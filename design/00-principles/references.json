@@ -1,0 +1,75 @@
+{
+  "references": [
+    {
+      "id": "wario",
+      "title": "WarioWare Smooth Moves 開發者訪談",
+      "url": "https://iwataasks.nintendo.com/interviews/wii/warioware_smooth_moves/0/1/",
+      "evidence": "團隊討論迅速傳達操作與讓旁觀者也覺得有趣。",
+      "application": "短示範、即時反應與可讀喜劇。"
+    },
+    {
+      "id": "sports",
+      "title": "Wii Sports 開發者訪談",
+      "url": "https://iwataasks.nintendo.com/interviews/wii/wii_sports/0/0/",
+      "evidence": "團隊以簡單且有深度的遊玩內容為方向。",
+      "application": "直覺控制的力度、方向與時機能漸進掌握。"
+    },
+    {
+      "id": "towerfall",
+      "title": "TowerFall 設計者訪談",
+      "url": "https://www.gamedeveloper.com/design/the-magic-of-i-towerfall-i-depth-simplicity-community",
+      "evidence": "閃避逐步延伸為接箭與取消技巧。",
+      "application": "小惡魔条件揭露既有操作的第二用途。"
+    },
+    {
+      "id": "overcooked",
+      "title": "Overcooked 創作者文章",
+      "url": "https://blog.playstation.com/archive/2016/02/29/chaotic-co-op-cooking-game-overcooked-announced-for-ps4",
+      "evidence": "分工、溝通與會改變協調方式的障礙是核心。",
+      "application": "共同物件、交接與救場，單人仍有有意義的操作。"
+    },
+    {
+      "id": "snipperclips",
+      "title": "Snipperclips 官方玩法",
+      "url": "https://media.nintendo.com/snipperclips/",
+      "evidence": "形狀互動有多種解法，單人可切換角色。",
+      "application": "可逆試錯與多職務切換，避免多人必要同步。"
+    },
+    {
+      "id": "rhythm",
+      "title": "Rhythm Heaven 開發者訪談",
+      "url": "https://iwataasks.nintendo.com/interviews/ds/rhythm-heaven/0/0/",
+      "evidence": "團隊以節奏感作為樂趣描述。",
+      "application": "預告、命中與聲畫回饋，以本機時間判定。"
+    },
+    {
+      "id": "assist",
+      "title": "Overcooked All You Can Eat 輔助模式",
+      "url": "https://blog.playstation.com/2020/07/20/overcooked-all-you-can-eat-is-a-visual-feast-for-ps5/",
+      "evidence": "提供延長時限、放慢超時與跳關選項。",
+      "application": "輔助不剝奪收藏，先放寬時間與懲罰。"
+    },
+    {
+      "id": "steam_schema",
+      "title": "Steam Inventory Schema",
+      "url": "https://partner.steamgames.com/doc/features/inventory/schema",
+      "evidence": "物品定義有 itemdefid/type/tradable/marketable 並支援自訂欄位。",
+      "application": "固定定義ID，收藏資格獨立於物品持有。"
+    },
+    {
+      "id": "steam_inventory",
+      "title": "Steam Inventory Service",
+      "url": "https://partner.steamgames.com/doc/features/inventory",
+      "evidence": "無自建伺服器掉落方案不信任客戶端自行指定授予物品。",
+      "application": "離線收藏與可交易發放不同責任；P2P房主不等於可信任伺服器。"
+    },
+    {
+      "id": "steam_p2p",
+      "title": "Steam Datagram Relay",
+      "url": "https://partner.steamgames.com/doc/features/multiplayer/steamdatagramrelay",
+      "evidence": "Steam P2P API 可使用 Valve 中繼。",
+      "application": "不必部署專用遊戲伺服器，仍有房主模擬與中斷處理。"
+    }
+  ]
+}
+

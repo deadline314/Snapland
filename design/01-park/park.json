@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "date": "2026-10-06",
+  "status": "design_spec_not_playtested",
+  "max_seats": 4,
+  "ai_levels": [
+    "簡單",
+    "中等",
+    "困難",
+    "惡魔"
+  ],
+  "collectible_counts": {
+    "game": 12,
+    "explore": 3,
+    "story": 1,
+    "quest": 2,
+    "normal_per_zone": 18,
+    "normal_total": 180,
+    "devil_per_zone": 12,
+    "devil_total": 120
+  },
+  "zones": [
+    {
+      "id": "welcome",
+      "name": "迎賓大道",
+      "threshold": 0,
+      "theme": "風、浮力與人潮",
+      "layout": "廣場入口、花壇步道、噴泉看台、招牌高台",
+      "exploration": "方向旗展示風勢；拿氣球可升高到可選捷徑；固定地面路線始終可達",
+      "rift": "倒影大道",
+      "rift_rule": "街道地標鏡像移位；噴泉形成短暫站台，改變配送與過街路線",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "harbor",
+      "name": "潮汐碼頭",
+      "threshold": 6,
+      "theme": "潮汐、浪頭與航行",
+      "layout": "燈塔岸線、漲退潮沙洲、環形水路、船票碼頭",
+      "exploration": "潮汐鐘預告路徑；退潮可抄近路，漲潮有免費渡船，沒有等潮才能離開的死路",
+      "rift": "逆潮港",
+      "rift_rule": "水面與水下流向交錯；浮潛切換改变航線，安全回港入口永遠可用",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "candy",
+      "name": "糖果工廠",
+      "threshold": 6,
+      "theme": "材料變形與即興加工",
+      "layout": "主輸送廊、加工台、糖漿管道、泡泡停靠台",
+      "exploration": "材料的黏性、浮力和溫度可做小互動；遊園路徑有護欄與重置點",
+      "rift": "反重力糖廠",
+      "rift_rule": "管線向上流，凝糖可堵支路或搭橋；餘熱要求預留緩衝",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "nightmarket",
+      "name": "霓虹夜市",
+      "threshold": 6,
+      "theme": "人群中的判斷與取捨",
+      "layout": "環形攤街、雨棚巷、屋頂餐桌、招牌維修台",
+      "exploration": "香氣、燈光與地面箭頭提示探索；夜市營業可自行切換而不依現實時間",
+      "rift": "午夜移動市",
+      "rift_rule": "攤車按預告換位；營業時間與雨棚路線一起改變配送次序",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "circus",
+      "name": "鏡之馬戲團",
+      "threshold": 30,
+      "theme": "錯覺與可逆實驗",
+      "layout": "鏡廊、觀眾席、影子台、砲彈安全墊",
+      "exploration": "投影預覽能反覆試；鏡像角標清楚，日常通路不會因答案錯誤被封",
+      "rift": "鏡背舞台",
+      "rift_rule": "影子触發實體機關；本體與鏡像交換可通過的材質",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "toy",
+      "name": "發條玩具城",
+      "threshold": 30,
+      "theme": "可預測機關的第二用途",
+      "layout": "積木街、車站岔道、維修台、發條鐘樓",
+      "exploration": "示範兵定時走指令；玩家可暫停排演；機關箱能一鍵恢復",
+      "rift": "失拍發條城",
+      "rift_rule": "指令延遲與倒轉傳動，玩家要插入等待與提早蓄能",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "garden",
+      "name": "苔光溫室",
+      "threshold": 30,
+      "theme": "光、水、生長與觀察",
+      "layout": "日照窗、濕地床、藤蔓層、夜芽庭",
+      "exploration": "植物以形狀/圖示而非顏色單獨表達需求；攀爬失敗回最近葉台",
+      "rift": "夜芽溫室",
+      "rift_rule": "明暗期交換植物能力，土床保水特性輪替，改變站位和投入時機",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "hotel",
+      "name": "幽幽旅館",
+      "threshold": 60,
+      "theme": "聲音、夢境與友善怪規則",
+      "layout": "櫃檯、折頁走廊、失物室、夢境客房",
+      "exploration": "所有門牌有固定錨點；回聲也有字幕；鬼不恐嚇玩家，夢境出口可隨時離開",
+      "rift": "夢裡旅館",
+      "rift_rule": "房門漂移与醒睡切換改變通路，必須先預備站位再切狀態",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "sky",
+      "name": "雲端遊樂場",
+      "threshold": 60,
+      "theme": "高低差、風與動量",
+      "layout": "摩天輪、浮島步道、風箏台、雲霄攝影點",
+      "exploration": "風旗預告；每個跳躍捷徑有永久安全繞路；失足回平台不扣費",
+      "rift": "上下顛倒天",
+      "rift_rule": "風層交換、雲台翻轉且限定連續停留，創造中繼與換層選擇",
+      "normal_count": 18,
+      "devil_count": 12
+    },
+    {
+      "id": "cinema",
+      "name": "星光影城",
+      "threshold": 60,
+      "theme": "創作、演出與時間連續性",
+      "layout": "布景街、攝影台、放映館、紅毯",
+      "exploration": "拍攝可排練回看，字幕用固定圖示詞；門票不需要購買服裝",
+      "rift": "倒帶影城",
+      "rift_rule": "先看結尾再排前因；道具按預告倒行，走位与連戲反向規劃",
+      "normal_count": 18,
+      "devil_count": 12
+    }
+  ],
+  "normal_ending": {
+    "threshold": 60,
+    "visited_zones": 10,
+    "requires_devil": false
+  },
+  "final": {
+    "id": "theatre",
+    "name": "地底惡魔劇場",
+    "game_count": 8,
+    "normal_required": 180,
+    "requires_devil": false
+  },
+  "unlock_consumes_photos": false,
+  "assisted_collection_equal": true
+}
+
