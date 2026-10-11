@@ -1,0 +1,48 @@
+name: Full available test suite
+
+on:
+  push:
+    paths:
+      - 'design/**'
+      - 'pm/**'
+      - 'tools/**'
+      - 'tests/**'
+      - '.github/workflows/**'
+      - '**/*.gd'
+      - '**/*.tscn'
+      - '**/*.tres'
+      - '**/*.cs'
+      - 'project.godot'
+      - 'game/**'
+      - 'src/**'
+      - 'addons/**'
+      - 'assets/**'
+      - 'README.md'
+      - 'AGENTS.md'
+  pull_request:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full-suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate all design data and links
+        run: python tools/verify_design.py --scope all
+      - name: Test validators against invalid designs
+        run: python -m unittest discover -s tests -v
+      - name: Verify runtime test coverage is configured
+        run: python tools/check_runtime_tests.py
