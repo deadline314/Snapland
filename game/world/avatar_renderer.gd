@@ -5,6 +5,10 @@ extends RefCounted
 const ATLAS_PATH := "res://assets/characters/traveller-actions-v1.png"
 const CACHE_LIMIT := 128
 const DIRECTIONS := ["front", "left", "back", "right"]
+const WALK_DIRECTIONS := ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]
+const WALK_METADATA_PATH := "res://assets/characters/walk-regions.json"
+const DIAGONAL_PARTS_PATH := "res://assets/characters/diagonal-parts.json"
+const IDLE_WALK_FRAME := 0
 const ACTIONS := ["wave", "photograph", "interact", "celebrate"]
 const SOURCE_SIZE := Vector2i(1122, 1402)
 const HAT_ATLAS_PATH := "res://assets/characters/hats-v1.png"
@@ -71,6 +75,18 @@ var _atlas_valid := false
 var _cache: Dictionary = {}
 var _cache_order: Array[String] = []
 var _warned_missing := false
+var _walk_images: Dictionary = {}
+var _walk_metadata: Dictionary = {}
+var _walk_frame_counts: Dictionary = {}
+var _walk_idle_frames: Dictionary = {}
+var _walk_scale_reference_height := 444.0
+var _walk_atlas_valid := false
+var _diagonal_hair_image: Image
+var _diagonal_hat_image: Image
+var _diagonal_hair_regions: Array = []
+var _diagonal_hat_regions: Array = []
+var _diagonal_hair_valid := false
+var _diagonal_hat_valid := false
 
 func _init() -> void:
 	_load_atlas()
@@ -90,39 +106,76 @@ func has_species_atlas() -> bool:
 func has_hair_atlas() -> bool:
 	return _hair_atlas_valid
 
+func has_walk_atlas() -> bool:
+	return _walk_atlas_valid
+
+func walk_frame_count(direction: String) -> int:
+	return int(_walk_frame_counts.get(direction, 0)) if _walk_atlas_valid else 0
+
+func walk_idle_frame(direction: String) -> int:
+	return int(_walk_idle_frames.get(direction, IDLE_WALK_FRAME)) if _walk_atlas_valid else IDLE_WALK_FRAME
+
+func has_diagonal_parts() -> bool:
+	return _diagonal_hair_valid and _diagonal_hat_valid
+
 func cached_texture_count() -> int:
 	return _cache.size()
 
 func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "front", frame: int = 0, action: String = "idle") -> Texture2D:
-	var safe_direction := direction if DIRECTIONS.has(direction) else "front"
-	var safe_action := action if ACTIONS.has(action) else "idle"
-	var safe_frame := clampi(frame, 0, 2)
+	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
+	var safe_action := action if ACTIONS.has(action) or action == "walk" else "idle"
+	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, 2)
+	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction)))
+	var walk_frame := IDLE_WALK_FRAME
+	if use_walk_source:
+		var frame_count := walk_frame_count(safe_direction)
+		walk_frame = clampi(frame, 0, frame_count - 1) if safe_action == "walk" else walk_idle_frame(safe_direction)
+	var pose_direction := safe_direction if DIRECTIONS.has(safe_direction) else _closest_cardinal(safe_direction)
 	var normalized_appearance := DEFAULT_APPEARANCE.duplicate()
 	for key in DEFAULT_APPEARANCE:
 		if appearance.has(key): normalized_appearance[key] = str(appearance[key])
 	var outfit := str(equipped.get("outfit", "outfit-tide"))
 	var hat := str(equipped.get("hat", "hat-none"))
-	var pose := _pose_index(safe_direction, safe_frame, safe_action)
+	var pose := _pose_index(pose_direction, safe_frame, safe_action)
 	var render_appearance := normalized_appearance.duplicate()
 	render_appearance.erase("gender")
-	var key := "%s|%s|%s" % [JSON.stringify(render_appearance), outfit + ":" + hat, str(pose)]
-	if _cache.has(key): return _cache[key]
-	var image := _atlas_pose_image(pose) if _atlas_valid else _fallback_image(safe_direction, safe_frame, safe_action)
-	var vertical_offset := _pose_vertical_offsets[pose] if _atlas_valid else 0
+	var pose_key := "walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else "action:%d" % pose
+	var key := "%s|%s|%s" % [JSON.stringify(render_appearance), outfit + ":" + hat, pose_key]
+	if _cache.has(key):
+		_cache_order.erase(key)
+		_cache_order.append(key)
+		return _cache[key]
+	var image := _walk_pose_image(safe_direction, walk_frame) if use_walk_source else (_atlas_pose_image(pose) if _atlas_valid else _fallback_image(pose_direction, safe_frame, safe_action))
+	var vertical_offset := 0 if use_walk_source else (_pose_vertical_offsets[pose] if _atlas_valid else 0)
+	var hair_hat_offset := 45 if use_walk_source else vertical_offset
+	var head_shift_x := 0
+	if use_walk_source:
+		var head_anchor: Dictionary = _walk_metadata["%s:%d" % [safe_direction, walk_frame]].anchor
+		var head_scale := float(_canvas_height) / _walk_scale_reference_height
+		head_shift_x = roundi(float(head_anchor.get("head_delta_x", 0.0)) * head_scale)
+		hair_hat_offset += roundi(float(head_anchor.get("head_delta_y", 0.0)) * head_scale)
 	var species := str(normalized_appearance.get("species", "human"))
-	if _hair_atlas_valid: _strip_source_hair(image, safe_direction)
+	var has_hair_overlay := _hair_atlas_valid and DIRECTIONS.has(safe_direction) or _diagonal_hair_valid and not DIRECTIONS.has(safe_direction)
+	var has_hat_overlay := _hat_atlas_valid and DIRECTIONS.has(safe_direction) or _diagonal_hat_valid and not DIRECTIONS.has(safe_direction)
+	if has_hair_overlay: _strip_source_hair(image, pose_direction)
 	if species == "elf" and _species_atlas_valid:
 		var ear_layer := Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
 		ear_layer.fill(Color.TRANSPARENT)
-		_apply_species_ears(ear_layer, species, safe_direction, vertical_offset, SKIN_COLORS.get(str(normalized_appearance.get("skin", "warm")), SKIN_COLORS.warm))
+		_apply_species_ears(ear_layer, species, pose_direction, vertical_offset, SKIN_COLORS.get(str(normalized_appearance.get("skin", "warm")), SKIN_COLORS.warm))
 		ear_layer.blend_rect(image, Rect2i(Vector2i.ZERO, Vector2i(image.get_width(), image.get_height())), Vector2i.ZERO)
 		image = ear_layer
-	if _hair_atlas_valid:
-		_apply_hair_atlas(image, str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.get(str(normalized_appearance.get("hair_color", "ink")), HAIR_COLORS.ink), vertical_offset)
-	_apply_palette(image, normalized_appearance, outfit, safe_direction)
-	_apply_appearance_details(image, normalized_appearance, safe_direction, safe_action)
-	_apply_species_horns(image, species, safe_direction, vertical_offset)
-	_apply_hat(image, hat, safe_direction, vertical_offset)
+	if _hair_atlas_valid and DIRECTIONS.has(safe_direction):
+		_apply_hair_atlas(image, str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.get(str(normalized_appearance.get("hair_color", "ink")), HAIR_COLORS.ink), hair_hat_offset, head_shift_x)
+	elif _diagonal_hair_valid and not DIRECTIONS.has(safe_direction):
+		_apply_diagonal_hair(image, str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.get(str(normalized_appearance.get("hair_color", "ink")), HAIR_COLORS.ink), hair_hat_offset, head_shift_x)
+	_apply_palette(image, normalized_appearance, outfit, pose_direction, has_hair_overlay)
+	if DIRECTIONS.has(safe_direction):
+		_apply_appearance_details(image, normalized_appearance, safe_direction, safe_action)
+	_apply_species_horns(image, species, pose_direction, vertical_offset)
+	if DIRECTIONS.has(safe_direction):
+		_apply_hat(image, hat, safe_direction, hair_hat_offset, head_shift_x)
+	elif has_hat_overlay:
+		_apply_diagonal_hat(image, hat, safe_direction, hair_hat_offset, head_shift_x)
 	var result := ImageTexture.create_from_image(image)
 	_cache[key] = result
 	_cache_order.append(key)
@@ -189,8 +242,10 @@ func _load_atlas() -> void:
 					push_warning("Avatar pose %d touches its metadata boundary and may be clipped; using fallback." % pose)
 					return
 	_atlas_valid = true
+	_load_walk_atlases()
 	_load_hat_atlas()
 	_load_hair_atlas()
+	_load_diagonal_parts()
 	_load_species_atlas()
 
 func _load_hat_atlas() -> void:
@@ -225,8 +280,170 @@ func _load_hat_atlas() -> void:
 func _scaled_region(region: Rect2i, scale_x: float, scale_y: float) -> Rect2i:
 	return Rect2i(roundi(region.position.x * scale_x), roundi(region.position.y * scale_y), roundi(region.size.x * scale_x), roundi(region.size.y * scale_y))
 
+func _closest_cardinal(direction: String) -> String:
+	match direction:
+		"front_left", "front_right": return "front"
+		"back_left", "back_right": return "back"
+	return direction if DIRECTIONS.has(direction) else "front"
+
+func _load_walk_atlases() -> void:
+	if not FileAccess.file_exists(WALK_METADATA_PATH):
+		push_warning("Avatar walk metadata '%s' is missing; authored eight-direction movement is unavailable." % WALK_METADATA_PATH)
+		return
+	var file := FileAccess.open(WALK_METADATA_PATH, FileAccess.READ)
+	if file == null:
+		push_warning("Avatar walk metadata '%s' cannot be read; authored eight-direction movement is unavailable." % WALK_METADATA_PATH)
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if not parsed is Dictionary:
+		push_warning("Avatar walk metadata has an invalid schema; authored eight-direction movement is unavailable.")
+		return
+	var directions_value: Variant = parsed.get("directions")
+	if not directions_value is Dictionary or directions_value.size() != WALK_DIRECTIONS.size():
+		push_warning("Avatar walk metadata must define exactly the eight authored directions.")
+		return
+	if parsed.has("frames_per_direction"):
+		var declared_frames: Variant = parsed.frames_per_direction
+		if not _is_finite_json_number(declared_frames) or not [8.0, 16.0].has(float(declared_frames)):
+			push_warning("Avatar walk metadata has an invalid frames_per_direction value.")
+			return
+	var scale_reference: Variant = parsed.get("scale_reference_height", 444)
+	if not _is_finite_json_number(scale_reference) or float(scale_reference) <= 0.0:
+		push_warning("Avatar walk metadata has an invalid scale_reference_height.")
+		return
+	var atlases: Dictionary = {}
+	var directions: Dictionary = directions_value
+	var loaded_metadata: Dictionary = {}
+	var frame_counts: Dictionary = {}
+	var idle_frames: Dictionary = {}
+	for direction in WALK_DIRECTIONS:
+		if not directions.has(direction):
+			push_warning("Avatar walk metadata omits direction '%s'; authored eight-direction movement is unavailable." % direction)
+			return
+		var entry_value: Variant = directions[direction]
+		if not entry_value is Dictionary:
+			push_warning("Avatar walk direction '%s' entry must be an object." % direction)
+			return
+		var entry: Dictionary = entry_value
+		var regions_value: Variant = entry.get("regions")
+		var anchors_value: Variant = entry.get("anchors")
+		if not regions_value is Array or not anchors_value is Array:
+			push_warning("Avatar walk direction '%s' must define region and anchor arrays." % direction)
+			return
+		var regions: Array = regions_value
+		var anchors: Array = anchors_value
+		if regions.size() not in [8, 16] or anchors.size() != regions.size():
+			push_warning("Avatar walk direction '%s' must define matching arrays of eight or sixteen poses." % direction)
+			return
+		var idle_frame_value: Variant = entry.get("idle_frame", IDLE_WALK_FRAME)
+		if not _is_json_integer(idle_frame_value) or int(idle_frame_value) < 0 or int(idle_frame_value) >= regions.size():
+			push_warning("Avatar walk direction '%s' has an invalid idle_frame." % direction)
+			return
+		var atlas_value: Variant = entry.get("atlas", "")
+		if typeof(atlas_value) != TYPE_STRING or str(atlas_value).is_empty():
+			push_warning("Avatar walk direction '%s' has an invalid atlas path." % direction)
+			return
+		var atlas_path := str(atlas_value)
+		if not atlases.has(atlas_path):
+			if not ResourceLoader.exists(atlas_path):
+				push_warning("Avatar walk atlas '%s' is missing; authored eight-direction movement is unavailable." % atlas_path)
+				return
+			var atlas_texture := load(atlas_path) as Texture2D
+			if atlas_texture == null:
+				push_warning("Avatar walk atlas '%s' is not an imported texture resource." % atlas_path)
+				return
+			atlases[atlas_path] = atlas_texture.get_image()
+		var atlas_image: Image = atlases[atlas_path]
+		for frame in range(regions.size()):
+			var raw_region_value: Variant = regions[frame]
+			var anchor_value: Variant = anchors[frame]
+			if not raw_region_value is Array or raw_region_value.size() != 4 or not anchor_value is Dictionary:
+				push_warning("Avatar walk pose '%s:%d' has invalid region/anchor metadata." % [direction, frame])
+				return
+			var raw_region: Array = raw_region_value
+			var anchor: Dictionary = anchor_value
+			if not anchor.has("center_x") or not anchor.has("feet_y"):
+				push_warning("Avatar walk pose '%s:%d' has invalid region/anchor metadata." % [direction, frame])
+				return
+			for coordinate in raw_region:
+				if not _is_json_integer(coordinate):
+					push_warning("Avatar walk pose '%s:%d' region coordinates must be integers." % [direction, frame])
+					return
+			var region := Rect2i(int(raw_region[0]), int(raw_region[1]), int(raw_region[2]), int(raw_region[3]))
+			if region.position.x < 0 or region.position.y < 0 or region.size.x <= 0 or region.size.y <= 0 or region.end.x > atlas_image.get_width() or region.end.y > atlas_image.get_height():
+				push_warning("Avatar walk pose '%s:%d' region exceeds its imported atlas." % [direction, frame])
+				return
+			var center_value: Variant = anchor.center_x
+			var feet_value: Variant = anchor.feet_y
+			var bounds_value: Variant = anchor.get("bounds")
+			if not _is_finite_json_number(center_value) or not _is_finite_json_number(feet_value) or not bounds_value is Array or bounds_value.size() != 4:
+				push_warning("Avatar walk pose '%s:%d' has malformed numeric anchors or bounds." % [direction, frame])
+				return
+			var bounds: Array = bounds_value
+			for bound in bounds:
+				if not _is_json_integer(bound):
+					push_warning("Avatar walk pose '%s:%d' bounds must use integer coordinates." % [direction, frame])
+					return
+			for delta_key in ["head_delta_x", "head_delta_y"]:
+				if anchor.has(delta_key) and (not _is_finite_json_number(anchor[delta_key]) or absf(float(anchor[delta_key])) > float(scale_reference)):
+					push_warning("Avatar walk pose '%s:%d' has an invalid %s." % [direction, frame, delta_key])
+					return
+			if float(center_value) < 0 or float(center_value) >= region.size.x or float(feet_value) < 0 or float(feet_value) >= region.size.y:
+				push_warning("Avatar walk pose '%s:%d' has invalid common-center/feet anchors." % [direction, frame])
+				return
+			var visible := 0
+			var central_visible := false
+			for y in range(region.size.y):
+				for x in range(region.size.x):
+					if atlas_image.get_pixel(region.position.x + x, region.position.y + y).a <= 0.4: continue
+					visible += 1
+					if x >= region.size.x * 0.25 and x <= region.size.x * 0.75 and y >= region.size.y * 0.2 and y <= region.size.y * 0.85:
+						central_visible = true
+			if visible < 10000 or not central_visible:
+				push_warning("Avatar walk pose '%s:%d' is empty or lacks central character pixels." % [direction, frame])
+				return
+			if int(bounds[0]) < 0 or int(bounds[1]) < 0 or int(bounds[2]) <= int(bounds[0]) or int(bounds[3]) <= int(bounds[1]) or int(bounds[2]) > region.size.x or int(bounds[3]) > region.size.y:
+				push_warning("Avatar walk pose '%s:%d' visible bounds exceed the cell." % [direction, frame])
+				return
+			loaded_metadata["%s:%d" % [direction, frame]] = {"region": region, "anchor": anchor, "atlas": atlas_path}
+		frame_counts[direction] = regions.size()
+		idle_frames[direction] = idle_frame_value
+	_walk_images = atlases
+	_walk_metadata = loaded_metadata
+	_walk_frame_counts = frame_counts
+	_walk_idle_frames = idle_frames
+	_walk_scale_reference_height = float(scale_reference)
+	_walk_atlas_valid = true
+
+func _is_finite_json_number(value: Variant) -> bool:
+	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT: return false
+	return is_finite(float(value))
+
+func _is_json_integer(value: Variant) -> bool:
+	return _is_finite_json_number(value) and floorf(float(value)) == float(value)
+
+func _walk_pose_image(direction: String, frame: int) -> Image:
+	var data: Dictionary = _walk_metadata["%s:%d" % [direction, frame]]
+	var region: Rect2i = data.region
+	var anchor: Dictionary = data.anchor
+	var source: Image = _walk_images[data.atlas]
+	var cell := source.get_region(region)
+	for y in range(cell.get_height()):
+		for x in range(cell.get_width()):
+			if cell.get_pixel(x, y).a < 0.4: cell.set_pixel(x, y, Color.TRANSPARENT)
+	var scale := float(_canvas_height) / _walk_scale_reference_height
+	var resized := Vector2i(maxi(1, roundi(float(cell.get_width()) * scale)), maxi(1, roundi(float(cell.get_height()) * scale)))
+	cell.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
+	var image := Image.create(_canvas_width, _canvas_height, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+	var source_center := float(anchor.center_x) * scale
+	var source_feet := float(anchor.feet_y) * scale
+	var offset := Vector2i(roundi(float(_canvas_width) * 0.5 - source_center), roundi(float(FEET_BASELINE) - source_feet))
+	image.blend_rect(cell, Rect2i(Vector2i.ZERO, resized), offset)
+	return image
+
 func _pose_index(direction: String, frame: int, action: String) -> int:
-	if action != "idle": return 12 + ACTIONS.find(action)
+	if action != "idle" and action != "walk": return 12 + ACTIONS.find(action)
 	var column := DIRECTIONS.find(direction)
 	if frame <= 0: return column
 	return (1 if frame % 2 == 1 else 2) * 4 + column
@@ -249,25 +466,27 @@ func _atlas_pose_image(pose: int) -> Image:
 				image.set_pixel(target_x, target_y, color)
 	return image
 
-func _apply_palette(image: Image, appearance: Dictionary, outfit_id: String, direction: String) -> void:
+func _apply_palette(image: Image, appearance: Dictionary, outfit_id: String, direction: String, use_hair_overlay: bool) -> void:
 	var skin_target: Color = SKIN_COLORS.get(str(appearance.get("skin", "warm")), SKIN_COLORS.warm)
 	var hair_target: Color = HAIR_COLORS.get(str(appearance.get("hair_color", "ink")), HAIR_COLORS.ink)
 	var coat_target: Color = OUTFIT_COLORS.get(outfit_id, OUTFIT_COLORS["outfit-tide"])
 	var skin_source := Color("#fdbb7b")
 	var hair_source := Color("#2a2b48")
 	var coat_source := Color("#267e83")
-	var hair_bottom := image.get_height() * 0.43
+	var hair_bottom := image.get_height() * 0.42
 	var face_left := image.get_width() * 0.30
 	var face_right := image.get_width() * 0.70
 	for y in range(image.get_height()):
 		for x in range(image.get_width()):
 			var color := image.get_pixel(x, y)
 			if color.a < 0.05: continue
-			if _is_color_family(color, skin_source, 0.03, 0.42):
+			var skin_zone := (y >= image.get_height() * 0.16 and y <= image.get_height() * 0.57) or (y >= image.get_height() * 0.62 and y <= image.get_height() * 0.87)
+			var coat_zone := y >= image.get_height() * 0.35 and y <= image.get_height() * 0.78 and not (x >= image.get_width() * 0.40 and x <= image.get_width() * 0.61 and y >= image.get_height() * 0.54)
+			if skin_zone and _is_color_family(color, skin_source, 0.055, 0.35):
 				image.set_pixel(x, y, _shade_preserving(color, skin_source, skin_target))
-			elif _is_color_family(color, coat_source, 0.055, 0.22):
+			elif coat_zone and _is_color_family(color, coat_source, 0.075, 0.12):
 				image.set_pixel(x, y, _shade_preserving(color, coat_source, coat_target))
-			elif not _hair_atlas_valid and y < hair_bottom and (direction == "back" or y < image.get_height() * 0.22 or x < face_left or x > face_right) and _is_dark_blue(color, hair_source):
+			elif not use_hair_overlay and y < hair_bottom and (direction == "back" or y < image.get_height() * 0.24 or x < face_left or x > face_right) and _is_dark_blue(color, hair_source):
 				image.set_pixel(x, y, _shade_preserving(color, hair_source, hair_target))
 
 func _is_color_family(color: Color, reference: Color, tolerance: float, minimum_value: float) -> bool:
@@ -306,6 +525,113 @@ func _load_hair_atlas() -> void:
 				push_warning("Avatar hair region %s is empty; using the source hairstyle fallback." % str(region))
 				return
 	_hair_atlas_valid = true
+
+func _load_diagonal_parts() -> void:
+	if not FileAccess.file_exists(DIAGONAL_PARTS_PATH):
+		push_warning("Avatar diagonal hair/hat manifest '%s' is missing; diagonal source art remains visible." % DIAGONAL_PARTS_PATH)
+		return
+	var file := FileAccess.open(DIAGONAL_PARTS_PATH, FileAccess.READ)
+	if file == null:
+		push_warning("Avatar diagonal hair/hat manifest cannot be read; diagonal source art remains visible.")
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if not parsed is Dictionary or not parsed.get("parts", {}) is Dictionary:
+		push_warning("Avatar diagonal hair/hat manifest has an invalid schema; diagonal source art remains visible.")
+		return
+	var parts: Dictionary = parsed.parts
+	var directions: Array = parsed.get("directions", [])
+	if directions != ["front_left", "front_right", "back_left", "back_right"]:
+		push_warning("Avatar diagonal part direction order is invalid; diagonal source art remains visible.")
+		return
+	_diagonal_hair_valid = _load_diagonal_part("hair", parts, _diagonal_hair_regions)
+	_diagonal_hat_valid = _load_diagonal_part("hats", parts, _diagonal_hat_regions)
+
+func _load_diagonal_part(name: String, parts: Dictionary, target_regions: Array) -> bool:
+	if not parts.has(name): return false
+	var entry: Dictionary = parts[name]
+	var atlas_path := str(entry.get("atlas", ""))
+	if not ResourceLoader.exists(atlas_path):
+		push_warning("Avatar diagonal %s atlas '%s' is unavailable." % [name, atlas_path])
+		return false
+	var atlas_texture := load(atlas_path) as Texture2D
+	if atlas_texture == null:
+		push_warning("Avatar diagonal %s atlas '%s' is not an imported texture." % [name, atlas_path])
+		return false
+	var atlas_image := atlas_texture.get_image()
+	var rows: Array = entry.get("regions", [])
+	if rows.size() != 3:
+		push_warning("Avatar diagonal %s atlas must define three appearance rows." % name)
+		return false
+	for row in range(3):
+		var cells: Array = rows[row]
+		if cells.size() != 4:
+			push_warning("Avatar diagonal %s row %d must define four direction parts." % [name, row])
+			return false
+		var stored_row: Array = []
+		for cell_index in range(4):
+			var values: Array = cells[cell_index]
+			if values.size() != 4:
+				push_warning("Avatar diagonal %s row %d direction %d has malformed bounds." % [name, row, cell_index])
+				return false
+			var region := Rect2i(int(values[0]), int(values[1]), int(values[2]), int(values[3]))
+			if region.position.x < 0 or region.position.y < 0 or region.size.x <= 0 or region.size.y <= 0 or region.end.x > atlas_image.get_width() or region.end.y > atlas_image.get_height():
+				push_warning("Avatar diagonal %s row %d direction %d exceeds the imported image." % [name, row, cell_index])
+				return false
+			var part := atlas_image.get_region(region)
+			var visible := 0
+			for y in range(part.get_height()):
+				for x in range(part.get_width()):
+					var pixel := part.get_pixel(x, y)
+					if pixel.a < 0.4:
+						part.set_pixel(x, y, Color.TRANSPARENT)
+					else:
+						visible += 1
+			if visible < 300:
+				push_warning("Avatar diagonal %s row %d direction %d is visually empty." % [name, row, cell_index])
+				return false
+			var used := part.get_used_rect()
+			if used.size.x <= 0 or used.size.y <= 0:
+				push_warning("Avatar diagonal %s row %d direction %d has no visible bounds." % [name, row, cell_index])
+				return false
+			stored_row.append(part.get_region(used))
+		target_regions.append(stored_row)
+	if name == "hair": _diagonal_hair_image = atlas_image
+	else: _diagonal_hat_image = atlas_image
+	return true
+
+func _apply_diagonal_hair(image: Image, hair_style: String, direction: String, hair_color: Color, vertical_offset: int, head_shift_x: int = 0) -> void:
+	var style_row: int = {"windswept": 0, "bob": 1, "curly": 2}.get(hair_style, 0)
+	var direction_index := ["front_left", "front_right", "back_left", "back_right"].find(direction)
+	if style_row >= _diagonal_hair_regions.size() or direction_index < 0: return
+	# The authored second column is a strict left profile. Mirror the first
+	# three-quarter component for rightward front travel so it exposes the face.
+	if direction == "front_right": direction_index = 0
+	var hair: Image = _diagonal_hair_regions[style_row][direction_index].duplicate()
+	if direction == "front_right": hair.flip_x()
+	for y in range(hair.get_height()):
+		for x in range(hair.get_width()):
+			var pixel := hair.get_pixel(x, y)
+			if pixel.a >= 0.4 and _is_dark_blue(pixel, Color("#2a2b48")):
+				hair.set_pixel(x, y, _shade_preserving(pixel, Color("#2a2b48"), hair_color))
+	var ratio := (HAIR_TARGET_WIDTH * float(image.get_width()) / CANVAS_SIZE.x) / 314.0
+	var resized := Vector2i(maxi(1, roundi(float(hair.get_width()) * ratio)), maxi(1, roundi(float(hair.get_height()) * ratio)))
+	hair.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
+	image.blend_rect(hair, Rect2i(Vector2i.ZERO, resized), Vector2i((image.get_width() - resized.x) / 2 + head_shift_x, vertical_offset))
+
+func _apply_diagonal_hat(image: Image, hat: String, direction: String, vertical_offset: int, head_shift_x: int = 0) -> void:
+	var row: int = {"hat-straw": 0, "hat-sailor": 1, "hat-flower": 2}.get(hat, -1)
+	var direction_index := ["front_left", "front_right", "back_left", "back_right"].find(direction)
+	if row < 0 or row >= _diagonal_hat_regions.size() or direction_index < 0: return
+	var hat_image: Image = _diagonal_hat_regions[row][direction_index].duplicate()
+	var width := roundi(HAT_TARGET_WIDTHS[row] * float(image.get_width()) / CANVAS_SIZE.x)
+	var ratio := float(width) / 314.0
+	var height_scale: float = HAT_VERTICAL_SCALE[row]
+	var resized_width := maxi(1, roundi(float(hat_image.get_width()) * ratio))
+	var resized_height := maxi(1, roundi(float(hat_image.get_height()) * ratio * height_scale))
+	hat_image.resize(resized_width, resized_height, Image.INTERPOLATE_NEAREST)
+	var crown_offset := roundi(HAT_CROWN_OFFSETS[row] * float(image.get_height()) / CANVAS_SIZE.y)
+	var crown_y := maxi(roundi(2.0 * float(image.get_height()) / CANVAS_SIZE.y), vertical_offset + crown_offset)
+	image.blend_rect(hat_image, Rect2i(Vector2i.ZERO, Vector2i(resized_width, resized_height)), Vector2i((image.get_width() - resized_width) / 2 + head_shift_x, crown_y))
 
 func _load_species_atlas() -> void:
 	if ResourceLoader.exists(SPECIES_ATLAS_PATH):
@@ -403,7 +729,7 @@ func _is_source_hair(color: Color) -> bool:
 	var distance := absf(color.h - reference.h)
 	return color.v > 0.025 and color.v < 0.58 and color.s > 0.15 and minf(distance, 1.0 - distance) < 0.065
 
-func _apply_hair_atlas(image: Image, hair_style: String, direction: String, hair_color: Color, vertical_offset: int) -> void:
+func _apply_hair_atlas(image: Image, hair_style: String, direction: String, hair_color: Color, vertical_offset: int, head_shift_x: int = 0) -> void:
 	var row: int = {"windswept": 0, "bob": 1, "curly": 2}.get(hair_style, 0)
 	var column := DIRECTIONS.find(direction)
 	if column < 0: column = 0
@@ -426,7 +752,7 @@ func _apply_hair_atlas(image: Image, hair_style: String, direction: String, hair
 				hair.set_pixel(x, y, _shade_preserving(pixel, Color("#2a2b48"), hair_color))
 	var resized := Vector2i(maxi(1, roundi(scaled_region_size.x)), maxi(1, roundi(scaled_region_size.y)))
 	hair.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
-	var position := Vector2i((image.get_width() - resized.x) / 2, vertical_offset)
+	var position := Vector2i((image.get_width() - resized.x) / 2 + head_shift_x, vertical_offset)
 	image.blend_rect(hair, Rect2i(Vector2i.ZERO, resized), position)
 
 func _shade_preserving(source: Color, source_base: Color, target_base: Color) -> Color:
@@ -461,32 +787,32 @@ func _apply_face_shape(image: Image, expression: String, sx: float, sy: float) -
 		_draw_line(image, Vector2i(roundi(37.0*sx), closed_eye_y), Vector2i(roundi(40.0*sx), closed_eye_y), dark, line_width)
 		_draw_line(image, Vector2i(roundi(30.0*sx), mouth_y), Vector2i(roundi(34.0*sx), mouth_y+roundi(0.6*sy)), Color("#9b5152"), line_width)
 
-func _apply_hat(image: Image, hat: String, direction: String, vertical_offset: int) -> void:
+func _apply_hat(image: Image, hat: String, direction: String, vertical_offset: int, head_shift_x: int = 0) -> void:
 	if hat == "hat-none": return
 	if _hat_atlas_valid:
 		var row: int = {"hat-straw": 0, "hat-sailor": 1, "hat-flower": 2}.get(hat, -1)
 		if row >= 0:
-			_apply_hat_atlas(image, row, DIRECTIONS.find(direction), vertical_offset)
+			_apply_hat_atlas(image, row, DIRECTIONS.find(direction), vertical_offset, head_shift_x)
 			return
 	var sx := float(image.get_width()) / 64.0
 	var sy := float(image.get_height()) / 96.0
 	var color := Color("#d8bb77") if hat == "hat-straw" else (Color("#f2f1e8") if hat == "hat-sailor" else Color("#d8789b"))
 	if hat == "hat-flower":
-		for offset in [-6, 0, 6]: _draw_rect(image, int((31+offset)*sx), int(5*sy), maxi(2, int(5*sx)), maxi(2, int(5*sy)), color.lightened(0.16 if offset == 0 else 0.0))
-		_draw_rect(image, int(31*sx), int(5*sy), maxi(2, int(4*sx)), maxi(2, int(4*sy)), Color("#edbb65"))
+		for offset in [-6, 0, 6]: _draw_rect(image, head_shift_x + int((31+offset)*sx), int(5*sy), maxi(2, int(5*sx)), maxi(2, int(5*sy)), color.lightened(0.16 if offset == 0 else 0.0))
+		_draw_rect(image, head_shift_x + int(31*sx), int(5*sy), maxi(2, int(4*sx)), maxi(2, int(4*sy)), Color("#edbb65"))
 	elif hat == "hat-sailor":
-		_draw_rect(image, int(17*sx), int(5*sy), int(30*sx), int(7*sy), color)
-		_draw_rect(image, int(13*sx), int(11*sy), int(39*sx), int(3*sy), Color("#36536a"))
-		_draw_rect(image, int(19*sx), int(8*sy), int(26*sx), int(2*sy), Color("#36536a"))
+		_draw_rect(image, head_shift_x + int(17*sx), int(5*sy), int(30*sx), int(7*sy), color)
+		_draw_rect(image, head_shift_x + int(13*sx), int(11*sy), int(39*sx), int(3*sy), Color("#36536a"))
+		_draw_rect(image, head_shift_x + int(19*sx), int(8*sy), int(26*sx), int(2*sy), Color("#36536a"))
 	else:
-		_draw_rect(image, int(18*sx), int(6*sy), int(28*sx), int(4*sy), color)
-		_draw_rect(image, int(10*sx), int(10*sy), int(45*sx), int(3*sy), color.darkened(0.1))
-		_draw_rect(image, int(25*sx), int(10*sy), int(13*sx), int(2*sy), Color("#815e42"))
+		_draw_rect(image, head_shift_x + int(18*sx), int(6*sy), int(28*sx), int(4*sy), color)
+		_draw_rect(image, head_shift_x + int(10*sx), int(10*sy), int(45*sx), int(3*sy), color.darkened(0.1))
+		_draw_rect(image, head_shift_x + int(25*sx), int(10*sy), int(13*sx), int(2*sy), Color("#815e42"))
 	# Profile hats extend forward so the face remains visible; rear hats stay centered.
-	if direction == "left": _draw_rect(image, int(9*sx), int(11*sy), int(8*sx), int(2*sy), color)
-	elif direction == "right": _draw_rect(image, int(47*sx), int(11*sy), int(8*sx), int(2*sy), color)
+	if direction == "left": _draw_rect(image, head_shift_x + int(9*sx), int(11*sy), int(8*sx), int(2*sy), color)
+	elif direction == "right": _draw_rect(image, head_shift_x + int(47*sx), int(11*sy), int(8*sx), int(2*sy), color)
 
-func _apply_hat_atlas(image: Image, row: int, column: int, vertical_offset: int) -> void:
+func _apply_hat_atlas(image: Image, row: int, column: int, vertical_offset: int, head_shift_x: int = 0) -> void:
 	if column < 0: return
 	var source_region: Rect2i = HAT_REGIONS[row][column]
 	var scale_x := float(_hat_atlas_image.get_width()) / HAT_SOURCE_SIZE.x
@@ -508,7 +834,7 @@ func _apply_hat_atlas(image: Image, row: int, column: int, vertical_offset: int)
 	hat.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
 	var crown_offset := roundi(HAT_CROWN_OFFSETS[row] * float(image.get_height()) / CANVAS_SIZE.y)
 	var crown_y := maxi(roundi(2.0 * float(image.get_height()) / CANVAS_SIZE.y), vertical_offset + crown_offset)
-	var position := Vector2i((image.get_width() - resized.x) / 2, crown_y)
+	var position := Vector2i((image.get_width() - resized.x) / 2 + head_shift_x, crown_y)
 	var composite := Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
 	composite.fill(Color.TRANSPARENT)
 	composite.blend_rect(hat, Rect2i(Vector2i.ZERO, resized), position)

@@ -50,6 +50,11 @@ var foliage_textures: Dictionary = {}
 var foliage_atlas_loaded := false
 var foliage_warnings: Dictionary = {}
 var facing := "front"
+const WALK_STRIDE_DISTANCE := 2.8
+const WALK_DIRECTION_HYSTERESIS := deg_to_rad(5.0)
+const WALK_DISTANCE_EPSILON := 0.0005
+var walk_distance_phase := 0.0
+var avatar_is_walking := false
 var mesh_count := 0
 var blocked := false
 var reduced_motion := false
@@ -1364,17 +1369,19 @@ func _physics_process(delta: float) -> void:
 		player.position.x=clampf(player.position.x,-2.05,2.05)
 	if player.position.y < -1.0:
 		player.position=Vector3(0,0.3,10)
-	if movement.length()>0.1:
-		if absf(movement.x) > absf(movement.y):
-			facing = "right" if movement.x > 0 else "left"
-		else:
-			facing = "back" if movement.y < 0 else "front"
-	var moving := movement.length()>0.1
-	var frame := (int(time*7.0)%2)+1 if moving else 0
+		previous_position=player.position
+	var actual_delta := player.position - previous_position
+	var horizontal_delta := Vector2(actual_delta.x, actual_delta.z)
+	var travelled := horizontal_delta.length()
+	avatar_is_walking = travelled > WALK_DISTANCE_EPSILON
+	if avatar_is_walking:
+		facing = quantize_walk_direction(horizontal_delta, facing)
+		walk_distance_phase = advance_walk_phase(walk_distance_phase, travelled)
+	var frame := walk_frame_for_phase(walk_distance_phase)
 	if avatar_action_remaining > 0.0:
 		avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
 		if avatar_action_remaining == 0.0: avatar_action=""
-	_refresh_avatar_texture(frame if moving else 0)
+	_refresh_avatar_texture(frame)
 	camera.position=camera.position.lerp(player.position+Vector3(0,15.5,25),minf(1,delta*7))
 	var area := "海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場")
 	if area!=current_area:
@@ -1390,6 +1397,27 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	time+=delta
+
+static func quantize_walk_direction(world_delta: Vector2, previous_direction: String = "front") -> String:
+	const COMPASS := ["back", "back_right", "right", "front_right", "front", "front_left", "left", "back_left"]
+	if world_delta.length_squared() < 0.000001: return previous_direction if COMPASS.has(previous_direction) else "front"
+	var angle := fposmod(atan2(world_delta.x, -world_delta.y), TAU)
+	var sector_width := TAU / float(COMPASS.size())
+	var nearest := posmod(roundi(angle / sector_width), COMPASS.size())
+	var previous := COMPASS.find(previous_direction)
+	if previous >= 0:
+		var previous_angle := float(previous) * sector_width
+		var difference := absf(wrapf(angle - previous_angle, -PI, PI))
+		if difference < sector_width * 0.5 + WALK_DIRECTION_HYSTERESIS:
+			return previous_direction
+	return COMPASS[nearest]
+
+static func advance_walk_phase(phase: float, travelled: float) -> float:
+	return fposmod(phase + maxf(0.0, travelled), WALK_STRIDE_DISTANCE)
+
+static func walk_frame_for_phase(phase: float) -> int:
+	var normalized_phase := fposmod(phase, WALK_STRIDE_DISTANCE) / WALK_STRIDE_DISTANCE
+	return clampi(floori(normalized_phase * 8.0), 0, 7)
 
 func interact() -> void:
 	if not blocked and not nearest.is_empty():
@@ -1421,7 +1449,7 @@ func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
 
 func _refresh_avatar_texture(frame: int) -> void:
 	if not is_instance_valid(avatar) or avatar_renderer == null: return
-	var action := avatar_action if avatar_action_remaining > 0.0 else "idle"
+	var action := avatar_action if avatar_action_remaining > 0.0 else ("walk" if avatar_is_walking else "idle")
 	if last_avatar_direction == facing and last_avatar_frame == frame and last_avatar_action == action: return
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,facing,frame,action)
 	var avatar_material := avatar.material_override as ShaderMaterial

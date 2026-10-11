@@ -1,0 +1,47 @@
+{
+  "sources": [
+    {
+      "source_file": "exec-baf15901-d1c0-4104-86fe-267ba8ee480f.png",
+      "runtime_path": "assets/characters/traveller-walk-front-back-v2.png",
+      "sha256": "bd155b550a174674890e4139c4d3fb78ce1766e34fdc00f921e461fcef0cbd3b",
+      "directions": [
+        "front",
+        "back"
+      ],
+      "review": "Root viewed complete generated atlas; original retained; runtime frame alignment pending."
+    },
+    {
+      "source_file": "exec-c4473cde-75a3-48ee-babb-852e6ca3e77b.png",
+      "runtime_path": "assets/characters/traveller-walk-sides-v2.png",
+      "sha256": "72e01fe0890946227ffd0974101cd85b143a229b6cfb7a19c6756b0f7c7b57f7",
+      "directions": [
+        "left",
+        "right"
+      ],
+      "review": "Root viewed complete generated atlas; original retained; runtime frame alignment pending."
+    },
+    {
+      "source_file": "exec-6dfef11d-1bcf-421f-9aee-0505cafefc6a.png",
+      "runtime_path": "assets/characters/traveller-walk-front-diagonal-v2.png",
+      "sha256": "2e2386e401cbde8d6b22bce48549b8d00074874987c7d28e8e6724a5f59cae30",
+      "directions": [
+        "front_left",
+        "front_right"
+      ],
+      "review": "Root viewed complete generated atlas; original retained; runtime frame alignment pending."
+    },
+    {
+      "source_file": "exec-e68804e5-4581-4b88-942b-26ed8a534963.png",
+      "runtime_path": "assets/characters/traveller-walk-back-diagonal-v2.png",
+      "sha256": "0843139216ac87c3c7f96f13f7eed43f8878eb5e7bead87fdaec24dec5f72dcd",
+      "directions": [
+        "back_left",
+        "back_right"
+      ],
+      "review": "Root viewed complete generated atlas; original retained; runtime frame alignment pending."
+    }
+  ],
+  "reference": "traveller-actions-v1.png",
+  "front_diagonal_rejected_source": "exec-4d157577-2649-4c78-b365-2b33f917e4a4.png",
+  "correction": "Passing poses were strict side-facing; edited source to preserve front-left diagonal angle. Rejected candidate retained outside runtime."
+}
