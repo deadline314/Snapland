@@ -1,0 +1,17 @@
+[
+  {
+    "file": "assets/world/tidal-foliage-v2.png",
+    "inputs": [
+      "pm/Snapland-art/images/ART-3-foliage-before.png"
+    ],
+    "prompt": "Redesign this original game sprite atlas in a disciplined, restrained pixel-art style. Keep the same eight subjects and 4-column by 2-row layout, isolated on true transparency: oak, ginkgo, palm, pine; shrub, flower planter, shoreline rocks, park lamp. Each object should read like a hand-built 64x80-pixel sprite enlarged with nearest-neighbor square pixels. Use coherent clusters and a shared limited palette of deep ink blue, sea teal, moss green, muted mustard, brick coral, cream and warm wood. Three flat tones per material. Strong distinctive silhouettes and quiet broad planes; only a few purposeful leaf clusters or chipped edges. Oak has an off-center trunk; ginkgo a fan-shaped crown; pine broad stepped branches. Lamp is a simple working harbor lamp with a small shell emblem. Complete trunks, feet on a common baseline within each row, empty gutters between objects. Remove the fine grain, thousands of individual leaves, ornate scrollwork, glow and tiny ornamental clutter. No text or border. Preserve all eight asset functions.",
+    "date": "2026-10-11",
+    "method": "Built-in image generation edit",
+    "source": "Original Snapland generation only; no third-party image input",
+    "inspection": "Viewed by main session: reduced fine texture, clearer clusters and silhouettes; prompt color counts and pixel grid are targets, not enforced output guarantees",
+    "sha256": "a1a7e7a9520f87c0247f33b4d08977afee703ef317d56e6ac1f151f879f84e23",
+    "input_sha256": {
+      "pm/Snapland-art/images/ART-3-foliage-before.png": "d87f080f1a3792bf79f03e9c102ce15958bb44cc73d374f65912fd526f67d44a"
+    }
+  }
+]

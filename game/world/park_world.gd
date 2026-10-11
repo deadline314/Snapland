@@ -4,6 +4,8 @@ signal interaction_requested(id: String, label: String)
 signal area_changed(label: String)
 const WATER = preload("res://game/world/water.gdshader")
 const STONE = preload("res://game/world/stone.gdshader")
+const WOOD = preload("res://game/world/wood.gdshader")
+const GRASS = preload("res://game/world/grass.gdshader")
 const CREAM = Color("#edddb8")
 const TEAL = Color("#246c6c")
 const CORAL = Color("#da705c")
@@ -17,6 +19,15 @@ var points: Array[Dictionary] = []
 var animated: Array[Dictionary] = []
 var lamps: Array[OmniLight3D] = []
 var sprite_frames: Array[Texture2D] = []
+var material_cache: Dictionary = {}
+var character_frames: Dictionary = {}
+var character_sprites: Array[Dictionary] = []
+var bubble_material: StandardMaterial3D
+var foliage_textures: Dictionary = {}
+var foliage_atlas_loaded := false
+var foliage_warnings: Dictionary = {}
+var facing := "front"
+var mesh_count := 0
 var blocked := false
 var reduced_motion := false
 var night := false
@@ -27,48 +38,120 @@ var fountain_water: ShaderMaterial
 var sea_material: ShaderMaterial
 
 func _ready() -> void:
+	_load_foliage_atlas()
 	_build_lighting()
 	_build_land()
+	_build_shoreline()
 	_build_dock()
 	_build_plaza()
 	_build_avenue()
 	_build_gates()
 	_build_player()
 	_build_camera()
+	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
 	set_night(false)
+
+func _load_foliage_atlas() -> void:
+	const ATLAS_PATH := "res://assets/world/tidal-foliage-v2.png"
+	const REGIONS_PATH := "res://assets/world/foliage-regions.json"
+	if not ResourceLoader.exists(ATLAS_PATH):
+		_warn_foliage_once("atlas", "World foliage resource %s is unavailable; using procedural geometry fallback" % ATLAS_PATH)
+		return
+	var atlas := load(ATLAS_PATH) as Texture2D
+	if atlas == null:
+		_warn_foliage_once("atlas", "World foliage resource %s did not load as a Texture2D; using procedural geometry fallback" % ATLAS_PATH)
+		return
+	if not FileAccess.file_exists(REGIONS_PATH):
+		_warn_foliage_once("regions", "World foliage region file %s is missing; using procedural geometry fallback" % REGIONS_PATH)
+		return
+	var parsed: Variant=JSON.parse_string(FileAccess.get_file_as_string(REGIONS_PATH))
+	if parsed is not Dictionary:
+		_warn_foliage_once("regions", "World foliage region file %s is invalid; using procedural geometry fallback" % REGIONS_PATH)
+		return
+	foliage_atlas_loaded=true
+	for key in parsed:
+		var rect: Variant=parsed[key]
+		if rect is not Array or rect.size()!=4:
+			_warn_foliage_once(str(key), "World foliage item '%s' in %s must contain x, y, width and height" % [key,REGIONS_PATH])
+			continue
+		var numeric := true
+		for value in rect:
+			if typeof(value)!=TYPE_INT and typeof(value)!=TYPE_FLOAT:
+				numeric=false
+				break
+		if not numeric:
+			_warn_foliage_once(str(key), "World foliage item '%s' in %s has nonnumeric rectangle values" % [key,REGIONS_PATH])
+			continue
+		var x := float(rect[0])
+		var y := float(rect[1])
+		var width := float(rect[2])
+		var height := float(rect[3])
+		if not is_finite(x) or not is_finite(y) or not is_finite(width) or not is_finite(height) or x<0.0 or y<0.0 or width<=0.0 or height<=0.0 or x+width>atlas.get_width() or y+height>atlas.get_height():
+			_warn_foliage_once(str(key), "World foliage item '%s' rectangle %s exceeds %s bounds (%d x %d)" % [key,str(rect),ATLAS_PATH,atlas.get_width(),atlas.get_height()])
+			continue
+		var texture := AtlasTexture.new()
+		texture.atlas = atlas
+		texture.region = Rect2(x,y,width,height)
+		foliage_textures[str(key)] = texture
+	if foliage_textures.is_empty():
+		foliage_atlas_loaded=false
+		_warn_foliage_once("regions", "World foliage file %s has no valid atlas regions; using procedural geometry fallback" % REGIONS_PATH)
+
+func _warn_foliage_once(key: String, message: String) -> void:
+	if foliage_warnings.has(key): return
+	foliage_warnings[key]=true
+	push_warning(message)
+
+func _foliage_has(key: String) -> bool:
+	if foliage_textures.has(key): return true
+	if foliage_atlas_loaded:
+		_warn_foliage_once(key, "World foliage item '%s' is absent from %s; using procedural geometry fallback for this item" % [key,"res://assets/world/foliage-regions.json"])
+	return false
 
 func _build_lighting() -> void:
 	var world_env := WorldEnvironment.new()
 	environment = Environment.new()
 	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color("#89bcc8")
+	environment.background_color = Color("#94c6ca")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color("#a9d5da")
-	environment.ambient_light_energy = 0.65
+	environment.ambient_light_color = Color("#b7d5c8")
+	environment.ambient_light_energy = 0.50
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	environment.glow_enabled = true
-	environment.glow_intensity = 0.5
+	environment.glow_intensity = 0.18
 	environment.fog_enabled = true
-	environment.fog_density = 0.0015
-	environment.fog_light_color = Color("#a0c8cc")
+	environment.fog_density = 0.0007
+	environment.fog_light_color = Color("#87b7bd")
 	world_env.environment = environment
 	add_child(world_env)
 	sun = DirectionalLight3D.new()
-	sun.rotation_degrees = Vector3(-48, -28, 0)
+	sun.rotation_degrees = Vector3(-52, -32, 0)
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 70.0
-	sun.light_color = Color("#ffe4b1")
-	sun.light_energy = 1.4
+	sun.light_color = Color("#fffdf7")
+	sun.light_energy = 0.72
 	add_child(sun)
 
 func _mat(color: Color, emissive := false) -> StandardMaterial3D:
+	var key := "%s:%s" % [color.to_html(true), str(emissive)]
+	if material_cache.has(key): return material_cache[key]
 	var material := StandardMaterial3D.new()
 	material.albedo_color = color
-	material.roughness = 0.8
+	material.roughness = 0.92
 	if emissive:
 		material.emission_enabled = true
 		material.emission = color
-		material.emission_energy_multiplier = 1.1
+		material.emission_energy_multiplier = 0.65
+	material_cache[key] = material
+	return material
+
+func _wood_material(color: Color) -> ShaderMaterial:
+	var key := "wood:" + color.to_html(true)
+	if material_cache.has(key): return material_cache[key]
+	var material := ShaderMaterial.new()
+	material.shader = WOOD
+	material.set_shader_parameter("base_color",color)
+	material_cache[key]=material
 	return material
 
 func _mesh(mesh: Mesh, pos: Vector3, material: Material) -> MeshInstance3D:
@@ -77,7 +160,33 @@ func _mesh(mesh: Mesh, pos: Vector3, material: Material) -> MeshInstance3D:
 	instance.position = pos
 	instance.material_override = material
 	add_child(instance)
+	mesh_count += 1
 	return instance
+
+func _multi_mesh(mesh: Mesh, pos: Vector3, transforms: Array[Transform3D], colors: Array[Color], material: Material) -> MultiMeshInstance3D:
+	var multi := MultiMesh.new()
+	multi.transform_format=MultiMesh.TRANSFORM_3D
+	multi.use_colors=true
+	multi.mesh=mesh
+	multi.instance_count=transforms.size()
+	for i in range(transforms.size()):
+		multi.set_instance_transform(i,transforms[i])
+		multi.set_instance_color(i,colors[i])
+	var instance := MultiMeshInstance3D.new()
+	instance.multimesh=multi
+	instance.position=pos
+	instance.material_override=material
+	add_child(instance)
+	mesh_count += 1
+	return instance
+
+func _vertex_color_material(cache_key: String, roughness := 0.9) -> StandardMaterial3D:
+	if material_cache.has(cache_key): return material_cache[cache_key]
+	var material := StandardMaterial3D.new()
+	material.vertex_color_use_as_albedo=true
+	material.roughness=roughness
+	material_cache[cache_key]=material
+	return material
 
 func _box(pos: Vector3, size: Vector3, color: Color, solid := false) -> MeshInstance3D:
 	var mesh := BoxMesh.new()
@@ -101,6 +210,14 @@ func _cylinder(pos: Vector3, radius: float, height: float, color: Color, top := 
 	mesh.radial_segments = 16
 	return _mesh(mesh, pos, _mat(color))
 
+func _cone(pos: Vector3, color: Color) -> MeshInstance3D:
+	var mesh := CylinderMesh.new()
+	mesh.top_radius=0.0
+	mesh.bottom_radius=0.5
+	mesh.height=1.0
+	mesh.radial_segments=8
+	return _mesh(mesh,pos,_mat(color))
+
 func _sphere(pos: Vector3, radius: float, color: Color) -> MeshInstance3D:
 	var mesh := SphereMesh.new()
 	mesh.radius = radius
@@ -116,7 +233,7 @@ func _label(text: String, pos: Vector3, size := 32, color := CREAM) -> Label3D:
 	label.font_size = size
 	label.pixel_size = 0.015
 	label.modulate = color
-	label.outline_size = 6
+	label.outline_size = maxi(2, int(size / 8))
 	label.outline_modulate = Color("#223f47")
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = false
@@ -135,8 +252,10 @@ func _build_land() -> void:
 	var sea_mesh := PlaneMesh.new()
 	sea_mesh.size = Vector2(240,240)
 	_mesh(sea_mesh,Vector3(0,-0.42,0),sea_material)
-	_box(Vector3(0,-0.75,-14),Vector3(41,1.4,67),Color("#b0a47c"))
-	_box(Vector3(0,-0.03,-14),Vector3(40,0.16,66),Color("#91a16b"))
+	_box(Vector3(0,-0.75,-14),Vector3(41,1.4,67),Color("#b89b70"))
+	var grass_material := ShaderMaterial.new()
+	grass_material.shader=GRASS
+	_mesh(_island_lawn_mesh(),Vector3(0,0.055,-14),grass_material)
 	# Paths lead without dead ends from dock to welcome's four clusters.
 	var stone_material := ShaderMaterial.new()
 	stone_material.shader = STONE
@@ -144,44 +263,200 @@ func _build_land() -> void:
 	path_mesh.size = Vector3(9,0.12,64)
 	_mesh(path_mesh,Vector3(0,0.12,-15),stone_material)
 	var square_mesh := BoxMesh.new()
-	square_mesh.size = Vector3(31,0.12,20)
+	square_mesh.size = Vector3(25,0.12,16)
 	_mesh(square_mesh,Vector3(0,0.12,0),stone_material)
 	for side in [-1,1]:
 		for i in range(14):
+			# Open the tree rhythm without shifting any gameplay landmarks.
+			if i % 4 == 2:
+				continue
 			var z := -44.0 + i*4.5
-			_tree(Vector3(side*(15.7+sin(i*1.2)*1.7),0,z),i)
+			_tree(Vector3(side*(16.0+sin(i*1.2)*1.8),0,z),i)
 			_box(Vector3(side*19.5,0.22,z),Vector3(0.3,0.5,3.8),Color("#d2bc8e"))
-		for i in range(8):
-			_flowerbed(Vector3(side*5.6,0,-14-i*4.0),i)
+		for i in range(5):
+			_flowerbed(Vector3(side*5.6,0,-14-i*5.8),i)
 	for i in range(26):
 		var a := float(i)/26.0*TAU
 		_box(Vector3(cos(a)*7.7,0.22,sin(a)*7.7),Vector3(0.55,0.22,0.55),CREAM)
+	# Painted stone inlays make the two central paths read as one welcoming route.
+	for i in range(16):
+		var z := -43.0 + i * 4.0
+		for side in [-1.0, 1.0]:
+			var shell := _box(Vector3(side * 4.45, 0.205, z), Vector3(0.08, 0.035, 1.15), Color("#d1bc91"))
+			shell.rotation.y = side * 0.08
+	for side in [-1, 1]:
+		for i in range(4):
+			var x: float = float(side) * (11.0 + (i % 2) * 2.2)
+			_flowerbed(Vector3(x,0,-2.0-float(i/2)*7.4),i+8)
+
+func _island_lawn_mesh() -> ArrayMesh:
+	var mesh := ArrayMesh.new()
+	var vertices := PackedVector3Array([Vector3.ZERO])
+	var indices := PackedInt32Array()
+	const SEGMENTS := 48
+	for i in range(SEGMENTS):
+		var angle := TAU*float(i)/SEGMENTS
+		var dx := cos(angle)
+		var dz := sin(angle)
+		var extent := minf(20.0/maxf(absf(dx),0.0001),33.0/maxf(absf(dz),0.0001))
+		var ragged := 1.0 + sin(angle*7.0+0.4)*0.022 + sin(angle*13.0-0.8)*0.013
+		vertices.append(Vector3(dx*extent*ragged,0,dz*extent*ragged))
+	for i in range(SEGMENTS):
+		indices.append(0)
+		indices.append((i+1)%SEGMENTS+1)
+		indices.append(i+1)
+	var arrays: Array=[]
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX]=vertices
+	var normals := PackedVector3Array()
+	for i in range(vertices.size()): normals.append(Vector3.UP)
+	arrays[Mesh.ARRAY_NORMAL]=normals
+	arrays[Mesh.ARRAY_INDEX]=indices
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+	return mesh
+
+func _build_shoreline() -> void:
+	# Layered cut-paper shore ledges and foam stay outside the playable lawn.
+	for side in [-1.0, 1.0]:
+		for i in range(18):
+			var z := -45.0 + i * 3.1
+			var wobble := sin(i * 2.17) * 0.5
+			var base := Vector3(side * (20.15 + wobble), -0.12, z)
+			if _foliage_has("rocks"):
+				_foliage_sprite("rocks",base+Vector3(0,-0.12,0),0.95+fmod(float(i)*0.11,0.36))
+			else:
+				var rock := _sphere(base+Vector3(0,0.02,0),0.72+fmod(float(i)*0.31,0.42),Color("#967e64") if i%3==0 else Color("#b29a77"))
+				rock.scale=Vector3(1.35,0.55,1.15)
+			var foam := _box(Vector3(side*(20.7+wobble),-0.20,z+0.7),Vector3(0.13,0.035,1.3),Color("#d2e5d8"))
+			foam.rotation.y = side * 0.12
+			if i % 3 == 0:
+				_sea_grass(Vector3(side*19.25,0,z+0.8),i)
+	for i in range(13):
+		var x := -19.0 + i * 3.15
+		var wobble := sin(i * 1.9) * 0.38
+		if _foliage_has("rocks"):
+			_foliage_sprite("rocks",Vector3(x,-0.12,19.0+wobble),1.1)
+		else:
+			_sphere(Vector3(x,-0.1,19.0+wobble),0.68,Color("#a58a6b")).scale=Vector3(1.4,0.48,1.0)
+		_box(Vector3(x+0.6,-0.2,19.7+wobble),Vector3(1.5,0.035,0.12),Color("#d5e5d8"))
+
+func _sea_grass(pos: Vector3, seed_value: int) -> void:
+	var stem_color := Color("#557961")
+	for i in range(3):
+		var blade := _box(pos+Vector3((i-1)*0.12,0.4,0),Vector3(0.09,0.82,0.07),stem_color)
+		blade.rotation.z = (i-1)*0.22
+	if seed_value % 2 == 0:
+		_sphere(pos+Vector3(0,0.82,0),0.12,CORAL)
 
 func _tree(pos: Vector3, seed_value: int) -> void:
-	_cylinder(pos+Vector3(0,1.1,0),0.23,2.2,Color("#856742"))
-	_sphere(pos+Vector3(0,2.6,0),1.2,Color("#416b55"))
-	_sphere(pos+Vector3(-0.55,2.7,0.25),0.85,Color("#56855d"))
-	_sphere(pos+Vector3(0.4,3.25,0),0.8,Color("#699160"))
+	# Give each avenue band a coherent canopy instead of cycling through a
+	# repeated random-looking row of unrelated tree silhouettes.
+	var key := "oak"
+	var tree_height := 4.35
+	if pos.z > -16.0:
+		key = "palm"
+		tree_height = 4.15
+	elif pos.z < -32.0 and pos.x < 0.0:
+		key = "pine"
+		tree_height = 4.6
+	elif pos.z > -30.0 and pos.x > 0.0 and seed_value in [4, 7]:
+		key = "ginkgo"
+		tree_height = 4.3
+	if _foliage_has(key):
+		_foliage_sprite(key,pos,tree_height)
+		return
+	_cylinder(pos+Vector3(0,1.15,0),0.2,2.3,Color("#76583f"))
+	for root in [-1,1]:
+		var a: float = float(root) * TAU / 4.0 + 0.4
+		var buttress := _box(pos+Vector3(cos(a)*0.33,0.25,sin(a)*0.33),Vector3(0.18,0.48,0.18),Color("#8a6948"))
+		buttress.rotation.y = a
+	for branch in [-1,1]:
+		var arm := _box(pos+Vector3(branch*0.42,1.9,0),Vector3(0.13,1.0,0.14),Color("#76583f"))
+		arm.rotation.z = branch * -0.58
+	# Flat leaf clusters are batched per tree so the foliage stays crisp without
+	# creating a separate mesh node for every printed leaf.
+	var leaves: Array[Transform3D]=[]
+	var leaf_colors: Array[Color]=[]
+	var glints: Array[Transform3D]=[]
+	var glint_colors: Array[Color]=[]
+	for leaf in range(9):
+		var a := float(leaf) * TAU / 9.0 + seed_value * 0.17
+		var crown := Vector3(cos(a)*0.85,2.55+sin(leaf*2.4)*0.22,sin(a)*0.75)
+		var basis := Basis().rotated(Vector3.UP,a).rotated(Vector3.FORWARD,sin(a)*0.18).scaled(Vector3(0.75,0.42,0.32))
+		leaves.append(Transform3D(basis,crown))
+		leaf_colors.append([Color("#3e7058"),Color("#54845d"),Color("#729365")][leaf%3])
+		if leaf % 3 == 0:
+			glints.append(Transform3D(Basis().rotated(Vector3.UP,a).scaled(Vector3(0.22,0.035,0.18)),crown+Vector3(0,0.23,0)))
+			glint_colors.append(Color("#a1ad72"))
+	var leaf_mesh := BoxMesh.new()
+	leaf_mesh.size=Vector3.ONE
+	_multi_mesh(leaf_mesh,pos,leaves,leaf_colors,_vertex_color_material("tree-leaves"))
+	var glint_mesh := BoxMesh.new()
+	glint_mesh.size=Vector3.ONE
+	_multi_mesh(glint_mesh,pos,glints,glint_colors,_vertex_color_material("tree-glints"))
 	if seed_value % 3 == 0:
 		_lantern(pos+Vector3(0.4,2,0.7))
 
 func _flowerbed(pos: Vector3, seed_value: int) -> void:
+	if _foliage_has("planter"):
+		_foliage_sprite("planter",pos,1.75+fmod(float(seed_value)*0.07,0.25))
+		return
 	_box(pos+Vector3(0,0.3,0),Vector3(1.7,0.5,1.3),Color("#ccba92"),true)
 	_box(pos+Vector3(0,0.58,0),Vector3(1.5,0.12,1.1),Color("#425c42"))
-	for j in range(5):
-		var offset := Vector3(sin(j*2.4)*0.55,0.8,cos(j*3.1)*0.37)
-		var flower := _sphere(pos+offset,0.19,CORAL if (j+seed_value)%2==0 else GOLD)
-		animated.append({"node":flower,"base":flower.position,"phase":j+seed_value,"kind":"flower"})
+	var leaves: Array[Transform3D]=[]
+	var leaf_colors: Array[Color]=[]
+	var petals: Array[Transform3D]=[]
+	var petal_colors: Array[Color]=[]
+	var centers: Array[Transform3D]=[]
+	var center_colors: Array[Color]=[]
+	for j in range(7):
+		var offset := Vector3(sin(j*2.4)*0.55,0.78,cos(j*3.1)*0.37)
+		var leaf_basis := Basis().rotated(Vector3.UP,j*0.8).rotated(Vector3.FORWARD,sin(j*1.7)*0.18).scaled(Vector3(0.16,0.42,0.1))
+		leaves.append(Transform3D(leaf_basis,offset*0.72))
+		leaf_colors.append(Color("#63865c") if j%2==0 else Color("#779463"))
+		petals.append(Transform3D(Basis().rotated(Vector3.UP,j*0.43).scaled(Vector3(0.28,0.08,0.23)),offset))
+		petal_colors.append(CORAL if (j+seed_value)%2==0 else GOLD)
+		centers.append(Transform3D(Basis().scaled(Vector3(0.07,0.025,0.07)),offset+Vector3(0,0.07,0)))
+		center_colors.append(Color("#fff0bd"))
+	var blade := BoxMesh.new()
+	blade.size=Vector3.ONE
+	var petal := BoxMesh.new()
+	petal.size=Vector3.ONE
+	var center := BoxMesh.new()
+	center.size=Vector3.ONE
+	_multi_mesh(blade,pos,leaves,leaf_colors,_vertex_color_material("flower-leaves"))
+	_multi_mesh(petal,pos,petals,petal_colors,_vertex_color_material("flower-petals"))
+	_multi_mesh(center,pos,centers,center_colors,_vertex_color_material("flower-centers"))
+
+func _foliage_sprite(kind: String, ground: Vector3, world_height: float) -> Sprite3D:
+	var sprite := Sprite3D.new()
+	sprite.texture=foliage_textures[kind]
+	var region_height: float=foliage_textures[kind].region.size.y
+	sprite.pixel_size=world_height/region_height
+	sprite.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	sprite.billboard=BaseMaterial3D.BILLBOARD_ENABLED
+	sprite.shaded=true
+	sprite.alpha_cut=SpriteBase3D.ALPHA_CUT_DISCARD
+	sprite.alpha_scissor_threshold=0.45
+	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	sprite.position=ground+Vector3(0,world_height*0.5,0)
+	add_child(sprite)
+	return sprite
 
 func _lantern(pos: Vector3) -> void:
-	_cylinder(pos,0.22,0.48,GOLD)
-	var light := OmniLight3D.new()
-	light.position = pos
-	light.light_color = Color("#ffc276")
-	light.omni_range = 5
-	light.light_energy = 0.0
-	add_child(light)
-	lamps.append(light)
+	_cylinder(pos,0.14,0.36,Color("#805b39"))
+	var shade := _box(pos+Vector3(0,0.05,0),Vector3(0.3,0.3,0.3),Color("#f6ca78"))
+	shade.material_override = _mat(Color("#ffd68b"),true)
+	var cap := _cone(pos+Vector3(0,0.24,0),Color("#7d6345"))
+	cap.scale=Vector3(0.2,0.12,0.2)
+	if lamps.size() < 12:
+		var light := OmniLight3D.new()
+		light.position = pos
+		light.light_color = Color("#ffc276")
+		light.omni_range = 4.2
+		light.light_energy = 0.0
+		add_child(light)
+		lamps.append(light)
 
 func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 	for side in [-1,1]:
@@ -196,22 +471,47 @@ func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 func _build_dock() -> void:
 	_box(Vector3(0,0.0,21),Vector3(5,0.3,13),Color("#a17b52"))
 	for i in range(27):
-		_box(Vector3(0,0.18,15+i*0.45),Vector3(5,0.08,0.06),Color("#6e5c42"))
+		var plank := _box(Vector3(0,0.18,15+i*0.45),Vector3(4.92,0.08,0.35),Color("#9a7149"))
+		plank.material_override = _wood_material(Color("#9a7149"))
+		for side in [-1,1]:
+			_cylinder(Vector3(side*2.18,0.25,15+i*0.45),0.035,0.025,Color("#d2b47d"))
 	for side in [-1,1]:
 		for i in range(5):
 			var z := 16.0+i*2.7
 			_cylinder(Vector3(side*2.5,0.6,z),0.12,1.4,Color("#665d45"))
 			if i<4:
-				_box(Vector3(side*2.5,1.1,z+1.35),Vector3(0.09,0.12,2.7),CREAM)
+				var rope := _box(Vector3(side*2.5,1.12,z+1.35),Vector3(0.07,0.08,2.7),Color("#ddcba0"))
+				rope.rotation.x = 0.08
+				if i % 2 == 0: _lantern(Vector3(side*2.5,1.45,z+1.35))
 	_arch(Vector3(0,0,13.8),"SNAPLAND",TEAL,5.5)
+	_box(Vector3(0,0.22,14.4),Vector3(6.6,0.18,0.28),Color("#d7bc8d"))
+	for side in [-1,1]:
+		_cylinder(Vector3(side*3.15,1.5,15.2),0.09,3.0,Color("#755b40"))
+		var pennant := _box(Vector3(side*3.15,2.65,15.5),Vector3(0.8,0.65,0.06),CORAL if side<0 else GOLD)
+		pennant.rotation.z = -0.15*side
+	# A string of tiny warm bulbs frames the arrival arch after dusk.
+	for i in range(9):
+		var x := -2.8 + i * 0.7
+		_box(Vector3(x,3.75,13.65),Vector3(0.035,0.3,0.035),Color("#6e563c"))
+		_lantern(Vector3(x,3.55,13.65))
 	# Original ferry silhouette, with portholes, lifebuoy, chimney and pennants.
-	_box(Vector3(5.5,0,25),Vector3(5,0.8,8),Color("#e4d7b6"),true)
+	var hull := _box(Vector3(5.5,0,25),Vector3(5,0.8,8),Color("#e4d7b6"),true)
+	var bow := _mesh(CylinderMesh.new(),Vector3(5.5,0,20.8),_mat(Color("#e4d7b6")))
+	bow.scale=Vector3(2.5,0.42,1.4)
 	_box(Vector3(5.5,0.7,25),Vector3(4,0.6,6.5),TEAL)
 	_box(Vector3(5.5,1.8,25.4),Vector3(3,1.6,4),CREAM)
 	_box(Vector3(5.5,2.7,25.4),Vector3(3.7,0.3,4.6),CORAL)
 	_cylinder(Vector3(5.5,3.35,25.5),0.45,1.2,TEAL)
 	for i in range(3):
 		_sphere(Vector3(3.95,1.85,24+i*1.2),0.3,Color("#335b6e"))
+		_cylinder(Vector3(7.62,1.9,24+i*1.2),0.14,0.06,Color("#d8b277"))
+	_cylinder(Vector3(4.25,1.8,24.8),0.5,0.12,CORAL,0.5)
+	_box(Vector3(5.5,1.15,21.9),Vector3(3.5,0.12,0.1),Color("#ddc69a"))
+	for i in range(5):
+		var mast := _box(Vector3(4.1+i*0.7,2.9,22.9),Vector3(0.055,0.9,0.055),Color("#715b42"))
+		mast.rotation.z = -0.2
+		var pennant_flag := _box(Vector3(4.1+i*0.7,3.3,22.9),Vector3(0.45,0.23,0.05),[CORAL,GOLD,CREAM][i%3])
+		pennant_flag.rotation.z = -0.12
 	_label("晚風號",Vector3(5.5,1.2,28.5),24)
 	_point("arrival","重播上島導覽",Vector3(0,0,24))
 	_label("碼頭  /  海風從這裡開始",Vector3(-4,1,19),24)
@@ -219,6 +519,10 @@ func _build_dock() -> void:
 func _build_plaza() -> void:
 	# Tiered fountain anchors the main area's visual silhouette.
 	_cylinder(Vector3(0,0.45,0),2.8,0.6,CREAM)
+	for i in range(24):
+		var a := i*TAU/24.0
+		var tile := _box(Vector3(cos(a)*2.57,0.79,sin(a)*2.57),Vector3(0.47,0.07,0.2),[Color("#dfc99e"),Color("#e7d7b8")][i%2])
+		tile.rotation.y = -a
 	_cylinder(Vector3(0,0.78,0),2.5,0.13,Color("#7ac3c8"))
 	fountain_water = ShaderMaterial.new()
 	fountain_water.shader = WATER
@@ -230,10 +534,26 @@ func _build_plaza() -> void:
 	_cylinder(Vector3(0,1.2,0),0.55,1.0,CREAM)
 	_cylinder(Vector3(0,1.8,0),1.5,0.25,CREAM)
 	_sphere(Vector3(0,2.2,0),0.42,GOLD)
+	for i in range(8):
+		var a := i*TAU/8.0
+		var stream := _box(Vector3(cos(a)*1.15,1.38,sin(a)*1.15),Vector3(0.07,0.64,0.07),Color("#79cbd0"))
+		stream.rotation.z=cos(a)*0.32
+		stream.rotation.x=sin(a)*0.32
+		_cylinder(Vector3(cos(a)*1.55,0.95,sin(a)*1.55),0.11,0.12,GOLD)
 	for i in range(12):
 		var a := i*TAU/12.0
 		var bead := _sphere(Vector3(cos(a)*1.2,1.8,sin(a)*1.2),0.08,Color("#b3e4df"))
 		animated.append({"node":bead,"base":bead.position,"phase":i*0.5,"kind":"water"})
+	for i in range(8):
+		var a := i*TAU/8.0
+		var lamp_post := Vector3(cos(a)*9.6,0,sin(a)*8.0)
+		_lamppost(lamp_post)
+	for i in range(4):
+		var fan := _box(Vector3(-4.2+i*2.8,0.205,9.2),Vector3(1.0,0.03,0.16),Color("#c2ad84"))
+		fan.rotation.y = (i%2)*0.25
+		for j in range(3):
+			var star := _box(Vector3(-4.2+i*2.8,0.23,8.8+j*0.3),Vector3(0.12,0.035,0.12),GOLD)
+			star.rotation.y = j*0.8
 	var collision := StaticBody3D.new()
 	var shape := CollisionShape3D.new()
 	var cylinder := CylinderShape3D.new()
@@ -253,19 +573,120 @@ func _build_plaza() -> void:
 	_sphere(Vector3(7,2.4,-5),0.7,CREAM)
 	_label("日夜鐘",Vector3(7,3.5,-5),26)
 	_point("clock","切換日夜",Vector3(7,0,-3))
+	for side in [-1.0,1.0]:
+		_bench(Vector3(side*12.0,0,5.5))
+		_bench(Vector3(side*12.0,0,-8.0))
+		_shrub_cluster(Vector3(side*14.0,0,2.0),side)
+		_shrub_cluster(Vector3(side*14.0,0,-5.8),-side)
 	_arch(Vector3(0,0,-11),"迎賓大道",CORAL,8)
-	_label("中央廣場",Vector3(0,4.7,1),36)
+	_label("中央廣場",Vector3(0,4.7,1),30)
+
+func _bench(pos: Vector3) -> void:
+	var wood := Color("#956d48")
+	for board in range(3):
+		var seat := _box(pos+Vector3(0,0.72,board*0.16-0.16),Vector3(2.0,0.09,0.13),wood if board%2==0 else Color("#a77b50"))
+		seat.material_override=_wood_material(Color("#956d48") if board%2==0 else Color("#a77b50"))
+	for side in [-1.0,1.0]:
+		_box(pos+Vector3(side*0.78,0.38,0),Vector3(0.11,0.7,0.12),Color("#5f5142"))
+		_box(pos+Vector3(side*0.78,1.12,-0.26),Vector3(0.12,1.05,0.12),Color("#5f5142"))
+		_cylinder(pos+Vector3(side*0.78,0.87,0.16),0.13,0.12,GOLD)
+	var back := _box(pos+Vector3(0,1.17,-0.26),Vector3(1.82,0.16,0.13),wood)
+	back.material_override=_wood_material(wood)
+
+func _shrub_cluster(pos: Vector3, seed_value: float) -> void:
+	if _foliage_has("shrub"):
+		_foliage_sprite("shrub",pos,2.05)
+		return
+	var branch := _cylinder(pos+Vector3(0,0.34,0),0.07,0.68,Color("#806143"))
+	var leaves: Array[Transform3D]=[]
+	var colors: Array[Color]=[]
+	for i in range(7):
+		var a := TAU*float(i)/7.0+seed_value
+		var origin := Vector3(cos(a)*0.34,0.78+sin(i*2.1)*0.08,sin(a)*0.34)
+		leaves.append(Transform3D(Basis().rotated(Vector3.UP,a).rotated(Vector3.FORWARD,sin(a)*0.32).scaled(Vector3(0.42,0.18,0.24)),origin))
+		colors.append([Color("#385e49"),Color("#527952"),Color("#789563")][i%3])
+	_multi_mesh(BoxMesh.new(),pos,leaves,colors,_vertex_color_material("shrub-leaves"))
+	for side in [-1.0,1.0]:
+		var blossom := _box(pos+Vector3(side*0.3,0.26,0.28),Vector3(0.18,0.12,0.15),CORAL if side<0 else GOLD)
+		blossom.rotation.y=side*0.35
 
 func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 	_box(pos+Vector3(0,0.7,0),Vector3(3.8,1.3,2.5),CREAM,true)
+	_box(pos+Vector3(0,0.48,1.28),Vector3(3.7,0.14,0.11),Color("#876843"))
+	_box(pos+Vector3(0,1.25,1.31),Vector3(3.1,0.12,0.13),Color("#876843"))
+	var product_transforms: Array[Transform3D]=[]
+	var product_colors: Array[Color]=[]
+	for i in range(5):
+		product_transforms.append(Transform3D(Basis().scaled(Vector3(0.34,0.08,0.65)),Vector3(-1.1+i*0.55,1.45,0.7)))
+		product_colors.append([CORAL,GOLD,TEAL,Color("#7abec3"),CORAL][i])
+	_multi_mesh(BoxMesh.new(),pos,product_transforms,product_colors,_vertex_color_material("kiosk-products"))
 	_box(pos+Vector3(0,1.7,0),Vector3(4.2,0.3,3),color)
-	for side in [-1,1]:
-		_box(pos+Vector3(side*1.65,1.85,0),Vector3(0.18,1.4,0.18),TEAL)
-	var roof := _box(pos+Vector3(0,2.7,0),Vector3(4.5,0.35,3.3),color)
-	roof.rotation.z=0.02
+	var support_transforms: Array[Transform3D]=[]
+	var support_colors: Array[Color]=[]
+	for side in [-1.0,1.0]:
+		for row in range(2):
+			support_transforms.append(Transform3D(Basis().scaled(Vector3(0.16 if row==0 else 0.12,1.4 if row==0 else 1.2,0.16 if row==0 else 0.12)),Vector3(side*(1.65 if row==0 else 1.87),1.85 if row==0 else 1.9,0.0 if row==0 else 0.8)))
+			support_colors.append(TEAL if row==0 else Color("#9a7854"))
+	_multi_mesh(BoxMesh.new(),pos,support_transforms,support_colors,_vertex_color_material("kiosk-supports"))
+	# Two printed-paper roof planes make the stand read as a little harbor pavilion.
+	var roof_left := _box(pos+Vector3(-1.08,2.62,0),Vector3(2.35,0.28,3.35),color)
+	var roof_right := _box(pos+Vector3(1.08,2.62,0),Vector3(2.35,0.28,3.35),color)
+	roof_left.rotation.z=-0.18
+	roof_right.rotation.z=0.18
+	_box(pos+Vector3(0,2.87,0),Vector3(0.22,0.32,3.45),Color("#866b47"))
+	_box(pos+Vector3(0,2.48,1.69),Vector3(4.85,0.14,0.12),Color("#f1d9a9"))
+	var scallop_transforms: Array[Transform3D]=[]
+	var scallop_colors: Array[Color]=[]
 	for i in range(9):
-		_box(pos+Vector3(-1.8+i*0.45,2.48,1.6),Vector3(0.45,0.5,0.13),CREAM if i%2==0 else color)
-	_label(title,pos+Vector3(0,2.05,1.65),24)
+		var tilt := 0.04 if i%2==0 else -0.04
+		scallop_transforms.append(Transform3D(Basis().rotated(Vector3.FORWARD,tilt).scaled(Vector3(0.45,0.38,0.13)),Vector3(-1.8+i*0.45,2.25,1.72)))
+		scallop_colors.append(CREAM if i%2==0 else Color("#f1d9a9"))
+	_multi_mesh(BoxMesh.new(),pos,scallop_transforms,scallop_colors,_vertex_color_material("kiosk-awning-fringe"))
+	var plaque := _box(pos+Vector3(0,2.01,1.59),Vector3(2.7,0.54,0.12),Color("#755a3c"))
+	_box(pos+Vector3(0,2.01,1.67),Vector3(2.55,0.4,0.06),color)
+	_label(title,pos+Vector3(0,1.94,1.73),19)
+	# Small brass studs and roof tiles share batched meshes across each stand.
+	var tile_transforms: Array[Transform3D]=[]
+	var tile_colors: Array[Color]=[]
+	for side in [-1.0,1.0]:
+		for row in range(3):
+			for col in range(5):
+				var tile_basis := Basis().rotated(Vector3.FORWARD,side*0.18).scaled(Vector3(0.32,0.035,0.58))
+				tile_transforms.append(Transform3D(tile_basis,Vector3(side*(0.32+col*0.43),2.79-row*0.075,-1.0+row*0.8)))
+				tile_colors.append(Color("#a96d55") if (col+row)%3==0 else color)
+	_multi_mesh(BoxMesh.new(),pos,tile_transforms,tile_colors,_vertex_color_material("kiosk-roof-tiles"))
+	var stud_transforms: Array[Transform3D]=[]
+	var stud_colors: Array[Color]=[]
+	for side in [-1.0,1.0]:
+		stud_transforms.append(Transform3D(Basis().scaled(Vector3(0.1,0.1,0.06)),Vector3(side*1.9,1.95,1.73)))
+		stud_colors.append(GOLD)
+	_multi_mesh(BoxMesh.new(),pos,stud_transforms,stud_colors,_vertex_color_material("kiosk-studs"))
+
+func _lamppost(pos: Vector3) -> void:
+	if _foliage_has("lamp"):
+		_foliage_sprite("lamp",pos,2.85)
+		var decorative_light := OmniLight3D.new()
+		decorative_light.position=pos+Vector3(0,2.18,0)
+		decorative_light.light_color=Color("#ffd79a")
+		decorative_light.omni_range=5.2
+		decorative_light.light_energy=0.0
+		add_child(decorative_light)
+		lamps.append(decorative_light)
+		return
+	_cylinder(pos+Vector3(0,1.2,0),0.09,2.4,Color("#554c3f"))
+	_cylinder(pos+Vector3(0,2.25,0),0.28,0.12,Color("#92734c"))
+	var glow := _box(pos+Vector3(0,2.55,0),Vector3(0.3,0.42,0.3),Color("#f4d292"))
+	glow.material_override=_mat(Color("#ffe0a0"),true)
+	for side in [-1,1]:
+		_box(pos+Vector3(side*0.21,2.76,0),Vector3(0.06,0.48,0.06),Color("#554c3f"))
+	_cylinder(pos+Vector3(0,2.98,0),0.19,0.08,Color("#554c3f"))
+	var light := OmniLight3D.new()
+	light.position=pos+Vector3(0,2.55,0)
+	light.light_color=Color("#ffd79a")
+	light.omni_range=5.2
+	light.light_energy=0.0
+	add_child(light)
+	lamps.append(light)
 
 func _build_avenue() -> void:
 	var names := ["氣球快遞","風箏穿環","噴泉跳拍","人潮指揮","帽子救援","彩帶節拍","花壇拼圖","招牌平衡","影子捉迷藏","泡泡合照","長椅換位","迎賓大合奏"]
@@ -276,34 +697,7 @@ func _build_avenue() -> void:
 		_kiosk(pos,names[i],color)
 		_point("game-%03d"%(i+1),names[i],pos+Vector3(-side*2.3,0,1))
 		_cylinder(pos+Vector3(-side*2.3,0.28,1),0.75,0.16,color)
-		# Every station has a distinct miniature sign, following its actual mechanic.
-		match i:
-			0,1:
-				for j in range(3):
-					var balloon := _sphere(pos+Vector3(-0.8+j*0.8,3.8+j*0.2,0),0.38,[CORAL,GOLD,Color("#77c7ce")][j])
-					animated.append({"node":balloon,"base":balloon.position,"phase":j,"kind":"float"})
-			2:
-				_cylinder(pos+Vector3(0,3,0),0.9,0.3,Color("#6ac2d0"))
-			3:
-				for j in range(3):
-					_sphere(pos+Vector3(j*0.5-0.5,3.4,0),0.2,[CORAL,GOLD,TEAL][j])
-			4:
-				_cylinder(pos+Vector3(0,3.1,0),0.8,0.12,GOLD)
-				_cylinder(pos+Vector3(0,3.35,0),0.45,0.4,GOLD)
-			5:
-				_box(pos+Vector3(0,3.25,0),Vector3(2,0.3,0.3),CORAL)
-			6:
-				_sphere(pos+Vector3(0,3.2,0),0.6,CORAL)
-			7:
-				_box(pos+Vector3(0,3.3,0),Vector3(2,0.8,0.2),TEAL).rotation.z=0.15
-			8:
-				_sphere(pos+Vector3(0,3.3,0),0.4,Color("#473c66"))
-			9:
-				_sphere(pos+Vector3(0,3.2,0),0.75,Color("#99d3da"))
-			10:
-				_box(pos+Vector3(0,3.1,0),Vector3(2,0.3,0.6),GOLD)
-			11:
-				_label("♫",pos+Vector3(0,3.6,0),55,GOLD)
+		_game_feature(i,pos,color)
 	_npc(Vector3(-3,0,-15),CORAL,"小角")
 	_point("quest-001","吉祥物的尾巴危機",Vector3(-3,0,-15))
 	_npc(Vector3(3,0,-15),TEAL,"阿浪")
@@ -314,6 +708,97 @@ func _build_avenue() -> void:
 	_point("explore-003","長椅雙人份",Vector3(-3,0,-35.7))
 	_arch(Vector3(0,0,-45),"倒影大道",Color("#655178"),5)
 	_point("rift","查看倒影大道",Vector3(0,0,-43))
+
+func _game_feature(index: int, pos: Vector3, color: Color) -> void:
+	# Each booth gets a large, readable silhouette of the activity on offer.
+	match index:
+		0: # Balloon delivery: cluster, threads and a small parcel basket.
+			for j in range(3):
+				var balloon := _sphere(pos+Vector3(-0.65+j*0.65,3.7+j*0.18,0),0.36,[CORAL,GOLD,Color("#77c7ce")][j])
+				animated.append({"node":balloon,"base":balloon.position,"phase":j,"kind":"float"})
+				_box(pos+Vector3(-0.65+j*0.65,3.25,0),Vector3(0.025,0.38,0.025),CREAM)
+			_box(pos+Vector3(0,3.02,0),Vector3(0.64,0.27,0.46),Color("#9a7149"))
+		1: # Kite-ring course: paper kite tails and three target hoops.
+			for j in range(3):
+				var hoop := _mesh(TorusMesh.new(),pos+Vector3(-0.82+j*0.82,3.5-j*0.14,0),_mat([CORAL,GOLD,TEAL][j]))
+				hoop.scale=Vector3(0.34,0.34,0.22)
+				hoop.rotation_degrees.x=90
+			var kite := _cone(pos+Vector3(0,4.05,-0.12),color)
+			kite.rotation_degrees.z=45
+			kite.scale=Vector3(0.58,0.7,0.16)
+			for j in range(3): _box(pos+Vector3(0,3.25-j*0.2,0.12),Vector3(0.28,0.045,0.04),CORAL if j%2==0 else GOLD)
+		2: # Fountain photo: scalloped basin and a crown of paper jets.
+			_cylinder(pos+Vector3(0,3.05,0),0.95,0.25,CREAM)
+			_cylinder(pos+Vector3(0,3.22,0),0.78,0.13,Color("#62b8c1"))
+			_cylinder(pos+Vector3(0,3.48,0),0.18,0.58,Color("#d0b37d"))
+			for j in range(6):
+				var a := j*TAU/6.0
+				var jet := _box(pos+Vector3(cos(a)*0.56,3.57,sin(a)*0.56),Vector3(0.07,0.64,0.07),Color("#7dcbd0"))
+				jet.rotation.z=cos(a)*0.32
+		3: # Crowd director: three arrow signs and a striped queue post.
+			for j in range(3):
+				var y := 3.3+j*0.37
+				_box(pos+Vector3(0,y,0),Vector3(0.1,0.7,0.1),Color("#745b42"))
+				var arrow := _box(pos+Vector3(-0.54+j*0.54,y+0.26,0),Vector3(0.74,0.28,0.13),[CORAL,GOLD,TEAL][j])
+				arrow.rotation.z=0.08*(j-1)
+				var tip := _cone(pos+Vector3(-0.15+j*0.54,y+0.26,0),[CORAL,GOLD,TEAL][j])
+				tip.rotation_degrees.z=-90
+				tip.scale=Vector3(0.2,0.3,0.12)
+		4: # Hat rescue: oversized top hat above a striped hat stand.
+			_cylinder(pos+Vector3(0,3.08,0),0.92,0.15,GOLD)
+			_cylinder(pos+Vector3(0,3.48,0),0.52,0.72,Color("#514258"),0.58)
+			_box(pos+Vector3(0,3.35,0.51),Vector3(0.58,0.11,0.05),CORAL)
+		5: # Ribbon rhythm: three curling strips on a music staff.
+			for j in range(3):
+				var strip := _box(pos+Vector3(0,3.15+j*0.23,0),Vector3(2.1,0.09,0.16),[CORAL,GOLD,Color("#64b9bd")][j])
+				strip.rotation.z=sin(j*2.1)*0.19
+				_box(pos+Vector3(-0.8+j*0.8,3.7,0),Vector3(0.13,0.32,0.13),CREAM)
+		6: # Flower puzzle: color tiles around a layered rosette.
+			for j in range(8):
+				var a := j*TAU/8.0
+				var petal := _box(pos+Vector3(cos(a)*0.65,3.3,sin(a)*0.65),Vector3(0.42,0.11,0.26),[CORAL,GOLD,Color("#84aa69")][j%3])
+				petal.rotation.y=-a
+			_sphere(pos+Vector3(0,3.42,0),0.27,Color("#fff0bd"))
+		7: # Sign balance: seesaw plank, brass fulcrum and two sign weights.
+			var beam := _box(pos+Vector3(0,3.35,0),Vector3(2.3,0.18,0.34),Color("#9a7149"))
+			beam.rotation.z=0.16
+			var fulcrum := _cone(pos+Vector3(0,3.02,0),CORAL)
+			fulcrum.scale=Vector3(0.45,0.42,0.35)
+			for side in [-1,1]:
+				_box(pos+Vector3(side*0.9,3.67,0),Vector3(0.62,0.45,0.12),TEAL if side<0 else GOLD)
+		8: # Shadow hide-and-seek: moon, sun and a hinged shadow screen.
+			var screen := _box(pos+Vector3(0,3.38,0),Vector3(1.85,1.25,0.12),Color("#423d58"))
+			_box(pos+Vector3(0,2.72,0.08),Vector3(2.15,0.12,0.18),Color("#876843"))
+			_sphere(pos+Vector3(-0.48,3.55,0.12),0.28,Color("#f1d48f"))
+			_box(pos+Vector3(0.5,3.28,0.14),Vector3(0.6,0.65,0.09),Color("#7e8a96"))
+		9: # Bubble portraits: hoop frame, shiny bubbles and a standing photo card.
+			var ring := _mesh(TorusMesh.new(),pos+Vector3(0,3.56,0),_mat(Color("#b3e7df")))
+			ring.scale=Vector3(0.76,0.92,0.18)
+			ring.rotation_degrees.x=90
+			for j in range(4):
+				var bubble := _sphere(pos+Vector3(-0.58+(j%2)*1.15,3.18+(j/2)*0.64,0.22),0.22,Color("#a6dce0"))
+				bubble.material_override=_bubble_material()
+				_box(pos+Vector3(-0.44+(j%2)*1.15,3.24+(j/2)*0.64,0.41),Vector3(0.08,0.06,0.035),CREAM)
+		10: # Bench swap: paired paper seats with contrasting cushions.
+			for side in [-1,1]:
+				_box(pos+Vector3(side*0.58,3.0,0),Vector3(0.88,0.15,0.55),GOLD if side<0 else CORAL)
+				_box(pos+Vector3(side*0.58,3.48,-0.2),Vector3(0.88,0.76,0.14),Color("#9b7d5c"))
+				for leg in [-1,1]: _box(pos+Vector3(side*0.58+leg*0.31,2.76,0),Vector3(0.08,0.46,0.08),Color("#654f3c"))
+		11: # Welcome ensemble: little drums, brass chimes and a conductor's baton.
+			for j in range(3):
+				_cylinder(pos+Vector3(-0.78+j*0.78,3.1,0),0.36,0.5,[CORAL,GOLD,TEAL][j],0.31)
+				_box(pos+Vector3(-0.78+j*0.78,3.38,0),Vector3(0.62,0.06,0.62),CREAM)
+				_box(pos+Vector3(-0.78+j*0.78,3.85,0),Vector3(0.07,0.78,0.07),Color("#d6bc86"))
+			_label("♫",pos+Vector3(0,4.28,0),42,GOLD)
+
+func _bubble_material() -> StandardMaterial3D:
+	if bubble_material == null:
+		bubble_material=StandardMaterial3D.new()
+		bubble_material.albedo_color=Color(0.62,0.85,0.88,0.55)
+		bubble_material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+		bubble_material.roughness=0.12
+		bubble_material.metallic=0.18
+	return bubble_material
 
 func park_data() -> Dictionary:
 	var path := "res://design/01-park/park.json"
@@ -335,44 +820,325 @@ func _build_gates() -> void:
 		var zone: Dictionary=zones[i]
 		var side := -1 if i%2==1 else 1
 		var pos := Vector3(side*15.5,0,8-float((i-1)/2)*4.5)
-		_box(pos+Vector3(0,1,0),Vector3(2.8,2,0.4),TEAL if side==1 else CORAL)
-		_label(zone["name"],pos+Vector3(0,2.3,0),24)
-		_box(pos+Vector3(0,0.55,1),Vector3(2.8,0.2,0.2),GOLD)
+		var zone_color: Color = [Color("#28737a"),Color("#e2795e"),Color("#e2ae4f"),Color("#725985"),Color("#47718a"),Color("#678858"),Color("#5295a0"),Color("#42638a"),Color("#865d71")][i-1]
+		_box(pos+Vector3(0,0.18,0),Vector3(3.9,0.22,1.5),Color("#d0bc96"))
+		for pillar_side in [-1,1]:
+			_box(pos+Vector3(pillar_side*1.25,1.35,0),Vector3(0.42,2.7,0.5),CREAM,true)
+			_box(pos+Vector3(pillar_side*1.25,0.55,0),Vector3(0.8,0.32,0.75),Color("#a98d68"))
+			_box(pos+Vector3(pillar_side*1.25,2.48,0),Vector3(0.76,0.26,0.72),zone_color)
+			_lantern(pos+Vector3(pillar_side*1.25,2.08,0.38))
+		_box(pos+Vector3(0,2.8,0),Vector3(3.25,0.48,0.66),zone_color)
+		_box(pos+Vector3(0,2.49,0),Vector3(2.65,0.12,0.8),Color("#f2d8a5"))
+		_zone_crown(i,pos,zone_color)
+		_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
+		_label(["⚓","✿","☼","✦","⚙","❀","⌬","◉","◇"][i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
 		_point("gate:"+zone["id"],zone["name"],pos+Vector3(0,0,2))
-		_label("%d 張 · 準備中"%zone["threshold"],pos+Vector3(0,1.1,0.3),20)
+		_label("%d 張 · 準備中"%zone["threshold"],pos+Vector3(0,1.1,0.48),19)
+
+func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
+	match index:
+		1: # Lighthouse beacon, lantern room and cap.
+			_cylinder(pos+Vector3(0,3.72,0),0.27,1.45,CREAM)
+			_cylinder(pos+Vector3(0,4.52,0),0.4,0.2,GOLD)
+			var beacon := _box(pos+Vector3(0,3.98,0),Vector3(0.42,0.45,0.42),Color("#f7d68f"))
+			beacon.material_override=_mat(Color("#f7d68f"),true)
+			var cap := _cone(pos+Vector3(0,4.68,0),color)
+			cap.scale=Vector3(0.48,0.38,0.48)
+		2: # Candy spool and wrapped sugar pinwheels.
+			for side in [-1,1]:
+				_cylinder(pos+Vector3(side*0.62,3.52,0),0.16,1.18,Color("#f1d6a8"))
+				for row in range(3): _box(pos+Vector3(side*0.62,3.18+row*0.34,0.2),Vector3(0.34,0.12,0.09),CORAL if row%2==0 else CREAM)
+			_cylinder(pos+Vector3(0,3.55,0),0.42,0.46,color)
+			_cylinder(pos+Vector3(0,3.82,0),0.5,0.08,GOLD)
+		3: # Night market pagoda roof and hanging lanterns.
+			for row in range(2):
+				var eave := _mesh(CylinderMesh.new(),pos+Vector3(0,3.42+row*0.38,0),_mat(color if row==0 else Color("#8d4f4c")))
+				eave.scale=Vector3(1.32-row*0.19,0.14,0.55)
+			for side in [-1,1]: _lantern(pos+Vector3(side*0.88,3.45,0.5))
+		4: # Circus tent peak and striped paper canopy.
+			var tent := _cone(pos+Vector3(0,3.75,0),color)
+			tent.scale=Vector3(1.25,1.15,0.62)
+			for side in [-1,1]:
+				var stripe := _box(pos+Vector3(side*0.38,3.4,0.31),Vector3(0.14,0.72,0.06),CREAM)
+				stripe.rotation.z=side*0.24
+		5: # Toy city clock tower with two visible hands.
+			_box(pos+Vector3(0,3.7,0),Vector3(0.6,1.1,0.55),Color("#98714e"))
+			_cylinder(pos+Vector3(0,4.22,0.32),0.34,0.1,CREAM)
+			_box(pos+Vector3(0,4.38,0.4),Vector3(0.035,0.24,0.035),Color("#514858"))
+			_box(pos+Vector3(0.08,4.29,0.4),Vector3(0.18,0.035,0.035),Color("#514858"))
+			var turret := _cone(pos+Vector3(0,4.43,0),color)
+			turret.scale=Vector3(0.44,0.36,0.44)
+		6: # Greenhouse flower crown, leaf blades and paper blossoms.
+			for side in [-1,1]:
+				var leaf := _box(pos+Vector3(side*0.52,3.54,0),Vector3(0.65,0.17,0.24),Color("#78945d"))
+				leaf.rotation.z=side*0.4
+				_sphere(pos+Vector3(side*0.72,3.86,0.12),0.18,CORAL if side<0 else GOLD)
+			_sphere(pos+Vector3(0,3.72,0),0.25,CREAM)
+		7: # Science flask with a thick glass neck and colored contents.
+			_cylinder(pos+Vector3(0,3.55,0),0.43,0.1,Color("#6a9b9c"),0.24)
+			_cylinder(pos+Vector3(0,3.88,0),0.27,0.62,Color("#89c7c8"),0.13)
+			_box(pos+Vector3(0,4.25,0),Vector3(0.42,0.09,0.42),GOLD)
+			_sphere(pos+Vector3(0,3.55,0.18),0.16,Color("#eb9c6c"))
+		8: # Planet model with a tilted paper ring.
+			_sphere(pos+Vector3(0,3.67,0),0.42,Color("#df9870"))
+			var orbit := _mesh(TorusMesh.new(),pos+Vector3(0,3.67,0),_mat(CREAM))
+			orbit.scale=Vector3(0.82,0.36,0.3)
+			orbit.rotation.z=0.32
+			for side in [-1,1]: _box(pos+Vector3(side*0.72,4.0,0),Vector3(0.11,0.11,0.11),GOLD)
+		9: # The last gate is a freestanding mirror oval with a key-like crest.
+			var portal := _mesh(TorusMesh.new(),pos+Vector3(0,3.83,0),_mat(Color("#b9d9d8")))
+			portal.scale=Vector3(0.72,1.05,0.22)
+			portal.rotation_degrees.x=90
+			var mirror := _box(pos+Vector3(0,3.8,-0.06),Vector3(1.08,1.62,0.06),Color("#6c8790"))
+			mirror.material_override=_mat(Color("#90b5b4"),true)
+			_cylinder(pos+Vector3(0,4.91,0),0.16,0.4,GOLD)
 
 func _npc(pos: Vector3, color: Color, title: String) -> void:
 	var sprite := Sprite3D.new()
-	sprite.texture=_pixel_character(color,0,false)
-	sprite.pixel_size=0.10
+	var role := "ticket"
+	if title == "小角": role = "imp"
+	elif title == "阿浪": role = "announcer"
+	sprite.texture=_character_texture(role,color,"front",0)
+	sprite.pixel_size=0.05
 	sprite.billboard=BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	sprite.position=pos+Vector3(0,1.2,0)
 	sprite.shaded=true
 	add_child(sprite)
+	character_sprites.append({"sprite":sprite,"role":role,"color":color})
 	_label(title,pos+Vector3(0,2.65,0),22)
 
-func _pixel_character(color: Color, frame: int, back: bool) -> Texture2D:
-	var pattern := [
-		"      hhhh      ","    hhhhhhhh    ","   hhhhhhhhhh   ","   hhhhhhhhhh   ",
-		"   hsssss shh   ","   ssessessss   ","    ssssssss    ","     ssmmss     ",
-		"      ssss      ","    cccccccc    ","   cccccccccc   ","  sccccccccccs  ",
-		"  sccwccccwccs  ","  sccccccccccs  ","   cccccccccc   ","    cccccccc    ",
-		"    bbbbbbbb    ","    bbb  bbb    ","    bbb  bbb    ","    bbb  bbb    ",
-		"   dddd  dddd   ","   dddd  dddd   ","                ","                "]
-	var image := Image.create(16,24,false,Image.FORMAT_RGBA8)
-	image.fill(Color.TRANSPARENT)
-	var palette := {"h":Color("#423b40"),"s":Color("#f1c7a0"),"e":Color("#263f42"),"m":Color("#ba806b"),"c":color,"w":CREAM,"b":Color("#385164"),"d":Color("#273f47")}
-	for y in range(24):
-		for x in range(16):
-			var key: String = pattern[y].substr(x,1)
-			if key!=" ":
-				var pixel_color: Color=palette[key]
-				if back and y<9: pixel_color=palette.h
-				var yy := y
-				if frame%2==1 and y>=17: yy=mini(23,y+(1 if x<8 else -1))
-				image.set_pixel(x,yy,pixel_color)
-	return ImageTexture.create_from_image(image)
+func _pixel_rect(image: Image, x: int, y: int, width: int, height: int, color: Color) -> void:
+	for py in range(y,maxi(0,y+height)):
+		for px in range(x,maxi(0,x+width)):
+			if px >= 0 and px < image.get_width() and py >= 0 and py < image.get_height():
+				image.set_pixel(px,py,color)
+
+func _pixel_triangle(image: Image, x: int, y: int, width: int, height: int, color: Color, point_up := true) -> void:
+	for row in range(height):
+		var progress := float(row) / maxi(1,height-1)
+		var span := maxi(1,roundi(width*(1.0-progress))) if point_up else maxi(1,roundi(width*progress))
+		var left := x + (width-span)/2
+		_pixel_rect(image,left,y+row,span,1,color)
+
+func _pixel_line(image: Image, start: Vector2i, finish: Vector2i, color: Color, thickness := 1) -> void:
+	var x := start.x
+	var y := start.y
+	var dx := absi(finish.x-start.x)
+	var sx := 1 if start.x < finish.x else -1
+	var dy := -absi(finish.y-start.y)
+	var sy := 1 if start.y < finish.y else -1
+	var error := dx+dy
+	while true:
+		_pixel_rect(image,x-thickness/2,y-thickness/2,thickness,thickness,color)
+		if x == finish.x and y == finish.y: break
+		var doubled := 2*error
+		if doubled >= dy:
+			error += dy
+			x += sx
+		if doubled <= dx:
+			error += dx
+			y += sy
+
+func _character_texture(role: String, accent: Color, direction: String, frame: int) -> Texture2D:
+	var key := "%s|%s|%s|%d" % [role,accent.to_html(true),direction,frame%4]
+	if character_frames.has(key): return character_frames[key]
+	const INK := Color("#243c50")
+	const SKIN := Color("#efc69e")
+	const CREAM_PAPER := Color("#f3e4bd")
+	const BOOT := Color("#654b3e")
+	var img := Image.create(32,48,false,Image.FORMAT_RGBA8)
+	img.fill(Color.TRANSPARENT)
+	var step := frame % 4
+	# Four planted-foot poses stay pixel-snapped; frame zero doubles as the idle pose.
+	var left_lift: int = [0,1,2,1][step]
+	var right_lift: int = [0,-1,-2,-1][step]
+	var boot_left := Color("#473e47") if role == "imp" else BOOT
+	var boot_right := Color("#473e47") if role == "imp" else BOOT
+	_pixel_rect(img,9,34+left_lift,6,9-left_lift,boot_left)
+	_pixel_rect(img,18,34+right_lift,6,9-right_lift,boot_right)
+	_pixel_rect(img,8,42+left_lift,8,4,Color("#463a39"))
+	_pixel_rect(img,18,42+right_lift,8,4,Color("#463a39"))
+	if role == "hero":
+		# Narrow cream rain shorts with two dark seams.
+		_pixel_rect(img,9,34+left_lift,5,6,CREAM_PAPER)
+		_pixel_rect(img,19,34+right_lift,5,6,CREAM_PAPER)
+		_pixel_line(img,Vector2i(16,35),Vector2i(16,39),Color("#c4ac82"))
+	elif role == "imp":
+		_pixel_rect(img,10,34+left_lift,4,6,accent.darkened(0.2))
+		_pixel_rect(img,19,34+right_lift,4,6,accent.darkened(0.2))
+	else:
+		_pixel_rect(img,10,34+left_lift,4,6,Color("#315363"))
+		_pixel_rect(img,19,34+right_lift,4,6,Color("#315363"))
+	# Body silhouette is role-led: raincoat, mascot, guide uniform or announcer's jacket.
+	_pixel_rect(img,8,20,16,16,INK)
+	_pixel_rect(img,9,21,14,14,accent)
+	if role == "hero":
+		var raincoat := Color("#267e83")
+		_pixel_rect(img,9,21,14,13,raincoat)
+		_pixel_rect(img,8,25,3,7,raincoat.darkened(0.16))
+		_pixel_rect(img,21,25,3,7,raincoat.darkened(0.16))
+		_pixel_rect(img,8,30,4,3,Color("#df765d"))
+		_pixel_rect(img,20,31,4,2,CREAM_PAPER)
+		_pixel_rect(img,10,21,12,3,Color("#d7ece0"))
+		# The ticket lanyard and paper boarding stub are only on the front.
+		if direction != "back":
+			_pixel_line(img,Vector2i(10,22),Vector2i(20,32),Color("#d9cfaa"),2)
+			_pixel_rect(img,18,29,5,5,Color("#f5edcf"))
+			_pixel_rect(img,19,30,3,1,Color("#d8ae68"))
+			_pixel_rect(img,19,32,2,1,Color("#78a5a0"))
+			# Brick-red box camera, worn brass side and pale blue lens.
+			_pixel_rect(img,21,32,6,4,Color("#994f45"))
+			_pixel_rect(img,22,31,4,2,Color("#bc7157"))
+			_pixel_rect(img,26,33,2,2,Color("#e4c57d"))
+			_pixel_rect(img,23,33,2,2,Color("#3e747b"))
+		_pixel_rect(img,15,22,2,11,Color("#f1f0d8"))
+		_pixel_rect(img,13,20,6,2,Color("#e4c27c"))
+	elif role == "imp":
+		# Soft mascot body, oversized trailing scarf and folded arrow-point tail.
+		_pixel_triangle(img,9,22,14,13,accent)
+		_pixel_rect(img,9,31,14,3,accent.darkened(0.13))
+		_pixel_rect(img,8,23,4,2,accent.lightened(0.16))
+		_pixel_rect(img,20,23,4,2,accent.lightened(0.16))
+		_pixel_rect(img,10,21,12,4,Color("#2c8b8c"))
+		_pixel_rect(img,17,23,5,10,Color("#2c8b8c"))
+		_pixel_triangle(img,17,31,6,5,Color("#47a6a2"),false)
+		# Tail points back from its turn; direction changes which edge it exits.
+		if direction == "left":
+			_pixel_line(img,Vector2i(10,29),Vector2i(4,32),Color("#b95051"),3)
+			_pixel_triangle(img,2,30,5,5,Color("#b95051"))
+			_pixel_rect(img,2,29,3,1,CREAM_PAPER)
+		else:
+			_pixel_line(img,Vector2i(22,29),Vector2i(28,32),Color("#b95051"),3)
+			_pixel_triangle(img,26,30,5,5,Color("#b95051"),false)
+			_pixel_rect(img,28,29,3,1,CREAM_PAPER)
+	elif role == "ticket":
+		_pixel_rect(img,9,21,14,13,Color("#34727a"))
+		_pixel_rect(img,9,23,14,3,Color("#e1bd6a"))
+		_pixel_rect(img,13,20,6,3,CREAM_PAPER)
+		_pixel_rect(img,10,30,5,2,Color("#8f604e"))
+		# Tiny brass ticket punch at the guide's hip.
+		_pixel_rect(img,22,28,4,5,Color("#c88f4a"))
+		_pixel_rect(img,23,29,2,1,Color("#f2dfa8"))
+	elif role == "announcer":
+		_pixel_rect(img,9,21,14,13,Color("#34566b"))
+		_pixel_rect(img,9,22,14,3,Color("#d5ba7b"))
+		_pixel_rect(img,15,25,2,9,Color("#283f52"))
+		# Handheld loudhailer, held away from his face.
+		_pixel_rect(img,22,27,4,3,Color("#d0a452"))
+		_pixel_triangle(img,25,26,5,5,Color("#ebd8a8"),false)
+	# Face, profile, hair and uniform headwear are drawn independently so the
+	# imp never inherits a human silhouette and rear views never show facial gear.
+	if role == "imp":
+		# Irregular coral head with asymmetrical ears, a chipped short horn and a bent horn.
+		_pixel_rect(img,10,9,12,12,Color("#da705c"))
+		_pixel_rect(img,8,11,16,8,Color("#da705c"))
+		_pixel_triangle(img,3,8,9,8,Color("#c85f58"),false)
+		_pixel_triangle(img,21,8,8,9,Color("#e18168"))
+		_pixel_triangle(img,10,4,5,6,CREAM_PAPER)
+		_pixel_rect(img,10,3,3,2,Color("#d7c69c"))	# chipped horn tip
+		_pixel_line(img,Vector2i(19,10),Vector2i(22,5),CREAM_PAPER,3)
+		_pixel_line(img,Vector2i(22,5),Vector2i(23,2),CREAM_PAPER,2)
+		if direction != "back":
+			if direction == "left":
+				_pixel_line(img,Vector2i(12,12),Vector2i(15,11),INK,1)
+				_pixel_rect(img,12,14,2,2,Color("#ffd884"))
+				_pixel_line(img,Vector2i(12,18),Vector2i(17,16),Color("#773f4c"),2)
+			elif direction == "right":
+				_pixel_line(img,Vector2i(17,11),Vector2i(20,12),INK,1)
+				_pixel_rect(img,18,14,2,2,Color("#ffd884"))
+				_pixel_line(img,Vector2i(15,16),Vector2i(20,18),Color("#773f4c"),2)
+			else:
+				_pixel_line(img,Vector2i(11,12),Vector2i(15,11),INK,1)
+				_pixel_line(img,Vector2i(18,11),Vector2i(22,12),INK,1)
+				_pixel_rect(img,12,14,2,2,Color("#ffd884"))
+				_pixel_rect(img,19,14,2,2,Color("#ffd884"))
+				_pixel_line(img,Vector2i(15,17),Vector2i(20,18),Color("#773f4c"),2)
+				_pixel_rect(img,13,16,1,1,CREAM_PAPER)	# one tooth in the crooked grin
+	else:
+		if direction == "back":
+			# Hair/cap back only; no skin, eyes, ticket or camera face markings.
+			_pixel_rect(img,9,6,14,13,INK)
+			_pixel_rect(img,7,10,3,6,INK)
+			_pixel_rect(img,22,10,3,6,INK)
+			if role == "hero":
+				_pixel_rect(img,10,8,12,2,Color("#314d62"))
+				_pixel_rect(img,9,21,14,12,Color("#24747b"))
+				_pixel_line(img,Vector2i(16,23),Vector2i(16,31),Color("#76a8a0"))
+			elif role == "ticket":
+				_pixel_rect(img,8,7,16,5,Color("#e3bb65"))
+				_pixel_rect(img,10,11,12,5,Color("#286776"))
+			elif role == "announcer":
+				_pixel_rect(img,7,5,18,5,Color("#273f58"))
+				_pixel_rect(img,8,9,16,3,Color("#d2ad64"))
+				_pixel_rect(img,7,11,4,5,Color("#263e52"))
+				_pixel_rect(img,21,11,4,5,Color("#263e52"))
+		else:
+			_pixel_rect(img,8,7,16,12,INK)
+			_pixel_rect(img,10,9,12,9,SKIN)
+			if direction == "left":
+				_pixel_rect(img,10,11,4,5,SKIN)
+				_pixel_rect(img,12,12,2,2,INK)
+			else:
+				_pixel_rect(img,18,11,4,5,SKIN)
+				_pixel_rect(img,18,12,2,2,INK)
+			if role == "hero":
+				# Short wind-tossed ink-blue hair and one cream forelock.
+				_pixel_rect(img,8,6,15,4,Color("#243e55"))
+				_pixel_rect(img,7,8,5,4,Color("#243e55"))
+				_pixel_rect(img,11,5,5,3,Color("#243e55"))
+				_pixel_triangle(img,18,4,5,5,Color("#243e55"),false)
+				_pixel_rect(img,14,5,2,3,CREAM_PAPER)
+			elif role == "ticket":
+				_pixel_rect(img,7,7,18,3,Color("#d8b257"))
+				_pixel_rect(img,9,4,14,4,Color("#2e6572"))
+				_pixel_rect(img,12,4,8,1,CREAM_PAPER)
+			elif role == "announcer":
+				_pixel_rect(img,7,6,18,3,Color("#273e55"))
+				_pixel_rect(img,9,3,14,4,Color("#263f56"))
+				_pixel_rect(img,11,4,10,1,Color("#d6b363"))
+				# Ear cups and the thin headset band.
+				_pixel_rect(img,6,11,3,6,Color("#263e52"))
+				_pixel_rect(img,23,11,3,6,Color("#263e52"))
+				_pixel_line(img,Vector2i(24,16),Vector2i(26,18),Color("#e1bd76"))
+			# Character-specific expressions.
+			if role == "hero":
+				_pixel_line(img,Vector2i(11,11),Vector2i(14,10),INK,1)
+				_pixel_rect(img,12,13,2,2,INK)
+				_pixel_rect(img,19,13,2,2,INK)
+				_pixel_line(img,Vector2i(15,17),Vector2i(18,16),Color("#a85d58"))
+			elif role == "ticket":
+				_pixel_line(img,Vector2i(11,11),Vector2i(14,12),INK)
+				_pixel_rect(img,12,14,2,2,INK)
+				_pixel_rect(img,19,14,2,2,INK)
+				_pixel_rect(img,15,17,3,1,Color("#aa5c53"))
+			else:
+				# Narrow eyes with worried, asymmetrical brows.
+				_pixel_line(img,Vector2i(11,10),Vector2i(14,12),INK)
+				_pixel_line(img,Vector2i(18,12),Vector2i(21,10),INK)
+				_pixel_rect(img,12,14,3,1,INK)
+				_pixel_rect(img,19,14,3,1,INK)
+				_pixel_rect(img,15,17,3,2,Color("#984d4f"))
+			if role == "hero":
+				# Front-strap only: no pale face/camera marks leak onto the raincoat back.
+				if direction != "back":
+					_pixel_line(img,Vector2i(10,22),Vector2i(20,33),Color("#dfd7bd"),2)
+					_pixel_rect(img,18,30,4,4,Color("#f4ecd2"))
+					_pixel_rect(img,19,31,2,1,Color("#d3ae68"))
+					_pixel_rect(img,21,33,6,3,Color("#934a43"))
+					_pixel_rect(img,22,32,4,2,Color("#bb6c55"))
+					_pixel_rect(img,23,34,2,1,Color("#91bcc0"))
+					_pixel_rect(img,8,30,3,3,Color("#df765d"))
+			elif role == "ticket":
+				# A neat little waist badge and puncher catch the light.
+				_pixel_rect(img,21,29,4,4,Color("#d9b463"))
+				_pixel_rect(img,22,30,2,1,Color("#fff0c8"))
+			elif role == "announcer":
+				_pixel_rect(img,21,28,6,3,Color("#d0a452"))
+				_pixel_triangle(img,25,27,5,5,Color("#ebd8a8"),false)
+	var texture := ImageTexture.create_from_image(img)
+	character_frames[key]=texture
+	return texture
 
 func _build_player() -> void:
 	player=CharacterBody3D.new()
@@ -385,15 +1151,15 @@ func _build_player() -> void:
 	collision.position.y=0.85
 	player.add_child(collision)
 	avatar=Sprite3D.new()
-	avatar.pixel_size=0.10
+	avatar.pixel_size=0.05
 	avatar.billboard=BaseMaterial3D.BILLBOARD_ENABLED
 	avatar.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	avatar.position.y=1.15
 	avatar.shaded=true
-	for back in [false,true]:
-		for frame in range(2):
-			sprite_frames.append(_pixel_character(Color("#4fa9b0"),frame,back))
-	avatar.texture=sprite_frames[0]
+	for direction in ["front","back","left","right"]:
+		for frame in range(4):
+			_character_texture("hero",Color("#408e96"),direction,frame)
+	avatar.texture=_character_texture("hero",Color("#408e96"),"front",0)
 	player.add_child(avatar)
 	add_child(player)
 	# Ground collision covers walkable land and dock. Sea never traps the player.
@@ -410,11 +1176,11 @@ func _build_player() -> void:
 func _build_camera() -> void:
 	camera=Camera3D.new()
 	camera.projection=Camera3D.PROJECTION_ORTHOGONAL
-	camera.size=23.0
+	camera.size=21.0
 	camera.far=200
-	camera.position=player.position+Vector3(0,20,25)
+	camera.position=player.position+Vector3(0,15.5,25)
 	add_child(camera)
-	camera.look_at(player.position+Vector3(0,0,-3))
+	camera.look_at(player.position+Vector3(0,1,-3))
 	camera.current=true
 
 func _physics_process(delta: float) -> void:
@@ -436,10 +1202,14 @@ func _physics_process(delta: float) -> void:
 	if player.position.y < -1.0:
 		player.position=Vector3(0,0.3,10)
 	var back := movement.y < -0.1
-	var frame := int(time*8.0)%2 if movement.length()>0.1 else 0
-	avatar.texture=sprite_frames[(2 if back else 0)+frame]
-	if absf(movement.x)>0.1: avatar.flip_h=movement.x<0
-	camera.position=camera.position.lerp(player.position+Vector3(0,20,25),minf(1,delta*7))
+	if movement.length()>0.1:
+		if absf(movement.x) > absf(movement.y):
+			facing = "right" if movement.x > 0 else "left"
+		else:
+			facing = "back" if movement.y < 0 else "front"
+	var frame := int(time*7.0)%4 if movement.length()>0.1 else 0
+	avatar.texture=_character_texture("hero",Color("#408e96"),facing,frame)
+	camera.position=camera.position.lerp(player.position+Vector3(0,15.5,25),minf(1,delta*7))
 	var area := "海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場")
 	if area!=current_area:
 		current_area=area
@@ -468,12 +1238,13 @@ func interact() -> void:
 
 func set_night(value: bool) -> void:
 	night=value
-	sun.light_energy=0.3 if value else 1.4
-	sun.light_color=Color("#b6c4ef") if value else Color("#ffe4b1")
-	environment.background_color=Color("#172e4b") if value else Color("#89bcc8")
-	environment.ambient_light_color=Color("#6b83ad") if value else Color("#a9d5da")
-	environment.ambient_light_energy=0.5 if value else 0.65
-	for lamp in lamps: lamp.light_energy=1.6 if value else 0.0
+	sun.light_energy=0.2 if value else 0.72
+	sun.light_color=Color("#b6c4ef") if value else Color("#fffdf7")
+	environment.background_color=Color("#172e4b") if value else Color("#94c6ca")
+	environment.ambient_light_color=Color("#6b83ad") if value else Color("#b7d5c8")
+	environment.ambient_light_energy=0.32 if value else 0.50
+	environment.glow_intensity=0.28 if value else 0.18
+	for lamp in lamps: lamp.light_energy=0.8 if value else 0.0
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
