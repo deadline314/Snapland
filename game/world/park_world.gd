@@ -44,6 +44,11 @@ var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
 var character_frames: Dictionary = {}
 var character_sprites: Array[Dictionary] = []
+var sprite_ground_anchors: Array[Dictionary] = []
+const SPRITE_FOOT_GUARD_PIXELS := 2.0
+var avatar_ground_anchor: Node3D
+var avatar_contact_shadow: MeshInstance3D
+var avatar_last_shadow_offset_y := INF
 var identity_atlas: Texture2D
 var identity_textures: Dictionary = {}
 var identity_warnings: Dictionary = {}
@@ -89,6 +94,7 @@ func _ready() -> void:
 	_build_gates()
 	_build_player()
 	_build_camera()
+	_update_sprite_grounding()
 	occlusion_controller.configure(player,camera)
 	_register_npc_activity()
 	component_motion.finish_registration()
@@ -213,6 +219,80 @@ func _add_contact_shadow(anchor: Node3D, local_ground_offset: Vector3, dimension
 	contact_shadows.append({"node": shadow, "anchor": anchor, "ground_offset": local_ground_offset})
 	mesh_count += 1
 	return shadow
+
+static func sprite_ground_anchor_y(
+	ground_y: float,
+	parent_world_y: float,
+	sprite_local_y: float,
+	feet_row: float,
+	canvas_height: float,
+	pixel_size: float,
+	camera_up_y: float
+) -> float:
+	var feet_from_center := (feet_row - canvas_height * 0.5) * pixel_size
+	return ground_y - parent_world_y - sprite_local_y + feet_from_center * camera_up_y
+
+static func _ground_surface_y(world_position: Vector3) -> float:
+	# Match the tops of the plaza/avenue path and dock meshes; the lawn is the fallback.
+	if absf(world_position.x) <= 2.46 and world_position.z >= 14.825 and world_position.z <= 26.975:
+		return 0.22
+	if absf(world_position.x) <= 12.5 and absf(world_position.z) <= 8.0:
+		return 0.18
+	if absf(world_position.x) <= 4.5 and world_position.z >= -47.0 and world_position.z <= 17.0:
+		return 0.18
+	return 0.055
+
+func _register_sprite_ground_anchor(sprite: Sprite3D, anchor: Node3D, parent: Node3D, ground_y: float, feet_row: float, canvas_height: float) -> void:
+	# Preserve the bottom pixel's entire area, including the one-pixel variation
+	# between authored poses. The guard is less than a centimetre in world space.
+	feet_row += SPRITE_FOOT_GUARD_PIXELS
+	sprite_ground_anchors.append({
+		"sprite": sprite,
+		"anchor": anchor,
+		"parent": parent,
+		"ground_y": ground_y,
+		"feet_row": feet_row,
+		"canvas_height": canvas_height,
+	})
+
+func _update_sprite_grounding() -> void:
+	if not is_instance_valid(camera):
+		return
+	var camera_up_y := camera.global_basis.y.y
+	for record in sprite_ground_anchors:
+		var sprite := record.get("sprite") as Sprite3D
+		var anchor := record.get("anchor") as Node3D
+		var parent := record.get("parent") as Node3D
+		if not is_instance_valid(sprite) or not is_instance_valid(anchor) or not is_instance_valid(parent):
+			continue
+		var ground_y := float(record.ground_y)
+		if parent == player:
+			ground_y = _ground_surface_y(player.global_position)
+		var desired_y := sprite_ground_anchor_y(
+			ground_y,
+			parent.global_position.y,
+			sprite.position.y,
+			float(record.feet_row),
+			float(record.canvas_height),
+			sprite.pixel_size,
+			camera_up_y
+		)
+		if absf(anchor.position.y - desired_y) > 0.0005:
+			anchor.position.y = desired_y
+	if is_instance_valid(player) and is_instance_valid(avatar_contact_shadow):
+		var ground_y := _ground_surface_y(player.global_position)
+		var shadow_y := ground_y - player.global_position.y + 0.005
+		if absf(shadow_y - avatar_last_shadow_offset_y) > 0.0005:
+			avatar_contact_shadow.position.y = shadow_y
+			avatar_last_shadow_offset_y = shadow_y
+			for index in range(contact_shadows.size()):
+				var record: Dictionary = contact_shadows[index]
+				if record.get("node") == avatar_contact_shadow:
+					var ground_offset: Vector3 = record.get("ground_offset", Vector3.ZERO)
+					ground_offset.y = shadow_y
+					record["ground_offset"] = ground_offset
+					contact_shadows[index] = record
+					break
 
 func _mat(color: Color, emissive := false) -> StandardMaterial3D:
 	var key := "%s:%s" % [color.to_html(true), str(emissive)]
@@ -711,8 +791,8 @@ func _build_plaza() -> void:
 	collision.add_child(shape)
 	add_child(collision)
 	_kiosk(Vector3(-6,0,5),"導覽亭",TEAL)
-	_npc(Vector3(-5,0,10),CORAL,"票票")
-	_point("guide","與票票合照",Vector3(-5,0,10))
+	_npc(Vector3(-5.8,0,10),CORAL,"票票")
+	_point("guide","與票票合照",Vector3(-5.8,0,10))
 	_kiosk(Vector3(6,0,5),"拍貼本",CORAL)
 	_point("album","翻閱拍貼收藏",Vector3(6,0,7))
 	_kiosk(Vector3(-7,0,-5),"借用道具",GOLD)
@@ -1046,11 +1126,27 @@ func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 			mirror.material_override=_mat(Color("#90b5b4"),true)
 			_cylinder(pos+Vector3(0,4.91,0),0.16,0.4,GOLD)
 
+func _fit_npc_rest_texture(texture: Texture2D) -> Texture2D:
+	var source := texture.get_image() if texture != null else null
+	if source == null or source.is_empty(): return texture
+	var used := source.get_used_rect()
+	if used.size.x <= 0 or used.size.y <= 0: return texture
+	var body := source.get_region(used)
+	var scale := minf(float(NpcActivityScript.ACTION_MAX_HEIGHT)/used.size.y, float(NpcActivityScript.ACTION_CANVAS_SIZE.x-4)/used.size.x)
+	body.resize(maxi(1,roundi(used.size.x*scale)),maxi(1,roundi(used.size.y*scale)),Image.INTERPOLATE_NEAREST)
+	var canvas := Image.create(NpcActivityScript.ACTION_CANVAS_SIZE.x,NpcActivityScript.ACTION_CANVAS_SIZE.y,false,Image.FORMAT_RGBA8)
+	canvas.fill(Color.TRANSPARENT)
+	canvas.blit_rect(body,Rect2i(Vector2i.ZERO,body.get_size()),Vector2i((canvas.get_width()-body.get_width())/2,NpcActivityScript.ACTION_FEET_ROW-body.get_height()+1))
+	return ImageTexture.create_from_image(canvas)
+
 func _npc(pos: Vector3, color: Color, title: String) -> void:
 	var activity_root := Node3D.new()
 	activity_root.name = "%sActivityRoot" % title
 	activity_root.position = pos
 	add_child(activity_root)
+	var ground_anchor := Node3D.new()
+	ground_anchor.name = "BillboardGroundAnchor"
+	activity_root.add_child(ground_anchor)
 	var sprite := Sprite3D.new()
 	var role := "ticket"
 	if title == "小角": role = "imp"
@@ -1062,6 +1158,13 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	else:
 		sprite.texture=_character_texture(role,color,"front",0)
 		sprite.pixel_size=0.05
+	# Reduced motion restores this rest texture. It must use the same canvas and
+	# foot row as activity frames, rather than an incompatible cropped identity.
+	var rest_frames := NpcActivityScript.load_action_frames(role)
+	if rest_frames.size() == 4:
+		sprite.texture = rest_frames[0]
+	else:
+		sprite.texture = _fit_npc_rest_texture(sprite.texture)
 	sprite.billboard=BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	sprite.pixel_size=2.4/float(NpcActivityScript.ACTION_VISIBLE_HEIGHT)
@@ -1074,8 +1177,10 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	var phase := 0.45 if role=="ticket" else (1.9 if role=="imp" else 3.2)
 	var idle_role := 1 if role=="ticket" else (2 if role=="imp" else 3)
 	_set_living_sprite_material(sprite,1,phase,breath_rate,idle_role)
-	activity_root.add_child(sprite)
-	_add_contact_shadow(activity_root,Vector3(0,0.22,0),Vector2(0.78,0.46))
+	ground_anchor.add_child(sprite)
+	var ground_y := _ground_surface_y(pos)
+	_register_sprite_ground_anchor(sprite,ground_anchor,activity_root,ground_y,float(NpcActivityScript.ACTION_FEET_ROW),float(NpcActivityScript.ACTION_CANVAS_SIZE.y))
+	_add_contact_shadow(activity_root,Vector3(0,ground_y-activity_root.global_position.y+0.005,0),Vector2(0.78,0.46))
 	component_motion.register_component(sprite,profile,phase/TAU)
 	character_sprites.append({"sprite":sprite,"activity_root":activity_root,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer")})
 	var name_label := _label(title,pos+Vector3(0,2.65,0),22)
@@ -1359,9 +1464,13 @@ func _build_player() -> void:
 	avatar.position.y=1.2
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,"front",0,"idle")
 	_set_living_sprite_material(avatar,1,0.18,0.72)
-	player.add_child(avatar)
+	avatar_ground_anchor=Node3D.new()
+	avatar_ground_anchor.name="BillboardGroundAnchor"
+	player.add_child(avatar_ground_anchor)
+	avatar_ground_anchor.add_child(avatar)
 	avatar.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_add_contact_shadow(player,Vector3(0,-0.075,0),Vector2(0.92,0.58))
+	avatar_contact_shadow=_add_contact_shadow(player,Vector3(0,0,0),Vector2(0.92,0.58))
+	_register_sprite_ground_anchor(avatar,avatar_ground_anchor,player,_ground_surface_y(player.position),float(AvatarRenderer.FEET_BASELINE),float(AvatarRenderer.CANVAS_SIZE.y))
 	component_motion.register_component(avatar,"character_hero",0.18/TAU)
 	add_child(player)
 	# Ground collision covers walkable land and dock. Sea never traps the player.
@@ -1417,6 +1526,7 @@ func _physics_process(delta: float) -> void:
 		if avatar_action_remaining == 0.0: avatar_action=""
 	_refresh_avatar_texture(frame)
 	camera.position=camera.position.lerp(player.position+Vector3(0,15.5,25),minf(1,delta*7))
+	_update_sprite_grounding()
 	var area := "海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場")
 	if area!=current_area:
 		current_area=area
