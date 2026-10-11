@@ -1,0 +1,8 @@
+{
+  "source_file": "exec-feaa3226-35fa-41f5-913e-4fd7aa9f8019.png",
+  "sha256": "8a1662c7d1b009d24b955a6463da83b669ddea8ddab0d4a80314b759eb6ecbfa",
+  "reference": "identities-v3.png",
+  "purpose": "Original authored four-frame serving / imp dance / announcer walking poses; source retained.",
+  "generation_instruction": "4 column by 3 row, transparent production pixel-art action sheet, approved identities reference; row1 ticket tray serving four poses, row2 imp dance four poses, row3 announcer side-facing-right walk four poses. Exact full request preserved in generation tool conversation on 2026-10-12.",
+  "review": "Root inspected complete atlas; runtime crops, baseline normalization and frame transition still require GPU acceptance."
+}

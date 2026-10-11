@@ -8,6 +8,7 @@ const WOOD = preload("res://game/world/wood.gdshader")
 const GRASS = preload("res://game/world/grass.gdshader")
 const LIVING_SPRITE = preload("res://game/world/living_sprite.gdshader")
 const ComponentAnimationScript = preload("res://game/world/component_animation.gd")
+const NpcActivityScript = preload("res://game/world/npc_activity.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
@@ -36,6 +37,7 @@ var sun: DirectionalLight3D
 var environment: Environment
 var points: Array[Dictionary] = []
 var component_motion: Node
+var npc_activity: Node
 var occlusion_controller: Node
 var lamps: Array[OmniLight3D] = []
 var sprite_frames: Array[Texture2D] = []
@@ -57,6 +59,7 @@ var walk_distance_phase := 0.0
 var avatar_is_walking := false
 var mesh_count := 0
 var blocked := false
+var npc_activity_paused := false
 var reduced_motion := false
 var night := false
 var time := 0.0
@@ -87,12 +90,15 @@ func _ready() -> void:
 	_build_player()
 	_build_camera()
 	occlusion_controller.configure(player,camera)
+	_register_npc_activity()
 	component_motion.finish_registration()
 	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
 	set_time_of_day(TimeOfDayScript.DEFAULT_PHASE)
 
 
 func _exit_tree() -> void:
+	if is_instance_valid(npc_activity):
+		npc_activity.release()
 	if is_instance_valid(occlusion_controller):
 		occlusion_controller.release()
 
@@ -325,6 +331,32 @@ func _point(id: String, title: String, pos: Vector3) -> void:
 	var marker := _label("◇", pos + Vector3(0,2.1,0), 38, GOLD)
 	points[-1]["marker"]=marker
 	component_motion.register_component(marker,"marker",float(points.size())*0.7)
+
+func _register_npc_activity() -> void:
+	npc_activity=NpcActivityScript.new()
+	npc_activity.name="NpcActivity"
+	add_child(npc_activity)
+	var point_ids := {"ticket":"guide","imp":"quest-001","announcer":"quest-002"}
+	for actor_record in character_sprites:
+		var role := String(actor_record.role)
+		var interaction_point := _point_by_id(String(point_ids.get(role,"")))
+		if interaction_point.is_empty():
+			push_warning("ParkWorld: missing interaction point for NPC role '%s'." % role)
+			continue
+		var sprite := actor_record.sprite as Sprite3D
+		var activity_root := actor_record.activity_root as Node3D
+		var frames: Array[Texture2D] = NpcActivityScript.load_action_frames(role)
+		if not npc_activity.register_actor(sprite,role,frames,activity_root,interaction_point,0.0):
+			push_warning("ParkWorld: could not register NPC role '%s' for ambient activity." % role)
+	npc_activity.finish_registration()
+	npc_activity.set_activity_paused(blocked)
+	npc_activity_paused=blocked
+
+func _point_by_id(point_id: String) -> Dictionary:
+	for point in points:
+		if String(point.get("id",""))==point_id:
+			return point
+	return {}
 
 func _build_land() -> void:
 	sea_material = ShaderMaterial.new()
@@ -679,8 +711,8 @@ func _build_plaza() -> void:
 	collision.add_child(shape)
 	add_child(collision)
 	_kiosk(Vector3(-6,0,5),"導覽亭",TEAL)
-	_npc(Vector3(-5,0,7),CORAL,"票票")
-	_point("guide","與票票合照",Vector3(-5,0,7))
+	_npc(Vector3(-5,0,10),CORAL,"票票")
+	_point("guide","與票票合照",Vector3(-5,0,10))
 	_kiosk(Vector3(6,0,5),"拍貼本",CORAL)
 	_point("album","翻閱拍貼收藏",Vector3(6,0,7))
 	_kiosk(Vector3(-7,0,-5),"借用道具",GOLD)
@@ -819,10 +851,10 @@ func _build_avenue() -> void:
 		_point("game-%03d"%(i+1),names[i],pos+Vector3(-side*2.3,0,1))
 		_cylinder(pos+Vector3(-side*2.3,0.28,1),0.75,0.16,color)
 		_game_feature(i,pos,color)
-	_npc(Vector3(-3,0,-15),CORAL,"小角")
-	_point("quest-001","吉祥物的尾巴危機",Vector3(-3,0,-15))
-	_npc(Vector3(3,0,-15),TEAL,"阿浪")
-	_point("quest-002","廣播即興救場",Vector3(3,0,-15))
+	_npc(Vector3(-3.4,0,-19.5),CORAL,"小角")
+	_point("quest-001","吉祥物的尾巴危機",Vector3(-3.4,0,-19.5))
+	_npc(Vector3(3.4,0,-19.5),TEAL,"阿浪")
+	_point("quest-002","廣播即興救場",Vector3(3.4,0,-19.5))
 	_point("explore-001","花壇會眨眼",Vector3(-3,0,-25))
 	_point("explore-002","歡迎字樣的影子",Vector3(3,0,-31))
 	_box(Vector3(-3,0.7,-37),Vector3(2,0.3,0.7),GOLD,true)
@@ -1032,7 +1064,9 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 		sprite.pixel_size=0.05
 	sprite.billboard=BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	sprite.position=Vector3(0,1.2,0)
+	sprite.pixel_size=2.4/float(NpcActivityScript.ACTION_VISIBLE_HEIGHT)
+	var feet_offset := float(NpcActivityScript.ACTION_FEET_ROW)-float(NpcActivityScript.ACTION_CANVAS_SIZE.y)*0.5
+	sprite.position=Vector3(0.0,sprite.pixel_size*feet_offset,0.0)
 	sprite.shaded=true
 	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var profile := "character_ticket" if role=="ticket" else ("character_imp" if role=="imp" else "character_announcer")
@@ -1043,7 +1077,7 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	activity_root.add_child(sprite)
 	_add_contact_shadow(activity_root,Vector3(0,0.22,0),Vector2(0.78,0.46))
 	component_motion.register_component(sprite,profile,phase/TAU)
-	character_sprites.append({"sprite":sprite,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer")})
+	character_sprites.append({"sprite":sprite,"activity_root":activity_root,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer")})
 	var name_label := _label(title,pos+Vector3(0,2.65,0),22)
 	name_label.reparent(activity_root,true)
 
@@ -1397,6 +1431,9 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	time+=delta
+	if is_instance_valid(npc_activity) and npc_activity_paused!=blocked:
+		npc_activity_paused=blocked
+		npc_activity.set_activity_paused(blocked)
 
 static func quantize_walk_direction(world_delta: Vector2, previous_direction: String = "front") -> String:
 	const COMPASS := ["back", "back_right", "right", "front_right", "front", "front_left", "left", "back_left"]
@@ -1506,6 +1543,7 @@ func apply_settings(settings: Dictionary) -> void:
 	sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	fountain_water.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	if is_instance_valid(component_motion): component_motion.set_reduced_motion(reduced_motion)
+	if is_instance_valid(npc_activity): npc_activity.set_reduced_motion(reduced_motion)
 	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
 
 func update_collection(photos: Dictionary) -> void:

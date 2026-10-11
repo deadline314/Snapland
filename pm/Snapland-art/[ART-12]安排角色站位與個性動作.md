@@ -1,20 +1,33 @@
 # [ART-12] 安排角色站位與個性動作
 
-> 狀態：待辦
+> 狀態：進行中
 
 ## 內文
 
 ### 需求
 把 NPC 安排在可見的活動空間，提供各自呼吸、服務姿勢、短距離走動或舞蹈等活動；依人物個性選動作，避免重疊和阻擋玩家。
 
+### 問題—改動—驗收
+問題：園區角色站位和活動不夠鮮明，互動標示也可能和角色分開。
+
+改動：讓三位角色各有合適的待機或活動，並讓稱呼與互動位置跟著移動中的角色。
+
+驗收：玩家可辨認每位角色並找到互動位置；角色腳底仍須穩穩接地，目前已發現接地問題，待 ART-15 修正後再驗收。
+
 ### 來源
 2026-10-12 使用者要求：加大透視圈並考慮效果、NPC 避免遮擋且有個性動作、修正光影、自由切換四時段並融入拍貼或任務、小遊戲有時段布景。研究需超過五個來源，來源與已看過的截圖一同附票。
 
 ### 驗收條件
-- [ ] 至少六個來源比較角色活動、待機、道具與動線，記錄取捨。
-- [ ] 三位具名角色站位不被主要建築擋住，各有可辨認且持續的活動節奏。
-- [ ] 活動保持腳底落地、道具定位、互動範圍及玩家通行；降低動態、重入場景正常。
-- [ ] 原生截圖及短片可追溯角色活動，局部驗證通過。
+- [x] 至少六個來源比較角色活動、待機、道具與動線，記錄取捨。
+- [x] 原生畫面可辨認三位角色與各自四格活動，移動中的稱呼及互動位置跟隨角色。
+- [x] 對話／選單暫停與降低動態設定能同步停止活動並恢復基準姿勢。
+- [ ] 角色腳底穩定接地、道具位置正確、活動不阻塞玩家通行；短片仍待腳底修正後檢查。
+- [ ] 原生活動短片及完整局部與打包驗證通過。
+
+### 研究來源
+已閱讀六個以上來源的文字內容；比較及實際取捨記錄於[NPC 站位與個性待機研究](../../design/runtime/npc-activity.md)。相關原始文件：[Godot AnimationPlayer](https://docs.godotengine.org/en/stable/classes/class_animationplayer.html)、[Godot AnimationTree](https://docs.godotengine.org/en/stable/tutorials/animation/animation_tree.html)、[Godot SpriteBase3D](https://docs.godotengine.org/en/stable/classes/class_spritebase3d.html)、[Godot NavigationAgent3D](https://docs.godotengine.org/en/stable/classes/class_navigationagent3d.html)、[Godot Navigation Regions](https://docs.godotengine.org/en/stable/tutorials/navigation/navigation_using_navigationregions.html)、[Godot CharacterBody3D](https://docs.godotengine.org/en/stable/classes/class_characterbody3d.html)、[Godot Label3D](https://docs.godotengine.org/en/stable/classes/class_label3d.html)、[避免突發動作的可及性指引](https://gameaccessibilityguidelines.com/avoid-any-sudden-unexpected-movement-or-events/)、[Aseprite Tags](https://www.aseprite.org/docs/tags/)。未宣稱看過來源影片。
+
+原生檢視：三位角色四格活動與名稱／互動位置跟隨均已看過；降低動態及模態暫停恢復已檢查。玩家指出腳底接地仍有問題，相關短片待修正後補看，故不以目前畫面宣稱腳步自然。
 
 ### 測試流程
 1. 啟動獨立測試存檔，原生操作本票功能。
@@ -29,3 +42,32 @@
 - Related：ART-7、ART-9、ART-11
 
 ---
+
+# 開始
+
+固定基準：c8202d69779497456ee55ae1ca051d21f7952dec。分支：feature/island-first-park。
+
+# Commit-1
+
+### 問題
+NPC位置容易遮擋，角色缺少各自活動節奏。
+
+### 改動
+安排角色站位與短活動循環。
+
+### 驗收
+三位NPC各四格活動、路線限度、對話暫停與互動位置同步局部／原生fixture通過。腳底完整性由ART-15修正；短循環不是整套動畫。
+
+### 測試結果
+受影響的執行專案檢查19/19通過；Windows輸出以實際GPU檢查角色圖集、NPC活動、場景動畫與遮擋資源載入通過，無ERROR。
+
+分支：feature/island-first-park。
+
+### 截圖
+
+[原生或研究證據：ART-12-announcer-01.png](images/ART-12-announcer-01.png)
+[原生或研究證據：ART-12-announcer-02.png](images/ART-12-announcer-02.png)
+[原生或研究證據：ART-12-imp-01.png](images/ART-12-imp-01.png)
+[原生或研究證據：ART-12-imp-02.png](images/ART-12-imp-02.png)
+[原生或研究證據：ART-12-ticket-01.png](images/ART-12-ticket-01.png)
+[原生或研究證據：ART-12-ticket-02.png](images/ART-12-ticket-02.png)
