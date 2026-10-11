@@ -13,7 +13,9 @@ var hud: Control
 var overlay: Control
 var modal_body: VBoxContainer
 var area_label: Label
-var count_label: Label
+var normal_count_label: Label
+var devil_count_label: Label
+var breadcrumbs: Array[Label] = []
 var hint: Label
 var toast: Label
 var quest_label: Label
@@ -43,6 +45,7 @@ func _ready() -> void:
 	world.interaction_requested.connect(_interact)
 	world.area_changed.connect(func(name: String):
 		area_label.text=name
+		_update_breadcrumb(name)
 		if session==null: audio.play_context("harbor" if name=="海風碼頭" else "plaza")
 	)
 	Progress.changed.connect(_refresh)
@@ -54,8 +57,12 @@ func _ready() -> void:
 		_capture_sequence.call_deferred()
 	elif not Progress.intro_seen:
 		_show_arrival()
-	if OS.get_cmdline_user_args().has("--smoke-test"):
-		_smoke_test.call_deferred()
+	var user_args := OS.get_cmdline_user_args()
+	if user_args.has("--smoke-test"):
+		if user_args.has("--smoke-art"):
+			_smoke_art_test.call_deferred()
+		else:
+			_smoke_test.call_deferred()
 
 func _smoke_test() -> void:
 	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty():
@@ -65,6 +72,89 @@ func _smoke_test() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("PASS: game startup and clean shutdown")
 	await _quit_game()
+
+func _smoke_art_test() -> void:
+	if DisplayServer.get_name()=="headless":
+		await _smoke_art_abort("--smoke-art requires a GPU-backed, non-headless display")
+		return
+	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty():
+		await _smoke_art_abort("--smoke-art requires isolated SNAPLAND_SAVE_PATH")
+		return
+	var final_status: Dictionary={}
+	var final_ready := false
+	for game_index in range(1,13):
+		var id := "game-%03d"%game_index
+		_launch_game(id,false)
+		if session==null or session.game_id!=id:
+			await _smoke_art_abort("Could not start art smoke game %s"%id)
+			return
+		# Let the CanvasItem draw the real game frame before checking its shared caches.
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		await get_tree().create_timer(0.08).timeout
+		await RenderingServer.frame_post_draw
+		var drawn_status: Dictionary=session.art_cache_status()
+		if not bool(drawn_status.get("backdrop_atlas_loaded",false)) or not bool(drawn_status.get("props_atlas_loaded",false)) or not bool(drawn_status.get("props_regions_loaded",false)):
+			await _smoke_art_abort("Art atlases did not load while drawing %s"%id)
+			return
+		if Session._backdrop_warning_emitted or Session._props_warning_emitted or not world.foliage_warnings.is_empty():
+			await _smoke_art_abort("An art resource warning occurred while drawing %s"%id)
+			return
+		if game_index==12:
+			# Resolve entries not reached by any game's draw path, then preserve the
+			# final live session's cache snapshot/readiness before cancelling it.
+			for key in Session.REQUIRED_PROP_KEYS:
+				var prop_texture: Texture2D=session._prop_texture(key)
+				if not prop_texture is Texture2D:
+					await _smoke_art_abort("Missing prop Texture2D: %s"%key)
+					return
+			final_status=session.art_cache_status()
+			final_ready=session.art_assets_ready()
+		_cancel_game()
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+	# Explicit resolution above proves unused prop regions load as Texture2D; it
+	# does not claim those props were drawn by a game.
+	var expected_scenes: Array[String]=Session.BACKDROP_SCENES.duplicate()
+	var loaded_scenes: Array=final_status.get("backdrops_loaded",[])
+	var missing_scenes: Array=final_status.get("backdrops_missing",[])
+	if not final_ready or not bool(final_status.get("backdrop_atlas_loaded",false)) or not missing_scenes.is_empty() or loaded_scenes.size()!=expected_scenes.size():
+		await _smoke_art_abort("Backdrop cache incomplete: %s"%str(final_status))
+		return
+	if not bool(final_status.get("props_atlas_loaded",false)) or not bool(final_status.get("props_regions_loaded",false)) or not final_status.get("props_missing",[]).is_empty() or final_status.get("props_loaded",[]).size()!=Session.REQUIRED_PROP_KEYS.size():
+		await _smoke_art_abort("Prop cache incomplete: %s"%str(final_status))
+		return
+	var foliage_keys: Array[String]=["oak","ginkgo","palm","pine","shrub","planter","rocks","lamp"]
+	var actual_foliage_keys: Array[String]=[]
+	for key in world.foliage_textures:
+		actual_foliage_keys.append(str(key))
+		if not world.foliage_textures[key] is Texture2D:
+			await _smoke_art_abort("Foliage '%s' is not a Texture2D"%str(key))
+			return
+	actual_foliage_keys.sort()
+	foliage_keys.sort()
+	if not world.foliage_atlas_loaded or actual_foliage_keys!=foliage_keys or not world.foliage_warnings.is_empty():
+		await _smoke_art_abort("Foliage cache incomplete or warned: %s"%str(actual_foliage_keys))
+		return
+	if Session._backdrop_warning_emitted or Session._props_warning_emitted:
+		await _smoke_art_abort("A minigame art resource warning was emitted during the smoke test")
+		return
+	print("PASS: art resources loaded (props=%d, scenes=%d, foliage=%d)"%[Session.REQUIRED_PROP_KEYS.size(),loaded_scenes.size(),actual_foliage_keys.size()])
+	_cancel_game()
+	world.blocked=true
+	world.set_process(false)
+	audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
+	get_tree().quit()
+
+func _smoke_art_abort(reason: String) -> void:
+	push_error("ART SMOKE FAILED: "+reason)
+	if session!=null: _cancel_game()
+	world.blocked=true
+	world.set_process(false)
+	audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
+	get_tree().quit(1)
 
 func _notification(what: int) -> void:
 	if what==NOTIFICATION_WM_CLOSE_REQUEST: _quit_game()
@@ -93,15 +183,51 @@ func _build_ui() -> void:
 	ui.add_child(hud)
 	var banner := PanelContainer.new()
 	banner.position=Vector2(24,20)
-	banner.custom_minimum_size=Vector2(295,92)
+	banner.custom_minimum_size=Vector2(330,112)
+	banner.size=Vector2(330,112)
+	banner.add_theme_stylebox_override("panel",Paper.plaque(Color("#f4ecd8")))
 	hud.add_child(banner)
 	var banner_box := VBoxContainer.new()
+	banner_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	banner_box.add_theme_constant_override("separation",4)
 	banner.add_child(banner_box)
-	banner_box.add_child(Paper.label("SNAPLAND  /  今晚也要拍一張",16,Paper.TEAL))
-	area_label=Paper.label("海風碼頭",28)
+	var island_row := HBoxContainer.new()
+	island_row.add_theme_constant_override("separation",4)
+	island_row.custom_minimum_size.x=286
+	banner_box.add_child(island_row)
+	island_row.add_child(Paper.icon("pin",18,Paper.CORAL))
+	for i in range(3):
+		if i>0:
+			var separator := Paper.label("›",12,Color("#9e987f"))
+			separator.autowrap_mode=TextServer.AUTOWRAP_OFF
+			separator.custom_minimum_size.x=10
+			island_row.add_child(separator)
+		var crumb := Paper.label(["海風碼頭","中央廣場","迎賓大道"][i],14,Paper.TEAL)
+		crumb.autowrap_mode=TextServer.AUTOWRAP_OFF
+		crumb.custom_minimum_size=Vector2(58,18)
+		breadcrumbs.append(crumb)
+		island_row.add_child(crumb)
+	area_label=Paper.label("海風碼頭",24)
+	area_label.autowrap_mode=TextServer.AUTOWRAP_OFF
 	banner_box.add_child(area_label)
-	count_label=Paper.label("",16)
-	banner_box.add_child(count_label)
+	var keepsakes := HBoxContainer.new()
+	keepsakes.add_theme_constant_override("separation",7)
+	keepsakes.custom_minimum_size.x=286
+	banner_box.add_child(keepsakes)
+	var album_mark := Paper.icon("album",18,Paper.TEAL)
+	album_mark.tooltip_text="普通拍貼收藏"
+	keepsakes.add_child(album_mark)
+	normal_count_label=Paper.label("",13)
+	normal_count_label.autowrap_mode=TextServer.AUTOWRAP_OFF
+	normal_count_label.custom_minimum_size.x=72
+	keepsakes.add_child(normal_count_label)
+	var devil_mark := Paper.icon("devil",18,Paper.CORAL)
+	devil_mark.tooltip_text="小惡魔拍貼收藏"
+	keepsakes.add_child(devil_mark)
+	devil_count_label=Paper.label("",13)
+	devil_count_label.autowrap_mode=TextServer.AUTOWRAP_OFF
+	devil_count_label.custom_minimum_size.x=88
+	keepsakes.add_child(devil_count_label)
 	var tools := HBoxContainer.new()
 	tools.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	tools.position=Vector2(-665,25)
@@ -122,6 +248,7 @@ func _build_ui() -> void:
 	lower.offset_right=-24
 	lower.offset_top=-73
 	lower.offset_bottom=-20
+	lower.add_theme_stylebox_override("panel",Paper.plaque(Color("#f4ecd8")))
 	hud.add_child(lower)
 	var row := HBoxContainer.new()
 	lower.add_child(row)
@@ -144,6 +271,14 @@ func _build_ui() -> void:
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui.add_child(overlay)
 	overlay.hide()
+	_update_breadcrumb("海風碼頭")
+
+func _update_breadcrumb(current: String) -> void:
+	var active := 0 if current=="海風碼頭" else (2 if current=="迎賓大道" else 1)
+	for i in range(breadcrumbs.size()):
+		if not is_instance_valid(breadcrumbs[i]): continue
+		breadcrumbs[i].add_theme_color_override("font_color",Paper.CORAL if i==active else Color("#80918a"))
+		breadcrumbs[i].add_theme_font_size_override("font_size",14 if i==active else 12)
 
 func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	for child in overlay.get_children():
@@ -160,24 +295,39 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	overlay.add_child(dim)
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	overlay.add_child(center)
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size=Vector2(1020,550)
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var tall_kinds := ["settings","album","achievements","map","pause"]
+	var preferred_height := 600.0 if tall_kinds.has(kind) else 350.0
+	panel.custom_minimum_size=Vector2(minf(960.0,viewport_size.x-56.0),minf(preferred_height,viewport_size.y-56.0))
+	panel.add_theme_stylebox_override("panel",Paper.plaque(Color("#f7efd9")))
 	center.add_child(panel)
 	var margin := MarginContainer.new()
-	for side in ["left","right","top","bottom"]:
-		margin.add_theme_constant_override("margin_"+side,20)
+	for side in ["left","right"]: margin.add_theme_constant_override("margin_"+side,18)
+	for side in ["top","bottom"]: margin.add_theme_constant_override("margin_"+side,14)
 	panel.add_child(margin)
 	modal_body=VBoxContainer.new()
-	modal_body.add_theme_constant_override("separation",14)
+	modal_body.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	modal_body.add_theme_constant_override("separation",10)
 	margin.add_child(modal_body)
-	modal_body.add_child(Paper.label("SNAPLAND   /   "+subtitle,15,Paper.TEAL))
-	modal_body.add_child(Paper.label(title,32))
+	var ticket_heading := HBoxContainer.new()
+	ticket_heading.add_theme_constant_override("separation",10)
+	modal_body.add_child(ticket_heading)
+	ticket_heading.add_child(Paper.icon("ticket",28,Paper.TEAL))
+	var heading_stack := VBoxContainer.new()
+	heading_stack.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	heading_stack.add_theme_constant_override("separation",1)
+	ticket_heading.add_child(heading_stack)
+	heading_stack.add_child(Paper.label("SNAPLAND   /   "+subtitle,13,Paper.TEAL))
+	heading_stack.add_child(Paper.label(title,28))
 	return modal_body
 
 func _scroll(parent: VBoxContainer, height := 330) -> VBoxContainer:
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size=Vector2(945,height)
+	scroll.custom_minimum_size=Vector2(0,height)
+	scroll.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	parent.add_child(scroll)
 	var box := VBoxContainer.new()
@@ -203,7 +353,8 @@ func _back(parent: Node) -> void:
 
 func _refresh() -> void:
 	if not is_instance_valid(ui): return
-	count_label.text="普通拍貼 %d / 18   ·   小惡魔 %d / 12"%[Progress.normal_count(),Progress.devil_count()]
+	normal_count_label.text="普通 %d / 18"%Progress.normal_count()
+	devil_count_label.text="小惡魔 %d / 12"%Progress.devil_count()
 	quest_label.text=""
 	for id in ["quest-001","quest-002"]:
 		var step := int(Progress.quests.get(id,0))
@@ -267,8 +418,22 @@ func _render_dialogue() -> void:
 		return
 	var line: Dictionary=dialogue[dialogue_index]
 	var body := _open(str(line.get("speaker","旁白")),"ISLAND STORIES  ·  %d / %d"%[dialogue_index+1,dialogue.size()],"dialogue")
+	var identity := PanelContainer.new()
+	identity.custom_minimum_size=Vector2(240,112)
+	identity.add_theme_stylebox_override("panel",Paper.box(Color("#e9dfc5"),8))
+	body.add_child(identity)
+	var identity_row := HBoxContainer.new()
+	identity_row.add_theme_constant_override("separation",10)
+	identity.add_child(identity_row)
+	identity_row.add_child(Paper.portrait(str(line.get("speaker","旁白"))))
+	var identity_copy := VBoxContainer.new()
+	identity_copy.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	identity_copy.add_theme_constant_override("separation",3)
+	identity_row.add_child(identity_copy)
+	identity_copy.add_child(Paper.label("本段說話者",14,Paper.TEAL))
+	identity_copy.add_child(Paper.label(str(line.get("speaker","旁白")),22))
 	dialogue_label=Paper.label(str(line.get("text","")),26)
-	dialogue_label.custom_minimum_size=Vector2(930,190)
+	dialogue_label.custom_minimum_size=Vector2(830,142)
 	dialogue_label.visible_characters=0
 	body.add_child(dialogue_label)
 	reveal=0
@@ -330,9 +495,19 @@ func _definition(id: String) -> Dictionary:
 func _show_game_info(id: String) -> void:
 	var definition := _definition(id)
 	var body := _open(definition.get("name",id),"FREE PLAY  /  免費重試","game_info")
+	var entry_stamp := HBoxContainer.new()
+	entry_stamp.add_theme_constant_override("separation",8)
+	body.add_child(entry_stamp)
+	entry_stamp.add_child(Paper.icon("ticket",23,Paper.CORAL))
+	entry_stamp.add_child(Paper.label("迎賓大道遊園票   ·   自由重玩",17,Paper.TEAL))
 	body.add_child(Paper.label(definition.get("instructions","依畫面提示操作。"),24))
-	body.add_child(Paper.label("小惡魔："+definition.get("devil_hint","完成特殊互動。"),20,Paper.TEAL))
-	body.add_child(Paper.label("普通拍貼在完成目標後取得；輔助模式同樣可以收藏。",18))
+	var reward_note := HBoxContainer.new()
+	reward_note.add_theme_constant_override("separation",7)
+	body.add_child(reward_note)
+	reward_note.add_child(Paper.icon("devil",24,Paper.CORAL))
+	reward_note.add_child(Paper.label("小惡魔："+definition.get("devil_hint","完成特殊互動。"),19,Paper.TEAL))
+	body.add_child(Paper.label("完成目標可收藏普通拍貼；輔助遊玩同樣可以收藏。",17))
+	body.add_child(Paper.label("遊玩節奏：標準挑戰；輔助會放寬時間與判定，收藏相同。",15,Color("#65746f")))
 	var row := HBoxContainer.new()
 	body.add_child(row)
 	Paper.button("開始遊玩",func(): _launch_game(id,bool(Progress.settings.get("assist",false))),row).grab_focus()
@@ -389,9 +564,20 @@ func _game_finished(result: Dictionary) -> void:
 	audio.play_sfx("success" if result.get("success",false) else "miss")
 	var definition := _definition(id)
 	var body := _open("今天的這一格，值得留下。" if result.get("success",false) else "差一點！再玩一次就好。","PHOTO BOOTH / "+definition.get("name",id),"result")
-	body.add_child(Paper.label("成績 %d   ·   %s"%[result.get("score",0),"輔助遊玩" if result.get("assisted",false) else "標準遊玩"],24))
+	var result_summary := HBoxContainer.new()
+	result_summary.add_theme_constant_override("separation",8)
+	body.add_child(result_summary)
+	result_summary.add_child(Paper.icon("album",23,Paper.TEAL))
+	result_summary.add_child(Paper.label("本次成績 %d   ·   %s"%[result.get("score",0),"輔助遊玩" if result.get("assisted",false) else "標準遊玩"],20))
 	if result.get("success",false):
-		body.add_child(Paper.label("普通拍貼已收藏"+("  ＋  小惡魔也入鏡了！" if result.get("devil",false) else ""),22,Paper.TEAL))
+		var award := HBoxContainer.new()
+		award.add_theme_constant_override("separation",8)
+		body.add_child(award)
+		award.add_child(Paper.icon("album",24,Paper.TEAL))
+		award.add_child(Paper.label("普通拍貼已收藏",20,Paper.TEAL))
+		if result.get("devil",false):
+			award.add_child(Paper.icon("devil",24,Paper.CORAL))
+			award.add_child(Paper.label("小惡魔也入鏡了",20,Paper.CORAL))
 	else:
 		body.add_child(Paper.label("沒有扣除任何收藏。也可以開啟輔助，試試別的節奏。",22))
 	var frames := HBoxContainer.new()
@@ -399,8 +585,8 @@ func _game_finished(result: Dictionary) -> void:
 	body.add_child(frames)
 	for i in range(4):
 		var card := PanelContainer.new()
-		card.add_theme_stylebox_override("panel",Paper.box(Color("#e8dab7"),4))
-		card.custom_minimum_size=Vector2(215,110)
+		card.add_theme_stylebox_override("panel",Paper.plaque(Color("#fff9e9")))
+		card.custom_minimum_size=Vector2(200,145)
 		var content := VBoxContainer.new()
 		card.add_child(content)
 		if not saved_frames.is_empty():
@@ -408,11 +594,16 @@ func _game_finished(result: Dictionary) -> void:
 			thumbnail.texture=_photo_texture(saved_frames[mini(i,saved_frames.size()-1)])
 			thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 			thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			thumbnail.custom_minimum_size=Vector2(190,105)
+			thumbnail.custom_minimum_size=Vector2(164,84)
 			content.add_child(thumbnail)
 		else:
 			content.add_child(Paper.label("◇ 第 %d 格"%(i+1),25,Paper.TEAL))
-		content.add_child(Paper.label(definition.get("name",id),18))
+		content.add_child(Paper.deckle_band())
+		var stamp_row := HBoxContainer.new()
+		stamp_row.add_theme_constant_override("separation",4)
+		content.add_child(stamp_row)
+		stamp_row.add_child(Paper.postmark())
+		stamp_row.add_child(Paper.label("郵戳 %02d  ·  %s"%[i+1,definition.get("name",id)],15,Paper.TEAL))
 		frames.add_child(card)
 	var row := HBoxContainer.new()
 	body.add_child(row)
@@ -435,12 +626,16 @@ func _show_album() -> void:
 	for item in sources:
 		var earned := Progress.photos.has(item.id)
 		var card := PanelContainer.new()
-		card.custom_minimum_size=Vector2(300,76)
-		card.add_theme_stylebox_override("panel",Paper.box(Color("#dfebd8") if earned else Color("#e9e0ca"),8))
+		card.custom_minimum_size=Vector2(270,84)
+		card.add_theme_stylebox_override("panel",Paper.plaque(Color("#f9f3e2") if earned else Color("#e9e3d4")))
 		var box := VBoxContainer.new()
 		card.add_child(box)
-		box.add_child(Paper.label(("✓  " if earned else "◇  ")+item.label,19))
-		box.add_child(Paper.label("已留下回憶" if earned else "去附近的設施或互動點看看",15,Paper.TEAL))
+		var title_row := HBoxContainer.new()
+		title_row.add_theme_constant_override("separation",6)
+		box.add_child(title_row)
+		title_row.add_child(Paper.icon("album" if earned else "ticket",19,Paper.TEAL if earned else Color("#978e7a")))
+		title_row.add_child(Paper.label(("已收藏  ·  " if earned else "待拍  ·  ")+item.label,16))
+		box.add_child(Paper.label("貼紙相紙  ·  可重拍" if earned else "前往設施或互動點留下這張",13,Paper.TEAL))
 		if earned:
 			var frames: Variant=Progress.photos[item.id].get("frames",[])
 			if frames is Array and not frames.is_empty() and frames[0] is String and FileAccess.file_exists(frames[0]):
@@ -450,10 +645,16 @@ func _show_album() -> void:
 					thumbnail.texture=photo
 					thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 					thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-					thumbnail.custom_minimum_size=Vector2(250,130)
+					thumbnail.custom_minimum_size=Vector2(224,96)
 					box.add_child(thumbnail)
 		grid.add_child(card)
-	body.add_child(Paper.label("普通 %d / 18  ·  小惡魔 %d / 12  ·  重拍不重複計數"%[Progress.normal_count(),Progress.devil_count()],18))
+	var album_legend := HBoxContainer.new()
+	album_legend.add_theme_constant_override("separation",7)
+	album_legend.add_child(Paper.icon("album",19,Paper.TEAL))
+	album_legend.add_child(Paper.label("普通 %d / 18"%Progress.normal_count(),16))
+	album_legend.add_child(Paper.icon("devil",19,Paper.CORAL))
+	album_legend.add_child(Paper.label("小惡魔 %d / 12  ·  重拍不重複計數"%Progress.devil_count(),16))
+	body.add_child(album_legend)
 	_back(body)
 
 func _show_tasks() -> void:
@@ -637,51 +838,63 @@ func _achievement_toast(id: String) -> void:
 
 func _capture_sequence() -> void:
 	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty():
-		push_error("Capture requires isolated SNAPLAND_SAVE_PATH")
-		get_tree().quit(1)
+		await _abort_capture("Capture requires isolated SNAPLAND_SAVE_PATH")
 		return
 	await get_tree().create_timer(2).timeout
+	world.player.position=Vector3(0,0.4,0)
+	await get_tree().create_timer(0.6).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-main/images/MAIN-4-plaza.png")
-	_capture("pm/Snapland-art/images/ART-1-plaza-day.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-3-day.png"): return
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-hud.png"): return
 	world.set_night(true)
 	await get_tree().create_timer(1).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-art/images/ART-1-plaza-night.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-3-night.png"): return
 	world.set_night(false)
-	world.player.position=Vector3(0,0.4,-22)
-	await get_tree().create_timer(2).timeout
+	world.player.position=Vector3(0,0.4,18)
+	await get_tree().create_timer(1).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-main/images/MAIN-4-welcome.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-3-dock.png"): return
+	world.player.position=Vector3(0,0.4,-22)
+	await get_tree().create_timer(1.5).timeout
+	await RenderingServer.frame_post_draw
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-3-avenue.png"): return
+	_start_dialogue([story.intro_lines()[0]],Callable())
+	reveal=1000
+	await get_tree().create_timer(0.5).timeout
+	await RenderingServer.frame_post_draw
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-4-ticket-portrait.png"): return
+	_start_dialogue([story.intro_lines()[2]],Callable())
+	reveal=1000
+	await get_tree().create_timer(0.5).timeout
+	await RenderingServer.frame_post_draw
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-4-kaku-portrait.png"): return
 	_show_album()
 	await get_tree().create_timer(0.5).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-main/images/MAIN-7-album.png")
-	_capture("pm/Snapland-art/images/ART-2-album-ui.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-album.png"): return
 	_show_settings()
 	await get_tree().create_timer(0.5).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-main/images/MAIN-6-settings.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-settings.png"): return
 	_show_achievements()
 	await get_tree().create_timer(0.5).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-main/images/MAIN-5-achievements.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-achievements.png"): return
 	_start_dialogue(story.intro_lines(),Callable())
 	reveal=1000
 	await get_tree().create_timer(0.5).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-story/images/ST-2-arrival.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-dialogue.png"): return
 	_show_quest("quest-001")
 	await get_tree().create_timer(0.5).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-story/images/ST-3-quest.png")
-	for i in range(12):
-		_close()
-		_launch_game("game-%03d"%(i+1),false)
-		await get_tree().create_timer(0.75).timeout
-		await RenderingServer.frame_post_draw
-		_capture("pm/Snapland-small-game/images/SG-%d-game.png"%(i+2))
-		_cancel_game()
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-quest.png"): return
+	_show_game_info("game-001")
+	await get_tree().create_timer(0.5).timeout
+	await RenderingServer.frame_post_draw
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-game-info.png"): return
+	_close()
 	_launch_game("game-011",false)
 	await get_tree().create_timer(1.2).timeout
 	for key in [KEY_1,KEY_2,KEY_2,KEY_3,KEY_2,KEY_4]:
@@ -698,14 +911,13 @@ func _capture_sequence() -> void:
 	await get_tree().create_timer(0.6).timeout
 	await RenderingServer.frame_post_draw
 	if modal_kind!="result" or not Progress.photos.has("photo-welcome-game-11"):
-		push_error("Native photo result verification failed")
-		get_tree().quit(1)
+		await _abort_capture("Native photo result verification failed")
 		return
-	_capture("pm/Snapland-main/images/MAIN-7-result.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-result.png"): return
 	_show_album()
 	await get_tree().create_timer(0.3).timeout
 	await RenderingServer.frame_post_draw
-	_capture("pm/Snapland-main/images/MAIN-7-album-earned.png")
+	if not await _capture_or_abort("pm/Snapland-art/images/ART-6-album-earned.png"): return
 	_close()
 	print("CAPTURE PASS: native GPU views saved")
 	await _quit_game()
@@ -747,8 +959,27 @@ func _save_photo_frames(id: String) -> Array[String]:
 		else: push_warning("Cannot save photo frame: "+path)
 	return paths
 
-func _capture(relative: String) -> void:
+func _capture(relative: String) -> bool:
 	var path := ProjectSettings.globalize_path("res://"+relative)
-	DirAccess.make_dir_recursive_absolute(path.get_base_dir())
+	var directory_error := DirAccess.make_dir_recursive_absolute(path.get_base_dir())
+	if directory_error!=OK and directory_error!=ERR_ALREADY_EXISTS:
+		push_error("Screenshot directory creation failed: "+path.get_base_dir()+" "+str(directory_error))
+		return false
 	var error := get_viewport().get_texture().get_image().save_png(path)
-	if error!=OK: push_error("Screenshot save failed: "+path+" "+str(error))
+	if error!=OK:
+		push_error("Screenshot save failed: "+path+" "+str(error))
+		return false
+	return true
+
+func _capture_or_abort(relative: String) -> bool:
+	if _capture(relative): return true
+	await _abort_capture("Capture sequence stopped after screenshot write failure")
+	return false
+
+func _abort_capture(reason: String) -> void:
+	push_error(reason)
+	world.blocked=true
+	world.set_process(false)
+	audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
+	get_tree().quit(1)
