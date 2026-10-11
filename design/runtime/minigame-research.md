@@ -4,6 +4,8 @@
 
 ## 來源與觀察
 
+- Nintendo，[Super Mario Party Jamboree](https://play.nintendo.com/explore/super-mario-party-jamboree/)：已查看官方頁彩色角色與設施封面；文字列出 Minigame Bay 的 Free Play，並明示可選按鈕／動作輸入。保存的 Jamboree 圖用於審阅鮮明物件分組，不能以封面圖證明具體玩法或玩家偏好。
+
 - Nintendo，《Super Mario Party》小遊戲頁：https://media.nintendo.com/supermarioparty/minigames/ 。官方介紹 80 款 skill-based minigames，並用「騎三輪車競速」、「翻轉方塊煮熟所有面」及「在合照中搶中心位置」呈現清楚、單一、可快速理解的操作目標。應用：每款進場就展示一句操作目標，輸入造成可見位置或狀態改變。
 - Nintendo，《WarioWare: Get It Together!》遊玩提示：https://play.nintendo.com/news-tips/tips-tricks/warioware-microgames-quick-tips/ 。每款提供操作說明，玩家可在 Play-o-pedia 重玩喜愛遊戲；失敗後也可用遊戲內幣延續。應用：不依賴記憶外部說明；提供明確重玩及低成本 retry，並讓目標完成度即時可見。
 - SEGA，《Puyo Puyo Tetris》官方頁：https://puyo.sega.com/tetris/ 。官方將單人 Adventure/Challenge 和最多四人 Arcade 作為不同模式呈現。應用：操作核心必須獨立於多人可擴充性，單人先能完整判定。
