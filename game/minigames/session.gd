@@ -845,7 +845,7 @@ func _draw_backdrop() -> void:
 		"bench_swap": scene = "garden"; tint = Color("#80aa95")
 		"melody_memory": scene = "night"; tint = Color("#697794")
 	draw_rect(Rect2(0,0,1280,720), tint)
-	var atlas_path := "res://assets/minigames/backdrops/tidal-atlas-v2.png"
+	var atlas_path := "res://assets/minigames/backdrops/tidal-atlas-v3.png"
 	if not _backdrop_checked:
 		_backdrop_checked = true
 		if ResourceLoader.exists(atlas_path):
@@ -878,7 +878,14 @@ func _draw_backdrop() -> void:
 			scene_texture.region = region
 			scene_texture.filter_clip = true
 			_scene_textures[scene] = scene_texture
-		draw_texture_rect(_scene_textures[scene],Rect2(29,122,1222,492),false,Color(1,1,1,0.76))
+		var texture: Texture2D = _scene_textures[scene]
+		var target := Rect2(29,122,1222,492)
+		# Cover the play area at one uniform scale; wheels and window frames keep their proportions.
+		var source_size := texture.get_size()
+		var cover_scale := maxf(target.size.x / source_size.x, target.size.y / source_size.y)
+		var visible_size := target.size / cover_scale
+		var visible_region := Rect2((source_size - visible_size) * 0.5, visible_size)
+		draw_texture_rect_region(texture,target,visible_region,Color(1,1,1,0.76))
 	# Layered tide lines and a promenade ground band keep absent backdrops fully composed.
 	for i in 7:
 		var y := 145.0 + i * 65.0

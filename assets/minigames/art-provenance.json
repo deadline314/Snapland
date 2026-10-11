@@ -30,5 +30,22 @@
     "input_sha256": {
       "pm/Snapland-art/images/ART-5-backdrops-before.png": "70e98751f7d46ca298b916950aeb0d31bb7f0cf6daf8866ee9bfdead1eb3aba4"
     }
+  },
+  {
+    "file": "assets/minigames/backdrops/tidal-atlas-v3.png",
+    "inputs": [
+      "pm/Snapland-art/images/ART-19-original.png",
+      "assets/characters/identities-v3.png"
+    ],
+    "prompt": "Use case: style-transfer. Asset type: original four-quadrant game background atlas for Snapland. Image 1 is the edit target, a 2x2 atlas. Image 2 is ONLY the game's own palette and pixel-cluster style reference; do not put its characters or props into the backgrounds. Preserve the exact four themes, quadrant order, camera compositions and open play surfaces of Image 1: upper-left harbor pier with coral-striped ticket kiosk at left, sailboat at right and distant lighthouse/wheel; upper-right sunny greenhouse plaza with coral arch at left and greenhouse at right; lower-left sunset timber stage framed by coral velvet curtains and lamps; lower-right moonlit stone pier framed by stone arch, benches and lamps. Redraw the surfaces as deliberately authored detailed pixel-game environment art, with crisp stepped contours and controlled connected pixel clusters, matching Image 2's ink-blue, sea-teal, coral, cream and brass palette. Keep the original depth and detailed functional objects, but choose fewer meaningful marks: stone slabs with a few joints/chips, timber grain following planks, solid connected greenhouse mullions, continuous load-bearing rail posts, a small number of distinct leaf clusters with negative space. Reduce gratuitous tiny flowers and foliage tangles. Treat the empty center of every scene as calm readable gameplay space, with decoration on edges. Preserve day/sunset/night distinction. One coherent light direction per scene; local lamps illuminate nearby materials, no all-over orange shine. No watercolor, oil-paint smears, canvas texture, sepia glaze, uniform speckle noise, airbrush gradients, bloom, lens blur, candy-gloss rendering or vector-poster smoothing. Do not simply pixelate the old painting: design the shapes and shadows. No people, text, logos, panel labels, margins or borders. All four quadrants must be equally sized and meet exactly on the center cross; no bleed between scenes.",
+    "date": "2026-10-12",
+    "method": "Built-in image generation edit",
+    "source": "User-specified original Snapland background and Snapland character palette; no third-party image input",
+    "inspection": "Main session viewed full atlas and native mini-game snapshots: stronger stepped outlines and coherent material clusters, calm open centers. Pixel alignment/color counts and exact architecture are prompt targets, not automated guarantees. Static painted light is retained; time profiles tint the backdrop, they do not recompute its painted shadows.",
+    "sha256": "6247f4471a0c47c2fef93d0894ecd1c84300672a5c96a676bc5c8433c0bd43c8",
+    "input_sha256": {
+      "pm/Snapland-art/images/ART-19-original.png": "619994f7e2669eb815e28444088f8f69b396536b0a575d8d0db2444fffc0db1a",
+      "assets/characters/identities-v3.png": "2e62aef5566fe4017f14aa22bd3fb8578cfc9e21717c2f4eea9d4e5a4c549be6"
+    }
   }
 ]
