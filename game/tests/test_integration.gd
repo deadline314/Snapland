@@ -23,6 +23,10 @@ func _run() -> void:
 	progress.reset_progress()
 	progress.intro_seen = false
 	progress.save_progress()
+	# Headless defaults to a 64x36 display, which is not a usable pointer
+	# review surface. Set the real test window geometry before creating UI.
+	get_window().size = Vector2i(1280, 720)
+	await _frames(2)
 	main = MAIN_SCENE.instantiate()
 	if main.get_script() == null:
 		_check(false, "main scene script loads before integration assertions")
@@ -115,11 +119,19 @@ func _test_cancel_and_successful_game_flow() -> void:
 	_press_button_containing(main.overlay, "開始遊玩")
 	_check(await _wait_for_session("game-001"), "game details launch the first session")
 	_check(main.session != null and main.session.game_id == "game-001", "game details launch the canonical session ID")
+	await _test_live_session_help()
+	if _abort_tests: return
 	_key_down(KEY_ESCAPE)
-	_check(await _wait_for_session_end(), "Escape cancels the active session")
-	_key_up(KEY_ESCAPE)
 	await _frames(2)
-	_check(main.session == null, "Escape cancels the active session")
+	_key_up(KEY_ESCAPE)
+	_check(main.session != null and main.session.paused, "Escape pauses the active session without losing the round")
+	_check(_find_button_containing(main.session.minigame_hud, "離開小遊戲") != null, "pause offers an explicit leave action")
+	_press_button_containing(main.session.minigame_hud, "離開小遊戲")
+	_check(main.session != null, "leave requires confirmation before discarding the round")
+	_press_button_containing(main.session.minigame_hud, "確定")
+	_check(await _wait_for_session_end(), "confirmed leave closes the active session")
+	await _frames(2)
+	_check(main.session == null, "confirmed leave removes the session")
 	_check(main.modal_kind == "", "cancel input does not leak into the pause menu")
 	_check(main.hud.visible and not main.world.blocked, "cancel restores HUD and world controls")
 	if main.modal_kind == "pause":
@@ -130,6 +142,8 @@ func _test_cancel_and_successful_game_flow() -> void:
 	_press_button_containing(main.overlay, "開始遊玩")
 	_check(await _wait_for_session("game-011"), "second station starts a session")
 	_check(main.session != null and main.session.game_id == "game-011", "second station launches its own canonical ID")
+	await _test_live_session_help()
+	if _abort_tests: return
 	# Solve the actual seat-swap puzzle through the game's keyboard event handler.
 	for key in [KEY_1, KEY_2, KEY_2, KEY_3, KEY_2, KEY_4]:
 		_key_down(key)
@@ -145,6 +159,64 @@ func _test_cancel_and_successful_game_flow() -> void:
 	_press_button_containing(main.overlay, "返回遊園")
 	await _frames(1)
 	_check(main.modal_kind == "" and main.hud.visible and not main.world.blocked, "closing results restores normal world controls")
+
+func _test_live_session_help() -> void:
+	var active: Control = main.session
+	await _frames(3)
+	var phase_before: float = active.phase
+	var elapsed_before: float = active.elapsed
+	var score_before: int = active.score
+	var help_button := active.minigame_hud.find_child("HelpButton", true, false) as Button
+	_check(help_button != null, "active round exposes its actual HUD help button")
+	if _abort_tests: return
+	_click_real_button(help_button)
+	_check(main.modal_kind == "game_help" and active.paused and active.process_mode == Node.PROCESS_MODE_DISABLED, "HUD help request opens static teaching and freezes round input/simulation")
+	await _frames(8)
+	_check(main.session == active and active.phase == phase_before and active.elapsed == elapsed_before and active.score == score_before, "reading help preserves the original session, phase, elapsed time and score")
+	_check(not main.hud.visible and not main.world.visible and not main.world.is_processing() and main.audio._paused, "session help hides the park HUD/world and pauses game audio")
+	var definition: Dictionary = main._definition(active.game_id)
+	for entry in [["HelpGoal", "goal"], ["HelpInput", "instructions"], ["HelpDevil", "devil_hint"]]:
+		var label := main.overlay.find_child(entry[0], true, false) as Label
+		_check(label != null and label.text.contains(str(definition.get(entry[1], ""))), "static help displays this game's %s" % entry[1])
+	var back := main.overlay.find_child("HelpReturnToGame", true, false) as Button
+	_check(back != null and back.is_visible_in_tree(), "help offers a live return-to-game control")
+	if _abort_tests: return
+	_click_real_button(back)
+	_check(main.session == active and main.modal_kind == "" and not active.paused and active.process_mode == Node.PROCESS_MODE_INHERIT, "actual return button resumes the same round (modal=%s paused=%s mode=%s same=%s backrect=%s)" % [main.modal_kind, active.paused, active.process_mode, main.session == active, back.get_global_rect()])
+	_check(active.phase == phase_before and active.elapsed == elapsed_before and active.score == score_before, "closing help does not reset the round's phase/time/score")
+	_check(not main.hud.visible and not main.world.visible and main.world.blocked and not main.world.is_processing() and not main.audio._paused, "return keeps park UI hidden while resuming game audio")
+	await _frames(5)
+	var learning_balloon: bool = active.mode == "balloon_delivery" and not active.balloon_started
+	_check(active.phase > phase_before and (active.elapsed == elapsed_before if learning_balloon else active.elapsed > elapsed_before), "the preserved game clock advances after help while balloon learning keeps its untimed introduction")
+	# Escape also uses the same close path; its release must not open park pause.
+	_click_real_button(help_button)
+	_key_down(KEY_ESCAPE)
+	_check(await _wait_for_modal(""), "Escape returns from teaching to the active game")
+	_key_up(KEY_ESCAPE)
+	await _frames(2)
+	_check(main.session == active and not active.paused and not main.hud.visible and main.modal_kind == "", "help Escape preserves the round and does not leak into park pause")
+
+func _click_real_button(button: Button) -> void:
+	var pressed_observed := {"value": false}
+	button.pressed.connect(func(): pressed_observed.value = true, CONNECT_ONE_SHOT)
+	var point := button.get_viewport().get_final_transform() * button.get_global_rect().get_center()
+	var motion := InputEventMouseMotion.new()
+	motion.position = point
+	motion.global_position = point
+	motion.window_id = get_window().get_window_id()
+	Input.parse_input_event(motion)
+	Input.flush_buffered_events()
+	for is_down in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.position = point
+		event.global_position = point
+		event.window_id = get_window().get_window_id()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.button_mask = MOUSE_BUTTON_MASK_LEFT if is_down else 0
+		event.pressed = is_down
+		Input.parse_input_event(event)
+		Input.flush_buffered_events()
+	_check(pressed_observed.value, "real integration click activates %s; rect=%s pointer=%s hovered=%s" % [button.name, button.get_global_rect(), point, button.get_viewport().gui_get_hovered_control()])
 
 func _test_story_and_quests() -> void:
 	await _interact_at("guide")
@@ -383,6 +455,8 @@ func _finish_after_audio_shutdown() -> void:
 		if is_instance_valid(audio_node) and audio_node.has_method("shutdown"):
 			audio_node.shutdown()
 		await get_tree().create_timer(0.15).timeout
+		main.queue_free()
+		await _frames(3)
 	if failures.is_empty():
 		print("PASS: main scene integration checks")
 		get_tree().quit(0)

@@ -345,7 +345,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	overlay.add_child(center)
 	var panel := PanelContainer.new()
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe","time","ticket"]
+	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe","time","ticket","game_help"]
 	var preferred_height := 600.0 if tall_kinds.has(kind) else 350.0
 	panel.name="AdaptiveMenuPanel"
 	var menu_scale := Paper.physical_scale(overlay)
@@ -397,6 +397,9 @@ func _scroll(parent: VBoxContainer, height := 330) -> VBoxContainer:
 	return box
 
 func _close() -> void:
+	if modal_kind == "game_help":
+		_close_game_help()
+		return
 	if modal_kind=="dialogue":
 		_finish_dialogue()
 		return
@@ -448,7 +451,7 @@ func _refresh() -> void:
 
 func _process(delta: float) -> void:
 	if session!=null and DisplayServer.get_name()!="headless" and session.elapsed>=next_snapshot and not session.ended:
-		next_snapshot=session.elapsed+15.0
+		next_snapshot=session.elapsed+0.9
 		_sample_photo.call_deferred()
 	if is_instance_valid(world) and modal_kind=="" and session==null:
 		var has_context: bool = not world.nearest.is_empty()
@@ -705,7 +708,7 @@ func _show_game_info(id: String) -> void:
 	Paper.button("開啟輔助遊玩",func(): _launch_game(id,true),row)
 	_back(body)
 
-func _launch_game(id: String, assist: bool) -> void:
+func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	if _definition(id).is_empty():
 		_notice("這個設施暫時無法開啟，請先逛逛其他地方。")
 		return
@@ -725,10 +728,50 @@ func _launch_game(id: String, assist: bool) -> void:
 	session.cancelled.connect(_cancel_game)
 	session.note_played.connect(audio.play_note)
 	session.feedback.connect(audio.play_sfx)
+	session.help_requested.connect(_show_game_help)
 	if session.has_method("set_time_of_day"):
 		session.set_time_of_day(TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE)))
 	session.start(id,assist)
+	if practice and session.has_method("set_practice_mode"):
+		session.set_practice_mode(true)
 	audio.play_context("game")
+
+func _show_game_help(id: String) -> void:
+	if session == null or session.game_id != id or session.ended:
+		return
+	var definition := _definition(id)
+	var body := _open(str(definition.get("name", id)) + " · 遊戲教學", "本局操作說明", "game_help")
+	# The session emitted its normal help request after pausing. Disable input
+	# as well, so tutorial Escape/clicks cannot alter the underlying round.
+	session.set_paused(true)
+	session.process_mode = Node.PROCESS_MODE_DISABLED
+	world.set_process(false)
+	audio.set_paused(true)
+	hud.hide()
+	ui.move_child(overlay, ui.get_child_count() - 1)
+	for section in [["HelpGoal", "本局目標", "goal", "完成挑戰。"], ["HelpInput", "操作方式", "instructions", "依畫面提示操作。"], ["HelpDevil", "小惡魔條件", "devil_hint", "完成特殊互動。"]]:
+		var label := Paper.label(str(section[1]) + "\n" + str(definition.get(section[2], section[3])), 21)
+		label.name = section[0]
+		body.add_child(label)
+	var back := Paper.button("返回遊戲", _close, modal_body)
+	back.name = "HelpReturnToGame"
+	back.grab_focus()
+
+func _close_game_help() -> void:
+	overlay.hide()
+	modal_kind = ""
+	world.blocked = session != null
+	world.set_process(session == null)
+	audio.set_paused(false)
+	if session == null:
+		hud.show()
+		return
+	hud.hide()
+	session.process_mode = Node.PROCESS_MODE_INHERIT
+	session.set_paused(false)
+	var help_button := session.minigame_hud.find_child("HelpButton", true, false) as Button
+	if help_button != null and help_button.is_visible_in_tree():
+		help_button.grab_focus()
 
 func _cancel_game() -> void:
 	if session!=null:
@@ -743,11 +786,14 @@ func _cancel_game() -> void:
 
 func _game_finished(result: Dictionary) -> void:
 	var id := str(result.get("game_id",""))
+	var practice := bool(result.get("practice",false))
 	var saved_frames: Array[String] = []
-	if bool(result.get("success",false)) and DisplayServer.get_name()!="headless":
-		await _sample_photo()
+	if bool(result.get("success",false)) and not practice and DisplayServer.get_name()!="headless":
+		# The completed session will draw its end overlay on the next frame. Keep
+		# the most recent rendered gameplay image instead of photographing that UI.
+		_append_photo_snapshot()
 		saved_frames=_save_photo_frames(id)
-	if bool(result.get("success",false)):
+	if bool(result.get("success",false)) and not practice:
 		celebrate_on_close=true
 		Progress.complete_game(id,bool(result.get("devil",false)),bool(result.get("assisted",false)))
 		var source := "photo-welcome-game-%d"%int(id.trim_prefix("game-"))
@@ -757,13 +803,15 @@ func _game_finished(result: Dictionary) -> void:
 	_cancel_game()
 	audio.play_sfx("success" if result.get("success",false) else "miss")
 	var definition := _definition(id)
-	var body := _open("今天的這一格，值得留下。" if result.get("success",false) else "差一點！再玩一次就好。","PHOTO BOOTH / "+definition.get("name",id),"result")
+	var result_title := "練習完成" if practice else ("今天的這一格，值得留下。" if result.get("success",false) else "差一點！再玩一次就好。")
+	var body := _open(result_title,"本局紀錄  /  "+str(definition.get("name",id)),"result")
 	var result_summary := HBoxContainer.new()
 	result_summary.add_theme_constant_override("separation",8)
 	body.add_child(result_summary)
-	result_summary.add_child(Paper.icon("album",23,Paper.TEAL))
-	result_summary.add_child(Paper.label("本次成績 %d   ·   %s"%[result.get("score",0),"輔助遊玩" if result.get("assisted",false) else "標準遊玩"],20))
-	if result.get("success",false):
+	result_summary.add_child(Paper.icon("album",23,Paper.CORAL if practice else Paper.TEAL))
+	var score_line := "練習分數 %d（不保存）"%int(result.get("score",0)) if practice else "本次成績 %d   ·   %s"%[int(result.get("score",0)),"輔助遊玩" if result.get("assisted",false) else "標準遊玩"]
+	result_summary.add_child(Paper.label(score_line,20))
+	if result.get("success",false) and not practice:
 		var award := HBoxContainer.new()
 		award.add_theme_constant_override("separation",8)
 		body.add_child(award)
@@ -772,37 +820,49 @@ func _game_finished(result: Dictionary) -> void:
 		if result.get("devil",false):
 			award.add_child(Paper.icon("devil",24,Paper.CORAL))
 			award.add_child(Paper.label("小惡魔也入鏡了",20,Paper.CORAL))
+	elif practice:
+		body.add_child(Paper.label("這是私人練習回合；分數、拍貼、任務與成就都沒有寫入紀錄。",20,Paper.DEEP_TEAL))
 	else:
 		body.add_child(Paper.label("沒有扣除任何收藏。也可以開啟輔助，試試別的節奏。",22))
-	var frames := HBoxContainer.new()
-	frames.add_theme_constant_override("separation",18)
-	body.add_child(frames)
-	for i in range(4):
-		var card := PanelContainer.new()
-		card.add_theme_stylebox_override("panel",Paper.plaque(Color("#fff9e9")))
-		card.custom_minimum_size=Vector2(200,145)
-		var content := VBoxContainer.new()
-		card.add_child(content)
-		if not saved_frames.is_empty():
-			var thumbnail := TextureRect.new()
-			thumbnail.texture=_photo_texture(saved_frames[mini(i,saved_frames.size()-1)])
-			thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-			thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			thumbnail.custom_minimum_size=Vector2(164,84)
-			content.add_child(thumbnail)
-		else:
-			content.add_child(Paper.label("◇ 第 %d 格"%(i+1),25,Paper.TEAL))
-		content.add_child(Paper.deckle_band())
-		var stamp_row := HBoxContainer.new()
-		stamp_row.add_theme_constant_override("separation",4)
-		content.add_child(stamp_row)
-		stamp_row.add_child(Paper.postmark())
-		stamp_row.add_child(Paper.label("郵戳 %02d  ·  %s"%[i+1,definition.get("name",id)],15,Paper.TEAL))
-		frames.add_child(card)
+	var score_summary: Dictionary=result.get("score_summary",{})
+	var score_rows: Array=score_summary.get("rows",[])
+	var detail_card := Paper.card(body,Color("#fffaf0"),6)
+	detail_card.add_child(Paper.section_title("得分明細"))
+	for score_row in score_rows:
+		if score_row is Dictionary:
+			detail_card.add_child(Paper.label("%s   ·   %d 分"%[str(score_row.get("label","得分")),int(score_row.get("amount",0))],18))
+	if not practice:
+		var frames := HBoxContainer.new()
+		frames.add_theme_constant_override("separation",18)
+		body.add_child(frames)
+		for i in range(4):
+			var card := PanelContainer.new()
+			card.add_theme_stylebox_override("panel",Paper.plaque(Color("#fff9e9")))
+			card.custom_minimum_size=Vector2(200,145)
+			var content := VBoxContainer.new()
+			card.add_child(content)
+			if not saved_frames.is_empty():
+				var thumbnail := TextureRect.new()
+				thumbnail.texture=_photo_texture(saved_frames[mini(i,saved_frames.size()-1)])
+				thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+				thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				thumbnail.custom_minimum_size=Vector2(164,84)
+				content.add_child(thumbnail)
+			else:
+				content.add_child(Paper.label("◇ 第 %d 格"%(i+1),25,Paper.TEAL))
+			content.add_child(Paper.deckle_band())
+			var stamp_row := HBoxContainer.new()
+			stamp_row.add_theme_constant_override("separation",4)
+			content.add_child(stamp_row)
+			stamp_row.add_child(Paper.postmark())
+			stamp_row.add_child(Paper.label("郵戳 %02d  ·  %s"%[i+1,definition.get("name",id)],16,Paper.TEAL))
+			frames.add_child(card)
 	var row := HBoxContainer.new()
 	body.add_child(row)
-	Paper.button("再玩一次",func(): _launch_game(id,bool(result.get("assisted",false))),row).grab_focus()
-	Paper.button("輔助重試",func(): _launch_game(id,true),row)
+	Paper.button("練習再來一次" if practice else "再玩一次",func(): _launch_game(id,bool(result.get("assisted",false)),practice),row).grab_focus()
+	if not practice:
+		Paper.button("練習操作",func(): _launch_game(id,bool(result.get("assisted",false)),true),row)
+		Paper.button("輔助重試",func(): _launch_game(id,true),row)
 	_back(body)
 
 func _show_album() -> void:
@@ -1091,12 +1151,10 @@ func _capture_sequence() -> void:
 
 func _sample_photo() -> void:
 	if DisplayServer.get_name()=="headless": return
+	var source_session := session
 	await RenderingServer.frame_post_draw
-	if session==null: return
-	var snapshot := get_viewport().get_texture().get_image()
-	snapshot.resize(320,180,Image.INTERPOLATE_LANCZOS)
-	if photo_frames.size()>=4: photo_frames.pop_front()
-	photo_frames.append(snapshot)
+	if not is_instance_valid(source_session) or session!=source_session or session.ended or session.paused: return
+	_append_photo_snapshot()
 
 func _photo_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
@@ -1236,3 +1294,13 @@ func _show_controls() -> void:
 	body.add_child(Paper.label("移動：WASD／方向鍵　·　互動：E　·　招呼：F　·　拍照：P",20))
 	body.add_child(Paper.label("衣櫃：C　·　時段：T　·　旅券：M　·　暫停：Esc",20))
 	_back(body)
+
+func _append_photo_snapshot() -> void:
+	if DisplayServer.get_name()=="headless" or session==null: return
+	var snapshot := get_viewport().get_texture().get_image()
+	if snapshot==null or snapshot.is_empty():
+		push_warning("Could not capture gameplay photo for "+str(session.game_id))
+		return
+	snapshot.resize(320,180,Image.INTERPOLATE_LANCZOS)
+	if photo_frames.size()>=4: photo_frames.pop_front()
+	photo_frames.append(snapshot)

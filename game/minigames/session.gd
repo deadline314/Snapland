@@ -6,6 +6,7 @@ signal finished(result: Dictionary)
 signal cancelled
 signal note_played(note: int)
 signal feedback(kind: String)
+signal help_requested(game_id: String)
 
 const ROUND_SECONDS := 60.0
 const BG := Color("#172d49")
@@ -25,6 +26,8 @@ const SEA := Color("#55b8ad")
 const GOLD := Color("#b77c45")
 const PAPER := Color("#fff2d4")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
+const MinigameHUDScript = preload("res://game/ui/minigame_hud.gd")
+const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
 const BUBBLE_MASCOT_RADIUS := 52.0
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
@@ -38,6 +41,20 @@ const BALLOON_WIND_SCALE := 1.0
 const BALLOON_ASSIST_DOCK_RADIUS := 88.0
 const BALLOON_ASSIST_DOCK_SPEED := 102.0
 const BALLOON_ASSIST_WIND_SCALE := 0.72
+const FOUNTAIN_PERIOD := 1.35
+const FOUNTAIN_FIRST_BEAT := 1.0
+const FOUNTAIN_PERFECT_WINDOW := 0.07
+const FOUNTAIN_GOOD_WINDOW := 0.16
+const FOUNTAIN_HIT_WINDOW := 0.22
+const FOUNTAIN_ASSIST_PERFECT_WINDOW := 0.11
+const FOUNTAIN_ASSIST_GOOD_WINDOW := 0.24
+const FOUNTAIN_ASSIST_HIT_WINDOW := 0.34
+const FOUNTAIN_TIMING_EPSILON := 0.0005
+const FOUNTAIN_JUMP_DURATION := 8.0 / 12.0
+const FOUNTAIN_LANDING_SETTLE_SECONDS := 0.07
+const FOUNTAIN_POSE_CACHE_META := "_snapland_fountain_pose_cache"
+const FOUNTAIN_RENDERER_META := "_snapland_fountain_avatar_renderer"
+const FOUNTAIN_POSE_CACHE_LIMIT := 4
 const REQUIRED_PROP_KEYS: Array[String] = ["balloon", "mailbox", "kite", "urchin", "hat", "visitor", "mascot", "lantern", "tourist_coral", "tourist_blue", "tourist_gold", "tourist_green", "flower_horn", "camera", "sign", "bench"]
 const BACKDROP_SCENES: Array[String] = ["harbor", "garden", "stage", "night"]
 static var _catalog_cache: Array = []
@@ -64,6 +81,17 @@ var devil_progress := 0
 var ended := false
 var won := false
 var devil_won := false
+var paused := false
+var _discard_next_delta := false
+var practice_mode := false
+var minigame_hud: Control
+var _fountain_avatar_renderer: RefCounted
+var _fountain_jump_textures: Array[Texture2D] = []
+var _fountain_idle_texture: Texture2D
+var score_events: Array[Dictionary] = []
+var _hud_refresh_clock := 1.0
+var _hud_dirty := true
+const HUD_REFRESH_INTERVAL := 0.1
 var game_time := 0.0
 var rng := RandomNumberGenerator.new()
 var p := Vector2(270, 390)
@@ -90,8 +118,12 @@ var velocity := Vector2.ZERO
 var phase := 0.0
 var beat := 0
 var beat_window := false
-var fountain_cycle := -1
 var fountain_attempts := 0
+var fountain_jump_started := -1.0
+var fountain_finish_pending := false
+var fountain_finish_at := -1.0
+var fountain_grades: Array[String] = []
+var fountain_errors_ms: Array[int] = []
 var feedback_color := MINT
 var reduced_motion := false
 var time_phase := TimeOfDayScript.DEFAULT_PHASE
@@ -168,6 +200,162 @@ func _ready() -> void:
 	focus_mode = Control.FOCUS_ALL
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	grab_focus()
+	minigame_hud = MinigameHUDScript.new()
+	minigame_hud.name = "MinigameHUD"
+	add_child(minigame_hud)
+	minigame_hud.pause_requested.connect(func(): set_paused(true))
+	minigame_hud.resume_requested.connect(func(): set_paused(false))
+	minigame_hud.help_requested.connect(request_help)
+	minigame_hud.details_requested.connect(func(): minigame_hud.set_score_details(score_summary()))
+	minigame_hud.practice_requested.connect(func(): set_practice_mode(true))
+	minigame_hud.retry_requested.connect(_retry_from_hud)
+	minigame_hud.leave_requested.connect(_leave_from_hud)
+	_refresh_hud()
+
+func set_paused(value: bool) -> void:
+	if ended and value:
+		return
+	if paused and not value:
+		_discard_next_delta = true
+	paused = value
+	if minigame_hud != null:
+		minigame_hud.set_paused(value)
+	_refresh_hud(true)
+
+func set_practice_mode(value: bool) -> void:
+	if practice_mode == value:
+		return
+	practice_mode = value
+	if game_id.is_empty():
+		return
+	reset_round()
+	set_paused(false)
+	_refresh_hud()
+
+func request_help() -> void:
+	if ended:
+		return
+	set_paused(true)
+	help_requested.emit(game_id)
+
+func _retry_from_hud() -> void:
+	reset_round()
+	set_paused(false)
+
+func _leave_from_hud() -> void:
+	paused = false
+	cancelled.emit()
+
+func _refresh_hud(force: bool = false) -> void:
+	if minigame_hud == null or not is_instance_valid(minigame_hud):
+		return
+	if not force and _hud_refresh_clock < HUD_REFRESH_INTERVAL:
+		_hud_dirty = true
+		return
+	_hud_refresh_clock = 0.0
+	_hud_dirty = false
+	var info := _definition()
+	var time_left := maxf(0.0, round_seconds - elapsed)
+	var time_text := "練習" if mode == "balloon_delivery" and not balloon_started else "%02d:%02d" % [int(time_left / 60.0), int(time_left) % 60]
+	if mode == "fountain_timing":
+		if ended:
+			time_text = "3 / 3 拍"
+		else:
+			var next_beat := _fountain_beat_time(mini(fountain_attempts, 2))
+			time_text = "第%d拍 %.1fs" % [mini(fountain_attempts + 1, 3), maxf(0.0, next_beat - phase)]
+	var feedback_text := ""
+	if mode == "balloon_delivery" and not balloon_started:
+		feedback_text = prompt
+	elif feedback_age <= 1.2:
+		feedback_text = prompt
+	minigame_hud.set_state({
+		"title": str(info.get("name", "小遊戲")),
+		"objective": str(info.get("goal", "完成挑戰")),
+		"progress_text": _progress_text(),
+		"score": score,
+		"time_text": time_text,
+		"feedback_text": feedback_text,
+		"feedback_color": feedback_color,
+		"assisted": assisted,
+		"practice": practice_mode,
+		"reduced_motion": reduced_motion,
+		"ended": ended,
+		"won": won,
+		"devil": devil_won
+	})
+
+func _progress_text() -> String:
+	match mode:
+		"balloon_delivery": return "郵袋 %d / 3" % balloon_delivery_index
+		"kite_rings": return "風環 %d / 5" % count
+		"fountain_timing": return "機會 %d / 3　成功 %d" % [fountain_attempts, count]
+		"crowd_traffic": return "隊伍 %d / 6" % count
+		"hat_catching": return "接住 %d / 6" % count
+		"ribbon_rhythm": return "命中 %d / 8" % devil_progress
+		"flower_pipes": return "轉動 %d 次" % move_count
+		"sign_balance": return "穩住 %d / 7 拍" % count
+		"shadow_alignment": return "穩定 %0.1f / 3.0 秒" % alignment_hold
+		"bubble_photo": return "有效合照 %d / 3" % devil_progress
+		"bench_swap": return "交換 %d 次" % move_count
+		"melody_memory": return "樂句 %d / 3　音符 %d / %d" % [count, sequence_index, sequence.size()]
+	return ""
+
+func score_summary() -> Dictionary:
+	var totals: Dictionary = {}
+	var labels: Dictionary = {}
+	var counts: Dictionary = {}
+	for event in score_events:
+		var key := str(event.get("key", "score"))
+		totals[key] = int(totals.get(key, 0)) + int(event.get("amount", 0))
+		labels[key] = str(event.get("label", "得分"))
+		counts[key] = int(counts.get(key, 0)) + int(event.get("count", 1))
+	var rows: Array[Dictionary] = []
+	var sum := 0
+	for key in totals:
+		var amount := int(totals[key])
+		sum += amount
+		rows.append({"key": key, "label": str(labels[key]), "amount": amount, "count": int(counts[key])})
+	if sum != score:
+		rows.append({"key": "score_adjustment", "label": "目前計分調整", "amount": score - sum, "count": 1})
+	if mode == "flower_pipes" or mode == "bench_swap":
+		rows.append({"key": "move_progress", "label": "操作步數（不計分）", "amount": 0, "count": move_count, "progress_only": true})
+	if mistakes > 0:
+		rows.append({"key": "mistakes", "label": "失誤（不計分）", "amount": 0, "count": mistakes, "progress_only": true})
+	if rows.is_empty():
+		rows.append({"key": "no_score", "label": _score_label(), "amount": 0, "count": 0})
+	return {"total": score, "label": _score_label(), "rule": _score_rule_text(), "rows": rows}
+
+func _score_label() -> String:
+	match mode:
+		"balloon_delivery": return "郵袋交付分"
+		"kite_rings": return "穿環分"
+		"fountain_timing": return "跳拍分"
+		"crowd_traffic": return "安全通行分"
+		"hat_catching": return "接帽分"
+		"ribbon_rhythm": return "節拍分"
+		"flower_pipes": return "路線轉動分"
+		"sign_balance": return "平衡拍點分"
+		"shadow_alignment": return "影子對準分"
+		"bubble_photo": return "合照分"
+		"bench_swap": return "換位分"
+		"melody_memory": return "演奏分"
+	return "得分"
+
+func _score_rule_text() -> String:
+	match mode:
+		"balloon_delivery": return "每送達一封郵袋 +150。"
+		"kite_rings": return "每穿過一個風環 +100。"
+		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。"
+		"crowd_traffic": return "每隊安全通過 +50。"
+		"hat_catching": return "每接住一頂帽子 +100。"
+		"ribbon_rhythm": return "每踩中一拍 +75。"
+		"flower_pipes": return "目前分數 = max(0, 1000 − 20 × 轉動次數)；連通另決定是否完成。"
+		"sign_balance": return "每個拍點穩在安全區 +50；精準度決定加碼條件。"
+		"shadow_alignment": return "完成三秒維持時 +100；保持時間決定一般成功。"
+		"bubble_photo": return "每張有效合照 +100。"
+		"bench_swap": return "目前分數 = max(0, 500 − 50 × 交換次數)；座位排列決定是否完成。"
+		"melody_memory": return "每個正確音符 +25；完成每段樂句再 +100。"
+	return "得分由已記錄的遊戲事件累加。"
 
 func set_time_of_day(phase_id: Variant) -> void:
 	time_phase = TimeOfDayScript.normalize(phase_id)
@@ -199,9 +387,11 @@ func _rng_reset() -> void:
 func reset_round() -> void:
 	elapsed = 0.0
 	score = 0
+	score_events.clear()
 	mistakes = 0
 	devil_progress = 0
 	ended = false
+	paused = false
 	won = false
 	devil_won = false
 	game_time = 0.0
@@ -209,8 +399,14 @@ func reset_round() -> void:
 	round_seconds = 55.0 if mode == "balloon_delivery" else ROUND_SECONDS
 	beat = 0
 	beat_window = false
-	fountain_cycle = -1
 	fountain_attempts = 0
+	fountain_jump_started = -1.0
+	fountain_finish_pending = false
+	fountain_finish_at = -1.0
+	fountain_grades.clear()
+	fountain_errors_ms.clear()
+	_fountain_jump_textures.clear()
+	_fountain_idle_texture = null
 	feedback_age = 99.0
 	particles.clear()
 	feedback_color = MINT
@@ -289,10 +485,60 @@ func reset_round() -> void:
 		"melody_memory": _next_melody()
 	if assisted:
 		prompt = "輔助已開：目標會標亮，判定範圍加寬"
+	if mode == "fountain_timing":
+		_prepare_fountain_avatar_poses()
+	_refresh_hud(true)
 	queue_redraw()
 
+func _prepare_fountain_avatar_poses() -> void:
+	var progress := get_node_or_null("/root/Progress")
+	var appearance: Dictionary = progress.appearance if progress != null and progress.get("appearance") is Dictionary else {}
+	var equipped: Dictionary = progress.equipped if progress != null and progress.get("equipped") is Dictionary else {}
+	var cache_key := JSON.stringify([appearance, equipped])
+	var pose_cache: Dictionary = {}
+	if progress != null and progress.has_meta(FOUNTAIN_POSE_CACHE_META):
+		pose_cache = progress.get_meta(FOUNTAIN_POSE_CACHE_META) as Dictionary
+	if pose_cache.has(cache_key):
+		var cached: Dictionary = pose_cache[cache_key]
+		_fountain_idle_texture = cached.get("idle") as Texture2D
+		_fountain_jump_textures.assign(cached.get("jump", []))
+		return
+	if progress != null:
+		var shared_renderer: Variant = null
+		if progress.has_meta(FOUNTAIN_RENDERER_META):
+			shared_renderer = progress.get_meta(FOUNTAIN_RENDERER_META)
+		if shared_renderer is RefCounted:
+			_fountain_avatar_renderer = shared_renderer
+	if _fountain_avatar_renderer == null:
+		_fountain_avatar_renderer = AvatarRendererScript.new()
+		if progress != null:
+			progress.set_meta(FOUNTAIN_RENDERER_META, _fountain_avatar_renderer)
+	_fountain_idle_texture = _fountain_avatar_renderer.texture(appearance, equipped, "front", 0, "idle")
+	if not _fountain_avatar_renderer.has_authored_action("jump", "front"):
+		return
+	var frame_count: int = _fountain_avatar_renderer.authored_frame_count("jump", "front")
+	for index in frame_count:
+		# AvatarRenderer applies the saved face/hair/skin, equipped layers, and the
+		# authored outfit variant. Its texture cache makes these one-time lookups.
+		var frame_texture: Texture2D = _fountain_avatar_renderer.texture(appearance, equipped, "front", index, "jump")
+		if frame_texture != null:
+			_fountain_jump_textures.append(frame_texture)
+	if progress != null and _fountain_jump_textures.size() > 0:
+		pose_cache[cache_key] = {"idle": _fountain_idle_texture, "jump": _fountain_jump_textures.duplicate()}
+		while pose_cache.size() > FOUNTAIN_POSE_CACHE_LIMIT:
+			pose_cache.erase(pose_cache.keys()[0])
+		progress.set_meta(FOUNTAIN_POSE_CACHE_META, pose_cache)
+
 func _process(delta: float) -> void:
-	if ended:
+	_hud_refresh_clock += maxf(delta, 0.0)
+	if _hud_dirty and _hud_refresh_clock >= HUD_REFRESH_INTERVAL:
+		_refresh_hud(true)
+	if ended or paused:
+		return
+	if _discard_next_delta:
+		_discard_next_delta = false
+		_refresh_hud()
+		queue_redraw()
 		return
 	if mode == "balloon_delivery" and not balloon_started:
 		feedback_age += delta
@@ -309,6 +555,7 @@ func _process(delta: float) -> void:
 				balloon_intro_step_clock = 0.0
 			intro_remaining -= intro_step
 		_set_balloon_intro_prompt()
+		_refresh_hud()
 		queue_redraw()
 		return
 	elapsed += delta
@@ -334,6 +581,7 @@ func _process(delta: float) -> void:
 			remaining -= step
 	else:
 		_tick_game(delta)
+	_refresh_hud()
 	queue_redraw()
 
 func _set_balloon_intro_prompt() -> void:
@@ -351,13 +599,12 @@ func _tick_game(delta: float) -> void:
 			p.x += 118.0 * delta
 			if count < ring_x.size() and p.x >= ring_x[count]:
 				if absf(p.y - ring_y[count]) <= (55 if assisted else 34):
-					count += 1; score += 100; devil_progress += 1; _feedback("穿環成功！", MINT)
+					count += 1; _award_points("ring", "成功穿過風環", 100); devil_progress += 1; _feedback("穿環成功！", MINT)
 				else:
 					count += 1; mistakes += 1; _feedback("差一點，風箏擦到環了", PINK)
 			if p.x > 1240: _finish(count == ring_x.size() and mistakes <= 1, devil_progress == 5 and mistakes == 0)
 		"fountain_timing":
-			var beat_phase := fposmod(phase, 1.35)
-			beat_window = beat_phase > (0.76 if assisted else 0.86) and beat_phase < (1.2 if assisted else 1.12)
+			_tick_fountain()
 		"crowd_traffic": _tick_crowd(delta)
 		"hat_catching": _tick_hats(delta)
 		"ribbon_rhythm":
@@ -377,7 +624,7 @@ func _tick_game(delta: float) -> void:
 				mistakes += 1; balance = signf(balance) * 0.72; _feedback("招牌晃過安全線！", PINK)
 				if mistakes >= 3: _finish(false)
 			if phase > 1.5 and fposmod(phase, 1.0) < delta and absf(balance) < (0.38 if assisted else 0.25):
-				count += 1; score += 50
+				count += 1; _award_points("balance", "穩住安全區拍點", 50)
 				if absf(balance) < 0.12: devil_progress += 1
 			if count >= 7: _finish(true, devil_progress >= 7 and mistakes == 0)
 		"shadow_alignment":
@@ -388,7 +635,7 @@ func _tick_game(delta: float) -> void:
 			else:
 				if shadow_started: shadow_broken = true
 				alignment_hold = 0.0
-			if alignment_hold >= 3.0: score += 100; _finish(true, mistakes == 0 and not shadow_broken)
+			if alignment_hold >= 3.0: _award_points("shadow", "影子維持三秒", 100); _finish(true, mistakes == 0 and not shadow_broken)
 		"bubble_photo":
 			target.y = 380.0 + sin(phase * 1.2) * 95.0
 			var photo_beat := fposmod(phase, 2.0)
@@ -508,7 +755,7 @@ func _tick_crowd(delta: float) -> void:
 		var direction := count % 2
 		if assisted: lane = direction
 		if direction == lane:
-			count += 1; score += 50; devil_progress += 1; _feedback("隊伍安全通過", MINT)
+			count += 1; _award_points("crowd", "隊伍安全通過", 50); devil_progress += 1; _feedback("隊伍安全通過", MINT)
 		else:
 			mistakes += 1; count += 1; _feedback("紅綠燈放錯方向", PINK)
 
@@ -519,7 +766,7 @@ func _tick_hats(delta: float) -> void:
 			hat_x[i] += sin(phase * 1.8 + i) * 24.0 * delta
 		if not hats_consumed[i] and hat_y[i] > 560:
 			if absf(hat_x[i] - p.x) < (115.0 if assisted else 65.0):
-				score += 100; count += 1; devil_progress += 1; _feedback("接住啦！", YELLOW)
+				_award_points("hat", "接住落帽", 100); count += 1; devil_progress += 1; _feedback("接住啦！", YELLOW)
 			else:
 				mistakes += 1; _feedback("帽子飛走了", PINK)
 			hats_consumed[i] = true
@@ -553,13 +800,13 @@ func _next_melody() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if ended:
-		if mode == "balloon_delivery" and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
-			reset_round()
 		return
 	var viewport := get_viewport()
 	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
 		if viewport: viewport.set_input_as_handled()
-		cancelled.emit()
+		set_paused(not paused)
+		return
+	if paused:
 		return
 	if (event is InputEventKey or event is InputEventMouse) and viewport:
 		viewport.set_input_as_handled()
@@ -575,7 +822,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		balloon_braking = (event as InputEventMouseButton).pressed
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_R: reset_round(); return
+		if event.keycode == KEY_R: set_paused(true); return
 		if event.keycode == KEY_SPACE: _press_action()
 		if event.keycode >= KEY_1 and event.keycode <= KEY_4: _melody_input(event.keycode - KEY_1)
 		if mode == "bench_swap" and event.keycode >= KEY_1 and event.keycode <= KEY_4: _bench_key(int(event.keycode - KEY_1))
@@ -594,11 +841,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		var mouse_event := event as InputEventMouseButton
 		var m := _to_design(mouse_event.position)
-		if m.y < 100:
-			if m.x > DESIGN_SIZE.x - 125: cancelled.emit()
-			elif m.x > DESIGN_SIZE.x - 280: reset_round()
-			return
-		if mode == "fountain_timing": _press_action()
+		if mode == "fountain_timing" and mouse_event.button_index == MOUSE_BUTTON_LEFT: _press_action()
 		elif mode == "ribbon_rhythm": _ribbon_input(KEY_LEFT if m.x < DESIGN_SIZE.x * 0.43 else (KEY_RIGHT if m.x > DESIGN_SIZE.x * 0.57 else KEY_SPACE))
 		elif mode == "crowd_traffic": lane = 1 - lane; _feedback("號誌切換", BLUE)
 		elif mode == "shadow_alignment": alignment = inverse_lerp(190.0, 1090.0, m.x) - 0.5; mistakes += 1 if absf(alignment) > 0.3 else 0
@@ -622,24 +865,91 @@ func _unhandled_input(event: InputEvent) -> void:
 func _press_action() -> void:
 	match mode:
 		"fountain_timing":
-			var cycle := int(floor(phase / 1.35))
-			if fountain_cycle == cycle: return
-			fountain_cycle = cycle
-			fountain_attempts += 1
-			if beat_window:
-				count += 1; score += 100; devil_progress += 1; _feedback("跳得漂亮！", MINT)
-			else:
-				mistakes += 1; _feedback("看水柱亮起再跳", PINK)
-			if fountain_attempts >= 3: _finish(count >= 2, devil_progress == 3 and mistakes == 0)
+			if fountain_attempts >= 3:
+				return
+			var target_time := _fountain_beat_time(fountain_attempts)
+			var error := phase - target_time
+			var tolerance := _fountain_hit_tolerance()
+			# An early spammed key before the water's pre-cue cannot burn the next jump.
+			if error < -tolerance - FOUNTAIN_TIMING_EPSILON:
+				_feedback("水柱還在蓄水，等中央水簾預亮", BLUE)
+				return
+			if error > tolerance + FOUNTAIN_TIMING_EPSILON:
+				_tick_fountain()
+				return
+			_resolve_fountain_jump(error)
 		"ribbon_rhythm":
 			_ribbon_input(KEY_SPACE)
+
+func _fountain_beat_time(index: int) -> float:
+	return FOUNTAIN_FIRST_BEAT + float(index) * FOUNTAIN_PERIOD
+
+func _fountain_perfect_tolerance() -> float:
+	return FOUNTAIN_ASSIST_PERFECT_WINDOW if assisted else FOUNTAIN_PERFECT_WINDOW
+
+func _fountain_good_tolerance() -> float:
+	return FOUNTAIN_ASSIST_GOOD_WINDOW if assisted else FOUNTAIN_GOOD_WINDOW
+
+func _fountain_hit_tolerance() -> float:
+	return FOUNTAIN_ASSIST_HIT_WINDOW if assisted else FOUNTAIN_HIT_WINDOW
+
+func _tick_fountain() -> void:
+	if fountain_finish_pending:
+		if phase + FOUNTAIN_TIMING_EPSILON >= fountain_finish_at:
+			fountain_finish_pending = false
+			_finish(count == 3, devil_progress == 3 and mistakes == 0)
+		return
+	while fountain_attempts < 3 and phase >= _fountain_beat_time(fountain_attempts) + _fountain_hit_tolerance() + FOUNTAIN_TIMING_EPSILON:
+		var missed_index := fountain_attempts + 1
+		fountain_attempts += 1
+		fountain_grades.append("錯過")
+		fountain_errors_ms.append(0)
+		mistakes += 1
+		_record_score_event("fountain_jump_%d" % missed_index, "第 %d 跳・錯過拍點　0 分" % missed_index, 0)
+		_feedback("第 %d 跳錯過拍點・沒有輸入" % missed_index, PINK)
+		if fountain_attempts >= 3:
+			_finish(count == 3, devil_progress == 3 and mistakes == 0)
+	beat_window = fountain_attempts < 3 and absf(phase - _fountain_beat_time(fountain_attempts)) <= _fountain_perfect_tolerance() + FOUNTAIN_TIMING_EPSILON
+
+func _resolve_fountain_jump(error: float) -> void:
+	if fountain_attempts >= 3:
+		return
+	var index := fountain_attempts + 1
+	var deviation := absf(error)
+	var grade := "擦邊"
+	var points := 100
+	var color := YELLOW
+	if deviation <= _fountain_perfect_tolerance() + FOUNTAIN_TIMING_EPSILON:
+		grade = "完美"
+		points = 300
+		devil_progress += 1
+		color = MINT
+	elif deviation <= _fountain_good_tolerance() + FOUNTAIN_TIMING_EPSILON:
+		grade = "準確"
+		points = 200
+	else:
+		grade = "踩中"
+	# All three authored timing grades are successful landings. Beyond the hit
+	# window the scheduled opportunity is a miss and is resolved by _tick_fountain.
+	count += 1
+	fountain_attempts += 1
+	fountain_jump_started = phase
+	fountain_grades.append(grade)
+	var signed_ms := roundi(error * 1000.0)
+	fountain_errors_ms.append(signed_ms)
+	var timing := "晚 +%dms" % signed_ms if signed_ms >= 0 else "早 %dms" % abs(signed_ms)
+	_award_points("fountain_jump_%d" % index, "第 %d 跳・%s（%s）" % [index, grade, timing], points)
+	_feedback("%s　%s　+%d" % [grade, timing, points], color)
+	if fountain_attempts >= 3:
+		fountain_finish_pending = true
+		fountain_finish_at = fountain_jump_started + FOUNTAIN_JUMP_DURATION + FOUNTAIN_LANDING_SETTLE_SECONDS
 
 func _ribbon_input(action: int) -> void:
 	if ended or beat != int(floor(phase / 0.82)): return
 	var rhythm: Array[int] = [KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_RIGHT, KEY_LEFT, KEY_SPACE, KEY_LEFT, KEY_RIGHT]
 	var expected: int = rhythm[beat % 8]
 	if action == expected and beat_window:
-		beat += 1; streak += 1; score += 75; devil_progress += 1
+		beat += 1; streak += 1; _award_points("rhythm", "踩中節拍", 75); devil_progress += 1
 		note_played.emit(0 if action == KEY_LEFT else (1 if action == KEY_RIGHT else 2))
 		_feedback("踩中節拍！", MINT)
 	else:
@@ -651,7 +961,7 @@ func _rotate_pipe(m: Vector2) -> void:
 	var col := int((m.x - 370) / 135.0); var row := int((m.y - 205) / 85.0); var idx := row * 4 + col
 	if idx < 0 or idx >= 16: return
 	flower_cells[idx] = ((flower_cells[idx] << 1) & 15) | (flower_cells[idx] >> 3)
-	move_count += 1; score = maxi(0, 1000 - move_count * 20)
+	move_count += 1; _set_formula_score("pipe_turns", "路線轉動計分調整", maxi(0, 1000 - move_count * 20))
 	if _pipe_solved(): _finish(true, move_count <= 4)
 
 func _pipe_solved() -> bool:
@@ -683,7 +993,7 @@ func _bubble_click(m: Vector2) -> void:
 	var aim_error := bubble_aim.distance_to(Vector2(790, target.y))
 	var photo_tolerance := _bubble_photo_tolerance()
 	if beat_window and aim_error < _bubble_aim_limit() and absf(m.x - 790.0) < photo_tolerance.x and absf(m.y - target.y) < photo_tolerance.y:
-		beat += 1; score += 100; devil_progress += 1
+		beat += 1; _award_points("photo", "有效合照", 100); devil_progress += 1
 		if aim_error >= 60.0 or m.distance_to(Vector2(790, target.y)) >= 40.0 or fposmod(phase, 2.0) < 1.55 or fposmod(phase, 2.0) > 1.85: bubble_perfect = false
 		_feedback("咔嚓！合照成功", MINT)
 	else:
@@ -705,7 +1015,7 @@ func _bench_click(m: Vector2) -> void:
 	var index := int((m.x - 370.0) / 135.0)
 	if select_index < 0: select_index = index; prompt = "再點一個座位交換"; return
 	var tmp := seats[index]; seats[index] = seats[select_index]; seats[select_index] = tmp
-	select_index = -1; move_count += 1; score = maxi(0, 500 - move_count * 50)
+	select_index = -1; move_count += 1; _set_formula_score("bench_swaps", "換位步數計分調整", maxi(0, 500 - move_count * 50))
 	var solved := seats == [0, 1, 2, 3]
 	if solved: _finish(true, move_count <= 3)
 	else: _feedback("朋友們再換一下位置", BLUE)
@@ -717,7 +1027,7 @@ func _bench_key(index: int) -> void:
 	var swap := select_index
 	select_index = -1
 	var tmp := seats[index]; seats[index] = seats[swap]; seats[swap] = tmp
-	move_count += 1; score = maxi(0, 500 - move_count * 50)
+	move_count += 1; _set_formula_score("bench_swaps", "換位步數計分調整", maxi(0, 500 - move_count * 50))
 	if seats == [0,1,2,3]: _finish(true, move_count <= 3)
 	else: _feedback("朋友們再換一下位置", BLUE)
 
@@ -725,9 +1035,9 @@ func _melody_input(note: int) -> void:
 	if mode != "melody_memory" or sequence_showing or ended: return
 	if sequence_index >= sequence.size(): return
 	if note == sequence[sequence_index]:
-		sequence_index += 1; score += 25; note_played.emit(note); _feedback("音符對了！", MINT)
+		sequence_index += 1; _award_points("melody_notes", "演奏正確音符", 25); note_played.emit(note); _feedback("音符對了！", MINT)
 		if sequence_index >= sequence.size():
-			count += 1; devil_progress += sequence.size(); score += 100
+			count += 1; devil_progress += sequence.size(); _award_points("melody_phrase", "完成迎賓樂句", 100)
 			if count >= 3: _finish(true, devil_progress >= 12 and mistakes == 0)
 			else: _next_melody()
 	else:
@@ -742,12 +1052,15 @@ func _feedback(message: String, color: Color) -> void:
 			var angle := TAU * float(i) / 12.0 + rng.randf_range(-0.14, 0.14)
 			particles.append({"pos": feedback_origin, "velocity": Vector2.RIGHT.rotated(angle) * rng.randf_range(34.0, 84.0), "life": rng.randf_range(0.22, 0.42), "color": palette[i % palette.size()]})
 	feedback.emit("success" if color == MINT or color == YELLOW else "miss" if color == PINK else "interact")
+	_refresh_hud(true)
+	if minigame_hud != null:
+		minigame_hud.set_feedback_at(message, feedback_origin)
 
 func _feedback_anchor() -> Vector2:
 	match mode:
 		"balloon_delivery": return p
 		"kite_rings": return p
-		"fountain_timing": return Vector2(640, 460)
+		"fountain_timing": return Vector2(960, 220)
 		"crowd_traffic": return Vector2(640, 420)
 		"hat_catching": return Vector2(p.x, 560)
 		"ribbon_rhythm": return Vector2(640, 420)
@@ -770,42 +1083,62 @@ func _design_transform() -> void:
 	draw_set_transform((size - DESIGN_SIZE * scale_factor) * 0.5, 0.0, Vector2.ONE * scale_factor)
 
 func _score(amount: int) -> void:
+	_award_points("mailbag", "郵袋交付", amount)
+
+func _award_points(key: String, label: String, amount: int, event_count: int = 1) -> void:
 	score += amount
+	_record_score_event(key, label, amount, event_count)
+	_refresh_hud(true)
+
+func _set_formula_score(key: String, label: String, value: int) -> void:
+	var adjustment := value - score
+	score = value
+	if adjustment != 0:
+		_record_score_event(key, label, adjustment)
+	_refresh_hud(true)
+
+func _record_score_event(key: String, label: String, amount: int, event_count: int = 1) -> void:
+	for index in score_events.size():
+		if str(score_events[index].get("key", "")) != key:
+			continue
+		var existing: Dictionary = score_events[index]
+		existing.amount = int(existing.get("amount", 0)) + amount
+		existing.count = int(existing.get("count", 0)) + event_count
+		score_events[index] = existing
+		return
+	if score_events.size() < 31:
+		score_events.append({"key": key, "label": label, "amount": amount, "count": event_count})
+		return
+	# Keep the ledger bounded without dropping any earned or deducted points.
+	var aggregate: Dictionary = {"key": "other_events", "label": "其他得分事件", "amount": amount, "count": event_count}
+	for index in score_events.size():
+		if str(score_events[index].get("key", "")) == "other_events":
+			aggregate = score_events[index]
+			aggregate.amount = int(aggregate.amount) + amount
+			aggregate.count = int(aggregate.count) + event_count
+			score_events[index] = aggregate
+			return
+	score_events.append(aggregate)
 
 func _finish(success: bool, devil: bool = false) -> void:
 	if ended: return
 	ended = true; won = success; devil_won = success and devil
-	var result := {"game_id": game_id, "success": success, "devil": devil_won, "score": score, "assisted": assisted}
+	var result := {"game_id": game_id, "success": success, "devil": devil_won, "score": score, "assisted": assisted, "practice": practice_mode, "mistakes": mistakes, "score_summary": score_summary()}
+	minigame_hud.set_score_details(result.score_summary)
 	finished.emit(result)
+	_refresh_hud(true)
 	queue_redraw()
 
 func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
-	var s := DESIGN_SIZE
 	_draw_backdrop()
 	# Warm inked frame, corner rivets and paper mat establish the harbor paper-theatre look.
 	draw_rect(Rect2(18,18,1244,684), Color("#f2d6a7"), false, 4)
 	draw_rect(Rect2(25,25,1230,670), Color(GOLD, 0.72), false, 2)
 	for corner in [Vector2(42,42), Vector2(1238,42), Vector2(42,678), Vector2(1238,678)]:
 		draw_circle(corner, 8, GOLD); draw_circle(corner, 3, PAPER)
-	draw_rect(Rect2(29,31,1222,90), Color("#152b40eF"), true)
-	draw_rect(Rect2(29,31,1222,90), Color("#d9ad70"), false, 2)
-	var info := _definition()
-	draw_string(FONT, Vector2(48,65), info.name, HORIZONTAL_ALIGNMENT_LEFT, 500, 27, PAPER)
-	draw_string(FONT, Vector2(50,99), "操作　" + info.instructions, HORIZONTAL_ALIGNMENT_LEFT, 680, 14, Color("#c9dfdf"))
-	draw_rect(Rect2(40,128,1200,31),Color("#fff0d5",0.88),true)
-	draw_rect(Rect2(40,128,1200,31),Color("#ac835c",0.65),false,1)
-	draw_string(FONT, Vector2(55,149), "本局目標　" + info.goal + "　　✦ 加碼　" + info.devil_hint, HORIZONTAL_ALIGNMENT_LEFT, 1170, 13, INK)
-	draw_string(FONT, Vector2(790,62), "時間  %02d" % int(ceil(maxf(0.0, round_seconds - elapsed))), HORIZONTAL_ALIGNMENT_LEFT, 150, 17, PAPER)
-	draw_string(FONT, Vector2(955,62), "得分  %04d" % score, HORIZONTAL_ALIGNMENT_LEFT, 170, 17, YELLOW)
-	draw_string(FONT, Vector2(790,96), "R 重來　　Esc 離開", HORIZONTAL_ALIGNMENT_LEFT, 210, 13, Color("#c9dfdf"))
-	if assisted: draw_string(FONT, Vector2(1060,96), "✦ 輔助", HORIZONTAL_ALIGNMENT_LEFT, 145, 14, YELLOW)
-	# The clock rail is deliberately calm and continuous; its color follows the remaining time.
-	var time_fraction := clampf((round_seconds - elapsed) / round_seconds, 0.0, 1.0)
-	draw_rect(Rect2(790,108,426,5), Color("#39566a"), true)
-	draw_rect(Rect2(790,108,426*time_fraction,5), MINT if time_fraction > 0.25 else PINK, true)
 	_draw_game()
 	for particle in particles:
 		var alpha := clampf(float(particle.life) / 0.42, 0.0, 1.0)
@@ -816,16 +1149,6 @@ func _draw() -> void:
 		draw_circle(feedback_origin,stamp_radius,Color("#173248",0.72*stamp_alpha))
 		draw_arc(feedback_origin,stamp_radius,0,TAU,32,Color(feedback_color,stamp_alpha),4)
 		draw_circle(feedback_origin,5,Color(feedback_color,stamp_alpha))
-	draw_rect(Rect2(38,626,1204,52), Color("#152b40e8"), true)
-	draw_rect(Rect2(38,626,7,52), feedback_color if feedback_age < 1.4 else GOLD, true)
-	draw_rect(Rect2(38,626,1204,52), Color("#e8c68d"), false, 2)
-	draw_string(FONT, Vector2(62,659), prompt, HORIZONTAL_ALIGNMENT_LEFT, 1140, 17, PAPER)
-	if ended:
-		draw_rect(Rect2(0,0,s.x,s.y), Color(0.03,0.08,0.14,0.70))
-		draw_rect(Rect2(350,262,580,180), Color("#17334a"), true)
-		draw_rect(Rect2(350,262,580,180), GOLD, false, 4)
-		draw_string(FONT, Vector2(0,326), "完成！" if won else "再試一次吧！", HORIZONTAL_ALIGNMENT_CENTER, s.x, 38, YELLOW if won else PINK)
-		draw_string(FONT, Vector2(0,378), ("惡魔拍貼達成 ✦" if devil_won else "普通拍貼達成" if won else "按 R 免費重試　／　Esc 離開"), HORIZONTAL_ALIGNMENT_CENTER, s.x, 19, PAPER)
 	draw_set_transform(Vector2.ZERO)
 
 func _draw_backdrop() -> void:
@@ -1278,22 +1601,70 @@ func _draw_fountain() -> void:
 	draw_rect(Rect2(151,464,978,94),Color("#5c8b8e"),true); draw_circle(Vector2(151,511),47,Color("#5c8b8e")); draw_circle(Vector2(1129,511),47,Color("#5c8b8e"))
 	draw_rect(Rect2(150,480,980,51),Color("#77aaa3"),true)
 	for i in 5:
-		var x := 260.0 + i * 190.0; var height := 42.0 + absf(sin(phase * 2.3 + i * 0.7)) * 132.0
-		var active := beat_window and i == 2
+		var x := 260.0 + i * 190.0
+		var height: float
+		if i == 2 and fountain_attempts < 3:
+			var offset := phase - _fountain_beat_time(fountain_attempts)
+			height = 108.0 if reduced_motion else 42.0 + 132.0 * (0.5 + 0.5 * cos(PI * offset / (FOUNTAIN_PERIOD * 0.5)))
+		else:
+			height = 78.0 if reduced_motion else 42.0 + absf(sin(phase * 2.3 + i * 0.7)) * 132.0
+		var near_cue := i == 2 and fountain_attempts < 3 and absf(phase - _fountain_beat_time(fountain_attempts)) <= 0.44
+		var active := near_cue and beat_window
+		var jet_color := MINT if active else YELLOW if near_cue else Color("#75aac0")
 		draw_line(Vector2(x,484), Vector2(x,484-height), Color("#a8eff0",0.35), 24)
-		draw_line(Vector2(x,484), Vector2(x,484-height), Color("#78dfe3") if active else Color("#75aac0"), 13)
-		draw_circle(Vector2(x,484-height), 11, Color("#f1ffff") if active else BLUE)
-		draw_arc(Vector2(x,484-height),18,PI,TAU,16,MINT if active else Color("#99d1d5"),2)
-	var jump_pose := 0.0
-	if feedback_age < 0.34 and feedback_color == MINT: jump_pose = 16.0 * sin((1.0-feedback_age/0.34)*PI*0.5)
-	draw_circle(Vector2(640,465-jump_pose),54,Color(MINT,0.18)); _draw_tourist("visitor",Rect2(611,386-jump_pose,58,118),Color("#e77e83"),504.0)
-	# Readable jump pose: coat, flying scarf and tucked legs on the live burst.
-	if beat_window:
-		draw_line(Vector2(625,450-jump_pose),Vector2(599,425-jump_pose),PINK,5); draw_line(Vector2(655,450-jump_pose),Vector2(681,425-jump_pose),PINK,5)
-	_draw_scene_label("趁中央噴泉水簾升起時起跳　　起跳 " + str(count) + " / 3",Vector2(640,350),21)
+		draw_line(Vector2(x,484), Vector2(x,484-height), Color("#78dfe3") if near_cue else Color("#75aac0"), 13)
+		draw_circle(Vector2(x,484-height), 11, Color("#f1ffff") if active else BLUE if not near_cue else PAPER)
+		draw_arc(Vector2(x,484-height),18,PI,TAU,16,jet_color,3 if active else 2)
+	var jump_age := phase - fountain_jump_started
+	var airborne := fountain_jump_started >= 0.0 and jump_age >= 0.0 and jump_age < FOUNTAIN_JUMP_DURATION
+	var jump_progress := clampf(jump_age / FOUNTAIN_JUMP_DURATION, 0.0, 1.0) if airborne else 0.0
+	var jump_lift := 48.0 * sin(PI * jump_progress) if airborne and not reduced_motion else 0.0
+	draw_circle(Vector2(640,465-jump_lift),54,Color(MINT,0.18) if airborne else Color(BLUE,0.10))
+	_draw_fountain_avatar(jump_lift, jump_progress, airborne)
+	var jump_label := "完成三跳　·　查看分數明細" if fountain_attempts >= 3 else "Space／點擊起跳　·　機會 %d / 3" % (fountain_attempts + 1)
+	if fountain_attempts < 3:
+		var seconds_to_beat := _fountain_beat_time(fountain_attempts) - phase
+		if seconds_to_beat > _fountain_hit_tolerance():
+			jump_label = ("水柱蓄水　·　%.1fs 後預亮" % maxf(0.0, seconds_to_beat - 0.44)) if seconds_to_beat > 0.44 else "中央水簾預亮　·　準備起跳"
+		elif beat_window:
+			jump_label = "現在起跳！　·　Space／點擊"
+		elif seconds_to_beat > 0.0:
+			jump_label = "中央水簾升至拍點　·　準備起跳"
+		elif absf(seconds_to_beat) <= _fountain_hit_tolerance():
+			jump_label = "拍點落下中　·　現在仍可起跳"
+		else:
+			jump_label = "中央水簾正在亮起　·　Space／點擊"
+	_draw_scene_label(jump_label,Vector2(640,276),21)
 	for i in 3:
 		var cx := 565.0 + i*75.0
-		draw_circle(Vector2(cx,400),16,MINT if i<count else PAPER); draw_string(FONT,Vector2(cx-10,406),"✓" if i<count else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
+		var finished_attempt := i < fountain_grades.size()
+		var grade_color := PAPER
+		if finished_attempt:
+			grade_color = MINT if fountain_grades[i] == "完美" else YELLOW if fountain_grades[i] in ["準確", "踩中"] else PINK
+		draw_circle(Vector2(cx,576),16,grade_color if finished_attempt else PAPER)
+		var marker := str(i+1)
+		if finished_attempt:
+			marker = "✓" if fountain_grades[i] != "錯過" else "×"
+		draw_string(FONT,Vector2(cx-10,582),marker,HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
+
+func _draw_fountain_avatar(jump_lift: float, jump_progress: float, airborne: bool) -> void:
+	# Draw one complete authored pose. The ground shadow stays fixed while the
+	# whole character follows the jump arc; no separate limb overlays are used.
+	var ground := Vector2(640.0, 504.0)
+	_draw_actor_contact_shadow(ground, Vector2(25.0, 6.0))
+	var pose: Texture2D = _fountain_idle_texture
+	if airborne and not _fountain_jump_textures.is_empty():
+		var frame_index := 0
+		if not reduced_motion:
+			frame_index = clampi(floori(jump_progress * _fountain_jump_textures.size()), 0, _fountain_jump_textures.size() - 1)
+		pose = _fountain_jump_textures[frame_index]
+	if pose == null:
+		_draw_tourist("visitor", Rect2(611.0, 386.0 - jump_lift, 58.0, 118.0), Color("#e77e83"), ground.y)
+		return
+	var size := Vector2(140.0, 180.0)
+	var feet_y := ground.y - jump_lift
+	var top := feet_y - (346.0 / 360.0) * size.y
+	draw_texture_rect(pose, Rect2(Vector2(ground.x - size.x * 0.5, top), size), false)
 
 func _draw_crowd() -> void:
 	# Two promenade lanes, zebra markings, direction chevrons and a brass signal post.

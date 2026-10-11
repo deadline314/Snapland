@@ -17,6 +17,7 @@ func _run() -> void:
 	_test_three_deliveries_finish_cleanly()
 	_test_fast_approach_recovers_without_teleport()
 	_test_timeout_and_retry_preserve_tutorial()
+	_test_pause_and_practice_preserve_state_contract()
 	_test_assisted_docks_are_wider()
 	print("PASS: balloon delivery checks (%d cases)" % checks)
 	quit()
@@ -116,9 +117,47 @@ func _test_timeout_and_retry_preserve_tutorial() -> void:
 	_key(session, KEY_ENTER)
 	session._process(55.0)
 	assert(session.ended and not session.won)
-	_key(session, KEY_R)
+	var hud: Control = session.get("minigame_hud")
+	hud._ask_retry()
+	hud.find_child("ConfirmAction", true, false).emit_signal("pressed")
 	assert(not session.ended and session.balloon_started and session.balloon_tutorial_seen)
 	assert(session.elapsed == 0.0 and session.balloon_delivery_index == 0)
+	session.queue_free()
+	checks += 1
+
+func _test_pause_and_practice_preserve_state_contract() -> void:
+	var session := _new_session()
+	var intro_pos: Vector2 = session.p
+	var intro_phase: float = session.phase
+	session.set_paused(true)
+	session._process(8.0)
+	assert(session.phase == intro_phase and session.p == intro_pos and session.elapsed == 0.0)
+	session.set_paused(false)
+	session._process(8.0)
+	assert(session.phase == intro_phase and session.p == intro_pos)
+	session._process(0.05)
+	assert(session.phase > intro_phase)
+	_key(session, KEY_ENTER)
+	session._process(0.05)
+	var active_pos: Vector2 = session.p
+	var active_elapsed: float = session.elapsed
+	session.set_paused(true)
+	_mouse_move(session, 1000, 540)
+	session._process(1.0)
+	assert(session.p == active_pos and session.elapsed == active_elapsed)
+	var help_ids: Array[String] = []
+	session.help_requested.connect(func(id: String): help_ids.append(id))
+	session.request_help()
+	assert(session.paused and help_ids == ["game-001"])
+	session.set_paused(false)
+	session.set_practice_mode(true)
+	assert(session.practice_mode and session.elapsed == 0.0 and session.score == 0)
+	session.reset_round()
+	assert(session.practice_mode)
+	var result_rows: Array[Dictionary] = []
+	session.finished.connect(func(value: Dictionary): result_rows.append(value))
+	session._finish(true)
+	assert(result_rows.size() == 1 and result_rows[0].practice)
 	session.queue_free()
 	checks += 1
 
