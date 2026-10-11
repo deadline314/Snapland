@@ -5,6 +5,7 @@ const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
 const Session = preload("res://game/minigames/session.gd")
 const PhotoStage = preload("res://game/ui/photo_stage.gd")
+const WardrobePanel = preload("res://game/ui/wardrobe_panel.gd")
 var world: Node3D
 var audio: Node
 var story: RefCounted
@@ -21,6 +22,8 @@ var toast: Label
 var quest_label: Label
 var session: Control
 var modal_kind := ""
+var wardrobe_panel: RefCounted
+var celebrate_on_close := false
 var dialogue: Array=[]
 var dialogue_index := 0
 var dialogue_label: Label
@@ -139,6 +142,21 @@ func _smoke_art_test() -> void:
 	if Session._backdrop_warning_emitted or Session._props_warning_emitted:
 		await _smoke_art_abort("A minigame art resource warning was emitted during the smoke test")
 		return
+	var avatar_source=world.avatar_renderer
+	if not avatar_source.is_asset_ready() or not avatar_source.has_hat_atlas() or not avatar_source.has_hair_atlas() or not avatar_source.has_species_atlas():
+		await _smoke_art_abort("Character, hair, hat or species atlas failed to load from the exported resources")
+		return
+	if world.identity_textures.size()!=3 or not world.identity_warnings.is_empty():
+		await _smoke_art_abort("Named character atlas regions failed to load")
+		return
+	var motion_status:Dictionary=world.component_motion.statistics()
+	if not bool(motion_status.get("playing",false)) or int(motion_status.get("registration_count",0))<100:
+		await _smoke_art_abort("Scene component animation did not start")
+		return
+	if int(world.occlusion_controller.statistics().get("registered_buildings",0))<15:
+		await _smoke_art_abort("Eligible building cutaways were not registered")
+		return
+	print("PASS: character source assets, three NPC regions, component animation and building cutaway registration")
 	print("PASS: art resources loaded (props=%d, scenes=%d, foliage=%d)"%[Session.REQUIRED_PROP_KEYS.size(),loaded_scenes.size(),actual_foliage_keys.size()])
 	_cancel_game()
 	world.blocked=true
@@ -233,7 +251,7 @@ func _build_ui() -> void:
 	tools.position=Vector2(-665,25)
 	tools.add_theme_constant_override("separation",8)
 	hud.add_child(tools)
-	for entry in [["拍貼本",_show_album],["任務",_show_tasks],["成就",_show_achievements],["地圖",_show_map],["設定",_show_settings]]:
+	for entry in [["拍貼本",_show_album],["任務",_show_tasks],["成就",_show_achievements],["地圖",_show_map],["衣櫃",_show_wardrobe],["設定",_show_settings]]:
 		Paper.button(entry[0],entry[1],tools)
 	quest_label=Paper.label("",17,Color("#fff3cf"))
 	quest_label.position=Vector2(28,155)
@@ -252,7 +270,7 @@ func _build_ui() -> void:
 	hud.add_child(lower)
 	var row := HBoxContainer.new()
 	lower.add_child(row)
-	hint=Paper.label("WASD / 方向鍵 移動   ·   E 互動   ·   Esc 暫停",18)
+	hint=Paper.label("WASD/方向鍵移動 · E互動 · C衣櫃 · F招呼 · P拍照 · Esc暫停",16)
 	hint.autowrap_mode=TextServer.AUTOWRAP_OFF
 	hint.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	row.add_child(hint)
@@ -299,7 +317,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	overlay.add_child(center)
 	var panel := PanelContainer.new()
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var tall_kinds := ["settings","album","achievements","map","pause"]
+	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe"]
 	var preferred_height := 600.0 if tall_kinds.has(kind) else 350.0
 	panel.custom_minimum_size=Vector2(minf(960.0,viewport_size.x-56.0),minf(preferred_height,viewport_size.y-56.0))
 	panel.add_theme_stylebox_override("panel",Paper.plaque(Color("#f7efd9")))
@@ -340,12 +358,16 @@ func _close() -> void:
 	if modal_kind=="dialogue":
 		_finish_dialogue()
 		return
+	var celebrate := celebrate_on_close and modal_kind=="result"
+	celebrate_on_close=false
 	overlay.hide()
 	modal_kind=""
 	world.blocked=session!=null
 	world.set_process(true)
 	audio.set_paused(false)
 	if session==null: hud.show()
+	if celebrate and session==null and world.has_method("play_action"):
+		world.play_action("celebrate")
 
 func _back(parent: Node) -> void:
 	var button := Paper.button("返回遊園  ·  Esc",_close,parent)
@@ -364,6 +386,8 @@ func _refresh() -> void:
 	audio.apply_settings(Progress.settings)
 	world.apply_settings(Progress.settings)
 	world.update_collection(Progress.photos)
+	if world.has_method("set_avatar_look"):
+		world.set_avatar_look(Progress.appearance,Progress.equipped)
 	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if Progress.settings.get("fullscreen",false) else DisplayServer.WINDOW_MODE_WINDOWED
 	if DisplayServer.get_name()!="headless" and not capture_mode:
 		DisplayServer.window_set_mode(mode)
@@ -373,7 +397,7 @@ func _process(delta: float) -> void:
 		next_snapshot=session.elapsed+15.0
 		_sample_photo.call_deferred()
 	if is_instance_valid(world) and modal_kind=="" and session==null:
-		hint.text="E  "+world.nearest.get("label","")+"   ·   WASD 移動   ·   Esc 暫停" if not world.nearest.is_empty() else "WASD / 方向鍵 移動   ·   E 互動   ·   Esc 暫停"
+		hint.text="E "+world.nearest.get("label","")+" · WASD移動 · C衣櫃 · F招呼 · P拍照 · Esc暫停" if not world.nearest.is_empty() else "WASD/方向鍵移動 · E互動 · C衣櫃 · F招呼 · P拍照 · Esc暫停"
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label):
 		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
 		dialogue_label.visible_characters=int(reveal)
@@ -390,11 +414,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif modal_kind=="" and session==null:
 			world.interact()
 		get_viewport().set_input_as_handled()
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_C:
+		if modal_kind=="" and session==null:
+			_show_wardrobe()
+		elif modal_kind=="wardrobe":
+			_close()
+		get_viewport().set_input_as_handled()
 
 func _show_pause() -> void:
 	var body := _open("留一點時間，給海風。","PAUSE","pause")
 	body.add_child(Paper.label("進度會自動保存。今天想玩哪一款，都可以慢慢選。",22))
 	Paper.button("繼續遊園",_close,body).grab_focus()
+	Paper.button("衣櫃與服飾店",_show_wardrobe,body)
 	Paper.button("拍貼收藏",_show_album,body)
 	Paper.button("設定與輔助",_show_settings,body)
 	Paper.button("儲存並離開",_quit_game,body)
@@ -555,6 +586,7 @@ func _game_finished(result: Dictionary) -> void:
 		await _sample_photo()
 		saved_frames=_save_photo_frames(id)
 	if bool(result.get("success",false)):
+		celebrate_on_close=true
 		Progress.complete_game(id,bool(result.get("devil",false)),bool(result.get("assisted",false)))
 		var source := "photo-welcome-game-%d"%int(id.trim_prefix("game-"))
 		if not saved_frames.is_empty() and Progress.photos.has(source):
@@ -767,6 +799,7 @@ func _show_exploration(id: String) -> void:
 		if index==3 and not stage.borrowed:
 			_notice("先從免費借用架拿一個小角立牌。")
 			return
+		if world.has_method("play_action"): world.play_action("photo")
 		Progress.grant_photo("photo-welcome-explore-%d"%index,{"pose":stage.pose})
 		audio.play_sfx("success")
 		_close()
@@ -823,6 +856,11 @@ func _show_settings() -> void:
 	body.add_child(Paper.label("移動：WASD / 方向鍵  ·  互動：E / Space  ·  返回：Esc",18))
 	_back(body)
 
+func _show_wardrobe() -> void:
+	var body := _open("把海風穿在身上。","WARDROBE  /  裁縫店","wardrobe")
+	wardrobe_panel=WardrobePanel.new()
+	wardrobe_panel.open(self,body)
+
 func _notice(message: String) -> void:
 	toast.text=message
 	var timer := get_tree().create_timer(3.5)
@@ -841,7 +879,7 @@ func _capture_sequence() -> void:
 		await _abort_capture("Capture requires isolated SNAPLAND_SAVE_PATH")
 		return
 	await get_tree().create_timer(2).timeout
-	world.player.position=Vector3(0,0.4,0)
+	world.player.position=Vector3(0,0.4,-6)
 	await get_tree().create_timer(0.6).timeout
 	await RenderingServer.frame_post_draw
 	if not await _capture_or_abort("pm/Snapland-art/images/ART-3-day.png"): return

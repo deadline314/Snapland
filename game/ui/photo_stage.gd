@@ -13,6 +13,8 @@ const GOLD = Color("#e9b762")
 const CORAL = Color("#d97966")
 const CREAM = Color("#f5e7c4")
 const FONT = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+var avatar_renderer := AvatarRenderer.new()
 func _ready() -> void:
 	custom_minimum_size=Vector2(0,142)
 	size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -38,7 +40,7 @@ func _draw() -> void:
 		"tail":
 			draw_rect(Rect2(width*0.55+offset,20,135,108),GOLD)
 			draw_circle(Vector2(width*0.55+offset+45,74),25,INK)
-			_person(Vector2(width*0.53,100),CORAL,pose)
+			_traveller(Vector2(width*0.53,100),"wave" if pose==1 else "photograph")
 			draw_arc(Vector2(width*0.53+38,93),30,-PI*0.5,PI*0.4,18,CORAL,7)
 			draw_line(Vector2(width*0.55+45,120),Vector2(width*0.55+45,137),INK,2)
 		"broadcast":
@@ -48,7 +50,7 @@ func _draw() -> void:
 			var tip := Vector2(width*0.43,72)+direction*25
 			draw_line(tip,tip-direction.rotated(0.7)*18,GOLD,7)
 			draw_line(tip,tip-direction.rotated(-0.7)*18,GOLD,7)
-			_person(Vector2(width*0.65,103),CORAL,0)
+			_traveller(Vector2(width*0.65,103),"interact")
 		"flower":
 			for i in range(6):
 				var pos := Vector2(width*0.28+i*64,90)
@@ -72,8 +74,12 @@ func _draw() -> void:
 			draw_rect(Rect2(width*0.35,98,230,12),GOLD)
 			draw_line(Vector2(width*0.37,108),Vector2(width*0.37,142),INK,5)
 			draw_line(Vector2(width*0.35+210,108),Vector2(width*0.35+210,142),INK,5)
-			_person(Vector2(width*0.40,88),Color("#60aeb3"),pose)
+			_traveller(Vector2(width*0.40,88),"wave" if pose==1 else "photograph")
 			if borrowed: _person(Vector2(width*0.53,88),CORAL,1)
+func _traveller(pos: Vector2, action: String) -> void:
+	var texture := avatar_renderer.texture(Progress.appearance,Progress.equipped,"front",0,action)
+	if texture!=null:
+		draw_texture_rect(texture,Rect2(pos.x-25,pos.y-86,50,86),false)
 func _person(pos: Vector2, color: Color, posture: int) -> void:
 	draw_circle(pos+Vector2(0,-36),17,CREAM)
 	draw_rect(Rect2(pos.x-14,pos.y-20,28,34),color)
