@@ -1,0 +1,86 @@
+[
+  {
+    "name": "game.wav",
+    "seconds": 43.64,
+    "channels": 2,
+    "peak": 23592,
+    "clipped": 0
+  },
+  {
+    "name": "harbor.wav",
+    "seconds": 43.64,
+    "channels": 2,
+    "peak": 23592,
+    "clipped": 0
+  },
+  {
+    "name": "note_0.wav",
+    "seconds": 0.3,
+    "channels": 1,
+    "peak": 7854,
+    "clipped": 0
+  },
+  {
+    "name": "note_1.wav",
+    "seconds": 0.3,
+    "channels": 1,
+    "peak": 7861,
+    "clipped": 0
+  },
+  {
+    "name": "note_2.wav",
+    "seconds": 0.3,
+    "channels": 1,
+    "peak": 7860,
+    "clipped": 0
+  },
+  {
+    "name": "note_3.wav",
+    "seconds": 0.3,
+    "channels": 1,
+    "peak": 7861,
+    "clipped": 0
+  },
+  {
+    "name": "photo_shutter.wav",
+    "seconds": 0.2,
+    "channels": 1,
+    "peak": 7421,
+    "clipped": 0
+  },
+  {
+    "name": "plaza.wav",
+    "seconds": 43.64,
+    "channels": 2,
+    "peak": 23592,
+    "clipped": 0
+  },
+  {
+    "name": "plaza_ambience.wav",
+    "seconds": 12.0,
+    "channels": 1,
+    "peak": 2000,
+    "clipped": 0
+  },
+  {
+    "name": "quest_complete.wav",
+    "seconds": 0.58,
+    "channels": 1,
+    "peak": 5890,
+    "clipped": 0
+  },
+  {
+    "name": "soft_error.wav",
+    "seconds": 0.27,
+    "channels": 1,
+    "peak": 3930,
+    "clipped": 0
+  },
+  {
+    "name": "ui_click.wav",
+    "seconds": 0.07,
+    "channels": 1,
+    "peak": 10460,
+    "clipped": 0
+  }
+]
