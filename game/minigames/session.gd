@@ -28,6 +28,7 @@ const PAPER := Color("#fff2d4")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const MinigameHUDScript = preload("res://game/ui/minigame_hud.gd")
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
+const BalloonHarborScript = preload("res://game/minigames/balloon_harbor_view.gd")
 const BUBBLE_MASCOT_RADIUS := 52.0
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
@@ -85,6 +86,8 @@ var paused := false
 var _discard_next_delta := false
 var practice_mode := false
 var minigame_hud: Control
+var presentation: Control
+var presentation_mode := ""
 var _fountain_avatar_renderer: RefCounted
 var _fountain_jump_textures: Array[Texture2D] = []
 var _fountain_idle_texture: Texture2D
@@ -210,7 +213,41 @@ func _ready() -> void:
 	minigame_hud.practice_requested.connect(func(): set_practice_mode(true))
 	minigame_hud.retry_requested.connect(_retry_from_hud)
 	minigame_hud.leave_requested.connect(_leave_from_hud)
+	resized.connect(_layout_presentation)
+	_sync_presentation()
 	_refresh_hud()
+
+func _sync_presentation() -> void:
+	if not is_inside_tree(): return
+	if presentation_mode != mode:
+		if is_instance_valid(presentation):
+			presentation.hide()
+			presentation.queue_free()
+		presentation = null
+		presentation_mode = mode
+		match mode:
+			"balloon_delivery":
+				# Headless rules tests do not allocate a renderer or GPU world.
+				if DisplayServer.get_name() != "headless": presentation = BalloonHarborScript.new()
+		if presentation != null:
+			presentation.name = "GamePresentation"
+			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			add_child(presentation)
+			move_child(presentation, 0)
+			if mode == "balloon_delivery": presentation.initialize()
+			_layout_presentation()
+	if not is_instance_valid(presentation): return
+	match mode:
+		"balloon_delivery":
+			presentation.present(p, velocity, balloon_wind_current, balloon_wind_forecast, balloon_delivery_index, balloon_dock_hold, balloon_braking, phase, reduced_motion, time_phase, balloon_delivery_index, _balloon_hazard_at(phase), 65.0)
+
+func _layout_presentation() -> void:
+	if not is_instance_valid(presentation): return
+	var factor := minf(size.x / DESIGN_SIZE.x, size.y / DESIGN_SIZE.y)
+	presentation.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	presentation.size = DESIGN_SIZE
+	presentation.scale = Vector2.ONE * factor
+	presentation.position = (size - DESIGN_SIZE * factor) * 0.5
 
 func set_paused(value: bool) -> void:
 	if ended and value:
@@ -530,6 +567,7 @@ func _prepare_fountain_avatar_poses() -> void:
 		progress.set_meta(FOUNTAIN_POSE_CACHE_META, pose_cache)
 
 func _process(delta: float) -> void:
+	_sync_presentation()
 	_hud_refresh_clock += maxf(delta, 0.0)
 	if _hud_dirty and _hud_refresh_clock >= HUD_REFRESH_INTERVAL:
 		_refresh_hud(true)
@@ -555,6 +593,7 @@ func _process(delta: float) -> void:
 				balloon_intro_step_clock = 0.0
 			intro_remaining -= intro_step
 		_set_balloon_intro_prompt()
+		_sync_presentation()
 		_refresh_hud()
 		queue_redraw()
 		return
@@ -581,13 +620,14 @@ func _process(delta: float) -> void:
 			remaining -= step
 	else:
 		_tick_game(delta)
+	_sync_presentation()
 	_refresh_hud()
 	queue_redraw()
 
 func _set_balloon_intro_prompt() -> void:
 	match balloon_intro_step:
 		0: prompt = "練習 1/3　方向鍵／WASD 或移動滑鼠推動氣球。Enter 隨時出發"
-		1: prompt = "練習 2/3　按空白鍵／右鍵煞車；↑↓ 控制高度。Enter 隨時出發"
+		1: prompt = "練習 2/3　按空白鍵／右鍵煞車；↑↓ 調整航線。Enter 隨時出發"
 		2: prompt = "練習 3/3　依序送達三個亮起的郵箱；進圈後煞停。Enter 開始計時"
 
 func _tick_game(delta: float) -> void:
@@ -856,6 +896,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var pointer := _to_design(mouse.position)
 		match mode:
 			"balloon_delivery":
+				if is_instance_valid(presentation): pointer = presentation.screen_to_design(pointer)
 				steering_target = Vector2(clampf(pointer.x, 130, 1150), clampf(pointer.y, 210, 585))
 				mouse_steering = true
 			"kite_rings": p.y = clampf(pointer.y, 220, 570)
@@ -1058,7 +1099,7 @@ func _feedback(message: String, color: Color) -> void:
 
 func _feedback_anchor() -> Vector2:
 	match mode:
-		"balloon_delivery": return p
+		"balloon_delivery": return Vector2(320, 208)
 		"kite_rings": return p
 		"fountain_timing": return Vector2(960, 220)
 		"crowd_traffic": return Vector2(640, 420)
@@ -1133,6 +1174,13 @@ func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
+	if mode == "balloon_delivery":
+		if mode == "balloon_delivery" and is_instance_valid(presentation):
+			var harbor_texture: Texture2D = presentation.texture()
+			if harbor_texture != null:
+				draw_texture_rect(harbor_texture, Rect2(Vector2.ZERO, DESIGN_SIZE), false)
+		draw_set_transform(Vector2.ZERO)
+		return
 	_draw_backdrop()
 	# Warm inked frame, corner rivets and paper mat establish the harbor paper-theatre look.
 	draw_rect(Rect2(18,18,1244,684), Color("#f2d6a7"), false, 4)

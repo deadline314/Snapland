@@ -14,6 +14,7 @@ const INK := Color("#20394d")
 const PAPER := Color("#fff4d9")
 const MINT := Color("#70e1c1")
 const GOLD := Color("#d6ad76")
+const SHADOW_INK := Color("#071923", 0.48)
 
 var _state: Dictionary = {}
 var _details: Dictionary = {}
@@ -79,6 +80,9 @@ func set_state(state: Dictionary) -> void:
 	var message := str(state.get("feedback_text", ""))
 	_feedback.visible = not message.is_empty()
 	_feedback_label.text = message
+	var feedback_width := clampf(float(state.get("feedback_width", 540.0)), 230.0, 540.0)
+	_feedback_label.custom_minimum_size.x = feedback_width - 30.0
+	_feedback.size.x = feedback_width
 	_feedback_label.add_theme_color_override("font_color", state.get("feedback_color", PAPER))
 	_pause_status.text = "練習中" if bool(state.get("practice", false)) else "正式挑戰"
 	_pause_title.text = str(state.get("title", "小遊戲")) + "　暫停"
@@ -130,7 +134,7 @@ func _build_header() -> void:
 	_header.position = Vector2(34, 18)
 	_header.size = Vector2(1212, 104)
 	_header.mouse_filter = Control.MOUSE_FILTER_STOP
-	_header.add_theme_stylebox_override("panel", _panel_style(Color("#142d43"), GOLD, 0.94))
+	_header.add_theme_stylebox_override("panel", _ticket_style())
 	add_child(_header)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
@@ -139,24 +143,24 @@ func _build_header() -> void:
 	text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text_col.add_theme_constant_override("separation", 2)
 	row.add_child(text_col)
-	_title = _label("小遊戲", 24, PAPER)
+	_title = _label("小遊戲", 24, INK)
 	text_col.add_child(_title)
-	_objective = _label("完成挑戰", 18, Color("#d2e3dc"))
+	_objective = _label("完成挑戰", 18, Color("#34545b"))
 	_objective.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_objective.tooltip_text = "完整目標請按 ? 查看圖解教學。"
 	text_col.add_child(_objective)
 	var status_row := HBoxContainer.new()
 	text_col.add_child(status_row)
-	_progress = _label("準備中", 18, Color("#f1d39f"))
+	_progress = _label("準備中", 18, Color("#79562b"))
 	status_row.add_child(_progress)
-	_badge = _label("", 16, MINT)
+	_badge = _label("", 16, Color("#28675d"))
 	status_row.add_child(_badge)
-	_score = _label("0000", 29, Color("#ffdb82"))
+	_score = _label("0000", 29, Color("#765321"))
 	_score.custom_minimum_size.x = 106
 	_score.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	row.add_child(_score)
 	var time_col := VBoxContainer.new()
-	_time = _label("01:00", 19, PAPER)
+	_time = _label("01:00", 19, INK)
 	_time.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	time_col.add_child(_time)
 	var detail_button := _button("分數明細", 16)
@@ -179,7 +183,7 @@ func _build_feedback() -> void:
 	_feedback.size = Vector2(540, 48)
 	_feedback.position = Vector2(34, 130)
 	_feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_feedback.add_theme_stylebox_override("panel", _panel_style(Color("#17354b"), Color("#f3d39c"), 0.96))
+	_feedback.add_theme_stylebox_override("panel", _panel_style(Color("#17354b"), Color("#f3d39c"), 0.98, 1))
 	_feedback_label = _label("", 18, PAPER)
 	_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -288,7 +292,7 @@ func _dialog_panel(parent: Control, at: Vector2, dimensions: Vector2) -> PanelCo
 	var panel := PanelContainer.new()
 	panel.position = at
 	panel.size = dimensions
-	panel.add_theme_stylebox_override("panel", _panel_style(Color("#18354a"), GOLD, 1.0))
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#18354a"), GOLD, 1.0, 2))
 	parent.add_child(panel)
 	return panel
 
@@ -308,10 +312,13 @@ func _button(text: String, font_size: int) -> Button:
 	button.add_theme_font_size_override("font_size", font_size)
 	button.add_theme_color_override("font_color", PAPER)
 	button.add_theme_color_override("font_hover_color", Color.WHITE)
-	button.add_theme_stylebox_override("normal", _panel_style(Color("#2d5367"), Color("#739589"), 1.0))
-	button.add_theme_stylebox_override("hover", _panel_style(Color("#3b6a79"), MINT, 1.0))
-	button.add_theme_stylebox_override("pressed", _panel_style(Color("#1e4358"), GOLD, 1.0))
-	button.add_theme_stylebox_override("focus", _panel_style(Color("#3b6a79"), Color.WHITE, 1.0))
+	button.add_theme_color_override("font_pressed_color", Color.WHITE)
+	button.add_theme_color_override("font_disabled_color", Color("#b7c3c0"))
+	button.add_theme_stylebox_override("normal", _button_style(Color("#31566a"), Color("#b39a70"), 4, 2, Vector2(2.0, 3.0)))
+	button.add_theme_stylebox_override("hover", _button_style(Color("#416d7b"), MINT, 5, 3, Vector2(2.0, 4.0)))
+	button.add_theme_stylebox_override("pressed", _button_style(Color("#23485b"), GOLD, 2, 0, Vector2(0.0, 1.0)))
+	button.add_theme_stylebox_override("focus", _focus_style())
+	button.add_theme_stylebox_override("disabled", _button_style(Color("#384b55"), Color("#697a7d"), 2, 0, Vector2.ZERO))
 	return button
 
 func _label(text: String, font_size: int, color: Color) -> Label:
@@ -322,16 +329,65 @@ func _label(text: String, font_size: int, color: Color) -> Label:
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	return label
 
-func _panel_style(background: Color, border: Color, alpha: float) -> StyleBoxFlat:
+func _panel_style(background: Color, border: Color, alpha: float, elevation: int = 1) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(background, alpha)
 	style.border_color = border
 	style.set_border_width_all(2)
+	style.border_width_bottom = 4 if elevation == 1 else 5 if elevation >= 2 else 2
 	style.set_corner_radius_all(10)
+	style.shadow_color = SHADOW_INK
+	style.shadow_size = 2 if elevation == 1 else 5 if elevation >= 2 else 0
+	style.shadow_offset = Vector2(2.0, 3.0) if elevation == 1 else Vector2(3.0, 5.0) if elevation >= 2 else Vector2.ZERO
 	style.content_margin_left = 10
 	style.content_margin_right = 10
 	style.content_margin_top = 6
 	style.content_margin_bottom = 6
+	return style
+
+func _ticket_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#f2e7ca")
+	style.border_color = Color("#a77a42")
+	style.set_border_width_all(1)
+	style.border_width_bottom = 3
+	style.set_corner_radius_all(9)
+	style.shadow_color = SHADOW_INK
+	style.shadow_size = 3
+	style.shadow_offset = Vector2(2.0, 4.0)
+	style.content_margin_left = 12
+	style.content_margin_right = 12
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
+	return style
+
+func _button_style(background: Color, border: Color, bottom_edge: int, shadow_size: int, shadow_offset: Vector2) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.border_width_bottom = bottom_edge
+	style.set_corner_radius_all(8)
+	style.shadow_color = SHADOW_INK
+	style.shadow_size = shadow_size
+	style.shadow_offset = shadow_offset
+	style.content_margin_left = 12
+	style.content_margin_right = 12
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
+	return style
+
+func _focus_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.0, 0.0, 0.0, 0.0)
+	style.border_color = Color.WHITE
+	style.set_border_width_all(3)
+	style.set_corner_radius_all(8)
+	style.shadow_size = 0
+	style.content_margin_left = 0
+	style.content_margin_right = 0
+	style.content_margin_top = 0
+	style.content_margin_bottom = 0
 	return style
 
 func _ask_retry() -> void:

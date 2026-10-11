@@ -1,5 +1,5 @@
 [
-  {"id":"game-001","mode":"balloon_delivery","name":"氣球快遞","goal":"依序送達三封郵袋，讀風選高度並避開海膽","instructions":"方向鍵／WASD 飛行；移動滑鼠引導；空白鍵／右鍵煞車；Enter 出發。","devil_hint":"零碰撞送完三站，並在收件圈內穩穩煞停","devil":"零碰撞送完三站，並在收件圈內穩穩煞停","ordinary":"限時內依序送達三封郵袋"},
+  {"id":"game-001","mode":"balloon_delivery","name":"氣球快遞","goal":"順著海風依序送達三封郵袋，避開海膽並煞停投遞","instructions":"方向鍵／WASD 或滑鼠推動氣球；空白鍵／右鍵煞車。進入亮圈煞停半秒即可投遞。","devil_hint":"零碰撞送完三站，並在收件圈內穩穩煞停","devil":"零碰撞送完三站，並在收件圈內穩穩煞停","ordinary":"限時內依序送達三封郵袋"},
   {"id":"game-002","mode":"kite_rings","name":"風箏穿環","goal":"上下移動風箏，依序穿過風環","instructions":"滑鼠移動高度，或用 ↑ ↓ 迎風修正。","devil_hint":"五環全中且零擦撞","devil":"五環全中且零擦撞","ordinary":"抵達終點並穿過全部風環"},
   {"id":"game-003","mode":"fountain_timing","name":"噴泉跳拍","goal":"看水柱預告，在亮起時起跳","instructions":"水柱最亮時按空白鍵或點擊起跳。","devil_hint":"三次都踩中水柱最亮拍點","devil":"三次都踩中水柱最亮拍點","ordinary":"成功踩中三次噴泉跳台"},
   {"id":"game-004","mode":"crowd_traffic","name":"人潮指揮","goal":"切換號誌，讓兩隊遊客安全過路口","instructions":"按 Q／E 或點擊切換號誌，讓相同方向的隊伍通過。","devil_hint":"六隊全數安全通過且號誌方向正確","devil":"六隊全數安全通過且號誌方向正確","ordinary":"安全帶完六隊遊客"},

@@ -53,7 +53,7 @@ func _run() -> void:
      if s.balloon_delivery_index>=1 and waypoint==0: waypoint=1
      if waypoint>=1 and waypoint<=3 and s.p.distance_to(waypoints[waypoint])<30: waypoint+=1
      if s.balloon_delivery_index>=2: waypoint=5
-     _motion(waypoints[waypoint])
+     _motion(s.presentation.design_to_screen(waypoints[waypoint]) if is_instance_valid(s.presentation) else waypoints[waypoint])
      var dock_approach=waypoint not in [1,2,3]
      var distance_to_dock=s.p.distance_to(s.target)
      var brake_now=dock_approach and distance_to_dock<190
