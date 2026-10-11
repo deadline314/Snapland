@@ -1,0 +1,473 @@
+{
+  "schema_version": 1,
+  "lessons": [
+    {
+      "id": "park",
+      "title": "園區操作總覽",
+      "goal": "自在移動、使用附近設施，並從園區面板查看旅程。",
+      "ordinary": "完成想做的互動後，可繼續探索或打開園區面板。",
+      "bonus": "無額外挑戰條件。",
+      "steps": [
+        {
+          "id": "move",
+          "title": "沿著園路走走",
+          "image": "res://assets/ui/tutorials/park-step-01.png",
+          "alt": "園區迎賓大道與移動中的旅人。",
+          "goal": "在迎賓大道移動到想去的設施附近。",
+          "input": "按 W／A／S／D 或方向鍵移動。",
+          "success": "角色到達另一處園路；移動不會改變收藏。"
+        },
+        {
+          "id": "interact",
+          "title": "使用附近設施",
+          "image": "res://assets/ui/tutorials/park-step-02.png",
+          "alt": "園區設施與附近的互動提示。",
+          "goal": "靠近互動點，查看當前提示後再互動。",
+          "input": "按 E 或 Space 互動；按 F 招呼，按 P 拍照。",
+          "success": "互動後出現對應面板或動作；按 Esc 可回到園區。"
+        },
+        {
+          "id": "panels",
+          "title": "查看旅程工具",
+          "image": "res://assets/ui/tutorials/park-step-03.png",
+          "alt": "園區工具入口與旅程狀態。",
+          "goal": "依需要查看衣櫃、時段和暫停面板。",
+          "input": "按 C 開衣櫃、T 切換時段、Esc 開啟暫停面板。",
+          "success": "面板可開啟並返回園區，原有旅程進度仍在。"
+        }
+      ]
+    },
+    {
+      "id": "game-001",
+      "title": "氣球快遞",
+      "goal": "依序送達三封郵袋，讀風選高度並避開海膽。",
+      "ordinary": "限時內依序送達三封郵袋。",
+      "bonus": "零碰撞送完三站，並在收件圈內穩穩煞停。",
+      "steps": [
+        {
+          "id": "launch",
+          "title": "先練習操縱",
+          "image": "res://assets/ui/tutorials/game-001-step-01.png",
+          "alt": "氣球出發位置與飛行控制提示。",
+          "goal": "出發前熟悉氣球的方向和高度控制。",
+          "input": "方向鍵／WASD 推動；移動滑鼠也可引導。",
+          "success": "看見氣球能依輸入改變位置；按 Enter 才開始正式計時。"
+        },
+        {
+          "id": "brake",
+          "title": "進圈前減速",
+          "image": "res://assets/ui/tutorials/game-001-step-02.png",
+          "alt": "郵箱收件圈與氣球煞車位置。",
+          "goal": "讓氣球進入亮起的收件圈並停留收件。",
+          "input": "按住 Space 或滑鼠右鍵煞車；方向鍵／WASD 仍可控制。",
+          "success": "在圈內低速停留半秒可收下一封郵袋；高速穿過會錯過並增加失誤。"
+        },
+        {
+          "id": "route",
+          "title": "照順序送完三站",
+          "image": "res://assets/ui/tutorials/game-001-step-03.png",
+          "alt": "目前郵箱、風向提示與送件進度。",
+          "goal": "追蹤下一個亮起的郵箱，避開海膽和碰撞。",
+          "input": "觀察目前與預告風向，調整高度後在郵箱前煞停。",
+          "success": "一般成功是限時送達三封；零碰撞且每站穩穩煞停可達加碼條件。"
+        }
+      ]
+    },
+    {
+      "id": "game-002",
+      "title": "風箏穿環",
+      "goal": "上下移動風箏，依序穿過風環。",
+      "ordinary": "抵達終點並穿過全部風環。",
+      "bonus": "五環全中且零擦撞。",
+      "steps": [
+        {
+          "id": "height",
+          "title": "上下調整高度",
+          "image": "res://assets/ui/tutorials/game-002-step-01.png",
+          "alt": "風箏與下一個風環的高度位置。",
+          "goal": "把風箏帶到下一個風環的高度。",
+          "input": "移動滑鼠調整高度，或按 ↑／↓ 迎風修正。",
+          "success": "風箏高度會隨滑鼠或按鍵移動；前進會自動持續。"
+        },
+        {
+          "id": "rings",
+          "title": "按順序穿過風環",
+          "image": "res://assets/ui/tutorials/game-002-step-02.png",
+          "alt": "依序排列的風環與當前目標環。",
+          "goal": "依序穿過一路上的五個風環。",
+          "input": "在每個風環抵達前微調高度。",
+          "success": "通過風環會記錄命中；錯過仍會前進並記一次失誤。"
+        },
+        {
+          "id": "result",
+          "title": "留意通關與加碼",
+          "image": "res://assets/ui/tutorials/game-002-step-03.png",
+          "alt": "風箏抵達終點與風環進度。",
+          "goal": "讓風箏抵達終點並完成全部風環。",
+          "input": "持續使用滑鼠或 ↑／↓ 修正高度。",
+          "success": "全部風環命中並抵達終點為一般成功；五環全中且零擦撞達加碼。"
+        }
+      ]
+    },
+    {
+      "id": "game-003",
+      "title": "噴泉跳拍",
+      "goal": "看中央水簾預告，三次各跳一次。",
+      "ordinary": "三次固定機會都踩中拍點。",
+      "bonus": "三跳都在拍點 ±70ms 內命中。",
+      "steps": [
+        {
+          "id": "read",
+          "title": "先看水柱節奏",
+          "image": "res://assets/ui/tutorials/game-003-step-01.png",
+          "alt": "噴泉水柱的蓄水、預亮與中央拍點提示。",
+          "goal": "中央水柱蓄水後會預亮，三次機會依固定拍點出現。",
+          "input": "第一次拍點前會先倒數；Space 或點擊都能起跳。過早按下不會耗掉下一跳。",
+          "success": "每次只判一跳；沒有輸入會在拍點過後記為錯過。"
+        },
+        {
+          "id": "jump",
+          "title": "在亮起時跳",
+          "image": "res://assets/ui/tutorials/game-003-step-02.png",
+          "alt": "起跳操作與水柱判定時機。",
+          "goal": "看中央水柱與預亮圈，在 ±220ms 內起跳。",
+          "input": "Space 或任意位置點擊；兩種輸入使用同一拍點。",
+          "success": "±70ms 完美 300 分、±160ms 準確 200 分、±220ms 踩中 100 分；未輸入或超出容差得 0。"
+        },
+        {
+          "id": "result",
+          "title": "看懂結果條件",
+          "image": "res://assets/ui/tutorials/game-003-step-03.png",
+          "alt": "三次噴泉跳拍的命中結果。",
+          "goal": "普通拍貼需三次全中；小惡魔拍貼需三次完美。",
+          "input": "三次固定機會各跳一次；完成後可在分數明細查看每跳毫秒差。",
+          "success": "三次踩中拍點取得普通拍貼；三次皆在 ±70ms 內取得小惡魔拍貼。輔助會放寬容差，不會代替起跳。"
+        }
+      ]
+    },
+    {
+      "id": "game-004",
+      "title": "人潮指揮",
+      "goal": "切換號誌，讓兩隊遊客安全過路口。",
+      "ordinary": "安全帶完六隊遊客。",
+      "bonus": "六隊全數安全通過且號誌方向正確。",
+      "steps": [
+        {
+          "id": "read",
+          "title": "看下一隊方向",
+          "image": "res://assets/ui/tutorials/game-004-step-01.png",
+          "alt": "路口、遊客隊伍與目前號誌方向。",
+          "goal": "先看即將通過的隊伍，再對照目前號誌。",
+          "input": "號誌可用 Q／E 或點擊切換。",
+          "success": "畫面提示目前選中的方向；每隊依固定間隔到路口。"
+        },
+        {
+          "id": "switch",
+          "title": "讓方向相同的隊伍通過",
+          "image": "res://assets/ui/tutorials/game-004-step-02.png",
+          "alt": "隊伍方向與對應號誌狀態。",
+          "goal": "把號誌調成和當前隊伍相同的方向。",
+          "input": "按 Q 或 E，或點擊畫面切換號誌。",
+          "success": "方向相同的隊伍安全通過；方向不符會增加失誤。"
+        },
+        {
+          "id": "result",
+          "title": "完成六隊",
+          "image": "res://assets/ui/tutorials/game-004-step-03.png",
+          "alt": "六隊通行進度與安全結果。",
+          "goal": "安全帶完全部六隊。",
+          "input": "持續比對每隊方向並切換號誌。",
+          "success": "六隊無失誤通過為一般成功，也符合全隊正確的加碼條件。"
+        }
+      ]
+    },
+    {
+      "id": "game-005",
+      "title": "帽子救援",
+      "goal": "左右走位接住落帽，選擇避開或利用陣風。",
+      "ordinary": "接住至少四頂帽子。",
+      "bonus": "六頂全接且零漏接。",
+      "steps": [
+        {
+          "id": "move",
+          "title": "左右跟上落點",
+          "image": "res://assets/ui/tutorials/game-005-step-01.png",
+          "alt": "角色位置與帽子落下路徑。",
+          "goal": "讓角色移到落帽路徑下方。",
+          "input": "按 ←／→ 或移動滑鼠左右移動。",
+          "success": "角色會跟隨水平輸入；帽子持續落下。"
+        },
+        {
+          "id": "catch",
+          "title": "接住六頂帽子",
+          "image": "res://assets/ui/tutorials/game-005-step-02.png",
+          "alt": "落帽位置與目前接取進度。",
+          "goal": "接住至少四頂，並留意漏接數。",
+          "input": "預判落點，必要時提早左右移動。",
+          "success": "接到帽子會累計成功；落地未接會算漏接。"
+        },
+        {
+          "id": "result",
+          "title": "一般與加碼條件",
+          "image": "res://assets/ui/tutorials/game-005-step-03.png",
+          "alt": "六頂帽子的接取結果。",
+          "goal": "盡量收齊六頂落帽。",
+          "input": "使用 ←／→ 或滑鼠移動保持在落點下方。",
+          "success": "接到至少四頂為一般成功；六頂全接且零漏接達加碼。"
+        }
+      ]
+    },
+    {
+      "id": "game-006",
+      "title": "彩帶節拍",
+      "goal": "跟著節拍依序按左、右或跳。",
+      "ordinary": "八拍中成功踩中六拍。",
+      "bonus": "八拍全中。",
+      "steps": [
+        {
+          "id": "learn",
+          "title": "看懂三種輸入",
+          "image": "res://assets/ui/tutorials/game-006-step-01.png",
+          "alt": "彩帶節拍的左、右和跳步提示。",
+          "goal": "依提示區分左、右和跳步。",
+          "input": "鍵盤用 ←、→、Space；滑鼠點左半、右半或中間區域。",
+          "success": "每拍只接受一個當前動作，錯過或按錯都算失誤。"
+        },
+        {
+          "id": "phrase",
+          "title": "跟著八拍提示",
+          "image": "res://assets/ui/tutorials/game-006-step-02.png",
+          "alt": "八拍序列與當前動作提示。",
+          "goal": "按畫面序列完成八拍動作。",
+          "input": "看到左箭頭按 ←、右箭頭按 →、跳步按 Space；滑鼠對應畫面左／右／中間。",
+          "success": "在正確節拍窗口輸入正確動作才會命中。"
+        },
+        {
+          "id": "result",
+          "title": "完成並查看命中",
+          "image": "res://assets/ui/tutorials/game-006-step-03.png",
+          "alt": "八拍節奏的命中進度。",
+          "goal": "八拍中至少命中六拍。",
+          "input": "每拍依序輸入提示，不必額外連按。",
+          "success": "六拍命中為一般成功；八拍全中且零失誤達加碼。"
+        }
+      ]
+    },
+    {
+      "id": "game-007",
+      "title": "花壇水路",
+      "goal": "轉動花管，讓水從入口流到出口。",
+      "ordinary": "連通水龍頭與花盆。",
+      "bonus": "四次或更少轉動完成連通。",
+      "steps": [
+        {
+          "id": "select",
+          "title": "選擇一段花管",
+          "image": "res://assets/ui/tutorials/game-007-step-01.png",
+          "alt": "花管格線、水泉入口與花盆出口。",
+          "goal": "從左上水泉找到通往右下花槽的水路。",
+          "input": "方向鍵移動目前選取的管線格。",
+          "success": "選取框會移到相鄰格；畫面顯示各格管口方向。"
+        },
+        {
+          "id": "rotate",
+          "title": "轉動管口",
+          "image": "res://assets/ui/tutorials/game-007-step-02.png",
+          "alt": "目前選取的管線格與管口方向。",
+          "goal": "讓相鄰管口彼此相接。",
+          "input": "按 Space 或點擊管線格旋轉。",
+          "success": "轉動會增加步數；連通水泉與花槽時完成。"
+        },
+        {
+          "id": "result",
+          "title": "留意步數加碼",
+          "image": "res://assets/ui/tutorials/game-007-step-03.png",
+          "alt": "水路連通狀態與轉動次數。",
+          "goal": "找出一條由入口到出口的連續水路。",
+          "input": "先用方向鍵選格，再按 Space 或點擊旋轉。",
+          "success": "水泉與花槽連通為一般成功；四次或更少旋轉達加碼。"
+        }
+      ]
+    },
+    {
+      "id": "game-008",
+      "title": "招牌平衡",
+      "goal": "左右調節招牌重心，兼顧陣風與移動落點。",
+      "ordinary": "穩住招牌七個搖擺拍。",
+      "bonus": "不觸碰安全線且七拍都在中心落點。",
+      "steps": [
+        {
+          "id": "control",
+          "title": "微調左右重心",
+          "image": "res://assets/ui/tutorials/game-008-step-01.png",
+          "alt": "搖擺招牌與平衡中心。",
+          "goal": "逆著晃動方向小幅調整招牌。",
+          "input": "按 ←／→ 微調，或點擊畫面左／右側。",
+          "success": "重心指針隨輸入移動；越過外側安全線會累積失誤。"
+        },
+        {
+          "id": "hold",
+          "title": "穩住七個拍點",
+          "image": "res://assets/ui/tutorials/game-008-step-02.png",
+          "alt": "招牌的安全線和中心落點。",
+          "goal": "在每次記錄時讓指針靠近中心落點。",
+          "input": "觀察海風方向，再用方向鍵或點擊左右側調整。",
+          "success": "每個拍點會記錄穩定程度；三次越線會提前結束。"
+        },
+        {
+          "id": "result",
+          "title": "守住安全區拿加碼",
+          "image": "res://assets/ui/tutorials/game-008-step-03.png",
+          "alt": "七拍平衡結果與失誤提示。",
+          "goal": "完成七個搖擺拍點。",
+          "input": "持續小幅修正，不要讓指針碰到外側安全線。",
+          "success": "穩住七拍為一般成功；七拍都在中心且零越線達加碼。"
+        }
+      ]
+    },
+    {
+      "id": "game-009",
+      "title": "影子捉迷藏",
+      "goal": "移動燈光，把角色影子對齊牆上目標輪廓。",
+      "ordinary": "將影子放入輪廓並維持三秒。",
+      "bonus": "第一次對準後連續維持三秒。",
+      "steps": [
+        {
+          "id": "move",
+          "title": "移動影燈",
+          "image": "res://assets/ui/tutorials/game-009-step-01.png",
+          "alt": "燈光、角色影子與牆面輪廓。",
+          "goal": "將小角角的影子移向牆上珊瑚紙影。",
+          "input": "移動滑鼠，或按 ←／→ 移動影燈。",
+          "success": "影子會隨燈位左右移動；目標區有明確輪廓。"
+        },
+        {
+          "id": "align",
+          "title": "對準並保持",
+          "image": "res://assets/ui/tutorials/game-009-step-02.png",
+          "alt": "影子與目標輪廓的重合位置。",
+          "goal": "讓影子落在目標範圍內並保持三秒。",
+          "input": "用滑鼠移動或方向鍵細調燈位。",
+          "success": "進入判定範圍會開始計時；離開範圍會重置保持時間。"
+        },
+        {
+          "id": "result",
+          "title": "一次穩定完成",
+          "image": "res://assets/ui/tutorials/game-009-step-03.png",
+          "alt": "影子對齊維持時間與結果。",
+          "goal": "完成連續三秒的影子對齊。",
+          "input": "盡量在首次對準後保持，不要大幅移動。",
+          "success": "保持三秒為一般成功；首次對準後不中斷達加碼。"
+        }
+      ]
+    },
+    {
+      "id": "game-010",
+      "title": "泡泡合照",
+      "goal": "瞄準並吹出泡泡，在泡泡包住吉祥物時拍照。",
+      "ordinary": "拍到至少兩張泡泡合照。",
+      "bonus": "三張合照都置中且完整包住吉祥物。",
+      "steps": [
+        {
+          "id": "aim",
+          "title": "先瞄準泡泡位置",
+          "image": "res://assets/ui/tutorials/game-010-step-01.png",
+          "alt": "瞄準位置、泡泡方向與合照吉祥物。",
+          "goal": "把第一下點擊放在吉祥物附近，讓泡泡瞄準合適位置。",
+          "input": "在遊戲場景點擊一次；鍵盤可按 Space 使用預設瞄準位置。",
+          "success": "泡泡出現後，等待吉祥物移進泡泡範圍。"
+        },
+        {
+          "id": "shoot",
+          "title": "等圓環亮起再拍",
+          "image": "res://assets/ui/tutorials/game-010-step-02.png",
+          "alt": "包住吉祥物的泡泡與拍照時機。",
+          "goal": "讓泡泡完整包住吉祥物，並在圓環亮起時拍照。",
+          "input": "滑鼠點吉祥物位置；鍵盤 Space 以預設位置拍照。",
+          "success": "每輪一張照片；錯過時等待下一顆泡泡，不會補回該次機會。"
+        },
+        {
+          "id": "result",
+          "title": "拍滿三次看結果",
+          "image": "res://assets/ui/tutorials/game-010-step-03.png",
+          "alt": "三張泡泡合照的置中結果。",
+          "goal": "三次拍照機會中至少成功兩次。",
+          "input": "瞄準、等待彩虹環亮起，再拍照。",
+          "success": "兩張成功為一般成功；三張置中且完整包住吉祥物達加碼。"
+        }
+      ]
+    },
+    {
+      "id": "game-011",
+      "title": "長椅換位",
+      "goal": "在有限長椅格位交換遊客座位，讓朋友坐在一起。",
+      "ordinary": "排好兩組好友。",
+      "bonus": "三次交換內排好全部好友。",
+      "steps": [
+        {
+          "id": "select",
+          "title": "選擇兩個座位",
+          "image": "res://assets/ui/tutorials/game-011-step-01.png",
+          "alt": "長椅座位與等待相鄰的好友。",
+          "goal": "查看四個編號座位與兩組好友標記。",
+          "input": "點選兩個座位，或按 1–4 選擇兩個座位編號。",
+          "success": "選好第二個座位後，兩位遊客交換位置。"
+        },
+        {
+          "id": "solve",
+          "title": "讓好友回到相鄰座位",
+          "image": "res://assets/ui/tutorials/game-011-step-02.png",
+          "alt": "交換後的座位排列。",
+          "goal": "把珊瑚徽章的一組與海草徽章的一組各自排在一起。",
+          "input": "繼續點選兩個座位交換，或用 1–4 鍵交換。",
+          "success": "四位遊客回到正確座位順序時完成。"
+        },
+        {
+          "id": "result",
+          "title": "少換幾次拿加碼",
+          "image": "res://assets/ui/tutorials/game-011-step-03.png",
+          "alt": "好友座位組合與交換次數。",
+          "goal": "完成座位整理，並留意交換次數。",
+          "input": "先選第一個座位，再選第二個座位完成一次交換。",
+          "success": "排好兩組好友為一般成功；三次或更少交換達加碼。"
+        }
+      ]
+    },
+    {
+      "id": "game-012",
+      "title": "迎賓大合奏",
+      "goal": "記住迎賓樂句再依序演奏。",
+      "ordinary": "完成三段旋律。",
+      "bonus": "完成三段旋律且零失誤。",
+      "steps": [
+        {
+          "id": "listen",
+          "title": "先聽花朵順序",
+          "image": "res://assets/ui/tutorials/game-012-step-01.png",
+          "alt": "依序亮起的旋律花朵。",
+          "goal": "記住一段旋律中花朵亮起的先後。",
+          "input": "播放時先觀察或聆聽，不要輸入。",
+          "success": "播放結束後才開始依序回奏。"
+        },
+        {
+          "id": "repeat",
+          "title": "依序按下花朵",
+          "image": "res://assets/ui/tutorials/game-012-step-02.png",
+          "alt": "四朵花的演奏輸入提示。",
+          "goal": "依剛才的順序重複旋律。",
+          "input": "按 1–4 對應花朵，或點擊花朵。",
+          "success": "順序正確會接續本段；按錯會重播本段，並記一次失誤。"
+        },
+        {
+          "id": "result",
+          "title": "完成三段旋律",
+          "image": "res://assets/ui/tutorials/game-012-step-03.png",
+          "alt": "三段旋律的完成進度。",
+          "goal": "完成全部三段迎賓旋律。",
+          "input": "每段先記住完整序列，再用同一順序回奏。",
+          "success": "完成三段為一般成功；全程零失誤可達加碼條件。"
+        }
+      ]
+    }
+  ]
+}

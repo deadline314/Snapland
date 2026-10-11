@@ -170,31 +170,33 @@ func _test_live_session_help() -> void:
 	_check(help_button != null, "active round exposes its actual HUD help button")
 	if _abort_tests: return
 	_click_real_button(help_button)
-	_check(main.modal_kind == "game_help" and active.paused and active.process_mode == Node.PROCESS_MODE_DISABLED, "HUD help request opens static teaching and freezes round input/simulation")
-	await _frames(8)
-	_check(main.session == active and active.phase == phase_before and active.elapsed == elapsed_before and active.score == score_before, "reading help preserves the original session, phase, elapsed time and score")
-	_check(not main.hud.visible and not main.world.visible and not main.world.is_processing() and main.audio._paused, "session help hides the park HUD/world and pauses game audio")
-	var definition: Dictionary = main._definition(active.game_id)
-	for entry in [["HelpGoal", "goal"], ["HelpInput", "instructions"], ["HelpDevil", "devil_hint"]]:
-		var label := main.overlay.find_child(entry[0], true, false) as Label
-		_check(label != null and label.text.contains(str(definition.get(entry[1], ""))), "static help displays this game's %s" % entry[1])
-	var back := main.overlay.find_child("HelpReturnToGame", true, false) as Button
-	_check(back != null and back.is_visible_in_tree(), "help offers a live return-to-game control")
+	await _frames(4)
+	var lesson: Control = main.tutorial_panel
+	_check(is_instance_valid(lesson) and active.paused, "HUD help opens screenshot teaching and pauses the live round")
 	if _abort_tests: return
-	_click_real_button(back)
-	_check(main.session == active and main.modal_kind == "" and not active.paused and active.process_mode == Node.PROCESS_MODE_INHERIT, "actual return button resumes the same round (modal=%s paused=%s mode=%s same=%s backrect=%s)" % [main.modal_kind, active.paused, active.process_mode, main.session == active, back.get_global_rect()])
-	_check(active.phase == phase_before and active.elapsed == elapsed_before and active.score == score_before, "closing help does not reset the round's phase/time/score")
-	_check(not main.hud.visible and not main.world.visible and main.world.blocked and not main.world.is_processing() and not main.audio._paused, "return keeps park UI hidden while resuming game audio")
+	_check(lesson.target_id == active.game_id and main.tutorial_origin == "session", "help loads this game's lesson")
+	for key in ["_goal_label", "_input_label", "_ordinary_label", "_bonus_label"]:
+		var label: Label = lesson.get(key)
+		_check(label != null and not label.text.is_empty(), "teaching provides %s" % key)
+	await _frames(8)
+	_check(main.session == active and active.phase == phase_before and active.elapsed == elapsed_before and active.score == score_before, "reading help preserves session phase, time and score")
+	_check(not main.hud.visible and not main.world.visible and main.world.blocked, "session lesson keeps park controls hidden and blocked")
+	_click_real_button(lesson.get("_close_button") as Button)
+	await _frames(3)
+	_check(main.session == active and not is_instance_valid(main.tutorial_panel) and active.paused, "closing teaching returns to the paused same round")
+	_check(active.phase == phase_before and active.elapsed == elapsed_before and active.score == score_before, "closing teaching does not reset progress")
+	_click_real_button(active.minigame_hud.find_child("ResumeButton", true, false) as Button)
 	await _frames(5)
 	var learning_balloon: bool = active.mode == "balloon_delivery" and not active.balloon_started
-	_check(active.phase > phase_before and (active.elapsed == elapsed_before if learning_balloon else active.elapsed > elapsed_before), "the preserved game clock advances after help while balloon learning keeps its untimed introduction")
-	# Escape also uses the same close path; its release must not open park pause.
+	_check(not active.paused and active.phase > phase_before and (active.elapsed == elapsed_before if learning_balloon else active.elapsed > elapsed_before), "resume advances the preserved round and untimed learning remains untimed")
 	_click_real_button(help_button)
+	await _frames(3)
 	_key_down(KEY_ESCAPE)
-	_check(await _wait_for_modal(""), "Escape returns from teaching to the active game")
 	_key_up(KEY_ESCAPE)
+	await _frames(3)
+	_check(main.session == active and not is_instance_valid(main.tutorial_panel) and active.paused and not main.hud.visible and main.modal_kind == "", "teaching Escape returns to paused game without leaking into park pause")
+	_click_real_button(active.minigame_hud.find_child("ResumeButton", true, false) as Button)
 	await _frames(2)
-	_check(main.session == active and not active.paused and not main.hud.visible and main.modal_kind == "", "help Escape preserves the round and does not leak into park pause")
 
 func _click_real_button(button: Button) -> void:
 	var pressed_observed := {"value": false}

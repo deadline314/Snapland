@@ -8,6 +8,7 @@ const PhotoStage = preload("res://game/ui/photo_stage.gd")
 const WardrobePanel = preload("res://game/ui/wardrobe_panel.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TimePanel = preload("res://game/ui/time_panel.gd")
+const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
 var world: Node3D
 var audio: Node
 var story: RefCounted
@@ -42,6 +43,10 @@ var photo_frames: Array[Image] = []
 var next_snapshot := 0.0
 var time_capture_token := 0
 var quitting := false
+var tutorial_panel: Control
+var tutorial_target := ""
+var tutorial_origin := ""
+var tutorial_assist := false
 
 func _ready() -> void:
 	get_tree().auto_accept_quit=false
@@ -345,7 +350,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	overlay.add_child(center)
 	var panel := PanelContainer.new()
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe","time","ticket","game_help"]
+	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe","time","ticket"]
 	var preferred_height := 600.0 if tall_kinds.has(kind) else 350.0
 	panel.name="AdaptiveMenuPanel"
 	var menu_scale := Paper.physical_scale(overlay)
@@ -397,9 +402,6 @@ func _scroll(parent: VBoxContainer, height := 330) -> VBoxContainer:
 	return box
 
 func _close() -> void:
-	if modal_kind == "game_help":
-		_close_game_help()
-		return
 	if modal_kind=="dialogue":
 		_finish_dialogue()
 		return
@@ -580,6 +582,82 @@ func _show_time_panel() -> void:
 		body.add_child(Paper.label("已暫停本局；關閉面板後會從同一局面繼續。", 18, Paper.TEAL))
 	_back(body)
 
+func _open_tutorial(target_id: String, origin: String, assisted_mode: bool = false) -> void:
+	if is_instance_valid(tutorial_panel):
+		return
+	tutorial_target=target_id
+	tutorial_origin=origin
+	tutorial_assist=assisted_mode
+	if origin=="session" and session!=null and session.has_method("set_paused"):
+		session.set_paused(true)
+		world.set_process(false)
+	tutorial_panel=TutorialPanelScript.new()
+	tutorial_panel.name="TutorialPanel"
+	ui.add_child(tutorial_panel)
+	tutorial_panel.close_requested.connect(_tutorial_close)
+	tutorial_panel.start_requested.connect(_tutorial_start)
+	tutorial_panel.skip_requested.connect(_tutorial_skip)
+	tutorial_panel.practice_requested.connect(_tutorial_practice)
+	_open_tutorial_lesson(target_id)
+
+func _open_tutorial_lesson(target_id: String) -> void:
+	if not is_instance_valid(tutorial_panel):
+		return
+	var opened: bool = await tutorial_panel.open_tutorial(target_id)
+	if not opened:
+		_notice("這份教學目前無法開啟，原畫面仍保留。")
+		_finish_tutorial_panel()
+
+func _finish_tutorial_panel() -> void:
+	if is_instance_valid(tutorial_panel):
+		tutorial_panel.dismiss()
+		tutorial_panel.queue_free()
+	tutorial_panel=null
+
+func _tutorial_close() -> void:
+	_finish_tutorial_panel()
+	if tutorial_origin=="session" and session!=null and session.has_method("set_paused"):
+		world.set_process(true)
+		# Closing the lesson returns to the paused session HUD; the player chooses when to resume.
+		session.set_paused(true)
+
+func _tutorial_skip(_target_id: String) -> void:
+	_tutorial_start(tutorial_target)
+
+func _tutorial_start(_target_id: String) -> void:
+	var target := tutorial_target
+	var origin := tutorial_origin
+	var assisted_mode := tutorial_assist
+	_finish_tutorial_panel()
+	if target=="park":
+		if origin=="session" and session!=null:
+			world.set_process(true)
+			session.set_paused(false)
+		return
+	if origin=="session" and session!=null:
+		world.set_process(true)
+		session.set_paused(false)
+		return
+	if target.begins_with("game-"):
+		_launch_game(target,assisted_mode,false)
+
+func _tutorial_practice(_target_id: String) -> void:
+	var target := tutorial_target
+	var origin := tutorial_origin
+	var assisted_mode := tutorial_assist
+	_finish_tutorial_panel()
+	if not target.begins_with("game-"):
+		if origin=="session" and session!=null:
+			world.set_process(true)
+			session.set_paused(false)
+		return
+	if origin=="session" and session!=null:
+		if session.has_method("set_practice_mode"):
+			world.set_process(true)
+			session.set_practice_mode(true)
+		return
+	_launch_game(target,assisted_mode,true)
+
 func _show_pause() -> void:
 	var body := _open("留一點時間，給海風。","PAUSE","pause")
 	var resume_card := Paper.card(body)
@@ -590,6 +668,8 @@ func _show_pause() -> void:
 	body.add_child(links)
 	Paper.button("打開航海旅券",_show_ticket,links)
 	Paper.button("儲存並離開",_quit_game,links)
+	if session!=null:
+		Paper.button("回看本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),links)
 
 func _show_arrival() -> void:
 	var body := _open("今晚也要拍一張","WELCOME TO THE ISLAND","arrival")
@@ -688,24 +768,32 @@ func _definition(id: String) -> Dictionary:
 
 func _show_game_info(id: String) -> void:
 	var definition := _definition(id)
-	var body := _open(definition.get("name",id),"FREE PLAY  /  免費重試","game_info")
+	var body := _open(str(definition.get("name",id)),"迎賓大道  /  小遊戲介紹","game_info")
 	var entry_stamp := HBoxContainer.new()
 	entry_stamp.add_theme_constant_override("separation",8)
 	body.add_child(entry_stamp)
 	entry_stamp.add_child(Paper.icon("ticket",23,Paper.CORAL))
-	entry_stamp.add_child(Paper.label("迎賓大道遊園票   ·   自由重玩",17,Paper.TEAL))
-	body.add_child(Paper.label(definition.get("instructions","依畫面提示操作。"),24))
+	entry_stamp.add_child(Paper.label("免費重玩   ·   收藏不消耗",18,Paper.TEAL))
+	var objective_card := Paper.card(body,Color("#fffaf0"),8)
+	objective_card.add_child(Paper.section_title("本局目標"))
+	objective_card.add_child(Paper.label(str(definition.get("goal","完成挑戰")),22))
+	Paper.divider(objective_card)
+	objective_card.add_child(Paper.section_title("操作方式",Paper.DEEP_TEAL))
+	objective_card.add_child(Paper.label(str(definition.get("instructions","依畫面提示操作。")),20))
 	var reward_note := HBoxContainer.new()
 	reward_note.add_theme_constant_override("separation",7)
-	body.add_child(reward_note)
+	objective_card.add_child(reward_note)
 	reward_note.add_child(Paper.icon("devil",24,Paper.CORAL))
 	reward_note.add_child(Paper.label("小惡魔："+definition.get("devil_hint","完成特殊互動。"),19,Paper.TEAL))
-	body.add_child(Paper.label("完成目標可收藏普通拍貼；輔助遊玩同樣可以收藏。",17))
-	body.add_child(Paper.label("遊玩節奏：標準挑戰；輔助會放寬時間與判定，收藏相同。",15,Color("#65746f")))
+	objective_card.add_child(Paper.label("完成一般目標可收藏普通拍貼；達成特別條件也會收進小惡魔拍貼。",18))
+	objective_card.add_child(Paper.label("輔助遊玩會放寬時間或判定，收藏資格相同。練習不記錄分數與收藏。",17,Color("#65746f")))
 	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation",8)
 	body.add_child(row)
+	Paper.button("圖解教學",func(): _open_tutorial(id,"game_info",bool(Progress.settings.get("assist",false))),row)
+	Paper.button("練習操作",func(): _launch_game(id,bool(Progress.settings.get("assist",false)),true),row)
 	Paper.button("開始遊玩",func(): _launch_game(id,bool(Progress.settings.get("assist",false))),row).grab_focus()
-	Paper.button("開啟輔助遊玩",func(): _launch_game(id,true),row)
+	Paper.button("輔助挑戰",func(): _launch_game(id,true),row)
 	_back(body)
 
 func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
@@ -726,52 +814,15 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	session.theme=Paper.theme()
 	session.finished.connect(_game_finished)
 	session.cancelled.connect(_cancel_game)
+	session.help_requested.connect(func(game_id: String): _open_tutorial(game_id,"session",assist))
 	session.note_played.connect(audio.play_note)
 	session.feedback.connect(audio.play_sfx)
-	session.help_requested.connect(_show_game_help)
 	if session.has_method("set_time_of_day"):
 		session.set_time_of_day(TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE)))
 	session.start(id,assist)
 	if practice and session.has_method("set_practice_mode"):
 		session.set_practice_mode(true)
 	audio.play_context("game")
-
-func _show_game_help(id: String) -> void:
-	if session == null or session.game_id != id or session.ended:
-		return
-	var definition := _definition(id)
-	var body := _open(str(definition.get("name", id)) + " · 遊戲教學", "本局操作說明", "game_help")
-	# The session emitted its normal help request after pausing. Disable input
-	# as well, so tutorial Escape/clicks cannot alter the underlying round.
-	session.set_paused(true)
-	session.process_mode = Node.PROCESS_MODE_DISABLED
-	world.set_process(false)
-	audio.set_paused(true)
-	hud.hide()
-	ui.move_child(overlay, ui.get_child_count() - 1)
-	for section in [["HelpGoal", "本局目標", "goal", "完成挑戰。"], ["HelpInput", "操作方式", "instructions", "依畫面提示操作。"], ["HelpDevil", "小惡魔條件", "devil_hint", "完成特殊互動。"]]:
-		var label := Paper.label(str(section[1]) + "\n" + str(definition.get(section[2], section[3])), 21)
-		label.name = section[0]
-		body.add_child(label)
-	var back := Paper.button("返回遊戲", _close, modal_body)
-	back.name = "HelpReturnToGame"
-	back.grab_focus()
-
-func _close_game_help() -> void:
-	overlay.hide()
-	modal_kind = ""
-	world.blocked = session != null
-	world.set_process(session == null)
-	audio.set_paused(false)
-	if session == null:
-		hud.show()
-		return
-	hud.hide()
-	session.process_mode = Node.PROCESS_MODE_INHERIT
-	session.set_paused(false)
-	var help_button := session.minigame_hud.find_child("HelpButton", true, false) as Button
-	if help_button != null and help_button.is_visible_in_tree():
-		help_button.grab_focus()
 
 func _cancel_game() -> void:
 	if session!=null:
@@ -1153,7 +1204,7 @@ func _sample_photo() -> void:
 	if DisplayServer.get_name()=="headless": return
 	var source_session := session
 	await RenderingServer.frame_post_draw
-	if not is_instance_valid(source_session) or session!=source_session or session.ended or session.paused: return
+	if not is_instance_valid(source_session) or session!=source_session or session.ended or session.paused or is_instance_valid(tutorial_panel): return
 	_append_photo_snapshot()
 
 func _photo_texture(path: String) -> Texture2D:
@@ -1210,7 +1261,6 @@ func _abort_capture(reason: String) -> void:
 	audio.shutdown()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().quit(1)
-
 func _adapt_hud() -> void:
 	if not is_instance_valid(hud): return
 	var scale_factor := Paper.physical_scale(hud)
@@ -1275,7 +1325,7 @@ func _show_ticket() -> void:
 	var help_card := Paper.card(list,Color("#f1e8d3"),6)
 	help_card.add_child(Paper.section_title("操作速查",Paper.DEEP_TEAL))
 	help_card.add_child(Paper.label("移動 WASD／方向鍵　·　互動 E　·　招呼 F　·　拍照 P　·　衣櫃 C　·　時段 T　·　暫停 Esc",18))
-	Paper.button("操作速查",_show_controls,help_card)
+	Paper.button("園區圖解教學",func(): _open_tutorial("park","ticket"),help_card)
 	_back(body)
 
 func _open_time_panel_from_ticket() -> void:

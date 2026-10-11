@@ -309,12 +309,91 @@ func _key(code:int) -> void:
  for pressed in [true,false]:
   var event=InputEventKey.new();event.keycode=code;event.physical_keycode=code;event.pressed=pressed;Input.parse_input_event(event)
 func _motion(position:Vector2) -> void:
- var event=InputEventMouseMotion.new();event.position=position;Input.parse_input_event(event)
+ var event=InputEventMouseMotion.new();event.position=position;event.global_position=position;event.window_id=get_window().get_window_id();Input.parse_input_event(event)
 func _click(position:Vector2) -> void:
  for pressed in [true,false]:
-  var event=InputEventMouseButton.new();event.position=position;event.button_index=MOUSE_BUTTON_LEFT;event.pressed=pressed;Input.parse_input_event(event)
+  var event=InputEventMouseButton.new();event.position=position;event.global_position=position;event.window_id=get_window().get_window_id();event.button_index=MOUSE_BUTTON_LEFT;event.button_mask=MOUSE_BUTTON_MASK_LEFT if pressed else 0;event.pressed=pressed;Input.parse_input_event(event)
 func _fail(message:String) -> void:
  push_error(message)
  main.audio.shutdown()
  await get_tree().create_timer(0.15).timeout
  get_tree().quit(1)
+
+## Dispatch a complete, observable pointer click through the normal input route.
+## Both coordinates matter: Input tracks global_position, while Viewport hit-tests
+## position. Leaving global_position at zero moves the tracked pointer to (0, 0)
+## between events even if gui_get_hovered_control() briefly reports the target.
+func _native_click_button(button: BaseButton, context: String) -> bool:
+ if not is_instance_valid(button) or not button.is_visible_in_tree() or button.disabled:
+  await _fail("Native click target is missing, hidden or disabled: " + context)
+  return false
+ var ancestor := button.get_parent()
+ while ancestor != null:
+  if ancestor is ScrollContainer: ancestor.ensure_control_visible(button)
+  ancestor = ancestor.get_parent()
+ await get_tree().process_frame
+ await get_tree().process_frame
+ var viewport := button.get_viewport()
+ var rect := button.get_global_rect()
+ var visible_rect := viewport.get_visible_rect()
+ ancestor = button.get_parent()
+ while ancestor != null:
+  if ancestor is Control and ancestor.clip_contents:
+   visible_rect = visible_rect.intersection(ancestor.get_global_rect())
+  ancestor = ancestor.get_parent()
+ if not visible_rect.encloses(rect):
+  await _fail("Native click target is clipped: %s rect=%s visible=%s" % [context, rect, visible_rect])
+  return false
+ var observation := {"down": 0, "up": 0, "pressed": 0, "gui": []}
+ var on_down := func(): observation.down += 1
+ var on_up := func(): observation.up += 1
+ var on_pressed := func(): observation.pressed += 1
+ var on_gui := func(event: InputEvent):
+  if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+   observation.gui.append("down" if event.pressed else "up")
+ button.button_down.connect(on_down)
+ button.button_up.connect(on_up)
+ button.pressed.connect(on_pressed)
+ button.gui_input.connect(on_gui)
+ var target_path := str(button.get_path())
+ var point := viewport.get_final_transform() * rect.get_center()
+ # Flush queued OS/fixture events before beginning this click. No input state,
+ # control signal or gameplay callback is assigned or invoked directly.
+ Input.flush_buffered_events()
+ var motion := InputEventMouseMotion.new()
+ motion.position = point
+ motion.global_position = point
+ motion.window_id = get_window().get_window_id()
+ motion.button_mask = Input.get_mouse_button_mask()
+ Input.parse_input_event(motion)
+ Input.flush_buffered_events()
+ var hovered := viewport.gui_get_hovered_control()
+ var diagnostics := "target=%s rect=%s pointer=%s hovered=%s button_hovered=%s initial_mask=%d" % [target_path, rect, point, str(hovered.get_path()) if is_instance_valid(hovered) else "none", button.is_hovered(), Input.get_mouse_button_mask()]
+ if not button.is_hovered() or not (hovered == button or is_instance_valid(hovered) and button.is_ancestor_of(hovered)):
+  for pair in [[button.button_down, on_down], [button.button_up, on_up], [button.pressed, on_pressed], [button.gui_input, on_gui]]:
+   pair[0].disconnect(pair[1])
+  await _fail("Native pointer did not hover its target: %s; %s" % [context, diagnostics])
+  return false
+ # Dispatch and flush each distinct event without yielding to unrelated OS
+ # motion or deferred focus changes between the observed down and release.
+ for is_down in [true, false]:
+  var event := InputEventMouseButton.new()
+  event.position = point
+  event.global_position = point
+  event.window_id = get_window().get_window_id()
+  event.button_index = MOUSE_BUTTON_LEFT
+  event.button_mask = MOUSE_BUTTON_MASK_LEFT if is_down else 0
+  event.pressed = is_down
+  Input.parse_input_event(event)
+  Input.flush_buffered_events()
+ if is_instance_valid(button):
+  for pair in [[button.button_down, on_down], [button.button_up, on_up], [button.pressed, on_pressed], [button.gui_input, on_gui]]:
+   pair[0].disconnect(pair[1])
+ diagnostics += " observed=%s final_mask=%d" % [observation, Input.get_mouse_button_mask()]
+ if observation.down != 1 or observation.pressed != 1:
+  await _fail("Native click did not activate its target: %s; %s" % [context, diagnostics])
+  return false
+ print("INPUT: ", context, " ", diagnostics)
+ await get_tree().process_frame
+ await get_tree().process_frame
+ return true

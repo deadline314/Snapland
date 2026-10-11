@@ -59,7 +59,7 @@ func _open_wardrobe_and_capture(width: int) -> bool:
 	if appearance_tab==null:
 		await _fail("Wardrobe appearance tab is missing")
 		return false
-	await _click_control(appearance_tab)
+	if not await _click_control(appearance_tab): return false
 	if main.wardrobe_panel.current_tab!="appearance":
 		await _fail("Actual mouse click did not activate the wardrobe appearance tab")
 		return false
@@ -91,7 +91,7 @@ func _check_wardrobe_controls() -> bool:
 		if row is HBoxContainer and not await _check_scroll_entry(scroll,row,"wardrobe appearance row"):
 			return false
 	var closet_tab := main.overlay.find_child("Tab_closet",true,false) as Button
-	await _click_control(closet_tab)
+	if not await _click_control(closet_tab): return false
 	if main.wardrobe_panel.current_tab!="closet":
 		await _fail("Actual mouse click did not activate the wardrobe closet tab")
 		return false
@@ -103,7 +103,7 @@ func _check_wardrobe_controls() -> bool:
 		if row is HBoxContainer and not await _check_scroll_entry(scroll,row,"wardrobe closet row"):
 			return false
 	var shop_tab := main.overlay.find_child("Tab_shop",true,false) as Button
-	await _click_control(shop_tab)
+	if not await _click_control(shop_tab): return false
 	if main.wardrobe_panel.current_tab!="shop":
 		await _fail("Actual mouse click did not activate the wardrobe shop tab")
 		return false
@@ -220,7 +220,7 @@ func _open_settings_and_capture() -> bool:
 	if settings_button==null or not _control_fits_viewport(settings_button):
 		await _fail("HUD settings button is missing or outside the viewport")
 		return false
-	await _click_control(settings_button)
+	if not await _click_control(settings_button): return false
 	await _frames(3)
 	if main.modal_kind!="settings":
 		await _fail("Actual mouse click did not open settings")
@@ -279,29 +279,8 @@ func _tap_key(code: int) -> void:
 	Input.parse_input_event(event)
 	await get_tree().process_frame
 
-func _click_control(control: Control) -> void:
-	get_window().grab_focus()
-	await _frames(3)
-	var point: Vector2=main.get_viewport().get_final_transform()*control.get_global_rect().get_center()
-	var motion := InputEventMouseMotion.new()
-	motion.position=point
-	Input.parse_input_event(motion)
-	await _frames(2)
-	point=main.get_viewport().get_final_transform()*control.get_global_rect().get_center()
-	motion=InputEventMouseMotion.new()
-	motion.position=point
-	Input.parse_input_event(motion)
-	var pressed := InputEventMouseButton.new()
-	pressed.position=point
-	pressed.button_index=MOUSE_BUTTON_LEFT
-	pressed.pressed=true
-	Input.parse_input_event(pressed)
-	await get_tree().process_frame
-	var released := InputEventMouseButton.new()
-	released.position=point
-	released.button_index=MOUSE_BUTTON_LEFT
-	Input.parse_input_event(released)
-	await get_tree().process_frame
+func _click_control(control: Control) -> bool:
+	return await _native_click_button(control as BaseButton, "layout/tutorial button")
 
 func _frames(count: int) -> void:
 	for _index in range(count): await get_tree().process_frame
