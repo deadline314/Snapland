@@ -61,7 +61,13 @@ func _run() -> void:
      if brake_now!=balloon_brake:
       _held_key(KEY_SPACE,brake_now);balloon_brake=brake_now
     2:
-     if s.count<5: _motion(Vector2(640,s.ring_y[s.count]))
+     if not s.ended:
+      var state=s.kite_model.snapshot()
+      var ring_index=int(state.nextRing)
+      if ring_index<5:
+       var error=float(state.height)-float(s.kite_model.RING_HEIGHT[ring_index])
+       var aim=clampf(error*0.024-float(state.vy)*0.014,-1.0,1.0)
+       _motion(Vector2(640.0,390.0-aim*235.0))
     3:
      if s.beat_window: _key(KEY_SPACE)
     4:

@@ -4,6 +4,7 @@ const Session = preload("res://game/minigames/session.gd")
 const HUD = preload("res://game/ui/minigame_hud.gd")
 var checks := 0
 var failed_checks := 0
+var _kite_pointer_test_completed := false
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -13,7 +14,19 @@ func _run() -> void:
 		push_error("Minigame tests require isolated SNAPLAND_SAVE_PATH")
 		quit(1)
 		return
+	if OS.get_cmdline_user_args().has("--kite-pointer-only"):
+		await _test_kite_native_pointer_routing()
+		_expect(_kite_pointer_test_completed,"standalone kite pointer coroutine reached its final assertion")
+		if failed_checks > 0:
+			push_error("FAIL: standalone kite pointer routing (%d expectations)" % failed_checks)
+			quit(1)
+			return
+		print("PASS: standalone kite pointer GUI routing")
+		quit(0)
+		return
 	await _test_native_input_routing()
+	await _test_kite_native_pointer_routing()
+	_expect(_kite_pointer_test_completed,"kite pointer coroutine completed without a runtime error")
 	_test_hud_signals_and_state()
 	_test_photo_and_rhythm_grades()
 	_test_pause_practice_and_score_summary()
@@ -91,19 +104,51 @@ func _test_kite_boundaries() -> void:
 	missed.finished.connect(func(value: Dictionary): missed_results.append(value))
 	while not missed.ended: missed._process(0.05)
 	assert(missed_results.size() == 1 and not missed_results[0].success)
+	assert(missed.kite_model.rescues_used == missed.kite_model.MAX_RESCUES)
 	missed.queue_free()
 
-	var flown := _new_session("game-002", true)
+	var flown := _new_session("game-002", false)
 	var flown_results: Array[Dictionary] = []
 	flown.finished.connect(func(value: Dictionary): flown_results.append(value))
-	for i in 5:
-		while flown.p.x < flown.ring_x[i] - 14.0: flown._process(0.05)
-		_mouse_move(flown, 640, flown.ring_y[i])
-		flown._process(0.15)
-	while not flown.ended: flown._process(0.05)
-	assert(flown_results.size() == 1 and flown_results[0].success and flown_results[0].devil)
+	var budget := 5000
+	while not flown.ended and budget > 0:
+		_kite_drive_step(flown, 0.01)
+		budget -= 1
+	assert(budget > 0 and flown_results.size() == 1 and flown_results[0].success and flown_results[0].devil, "actual input-driven flight must center all five rings: %s" % str(flown.kite_model.snapshot()))
+	assert(flown.kite_model.center_hits == 5 and flown.kite_model.edge_hits == 0 and flown.kite_model.rescues_used == 0)
+	assert(flown.score == 500 and flown.mistakes == 0 and flown.score_summary().total == flown.score)
 	flown.queue_free()
+
+	var keyed := _new_session("game-002", true)
+	var keyed_results: Array[Dictionary] = []
+	keyed.finished.connect(func(value: Dictionary): keyed_results.append(value))
+	budget = 7000
+	while not keyed.ended and budget > 0:
+		_kite_keyboard_drive_step(keyed, 0.01)
+		budget -= 1
+	assert(budget > 0 and keyed_results.size() == 1 and keyed_results[0].success and not keyed_results[0].devil, "assisted keyboard controls must fly the complete route: %s" % str(keyed.kite_model.snapshot()))
+	assert(keyed.kite_model.ring_index == 5 and keyed.kite_model.assisted)
+	_key_release(keyed, KEY_UP); _key_release(keyed, KEY_DOWN)
+	keyed.queue_free()
 	checks += 1
+
+func _kite_keyboard_drive_step(session: Control, delta: float = 0.01) -> void:
+	var model = session.kite_model
+	var target_height := float(model.RING_HEIGHT[model.ring_index]) if model.ring_index < 5 else 390.0
+	var desired := clampf((float(model.height) - target_height) * 0.024 - float(model.vy) * 0.014, -1.0, 1.0)
+	var up := desired > 0.25
+	var down := desired < -0.25
+	if up != session._kite_up_held: _key(session, KEY_UP) if up else _key_release(session, KEY_UP)
+	if down != session._kite_down_held: _key(session, KEY_DOWN) if down else _key_release(session, KEY_DOWN)
+	session._process(delta)
+
+func _kite_drive_step(session: Control, delta: float = 0.01) -> void:
+	var model = session.kite_model
+	var target_height := float(model.RING_HEIGHT[model.ring_index]) if model.ring_index < 5 else 390.0
+	var error := float(model.height) - target_height
+	var aim := clampf(error * 0.024 - float(model.vy) * 0.014, -1.0, 1.0)
+	_mouse_move(session, 640.0, 390.0 - aim * 235.0)
+	session._process(delta)
 
 func _test_crowd_boundaries() -> void:
 	for use_assist in [false, true]:
@@ -455,9 +500,9 @@ func _advance_to(session: Control, target_phase: float) -> void:
 func _test_vertical_input_and_hat_consumption() -> void:
 	var kite := _new_session("game-002")
 	var start_y: float = kite.p.y
-	Input.action_press("ui_up")
+	_key(kite, KEY_UP)
 	kite._process(0.1)
-	Input.action_release("ui_up")
+	_key_release(kite, KEY_UP)
 	assert(kite.p.y < start_y)
 	kite.queue_free()
 
@@ -681,7 +726,7 @@ func _test_all_modes() -> void:
 						if should_brake != s.balloon_braking:
 							_key(s, KEY_SPACE) if should_brake else _key_release(s, KEY_SPACE)
 					2:
-						if s.count < 5: _mouse_move(s, 640, s.ring_y[s.count])
+						_kite_drive_step(s, 0.01)
 					3:
 						if s.beat_window: _key(s, KEY_SPACE)
 					4:
@@ -727,7 +772,8 @@ func _test_all_modes() -> void:
 			if number == 1:
 				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
 			else:
-				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability game-%03d assist=%s" % [number, assisted])
+				var expected_devil: bool = (not assisted) if number == 2 else true
+				assert(results.size() == 1 and results[0].success and results[0].devil == expected_devil, "Reachability game-%03d assist=%s results=%s" % [number, assisted, str(results)])
 			var score_detail: Dictionary = results[0].get("score_summary", {})
 			var displayed_total := 0
 			for row in score_detail.get("rows", []):
@@ -818,3 +864,86 @@ func _test_native_input_routing() -> void:
 	bubble.queue_free()
 	await process_frame
 	checks += 1
+func _test_kite_native_pointer_routing() -> void:
+	_kite_pointer_test_completed = false
+	# Match native/Main fullscreen GUI ancestry; an ancestor STOP must not steal
+	# the flight surface's mouse events before Session._unhandled_input.
+	var host := Control.new()
+	host.name = "KiteStopControlHost"
+	root.add_child(host)
+	host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var kite: Control = Session.new()
+	host.add_child(kite)
+	kite.start("game-002")
+	kite.set_process(false)
+	kite._sync_presentation()
+	await process_frame
+	_expect(is_instance_valid(kite.presentation),"kite pointer regression has a real headless flight Control")
+	if not is_instance_valid(kite.presentation):
+		host.queue_free()
+		await process_frame
+		return
+	var design_point := Vector2(640,446.6233)
+	var viewport_point: Vector2 = kite.presentation.get_global_transform_with_canvas() * design_point
+	var physical_point := root.get_final_transform() * viewport_point
+	var motion := InputEventMouseMotion.new()
+	motion.position = physical_point
+	motion.global_position = physical_point
+	motion.relative = physical_point-root.get_final_transform()*root.get_mouse_position()
+	motion.window_id = root.get_window_id()
+	Input.parse_input_event(motion)
+	Input.flush_buffered_events()
+	_expect(is_equal_approx(float(kite.kite_model.snapshot().aim),(390.0-design_point.y)/235.0),"native kite window-coordinate pointer dispatch applies the height aim through GUI/input")
+	_expect(root.get_mouse_position().distance_to(viewport_point)<0.01,"native kite event uses the actual window-to-viewport stretch transform")
+	_expect(root.gui_get_hovered_control()==kite.presentation,"kite GUI target is the flight surface instead of its STOP ancestor")
+	await process_frame
+	for input_case in [[MOUSE_BUTTON_LEFT,true],[MOUSE_BUTTON_LEFT,false],[MOUSE_BUTTON_RIGHT,true],[MOUSE_BUTTON_RIGHT,false]]:
+		var flight_button := InputEventMouseButton.new()
+		flight_button.position = physical_point
+		flight_button.global_position = physical_point
+		flight_button.button_index = input_case[0]
+		flight_button.pressed = input_case[1]
+		flight_button.button_mask = (MOUSE_BUTTON_MASK_LEFT if input_case[0]==MOUSE_BUTTON_LEFT else MOUSE_BUTTON_MASK_RIGHT) if input_case[1] else 0
+		flight_button.window_id = root.get_window_id()
+		Input.parse_input_event(flight_button)
+		Input.flush_buffered_events()
+		var action_active: bool = kite.kite_model.boost if input_case[0]==MOUSE_BUTTON_LEFT else kite.kite_model.reel
+		_expect(action_active==bool(input_case[1]),"real flight GUI mouse button %d changes boost/reel to %s" % [input_case[0],str(input_case[1])])
+	var before_hud: float = kite.kite_model.snapshot().aim
+	var pause_button: Button = kite.minigame_hud.find_child("PauseButton",true,false)
+	_expect(is_instance_valid(pause_button),"kite pointer regression retains the real PauseButton")
+	if not is_instance_valid(pause_button):
+		host.queue_free()
+		await process_frame
+		return
+	var pause_point := root.get_final_transform() * pause_button.get_global_rect().get_center()
+	motion = InputEventMouseMotion.new()
+	motion.position = pause_point
+	motion.global_position = pause_point
+	motion.window_id = root.get_window_id()
+	Input.parse_input_event(motion)
+	Input.flush_buffered_events()
+	_expect(is_equal_approx(float(kite.kite_model.snapshot().aim),before_hud),"kite pointer over the real HUD does not steer through GUI")
+	_expect(root.gui_get_hovered_control()==pause_button,"native kite hover remains on the actual PauseButton")
+	for pressed in [true,false]:
+		var button := InputEventMouseButton.new()
+		button.position = pause_point
+		button.global_position = pause_point
+		button.button_index = MOUSE_BUTTON_LEFT
+		button.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+		button.pressed = pressed
+		button.window_id = root.get_window_id()
+		Input.parse_input_event(button)
+		Input.flush_buffered_events()
+	_expect(kite.paused and not kite.kite_model.boost,"real kite HUD pause click pauses instead of boosting")
+	motion = InputEventMouseMotion.new()
+	motion.position = physical_point
+	motion.global_position = physical_point
+	motion.window_id = root.get_window_id()
+	Input.parse_input_event(motion)
+	Input.flush_buffered_events()
+	_expect(is_equal_approx(float(kite.kite_model.snapshot().aim),before_hud),"paused native kite ignores play-area pointer motion")
+	host.queue_free()
+	await process_frame
+	checks += 1
+	_kite_pointer_test_completed = true

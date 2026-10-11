@@ -33,6 +33,8 @@ const PipePlanScript = preload("res://game/minigames/pipe_plan_view.gd")
 const PipeRoundScript = preload("res://game/minigames/pipe_round_model.gd")
 const CrowdTrafficScript = preload("res://game/minigames/crowd_traffic_model.gd")
 const CrowdCrossingScript = preload("res://game/minigames/crowd_crossing_view.gd")
+const KiteFlightModelScript = preload("res://game/minigames/kite_flight_model.gd")
+const KiteFlightViewScript = preload("res://game/minigames/kite_flight_view.gd")
 const BUBBLE_MASCOT_RADIUS := 52.0
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
@@ -96,6 +98,12 @@ var pipe_connected := false
 var pipe_finish_at := -1.0
 var pipe_model: RefCounted = PipeRoundScript.new()
 var crowd_model: RefCounted = CrowdTrafficScript.new()
+var kite_model: RefCounted = KiteFlightModelScript.new()
+var _kite_marker_cursor := 0
+var _kite_up_held := false
+var _kite_down_held := false
+var _kite_boost_held := false
+var _kite_reel_held := false
 var _crowd_event_cursor := 0
 var _fountain_avatar_renderer: RefCounted
 var _fountain_jump_textures: Array[Texture2D] = []
@@ -170,8 +178,6 @@ var flower_cells: Array[int] = []
 var hat_x: Array[float] = []
 var hat_y: Array[float] = []
 var hats_consumed: Array[bool] = []
-var ring_x: Array[float] = []
-var ring_y: Array[float] = []
 
 static func definitions() -> Array:
 	if not _catalog_loaded:
@@ -240,11 +246,17 @@ func _sync_presentation() -> void:
 				if DisplayServer.get_name() != "headless": presentation = BalloonHarborScript.new()
 			"flower_pipes": presentation = PipePlanScript.new()
 			"crowd_traffic": presentation = CrowdCrossingScript.new()
+			"kite_rings": presentation = KiteFlightViewScript.new()
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			add_child(presentation)
 			move_child(presentation, 0)
+			if mode == "kite_rings":
+				# Own play-surface mouse events before a fullscreen GUI ancestor stops
+				# them. The later HUD sibling still receives its own buttons/overlays.
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+				presentation.gui_input.connect(_on_kite_presentation_input)
 			if mode == "balloon_delivery": presentation.initialize()
 			_layout_presentation()
 	if not is_instance_valid(presentation): return
@@ -257,6 +269,7 @@ func _sync_presentation() -> void:
 			presentation.present_order(pipe_model.snapshot(), phase, reduced_motion, time_phase)
 			presentation.cursor = pipe_cursor
 		"crowd_traffic": presentation.present_state(crowd_model.snapshot(), phase, reduced_motion, time_phase)
+		"kite_rings": presentation.update_frame(kite_model.snapshot(), "result" if ended else ("paused" if paused else "playing"), reduced_motion, time_phase)
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -342,7 +355,7 @@ func _refresh_hud(force: bool = false) -> void:
 func _progress_text() -> String:
 	match mode:
 		"balloon_delivery": return "郵袋 %d / 3" % balloon_delivery_index
-		"kite_rings": return "風環 %d / 5" % count
+		"kite_rings": return "風環 %d / 5　中心 %d　救援 %d" % [count, devil_progress, int(kite_model.snapshot().rescues_used)]
 		"fountain_timing": return "機會 %d / 3　成功 %d" % [fountain_attempts, count]
 		"crowd_traffic": return "隊伍 %d / 6" % count
 		"hat_catching": return "接住 %d / 6" % count
@@ -399,7 +412,7 @@ func _score_label() -> String:
 func _score_rule_text() -> String:
 	match mode:
 		"balloon_delivery": return "每送達一封郵袋 +150。"
-		"kite_rings": return "每穿過一個風環 +100。"
+		"kite_rings": return "中心穿環 +100，擦邊穿環 +60，漏環或斷線不加分。"
 		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。"
 		"crowd_traffic": return "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。"
 		"hat_catching": return "每接住一頂帽子 +100。"
@@ -454,6 +467,14 @@ func reset_round() -> void:
 	game_time = 0.0
 	phase = 0.0
 	round_seconds = 55.0 if mode == "balloon_delivery" else ROUND_SECONDS
+	_kite_up_held = false
+	_kite_down_held = false
+	_kite_boost_held = false
+	_kite_reel_held = false
+	_kite_marker_cursor = 0
+	if mode == "kite_rings":
+		kite_model.reset(assisted)
+		_kite_marker_cursor = kite_model.snapshot().eventmarkers.size()
 	beat = 0
 	beat_window = false
 	fountain_attempts = 0
@@ -500,8 +521,6 @@ func reset_round() -> void:
 	hat_x.clear()
 	hat_y.clear()
 	hats_consumed.clear()
-	ring_x.clear()
-	ring_y.clear()
 	sequence.clear()
 	sequence_index = 0
 	sequence_showing = false
@@ -520,10 +539,8 @@ func reset_round() -> void:
 			steering_target = p
 			prompt = "吹風練習：方向鍵或 WASD 推動氣球。Enter 隨時開始送件"
 		"kite_rings":
-			p = Vector2(180, 360)
-			for i in 5:
-				ring_x.append(410.0 + i * 155.0)
-				ring_y.append([270.0, 450.0, 320.0, 470.0, 310.0][i])
+			var kite_snapshot: Dictionary = kite_model.snapshot()
+			p = Vector2(float(kite_snapshot.x), float(kite_snapshot.height))
 		"fountain_timing": pass
 		"crowd_traffic":
 			crowd_model.reset(assisted)
@@ -632,7 +649,9 @@ func _process(delta: float) -> void:
 	if elapsed >= round_seconds:
 		_finish(false)
 		return
-	if mode == "balloon_delivery":
+	if mode == "kite_rings":
+		_tick_kite(delta)
+	elif mode == "balloon_delivery":
 		# Time still advances at wall-clock delta; physics uses bounded substeps.
 		var remaining := minf(maxf(delta, 0.0), 0.5)
 		while remaining > 0.00001 and not ended:
@@ -652,19 +671,34 @@ func _set_balloon_intro_prompt() -> void:
 		1: prompt = "練習 2/3　按空白鍵／右鍵煞車；↑↓ 調整航線。Enter 隨時出發"
 		2: prompt = "練習 3/3　依序送達三個亮起的郵箱；進圈後煞停。Enter 開始計時"
 
+func _tick_kite(delta: float) -> void:
+	kite_model.step(delta)
+	var state: Dictionary = kite_model.snapshot()
+	p = Vector2(float(state.get("x", 120.0)), float(state.get("height", 380.0)))
+	count = int(state.get("nextRing", 0))
+	devil_progress = int(state.get("center_hits", 0))
+	mistakes = int(state.get("mistakes", 0))
+	var markers: Array = state.get("eventmarkers", [])
+	while _kite_marker_cursor < markers.size():
+		var marker: Dictionary = markers[_kite_marker_cursor]
+		var kind := str(marker.get("kind", ""))
+		if kind == "center":
+			_award_points("kite_center", "中心穿環", 100)
+			_feedback("穿過風環中心！", MINT)
+		elif kind == "edge":
+			_award_points("kite_edge", "擦邊穿環", 60)
+			_feedback("擦邊穿過風環", YELLOW)
+		elif kind == "miss":
+			_feedback("漏過風環，風箏已退回安全距離", PINK)
+		elif kind == "line_snap":
+			_feedback("風箏線張力過高，已安全復位", PINK)
+		_kite_marker_cursor += 1
+	if bool(state.get("ended", false)):
+		_finish(bool(state.get("won", false)), bool(state.get("devil", false)))
+
 func _tick_game(delta: float) -> void:
 	match mode:
 		"balloon_delivery": _tick_balloon(delta)
-		"kite_rings":
-			p.y += _axis_y() * 235.0 * delta
-			p.y = clampf(p.y + sin(phase * 2.0) * (22.0 if not assisted else 11.0) * delta, 220, 570)
-			p.x += 118.0 * delta
-			if count < ring_x.size() and p.x >= ring_x[count]:
-				if absf(p.y - ring_y[count]) <= (55 if assisted else 34):
-					count += 1; _award_points("ring", "成功穿過風環", 100); devil_progress += 1; _feedback("穿環成功！", MINT)
-				else:
-					count += 1; mistakes += 1; _feedback("差一點，風箏擦到環了", PINK)
-			if p.x > 1240: _finish(count == ring_x.size() and mistakes <= 1, devil_progress == 5 and mistakes == 0)
 		"fountain_timing":
 			_tick_fountain()
 		"crowd_traffic": _tick_crowd(delta)
@@ -896,6 +930,21 @@ func _next_melody() -> void:
 	sequence_index = 0; sequence_show_index = 0; sequence_showing = true; sequence_clock = 0.8 if assisted else 0.55
 	if not sequence.is_empty(): note_played.emit(sequence[0])
 
+func _on_kite_presentation_input(event: InputEvent) -> void:
+	if mode != "kite_rings" or ended or paused:
+		return
+	if event is InputEventMouseMotion:
+		# gui_input is already expressed in the unscaled presentation design plane.
+		kite_model.set_aim(clampf((390.0 - event.position.y) / 235.0, -1.0, 1.0))
+	elif event is InputEventMouseButton:
+		_apply_kite_pointer_button(event)
+
+func _apply_kite_pointer_button(event: InputEventMouseButton) -> void:
+	if event.button_index == MOUSE_BUTTON_LEFT: _kite_boost_held = event.pressed
+	elif event.button_index == MOUSE_BUTTON_RIGHT: _kite_reel_held = event.pressed
+	kite_model.set_boost(_kite_boost_held)
+	kite_model.set_reel(_kite_reel_held)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if ended:
 		return
@@ -919,6 +968,19 @@ func _unhandled_input(event: InputEvent) -> void:
 	if mode == "balloon_delivery" and event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_RIGHT:
 		balloon_braking = (event as InputEventMouseButton).pressed
 		return
+	if mode == "kite_rings":
+		if event is InputEventKey:
+			var kite_key := event as InputEventKey
+			if kite_key.keycode == KEY_UP: _kite_up_held = kite_key.pressed
+			elif kite_key.keycode == KEY_DOWN: _kite_down_held = kite_key.pressed
+			elif kite_key.keycode == KEY_SPACE: _kite_boost_held = kite_key.pressed
+			elif kite_key.keycode == KEY_SHIFT: _kite_reel_held = kite_key.pressed
+			kite_model.set_aim(float(int(_kite_up_held) - int(_kite_down_held)))
+			kite_model.set_boost(_kite_boost_held)
+			kite_model.set_reel(_kite_reel_held)
+		elif event is InputEventMouseButton:
+			_apply_kite_pointer_button(event as InputEventMouseButton)
+			return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_R: set_paused(true); return
 		if event.keycode == KEY_SPACE: _press_action()
@@ -960,7 +1022,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				if is_instance_valid(presentation): pointer = presentation.screen_to_design(pointer)
 				steering_target = Vector2(clampf(pointer.x, 130, 1150), clampf(pointer.y, 210, 585))
 				mouse_steering = true
-			"kite_rings": p.y = clampf(pointer.y, 220, 570)
+			"kite_rings": kite_model.set_aim(clampf((390.0 - pointer.y) / 235.0, -1.0, 1.0))
 			"hat_catching": p.x = clampf(pointer.x, 180, 1100)
 			"shadow_alignment": alignment = clampf(inverse_lerp(190.0, 1090.0, pointer.x) - 0.5, -0.5, 0.5)
 
@@ -1233,7 +1295,7 @@ func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
-	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic"]:
+	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings"]:
 		if mode == "balloon_delivery" and is_instance_valid(presentation):
 			var harbor_texture: Texture2D = presentation.texture()
 			if harbor_texture != null:
@@ -1263,7 +1325,6 @@ func _draw_backdrop() -> void:
 	var tint := Color("#4b928e")
 	match mode:
 		"balloon_delivery": scene = "harbor"; tint = Color("#78afa3")
-		"kite_rings": scene = "harbor"; tint = Color("#7db8c4")
 		"fountain_timing": scene = "garden"; tint = Color("#7ba995")
 		"crowd_traffic": scene = "stage"; tint = Color("#b69477")
 		"hat_catching": scene = "stage"; tint = Color("#c59485")
@@ -1334,10 +1395,6 @@ func _draw_backdrop() -> void:
 		"balloon_delivery":
 			_draw_cloud(Vector2(200,208),0.85); _draw_cloud(Vector2(1040,205),0.72)
 			_draw_lighthouse(Vector2(1150,440)); _draw_boat(Vector2(270,548),0.8)
-		"kite_rings":
-			_draw_cloud(Vector2(180,220),1.0); _draw_cloud(Vector2(1085,215),0.9)
-			draw_line(Vector2(55,324),Vector2(210,292),Color("#557f69",0.7),5)
-			draw_line(Vector2(1070,330),Vector2(1230,292),Color("#557f69",0.7),5)
 		"fountain_timing", "flower_pipes", "bench_swap":
 			_draw_topiary(Vector2(130,450),0.78); _draw_topiary(Vector2(1150,450),0.78)
 			_draw_awning(245,190,790)
@@ -1562,7 +1619,6 @@ func _definition() -> Dictionary:
 func _draw_game() -> void:
 	match mode:
 		"balloon_delivery": _draw_balloon()
-		"kite_rings": _draw_kite()
 		"fountain_timing": _draw_fountain()
 		"crowd_traffic": _draw_crowd()
 		"hat_catching": _draw_hats()
@@ -1686,23 +1742,6 @@ func _draw_balloon_wind_gauge() -> void:
 	var needle_x := 944.0 + bar.size.x * clampf((balloon_wind_current.x / 60.0 + 1.0) * 0.5,0.0,1.0)
 	draw_line(Vector2(needle_x,232),Vector2(needle_x,253),Color("#bd704f"),3)
 
-func _draw_kite() -> void:
-	for i in ring_x.size():
-		var c := MINT if i < count else Color("#493f4f")
-		# Physical and visible opening share the same radius used by the pass check.
-		draw_arc(Vector2(ring_x[i], ring_y[i]), 34, 0, TAU, 40, c, 8)
-		draw_arc(Vector2(ring_x[i], ring_y[i]), 40, 0, TAU, 40, Color("#f5d59b",0.8), 2)
-		draw_circle(Vector2(ring_x[i]-34,ring_y[i]),5,GOLD); draw_circle(Vector2(ring_x[i]+34,ring_y[i]),5,GOLD)
-	# Crosswind tails remain behind the original quilted kite and alternate two pennant colors.
-	for i in 5:
-		var trail := p + Vector2(-13-i*9, 16+i*11)
-		draw_colored_polygon(PackedVector2Array([trail,trail+Vector2(-17,8),trail+Vector2(-7,18)]),PINK if i%2==0 else Color("#59b9ae"))
-	if not _draw_prop("kite",Rect2(p.x-37,p.y-43,74,108)):
-		draw_line(p+Vector2(0,20),p+Vector2(-4,63),PAPER,2)
-		draw_colored_polygon(PackedVector2Array([p+Vector2(0,-30),p+Vector2(31,0),p+Vector2(0,30),p+Vector2(-31,0)]),Color("#e97792"))
-		draw_colored_polygon(PackedVector2Array([p+Vector2(0,-23),p+Vector2(22,0),p+Vector2(0,23)]),Color("#ffd27e"))
-		draw_line(p+Vector2(0,-27),p+Vector2(0,27),Color("#fff0d2"),2); draw_line(p+Vector2(-27,0),p+Vector2(27,0),Color("#fff0d2"),2)
-	_draw_scene_label("穿過五枚潮汐風環　　拖曳高度或按 ↑ ↓；已穿過 " + str(count) + " / 5",Vector2(640,545),18)
 
 func _draw_fountain() -> void:
 	draw_rect(Rect2(151,464,978,94),Color("#5c8b8e"),true); draw_circle(Vector2(151,511),47,Color("#5c8b8e")); draw_circle(Vector2(1129,511),47,Color("#5c8b8e"))
