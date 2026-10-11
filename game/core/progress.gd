@@ -5,6 +5,13 @@ signal achievement_unlocked(id: String)
 
 const SAVE_FILE := "user://progress.json"
 const SAVE_VERSION := 1
+const MAX_COINS := 1000000
+const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
+const DEFAULT_APPEARANCE := {
+	"skin": "warm", "species": "human", "gender": "neutral",
+	"hair": "windswept", "hair_color": "ink", "face": "curious",
+}
+const DEFAULT_EQUIPPED := {"outfit": "outfit-tide", "hat": "hat-none"}
 const DEFAULT_SETTINGS := {
 	"master_volume": 0.7,
 	"music_volume": 0.6,
@@ -27,8 +34,14 @@ var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
 var visited: Dictionary = {}
 var intro_seen := false
 var platform_pending_achievements: Array[String] = []
+var appearance: Dictionary = DEFAULT_APPEARANCE.duplicate(true)
+var equipped: Dictionary = DEFAULT_EQUIPPED.duplicate(true)
+var owned_clothes: Array[String] = ["outfit-tide"]
+var coins := 120
+var wardrobe_rewarded_games: Array[String] = []
 var _extra_fields: Dictionary = {}
 var _loading := false
+var _suppress_changed_save := false
 
 func _ready() -> void:
 	changed.connect(_on_changed)
@@ -47,6 +60,11 @@ func complete_game(game_id: String, devil: bool, assisted: bool = false) -> void
 	var game_number := _welcome_game_number(game_id)
 	if game_number == 0:
 		return
+	var completed_photo_id := "photo-welcome-game-%d" % game_number
+	if not wardrobe_rewarded_games.has(game_id):
+		if not photos.has(completed_photo_id):
+			coins = mini(clampi(coins, 0, MAX_COINS) + 40, MAX_COINS)
+		wardrobe_rewarded_games.append(game_id)
 	grant_photo("photo-welcome-game-%d" % game_number, {"game_id": game_id, "assisted": assisted, "devil": false})
 	if devil:
 		grant_photo("photo-welcome-devil-%d" % game_number, {"game_id": game_id, "assisted": assisted, "devil": true})
@@ -63,6 +81,98 @@ func complete_game(game_id: String, devil: bool, assisted: bool = false) -> void
 	if all_devils:
 		_unlock("ACH_ALL_DEVILS")
 	changed.emit()
+
+func set_appearance(key: String, value: String) -> bool:
+	var options := WardrobeCatalog.options()
+	if not options.has(key):
+		return false
+	for option: Dictionary in options[key]:
+		if option.id == value:
+			if appearance.get(key) == value:
+				return true
+			var previous_appearance := appearance.duplicate(true)
+			appearance[key] = value
+			if not _save_wardrobe_change():
+				appearance = previous_appearance
+				return false
+			return true
+	return false
+
+func set_appearance_batch(values: Dictionary) -> bool:
+	var options := WardrobeCatalog.options()
+	var updated_appearance := appearance.duplicate(true)
+	for key: Variant in values:
+		if not options.has(key) or typeof(values[key]) != TYPE_STRING:
+			return false
+		var valid_value := false
+		for option: Dictionary in options[key]:
+			if option.id == values[key]:
+				valid_value = true
+				break
+		if not valid_value:
+			return false
+		updated_appearance[str(key)] = values[key]
+	if updated_appearance == appearance:
+		return true
+	var previous_appearance := appearance
+	appearance = updated_appearance
+	if not _save_wardrobe_change():
+		appearance = previous_appearance
+		return false
+	return true
+
+func buy_clothing(id: String) -> bool:
+	var item := wardrobe_item(id)
+	if item.is_empty() or id == "hat-none" or owned_clothes.has(id):
+		return false
+	var price := int(item.price)
+	if coins < price:
+		return false
+	var previous_coins := coins
+	var previous_owned := owned_clothes.duplicate()
+	coins -= price
+	owned_clothes.append(id)
+	if not _save_wardrobe_change():
+		coins = previous_coins
+		owned_clothes = previous_owned
+		return false
+	return true
+
+func equip_clothing(id: String) -> bool:
+	var item := wardrobe_item(id)
+	if item.is_empty() or (id != "hat-none" and not owned_clothes.has(id)):
+		return false
+	var slot: String = item.slot
+	if not equipped.has(slot):
+		return false
+	if equipped[slot] == id:
+		return true
+	var previous_equipped := equipped.duplicate(true)
+	equipped[slot] = id
+	if not _save_wardrobe_change():
+		equipped = previous_equipped
+		return false
+	return true
+
+func _save_wardrobe_change() -> bool:
+	if not save_progress():
+		return false
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = false
+	return true
+
+func wardrobe_item(id: String) -> Dictionary:
+	return WardrobeCatalog.item(id)
+
+func wardrobe_items() -> Array:
+	var items: Array = []
+	for item: Dictionary in WardrobeCatalog.ITEMS:
+		items.append(item.duplicate(true))
+	return items
+
+func appearance_options() -> Dictionary:
+	return WardrobeCatalog.options()
 
 func advance_quest(id: String, step: int) -> void:
 	if id.is_empty() or step < 0:
@@ -88,6 +198,11 @@ func save_progress() -> bool:
 		"visited": visited,
 		"intro_seen": intro_seen,
 		"platform_pending_achievements": platform_pending_achievements,
+		"appearance": appearance,
+		"equipped": equipped,
+		"owned_clothes": owned_clothes,
+		"coins": coins,
+		"wardrobe_rewarded_games": wardrobe_rewarded_games,
 	}, true)
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
@@ -194,6 +309,15 @@ func _welcome_game_number(game_id: String) -> int:
 	var index := WELCOME_GAME_IDS.find(game_id)
 	return index + 1 if index >= 0 else 0
 
+func _is_rewardable_game_id(game_id: String) -> bool:
+	if not game_id.begins_with("game-"):
+		return false
+	var number_text := game_id.trim_prefix("game-")
+	if not number_text.is_valid_int():
+		return false
+	var number := int(number_text)
+	return WELCOME_GAME_IDS.has(game_id) and game_id == "game-%03d" % number
+
 func _has_complete_game_set(zone: String, devil: bool) -> bool:
 	for index in range(1, 13):
 		var card_id := "photo-%s-game-%d" % [zone, index]
@@ -274,13 +398,54 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 		if result.has(key) and typeof(result[key]) != TYPE_BOOL:
 			push_error("Invalid '%s' field in progress file '%s'; using default." % [key, path])
 			result.erase(key)
+	if result.has("appearance"):
+		if typeof(result.appearance) != TYPE_DICTIONARY:
+			push_warning("Invalid 'appearance' field in progress file '%s'; using wardrobe defaults." % path)
+			result.erase("appearance")
+		else:
+			var safe_appearance: Dictionary = result.appearance
+			var options := WardrobeCatalog.options()
+			for key: Variant in safe_appearance.keys():
+				var valid := false
+				if options.has(key) and typeof(safe_appearance[key]) == TYPE_STRING:
+					for option: Dictionary in options[key]:
+						if option.id == safe_appearance[key]:
+							valid = true
+							break
+				if not valid:
+					push_warning("Invalid appearance option '%s' in progress file '%s'; using default." % [str(key), path])
+					safe_appearance.erase(key)
+	if result.has("equipped") and typeof(result.equipped) == TYPE_DICTIONARY:
+		var safe_equipped: Dictionary = result.equipped
+		for slot: Variant in safe_equipped.keys():
+			if not DEFAULT_EQUIPPED.has(slot):
+				push_warning("Invalid wardrobe slot '%s' in progress file '%s'; skipping." % [str(slot), path])
+				safe_equipped.erase(slot)
+	for key in ["equipped", "owned_clothes"]:
+		if result.has(key) and typeof(result[key]) != (TYPE_DICTIONARY if key == "equipped" else TYPE_ARRAY):
+			push_warning("Invalid '%s' field in progress file '%s'; using wardrobe defaults." % [key, path])
+			result.erase(key)
+	if result.has("coins"):
+		var saved_coins: Variant = result.coins
+		if typeof(saved_coins) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(saved_coins)) or float(saved_coins) < 0.0 or float(saved_coins) > MAX_COINS or floor(float(saved_coins)) != float(saved_coins):
+			push_warning("Invalid 'coins' field in progress file '%s'; using default." % path)
+			result.erase("coins")
+	if result.has("wardrobe_rewarded_games") and typeof(result.wardrobe_rewarded_games) != TYPE_ARRAY:
+		push_warning("Invalid 'wardrobe_rewarded_games' field in progress file '%s'; using defaults." % path)
+		result.erase("wardrobe_rewarded_games")
+	elif result.has("wardrobe_rewarded_games"):
+		var safe_rewarded_games: Array = result.wardrobe_rewarded_games
+		for game_id: Variant in safe_rewarded_games.duplicate():
+			if typeof(game_id) != TYPE_STRING or not _is_rewardable_game_id(str(game_id)):
+				push_warning("Invalid completed game reward '%s' in progress file '%s'; skipping." % [str(game_id), path])
+				safe_rewarded_games.erase(game_id)
 	return result
 
 func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "platform_pending_achievements"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -315,6 +480,40 @@ func _apply_save(payload: Dictionary) -> void:
 		for achievement_id in loaded_pending:
 			if typeof(achievement_id) == TYPE_STRING and not achievement_id.is_empty() and not platform_pending_achievements.has(achievement_id):
 				platform_pending_achievements.append(achievement_id)
+	var loaded_appearance: Variant = payload.get("appearance", {})
+	if typeof(loaded_appearance) == TYPE_DICTIONARY:
+		for key: Variant in loaded_appearance:
+			if DEFAULT_APPEARANCE.has(key):
+				appearance[str(key)] = loaded_appearance[key]
+	var loaded_owned: Variant = payload.get("owned_clothes", [])
+	if typeof(loaded_owned) == TYPE_ARRAY:
+		if payload.has("owned_clothes"):
+			owned_clothes = []
+		for item_id: Variant in loaded_owned:
+			var id := str(item_id)
+			if typeof(item_id) != TYPE_STRING or owned_clothes.has(id) or wardrobe_item(id).is_empty() or id == "hat-none":
+				push_warning("Invalid wardrobe item '%s' in field 'owned_clothes' in progress file '%s'; skipping." % [id, _save_path()])
+				continue
+			owned_clothes.append(id)
+	if not owned_clothes.has("outfit-tide"):
+		owned_clothes.append("outfit-tide")
+	var loaded_equipped: Variant = payload.get("equipped", {})
+	if typeof(loaded_equipped) == TYPE_DICTIONARY:
+		for slot: Variant in DEFAULT_EQUIPPED:
+			var id := str(loaded_equipped.get(slot, DEFAULT_EQUIPPED[slot]))
+			var item := wardrobe_item(id)
+			if item.is_empty() or item.slot != slot or (id != "hat-none" and not owned_clothes.has(id)):
+				push_warning("Invalid equipped wardrobe item '%s' for slot '%s' in progress file '%s'; using default." % [id, str(slot), _save_path()])
+				continue
+			equipped[str(slot)] = id
+	var loaded_coins: Variant = payload.get("coins", 120)
+	if typeof(loaded_coins) in [TYPE_INT, TYPE_FLOAT]:
+		coins = int(loaded_coins)
+	var loaded_rewarded: Variant = payload.get("wardrobe_rewarded_games", [])
+	if typeof(loaded_rewarded) == TYPE_ARRAY:
+		for game_id: Variant in loaded_rewarded:
+			if typeof(game_id) == TYPE_STRING and _is_rewardable_game_id(game_id) and not wardrobe_rewarded_games.has(game_id):
+				wardrobe_rewarded_games.append(game_id)
 	_loading = false
 
 func _apply_loaded_setting(key: String, value: Variant) -> void:
@@ -342,7 +541,7 @@ func _apply_setting(key: String) -> void:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
 
 func _on_changed() -> void:
-	if not _loading:
+	if not _loading and not _suppress_changed_save:
 		save_progress()
 
 func _reset_memory() -> void:
@@ -353,4 +552,9 @@ func _reset_memory() -> void:
 	visited = {}
 	intro_seen = false
 	platform_pending_achievements = []
+	appearance = DEFAULT_APPEARANCE.duplicate(true)
+	equipped = DEFAULT_EQUIPPED.duplicate(true)
+	owned_clothes = ["outfit-tide"]
+	coins = 120
+	wardrobe_rewarded_games = []
 	_extra_fields = {}
