@@ -10,6 +10,7 @@ const WALK_METADATA_PATH := "res://assets/characters/walk-regions.json"
 const DIAGONAL_PARTS_PATH := "res://assets/characters/diagonal-parts.json"
 const IDLE_WALK_FRAME := 0
 const ACTIONS := ["wave", "photograph", "interact", "celebrate"]
+const CharacterAnimationLibraryScript = preload("res://game/world/character_animation_library.gd")
 const SOURCE_SIZE := Vector2i(1122, 1402)
 const HAT_ATLAS_PATH := "res://assets/characters/hats-v1.png"
 const HAT_SOURCE_SIZE := Vector2i(1217, 1293)
@@ -87,9 +88,11 @@ var _diagonal_hair_regions: Array = []
 var _diagonal_hat_regions: Array = []
 var _diagonal_hair_valid := false
 var _diagonal_hat_valid := false
+var animation_library: RefCounted
 
 func _init() -> void:
 	_load_atlas()
+	animation_library = CharacterAnimationLibraryScript.new()
 
 func pose_height() -> int:
 	return _canvas_height if _atlas_valid else 96
@@ -121,11 +124,26 @@ func has_diagonal_parts() -> bool:
 func cached_texture_count() -> int:
 	return _cache.size()
 
+func has_authored_action(action: String, direction: String = "front") -> bool:
+	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
+	return animation_library != null and animation_library.has_action("traveller", action, safe_direction)
+
+func authored_frame_count(action: String, direction: String = "front") -> int:
+	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
+	return animation_library.frame_count("traveller", action, safe_direction) if animation_library != null else 0
+
+func authored_action_fps(action: String, direction: String = "front") -> float:
+	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
+	return animation_library.frame_fps("traveller", action, safe_direction) if animation_library != null else 0.0
+
 func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "front", frame: int = 0, action: String = "idle") -> Texture2D:
 	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
-	var safe_action := action if ACTIONS.has(action) or action == "walk" else "idle"
-	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, 2)
-	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction)))
+	var authored_action: bool = animation_library != null and animation_library.has_action("traveller", action, safe_direction)
+	var safe_action := action if ACTIONS.has(action) or action == "walk" or authored_action else "idle"
+	var has_manifest_frame: bool = safe_action != "walk" and animation_library.has_frame("traveller", safe_action, safe_direction)
+	var authored_frame_count: int = animation_library.frame_count("traveller", safe_action, safe_direction) if has_manifest_frame else 0
+	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, authored_frame_count - 1) if has_manifest_frame else clampi(frame, 0, 2)
+	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction))) and not has_manifest_frame
 	var walk_frame := IDLE_WALK_FRAME
 	if use_walk_source:
 		var frame_count := walk_frame_count(safe_direction)
@@ -139,13 +157,22 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var pose := _pose_index(pose_direction, safe_frame, safe_action)
 	var render_appearance := normalized_appearance.duplicate()
 	render_appearance.erase("gender")
-	var pose_key := "walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else "action:%d" % pose
+	var pose_key := "walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else ("manifest:%s:%s:%d" % [safe_action, safe_direction, safe_frame] if has_manifest_frame else "action:%d" % pose)
 	var key := "%s|%s|%s" % [JSON.stringify(render_appearance), outfit + ":" + hat, pose_key]
 	if _cache.has(key):
 		_cache_order.erase(key)
 		_cache_order.append(key)
 		return _cache[key]
 	var image := _walk_pose_image(safe_direction, walk_frame) if use_walk_source else (_atlas_pose_image(pose) if _atlas_valid else _fallback_image(pose_direction, safe_frame, safe_action))
+	var manifest_head_anchor := Vector2i.ZERO
+	var manifest_has_head_anchor := false
+	if has_manifest_frame:
+		var authored: Texture2D = animation_library.texture("traveller", safe_action, safe_direction, safe_frame, equipped)
+		if authored != null:
+			image = authored.get_image()
+			if animation_library.has_anchor("traveller", safe_action, safe_direction, safe_frame, "head", equipped):
+				manifest_head_anchor = animation_library.normalized_anchor("traveller", safe_action, safe_direction, safe_frame, "head", equipped)
+				manifest_has_head_anchor = true
 	var vertical_offset := 0 if use_walk_source else (_pose_vertical_offsets[pose] if _atlas_valid else 0)
 	var hair_hat_offset := 45 if use_walk_source else vertical_offset
 	var head_shift_x := 0
@@ -154,6 +181,9 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		var head_scale := float(_canvas_height) / _walk_scale_reference_height
 		head_shift_x = roundi(float(head_anchor.get("head_delta_x", 0.0)) * head_scale)
 		hair_hat_offset += roundi(float(head_anchor.get("head_delta_y", 0.0)) * head_scale)
+	if manifest_has_head_anchor:
+		head_shift_x = manifest_head_anchor.x - image.get_width() / 2
+		hair_hat_offset = manifest_head_anchor.y
 	var species := str(normalized_appearance.get("species", "human"))
 	var has_hair_overlay := _hair_atlas_valid and DIRECTIONS.has(safe_direction) or _diagonal_hair_valid and not DIRECTIONS.has(safe_direction)
 	var has_hat_overlay := _hat_atlas_valid and DIRECTIONS.has(safe_direction) or _diagonal_hat_valid and not DIRECTIONS.has(safe_direction)

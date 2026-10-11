@@ -29,6 +29,7 @@ var avatar_appearance: Dictionary = {"skin":"warm","species":"human","gender":"n
 var avatar_equipped: Dictionary = {"outfit":"outfit-tide","hat":"hat-none"}
 var avatar_action := ""
 var avatar_action_remaining := 0.0
+var avatar_action_elapsed := 0.0
 var last_avatar_direction := ""
 var last_avatar_frame := -1
 var last_avatar_action := ""
@@ -39,6 +40,7 @@ var points: Array[Dictionary] = []
 var component_motion: Node
 var npc_activity: Node
 var occlusion_controller: Node
+var pending_npc_interaction: Dictionary = {}
 var lamps: Array[OmniLight3D] = []
 var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
@@ -97,6 +99,7 @@ func _ready() -> void:
 	_update_sprite_grounding()
 	occlusion_controller.configure(player,camera)
 	_register_npc_activity()
+	interaction_requested.connect(_on_interaction_requested)
 	component_motion.finish_registration()
 	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
 	set_time_of_day(TimeOfDayScript.DEFAULT_PHASE)
@@ -1524,8 +1527,16 @@ func _physics_process(delta: float) -> void:
 	var walk_frame_count := int(avatar_renderer.walk_frame_count(facing)) if avatar_renderer != null else 8
 	var frame := walk_frame_for_phase(walk_distance_phase, walk_frame_count)
 	if avatar_action_remaining > 0.0:
-		avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
-		if avatar_action_remaining == 0.0: avatar_action=""
+		if avatar_is_walking:
+			# Gestures never hold a planted pose while the player translates.
+			avatar_action_remaining=0.0
+			avatar_action=""
+		else:
+			# Modal overlays pause the current pose and resume at the same phase.
+			if not blocked:
+				avatar_action_elapsed += delta
+				avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
+				if avatar_action_remaining == 0.0: avatar_action=""
 	_refresh_avatar_texture(frame)
 	camera.position=camera.position.lerp(player.position+Vector3(0,15.5,25),minf(1,delta*7))
 	_update_sprite_grounding()
@@ -1542,10 +1553,46 @@ func _physics_process(delta: float) -> void:
 			nearest=point
 
 func _process(delta: float) -> void:
-	time+=delta
+	if not blocked: time+=delta
 	if is_instance_valid(npc_activity) and npc_activity_paused!=blocked:
 		npc_activity_paused=blocked
 		npc_activity.set_activity_paused(blocked)
+	if not blocked and not pending_npc_interaction.is_empty():
+		_play_pending_npc_interaction()
+
+func _on_interaction_requested(id: String, _label: String) -> void:
+	var role := ""
+	var action := "interact"
+	match id:
+		"guide":
+			role = "ticket"
+			action = "greet"
+		"quest-001": role = "imp"
+		"quest-002": role = "announcer"
+		_: return
+	var actor_record := _npc_record_for_role(role)
+	var sprite := actor_record.get("sprite") as Sprite3D
+	var actor_root := actor_record.get("activity_root") as Node3D
+	if not is_instance_valid(sprite) or not is_instance_valid(actor_root) or not is_instance_valid(player): return
+	var target_delta := Vector2(player.global_position.x - actor_root.global_position.x, player.global_position.z - actor_root.global_position.z)
+	var direction := quantize_walk_direction(target_delta, "front")
+	pending_npc_interaction = {"sprite": sprite, "action": action, "direction": direction}
+
+func _play_pending_npc_interaction() -> void:
+	if pending_npc_interaction.is_empty() or not is_instance_valid(npc_activity): return
+	var request := pending_npc_interaction
+	pending_npc_interaction = {}
+	var sprite := request.get("sprite") as Sprite3D
+	if not is_instance_valid(sprite): return
+	match String(request.action):
+		"greet": npc_activity.greet(sprite, String(request.direction))
+		"interact": npc_activity.interact(sprite, String(request.direction))
+
+func _npc_record_for_role(role: String) -> Dictionary:
+	for actor_record in character_sprites:
+		if String(actor_record.get("role", "")) == role:
+			return actor_record
+	return {}
 
 static func quantize_walk_direction(world_delta: Vector2, previous_direction: String = "front") -> String:
 	const COMPASS := ["back", "back_right", "right", "front_right", "front", "front_left", "left", "back_left"]
@@ -1588,6 +1635,7 @@ func play_action(name: String) -> void:
 	if action not in ["wave", "photograph", "interact", "celebrate"]: return
 	avatar_action=action
 	avatar_action_remaining=0.8
+	avatar_action_elapsed=0.0
 	_refresh_avatar_texture(0)
 
 func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
@@ -1599,14 +1647,19 @@ func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
 
 func _refresh_avatar_texture(frame: int) -> void:
 	if not is_instance_valid(avatar) or avatar_renderer == null: return
-	var action := avatar_action if avatar_action_remaining > 0.0 else ("walk" if avatar_is_walking else "idle")
-	if last_avatar_direction == facing and last_avatar_frame == frame and last_avatar_action == action: return
-	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,facing,frame,action)
+	var action := avatar_action if avatar_action_remaining > 0.0 and not avatar_is_walking else ("walk" if avatar_is_walking else "idle")
+	var display_frame := frame
+	if action != "walk":
+		var animation_library = avatar_renderer.animation_library
+		if animation_library.has_frame("traveller", action, facing):
+			display_frame=animation_library.frame_for_time("traveller", action, facing, avatar_action_elapsed if action == avatar_action else time, reduced_motion)
+	if last_avatar_direction == facing and last_avatar_frame == display_frame and last_avatar_action == action: return
+	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,facing,display_frame,action)
 	var avatar_material := avatar.material_override as ShaderMaterial
 	if avatar_material != null:
 		avatar_material.set_shader_parameter("texture_albedo",avatar.texture)
 	last_avatar_direction=facing
-	last_avatar_frame=frame
+	last_avatar_frame=display_frame
 	last_avatar_action=action
 
 func set_night(value: bool) -> void:

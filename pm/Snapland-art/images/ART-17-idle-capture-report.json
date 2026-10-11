@@ -1,0 +1,514 @@
+{
+  "actors": {
+    "announcer": {
+      "categories": {
+        "emotion": "emotion_curious",
+        "greet": "greet",
+        "idle": "idle",
+        "interact": "interact",
+        "special": "special",
+        "walk": "walk"
+      },
+      "directions": {
+        "emotion_curious": [
+          "front"
+        ],
+        "greet": [
+          "front"
+        ],
+        "idle": [
+          "front"
+        ],
+        "interact": [
+          "front"
+        ],
+        "special": [
+          "front"
+        ],
+        "walk": [
+          "right",
+          "left"
+        ],
+        "walk_candidate": [
+          "front"
+        ]
+      },
+      "frame_issues": [],
+      "missing": [
+        "announcer/stance/<no matching action>",
+        "announcer/idle/right",
+        "announcer/idle/left",
+        "announcer/greet/right",
+        "announcer/greet/left",
+        "announcer/interact/right",
+        "announcer/interact/left",
+        "announcer/special/right",
+        "announcer/special/left",
+        "announcer/emotion_curious/right",
+        "announcer/emotion_curious/left",
+        "announcer/walk_candidate/right",
+        "announcer/walk_candidate/left",
+        "announcer/walk/front"
+      ],
+      "required_directions": {
+        "emotion_curious": [
+          "front",
+          "right",
+          "left"
+        ],
+        "greet": [
+          "front",
+          "right",
+          "left"
+        ],
+        "idle": [
+          "front",
+          "right",
+          "left"
+        ],
+        "interact": [
+          "front",
+          "right",
+          "left"
+        ],
+        "special": [
+          "front",
+          "right",
+          "left"
+        ],
+        "walk": [
+          "front",
+          "right",
+          "left"
+        ],
+        "walk_candidate": [
+          "front",
+          "right",
+          "left"
+        ]
+      }
+    },
+    "imp": {
+      "categories": {
+        "emotion": "emotion_proud",
+        "greet": "greet",
+        "idle": "idle_gesture",
+        "interact": "interact",
+        "special": "dance"
+      },
+      "directions": {
+        "dance": [
+          "front"
+        ],
+        "emotion_proud": [
+          "front"
+        ],
+        "greet": [
+          "front"
+        ],
+        "idle": [
+          "front"
+        ],
+        "idle_gesture": [
+          "front"
+        ],
+        "interact": [
+          "front"
+        ]
+      },
+      "frame_issues": [],
+      "missing": [
+        "imp/stance/<no matching action>",
+        "imp/walk/<no matching action>"
+      ],
+      "required_directions": {
+        "dance": [
+          "front"
+        ],
+        "emotion_proud": [
+          "front"
+        ],
+        "greet": [
+          "front"
+        ],
+        "idle": [
+          "front"
+        ],
+        "idle_gesture": [
+          "front"
+        ],
+        "interact": [
+          "front"
+        ]
+      }
+    },
+    "ticket": {
+      "categories": {
+        "emotion": "emotion_happy",
+        "greet": "greet",
+        "idle": "idle_gesture",
+        "interact": "interact"
+      },
+      "directions": {
+        "emotion_happy": [
+          "front"
+        ],
+        "greet": [
+          "front"
+        ],
+        "idle": [
+          "front"
+        ],
+        "idle_gesture": [
+          "front"
+        ],
+        "interact": [
+          "front"
+        ],
+        "walk_candidate": [
+          "front"
+        ]
+      },
+      "frame_issues": [],
+      "missing": [
+        "ticket/stance/<no matching action>",
+        "ticket/special/<no matching action>",
+        "ticket/walk/<no matching action>"
+      ],
+      "required_directions": {
+        "emotion_happy": [
+          "front"
+        ],
+        "greet": [
+          "front"
+        ],
+        "idle": [
+          "front"
+        ],
+        "idle_gesture": [
+          "front"
+        ],
+        "interact": [
+          "front"
+        ],
+        "walk_candidate": [
+          "front"
+        ]
+      }
+    },
+    "traveller": {
+      "categories": {
+        "greet": "wave",
+        "idle": "idle",
+        "interact": "interact",
+        "special": "photograph"
+      },
+      "directions": {
+        "idle": [
+          "front"
+        ],
+        "interact": [
+          "front"
+        ],
+        "photograph": [
+          "front"
+        ],
+        "wave": [
+          "front"
+        ]
+      },
+      "frame_issues": [],
+      "missing": [
+        "traveller/stance/<no matching action>",
+        "traveller/emotion/<no matching action>",
+        "traveller/walk/<no matching action>",
+        "traveller/idle/front_right",
+        "traveller/idle/right",
+        "traveller/idle/back_right",
+        "traveller/idle/back",
+        "traveller/idle/back_left",
+        "traveller/idle/left",
+        "traveller/idle/front_left",
+        "traveller/wave/front_right",
+        "traveller/wave/right",
+        "traveller/wave/back_right",
+        "traveller/wave/back",
+        "traveller/wave/back_left",
+        "traveller/wave/left",
+        "traveller/wave/front_left",
+        "traveller/photograph/front_right",
+        "traveller/photograph/right",
+        "traveller/photograph/back_right",
+        "traveller/photograph/back",
+        "traveller/photograph/back_left",
+        "traveller/photograph/left",
+        "traveller/photograph/front_left",
+        "traveller/interact/front_right",
+        "traveller/interact/right",
+        "traveller/interact/back_right",
+        "traveller/interact/back",
+        "traveller/interact/back_left",
+        "traveller/interact/left",
+        "traveller/interact/front_left"
+      ],
+      "required_directions": {
+        "idle": [
+          "front",
+          "front_right",
+          "right",
+          "back_right",
+          "back",
+          "back_left",
+          "left",
+          "front_left"
+        ],
+        "interact": [
+          "front",
+          "front_right",
+          "right",
+          "back_right",
+          "back",
+          "back_left",
+          "left",
+          "front_left"
+        ],
+        "photograph": [
+          "front",
+          "front_right",
+          "right",
+          "back_right",
+          "back",
+          "back_left",
+          "left",
+          "front_left"
+        ],
+        "wave": [
+          "front",
+          "front_right",
+          "right",
+          "back_right",
+          "back",
+          "back_left",
+          "left",
+          "front_left"
+        ]
+      }
+    }
+  },
+  "capture_action_filter": "idle",
+  "capture_only": true,
+  "capture_roles": [
+    "traveller",
+    "ticket",
+    "imp",
+    "announcer"
+  ],
+  "clip_only": true,
+  "clip_watchdog_seconds": 300.0,
+  "completed_clip_count": 8,
+  "completed_clips": [
+    {
+      "action": "idle",
+      "actor": "traveller",
+      "direction": "front",
+      "duration_seconds": 2.66666666666667,
+      "end_process_frame": 169,
+      "expected_output_frames": 160,
+      "output_frames": 160,
+      "process_frame_count": 160,
+      "recorded_duration_seconds": 2.66666666666667,
+      "source_fps": 3.0,
+      "source_frame_count": 8,
+      "source_frame_index": 7,
+      "speed": 1.0,
+      "start_process_frame": 9
+    },
+    {
+      "action": "idle",
+      "actor": "traveller",
+      "direction": "front",
+      "duration_seconds": 10.6666666666667,
+      "end_process_frame": 809,
+      "expected_output_frames": 640,
+      "output_frames": 640,
+      "process_frame_count": 640,
+      "recorded_duration_seconds": 10.6666666666667,
+      "source_fps": 3.0,
+      "source_frame_count": 8,
+      "source_frame_index": 7,
+      "speed": 0.25,
+      "start_process_frame": 169
+    },
+    {
+      "action": "idle",
+      "actor": "ticket",
+      "direction": "front",
+      "duration_seconds": 2.66666666666667,
+      "end_process_frame": 969,
+      "expected_output_frames": 160,
+      "output_frames": 160,
+      "process_frame_count": 160,
+      "recorded_duration_seconds": 2.66666666666667,
+      "source_fps": 3.0,
+      "source_frame_count": 8,
+      "source_frame_index": 7,
+      "speed": 1.0,
+      "start_process_frame": 809
+    },
+    {
+      "action": "idle",
+      "actor": "ticket",
+      "direction": "front",
+      "duration_seconds": 10.6666666666667,
+      "end_process_frame": 1609,
+      "expected_output_frames": 640,
+      "output_frames": 640,
+      "process_frame_count": 640,
+      "recorded_duration_seconds": 10.6666666666667,
+      "source_fps": 3.0,
+      "source_frame_count": 8,
+      "source_frame_index": 7,
+      "speed": 0.25,
+      "start_process_frame": 969
+    },
+    {
+      "action": "idle",
+      "actor": "imp",
+      "direction": "front",
+      "duration_seconds": 2.33333333333333,
+      "end_process_frame": 1749,
+      "expected_output_frames": 140,
+      "output_frames": 140,
+      "process_frame_count": 140,
+      "recorded_duration_seconds": 2.33333333333333,
+      "source_fps": 3.0,
+      "source_frame_count": 7,
+      "source_frame_index": 6,
+      "speed": 1.0,
+      "start_process_frame": 1609
+    },
+    {
+      "action": "idle",
+      "actor": "imp",
+      "direction": "front",
+      "duration_seconds": 9.33333333333333,
+      "end_process_frame": 2309,
+      "expected_output_frames": 560,
+      "output_frames": 560,
+      "process_frame_count": 560,
+      "recorded_duration_seconds": 9.33333333333333,
+      "source_fps": 3.0,
+      "source_frame_count": 7,
+      "source_frame_index": 6,
+      "speed": 0.25,
+      "start_process_frame": 1749
+    },
+    {
+      "action": "idle",
+      "actor": "announcer",
+      "direction": "front",
+      "duration_seconds": 2.66666666666667,
+      "end_process_frame": 2469,
+      "expected_output_frames": 160,
+      "output_frames": 160,
+      "process_frame_count": 160,
+      "recorded_duration_seconds": 2.66666666666667,
+      "source_fps": 3.0,
+      "source_frame_count": 8,
+      "source_frame_index": 7,
+      "speed": 1.0,
+      "start_process_frame": 2309
+    },
+    {
+      "action": "idle",
+      "actor": "announcer",
+      "direction": "front",
+      "duration_seconds": 10.6666666666667,
+      "end_process_frame": 3109,
+      "expected_output_frames": 640,
+      "output_frames": 640,
+      "process_frame_count": 640,
+      "recorded_duration_seconds": 10.6666666666667,
+      "source_fps": 3.0,
+      "source_frame_count": 8,
+      "source_frame_index": 7,
+      "speed": 0.25,
+      "start_process_frame": 2469
+    }
+  ],
+  "coverage_complete": false,
+  "current_clip": {},
+  "detail": "",
+  "engine_automatic_draws": 3109,
+  "engine_time_scale": 1.0,
+  "forced_draws": 3100,
+  "frame_issue_count": 0,
+  "frame_issues": [],
+  "full_animation_accepted": false,
+  "missing": [
+    "traveller/stance/<no matching action>",
+    "traveller/emotion/<no matching action>",
+    "traveller/walk/<no matching action>",
+    "traveller/idle/front_right",
+    "traveller/idle/right",
+    "traveller/idle/back_right",
+    "traveller/idle/back",
+    "traveller/idle/back_left",
+    "traveller/idle/left",
+    "traveller/idle/front_left",
+    "traveller/wave/front_right",
+    "traveller/wave/right",
+    "traveller/wave/back_right",
+    "traveller/wave/back",
+    "traveller/wave/back_left",
+    "traveller/wave/left",
+    "traveller/wave/front_left",
+    "traveller/photograph/front_right",
+    "traveller/photograph/right",
+    "traveller/photograph/back_right",
+    "traveller/photograph/back",
+    "traveller/photograph/back_left",
+    "traveller/photograph/left",
+    "traveller/photograph/front_left",
+    "traveller/interact/front_right",
+    "traveller/interact/right",
+    "traveller/interact/back_right",
+    "traveller/interact/back",
+    "traveller/interact/back_left",
+    "traveller/interact/left",
+    "traveller/interact/front_left",
+    "ticket/stance/<no matching action>",
+    "ticket/special/<no matching action>",
+    "ticket/walk/<no matching action>",
+    "imp/stance/<no matching action>",
+    "imp/walk/<no matching action>",
+    "announcer/stance/<no matching action>",
+    "announcer/idle/right",
+    "announcer/idle/left",
+    "announcer/greet/right",
+    "announcer/greet/left",
+    "announcer/interact/right",
+    "announcer/interact/left",
+    "announcer/special/right",
+    "announcer/special/left",
+    "announcer/emotion_curious/right",
+    "announcer/emotion_curious/left",
+    "announcer/walk_candidate/right",
+    "announcer/walk_candidate/left",
+    "announcer/walk/front"
+  ],
+  "missing_count": 50,
+  "movie_capture": true,
+  "movie_path": ".review/ART-17-idles-v3.avi",
+  "output_fps": 60.0,
+  "output_fps_source": "MovieWriter fixed process delta / Engine.time_scale",
+  "process_delta_seconds": 0.0166666666666667,
+  "process_frames": 3109,
+  "run_id": "36160-1286231",
+  "stage": "finished",
+  "status": "available-only",
+  "successful": true,
+  "terminal": true,
+  "visual_naturalness": "requires human GPU screenshot/video review",
+  "wardrobe_change": "not exercised (clip-only)"
+}

@@ -1,0 +1,5647 @@
+{
+  "schema_version": 1,
+  "description": "Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.",
+  "runtime_aliases": {
+    "traveller": {
+      "station_stand": "idle/front/frame_0 (same authored frame; not a separate animation)"
+    },
+    "ticket": {
+      "special": "idle_gesture/front (runtime alias; no duplicate frames)"
+    }
+  },
+  "coverage_notes": {
+    "traveller": "This manifest adds front actions only. Existing 8-direction legacy walk, 8 frames/direction, remains legacy coverage and is not counted as a complete new action set. Jump is an 8-pose front action at 12 FPS; other jump directions are not authored here.",
+    "traveller_outfit_coral": "Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.",
+    "ticket": "Walk row is only a walk_candidate pending authored validation.",
+    "imp": "42 authored cells (7x6); no frames synthesized.",
+    "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."
+  },
+  "actors": {
+    "traveller": {
+      "canvas_size": [
+        280,
+        360
+      ],
+      "reference_size": [
+        175,
+        220
+      ],
+      "feet_baseline": 346,
+      "idle": {
+        "front": {
+          "fps": 3,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                70,
+                47,
+                124,
+                183
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  181
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    70,
+                    46,
+                    125,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      61,
+                      184
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                290,
+                47,
+                123,
+                184
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  182
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    290,
+                    46,
+                    125,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      61,
+                      184
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                507,
+                47,
+                124,
+                184
+              ],
+              "anchors": {
+                "feet": [
+                  62,
+                  182
+                ],
+                "head": [
+                  62,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    507,
+                    46,
+                    126,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      62,
+                      184
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                726,
+                47,
+                124,
+                184
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  182
+                ],
+                "head": [
+                  62,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    727,
+                    46,
+                    126,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      62,
+                      184
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                938,
+                47,
+                125,
+                183
+              ],
+              "anchors": {
+                "feet": [
+                  62,
+                  181
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    941,
+                    46,
+                    126,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      62,
+                      184
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1155,
+                47,
+                126,
+                184
+              ],
+              "anchors": {
+                "feet": [
+                  63,
+                  182
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1157,
+                    46,
+                    128,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      63,
+                      184
+                    ],
+                    "head": [
+                      65,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1375,
+                47,
+                125,
+                183
+              ],
+              "anchors": {
+                "feet": [
+                  62,
+                  181
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1377,
+                    46,
+                    127,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      61,
+                      184
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1591,
+                47,
+                125,
+                184
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  182
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1593,
+                    46,
+                    127,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      61,
+                      184
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "wave": {
+        "front": {
+          "fps": 6,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                70,
+                261,
+                126,
+                187
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  185
+                ],
+                "head": [
+                  64,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    69,
+                    262,
+                    127,
+                    190
+                  ],
+                  "anchors": {
+                    "feet": [
+                      62,
+                      188
+                    ],
+                    "head": [
+                      64,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                288,
+                261,
+                125,
+                187
+              ],
+              "anchors": {
+                "feet": [
+                  63,
+                  185
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    287,
+                    261,
+                    129,
+                    190
+                  ],
+                  "anchors": {
+                    "feet": [
+                      64,
+                      188
+                    ],
+                    "head": [
+                      66,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                491,
+                263,
+                141,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  78,
+                  183
+                ],
+                "head": [
+                  71,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    489,
+                    261,
+                    144,
+                    190
+                  ],
+                  "anchors": {
+                    "feet": [
+                      79,
+                      188
+                    ],
+                    "head": [
+                      72,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                706,
+                261,
+                144,
+                188
+              ],
+              "anchors": {
+                "feet": [
+                  81,
+                  186
+                ],
+                "head": [
+                  73,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    706,
+                    261,
+                    147,
+                    190
+                  ],
+                  "anchors": {
+                    "feet": [
+                      82,
+                      188
+                    ],
+                    "head": [
+                      74,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                919,
+                261,
+                145,
+                187
+              ],
+              "anchors": {
+                "feet": [
+                  82,
+                  185
+                ],
+                "head": [
+                  74,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    919,
+                    261,
+                    147,
+                    190
+                  ],
+                  "anchors": {
+                    "feet": [
+                      83,
+                      188
+                    ],
+                    "head": [
+                      74,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1139,
+                261,
+                142,
+                187
+              ],
+              "anchors": {
+                "feet": [
+                  79,
+                  185
+                ],
+                "head": [
+                  72,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1138,
+                    261,
+                    146,
+                    191
+                  ],
+                  "anchors": {
+                    "feet": [
+                      82,
+                      189
+                    ],
+                    "head": [
+                      73,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1361,
+                261,
+                139,
+                187
+              ],
+              "anchors": {
+                "feet": [
+                  75,
+                  185
+                ],
+                "head": [
+                  70,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1360,
+                    261,
+                    144,
+                    191
+                  ],
+                  "anchors": {
+                    "feet": [
+                      78,
+                      189
+                    ],
+                    "head": [
+                      71,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1588,
+                261,
+                128,
+                187
+              ],
+              "anchors": {
+                "feet": [
+                  63,
+                  185
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1589,
+                    262,
+                    129,
+                    190
+                  ],
+                  "anchors": {
+                    "feet": [
+                      63,
+                      188
+                    ],
+                    "head": [
+                      66,
+                      2
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "photograph": {
+        "front": {
+          "fps": 5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                70,
+                476,
+                126,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  183
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    69,
+                    477,
+                    127,
+                    187
+                  ],
+                  "anchors": {
+                    "feet": [
+                      62,
+                      185
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                287,
+                476,
+                126,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  65,
+                  183
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    287,
+                    477,
+                    128,
+                    187
+                  ],
+                  "anchors": {
+                    "feet": [
+                      64,
+                      185
+                    ],
+                    "head": [
+                      66,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                504,
+                476,
+                127,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  65,
+                  183
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    503,
+                    477,
+                    129,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      66,
+                      184
+                    ],
+                    "head": [
+                      66,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                722,
+                476,
+                128,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  64,
+                  183
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    721,
+                    477,
+                    131,
+                    187
+                  ],
+                  "anchors": {
+                    "feet": [
+                      66,
+                      185
+                    ],
+                    "head": [
+                      68,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                936,
+                476,
+                127,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  66,
+                  183
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    936,
+                    477,
+                    130,
+                    187
+                  ],
+                  "anchors": {
+                    "feet": [
+                      66,
+                      185
+                    ],
+                    "head": [
+                      67,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1154,
+                476,
+                127,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  64,
+                  183
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1155,
+                    477,
+                    130,
+                    187
+                  ],
+                  "anchors": {
+                    "feet": [
+                      65,
+                      185
+                    ],
+                    "head": [
+                      67,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1373,
+                476,
+                127,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  64,
+                  183
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1373,
+                    477,
+                    129,
+                    187
+                  ],
+                  "anchors": {
+                    "feet": [
+                      64,
+                      185
+                    ],
+                    "head": [
+                      67,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1589,
+                476,
+                127,
+                185
+              ],
+              "anchors": {
+                "feet": [
+                  63,
+                  183
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1588,
+                    478,
+                    130,
+                    186
+                  ],
+                  "anchors": {
+                    "feet": [
+                      64,
+                      184
+                    ],
+                    "head": [
+                      66,
+                      2
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "interact": {
+        "front": {
+          "fps": 5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                70,
+                687,
+                126,
+                182
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  180
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    69,
+                    688,
+                    127,
+                    184
+                  ],
+                  "anchors": {
+                    "feet": [
+                      62,
+                      182
+                    ],
+                    "head": [
+                      63,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                290,
+                687,
+                135,
+                182
+              ],
+              "anchors": {
+                "feet": [
+                  62,
+                  180
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    288,
+                    688,
+                    141,
+                    184
+                  ],
+                  "anchors": {
+                    "feet": [
+                      62,
+                      182
+                    ],
+                    "head": [
+                      71,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                507,
+                687,
+                142,
+                182
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  180
+                ],
+                "head": [
+                  69,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    505,
+                    688,
+                    147,
+                    184
+                  ],
+                  "anchors": {
+                    "feet": [
+                      63,
+                      182
+                    ],
+                    "head": [
+                      72,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                726,
+                687,
+                134,
+                182
+              ],
+              "anchors": {
+                "feet": [
+                  59,
+                  180
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    726,
+                    687,
+                    136,
+                    185
+                  ],
+                  "anchors": {
+                    "feet": [
+                      60,
+                      183
+                    ],
+                    "head": [
+                      69,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                934,
+                687,
+                127,
+                182
+              ],
+              "anchors": {
+                "feet": [
+                  68,
+                  180
+                ],
+                "head": [
+                  64,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    936,
+                    688,
+                    129,
+                    184
+                  ],
+                  "anchors": {
+                    "feet": [
+                      66,
+                      182
+                    ],
+                    "head": [
+                      65,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1154,
+                687,
+                127,
+                182
+              ],
+              "anchors": {
+                "feet": [
+                  64,
+                  180
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1156,
+                    688,
+                    129,
+                    184
+                  ],
+                  "anchors": {
+                    "feet": [
+                      64,
+                      182
+                    ],
+                    "head": [
+                      65,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1374,
+                687,
+                126,
+                182
+              ],
+              "anchors": {
+                "feet": [
+                  63,
+                  180
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1374,
+                    688,
+                    129,
+                    184
+                  ],
+                  "anchors": {
+                    "feet": [
+                      63,
+                      182
+                    ],
+                    "head": [
+                      65,
+                      2
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-front-actions-v2.png",
+              "region": [
+                1591,
+                687,
+                125,
+                182
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  180
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-vest-actions-v1.png",
+                  "region": [
+                    1590,
+                    688,
+                    129,
+                    184
+                  ],
+                  "anchors": {
+                    "feet": [
+                      62,
+                      182
+                    ],
+                    "head": [
+                      64,
+                      2
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "jump": {
+        "front": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-jump-front-v1.png",
+              "region": [
+                53,
+                78,
+                174,
+                291
+              ],
+              "anchors": {
+                "feet": [
+                  87,
+                  291
+                ],
+                "head": [
+                  86,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top",
+                "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+              },
+              "source_scale": 0.656,
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-jump-front-v1.png",
+                  "region": [
+                    53,
+                    416,
+                    173,
+                    308
+                  ],
+                  "anchors": {
+                    "feet": [
+                      87,
+                      308
+                    ],
+                    "head": [
+                      87,
+                      2
+                    ]
+                  },
+                  "anchor_method": {
+                    "feet_method": "bottom_8px_two_contact_midpoint",
+                    "head_method": "central_upper_alpha_hat_hair_top",
+                    "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+                  },
+                  "source_scale": 0.656,
+                  "layers": []
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-jump-front-v1.png",
+              "region": [
+                325,
+                129,
+                178,
+                240
+              ],
+              "anchors": {
+                "feet": [
+                  88,
+                  240
+                ],
+                "head": [
+                  92,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top",
+                "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+              },
+              "source_scale": 0.656,
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-jump-front-v1.png",
+                  "region": [
+                    325,
+                    465,
+                    178,
+                    259
+                  ],
+                  "anchors": {
+                    "feet": [
+                      88,
+                      259
+                    ],
+                    "head": [
+                      91,
+                      2
+                    ]
+                  },
+                  "anchor_method": {
+                    "feet_method": "bottom_8px_two_contact_midpoint",
+                    "head_method": "central_upper_alpha_hat_hair_top",
+                    "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+                  },
+                  "source_scale": 0.656,
+                  "layers": []
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-jump-front-v1.png",
+              "region": [
+                596,
+                79,
+                175,
+                290
+              ],
+              "anchors": {
+                "feet": [
+                  93,
+                  290
+                ],
+                "head": [
+                  87,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top",
+                "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+              },
+              "source_scale": 0.656,
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-jump-front-v1.png",
+                  "region": [
+                    596,
+                    416,
+                    174,
+                    308
+                  ],
+                  "anchors": {
+                    "feet": [
+                      93,
+                      308
+                    ],
+                    "head": [
+                      87,
+                      2
+                    ]
+                  },
+                  "anchor_method": {
+                    "feet_method": "bottom_8px_two_contact_midpoint",
+                    "head_method": "central_upper_alpha_hat_hair_top",
+                    "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+                  },
+                  "source_scale": 0.656,
+                  "layers": []
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-jump-front-v1.png",
+              "region": [
+                870,
+                46,
+                178,
+                323
+              ],
+              "anchors": {
+                "feet": [
+                  120,
+                  323
+                ],
+                "head": [
+                  92,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top",
+                "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+              },
+              "source_scale": 0.656,
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-jump-front-v1.png",
+                  "region": [
+                    870,
+                    383,
+                    178,
+                    341
+                  ],
+                  "anchors": {
+                    "feet": [
+                      120,
+                      341
+                    ],
+                    "head": [
+                      92,
+                      2
+                    ]
+                  },
+                  "anchor_method": {
+                    "feet_method": "bottom_8px_joined_contact_centroid",
+                    "head_method": "central_upper_alpha_hat_hair_top",
+                    "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+                  },
+                  "source_scale": 0.656,
+                  "layers": []
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-jump-front-v1.png",
+              "region": [
+                1132,
+                46,
+                177,
+                323
+              ],
+              "anchors": {
+                "feet": [
+                  112,
+                  323
+                ],
+                "head": [
+                  90,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top",
+                "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+              },
+              "source_scale": 0.656,
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-jump-front-v1.png",
+                  "region": [
+                    1132,
+                    381,
+                    177,
+                    343
+                  ],
+                  "anchors": {
+                    "feet": [
+                      112,
+                      343
+                    ],
+                    "head": [
+                      91,
+                      2
+                    ]
+                  },
+                  "anchor_method": {
+                    "feet_method": "bottom_8px_joined_contact_centroid",
+                    "head_method": "central_upper_alpha_hat_hair_top",
+                    "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+                  },
+                  "source_scale": 0.656,
+                  "layers": []
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-jump-front-v1.png",
+              "region": [
+                1403,
+                79,
+                177,
+                290
+              ],
+              "anchors": {
+                "feet": [
+                  90,
+                  290
+                ],
+                "head": [
+                  91,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top",
+                "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+              },
+              "source_scale": 0.656,
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-jump-front-v1.png",
+                  "region": [
+                    1403,
+                    416,
+                    177,
+                    308
+                  ],
+                  "anchors": {
+                    "feet": [
+                      90,
+                      308
+                    ],
+                    "head": [
+                      91,
+                      2
+                    ]
+                  },
+                  "anchor_method": {
+                    "feet_method": "bottom_8px_two_contact_midpoint",
+                    "head_method": "central_upper_alpha_hat_hair_top",
+                    "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+                  },
+                  "source_scale": 0.656,
+                  "layers": []
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-jump-front-v1.png",
+              "region": [
+                1682,
+                129,
+                178,
+                240
+              ],
+              "anchors": {
+                "feet": [
+                  90,
+                  240
+                ],
+                "head": [
+                  92,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top",
+                "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+              },
+              "source_scale": 0.656,
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-jump-front-v1.png",
+                  "region": [
+                    1682,
+                    465,
+                    178,
+                    259
+                  ],
+                  "anchors": {
+                    "feet": [
+                      90,
+                      259
+                    ],
+                    "head": [
+                      92,
+                      2
+                    ]
+                  },
+                  "anchor_method": {
+                    "feet_method": "bottom_8px_two_contact_midpoint",
+                    "head_method": "central_upper_alpha_hat_hair_top",
+                    "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+                  },
+                  "source_scale": 0.656,
+                  "layers": []
+                }
+              }
+            },
+            {
+              "source": "res://assets/characters/traveller-jump-front-v1.png",
+              "region": [
+                1953,
+                78,
+                173,
+                291
+              ],
+              "anchors": {
+                "feet": [
+                  87,
+                  291
+                ],
+                "head": [
+                  85,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top",
+                "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+              },
+              "source_scale": 0.656,
+              "layers": [],
+              "variants": {
+                "outfit-coral": {
+                  "source": "res://assets/characters/traveller-jump-front-v1.png",
+                  "region": [
+                    1953,
+                    416,
+                    173,
+                    308
+                  ],
+                  "anchors": {
+                    "feet": [
+                      87,
+                      308
+                    ],
+                    "head": [
+                      89,
+                      2
+                    ]
+                  },
+                  "anchor_method": {
+                    "feet_method": "bottom_8px_two_contact_midpoint",
+                    "head_method": "central_upper_alpha_hat_hair_top",
+                    "feet_y_method": "shared_atlas_row_baseline_preserves_authored_vertical_pose"
+                  },
+                  "source_scale": 0.656,
+                  "layers": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ticket": {
+      "canvas_size": [
+        320,
+        460
+      ],
+      "reference_size": [
+        130,
+        200
+      ],
+      "feet_baseline": 448,
+      "idle": {
+        "front": {
+          "fps": 3,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                64,
+                10,
+                102,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  170
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                228,
+                10,
+                105,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  54,
+                  170
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                396,
+                10,
+                100,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  170
+                ],
+                "head": [
+                  49,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                561,
+                10,
+                103,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  170
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                727,
+                10,
+                103,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  170
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                893,
+                10,
+                103,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  170
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1059,
+                10,
+                102,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  170
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1224,
+                10,
+                102,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  170
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "greet": {
+        "front": {
+          "fps": 6,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                64,
+                186,
+                102,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  172
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                230,
+                187,
+                110,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  172
+                ],
+                "head": [
+                  55,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                396,
+                187,
+                113,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  172
+                ],
+                "head": [
+                  55,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                561,
+                187,
+                120,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  172
+                ],
+                "head": [
+                  58,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                727,
+                187,
+                118,
+                173
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  171
+                ],
+                "head": [
+                  57,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                894,
+                187,
+                110,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  172
+                ],
+                "head": [
+                  55,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1059,
+                186,
+                103,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1224,
+                186,
+                102,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "interact": {
+        "front": {
+          "fps": 5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                63,
+                364,
+                103,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                230,
+                366,
+                103,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  172
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                396,
+                366,
+                102,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  172
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                562,
+                367,
+                101,
+                173
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  171
+                ],
+                "head": [
+                  49,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                728,
+                365,
+                102,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                895,
+                363,
+                102,
+                177
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  175
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1060,
+                365,
+                102,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  173
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1225,
+                364,
+                102,
+                176
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  174
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "idle_gesture": {
+        "front": {
+          "fps": 3,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                62,
+                543,
+                102,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  172
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                227,
+                543,
+                103,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  172
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                394,
+                543,
+                104,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  54,
+                  172
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                561,
+                543,
+                103,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  172
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                727,
+                543,
+                102,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  54,
+                  172
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                893,
+                541,
+                102,
+                176
+              ],
+              "anchors": {
+                "feet": [
+                  54,
+                  174
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1059,
+                543,
+                102,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  172
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1224,
+                543,
+                103,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  172
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "emotion_happy": {
+        "front": {
+          "fps": 4,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                63,
+                720,
+                103,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                229,
+                720,
+                103,
+                174
+              ],
+              "anchors": {
+                "feet": [
+                  54,
+                  172
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                396,
+                720,
+                104,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                561,
+                720,
+                104,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                728,
+                720,
+                103,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                894,
+                720,
+                103,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  173
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1059,
+                720,
+                103,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1224,
+                720,
+                103,
+                175
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  173
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "walk_candidate": {
+        "front": {
+          "fps": 7,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                65,
+                898,
+                104,
+                179
+              ],
+              "anchors": {
+                "feet": [
+                  42,
+                  177
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                230,
+                899,
+                103,
+                178
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  176
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                396,
+                898,
+                103,
+                179
+              ],
+              "anchors": {
+                "feet": [
+                  40,
+                  177
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                562,
+                899,
+                103,
+                178
+              ],
+              "anchors": {
+                "feet": [
+                  69,
+                  176
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                728,
+                899,
+                103,
+                178
+              ],
+              "anchors": {
+                "feet": [
+                  40,
+                  176
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                892,
+                900,
+                104,
+                177
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  175
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1059,
+                899,
+                103,
+                178
+              ],
+              "anchors": {
+                "feet": [
+                  40,
+                  176
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                1229,
+                898,
+                104,
+                179
+              ],
+              "anchors": {
+                "feet": [
+                  40,
+                  177
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      }
+    },
+    "imp": {
+      "canvas_size": [
+        320,
+        460
+      ],
+      "reference_size": [
+        150,
+        180
+      ],
+      "feet_baseline": 448,
+      "idle": {
+        "front": {
+          "fps": 3,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                49,
+                69,
+                121,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  133
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                200,
+                68,
+                121,
+                136
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  134
+                ],
+                "head": [
+                  64,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                354,
+                68,
+                124,
+                136
+              ],
+              "anchors": {
+                "feet": [
+                  59,
+                  134
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                505,
+                69,
+                128,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  62,
+                  133
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                655,
+                69,
+                125,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  60,
+                  133
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                821,
+                70,
+                122,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  133
+                ],
+                "head": [
+                  64,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                999,
+                71,
+                122,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  54,
+                  133
+                ],
+                "head": [
+                  64,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "greet": {
+        "front": {
+          "fps": 6,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                50,
+                264,
+                120,
+                138
+              ],
+              "anchors": {
+                "feet": [
+                  51,
+                  136
+                ],
+                "head": [
+                  64,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                202,
+                263,
+                120,
+                138
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  136
+                ],
+                "head": [
+                  64,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                360,
+                262,
+                124,
+                139
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  137
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                512,
+                264,
+                125,
+                138
+              ],
+              "anchors": {
+                "feet": [
+                  57,
+                  136
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                672,
+                264,
+                125,
+                138
+              ],
+              "anchors": {
+                "feet": [
+                  57,
+                  136
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                833,
+                263,
+                124,
+                139
+              ],
+              "anchors": {
+                "feet": [
+                  56,
+                  137
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                1005,
+                264,
+                122,
+                138
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  136
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "interact": {
+        "front": {
+          "fps": 5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                52,
+                461,
+                124,
+                140
+              ],
+              "anchors": {
+                "feet": [
+                  54,
+                  138
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                200,
+                462,
+                126,
+                139
+              ],
+              "anchors": {
+                "feet": [
+                  57,
+                  137
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                360,
+                461,
+                125,
+                140
+              ],
+              "anchors": {
+                "feet": [
+                  58,
+                  138
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                515,
+                461,
+                127,
+                140
+              ],
+              "anchors": {
+                "feet": [
+                  58,
+                  138
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                672,
+                463,
+                133,
+                138
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  136
+                ],
+                "head": [
+                  69,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                837,
+                461,
+                127,
+                140
+              ],
+              "anchors": {
+                "feet": [
+                  58,
+                  138
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                1003,
+                463,
+                124,
+                139
+              ],
+              "anchors": {
+                "feet": [
+                  56,
+                  137
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "idle_gesture": {
+        "front": {
+          "fps": 3,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                53,
+                669,
+                123,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  133
+                ],
+                "head": [
+                  61,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                203,
+                661,
+                128,
+                143
+              ],
+              "anchors": {
+                "feet": [
+                  63,
+                  141
+                ],
+                "head": [
+                  71,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                361,
+                668,
+                127,
+                137
+              ],
+              "anchors": {
+                "feet": [
+                  57,
+                  135
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                516,
+                664,
+                127,
+                141
+              ],
+              "anchors": {
+                "feet": [
+                  56,
+                  139
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                679,
+                665,
+                125,
+                141
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  139
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                847,
+                666,
+                122,
+                140
+              ],
+              "anchors": {
+                "feet": [
+                  49,
+                  138
+                ],
+                "head": [
+                  60,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                1004,
+                665,
+                125,
+                139
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  137
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "emotion_proud": {
+        "front": {
+          "fps": 4,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                51,
+                861,
+                124,
+                141
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  139
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                203,
+                862,
+                128,
+                140
+              ],
+              "anchors": {
+                "feet": [
+                  60,
+                  138
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                360,
+                862,
+                127,
+                141
+              ],
+              "anchors": {
+                "feet": [
+                  60,
+                  139
+                ],
+                "head": [
+                  68,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                525,
+                863,
+                115,
+                140
+              ],
+              "anchors": {
+                "feet": [
+                  48,
+                  138
+                ],
+                "head": [
+                  57,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                675,
+                864,
+                125,
+                139
+              ],
+              "anchors": {
+                "feet": [
+                  57,
+                  137
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                838,
+                862,
+                130,
+                141
+              ],
+              "anchors": {
+                "feet": [
+                  59,
+                  139
+                ],
+                "head": [
+                  68,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                1004,
+                862,
+                125,
+                141
+              ],
+              "anchors": {
+                "feet": [
+                  56,
+                  139
+                ],
+                "head": [
+                  66,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "dance": {
+        "front": {
+          "fps": 6,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                48,
+                1064,
+                120,
+                144
+              ],
+              "anchors": {
+                "feet": [
+                  56,
+                  142
+                ],
+                "head": [
+                  64,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                204,
+                1062,
+                123,
+                148
+              ],
+              "anchors": {
+                "feet": [
+                  51,
+                  146
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                359,
+                1063,
+                131,
+                147
+              ],
+              "anchors": {
+                "feet": [
+                  71,
+                  145
+                ],
+                "head": [
+                  62,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                514,
+                1070,
+                128,
+                142
+              ],
+              "anchors": {
+                "feet": [
+                  53,
+                  140
+                ],
+                "head": [
+                  67,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                674,
+                1063,
+                126,
+                150
+              ],
+              "anchors": {
+                "feet": [
+                  71,
+                  148
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                842,
+                1062,
+                125,
+                150
+              ],
+              "anchors": {
+                "feet": [
+                  71,
+                  148
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                1005,
+                1069,
+                123,
+                141
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  139
+                ],
+                "head": [
+                  65,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      }
+    },
+    "announcer": {
+      "canvas_size": [
+        320,
+        460
+      ],
+      "reference_size": [
+        160,
+        180
+      ],
+      "feet_baseline": 448,
+      "idle": {
+        "front": {
+          "fps": 3,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                86,
+                44,
+                88,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  149
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                249,
+                45,
+                88,
+                150
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  148
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                420,
+                44,
+                86,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  42,
+                  149
+                ],
+                "head": [
+                  42,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                594,
+                45,
+                89,
+                150
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  148
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                765,
+                44,
+                88,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  149
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                939,
+                44,
+                88,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  149
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1112,
+                44,
+                88,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  42,
+                  149
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1279,
+                44,
+                87,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  42,
+                  149
+                ],
+                "head": [
+                  43,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "greet": {
+        "front": {
+          "fps": 6,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                77,
+                217,
+                93,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  49,
+                  149
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                245,
+                217,
+                91,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  46,
+                  149
+                ],
+                "head": [
+                  46,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                412,
+                217,
+                95,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  51,
+                  149
+                ],
+                "head": [
+                  46,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                578,
+                217,
+                109,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  61,
+                  149
+                ],
+                "head": [
+                  56,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                749,
+                217,
+                112,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  64,
+                  149
+                ],
+                "head": [
+                  60,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                923,
+                217,
+                109,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  63,
+                  149
+                ],
+                "head": [
+                  57,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1112,
+                217,
+                89,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  149
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1280,
+                217,
+                88,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  149
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "interact": {
+        "front": {
+          "fps": 5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                81,
+                391,
+                89,
+                154
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  152
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                247,
+                391,
+                88,
+                154
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  152
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                416,
+                391,
+                118,
+                154
+              ],
+              "anchors": {
+                "feet": [
+                  46,
+                  152
+                ],
+                "head": [
+                  53,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                593,
+                391,
+                119,
+                154
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  152
+                ],
+                "head": [
+                  53,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                765,
+                391,
+                121,
+                154
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  152
+                ],
+                "head": [
+                  53,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                939,
+                391,
+                119,
+                154
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  152
+                ],
+                "head": [
+                  53,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1111,
+                392,
+                90,
+                153
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  151
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1280,
+                392,
+                90,
+                153
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  151
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "special": {
+        "front": {
+          "fps": 5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                81,
+                570,
+                90,
+                154
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  152
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                247,
+                569,
+                88,
+                155
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  153
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                418,
+                569,
+                107,
+                155
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  153
+                ],
+                "head": [
+                  51,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                593,
+                569,
+                107,
+                155
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  153
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                765,
+                569,
+                108,
+                155
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  153
+                ],
+                "head": [
+                  52,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                940,
+                569,
+                89,
+                155
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  153
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1109,
+                569,
+                91,
+                155
+              ],
+              "anchors": {
+                "feet": [
+                  46,
+                  153
+                ],
+                "head": [
+                  46,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1279,
+                570,
+                89,
+                154
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  152
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "emotion_curious": {
+        "front": {
+          "fps": 4,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                81,
+                748,
+                89,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  149
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                246,
+                747,
+                89,
+                152
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  150
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                421,
+                747,
+                89,
+                152
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  150
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                595,
+                748,
+                90,
+                152
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  150
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                766,
+                748,
+                92,
+                152
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  150
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                941,
+                748,
+                90,
+                152
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  150
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1111,
+                748,
+                90,
+                152
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  150
+                ],
+                "head": [
+                  45,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1279,
+                748,
+                88,
+                152
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  150
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "walk_candidate": {
+        "front": {
+          "fps": 7,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                82,
+                910,
+                87,
+                148
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  146
+                ],
+                "head": [
+                  42,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                248,
+                910,
+                86,
+                148
+              ],
+              "anchors": {
+                "feet": [
+                  40,
+                  146
+                ],
+                "head": [
+                  42,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                419,
+                910,
+                87,
+                149
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  147
+                ],
+                "head": [
+                  43,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                594,
+                910,
+                86,
+                149
+              ],
+              "anchors": {
+                "feet": [
+                  45,
+                  147
+                ],
+                "head": [
+                  42,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                769,
+                910,
+                87,
+                149
+              ],
+              "anchors": {
+                "feet": [
+                  39,
+                  147
+                ],
+                "head": [
+                  43,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                942,
+                910,
+                87,
+                148
+              ],
+              "anchors": {
+                "feet": [
+                  41,
+                  146
+                ],
+                "head": [
+                  42,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1114,
+                910,
+                86,
+                149
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  147
+                ],
+                "head": [
+                  42,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                1282,
+                911,
+                86,
+                148
+              ],
+              "anchors": {
+                "feet": [
+                  42,
+                  146
+                ],
+                "head": [
+                  42,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "walk": {
+        "right": {
+          "fps": 7,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-walk-sides-v2.png",
+              "region": [
+                36,
+                132,
+                152,
+                289
+              ],
+              "anchors": {
+                "feet": [
+                  74,
+                  287
+                ],
+                "head": [
+                  81,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.54,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-walk-sides-v2.png",
+              "region": [
+                264,
+                133,
+                145,
+                288
+              ],
+              "anchors": {
+                "feet": [
+                  83,
+                  286
+                ],
+                "head": [
+                  75,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.54,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-walk-sides-v2.png",
+              "region": [
+                485,
+                134,
+                146,
+                287
+              ],
+              "anchors": {
+                "feet": [
+                  83,
+                  285
+                ],
+                "head": [
+                  75,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.54,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-walk-sides-v2.png",
+              "region": [
+                706,
+                132,
+                148,
+                289
+              ],
+              "anchors": {
+                "feet": [
+                  44,
+                  287
+                ],
+                "head": [
+                  76,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.54,
+              "layers": []
+            }
+          ]
+        },
+        "left": {
+          "fps": 7,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-walk-sides-v2.png",
+              "region": [
+                39,
+                535,
+                149,
+                286
+              ],
+              "anchors": {
+                "feet": [
+                  73,
+                  284
+                ],
+                "head": [
+                  73,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.54,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-walk-sides-v2.png",
+              "region": [
+                263,
+                535,
+                143,
+                287
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  285
+                ],
+                "head": [
+                  70,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.54,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-walk-sides-v2.png",
+              "region": [
+                484,
+                535,
+                144,
+                287
+              ],
+              "anchors": {
+                "feet": [
+                  56,
+                  285
+                ],
+                "head": [
+                  71,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.54,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-walk-sides-v2.png",
+              "region": [
+                705,
+                535,
+                145,
+                287
+              ],
+              "anchors": {
+                "feet": [
+                  97,
+                  285
+                ],
+                "head": [
+                  71,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.54,
+              "layers": []
+            }
+          ]
+        }
+      }
+    }
+  }
+}

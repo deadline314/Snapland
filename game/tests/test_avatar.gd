@@ -20,6 +20,24 @@ func _initialize() -> void:
 	var base: Texture2D = renderer.texture(appearance, equipped)
 	assert(base != null and base.get_height() > 0, "avatar renderer returns a usable default texture")
 	assert(base == renderer.texture(appearance, equipped), "identical poses reuse the bounded texture cache")
+	assert(renderer.animation_library.has_frame("traveller", "idle", "front"), "the real animation manifest provides traveller front idle frames")
+	var authored_idle_first: Texture2D = renderer.texture(appearance, equipped, "front", 0, "idle")
+	var authored_idle_blink: Texture2D = renderer.texture(appearance, equipped, "front", 4, "idle")
+	assert(_image_data(authored_idle_first) != _image_data(authored_idle_blink), "manifest idle frame 0 and blink frame 4 render distinct authored poses")
+	assert(renderer.walk_frame_count("front") == 8, "manifest idle does not replace the compatible eight-frame legacy walk")
+	var authored_tide: Texture2D = renderer.animation_library.texture("traveller", "idle", "front", 0, equipped)
+	var authored_coral: Texture2D = renderer.animation_library.texture("traveller", "idle", "front", 0, {"outfit":"outfit-coral"})
+	assert(authored_tide != null and authored_coral != null and _image_data(authored_tide) != _image_data(authored_coral), "real manifest's outfit-coral variant loads and replaces the traveller body cel")
+	assert(renderer.has_authored_action("jump", "front") and renderer.authored_frame_count("jump", "front") == 8 and is_equal_approx(renderer.authored_action_fps("jump", "front"), 12.0), "renderer exposes the authored jump frame count and cadence")
+	var jump_frames: Array[PackedByteArray] = []
+	for frame_index in range(renderer.authored_frame_count("jump", "front")):
+		var jump_pose: Texture2D = renderer.texture(appearance, equipped, "front", frame_index, "jump")
+		assert(jump_pose != null and _opaque_pixels(jump_pose) > 5000, "jump pose %d retains appearance and visible authored pixels" % frame_index)
+		jump_frames.append(_image_data(jump_pose))
+	assert(_unique_bytes(jump_frames) == 8, "renderer selects all eight distinct jump poses without clamping to three frames")
+	var coral_jump: Texture2D = renderer.texture(appearance, {"outfit":"outfit-coral", "hat":"hat-none"}, "front", 7, "jump")
+	assert(coral_jump != null and _image_data(coral_jump) != jump_frames[7], "renderer selects the coral jump variant while preserving avatar appearance processing")
+	assert(renderer.texture(appearance, equipped, "front", 7, "jump") == renderer.texture(appearance, equipped, "front", 7, "jump"), "repeated jump frame requests reuse the composed appearance texture cache")
 
 	var directions := ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]
 	var pose_images: Array[PackedByteArray] = []
@@ -32,8 +50,12 @@ func _initialize() -> void:
 		var idle_pose: Texture2D = renderer.texture(appearance, equipped, direction, 0, "idle")
 		assert(idle_pose != null and _opaque_pixels(idle_pose) > 5000, "every idle heading retains visible source pixels")
 		foot_rows.append(_last_opaque_row(idle_pose))
-		assert(idle_pose == renderer.texture(appearance, equipped, direction, frame_count - 1, "idle"), "idle holds its metadata-selected pose independent of the walk phase")
-		assert(_image_data(idle_pose) == _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "idle uses the authored contact/hold cel selected by its direction metadata")
+		var manifest_idle_count: int = renderer.animation_library.frame_count("traveller", "idle", direction)
+		if manifest_idle_count > 0:
+			assert(_image_data(idle_pose) != _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "manifest idle uses authored pose art instead of the legacy walk hold cel")
+		else:
+			assert(idle_pose == renderer.texture(appearance, equipped, direction, frame_count - 1, "idle"), "legacy idle holds its metadata-selected pose independent of the walk phase")
+			assert(_image_data(idle_pose) == _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "legacy idle uses the authored contact/hold cel selected by its direction metadata")
 		var frames: Array[PackedByteArray] = []
 		for frame in range(frame_count):
 			var pose: Texture2D = renderer.texture(appearance, equipped, direction, frame, "walk")
@@ -56,7 +78,8 @@ func _initialize() -> void:
 	assert(pose_images[1] != pose_images[0] and pose_images[7] != pose_images[0], "both front diagonals retain authored perspective rather than cardinal reuse")
 	assert(_image_data(renderer.texture(appearance, equipped, "front", 0, "walk")) != _image_data(renderer.texture(appearance, equipped, "front", 1, "walk")), "walking changes authored cel instead of repeating a two-frame toggle")
 	assert(pose_images[0] != _image_data(renderer.texture(appearance, equipped, "front", 0, "wave")), "wave action differs from the authored idle pose")
-	assert(renderer.texture(appearance, equipped, "front_right", 0, "wave") == renderer.texture(appearance, equipped, "front", 0, "wave"), "diagonal gesture pose intentionally falls back to nearest authored cardinal action")
+	var diagonal_wave: Texture2D = renderer.texture(appearance, equipped, "front_right", 0, "wave")
+	assert(not renderer.animation_library.has_frame("traveller", "wave", "front_right") and _opaque_pixels(diagonal_wave) > 5000, "uncovered diagonal wave remains an explicit legacy fallback, not claimed manifest coverage")
 	for row in foot_rows:
 		assert(absi(row - 346) <= 1, "all directions and actions stay within one output pixel of the common foot baseline: %s" % str(foot_rows))
 
@@ -67,11 +90,20 @@ func _initialize() -> void:
 	changed_equipped.hat = "hat-straw"
 	var straw_hat: Texture2D = renderer.texture(appearance, changed_equipped)
 	assert(_image_data(base) != _image_data(straw_hat), "hat changes avatar pixels")
-	assert(_region_difference_count(base, straw_hat, Rect2i(45, 38, 190, 10)) > 0, "straw crown begins at the new source head instead of floating above it")
+	var authored_head: Vector2i = renderer.animation_library.normalized_anchor("traveller", "idle", "front", 0, "head", equipped)
+	var straw_head: Vector2i = renderer.animation_library.normalized_anchor("traveller", "idle", "front", 0, "head", changed_equipped)
+	# The fixed y=38 probe belonged to earlier source art. Read the current authored head anchor instead.
+	var crown_probe := Rect2i(authored_head.x - 95, authored_head.y - 8, 190, 20)
+	var hat_envelope := Rect2i(authored_head.x - 110, authored_head.y - 6, 220, 65)
+	assert(straw_head == authored_head and _region_difference_count(base, straw_hat, crown_probe) > 0, "straw crown adds pixels immediately around the current authored source head without moving its anchor")
+	assert(_last_opaque_row(base) == _last_opaque_row(straw_hat), "adding the straw hat leaves the authored feet baseline unchanged")
+	assert(_difference_outside_region_count(base, straw_hat, hat_envelope) == 0, "straw hat changes pixels only within its head-anchored overlay envelope")
 	assert(_region_difference_count(base, straw_hat, Rect2i(80, 126, 120, 54)) == 0, "straw brim stays above the new front eye and face landmarks")
 	changed_equipped.hat = "hat-sailor"
 	var sailor_hat: Texture2D = renderer.texture(appearance, changed_equipped)
-	assert(_region_difference_count(base, sailor_hat, Rect2i(45, 38, 190, 10)) > 0, "sailor crown begins at the new source head instead of floating above it")
+	assert(renderer.animation_library.normalized_anchor("traveller", "idle", "front", 0, "head", changed_equipped) == authored_head and _region_difference_count(base, sailor_hat, crown_probe) > 0, "sailor crown uses the same current source head without moving its anchor")
+	assert(_last_opaque_row(base) == _last_opaque_row(sailor_hat), "adding the sailor hat leaves the authored feet baseline unchanged")
+	assert(_difference_outside_region_count(base, sailor_hat, hat_envelope) == 0, "sailor hat changes pixels only within its head-anchored overlay envelope")
 	assert(_region_difference_count(base, sailor_hat, Rect2i(80, 126, 120, 54)) == 0, "sailor brim stays above the new front eye and face landmarks")
 
 	var changed_appearance := appearance.duplicate()
@@ -139,6 +171,15 @@ func _probe_world_integration() -> void:
 	world.blocked = true
 	world._unhandled_key_input(wave_key)
 	assert(world.avatar_action == "photograph", "blocked modal input cannot replace an avatar action")
+	var paused_action_time: float = world.avatar_action_elapsed
+	var paused_idle_time: float = world.time
+	for _step in range(2): await physics_frame
+	assert(world.avatar_action == "photograph" and is_equal_approx(world.avatar_action_elapsed, paused_action_time) and is_equal_approx(world.time, paused_idle_time), "modal freeze preserves action and idle animation phases")
+	world.blocked = false
+	Input.action_press("move_right")
+	for _step in range(5): await physics_frame
+	Input.action_release("move_right")
+	assert(world.avatar_action.is_empty(), "walking cancels a gesture so its planted pose never slides")
 	world.queue_free()
 	print("PASS: avatar runtime checks")
 	quit(0)
@@ -201,4 +242,15 @@ func _region_difference_count(first: Texture2D, second: Texture2D, region: Rect2
 	for y in range(region.position.y, mini(region.end.y, first_image.get_height())):
 		for x in range(region.position.x, mini(region.end.x, first_image.get_width())):
 			if first_image.get_pixel(x, y) != second_image.get_pixel(x, y): count += 1
+	return count
+
+func _difference_outside_region_count(first: Texture2D, second: Texture2D, allowed: Rect2i) -> int:
+	var first_image := first.get_image()
+	var second_image := second.get_image()
+	var count := 0
+	for y in range(first_image.get_height()):
+		for x in range(first_image.get_width()):
+			if allowed.has_point(Vector2i(x,y)):
+				continue
+			if first_image.get_pixel(x,y) != second_image.get_pixel(x,y): count += 1
 	return count

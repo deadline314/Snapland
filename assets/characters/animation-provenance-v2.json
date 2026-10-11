@@ -1,0 +1,134 @@
+{
+  "tool": "built-in image generation",
+  "date": "2026-10-12",
+  "policy": "Source PNGs are copied unchanged; runtime alpha region cropping/compositing uses metadata. Prompt intent is not proof of anatomy, identity or motion quality.",
+  "entries": [
+    {
+      "output": "traveller-front-actions-v2.png",
+      "source": "exec-33fdf555-cb5a-4ac1-8299-f9ecb4d5f742.png",
+      "prompts": [
+        {
+          "stage": "hero_actions_prompt",
+          "text": "Production pixel-game animation sprite sheet, editing only the CAMERA TRAVELLER from the game's own approved reference sheet (Image 1). Retain EXACT identity: angular ink-blue hair with a small cream forelock on the same side, narrow skeptical eyebrows, modest eyes, the exact head-to-body proportions of the complete standing reference, without making the legs or head longer, sea-teal jacket with one coral repaired cuff, cream shorts, brown work boots, brick-red camera on chest strap, brown side satchel. Do not draw any other subject from the reference. Make a precise EIGHT-COLUMN by FOUR-ROW grid, thirty-two COMPLETE FULL BODY cels, front-facing throughout. All bodies identical height and head size, fixed sole baseline within every equal-sized cell, generous transparent gutters and safety margins above hair and below both boots. Both legs, feet, hands, hair and accessories stay fully in their own cell. Each row is ONE coherent cyclic action with eight consecutive poses LEFT TO RIGHT, complete anticipation, action, follow-through, return. Row1 independent standing idle: both feet planted, relaxed asymmetrical stance, subtle chest/shoulder breathing, brief blink at poses4/5, then return; NOT a walking stride. Row2 greeting: right hand moves from side to raised modest wave, wrist wave then lowers back to stance, opposite hand rests on camera strap. Row3 photography: both hands lift red camera from chest to eye, head inclines, shutter release, lower camera to chest, return to stance; keep fingers plausible and the camera connected to hands. Row4 interaction: small anticipation then hand reaches to accept a boarding ticket, slight body inclination, retract to stance; no huge lean or foot movement. DO NOT translate, scale, stretch, mirror, rotate shoes or change costume between cels. Small stance changes should be authored anatomy, not wobbling cutout pieces. Clear ink-blue pixel outlines, clean connected pixel clusters, restrained material shadows, same palette as reference. Neutral uniform sprite lighting, no cast shadow or environment. Exact32subjects and grid, no text/labels/dividers. Truly transparent background."
+        },
+        {
+          "stage": "hero_padding_prompt",
+          "text": "Edit this SAME 8-column by 4-row transparent animation sheet. Preserve every existing character, identity, pose order, outfit, expression and pixel artwork. Change ONLY layout and safety spacing: zoom all thirty-two complete full-body subjects down uniformly to occupy at most 78 percent of their equal-sized cell height, centered horizontally, leaving at least 10 percent transparent padding at both the top and bottom of EVERY cell, including all outer edges of the sheet. Keep each row's feet on the same baseline. Ensure boots, hair and fingertips are entirely visible and NEVER touch the cell boundary; there must be clear transparent gutters between every row and column. Do not redraw or omit any boot, arm, hand, hair tip, camera or bag. Eight cels per row and four rows exactly. No background, text, dividers, shadows, frames or borders. True transparency. Keep exact32 cels and current detailed pixel style; this edit fixes only clearance and even grid spacing."
+        }
+      ],
+      "review": "32 source cells; front idle/wave/photograph/interact. Visual normal/slow acceptance pending.",
+      "sha256": "f5c6aab2fb73076047589e9135aacf95fe5f1a617ebfda42f6f090759bea031e",
+      "actual_dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "output": "ticket-front-actions-v2.png",
+      "source": "exec-7a936bac-0d5e-4966-81c6-d8b19a872a8b.png",
+      "prompts": [
+        {
+          "stage": "npc_ticket_prompt",
+          "text": "Create an original production animation sheet of ONLY the brown-haired round-glasses blue-sweater character shown in row1 of Image1 and row3column2 of Image2. Preserve this exact character's physique, brown hair shape, narrow thoughtful eyebrows, round glasses, blue sweater with cream wave emblem, cream shorts, brown leather satchel across chest and brown work boots. This is Snapland's ticket attendant, gentle and observant. SIX rows by EIGHT columns, forty-eight full-body animation cels, front-facing throughout. Every identical-sized cel has at least 12 percent transparent margins above hair/below boots and clear gutters; subjects occupy at most75 percent cell height. Exact same stature and complete anatomy throughout. Each row shows one eight-cel action left to right: row1 quiet standing idle with relaxed planted feet, light shoulder breathing and one blink (distinct neutral stance, no tray); row2 a modest greeting wave, hand from rest up through wave then back; row3 takes a small cream ticket in hand, glances down, stamps/checks it, offers it forward, returns to stand; row4 occasional adjustment of glasses with one hand, thoughtful head tilt and return; row5 happy reaction, restrained open smile and small nod, returning toneutral; row6 front-facing walking two-step cycle with opposite arms, real left/right boot contact, down, passing and rise, return. Camera fixed, no entire-sprite wobble/stretch, no rotated shoe cutouts. Props connected to hands, fingers plausible. Torso, hair, satchel and costume stay consistent. Detailed clean pixel clusters, ink-blue contours, teal/coral/cream/ochre game's palette, uniformneutral sprite lighting. True transparency, no shadows, environment, captions, numbers, lines or panels. Show ALL48 COMPLETE characters including feet/hair/fingers fully inside their individual cells."
+        }
+      ],
+      "review": "48 source cells. Last row exploratory walk_candidate, not accepted walk.",
+      "sha256": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1",
+      "actual_dimensions": [
+        1448,
+        1086
+      ]
+    },
+    {
+      "output": "imp-front-actions-v2.png",
+      "source": "exec-40bc3cf3-8ed2-4476-a6b1-208669b01787.png",
+      "prompts": [
+        {
+          "stage": "npc_imp_prompt",
+          "text": "Original game animation sheet of ONLY the coral imp from Image1 row2column3, with Image2 row2 as action reference. Lock approved identity: wedge-shaped face, narrow mischievous eyes and raised eyebrow, crooked toothy grin; one short chipped cream horn on viewer LEFT and one longer bent cream horn on viewer RIGHT, unequal pointed ears with ink-blue interiors; cream belly, teal scarf, kinked arrow tail curling to viewer RIGHT. Preserve horn sizes and sides EVERY cel, never mirror them. This is the SAME imp, not dozens of different demons. EIGHT columns SIX rows,48 fully visible fullbody sequential animation cels, fixed frontview, neutral sprite lighting. Subjects occupy at most72% each equal cell height, 12%transparent safety around hair/horns/feet/tail, even gutters and consistent groundbaseline. Row1 a quiet mischievous standing idle, both feet planted, gentle breathing, blink, small tailtip followthrough, return. Row2 playful one-hand greeting: anticipatory tilt, modest raised hand wave, hand lowers to rest. Row3 presents a small original cream photo-ticket between two hands at chest, extends toward viewer, returns to stance; one connected ticket, two hands. Row4 occasional curious headtilt and scarf adjustment, lowkey stance to gesture andback. Row5 proud happy reaction with crooked smile, slight shouldersrise, soft nod then rest; keep asymmetric horns. Row6 a short complete dance flourish with anticipation, two alternating side steps and arm swing, both feet then settle to original standing pose; this is finite special action, not perpetual idle. Each row8 meaningful consecutiveposes including return, no rigidbodyrotations/scaling, no separatedlegpieces or rotatedbootcutouts. Correcttwoarms/twolegs, coherent feet and hands, no body partcut bycellorpage. Detailed authored pixelclusters, dark ink-blue contour, restrained coral/teal/cream palette ofreference; no glossy painting, dots/noise/effects/letters/grid/labels/background/shadow. True transparent background."
+        },
+        {
+          "stage": "npc_imp_padding_prompt",
+          "text": "Edit layout ONLY of this SAME transparent imp animation sheet. Preserve its actual SEVEN columns and SIX rows (forty-two complete subjects), every pose, character identity, horn asymmetry, expressions and costume. Uniformly reduce all subjects within their own equally sized cells to at most72 percent cell height/width, center each cell, with visibly generous transparent margins on EVERY side and outside the whole sheet. Tail arrows, horn tips, fingers and both feet must all have at least12px true transparent clearance from cell boundaries and image edges, especially the rightmost tail tips. Preserve all42 poses exactly, do not add or remove poses, do not mirror any character. No text, dividers, background, fakecheckerboard or shadows. Keep original detailed pixel-art appearance and true transparency. This revision fixes only framing and even transparent gutters."
+        }
+      ],
+      "review": "42 source cells, 7x6 not requested 8x6; no synthetic frames.",
+      "sha256": "03a7f332575cb919c4ecd2df567d091192632512d9d94569615799286ee2a4cf",
+      "actual_dimensions": [
+        1182,
+        1330
+      ]
+    },
+    {
+      "output": "announcer-front-actions-v2.png",
+      "source": "exec-f317e098-b526-441b-ba21-08bfbad07623.png",
+      "prompts": [
+        {
+          "stage": "npc_announcer_prompt",
+          "text": "Production detailed pixel-game animation sheet of ONLY the yellow raincoat sailor from Image1 row3column3 and Image2 row3. Preserve original identity exactly: brown side-swept hair, off-white sailor cap with blue anchor on front, slender understated face and eyebrows, yellow buttoned raincoat, teal shorts, cream/blue striped shirt, yellow rubber boots. Young adult proportions as approved reference, not a new mascot. EIGHT columns SIX rows,48 fullbodycels, front-facing throughout. Characters occupy no more than72% of each equal cell height/width, with generous actualtransparent outer margins and gutters; both boots and cap alwayscomplete. Everyrow is one coherent eightcelaction left-to-right, fixedhead/body size and grounding: row1 independently authored neutral standing idle, hands relaxed, quiet shoulderbreath and one natural blink, not a paused walkingstride; row2 unhurried greeting/salute, handto capbrim then soft wave and backto rest; row3 points toward route, small anticipatory armraise, clear pointing direction, lowershand, return; row4 occasionally takes a small brass telescope fromcoat, lifts with bothhands to look toward harbour, lowers/stows thenrest; row5 curious surprise, slight browraise and restrained headtilt then warm reassuring smile andrest; row6 slow two-step frontview walk, true alternating left andright footcontact/down/passing/up phases, softcoathemfollowthrough, no running. Exactsame cap and anchor orientation, bootssize, hair/costume across all48. Twoarms/twolegs, realistic connectedhands andprops, no missingfeet, flippedshoepieces, wholebodywarping or alternatingnewfaces. Ink-blue stepped outlines, thoughtful pixelclusters, modestshadows, same yellow/teal/cream/brown asreference. Neutrallighting, no floor/shadow/effects/labels/gridlines/background. True transparency."
+        }
+      ],
+      "review": "48 source cells; final padding edit prompt was not retained verbatim. Last row walk_candidate only.",
+      "sha256": "a52161de3875889cbcedc7557e23310abf515bb1ff8815b62a3e591bfc7e9c40",
+      "actual_dimensions": [
+        1448,
+        1086
+      ]
+    },
+    {
+      "output": "traveller-vest-actions-v1.png",
+      "source": "exec-78ff1272-08c9-4577-8619-17d4fad02010.png",
+      "prompts": [
+        {
+          "stage": "traveller_vest_prompt",
+          "text": "Edit this original Snapland traveller animation atlas into an alternate purchased costume, preserving all 32 exact full-body poses, the same eight columns and four separated rows, identical figure positions, scale and timing, and identical camera, satchel, boots, shorts, skin, cream forelock and ink-blue hair. Change only the upper-body costume: replace the sea-teal long-sleeved jacket with a coral-red short fisherman's vest with two square cream pockets over a cream shirt with rolled sea-teal cuffs. Give the vest a clear short waist-length hem, visible cream sleeves, brass buttons and teal lining. Keep each hand and elbow in its exact original pose; vest/shirt folds follow those poses and overlap beneath hands, camera strap and satchel strap. The alternate costume must visibly have a different silhouette from the long-sleeved jacket. Do not change the faces, hair or body anatomy. Row 1 idle 8, row 2 wave 8, row 3 camera 8, row 4 hand-over ticket 8. Every cell complete and widely separated; preserve generous transparent outer margins and gutters. No missing fingers or boot soles, no arms detached, no extra props. Precise detailed pixel style of reference; no smooth illustration, gradients or noisy textures. True transparent background. Do not add poses or reorder any frame."
+        }
+      ],
+      "review": "32 full-pose costume frames, not independent clothing layer; all-direction sync incomplete.",
+      "sha256": "07f99279be3810b0544b7b2ba01e7668c13bec68578397008c95290f0bb7c9d9",
+      "actual_dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "output": "announcer-walk-sides-v2.png",
+      "source": "exec-e1494ee3-fdc4-46f3-b383-7c586dd0fbb5.png",
+      "prompts": [
+        {
+          "stage": "ann_walk_v2_prompt",
+          "text": "Create an original game sprite sheet using the attached Snapland sailor girl ONLY as design reference. Keep identical chestnut side-swept hair, ivory sailor cap with a navy anchor, yellow open raincoat, navy/ivory horizontal striped shirt, teal shorts, yellow ankle boots, same young proportions. Transparent background, crisp deliberate high-detail pixel clusters, restricted warm harbor palette. No glows, sparkle, watercolor, red fringe, outline spatter, scenery, ground shadows or writing. Exactly TWO ROWS and EIGHT COLUMNS, 16 whole-body sprites, wide transparent gutters, at least 25 pixels transparent clearance all sides of every cap/hand/coat/boot. One cell per pose, identical scale and ground baseline. ROW 1: strict RIGHT SIDE PROFILE walking cycle, face shows ONLY one eye and nose points RIGHT; torso/hips/shirt/boots all profile, no front-facing chest. Eight clearly distinct key poses in order: right foot forward heel contact / weight down right knee bent / left foot passing under hip / weight rising left knee forward / left foot forward heel contact / weight down left knee bent / right foot passing / weight rising right knee forward. Walking arms swing opposite legs, natural short stride, knees attached, boots connected and distinct soles, coat hem slightly trails. ROW 2: same physical eight poses strict LEFT SIDE PROFILE, nose left, one eye, no 3/4 front. Do not recycle a single stand pose into eight copies. Boots must visibly alternate contact, passing, lifted recovery. Every full character complete inside its cell. Uniform ambient sprite light; no forced shiny rendering. This is a production animation study, not illustration."
+        }
+      ],
+      "review": "16 source cells but second four per row repeat the first four pose types. Only first four per direction proposed for runtime; not 8 distinct authored walk keys. Root inspected source, native motion pending.",
+      "sha256": "70a83037802218e67061fcc3504b3266e7ea66478df33d1232b70fe9487c65a0",
+      "actual_dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "output": "traveller-jump-front-v1.png",
+      "source": "exec-35f5516d-d5f7-4ee6-beef-22df4a2009c5.png",
+      "prompts": [
+        {
+          "stage": "hero_jump_prompt_v1",
+          "text": "Edit the referenced Snapland protagonist sprite sheets to produce ONE production pixel-art sprite sheet for a short FRONT-VIEW JUMP action. Preserve exactly this particular character's recognizable angular navy forelock, the single cream hair streak above the right eyebrow, peach skin, eyebrow and eye shapes, teal jacket with coral elbow patch, cream shorts, chunky brown boots, coral camera with navy circular lens on chest, brown satchel on his left side (viewer right), and the second reference's coral fisherman vest outfit. Keep the clean dense pixel clusters of the reference, limited shared navy/teal/coral/cream/ochre palette, no brush grain, no smooth illustrated highlights, no text or props. This is not concept art: 16 full-body sprite frames total in EXACTLY EIGHT columns and TWO rows with wide transparent gutters, no overlapping silhouettes, all hair, fingers, boots, satchel and straps wholly inside each cell with at least 24 pixels clearance. Row 1 eight full-body jump poses wearing the ORIGINAL TEAL JACKET. Row 2 the exact same eight poses at the same size and placement wearing the CORAL FISHERMAN VEST. Pose timing left to right: 1 neutral planted feet holding the chest camera; 2 anticipation squat, flex both knees naturally, shoulders down, hands protect camera; 3 push-off straightening knees, heels lifting; 4 ascending with both knees gently tucked, satchel lagging down; 5 apex with natural tucked legs and relaxed elbows; 6 descending with legs extending toward landing, satchel slightly up; 7 landing with both knees flexed and boots touching the implied ground; 8 recover to exact neutral pose matching frame1. Draw real anatomical changes in the ENTIRE character for each pose, coherent hips/knees/ankles and opposite balanced limbs. Never invent extra arms or legs, never rotate isolated shoes or detach knees, never change the camera, haircut, eye style or outfit between poses. Camera stays strapped at the chest; both hands protect it through action. Frame 1 and 8 match identity and stance; pose4 and5 must visibly be airborne with knees bent, not a standing silhouette translated. Maintain a uniform anatomical scale across all cells, a fixed invisible ground pivot and head reference, no frame-to-frame zoom. Leave generous room above hair and below grounded soles. Do not add ground, shadows, labels, checkerboard, borders or background. Output transparent RGBA."
+        }
+      ],
+      "review": "16 source cells; 8 front jump poses each for teal jacket and coral vest. Strong alpha outer margins L55/T48/R48/B32; source viewed, runtime normal/slow and consistency acceptance pending.",
+      "actual_dimensions": [
+        2172,
+        724
+      ],
+      "sha256": "9172feeb85e6a7a1d392e42d6d0f9c7a57e439db38c35172cd7d3e66233592b0"
+    }
+  ],
+  "rejected": [
+    {
+      "source": "exec-db1c2675-54ec-48f0-b1f2-4f594fbcfd61.png",
+      "prompt": "Create an authored full-body sprite animation sheet for this exact original Snapland yellow-raincoat sailor NPC. Reference is identity/style only. TWO rows, EIGHT frames per row, exactly sixteen separate whole figures on transparent background. Row 1: complete side-view walk cycle facing RIGHT (face/nose, knees and toes point right). Row 2: complete side-view walk cycle facing LEFT (face/nose, knees and toes point left), independently drawn, not mirrored. Consistent creamy sailor cap with ink anchor, chestnut hair, yellow open raincoat, striped cream/teal shirt, teal shorts, yellow boots, proportions and pixel outlines. Each row follows eight DISTINCT stages in order: 1 contact front leg heel strike/back leg toe push; 2 down weight on planted front boot bent knee/back foot lifts; 3 passing swing knee beneath hip with planted support boot; 4 up swing boot reaches forward before contact; 5 opposite contact; 6 opposite down; 7 opposite passing; 8 opposite up. Natural connected hip, knee and ankle, torso subtle rise/fall, opposing arms, raincoat tails lag one phase. Both legs must remain visibly attached to pelvis. Keep individual fore/aft boot silhouettes readable. No gliding, scissor-straight legs, detached feet, identical standing frames, huge lunges, running or turnaround. Pixel game art matching reference, no new costume/face variants. Same body scale all frames; centered shared foot baseline with wide transparent gutters and outer margins, both boot soles and cap entirely visible. No labels, no shadow blobs, no text. Exactly 2 rows of 8 whole poses.",
+      "reason": "Root inspected; 3/4 front instead of profile, repeated poses and fringe. Not integrated."
+    }
+  ]
+}
