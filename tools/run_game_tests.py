@@ -38,7 +38,13 @@ def main() -> int:
             ("clean project import", [executable, "--headless", "--editor", "--path", str(ROOT), "--rendering-method", "gl_compatibility", "--import", "--quit"]),
             ("game startup", common + ["--", "--smoke-test"]),
             ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
+            ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),
+            ("avatar runtime tests", common + ["--script", "res://game/tests/test_avatar.gd"]),
+            ("wardrobe UI tests", common + ["res://game/tests/test_wardrobe_ui.tscn"]),
+            ("component animation tests", common + ["--script", "res://game/tests/test_component_animation.gd"]),
+            ("building occlusion tests", common + ["--script", "res://game/tests/test_occlusion.gd"]),
             ("welcome minigame tests", common + ["--script", "res://game/tests/test_minigames.gd"]),
+            ("balloon delivery tests", common + ["--script", "res://game/tests/test_balloon.gd"]),
             ("story runtime tests", common + ["--script", "res://game/tests/test_story.gd"]),
             ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
             ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
@@ -47,6 +53,11 @@ def main() -> int:
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
             try:
                 result = subprocess.run(command, cwd=ROOT, env=env, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=90)
+            except subprocess.TimeoutExpired as error:
+                def decoded(value: str | bytes | None) -> str:
+                    return value.decode("utf-8", errors="replace") if isinstance(value, bytes) else (value or "")
+                output = decoded(error.stdout) + "\n" + decoded(error.stderr)
+                return fail(f"{label} timed out after 90 seconds:\n{output.strip()[-6000:]}")
             except (OSError, subprocess.SubprocessError) as error:
                 return fail(f"{label} could not run: {error}")
             if result.returncode:
@@ -59,7 +70,13 @@ def main() -> int:
             pass_markers = {
                 "game startup": "PASS: game startup and clean shutdown",
                 "core runtime tests": "PASS: core runtime checks",
+                "wardrobe runtime tests": "PASS: wardrobe runtime checks",
+                "avatar runtime tests": "PASS: avatar runtime checks",
+                "wardrobe UI tests": "PASS: wardrobe UI runtime checks",
+                "component animation tests": "PASS: component animation runtime checks",
+                "building occlusion tests": "PASS: occlusion controller runtime checks",
                 "welcome minigame tests": "PASS: welcome minigame checks",
+                "balloon delivery tests": "PASS: balloon delivery checks",
                 "story runtime tests": "PASS: story runtime checks",
                 "audio runtime tests": "PASS: audio runtime checks",
                 "main scene integration tests": "PASS: main scene integration checks",

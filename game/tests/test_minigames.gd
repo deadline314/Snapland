@@ -58,6 +58,7 @@ func _test_balloon_boundaries() -> void:
 	var bad := _new_session("game-001", true)
 	var bad_results: Array[Dictionary] = []
 	bad.finished.connect(func(value: Dictionary): bad_results.append(value))
+	_key(bad, KEY_ENTER)
 	Input.action_press("ui_up")
 	var start_y: float = bad.p.y
 	bad._process(0.05)
@@ -392,6 +393,12 @@ func _key(session: Control, code: Key) -> void:
 	event.pressed = true
 	session._unhandled_input(event)
 
+func _key_release(session: Control, code: Key) -> void:
+	var event := InputEventKey.new()
+	event.keycode = code
+	event.pressed = false
+	session._unhandled_input(event)
+
 
 
 
@@ -404,12 +411,24 @@ func _test_all_modes() -> void:
 			var rhythm: Array[int] = [KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_RIGHT, KEY_LEFT, KEY_SPACE, KEY_LEFT, KEY_RIGHT]
 			var last_cycle := -1
 			var waypoint := 0
+			var balloon_steps := 0
+			if number == 1: _key(s, KEY_ENTER)
 			while not s.ended:
 				match number:
 					1:
-						var points := [Vector2(570, 530), Vector2(875, 530), Vector2(1060, 345)]
-						_mouse_move(s, points[waypoint].x, points[waypoint].y)
-						if waypoint < 2 and s.p.distance_to(points[waypoint]) < 20: waypoint += 1
+						var points: Array[Vector2] = [Vector2(520, 305), Vector2(780, 270), Vector2(820, 480), Vector2(1080, 320)]
+						if s.balloon_delivery_index == 1 and waypoint == 0: waypoint = 1
+						if s.balloon_delivery_index == 2: waypoint = 3
+						var point: Vector2 = points[waypoint]
+						_mouse_move(s, point.x, point.y)
+						if waypoint == 1 and s.p.distance_to(point) < 30.0: waypoint = 2
+						var dock_distance: float = s.p.distance_to(s.target)
+						var stop_early: bool = dock_distance < 150.0 and s.velocity.length() > s.balloon_dock_speed
+						var hold_at_dock: bool = dock_distance <= s.balloon_dock_radius
+						var finish_braking: bool = s.balloon_braking and dock_distance <= s.balloon_dock_radius + 40.0
+						var should_brake: bool = s.balloon_delivery_index < 3 and (stop_early or hold_at_dock or finish_braking) and waypoint != 1
+						if should_brake != s.balloon_braking:
+							_key(s, KEY_SPACE) if should_brake else _key_release(s, KEY_SPACE)
 					2:
 						if s.count < 5: _mouse_move(s, 640, s.ring_y[s.count])
 					3:
@@ -443,13 +462,21 @@ func _test_all_modes() -> void:
 					12:
 						if not s.sequence_showing:
 							for note in s.sequence.duplicate(): _key(s, KEY_1 + note)
-				if not s.ended: s._process(0.01)
+				if not s.ended:
+					s._process(0.05 if number == 1 else 0.01)
+					if number == 1:
+						balloon_steps += 1
+						assert(balloon_steps < 1100, "Balloon route solver made no bounded progress assist=%s index=%d pos=%s target=%s" % [assisted, s.balloon_delivery_index, s.p, s.target])
 			Input.action_release("ui_right"); Input.action_release("ui_left")
-			assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability game-%03d assist=%s" % [number, assisted])
+			if number == 1:
+				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
+			else:
+				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability game-%03d assist=%s" % [number, assisted])
 			s.queue_free()
 			var timeout := _new_session("game-%03d" % number, assisted)
 			var timeout_results: Array[Dictionary] = []
 			timeout.finished.connect(func(value: Dictionary): timeout_results.append(value))
+			if number == 1: _key(timeout, KEY_ENTER)
 			timeout._process(60.0)
 			assert(timeout_results.size() == 1 and not timeout_results[0].success and not timeout_results[0].devil)
 			timeout.queue_free()

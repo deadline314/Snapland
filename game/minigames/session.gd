@@ -25,6 +25,18 @@ const SEA := Color("#55b8ad")
 const GOLD := Color("#b77c45")
 const PAPER := Color("#fff2d4")
 const BUBBLE_MASCOT_RADIUS := 52.0
+const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
+const BALLOON_WIND_FORECAST_SECONDS := 0.8
+const BALLOON_MAX_SPEED := 260.0
+const BALLOON_ACCELERATION := 520.0
+const BALLOON_BRAKE_ACCELERATION := 680.0
+const BALLOON_DOCK_RADIUS := 66.0
+const BALLOON_DOCK_SPEED := 68.0
+const BALLOON_DOCK_HOLD_SECONDS := 0.5
+const BALLOON_WIND_SCALE := 1.0
+const BALLOON_ASSIST_DOCK_RADIUS := 88.0
+const BALLOON_ASSIST_DOCK_SPEED := 102.0
+const BALLOON_ASSIST_WIND_SCALE := 0.72
 const REQUIRED_PROP_KEYS: Array[String] = ["balloon", "mailbox", "kite", "urchin", "hat", "visitor", "mascot", "lantern", "tourist_coral", "tourist_blue", "tourist_gold", "tourist_green", "flower_horn", "camera", "sign", "bench"]
 const BACKDROP_SCENES: Array[String] = ["harbor", "garden", "stage", "night"]
 static var _catalog_cache: Array = []
@@ -57,6 +69,20 @@ var p := Vector2(270, 390)
 var target := Vector2(1010, 360)
 var mouse_steering := false
 var steering_target := Vector2.ZERO
+var balloon_started := false
+var balloon_tutorial_seen := false
+var balloon_intro_step := 0
+var balloon_intro_step_clock := 0.0
+var balloon_braking := false
+var balloon_delivery_index := 0
+var balloon_dock_hold := 0.0
+var balloon_dock_miss_latched := false
+var balloon_hazard_cooldown := 0.0
+var balloon_wind_current := Vector2.ZERO
+var balloon_wind_forecast := Vector2.ZERO
+var balloon_wind_scale := BALLOON_WIND_SCALE
+var balloon_dock_radius := BALLOON_DOCK_RADIUS
+var balloon_dock_speed := BALLOON_DOCK_SPEED
 var bubble_cycle := -1
 var bubble_attempts := 0
 var velocity := Vector2.ZERO
@@ -124,6 +150,7 @@ func start(id: String, assisted_mode: bool = false) -> void:
 		cancelled.emit()
 		return
 	assisted = assisted_mode
+	balloon_tutorial_seen = false
 	var progress := get_node_or_null("/root/Progress")
 	reduced_motion = progress != null and bool(progress.settings.get("reduced_motion", false))
 	_rng_reset()
@@ -150,6 +177,7 @@ func reset_round() -> void:
 	devil_won = false
 	game_time = 0.0
 	phase = 0.0
+	round_seconds = 55.0 if mode == "balloon_delivery" else ROUND_SECONDS
 	beat = 0
 	beat_window = false
 	fountain_cycle = -1
@@ -171,6 +199,18 @@ func reset_round() -> void:
 	velocity = Vector2.ZERO
 	mouse_steering = false
 	steering_target = p
+	balloon_started = mode != "balloon_delivery" or balloon_tutorial_seen
+	balloon_intro_step = 3 if balloon_tutorial_seen else 0
+	balloon_braking = false
+	balloon_delivery_index = 0
+	balloon_dock_hold = 0.0
+	balloon_dock_miss_latched = false
+	balloon_hazard_cooldown = 0.0
+	balloon_wind_current = Vector2.ZERO
+	balloon_wind_forecast = Vector2.ZERO
+	balloon_wind_scale = BALLOON_ASSIST_WIND_SCALE if assisted else BALLOON_WIND_SCALE
+	balloon_dock_radius = BALLOON_ASSIST_DOCK_RADIUS if assisted else BALLOON_DOCK_RADIUS
+	balloon_dock_speed = BALLOON_ASSIST_DOCK_SPEED if assisted else BALLOON_DOCK_SPEED
 	bubble_cycle = -1
 	bubble_attempts = 0
 	seats.clear()
@@ -192,7 +232,11 @@ func reset_round() -> void:
 	shadow_started = false
 	shadow_broken = false
 	match mode:
-		"balloon_delivery": p = Vector2(250, 380); target = Vector2(1060, 345)
+		"balloon_delivery":
+			p = Vector2(250, 380)
+			target = BALLOON_MAILBOXES[0]
+			steering_target = p
+			prompt = "吹風練習：方向鍵或 WASD 推動氣球。Enter 隨時開始送件"
 		"kite_rings":
 			p = Vector2(180, 360)
 			for i in 5:
@@ -221,9 +265,26 @@ func reset_round() -> void:
 func _process(delta: float) -> void:
 	if ended:
 		return
+	if mode == "balloon_delivery" and not balloon_started:
+		feedback_age += delta
+		# The tutorial is learn-by-doing, with a short fallback per lesson. Cap a
+		# suspended-window delta so neither wind phase nor balloon position jumps.
+		var intro_remaining := minf(maxf(delta, 0.0), 0.5)
+		while intro_remaining > 0.00001:
+			var intro_step := minf(intro_remaining, 0.05)
+			phase += intro_step
+			balloon_intro_step_clock += intro_step
+			_tick_balloon_motion(intro_step)
+			if balloon_intro_step_clock >= 3.0 and balloon_intro_step < 2:
+				balloon_intro_step += 1
+				balloon_intro_step_clock = 0.0
+			intro_remaining -= intro_step
+		_set_balloon_intro_prompt()
+		queue_redraw()
+		return
 	elapsed += delta
 	game_time += delta
-	phase += delta
+	if mode != "balloon_delivery": phase += delta
 	feedback_age += delta
 	for i in range(particles.size() - 1, -1, -1):
 		var particle: Dictionary = particles[i]
@@ -234,30 +295,27 @@ func _process(delta: float) -> void:
 	if elapsed >= round_seconds:
 		_finish(false)
 		return
-	_tick_game(delta)
+	if mode == "balloon_delivery":
+		# Time still advances at wall-clock delta; physics uses bounded substeps.
+		var remaining := minf(maxf(delta, 0.0), 0.5)
+		while remaining > 0.00001 and not ended:
+			var step := minf(remaining, 0.05)
+			phase += step
+			_tick_balloon(step)
+			remaining -= step
+	else:
+		_tick_game(delta)
 	queue_redraw()
+
+func _set_balloon_intro_prompt() -> void:
+	match balloon_intro_step:
+		0: prompt = "練習 1/3　方向鍵／WASD 或移動滑鼠推動氣球。Enter 隨時出發"
+		1: prompt = "練習 2/3　按空白鍵／右鍵煞車；↑↓ 控制高度。Enter 隨時出發"
+		2: prompt = "練習 3/3　依序送達三個亮起的郵箱；進圈後煞停。Enter 開始計時"
 
 func _tick_game(delta: float) -> void:
 	match mode:
-		"balloon_delivery":
-			var steer := _axis_x()
-			var lift := _axis_y()
-			if steer != 0.0 or lift != 0.0: mouse_steering = false
-			if mouse_steering:
-				steer = clampf((steering_target.x - p.x) * 0.65 / 165.0 - sin(phase * 1.6) * 30.0 / 165.0, -1.0, 1.0)
-				lift = clampf((steering_target.y - p.y) * 0.65 / 145.0 - cos(phase * 1.1) * 12.0 / 145.0, -1.0, 1.0)
-			velocity.x = move_toward(velocity.x, steer * 165.0 + sin(phase * 1.6) * 30.0, 210.0 * delta)
-			velocity.y = move_toward(velocity.y, lift * 145.0 + cos(phase * 1.1) * 12.0, 180.0 * delta)
-			p += velocity * delta
-			p.x = clampf(p.x, 130, 1150); p.y = clampf(p.y, 210, 585)
-			var thorn := Vector2(715, 380)
-			if p.distance_to(thorn) < 62:
-				p = thorn + (p - thorn).normalized() * 64.0; mistakes += 1; _feedback("刺球擦破了氣球！", PINK)
-			if p.distance_to(target) < (118.0 if assisted else 80.0):
-				if absf(velocity.y) < (88.0 if assisted else 58.0) and absf(velocity.x) < (102.0 if assisted else 76.0):
-					_score(100); _finish(true, mistakes == 0)
-				else:
-					p = Vector2(760, 455); velocity *= 0.25; mistakes += 1; _feedback("郵箱前先穩住氣球！", YELLOW)
+		"balloon_delivery": _tick_balloon(delta)
 		"kite_rings":
 			p.y += _axis_y() * 235.0 * delta
 			p.y = clampf(p.y + sin(phase * 2.0) * (22.0 if not assisted else 11.0) * delta, 220, 570)
@@ -308,6 +366,111 @@ func _tick_game(delta: float) -> void:
 			beat_window = bubble_attempts < 3 and bubble_cycle != int(floor(phase / 2.0)) and photo_beat > (1.1 if assisted else 1.35) and photo_beat < 1.99
 		"bench_swap": pass
 		"melody_memory": _tick_melody(delta)
+
+func _tick_balloon_motion(delta: float) -> void:
+	balloon_wind_current = _balloon_wind_at(phase, p.y)
+	balloon_wind_forecast = _balloon_wind_at(phase + BALLOON_WIND_FORECAST_SECONDS, p.y)
+	var control := Vector2(_axis_x(), _axis_y())
+	if control.length() > 1.0: control = control.normalized()
+	if control.is_zero_approx() and mouse_steering:
+		var guide := steering_target - p
+		if guide.length() > 18.0: control = guide.normalized()
+	if not balloon_started:
+		if balloon_intro_step == 0 and not control.is_zero_approx():
+			balloon_intro_step = 1
+			balloon_intro_step_clock = 0.0
+		elif balloon_intro_step == 1 and balloon_braking:
+			balloon_intro_step = 2
+			balloon_intro_step_clock = 0.0
+	var desired_velocity := control * BALLOON_MAX_SPEED + balloon_wind_current
+	if balloon_braking:
+		# Braking damps the current flight speed without taking steering away;
+		# the 22% control cap keeps a aimed dock approach under the low-speed limit.
+		desired_velocity = control * BALLOON_MAX_SPEED * 0.22 + balloon_wind_current * 0.16
+	var max_velocity := BALLOON_MAX_SPEED
+	if desired_velocity.length() > max_velocity: desired_velocity = desired_velocity.normalized() * max_velocity
+	velocity = velocity.move_toward(desired_velocity, (BALLOON_BRAKE_ACCELERATION if balloon_braking else BALLOON_ACCELERATION) * delta)
+	if velocity.length() > max_velocity: velocity = velocity.normalized() * max_velocity
+	p += velocity * delta
+	p.x = clampf(p.x, 130.0, 1150.0)
+	p.y = clampf(p.y, 210.0, 585.0)
+
+func _balloon_wind_at(at_time: float, altitude: float = -1.0) -> Vector2:
+	# The upper and lower harbor lanes pull in opposite directions; the middle is calm.
+	var height := p.y if altitude < 0.0 else altitude
+	var interval := 12.0
+	var gust_index := int(floor(maxf(0.0, at_time) / interval))
+	var gust_direction := 1.0 if gust_index % 2 == 0 else -1.0
+	var gust_strength := 42.0 + float(gust_index % 3) * 8.0
+	var lane_bias := 1.0 - 2.0 * clampf(inverse_lerp(280.0, 520.0, height), 0.0, 1.0)
+	return Vector2(gust_direction * gust_strength * lane_bias * balloon_wind_scale, 0.0)
+
+func _balloon_hazard_at(at_time: float) -> Vector2:
+	return Vector2(720.0 + sin(at_time * 0.48) * 54.0, 390.0 + sin(at_time * 0.71 + 0.4) * 24.0)
+
+func _tick_balloon(delta: float) -> void:
+	_tick_balloon_motion(delta)
+	balloon_hazard_cooldown = maxf(0.0, balloon_hazard_cooldown - delta)
+	var hazard := _balloon_hazard_at(phase)
+	if balloon_hazard_cooldown <= 0.0 and p.distance_to(hazard) < 65.0:
+		var separation := p - hazard
+		if separation.is_zero_approx(): separation = Vector2.LEFT
+		p = hazard + separation.normalized() * 66.0
+		velocity *= 0.48
+		balloon_hazard_cooldown = 1.0
+		mistakes += 1
+		balloon_dock_hold = 0.0
+		_feedback("海膽擦到氣球！看風向繞過它", PINK)
+	var distance_to_mailbox := p.distance_to(target)
+	if distance_to_mailbox <= balloon_dock_radius:
+		if velocity.length() <= balloon_dock_speed:
+			balloon_dock_miss_latched = false
+			balloon_dock_hold += delta
+			if balloon_dock_hold >= BALLOON_DOCK_HOLD_SECONDS:
+				balloon_delivery_index += 1
+				count = balloon_delivery_index
+				devil_progress += 1
+				_score(150)
+				balloon_dock_hold = 0.0
+				balloon_dock_miss_latched = false
+				if balloon_delivery_index >= BALLOON_MAILBOXES.size():
+					_feedback("三封郵袋都送達！", MINT)
+					_finish(true, mistakes == 0 and devil_progress == 3)
+				else:
+					target = BALLOON_MAILBOXES[balloon_delivery_index]
+					_feedback("郵袋送達！下一站亮起了", MINT)
+		else:
+			balloon_dock_hold = 0.0
+			if not balloon_dock_miss_latched:
+				balloon_dock_miss_latched = true
+				mistakes += 1
+				_feedback("郵箱前按空白鍵或右鍵煞車", YELLOW)
+	else:
+		balloon_dock_hold = 0.0
+		balloon_dock_miss_latched = false
+
+func _launch_balloon() -> void:
+	if mode != "balloon_delivery" or balloon_started: return
+	balloon_started = true
+	balloon_tutorial_seen = true
+	balloon_intro_step = 3
+	balloon_intro_step_clock = 0.0
+	elapsed = 0.0
+	game_time = 0.0
+	phase = 0.0
+	p = Vector2(250, 380)
+	target = BALLOON_MAILBOXES[0]
+	velocity = Vector2.ZERO
+	balloon_braking = false
+	balloon_delivery_index = 0
+	count = 0
+	mistakes = 0
+	devil_progress = 0
+	balloon_dock_hold = 0.0
+	balloon_dock_miss_latched = false
+	balloon_hazard_cooldown = 0.0
+	steering_target = p
+	_feedback("出發！按方向鍵／WASD飛行，空白鍵或右鍵煞車", BLUE)
 
 func _tick_crowd(delta: float) -> void:
 	if count >= 6: _finish(mistakes == 0, mistakes == 0 and devil_progress == 6); return
@@ -360,7 +523,10 @@ func _next_melody() -> void:
 	if not sequence.is_empty(): note_played.emit(sequence[0])
 
 func _unhandled_input(event: InputEvent) -> void:
-	if ended: return
+	if ended:
+		if mode == "balloon_delivery" and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+			reset_round()
+		return
 	var viewport := get_viewport()
 	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
 		if viewport: viewport.set_input_as_handled()
@@ -368,6 +534,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if (event is InputEventKey or event is InputEventMouse) and viewport:
 		viewport.set_input_as_handled()
+	if mode == "balloon_delivery" and event is InputEventKey:
+		var key_event := event as InputEventKey
+		if key_event.keycode == KEY_SPACE:
+			balloon_braking = key_event.pressed
+			return
+		if key_event.pressed and not key_event.echo and (key_event.keycode == KEY_ENTER or key_event.keycode == KEY_KP_ENTER):
+			_launch_balloon()
+			return
+	if mode == "balloon_delivery" and event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_RIGHT:
+		balloon_braking = (event as InputEventMouseButton).pressed
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_R: reset_round(); return
 		if event.keycode == KEY_SPACE: _press_action()
@@ -934,35 +1111,104 @@ func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignmen
 	draw_string(FONT, Vector2(left + 6.0, baseline.y), text, alignment, plate_width - 12.0, font_size, color)
 
 func _draw_balloon() -> void:
-	# Paper harbor mail run, seen from the end of the quay.
+	# Three ordered mail drops give the flight short goals and route decisions.
 	draw_rect(Rect2(62,492,1156,78),Color("#bd9a6d"),true)
 	for i in 14: draw_line(Vector2(72+i*82,495),Vector2(72+i*82,567),Color("#e6c793",0.8),2)
-	# The receive halo is centered on the real goal point; the mailbox slot sits at its center.
-	draw_circle(target,80,Color(MINT,0.09)); draw_arc(target,80,0,TAU,56,Color("#fff1cb",0.75),2)
-	var mailbox_size := Vector2(120,180)
-	var mailbox_rect := Rect2(target.x-mailbox_size.x*0.51,target.y-mailbox_size.y*0.415,mailbox_size.x,mailbox_size.y)
-	if not _draw_prop("mailbox",mailbox_rect):
-		draw_rect(Rect2(mailbox_rect.position.x,mailbox_rect.position.y+18,mailbox_rect.size.x,mailbox_rect.size.y-18),Color("#bd704f"),true)
-	# Slot center from the art-region map is x=.51, y=.415; the active ring denotes the broader receiving area.
-	draw_arc(target,80,0,TAU,56,Color("#fff1cb",0.8),2)
-	draw_rect(Rect2(target.x-13,target.y-7,26,14),Color("#fff1cb",0.85),true)
-	draw_colored_polygon(PackedVector2Array([target+Vector2(-11,-3),target+Vector2(0,5),target+Vector2(11,-3)]),Color("#dc8468"))
-	draw_string(FONT,Vector2(target.x-44,target.y+30),"收件區",HORIZONTAL_ALIGNMENT_CENTER,88,13,PAPER)
-	# The thorn hazard is a visible, softly printed 62-unit radius around its collision center.
-	var thorn := Vector2(715,380)
-	draw_circle(thorn,62,Color(PINK,0.12)); draw_arc(thorn,62,0,TAU,40,Color(PINK,0.65),2)
+	for i in range(1, BALLOON_MAILBOXES.size()):
+		draw_line(BALLOON_MAILBOXES[i-1], BALLOON_MAILBOXES[i], Color("#fff1cb",0.42), 3)
+		for dot in 8:
+			var point := BALLOON_MAILBOXES[i-1].lerp(BALLOON_MAILBOXES[i], float(dot+1)/9.0)
+			draw_circle(point, 3, Color("#fff1cb",0.65))
+	for i in BALLOON_MAILBOXES.size():
+		var mailbox_point: Vector2 = BALLOON_MAILBOXES[i]
+		var active := i == balloon_delivery_index and balloon_started
+		var delivered := i < balloon_delivery_index
+		var alpha := 1.0 if active or delivered else 0.68
+		var ring_color := MINT if delivered else YELLOW if active else Color("#fff1cb",0.55)
+		draw_circle(mailbox_point, balloon_dock_radius if active else 51.0, Color(ring_color, 0.08 if active else 0.04))
+		draw_arc(mailbox_point, balloon_dock_radius if active else 51.0, 0, TAU, 48, ring_color, 5 if active else 2)
+		var mailbox_rect := Rect2(mailbox_point.x-61,mailbox_point.y-75,122,150)
+		if not _draw_prop("mailbox",mailbox_rect,Color(1,1,1,alpha)):
+			draw_rect(mailbox_rect,Color("#bd704f",alpha),true)
+		draw_rect(Rect2(mailbox_point.x-14,mailbox_point.y-8,28,16),Color("#fff1cb",alpha),true)
+		draw_circle(mailbox_point+Vector2(0,25),13,Color("#e6bf80",alpha))
+		draw_string(FONT,mailbox_point+Vector2(-8,30),"✓" if delivered else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,16,12,INK)
+	# A ghosted future position forecasts the bounded moving urchin hazard.
+	var thorn := _balloon_hazard_at(phase)
+	var thorn_preview := _balloon_hazard_at(phase + BALLOON_WIND_FORECAST_SECONDS)
+	draw_arc(thorn_preview,65,0,TAU,40,Color(PINK,0.35),2)
+	draw_circle(thorn,65,Color(PINK,0.10)); draw_arc(thorn,65,0,TAU,40,Color(PINK,0.82),2)
 	if not _draw_prop("urchin",Rect2(thorn.x-52,thorn.y-52,104,104)):
 		for i in 12:
 			var a := TAU*float(i)/12.0
 			draw_line(thorn+Vector2.RIGHT.rotated(a)*23,thorn+Vector2.RIGHT.rotated(a)*50,Color("#514963"),7)
 			draw_colored_polygon(PackedVector2Array([thorn+Vector2.RIGHT.rotated(a)*48,thorn+Vector2.RIGHT.rotated(a+0.13)*36,thorn+Vector2.RIGHT.rotated(a-0.13)*36]),Color("#e8a17c"))
 		draw_circle(thorn,27,Color("#d78072")); draw_circle(thorn+Vector2(-8,-6),4,PAPER); draw_circle(thorn+Vector2(8,-6),4,PAPER)
-	# The illustrated balloon is the controlled object; use its true feathered cutout bounds.
+	# Three labeled altitude lanes use the same phase and altitude inputs as the
+	# force applied in _balloon_wind_at, so the visible arrows preview route choice.
+	var lane_y: Array[float] = [245.0, 395.0, 550.0]
+	var lane_names: Array[String] = ["高風道", "中風道", "低風道"]
+	for lane in 3:
+		var yy: float = lane_y[lane]
+		var lane_wind := _balloon_wind_at(phase, yy)
+		var lane_direction := signf(lane_wind.x)
+		var lane_arrow := "→" if lane_direction > 0.0 else "←" if lane_direction < 0.0 else "↔"
+		draw_string(FONT,Vector2(63,yy+5),lane_names[lane]+"  "+lane_arrow,HORIZONTAL_ALIGNMENT_LEFT,110,13,Color("#fff1cb",0.9))
+		for i in 4:
+			var offset := 0.0 if reduced_motion else fposmod(phase * 58.0 + i * 43.0, 110.0)
+			var start_x := 185.0 + float(i) * 54.0 + offset
+			if lane_direction == 0.0:
+				draw_circle(Vector2(start_x,yy),2.5,Color("#eef5db",0.72))
+				continue
+			var arrow_direction := lane_direction
+			var arrow_length := 10.0 + absf(lane_wind.x) * 0.30
+			var end_x := start_x + arrow_direction * arrow_length
+			draw_line(Vector2(start_x,yy),Vector2(end_x,yy),Color("#eef5db",0.62),2)
+			draw_colored_polygon(PackedVector2Array([Vector2(end_x,yy),Vector2(end_x-arrow_direction*8,yy-4),Vector2(end_x-arrow_direction*8,yy+4)]),Color("#eef5db",0.76))
+	# The balloon's ribbon acts as an in-world tell for current crosswind. Calm
+	# air hangs straight; stronger wind increases the sideways deflection.
 	if not _draw_prop("balloon",Rect2(p.x-39,p.y-56,78,110)):
 		draw_circle(p,33,Color("#dc6588")); draw_arc(p,31,PI,TAU,22,Color("#ffd39c"),2)
 		draw_line(p+Vector2(-9,31),p+Vector2(-5,43),PAPER,2); draw_line(p+Vector2(9,31),p+Vector2(5,43),PAPER,2)
 		draw_rect(Rect2(p.x-9,p.y+42,18,12),Color("#8b684e"),true)
-	_draw_scene_label("郵袋送到信箱，避開海膽　　海風　"+("←" if sin(phase*1.6)<0 else "→")+"　郵袋 0 / 1",Vector2(640,535),17)
+	var wind_sign := signf(balloon_wind_current.x)
+	var ribbon_deflection := 54.0 * clampf(absf(balloon_wind_current.x) / 60.0,0.0,1.0) * wind_sign
+	var ribbon_end := p + Vector2(-ribbon_deflection,58.0 + absf(ribbon_deflection)*0.18)
+	draw_line(p+Vector2(0,50),ribbon_end,Color("#ffe3a4"),4)
+	var tail_direction := signf(ribbon_end.x-p.x)
+	if tail_direction == 0.0:
+		draw_colored_polygon(PackedVector2Array([ribbon_end,ribbon_end+Vector2(-8,9),ribbon_end+Vector2(8,9)]),PINK)
+	else:
+		draw_colored_polygon(PackedVector2Array([ribbon_end,ribbon_end+Vector2(tail_direction*18,-3),ribbon_end+Vector2(tail_direction*8,8)]),PINK)
+	_draw_balloon_wind_gauge()
+	if balloon_started:
+		_draw_scene_label("郵袋 " + str(balloon_delivery_index) + " / 3　　煞停進入第 " + str(balloon_delivery_index+1) + " 號信箱",Vector2(640,585),18)
+		if balloon_dock_hold > 0.0:
+			var dock_fraction := clampf(balloon_dock_hold / BALLOON_DOCK_HOLD_SECONDS,0.0,1.0)
+			draw_rect(Rect2(target.x-48,target.y+balloon_dock_radius+6,96,8),Color("#31495b"),true)
+			draw_rect(Rect2(target.x-48,target.y+balloon_dock_radius+6,96*dock_fraction,8),MINT,true)
+	else:
+		var lesson: String = ["1　← →／WASD 推動", "2　↑↓ 換風道　・　空白／右鍵煞車", "3　投遞三站　・　Enter 開始計時"][balloon_intro_step]
+		_draw_scene_label("氣球快遞練習　" + lesson,Vector2(470,205),17)
+
+func _draw_balloon_wind_gauge() -> void:
+	draw_rect(Rect2(930,174,285,92),Color("#fff0d5",0.94),true)
+	draw_rect(Rect2(930,174,285,92),Color("#87674d",0.88),false,2)
+	var direction := "→" if balloon_wind_current.x > 0.0 else "←" if balloon_wind_current.x < 0.0 else "↔"
+	var forecast_direction := "→" if balloon_wind_forecast.x > 0.0 else "←" if balloon_wind_forecast.x < 0.0 else "↔"
+	draw_string(FONT,Vector2(944,199),"海風　"+direction,HORIZONTAL_ALIGNMENT_LEFT,100,17,INK)
+	var feather_count := clampi(int(ceil(absf(balloon_wind_current.x)/18.0)),0,3)
+	for i in 3:
+		var fx := 1019.0+i*15.0
+		draw_line(Vector2(fx,187),Vector2(fx+(4.0 if balloon_wind_current.x>=0.0 else -4.0),198),Color("#557e80") if i<feather_count else Color("#bba88c",0.55),3)
+	var forecast_value := roundi(balloon_wind_forecast.x)
+	var forecast_signed := "+" + str(forecast_value) if forecast_value > 0 else str(forecast_value)
+	draw_string(FONT,Vector2(944,223),"0.8 秒預報　"+forecast_direction+" "+forecast_signed,HORIZONTAL_ALIGNMENT_LEFT,200,13,Color("#536874"))
+	var bar := Rect2(944,237,244,12)
+	draw_rect(bar,Color("#d7c7a5"),true)
+	draw_rect(Rect2(bar.position,Vector2(bar.size.x*clampf(absf(balloon_wind_current.x)/60.0,0.0,1.0),bar.size.y)),Color("#55a99f"),true)
+	var needle_x := 944.0 + bar.size.x * clampf((balloon_wind_current.x / 60.0 + 1.0) * 0.5,0.0,1.0)
+	draw_line(Vector2(needle_x,232),Vector2(needle_x,253),Color("#bd704f"),3)
 
 func _draw_kite() -> void:
 	for i in ring_x.size():
@@ -1241,12 +1487,3 @@ func _draw_melody() -> void:
 		draw_line(note_center+Vector2(0,13),note_center+Vector2(0,30),colors[note],3)
 	_draw_scene_label("花喇叭先吹奏短句，聽完後用同一順序回奏",Vector2(640,270),19)
 	_draw_scene_label("曲段 " + str(count+1) + " / 3　　" + ("留心聆聽…" if sequence_showing else "演奏中…"),Vector2(640,570),18)
-
-
-
-
-
-
-
-
-
