@@ -6,6 +6,8 @@ const Audio = preload("res://game/audio/audio_director.gd")
 const Session = preload("res://game/minigames/session.gd")
 const PhotoStage = preload("res://game/ui/photo_stage.gd")
 const WardrobePanel = preload("res://game/ui/wardrobe_panel.gd")
+const TimeOfDay = preload("res://game/core/time_of_day.gd")
+const TimePanel = preload("res://game/ui/time_panel.gd")
 var world: Node3D
 var audio: Node
 var story: RefCounted
@@ -23,6 +25,7 @@ var quest_label: Label
 var session: Control
 var modal_kind := ""
 var wardrobe_panel: RefCounted
+var time_panel: RefCounted
 var celebrate_on_close := false
 var dialogue: Array=[]
 var dialogue_index := 0
@@ -33,6 +36,7 @@ var definitions: Array=[]
 var capture_mode := false
 var photo_frames: Array[Image] = []
 var next_snapshot := 0.0
+var time_capture_token := 0
 var quitting := false
 
 func _ready() -> void:
@@ -143,12 +147,16 @@ func _smoke_art_test() -> void:
 		await _smoke_art_abort("A minigame art resource warning was emitted during the smoke test")
 		return
 	var avatar_source=world.avatar_renderer
-	if not avatar_source.is_asset_ready() or not avatar_source.has_hat_atlas() or not avatar_source.has_hair_atlas() or not avatar_source.has_species_atlas():
+	if not avatar_source.is_asset_ready() or not avatar_source.has_hat_atlas() or not avatar_source.has_hair_atlas() or not avatar_source.has_species_atlas() or not avatar_source.has_walk_atlas() or not avatar_source.has_diagonal_parts():
 		await _smoke_art_abort("Character, hair, hat or species atlas failed to load from the exported resources")
 		return
 	if world.identity_textures.size()!=3 or not world.identity_warnings.is_empty():
 		await _smoke_art_abort("Named character atlas regions failed to load")
 		return
+	for actor_role in ["ticket", "imp", "announcer"]:
+		if world.npc_activity.load_action_frames(actor_role).size() != 4:
+			await _smoke_art_abort("Authored NPC activity assets failed to load: " + actor_role)
+			return
 	var motion_status:Dictionary=world.component_motion.statistics()
 	if not bool(motion_status.get("playing",false)) or int(motion_status.get("registration_count",0))<100:
 		await _smoke_art_abort("Scene component animation did not start")
@@ -251,7 +259,7 @@ func _build_ui() -> void:
 	tools.position=Vector2(-665,25)
 	tools.add_theme_constant_override("separation",8)
 	hud.add_child(tools)
-	for entry in [["拍貼本",_show_album],["任務",_show_tasks],["成就",_show_achievements],["地圖",_show_map],["衣櫃",_show_wardrobe],["設定",_show_settings]]:
+	for entry in [["拍貼本",_show_album],["任務",_show_tasks],["成就",_show_achievements],["地圖",_show_map],["衣櫃",_show_wardrobe],["時段",_show_time_panel],["設定",_show_settings]]:
 		Paper.button(entry[0],entry[1],tools)
 	quest_label=Paper.label("",17,Color("#fff3cf"))
 	quest_label.position=Vector2(28,155)
@@ -270,7 +278,7 @@ func _build_ui() -> void:
 	hud.add_child(lower)
 	var row := HBoxContainer.new()
 	lower.add_child(row)
-	hint=Paper.label("WASD/方向鍵移動 · E互動 · C衣櫃 · F招呼 · P拍照 · Esc暫停",16)
+	hint=Paper.label("WASD/方向鍵移動 · E互動 · C衣櫃 · T時段 · F招呼 · P拍照 · Esc暫停",16)
 	hint.autowrap_mode=TextServer.AUTOWRAP_OFF
 	hint.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	row.add_child(hint)
@@ -306,7 +314,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	modal_kind=kind
 	world.blocked=true
 	world.set_process(kind!="pause")
-	audio.set_paused(kind=="pause")
+	audio.set_paused(kind=="pause" or (kind=="time" and session!=null))
 	var dim := ColorRect.new()
 	dim.color=Color(0.06,0.14,0.19,0.74)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -317,7 +325,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	overlay.add_child(center)
 	var panel := PanelContainer.new()
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe"]
+	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe","time"]
 	var preferred_height := 600.0 if tall_kinds.has(kind) else 350.0
 	panel.custom_minimum_size=Vector2(minf(960.0,viewport_size.x-56.0),minf(preferred_height,viewport_size.y-56.0))
 	panel.add_theme_stylebox_override("panel",Paper.plaque(Color("#f7efd9")))
@@ -358,6 +366,8 @@ func _close() -> void:
 	if modal_kind=="dialogue":
 		_finish_dialogue()
 		return
+	if modal_kind == "time":
+		time_capture_token += 1
 	var celebrate := celebrate_on_close and modal_kind=="result"
 	celebrate_on_close=false
 	overlay.hide()
@@ -365,6 +375,8 @@ func _close() -> void:
 	world.blocked=session!=null
 	world.set_process(true)
 	audio.set_paused(false)
+	if session != null:
+		session.process_mode=Node.PROCESS_MODE_INHERIT
 	if session==null: hud.show()
 	if celebrate and session==null and world.has_method("play_action"):
 		world.play_action("celebrate")
@@ -385,6 +397,7 @@ func _refresh() -> void:
 			quest_label.text+="◇ "+quest.get("title",id)+"  %d / 3\n"%step
 	audio.apply_settings(Progress.settings)
 	world.apply_settings(Progress.settings)
+	_apply_time_phase()
 	world.update_collection(Progress.photos)
 	if world.has_method("set_avatar_look"):
 		world.set_avatar_look(Progress.appearance,Progress.equipped)
@@ -397,10 +410,18 @@ func _process(delta: float) -> void:
 		next_snapshot=session.elapsed+15.0
 		_sample_photo.call_deferred()
 	if is_instance_valid(world) and modal_kind=="" and session==null:
-		hint.text="E "+world.nearest.get("label","")+" · WASD移動 · C衣櫃 · F招呼 · P拍照 · Esc暫停" if not world.nearest.is_empty() else "WASD/方向鍵移動 · E互動 · C衣櫃 · F招呼 · P拍照 · Esc暫停"
+		hint.text="E "+world.nearest.get("label","")+" · WASD移動 · C衣櫃 · T時段 · F招呼 · P拍照 · Esc暫停" if not world.nearest.is_empty() else "WASD/方向鍵移動 · E互動 · C衣櫃 · T時段 · F招呼 · P拍照 · Esc暫停"
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label):
 		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
 		dialogue_label.visible_characters=int(reveal)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_T:
+		if modal_kind == "time":
+			_close()
+		elif modal_kind == "":
+			_show_time_panel()
+		get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
@@ -420,6 +441,92 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif modal_kind=="wardrobe":
 			_close()
 		get_viewport().set_input_as_handled()
+
+func _apply_time_phase() -> void:
+	var phase_id := TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE))
+	if world.has_method("set_time_of_day"):
+		world.set_time_of_day(phase_id)
+	else:
+		world.set_night(phase_id == "night")
+	if session != null and session.has_method("set_time_of_day"):
+		session.set_time_of_day(phase_id)
+
+func _select_time_phase(phase_id: String) -> bool:
+	if not Progress.set_time_phase(phase_id):
+		return false
+	_apply_time_phase()
+	return true
+
+func _collect_time_postcard(phase_id: String) -> String:
+	if not _can_capture_time_postcard(phase_id, time_capture_token):
+		return ""
+	var token := time_capture_token
+	var frame_path := await _capture_time_postcard_frame(phase_id, token)
+	if frame_path.is_empty() or not _can_capture_time_postcard(phase_id, token):
+		if not frame_path.is_empty() and FileAccess.file_exists(frame_path):
+			DirAccess.remove_absolute(frame_path)
+		return ""
+	if not Progress.collect_time_postcard(phase_id, frame_path):
+		DirAccess.remove_absolute(frame_path)
+		return ""
+	return frame_path
+
+func _can_capture_time_postcard(phase_id: String, token: int) -> bool:
+	return token == time_capture_token and modal_kind == "time" and session == null and is_instance_valid(world) and str(world.nearest.get("id", "")) == "guide" and str(Progress.settings.get("time_phase", "")) == phase_id and TimeOfDay.phase_ids().has(phase_id) and not Progress.photos.has(TimeOfDay.postcard_id(phase_id))
+
+func _capture_time_postcard_frame(phase_id: String, token: int) -> String:
+	if not _can_capture_time_postcard(phase_id, token):
+		return ""
+	var overlay_was_visible := overlay.visible
+	var hud_was_visible := hud.visible
+	overlay.hide()
+	hud.hide()
+	await get_tree().process_frame
+	if not _can_capture_time_postcard(phase_id, token):
+		_restore_time_capture_ui(token, overlay_was_visible, hud_was_visible)
+		return ""
+	await RenderingServer.frame_post_draw
+	if not _can_capture_time_postcard(phase_id, token):
+		_restore_time_capture_ui(token, overlay_was_visible, hud_was_visible)
+		return ""
+	var viewport := get_viewport()
+	var snapshot := viewport.get_texture().get_image() if is_instance_valid(viewport) else null
+	_restore_time_capture_ui(token, overlay_was_visible, hud_was_visible)
+	if snapshot == null or snapshot.is_empty() or not _can_capture_time_postcard(phase_id, token):
+		return ""
+	snapshot.resize(320, 180, Image.INTERPOLATE_LANCZOS)
+	snapshot.convert(Image.FORMAT_RGBA8)
+	var directory := _photo_directory()
+	var error := DirAccess.make_dir_recursive_absolute(directory)
+	if error != OK and error != ERR_ALREADY_EXISTS:
+		push_warning("Cannot create time postcard directory: " + directory)
+		return ""
+	var path := directory + "/" + TimeOfDay.postcard_id(phase_id) + ".png"
+	if snapshot.save_png(path) != OK:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(path)
+		push_warning("Cannot save time postcard image: " + path)
+		return ""
+	return path
+
+func _restore_time_capture_ui(token: int, overlay_visible: bool, hud_visible: bool) -> void:
+	if token != time_capture_token or modal_kind != "time":
+		return
+	overlay.visible = overlay_visible
+	hud.visible = hud_visible
+
+func _show_time_panel() -> void:
+	if modal_kind != "" or not is_instance_valid(world):
+		return
+	var body := _open("晨昏換景，收藏四時。", "ISLAND TIME", "time")
+	time_panel = TimePanel.new()
+	time_capture_token += 1
+	var at_photo_station := session == null and str(world.nearest.get("id", "")) == "guide"
+	time_panel.open(self, body, Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE), Progress.photos, at_photo_station, _select_time_phase, _collect_time_postcard)
+	if session != null:
+		session.process_mode = Node.PROCESS_MODE_DISABLED
+		body.add_child(Paper.label("已暫停本局；關閉面板後會從同一局面繼續。", 16, Paper.TEAL))
+	_back(body)
 
 func _show_pause() -> void:
 	var body := _open("留一點時間，給海風。","PAUSE","pause")
@@ -565,6 +672,8 @@ func _launch_game(id: String, assist: bool) -> void:
 	session.cancelled.connect(_cancel_game)
 	session.note_played.connect(audio.play_note)
 	session.feedback.connect(audio.play_sfx)
+	if session.has_method("set_time_of_day"):
+		session.set_time_of_day(TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE)))
 	session.start(id,assist)
 	audio.play_context("game")
 
@@ -649,7 +758,8 @@ func _show_album() -> void:
 	grid.columns=3
 	grid.add_theme_constant_override("h_separation",12)
 	grid.add_theme_constant_override("v_separation",8)
-	_scroll(body).add_child(grid)
+	var collection_content := _scroll(body, 360)
+	collection_content.add_child(grid)
 	var sources: Array=[]
 	for i in range(12):
 		sources.append({"id":"photo-welcome-game-%d"%(i+1),"label":_definition("game-%03d"%(i+1)).get("name","設施 %d"%(i+1))})
@@ -680,6 +790,41 @@ func _show_album() -> void:
 					thumbnail.custom_minimum_size=Vector2(224,96)
 					box.add_child(thumbnail)
 		grid.add_child(card)
+	var time_postcard_count := 0
+	for phase: Dictionary in TimeOfDay.PHASES:
+		if Progress.photos.has(TimeOfDay.postcard_id(str(phase.id))):
+			time_postcard_count += 1
+	collection_content.add_child(Paper.label("四時紀念拍貼  ·  %d / 4" % time_postcard_count, 20, Paper.TEAL))
+	var time_grid := GridContainer.new()
+	time_grid.name = "TimePostcardGrid"
+	time_grid.columns = 2
+	time_grid.add_theme_constant_override("h_separation", 8)
+	time_grid.add_theme_constant_override("v_separation", 8)
+	collection_content.add_child(time_grid)
+	for phase: Dictionary in TimeOfDay.PHASES:
+		var source_id := TimeOfDay.postcard_id(str(phase.id))
+		var earned := Progress.photos.has(source_id)
+		var card := PanelContainer.new()
+		card.custom_minimum_size = Vector2(300, 124)
+		card.add_theme_stylebox_override("panel", Paper.plaque(Color("#fff9e9") if earned else Color("#e9e3d4")))
+		var content := VBoxContainer.new()
+		card.add_child(content)
+		content.add_child(Paper.label("%s · %s" % [str(phase.label), str(phase.clock)], 17, Paper.TEAL))
+		if earned:
+			var frames: Variant = Progress.photos[source_id].get("frames", [])
+			if frames is Array and not frames.is_empty() and typeof(frames[0]) == TYPE_STRING:
+				var texture := _photo_texture(str(frames[0]))
+				if texture != null:
+					var thumbnail := TextureRect.new()
+					thumbnail.texture = texture
+					thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+					thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+					thumbnail.custom_minimum_size = Vector2(260, 90)
+					content.add_child(thumbnail)
+			content.add_child(Paper.label("已收藏", 14, Paper.TEAL))
+		else:
+			content.add_child(Paper.label("尚未收藏", 14, Color("#978e7a")))
+		time_grid.add_child(card)
 	var album_legend := HBoxContainer.new()
 	album_legend.add_theme_constant_override("separation",7)
 	album_legend.add_child(Paper.icon("album",19,Paper.TEAL))
@@ -695,7 +840,7 @@ func _show_tasks() -> void:
 		var quest: Dictionary=story.quest_data(id)
 		var step := int(Progress.quests.get(id,0))
 		Paper.button(quest.get("title",id)+"   %d / 3"%step,func(): _show_quest(id),body)
-	body.add_child(Paper.label("小角和阿浪在迎賓大道入口等你。步驟隨時保存，離開後能繼續。",20))
+	body.add_child(Paper.label("小角和阿浪在迎賓大道的左右步道等你。步驟隨時保存，離開後能繼續。",20))
 	_back(body)
 
 func _show_quest(id: String) -> void:
@@ -815,6 +960,8 @@ func _show_achievements() -> void:
 		list.add_child(Paper.label(("✓ " if Progress.achievements.has(id) else "◇ ")+"第一次："+_definition("game-%03d"%(i+1)).get("name",id),20))
 	for entry in [["ACH_WELCOME_CLEAR","迎賓全通關","完成迎賓十二款"],["ACH_WELCOME_DEVILS","尾巴藏不住","迎賓十二張小惡魔"],["ACH_ALL_DEVILS","每個小惡魔都入鏡","十區120張小惡魔"]]:
 		list.add_child(Paper.label(("✓ " if Progress.achievements.has(entry[0]) else "◇ ")+entry[1]+"  ·  "+entry[2],20))
+	var time_achievement := TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS
+	list.add_child(Paper.label(("✓ " if Progress.achievements.has(time_achievement) else "◇ ")+"四時留影  ·  收藏凌晨、中午、傍晚與晚上拍貼",20))
 	body.add_child(Paper.label("成就保存在遊戲內。Steam 接點預留，未連線時保留待同步紀錄。",16,Paper.TEAL))
 	_back(body)
 
@@ -871,7 +1018,7 @@ func _achievement_toast(id: String) -> void:
 	if id.begins_with("ACH_GAME_"):
 		label=str(_definition("game-%03d"%int(id.trim_prefix("ACH_GAME_"))).get("name","小遊戲"))+"的第一張照片"
 	else:
-		label={"ACH_WELCOME_CLEAR":"迎賓大道通關","ACH_WELCOME_DEVILS":"迎賓小惡魔全收藏","ACH_ALL_DEVILS":"全島小惡魔全收藏"}.get(id,"新的旅途紀念")
+		label={"ACH_WELCOME_CLEAR":"迎賓大道通關","ACH_WELCOME_DEVILS":"迎賓小惡魔全收藏","ACH_ALL_DEVILS":"全島小惡魔全收藏",TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS:"四時留影"}.get(id,"新的旅途紀念")
 	_notice("成就解鎖  ✦  "+label)
 
 func _capture_sequence() -> void:
@@ -984,9 +1131,7 @@ func _photo_texture(path: String) -> Texture2D:
 
 func _save_photo_frames(id: String) -> Array[String]:
 	var paths: Array[String]=[]
-	# Preview sessions never write into the player's real profile.
-	var override := OS.get_environment("SNAPLAND_SAVE_PATH")
-	var directory := (override.get_base_dir()+"/photos") if not override.is_empty() else ProjectSettings.globalize_path("user://photos")
+	var directory := _photo_directory()
 	var err := DirAccess.make_dir_recursive_absolute(directory)
 	if err!=OK:
 		push_warning("Cannot create photo directory: "+directory)
@@ -996,6 +1141,11 @@ func _save_photo_frames(id: String) -> Array[String]:
 		if photo_frames[i].save_png(path)==OK: paths.append(path)
 		else: push_warning("Cannot save photo frame: "+path)
 	return paths
+
+func _photo_directory() -> String:
+	# Preview sessions never write into the player's real profile.
+	var override := OS.get_environment("SNAPLAND_SAVE_PATH")
+	return (override.get_base_dir()+"/photos") if not override.is_empty() else ProjectSettings.globalize_path("user://photos")
 
 func _capture(relative: String) -> bool:
 	var path := ProjectSettings.globalize_path("res://"+relative)

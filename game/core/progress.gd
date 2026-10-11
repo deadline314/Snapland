@@ -7,6 +7,7 @@ const SAVE_FILE := "user://progress.json"
 const SAVE_VERSION := 1
 const MAX_COINS := 1000000
 const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
+const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const DEFAULT_APPEARANCE := {
 	"skin": "warm", "species": "human", "gender": "neutral",
 	"hair": "windswept", "hair_color": "ink", "face": "curious",
@@ -20,6 +21,7 @@ const DEFAULT_SETTINGS := {
 	"text_speed": 1.0,
 	"assist": false,
 	"fullscreen": false,
+	"time_phase": TimeOfDay.DEFAULT_PHASE,
 }
 const WELCOME_GAME_IDS := [
 	"game-001", "game-002", "game-003", "game-004", "game-005", "game-006",
@@ -53,6 +55,52 @@ func grant_photo(source_id: String, metadata: Dictionary = {}) -> bool:
 	if photos.has(source_id):
 		return false
 	photos[source_id] = metadata.duplicate(true)
+	changed.emit()
+	return true
+
+func set_time_phase(value: String) -> bool:
+	if not TimeOfDay.phase_ids().has(value):
+		return false
+	if settings.get("time_phase", TimeOfDay.DEFAULT_PHASE) == value:
+		return true
+	var previous := str(settings.get("time_phase", TimeOfDay.DEFAULT_PHASE))
+	settings["time_phase"] = value
+	if not save_progress():
+		settings["time_phase"] = previous
+		return false
+	changed.emit()
+	return true
+
+func collect_time_postcard(value: String, frame_path: String) -> bool:
+	if not TimeOfDay.phase_ids().has(value):
+		return false
+	if settings.get("time_phase", TimeOfDay.DEFAULT_PHASE) != value or not FileAccess.file_exists(frame_path):
+		return false
+	var frame := Image.load_from_file(frame_path)
+	if frame == null or frame.get_width() != 320 or frame.get_height() != 180:
+		return false
+	var source_id := TimeOfDay.postcard_id(value)
+	if photos.has(source_id):
+		return false
+	var previous_coins := coins
+	coins = mini(clampi(coins, 0, MAX_COINS) + 20, MAX_COINS)
+	photos[source_id] = {"time_phase": value, "frames": [frame_path]}
+	var completes_set := true
+	for postcard in TimeOfDay.all_postcard_ids():
+		if not photos.has(postcard):
+			completes_set = false
+			break
+	var newly_unlocked := completes_set and not achievements.has(TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS)
+	if newly_unlocked:
+		achievements[TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS] = true
+	if not save_progress():
+		coins = previous_coins
+		photos.erase(source_id)
+		if newly_unlocked:
+			achievements.erase(TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS)
+		return false
+	if newly_unlocked:
+		achievement_unlocked.emit(TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS)
 	changed.emit()
 	return true
 
@@ -382,6 +430,8 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 			var value: Variant = safe_settings[key]
 			var default_value: Variant = DEFAULT_SETTINGS[key]
 			var valid := typeof(default_value) == TYPE_BOOL and typeof(value) == TYPE_BOOL
+			if str(key) == "time_phase":
+				valid = typeof(value) == TYPE_STRING and TimeOfDay.phase_ids().has(value)
 			if typeof(default_value) in [TYPE_INT, TYPE_FLOAT]:
 				valid = typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value))
 				if valid:
@@ -389,7 +439,10 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 					var high := 1.0 if str(key).ends_with("_volume") else 2.0
 					valid = float(value) >= low and float(value) <= high
 			if not valid:
-				push_error("Invalid setting '%s' in progress file '%s'; using default." % [str(key), path])
+				if str(key) == "time_phase":
+					push_warning("Invalid setting '%s' in progress file '%s'; using default." % [str(key), path])
+				else:
+					push_error("Invalid setting '%s' in progress file '%s'; using default." % [str(key), path])
 				safe_settings.erase(key)
 	if result.has("platform_pending_achievements") and typeof(result["platform_pending_achievements"]) != TYPE_ARRAY:
 		push_error("Invalid 'platform_pending_achievements' field in progress file '%s'; using defaults." % path)
@@ -464,7 +517,14 @@ func _apply_save(payload: Dictionary) -> void:
 				quests[str(key)] = int(loaded_quests[key])
 	var loaded_settings: Variant = payload.get("settings", {})
 	if typeof(loaded_settings) == TYPE_DICTIONARY:
+		# Prefer the new value when present; migrate saves that used the old binary day/night key.
+		if loaded_settings.has("time_phase"):
+			settings["time_phase"] = TimeOfDay.normalize(loaded_settings["time_phase"])
+		elif loaded_settings.has("day_time"):
+			settings["time_phase"] = TimeOfDay.normalize(loaded_settings["day_time"])
 		for setting_key: Variant in loaded_settings.keys():
+			if setting_key == "day_time":
+				continue
 			if DEFAULT_SETTINGS.has(setting_key):
 				_apply_loaded_setting(str(setting_key), loaded_settings[setting_key])
 			else:
@@ -520,7 +580,10 @@ func _apply_loaded_setting(key: String, value: Variant) -> void:
 	if not DEFAULT_SETTINGS.has(key):
 		return
 	var default_value: Variant = DEFAULT_SETTINGS[key]
-	if typeof(default_value) == TYPE_BOOL:
+	if key == "time_phase":
+		if typeof(value) == TYPE_STRING and TimeOfDay.phase_ids().has(value):
+			settings[key] = value
+	elif typeof(default_value) == TYPE_BOOL:
 		if typeof(value) == TYPE_BOOL:
 			settings[key] = value
 	else:
@@ -557,4 +620,5 @@ func _reset_memory() -> void:
 	owned_clothes = ["outfit-tide"]
 	coins = 120
 	wardrobe_rewarded_games = []
+	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
