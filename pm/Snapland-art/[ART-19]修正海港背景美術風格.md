@@ -63,4 +63,4 @@
 
 48 張完整畫面依 images/ART-19-game-01–12-dawn/noon/dusk/night.png 命名；降低動態畫面為 images/ART-19-reduced-motion-on.png。
 
-分支：`feature/island-first-park`。本次提交連結於推送後補登。
+分支：`feature/island-first-park`。[遠端提交](https://github.com/deadline314/Snapland/commit/64fcf8cbd313ba350c7165a2e4ec914398a8f943)。
