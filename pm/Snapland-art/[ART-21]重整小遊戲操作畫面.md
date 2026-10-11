@@ -106,4 +106,4 @@
 
 ### 提交
 
-分支：`feature/island-first-park`；提交後補上不可變的遠端連結。
+分支：`feature/island-first-park`；[遠端提交 9f7a667](https://github.com/deadline314/Snapland/commit/9f7a667)。
