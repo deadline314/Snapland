@@ -1,0 +1,14 @@
+{
+  "tool": "builtin image editing",
+  "prompt": "Edit this original 4x4 pixel-game asset sheet. Keep all sixteen subjects, cell order, transparent gutters and complete silhouettes. Redesign the six human figures and the coral imp to have individual personalities instead of matching round baby faces. Camera visitor: a curious young traveler, three-and-a-half-head body proportions, angular windblown ink-blue hair with one small cream forelock, slightly raised skeptical brow, sea-teal raincoat with a coral repair patch on one cuff, folded boarding ticket clipped to the strap, battered brick-red camera, cream shorts and work boots. Coral imp: wedge-shaped face, one short chipped cream horn and one bent long horn, unequal triangular ears, narrow mischievous eyes with one raised eyebrow, crooked toothy grin, long teal scarf and kinked arrow tail; playful, not sinister. Coral-dress visitor has a broad tilted sunhat and an assertive wave; blue-sweater glasses visitor has a narrow face and thoughtful lowered brow; yellow sailor visitor has a long face and matter-of-fact expression; green-overalls visitor has a broad face and amused sideways smile. Keep their existing clothing colors. Use clean pixel clusters and flat tones, expressive posture and clear silhouettes. Small eyes, understated mouths, purposeful asymmetry. Preserve all ten inanimate props unchanged. No soft airbrush, rosy doll cheeks, huge sparkling eyes, grain, text or border. True transparency.",
+  "source": "exec-7e15bca2-466e-4e55-951c-7e70c7747199.png",
+  "reference": "../minigames/props/tidal-props-v2.png",
+  "review": "Root viewed image after user approval: camera traveller forelock, coral cuff, red camera, expressive eyebrows; imp asymmetric horns and cheeky expression; other tourists with individual posture. Original v2 props kept, v3 serves character identity reference.",
+  "output": "identities-v3.png",
+  "sha256": "2e62aef5566fe4017f14aa22bd3fb8578cfc9e21717c2f4eea9d4e5a4c549be6",
+  "actual_dimensions": [
+    1254,
+    1254
+  ],
+  "reference_sha256": "b4b416783e281cdb48a0196a5b5bef48960291c2228d5cffda4cd0b4c37e11d3"
+}
