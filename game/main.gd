@@ -18,8 +18,12 @@ var modal_body: VBoxContainer
 var area_label: Label
 var normal_count_label: Label
 var devil_count_label: Label
+var coin_count_label: Label
+var phase_label: Label
 var breadcrumbs: Array[Label] = []
-var hint: Label
+var context_action: Button
+var context_bar: PanelContainer
+var ticket_button: Button
 var toast: Label
 var quest_label: Label
 var session: Control
@@ -208,83 +212,97 @@ func _build_ui() -> void:
 	hud.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	ui.add_child(hud)
 	var banner := PanelContainer.new()
+	banner.name="ParkKeepsakeBanner"
 	banner.position=Vector2(24,20)
-	banner.custom_minimum_size=Vector2(330,112)
-	banner.size=Vector2(330,112)
-	banner.add_theme_stylebox_override("panel",Paper.plaque(Color("#f4ecd8")))
+	banner.custom_minimum_size=Vector2(390,106)
+	banner.size=Vector2(390,106)
+	var banner_style := Paper.plaque(Color("#f7efd9"))
+	banner_style.content_margin_left=12
+	banner_style.content_margin_right=12
+	banner_style.content_margin_top=8
+	banner_style.content_margin_bottom=8
+	banner.add_theme_stylebox_override("panel",banner_style)
 	hud.add_child(banner)
 	var banner_box := VBoxContainer.new()
 	banner_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	banner_box.add_theme_constant_override("separation",4)
 	banner.add_child(banner_box)
 	var island_row := HBoxContainer.new()
-	island_row.add_theme_constant_override("separation",4)
-	island_row.custom_minimum_size.x=286
+	island_row.add_theme_constant_override("separation",8)
 	banner_box.add_child(island_row)
-	island_row.add_child(Paper.icon("pin",18,Paper.CORAL))
-	for i in range(3):
-		if i>0:
-			var separator := Paper.label("›",12,Color("#9e987f"))
-			separator.autowrap_mode=TextServer.AUTOWRAP_OFF
-			separator.custom_minimum_size.x=10
-			island_row.add_child(separator)
-		var crumb := Paper.label(["海風碼頭","中央廣場","迎賓大道"][i],14,Paper.TEAL)
-		crumb.autowrap_mode=TextServer.AUTOWRAP_OFF
-		crumb.custom_minimum_size=Vector2(58,18)
-		breadcrumbs.append(crumb)
-		island_row.add_child(crumb)
+	island_row.add_child(Paper.icon("pin",20,Paper.CORAL))
 	area_label=Paper.label("海風碼頭",24)
 	area_label.autowrap_mode=TextServer.AUTOWRAP_OFF
-	banner_box.add_child(area_label)
+	island_row.add_child(area_label)
+	phase_label=Paper.label("",18,Paper.TEAL)
+	phase_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+	phase_label.custom_minimum_size.x=98
+	island_row.add_child(phase_label)
 	var keepsakes := HBoxContainer.new()
-	keepsakes.add_theme_constant_override("separation",7)
-	keepsakes.custom_minimum_size.x=286
+	keepsakes.add_theme_constant_override("separation",6)
 	banner_box.add_child(keepsakes)
 	var album_mark := Paper.icon("album",18,Paper.TEAL)
 	album_mark.tooltip_text="普通拍貼收藏"
 	keepsakes.add_child(album_mark)
-	normal_count_label=Paper.label("",13)
+	normal_count_label=Paper.label("",18)
 	normal_count_label.autowrap_mode=TextServer.AUTOWRAP_OFF
-	normal_count_label.custom_minimum_size.x=72
+	normal_count_label.custom_minimum_size.x=88
+	normal_count_label.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 	keepsakes.add_child(normal_count_label)
 	var devil_mark := Paper.icon("devil",18,Paper.CORAL)
 	devil_mark.tooltip_text="小惡魔拍貼收藏"
 	keepsakes.add_child(devil_mark)
-	devil_count_label=Paper.label("",13)
+	devil_count_label=Paper.label("",18,Paper.CORAL)
 	devil_count_label.autowrap_mode=TextServer.AUTOWRAP_OFF
-	devil_count_label.custom_minimum_size.x=88
+	devil_count_label.custom_minimum_size.x=102
+	devil_count_label.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 	keepsakes.add_child(devil_count_label)
-	var tools := HBoxContainer.new()
-	tools.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-	tools.position=Vector2(-665,25)
-	tools.add_theme_constant_override("separation",8)
-	hud.add_child(tools)
-	for entry in [["拍貼本",_show_album],["任務",_show_tasks],["成就",_show_achievements],["地圖",_show_map],["衣櫃",_show_wardrobe],["時段",_show_time_panel],["設定",_show_settings]]:
-		Paper.button(entry[0],entry[1],tools)
-	quest_label=Paper.label("",17,Color("#fff3cf"))
-	quest_label.position=Vector2(28,155)
-	quest_label.size=Vector2(360,140)
-	quest_label.add_theme_color_override("font_shadow_color",Color("#274750"))
+	coin_count_label=Paper.label("",18,Paper.GOLD)
+	coin_count_label.autowrap_mode=TextServer.AUTOWRAP_OFF
+	coin_count_label.custom_minimum_size.x=62
+	coin_count_label.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
+	keepsakes.add_child(Paper.icon("ticket",18,Paper.GOLD))
+	keepsakes.add_child(coin_count_label)
+	ticket_button=Paper.button("航海旅券  ·  M",_show_ticket,hud)
+	ticket_button.name="VoyageTicket"
+	ticket_button.anchor_left=1.0
+	ticket_button.anchor_right=1.0
+	ticket_button.offset_left=-222.0
+	ticket_button.offset_right=-24.0
+	ticket_button.offset_top=24.0
+	ticket_button.offset_bottom=72.0
+	ticket_button.custom_minimum_size=Vector2(198,48)
+	quest_label=Paper.label("",18,Color("#fffaf0"))
+	quest_label.position=Vector2(28,135)
+	quest_label.size=Vector2(376,48)
+	quest_label.add_theme_color_override("font_shadow_color",Color("#203e47"))
 	quest_label.add_theme_constant_override("shadow_offset_x",1)
-	quest_label.add_theme_constant_override("shadow_offset_y",2)
+	quest_label.add_theme_constant_override("shadow_offset_y",1)
 	hud.add_child(quest_label)
-	var lower := PanelContainer.new()
-	lower.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	lower.offset_left=24
-	lower.offset_right=-24
-	lower.offset_top=-73
-	lower.offset_bottom=-20
-	lower.add_theme_stylebox_override("panel",Paper.plaque(Color("#f4ecd8")))
-	hud.add_child(lower)
+	context_bar=PanelContainer.new()
+	context_bar.anchor_left=0.5
+	context_bar.anchor_right=0.5
+	context_bar.anchor_top=1.0
+	context_bar.anchor_bottom=1.0
+	context_bar.offset_left=-200
+	context_bar.offset_right=200
+	context_bar.offset_top=-62
+	context_bar.offset_bottom=-18
+	context_bar.custom_minimum_size=Vector2(400,44)
+	var context_style := Paper.plaque(Color("#f7efd9"))
+	context_style.content_margin_left=8
+	context_style.content_margin_right=8
+	context_style.content_margin_top=0
+	context_style.content_margin_bottom=0
+	context_bar.add_theme_stylebox_override("panel",context_style)
+	hud.add_child(context_bar)
 	var row := HBoxContainer.new()
-	lower.add_child(row)
-	hint=Paper.label("WASD/方向鍵移動 · E互動 · C衣櫃 · T時段 · F招呼 · P拍照 · Esc暫停",16)
-	hint.autowrap_mode=TextServer.AUTOWRAP_OFF
-	hint.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	row.add_child(hint)
-	var motto := Paper.label("不趕路，也是一種玩法。",17,Paper.TEAL)
-	motto.autowrap_mode=TextServer.AUTOWRAP_OFF
-	row.add_child(motto)
+	context_bar.add_child(row)
+	context_action=Paper.button("",_interact_nearest,row)
+	context_action.name="ContextAction"
+	context_action.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	context_action.visible=false
+	context_bar.visible=false
 	toast=Paper.label("",21,Paper.GOLD)
 	toast.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
 	toast.position=Vector2(-310,130)
@@ -298,6 +316,8 @@ func _build_ui() -> void:
 	ui.add_child(overlay)
 	overlay.hide()
 	_update_breadcrumb("海風碼頭")
+	get_tree().root.size_changed.connect(_adapt_hud)
+	call_deferred("_adapt_hud")
 
 func _update_breadcrumb(current: String) -> void:
 	var active := 0 if current=="海風碼頭" else (2 if current=="迎賓大道" else 1)
@@ -325,9 +345,12 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	overlay.add_child(center)
 	var panel := PanelContainer.new()
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe","time"]
+	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe","time","ticket"]
 	var preferred_height := 600.0 if tall_kinds.has(kind) else 350.0
-	panel.custom_minimum_size=Vector2(minf(960.0,viewport_size.x-56.0),minf(preferred_height,viewport_size.y-56.0))
+	panel.name="AdaptiveMenuPanel"
+	var menu_scale := Paper.physical_scale(overlay)
+	var menu_width := minf(1040.0/menu_scale,viewport_size.x-32.0/menu_scale)
+	panel.custom_minimum_size=Vector2(menu_width,minf(preferred_height/menu_scale,viewport_size.y-32.0/menu_scale))
 	panel.add_theme_stylebox_override("panel",Paper.plaque(Color("#f7efd9")))
 	center.add_child(panel)
 	var margin := MarginContainer.new()
@@ -346,20 +369,31 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	heading_stack.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	heading_stack.add_theme_constant_override("separation",1)
 	ticket_heading.add_child(heading_stack)
-	heading_stack.add_child(Paper.label("SNAPLAND   /   "+subtitle,13,Paper.TEAL))
-	heading_stack.add_child(Paper.label(title,28))
-	return modal_body
+	heading_stack.add_child(Paper.label("島郵局   /   "+subtitle,16,Paper.TEAL))
+	heading_stack.add_child(Paper.label(title,30))
+	var content_scroll := ScrollContainer.new()
+	content_scroll.name="AdaptiveMenuScroll"
+	content_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	content_scroll.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	content_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	content_scroll.follow_focus=true
+	modal_body.add_child(content_scroll)
+	var content := VBoxContainer.new()
+	content.name="AdaptiveMenuContent"
+	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation",10)
+	content_scroll.add_child(content)
+	call_deferred("_adapt_open_menu")
+	if not get_tree().root.size_changed.is_connected(_adapt_open_menu):
+		get_tree().root.size_changed.connect(_adapt_open_menu)
+	return content
 
 func _scroll(parent: VBoxContainer, height := 330) -> VBoxContainer:
-	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size=Vector2(0,height)
-	scroll.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	parent.add_child(scroll)
+	# The generic modal already owns the bounded scrolling region.
 	var box := VBoxContainer.new()
 	box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	box.add_theme_constant_override("separation",10)
-	scroll.add_child(box)
+	parent.add_child(box)
 	return box
 
 func _close() -> void:
@@ -377,24 +411,31 @@ func _close() -> void:
 	audio.set_paused(false)
 	if session != null:
 		session.process_mode=Node.PROCESS_MODE_INHERIT
+		if session.has_method("set_paused"):
+			session.set_paused(false)
 	if session==null: hud.show()
 	if celebrate and session==null and world.has_method("play_action"):
 		world.play_action("celebrate")
 
 func _back(parent: Node) -> void:
-	var button := Paper.button("返回遊園  ·  Esc",_close,parent)
+	var button := Paper.button("返回遊園  ·  Esc",_close,modal_body)
 	button.grab_focus()
 
 func _refresh() -> void:
 	if not is_instance_valid(ui): return
+	Paper.set_reduced_motion(bool(Progress.settings.get("reduced_motion",false)))
 	normal_count_label.text="普通 %d / 18"%Progress.normal_count()
 	devil_count_label.text="小惡魔 %d / 12"%Progress.devil_count()
+	coin_count_label.text="%d 幣"%Progress.coins
+	var phase := TimeOfDay.phase_for_id(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE))
+	phase_label.text="%s %s"%[str(phase.get("label","中午")),str(phase.get("clock","12:00"))]
 	quest_label.text=""
 	for id in ["quest-001","quest-002"]:
 		var step := int(Progress.quests.get(id,0))
 		if step>0 and step<3:
 			var quest: Dictionary=story.quest_data(id)
-			quest_label.text+="◇ "+quest.get("title",id)+"  %d / 3\n"%step
+			quest_label.text="任務  ·  "+quest.get("title",id)+"  %d / 3  ·  M 查看旅券"%step
+	quest_label.visible=not quest_label.text.is_empty()
 	audio.apply_settings(Progress.settings)
 	world.apply_settings(Progress.settings)
 	_apply_time_phase()
@@ -410,7 +451,11 @@ func _process(delta: float) -> void:
 		next_snapshot=session.elapsed+15.0
 		_sample_photo.call_deferred()
 	if is_instance_valid(world) and modal_kind=="" and session==null:
-		hint.text="E "+world.nearest.get("label","")+" · WASD移動 · C衣櫃 · T時段 · F招呼 · P拍照 · Esc暫停" if not world.nearest.is_empty() else "WASD/方向鍵移動 · E互動 · C衣櫃 · T時段 · F招呼 · P拍照 · Esc暫停"
+		var has_context: bool = not world.nearest.is_empty()
+		context_bar.visible=has_context
+		context_action.visible=has_context
+		if has_context:
+			context_action.text="E   互動：%s"%str(world.nearest.get("label","附近設施"))
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label):
 		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
 		dialogue_label.visible_characters=int(reveal)
@@ -421,6 +466,9 @@ func _input(event: InputEvent) -> void:
 			_close()
 		elif modal_kind == "":
 			_show_time_panel()
+		get_viewport().set_input_as_handled()
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_M and modal_kind=="" and session==null:
+		_show_ticket()
 		get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -522,26 +570,31 @@ func _show_time_panel() -> void:
 	time_panel = TimePanel.new()
 	time_capture_token += 1
 	var at_photo_station := session == null and str(world.nearest.get("id", "")) == "guide"
-	time_panel.open(self, body, Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE), Progress.photos, at_photo_station, _select_time_phase, _collect_time_postcard)
+	var time_card := Paper.card(body,Color("#fffaf0"),8)
+	time_panel.open(self, time_card, Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE), Progress.photos, at_photo_station, _select_time_phase, _collect_time_postcard)
 	if session != null:
 		session.process_mode = Node.PROCESS_MODE_DISABLED
-		body.add_child(Paper.label("已暫停本局；關閉面板後會從同一局面繼續。", 16, Paper.TEAL))
+		body.add_child(Paper.label("已暫停本局；關閉面板後會從同一局面繼續。", 18, Paper.TEAL))
 	_back(body)
 
 func _show_pause() -> void:
 	var body := _open("留一點時間，給海風。","PAUSE","pause")
-	body.add_child(Paper.label("進度會自動保存。今天想玩哪一款，都可以慢慢選。",22))
-	Paper.button("繼續遊園",_close,body).grab_focus()
-	Paper.button("衣櫃與服飾店",_show_wardrobe,body)
-	Paper.button("拍貼收藏",_show_album,body)
-	Paper.button("設定與輔助",_show_settings,body)
-	Paper.button("儲存並離開",_quit_game,body)
+	var resume_card := Paper.card(body)
+	resume_card.add_child(Paper.section_title("回到旅程"))
+	resume_card.add_child(Paper.label("進度會自動保存。今天想玩哪一款，都可以慢慢選。",20))
+	Paper.button("繼續遊園",_close,resume_card).grab_focus()
+	var links := HBoxContainer.new()
+	body.add_child(links)
+	Paper.button("打開航海旅券",_show_ticket,links)
+	Paper.button("儲存並離開",_quit_game,links)
 
 func _show_arrival() -> void:
 	var body := _open("今晚也要拍一張","WELCOME TO THE ISLAND","arrival")
-	body.add_child(Paper.label("船靠岸了。海風吹亂你的頭髮，也吹來一張沒有人署名的入園券。",24))
-	body.add_child(Paper.label("這座遊樂園收藏的不是完美紀錄，是那些差一點就錯過的笑容。\n\n沿著木棧橋走進廣場，再去迎賓大道看看。",22))
-	Paper.button("下船，去看看",func(): _start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress()),body).grab_focus()
+	var arrival_card := Paper.card(body,Color("#fffaf0"),10)
+	arrival_card.add_child(Paper.section_title("你的入園票已經備好。"))
+	arrival_card.add_child(Paper.label("船靠岸了。海風吹亂你的頭髮，也吹來一張沒有人署名的入園券。",20))
+	arrival_card.add_child(Paper.label("沿著木棧橋走進廣場，再到迎賓大道看看。收藏的是差一點錯過的笑容。",20))
+	Paper.button("下船，去看看",func(): _start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress()),arrival_card).grab_focus()
 	Paper.button("略過導覽，直接遊園",func(): Progress.intro_seen=true; Progress.save_progress(); _close(),body)
 
 func _start_dialogue(lines: Array, done: Callable) -> void:
@@ -754,84 +807,11 @@ func _game_finished(result: Dictionary) -> void:
 
 func _show_album() -> void:
 	var body := _open("一張照片，一點小事。","PHOTO COLLECTION","album")
-	var grid := GridContainer.new()
-	grid.columns=3
-	grid.add_theme_constant_override("h_separation",12)
-	grid.add_theme_constant_override("v_separation",8)
-	var collection_content := _scroll(body, 360)
-	collection_content.add_child(grid)
-	var sources: Array=[]
-	for i in range(12):
-		sources.append({"id":"photo-welcome-game-%d"%(i+1),"label":_definition("game-%03d"%(i+1)).get("name","設施 %d"%(i+1))})
-	for entry in [["explore-1","花壇會眨眼"],["explore-2","歡迎字樣的影子"],["explore-3","長椅雙人份"],["story-1","照片多了一條尾巴"],["quest-1","吉祥物的尾巴危機"],["quest-2","廣播即興救場"]]:
-		sources.append({"id":"photo-welcome-"+entry[0],"label":entry[1]})
-	for item in sources:
-		var earned := Progress.photos.has(item.id)
-		var card := PanelContainer.new()
-		card.custom_minimum_size=Vector2(270,84)
-		card.add_theme_stylebox_override("panel",Paper.plaque(Color("#f9f3e2") if earned else Color("#e9e3d4")))
-		var box := VBoxContainer.new()
-		card.add_child(box)
-		var title_row := HBoxContainer.new()
-		title_row.add_theme_constant_override("separation",6)
-		box.add_child(title_row)
-		title_row.add_child(Paper.icon("album" if earned else "ticket",19,Paper.TEAL if earned else Color("#978e7a")))
-		title_row.add_child(Paper.label(("已收藏  ·  " if earned else "待拍  ·  ")+item.label,16))
-		box.add_child(Paper.label("貼紙相紙  ·  可重拍" if earned else "前往設施或互動點留下這張",13,Paper.TEAL))
-		if earned:
-			var frames: Variant=Progress.photos[item.id].get("frames",[])
-			if frames is Array and not frames.is_empty() and frames[0] is String and FileAccess.file_exists(frames[0]):
-				var thumbnail := TextureRect.new()
-				var photo := _photo_texture(frames[0])
-				if photo!=null:
-					thumbnail.texture=photo
-					thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-					thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-					thumbnail.custom_minimum_size=Vector2(224,96)
-					box.add_child(thumbnail)
-		grid.add_child(card)
-	var time_postcard_count := 0
-	for phase: Dictionary in TimeOfDay.PHASES:
-		if Progress.photos.has(TimeOfDay.postcard_id(str(phase.id))):
-			time_postcard_count += 1
-	collection_content.add_child(Paper.label("四時紀念拍貼  ·  %d / 4" % time_postcard_count, 20, Paper.TEAL))
-	var time_grid := GridContainer.new()
-	time_grid.name = "TimePostcardGrid"
-	time_grid.columns = 2
-	time_grid.add_theme_constant_override("h_separation", 8)
-	time_grid.add_theme_constant_override("v_separation", 8)
-	collection_content.add_child(time_grid)
-	for phase: Dictionary in TimeOfDay.PHASES:
-		var source_id := TimeOfDay.postcard_id(str(phase.id))
-		var earned := Progress.photos.has(source_id)
-		var card := PanelContainer.new()
-		card.custom_minimum_size = Vector2(300, 124)
-		card.add_theme_stylebox_override("panel", Paper.plaque(Color("#fff9e9") if earned else Color("#e9e3d4")))
-		var content := VBoxContainer.new()
-		card.add_child(content)
-		content.add_child(Paper.label("%s · %s" % [str(phase.label), str(phase.clock)], 17, Paper.TEAL))
-		if earned:
-			var frames: Variant = Progress.photos[source_id].get("frames", [])
-			if frames is Array and not frames.is_empty() and typeof(frames[0]) == TYPE_STRING:
-				var texture := _photo_texture(str(frames[0]))
-				if texture != null:
-					var thumbnail := TextureRect.new()
-					thumbnail.texture = texture
-					thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-					thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-					thumbnail.custom_minimum_size = Vector2(260, 90)
-					content.add_child(thumbnail)
-			content.add_child(Paper.label("已收藏", 14, Paper.TEAL))
-		else:
-			content.add_child(Paper.label("尚未收藏", 14, Color("#978e7a")))
-		time_grid.add_child(card)
-	var album_legend := HBoxContainer.new()
-	album_legend.add_theme_constant_override("separation",7)
-	album_legend.add_child(Paper.icon("album",19,Paper.TEAL))
-	album_legend.add_child(Paper.label("普通 %d / 18"%Progress.normal_count(),16))
-	album_legend.add_child(Paper.icon("devil",19,Paper.CORAL))
-	album_legend.add_child(Paper.label("小惡魔 %d / 12  ·  重拍不重複計數"%Progress.devil_count(),16))
-	body.add_child(album_legend)
+	var book_script = load("res://game/ui/collection_book_panel.gd")
+	var book = book_script.new()
+	book.setup(Progress,definitions,TimeOfDay.PHASES,Callable(self,"_photo_texture"))
+	var scroll := _scroll(body,430)
+	scroll.add_child(book)
 	_back(body)
 
 func _show_tasks() -> void:
@@ -954,38 +934,36 @@ func _show_exploration(id: String) -> void:
 
 func _show_achievements() -> void:
 	var body := _open("那些「我做到了」的小瞬間。","ACHIEVEMENTS","achievements")
-	var list := _scroll(body)
-	for i in range(12):
-		var id := "ACH_GAME_%03d"%(i+1)
-		list.add_child(Paper.label(("✓ " if Progress.achievements.has(id) else "◇ ")+"第一次："+_definition("game-%03d"%(i+1)).get("name",id),20))
-	for entry in [["ACH_WELCOME_CLEAR","迎賓全通關","完成迎賓十二款"],["ACH_WELCOME_DEVILS","尾巴藏不住","迎賓十二張小惡魔"],["ACH_ALL_DEVILS","每個小惡魔都入鏡","十區120張小惡魔"]]:
-		list.add_child(Paper.label(("✓ " if Progress.achievements.has(entry[0]) else "◇ ")+entry[1]+"  ·  "+entry[2],20))
-	var time_achievement := TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS
-	list.add_child(Paper.label(("✓ " if Progress.achievements.has(time_achievement) else "◇ ")+"四時留影  ·  收藏凌晨、中午、傍晚與晚上拍貼",20))
-	body.add_child(Paper.label("成就保存在遊戲內。Steam 接點預留，未連線時保留待同步紀錄。",16,Paper.TEAL))
+	var stamp_script = load("res://game/ui/achievement_stamp_book.gd")
+	var stamp_book = stamp_script.new()
+	stamp_book.setup(Progress,definitions)
+	var scroll := _scroll(body,390)
+	scroll.add_child(stamp_book)
 	_back(body)
 
 func _show_map() -> void:
 	var body := _open("今天想去哪一邊？","ISLAND MAP","map")
-	var list := _scroll(body)
-	list.add_child(Paper.label("↓ 海風碼頭   →   中央廣場   →   ↑ 迎賓大道（12 款可玩）",24,Paper.TEAL))
-	var data: Dictionary=world.park_data()
-	for zone in data.zones:
-		if zone.id!="welcome":
-			list.add_child(Paper.label("◇ "+zone.name+"  ·  %d 張普通拍貼  ·  路口已開放，園區準備中"%zone.threshold,19))
+	var map_script = load("res://game/ui/island_map_panel.gd")
+	var map_panel = map_script.new()
+	var park_data: Dictionary=world.park_data()
+	map_panel.setup(park_data.get("zones",[]),definitions,Progress.normal_count(),world.points)
+	var scroll := _scroll(body,430)
+	scroll.add_child(map_panel)
 	_back(body)
 
 func _show_settings() -> void:
 	var body := _open("把這趟遊園，調成你的步調。","SETTINGS","settings")
 	var list := _scroll(body,300)
-	for entry in [["master_volume","總音量"],["music_volume","音樂"],["sfx_volume","音效"],["text_speed","文字速度"]]:
+	var sound_card := Paper.card(list,Color("#fffaf0"),6)
+	sound_card.add_child(Paper.section_title("聲音與閱讀"))
+	for entry in [["master_volume","總音量"],["music_volume","背景音樂"],["sfx_volume","互動音效"],["text_speed","對話文字速度"]]:
 		var row := HBoxContainer.new()
-		list.add_child(row)
+		sound_card.add_child(row)
 		var label := Paper.label(entry[1],20)
-		label.custom_minimum_size.x=200
+		label.custom_minimum_size.x=220
 		row.add_child(label)
 		var slider := HSlider.new()
-		slider.custom_minimum_size=Vector2(550,36)
+		slider.custom_minimum_size=Vector2(360,44)
 		slider.min_value=0.5 if entry[0]=="text_speed" else 0.0
 		slider.max_value=2.0 if entry[0]=="text_speed" else 1.0
 		slider.step=0.05
@@ -993,14 +971,17 @@ func _show_settings() -> void:
 		var key: String=entry[0]
 		slider.value_changed.connect(func(value: float): Progress.set_setting(key,value))
 		row.add_child(slider)
-	for entry in [["assist","預設輔助  ·  時間與判定更寬鬆，仍可收藏"],["reduced_motion","降低背景動態  ·  停止水波與裝飾擺動"],["fullscreen","全螢幕"]]:
+	var access_card := Paper.card(list,Color("#f1e8d3"),5)
+	access_card.add_child(Paper.section_title("遊玩方式與顯示"))
+	for entry in [["assist","輔助遊玩：放寬時間與判定，仍可收藏"],["reduced_motion","降低動態：停止水波與裝飾擺動"],["fullscreen","使用全螢幕"]]:
 		var toggle := CheckButton.new()
 		toggle.text=entry[1]
+		toggle.custom_minimum_size.y=44
 		toggle.button_pressed=bool(Progress.settings.get(entry[0],false))
 		var key: String=entry[0]
 		toggle.toggled.connect(func(value: bool): Progress.set_setting(key,value))
-		list.add_child(toggle)
-	body.add_child(Paper.label("移動：WASD / 方向鍵  ·  互動：E / Space  ·  返回：Esc",18))
+		access_card.add_child(toggle)
+	access_card.add_child(Paper.label("快捷鍵可在航海旅券「操作速查」重看。",18,Paper.DEEP_TEAL))
 	_back(body)
 
 func _show_wardrobe() -> void:
@@ -1171,3 +1152,88 @@ func _abort_capture(reason: String) -> void:
 	audio.shutdown()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().quit(1)
+
+func _adapt_hud() -> void:
+	if not is_instance_valid(hud): return
+	var scale_factor := Paper.physical_scale(hud)
+	Paper.adapt_menu(hud,scale_factor)
+	var banner := hud.get_node("ParkKeepsakeBanner") as Control
+	banner.position=Vector2(24,20)/scale_factor
+	banner.custom_minimum_size=Vector2(390,106)/scale_factor
+	banner.size=banner.custom_minimum_size
+	ticket_button.offset_left=-222.0/scale_factor
+	ticket_button.offset_right=-24.0/scale_factor
+	ticket_button.offset_top=24.0/scale_factor
+	ticket_button.offset_bottom=72.0/scale_factor
+	ticket_button.custom_minimum_size=Vector2(198,48)/scale_factor
+	quest_label.position=Vector2(28,135)/scale_factor
+	quest_label.size=Vector2(376,48)/scale_factor
+	context_bar.offset_left=-200.0/scale_factor
+	context_bar.offset_right=200.0/scale_factor
+	context_bar.offset_top=-70.0/scale_factor
+	context_bar.offset_bottom=-18.0/scale_factor
+	context_bar.custom_minimum_size=Vector2(400,52)/scale_factor
+	toast.offset_left=-310.0/scale_factor
+	toast.offset_right=310.0/scale_factor
+	toast.offset_top=190.0/scale_factor
+	toast.offset_bottom=280.0/scale_factor
+
+func _adapt_open_menu() -> void:
+	if not is_instance_valid(overlay) or not overlay.visible: return
+	var scale_factor := Paper.physical_scale(overlay)
+	var panel := overlay.find_child("AdaptiveMenuPanel",true,false) as Control
+	if panel!=null:
+		var viewport_size := get_viewport().get_visible_rect().size
+		panel.custom_minimum_size.x=minf(1040.0/scale_factor,viewport_size.x-32.0/scale_factor)
+		if scale_factor<0.9: panel.custom_minimum_size.y=viewport_size.y-32.0/scale_factor
+	Paper.adapt_menu(overlay,scale_factor)
+	var chart := overlay.find_child("IslandChartCanvas",true,false)
+	if chart!=null and chart.get_parent().get_parent().has_method("_layout_map_buttons"):
+		chart.get_parent().get_parent().call_deferred("_layout_map_buttons")
+
+func _show_ticket() -> void:
+	var body := _open("島上的事，都收在這本旅券裡。","VOYAGE PASS","ticket")
+	var list := _scroll(body,430)
+	var groups := GridContainer.new()
+	groups.columns=2
+	groups.add_theme_constant_override("h_separation",10)
+	groups.add_theme_constant_override("v_separation",10)
+	list.add_child(groups)
+	var column_width := clampf((get_viewport().get_visible_rect().size.x-112.0)/2.0,280.0,440.0)
+	var sections := [
+		{"title":"探索島嶼","subtitle":"地圖與正在進行的委託","items":[["島嶼地圖",_show_map],["今日任務",_show_tasks]]},
+		{"title":"收藏記錄","subtitle":"拍貼與完成紀念","items":[["拍貼收藏本",_show_album],["遊園成就",_show_achievements]]},
+		{"title":"整裝出發","subtitle":"外觀、衣櫃與服飾店","items":[["衣櫃與服飾店",_show_wardrobe]]},
+		{"title":"遊園安排","subtitle":"光線、聲音與輔助設定","items":[["切換時段",_open_time_panel_from_ticket],["設定與輔助",_show_settings]]},
+	]
+	for section: Dictionary in sections:
+		var card := Paper.card(groups,Color("#fffaf0"),8)
+		card.custom_minimum_size=Vector2(column_width,0)
+		card.add_child(Paper.section_title(str(section.title)))
+		var caption := Paper.label(str(section.subtitle),16,Paper.DEEP_TEAL)
+		card.add_child(caption)
+		for entry: Array in section.items:
+			Paper.button(str(entry[0]),entry[1],card)
+	var help_card := Paper.card(list,Color("#f1e8d3"),6)
+	help_card.add_child(Paper.section_title("操作速查",Paper.DEEP_TEAL))
+	help_card.add_child(Paper.label("移動 WASD／方向鍵　·　互動 E　·　招呼 F　·　拍照 P　·　衣櫃 C　·　時段 T　·　暫停 Esc",18))
+	Paper.button("操作速查",_show_controls,help_card)
+	_back(body)
+
+func _open_time_panel_from_ticket() -> void:
+	if modal_kind != "ticket":
+		return
+	_close()
+	_show_time_panel()
+
+func _interact_nearest() -> void:
+	if not world.nearest.is_empty():
+		world.interact()
+
+func _show_controls() -> void:
+	var body := _open("操作速查","PARK CONTROLS","controls")
+	body.add_child(Paper.section_title("移動與互動"))
+	body.add_child(Paper.label("移動：WASD／方向鍵　·　互動：E　·　招呼：F　·　拍照：P",20))
+	body.add_child(Paper.label("衣櫃：C　·　時段：T　·　旅券：M　·　暫停：Esc",20))
+	_back(body)
+

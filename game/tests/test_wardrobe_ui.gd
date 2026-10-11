@@ -106,11 +106,13 @@ func _run() -> void:
 	_collect_buttons(main.hud,hud_buttons)
 	var viewport_rect := get_viewport().get_visible_rect()
 	var hud_fits := true
+	var hud_offender := ""
 	for button in hud_buttons:
 		if not viewport_rect.encloses(button.get_global_rect()):
 			hud_fits=false
+			hud_offender="%s %s viewport=%s"%[button.name,str(button.get_global_rect()),str(viewport_rect)]
 			break
-	_check(hud_fits,"HUD wardrobe and utility buttons stay on an 800×600 screen")
+	_check(hud_fits,"HUD wardrobe and utility buttons stay on an 800×600 screen "+hud_offender)
 	get_tree().root.size=Vector2i(1280,720)
 	await _frames(2)
 	_finish()

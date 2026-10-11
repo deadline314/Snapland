@@ -1,0 +1,11 @@
+{
+  "scope": "ART20 coherent staged project, not whole park/gameplay acceptance",
+  "tree": "a01cebb75154166eba361187f20b8e9376f23ceb",
+  "native": "PASS 1280x720 and 800x600 nine park menus, four phases, saved reduced-motion toggles using native inputs",
+  "travel_checks": 59,
+  "wardrobe": "PASS",
+  "errors": 0,
+  "movie_frames": 961,
+  "movie_fps": 60,
+  "pending": "all minigame/result/tutorial interfaces and final subjective full-UI polish remain separate review"
+}

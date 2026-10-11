@@ -49,7 +49,7 @@ func _build() -> void:
 	preview_stack.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	preview_stack.add_theme_constant_override("separation",6)
 	preview_card.add_child(preview_stack)
-	preview_stack.add_child(Paper.label("試衣鏡",18,Paper.TEAL))
+	preview_stack.add_child(Paper.section_title("試衣鏡  ·  即時預覽"))
 	var frame := PanelContainer.new()
 	frame.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	frame.add_theme_stylebox_override("panel",Paper.box(Color("#e6d7b8"),5))
@@ -77,7 +77,7 @@ func _build() -> void:
 		direction_button.tooltip_text={"front":"正面預覽","left":"左側預覽","right":"右側預覽","back":"背面預覽"}[direction]
 		direction_button.custom_minimum_size.x=0
 		direction_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	preview_caption=Paper.label("正面預覽",15,Paper.TEAL)
+	preview_caption=Paper.label("正面預覽",16,Paper.TEAL)
 	preview_caption.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	preview_stack.add_child(preview_caption)
 	var controls := VBoxContainer.new()
@@ -92,9 +92,9 @@ func _build() -> void:
 	ledger_row.add_theme_constant_override("separation",5)
 	ledger.add_child(ledger_row)
 	ledger_row.add_child(Paper.icon("ticket",20,Paper.GOLD))
-	balance_label=Paper.label("海島幣：%d"%Progress.coins,17)
+	balance_label=Paper.label("島幣  %d"%Progress.coins,20,Paper.INK)
 	ledger_row.add_child(balance_label)
-	ledger_row.add_child(Paper.label("每款遊戲首次完成 +40",14,Paper.TEAL))
+	ledger_row.add_child(Paper.label("每款遊戲首次完成可得 40 枚",16,Paper.DEEP_TEAL))
 	var tabs := HBoxContainer.new()
 	tabs.add_theme_constant_override("separation",5)
 	controls.add_child(tabs)
@@ -103,13 +103,14 @@ func _build() -> void:
 		var button := Paper.button(entry[1],func(): _show_tab(tab_id),tabs)
 		button.name="Tab_"+tab_id
 		button.custom_minimum_size.x=0
+		button.custom_minimum_size.y=48
 		button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	content=VBoxContainer.new()
 	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	content.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("separation",7)
 	controls.add_child(content)
-	status_label=Paper.label("",15,Paper.TEAL)
+	status_label=Paper.label("",16,Paper.TEAL)
 	status_label.custom_minimum_size.y=22
 	controls.add_child(status_label)
 	action_row=HBoxContainer.new()
@@ -162,16 +163,19 @@ func _show_tab(tab_id: String) -> void:
 		var shop_cancel_button := Paper.button("返回遊園",_cancel,action_row)
 		shop_cancel_button.name="CancelWardrobe"
 	_refresh_preview()
+	# Tabs replace their controls after the initial menu layout. Reapply the
+	# idempotent physical sizing before the next frame is presented.
+	host.call_deferred("_adapt_open_menu")
 
 func _fill_appearance(list: VBoxContainer) -> void:
-	list.add_child(Paper.label("選好喜歡的樣子，再按「套用外觀」保存。",16,Paper.TEAL))
+	list.add_child(Paper.label("選好喜歡的樣子，再按「套用外觀」保存。",18,Paper.DEEP_TEAL))
 	var options: Dictionary=Progress.appearance_options()
 	for key in ["skin","species","gender","hair","hair_color","face"]:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation",8)
 		list.add_child(row)
-		var label := Paper.label(CATEGORY_NAMES[key],16)
-		label.custom_minimum_size.x=56
+		var label := Paper.label(CATEGORY_NAMES[key],18)
+		label.custom_minimum_size.x=72
 		row.add_child(label)
 		var selector := OptionButton.new()
 		selector.name="Appearance_"+key
@@ -189,29 +193,43 @@ func _fill_appearance(list: VBoxContainer) -> void:
 		)
 
 func _fill_closet(list: VBoxContainer) -> void:
-	list.add_child(Paper.label("已收藏的穿搭留在衣櫃；選取後可先預覽，再穿戴。",15,Paper.TEAL))
+	list.add_child(Paper.section_title("已收藏穿搭"))
+	list.add_child(Paper.label("選取物件可先預覽，再按「穿戴所選」。",18,Paper.DEEP_TEAL))
 	for item: Dictionary in Progress.wardrobe_items():
 		if item.id!="hat-none" and not Progress.owned_clothes.has(item.id): continue
 		_add_item_row(list,item)
 
 func _fill_shop(list: VBoxContainer) -> void:
-	list.add_child(Paper.label("試穿即時預覽，購買後會收進衣櫃。",15,Paper.TEAL))
+	list.add_child(Paper.section_title("服飾目錄"))
+	list.add_child(Paper.label("選取商品可試穿；購買後會收進衣櫃。",18,Paper.DEEP_TEAL))
 	for item: Dictionary in Progress.wardrobe_items():
 		_add_item_row(list,item)
 
 func _add_item_row(list: VBoxContainer, item: Dictionary) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation",5)
+	row.custom_minimum_size.y=62
 	list.add_child(row)
 	var slot_name := "外套" if item.slot=="outfit" else "帽子"
+	var preview_equipped: Dictionary=draft_equipped.duplicate(true)
+	preview_equipped[str(item.slot)]=str(item.id)
+	var item_preview := TextureRect.new()
+	item_preview.name="ClothingPreview_"+str(item.id)
+	item_preview.texture=renderer.texture(draft_appearance,preview_equipped,"front",0,"idle")
+	item_preview.custom_minimum_size=Vector2(48,58)
+	item_preview.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+	item_preview.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	item_preview.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
+	item_preview.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	row.add_child(item_preview)
 	var choose := Paper.button("%s  ·  %s"%[slot_name,str(item.name)],func(): _select_item(item),row)
 	choose.name="WardrobeItem_"+str(item.id)
 	choose.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	choose.custom_minimum_size.x=0
 	var state_text := "穿著中" if str(Progress.equipped.get(item.slot,""))==str(item.id) else ("已收藏" if item.id=="hat-none" or Progress.owned_clothes.has(item.id) else "%d 幣"%int(item.price))
 	var state_color: Color=Paper.TEAL if state_text in ["穿著中","已收藏"] else Paper.CORAL
-	var state := Paper.label(state_text,14,state_color)
-	state.custom_minimum_size.x=76
+	var state := Paper.label(state_text,16,state_color)
+	state.custom_minimum_size.x=88
 	state.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
 	row.add_child(state)
 

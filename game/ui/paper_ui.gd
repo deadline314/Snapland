@@ -7,6 +7,7 @@ const DEEP_TEAL = Color("#24585d")
 const CORAL = Color("#d97966")
 const GOLD = Color("#dfa458")
 const FONT = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+static var _reduced_motion := false
 
 class PrintMark extends Control:
 	var motif := "ticket"
@@ -51,47 +52,36 @@ class PrintMark extends Control:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 class CharacterPortrait extends Control:
-	const CHARACTER_ATLAS = preload("res://assets/minigames/props/tidal-props-v2.png")
+	const CharacterLibraryScript = preload("res://game/world/character_animation_library.gd")
 	var speaker := ""
+	var animation_library: RefCounted
+	func _init() -> void:
+		animation_library=CharacterLibraryScript.new()
 	func _draw() -> void:
-		# Use the actual mascot and playable character art where their sprite exists.
-		var paper := Color("#f3e6c9")
 		var ink := Color("#294951")
-		var hair := Color("#5c5147")
-		var face := Color("#e8b990")
 		draw_arc(Vector2(48, 48), 39, 0, TAU, 48, Color("#dfa458"), 2.2)
 		draw_arc(Vector2(48, 48), 34, 0.1, TAU - 0.1, 40, Color("#b97759"), 0.8)
-		if speaker=="小角":
-			# Runtime crop from the mascot region; source artwork stays untouched.
-			draw_texture_rect_region(CHARACTER_ATLAS, Rect2(8, 21, 80, 47), Rect2(661, 365, 268, 148))
+		var actor := ""
+		match speaker:
+			"小角": actor="imp"
+			"主角": actor="traveller"
+			"票票": actor="ticket"
+			"阿浪": actor="announcer"
+		if not actor.is_empty():
+			var sequence: Dictionary=animation_library.get_sequence(actor,"idle","front")
+			var frames: Array=sequence.get("frames",[])
+			if not frames.is_empty() and frames[0] is Dictionary and frames[0].get("texture") is Texture2D:
+				var texture: Texture2D=frames[0].texture
+				var scale_factor := minf(76.0/texture.get_width(),76.0/texture.get_height())
+				var draw_size := Vector2(texture.get_size())*scale_factor
+				draw_texture_rect(texture,Rect2((size-draw_size)*0.5,draw_size),false)
+				return
+			# If authored art is unavailable, do not invent a costume for the named character.
+			draw_circle(Vector2(48,48),25,Color("#e8b990"))
+			draw_string(ThemeDB.fallback_font,Vector2(40,56),speaker.substr(0,1),HORIZONTAL_ALIGNMENT_LEFT,-1,22,ink)
 			return
-		if speaker=="主角":
-			# Dark-haired teal-coated camera visitor, matching the in-world character.
-			draw_texture_rect_region(CHARACTER_ATLAS, Rect2(17, 17, 62, 64), Rect2(386, 324, 160, 159))
-			return
-		if speaker=="票票": hair=Color("#503d34")
-		elif speaker=="阿浪": hair=Color("#354c64")
-		elif speaker=="露露": hair=Color("#66534b")
-		# Shoulder line and sailor collar.
-		var uniform := Color("#dca94f") if speaker=="票票" else Color("#337b7b")
-		draw_colored_polygon(PackedVector2Array([Vector2(17, 79), Vector2(22, 67), Vector2(34, 61), Vector2(48, 66), Vector2(62, 61), Vector2(75, 68), Vector2(80, 81)]), uniform)
-		draw_line(Vector2(40, 65), Vector2(48, 76), paper, 2)
-		draw_line(Vector2(56, 65), Vector2(48, 76), paper, 2)
-		# Neck, ear, face and distinct fringe strokes.
-		draw_rect(Rect2(42, 56, 12, 12), face)
-		draw_colored_polygon(PackedVector2Array([Vector2(32, 36), Vector2(35, 22), Vector2(48, 17), Vector2(62, 23), Vector2(65, 40), Vector2(61, 57), Vector2(54, 64), Vector2(40, 62), Vector2(33, 52)]), face)
-		draw_arc(Vector2(31, 44), 4, PI * 1.5, PI * 2.5, 12, face, 2)
-		draw_arc(Vector2(65, 44), 4, PI * 0.5, PI * 1.5, 12, face, 2)
-		draw_colored_polygon(PackedVector2Array([Vector2(31, 42), Vector2(30, 29), Vector2(35, 20), Vector2(44, 15), Vector2(57, 17), Vector2(65, 25), Vector2(66, 39), Vector2(60, 34), Vector2(54, 28), Vector2(47, 32), Vector2(38, 30)]), hair)
-		if speaker=="票票":
-			# Code-native park guide cap and tiny ticket badge.
-			draw_colored_polygon(PackedVector2Array([Vector2(33, 29), Vector2(36, 18), Vector2(46, 13), Vector2(58, 17), Vector2(64, 27), Vector2(48, 24)]), Color("#e0ad55"))
-			draw_line(Vector2(31, 30), Vector2(66, 30), ink, 2)
-			draw_line(Vector2(46, 20), Vector2(50, 20), Color("#f7efd9"), 2)
-		draw_line(Vector2(39, 43), Vector2(43, 43), ink, 1.8)
-		draw_line(Vector2(53, 43), Vector2(57, 43), ink, 1.8)
-		draw_line(Vector2(48, 44), Vector2(46, 50), ink, 1.1)
-		draw_arc(Vector2(48, 51), 5, 0.25, PI - 0.25, 10, Color("#9f5c50"), 1.2)
+		draw_circle(Vector2(48,48),25,Color("#e8b990"))
+		draw_string(ThemeDB.fallback_font,Vector2(40,56),speaker.substr(0,1),HORIZONTAL_ALIGNMENT_LEFT,-1,22,ink)
 
 class Postmark extends Control:
 	func _draw() -> void:
@@ -122,11 +112,12 @@ static func theme() -> Theme:
 	result.set_color("font_pressed_color", "Button", PAPER)
 	result.set_color("font_focus_color", "Button", INK)
 	result.set_color("font_disabled_color", "Button", Color("#7e837b"))
-	result.set_stylebox("normal", "Button", button_box(Color("#eee4cd"), Color("#c1a97d")))
-	result.set_stylebox("hover", "Button", button_box(TEAL, Color("#dfa458")))
-	result.set_stylebox("pressed", "Button", button_box(DEEP_TEAL, Color("#dfa458")))
+	result.set_stylebox("normal", "Button", button_box(Color("#eee4cd"), Color("#c1a97d"), 3, Vector2(2, 3)))
+	result.set_stylebox("hover", "Button", button_box(TEAL, Color("#dfa458"), 5, Vector2(2, 5)))
+	result.set_stylebox("pressed", "Button", button_box(DEEP_TEAL, Color("#dfa458"), 0, Vector2.ZERO))
 	var focus := button_box(Color(0, 0, 0, 0), GOLD)
 	focus.set_border_width_all(3)
+	focus.shadow_size=0
 	result.set_stylebox("focus", "Button", focus)
 	result.set_stylebox("panel", "PanelContainer", box(PAPER, 12))
 	result.set_color("font_color", "CheckButton", INK)
@@ -138,22 +129,26 @@ static func theme() -> Theme:
 static func box(color: Color, radius: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color=color
-	style.border_color=Color("#d3c29e")
+	style.border_color=Color("#c8b78f")
 	style.set_border_width_all(1)
+	style.set_border_width(SIDE_BOTTOM, 3)
 	style.set_corner_radius_all(radius)
-	style.content_margin_left=16
-	style.content_margin_right=16
-	style.content_margin_top=10
-	style.content_margin_bottom=10
-	style.shadow_color=Color("#172f39", 0.22)
-	style.shadow_size=3
-	style.shadow_offset=Vector2(1, 2)
+	style.content_margin_left=18
+	style.content_margin_right=18
+	style.content_margin_top=14
+	style.content_margin_bottom=14
+	style.shadow_color=Color("#172f39", 0.18)
+	style.shadow_size=2
+	style.shadow_offset=Vector2(2, 3)
 	return style
 
-static func button_box(color: Color, edge: Color) -> StyleBoxFlat:
+static func button_box(color: Color, edge: Color, shadow_size := 2, shadow_offset := Vector2(1, 2)) -> StyleBoxFlat:
 	var style := box(color, 9)
 	style.border_color=edge
 	style.set_border_width_all(1)
+	style.set_border_width(SIDE_BOTTOM, 2 if shadow_size == 0 else 4)
+	style.shadow_size=shadow_size
+	style.shadow_offset=shadow_offset
 	style.content_margin_left=14
 	style.content_margin_right=14
 	style.content_margin_top=7
@@ -162,11 +157,24 @@ static func button_box(color: Color, edge: Color) -> StyleBoxFlat:
 
 static func plaque(color := PAPER) -> StyleBoxFlat:
 	var style := box(color, 8)
-	style.border_color=Color("#bba77e")
+	style.border_color=Color("#aa956d")
 	style.set_border_width_all(1)
+	style.set_border_width(SIDE_BOTTOM, 5)
 	style.shadow_size=4
-	style.shadow_color=Color("#122a32", 0.3)
+	style.shadow_offset=Vector2(2, 5)
+	style.shadow_color=Color("#122a32", 0.20)
 	return style
+
+## Root calls this when the saved accessibility option changes. Paper depth itself is static;
+## callers can consult reduced_motion() before adding any optional transition.
+static func set_reduced_motion(enabled: bool) -> void:
+	_reduced_motion=enabled
+
+static func reduced_motion() -> bool:
+	return _reduced_motion
+
+static func motion_duration_seconds(requested_duration: float) -> float:
+	return 0.0 if _reduced_motion else maxf(requested_duration, 0.0)
 
 static func label(text: String, size := 20, color := INK) -> Label:
 	var result := Label.new()
@@ -176,6 +184,32 @@ static func label(text: String, size := 20, color := INK) -> Label:
 	result.add_theme_color_override("font_color", color)
 	result.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0))
 	result.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	return result
+
+static func section_title(text: String, color := TEAL) -> Label:
+	var result := label(text, 20, color)
+	result.add_theme_font_size_override("font_size", 20)
+	result.add_theme_constant_override("outline_size", 0)
+	result.custom_minimum_size.y=30
+	return result
+
+static func card(parent: Node, color := Color("#fffaf0"), separation := 8) -> VBoxContainer:
+	var panel := PanelContainer.new()
+	# The plaque is only a backdrop. Keeping its frame out of GUI hit testing lets
+	# nested buttons receive real mouse clicks even when the plaque shadow overlaps.
+	panel.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override("panel", plaque(color))
+	parent.add_child(panel)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", separation)
+	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	panel.add_child(content)
+	return content
+
+static func divider(parent: Node, color := Color("#c8b78f")) -> HSeparator:
+	var result := HSeparator.new()
+	result.add_theme_color_override("separator_color", color)
+	parent.add_child(result)
 	return result
 
 static func icon(motif: String, extent := 28, tint := TEAL) -> Control:
@@ -210,8 +244,33 @@ static func deckle_band() -> Control:
 static func button(text: String, callback: Callable, parent: Node) -> Button:
 	var result := Button.new()
 	result.text=text
-	result.custom_minimum_size.y=46
+	result.custom_minimum_size.y=44
+	result.add_theme_font_size_override("font_size",20)
 	result.mouse_default_cursor_shape=Control.CURSOR_POINTING_HAND
 	result.pressed.connect(callback)
 	parent.add_child(result)
 	return result
+
+static func physical_scale(control: CanvasItem) -> float:
+	var transform := control.get_viewport().get_final_transform()
+	return maxf(0.01,minf(transform.x.length(),transform.y.length()))
+
+static func adapt_menu(node: Node, scale_factor: float) -> void:
+	if node is Control:
+		var control := node as Control
+		if not control.has_meta("menu_base_minimum"):
+			control.set_meta("menu_base_minimum",control.custom_minimum_size)
+		var base: Vector2=control.get_meta("menu_base_minimum")
+		if control is Label or control is Button:
+			if not control.has_meta("menu_base_font"):
+				control.set_meta("menu_base_font",control.get_theme_font_size("font_size"))
+			var base_font: int=control.get_meta("menu_base_font")
+			var physical_font := maxi(base_font,20 if base_font>=20 else 16)
+			control.add_theme_font_size_override("font_size",ceili(float(physical_font)/scale_factor))
+		if control is Button or control.focus_mode==Control.FOCUS_ALL:
+			control.custom_minimum_size=Vector2(maxf(base.x,44.0/scale_factor),maxf(base.y,44.0/scale_factor))
+		if control is ScrollContainer:
+			control.custom_minimum_size.y=0.0 if control.name=="AdaptiveMenuScroll" else minf(base.y,maxf(120.0,control.get_viewport().get_visible_rect().size.y-250.0/scale_factor))
+		if control is GridContainer and control.name=="MinigameStampGrid":
+			control.columns=clampi(floori((control.get_viewport().get_visible_rect().size.x*scale_factor-90.0)/245.0),2,4)
+	for child in node.get_children(): adapt_menu(child,scale_factor)
