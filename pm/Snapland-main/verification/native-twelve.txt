@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+PASS: native input and photo result game-001
+PASS: native input and photo result game-002
+PASS: native input and photo result game-003
+PASS: native input and photo result game-004
+PASS: native input and photo result game-005
+PASS: native input and photo result game-006
+PASS: native input and photo result game-007
+PASS: native input and photo result game-008
+PASS: native input and photo result game-009
+PASS: native input and photo result game-010
+PASS: native input and photo result game-011
+PASS: native input and photo result game-012
+PASS: native twelve-game review and park achievement

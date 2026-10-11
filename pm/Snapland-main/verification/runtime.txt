@@ -1,0 +1,7 @@
+PASS: clean project import
+PASS: game startup
+PASS: core runtime tests
+PASS: welcome minigame tests
+PASS: story runtime tests
+PASS: audio runtime tests
+PASS: main scene integration tests

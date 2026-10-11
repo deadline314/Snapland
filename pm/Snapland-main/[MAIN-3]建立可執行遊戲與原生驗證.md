@@ -1,6 +1,6 @@
 # [MAIN-3] 建立可執行遊戲與原生驗證
 
-> 狀態：待辦
+> 狀態：進行中（base SHA：c1b7b19）
 
 ## 內文
 
@@ -14,7 +14,7 @@
 
 ### 驗收條件
 
-- [ ] Godot 可啟動遊戲且遊戲腳本無解析錯誤。
+- [x] Godot 可啟動遊戲且遊戲腳本無解析錯誤。
 - [ ] CI 執行實際遊戲測試，缺少引擎或測試不能略過。
 
 ### 測試流程
@@ -33,3 +33,38 @@
 
 ---
 
+## 開始基準
+
+c1b7b19；feature/island-first-park。
+
+# Commit-1
+
+## 內文
+
+問題：先前只有設計資料，無法啟動遊戲。
+
+改動：現在可開啟上島與迎賓大道，缺少引擎或測試時會明確失敗。
+
+驗收：本機7組runtime與Windows GPU啟動／退出通過。遠端CI已觸發但因帳戶付款／支出限制未啟動，該条件保持未勾選。
+
+分支：`feature/island-first-park`；開始基準：`c1b7b19`；[程式 commit](https://github.com/deadline314/Snapland/commit/de7aefcf310c8cea710ac98e5a9d9af289ab3226)。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 受影響局部驗證 | 本票相關runtime與主場景整合通過 |
+| 原生畫面 | GPU擷取並查看；程式化操作驗收 |
+| 遠端CI | 帳戶限制，工作未啟動；未重試 |
+
+### 研究與圖例
+
+[核心與成就研究](../../design/runtime/core-research.md)。圖例為審閱參考，不是本作遊戲素材或試玩證據。
+
+![業界參考](../Snapland-art/images/ART-1-reference-octopath.jpg)
+
+### 截圖
+
+![本票原生畫面](images/MAIN-3-startup.png)
+
+[整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
