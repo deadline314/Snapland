@@ -65,7 +65,8 @@ func _run() -> void:
     3:
      if s.beat_window: _key(KEY_SPACE)
     4:
-     if s.lane!=s.count%2: _key(KEY_Q)
+     var chosen=_crowd_priority_lane(s.crowd_model)
+     if chosen>=0 and s.crowd_model.desired_lane!=chosen: _key(KEY_Q if chosen==0 else KEY_E)
     5:
      var index=-1
      var highest=-INF
@@ -315,6 +316,18 @@ func _motion(position:Vector2) -> void:
 func _click(position:Vector2) -> void:
  for pressed in [true,false]:
   var event=InputEventMouseButton.new();event.position=position;event.global_position=position;event.window_id=get_window().get_window_id();event.button_index=MOUSE_BUTTON_LEFT;event.button_mask=MOUSE_BUTTON_MASK_LEFT if pressed else 0;event.pressed=pressed;Input.parse_input_event(event)
+func _crowd_priority_lane(model) -> int:
+ var chosen=-1
+ var earliest_deadline=INF
+ for direction in 2:
+  var lane_queue:Array=model.queues[direction]
+  if lane_queue.is_empty(): continue
+  var head:Dictionary=lane_queue[0]
+  var deadline=float(head.arrived_at)+float(head.patience)
+  if deadline<earliest_deadline:
+   earliest_deadline=deadline
+   chosen=direction
+ return chosen
 func _fail(message:String) -> void:
  push_error(message)
  main.audio.shutdown()

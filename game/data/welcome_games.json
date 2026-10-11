@@ -2,7 +2,7 @@
   {"id":"game-001","mode":"balloon_delivery","name":"氣球快遞","goal":"順著海風依序送達三封郵袋，避開海膽並煞停投遞","instructions":"方向鍵／WASD 或滑鼠推動氣球；空白鍵／右鍵煞車。進入亮圈煞停半秒即可投遞。","devil_hint":"零碰撞送完三站，並在收件圈內穩穩煞停","devil":"零碰撞送完三站，並在收件圈內穩穩煞停","ordinary":"限時內依序送達三封郵袋"},
   {"id":"game-002","mode":"kite_rings","name":"風箏穿環","goal":"上下移動風箏，依序穿過風環","instructions":"滑鼠移動高度，或用 ↑ ↓ 迎風修正。","devil_hint":"五環全中且零擦撞","devil":"五環全中且零擦撞","ordinary":"抵達終點並穿過全部風環"},
   {"id":"game-003","mode":"fountain_timing","name":"噴泉跳拍","goal":"看水柱預告，在亮起時起跳","instructions":"水柱最亮時按空白鍵或點擊起跳。","devil_hint":"三次都踩中水柱最亮拍點","devil":"三次都踩中水柱最亮拍點","ordinary":"成功踩中三次噴泉跳台"},
-  {"id":"game-004","mode":"crowd_traffic","name":"人潮指揮","goal":"切換號誌，讓兩隊遊客安全過路口","instructions":"按 Q／E 或點擊切換號誌，讓相同方向的隊伍通過。","devil_hint":"六隊全數安全通過且號誌方向正確","devil":"六隊全數安全通過且號誌方向正確","ordinary":"安全帶完六隊遊客"},
+  {"id":"game-004","mode":"crowd_traffic","name":"人潮指揮","goal":"安排雙向通行，讓六隊旅客在耐心耗盡前過路口","instructions":"Q 安排橫向、E 安排縱向，也可點對應號誌。正在通行的隊伍會先安全離開，救援隊需優先留意。","devil_hint":"六隊全部安全通過，效率總分至少 430","devil":"六隊全部安全通過，效率總分至少 430","ordinary":"安全帶完六隊遊客"},
   {"id":"game-005","mode":"hat_catching","name":"帽子救援","goal":"左右走位接住落帽，選擇避開或利用陣風","instructions":"按 ← → 或移動滑鼠接住落帽。","devil_hint":"六頂全接且零漏接","devil":"六頂全接且零漏接","ordinary":"接住至少四頂帽子"},
   {"id":"game-006","mode":"ribbon_rhythm","name":"彩帶節拍","goal":"跟著節拍依序按左、右或跳","instructions":"跟隨八拍提示按 ←、→ 或空白鍵；滑鼠左／右半側對應方向。","devil_hint":"八拍全中且強拍動作正確","devil":"八拍全中且強拍動作正確","ordinary":"八拍中成功踩中六拍"},
   {"id":"game-007","mode":"flower_pipes","name":"花壇水路","goal":"完成三張供水工單，將每張的全部花床接通","instructions":"方向鍵選管節，空白鍵或點管節旋轉。第二、三張需要兩個出口同時供水。","devil_hint":"三張都不超過目標轉數：4／7／8 次","devil":"三張都不超過目標轉數：4／7／8 次","ordinary":"完成三張供水工單"},

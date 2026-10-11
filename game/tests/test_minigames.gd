@@ -106,32 +106,50 @@ func _test_kite_boundaries() -> void:
 	checks += 1
 
 func _test_crowd_boundaries() -> void:
-	var wrong := _new_session("game-004", false)
-	var wrong_results: Array[Dictionary] = []
-	wrong.finished.connect(func(value: Dictionary): wrong_results.append(value))
-	while wrong.count == 0: wrong._process(0.01)
-	for i in 5:
-		while fposmod(wrong.phase, 2.2) < 2.10: wrong._process(0.01)
-		_key(wrong, KEY_Q)
-		while wrong.count < i + 2: wrong._process(0.01)
-	wrong._process(0.01)
-	assert(wrong_results.size() == 1 and wrong_results[0].success and wrong_results[0].devil)
-	wrong.queue_free()
-
-	var assisted := _new_session("game-004", true)
-	var assisted_results: Array[Dictionary] = []
-	assisted.finished.connect(func(value: Dictionary): assisted_results.append(value))
-	for i in 7: assisted._process(2.2)
-	assert(assisted_results.size() == 1 and assisted_results[0].success and assisted_results[0].devil and assisted_results[0].assisted)
-	assisted.queue_free()
-
+	for use_assist in [false, true]:
+		var played := _new_session("game-004", use_assist)
+		var results: Array[Dictionary] = []
+		played.finished.connect(func(value: Dictionary): results.append(value))
+		var budget := 1000
+		# Model the 0.65-second opening instruction and 0.30-second response.
+		while played.crowd_model.elapsed < 0.95 and budget > 0:
+			played._process(minf(0.05, 0.95 - played.crowd_model.elapsed))
+			budget -= 1
+		while not played.ended and budget > 0:
+			var chosen := _crowd_priority_lane(played.crowd_model)
+			if chosen >= 0 and played.crowd_model.desired_lane != chosen:
+				_key(played, KEY_Q if chosen == 0 else KEY_E)
+			played._process(0.05)
+			budget -= 1
+		assert(budget > 0 and results.size() == 1)
+		assert(results[0].success and results[0].devil and results[0].assisted == use_assist)
+		assert(played.crowd_model.safe_count == 6 and played.score == played.crowd_model.score)
+		assert(played.score_summary().total == played.score and played.mistakes == 0)
+		played.queue_free()
 	var missed := _new_session("game-004", false)
 	var missed_results: Array[Dictionary] = []
 	missed.finished.connect(func(value: Dictionary): missed_results.append(value))
-	while not missed.ended: missed._process(0.05)
+	for index in 500:
+		if missed.ended: break
+		missed._process(0.05)
 	assert(missed_results.size() == 1 and not missed_results[0].success)
+	assert(missed.mistakes == 6 and missed.score == 0)
 	missed.queue_free()
 	checks += 1
+
+func _crowd_priority_lane(model) -> int:
+	var chosen := -1
+	var earliest_deadline := INF
+	for direction in 2:
+		var lane_queue: Array = model.queues[direction]
+		if lane_queue.is_empty(): continue
+		# A lane's queue remains FIFO; compare only its head's true patience deadline.
+		var head: Dictionary = lane_queue[0]
+		var deadline := float(head.arrived_at) + float(head.patience)
+		if deadline < earliest_deadline:
+			earliest_deadline = deadline
+			chosen = direction
+	return chosen
 
 func _test_hat_boundaries() -> void:
 	var missed := _new_session("game-005", true)
@@ -667,7 +685,9 @@ func _test_all_modes() -> void:
 					3:
 						if s.beat_window: _key(s, KEY_SPACE)
 					4:
-						if s.lane != s.count % 2: _key(s, KEY_Q)
+						var chosen := _crowd_priority_lane(s.crowd_model)
+						if chosen >= 0 and s.crowd_model.desired_lane != chosen:
+							_key(s, KEY_Q if chosen == 0 else KEY_E)
 					5:
 						var closest := -1
 						var closest_y := -INF

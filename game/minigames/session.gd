@@ -31,6 +31,8 @@ const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
 const BalloonHarborScript = preload("res://game/minigames/balloon_harbor_view.gd")
 const PipePlanScript = preload("res://game/minigames/pipe_plan_view.gd")
 const PipeRoundScript = preload("res://game/minigames/pipe_round_model.gd")
+const CrowdTrafficScript = preload("res://game/minigames/crowd_traffic_model.gd")
+const CrowdCrossingScript = preload("res://game/minigames/crowd_crossing_view.gd")
 const BUBBLE_MASCOT_RADIUS := 52.0
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
@@ -93,6 +95,8 @@ var presentation_mode := ""
 var pipe_connected := false
 var pipe_finish_at := -1.0
 var pipe_model: RefCounted = PipeRoundScript.new()
+var crowd_model: RefCounted = CrowdTrafficScript.new()
+var _crowd_event_cursor := 0
 var _fountain_avatar_renderer: RefCounted
 var _fountain_jump_textures: Array[Texture2D] = []
 var _fountain_idle_texture: Texture2D
@@ -235,6 +239,7 @@ func _sync_presentation() -> void:
 				# Headless rules tests do not allocate a renderer or GPU world.
 				if DisplayServer.get_name() != "headless": presentation = BalloonHarborScript.new()
 			"flower_pipes": presentation = PipePlanScript.new()
+			"crowd_traffic": presentation = CrowdCrossingScript.new()
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -251,6 +256,7 @@ func _sync_presentation() -> void:
 			presentation.set_animation_active(not paused)
 			presentation.present_order(pipe_model.snapshot(), phase, reduced_motion, time_phase)
 			presentation.cursor = pipe_cursor
+		"crowd_traffic": presentation.present_state(crowd_model.snapshot(), phase, reduced_motion, time_phase)
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -395,7 +401,7 @@ func _score_rule_text() -> String:
 		"balloon_delivery": return "每送達一封郵袋 +150。"
 		"kite_rings": return "每穿過一個風環 +100。"
 		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。"
-		"crowd_traffic": return "每隊安全通過 +50。"
+		"crowd_traffic": return "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。"
 		"hat_catching": return "每接住一頂帽子 +100。"
 		"ribbon_rhythm": return "每踩中一拍 +75。"
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
@@ -519,7 +525,9 @@ func reset_round() -> void:
 				ring_x.append(410.0 + i * 155.0)
 				ring_y.append([270.0, 450.0, 320.0, 470.0, 310.0][i])
 		"fountain_timing": pass
-		"crowd_traffic": pass
+		"crowd_traffic":
+			crowd_model.reset(assisted)
+			_crowd_event_cursor = 0
 		"hat_catching":
 			for i in 6:
 				hat_x.append(260.0 + i * 150.0)
@@ -803,15 +811,29 @@ func _launch_balloon() -> void:
 	_feedback("出發！按方向鍵／WASD飛行，空白鍵或右鍵煞車", BLUE)
 
 func _tick_crowd(delta: float) -> void:
-	if count >= 6: _finish(mistakes == 0, mistakes == 0 and devil_progress == 6); return
-	var walk := fposmod(phase, 2.2)
-	if walk < delta:
-		var direction := count % 2
-		if assisted: lane = direction
-		if direction == lane:
-			count += 1; _award_points("crowd", "隊伍安全通過", 50); devil_progress += 1; _feedback("隊伍安全通過", MINT)
-		else:
-			mistakes += 1; count += 1; _feedback("紅綠燈放錯方向", PINK)
+	crowd_model.step(delta)
+	var state: Dictionary = crowd_model.snapshot()
+	count = int(state.safe_count) + int(state.missed_count)
+	mistakes = int(state.mistakes)
+	devil_progress = int(state.devil_progress)
+	while _crowd_event_cursor < crowd_model.events.size():
+		var event: Dictionary = crowd_model.events[_crowd_event_cursor]
+		_crowd_event_cursor += 1
+		if event.kind == "safe":
+			var data: Dictionary = event.data
+			_award_points("crowd", "隊伍安全通過", int(data.base))
+			if int(data.efficiency) > 0: _award_points("crowd_wait", "等候效率", int(data.efficiency))
+			if int(data.rescue_bonus) > 0: _award_points("crowd_rescue", "救援隊及時通行", int(data.rescue_bonus))
+			_feedback("隊伍安全通過", MINT)
+		elif event.kind == "expired": _feedback("等候太久，隊伍改走別條路", PINK)
+	if bool(state.finished): _finish(bool(state.success), bool(state.devil))
+
+func _request_crowd_lane(value: int) -> void:
+	if ended or paused: return
+	lane = value
+	crowd_model.request_lane(value)
+	_feedback("安排橫向通行" if value == 0 else "安排縱向通行", BLUE)
+	_sync_presentation()
 
 func _tick_pipe(delta: float) -> void:
 	var previous_order: int = pipe_model.order_index
@@ -913,13 +935,16 @@ func _unhandled_input(event: InputEvent) -> void:
 			if not bubble_ready: bubble_ready = true; bubble_aim = Vector2(790, target.y); prompt = "泡泡飛出去啦！等它包住吉祥物，再按空白鍵拍照"
 			else: _bubble_click(Vector2(790, target.y))
 		if mode == "ribbon_rhythm" and (event.keycode == KEY_LEFT or event.keycode == KEY_RIGHT): _ribbon_input(event.keycode)
-		if mode == "crowd_traffic" and (event.keycode == KEY_Q or event.keycode == KEY_E): lane = 1 - lane; _feedback("號誌切換：" + ("左向" if lane == 0 else "右向"), BLUE)
+		if mode == "crowd_traffic" and event.keycode in [KEY_Q, KEY_E]: _request_crowd_lane(0 if event.keycode == KEY_Q else 1)
 	if event is InputEventMouseButton and event.pressed:
 		var mouse_event := event as InputEventMouseButton
 		var m := _to_design(mouse_event.position)
 		if mode == "fountain_timing" and mouse_event.button_index == MOUSE_BUTTON_LEFT: _press_action()
 		elif mode == "ribbon_rhythm": _ribbon_input(KEY_LEFT if m.x < DESIGN_SIZE.x * 0.43 else (KEY_RIGHT if m.x > DESIGN_SIZE.x * 0.57 else KEY_SPACE))
-		elif mode == "crowd_traffic": lane = 1 - lane; _feedback("號誌切換", BLUE)
+		elif mode == "crowd_traffic":
+			var chosen_lane: int = presentation.pointerSignalAt(m) if is_instance_valid(presentation) else -1
+			if chosen_lane >= 0:
+				_request_crowd_lane(chosen_lane)
 		elif mode == "shadow_alignment": alignment = inverse_lerp(190.0, 1090.0, m.x) - 0.5; mistakes += 1 if absf(alignment) > 0.3 else 0
 		elif mode == "bubble_photo": _bubble_click(m)
 		elif mode == "flower_pipes": _rotate_pipe(m)
@@ -1136,7 +1161,7 @@ func _feedback_anchor() -> Vector2:
 		"balloon_delivery": return Vector2(320, 208)
 		"kite_rings": return p
 		"fountain_timing": return Vector2(960, 220)
-		"crowd_traffic": return Vector2(640, 420)
+		"crowd_traffic": return Vector2(320, 220)
 		"hat_catching": return Vector2(p.x, 560)
 		"ribbon_rhythm": return Vector2(640, 420)
 		"flower_pipes": return Vector2(150, 460)
@@ -1208,7 +1233,7 @@ func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
-	if mode in ["balloon_delivery", "flower_pipes"]:
+	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic"]:
 		if mode == "balloon_delivery" and is_instance_valid(presentation):
 			var harbor_texture: Texture2D = presentation.texture()
 			if harbor_texture != null:
