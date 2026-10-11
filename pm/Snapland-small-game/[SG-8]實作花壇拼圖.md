@@ -50,7 +50,7 @@ c1b7b19；feature/island-first-park。
 
 驗收：正常／輔助的成功、惡魔條件與超時不授卡局部測試通過；原生GPU鍵鼠通關取得普通與惡魔拍貼，結算畫面已查看。
 
-分支：`feature/island-first-park`；開始基準：`c1b7b19`；[程式 commit](https://github.com/deadline314/Snapland/commit/de7aefcf310c8cea710ac98e5a9d9af289ab3226)。
+分支：`feature/island-first-park`；開始基準：`c1b7b19`；[程式 commit](https://github.com/deadline314/Snapland/commit/f2d6b84919a91d534082660a12aec5a9b44eaa2c)。
 
 ### 測試結果
 

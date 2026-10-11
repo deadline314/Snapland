@@ -86,3 +86,6 @@
 [原生或研究證據：ART-14-walk-front_right.png](images/ART-14-walk-front_right.png)
 [原生或研究證據：ART-14-walk-left.png](images/ART-14-walk-left.png)
 [原生或研究證據：ART-14-walk-right.png](images/ART-14-walk-right.png)
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[209d95f](https://github.com/deadline314/Snapland/commit/209d95fb5ad0d9c24d6f6213b726efaa9988db43)。

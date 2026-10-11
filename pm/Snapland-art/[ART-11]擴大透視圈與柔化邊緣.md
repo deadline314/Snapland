@@ -69,3 +69,6 @@
 [原生或研究證據：ART-11-cutaway-night.png](images/ART-11-cutaway-night.png)
 [原生或研究證據：ART-11-cutaway-reduced-motion.png](images/ART-11-cutaway-reduced-motion.png)
 [原生或研究證據：ART-11-cutaway-right-kiosk.png](images/ART-11-cutaway-right-kiosk.png)
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[b90ecb2](https://github.com/deadline314/Snapland/commit/b90ecb22684d65d071edc0f31b27ddff2ca41102)。

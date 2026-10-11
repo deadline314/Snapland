@@ -47,7 +47,7 @@ c1b7b19；feature/island-first-park。
 
 驗收：保存／重開、欄位邊界、備份恢復與無備份預設通過；一次未隔離測試曾誤寫本機舊存檔，內容未能恢復，影響詳見交付紀錄。後續測試已強制隔離。
 
-分支：`feature/island-first-park`；開始基準：`c1b7b19`；[程式 commit](https://github.com/deadline314/Snapland/commit/de7aefcf310c8cea710ac98e5a9d9af289ab3226)。
+分支：`feature/island-first-park`；開始基準：`c1b7b19`；[程式 commit](https://github.com/deadline314/Snapland/commit/f2d6b84919a91d534082660a12aec5a9b44eaa2c)。
 
 ### 測試結果
 

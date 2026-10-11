@@ -117,3 +117,6 @@
 [原生或研究證據：ART-13-world-dusk.png](images/ART-13-world-dusk.png)
 [原生或研究證據：ART-13-world-night.png](images/ART-13-world-night.png)
 [原生或研究證據：ART-13-world-noon.png](images/ART-13-world-noon.png)
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[e61dd4a](https://github.com/deadline314/Snapland/commit/e61dd4ab4f228853df43f449b0bcb7dcb8623d1e)。

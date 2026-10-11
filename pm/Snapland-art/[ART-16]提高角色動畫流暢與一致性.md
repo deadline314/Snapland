@@ -61,3 +61,6 @@
 
 ### 失敗證據
 [不合格原生試作（僅供追溯）](images/ART-16-rejected-rig.png)。此試作沒有列為交付動畫。
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[12a7aa8](https://github.com/deadline314/Snapland/commit/12a7aa8072fdd075a3c31c9de411136dbb3e7366)。

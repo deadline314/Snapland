@@ -20,7 +20,7 @@ Windows 預覽包在本 worktree 的 `build/`。執行 `Play-Snapland.cmd`，預
 
 ## 遠端與票況
 
-[程式交付 commit](https://github.com/deadline314/Snapland/commit/de7aefcf310c8cea710ac98e5a9d9af289ab3226)已推送。先提交共同可執行程式，接著逐票單独提交證據，讓每張票都有穩定可查的程式commit連結。
+[程式交付 commit](https://github.com/deadline314/Snapland/commit/f2d6b84919a91d534082660a12aec5a9b44eaa2c)已推送。先提交共同可執行程式，接著逐票單独提交證據，讓每張票都有穩定可查的程式commit連結。
 
 [GitHub Actions執行紀錄](https://github.com/deadline314/Snapland/actions/runs/38143451049)已触發，但兩個工作皆因帳戶付款／支出限制未啟動（步驟列表為空）。沒有重試遠端工作，沒有更改付款或支出設定，不能宣稱遠端CI通過。MAIN-3的實際CI條件與MIC-1的聽感條件保持未勾選，因此整組保持「進行中」且未推main；未刪交付分支或worktree。
 
@@ -36,25 +36,25 @@ Windows 預覽包在本 worktree 的 `build/`。執行 `Play-Snapland.cmd`，預
 
 | 票 | 結果與局部證據 | 票況 | 證據commit |
 |---|---|---|---|
-| [MAIN-3](Snapland-main/[MAIN-3]建立可執行遊戲與原生驗證.md) | 現在可開啟上島與迎賓大道，缺少引擎或測試時會明確失敗。；CI未啟動 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/490b39f559e57409b2a1cbba6a45b63603260bd0) |
-| [MAIN-4](Snapland-main/[MAIN-4]建立主廣場與園區路口.md) | 現在可步行往返三個主要地帶，另九區顯示入口、收藏門檻與準備中提示。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/fd662cab11274bbffb2d956fcb8adcfc49ea751b) |
-| [MAIN-5](Snapland-main/[MAIN-5]建立遊戲成就與平台接點.md) | 十二款首次完成、迎賓全通關、小惡魔全集有獨立成就，離線可記下待平台同步成果。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/8fc2071932e65a8e5eaae6063080a6033a890867) |
-| [MAIN-6](Snapland-main/[MAIN-6]提供設定與安全存檔.md) | 現在可調整音量、文字速度、動態、顯示與輔助，進度重開能接續，損毀檔案有具體位置與安全恢復。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/811cdf02c0758348eb5d31bb767ca25d94b60cbe) |
-| [MAIN-7](Snapland-main/[MAIN-7]建立拍貼結算與收藏冊.md) | 現在結算保存實際遊戲畫面，可重試／返回；普通與小惡魔獨立收藏，重玩不重複增加張數。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/0ad0c29305cfa7b23c092d1b95dfd6a88fe8c51e) |
-| [ART-1](Snapland-art/[ART-1]建立立體像素園區光影.md) | 像素角色走進立體碼頭、主廣場與迎賓大道，水面、旗幟、植栽與日夜光影連動。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/b951581af7485688c80d81a0d6d3f4e77883cf45) |
-| [ART-2](Snapland-art/[ART-2]建立遊園介面與操作引導.md) | 現在以清楚操作提示與可見鍵盤焦點操作各選單，對話與結算有返回方式。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/0a125bdf8ce1d4163285f90ecdf615443a8bf0ce) |
-| [ST-2](Snapland-story/[ST-2]演出上島導覽與對話.md) | 碼頭以五段短對話開始旅途，按玩家步調前進，可略過與重播，保留船上序章前接點。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/41fd7ff5729fbaa195951c37ae65be72c913b7f9) |
-| [ST-3](Snapland-story/[ST-3]實作迎賓任務與探索.md) | 尾巴危機與廣播救場各有三步，另可讓花壇眨眼、對齊影子及借立牌合照，保留任務進度。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/6550eee343220b550977b4edb0e7e8cc75438ae6) |
-| [MIC-1](Snapland-music/[MIC-1]製作首區音樂與互動音效.md) | 現在有三首原創循環、海風、互動與快門等音效，節拍與合奏會發出實際音高。；聽感未驗收 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/8ce91046e0d348cbbf429f6a9982fbb5b5bd2647) |
-| [SG-2](Snapland-small-game/[SG-2]實作氣球快遞.md) | 現在可依提示遊玩「氣球快遞」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/1824e28bec4837bafa2f494e4837a45761db8ca6) |
-| [SG-3](Snapland-small-game/[SG-3]實作風箏穿環.md) | 現在可依提示遊玩「風箏穿環」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/2fb08a997a28386bcc1dfe275b185a439bb502c5) |
-| [SG-4](Snapland-small-game/[SG-4]實作噴泉跳拍.md) | 現在可依提示遊玩「噴泉跳拍」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/6e95274c3586adcbae1a66dd6533354a438209f8) |
-| [SG-5](Snapland-small-game/[SG-5]實作人潮指揮.md) | 現在可依提示遊玩「人潮指揮」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/ef2fc3335e2b9cb54b830023513d23fd78d17949) |
-| [SG-6](Snapland-small-game/[SG-6]實作帽子救援.md) | 現在可依提示遊玩「帽子救援」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/047659127faf7ff7028f4e55ca2f3928ac7750ec) |
-| [SG-7](Snapland-small-game/[SG-7]實作彩帶節拍.md) | 現在可依提示遊玩「彩帶節拍」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/01306aca781acc512ce608752afb2071dab412e8) |
-| [SG-8](Snapland-small-game/[SG-8]實作花壇拼圖.md) | 現在可依提示遊玩「花壇水路」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/2648f10e82fba531b57228b57ec46c0fcc1e24be) |
-| [SG-9](Snapland-small-game/[SG-9]實作招牌平衡.md) | 現在可依提示遊玩「招牌平衡」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/f2bb4fa7a33819fe1a39359f29008e3bbe481716) |
-| [SG-10](Snapland-small-game/[SG-10]實作影子捉迷藏.md) | 現在可依提示遊玩「影子捉迷藏」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/c2d0ffd6df85ef9058f76f8c9926c24c170093b5) |
-| [SG-11](Snapland-small-game/[SG-11]實作泡泡合照.md) | 現在可依提示遊玩「泡泡合照」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/57f62691b37d1d704815fc2b416eb1e61ca993ea) |
-| [SG-12](Snapland-small-game/[SG-12]實作長椅換位.md) | 現在可依提示遊玩「長椅換位」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/f9483875918b101dc7908d8fd4562fa3e005efb5) |
-| [SG-13](Snapland-small-game/[SG-13]實作迎賓大合奏.md) | 現在可依提示遊玩「迎賓大合奏」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/e7449fff0a27da5fcf363d473798bc8b1f8fd3d3) |
+| [MAIN-3](Snapland-main/[MAIN-3]建立可執行遊戲與原生驗證.md) | 現在可開啟上島與迎賓大道，缺少引擎或測試時會明確失敗。；CI未啟動 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/f89466f5eeced3cbee303a7476a4c7f4250cbbde) |
+| [MAIN-4](Snapland-main/[MAIN-4]建立主廣場與園區路口.md) | 現在可步行往返三個主要地帶，另九區顯示入口、收藏門檻與準備中提示。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/f724b21c4719f72682386ec19d9fab607523d295) |
+| [MAIN-5](Snapland-main/[MAIN-5]建立遊戲成就與平台接點.md) | 十二款首次完成、迎賓全通關、小惡魔全集有獨立成就，離線可記下待平台同步成果。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/df32881cf6ca63a224e1dd5a841fe39345216ba1) |
+| [MAIN-6](Snapland-main/[MAIN-6]提供設定與安全存檔.md) | 現在可調整音量、文字速度、動態、顯示與輔助，進度重開能接續，損毀檔案有具體位置與安全恢復。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/0da0e234e80028ce46dc503ca8d2f1ba37a67946) |
+| [MAIN-7](Snapland-main/[MAIN-7]建立拍貼結算與收藏冊.md) | 現在結算保存實際遊戲畫面，可重試／返回；普通與小惡魔獨立收藏，重玩不重複增加張數。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/dfd19a61fe880812f4e7db41941002cd31e15fbb) |
+| [ART-1](Snapland-art/[ART-1]建立立體像素園區光影.md) | 像素角色走進立體碼頭、主廣場與迎賓大道，水面、旗幟、植栽與日夜光影連動。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/4b8978ed8b2aa5617562e1baa771fb90b45220aa) |
+| [ART-2](Snapland-art/[ART-2]建立遊園介面與操作引導.md) | 現在以清楚操作提示與可見鍵盤焦點操作各選單，對話與結算有返回方式。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/78aa5cdadb448140e9ce5f8934df64feb5610292) |
+| [ST-2](Snapland-story/[ST-2]演出上島導覽與對話.md) | 碼頭以五段短對話開始旅途，按玩家步調前進，可略過與重播，保留船上序章前接點。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/b82ece7af9d755f85c4affbe70eaf1787e9c338e) |
+| [ST-3](Snapland-story/[ST-3]實作迎賓任務與探索.md) | 尾巴危機與廣播救場各有三步，另可讓花壇眨眼、對齊影子及借立牌合照，保留任務進度。；局部／原生驗收通過 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/3fbca6248fb0d3ac0e81d72d2bd6b95e8f21c06d) |
+| [MIC-1](Snapland-music/[MIC-1]製作首區音樂與互動音效.md) | 現在有三首原創循環、海風、互動與快門等音效，節拍與合奏會發出實際音高。；聽感未驗收 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/96b57dcef5363782b50382a4d525412ff653a504) |
+| [SG-2](Snapland-small-game/[SG-2]實作氣球快遞.md) | 現在可依提示遊玩「氣球快遞」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/aac55c6b2f96ba7d7f59c2c5062c7a7bf134abf2) |
+| [SG-3](Snapland-small-game/[SG-3]實作風箏穿環.md) | 現在可依提示遊玩「風箏穿環」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/bfb70a750d1a9ff3a3b92fdbb13e0d96c4eee4be) |
+| [SG-4](Snapland-small-game/[SG-4]實作噴泉跳拍.md) | 現在可依提示遊玩「噴泉跳拍」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/7239388a64949ca224f12e9bde1c0e4cfd46a4e9) |
+| [SG-5](Snapland-small-game/[SG-5]實作人潮指揮.md) | 現在可依提示遊玩「人潮指揮」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/03749447d26fed0f16afd748d6657bbfff2dc119) |
+| [SG-6](Snapland-small-game/[SG-6]實作帽子救援.md) | 現在可依提示遊玩「帽子救援」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/3dd2b6b754dc12af508f9fd50f4e529dfc294bea) |
+| [SG-7](Snapland-small-game/[SG-7]實作彩帶節拍.md) | 現在可依提示遊玩「彩帶節拍」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/bb5130762d1b43badfdb3424b33735fa57d79c37) |
+| [SG-8](Snapland-small-game/[SG-8]實作花壇拼圖.md) | 現在可依提示遊玩「花壇水路」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/3417dbb3dd97892c1f7200bfccfc0369e3eded39) |
+| [SG-9](Snapland-small-game/[SG-9]實作招牌平衡.md) | 現在可依提示遊玩「招牌平衡」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/23cbb009e413c5e1e8cf8677fcb23200980d82d4) |
+| [SG-10](Snapland-small-game/[SG-10]實作影子捉迷藏.md) | 現在可依提示遊玩「影子捉迷藏」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/a7e3f439024e2392621ee46159ef1b3e873656f5) |
+| [SG-11](Snapland-small-game/[SG-11]實作泡泡合照.md) | 現在可依提示遊玩「泡泡合照」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/249f17107e3bb1e82dd104ae092c3e98f9b7dc2b) |
+| [SG-12](Snapland-small-game/[SG-12]實作長椅換位.md) | 現在可依提示遊玩「長椅換位」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/8fa208e54e4709b743bbdccb0af9fa233eacab23) |
+| [SG-13](Snapland-small-game/[SG-13]實作迎賓大合奏.md) | 現在可依提示遊玩「迎賓大合奏」，免費重試與離開，正常與輔助都可收藏，另有本款成就及小惡魔目標。；原生通關圖、42案例 | 進行中 | [證據](https://github.com/deadline314/Snapland/commit/13bc54fe00aabd62ceefe6435d7516c38cd6aaf7) |

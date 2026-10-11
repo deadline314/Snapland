@@ -75,3 +75,6 @@
 [原生或研究證據：MAIN-9-time-dusk.png](images/MAIN-9-time-dusk.png)
 [原生或研究證據：MAIN-9-time-night.png](images/MAIN-9-time-night.png)
 [原生或研究證據：MAIN-9-time-noon.png](images/MAIN-9-time-noon.png)
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[52e1f3f](https://github.com/deadline314/Snapland/commit/52e1f3f7d28f6685278b561606abb7d59b09e680)。

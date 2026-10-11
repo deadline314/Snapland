@@ -56,3 +56,6 @@
 ![阿浪完整腳掌與降低動態](images/ART-15-sprite-clearance-npc-announcer-reduced.png)
 
 Windows 輸出以 Intel Arc B580 原生 GPU 檢查角色、NPC、場景動畫與遮擋素材載入通過；這是打包冒煙檢查，不是輸出版本完整逐姿勢畫面驗收。
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[95a2d02](https://github.com/deadline314/Snapland/commit/95a2d027e8743f71acabe0f369dc2d0ffb3e5943)。

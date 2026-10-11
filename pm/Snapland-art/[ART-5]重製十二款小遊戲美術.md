@@ -60,3 +60,6 @@
 
 ### 最新輸出驗證
 Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮擋資源冒煙檢查，12款場景所需素材均載入，無ERROR；此檢查不代表真人試玩、完整換裝動作、每姿勢或試聽驗收。
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[53a9dc3](https://github.com/deadline314/Snapland/commit/53a9dc3e15be759e647209c623aaef72c61918f0)。

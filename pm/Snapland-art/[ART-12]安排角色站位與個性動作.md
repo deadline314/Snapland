@@ -71,3 +71,6 @@ NPC位置容易遮擋，角色缺少各自活動節奏。
 [原生或研究證據：ART-12-imp-02.png](images/ART-12-imp-02.png)
 [原生或研究證據：ART-12-ticket-01.png](images/ART-12-ticket-01.png)
 [原生或研究證據：ART-12-ticket-02.png](images/ART-12-ticket-02.png)
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[449c328](https://github.com/deadline314/Snapland/commit/449c328b6bd41116b15e190b96ea90a0935d4539)。

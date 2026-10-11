@@ -57,7 +57,7 @@
 記錄換裝動畫分層研究與驗收要求。
 
 ### 驗收
-比較八方一手資料，實際核對並保存三張參考截圖；記錄逐幀分層、共用時序、逐格錨點與遮擋順序的取捨。服装轮廓和整套动画尚未製作，驗收保持未勾。
+比較八方一手資料，實際核對並保存三張參考截圖；記錄逐幀分層、共用時序、逐格錨點與遮擋順序的取捨。服裝輪廓和整套動畫尚未製作，驗收保持未勾。
 
 ### 測試結果
 研究文件與三張參考截圖實際核對，沒有聲稱完成遊戲動畫。
@@ -69,3 +69,6 @@
 [原生或研究證據：ART-18-reference-aseprite-layers.png](images/ART-18-reference-aseprite-layers.png)
 [原生或研究證據：ART-18-reference-lpc-generator.png](images/ART-18-reference-lpc-generator.png)
 [原生或研究證據：ART-18-reference-spine-mix-match.png](images/ART-18-reference-spine-mix-match.png)
+
+### 程式與證據提交
+分支：feature/island-first-park。更新至最新main後的本票提交：[3f87c63](https://github.com/deadline314/Snapland/commit/3f87c63ff57b93ae451276657651a0d6e922d8bb)。

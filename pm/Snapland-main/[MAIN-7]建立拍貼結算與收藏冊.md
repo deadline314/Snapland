@@ -47,7 +47,7 @@ c1b7b19；feature/island-first-park。
 
 驗收：原生12款鍵鼠通關與存圖通過；固定18來源、去重與重開保存局部檢查通過。
 
-分支：`feature/island-first-park`；開始基準：`c1b7b19`；[程式 commit](https://github.com/deadline314/Snapland/commit/de7aefcf310c8cea710ac98e5a9d9af289ab3226)。
+分支：`feature/island-first-park`；開始基準：`c1b7b19`；[程式 commit](https://github.com/deadline314/Snapland/commit/f2d6b84919a91d534082660a12aec5a9b44eaa2c)。
 
 ### 測試結果
 
