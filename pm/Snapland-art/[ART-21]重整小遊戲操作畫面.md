@@ -18,18 +18,25 @@
 
 ### 驗收條件
 - [ ] 十二款玩法有各自的鏡頭、空間、媒材與演出設計；比較總覽不能呈現同一背景和構圖的十二種換皮。
-- [ ] 參考至少六個不同來源的遊戲畫面與計分回饋，保存實際閱讀與圖例並形成自己的設計。
+- [x] 參考至少六個不同來源的遊戲畫面與計分回饋，保存實際閱讀與圖例並形成自己的設計。
 - [ ] 十二款操作畫面有清楚主體與必要的當前目標、時間和成績，裝飾與文字不干擾操作區。
 - [ ] 命中、失誤、連續成功及結算可看懂，分數與成就條件不互相矛盾；支持重試、退出及教學入口。
 - [ ] 十二款原生鍵鼠畫面、不同時段及降低動態實際檢視通過，保存前後截圖及影片。
 
 ### 參考資料與實際觀察
 
-介面調查見[十項來源研究紀錄](../../design/runtime/ui-quality-survey.md)，玩法、操作與計分的九個不同遊戲一手來源見[首區玩法比較](../../design/runtime/first-park-gameplay-quality.md)。文件逐項區分實際讀到的內容與設計推論，沒有把閱讀介紹算作試玩。
+介面調查見[十項來源研究紀錄](../../design/runtime/ui-quality-survey.md)，玩法、操作與計分的一手文字來源見[首區玩法比較](../../design/runtime/first-park-gameplay-quality.md)。本次另實際查看六張經核准的遊戲畫面，逐一閱讀官方來源文字；鏡頭、物件與資訊位置的觀察、採用／不採用原則及仍看不到的內容都記在[小遊戲視覺多樣性檢視](../../design/runtime/minigame-visual-diversity-review.md)。
 
-實際查看 [Super Mario Party Jamboree 官方小遊戲介紹](https://www.nintendo.com/ph/switch/a7hl/minigame/index.html)的 Camera Ready 畫面：共用時間放在上方、個人成績在角落，鏡頭中心保留給操作主體；規則放在遊玩畫面外說明。採用清楚的主次與獨立教學，不移植其人物、畫面或多人規則。
+| 官方一手來源 | 實際查看的圖例 |
+|---|---|
+| [Nintendo — Super Mario Party Jamboree](https://www.nintendo.com/ph/switch/a7hl/minigame/index.html) | [頁面截圖](images/ART-21-ref-mario-party.png) |
+| [Panic / Playdate — b360](https://play.date/games/b360/) | [遊戲截圖](images/ART-21-ref-b360.png) |
+| [Lucas Pope — Return of the Obra Dinn](https://obradinn.com/media/prerelease.html) | [遊戲截圖](images/ART-21-ref-obra-dinn.png) |
+| [Drool — Thumper](https://thumpergame.com/) | [遊戲截圖](images/ART-21-ref-thumper.png) |
+| [Ben Esposito / Annapurna Interactive — Donut County](https://donutcounty.com/) | [遊戲截圖](images/ART-21-ref-donut-play.jpg) |
+| [Enhance — Lumines Arise](https://lumines.game/) | [遊戲截圖](images/ART-21-ref-lumines-play.jpg) |
 
-![Camera Ready 目標與成績分區](images/ART-21-ref-mario-party.png)
+截圖是靜態觀察，不代表試玩或已看過動畫。Mario Party、b360 與 Lumines 的圖例可見時間、分數或盤面資訊；其餘圖例用於核對鏡頭、主體和層次，不虛稱含計分畫面。
 
 ### 測試流程
 1. 查看本票研究紀錄與圖例，核對採用的原則和原生前後比較。
@@ -70,3 +77,33 @@
 ### 截圖
 ![暫停與分數操作](images/ART-21-pause.png)
 ![分數明細](images/ART-21-score-details.png)
+
+# Commit-2
+
+## 問題
+
+票內原有的單一小遊戲截圖不足以說明不同玩法如何安排鏡頭、主體及計分資訊，也未區分靜態畫面證據和對動畫的推測。
+
+## 改動
+
+新增六個不同團隊的一手畫面檢視、來源頁面連結、逐圖觀察和 Snapland 自有設計原則。保留原有 Commit-1 與提交連結；本段先交付參考資料，遊戲改版另行驗收。
+
+## 驗收
+
+六張指定圖例均已實際查看，六個官方來源頁面文字均已閱讀；只勾選「至少六個不同來源」參考條件。十二款操作畫面、流程與原生驗收仍維持未勾選。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 參考圖像 | 六張核准圖例均已視覺檢視，未使用封面或非遊戲頁面圖 |
+| 官方資料 | 六個第一方頁面文字已閱讀；影片未播放 |
+| 遊戲驗收 | 未進行試玩、GPU 擷取或動畫檢視 |
+
+### 圖例與來源
+
+[小遊戲視覺多樣性檢視](../../design/runtime/minigame-visual-diversity-review.md)內嵌六張圖例並列出官方來源與採用／不採用理由。
+
+### 提交
+
+分支：`feature/island-first-park`；提交後補上不可變的遠端連結。
