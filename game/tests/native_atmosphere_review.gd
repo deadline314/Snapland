@@ -88,21 +88,21 @@ func _run() -> void:
 		await _fail("No actual eligible kiosk obstruction found in the bounded fixture search")
 		return
 	print("OCCLUSION FIXTURE: player=", occlusion_position, " stats=", park_world.occlusion_controller.statistics())
-	if not await _capture("ART-10-cutaway-day.png"):
+	if not await _capture("ART-11-cutaway-day.png"):
 		return
 	var kiosk_position_right := await _find_kiosk_occlusion(Vector3(6.0, 0.4, 2.0))
 	if kiosk_position_right == Vector3.INF:
 		await _fail("No actual eligible right kiosk obstruction found")
 		return
 	print("RIGHT KIOSK FIXTURE: player=", kiosk_position_right, " stats=", park_world.occlusion_controller.statistics())
-	if not await _capture("ART-10-cutaway-right-kiosk.png"):
+	if not await _capture("ART-11-cutaway-right-kiosk.png"):
 		return
 	occlusion_position = await _find_arch_occlusion()
 	if occlusion_position == Vector3.INF:
 		await _fail("The center welcome arch did not trigger a local cutaway")
 		return
 	park_world.set_night(false)
-	if not await _capture("ART-10-arch-cutaway-day.png"):
+	if not await _capture("ART-11-arch-cutaway-day.png"):
 		return
 	var arch_hits: Dictionary = park_world.occlusion_controller._active_group_ids.duplicate()
 	if arch_hits.is_empty() or not _has_active_cutaway():
@@ -125,7 +125,7 @@ func _run() -> void:
 	var reported_center: Vector2 = resized_stats.get("center_px", Vector2.ZERO)
 	var normalized_center_error: float = (reported_center / stats_viewport - expected_center / visible_viewport).length() if stats_viewport.x > 0.0 and visible_viewport.x > 0.0 else INF
 	var projected_body_height: float = park_world.camera.unproject_position(park_world.player.global_position).distance_to(park_world.camera.unproject_position(park_world.player.global_position + Vector3.UP * 1.9))
-	var expected_radius: float = clampf(projected_body_height * 0.48, 24.0, 84.0)
+	var expected_radius: float = minf(clampf(projected_body_height * 0.75, 32.0, 120.0), minf(visible_viewport.x, visible_viewport.y) * 0.17)
 	if not _has_active_cutaway() or normalized_center_error > 0.005 or absf(float(resized_stats.get("radius_px", 0.0)) - expected_radius) > 0.5:
 		await _fail("Resized arch projection no longer matches the player's normalized center/body height: " + str(resized_stats) + " center_error=" + str(normalized_center_error) + " expected_radius=" + str(expected_radius))
 		return
@@ -137,7 +137,7 @@ func _run() -> void:
 	if avatar_material == null or avatar_material.get_shader_parameter("texture_albedo") != park_world.avatar.texture:
 		await _fail("Equipping the avatar did not refresh the living-sprite texture")
 		return
-	if not await _capture("ART-10-arch-cutaway-resized-equipped.png"):
+	if not await _capture("ART-11-arch-cutaway-resized-equipped.png"):
 		return
 	# Compare completed readbacks. A live texture's reported size can refer to a
 	# different backing allocation during a native window/DPI transition.
@@ -162,7 +162,7 @@ func _run() -> void:
 	if _has_active_cutaway():
 		await _fail("Arch cutaway remained active after mapped S movement: " + str(park_world.occlusion_controller.statistics()))
 		return
-	if not await _capture("ART-10-arch-cutaway-clear.png"):
+	if not await _capture("ART-11-arch-cutaway-clear.png"):
 		return
 	# Return to the left kiosk fixture for the day/night/reduced-motion pair below.
 	occlusion_position = await _find_kiosk_occlusion(Vector3(-6.0, 0.4, 2.0))
@@ -175,7 +175,7 @@ func _run() -> void:
 	if not _has_active_cutaway():
 		await _fail("Night transition lost the active kiosk cutaway")
 		return
-	if not await _capture("ART-10-cutaway-night.png"):
+	if not await _capture("ART-11-cutaway-night.png"):
 		return
 
 	park_world.apply_settings({"reduced_motion": true})
@@ -184,7 +184,7 @@ func _run() -> void:
 	if not bool(reduced_stats.get("active", false)) or not is_equal_approx(float(reduced_stats.get("fade_weight", 0.0)), 1.0):
 		await _fail("Reduced motion must retain the active cutaway immediately: " + str(reduced_stats))
 		return
-	if not await _capture("ART-10-cutaway-reduced-motion.png"):
+	if not await _capture("ART-11-cutaway-reduced-motion.png"):
 		return
 
 	park_world.apply_settings({"reduced_motion": false})
@@ -193,7 +193,7 @@ func _run() -> void:
 	if _has_active_cutaway():
 		await _fail("Kiosk in front of the player incorrectly kept the cutaway active: " + str(park_world.occlusion_controller.statistics()))
 		return
-	if not await _capture("ART-10-cutaway-clear.png"):
+	if not await _capture("ART-11-cutaway-clear.png"):
 		return
 
 	print("PASS: native atmosphere and obstruction review. Deterministic fixture positions and framed camera views are review setup, not a player-input playthrough.")
@@ -226,12 +226,14 @@ func _set_player(position: Vector3) -> void:
 	park_world.camera.position = position + Vector3(0, 15.5, 25)
 	park_world.camera.look_at(position + Vector3(0, 1, -3))
 	park_world.camera.current = true
+	park_world._update_sprite_grounding()
 
 
 func _restore_follow_camera() -> void:
 	park_world.camera.position = park_world.player.position + Vector3(0, 15.5, 25)
 	park_world.camera.look_at(park_world.player.position + Vector3(0, 1, -3))
 	park_world.camera.current = true
+	park_world._update_sprite_grounding()
 
 
 func _find_character_sprite(role: String) -> Sprite3D:
@@ -247,6 +249,7 @@ func _frame_camera(target: Vector3, camera_position: Vector3, camera_size: float
 	park_world.camera.size = camera_size
 	park_world.camera.look_at(target)
 	park_world.camera.current = true
+	park_world._update_sprite_grounding()
 
 
 func _find_arch_occlusion() -> Vector3:

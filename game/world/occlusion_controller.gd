@@ -5,6 +5,11 @@ const OccluderShader := preload("res://game/world/occluder.gdshader")
 const RAY_COLLISION_LAYER := 1 << 5
 const SAMPLE_INTERVAL := 0.08
 const FADE_SECONDS := 0.15
+const BODY_RADIUS_HEIGHT_RATIO := 0.75
+const BODY_RADIUS_VIEWPORT_RATIO := 0.17
+const BODY_RADIUS_MIN_PX := 32.0
+const BODY_RADIUS_MAX_PX := 120.0
+const EDGE_FEATHER_PX := 2.5
 
 var player: Node3D
 var camera: Camera3D
@@ -34,6 +39,7 @@ func _ready() -> void:
 	_shader_material = ShaderMaterial.new()
 	_shader_material.shader = OccluderShader
 	_shader_material.set_shader_parameter("cutaway_weight", 0.0)
+	_shader_material.set_shader_parameter("edge_feather_px", EDGE_FEATHER_PX)
 
 
 func _exit_tree() -> void:
@@ -217,7 +223,10 @@ func _process(delta: float) -> void:
 	var feet := camera.unproject_position(player.global_position)
 	var head := camera.unproject_position(player.global_position + Vector3.UP * 1.9)
 	var projected_height := feet.distance_to(head)
-	var radius := clampf(projected_height * 0.48, 24.0, 84.0)
+	# Size the reveal from the projected body so zoom and logical viewport scale
+	# stay consistent. A short-edge cap prevents the circle swallowing a small view.
+	var viewport_limit := minf(viewport_size.x, viewport_size.y) * BODY_RADIUS_VIEWPORT_RATIO
+	var radius := minf(clampf(projected_height * BODY_RADIUS_HEIGHT_RATIO, BODY_RADIUS_MIN_PX, BODY_RADIUS_MAX_PX), viewport_limit)
 	var camera_space_body := camera.to_local(body_point)
 	var player_depth := maxf(0.0, -camera_space_body.z)
 	var target_weight := 1.0 if not _active_group_ids.is_empty() else 0.0

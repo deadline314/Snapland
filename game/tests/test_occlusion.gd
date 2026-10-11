@@ -48,8 +48,10 @@ func _run() -> void:
 	assert(int(controller.statistics().ray_mask) == OCCLUSION_LAYER, "ray mask includes only the dedicated building layer")
 	assert(controller._ray_query.exclude.has(player.get_rid()), "player RID is explicitly excluded from obstruction rays")
 	var shader_source := FileAccess.get_file_as_string("res://game/world/occluder.gdshader")
-	assert(shader_source.contains("SCREEN_UV * viewport_size_px") and shader_source.contains("distance(fragment_px, body_center_px) <= radius"), "the opening is a circular mask in viewport-pixel space")
+	assert(shader_source.contains("SCREEN_UV * viewport_size_px") and shader_source.contains("distance(fragment_px, body_center_px)"), "the opening is a circular mask in viewport-pixel space")
 	assert(shader_source.contains("fragment_view_depth < player_view_depth") and shader_source.contains("discard;"), "only eligible fragments in front of the player are cut out")
+	assert(shader_source.contains("edge_feather_px") and shader_source.contains("smoothstep(radius - edge_width, radius + edge_width, distance_px)"), "the cutaway uses a narrow soft dither band at the circle edge")
+	assert(shader_source.contains("!IN_SHADOW_PASS") and not shader_source.contains("ALPHA ="), "the reveal keeps opaque shading and preserves the full shadow silhouette")
 	assert(shader_source.contains("ALBEDO = COLOR.rgb * occluder_tint.rgb"), "building shading retains source colors and multimesh instance colors")
 
 	var decoy := StaticBody3D.new()
@@ -78,6 +80,10 @@ func _run() -> void:
 	var player_mask_before := player.collision_mask
 	controller._process(0.05)
 	assert(float(controller.statistics().fade_weight) > 0.0 and float(controller.statistics().fade_weight) < 1.0, "entry eases over the configured short interval")
+	var initial_body_height := camera.unproject_position(player.global_position + Vector3.UP * 1.9).distance_to(camera.unproject_position(player.global_position))
+	var initial_radius_expected := minf(clampf(initial_body_height * 0.75, 32.0, 120.0), minf(800.0, 600.0) * 0.17)
+	assert(is_equal_approx(float(controller.statistics().radius_px), initial_radius_expected), "reveal radius scales to about three quarters of projected body height")
+	assert(is_equal_approx(float(controller._shader_material.get_shader_parameter("edge_feather_px")), 2.5), "edge feather remains a small logical-pixel band")
 	controller.set_reduced_motion(true)
 	assert(is_equal_approx(float(controller.statistics().fade_weight), 1.0), "reduced motion keeps the orientation aid and snaps it to its active target")
 	assert(player.collision_layer == player_layer_before and player.collision_mask == player_mask_before, "visibility rays do not mutate player collision")
@@ -97,6 +103,14 @@ func _run() -> void:
 	assert(controller.statistics().viewport_size == Vector2(1000.0, 700.0), "mask projection follows a resized viewport")
 	assert(float(controller.statistics().radius_px) > initial_radius, "circle radius remains proportional to projected body height on resize")
 	assert(initial_viewport == Vector2i(800, 600), "resize fixture began at a known viewport size")
+	var resized_height := camera.unproject_position(player.global_position + Vector3.UP * 1.9).distance_to(camera.unproject_position(player.global_position))
+	var resized_radius_expected := minf(clampf(resized_height * 0.75, 32.0, 120.0), minf(1000.0, 700.0) * 0.17)
+	assert(is_equal_approx(float(controller.statistics().radius_px), resized_radius_expected), "resized reveal stays proportional to logical projection with a viewport cap")
+	camera.size = 7.0
+	controller._process(0.0)
+	assert(float(controller.statistics().radius_px) <= 120.0 and float(controller.statistics().radius_px) >= 32.0, "orthographic zoom keeps the cutaway within its pixel bounds")
+	assert(float(controller.statistics().radius_px) <= minf(1000.0, 700.0) * 0.17 + 0.001, "zoomed circle remains capped relative to the visible viewport")
+	camera.size = 12.0
 
 	front_a.body.queue_free()
 	front_b.body.queue_free()
