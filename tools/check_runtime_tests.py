@@ -1,11 +1,16 @@
-"""Fail loudly until real Godot runtime tests are configured when the game exists."""
+"""Fail if a Godot project has no native runtime test command."""
 from pathlib import Path
 import sys
 
-root = Path(__file__).resolve().parents[1]
-projects = [p for p in root.rglob('project.godot') if not any(x in p.parts for x in ('.git', '.review', '.godot'))]
-runtime_files = [p for suffix in ('*.gd', '*.tscn', '*.tres', '*.cs') for p in root.rglob(suffix) if not any(x in p.parts for x in ('.git', '.review', '.godot'))]
-if projects or runtime_files:
-    print('FAIL: Godot project/runtime files found. Add and execute the actual runtime test suite in CI before claiming full coverage.', file=sys.stderr)
-    sys.exit(1)
-print('NOT APPLICABLE: no Godot project/runtime yet; only the complete design validation suite exists.')
+ROOT = Path(__file__).resolve().parents[1]
+project = ROOT / "project.godot"
+runner = ROOT / "tools" / "run_game_tests.py"
+suite = ROOT / "game" / "tests" / "test_core.tscn"
+if project.exists() or any(ROOT.rglob("*.gd")) or any(ROOT.rglob("*.tscn")):
+    missing = [str(path.relative_to(ROOT)) for path in (project, runner, suite) if not path.is_file()]
+    if missing:
+        print("FAIL: runtime files found but the actual runtime test suite is incomplete: " + ", ".join(missing), file=sys.stderr)
+        sys.exit(1)
+    print("PASS: native runtime test command is configured.")
+else:
+    print("NOT APPLICABLE: no Godot project/runtime exists yet.")

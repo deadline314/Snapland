@@ -24,4 +24,4 @@ python tools/verify_design.py --scope links
 python tools/verify_design.py --scope all
 python -m unittest discover -s tests -v
 
-目前沒有Godot執行專案；加入project.godot前必須同步配置實際遊戲測試命令，CI不允許安靜略過。
+Godot 執行專案使用 `python tools/run_game_tests.py` 驗證匯入、啟動、核心、小遊戲、劇情、音訊與整合；設定 `GODOT_BIN` 指向 Godot 4.7.2。CI 不允許缺少引擎或測試時安靜略過。直接執行會寫存檔的測試或截圖時，必須提供獨立 `SNAPLAND_SAVE_PATH`，不得使用玩家存檔。
