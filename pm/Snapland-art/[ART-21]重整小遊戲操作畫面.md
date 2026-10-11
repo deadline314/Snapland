@@ -65,7 +65,7 @@
 - 原生檢視發現首次教學提示壓住標題，已移到操作區上緣並限制文字寬度；其餘場景仍逐款驗收。
 - 跨票改動：短回合的拍贴截取與結算接入；噴泉評級及動作時機是共用回合的一部分，SG-18 留存專項測試與影片。
 - [多元玩法與表現研究](../../design/runtime/minigame-diversity-survey.md)：九個一手來源，明確區分文字閱讀與未看過的影片。
-- 分支：`feature/island-first-park`；[遠端交付分支](https://github.com/deadline314/Snapland/tree/feature/island-first-park)。
+- 分支：`feature/island-first-park`；[遠端提交 9645e6b](https://github.com/deadline314/Snapland/commit/9645e6b)。
 
 ### 截圖
 ![暫停與分數操作](images/ART-21-pause.png)
