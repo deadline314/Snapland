@@ -56,7 +56,7 @@
 - 原生 59 張截圖，實際點擊與按鍵驗證；點擊缺圖示範的測試產生預期警告，不把它當成資源已正常載入。
 - 主 Session 檢視完整截圖放大及各遊戲第一步總覽；其餘步驟的文字版面與導航由原生檢查逐項確認。
 - 跨票最小改動：原生驗收的滑鼠座標與輸入完整派送，修正按鈕明明可見卻點不到的問題；保留原有驗收斷言。
-- 分支：`feature/island-first-park`；[交付分支](https://github.com/deadline314/Snapland/tree/feature/island-first-park)。
+- 分支：`feature/island-first-park`；[遠端提交 cbbcd29](https://github.com/deadline314/Snapland/commit/cbbcd29)。
 
 ### 截圖與影片
 ![800 像素教學](images/MAIN-10-game-001-800-normal.png)
