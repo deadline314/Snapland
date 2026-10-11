@@ -199,7 +199,7 @@ func _add_destination_buttons() -> void:
 		gate.mouse_entered.connect(select_gate)
 		gate.focus_entered.connect(select_gate)
 		zone_index+=1
-	
+
 func _make_button(text: String, node_name: String) -> Button:
 	var button := Paper.button(text,func(): pass,_canvas)
 	button.name=node_name
@@ -309,4 +309,3 @@ func _select_zone(zone: Dictionary) -> void:
 	_detail_title.text="%s｜園區入口 · 準備中" % str(zone.get("name","未命名園區"))
 	var qualification := "已達入園資格" if remaining==0 else "還差 %d 張不同普通拍貼" % remaining
 	_detail_text.text="主題：%s\n門檻：%d 張（目前 %d 張；%s）。收藏不消耗。園區內容仍在準備中，先收藏拍貼、累積入園資格。" % [str(zone.get("theme","主題資料準備中。")),threshold,_normal_count,qualification]
-

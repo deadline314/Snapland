@@ -297,5 +297,3 @@ func _finish() -> void:
 	else:
 		push_error("Travel/book UI failures: "+str(_failures))
 		get_tree().quit(1)
-
-

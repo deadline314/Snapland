@@ -55,4 +55,3 @@
 - 衣櫃保留草稿、購買與穿戴流程，增加清楚狀態及服飾 sprite 縮圖。票票角色肖像取角色動畫庫中的 authored ticket/front idle frame，不另外繪製通用帽子或臉。
 - TutorialPanel 的 start／skip／practice／close 意圖已接到主流程；缺少正式截圖時仍使用教學面板的文字 fallback。本輪只驗證面板資料與流程，沒有宣稱截圖完成。
 - 練習結果展示真實 `score_summary` 明細，不進照片、幣、任務、成就的正式存檔流程。
-

@@ -61,7 +61,7 @@
 ### 測試結果
 - 可提交版本：地圖／收藏／成就 59 項通過；衣櫃檢查通過；原生遊園介面輸入流程通過，0 腳本或引擎錯誤。
 - 證據：[驗收摘要](images/ART-20-review.json)、[原生操作影片](images/ART-20-native-ui.mp4)。
-- 分支：`feature/island-first-park`；[遠端交付分支](https://github.com/deadline314/Snapland/tree/feature/island-first-park)。
+- 分支：`feature/island-first-park`；[遠端交付提交](https://github.com/deadline314/Snapland/commit/da19582)。
 
 ### 截圖
 ![小視窗島嶼地圖](images/ART-20-map-800.png)
