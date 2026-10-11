@@ -217,6 +217,26 @@ func _test_bubble_boundaries() -> void:
 	_click(failed, 790, 380)
 	assert(failed.beat == 0 and failed.mistakes == 1)
 	failed.queue_free()
+	# The live bubble envelope uses the same normal/assist tolerance as the aim判定.
+	for assist_edge in [false, true]:
+		var aim_limit := 180.0 if assist_edge else 130.0
+		var inside := _new_session("game-010", assist_edge)
+		inside.phase = 1.6
+		inside._process(0.01)
+		assert(inside.beat_window)
+		_click(inside, 790.0 + aim_limit - 1.0, inside.target.y)
+		assert(inside.bubble_ready and inside._bubble_display_radius() >= aim_limit - 1.0 + inside.BUBBLE_MASCOT_RADIUS)
+		_click(inside, 790, inside.target.y)
+		assert(inside.beat == 1 and inside.mistakes == 0)
+		inside.queue_free()
+
+		var outside := _new_session("game-010", assist_edge)
+		outside.phase = 1.6
+		outside._process(0.01)
+		_click(outside, 790.0 + aim_limit + 1.0, outside.target.y)
+		_click(outside, 790, outside.target.y)
+		assert(outside.beat == 0 and outside.mistakes == 1)
+		outside.queue_free()
 	for shot in 3:
 		while s.phase < shot * 2.0 + 1.65: s._process(0.01)
 		_click(s, 790, s.target.y)
