@@ -8,6 +8,7 @@ const WOOD = preload("res://game/world/wood.gdshader")
 const GRASS = preload("res://game/world/grass.gdshader")
 const LIVING_SPRITE = preload("res://game/world/living_sprite.gdshader")
 const ComponentAnimationScript = preload("res://game/world/component_animation.gd")
+const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const IDENTITY_ATLAS_PATH := "res://assets/characters/identities-v3.png"
 const IDENTITY_REGIONS := {
@@ -34,6 +35,7 @@ var sun: DirectionalLight3D
 var environment: Environment
 var points: Array[Dictionary] = []
 var component_motion: Node
+var occlusion_controller: Node
 var lamps: Array[OmniLight3D] = []
 var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
@@ -61,6 +63,9 @@ func _ready() -> void:
 	component_motion=ComponentAnimationScript.new()
 	component_motion.name="ComponentAnimation"
 	add_child(component_motion)
+	occlusion_controller=OcclusionControllerScript.new()
+	occlusion_controller.name="OcclusionController"
+	add_child(occlusion_controller)
 	_load_foliage_atlas()
 	_load_identity_atlas()
 	_build_lighting()
@@ -72,9 +77,15 @@ func _ready() -> void:
 	_build_gates()
 	_build_player()
 	_build_camera()
+	occlusion_controller.configure(player,camera)
 	component_motion.finish_registration()
 	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
 	set_night(false)
+
+
+func _exit_tree() -> void:
+	if is_instance_valid(occlusion_controller):
+		occlusion_controller.release()
 
 func _load_foliage_atlas() -> void:
 	const ATLAS_PATH := "res://assets/world/tidal-foliage-v2.png"
@@ -185,6 +196,8 @@ func _mesh(mesh: Mesh, pos: Vector3, material: Material) -> MeshInstance3D:
 	instance.position = pos
 	instance.material_override = material
 	add_child(instance)
+	if is_instance_valid(occlusion_controller):
+		occlusion_controller.register_geometry(instance,material)
 	mesh_count += 1
 	return instance
 
@@ -202,6 +215,8 @@ func _multi_mesh(mesh: Mesh, pos: Vector3, transforms: Array[Transform3D], color
 	instance.position=pos
 	instance.material_override=material
 	add_child(instance)
+	if is_instance_valid(occlusion_controller):
+		occlusion_controller.register_geometry(instance,material)
 	mesh_count += 1
 	return instance
 
@@ -513,14 +528,21 @@ func _lantern(pos: Vector3) -> void:
 		component_motion.register_light(light,float(lamps.size())*0.17)
 
 func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
-	for side in [-1,1]:
-		_box(pos+Vector3(side*wide*0.5,1.65,0),Vector3(0.5,3.3,0.6),CREAM,true)
-		_lantern(pos+Vector3(side*(wide*0.5-0.4),2.3,0))
+	# Register the arch's opaque frame and its title's local visibility. Lanterns
+	# keep their existing materials; the title hides only when it overlaps the mask.
+	occlusion_controller.begin_building()
+	var left_pillar := _box(pos+Vector3(-wide*0.5,1.65,0),Vector3(0.5,3.3,0.6),CREAM,true)
+	var blocker := left_pillar.get_child(0) as StaticBody3D
+	_box(pos+Vector3(wide*0.5,1.65,0),Vector3(0.5,3.3,0.6),CREAM,true)
 	_box(pos+Vector3(0,3.4,0),Vector3(wide+0.8,0.7,0.7),color)
-	_label(title,pos+Vector3(0,3.5,0.43),30)
 	for i in range(7):
 		var flag := _box(pos+Vector3(-wide*0.45+i*wide*0.15,2.85,0),Vector3(0.4,0.35,0.04),CORAL if i%2==0 else GOLD)
 		component_motion.register_component(flag,"flag",float(i)*0.6)
+	var arch_title := _label(title,pos+Vector3(0,3.5,0.43),30)
+	occlusion_controller.register_visibility_label(arch_title)
+	occlusion_controller.finish_building(blocker)
+	for side in [-1,1]:
+		_lantern(pos+Vector3(side*(wide*0.5-0.4),2.3,0))
 
 func _build_dock() -> void:
 	_box(Vector3(0,0.0,21),Vector3(5,0.3,13),Color("#a17b52"))
@@ -665,7 +687,9 @@ func _shrub_cluster(pos: Vector3, seed_value: float) -> void:
 		blossom.rotation.y=side*0.35
 
 func _kiosk(pos: Vector3, title: String, color: Color) -> void:
-	_box(pos+Vector3(0,0.7,0),Vector3(3.8,1.3,2.5),CREAM,true)
+	occlusion_controller.begin_building()
+	var opaque_base := _box(pos+Vector3(0,0.7,0),Vector3(3.8,1.3,2.5),CREAM,true)
+	var blocker := opaque_base.get_child(0) as StaticBody3D
 	_box(pos+Vector3(0,0.48,1.28),Vector3(3.7,0.14,0.11),Color("#876843"))
 	_box(pos+Vector3(0,1.25,1.31),Vector3(3.1,0.12,0.13),Color("#876843"))
 	var product_transforms: Array[Transform3D]=[]
@@ -715,6 +739,7 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 		stud_transforms.append(Transform3D(Basis().scaled(Vector3(0.1,0.1,0.06)),Vector3(side*1.9,1.95,1.73)))
 		stud_colors.append(GOLD)
 	_multi_mesh(BoxMesh.new(),pos,stud_transforms,stud_colors,_vertex_color_material("kiosk-studs"))
+	occlusion_controller.finish_building(blocker)
 
 func _lamppost(pos: Vector3) -> void:
 	if _foliage_has("lamp"):
@@ -1380,6 +1405,7 @@ func apply_settings(settings: Dictionary) -> void:
 	sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	fountain_water.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	if is_instance_valid(component_motion): component_motion.set_reduced_motion(reduced_motion)
+	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
 
 func update_collection(photos: Dictionary) -> void:
 	for point in points:
