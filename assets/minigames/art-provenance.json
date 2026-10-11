@@ -1,0 +1,34 @@
+[
+  {
+    "file": "assets/minigames/props/tidal-props-v2.png",
+    "inputs": [
+      "pm/Snapland-art/images/ART-5-props-before.png",
+      "assets/world/tidal-foliage-v2.png"
+    ],
+    "prompt": "Image 1 is the asset sheet to redesign; image 2 sets the restrained pixel-cluster treatment. Keep image 1's exact sixteen subjects, identities and 4x4 order, each isolated with generous transparent gutters. Make a readable pixel game prop atlas with broad flat color clusters, ink-blue silhouette outlines, and three tones per material. Shared sea-teal, brick-coral, cream, ochre and indigo palette. Row 1 balloon, mailbox, kite, cranky sea urchin; row 2 straw hat, dark-haired teal-jacket camera visitor, coral imp with cream horns/teal scarf/arrow tail, lantern; row 3 coral-dress hat girl, glasses blue-sweater boy, yellow sailor visitor, dark-skinned green-overalls visitor; row 4 flower-shaped gramophone, camera, wave sign, wooden bench. Keep the characters' accessories but simplify their faces to small pixel eyes and varied brow/mouth shapes, not glossy enormous eyes. Plain useful objects, distinct silhouettes, few purposeful chips, no ornamental brass scrollwork, no uniform grain, no glow, no written labels. Complete feet and tails. True transparent background.",
+    "date": "2026-10-11",
+    "method": "Built-in image generation edit",
+    "source": "Original Snapland generation only; no third-party image input",
+    "inspection": "Viewed by main session: reduced fine texture, clearer clusters and silhouettes; prompt color counts and pixel grid are targets, not enforced output guarantees",
+    "sha256": "b4b416783e281cdb48a0196a5b5bef48960291c2228d5cffda4cd0b4c37e11d3",
+    "input_sha256": {
+      "pm/Snapland-art/images/ART-5-props-before.png": "84f7a4cbe6964c568d2bc21fd049712675dce17d1db9847df3e397dfd14bf91f",
+      "assets/world/tidal-foliage-v2.png": "a1a7e7a9520f87c0247f33b4d08977afee703ef317d56e6ac1f151f879f84e23"
+    }
+  },
+  {
+    "file": "assets/minigames/backdrops/tidal-atlas-v2.png",
+    "inputs": [
+      "pm/Snapland-art/images/ART-5-backdrops-before.png"
+    ],
+    "prompt": "Redesign this original 2x2 game background sheet as clean screen-printed stage scenery, keeping four equal panels with their subjects: seaside amusement harbor, coastal garden, sunset boardwalk stage, moonlit photo courtyard. Crisp ink-blue shapes, broad calm color planes, 2-3 flat tones per material. Shared cream, brick-coral, sea-teal, moss-green and indigo palette. A little purposeful irregularity in roof edges and stone outlines, not a blanket paper-grain filter. Build depth using three simple overlapping scenery layers and graphic cast shadows. Each panel has a large quiet open center and lower half for moving game pieces. Decorative details only near side edges. Preserve lighthouse/ferris wheel silhouettes, canvas awnings, useful wooden railings and ocean identity. Remove filigree, flowers covering every surface, realistic grain, sparkle, gradients, glow and tiny repeated details. Keep the exact 2x2 edge-to-edge panel arrangement, no text, no UI, no characters, no borders.",
+    "date": "2026-10-11",
+    "method": "Built-in image generation edit",
+    "source": "Original Snapland generation only; no third-party image input",
+    "inspection": "Viewed by main session: reduced fine texture, clearer clusters and silhouettes; prompt color counts and pixel grid are targets, not enforced output guarantees",
+    "sha256": "e7e41afa44a864dc62f41c5e59ee45bd574cde96c235e82a0bcd7d07d243f320",
+    "input_sha256": {
+      "pm/Snapland-art/images/ART-5-backdrops-before.png": "70e98751f7d46ca298b916950aeb0d31bb7f0cf6daf8866ee9bfdead1eb3aba4"
+    }
+  }
+]

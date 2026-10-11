@@ -19,8 +19,26 @@ const FLOWER_ROUTE: Array[int] = [0, 4, 5, 6, 10, 14, 15]
 const PIPE_DIRS: Array[Vector2i] = [Vector2i(0,-1), Vector2i(1,0), Vector2i(0,1), Vector2i(-1,0)]
 const PIPE_BITS: Array[int] = [1,2,4,8]
 const CROWD_COLORS: Array[Color] = [Color("#ff83aa"), Color("#79bdff"), Color("#ffd166"), Color("#70e1c1")]
+const DESIGN_SIZE := Vector2(1280, 720)
+const INK := Color("#243b50")
+const SEA := Color("#55b8ad")
+const GOLD := Color("#b77c45")
+const PAPER := Color("#fff2d4")
+const BUBBLE_MASCOT_RADIUS := 52.0
+const REQUIRED_PROP_KEYS: Array[String] = ["balloon", "mailbox", "kite", "urchin", "hat", "visitor", "mascot", "lantern", "tourist_coral", "tourist_blue", "tourist_gold", "tourist_green", "flower_horn", "camera", "sign", "bench"]
+const BACKDROP_SCENES: Array[String] = ["harbor", "garden", "stage", "night"]
 static var _catalog_cache: Array = []
 static var _catalog_loaded := false
+static var _backdrop_texture: Texture2D
+static var _backdrop_checked := false
+static var _backdrop_warning_emitted := false
+static var _scene_textures: Dictionary = {}
+static var _props_atlas: Texture2D
+static var _prop_regions: Dictionary = {}
+static var _prop_textures: Dictionary = {}
+static var _props_checked := false
+static var _props_available := false
+static var _props_warning_emitted := false
 
 var game_id := ""
 var mode := ""
@@ -47,8 +65,11 @@ var beat := 0
 var beat_window := false
 var fountain_cycle := -1
 var fountain_attempts := 0
-var flash := 0.0
 var feedback_color := MINT
+var reduced_motion := false
+var feedback_age := 99.0
+var feedback_origin := Vector2(640, 400)
+var particles: Array[Dictionary] = []
 var prompt := ""
 var select_index := -1
 var pipe_cursor := 0
@@ -103,6 +124,8 @@ func start(id: String, assisted_mode: bool = false) -> void:
 		cancelled.emit()
 		return
 	assisted = assisted_mode
+	var progress := get_node_or_null("/root/Progress")
+	reduced_motion = progress != null and bool(progress.settings.get("reduced_motion", false))
 	_rng_reset()
 	reset_round()
 	queue_redraw()
@@ -111,6 +134,7 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	focus_mode = Control.FOCUS_ALL
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	grab_focus()
 
 func _rng_reset() -> void:
@@ -130,7 +154,8 @@ func reset_round() -> void:
 	beat_window = false
 	fountain_cycle = -1
 	fountain_attempts = 0
-	flash = 0.0
+	feedback_age = 99.0
+	particles.clear()
 	feedback_color = MINT
 	prompt = "準備好了嗎？"
 	select_index = -1
@@ -199,7 +224,13 @@ func _process(delta: float) -> void:
 	elapsed += delta
 	game_time += delta
 	phase += delta
-	flash = maxf(0.0, flash - delta)
+	feedback_age += delta
+	for i in range(particles.size() - 1, -1, -1):
+		var particle: Dictionary = particles[i]
+		particle.life = float(particle.life) - delta
+		particle.pos = Vector2(particle.pos) + Vector2(particle.velocity) * delta
+		particles[i] = particle
+		if particle.life <= 0.0: particles.remove_at(i)
 	if elapsed >= round_seconds:
 		_finish(false)
 		return
@@ -356,13 +387,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		if mode == "crowd_traffic" and (event.keycode == KEY_Q or event.keycode == KEY_E): lane = 1 - lane; _feedback("號誌切換：" + ("左向" if lane == 0 else "右向"), BLUE)
 	if event is InputEventMouseButton and event.pressed:
 		var mouse_event := event as InputEventMouseButton
-		var m: Vector2 = mouse_event.position
+		var m := _to_design(mouse_event.position)
 		if m.y < 100:
-			if m.x > size.x - 125: cancelled.emit()
-			elif m.x > size.x - 280: reset_round()
+			if m.x > DESIGN_SIZE.x - 125: cancelled.emit()
+			elif m.x > DESIGN_SIZE.x - 280: reset_round()
 			return
 		if mode == "fountain_timing": _press_action()
-		elif mode == "ribbon_rhythm": _ribbon_input(KEY_LEFT if m.x < size.x * 0.43 else (KEY_RIGHT if m.x > size.x * 0.57 else KEY_SPACE))
+		elif mode == "ribbon_rhythm": _ribbon_input(KEY_LEFT if m.x < DESIGN_SIZE.x * 0.43 else (KEY_RIGHT if m.x > DESIGN_SIZE.x * 0.57 else KEY_SPACE))
 		elif mode == "crowd_traffic": lane = 1 - lane; _feedback("號誌切換", BLUE)
 		elif mode == "shadow_alignment": alignment = inverse_lerp(190.0, 1090.0, m.x) - 0.5; mistakes += 1 if absf(alignment) > 0.3 else 0
 		elif mode == "bubble_photo": _bubble_click(m)
@@ -370,16 +401,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif mode == "bench_swap": _bench_click(m)
 		elif mode == "melody_memory":
 			var petal := int(clampi(int((m.x - 380.0) / 130.0), 0, 3)); _melody_input(petal)
-		elif mode == "sign_balance": balance += -0.16 if m.x < size.x / 2.0 else 0.16
+		elif mode == "sign_balance": balance += -0.16 if m.x < DESIGN_SIZE.x / 2.0 else 0.16
 	if event is InputEventMouseMotion:
 		var mouse := event as InputEventMouseMotion
+		var pointer := _to_design(mouse.position)
 		match mode:
 			"balloon_delivery":
-				steering_target = Vector2(clampf(mouse.position.x, 130, 1150), clampf(mouse.position.y, 210, 585))
+				steering_target = Vector2(clampf(pointer.x, 130, 1150), clampf(pointer.y, 210, 585))
 				mouse_steering = true
-			"kite_rings": p.y = clampf(mouse.position.y, 220, 570)
-			"hat_catching": p.x = clampf(mouse.position.x, 180, 1100)
-			"shadow_alignment": alignment = clampf(inverse_lerp(190.0, 1090.0, mouse.position.x) - 0.5, -0.5, 0.5)
+			"kite_rings": p.y = clampf(pointer.y, 220, 570)
+			"hat_catching": p.x = clampf(pointer.x, 180, 1100)
+			"shadow_alignment": alignment = clampf(inverse_lerp(190.0, 1090.0, pointer.x) - 0.5, -0.5, 0.5)
 
 func _press_action() -> void:
 	match mode:
@@ -443,16 +475,24 @@ func _bubble_click(m: Vector2) -> void:
 	bubble_cycle = cycle
 	bubble_attempts += 1
 	var aim_error := bubble_aim.distance_to(Vector2(790, target.y))
-	var aim_limit := 180.0 if assisted else 130.0
-	var photo_x_limit := 160.0 if assisted else 120.0
-	var photo_y_limit := 140.0 if assisted else 100.0
-	if beat_window and aim_error < aim_limit and absf(m.x - 790.0) < photo_x_limit and absf(m.y - target.y) < photo_y_limit:
+	var photo_tolerance := _bubble_photo_tolerance()
+	if beat_window and aim_error < _bubble_aim_limit() and absf(m.x - 790.0) < photo_tolerance.x and absf(m.y - target.y) < photo_tolerance.y:
 		beat += 1; score += 100; devil_progress += 1
 		if aim_error >= 60.0 or m.distance_to(Vector2(790, target.y)) >= 40.0 or fposmod(phase, 2.0) < 1.55 or fposmod(phase, 2.0) > 1.85: bubble_perfect = false
 		_feedback("咔嚓！合照成功", MINT)
 	else:
 		mistakes += 1; _feedback("泡泡沒包住吉祥物，等下一顆", PINK)
 	if bubble_attempts >= 3: _finish(devil_progress >= 2, devil_progress == 3 and mistakes == 0 and bubble_perfect)
+
+func _bubble_aim_limit() -> float:
+	return 180.0 if assisted else 130.0
+
+func _bubble_photo_tolerance() -> Vector2:
+	return Vector2(160,140) if assisted else Vector2(120,100)
+
+func _bubble_display_radius() -> float:
+	# The rainbow rim contains every mascot center accepted by the aim test, plus its full sprite radius.
+	return _bubble_aim_limit() + BUBBLE_MASCOT_RADIUS
 
 func _bench_click(m: Vector2) -> void:
 	if m.y < 300 or m.y > 510 or m.x < 370 or m.x > 910: return
@@ -488,8 +528,40 @@ func _melody_input(note: int) -> void:
 		mistakes += 1; _feedback("音符跑掉了，再聽一次", PINK); sequence_index = 0; sequence_show_index = 0; sequence_showing = true; sequence_clock = float(sequence.size()) * (0.8 if assisted else 0.55)
 
 func _feedback(message: String, color: Color) -> void:
-	prompt = message; feedback_color = color; flash = 0.14
+	prompt = message; feedback_color = color; feedback_age = 0.0
+	feedback_origin = _feedback_anchor()
+	if not reduced_motion:
+		var palette: Array[Color] = [color, PAPER, YELLOW]
+		for i in mini(12, 24 - particles.size()):
+			var angle := TAU * float(i) / 12.0 + rng.randf_range(-0.14, 0.14)
+			particles.append({"pos": feedback_origin, "velocity": Vector2.RIGHT.rotated(angle) * rng.randf_range(34.0, 84.0), "life": rng.randf_range(0.22, 0.42), "color": palette[i % palette.size()]})
 	feedback.emit("success" if color == MINT or color == YELLOW else "miss" if color == PINK else "interact")
+
+func _feedback_anchor() -> Vector2:
+	match mode:
+		"balloon_delivery": return p
+		"kite_rings": return p
+		"fountain_timing": return Vector2(640, 460)
+		"crowd_traffic": return Vector2(640, 420)
+		"hat_catching": return Vector2(p.x, 560)
+		"ribbon_rhythm": return Vector2(640, 420)
+		"flower_pipes": return Vector2(370 + (pipe_cursor % 4) * 135 + 55, 205 + int(pipe_cursor / 4) * 85 + 30)
+		"sign_balance": return Vector2(640, 340)
+		"shadow_alignment": return Vector2(940 + alignment * 300, 390)
+		"bubble_photo": return Vector2(790, target.y)
+		"bench_swap": return Vector2(425 + maxi(select_index, 0) * 135, 340)
+		"melody_memory": return Vector2(450 + maxi(sequence_index, 0) * 130, 420)
+	return Vector2(640, 400)
+
+func _to_design(point: Vector2) -> Vector2:
+	var scale_factor := minf(size.x / DESIGN_SIZE.x, size.y / DESIGN_SIZE.y)
+	if scale_factor <= 0.0: return point
+	var drawn := DESIGN_SIZE * scale_factor
+	return (point - (size - drawn) * 0.5) / scale_factor
+
+func _design_transform() -> void:
+	var scale_factor := minf(size.x / DESIGN_SIZE.x, size.y / DESIGN_SIZE.y)
+	draw_set_transform((size - DESIGN_SIZE * scale_factor) * 0.5, 0.0, Vector2.ONE * scale_factor)
 
 func _score(amount: int) -> void:
 	score += amount
@@ -502,26 +574,331 @@ func _finish(success: bool, devil: bool = false) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	var s := size
-	draw_rect(Rect2(Vector2.ZERO, s), BG)
-	if flash > 0.0: draw_rect(Rect2(Vector2.ZERO, s), Color(feedback_color, flash * 0.32))
-	for i in 8:
-		draw_circle(Vector2(90 + i * 160, 150 + sin(phase + i) * 12), 3, Color(1,1,1,0.28))
-	draw_rect(Rect2(0,0,s.x,108), Color("#10243a"))
+	var viewport_size := size
+	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
+	_design_transform()
+	var s := DESIGN_SIZE
+	_draw_backdrop()
+	# Warm inked frame, corner rivets and paper mat establish the harbor paper-theatre look.
+	draw_rect(Rect2(18,18,1244,684), Color("#f2d6a7"), false, 4)
+	draw_rect(Rect2(25,25,1230,670), Color(GOLD, 0.72), false, 2)
+	for corner in [Vector2(42,42), Vector2(1238,42), Vector2(42,678), Vector2(1238,678)]:
+		draw_circle(corner, 8, GOLD); draw_circle(corner, 3, PAPER)
+	draw_rect(Rect2(29,31,1222,90), Color("#152b40eF"), true)
+	draw_rect(Rect2(29,31,1222,90), Color("#d9ad70"), false, 2)
 	var info := _definition()
-	draw_string(FONT, Vector2(34,48), info.name, HORIZONTAL_ALIGNMENT_LEFT, -1, 28, CREAM)
-	draw_string(FONT, Vector2(34,82), "操作：" + info.instructions, HORIZONTAL_ALIGNMENT_LEFT, s.x - 350, 15, Color("#c2d6e4"))
-	draw_string(FONT, Vector2(34,104), "目標：" + info.goal + "　✦ 惡魔：" + info.devil_hint, HORIZONTAL_ALIGNMENT_LEFT, s.x - 80, 14, Color("#d6e6ee"))
-	draw_string(FONT, Vector2(s.x - 330,45), "時間 %02d　　分數 %04d" % [int(round_seconds - elapsed), score], HORIZONTAL_ALIGNMENT_LEFT, 240, 17, CREAM)
-	draw_string(FONT, Vector2(s.x - 280,80), "R 重試　　Esc 離開", HORIZONTAL_ALIGNMENT_LEFT, 260, 14, Color("#c2d6e4"))
-	if assisted: draw_string(FONT, Vector2(s.x - 295,105), "✦ 輔助已開", HORIZONTAL_ALIGNMENT_LEFT, 180, 16, YELLOW)
+	draw_string(FONT, Vector2(48,65), info.name, HORIZONTAL_ALIGNMENT_LEFT, 500, 27, PAPER)
+	draw_string(FONT, Vector2(50,99), "操作　" + info.instructions, HORIZONTAL_ALIGNMENT_LEFT, 680, 14, Color("#c9dfdf"))
+	draw_rect(Rect2(40,128,1200,31),Color("#fff0d5",0.88),true)
+	draw_rect(Rect2(40,128,1200,31),Color("#ac835c",0.65),false,1)
+	draw_string(FONT, Vector2(55,149), "本局目標　" + info.goal + "　　✦ 加碼　" + info.devil_hint, HORIZONTAL_ALIGNMENT_LEFT, 1170, 13, INK)
+	draw_string(FONT, Vector2(790,62), "時間  %02d" % int(ceil(maxf(0.0, round_seconds - elapsed))), HORIZONTAL_ALIGNMENT_LEFT, 150, 17, PAPER)
+	draw_string(FONT, Vector2(955,62), "得分  %04d" % score, HORIZONTAL_ALIGNMENT_LEFT, 170, 17, YELLOW)
+	draw_string(FONT, Vector2(790,96), "R 重來　　Esc 離開", HORIZONTAL_ALIGNMENT_LEFT, 210, 13, Color("#c9dfdf"))
+	if assisted: draw_string(FONT, Vector2(1060,96), "✦ 輔助", HORIZONTAL_ALIGNMENT_LEFT, 145, 14, YELLOW)
+	# The clock rail is deliberately calm and continuous; its color follows the remaining time.
+	var time_fraction := clampf((round_seconds - elapsed) / round_seconds, 0.0, 1.0)
+	draw_rect(Rect2(790,108,426,5), Color("#39566a"), true)
+	draw_rect(Rect2(790,108,426*time_fraction,5), MINT if time_fraction > 0.25 else PINK, true)
 	_draw_game()
-	draw_rect(Rect2(26,s.y - 67,s.x - 52,44), Color("#10243acc"), true)
-	draw_string(FONT, Vector2(44,s.y - 39), prompt, HORIZONTAL_ALIGNMENT_LEFT, s.x - 100, 18, Color("#ffffff"))
+	for particle in particles:
+		var alpha := clampf(float(particle.life) / 0.42, 0.0, 1.0)
+		draw_circle(particle.pos, 3.0 + alpha * 2.0, Color(particle.color, alpha))
+	if feedback_age < 0.48:
+		var stamp_alpha := 1.0 if reduced_motion else clampf(1.0-feedback_age/0.48,0.0,1.0)
+		var stamp_radius := 30.0 if reduced_motion else 28.0+sin(feedback_age*PI/0.48)*8.0
+		draw_circle(feedback_origin,stamp_radius,Color("#173248",0.72*stamp_alpha))
+		draw_arc(feedback_origin,stamp_radius,0,TAU,32,Color(feedback_color,stamp_alpha),4)
+		draw_circle(feedback_origin,5,Color(feedback_color,stamp_alpha))
+	draw_rect(Rect2(38,626,1204,52), Color("#152b40e8"), true)
+	draw_rect(Rect2(38,626,7,52), feedback_color if feedback_age < 1.4 else GOLD, true)
+	draw_rect(Rect2(38,626,1204,52), Color("#e8c68d"), false, 2)
+	draw_string(FONT, Vector2(62,659), prompt, HORIZONTAL_ALIGNMENT_LEFT, 1140, 17, PAPER)
 	if ended:
 		draw_rect(Rect2(0,0,s.x,s.y), Color(0.03,0.08,0.14,0.70))
-		draw_string(FONT, Vector2(0,s.y * 0.46), "完成！" if won else "再試一次吧！", HORIZONTAL_ALIGNMENT_CENTER, s.x, 44, YELLOW if won else PINK)
-		draw_string(FONT, Vector2(0,s.y * 0.54), ("惡魔拍貼達成 ✦" if devil_won else "普通拍貼達成" if won else "按 R 免費重試　／　Esc 離開"), HORIZONTAL_ALIGNMENT_CENTER, s.x, 23, CREAM)
+		draw_rect(Rect2(350,262,580,180), Color("#17334a"), true)
+		draw_rect(Rect2(350,262,580,180), GOLD, false, 4)
+		draw_string(FONT, Vector2(0,326), "完成！" if won else "再試一次吧！", HORIZONTAL_ALIGNMENT_CENTER, s.x, 38, YELLOW if won else PINK)
+		draw_string(FONT, Vector2(0,378), ("惡魔拍貼達成 ✦" if devil_won else "普通拍貼達成" if won else "按 R 免費重試　／　Esc 離開"), HORIZONTAL_ALIGNMENT_CENTER, s.x, 19, PAPER)
+	draw_set_transform(Vector2.ZERO)
+
+func _draw_backdrop() -> void:
+	var scene := "harbor"
+	var tint := Color("#4b928e")
+	match mode:
+		"balloon_delivery": scene = "harbor"; tint = Color("#78afa3")
+		"kite_rings": scene = "harbor"; tint = Color("#7db8c4")
+		"fountain_timing": scene = "garden"; tint = Color("#7ba995")
+		"crowd_traffic": scene = "stage"; tint = Color("#b69477")
+		"hat_catching": scene = "stage"; tint = Color("#c59485")
+		"ribbon_rhythm": scene = "stage"; tint = Color("#806b86")
+		"flower_pipes": scene = "garden"; tint = Color("#8ba976")
+		"sign_balance": scene = "harbor"; tint = Color("#bd9c6e")
+		"shadow_alignment": scene = "night"; tint = Color("#394968")
+		"bubble_photo": scene = "night"; tint = Color("#527489")
+		"bench_swap": scene = "garden"; tint = Color("#80aa95")
+		"melody_memory": scene = "night"; tint = Color("#697794")
+	draw_rect(Rect2(0,0,1280,720), tint)
+	var atlas_path := "res://assets/minigames/backdrops/tidal-atlas-v2.png"
+	if not _backdrop_checked:
+		_backdrop_checked = true
+		if ResourceLoader.exists(atlas_path):
+			var loaded_atlas: Resource = load(atlas_path)
+			if loaded_atlas is Texture2D:
+				_backdrop_texture = loaded_atlas
+			else:
+				_warn_backdrop_asset("Invalid minigame backdrop atlas: " + atlas_path)
+		else:
+			_warn_backdrop_asset("Missing minigame backdrop atlas: " + atlas_path)
+	if _backdrop_texture:
+		if not _scene_textures.has(scene):
+			var atlas_size := _backdrop_texture.get_size()
+			var split_x := int(atlas_size.x / 2)
+			var split_y := int(atlas_size.y / 2)
+			var source := Vector2i.ZERO
+			var region_size := Vector2i(split_x,split_y)
+			match scene:
+				"garden": source = Vector2i(split_x,0); region_size = Vector2i(atlas_size.x-split_x,split_y)
+				"stage": source = Vector2i(0,split_y); region_size = Vector2i(split_x,atlas_size.y-split_y)
+				"night": source = Vector2i(split_x,split_y); region_size = Vector2i(atlas_size.x-split_x,atlas_size.y-split_y)
+			if region_size.x <= 0 or region_size.y <= 0:
+				_warn_backdrop_asset("Invalid minigame backdrop dimensions at " + atlas_path)
+				_backdrop_texture = null
+				return
+			# Each quadrant uses its exact half-size bounds; AtlasTexture clips filtering to the region.
+			var region := Rect2(Vector2(source),Vector2(region_size))
+			var scene_texture := AtlasTexture.new()
+			scene_texture.atlas = _backdrop_texture
+			scene_texture.region = region
+			scene_texture.filter_clip = true
+			_scene_textures[scene] = scene_texture
+		draw_texture_rect(_scene_textures[scene],Rect2(29,122,1222,492),false,Color(1,1,1,0.76))
+	# Layered tide lines and a promenade ground band keep absent backdrops fully composed.
+	for i in 7:
+		var y := 145.0 + i * 65.0
+		var line_color := Color(PAPER, 0.055 if i % 2 == 0 else 0.09)
+		draw_line(Vector2(42,y), Vector2(1238,y + 12), line_color, 2)
+	draw_rect(Rect2(30,576,1220,38), Color("#315d60",0.72), true)
+	draw_line(Vector2(34,576),Vector2(1246,576),Color("#efcf93",0.7),3)
+	# Scalloped printed edge and tiny brass stars add paper-cut depth without covering play.
+	for i in 18:
+		var x := 66.0 + i * 67.0
+		draw_arc(Vector2(x,602), 8, PI, TAU, 10, Color("#e9cd9c",0.45), 2)
+	for star in [Vector2(78,157),Vector2(1195,170),Vector2(1182,545),Vector2(92,548)]:
+		draw_circle(star, 3, Color("#ffe6a8",0.65))
+	# Scene-specific theater dressing gives each activity a distinct camera and silhouette.
+	match mode:
+		"balloon_delivery":
+			_draw_cloud(Vector2(200,208),0.85); _draw_cloud(Vector2(1040,205),0.72)
+			_draw_lighthouse(Vector2(1150,440)); _draw_boat(Vector2(270,548),0.8)
+		"kite_rings":
+			_draw_cloud(Vector2(180,220),1.0); _draw_cloud(Vector2(1085,215),0.9)
+			draw_line(Vector2(55,324),Vector2(210,292),Color("#557f69",0.7),5)
+			draw_line(Vector2(1070,330),Vector2(1230,292),Color("#557f69",0.7),5)
+		"fountain_timing", "flower_pipes", "bench_swap":
+			_draw_topiary(Vector2(130,450),0.78); _draw_topiary(Vector2(1150,450),0.78)
+			_draw_awning(245,190,790)
+		"crowd_traffic", "hat_catching", "ribbon_rhythm":
+			_draw_curtain(40,150,165,430); _draw_curtain(1075,150,165,430)
+			for x in [300,640,980]: _draw_lantern(Vector2(x,174),0.8)
+		"sign_balance":
+			_draw_boat(Vector2(170,540),0.55); _draw_lighthouse(Vector2(1120,475))
+		"shadow_alignment", "bubble_photo", "melody_memory":
+			_draw_moon(Vector2(1125,205)); _draw_lantern(Vector2(180,235),0.95)
+			for x in [345,640,935]: _draw_topiary(Vector2(x,555),0.42)
+
+func _warn_backdrop_asset(message: String) -> void:
+	if _backdrop_warning_emitted: return
+	_backdrop_warning_emitted = true
+	push_warning(message)
+
+func art_cache_status() -> Dictionary:
+	# Read-only smoke hook: call after drawing each mode to confirm real assets and regions loaded.
+	var loaded_props: Array[String] = []
+	var missing_props: Array[String] = []
+	for key in REQUIRED_PROP_KEYS:
+		if _prop_textures.get(key) is Texture2D: loaded_props.append(key)
+		else: missing_props.append(key)
+	var loaded_scenes: Array[String] = []
+	var missing_scenes: Array[String] = []
+	for key in BACKDROP_SCENES:
+		if _scene_textures.get(key) is Texture2D: loaded_scenes.append(key)
+		else: missing_scenes.append(key)
+	return {
+		"props_atlas_loaded": _props_atlas != null,
+		"props_regions_loaded": _props_available,
+		"props_loaded": loaded_props,
+		"props_missing": missing_props,
+		"backdrop_atlas_loaded": _backdrop_texture != null,
+		"backdrops_loaded": loaded_scenes,
+		"backdrops_missing": missing_scenes,
+	}
+
+func art_assets_ready() -> bool:
+	var status := art_cache_status()
+	return bool(status.props_atlas_loaded) and bool(status.props_regions_loaded) and status.props_missing.is_empty() and bool(status.backdrop_atlas_loaded) and status.backdrops_missing.is_empty()
+
+func _draw_cloud(center: Vector2, scale_factor: float = 1.0) -> void:
+	var c := Color("#f4e7c9",0.72)
+	for blob in [Vector2(-30,8),Vector2(-8,-8),Vector2(18,-10),Vector2(40,8)]: draw_circle(center + blob * scale_factor, 18 * scale_factor, c)
+	draw_rect(Rect2(center.x - 37*scale_factor,center.y,78*scale_factor,16*scale_factor),c,true)
+
+func _draw_boat(center: Vector2, scale_factor: float = 1.0) -> void:
+	var hull := PackedVector2Array([center+Vector2(-56,0)*scale_factor,center+Vector2(50,0)*scale_factor,center+Vector2(34,20)*scale_factor,center+Vector2(-38,20)*scale_factor])
+	draw_colored_polygon(hull, Color("#a7664d",0.9)); draw_line(center+Vector2(-60,2)*scale_factor,center+Vector2(52,2)*scale_factor,GOLD,3*scale_factor)
+	draw_line(center+Vector2(0,0),center+Vector2(0,-38)*scale_factor,PAPER,3*scale_factor)
+	draw_colored_polygon(PackedVector2Array([center+Vector2(2,-36)*scale_factor,center+Vector2(32,-5)*scale_factor,center+Vector2(2,-5)*scale_factor]), Color("#e9c782",0.9))
+
+func _draw_lighthouse(center: Vector2) -> void:
+	draw_colored_polygon(PackedVector2Array([center+Vector2(-27,0),center+Vector2(27,0),center+Vector2(20,-90),center+Vector2(-20,-90)]),Color("#f2dfb9"))
+	for y in [-72,-40]: draw_rect(Rect2(center.x-22,center.y+y,44,11),Color("#cb735d"),true)
+	draw_rect(Rect2(center.x-24,center.y-102,48,14),Color("#31485b"),true); draw_colored_polygon(PackedVector2Array([center+Vector2(-31,-102),center+Vector2(0,-122),center+Vector2(31,-102)]),GOLD)
+	draw_rect(Rect2(center.x-7,center.y-84,14,17),Color("#8ec9c2"),true)
+
+func _draw_topiary(center: Vector2, scale_factor: float = 1.0) -> void:
+	draw_rect(Rect2(center.x-20*scale_factor,center.y,40*scale_factor,60*scale_factor),Color("#ae774d"),true)
+	draw_circle(center+Vector2(0,-18)*scale_factor,31*scale_factor,Color("#3d806d")); draw_circle(center+Vector2(-17,-4)*scale_factor,19*scale_factor,Color("#579173")); draw_circle(center+Vector2(17,-4)*scale_factor,19*scale_factor,Color("#579173"))
+	draw_circle(center+Vector2(-9,-20)*scale_factor,4*scale_factor,YELLOW); draw_circle(center+Vector2(11,-22)*scale_factor,4*scale_factor,PINK)
+
+func _draw_awning(x: float, y: float, width: float) -> void:
+	draw_rect(Rect2(x,y,width,24),Color("#b37256"),true)
+	for i in 9:
+		var sx := x + i * width / 9.0
+		draw_rect(Rect2(sx,y+21,width/9.0,13),PAPER if i%2==0 else Color("#d6906b"),true)
+		draw_circle(Vector2(sx+width/18.0,y+34),6,PAPER if i%2==0 else Color("#d6906b"))
+
+func _draw_curtain(x: float, y: float, width: float, height: float) -> void:
+	draw_rect(Rect2(x,y,width,height),Color("#663c59",0.85),true)
+	for i in 4:
+		var fold_x := x + i * width / 3.0
+		draw_line(Vector2(fold_x,y+8),Vector2(fold_x-12,y+height-5),Color("#bd7083",0.58),7)
+	draw_arc(Vector2(x+width/2,y+5),width/2,0,PI,24,Color("#e7b983"),7)
+
+func _draw_lantern(center: Vector2, scale_factor: float = 1.0) -> void:
+	if _draw_prop("lantern",Rect2(center.x-19*scale_factor,center.y-36*scale_factor,38*scale_factor,72*scale_factor)): return
+	draw_line(center+Vector2(0,-45)*scale_factor,center+Vector2(0,-20)*scale_factor,INK,3)
+	draw_colored_polygon(PackedVector2Array([center+Vector2(-18,-20)*scale_factor,center+Vector2(18,-20)*scale_factor,center+Vector2(13,20)*scale_factor,center+Vector2(-13,20)*scale_factor]),Color("#efb66b",0.92))
+	draw_line(center+Vector2(-12,-15)*scale_factor,center+Vector2(-10,15)*scale_factor,Color("#fff0bd",0.8),3*scale_factor)
+
+func _draw_moon(center: Vector2) -> void:
+	draw_circle(center,36,Color("#f5d692",0.9)); draw_circle(center+Vector2(14,-9),34,Color("#586d83",0.9))
+	for dot in [Vector2(-45,28),Vector2(42,48),Vector2(-8,65)]: draw_circle(center+dot,3,Color("#fff0bf",0.78))
+
+func _draw_person(center: Vector2, palette: Color, pose: int = 0, scale_factor: float = 1.0) -> void:
+	# Original paper-cut island visitor: cap, face, collar, coat and small working limbs.
+	var c := center
+	draw_rect(Rect2(c.x-13*scale_factor,c.y-4*scale_factor,26*scale_factor,15*scale_factor),Color("#bf7958"),true)
+	draw_circle(c+Vector2(-9,-4)*scale_factor,5*scale_factor,Color("#bf7958")); draw_circle(c+Vector2(9,-4)*scale_factor,5*scale_factor,Color("#bf7958"))
+	draw_circle(c+Vector2(0,-20)*scale_factor,13*scale_factor,Color("#f1c49a"))
+	draw_rect(Rect2(c.x-13*scale_factor,c.y-34*scale_factor,26*scale_factor,7*scale_factor),palette,true)
+	draw_arc(c+Vector2(0,-33)*scale_factor,14*scale_factor,PI,TAU,12,palette,5*scale_factor)
+	draw_circle(c+Vector2(-4,-20)*scale_factor,1.6*scale_factor,INK); draw_circle(c+Vector2(4,-20)*scale_factor,1.6*scale_factor,INK)
+	draw_line(c+Vector2(-10,5)*scale_factor,c+Vector2(-15,-8)*scale_factor,Color("#f1c49a"),4*scale_factor)
+	draw_line(c+Vector2(10,5)*scale_factor,c+Vector2(15,-8 + float(pose%2)*9)*scale_factor,Color("#f1c49a"),4*scale_factor)
+	draw_line(c+Vector2(-7,9)*scale_factor,c+Vector2(-9,19)*scale_factor,INK,3*scale_factor); draw_line(c+Vector2(7,9)*scale_factor,c+Vector2(10,18)*scale_factor,INK,3*scale_factor)
+
+func _draw_tourist(name: String, rect: Rect2, fallback_color: Color) -> void:
+	if not _draw_prop(name,rect): _draw_person(rect.position+rect.size*0.5,fallback_color,0,1.0)
+
+func _draw_devil_mascot(center: Vector2, radius: float = 34.0) -> void:
+	if _draw_prop("mascot",Rect2(center.x-radius*1.13,center.y-radius*1.13,radius*2.26,radius*2.26)): return
+	# Little tide imp "Koro": scalloped ears, coral horns, star bib and curled tail.
+	draw_arc(center+Vector2(radius*0.92, radius*0.35),radius*0.55,-1.5,1.5,20,Color("#ef91a5"),5)
+	draw_colored_polygon(PackedVector2Array([center+Vector2(-radius*.58,-radius*.65),center+Vector2(-radius*.80,-radius*1.22),center+Vector2(-radius*.13,-radius*.82)]),Color("#d98998"))
+	draw_colored_polygon(PackedVector2Array([center+Vector2(radius*.58,-radius*.65),center+Vector2(radius*.80,-radius*1.22),center+Vector2(radius*.13,-radius*.82)]),Color("#d98998"))
+	draw_colored_polygon(PackedVector2Array([center+Vector2(-radius*.36,-radius*.73),center+Vector2(-radius*.13,-radius*1.35),center+Vector2(radius*.02,-radius*.73)]),Color("#d85e63"))
+	draw_colored_polygon(PackedVector2Array([center+Vector2(radius*.36,-radius*.73),center+Vector2(radius*.13,-radius*1.35),center+Vector2(-radius*.02,-radius*.73)]),Color("#d85e63"))
+	draw_circle(center,radius,Color("#f5c277")); draw_circle(center+Vector2(0,radius*.34),radius*.52,Color("#fff0cf"))
+	draw_circle(center+Vector2(-radius*.31,-radius*.06),radius*.085,INK); draw_circle(center+Vector2(radius*.31,-radius*.06),radius*.085,INK)
+	draw_arc(center+Vector2(0,radius*.13),radius*.2,0,PI,16,INK,2)
+	draw_colored_polygon(PackedVector2Array([center+Vector2(0,radius*.48),center+Vector2(radius*.13,radius*.65),center,center+Vector2(-radius*.13,radius*.65)]),Color("#df6e6b"))
+
+func _draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
+	var points := PackedVector2Array()
+	for i in 24: points.append(center+Vector2(cos(TAU*i/24.0)*radii.x,sin(TAU*i/24.0)*radii.y))
+	draw_colored_polygon(points,color)
+
+func _draw_prop(name: String, rect: Rect2, modulation: Color = Color.WHITE) -> bool:
+	var sprite := _prop_texture(name)
+	if sprite == null: return false
+	draw_texture_rect(sprite,rect,false,modulation)
+	return true
+
+func _draw_rotated_prop(name: String, center: Vector2, dimensions: Vector2, angle: float, modulation: Color = Color.WHITE) -> bool:
+	var sprite := _prop_texture(name)
+	if sprite == null: return false
+	var factor := minf(size.x/DESIGN_SIZE.x,size.y/DESIGN_SIZE.y)
+	var offset := (size-DESIGN_SIZE*factor)*0.5+center*factor
+	draw_set_transform(offset,angle,Vector2.ONE*factor)
+	draw_texture_rect(sprite,Rect2(-dimensions*0.5,dimensions),false,modulation)
+	_design_transform()
+	return true
+
+func _prop_texture(name: String) -> Texture2D:
+	if _prop_textures.has(name): return _prop_textures[name]
+	if not _props_checked:
+		_props_checked = true
+		var atlas_path := "res://assets/minigames/props/tidal-props-v2.png"
+		if not ResourceLoader.exists(atlas_path):
+			_warn_prop_asset("Missing prop atlas: " + atlas_path)
+			_prop_textures[name] = null
+			return null
+		var loaded_atlas: Resource = load(atlas_path)
+		if not loaded_atlas is Texture2D:
+			_warn_prop_asset("Invalid prop atlas: " + atlas_path)
+			_prop_textures[name] = null
+			return null
+		_props_atlas = loaded_atlas
+		var region_path := "res://assets/minigames/props/regions.json"
+		if not ResourceLoader.exists(region_path):
+			_warn_prop_asset("Missing prop regions: " + region_path)
+			_prop_textures[name] = null
+			return null
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(region_path))
+		if not parsed is Dictionary:
+			_warn_prop_asset("Invalid prop region JSON: " + region_path)
+			_prop_textures[name] = null
+			return null
+		_prop_regions = parsed
+		_props_available = true
+	if not _props_available:
+		_prop_textures[name] = null
+		return null
+	if not _prop_regions.has(name):
+		_warn_prop_asset("No region for prop '%s' in res://assets/minigames/props/regions.json" % name)
+		_prop_textures[name] = null
+		return null
+	if not _prop_regions[name] is Array:
+		_warn_prop_asset("Non-array region for prop '%s' in res://assets/minigames/props/regions.json" % name)
+		_prop_textures[name] = null
+		return null
+	var region: Array = _prop_regions[name]
+	if region.size() != 4:
+		_warn_prop_asset("Bad region for prop '%s' in res://assets/minigames/props/regions.json" % name)
+		_prop_textures[name] = null
+		return null
+	for coordinate in region:
+		if not (coordinate is int or coordinate is float):
+			_warn_prop_asset("Non-numeric region for prop '%s' in res://assets/minigames/props/regions.json" % name)
+			_prop_textures[name] = null
+			return null
+	var source_rect := Rect2i(int(region[0]),int(region[1]),int(region[2]),int(region[3]))
+	var atlas_size := _props_atlas.get_size()
+	if source_rect.position.x < 0 or source_rect.position.y < 0 or source_rect.size.x <= 0 or source_rect.size.y <= 0 or source_rect.end.x > atlas_size.x or source_rect.end.y > atlas_size.y:
+		_warn_prop_asset("Out-of-bounds region for prop '%s' in res://assets/minigames/props/regions.json" % name)
+		_prop_textures[name] = null
+		return null
+	var texture := AtlasTexture.new()
+	texture.atlas = _props_atlas
+	texture.region = Rect2(source_rect)
+	texture.filter_clip = true
+	_prop_textures[name] = texture
+	return texture
+
+func _warn_prop_asset(message: String) -> void:
+	if _props_warning_emitted: return
+	_props_warning_emitted = true
+	push_warning(message)
 
 func _definition() -> Dictionary:
 	if _catalog_cache.is_empty(): definitions()
@@ -544,114 +921,326 @@ func _draw_game() -> void:
 		"bench_swap": _draw_bench()
 		"melody_memory": _draw_melody()
 
+func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignment: int = HORIZONTAL_ALIGNMENT_CENTER, color: Color = INK) -> void:
+	# Keep functional copy readable over every printed backdrop without laying a full-width strip over the scene.
+	var measured_width := FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	var plate_width := minf(measured_width + 24.0, 760.0)
+	var left := baseline.x - plate_width * 0.5
+	if alignment == HORIZONTAL_ALIGNMENT_LEFT:
+		left = baseline.x - 8.0
+	var plate := Rect2(left, baseline.y - font_size - 7.0, plate_width, font_size + 15.0)
+	draw_rect(plate, Color("#fff0d2", 0.94), true)
+	draw_rect(plate, Color("#87674d", 0.88), false, 1.5)
+	draw_string(FONT, Vector2(left + 6.0, baseline.y), text, alignment, plate_width - 12.0, font_size, color)
+
 func _draw_balloon() -> void:
-	draw_rect(Rect2(0,560,size.x,160), Color("#326a6a")); draw_rect(Rect2(940,290,170,170), Color("#e5ac73"))
-	draw_rect(Rect2(990,340,90,84), Color("#57496a")); draw_string(FONT, Vector2(978,326), "郵箱", HORIZONTAL_ALIGNMENT_LEFT, 120, 24, CREAM)
-	draw_colored_polygon(PackedVector2Array([Vector2(690,325),Vector2(735,380),Vector2(690,435),Vector2(645,380)]), PINK)
-	draw_circle(p, 33, Color("#fc78aa")); draw_line(p + Vector2(0,34), p + Vector2(0,70), CREAM, 3)
-	draw_string(FONT, Vector2(120,590), "滑鼠移動瞄準　鍵盤 ← → 控風、↑↓ 控浮力　風向 " + ("←" if sin(phase * 1.6) < 0 else "→"), HORIZONTAL_ALIGNMENT_LEFT, 800, 20, CREAM)
+	# Paper harbor mail run, seen from the end of the quay.
+	draw_rect(Rect2(62,492,1156,78),Color("#bd9a6d"),true)
+	for i in 14: draw_line(Vector2(72+i*82,495),Vector2(72+i*82,567),Color("#e6c793",0.8),2)
+	# The receive halo is centered on the real goal point; the mailbox slot sits at its center.
+	draw_circle(target,80,Color(MINT,0.09)); draw_arc(target,80,0,TAU,56,Color("#fff1cb",0.75),2)
+	var mailbox_size := Vector2(120,180)
+	var mailbox_rect := Rect2(target.x-mailbox_size.x*0.51,target.y-mailbox_size.y*0.415,mailbox_size.x,mailbox_size.y)
+	if not _draw_prop("mailbox",mailbox_rect):
+		draw_rect(Rect2(mailbox_rect.position.x,mailbox_rect.position.y+18,mailbox_rect.size.x,mailbox_rect.size.y-18),Color("#bd704f"),true)
+	# Slot center from the art-region map is x=.51, y=.415; the active ring denotes the broader receiving area.
+	draw_arc(target,80,0,TAU,56,Color("#fff1cb",0.8),2)
+	draw_rect(Rect2(target.x-13,target.y-7,26,14),Color("#fff1cb",0.85),true)
+	draw_colored_polygon(PackedVector2Array([target+Vector2(-11,-3),target+Vector2(0,5),target+Vector2(11,-3)]),Color("#dc8468"))
+	draw_string(FONT,Vector2(target.x-44,target.y+30),"收件區",HORIZONTAL_ALIGNMENT_CENTER,88,13,PAPER)
+	# The thorn hazard is a visible, softly printed 62-unit radius around its collision center.
+	var thorn := Vector2(715,380)
+	draw_circle(thorn,62,Color(PINK,0.12)); draw_arc(thorn,62,0,TAU,40,Color(PINK,0.65),2)
+	if not _draw_prop("urchin",Rect2(thorn.x-52,thorn.y-52,104,104)):
+		for i in 12:
+			var a := TAU*float(i)/12.0
+			draw_line(thorn+Vector2.RIGHT.rotated(a)*23,thorn+Vector2.RIGHT.rotated(a)*50,Color("#514963"),7)
+			draw_colored_polygon(PackedVector2Array([thorn+Vector2.RIGHT.rotated(a)*48,thorn+Vector2.RIGHT.rotated(a+0.13)*36,thorn+Vector2.RIGHT.rotated(a-0.13)*36]),Color("#e8a17c"))
+		draw_circle(thorn,27,Color("#d78072")); draw_circle(thorn+Vector2(-8,-6),4,PAPER); draw_circle(thorn+Vector2(8,-6),4,PAPER)
+	# The illustrated balloon is the controlled object; use its true feathered cutout bounds.
+	if not _draw_prop("balloon",Rect2(p.x-39,p.y-56,78,110)):
+		draw_circle(p,33,Color("#dc6588")); draw_arc(p,31,PI,TAU,22,Color("#ffd39c"),2)
+		draw_line(p+Vector2(-9,31),p+Vector2(-5,43),PAPER,2); draw_line(p+Vector2(9,31),p+Vector2(5,43),PAPER,2)
+		draw_rect(Rect2(p.x-9,p.y+42,18,12),Color("#8b684e"),true)
+	_draw_scene_label("郵袋送到信箱，避開海膽　　海風　"+("←" if sin(phase*1.6)<0 else "→")+"　郵袋 0 / 1",Vector2(640,535),17)
 
 func _draw_kite() -> void:
-	draw_rect(Rect2(0,585,size.x,135), Color("#33776c"))
 	for i in ring_x.size():
-		var c := MINT if i < count else YELLOW
-		draw_arc(Vector2(ring_x[i], ring_y[i]), 42, 0, TAU, 40, c, 9)
-	draw_colored_polygon(PackedVector2Array([p + Vector2(0,-26),p + Vector2(28,0),p + Vector2(0,26),p + Vector2(-28,0)]), PINK)
-	draw_line(p + Vector2(0,26), p + Vector2(-34,68), CREAM, 3)
-	draw_string(FONT, Vector2(0,630), "滑鼠移動高度　或用 ↑ ↓ 迎風修正", HORIZONTAL_ALIGNMENT_CENTER, size.x, 20, CREAM)
+		var c := MINT if i < count else Color("#493f4f")
+		# Physical and visible opening share the same radius used by the pass check.
+		draw_arc(Vector2(ring_x[i], ring_y[i]), 34, 0, TAU, 40, c, 8)
+		draw_arc(Vector2(ring_x[i], ring_y[i]), 40, 0, TAU, 40, Color("#f5d59b",0.8), 2)
+		draw_circle(Vector2(ring_x[i]-34,ring_y[i]),5,GOLD); draw_circle(Vector2(ring_x[i]+34,ring_y[i]),5,GOLD)
+	# Crosswind tails remain behind the original quilted kite and alternate two pennant colors.
+	for i in 5:
+		var trail := p + Vector2(-13-i*9, 16+i*11)
+		draw_colored_polygon(PackedVector2Array([trail,trail+Vector2(-17,8),trail+Vector2(-7,18)]),PINK if i%2==0 else Color("#59b9ae"))
+	if not _draw_prop("kite",Rect2(p.x-37,p.y-43,74,108)):
+		draw_line(p+Vector2(0,20),p+Vector2(-4,63),PAPER,2)
+		draw_colored_polygon(PackedVector2Array([p+Vector2(0,-30),p+Vector2(31,0),p+Vector2(0,30),p+Vector2(-31,0)]),Color("#e97792"))
+		draw_colored_polygon(PackedVector2Array([p+Vector2(0,-23),p+Vector2(22,0),p+Vector2(0,23)]),Color("#ffd27e"))
+		draw_line(p+Vector2(0,-27),p+Vector2(0,27),Color("#fff0d2"),2); draw_line(p+Vector2(-27,0),p+Vector2(27,0),Color("#fff0d2"),2)
+	_draw_scene_label("穿過五枚潮汐風環　　拖曳高度或按 ↑ ↓；已穿過 " + str(count) + " / 5",Vector2(640,545),18)
 
 func _draw_fountain() -> void:
-	draw_rect(Rect2(140,495,1000,86), Color("#6a9ca5"), true)
-	var splash := beat_window
+	draw_rect(Rect2(151,464,978,94),Color("#5c8b8e"),true); draw_circle(Vector2(151,511),47,Color("#5c8b8e")); draw_circle(Vector2(1129,511),47,Color("#5c8b8e"))
+	draw_rect(Rect2(150,480,980,51),Color("#77aaa3"),true)
 	for i in 5:
-		var x := 260.0 + i * 190.0; var height := 45.0 + absf(sin(phase * 2.3 + i * 0.7)) * 145.0
-		draw_line(Vector2(x,495), Vector2(x,495-height), BLUE if splash else Color("#548293"), 18)
-		draw_circle(Vector2(x,495-height), 16, MINT if splash else BLUE)
-	draw_circle(Vector2(640,454),32,PINK); draw_line(Vector2(640,486),Vector2(640,510),CREAM,7)
-	draw_string(FONT, Vector2(0,280), "看到水柱最亮的一刻，按空白鍵／點一下起跳", HORIZONTAL_ALIGNMENT_CENTER, size.x, 26, YELLOW)
-	draw_string(FONT, Vector2(0,350), "●　●　●".substr(0,count * 2) + "○　○　○".substr(count * 2), HORIZONTAL_ALIGNMENT_CENTER, size.x, 32, CREAM)
+		var x := 260.0 + i * 190.0; var height := 42.0 + absf(sin(phase * 2.3 + i * 0.7)) * 132.0
+		var active := beat_window and i == 2
+		draw_line(Vector2(x,484), Vector2(x,484-height), Color("#a8eff0",0.35), 24)
+		draw_line(Vector2(x,484), Vector2(x,484-height), Color("#78dfe3") if active else Color("#75aac0"), 13)
+		draw_circle(Vector2(x,484-height), 11, Color("#f1ffff") if active else BLUE)
+		draw_arc(Vector2(x,484-height),18,PI,TAU,16,MINT if active else Color("#99d1d5"),2)
+	var jump_pose := 0.0
+	if feedback_age < 0.34 and feedback_color == MINT: jump_pose = 16.0 * sin((1.0-feedback_age/0.34)*PI*0.5)
+	_draw_ellipse(Vector2(640,502),Vector2(19+jump_pose*0.25,5),Color("#315a68",0.3))
+	draw_circle(Vector2(640,465-jump_pose),54,Color(MINT,0.18)); _draw_tourist("visitor",Rect2(611,386-jump_pose,58,118),Color("#e77e83"))
+	# Readable jump pose: coat, flying scarf and tucked legs on the live burst.
+	if beat_window:
+		draw_line(Vector2(625,450-jump_pose),Vector2(599,425-jump_pose),PINK,5); draw_line(Vector2(655,450-jump_pose),Vector2(681,425-jump_pose),PINK,5)
+	_draw_scene_label("趁中央噴泉水簾升起時起跳　　起跳 " + str(count) + " / 3",Vector2(640,350),21)
+	for i in 3:
+		var cx := 565.0 + i*75.0
+		draw_circle(Vector2(cx,400),16,MINT if i<count else PAPER); draw_string(FONT,Vector2(cx-10,406),"✓" if i<count else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
 
 func _draw_crowd() -> void:
-	draw_rect(Rect2(0,300,size.x,230), Color("#53667b")); draw_rect(Rect2(0,390,size.x,42), YELLOW)
-	draw_rect(Rect2(575,250,130,360), Color("#263a52"), true)
-	draw_circle(Vector2(640,250), 47, MINT if lane == 0 else PINK)
-	draw_string(FONT, Vector2(0,215), "號誌 " + ("綠燈 ←" if lane == 0 else "綠燈 →") + "　按 Q／E 或點擊切換", HORIZONTAL_ALIGNMENT_CENTER, size.x, 27, CREAM)
+	# Two promenade lanes, zebra markings, direction chevrons and a brass signal post.
+	draw_rect(Rect2(92,318,1096,216),Color("#827362"),true)
+	draw_rect(Rect2(105,329,1070,82),Color("#d6b78a"),true); draw_rect(Rect2(105,435,1070,82),Color("#c2a47d"),true)
+	for i in 11:
+		var x := 150.0 + i*96.0
+		draw_rect(Rect2(x,414,45,20),Color("#f8e9c6",0.76),true)
+		draw_colored_polygon(PackedVector2Array([Vector2(x+13,354),Vector2(x+45,369),Vector2(x+13,384),Vector2(x+20,369)]),Color("#af9170"))
+		draw_colored_polygon(PackedVector2Array([Vector2(x+30,465),Vector2(x+2,480),Vector2(x+30,495),Vector2(x+24,480)]),Color("#af9170"))
+	# Six recognizable visitors move along the same two crossing lanes as the timing cue.
 	for i in 6:
-		var x := 90.0 + fposmod(phase * 130 + i * 180, 1100.0); var y := 355.0 if (i + count) % 2 == 0 else 470.0
-		draw_circle(Vector2(x,y), 19, CROWD_COLORS[i % 4]); draw_rect(Rect2(x-11,y+19,22,32), CREAM)
+		var x := 90.0 + fposmod(phase * 130 + i * 180, 1100.0)
+		var y := 370.0 if (i + count) % 2 == 0 else 478.0
+		var tourist_keys := ["tourist_coral","tourist_blue","tourist_gold","tourist_green"]
+		_draw_tourist(tourist_keys[i%4],Rect2(x-24,y-69,48,78),CROWD_COLORS[i%4])
+		if int(fposmod(phase*130+i*180,1100.0)) < 55:
+			draw_arc(Vector2(x,y-6),29,PI,TAU,18,YELLOW,2)
+	# Signal aspect and arrow show the selected direction with a friendly signal keeper.
+	draw_rect(Rect2(586,238,108,92),Color("#76533f"),true); draw_rect(Rect2(594,246,92,76),Color("#bd9263"),false,3)
+	draw_circle(Vector2(640,270),20,MINT if lane==0 else Color("#563f52")); draw_circle(Vector2(640,300),13,PINK if lane==1 else Color("#563f52"))
+	_draw_scene_label("切換行人燈　Q / E 或點擊　　放行　"+str(count)+" / 6",Vector2(640,558),17)
 
 func _draw_hats() -> void:
-	draw_rect(Rect2(0,570,size.x,150), Color("#3d6d65")); draw_circle(Vector2(p.x,570), 34, PINK); draw_rect(Rect2(p.x-22,570,44,54), Color("#f0d19a"))
+	# Catching deck uses a front-facing performer with upturned hands and a stitched apron.
+	draw_rect(Rect2(82,522,1116,54),Color("#986e54"),true)
+	draw_line(Vector2(p.x-9,546),Vector2(p.x-25,518),Color("#efc09b"),6); draw_line(Vector2(p.x+9,546),Vector2(p.x+25,518),Color("#efc09b"),6)
+	_draw_tourist("tourist_coral",Rect2(p.x-31,484,62,96),Color("#e07d79"))
 	for i in hat_y.size():
 		if hat_y[i] < 620:
-			draw_arc(Vector2(hat_x[i],hat_y[i]), 24, PI, TAU, 24, YELLOW, 12); draw_line(Vector2(hat_x[i]-24,hat_y[i]),Vector2(hat_x[i]+24,hat_y[i]),YELLOW,5)
-	draw_string(FONT, Vector2(0,190), "← → 移動接帽子　　陣風：" + ("吹左" if sin(phase*1.8) < 0 else "吹右"), HORIZONTAL_ALIGNMENT_CENTER, size.x, 24, CREAM)
+			var hc := Vector2(hat_x[i],hat_y[i])
+			# Catch bands match the live horizontal tolerance at the actual crossing line.
+			var catch_tolerance := 115.0 if assisted else 65.0
+			if hc.y > 530 and hc.y < 590:
+				draw_rect(Rect2(p.x-catch_tolerance,545,catch_tolerance*2,38),Color(MINT,0.13),true)
+			draw_arc(hc+Vector2(0,8),24,PI,TAU,24,YELLOW,9); draw_line(hc+Vector2(-24,8),hc+Vector2(24,8),YELLOW,5)
+			draw_colored_polygon(PackedVector2Array([hc+Vector2(-17,8),hc+Vector2(-12,-13),hc+Vector2(0,-22),hc+Vector2(12,-13),hc+Vector2(17,8)]),Color("#dc8e58"))
+			draw_arc(hc+Vector2(0,8),13,PI,TAU,16,Color("#f5d6a7"),2)
+			draw_circle(hc+Vector2(0,-5),3,PINK if i%2==0 else BLUE)
+	_draw_scene_label("← → 或拖曳接住落下的帽子　　陣風：" + ("吹左" if sin(phase*1.8) < 0 else "吹右"),Vector2(640,195),19)
 
 func _draw_ribbon() -> void:
+	# Dancer and stage ribbon trace a unique eight-count phrase across the proscenium.
+	draw_line(Vector2(246,514),Vector2(1034,514),Color("#b79a76"),4)
+	var dancer := Vector2(640,430)
+	_draw_tourist("tourist_green",Rect2(611,379,58,112),Color("#6595a0"))
+	var wave := PackedVector2Array()
+	for i in 25:
+		var t := float(i)/24.0
+		wave.append(Vector2(580+t*120,382+sin(t*TAU*2+phase*2.0)*18))
+	draw_polyline(wave,Color("#f4a3b5"),6)
 	for i in 8:
-		var x := 330.0 + i * 90.0; var c := PINK if i == beat else (MINT if i < beat else Color("#668297"))
-		draw_circle(Vector2(x,420), 31, c)
+		var x := 330.0 + i * 90.0; var active := i == beat
+		var c := Color("#e78aa2") if active else (Color("#64b5a7") if i < beat else Color("#879089"))
+		draw_circle(Vector2(x,420), 30, c); draw_arc(Vector2(x,420),35,0,TAU,32,Color("#f5d69d"),2)
 	var labels := ["←","→","跳","→","←","跳","←","→"]
-	for i in 8: draw_string(FONT, Vector2(310+i*90,429), labels[i], HORIZONTAL_ALIGNMENT_CENTER, 40, 25, CREAM)
-	draw_string(FONT, Vector2(0,290), "依序按方向鍵／空白鍵，或按節拍點擊", HORIZONTAL_ALIGNMENT_CENTER, size.x, 26, CREAM)
-	draw_circle(Vector2(640,520), 42, YELLOW if beat_window else Color("#617b8f"))
+	for i in 8: draw_string(FONT, Vector2(310+i*90,429), labels[i], HORIZONTAL_ALIGNMENT_CENTER, 40, 24, PAPER)
+	_draw_scene_label("跟著舞者依序轉向與跳步　　←　→　空白鍵",Vector2(640,290),20)
+	draw_circle(Vector2(640,535), 26, YELLOW if beat_window else Color("#617b8f")); draw_circle(Vector2(640,535),8,Color("#fff4d3"))
+	for i in mini(8,beat): draw_circle(Vector2(475+i*34,570),5,MINT)
 
 func _draw_flower() -> void:
 	var dirs := PIPE_DIRS; var bits := PIPE_BITS
-	draw_string(FONT, Vector2(275,230), "🚰", HORIZONTAL_ALIGNMENT_CENTER, 60, 34, BLUE)
+	# Garden bed and copper source/drain are visibly joined by each rotatable pipe piece.
+	draw_rect(Rect2(346,190,573,366),Color("#866b4e"),true); draw_rect(Rect2(354,198,557,350),Color("#a58460"),false,5)
+	draw_rect(Rect2(295,225,76,37),Color("#a66d4a"),true); draw_rect(Rect2(302,231,60,16),Color("#d8a46a"),true)
+	draw_arc(Vector2(300,243),30,PI,TAU,22,Color("#95603e"),8)
+	draw_rect(Rect2(910,510,75,39),Color("#a66d4a"),true); draw_rect(Rect2(920,517,54,14),Color("#79d3da"),true)
+	draw_string(FONT, Vector2(268,295), "泉", HORIZONTAL_ALIGNMENT_CENTER, 70, 18, PAPER)
+	draw_string(FONT, Vector2(910,580), "花槽", HORIZONTAL_ALIGNMENT_CENTER, 75, 16, INK)
 	for i in 16:
 		var x := 370.0 + (i%4)*135.0; var y := 205.0 + int(i/4)*85.0
-		draw_rect(Rect2(x,y,112,65), Color("#477663"), true)
-		if i == pipe_cursor: draw_rect(Rect2(x,y,112,65), CREAM, false, 3)
+		draw_rect(Rect2(x,y,112,65), Color("#70916a"), true)
+		draw_rect(Rect2(x+4,y+4,104,57), Color("#89a678"), false, 2)
+		for n in 3: draw_circle(Vector2(x+18+n*35,y+54),4,Color("#5f794f"))
+		if i == pipe_cursor: draw_rect(Rect2(x,y,112,65), YELLOW, false, 4)
 		for d in 4:
-			if flower_cells[i] & bits[d]: draw_line(Vector2(x+56,y+32), Vector2(x+56+dirs[d].x*32,y+32+dirs[d].y*25), BLUE, 9)
-		draw_circle(Vector2(x+56,y+32),7,YELLOW)
-	draw_circle(Vector2(955,545),30,PINK)
+			if flower_cells[i] & bits[d]:
+				draw_line(Vector2(x+56,y+32), Vector2(x+56+dirs[d].x*32,y+32+dirs[d].y*25), Color("#9a653e"), 15)
+				draw_line(Vector2(x+56,y+32), Vector2(x+56+dirs[d].x*32,y+32+dirs[d].y*25), Color("#d29b5e"), 10)
+		draw_circle(Vector2(x+56,y+32),9,Color("#d49a5a")); draw_circle(Vector2(x+53,y+29),3,Color("#ffe0a0"))
+		if i in [0,5,10,15]:
+			var flower_pos := Vector2(x+22,y+47)
+			draw_line(flower_pos,flower_pos+Vector2(0,-13),Color("#3e785a"),2)
+			for petal in 5: draw_circle(flower_pos+Vector2.RIGHT.rotated(TAU*petal/5.0)*5,3,PINK if i%2==0 else YELLOW)
+	# Flow only lights reciprocal segments along the route currently reached by the source.
+	var flowing := {0:true,4:true,5:true,6:true,10:true,14:true,15:true}
+	for cell in flowing:
+		var x := 370.0 + (int(cell)%4)*135.0; var y := 205.0 + int(int(cell)/4)*85.0
+		if cell == 0: draw_line(Vector2(362,243),Vector2(x+56,y+32),Color("#8ce4e0",0.9),4)
+		for d in 4:
+			if flower_cells[cell] & bits[d]: draw_line(Vector2(x+56,y+32),Vector2(x+56+dirs[d].x*32,y+32+dirs[d].y*25),Color("#9cf0eb",0.68),4)
+	_draw_topiary(Vector2(1020,508),0.72)
+	_draw_scene_label("轉動方管讓水從左上泉口流進右下花槽　　步數 " + str(move_count),Vector2(640,575),16)
 
 func _draw_sign() -> void:
-	draw_line(Vector2(640,510),Vector2(640,590),Color("#a7754f"),14)
+	# A pier carpenter balances a real two-sided painted sign on its brass pivot.
+	draw_rect(Rect2(575,505,130,80),Color("#a5754d"),true); draw_rect(Rect2(584,514,112,59),Color("#c99863"),false,4)
+	draw_line(Vector2(640,507),Vector2(640,348),Color("#875e42"),16)
 	var angle := balance * 0.30
-	var a := Vector2(640,330).rotated(angle); var left := Vector2(640,330) + Vector2(-185,0).rotated(angle); var right := Vector2(640,330) + Vector2(185,0).rotated(angle)
-	draw_line(left,right, YELLOW, 20); draw_circle(Vector2(640,330),17,PINK)
-	draw_string(FONT, Vector2(0,245), "← → 壓低重的一側／點畫面左或右　風向：" + ("←" if sin(phase*1.7)<0 else "→"), HORIZONTAL_ALIGNMENT_CENTER, size.x, 24, CREAM)
-	draw_line(Vector2(570,600),Vector2(710,600),MINT,4)
+	var center := Vector2(640,335)
+	var left := center + Vector2(-185,0).rotated(angle); var right := center + Vector2(185,0).rotated(angle)
+	_draw_rotated_prop("sign",Vector2(640,290),Vector2(220,124),angle)
+	# Chains suspend the actual sign boards from the tilting crossbar.
+	draw_line(left, left+Vector2(0,56),GOLD,4); draw_line(right,right+Vector2(0,56),GOLD,4)
+	draw_line(left+Vector2(0,56),right+Vector2(0,56),Color("#916444"),8)
+	draw_rect(Rect2(left.x-59,left.y+44,118,54),Color("#e6bd7e"),true); draw_rect(Rect2(right.x-59,right.y+44,118,54),Color("#7db4a2"),true)
+	draw_rect(Rect2(left.x-59,left.y+44,118,54),GOLD,false,3); draw_rect(Rect2(right.x-59,right.y+44,118,54),GOLD,false,3)
+	draw_string(FONT,left+Vector2(-50,79),"珊瑚餅",HORIZONTAL_ALIGNMENT_CENTER,100,14,INK); draw_string(FONT,right+Vector2(-50,79),"海鹽糖",HORIZONTAL_ALIGNMENT_CENTER,100,14,INK)
+	draw_colored_polygon(PackedVector2Array([center+Vector2(-26,0),center+Vector2(26,0),center+Vector2(0,38)]),Color("#d98971")); draw_circle(center,12,YELLOW)
+	# Gauge mirrors balance units; green marks the valid scoring band and outer red marks failure.
+	draw_line(Vector2(300,573),Vector2(980,573),Color("#b3a17e"),9)
+	draw_line(Vector2(510,573),Vector2(770,573),MINT,10)
+	draw_line(Vector2(300,561),Vector2(300,585),PINK,5); draw_line(Vector2(980,561),Vector2(980,585),PINK,5)
+	var needle_x := 640.0 + balance * 300.0
+	draw_colored_polygon(PackedVector2Array([Vector2(needle_x,550),Vector2(needle_x-10,566),Vector2(needle_x+10,566)]),Color("#d86f78"))
+	var wind_direction := -1 if sin(phase*1.7)<0 else 1
+	_draw_scene_label("← → 或點擊兩側壓平招牌　　海風　" + ("←" if wind_direction<0 else "→") + "　穩住 " + str(count) + " / 7 拍",Vector2(640,220),19)
+	for i in 4:
+		var wx := 520.0+i*78.0
+		draw_line(Vector2(wx,278),Vector2(wx+wind_direction*22,278),Color("#b27b58",0.62),2)
+		draw_colored_polygon(PackedVector2Array([Vector2(wx+wind_direction*22,273),Vector2(wx+wind_direction*30,278),Vector2(wx+wind_direction*22,283)]),GOLD)
 
 func _draw_shadow() -> void:
-	draw_rect(Rect2(790,205,310,355), Color("#f2dca6"), true)
+	draw_rect(Rect2(755,190,370,390),Color("#293e5a"),true); draw_rect(Rect2(772,206,336,356),Color("#f0d9a5"),true)
+	# A painted, horned original lantern imp casts the live silhouette; target offset respects assist.
+	var target_x := 940.0 + (0.18 if assisted else 0.0) * 300.0
 	var x := 940.0 + alignment * 300.0
-	draw_colored_polygon(PackedVector2Array([Vector2(x-65,490),Vector2(x-42,330),Vector2(x,270),Vector2(x+42,330),Vector2(x+65,490)]), Color("#263c54"))
-	draw_arc(Vector2(940,390),90,PI,TAU,32,PINK,7)
-	draw_string(FONT, Vector2(0,610), "點選畫面左右移動燈光　保持影子在粉紅輪廓內", HORIZONTAL_ALIGNMENT_CENTER, size.x, 21, CREAM)
-	draw_line(Vector2(190,570),Vector2(1090,570),YELLOW,4)
+	var silhouette := PackedVector2Array([Vector2(x-75,492),Vector2(x-56,370),Vector2(x-38,329),Vector2(x-53,301),Vector2(x-24,316),Vector2(x,282),Vector2(x+24,316),Vector2(x+53,301),Vector2(x+38,329),Vector2(x+56,370),Vector2(x+75,492)])
+	var ghost := silhouette.duplicate()
+	for i in ghost.size(): ghost[i].x += target_x-x
+	_draw_prop("mascot",Rect2(target_x-57,315,114,116),Color("#df8a9a",0.28))
+	if not _draw_prop("mascot",Rect2(x-57,315,114,116),Color("#26384d")):
+		draw_colored_polygon(ghost,Color("#db7b87",0.18)); draw_polyline(ghost + PackedVector2Array([ghost[0]]),Color("#ea8e9c"),4)
+		draw_colored_polygon(silhouette,Color("#26384d")); draw_circle(Vector2(x-17,359),4,Color("#ffdb8b")); draw_circle(Vector2(x+17,359),4,Color("#ffdb8b"))
+	draw_circle(Vector2(target_x,374),6,Color("#edafb2",0.9)); draw_circle(Vector2(x,374),5,Color("#ffdb8b"))
+	draw_line(Vector2(x,355),Vector2(x,448),Color("#7797a1",0.45),2)
+	draw_string(FONT,Vector2(805,535),"引燈影",HORIZONTAL_ALIGNMENT_CENTER,270,16,Color("#5c6374"))
+	# Ruler maps one alignment unit to 300 pixels. Its highlighted span equals the hit tolerance.
+	draw_line(Vector2(190,592),Vector2(1090,592),Color("#826c50"),5)
+	for i in 19:
+		var tick_x := 190.0+i*50.0
+		var in_band := absf((tick_x-940.0)/300.0-(0.18 if assisted else 0.0)) < (0.13 if assisted else 0.065)
+		draw_line(Vector2(tick_x,584),Vector2(tick_x,604),MINT if in_band else YELLOW,3)
+	draw_circle(Vector2(x,592),8,PINK)
+	_draw_scene_label("拖曳影燈，讓小角角的影子貼合珊瑚紙影" + ("　輔助目標偏右" if assisted else ""),Vector2(640,220),19)
+	draw_rect(Rect2(386,533,150,28),Color("#20364c"),true); draw_rect(Rect2(386,533,clampf(alignment_hold/3.0,0,1)*150,28),MINT,true)
+	_draw_scene_label("穩住 %.1f / 3 秒" % alignment_hold,Vector2(390,554),13,HORIZONTAL_ALIGNMENT_LEFT)
 
 func _draw_bubble() -> void:
-	draw_circle(Vector2(790,target.y),53,YELLOW); draw_circle(Vector2(770,target.y-12),7,BG); draw_circle(Vector2(810,target.y-12),7,BG); draw_arc(Vector2(790,target.y+3),18,0,PI,20,BG,3)
-	draw_circle(Vector2(310,465),50,PINK); draw_string(FONT, Vector2(0,240), "點擊吹泡泡；泡泡發亮包住吉祥物時，再點吉祥物拍照！", HORIZONTAL_ALIGNMENT_CENTER, size.x, 23, CREAM)
-	var open := beat_window
-	draw_arc(Vector2(790,target.y),105,0,TAU,48,MINT if open else BLUE,6 if open else 3)
-	draw_string(FONT, Vector2(0,610), "合照 " + str(beat) + " / 3　　時機亮起再拍", HORIZONTAL_ALIGNMENT_CENTER, size.x, 22, YELLOW)
+	# Photo stage is a moonlit glasshouse with a real framing window around the moving mascot.
+	draw_rect(Rect2(350,218,590,327),Color("#304b61",0.8),true)
+	for x in [375,525,675,825,915]: draw_line(Vector2(x,222),Vector2(x,542),Color("#d5c8a0",0.48),3)
+	var glasshouse_arch := PackedVector2Array()
+	for i in 49:
+		var angle := PI * float(i) / 48.0
+		glasshouse_arch.append(Vector2(645.0 + 295.0 * cos(angle), 511.0 - 293.0 * sin(angle)))
+	draw_polyline(glasshouse_arch,Color("#d8be8c",0.7),5)
+	var frame_x := 790.0
+	var frame_tolerance := _bubble_photo_tolerance()
+	draw_rect(Rect2(frame_x-frame_tolerance.x,target.y-frame_tolerance.y,frame_tolerance.x*2,frame_tolerance.y*2),Color("#f2dda6",0.08),true)
+	draw_rect(Rect2(frame_x-frame_tolerance.x,target.y-frame_tolerance.y,frame_tolerance.x*2,frame_tolerance.y*2),Color(MINT if beat_window else Color("#b2c6ca"),0.78),false,3)
+	for corner in [Vector2(-frame_tolerance.x,-frame_tolerance.y),Vector2(frame_tolerance.x,-frame_tolerance.y),Vector2(-frame_tolerance.x,frame_tolerance.y),Vector2(frame_tolerance.x,frame_tolerance.y)]:
+		var c: Vector2 = Vector2(frame_x,target.y)+corner
+		draw_line(c,c+Vector2(-signf(corner.x)*17,0),GOLD,5); draw_line(c,c+Vector2(0,-signf(corner.y)*17),GOLD,5)
+	_draw_devil_mascot(Vector2(frame_x,target.y),32)
+	# Soap mix cauldron, wand and animated aim bubble.
+	draw_rect(Rect2(257,472,101,52),Color("#8b614d"),true); draw_rect(Rect2(268,448,79,29),Color("#d99c65"),true)
+	draw_circle(Vector2(307,446),33,Color("#96dcd6",0.8)); draw_circle(Vector2(299,438),8,Color("#e7ffff",0.9))
+	draw_line(Vector2(348,466),Vector2(386,426),GOLD,5); draw_arc(Vector2(393,419),10,0,TAU,20,PAPER,3)
+	if bubble_ready:
+		var radius := _bubble_display_radius() if beat_window else 44.0
+		if beat_window:
+			# Low-contrast cloudy fill and colored rim show the actual aim tolerance without hiding Koro.
+			draw_circle(bubble_aim,radius,Color("#dcf4ef",0.045))
+			draw_arc(bubble_aim,radius,0,TAU,80,Color("#e7f4e5",0.52),3)
+			if reduced_motion:
+				draw_arc(bubble_aim,radius-5,0,TAU,80,Color("#afddd7",0.50),2)
+			else:
+				var rim_colors := [Color("#f5b5c5",0.62),Color("#f3d18e",0.58),Color("#9cddd0",0.62),Color("#a6cfe7",0.58)]
+				for arc in 4: draw_arc(bubble_aim,radius-5,arc*TAU/4.0+0.10,(arc+1)*TAU/4.0-0.10,20,rim_colors[arc],3)
+				var cloud := bubble_aim+Vector2(-radius*0.33,-radius*0.56)
+				draw_arc(cloud,12,PI*0.95,PI*1.95,18,Color("#ffffff",0.60),3)
+		else:
+			draw_circle(bubble_aim,radius,Color("#dcf4ef",0.12))
+			draw_arc(bubble_aim,radius,0,TAU,42,Color("#d5f3ed",0.78),3)
+		draw_arc(bubble_aim+Vector2(-8,-8),mini(28.0,radius*0.55),3.6,4.8,12,PAPER,2)
+		draw_line(Vector2(392,430),bubble_aim,Color("#dff8ee",0.42),2)
+	for i in 3: draw_circle(Vector2(730+i*49,536),12,MINT if i<beat else Color("#91a5aa")); draw_circle(Vector2(730+i*49,536),4,PAPER)
+	_draw_scene_label("吹一顆泡泡；等小角角進入相框、彩虹亮起時再按快門",Vector2(640,190),18)
+	if not _draw_prop("camera",Rect2(995,385,112,78)):
+		draw_rect(Rect2(1008,393,88,82),Color("#354452"),true); draw_rect(Rect2(1017,402,70,63),Color("#9dcbcb"),true); draw_circle(Vector2(1052,433),17,Color("#334b62")); draw_circle(Vector2(1052,433),10,Color("#d8e9d4"))
+	draw_string(FONT,Vector2(1007,493),"拍貼相機",HORIZONTAL_ALIGNMENT_CENTER,90,13,INK)
 
 func _draw_bench() -> void:
-	draw_rect(Rect2(330,355,620,78), Color("#9b684f"), true)
-	var colors := [PINK,BLUE,YELLOW,MINT]
+	# Four individually numbered brass-backed seats and four original visitors.
+	var colors := [Color("#cf7588"),Color("#5d9aab"),Color("#d2a658"),Color("#60977b")]
+	var tourist_keys := ["tourist_coral","tourist_blue","tourist_gold","tourist_green"]
 	for i in 4:
 		var x := 425.0 + i*135.0; var y := 340.0
-		draw_circle(Vector2(x,y),43,colors[seats[i]])
-		draw_string(FONT, Vector2(x-19,y+8), str(seats[i]+1), HORIZONTAL_ALIGNMENT_CENTER, 38, 24, BG)
-		if select_index == i: draw_arc(Vector2(x,y),52,0,TAU,32,CREAM,5)
-	var pairs := "朋友組：1+2、3+4" if assisted else "好友標記：1+2、3+4（同色為一組）"
-	draw_string(FONT, Vector2(0,250), pairs, HORIZONTAL_ALIGNMENT_CENTER, size.x, 25, CREAM)
-	draw_string(FONT, Vector2(0,500), "點兩個座位交換　　交換次數："+str(move_count)+" / 6", HORIZONTAL_ALIGNMENT_CENTER, size.x, 22, YELLOW)
+		_draw_prop("bench",Rect2(x-68,353,136,92))
+		_draw_tourist(tourist_keys[seats[i]],Rect2(x-29,263,58,118),colors[seats[i]])
+		# Paired friendship badge remains attached to person identity while seats swap.
+		var group_color := Color("#ef8e99") if seats[i] < 2 else Color("#7fcdb3")
+		draw_circle(Vector2(x+19,326),10,group_color); draw_circle(Vector2(x+16,323),2,PAPER)
+		draw_circle(Vector2(x,462),18,Color("#e7cc98")); draw_string(FONT,Vector2(x-12,469),str(i+1),HORIZONTAL_ALIGNMENT_CENTER,24,14,INK)
+		if select_index == i: draw_arc(Vector2(x,339),58,0,TAU,36,YELLOW,5)
+	var pairs := "整理順序，讓四位朋友坐回編號座位　　好友徽章：珊瑚 1＋2　海草 3＋4"
+	_draw_scene_label(pairs,Vector2(640,245),18)
+	_draw_scene_label("點選／按編號交換　　已交換 " + str(move_count) + " 次",Vector2(640,520),18)
+	for i in 4:
+		draw_circle(Vector2(480+i*108,565),14,MINT if seats[i]==i else Color("#c8b68d"))
+		draw_string(FONT,Vector2(470+i*108,570),"✓" if seats[i]==i else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
 
 func _draw_melody() -> void:
-	var colors := [PINK,BLUE,YELLOW,MINT]
+	var colors := [Color("#d77c8f"),Color("#62a3b2"),Color("#d4a34f"),Color("#60977d")]
 	for i in 4:
-		var x := 450.0 + i*130.0; var lit := sequence_showing and sequence_show_index < sequence.size() and i == sequence[sequence_show_index] and int(sequence_clock*3.2)%2 == 0
-		draw_circle(Vector2(x,420),47,CREAM if lit else colors[i])
-		draw_string(FONT, Vector2(x-18,430), str(i+1), HORIZONTAL_ALIGNMENT_CENTER, 36, 23, BG)
-	draw_string(FONT, Vector2(0,295), "樂句 " + str(count+1) + " / 3　　" + ("請聽並記住…" if sequence_showing else "依序按 1–4 或點花朵演奏"), HORIZONTAL_ALIGNMENT_CENTER, size.x, 25, CREAM)
-	if not sequence_showing:
-		for j in sequence_index: draw_circle(Vector2(470+j*35,520),9,MINT)
+		var x := 450.0 + i*130.0; var center := Vector2(x,420)
+		var lit := sequence_showing and sequence_show_index < sequence.size() and i == sequence[sequence_show_index] and int(sequence_clock*3.2)%2 == 0
+		# Original brass flower gramophone, with the note lamp layered on its bell.
+		if not _draw_prop("flower_horn",Rect2(x-67,387,134,164)):
+			draw_line(center+Vector2(0,6),center+Vector2(0,50),Color("#64816a"),7)
+			for petal in 8:
+				var pc := center+Vector2.RIGHT.rotated(TAU*petal/8.0)*32
+				_draw_ellipse(pc,Vector2(9,15),Color(colors[i],0.72))
+			draw_circle(center,25,colors[i])
+		draw_circle(center,12,CREAM if lit else Color("#e1c78f")); draw_circle(center+Vector2(0,-3),5,Color("#566a70"))
+		draw_arc(center,43,0,TAU,32,YELLOW if lit else Color("#e1d3ad"),4 if lit else 2)
+		draw_circle(center+Vector2(0,70),15,Color("#ebd39f")); draw_string(FONT,Vector2(x-10,75+405),str(i+1),HORIZONTAL_ALIGNMENT_CENTER,20,13,INK)
+		if not sequence_showing and i < sequence_index: draw_circle(center+Vector2(0,94),5,MINT)
+	# Bubble-shaped notes trace the tune during playback and fly to the player on input.
+	if sequence_showing and sequence_show_index < sequence.size():
+		var note := sequence[sequence_show_index]
+		var note_center := Vector2(450+note*130,326)
+		draw_circle(note_center,13,Color("#fff4d4",0.82)); draw_circle(note_center+Vector2(-4,-4),4,PAPER)
+		draw_line(note_center+Vector2(0,13),note_center+Vector2(0,30),colors[note],3)
+	_draw_scene_label("花喇叭先吹奏短句，聽完後用同一順序回奏",Vector2(640,270),19)
+	_draw_scene_label("曲段 " + str(count+1) + " / 3　　" + ("留心聆聽…" if sequence_showing else "演奏中…"),Vector2(640,570),18)
 
 
 
