@@ -6,12 +6,27 @@ const WATER = preload("res://game/world/water.gdshader")
 const STONE = preload("res://game/world/stone.gdshader")
 const WOOD = preload("res://game/world/wood.gdshader")
 const GRASS = preload("res://game/world/grass.gdshader")
+const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const IDENTITY_ATLAS_PATH := "res://assets/characters/identities-v3.png"
+const IDENTITY_REGIONS := {
+	"imp": Rect2i(642,350,295,294),
+	"ticket": Rect2i(374,667,188,343),
+	"announcer": Rect2i(675,642,207,369),
+}
 const CREAM = Color("#edddb8")
 const TEAL = Color("#246c6c")
 const CORAL = Color("#da705c")
 const GOLD = Color("#edbb65")
 var player: CharacterBody3D
 var avatar: Sprite3D
+var avatar_renderer: RefCounted
+var avatar_appearance: Dictionary = {"skin":"warm","species":"human","gender":"neutral","hair":"windswept","hair_color":"ink","face":"curious"}
+var avatar_equipped: Dictionary = {"outfit":"outfit-tide","hat":"hat-none"}
+var avatar_action := ""
+var avatar_action_remaining := 0.0
+var last_avatar_direction := ""
+var last_avatar_frame := -1
+var last_avatar_action := ""
 var camera: Camera3D
 var sun: DirectionalLight3D
 var environment: Environment
@@ -22,6 +37,9 @@ var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
 var character_frames: Dictionary = {}
 var character_sprites: Array[Dictionary] = []
+var identity_atlas: Texture2D
+var identity_textures: Dictionary = {}
+var identity_warnings: Dictionary = {}
 var bubble_material: StandardMaterial3D
 var foliage_textures: Dictionary = {}
 var foliage_atlas_loaded := false
@@ -39,6 +57,7 @@ var sea_material: ShaderMaterial
 
 func _ready() -> void:
 	_load_foliage_atlas()
+	_load_identity_atlas()
 	_build_lighting()
 	_build_land()
 	_build_shoreline()
@@ -898,15 +917,46 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	var role := "ticket"
 	if title == "小角": role = "imp"
 	elif title == "阿浪": role = "announcer"
-	sprite.texture=_character_texture(role,color,"front",0)
-	sprite.pixel_size=0.05
+	var identity_region: Rect2i = IDENTITY_REGIONS[role]
+	if identity_textures.has(role):
+		sprite.texture=identity_textures[role]
+		sprite.pixel_size=2.4 / float(identity_region.size.y)
+	else:
+		sprite.texture=_character_texture(role,color,"front",0)
+		sprite.pixel_size=0.05
 	sprite.billboard=BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	sprite.position=pos+Vector3(0,1.2,0)
-	sprite.shaded=true
+	sprite.shaded=false
 	add_child(sprite)
-	character_sprites.append({"sprite":sprite,"role":role,"color":color})
+	character_sprites.append({"sprite":sprite,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer")})
 	_label(title,pos+Vector3(0,2.65,0),22)
+
+func _load_identity_atlas() -> void:
+	if not ResourceLoader.exists(IDENTITY_ATLAS_PATH):
+		_warn_identity_once("atlas","Character identity atlas %s is missing; using built-in NPC fallback art." % IDENTITY_ATLAS_PATH)
+		return
+	identity_atlas=load(IDENTITY_ATLAS_PATH) as Texture2D
+	if identity_atlas == null:
+		_warn_identity_once("atlas","Character identity atlas %s could not be loaded; using built-in NPC fallback art." % IDENTITY_ATLAS_PATH)
+		return
+	for role: String in IDENTITY_REGIONS:
+		var region: Rect2i=IDENTITY_REGIONS[role]
+		if region.position.x<0 or region.position.y<0 or region.size.x<=0 or region.size.y<=0 or region.end.x>identity_atlas.get_width() or region.end.y>identity_atlas.get_height():
+			_warn_identity_once(role,"Character identity '%s' region exceeds %s bounds; using built-in fallback art." % [role,IDENTITY_ATLAS_PATH])
+			continue
+		var texture := AtlasTexture.new()
+		texture.atlas=identity_atlas
+		texture.region=Rect2(region)
+		identity_textures[role]=texture
+	if identity_textures.is_empty():
+		identity_atlas=null
+		_warn_identity_once("regions","Character identity atlas has no valid regions; using built-in NPC fallback art.")
+
+func _warn_identity_once(key: String, message: String) -> void:
+	if identity_warnings.has(key): return
+	identity_warnings[key]=true
+	push_warning(message)
 
 func _pixel_rect(image: Image, x: int, y: int, width: int, height: int, color: Color) -> void:
 	for py in range(y,maxi(0,y+height)):
@@ -1141,6 +1191,7 @@ func _character_texture(role: String, accent: Color, direction: String, frame: i
 	return texture
 
 func _build_player() -> void:
+	avatar_renderer=AvatarRenderer.new()
 	player=CharacterBody3D.new()
 	player.position=Vector3(0,0.3,23.2)
 	var collision := CollisionShape3D.new()
@@ -1151,15 +1202,13 @@ func _build_player() -> void:
 	collision.position.y=0.85
 	player.add_child(collision)
 	avatar=Sprite3D.new()
-	avatar.pixel_size=0.05
+	avatar.pixel_size=2.4 / float(avatar_renderer.pose_height())
 	avatar.billboard=BaseMaterial3D.BILLBOARD_ENABLED
 	avatar.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	avatar.position.y=1.15
 	avatar.shaded=true
-	for direction in ["front","back","left","right"]:
-		for frame in range(4):
-			_character_texture("hero",Color("#408e96"),direction,frame)
-	avatar.texture=_character_texture("hero",Color("#408e96"),"front",0)
+	avatar.position.y=1.2
+	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,"front",0,"idle")
 	player.add_child(avatar)
 	add_child(player)
 	# Ground collision covers walkable land and dock. Sea never traps the player.
@@ -1201,14 +1250,17 @@ func _physics_process(delta: float) -> void:
 		player.position.x=clampf(player.position.x,-2.05,2.05)
 	if player.position.y < -1.0:
 		player.position=Vector3(0,0.3,10)
-	var back := movement.y < -0.1
 	if movement.length()>0.1:
 		if absf(movement.x) > absf(movement.y):
 			facing = "right" if movement.x > 0 else "left"
 		else:
 			facing = "back" if movement.y < 0 else "front"
-	var frame := int(time*7.0)%4 if movement.length()>0.1 else 0
-	avatar.texture=_character_texture("hero",Color("#408e96"),facing,frame)
+	var moving := movement.length()>0.1
+	var frame := (int(time*7.0)%2)+1 if moving else 0
+	if avatar_action_remaining > 0.0:
+		avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
+		if avatar_action_remaining == 0.0: avatar_action=""
+	_refresh_avatar_texture(frame if moving else 0)
 	camera.position=camera.position.lerp(player.position+Vector3(0,15.5,25),minf(1,delta*7))
 	var area := "海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場")
 	if area!=current_area:
@@ -1234,7 +1286,40 @@ func _process(delta: float) -> void:
 
 func interact() -> void:
 	if not blocked and not nearest.is_empty():
+		play_action("interact")
 		interaction_requested.emit(nearest.id,nearest.label)
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if blocked or not event is InputEventKey or not event.pressed or event.echo: return
+	if event.keycode == KEY_F:
+		play_action("wave")
+		get_viewport().set_input_as_handled()
+	elif event.keycode == KEY_P:
+		play_action("photograph")
+		get_viewport().set_input_as_handled()
+
+func play_action(name: String) -> void:
+	var action := "photograph" if name == "photo" else name
+	if action not in ["wave", "photograph", "interact", "celebrate"]: return
+	avatar_action=action
+	avatar_action_remaining=0.8
+	_refresh_avatar_texture(0)
+
+func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
+	if avatar_appearance == appearance and avatar_equipped == equipped: return
+	avatar_appearance=appearance.duplicate(true)
+	avatar_equipped=equipped.duplicate(true)
+	last_avatar_frame=-1
+	_refresh_avatar_texture(0)
+
+func _refresh_avatar_texture(frame: int) -> void:
+	if not is_instance_valid(avatar) or avatar_renderer == null: return
+	var action := avatar_action if avatar_action_remaining > 0.0 else "idle"
+	if last_avatar_direction == facing and last_avatar_frame == frame and last_avatar_action == action: return
+	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,facing,frame,action)
+	last_avatar_direction=facing
+	last_avatar_frame=frame
+	last_avatar_action=action
 
 func set_night(value: bool) -> void:
 	night=value

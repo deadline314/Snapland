@@ -1,0 +1,15 @@
+{
+  "tool": "builtin image generation",
+  "kind": "original character animation atlas derived from user-approved reference",
+  "source": "exec-1d76b994-21bb-4d83-bc67-163fbd72078b.png",
+  "prompt": "Create a production sprite animation sheet for Snapland, using ONLY the young camera traveller in the supplied reference as character design reference. Keep their distinctive windswept navy hair with small ivory forelock, curious asymmetrical eyebrows, teal harbor jacket with coral cuff patch, ivory shorts, brown boots and small red camera. Maintain the approved detailed pixel-art aesthetic, clean deliberate pixel clusters, rich but controlled shading, readable silhouette, crisp pixel edges, no watercolor grain or decorative sparkles. We need real high-detail sprites, target roughly 128 by 192 logical pixels of detail per figure, not enlarged 32px characters. ONE transparent animation atlas, exactly FOUR columns and FOUR rows of equal rectangular cells; no printed grid, no labels, no scenery, no shadows on background, generous transparent gutters. Every figure stays centered at identical baseline and scale, entire head and boots inside its cell. Column directions for first THREE rows, left to right: front view, left profile, back view, right profile. Row one: relaxed standing idle in those four directions. Row two: walking pose with left leg forward, right leg back, opposite arm swing, in all four directions. Row three: walking pose with right leg forward, left leg back, opposite arm swing, in all four directions. Row four consists of FOUR distinct FRONT-facing action poses left to right: waving with right hand above head; raising the red camera to eye level with both hands to take a photo; leaning forward reaching a hand to interact; cheerful celebration raising both hands. Correct anatomy two arms and two legs, hands in clear positions. Keep the same jacket, skin tone, hair shape and camera across all sixteen frames, and four-direction body orientation genuinely changes including a full back view in column three. No hats so hats can be equipped as an independent overlay. Uniform studio-neutral sprite illumination. This is an original game character sheet, not a promotional illustration.",
+  "reference": "identities-v3.png",
+  "review": "Root viewed full generated atlas: sixteen figures, four genuine directions and visibly different walk/action poses. Prompt target pixel dimensions are not a claim of measured logical pixel resolution. Native composition and clipping verification required.",
+  "output": "traveller-actions-v1.png",
+  "sha256": "9b55de2dacc26dcbbd011657b9757971f7028e28bd597a8f192369fee585b11c",
+  "actual_dimensions": [
+    1122,
+    1402
+  ],
+  "reference_sha256": "2e62aef5566fe4017f14aa22bd3fb8578cfc9e21717c2f4eea9d4e5a4c549be6"
+}

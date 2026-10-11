@@ -1,0 +1,14 @@
+{
+  "tool": "builtin image generation",
+  "source": "exec-4452903f-ca91-4238-89a3-bc3298177b28.png",
+  "prompt": "Production pixel-art modular HAIR WIG sheet for the Snapland traveller reference. Make high-detail hairstyles, not full people: ONLY HAIR, no heads, no faces, no ears, no necks, no hats. The front and side hairstyles have a transparent face opening under the fringe so they can be layered on an existing character head. Transparent background, no shadows, no text, no decorative layout. Exactly FOUR columns and THREE rows of equal cells with generous transparent separation. Columns left to right: front, LEFT profile, BACK, RIGHT profile. Row one: the reference traveller's distinctive windswept navy hair, left-swept irregular spikes and ONE small ivory forelock, retain detailed blue strand pixel clusters. Row two: a short ear-length dark navy bob with a clear rounded silhouette, broken side part, tucked side lock, angular shaped fringe, no white streak. Row three: natural rounded dense dark navy curls with broad scalloped silhouette and carefully shaded connected curly pixel clusters, avoid isolated glitter-like pixels. ALL styles match the same big stylized character head proportions, their crown centers align. Face opening should be empty transparent space. Front wigs hair wraps top and temples but center face from eyes downward remains empty. Back wigs are full hair surface. Profiles extend across the back of the skull but preserve the transparent face area in front. Navy dark outline, coherent blue middle and lighter blue highlights. The final character is high-detail roughly128x192 logical pixels, so hair has substantial authentic cluster detail; clean sharp pixel edges with no gouache texture. Existing hero identity is the supplied reference, style reference only.",
+  "reference": "identities-v3.png",
+  "review": "Root viewed twelve direction/style parts: windswept with ivory forelock, rounded bob, connected curly silhouette. Front/profile parts have transparent face apertures, back has full hair. Native alignment, replacement and eye preservation required.",
+  "output": "hair-v1.png",
+  "sha256": "3d2cf9c50dec232e1486a42746b32ea0cb1af3685fb7538a62f160a6ebd5d90e",
+  "actual_dimensions": [
+    1448,
+    1086
+  ],
+  "reference_sha256": "2e62aef5566fe4017f14aa22bd3fb8578cfc9e21717c2f4eea9d4e5a4c549be6"
+}

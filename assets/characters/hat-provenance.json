@@ -1,0 +1,14 @@
+{
+  "tool": "builtin image generation",
+  "source": "exec-493da0eb-040f-455a-89c2-791afa09209a.png",
+  "prompt": "Create a transparent production pixel-art EQUIPPABLE HAT atlas for the Snapland camera traveller shown in reference. This is a NEW accessory sheet, not a copy of the whole reference layout. Detailed deliberate pixel clusters and clean dark navy outlines, restrained teal coral ochre ivory palette, no watercolor flecks, no background, no text, no heads or bodies. EXACTLY FOUR columns and THREE rows, each item centered in an equal cell with broad clear gutters. Columns always front, LEFT profile, BACK, RIGHT profile. Row one: a broad ochre woven straw sunhat with a teal ribbon tied at one side, all four directions. Row two: ivory sailor cap with navy band and small navy anchor emblem on FRONT ONLY, all four directions, rear cap has no emblem. Row three: a small coral hibiscus flower with two teal leaves clipped to the wearer's LEFT temple: front view flower at image right, left profile flower clearly visible, back view leaves and rear petals visible at image left, right profile a smaller partial petal glimpse. Keep the visual style of the supplied original game character. Every hat has consistent relative scale across directions, oriented as worn on a head, no giant ornamental crown. Crisp readable shading and woven pattern controlled to large pixel clusters; transparent padding avoids intersecting adjacent items. This should match a 128x192 logical pixel full-character sprite with head about 80 pixels wide. Straw hat wider than head, sailor hat about head width, flower about a quarter of head width.",
+  "reference": "identities-v3.png",
+  "review": "Root viewed twelve hat/accessory directions. Alpha bounding boxes measured before integration; first straw brim touches image edge. Shape, baseline and face obstruction still require native verification.",
+  "output": "hats-v1.png",
+  "sha256": "34b8f8cd104e37e6fb59d46303b1a6dfb4abfa925f20c7b7fd3d828a824de432",
+  "actual_dimensions": [
+    1217,
+    1293
+  ],
+  "reference_sha256": "2e62aef5566fe4017f14aa22bd3fb8578cfc9e21717c2f4eea9d4e5a4c549be6"
+}

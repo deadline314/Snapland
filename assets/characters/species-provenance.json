@@ -1,0 +1,12 @@
+{
+  "tool": "builtin image generation",
+  "prompt": "Create an original high-detail pixel-game modular character parts sheet on a fully transparent background, clean 4-column by 2-row grid with generous empty gutters, exactly eight isolated objects, no labels or text. Use crisp purposeful pixel clusters, dark ink-blue outlines, flat restrained shadows and highlights; compatible with a whimsical harbor traveller wearing teal and cream, not generic glossy anime. Row 1, left to right: a left pointed elf ear facing forward with tip angled gently outward left; a right pointed elf ear facing forward with tip angled outward right; one elf ear seen from the left-facing profile; one elf ear seen from the right-facing profile. Ears warm tan skin with readable inner folds and rounded attachment bases, distinct sculpted ear silhouettes, not simple triangles. Row 2, left to right: a short chipped cream little-devil horn curved gently left; a longer bent cream horn curved gently right; the short horn viewed from behind; the long horn viewed from behind. Horns cream ivory with two or three stepped shading bands, a warm brown root and subtle chipped tip, charming deliberate asymmetry. Each complete part alone, similar size, no heads, hair, faces, bodies, backgrounds, shadows floating outside the objects or other accessories. Real alpha transparency and antialias-free pixel edges.",
+  "source": "exec-5cd46d63-408a-4346-a607-52b0f96d90e4.png",
+  "output": "species-parts-v1.png",
+  "review": "Root viewed eight isolated shaded ear/horn components; transparent alpha and runtime alignment reviewed separately.",
+  "sha256": "41eceaeeab099571d5d1a023698877b6232fb10865d8210f645c6e80e3ee0e59",
+  "actual_dimensions": [
+    1536,
+    1024
+  ]
+}
