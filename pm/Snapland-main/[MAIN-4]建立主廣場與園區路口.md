@@ -1,6 +1,6 @@
 # [MAIN-4] 建立主廣場與園區路口
 
-> 狀態：待辦
+> 狀態：進行中
 
 ## 內文
 
@@ -14,8 +14,8 @@
 
 ### 驗收條件
 
-- [ ] 角色可移動、碰撞、互動並往返碼頭、廣場與迎賓大道。
-- [ ] 其他九區顯示園區名稱、收藏門檻與施工提示，不消耗收藏。
+- [x] 角色可移動、碰撞、互動並往返碼頭、廣場與迎賓大道。
+- [x] 其他九區顯示園區名稱、收藏門檻與施工提示，不消耗收藏。
 
 ### 測試流程
 
@@ -33,3 +33,44 @@
 
 ---
 
+## 開始基準
+
+c1b7b19；feature/island-first-park。
+
+## 業界研究
+
+參見 [園區與介面研究](../../design/runtime/world-research.md)，來源在實作前讀取。
+
+# Commit-1
+
+## 內文
+
+問題：碼頭、主廣場及園區入口尚無可走動場景。
+
+改動：現在可步行往返三個主要地帶，另九區顯示入口、收藏門檻與準備中提示。
+
+驗收：原生移動、碰撞、互動與返回通過；日夜及迎賓大道畫面已查看。
+
+分支：`feature/island-first-park`；開始基準：`c1b7b19`；[程式 commit](https://github.com/deadline314/Snapland/commit/de7aefcf310c8cea710ac98e5a9d9af289ab3226)。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 受影響局部驗證 | 本票相關runtime與主場景整合通過 |
+| 原生畫面 | GPU擷取並查看；程式化操作驗收 |
+| 遠端CI | 帳戶限制，工作未啟動；未重試 |
+
+### 研究與圖例
+
+[園區與介面研究](../../design/runtime/world-research.md)。圖例為審閱參考，不是本作遊戲素材或試玩證據。
+
+![業界參考](../Snapland-art/images/ART-1-reference-octopath.jpg)
+
+### 截圖
+
+![本票原生畫面](images/MAIN-4-plaza.png)
+
+![本票原生畫面](images/MAIN-4-welcome.png)
+
+[整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
