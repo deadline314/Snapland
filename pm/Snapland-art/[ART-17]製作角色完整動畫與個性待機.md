@@ -87,6 +87,6 @@
 ![阿浪待機完整全身](images/ART-17-announcer-idle-normal.png)
 [正常速度與慢放影片](images/ART-17-idles-normal-slow.mp4) · [本次覆蓋與錄影報告](images/ART-17-idle-capture-report.json)
 
-分支：`feature/island-first-park`。本次程式與證據提交連結於推送後補入。
+分支：`feature/island-first-park`。本次程式與證據提交：[f870e3d](https://github.com/deadline314/Snapland/commit/f870e3d)。
 
 涉及 ART-18 的共用角色姿勢與換装對應，以及 SG-18 的主角起跳素材；兩票仍需各自的實際操作驗收。
