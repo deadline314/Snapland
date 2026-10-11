@@ -24,6 +24,7 @@ const INK := Color("#243b50")
 const SEA := Color("#55b8ad")
 const GOLD := Color("#b77c45")
 const PAPER := Color("#fff2d4")
+const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const BUBBLE_MASCOT_RADIUS := 52.0
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
@@ -93,6 +94,10 @@ var fountain_cycle := -1
 var fountain_attempts := 0
 var feedback_color := MINT
 var reduced_motion := false
+var time_phase := TimeOfDayScript.DEFAULT_PHASE
+var phase_wash := Color(0.93,0.72,0.55,0.055)
+var phase_shadow_color := Color(0.12,0.22,0.24,0.24)
+var phase_shadow_x := 4.0
 var feedback_age := 99.0
 var feedback_origin := Vector2(640, 400)
 var particles: Array[Dictionary] = []
@@ -163,6 +168,30 @@ func _ready() -> void:
 	focus_mode = Control.FOCUS_ALL
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	grab_focus()
+
+func set_time_of_day(phase_id: Variant) -> void:
+	time_phase = TimeOfDayScript.normalize(phase_id)
+	var profile: Dictionary = TimeOfDayScript.phase_for_id(time_phase)
+	var veil_color: Color
+	var veil_alpha: float
+	match time_phase:
+		"dawn":
+			veil_color = Color("#efb990")
+			veil_alpha = 0.075
+		"noon":
+			veil_color = Color("#e8efd8")
+			veil_alpha = 0.025
+		"dusk":
+			veil_color = Color("#e88f79")
+			veil_alpha = 0.105
+		"night":
+			veil_color = Color("#526c9a")
+			veil_alpha = 0.14
+	phase_wash = Color(veil_color,veil_alpha)
+	var rotation: Vector3 = profile.key_rotation_degrees
+	phase_shadow_x = clampf(sin(deg_to_rad(rotation.y))*14.0,-9.0,9.0)
+	phase_shadow_color = Color("#203a4b",0.18 if time_phase == "noon" else 0.25)
+	queue_redraw()
 
 func _rng_reset() -> void:
 	rng.seed = hash(game_id) + int(Time.get_ticks_msec())
@@ -883,6 +912,10 @@ func _draw_backdrop() -> void:
 		"shadow_alignment", "bubble_photo", "melody_memory":
 			_draw_moon(Vector2(1125,205)); _draw_lantern(Vector2(180,235),0.95)
 			for x in [345,640,935]: _draw_topiary(Vector2(x,555),0.42)
+	# Apply time-of-day to the authored backdrop only; targets, actors, and text
+	# are drawn later and keep their original contrast and interaction cues.
+	if phase_wash.a > 0.0:
+		draw_rect(Rect2(29,122,1222,492),phase_wash,true)
 
 func _warn_backdrop_asset(message: String) -> void:
 	if _backdrop_warning_emitted: return
@@ -974,8 +1007,14 @@ func _draw_person(center: Vector2, palette: Color, pose: int = 0, scale_factor: 
 	draw_line(c+Vector2(10,5)*scale_factor,c+Vector2(15,-8 + float(pose%2)*9)*scale_factor,Color("#f1c49a"),4*scale_factor)
 	draw_line(c+Vector2(-7,9)*scale_factor,c+Vector2(-9,19)*scale_factor,INK,3*scale_factor); draw_line(c+Vector2(7,9)*scale_factor,c+Vector2(10,18)*scale_factor,INK,3*scale_factor)
 
-func _draw_tourist(name: String, rect: Rect2, fallback_color: Color) -> void:
+func _draw_tourist(name: String, rect: Rect2, fallback_color: Color, ground_y := -1.0) -> void:
+	var foot_y := ground_y if ground_y >= 0.0 else rect.end.y
+	_draw_actor_contact_shadow(Vector2(rect.position.x+rect.size.x*0.5,foot_y),Vector2(maxf(15.0,rect.size.x*0.32),maxf(4.0,rect.size.y*0.055)))
 	if not _draw_prop(name,rect): _draw_person(rect.position+rect.size*0.5,fallback_color,0,1.0)
+
+func _draw_actor_contact_shadow(center: Vector2, radii: Vector2) -> void:
+	var shifted := center+Vector2(phase_shadow_x,2.0)
+	_draw_ellipse(shifted,radii,phase_shadow_color)
 
 func _draw_devil_mascot(center: Vector2, radius: float = 34.0) -> void:
 	if _draw_prop("mascot",Rect2(center.x-radius*1.13,center.y-radius*1.13,radius*2.26,radius*2.26)): return
@@ -1240,8 +1279,7 @@ func _draw_fountain() -> void:
 		draw_arc(Vector2(x,484-height),18,PI,TAU,16,MINT if active else Color("#99d1d5"),2)
 	var jump_pose := 0.0
 	if feedback_age < 0.34 and feedback_color == MINT: jump_pose = 16.0 * sin((1.0-feedback_age/0.34)*PI*0.5)
-	_draw_ellipse(Vector2(640,502),Vector2(19+jump_pose*0.25,5),Color("#315a68",0.3))
-	draw_circle(Vector2(640,465-jump_pose),54,Color(MINT,0.18)); _draw_tourist("visitor",Rect2(611,386-jump_pose,58,118),Color("#e77e83"))
+	draw_circle(Vector2(640,465-jump_pose),54,Color(MINT,0.18)); _draw_tourist("visitor",Rect2(611,386-jump_pose,58,118),Color("#e77e83"),504.0)
 	# Readable jump pose: coat, flying scarf and tucked legs on the live burst.
 	if beat_window:
 		draw_line(Vector2(625,450-jump_pose),Vector2(599,425-jump_pose),PINK,5); draw_line(Vector2(655,450-jump_pose),Vector2(681,425-jump_pose),PINK,5)

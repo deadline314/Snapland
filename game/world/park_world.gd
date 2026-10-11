@@ -10,6 +10,7 @@ const LIVING_SPRITE = preload("res://game/world/living_sprite.gdshader")
 const ComponentAnimationScript = preload("res://game/world/component_animation.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const IDENTITY_ATLAS_PATH := "res://assets/characters/identities-v3.png"
 const IDENTITY_REGIONS := {
 	"imp": Rect2i(642,350,295,294),
@@ -58,6 +59,9 @@ var current_area := ""
 var nearest: Dictionary = {}
 var fountain_water: ShaderMaterial
 var sea_material: ShaderMaterial
+var active_time_phase := TimeOfDayScript.DEFAULT_PHASE
+var contact_shadow_material: StandardMaterial3D
+var contact_shadows: Array[Dictionary] = []
 
 func _ready() -> void:
 	component_motion=ComponentAnimationScript.new()
@@ -80,7 +84,7 @@ func _ready() -> void:
 	occlusion_controller.configure(player,camera)
 	component_motion.finish_registration()
 	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
-	set_night(false)
+	set_time_of_day(TimeOfDayScript.DEFAULT_PHASE)
 
 
 func _exit_tree() -> void:
@@ -148,25 +152,56 @@ func _build_lighting() -> void:
 	var world_env := WorldEnvironment.new()
 	environment = Environment.new()
 	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color("#94c6ca")
+	environment.background_color = Color("#9bc9d9")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color("#b7d5c8")
-	environment.ambient_light_energy = 0.50
+	environment.ambient_light_color = Color("#fff0d2")
+	environment.ambient_light_energy = 1.0
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	environment.glow_enabled = true
-	environment.glow_intensity = 0.18
+	environment.glow_intensity = 0.10
 	environment.fog_enabled = true
 	environment.fog_density = 0.0007
-	environment.fog_light_color = Color("#87b7bd")
+	environment.fog_light_color = Color("#9bc9d9")
 	world_env.environment = environment
 	add_child(world_env)
 	sun = DirectionalLight3D.new()
-	sun.rotation_degrees = Vector3(-52, -32, 0)
+	sun.rotation_degrees = Vector3(-52, -145, 0)
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 70.0
-	sun.light_color = Color("#fffdf7")
-	sun.light_energy = 0.72
+	sun.light_color = Color("#fff1cf")
+	sun.light_energy = 1.25
 	add_child(sun)
+	contact_shadow_material = _make_contact_shadow_material()
+
+func _make_contact_shadow_material() -> StandardMaterial3D:
+	var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	for y in range(32):
+		for x in range(32):
+			var p := (Vector2(x, y) + Vector2(0.5, 0.5) - Vector2(16.0, 16.0)) / 16.0
+			var edge := clampf(1.0 - p.length(), 0.0, 1.0)
+			image.set_pixel(x, y, Color(0.12, 0.19, 0.20, edge * edge * 0.34))
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.albedo_texture = ImageTexture.create_from_image(image)
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_OPAQUE_ONLY
+	material_cache["contact_shadow"] = material
+	return material
+
+func _add_contact_shadow(anchor: Node3D, local_ground_offset: Vector3, dimensions: Vector2) -> MeshInstance3D:
+	var shadow := MeshInstance3D.new()
+	var plane := PlaneMesh.new()
+	plane.size = dimensions
+	shadow.mesh = plane
+	shadow.material_override = contact_shadow_material
+	shadow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	shadow.position = local_ground_offset
+	anchor.add_child(shadow)
+	contact_shadows.append({"node": shadow, "anchor": anchor, "ground_offset": local_ground_offset})
+	mesh_count += 1
+	return shadow
 
 func _mat(color: Color, emissive := false) -> StandardMaterial3D:
 	var key := "%s:%s" % [color.to_html(true), str(emissive)]
@@ -478,7 +513,7 @@ func _foliage_sprite(kind: String, ground: Vector3, world_height: float) -> Spri
 	sprite.shaded=true
 	sprite.alpha_cut=SpriteBase3D.ALPHA_CUT_DISCARD
 	sprite.alpha_scissor_threshold=0.45
-	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	sprite.position=ground+Vector3(0,world_height*0.5,0)
 	var phase := fposmod(ground.x * 0.713 + ground.z * 0.391, TAU)
 	_set_living_sprite_material(sprite, 0, phase, 0.72)
@@ -975,6 +1010,10 @@ func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 			_cylinder(pos+Vector3(0,4.91,0),0.16,0.4,GOLD)
 
 func _npc(pos: Vector3, color: Color, title: String) -> void:
+	var activity_root := Node3D.new()
+	activity_root.name = "%sActivityRoot" % title
+	activity_root.position = pos
+	add_child(activity_root)
 	var sprite := Sprite3D.new()
 	var role := "ticket"
 	if title == "小角": role = "imp"
@@ -988,17 +1027,20 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 		sprite.pixel_size=0.05
 	sprite.billboard=BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	sprite.position=pos+Vector3(0,1.2,0)
+	sprite.position=Vector3(0,1.2,0)
 	sprite.shaded=true
+	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var profile := "character_ticket" if role=="ticket" else ("character_imp" if role=="imp" else "character_announcer")
 	var breath_rate := 0.74 if role=="ticket" else (1.23 if role=="imp" else 0.53)
 	var phase := 0.45 if role=="ticket" else (1.9 if role=="imp" else 3.2)
 	var idle_role := 1 if role=="ticket" else (2 if role=="imp" else 3)
 	_set_living_sprite_material(sprite,1,phase,breath_rate,idle_role)
-	add_child(sprite)
+	activity_root.add_child(sprite)
+	_add_contact_shadow(activity_root,Vector3(0,0.22,0),Vector2(0.78,0.46))
 	component_motion.register_component(sprite,profile,phase/TAU)
 	character_sprites.append({"sprite":sprite,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer")})
-	_label(title,pos+Vector3(0,2.65,0),22)
+	var name_label := _label(title,pos+Vector3(0,2.65,0),22)
+	name_label.reparent(activity_root,true)
 
 func _load_identity_atlas() -> void:
 	if not ResourceLoader.exists(IDENTITY_ATLAS_PATH):
@@ -1279,6 +1321,8 @@ func _build_player() -> void:
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,"front",0,"idle")
 	_set_living_sprite_material(avatar,1,0.18,0.72)
 	player.add_child(avatar)
+	avatar.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_add_contact_shadow(player,Vector3(0,-0.075,0),Vector2(0.92,0.58))
 	component_motion.register_component(avatar,"character_hero",0.18/TAU)
 	add_child(player)
 	# Ground collision covers walkable land and dock. Sea never traps the player.
@@ -1388,17 +1432,46 @@ func _refresh_avatar_texture(frame: int) -> void:
 	last_avatar_action=action
 
 func set_night(value: bool) -> void:
-	night=value
-	sun.light_energy=0.2 if value else 0.72
-	sun.light_color=Color("#b6c4ef") if value else Color("#fffdf7")
-	environment.background_color=Color("#172e4b") if value else Color("#94c6ca")
-	environment.ambient_light_color=Color("#6b83ad") if value else Color("#b7d5c8")
-	environment.ambient_light_energy=0.32 if value else 0.50
-	environment.glow_intensity=0.28 if value else 0.18
-	for lamp in lamps:
-		var energy := 0.8 if value else 0.0
-		lamp.light_energy=energy
+	set_time_of_day("night" if value else "noon")
+
+func set_time_of_day(phase_id: Variant) -> void:
+	active_time_phase = TimeOfDayScript.normalize(phase_id)
+	var profile: Dictionary = TimeOfDayScript.phase_for_id(active_time_phase)
+	night = active_time_phase == "night"
+	sun.rotation_degrees = profile.key_rotation_degrees
+	sun.light_color = profile.key_color
+	sun.light_energy = float(profile.key_energy)
+	environment.background_color = profile.sky_color
+	environment.ambient_light_color = profile.ambient_color
+	environment.ambient_light_energy = float(profile.ambient_energy)
+	environment.fog_light_color = profile.sky_color.lerp(profile.ambient_color, 0.28)
+	match active_time_phase:
+		"dawn": environment.glow_intensity = 0.09
+		"noon": environment.glow_intensity = 0.07
+		"dusk": environment.glow_intensity = 0.12
+		"night": environment.glow_intensity = 0.18
+	var lamp_energy: float = float({"dawn": 0.18, "noon": 0.0, "dusk": 0.48, "night": 0.82}[active_time_phase])
+	var active_limit := mini(8, lamps.size())
+	var stride := maxi(1, ceili(float(lamps.size()) / float(maxi(1, active_limit))))
+	var active_count := 0
+	for index in range(lamps.size()):
+		var lamp := lamps[index]
+		var enabled: bool = lamp_energy > 0.0 and index % stride == 0 and active_count < active_limit
+		var energy: float = lamp_energy if enabled else 0.0
+		lamp.light_energy = energy
+		lamp.shadow_enabled = false
+		if enabled: active_count += 1
 		if is_instance_valid(component_motion): component_motion.set_light_baseline(lamp,energy)
+	var sun_direction := -sun.global_basis.z
+	var projected := Vector3(sun_direction.x,0.0,sun_direction.z)
+	var shadow_offset := Vector3.ZERO
+	if projected.length_squared() > 0.0001:
+		shadow_offset = -projected.normalized() * 0.12
+	for record in contact_shadows:
+		var shadow := record.get("node") as Node3D
+		if not is_instance_valid(shadow): continue
+		var ground_offset: Vector3 = record.get("ground_offset",Vector3.ZERO)
+		shadow.position = ground_offset + shadow_offset
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
