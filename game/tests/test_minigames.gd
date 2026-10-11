@@ -457,13 +457,19 @@ func _test_flower_pipe_route() -> void:
 	var s := _new_session("game-007")
 	var results: Array[Dictionary] = []
 	s.finished.connect(func(value: Dictionary): results.append(value))
-	for point in [[426.0,237.0], [426.0,322.0], [696.0,322.0]]:
-		_click(s, point[0], point[1])
-	assert(results.is_empty())
-	_click(s, 831, 492)
-	assert(results.size() == 1)
-	assert(results[0].success and results[0].devil)
-	assert(s.move_count == 4)
+	var routes := [[0,4,6,15], [0,1,2,3,4,8,12], [0,1,2,3,6,10,14,15]]
+	for order in 3:
+		for cell in routes[order]:
+			_click(s, 400 + (cell % 4) * 160, 216 + int(cell / 4) * 100)
+		assert(s.pipe_connected and results.is_empty())
+		s._process(0.5)
+		assert(results.is_empty() and s.pipe_model.order_index == order)
+		s._process(0.7)
+		assert(results.is_empty())
+		if order < 2: assert(s.pipe_model.order_index == order + 1 and not s.pipe_connected)
+	s._process(0.21)
+	assert(results.size() == 1 and results[0].success and results[0].devil)
+	assert(s.move_count == 19 and s.score == 2620 and s.score_summary().total == 2620)
 	checks += 1
 
 func _test_escape_cancels() -> void:
@@ -638,6 +644,7 @@ func _test_all_modes() -> void:
 			var last_cycle := -1
 			var waypoint := 0
 			var balloon_steps := 0
+			var pipe_order_played := -1
 			if number == 1: _key(s, KEY_ENTER)
 			while not s.ended:
 				match number:
@@ -671,7 +678,10 @@ func _test_all_modes() -> void:
 					6:
 						if s.beat_window and s.beat < 8: _key(s, rhythm[s.beat])
 					7:
-						for point in [[426,237], [426,322], [696,322], [831,492]]: _click(s, point[0], point[1])
+						if s.pipe_model.order_index != pipe_order_played:
+							pipe_order_played = s.pipe_model.order_index
+							var routes := [[0,4,6,15], [0,1,2,3,4,8,12], [0,1,2,3,6,10,14,15]]
+							for cell in routes[pipe_order_played]: _click(s, 400 + (cell % 4) * 160, 216 + int(cell / 4) * 100)
 					8:
 						Input.action_release("ui_right"); Input.action_release("ui_left")
 						var expected: float = s.balance + sin((s.phase + 0.01) * 1.7) * (0.32 if assisted else 0.50) * 0.01

@@ -29,6 +29,8 @@ const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const MinigameHUDScript = preload("res://game/ui/minigame_hud.gd")
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
 const BalloonHarborScript = preload("res://game/minigames/balloon_harbor_view.gd")
+const PipePlanScript = preload("res://game/minigames/pipe_plan_view.gd")
+const PipeRoundScript = preload("res://game/minigames/pipe_round_model.gd")
 const BUBBLE_MASCOT_RADIUS := 52.0
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
@@ -88,6 +90,9 @@ var practice_mode := false
 var minigame_hud: Control
 var presentation: Control
 var presentation_mode := ""
+var pipe_connected := false
+var pipe_finish_at := -1.0
+var pipe_model: RefCounted = PipeRoundScript.new()
 var _fountain_avatar_renderer: RefCounted
 var _fountain_jump_textures: Array[Texture2D] = []
 var _fountain_idle_texture: Texture2D
@@ -229,6 +234,7 @@ func _sync_presentation() -> void:
 			"balloon_delivery":
 				# Headless rules tests do not allocate a renderer or GPU world.
 				if DisplayServer.get_name() != "headless": presentation = BalloonHarborScript.new()
+			"flower_pipes": presentation = PipePlanScript.new()
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -240,6 +246,11 @@ func _sync_presentation() -> void:
 	match mode:
 		"balloon_delivery":
 			presentation.present(p, velocity, balloon_wind_current, balloon_wind_forecast, balloon_delivery_index, balloon_dock_hold, balloon_braking, phase, reduced_motion, time_phase, balloon_delivery_index, _balloon_hazard_at(phase), 65.0)
+		"flower_pipes":
+			presentation.configure(reduced_motion, time_phase)
+			presentation.set_animation_active(not paused)
+			presentation.present_order(pipe_model.snapshot(), phase, reduced_motion, time_phase)
+			presentation.cursor = pipe_cursor
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -312,6 +323,7 @@ func _refresh_hud(force: bool = false) -> void:
 		"score": score,
 		"time_text": time_text,
 		"feedback_text": feedback_text,
+		"feedback_width": 240.0 if mode == "flower_pipes" else 540.0,
 		"feedback_color": feedback_color,
 		"assisted": assisted,
 		"practice": practice_mode,
@@ -329,7 +341,7 @@ func _progress_text() -> String:
 		"crowd_traffic": return "隊伍 %d / 6" % count
 		"hat_catching": return "接住 %d / 6" % count
 		"ribbon_rhythm": return "命中 %d / 8" % devil_progress
-		"flower_pipes": return "轉動 %d 次" % move_count
+		"flower_pipes": return "工單 %d / 3　轉動 %d 次" % [mini(pipe_model.order_index + 1, 3), move_count]
 		"sign_balance": return "穩住 %d / 7 拍" % count
 		"shadow_alignment": return "穩定 %0.1f / 3.0 秒" % alignment_hold
 		"bubble_photo": return "有效合照 %d / 3" % devil_progress
@@ -386,7 +398,7 @@ func _score_rule_text() -> String:
 		"crowd_traffic": return "每隊安全通過 +50。"
 		"hat_catching": return "每接住一頂帽子 +100。"
 		"ribbon_rhythm": return "每踩中一拍 +75。"
-		"flower_pipes": return "目前分數 = max(0, 1000 − 20 × 轉動次數)；連通另決定是否完成。"
+		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
 		"sign_balance": return "每個拍點穩在安全區 +50；精準度決定加碼條件。"
 		"shadow_alignment": return "完成三秒維持時 +100；保持時間決定一般成功。"
 		"bubble_photo": return "每張有效合照 +100。"
@@ -422,6 +434,8 @@ func _rng_reset() -> void:
 	rng.seed = hash(game_id) + int(Time.get_ticks_msec())
 
 func reset_round() -> void:
+	pipe_connected = false
+	pipe_finish_at = -1.0
 	elapsed = 0.0
 	score = 0
 	score_events.clear()
@@ -513,8 +527,8 @@ func reset_round() -> void:
 				hats_consumed.append(false)
 		"ribbon_rhythm": pass
 		"flower_pipes":
-			# Four visibly scrambled elbows/straights form a single pipe route.
-			flower_cells = [10, 0, 0, 0, 9, 10, 6, 0, 0, 0, 5, 0, 0, 0, 3, 6]
+			pipe_model.reset()
+			flower_cells = pipe_model.cells
 		"sign_balance": pass
 		"shadow_alignment": alignment = -0.72
 		"bubble_photo": pass
@@ -655,7 +669,7 @@ func _tick_game(delta: float) -> void:
 				beat += 1; streak = 0; mistakes += 1
 			if beat >= 8: _finish(devil_progress >= (4 if assisted else 6), mistakes == 0 and devil_progress == 8)
 			beat_window = not ended and beat == cycle and beat_phase < window
-		"flower_pipes": pass
+		"flower_pipes": _tick_pipe(delta)
 		"sign_balance":
 			var wind := sin(phase * 1.7) * (0.50 if not assisted else 0.32)
 			balance += wind * delta - _axis_x() * 0.78 * delta
@@ -799,6 +813,28 @@ func _tick_crowd(delta: float) -> void:
 		else:
 			mistakes += 1; count += 1; _feedback("紅綠燈放錯方向", PINK)
 
+func _tick_pipe(delta: float) -> void:
+	var previous_order: int = pipe_model.order_index
+	var previous_completed: int = pipe_model.completed_beds
+	var state: Dictionary = pipe_model.step(delta)
+	flower_cells = pipe_model.cells
+	move_count = int(state.total_turns)
+	pipe_connected = bool(state.connected)
+	if int(state.score) != score: _set_formula_score("pipe_orders", "供水工單與轉動計分", int(state.score))
+	if pipe_model.order_index != previous_order:
+		pipe_cursor = 0
+		_feedback("工單 %d：%s" % [pipe_model.order_index + 1, str(state.brief)], MINT)
+	if bool(state.ended):
+		if not bool(state.success): _finish(false); return
+		if pipe_finish_at < 0.0: pipe_finish_at = phase + 0.20
+		if phase >= pipe_finish_at:
+			var perfect := true
+			for index in pipe_model.orders.size():
+				if pipe_model.order_turns[index] > int(pipe_model.orders[index].turn_par): perfect = false
+			_finish(true, perfect)
+	elif pipe_model.completed_beds > previous_completed:
+		_feedback("花床已供水", MINT)
+
 func _tick_hats(delta: float) -> void:
 	for i in hat_y.size():
 		hat_y[i] += (112.0 + float(i % 3) * 20.0) * delta
@@ -871,7 +907,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			if event.keycode == KEY_RIGHT: pipe_cursor = mini(15, pipe_cursor + 1)
 			if event.keycode == KEY_UP: pipe_cursor = maxi(0, pipe_cursor - 4)
 			if event.keycode == KEY_DOWN: pipe_cursor = mini(15, pipe_cursor + 4)
-			if event.keycode == KEY_SPACE: _rotate_pipe(Vector2(370 + (pipe_cursor % 4) * 135 + 50, 205 + int(pipe_cursor / 4) * 85 + 30))
+			if event.keycode == KEY_SPACE: _rotate_pipe_index(pipe_cursor)
 		if mode == "shadow_alignment" and (event.keycode == KEY_LEFT or event.keycode == KEY_RIGHT): alignment = clampf(alignment + (0.04 if event.keycode == KEY_RIGHT else -0.04), -0.5, 0.5)
 		if mode == "bubble_photo" and event.keycode == KEY_SPACE:
 			if not bubble_ready: bubble_ready = true; bubble_aim = Vector2(790, target.y); prompt = "泡泡飛出去啦！等它包住吉祥物，再按空白鍵拍照"
@@ -998,28 +1034,26 @@ func _ribbon_input(action: int) -> void:
 	if beat >= 8: _finish(devil_progress >= (4 if assisted else 6), mistakes == 0 and devil_progress == 8)
 
 func _rotate_pipe(m: Vector2) -> void:
-	if m.x < 370 or m.x > 910 or m.y < 205 or m.y > 545: return
-	var col := int((m.x - 370) / 135.0); var row := int((m.y - 205) / 85.0); var idx := row * 4 + col
-	if idx < 0 or idx >= 16: return
-	flower_cells[idx] = ((flower_cells[idx] << 1) & 15) | (flower_cells[idx] >> 3)
-	move_count += 1; _set_formula_score("pipe_turns", "路線轉動計分調整", maxi(0, 1000 - move_count * 20))
-	if _pipe_solved(): _finish(true, move_count <= 4)
+	var board: Rect2 = PipePlanScript.BOARD_RECT
+	if not board.has_point(m): return
+	var cell_size := board.size / 4.0
+	var col := int((m.x - board.position.x) / cell_size.x)
+	var row := int((m.y - board.position.y) / cell_size.y)
+	_rotate_pipe_index(row * 4 + col)
+
+func _rotate_pipe_index(idx: int) -> void:
+	if pipe_connected or idx < 0 or idx >= 16: return
+	pipe_cursor = idx
+	var state: Dictionary = pipe_model.rotate(idx)
+	flower_cells = pipe_model.cells
+	move_count = int(state.total_turns)
+	pipe_connected = bool(state.connected)
+	if int(state.score) != score: _set_formula_score("pipe_orders", "供水工單與轉動計分", int(state.score))
+	if pipe_connected: _feedback("泉水接通了，看看花床！", MINT)
+	_sync_presentation()
 
 func _pipe_solved() -> bool:
-	# Validate path by flooding reciprocal connections from upper-left inlet.
-	var dirs: Array[Vector2i] = [Vector2i(0,-1), Vector2i(1,0), Vector2i(0,1), Vector2i(-1,0)]
-	var bits: Array[int] = [1,2,4,8]
-	var visited := {0: true}; var queue: Array[int] = [0]; var reached_end := false
-	while not queue.is_empty():
-		var at: int = queue.pop_front(); var x: int = at % 4; var y: int = int(at / 4)
-		if at == 15: reached_end = true
-		for d in 4:
-			if flower_cells[at] & bits[d] == 0: continue
-			var nx: int = x + dirs[d].x; var ny: int = y + dirs[d].y
-			if nx < 0 or nx > 3 or ny < 0 or ny > 3: continue
-			var n: int = ny * 4 + nx; var opposite: int = (d + 2) % 4
-			if flower_cells[n] & bits[opposite] and not visited.has(n): visited[n] = true; queue.append(n)
-	return reached_end and (flower_cells[0] & 1) != 0 and (flower_cells[15] & 4) != 0
+	return bool(pipe_model.snapshot().connected)
 
 func _bubble_click(m: Vector2) -> void:
 	if m.y < 225 or m.y > 570: return
@@ -1105,7 +1139,7 @@ func _feedback_anchor() -> Vector2:
 		"crowd_traffic": return Vector2(640, 420)
 		"hat_catching": return Vector2(p.x, 560)
 		"ribbon_rhythm": return Vector2(640, 420)
-		"flower_pipes": return Vector2(370 + (pipe_cursor % 4) * 135 + 55, 205 + int(pipe_cursor / 4) * 85 + 30)
+		"flower_pipes": return Vector2(150, 460)
 		"sign_balance": return Vector2(640, 340)
 		"shadow_alignment": return Vector2(940 + alignment * 300, 390)
 		"bubble_photo": return Vector2(790, target.y)
@@ -1174,7 +1208,7 @@ func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
-	if mode == "balloon_delivery":
+	if mode in ["balloon_delivery", "flower_pipes"]:
 		if mode == "balloon_delivery" and is_instance_valid(presentation):
 			var harbor_texture: Texture2D = presentation.texture()
 			if harbor_texture != null:

@@ -5,7 +5,7 @@
   {"id":"game-004","mode":"crowd_traffic","name":"人潮指揮","goal":"切換號誌，讓兩隊遊客安全過路口","instructions":"按 Q／E 或點擊切換號誌，讓相同方向的隊伍通過。","devil_hint":"六隊全數安全通過且號誌方向正確","devil":"六隊全數安全通過且號誌方向正確","ordinary":"安全帶完六隊遊客"},
   {"id":"game-005","mode":"hat_catching","name":"帽子救援","goal":"左右走位接住落帽，選擇避開或利用陣風","instructions":"按 ← → 或移動滑鼠接住落帽。","devil_hint":"六頂全接且零漏接","devil":"六頂全接且零漏接","ordinary":"接住至少四頂帽子"},
   {"id":"game-006","mode":"ribbon_rhythm","name":"彩帶節拍","goal":"跟著節拍依序按左、右或跳","instructions":"跟隨八拍提示按 ←、→ 或空白鍵；滑鼠左／右半側對應方向。","devil_hint":"八拍全中且強拍動作正確","devil":"八拍全中且強拍動作正確","ordinary":"八拍中成功踩中六拍"},
-  {"id":"game-007","mode":"flower_pipes","name":"花壇水路","goal":"轉動花管，讓水從入口流到出口","instructions":"用方向鍵選管線，按空白鍵或點擊旋轉。","devil_hint":"四次或更少轉動完成連通","devil":"四次或更少轉動完成連通","ordinary":"連通水龍頭與花盆"},
+  {"id":"game-007","mode":"flower_pipes","name":"花壇水路","goal":"完成三張供水工單，將每張的全部花床接通","instructions":"方向鍵選管節，空白鍵或點管節旋轉。第二、三張需要兩個出口同時供水。","devil_hint":"三張都不超過目標轉數：4／7／8 次","devil":"三張都不超過目標轉數：4／7／8 次","ordinary":"完成三張供水工單"},
   {"id":"game-008","mode":"sign_balance","name":"招牌平衡","goal":"左右調節招牌重心，兼顧陣風與移動落點","instructions":"按 ← → 調整重心，或點擊畫面左／右側微調。","devil_hint":"不觸碰安全線且七拍都在中心落點","devil":"不觸碰安全線且七拍都在中心落點","ordinary":"穩住招牌七個搖擺拍"},
   {"id":"game-009","mode":"shadow_alignment","name":"影子捉迷藏","goal":"移動燈光，把角色影子對齊牆上目標輪廓","instructions":"移動滑鼠或按 ← → 移動燈光，讓影子留在目標內三秒。","devil_hint":"第一次對準後連續維持三秒","devil":"第一次對準後連續維持三秒","ordinary":"將影子放入輪廓並維持三秒"},
   {"id":"game-010","mode":"bubble_photo","name":"泡泡合照","goal":"瞄準並吹出泡泡，在泡泡包住吉祥物時拍照","instructions":"點擊瞄準並吹泡泡，待吉祥物周圍圓環亮起時再點它拍照。","devil_hint":"三張合照都置中且完整包住吉祥物","devil":"三張合照都置中且完整包住吉祥物","ordinary":"拍到至少兩張泡泡合照"},

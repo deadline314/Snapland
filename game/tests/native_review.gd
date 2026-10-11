@@ -41,6 +41,7 @@ func _run() -> void:
   var waypoint=0
   var last_cycle=-1
   var puzzle_done=false
+  var pipe_order_played=-1
   var rhythm=[KEY_LEFT,KEY_RIGHT,KEY_SPACE,KEY_RIGHT,KEY_LEFT,KEY_SPACE,KEY_LEFT,KEY_RIGHT]
   var waypoints=[Vector2(520,305),Vector2(780,270),Vector2(880,270),Vector2(960,360),Vector2(820,480),Vector2(1080,320)]
   var balloon_brake=false
@@ -74,9 +75,10 @@ func _run() -> void:
     6:
      if s.beat_window and s.beat<8: _key(rhythm[s.beat])
     7:
-     if not puzzle_done:
-      for point in [Vector2(426,237),Vector2(426,322),Vector2(696,322),Vector2(831,492)]: _click(point)
-      puzzle_done=true
+     if s.pipe_model.order_index!=pipe_order_played:
+      pipe_order_played=s.pipe_model.order_index
+      var routes=[[0,4,6,15],[0,1,2,3,4,8,12],[0,1,2,3,6,10,14,15]]
+      for cell in routes[pipe_order_played]: _click(Vector2(400+(cell%4)*160,216+int(cell/4)*100))
     8:
      Input.action_release('ui_left');Input.action_release('ui_right')
      var expected=s.balance+sin((s.phase+0.016)*1.7)*0.50*0.016
