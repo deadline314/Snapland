@@ -6,6 +6,8 @@ const WATER = preload("res://game/world/water.gdshader")
 const STONE = preload("res://game/world/stone.gdshader")
 const WOOD = preload("res://game/world/wood.gdshader")
 const GRASS = preload("res://game/world/grass.gdshader")
+const LIVING_SPRITE = preload("res://game/world/living_sprite.gdshader")
+const ComponentAnimationScript = preload("res://game/world/component_animation.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const IDENTITY_ATLAS_PATH := "res://assets/characters/identities-v3.png"
 const IDENTITY_REGIONS := {
@@ -31,7 +33,7 @@ var camera: Camera3D
 var sun: DirectionalLight3D
 var environment: Environment
 var points: Array[Dictionary] = []
-var animated: Array[Dictionary] = []
+var component_motion: Node
 var lamps: Array[OmniLight3D] = []
 var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
@@ -56,6 +58,9 @@ var fountain_water: ShaderMaterial
 var sea_material: ShaderMaterial
 
 func _ready() -> void:
+	component_motion=ComponentAnimationScript.new()
+	component_motion.name="ComponentAnimation"
+	add_child(component_motion)
 	_load_foliage_atlas()
 	_load_identity_atlas()
 	_build_lighting()
@@ -67,6 +72,7 @@ func _ready() -> void:
 	_build_gates()
 	_build_player()
 	_build_camera()
+	component_motion.finish_registration()
 	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
 	set_night(false)
 
@@ -263,7 +269,7 @@ func _point(id: String, title: String, pos: Vector3) -> void:
 	points.append({"id":id,"label":title,"position":pos})
 	var marker := _label("◇", pos + Vector3(0,2.1,0), 38, GOLD)
 	points[-1]["marker"]=marker
-	animated.append({"node":marker,"base":marker.position,"phase":points.size()*0.7,"kind":"float"})
+	component_motion.register_component(marker,"marker",float(points.size())*0.7)
 
 func _build_land() -> void:
 	sea_material = ShaderMaterial.new()
@@ -459,13 +465,41 @@ func _foliage_sprite(kind: String, ground: Vector3, world_height: float) -> Spri
 	sprite.alpha_scissor_threshold=0.45
 	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	sprite.position=ground+Vector3(0,world_height*0.5,0)
+	var phase := fposmod(ground.x * 0.713 + ground.z * 0.391, TAU)
+	_set_living_sprite_material(sprite, 0, phase, 0.72)
 	add_child(sprite)
+	component_motion.register_component(sprite,"foliage",phase/TAU)
 	return sprite
+
+
+func _set_living_sprite_material(sprite: Sprite3D, kind: int, phase: float, breath_rate: float, idle_role := 0) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader=LIVING_SPRITE
+	material.set_shader_parameter("motion_kind",kind)
+	material.set_shader_parameter("idle_role",idle_role)
+	material.set_shader_parameter("phase",phase)
+	material.set_shader_parameter("breath_rate",breath_rate)
+	material.set_shader_parameter("breath_pixels",0.65)
+	material.set_shader_parameter("gesture_pixels",0.65)
+	material.set_shader_parameter("tint",Color.WHITE)
+	var texture_source: Texture2D=sprite.texture
+	var uv_rect := Rect2(0.0,0.0,1.0,1.0)
+	if texture_source is AtlasTexture and texture_source.atlas != null:
+		var atlas_texture := texture_source as AtlasTexture
+		var atlas_size := Vector2(atlas_texture.atlas.get_width(),atlas_texture.atlas.get_height())
+		uv_rect=Rect2(atlas_texture.region.position/atlas_size,atlas_texture.region.size/atlas_size)
+		texture_source=atlas_texture.atlas
+	material.set_shader_parameter("texture_albedo",texture_source)
+	material.set_shader_parameter("uv_rect",Vector4(uv_rect.position.x,uv_rect.position.y,uv_rect.size.x,uv_rect.size.y))
+	sprite.material_override=material
+	component_motion.register_shader(material)
+	return material
 
 func _lantern(pos: Vector3) -> void:
 	_cylinder(pos,0.14,0.36,Color("#805b39"))
 	var shade := _box(pos+Vector3(0,0.05,0),Vector3(0.3,0.3,0.3),Color("#f6ca78"))
 	shade.material_override = _mat(Color("#ffd68b"),true)
+	component_motion.register_component(shade,"soft_scale",float(lamps.size())*0.23)
 	var cap := _cone(pos+Vector3(0,0.24,0),Color("#7d6345"))
 	cap.scale=Vector3(0.2,0.12,0.2)
 	if lamps.size() < 12:
@@ -476,6 +510,7 @@ func _lantern(pos: Vector3) -> void:
 		light.light_energy = 0.0
 		add_child(light)
 		lamps.append(light)
+		component_motion.register_light(light,float(lamps.size())*0.17)
 
 func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 	for side in [-1,1]:
@@ -485,7 +520,7 @@ func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 	_label(title,pos+Vector3(0,3.5,0.43),30)
 	for i in range(7):
 		var flag := _box(pos+Vector3(-wide*0.45+i*wide*0.15,2.85,0),Vector3(0.4,0.35,0.04),CORAL if i%2==0 else GOLD)
-		animated.append({"node":flag,"base":flag.position,"phase":i*0.6,"kind":"flag"})
+		component_motion.register_component(flag,"flag",float(i)*0.6)
 
 func _build_dock() -> void:
 	_box(Vector3(0,0.0,21),Vector3(5,0.3,13),Color("#a17b52"))
@@ -562,7 +597,7 @@ func _build_plaza() -> void:
 	for i in range(12):
 		var a := i*TAU/12.0
 		var bead := _sphere(Vector3(cos(a)*1.2,1.8,sin(a)*1.2),0.08,Color("#b3e4df"))
-		animated.append({"node":bead,"base":bead.position,"phase":i*0.5,"kind":"water"})
+		component_motion.register_component(bead,"water",float(i)*0.5)
 	for i in range(8):
 		var a := i*TAU/8.0
 		var lamp_post := Vector3(cos(a)*9.6,0,sin(a)*8.0)
@@ -691,6 +726,7 @@ func _lamppost(pos: Vector3) -> void:
 		decorative_light.light_energy=0.0
 		add_child(decorative_light)
 		lamps.append(decorative_light)
+		component_motion.register_light(decorative_light,float(lamps.size())*0.17)
 		return
 	_cylinder(pos+Vector3(0,1.2,0),0.09,2.4,Color("#554c3f"))
 	_cylinder(pos+Vector3(0,2.25,0),0.28,0.12,Color("#92734c"))
@@ -706,6 +742,7 @@ func _lamppost(pos: Vector3) -> void:
 	light.light_energy=0.0
 	add_child(light)
 	lamps.append(light)
+	component_motion.register_light(light,float(lamps.size())*0.17)
 
 func _build_avenue() -> void:
 	var names := ["氣球快遞","風箏穿環","噴泉跳拍","人潮指揮","帽子救援","彩帶節拍","花壇拼圖","招牌平衡","影子捉迷藏","泡泡合照","長椅換位","迎賓大合奏"]
@@ -734,7 +771,7 @@ func _game_feature(index: int, pos: Vector3, color: Color) -> void:
 		0: # Balloon delivery: cluster, threads and a small parcel basket.
 			for j in range(3):
 				var balloon := _sphere(pos+Vector3(-0.65+j*0.65,3.7+j*0.18,0),0.36,[CORAL,GOLD,Color("#77c7ce")][j])
-				animated.append({"node":balloon,"base":balloon.position,"phase":j,"kind":"float"})
+				component_motion.register_component(balloon,"balloon",float(j))
 				_box(pos+Vector3(-0.65+j*0.65,3.25,0),Vector3(0.025,0.38,0.025),CREAM)
 			_box(pos+Vector3(0,3.02,0),Vector3(0.64,0.27,0.46),Color("#9a7149"))
 		1: # Kite-ring course: paper kite tails and three target hoops.
@@ -927,8 +964,14 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	sprite.billboard=BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	sprite.position=pos+Vector3(0,1.2,0)
-	sprite.shaded=false
+	sprite.shaded=true
+	var profile := "character_ticket" if role=="ticket" else ("character_imp" if role=="imp" else "character_announcer")
+	var breath_rate := 0.74 if role=="ticket" else (1.23 if role=="imp" else 0.53)
+	var phase := 0.45 if role=="ticket" else (1.9 if role=="imp" else 3.2)
+	var idle_role := 1 if role=="ticket" else (2 if role=="imp" else 3)
+	_set_living_sprite_material(sprite,1,phase,breath_rate,idle_role)
 	add_child(sprite)
+	component_motion.register_component(sprite,profile,phase/TAU)
 	character_sprites.append({"sprite":sprite,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer")})
 	_label(title,pos+Vector3(0,2.65,0),22)
 
@@ -1209,7 +1252,9 @@ func _build_player() -> void:
 	avatar.shaded=true
 	avatar.position.y=1.2
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,"front",0,"idle")
+	_set_living_sprite_material(avatar,1,0.18,0.72)
 	player.add_child(avatar)
+	component_motion.register_component(avatar,"character_hero",0.18/TAU)
 	add_child(player)
 	# Ground collision covers walkable land and dock. Sea never traps the player.
 	for geometry in [Vector3(40,0.2,66),Vector3(5,0.2,13)]:
@@ -1276,13 +1321,6 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	time+=delta
-	if reduced_motion: return
-	for item in animated:
-		var node: Node3D=item.node
-		var amount := 0.16 if item.kind=="float" else 0.04
-		if item.kind=="water": amount=0.32
-		node.position.y=item.base.y+sin(time*1.5+item.phase)*amount
-		if item.kind=="flag": node.rotation.z=sin(time*2+item.phase)*0.08
 
 func interact() -> void:
 	if not blocked and not nearest.is_empty():
@@ -1317,6 +1355,9 @@ func _refresh_avatar_texture(frame: int) -> void:
 	var action := avatar_action if avatar_action_remaining > 0.0 else "idle"
 	if last_avatar_direction == facing and last_avatar_frame == frame and last_avatar_action == action: return
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,facing,frame,action)
+	var avatar_material := avatar.material_override as ShaderMaterial
+	if avatar_material != null:
+		avatar_material.set_shader_parameter("texture_albedo",avatar.texture)
 	last_avatar_direction=facing
 	last_avatar_frame=frame
 	last_avatar_action=action
@@ -1329,12 +1370,16 @@ func set_night(value: bool) -> void:
 	environment.ambient_light_color=Color("#6b83ad") if value else Color("#b7d5c8")
 	environment.ambient_light_energy=0.32 if value else 0.50
 	environment.glow_intensity=0.28 if value else 0.18
-	for lamp in lamps: lamp.light_energy=0.8 if value else 0.0
+	for lamp in lamps:
+		var energy := 0.8 if value else 0.0
+		lamp.light_energy=energy
+		if is_instance_valid(component_motion): component_motion.set_light_baseline(lamp,energy)
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
 	sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	fountain_water.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
+	if is_instance_valid(component_motion): component_motion.set_reduced_motion(reduced_motion)
 
 func update_collection(photos: Dictionary) -> void:
 	for point in points:
