@@ -22,6 +22,27 @@ func _initialize() -> void:
 	assert(is_equal_approx(ParkWorld.advance_walk_phase(0.83, 0.0), 0.83), "a blocked or stationary tick leaves gait phase unchanged")
 	assert(is_equal_approx(ParkWorld.advance_walk_phase(0.4, ParkWorld.WALK_STRIDE_DISTANCE), 0.4), "one full stride wraps without resetting the carried phase")
 	assert(ParkWorld.walk_frame_for_phase(0.0) == 0 and ParkWorld.walk_frame_for_phase(ParkWorld.WALK_STRIDE_DISTANCE * 0.999) == 7, "distance phase selects the full eight-frame loop")
+	var phase8 := ParkWorld.WALK_STRIDE_DISTANCE / 16.0
+	var reached8 := {}
+	reached8[ParkWorld.walk_frame_for_phase(phase8,8)] = true
+	for _step in range(8):
+		phase8 = ParkWorld.advance_walk_phase(phase8,ParkWorld.WALK_STRIDE_DISTANCE / 8.0)
+		reached8[ParkWorld.walk_frame_for_phase(phase8,8)] = true
+	assert(reached8.size() == 8, "eight consecutive equal distance steps reach all eight authored walk frames")
+	var phase16 := ParkWorld.WALK_STRIDE_DISTANCE / 32.0
+	var reached16 := {}
+	reached16[ParkWorld.walk_frame_for_phase(phase16,16)] = true
+	for _step in range(16):
+		phase16 = ParkWorld.advance_walk_phase(phase16,ParkWorld.WALK_STRIDE_DISTANCE / 16.0)
+		reached16[ParkWorld.walk_frame_for_phase(phase16,16)] = true
+	assert(reached16.size() == 16, "sixteen consecutive equal distance steps reach all sixteen authored walk frames")
+	assert(ParkWorld.walk_frame_for_phase(ParkWorld.WALK_STRIDE_DISTANCE * 0.999,16) == 15, "sixteen-frame loop selects its last pose just before the stride boundary")
+	for invalid_count in [0,7,9,12,17]:
+		assert(ParkWorld.walk_frame_for_phase(0.0,invalid_count) == 0 and ParkWorld.walk_frame_for_phase(ParkWorld.WALK_STRIDE_DISTANCE * 0.999,invalid_count) == 7, "invalid frame count %d safely defaults to eight frames" % invalid_count)
+	assert(ParkWorld.walk_frame_for_phase(-ParkWorld.WALK_STRIDE_DISTANCE / 16.0,16) == 15, "negative phase wraps into the final sixteen-frame pose")
+	assert(ParkWorld.walk_frame_for_phase(-ParkWorld.WALK_STRIDE_DISTANCE,16) == 0, "negative whole-stride boundary wraps to frame zero")
+	assert(ParkWorld.walk_frame_for_phase(ParkWorld.WALK_STRIDE_DISTANCE,16) == 0, "positive whole-stride boundary wraps to frame zero")
+
 	call_deferred("_probe_world_travel")
 
 func _probe_world_travel() -> void:

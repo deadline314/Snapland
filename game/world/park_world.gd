@@ -791,6 +791,7 @@ func _build_plaza() -> void:
 	collision.add_child(shape)
 	add_child(collision)
 	_kiosk(Vector3(-6,0,5),"導覽亭",TEAL)
+	# Keep the whole sprite on one ground level: the raised avenue starts at x=-4.5.
 	_npc(Vector3(-5.8,0,10),CORAL,"票票")
 	_point("guide","與票票合照",Vector3(-5.8,0,10))
 	_kiosk(Vector3(6,0,5),"拍貼本",CORAL)
@@ -1520,7 +1521,8 @@ func _physics_process(delta: float) -> void:
 	if avatar_is_walking:
 		facing = quantize_walk_direction(horizontal_delta, facing)
 		walk_distance_phase = advance_walk_phase(walk_distance_phase, travelled)
-	var frame := walk_frame_for_phase(walk_distance_phase)
+	var walk_frame_count := int(avatar_renderer.walk_frame_count(facing)) if avatar_renderer != null else 8
+	var frame := walk_frame_for_phase(walk_distance_phase, walk_frame_count)
 	if avatar_action_remaining > 0.0:
 		avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
 		if avatar_action_remaining == 0.0: avatar_action=""
@@ -1562,9 +1564,10 @@ static func quantize_walk_direction(world_delta: Vector2, previous_direction: St
 static func advance_walk_phase(phase: float, travelled: float) -> float:
 	return fposmod(phase + maxf(0.0, travelled), WALK_STRIDE_DISTANCE)
 
-static func walk_frame_for_phase(phase: float) -> int:
+static func walk_frame_for_phase(phase: float, frame_count: int = 8) -> int:
 	var normalized_phase := fposmod(phase, WALK_STRIDE_DISTANCE) / WALK_STRIDE_DISTANCE
-	return clampi(floori(normalized_phase * 8.0), 0, 7)
+	var safe_frame_count := frame_count if frame_count in [8, 16] else 8
+	return clampi(floori(normalized_phase * float(safe_frame_count)), 0, safe_frame_count - 1)
 
 func interact() -> void:
 	if not blocked and not nearest.is_empty():
