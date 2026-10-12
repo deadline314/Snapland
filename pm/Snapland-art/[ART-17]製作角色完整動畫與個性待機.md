@@ -133,3 +133,5 @@ Root 實際查看兩張 1280×720 原生比較圖：三張全身姿勢均以 200
 [靜態比較與退件紀錄](../../design/runtime/character-k1-static-review.md) · [本次量測](images/ART-17-K1-static-measurements.json) · [原生 log](images/ART-17-K1-static-native.log) · [逐檔證據索引](images/ART-17-K1-static-evidence.json)。本次記錄四個 Root 實際新讀來源；原有八方研究與 Commit-3 六來源紀錄沿用原票，不假稱本次重新查閱。
 
 本證據包固定基準：`909356b551f280810f860417b1629fa2b5398d45`；分支：`feature/island-first-park`。保存的原生量測保留實際截圖基準，沒有在證據包新基準重跑 GPU。票況：進行中。
+
+[本輪靜態退件證據提交](https://github.com/deadline314/Snapland/commit/9c69d0ae48929a63a356db509c026318261424fb)。
