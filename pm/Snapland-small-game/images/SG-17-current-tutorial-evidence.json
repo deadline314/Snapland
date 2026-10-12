@@ -1,0 +1,79 @@
+{
+  "base_commit": "63e2d06df43382be860cafafdf2d40eff308692e",
+  "branch": "feature/island-first-park",
+  "scope": "First-visit tutorial panel and current screenshots only; not a new gameplay or animation review.",
+  "native": {
+    "result": "PASS",
+    "command": "Godot native GPU run of res://game/tests/native_kite_tutorial_current_review.tscn",
+    "exit": 0,
+    "elapsed_msec": 5888,
+    "errors": 0,
+    "resource_leaks": 0,
+    "reviewed_pages": [
+      1,
+      2,
+      3
+    ],
+    "screenshots": [
+      "pm/Snapland-small-game/images/SG-17-kite-current-tutorial-step-01.png",
+      "pm/Snapland-small-game/images/SG-17-kite-current-tutorial-step-02.png",
+      "pm/Snapland-small-game/images/SG-17-kite-current-tutorial-step-03.png"
+    ],
+    "log": "pm/Snapland-small-game/images/SG-17-kite-current-tutorial-native.log",
+    "scope": "first-visit tutorial panel and image presentation only; no gameplay or movie acceptance claim"
+  },
+  "root_local_tests": [
+    "Tutorial panel/catalog PASS; deliberate missing-image fixture warning",
+    "Tutorial seen/save failure handling PASS; deliberate malformed-data warnings"
+  ],
+  "files": [
+    {
+      "path": "assets/ui/tutorials/game-002-step-01.png",
+      "sha256": "5b460a3866e61938a8d084c11243198ca0564be5219c109e1b2baa0c53a1b07f"
+    },
+    {
+      "path": "assets/ui/tutorials/game-002-step-02.png",
+      "sha256": "bc329e8a9b9236b5aa9358f92f8d7d6efbf762eceedadac6f3445bd3685bd427"
+    },
+    {
+      "path": "assets/ui/tutorials/game-002-step-03.png",
+      "sha256": "59a47772f3b06ed7900ce7db463bfdb0ec72e4fad9fc661961fd3f8b0596f68a"
+    },
+    {
+      "path": "game/data/tutorials.json",
+      "sha256": "661d9aaf1d47edb9646c036c8682e0a8193489d31c9d4f3ae5a109567082afb9"
+    },
+    {
+      "path": "game/tests/native_kite_tutorial_current_review.gd",
+      "sha256": "0a1f3d1719e1042a4e7abeda5e46071295ff63972d750d04db3c9f2551f65804"
+    },
+    {
+      "path": "game/tests/native_kite_tutorial_current_review.gd.uid",
+      "sha256": "1db67d7db78d15afceb9cacf7bb4e42e3b81853aa444a9d21d17ef3976041918"
+    },
+    {
+      "path": "game/tests/native_kite_tutorial_current_review.tscn",
+      "sha256": "07f238105a0343eff6c2613f3eb02fce3c6958407ac9512f3bf92223a67ace3d"
+    },
+    {
+      "path": "pm/Snapland-small-game/[SG-17]精修風箏穿環玩法與計分.md",
+      "sha256": "2b309fcfbea903b018ca043032832c6a006396a42c1b94156d43e040d161c47f"
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-kite-current-tutorial-step-01.png",
+      "sha256": "3c75b6b3fa4227a9e2841fea78417e12095e27754a72aeea328021b6b2ffb54b"
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-kite-current-tutorial-step-02.png",
+      "sha256": "406f9f5f238f51daa1520e7744a2f274adfac4375976d496ddc8809df6a11e69"
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-kite-current-tutorial-step-03.png",
+      "sha256": "50cdb351dca72130b233b3fffe8719b10c344a90c6ef90f6831c70f55301e25d"
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-kite-current-tutorial-native.log",
+      "sha256": "cfeb4aab56aa05ce5835d448deebf3e3f8528a8e593d43b162ed910c0b36595a"
+    }
+  ]
+}
