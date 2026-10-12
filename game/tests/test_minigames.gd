@@ -2,6 +2,7 @@ extends SceneTree
 
 const Session = preload("res://game/minigames/session.gd")
 const HUD = preload("res://game/ui/minigame_hud.gd")
+const RibbonView = preload("res://game/minigames/ribbon_rhythm_view.gd")
 const Model = preload("res://game/minigames/melody_memory_model.gd")
 var checks := 0
 var failed_checks := 0
@@ -228,25 +229,64 @@ func _test_hat_boundaries() -> void:
 	checks += 1
 
 func _test_ribbon_boundaries() -> void:
-	var s := _new_session("game-006", true)
+	var s := _new_session("game-006")
+	var ribbon_view := s.presentation as RibbonView
+	var feedback_anchor: Vector2 = s._feedback_anchor()
+	s.minigame_hud.set_feedback_at("節拍狀態", feedback_anchor)
+	var feedback_control := s.minigame_hud.find_child("ContextFeedback", true, false) as Control
+	_expect(feedback_control != null and feedback_anchor == Vector2(640, 230), "Ribbon feedback uses the clear strip below the HUD")
+	if feedback_control != null and ribbon_view != null:
+		var toast_rect := Rect2(feedback_control.position, feedback_control.size)
+		for pose in ["walk_left", "wave_front", "jump_front"]:
+			var dancer_bounds := ribbon_view.avatar_bounds_for_pose(pose)
+			var partner_bounds := ribbon_view.avatar_bounds_for_pose(pose, true)
+			_expect(not toast_rect.intersects(dancer_bounds) and not toast_rect.intersects(partner_bounds), "Ribbon feedback misses both dancers during %s choreography" % pose)
+		for cue_rect in [RibbonView.CURRENT_CUE_RECT, RibbonView.UPCOMING_CUE_RECTS[0], RibbonView.UPCOMING_CUE_RECTS[1]]:
+			_expect(not toast_rect.intersects(cue_rect), "Ribbon feedback never covers a visible gesture card")
 	var results: Array[Dictionary] = []
-	s.finished.connect(func(value: Dictionary): results.append(value))
-	var sequence: Array[int] = [KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_RIGHT, KEY_LEFT, KEY_SPACE, KEY_LEFT, KEY_RIGHT]
-	for i in 8:
-		while not s.beat_window: s._process(0.01)
-		_key(s, sequence[i])
-		if i < 7: s._process(0.82)
-	assert(results.size() == 1 and results[0].success and results[0].devil and results[0].assisted)
+	s.finished.connect(func(value: Dictionary) -> void: results.append(value.duplicate(true)))
+	_expect(s.ribbon_model.snapshot().upcoming.size() == 2, "ribbon opening presents two authored upcoming gestures")
+	_advance_ribbon_to(s, 1.02)
+	s._on_ribbon_action_pressed("right")
+	_expect(s.mistakes == 1 and s.devil_progress == 0 and results.is_empty(), "wrong direction records an error without auto-advancing or answering")
+	s._on_ribbon_action_pressed("left")
+	_expect(s.devil_progress == 1 and s.ribbon_model.snapshot().gesture_index == 1, "correct action remains available after a wrong direction")
+	var gestures: Array = s.ribbon_model.GESTURES
+	for index in range(1, gestures.size()):
+		var cue_time := 1.02 + float(index) * 0.94
+		_advance_ribbon_to(s, cue_time)
+		var action := str(gestures[index].action)
+		s._on_ribbon_action_pressed(action)
+		if float(gestures[index].hold) > 0.0:
+			_advance_ribbon_to(s, cue_time + float(gestures[index].hold))
+			s._on_ribbon_action_released(action)
+	_expect(results.size() == 1 and bool(results[0].success) and not bool(results[0].devil), "eight correct gestures with an earlier error finish ordinary, never devil")
+	var ledger_score := 0
+	for event in s.score_events: ledger_score += int(event.amount)
+	_expect(s.score == ledger_score and s.score == s.ribbon_model.score and s._ribbon_score_cursor == 8, "Session score summary mirrors all eight actual gesture ledger entries")
+	_expect(s._ribbon_note_cursor == int(s.ribbon_model.snapshot().note_played_serial) and s.mistakes == 1 and s.ribbon_model.snapshot().precise_count >= 6, "audio cue cursor and precision/error ledgers stay independently observable")
 	s.queue_free()
-
-	var wrong := _new_session("game-006", true)
-	var wrong_results: Array[Dictionary] = []
-	wrong.finished.connect(func(value: Dictionary): wrong_results.append(value))
-	wrong._process(0.01)
-	_key(wrong, KEY_RIGHT)
-	assert(wrong.mistakes == 1 and wrong.beat == 1 and wrong_results.is_empty())
-	wrong.queue_free()
+	var assisted := _new_session("game-006", true)
+	_advance_ribbon_to(assisted, 1.02)
+	var assist_elapsed: float = float(assisted.ribbon_model.snapshot().elapsed)
+	assisted._on_ribbon_action_pressed("left")
+	_expect(assisted.ribbon_model.snapshot().elapsed == assist_elapsed and assisted.devil_progress == 1, "assistance does not automate an input and only widens timing tolerance")
+	assisted.set_paused(true)
+	var frozen: float = float(assisted.ribbon_model.snapshot().elapsed)
+	assisted._process(0.2)
+	_expect(is_equal_approx(float(assisted.ribbon_model.snapshot().elapsed), frozen), "paused ribbon clock freezes all gesture timing")
+	assisted.reset_round()
+	_expect(assisted.score == 0 and assisted._ribbon_note_cursor == 0 and assisted.ribbon_model.snapshot().gesture_index == 0, "retry clears ribbon score, cue cursor and hold state")
+	_expect(assisted.score_summary().rule.contains("四個重拍") and not bool(assisted.ribbon_model.snapshot().devil_success), "score rules expose strong beats and assisted devil exclusion")
+	assisted.queue_free()
 	checks += 1
+
+func _advance_ribbon_to(session: Control, target: float) -> void:
+	var iterations := 0
+	while float(session.ribbon_model.snapshot().elapsed) + 0.00001 < target and iterations < 1200:
+		session._process(minf(0.02, target - float(session.ribbon_model.snapshot().elapsed)))
+		iterations += 1
+	_expect(iterations < 1200, "ribbon clock reaches each scheduled cue within a bounded number of steps")
 
 func _test_sign_boundaries() -> void:
 	var s := _new_session("game-008", true)
@@ -985,14 +1025,24 @@ func _test_all_modes() -> void:
 			assert(s.minigame_hud._objective.text == str(definition.goal), "HUD objective must be correct immediately after start: %s" % definition.id)
 			var results: Array[Dictionary] = []
 			s.finished.connect(func(value: Dictionary): results.append(value))
-			var rhythm: Array[int] = [KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_RIGHT, KEY_LEFT, KEY_SPACE, KEY_LEFT, KEY_RIGHT]
 			var last_cycle := -1
 			var waypoint := 0
 			var balloon_steps := 0
 			var pipe_order_played := -1
 			var bench_order_played := -1
 			if number == 1: _key(s, KEY_ENTER)
-			while not s.ended:
+			if number == 6:
+				var gestures: Array = s.ribbon_model.GESTURES
+				for gesture_index in gestures.size():
+					var cue_time := 1.02 + float(gesture_index) * 0.94
+					_advance_ribbon_to(s, cue_time)
+					var action := str(gestures[gesture_index].action)
+					var keycode := KEY_LEFT if action == "left" else (KEY_RIGHT if action == "right" else KEY_SPACE)
+					_key(s, keycode)
+					if float(gestures[gesture_index].hold) > 0.0:
+						_advance_ribbon_to(s, cue_time + float(gestures[gesture_index].hold))
+						_key_release(s, keycode)
+			while not s.ended and number != 6:
 				match number:
 					1:
 						var points: Array[Vector2] = [Vector2(520, 305), Vector2(780, 270), Vector2(820, 480), Vector2(1080, 320)]
@@ -1023,8 +1073,6 @@ func _test_all_modes() -> void:
 							if not s.hats_consumed[i] and s.hat_y[i] > closest_y:
 								closest = i; closest_y = s.hat_y[i]
 						if closest >= 0: _mouse_move(s, s.hat_x[closest], 570)
-					6:
-						if s.beat_window and s.beat < 8: _key(s, rhythm[s.beat])
 					7:
 						if s.pipe_model.order_index != pipe_order_played:
 							pipe_order_played = s.pipe_model.order_index
@@ -1066,7 +1114,7 @@ func _test_all_modes() -> void:
 			if number == 1:
 				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
 			else:
-				var expected_devil: bool = (not assisted) if number in [2, 11, 12] else true
+				var expected_devil: bool = (not assisted) if number in [2, 6, 11, 12] else true
 				assert(results.size() == 1 and results[0].success and results[0].devil == expected_devil, "Reachability game-%03d assist=%s results=%s" % [number, assisted, str(results)])
 			var score_detail: Dictionary = results[0].get("score_summary", {})
 			var displayed_total := 0
@@ -1093,9 +1141,10 @@ func _test_all_modes() -> void:
 	var spam := _new_session("game-006")
 	spam._process(0.01)
 	for key in [KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_RIGHT, KEY_LEFT, KEY_SPACE, KEY_LEFT, KEY_RIGHT]: _key(spam, key)
-	assert(spam.beat == 1 and not spam.ended)
+	assert(spam.beat == 0 and not spam.ended and spam.ribbon_model.snapshot().correct_count == 0, "early spam does not advance cues or create an automatic answer")
 	while not spam.ended: spam._process(0.01)
-	assert(not spam.won and not spam.devil_won and spam.mistakes == 7)
+	var spam_state: Dictionary = spam.ribbon_model.snapshot()
+	assert(not spam.won and not spam.devil_won and spam.mistakes == int(spam_state.error_count) and int(spam_state.correct_count) == 0 and int(spam_state.missed_count) == 8 and spam.score == 0, "spam earns no answers or score; each scheduled cue resolves as a miss")
 	spam.queue_free()
 
 func _test_photo_and_rhythm_grades() -> void:
@@ -1139,13 +1188,16 @@ func _test_photo_and_rhythm_grades() -> void:
 		assert(photo.score == 294 and photo.mistakes == 0, "off-center image receives the actual lower composition score without a fabricated miss")
 		photo.queue_free()
 		var rhythm := _new_session("game-006", assisted)
-		var sequence: Array[int] = [KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_RIGHT, KEY_LEFT, KEY_SPACE, KEY_LEFT, KEY_RIGHT]
-		for cycle in 8:
-			while rhythm.phase < cycle * 0.82 + 0.02: rhythm._process(0.01)
-			if cycle >= 2: _key(rhythm, sequence[cycle])
-			else:
-				while rhythm.beat <= cycle: rhythm._process(0.01)
-		assert(rhythm.won and not rhythm.devil_won and rhythm.mistakes == 2)
+		var gestures: Array = rhythm.ribbon_model.GESTURES
+		for cycle in gestures.size():
+			var cue_time := 1.02 + float(cycle) * 0.94
+			_advance_ribbon_to(rhythm, cue_time)
+			var action := str(gestures[cycle].action)
+			rhythm._on_ribbon_action_pressed(action)
+			if float(gestures[cycle].hold) > 0.0:
+				_advance_ribbon_to(rhythm, cue_time + float(gestures[cycle].hold))
+				rhythm._on_ribbon_action_released(action)
+		assert(rhythm.won and rhythm.devil_won == not assisted and rhythm.mistakes == 0)
 		rhythm.queue_free()
 		checks += 1
 

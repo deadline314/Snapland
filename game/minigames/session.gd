@@ -44,6 +44,8 @@ const MelodyMemoryModelScript = preload("res://game/minigames/melody_memory_mode
 const MelodyMemoryViewScript = preload("res://game/minigames/melody_memory_view.gd")
 const BenchSwapModelScript = preload("res://game/minigames/bench_swap_model.gd")
 const BenchSwapViewScript = preload("res://game/minigames/bench_swap_view.gd")
+const RibbonRhythmModelScript = preload("res://game/minigames/ribbon_rhythm_model.gd")
+const RibbonRhythmViewScript = preload("res://game/minigames/ribbon_rhythm_view.gd")
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
 const BALLOON_MAX_SPEED := 260.0
@@ -111,6 +113,7 @@ var kite_model: RefCounted = KiteFlightModelScript.new()
 var bubble_model: RefCounted = BubblePhotoModelScript.new()
 var sign_model: RefCounted = SignBalanceModelScript.new()
 var melody_model: RefCounted = MelodyMemoryModelScript.new()
+var ribbon_model: RefCounted = RibbonRhythmModelScript.new()
 var melody_snapshot: Dictionary = {}
 var _melody_audio_cursor := 0
 var _melody_error_cursor := 0
@@ -127,6 +130,11 @@ var _kite_down_held := false
 var _kite_boost_held := false
 var _kite_reel_held := false
 var _crowd_event_cursor := 0
+var _ribbon_snapshot: Dictionary = {}
+var _ribbon_note_cursor := 0
+var _ribbon_score_cursor := 0
+var _ribbon_error_cursor := 0
+var _ribbon_last_event := ""
 var _fountain_avatar_renderer: RefCounted
 var _fountain_jump_textures: Array[Texture2D] = []
 var _fountain_idle_texture: Texture2D
@@ -271,6 +279,7 @@ func _sync_presentation() -> void:
 			"melody_memory":
 				if DisplayServer.get_name() != "headless": presentation = MelodyMemoryViewScript.new()
 			"bench_swap": presentation = BenchSwapViewScript.new()
+			"ribbon_rhythm": presentation = RibbonRhythmViewScript.new()
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -331,6 +340,7 @@ func _sync_presentation() -> void:
 		"sign_balance": presentation.update_frame(sign_model.snapshot(), time_phase, reduced_motion)
 		"melody_memory": presentation.update_frame(melody_snapshot, time_phase, reduced_motion)
 		"bench_swap": presentation.update_frame(bench_model.snapshot(), time_phase, reduced_motion)
+		"ribbon_rhythm": presentation.update_frame(_ribbon_snapshot, time_phase, reduced_motion)
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -439,7 +449,7 @@ func _progress_text() -> String:
 		"fountain_timing": return "機會 %d / 3　成功 %d" % [fountain_attempts, count]
 		"crowd_traffic": return "隊伍 %d / 6" % count
 		"hat_catching": return "接住 %d / 6" % count
-		"ribbon_rhythm": return "命中 %d / 8" % devil_progress
+		"ribbon_rhythm": return "命中 %d / 8　失拍 %d　錯誤 %d" % [devil_progress, int(_ribbon_snapshot.get("missed_count", 0)), mistakes]
 		"flower_pipes": return "工單 %d / 3　轉動 %d 次" % [mini(pipe_model.order_index + 1, 3), move_count]
 		"sign_balance": return "穩住 %d / 7 拍" % count
 		"shadow_alignment": return "穩定 %0.1f / 3.0 秒" % alignment_hold
@@ -504,7 +514,7 @@ func _score_rule_text() -> String:
 		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。"
 		"crowd_traffic": return "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。"
 		"hat_catching": return "每接住一頂帽子 +100。"
-		"ribbon_rhythm": return "每踩中一拍 +75。"
+		"ribbon_rhythm": return "精準 +100、合拍 +60；四個重拍另 +25。六拍一般成功；未輔助、八拍全精準且零錯誤才得惡魔拍貼。"
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
 		"sign_balance": return "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
 		"shadow_alignment": return "完成三秒維持時 +100；保持時間決定一般成功。"
@@ -572,6 +582,11 @@ func reset_round() -> void:
 		_kite_marker_cursor = kite_model.snapshot().eventmarkers.size()
 	beat = 0
 	beat_window = false
+	_ribbon_note_cursor = 0
+	_ribbon_score_cursor = 0
+	_ribbon_error_cursor = 0
+	_ribbon_last_event = ""
+	_ribbon_snapshot.clear()
 	fountain_attempts = 0
 	fountain_jump_started = -1.0
 	fountain_finish_pending = false
@@ -638,7 +653,11 @@ func reset_round() -> void:
 				hat_x.append(260.0 + i * 150.0)
 				hat_y.append(-float(i) * 180.0 - 30.0)
 				hats_consumed.append(false)
-		"ribbon_rhythm": pass
+		"ribbon_rhythm":
+			ribbon_model.reset(assisted, time_phase)
+			_ribbon_snapshot = ribbon_model.snapshot().duplicate(true)
+			_ribbon_last_event = str(_ribbon_snapshot.get("last_event", ""))
+			prompt = _ribbon_last_event
 		"flower_pipes":
 			pipe_model.reset()
 			flower_cells = pipe_model.cells
@@ -805,13 +824,8 @@ func _tick_game(delta: float) -> void:
 		"crowd_traffic": _tick_crowd(delta)
 		"hat_catching": _tick_hats(delta)
 		"ribbon_rhythm":
-			var beat_phase := fposmod(phase, 0.82)
-			var cycle := int(floor(phase / 0.82))
-			var window := 0.34 if assisted else 0.12
-			while beat < 8 and (beat < cycle or (beat == cycle and beat_phase >= window)):
-				beat += 1; streak = 0; mistakes += 1
-			if beat >= 8: _finish(devil_progress >= (4 if assisted else 6), mistakes == 0 and devil_progress == 8)
-			beat_window = not ended and beat == cycle and beat_phase < window
+			ribbon_model.step(delta)
+			_sync_ribbon_model("elapsed")
 		"flower_pipes": _tick_pipe(delta)
 		"sign_balance":
 			var input_axis := _axis_x()
@@ -1088,6 +1102,26 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event is InputEventMouseButton:
 			_apply_kite_pointer_button(event as InputEventMouseButton)
 			return
+	if mode == "ribbon_rhythm" and event is InputEventKey:
+		var ribbon_key := event as InputEventKey
+		if ribbon_key.echo: return
+		var ribbon_action := ""
+		match ribbon_key.keycode:
+			KEY_LEFT, KEY_A: ribbon_action = "left"
+			KEY_RIGHT, KEY_D: ribbon_action = "right"
+			KEY_SPACE, KEY_UP, KEY_W: ribbon_action = "jump"
+		if not ribbon_action.is_empty():
+			if ribbon_key.pressed: _on_ribbon_action_pressed(ribbon_action)
+			else: _on_ribbon_action_released(ribbon_action)
+			return
+	if mode == "ribbon_rhythm" and event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+		var ribbon_pointer := _to_design((event as InputEventMouseButton).position)
+		if is_instance_valid(presentation): ribbon_pointer = presentation.screen_to_design((event as InputEventMouseButton).position)
+		for action in ["left", "jump", "right"]:
+			if RibbonRhythmViewScript.CONTROL_RECTS[action].has_point(ribbon_pointer):
+				if (event as InputEventMouseButton).pressed: _on_ribbon_action_pressed(action)
+				else: _on_ribbon_action_released(action)
+				return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_R: set_paused(true); return
 		if event.keycode == KEY_SPACE:
@@ -1116,13 +1150,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			bubble_model.set_frame_center(center + shift)
 			_sync_presentation()
 			_refresh_hud(true)
-		if mode == "ribbon_rhythm" and (event.keycode == KEY_LEFT or event.keycode == KEY_RIGHT): _ribbon_input(event.keycode)
 		if mode == "crowd_traffic" and event.keycode in [KEY_Q, KEY_E]: _request_crowd_lane(0 if event.keycode == KEY_Q else 1)
 	if event is InputEventMouseButton and event.pressed:
 		var mouse_event := event as InputEventMouseButton
 		var m := _to_design(mouse_event.position)
 		if mode == "fountain_timing" and mouse_event.button_index == MOUSE_BUTTON_LEFT: _press_action()
-		elif mode == "ribbon_rhythm": _ribbon_input(KEY_LEFT if m.x < DESIGN_SIZE.x * 0.43 else (KEY_RIGHT if m.x > DESIGN_SIZE.x * 0.57 else KEY_SPACE))
 		elif mode == "crowd_traffic":
 			var chosen_lane: int = presentation.pointerSignalAt(m) if is_instance_valid(presentation) else -1
 			if chosen_lane >= 0:
@@ -1164,8 +1196,6 @@ func _press_action() -> void:
 				_tick_fountain()
 				return
 			_resolve_fountain_jump(error)
-		"ribbon_rhythm":
-			_ribbon_input(KEY_SPACE)
 
 func _fountain_beat_time(index: int) -> float:
 	return FOUNTAIN_FIRST_BEAT + float(index) * FOUNTAIN_PERIOD
@@ -1230,17 +1260,51 @@ func _resolve_fountain_jump(error: float) -> void:
 		fountain_finish_pending = true
 		fountain_finish_at = fountain_jump_started + FOUNTAIN_JUMP_DURATION + FOUNTAIN_LANDING_SETTLE_SECONDS
 
-func _ribbon_input(action: int) -> void:
-	if ended or beat != int(floor(phase / 0.82)): return
-	var rhythm: Array[int] = [KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_RIGHT, KEY_LEFT, KEY_SPACE, KEY_LEFT, KEY_RIGHT]
-	var expected: int = rhythm[beat % 8]
-	if action == expected and beat_window:
-		beat += 1; streak += 1; _award_points("rhythm", "踩中節拍", 75); devil_progress += 1
-		note_played.emit(0 if action == KEY_LEFT else (1 if action == KEY_RIGHT else 2))
-		_feedback("踩中節拍！", MINT)
-	else:
-		beat += 1; streak = 0; mistakes += 1; _feedback("慢半拍了", PINK)
-	if beat >= 8: _finish(devil_progress >= (4 if assisted else 6), mistakes == 0 and devil_progress == 8)
+func _on_ribbon_action_pressed(action: String) -> void:
+	if ended or paused or mode != "ribbon_rhythm": return
+	ribbon_model.press_action(action)
+	_sync_ribbon_model("input")
+
+func _on_ribbon_action_released(action: String) -> void:
+	if ended or paused or mode != "ribbon_rhythm": return
+	ribbon_model.release_action(action)
+	_sync_ribbon_model("input")
+
+func _sync_ribbon_model(_source: String) -> void:
+	var state: Dictionary = ribbon_model.snapshot().duplicate(true)
+	var trail: Array = state.get("ribbon_trail", [])
+	while _ribbon_score_cursor < trail.size():
+		var entry: Dictionary = trail[_ribbon_score_cursor]
+		var points := (100 if str(entry.get("grade", "")) == "精準" else 60) + (25 if bool(entry.get("strong", false)) else 0)
+		_award_points("ribbon_gesture_%d" % int(entry.get("index", _ribbon_score_cursor)), "第 %d 拍・%s%s" % [int(entry.get("index", _ribbon_score_cursor)) + 1, str(entry.get("grade", "合拍")), "・重拍" if bool(entry.get("strong", false)) else ""], points)
+		_ribbon_score_cursor += 1
+	while _ribbon_error_cursor < int(state.get("error_count", 0)):
+		_ribbon_error_cursor += 1
+		_feedback(str(state.get("last_event", "這拍失誤")), PINK)
+	var notes := int(state.get("note_played_serial", 0))
+	while _ribbon_note_cursor < notes:
+		var cue: Dictionary = RibbonRhythmModelScript.GESTURES[_ribbon_note_cursor]
+		note_played.emit(0 if str(cue.action) == "left" else (1 if str(cue.action) == "right" else 2))
+		_ribbon_note_cursor += 1
+	_ribbon_snapshot = state
+	beat = int(state.get("gesture_index", 0))
+	devil_progress = int(state.get("correct_count", 0))
+	count = devil_progress
+	mistakes = int(state.get("error_count", 0))
+	beat_window = false
+	var current: Dictionary = state.get("current_gesture", {})
+	if not current.is_empty():
+		beat_window = absf(float(state.get("elapsed", 0.0)) - float(current.get("time", 0.0))) <= float(state.get("timing_window", 0.0))
+	var new_event := str(state.get("last_event", ""))
+	if new_event != _ribbon_last_event:
+		prompt = new_event
+		if _ribbon_error_cursor == int(state.get("error_count", 0)) and str(state.get("last_grade", "")) != "失拍":
+			_feedback(new_event, MINT)
+		_ribbon_last_event = new_event
+	_sync_presentation()
+	_refresh_hud(true)
+	if bool(state.get("ended", false)):
+		_finish(bool(state.get("success", false)), bool(state.get("devil_success", false)))
 
 func _rotate_pipe(m: Vector2) -> void:
 	var board: Rect2 = PipePlanScript.BOARD_RECT
@@ -1424,7 +1488,7 @@ func _feedback_anchor() -> Vector2:
 		"fountain_timing": return Vector2(960, 220)
 		"crowd_traffic": return Vector2(320, 220)
 		"hat_catching": return Vector2(p.x, 560)
-		"ribbon_rhythm": return Vector2(640, 420)
+		"ribbon_rhythm": return Vector2(640, 230)
 		"flower_pipes": return Vector2(150, 460)
 		"sign_balance": return Vector2(640, 340)
 		"shadow_alignment": return Vector2(940 + alignment * 300, 390)
