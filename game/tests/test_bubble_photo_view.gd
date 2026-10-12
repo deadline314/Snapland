@@ -21,6 +21,7 @@ func _run() -> void:
 	_test_live_feedback_and_lighting()
 	_test_three_frozen_polaroids()
 	_test_reduced_motion_and_model_bounds()
+	_test_optical_depth_layers()
 	if failures.is_empty():
 		print("PASS: bubble photo view (%d checks)" % checks)
 		quit(0)
@@ -65,6 +66,12 @@ func _test_camera_layout_and_legibility() -> void:
 	_expect(plaque.position.y >= 130.0 and plaque.end.y <= playfield.position.y and plaque.position.y > 125.0, "camera identity sits below the top HUD and above the photographed image")
 	_expect(inset.encloses(playfield) and shutter.position.x >= playfield.end.x and body.encloses(shutter), "the shutter lives in its own wide side column outside the full scored image")
 	_expect(not view.preview_label_rect().intersects(view.readout_badge_rect(2)) and view.preview_label_rect().end.x < shutter.position.x, "score preview clears status badges and the shutter column")
+	_expect(screen.encloses(view.focus_backplate_rect()) and screen.encloses(view.preview_backplate_rect()), "both new opaque readout plates stay within the 1280×720 screen")
+	_expect(not view.focus_backplate_rect().intersects(view.preview_backplate_rect()), "focus and score-preview backplates occupy separate text lanes")
+	_expect(view.focus_backplate_rect().encloses(view.focus_text_rect()) and view.preview_backplate_rect().encloses(view.preview_label_rect()), "dark readout plates contain their actual focus and score labels")
+	for badge_index in 3:
+		var badge: Rect2 = view.readout_badge_rect(badge_index)
+		_expect(not view.focus_backplate_rect().intersects(badge) and not view.preview_backplate_rect().intersects(badge), "readout plates clear status badge %d" % badge_index)
 	_expect(view.control_label_width() >= 88.0 and view.plaque_title_rect().position.y >= 130.0, "camera labels reserve safe text space below the persistent HUD")
 	var font: Font = ThemeDB.fallback_font
 	_expect(_text_fits(font, view.plaque_title_text(), 15, view.plaque_title_rect()), "full camera plaque title fits its measured font box")
@@ -89,6 +96,10 @@ func _test_camera_layout_and_legibility() -> void:
 	var shell := Color("#10262d")
 	var readout_panel := Color("#142b31")
 	_expect(_contrast_ratio(plaque_ink, shell) >= 7.0 and _contrast_ratio(readout_ink, readout_panel) >= 7.0, "plaque and night readouts retain high luminance contrast")
+	_expect(_contrast_ratio(view.photo_readout_text_color(), view.photo_readout_panel_color()) >= 7.0, "the focus and score labels use the same opaque backplate and ink whose measured contrast exceeds 7:1")
+	var maximum_subject := _sampled_subject_motion_bounds()
+	_expect(maximum_subject.size.x >= 700.0 and maximum_subject.size.y >= 330.0, "the overlap check samples the broad three-round full-body motion envelope")
+	_expect(not view.focus_backplate_rect().intersects(maximum_subject) and not view.preview_backplate_rect().intersects(maximum_subject), "both readout plates clear the sampled union of all three full-body motion paths")
 	_expect(_contrast_ratio(Color("#17272b"), Color("#e9d8b2")) >= 7.0 and _contrast_ratio(Color("#263a3d"), Color("#e9d8b2")) >= 4.5, "all photo captions remain readable on warm print paper")
 	_expect(screen.encloses(Rect2(view.shutter_primary_rect().position, view.shutter_primary_rect().size)) and screen.encloses(view.exposure_text_rect()), "shutter and exposure copy remain inside the viewport")
 	_expect(body.position.y >= 120.0 and body.end.y < view.photo_rail_rect().position.y, "the camera shell clears both HUD and print rail")
@@ -103,6 +114,17 @@ func _contrast_ratio(first: Color, second: Color) -> float:
 	var first_luminance := first_linear.r * 0.2126 + first_linear.g * 0.7152 + first_linear.b * 0.0722
 	var second_luminance := second_linear.r * 0.2126 + second_linear.g * 0.7152 + second_linear.b * 0.0722
 	return (maxf(first_luminance, second_luminance) + 0.05) / (minf(first_luminance, second_luminance) + 0.05)
+
+func _sampled_subject_motion_bounds() -> Rect2:
+	var model = BubblePhotoModel.new()
+	model.reset(false, "noon")
+	model.set_subject_size(view.measured_subject_size())
+	var bounds := Rect2()
+	for sample_index in 360:
+		var target: Rect2 = model.snapshot().target_box
+		bounds = target if sample_index == 0 else bounds.merge(target)
+		model.step(0.05)
+	return bounds
 
 func _test_live_feedback_and_lighting() -> void:
 	var model = BubblePhotoModel.new()
@@ -124,6 +146,11 @@ func _test_live_feedback_and_lighting() -> void:
 	view.present_state(model.snapshot(), "aim", false, "night")
 	_expect(is_same(view.semantic_feedback(), feedback_ref), "live status labels refresh in one cached dictionary")
 	_expect(view.shows_reduced_motion() == false, "normal presentation retains live camera state")
+	for phase_index in 4:
+		var reduced := phase_index % 2 == 1
+		view.present_state(model.snapshot(), "aim", reduced, ["dawn", "noon", "dusk", "night"][phase_index])
+		_expect(_contrast_ratio(view.photo_readout_text_color(), view.photo_readout_panel_color()) >= 7.0 and view.photo_readout_panel_color().a == 1.0, "focus and score text keep opaque high-contrast ink in %s, reduced=%s" % [["dawn", "noon", "dusk", "night"][phase_index], reduced])
+		_expect(not view.focus_backplate_rect().intersects(view.readout_badge_rect(0)) and not view.preview_backplate_rect().intersects(view.readout_badge_rect(2)), "readout-to-badge spacing remains stable in %s, reduced=%s" % [["dawn", "noon", "dusk", "night"][phase_index], reduced])
 
 func _test_three_frozen_polaroids() -> void:
 	var model = BubblePhotoModel.new()
@@ -169,6 +196,42 @@ func _test_reduced_motion_and_model_bounds() -> void:
 	view.present_state(model.snapshot(), "aim", true, "dawn")
 	_expect(view.camera_frame_rect().end.x <= BubblePhotoModel.PLAY_RECT.end.x and view.camera_frame_rect().position.y >= BubblePhotoModel.PLAY_RECT.position.y, "maximum frame movement stays inside the photographed area")
 	_expect(view.camera_frame_rect() != before_frame and view.subject_draw_rect() == before_subject, "camera movement follows the input while the subject remains on its independent track")
+
+func _test_optical_depth_layers() -> void:
+	var model = BubblePhotoModel.new()
+	model.reset(false, "noon")
+	model.set_subject_size(view.measured_subject_size())
+	for _frame in 6:
+		model.step(0.25)
+	view.present_state(model.snapshot(), "aim", false, "noon")
+	var center_subject: Rect2 = view.subject_draw_rect()
+	var center_far: Vector2 = view.harbor_layer_offset("far")
+	var center_mid: Vector2 = view.harbor_layer_offset("mid")
+	var center_near: Vector2 = view.harbor_layer_offset("near")
+	_expect(center_far == Vector2.ZERO and center_mid == Vector2.ZERO and center_near == Vector2.ZERO, "the three optical planes rest at the model's centered camera framing")
+	model.set_frame_center(Vector2(830.0, 425.0))
+	view.present_state(model.snapshot(), "aim", false, "noon")
+	var far_offset: Vector2 = view.harbor_layer_offset("far")
+	var mid_offset: Vector2 = view.harbor_layer_offset("mid")
+	var near_offset: Vector2 = view.harbor_layer_offset("near")
+	_expect(far_offset.x < 0.0 and mid_offset.x < far_offset.x and near_offset.x < mid_offset.x, "camera pan produces increasing opposite parallax from far shore to near tide line")
+	_expect(absf(far_offset.y) < absf(mid_offset.y) and absf(mid_offset.y) < absf(near_offset.y), "vertical framing pan preserves the same ordered depth response")
+	var playfield: Rect2 = view.playfield_rect()
+	var far_bounds: Rect2 = view.harbor_layer_bounds("far")
+	var mid_bounds: Rect2 = view.harbor_layer_bounds("mid")
+	var near_bounds: Rect2 = view.harbor_layer_bounds("near")
+	_expect(playfield.encloses(far_bounds) and playfield.encloses(mid_bounds) and playfield.encloses(near_bounds), "all measured parallax silhouettes remain inside the camera negative")
+	_expect(near_bounds.position.y >= model.snapshot().target_box.end.y + 6.0, "the close shoreline starts below the model's maximum full-body target box")
+	_expect(view.subject_draw_rect() == center_subject and view.subject_draw_rect() == model.snapshot().target_box, "optical background pan never moves or rescales the scored full-body subject")
+	var saved_far: Vector2 = far_offset
+	view.present_state(model.snapshot(), "aim", false, "night")
+	_expect(view.harbor_layer_offset("far") == saved_far, "time-of-day changes its palette without inventing background camera motion")
+	view.present_state(model.snapshot(), "aim", true, "night")
+	_expect(view.shows_reduced_motion() and view.harbor_layer_offset("far") == far_offset and view.harbor_layer_offset("near") == near_offset, "reduced motion retains the same static framing and depth cues")
+	model.set_frame_center(Vector2(450.0, 355.0))
+	view.present_state(model.snapshot(), "aim", true, "night")
+	_expect(view.harbor_layer_offset("far").x > 0.0 and view.harbor_layer_offset("near").x > view.harbor_layer_offset("far").x, "opposite-edge camera movement reverses parallax without leaving the safe window")
+	_expect(playfield.encloses(view.harbor_layer_bounds("near")), "the foreground's measured union remains inside the playfield at the opposite vertical edge")
 
 func _expect(condition: bool, message: String) -> void:
 	checks += 1
