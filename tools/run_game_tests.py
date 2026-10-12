@@ -83,6 +83,7 @@ def main() -> int:
             ("fountain timing tests", common + ["--script", "res://game/tests/test_fountain.gd"]),
             ("balloon delivery tests", common + ["--script", "res://game/tests/test_balloon.gd"]),
             ("story runtime tests", common + ["--script", "res://game/tests/test_story.gd"]),
+            ("main story integration tests", common + ["res://game/tests/test_story_integration.tscn"]),
             ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
             ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
         ]
@@ -151,7 +152,8 @@ def main() -> int:
                 "fountain jump view tests": "FountainJumpView tests: ",
                 "fountain timing tests": "PASS: fountain timing checks",
                 "balloon delivery tests": "PASS: balloon delivery checks",
-                "story runtime tests": "PASS: story runtime checks",
+                "story runtime tests": "PASS: story data, compatibility, mission evidence, and idempotency",
+                "main story integration tests": "PASS: real Main story interactions and exploration evidence",
                 "audio runtime tests": "PASS: audio runtime checks",
                 "main scene integration tests": "PASS: main scene integration checks",
             }

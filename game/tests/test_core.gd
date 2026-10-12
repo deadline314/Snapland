@@ -52,10 +52,17 @@ func _run() -> void:
 	Progress.visited["welcome"] = true
 	Progress.intro_seen = true
 	Progress._extra_fields["future_field"] = {"kept": true}
+	Progress.photos["photo-welcome-explore-3"] = {"pose": 0}
+	var complete_saved_tree_before: Dictionary = _progress_payload_snapshot()
 	_check(Progress.save_progress(), "progress saves")
 	Progress._reset_memory()
 	Progress.load_progress()
-	_check(Progress.photos.size() == 135, "unique photos survive reload")
+	var complete_saved_tree_after: Dictionary = _progress_payload_snapshot()
+	_check(_saved_tree_semantically_equal(complete_saved_tree_before, complete_saved_tree_after), "all saved progress fields, IDs, quest cursors, and integer-pose metadata survive one real JSON save/reload")
+	var reloaded_pose: Variant = Progress.photos.get("photo-welcome-explore-3", {}).get("pose", null)
+	print("CORE SAVE DIAGNOSTIC: pose=%s type=%s photo_ids=%d" % [str(reloaded_pose), type_string(typeof(reloaded_pose)), Progress.photos.size()])
+	_check(typeof(reloaded_pose) in [TYPE_INT, TYPE_FLOAT] and float(reloaded_pose) == 0.0, "integer pose metadata retains its exact numeric value after reload")
+	_check(Progress.photos.size() == 136, "all unique photos plus the integer-pose record survive reload")
 	_check(Progress.quests["story-intro"] == 2 and Progress.quests["quest-001"] == 3, "integer quest progress survives JSON reload")
 	_check(Progress.achievements.has("ACH_WELCOME_DEVILS"), "achievements survive reload")
 	_check(Progress.settings.master_volume == 1.0 and Progress.settings.text_speed == 2.0, "settings survive reload")
@@ -100,3 +107,42 @@ func _run() -> void:
 func _check(condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)
+
+func _progress_payload_snapshot() -> Dictionary:
+	var payload: Dictionary = Progress._extra_fields.duplicate(true)
+	payload.merge({
+		"version": Progress.SAVE_VERSION,
+		"photos": Progress.photos,
+		"achievements": Progress.achievements,
+		"quests": Progress.quests,
+		"settings": Progress.settings,
+		"visited": Progress.visited,
+		"intro_seen": Progress.intro_seen,
+		"platform_pending_achievements": Progress.platform_pending_achievements,
+		"appearance": Progress.appearance,
+		"equipped": Progress.equipped,
+		"owned_clothes": Progress.owned_clothes,
+		"coins": Progress.coins,
+		"wardrobe_rewarded_games": Progress.wardrobe_rewarded_games,
+		"tutorial_seen_games": Progress.tutorial_seen_games,
+	}, true)
+	return payload
+
+func _saved_tree_semantically_equal(before: Variant, after: Variant) -> bool:
+	if typeof(before) == TYPE_DICTIONARY and typeof(after) == TYPE_DICTIONARY:
+		var before_dict: Dictionary = before
+		var after_dict: Dictionary = after
+		if before_dict.size() != after_dict.size(): return false
+		for key in before_dict:
+			if not after_dict.has(key) or not _saved_tree_semantically_equal(before_dict[key], after_dict[key]): return false
+		return true
+	if typeof(before) == TYPE_ARRAY and typeof(after) == TYPE_ARRAY:
+		var before_array: Array = before
+		var after_array: Array = after
+		if before_array.size() != after_array.size(): return false
+		for index in range(before_array.size()):
+			if not _saved_tree_semantically_equal(before_array[index], after_array[index]): return false
+		return true
+	if typeof(before) in [TYPE_INT, TYPE_FLOAT] and typeof(after) in [TYPE_INT, TYPE_FLOAT]:
+		return float(before) == float(after)
+	return typeof(before) == typeof(after) and before == after

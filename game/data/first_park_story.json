@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "characters": {
+    "ticket": {
+      "name": "票票",
+      "role": "導覽亭值班員",
+      "motivation": "想讓第一次上島的人找到方向、也帶走一張真正屬於自己的照片。",
+      "voice": "周到而直接；用行程與服務細節表達關心，不把每句話都說成售票口號。"
+    },
+    "imp": {
+      "name": "小角",
+      "role": "迎賓吉祥物",
+      "motivation": "想把打結尾巴的窘境變成彩帶主題的新構圖，請玩家用自己的角色先試拍。",
+      "voice": "先做再解釋，愛把小失誤講成新點子；遇到認真幫忙的人會收起逞強。"
+    },
+    "announcer": {
+      "name": "阿浪",
+      "role": "迎賓大道廣播員",
+      "motivation": "想把人潮安全帶進園區，也希望廣播亭的方向指引真的幫得上忙。",
+      "voice": "節奏像現場播報，短句修正自己說錯的話；緊張時會先補上正確方向。"
+    }
+  },
+  "intro_lines": [
+    {"speaker": "票票", "text": "船已靠岸。沿木棧橋進廣場，迷路時看我亭上的藍色箭頭。"},
+    {"speaker": "主角", "text": "我先把相機拿好。這裡的路牌和海風都值得拍。"},
+    {"speaker": "小角", "text": "等等，我想到新點子了：把尾巴彩帶當成構圖靈感。可以先用你的角色試拍看看嗎？"},
+    {"speaker": "票票", "text": "他在大道左側。先逛一圈，想幫忙或補拍都隨時可以回來。"}
+  ],
+  "main_lines": [
+    {"speaker": "票票", "text": "迎賓大道的設施都能重玩。拍貼也能補拍，不必趕行程。"},
+    {"speaker": "阿浪", "text": "我剛核對過入口方向，入口在前方——這次我看過牌子才播。"},
+    {"speaker": "小角", "text": "我還在構思尾巴彩帶主題。先看看長椅的拍照構圖，再用你的角色幫我試拍吧。"},
+    {"speaker": "阿浪", "text": "人潮交給我。若我又把出口說成入口，請直接提醒我。"}
+  ],
+  "quest_missions": {
+    "quest-001": {
+      "title": "小角的尾巴彩帶試拍",
+      "speaker": "小角",
+      "motivation": "小角想把尾巴彩帶的點子變成迎賓構圖；玩家先用自己的角色試拍，確認拍照流程和取景方式。",
+      "legacy_progress_max": 3,
+      "completion_photo_id": "photo-welcome-quest-1",
+      "steps": [
+        {"step_id": "meet_imp", "kind": "interaction", "target_id": "quest-001", "title": "到大道左側找小角", "goal": "走到小角旁，聽他介紹尾巴彩帶構圖的試拍點子。", "evidence": "玩家與既有 quest-001 互動點互動。"},
+        {"step_id": "frame_the_tail", "kind": "photo", "target_id": "photo-welcome-explore-3", "title": "看看長椅的合照構圖", "goal": "到長椅借用小角立牌並拍下合照，先試試兩個位置的安排。", "evidence": "既有 explore-003 拍照成功，Progress.photos 含指定 photo_id。"},
+        {"step_id": "test_bubble_camera", "kind": "minigame_result", "target_id": "game-010", "title": "替新構圖試一次泡泡快門", "goal": "完成泡泡合照遊戲，用自己的角色試拍全身構圖。", "evidence": "game-010 正式或輔助回合成功；practice 回合不算。"}
+      ]
+    },
+    "quest-002": {
+      "title": "廣播即興救場",
+      "speaker": "阿浪",
+      "motivation": "入口與出口箭頭剛調換，阿浪怕散場人潮走錯；他需要先核對現場標記，再驗證廣播能把隊伍安全分流。",
+      "legacy_progress_max": 3,
+      "completion_photo_id": "photo-welcome-quest-2",
+      "steps": [
+        {"step_id": "meet_announcer", "kind": "interaction", "target_id": "quest-002", "title": "到大道右側找阿浪", "goal": "走到廣播亭旁，聽阿浪說明指示牌的錯向。", "evidence": "玩家與既有 quest-002 互動點互動。"},
+        {"step_id": "inspect_welcome_sign", "kind": "observation", "target_id": "explore-002", "proof_photo_id": "photo-welcome-explore-2", "title": "核對歡迎字樣與入口方向", "goal": "到展示燈前檢視歡迎字樣投影，確認箭頭指向大道入口。", "evidence": "既有 explore-002 展示燈／影子互動完成；可用其成功拍照 photo-welcome-explore-2 記錄。"},
+        {"step_id": "guide_the_crowd", "kind": "minigame_result", "target_id": "game-004", "title": "試播人潮號誌", "goal": "完成路口指揮遊戲，讓六隊遊客安全通行。", "evidence": "game-004 正式或輔助回合成功；practice 回合不算。"}
+      ]
+    }
+  }
+}

@@ -242,23 +242,33 @@ func _test_story_and_quests() -> void:
 	_check(progress.photos.has("photo-welcome-story-1"), "main story awards its fixed photo source")
 
 	await _interact_at("quest-001")
-	var first_quest: Dictionary = main.story.quest_data("quest-001")
-	var first_step: Dictionary = first_quest.steps[0]
-	var wrong_index := 1 if int(first_step.correct) == 0 else 0
-	var wrong_before := int(progress.quests.get("quest-001", 0))
-	_press_button_containing(main.overlay, str(first_step.options[wrong_index]))
-	await _frames(1)
-	_check(int(progress.quests.get("quest-001", 0)) == wrong_before, "wrong quest answer does not advance progress")
-	await _complete_quest("quest-001")
-	_check(int(progress.quests.get("quest-001", 0)) == 3, "correct quest answers advance all three steps")
-	_check(progress.photos.has("photo-welcome-quest-1"), "first completed quest grants its fixed card")
+	_check(int(progress.quests.get("quest-001", 0)) == 1, "real Xiao Jiao interaction starts the mission")
 	_press_button_containing(main.modal_body, "返回遊園")
+	await _frames(1)
+	await _complete_exploration(3)
+	_check(int(progress.quests.get("quest-001", 0)) == 2, "real bench photo advances the framing step")
+	_press_button_containing(main.overlay, "返回遊園")
 	await _frames(1)
 	await _interact_at("quest-002")
-	await _complete_quest("quest-002")
-	_check(int(progress.quests.get("quest-002", 0)) == 3, "second quest stores its completed step")
-	_check(progress.photos.has("photo-welcome-quest-2"), "second completed quest grants its fixed card")
+	_check(int(progress.quests.get("quest-002", 0)) == 1, "real 阿浪 interaction starts his mission")
 	_press_button_containing(main.modal_body, "返回遊園")
+	await _frames(1)
+	await _complete_exploration(2)
+	_check(int(progress.quests.get("quest-002", 0)) == 2, "real welcome-wall photo proves the observation step")
+	_check(not progress.photos.has("photo-welcome-quest-1") and not progress.photos.has("photo-welcome-quest-2"), "incomplete missions have not granted completion photos")
+	_press_button_containing(main.overlay, "返回遊園")
+	await _frames(1)
+
+func _complete_exploration(index: int) -> void:
+	await _interact_at("explore-%03d" % index)
+	if index == 2:
+		var slider := _find_slider(main.modal_body)
+		_check(slider != null, "welcome-wall observation exposes its alignment control")
+		if slider != null:
+			slider.value = 0
+	elif index == 3:
+		_press_button_containing(main.modal_body, "借一個小角立牌")
+	_press_button_containing(main.modal_body, "按下快門")
 	await _frames(1)
 
 func _test_fixed_collection_and_audio() -> void:
@@ -267,6 +277,8 @@ func _test_fixed_collection_and_audio() -> void:
 			progress.complete_game("game-%03d" % index, false)
 	for index in range(1, 4):
 		await _interact_at("explore-%03d" % index)
+		var source_id := "photo-welcome-explore-%d" % index
+		var previous_photo: Dictionary = progress.photos.get(source_id, {}).duplicate(true)
 		if index == 1:
 			_press_button_containing(main.modal_body, "按下快門")
 			await _frames(1)
@@ -279,12 +291,12 @@ func _test_fixed_collection_and_audio() -> void:
 				slider.value = 60
 				_press_button_containing(main.modal_body, "按下快門")
 				await _frames(1)
-				_check(not progress.photos.has("photo-welcome-explore-2"), "shadow exploration rejects a misaligned shutter")
+				_check(progress.photos.get(source_id, {}) == previous_photo, "shadow exploration rejects a misaligned shutter without overwriting a saved photo")
 				slider.value = 0
 		else:
 			_press_button_containing(main.modal_body, "按下快門")
 			await _frames(1)
-			_check(not progress.photos.has("photo-welcome-explore-3"), "bench exploration rejects shutter before borrowing a prop")
+			_check(progress.photos.get(source_id, {}) == previous_photo, "bench exploration rejects shutter before borrowing a prop without overwriting a saved photo")
 			_press_button_containing(main.modal_body, "借一個小角立牌")
 		_press_button_containing(main.modal_body, "按下快門")
 		await _frames(1)

@@ -746,7 +746,9 @@ func _interact(id: String, title: String) -> void:
 	elif id=="clock":
 		world.set_night(not world.night)
 		_notice("夜晚亮起來了。" if world.night else "陽光回到島上了。")
-	elif id.begins_with("quest-"): _show_quest(id)
+	elif id.begins_with("quest-"):
+		_record_story_mission_event({"type":"interaction","id":id})
+		_show_quest(id)
 	elif id.begins_with("explore-"): _show_exploration(id)
 	elif id=="rift":
 		var body := _open(title,"LITTLE DEVILS","rift")
@@ -855,6 +857,7 @@ func _game_finished(result: Dictionary) -> void:
 	if bool(result.get("success",false)) and not practice:
 		celebrate_on_close=true
 		Progress.complete_game(id,bool(result.get("devil",false)),bool(result.get("assisted",false)))
+		_record_story_mission_event({"type":"minigame_result","id":id,"success":true,"practice":false})
 		var source := "photo-welcome-game-%d"%int(id.trim_prefix("game-"))
 		if not saved_frames.is_empty() and Progress.photos.has(source):
 			Progress.photos[source]["frames"]=saved_frames
@@ -935,68 +938,46 @@ func _show_album() -> void:
 
 func _show_tasks() -> void:
 	var body := _open("今天，幫誰一個小忙？","ISLAND QUESTS","tasks")
+	body.add_child(Paper.label("委託會自動保存；選一張旅券即可接續目前進度。",18,Paper.DEEP_TEAL))
 	for id in ["quest-001","quest-002"]:
 		var quest: Dictionary=story.quest_data(id)
 		var step := int(Progress.quests.get(id,0))
-		Paper.button(quest.get("title",id)+"   %d / 3"%step,func(): _show_quest(id),body)
-	body.add_child(Paper.label("小角和阿浪在迎賓大道的左右步道等你。步驟隨時保存，離開後能繼續。",20))
+		var card := Paper.card(body,Color("#fffaf0"),6)
+		card.add_child(Paper.section_title(str(quest.get("title",id))))
+		card.add_child(Paper.label("%s  ·  進度 %d / 3"%["已完成" if step>=3 else "進行中" if step>0 else "尚未開始",step],18,Paper.DEEP_TEAL))
+		Paper.button("%s委託"%["查看" if step>=3 else "接續" if step>0 else "開始"],func(): _show_quest(id),card)
+	body.add_child(Paper.label("小角和阿浪在迎賓大道的左右步道等你。",18,Paper.TEAL))
 	_back(body)
 
 func _show_quest(id: String) -> void:
 	var quest: Dictionary=story.quest_data(id)
 	var step := int(Progress.quests.get(id,0))
-	var body := _open(quest.get("title",id),"STEP %d / 3"%mini(step+1,3),"quest")
+	var quest_title := str(quest.get("title","")).strip_edges()
+	if quest_title.is_empty(): quest_title="任務目標"
+	var subtitle := "旅券 · 已完成" if step>=3 else "旅券 · 第%d步 / 3"%(step+1)
+	var body := _open(quest_title,subtitle,"quest")
 	if step>=3:
 		body.add_child(Paper.label("今天的小麻煩，已經變成了拍貼裡的笑話。",24))
 		_back(body)
 		return
-	var steps: Array=quest.get("steps",[])
+	var mission: Dictionary=story.quest_mission_data(id)
+	var steps: Array=mission.get("steps",[])
+	if step < 0 or step >= steps.size():
+		push_error("Story mission '%s' has no step at saved cursor %d." % [id, step])
+		body.add_child(Paper.label("這張旅券的進度資料無法讀取。請先返回遊園。",20,Paper.CORAL))
+		_back(body)
+		return
 	var data: Dictionary=steps[step]
-	body.add_child(Paper.label(data.get("prompt",""),24))
-	var stage := PhotoStage.new()
-	stage.kind="tail" if id=="quest-001" else "broadcast"
-	stage.reduced_motion=bool(Progress.settings.get("reduced_motion",false))
-	body.add_child(stage)
-	if step==1 and id=="quest-001":
-		stage.offset=-90.0
-		body.add_child(Paper.label("拖動背景板，把尾巴接到彩帶缺口。",18,Paper.TEAL))
-		var slider := HSlider.new()
-		slider.min_value=-120
-		slider.max_value=120
-		slider.value=-90
-		slider.step=1
-		slider.value_changed.connect(func(value: float): stage.offset=value)
-		body.add_child(slider)
-		Paper.button("固定背景板",func():
-			if absf(stage.offset)<18: _advance_quest(id,step,quest)
-			else: _notice("尾巴還沒接上彩帶，往中間移一點。")
-		,body)
-		_back(body)
-		return
-	if step==1 and id=="quest-002":
-		body.add_child(Paper.label("轉動箭頭，讓它朝大道裡面（↑）。",18,Paper.TEAL))
-		stage.offset=2
-		var arrows := HBoxContainer.new()
-		body.add_child(arrows)
-		for i in range(4):
-			var direction := i
-			Paper.button(["↑ 大道","→ 廣場","↓ 碼頭","← 海邊"][i],func(): stage.offset=direction,arrows)
-		Paper.button("試播方向",func():
-			if stage.offset==0: _advance_quest(id,step,quest)
-			else: _notice("箭頭還沒有朝大道裡面。")
-		,body)
-		_back(body)
-		return
-	var options: Array=data.get("options",[])
-	for i in range(options.size()):
-		var chosen := i
-		Paper.button(str(options[i]),func():
-			if chosen==int(data.get("correct",0)):
-				_advance_quest(id,step,quest)
-			else:
-				_notice(data.get("feedback","再觀察一下旁邊的提示。"))
-				audio.play_sfx("miss")
-		,body)
+	var prompt_card := Paper.card(body,Color("#fffaf0"),8)
+	var step_title := str(data.get("title","")).strip_edges()
+	if step_title.is_empty(): step_title="任務目標"
+	prompt_card.add_child(Paper.section_title("第 %d 步  ·  %s"%[step+1,step_title]))
+	prompt_card.add_child(Paper.label(str(data.get("goal","請依旅券提示完成園區目標。")),22))
+	match str(data.get("kind","")):
+		"photo": prompt_card.add_child(Paper.label("完成指定園區合照後，這一步會自動蓋章。",18,Paper.TEAL))
+		"observation": prompt_card.add_child(Paper.label("到展示燈旁觀察方向，或拍下正確對準的歡迎牆合照。",18,Paper.TEAL))
+		"minigame_result": prompt_card.add_child(Paper.label("正式成功完成指定設施即可；練習回合不會推進旅券。",18,Paper.TEAL))
+		_: prompt_card.add_child(Paper.label("走到角色身旁按 E 互動即可接續。",18,Paper.TEAL))
 	_back(body)
 
 func _advance_quest(id: String, step: int, quest: Dictionary) -> void:
@@ -1005,6 +986,55 @@ func _advance_quest(id: String, step: int, quest: Dictionary) -> void:
 		Progress.grant_photo(quest.get("photo_id","photo-welcome-quest-%d"%(1 if id=="quest-001" else 2)))
 		audio.play_sfx("success")
 	_show_quest(id)
+
+func _record_story_mission_event(evidence: Dictionary) -> void:
+	for quest_id in ["quest-001", "quest-002"]:
+		var cursor := int(Progress.quests.get(quest_id, 0))
+		var event := evidence.duplicate(true)
+		for _attempt in range(3):
+			var result: Dictionary = story.mission_event_result(quest_id, cursor, event)
+			if not bool(result.get("accepted", false)):
+				# Saved source photos are durable proof of earlier real actions/results.
+				# Practice games never persist their source photo, so cannot satisfy this path.
+				var stored_evidence := _stored_mission_evidence(quest_id, cursor)
+				if stored_evidence.is_empty():
+					break
+				event = stored_evidence
+				result = story.mission_event_result(quest_id, cursor, event)
+				if not bool(result.get("accepted", false)):
+					break
+			Progress.advance_quest(quest_id, int(result.get("next_step", cursor)))
+			cursor = int(result.get("next_step", cursor))
+			if bool(result.get("complete", false)):
+				var reward_id := str(result.get("reward_photo_id", ""))
+				if not reward_id.is_empty() and not Progress.photos.has(reward_id):
+					Progress.grant_photo(reward_id)
+				audio.play_sfx("success")
+				break
+			event = _stored_mission_evidence(quest_id, cursor)
+			if event.is_empty():
+				break
+
+func _stored_mission_evidence(quest_id: String, cursor: int) -> Dictionary:
+	var mission: Dictionary = story.quest_mission_data(quest_id)
+	var steps: Array = mission.get("steps", [])
+	if cursor < 0 or cursor >= steps.size():
+		return {}
+	var step: Dictionary = steps[cursor]
+	var kind := str(step.get("kind", ""))
+	var target_id := str(step.get("target_id", ""))
+	if kind == "photo" and Progress.photos.has(target_id):
+		return {"type":"photo_collected", "id":target_id}
+	if kind == "observation":
+		var proof_id := str(step.get("proof_photo_id", ""))
+		if not proof_id.is_empty() and Progress.photos.has(proof_id):
+			return {"type":"photo_collected", "id":proof_id}
+	if kind == "minigame_result":
+		var game_number := int(target_id.trim_prefix("game-"))
+		var source_id := "photo-welcome-game-%d" % game_number
+		if Progress.photos.has(source_id):
+			return {"type":"minigame_result", "id":target_id, "success":true, "practice":false}
+	return {}
 
 func _show_exploration(id: String) -> void:
 	var index := int(id.trim_prefix("explore-"))
@@ -1044,7 +1074,9 @@ func _show_exploration(id: String) -> void:
 			_notice("先從免費借用架拿一個小角立牌。")
 			return
 		if world.has_method("play_action"): world.play_action("photo")
-		Progress.grant_photo("photo-welcome-explore-%d"%index,{"pose":stage.pose})
+		var photo_id := "photo-welcome-explore-%d" % index
+		Progress.grant_photo(photo_id,{"pose":stage.pose})
+		_record_story_mission_event({"type":"photo_collected","id":photo_id})
 		audio.play_sfx("success")
 		_close()
 		_notice("探索拍貼已收藏："+titles[index-1])
