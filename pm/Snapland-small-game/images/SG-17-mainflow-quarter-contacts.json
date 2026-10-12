@@ -1,0 +1,40 @@
+[
+  {
+    "page": "SG-17-mainflow-quarter-contact-1.png",
+    "files": [
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-assisted-reduced-practice-start.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-devil-album.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-earned-achievement.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-first-visit-tutorial.png"
+    ],
+    "repeated_fill": 0
+  },
+  {
+    "page": "SG-17-mainflow-quarter-contact-2.png",
+    "files": [
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-ordinary-action.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-ordinary-album.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-ordinary-gust.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-ordinary-result.png"
+    ],
+    "repeated_fill": 0
+  },
+  {
+    "page": "SG-17-mainflow-quarter-contact-3.png",
+    "files": [
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-park-after-private-leave.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-practice-after-retry-action.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-practice-after-retry-gust.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-practice-before-retry-action.png"
+    ],
+    "repeated_fill": 0
+  },
+  {
+    "page": "SG-17-mainflow-quarter-contact-4.png",
+    "files": [
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-practice-before-retry-gust.png",
+      "SG-17-mainflow-quarter-SG-17-mainflow-quarter-practice-retried.png"
+    ],
+    "repeated_fill": 2
+  }
+]

@@ -1,0 +1,338 @@
+{
+  "base_commit": "186b3a90fb904ae37ba98ff09a258b802d956022",
+  "purpose": "SG-17 Main native-flow evidence package; production source unchanged.",
+  "runs": {
+    "normal": {
+      "frames": 1760,
+      "duration_seconds": 29.333333,
+      "fps": 60,
+      "resolution": "1280x720",
+      "movie_review": {
+        "ended": true,
+        "inspected_seconds": [
+          0.17
+        ],
+        "also_inspected": "end"
+      }
+    },
+    "quarter": {
+      "frames": 6757,
+      "duration_seconds": 112.616667,
+      "fps": 60,
+      "resolution": "1280x720",
+      "movie_review": {
+        "ended": true,
+        "inspected_seconds": [
+          0.17,
+          61.66,
+          108.75
+        ],
+        "also_inspected": "end"
+      }
+    }
+  },
+  "screenshots": {
+    "normal": 14,
+    "quarter": 14,
+    "contact_pages": 8
+  },
+  "limitations": [
+    "Fixture positions the player at the station before real E-key interaction; it does not verify the walking route.",
+    "The first-visit tutorial screenshot shows an older visual version.",
+    "The devil card really displayed missing-photo fallback; MAIN-13 tracks the thumbnail fix. Only collected status is accepted here.",
+    "The final contact page uses repeated fill and does not represent extra unique captures."
+  ],
+  "files": [
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-contact-1.png",
+      "sha256": "7fb59a61af89e181232975f1f7ed7ae90a12bedd44c08c0901e1e5a21d607f5a",
+      "bytes": 381311
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-contact-2.png",
+      "sha256": "d0dca11867fecf59349362edc01e42343316a5306b13ded8727ccebbf9be5eb7",
+      "bytes": 383843
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-contact-3.png",
+      "sha256": "4966c84d10b96ee8e3d5be60663bfe469791728ee76f66f462f3a97bf82fe61b",
+      "bytes": 492440
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-contact-4.png",
+      "sha256": "701165086613623703ab7145bd350ffe7763fc3b300c4f528c1b108270b50159",
+      "bytes": 167840
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-contacts.json",
+      "sha256": "026860eae89b2a5b857f460fb095d3b61cbd6f0445ca3de88c9fc0249cf7fea1",
+      "bytes": 1552
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-contact-1.png",
+      "sha256": "624e53b204ace1e72c73cbe593258a6db48758e105126dba65f4652f1aca3feb",
+      "bytes": 383608
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-contact-2.png",
+      "sha256": "1f87d6e61c06b3aafa45793c8893e69a0772a4376b46752906117a6c40fe718d",
+      "bytes": 383799
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-contact-3.png",
+      "sha256": "0b5e80ac6def72628290532ddcb22295a7a12f884e7e4963f06da6f50b861345",
+      "bytes": 496714
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-contact-4.png",
+      "sha256": "9a54b3ffb3b50e99df5184a0adca855a709759d8cf105ab4c41097adbcf50a57",
+      "bytes": 171932
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-contacts.json",
+      "sha256": "f48f785ea4c37dd1d9d750ad936dfa454ef8cde35eae5e160f1f70bd74085ba5",
+      "bytes": 1584
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-assisted-reduced-practice-start.png",
+      "sha256": "28bcac661ffd69b526d71a1ce7af3e0a04efc298eae80493eb8ba275446b26dd",
+      "bytes": 90768
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-devil-album.png",
+      "sha256": "8d7406da9c4dc5def0d81d41d55442931dcfaacd3c9e581cae47885d4dc85914",
+      "bytes": 171360
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-earned-achievement.png",
+      "sha256": "b2331e0c84a842cf0b5dc390182f20da3f54e4bf84fde7726e3b1919a1532d3a",
+      "bytes": 188089
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-first-visit-tutorial.png",
+      "sha256": "d964886528e5ca88c275127038f8b35a7cd8efd9301be80a44872fb05a704661",
+      "bytes": 167537
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-ordinary-action.png",
+      "sha256": "5b460a3866e61938a8d084c11243198ca0564be5219c109e1b2baa0c53a1b07f",
+      "bytes": 90784
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-ordinary-album.png",
+      "sha256": "6756954f7b80274685b0785cfac6f39b10f5098056f722a017360d580a676914",
+      "bytes": 166762
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-ordinary-gust.png",
+      "sha256": "bc329e8a9b9236b5aa9358f92f8d7d6efbf762eceedadac6f3445bd3685bd427",
+      "bytes": 93195
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-ordinary-result.png",
+      "sha256": "59a47772f3b06ed7900ce7db463bfdb0ec72e4fad9fc661961fd3f8b0596f68a",
+      "bytes": 293298
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-park-after-private-leave.png",
+      "sha256": "22a8c5d63e363178d1a932dbe9fb25c138b3bfce141fd516a00e29c45efbb3c6",
+      "bytes": 665445
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-practice-after-retry-action.png",
+      "sha256": "28bcac661ffd69b526d71a1ce7af3e0a04efc298eae80493eb8ba275446b26dd",
+      "bytes": 90768
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-practice-after-retry-gust.png",
+      "sha256": "e7a4e5d68c857f98ee86abae52df58294924dbe5045b59b88b6ef894f506c4c2",
+      "bytes": 93093
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-practice-before-retry-action.png",
+      "sha256": "28bcac661ffd69b526d71a1ce7af3e0a04efc298eae80493eb8ba275446b26dd",
+      "bytes": 90768
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-practice-before-retry-gust.png",
+      "sha256": "e7a4e5d68c857f98ee86abae52df58294924dbe5045b59b88b6ef894f506c4c2",
+      "bytes": 93093
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal-practice-retried.png",
+      "sha256": "28bcac661ffd69b526d71a1ce7af3e0a04efc298eae80493eb8ba275446b26dd",
+      "bytes": 90768
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal.log",
+      "sha256": "9796e0ba350ff74c5e0329f6963a542ee282a97d145e6c80c1a0a7f6c8c520a2",
+      "bytes": 8948,
+      "error_lines": 0
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-normal.mp4",
+      "sha256": "311be70fcb8146e8bc7df04e132fdcaa8343e833b94bf7a61cfb9b3be40206bd",
+      "bytes": 10235718,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "60/1",
+            "nb_frames": "1760"
+          },
+          {
+            "codec_name": "aac",
+            "r_frame_rate": "0/0",
+            "nb_frames": "1376"
+          }
+        ],
+        "format": {
+          "duration": "29.333333"
+        }
+      }
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-assisted-reduced-practice-start.png",
+      "sha256": "1b9655e561c9099655912cda737ea920ae885ad0e03a13f559e79055874e4876",
+      "bytes": 90121
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-devil-album.png",
+      "sha256": "ab0249dd5583a9dcf5a1f69ec9ed4bc82ab82dd4c584eb36ac4938f8c16a4172",
+      "bytes": 171374
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-earned-achievement.png",
+      "sha256": "4188efd5870642371a69f8dcc5e1ea1eb83ca1ed5a49c9a4e91403f5a541d1bb",
+      "bytes": 188074
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-first-visit-tutorial.png",
+      "sha256": "77ec1b59e5138e6db1e824bc503049adba145d8604cf9e2473d0234753bd59d3",
+      "bytes": 177041
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-ordinary-action.png",
+      "sha256": "8652dba050ff0c3d04a1a48accc5bff500f5f2449af9ea06ca792fc5d246d38f",
+      "bytes": 90161
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-ordinary-album.png",
+      "sha256": "f5b0e177312aaa46cf99ab1ab473d6d2e752b72712f73a6c66ac0fcdbd6e044f",
+      "bytes": 167131
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-ordinary-gust.png",
+      "sha256": "f81d76ae5e29ef00d4354ed096ca1b8eb2d5da9825646b7372d049fbf9ed4149",
+      "bytes": 93134
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-ordinary-result.png",
+      "sha256": "bd527d001e3ecbacecc577702c0951b231cc767b4dfb81f0c976f338a181d061",
+      "bytes": 293579
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-park-after-private-leave.png",
+      "sha256": "0e8bada28e2ac42dc7a2c9eff342e20e3113f131092220878d0c7beae0367acd",
+      "bytes": 665094
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-practice-after-retry-action.png",
+      "sha256": "1b9655e561c9099655912cda737ea920ae885ad0e03a13f559e79055874e4876",
+      "bytes": 90121
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-practice-after-retry-gust.png",
+      "sha256": "63661bd0303cffa5f703ee8e7a71155818b5ffcb6e3a6b58d4ed2306bb5868cc",
+      "bytes": 93113
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-practice-before-retry-action.png",
+      "sha256": "1b9655e561c9099655912cda737ea920ae885ad0e03a13f559e79055874e4876",
+      "bytes": 90121
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-practice-before-retry-gust.png",
+      "sha256": "63661bd0303cffa5f703ee8e7a71155818b5ffcb6e3a6b58d4ed2306bb5868cc",
+      "bytes": 93113
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter-practice-retried.png",
+      "sha256": "1b9655e561c9099655912cda737ea920ae885ad0e03a13f559e79055874e4876",
+      "bytes": 90121
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter.log",
+      "sha256": "78598743b0abcbc34f514dbe9e3ba5d2aa3d2ca2629e7cf17abc91900b7d7c23",
+      "bytes": 8950,
+      "error_lines": 0
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-quarter.mp4",
+      "sha256": "66bd31d316f340e4dfb83b9fad70ca3dbd30909d59cde7ad016015c7b2b94997",
+      "bytes": 25549814,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "60/1",
+            "nb_frames": "6757"
+          },
+          {
+            "codec_name": "aac",
+            "r_frame_rate": "0/0",
+            "nb_frames": "5280"
+          }
+        ],
+        "format": {
+          "duration": "112.616667"
+        }
+      }
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-rejected-1.log",
+      "sha256": "978d24fdb500060940f98e172be7917450db5b2bb955502b0f9f9d6528414450",
+      "bytes": 3938,
+      "error_lines": 1
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-rejected-2.log",
+      "sha256": "d3b66c3160018a99851ed09695907b5bf334fe9b48614644c088dc45aa51e219",
+      "bytes": 8573,
+      "error_lines": 1
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-17-mainflow-rejected-3.log",
+      "sha256": "5005448baf33a12e7094f098bfdca8022cef21932a351380f9cffc3fefaa0785",
+      "bytes": 9198,
+      "error_lines": 1
+    },
+    {
+      "path": "game/tests/native_kite_main_flow_review.gd",
+      "sha256": "ffc27ed4141479578ce0c2d1d47b2b4f22051342035b16c52915caa97393dbf1",
+      "bytes": 27608
+    },
+    {
+      "path": "game/tests/native_kite_main_flow_review.gd.uid",
+      "sha256": "2c172d4bdc00dffe0d78a30228ecb671d60fe0eefadd3acf7388d027a7ebb62b",
+      "bytes": 21
+    },
+    {
+      "path": "game/tests/native_kite_main_flow_review.tscn",
+      "sha256": "f554a90b323be66bfefb6df0ae1b05cc4f1974686f8dc583efaa5bff2f7bda35",
+      "bytes": 205
+    }
+  ],
+  "ticket": {
+    "path": "pm/Snapland-small-game/[SG-17]精修風箏穿環玩法與計分.md",
+    "sha256": "16d5b3d0d7b4d79385ce7775c43ae964f137712121cf6030a9f2016029db70e3"
+  }
+}

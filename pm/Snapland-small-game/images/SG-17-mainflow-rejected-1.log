@@ -1,0 +1,23 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 60 FPS...
+[park_world] scenery meshes: 1024, nodes: 1613
+INPUT: request the first game-002 play target=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1610/AdaptiveMenuPanel/@MarginContainer@1611/@VBoxContainer@1612/AdaptiveMenuScroll/AdaptiveMenuContent/@HBoxContainer@1635/@Button@1638 rect=[P: (388.0, 409.0), S: (108.0, 44.0)] pointer=(442.0, 431.0) hovered=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1610/AdaptiveMenuPanel/@MarginContainer@1611/@VBoxContainer@1612/AdaptiveMenuScroll/AdaptiveMenuContent/@HBoxContainer@1635/@Button@1638 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start from the first-visit lesson target=/root/Snapland/@CanvasLayer@1587/@Control@1588/TutorialPanel/TutorialCard/@MarginContainer@1642/@VBoxContainer@1643/@HFlowContainer@1673/@Button@1682 rect=[P: (808.0, 610.0), S: (112.0, 48.0)] pointer=(864.0, 634.0) hovered=/root/Snapland/@CanvasLayer@1587/@Control@1588/TutorialPanel/TutorialCard/@MarginContainer@1642/@VBoxContainer@1643/@HFlowContainer@1673/@Button@1682 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: return from the ordinary/devil result target=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1721/AdaptiveMenuPanel/@MarginContainer@1722/@VBoxContainer@1723/@Button@1776 rect=[P: (156.0, 463.0), S: (968.0, 44.0)] pointer=(640.0, 485.0) hovered=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1721/AdaptiveMenuPanel/@MarginContainer@1722/@VBoxContainer@1723/@Button@1776 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open the live Kite collection book target=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1778/AdaptiveMenuPanel/@MarginContainer@1779/@VBoxContainer@1780/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1788/@GridContainer@1789/@PanelContainer@1796/@VBoxContainer@1797/@Button@1800 rect=[P: (659.0, 251.0), S: (440.0, 44.0)] pointer=(879.0, 273.0) hovered=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1778/AdaptiveMenuPanel/@MarginContainer@1779/@VBoxContainer@1780/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1788/@GridContainer@1789/@PanelContainer@1796/@VBoxContainer@1797/@Button@1800 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+ERROR: Native SG-17 Main flow: The live collection book does not show both earned game-002 normal and devil entries
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://game/tests/native_kite_main_flow_review.gd:509)
+       [1] _capture_live_achievement (res://game/tests/native_kite_main_flow_review.gd:400)
+       [2] _activate_main_button (res://game/tests/native_fountain_review.gd:260)
+       [3] _native_click_button (res://game/tests/native_review.gd:427)
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-first-park\Snapland\.review\root-kite-main-flow-normal.avi
+1298 frames at 60 FPS (movie length: 00:00:21:38), recorded in 00:00:31 (67% of real-time speed).
+CPU render time: 0.62 seconds (average: 0.47 ms/frame)
+GPU render time: 1.79 seconds (average: 1.38 ms/frame)
+Encoding time: 7.36 seconds (average: 5.67 ms/frame)
+--------------------------------------------------------------------------------

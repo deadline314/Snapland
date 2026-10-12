@@ -1,0 +1,40 @@
+[
+  {
+    "page": "SG-17-mainflow-normal-contact-1.png",
+    "files": [
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-assisted-reduced-practice-start.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-devil-album.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-earned-achievement.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-first-visit-tutorial.png"
+    ],
+    "repeated_fill": 0
+  },
+  {
+    "page": "SG-17-mainflow-normal-contact-2.png",
+    "files": [
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-ordinary-action.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-ordinary-album.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-ordinary-gust.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-ordinary-result.png"
+    ],
+    "repeated_fill": 0
+  },
+  {
+    "page": "SG-17-mainflow-normal-contact-3.png",
+    "files": [
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-park-after-private-leave.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-practice-after-retry-action.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-practice-after-retry-gust.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-practice-before-retry-action.png"
+    ],
+    "repeated_fill": 0
+  },
+  {
+    "page": "SG-17-mainflow-normal-contact-4.png",
+    "files": [
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-practice-before-retry-gust.png",
+      "SG-17-mainflow-normal-SG-17-mainflow-normal-practice-retried.png"
+    ],
+    "repeated_fill": 2
+  }
+]
