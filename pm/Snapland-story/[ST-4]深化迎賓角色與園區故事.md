@@ -65,4 +65,4 @@ Root 使用隔離存檔完成上島對話、兩條任務、探索拍照與兩款
 
 [原生流程影片](images/ST-4-final-native-flow.mp4)。十二張原圖以 `ST-4-final-` 開頭保存在本票 images 資料夾。
 
-分支：`feature/island-first-park`。本輪交付 commit 連結於提交後補入。
+分支：`feature/island-first-park`。本輪程式與原生證據：[61fb5de](https://github.com/deadline314/Snapland/commit/61fb5de200cbc0eb805a01ed5dd1f9378399e634)。
