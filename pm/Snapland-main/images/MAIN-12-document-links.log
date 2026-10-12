@@ -1,0 +1,12 @@
+COMMAND: python tools/verify_design.py --scope links --root C:\Users\stanl\.codex\worktrees\island-first-park\Snapland\.review\MAIN12-main-delivery-candidate
+PASS links
+PASS 1 design scope(s); gameplay/playtesting not executed
+
+COMMAND: python -m unittest tests.test_design_validation.EvidenceAndRuntimeTests.test_missing_local_link_rejected tests.test_design_validation.EvidenceAndRuntimeTests.test_existing_link_accepted -v
+test_missing_local_link_rejected (tests.test_design_validation.EvidenceAndRuntimeTests.test_missing_local_link_rejected) ... ok
+test_existing_link_accepted (tests.test_design_validation.EvidenceAndRuntimeTests.test_existing_link_accepted) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.009s
+
+OK
