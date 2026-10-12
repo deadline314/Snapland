@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://game/tests/native_bench_swap_view_review.gd" id="1"]
+
+[node name="NativeBenchSwapViewReview" type="Node"]
+script = ExtResource("1")

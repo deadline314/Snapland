@@ -74,6 +74,12 @@ func _test_definition_catalog() -> void:
 	assert(ids.size() == unique.size())
 	var data = JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json"))
 	assert(data is Array and data.size() == 12)
+	var bench_definition: Dictionary = defs[10]
+	var tutorial_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://game/data/tutorials.json"))
+	var lessons: Array = tutorial_data.get("lessons", [])
+	var bench_tutorial: Dictionary = lessons.filter(func(item: Dictionary) -> bool: return str(item.get("id", "")) == "game-011")[0]
+	_expect(str(bench_definition.instructions).contains("1–6") and str(bench_definition.ordinary).contains("三桌"), "game-011 catalog teaches six numbered seats and all three rule-based orders")
+	_expect(str(bench_tutorial.ordinary).contains("三桌") and str(bench_tutorial.bonus).contains("最少") and str(bench_tutorial.steps[0].input).contains("1–6"), "game-011 tutorial matches its six-seat interaction and exact-minimum devil target")
 	var missing := _new_session("unknown-game-id")
 	assert(missing.ended and missing.game_id.is_empty())
 	missing.queue_free()
@@ -502,33 +508,115 @@ func _test_melody_boundaries() -> void:
 	checks += 1
 
 func _test_bench_swaps_and_devil_boundary() -> void:
-	var incomplete := _new_session("game-011", false)
-	var incomplete_results: Array[Dictionary] = []
-	incomplete.finished.connect(func(value: Dictionary): incomplete_results.append(value))
-	_click(incomplete, 425, 340); _click(incomplete, 425, 340)
-	assert(incomplete_results.is_empty() and incomplete.move_count == 1)
-	incomplete.queue_free()
+	var failed_route := _new_session("game-011", false)
+	var failed_results: Array[Dictionary] = []
+	failed_route.finished.connect(func(value: Dictionary): failed_results.append(value))
+	var failed_model: Variant = failed_route.get("bench_model")
+	_expect(failed_model != null and failed_route.presentation != null, "bench Session installs the view and finite model")
+	if failed_model == null:
+		failed_route.queue_free()
+		return
+	var initial: Dictionary = failed_model.snapshot()
+	_expect(initial.seats.size() == 6, "bench Session starts with six numbered seats")
+	_expect(not _bench_rules_satisfied(initial.seats, initial.rules), "first six-seat order is not already solved by its visible rules")
+	for attempt in 3:
+		_bench_select_keys(failed_route, 0, 2)
+		failed_route._process(0.15); failed_route._process(0.15)
+		if attempt < 2: _expect(failed_results.is_empty() and int(failed_model.level) == 0, "wrong route remains active before the move budget is exhausted")
+	_expect(failed_results.is_empty() and int(failed_model.moves) == 0 and str(failed_model.last_event).contains("次數用完"), "spending the wrong-route budget retries without emitting a result")
+	failed_route.queue_free()
 
-	var s := _new_session("game-011", false)
-	var result: Array[Dictionary] = []
-	s.finished.connect(func(value: Dictionary): result.append(value))
-	for pair in [[425.0, 560.0], [560.0, 830.0], [695.0, 830.0]]:
-		_click(s, pair[0], 340)
-		_click(s, pair[1], 340)
-	assert(result.size() == 1)
-	assert(result[0].success and result[0].devil and not result[0].assisted)
-	assert(s.seats == [0, 1, 2, 3])
-	s.queue_free()
+	var exact := _new_session("game-011", false)
+	var exact_model: Variant = exact.get("bench_model")
+	if exact_model == null:
+		_expect(false, "ordinary bench Session exposes its independently solvable model")
+		exact.queue_free()
+		return
+	var exact_results: Array[Dictionary] = []
+	exact.finished.connect(func(value: Dictionary): exact_results.append(value))
+	var expected_points := 0
+	for level_index in 3:
+		var state: Dictionary = exact_model.snapshot()
+		var route := _bench_visible_rule_plan(state.seats, state.rules)
+		_expect(route.size() == int(state.optimal_moves) and route.size() == level_index + 1, "visible-rule BFS independently finds the %d-swap target" % (level_index + 1))
+		expected_points += 300 - route.size() * 25
+		for pair in route:
+			_bench_select_keys(exact, int(pair[0]), int(pair[1]))
+			exact._process(0.15); exact._process(0.15)
+	var final_state: Dictionary = exact_model.snapshot()
+	_expect(exact_results.size() == 1 and exact_results[0].success and exact_results[0].devil and not exact_results[0].assisted, "natural exact solution of all three visible-rule orders earns devil success")
+	_expect(final_state.finished and final_state.ledger.filter(func(row: Dictionary) -> bool: return bool(row.solved)).size() == 3, "model ledger carries all three naturally solved orders")
+	_expect(exact.score == expected_points and exact.score_summary().total == exact.score and exact.score_events.size() == 3, "three per-table score events reconcile exactly to summary total")
+	exact.queue_free()
 
 	var assisted := _new_session("game-011", true)
-	var assisted_result: Array[Dictionary] = []
-	assisted.finished.connect(func(value: Dictionary): assisted_result.append(value))
-	for pair in [[425.0, 560.0], [560.0, 830.0], [695.0, 830.0]]:
-		_click(assisted, pair[0], 340)
-		_click(assisted, pair[1], 340)
-	assert(assisted_result.size() == 1)
-	assert(assisted_result[0].success and assisted_result[0].devil and assisted_result[0].assisted)
+	var assisted_model: Variant = assisted.get("bench_model")
+	if assisted_model == null:
+		_expect(false, "assisted bench Session exposes its finite model")
+		assisted.queue_free()
+		return
+	var assisted_results: Array[Dictionary] = []
+	assisted.finished.connect(func(value: Dictionary): assisted_results.append(value))
+	_bench_select_keys(assisted, 0, 2)
+	_expect(not assisted_model.snapshot().hint_pair.is_empty() and not assisted_model.rules_satisfied(assisted_model.seats), "assisted hint gives a useful next exchange but does not solve automatically")
+	assisted._process(0.15); assisted._process(0.15)
+	for level_index in 3:
+		var state: Dictionary = assisted_model.snapshot()
+		_expect(int(state.level) == level_index, "assisted route reached visible table %d before solving" % (level_index + 1))
+		for pair in _bench_visible_rule_plan(state.seats, state.rules):
+			_bench_select_keys(assisted, int(pair[0]), int(pair[1]))
+			assisted._process(0.15); assisted._process(0.15)
+	_expect(assisted_results.size() == 1 and assisted_results[0].success and not assisted_results[0].devil and assisted_results[0].assisted, "assisted exact route keeps ordinary success and excludes devil: %s %s" % [str(assisted_results), str(assisted_model.snapshot())])
+	assisted.queue_free()
 	checks += 1
+
+func _bench_select_keys(session: Control, first: int, second: int) -> void:
+	_key(session, KEY_1 + first)
+	_key(session, KEY_1 + second)
+
+func _bench_visible_rule_plan(start: Array, rules: Array) -> Array:
+	var queue: Array = [start.duplicate()]
+	var parents := {_bench_order_key(start): {"previous":"", "swap":[]}}
+	var cursor := 0
+	var goal := ""
+	while cursor < queue.size():
+		var order: Array = queue[cursor]
+		cursor += 1
+		var key := _bench_order_key(order)
+		if _bench_rules_satisfied(order, rules):
+			goal = key
+			break
+		for a in 6:
+			for b in range(a + 1, 6):
+				var next: Array = order.duplicate()
+				var hold: Variant = next[a]
+				next[a] = next[b]; next[b] = hold
+				var next_key := _bench_order_key(next)
+				if parents.has(next_key): continue
+				parents[next_key] = {"previous":key, "swap":[a,b]}
+				queue.append(next)
+	var plan: Array = []
+	if goal.is_empty(): return plan
+	while str(parents[goal].previous) != "":
+		plan.push_front(parents[goal].swap)
+		goal = str(parents[goal].previous)
+	return plan
+
+func _bench_rules_satisfied(order: Array, rules: Array) -> bool:
+	if order.size() != 6: return false
+	var sorted: Array = order.duplicate(); sorted.sort()
+	if sorted != [0, 1, 2, 3, 4, 5]: return false
+	for rule in rules:
+		var a := order.find(int(rule.get("a", rule.get("guest", -1))))
+		var b := order.find(int(rule.get("b", -1)))
+		match str(rule.get("kind", "")):
+			"seat": if a != int(rule.seat): return false
+			"together": if absi(a - b) != 1: return false
+			"apart": if absi(a - b) < 2: return false
+	return true
+
+func _bench_order_key(order: Array) -> String:
+	return ",".join(order.map(func(value: Variant) -> String: return str(value)))
 
 func _test_timed_action() -> void:
 	var exact := _new_session("game-003")
@@ -902,6 +990,7 @@ func _test_all_modes() -> void:
 			var waypoint := 0
 			var balloon_steps := 0
 			var pipe_order_played := -1
+			var bench_order_played := -1
 			if number == 1: _key(s, KEY_ENTER)
 			while not s.ended:
 				match number:
@@ -958,8 +1047,14 @@ func _test_all_modes() -> void:
 							_mouse_move(s, center.x, center.y)
 							_key(s, KEY_SPACE)
 					11:
-						for pair in [[425,560], [560,830], [695,830]]:
-							_click(s, pair[0], 340); _click(s, pair[1], 340)
+						if int(s.bench_model.level) != bench_order_played:
+							bench_order_played = int(s.bench_model.level)
+							var bench_state: Dictionary = s.bench_model.snapshot()
+							var plan := _bench_visible_rule_plan(bench_state.seats, bench_state.rules)
+							assert(plan.size() == int(bench_state.optimal_moves) and plan.size() == bench_order_played + 1)
+							for pair in plan:
+								_bench_select_keys(s, int(pair[0]), int(pair[1]))
+								s._process(0.15); s._process(0.15)
 					12:
 						_drive_melody_keys(s, s.melody_model)
 				if not s.ended:
@@ -971,7 +1066,7 @@ func _test_all_modes() -> void:
 			if number == 1:
 				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
 			else:
-				var expected_devil: bool = (not assisted) if number in [2, 12] else true
+				var expected_devil: bool = (not assisted) if number in [2, 11, 12] else true
 				assert(results.size() == 1 and results[0].success and results[0].devil == expected_devil, "Reachability game-%03d assist=%s results=%s" % [number, assisted, str(results)])
 			var score_detail: Dictionary = results[0].get("score_summary", {})
 			var displayed_total := 0
@@ -983,7 +1078,10 @@ func _test_all_modes() -> void:
 			var timeout_results: Array[Dictionary] = []
 			timeout.finished.connect(func(value: Dictionary): timeout_results.append(value))
 			if number == 1: _key(timeout, KEY_ENTER)
-			if number == 12:
+			if number == 11:
+				timeout._process(60.0)
+				_expect(not timeout.ended and timeout_results.is_empty(), "Bench has no countdown and cannot complete before satisfying all table rules")
+			elif number == 12:
 				timeout._process(60.0)
 				_expect(not timeout.ended and timeout_results.is_empty(), "Melody Memory has no timer and cannot complete without reproducing its phrases")
 			else:

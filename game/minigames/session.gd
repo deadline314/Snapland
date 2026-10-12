@@ -42,6 +42,8 @@ const SignBalanceModelScript = preload("res://game/minigames/sign_balance_model.
 const SignBalanceViewScript = preload("res://game/minigames/sign_balance_view.gd")
 const MelodyMemoryModelScript = preload("res://game/minigames/melody_memory_model.gd")
 const MelodyMemoryViewScript = preload("res://game/minigames/melody_memory_view.gd")
+const BenchSwapModelScript = preload("res://game/minigames/bench_swap_model.gd")
+const BenchSwapViewScript = preload("res://game/minigames/bench_swap_view.gd")
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
 const BALLOON_MAX_SPEED := 260.0
@@ -113,6 +115,9 @@ var melody_snapshot: Dictionary = {}
 var _melody_audio_cursor := 0
 var _melody_error_cursor := 0
 var _melody_last_event := ""
+var bench_model: RefCounted = BenchSwapModelScript.new()
+var _bench_score_published := 0
+var _bench_last_event := ""
 var _sign_stage_cursor := 0
 var _sign_impact_cursor := 0
 var _bubble_photo_cursor := 0
@@ -265,6 +270,7 @@ func _sync_presentation() -> void:
 				if DisplayServer.get_name() != "headless": presentation = SignBalanceViewScript.new()
 			"melody_memory":
 				if DisplayServer.get_name() != "headless": presentation = MelodyMemoryViewScript.new()
+			"bench_swap": presentation = BenchSwapViewScript.new()
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -282,6 +288,13 @@ func _sync_presentation() -> void:
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.note_requested.connect(_on_melody_note_requested)
 				presentation.replay_requested.connect(_on_melody_replay_requested)
+			if mode == "bench_swap":
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+				presentation.seat_requested.connect(_on_bench_seat_requested)
+				var bench_progress := get_node_or_null("/root/Progress")
+				var bench_appearance: Dictionary = bench_progress.appearance if bench_progress != null and bench_progress.get("appearance") is Dictionary else {}
+				var bench_equipped: Dictionary = bench_progress.equipped if bench_progress != null and bench_progress.get("equipped") is Dictionary else {}
+				presentation.configure_avatar(bench_appearance, bench_equipped)
 			if mode == "balloon_delivery": presentation.initialize()
 			if mode == "melody_memory":
 				presentation.initialize()
@@ -317,6 +330,7 @@ func _sync_presentation() -> void:
 		"bubble_photo": presentation.present_state(bubble_model.snapshot(), str(bubble_model.phase), reduced_motion, time_phase)
 		"sign_balance": presentation.update_frame(sign_model.snapshot(), time_phase, reduced_motion)
 		"melody_memory": presentation.update_frame(melody_snapshot, time_phase, reduced_motion)
+		"bench_swap": presentation.update_frame(bench_model.snapshot(), time_phase, reduced_motion)
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -432,7 +446,7 @@ func _progress_text() -> String:
 		"bubble_photo":
 			var photo_state: Dictionary = bubble_model.snapshot()
 			return "合格 %d / 2　完美 %d / 3" % [int(photo_state.qualified_count), int(photo_state.perfect_count)]
-		"bench_swap": return "交換 %d 次" % move_count
+		"bench_swap": return "桌 %d / 3　交換 %d 次" % [mini(int(bench_model.snapshot().level) + 1, 3), move_count]
 		"melody_memory":
 			var phase_name := str(melody_snapshot.get("phase", "listen"))
 			var phrase := int(melody_snapshot.get("phrase_number", 1))
@@ -495,7 +509,7 @@ func _score_rule_text() -> String:
 		"sign_balance": return "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
 		"shadow_alignment": return "完成三秒維持時 +100；保持時間決定一般成功。"
 		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10。至少兩張合格為一般成功；三張完美可得小惡魔拍貼。"
-		"bench_swap": return "目前分數 = max(0, 500 − 50 × 交換次數)；座位排列決定是否完成。"
+		"bench_swap": return "每桌依完成步數得分；符合本桌全部規則為普通目標，每桌以最少交換完成且未開輔助或重排可得加碼。"
 		"melody_memory": return "每個正確音符 +25；完成每段樂句再 +100。"
 	return "得分由已記錄的遊戲事件累加。"
 
@@ -504,6 +518,9 @@ func set_time_of_day(phase_id: Variant) -> void:
 	if mode == "bubble_photo" and bubble_model != null:
 		bubble_model.time_of_day = time_phase
 		bubble_model.snapshot()
+		_sync_presentation()
+	if mode == "bench_swap" and bench_model != null:
+		bench_model.time_phase = time_phase
 		_sync_presentation()
 	var profile: Dictionary = TimeOfDayScript.phase_for_id(time_phase)
 	var veil_color: Color
@@ -630,7 +647,11 @@ func reset_round() -> void:
 		"bubble_photo":
 			bubble_model.reset(assisted, time_phase)
 			_sync_presentation()
-		"bench_swap": seats = [2, 0, 3, 1]
+		"bench_swap":
+			bench_model.reset(assisted, time_phase)
+			_bench_score_published = 0
+			_bench_last_event = str(bench_model.snapshot().last_event)
+			_sync_bench_state()
 		"melody_memory":
 			melody_model.reset(assisted, time_phase)
 			melody_snapshot = melody_model.snapshot()
@@ -726,7 +747,7 @@ func _process(delta: float) -> void:
 		particle.pos = Vector2(particle.pos) + Vector2(particle.velocity) * delta
 		particles[i] = particle
 		if particle.life <= 0.0: particles.remove_at(i)
-	if mode != "melody_memory" and elapsed >= round_seconds:
+	if mode not in ["melody_memory", "bench_swap"] and elapsed >= round_seconds:
 		_finish(false)
 		return
 	if mode == "kite_rings":
@@ -829,7 +850,7 @@ func _tick_game(delta: float) -> void:
 			if alignment_hold >= 3.0: _award_points("shadow", "影子維持三秒", 100); _finish(true, mistakes == 0 and not shadow_broken)
 		"bubble_photo":
 			_tick_bubble_photo(delta)
-		"bench_swap": pass
+		"bench_swap": _tick_bench_swap(delta)
 		"melody_memory": _tick_melody(delta)
 
 func _tick_balloon_motion(delta: float) -> void:
@@ -1077,7 +1098,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				_melody_input(event.keycode - KEY_1)
 			elif event.keycode in [KEY_A, KEY_S, KEY_D, KEY_F]:
 				_melody_input([KEY_A, KEY_S, KEY_D, KEY_F].find(event.keycode))
-		if mode == "bench_swap" and event.keycode >= KEY_1 and event.keycode <= KEY_4: _bench_key(int(event.keycode - KEY_1))
+		if mode == "bench_swap" and event.keycode >= KEY_1 and event.keycode <= KEY_6: _bench_key(int(event.keycode - KEY_1))
 		if mode == "flower_pipes":
 			if event.keycode == KEY_LEFT: pipe_cursor = maxi(0, pipe_cursor - 1)
 			if event.keycode == KEY_RIGHT: pipe_cursor = mini(15, pipe_cursor + 1)
@@ -1110,7 +1131,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif mode == "bubble_photo":
 			if m.distance_to(Vector2(1020.0, 184.0)) <= 32.0: _bubble_shutter()
 		elif mode == "flower_pipes": _rotate_pipe(m)
-		elif mode == "bench_swap": _bench_click(m)
 	if event is InputEventMouseMotion:
 		var mouse := event as InputEventMouseMotion
 		var pointer := _to_design(mouse.position)
@@ -1284,26 +1304,50 @@ func _sync_bubble_photo_events() -> void:
 	beat = int(state.qualified_count)
 	devil_progress = int(state.perfect_count)
 
-func _bench_click(m: Vector2) -> void:
-	if m.y < 300 or m.y > 510 or m.x < 370 or m.x > 910: return
-	var index := int((m.x - 370.0) / 135.0)
-	if select_index < 0: select_index = index; prompt = "再點一個座位交換"; return
-	var tmp := seats[index]; seats[index] = seats[select_index]; seats[select_index] = tmp
-	select_index = -1; move_count += 1; _set_formula_score("bench_swaps", "換位步數計分調整", maxi(0, 500 - move_count * 50))
-	var solved := seats == [0, 1, 2, 3]
-	if solved: _finish(true, move_count <= 3)
-	else: _feedback("朋友們再換一下位置", BLUE)
-
 func _bench_key(index: int) -> void:
-	if select_index < 0:
-		select_index = index; prompt = "再按一個座位編號交換"
-		return
-	var swap := select_index
-	select_index = -1
-	var tmp := seats[index]; seats[index] = seats[swap]; seats[swap] = tmp
-	move_count += 1; _set_formula_score("bench_swaps", "換位步數計分調整", maxi(0, 500 - move_count * 50))
-	if seats == [0,1,2,3]: _finish(true, move_count <= 3)
-	else: _feedback("朋友們再換一下位置", BLUE)
+	if mode != "bench_swap" or ended or paused or index < 0 or index >= BenchSwapModelScript.SEATS: return
+	bench_model.select_seat(index)
+	_sync_bench_state()
+	_sync_presentation()
+	_refresh_hud(true)
+
+func _on_bench_seat_requested(index: int) -> void:
+	_bench_key(index)
+
+func _tick_bench_swap(delta: float) -> void:
+	if ended or paused: return
+	bench_model.step(delta)
+	_sync_bench_state()
+	if bool(bench_model.snapshot().finished):
+		_finish(bool(bench_model.snapshot().success), bool(bench_model.snapshot().devil) and not practice_mode and not assisted)
+
+func _sync_bench_state() -> void:
+	var state: Dictionary = bench_model.snapshot()
+	seats.assign(state.get("seats", []))
+	var ledger: Array = state.get("ledger", [])
+	move_count = ledger.size()
+	count = 0
+	devil_progress = 0
+	for record in ledger:
+		if not bool(record.get("solved", false)): continue
+		count += 1
+		if int(record.get("moves", -1)) == int(record.get("optimal_moves", -2)):
+			devil_progress += 1
+	var model_score := int(state.get("score", 0))
+	if model_score > _bench_score_published:
+		var table_number := mini(count, BenchSwapModelScript.LEVELS.size())
+		_award_points("bench_table_%d" % table_number, "第 %d 桌・符合座位規則" % table_number, model_score - _bench_score_published)
+	_bench_score_published = model_score
+	var current_event := str(state.get("last_event", ""))
+	if current_event != _bench_last_event:
+		_bench_last_event = current_event
+		prompt = current_event
+		feedback_age = 0.0
+		feedback_color = MINT if current_event.contains("完成") or current_event.contains("重逢") else BLUE if current_event.contains("選") or current_event.contains("換位") else PINK if current_event.contains("重排") else MINT
+	queue_redraw()
+
+func _bench_select_view_index(index: int) -> void:
+	_on_bench_seat_requested(index)
 
 func _sync_melody_state(input_note: int = -1) -> void:
 	melody_snapshot = melody_model.snapshot()
@@ -1385,7 +1429,9 @@ func _feedback_anchor() -> Vector2:
 		"sign_balance": return Vector2(640, 340)
 		"shadow_alignment": return Vector2(940 + alignment * 300, 390)
 		"bubble_photo": return Vector2(640, 240)
-		"bench_swap": return Vector2(425 + maxi(select_index, 0) * 135, 340)
+		"bench_swap":
+			var selected_seat := int(bench_model.snapshot().get("selected_seat", -1))
+			return presentation.seat_geometry_bounds(selected_seat).get_center() if is_instance_valid(presentation) and selected_seat >= 0 else Vector2(640, 420)
 		"melody_memory": return Vector2(640, 405)
 	return Vector2(640, 400)
 
@@ -1450,7 +1496,7 @@ func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
-	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings", "bubble_photo", "sign_balance"]:
+	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings", "bubble_photo", "sign_balance", "bench_swap"]:
 		if mode == "balloon_delivery" and is_instance_valid(presentation):
 			var harbor_texture: Texture2D = presentation.texture()
 			if harbor_texture != null:
@@ -1781,7 +1827,7 @@ func _draw_game() -> void:
 		"flower_pipes": _draw_flower()
 		"sign_balance": _draw_sign()
 		"shadow_alignment": _draw_shadow()
-		"bench_swap": _draw_bench()
+		"bench_swap": pass
 		"melody_memory": pass
 
 func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignment: int = HORIZONTAL_ALIGNMENT_CENTER, color: Color = INK) -> void:
