@@ -283,46 +283,70 @@ func _test_shadow_boundaries() -> void:
 	checks += 1
 
 func _test_bubble_boundaries() -> void:
-	var s := _new_session("game-010", true)
-	var results: Array[Dictionary] = []
-	s.finished.connect(func(value: Dictionary): results.append(value))
-	var failed := _new_session("game-010", true)
-	_click(failed, 790, 380) # Outside timing: aiming does not take a photo.
-	_click(failed, 790, 380)
-	assert(failed.beat == 0 and failed.mistakes == 1)
-	failed.queue_free()
-	# The live bubble envelope uses the same normal/assist tolerance as the aim判定.
-	for assist_edge in [false, true]:
-		var aim_limit := 180.0 if assist_edge else 130.0
-		var inside := _new_session("game-010", assist_edge)
-		inside.phase = 1.6
-		inside._process(0.01)
-		assert(inside.beat_window)
-		_click(inside, 790.0 + aim_limit - 1.0, inside.target.y)
-		assert(inside.bubble_ready and inside._bubble_display_radius() >= aim_limit - 1.0 + inside.BUBBLE_MASCOT_RADIUS)
-		_click(inside, 790, inside.target.y)
-		assert(inside.beat == 1 and inside.mistakes == 0)
-		inside.queue_free()
+	var input_session := _new_session("game-010")
+	var start_center: Vector2 = input_session.bubble_model.snapshot().frame_center
+	_key(input_session, KEY_RIGHT)
+	assert(input_session.bubble_model.snapshot().frame_center == start_center + Vector2(14, 0), "arrow input moves the real camera frame")
+	_mouse_move(input_session, 700, 390)
+	assert(input_session.bubble_model.snapshot().frame_center == Vector2(700, 390), "mouse movement positions the camera frame")
+	_key(input_session, KEY_SPACE)
+	assert(input_session.bubble_model.snapshot().photos.size() == 1 and input_session.mistakes == 1, "an early shutter consumes exactly one real photo opportunity")
+	input_session.queue_free()
 
-		var outside := _new_session("game-010", assist_edge)
-		outside.phase = 1.6
-		outside._process(0.01)
-		_click(outside, 790.0 + aim_limit + 1.0, outside.target.y)
-		_click(outside, 790, outside.target.y)
-		assert(outside.beat == 0 and outside.mistakes == 1)
-		outside.queue_free()
-	for shot in 3:
-		while s.phase < shot * 2.0 + 1.65: s._process(0.01)
-		_click(s, 790, s.target.y)
-		s._process(0.01)
-		_click(s, 790, s.target.y)
-		if shot < 2:
-			_click(s, 790, s.target.y)
-			_click(s, 790, s.target.y)
-			assert(s.beat == shot + 1)
-	assert(results.size() == 1 and results[0].success and results[0].devil and results[0].assisted)
-	s.queue_free()
+	var perfect := _new_session("game-010", true)
+	var results: Array[Dictionary] = []
+	perfect.finished.connect(func(value: Dictionary): results.append(value))
+	for round_index in 3:
+		_bubble_capture_session_round(perfect, true)
+	assert(results.size() == 1 and results[0].success and results[0].devil and results[0].assisted, "three actual full-body perfect exposures meet ordinary and devil thresholds")
+	assert(perfect.score == 300 and perfect.score_summary().total == perfect.score, "three actual captured score events sum to 300")
+	perfect.queue_free()
+
+	var miss := _new_session("game-010")
+	var miss_results: Array[Dictionary] = []
+	miss.finished.connect(func(value: Dictionary): miss_results.append(value))
+	for _round in 3: _key(miss, KEY_SPACE)
+	assert(miss_results.size() == 1 and not miss_results[0].success and not miss_results[0].devil and miss.mistakes == 3, "three early shutters fail honestly without awarding either sticker")
+	miss.queue_free()
+
+	for light_phase in ["dawn", "noon", "dusk", "night"]:
+		var lit := _new_session("game-010")
+		lit.set_time_of_day(light_phase)
+		_bubble_capture_session_round(lit, true)
+		assert(str(lit.bubble_model.snapshot().photos[0].time_of_day) == light_phase, "each canonical park light phase is stored on the actual captured photo: %s" % light_phase)
+		lit.queue_free()
+
+	var paused := _new_session("game-010", true)
+	paused._process(0.20)
+	paused.set_paused(true)
+	var paused_state: Dictionary = paused.bubble_model.snapshot()
+	var frozen_photo_time := float(paused_state.round_elapsed)
+	paused._process(4.0)
+	assert(float(paused.bubble_model.snapshot().round_elapsed) == frozen_photo_time, "pause freezes portrait motion and its shutter clock")
+	paused.set_paused(false)
+	paused._process(8.0)
+	assert(float(paused.bubble_model.snapshot().round_elapsed) == frozen_photo_time, "resume discards the suspended-frame delta instead of catching up")
+	for _frame in 3: paused._process(0.05)
+	assert(float(paused.bubble_model.snapshot().round_elapsed) > frozen_photo_time, "photo simulation advances again after a normal resumed frame")
+	paused.set_practice_mode(true)
+	assert(paused.practice_mode and paused.assisted and paused.bubble_model.snapshot().photos.is_empty(), "practice reset retains assistance but clears every photo and score")
+	paused.queue_free()
 	checks += 1
+
+func _bubble_capture_session_round(session: Control, perfect: bool, offset: Vector2 = Vector2.ZERO) -> void:
+	var model = session.bubble_model
+	var state: Dictionary = model.snapshot()
+	var round_index := int(state.round)
+	var target_time := float(model.BEST_POSE_TIMES[round_index])
+	while str(model.phase) == "aim" and float(model.snapshot().round_elapsed) < target_time:
+		session._process(0.05)
+	state = model.snapshot()
+	model.set_frame_center(Vector2(state.target_center) + (Vector2.ZERO if perfect else offset))
+	session._sync_presentation()
+	_key(session, KEY_SPACE)
+	assert(str(model.phase) == "exposure" and session.score == int(model.snapshot().score), "the shutter records its actual score immediately and starts exposure")
+	while str(model.phase) == "exposure" and not session.ended:
+		session._process(0.05)
 
 func _test_melody_boundaries() -> void:
 	var s := _new_session("game-012", true)
@@ -753,10 +777,11 @@ func _test_all_modes() -> void:
 						Input.action_press("ui_right" if expected > 0 else "ui_left")
 					9: _mouse_move(s, 802 if assisted else 640, 420)
 					10:
-						var cycle := int(floor(s.phase / 2.0))
-						if fposmod(s.phase, 2.0) >= 1.65 and last_cycle != cycle:
-							_click(s, 790, s.target.y); _click(s, 790, s.target.y)
-							last_cycle = cycle
+						var photo_state: Dictionary = s.bubble_model.snapshot()
+						if str(photo_state.phase) == "aim" and float(photo_state.round_elapsed) >= float(s.bubble_model.BEST_POSE_TIMES[int(photo_state.round)]):
+							var center: Vector2 = photo_state.target_center
+							_mouse_move(s, center.x, center.y)
+							_key(s, KEY_SPACE)
 					11:
 						for pair in [[425,560], [560,830], [695,830]]:
 							_click(s, pair[0], 340); _click(s, pair[1], 340)
@@ -798,25 +823,45 @@ func _test_all_modes() -> void:
 	spam.queue_free()
 
 func _test_photo_and_rhythm_grades() -> void:
+	var repeated_photo := _new_session("game-010")
+	var repeated_state: Dictionary = repeated_photo.bubble_model.snapshot()
+	var repeat_target_time := float(repeated_photo.bubble_model.BEST_POSE_TIMES[int(repeated_state.round)])
+	while float(repeated_photo.bubble_model.snapshot().round_elapsed) < repeat_target_time:
+		repeated_photo._process(0.05)
+	repeated_state = repeated_photo.bubble_model.snapshot()
+	repeated_photo.bubble_model.set_frame_center(repeated_state.target_center)
+	_key(repeated_photo, KEY_SPACE)
+	var captured_once: int = repeated_photo.bubble_model.snapshot().photos.size()
+	var score_once: int = repeated_photo.score
+	_key(repeated_photo, KEY_SPACE)
+	assert(captured_once == 1 and repeated_photo.bubble_model.snapshot().photos.size() == captured_once and repeated_photo.score == score_once, "a repeated shutter during one exposure cannot create another photo or score")
+	while str(repeated_photo.bubble_model.phase) == "exposure":
+		repeated_photo._process(0.05)
+	assert(repeated_photo.bubble_model.snapshot().photos.size() == 1, "exposure completion advances without replaying the previous shutter")
+	repeated_photo.queue_free()
+
+	var two_and_timeout := _new_session("game-010")
+	_bubble_capture_session_round(two_and_timeout, true)
+	_bubble_capture_session_round(two_and_timeout, true)
+	while not two_and_timeout.ended:
+		two_and_timeout._process(0.25)
+	var timeout_photos: Array = two_and_timeout.bubble_model.snapshot().photos
+	var captured_score_total := 0
+	for photo_entry in timeout_photos:
+		captured_score_total += int(photo_entry.get("score", 0))
+	var ledger_total := int(two_and_timeout.score_summary().total)
+	assert(two_and_timeout.won and not two_and_timeout.devil_won and timeout_photos.size() == 3 and str(timeout_photos[2].reason) == "timeout", "two qualified full-body photos and a genuine third-round timeout award ordinary success only")
+	assert(two_and_timeout.score == captured_score_total and ledger_total == captured_score_total, "timeout result and score ledger equal the scores of the two actual captures")
+	two_and_timeout.queue_free()
+
 	for assisted in [false, true]:
 		var photo := _new_session("game-010", assisted)
-		for cycle in 3:
-			while photo.phase < cycle * 2.0 + 1.4: photo._process(0.01)
-			# Broad timing and off-center framing earn ordinary, never devil.
-			_click(photo, 790, photo.target.y)
-			_click(photo, 855, photo.target.y)
-			var photos: int = photo.beat
-			for i in 6: _click(photo, 790, photo.target.y)
-			assert(photo.beat == photos)
-		assert(photo.won and not photo.devil_won and photo.beat == 3)
+		_bubble_capture_session_round(photo, true)
+		_bubble_capture_session_round(photo, true)
+		_bubble_capture_session_round(photo, false, Vector2(32, 0))
+		assert(photo.won and not photo.devil_won and photo.beat == 3 and photo.devil_progress == 2, "two perfect plus one slightly offset photo reach ordinary only")
+		assert(photo.score == 294 and photo.mistakes == 0, "off-center image receives the actual lower composition score without a fabricated miss")
 		photo.queue_free()
-		var two := _new_session("game-010", assisted)
-		_click(two, 790, 380); _click(two, 790, 380)
-		for cycle in [1, 2]:
-			while two.phase < cycle * 2.0 + 1.65: two._process(0.01)
-			_click(two, 790, two.target.y); _click(two, 790, two.target.y)
-		assert(two.won and not two.devil_won and two.beat == 2 and two.mistakes == 1)
-		two.queue_free()
 		var rhythm := _new_session("game-006", assisted)
 		var sequence: Array[int] = [KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_RIGHT, KEY_LEFT, KEY_SPACE, KEY_LEFT, KEY_RIGHT]
 		for cycle in 8:
@@ -847,20 +892,20 @@ func _test_native_input_routing() -> void:
 	var bubble := _new_session("game-010")
 	bubble.set_process(false)
 	await process_frame
+	var frame_motion := InputEventMouseMotion.new()
+	frame_motion.position = Vector2(700, 390)
+	root.push_input(frame_motion, true)
+	Input.flush_buffered_events()
+	await process_frame
+	assert(bubble.bubble_model.snapshot().frame_center == Vector2(700, 390), "native mouse motion moves the model-backed camera frame")
 	var click := InputEventMouseButton.new()
-	click.position = Vector2(790, 380)
+	click.position = Vector2(1020, 184)
 	click.button_index = MOUSE_BUTTON_LEFT
 	click.pressed = true
 	root.push_input(click, true)
 	Input.flush_buffered_events()
 	await process_frame
-	assert(bubble.bubble_ready and bubble.bubble_aim == Vector2(790, 380))
-	click = InputEventMouseButton.new()
-	click.position = Vector2(790, 380)
-	click.button_index = MOUSE_BUTTON_LEFT
-	click.pressed = false
-	root.push_input(click, true)
-	Input.flush_buffered_events()
+	assert(bubble.bubble_model.snapshot().photos.size() == 1 and bubble.mistakes == 1, "native shutter click consumes one premature exposure")
 	bubble.queue_free()
 	await process_frame
 	checks += 1

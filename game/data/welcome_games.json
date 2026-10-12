@@ -8,7 +8,7 @@
   {"id":"game-007","mode":"flower_pipes","name":"花壇水路","goal":"完成三張供水工單，將每張的全部花床接通","instructions":"方向鍵選管節，空白鍵或點管節旋轉。第二、三張需要兩個出口同時供水。","devil_hint":"三張都不超過目標轉數：4／7／8 次","devil":"三張都不超過目標轉數：4／7／8 次","ordinary":"完成三張供水工單"},
   {"id":"game-008","mode":"sign_balance","name":"招牌平衡","goal":"左右調節招牌重心，兼顧陣風與移動落點","instructions":"按 ← → 調整重心，或點擊畫面左／右側微調。","devil_hint":"不觸碰安全線且七拍都在中心落點","devil":"不觸碰安全線且七拍都在中心落點","ordinary":"穩住招牌七個搖擺拍"},
   {"id":"game-009","mode":"shadow_alignment","name":"影子捉迷藏","goal":"移動燈光，把角色影子對齊牆上目標輪廓","instructions":"移動滑鼠或按 ← → 移動燈光，讓影子留在目標內三秒。","devil_hint":"第一次對準後連續維持三秒","devil":"第一次對準後連續維持三秒","ordinary":"將影子放入輪廓並維持三秒"},
-  {"id":"game-010","mode":"bubble_photo","name":"泡泡合照","goal":"瞄準並吹出泡泡，在泡泡包住吉祥物時拍照","instructions":"點擊瞄準並吹泡泡，待吉祥物周圍圓環亮起時再點它拍照。","devil_hint":"三張合照都置中且完整包住吉祥物","devil":"三張合照都置中且完整包住吉祥物","ordinary":"拍到至少兩張泡泡合照"},
+  {"id":"game-010","mode":"bubble_photo","name":"泡泡拍貼","goal":"移動相框，拍下三張完整、置中的港灣人像","instructions":"方向鍵或滑鼠移動相框；人物全身入框、構圖置中並合焦時按 Space 或點快門。每輪只能拍一次。","devil_hint":"三張都全身入框、精準置中，並在清晰姿勢時合焦","devil":"三張都全身入框、精準置中，並在清晰姿勢時合焦","ordinary":"三張中至少兩張達到合格構圖"},
   {"id":"game-011","mode":"bench_swap","name":"長椅換位","goal":"在有限長椅格位交換遊客座位，讓朋友坐在一起","instructions":"點兩個座位交換，或按 1–4 選兩個座位。","devil_hint":"三次交換內排好全部好友","devil":"三次交換內排好全部好友","ordinary":"排好兩組好友"},
   {"id":"game-012","mode":"melody_memory","name":"迎賓大合奏","goal":"記住迎賓樂句再依序演奏","instructions":"記住花朵亮起順序，再按 1–4 或點擊花朵演奏。","devil_hint":"完成三段旋律且零失誤","devil":"完成三段旋律且零失誤","ordinary":"完成三段旋律"}
 ]

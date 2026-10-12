@@ -92,9 +92,11 @@ func _run() -> void:
      Input.action_press('ui_right' if expected>0 else 'ui_left')
     9: _motion(Vector2(640,420))
     10:
-     var cycle=int(floor(s.phase/2.0))
-     if fposmod(s.phase,2.0)>=1.65 and cycle!=last_cycle:
-      _click(Vector2(790,s.target.y));_click(Vector2(790,s.target.y));last_cycle=cycle
+     var photo_state:Dictionary=s.bubble_model.snapshot()
+     if str(photo_state.phase)=='aim':
+      var center:Vector2=photo_state.target_center
+      _motion(center)
+      if float(photo_state.round_elapsed)>=float(s.bubble_model.BEST_POSE_TIMES[int(photo_state.round)])+0.02 and bool(photo_state.focus_available): _key(KEY_SPACE)
     11:
      if not puzzle_done:
       for key in [KEY_1,KEY_2,KEY_2,KEY_3,KEY_2,KEY_4]: _key(key)

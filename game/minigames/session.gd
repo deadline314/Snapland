@@ -35,7 +35,8 @@ const CrowdTrafficScript = preload("res://game/minigames/crowd_traffic_model.gd"
 const CrowdCrossingScript = preload("res://game/minigames/crowd_crossing_view.gd")
 const KiteFlightModelScript = preload("res://game/minigames/kite_flight_model.gd")
 const KiteFlightViewScript = preload("res://game/minigames/kite_flight_view.gd")
-const BUBBLE_MASCOT_RADIUS := 52.0
+const BubblePhotoModelScript = preload("res://game/minigames/bubble_photo_model.gd")
+const BubblePhotoViewScript = preload("res://game/minigames/bubble_photo_view.gd")
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
 const BALLOON_MAX_SPEED := 260.0
@@ -99,6 +100,8 @@ var pipe_finish_at := -1.0
 var pipe_model: RefCounted = PipeRoundScript.new()
 var crowd_model: RefCounted = CrowdTrafficScript.new()
 var kite_model: RefCounted = KiteFlightModelScript.new()
+var bubble_model: RefCounted = BubblePhotoModelScript.new()
+var _bubble_photo_cursor := 0
 var _kite_marker_cursor := 0
 var _kite_up_held := false
 var _kite_down_held := false
@@ -132,8 +135,6 @@ var balloon_wind_forecast := Vector2.ZERO
 var balloon_wind_scale := BALLOON_WIND_SCALE
 var balloon_dock_radius := BALLOON_DOCK_RADIUS
 var balloon_dock_speed := BALLOON_DOCK_SPEED
-var bubble_cycle := -1
-var bubble_attempts := 0
 var velocity := Vector2.ZERO
 var phase := 0.0
 var beat := 0
@@ -167,9 +168,6 @@ var sequence_index := 0
 var sequence_showing := false
 var sequence_clock := 0.0
 var sequence_show_index := 0
-var bubble_ready := false
-var bubble_aim := Vector2(790, 380)
-var bubble_perfect := true
 var alignment_hold := 0.0
 var shadow_started := false
 var shadow_broken := false
@@ -247,6 +245,9 @@ func _sync_presentation() -> void:
 			"flower_pipes": presentation = PipePlanScript.new()
 			"crowd_traffic": presentation = CrowdCrossingScript.new()
 			"kite_rings": presentation = KiteFlightViewScript.new()
+			"bubble_photo":
+				# Headless rule tests exercise the model without allocating avatar textures.
+				if DisplayServer.get_name() != "headless": presentation = BubblePhotoViewScript.new()
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -258,6 +259,13 @@ func _sync_presentation() -> void:
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.gui_input.connect(_on_kite_presentation_input)
 			if mode == "balloon_delivery": presentation.initialize()
+			if mode == "bubble_photo":
+				presentation.initialize()
+				var progress := get_node_or_null("/root/Progress")
+				var appearance: Dictionary = progress.appearance if progress != null and progress.get("appearance") is Dictionary else {}
+				var equipped: Dictionary = progress.equipped if progress != null and progress.get("equipped") is Dictionary else {}
+				presentation.set_appearance(appearance, equipped)
+				bubble_model.set_subject_size(presentation.measured_subject_size())
 			_layout_presentation()
 	if not is_instance_valid(presentation): return
 	match mode:
@@ -270,6 +278,7 @@ func _sync_presentation() -> void:
 			presentation.cursor = pipe_cursor
 		"crowd_traffic": presentation.present_state(crowd_model.snapshot(), phase, reduced_motion, time_phase)
 		"kite_rings": presentation.update_frame(kite_model.snapshot(), "result" if ended else ("paused" if paused else "playing"), reduced_motion, time_phase)
+		"bubble_photo": presentation.present_state(bubble_model.snapshot(), str(bubble_model.phase), reduced_motion, time_phase)
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -324,6 +333,9 @@ func _refresh_hud(force: bool = false) -> void:
 	var info := _definition()
 	var time_left := maxf(0.0, round_seconds - elapsed)
 	var time_text := "練習" if mode == "balloon_delivery" and not balloon_started else "%02d:%02d" % [int(time_left / 60.0), int(time_left) % 60]
+	if mode == "bubble_photo":
+		var photo_state: Dictionary = bubble_model.snapshot()
+		time_text = "已拍滿" if bool(photo_state.finished) else ("顯影中" if str(photo_state.phase) == "exposure" else "本張 %.1fs" % maxf(0.0, BubblePhotoModelScript.ROUND_SECONDS - float(photo_state.round_elapsed)))
 	if mode == "fountain_timing":
 		if ended:
 			time_text = "3 / 3 拍"
@@ -363,7 +375,9 @@ func _progress_text() -> String:
 		"flower_pipes": return "工單 %d / 3　轉動 %d 次" % [mini(pipe_model.order_index + 1, 3), move_count]
 		"sign_balance": return "穩住 %d / 7 拍" % count
 		"shadow_alignment": return "穩定 %0.1f / 3.0 秒" % alignment_hold
-		"bubble_photo": return "有效合照 %d / 3" % devil_progress
+		"bubble_photo":
+			var photo_state: Dictionary = bubble_model.snapshot()
+			return "合格 %d / 2　完美 %d / 3" % [int(photo_state.qualified_count), int(photo_state.perfect_count)]
 		"bench_swap": return "交換 %d 次" % move_count
 		"melody_memory": return "樂句 %d / 3　音符 %d / %d" % [count, sequence_index, sequence.size()]
 	return ""
@@ -420,13 +434,17 @@ func _score_rule_text() -> String:
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
 		"sign_balance": return "每個拍點穩在安全區 +50；精準度決定加碼條件。"
 		"shadow_alignment": return "完成三秒維持時 +100；保持時間決定一般成功。"
-		"bubble_photo": return "每張有效合照 +100。"
+		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10。至少兩張合格為一般成功；三張完美可得小惡魔拍貼。"
 		"bench_swap": return "目前分數 = max(0, 500 − 50 × 交換次數)；座位排列決定是否完成。"
 		"melody_memory": return "每個正確音符 +25；完成每段樂句再 +100。"
 	return "得分由已記錄的遊戲事件累加。"
 
 func set_time_of_day(phase_id: Variant) -> void:
 	time_phase = TimeOfDayScript.normalize(phase_id)
+	if mode == "bubble_photo" and bubble_model != null:
+		bubble_model.time_of_day = time_phase
+		bubble_model.snapshot()
+		_sync_presentation()
 	var profile: Dictionary = TimeOfDayScript.phase_for_id(time_phase)
 	var veil_color: Color
 	var veil_alpha: float
@@ -466,7 +484,7 @@ func reset_round() -> void:
 	devil_won = false
 	game_time = 0.0
 	phase = 0.0
-	round_seconds = 55.0 if mode == "balloon_delivery" else ROUND_SECONDS
+	round_seconds = 55.0 if mode == "balloon_delivery" else (24.0 if mode == "bubble_photo" else ROUND_SECONDS)
 	_kite_up_held = false
 	_kite_down_held = false
 	_kite_boost_held = false
@@ -514,8 +532,7 @@ func reset_round() -> void:
 	balloon_wind_scale = BALLOON_ASSIST_WIND_SCALE if assisted else BALLOON_WIND_SCALE
 	balloon_dock_radius = BALLOON_ASSIST_DOCK_RADIUS if assisted else BALLOON_DOCK_RADIUS
 	balloon_dock_speed = BALLOON_ASSIST_DOCK_SPEED if assisted else BALLOON_DOCK_SPEED
-	bubble_cycle = -1
-	bubble_attempts = 0
+	_bubble_photo_cursor = 0
 	seats.clear()
 	flower_cells.clear()
 	hat_x.clear()
@@ -526,9 +543,6 @@ func reset_round() -> void:
 	sequence_showing = false
 	sequence_clock = 0.0
 	sequence_show_index = 0
-	bubble_ready = false
-	bubble_aim = Vector2(790, 380)
-	bubble_perfect = true
 	alignment_hold = 0.0
 	shadow_started = false
 	shadow_broken = false
@@ -556,13 +570,16 @@ func reset_round() -> void:
 			flower_cells = pipe_model.cells
 		"sign_balance": pass
 		"shadow_alignment": alignment = -0.72
-		"bubble_photo": pass
+		"bubble_photo":
+			bubble_model.reset(assisted, time_phase)
+			_sync_presentation()
 		"bench_swap": seats = [2, 0, 3, 1]
 		"melody_memory": _next_melody()
 	if assisted:
 		prompt = "輔助已開：目標會標亮，判定範圍加寬"
 	if mode == "fountain_timing":
 		_prepare_fountain_avatar_poses()
+	_sync_presentation()
 	_refresh_hud(true)
 	queue_redraw()
 
@@ -733,9 +750,7 @@ func _tick_game(delta: float) -> void:
 				alignment_hold = 0.0
 			if alignment_hold >= 3.0: _award_points("shadow", "影子維持三秒", 100); _finish(true, mistakes == 0 and not shadow_broken)
 		"bubble_photo":
-			target.y = 380.0 + sin(phase * 1.2) * 95.0
-			var photo_beat := fposmod(phase, 2.0)
-			beat_window = bubble_attempts < 3 and bubble_cycle != int(floor(phase / 2.0)) and photo_beat > (1.1 if assisted else 1.35) and photo_beat < 1.99
+			_tick_bubble_photo(delta)
 		"bench_swap": pass
 		"melody_memory": _tick_melody(delta)
 
@@ -983,7 +998,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_R: set_paused(true); return
-		if event.keycode == KEY_SPACE: _press_action()
+		if event.keycode == KEY_SPACE:
+			if mode == "bubble_photo": _bubble_shutter()
+			else: _press_action()
 		if event.keycode >= KEY_1 and event.keycode <= KEY_4: _melody_input(event.keycode - KEY_1)
 		if mode == "bench_swap" and event.keycode >= KEY_1 and event.keycode <= KEY_4: _bench_key(int(event.keycode - KEY_1))
 		if mode == "flower_pipes":
@@ -993,9 +1010,16 @@ func _unhandled_input(event: InputEvent) -> void:
 			if event.keycode == KEY_DOWN: pipe_cursor = mini(15, pipe_cursor + 4)
 			if event.keycode == KEY_SPACE: _rotate_pipe_index(pipe_cursor)
 		if mode == "shadow_alignment" and (event.keycode == KEY_LEFT or event.keycode == KEY_RIGHT): alignment = clampf(alignment + (0.04 if event.keycode == KEY_RIGHT else -0.04), -0.5, 0.5)
-		if mode == "bubble_photo" and event.keycode == KEY_SPACE:
-			if not bubble_ready: bubble_ready = true; bubble_aim = Vector2(790, target.y); prompt = "泡泡飛出去啦！等它包住吉祥物，再按空白鍵拍照"
-			else: _bubble_click(Vector2(790, target.y))
+		if mode == "bubble_photo" and event.keycode in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN]:
+			var center: Vector2 = bubble_model.snapshot().frame_center
+			var shift := Vector2.ZERO
+			if event.keycode == KEY_LEFT: shift.x = -14.0
+			elif event.keycode == KEY_RIGHT: shift.x = 14.0
+			elif event.keycode == KEY_UP: shift.y = -14.0
+			else: shift.y = 14.0
+			bubble_model.set_frame_center(center + shift)
+			_sync_presentation()
+			_refresh_hud(true)
 		if mode == "ribbon_rhythm" and (event.keycode == KEY_LEFT or event.keycode == KEY_RIGHT): _ribbon_input(event.keycode)
 		if mode == "crowd_traffic" and event.keycode in [KEY_Q, KEY_E]: _request_crowd_lane(0 if event.keycode == KEY_Q else 1)
 	if event is InputEventMouseButton and event.pressed:
@@ -1008,7 +1032,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			if chosen_lane >= 0:
 				_request_crowd_lane(chosen_lane)
 		elif mode == "shadow_alignment": alignment = inverse_lerp(190.0, 1090.0, m.x) - 0.5; mistakes += 1 if absf(alignment) > 0.3 else 0
-		elif mode == "bubble_photo": _bubble_click(m)
+		elif mode == "bubble_photo":
+			if m.distance_to(Vector2(1020.0, 184.0)) <= 32.0: _bubble_shutter()
 		elif mode == "flower_pipes": _rotate_pipe(m)
 		elif mode == "bench_swap": _bench_click(m)
 		elif mode == "melody_memory":
@@ -1025,6 +1050,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			"kite_rings": kite_model.set_aim(clampf((390.0 - pointer.y) / 235.0, -1.0, 1.0))
 			"hat_catching": p.x = clampf(pointer.x, 180, 1100)
 			"shadow_alignment": alignment = clampf(inverse_lerp(190.0, 1090.0, pointer.x) - 0.5, -0.5, 0.5)
+			"bubble_photo":
+				if BubblePhotoModelScript.PLAY_RECT.has_point(pointer):
+					bubble_model.set_frame_center(pointer)
+					_sync_presentation()
+					_refresh_hud()
 
 func _press_action() -> void:
 	match mode:
@@ -1142,35 +1172,45 @@ func _rotate_pipe_index(idx: int) -> void:
 func _pipe_solved() -> bool:
 	return bool(pipe_model.snapshot().connected)
 
-func _bubble_click(m: Vector2) -> void:
-	if m.y < 225 or m.y > 570: return
-	var cycle := int(floor(phase / 2.0))
-	if bubble_cycle == cycle: return
-	if not bubble_ready:
-		bubble_ready = true; bubble_aim = m; prompt = "泡泡飛出去啦！等它包住吉祥物，再點一下拍照"
+func _bubble_shutter() -> void:
+	if ended or paused or str(bubble_model.phase) != "aim":
 		return
-	bubble_ready = false
-	bubble_cycle = cycle
-	bubble_attempts += 1
-	var aim_error := bubble_aim.distance_to(Vector2(790, target.y))
-	var photo_tolerance := _bubble_photo_tolerance()
-	if beat_window and aim_error < _bubble_aim_limit() and absf(m.x - 790.0) < photo_tolerance.x and absf(m.y - target.y) < photo_tolerance.y:
-		beat += 1; _award_points("photo", "有效合照", 100); devil_progress += 1
-		if aim_error >= 60.0 or m.distance_to(Vector2(790, target.y)) >= 40.0 or fposmod(phase, 2.0) < 1.55 or fposmod(phase, 2.0) > 1.85: bubble_perfect = false
-		_feedback("咔嚓！合照成功", MINT)
-	else:
-		mistakes += 1; _feedback("泡泡沒包住吉祥物，等下一顆", PINK)
-	if bubble_attempts >= 3: _finish(devil_progress >= 2, devil_progress == 3 and mistakes == 0 and bubble_perfect)
+	var result: Dictionary = bubble_model.shutter()
+	if not bool(result.get("accepted", false)):
+		return
+	_sync_bubble_photo_events()
+	_sync_presentation()
+	_refresh_hud(true)
+	if bool(bubble_model.finished):
+		_finish(bool(bubble_model.success), bool(bubble_model.devil))
+	queue_redraw()
 
-func _bubble_aim_limit() -> float:
-	return 180.0 if assisted else 130.0
+func _tick_bubble_photo(delta: float) -> void:
+	bubble_model.step(delta)
+	_sync_bubble_photo_events()
+	if bool(bubble_model.finished):
+		_finish(bool(bubble_model.success), bool(bubble_model.devil))
 
-func _bubble_photo_tolerance() -> Vector2:
-	return Vector2(160,140) if assisted else Vector2(120,100)
-
-func _bubble_display_radius() -> float:
-	# The rainbow rim contains every mascot center accepted by the aim test, plus its full sprite radius.
-	return _bubble_aim_limit() + BUBBLE_MASCOT_RADIUS
+func _sync_bubble_photo_events() -> void:
+	var state: Dictionary = bubble_model.snapshot()
+	var photos: Array = state.photos
+	while _bubble_photo_cursor < photos.size():
+		var shot: Dictionary = photos[_bubble_photo_cursor]
+		var round_index := int(shot.get("round", _bubble_photo_cursor))
+		if bool(shot.get("captured", false)):
+			var amount := int(shot.get("score", 0))
+			_award_points("photo_%d" % round_index, "第 %d 張・構圖得分" % (round_index + 1), amount)
+			if bool(shot.get("qualified", false)):
+				_feedback("第 %d 張合格・%d 分" % [round_index + 1, amount], MINT if bool(shot.get("perfect", false)) else YELLOW)
+			else:
+				_feedback("第 %d 張未達合格構圖・%d 分" % [round_index + 1, amount], PINK)
+		else:
+			mistakes += 1
+			_feedback("第 %d 次錯過快門" % (round_index + 1), PINK)
+		_bubble_photo_cursor += 1
+	count = photos.size()
+	beat = int(state.qualified_count)
+	devil_progress = int(state.perfect_count)
 
 func _bench_click(m: Vector2) -> void:
 	if m.y < 300 or m.y > 510 or m.x < 370 or m.x > 910: return
@@ -1229,7 +1269,7 @@ func _feedback_anchor() -> Vector2:
 		"flower_pipes": return Vector2(150, 460)
 		"sign_balance": return Vector2(640, 340)
 		"shadow_alignment": return Vector2(940 + alignment * 300, 390)
-		"bubble_photo": return Vector2(790, target.y)
+		"bubble_photo": return Vector2(640, 240)
 		"bench_swap": return Vector2(425 + maxi(select_index, 0) * 135, 340)
 		"melody_memory": return Vector2(450 + maxi(sequence_index, 0) * 130, 420)
 	return Vector2(640, 400)
@@ -1295,7 +1335,7 @@ func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
-	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings"]:
+	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings", "bubble_photo"]:
 		if mode == "balloon_delivery" and is_instance_valid(presentation):
 			var harbor_texture: Texture2D = presentation.texture()
 			if harbor_texture != null:
@@ -1626,7 +1666,6 @@ func _draw_game() -> void:
 		"flower_pipes": _draw_flower()
 		"sign_balance": _draw_sign()
 		"shadow_alignment": _draw_shadow()
-		"bubble_photo": _draw_bubble()
 		"bench_swap": _draw_bench()
 		"melody_memory": _draw_melody()
 
@@ -1959,51 +1998,6 @@ func _draw_shadow() -> void:
 	_draw_scene_label("拖曳影燈，讓小角角的影子貼合珊瑚紙影" + ("　輔助目標偏右" if assisted else ""),Vector2(640,220),19)
 	draw_rect(Rect2(386,533,150,28),Color("#20364c"),true); draw_rect(Rect2(386,533,clampf(alignment_hold/3.0,0,1)*150,28),MINT,true)
 	_draw_scene_label("穩住 %.1f / 3 秒" % alignment_hold,Vector2(390,554),13,HORIZONTAL_ALIGNMENT_LEFT)
-
-func _draw_bubble() -> void:
-	# Photo stage is a moonlit glasshouse with a real framing window around the moving mascot.
-	draw_rect(Rect2(350,218,590,327),Color("#304b61",0.8),true)
-	for x in [375,525,675,825,915]: draw_line(Vector2(x,222),Vector2(x,542),Color("#d5c8a0",0.48),3)
-	var glasshouse_arch := PackedVector2Array()
-	for i in 49:
-		var angle := PI * float(i) / 48.0
-		glasshouse_arch.append(Vector2(645.0 + 295.0 * cos(angle), 511.0 - 293.0 * sin(angle)))
-	draw_polyline(glasshouse_arch,Color("#d8be8c",0.7),5)
-	var frame_x := 790.0
-	var frame_tolerance := _bubble_photo_tolerance()
-	draw_rect(Rect2(frame_x-frame_tolerance.x,target.y-frame_tolerance.y,frame_tolerance.x*2,frame_tolerance.y*2),Color("#f2dda6",0.08),true)
-	draw_rect(Rect2(frame_x-frame_tolerance.x,target.y-frame_tolerance.y,frame_tolerance.x*2,frame_tolerance.y*2),Color(MINT if beat_window else Color("#b2c6ca"),0.78),false,3)
-	for corner in [Vector2(-frame_tolerance.x,-frame_tolerance.y),Vector2(frame_tolerance.x,-frame_tolerance.y),Vector2(-frame_tolerance.x,frame_tolerance.y),Vector2(frame_tolerance.x,frame_tolerance.y)]:
-		var c: Vector2 = Vector2(frame_x,target.y)+corner
-		draw_line(c,c+Vector2(-signf(corner.x)*17,0),GOLD,5); draw_line(c,c+Vector2(0,-signf(corner.y)*17),GOLD,5)
-	_draw_devil_mascot(Vector2(frame_x,target.y),32)
-	# Soap mix cauldron, wand and animated aim bubble.
-	draw_rect(Rect2(257,472,101,52),Color("#8b614d"),true); draw_rect(Rect2(268,448,79,29),Color("#d99c65"),true)
-	draw_circle(Vector2(307,446),33,Color("#96dcd6",0.8)); draw_circle(Vector2(299,438),8,Color("#e7ffff",0.9))
-	draw_line(Vector2(348,466),Vector2(386,426),GOLD,5); draw_arc(Vector2(393,419),10,0,TAU,20,PAPER,3)
-	if bubble_ready:
-		var radius := _bubble_display_radius() if beat_window else 44.0
-		if beat_window:
-			# Low-contrast cloudy fill and colored rim show the actual aim tolerance without hiding Koro.
-			draw_circle(bubble_aim,radius,Color("#dcf4ef",0.045))
-			draw_arc(bubble_aim,radius,0,TAU,80,Color("#e7f4e5",0.52),3)
-			if reduced_motion:
-				draw_arc(bubble_aim,radius-5,0,TAU,80,Color("#afddd7",0.50),2)
-			else:
-				var rim_colors := [Color("#f5b5c5",0.62),Color("#f3d18e",0.58),Color("#9cddd0",0.62),Color("#a6cfe7",0.58)]
-				for arc in 4: draw_arc(bubble_aim,radius-5,arc*TAU/4.0+0.10,(arc+1)*TAU/4.0-0.10,20,rim_colors[arc],3)
-				var cloud := bubble_aim+Vector2(-radius*0.33,-radius*0.56)
-				draw_arc(cloud,12,PI*0.95,PI*1.95,18,Color("#ffffff",0.60),3)
-		else:
-			draw_circle(bubble_aim,radius,Color("#dcf4ef",0.12))
-			draw_arc(bubble_aim,radius,0,TAU,42,Color("#d5f3ed",0.78),3)
-		draw_arc(bubble_aim+Vector2(-8,-8),mini(28.0,radius*0.55),3.6,4.8,12,PAPER,2)
-		draw_line(Vector2(392,430),bubble_aim,Color("#dff8ee",0.42),2)
-	for i in 3: draw_circle(Vector2(730+i*49,536),12,MINT if i<beat else Color("#91a5aa")); draw_circle(Vector2(730+i*49,536),4,PAPER)
-	_draw_scene_label("吹一顆泡泡；等小角角進入相框、彩虹亮起時再按快門",Vector2(640,190),18)
-	if not _draw_prop("camera",Rect2(995,385,112,78)):
-		draw_rect(Rect2(1008,393,88,82),Color("#354452"),true); draw_rect(Rect2(1017,402,70,63),Color("#9dcbcb"),true); draw_circle(Vector2(1052,433),17,Color("#334b62")); draw_circle(Vector2(1052,433),10,Color("#d8e9d4"))
-	draw_string(FONT,Vector2(1007,493),"拍貼相機",HORIZONTAL_ALIGNMENT_CENTER,90,13,INK)
 
 func _draw_bench() -> void:
 	# Four individually numbered brass-backed seats and four original visitors.
