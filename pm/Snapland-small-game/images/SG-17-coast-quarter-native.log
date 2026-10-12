@@ -1,0 +1,66 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 60 FPS...
+NATIVE KITE REVIEW SPEED: quarter (engine time_scale=0.25)
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/palette-dawn.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/palette-noon.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/palette-dusk.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/palette-night.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/palette-reduced-static.png
+PALETTE PREVIEW ONLY: four time phases plus reduced-motion static sample; no gameplay or result was created
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-starting.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-gust.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-flight.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-strong-wind.png
+NATURAL STRONG WIND: keyboard actualwind=121.5
+FEEDBACK GEOMETRY: capture=keyboard-center.png toast_global=[P: (430.0, 130.0), S: (420.0, 48.0)] kite_global=[P: (218.3, 331.8337), S: (183.2, 289.8663)]
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-center.png
+ROUTE RESULT: keyboard rings=5 centers=5 edges=0 rescues=0 mistakes=0 score=500 devil=false boost_used=true boost_seen=true reel_used=true reel_seen=true
+REVIEW: no natural strain warning on route keyboard; strain screenshot is optional
+FINAL HUD: keyboard score=0500 progress=風環 5 / 5　中心 5　救援 0 result=練習結果・不會收藏拍貼 / 穿環分　500
+FINAL HUD: keyboard score=0500 progress=風環 5 / 5　中心 5　救援 0 result=練習結果・不會收藏拍貼 / 穿環分　500
+FINAL STAGE HOLD: keyboard natural_frames=41 wall_ms=654
+FEEDBACK GEOMETRY: capture=keyboard-completed.png toast_global=[P: (430.0, 130.0), S: (420.0, 48.0)] kite_global=[P: (218.3, 341.2019), S: (183.2, 280.4981)]
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-completed.png
+FINAL HUD: keyboard score=0500 progress=風環 5 / 5　中心 5　救援 0 result=練習結果・不會收藏拍貼 / 穿環分　500
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/mouse-starting.png
+MOUSE INPUT PROBE: design=(640.0, 446.4819) window=(640.0, 446.4819) viewport=(-29.0, 521.0) final_transform=[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)] hovered=/root/NativeKiteFlightReview/KiteFlightReviewSession/GamePresentation gui_motions=1 gui_local=(640.0, 446.4819) aim_before=0.0 aim_after=-0.24034865359043 expected=-0.24034871752618
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/mouse-gust.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/mouse-flight.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/mouse-strong-wind.png
+NATURAL STRONG WIND: mouse actualwind=121.5
+FEEDBACK GEOMETRY: capture=mouse-center.png toast_global=[P: (430.0, 130.0), S: (420.0, 48.0)] kite_global=[P: (218.3, 335.6508), S: (183.1992, 286.0492)]
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/mouse-center.png
+ROUTE RESULT: mouse rings=5 centers=5 edges=0 rescues=0 mistakes=0 score=500 devil=true boost_used=true boost_seen=true reel_used=true reel_seen=true
+REVIEW: no natural strain warning on route mouse; strain screenshot is optional
+FINAL HUD: mouse score=0500 progress=風環 5 / 5　中心 5　救援 0 result=惡魔拍貼達成 / 穿環分　500
+FINAL HUD: mouse score=0500 progress=風環 5 / 5　中心 5　救援 0 result=惡魔拍貼達成 / 穿環分　500
+FINAL STAGE HOLD: mouse natural_frames=44 wall_ms=655
+FEEDBACK GEOMETRY: capture=mouse-completed.png toast_global=[P: (430.0, 130.0), S: (420.0, 48.0)] kite_global=[P: (218.3, 346.996), S: (183.1999, 274.704)]
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/mouse-completed.png
+FINAL HUD: mouse score=0500 progress=風環 5 / 5　中心 5　救援 0 result=惡魔拍貼達成 / 穿環分　500
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-reduced-starting.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-reduced-gust.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-reduced-flight.png
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-reduced-strong-wind.png
+NATURAL STRONG WIND: keyboard-reduced actualwind=121.5
+FEEDBACK GEOMETRY: capture=keyboard-reduced-center.png toast_global=[P: (430.0, 130.0), S: (420.0, 48.0)] kite_global=[P: (218.3, 331.8337), S: (183.2, 289.8663)]
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-reduced-center.png
+ROUTE RESULT: keyboard-reduced rings=5 centers=5 edges=0 rescues=0 mistakes=0 score=500 devil=false boost_used=true boost_seen=true reel_used=true reel_seen=true
+REVIEW: no natural strain warning on route keyboard-reduced; strain screenshot is optional
+FINAL HUD: keyboard-reduced score=0500 progress=風環 5 / 5　中心 5　救援 0 result=練習結果・不會收藏拍貼 / 穿環分　500
+FINAL HUD: keyboard-reduced score=0500 progress=風環 5 / 5　中心 5　救援 0 result=練習結果・不會收藏拍貼 / 穿環分　500
+FINAL STAGE HOLD: keyboard-reduced natural_frames=45 wall_ms=665
+FEEDBACK GEOMETRY: capture=keyboard-reduced-completed.png toast_global=[P: (430.0, 130.0), S: (420.0, 48.0)] kite_global=[P: (218.3, 341.2019), S: (183.2, 280.4981)]
+CAPTURE: C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/SG17-flight-art-candidate/.review/kite-flight/keyboard-reduced-completed.png
+FINAL HUD: keyboard-reduced score=0500 progress=風環 5 / 5　中心 5　救援 0 result=練習結果・不會收藏拍貼 / 穿環分　500
+FINAL ROUTE KEPT ALIVE: keyboard-reduced practice
+PASS: native kite flight keyboard-practice, mouse-formal and reduced keyboard-practice routes completed all five model rings
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-first-park\Snapland\.review\root-kite-art-final-quarter.avi
+15245 frames at 60 FPS (movie length: 00:04:14:05), recorded in 00:04:05 (103% of real-time speed).
+CPU render time: 4.91 seconds (average: 0.32 ms/frame)
+GPU render time: 4.06 seconds (average: 0.27 ms/frame)
+Encoding time: 85.92 seconds (average: 5.64 ms/frame)
+--------------------------------------------------------------------------------

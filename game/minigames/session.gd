@@ -505,7 +505,7 @@ func _refresh_hud(force: bool = false) -> void:
 		"score": score,
 		"time_text": time_text,
 		"feedback_text": feedback_text,
-		"feedback_width": 240.0 if mode == "flower_pipes" else (420.0 if mode == "sign_balance" else 540.0),
+		"feedback_width": 240.0 if mode == "flower_pipes" else (420.0 if mode in ["sign_balance", "kite_rings"] else 540.0),
 		"feedback_color": feedback_color,
 		"assisted": assisted,
 		"practice": practice_mode,
@@ -1745,7 +1745,7 @@ func _feedback(message: String, color: Color) -> void:
 func _feedback_anchor() -> Vector2:
 	match mode:
 		"balloon_delivery": return Vector2(320, 208)
-		"kite_rings": return p
+		"kite_rings": return Vector2(640, 208)
 		"fountain_timing": return Vector2(960, 220)
 		"crowd_traffic": return Vector2(640, 654)
 		"hat_catching": return Vector2(640.0, 448.0)

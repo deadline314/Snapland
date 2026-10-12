@@ -1,0 +1,71 @@
+{
+  "pages": [
+    {
+      "page": "kite-caption-final-contact-1.png",
+      "files": [
+        "phase-dawn.png",
+        "phase-dusk.png",
+        "phase-night.png",
+        "phase-noon.png"
+      ]
+    },
+    {
+      "page": "kite-caption-final-contact-2.png",
+      "files": [
+        "preview-dusk-playing-center.png",
+        "preview-dusk-playing-edge.png",
+        "preview-dusk-playing-generic.png",
+        "preview-dusk-playing-line_snap.png"
+      ]
+    },
+    {
+      "page": "kite-caption-final-contact-3.png",
+      "files": [
+        "preview-dusk-playing-miss.png",
+        "preview-dusk-result-center.png",
+        "preview-dusk-result-edge.png",
+        "preview-dusk-result-generic.png"
+      ]
+    },
+    {
+      "page": "kite-caption-final-contact-4.png",
+      "files": [
+        "preview-dusk-result-line_snap.png",
+        "preview-dusk-result-miss.png",
+        "preview-night-playing-center.png",
+        "preview-night-playing-edge.png"
+      ]
+    },
+    {
+      "page": "kite-caption-final-contact-5.png",
+      "files": [
+        "preview-night-playing-generic.png",
+        "preview-night-playing-line_snap.png",
+        "preview-night-playing-miss.png",
+        "preview-night-result-center.png"
+      ]
+    },
+    {
+      "page": "kite-caption-final-contact-6.png",
+      "files": [
+        "preview-night-result-edge.png",
+        "preview-night-result-generic.png",
+        "preview-night-result-line_snap.png",
+        "preview-night-result-miss.png"
+      ]
+    }
+  ],
+  "day_palette_parity": {
+    "dawn": {
+      "size_equal": true,
+      "different_pixels": 0,
+      "difference_bbox": null
+    },
+    "noon": {
+      "size_equal": true,
+      "different_pixels": 0,
+      "difference_bbox": null
+    }
+  },
+  "scope": "24 native view-only previews; no game input or rewards"
+}

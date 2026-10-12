@@ -56,7 +56,9 @@ func _run() -> void:
 
 	_test_actual_extreme_geometry(view)
 	_test_marker_and_legend_shapes(view)
+	_test_actual_wind_environment(view)
 	_test_time_phases_and_reduced_motion(view, live_snapshot)
+	_test_caption_contrast(view, live_snapshot)
 	_test_cache_revision(view, live_snapshot, revision)
 	view.queue_free()
 	await process_frame
@@ -140,6 +142,137 @@ func _test_time_phases_and_reduced_motion(view: Control, source_snapshot: Dictio
 	_check(view._kite_roll == 0.0 and normal_roll != 0.0, "reduced motion keeps kite position while suppressing decorative tilt")
 	_check(view._tail_wave(0) == 0.0 and normal_tail_phase != 0.0, "reduced motion removes tail flutter without hiding wind indicators")
 	_check(view.legend_style("actual") == "solid_vertical_arrow" and view.legend_style("forecast") == "dashed_open_vertical_arrow", "reduced motion retains both distinct wind legends")
+
+func _test_caption_contrast(view: Control, source_snapshot: Dictionary) -> void:
+	var events: Array[String] = ["", "miss", "edge", "center", "line_snap"]
+	var phases: Array[String] = ["playing", "paused", "result"]
+	var night_readable := true
+	var dusk_readable := true
+	for time_phase in ["night", "dusk"]:
+		view.update_frame(source_snapshot, "playing", false, time_phase)
+		var sky: Color = view._sky_color()
+		var backplate: Color = view._flight_caption_backplate_color(time_phase)
+		var displayed_background := _composite_color(backplate, sky)
+		for flight_phase in phases:
+			for event in events:
+				var foreground: Color = view._flight_caption_color(time_phase, flight_phase, event, _legacy_caption_tint(view, event))
+				var readable := _contrast_ratio(foreground, displayed_background) >= 4.5
+				if time_phase == "night": night_readable = night_readable and readable
+				else: dusk_readable = dusk_readable and readable
+	_check(night_readable, "night generic, four event and result captions reach 4.5 contrast after sky/backplate compositing")
+	_check(dusk_readable, "dusk generic, four event and result captions reach 4.5 contrast after sky/backplate compositing")
+	var daytime_parity := true
+	for time_phase in ["dawn", "noon"]:
+		for flight_phase in phases:
+			for event in events:
+				var actual: Color = view._flight_caption_color(time_phase, flight_phase, event, _legacy_caption_tint(view, event))
+				daytime_parity = daytime_parity and actual == _legacy_caption_tint(view, event)
+			daytime_parity = daytime_parity and view._flight_caption_backplate_color(time_phase).a == 0.0
+	_check(daytime_parity, "dawn/noon generic, event and result captions plus background remain byte-equivalent")
+	view.update_frame(source_snapshot, "result", false, "night")
+	var result_tint: Color = view._flight_caption_color("night", view._phase, "", _legacy_caption_tint(view, ""))
+	var result_background := _composite_color(view._flight_caption_backplate_color("night"), view._sky_color())
+	_check(_contrast_ratio(result_tint, result_background) >= 4.5, "actual singular result phase keeps the generic caption readable at night")
+
+func _legacy_caption_tint(view: Control, event: String) -> Color:
+	match event:
+		"miss", "line_snap": return view.CORAL
+		"edge": return view.OCHRE
+		"center": return view.SEA_GLASS
+		_: return Color(view.INK, 0.8)
+
+func _composite_color(foreground: Color, background: Color) -> Color:
+	var inverse_alpha := 1.0 - foreground.a
+	return Color(
+		foreground.r * foreground.a + background.r * inverse_alpha,
+		foreground.g * foreground.a + background.g * inverse_alpha,
+		foreground.b * foreground.a + background.b * inverse_alpha,
+		1.0
+	)
+
+func _contrast_ratio(foreground: Color, background: Color) -> float:
+	var foreground_luminance := _relative_luminance(foreground)
+	var background_luminance := _relative_luminance(background)
+	var lighter := maxf(foreground_luminance, background_luminance)
+	var darker := minf(foreground_luminance, background_luminance)
+	return (lighter + 0.05) / (darker + 0.05)
+
+func _relative_luminance(color: Color) -> float:
+	var red := _linear_channel(color.r)
+	var green := _linear_channel(color.g)
+	var blue := _linear_channel(color.b)
+	return red * 0.2126 + green * 0.7152 + blue * 0.0722
+
+func _linear_channel(value: float) -> float:
+	if value <= 0.04045:
+		return value / 12.92
+	return pow((value + 0.055) / 1.055, 2.4)
+
+func _test_actual_wind_environment(view: Control) -> void:
+	var calm: Dictionary = {"x": 120.0, "height": 380.0, "vy": 0.0, "elapsed": 0.0, "actualwind": 0.0, "forecast": 0.0, "eventmarkers": [], "nextRing": 0}
+	view.update_frame(calm, "playing", false, "noon")
+	var calm_path: PackedVector2Array = view._wind_streamers[0].duplicate()
+	var calm_pennant_y: float = view._beacon_pennant[1].y
+	var streamer_array: Array[PackedVector2Array] = view._wind_streamers
+	var positive: Dictionary = calm.duplicate(true)
+	positive["actualwind"] = 90.0
+	positive["forecast"] = -160.0
+	view.update_frame(positive, "playing", false, "noon")
+	var positive_lift: float = view._wind_streamer_lift(0)
+	var positive_pennant_y: float = view._beacon_pennant[1].y
+	_check(positive_lift < 0.0 and positive_pennant_y < calm_pennant_y, "positive actual lift curves the visible wind lane and beacon pennant upward")
+	var wind_lanes_clear_hud := true
+	for streamer in view._wind_streamers:
+		for point in streamer:
+			if point.y <= view.HUD_RECT.end.y or point.y >= view.FIELD_RECT.end.y:
+				wind_lanes_clear_hud = false
+	_check(wind_lanes_clear_hud, "wind lanes remain below the reserved HUD and inside the flight field")
+	var strong_positive: Dictionary = positive.duplicate(true)
+	strong_positive["actualwind"] = 185.0
+	view.update_frame(strong_positive, "playing", false, "noon")
+	_check(absf(view._wind_streamer_lift(0)) > absf(positive_lift), "stronger actual lift produces a visibly larger coastal flow bend")
+	var negative: Dictionary = positive.duplicate(true)
+	negative["actualwind"] = -90.0
+	view.update_frame(negative, "playing", false, "noon")
+	_check(view._wind_streamer_lift(0) > 0.0 and view._beacon_pennant[1].y > calm_pennant_y, "negative actual lift reverses the wind lane and pennant direction")
+	var forecast_only: Dictionary = calm.duplicate(true)
+	forecast_only["forecast"] = 185.0
+	view.update_frame(forecast_only, "playing", false, "noon")
+	_check(view._wind_streamers[0] == calm_path, "forecast-only change never moves the actual-wind scenery")
+	var still_a: Dictionary = calm.duplicate(true)
+	still_a["actualwind"] = 120.0
+	still_a["elapsed"] = 1.25
+	view.update_frame(still_a, "playing", true, "noon")
+	var reduced_path: PackedVector2Array = view._wind_streamers[0].duplicate()
+	var reduced_pennant: PackedVector2Array = view._beacon_pennant.duplicate()
+	var reduced_flags: Array[PackedVector2Array] = []
+	for flag in view._tail_flags:
+		reduced_flags.append(flag.duplicate())
+	var still_b: Dictionary = still_a.duplicate(true)
+	still_b["elapsed"] = 8.75
+	view.update_frame(still_b, "playing", true, "noon")
+	_check(view._wind_streamers[0] == reduced_path and view._beacon_pennant == reduced_pennant, "reduced motion freezes wind decoration across elapsed-time changes")
+	_check(view._tail_flags == reduced_flags, "reduced motion keeps each tail flag still")
+	var reduced_negative: Dictionary = still_b.duplicate(true)
+	reduced_negative["actualwind"] = -120.0
+	view.update_frame(reduced_negative, "playing", true, "noon")
+	_check(view._wind_streamer_lift(0) > 0.0, "reduced motion preserves the correct static direction for changed actual wind")
+	_check(is_same(view._wind_streamers, streamer_array), "wind geometry container is reused instead of rebuilt per frame")
+	_check(absf(view._parallax_offset(520.0, 0.17)) > absf(view._parallax_offset(520.0, 0.09)), "near cliff moves faster than far cliff to reinforce forward travel")
+	_check(view._ring_color("next") != view._ring_color("silhouette"), "the solid current ring remains visually distinct from pale future rings")
+	var compact_wind_paths: bool = view._wind_streamers.size() == 3
+	for streamer in view._wind_streamers:
+		if streamer.size() < 2 or streamer[-1].x - streamer[0].x > 260.0:
+			compact_wind_paths = false
+	_check(compact_wind_paths, "coastal wind is drawn as three compact traces instead of full-width parallel lines")
+	var arch_peaks_clear_shelf: bool = view._cliff_arches.size() == 3
+	for arch in view._cliff_arches:
+		var peak_y: float = INF
+		for point in arch:
+			peak_y = minf(peak_y, point.y)
+		if peak_y >= 637.0:
+			arch_peaks_clear_shelf = false
+	_check(arch_peaks_clear_shelf, "varied cliff-arch openings begin above the fixed instrument shelf")
 
 func _test_cache_revision(view: Control, source_snapshot: Dictionary, revision: int) -> void:
 	var cloud_cache: Array = view._clouds

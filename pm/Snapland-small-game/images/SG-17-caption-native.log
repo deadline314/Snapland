@@ -1,0 +1,36 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 60 FPS...
+CAPTION PALETTE CAPTURE: phase=dawn path=res://.review/kite-flight-caption/phase-dawn.png
+CAPTION PALETTE CAPTURE: phase=noon path=res://.review/kite-flight-caption/phase-noon.png
+CAPTION PALETTE CAPTURE: phase=dusk path=res://.review/kite-flight-caption/phase-dusk.png
+CAPTION PALETTE CAPTURE: phase=night path=res://.review/kite-flight-caption/phase-night.png
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=playing event=generic
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=playing event=miss
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=playing event=edge
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=playing event=center
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=playing event=line_snap
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=result event=generic
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=result event=miss
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=result event=edge
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=result event=center
+SYNTHETIC CAPTION PREVIEW ONLY: palette=dusk phase=result event=line_snap
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=playing event=generic
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=playing event=miss
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=playing event=edge
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=playing event=center
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=playing event=line_snap
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=result event=generic
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=result event=miss
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=result event=edge
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=result event=center
+SYNTHETIC CAPTION PREVIEW ONLY: palette=night phase=result event=line_snap
+PASS: captured dawn/noon/dusk/night actual rendered view palettes; no session, gameplay input, score, reward, or completion was created
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-first-park\Snapland\.review\root-kite-caption-final.avi
+49 frames at 60 FPS (movie length: 00:00:00:49), recorded in 00:00:02 (50% of real-time speed).
+CPU render time: 0.01 seconds (average: 0.27 ms/frame)
+GPU render time: 0.01 seconds (average: 0.19 ms/frame)
+Encoding time: 0.26 seconds (average: 5.39 ms/frame)
+--------------------------------------------------------------------------------

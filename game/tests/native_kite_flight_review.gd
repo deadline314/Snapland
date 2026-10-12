@@ -1,6 +1,8 @@
 extends Node
 
 const SessionScript = preload("res://game/minigames/session.gd")
+const KiteViewScript = preload("res://game/minigames/kite_flight_view.gd")
+const KiteModelScript = preload("res://game/minigames/kite_flight_model.gd")
 const REVIEW_DIR := "res://.review/kite-flight"
 
 var session: Control
@@ -9,6 +11,9 @@ var _last_mouse_position := Vector2.ZERO
 var _mouse_probe_logged := false
 var _kite_gui_motions := 0
 var _kite_gui_position := Vector2.ZERO
+var _review_deadline := 0
+var _failure_latched := false
+var _feedback_bounds_assertions := 0
 
 func _ready() -> void:
 	call_deferred("_run")
@@ -16,6 +21,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if _movie_mode():
 		RenderingServer.force_draw()
+	if _review_deadline > 0 and Time.get_ticks_msec() >= _review_deadline and not _failure_latched:
+		_review_deadline = 0
+		call_deferred("_fail", "Kite review exceeded its bounded 330-second wall watchdog")
 
 func _movie_mode() -> bool:
 	return OS.has_feature("movie") or OS.get_cmdline_args().has("--write-movie")
@@ -26,27 +34,66 @@ func _run() -> void:
 		get_tree().quit(1)
 		return
 	var absolute_dir := ProjectSettings.globalize_path(REVIEW_DIR)
+	_review_deadline = Time.get_ticks_msec() + 330000
 	var quarter_speed := Engine.time_scale <= 0.26
 	print("NATIVE KITE REVIEW SPEED: ", "quarter" if quarter_speed else "normal", " (engine time_scale=", Engine.time_scale, ")")
 	if DirAccess.make_dir_recursive_absolute(absolute_dir) != OK and not DirAccess.dir_exists_absolute(absolute_dir):
 		await _fail("Could not create isolated kite screenshot folder")
 		return
-	for route in ["keyboard", "mouse"]:
+	if not await _capture_palette_previews():
+		return
+	for route in ["keyboard", "mouse", "keyboard-reduced"]:
 		if not await _run_route(route):
 			return
-	print("PASS: native kite flight keyboard and mouse routes completed all five model rings")
+	print("PASS: native kite flight keyboard-practice, mouse-formal and reduced keyboard-practice routes completed all five model rings")
+	_review_deadline = 0
 	get_tree().quit(0)
 
+func _capture_palette_previews() -> bool:
+	# These are view-only palette captures from a fresh model snapshot, not a
+	# Session, station launch, input route, score, or completion claim.
+	var model = KiteModelScript.new()
+	model.reset(false)
+	var snapshot: Dictionary = model.snapshot()
+	var view: Control = KiteViewScript.new()
+	view.name = "KitePalettePreview"
+	view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(view)
+	var phases: Array[String] = ["dawn", "noon", "dusk", "night"]
+	for phase in phases:
+		view.update_frame(snapshot, "playing", false, phase)
+		if not await _capture("palette-%s.png" % phase):
+			view.queue_free()
+			return false
+	view.update_frame(snapshot, "playing", true, "noon")
+	if not await _capture("palette-reduced-static.png"):
+		view.queue_free()
+		return false
+	view.queue_free()
+	await get_tree().process_frame
+	print("PALETTE PREVIEW ONLY: four time phases plus reduced-motion static sample; no gameplay or result was created")
+	return true
+
 func _run_route(route: String) -> bool:
-	var assisted := route == "keyboard"
+	var keyboard_route := route != "mouse"
+	var assisted := keyboard_route
 	session = SessionScript.new()
 	session.name = "KiteFlightReviewSession"
 	session.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(session)
 	session.start("game-002", assisted)
-	if route == "keyboard":
+	if keyboard_route:
 		session.set_practice_mode(true)
+	if route == "keyboard-reduced":
+		# This third route verifies the actual reduced-motion setting reaches the
+		# Session and its existing View through the normal presentation refresh.
+		session.reduced_motion = true
 	session._sync_presentation()
+	if route == "keyboard-reduced":
+		session._refresh_hud(true)
+		if not session.reduced_motion or not bool(session.presentation.get("_reduced_motion")):
+			await _fail("Reduced keyboard-practice route did not enable reduced motion on Session and Kite view")
+			return false
 	if not is_instance_valid(session.presentation):
 		await _fail("Kite review has no initialized flight input surface")
 		return false
@@ -58,8 +105,10 @@ func _run_route(route: String) -> bool:
 	var wall_deadline := Time.get_ticks_msec() + 180000 * slowdown_factor
 	var captured_flight := false
 	var captured_gust := false
+	var captured_strong_wind := false
 	var captured_center := false
 	var captured_strain := false
+	_feedback_bounds_assertions = 0
 	var last_center_count := 0
 	var held_key := 0
 	var boost_held := false
@@ -81,7 +130,7 @@ func _run_route(route: String) -> bool:
 		if ring_index < 5:
 			var ring_height := float(session.kite_model.RING_HEIGHT[ring_index])
 			desired_aim = clampf((float(state.height) - ring_height) * 0.024 - float(state.vy) * 0.014, -1.0, 1.0)
-		if route == "mouse":
+		if not keyboard_route:
 			var pointer_target := Vector2(640.0, 390.0 - desired_aim * 235.0)
 			var aim_before := float(session.kite_model.snapshot().get("aim", 0.0))
 			_send_mouse_motion(pointer_target)
@@ -122,8 +171,13 @@ func _run_route(route: String) -> bool:
 			reel_used = true
 		if not captured_flight and frame_index >= 40:
 			captured_flight = await _capture("%s-flight.png" % route)
-		if not captured_gust and absf(float(state.get("actualwind", 0.0))) >= 30.0:
+		if not captured_gust and float(state.get("actualwind", 0.0)) >= 30.0:
 			captured_gust = await _capture("%s-gust.png" % route)
+		if not captured_strong_wind and float(state.get("actualwind", 0.0)) >= 120.0:
+			captured_strong_wind = await _capture("%s-strong-wind.png" % route)
+			if not captured_strong_wind:
+				return false
+			print("NATURAL STRONG WIND: %s actualwind=%.1f" % [route, float(state.actualwind)])
 		if int(state.get("center_hits", 0)) > last_center_count:
 			last_center_count = int(state.get("center_hits", 0))
 			if not captured_center: captured_center = await _capture("%s-center.png" % route)
@@ -143,6 +197,9 @@ func _run_route(route: String) -> bool:
 	if not session.ended or not session.won:
 		await _fail("%s input route did not pass all five rings before its guard: %s" % [route, str(session.kite_model.snapshot())])
 		return false
+	if not captured_strong_wind:
+		await _fail("%s route ended without a natural model wind sample >= 120" % route)
+		return false
 	if not await _verify_completed_route(route, assisted, boost_used, reel_used, boost_observed, reel_observed):
 		return false
 	if not captured_flight and not await _capture("%s-flight.png" % route): return false
@@ -152,12 +209,19 @@ func _run_route(route: String) -> bool:
 	if not await _hold_completed_stage(route): return false
 	if not await _capture("%s-completed.png" % route): return false
 	if not await _verify_visible_completed_hud(route): return false
+	if _feedback_bounds_assertions == 0:
+		await _fail("%s route never observed visible success feedback for the Kite bounds-overlap assertion" % route)
+		return false
 	# Keep the terminal mouse result alive until _run quits immediately. Removing
 	# it and yielding here would record a fixture-created empty/gray trailing frame.
-	if route == "keyboard":
+	if route != "keyboard-reduced":
 		session.queue_free()
 		session = null
 		await get_tree().process_frame
+	else:
+		# Keep the last real result alive through the fixture's immediate quit to
+		# avoid a fixture-created blank tail in movie output.
+		print("FINAL ROUTE KEPT ALIVE: keyboard-reduced practice")
 	return true
 
 func _hold_completed_stage(route: String) -> bool:
@@ -245,13 +309,13 @@ func _send_mouse_motion(position: Vector2) -> void:
 	_last_mouse_position = window_point
 
 func _send_boost(route: String, pressed: bool) -> void:
-	if route == "keyboard":
+	if route != "mouse":
 		_send_key(KEY_SPACE, pressed)
 	else:
 		_send_mouse_button(MOUSE_BUTTON_LEFT, pressed)
 
 func _send_reel(route: String, pressed: bool) -> void:
-	if route == "keyboard":
+	if route != "mouse":
 		_send_key(KEY_SHIFT, pressed)
 	else:
 		_send_mouse_button(MOUSE_BUTTON_RIGHT, pressed)
@@ -277,6 +341,25 @@ func _capture(file_name: String) -> bool:
 	if image == null or image.is_empty():
 		await _fail("GPU capture returned no frame: " + file_name)
 		return false
+	if is_instance_valid(session) and is_instance_valid(session.presentation):
+		var toast := session.minigame_hud.find_child("ContextFeedback", true, false) as Control if is_instance_valid(session.minigame_hud) else null
+		if toast != null and toast.is_visible_in_tree():
+			var kite_view: Control = session.presentation
+			var local_bounds: Rect2 = kite_view.kite_visual_bounds()
+			var canvas_transform: Transform2D = kite_view.get_global_transform_with_canvas()
+			var p0 := canvas_transform * local_bounds.position
+			var p1 := canvas_transform * (local_bounds.position + Vector2(local_bounds.size.x, 0.0))
+			var p2 := canvas_transform * (local_bounds.position + local_bounds.size)
+			var p3 := canvas_transform * (local_bounds.position + Vector2(0.0, local_bounds.size.y))
+			var minimum := Vector2(minf(minf(p0.x, p1.x), minf(p2.x, p3.x)), minf(minf(p0.y, p1.y), minf(p2.y, p3.y)))
+			var maximum := Vector2(maxf(maxf(p0.x, p1.x), maxf(p2.x, p3.x)), maxf(maxf(p0.y, p1.y), maxf(p2.y, p3.y)))
+			var kite_global_bounds := Rect2(minimum, maximum - minimum)
+			var toast_global_bounds := toast.get_global_rect()
+			_feedback_bounds_assertions += 1
+			if toast_global_bounds.intersects(kite_global_bounds):
+				await _fail("Visible Kite success feedback overlaps the transformed full kite bounds: toast=%s kite=%s capture=%s" % [str(toast_global_bounds), str(kite_global_bounds), file_name])
+				return false
+			print("FEEDBACK GEOMETRY: capture=%s toast_global=%s kite_global=%s" % [file_name, str(toast_global_bounds), str(kite_global_bounds)])
 	var path := ProjectSettings.globalize_path(REVIEW_DIR.path_join(file_name))
 	var result := image.save_png(path)
 	if result != OK:
@@ -286,6 +369,10 @@ func _capture(file_name: String) -> bool:
 	return true
 
 func _fail(message: String) -> void:
+	if _failure_latched:
+		return
+	_failure_latched = true
+	_review_deadline = 0
 	failures += 1
 	push_error("Native kite review: " + message)
 	get_tree().quit(1)
