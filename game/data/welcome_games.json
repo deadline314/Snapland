@@ -3,7 +3,16 @@
   {"id":"game-002","mode":"kite_rings","name":"風箏穿環","goal":"沿海崖側面操控風箏，預判陣風依序穿過五個風環","instructions":"滑鼠上下或 ↑／↓ 調迎風角；空白鍵／左鍵衝刺，Shift／右鍵收線。看實風與 1.25 秒預報，收線可降張力。","devil_hint":"五環中心穿越、零擦邊／救援，且未開輔助","devil":"五環中心穿越、零擦邊／救援，且未開輔助","ordinary":"60 秒內依序穿過全部五環；中心 +100，擦邊 +60"},
   {"id":"game-003","mode":"fountain_timing","name":"噴泉跳拍","goal":"看水柱預告，在亮起時起跳","instructions":"水柱最亮時按空白鍵或點擊起跳。","devil_hint":"三次都踩中水柱最亮拍點","devil":"三次都踩中水柱最亮拍點","ordinary":"成功踩中三次噴泉跳台"},
   {"id":"game-004","mode":"crowd_traffic","name":"人潮指揮","goal":"安排雙向通行，讓六隊旅客在耐心耗盡前過路口","instructions":"Q 安排橫向、E 安排縱向，也可點對應號誌。正在通行的隊伍會先安全離開，救援隊需優先留意。","devil_hint":"六隊全部安全通過，效率總分至少 430","devil":"六隊全部安全通過，效率總分至少 430","ordinary":"安全帶完六隊遊客"},
-  {"id":"game-005","mode":"hat_catching","name":"帽子救援","goal":"左右走位接住落帽，選擇避開或利用陣風","instructions":"按 ← → 或移動滑鼠接住落帽。","devil_hint":"六頂全接且零漏接","devil":"六頂全接且零漏接","ordinary":"接住至少四頂帽子"},
+  {
+    "id": "game-005",
+    "mode": "hat_catching",
+    "name": "帽子救援",
+    "goal": "看風旗預判帽子飄向，沿接帽線走位並在帽簷過手時伸手",
+    "instructions": "←／→ 或 WASD 連續走位；Space 短按伸手。滑鼠移動走位，左鍵短按伸手。看旗子預告風向，再追真正的帽影和落點。",
+    "devil_hint": "六頂全部中心接住、零漏接且未開輔助",
+    "devil": "六頂全部中心接住、零漏接且未開輔助",
+    "ordinary": "接住至少四頂帽子"
+  },
   {
     "id": "game-006",
     "mode": "ribbon_rhythm",

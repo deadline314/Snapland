@@ -41,6 +41,8 @@ const BubblePhotoModelScript = preload("res://game/minigames/bubble_photo_model.
 const BubblePhotoViewScript = preload("res://game/minigames/bubble_photo_view.gd")
 const SignBalanceModelScript = preload("res://game/minigames/sign_balance_model.gd")
 const SignBalanceViewScript = preload("res://game/minigames/sign_balance_view.gd")
+const HatRescueModelScript = preload("res://game/minigames/hat_rescue_model.gd")
+const HatRescueViewScript = preload("res://game/minigames/hat_rescue_view.gd")
 const MelodyMemoryModelScript = preload("res://game/minigames/melody_memory_model.gd")
 const MelodyMemoryViewScript = preload("res://game/minigames/melody_memory_view.gd")
 const ShadowTheatreModelScript = preload("res://game/minigames/shadow_theatre_model.gd")
@@ -115,6 +117,7 @@ var crowd_model: RefCounted = CrowdTrafficScript.new()
 var kite_model: RefCounted = KiteFlightModelScript.new()
 var bubble_model: RefCounted = BubblePhotoModelScript.new()
 var sign_model: RefCounted = SignBalanceModelScript.new()
+var hat_model: RefCounted = HatRescueModelScript.new()
 var melody_model: RefCounted = MelodyMemoryModelScript.new()
 var ribbon_model: RefCounted = RibbonRhythmModelScript.new()
 var melody_snapshot: Dictionary = {}
@@ -139,6 +142,9 @@ var _kite_down_held := false
 var _kite_boost_held := false
 var _kite_reel_held := false
 var _crowd_event_cursor := 0
+var _hat_ledger_cursor := 0
+var _hat_left_held := false
+var _hat_right_held := false
 var _ribbon_snapshot: Dictionary = {}
 var _ribbon_note_cursor := 0
 var _ribbon_score_cursor := 0
@@ -204,9 +210,6 @@ var shadow_started := false
 var shadow_broken := false
 var seats: Array[int] = []
 var flower_cells: Array[int] = []
-var hat_x: Array[float] = []
-var hat_y: Array[float] = []
-var hats_consumed: Array[bool] = []
 
 static func definitions() -> Array:
 	if not _catalog_loaded:
@@ -285,6 +288,8 @@ func _sync_presentation() -> void:
 				if DisplayServer.get_name() != "headless": presentation = BubblePhotoViewScript.new()
 			"sign_balance":
 				if DisplayServer.get_name() != "headless": presentation = SignBalanceViewScript.new()
+			"hat_catching":
+				if DisplayServer.get_name() != "headless": presentation = HatRescueViewScript.new()
 			"melody_memory":
 				if DisplayServer.get_name() != "headless": presentation = MelodyMemoryViewScript.new()
 			"shadow_alignment":
@@ -304,6 +309,13 @@ func _sync_presentation() -> void:
 			if mode == "sign_balance":
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.balance_requested.connect(_on_sign_balance_requested)
+			if mode == "hat_catching":
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+				presentation.gui_input.connect(_on_hat_presentation_input)
+				var hat_progress := get_node_or_null("/root/Progress")
+				var hat_appearance: Dictionary = hat_progress.appearance if hat_progress != null and hat_progress.get("appearance") is Dictionary else {}
+				var hat_equipped: Dictionary = hat_progress.equipped if hat_progress != null and hat_progress.get("equipped") is Dictionary else {}
+				presentation.configure_avatar(hat_appearance, hat_equipped)
 			if mode == "crowd_traffic":
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.focus_mode = Control.FOCUS_ALL
@@ -358,6 +370,7 @@ func _sync_presentation() -> void:
 		"kite_rings": presentation.update_frame(kite_model.snapshot(), "result" if ended else ("paused" if paused else "playing"), reduced_motion, time_phase)
 		"bubble_photo": presentation.present_state(bubble_model.snapshot(), str(bubble_model.phase), reduced_motion, time_phase)
 		"sign_balance": presentation.update_frame(sign_model.snapshot(), time_phase, reduced_motion)
+		"hat_catching": presentation.update_frame(hat_model.snapshot(), time_phase, reduced_motion)
 		"shadow_alignment": presentation.present_state(shadow_model.snapshot(), time_phase, reduced_motion)
 		"melody_memory": presentation.update_frame(melody_snapshot, time_phase, reduced_motion)
 		"bench_swap": presentation.update_frame(bench_model.snapshot(), time_phase, reduced_motion)
@@ -389,6 +402,12 @@ func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
 func set_paused(value: bool) -> void:
 	if ended and value:
 		return
+	if value and mode == "hat_catching":
+		_hat_left_held = false
+		_hat_right_held = false
+		hat_model.set_axis(0.0)
+		if is_instance_valid(presentation) and presentation.has_method("clear_held_directions"):
+			presentation.clear_held_directions()
 	if mode == "shadow_alignment":
 		_shadow_left_held = false
 		_shadow_right_held = false
@@ -677,9 +696,9 @@ func reset_round() -> void:
 	_bubble_photo_cursor = 0
 	seats.clear()
 	flower_cells.clear()
-	hat_x.clear()
-	hat_y.clear()
-	hats_consumed.clear()
+	_hat_ledger_cursor = 0
+	_hat_left_held = false
+	_hat_right_held = false
 	_sign_stage_cursor = 0
 	_sign_impact_cursor = 0
 	alignment_hold = 0.0
@@ -699,10 +718,9 @@ func reset_round() -> void:
 			crowd_model.reset(assisted)
 			_crowd_event_cursor = 0
 		"hat_catching":
-			for i in 6:
-				hat_x.append(260.0 + i * 150.0)
-				hat_y.append(-float(i) * 180.0 - 30.0)
-				hats_consumed.append(false)
+			hat_model.reset(assisted, time_phase)
+			var initial_hat_state: Dictionary = hat_model.snapshot()
+			p.x = float(initial_hat_state.player_x)
 		"ribbon_rhythm":
 			ribbon_model.reset(assisted, time_phase)
 			_ribbon_snapshot = ribbon_model.snapshot().duplicate(true)
@@ -1134,20 +1152,27 @@ func _tick_pipe(delta: float) -> void:
 		_feedback("花床已供水", MINT)
 
 func _tick_hats(delta: float) -> void:
-	for i in hat_y.size():
-		hat_y[i] += (112.0 + float(i % 3) * 20.0) * delta
-		if i % 2 == 0:
-			hat_x[i] += sin(phase * 1.8 + i) * 24.0 * delta
-		if not hats_consumed[i] and hat_y[i] > 560:
-			if absf(hat_x[i] - p.x) < (115.0 if assisted else 65.0):
-				_award_points("hat", "接住落帽", 100); count += 1; devil_progress += 1; _feedback("接住啦！", YELLOW)
-			else:
-				mistakes += 1; _feedback("帽子飛走了", PINK)
-			hats_consumed[i] = true
-			hat_y[i] = 700
-	p.x += _axis_x() * 280.0 * delta
-	p.x = clampf(p.x, 180, 1100)
-	if count + mistakes >= 6: _finish(count >= 4, count == 6 and mistakes == 0)
+	var state: Dictionary = hat_model.step(delta)
+	count = int(state.get("caught", 0))
+	devil_progress = int(state.get("center_catches", 0))
+	mistakes = int(state.get("misses", 0))
+	p.x = float(state.get("player_x", p.x))
+	var ledger: Array = state.get("ledger", [])
+	while _hat_ledger_cursor < mini(HatRescueModelScript.HAT_COUNT, ledger.size()):
+		var entry: Dictionary = ledger[_hat_ledger_cursor]
+		var status := str(entry.get("status", "waiting"))
+		if status == "waiting":
+			break
+		var points := int(entry.get("points", 0))
+		if points > 0:
+			_award_points("hat_%d" % _hat_ledger_cursor, "第 %d 頂・%s接住" % [_hat_ledger_cursor + 1, str(entry.get("grade", ""))], points)
+			_feedback("第 %d 頂%s　+%d" % [_hat_ledger_cursor + 1, str(entry.get("grade", "")), points], MINT if status == "center" else YELLOW)
+		else:
+			_feedback("第 %d 頂漏接" % (_hat_ledger_cursor + 1), PINK)
+		_hat_ledger_cursor += 1
+	_sync_presentation()
+	if bool(state.get("finished", false)):
+		_finish(bool(state.get("success", false)), bool(state.get("devil", false)))
 
 func _tick_melody(delta: float) -> void:
 	melody_model.step(delta)
@@ -1173,6 +1198,43 @@ func _on_kite_presentation_input(event: InputEvent) -> void:
 func _on_sign_balance_requested(value: float) -> void:
 	if mode == "sign_balance" and not ended and not paused:
 		sign_model.set_balance(value)
+
+func _on_hat_presentation_input(event: InputEvent) -> void:
+	if mode != "hat_catching" or ended or paused:
+		return
+	if event is InputEventKey:
+		var key := event as InputEventKey
+		if key.keycode in [KEY_LEFT, KEY_A]:
+			_hat_left_held = key.pressed
+			_update_hat_axis()
+			presentation.accept_event()
+		elif key.keycode in [KEY_RIGHT, KEY_D]:
+			_hat_right_held = key.pressed
+			_update_hat_axis()
+			presentation.accept_event()
+		elif key.keycode == KEY_SPACE and key.pressed and not key.echo:
+			hat_model.set_catch(true)
+			presentation.accept_event()
+	elif event is InputEventMouseMotion:
+		var pointer := (event as InputEventMouseMotion).position
+		# Incidental mouse motion must not switch a held keyboard route into
+		# pointer-target mode. An explicit click still selects a pointer target.
+		if HatRescueViewScript.PLAY_BOUNDS.has_point(pointer):
+			if not _hat_left_held and not _hat_right_held:
+				hat_model.set_target_x(pointer.x)
+			presentation.accept_event()
+	elif event is InputEventMouseButton:
+		var button := event as InputEventMouseButton
+		if button.button_index == MOUSE_BUTTON_LEFT and HatRescueViewScript.PLAY_BOUNDS.has_point(button.position):
+			if button.pressed:
+				hat_model.set_target_x(button.position.x)
+				hat_model.set_catch(true)
+			presentation.accept_event()
+	_sync_presentation()
+
+func _update_hat_axis() -> void:
+	if mode == "hat_catching" and not ended and not paused:
+		hat_model.set_axis(float(int(_hat_right_held) - int(_hat_left_held)))
 
 func _apply_kite_pointer_button(event: InputEventMouseButton) -> void:
 	if event.button_index == MOUSE_BUTTON_LEFT: _kite_boost_held = event.pressed
@@ -1225,6 +1287,20 @@ func _unhandled_input(event: InputEvent) -> void:
 			kite_model.set_reel(_kite_reel_held)
 		elif event is InputEventMouseButton:
 			_apply_kite_pointer_button(event as InputEventMouseButton)
+			return
+	if mode == "hat_catching" and event is InputEventKey:
+		var hat_key := event as InputEventKey
+		if hat_key.keycode in [KEY_LEFT, KEY_A]:
+			_hat_left_held = hat_key.pressed
+			_update_hat_axis()
+			return
+		if hat_key.keycode in [KEY_RIGHT, KEY_D]:
+			_hat_right_held = hat_key.pressed
+			_update_hat_axis()
+			return
+		if hat_key.keycode == KEY_SPACE and hat_key.pressed and not hat_key.echo:
+			hat_model.set_catch(true)
+			_sync_presentation()
 			return
 	if mode == "ribbon_rhythm" and event is InputEventKey:
 		var ribbon_key := event as InputEventKey
@@ -1287,6 +1363,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif mode == "bubble_photo":
 			if m.distance_to(Vector2(1020.0, 184.0)) <= 32.0: _bubble_shutter()
 		elif mode == "flower_pipes": _rotate_pipe(m)
+		elif mode == "hat_catching" and not is_instance_valid(presentation) and HatRescueViewScript.PLAY_BOUNDS.has_point(m):
+			hat_model.set_target_x(m.x)
+			hat_model.set_catch(true)
 	if event is InputEventMouseMotion:
 		var mouse := event as InputEventMouseMotion
 		var pointer := _to_design(mouse.position)
@@ -1296,7 +1375,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				steering_target = Vector2(clampf(pointer.x, 130, 1150), clampf(pointer.y, 210, 585))
 				mouse_steering = true
 			"kite_rings": kite_model.set_aim(clampf((390.0 - pointer.y) / 235.0, -1.0, 1.0))
-			"hat_catching": p.x = clampf(pointer.x, 180, 1100)
+			"hat_catching":
+				if not is_instance_valid(presentation) and HatRescueViewScript.PLAY_BOUNDS.has_point(pointer):
+					hat_model.set_target_x(pointer.x)
 			"shadow_alignment":
 				if not is_instance_valid(presentation):
 					_on_shadow_lamp_target_requested(_shadow_pointer_target(pointer))
@@ -1619,7 +1700,7 @@ func _feedback_anchor() -> Vector2:
 		"kite_rings": return p
 		"fountain_timing": return Vector2(960, 220)
 		"crowd_traffic": return Vector2(640, 654)
-		"hat_catching": return Vector2(p.x, 560)
+		"hat_catching": return Vector2(640.0, 448.0)
 		"ribbon_rhythm": return Vector2(640, 230)
 		"flower_pipes": return Vector2(150, 460)
 		"sign_balance": return Vector2(640, 340)
@@ -1697,7 +1778,7 @@ func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
-	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings", "bubble_photo", "sign_balance", "bench_swap"]:
+	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings", "bubble_photo", "sign_balance", "bench_swap", "hat_catching"]:
 		if mode == "balloon_delivery" and is_instance_valid(presentation):
 			var harbor_texture: Texture2D = presentation.texture()
 			if harbor_texture != null:
@@ -2023,7 +2104,6 @@ func _draw_game() -> void:
 		"balloon_delivery": _draw_balloon()
 		"fountain_timing": pass # The child SubViewport owns this mode's full 3D stage.
 		"crowd_traffic": _draw_crowd()
-		"hat_catching": _draw_hats()
 		"ribbon_rhythm": _draw_ribbon()
 		"flower_pipes": _draw_flower()
 		"sign_balance": _draw_sign()
@@ -2234,24 +2314,6 @@ func _draw_crowd() -> void:
 	draw_rect(Rect2(586,238,108,92),Color("#76533f"),true); draw_rect(Rect2(594,246,92,76),Color("#bd9263"),false,3)
 	draw_circle(Vector2(640,270),20,MINT if lane==0 else Color("#563f52")); draw_circle(Vector2(640,300),13,PINK if lane==1 else Color("#563f52"))
 	_draw_scene_label("切換行人燈　Q / E 或點擊　　放行　"+str(count)+" / 6",Vector2(640,558),17)
-
-func _draw_hats() -> void:
-	# Catching deck uses a front-facing performer with upturned hands and a stitched apron.
-	draw_rect(Rect2(82,522,1116,54),Color("#986e54"),true)
-	draw_line(Vector2(p.x-9,546),Vector2(p.x-25,518),Color("#efc09b"),6); draw_line(Vector2(p.x+9,546),Vector2(p.x+25,518),Color("#efc09b"),6)
-	_draw_tourist("tourist_coral",Rect2(p.x-31,484,62,96),Color("#e07d79"))
-	for i in hat_y.size():
-		if hat_y[i] < 620:
-			var hc := Vector2(hat_x[i],hat_y[i])
-			# Catch bands match the live horizontal tolerance at the actual crossing line.
-			var catch_tolerance := 115.0 if assisted else 65.0
-			if hc.y > 530 and hc.y < 590:
-				draw_rect(Rect2(p.x-catch_tolerance,545,catch_tolerance*2,38),Color(MINT,0.13),true)
-			draw_arc(hc+Vector2(0,8),24,PI,TAU,24,YELLOW,9); draw_line(hc+Vector2(-24,8),hc+Vector2(24,8),YELLOW,5)
-			draw_colored_polygon(PackedVector2Array([hc+Vector2(-17,8),hc+Vector2(-12,-13),hc+Vector2(0,-22),hc+Vector2(12,-13),hc+Vector2(17,8)]),Color("#dc8e58"))
-			draw_arc(hc+Vector2(0,8),13,PI,TAU,16,Color("#f5d6a7"),2)
-			draw_circle(hc+Vector2(0,-5),3,PINK if i%2==0 else BLUE)
-	_draw_scene_label("← → 或拖曳接住落下的帽子　　陣風：" + ("吹左" if sin(phase*1.8) < 0 else "吹右"),Vector2(640,195),19)
 
 func _draw_ribbon() -> void:
 	# Dancer and stage ribbon trace a unique eight-count phrase across the proscenium.

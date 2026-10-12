@@ -1938,6 +1938,314 @@
             }
           ]
         }
+      },
+      "catch": {
+        "front": {
+          "fps": 20,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                93,
+                52,
+                205,
+                306
+              ],
+              "anchors": {
+                "feet": [
+                  102,
+                  304
+                ],
+                "head": [
+                  102,
+                  9
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                437,
+                52,
+                206,
+                306
+              ],
+              "anchors": {
+                "feet": [
+                  103,
+                  304
+                ],
+                "head": [
+                  103,
+                  9
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                799,
+                52,
+                205,
+                306
+              ],
+              "anchors": {
+                "feet": [
+                  102,
+                  304
+                ],
+                "head": [
+                  102,
+                  9
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                1149,
+                52,
+                235,
+                306
+              ],
+              "anchors": {
+                "feet": [
+                  118,
+                  304
+                ],
+                "head": [
+                  118,
+                  8
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                86,
+                406,
+                226,
+                309
+              ],
+              "anchors": {
+                "feet": [
+                  113,
+                  307
+                ],
+                "head": [
+                  113,
+                  8
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                432,
+                400,
+                224,
+                315
+              ],
+              "anchors": {
+                "feet": [
+                  112,
+                  313
+                ],
+                "head": [
+                  112,
+                  9
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                796,
+                382,
+                208,
+                333
+              ],
+              "anchors": {
+                "feet": [
+                  104,
+                  331
+                ],
+                "head": [
+                  104,
+                  32
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                1159,
+                406,
+                209,
+                309
+              ],
+              "anchors": {
+                "feet": [
+                  104,
+                  307
+                ],
+                "head": [
+                  104,
+                  9
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                84,
+                737,
+                231,
+                306
+              ],
+              "anchors": {
+                "feet": [
+                  116,
+                  304
+                ],
+                "head": [
+                  116,
+                  8
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                438,
+                737,
+                209,
+                306
+              ],
+              "anchors": {
+                "feet": [
+                  104,
+                  304
+                ],
+                "head": [
+                  104,
+                  8
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                796,
+                740,
+                206,
+                303
+              ],
+              "anchors": {
+                "feet": [
+                  103,
+                  301
+                ],
+                "head": [
+                  103,
+                  9
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-catch-front-v4.png",
+              "region": [
+                1160,
+                737,
+                208,
+                306
+              ],
+              "anchors": {
+                "feet": [
+                  104,
+                  304
+                ],
+                "head": [
+                  104,
+                  8
+                ]
+              },
+              "source_scale": 0.602,
+              "anchor_method": {
+                "feet_method": "alpha32_shoe_contact_lower_edge",
+                "head_method": "central_navy_hair_top_excluding_raised_hands"
+              },
+              "layers": []
+            }
+          ]
+        }
       }
     },
     "ticket": {

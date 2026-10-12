@@ -3,6 +3,7 @@ extends SceneTree
 const Session = preload("res://game/minigames/session.gd")
 const CrowdSemaphoreView = preload("res://game/minigames/crowd_semaphore_view.gd")
 const HUD = preload("res://game/ui/minigame_hud.gd")
+const HatView = preload("res://game/minigames/hat_rescue_view.gd")
 const ShadowModel = preload("res://game/minigames/shadow_theatre_model.gd")
 const RibbonView = preload("res://game/minigames/ribbon_rhythm_view.gd")
 const Model = preload("res://game/minigames/melody_memory_model.gd")
@@ -226,23 +227,124 @@ func _test_hat_boundaries() -> void:
 	var missed_results: Array[Dictionary] = []
 	missed.finished.connect(func(value: Dictionary): missed_results.append(value))
 	while not missed.ended: missed._process(0.05)
-	assert(missed_results.size() == 1 and not missed_results[0].success)
+	assert(missed_results.size() == 1 and not missed_results[0].success and missed.mistakes == 6, "no timed reaches means six real misses and no completion")
 	missed.queue_free()
 
-	var caught := _new_session("game-005", true)
-	var caught_results: Array[Dictionary] = []
-	caught.finished.connect(func(value: Dictionary): caught_results.append(value))
-	while not caught.ended:
-		var closest := -1
-		var closest_y := -INF
-		for i in caught.hat_y.size():
-			if not caught.hats_consumed[i] and caught.hat_y[i] > closest_y and caught.hat_y[i] > 535.0:
-				closest = i; closest_y = caught.hat_y[i]
-		if closest >= 0: _mouse_move(caught, caught.hat_x[closest], 570)
-		caught._process(0.02)
-	assert(caught_results.size() == 1 and caught_results[0].success and caught_results[0].devil and caught_results[0].assisted)
-	caught.queue_free()
+	var feedback_session := _new_session("game-005")
+	var feedback_anchor: Vector2 = feedback_session._feedback_anchor()
+	feedback_session.minigame_hud.set_feedback_at("caught +120", feedback_anchor)
+	var popup := Rect2(feedback_session.minigame_hud._feedback.position, feedback_session.minigame_hud._feedback.size)
+	var actor_bounds := Rect2(feedback_session.hat_model.player_x - HatView.PLAYER_DRAW_SIZE.x * 0.5, HatView.PLAYER_GROUND_Y - HatView.PLAYER_DRAW_SIZE.y, HatView.PLAYER_DRAW_SIZE.x, HatView.PLAYER_DRAW_SIZE.y)
+	var cue_bounds := Rect2(510.0, 202.0, 260.0, 166.0)
+	var next_hat_label := Rect2(607.0, 420.0, 66.0, 22.0)
+	_expect(feedback_anchor == Vector2(640.0, 448.0) and popup.position.y == 370.0 and not popup.intersects(HatView.HUD_SAFE_RECT) and not popup.intersects(cue_bounds) and not popup.intersects(next_hat_label) and not popup.intersects(actor_bounds), "the production Hat Session feedback panel clears the reserved HUD, forecast, next-hat cue, and full avatar bounds")
+	feedback_session.queue_free()
 	checks += 1
+
+	var mixed_input := _new_session("game-005")
+	var input_view := HatView.new()
+	input_view.mouse_filter = Control.MOUSE_FILTER_STOP
+	mixed_input.presentation = input_view
+	mixed_input.add_child(input_view)
+	input_view.gui_input.connect(mixed_input._on_hat_presentation_input)
+	var right_press := InputEventKey.new()
+	right_press.keycode = KEY_RIGHT
+	right_press.pressed = true
+	input_view.gui_input.emit(right_press)
+	_expect(mixed_input.hat_model.axis == 1.0 and not mixed_input.hat_model.pointer_targeting, "Session GUI right-key event enters held keyboard steering")
+	var incidental_motion := InputEventMouseMotion.new()
+	incidental_motion.position = Vector2(900.0, 540.0)
+	input_view.gui_input.emit(incidental_motion)
+	_expect(mixed_input.hat_model.axis == 1.0 and not mixed_input.hat_model.pointer_targeting and mixed_input.hat_model.target_x == 640.0, "incidental GUI mouse motion cannot replace a held keyboard steering mode")
+	mixed_input.hat_model.step(0.10)
+	_expect(mixed_input.hat_model.player_x > 640.0, "the retained keyboard axis moves the catcher after incidental mouse motion")
+	var right_release := InputEventKey.new()
+	right_release.keycode = KEY_RIGHT
+	right_release.pressed = false
+	input_view.gui_input.emit(right_release)
+	_expect(mixed_input.hat_model.axis == 0.0 and not mixed_input.hat_model.pointer_targeting, "keyboard release ends keyboard steering cleanly")
+	var pointer_motion := InputEventMouseMotion.new()
+	pointer_motion.position = Vector2(900.0, 540.0)
+	input_view.gui_input.emit(pointer_motion)
+	_expect(mixed_input.hat_model.pointer_targeting and mixed_input.hat_model.target_x == 900.0, "pointer motion after keyboard release selects the live pointer target")
+	var explicit_click := InputEventMouseButton.new()
+	explicit_click.button_index = MOUSE_BUTTON_LEFT
+	explicit_click.pressed = true
+	explicit_click.position = Vector2(840.0, 540.0)
+	input_view.gui_input.emit(explicit_click)
+	_expect(mixed_input.hat_model.pointer_targeting and mixed_input.hat_model.target_x == 840.0 and mixed_input.hat_model.catch_window > 0.0, "an explicit pointer click selects its target and starts the real catch window")
+	mixed_input.queue_free()
+	checks += 6
+
+	var keyboard := _new_session("game-005")
+	var keyboard_results: Array[Dictionary] = []
+	keyboard.finished.connect(func(value: Dictionary): keyboard_results.append(value))
+	_drive_hat_session(keyboard, true)
+	assert(keyboard_results.size() == 1 and keyboard_results[0].success and keyboard_results[0].devil and keyboard_results[0].score >= 720, "real left/right and Space routing earns six center catches and the model result")
+	assert(keyboard.hat_model.snapshot().ledger.size() == 6 and keyboard.score == keyboard.hat_model.score and keyboard.devil_progress == 6, "session score, progress and result stay sourced from the six real model ledger entries")
+	keyboard.queue_free()
+
+	var pointer := _new_session("game-005", true)
+	var pointer_results: Array[Dictionary] = []
+	pointer.finished.connect(func(value: Dictionary): pointer_results.append(value))
+	_drive_hat_session(pointer, false)
+	assert(pointer_results.size() == 1 and pointer_results[0].success and not pointer_results[0].devil and pointer_results[0].assisted, "assisted absolute pointer movement plus timed clicks completes without devil eligibility")
+	var before_pause: Dictionary = pointer.hat_model.snapshot()
+	pointer.set_paused(true)
+	pointer._process(1.0)
+	assert(pointer.hat_model.snapshot().elapsed == before_pause.elapsed, "pause freezes the physical hat clock")
+	pointer.set_paused(false)
+	pointer._process(1.0)
+	assert(pointer.hat_model.snapshot().elapsed == before_pause.elapsed, "resume discards its stale frame before advancing the hat chart")
+	pointer.set_practice_mode(true)
+	assert(pointer.practice_mode and pointer.score == 0 and pointer.hat_model.snapshot().elapsed == 0.0 and pointer.hat_model.snapshot().caught == 0, "practice restarts the model with no retained score or catches")
+	var practice_results: Array[Dictionary] = []
+	pointer.finished.connect(func(value: Dictionary): practice_results.append(value))
+	_drive_hat_session(pointer, false)
+	assert(practice_results.size() == 1 and practice_results[0].get("practice", false) and practice_results[0].success and not practice_results[0].devil, "practice result reflects its real assisted pointer round")
+	pointer.queue_free()
+	checks += 1
+
+func _drive_hat_session(session: Control, keyboard_only: bool) -> void:
+	var held_direction := 0
+	var guard := 0
+	while not session.ended and guard < 1900:
+		var state: Dictionary = session.hat_model.snapshot()
+		var target_x := float(state.next_spawn_x)
+		var index := -1
+		for hat_index in state.hats.size():
+			var hat: Dictionary = state.hats[hat_index]
+			if hat.active and not hat.resolved:
+				index = hat_index
+				target_x = float(hat.landing_x)
+				break
+		if keyboard_only:
+			var distance: float = target_x - session.hat_model.player_x
+			var speed: float = session.hat_model.player_velocity
+			var brake_distance: float = speed * speed / (2.0 * session.hat_model.PLAYER_ACCEL) + 24.0
+			var direction := 0
+			if absf(speed) > 24.0 and signf(distance) == signf(speed) and absf(distance) <= brake_distance:
+				direction = -int(signf(speed))
+			elif absf(distance) > 18.0:
+				direction = int(signf(distance))
+			if direction != held_direction:
+				if held_direction != 0: _key_release(session, KEY_RIGHT if held_direction > 0 else KEY_LEFT)
+				if direction != 0: _key(session, KEY_RIGHT if direction > 0 else KEY_LEFT)
+				held_direction = direction
+		else:
+			_mouse_move(session, target_x, 540.0)
+		if index >= 0:
+			var current: Dictionary = session.hat_model.snapshot().hats[index]
+			if float(current.eta) <= 0.30 and float(state.catch_window) <= 0.0:
+				if keyboard_only:
+					_key(session, KEY_SPACE)
+					_key_release(session, KEY_SPACE)
+				else:
+					_click(session, target_x, 540.0)
+		session._process(0.02)
+		guard += 1
+	if held_direction != 0: _key_release(session, KEY_RIGHT if held_direction > 0 else KEY_LEFT)
+	assert(guard < 1900, "input-driven hat route remains bounded; state=" + str(session.hat_model.snapshot()))
 
 func _test_ribbon_boundaries() -> void:
 	var s := _new_session("game-006")
@@ -897,12 +999,13 @@ func _test_vertical_input_and_hat_consumption() -> void:
 	kite.queue_free()
 
 	var hats := _new_session("game-005")
-	hats.p.x = hats.hat_x[0]
-	hats.hat_y[0] = 561.0
-	hats._process(0.01)
-	assert(hats.count == 1 and hats.hats_consumed[0])
-	hats._process(0.01)
-	assert(hats.count == 1 and hats.mistakes == 0)
+	var start_x: float = hats.hat_model.player_x
+	_key(hats, KEY_RIGHT)
+	hats._process(0.1)
+	_key_release(hats, KEY_RIGHT)
+	assert(hats.hat_model.player_x > start_x and hats.hat_model.snapshot().catch_window == 0.0, "keyboard moves the model catcher continuously without creating a catch action")
+	_key(hats, KEY_SPACE)
+	assert(hats.hat_model.snapshot().catch_window > 0.0, "Space creates the real short-lived catch window")
 	hats.queue_free()
 	checks += 1
 
@@ -1171,12 +1274,14 @@ func _test_all_modes() -> void:
 						if chosen >= 0 and s.crowd_model.desired_lane != chosen:
 							_key(s, KEY_Q if chosen == 0 else KEY_E)
 					5:
-						var closest := -1
-						var closest_y := -INF
-						for i in s.hat_y.size():
-							if not s.hats_consumed[i] and s.hat_y[i] > closest_y:
-								closest = i; closest_y = s.hat_y[i]
-						if closest >= 0: _mouse_move(s, s.hat_x[closest], 570)
+						var hat_state: Dictionary = s.hat_model.snapshot()
+						var target_x := float(hat_state.next_spawn_x)
+						for hat in hat_state.hats:
+							if hat.active and not hat.resolved:
+								target_x = float(hat.landing_x)
+								if float(hat.eta) <= 0.30 and float(hat_state.catch_window) <= 0.0: _click(s, target_x, 540.0)
+								break
+						_mouse_move(s, target_x, 540.0)
 					7:
 						if s.pipe_model.order_index != pipe_order_played:
 							pipe_order_played = s.pipe_model.order_index
@@ -1222,7 +1327,7 @@ func _test_all_modes() -> void:
 			if number == 1:
 				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
 			else:
-				var expected_devil: bool = (not assisted) if number in [2, 6, 9, 11, 12] else true
+				var expected_devil: bool = (not assisted) if number in [2, 5, 6, 9, 11, 12] else true
 				assert(results.size() == 1 and results[0].success and results[0].devil == expected_devil, "Reachability game-%03d assist=%s results=%s" % [number, assisted, str(results)])
 			var score_detail: Dictionary = results[0].get("score_summary", {})
 			var displayed_total := 0
