@@ -107,3 +107,31 @@
 ### 提交
 
 分支：`feature/island-first-park`；[遠端提交 9f7a667](https://github.com/deadline314/Snapland/commit/9f7a667)。
+
+# Commit-3
+
+## 問題
+
+十二款小遊戲的既有原生畫面分散在各玩法交付資料中，難以直接比較媒材、空間構圖與主要操作。
+
+## 改動
+
+新增 3 欄 × 4 列原生畫面總覽，每格保留完整畫面並附中文名稱、依 renderer／scene-node 確定的媒材及主要操作，並記錄來源雜湊與交付狀態。帽子救援使用已提交的 v13 原生截圖；泡泡拍貼採用 Photo checkpoint `80ca160` 的 v2 畫面。
+
+## 驗收
+
+本次只整理既有截圖並列，未將畫面比對描述成目前 Main 的十二款 GPU 試玩或精品驗收。Root 已確認比較圖版面與媒材分類；十二款 Main 原生 GPU 試玩及全套驗收仍未完成，原票相關驗收維持未勾選。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 圖片版面 | 12 款、3 欄 × 4 列；原圖 1280×720 完整依比例縮放，未裁切；3D 分類為 001、003、004、009 |
+| 來源追溯 | 11 張來自基線已提交圖片；SG-20 使用提交 f2919ac 的 v13 圖；SG-25 使用 Photo checkpoint 80ca160 的 v2 圖 |
+| Main 十二款原生 GPU 試玩／全套視覺驗收 | 未執行；本次僅完成既有截圖比較，Root 已確認比較圖版面與分類 |
+
+### 截圖
+
+![十二款原生畫面比較](images/ART-21-twelve-native-comparison.png)
+
+來源及 SHA-256：[比較圖來源清單](../../design/runtime/ART-21-twelve-native-comparison-manifest.md)。
