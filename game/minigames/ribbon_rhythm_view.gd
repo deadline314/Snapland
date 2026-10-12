@@ -7,14 +7,17 @@ signal action_released(action: String)
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const CharacterAnimationLibrary = preload("res://game/world/character_animation_library.gd")
 const STAGE_BOUNDS := Rect2(78.0, 142.0, 1124.0, 486.0)
 const TOP_HUD_SAFE := Rect2(24.0, 12.0, 1232.0, 116.0)
 const BOTTOM_HUD_SAFE := Rect2(24.0, 640.0, 1232.0, 68.0)
 const MAIN_AVATAR_RECT := Rect2(503.0, 273.0, 230.0, 296.0)
-const PARTNER_AVATAR_RECT := Rect2(722.0, 315.0, 184.0, 237.0)
+const PARTNER_AVATAR_RECT := Rect2(812.0, 368.0, 128.0, 184.0)
 const JUMP_AVATAR_RECT := Rect2(503.0, 246.0, 230.0, 296.0)
 const CURRENT_CUE_RECT := Rect2(133.0, 229.0, 170.0, 76.0)
 const UPCOMING_CUE_RECTS := [Rect2(977.0, 229.0, 170.0, 76.0), Rect2(1018.0, 319.0, 132.0, 63.0)]
+const BEAT_MARKER_COUNT := 8
+const STRONG_BEATS := [0, 3, 5, 7]
 const CONTROL_RECTS := {
 	"left": Rect2(342.0, 647.0, 176.0, 50.0),
 	"jump": Rect2(552.0, 647.0, 176.0, 50.0),
@@ -34,8 +37,19 @@ var _reduced_motion := false
 var _renderer: RefCounted
 var _appearance: Dictionary = {}
 var _equipped: Dictionary = {}
-var _partner_equipped: Dictionary = {}
 var _texture_cache: Dictionary = {}
+var _companion_library
+var _companion_idle_frames: Array[Texture2D] = []
+var _companion_dance_frames: Array[Texture2D] = []
+var _companion_static_texture: Texture2D
+var _companion_idle_fps := 3.0
+var _companion_dance_fps := 6.0
+var _companion_dance_active := false
+var _companion_dance_complete := false
+var _companion_dance_elapsed := 0.0
+var _last_snapshot_elapsed := 0.0
+var _last_snapshot_index := 0
+var _last_snapshot_ended := false
 var _assets_ready := false
 
 func _ready() -> void:
@@ -43,18 +57,38 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	queue_redraw()
 
+func _process(delta: float) -> void:
+	if not _companion_dance_active or _reduced_motion or not is_finite(delta) or delta <= 0.0:
+		return
+	_companion_dance_elapsed += minf(delta, 0.1)
+	if _companion_dance_elapsed >= float(_companion_dance_frames.size()) / maxf(0.01, _companion_dance_fps):
+		_companion_dance_active = false
+		_companion_dance_complete = true
+	queue_redraw()
+
 func configure_avatar(appearance: Dictionary, equipped: Dictionary) -> void:
 	_appearance = appearance.duplicate(true)
 	_equipped = equipped.duplicate(true)
-	_partner_equipped = _equipped.duplicate(true)
-	_partner_equipped["outfit"] = "outfit-coral" if str(_equipped.get("outfit", "outfit-tide")) != "outfit-coral" else "outfit-tide"
 	_texture_cache.clear()
 	_renderer = AvatarRenderer.new()
+	_prepare_companion()
 	_assets_ready = _validate_authored_avatar_actions()
 	queue_redraw()
 
 func update_frame(snapshot: Dictionary, time_of_day: String = "noon", reduced_motion: bool = false) -> void:
+	var elapsed := float(snapshot.get("elapsed", 0.0))
+	var index := int(snapshot.get("gesture_index", 0))
+	var ended := bool(snapshot.get("ended", false))
+	if elapsed + 0.00001 < _last_snapshot_elapsed or index < _last_snapshot_index or (not ended and _last_snapshot_ended):
+		_reset_companion_performance()
+	var successful_finish := ended and bool(snapshot.get("success", false)) and index >= BEAT_MARKER_COUNT
+	if successful_finish and not _last_snapshot_ended and not _companion_dance_complete:
+		_companion_dance_active = not _companion_dance_frames.is_empty()
+		_companion_dance_elapsed = 0.0
 	_snapshot = snapshot
+	_last_snapshot_elapsed = elapsed
+	_last_snapshot_index = index
+	_last_snapshot_ended = ended
 	_time_phase = time_of_day if PALETTES.has(time_of_day) else "noon"
 	_reduced_motion = reduced_motion
 	queue_redraw()
@@ -87,6 +121,55 @@ func avatar_bounds_for_pose(pose: String, partner: bool = false) -> Rect2:
 
 func available_pose_names() -> Array[String]:
 	return POSE_NAMES.duplicate()
+
+func companion_bounds() -> Rect2:
+	return PARTNER_AVATAR_RECT
+
+func companion_identity() -> String:
+	return "imp"
+
+func companion_display_name() -> String:
+	return "小角"
+
+func companion_assets_ready() -> bool:
+	return _companion_static_texture != null and not _companion_idle_frames.is_empty()
+
+func companion_idle_frame_count() -> int:
+	return _companion_idle_frames.size()
+
+func companion_dance_frame_count() -> int:
+	return _companion_dance_frames.size()
+
+func companion_cached_texture_count() -> int:
+	return int(_companion_library.cached_texture_count()) if _companion_library != null else 0
+
+func companion_frame_index() -> int:
+	return _companion_frame_index(float(_snapshot.get("elapsed", 0.0)))
+
+func companion_is_dancing() -> bool:
+	return _companion_dance_active
+
+func beat_marker_rect(index: int) -> Rect2:
+	if index < 0 or index >= BEAT_MARKER_COUNT:
+		return Rect2()
+	var center_y := 600.0 + (3.0 if index % 2 == 1 else 0.0)
+	return Rect2(Vector2(184.0 + float(index) * 130.0 - 12.0, center_y - 11.0), Vector2(24.0, 32.0))
+
+func beat_marker_state(index: int, snapshot: Dictionary = {}) -> String:
+	if index < 0 or index >= BEAT_MARKER_COUNT:
+		return "invalid"
+	var state := snapshot if not snapshot.is_empty() else _snapshot
+	var current := int(state.get("gesture_index", 0))
+	var trail: Variant = state.get("ribbon_trail", [])
+	if index < current:
+		if trail is Array:
+			for entry in trail:
+				if entry is Dictionary and int(entry.get("index", -1)) == index:
+					return "complete"
+		return "missed"
+	if index == current and current < BEAT_MARKER_COUNT and not bool(state.get("ended", false)):
+		return "current"
+	return "future"
 
 func avatar_assets_ready() -> bool:
 	return _assets_ready
@@ -154,6 +237,59 @@ func _validate_authored_avatar_actions() -> bool:
 		and _renderer.has_authored_action("jump", "front") and _renderer.has_authored_action("wave", "front") \
 		and _renderer.texture(_appearance, _equipped, "front", 0, "celebrate") != null
 
+func _prepare_companion() -> void:
+	_companion_library = CharacterAnimationLibrary.new()
+	_companion_idle_frames.clear()
+	_companion_dance_frames.clear()
+	_companion_static_texture = null
+	_companion_dance_active = false
+	_companion_dance_complete = false
+	_companion_dance_elapsed = 0.0
+	_last_snapshot_elapsed = float(_snapshot.get("elapsed", 0.0))
+	_last_snapshot_index = int(_snapshot.get("gesture_index", 0))
+	_last_snapshot_ended = bool(_snapshot.get("ended", false))
+	var idle: Dictionary = _companion_library.get_sequence("imp", "idle", "front")
+	var dance: Dictionary = _companion_library.get_sequence("imp", "dance", "front")
+	_companion_idle_fps = maxf(0.01, float(idle.get("fps", 3.0)))
+	_companion_dance_fps = maxf(0.01, float(dance.get("fps", 6.0)))
+	_append_sequence_textures(idle, _companion_idle_frames)
+	_append_sequence_textures(dance, _companion_dance_frames)
+	if not _companion_idle_frames.is_empty():
+		_companion_static_texture = _companion_idle_frames[0]
+	elif not _companion_dance_frames.is_empty():
+		_companion_static_texture = _companion_dance_frames[0]
+		_companion_idle_frames.append(_companion_static_texture)
+		push_warning("RibbonRhythmView: imp idle frames are unavailable; using its authored dance first frame as a static identity fallback.")
+	else:
+		push_warning("RibbonRhythmView: authored imp companion textures are unavailable; keeping the partner slot empty rather than duplicating the traveller.")
+	if _companion_dance_frames.is_empty():
+		push_warning("RibbonRhythmView: authored imp dance is unavailable; 小角 will remain in a static authored imp pose on success.")
+
+func _append_sequence_textures(sequence: Dictionary, destination: Array[Texture2D]) -> void:
+	var frames: Variant = sequence.get("frames", [])
+	if not frames is Array:
+		return
+	for frame_value in frames:
+		if not frame_value is Dictionary:
+			continue
+		var texture := frame_value.get("texture") as Texture2D
+		if texture != null:
+			destination.append(texture)
+
+func _reset_companion_performance() -> void:
+	_companion_dance_active = false
+	_companion_dance_complete = false
+	_companion_dance_elapsed = 0.0
+
+func _companion_frame_index(elapsed: float) -> int:
+	if _companion_dance_active and not _companion_dance_frames.is_empty():
+		if _reduced_motion:
+			return _companion_dance_frames.size() - 1
+		return mini(floori(maxf(0.0, _companion_dance_elapsed) * _companion_dance_fps), _companion_dance_frames.size() - 1)
+	if _companion_idle_frames.is_empty() or _reduced_motion:
+		return 0
+	return posmod(floori(maxf(0.0, elapsed) * _companion_idle_fps), _companion_idle_frames.size())
+
 func _pose_data(pose: String, elapsed: float) -> Dictionary:
 	if pose == "walk_left" or pose == "walk_right":
 		var direction := "left" if pose == "walk_left" else "right"
@@ -176,17 +312,16 @@ func _pose_data(pose: String, elapsed: float) -> Dictionary:
 		return {"action": "celebrate", "direction": "front", "frame": frame}
 	return {"action": "idle", "direction": "front", "frame": 0}
 
-func _avatar_texture(pose: String, elapsed: float, partner: bool = false) -> Texture2D:
+func _avatar_texture(pose: String, elapsed: float, _partner: bool = false) -> Texture2D:
 	if _renderer == null:
 		return null
 	var pose_data := _pose_data(pose, elapsed)
 	var action := str(pose_data.action)
 	var direction := str(pose_data.direction)
 	var frame := int(pose_data.frame)
-	var wardrobe := _partner_equipped if partner else _equipped
-	var cache_key := "%s|%s|%s|%d|%s" % [action, direction, frame, int(partner), JSON.stringify(wardrobe)]
+	var cache_key := "%s|%s|%d|%s" % [action, direction, frame, JSON.stringify(_equipped)]
 	if not _texture_cache.has(cache_key):
-		_texture_cache[cache_key] = _renderer.texture(_appearance, wardrobe, direction, frame, action)
+		_texture_cache[cache_key] = _renderer.texture(_appearance, _equipped, direction, frame, action)
 	return _texture_cache[cache_key]
 
 func _draw() -> void:
@@ -196,7 +331,6 @@ func _draw() -> void:
 	_draw_timeline(palette)
 	_draw_ribbon_trails(palette)
 	_draw_performers(palette)
-	_draw_score_and_progress(palette)
 	_draw_controls(palette)
 
 func _draw_stage(palette: Dictionary) -> void:
@@ -270,14 +404,24 @@ func _draw_plank_stage(palette: Dictionary) -> void:
 		draw_circle(Vector2(x, 565), 3.5, palette.gold)
 
 func _draw_floor_lights(palette: Dictionary) -> void:
-	for index in range(8):
-		var x := 184.0 + float(index) * 130.0
-		var y := 600.0 + (3.0 if index % 2 == 0 else 0.0)
-		draw_circle(Vector2(x, y), 8.0, palette.sky.darkened(0.15))
-		draw_circle(Vector2(x, y), 4.0, palette.gold)
+	# The eight existing footlights are the performance timeline, safely below
+	# the shared HUD and below the performers' feet.
+	for index in range(BEAT_MARKER_COUNT):
+		var center := Vector2(184.0 + float(index) * 130.0, 600.0 + (3.0 if index % 2 == 0 else 0.0))
+		var state := beat_marker_state(index)
+		var color: Color = palette.text.darkened(0.38)
+		match state:
+			"complete": color = palette.accent if index % 2 == 0 else palette.coral
+			"current": color = palette.gold
+			"missed": color = palette.coral.darkened(0.30)
+		draw_circle(center, 9.0 if index in STRONG_BEATS else 7.0, palette.sky.darkened(0.15))
+		draw_circle(center, 5.5 if index in STRONG_BEATS else 4.0, color)
+		if state == "current":
+			draw_arc(center, 10.5, 0.0, TAU, 24, palette.gold, 1.5, true)
+		_draw_label(Vector2(center.x - 7.0, 620.0), str(index + 1), palette.text.darkened(0.08), HORIZONTAL_ALIGNMENT_CENTER, 14, 9)
 	# Two raised side steps give the stage its 2.5D edge and contact shadow.
-	draw_line(Vector2(92, 618), Vector2(1188, 618), palette.sky.darkened(0.50), 4.0)
-	draw_line(Vector2(112, 624), Vector2(1168, 624), palette.gold.darkened(0.40), 2.0)
+	draw_line(Vector2(92, 627), Vector2(1188, 627), palette.sky.darkened(0.50), 4.0)
+	draw_line(Vector2(112, 632), Vector2(1168, 632), palette.gold.darkened(0.40), 2.0)
 
 func _draw_timeline(palette: Dictionary) -> void:
 	var upcoming: Array = _snapshot.get("upcoming", [])
@@ -377,23 +521,27 @@ func _draw_performers(palette: Dictionary) -> void:
 	elif not current.is_empty():
 		pose = str(current.get("pose", "idle_front"))
 	var elapsed := float(_snapshot.get("elapsed", 0.0))
-	# Stage twin is a mirrored wardrobe variant, kept behind the player silhouette.
-	_draw_ground_shadow(PARTNER_AVATAR_RECT, palette)
-	var partner_pose := _partner_pose(pose)
-	_draw_avatar(partner_pose, elapsed, true, PARTNER_AVATAR_RECT, Color(palette.accent, 0.90), true)
+	_draw_companion(palette, elapsed)
 	var main_rect := JUMP_AVATAR_RECT if pose == "jump_front" and not _reduced_motion else MAIN_AVATAR_RECT
 	_draw_ground_shadow(main_rect, palette, pose == "jump_front" and not _reduced_motion)
 	_draw_avatar(pose, elapsed, false, main_rect, Color.WHITE, false)
 	if bool(_snapshot.get("ended", false)):
 		_draw_label(Vector2(436, 250), "掌聲留在天鵝絨後台", palette.gold, HORIZONTAL_ALIGNMENT_CENTER, 410, 15)
 
-func _partner_pose(pose: String) -> String:
-	if pose == "walk_left": return "walk_right"
-	if pose == "walk_right": return "walk_left"
-	if pose == "jump_front": return "jump_front"
-	if pose == "wave_front": return "wave_front"
-	if pose == "celebrate_front": return "celebrate_front"
-	return "idle_front"
+func _draw_companion(palette: Dictionary, elapsed: float) -> void:
+	var texture := _companion_texture(elapsed)
+	if texture == null:
+		return
+	_draw_ground_shadow(PARTNER_AVATAR_RECT, palette)
+	draw_texture_rect(texture, PARTNER_AVATAR_RECT, false)
+	_draw_label(Vector2(PARTNER_AVATAR_RECT.position.x, PARTNER_AVATAR_RECT.position.y - 5.0), "小角", palette.gold, HORIZONTAL_ALIGNMENT_CENTER, int(PARTNER_AVATAR_RECT.size.x), 12)
+
+func _companion_texture(elapsed: float) -> Texture2D:
+	if _companion_dance_active and not _companion_dance_frames.is_empty():
+		return _companion_dance_frames[_companion_frame_index(elapsed)]
+	if _companion_idle_frames.is_empty():
+		return _companion_static_texture
+	return _companion_idle_frames[_companion_frame_index(elapsed)]
 
 func _draw_ground_shadow(rect: Rect2, palette: Dictionary, airborne: bool = false) -> void:
 	var point := Vector2(rect.get_center().x, 575.0)
@@ -415,30 +563,6 @@ func _draw_avatar(pose: String, elapsed: float, partner: bool, rect: Rect2, modu
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	else:
 		draw_texture_rect(texture, rect, false, modulate)
-func _draw_score_and_progress(palette: Dictionary) -> void:
-	var index := mini(int(_snapshot.get("gesture_index", 0)), 8)
-	var completed := int(_snapshot.get("correct_count", 0))
-	var score_value := int(_snapshot.get("score", 0))
-	_draw_label(Vector2(34, 40), "彩帶舞台", palette.text, HORIZONTAL_ALIGNMENT_LEFT, 220, 22)
-	_draw_label(Vector2(35, 68), "RIBBON CABARET", palette.gold, HORIZONTAL_ALIGNMENT_LEFT, 220, 11)
-	_draw_label(Vector2(936, 42), "%04d" % score_value, palette.gold, HORIZONTAL_ALIGNMENT_RIGHT, 300, 25)
-	_draw_label(Vector2(1057, 68), "得分", palette.text, HORIZONTAL_ALIGNMENT_RIGHT, 178, 12)
-	_draw_label(Vector2(530, 42), "%d / 8" % index, palette.text, HORIZONTAL_ALIGNMENT_CENTER, 220, 20)
-	_draw_label(Vector2(548, 68), "八拍演出", palette.gold, HORIZONTAL_ALIGNMENT_CENTER, 184, 12)
-	var bar := Rect2(408, 91, 464, 9)
-	draw_rect(bar, Color(palette.text, 0.20), true)
-	if completed > 0:
-		draw_rect(Rect2(bar.position, Vector2(bar.size.x * float(completed) / 8.0, bar.size.y)), palette.accent, true)
-	for cue in range(8):
-		var x := bar.position.x + bar.size.x * (float(cue) + 0.5) / 8.0
-		draw_circle(Vector2(x, bar.get_center().y), 4.0, palette.gold if cue in [0, 3, 5, 7] else palette.text)
-	var error_text := str(_snapshot.get("last_event", ""))
-	if error_text.length() > 34:
-		error_text = error_text.substr(0, 33) + "…"
-	_draw_label(Vector2(409, 119), error_text, palette.text.darkened(0.04), HORIZONTAL_ALIGNMENT_CENTER, 462, 12)
-	var time_left := maxf(0.0, float(_snapshot.get("cue_times", []).back()) + float(_snapshot.get("timing_window", 0.0)) - float(_snapshot.get("elapsed", 0.0))) if not _snapshot.get("cue_times", []).is_empty() else 0.0
-	_draw_label(Vector2(1108, 98), "%.1fs" % time_left, palette.text, HORIZONTAL_ALIGNMENT_RIGHT, 100, 14)
-
 func _draw_controls(palette: Dictionary) -> void:
 	for action in ["left", "jump", "right"]:
 		var rect: Rect2 = CONTROL_RECTS[action]
@@ -449,8 +573,6 @@ func _draw_controls(palette: Dictionary) -> void:
 		draw_rect(rect, palette.gold.darkened(0.16) if active else palette.accent.darkened(0.12), false, 2.0, true)
 		var label := "←  A / ←" if action == "left" else ("跳起  SPACE" if action == "jump" else "D / →  →")
 		_draw_label(rect.position + Vector2(0, 32), label, palette.text if not active else palette.sky, HORIZONTAL_ALIGNMENT_CENTER, int(rect.size.x), 15)
-	_draw_label(Vector2(34, 685), "方向鍵／A D：踩步　空白鍵：躍起　長按左／右：揮帶", palette.text.darkened(0.02), HORIZONTAL_ALIGNMENT_LEFT, 792, 13)
-	_draw_label(Vector2(920, 685), "滑鼠點按或按住舞台按鍵", palette.gold, HORIZONTAL_ALIGNMENT_RIGHT, 326, 12)
 
 func _draw_label(position: Vector2, text: String, color: Color, alignment: HorizontalAlignment, width: int, size_value: int) -> void:
 	draw_string(FONT, position, text, alignment, width, size_value, color)

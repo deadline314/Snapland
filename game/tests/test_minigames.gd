@@ -19,6 +19,9 @@ func _run() -> void:
 		push_error("Minigame tests require isolated SNAPLAND_SAVE_PATH")
 		quit(1)
 		return
+	root.size = Vector2i(1280, 720)
+	await process_frame
+	await process_frame
 	if OS.get_cmdline_user_args().has("--kite-pointer-only"):
 		await _test_kite_native_pointer_routing()
 		_expect(_kite_pointer_test_completed,"standalone kite pointer coroutine reached its final assertion")
@@ -43,6 +46,7 @@ func _run() -> void:
 	_test_crowd_boundaries()
 	_test_hat_boundaries()
 	_test_ribbon_boundaries()
+	_test_ribbon_finish_gate()
 	_test_sign_boundaries()
 	_test_sign_seven_stage_score_ledger()
 	_test_shadow_boundaries()
@@ -378,6 +382,9 @@ func _test_ribbon_boundaries() -> void:
 		if float(gestures[index].hold) > 0.0:
 			_advance_ribbon_to(s, cue_time + float(gestures[index].hold))
 			s._on_ribbon_action_released(action)
+	_expect(results.is_empty() and s.ribbon_finish_pending and not s.ended, "final successful beat opens a visible dance gate before publishing the result")
+	_expect(ribbon_view != null and ribbon_view.companion_is_dancing(), "the successful Session snapshot starts XiaoJiao's authored dance before completion")
+	_advance_ribbon_finish(s)
 	_expect(results.size() == 1 and bool(results[0].success) and not bool(results[0].devil), "eight correct gestures with an earlier error finish ordinary, never devil")
 	var ledger_score := 0
 	for event in s.score_events: ledger_score += int(event.amount)
@@ -398,6 +405,85 @@ func _test_ribbon_boundaries() -> void:
 	_expect(assisted.score_summary().rule.contains("四個重拍") and not bool(assisted.ribbon_model.snapshot().devil_success), "score rules expose strong beats and assisted devil exclusion")
 	assisted.queue_free()
 	checks += 1
+
+func _test_ribbon_finish_gate() -> void:
+	var failed := _new_session("game-006")
+	var failed_results: Array[Dictionary] = []
+	failed.finished.connect(func(value: Dictionary) -> void: failed_results.append(value.duplicate(true)))
+	while not bool(failed.ribbon_model.snapshot().ended):
+		failed._process(0.05)
+	_expect(failed_results.size() == 1 and not bool(failed_results[0].success) and not failed.ribbon_finish_pending, "a failed rhythm round settles immediately without the success dance gate")
+	failed.queue_free()
+
+	var retry := _new_session("game-006")
+	var retry_results: Array[Dictionary] = []
+	retry.finished.connect(func(value: Dictionary) -> void: retry_results.append(value.duplicate(true)))
+	_drive_ribbon_success(retry)
+	_expect(retry.ribbon_finish_pending and retry_results.is_empty(), "successful rhythm waits for its authored finish performance")
+	retry.reset_round()
+	_expect(not retry.ribbon_finish_pending and retry.ribbon_model.snapshot().gesture_index == 0 and retry.score == 0, "retry cancels the old finish gate and resets the real model")
+	retry._process(1.0)
+	_expect(retry_results.is_empty() and not retry.ended, "a canceled retry gate cannot publish a stale result")
+	retry.queue_free()
+
+	var paused := _new_session("game-006")
+	var paused_results: Array[Dictionary] = []
+	paused.finished.connect(func(value: Dictionary) -> void: paused_results.append(value.duplicate(true)))
+	_drive_ribbon_success(paused)
+	for _frame in range(4): paused._process(0.1)
+	var before_pause: float = float(paused.ribbon_finish_elapsed)
+	var paused_view := paused.presentation as RibbonView
+	paused.set_paused(true)
+	_expect(paused.ribbon_finish_pending and not paused.ended and paused_view != null and not paused_view.is_processing(), "pausing freezes the running dance gate and its view")
+	paused._process(1.0)
+	_expect(paused_results.is_empty() and is_equal_approx(paused.ribbon_finish_elapsed, before_pause), "the paused finish retains exactly the same remaining duration")
+	paused.set_paused(false)
+	_expect(paused.ribbon_finish_pending and not paused.ended and paused_view.is_processing(), "resume continues rather than skipping the remaining dance")
+	_advance_ribbon_finish(paused)
+	_expect(paused.ended and paused_results.size() == 1 and bool(paused_results[0].success) and is_equal_approx(paused.ribbon_finish_elapsed, paused.ribbon_finish_duration), "the resumed gate uses its full remaining duration before publishing once")
+	paused._process(1.0)
+	_expect(paused_results.size() == 1, "a resumed rhythm finish emits no duplicate result")
+	paused.queue_free()
+
+	var leaving := _new_session("game-006")
+	var canceled_count := [0]
+	leaving.cancelled.connect(func(): canceled_count[0] += 1)
+	_drive_ribbon_success(leaving)
+	leaving._leave_from_hud()
+	_expect(not leaving.ribbon_finish_pending and int(canceled_count[0]) == 1, "leaving cancels the presentation gate without publishing a result")
+	leaving.queue_free()
+
+	var reduced := _new_session("game-006")
+	reduced.reduced_motion = true
+	var reduced_results: Array[Dictionary] = []
+	reduced.finished.connect(func(value: Dictionary) -> void: reduced_results.append(value.duplicate(true)))
+	_drive_ribbon_success(reduced)
+	var reduced_view := reduced.presentation as RibbonView
+	_expect(reduced.ribbon_finish_pending and is_equal_approx(reduced.ribbon_finish_duration, Session.RIBBON_REDUCED_FINISH_SECONDS), "reduced motion keeps a brief static success pose with a shorter finish gate")
+	_expect(reduced_view != null and reduced_view.companion_is_dancing() and reduced_view.companion_frame_index() == reduced_view.companion_dance_frame_count() - 1, "reduced motion shows the authored final dance pose without animating through it")
+	reduced._process(0.1)
+	reduced._process(Session.RIBBON_REDUCED_FINISH_SECONDS - 0.1)
+	_expect(reduced_results.size() == 1 and bool(reduced_results[0].success), "reduced-motion finish still publishes the true model result once")
+	reduced.queue_free()
+	checks += 1
+
+func _drive_ribbon_success(session: Control) -> void:
+	var gestures: Array = session.ribbon_model.GESTURES
+	for index in gestures.size():
+		var cue_time := 1.02 + float(index) * 0.94
+		_advance_ribbon_to(session, cue_time)
+		var action := str(gestures[index].action)
+		session._on_ribbon_action_pressed(action)
+		if float(gestures[index].hold) > 0.0:
+			_advance_ribbon_to(session, cue_time + float(gestures[index].hold))
+			session._on_ribbon_action_released(action)
+
+func _advance_ribbon_finish(session: Control) -> void:
+	var guard := 0
+	while session.ribbon_finish_pending and not session.ended and guard < 40:
+		session._process(0.1)
+		guard += 1
+	_expect(guard < 40 and session.ended, "ribbon finish gate advances to one bounded result")
 
 func _advance_ribbon_to(session: Control, target: float) -> void:
 	var iterations := 0
@@ -1249,6 +1335,8 @@ func _test_all_modes() -> void:
 					if float(gestures[gesture_index].hold) > 0.0:
 						_advance_ribbon_to(s, cue_time + float(gestures[gesture_index].hold))
 						_key_release(s, keycode)
+				while s.ribbon_finish_pending:
+					s._process(0.1)
 			while not s.ended and number != 6:
 				match number:
 					1:
@@ -1416,6 +1504,7 @@ func _test_photo_and_rhythm_grades() -> void:
 			if float(gestures[cycle].hold) > 0.0:
 				_advance_ribbon_to(rhythm, cue_time + float(gestures[cycle].hold))
 				rhythm._on_ribbon_action_released(action)
+		_advance_ribbon_finish(rhythm)
 		assert(rhythm.won and rhythm.devil_won == not assisted and rhythm.mistakes == 0)
 		rhythm.queue_free()
 		checks += 1

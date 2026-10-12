@@ -2,6 +2,7 @@ extends SceneTree
 
 const RibbonModel = preload("res://game/minigames/ribbon_rhythm_model.gd")
 const RibbonView = preload("res://game/minigames/ribbon_rhythm_view.gd")
+const AnimationLibraryScript = preload("res://game/world/character_animation_library.gd")
 
 var failures := 0
 var checks := 0
@@ -29,6 +30,9 @@ func _run() -> void:
 	_test_all_authored_pose_bounds(view)
 	_test_keyboard_and_pointer_actions(view)
 	_test_reduced_motion_keeps_static_cues(view, model)
+	_test_stage_lanterns_and_imp_identity(view)
+	_test_authored_imp_frames(view)
+	_test_imp_dance_requires_eighth_hit_and_retry_resets(view)
 	if failures > 0:
 		push_error("FAIL: ribbon rhythm view (%d/%d checks failed)" % [failures, checks])
 		quit(1)
@@ -95,6 +99,106 @@ func _test_reduced_motion_keeps_static_cues(view: Control, model: RefCounted) ->
 	_expect(view.palette_phase() == "night", "night lighting selection is retained")
 	view.update_frame(snapshot, "noon", false)
 	_expect(view.visual_motion_enabled(), "normal mode enables authored ribbon motion")
+
+func _test_stage_lanterns_and_imp_identity(view: Control) -> void:
+	var stage: Rect2 = view.playfield_rect()
+	var companion: Rect2 = view.companion_bounds()
+	_expect(view.companion_identity() == "imp" and view.companion_display_name() == "小角", "the side-stage partner is the named imp, not a recolored traveller clone")
+	_expect(stage.encloses(companion) and not companion.intersects(view.avatar_bounds_for_pose("idle_front")), "the full-body side-stage companion fits beside the central player")
+	var seen_centers: Array[Vector2] = []
+	for index in range(8):
+		var marker: Rect2 = view.beat_marker_rect(index)
+		_expect(stage.encloses(marker) and marker.position.y > 128.0 and marker.end.y < 640.0, "beat %d is on the stage rail outside both HUD bands" % (index + 1))
+		for prior in seen_centers:
+			_expect(not marker.has_point(prior), "stage-rail beat markers have distinct positions")
+		seen_centers.append(marker.get_center())
+	_expect(view.beat_marker_state(0, {"gesture_index": 0, "ribbon_trail": []}) == "current", "the first footlight identifies the current beat")
+	_expect(view.beat_marker_state(1, {"gesture_index": 0, "ribbon_trail": []}) == "future", "unplayed footlights remain upcoming")
+	_expect(view.beat_marker_state(0, {"gesture_index": 1, "ribbon_trail": [{"index": 0}]}) == "complete", "a footlight fills only when its real beat appears in the hit trail")
+	_expect(view.beat_marker_state(0, {"gesture_index": 1, "ribbon_trail": []}) == "missed", "an advanced but absent hit remains visibly distinct from completion")
+
+func _test_authored_imp_frames(view: Control) -> void:
+	var library = AnimationLibraryScript.new()
+	var idle: Dictionary = library.get_sequence("imp", "idle", "front")
+	var dance: Dictionary = library.get_sequence("imp", "dance", "front")
+	_expect(view.companion_assets_ready(), "the accepted authored imp atlas loads a safe static identity")
+	_expect(view.companion_idle_frame_count() == 7 and int(idle.get("fps", 0)) == 3 and bool(idle.get("loop", false)), "小角 uses all seven authored idle frames at their declared loop rate")
+	_expect(view.companion_dance_frame_count() == 7 and int(dance.get("fps", 0)) == 6 and not bool(dance.get("loop", true)), "小角's finale uses all seven authored one-shot dance frames")
+	for action in ["idle", "dance"]:
+		var sequence: Dictionary = idle if action == "idle" else dance
+		for index in range(7):
+			var frames: Array = sequence.get("frames", [])
+			var frame: Dictionary = frames[index]
+			var texture := frame.get("texture") as Texture2D
+			var head: Vector2i = library.normalized_anchor("imp", action, "front", index, "head")
+			var feet: Vector2i = library.normalized_anchor("imp", action, "front", index, "feet")
+			_expect(texture != null and texture.get_width() == 320 and texture.get_height() == 460, "%s frame %d keeps the complete normalized body canvas" % [action, index])
+			_expect(head.x > 0 and head.x < 320 and head.y >= 0 and head.y < feet.y and feet.y == 448, "%s frame %d preserves head and sole anchors" % [action, index])
+	var cached_count: int = view.companion_cached_texture_count()
+	for repeat in range(12):
+		view.update_frame({"gesture_index": 0, "elapsed": float(repeat) * 0.01, "ribbon_trail": [], "upcoming": []})
+	_expect(view.companion_cached_texture_count() == cached_count, "repeated frame updates reuse the preloaded authored imp textures")
+
+func _test_imp_dance_requires_eighth_hit_and_retry_resets(view: Control) -> void:
+	var model = RibbonModel.new()
+	model.reset(false, "noon")
+	view.update_frame(model.snapshot(), "noon", false)
+	for index in range(7):
+		var state: Dictionary = model.snapshot()
+		_advance_model_to(model, float(state.cue_times[index]))
+		var cue: Dictionary = RibbonModel.GESTURES[index]
+		model.press_action(str(cue.action))
+		if float(cue.hold) > 0.0:
+			_advance_model_to(model, float(model.snapshot().elapsed) + float(cue.hold))
+			model.release_action(str(cue.action))
+		view.update_frame(model.snapshot(), "noon", false)
+		_expect(not view.companion_is_dancing(), "小角 does not dance before the real eighth hit (after beat %d)" % (index + 1))
+	var before_final: Dictionary = model.snapshot()
+	_expect(int(before_final.gesture_index) == 7 and not bool(before_final.ended) and view.beat_marker_state(7) == "current", "the last footlight remains current until beat eight is actually judged")
+	var last_cue: Dictionary = RibbonModel.GESTURES[7]
+	_advance_model_to(model, float(model.snapshot().cue_times[7]))
+	model.press_action(str(last_cue.action))
+	var result: Dictionary = model.snapshot()
+	view.update_frame(result, "noon", false)
+	_expect(bool(result.ended) and bool(result.success) and int(result.correct_count) == 8 and view.companion_is_dancing(), "a real successful eighth input alone starts 小角's dance one-shot")
+	_expect(view.beat_marker_state(7) == "complete", "the final stage light fills after the real eighth hit")
+	var initial_dance_frame: int = view.companion_frame_index()
+	view._process(0.1)
+	view._process(0.1)
+	_expect(view.companion_is_dancing() and view.companion_frame_index() != initial_dance_frame, "the authored dance advances on its own view clock after model completion")
+	model.retry()
+	view.update_frame(model.snapshot(), "noon", false)
+	_expect(not view.companion_is_dancing() and view.companion_frame_index() == 0 and view.beat_marker_state(0) == "current", "retry during the one-shot immediately clears the dance and restores the first stage light")
+	for index in range(8):
+		var state: Dictionary = model.snapshot()
+		var cue: Dictionary = RibbonModel.GESTURES[index]
+		_advance_model_to(model, float(state.cue_times[index]))
+		model.press_action(str(cue.action))
+		if float(cue.hold) > 0.0:
+			_advance_model_to(model, float(model.snapshot().elapsed) + float(cue.hold))
+			model.release_action(str(cue.action))
+		view.update_frame(model.snapshot(), "noon", false)
+	var second_result: Dictionary = model.snapshot()
+	_expect(bool(second_result.success) and int(second_result.correct_count) == 8 and view.companion_is_dancing(), "the retried real eight-hit phrase can start a fresh one-shot finale")
+	for ignored in 12:
+		view._process(0.1)
+	_expect(not view.companion_is_dancing(), "the non-looping finale returns to the companion idle identity after all authored frames")
+	model.retry()
+	view.update_frame(model.snapshot(), "noon", false)
+	_advance_model_to(model, float(model.snapshot().cue_times[0]))
+	model.press_action(str(RibbonModel.GESTURES[0].action))
+	var held_snapshot: Dictionary = model.snapshot()
+	view.update_frame(held_snapshot, "noon", true)
+	_expect(not view.companion_is_dancing() and view.companion_frame_index() == 0 and view.visual_cue_state().gesture_index == 1, "reduced motion keeps the distinct idle companion and current player cue without starting a finale")
+func _advance_model_to(model: RefCounted, target: float) -> void:
+	var remaining := target - float(model.snapshot().elapsed)
+	var guard := 0
+	while remaining > 0.000001 and guard < 100:
+		var step := minf(remaining, 0.25)
+		model.step(step)
+		remaining = target - float(model.snapshot().elapsed)
+		guard += 1
+	_expect(guard < 100, "bounded model steps reach the requested authored beat")
 
 func _expect(condition: bool, label: String) -> void:
 	checks += 1

@@ -72,7 +72,14 @@ func _start_review() -> void:
 	if not _view.avatar_assets_ready() or initial.upcoming.size() != 2 or int(initial.gesture_count) != 8:
 		_fail("authored avatar actions, eight-gesture phrase, or two-step preview did not initialize")
 		return
-	print("RIBBON_NATIVE_READY: preview=" + JSON.stringify(initial.upcoming) + " assets=" + str(_view.avatar_assets_ready()))
+	if _view.companion_identity() != "imp" or _view.companion_display_name() != "小角" or not _view.companion_assets_ready() or _view.companion_idle_frame_count() != 7 or _view.companion_dance_frame_count() != 7:
+		_fail("authored 小角 idle/dance frames did not load as the stage partner")
+		return
+	await RenderingServer.frame_post_draw
+	if not _capture_companion_view(".review/native-ribbon-companion-opening.png"):
+		_fail("could not capture the real stage and 小角's opening pose")
+		return
+	print("RIBBON_NATIVE_READY: preview=" + JSON.stringify(initial.upcoming) + " assets=" + str(_view.avatar_assets_ready()) + " companion=小角/imp idle=7 dance=7")
 	if not await _run_unassisted_error_route():
 		return
 	if not await _retry_through_r_input():
@@ -85,6 +92,14 @@ func _start_review() -> void:
 	print("PASS: native RibbonRhythmView keyboard/pointer Input.parse_input_event paths, eight gestures and both sustained holds, wrong-input ordinary result, R retry exact-zero, unassisted devil result at 1x, assisted reduced-motion result at 0.25x")
 	print("RIBBON_NATIVE_REPORT: " + JSON.stringify({"retry_zero": _retry_zero_capture, "unassisted_devil": _finish_ledger, "normal_seen": _normal_seen, "quarter_seen": _quarter_seen}))
 	get_tree().quit(0)
+
+func _capture_companion_view(relative_path: String) -> bool:
+	var target := ProjectSettings.globalize_path(relative_path)
+	var directory := target.get_base_dir()
+	if DirAccess.make_dir_recursive_absolute(directory) != OK and not DirAccess.dir_exists_absolute(directory):
+		return false
+	var image := get_viewport().get_texture().get_image()
+	return image != null and image.save_png(target) == OK
 
 func _native_guard() -> bool:
 	var path := OS.get_environment("SNAPLAND_SAVE_PATH")
@@ -111,6 +126,13 @@ func _run_unassisted_error_route() -> bool:
 	if int(after.error_count) != int(before.error_count) + 1 or int(after.gesture_index) != 0 or int(after.score) != 0:
 		_fail("wrong direction did not become a real model error without advancing or scoring")
 		return false
+	if _view.companion_is_dancing():
+		_fail("a wrong input or unfinished phrase triggered the companion finale")
+		return false
+	await RenderingServer.frame_post_draw
+	if not _capture_companion_view(".review/native-ribbon-companion-unfinished.png"):
+		_fail("could not capture 小角 remaining at idle before the eighth hit")
+		return false
 	if not await _play_eight_gestures("ordinary-after-error", false, 0):
 		return false
 	var result: Dictionary = _model.snapshot()
@@ -121,6 +143,22 @@ func _run_unassisted_error_route() -> bool:
 		_fail("ordinary route did not traverse both keyboard and pointer View signals")
 		return false
 	_freeze_route("unassisted_error_ordinary", result)
+	if not _view.companion_is_dancing():
+		_fail("real successful eighth hit did not start the authored imp dance")
+		return false
+	await RenderingServer.frame_post_draw
+	if not _capture_companion_view(".review/native-ribbon-companion-eighth-hit.png"):
+		_fail("could not capture 小角's actual eighth-hit dance frame")
+		return false
+	var opening_dance_frame: int = _view.companion_frame_index()
+	await _frames(10)
+	if not _view.companion_is_dancing() or _view.companion_frame_index() == opening_dance_frame:
+		_fail("小角's authored one-shot dance did not visibly advance on the live native route")
+		return false
+	await RenderingServer.frame_post_draw
+	if not _capture_companion_view(".review/native-ribbon-companion-dance-progress.png"):
+		_fail("could not capture the advancing authored dance sequence")
+		return false
 	print("RIBBON_NATIVE_ORDINARY: " + JSON.stringify(_finish_ledger))
 	return true
 
@@ -188,7 +226,14 @@ func _run_assisted_reduced_quarter_route() -> bool:
 	if not _route_used_both_inputs(true):
 		_fail("assisted route did not traverse both keyboard and pointer View signals")
 		return false
+	if not _view.companion_is_dancing() or _view.companion_frame_index() != 6:
+		_fail("reduced motion should preserve a static distinct imp finale without cycling frames")
+		return false
 	_freeze_route("assisted_reduced_quarter", result)
+	await RenderingServer.frame_post_draw
+	if not _capture_companion_view(".review/native-ribbon-companion-reduced-finale.png"):
+		_fail("could not capture the reduced-motion static imp finale")
+		return false
 	print("RIBBON_NATIVE_ASSISTED: " + JSON.stringify(_finish_ledger))
 	return true
 

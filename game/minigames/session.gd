@@ -185,6 +185,13 @@ var fountain_attempts := 0
 var fountain_jump_started := -1.0
 var fountain_finish_pending := false
 var fountain_finish_at := -1.0
+const RIBBON_FINISH_DANCE_SECONDS := 1.30
+const RIBBON_REDUCED_FINISH_SECONDS := 0.18
+var ribbon_finish_pending := false
+var ribbon_finish_elapsed := 0.0
+var ribbon_finish_duration := RIBBON_FINISH_DANCE_SECONDS
+var ribbon_finish_success := false
+var ribbon_finish_devil := false
 var fountain_grades: Array[String] = []
 var fountain_errors_ms: Array[int] = []
 var feedback_color := MINT
@@ -352,6 +359,15 @@ func _sync_presentation() -> void:
 				var equipped: Dictionary = progress.equipped if progress != null and progress.get("equipped") is Dictionary else {}
 				presentation.set_appearance(appearance, equipped)
 				bubble_model.set_subject_size(presentation.measured_subject_size())
+			if mode == "ribbon_rhythm":
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+				presentation.action_pressed.connect(_on_ribbon_action_pressed)
+				presentation.action_released.connect(_on_ribbon_action_released)
+				var ribbon_progress := get_node_or_null("/root/Progress")
+				var ribbon_appearance: Dictionary = ribbon_progress.appearance if ribbon_progress != null and ribbon_progress.get("appearance") is Dictionary else AvatarRendererScript.DEFAULT_APPEARANCE
+				var ribbon_equipped: Dictionary = ribbon_progress.equipped if ribbon_progress != null and ribbon_progress.get("equipped") is Dictionary else {"outfit": "outfit-tide", "hat": "hat-none"}
+				presentation.configure_avatar(ribbon_appearance, ribbon_equipped)
+				presentation.grab_focus()
 			_layout_presentation()
 	if not is_instance_valid(presentation): return
 	match mode:
@@ -400,6 +416,8 @@ func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
 func set_paused(value: bool) -> void:
 	if ended and value:
 		return
+	if mode == "ribbon_rhythm" and is_instance_valid(presentation):
+		presentation.set_process(not value)
 	if value and mode == "hat_catching":
 		_hat_left_held = false
 		_hat_right_held = false
@@ -446,6 +464,7 @@ func _retry_from_hud() -> void:
 
 func _leave_from_hud() -> void:
 	paused = false
+	_cancel_ribbon_finish_gate()
 	if mode == "shadow_alignment" and is_instance_valid(presentation):
 		presentation.set_process(false)
 	cancelled.emit()
@@ -658,6 +677,7 @@ func reset_round() -> void:
 	fountain_jump_started = -1.0
 	fountain_finish_pending = false
 	fountain_finish_at = -1.0
+	_cancel_ribbon_finish_gate()
 	fountain_grades.clear()
 	fountain_errors_ms.clear()
 	_fountain_jump_textures.clear()
@@ -814,6 +834,17 @@ func _process(delta: float) -> void:
 		_discard_next_delta = false
 		_refresh_hud()
 		queue_redraw()
+		return
+	if mode == "ribbon_rhythm" and ribbon_finish_pending:
+		# The model has already produced its immutable result. Keep the Session
+		# alive just long enough for the authored final dance to be seen.
+		ribbon_finish_elapsed += minf(maxf(delta, 0.0), 0.1)
+		_sync_presentation()
+		_refresh_hud()
+		queue_redraw()
+		if ribbon_finish_elapsed + 0.00001 >= ribbon_finish_duration:
+			ribbon_finish_pending = false
+			_finish(ribbon_finish_success, ribbon_finish_devil)
 		return
 	if mode == "balloon_delivery" and not balloon_started:
 		feedback_age += delta
@@ -1510,7 +1541,26 @@ func _sync_ribbon_model(_source: String) -> void:
 	_sync_presentation()
 	_refresh_hud(true)
 	if bool(state.get("ended", false)):
-		_finish(bool(state.get("success", false)), bool(state.get("devil_success", false)))
+		if bool(state.get("success", false)):
+			_begin_ribbon_finish(state)
+		else:
+			_finish(false, false)
+
+func _begin_ribbon_finish(state: Dictionary) -> void:
+	if ended or ribbon_finish_pending:
+		return
+	ribbon_finish_success = true
+	ribbon_finish_devil = bool(state.get("devil_success", false))
+	ribbon_finish_elapsed = 0.0
+	ribbon_finish_duration = RIBBON_REDUCED_FINISH_SECONDS if reduced_motion else RIBBON_FINISH_DANCE_SECONDS
+	ribbon_finish_pending = true
+
+func _cancel_ribbon_finish_gate() -> void:
+	ribbon_finish_pending = false
+	ribbon_finish_elapsed = 0.0
+	ribbon_finish_duration = RIBBON_FINISH_DANCE_SECONDS
+	ribbon_finish_success = false
+	ribbon_finish_devil = false
 
 func _rotate_pipe(m: Vector2) -> void:
 	var board: Rect2 = PipePlanScript.BOARD_RECT

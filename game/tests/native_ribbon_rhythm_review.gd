@@ -3,10 +3,12 @@ extends "res://game/tests/native_review.gd"
 const Model := preload("res://game/minigames/ribbon_rhythm_model.gd")
 var _finish_latch: Dictionary = {}
 var _finished_session_id := 0
+var _finish_signal_count := 0
 var _retry_latch: Dictionary = {}
 var _review_deadline := 0
 var _failure_latched := false
 var _formal_engine_scale := 1.0
+var _sent_ribbon_key_event_count := 0
 
 func _process(_delta: float) -> void:
 	if not Engine.get_write_movie_path().is_empty():
@@ -31,7 +33,8 @@ func _run() -> void:
 	if not await _launch_station(false, false): return
 	var formal: Control = main.session
 	var formal_id := formal.get_instance_id()
-	formal.finished.connect(_capture_finish.bind(formal_id), CONNECT_ONE_SHOT)
+	_finish_signal_count = 0
+	formal.finished.connect(_capture_finish.bind(formal_id))
 	if not is_instance_valid(formal.presentation) or not formal.presentation.avatar_assets_ready():
 		await _fail("Ribbon Session did not load its authored full-body avatar actions"); return
 	var before_formal := _private_progress()
@@ -56,11 +59,13 @@ func _run() -> void:
 	var practice: Control = main.session
 	var practice_id := practice.get_instance_id()
 	_finish_latch = {}; _finished_session_id = 0
-	practice.finished.connect(_capture_finish.bind(practice_id), CONNECT_ONE_SHOT)
+	_finish_signal_count = 0
+	practice.finished.connect(_capture_finish.bind(practice_id))
 	practice.set_process(true)
 	if not practice.assisted or not practice.practice_mode or not practice.reduced_motion or practice.presentation.visual_motion_enabled():
 		await _fail("Assisted reduced-motion practice settings did not reach the live Session/view"); return
 	if not await _play_phrase(practice_id, true): return
+	if _finish_signal_count != 1: await _fail("Assisted reduced-motion gate must emit one natural result after its static hold"); return
 	Engine.time_scale = 1.0
 	var result_capture_engine_scale := Engine.time_scale
 	if _finished_session_id != practice_id or _finish_latch.is_empty(): await _fail("Assisted pointer result was not synchronously latched"); return
@@ -96,10 +101,18 @@ func _launch_station(assist: bool, practice: bool) -> bool:
 
 func _wrong_press_pause_retry(session: Control, sid: int, progress_before: Dictionary) -> bool:
 	if not await _wait_ribbon_elapsed(sid, 1.02): return false
+	var before_wrong: Dictionary = session.ribbon_model.snapshot().duplicate(true)
+	var before_focus := get_viewport().gui_get_focus_owner()
+	var before_event_count := _sent_ribbon_key_event_count
 	_send_key(KEY_RIGHT, true); _send_key(KEY_RIGHT, false)
 	if not await _require_live(sid): return false
-	if int(session.ribbon_model.snapshot().error_count) != 1 or int(session.ribbon_model.snapshot().gesture_index) != 0 or int(session.ribbon_model.snapshot().correct_count) != 0:
-		await _fail("Wrong direction must be a real recorded error without advancing or auto-answering"); return false
+	var wrong_snapshot: Dictionary = session.ribbon_model.snapshot().duplicate(true)
+	var after_focus := get_viewport().gui_get_focus_owner()
+	print("Ribbon wrong-action trace: before=%s after=%s sent_key_events=%d->%d focus=%s->%s view_has_focus=%s key_right_down_after=%s" % [str(before_wrong), str(wrong_snapshot), before_event_count, _sent_ribbon_key_event_count, str(before_focus.get_path() if before_focus != null else NodePath()), str(after_focus.get_path() if after_focus != null else NodePath()), str(session.presentation.has_focus()), str(Input.is_key_pressed(KEY_RIGHT))])
+	if int(wrong_snapshot.error_count) != 1 or int(wrong_snapshot.gesture_index) != 0 or int(wrong_snapshot.correct_count) != 0:
+		var focus_owner := get_viewport().gui_get_focus_owner()
+		var diagnostic := {"snapshot": wrong_snapshot, "engine_time_scale": Engine.time_scale, "key_right_pressed": Input.is_key_pressed(KEY_RIGHT), "session_paused": session.paused, "session_ended": session.ended, "presentation_valid": is_instance_valid(session.presentation), "focus_owner": focus_owner.get_path() if focus_owner != null else NodePath(), "expected_wrong_action": "right", "expected_gesture": "left"}
+		await _fail("Wrong direction must be a real recorded error without advancing or auto-answering; diagnostic=" + str(diagnostic)); return false
 	if not await _click_hud(session, "PauseButton", "pause after real wrong action"): return false
 	if not await _require_live(sid) or not session.paused: await _fail("Pause button did not pause Ribbon Session"); return false
 	var frozen := float(session.ribbon_model.snapshot().elapsed)
@@ -137,11 +150,6 @@ func _play_phrase(sid: int, pointer: bool) -> bool:
 		else:
 			var keycode := KEY_LEFT if action == "left" else (KEY_RIGHT if action == "right" else KEY_SPACE)
 			_send_key(keycode, true)
-		# The final authored tap ends the Session during this real input dispatch.
-		# Its finished handler copies scalars before Main queues Session deletion.
-		if index == gestures.size() - 1 and (_finished_session_id != sid or _finish_latch.is_empty()):
-			await _fail("Final gesture did not synchronously close and latch its matching Session on input")
-			return false
 		if float(gestures[index].hold) > 0.0:
 			var release_at := Model.FIRST_BEAT_TIME + float(index) * Model.BEAT_INTERVAL + float(gestures[index].hold)
 			if not await _wait_ribbon_elapsed(sid, release_at): return false
@@ -156,8 +164,75 @@ func _play_phrase(sid: int, pointer: bool) -> bool:
 			else:
 				var release_key := KEY_LEFT if action == "left" else (KEY_RIGHT if action == "right" else KEY_SPACE)
 				_send_key(release_key, false)
+		if index == gestures.size() - 1:
+			if not await _observe_finish_gate(sid): return false
 		if not await _live_or_finished(sid): return false
 	return await _wait_for_finish(sid)
+
+func _observe_finish_gate(sid: int) -> bool:
+	var live := _node_for_id(sid)
+	var settle_deadline := _wall_deadline(2.0)
+	while live != null and not live.ribbon_finish_pending and Time.get_ticks_msec() < settle_deadline:
+		await get_tree().process_frame
+		live = _node_for_id(sid)
+	if live == null or main.session != live or live.is_queued_for_deletion(): await _fail("Final gesture removed the Session before its finish-gate evidence"); return false
+	var model_state: Dictionary = live.ribbon_model.snapshot().duplicate(true)
+	var view := live.presentation as Control
+	if not bool(model_state.get("ended", false)) or not bool(model_state.get("success", false)) or int(model_state.get("correct_count", -1)) != 8 or int(model_state.get("error_count", -1)) != 0:
+		await _fail("Final real input did not complete the eight-action model successfully: " + str(model_state)); return false
+	if live.ended or not live.ribbon_finish_pending or _finished_session_id == sid or not _finish_latch.is_empty() or _finish_signal_count != 0:
+		await _fail("Successful model must remain live inside its visible finish gate before emitting finished"); return false
+	if not is_instance_valid(view) or not view.companion_is_dancing(): await _fail("Real model completion did not show 小角's authored finish performance"); return false
+	if not live.reduced_motion and (absf(live.ribbon_finish_duration - 1.30) > 0.001 or absf(live.ribbon_finish_elapsed) > 0.03):
+		await _fail("Normal finish gate did not start at its full visible duration: elapsed=%s duration=%s" % [live.ribbon_finish_elapsed, live.ribbon_finish_duration]); return false
+	await RenderingServer.frame_post_draw
+	if not live.reduced_motion and not main._capture(".review/native-ribbon-finish-start.png"): await _fail("Could not capture the real finish-gate opening frame"); return false
+	if live.reduced_motion and not main._capture(".review/native-ribbon-assisted-finish-static.png"): await _fail("Could not capture reduced-motion static finish gate"); return false
+	if not live.reduced_motion:
+		if not await _click_hud(live, "PauseButton", "pause during Ribbon finish performance"): return false
+		if not await _require_live(sid) or not live.paused: await _fail("HUD pause did not pause the live finish performance"); return false
+		var frozen_elapsed: float = float(live.ribbon_finish_elapsed)
+		var frozen_frame: int = int(live.presentation.companion_frame_index())
+		for _frame in 12: await get_tree().process_frame
+		if absf(live.ribbon_finish_elapsed - frozen_elapsed) > 0.00001 or live.presentation.companion_frame_index() != frozen_frame:
+			await _fail("Pause must freeze both finish-gate time and the authored companion frame"); return false
+		if not await _click_hud(live, "ResumeButton", "resume Ribbon finish performance"): return false
+		if not await _require_live(sid) or live.paused: await _fail("HUD resume did not continue the live finish performance"); return false
+		if not await _wait_finish_elapsed(sid, 0.55): return false
+		live = _node_for_id(sid)
+		if live == null or not live.ribbon_finish_pending or _finished_session_id == sid: await _fail("Finish result emitted before the middle performance capture"); return false
+		await RenderingServer.frame_post_draw
+		if not main._capture(".review/native-ribbon-finish-mid.png"): await _fail("Could not capture the middle finish-performance frame"); return false
+		if not await _wait_finish_elapsed(sid, 1.08): return false
+		live = _node_for_id(sid)
+		if live == null or not live.ribbon_finish_pending or _finished_session_id == sid: await _fail("Finish result emitted before the late performance capture"); return false
+		await RenderingServer.frame_post_draw
+		if not main._capture(".review/native-ribbon-finish-late.png"): await _fail("Could not capture the late finish-performance frame"); return false
+		print("Ribbon finish gate observed: start/mid/late captures; paused elapsed and authored companion frame stayed fixed; duration=%.2fs" % live.ribbon_finish_duration)
+	else:
+		if absf(live.ribbon_finish_duration - 0.18) > 0.001 or live.ribbon_finish_elapsed > 0.03:
+			await _fail("Reduced-motion finish must use its brief static gate: elapsed=%s duration=%s" % [live.ribbon_finish_elapsed, live.ribbon_finish_duration]); return false
+		if not await _wait_finish_elapsed(sid, 0.10): return false
+		live = _node_for_id(sid)
+		if live == null or not live.ribbon_finish_pending or live.ended or _finished_session_id == sid or not _finish_latch.is_empty():
+			await _fail("Reduced-motion result must remain private until its brief static gate finishes"); return false
+	if not await _wait_for_finish(sid): return false
+	if _finished_session_id != sid or _finish_latch.is_empty() or _finish_signal_count != 1:
+		await _fail("Finish gate must emit exactly one matching result after its full duration"); return false
+	if float(_finish_latch.get("gate_elapsed", -1.0)) + 0.00001 < float(_finish_latch.get("gate_duration", 0.0)):
+		await _fail("Finished signal arrived before the full visible gate elapsed: " + str(_finish_latch)); return false
+	return true
+
+func _wait_finish_elapsed(sid: int, target: float) -> bool:
+	var deadline := _wall_deadline(8.0)
+	while Time.get_ticks_msec() < deadline:
+		var live := _node_for_id(sid)
+		if live == null or main.session != live or live.is_queued_for_deletion(): await _fail("Session disappeared while waiting through the visible finish gate"); return false
+		if live.ended or not live.ribbon_finish_pending: await _fail("Visible finish gate ended before requested elapsed point %.2f" % target); return false
+		if float(live.ribbon_finish_elapsed) >= target: return true
+		await get_tree().process_frame
+	await _fail("Visible finish gate did not reach elapsed %.2f within its bounded wait" % target)
+	return false
 
 func _wait_ribbon_elapsed(sid: int, target: float) -> bool:
 	var live_at_start := _node_for_id(sid)
@@ -183,7 +258,8 @@ func _wait_for_finish(sid: int) -> bool:
 	var deadline := _wall_deadline(5.0)
 	while Time.get_ticks_msec() < deadline and _finished_session_id != sid:
 		await get_tree().physics_frame
-	return _finished_session_id == sid or await _live_or_finished(sid)
+	if _finished_session_id != sid or _finish_latch.is_empty(): await _fail("Ribbon finish gate did not emit a matching result before its bounded deadline"); return false
+	return true
 
 func _pointer_action(sid: int, action: String, down: bool) -> bool:
 	var live := _node_for_id(sid)
@@ -197,6 +273,7 @@ func _pointer_action(sid: int, action: String, down: bool) -> bool:
 	return await _live_or_finished(sid)
 
 func _send_key(code: Key, down: bool) -> void:
+	_sent_ribbon_key_event_count += 1
 	var event := InputEventKey.new(); event.keycode = code; event.physical_keycode = code; event.pressed = down
 	Input.parse_input_event(event); Input.flush_buffered_events()
 
@@ -211,7 +288,8 @@ func _capture_finish(result: Dictionary, sid: int) -> void:
 	var live := _node_for_id(sid)
 	if live == null or str(result.get("game_id", "")) != "game-006":
 		call_deferred("_fail", "Ribbon finished signal did not match a live game-006 Session"); return
-	_finish_latch = {"result":result.duplicate(true),"snapshot":live.ribbon_model.snapshot().duplicate(true),"session_score":live.score,"events":live.score_events.duplicate(true),"summary":live.score_summary().duplicate(true),"session_id":sid}
+	_finish_signal_count += 1
+	_finish_latch = {"result":result.duplicate(true),"snapshot":live.ribbon_model.snapshot().duplicate(true),"session_score":live.score,"events":live.score_events.duplicate(true),"summary":live.score_summary().duplicate(true),"session_id":sid,"gate_elapsed":live.ribbon_finish_elapsed,"gate_duration":live.ribbon_finish_duration}
 	_finished_session_id = sid
 
 func _node_for_id(sid: int) -> Control:
