@@ -42,3 +42,5 @@
 
 **驗收**
 主 Session 親自核對入口與 SG-1 內容，隔離副本的連結驗證通過，既有的失效／有效連結兩項測試通過；必要目標缺失仍會回報失敗。保存[實際文件驗證記錄](images/MAIN-12-document-links.log)。本段是文件可達性驗收，不是遊戲畫面或試玩驗收。分支：`feature/island-first-park`。
+
+Main 交付提交：[57e2395](https://github.com/deadline314/Snapland/commit/57e2395285deac39f748d90f089e721d1f9bbaec)；票況：審查中。此提交只修復設計入口與保存文件驗證，遊戲製作仍留在 `feature/island-first-park`。
