@@ -168,3 +168,27 @@ HUD 專項檢查 69 項通過，Main 整合檢查通過。隔離存檔的原生�
 ### 提交
 
 分支：`feature/island-first-park`；[遠端交付提交](https://github.com/deadline314/Snapland/commit/07aa4f40c4e05033f35149bdead884d80d5b7f34)。
+
+
+# Commit-5
+
+## 問題
+
+後續 renderer 已改變部分遊戲的實際媒材，但票內舊比較圖與視覺摘要仍使用較早的分類；「3D renderer」也容易被誤讀為自由 3D 操作或已完成原生驗收。
+
+## 改動
+
+新增依 HEAD 程式與目錄核對的十二款現況文件，並更新視覺回顧中的媒材摘要：目前五款 renderer 使用 3D 場景（001、003、004、008、009），同時區分固定投影、2D Sprite3D 主角與模型驅動場景物件。舊十二款靜格與媒材清單仍保留為歷史基線；玩家指南新增兩句概括各款操作動詞和目前媒材。帽子救援的近／中／遠接物帶仍是待評估提案，沒有記成已實作。
+
+## 驗收
+
+本次僅核對靜態 HEAD 程式、資料目錄及文件連結，沒有執行遊戲、GPU 擷取、十二款原生操作或畫質驗收。主 Session 另實際讀取 Nintendo、Playdate、Obra Dinn、Thumper、Donut County 與 Lumines 的六個官方頁面，核對不同操作、鏡頭及資訊節奏；沒有把頁面文字當成遊玩體驗或影片觀察。本次未新增來源圖片。所有玩法、介面和原生畫面驗收勾選狀態維持原樣。
+
+### 文件
+
+- [十二款目前實作稽核](../../design/runtime/minigame-current-diversity-audit.md)
+- [視覺多樣性回顧與媒材摘要](../../design/runtime/minigame-visual-diversity-review.md)
+
+### 提交
+
+分支：`feature/island-first-park`；固定文件核對基準：`63e2d06df43382be860cafafdf2d40eff308692e`。
