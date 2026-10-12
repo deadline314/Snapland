@@ -164,3 +164,7 @@ HUD 專項檢查 69 項通過，Main 整合檢查通過。隔離存檔的原生�
 ![縮小後恢復標準尺寸的暫停畫面](images/ART-21-final-restored-pause.png)
 
 [原生操作影片](images/ART-21-final-native.mp4)已完整播放檢視，時長 10.7167 秒。完整 57 張截圖及三張比較圖位於本票 images 目錄，檔名以 `ART-21-final-` 開頭。
+
+### 提交
+
+分支：`feature/island-first-park`；[遠端交付提交](https://github.com/deadline314/Snapland/commit/07aa4f40c4e05033f35149bdead884d80d5b7f34)。
