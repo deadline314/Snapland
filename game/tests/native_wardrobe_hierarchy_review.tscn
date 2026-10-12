@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://game/tests/native_wardrobe_hierarchy_review.gd" id="1"]
+
+[node name="NativeWardrobeHierarchyReview" type="Node"]
+script = ExtResource("1")

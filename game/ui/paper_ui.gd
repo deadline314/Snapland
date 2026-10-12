@@ -5,6 +5,7 @@ const PAPER = Color("#f7efd9")
 const TEAL = Color("#337b7b")
 const DEEP_TEAL = Color("#24585d")
 const CORAL = Color("#d97966")
+const PRICE_INK = Color("#8d3c33")
 const GOLD = Color("#dfa458")
 const FONT = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
 static var _reduced_motion := false
@@ -111,7 +112,8 @@ static func theme() -> Theme:
 	result.set_color("font_hover_color", "Button", PAPER)
 	result.set_color("font_pressed_color", "Button", PAPER)
 	result.set_color("font_focus_color", "Button", INK)
-	result.set_color("font_disabled_color", "Button", Color("#7e837b"))
+	result.set_color("font_disabled_color", "Button", Color("#52605d"))
+	result.set_stylebox("disabled", "Button", button_box(Color("#e4dcc9"), Color("#9a8a69"), 0, Vector2.ZERO))
 	result.set_stylebox("normal", "Button", button_box(Color("#eee4cd"), Color("#c1a97d"), 3, Vector2(2, 3)))
 	result.set_stylebox("hover", "Button", button_box(TEAL, Color("#dfa458"), 5, Vector2(2, 5)))
 	result.set_stylebox("pressed", "Button", button_box(DEEP_TEAL, Color("#dfa458"), 0, Vector2.ZERO))
@@ -154,6 +156,84 @@ static func button_box(color: Color, edge: Color, shadow_size := 2, shadow_offse
 	style.content_margin_top=7
 	style.content_margin_bottom=7
 	return style
+
+static func fitting_frame(color := Color("#d9cfb6")) -> StyleBoxFlat:
+	var style := box(color, 4)
+	style.border_color=Color("#6e7770")
+	style.set_border_width_all(2)
+	style.set_border_width(SIDE_RIGHT, 5)
+	style.set_border_width(SIDE_BOTTOM, 8)
+	style.shadow_color=Color("#122a32", 0.28)
+	style.shadow_size=7
+	style.shadow_offset=Vector2(4, 7)
+	style.content_margin_left=10
+	style.content_margin_right=10
+	style.content_margin_top=10
+	style.content_margin_bottom=12
+	return style
+
+static func focus_outline() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color=Color(0, 0, 0, 0)
+	style.border_color=GOLD
+	style.set_border_width_all(3)
+	style.set_corner_radius_all(8)
+	style.shadow_size=0
+	style.content_margin_left=10
+	style.content_margin_right=10
+	style.content_margin_top=7
+	style.content_margin_bottom=7
+	return style
+
+static func tab_box(selected: bool) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color=DEEP_TEAL if selected else Color("#e4d8bd")
+	style.border_color=GOLD if selected else Color("#ad9972")
+	style.set_border_width_all(2 if selected else 1)
+	style.set_border_width(SIDE_BOTTOM, 0 if selected else 4)
+	style.set_corner_radius_all(7)
+	style.set_corner_radius(CORNER_BOTTOM_LEFT, 0)
+	style.set_corner_radius(CORNER_BOTTOM_RIGHT, 0)
+	style.shadow_color=Color("#122a32", 0.0 if selected else 0.14)
+	style.shadow_size=0 if selected else 2
+	style.shadow_offset=Vector2(0, 2)
+	style.content_margin_left=10
+	style.content_margin_right=10
+	style.content_margin_top=8
+	style.content_margin_bottom=7
+	return style
+
+static func set_button_role(button: Button, role: String) -> void:
+	var primary := role == "primary"
+	if role == "tab_selected" or role == "tab_idle":
+		var selected := role == "tab_selected"
+		var tab_style := tab_box(selected)
+		button.add_theme_stylebox_override("normal", tab_style)
+		button.add_theme_stylebox_override("hover", tab_style)
+		button.add_theme_stylebox_override("pressed", tab_style)
+		button.add_theme_stylebox_override("focus", focus_outline())
+		var tab_ink := PAPER if selected else INK
+		button.add_theme_color_override("font_color", tab_ink)
+		button.add_theme_color_override("font_hover_color", tab_ink)
+		button.add_theme_color_override("font_pressed_color", tab_ink)
+		button.add_theme_color_override("font_focus_color", tab_ink)
+		return
+	var normal_color := DEEP_TEAL if primary else Color("#eee4cd")
+	var hover_color := TEAL if primary else Color("#f7efd9")
+	var pressed_color := INK if primary else Color("#e3d4b2")
+	var edge := GOLD if primary else Color("#b4a17d")
+	button.add_theme_stylebox_override("normal", button_box(normal_color, edge, 4 if primary else 2, Vector2(2, 4) if primary else Vector2(1, 2)))
+	button.add_theme_stylebox_override("hover", button_box(hover_color, GOLD if primary else TEAL, 4 if primary else 3, Vector2(2, 4) if primary else Vector2(1, 3)))
+	button.add_theme_stylebox_override("pressed", button_box(pressed_color, edge, 0, Vector2.ZERO))
+	var disabled := button_box(Color("#e4dcc9"), Color("#9a8a69"), 0, Vector2.ZERO)
+	button.add_theme_stylebox_override("disabled", disabled)
+	button.add_theme_stylebox_override("focus", focus_outline())
+	var text_color := PAPER if primary else INK
+	button.add_theme_color_override("font_color", text_color)
+	button.add_theme_color_override("font_hover_color", PAPER if primary else INK)
+	button.add_theme_color_override("font_pressed_color", PAPER if primary else INK)
+	button.add_theme_color_override("font_focus_color", text_color)
+	button.add_theme_color_override("font_disabled_color", Color("#52605d"))
 
 static func plaque(color := PAPER) -> StyleBoxFlat:
 	var style := box(color, 8)

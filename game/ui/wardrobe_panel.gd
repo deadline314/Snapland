@@ -14,12 +14,17 @@ var status_label: Label
 var content: VBoxContainer
 var action_row: HBoxContainer
 var item_scroll: ScrollContainer
+var main_row: HBoxContainer
+var preview_stack: VBoxContainer
+var controls: VBoxContainer
 var current_tab := "appearance"
 var selected_item_id := ""
 var selected_slot := "outfit"
 var preview_direction := "front"
 var draft_appearance: Dictionary = {}
 var draft_equipped: Dictionary = {}
+var tab_group := ButtonGroup.new()
+var tab_buttons: Dictionary = {}
 
 const CATEGORY_NAMES := {
 	"skin": "膚色", "species": "種族", "gender": "性別",
@@ -33,9 +38,14 @@ func open(main: Node, modal_body: VBoxContainer) -> void:
 	draft_equipped=Progress.equipped.duplicate(true)
 	_build()
 	_show_tab("appearance")
+	var root_viewport := host.get_tree().root
+	if not root_viewport.size_changed.is_connected(_queue_responsive_profile):
+		root_viewport.size_changed.connect(_queue_responsive_profile)
+	if not body.tree_exiting.is_connected(_disconnect_responsive_profile):
+		body.tree_exiting.connect(_disconnect_responsive_profile)
 
 func _build() -> void:
-	var main_row := HBoxContainer.new()
+	main_row=HBoxContainer.new()
 	main_row.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	main_row.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	main_row.add_theme_constant_override("separation",14)
@@ -45,14 +55,15 @@ func _build() -> void:
 	preview_card.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	preview_card.add_theme_stylebox_override("panel",Paper.plaque(Color("#f3e6c9")))
 	main_row.add_child(preview_card)
-	var preview_stack := VBoxContainer.new()
+	preview_stack=VBoxContainer.new()
 	preview_stack.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	preview_stack.add_theme_constant_override("separation",6)
+	var compact_spacing := Paper.physical_scale(body)<0.9
+	preview_stack.add_theme_constant_override("separation",4 if compact_spacing else 6)
 	preview_card.add_child(preview_stack)
 	preview_stack.add_child(Paper.section_title("試衣鏡  ·  即時預覽"))
 	var frame := PanelContainer.new()
 	frame.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	frame.add_theme_stylebox_override("panel",Paper.box(Color("#e6d7b8"),5))
+	frame.add_theme_stylebox_override("panel",Paper.fitting_frame(Color("#d9cfb6")))
 	preview_stack.add_child(frame)
 	preview=TextureRect.new()
 	preview.name="AvatarPreview"
@@ -80,10 +91,10 @@ func _build() -> void:
 	preview_caption=Paper.label("正面預覽",16,Paper.TEAL)
 	preview_caption.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	preview_stack.add_child(preview_caption)
-	var controls := VBoxContainer.new()
+	controls=VBoxContainer.new()
 	controls.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	controls.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	controls.add_theme_constant_override("separation",6)
+	controls.add_theme_constant_override("separation",4 if compact_spacing else 6)
 	main_row.add_child(controls)
 	var ledger := PanelContainer.new()
 	ledger.add_theme_stylebox_override("panel",Paper.plaque(Color("#fff8e8")))
@@ -95,6 +106,7 @@ func _build() -> void:
 	balance_label=Paper.label("島幣  %d"%Progress.coins,20,Paper.INK)
 	ledger_row.add_child(balance_label)
 	ledger_row.add_child(Paper.label("每款遊戲首次完成可得 40 枚",16,Paper.DEEP_TEAL))
+	tab_buttons.clear()
 	var tabs := HBoxContainer.new()
 	tabs.add_theme_constant_override("separation",5)
 	controls.add_child(tabs)
@@ -102,6 +114,9 @@ func _build() -> void:
 		var tab_id: String=entry[0]
 		var button := Paper.button(entry[1],func(): _show_tab(tab_id),tabs)
 		button.name="Tab_"+tab_id
+		button.toggle_mode=true
+		button.button_group=tab_group
+		tab_buttons[tab_id]=button
 		button.custom_minimum_size.x=0
 		button.custom_minimum_size.y=48
 		button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -111,17 +126,23 @@ func _build() -> void:
 	content.add_theme_constant_override("separation",7)
 	controls.add_child(content)
 	status_label=Paper.label("",16,Paper.TEAL)
-	status_label.custom_minimum_size.y=22
+	status_label.custom_minimum_size.y=0
 	controls.add_child(status_label)
 	action_row=HBoxContainer.new()
 	action_row.add_theme_constant_override("separation",6)
 	controls.add_child(action_row)
 	_refresh_preview()
+	_apply_responsive_profile(Paper.physical_scale(body))
 
 func _show_tab(tab_id: String) -> void:
 	current_tab=tab_id
 	selected_item_id=""
 	status_label.text=""
+	for key in tab_buttons:
+		var tab: Button=tab_buttons[key]
+		var selected := str(key)==tab_id
+		tab.button_pressed=selected
+		Paper.set_button_role(tab,"tab_selected" if selected else "tab_idle")
 	for child in content.get_children():
 		content.remove_child(child)
 		child.queue_free()
@@ -145,23 +166,30 @@ func _show_tab(tab_id: String) -> void:
 	if tab_id=="appearance":
 		var apply_button := Paper.button("套用外觀",_apply_appearance,action_row)
 		apply_button.name="ApplyAppearance"
+		Paper.set_button_role(apply_button,"primary")
 		apply_button.grab_focus()
 		var appearance_cancel_button := Paper.button("取消試穿",_cancel,action_row)
 		appearance_cancel_button.name="CancelFitting"
+		Paper.set_button_role(appearance_cancel_button,"secondary")
 	elif tab_id=="closet":
 		var closet_wear_button := Paper.button("穿戴所選",_wear_selected,action_row)
 		closet_wear_button.name="WearSelected"
+		Paper.set_button_role(closet_wear_button,"primary")
 		closet_wear_button.grab_focus()
 		var closet_cancel_button := Paper.button("取消試穿",_cancel,action_row)
 		closet_cancel_button.name="CancelFitting"
+		Paper.set_button_role(closet_cancel_button,"secondary")
 	else:
 		var purchase_button := Paper.button("購買所選",_purchase_selected,action_row)
 		purchase_button.name="PurchaseSelected"
+		Paper.set_button_role(purchase_button,"primary")
 		purchase_button.grab_focus()
 		var shop_wear_button := Paper.button("穿戴所選",_wear_selected,action_row)
 		shop_wear_button.name="WearSelected"
+		Paper.set_button_role(shop_wear_button,"secondary")
 		var shop_cancel_button := Paper.button("返回遊園",_cancel,action_row)
 		shop_cancel_button.name="CancelWardrobe"
+		Paper.set_button_role(shop_cancel_button,"secondary")
 	_refresh_preview()
 	# Tabs replace their controls after the initial menu layout. Reapply the
 	# idempotent physical sizing before the next frame is presented.
@@ -227,7 +255,7 @@ func _add_item_row(list: VBoxContainer, item: Dictionary) -> void:
 	choose.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	choose.custom_minimum_size.x=0
 	var state_text := "穿著中" if str(Progress.equipped.get(item.slot,""))==str(item.id) else ("已收藏" if item.id=="hat-none" or Progress.owned_clothes.has(item.id) else "%d 幣"%int(item.price))
-	var state_color: Color=Paper.TEAL if state_text in ["穿著中","已收藏"] else Paper.CORAL
+	var state_color: Color=Paper.TEAL if state_text in ["穿著中","已收藏"] else Paper.PRICE_INK
 	var state := Paper.label(state_text,16,state_color)
 	state.custom_minimum_size.x=88
 	state.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
@@ -240,11 +268,88 @@ func _select_item(item: Dictionary) -> void:
 	_show_tab(current_tab)
 	selected_item_id=picked_id
 	status_label.text="已預覽 · %s"%str(item.name)
+	_refresh_selected_purchase_state()
 	var item_button := content.find_child("WardrobeItem_"+picked_id,true,false) as Button
 	if item_button!=null:
+		# Preserve immediate keyboard focus while the replacement list is laid out;
+		# the deferred pass below then scrolls the focused row into its visible area.
 		item_button.grab_focus()
 		item_scroll.ensure_control_visible(item_button)
-		item_scroll.call_deferred("ensure_control_visible",item_button)
+		call_deferred("_focus_selected_item_after_layout",picked_id)
+
+func _focus_selected_item_after_layout(item_id: String) -> void:
+	# _select_item rebuilds the list. Wait for those new rows to acquire their final
+	# layout before scrolling; otherwise focus may remain on an offscreen row.
+	await host.get_tree().process_frame
+	await host.get_tree().process_frame
+	if selected_item_id!=item_id or not is_instance_valid(item_scroll): return
+	var item_button := content.find_child("WardrobeItem_"+item_id,true,false) as Button
+	if item_button==null: return
+	item_scroll.ensure_control_visible(item_button)
+	await host.get_tree().process_frame
+	if selected_item_id!=item_id or not is_instance_valid(item_scroll) or not is_instance_valid(item_button): return
+	item_scroll.ensure_control_visible(item_button)
+	item_button.grab_focus()
+
+func _queue_responsive_profile() -> void:
+	# Main's size handler adapts font and hit-target sizes first. Defer this geometry
+	# pass so it reads the new final viewport transform and stays idempotent.
+	call_deferred("_apply_current_responsive_profile")
+
+func _apply_current_responsive_profile() -> void:
+	if not is_instance_valid(body): return
+	_apply_responsive_profile(Paper.physical_scale(body))
+	if current_tab=="shop" and not selected_item_id.is_empty():
+		# The selected shop row may move outside the viewport when compact spacing
+		# changes. Re-run the same settled-layout visibility pass used on selection.
+		call_deferred("_focus_selected_item_after_layout",selected_item_id)
+
+func _disconnect_responsive_profile() -> void:
+	if not is_instance_valid(host): return
+	var root_viewport := host.get_tree().root
+	var callback := Callable(self,"_queue_responsive_profile")
+	if root_viewport.size_changed.is_connected(callback):
+		root_viewport.size_changed.disconnect(callback)
+
+func _apply_responsive_profile(scale_factor: float) -> void:
+	if not is_instance_valid(body) or not is_instance_valid(preview): return
+	var compact := scale_factor<0.9
+	main_row.add_theme_constant_override("separation",10 if compact else 14)
+	preview_stack.add_theme_constant_override("separation",3 if compact else 6)
+	controls.add_theme_constant_override("separation",4 if compact else 6)
+	content.add_theme_constant_override("separation",5 if compact else 7)
+	preview.custom_minimum_size.y=220 if compact else 265
+	for key in tab_buttons:
+		var tab: Button=tab_buttons[key]
+		Paper.set_button_role(tab,"tab_selected" if tab.button_pressed else "tab_idle")
+
+func _refresh_selected_purchase_state() -> void:
+	if current_tab!="shop" or not is_instance_valid(action_row): return
+	var purchase := action_row.find_child("PurchaseSelected",false,false) as Button
+	if purchase==null: return
+	if selected_item_id.is_empty():
+		purchase.disabled=false
+		return
+	var item: Dictionary=Progress.wardrobe_item(selected_item_id)
+	if item.is_empty():
+		purchase.disabled=true
+		status_label.text="找不到這件商品。"
+		status_label.add_theme_color_override("font_color",Paper.PRICE_INK)
+		return
+	if selected_item_id=="hat-none" or Progress.owned_clothes.has(selected_item_id):
+		purchase.disabled=true
+		status_label.text="已收藏，請在衣櫃穿戴。"
+		status_label.add_theme_color_override("font_color",Paper.TEAL)
+		return
+	var price := int(item.price)
+	if Progress.coins<price:
+		purchase.disabled=true
+		status_label.text="餘額不足：需要 %d 枚，還差 %d 枚。"%[price,price-Progress.coins]
+		status_label.add_theme_color_override("font_color",Paper.PRICE_INK)
+	else:
+		purchase.disabled=false
+		status_label.text="已預覽 · %s"%str(item.name)
+		status_label.add_theme_color_override("font_color",Paper.TEAL)
 
 func _purchase_selected() -> void:
 	if selected_item_id.is_empty():
@@ -258,7 +363,7 @@ func _purchase_selected() -> void:
 		_show_status("這件已在衣櫃裡，可以直接穿戴。",Paper.TEAL)
 		return
 	if Progress.coins<int(item.price):
-		_show_status("海島幣不足，還差 %d 枚。"%[int(item.price)-Progress.coins],Paper.CORAL)
+		_show_status("海島幣不足，還差 %d 枚。"%[int(item.price)-Progress.coins],Paper.PRICE_INK)
 		return
 	var bought_id := selected_item_id
 	if not Progress.buy_clothing(bought_id):

@@ -69,3 +69,43 @@
 ![小視窗成就印章](images/ART-20-achievements-800.png)
 ![小視窗衣櫃](images/ART-20-wardrobe-800.png)
 ![夜晚遊園介面](images/ART-20-main-night-800.png)
+
+
+# Commit-2
+
+## 問題
+
+衣櫃和商店的選中頁籤、鏡框與主要動作層級不夠清楚；小視窗調整時，操作列、商品焦點和價格資訊可能難以完整閱讀。
+
+## 改動
+
+衣櫃改以深色選中頁籤、凸起試衣鏡框和單一主要動作建立層級；商品金額與餘額不足狀態改用深色字，並在視窗縮小後重新排版及保持所選商品可見。保留實際購買、穿戴、取消及降低動態行為。
+
+## 驗收
+
+以隔離存檔執行同一原生輸入流程，在乾淨基準版及候選版各取得六張對照畫面。候選版原生 v4 完成六張擷取且無引擎或腳本錯誤；已檢視標準商店、降低動態商店、800×600 商店與外觀畫面，所選商品、全身預覽、價格、狀態與操作列均可見。另完成並播放標準尺寸影片至結尾，核對開頭與結尾畫面。這是自動化原生介面流程及指定畫面的人工檢視，不代表完整遊戲試玩、完整衣櫃動畫檢查或本票所有介面都已完成視覺驗收，因此本票維持進行中。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 衣櫃 UI 局部測試 | 通過 60 項，0 錯誤 |
+| 核心與衣櫃執行檢查 | 通過，0 錯誤；損壞存檔案例的預期警告除外 |
+| 教學面板與目錄 | 通過，0 錯誤 |
+| 原生候選版 v4 | 六張畫面完成，0 引擎或腳本錯誤 |
+| 標準尺寸原生影片 | 242 幀、60 fps、1280×720，播放至 4.033 秒結尾；檢視開頭與結尾畫面 |
+
+### 基準版與候選版畫面
+
+| 畫面 | 基準版 | 候選版 |
+|---|---|---|
+| 標準外觀 | ![基準版標準外觀](images/ART-20-wardrobe-before-01-appearance-standard.png) | ![候選版標準外觀](images/ART-20-wardrobe-after-01-appearance-standard.png) |
+| 標準衣櫃 | ![基準版標準衣櫃](images/ART-20-wardrobe-before-02-closet-standard.png) | ![候選版標準衣櫃](images/ART-20-wardrobe-after-02-closet-standard.png) |
+| 未負擔商店選取 | ![基準版未負擔商店](images/ART-20-wardrobe-before-03-shop-unaffordable-100-focus.png) | ![候選版未負擔商店](images/ART-20-wardrobe-after-03-shop-unaffordable-100-focus.png) |
+| 降低動態商店 | ![基準版降低動態商店](images/ART-20-wardrobe-before-04-shop-reduced-motion.png) | ![候選版降低動態商店](images/ART-20-wardrobe-after-04-shop-reduced-motion.png) |
+| 800×600 商店 | ![基準版小視窗商店](images/ART-20-wardrobe-before-05-shop-compact-800x600.png) | ![候選版小視窗商店](images/ART-20-wardrobe-after-05-shop-compact-800x600.png) |
+| 800×600 外觀 | ![基準版小視窗外觀](images/ART-20-wardrobe-before-06-appearance-compact-800x600.png) | ![候選版小視窗外觀](images/ART-20-wardrobe-after-06-appearance-compact-800x600.png) |
+
+### 原生操作錄影
+
+[衣櫃標準尺寸四頁操作錄影](images/ART-20-wardrobe-hierarchy-native.mp4)
