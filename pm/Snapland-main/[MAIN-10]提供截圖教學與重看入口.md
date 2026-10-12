@@ -102,3 +102,7 @@
 ![私人練習｜遊玩中說明](images/MAIN-10-v3-native-private-practice-help.png)
 
 測試方式及範圍：[原生生命週期檢視](../../design/runtime/tutorial-lifecycle-native-review.md)；逐張來源與雜湊：[證據清單](../../design/runtime/MAIN-10-v3-native-evidence-manifest.md)。
+
+### 提交
+
+分支：`feature/island-first-park`；[遠端交付提交](https://github.com/deadline314/Snapland/commit/53addabd32fb0cf7437836280cb549325a94341d)。
