@@ -37,6 +37,8 @@ const KiteFlightModelScript = preload("res://game/minigames/kite_flight_model.gd
 const KiteFlightViewScript = preload("res://game/minigames/kite_flight_view.gd")
 const BubblePhotoModelScript = preload("res://game/minigames/bubble_photo_model.gd")
 const BubblePhotoViewScript = preload("res://game/minigames/bubble_photo_view.gd")
+const SignBalanceModelScript = preload("res://game/minigames/sign_balance_model.gd")
+const SignBalanceViewScript = preload("res://game/minigames/sign_balance_view.gd")
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
 const BALLOON_MAX_SPEED := 260.0
@@ -101,6 +103,9 @@ var pipe_model: RefCounted = PipeRoundScript.new()
 var crowd_model: RefCounted = CrowdTrafficScript.new()
 var kite_model: RefCounted = KiteFlightModelScript.new()
 var bubble_model: RefCounted = BubblePhotoModelScript.new()
+var sign_model: RefCounted = SignBalanceModelScript.new()
+var _sign_stage_cursor := 0
+var _sign_impact_cursor := 0
 var _bubble_photo_cursor := 0
 var _kite_marker_cursor := 0
 var _kite_up_held := false
@@ -248,6 +253,8 @@ func _sync_presentation() -> void:
 			"bubble_photo":
 				# Headless rule tests exercise the model without allocating avatar textures.
 				if DisplayServer.get_name() != "headless": presentation = BubblePhotoViewScript.new()
+			"sign_balance":
+				if DisplayServer.get_name() != "headless": presentation = SignBalanceViewScript.new()
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -258,6 +265,9 @@ func _sync_presentation() -> void:
 				# them. The later HUD sibling still receives its own buttons/overlays.
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.gui_input.connect(_on_kite_presentation_input)
+			if mode == "sign_balance":
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+				presentation.balance_requested.connect(_on_sign_balance_requested)
 			if mode == "balloon_delivery": presentation.initialize()
 			if mode == "bubble_photo":
 				presentation.initialize()
@@ -279,6 +289,7 @@ func _sync_presentation() -> void:
 		"crowd_traffic": presentation.present_state(crowd_model.snapshot(), phase, reduced_motion, time_phase)
 		"kite_rings": presentation.update_frame(kite_model.snapshot(), "result" if ended else ("paused" if paused else "playing"), reduced_motion, time_phase)
 		"bubble_photo": presentation.present_state(bubble_model.snapshot(), str(bubble_model.phase), reduced_motion, time_phase)
+		"sign_balance": presentation.update_frame(sign_model.snapshot(), time_phase, reduced_motion)
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -416,7 +427,7 @@ func _score_label() -> String:
 		"hat_catching": return "接帽分"
 		"ribbon_rhythm": return "節拍分"
 		"flower_pipes": return "路線轉動分"
-		"sign_balance": return "平衡拍點分"
+		"sign_balance": return "平衡段落分"
 		"shadow_alignment": return "影子對準分"
 		"bubble_photo": return "合照分"
 		"bench_swap": return "換位分"
@@ -432,7 +443,7 @@ func _score_rule_text() -> String:
 		"hat_catching": return "每接住一頂帽子 +100。"
 		"ribbon_rhythm": return "每踩中一拍 +75。"
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
-		"sign_balance": return "每個拍點穩在安全區 +50；精準度決定加碼條件。"
+		"sign_balance": return "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
 		"shadow_alignment": return "完成三秒維持時 +100；保持時間決定一般成功。"
 		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10。至少兩張合格為一般成功；三張完美可得小惡魔拍貼。"
 		"bench_swap": return "目前分數 = max(0, 500 − 50 × 交換次數)；座位排列決定是否完成。"
@@ -543,6 +554,8 @@ func reset_round() -> void:
 	sequence_showing = false
 	sequence_clock = 0.0
 	sequence_show_index = 0
+	_sign_stage_cursor = 0
+	_sign_impact_cursor = 0
 	alignment_hold = 0.0
 	shadow_started = false
 	shadow_broken = false
@@ -568,7 +581,7 @@ func reset_round() -> void:
 		"flower_pipes":
 			pipe_model.reset()
 			flower_cells = pipe_model.cells
-		"sign_balance": pass
+		"sign_balance": sign_model.reset(assisted)
 		"shadow_alignment": alignment = -0.72
 		"bubble_photo":
 			bubble_model.reset(assisted, time_phase)
@@ -730,16 +743,31 @@ func _tick_game(delta: float) -> void:
 			beat_window = not ended and beat == cycle and beat_phase < window
 		"flower_pipes": _tick_pipe(delta)
 		"sign_balance":
-			var wind := sin(phase * 1.7) * (0.50 if not assisted else 0.32)
-			balance += wind * delta - _axis_x() * 0.78 * delta
-			balance = clampf(balance, -1.4, 1.4)
-			if absf(balance) > 1.05:
-				mistakes += 1; balance = signf(balance) * 0.72; _feedback("招牌晃過安全線！", PINK)
-				if mistakes >= 3: _finish(false)
-			if phase > 1.5 and fposmod(phase, 1.0) < delta and absf(balance) < (0.38 if assisted else 0.25):
-				count += 1; _award_points("balance", "穩住安全區拍點", 50)
-				if absf(balance) < 0.12: devil_progress += 1
-			if count >= 7: _finish(true, devil_progress >= 7 and mistakes == 0)
+			var input_axis := _axis_x()
+			if not is_zero_approx(input_axis):
+				sign_model.set_balance(sign_model.balance + input_axis * delta * 1.8)
+			var state: Dictionary = sign_model.step(delta)
+			balance = float(state.balance)
+			count = int(state.safe_stages)
+			devil_progress = int(state.precise_stages)
+			mistakes = int(state.impacts)
+			var stage_results: Array = state.stage_results
+			var completed_stage_count := mini(int(state.completed_stage_count), stage_results.size())
+			while _sign_stage_cursor < completed_stage_count:
+				var stage_result: Dictionary = stage_results[_sign_stage_cursor]
+				if bool(stage_result.passed):
+					var stage_number := _sign_stage_cursor + 1
+					var stage_label := "第 %d 段・中心精準" % stage_number if bool(stage_result.precise) else "第 %d 段・安全帶" % stage_number
+					_award_points("sign_stage_%d" % stage_number, stage_label, 100 if bool(stage_result.precise) else 70)
+					_feedback("中心精準！" if bool(stage_result.precise) else "穩住安全帶！", MINT if bool(stage_result.precise) else YELLOW)
+				else:
+					_feedback("這段沒有穩在安全帶", PINK)
+				_sign_stage_cursor += 1
+			while _sign_impact_cursor < int(state.impacts):
+				_sign_impact_cursor += 1
+				_feedback("招牌撞到外側安全線", PINK)
+			if bool(state.ended):
+				_finish(bool(state.success), bool(state.devil_success))
 		"shadow_alignment":
 			var target_alignment := 0.18 if assisted else 0.0
 			if absf(alignment - target_alignment) < (0.13 if assisted else 0.065):
@@ -954,6 +982,10 @@ func _on_kite_presentation_input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton:
 		_apply_kite_pointer_button(event)
 
+func _on_sign_balance_requested(value: float) -> void:
+	if mode == "sign_balance" and not ended and not paused:
+		sign_model.set_balance(value)
+
 func _apply_kite_pointer_button(event: InputEventMouseButton) -> void:
 	if event.button_index == MOUSE_BUTTON_LEFT: _kite_boost_held = event.pressed
 	elif event.button_index == MOUSE_BUTTON_RIGHT: _kite_reel_held = event.pressed
@@ -1038,7 +1070,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif mode == "bench_swap": _bench_click(m)
 		elif mode == "melody_memory":
 			var petal := int(clampi(int((m.x - 380.0) / 130.0), 0, 3)); _melody_input(petal)
-		elif mode == "sign_balance": balance += -0.16 if m.x < DESIGN_SIZE.x / 2.0 else 0.16
 	if event is InputEventMouseMotion:
 		var mouse := event as InputEventMouseMotion
 		var pointer := _to_design(mouse.position)
@@ -1335,7 +1366,7 @@ func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
 	_design_transform()
-	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings", "bubble_photo"]:
+	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings", "bubble_photo", "sign_balance"]:
 		if mode == "balloon_delivery" and is_instance_valid(presentation):
 			var harbor_texture: Texture2D = presentation.texture()
 			if harbor_texture != null:

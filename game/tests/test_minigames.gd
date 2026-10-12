@@ -39,6 +39,7 @@ func _run() -> void:
 	_test_hat_boundaries()
 	_test_ribbon_boundaries()
 	_test_sign_boundaries()
+	_test_sign_seven_stage_score_ledger()
 	_test_shadow_boundaries()
 	_test_bubble_boundaries()
 	_test_melody_boundaries()
@@ -242,27 +243,98 @@ func _test_ribbon_boundaries() -> void:
 
 func _test_sign_boundaries() -> void:
 	var s := _new_session("game-008", true)
-	var results: Array[Dictionary] = []
-	s.finished.connect(func(value: Dictionary): results.append(value))
-	while not s.ended and s.phase < 9.0:
-		var wind: float = sin(s.phase * 1.7) * 0.32
-		var expected: float = s.balance + wind * 0.01
-		Input.action_release("ui_right"); Input.action_release("ui_left")
-		if expected > 0.0: Input.action_press("ui_right")
-		elif expected < 0.0: Input.action_press("ui_left")
-		s._process(0.01)
-	Input.action_release("ui_right"); Input.action_release("ui_left")
-	assert(results.size() == 1 and results[0].success and results[0].devil)
+	var initial: Dictionary = s.sign_model.snapshot().duplicate(true)
+	Input.action_press("ui_right")
+	s._process(0.1)
+	Input.action_release("ui_right")
+	var moved: Dictionary = s.sign_model.snapshot()
+	assert(float(moved.balance) > float(initial.balance), "held right input moves the physical counterweight through the session: axis=%f initial=%s moved=%s" % [s._axis_x(), str(initial), str(moved)])
+	assert(float(moved.angle) > float(initial.angle), "counterweight torque turns the sign through the session model")
+	assert(s.score_summary().total == s.score and s.score_summary().rule.contains("0.52 秒"), "session score summary follows the seven-stage model rules")
+	var elapsed_before_pause: float = moved.elapsed
+	s.set_paused(true)
+	Input.action_press("ui_left")
+	s._process(0.2)
+	Input.action_release("ui_left")
+	assert(is_equal_approx(float(s.sign_model.snapshot().elapsed), elapsed_before_pause), "paused sign model does not advance")
+	s.reset_round()
+	assert(float(s.sign_model.snapshot().elapsed) == 0.0 and s.sign_model.snapshot().stage == 0 and s.score == 0, "retry resets sign physics and stage ledger immediately")
+	s.set_practice_mode(true)
+	assert(s.practice_mode and not s.ended and s.sign_model.snapshot().elapsed == 0.0, "practice starts a clean sign route")
 	s.queue_free()
 
-	var bad := _new_session("game-008", true)
-	var bad_results: Array[Dictionary] = []
-	bad.finished.connect(func(value: Dictionary): bad_results.append(value))
+	var wrong := _new_session("game-008")
+	var failure_results: Array[Dictionary] = []
+	wrong.finished.connect(func(value: Dictionary) -> void: failure_results.append(value.duplicate(true)))
 	Input.action_press("ui_left")
-	for i in 250: bad._process(0.01)
+	var failure_steps := 0
+	while not wrong.ended and failure_steps < 2600:
+		wrong._process(0.01)
+		failure_steps += 1
 	Input.action_release("ui_left")
-	assert(bad_results.size() == 1 and not bad_results[0].success)
-	bad.queue_free()
+	Input.action_release("ui_right")
+	var completed_failure: bool = wrong.ended and failure_steps < 2600 and failure_results.size() == 1 and not bool(failure_results[0].success) and not bool(failure_results[0].devil)
+	_expect(completed_failure, "held left input reaches exactly one real unsuccessful Sign result through collision or timeout")
+	if completed_failure:
+		var failure_summary: Dictionary = wrong.score_summary()
+		var failure_event_total := 0
+		for event in wrong.score_events:
+			failure_event_total += int(event.amount)
+		_expect(int(failure_summary.get("total", -1)) == wrong.score and failure_event_total == wrong.score and int(failure_results[0].get("score_summary", {}).get("total", -1)) == wrong.score, "failed Sign result and score summary retain the earned score ledger")
+	wrong.queue_free()
+
+func _test_sign_seven_stage_score_ledger() -> void:
+	var session := _new_session("game-008")
+	var result: Array[Dictionary] = []
+	session.finished.connect(func(value: Dictionary) -> void: result.append(value.duplicate(true)))
+	var iterations := 0
+	while not session.ended and iterations < 2600:
+		var state: Dictionary = session.sign_model.snapshot().duplicate(true)
+		var target := float(state.target_angle)
+		var error := float(state.angle) - target
+		var torque := float(state.wind_torque)
+		if bool(state.forecast_visible): torque = float(state.forecast_torque)
+		var desired_accel := -8.0 * error - 4.0 * float(state.angular_velocity)
+		var restoring: float = -session.sign_model.RESTORE_TORQUE * error
+		var desired_balance := clampf((desired_accel - torque - restoring + session.sign_model.ANGULAR_DAMPING * float(state.angular_velocity)) / session.sign_model.COUNTERWEIGHT_TORQUE, -1.0, 1.0)
+		var axis := 1 if desired_balance > float(state.balance) + 0.02 else (-1 if desired_balance < float(state.balance) - 0.02 else 0)
+		Input.action_release("ui_left")
+		Input.action_release("ui_right")
+		if axis < 0: Input.action_press("ui_left")
+		if axis > 0: Input.action_press("ui_right")
+		session._process(0.01)
+		iterations += 1
+	Input.action_release("ui_left")
+	Input.action_release("ui_right")
+	var final_state: Dictionary = session.sign_model.snapshot().duplicate(true)
+	var ledger: Array = final_state.stage_results
+	var ledger_precise := 0
+	var ledger_score := 0
+	for entry in ledger:
+		if bool(entry.passed):
+			ledger_score += 100 if bool(entry.precise) else 70
+			if bool(entry.precise): ledger_precise += 1
+	var awarded_score := 0
+	for event in session.score_events:
+		awarded_score += int(event.amount)
+	_expect(session.ended and result.size() == 1 and bool(result[0].success) and bool(result[0].devil), "seven-stage sign session reaches its actual devil result through direction input")
+	_expect(ledger.size() == 7 and ledger_precise == 7 and ledger_score == 700, "seven completed model ledger entries are all precise and total 700")
+	_expect(session.score == ledger_score and awarded_score == 700 and session._sign_stage_cursor == 7, "session awards every completed ledger entry including final index six")
+	var summary: Dictionary = session.score_summary()
+	var rows: Array = summary.get("rows", [])
+	_expect(rows.size() == 7 and int(summary.get("total", -1)) == 700, "seven distinct Sign stage awards create seven readable summary rows totaling 700")
+	for index in mini(7, rows.size()):
+		var expected_label := "第 %d 段・中心精準" % (index + 1)
+		_expect(str(rows[index].get("label", "")) == expected_label and int(rows[index].get("amount", -1)) == 100, "score summary exposes the actual precise label and 100-point award for stage %d" % (index + 1))
+	var event_count: int = session.score_events.size()
+	session._process(0.01)
+	var post_finish_awards := 0
+	for event in session.score_events:
+		post_finish_awards += int(event.amount)
+	_expect(session.score == 700 and post_finish_awards == 700 and session.score_events.size() == event_count, "post-finish processing does not duplicate sign stage awards")
+	if not (session.ended and ledger_precise == 7 and session.score == 700):
+		push_error("Sign seven-stage regression evidence: iterations=%d result=%s stage=%s ledger_precise=%d ledger_score=%d score=%d cursor=%d" % [iterations, str(result), str(final_state), ledger_precise, ledger_score, session.score, session._sign_stage_cursor])
+	session.queue_free()
 	checks += 1
 
 func _test_shadow_boundaries() -> void:
@@ -772,9 +844,14 @@ func _test_all_modes() -> void:
 							var routes := [[0,4,6,15], [0,1,2,3,4,8,12], [0,1,2,3,6,10,14,15]]
 							for cell in routes[pipe_order_played]: _click(s, 400 + (cell % 4) * 160, 216 + int(cell / 4) * 100)
 					8:
-						Input.action_release("ui_right"); Input.action_release("ui_left")
-						var expected: float = s.balance + sin((s.phase + 0.01) * 1.7) * (0.32 if assisted else 0.50) * 0.01
-						Input.action_press("ui_right" if expected > 0 else "ui_left")
+						var sign_state: Dictionary = s.sign_model.snapshot()
+						var target_angle := float(sign_state.target_angle)
+						var torque := float(sign_state.wind_torque)
+						if bool(sign_state.forecast_visible): torque = float(sign_state.forecast_torque)
+						var angle_error := float(sign_state.angle) - target_angle
+						var desired_accel := -8.0 * angle_error - 4.0 * float(sign_state.angular_velocity)
+						var restoring: float = -s.sign_model.RESTORE_TORQUE * angle_error
+						s.sign_model.set_balance(clampf((desired_accel - torque - restoring + s.sign_model.ANGULAR_DAMPING * float(sign_state.angular_velocity)) / s.sign_model.COUNTERWEIGHT_TORQUE, -1.0, 1.0))
 					9: _mouse_move(s, 802 if assisted else 640, 420)
 					10:
 						var photo_state: Dictionary = s.bubble_model.snapshot()
@@ -909,6 +986,7 @@ func _test_native_input_routing() -> void:
 	bubble.queue_free()
 	await process_frame
 	checks += 1
+
 func _test_kite_native_pointer_routing() -> void:
 	_kite_pointer_test_completed = false
 	# Match native/Main fullscreen GUI ancestry; an ancestor STOP must not steal
