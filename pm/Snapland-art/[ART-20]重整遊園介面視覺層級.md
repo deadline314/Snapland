@@ -109,3 +109,7 @@
 ### 原生操作錄影
 
 [衣櫃標準尺寸四頁操作錄影](images/ART-20-wardrobe-hierarchy-native.mp4)
+
+### 提交
+
+分支：`feature/island-first-park`；[遠端交付提交](https://github.com/deadline314/Snapland/commit/557404258269e65d59cd9dcac5b04d1de92c5634)。
