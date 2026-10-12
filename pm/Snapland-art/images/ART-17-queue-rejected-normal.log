@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 60 FPS...
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=01/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-01.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=02/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-02.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=03/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-03.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=04/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-04.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=05/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-05.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=06/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-06.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=07/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-07.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=08/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-08.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=09/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-09.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=10/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-10.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=11/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-11.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=12/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-12.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=13/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-13.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=14/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-14.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=15/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-15.png
+TICKET_IDLE_NATIVE_FRAME rate=12 frame=16/16 path=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review/ticket-look-normal-frame-16.png
+TICKET_IDLE_NATIVE_PREVIEW_COMPLETE rate=12 captured=16 output=C:/Users/stanl/.codex/worktrees/island-first-park/Snapland/.review/ART17-variable-idle-candidate/.review
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-first-park\Snapland\.review\root-ticket-queue-normal.avi
+102 frames at 60 FPS (movie length: 00:00:01:42), recorded in 00:00:04 (25% of real-time speed).
+CPU render time: 0.01 seconds (average: 0.07 ms/frame)
+GPU render time: 0.01 seconds (average: 0.12 ms/frame)
+Encoding time: 0.73 seconds (average: 7.19 ms/frame)
+--------------------------------------------------------------------------------

@@ -1,0 +1,800 @@
+{
+  "candidate_base": "52de09f597f4dd0f29cf9d16978799f8f6ce9954",
+  "atlas": "assets/characters/ticket-idle-look-queue-v1.png",
+  "atlas_sha256": "7f08663951befc803aa6976cdb156e09dfab1d6a504d0ddd9991218fe29f5d1b",
+  "atlas_size": [
+    1047,
+    1503
+  ],
+  "extraction": "Find 16 major alpha>=64 connected components; include all alpha>0 pixels within 3 source px of each silhouette; frame numbering is row-major spatial order only, atlas does not provide sequence metadata.",
+  "frame_count": 16,
+  "raw_region_size_px": {
+    "min": [
+      174,
+      295
+    ],
+    "max": [
+      185,
+      305
+    ]
+  },
+  "raw_region_gap_px": {
+    "horizontal_min": 69,
+    "vertical_min": 62
+  },
+  "fps": 12,
+  "loop": false,
+  "shared_source_scale": 0.572,
+  "canonical_canvas": [
+    320,
+    460
+  ],
+  "feet_baseline": [
+    160,
+    448
+  ],
+  "canonical_measurements_from_existing_library": {
+    "alpha_threshold_64": "alpha byte >=64",
+    "old_idle": {
+      "height_px": [
+        386,
+        389,
+        386,
+        389,
+        389,
+        386,
+        389,
+        386
+      ],
+      "mean_height_px": 387.5,
+      "height_spread_px": 3,
+      "padding_ltrb_px": {
+        "min": [
+          40,
+          59,
+          47,
+          9
+        ],
+        "max": [
+          45,
+          62,
+          52,
+          12
+        ]
+      }
+    },
+    "old_idle_gesture": {
+      "mean_height_px": 390.63,
+      "height_spread_px": 5,
+      "padding_ltrb_px": {
+        "min": [
+          38,
+          53,
+          49,
+          12
+        ],
+        "max": [
+          43,
+          57,
+          54,
+          13
+        ]
+      }
+    },
+    "candidate_idle_look_queue": {
+      "height_px": [
+        384,
+        384,
+        380,
+        384,
+        388,
+        387,
+        386,
+        388,
+        389,
+        393,
+        393,
+        389,
+        388,
+        388,
+        388,
+        388
+      ],
+      "mean_height_px": 387.31,
+      "height_spread_px": 13,
+      "mean_delta_from_old_idle_px": -0.19,
+      "padding_ltrb_px": {
+        "min": [
+          43,
+          56,
+          42,
+          10
+        ],
+        "max": [
+          50,
+          68,
+          50,
+          12
+        ]
+      },
+      "per_frame_padding_ltrb_px": [
+        [
+          48,
+          64,
+          50,
+          12
+        ],
+        [
+          50,
+          64,
+          49,
+          12
+        ],
+        [
+          48,
+          68,
+          49,
+          12
+        ],
+        [
+          48,
+          64,
+          47,
+          12
+        ],
+        [
+          46,
+          61,
+          47,
+          11
+        ],
+        [
+          47,
+          63,
+          47,
+          10
+        ],
+        [
+          47,
+          63,
+          47,
+          11
+        ],
+        [
+          48,
+          61,
+          47,
+          11
+        ],
+        [
+          46,
+          60,
+          45,
+          11
+        ],
+        [
+          44,
+          56,
+          45,
+          11
+        ],
+        [
+          43,
+          56,
+          42,
+          11
+        ],
+        [
+          46,
+          60,
+          45,
+          11
+        ],
+        [
+          46,
+          60,
+          47,
+          12
+        ],
+        [
+          47,
+          60,
+          47,
+          12
+        ],
+        [
+          47,
+          60,
+          47,
+          12
+        ],
+        [
+          46,
+          60,
+          47,
+          12
+        ]
+      ],
+      "per_frame_alpha64_bbox_xywh_px": [
+        [
+          48,
+          64,
+          222,
+          384
+        ],
+        [
+          50,
+          64,
+          221,
+          384
+        ],
+        [
+          48,
+          68,
+          223,
+          380
+        ],
+        [
+          48,
+          64,
+          225,
+          384
+        ],
+        [
+          46,
+          61,
+          227,
+          388
+        ],
+        [
+          47,
+          63,
+          226,
+          387
+        ],
+        [
+          47,
+          63,
+          226,
+          386
+        ],
+        [
+          48,
+          61,
+          225,
+          388
+        ],
+        [
+          46,
+          60,
+          229,
+          389
+        ],
+        [
+          44,
+          56,
+          231,
+          393
+        ],
+        [
+          43,
+          56,
+          235,
+          393
+        ],
+        [
+          46,
+          60,
+          229,
+          389
+        ],
+        [
+          46,
+          60,
+          227,
+          388
+        ],
+        [
+          47,
+          60,
+          226,
+          388
+        ],
+        [
+          47,
+          60,
+          226,
+          388
+        ],
+        [
+          46,
+          60,
+          227,
+          388
+        ]
+      ]
+    }
+  },
+  "regions": [
+    {
+      "frame": 0,
+      "region": [
+        47,
+        34,
+        175,
+        298
+      ],
+      "alpha64_bbox": [
+        50,
+        37,
+        169,
+        292
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        47,
+        34,
+        175,
+        298
+      ],
+      "feet_anchor_source_px": [
+        88,
+        295
+      ],
+      "head_anchor_source_px": [
+        88,
+        5
+      ],
+      "foot_contact_source_y": 328
+    },
+    {
+      "frame": 1,
+      "region": [
+        305,
+        34,
+        174,
+        298
+      ],
+      "alpha64_bbox": [
+        308,
+        37,
+        168,
+        292
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        305,
+        34,
+        174,
+        298
+      ],
+      "feet_anchor_source_px": [
+        87,
+        295
+      ],
+      "head_anchor_source_px": [
+        87,
+        5
+      ],
+      "foot_contact_source_y": 328
+    },
+    {
+      "frame": 2,
+      "region": [
+        557,
+        37,
+        175,
+        295
+      ],
+      "alpha64_bbox": [
+        560,
+        40,
+        170,
+        289
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        557,
+        37,
+        175,
+        295
+      ],
+      "feet_anchor_source_px": [
+        88,
+        292
+      ],
+      "head_anchor_source_px": [
+        88,
+        5
+      ],
+      "foot_contact_source_y": 328
+    },
+    {
+      "frame": 3,
+      "region": [
+        815,
+        34,
+        177,
+        298
+      ],
+      "alpha64_bbox": [
+        818,
+        37,
+        171,
+        292
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        815,
+        34,
+        177,
+        298
+      ],
+      "feet_anchor_source_px": [
+        88,
+        295
+      ],
+      "head_anchor_source_px": [
+        88,
+        5
+      ],
+      "foot_contact_source_y": 328
+    },
+    {
+      "frame": 4,
+      "region": [
+        46,
+        397,
+        179,
+        300
+      ],
+      "alpha64_bbox": [
+        49,
+        400,
+        173,
+        295
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        46,
+        397,
+        179,
+        300
+      ],
+      "feet_anchor_source_px": [
+        90,
+        297
+      ],
+      "head_anchor_source_px": [
+        90,
+        5
+      ],
+      "foot_contact_source_y": 693
+    },
+    {
+      "frame": 5,
+      "region": [
+        305,
+        398,
+        177,
+        300
+      ],
+      "alpha64_bbox": [
+        307,
+        401,
+        172,
+        294
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        305,
+        398,
+        177,
+        300
+      ],
+      "feet_anchor_source_px": [
+        88,
+        296
+      ],
+      "head_anchor_source_px": [
+        88,
+        5
+      ],
+      "foot_contact_source_y": 693
+    },
+    {
+      "frame": 6,
+      "region": [
+        557,
+        398,
+        178,
+        299
+      ],
+      "alpha64_bbox": [
+        560,
+        401,
+        172,
+        294
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        557,
+        398,
+        178,
+        299
+      ],
+      "feet_anchor_source_px": [
+        89,
+        296
+      ],
+      "head_anchor_source_px": [
+        89,
+        5
+      ],
+      "foot_contact_source_y": 693
+    },
+    {
+      "frame": 7,
+      "region": [
+        817,
+        397,
+        177,
+        300
+      ],
+      "alpha64_bbox": [
+        820,
+        400,
+        171,
+        295
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        817,
+        397,
+        177,
+        300
+      ],
+      "feet_anchor_source_px": [
+        88,
+        297
+      ],
+      "head_anchor_source_px": [
+        88,
+        5
+      ],
+      "foot_contact_source_y": 693
+    },
+    {
+      "frame": 8,
+      "region": [
+        44,
+        765,
+        180,
+        302
+      ],
+      "alpha64_bbox": [
+        47,
+        768,
+        174,
+        296
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        44,
+        765,
+        180,
+        302
+      ],
+      "feet_anchor_source_px": [
+        90,
+        298
+      ],
+      "head_anchor_source_px": [
+        90,
+        5
+      ],
+      "foot_contact_source_y": 1062
+    },
+    {
+      "frame": 9,
+      "region": [
+        305,
+        762,
+        182,
+        305
+      ],
+      "alpha64_bbox": [
+        308,
+        765,
+        176,
+        299
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        305,
+        762,
+        182,
+        305
+      ],
+      "feet_anchor_source_px": [
+        91,
+        301
+      ],
+      "head_anchor_source_px": [
+        91,
+        5
+      ],
+      "foot_contact_source_y": 1062
+    },
+    {
+      "frame": 10,
+      "region": [
+        556,
+        762,
+        185,
+        305
+      ],
+      "alpha64_bbox": [
+        559,
+        765,
+        179,
+        299
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        556,
+        762,
+        185,
+        305
+      ],
+      "feet_anchor_source_px": [
+        92,
+        301
+      ],
+      "head_anchor_source_px": [
+        92,
+        5
+      ],
+      "foot_contact_source_y": 1062
+    },
+    {
+      "frame": 11,
+      "region": [
+        816,
+        765,
+        180,
+        302
+      ],
+      "alpha64_bbox": [
+        819,
+        768,
+        174,
+        296
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        816,
+        765,
+        180,
+        302
+      ],
+      "feet_anchor_source_px": [
+        90,
+        298
+      ],
+      "head_anchor_source_px": [
+        90,
+        5
+      ],
+      "foot_contact_source_y": 1062
+    },
+    {
+      "frame": 12,
+      "region": [
+        46,
+        1129,
+        179,
+        301
+      ],
+      "alpha64_bbox": [
+        49,
+        1132,
+        173,
+        295
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        46,
+        1129,
+        179,
+        301
+      ],
+      "feet_anchor_source_px": [
+        90,
+        298
+      ],
+      "head_anchor_source_px": [
+        90,
+        5
+      ],
+      "foot_contact_source_y": 1426
+    },
+    {
+      "frame": 13,
+      "region": [
+        304,
+        1129,
+        178,
+        301
+      ],
+      "alpha64_bbox": [
+        307,
+        1132,
+        172,
+        295
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        304,
+        1129,
+        178,
+        301
+      ],
+      "feet_anchor_source_px": [
+        89,
+        298
+      ],
+      "head_anchor_source_px": [
+        89,
+        5
+      ],
+      "foot_contact_source_y": 1426
+    },
+    {
+      "frame": 14,
+      "region": [
+        557,
+        1129,
+        178,
+        301
+      ],
+      "alpha64_bbox": [
+        560,
+        1132,
+        172,
+        295
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        557,
+        1129,
+        178,
+        301
+      ],
+      "feet_anchor_source_px": [
+        89,
+        298
+      ],
+      "head_anchor_source_px": [
+        89,
+        5
+      ],
+      "foot_contact_source_y": 1426
+    },
+    {
+      "frame": 15,
+      "region": [
+        814,
+        1129,
+        179,
+        301
+      ],
+      "alpha64_bbox": [
+        817,
+        1132,
+        173,
+        295
+      ],
+      "weak_edge_bbox_alpha1_within_3px": [
+        814,
+        1129,
+        179,
+        301
+      ],
+      "feet_anchor_source_px": [
+        90,
+        298
+      ],
+      "head_anchor_source_px": [
+        90,
+        5
+      ],
+      "foot_contact_source_y": 1426
+    }
+  ]
+}

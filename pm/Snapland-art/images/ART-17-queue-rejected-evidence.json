@@ -1,0 +1,251 @@
+{
+  "candidate_base": "50103433d4e08c19665c56b958325dadc8dd3ec9",
+  "candidate_branch": "feature/island-first-park",
+  "status": "rejected_not_for_integration",
+  "evidence_count": 47,
+  "evidence_files": [
+    {
+      "path": "ART-17-queue-rejected-cpu.log",
+      "sha256": "d17cfc1aec0e1e8dd20933bcc2443631d9eeec506dc835a5f9a4f60558048a8f",
+      "bytes": 1132
+    },
+    {
+      "path": "ART-17-queue-rejected-measurements.json",
+      "sha256": "d544fa958a68ee1da4dae31da82b904315acc23e6abe3253465a4e2487a03fe7",
+      "bytes": 13011
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-contact-1.png",
+      "sha256": "ecf7264c83ba5d94c27cf5e114c7139c3fc0ca0b9f6b8967c638eefcfd5880f0",
+      "bytes": 245186
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-contact-2.png",
+      "sha256": "b7bacedbb3063a87520a11ad826791ee65b5f2d38e10b3540f4c5cd40e26e8be",
+      "bytes": 248952
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-contact-3.png",
+      "sha256": "a9e77e9943f44eeb65811da8d6d7d2c8b87c34096ce3f48cea3e6e89a19fddcb",
+      "bytes": 249497
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-contact-4.png",
+      "sha256": "d3811413d24ae30eab7a7249606ed579412e9fc6f9b0dbc3d8b83d991920445c",
+      "bytes": 248468
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-01.png",
+      "sha256": "25c7d72e2988d9d5488e7efed121758bf2049b091c06bfcd2008de7d468f5f87",
+      "bytes": 144759
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-02.png",
+      "sha256": "fbd812e573c4c6753998e7e7968d06e6373495b6411f391052fcd1510b189e21",
+      "bytes": 145294
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-03.png",
+      "sha256": "8bc42023f12ac7f1049eeef81418df730ae0af6ad133cace4638a6a9d18ba1a9",
+      "bytes": 144545
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-04.png",
+      "sha256": "1d0f999000bca3ca1a785f7c41ad1469ae88982782f27e72412d705d5cd794e0",
+      "bytes": 145207
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-05.png",
+      "sha256": "79556d4d6ba916ce5acd5cbb4999dc0f1f3a6ae1e639edf5bac4c475a505f675",
+      "bytes": 147511
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-06.png",
+      "sha256": "57dd429ca02fb62403523f6eae91430abbff3daec09c990f5dc1a1f6288e6b49",
+      "bytes": 146928
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-07.png",
+      "sha256": "11c1cec919a0f486485d73dea9d84baff5f73328124bb02d2cfddfb1e1c5fde5",
+      "bytes": 146805
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-08.png",
+      "sha256": "66e974a577f1378e8ee715aad507bbd4997454dca5562fd8bfcdefb2d19e1727",
+      "bytes": 147277
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-09.png",
+      "sha256": "8b8e67c071af014d6ef8be81bec0ccc1df1fc977a7491d850b374c875e99cd44",
+      "bytes": 147448
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-10.png",
+      "sha256": "24b9178a55ee92a6a2810a8ce6a4dc8f27bbcc52523033acb57d35e9f3e5fcc1",
+      "bytes": 147169
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-11.png",
+      "sha256": "aa4b5432d90ed390c6cc425c19753791c891a3b736fca6af407d2a230b4a27c5",
+      "bytes": 148150
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-12.png",
+      "sha256": "159fa8d389994546c603308e22bb61723acb9e9d22bbb0eede9562010bbb819e",
+      "bytes": 147608
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-13.png",
+      "sha256": "a846f09698579edf347840fb3c0fa9cfb3040920eea03e82b66a09291395b02e",
+      "bytes": 147209
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-14.png",
+      "sha256": "dd548ae7d322b3d383e8850bd8c037c75cdda7cd2fbdac681ca389c208a545cc",
+      "bytes": 146611
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-15.png",
+      "sha256": "46a7c11a55d1466b52ddf5d9b8d84ded9ec17c59e351c0ab127c51dce42cab7b",
+      "bytes": 146362
+    },
+    {
+      "path": "ART-17-queue-rejected-normal-frame-16.png",
+      "sha256": "7655634019d3763576d778a72174c99c9d621a15aabc8dac3bb11f76771ab12b",
+      "bytes": 147120
+    },
+    {
+      "path": "ART-17-queue-rejected-normal.log",
+      "sha256": "c574561354982d5ead31a906659823a48f07989360794dcbe5d209158c53e849",
+      "bytes": 3960
+    },
+    {
+      "path": "ART-17-queue-rejected-normal.mp4",
+      "sha256": "c0003ff38d58d907e0ea05ac4887311b2e11239487f9e915d7b22ea19c4c933f",
+      "bytes": 308109
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-contact-1.png",
+      "sha256": "02b2ff1fe4606febf0928ca1b1044eb2f7a7a2e4af1f6d8cc654214461607372",
+      "bytes": 312588
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-contact-2.png",
+      "sha256": "5bb22f23c6a8d3cd618186e0e4ce3c959fd1982c9b2a971af7dac5d6e3bc3910",
+      "bytes": 315305
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-contact-3.png",
+      "sha256": "b2f165b3dc8af14b1edb3c39d2450be70d4b189b12534cf3ba493db43441b5e7",
+      "bytes": 317702
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-contact-4.png",
+      "sha256": "d3f3f4e7c6b1da11786d7d5084fe054b865cf5a14bbb230387b7e2b2909de674",
+      "bytes": 315621
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-01.png",
+      "sha256": "4aa0f5ca7a7dfcd3e59c4207451a3a0d238ede0b1c4aa8f4f46c19240637cd3b",
+      "bytes": 145125
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-02.png",
+      "sha256": "7b7fd7d4bf43dbcdfe7a55ad55c3864a144208fb9e73a2a012b4e6f8bca0731d",
+      "bytes": 146303
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-03.png",
+      "sha256": "4cb4c0d4bd20a9a1ad754d54fbb4b492d95b020c18a0073f5c4ca4428a1350de",
+      "bytes": 144613
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-04.png",
+      "sha256": "2b4ea82c38d3078920cca7b71055e99fd0e89033ffde836e3b51407e887e793f",
+      "bytes": 145712
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-05.png",
+      "sha256": "b8c9dbfd9d6cf1b9690df6523b51d573192c1b1c6643d3abc21337db488605e4",
+      "bytes": 147473
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-06.png",
+      "sha256": "e610ae097c292bab47c7654ff7b1323e664558fddf592f4393c35d6135c812ae",
+      "bytes": 146548
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-07.png",
+      "sha256": "22c3c299d055511e935f3c12f88e02758559d97b394831ca448684d0e22fc973",
+      "bytes": 146562
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-08.png",
+      "sha256": "4edbe1a9b08e6565767a7a94084fc8046aa15d7c54700cd3137284c28ebfdf54",
+      "bytes": 146541
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-09.png",
+      "sha256": "59908f01019968dfe99a2aa3c51ca336170d0c83081c4a5e85d94e71e7435362",
+      "bytes": 147958
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-10.png",
+      "sha256": "0f2c8a6df62da55c95094c0a42b2ef42248605584caa6b175002099f2e0e66f2",
+      "bytes": 148244
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-11.png",
+      "sha256": "e9f98f142d629fb686f88ee4256aa0b74d20e188671e95638efe1f4175670a6b",
+      "bytes": 148186
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-12.png",
+      "sha256": "1c81c3f117e4630199ed25a4f7cba10d91f222997fa952f341aec110248ac5af",
+      "bytes": 148071
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-13.png",
+      "sha256": "6f0ac9095f5d2acb24142d39bff06c4ecb6d514a09ff6b36a0aa2e407e48d95d",
+      "bytes": 147396
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-14.png",
+      "sha256": "9c4e552523d3da00366a419df04c76e03a79f66f64eb7baa891b554f23bd83c8",
+      "bytes": 146673
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-15.png",
+      "sha256": "f60204fe3118da8cc7b3f31d129a5e3c7f9ed1bae0c9d10be1e8437964a61c1e",
+      "bytes": 146416
+    },
+    {
+      "path": "ART-17-queue-rejected-slow-frame-16.png",
+      "sha256": "9895dfb352be63c4715a8545dfcac390da3e0b2e03cc5c599ea57bd60f094768",
+      "bytes": 146227
+    },
+    {
+      "path": "ART-17-queue-rejected-slow.log",
+      "sha256": "ce81b1e4b0a123eb1edc1e37ab00d5f103b06ba5703ffe454b8f51c1ba0b0ae7",
+      "bytes": 3909
+    },
+    {
+      "path": "ART-17-queue-rejected-slow.mp4",
+      "sha256": "e150fff4249ab8a99a1a13700db466f2861cd98dc304e33a739a75ac6b3b4498",
+      "bytes": 635769
+    },
+    {
+      "path": "ART-17-queue-rejected-source-v1.png",
+      "sha256": "7f08663951befc803aa6976cdb156e09dfab1d6a504d0ddd9991218fe29f5d1b",
+      "bytes": 1419175
+    }
+  ],
+  "measurement_json": "ART-17-queue-rejected-measurements.json",
+  "preview_fixture_sha256": "c59e8bc88d20aa523b5cd7dd32a39720de9701032dcd04480d43b03557df4a57",
+  "validation": {
+    "cpu_structural_checks": "90 passed; atlas parsing/regions/canonical canvas/anchors/timing only, not visual acceptance",
+    "normal_native": "exit 0; 102 frames at 60 FPS, 1.7 seconds; 16 frame captures; 0 ERROR",
+    "slow_native": "exit 0; 342 frames at 60 FPS, 5.7 seconds; 16 frame captures; 0 ERROR",
+    "visual_decision": "Root reviewed 32 frame captures and watched both MP4s to end; rejected for hair silhouette drift, 13 px height spread vs 3 px old idle, unclear queue-facing intent and 10–12 px bottom padding vs 12% target"
+  }
+}

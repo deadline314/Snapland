@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+TICKET_IDLE_LOOK_MEASURE old_idle_alpha64_height=[386, 389, 386, 389, 389, 386, 389, 386] mean=387.50 range=3 old_gesture_mean=390.63 range=5 candidate_alpha64_height=[384, 384, 380, 384, 388, 387, 386, 388, 389, 393, 393, 389, 388, 388, 388, 388] mean=387.31 range=13 feet_baseline=448 source_scale=0.572
+CANONICAL_ALPHA64_BOXES old_idle=[[42,62,228,386],[41,59,231,389],[45,62,223,386],[43,62,230,389],[43,62,230,389],[40,62,233,386],[43,59,228,389],[43,62,228,386]] old_gesture=[[43,57,228,390],[39,57,227,390],[41,57,229,390],[40,57,230,390],[41,57,225,390],[38,53,231,395],[43,57,228,390],[43,57,227,390]] candidate=[[48,64,222,384],[50,64,221,384],[48,68,223,380],[48,64,225,384],[46,61,227,388],[47,63,226,387],[47,63,226,386],[48,61,225,388],[46,60,229,389],[44,56,231,393],[43,56,235,393],[46,60,229,389],[46,60,227,388],[47,60,226,388],[47,60,226,388],[46,60,227,388]]
+REVIEW NOTE: height spread is measured, not normalized frame-by-frame; inspect for perceptible breathing in native preview.
+Ticket idle-look variable atlas: 90 checks passed
