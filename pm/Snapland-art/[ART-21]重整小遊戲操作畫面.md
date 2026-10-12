@@ -135,3 +135,7 @@
 ![十二款原生畫面比較](images/ART-21-twelve-native-comparison.png)
 
 來源及 SHA-256：[比較圖來源清單](../../design/runtime/ART-21-twelve-native-comparison-manifest.md)。
+
+### 提交
+
+分支：`feature/island-first-park`；[遠端交付提交](https://github.com/deadline314/Snapland/commit/2cf2c9dc9c19b7d2aa18f4ddc368c19aa9f3481c)。
