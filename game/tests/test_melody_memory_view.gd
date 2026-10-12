@@ -2,6 +2,7 @@ extends SceneTree
 
 const View = preload("res://game/minigames/melody_memory_view.gd")
 const Model = preload("res://game/minigames/melody_memory_model.gd")
+const Session = preload("res://game/minigames/session.gd")
 var checks := 0
 var failures := 0
 
@@ -16,6 +17,7 @@ func _run() -> void:
 	_test_stage_bounds(view)
 	_test_distinct_materials_and_pointer_input(view)
 	_test_cues_and_reduced_motion(view)
+	await _test_game_session_view_lifecycle(view)
 	view.queue_free()
 	await process_frame
 	if failures == 0:
@@ -118,3 +120,51 @@ func _test_cues_and_reduced_motion(view) -> void:
 	state["current_cue"] = -1
 	view.update_frame(state, "dawn", true)
 	_expect(view.rhythm_markers().is_empty() and not view.cue_is_visible(2), "ready phase clears previous phrase reveal before active play")
+
+func _test_game_session_view_lifecycle(view: View) -> void:
+	var session: Control = Session.new()
+	root.add_child(session)
+	var native_display := DisplayServer.get_name() != "headless"
+	if native_display:
+		DisplayServer.window_set_size(Vector2i(1280, 720))
+	else:
+		# Headless rule tests do not allocate the renderer; retain a direct ready view
+		# to verify that its resource setup and update path still work in that mode.
+		session.presentation = view
+		session.presentation_mode = "melody_memory"
+		view.note_requested.connect(session._on_melody_note_requested)
+		view.replay_requested.connect(session._on_melody_replay_requested)
+	session.start("game-012")
+	var model: Variant = session.melody_model
+	var launched_view: View = view if not native_display else session.presentation as View
+	_expect(session.game_id == "game-012" and session.mode == "melody_memory", "game-012 launches its actual melody session and finite model")
+	_expect(launched_view != null and launched_view.is_node_ready() and launched_view.has_instrument_atlas() and launched_view.atlas_resource_cached_correctly(), "the launched session creates a ready view with the imported instrument atlas already cached")
+	if native_display:
+		await RenderingServer.frame_post_draw
+		var capture_path := OS.get_environment("SNAPLAND_MELODY_LAUNCH_CAPTURE")
+		if not capture_path.is_empty():
+			var capture_dir := capture_path.get_base_dir()
+			DirAccess.make_dir_recursive_absolute(capture_dir)
+			var captured := root.get_viewport().get_texture().get_image().save_png(capture_path) == OK
+			_expect(captured, "native game-012 session launch screenshot is saved when requested")
+	var active := false
+	for _frame in 800:
+		if model.snapshot().phase == "active":
+			active = true
+			break
+		session._process(0.025)
+	_expect(active, "session advances its first listened phrase into the matching input phase")
+	if active:
+		var expected := int(Model.PHRASES[0][0])
+		var pointer := InputEventMouseButton.new()
+		pointer.button_index = MOUSE_BUTTON_LEFT
+		pointer.pressed = true
+		pointer.position = launched_view.instrument_bounds(expected).get_center()
+		launched_view._gui_input(pointer)
+		_expect(int(model.snapshot().input_index) == 1 and launched_view._snapshot.get("last_event") == model.snapshot().last_event, "an actual instrument pointer event reaches the session model and refreshes the view's response cue")
+	session._retry_from_hud()
+	_expect(int(model.snapshot().input_index) == 0 and model.snapshot().phase == "listen" and session.score == 0, "retry resets both the launched game model and visible phrase")
+	session.set_practice_mode(true)
+	_expect(session.practice_mode and model.snapshot().phase == "listen" and model.snapshot().input_index == 0, "practice restarts the same view-model lifecycle without carrying the answer forward")
+	session.queue_free()
+	await process_frame

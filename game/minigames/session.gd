@@ -337,8 +337,6 @@ func _sync_presentation() -> void:
 				var bench_equipped: Dictionary = bench_progress.equipped if bench_progress != null and bench_progress.get("equipped") is Dictionary else {}
 				presentation.configure_avatar(bench_appearance, bench_equipped)
 			if mode == "balloon_delivery": presentation.initialize()
-			if mode == "melody_memory":
-				presentation.initialize()
 			if mode == "fountain_timing":
 				presentation.call("initialize")
 				var fountain_progress := get_node_or_null("/root/Progress")
