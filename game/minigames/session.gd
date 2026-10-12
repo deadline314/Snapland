@@ -42,6 +42,8 @@ const SignBalanceModelScript = preload("res://game/minigames/sign_balance_model.
 const SignBalanceViewScript = preload("res://game/minigames/sign_balance_view.gd")
 const MelodyMemoryModelScript = preload("res://game/minigames/melody_memory_model.gd")
 const MelodyMemoryViewScript = preload("res://game/minigames/melody_memory_view.gd")
+const ShadowTheatreModelScript = preload("res://game/minigames/shadow_theatre_model.gd")
+const ShadowTheatreViewScript = preload("res://game/minigames/shadow_theatre_view.gd")
 const BenchSwapModelScript = preload("res://game/minigames/bench_swap_model.gd")
 const BenchSwapViewScript = preload("res://game/minigames/bench_swap_view.gd")
 const RibbonRhythmModelScript = preload("res://game/minigames/ribbon_rhythm_model.gd")
@@ -118,6 +120,12 @@ var melody_snapshot: Dictionary = {}
 var _melody_audio_cursor := 0
 var _melody_error_cursor := 0
 var _melody_last_event := ""
+var shadow_model: RefCounted = ShadowTheatreModelScript.new()
+var _shadow_frame_delta := 1.0 / 60.0
+var _shadow_left_held := false
+var _shadow_right_held := false
+var _shadow_near_held := false
+var _shadow_far_held := false
 var bench_model: RefCounted = BenchSwapModelScript.new()
 var _bench_score_published := 0
 var _bench_last_event := ""
@@ -278,6 +286,8 @@ func _sync_presentation() -> void:
 				if DisplayServer.get_name() != "headless": presentation = SignBalanceViewScript.new()
 			"melody_memory":
 				if DisplayServer.get_name() != "headless": presentation = MelodyMemoryViewScript.new()
+			"shadow_alignment":
+				if DisplayServer.get_name() != "headless": presentation = ShadowTheatreViewScript.new()
 			"bench_swap": presentation = BenchSwapViewScript.new()
 			"ribbon_rhythm": presentation = RibbonRhythmViewScript.new()
 		if presentation != null:
@@ -297,6 +307,11 @@ func _sync_presentation() -> void:
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.note_requested.connect(_on_melody_note_requested)
 				presentation.replay_requested.connect(_on_melody_replay_requested)
+			if mode == "shadow_alignment":
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+				presentation.axis_requested.connect(_on_shadow_axis_requested)
+				presentation.lamp_target_requested.connect(_on_shadow_lamp_target_requested)
+				presentation.shutter_requested.connect(_on_shadow_shutter_requested)
 			if mode == "bench_swap":
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.seat_requested.connect(_on_bench_seat_requested)
@@ -338,6 +353,7 @@ func _sync_presentation() -> void:
 		"kite_rings": presentation.update_frame(kite_model.snapshot(), "result" if ended else ("paused" if paused else "playing"), reduced_motion, time_phase)
 		"bubble_photo": presentation.present_state(bubble_model.snapshot(), str(bubble_model.phase), reduced_motion, time_phase)
 		"sign_balance": presentation.update_frame(sign_model.snapshot(), time_phase, reduced_motion)
+		"shadow_alignment": presentation.present_state(shadow_model.snapshot(), time_phase, reduced_motion)
 		"melody_memory": presentation.update_frame(melody_snapshot, time_phase, reduced_motion)
 		"bench_swap": presentation.update_frame(bench_model.snapshot(), time_phase, reduced_motion)
 		"ribbon_rhythm": presentation.update_frame(_ribbon_snapshot, time_phase, reduced_motion)
@@ -368,6 +384,17 @@ func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
 func set_paused(value: bool) -> void:
 	if ended and value:
 		return
+	if mode == "shadow_alignment":
+		_shadow_left_held = false
+		_shadow_right_held = false
+		_shadow_near_held = false
+		_shadow_far_held = false
+		if is_instance_valid(presentation):
+			if value:
+				for field in ["_left_down", "_right_down", "_up_down", "_down_down"]:
+					presentation.set(field, false)
+			presentation.set_process(not value)
+			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE if value else Control.MOUSE_FILTER_STOP
 	if paused and not value:
 		_discard_next_delta = true
 	paused = value
@@ -397,6 +424,8 @@ func _retry_from_hud() -> void:
 
 func _leave_from_hud() -> void:
 	paused = false
+	if mode == "shadow_alignment" and is_instance_valid(presentation):
+		presentation.set_process(false)
 	cancelled.emit()
 
 func _refresh_hud(force: bool = false) -> void:
@@ -420,6 +449,9 @@ func _refresh_hud(force: bool = false) -> void:
 		else:
 			var next_beat := _fountain_beat_time(mini(fountain_attempts, 2))
 			time_text = "第%d拍 %.1fs" % [mini(fountain_attempts + 1, 3), maxf(0.0, next_beat - phase)]
+	if mode == "shadow_alignment":
+		var shadow_time_left := maxf(0.0, float(shadow_model.snapshot().time_left))
+		time_text = "%02d:%02d" % [int(shadow_time_left / 60.0), int(shadow_time_left) % 60]
 	var feedback_text := ""
 	if mode == "balloon_delivery" and not balloon_started:
 		feedback_text = prompt
@@ -452,7 +484,12 @@ func _progress_text() -> String:
 		"ribbon_rhythm": return "命中 %d / 8　失拍 %d　錯誤 %d" % [devil_progress, int(_ribbon_snapshot.get("missed_count", 0)), mistakes]
 		"flower_pipes": return "工單 %d / 3　轉動 %d 次" % [mini(pipe_model.order_index + 1, 3), move_count]
 		"sign_balance": return "穩住 %d / 7 拍" % count
-		"shadow_alignment": return "穩定 %0.1f / 3.0 秒" % alignment_hold
+		"shadow_alignment":
+			var shadow_state: Dictionary = shadow_model.snapshot()
+			var resolved := 0
+			for row in shadow_state.ledger:
+				if str(row.status) != "waiting": resolved += 1
+			return "定影 %d / 3　合格 %d" % [resolved, int(shadow_state.qualified_count)]
 		"bubble_photo":
 			var photo_state: Dictionary = bubble_model.snapshot()
 			return "合格 %d / 2　完美 %d / 3" % [int(photo_state.qualified_count), int(photo_state.perfect_count)]
@@ -517,7 +554,7 @@ func _score_rule_text() -> String:
 		"ribbon_rhythm": return "精準 +100、合拍 +60；四個重拍另 +25。六拍一般成功；未輔助、八拍全精準且零錯誤才得惡魔拍貼。"
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
 		"sign_balance": return "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
-		"shadow_alignment": return "完成三秒維持時 +100；保持時間決定一般成功。"
+		"shadow_alignment": return "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。"
 		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10。至少兩張合格為一般成功；三張完美可得小惡魔拍貼。"
 		"bench_swap": return "每桌依完成步數得分；符合本桌全部規則為普通目標，每桌以最少交換完成且未開輔助或重排可得加碼。"
 		"melody_memory": return "每個正確音符 +25；完成每段樂句再 +100。"
@@ -528,6 +565,10 @@ func set_time_of_day(phase_id: Variant) -> void:
 	if mode == "bubble_photo" and bubble_model != null:
 		bubble_model.time_of_day = time_phase
 		bubble_model.snapshot()
+		_sync_presentation()
+	if mode == "shadow_alignment" and shadow_model != null:
+		shadow_model.time_of_day = time_phase
+		shadow_model.snapshot()
 		_sync_presentation()
 	if mode == "bench_swap" and bench_model != null:
 		bench_model.time_phase = time_phase
@@ -577,6 +618,10 @@ func reset_round() -> void:
 	_kite_boost_held = false
 	_kite_reel_held = false
 	_kite_marker_cursor = 0
+	_shadow_left_held = false
+	_shadow_right_held = false
+	_shadow_near_held = false
+	_shadow_far_held = false
 	if mode == "kite_rings":
 		kite_model.reset(assisted)
 		_kite_marker_cursor = kite_model.snapshot().eventmarkers.size()
@@ -662,7 +707,15 @@ func reset_round() -> void:
 			pipe_model.reset()
 			flower_cells = pipe_model.cells
 		"sign_balance": sign_model.reset(assisted)
-		"shadow_alignment": alignment = -0.72
+		"shadow_alignment":
+			shadow_model.reset(assisted, time_phase)
+			_shadow_frame_delta = 1.0 / 60.0
+			if is_instance_valid(presentation):
+				for field in ["_left_down", "_right_down", "_up_down", "_down_down"]:
+					presentation.set(field, false)
+				presentation.set_process(true)
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+			prompt = "移動點光源的左右與深度，讓完整影形貼合牆上印記；按 Space 定影三輪"
 		"bubble_photo":
 			bubble_model.reset(assisted, time_phase)
 			_sync_presentation()
@@ -726,6 +779,10 @@ func _prepare_fountain_avatar_poses() -> void:
 		progress.set_meta(FOUNTAIN_POSE_CACHE_META, pose_cache)
 
 func _process(delta: float) -> void:
+	var shadow_delta := delta if is_finite(delta) and delta > 0.0 else 0.0
+	if mode == "shadow_alignment":
+		shadow_delta = minf(shadow_delta, 0.5)
+		_shadow_frame_delta = minf(shadow_delta, ShadowTheatreModelScript.MAX_STEP)
 	_sync_presentation()
 	_hud_refresh_clock += maxf(delta, 0.0)
 	if _hud_dirty and _hud_refresh_clock >= HUD_REFRESH_INTERVAL:
@@ -756,17 +813,21 @@ func _process(delta: float) -> void:
 		_refresh_hud()
 		queue_redraw()
 		return
-	elapsed += delta
-	game_time += delta
-	if mode != "balloon_delivery": phase += delta
-	feedback_age += delta
+	var simulation_delta := shadow_delta if mode == "shadow_alignment" else delta
+	elapsed += simulation_delta
+	game_time += simulation_delta
+	if mode != "balloon_delivery": phase += simulation_delta
+	feedback_age += simulation_delta
 	for i in range(particles.size() - 1, -1, -1):
 		var particle: Dictionary = particles[i]
-		particle.life = float(particle.life) - delta
-		particle.pos = Vector2(particle.pos) + Vector2(particle.velocity) * delta
+		particle.life = float(particle.life) - simulation_delta
+		particle.pos = Vector2(particle.pos) + Vector2(particle.velocity) * simulation_delta
 		particles[i] = particle
 		if particle.life <= 0.0: particles.remove_at(i)
-	if mode not in ["melody_memory", "bench_swap"] and elapsed >= round_seconds:
+	if mode == "shadow_alignment":
+		_tick_shadow_theatre(simulation_delta)
+		if ended: return
+	if mode not in ["melody_memory", "bench_swap", "shadow_alignment"] and elapsed >= round_seconds:
 		_finish(false)
 		return
 	if mode == "kite_rings":
@@ -853,19 +914,63 @@ func _tick_game(delta: float) -> void:
 				_feedback("招牌撞到外側安全線", PINK)
 			if bool(state.ended):
 				_finish(bool(state.success), bool(state.devil_success))
-		"shadow_alignment":
-			var target_alignment := 0.18 if assisted else 0.0
-			if absf(alignment - target_alignment) < (0.13 if assisted else 0.065):
-				alignment_hold += delta
-				shadow_started = true
-			else:
-				if shadow_started: shadow_broken = true
-				alignment_hold = 0.0
-			if alignment_hold >= 3.0: _award_points("shadow", "影子維持三秒", 100); _finish(true, mistakes == 0 and not shadow_broken)
+		"shadow_alignment": pass # Advanced by the bounded projection-model clock in _process.
 		"bubble_photo":
 			_tick_bubble_photo(delta)
 		"bench_swap": _tick_bench_swap(delta)
 		"melody_memory": _tick_melody(delta)
+
+func _tick_shadow_theatre(delta: float) -> void:
+	var remaining := minf(maxf(delta, 0.0), 0.5)
+	while remaining > 0.000001 and not shadow_model.finished:
+		var step := minf(remaining, ShadowTheatreModelScript.MAX_STEP)
+		if not is_instance_valid(presentation):
+			shadow_model.continuous_axis(float(int(_shadow_right_held) - int(_shadow_left_held)), float(int(_shadow_near_held) - int(_shadow_far_held)), step)
+		shadow_model.step(step)
+		remaining -= step
+	if shadow_model.timed_out:
+		_sync_shadow_progress()
+		_sync_presentation()
+		_finish(false, false)
+
+func _sync_shadow_progress() -> void:
+	var state: Dictionary = shadow_model.snapshot()
+	count = int(state.qualified_count)
+	devil_progress = int(state.perfect_count)
+	mistakes = int(state.misses)
+
+func _on_shadow_axis_requested(horizontal: float, depth: float) -> void:
+	if mode != "shadow_alignment" or ended or paused:
+		return
+	shadow_model.continuous_axis(horizontal, depth, _shadow_frame_delta)
+	_sync_presentation()
+	_refresh_hud()
+
+func _on_shadow_lamp_target_requested(target_position: Vector2) -> void:
+	if mode != "shadow_alignment" or ended or paused:
+		return
+	shadow_model.setlamp_target(target_position)
+	_sync_presentation()
+	_refresh_hud(true)
+
+func _on_shadow_shutter_requested() -> void:
+	if mode != "shadow_alignment" or ended or paused:
+		return
+	var result: Dictionary = shadow_model.capture()
+	if not bool(result.get("accepted", false)):
+		return
+	var round_number := int(result.round) + 1
+	if bool(result.qualified):
+		_award_points("shadow_round_%d" % round_number, "第 %d 輪影形定影" % round_number, int(result.score))
+		_feedback("影形吻合並完成定影" if bool(result.perfect) else "影形合格，進入下一輪", MINT if bool(result.perfect) else YELLOW)
+	else:
+		_record_score_event("shadow_round_%d" % round_number, "第 %d 輪未達投影門檻" % round_number, 0)
+		_feedback("影形未合格；檢查左右與燈距後再定影", PINK)
+	_sync_shadow_progress()
+	_sync_presentation()
+	_refresh_hud(true)
+	if bool(shadow_model.finished):
+		_finish(bool(shadow_model.success), bool(shadow_model.devil))
 
 func _tick_balloon_motion(delta: float) -> void:
 	balloon_wind_current = _balloon_wind_at(phase, p.y)
@@ -1078,6 +1183,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if (event is InputEventKey or event is InputEventMouse) and viewport:
 		viewport.set_input_as_handled()
+	if mode == "shadow_alignment" and not is_instance_valid(presentation) and event is InputEventKey:
+		var shadow_key := event as InputEventKey
+		match shadow_key.keycode:
+			KEY_LEFT, KEY_A: _shadow_left_held = shadow_key.pressed
+			KEY_RIGHT, KEY_D: _shadow_right_held = shadow_key.pressed
+			KEY_UP, KEY_W: _shadow_near_held = shadow_key.pressed
+			KEY_DOWN, KEY_S: _shadow_far_held = shadow_key.pressed
+			_: pass
+		if shadow_key.keycode in [KEY_LEFT, KEY_A, KEY_RIGHT, KEY_D, KEY_UP, KEY_W, KEY_DOWN, KEY_S]:
+			return
 	if mode == "balloon_delivery" and event is InputEventKey:
 		var key_event := event as InputEventKey
 		if key_event.keycode == KEY_SPACE:
@@ -1139,7 +1254,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			if event.keycode == KEY_UP: pipe_cursor = maxi(0, pipe_cursor - 4)
 			if event.keycode == KEY_DOWN: pipe_cursor = mini(15, pipe_cursor + 4)
 			if event.keycode == KEY_SPACE: _rotate_pipe_index(pipe_cursor)
-		if mode == "shadow_alignment" and (event.keycode == KEY_LEFT or event.keycode == KEY_RIGHT): alignment = clampf(alignment + (0.04 if event.keycode == KEY_RIGHT else -0.04), -0.5, 0.5)
 		if mode == "bubble_photo" and event.keycode in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN]:
 			var center: Vector2 = bubble_model.snapshot().frame_center
 			var shift := Vector2.ZERO
@@ -1159,7 +1273,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			var chosen_lane: int = presentation.pointerSignalAt(m) if is_instance_valid(presentation) else -1
 			if chosen_lane >= 0:
 				_request_crowd_lane(chosen_lane)
-		elif mode == "shadow_alignment": alignment = inverse_lerp(190.0, 1090.0, m.x) - 0.5; mistakes += 1 if absf(alignment) > 0.3 else 0
+		elif mode == "shadow_alignment" and not is_instance_valid(presentation):
+			_on_shadow_lamp_target_requested(_shadow_pointer_target(m))
 		elif mode == "bubble_photo":
 			if m.distance_to(Vector2(1020.0, 184.0)) <= 32.0: _bubble_shutter()
 		elif mode == "flower_pipes": _rotate_pipe(m)
@@ -1173,7 +1288,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				mouse_steering = true
 			"kite_rings": kite_model.set_aim(clampf((390.0 - pointer.y) / 235.0, -1.0, 1.0))
 			"hat_catching": p.x = clampf(pointer.x, 180, 1100)
-			"shadow_alignment": alignment = clampf(inverse_lerp(190.0, 1090.0, pointer.x) - 0.5, -0.5, 0.5)
+			"shadow_alignment":
+				if not is_instance_valid(presentation):
+					_on_shadow_lamp_target_requested(_shadow_pointer_target(pointer))
 			"bubble_photo":
 				if BubblePhotoModelScript.PLAY_RECT.has_point(pointer):
 					bubble_model.set_frame_center(pointer)
@@ -1182,6 +1299,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _press_action() -> void:
 	match mode:
+		"shadow_alignment": _on_shadow_shutter_requested()
 		"fountain_timing":
 			if fountain_attempts >= 3:
 				return
@@ -1491,7 +1609,7 @@ func _feedback_anchor() -> Vector2:
 		"ribbon_rhythm": return Vector2(640, 230)
 		"flower_pipes": return Vector2(150, 460)
 		"sign_balance": return Vector2(640, 340)
-		"shadow_alignment": return Vector2(940 + alignment * 300, 390)
+		"shadow_alignment": return Vector2(640, 230)
 		"bubble_photo": return Vector2(640, 240)
 		"bench_swap":
 			var selected_seat := int(bench_model.snapshot().get("selected_seat", -1))
@@ -1546,6 +1664,11 @@ func _record_score_event(key: String, label: String, amount: int, event_count: i
 			score_events[index] = aggregate
 			return
 	score_events.append(aggregate)
+
+func _shadow_pointer_target(point: Vector2) -> Vector2:
+	var x := lerpf(ShadowTheatreModelScript.LAMP_X_MIN, ShadowTheatreModelScript.LAMP_X_MAX, clampf((point.x - 160.0) / 960.0, 0.0, 1.0))
+	var depth := lerpf(ShadowTheatreModelScript.LAMP_Z_MAX, ShadowTheatreModelScript.LAMP_Z_MIN, clampf((point.y - 176.0) / 440.0, 0.0, 1.0))
+	return Vector2(x, depth)
 
 func _finish(success: bool, devil: bool = false) -> void:
 	if ended: return

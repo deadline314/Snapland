@@ -2,6 +2,7 @@ extends SceneTree
 
 const Session = preload("res://game/minigames/session.gd")
 const HUD = preload("res://game/ui/minigame_hud.gd")
+const ShadowModel = preload("res://game/minigames/shadow_theatre_model.gd")
 const RibbonView = preload("res://game/minigames/ribbon_rhythm_view.gd")
 const Model = preload("res://game/minigames/melody_memory_model.gd")
 var checks := 0
@@ -385,21 +386,109 @@ func _test_sign_seven_stage_score_ledger() -> void:
 	checks += 1
 
 func _test_shadow_boundaries() -> void:
-	var s := _new_session("game-009", true)
-	var results: Array[Dictionary] = []
-	s.finished.connect(func(value: Dictionary): results.append(value))
-	_mouse_move(s, 802, 420)
-	s._process(3.1)
-	assert(results.size() == 1 and results[0].success and results[0].devil and results[0].assisted)
-	s.queue_free()
-
-	var bad := _new_session("game-009", true)
-	var bad_results: Array[Dictionary] = []
-	bad.finished.connect(func(value: Dictionary): bad_results.append(value))
-	bad._process(3.1)
-	assert(bad_results.is_empty() and bad.alignment_hold == 0.0)
-	bad.queue_free()
+	var controls := _new_session("game-009")
+	_expect(controls._feedback_anchor() == Vector2(640, 230), "Shadow feedback anchor remains in the upper clear strip")
+	var initial: Vector2 = controls.shadow_model.snapshot().lamp_position
+	_key(controls, KEY_RIGHT)
+	controls._process(0.1)
+	_key_release(controls, KEY_RIGHT)
+	var after_horizontal: Vector2 = controls.shadow_model.snapshot().lamp_position
+	_expect(after_horizontal.x > initial.x and is_equal_approx(after_horizontal.y, initial.y), "session forwards horizontal key hold through the bounded model axis")
+	_key(controls, KEY_UP)
+	controls._process(0.1)
+	_key_release(controls, KEY_UP)
+	var after_depth: Vector2 = controls.shadow_model.snapshot().lamp_position
+	_expect(after_depth.y > after_horizontal.y, "up input moves the real light closer to the fixed puppet")
+	_key(controls, KEY_RIGHT)
+	var before_stall: Vector2 = after_depth
+	controls._process(10.0)
+	_key_release(controls, KEY_RIGHT)
+	var after_stall: Vector2 = controls.shadow_model.snapshot().lamp_position
+	_expect(before_stall.distance_to(after_stall) <= ShadowModel.LAMP_SPEED * 0.5 + 0.0001 and controls.shadow_model.snapshot().elapsed < 1.0, "a long frame is capped and substepped instead of teleporting the lamp or skipping time")
+	_shadow_move_lamp(controls, controls.shadow_model.round_solution(0))
+	_expect(controls.shadow_model.snapshot().lamp_position.distance_to(controls.shadow_model.round_solution(0)) < 0.00001, "pointer screen motion maps through the session design transform to the physical lamp rail")
+	_key(controls, KEY_SPACE)
+	_expect(str(controls.shadow_model.snapshot().ledger[0].status) == "perfect", "Space routes through session shutter handling and records an actual model judgement")
+	controls.queue_free()
 	checks += 1
+
+	var ordinary := _new_session("game-009")
+	var ordinary_results: Array[Dictionary] = []
+	ordinary.finished.connect(func(value: Dictionary): ordinary_results.append(value))
+	for round_index in 3:
+		var target: Vector2 = ordinary.shadow_model.round_solution(round_index)
+		if round_index == 1:
+			target += Vector2(0.20, 0.0)
+		_shadow_move_lamp(ordinary, target)
+		_key(ordinary, KEY_SPACE)
+		_key_release(ordinary, KEY_SPACE)
+	var ordinary_rows: Array = ordinary.shadow_model.snapshot().ledger
+	_expect(ordinary_results.size() == 1 and ordinary_results[0].success and not ordinary_results[0].devil, "two real qualified projections out of three earn ordinary success without the precision award")
+	_expect(ordinary_rows[0].perfect and ordinary_rows[1].status == "miss" and ordinary_rows[2].perfect and ordinary.mistakes == 1, "misaligned shutter remains in the real three-round ledger as a miss")
+	_expect(ordinary.score > 0 and ordinary.score == ordinary.shadow_model.score and ordinary.score_summary().total == ordinary.score, "captured model points flow into the shared score total and result summary")
+	var ordinary_summary: Dictionary = ordinary_results[0].score_summary
+	var ordinary_row_total := 0
+	for row in ordinary_summary.rows:
+		ordinary_row_total += int(row.amount)
+	_expect(ordinary_row_total == ordinary.score, "ordinary result rows reconcile with the actual qualifying capture awards")
+	ordinary.queue_free()
+	checks += 1
+
+	var precise := _new_session("game-009")
+	var precise_results: Array[Dictionary] = []
+	precise.finished.connect(func(value: Dictionary): precise_results.append(value))
+	for round_index in 3:
+		_shadow_move_lamp(precise, precise.shadow_model.round_solution(round_index))
+		_key(precise, KEY_SPACE)
+		_key_release(precise, KEY_SPACE)
+	_expect(precise_results.size() == 1 and precise_results[0].success and precise_results[0].devil and not precise_results[0].assisted, "three precise actual shutters with zero misses unlock the unassisted precision result")
+	_expect(precise.devil_progress == 3 and precise.mistakes == 0 and precise.score == precise.shadow_model.score, "precision progress and awarded score mirror the model ledger")
+	precise.queue_free()
+	checks += 1
+
+	var assisted := _new_session("game-009", true)
+	var assisted_results: Array[Dictionary] = []
+	assisted.finished.connect(func(value: Dictionary): assisted_results.append(value))
+	_shadow_move_lamp(assisted, assisted.shadow_model.round_solution(0) + Vector2(0.19, 0.0))
+	_key(assisted, KEY_SPACE)
+	var assisted_first: Dictionary = assisted.shadow_model.snapshot().ledger[0]
+	for round_index in [1, 2]:
+		_shadow_move_lamp(assisted, assisted.shadow_model.round_solution(round_index))
+		_key(assisted, KEY_SPACE)
+	_expect(assisted_first.qualified and not assisted_first.perfect and assisted_results.size() == 1 and assisted_results[0].success and not assisted_results[0].devil and assisted_results[0].assisted, "wider assist tolerance still requires the actual pointer to align and never grants the precision award")
+	_expect(assisted.shadow_model.snapshot().qualified_count == 3 and assisted.shadow_model.snapshot().perfect_count == 2, "assisted ordinary and precision counts come from three real model captures")
+	assisted.queue_free()
+	checks += 1
+
+	var timeout := _new_session("game-009")
+	var timeout_results: Array[Dictionary] = []
+	timeout.finished.connect(func(value: Dictionary): timeout_results.append(value))
+	timeout.set_paused(true)
+	var paused_elapsed: float = timeout.shadow_model.elapsed
+	timeout._process(1.0)
+	_expect(timeout.shadow_model.elapsed == paused_elapsed, "pause freezes the dedicated projection-model clock")
+	timeout.set_paused(false)
+	timeout._process(10.0)
+	_expect(timeout.shadow_model.elapsed == paused_elapsed, "the first resumed frame is discarded and cannot jump the lamp timer")
+	var timeout_guard := 0
+	while not timeout.ended and timeout_guard < 125:
+		timeout._process(0.5)
+		timeout_guard += 1
+	var timed_state: Dictionary = timeout.shadow_model.snapshot()
+	_expect(timeout_guard < 125 and timed_state.finished and timed_state.timed_out and timeout_results.size() == 1 and not timeout_results[0].success and not timeout_results[0].devil, "actual model timer emits one safe unsuccessful timeout without awarding success")
+	timeout._retry_from_hud()
+	_expect(not timeout.shadow_model.finished and is_zero_approx(timeout.shadow_model.elapsed) and timeout.shadow_model.snapshot().ledger[0].status == "waiting", "retry creates a clean model clock and waiting ledger")
+	timeout.queue_free()
+	checks += 1
+
+func _shadow_move_lamp(session: Control, target: Vector2) -> void:
+	var design := Vector2(
+		160.0 + (target.x - ShadowModel.LAMP_X_MIN) / (ShadowModel.LAMP_X_MAX - ShadowModel.LAMP_X_MIN) * 960.0,
+		176.0 + (ShadowModel.LAMP_Z_MAX - target.y) / (ShadowModel.LAMP_Z_MAX - ShadowModel.LAMP_Z_MIN) * 440.0
+	)
+	var factor := minf(session.size.x / 1280.0, session.size.y / 720.0)
+	var local := design if factor <= 0.0 else (session.size - Vector2(1280.0, 720.0) * factor) * 0.5 + design * factor
+	_mouse_move(session, local.x, local.y)
 
 func _test_bubble_boundaries() -> void:
 	var input_session := _new_session("game-010")
@@ -1087,7 +1176,11 @@ func _test_all_modes() -> void:
 						var desired_accel := -8.0 * angle_error - 4.0 * float(sign_state.angular_velocity)
 						var restoring: float = -s.sign_model.RESTORE_TORQUE * angle_error
 						s.sign_model.set_balance(clampf((desired_accel - torque - restoring + s.sign_model.ANGULAR_DAMPING * float(sign_state.angular_velocity)) / s.sign_model.COUNTERWEIGHT_TORQUE, -1.0, 1.0))
-					9: _mouse_move(s, 802 if assisted else 640, 420)
+					9:
+						var shadow_target: Vector2 = s.shadow_model.round_solution(s.shadow_model.round)
+						_shadow_move_lamp(s, shadow_target)
+						_key(s, KEY_SPACE)
+						_key_release(s, KEY_SPACE)
 					10:
 						var photo_state: Dictionary = s.bubble_model.snapshot()
 						if str(photo_state.phase) == "aim" and float(photo_state.round_elapsed) >= float(s.bubble_model.BEST_POSE_TIMES[int(photo_state.round)]):
@@ -1114,7 +1207,7 @@ func _test_all_modes() -> void:
 			if number == 1:
 				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
 			else:
-				var expected_devil: bool = (not assisted) if number in [2, 6, 11, 12] else true
+				var expected_devil: bool = (not assisted) if number in [2, 6, 9, 11, 12] else true
 				assert(results.size() == 1 and results[0].success and results[0].devil == expected_devil, "Reachability game-%03d assist=%s results=%s" % [number, assisted, str(results)])
 			var score_detail: Dictionary = results[0].get("score_summary", {})
 			var displayed_total := 0
@@ -1132,6 +1225,12 @@ func _test_all_modes() -> void:
 			elif number == 12:
 				timeout._process(60.0)
 				_expect(not timeout.ended and timeout_results.is_empty(), "Melody Memory has no timer and cannot complete without reproducing its phrases")
+			elif number == 9:
+				var shadow_timeout_guard := 0
+				while not timeout.ended and shadow_timeout_guard < 125:
+					timeout._process(0.5)
+					shadow_timeout_guard += 1
+				_expect(shadow_timeout_guard < 125 and timeout_results.size() == 1 and not bool(timeout_results[0].success) and not bool(timeout_results[0].devil), "shadow model deadline returns one unsuccessful timeout")
 			else:
 				timeout._process(60.0)
 				assert(timeout_results.size() == 1 and not timeout_results[0].success and not timeout_results[0].devil)
