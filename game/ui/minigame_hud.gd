@@ -15,14 +15,17 @@ const PAPER := Color("#fff4d9")
 const MINT := Color("#70e1c1")
 const GOLD := Color("#d6ad76")
 const SHADOW_INK := Color("#071923", 0.48)
+const HUD_FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
 
-var _state: Dictionary = {}
 var _details: Dictionary = {}
 var _header: PanelContainer
+var _status_rail: PanelContainer
 var _title: Label
 var _objective: Label
 var _progress: Label
+var _score_label: Label
 var _score: Label
+var _time_label: Label
 var _time: Label
 var _badge: Label
 var _feedback: PanelContainer
@@ -43,6 +46,8 @@ var _result_panel: PanelContainer
 var _result_title: Label
 var _result_status: Label
 var _layout_scale := 1.0
+var _effective_scale := 1.0
+var _layout_refresh_pending := false
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -53,30 +58,36 @@ func _ready() -> void:
 	_build_score_layer()
 	_build_confirm_layer()
 	_build_result_layer()
-	resized.connect(_layout)
+	resized.connect(_queue_layout_refresh)
+	get_viewport().size_changed.connect(_queue_layout_refresh)
+	var window := get_window()
+	if window != null and not window.size_changed.is_connected(_queue_layout_refresh):
+		window.size_changed.connect(_queue_layout_refresh)
 	var parent_control := get_parent_control()
 	if parent_control != null:
-		parent_control.resized.connect(_layout)
+		parent_control.resized.connect(_queue_layout_refresh)
 	_layout()
 	set_state({})
 
 func set_state(state: Dictionary) -> void:
-	_state = state.duplicate()
 	if _title == null:
 		return
 	_title.text = str(state.get("title", "小遊戲"))
 	_objective.text = str(state.get("objective", "完成挑戰"))
 	_objective.tooltip_text = _objective.text
+	_title.tooltip_text = _objective.text
 	_progress.text = str(state.get("progress_text", "準備中"))
+	_progress.tooltip_text = _progress.text
 	_score.text = "%04d" % int(state.get("score", 0))
 	_time.text = str(state.get("time_text", "01:00"))
-	var badges: Array[String] = []
+	var badge_text := ""
 	if bool(state.get("assisted", false)):
-		badges.append("輔助")
+		badge_text = "輔助"
 	if bool(state.get("practice", false)):
-		badges.append("練習・不收藏")
-	_badge.text = "　".join(badges)
-	_badge.visible = not badges.is_empty()
+		badge_text += "　" if not badge_text.is_empty() else ""
+		badge_text += "練習・不收藏"
+	_badge.text = badge_text
+	_badge.visible = not badge_text.is_empty()
 	var message := str(state.get("feedback_text", ""))
 	_feedback.visible = not message.is_empty()
 	_feedback_label.text = message
@@ -85,7 +96,9 @@ func set_state(state: Dictionary) -> void:
 	_feedback.size.x = feedback_width
 	_feedback_label.add_theme_color_override("font_color", state.get("feedback_color", PAPER))
 	_pause_status.text = "練習中" if bool(state.get("practice", false)) else "正式挑戰"
-	_pause_title.text = str(state.get("title", "小遊戲")) + "　暫停"
+	# The game name is already visible in the corner header. Keeping this title
+	# short prevents long localized names from forcing the centered dialog wider.
+	_pause_title.text = "暫停"
 	var ended := bool(state.get("ended", false))
 	_result_layer.visible = ended
 	if ended:
@@ -131,51 +144,100 @@ func close_score_details() -> void:
 func _build_header() -> void:
 	_header = PanelContainer.new()
 	_header.name = "MinigameHeader"
-	_header.position = Vector2(34, 18)
-	_header.size = Vector2(1212, 104)
+	_header.position = Vector2(24, 18)
+	_header.size = Vector2(392, 84)
 	_header.mouse_filter = Control.MOUSE_FILTER_STOP
 	_header.add_theme_stylebox_override("panel", _ticket_style())
 	add_child(_header)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	_header.add_child(row)
-	var text_col := VBoxContainer.new()
-	text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	text_col.add_theme_constant_override("separation", 2)
-	row.add_child(text_col)
+	var title_col := VBoxContainer.new()
+	title_col.name = "TitleAndProgress"
+	title_col.add_theme_constant_override("separation", 2)
+	_header.add_child(title_col)
 	_title = _label("小遊戲", 24, INK)
-	text_col.add_child(_title)
+	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_col.add_child(_title)
+	# Preserve the full goal for assistive discovery without keeping its full
+	# sentence over the active play space.
 	_objective = _label("完成挑戰", 18, Color("#34545b"))
-	_objective.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	_objective.tooltip_text = "完整目標請按 ? 查看圖解教學。"
-	text_col.add_child(_objective)
+	_objective.visible = false
+	_objective.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_col.add_child(_objective)
 	var status_row := HBoxContainer.new()
-	text_col.add_child(status_row)
-	_progress = _label("準備中", 18, Color("#79562b"))
+	status_row.name = "ProgressAndBadges"
+	status_row.add_theme_constant_override("separation", 7)
+	title_col.add_child(status_row)
+	_progress = _label("準備中", 16, Color("#79562b"))
+	_progress.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_progress.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	status_row.add_child(_progress)
 	_badge = _label("", 16, Color("#28675d"))
+	_badge.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	status_row.add_child(_badge)
-	_score = _label("0000", 29, Color("#765321"))
-	_score.custom_minimum_size.x = 106
-	_score.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	row.add_child(_score)
-	var time_col := VBoxContainer.new()
-	_time = _label("01:00", 19, INK)
-	_time.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	_status_rail = PanelContainer.new()
+	_status_rail.name = "MinigameStatusRail"
+	_status_rail.position = Vector2(640, 18)
+	_status_rail.size = Vector2(616, 84)
+	_status_rail.mouse_filter = Control.MOUSE_FILTER_STOP
+	var rail_style := _panel_style(Color("#e8dfc9"), Color("#af8958"), 0.98, 1)
+	rail_style.content_margin_top = 2
+	rail_style.content_margin_bottom = 2
+	rail_style.border_width_top = 1
+	rail_style.border_width_bottom = 1
+	_status_rail.add_theme_stylebox_override("panel", rail_style)
+	add_child(_status_rail)
+	var rail_content := VBoxContainer.new()
+	rail_content.name = "StatusAndActions"
+	rail_content.add_theme_constant_override("separation", 3)
+	rail_content.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_status_rail.add_child(rail_content)
+	var status_line := HBoxContainer.new()
+	status_line.name = "ScoreAndTime"
+	status_line.add_theme_constant_override("separation", 16)
+	status_line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rail_content.add_child(status_line)
+	var score_col := HBoxContainer.new()
+	score_col.name = "ScoreReadout"
+	score_col.alignment = BoxContainer.ALIGNMENT_CENTER
+	score_col.add_theme_constant_override("separation", 5)
+	status_line.add_child(score_col)
+	_score_label = _label("得分", 14, Color("#536b65"))
+	_score_label.name = "ScoreLabel"
+	score_col.add_child(_score_label)
+	_score = _label("0000", 19, Color("#76532a"))
+	_score.custom_minimum_size.x = 54
+	score_col.add_child(_score)
+	var time_col := HBoxContainer.new()
+	time_col.name = "TimeReadout"
+	time_col.add_theme_constant_override("separation", 5)
+	status_line.add_child(time_col)
+	_time_label = _label("時間", 14, Color("#536b65"))
+	time_col.add_child(_time_label)
+	_time = _label("01:00", 17, INK)
 	time_col.add_child(_time)
+	var actions := HBoxContainer.new()
+	actions.name = "HUDActions"
+	actions.add_theme_constant_override("separation", 7)
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rail_content.add_child(actions)
 	var detail_button := _button("分數明細", 16)
 	detail_button.name = "DetailsButton"
+	detail_button.custom_minimum_size = Vector2(132, 44)
 	detail_button.pressed.connect(func(): details_requested.emit(); open_score_details())
-	time_col.add_child(detail_button)
-	row.add_child(time_col)
-	var help_button := _button("? 教學", 16)
+	actions.add_child(detail_button)
+	var help_button := _button("教學", 15)
 	help_button.name = "HelpButton"
+	help_button.custom_minimum_size = Vector2(92, 44)
+	help_button.tooltip_text = "開啟本遊戲完整教學"
 	help_button.pressed.connect(func(): help_requested.emit())
-	row.add_child(help_button)
-	var pause_button := _button("暫停", 16)
+	actions.add_child(help_button)
+	var pause_button := _button("暫停", 15)
 	pause_button.name = "PauseButton"
+	pause_button.custom_minimum_size = Vector2(76, 44)
 	pause_button.pressed.connect(func(): pause_requested.emit())
-	row.add_child(pause_button)
+	actions.add_child(pause_button)
 
 func _build_feedback() -> void:
 	_feedback = PanelContainer.new()
@@ -308,11 +370,15 @@ func _button(text: String, font_size: int) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.custom_minimum_size.y = 44
+	button.add_theme_font_override("font", HUD_FONT)
 	button.add_theme_font_size_override("font_size", font_size)
+	button.set_meta("hud_base_font_size", font_size)
 	button.add_theme_color_override("font_color", PAPER)
 	button.add_theme_color_override("font_hover_color", Color.WHITE)
 	button.add_theme_color_override("font_pressed_color", Color.WHITE)
+	button.add_theme_color_override("font_focus_color", Color.WHITE)
 	button.add_theme_color_override("font_disabled_color", Color("#b7c3c0"))
 	button.add_theme_stylebox_override("normal", _button_style(Color("#31566a"), Color("#b39a70"), 4, 2, Vector2(2.0, 3.0)))
 	button.add_theme_stylebox_override("hover", _button_style(Color("#416d7b"), MINT, 5, 3, Vector2(2.0, 4.0)))
@@ -324,7 +390,9 @@ func _button(text: String, font_size: int) -> Button:
 func _label(text: String, font_size: int, color: Color) -> Label:
 	var label := Label.new()
 	label.text = text
+	label.add_theme_font_override("font", HUD_FONT)
 	label.add_theme_font_size_override("font_size", font_size)
+	label.set_meta("hud_base_font_size", font_size)
 	label.add_theme_color_override("font_color", color)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	return label
@@ -423,3 +491,61 @@ func _layout() -> void:
 	scale = Vector2.ONE * fitted
 	position = (canvas_size - DESIGN_SIZE * fitted) * 0.5
 	size = DESIGN_SIZE
+	_effective_scale = _effective_layout_scale(fitted)
+	var header_height := (24.0 + 16.0) / _effective_scale + 16.0
+	var rail_height := 19.0 / _effective_scale + 3.0 + 44.0 / _effective_scale + 12.0
+	var panel_height := maxf(84.0, maxf(header_height, rail_height))
+	_header.size.y = panel_height
+	_status_rail.size.y = panel_height
+	_fit_semantic_text_and_targets(_effective_scale)
+
+func _queue_layout_refresh() -> void:
+	if _layout_refresh_pending:
+		return
+	_layout_refresh_pending = true
+	_refresh_layout_after_resize()
+
+func _refresh_layout_after_resize() -> void:
+	# A window resize signal can arrive before the viewport's final transform is
+	# updated. Re-read it after two process-frame boundaries so a restored window
+	# does not retain compact-scale text and plate heights.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if is_inside_tree():
+		_layout()
+		# Font overrides alter container minimum sizes; let those settle before
+		# another pass clamps the plates back to their new dimensions.
+		await get_tree().process_frame
+		if is_inside_tree():
+			_layout()
+			await get_tree().process_frame
+			if is_inside_tree():
+				_layout()
+	_layout_refresh_pending = false
+
+func _effective_layout_scale(fitted: float) -> float:
+	var scale_factor := maxf(fitted, 0.01)
+	var parent_control := get_parent_control()
+	if parent_control != null:
+		var parent_scale := parent_control.get_global_transform().get_scale()
+		scale_factor *= minf(absf(parent_scale.x), absf(parent_scale.y))
+	var viewport_scale := get_viewport().get_final_transform().get_scale()
+	scale_factor *= minf(absf(viewport_scale.x), absf(viewport_scale.y))
+	return maxf(scale_factor, 0.01)
+
+func _fit_semantic_text_and_targets(fitted: float) -> void:
+	var stack: Array[Node] = [self]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		for child in node.get_children():
+			stack.append(child)
+			if child is Button:
+				var button := child as Button
+				if not button.has_meta("hud_design_minimum_size"):
+					button.set_meta("hud_design_minimum_size", button.custom_minimum_size)
+				var base_size: Vector2 = button.get_meta("hud_design_minimum_size")
+				button.custom_minimum_size = Vector2(maxf(base_size.x, 44.0 / fitted), maxf(base_size.y, 44.0 / fitted))
+				button.add_theme_font_size_override("font_size", maxi(int(button.get_meta("hud_base_font_size", 18)), ceili(float(button.get_meta("hud_base_font_size", 18)) / fitted)))
+			elif child is Label and child.has_meta("hud_base_font_size"):
+				var base_font_size := int(child.get_meta("hud_base_font_size"))
+				(child as Label).add_theme_font_size_override("font_size", maxi(base_font_size, ceili(float(base_font_size) / fitted)))

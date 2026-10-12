@@ -1,0 +1,48 @@
+# Shared minigame HUD hierarchy
+
+## Purpose and limits
+
+This pass reduces the shared overlay's visual weight so each game's own playfield can carry its verb and feedback. It changes only `MinigameHUD` and adds a focused HUD test. The HUD continues to receive the same `set_state` dictionary and exposes the same pause, help, details, practice, retry, and leave signals. It does not change game rules, timing, or per-game drawings, and does not claim that twelve games now have distinct or finished art.
+
+The full objective remains exact state and a title tooltip; the existing `help_requested` button remains the route to the full lesson. The permanent sentence is removed from the shared overlay. Two quiet opaque plates occupy the upper corners: the left groups title, live round progress, and assist/practice labels; the right groups explicitly labeled score, time, score details, tutorial, and pause. Both plates have bounded paper depth and leave the middle of the viewport open. Result, pause, confirmation, and score-detail overlays keep their previous behavior.
+
+## What the six supplied official stills show
+
+These are still-image observations from the six reference captures already retained by the ART-21 survey. I viewed the supplied pixels and read their corresponding official-source notes; they are not playtest evidence, and no motion is inferred.
+
+| Official reference and supplied still | Observed hierarchy | Adopted here | Deliberately not copied |
+|---|---|---|---|
+| [Nintendo — Super Mario Party Jamboree](https://www.nintendo.com/ph/switch/a7hl/minigame/index.html), `pm/Snapland-art/images/ART-21-ref-mario-party.png` | In the Camera-Ready page section, four play views each have a reticle and timer, small score marks sit on the view edges, and one example photo sits between views. Large page copy remains outside the game frames. | Keep task explanation outside active play; reserve the scene itself for the current interaction. | The product-page typography, split-screen arrangement, and game-specific reticle/timer layout. |
+| [Panic / Playdate — b360](https://play.date/games/b360/), `ART-21-ref-b360.png` | A narrow left rail stacks score, galaxy, and accessory information beside a bordered playfield on the right. | Separate compact status from the active visual field. | Monochrome pixel styling and the very small device-scale type. |
+| [Lucas Pope — Return of the Obra Dinn](https://obradinn.com/media/prerelease.html), `ART-21-ref-obra-dinn.png` | The close ship interior and hard-edged light dominate; there is no prominent score card in the supplied still. | Let play-space contrast and composition stay in front of peripheral information. | One-bit rendering, dithering, and its specific scene treatment. |
+| [Drool — Thumper](https://thumpergame.com/), `ART-21-ref-thumper.png` | A bright foreground beetle and a track converging toward a vanishing point establish the visual direction; no readable score appears in this crop. | Keep overlays from flattening the play-space focal direction. | Motion blur, neon intensity, and its aggressive tone. |
+| [Ben Esposito / Annapurna — Donut County](https://donutcounty.com/), `ART-21-ref-donut-play.jpg` | A large tilted building and central hole anchor the center, with smaller objects around them establishing scale; no HUD is visible. | Preserve an open center where a game's central object or mechanic needs it. | Its hole mechanic, palette, low-poly scene, and characters. |
+| [Enhance — Lumines Arise](https://lumines.game/), `ART-21-ref-lumines-play.jpg` | A crisp central grid is separated from a narrow right-side score/status column; high-density signage surrounds both. | Keep live score distinct from the game board and group it on an edge. | Dense signage, glow, and neon clutter. |
+
+## Layout and behavior
+
+At the 1280×720 design canvas, the title/progress plate is 392×84 at (24,18), and the score/actions plate is 616 pixels wide at (640,18). The right plate puts compact labeled score/time on its first line and 44-pixel-high Details/Help/Pause buttons on a separate aligned row. The space between the corner plates remains open. The right plate uses the same warm paper family as the title card, with dark ink text instead of a large dark panel. Both plates use restrained borders and shadows. At display scales below 1.0, their shared height grows only enough for physically readable status text and 44-pixel hit targets; the normal 1280 layout stays at 84 pixels high.
+
+The fit calculation includes the HUD canvas fit, its parent transform, and the viewport's final transform; window and viewport resize signals both trigger it. This covers an 800-pixel physical window with a fixed 1280-pixel logical canvas, where sizing only from the Control's own resize event had left buttons below the 44-pixel floor. The 800×600 test covers a directly compact canvas, and a second case scales the 1280 logical scene by 0.625 to simulate root stretch. Both cases check the physical dimensions and bounds of Details, Help, Pause, and the visible Resume action, as well as the center gap and plate height. Long titles and progress lines ellipsize rather than expanding over the scene; title and progress tooltips retain their complete strings. Assist and private-practice labels remain visible, and the score readout accepts zero without blanking.
+
+The header's full goal label remains populated for compatibility with existing state consumers but is hidden. The title receives that exact objective as its tooltip. `? 教學` still emits the existing help signal; this keeps the detailed rules in the current real tutorial flow instead of inventing a second copy. Score details still show the current rule, scored rows, and total. Pause continues to focus Resume. The result overlay still distinguishes formal ordinary/devil outcomes from private practice's no-collection result.
+
+## Focused verification
+
+`game/tests/test_minigame_hud.gd` uses the actual HUD scene at standard, directly compact, and 0.625-stretched scales. It checks the preserved objective/tooltips, title/progress overflow policy, zero score, time, assist/practice labels, live signal connections for Pause/Help/Details, score-detail rows and return, focused Resume, formal and private result copy, plate bounds, open center gap, visible hit-target dimensions, and viewport containment. The fixture is headless and tests HUD behavior; it does not substitute for root-owned native GPU review or for player testing across all twelve modes.
+
+## Reference evidence
+
+The source links and written observations above follow `design/runtime/minigame-visual-diversity-review.md`; the wider shared-HUD problem statement and type/spacing guidance are in `design/runtime/ui-quality-survey.md` and `design/runtime/ui-depth-survey.md`. The six stills are retained in `pm/Snapland-art/images/` under the filenames listed above. Their official pages are cited for the pictured product/context; they inform hierarchy only, not copyable art or proof of gameplay quality.
+
+## Native review fixture
+
+`game/tests/native_hud_hierarchy_review.tscn` is the root-owned GPU review entry point. It starts the real Main scene with an isolated `SNAPLAND_SAVE_PATH`, places the player at each real station, and launches all twelve sessions using E and the visible Start button. It captures each live HUD, then uses actual pointer clicks for pause/resume, score details/return, and the game's Help tutorial/close route. It exits each session through the visible leave confirmation without advancing the game or asserting a result. For games 005, 010, and 012 it also captures the live HUD, Details, and Pause states at a physical 800×600 window and checks that the action targets remain at least 44 physical pixels. The fixture keeps `RenderingServer.force_draw` active while movie capture is enabled and applies a 120-second wall-clock watchdog.
+
+## Native review status
+
+The final candidate completed the root-owned windowed run with 57 captures and zero engine or script errors. The fixture used the real Main scene and actual keyboard/mouse routes for all twelve games, including pause/resume, score details, Help, and leave confirmation; it did not advance a game or test a result. It also exercised three representative games at physical 800×600, returned them to 1280×720, and checked the restored HUD before capturing Pause. All three restored layouts returned to 84-pixel plates, and the visible action targets met the 44-physical-pixel minimum. The earlier compact layout that retained its oversized geometry after restoration is no longer present in this run.
+
+The focused HUD suite passes 69 checks, and the latest Main integration check passes. Root reviewed all three final comparison sheets, the full-size 005/010/012 examples, and played the final 60 fps movie to completion (10.7167 seconds). The final screenshot set is retained in `.review/native-hud-hierarchy/`; the twelve-game and representative compact/restored comparison sheets and movie are in `pm/Snapland-art/images/ART-21-final-*`. Game 006 is missing its performers at startup, a separate game-content issue outside this HUD change. These checks cover shared interface behavior and presentation only, not completion of ART-21's twelve distinct game art/animation requirements.
+
+The fixture normally writes to `.review/native-hud-hierarchy/`. Passing `--hud-capture-standard-only` skips the compact-window cases and writes a separate twelve-game standard-window capture set to `.review/native-hud-hierarchy-standard/`, leaving the default 57-capture run unchanged. The fixture keeps `RenderingServer.force_draw` active during movie capture and enforces its 120-second wall-clock watchdog in `_process`.
