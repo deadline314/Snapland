@@ -2,6 +2,7 @@ extends SceneTree
 
 const Session = preload("res://game/minigames/session.gd")
 const HUD = preload("res://game/ui/minigame_hud.gd")
+const Model = preload("res://game/minigames/melody_memory_model.gd")
 var checks := 0
 var failed_checks := 0
 var _kite_pointer_test_completed := false
@@ -421,21 +422,82 @@ func _bubble_capture_session_round(session: Control, perfect: bool, offset: Vect
 		session._process(0.05)
 
 func _test_melody_boundaries() -> void:
-	var s := _new_session("game-012", true)
+	var s := _new_session("game-012", false)
+	var model: Variant = s.get("melody_model")
+	_expect(model != null and model.has_method("snapshot"), "game-012 session owns its finite melody model")
+	if model == null:
+		s.queue_free()
+		return
 	var results: Array[Dictionary] = []
-	s.finished.connect(func(value: Dictionary): results.append(value))
-	while s.count < 3:
-		while s.sequence_showing: s._process(0.1)
-		for note in s.sequence.duplicate(): _key(s, KEY_1 + note)
-	assert(results.size() == 1 and results[0].success and results[0].devil and results[0].assisted)
+	var played: Array[int] = []
+	s.finished.connect(func(value: Dictionary): results.append(value.duplicate(true)))
+	s.note_played.connect(func(note: int): played.append(note))
+	var cached_snapshot: Dictionary = model.snapshot()
+	var initial_heard := _wait_melody_active(s, model)
+	_expect(initial_heard == Model.PHRASES[0], "session playback follows the authored phrase before accepting input")
+	_expect(played == Model.PHRASES[0] and int(model.snapshot().note_start_serial) == 3, "session emits each model cue to the audio owner exactly once")
+	_expect(is_same(cached_snapshot, model.snapshot()), "session consumes the model's stable cached snapshot without cloning")
+	var index_before := int(model.snapshot().input_index)
+	_key(s, KEY_1)
+	var audio_count_after_first := played.size()
+	var echoed := InputEventKey.new()
+	echoed.keycode = KEY_3
+	echoed.pressed = true
+	echoed.echo = true
+	s._unhandled_input(echoed)
+	s._process(0.03)
+	_key(s, KEY_3)
+	_expect(int(model.snapshot().input_index) == index_before + 1 and int(model.snapshot().error_count) == 0, "echoes and a second chorded key cannot register rapid duplicate notes")
+	_expect(played.size() == audio_count_after_first, "one accepted note input makes one audio event and a chorded retry makes none")
+	_expect(s.score == int(model.snapshot().score) and s.score_summary().total == s.score, "session scoring mirrors the model score without a parallel completion bonus")
+	s._retry_from_hud()
+	_expect(not s.ended and s.score == 0 and model.snapshot().phase == "listen" and int(model.snapshot().input_index) == 0, "retry resets session and melody model together")
+	s.set_practice_mode(true)
+	_expect(s.practice_mode and model.snapshot().assisted == s.assisted and int(model.snapshot().score) == 0, "practice restarts the same model while preserving the chosen assist setting")
+	var model_view_snapshot: Dictionary = model.snapshot()
+	s._process(0.025)
+	_expect(is_same(model_view_snapshot, model.snapshot()), "practice frames preserve the cached snapshot identity")
+	_drive_melody_keys(s, model)
+	_expect(results.size() == 1 and bool(results[0].success) and bool(results[0].practice) and not bool(results[0].devil), "model-complete practice emits one ordinary-only result")
+	_expect(s.score == int(model.snapshot().score) and s.count == 3 and s.devil_progress == 15, "session completion fields match all three fixed phrases and actual precise notes")
 	s.queue_free()
 
+	var formal := _new_session("game-012", false)
+	var formal_model: RefCounted = formal.melody_model
+	var formal_results: Array[Dictionary] = []
+	formal.finished.connect(func(value: Dictionary): formal_results.append(value.duplicate(true)))
+	_drive_melody_keys(formal, formal_model)
+	_expect(formal_results.size() == 1 and bool(formal_results[0].success) and bool(formal_results[0].devil) and not bool(formal_results[0].practice), "a clean unassisted 3/5/7-note session earns its model-verified devil result exactly once")
+	var formal_result: Dictionary = formal_results[0] if not formal_results.is_empty() else {}
+	var formal_summary: Dictionary = formal_result.get("score_summary", {})
+	_expect(formal.score == int(formal_model.snapshot().score) and int(formal_model.snapshot().precise_notes) == 15 and int(formal_summary.get("total", -1)) == formal.score, "formal session result and score ledger remain aligned with all fifteen notes")
+	formal.queue_free()
+
+	var assisted := _new_session("game-012", true)
+	var assisted_model: RefCounted = assisted.melody_model
+	var assisted_results: Array[Dictionary] = []
+	assisted.finished.connect(func(value: Dictionary): assisted_results.append(value.duplicate(true)))
+	_drive_melody_keys(assisted, assisted_model)
+	_expect(assisted_results.size() == 1 and bool(assisted_results[0].success) and not bool(assisted_results[0].devil) and bool(assisted_results[0].assisted), "assisted timing keeps ordinary completion while the model disqualifies the devil award")
+	assisted.queue_free()
+
+	var unbounded := _new_session("game-012")
+	unbounded._process(60.0)
+	_expect(not unbounded.ended and unbounded.minigame_hud._time.text == "自由節奏", "melody keeps no countdown and cannot succeed while notes remain unreproduced")
+	unbounded.queue_free()
+
 	var wrong := _new_session("game-012", true)
+	var wrong_model: Variant = wrong.get("melody_model")
 	var wrong_results: Array[Dictionary] = []
-	wrong.finished.connect(func(value: Dictionary): wrong_results.append(value))
-	while wrong.sequence_showing: wrong._process(0.1)
-	_key(wrong, KEY_1 + ((wrong.sequence[0] + 1) % 4))
-	assert(wrong.mistakes == 1 and wrong_results.is_empty())
+	var wrong_played: Array[int] = []
+	wrong.finished.connect(func(value: Dictionary): wrong_results.append(value.duplicate(true)))
+	wrong.note_played.connect(func(note: int): wrong_played.append(note))
+	_wait_melody_active(wrong, wrong_model)
+	_key(wrong, KEY_4)
+	_expect(int(wrong_model.snapshot().error_count) == 1 and str(wrong_model.snapshot().phase) == "wrong_pause" and wrong_results.is_empty(), "wrong instrument uses model retry and cannot finish early")
+	_expect(wrong_played.size() == 4 and wrong_played.back() == 3, "wrong attempt still sends its actual instrument note to audio exactly once")
+	var retried_heard := _wait_melody_active(wrong, wrong_model)
+	_expect(retried_heard == Model.PHRASES[0], "wrong-note retry replays the same fixed phrase")
 	wrong.queue_free()
 	checks += 1
 
@@ -751,6 +813,42 @@ func _test_bounded_score_ledger_and_hud_rate() -> void:
 	session.queue_free()
 	checks += 1
 
+func _wait_melody_active(session: Control, model: RefCounted) -> Array[int]:
+	var heard: Array[int] = []
+	var budget := 1000
+	while str(model.snapshot().phase) != "active" and budget > 0:
+		session._process(0.025)
+		var current: Array = model.snapshot().get("heard_notes", [])
+		for index in range(heard.size(), current.size()):
+			heard.append(int(current[index]))
+		budget -= 1
+	return heard
+
+func _drive_melody_keys(session: Control, model: RefCounted) -> void:
+	var phrase_cursor := -1
+	var next_input_time := 0.05
+	var budget := 10000
+	while not bool(model.snapshot().ended) and budget > 0:
+		var state: Dictionary = model.snapshot()
+		if str(state.phase) != "active":
+			session._process(0.025)
+		else:
+			var phrase_index := int(state.phrase_index)
+			if phrase_cursor != phrase_index:
+				phrase_cursor = phrase_index
+				next_input_time = 0.05
+			var phase_time := float(state.phase_elapsed)
+			if phase_time + 0.0001 < next_input_time:
+				session._process(minf(0.025, next_input_time - phase_time))
+			else:
+				var input_index := int(state.input_index)
+				_key(session, KEY_1 + int(Model.PHRASES[phrase_index][input_index]))
+				var next_index := input_index + 1
+				if next_index < Model.PHRASES[phrase_index].size():
+					next_input_time = float(model.snapshot().phase_elapsed) + float(Model.RHYTHMS[phrase_index][next_index])
+		budget -= 1
+
+
 func _new_session(id: String, assisted: bool = false) -> Control:
 	var session: Control = Session.new()
 	root.add_child(session)
@@ -863,8 +961,7 @@ func _test_all_modes() -> void:
 						for pair in [[425,560], [560,830], [695,830]]:
 							_click(s, pair[0], 340); _click(s, pair[1], 340)
 					12:
-						if not s.sequence_showing:
-							for note in s.sequence.duplicate(): _key(s, KEY_1 + note)
+						_drive_melody_keys(s, s.melody_model)
 				if not s.ended:
 					s._process(0.05 if number == 1 else 0.01)
 					if number == 1:
@@ -874,7 +971,7 @@ func _test_all_modes() -> void:
 			if number == 1:
 				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
 			else:
-				var expected_devil: bool = (not assisted) if number == 2 else true
+				var expected_devil: bool = (not assisted) if number in [2, 12] else true
 				assert(results.size() == 1 and results[0].success and results[0].devil == expected_devil, "Reachability game-%03d assist=%s results=%s" % [number, assisted, str(results)])
 			var score_detail: Dictionary = results[0].get("score_summary", {})
 			var displayed_total := 0
@@ -886,9 +983,13 @@ func _test_all_modes() -> void:
 			var timeout_results: Array[Dictionary] = []
 			timeout.finished.connect(func(value: Dictionary): timeout_results.append(value))
 			if number == 1: _key(timeout, KEY_ENTER)
-			timeout._process(60.0)
-			assert(timeout_results.size() == 1 and not timeout_results[0].success and not timeout_results[0].devil)
-			_expect(timeout_results[0].get("score_summary", {}).get("total", -1) == timeout.score, "timeout result includes actual score summary")
+			if number == 12:
+				timeout._process(60.0)
+				_expect(not timeout.ended and timeout_results.is_empty(), "Melody Memory has no timer and cannot complete without reproducing its phrases")
+			else:
+				timeout._process(60.0)
+				assert(timeout_results.size() == 1 and not timeout_results[0].success and not timeout_results[0].devil)
+				_expect(timeout_results[0].get("score_summary", {}).get("total", -1) == timeout.score, "timeout result includes actual score summary")
 			timeout.queue_free()
 			checks += 1
 	var spam := _new_session("game-006")

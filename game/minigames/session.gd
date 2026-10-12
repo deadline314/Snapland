@@ -39,6 +39,8 @@ const BubblePhotoModelScript = preload("res://game/minigames/bubble_photo_model.
 const BubblePhotoViewScript = preload("res://game/minigames/bubble_photo_view.gd")
 const SignBalanceModelScript = preload("res://game/minigames/sign_balance_model.gd")
 const SignBalanceViewScript = preload("res://game/minigames/sign_balance_view.gd")
+const MelodyMemoryModelScript = preload("res://game/minigames/melody_memory_model.gd")
+const MelodyMemoryViewScript = preload("res://game/minigames/melody_memory_view.gd")
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
 const BALLOON_MAX_SPEED := 260.0
@@ -104,6 +106,11 @@ var crowd_model: RefCounted = CrowdTrafficScript.new()
 var kite_model: RefCounted = KiteFlightModelScript.new()
 var bubble_model: RefCounted = BubblePhotoModelScript.new()
 var sign_model: RefCounted = SignBalanceModelScript.new()
+var melody_model: RefCounted = MelodyMemoryModelScript.new()
+var melody_snapshot: Dictionary = {}
+var _melody_audio_cursor := 0
+var _melody_error_cursor := 0
+var _melody_last_event := ""
 var _sign_stage_cursor := 0
 var _sign_impact_cursor := 0
 var _bubble_photo_cursor := 0
@@ -168,11 +175,6 @@ var count := 0
 var lane := 0
 var balance := 0.0
 var alignment := 0.0
-var sequence: Array[int] = []
-var sequence_index := 0
-var sequence_showing := false
-var sequence_clock := 0.0
-var sequence_show_index := 0
 var alignment_hold := 0.0
 var shadow_started := false
 var shadow_broken := false
@@ -255,6 +257,8 @@ func _sync_presentation() -> void:
 				if DisplayServer.get_name() != "headless": presentation = BubblePhotoViewScript.new()
 			"sign_balance":
 				if DisplayServer.get_name() != "headless": presentation = SignBalanceViewScript.new()
+			"melody_memory":
+				if DisplayServer.get_name() != "headless": presentation = MelodyMemoryViewScript.new()
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -268,7 +272,13 @@ func _sync_presentation() -> void:
 			if mode == "sign_balance":
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.balance_requested.connect(_on_sign_balance_requested)
+			if mode == "melody_memory":
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+				presentation.note_requested.connect(_on_melody_note_requested)
+				presentation.replay_requested.connect(_on_melody_replay_requested)
 			if mode == "balloon_delivery": presentation.initialize()
+			if mode == "melody_memory":
+				presentation.initialize()
 			if mode == "bubble_photo":
 				presentation.initialize()
 				var progress := get_node_or_null("/root/Progress")
@@ -290,6 +300,7 @@ func _sync_presentation() -> void:
 		"kite_rings": presentation.update_frame(kite_model.snapshot(), "result" if ended else ("paused" if paused else "playing"), reduced_motion, time_phase)
 		"bubble_photo": presentation.present_state(bubble_model.snapshot(), str(bubble_model.phase), reduced_motion, time_phase)
 		"sign_balance": presentation.update_frame(sign_model.snapshot(), time_phase, reduced_motion)
+		"melody_memory": presentation.update_frame(melody_snapshot, time_phase, reduced_motion)
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -344,6 +355,7 @@ func _refresh_hud(force: bool = false) -> void:
 	var info := _definition()
 	var time_left := maxf(0.0, round_seconds - elapsed)
 	var time_text := "練習" if mode == "balloon_delivery" and not balloon_started else "%02d:%02d" % [int(time_left / 60.0), int(time_left) % 60]
+	if mode == "melody_memory": time_text = "自由節奏"
 	if mode == "bubble_photo":
 		var photo_state: Dictionary = bubble_model.snapshot()
 		time_text = "已拍滿" if bool(photo_state.finished) else ("顯影中" if str(photo_state.phase) == "exposure" else "本張 %.1fs" % maxf(0.0, BubblePhotoModelScript.ROUND_SECONDS - float(photo_state.round_elapsed)))
@@ -390,7 +402,13 @@ func _progress_text() -> String:
 			var photo_state: Dictionary = bubble_model.snapshot()
 			return "合格 %d / 2　完美 %d / 3" % [int(photo_state.qualified_count), int(photo_state.perfect_count)]
 		"bench_swap": return "交換 %d 次" % move_count
-		"melody_memory": return "樂句 %d / 3　音符 %d / %d" % [count, sequence_index, sequence.size()]
+		"melody_memory":
+			var phase_name := str(melody_snapshot.get("phase", "listen"))
+			var phrase := int(melody_snapshot.get("phrase_number", 1))
+			if phase_name != "active":
+				var heard: Array = melody_snapshot.get("heard_notes", [])
+				return "樂句 %d / 3　聽看 %d / %d" % [phrase, heard.size(), int(melody_snapshot.get("phrase_length", 0))]
+			return "樂句 %d / 3　音符 %d / %d" % [phrase, int(melody_snapshot.get("input_index", 0)), int(melody_snapshot.get("phrase_length", 0))]
 	return ""
 
 func score_summary() -> Dictionary:
@@ -549,11 +567,6 @@ func reset_round() -> void:
 	hat_x.clear()
 	hat_y.clear()
 	hats_consumed.clear()
-	sequence.clear()
-	sequence_index = 0
-	sequence_showing = false
-	sequence_clock = 0.0
-	sequence_show_index = 0
 	_sign_stage_cursor = 0
 	_sign_impact_cursor = 0
 	alignment_hold = 0.0
@@ -587,7 +600,13 @@ func reset_round() -> void:
 			bubble_model.reset(assisted, time_phase)
 			_sync_presentation()
 		"bench_swap": seats = [2, 0, 3, 1]
-		"melody_memory": _next_melody()
+		"melody_memory":
+			melody_model.reset(assisted, time_phase)
+			melody_snapshot = melody_model.snapshot()
+			_melody_audio_cursor = int(melody_snapshot.get("note_start_serial", 0))
+			_melody_error_cursor = int(melody_snapshot.get("error_count", 0))
+			_melody_last_event = str(melody_snapshot.get("last_event", ""))
+			prompt = _melody_last_event
 	if assisted:
 		prompt = "輔助已開：目標會標亮，判定範圍加寬"
 	if mode == "fountain_timing":
@@ -676,7 +695,7 @@ func _process(delta: float) -> void:
 		particle.pos = Vector2(particle.pos) + Vector2(particle.velocity) * delta
 		particles[i] = particle
 		if particle.life <= 0.0: particles.remove_at(i)
-	if elapsed >= round_seconds:
+	if mode != "melody_memory" and elapsed >= round_seconds:
 		_finish(false)
 		return
 	if mode == "kite_rings":
@@ -951,27 +970,16 @@ func _tick_hats(delta: float) -> void:
 	if count + mistakes >= 6: _finish(count >= 4, count == 6 and mistakes == 0)
 
 func _tick_melody(delta: float) -> void:
-	if sequence_showing:
-		sequence_clock -= delta
-		if sequence_clock <= 0:
-			sequence_show_index += 1
-			if sequence_show_index >= sequence.size():
-				sequence_showing = false; prompt = "換你演奏！按 1–4 或點花朵"
-			else:
-				sequence_clock = 0.8 if assisted else 0.55
-				note_played.emit(sequence[sequence_show_index])
+	melody_model.step(delta)
+	_sync_melody_state()
+	if bool(melody_snapshot.get("ended", false)):
+		_finish(bool(melody_snapshot.get("success", false)), bool(melody_snapshot.get("devil_success", false)) and not practice_mode)
 
 func _axis_x() -> float:
 	return clampf(Input.get_axis("ui_left", "ui_right") + Input.get_axis("move_left", "move_right"), -1.0, 1.0)
 
 func _axis_y() -> float:
 	return clampf(Input.get_axis("ui_up", "ui_down") + Input.get_axis("move_up", "move_down"), -1.0, 1.0)
-
-func _next_melody() -> void:
-	sequence.clear()
-	for i in mini(3 + count, 7): sequence.append(rng.randi_range(0, 3))
-	sequence_index = 0; sequence_show_index = 0; sequence_showing = true; sequence_clock = 0.8 if assisted else 0.55
-	if not sequence.is_empty(): note_played.emit(sequence[0])
 
 func _on_kite_presentation_input(event: InputEvent) -> void:
 	if mode != "kite_rings" or ended or paused:
@@ -1033,7 +1041,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.keycode == KEY_SPACE:
 			if mode == "bubble_photo": _bubble_shutter()
 			else: _press_action()
-		if event.keycode >= KEY_1 and event.keycode <= KEY_4: _melody_input(event.keycode - KEY_1)
+		if mode == "melody_memory":
+			if event.keycode >= KEY_1 and event.keycode <= KEY_4:
+				_melody_input(event.keycode - KEY_1)
+			elif event.keycode in [KEY_A, KEY_S, KEY_D, KEY_F]:
+				_melody_input([KEY_A, KEY_S, KEY_D, KEY_F].find(event.keycode))
 		if mode == "bench_swap" and event.keycode >= KEY_1 and event.keycode <= KEY_4: _bench_key(int(event.keycode - KEY_1))
 		if mode == "flower_pipes":
 			if event.keycode == KEY_LEFT: pipe_cursor = maxi(0, pipe_cursor - 1)
@@ -1068,8 +1080,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			if m.distance_to(Vector2(1020.0, 184.0)) <= 32.0: _bubble_shutter()
 		elif mode == "flower_pipes": _rotate_pipe(m)
 		elif mode == "bench_swap": _bench_click(m)
-		elif mode == "melody_memory":
-			var petal := int(clampi(int((m.x - 380.0) / 130.0), 0, 3)); _melody_input(petal)
 	if event is InputEventMouseMotion:
 		var mouse := event as InputEventMouseMotion
 		var pointer := _to_design(mouse.position)
@@ -1264,17 +1274,60 @@ func _bench_key(index: int) -> void:
 	if seats == [0,1,2,3]: _finish(true, move_count <= 3)
 	else: _feedback("朋友們再換一下位置", BLUE)
 
+func _sync_melody_state(input_note: int = -1) -> void:
+	melody_snapshot = melody_model.snapshot()
+	var serial := int(melody_snapshot.get("note_start_serial", 0))
+	while _melody_audio_cursor < serial:
+		_melody_audio_cursor += 1
+		var note := input_note if _melody_audio_cursor == serial and input_note >= 0 else int(melody_snapshot.get("current_cue", -1))
+		if note >= 0 and note < 4:
+			note_played.emit(note)
+	var previous_score := score
+	var model_score := int(melody_snapshot.get("score", 0))
+	if model_score > score:
+		_record_score_event("melody_notes", "演奏音符得分", model_score - score)
+	score = model_score
+	count = int(melody_snapshot.get("completed_phrases", 0))
+	devil_progress = int(melody_snapshot.get("precise_notes", 0))
+	mistakes = int(melody_snapshot.get("error_count", 0))
+	var event := str(melody_snapshot.get("last_event", ""))
+	if mistakes > _melody_error_cursor:
+		_melody_error_cursor = mistakes
+		_melody_last_event = event
+		_feedback(event, PINK)
+	elif event != _melody_last_event:
+		_melody_last_event = event
+		prompt = event
+		feedback_age = 0.0
+		feedback_color = MINT if str(melody_snapshot.get("phase", "")) in ["ready", "active", "complete"] else BLUE
+		_refresh_hud(true)
+	if is_instance_valid(presentation) and mode == "melody_memory":
+		presentation.update_frame(melody_snapshot, time_phase, reduced_motion)
+	if score != previous_score:
+		_refresh_hud(true)
+
 func _melody_input(note: int) -> void:
-	if mode != "melody_memory" or sequence_showing or ended: return
-	if sequence_index >= sequence.size(): return
-	if note == sequence[sequence_index]:
-		sequence_index += 1; _award_points("melody_notes", "演奏正確音符", 25); note_played.emit(note); _feedback("音符對了！", MINT)
-		if sequence_index >= sequence.size():
-			count += 1; devil_progress += sequence.size(); _award_points("melody_phrase", "完成迎賓樂句", 100)
-			if count >= 3: _finish(true, devil_progress >= 12 and mistakes == 0)
-			else: _next_melody()
-	else:
-		mistakes += 1; _feedback("音符跑掉了，再聽一次", PINK); sequence_index = 0; sequence_show_index = 0; sequence_showing = true; sequence_clock = float(sequence.size()) * (0.8 if assisted else 0.55)
+	if mode != "melody_memory" or ended or paused:
+		return
+	melody_model.play_note(note)
+	_sync_melody_state(note)
+	if bool(melody_snapshot.get("ended", false)):
+		_finish(bool(melody_snapshot.get("success", false)), bool(melody_snapshot.get("devil_success", false)) and not practice_mode)
+		return
+	queue_redraw()
+
+func _on_melody_note_requested(note: int) -> void:
+	_melody_input(note)
+
+func _on_melody_replay_requested() -> void:
+	if mode != "melody_memory" or ended or paused:
+		return
+	var before_replays := int(melody_snapshot.get("replay_count", 0))
+	melody_model.replay_phrase()
+	_sync_melody_state()
+	if int(melody_snapshot.get("replay_count", 0)) > before_replays:
+		_feedback(str(melody_snapshot.get("last_event", "重聽樂句")), BLUE)
+	queue_redraw()
 
 func _feedback(message: String, color: Color) -> void:
 	prompt = message; feedback_color = color; feedback_age = 0.0
@@ -1302,7 +1355,7 @@ func _feedback_anchor() -> Vector2:
 		"shadow_alignment": return Vector2(940 + alignment * 300, 390)
 		"bubble_photo": return Vector2(640, 240)
 		"bench_swap": return Vector2(425 + maxi(select_index, 0) * 135, 340)
-		"melody_memory": return Vector2(450 + maxi(sequence_index, 0) * 130, 420)
+		"melody_memory": return Vector2(640, 405)
 	return Vector2(640, 400)
 
 func _to_design(point: Vector2) -> Vector2:
@@ -1698,7 +1751,7 @@ func _draw_game() -> void:
 		"sign_balance": _draw_sign()
 		"shadow_alignment": _draw_shadow()
 		"bench_swap": _draw_bench()
-		"melody_memory": _draw_melody()
+		"melody_memory": pass
 
 func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignment: int = HORIZONTAL_ALIGNMENT_CENTER, color: Color = INK) -> void:
 	# Keep functional copy readable over every printed backdrop without laying a full-width strip over the scene.
@@ -2049,28 +2102,3 @@ func _draw_bench() -> void:
 	for i in 4:
 		draw_circle(Vector2(480+i*108,565),14,MINT if seats[i]==i else Color("#c8b68d"))
 		draw_string(FONT,Vector2(470+i*108,570),"✓" if seats[i]==i else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
-
-func _draw_melody() -> void:
-	var colors := [Color("#d77c8f"),Color("#62a3b2"),Color("#d4a34f"),Color("#60977d")]
-	for i in 4:
-		var x := 450.0 + i*130.0; var center := Vector2(x,420)
-		var lit := sequence_showing and sequence_show_index < sequence.size() and i == sequence[sequence_show_index] and int(sequence_clock*3.2)%2 == 0
-		# Original brass flower gramophone, with the note lamp layered on its bell.
-		if not _draw_prop("flower_horn",Rect2(x-67,387,134,164)):
-			draw_line(center+Vector2(0,6),center+Vector2(0,50),Color("#64816a"),7)
-			for petal in 8:
-				var pc := center+Vector2.RIGHT.rotated(TAU*petal/8.0)*32
-				_draw_ellipse(pc,Vector2(9,15),Color(colors[i],0.72))
-			draw_circle(center,25,colors[i])
-		draw_circle(center,12,CREAM if lit else Color("#e1c78f")); draw_circle(center+Vector2(0,-3),5,Color("#566a70"))
-		draw_arc(center,43,0,TAU,32,YELLOW if lit else Color("#e1d3ad"),4 if lit else 2)
-		draw_circle(center+Vector2(0,70),15,Color("#ebd39f")); draw_string(FONT,Vector2(x-10,75+405),str(i+1),HORIZONTAL_ALIGNMENT_CENTER,20,13,INK)
-		if not sequence_showing and i < sequence_index: draw_circle(center+Vector2(0,94),5,MINT)
-	# Bubble-shaped notes trace the tune during playback and fly to the player on input.
-	if sequence_showing and sequence_show_index < sequence.size():
-		var note := sequence[sequence_show_index]
-		var note_center := Vector2(450+note*130,326)
-		draw_circle(note_center,13,Color("#fff4d4",0.82)); draw_circle(note_center+Vector2(-4,-4),4,PAPER)
-		draw_line(note_center+Vector2(0,13),note_center+Vector2(0,30),colors[note],3)
-	_draw_scene_label("花喇叭先吹奏短句，聽完後用同一順序回奏",Vector2(640,270),19)
-	_draw_scene_label("曲段 " + str(count+1) + " / 3　　" + ("留心聆聽…" if sequence_showing else "演奏中…"),Vector2(640,570),18)
