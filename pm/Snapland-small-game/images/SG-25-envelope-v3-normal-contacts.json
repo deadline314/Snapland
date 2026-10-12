@@ -1,0 +1,45 @@
+[
+  {
+    "page": "SG-25-envelope-v3-normal-contact-1.png",
+    "files": [
+      "SG-25-envelope-v3-normal-assist-reduced-initial.png",
+      "SG-25-envelope-v3-normal-earned-result.png",
+      "SG-25-envelope-v3-normal-formal-keyboard-charge.png",
+      "SG-25-envelope-v3-normal-formal-keyboard-envelope-launched.png"
+    ],
+    "repeated_fill": 0,
+    "evidence_root": "SG-25-envelope-v3-normal"
+  },
+  {
+    "page": "SG-25-envelope-v3-normal-contact-2.png",
+    "files": [
+      "SG-25-envelope-v3-normal-formal-keyboard-exposure.png",
+      "SG-25-envelope-v3-normal-formal-keyboard-initial.png",
+      "SG-25-envelope-v3-normal-formal-keyboard-three-prints.png",
+      "SG-25-envelope-v3-normal-paused.png"
+    ],
+    "repeated_fill": 0,
+    "evidence_root": "SG-25-envelope-v3-normal"
+  },
+  {
+    "page": "SG-25-envelope-v3-normal-contact-3.png",
+    "files": [
+      "SG-25-envelope-v3-normal-practice-result.png",
+      "SG-25-envelope-v3-normal-private-practice-pointer-charge.png",
+      "SG-25-envelope-v3-normal-private-practice-pointer-envelope-launched.png",
+      "SG-25-envelope-v3-normal-private-practice-pointer-exposure.png"
+    ],
+    "repeated_fill": 0,
+    "evidence_root": "SG-25-envelope-v3-normal"
+  },
+  {
+    "page": "SG-25-envelope-v3-normal-contact-4.png",
+    "files": [
+      "SG-25-envelope-v3-normal-private-practice-pointer-initial.png",
+      "SG-25-envelope-v3-normal-private-practice-pointer-three-prints.png",
+      "SG-25-envelope-v3-normal-retry-reset.png"
+    ],
+    "repeated_fill": 1,
+    "evidence_root": "SG-25-envelope-v3-normal"
+  }
+]

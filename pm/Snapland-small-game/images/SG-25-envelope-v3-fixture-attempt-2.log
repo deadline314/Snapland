@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 60 FPS...
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+[park_world] scenery meshes: 1024, nodes: 1613
+INPUT: start bubble photo target=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1610/AdaptiveMenuPanel/@MarginContainer@1611/@VBoxContainer@1612/AdaptiveMenuScroll/AdaptiveMenuContent/@HBoxContainer@1635/@Button@1638 rect=[P: (388.0, 409.0), S: (108.0, 44.0)] pointer=(442.0, 431.0) hovered=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1610/AdaptiveMenuPanel/@MarginContainer@1611/@VBoxContainer@1612/AdaptiveMenuScroll/AdaptiveMenuContent/@HBoxContainer@1635/@Button@1638 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: return from the earned game-010 result target=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1676/AdaptiveMenuPanel/@MarginContainer@1677/@VBoxContainer@1678/@Button@1733 rect=[P: (156.0, 463.0), S: (968.0, 44.0)] pointer=(640.0, 485.0) hovered=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1676/AdaptiveMenuPanel/@MarginContainer@1677/@VBoxContainer@1678/@Button@1733 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start bubble photo target=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1735/AdaptiveMenuPanel/@MarginContainer@1736/@VBoxContainer@1737/AdaptiveMenuScroll/AdaptiveMenuContent/@HBoxContainer@1760/@Button@1764 rect=[P: (504.0, 409.0), S: (108.0, 44.0)] pointer=(558.0, 431.0) hovered=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1735/AdaptiveMenuPanel/@MarginContainer@1736/@VBoxContainer@1737/AdaptiveMenuScroll/AdaptiveMenuContent/@HBoxContainer@1760/@Button@1764 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+ERROR: Native Photo review: A real held E input did not begin the pre-pause bubble charge
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://game/tests/native_bubble_photo_review.gd:544)
+       [1] _run (res://game/tests/native_bubble_photo_review.gd:102)
+       [2] _wait_until (res://game/tests/native_bubble_photo_review.gd:535)
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-first-park\Snapland\.review\root-bubble-envelope-normal.avi
+822 frames at 60 FPS (movie length: 00:00:13:42), recorded in 00:00:22 (59% of real-time speed).
+CPU render time: 0.33 seconds (average: 0.40 ms/frame)
+GPU render time: 1.33 seconds (average: 1.61 ms/frame)
+Encoding time: 4.89 seconds (average: 5.95 ms/frame)
+--------------------------------------------------------------------------------

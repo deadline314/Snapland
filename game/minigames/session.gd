@@ -416,6 +416,11 @@ func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
 func set_paused(value: bool) -> void:
 	if ended and value:
 		return
+	if value and mode == "bubble_photo" and bubble_model != null:
+		# A held control can lose its release while focus is in the pause menu.
+		# Cancel only an unlaunched charge; an already launched bubble remains live.
+		bubble_model.cancel_bubble_charge()
+		_sync_presentation()
 	if mode == "ribbon_rhythm" and is_instance_valid(presentation):
 		presentation.set_process(not value)
 	if value and mode == "hat_catching":
@@ -596,7 +601,7 @@ func _score_rule_text() -> String:
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
 		"sign_balance": return "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
 		"shadow_alignment": return "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。"
-		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10。至少兩張合格為一般成功；三張完美可得小惡魔拍貼。"
+		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。"
 		"bench_swap": return "每桌依完成步數得分；符合本桌全部規則為普通目標，每桌以最少交換完成且未開輔助或重排可得加碼。"
 		"melody_memory": return "每個正確音符 +25；完成每段樂句再 +100。"
 	return "得分由已記錄的遊戲事件累加。"
@@ -1304,6 +1309,25 @@ func _unhandled_input(event: InputEvent) -> void:
 	if mode == "balloon_delivery" and event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_RIGHT:
 		balloon_braking = (event as InputEventMouseButton).pressed
 		return
+	if mode == "bubble_photo" and event is InputEventKey:
+		var bubble_key := event as InputEventKey
+		if bubble_key.keycode == KEY_E:
+			if bubble_key.echo: return
+			if bubble_key.pressed and not bubble_key.echo:
+				bubble_model.start_bubble_charge()
+			else:
+				bubble_model.release_bubble_charge()
+			_sync_presentation()
+			_refresh_hud()
+			return
+	if mode == "bubble_photo" and event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_RIGHT:
+		if (event as InputEventMouseButton).pressed:
+			bubble_model.start_bubble_charge()
+		else:
+			bubble_model.release_bubble_charge()
+		_sync_presentation()
+		_refresh_hud()
+		return
 	if mode == "kite_rings":
 		if event is InputEventKey:
 			var kite_key := event as InputEventKey
@@ -1589,6 +1613,10 @@ func _bubble_shutter() -> void:
 		return
 	var result: Dictionary = bubble_model.shutter()
 	if not bool(result.get("accepted", false)):
+		if str(result.get("reason", "")) == "not_ready":
+			_feedback("姿勢未準備，不消耗本輪", YELLOW)
+			_sync_presentation()
+			_refresh_hud()
 		return
 	_sync_bubble_photo_events()
 	_sync_presentation()
@@ -1596,6 +1624,11 @@ func _bubble_shutter() -> void:
 	if bool(bubble_model.finished):
 		_finish(bool(bubble_model.success), bool(bubble_model.devil))
 	queue_redraw()
+
+func _notification(what: int) -> void:
+	if mode == "bubble_photo" and bubble_model != null and what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT]:
+		bubble_model.cancel_bubble_charge()
+		_sync_presentation()
 
 func _tick_bubble_photo(delta: float) -> void:
 	bubble_model.step(delta)
@@ -1614,6 +1647,8 @@ func _sync_bubble_photo_events() -> void:
 			_award_points("photo_%d" % round_index, "第 %d 張・構圖得分" % (round_index + 1), amount)
 			if bool(shot.get("qualified", false)):
 				_feedback("第 %d 張合格・%d 分" % [round_index + 1, amount], MINT if bool(shot.get("perfect", false)) else YELLOW)
+			elif not bool(shot.get("bubble_enveloped", false)):
+				_feedback("第 %d 張泡泡未包住全身・%d 分" % [round_index + 1, amount], PINK)
 			else:
 				_feedback("第 %d 張未達合格構圖・%d 分" % [round_index + 1, amount], PINK)
 		else:

@@ -4,6 +4,7 @@ const Session = preload("res://game/minigames/session.gd")
 const CrowdSemaphoreView = preload("res://game/minigames/crowd_semaphore_view.gd")
 const HUD = preload("res://game/ui/minigame_hud.gd")
 const HatView = preload("res://game/minigames/hat_rescue_view.gd")
+const BubblePhotoModelScript = preload("res://game/minigames/bubble_photo_model.gd")
 const ShadowModel = preload("res://game/minigames/shadow_theatre_model.gd")
 const RibbonView = preload("res://game/minigames/ribbon_rhythm_view.gd")
 const Model = preload("res://game/minigames/melody_memory_model.gd")
@@ -700,9 +701,62 @@ func _test_bubble_boundaries() -> void:
 	assert(input_session.bubble_model.snapshot().frame_center == start_center + Vector2(14, 0), "arrow input moves the real camera frame")
 	_mouse_move(input_session, 700, 390)
 	assert(input_session.bubble_model.snapshot().frame_center == Vector2(700, 390), "mouse movement positions the camera frame")
+	_key(input_session, KEY_E)
+	assert(str(input_session.bubble_model.snapshot().bubble.phase) == "charging", "keyboard hold starts the live bubble charge")
+	var repeat_e := InputEventKey.new()
+	repeat_e.keycode = KEY_E
+	repeat_e.pressed = true
+	repeat_e.echo = true
+	input_session._unhandled_input(repeat_e)
+	assert(str(input_session.bubble_model.snapshot().bubble.phase) == "charging", "keyboard repeat cannot accidentally release a held bubble charge")
+	for _step in 4: input_session._process(0.18)
+	_key_release(input_session, KEY_E)
+	assert(str(input_session.bubble_model.snapshot().bubble.phase) == "launched" and float(input_session.bubble_model.snapshot().bubble.radius) > BubblePhotoModelScript.BUBBLE_RADIUS_MIN, "keyboard release launches a visibly charged model-backed bubble")
 	_key(input_session, KEY_SPACE)
-	assert(input_session.bubble_model.snapshot().photos.size() == 1 and input_session.mistakes == 1, "an early shutter consumes exactly one real photo opportunity")
+	assert(input_session.bubble_model.snapshot().photos.is_empty() and input_session.mistakes == 0 and str(input_session.prompt).contains("不消耗本輪"), "an early keyboard shutter shows the ready cue without consuming a photo or miss")
+	while not bool(input_session.bubble_model.snapshot().focus_available): input_session._process(0.1)
+	_key(input_session, KEY_SPACE)
+	assert(input_session.bubble_model.snapshot().photos.size() == 1 and input_session.mistakes == 0, "the same real keyboard shutter captures once the ready cue appears")
 	input_session.queue_free()
+
+	var pointer_bubble := _new_session("game-010")
+	_mouse_button(pointer_bubble, MOUSE_BUTTON_RIGHT, true)
+	assert(str(pointer_bubble.bubble_model.snapshot().bubble.phase) == "charging", "right mouse press begins the same bubble action")
+	_mouse_button(pointer_bubble, MOUSE_BUTTON_RIGHT, false)
+	assert(str(pointer_bubble.bubble_model.snapshot().bubble.phase) == "launched", "right mouse release launches a real bubble without a simultaneous key")
+	var launched_age: float = float(pointer_bubble.bubble_model.snapshot().bubble.age)
+	pointer_bubble.set_paused(true)
+	pointer_bubble._process(0.5)
+	assert(str(pointer_bubble.bubble_model.snapshot().bubble.phase) == "launched" and float(pointer_bubble.bubble_model.snapshot().bubble.age) == launched_age, "pause freezes but does not recall a bubble that was already launched")
+	pointer_bubble.set_paused(false)
+	pointer_bubble._process(0.05)
+	pointer_bubble._process(0.20)
+	assert(float(pointer_bubble.bubble_model.snapshot().bubble.age) > launched_age, "the launched bubble resumes its actual flight after pause")
+	pointer_bubble.queue_free()
+
+	var paused_charge := _new_session("game-010")
+	_key(paused_charge, KEY_E)
+	paused_charge._process(0.20)
+	paused_charge.set_paused(true)
+	var charge_at_pause: float = float(paused_charge.bubble_model.snapshot().bubble.charge)
+	assert(str(paused_charge.bubble_model.snapshot().bubble.phase) == "idle" and charge_at_pause == 0.0, "pause safely cancels an unlaunched held charge")
+	_key_release(paused_charge, KEY_E)
+	paused_charge._process(1.0)
+	assert(is_equal_approx(float(paused_charge.bubble_model.snapshot().bubble.charge), charge_at_pause) and str(paused_charge.bubble_model.snapshot().bubble.phase) == "idle", "a release delivered while paused cannot leave a sticky or launched charge")
+	paused_charge.set_paused(false)
+	paused_charge._process(0.05) # Session deliberately discards the first resumed frame delta.
+	paused_charge._process(0.20)
+	assert(str(paused_charge.bubble_model.snapshot().bubble.phase) == "idle", "resuming after a pause-release does not auto-launch the canceled charge")
+	paused_charge._retry_from_hud()
+	assert(str(paused_charge.bubble_model.snapshot().bubble.phase) == "idle" and float(paused_charge.bubble_model.snapshot().bubble.radius) == 0.0, "retry clears a held bubble and its visible size")
+	paused_charge.queue_free()
+
+	var focus_lost := _new_session("game-010")
+	_key(focus_lost, KEY_E)
+	focus_lost._process(0.2)
+	focus_lost._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+	assert(str(focus_lost.bubble_model.snapshot().bubble.phase) == "idle", "window focus loss cancels only the unlaunched charge safely")
+	focus_lost.queue_free()
 
 	var perfect := _new_session("game-010", true)
 	var results: Array[Dictionary] = []
@@ -710,14 +764,17 @@ func _test_bubble_boundaries() -> void:
 	for round_index in 3:
 		_bubble_capture_session_round(perfect, true)
 	assert(results.size() == 1 and results[0].success and results[0].devil and results[0].assisted, "three actual full-body perfect exposures meet ordinary and devil thresholds")
-	assert(perfect.score == 300 and perfect.score_summary().total == perfect.score, "three actual captured score events sum to 300")
+	var perfect_photo_total := 0
+	for photo_entry in perfect.bubble_model.snapshot().photos:
+		perfect_photo_total += int(photo_entry.score)
+	assert(perfect.score == perfect_photo_total and perfect.score_summary().total == perfect.score and perfect.score <= 300, "three actual captured score events match their continuous-score ledger")
 	perfect.queue_free()
 
 	var miss := _new_session("game-010")
 	var miss_results: Array[Dictionary] = []
 	miss.finished.connect(func(value: Dictionary): miss_results.append(value))
 	for _round in 3: _key(miss, KEY_SPACE)
-	assert(miss_results.size() == 1 and not miss_results[0].success and not miss_results[0].devil and miss.mistakes == 3, "three early shutters fail honestly without awarding either sticker")
+	assert(miss_results.is_empty() and miss.bubble_model.snapshot().photos.is_empty() and miss.mistakes == 0 and str(miss.prompt).contains("不消耗本輪"), "early shutter is ignored with a clear cue and does not spend an opportunity or create a miss")
 	miss.queue_free()
 
 	for light_phase in ["dawn", "noon", "dusk", "night"]:
@@ -749,11 +806,19 @@ func _bubble_capture_session_round(session: Control, perfect: bool, offset: Vect
 	var state: Dictionary = model.snapshot()
 	var round_index := int(state.round)
 	var target_time := float(model.BEST_POSE_TIMES[round_index])
-	while str(model.phase) == "aim" and float(model.snapshot().round_elapsed) < target_time:
+	var charge_start_time: float = target_time - BubblePhotoModelScript.BUBBLE_CHARGE_MAX
+	while str(model.phase) == "aim" and float(model.snapshot().round_elapsed) < charge_start_time:
 		session._process(0.05)
+	state = model.snapshot()
+	model.set_frame_center(Vector2(state.target_center))
+	session._sync_presentation()
+	_key(session, KEY_E)
+	for _step in 4: session._process(0.18)
 	state = model.snapshot()
 	model.set_frame_center(Vector2(state.target_center) + (Vector2.ZERO if perfect else offset))
 	session._sync_presentation()
+	_key_release(session, KEY_E)
+	assert(bool(model.snapshot().bubble.launched) and bool(model.snapshot().bubble.enveloped), "the charged bubble encloses all four body corners: %s subject=%s" % [str(model.snapshot().bubble), str(model.subject_size)])
 	_key(session, KEY_SPACE)
 	assert(str(model.phase) == "exposure" and session.score == int(model.snapshot().score), "the shutter records its actual score immediately and starts exposure")
 	while str(model.phase) == "exposure" and not session.ended:
@@ -1283,6 +1348,13 @@ func _click(session: Control, x: float, y: float) -> void:
 	event.position = Vector2(x, y)
 	session._unhandled_input(event)
 
+func _mouse_button(session: Control, button: MouseButton, pressed: bool) -> void:
+	var event := InputEventMouseButton.new()
+	event.button_index = button
+	event.pressed = pressed
+	event.position = Vector2(640.0, 360.0)
+	session._unhandled_input(event)
+
 func _mouse_move(session: Control, x: float, y: float) -> void:
 	var event := InputEventMouseMotion.new()
 	event.position = Vector2(x, y)
@@ -1391,10 +1463,15 @@ func _test_all_modes() -> void:
 						_key_release(s, KEY_SPACE)
 					10:
 						var photo_state: Dictionary = s.bubble_model.snapshot()
-						if str(photo_state.phase) == "aim" and float(photo_state.round_elapsed) >= float(s.bubble_model.BEST_POSE_TIMES[int(photo_state.round)]):
+						if str(photo_state.phase) == "aim":
 							var center: Vector2 = photo_state.target_center
 							_mouse_move(s, center.x, center.y)
-							_key(s, KEY_SPACE)
+							if str(photo_state.bubble.phase) == "idle" and float(photo_state.round_elapsed) >= float(s.bubble_model.BEST_POSE_TIMES[int(photo_state.round)]) - 0.80:
+								_mouse_button(s, MOUSE_BUTTON_RIGHT, true)
+							elif str(photo_state.bubble.phase) == "charging" and float(photo_state.bubble.charge) >= 0.99:
+								_mouse_button(s, MOUSE_BUTTON_RIGHT, false)
+							elif str(photo_state.bubble.phase) == "launched" and float(photo_state.round_elapsed) >= float(s.bubble_model.BEST_POSE_TIMES[int(photo_state.round)]) and bool(photo_state.focus_available) and bool(photo_state.bubble.enveloped):
+								_key(s, KEY_SPACE)
 					11:
 						if int(s.bench_model.level) != bench_order_played:
 							bench_order_played = int(s.bench_model.level)
@@ -1492,7 +1569,11 @@ func _test_photo_and_rhythm_grades() -> void:
 		_bubble_capture_session_round(photo, true)
 		_bubble_capture_session_round(photo, false, Vector2(32, 0))
 		assert(photo.won and not photo.devil_won and photo.beat == 3 and photo.devil_progress == 2, "two perfect plus one slightly offset photo reach ordinary only")
-		assert(photo.score == 294 and photo.mistakes == 0, "off-center image receives the actual lower composition score without a fabricated miss")
+		var recorded_photo_score := 0
+		for photo_entry in photo.bubble_model.snapshot().photos:
+			recorded_photo_score += int(photo_entry.score)
+		var final_photo: Dictionary = photo.bubble_model.snapshot().photos[2]
+		assert(photo.score == recorded_photo_score and int(final_photo.score) < 100 and photo.mistakes == 0, "off-center image keeps its exact lower ledger score without a fabricated miss")
 		photo.queue_free()
 		var rhythm := _new_session("game-006", assisted)
 		var gestures: Array = rhythm.ribbon_model.GESTURES
@@ -1541,7 +1622,17 @@ func _test_native_input_routing() -> void:
 	root.push_input(click, true)
 	Input.flush_buffered_events()
 	await process_frame
-	assert(bubble.bubble_model.snapshot().photos.size() == 1 and bubble.mistakes == 1, "native shutter click consumes one premature exposure")
+	assert(bubble.bubble_model.snapshot().photos.is_empty() and bubble.mistakes == 0 and str(bubble.prompt).contains("不消耗本輪"), "native shutter click before readiness is ignored with a clear cue")
+	while not bool(bubble.bubble_model.snapshot().focus_available):
+		bubble._process(0.1)
+	var ready_click := InputEventMouseButton.new()
+	ready_click.position = Vector2(1020, 184)
+	ready_click.button_index = MOUSE_BUTTON_LEFT
+	ready_click.pressed = true
+	root.push_input(ready_click, true)
+	Input.flush_buffered_events()
+	await process_frame
+	assert(bubble.bubble_model.snapshot().photos.size() == 1, "native shutter click captures after the real model exposes readiness")
 	bubble.queue_free()
 	await process_frame
 	checks += 1

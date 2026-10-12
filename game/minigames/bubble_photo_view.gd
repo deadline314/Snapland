@@ -9,6 +9,7 @@ const CAMERA_INSET := Rect2(199.0, 131.0, 882.0, 489.0)
 const CAMERA_PLAQUE := Rect2(295.0, 130.0, 520.0, 30.0)
 const SHUTTER_COLUMN := Rect2(986.0, 158.0, 88.0, 142.0)
 const PREVIEW_LABEL := Rect2(734.0, 195.0, 236.0, 20.0)
+const BUBBLE_STATUS_RECT := Rect2(584.0, 195.0, 142.0, 20.0)
 const PLAQUE_TITLE_RECT := Rect2(295.0, 136.0, 520.0, 22.0)
 const PLAQUE_LIGHT_RECT := Rect2(922.0, 136.0, 120.0, 22.0)
 const SHUTTER_PRIMARY_RECT := Rect2(986.0, 207.0, 88.0, 20.0)
@@ -51,6 +52,7 @@ var _avatar_regions: Array[Rect2i] = []
 var _union_alpha_bounds := Rect2i(0, 0, 280, 360)
 var _avatar_fps := 2.5
 var _model_snapshot: Dictionary = {}
+var _bubble_state: Dictionary = {}
 var _phase := "aim"
 var _reduced_motion := false
 var _time_phase := "noon"
@@ -98,6 +100,7 @@ func set_appearance(appearance: Dictionary, equipped: Dictionary) -> void:
 func present_state(snapshot: Dictionary, phase: String, reduced: bool, timephase: String) -> void:
 	initialize()
 	_model_snapshot = snapshot
+	_bubble_state = snapshot.get("bubble", {}) if snapshot.get("bubble", {}) is Dictionary else {}
 	_phase = phase if phase in ["aim", "exposure", "finished"] else str(snapshot.get("phase", "aim"))
 	_reduced_motion = reduced
 	_time_phase = _normalize_time_phase(timephase)
@@ -127,6 +130,8 @@ func cached_avatar_frame_count() -> int:
 func pose_frame_for(snapshot: Dictionary) -> int:
 	if _avatar_frames.is_empty():
 		return 0
+	if _reduced_motion and str(snapshot.get("phase", "aim")) != "exposure":
+		return 0 # Static idle pose; timing/readiness remains visible in the viewfinder.
 	var elapsed := float(snapshot.get("round_elapsed", 0.0))
 	if str(snapshot.get("phase", "aim")) == "exposure":
 		var round_index := int(snapshot.get("round", 0))
@@ -145,6 +150,26 @@ func photo_card_rect(index: int) -> Rect2:
 
 func photo_rail_rect() -> Rect2:
 	return PHOTO_RAIL
+
+func bubble_visual_center() -> Vector2:
+	var value: Variant = _bubble_state.get("center", Vector2.ZERO)
+	return value if value is Vector2 else Vector2.ZERO
+
+func bubble_visual_radius() -> float:
+	return maxf(0.0, float(_bubble_state.get("radius", 0.0)))
+
+func bubble_visual_bounds() -> Rect2:
+	var radius := bubble_visual_radius()
+	return Rect2(bubble_visual_center() - Vector2.ONE * radius, Vector2.ONE * radius * 2.0) if radius > 0.0 else Rect2()
+
+func bubble_status_text() -> String:
+	var bubble_phase := str(_bubble_state.get("phase", "idle"))
+	if bubble_phase == "charging": return "充氣 %d%%" % roundi(float(_bubble_state.get("charge", 0.0)) * 100.0)
+	if bubble_phase == "launched":
+		if bool(_bubble_state.get("enveloped", false)): return "全身入泡"
+		return "泡泡漂浮 · %0.1fs" % float(_bubble_state.get("remaining", 0.0))
+	if bubble_phase == "popped": return "泡泡已破"
+	return "按住 E / 右鍵吹泡"
 
 func camera_body_rect() -> Rect2:
 	return CAMERA_BODY
@@ -326,8 +351,9 @@ func _refresh_feedback() -> void:
 	var coverage := float(_model_snapshot.get("coverage", 0.0))
 	var centering := float(_model_snapshot.get("centering", 0.0))
 	var timing := float(_model_snapshot.get("timing_quality", 0.0))
-	_feedback_cache["coverage_text"] = "完整" if coverage >= 0.999 else ("入框" if coverage >= 0.80 else "裁切")
-	_feedback_cache["coverage_shape"] = "closed_frame" if coverage >= 0.999 else ("partial_frame" if coverage >= 0.80 else "cropped_frame")
+	var frame_enclosed := bool(_model_snapshot.get("frame_enclosed", false))
+	_feedback_cache["coverage_text"] = ("完整" if coverage >= 0.999 else ("入框" if coverage >= 0.80 else "裁切")) if frame_enclosed else "裁切"
+	_feedback_cache["coverage_shape"] = ("closed_frame" if coverage >= 0.999 else ("partial_frame" if coverage >= 0.80 else "cropped_frame")) if frame_enclosed else "cropped_frame"
 	_feedback_cache["center_text"] = "置中" if centering >= 0.92 else "偏移"
 	_feedback_cache["center_shape"] = "balanced_crosshair" if centering >= 0.92 else "offset_crosshair"
 	_feedback_cache["timing_text"] = "合焦" if bool(_model_snapshot.get("focus_available", false)) else "等待姿勢"
@@ -352,6 +378,7 @@ func _draw() -> void:
 		return
 	_draw_camera_shell()
 	_draw_harbor_view()
+	_draw_bubble_envelope()
 	_draw_character()
 	_draw_camera_frame()
 	_draw_camera_controls()
@@ -459,7 +486,37 @@ func _draw_readouts() -> void:
 	draw_rect(FOCUS_BACKPLATE_RECT, PHOTO_READOUT_PANEL, true)
 	draw_rect(PREVIEW_BACKPLATE_RECT, PHOTO_READOUT_PANEL, true)
 	draw_string(ThemeDB.fallback_font, FOCUS_TEXT_RECT.position + Vector2(0.0, 16.0), focus_label_text(), HORIZONTAL_ALIGNMENT_LEFT, FOCUS_TEXT_RECT.size.x, 14, READOUT_INK)
+	draw_string(ThemeDB.fallback_font, BUBBLE_STATUS_RECT.position + Vector2(0.0, 16.0), bubble_status_text(), HORIZONTAL_ALIGNMENT_CENTER, BUBBLE_STATUS_RECT.size.x, 13, Color("#a9e6dc") if bool(_bubble_state.get("enveloped", false)) else READOUT_INK)
 	draw_string(ThemeDB.fallback_font, PREVIEW_LABEL.position + Vector2(0.0, 16.0), preview_label_text(), HORIZONTAL_ALIGNMENT_RIGHT, PREVIEW_LABEL.size.x, 14, READOUT_INK)
+
+func _draw_bubble_envelope() -> void:
+	var bubble_phase := str(_bubble_state.get("phase", "idle"))
+	if bubble_phase not in ["charging", "launched"]:
+		return
+	var center := bubble_visual_center()
+	var radius := bubble_visual_radius()
+	if radius <= 0.0:
+		return
+	var enveloped := bool(_bubble_state.get("enveloped", false))
+	var rim := Color("#a9e6dc", 0.92) if enveloped else Color("#d5edf0", 0.68)
+	var rim_width := 3.0 if enveloped else 2.0
+	# The exact model circle is rendered behind the avatar. Reduced motion keeps
+	# this physical boundary but removes the rotating/rainbow surface glint.
+	draw_arc(center, radius, 0.0, TAU, 96, rim, rim_width, true)
+	draw_arc(center + Vector2(-radius * 0.12, -radius * 0.16), radius * 0.87, PI * 1.12, PI * 1.68, 32, Color("#f5f0ce", 0.42), 1.5, true)
+	if not _reduced_motion:
+		var age := float(_bubble_state.get("age", 0.0))
+		var glint_angle := fposmod(age * 0.8, TAU)
+		var glint := center + Vector2(cos(glint_angle), sin(glint_angle)) * radius
+		draw_circle(glint, 3.0, Color("#fff5ce", 0.84))
+	var forecast_end: Vector2 = _bubble_state.get("forecast_end", center)
+	var direction := (forecast_end - center).normalized()
+	if direction.length_squared() > 0.0:
+		var cue_start := center + direction * (radius + 5.0)
+		var cue_end := cue_start + direction * 16.0
+		draw_line(cue_start, cue_end, Color("#d9e9d5", 0.70), 2.0, true)
+		draw_line(cue_end, cue_end - direction.rotated(0.55) * 6.0, Color("#d9e9d5", 0.70), 2.0, true)
+		draw_line(cue_end, cue_end - direction.rotated(-0.55) * 6.0, Color("#d9e9d5", 0.70), 2.0, true)
 
 func _draw_badge(rect: Rect2, label: String, shape: String) -> void:
 	draw_rect(rect, READOUT_PANEL, true)
@@ -562,6 +619,8 @@ func _draw_photo_rail() -> void:
 			if bool(shot.get("captured", false)) and not _avatar_frames.is_empty():
 				var texture: Texture2D = _avatar_frames[_pose_frame_at(float(shot.get("shutter_time", 0.0)))]
 				draw_texture_rect_region(texture, _fit_rect(_union_alpha_bounds.size, image_rect), Rect2(_union_alpha_bounds), light_tint(str(shot.get("time_of_day", "noon"))), false, true)
+				if bool(shot.get("bubble_enveloped", false)):
+					draw_arc(image_rect.get_center(), 26.0, 0.0, TAU, 40, Color("#66b9b1", 0.9), 1.5, true)
 			else:
 				draw_line(image_rect.position, image_rect.end, Color("#dba780"), 2.0)
 				draw_line(Vector2(image_rect.end.x, image_rect.position.y), Vector2(image_rect.position.x, image_rect.end.y), Color("#dba780"), 2.0)

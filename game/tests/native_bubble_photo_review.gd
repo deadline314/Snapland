@@ -42,6 +42,15 @@ func _run() -> void:
 		return
 	if not await _launch_bubble(false): return
 	var ordinary_session: Control = main.session
+	_key(KEY_SPACE)
+	Input.flush_buffered_events()
+	await get_tree().process_frame
+	if not await _require_live_session(ordinary_session, "checking an early real shutter"):
+		return
+	var not_ready_state: Dictionary = ordinary_session.bubble_model.snapshot()
+	if not not_ready_state.photos.is_empty() or int(not_ready_state.misses) != 0 or not str(ordinary_session.prompt).contains("不消耗本輪"):
+		await _fail("A real Space shutter before the ready cue must show the brief cue without spending a photo or miss")
+		return
 	ordinary_session.finished.connect(_capture_earned_result.bind(ordinary_session.get_instance_id()), CONNECT_ONE_SHOT)
 	if not await _capture_three_photos(ordinary_session, "keyboard"): return
 	if not await _wait_bubble_result(): return
@@ -88,6 +97,14 @@ func _run() -> void:
 		return
 	if not await _wait_until(_photo_round_elapsed_at_least.bind(assisted_session.get_instance_id(), 0.30), "assisted photo round advances"):
 		return
+	_held_key(KEY_E, true)
+	Input.flush_buffered_events()
+	await get_tree().process_frame
+	if not await _require_live_session(assisted_session, "observing the flushed held E input"):
+		return
+	if str(assisted_session.bubble_model.snapshot().bubble.phase) != "charging":
+		await _fail("A real held E input did not begin the pre-pause bubble charge")
+		return
 	if not await _require_live_session(assisted_session, "opening pause menu"):
 		return
 	if not await _click_session_hud(assisted_session, "PauseButton", "open pause menu for private practice"):
@@ -95,6 +112,17 @@ func _run() -> void:
 	if not await _require_live_session(assisted_session, "checking the actual pause click"): return
 	if not assisted_session.paused:
 		await _fail("Pause button did not pause the assisted camera session")
+		return
+	if str(assisted_session.bubble_model.snapshot().bubble.phase) != "idle":
+		await _fail("Pausing did not cancel the unlaunched bubble charge")
+		return
+	_held_key(KEY_E, false) # The lost release must be harmless even while the pause menu has focus.
+	Input.flush_buffered_events()
+	await get_tree().process_frame
+	if not await _require_live_session(assisted_session, "observing the flushed paused E release"):
+		return
+	if str(assisted_session.bubble_model.snapshot().bubble.phase) != "idle":
+		await _fail("A flushed E release while paused restored a stale bubble charge")
 		return
 	var paused_elapsed: float = float(assisted_session.bubble_model.snapshot().round_elapsed)
 	await _frames(15)
@@ -115,6 +143,10 @@ func _run() -> void:
 		return
 	if assisted_session.paused:
 		await _fail("Resume button left the camera session paused")
+		return
+	await _frames(3)
+	if str(assisted_session.bubble_model.snapshot().bubble.phase) != "idle":
+		await _fail("Resuming after the real paused key release must not launch or restore a stale charge")
 		return
 	if not await _click_session_hud(assisted_session, "PauseButton", "pause before retry"):
 		return
@@ -240,8 +272,10 @@ func _capture_three_photos(session: Control, input_mode: String) -> bool:
 	if not await _require_live_session(session, "beginning three real camera exposures"): return false
 	var session_id := session.get_instance_id()
 	var captured_view: Control = session.presentation
-	var screenshots := [".review/native-bubble-photo-initial.png", ".review/native-bubble-photo-exposure.png", ".review/native-bubble-photo-three-prints.png"]
+	var route_name := ("private-practice" if session.practice_mode else "formal") + "-" + input_mode
+	var screenshots := [".review/native-bubble-photo-%s-initial.png" % route_name, ".review/native-bubble-photo-%s-exposure.png" % route_name, ".review/native-bubble-photo-%s-three-prints.png" % route_name]
 	var expected_running_score := 0
+	var charge_capture_done := false
 	await RenderingServer.frame_post_draw
 	if not await _require_live_session(session, "capturing initial camera composition"):
 		return false
@@ -251,11 +285,37 @@ func _capture_three_photos(session: Control, input_mode: String) -> bool:
 	for round_index in 3:
 		var deadline := _wall_deadline_ms(12000)
 		var shot_fired := false
+		var bubble_button_held := false
 		while not shot_fired and Time.get_ticks_msec() < deadline:
 			if not await _require_live_session(session, "aiming photo round %d" % (round_index + 1)): return false
 			var state: Dictionary = session.bubble_model.snapshot()
 			if str(state.phase) == "aim" and int(state.round) == round_index:
 				var target_center: Vector2 = state.target_center
+				var charge_start := float(session.bubble_model.BEST_POSE_TIMES[round_index]) - float(session.bubble_model.BUBBLE_CHARGE_MAX) - 0.06
+				if str(state.bubble.phase) == "idle" and float(state.round_elapsed) >= charge_start:
+					if input_mode == "pointer":
+						_motion(target_center)
+						_right_button(target_center, true)
+					else:
+						_keyboard_aim_one_step(Vector2(state.frame_center), target_center)
+						_held_key(KEY_E, true)
+					bubble_button_held = true
+					Input.flush_buffered_events()
+				if round_index == 0 and not charge_capture_done:
+					var charge_snapshot: Dictionary = session.bubble_model.snapshot()
+					if str(charge_snapshot.bubble.phase) == "charging" and float(charge_snapshot.bubble.charge) >= 0.65:
+						await RenderingServer.frame_post_draw
+						if not await _require_live_session(session, "capturing natural bubble charge"):
+							return false
+						if not main._capture(".review/native-bubble-photo-%s-charge.png" % route_name):
+							await _fail("Could not capture the naturally charged bubble at 65%% or higher")
+							return false
+						charge_capture_done = true
+				if bubble_button_held and float(state.bubble.charge) >= 0.999:
+					if input_mode == "pointer": _right_button(target_center, false)
+					else: _held_key(KEY_E, false)
+					bubble_button_held = false
+					Input.flush_buffered_events()
 				if input_mode == "pointer":
 					_motion(target_center)
 					Input.flush_buffered_events()
@@ -263,7 +323,14 @@ func _capture_three_photos(session: Control, input_mode: String) -> bool:
 					_keyboard_aim_one_step(Vector2(state.frame_center), target_center)
 				if float(state.round_elapsed) >= float(session.bubble_model.BEST_POSE_TIMES[round_index]):
 					var current: Dictionary = session.bubble_model.snapshot()
-					if bool(current.focus_available) and Vector2(current.frame_center).distance_to(Vector2(current.target_center)) <= 16.0:
+					var envelope: Dictionary = current.bubble
+					if str(envelope.phase) == "launched" and bool(envelope.enveloped) and bool(current.focus_available) and Vector2(current.frame_center).distance_to(Vector2(current.target_center)) <= 16.0:
+						if round_index == 0:
+							await RenderingServer.frame_post_draw
+							if not await _require_live_session(session, "capturing the actual launched bubble envelope"): return false
+							if not main._capture(".review/native-bubble-photo-%s-envelope-launched.png" % route_name):
+								await _fail("Could not capture the real launched envelope before its shutter")
+								return false
 						if input_mode == "pointer": _click(Vector2(1020.0, 184.0))
 						else: _key(KEY_SPACE)
 						Input.flush_buffered_events()
@@ -314,10 +381,23 @@ func _capture_three_photos(session: Control, input_mode: String) -> bool:
 				return false
 		if not await _wait_photo_exposure(session_id, round_index):
 			return false
-		if captured_score != expected_running_score or int(captured_record.score) != _score_from_photo(captured_record) or not bool(captured_record.perfect) or float(captured_record.coverage) < 0.999 or str(captured_record.time_of_day) != str(progress.settings.get("time_phase", "noon")):
+		if captured_score != expected_running_score or int(captured_record.score) != _score_from_photo(captured_record) or not bool(captured_record.perfect) or not bool(captured_record.bubble_enveloped) or float(captured_record.coverage) < 0.999 or str(captured_record.time_of_day) != str(progress.settings.get("time_phase", "noon")):
 			await _fail("Actual portrait score differs from full-body centered timing: total=%d record=%s" % [captured_score, str(captured_record)])
 			return false
+	if not charge_capture_done:
+		await _fail("Natural first-round charge did not reach 65%% for the %s reference capture" % route_name)
+		return false
 	return true
+
+func _right_button(position: Vector2, pressed: bool) -> void:
+	var event := InputEventMouseButton.new()
+	event.position = position
+	event.global_position = position
+	event.window_id = get_window().get_window_id()
+	event.button_index = MOUSE_BUTTON_RIGHT
+	event.button_mask = MOUSE_BUTTON_MASK_RIGHT if pressed else 0
+	event.pressed = pressed
+	Input.parse_input_event(event)
 
 func _capture_earned_result(result: Dictionary, session_id: int) -> void:
 	# Main's earlier finished listener removes/queues the Session. The signal is

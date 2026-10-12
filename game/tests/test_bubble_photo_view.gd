@@ -22,6 +22,7 @@ func _run() -> void:
 	_test_three_frozen_polaroids()
 	_test_reduced_motion_and_model_bounds()
 	_test_optical_depth_layers()
+	_test_bubble_geometry_and_reduced_motion_truth()
 	if failures.is_empty():
 		print("PASS: bubble photo view (%d checks)" % checks)
 		quit(0)
@@ -164,9 +165,12 @@ func _test_three_frozen_polaroids() -> void:
 			model.step(minf(0.08, desired - float(current.round_elapsed)))
 		var current: Dictionary = model.snapshot()
 		model.set_frame_center(current.target_box.get_center())
+		model.start_bubble_charge()
+		model.release_bubble_charge()
+		view.present_state(model.snapshot(), "aim", false, "night")
 		var pose_before: int = view.pose_frame_for(model.snapshot())
 		var photo: Dictionary = model.shutter()
-		_expect(photo.captured and photo.score > 0, "shot %d records real model composition" % shot_index)
+		_expect(photo.captured and photo.score > 0 and photo.bubble_enveloped, "shot %d records real camera composition inside the live bubble" % shot_index)
 		view.present_state(model.snapshot(), "exposure", false, "night")
 		_expect(view.pose_frame_for(model.snapshot()) == pose_before, "the character freezes on the exact pose used by shot %d" % shot_index)
 		_expect(view.exposure_flash_enabled(), "normal exposure gives a brief camera flash cue")
@@ -196,6 +200,27 @@ func _test_reduced_motion_and_model_bounds() -> void:
 	view.present_state(model.snapshot(), "aim", true, "dawn")
 	_expect(view.camera_frame_rect().end.x <= BubblePhotoModel.PLAY_RECT.end.x and view.camera_frame_rect().position.y >= BubblePhotoModel.PLAY_RECT.position.y, "maximum frame movement stays inside the photographed area")
 	_expect(view.camera_frame_rect() != before_frame and view.subject_draw_rect() == before_subject, "camera movement follows the input while the subject remains on its independent track")
+	model.reset(true, "dawn")
+	view.present_state(model.snapshot(), "aim", true, "dawn")
+	var reduced_idle_frame: int = view.pose_frame_for(model.snapshot())
+	var waiting_cue: String = str(view.semantic_feedback().timing_text)
+	while not model.snapshot().focus_available:
+		model.step(0.1)
+	view.present_state(model.snapshot(), "aim", true, "dawn")
+	_expect(view.pose_frame_for(model.snapshot()) == reduced_idle_frame, "reduced motion holds one decorative idle frame while time advances")
+	_expect(waiting_cue == "等待姿勢" and view.semantic_feedback().timing_text == "合焦", "reduced motion preserves the real readiness cue and timing information")
+	view.present_state(model.snapshot(), "aim", false, "dawn")
+	_expect(view.pose_frame_for(model.snapshot()) != reduced_idle_frame, "normal motion retains the authored time-based pose change")
+	var cropped := BubblePhotoModel.new()
+	cropped.reset(false, "noon")
+	cropped.set_subject_size(Vector2(220.0, 440.0))
+	var crop_state: Dictionary = cropped.snapshot()
+	cropped.set_frame_center(crop_state.target_box.get_center())
+	for _step in 26: cropped.step(0.1)
+	crop_state = cropped.snapshot()
+	cropped.set_frame_center(crop_state.target_box.get_center() + Vector2(0.0, 4.0))
+	view.present_state(cropped.snapshot(), "aim", false, "noon")
+	_expect(not cropped.snapshot().frame_enclosed and view.semantic_feedback().coverage_text == "裁切" and view.semantic_feedback().coverage_shape == "cropped_frame", "even a small real body crop is identified as cropped rather than complete")
 
 func _test_optical_depth_layers() -> void:
 	var model = BubblePhotoModel.new()
@@ -232,6 +257,28 @@ func _test_optical_depth_layers() -> void:
 	view.present_state(model.snapshot(), "aim", true, "night")
 	_expect(view.harbor_layer_offset("far").x > 0.0 and view.harbor_layer_offset("near").x > view.harbor_layer_offset("far").x, "opposite-edge camera movement reverses parallax without leaving the safe window")
 	_expect(playfield.encloses(view.harbor_layer_bounds("near")), "the foreground's measured union remains inside the playfield at the opposite vertical edge")
+
+func _test_bubble_geometry_and_reduced_motion_truth() -> void:
+	var model := BubblePhotoModel.new()
+	model.reset(false, "noon")
+	var initial := model.snapshot()
+	view.present_state(initial, "aim", false, "noon")
+	_expect(view.bubble_status_text().contains("吹泡") and view.bubble_visual_bounds().size == Vector2.ZERO, "idle state explains the real bubble input without drawing a fictitious bubble")
+	model.set_frame_center(initial.target_box.get_center())
+	var ready_state: Dictionary = model.snapshot()
+	var idle_phase := str(ready_state.bubble.phase)
+	var bubble_cache: Dictionary = ready_state.bubble
+	model.start_bubble_charge()
+	model.release_bubble_charge()
+	var launched: Dictionary = model.snapshot()
+	view.present_state(launched, "aim", false, "noon")
+	var bubble: Dictionary = launched.bubble
+	_expect(view.bubble_visual_center() == bubble.center and view.bubble_visual_radius() == bubble.radius, "the visible envelope uses the exact model center and radius")
+	_expect(view.bubble_visual_bounds() == Rect2(bubble.center - Vector2.ONE * bubble.radius, Vector2.ONE * bubble.radius * 2.0), "reported rendered circle bounds match the model geometry exactly")
+	_expect(bool(bubble.enveloped) and view.bubble_status_text() == "全身入泡", "full-body envelope status is shown only when the model corner test succeeds")
+	view.present_state(launched, "aim", true, "noon")
+	_expect(view.shows_reduced_motion() and view.bubble_visual_center() == bubble.center and view.bubble_visual_radius() == bubble.radius and view.bubble_status_text() == "全身入泡", "reduced motion removes glint only and preserves real bubble geometry and outcome")
+	_expect(idle_phase == "idle" and is_same(bubble_cache, model.snapshot().bubble), "the no-bubble state is read before launch and snapshots reuse the documented stable bubble cache")
 
 func _expect(condition: bool, message: String) -> void:
 	checks += 1

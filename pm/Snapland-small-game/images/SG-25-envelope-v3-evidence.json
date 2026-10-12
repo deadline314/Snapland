@@ -1,0 +1,771 @@
+{
+  "ticket": "SG-25",
+  "candidate_baseline": "cf719411aca2be6d15bc9a1b6a468e338095e1fb",
+  "state": "in progress; gameplay evidence and shortened native tutorial are reviewed; final art and zone comparison remain pending",
+  "scope_note": "No runtime model, view, session, or native fixture edits in this handoff.",
+  "native_fixture": {
+    "path": "game/tests/native_bubble_photo_review.gd",
+    "sha256": "1f7d5384bd3cb1e9b2670f757805c2615ae520a72bbc5522657d8e25c3ca2c25",
+    "unchanged": true
+  },
+  "tutorial_capture_sources": [
+    {
+      "path": "assets/ui/tutorials/game-010-step-01.png",
+      "sha256": "fd537115170eaa8ceb5fe4791e6155e56271e98ceb6548e5ed53e00be15c0d1a",
+      "copied_from": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-formal-keyboard-charge.png"
+    },
+    {
+      "path": "assets/ui/tutorials/game-010-step-02.png",
+      "sha256": "2bdcf6449fef82ddde06db0c13dea6a1ca9b3855f9f30214c69900c6fdb3878d",
+      "copied_from": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-formal-keyboard-envelope-launched.png"
+    },
+    {
+      "path": "assets/ui/tutorials/game-010-step-03.png",
+      "sha256": "94f887291b689686d63a4cb90fee006474b21821441bb685ffbe88b46a4b4d7a",
+      "copied_from": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-formal-keyboard-three-prints.png"
+    }
+  ],
+  "tutorial_content_and_design_files": [
+    {
+      "path": "game/data/tutorials.json",
+      "sha256": "a6399c1694aa0753e2288ebfd98db5dbbac7fc4d47378b9d56256dadd88a7e64",
+      "bytes": 26031
+    },
+    {
+      "path": "game/data/welcome_games.json",
+      "sha256": "729ddb39a9e85f5a7a3771cd5dea1dd2a9ef3b0ef08244ec2c9fc34ef3a9cdaa",
+      "bytes": 6934
+    },
+    {
+      "path": "design/runtime/bubble-photo-design.md",
+      "sha256": "3d6366a9b3f5cf4eb11fab61a4b97d3df92f9bcb8e3c983ac1451094096beb0a",
+      "bytes": 16340
+    },
+    {
+      "path": "pm/Snapland-small-game/[SG-25]精修泡泡合照玩法與計分.md",
+      "sha256": "5387cbb20467b08ec6cc1cb963d577dc63dc9f5d2d14a4f5006f1f5cf5889551",
+      "bytes": 10509
+    }
+  ],
+  "proof_media": [
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-fixture-attempt-1.log",
+      "sha256": "9360caabe8f4f801fa20f1f09696b0ea602d0fe50a65d10b75864edd1ffffc80",
+      "bytes": 2417
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-fixture-attempt-2.log",
+      "sha256": "ab27942fca1fed778c43762234a47d1b0d6d7d2209f8a95b4d69909c45e95c0b",
+      "bytes": 3173
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-minigames-81.log",
+      "sha256": "e125527b32aac41637b2fe0ba844edb7afb7774dba898399968ab0bbe1dcac04",
+      "bytes": 114
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-model-71.log",
+      "sha256": "ae1d95010e4f0127359694082583b9644e8e9774dc2620d5ce03c105dad2f3e8",
+      "bytes": 110
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-native-tutorial-current.log",
+      "sha256": "174ca77c055bc39a853bb84d340b1eaf1ecae9402426f99129218d9c9cf0750c",
+      "bytes": 2739
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-native-tutorial-step-01.png",
+      "sha256": "9cc6f60a4a934e88642daf2d7581306900dfb4a7bca13960f05b258a8a77df07",
+      "bytes": 192557,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-native-tutorial-step-02.png",
+      "sha256": "6f6b322df8b465b9a1b884c3bdb92b90c4bc6564d7b6b60c8abc1056799220f0",
+      "bytes": 183697,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-native-tutorial-step-03.png",
+      "sha256": "88998ccddfe7730d5fcc866884c06594521c3f8da7f8a6f67beef2589db59829",
+      "bytes": 169615,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-assist-reduced-initial.png",
+      "sha256": "4a3466be39469aa130de4e1a25f07aa27368ac278dbb9725bed366b1a2bff58c",
+      "bytes": 109680,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-contact-1.png",
+      "sha256": "cce312be771693c3dc80a398fa493aea4c1a05ca2e2232654e53c194ee18b074",
+      "bytes": 303816,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-contact-2.png",
+      "sha256": "cbda760555dc8c90f1a39984e3fb5a157faadfc545e6bcb12d26dd5288040c96",
+      "bytes": 237278,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-contact-3.png",
+      "sha256": "353600b9d4ca3c4a49bdfa4cf6db4288645f9dd7e7ebf0075859dd8ac3051276",
+      "bytes": 314222,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-contact-4.png",
+      "sha256": "287480c0bc96b9325c04943558f4352c17a1c116e713acd36210039f090c8647",
+      "bytes": 195683,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-contacts.json",
+      "sha256": "2b0915a7d1db2c56a30a4c1ed255164e04a8fc8f91dc8f90fcd9d32ad44bd7bb",
+      "bytes": 1584
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-earned-result.png",
+      "sha256": "c5bf4c70fc5b271adb023e70e0bae0a1846bd746418575bdede5958eeb57fce7",
+      "bytes": 197593,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-formal-keyboard-charge.png",
+      "sha256": "fd537115170eaa8ceb5fe4791e6155e56271e98ceb6548e5ed53e00be15c0d1a",
+      "bytes": 122467,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-formal-keyboard-envelope-launched.png",
+      "sha256": "2bdcf6449fef82ddde06db0c13dea6a1ca9b3855f9f30214c69900c6fdb3878d",
+      "bytes": 122840,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-formal-keyboard-exposure.png",
+      "sha256": "75e7f837eded08449191ce1d13bdafe970a37c3ba03b7def35f2dfed84ed8772",
+      "bytes": 134522,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-formal-keyboard-initial.png",
+      "sha256": "dcdff425aefb42d88e45dd160a025fb84569159ec651f67296144e272cfb8ce5",
+      "bytes": 110944,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-formal-keyboard-three-prints.png",
+      "sha256": "94f887291b689686d63a4cb90fee006474b21821441bb685ffbe88b46a4b4d7a",
+      "bytes": 145373,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-paused.png",
+      "sha256": "e353fd7e284d3e622715b47b777ea80f4a4f61564e3c57114204a8ba229b085a",
+      "bytes": 65896,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-practice-result.png",
+      "sha256": "e3f4d4f75fcafd36d15f1b1b8b1a5c1c6841034f6a50c0af1d60e2bda9357132",
+      "bytes": 200185,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-private-practice-pointer-charge.png",
+      "sha256": "cb05d4fb3562ebed8939f6ed47c37fb81e99ec14af0be11f6cfe3b81e02903de",
+      "bytes": 123558,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-private-practice-pointer-envelope-launched.png",
+      "sha256": "ed538489f32e91da5f0395ded9e5dad3456d4fda27516a3b677b5271cba53828",
+      "bytes": 125080,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-private-practice-pointer-exposure.png",
+      "sha256": "086f898437c7d9f0e978dca59954ddbe9e4bd811090eef06fa600e3380339059",
+      "bytes": 135859,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-private-practice-pointer-initial.png",
+      "sha256": "4a3466be39469aa130de4e1a25f07aa27368ac278dbb9725bed366b1a2bff58c",
+      "bytes": 109680,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-private-practice-pointer-three-prints.png",
+      "sha256": "a1763a382040f3a07a2fafc0494a602f2d4d0cd8aa08ec57e998f86e5658ef26",
+      "bytes": 148203,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal-retry-reset.png",
+      "sha256": "4a3466be39469aa130de4e1a25f07aa27368ac278dbb9725bed366b1a2bff58c",
+      "bytes": 109680,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal.log",
+      "sha256": "707f05f9ef29fceb8b953e9274fc96c87ee1ae0089ba607f866e27dc1bd6c145",
+      "bytes": 6523
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal.mp4",
+      "sha256": "c40d711e8f567da9aac7883319fc191c68025253415e25fc47a890b1ef6e9b35",
+      "bytes": 6902259
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-assist-reduced-initial.png",
+      "sha256": "f149e3dbe4879519febeca187cfd4f90f21c091f1cb62b96368103d2dd439a84",
+      "bytes": 109737,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-contact-1.png",
+      "sha256": "56820ecbc2f466415f532894434264803a4c4068f0cc651836258daeb7dde8cb",
+      "bytes": 299808,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-contact-2.png",
+      "sha256": "67dbf878bb4f699363caab446c0a55a5fa2288dc56ebf4018e4df224912b6784",
+      "bytes": 234938,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-contact-3.png",
+      "sha256": "ba4e8fcdaf21a319393f985b0ed68bc2106e7872656194ee5f134c332f7a1ffb",
+      "bytes": 313898,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-contact-4.png",
+      "sha256": "394c6181b17d175aeafe263b2abe40124ab762307b15c17d3f1c4643c690818c",
+      "bytes": 195538,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-contacts.json",
+      "sha256": "ac11b3d64eb63de287dbb5f41b37b8de5b205d2e39c2a7554529b02300c298da",
+      "bytes": 1607
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-earned-result.png",
+      "sha256": "ad65546bdb08d095cf1c29917ad798d5f8e7ddd6e9cabb79743cc20cdf3c46f7",
+      "bytes": 197526,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-formal-keyboard-charge.png",
+      "sha256": "6462fc4298130645d3727b3edf2ed80b8afe0cf625c031d365a84e9b4e289356",
+      "bytes": 121591,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-formal-keyboard-envelope-launched.png",
+      "sha256": "0007dad8feb6a4ffdfe2344b7f6a29a13957465edcda96e4189051470f5b4315",
+      "bytes": 122920,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-formal-keyboard-exposure.png",
+      "sha256": "0142c999cbd391c0ec5e1e51f3628c2d3f7121d9ec1b6db80b703ed806113c16",
+      "bytes": 134641,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-formal-keyboard-initial.png",
+      "sha256": "2278c1566ddd3a3021de0e799af5cc87d53e1b2d723c0121af196c2da51c5589",
+      "bytes": 111134,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-formal-keyboard-three-prints.png",
+      "sha256": "369fee11477de50b550270cfdd588a41be1ffb9cfdff3f6213166a1112a47233",
+      "bytes": 145428,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-paused.png",
+      "sha256": "a21963cc0b88626ffeadb20d0850a418dd8237355cea899ba252edcde80dc518",
+      "bytes": 66756,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-practice-result.png",
+      "sha256": "82181905a79c3b5eb0b9c3b45686b518bfe360d354115ae462b430d064a95b2c",
+      "bytes": 200201,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-private-practice-pointer-charge.png",
+      "sha256": "fef99b4fbcf6fe2c69c6b362b0d686abdcd03c598a90c4ce1af66a7d8e97690a",
+      "bytes": 122958,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-private-practice-pointer-envelope-launched.png",
+      "sha256": "97900c9b1415d5a9533804bc39d913b1908b120bfbaa99b91a1f4ba90d3ce933",
+      "bytes": 124961,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-private-practice-pointer-exposure.png",
+      "sha256": "649112c813f825358b8d4a5d66c3436e5cda2dc72254f704f2ea18e5d62e222f",
+      "bytes": 135788,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-private-practice-pointer-initial.png",
+      "sha256": "f149e3dbe4879519febeca187cfd4f90f21c091f1cb62b96368103d2dd439a84",
+      "bytes": 109737,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-private-practice-pointer-three-prints.png",
+      "sha256": "0f6ff9f48d60268d0c6d7bceeb9bf631374e6dd142b491bbfd42208cd5119046",
+      "bytes": 148167,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter-retry-reset.png",
+      "sha256": "f149e3dbe4879519febeca187cfd4f90f21c091f1cb62b96368103d2dd439a84",
+      "bytes": 109737,
+      "dimensions_px": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter.log",
+      "sha256": "80998019fdd4308af776d84aa95516c5cfc8b40351c897751c8c6d9b2b31e4b3",
+      "bytes": 6525
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter.mp4",
+      "sha256": "a3bd1cc3a4bfabe1243fe245b9f9f3b4a330bcd2877850b04993381ed77aeca4",
+      "bytes": 14793407
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-view-111.log",
+      "sha256": "f3b3c2a206b01398b631be53535fbbde7d7ff50dd28711a324606166601c711c",
+      "bytes": 110
+    }
+  ],
+  "counts": {
+    "normal_and_quarter_screenshots": 30,
+    "contact_sheets": 8,
+    "contact_maps": 2,
+    "videos": 2,
+    "final_run_logs": 2,
+    "earlier_fixture_timing_logs": 2,
+    "native_current_tutorial_screenshots": 3,
+    "owned_evidence_files": 53,
+    "owned_source_test_uid_scene_files": 18
+  },
+  "video_metadata": [
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": "60/1",
+      "frames": 1590,
+      "duration_seconds": 26.5,
+      "player_review": "Root watched to ended=true"
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": "60/1",
+      "frames": 6057,
+      "duration_seconds": 100.95,
+      "player_review": "Root watched to ended=true"
+    }
+  ],
+  "native_results": {
+    "formal_keyboard_each_speed": {
+      "total": 295,
+      "prints": [
+        99,
+        98,
+        98
+      ],
+      "full_body_perfect_prints": 3,
+      "ordinary_and_devil_qualified": true
+    },
+    "private_pointer_assisted_reduced_each_speed": {
+      "score": 296,
+      "no_collection_award": true
+    },
+    "final_run_logs": "Both final logs report PASS with no engine ERROR or SCRIPT ERROR. Root reviewed all 30 screenshots in eight contact sheets."
+  },
+  "earlier_fixture_attempts": [
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-fixture-attempt-1.log",
+      "interpretation": "A fixture boolean check for whether the photo list was empty was inverted. This was a fixture correction, not a product defect."
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-fixture-attempt-2.log",
+      "interpretation": "The fixture read held-E charge before flushing buffered input. This was a fixture timing correction, not a product defect."
+    }
+  ],
+  "local_validation": [
+    {
+      "command": "Godot 4.7.2 --headless --editor --path <candidate> --import --quit",
+      "result": "exit 0"
+    },
+    {
+      "command": "Godot 4.7.2 --headless --path <candidate> --script res://game/tests/test_tutorial_panel.gd",
+      "result": "PASS: tutorial panel/catalog checks; the only missing-image warning is the deliberate game-001 fixture"
+    },
+    {
+      "command": "Godot 4.7.2 --headless --path <candidate> res://game/tests/test_tutorial_seen_progress.tscn",
+      "result": "PASS: tutorial seen progress and failed-save start checks; malformed-record warnings are intentional fixtures"
+    }
+  ],
+  "visual_review_limit": "Root watched both gameplay videos and all 30 gameplay screenshots, then separately viewed the final three tutorial-page screenshots. Gameplay movies and static tutorial review are reported separately.",
+  "manifest_hash_note": "This file intentionally does not include its own hash.",
+  "import_sidecars": [
+    {
+      "path": "assets/ui/tutorials/game-010-step-01.png.import",
+      "sha256": "2fdf7a5c3a260c09627d1fc84fd7c4037b5b80d5be29516eb91435824a996ac5"
+    },
+    {
+      "path": "assets/ui/tutorials/game-010-step-02.png.import",
+      "sha256": "2fb3276cdcc817c47d903e15a66d969576e5186ef246504cc784197f9a56ba08"
+    },
+    {
+      "path": "assets/ui/tutorials/game-010-step-03.png.import",
+      "sha256": "4143807bc4db53a8da281c4300087da5723e250db770c70853c6eb5d325bf879"
+    }
+  ],
+  "tutorial_revision": {
+    "ordinary": "拍滿三張；至少兩張全身完整且合格。",
+    "bonus": "三張全身完整、精準置中且合焦，未開輔助。",
+    "result_success": "普通拍貼至少兩張合格；三張完整、精準置中且合焦可得小惡魔。正式示例 99、98、98 分，合計 295。",
+    "other_lessons_changed": false,
+    "previous_native_capture_needs_refresh": true
+  },
+  "candidate_source_and_test_files": [
+    {
+      "path": "game/minigames/bubble_photo_model.gd",
+      "sha256": "69efeb186bfbe8a20e5482e8b7c959e10d2ce27c2ec88f6559166e0b42ab323c",
+      "bytes": 16516
+    },
+    {
+      "path": "game/minigames/bubble_photo_model.gd.uid",
+      "sha256": "0b520fd74bea7397acd83f715e6bb7ce463c020c5ca0e36124862639ee1b59b5",
+      "bytes": 21
+    },
+    {
+      "path": "game/minigames/bubble_photo_view.gd",
+      "sha256": "7e6c9d28e34d5e2718d652589f5680cc02c00d3e0f40993dd48642aed25ef884",
+      "bytes": 36104
+    },
+    {
+      "path": "game/minigames/bubble_photo_view.gd.uid",
+      "sha256": "1af78a692af695e5ae943fbc0177169ee94ba43e0d41aa357e1d3a30091f04dc",
+      "bytes": 21
+    },
+    {
+      "path": "game/minigames/session.gd",
+      "sha256": "56139490fdc2790f790ef6fe7ff923438844f3142644b6194c183095581c0c35",
+      "bytes": 123699
+    },
+    {
+      "path": "game/minigames/session.gd.uid",
+      "sha256": "37df401b953dcabb9bbbc41412261a0d7942cf63b49d522d8c8ab4cbe78ceef7",
+      "bytes": 20
+    },
+    {
+      "path": "game/tests/test_bubble_photo_model.gd",
+      "sha256": "01bb0d247fe9157ae4b834046aa8ee9c51a26adcf94ac1b8bf4a7acf57862848",
+      "bytes": 22264
+    },
+    {
+      "path": "game/tests/test_bubble_photo_model.gd.uid",
+      "sha256": "cc48f7a309433c4687e1b4ee55541e4057a1588245fa3428fcb01d04d7f78f96",
+      "bytes": 21
+    },
+    {
+      "path": "game/tests/test_bubble_photo_view.gd",
+      "sha256": "0da3d14f695b088adadd430104214af57cb34850c8a93dc35e25a8184b86b591",
+      "bytes": 22660
+    },
+    {
+      "path": "game/tests/test_bubble_photo_view.gd.uid",
+      "sha256": "51dc8a5529a84e767da85fad8e3a39c68bb55addf54395cbe1fecf2010ede4c5",
+      "bytes": 21
+    },
+    {
+      "path": "game/tests/test_minigames.gd",
+      "sha256": "d2a13fde1bf7286d235c085272e864ecb2f900b0da5568fbea387b0f266107d3",
+      "bytes": 95881
+    },
+    {
+      "path": "game/tests/test_minigames.gd.uid",
+      "sha256": "e2e4ae392700e3c52984c91a6d5879481385ba63591aa079d99aae00916f94c0",
+      "bytes": 20
+    },
+    {
+      "path": "game/tests/native_bubble_photo_review.gd",
+      "sha256": "1f7d5384bd3cb1e9b2670f757805c2615ae520a72bbc5522657d8e25c3ca2c25",
+      "bytes": 37609
+    },
+    {
+      "path": "game/tests/native_bubble_photo_review.gd.uid",
+      "sha256": "18d92faa241d62fe7ebeaef288757564f314dbf134819f75e41c90ed588e85f1",
+      "bytes": 26
+    },
+    {
+      "path": "game/tests/native_bubble_photo_review.tscn",
+      "sha256": "2426461a7d1ac17631f23d60933d863e1615c27f21a25cd9af253c6dfc7743d7",
+      "bytes": 207
+    },
+    {
+      "path": "game/tests/native_bubble_tutorial_current_review.gd",
+      "sha256": "61be25c73bdab5f4437945b9987d60b0a422f813c9098381c559dfdb9914926b",
+      "bytes": 7217
+    },
+    {
+      "path": "game/tests/native_bubble_tutorial_current_review.gd.uid",
+      "sha256": "5a03692dbe86abf5ddb1084dce74cdc94b1cf59353b2879cb7af0e147707f5b5",
+      "bytes": 37
+    },
+    {
+      "path": "game/tests/native_bubble_tutorial_current_review.tscn",
+      "sha256": "bd82dc6f4fc2e316b8b55c00469d7e847d77c83c32d9edb44af46662b93cf62e",
+      "bytes": 223
+    }
+  ],
+  "native_tutorial_fixture": {
+    "path": "game/tests/native_bubble_tutorial_current_review.gd",
+    "sha256": "61be25c73bdab5f4437945b9987d60b0a422f813c9098381c559dfdb9914926b",
+    "bytes": 7217,
+    "uid": {
+      "path": "game/tests/native_bubble_tutorial_current_review.gd.uid",
+      "sha256": "5a03692dbe86abf5ddb1084dce74cdc94b1cf59353b2879cb7af0e147707f5b5",
+      "bytes": 37
+    },
+    "scene": {
+      "path": "game/tests/native_bubble_tutorial_current_review.tscn",
+      "sha256": "bd82dc6f4fc2e316b8b55c00469d7e847d77c83c32d9edb44af46662b93cf62e",
+      "bytes": 223
+    },
+    "status": "Root native PASS; fixture source unchanged",
+    "storage_note": "Terminal blank lines removed after capture; executable content unchanged."
+  },
+  "root_native_tutorial_review": {
+    "log_path": "pm/Snapland-small-game/images/SG-25-envelope-v3-native-tutorial-current.log",
+    "result": "PASS; 35 frames at 60 fps; 0.583333 seconds; elapsed 3350 ms; exit 0; 0 ERROR; 0 resource leaks",
+    "reviewed": "Root visually checked all three pages after shortening; all required text fits in the visible page.",
+    "scope_limit": "Static first-visit tutorial panel check only; not a gameplay video or full human playtest."
+  },
+  "root_cpu_checks": [
+    {
+      "suite": "bubble photo model",
+      "checks": 71,
+      "result": "PASS",
+      "log": "pm/Snapland-small-game/images/SG-25-envelope-v3-model-71.log"
+    },
+    {
+      "suite": "bubble photo view",
+      "checks": 111,
+      "result": "PASS",
+      "log": "pm/Snapland-small-game/images/SG-25-envelope-v3-view-111.log"
+    },
+    {
+      "suite": "welcome minigame checks",
+      "cases": 81,
+      "result": "PASS",
+      "log": "pm/Snapland-small-game/images/SG-25-envelope-v3-minigames-81.log"
+    }
+  ],
+  "integration_base": "fd3d473e8d9a7f20d574db2ea2db2223fdef6a8b",
+  "integration_note": "Only game-010 is merged into the current HEAD tutorial/catalog; current SG-17 lesson and unrelated Source changes are preserved.",
+  "root_integrated_source_checks": [
+    "PASS: bubble photo model (71 checks)",
+    "PASS: bubble photo view (111 checks)",
+    "PASS: welcome minigame checks (82 cases)",
+    "PASS: tutorial panel/catalog checks"
+  ],
+  "log_storage_normalization": [
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-fixture-attempt-1.log",
+      "source_sha256": "c5f7bd0bd0e9aa6841bc835bbfc6ed5064c4cd5ea854c42c811a8b578673eaa6",
+      "stored_sha256": "9360caabe8f4f801fa20f1f09696b0ea602d0fe50a65d10b75864edd1ffffc80",
+      "normalization": "CRCRLF/CRLF to LF and terminal blank lines removed; message lines preserved."
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-fixture-attempt-2.log",
+      "source_sha256": "c886f2b31ceec7002eb3753993139737eef56526df856cccf94ff9c914775967",
+      "stored_sha256": "ab27942fca1fed778c43762234a47d1b0d6d7d2209f8a95b4d69909c45e95c0b",
+      "normalization": "CRCRLF/CRLF to LF and terminal blank lines removed; message lines preserved."
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-minigames-81.log",
+      "source_sha256": "45a166b1d536d88b99df8bfd2517638e8a8cb9ff3760308bd80090ed0922a710",
+      "stored_sha256": "e125527b32aac41637b2fe0ba844edb7afb7774dba898399968ab0bbe1dcac04",
+      "normalization": "CRCRLF/CRLF to LF and terminal blank lines removed; message lines preserved."
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-model-71.log",
+      "source_sha256": "cb86860c38afc5fa3600098986375e16e6fc7bd0ce8d80b4177b01a6cbadb10b",
+      "stored_sha256": "ae1d95010e4f0127359694082583b9644e8e9774dc2620d5ce03c105dad2f3e8",
+      "normalization": "CRCRLF/CRLF to LF and terminal blank lines removed; message lines preserved."
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-native-tutorial-current.log",
+      "source_sha256": "4cc22ab73c077cd4dea469d2be3aa7d1b4e6998568ac29a17e32adfc269fdf83",
+      "stored_sha256": "174ca77c055bc39a853bb84d340b1eaf1ecae9402426f99129218d9c9cf0750c",
+      "normalization": "CRCRLF/CRLF to LF and terminal blank lines removed; message lines preserved."
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-normal.log",
+      "source_sha256": "1c433da7ac8ca8e19fb259d80edaf14c60072be6e7459bdf38f5300a4b5eaabf",
+      "stored_sha256": "707f05f9ef29fceb8b953e9274fc96c87ee1ae0089ba607f866e27dc1bd6c145",
+      "normalization": "CRCRLF/CRLF to LF and terminal blank lines removed; message lines preserved."
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-quarter.log",
+      "source_sha256": "20e1aa5c0f95a8c7ba789469b1d8d2c004b62525a67ee946be3265299566b817",
+      "stored_sha256": "80998019fdd4308af776d84aa95516c5cfc8b40351c897751c8c6d9b2b31e4b3",
+      "normalization": "CRCRLF/CRLF to LF and terminal blank lines removed; message lines preserved."
+    },
+    {
+      "path": "pm/Snapland-small-game/images/SG-25-envelope-v3-view-111.log",
+      "source_sha256": "b50f78ce377e10a28816cb19271b8fd204c1d3aff94257847964954df2bd532a",
+      "stored_sha256": "f3b3c2a206b01398b631be53535fbbde7d7ff50dd28711a324606166601c711c",
+      "normalization": "CRCRLF/CRLF to LF and terminal blank lines removed; message lines preserved."
+    }
+  ],
+  "links_validation": "PASS on current integrated Source; historical candidate has pre-MAIN-12 missing design entrance and was not treated as passing.",
+  "canonical_text_normalization": "Canonical shared text files stored with LF; no content or rule change."
+}

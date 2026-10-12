@@ -1,0 +1,26 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 60 FPS...
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+[park_world] scenery meshes: 1024, nodes: 1613
+INPUT: start bubble photo target=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1610/AdaptiveMenuPanel/@MarginContainer@1611/@VBoxContainer@1612/AdaptiveMenuScroll/AdaptiveMenuContent/@HBoxContainer@1635/@Button@1638 rect=[P: (388.0, 409.0), S: (108.0, 44.0)] pointer=(442.0, 431.0) hovered=/root/Snapland/@CanvasLayer@1587/@Control@1588/@Control@1608/@CenterContainer@1610/AdaptiveMenuPanel/@MarginContainer@1611/@VBoxContainer@1612/AdaptiveMenuScroll/AdaptiveMenuContent/@HBoxContainer@1635/@Button@1638 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+ERROR: Native Photo review: A real Space shutter before the ready cue must show the brief cue without spending a photo or miss
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://game/tests/native_bubble_photo_review.gd:540)
+       [1] _run (res://game/tests/native_bubble_photo_review.gd:48)
+       [2] _launch_bubble (res://game/tests/native_bubble_photo_review.gd:254)
+       [3] _activate_main_button (res://game/tests/native_bubble_photo_review.gd:561)
+       [4] _native_click_button (res://game/tests/native_bubble_photo_review.gd:675)
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-first-park\Snapland\.review\root-bubble-envelope-normal.avi
+82 frames at 60 FPS (movie length: 00:00:01:22), recorded in 00:00:08 (12% of real-time speed).
+CPU render time: 0.11 seconds (average: 1.38 ms/frame)
+GPU render time: 0.34 seconds (average: 4.16 ms/frame)
+Encoding time: 0.68 seconds (average: 8.24 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
