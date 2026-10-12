@@ -6,6 +6,8 @@ var main: Node
 var progress: Node
 var _finishing := false
 var _abort_tests := false
+var _bench_finish_snapshot: Dictionary = {}
+var _bench_finished_session_id := 0
 
 func _ready() -> void:
 	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty():
@@ -117,8 +119,17 @@ func _test_cancel_and_successful_game_flow() -> void:
 	await _interact_at("game-001")
 	_check(main.modal_kind == "game_info", "interacting with a station opens game details")
 	_press_button_containing(main.overlay, "開始遊玩")
+	_check(await _wait_for_tutorial("game-001"), "first Start opens the unseen game's screenshot tutorial")
+	if not is_instance_valid(main.tutorial_panel): return
+	_check(main.session == null, "first-entry tutorial appears before a session exists")
+	await _frames(8)
+	_check(main.session == null, "reading first-entry tutorial does not advance or create a session")
+	_check(not progress.has_seen_tutorial("game-001"), "tutorial is not marked seen before the player chooses")
+	_press_button_containing(main.tutorial_panel, "開始挑戰")
+	_check(await _wait_for_session("game-001"), "choosing Begin from the tutorial launches the first session")
 	_check(await _wait_for_session("game-001"), "game details launch the first session")
 	_check(main.session != null and main.session.game_id == "game-001", "game details launch the canonical session ID")
+	_check(progress.has_seen_tutorial("game-001"), "choosing Begin records that the first-entry tutorial was learned")
 	await _test_live_session_help()
 	if _abort_tests: return
 	_key_down(KEY_ESCAPE)
@@ -140,17 +151,20 @@ func _test_cancel_and_successful_game_flow() -> void:
 
 	await _interact_at("game-011")
 	_press_button_containing(main.overlay, "開始遊玩")
+	_check(await _wait_for_tutorial("game-011"), "another unseen game's Start opens its screenshot tutorial")
+	if not is_instance_valid(main.tutorial_panel): return
+	_check(main.session == null, "second first-entry tutorial appears before its session exists")
+	await _frames(8)
+	_check(main.session == null, "reading second first-entry tutorial does not create a session")
+	_press_button_containing(main.tutorial_panel, "略過")
+	_check(await _wait_for_session("game-011"), "choosing Skip from the tutorial launches the second session")
 	_check(await _wait_for_session("game-011"), "second station starts a session")
 	_check(main.session != null and main.session.game_id == "game-011", "second station launches its own canonical ID")
+	_check(progress.has_seen_tutorial("game-011"), "choosing Skip records that the tutorial was learned")
 	await _test_live_session_help()
 	if _abort_tests: return
-	# Solve the actual seat-swap puzzle through the game's keyboard event handler.
-	for key in [KEY_1, KEY_2, KEY_2, KEY_3, KEY_2, KEY_4]:
-		_key_down(key)
-		await get_tree().physics_frame
-		_key_up(key)
-		await get_tree().physics_frame
-		if _abort_tests: return
+	# Solve all three actual BenchSwap tables from their visible rules using real seat-key input.
+	if not await _solve_bench_tables_with_real_keys(main.session): return
 	_check(await _wait_for_modal("result"), "completed minigame input opens the result modal")
 	_check(main.session == null and main.modal_kind == "result", "valid game input flows into the result modal")
 	_check(progress.photos.has("photo-welcome-game-11"), "successful devil result awards the ordinary card")
@@ -360,6 +374,127 @@ func _wait_for_session(id: String, timeout_seconds := 1.0) -> bool:
 		await get_tree().process_frame
 		if main.session != null and main.session.game_id == id: return true
 	return false
+
+func _wait_for_tutorial(id: String, timeout_seconds := 1.0) -> bool:
+	var started := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - started < int(timeout_seconds * 1000.0):
+		await get_tree().process_frame
+		if is_instance_valid(main.tutorial_panel) and main.tutorial_panel.target_id == id: return true
+	return false
+
+func _solve_bench_tables_with_real_keys(active_session: Node) -> bool:
+	var session_id := active_session.get_instance_id()
+	_bench_finish_snapshot.clear()
+	_bench_finished_session_id = 0
+	active_session.finished.connect(_capture_bench_finish.bind(session_id), CONNECT_ONE_SHOT)
+	for table in 3:
+		if main.session != active_session:
+			_check(false, "BenchSwap remains active through table %d" % (table + 1))
+			return false
+		var state: Dictionary = active_session.bench_model.snapshot()
+		_check(int(state.level) == table, "visible BenchSwap model is on table %d" % (table + 1))
+		var plan := _visible_bench_bfs(state.seats, state.rules)
+		_check(plan.size() == int(state.optimal_moves) and plan.size() == table + 1, "table %d visible rules have the model's %d-swap solution" % [table + 1, int(state.optimal_moves)])
+		if plan.is_empty(): return false
+		for pair in plan:
+			_key_down(KEY_1 + int(pair[0]))
+			await get_tree().process_frame
+			_key_up(KEY_1 + int(pair[0]))
+			_key_down(KEY_1 + int(pair[1]))
+			await get_tree().process_frame
+			_key_up(KEY_1 + int(pair[1]))
+			if not await _wait_for_bench_transition(session_id): return false
+			if _bench_finished_session_id == session_id:
+				state = _bench_finish_snapshot
+			elif is_instance_valid(active_session):
+				state = active_session.bench_model.snapshot()
+			else:
+				_check(false, "BenchSwap state remains available after real key input")
+				return false
+			if _bench_rules_satisfied(state.seats, state.rules) and pair != plan.back():
+				_check(false, "table %d remains unsolved before its final BFS exchange" % (table + 1))
+				return false
+		var solved_state: Dictionary = _bench_finish_snapshot if table == 2 else active_session.bench_model.snapshot()
+		var table_solved := false
+		for entry in solved_state.ledger:
+			if int(entry.level) == table and bool(entry.solved) and int(entry.moves) == plan.size() and int(entry.optimal_moves) == plan.size(): table_solved = true
+		_check(table_solved, "table %d naturally records its exact visible-rule solution" % (table + 1))
+		if not table_solved: return false
+	return _bench_finished_session_id == session_id and not _bench_finish_snapshot.is_empty()
+
+func _wait_for_bench_transition(session_id: int, timeout_seconds := 3.0) -> bool:
+	var deadline := Time.get_ticks_msec() + int(timeout_seconds * 1000.0)
+	var saw_transition := false
+	while Time.get_ticks_msec() < deadline:
+		var state: Dictionary
+		if _bench_finished_session_id == session_id:
+			state = _bench_finish_snapshot
+		else:
+			var active := instance_from_id(session_id) as Node if is_instance_id_valid(session_id) else null
+			if active == null: return false
+			state = active.bench_model.snapshot()
+		if int(state.get("swap_from", -1)) >= 0:
+			saw_transition = true
+		elif saw_transition:
+			return true
+		await get_tree().physics_frame
+	_check(false, "real seat-key input completes an animated BenchSwap transition")
+	return false
+
+func _capture_bench_finish(_result: Dictionary, session_id: int) -> void:
+	var completed := instance_from_id(session_id) as Node if is_instance_id_valid(session_id) else null
+	if completed == null:
+		_check(false, "BenchSwap finished signal can still inspect its emitting session")
+		return
+	_bench_finish_snapshot = completed.bench_model.snapshot().duplicate(true)
+	_bench_finished_session_id = session_id
+
+func _bench_rules_satisfied(seats: Array, rules: Array) -> bool:
+	if seats.size() != 6: return false
+	var sorted := seats.duplicate()
+	sorted.sort()
+	if sorted != [0, 1, 2, 3, 4, 5]: return false
+	for rule in rules:
+		var first := seats.find(int(rule.get("a", -1)))
+		var second := seats.find(int(rule.get("b", -1)))
+		match str(rule.kind):
+			"seat": if seats.find(int(rule.guest)) != int(rule.seat): return false
+			"together": if absi(first - second) != 1: return false
+			"apart": if absi(first - second) < 2: return false
+	return true
+
+func _visible_bench_bfs(start: Array, rules: Array) -> Array:
+	var queue: Array = [start.duplicate()]
+	var parents := {_bench_order_key(start): {"prev": "", "swap": []}}
+	var cursor := 0
+	var goal := ""
+	while cursor < queue.size():
+		var order: Array = queue[cursor]
+		cursor += 1
+		var key := _bench_order_key(order)
+		if _bench_rules_satisfied(order, rules):
+			goal = key
+			break
+		for first in 6:
+			for second in range(first + 1, 6):
+				var next: Array = order.duplicate()
+				var hold: Variant = next[first]
+				next[first] = next[second]
+				next[second] = hold
+				var next_key := _bench_order_key(next)
+				if not parents.has(next_key):
+					parents[next_key] = {"prev": key, "swap": [first, second]}
+					queue.append(next)
+	if goal.is_empty(): return []
+	var path: Array = []
+	var key := goal
+	while str(parents[key].prev) != "":
+		path.push_front(parents[key].swap)
+		key = str(parents[key].prev)
+	return path
+
+func _bench_order_key(order: Array) -> String:
+	return ",".join(order.map(func(value: Variant) -> String: return str(value)))
 
 func _wait_for_session_end(timeout_seconds := 1.0) -> bool:
 	var started := Time.get_ticks_msec()

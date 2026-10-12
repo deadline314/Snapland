@@ -178,7 +178,12 @@ func _review_world() -> bool:
   await get_tree().process_frame
  print('PASS: native four-direction movement, reduced night and nine gate interactions')
  return true
-func _instantiate_main() -> Node:
+func _instantiate_main(prepare_returning_player: bool = true) -> Node:
+ if prepare_returning_player:
+  Progress.tutorial_seen_games.clear()
+  for game_id in Progress.WELCOME_GAME_IDS:
+   Progress.tutorial_seen_games.append(game_id)
+  print("NATIVE PROFILE: returning-player tutorial state seeded for %d welcome games" % Progress.tutorial_seen_games.size())
  var packed_scene=load(MAIN_SCENE_PATH) as PackedScene
  if packed_scene==null: push_error('Could not load main scene '+MAIN_SCENE_PATH);return null
  return packed_scene.instantiate()

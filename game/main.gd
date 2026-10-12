@@ -639,6 +639,8 @@ func _tutorial_start(_target_id: String) -> void:
 		session.set_paused(false)
 		return
 	if target.begins_with("game-"):
+		if origin in ["first_entry", "game_info"] and not Progress.mark_game_tutorial_seen(target):
+			_notice("教學已看過，但暫時無法保存；下次仍會教學。")
 		_launch_game(target,assisted_mode,false)
 
 func _tutorial_practice(_target_id: String) -> void:
@@ -792,9 +794,15 @@ func _show_game_info(id: String) -> void:
 	body.add_child(row)
 	Paper.button("圖解教學",func(): _open_tutorial(id,"game_info",bool(Progress.settings.get("assist",false))),row)
 	Paper.button("練習操作",func(): _launch_game(id,bool(Progress.settings.get("assist",false)),true),row)
-	Paper.button("開始遊玩",func(): _launch_game(id,bool(Progress.settings.get("assist",false))),row).grab_focus()
+	Paper.button("開始遊玩",func(): _request_game_start(id,bool(Progress.settings.get("assist",false))),row).grab_focus()
 	Paper.button("輔助挑戰",func(): _launch_game(id,true),row)
 	_back(body)
+
+func _request_game_start(id: String, assist: bool) -> void:
+	if not Progress.has_seen_tutorial(id):
+		_open_tutorial(id,"first_entry",assist)
+		return
+	_launch_game(id,assist)
 
 func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	if _definition(id).is_empty():

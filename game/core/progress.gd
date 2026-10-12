@@ -41,6 +41,7 @@ var equipped: Dictionary = DEFAULT_EQUIPPED.duplicate(true)
 var owned_clothes: Array[String] = ["outfit-tide"]
 var coins := 120
 var wardrobe_rewarded_games: Array[String] = []
+var tutorial_seen_games: Array[String] = []
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
@@ -56,6 +57,20 @@ func grant_photo(source_id: String, metadata: Dictionary = {}) -> bool:
 		return false
 	photos[source_id] = metadata.duplicate(true)
 	changed.emit()
+	return true
+
+func has_seen_tutorial(game_id: String) -> bool:
+	return WELCOME_GAME_IDS.has(game_id) and tutorial_seen_games.has(game_id)
+
+func mark_game_tutorial_seen(game_id: String) -> bool:
+	if not WELCOME_GAME_IDS.has(game_id):
+		return false
+	if tutorial_seen_games.has(game_id):
+		return true
+	tutorial_seen_games.append(game_id)
+	if not save_progress():
+		tutorial_seen_games.erase(game_id)
+		return false
 	return true
 
 func set_time_phase(value: String) -> bool:
@@ -251,6 +266,7 @@ func save_progress() -> bool:
 		"owned_clothes": owned_clothes,
 		"coins": coins,
 		"wardrobe_rewarded_games": wardrobe_rewarded_games,
+		"tutorial_seen_games": tutorial_seen_games,
 	}, true)
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
@@ -451,6 +467,15 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 		if result.has(key) and typeof(result[key]) != TYPE_BOOL:
 			push_error("Invalid '%s' field in progress file '%s'; using default." % [key, path])
 			result.erase(key)
+	if result.has("tutorial_seen_games") and typeof(result["tutorial_seen_games"]) != TYPE_ARRAY:
+		push_warning("Invalid 'tutorial_seen_games' field in progress file '%s'; using defaults." % path)
+		result.erase("tutorial_seen_games")
+	elif result.has("tutorial_seen_games"):
+		var safe_tutorial_seen: Array = result["tutorial_seen_games"]
+		for game_id: Variant in safe_tutorial_seen.duplicate():
+			if typeof(game_id) != TYPE_STRING or not WELCOME_GAME_IDS.has(str(game_id)):
+				push_warning("Invalid seen tutorial ID '%s' in progress file '%s'; skipping." % [str(game_id), path])
+				safe_tutorial_seen.erase(game_id)
 	if result.has("appearance"):
 		if typeof(result.appearance) != TYPE_DICTIONARY:
 			push_warning("Invalid 'appearance' field in progress file '%s'; using wardrobe defaults." % path)
@@ -498,7 +523,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -574,6 +599,11 @@ func _apply_save(payload: Dictionary) -> void:
 		for game_id: Variant in loaded_rewarded:
 			if typeof(game_id) == TYPE_STRING and _is_rewardable_game_id(game_id) and not wardrobe_rewarded_games.has(game_id):
 				wardrobe_rewarded_games.append(game_id)
+	var loaded_tutorial_seen: Variant = payload.get("tutorial_seen_games", [])
+	if typeof(loaded_tutorial_seen) == TYPE_ARRAY:
+		for game_id: Variant in loaded_tutorial_seen:
+			if typeof(game_id) == TYPE_STRING and WELCOME_GAME_IDS.has(game_id) and not tutorial_seen_games.has(game_id):
+				tutorial_seen_games.append(game_id)
 	_loading = false
 
 func _apply_loaded_setting(key: String, value: Variant) -> void:
@@ -620,5 +650,6 @@ func _reset_memory() -> void:
 	owned_clothes = ["outfit-tide"]
 	coins = 120
 	wardrobe_rewarded_games = []
+	tutorial_seen_games = []
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
