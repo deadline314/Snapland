@@ -4,10 +4,12 @@ var _result_snapshot: Dictionary = {}
 var _finish_state: Dictionary = {}
 var _retry_snapshot: Dictionary = {}
 var _confirmed_retry_snapshot: Dictionary = {}
+var _wall_deadline_msec: int = 0
 
 ## GPU review fixture. Game progress comes from physical controls sent through
 ## the live park, HUD and session input paths; it never edits a result field.
 func _run() -> void:
+	_wall_deadline_msec = Time.get_ticks_msec() + 300000
 	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty() or DisplayServer.get_name() == "headless":
 		push_error("Native sign balance review requires GPU and isolated SNAPLAND_SAVE_PATH")
 		get_tree().quit(1)
@@ -109,11 +111,114 @@ func _launch_sign_balance() -> bool:
 	if main.session == null or main.session.game_id != "game-008":
 		await _fail("Native Start click did not launch game-008")
 		return false
+	var spatial_presentation: Control = main.session.presentation
+	var stage := spatial_presentation.find_child("SpatialStage", true, false) as SubViewportContainer
+	var camera := spatial_presentation.find_child("StageCamera", true, false) as Camera3D
+	var mass := spatial_presentation.find_child("Counterweight", true, false) as Node3D
+	if stage == null or camera == null or mass == null or not camera.current:
+		await _fail("Game-008 launch did not create its live 3D sign apparatus, camera and counterweight")
+		return false
+	await _frames(2)
+	if not _live_session(main.session): return false
+	return await _check_rendered_stage(main.session)
+
+func _check_rendered_stage(session: Control) -> bool:
+	# Inspect the same completed GPU frame in the source texture and final
+	# composited viewport. Node/transform checks alone missed the opaque BG.
+	await RenderingServer.frame_post_draw
+	if not _live_session(session): return false
+	var presentation: Control = session.presentation
+	var stage := presentation.find_child("SpatialStage", true, false) as SubViewportContainer
+	var hud: Control = session.minigame_hud
+	if stage == null or stage.z_index != 0 or not stage.z_as_relative or not stage.show_behind_parent or stage.mouse_filter != Control.MOUSE_FILTER_IGNORE or presentation.z_index != session.z_index or hud.z_index != presentation.z_index or hud.get_parent() != presentation.get_parent() or presentation.get_index() >= hud.get_index():
+		await _fail("Live canvas order must be session background, 3D stage, local paper overlays, then clickable HUD sibling")
+		return false
+	if not await _check_live_feedback_clearance(session): return false
+	var source_viewport := stage.get_child(0) as SubViewport
+	if source_viewport == null:
+		await _fail("Live spatial stage has no SubViewport render target")
+		return false
+	var source_image: Image = source_viewport.get_texture().get_image()
+	var final_image: Image = get_viewport().get_texture().get_image()
+	if source_image == null or source_image.is_empty() or final_image == null or final_image.is_empty():
+		await _fail("Completed sign GPU frame returned an empty source or final viewport texture")
+		return false
+	# These samples cover the mechanism below the transient HUD feedback bar
+	# and above the paper controls; score/stage/forecast cards cannot pass it.
+	var source_min := Vector3(INF, INF, INF)
+	var source_max := Vector3(-INF, -INF, -INF)
+	var final_min := Vector3(INF, INF, INF)
+	var final_max := Vector3(-INF, -INF, -INF)
+	var matched := 0
+	var samples := 0
+	for y in range(324, 490, 12):
+		for x in range(420, 861, 12):
+			var design_point := Vector2(x, y)
+			var source_point := Vector2i(design_point / presentation.DESIGN_SIZE * Vector2(source_image.get_size()))
+			var final_point := Vector2i(presentation.get_global_transform_with_canvas() * design_point)
+			if not Rect2i(Vector2i.ZERO, source_image.get_size()).has_point(source_point) or not Rect2i(Vector2i.ZERO, final_image.get_size()).has_point(final_point):
+				await _fail("Central mechanism render samples fell outside source/final viewport bounds")
+				return false
+			var source_color := source_image.get_pixelv(source_point)
+			var final_color := final_image.get_pixelv(final_point)
+			var source_rgb := Vector3(source_color.r, source_color.g, source_color.b)
+			var final_rgb := Vector3(final_color.r, final_color.g, final_color.b)
+			source_min = source_min.min(source_rgb)
+			source_max = source_max.max(source_rgb)
+			final_min = final_min.min(final_rgb)
+			final_max = final_max.max(final_rgb)
+			if source_rgb.distance_to(final_rgb) < 0.08: matched += 1
+			samples += 1
+	var source_range := source_max.distance_to(source_min)
+	var final_range := final_max.distance_to(final_min)
+	if source_range < 0.12 or final_range < 0.12 or float(matched) / float(samples) < 0.85:
+		await _fail("3D sign must render nonflat pixels and reach the visible central viewport: source_range=%.3f final_range=%.3f matched=%d/%d" % [source_range, final_range, matched, samples])
+		return false
+	print("Sign balance rendered stage: source_range=%.3f final_range=%.3f matched=%d/%d" % [source_range, final_range, matched, samples])
 	return true
+
+func _check_live_feedback_clearance(session: Control) -> bool:
+	var presentation: Control = session.presentation
+	var feedback := session.minigame_hud.find_child("ContextFeedback", true, false) as Control
+	if feedback == null:
+		await _fail("Live contextual feedback node is missing")
+		return false
+	if not feedback.is_visible_in_tree(): return true
+	var to_design := presentation.get_global_transform_with_canvas().affine_inverse()
+	var feedback_rect := Rect2(to_design * feedback.get_global_rect().position, feedback.size * session.minigame_hud.scale / presentation.scale).grow(4.0)
+	var camera := presentation.find_child("StageCamera", true, false) as Camera3D
+	var title := presentation.find_child("SignTitle", true, false) as Label3D
+	var mass := presentation.find_child("WeightForging", true, false) as MeshInstance3D
+	var board_rect: Rect2 = presentation.projected_sign_bounds()
+	var title_rect := _projected_geometry_bounds(camera, title)
+	var weight_rect := _projected_geometry_bounds(camera, mass)
+	if not is_equal_approx(feedback.size.x, 420.0) or feedback.position.y != 130.0 or feedback_rect.intersects(board_rect) or feedback_rect.intersects(title_rect) or feedback_rect.intersects(weight_rect) or feedback_rect.intersects(presentation.stage_card_bounds()) or feedback_rect.intersects(presentation.FORECAST_CARD_BOUNDS) or feedback_rect.intersects(presentation.controls_panel_bounds()):
+		await _fail("Actual sign feedback must clear the live sign face/title, hanging weight and cards: feedback=%s sign=%s title=%s" % [str(feedback_rect), str(board_rect), str(title_rect)])
+		return false
+	print("Sign balance feedback clear: feedback=%s sign=%s title=%s" % [str(feedback_rect), str(board_rect), str(title_rect)])
+	return true
+
+func _projected_geometry_bounds(camera: Camera3D, geometry: GeometryInstance3D) -> Rect2:
+	geometry.force_update_transform()
+	var bounds := geometry.get_aabb()
+	var minimum := Vector2(INF, INF)
+	var maximum := Vector2(-INF, -INF)
+	for x in [bounds.position.x, bounds.end.x]:
+		for y in [bounds.position.y, bounds.end.y]:
+			for z in [bounds.position.z, bounds.end.z]:
+				var point := camera.unproject_position(geometry.global_transform * Vector3(x, y, z))
+				minimum = minimum.min(point)
+				maximum = maximum.max(point)
+	return Rect2(minimum, maximum - minimum)
 
 func _check_pointer_and_pause_retry(session: Control) -> bool:
 	if not await _wait_for_live_model(session, 0.15): return false
 	var initial_balance := float(session.sign_model.snapshot().balance)
+	var spatial_mass := session.presentation.find_child("Counterweight", true, false) as Node3D
+	if spatial_mass == null:
+		await _fail("Live spatial counterweight node is missing")
+		return false
+	var initial_mass_x: float = spatial_mass.position.x
 	var rail: Rect2 = session.presentation.WEIGHT_RAIL
 	var start_physical := _physical_design_point(session, Vector2(rail.position.x + rail.size.x * 0.60, rail.get_center().y))
 	var drag_physical := _physical_design_point(session, Vector2(rail.position.x + rail.size.x * 0.82, rail.get_center().y))
@@ -157,6 +262,9 @@ func _check_pointer_and_pause_retry(session: Control) -> bool:
 		return false
 	await _frames(2)
 	if not _live_session(session): return false
+	if is_equal_approx(spatial_mass.position.x, initial_mass_x) or not is_equal_approx(spatial_mass.position.x, session.presentation.weight_rail_x(session.sign_model.snapshot())):
+		await _fail("Real mouse drag changed the score model but not the visible 3D counterweight position")
+		return false
 	var pause_button: Button = session.minigame_hud.find_child("PauseButton", true, false)
 	if not await _native_click_button(pause_button, "pause game-008"): return false
 	if not _live_session(session) or not session.paused:
@@ -218,11 +326,15 @@ func _drive_seven_stages(session: Control, use_practice_result: bool) -> bool:
 		if not _result_snapshot.is_empty(): break
 		if not _live_session(session): return false
 		var state: Dictionary = session.sign_model.snapshot().duplicate(true)
+		var sign_assembly := session.presentation.find_child("SignAssembly", true, false) as Node3D
+		var spatial_mass := session.presentation.find_child("Counterweight", true, false) as Node3D
+		if sign_assembly == null or spatial_mass == null or not is_equal_approx(sign_assembly.rotation.z, session.presentation.visual_angle(state)) or not is_equal_approx(spatial_mass.position.x, session.presentation.weight_rail_x(state)):
+			await _fail("Live sign angle or counterweight transform diverged from the existing model snapshot")
+			return false
 		if captures.has(int(state.stage)) and not captures[int(state.stage)].is_empty():
 			var label: String = captures[int(state.stage)]
 			captures[int(state.stage)] = ""
-			await RenderingServer.frame_post_draw
-			if not _live_session(session): return false
+			if not await _check_rendered_stage(session): return false
 			if not main._capture(".review/native-sign-balance-%s-stage-%02d.png" % ["practice" if use_practice_result else "formal", int(state.stage) + 1]):
 				await _fail("Could not capture live sign state at stage %s" % label)
 				return false
@@ -284,3 +396,10 @@ func _live_session(session: Control) -> bool:
 	if is_instance_valid(main):
 		push_error("Native sign fixture lost the live game session while waiting")
 	return false
+
+
+func _process(_delta: float) -> void:
+	if _wall_deadline_msec > 0 and Time.get_ticks_msec() >= _wall_deadline_msec:
+		_wall_deadline_msec = 0
+		push_error("Native sign balance review exceeded its 300-second wall-clock watchdog")
+		get_tree().quit(1)

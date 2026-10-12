@@ -486,7 +486,7 @@ func _refresh_hud(force: bool = false) -> void:
 		"score": score,
 		"time_text": time_text,
 		"feedback_text": feedback_text,
-		"feedback_width": 240.0 if mode == "flower_pipes" else 540.0,
+		"feedback_width": 240.0 if mode == "flower_pipes" else (420.0 if mode == "sign_balance" else 540.0),
 		"feedback_color": feedback_color,
 		"assisted": assisted,
 		"practice": practice_mode,
@@ -1701,7 +1701,7 @@ func _feedback_anchor() -> Vector2:
 		"hat_catching": return Vector2(640.0, 448.0)
 		"ribbon_rhythm": return Vector2(640, 230)
 		"flower_pipes": return Vector2(150, 460)
-		"sign_balance": return Vector2(640, 340)
+		"sign_balance": return Vector2(640, 208)
 		"shadow_alignment": return Vector2(640, 230)
 		"bubble_photo": return Vector2(640, 240)
 		"bench_swap":
