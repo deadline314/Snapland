@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Session = preload("res://game/minigames/session.gd")
+const CrowdSemaphoreView = preload("res://game/minigames/crowd_semaphore_view.gd")
 const HUD = preload("res://game/ui/minigame_hud.gd")
 const ShadowModel = preload("res://game/minigames/shadow_theatre_model.gd")
 const RibbonView = preload("res://game/minigames/ribbon_rhythm_view.gd")
@@ -165,6 +166,19 @@ func _test_crowd_boundaries() -> void:
 		var played := _new_session("game-004", use_assist)
 		var results: Array[Dictionary] = []
 		played.finished.connect(func(value: Dictionary): results.append(value))
+		_expect(played.presentation is CrowdSemaphoreView, "game-004 uses the isolated 3D semaphore presenter")
+		_expect(played.presentation.signal_control_centres() == [Vector2(520, 235), Vector2(760, 235)], "semaphore presents two spaced pointer controls")
+		played._request_crowd_lane(1)
+		var crowd_toast := played.minigame_hud.find_child("ContextFeedback", true, false) as Control
+		_expect(played.feedback_origin == Vector2(640, 654), "Crowd feedback originates in its dedicated bottom HUD band")
+		_expect(crowd_toast != null and crowd_toast.visible, "Crowd signal feedback is emitted through the live HUD toast")
+		var toast_rect := Rect2(crowd_toast.position, crowd_toast.size) if crowd_toast != null else Rect2()
+		_expect(Rect2(Vector2.ZERO, Vector2(1280, 720)).encloses(toast_rect), "Crowd feedback toast stays inside the viewport")
+		_expect(not toast_rect.intersects(played.presentation.projected_content_bounds()) and not toast_rect.intersects(played.presentation.signal_card_rect(0)) and not toast_rect.intersects(played.presentation.signal_card_rect(1)), "Crowd toast avoids the measured stage and both signal cards")
+		_click(played, 760, 235)
+		_expect(played.crowd_model.desired_lane == 1 and played.score == 0, "vertical pointer control changes only the requested lane")
+		_click(played, 520, 235)
+		_expect(played.crowd_model.desired_lane == 0 and played.score == 0, "horizontal pointer control preserves the unscored model state")
 		var budget := 1000
 		# Model the 0.65-second opening instruction and 0.30-second response.
 		while played.crowd_model.elapsed < 0.95 and budget > 0:
@@ -180,6 +194,7 @@ func _test_crowd_boundaries() -> void:
 		assert(results[0].success and results[0].devil and results[0].assisted == use_assist)
 		assert(played.crowd_model.safe_count == 6 and played.score == played.crowd_model.score)
 		assert(played.score_summary().total == played.score and played.mistakes == 0)
+		checks += 8
 		played.queue_free()
 	var missed := _new_session("game-004", false)
 	var missed_results: Array[Dictionary] = []

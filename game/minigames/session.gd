@@ -34,6 +34,7 @@ const PipePlanScript = preload("res://game/minigames/pipe_plan_view.gd")
 const PipeRoundScript = preload("res://game/minigames/pipe_round_model.gd")
 const CrowdTrafficScript = preload("res://game/minigames/crowd_traffic_model.gd")
 const CrowdCrossingScript = preload("res://game/minigames/crowd_crossing_view.gd")
+const CrowdSemaphoreScript = preload("res://game/minigames/crowd_semaphore_view.gd")
 const KiteFlightModelScript = preload("res://game/minigames/kite_flight_model.gd")
 const KiteFlightViewScript = preload("res://game/minigames/kite_flight_view.gd")
 const BubblePhotoModelScript = preload("res://game/minigames/bubble_photo_model.gd")
@@ -277,7 +278,7 @@ func _sync_presentation() -> void:
 				# The 3D court has its own SubViewport; keep headless rules tests renderer-free.
 				if DisplayServer.get_name() != "headless": presentation = FountainJumpViewScript.new()
 			"flower_pipes": presentation = PipePlanScript.new()
-			"crowd_traffic": presentation = CrowdCrossingScript.new()
+			"crowd_traffic": presentation = CrowdSemaphoreScript.new()
 			"kite_rings": presentation = KiteFlightViewScript.new()
 			"bubble_photo":
 				# Headless rule tests exercise the model without allocating avatar textures.
@@ -303,6 +304,10 @@ func _sync_presentation() -> void:
 			if mode == "sign_balance":
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.balance_requested.connect(_on_sign_balance_requested)
+			if mode == "crowd_traffic":
+				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
+				presentation.focus_mode = Control.FOCUS_ALL
+				presentation.signal_requested.connect(_on_crowd_signal_requested)
 			if mode == "melody_memory":
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 				presentation.note_requested.connect(_on_melody_note_requested)
@@ -349,7 +354,7 @@ func _sync_presentation() -> void:
 			presentation.set_animation_active(not paused)
 			presentation.present_order(pipe_model.snapshot(), phase, reduced_motion, time_phase)
 			presentation.cursor = pipe_cursor
-		"crowd_traffic": presentation.present_state(crowd_model.snapshot(), phase, reduced_motion, time_phase)
+		"crowd_traffic": presentation.present_traffic(crowd_model.snapshot(), crowd_model.elapsed, reduced_motion, time_phase)
 		"kite_rings": presentation.update_frame(kite_model.snapshot(), "result" if ended else ("paused" if paused else "playing"), reduced_motion, time_phase)
 		"bubble_photo": presentation.present_state(bubble_model.snapshot(), str(bubble_model.phase), reduced_motion, time_phase)
 		"sign_balance": presentation.update_frame(sign_model.snapshot(), time_phase, reduced_motion)
@@ -1102,6 +1107,10 @@ func _request_crowd_lane(value: int) -> void:
 	_feedback("安排橫向通行" if value == 0 else "安排縱向通行", BLUE)
 	_sync_presentation()
 
+func _on_crowd_signal_requested(value: int) -> void:
+	if mode == "crowd_traffic" and value in [0, 1]:
+		_request_crowd_lane(value)
+
 func _tick_pipe(delta: float) -> void:
 	var previous_order: int = pipe_model.order_index
 	var previous_completed: int = pipe_model.completed_beds
@@ -1270,7 +1279,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var m := _to_design(mouse_event.position)
 		if mode == "fountain_timing" and mouse_event.button_index == MOUSE_BUTTON_LEFT: _press_action()
 		elif mode == "crowd_traffic":
-			var chosen_lane: int = presentation.pointerSignalAt(m) if is_instance_valid(presentation) else -1
+			var chosen_lane: int = presentation.signal_lane_at(m) if is_instance_valid(presentation) else -1
 			if chosen_lane >= 0:
 				_request_crowd_lane(chosen_lane)
 		elif mode == "shadow_alignment" and not is_instance_valid(presentation):
@@ -1598,13 +1607,18 @@ func _feedback(message: String, color: Color) -> void:
 	_refresh_hud(true)
 	if minigame_hud != null:
 		minigame_hud.set_feedback_at(message, feedback_origin)
+		if mode == "crowd_traffic":
+			var crowd_feedback := minigame_hud.find_child("ContextFeedback", true, false) as Control
+			if crowd_feedback != null:
+				# Keep the transient callout in the lower HUD band, below the measured 3D playfield.
+				crowd_feedback.position = Vector2(clampf(640.0 - crowd_feedback.size.x * 0.5, 30.0, 1280.0 - crowd_feedback.size.x - 30.0), 622.0)
 
 func _feedback_anchor() -> Vector2:
 	match mode:
 		"balloon_delivery": return Vector2(320, 208)
 		"kite_rings": return p
 		"fountain_timing": return Vector2(960, 220)
-		"crowd_traffic": return Vector2(320, 220)
+		"crowd_traffic": return Vector2(640, 654)
 		"hat_catching": return Vector2(p.x, 560)
 		"ribbon_rhythm": return Vector2(640, 230)
 		"flower_pipes": return Vector2(150, 460)
