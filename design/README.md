@@ -4,9 +4,7 @@
 
 - [樂趣中心與業界來源](00-principles/fun-principles.md)
 - [園區、收藏與多人](01-park/park-and-collection.md)
-- [128款小遊戲目錄](02-minigames/catalog.md)
-- [前版候選改造對照](02-minigames/revision-notes.md)
-- [六款原型規格](02-minigames/prototypes.md)
+- [小遊戲目錄設計進度（SG-1）](../pm/Snapland-small-game/[SG-1]重設小遊戲樂趣目錄.md)
 - [劇情框架](03-story/story.md)
 - [支線與探索事件](03-story/quest-guide.md)
 - [Steam相容物品定義](04-items/itemdefs.json)
