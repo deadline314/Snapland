@@ -1,0 +1,151 @@
+{
+  "prompt_id": "8413873b-71e8-4897-9597-9d84672c3a92",
+  "history": {
+    "prompt": [
+      0,
+      "8413873b-71e8-4897-9597-9d84672c3a92",
+      {
+        "1": {
+          "class_type": "LoadImage",
+          "inputs": {
+            "image": "ticket-K1.png"
+          }
+        },
+        "2": {
+          "class_type": "InvertMask",
+          "inputs": {
+            "mask": [
+              "1",
+              1
+            ]
+          }
+        },
+        "3": {
+          "class_type": "ThresholdMask",
+          "inputs": {
+            "mask": [
+              "2",
+              0
+            ],
+            "value": 0.12549019607843137
+          }
+        },
+        "4": {
+          "class_type": "GrowMask",
+          "inputs": {
+            "mask": [
+              "3",
+              0
+            ],
+            "expand": 2,
+            "tapered_corners": false
+          }
+        },
+        "5": {
+          "class_type": "MaskComposite",
+          "inputs": {
+            "destination": [
+              "2",
+              0
+            ],
+            "source": [
+              "4",
+              0
+            ],
+            "x": 0,
+            "y": 0,
+            "operation": "multiply"
+          }
+        },
+        "6": {
+          "class_type": "InvertMask",
+          "inputs": {
+            "mask": [
+              "5",
+              0
+            ]
+          }
+        },
+        "7": {
+          "class_type": "JoinImageWithAlpha",
+          "inputs": {
+            "image": [
+              "1",
+              0
+            ],
+            "alpha": [
+              "6",
+              0
+            ]
+          }
+        },
+        "8": {
+          "class_type": "SaveImage",
+          "inputs": {
+            "images": [
+              "7",
+              0
+            ],
+            "filename_prefix": "ticket-K1-alpha-clean"
+          }
+        }
+      },
+      {
+        "client_id": "snapland-root-alpha-review",
+        "create_time": 1791793627956
+      },
+      [
+        "8"
+      ]
+    ],
+    "outputs": {
+      "8": {
+        "images": [
+          {
+            "filename": "ticket-K1-alpha-clean_00001_.png",
+            "subfolder": "",
+            "type": "output"
+          }
+        ]
+      }
+    },
+    "status": {
+      "status_str": "success",
+      "completed": true,
+      "messages": [
+        [
+          "execution_start",
+          {
+            "prompt_id": "8413873b-71e8-4897-9597-9d84672c3a92",
+            "timestamp": 1791793627957
+          }
+        ],
+        [
+          "execution_cached",
+          {
+            "nodes": [],
+            "prompt_id": "8413873b-71e8-4897-9597-9d84672c3a92",
+            "timestamp": 1791793627965
+          }
+        ],
+        [
+          "execution_success",
+          {
+            "prompt_id": "8413873b-71e8-4897-9597-9d84672c3a92",
+            "timestamp": 1791793628314
+          }
+        ]
+      ]
+    },
+    "meta": {
+      "8": {
+        "node_id": "8",
+        "display_node": "8",
+        "parent_node": null,
+        "real_node_id": "8"
+      }
+    }
+  },
+  "source_sha256": "e016c29f0417651a6ceb8f2f9e9e3dfa2c9f0a0adc4c1ce24ad38606541a6be4",
+  "output_sha256": "1365a0c11edd216df6aac302815b18f08ffd4d595f20307bf235a22b2e8956c4"
+}

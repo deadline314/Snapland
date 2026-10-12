@@ -1,0 +1,41 @@
+{
+  "source_size": [
+    1024,
+    1536
+  ],
+  "clean_size": [
+    1024,
+    1536
+  ],
+  "rgb_changed_pixels": 0,
+  "alpha_changed_pixels": 24632,
+  "alpha_difference_range": [
+    -16,
+    0
+  ],
+  "thresholds": {
+    "32": {
+      "source_pixels": 357141,
+      "changed_pixels": 2421,
+      "maximum_decrease": 1,
+      "maximum_increase": 0
+    },
+    "64": {
+      "source_pixels": 355645,
+      "changed_pixels": 925,
+      "maximum_decrease": 1,
+      "maximum_increase": 0
+    },
+    "128": {
+      "source_pixels": 353818,
+      "changed_pixels": 0,
+      "maximum_decrease": 0,
+      "maximum_increase": 0
+    }
+  },
+  "fully_removed": {
+    "pixel_count": 13168,
+    "maximum_original_alpha": 16
+  },
+  "scope": "Read-only CPU comparison; does not establish animation or gameplay acceptance."
+}

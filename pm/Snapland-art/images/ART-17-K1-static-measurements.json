@@ -1,0 +1,106 @@
+{
+	"alpha_threshold": 64,
+	"base_sha": "63e2d06df43382be860cafafdf2d40eff308692e",
+	"display_opaque_height": 200.0,
+	"display_sole_baseline": 540.0,
+	"panels": [
+		{
+			"alpha64_bbox": [
+				42,
+				62,
+				270,
+				448
+			],
+			"comparison_only": true,
+			"comparison_scale": 0.518134715025907,
+			"display_opaque_height": 200.0,
+			"display_sole_baseline": 540.0,
+			"frame_index": 0,
+			"manifest_key": "ticket/idle/front",
+			"name": "核准站姿",
+			"normalized_size": [
+				320,
+				460
+			],
+			"opaque_height": 386,
+			"source": "res://assets/characters/ticket-front-actions-v2.png",
+			"source_anchors": {
+				"feet": [
+					52.0,
+					170.0
+				],
+				"head": [
+					50.0,
+					2.0
+				]
+			},
+			"source_region": [
+				64.0,
+				10.0,
+				102.0,
+				172.0
+			]
+		},
+		{
+			"alpha64_bbox": [
+				39,
+				57,
+				266,
+				447
+			],
+			"comparison_only": true,
+			"comparison_scale": 0.512820512820513,
+			"display_opaque_height": 200.0,
+			"display_sole_baseline": 540.0,
+			"frame_index": 1,
+			"manifest_key": "ticket/idle_gesture/front",
+			"name": "核准扶鏡框",
+			"normalized_size": [
+				320,
+				460
+			],
+			"opaque_height": 390,
+			"source": "res://assets/characters/ticket-front-actions-v2.png",
+			"source_anchors": {
+				"feet": [
+					55.0,
+					172.0
+				],
+				"head": [
+					51.0,
+					2.0
+				]
+			},
+			"source_region": [
+				227.0,
+				543.0,
+				103.0,
+				174.0
+			]
+		},
+		{
+			"alpha64_bbox": [
+				258,
+				311,
+				796,
+				1322
+			],
+			"comparison_only": true,
+			"comparison_scale": 0.19782393669634,
+			"display_opaque_height": 200.0,
+			"display_sole_baseline": 540.0,
+			"name": "K1 alpha-clean",
+			"opaque_height": 1011,
+			"source": "res://assets/characters/ticket-glasses-keypose-alpha-clean-review.png",
+			"source_size": [
+				1024,
+				1536
+			]
+		}
+	],
+	"scope": "static poses only; no animation or gameplay acceptance",
+	"viewport": [
+		1280,
+		720
+	]
+}

@@ -1,0 +1,66 @@
+{
+  "fixed_base": "909356b551f280810f860417b1629fa2b5398d45",
+  "branch": "feature/island-first-park",
+  "actual_capture_base": "63e2d06df43382be860cafafdf2d40eff308692e",
+  "status": "static transparency/full-body passed; pose identity/pixel style rejected; ART-17 in progress",
+  "files": {
+    "pm/Snapland-art/images/ART-17-K1-static-comparison-cream.png": {
+      "source": ".review/ART17-K1-static-candidate/.review/ticket-k1-static/comparison-cream.png",
+      "source_sha256": "b79d2540c6f7db4d19fef8322d28015eb47a71c654b891ffd299dc10e214de74",
+      "stored_sha256": "b79d2540c6f7db4d19fef8322d28015eb47a71c654b891ffd299dc10e214de74",
+      "redacted_workspace_path_only": false
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-comparison-ink.png": {
+      "source": ".review/ART17-K1-static-candidate/.review/ticket-k1-static/comparison-ink.png",
+      "source_sha256": "a9e95b6222680c30eba681d33e5c0e8161164190285b45a627ecafd4a3a9c469",
+      "stored_sha256": "a9e95b6222680c30eba681d33e5c0e8161164190285b45a627ecafd4a3a9c469",
+      "redacted_workspace_path_only": false
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-measurements.json": {
+      "source": ".review/ART17-K1-static-candidate/.review/ticket-k1-static/measurements.json",
+      "source_sha256": "f6853dfdb6907a9ad29bbfb3528da0d2444752c5ea58796e5357533f29631488",
+      "stored_sha256": "f6853dfdb6907a9ad29bbfb3528da0d2444752c5ea58796e5357533f29631488",
+      "redacted_workspace_path_only": false
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-native.log": {
+      "source": ".review/root-k1-static.log",
+      "source_sha256": "a7b9cd15f7fc417e2f9aa9a6dfd5ec6ea9876146aed15714df1b2f679cd18a2a",
+      "stored_sha256": "c83a07d48517f0d3fd63d491b7635c4245e9b1bdf09cb7d8760ae241a10d1d05",
+      "redacted_workspace_path_only": true
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-source-v2.png": {
+      "source": ".review/ticket-glasses-keypose-v2.png",
+      "source_sha256": "e016c29f0417651a6ceb8f2f9e9e3dfa2c9f0a0adc4c1ce24ad38606541a6be4",
+      "stored_sha256": "e016c29f0417651a6ceb8f2f9e9e3dfa2c9f0a0adc4c1ce24ad38606541a6be4",
+      "redacted_workspace_path_only": false
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-alpha-clean.png": {
+      "source": ".review/ticket-glasses-keypose-alpha-clean.png",
+      "source_sha256": "1365a0c11edd216df6aac302815b18f08ffd4d595f20307bf235a22b2e8956c4",
+      "stored_sha256": "1365a0c11edd216df6aac302815b18f08ffd4d595f20307bf235a22b2e8956c4",
+      "redacted_workspace_path_only": false
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-comfy-workflow.json": {
+      "source": ".review/comfy-alpha/workflow-api.json",
+      "source_sha256": "b4e3d9fe00c8529b905ff57f66f07f8640b5d4ad77de27dce710dc4cba6f34b5",
+      "stored_sha256": "b4e3d9fe00c8529b905ff57f66f07f8640b5d4ad77de27dce710dc4cba6f34b5",
+      "redacted_workspace_path_only": false
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-comfy-execution.json": {
+      "source": ".review/comfy-alpha/execution.json",
+      "source_sha256": "30a5706b8d37598c5a4f1a917b6e5d9beaff6015781e9fa9866cefef4d3bb188",
+      "stored_sha256": "30a5706b8d37598c5a4f1a917b6e5d9beaff6015781e9fa9866cefef4d3bb188",
+      "redacted_workspace_path_only": false
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-alpha-measurements.json": {
+      "source": ".review/ticket-glasses-keypose-alpha-clean-measurements.json",
+      "source_sha256": "c70e89d58aee5d22ea893dcb9efa1f150e20f30e700bc30e367413d787e99d30",
+      "stored_sha256": "c70e89d58aee5d22ea893dcb9efa1f150e20f30e700bc30e367413d787e99d30",
+      "redacted_workspace_path_only": false
+    },
+    "pm/Snapland-art/images/ART-17-K1-static-pixel-audit.json": {
+      "source": "read-only RGBA comparison of source-v2.png and alpha-clean.png",
+      "stored_sha256": "0712e8f620aa0c715bd4be3c24672896b997be2fd6a85a6e845f588b6b69a911"
+    }
+  }
+}

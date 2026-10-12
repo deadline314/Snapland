@@ -1,0 +1,86 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "ticket-K1.png"
+    }
+  },
+  "2": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "1",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "ThresholdMask",
+    "inputs": {
+      "mask": [
+        "2",
+        0
+      ],
+      "value": 0.12549019607843137
+    }
+  },
+  "4": {
+    "class_type": "GrowMask",
+    "inputs": {
+      "mask": [
+        "3",
+        0
+      ],
+      "expand": 2,
+      "tapered_corners": false
+    }
+  },
+  "5": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "2",
+        0
+      ],
+      "source": [
+        "4",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "operation": "multiply"
+    }
+  },
+  "6": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "5",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "JoinImageWithAlpha",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "alpha": [
+        "6",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "7",
+        0
+      ],
+      "filename_prefix": "ticket-K1-alpha-clean"
+    }
+  }
+}
