@@ -3,7 +3,7 @@
 - Base candidate: clean HEAD `0b337eaf54b169d62cb4650692d89569b2831237`; SG-27 fix checkpoint `7719b26`.
 - Native run: exit 0; zero `ERROR:`, `SCRIPT ERROR:`, or `FAIL:` lines; all 12 game PASS markers; 4,150 frames at 60 FPS (69.1667 seconds).
 - Captured 72 post-draw screenshots (12 games × 6 states), each 1280×720. Each file was copied byte-for-byte from the v3 candidate review evidence folder. Contact sheets show each whole screenshot scaled to fit, without crop. Root-encoded playback movie: `pm/Snapland-main/images/MAIN-10-lifecycle-v3-native.mp4` (1280×720, 60 FPS, 4,150 frames, 69.1667 seconds; SHA-256 `e9a0714851e53f263357508d6c7ecaac69600d4d55248ac667ff9dd55e3386e2`). Root played the movie through and inspected 21.74 seconds and the expected final gray shutdown frame.
-- The native fixture validates UI/session lifecycle; sessions are started, paused, and left, but the games are not all completed and result/score/collection awards are not claimed. Root still needs to view the gallery and encoded movie.
+- The native fixture validates UI/session lifecycle; sessions are started, paused, and left, but the games are not all completed and result/score/collection awards are not claimed. Root viewed all six galleries and three full-size samples, and played the encoded movie through; this accepts only the reviewed lifecycle presentation.
 
 ## Contact sheets
 
