@@ -191,4 +191,4 @@ HUD 專項檢查 69 項通過，Main 整合檢查通過。隔離存檔的原生�
 
 ### 提交
 
-分支：`feature/island-first-park`；固定文件核對基準：`63e2d06df43382be860cafafdf2d40eff308692e`。
+分支：`feature/island-first-park`；固定文件核對基準：`63e2d06df43382be860cafafdf2d40eff308692e`。 [本輪文件交付提交](https://github.com/deadline314/Snapland/commit/eec217a0cb93bd42b64960bec5c4b49e842c5e98)。
