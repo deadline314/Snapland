@@ -28,6 +28,7 @@ const PAPER := Color("#fff2d4")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const MinigameHUDScript = preload("res://game/ui/minigame_hud.gd")
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
+const FountainJumpViewScript = preload("res://game/minigames/fountain_jump_view.gd")
 const BalloonHarborScript = preload("res://game/minigames/balloon_harbor_view.gd")
 const PipePlanScript = preload("res://game/minigames/pipe_plan_view.gd")
 const PipeRoundScript = preload("res://game/minigames/pipe_round_model.gd")
@@ -99,6 +100,7 @@ var practice_mode := false
 var minigame_hud: Control
 var presentation: Control
 var presentation_mode := ""
+var _fountain_output: TextureRect
 var pipe_connected := false
 var pipe_finish_at := -1.0
 var pipe_model: RefCounted = PipeRoundScript.new()
@@ -244,11 +246,15 @@ func _sync_presentation() -> void:
 			presentation.hide()
 			presentation.queue_free()
 		presentation = null
+		_fountain_output = null
 		presentation_mode = mode
 		match mode:
 			"balloon_delivery":
 				# Headless rules tests do not allocate a renderer or GPU world.
 				if DisplayServer.get_name() != "headless": presentation = BalloonHarborScript.new()
+			"fountain_timing":
+				# The 3D court has its own SubViewport; keep headless rules tests renderer-free.
+				if DisplayServer.get_name() != "headless": presentation = FountainJumpViewScript.new()
 			"flower_pipes": presentation = PipePlanScript.new()
 			"crowd_traffic": presentation = CrowdCrossingScript.new()
 			"kite_rings": presentation = KiteFlightViewScript.new()
@@ -279,6 +285,14 @@ func _sync_presentation() -> void:
 			if mode == "balloon_delivery": presentation.initialize()
 			if mode == "melody_memory":
 				presentation.initialize()
+			if mode == "fountain_timing":
+				presentation.call("initialize")
+				var fountain_progress := get_node_or_null("/root/Progress")
+				var appearance: Dictionary = fountain_progress.appearance if fountain_progress != null and fountain_progress.get("appearance") is Dictionary else {}
+				var equipped: Dictionary = fountain_progress.equipped if fountain_progress != null and fountain_progress.get("equipped") is Dictionary else {}
+				presentation.call("configure_avatar", appearance, equipped)
+				var fountain_texture := presentation.call("get_texture") as Texture2D
+				_fountain_output = _attach_fountain_output(presentation, fountain_texture)
 			if mode == "bubble_photo":
 				presentation.initialize()
 				var progress := get_node_or_null("/root/Progress")
@@ -291,6 +305,8 @@ func _sync_presentation() -> void:
 	match mode:
 		"balloon_delivery":
 			presentation.present(p, velocity, balloon_wind_current, balloon_wind_forecast, balloon_delivery_index, balloon_dock_hold, balloon_braking, phase, reduced_motion, time_phase, balloon_delivery_index, _balloon_hazard_at(phase), 65.0)
+		"fountain_timing":
+			presentation.call("update_frame", {"phase": phase, "fountain_attempts": fountain_attempts, "fountain_jump_started": fountain_jump_started, "beat_window": beat_window}, time_phase, reduced_motion)
 		"flower_pipes":
 			presentation.configure(reduced_motion, time_phase)
 			presentation.set_animation_active(not paused)
@@ -309,6 +325,21 @@ func _layout_presentation() -> void:
 	presentation.size = DESIGN_SIZE
 	presentation.scale = Vector2.ONE * factor
 	presentation.position = (size - DESIGN_SIZE * factor) * 0.5
+
+func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
+	if texture == null:
+		push_error("Fountain timing SubViewport returned no texture")
+		return null
+	var output := TextureRect.new()
+	output.name = "FountainRenderOutput"
+	output.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	output.texture = texture
+	output.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	output.stretch_mode = TextureRect.STRETCH_SCALE
+	output.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	output.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	view.add_child(output)
+	return output
 
 func set_paused(value: bool) -> void:
 	if ended and value:
@@ -1743,7 +1774,7 @@ func _definition() -> Dictionary:
 func _draw_game() -> void:
 	match mode:
 		"balloon_delivery": _draw_balloon()
-		"fountain_timing": _draw_fountain()
+		"fountain_timing": pass # The child SubViewport owns this mode's full 3D stage.
 		"crowd_traffic": _draw_crowd()
 		"hat_catching": _draw_hats()
 		"ribbon_rhythm": _draw_ribbon()

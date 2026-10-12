@@ -13,6 +13,7 @@ func _run() -> void:
 		quit(1)
 		return
 	_test_timing_bands()
+	_test_session_view_output_and_headless_guard()
 	_test_three_jump_gate_and_equivalent_input()
 	_test_misses_spam_and_slow_frames()
 	_test_pause_assist_and_reduced_motion()
@@ -36,6 +37,19 @@ func _test_timing_bands() -> void:
 		_expect(game.fountain_grades == [sample[1]] and game.score == int(sample[2]), "timing band at %s sec" % sample[0])
 		game.queue_free()
 	_expect(true, "timing bands complete")
+
+func _test_session_view_output_and_headless_guard() -> void:
+	var session := _new(false)
+	if DisplayServer.get_name() == "headless":
+		_expect(session.presentation_mode == "fountain_timing" and session.presentation == null and session._fountain_output == null, "headless fountain session records its mode without allocating a SubViewport or output TextureRect")
+	var image := Image.create(2, 2, false, Image.FORMAT_RGBA8)
+	image.fill(Color("#75c5c0"))
+	var texture := ImageTexture.create_from_image(image)
+	var output: TextureRect = session.call("_attach_fountain_output", session, texture) as TextureRect
+	_expect(output != null and output.get_parent() == session and output.texture == texture, "session's production output helper attaches the supplied SubViewport texture to a scaled TextureRect")
+	_expect(output != null and output.expand_mode == TextureRect.EXPAND_IGNORE_SIZE and output.stretch_mode == TextureRect.STRETCH_SCALE and output.mouse_filter == Control.MOUSE_FILTER_IGNORE, "render output fills the stage without intercepting timing input")
+	session.queue_free()
+	cases += 1
 
 func _test_three_jump_gate_and_equivalent_input() -> void:
 	for click_input in [false, true]:

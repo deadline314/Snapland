@@ -1,0 +1,51 @@
+# SG-18 fountain court view
+
+This is a standalone visual module for the existing `fountain_timing` game. It does not own scoring, input, deadline resolution, retries, or collection gates. `game/minigames/session.gd` remains authoritative. The module creates a 1280×720 orthographic `SubViewport` composition around a harbor-square fountain and consumes immutable frame snapshots from its host.
+
+## Existing runtime contract read
+
+The current fountain implementation is inside `game/minigames/session.gd`, not a separate fountain model. Its central beat timestamps are 1.00s, 2.35s, and 3.70s (`FOUNTAIN_FIRST_BEAT` + `index * FOUNTAIN_PERIOD`, with a 1.35s period). In `_draw_fountain`, the central jet height is `42 + 132 * (0.5 + 0.5*cos(PI*offset/(period*0.5)))` design pixels and the reduced-motion height is fixed at 108 pixels. The avatar's authored jump is eight frames at 12 FPS; the session holds the feet at the floor, selects the frame from elapsed jump progress, and raises the entire canvas by `48*sin(PI*progress)` pixels. `AvatarRenderer` exposes cached full-canvas textures, action availability, and manifest-derived frame counts. The view preserves those same beat, height, reduced-motion, frame-selection, lift, and 280×360 canvas/346px feet-baseline rules. Only the central jet is tied to the upcoming jump; the other four columns retain the session's independent ambient sine rhythm.
+
+## Composition and materials
+
+The camera holds a close three-quarter view of a small octagonal tiled court, a layered glazed basin, five nozzle collars, and a compact stepped stone-and-brass fountain crown. Its shortened piers and canopy keep the actual roof geometry clear of the shared HUD strip. The target frame is 1280×720, with play content reserved to x=142…1138 and y=130…680. The headless view test projects all eight corners of every live mesh AABB through the active camera and unions those pixels with all four corners of the avatar's complete authored billboard; it checks the result at each water peak and during the jump arc. The entire sprite canvas remains intact, so feet are placed by the authored baseline rather than by cropping the art.
+
+All stage meshes, sculpted shell and wave inlays, water ribbons, crest rings, materials, lights, and the `Sprite3D` are created once in `initialize()`. `update_frame()` reads scalar values from the caller's snapshot without copying or retaining its dictionary. It changes only the five existing jet transforms/material colors, the selected authored avatar texture/height, and existing sky/light resources. Water is a tapered set of translucent curved strips plus two fine threads per nozzle; a narrow flattened crest ring replaces the solid cone-and-sphere silhouette. The middle column reaches its maximum on each model beat. Pre-cue colors use the existing ±0.44s lead, while `beat_window` only brightens the crest when the model reports it. The avatar jumps only for a supplied `fountain_jump_started`; no pose is synthesized.
+
+The visitor stands on the forward landing in front of the basin's near lip, so the full head and feet are not hidden by the rim. Three shallow brass-edged treads meet the cool slate court; carved pier panels, stepped capitals, shell reliefs and wave cuts provide the limited close-up detail. Four time-of-day palettes alter the actual `DirectionalLight3D`, broad water bounce, a close lantern-colored face fill, local basin glow, stage lantern, ambient color, water/lamp emission and sky. Night keeps its cool palette while the lantern bounce lights the visitor's face and local lights reveal the timing water. The key light casts geometric court and fountain shadows. The alpha-cut billboard is configured to cast its complete authored silhouette as a real shadow; root's GPU review must still verify shadow stability and appearance.
+
+## API
+
+- `initialize()` builds the isolated world once; safe to call repeatedly.
+- `configure_avatar(appearance, equipped)` resolves the selected idle and authored front jump frames through `AvatarRenderer`. If the renderer cannot provide an idle texture, it emits one warning and hides the sprite while preserving the functioning stage.
+- `update_frame(snapshot, time_phase = "noon", reduced_motion = false)` accepts `phase`, `fountain_attempts` (or `attempt`), `fountain_jump_started` (or `jump_started`), and optional `beat_window`. It treats missing/non-finite values as safe defaults and does not mutate the dictionary.
+- `get_texture()` returns the viewport texture for composition by a caller; `content_bounds()` returns the reserved design rect `(142, 145, 996, 520)`, keeping rendered content below the existing top HUD clearance.
+- `camera()`, `sub_viewport()`, `world_root()`, `avatar_sprite()`, and `avatar_available()` expose read-only integration/test handles. `timed_jet_height_pixels(phase, attempt, reduced_motion)` gives the same middle-column pixel height as the source runtime formula.
+
+Reduced motion uses the existing stable 108px fountain cue and holds the jump at the first authored jump pose without vertical travel. It retains beat timing, central-jet color, real scene geometry, and time-of-day lighting.
+
+## Research notes
+
+The local first-party survey records these source descriptions and the design choices drawn from them. These are presentation references, not claims of hands-on play or source-code analysis:
+
+1. Nintendo's [WarioWare: Get It Together!](https://www.nintendo.com/us/store/products/warioware-get-it-together-switch/) describes short comic microgames and distinct character abilities. I used that distinction to stage SG-18 around its fountain/jump action and a whole authored character pose, rather than inheriting the harbor delivery scene's framing.
+2. Nintendo's [Mario Party Superstars minigame list](https://mariopartysuperstars.nintendo.com/minigames/1-vs-3/) lists different spatial actions. The survey's takeaway is that roles should read spatially; here the separate basin, timed middle nozzle, landing sprite, and crest are visible together.
+3. Playdate's [b360](https://play.date/games/b360/) presents brick breaking with a rotation twist and named controls. I applied the survey's mechanic-specific motion cue principle: the jet's actual height, not decorative particles, carries the beat.
+4. Annapurna's [Donut County](https://annapurnainteractive.com/games/donut-county) describes a physics puzzle where the field's rule changes the spectacle. Here the water-column rise and fall is generated by the same timestamp used by the timing game.
+5. Drool's [Thumper](https://thumpergame.com/) connects rhythm action to an unusually intimate visual frame. I took the survey's rhythm/camera intimacy point for the close, fixed fountain portrait, without adopting its intensity or palette.
+6. Enhance's [Lumines Arise](https://lumines.game/) and [modes/accessibility description](https://lumines.game/about-the-game/) connect a matching rule with a sweeping beat and describe reduced effects/motion options. The view therefore keeps a static, readable 108px cue under reduced motion while retaining the underlying beat state.
+7. House House's [Untitled Goose Game site](https://untitled.goose.game/) describes a clear protagonist point of view and mischievous objects in a village space. I used the survey's one-silhouette/few-props principle for the visitor sprite, water clock, and basin; the view does not add a crowd or animated set dressing.
+
+The implementation details above were checked against Godot's primary documentation: [SpriteBase3D](https://docs.godotengine.org/en/stable/classes/class_spritebase3d.html) documents billboarding, centered texture placement, pixel size, and alpha cut; [3D lights and shadows](https://docs.godotengine.org/en/latest/tutorials/3d/lights_and_shadows.html) explains directional rays, normal bias, and shadow performance; [SubViewport](https://docs.godotengine.org/en/4.7/classes/class_subviewport.html) documents the independent render-target and update-mode behavior. These drove the 2× MSAA, single shadow-casting key, non-shadowing bounce fill, opaque-cut sprite, and fixed-size isolated viewport choices.
+
+## Verification scope and limitations
+
+`game/tests/test_fountain_jump_view.gd` checks the actual viewport/light/avatar nodes, projected whole-body bounds and feet baseline relative to the near basin rim, full center-stream projection at all three peaks, real jet transform at the model peaks and pre-cue, translucent curved mesh topology, jump pose/lift, reduced motion, night local-light levels, four time-of-day resource changes, safe invalid input, and stable node/material/mesh identities. Run with Godot 4.7.2 in headless mode and an isolated `SNAPLAND_SAVE_PATH`. This is local static/runtime-module evidence only. It is not game integration, play acceptance, GPU lighting/shadow approval, or final visual review; the root owner retains native capture and art review.
+
+原生 3D fixture 以 `模擬毫秒 / max(Engine.time_scale, 0.05)` 換算所有牆鐘期限，含繼承的站牌／HUD 等待，單次上限一小時，整段另設 90 遊戲秒的 watchdog。四分之一速度時等待 phase 的 7 秒額度為 28 牆鐘秒、結果 9 秒為 36 牆鐘秒、整段 watchdog 為 360 牆鐘秒；只延長 QA 等待，實際跳躍判定與分數驗收不變。
+
+## Root native checkpoint, 2026-10-12
+
+Root reviewed actual Main station-entry captures at 1× and 0.25×, including the failed 500-point route, assisted/reduced-motion night route with one 100-point hit, real pause/resume and confirmed exact-zero retry, and the formal three-Space 900-point result. The current avatar and equipment were held constant across noon and night. Root saw whole head and boots in both lighting phases and the authored airborne pose in the 1× capture at 11.4 seconds; the 0.25× playback was inspected during the formal second jump at 47.09 seconds as well as the result. Native logs contain the expected PASS and no ERROR; movies have 894 and 3359 frames at 60 fps (14.9 and 55.9833 seconds). Independent affected checks passed: timing 43, view 62, shared session 53.
+
+This accepts the new spatial presentation and exercised input/result routes as a checkpoint. It does not certify final environment art, naturalness of a complete character animation set, first-time tutorial navigation, mouse and wardrobe combinations in this new view, or human listening. Those requirements remain open.
