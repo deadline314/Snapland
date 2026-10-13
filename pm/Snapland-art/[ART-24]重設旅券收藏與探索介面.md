@@ -60,4 +60,4 @@
 
 分支：`feature/island-experience`；[本票程式與證據提交](https://github.com/deadline314/Snapland/commit/5c23f3e6d679a3da2dbadd1597ce923a64cdbc2b)。本票列出的本機條件已通過；執行專案的共用feature分支仍含ART-17未完成動畫驗收，故整枝尚未推main，票況維持進行中，待與執行專案一起整合。
 
-[空收藏退件圖](images/ART-24-rejected-album-pager-overlap-800x450.png) · [39張教學圖來源與雜湊](images/ART-24-tutorial-native-review.json)。示例結算為腳本設定，教學圖片不構成人類遊玩成功證據。
+[空收藏退件圖](images/ART-24-rejected-album-pager-overlap-800x450.png) · [文字被凸起邊框遮住的退件圖](images/ART-24-rejected-caption-bevel-1920x1080.png) · [39張教學圖來源與雜湊](images/ART-24-tutorial-native-review.json)。兩項退件均已用實際內距與可用空間修正，通過圖另見上方。本輪既有照片測試只補上1280×720視窗初始化，所有原有斷言保留。示例結算為腳本設定，教學圖片不構成人類遊玩成功證據。
