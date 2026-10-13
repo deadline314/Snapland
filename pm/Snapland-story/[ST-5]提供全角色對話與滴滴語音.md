@@ -82,4 +82,4 @@
 
 ![修正後的上島地標引導](images/ST-5-arrival-landmark-corrected.png)
 
-分支：`feature/island-experience`；本輪文字基準：`d3d98a4`。遠端提交連結於本次提交後補入。
+分支：`feature/island-experience`；本輪文字基準：`d3d98a4`。[文字與原生畫面提交](https://github.com/deadline314/Snapland/commit/5eb08b6)。
