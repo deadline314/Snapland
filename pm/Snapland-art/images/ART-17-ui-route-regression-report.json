@@ -1,0 +1,2248 @@
+{
+	"captures": [
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Natural source-Sprite rest; three seconds of controller runtime",
+			"elapsed_ms": 9180,
+			"engine_frame": 11,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-idle-rest.png",
+			"phase": "idle-rest",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (539.7966, 219.6306), S: (264.2736, 307.1999)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (539.7966, 219.6306), S: (264.2736, 307.1999)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "greet",
+			"controller_direction": "front",
+			"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+			"elapsed_ms": 12475,
+			"engine_frame": 198,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-greet.png",
+			"phase": "greet",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (544.3727, 216.0404), S: (257.4094, 310.3836)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (544.3727, 216.0404), S: (257.4094, 310.3836)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "interact",
+			"controller_direction": "front",
+			"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+			"elapsed_ms": 13931,
+			"engine_frame": 275,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-interact.png",
+			"phase": "interact",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (542.0847, 214.4489), S: (259.6974, 311.9752)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (542.0847, 214.4489), S: (259.6974, 311.9752)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "idle_gesture",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: idle_gesture",
+			"elapsed_ms": 15780,
+			"engine_frame": 376,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-personality-idle_gesture.png",
+			"phase": "personality-idle_gesture",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (542.0848, 216.0405), S: (257.4092, 310.3835)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (542.0848, 216.0405), S: (257.4092, 310.3835)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "emotion_happy",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: emotion_happy",
+			"elapsed_ms": 23233,
+			"engine_frame": 813,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-personality-emotion_happy.png",
+			"phase": "personality-emotion_happy",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (542.0847, 214.4489), S: (259.6974, 311.9752)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (542.0847, 214.4489), S: (259.6974, 311.9752)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": false,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Actual Main NPC route; measured rig direction=right",
+			"elapsed_ms": 30394,
+			"engine_frame": 1233,
+			"gait_rig_direction": "right",
+			"gait_rig_visible": true,
+			"gait_source_record": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 261.0,
+							"hip_to_ankle_px": 35.0,
+							"leg_length_scale": 0.518518518518518,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.233333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							314.0,
+							150.0,
+							349.0,
+							784.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 262.0,
+							"hip_to_ankle_px": 34.0,
+							"leg_length_scale": 0.503703703703704,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.226666666666667
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							899.0,
+							146.0,
+							324.0,
+							791.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.783815, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-native-route-gait-right.png",
+			"phase": "native-route-gait-right",
+			"rig_visible_part_bounds_px": [
+				{
+					"bounds_px": "[P: (542.8857, 208.4854), S: (268.8001, 345.5997)]",
+					"name": "@Sprite3D@1535"
+				},
+				{
+					"bounds_px": "[P: (654.3466, 457.296), S: (7.478394, 33.64246)]",
+					"name": "@MeshInstance3D@1539"
+				},
+				{
+					"bounds_px": "[P: (548.2594, 247.3676), S: (268.8, 294.5116)]",
+					"name": "@Sprite3D@1540"
+				},
+				{
+					"bounds_px": "[P: (695.6266, 457.2959), S: (7.478394, 33.64258)]",
+					"name": "@MeshInstance3D@1544"
+				},
+				{
+					"bounds_px": "[P: (593.0305, 247.4824), S: (268.7999, 294.5117)]",
+					"name": "@Sprite3D@1545"
+				}
+			],
+			"role": "ticket",
+			"root_world": "(-3.783815, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": false,
+			"visible_full_body_bounds_px": "[P: (542.8857, 208.4854), S: (318.9448, 345.5997)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Same NPC after actual route deceleration and rig cleanup",
+			"elapsed_ms": 32667,
+			"engine_frame": 1358,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-native-route-settle.png",
+			"phase": "native-route-settle",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (542.0847, 219.6304), S: (257.4094, 307.2001)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (542.0847, 219.6304), S: (257.4094, 307.2001)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Natural source-Sprite rest; three seconds of controller runtime",
+			"elapsed_ms": 32943,
+			"engine_frame": 1359,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-idle-rest.png",
+			"phase": "idle-rest",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (531.1361, 277.0609), S: (322.9201, 249.6002)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (531.1361, 277.0609), S: (322.9201, 249.6002)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "greet",
+			"controller_direction": "front",
+			"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+			"elapsed_ms": 36186,
+			"engine_frame": 1546,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-greet.png",
+			"phase": "greet",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (541.3876, 271.7125), S: (317.7943, 254.9486)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (541.3876, 271.7125), S: (317.7943, 254.9486)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "interact",
+			"controller_direction": "front",
+			"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+			"elapsed_ms": 38680,
+			"engine_frame": 1689,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-interact.png",
+			"phase": "interact",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (533.699, 267.4994), S: (329.3272, 259.4058)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (533.699, 267.4994), S: (329.3272, 259.4058)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "idle_gesture",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: idle_gesture",
+			"elapsed_ms": 41115,
+			"engine_frame": 1828,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-personality-idle_gesture.png",
+			"phase": "personality-idle_gesture",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (536.2619, 277.061), S: (325.4829, 249.5999)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (536.2619, 277.061), S: (325.4829, 249.5999)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: dance",
+			"elapsed_ms": 56661,
+			"engine_frame": 2754,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-personality-dance.png",
+			"phase": "personality-dance",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (531.1361, 277.061), S: (320.3572, 249.6)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (531.1361, 277.061), S: (320.3572, 249.6)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": false,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Actual Main NPC route; measured rig direction=right",
+			"elapsed_ms": 63421,
+			"engine_frame": 3153,
+			"gait_rig_direction": "right",
+			"gait_rig_visible": true,
+			"gait_source_record": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 7,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 321.0,
+							"hip_center_y_px": 277.0,
+							"hip_to_ankle_px": 44.0,
+							"leg_length_scale": 0.651851851851852,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.293333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							254.0,
+							140.0,
+							504.0,
+							617.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 320.0,
+							"hip_center_y_px": 279.0,
+							"hip_to_ankle_px": 41.0,
+							"leg_length_scale": 0.607407407407407,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.273333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							1009.0,
+							134.0,
+							511.0,
+							624.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.383204, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-native-route-gait-right.png",
+			"phase": "native-route-gait-right",
+			"rig_visible_part_bounds_px": [
+				{
+					"bounds_px": "[P: (542.9729, 205.8668), S: (268.8001, 345.6001)]",
+					"name": "@Sprite3D@1547"
+				},
+				{
+					"bounds_px": "[P: (679.4868, 470.3695), S: (9.212524, 41.44345)]",
+					"name": "@MeshInstance3D@1551"
+				},
+				{
+					"bounds_px": "[P: (562.3684, 247.5203), S: (268.7999, 294.5117)]",
+					"name": "@Sprite3D@1552"
+				},
+				{
+					"bounds_px": "[P: (705.4067, 470.3695), S: (9.212524, 41.44357)]",
+					"name": "@MeshInstance3D@1556"
+				},
+				{
+					"bounds_px": "[P: (591.3237, 247.6599), S: (268.7999, 294.5115)]",
+					"name": "@Sprite3D@1557"
+				}
+			],
+			"role": "imp",
+			"root_world": "(-5.383204, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": false,
+			"visible_full_body_bounds_px": "[P: (542.9729, 205.8668), S: (317.1508, 345.6001)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Same NPC after actual route deceleration and rig cleanup",
+			"elapsed_ms": 65658,
+			"engine_frame": 3280,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-native-route-settle.png",
+			"phase": "native-route-settle",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (531.1361, 277.0609), S: (322.9201, 249.6002)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (531.1361, 277.0609), S: (322.9201, 249.6002)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "idle",
+			"controller_direction": "front",
+			"description": "Natural source-Sprite rest; three seconds of controller runtime",
+			"elapsed_ms": 66671,
+			"engine_frame": 3322,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(2.8, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-idle-rest.png",
+			"phase": "idle-rest",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(2.8, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (506.6773, 193.6976), S: (252.3429, 307.2)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (506.6773, 193.6976), S: (252.3429, 307.2)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "greet",
+			"controller_direction": "front",
+			"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+			"elapsed_ms": 79735,
+			"engine_frame": 4091,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(4.0, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-greet.png",
+			"phase": "greet",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(4.0, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (659.7838, 206.234), S: (267.3633, 307.2)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (659.7838, 206.234), S: (267.3633, 307.2)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "interact",
+			"controller_direction": "front",
+			"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+			"elapsed_ms": 84184,
+			"engine_frame": 4343,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(2.8, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-interact.png",
+			"phase": "interact",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(2.8, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (500.6691, 187.4283), S: (255.347, 313.4693)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (500.6691, 187.4283), S: (255.347, 313.4693)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "special",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: special",
+			"elapsed_ms": 85902,
+			"engine_frame": 4431,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(2.8, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-personality-special.png",
+			"phase": "personality-special",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(2.8, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (500.6691, 187.4283), S: (258.3511, 313.4693)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (500.6691, 187.4283), S: (258.3511, 313.4693)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "emotion_curious",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: emotion_curious",
+			"elapsed_ms": 88740,
+			"engine_frame": 4585,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(4.0, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-personality-emotion_curious.png",
+			"phase": "personality-emotion_curious",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(4.0, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (674.8043, 206.234), S: (255.3469, 307.2001)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (674.8043, 206.234), S: (255.3469, 307.2001)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": false,
+			"controller_action": "walk",
+			"controller_direction": "left",
+			"description": "Actual Main NPC route; measured rig direction=left",
+			"elapsed_ms": 90868,
+			"engine_frame": 4698,
+			"gait_rig_direction": "left",
+			"gait_rig_visible": true,
+			"gait_source_record": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							236.0,
+							108.0,
+							391.0,
+							823.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							918.0,
+							116.0,
+							373.0,
+							815.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"interaction_point_delta_m": 0.00999999046325684,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(3.986098, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-native-route-gait-left.png",
+			"phase": "native-route-gait-left",
+			"rig_visible_part_bounds_px": [
+				{
+					"bounds_px": "[P: (663.167, 200.6282), S: (268.8, 345.6003)]",
+					"name": "@Sprite3D@1559"
+				},
+				{
+					"bounds_px": "[P: (768.9531, 413.3831), S: (16.90778, 76.0611)]",
+					"name": "@MeshInstance3D@1563"
+				},
+				{
+					"bounds_px": "[P: (614.2394, 236.7098), S: (268.8, 294.5119)]",
+					"name": "@Sprite3D@1564"
+				},
+				{
+					"bounds_px": "[P: (807.3531, 413.3831), S: (16.90784, 76.06122)]",
+					"name": "@MeshInstance3D@1568"
+				},
+				{
+					"bounds_px": "[P: (650.4276, 236.5078), S: (268.8, 294.5118)]",
+					"name": "@Sprite3D@1569"
+				}
+			],
+			"role": "announcer",
+			"root_world": "(3.976098, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": false,
+			"visible_full_body_bounds_px": "[P: (614.2394, 200.6282), S: (317.7277, 345.6003)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "idle",
+			"controller_direction": "front",
+			"description": "Same NPC after actual route deceleration and rig cleanup",
+			"elapsed_ms": 93243,
+			"engine_frame": 4825,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(2.8, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-native-route-settle.png",
+			"phase": "native-route-settle",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(2.8, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (506.6773, 193.6976), S: (252.3429, 307.2)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (506.6773, 193.6976), S: (252.3429, 307.2)]"
+		}
+	],
+	"controller_statistics": {
+		"activity_paused": false,
+		"by_role": {
+			"announcer": 1,
+			"imp": 1,
+			"ticket": 1
+		},
+		"dialogue_hold": false,
+		"playing": true,
+		"reduced_motion": false,
+		"registration_count": 3
+	},
+	"failures": [],
+	"fixture": "Main-backed island NPC motion review",
+	"godot_version": {
+		"build": "official",
+		"hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+		"hex": 263938,
+		"major": 4,
+		"minor": 7,
+		"patch": 2,
+		"status": "stable",
+		"string": "4.7.2-stable (official)",
+		"timestamp": 0
+	},
+	"human_played": false,
+	"human_visual_acceptance": "pending parent review",
+	"limitations": "Scripted camera/player positioning only; NPC roots and controller routes were not repositioned. PNGs require human visual review; no gameplay-success claim.",
+	"npc_activity_opted_in_by_main": true,
+	"player_and_child_hero_rig_hidden_for_capture": true,
+	"proof_prefix": "pixel-ui-turn-regression",
+	"result": "PASS",
+	"roles": {
+		"announcer": {
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"authored_action_coverage": {},
+			"captures": [
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "idle",
+					"controller_direction": "front",
+					"description": "Natural source-Sprite rest; three seconds of controller runtime",
+					"elapsed_ms": 66671,
+					"engine_frame": 3322,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(2.8, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-idle-rest.png",
+					"phase": "idle-rest",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(2.8, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (506.6773, 193.6976), S: (252.3429, 307.2)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (506.6773, 193.6976), S: (252.3429, 307.2)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "greet",
+					"controller_direction": "front",
+					"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+					"elapsed_ms": 79735,
+					"engine_frame": 4091,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(4.0, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-greet.png",
+					"phase": "greet",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(4.0, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (659.7838, 206.234), S: (267.3633, 307.2)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (659.7838, 206.234), S: (267.3633, 307.2)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "interact",
+					"controller_direction": "front",
+					"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+					"elapsed_ms": 84184,
+					"engine_frame": 4343,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(2.8, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-interact.png",
+					"phase": "interact",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(2.8, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (500.6691, 187.4283), S: (255.347, 313.4693)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (500.6691, 187.4283), S: (255.347, 313.4693)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "special",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: special",
+					"elapsed_ms": 85902,
+					"engine_frame": 4431,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(2.8, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-personality-special.png",
+					"phase": "personality-special",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(2.8, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (500.6691, 187.4283), S: (258.3511, 313.4693)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (500.6691, 187.4283), S: (258.3511, 313.4693)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "emotion_curious",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: emotion_curious",
+					"elapsed_ms": 88740,
+					"engine_frame": 4585,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(4.0, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-personality-emotion_curious.png",
+					"phase": "personality-emotion_curious",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(4.0, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (674.8043, 206.234), S: (255.3469, 307.2001)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (674.8043, 206.234), S: (255.3469, 307.2001)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": false,
+					"controller_action": "walk",
+					"controller_direction": "left",
+					"description": "Actual Main NPC route; measured rig direction=left",
+					"elapsed_ms": 90868,
+					"engine_frame": 4698,
+					"gait_rig_direction": "left",
+					"gait_rig_visible": true,
+					"gait_source_record": {
+						"metadata_path": "res://assets/characters/npc-motion-regions.json",
+						"old_idle_front_frame_count": 8,
+						"required_directions": [
+							"left",
+							"right"
+						],
+						"rig_source_records": {
+							"left": {
+								"leg_measurement": {
+									"ankle_y_px": 306.0,
+									"hip_center_y_px": 228.0,
+									"hip_to_ankle_px": 78.0,
+									"leg_length_scale": 1.15555555555556,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.52
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+								"source_rect": [
+									236.0,
+									108.0,
+									391.0,
+									823.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							},
+							"right": {
+								"leg_measurement": {
+									"ankle_y_px": 306.0,
+									"hip_center_y_px": 228.0,
+									"hip_to_ankle_px": 78.0,
+									"leg_length_scale": 1.15555555555556,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.52
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+								"source_rect": [
+									918.0,
+									116.0,
+									373.0,
+									815.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							}
+						},
+						"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+					},
+					"interaction_point_delta_m": 0.00999999046325684,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(3.986098, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-native-route-gait-left.png",
+					"phase": "native-route-gait-left",
+					"rig_visible_part_bounds_px": [
+						{
+							"bounds_px": "[P: (663.167, 200.6282), S: (268.8, 345.6003)]",
+							"name": "@Sprite3D@1559"
+						},
+						{
+							"bounds_px": "[P: (768.9531, 413.3831), S: (16.90778, 76.0611)]",
+							"name": "@MeshInstance3D@1563"
+						},
+						{
+							"bounds_px": "[P: (614.2394, 236.7098), S: (268.8, 294.5119)]",
+							"name": "@Sprite3D@1564"
+						},
+						{
+							"bounds_px": "[P: (807.3531, 413.3831), S: (16.90784, 76.06122)]",
+							"name": "@MeshInstance3D@1568"
+						},
+						{
+							"bounds_px": "[P: (650.4276, 236.5078), S: (268.8, 294.5118)]",
+							"name": "@Sprite3D@1569"
+						}
+					],
+					"role": "announcer",
+					"root_world": "(3.976098, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": false,
+					"visible_full_body_bounds_px": "[P: (614.2394, 200.6282), S: (317.7277, 345.6003)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "idle",
+					"controller_direction": "front",
+					"description": "Same NPC after actual route deceleration and rig cleanup",
+					"elapsed_ms": 93243,
+					"engine_frame": 4825,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(2.8, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-announcer-native-route-settle.png",
+					"phase": "native-route-settle",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(2.8, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (506.6773, 193.6976), S: (252.3429, 307.2)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (506.6773, 193.6976), S: (252.3429, 307.2)]"
+				}
+			],
+			"elapsed_wall_ms": 27585,
+			"end_point_world": "(2.8, 0.0, -4.0)",
+			"end_root_world": "(2.8, 0.0, -4.0)",
+			"interaction_point_id": "quest-002",
+			"legacy_fallback_used": false,
+			"measured_gait_source": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							236.0,
+							108.0,
+							391.0,
+							823.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							918.0,
+							116.0,
+							373.0,
+							815.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"motion_views": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							236.0,
+							108.0,
+							391.0,
+							823.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							918.0,
+							116.0,
+							373.0,
+							815.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"normal_rest_duration_seconds_required": 3.0,
+			"npc_role_motion_enabled": true,
+			"personality_actions": {
+				"emotion_curious": {
+					"action": "emotion_curious",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 8
+				},
+				"special": {
+					"action": "special",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 8
+				}
+			},
+			"point_delta": 0.0,
+			"rest_elapsed_wall_ms": 5650,
+			"rest_max_abs_route_axis_offset_m": 0.599999904632568,
+			"rest_observed_seconds": 3.01699999999999,
+			"rest_root_delta": "(1.2, 0.0, 0.0)",
+			"rest_route_bounds_failure": "",
+			"rest_route_origin_world": "(3.4, 0.18, -4.0)",
+			"route_capture_frame_displacement_m": 0.00999999046325684,
+			"route_direction": "left",
+			"route_max_root_displacement_m": 0.0139021873474121,
+			"route_sample_frames": 113,
+			"start_point_world": "(3.133212, 0.0, -4.0)",
+			"start_root_world": "(3.123212, 0.0, -4.0)"
+		},
+		"imp": {
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"authored_action_coverage": {},
+			"captures": [
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Natural source-Sprite rest; three seconds of controller runtime",
+					"elapsed_ms": 32943,
+					"engine_frame": 1359,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-idle-rest.png",
+					"phase": "idle-rest",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (531.1361, 277.0609), S: (322.9201, 249.6002)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (531.1361, 277.0609), S: (322.9201, 249.6002)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "greet",
+					"controller_direction": "front",
+					"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+					"elapsed_ms": 36186,
+					"engine_frame": 1546,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-greet.png",
+					"phase": "greet",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (541.3876, 271.7125), S: (317.7943, 254.9486)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (541.3876, 271.7125), S: (317.7943, 254.9486)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "interact",
+					"controller_direction": "front",
+					"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+					"elapsed_ms": 38680,
+					"engine_frame": 1689,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-interact.png",
+					"phase": "interact",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (533.699, 267.4994), S: (329.3272, 259.4058)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (533.699, 267.4994), S: (329.3272, 259.4058)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "idle_gesture",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: idle_gesture",
+					"elapsed_ms": 41115,
+					"engine_frame": 1828,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-personality-idle_gesture.png",
+					"phase": "personality-idle_gesture",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (536.2619, 277.061), S: (325.4829, 249.5999)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (536.2619, 277.061), S: (325.4829, 249.5999)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: dance",
+					"elapsed_ms": 56661,
+					"engine_frame": 2754,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-personality-dance.png",
+					"phase": "personality-dance",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (531.1361, 277.061), S: (320.3572, 249.6)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (531.1361, 277.061), S: (320.3572, 249.6)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": false,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Actual Main NPC route; measured rig direction=right",
+					"elapsed_ms": 63421,
+					"engine_frame": 3153,
+					"gait_rig_direction": "right",
+					"gait_rig_visible": true,
+					"gait_source_record": {
+						"metadata_path": "res://assets/characters/npc-motion-regions.json",
+						"old_idle_front_frame_count": 7,
+						"required_directions": [
+							"left",
+							"right"
+						],
+						"rig_source_records": {
+							"left": {
+								"leg_measurement": {
+									"ankle_y_px": 321.0,
+									"hip_center_y_px": 277.0,
+									"hip_to_ankle_px": 44.0,
+									"leg_length_scale": 0.651851851851852,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.293333333333333
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+								"source_rect": [
+									254.0,
+									140.0,
+									504.0,
+									617.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							},
+							"right": {
+								"leg_measurement": {
+									"ankle_y_px": 320.0,
+									"hip_center_y_px": 279.0,
+									"hip_to_ankle_px": 41.0,
+									"leg_length_scale": 0.607407407407407,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.273333333333333
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+								"source_rect": [
+									1009.0,
+									134.0,
+									511.0,
+									624.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							}
+						},
+						"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+					},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.383204, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-native-route-gait-right.png",
+					"phase": "native-route-gait-right",
+					"rig_visible_part_bounds_px": [
+						{
+							"bounds_px": "[P: (542.9729, 205.8668), S: (268.8001, 345.6001)]",
+							"name": "@Sprite3D@1547"
+						},
+						{
+							"bounds_px": "[P: (679.4868, 470.3695), S: (9.212524, 41.44345)]",
+							"name": "@MeshInstance3D@1551"
+						},
+						{
+							"bounds_px": "[P: (562.3684, 247.5203), S: (268.7999, 294.5117)]",
+							"name": "@Sprite3D@1552"
+						},
+						{
+							"bounds_px": "[P: (705.4067, 470.3695), S: (9.212524, 41.44357)]",
+							"name": "@MeshInstance3D@1556"
+						},
+						{
+							"bounds_px": "[P: (591.3237, 247.6599), S: (268.7999, 294.5115)]",
+							"name": "@Sprite3D@1557"
+						}
+					],
+					"role": "imp",
+					"root_world": "(-5.383204, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": false,
+					"visible_full_body_bounds_px": "[P: (542.9729, 205.8668), S: (317.1508, 345.6001)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Same NPC after actual route deceleration and rig cleanup",
+					"elapsed_ms": 65658,
+					"engine_frame": 3280,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-imp-native-route-settle.png",
+					"phase": "native-route-settle",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (531.1361, 277.0609), S: (322.9201, 249.6002)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (531.1361, 277.0609), S: (322.9201, 249.6002)]"
+				}
+			],
+			"elapsed_wall_ms": 32991,
+			"end_point_world": "(-5.4, 0.18, -7.8)",
+			"end_root_world": "(-5.4, 0.18, -7.8)",
+			"interaction_point_id": "quest-001",
+			"legacy_fallback_used": false,
+			"measured_gait_source": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 7,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 321.0,
+							"hip_center_y_px": 277.0,
+							"hip_to_ankle_px": 44.0,
+							"leg_length_scale": 0.651851851851852,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.293333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							254.0,
+							140.0,
+							504.0,
+							617.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 320.0,
+							"hip_center_y_px": 279.0,
+							"hip_to_ankle_px": 41.0,
+							"leg_length_scale": 0.607407407407407,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.273333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							1009.0,
+							134.0,
+							511.0,
+							624.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"motion_views": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 7,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 321.0,
+							"hip_center_y_px": 277.0,
+							"hip_to_ankle_px": 44.0,
+							"leg_length_scale": 0.651851851851852,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.293333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							254.0,
+							140.0,
+							504.0,
+							617.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 320.0,
+							"hip_center_y_px": 279.0,
+							"hip_to_ankle_px": 41.0,
+							"leg_length_scale": 0.607407407407407,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.273333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							1009.0,
+							134.0,
+							511.0,
+							624.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"normal_rest_duration_seconds_required": 3.0,
+			"npc_role_motion_enabled": true,
+			"personality_actions": {
+				"dance": {
+					"action": "dance",
+					"action_elapsed": 0.0,
+					"frame_count": 7
+				},
+				"idle_gesture": {
+					"action": "idle_gesture",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 7
+				}
+			},
+			"point_delta": 0.0,
+			"rest_elapsed_wall_ms": 3252,
+			"rest_max_abs_route_axis_offset_m": 0.0,
+			"rest_observed_seconds": 3.00999999999999,
+			"rest_root_delta": "(0.0, 0.0, 0.0)",
+			"rest_route_bounds_failure": "",
+			"rest_route_origin_world": "(-5.4, 0.18, -7.8)",
+			"route_capture_frame_displacement_m": 0.00583314895629883,
+			"route_direction": "left",
+			"route_max_root_displacement_m": 0.0109634399414063,
+			"route_sample_frames": 399,
+			"start_point_world": "(-5.4, 0.18, -7.8)",
+			"start_root_world": "(-5.4, 0.18, -7.8)"
+		},
+		"ticket": {
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"authored_action_coverage": {},
+			"captures": [
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Natural source-Sprite rest; three seconds of controller runtime",
+					"elapsed_ms": 9180,
+					"engine_frame": 11,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-idle-rest.png",
+					"phase": "idle-rest",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (539.7966, 219.6306), S: (264.2736, 307.1999)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (539.7966, 219.6306), S: (264.2736, 307.1999)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "greet",
+					"controller_direction": "front",
+					"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+					"elapsed_ms": 12475,
+					"engine_frame": 198,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-greet.png",
+					"phase": "greet",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (544.3727, 216.0404), S: (257.4094, 310.3836)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (544.3727, 216.0404), S: (257.4094, 310.3836)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "interact",
+					"controller_direction": "front",
+					"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+					"elapsed_ms": 13931,
+					"engine_frame": 275,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-interact.png",
+					"phase": "interact",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (542.0847, 214.4489), S: (259.6974, 311.9752)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (542.0847, 214.4489), S: (259.6974, 311.9752)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "idle_gesture",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: idle_gesture",
+					"elapsed_ms": 15780,
+					"engine_frame": 376,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-personality-idle_gesture.png",
+					"phase": "personality-idle_gesture",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (542.0848, 216.0405), S: (257.4092, 310.3835)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (542.0848, 216.0405), S: (257.4092, 310.3835)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "emotion_happy",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: emotion_happy",
+					"elapsed_ms": 23233,
+					"engine_frame": 813,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-personality-emotion_happy.png",
+					"phase": "personality-emotion_happy",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (542.0847, 214.4489), S: (259.6974, 311.9752)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (542.0847, 214.4489), S: (259.6974, 311.9752)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": false,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Actual Main NPC route; measured rig direction=right",
+					"elapsed_ms": 30394,
+					"engine_frame": 1233,
+					"gait_rig_direction": "right",
+					"gait_rig_visible": true,
+					"gait_source_record": {
+						"metadata_path": "res://assets/characters/npc-motion-regions.json",
+						"old_idle_front_frame_count": 8,
+						"required_directions": [
+							"left",
+							"right"
+						],
+						"rig_source_records": {
+							"left": {
+								"leg_measurement": {
+									"ankle_y_px": 296.0,
+									"hip_center_y_px": 261.0,
+									"hip_to_ankle_px": 35.0,
+									"leg_length_scale": 0.518518518518518,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.233333333333333
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+								"source_rect": [
+									314.0,
+									150.0,
+									349.0,
+									784.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							},
+							"right": {
+								"leg_measurement": {
+									"ankle_y_px": 296.0,
+									"hip_center_y_px": 262.0,
+									"hip_to_ankle_px": 34.0,
+									"leg_length_scale": 0.503703703703704,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.226666666666667
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+								"source_rect": [
+									899.0,
+									146.0,
+									324.0,
+									791.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							}
+						},
+						"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+					},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.783815, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-native-route-gait-right.png",
+					"phase": "native-route-gait-right",
+					"rig_visible_part_bounds_px": [
+						{
+							"bounds_px": "[P: (542.8857, 208.4854), S: (268.8001, 345.5997)]",
+							"name": "@Sprite3D@1535"
+						},
+						{
+							"bounds_px": "[P: (654.3466, 457.296), S: (7.478394, 33.64246)]",
+							"name": "@MeshInstance3D@1539"
+						},
+						{
+							"bounds_px": "[P: (548.2594, 247.3676), S: (268.8, 294.5116)]",
+							"name": "@Sprite3D@1540"
+						},
+						{
+							"bounds_px": "[P: (695.6266, 457.2959), S: (7.478394, 33.64258)]",
+							"name": "@MeshInstance3D@1544"
+						},
+						{
+							"bounds_px": "[P: (593.0305, 247.4824), S: (268.7999, 294.5117)]",
+							"name": "@Sprite3D@1545"
+						}
+					],
+					"role": "ticket",
+					"root_world": "(-3.783815, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": false,
+					"visible_full_body_bounds_px": "[P: (542.8857, 208.4854), S: (318.9448, 345.5997)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Same NPC after actual route deceleration and rig cleanup",
+					"elapsed_ms": 32667,
+					"engine_frame": 1358,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/pixel-ui-turn-regression-ticket-native-route-settle.png",
+					"phase": "native-route-settle",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (542.0847, 219.6304), S: (257.4094, 307.2001)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (542.0847, 219.6304), S: (257.4094, 307.2001)]"
+				}
+			],
+			"elapsed_wall_ms": 23823,
+			"end_point_world": "(-3.8, 0.18, 5.0)",
+			"end_root_world": "(-3.8, 0.18, 5.0)",
+			"interaction_point_id": "guide",
+			"legacy_fallback_used": false,
+			"measured_gait_source": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 261.0,
+							"hip_to_ankle_px": 35.0,
+							"leg_length_scale": 0.518518518518518,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.233333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							314.0,
+							150.0,
+							349.0,
+							784.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 262.0,
+							"hip_to_ankle_px": 34.0,
+							"leg_length_scale": 0.503703703703704,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.226666666666667
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							899.0,
+							146.0,
+							324.0,
+							791.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"motion_views": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 261.0,
+							"hip_to_ankle_px": 35.0,
+							"leg_length_scale": 0.518518518518518,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.233333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							314.0,
+							150.0,
+							349.0,
+							784.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 262.0,
+							"hip_to_ankle_px": 34.0,
+							"leg_length_scale": 0.503703703703704,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.226666666666667
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							899.0,
+							146.0,
+							324.0,
+							791.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"normal_rest_duration_seconds_required": 3.0,
+			"npc_role_motion_enabled": true,
+			"personality_actions": {
+				"emotion_happy": {
+					"action": "emotion_happy",
+					"action_elapsed": 0.033332,
+					"frame_count": 8
+				},
+				"idle_gesture": {
+					"action": "idle_gesture",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 8
+				}
+			},
+			"point_delta": 0.0,
+			"rest_elapsed_wall_ms": 3298,
+			"rest_max_abs_route_axis_offset_m": 0.0,
+			"rest_observed_seconds": 3.00499999999999,
+			"rest_root_delta": "(0.0, 0.0, 0.0)",
+			"rest_route_bounds_failure": "",
+			"rest_route_origin_world": "(-3.8, 0.18, 5.0)",
+			"route_capture_frame_displacement_m": 0.00416660308837891,
+			"route_direction": "left",
+			"route_max_root_displacement_m": 0.0120184421539307,
+			"route_sample_frames": 420,
+			"start_point_world": "(-3.8, 0.18, 5.0)",
+			"start_root_world": "(-3.8, 0.18, 5.0)"
+		}
+	},
+	"save_profile_path": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\pixel-native_island_npc_motion_review-df213173\\profile\\progress.json",
+	"scripted_fixture": true,
+	"total_review_elapsed_ms": 84399,
+	"total_review_seconds": 84.399,
+	"viewport_px": "(1280.0, 720.0)"
+}

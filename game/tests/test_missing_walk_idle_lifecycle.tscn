@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://game/tests/test_missing_walk_idle_lifecycle.gd" id="1"]
+[node name="TestMissingWalkIdleLifecycle" type="Node"]
+script=ExtResource("1")

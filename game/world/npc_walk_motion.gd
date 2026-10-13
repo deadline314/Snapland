@@ -135,7 +135,10 @@ func update(delta: float, held: bool = false, paused: bool = false) -> void:
 		stationary_elapsed = 0.0
 		var right_axis := camera.global_basis.x if is_instance_valid(camera) else Vector3.RIGHT
 		var view := "right" if horizontal.dot(right_axis)>=0.0 else "left"
-		rig.set_direction(view)
+		# A source change rebinds contacts before posing. Reapplying the same
+		# source would instead pose old world plants at the already-moved root,
+		# before actual distance can advance their support epoch.
+		if rig.direction!=view: rig.set_direction(view)
 		rig.advance_from_motion(delta,displacement,false)
 		# Any real post-route movement should switch to the gait. A per-frame
 		# threshold here would suppress the measured slow-walk speed at 60 Hz.

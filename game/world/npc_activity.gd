@@ -457,7 +457,16 @@ func _update_short_route(record: Dictionary, delta: float) -> void:
 		_records[index].route_clock=clock
 		if moving and String(_records[index].action)!="walk":
 			var direction:="right" if phase<float(record.route_walk_seconds)*0.5 else "left"
-			_play_actor_action(index,"walk",direction,true)
+			# Measured gait owns route movement even when this authored direction
+			# has no walk cels. Preserve the current breathing/interaction sequence.
+			if _has_sequence(role,"walk",direction):
+				_play_actor_action(index,"walk",direction,true)
+			else:
+				var missing: Dictionary=_records[index].missing_actions
+				var key := "walk/%s" % direction
+				if not missing.has(key):
+					missing[key]=true
+					push_warning("NpcActivity: %s lacks authored %s; measured route gait retains the current authored pose." % [role,key])
 		elif not moving and String(_records[index].action)=="walk":
 			if not _play_actor_action(index,"idle","front",true): _play_actor_action(index,"stand","front",true)
 
