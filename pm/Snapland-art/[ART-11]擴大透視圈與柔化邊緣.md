@@ -72,3 +72,34 @@
 
 ### 程式與證據提交
 分支：feature/island-first-park。更新至最新main後的本票提交：[b90ecb2](https://github.com/deadline314/Snapland/commit/b90ecb22684d65d071edc0f31b27ddff2ca41102)。
+
+
+# Commit-2
+
+### 問題
+
+拉近鏡頭查看乘坐角色時，透視圈停在固定大小，臉和鞋子仍被設施遮住。
+
+### 改動
+
+一般遊園鏡頭維持克制的開口，近景會隨角色在畫面中的尺寸放大；圈外建築保持正常光影，離開遮擋後恢復完整外觀。
+
+### 驗收
+
+主 Session 實際查看近景完整角色、柔邊、圈外建築陰影與離開後恢復的原生截圖，並查看正常速度與四分之一速度短片。這是獨立遮擋畫面驗收，不代表島上自由遊玩或角色動畫品質已完成。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 提交內容獨立匯入、建築遮擋局部檢查 | 2 / 2 通過，0 ERROR |
+| 一般及近景、1280×720 與 800×600 尺寸檢查 | 通過 |
+| 原生近景遮擋及恢復 | 通過，0 ERROR；近景半徑約 209 像素 |
+
+本輪固定基準：`c9bf47f`。分支：`feature/island-experience`。遠端提交連結於推送後補入。
+
+### 截圖及影片
+
+![近景完整角色與建築陰影](images/ART-11-zoom-v3-reveal.png)
+![離開後恢復完整建築](images/ART-11-zoom-v3-restored.png)
+[正常速度](images/ART-11-zoom-v3-normal.mp4) · [四分之一速度](images/ART-11-zoom-v3-quarter.mp4) · [原生記錄](images/ART-11-zoom-v3-native.log)

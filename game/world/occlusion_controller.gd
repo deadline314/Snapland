@@ -7,9 +7,11 @@ const RAY_COLLISION_LAYER := 1 << 5
 const SAMPLE_INTERVAL := 0.08
 const FADE_SECONDS := 0.15
 const BODY_RADIUS_HEIGHT_RATIO := 0.75
-const BODY_RADIUS_VIEWPORT_RATIO := 0.17
+const BODY_RADIUS_FIT_RATIO := 0.60
+const BODY_RADIUS_VIEWPORT_RATIO := 0.34
 const BODY_RADIUS_MIN_PX := 32.0
-const BODY_RADIUS_MAX_PX := 120.0
+const BODY_RADIUS_COMPACT_MAX_PX := 120.0
+const BODY_RADIUS_MAX_PX := 320.0
 const EDGE_FEATHER_PX := 2.5
 
 var player: Node3D
@@ -335,10 +337,9 @@ func _process(delta: float) -> void:
 	var feet := camera.unproject_position(player.global_position)
 	var head := camera.unproject_position(player.global_position + Vector3.UP * 1.9)
 	var projected_height := feet.distance_to(head)
-	# Size the reveal from the projected body so zoom and logical viewport scale
-	# stay consistent. A short-edge cap prevents the circle swallowing a small view.
-	var viewport_limit := minf(viewport_size.x, viewport_size.y) * BODY_RADIUS_VIEWPORT_RATIO
-	var radius := minf(clampf(projected_height * BODY_RADIUS_HEIGHT_RATIO, BODY_RADIUS_MIN_PX, BODY_RADIUS_MAX_PX), viewport_limit)
+	# Scale with the projected body. Keep the usual distant radius compact, while
+	# allowing a close actor's face and feet to fit inside the opening.
+	var radius := reveal_radius_px(projected_height,viewport_size)
 	var camera_space_body := camera.to_local(body_point)
 	var player_depth := maxf(0.0, -camera_space_body.z)
 	var target_weight := 1.0 if not _active_group_ids.is_empty() else 0.0
@@ -351,6 +352,17 @@ func _process(delta: float) -> void:
 	_last_viewport_size = viewport_size
 	_update_shader_uniforms(player_depth)
 	_refresh_registered_labels()
+
+
+static func reveal_radius_px(projected_height: float, viewport_size: Vector2) -> float:
+	if projected_height<=0.0 or viewport_size.x<=0.0 or viewport_size.y<=0.0:
+		return 0.0
+	var short_edge_limit := minf(viewport_size.x,viewport_size.y)*BODY_RADIUS_VIEWPORT_RATIO
+	var compact_radius := clampf(projected_height*BODY_RADIUS_HEIGHT_RATIO,BODY_RADIUS_MIN_PX,BODY_RADIUS_COMPACT_MAX_PX)
+	# Past the original compact cap, preserve enough radius for the body to fit
+	# around its y=1m center while keeping the ordinary view unchanged.
+	var desired := maxf(compact_radius,projected_height*BODY_RADIUS_FIT_RATIO)
+	return minf(desired,minf(BODY_RADIUS_MAX_PX,short_edge_limit))
 
 
 func _update_shader_uniforms(player_depth: float) -> void:

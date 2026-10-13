@@ -54,6 +54,9 @@ func _run() -> void:
 	assert(shader_source.contains("edge_feather_px") and shader_source.contains("smoothstep(radius - edge_width, radius + edge_width, distance_px)"), "the cutaway uses a narrow soft dither band at the circle edge")
 	assert(shader_source.contains("!IN_SHADOW_PASS") and not shader_source.contains("ALPHA ="), "the reveal keeps opaque shading and preserves the full shadow silhouette")
 	assert(shader_source.contains("ALBEDO = COLOR.rgb * occluder_tint.rgb"), "building shading retains source colors and multimesh instance colors")
+	assert(is_equal_approx(OcclusionControllerScript.reveal_radius_px(114.0,Vector2(1280,720)),85.5), "normal framing retains the compact legacy radius below its cap")
+	assert(is_equal_approx(OcclusionControllerScript.reveal_radius_px(380.0,Vector2(1280,720)),228.0), "close 1280x720 framing scales enough to fit a 380px actor")
+	assert(is_equal_approx(OcclusionControllerScript.reveal_radius_px(380.0,Vector2(800,600)),204.0), "close 800x600 framing fits the body under the short-edge safety cap")
 
 	var decoy := StaticBody3D.new()
 	decoy.collision_layer = 1
@@ -82,7 +85,7 @@ func _run() -> void:
 	controller._process(0.05)
 	assert(float(controller.statistics().fade_weight) > 0.0 and float(controller.statistics().fade_weight) < 1.0, "entry eases over the configured short interval")
 	var initial_body_height := camera.unproject_position(player.global_position + Vector3.UP * 1.9).distance_to(camera.unproject_position(player.global_position))
-	var initial_radius_expected := minf(clampf(initial_body_height * 0.75, 32.0, 120.0), minf(800.0, 600.0) * 0.17)
+	var initial_radius_expected := OcclusionControllerScript.reveal_radius_px(initial_body_height,Vector2(800.0,600.0))
 	assert(is_equal_approx(float(controller.statistics().radius_px), initial_radius_expected), "reveal radius scales to about three quarters of projected body height")
 	assert(is_equal_approx(float(controller._shader_material.get_shader_parameter("edge_feather_px")), 2.5), "edge feather remains a small logical-pixel band")
 	controller.set_reduced_motion(true)
@@ -105,12 +108,35 @@ func _run() -> void:
 	assert(float(controller.statistics().radius_px) > initial_radius, "circle radius remains proportional to projected body height on resize")
 	assert(initial_viewport == Vector2i(800, 600), "resize fixture began at a known viewport size")
 	var resized_height := camera.unproject_position(player.global_position + Vector3.UP * 1.9).distance_to(camera.unproject_position(player.global_position))
-	var resized_radius_expected := minf(clampf(resized_height * 0.75, 32.0, 120.0), minf(1000.0, 700.0) * 0.17)
+	var resized_radius_expected := OcclusionControllerScript.reveal_radius_px(resized_height,Vector2(1000.0,700.0))
 	assert(is_equal_approx(float(controller.statistics().radius_px), resized_radius_expected), "resized reveal stays proportional to logical projection with a viewport cap")
+	subviewport.size = Vector2i(1280,720)
+	await process_frame
+	camera.size = 12.0
+	controller._process(0.0)
+	var normal_1280_height := camera.unproject_position(player.global_position+Vector3.UP*1.9).distance_to(camera.unproject_position(player.global_position))
+	var normal_1280_radius := float(controller.statistics().radius_px)
+	assert(normal_1280_radius<120.0 and is_equal_approx(normal_1280_radius,OcclusionControllerScript.reveal_radius_px(normal_1280_height,Vector2(1280.0,720.0))), "normal 1280x720 framing retains a compact actor-sized circle")
+	camera.size = 3.6
+	controller._process(0.0)
+	var close_1280_height := camera.unproject_position(player.global_position+Vector3.UP*1.9).distance_to(camera.unproject_position(player.global_position))
+	var close_1280_radius := float(controller.statistics().radius_px)
+	assert(close_1280_height>370.0 and close_1280_height<390.0, "the close-view fixture projects the actor to about 380 logical pixels")
+	assert(close_1280_radius>120.0 and close_1280_radius>=close_1280_height*(1.0/1.9) and close_1280_radius<=720.0*0.34, "close 1280x720 reveal covers the projected face-to-feet extent within the short-edge cap")
+	subviewport.size = Vector2i(800,600)
+	await process_frame
+	camera.size = 3.0
+	controller._process(0.0)
+	var close_800_height := camera.unproject_position(player.global_position+Vector3.UP*1.9).distance_to(camera.unproject_position(player.global_position))
+	var close_800_radius := float(controller.statistics().radius_px)
+	assert(close_800_height>370.0 and close_800_height<390.0, "the compact-view fixture also projects the actor to about 380 logical pixels")
+	assert(close_800_radius>120.0 and close_800_radius>=close_800_height*(1.0/1.9) and close_800_radius<=600.0*0.34, "close 800x600 reveal covers the projected face-to-feet extent within its smaller short-edge cap")
+	subviewport.size = Vector2i(1000,700)
+	await process_frame
 	camera.size = 7.0
 	controller._process(0.0)
-	assert(float(controller.statistics().radius_px) <= 120.0 and float(controller.statistics().radius_px) >= 32.0, "orthographic zoom keeps the cutaway within its pixel bounds")
-	assert(float(controller.statistics().radius_px) <= minf(1000.0, 700.0) * 0.17 + 0.001, "zoomed circle remains capped relative to the visible viewport")
+	assert(float(controller.statistics().radius_px) <= 320.0 and float(controller.statistics().radius_px) >= 32.0, "orthographic zoom keeps the cutaway within its pixel bounds")
+	assert(float(controller.statistics().radius_px) <= minf(1000.0, 700.0) * 0.34 + 0.001, "zoomed circle remains capped relative to the visible viewport")
 	camera.size = 12.0
 
 	front_a.body.queue_free()

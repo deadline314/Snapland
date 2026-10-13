@@ -9,7 +9,7 @@ instance uniform float occluder_metallic : hint_range(0.0, 1.0) = 0.0;
 
 uniform vec2 viewport_size_px = vec2(1280.0, 720.0);
 uniform vec2 body_center_px = vec2(640.0, 360.0);
-uniform float body_radius_px : hint_range(0.0, 160.0) = 50.0;
+uniform float body_radius_px : hint_range(0.0, 320.0) = 50.0;
 uniform float edge_feather_px : hint_range(0.0, 8.0) = 2.5;
 uniform float cutaway_weight : hint_range(0.0, 1.0) = 0.0;
 uniform float player_view_depth = 0.0;
