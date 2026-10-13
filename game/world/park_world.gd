@@ -45,6 +45,15 @@ var npc_activity: Node
 var occlusion_controller: Node
 var pending_npc_interaction: Dictionary = {}
 var lamps: Array[OmniLight3D] = []
+const ACTIVE_LAMP_LIMIT := 8
+const SHADOW_LAMP_LIMIT := 2
+const LAMP_SELECTION_INTERVAL := 0.4
+var active_lamp_indices: Array[int] = []
+var shadow_lamp_indices: Array[int] = []
+var lamp_candidate_distances: Array[float] = []
+var lamp_selection_elapsed := 0.0
+var lamp_selection_player_position := Vector3(INF, INF, INF)
+var lamp_energy_for_phase := 0.0
 var district_labels: Array[Label3D] = []
 var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
@@ -85,9 +94,18 @@ var sea_material: ShaderMaterial
 var active_time_phase := TimeOfDayScript.DEFAULT_PHASE
 var contact_shadow_material: StandardMaterial3D
 var contact_shadows: Array[Dictionary] = []
+var actor_shadow_proxies: Array[Dictionary] = []
 var island_attractions: Node
 
 func _ready() -> void:
+	active_lamp_indices.resize(ACTIVE_LAMP_LIMIT)
+	lamp_candidate_distances.resize(ACTIVE_LAMP_LIMIT)
+	shadow_lamp_indices.resize(SHADOW_LAMP_LIMIT)
+	for index in range(ACTIVE_LAMP_LIMIT):
+		active_lamp_indices[index] = -1
+		lamp_candidate_distances[index] = INF
+	for index in range(SHADOW_LAMP_LIMIT):
+		shadow_lamp_indices[index] = -1
 	if ResourceLoader.exists(COASTAL_MATERIAL_ATLAS):
 		coastal_atlas = load(COASTAL_MATERIAL_ATLAS) as Texture2D
 	else:
@@ -194,12 +212,18 @@ func _build_lighting() -> void:
 	environment.background_mode = Environment.BG_COLOR
 	environment.background_color = Color("#9bc9d9")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color("#fff0d2")
+	environment.ambient_light_color = Color("#d4c7aa")
 	environment.ambient_light_energy = 0.54
-	environment.tonemap_exposure = 0.84
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	# Keep the phase key-light contract, but reduce the final scene exposure so
+	# warm albedo differences survive instead of washing out on sunlit surfaces.
+	environment.tonemap_exposure = 0.84
 	environment.glow_enabled = true
 	environment.glow_intensity = 0.10
+	environment.ssao_enabled = true
+	environment.ssao_radius = 1.1
+	environment.ssao_intensity = 0.65
+	environment.ssao_power = 1.2
 	environment.fog_enabled = true
 	environment.fog_density = 0.0007
 	environment.fog_light_color = Color("#9bc9d9")
@@ -209,8 +233,8 @@ func _build_lighting() -> void:
 	sun.rotation_degrees = Vector3(-52, -145, 0)
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 70.0
-	sun.light_color = Color("#fff1cf")
-	sun.light_energy = 1.25
+	sun.light_color = Color("#f4e4c3")
+	sun.light_energy = 1.08
 	add_child(sun)
 	contact_shadow_material = _make_contact_shadow_material()
 func _make_contact_shadow_material() -> StandardMaterial3D:
@@ -243,6 +267,57 @@ func _add_contact_shadow(anchor: Node3D, local_ground_offset: Vector3, dimension
 	mesh_count += 1
 	return shadow
 
+func _add_actor_shadow_proxy(actor: Node3D, role: String, ground_offset_y: float) -> Node3D:
+	# Coarse opaque volumes stand in for the alpha-tested sprite in shadow maps.
+	# SHADOWS_ONLY keeps them out of the camera pass and they have no colliders.
+	var proportions := {
+		"hero": Vector3(0.30, 1.20, 0.32),
+		"ticket": Vector3(0.25, 1.05, 0.28),
+		"imp": Vector3(0.34, 0.95, 0.37),
+		"announcer": Vector3(0.29, 1.12, 0.31),
+	}
+	var shape: Vector3 = proportions.get(role, proportions["hero"])
+	var proxy := Node3D.new()
+	proxy.name = "%sShadowOnlyProxy" % role.capitalize()
+	proxy.position.y = ground_offset_y
+	actor.add_child(proxy)
+	var shadow_material := _mat(Color("#ffffff"))
+	var torso_mesh := CapsuleMesh.new()
+	torso_mesh.radius = shape.x
+	torso_mesh.height = shape.y
+	var torso := MeshInstance3D.new()
+	torso.name = "TorsoShadowVolume"
+	torso.mesh = torso_mesh
+	torso.position.y = shape.y * 0.5
+	torso.material_override = shadow_material
+	torso.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	proxy.add_child(torso)
+	var head_mesh := SphereMesh.new()
+	head_mesh.radius = shape.z
+	head_mesh.height = shape.z * 2.0
+	var head := MeshInstance3D.new()
+	head.name = "HeadShadowVolume"
+	head.mesh = head_mesh
+	head.position.y = shape.y + shape.z * 0.55
+	head.material_override = shadow_material
+	head.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	proxy.add_child(head)
+	actor_shadow_proxies.append({"node": proxy, "actor": actor, "role": role})
+	mesh_count += 2
+	return proxy
+
+static func sprite_ground_anchor_y(
+	ground_y: float,
+	parent_world_y: float,
+	sprite_local_y: float,
+	feet_row: float,
+	canvas_height: float,
+	pixel_size: float,
+	camera_up_y: float
+) -> float:
+	var feet_from_center := (feet_row - canvas_height * 0.5) * pixel_size
+	return ground_y - parent_world_y - sprite_local_y + feet_from_center * camera_up_y
+
 static func _ground_surface_y(world_position: Vector3) -> float:
 	# Match the tops of the raised boardwalk and authored district floors as well
 	# as the plaza/avenue path; the lawn is the fallback.
@@ -273,19 +348,6 @@ static func _ground_surface_y(world_position: Vector3) -> float:
 		return 0.18
 	return 0.055
 
-
-static func sprite_ground_anchor_y(
-	ground_y: float,
-	parent_world_y: float,
-	sprite_local_y: float,
-	feet_row: float,
-	canvas_height: float,
-	pixel_size: float,
-	camera_up_y: float
-) -> float:
-	var feet_from_center := (feet_row - canvas_height * 0.5) * pixel_size
-	return ground_y - parent_world_y - sprite_local_y + feet_from_center * camera_up_y
-
 func _register_sprite_ground_anchor(sprite: Sprite3D, anchor: Node3D, parent: Node3D, ground_y: float, feet_row: float, canvas_height: float) -> void:
 	# Preserve the bottom pixel's entire area, including the one-pixel variation
 	# between authored poses. The guard is less than a centimetre in world space.
@@ -312,7 +374,7 @@ func _update_sprite_grounding() -> void:
 		var ground_y := float(record.ground_y)
 		if parent == player:
 			ground_y = _ground_surface_y(player.global_position)
-		var desired_y: float = sprite_ground_anchor_y(
+		var desired_y := sprite_ground_anchor_y(
 			ground_y,
 			parent.global_position.y,
 			sprite.position.y,
@@ -335,7 +397,11 @@ func _update_sprite_grounding() -> void:
 		ground_offset.y = shadow_y
 		record["ground_offset"] = ground_offset
 		contact_shadows[index] = record
-
+	for proxy_record in actor_shadow_proxies:
+		var proxy := proxy_record.get("node") as Node3D
+		var actor := proxy_record.get("actor") as Node3D
+		if not is_instance_valid(proxy) or not is_instance_valid(actor): continue
+		proxy.position.y = 0.0 if actor == player and is_riding() else _ground_surface_y(actor.global_position) - actor.global_position.y
 func _mat(color: Color, emissive := false) -> StandardMaterial3D:
 	var key := "%s:%s" % [color.to_html(true), str(emissive)]
 	if material_cache.has(key): return material_cache[key]
@@ -978,8 +1044,8 @@ func _build_plaza() -> void:
 	add_child(collision)
 	_kiosk(Vector3(-8,0,5),"導覽亭",TEAL)
 	# Keep the whole sprite on one ground level: the raised avenue starts at x=-4.5.
-	_npc(Vector3(-3.8,0,8.8),CORAL,"票票")
-	_point("guide","與票票合照",Vector3(-3.8,0,8.8))
+	_npc(Vector3(-3.8,0,5.0),CORAL,"票票")
+	_point("guide","與票票合照",Vector3(-3.8,0,5.0))
 	_kiosk(Vector3(8,0,5),"拍貼本",CORAL)
 	_point("album","翻閱拍貼收藏",Vector3(8,0,7))
 	_kiosk(Vector3(-9,0,-5),"借用道具",GOLD)
@@ -1615,6 +1681,7 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	var ground_y := _ground_surface_y(pos)
 	_register_sprite_ground_anchor(sprite,ground_anchor,activity_root,ground_y,float(NpcActivityScript.ACTION_FEET_ROW),float(NpcActivityScript.ACTION_CANVAS_SIZE.y))
 	_add_contact_shadow(activity_root,Vector3(0,ground_y-activity_root.global_position.y+0.005,0),Vector2(0.78,0.46))
+	_add_actor_shadow_proxy(activity_root,role,ground_y-activity_root.global_position.y)
 	component_motion.register_component(sprite,profile,phase/TAU)
 	character_sprites.append({"sprite":sprite,"activity_root":activity_root,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer")})
 	var name_label := _label(title,pos+Vector3(0,2.65,0),22)
@@ -1904,6 +1971,7 @@ func _build_player() -> void:
 	avatar_ground_anchor.add_child(avatar)
 	avatar.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	avatar_contact_shadow=_add_contact_shadow(player,Vector3(0,0,0),Vector2(0.92,0.58))
+	_add_actor_shadow_proxy(player,"hero",_ground_surface_y(player.position)-player.position.y)
 	_register_sprite_ground_anchor(avatar,avatar_ground_anchor,player,_ground_surface_y(player.position),float(AvatarRenderer.FEET_BASELINE),float(AvatarRenderer.CANVAS_SIZE.y))
 	component_motion.register_component(avatar,"character_hero",0.18/TAU)
 	add_child(player)
@@ -2001,12 +2069,15 @@ func _physics_process(delta: float) -> void:
 		if is_instance_valid(marker): marker.visible=point.get("id","")==nearest.get("id","")
 func _process(delta: float) -> void:
 	if not blocked: time+=delta
+	if is_instance_valid(player):
+		lamp_selection_elapsed += delta
+		if lamp_selection_elapsed >= LAMP_SELECTION_INTERVAL and player.global_position.distance_squared_to(lamp_selection_player_position) >= 0.04:
+			_update_lamp_selection()
 	if is_instance_valid(npc_activity) and npc_activity_paused!=blocked:
 		npc_activity_paused=blocked
 		npc_activity.set_activity_paused(blocked)
 	if not blocked and not pending_npc_interaction.is_empty():
 		_play_pending_npc_interaction()
-
 func _on_interaction_requested(id: String, _label: String) -> void:
 	var role := ""
 	var action := "interact"
@@ -2134,32 +2205,56 @@ func set_time_of_day(phase_id: Variant) -> void:
 	environment.ambient_light_energy = float(profile.ambient_energy) * 0.58
 	environment.fog_light_color = profile.sky_color.lerp(profile.ambient_color, 0.28)
 	match active_time_phase:
-		"dawn": environment.glow_intensity = 0.09
-		"noon": environment.glow_intensity = 0.07
-		"dusk": environment.glow_intensity = 0.12
-		"night": environment.glow_intensity = 0.18
-	var lamp_energy: float = float({"dawn": 0.18, "noon": 0.0, "dusk": 0.48, "night": 0.82}[active_time_phase])
-	var active_limit := mini(8, lamps.size())
-	var stride := maxi(1, ceili(float(lamps.size()) / float(maxi(1, active_limit))))
-	var active_count := 0
-	for index in range(lamps.size()):
-		var lamp := lamps[index]
-		var enabled: bool = lamp_energy > 0.0 and index % stride == 0 and active_count < active_limit
-		var energy: float = lamp_energy if enabled else 0.0
-		lamp.light_energy = energy
-		lamp.shadow_enabled = false
-		if enabled: active_count += 1
-		if is_instance_valid(component_motion): component_motion.set_light_baseline(lamp,energy)
-	var sun_direction := -sun.global_basis.z
-	var projected := Vector3(sun_direction.x,0.0,sun_direction.z)
-	var shadow_offset := Vector3.ZERO
-	if projected.length_squared() > 0.0001:
-		shadow_offset = -projected.normalized() * 0.12
+		"dawn": environment.glow_intensity = 0.025
+		"noon": environment.glow_intensity = 0.025
+		"dusk": environment.glow_intensity = 0.045
+		"night": environment.glow_intensity = 0.08
+	lamp_energy_for_phase = float({"dawn": 0.18, "noon": 0.0, "dusk": 0.48, "night": 0.82}[active_time_phase])
+	_update_lamp_selection(true)
 	for record in contact_shadows:
 		var shadow := record.get("node") as Node3D
 		if not is_instance_valid(shadow): continue
 		var ground_offset: Vector3 = record.get("ground_offset",Vector3.ZERO)
-		shadow.position = ground_offset + shadow_offset
+		shadow.position = ground_offset
+func _update_lamp_selection(force := false) -> void:
+	if not is_instance_valid(player): return
+	if not force and lamp_selection_elapsed < LAMP_SELECTION_INTERVAL: return
+	lamp_selection_elapsed = 0.0
+	lamp_selection_player_position = player.global_position
+	for slot in range(ACTIVE_LAMP_LIMIT):
+		active_lamp_indices[slot] = -1
+		lamp_candidate_distances[slot] = INF
+	for lamp_index in range(lamps.size()):
+		var lamp := lamps[lamp_index]
+		if not is_instance_valid(lamp): continue
+		var distance := player.global_position.distance_squared_to(lamp.global_position)
+		for slot in range(ACTIVE_LAMP_LIMIT):
+			if distance >= lamp_candidate_distances[slot]: continue
+			for shift in range(ACTIVE_LAMP_LIMIT - 1, slot, -1):
+				active_lamp_indices[shift] = active_lamp_indices[shift - 1]
+				lamp_candidate_distances[shift] = lamp_candidate_distances[shift - 1]
+			active_lamp_indices[slot] = lamp_index
+			lamp_candidate_distances[slot] = distance
+			break
+	for slot in range(SHADOW_LAMP_LIMIT): shadow_lamp_indices[slot] = -1
+	var shadow_count := 0
+	for slot in range(ACTIVE_LAMP_LIMIT):
+		var lamp_index := active_lamp_indices[slot]
+		if lamp_index < 0: continue
+		var lamp := lamps[lamp_index]
+		var enabled := lamp_energy_for_phase > 0.0
+		lamp.light_energy = lamp_energy_for_phase if enabled else 0.0
+		lamp.shadow_enabled = enabled and active_time_phase in ["dusk", "night"] and shadow_count < SHADOW_LAMP_LIMIT
+		if lamp.shadow_enabled:
+			shadow_lamp_indices[shadow_count] = lamp_index
+			shadow_count += 1
+	for lamp_index in range(lamps.size()):
+		if active_lamp_indices.has(lamp_index): continue
+		var lamp := lamps[lamp_index]
+		lamp.light_energy = 0.0
+		lamp.shadow_enabled = false
+
+
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
 	sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)

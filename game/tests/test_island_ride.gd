@@ -76,7 +76,8 @@ func _run() -> void:
 	var foundation := attraction.find_child("CarouselFoundation",true,false) as MeshInstance3D
 	var spindle := attraction.find_child("ShellCarouselSpindle",true,false) as MeshInstance3D
 	_check(absf(ride_position.x+6.7)<0.01 and absf(ride_position.z-11.2)<0.01, "ride interaction sits at the open outer boardwalk approach")
-	_check(absf(guide_position.x+3.8)<0.01 and absf(guide_position.z-8.8)<0.01, "guide interaction is clear of the ramp toe")
+	var ramp_toe := Vector2(-4.2,11.2)
+	_check(Vector2(guide_position.x,guide_position.z).distance_to(ramp_toe)>3.0, "guide interaction is clear of the ramp toe")
 	_check(ride_position.distance_to(guide_position) > 3.0, "ride boarding point is separated from the welcome guide interaction")
 	_check(Vector2(ride_position.x-carousel.global_position.x,ride_position.z-carousel.global_position.z).length()>2.9, "boarding point clears the carousel foundation and leaves approach room")
 	_check(boardwalk != null and absf(boardwalk.global_position.z-10.0)<0.01 and (boardwalk.mesh as BoxMesh).size.z>=6.8, "wider deck carries the full rail and boarding approach")

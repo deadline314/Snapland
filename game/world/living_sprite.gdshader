@@ -27,6 +27,10 @@ void vertex() {
 		vec4(MODEL_MATRIX[3].xyz, 1.0)
 	);
 	MODELVIEW_MATRIX = VIEW_MATRIX * billboard;
+	// The billboard transform replaces the sprite's model-view orientation.
+	// Keep its normal transform in sync so shaded sprites still respond to
+	// directional and point lights instead of inheriting the unbillboarded axes.
+	MODELVIEW_NORMAL_MATRIX = transpose(inverse(mat3(MODELVIEW_MATRIX)));
 
 	float time = TIME;
 	vec2 local_uv = (UV - uv_rect.xy) / max(uv_rect.zw, vec2(0.000001));

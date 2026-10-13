@@ -75,3 +75,33 @@ c1b7b19；feature/island-first-park。
 ![本票原生畫面](images/ART-1-plaza-night.png)
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
+
+## 2026-10-13 試玩後修訂
+
+使用者否定目前島上畫面／動畫／介面品質。歷史交付證據只代表當時版本與當時範圍；本輪新增品質驗收如下。
+
+- [ ] 新島畫面有清楚前景、中景、遠景、高度與材質層次；角色接地、陰影與實際光源一致，不以存在3D節點判定HD-2D美術通過。
+- [ ] 保存本輪原生前後畫面與影片，實際查看後記錄通過或拒絕原因。
+
+Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
+
+# Commit-2
+
+### 問題
+角色像平面紙片投影，背景與角色的光照方向不一致，夜間燈光也缺少與附近物件互動的陰影。
+
+### 改動
+角色表面跟隨場景光源，腳下保留置中的柔和接地陰影；日照與附近兩盞燈產生方向陰影。凌晨、中午、傍晚、晚上各有不同的天空、填光和燈光，燈光數量維持受控。票票移到入口屋頂遮不到全身的位置。
+
+### 驗收
+主 Session 以本票提交內容重建並執行光影、地圖和設施局部驗證，三項全過，載入及執行沒有 ERROR。原生 GPU 擷取四時段共 361 格／6.017 秒，四張最終圖片均已實際查看：地面長影會隨日照改變，夜間燈光照亮附近人物，票票的完整全身可見。角色方向影是近似體積，未精確描出頭髮、衣服與坐姿；本段不宣稱完整角色動畫或整島精品品質通過，新增品質条件維持未勾。
+
+### 測試與證據
+[多方向研究與圖例](../../design/runtime/island-experience-references.md) · [光影取捨与驗證界限](../../design/runtime/character-lighting-shadows.md) · [局部驗證](images/ART-1-island-final-lighting-local.log) · [原生紀錄](images/ART-1-island-final-native.log) · [四時段報告](images/ART-1-island-final-report.json) · [原生四時段影片](images/ART-1-island-final-normal.mp4)。
+
+![凌晨廣場](images/ART-1-island-final-dawn.png)
+![中午廣場與完整票票](images/ART-1-island-final-noon.png)
+![傍晚方向陰影](images/ART-1-island-final-dusk.png)
+![夜晚附近燈光](images/ART-1-island-final-night.png)
+
+本輪固定基準：`939130f`；分支：`feature/island-experience`；票況：進行中。共用變動包括 MAIN-11 的票票站位與 MAIN-15 的入口距離驗證，保留原有通路、互動及設施測試斷言；本段為受控場景檢查，沒有人工試玩或試聽宣稱。

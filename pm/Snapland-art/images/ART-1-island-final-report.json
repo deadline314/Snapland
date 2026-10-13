@@ -1,0 +1,39 @@
+{
+	"audio": "Dummy",
+	"human_played": false,
+	"phases": [
+		{
+			"active_lamps": 8,
+			"exposure": 0.839999973773956,
+			"image": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-ART1C/pm/Snapland-art/images/ART-1-island-final-dawn.png",
+			"light_ray": "(0.891266, -0.275637, 0.360095)",
+			"phase": "dawn",
+			"shadow_lamps": 0
+		},
+		{
+			"active_lamps": 0,
+			"exposure": 0.839999973773956,
+			"image": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-ART1C/pm/Snapland-art/images/ART-1-island-final-noon.png",
+			"light_ray": "(0.353129, -0.788011, 0.50432)",
+			"phase": "noon",
+			"shadow_lamps": 0
+		},
+		{
+			"active_lamps": 8,
+			"exposure": 0.839999973773956,
+			"image": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-ART1C/pm/Snapland-art/images/ART-1-island-final-dusk.png",
+			"light_ray": "(-0.561042, -0.207912, -0.801252)",
+			"phase": "dusk",
+			"shadow_lamps": 2
+		},
+		{
+			"active_lamps": 8,
+			"exposure": 0.839999973773956,
+			"image": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-ART1C/pm/Snapland-art/images/ART-1-island-final-night.png",
+			"light_ray": "(-0.476288, -0.438371, -0.762221)",
+			"phase": "night",
+			"shadow_lamps": 2
+		}
+	],
+	"scripted_fixture": true
+}
