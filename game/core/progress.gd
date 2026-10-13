@@ -6,6 +6,9 @@ signal achievement_unlocked(id: String)
 const SAVE_FILE := "user://progress.json"
 const SAVE_VERSION := 1
 const MAX_COINS := 1000000
+const MAX_GAME_PHOTO_FRAMES := 3
+const MAX_GAME_PHOTO_FRAME_CANDIDATES := 12
+const MAX_GAME_PHOTO_FILE_BYTES := 16 * 1024 * 1024
 const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TestSaveGuard = preload("res://game/core/test_save_guard.gd")
@@ -46,6 +49,7 @@ var tutorial_seen_games: Array[String] = []
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
+var _game_photo_decoder_invocations := 0
 
 func _ready() -> void:
 	if not _guard_test_save_path("startup"):
@@ -147,6 +151,148 @@ func complete_game(game_id: String, devil: bool, assisted: bool = false) -> void
 	if all_devils:
 		_unlock("ACH_ALL_DEVILS")
 	changed.emit()
+
+## Attach one saved gameplay capture set to the already-granted card(s).
+## Ordinary and devil records point at the same files; this never grants cards.
+func attach_welcome_game_photo_frames(game_id: String, saved_frames: Array, include_devil: bool) -> bool:
+	var game_number := _welcome_game_number(game_id)
+	if game_number == 0:
+		push_warning("Cannot attach gameplay thumbnails for unknown game '%s'." % game_id)
+		return false
+	var ordinary_id := "photo-welcome-game-%d" % game_number
+	if not photos.has(ordinary_id):
+		push_warning("Cannot attach gameplay thumbnails: collected ordinary photo '%s' is missing." % ordinary_id)
+		return false
+	var image_cache: Dictionary = {}
+	var valid_frames := _validated_game_photo_frames(ordinary_id, saved_frames, image_cache)
+	if valid_frames.is_empty():
+		var ordinary_photo: Dictionary = photos[ordinary_id]
+		valid_frames = _validated_game_photo_frames(ordinary_id, ordinary_photo.get("frames", []), image_cache)
+	if valid_frames.is_empty():
+		push_warning("No readable 320x180 gameplay thumbnails are available for collected photo '%s'." % ordinary_id)
+		return false
+	photos[ordinary_id]["frames"] = valid_frames.duplicate()
+	var devil_id := "photo-welcome-devil-%d" % game_number
+	if include_devil and photos.has(devil_id):
+		photos[devil_id]["frames"] = valid_frames.duplicate()
+	if not save_progress():
+		push_error("Could not save gameplay thumbnail paths for '%s'." % ordinary_id)
+		return false
+	return true
+
+func _backfill_legacy_devil_photo_frames() -> bool:
+	var changed_any := false
+	var image_cache: Dictionary = {}
+	for game_number in range(1, 13):
+		var devil_id := "photo-welcome-devil-%d" % game_number
+		if not photos.has(devil_id):
+			continue
+		var devil_photo: Dictionary = photos[devil_id]
+		var current_frames := _validated_game_photo_frames(devil_id, devil_photo.get("frames", []), image_cache)
+		if not current_frames.is_empty():
+			if devil_photo.get("frames", []) != current_frames:
+				devil_photo["frames"] = current_frames
+				changed_any = true
+			continue
+		var ordinary_id := "photo-welcome-game-%d" % game_number
+		if not photos.has(ordinary_id):
+			if devil_photo.has("frames"):
+				devil_photo.erase("frames")
+				changed_any = true
+			continue
+		var ordinary_photo: Variant = photos[ordinary_id]
+		var source_frames: Array[String] = _validated_game_photo_frames(ordinary_id, ordinary_photo.get("frames", []), image_cache) if ordinary_photo is Dictionary else []
+		if source_frames.is_empty():
+			if devil_photo.has("frames"):
+				devil_photo.erase("frames")
+				changed_any = true
+			continue
+		devil_photo["frames"] = source_frames.duplicate()
+		changed_any = true
+	return changed_any
+
+func _validated_game_photo_frames(photo_id: String, frame_value: Variant, image_cache: Dictionary = {}) -> Array[String]:
+	var valid: Array[String] = []
+	if typeof(frame_value) != TYPE_ARRAY:
+		if frame_value != null:
+			push_warning("Photo '%s' has invalid 'frames' data (expected an array)." % photo_id)
+		return valid
+	if frame_value.size() > MAX_GAME_PHOTO_FRAME_CANDIDATES:
+		push_warning("Photo '%s' has %d screenshot entries; only the first %d will be inspected." % [photo_id, frame_value.size(), MAX_GAME_PHOTO_FRAME_CANDIDATES])
+	var inspected_count := mini(frame_value.size(), MAX_GAME_PHOTO_FRAME_CANDIDATES)
+	var seen_paths: Dictionary = {}
+	for frame_index in range(inspected_count):
+		var candidate: Variant = frame_value[frame_index]
+		if typeof(candidate) != TYPE_STRING or str(candidate).strip_edges().is_empty():
+			push_warning("Photo '%s' has an invalid screenshot path value at index %d: %s." % [photo_id, frame_index, str(candidate)])
+			continue
+		var path := str(candidate)
+		if seen_paths.has(path):
+			push_warning("Photo '%s' repeats screenshot path at index %d; duplicate ignored: '%s'." % [photo_id, frame_index, path])
+			continue
+		seen_paths[path] = true
+		if valid.size() >= MAX_GAME_PHOTO_FRAMES:
+			push_warning("Photo '%s' has more paths after the %d-image limit; remaining entries are not inspected (next: '%s')." % [photo_id, MAX_GAME_PHOTO_FRAMES, path])
+			break
+		if not FileAccess.file_exists(path):
+			push_warning("Photo '%s' screenshot is missing: '%s'." % [photo_id, path])
+			continue
+		if _read_game_photo_image(photo_id, path, image_cache) == null:
+			continue
+		valid.append(path)
+	return valid
+
+func _read_game_photo_image(photo_id: String, path: String, image_cache: Dictionary) -> Image:
+	if image_cache.has(path):
+		return image_cache[path] as Image
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		push_warning("Photo '%s' screenshot cannot be opened: '%s'." % [photo_id, path])
+		image_cache[path] = null
+		return null
+	var file_length := file.get_length()
+	if file_length < 45 or file_length > MAX_GAME_PHOTO_FILE_BYTES:
+		file.close()
+		push_warning("Photo '%s' screenshot has invalid size (%d bytes; allowed 45..%d): '%s'." % [photo_id, file_length, MAX_GAME_PHOTO_FILE_BYTES, path])
+		image_cache[path] = null
+		return null
+	var header := file.get_buffer(24)
+	var signature := PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10])
+	if header.size() != 24 or header.slice(0, 8) != signature or header.slice(12, 16).get_string_from_ascii() != "IHDR" or _thumbnail_u32(header, 8) != 13:
+		file.close()
+		push_warning("Photo '%s' screenshot has no standard PNG IHDR header: '%s'." % [photo_id, path])
+		image_cache[path] = null
+		return null
+	var width := _thumbnail_u32(header, 16)
+	var height := _thumbnail_u32(header, 20)
+	if width != 320 or height != 180:
+		file.close()
+		push_warning("Photo '%s' screenshot has unexpected IHDR dimensions %dx%d at '%s' (expected 320x180); decoder was not called." % [photo_id, width, height, path])
+		image_cache[path] = null
+		return null
+	file.seek(0)
+	var png_bytes := file.get_buffer(file_length)
+	file.close()
+	if png_bytes.size() != file_length:
+		push_warning("Photo '%s' screenshot could not be read completely: '%s'." % [photo_id, path])
+		image_cache[path] = null
+		return null
+	var image := Image.new()
+	_game_photo_decoder_invocations += 1
+	var decode_error: Error = image.load_png_from_buffer(png_bytes)
+	if decode_error != OK or image.is_empty():
+		push_warning("Photo '%s' screenshot could not be decoded (%s): '%s'." % [photo_id, error_string(decode_error), path])
+		image_cache[path] = null
+		return null
+	if image.get_width() != 320 or image.get_height() != 180:
+		push_warning("Photo '%s' decoded to unexpected dimensions %dx%d at '%s'." % [photo_id, image.get_width(), image.get_height(), path])
+		image_cache[path] = null
+		return null
+	image_cache[path] = image
+	return image
+
+func _thumbnail_u32(bytes: PackedByteArray, offset: int) -> int:
+	return (int(bytes[offset]) << 24) | (int(bytes[offset + 1]) << 16) | (int(bytes[offset + 2]) << 8) | int(bytes[offset + 3])
 
 func set_appearance(key: String, value: String) -> bool:
 	var options := WardrobeCatalog.options()
@@ -322,7 +468,12 @@ func load_progress() -> void:
 		_reset_memory()
 		return
 	_apply_save(parsed)
+	var migrated_frames := _backfill_legacy_devil_photo_frames()
+	if migrated_frames and not save_progress():
+		push_error("Could not persist legacy gameplay thumbnail migration to '%s'." % path)
+	_suppress_changed_save = true
 	changed.emit()
+	_suppress_changed_save = false
 
 func reset_progress() -> void:
 	_reset_memory()

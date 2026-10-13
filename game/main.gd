@@ -947,10 +947,8 @@ func _game_finished(result: Dictionary) -> void:
 		celebrate_on_close=true
 		Progress.complete_game(id,bool(result.get("devil",false)),bool(result.get("assisted",false)))
 		_record_story_mission_event({"type":"minigame_result","id":id,"success":true,"practice":false})
-		var source := "photo-welcome-game-%d"%int(id.trim_prefix("game-"))
-		if not saved_frames.is_empty() and Progress.photos.has(source):
-			Progress.photos[source]["frames"]=saved_frames
-			Progress.save_progress()
+		if not saved_frames.is_empty():
+			_sync_finished_photo_thumbnails(result,saved_frames)
 	_cancel_game()
 	audio.play_sfx("success" if result.get("success",false) else "miss")
 	var definition := _definition(id)
@@ -1015,6 +1013,13 @@ func _game_finished(result: Dictionary) -> void:
 		Paper.button("練習操作",func(): _launch_game(id,bool(result.get("assisted",false)),true),row)
 		Paper.button("輔助重試",func(): _launch_game(id,true),row)
 	_back(body)
+
+func _sync_finished_photo_thumbnails(result: Dictionary, saved_frames: Array[String]) -> bool:
+	if not bool(result.get("success", false)) or bool(result.get("practice", false)):
+		return false
+	return Progress.attach_welcome_game_photo_frames(
+		str(result.get("game_id", "")), saved_frames, bool(result.get("devil", false))
+	)
 
 func _show_album() -> void:
 	var body := _open("一張照片，一點小事。","PHOTO COLLECTION","album")

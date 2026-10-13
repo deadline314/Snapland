@@ -4,6 +4,7 @@ extends VBoxContainer
 const Paper = preload("res://game/ui/paper_ui.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const PAGE_SIZE := 6
+const MAX_PHOTO_FRAME_CANDIDATES := 12
 
 class BookSpread extends Control:
 	func _draw() -> void:
@@ -30,12 +31,16 @@ var _photo_details: Label
 var _normal_button: Button
 var _devil_button: Button
 var _time_button: Button
+var _game_photo_texture_cache: Dictionary = {}
+var _thumbnail_decode_count := 0
 
 func setup(progress: Node, definitions: Array, phases: Array, photo_loader: Callable) -> void:
 	_progress=progress
 	_definitions=definitions.duplicate(true)
 	_time_phases=phases.duplicate(true)
 	_photo_loader=photo_loader
+	_game_photo_texture_cache.clear()
+	_thumbnail_decode_count = 0
 
 func _ready() -> void:
 	custom_minimum_size.y=420
@@ -239,13 +244,50 @@ func _blank_tile() -> Control:
 func _saved_texture(photo_id: String) -> Texture2D:
 	var photo: Variant=_progress.photos.get(photo_id,{})
 	if not photo is Dictionary:
+		push_warning("Collected photo '%s' has invalid metadata; showing the unreadable-photo fallback." % photo_id)
 		return null
 	var frames: Variant=photo.get("frames",[])
 	if not frames is Array:
+		push_warning("Collected photo '%s' has invalid 'frames' metadata; showing the unreadable-photo fallback." % photo_id)
 		return null
-	for path_value in frames:
-		if typeof(path_value)==TYPE_STRING and FileAccess.file_exists(str(path_value)) and _photo_loader.is_valid():
-			var texture: Variant=_photo_loader.call(str(path_value))
-			if texture is Texture2D:
-				return texture
+	var is_game_photo := photo_id.begins_with("photo-welcome-game-") or photo_id.begins_with("photo-welcome-devil-")
+	var is_devil_photo := photo_id.begins_with("photo-welcome-devil-")
+	if frames.is_empty():
+		if is_devil_photo:
+			push_warning("Collected devil photo '%s' has no saved screenshot paths; showing the unreadable-photo fallback." % photo_id)
+		return null
+	if frames.size() > MAX_PHOTO_FRAME_CANDIDATES:
+		push_warning("Collected photo '%s' has %d screenshot paths; only the first %d will be checked." % [photo_id, frames.size(), MAX_PHOTO_FRAME_CANDIDATES])
+	for frame_index in range(mini(frames.size(), MAX_PHOTO_FRAME_CANDIDATES)):
+		var path_value: Variant = frames[frame_index]
+		if typeof(path_value)!=TYPE_STRING or str(path_value).strip_edges().is_empty():
+			push_warning("Collected photo '%s' has an invalid screenshot path value: %s." % [photo_id,str(path_value)])
+			continue
+		var path := str(path_value)
+		if is_game_photo:
+			if _game_photo_texture_cache.has(path):
+				var cached: Variant = _game_photo_texture_cache[path]
+				if cached is Texture2D:
+					return cached
+				push_warning("Collected photo '%s' screenshot was already rejected; showing fallback: '%s'." % [photo_id, path])
+				continue
+			_thumbnail_decode_count += 1
+			var image_cache: Dictionary = {}
+			var image: Image = _progress._read_game_photo_image(photo_id, path, image_cache)
+			if image == null:
+				_game_photo_texture_cache[path] = null
+				continue
+			var game_texture := ImageTexture.create_from_image(image)
+			_game_photo_texture_cache[path] = game_texture
+			return game_texture
+		if not FileAccess.file_exists(path):
+			push_warning("Collected photo '%s' screenshot is missing: '%s'." % [photo_id,path])
+			continue
+		if not _photo_loader.is_valid():
+			push_warning("Collected photo '%s' cannot load screenshot '%s': image loader is unavailable." % [photo_id,path])
+			return null
+		var texture: Variant=_photo_loader.call(path)
+		if texture is Texture2D:
+			return texture
+		push_warning("Collected photo '%s' screenshot could not be decoded: '%s'." % [photo_id,path])
 	return null
