@@ -1,0 +1,16 @@
+{
+  "original_user_progress_recovered": false,
+  "original_user_progress_known": false,
+  "only_incident_after_state_preserved": true,
+  "no_fixture_substituted_for_player_original": true,
+  "files": [
+    {
+      "path": "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json",
+      "sha256": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf"
+    },
+    {
+      "path": "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json.bak",
+      "sha256": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b"
+    }
+  ]
+}

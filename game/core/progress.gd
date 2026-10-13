@@ -8,6 +8,7 @@ const SAVE_VERSION := 1
 const MAX_COINS := 1000000
 const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
+const TestSaveGuard = preload("res://game/core/test_save_guard.gd")
 const DEFAULT_APPEARANCE := {
 	"skin": "warm", "species": "human", "gender": "neutral",
 	"hair": "windswept", "hair_color": "ink", "face": "curious",
@@ -47,6 +48,8 @@ var _loading := false
 var _suppress_changed_save := false
 
 func _ready() -> void:
+	if not _guard_test_save_path("startup"):
+		return
 	changed.connect(_on_changed)
 	load_progress()
 
@@ -244,6 +247,8 @@ func advance_quest(id: String, step: int) -> void:
 	changed.emit()
 
 func save_progress() -> bool:
+	if not _guard_test_save_path("save"):
+		return false
 	var path := _save_path()
 	var directory := path.get_base_dir()
 	if not DirAccess.dir_exists_absolute(directory):
@@ -300,6 +305,8 @@ func save_progress() -> bool:
 	return true
 
 func load_progress() -> void:
+	if not _guard_test_save_path("load"):
+		return
 	var path := _save_path()
 	var parsed := _read_save(path)
 	var backup := path + ".bak"
@@ -409,6 +416,24 @@ func _is_canonical_normal_photo(source_id: String, only_zone := "") -> bool:
 func _save_path() -> String:
 	var override_path := OS.get_environment("SNAPLAND_SAVE_PATH")
 	return override_path if not override_path.is_empty() else ProjectSettings.globalize_path(SAVE_FILE)
+
+func _guard_test_save_path(operation: String) -> bool:
+	if not _is_test_or_review_launch():
+		return true
+	var override_path := OS.get_environment("SNAPLAND_SAVE_PATH")
+	var error_message := TestSaveGuard.validate_save_path(override_path, OS.get_user_data_dir())
+	if error_message.is_empty():
+		return true
+	push_error("Save isolation guard blocked %s: %s" % [operation, error_message])
+	if operation == "startup":
+		get_tree().quit(1)
+	return false
+
+func _is_test_or_review_launch() -> bool:
+	var arguments := OS.get_cmdline_args()
+	var user_arguments := OS.get_cmdline_user_args()
+	arguments.append_array(user_arguments)
+	return TestSaveGuard.is_test_launch(arguments)
 
 func _read_save(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):

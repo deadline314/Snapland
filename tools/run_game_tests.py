@@ -38,6 +38,7 @@ def main() -> int:
             ("clean project import", [executable, "--headless", "--editor", "--path", str(ROOT), "--rendering-method", "gl_compatibility", "--import", "--quit"]),
             ("game startup", common + ["--", "--smoke-test"]),
             ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
+            ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
             ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),
             ("avatar runtime tests", common + ["--script", "res://game/tests/test_avatar.gd"]),
             ("avatar attachment tests", common + ["--script", "res://game/tests/test_avatar_attachment.gd"]),
@@ -113,6 +114,7 @@ def main() -> int:
             pass_markers = {
                 "game startup": "PASS: game startup and clean shutdown",
                 "core runtime tests": "PASS: core runtime checks",
+                "test/review save isolation tests": "PASS: test/review launch detection, absolute isolated paths, userdata/sidecar rejection, and unchanged fake fixtures",
                 "wardrobe runtime tests": "PASS: wardrobe runtime checks",
                 "avatar runtime tests": "PASS: avatar runtime checks",
                 "avatar attachment tests": "PASS: measured walk head attachments",
