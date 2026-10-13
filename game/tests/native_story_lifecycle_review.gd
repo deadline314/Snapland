@@ -43,23 +43,16 @@ func _run_story_review() -> void:
 		get_tree().quit(1)
 		return
 	get_tree().root.add_child(main)
-	print("ST-4 PHASE: fresh arrival and actual dialogue")
-	if not await _wait_until(func() -> bool: return main.modal_kind == "arrival", "fresh arrival panel"): return
-	if not await _capture_story("arrival"): return
-	if not await _activate_main_button("下船，去看看", "begin arrival dialogue"): return
-	var dialogue_steps := 0
-	while main.modal_kind == "dialogue" and dialogue_steps < 12:
-		if is_instance_valid(main.dialogue_label) and main.dialogue_label.visible_characters < main.dialogue_label.text.length():
-			_key(KEY_E)
-		else:
-			_key(KEY_E)
-		dialogue_steps += 1
-		await get_tree().create_timer(0.12).timeout
-		if Time.get_ticks_msec() - _started_at_ms > 300000: return
+	print("ST-4 PHASE: fresh arrival in anchored dialogue")
+	if not await _wait_until(func() -> bool: return main.modal_kind == "dialogue", "fresh anchored arrival dialogue"): return
+	if not await _capture_story("arrival-dialogue"): return
+	if not await _complete_story_dialogue(): return
 	if main.modal_kind != "":
 		await _fail("Arrival dialogue did not naturally return to the park")
 		return
-	if not await _capture_story("arrival-dialogue"): return
+	if not progress.intro_seen:
+		await _fail("Natural arrival completion did not preserve intro progress")
+		return
 
 	print("ST-4 PHASE: quest-001 interaction and bench evidence")
 	if not await _interact_at_station("quest-001", "quest"): return
@@ -251,12 +244,28 @@ func _interact_at_station(id: String, expected_modal: String) -> bool:
 		return false
 	print("ST-4 INPUT: E at actual station ", id, " (player-position-only setup)")
 	_key(KEY_E)
+	if expected_modal == "quest" and main.modal_kind == "dialogue":
+		if not await _complete_story_dialogue(): return false
 	deadline = _wall_deadline_ms(8000)
 	while Time.get_ticks_msec() < deadline and main.modal_kind != expected_modal:
 		await get_tree().process_frame
 		if not await _require_live_main("opening actual " + id + " UI"): return false
 	if main.modal_kind != expected_modal:
 		await _fail("Actual E interaction at %s opened %s, expected %s" % [id, main.modal_kind, expected_modal])
+		return false
+	return true
+
+func _complete_story_dialogue() -> bool:
+	var safety: int = main.dialogue.size() * 3 + 2
+	while main.modal_kind == "dialogue" and safety > 0:
+		safety -= 1
+		var needs_reveal: bool = main.dialogue_label != null and main.dialogue_label.visible_characters >= 0
+		_key(KEY_E)
+		if needs_reveal:
+			_key(KEY_E)
+		await get_tree().process_frame
+	if main.modal_kind == "dialogue":
+		await _fail("Dialogue did not naturally complete through actual E input")
 		return false
 	return true
 

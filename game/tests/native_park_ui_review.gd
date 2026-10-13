@@ -207,10 +207,11 @@ func _capture_menu(kind: String, suffix: String) -> bool:
 			if station_count!=12 or gate_count!=9:
 				await _fail("Map must contain twelve stations and nine future entrances")
 				return false
-	if not _physical_menu_readable(main.overlay):
+	var review_surface: Node = main.dialogue_panel if kind=="dialogue" else main.overlay
+	if not _physical_menu_readable(review_surface):
 		await _fail("Menu physical hit targets or font sizes fall below the readability baseline: " + kind + " / " + suffix)
 		return false
-	if not await _inspect_controls(main.overlay, main.get_viewport().get_visible_rect()):
+	if not await _inspect_controls(review_surface, main.get_viewport().get_visible_rect()):
 		await _fail("ART20 controls extend or clip at " + kind + " / " + suffix)
 		return false
 	await RenderingServer.frame_post_draw
@@ -246,9 +247,9 @@ func _reveal_control(control: Control) -> void:
 		ancestor=ancestor.get_parent()
 	await _frames(3)
 
-func _click_control(control: Control) -> void:
+func _click_control(control: Control) -> bool:
 	await _reveal_control(control)
-	await super._click_control(control)
+	return await super._click_control(control)
 
 func _control_diagnostics(control: Control) -> String:
 	if control == null:

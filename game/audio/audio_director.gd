@@ -26,6 +26,11 @@ const AMBIENCE_PATH := "res://assets/audio/plaza_ambience.wav"
 const FADE_SECONDS := 0.85
 const SILENCE_DB := -60.0
 const DEFAULT_SETTINGS := {"master": 1.0, "music": 0.8, "sfx": 0.9}
+const DIALOGUE_BEEP_SAMPLE_RATE := 22050
+const DIALOGUE_BEEP_SECONDS := 0.024
+const DIALOGUE_BEEP_PITCH_HZ := {"票票": 760.0, "小角": 910.0, "阿浪": 620.0, "主角": 700.0}
+const DIALOGUE_BEEP_INTERVAL_MSEC := {"票票": 54, "小角": 42, "阿浪": 50, "主角": 48}
+const DIALOGUE_PUNCTUATION := "，。！？；：、…—,.!?;:·"
 const SETTING_KEYS := {
 	"master": "master_volume",
 	"music": "music_volume",
@@ -37,6 +42,9 @@ var _ambience: AudioStreamPlayer
 var _sfx: AudioStreamPlayer
 var _notes: AudioStreamPlayer
 var _note_streams: Array[AudioStreamWAV] = []
+var _dialogue_beep_player: AudioStreamPlayer
+var _dialogue_beep_streams: Dictionary = {}
+var _last_dialogue_beep_msec := -100000
 var _active_music := -1
 var _active_context := ""
 var _settings := DEFAULT_SETTINGS.duplicate(true)
@@ -62,6 +70,12 @@ func _ready() -> void:
 	_notes = AudioStreamPlayer.new()
 	_notes.max_polyphony = 4
 	add_child(_notes)
+	_dialogue_beep_player = AudioStreamPlayer.new()
+	_dialogue_beep_player.name = "DialogueBeepPlayer"
+	_dialogue_beep_player.max_polyphony = 4
+	add_child(_dialogue_beep_player)
+	for speaker: String in DIALOGUE_BEEP_PITCH_HZ:
+		_dialogue_beep_streams[speaker] = _make_dialogue_beep(float(DIALOGUE_BEEP_PITCH_HZ[speaker]))
 	for index in range(4):
 		_note_streams.append(load("res://assets/audio/note_%d.wav" % index) as AudioStreamWAV)
 	apply_settings(_settings)
@@ -84,6 +98,10 @@ func shutdown() -> void:
 	if _notes:
 		_notes.stop()
 		_notes.stream = null
+	if _dialogue_beep_player:
+		_dialogue_beep_player.stop()
+		_dialogue_beep_player.stream = null
+	_dialogue_beep_streams.clear()
 	_note_streams.clear()
 
 func play_context(name: String) -> void:
@@ -146,6 +164,8 @@ func apply_settings(settings: Dictionary) -> void:
 		_sfx.volume_db = _sfx_volume_db()
 	if _notes:
 		_notes.volume_db = _sfx_volume_db()
+	if _dialogue_beep_player:
+		_dialogue_beep_player.volume_db = _sfx_volume_db() - 8.0
 
 func play_note(note: int) -> void:
 	if note < 0 or note >= _note_streams.size(): return
@@ -153,6 +173,39 @@ func play_note(note: int) -> void:
 	_notes.volume_db = _sfx_volume_db()
 	_notes.play()
 	_notes.stream_paused = _paused
+
+func play_dialogue_beep(speaker: String, character: String) -> bool:
+	if not _dialogue_beep_streams.has(speaker) or not _is_dialogue_beep_glyph(character):
+		return false
+	if _settings.master * _settings.sfx <= 0.000001 or _paused:
+		return false
+	var now := Time.get_ticks_msec()
+	if now - _last_dialogue_beep_msec < int(DIALOGUE_BEEP_INTERVAL_MSEC[speaker]):
+		return false
+	_last_dialogue_beep_msec = now
+	_dialogue_beep_player.stream = _dialogue_beep_streams[speaker]
+	_dialogue_beep_player.volume_db = _sfx_volume_db() - 8.0
+	_dialogue_beep_player.play()
+	return true
+
+static func _is_dialogue_beep_glyph(character: String) -> bool:
+	return not character.strip_edges().is_empty() and not DIALOGUE_PUNCTUATION.contains(character)
+
+func _make_dialogue_beep(frequency: float) -> AudioStreamWAV:
+	var sample_count := int(DIALOGUE_BEEP_SAMPLE_RATE * DIALOGUE_BEEP_SECONDS)
+	var samples := PackedByteArray()
+	samples.resize(sample_count * 2)
+	for index in range(sample_count):
+		var time_seconds := float(index) / DIALOGUE_BEEP_SAMPLE_RATE
+		var fade := minf(1.0, minf(time_seconds / 0.003, (DIALOGUE_BEEP_SECONDS - time_seconds) / 0.006))
+		var sample := int(round(sin(TAU * frequency * time_seconds) * clampf(fade, 0.0, 1.0) * 7200.0))
+		samples.encode_s16(index * 2, sample)
+	var stream := AudioStreamWAV.new()
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = DIALOGUE_BEEP_SAMPLE_RATE
+	stream.stereo = false
+	stream.data = samples
+	return stream
 
 func set_paused(paused: bool) -> void:
 	_paused = paused
@@ -164,6 +217,8 @@ func set_paused(paused: bool) -> void:
 		_sfx.stream_paused = paused
 	if _notes:
 		_notes.stream_paused = paused
+	if _dialogue_beep_player:
+		_dialogue_beep_player.stream_paused = paused
 
 func _set_ambience_enabled(enabled: bool) -> void:
 	if _ambience_tween and _ambience_tween.is_running():

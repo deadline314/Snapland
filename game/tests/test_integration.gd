@@ -51,15 +51,8 @@ func _run() -> void:
 
 func _test_arrival_and_replay() -> void:
 	_check(main.audio._active_context == "harbor", "main scene starts harbor audio while the player is at the dock")
-	_check(main.modal_kind == "arrival", "new profile opens the arrival modal")
-	_press_button_containing(main.overlay, "下船，去看看")
-	await _frames(1)
-	_check(main.modal_kind == "dialogue", "arrival action starts the intro")
-	for _line in 5:
-		_press_button_containing(main.overlay, "繼續")
-		await _frames(1)
-		_press_button_containing(main.overlay, "繼續")
-		await _frames(1)
+	_check(main.modal_kind == "dialogue" and is_instance_valid(main.dialogue_panel) and main.dialogue_panel.visible, "new profile opens the visible arrival dialogue")
+	await _finish_dialogue_naturally("")
 	_check(progress.intro_seen, "finishing the intro persists intro completion")
 	_check(main.modal_kind == "", "finishing the intro closes its modal")
 	await _frames(3)
@@ -69,9 +62,10 @@ func _test_arrival_and_replay() -> void:
 	_key_up(KEY_E)
 	await _frames(2)
 	_check(main.modal_kind == "dialogue", "arrival interaction replays the intro")
-	_press_button_containing(main.overlay, "略過這段對話")
+	var replay_cancel := main.dialogue_panel.cancel_button as Button
+	_click_real_button(replay_cancel)
 	await _frames(1)
-	_check(progress.intro_seen and main.modal_kind == "", "skipping replay closes it and keeps intro completion")
+	_check(progress.intro_seen and main.modal_kind == "", "cancelling replay closes it and keeps intro completion")
 
 func _test_movement_and_nearest_interaction() -> void:
 	var start: Vector3 = main.world.player.position
@@ -91,7 +85,7 @@ func _test_movement_and_nearest_interaction() -> void:
 	_key_up(KEY_E)
 	await _frames(1)
 	_check(arrival_interactions.has("arrival"), "E interacts with the nearest world point")
-	_press_button_containing(main.overlay, "略過這段對話")
+	await _finish_dialogue_naturally("")
 	await _frames(1)
 	main.world.player.position = Vector3(0, 0.3, 23.2)
 	await _frames(2)
@@ -237,11 +231,13 @@ func _click_real_button(button: Button) -> void:
 func _test_story_and_quests() -> void:
 	await _interact_at("guide")
 	_check(main.modal_kind == "dialogue", "guide interaction starts the main story")
-	_press_button_containing(main.overlay, "略過這段對話")
+	await _finish_dialogue_naturally("")
 	await _frames(1)
 	_check(progress.photos.has("photo-welcome-story-1"), "main story awards its fixed photo source")
 
 	await _interact_at("quest-001")
+	_check(main.modal_kind == "dialogue", "Xiao Jiao greets the player before opening her mission")
+	await _finish_dialogue_naturally("quest")
 	_check(int(progress.quests.get("quest-001", 0)) == 1, "real Xiao Jiao interaction starts the mission")
 	_press_button_containing(main.modal_body, "返回遊園")
 	await _frames(1)
@@ -250,6 +246,8 @@ func _test_story_and_quests() -> void:
 	_press_button_containing(main.overlay, "返回遊園")
 	await _frames(1)
 	await _interact_at("quest-002")
+	_check(main.modal_kind == "dialogue", "阿浪 greets the player before opening his mission")
+	await _finish_dialogue_naturally("quest")
 	_check(int(progress.quests.get("quest-002", 0)) == 1, "real 阿浪 interaction starts his mission")
 	_press_button_containing(main.modal_body, "返回遊園")
 	await _frames(1)
@@ -358,7 +356,7 @@ func _interact_at(id: String) -> void:
 				_check(false, "nearest interaction resolves to %s (got %s)" % [id, str(main.world.nearest.get("id", "none"))])
 				return
 			_key_down(KEY_E)
-			var expected := "game_info" if id.begins_with("game-") else "quest" if id.begins_with("quest-") else "explore" if id.begins_with("explore-") else "dialogue"
+			var expected := "game_info" if id.begins_with("game-") else "explore" if id.begins_with("explore-") else "dialogue"
 			var opened := await _wait_for_modal(expected)
 			_key_up(KEY_E)
 			if not opened:
@@ -521,6 +519,18 @@ func _press_first_action_button() -> void:
 		_check(false, "modal has an action button")
 		return
 	button.emit_signal("pressed")
+
+func _finish_dialogue_naturally(expected_modal: String) -> void:
+	for _advance in range(256):
+		if _abort_tests or main.modal_kind != "dialogue":
+			break
+		var advance_button: Button = main.dialogue_panel.advance_button if is_instance_valid(main.dialogue_panel) else null
+		if advance_button == null:
+			_check(false, "visible dialogue exposes its real next/reveal button")
+			break
+		_click_real_button(advance_button)
+		await _frames(1)
+	_check(main.modal_kind == expected_modal, "natural dialogue completion reaches %s (got %s)" % [expected_modal if not expected_modal.is_empty() else "the park", main.modal_kind])
 
 func _press_button_containing(node: Node, needle: String) -> void:
 	if _abort_tests: return

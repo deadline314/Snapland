@@ -28,10 +28,11 @@ func _run() -> void:
 	main = MAIN_SCENE.instantiate()
 	get_tree().root.add_child(main)
 	await _frames(3)
-	_check(main.modal_kind == "arrival", "fresh profile reaches the arrival conversation")
-	_press_button(main.overlay, "略過導覽，直接遊園")
+	_check(main.modal_kind == "dialogue" and main.dialogue_panel.visible, "fresh profile reaches anchored arrival dialogue")
+	_check(main.dialogue_label.visible_characters >= 0 and main.dialogue_label.visible_characters < main.dialogue_label.text.length(), "arrival opens with its first subtitle in typewriter reveal")
+	await _complete_dialogue()
 	await _frames(2)
-	_check(main.modal_kind == "", "player choice opens the park")
+	_check(main.modal_kind == "" and progress.intro_seen, "natural arrival dialogue completion opens the park and preserves intro progress")
 
 	await _interact_at("quest-001")
 	_check(int(progress.quests.get("quest-001", 0)) == 1, "real Xiao Jiao interaction starts mission 1")
@@ -166,12 +167,15 @@ func _interact_at(id: String) -> void:
 		if str(main.world.nearest.get("id", "")) != id:
 			return
 		_key(KEY_E, true)
-		var expected := "quest" if id.begins_with("quest-") else "explore" if id.begins_with("explore-") else "game_info"
+		var expected := "dialogue" if id.begins_with("quest-") else "explore" if id.begins_with("explore-") else "game_info"
 		deadline = Time.get_ticks_msec() + 1500
 		while Time.get_ticks_msec() < deadline and main.modal_kind != expected:
 			await get_tree().process_frame
 		_key(KEY_E, false)
 		_check(main.modal_kind == expected, "E opens actual " + expected + " UI at " + id)
+		if id.begins_with("quest-") and main.modal_kind == "dialogue":
+			await _complete_dialogue()
+			_check(main.modal_kind == "quest", "natural actor dialogue completion opens the existing quest at " + id)
 		return
 	_check(false, "world has interaction point " + id)
 
@@ -186,6 +190,20 @@ func _complete_exploration(index: int) -> void:
 		_press_button(main.modal_body, "借一個小角立牌")
 	_press_button(main.modal_body, "按下快門")
 	await _frames(2)
+
+func _complete_dialogue() -> void:
+	var remaining: int = main.dialogue.size() * 3 + 2
+	while main.modal_kind == "dialogue" and remaining > 0:
+		remaining -= 1
+		var needs_reveal: bool = main.dialogue_label != null and main.dialogue_label.visible_characters >= 0
+		_key(KEY_E, true)
+		_key(KEY_E, false)
+		await _frames(1)
+		if needs_reveal and main.modal_kind == "dialogue":
+			_key(KEY_E, true)
+			_key(KEY_E, false)
+			await _frames(1)
+	_check(main.modal_kind != "dialogue", "all dialogue lines complete through E reveal/advance input")
 
 func _press_button(node: Node, needle: String) -> void:
 	var button := _find_button(node, needle)

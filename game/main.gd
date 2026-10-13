@@ -9,6 +9,7 @@ const WardrobePanel = preload("res://game/ui/wardrobe_panel.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TimePanel = preload("res://game/ui/time_panel.gd")
 const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
+const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 var world: Node3D
 var audio: Node
 var story: RefCounted
@@ -35,7 +36,9 @@ var celebrate_on_close := false
 var dialogue: Array=[]
 var dialogue_index := 0
 var dialogue_label: Label
+var dialogue_panel: Control
 var dialogue_done := Callable()
+var dialogue_cancelled := Callable()
 var reveal := 0.0
 var definitions: Array=[]
 var capture_mode := false
@@ -461,9 +464,14 @@ func _process(delta: float) -> void:
 		context_action.visible=has_context
 		if has_context:
 			context_action.text="E   互動：%s"%str(world.nearest.get("label","附近設施"))
-	if modal_kind=="dialogue" and is_instance_valid(dialogue_label):
+	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0:
+		var previous_count := dialogue_label.visible_characters
 		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
-		dialogue_label.visible_characters=int(reveal)
+		var next_count := mini(int(reveal), dialogue_label.text.length())
+		dialogue_label.visible_characters=next_count
+		for char_index in range(previous_count, next_count):
+			var current_speaker := str(dialogue[dialogue_index].get("speaker", "")) if dialogue_index < dialogue.size() else ""
+			audio.play_dialogue_beep(current_speaker, dialogue_label.text.substr(char_index, 1))
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_T:
@@ -478,7 +486,7 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
-		if modal_kind=="dialogue": _finish_dialogue()
+		if modal_kind=="dialogue": _cancel_dialogue()
 		elif modal_kind!="": _close()
 		elif session==null: _show_pause()
 		get_viewport().set_input_as_handled()
@@ -487,6 +495,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			_next_dialogue()
 		elif modal_kind=="" and session==null:
 			world.interact()
+		get_viewport().set_input_as_handled()
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_SPACE and modal_kind=="dialogue":
+		_next_dialogue()
 		get_viewport().set_input_as_handled()
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_C:
 		if modal_kind=="" and session==null:
@@ -674,18 +685,32 @@ func _show_pause() -> void:
 		Paper.button("回看本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),links)
 
 func _show_arrival() -> void:
-	var body := _open("今晚也要拍一張","WELCOME TO THE ISLAND","arrival")
-	var arrival_card := Paper.card(body,Color("#fffaf0"),10)
-	arrival_card.add_child(Paper.section_title("你的入園票已經備好。"))
-	arrival_card.add_child(Paper.label("船靠岸了。海風吹亂你的頭髮，也吹來一張沒有人署名的入園券。",20))
-	arrival_card.add_child(Paper.label("沿著木棧橋走進廣場，再到迎賓大道看看。收藏的是差一點錯過的笑容。",20))
-	Paper.button("下船，去看看",func(): _start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress()),arrival_card).grab_focus()
-	Paper.button("略過導覽，直接遊園",func(): Progress.intro_seen=true; Progress.save_progress(); _close(),body)
+	_start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress(),func(): Progress.intro_seen=true; Progress.save_progress())
 
-func _start_dialogue(lines: Array, done: Callable) -> void:
-	dialogue=lines
+func _start_dialogue(lines: Array, done: Callable, cancelled: Callable = Callable()) -> void:
+	if lines.is_empty():
+		if done.is_valid(): done.call()
+		return
+	dialogue=lines.duplicate(true)
 	dialogue_index=0
 	dialogue_done=done
+	dialogue_cancelled=cancelled
+	if not is_instance_valid(dialogue_panel):
+		dialogue_panel=DialoguePanelScript.new()
+		dialogue_panel.advance_requested.connect(_next_dialogue)
+		dialogue_panel.finished.connect(_cancel_dialogue)
+		dialogue_panel.tree_exiting.connect(_dialogue_panel_exiting.bind(dialogue_panel))
+		ui.add_child(dialogue_panel)
+		dialogue_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_dialogue_panel_resized()
+		if not get_tree().root.size_changed.is_connected(_dialogue_panel_resized):
+			get_tree().root.size_changed.connect(_dialogue_panel_resized)
+	else:
+		dialogue_panel.show()
+		dialogue_panel.set_process_unhandled_key_input(true)
+	overlay.hide()
+	hud.show()
+	world.blocked=true
 	_render_dialogue()
 
 func _render_dialogue() -> void:
@@ -693,62 +718,90 @@ func _render_dialogue() -> void:
 		_finish_dialogue()
 		return
 	var line: Dictionary=dialogue[dialogue_index]
-	var body := _open(str(line.get("speaker","旁白")),"ISLAND STORIES  ·  %d / %d"%[dialogue_index+1,dialogue.size()],"dialogue")
-	var identity := PanelContainer.new()
-	identity.custom_minimum_size=Vector2(240,112)
-	identity.add_theme_stylebox_override("panel",Paper.box(Color("#e9dfc5"),8))
-	body.add_child(identity)
-	var identity_row := HBoxContainer.new()
-	identity_row.add_theme_constant_override("separation",10)
-	identity.add_child(identity_row)
-	identity_row.add_child(Paper.portrait(str(line.get("speaker","旁白"))))
-	var identity_copy := VBoxContainer.new()
-	identity_copy.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	identity_copy.add_theme_constant_override("separation",3)
-	identity_row.add_child(identity_copy)
-	identity_copy.add_child(Paper.label("本段說話者",14,Paper.TEAL))
-	identity_copy.add_child(Paper.label(str(line.get("speaker","旁白")),22))
-	dialogue_label=Paper.label(str(line.get("text","")),26)
-	dialogue_label.custom_minimum_size=Vector2(830,142)
-	dialogue_label.visible_characters=0
-	body.add_child(dialogue_label)
+	dialogue_panel.show_line(str(line.get("speaker","旁白")),str(line.get("text","")),dialogue_index)
+	dialogue_label=dialogue_panel.text_label
 	reveal=0
-	Paper.button("繼續  ·  E / Space",_next_dialogue,body).grab_focus()
-	Paper.button("略過這段對話",_finish_dialogue,body)
+	modal_kind="dialogue"
 
 func _next_dialogue() -> void:
 	if not is_instance_valid(dialogue_label): return
-	if dialogue_label.visible_characters<dialogue_label.text.length():
+	if dialogue_label.visible_characters>=0 and dialogue_label.visible_characters<dialogue_label.text.length():
 		reveal=dialogue_label.text.length()
-		dialogue_label.visible_characters=-1
+		dialogue_panel.reveal_all()
 	else:
 		dialogue_index+=1
 		_render_dialogue()
 
-func _finish_dialogue() -> void:
+func _finish_dialogue(cancelled: bool = false) -> void:
 	var callback := dialogue_done
+	var cancel_callback := dialogue_cancelled
 	dialogue_done=Callable()
+	dialogue_cancelled=Callable()
+	if is_instance_valid(dialogue_panel):
+		dialogue_panel.set_process_unhandled_key_input(false)
+		dialogue_panel.hide()
+		dialogue_panel.queue_free()
+	dialogue_panel=null
+	dialogue_label=null
+	dialogue.clear()
 	overlay.hide()
 	modal_kind=""
-	world.blocked=false
-	if callback.is_valid(): callback.call()
+	if is_instance_valid(world): world.blocked=session!=null
+	if is_instance_valid(hud): hud.show()
+	if cancelled:
+		if cancel_callback.is_valid(): cancel_callback.call()
+	elif callback.is_valid():
+		callback.call()
+
+func _cancel_dialogue() -> void:
+	_finish_dialogue(true)
+
+func _dialogue_panel_exiting(panel: Control) -> void:
+	if dialogue_panel!=panel: return
+	dialogue_panel=null
+	dialogue_label=null
+	dialogue_done=Callable()
+	dialogue_cancelled=Callable()
+	dialogue.clear()
+	if modal_kind=="dialogue":
+		modal_kind=""
+		if is_instance_valid(world): world.blocked=session!=null
+
+func _dialogue_panel_resized() -> void:
+	if not is_instance_valid(dialogue_panel): return
+	var scale_factor := Paper.physical_scale(dialogue_panel)
+	Paper.adapt_menu(dialogue_panel, scale_factor)
+	var center := dialogue_panel.get_child(0) as CenterContainer
+	center.anchor_top=1.0
+	center.anchor_bottom=1.0
+	center.offset_left=24.0/scale_factor
+	center.offset_right=-24.0/scale_factor
+	center.offset_top=-252.0/scale_factor
+	center.offset_bottom=-20.0/scale_factor
+	var plaque := dialogue_panel.find_child("DialoguePlaque", true, false) as Control
+	if plaque != null:
+		plaque.custom_minimum_size=Vector2(get_viewport().get_visible_rect().size.x-48.0/scale_factor,210.0/scale_factor)
+	if is_instance_valid(dialogue_label): dialogue_label.custom_minimum_size.y=82.0/scale_factor
 
 func _interact(id: String, title: String) -> void:
 	audio.play_sfx("interact")
 	if id.begins_with("game-"):
 		_show_game_info(id)
 	elif id=="arrival":
-		_start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress())
+		_start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress(),func(): Progress.intro_seen=true; Progress.save_progress())
 	elif id=="guide":
 		_start_dialogue(story.main_lines(),func(): Progress.grant_photo("photo-welcome-story-1"); _notice("第一張主線拍貼，收進本子裡了。"))
+	elif id=="quest-001" or id=="quest-002":
+		var actor_lines := _actor_dialogue_lines(id)
+		_start_dialogue(actor_lines,func():
+			_record_story_mission_event({"type":"interaction","id":id})
+			_show_quest(id)
+		,func(): _record_story_mission_event({"type":"interaction","id":id}))
 	elif id=="album": _show_album()
 	elif id=="settings": _show_settings()
 	elif id=="clock":
 		world.set_night(not world.night)
 		_notice("夜晚亮起來了。" if world.night else "陽光回到島上了。")
-	elif id.begins_with("quest-"):
-		_record_story_mission_event({"type":"interaction","id":id})
-		_show_quest(id)
 	elif id.begins_with("explore-"): _show_exploration(id)
 	elif id=="rift":
 		var body := _open(title,"LITTLE DEVILS","rift")
@@ -764,6 +817,15 @@ func _interact(id: String, title: String) -> void:
 				body.add_child(Paper.label("入園資格：%d 張不同普通拍貼（不消耗）\n目前：%d 張\n\n這座園區正在準備中。先去迎賓大道留下今天的回憶吧。"%[zone.threshold,Progress.normal_count()],22))
 				_back(body)
 				break
+
+func _actor_dialogue_lines(quest_id: String) -> Array:
+	var mission: Dictionary=story.quest_data(quest_id).get("mission",{})
+	var speaker := str(mission.get("speaker", ""))
+	var lines: Array=[]
+	for line: Dictionary in story.main_lines():
+		if str(line.get("speaker", "")) == speaker:
+			lines.append(line)
+	return lines
 
 func _definition(id: String) -> Dictionary:
 	for definition in definitions:
