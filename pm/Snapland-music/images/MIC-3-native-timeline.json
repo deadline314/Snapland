@@ -1,0 +1,144 @@
+{
+	"audition": "pending",
+	"capture_bytes": 6301696,
+	"duration_seconds": 32.929,
+	"events": [
+		{
+			"active_context": "harbor",
+			"active_stream_path": "res://assets/audio/cc0/harbor.ogg",
+			"event": "main_ready_harbor",
+			"paused": false,
+			"seconds": 0.0,
+			"volume_db": -17.0307941436768,
+			"volume_linear": 0.140753865242004
+		},
+		{
+			"active_context": "harbor",
+			"active_stream_path": "res://assets/audio/cc0/harbor.ogg",
+			"event": "screenshot_harbor",
+			"paused": false,
+			"seconds": 0.145,
+			"volume_db": -16.7579727172852,
+			"volume_linear": 0.145245060324669
+		},
+		{
+			"active_context": "plaza",
+			"active_stream_path": "res://assets/audio/cc0/plaza.ogg",
+			"event": "music_context_plaza",
+			"paused": false,
+			"seconds": 8.028,
+			"volume_db": "-inf",
+			"volume_linear": 0.0
+		},
+		{
+			"active_context": "plaza",
+			"active_stream_path": "res://assets/audio/cc0/plaza.ogg",
+			"event": "screenshot_plaza",
+			"paused": false,
+			"seconds": 9.06,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "music_context_game",
+			"paused": false,
+			"seconds": 16.052,
+			"volume_db": "-inf",
+			"volume_linear": 0.0
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "screenshot_game",
+			"paused": false,
+			"seconds": 17.087,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "sfx_interact",
+			"paused": false,
+			"seconds": 24.001,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "gameplay_success_short_hit",
+			"paused": false,
+			"seconds": 24.318,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "sfx_miss",
+			"paused": false,
+			"seconds": 24.734,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "sfx_shutter",
+			"paused": false,
+			"seconds": 25.252,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "sfx_quest_complete_full",
+			"paused": false,
+			"seconds": 25.668,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "dialogue_beep",
+			"paused": false,
+			"seconds": 29.683,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "master_mute_begin",
+			"paused": false,
+			"seconds": 30.5,
+			"volume_db": "-inf",
+			"volume_linear": 0.0
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "screenshot_mute",
+			"paused": false,
+			"seconds": 30.633,
+			"volume_db": "-inf",
+			"volume_linear": 0.0
+		},
+		{
+			"active_context": "game",
+			"active_stream_path": "res://assets/audio/cc0/game.ogg",
+			"event": "master_mute_end",
+			"paused": false,
+			"seconds": 32.517,
+			"volume_db": -7.53501415252686,
+			"volume_linear": 0.420000016689301
+		}
+	],
+	"method": "Audio-only technical test in the same native Main scene: direct audio context changes and scripted SFX calls; no traversal through three park areas or gameplay; native Master mix capture, audition pending",
+	"recording": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\cc0-native-caf38248/MIC-3-native-mix.wav"
+}

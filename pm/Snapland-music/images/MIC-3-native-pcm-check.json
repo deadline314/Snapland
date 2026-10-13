@@ -1,0 +1,11 @@
+{
+  "method": "PCM inspection only; no listening judgment",
+  "sample_rate": 48000,
+  "channels": 2,
+  "duration_seconds": 32.821333333333335,
+  "peak_pcm16": 5435,
+  "saturated_samples": 0,
+  "mute_middle_peak_pcm16": 0,
+  "master_gain_restored": true,
+  "audition": "pending"
+}

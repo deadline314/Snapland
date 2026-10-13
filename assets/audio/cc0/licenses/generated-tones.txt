@@ -1,0 +1,16 @@
+CC0 1.0 Universal — Snapland generated audio outputs
+
+To the extent possible under law, Stanley Li has waived all copyright and
+related or neighboring rights to the isolated synthesized audio outputs
+listed below under CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Scope: note_0.wav through note_3.wav; the four speaker sine-wave beeps
+generated at runtime by game/audio/audio_director.gd; legacy WAV outputs
+of game/audio/generate_audio.py (harbor, plaza, game, plaza_ambience,
+ui_click, photo_shutter, quest_complete and soft_error).
+
+These outputs were synthesized for this project without third-party samples.
+This dedication does not apply to the game's source code, art, characters,
+or third-party recordings. Third-party CC0 material retains its own source
+record in assets/audio/cc0/catalog.json and the accompanying source licenses.

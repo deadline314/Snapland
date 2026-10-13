@@ -6,7 +6,6 @@ import wave
 
 RATE = 22050
 OUT = Path(__file__).resolve().parents[2] / 'assets' / 'audio'
-OUT.mkdir(parents=True, exist_ok=True)
 
 # All audio is composed in this script. Equal temperament, gentle triangle-like
 # partials, and restrained peaks keep the loops soft and easy to layer.
@@ -133,13 +132,25 @@ def render_sfx(filename, notes, seconds, noise=0.0):
             frames.extend(struct.pack('<h', int(max(-0.95, min(0.95, sample)) * 32767)))
         file.writeframes(frames)
 
-for context, melody in MELODIES.items():
-    render_music(context, melody)
-render_ambience()
-render_sfx('ui_click.wav', [(84, 0.0, 0.055, 0.32)], 0.07)
-render_sfx('photo_shutter.wav', [(77, 0.0, 0.10, 0.22), (64, 0.055, 0.12, 0.12)], 0.20, noise=0.07)
-render_sfx('quest_complete.wav', [(72, 0.0, 0.16, 0.18), (76, 0.12, 0.18, 0.17), (79, 0.25, 0.28, 0.16)], 0.58)
+if __name__ == '__main__':
+    import argparse
 
-render_sfx('soft_error.wav', [(57, 0.0, 0.11, 0.12), (53, 0.09, 0.14, 0.10)], 0.27)
-for index, pitch in enumerate([72, 76, 79, 84]):
-    render_sfx(f'note_{index}.wav', [(pitch, 0.0, 0.27, 0.24)], 0.30)
+    parser = argparse.ArgumentParser(description='Generate CC0 isolated notes; preserve curated third-party audio.')
+    parser.add_argument('--legacy-output', type=Path, help='Render historical compositions only into a separate review directory.')
+    args = parser.parse_args()
+    if args.legacy_output:
+        legacy = args.legacy_output.resolve()
+        if legacy.is_relative_to(OUT.resolve()):
+            parser.error('Legacy output must stay outside assets/audio to preserve curated CC0 assets.')
+        OUT = legacy
+    OUT.mkdir(parents=True, exist_ok=True)
+    if args.legacy_output:
+        for context, melody in MELODIES.items():
+            render_music(context, melody)
+        render_ambience()
+        render_sfx('ui_click.wav', [(84, 0.0, 0.055, 0.32)], 0.07)
+        render_sfx('photo_shutter.wav', [(77, 0.0, 0.10, 0.22), (64, 0.055, 0.12, 0.12)], 0.20, noise=0.07)
+        render_sfx('quest_complete.wav', [(72, 0.0, 0.16, 0.18), (76, 0.12, 0.18, 0.17), (79, 0.25, 0.28, 0.16)], 0.58)
+        render_sfx('soft_error.wav', [(57, 0.0, 0.11, 0.12), (53, 0.09, 0.14, 0.10)], 0.27)
+    for index, pitch in enumerate([72, 76, 79, 84]):
+        render_sfx(f'note_{index}.wav', [(pitch, 0.0, 0.27, 0.24)], 0.30)

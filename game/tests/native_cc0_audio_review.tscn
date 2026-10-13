@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://game/tests/native_cc0_audio_review.gd" id="1_audio_review"]
+
+[node name="NativeCC0AudioReview" type="Node"]
+script = ExtResource("1_audio_review")

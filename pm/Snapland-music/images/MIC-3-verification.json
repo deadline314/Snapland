@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-14",
+  "baseline": "89bf0b4",
+  "branch": "feature/island-experience",
+  "python": {
+    "audio_license_checks": 5,
+    "safe_entrypoint_checks": 13,
+    "failures": 0
+  },
+  "godot": [
+    {
+      "suite": "audio",
+      "exit": 0,
+      "errors": 0,
+      "pass_markers": [
+        "PASS: ambience remained playing beyond full cycle: 3.650s, 160965 frames, format 3",
+        "PASS: audio runtime checks"
+      ]
+    },
+    {
+      "suite": "dialogue",
+      "exit": 0,
+      "errors": 0,
+      "pass_markers": [
+        "PASS: island dialogue panel and bounded, speaker-pitched beep"
+      ]
+    },
+    {
+      "suite": "main-integration",
+      "exit": 0,
+      "errors": 0,
+      "pass_markers": [
+        "PASS: main scene integration checks"
+      ]
+    }
+  ],
+  "native": {
+    "renderer": "Vulkan Forward+",
+    "device": "Intel Arc B580",
+    "audio_driver": "WASAPI",
+    "root_visual_review": [
+      "MIC-3-harbor.png",
+      "MIC-3-mute.png"
+    ],
+    "scope": "same Main scene with scripted audio context changes, not traversing the park or playing minigames",
+    "audition": "pending",
+    "errors": 0,
+    "capture_sha256": "6e4c8966685d211819bc5bf1742cbe913bccce5dfb6b61eb6c92c681feb02d7e",
+    "pcm_check": {
+      "method": "PCM inspection only; no listening judgment",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration_seconds": 32.821333333333335,
+      "peak_pcm16": 5435,
+      "saturated_samples": 0,
+      "mute_middle_peak_pcm16": 0,
+      "master_gain_restored": true,
+      "audition": "pending"
+    }
+  },
+  "scope_note": "Only the Main gameplay-feedback connection changes outside the music-owned files; full per-game scores and theme synchronization remain MIC-2.",
+  "formal_profile_sha256": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf",
+  "formal_profile_backup_sha256": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b",
+  "review_boundaries": [
+    "Full music loops, fatigue and subjective mix balance require headphones/speaker audition.",
+    "The native run uses the project Forward+ renderer; an earlier incompatible GL review launch was stopped and is not passing evidence.",
+    "Existing NPC motion and occlusion-material warnings are not certified as resolved by this audio ticket."
+  ]
+}

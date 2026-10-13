@@ -1179,7 +1179,7 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	session.cancelled.connect(_cancel_game)
 	session.help_requested.connect(func(game_id: String): _open_tutorial(game_id,"session",assist))
 	session.note_played.connect(audio.play_note)
-	session.feedback.connect(audio.play_sfx)
+	session.feedback.connect(audio.play_gameplay_feedback)
 	if session.has_method("set_time_of_day"):
 		session.set_time_of_day(TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE)))
 	session.start(id,assist)
