@@ -67,4 +67,19 @@
 
 [正常流程](images/ST-5-native-normal.mp4) · [四分之一速度](images/ST-5-native-quarter.mp4)
 
-錄影以實際鍵鼠事件操作，站點間有測試傳送；這段證據確認對話操作，不是整島自由試玩。共同背景改善另由 MAIN-11 驗收。分支：`feature/island-experience`；遠端功能提交連結於證據更新補入。
+錄影以實際鍵鼠事件操作，站點間有測試傳送；這段證據確認對話操作，不是整島自由試玩。共同背景改善另由 MAIN-11 驗收。分支：`feature/island-experience`；[遠端功能提交](https://github.com/deadline314/Snapland/commit/4c95f00b0d92e562fa13c022ff4e51ba9cd20762)。
+
+# Commit-2
+
+### 問題
+上島對話仍引導玩家找不存在的亭上藍色箭頭，與目前廣場配置不符。
+
+### 改動
+抵達時改以木棧橋、廣場及票票的圓眼鏡和棕色包引路，讓對話指向玩家實際看得到的人與位置。
+
+### 驗收
+以本次提交內容建立獨立副本，故事、故事整合、對話及主場景四項局部測試通過。原生啟動錄製 240 格／60 FPS；主 Session 實際查看完整對話截圖，文字正確且沒有被介面截斷，執行記錄沒有 ERROR。這是啟動與文字驗收，沒有把它當成自由試玩或音效試聽。
+
+![修正後的上島地標引導](images/ST-5-arrival-landmark-corrected.png)
+
+分支：`feature/island-experience`；本輪文字基準：`d3d98a4`。遠端提交連結於本次提交後補入。
