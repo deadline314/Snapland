@@ -1,0 +1,9 @@
+# Looking through collected album photos
+
+A collected photo tile opens a full-screen viewer only when a saved image can actually be read. The viewer displays that saved texture at its original aspect ratio and does not crop it. Pressing Escape or the visible “返回相簿” button closes the viewer, leaves the collection book open, and returns keyboard focus to the originating photo tile. A collected card whose image is unavailable stays in the book and explains the situation in player-facing language. Empty slots and existing tabs, paging, and collection requirements remain part of the same album.
+
+Opening and closing a viewer is read-only: it does not award, consume, or change a photo, achievement, quest, or currency record. The viewer is attached above the existing modal overlay, and handles cancel input before Main's unhandled key navigation can close the whole book.
+
+`res://game/tests/test_album_photo_viewer.tscn` exercises a real PNG fixture, keyboard activation, aspect-preserving display, Escape and button close paths, focus restoration, unavailable-image copy, no fake image, and immutable progress. Existing 32×18 general album images remain displayable through the separately bounded general-PNG path. This is a bounded headless UI test; visual sizing and legibility still need native in-game review.
+
+The interaction follows the album-as-a-second creative space described by Nintendo's [New Pokémon Snap product page](https://www.nintendo.com/us/store/products/new-pokemon-snap-110735/), while Microsoft [XAG 104](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/104) supports visible/readable alternatives and keyboard operation for meaningful controls. The [GDC Vault session description](https://www.gdcvault.com/play/1027158/Cutting-Apart-The-Diegetic-Interface) informed the balance between themed presentation and clear controls; the full session was not viewed.

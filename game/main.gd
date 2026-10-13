@@ -353,12 +353,11 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	overlay.add_child(center)
 	var panel := PanelContainer.new()
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var tall_kinds := ["settings","album","achievements","map","pause","wardrobe","time","ticket"]
-	var preferred_height := 600.0 if tall_kinds.has(kind) else 350.0
+	var preferred_size := _menu_preferred_size(kind)
 	panel.name="AdaptiveMenuPanel"
 	var menu_scale := Paper.physical_scale(overlay)
-	var menu_width := minf(1040.0/menu_scale,viewport_size.x-32.0/menu_scale)
-	panel.custom_minimum_size=Vector2(menu_width,minf(preferred_height/menu_scale,viewport_size.y-32.0/menu_scale))
+	var menu_width := minf(preferred_size.x/menu_scale,viewport_size.x-32.0/menu_scale)
+	panel.custom_minimum_size=Vector2(menu_width,minf(preferred_size.y/menu_scale,viewport_size.y-32.0/menu_scale))
 	panel.add_theme_stylebox_override("panel",Paper.plaque(Color("#f7efd9")))
 	center.add_child(panel)
 	var margin := MarginContainer.new()
@@ -1426,8 +1425,8 @@ func _adapt_open_menu() -> void:
 	var panel := overlay.find_child("AdaptiveMenuPanel",true,false) as Control
 	if panel!=null:
 		var viewport_size := get_viewport().get_visible_rect().size
-		panel.custom_minimum_size.x=minf(1040.0/scale_factor,viewport_size.x-32.0/scale_factor)
-		if scale_factor<0.9: panel.custom_minimum_size.y=viewport_size.y-32.0/scale_factor
+		var preferred_size := _menu_preferred_size(modal_kind)
+		panel.custom_minimum_size=Vector2(minf(preferred_size.x/scale_factor,viewport_size.x-32.0/scale_factor),minf(preferred_size.y/scale_factor,viewport_size.y-32.0/scale_factor))
 	Paper.adapt_menu(overlay,scale_factor)
 	var chart := overlay.find_child("IslandChartCanvas",true,false)
 	if chart!=null and chart.get_parent().get_parent().has_method("_layout_map_buttons"):
@@ -1488,3 +1487,11 @@ func _append_photo_snapshot() -> void:
 	snapshot.resize(320,180,Image.INTERPOLATE_LANCZOS)
 	if photo_frames.size()>=4: photo_frames.pop_front()
 	photo_frames.append(snapshot)
+
+func _menu_preferred_size(kind: String) -> Vector2:
+	if kind=="pause": return Vector2(720,330)
+	if kind=="album": return Vector2(1080,680)
+	if kind=="time": return Vector2(1000,540)
+	var tall_kinds := ["settings","achievements","map","wardrobe","ticket"]
+	return Vector2(1040,600 if tall_kinds.has(kind) else 350)
+

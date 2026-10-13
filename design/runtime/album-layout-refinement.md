@@ -1,0 +1,9 @@
+# Album layout refinement
+
+The collection book adapts its photo spread to physical viewport width. At 1200 px and wider, it places four catalog entries in one row and sizes the paper spread to 224 physical pixels high. Narrower windows use two columns with a 432 physical pixel spread so both rows can be reached by scrolling. The category tabs remain above the scrolling content. The page count now shares the previous/next navigation row, leaving more vertical room for the photo spread and details.
+
+Each card reserves 232 physical pixels of width (above the 224 px minimum) and 200 pixels of height. Its saved-photo frame keeps a centered, uncropped 16:9 image at a 220×124 physical minimum. The image frame and book cover plaque use 4 physical pixels of content padding, with 8 physical pixels of cover margin and 14 pixel grid insets. The title and saved/waiting status remain within their card. The test checks all cards and the category, detail, and page controls against the real Scroll clip and paper bounds; at 800×600 it checks both rows and the page navigation after scrolling.
+
+The change preserves the 18 ordinary, 12 devil, and 4 time postcard entries, four entries per page, earned-first ordering, stable IDs, category hints, and page controls. It changes the wide layout from two rows to a single-row photo gallery to use the album's available width and avoid clipping. Empty and unreadable-photo behavior are unchanged.
+
+The CPU `test_travel_book_ui.tscn` verifies actual ScrollContainer clipping at 1280×720, the responsive two-column layout and full first/lower rows at 800×600, readable titles/status, the full-size thumbnail bounds, and catalog/page behavior. It passed on Godot 4.7.2 with an isolated absolute `SNAPLAND_SAVE_PATH`. This is a layout/control check, not native visual acceptance; the native album still needs review.

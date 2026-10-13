@@ -113,3 +113,35 @@
 ### 提交
 
 分支：`feature/island-first-park`；[遠端交付提交](https://github.com/deadline314/Snapland/commit/557404258269e65d59cd9dcac5b04d1de92c5634)。
+
+## 2026-10-13 試玩後修訂
+
+使用者否定目前島上畫面／動畫／介面品質。歷史交付證據只代表當時版本與當時範圍；本輪新增品質驗收如下。
+
+- [ ] 重新以島上遊玩流程驗收拍貼與介面：清楚主要操作、可見照片、收藏回饋與返回方式，不靠裝飾或增加選單複雜度改善。
+- [ ] 保存本輪原生前後畫面與影片，實際查看後記錄通過或拒絕原因。
+
+Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
+
+# Commit-4
+
+### 問題
+收藏本照片太小，下排文字會被捲動區裁掉；測試曾只核對整個視窗，漏掉真正可見的範圍。暫停介面也有不必要的大量空白。
+
+### 改動
+大視窗的收藏本改成一排四張完整照片，小視窗改用雙欄捲動；圖片、名稱、收藏狀態、頁碼與返回都有清楚位置。照片可放大並返回原焦點，保留完整比例。減少 HUD 高度，依內容調整暫停、時段與相簿的大小，視窗改變時也維持相同操作邏輯。
+
+### 驗收
+主 Session 重建本票提交內容，版面、照片檢視器與共用縮圖三项局部驗證全過。實際原生操作遊園選單、四個時段及降低動態，錄影 891 格／14.85 秒、0 ERROR；已查看大／小相簿、地圖、衣櫃、設定、成就和對話截圖。實體視窗為 1280×720 與 800×600，後者截取的有效畫布是 800×450。保留第一輪裁字失敗圖，新增測試逐一核對卡片、文字與導覽位於紙頁和捲動區的可見範圍。正式遊戲取得照片及重開後檢視高清原圖仍與 MAIN-16 一起驗收；本票維持進行中，未把局部改善稱作所有介面精品完成。
+
+### 測試與證據
+[版面決策與邊界](../../design/runtime/album-layout-refinement.md) · [照片放大與返回](../../design/runtime/album-photo-interaction.md) · [局部版面驗證](images/ART-20-island-final-layout-local.log) · [照片檢視驗證](images/ART-20-island-final-viewer-local.log) · [原生操作紀錄](images/ART-20-island-final-native.log) · [選單操作影片](images/ART-20-island-final-normal.mp4)。
+
+![退回修正的下排裁字](images/ART-20-island-rejected-album-clipping.png)
+![四張照片、完整文字與導覽](images/ART-20-island-final-album-1280.png)
+![小視窗雙欄與固定返回](images/ART-20-island-final-album-800.png)
+![衣櫃完整人物預覽](images/ART-20-island-final-wardrobe-1280.png)
+![時段選擇](images/ART-20-island-final-time-800.png)
+![島嶼地圖](images/ART-20-island-final-map-1280.png)
+
+本輪提交基準：`e0a332b`；分支：`feature/island-experience`。共用改動涉及 MAIN-13 的收藏卡片顯示，沒有更改收藏資格或重新發獎勵。本段是程式化操作及原生畫面檢查，沒有人工試玩或試聽宣稱。

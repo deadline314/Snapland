@@ -1,0 +1,205 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 60 FPS...
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_avenue (res://game/world/park_world.gd:1198)
+       [4] _ready (res://game/world/park_world.gd:127)
+       [5] _ready (res://game/main.gd:58)
+       [6] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_avenue (res://game/world/park_world.gd:1198)
+       [4] _ready (res://game/world/park_world.gd:127)
+       [5] _ready (res://game/main.gd:58)
+       [6] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_avenue (res://game/world/park_world.gd:1198)
+       [4] _ready (res://game/world/park_world.gd:127)
+       [5] _ready (res://game/main.gd:58)
+       [6] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_avenue (res://game/world/park_world.gd:1198)
+       [4] _ready (res://game/world/park_world.gd:127)
+       [5] _ready (res://game/main.gd:58)
+       [6] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1224)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1231)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1231)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1231)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1231)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1231)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1238)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1238)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1245)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1245)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1245)
+       [4] _build_avenue (res://game/world/park_world.gd:1199)
+       [5] _ready (res://game/world/park_world.gd:127)
+       [6] _ready (res://game/main.gd:58)
+       [7] _run (res://game/tests/native_park_ui_review.gd:25)
+[park_world] scenery meshes: 865, nodes: 1658
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1555/AdaptiveMenuPanel/@MarginContainer@1556/@VBoxContainer@1557/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1565/@GridContainer@1566/@PanelContainer@1567/@VBoxContainer@1568/@Button@1571 rect=[P: (173.0, 251.0), S: (440.0, 44.0)] pointer=(393.0, 273.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1555/AdaptiveMenuPanel/@MarginContainer@1556/@VBoxContainer@1557/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1565/@GridContainer@1566/@PanelContainer@1567/@VBoxContainer@1568/@Button@1571 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1650/AdaptiveMenuPanel/@MarginContainer@1651/@VBoxContainer@1652/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1660/@GridContainer@1661/@PanelContainer@1662/@VBoxContainer@1663/@Button@1667 rect=[P: (173.0, 303.0), S: (440.0, 44.0)] pointer=(393.0, 325.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1650/AdaptiveMenuPanel/@MarginContainer@1651/@VBoxContainer@1652/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1660/@GridContainer@1661/@PanelContainer@1662/@VBoxContainer@1663/@Button@1667 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1716/AdaptiveMenuPanel/@MarginContainer@1717/@VBoxContainer@1718/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1726/@GridContainer@1727/@PanelContainer@1734/@VBoxContainer@1735/@Button@1738 rect=[P: (659.0, 251.0), S: (440.0, 44.0)] pointer=(879.0, 273.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1716/AdaptiveMenuPanel/@MarginContainer@1717/@VBoxContainer@1718/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1726/@GridContainer@1727/@PanelContainer@1734/@VBoxContainer@1735/@Button@1738 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1835/AdaptiveMenuPanel/@MarginContainer@1836/@VBoxContainer@1837/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1845/@GridContainer@1846/@PanelContainer@1853/@VBoxContainer@1854/@Button@1858 rect=[P: (659.0, 303.0), S: (440.0, 44.0)] pointer=(879.0, 325.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1835/AdaptiveMenuPanel/@MarginContainer@1836/@VBoxContainer@1837/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1845/@GridContainer@1846/@PanelContainer@1853/@VBoxContainer@1854/@Button@1858 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1955/AdaptiveMenuPanel/@MarginContainer@1956/@VBoxContainer@1957/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1965/@GridContainer@1966/@PanelContainer@1979/@VBoxContainer@1980/@Button@1983 rect=[P: (173.0, 455.0), S: (440.0, 44.0)] pointer=(393.0, 477.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@1955/AdaptiveMenuPanel/@MarginContainer@1956/@VBoxContainer@1957/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@1965/@GridContainer@1966/@PanelContainer@1979/@VBoxContainer@1980/@Button@1983 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2111/AdaptiveMenuPanel/@MarginContainer@2112/@VBoxContainer@2113/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2121/@GridContainer@2122/@PanelContainer@2140/@VBoxContainer@2141/@Button@2144 rect=[P: (659.0, 455.0), S: (440.0, 44.0)] pointer=(879.0, 477.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2111/AdaptiveMenuPanel/@MarginContainer@2112/@VBoxContainer@2113/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2121/@GridContainer@2122/@PanelContainer@2140/@VBoxContainer@2141/@Button@2144 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2205/AdaptiveMenuPanel/@MarginContainer@2206/@VBoxContainer@2207/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2215/@GridContainer@2216/@PanelContainer@2234/@VBoxContainer@2235/@Button@2239 rect=[P: (659.0, 507.0), S: (440.0, 44.0)] pointer=(879.0, 529.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2205/AdaptiveMenuPanel/@MarginContainer@2206/@VBoxContainer@2207/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2215/@GridContainer@2216/@PanelContainer@2234/@VBoxContainer@2235/@Button@2239 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+CAPTURED: ART20 main, dialogue and ticket menus at 1280px
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2282/AdaptiveMenuPanel/@MarginContainer@2283/@VBoxContainer@2284/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@2292/@VBoxContainer@2293/@GridContainer@2296/TimePhase_dawn rect=[P: (194.0, 293.0), S: (156.0, 44.0)] pointer=(272.0, 315.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2282/AdaptiveMenuPanel/@MarginContainer@2283/@VBoxContainer@2284/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@2292/@VBoxContainer@2293/@GridContainer@2296/TimePhase_dawn button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2376/AdaptiveMenuPanel/@MarginContainer@2377/@VBoxContainer@2378/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@2386/@VBoxContainer@2387/@GridContainer@2390/TimePhase_noon rect=[P: (358.0, 293.0), S: (156.0, 44.0)] pointer=(436.0, 315.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2376/AdaptiveMenuPanel/@MarginContainer@2377/@VBoxContainer@2378/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@2386/@VBoxContainer@2387/@GridContainer@2390/TimePhase_noon button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2470/AdaptiveMenuPanel/@MarginContainer@2471/@VBoxContainer@2472/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@2480/@VBoxContainer@2481/@GridContainer@2484/TimePhase_dusk rect=[P: (194.0, 345.0), S: (156.0, 44.0)] pointer=(272.0, 367.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2470/AdaptiveMenuPanel/@MarginContainer@2471/@VBoxContainer@2472/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@2480/@VBoxContainer@2481/@GridContainer@2484/TimePhase_dusk button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2564/AdaptiveMenuPanel/@MarginContainer@2565/@VBoxContainer@2566/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@2574/@VBoxContainer@2575/@GridContainer@2578/TimePhase_night rect=[P: (358.0, 345.0), S: (156.0, 44.0)] pointer=(436.0, 367.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2564/AdaptiveMenuPanel/@MarginContainer@2565/@VBoxContainer@2566/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@2574/@VBoxContainer@2575/@GridContainer@2578/TimePhase_night button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2658/AdaptiveMenuPanel/@MarginContainer@2659/@VBoxContainer@2660/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2668/@GridContainer@2669/@PanelContainer@2687/@VBoxContainer@2688/@Button@2692 rect=[P: (659.0, 507.0), S: (440.0, 44.0)] pointer=(879.0, 529.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2658/AdaptiveMenuPanel/@MarginContainer@2659/@VBoxContainer@2660/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2668/@GridContainer@2669/@PanelContainer@2687/@VBoxContainer@2688/@Button@2692 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2700/AdaptiveMenuPanel/@MarginContainer@2701/@VBoxContainer@2702/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2710/@PanelContainer@2726/@VBoxContainer@2727/@CheckButton@2730 rect=[P: (174.0, 533.0), S: (924.0, 44.0)] pointer=(636.0, 555.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2700/AdaptiveMenuPanel/@MarginContainer@2701/@VBoxContainer@2702/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2710/@PanelContainer@2726/@VBoxContainer@2727/@CheckButton@2730 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2700/AdaptiveMenuPanel/@MarginContainer@2701/@VBoxContainer@2702/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2710/@PanelContainer@2726/@VBoxContainer@2727/@CheckButton@2730 rect=[P: (174.0, 533.0), S: (924.0, 44.0)] pointer=(636.0, 555.0) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2700/AdaptiveMenuPanel/@MarginContainer@2701/@VBoxContainer@2702/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2710/@PanelContainer@2726/@VBoxContainer@2727/@CheckButton@2730 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2744/AdaptiveMenuPanel/@MarginContainer@2745/@VBoxContainer@2746/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2754/@GridContainer@2755/@PanelContainer@2756/@VBoxContainer@2757/@Button@2760 rect=[P: (79.0, 290.0), S: (440.0, 71.0)] pointer=(186.875, 278.4375) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2744/AdaptiveMenuPanel/@MarginContainer@2745/@VBoxContainer@2746/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2754/@GridContainer@2755/@PanelContainer@2756/@VBoxContainer@2757/@Button@2760 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2839/AdaptiveMenuPanel/@MarginContainer@2840/@VBoxContainer@2841/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2849/@GridContainer@2850/@PanelContainer@2851/@VBoxContainer@2852/@Button@2856 rect=[P: (79.0, 369.0), S: (440.0, 71.0)] pointer=(186.875, 327.8125) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2839/AdaptiveMenuPanel/@MarginContainer@2840/@VBoxContainer@2841/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2849/@GridContainer@2850/@PanelContainer@2851/@VBoxContainer@2852/@Button@2856 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2905/AdaptiveMenuPanel/@MarginContainer@2906/@VBoxContainer@2907/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2915/@GridContainer@2916/@PanelContainer@2923/@VBoxContainer@2924/@Button@2927 rect=[P: (565.0, 290.0), S: (440.0, 71.0)] pointer=(490.625, 278.4375) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@2905/AdaptiveMenuPanel/@MarginContainer@2906/@VBoxContainer@2907/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@2915/@GridContainer@2916/@PanelContainer@2923/@VBoxContainer@2924/@Button@2927 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3024/AdaptiveMenuPanel/@MarginContainer@3025/@VBoxContainer@3026/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3034/@GridContainer@3035/@PanelContainer@3042/@VBoxContainer@3043/@Button@3047 rect=[P: (565.0, 369.0), S: (440.0, 71.0)] pointer=(490.625, 327.8125) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3024/AdaptiveMenuPanel/@MarginContainer@3025/@VBoxContainer@3026/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3034/@GridContainer@3035/@PanelContainer@3042/@VBoxContainer@3043/@Button@3047 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3144/AdaptiveMenuPanel/@MarginContainer@3145/@VBoxContainer@3146/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3154/@GridContainer@3155/@PanelContainer@3168/@VBoxContainer@3169/@Button@3172 rect=[P: (79.0, 513.0), S: (440.0, 71.0)] pointer=(186.875, 417.8125) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3144/AdaptiveMenuPanel/@MarginContainer@3145/@VBoxContainer@3146/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3154/@GridContainer@3155/@PanelContainer@3168/@VBoxContainer@3169/@Button@3172 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3300/AdaptiveMenuPanel/@MarginContainer@3301/@VBoxContainer@3302/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3310/@GridContainer@3311/@PanelContainer@3329/@VBoxContainer@3330/@Button@3333 rect=[P: (565.0, 513.0), S: (440.0, 71.0)] pointer=(490.625, 417.8125) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3300/AdaptiveMenuPanel/@MarginContainer@3301/@VBoxContainer@3302/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3310/@GridContainer@3311/@PanelContainer@3329/@VBoxContainer@3330/@Button@3333 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3394/AdaptiveMenuPanel/@MarginContainer@3395/@VBoxContainer@3396/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3404/@GridContainer@3405/@PanelContainer@3423/@VBoxContainer@3424/@Button@3428 rect=[P: (565.0, 513.0), S: (440.0, 71.0)] pointer=(490.625, 417.8125) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3394/AdaptiveMenuPanel/@MarginContainer@3395/@VBoxContainer@3396/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3404/@GridContainer@3405/@PanelContainer@3423/@VBoxContainer@3424/@Button@3428 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+CAPTURED: ART20 main, dialogue and ticket menus at 800px
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3471/AdaptiveMenuPanel/@MarginContainer@3472/@VBoxContainer@3473/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@3481/@VBoxContainer@3482/@GridContainer@3485/TimePhase_dawn rect=[P: (79.0, 307.0), S: (232.0, 70.4)] pointer=(121.875, 288.875) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3471/AdaptiveMenuPanel/@MarginContainer@3472/@VBoxContainer@3473/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@3481/@VBoxContainer@3482/@GridContainer@3485/TimePhase_dawn button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3565/AdaptiveMenuPanel/@MarginContainer@3566/@VBoxContainer@3567/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@3575/@VBoxContainer@3576/@GridContainer@3579/TimePhase_noon rect=[P: (319.0, 307.0), S: (232.0, 70.4)] pointer=(271.875, 288.875) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3565/AdaptiveMenuPanel/@MarginContainer@3566/@VBoxContainer@3567/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@3575/@VBoxContainer@3576/@GridContainer@3579/TimePhase_noon button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3659/AdaptiveMenuPanel/@MarginContainer@3660/@VBoxContainer@3661/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@3669/@VBoxContainer@3670/@GridContainer@3673/TimePhase_dusk rect=[P: (79.0, 385.0), S: (232.0, 70.4)] pointer=(121.875, 337.625) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3659/AdaptiveMenuPanel/@MarginContainer@3660/@VBoxContainer@3661/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@3669/@VBoxContainer@3670/@GridContainer@3673/TimePhase_dusk button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3753/AdaptiveMenuPanel/@MarginContainer@3754/@VBoxContainer@3755/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@3763/@VBoxContainer@3764/@GridContainer@3767/TimePhase_night rect=[P: (319.0, 385.0), S: (232.0, 70.4)] pointer=(271.875, 337.625) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3753/AdaptiveMenuPanel/@MarginContainer@3754/@VBoxContainer@3755/AdaptiveMenuScroll/AdaptiveMenuContent/@PanelContainer@3763/@VBoxContainer@3764/@GridContainer@3767/TimePhase_night button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3847/AdaptiveMenuPanel/@MarginContainer@3848/@VBoxContainer@3849/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3857/@GridContainer@3858/@PanelContainer@3876/@VBoxContainer@3877/@Button@3881 rect=[P: (565.0, 513.0), S: (440.0, 71.0)] pointer=(490.625, 417.8125) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3847/AdaptiveMenuPanel/@MarginContainer@3848/@VBoxContainer@3849/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3857/@GridContainer@3858/@PanelContainer@3876/@VBoxContainer@3877/@Button@3881 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3889/AdaptiveMenuPanel/@MarginContainer@3890/@VBoxContainer@3891/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3899/@PanelContainer@3915/@VBoxContainer@3916/@CheckButton@3919 rect=[P: (79.0, 513.0), S: (1112.0, 71.0)] pointer=(396.875, 417.8125) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3889/AdaptiveMenuPanel/@MarginContainer@3890/@VBoxContainer@3891/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3899/@PanelContainer@3915/@VBoxContainer@3916/@CheckButton@3919 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: layout/tutorial button target=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3889/AdaptiveMenuPanel/@MarginContainer@3890/@VBoxContainer@3891/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3899/@PanelContainer@3915/@VBoxContainer@3916/@CheckButton@3919 rect=[P: (79.0, 513.0), S: (1112.0, 71.0)] pointer=(396.875, 417.8125) hovered=/root/Snapland/@CanvasLayer@1523/@Control@1524/@Control@1544/@CenterContainer@3889/AdaptiveMenuPanel/@MarginContainer@3890/@VBoxContainer@3891/AdaptiveMenuScroll/AdaptiveMenuContent/@VBoxContainer@3899/@PanelContainer@3915/@VBoxContainer@3916/@CheckButton@3919 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PASS: ART20 park menus, four phase variants, and saved reduced-motion on/off verified with native inputs at both widths; presentation fixture only
+--------------------------------------------------------------------------------
+Done recording movie at path: C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/art20-native-final2.avi
+891 frames at 60 FPS (movie length: 00:00:14:51), recorded in 00:00:34 (41% of real-time speed).
+CPU render time: 1.21 seconds (average: 1.35 ms/frame)
+GPU render time: 3.58 seconds (average: 4.02 ms/frame)
+Encoding time: 6.05 seconds (average: 6.79 ms/frame)
+--------------------------------------------------------------------------------

@@ -3,8 +3,10 @@ extends VBoxContainer
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
-const PAGE_SIZE := 6
+const PhotoViewer = preload("res://game/ui/photo_viewer.gd")
+const PAGE_SIZE := 4
 const MAX_PHOTO_FRAME_CANDIDATES := 12
+const MAX_LEGACY_UI_PHOTO_BYTES := 16 * 1024 * 1024
 
 class BookSpread extends Control:
 	func _draw() -> void:
@@ -24,6 +26,7 @@ var _photo_loader: Callable
 var _category := "normal"
 var _page := 0
 var _spread: GridContainer
+var _spread_surface: Control
 var _page_label: Label
 var _empty_message: Label
 var _collection_state: Label
@@ -34,13 +37,17 @@ var _time_button: Button
 var _game_photo_texture_cache: Dictionary = {}
 var _thumbnail_decode_count := 0
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		_apply_responsive_spread_columns()
+
 func setup(progress: Node, definitions: Array, phases: Array, photo_loader: Callable) -> void:
 	_progress=progress
 	_definitions=definitions.duplicate(true)
 	_time_phases=phases.duplicate(true)
 	_photo_loader=photo_loader
 	_game_photo_texture_cache.clear()
-	_thumbnail_decode_count = 0
+	_thumbnail_decode_count=0
 
 func _ready() -> void:
 	custom_minimum_size.y=420
@@ -59,27 +66,27 @@ func _ready() -> void:
 		button.custom_minimum_size=Vector2(0,44)
 	var cover := PanelContainer.new()
 	cover.name="AlbumBookCover"
-	cover.add_theme_stylebox_override("panel",Paper.plaque(Color("#c8a477")))
+	var cover_style := Paper.plaque(Color("#c8a477"))
+	var menu_scale := Paper.physical_scale(self)
+	cover_style.content_margin_left=4.0/menu_scale
+	cover_style.content_margin_right=4.0/menu_scale
+	cover_style.content_margin_top=4.0/menu_scale
+	cover_style.content_margin_bottom=4.0/menu_scale
+	cover.add_theme_stylebox_override("panel",cover_style)
 	cover.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	add_child(cover)
 	var cover_margin := MarginContainer.new()
 	for side in ["left","right","top","bottom"]:
-		cover_margin.add_theme_constant_override("margin_"+side,8)
+		cover_margin.add_theme_constant_override("margin_"+side,8.0/menu_scale)
 	cover.add_child(cover_margin)
 	var book_body := VBoxContainer.new()
 	book_body.add_theme_constant_override("separation",4)
 	cover_margin.add_child(book_body)
-	var book_head := HBoxContainer.new()
-	book_body.add_child(book_head)
-	_page_label=Paper.label("第 1 / 1 頁",16,Color("#fff4db"))
-	_page_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	_page_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
-	book_head.add_child(_page_label)
-	var spread_surface := BookSpread.new()
-	spread_surface.name="AlbumBookSpread"
-	spread_surface.custom_minimum_size=Vector2(0,450.0/Paper.physical_scale(self))
-	spread_surface.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	book_body.add_child(spread_surface)
+	_spread_surface=BookSpread.new()
+	_spread_surface.name="AlbumBookSpread"
+	_spread_surface.custom_minimum_size=Vector2(0,432.0/menu_scale)
+	_spread_surface.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	book_body.add_child(_spread_surface)
 	_spread=GridContainer.new()
 	_spread.name="AlbumPhotoGrid"
 	_spread.columns=2
@@ -91,7 +98,7 @@ func _ready() -> void:
 	_spread.offset_right=-14
 	_spread.offset_bottom=-12
 	_spread.add_theme_constant_override("h_separation",22)
-	spread_surface.add_child(_spread)
+	_spread_surface.add_child(_spread)
 	_photo_details=Paper.label("選取照片，查看收藏方式。",16,Paper.DEEP_TEAL)
 	_photo_details.name="AlbumPhotoDetails"
 	book_body.add_child(_photo_details)
@@ -103,10 +110,12 @@ func _ready() -> void:
 	var next := Paper.button("下一頁 →",func(): _change_page(1),nav)
 	next.name="AlbumNextPage"
 	next.custom_minimum_size=Vector2(130,44)
-	var hint := Paper.label("照片縮圖只在實際存有可讀影格時顯示。",15,Color("#fff4db"))
-	hint.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-	hint.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	nav.add_child(hint)
+	_page_label=Paper.label("第 1 / 1 頁",16,Color("#fff4db"))
+	_page_label.name="AlbumPageLabel"
+	_page_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	_page_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+	nav.add_child(_page_label)
+	nav.move_child(_page_label,1)
 	_empty_message=Paper.label("這一類目前尚無收藏。拍照或完成對應挑戰後，照片會出現在本頁。",19,Paper.DEEP_TEAL)
 	_empty_message.name="AlbumEmptyState"
 	add_child(_empty_message)
@@ -128,6 +137,7 @@ func _change_page(amount: int) -> void:
 func _refresh_book() -> void:
 	if _progress==null or not is_instance_valid(_spread):
 		return
+	_photo_details.text = _category_prompt()
 	_normal_button.text="普通拍貼  %d / 18" % int(_progress.normal_count())
 	_devil_button.text="小惡魔  %d / 12" % int(_progress.devil_count())
 	var time_count := 0
@@ -151,13 +161,26 @@ func _refresh_book() -> void:
 		child.queue_free()
 	if entries.is_empty():
 		return
+	_apply_responsive_spread_columns()
 	for entry_index in range(entries.size()):
-		var tile := _photo_tile(entries[entry_index],entry_index+1)
+		var tile := _photo_tile(entries[entry_index])
 		tile.name="AlbumPhoto_"+str(entries[entry_index].id)
 		tile.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		tile.visible=entry_index>=_page*PAGE_SIZE and entry_index<(_page+1)*PAGE_SIZE
 		_spread.add_child(tile)
 	Paper.adapt_menu(self,Paper.physical_scale(self))
+	_apply_responsive_spread_columns()
+
+func _apply_responsive_spread_columns() -> void:
+	if not is_instance_valid(_spread):
+		return
+	var physical_width := get_viewport_rect().size.x * Paper.physical_scale(self)
+	var wide_layout := physical_width >= 1200.0
+	_spread.columns=4 if wide_layout else 2
+	if is_instance_valid(_spread_surface):
+		_spread_surface.custom_minimum_size.y=(224.0 if wide_layout else 432.0)/Paper.physical_scale(self)
+	_spread.add_theme_constant_override("h_separation",8.0/Paper.physical_scale(self))
+	_spread.add_theme_constant_override("v_separation",8.0/Paper.physical_scale(self))
 
 func _entries() -> Array[Dictionary]:
 	var entries: Array[Dictionary]=[]
@@ -176,32 +199,60 @@ func _entries() -> Array[Dictionary]:
 			for phase in _time_phases:
 				var id := str(phase.get("id",""))
 				entries.append(_entry(TimeOfDay.postcard_id(id),str(phase.get("label","時段"))+" · "+str(phase.get("clock","")),"切換到這個時段，為園區拍攝紀念明信片。"))
-	return entries
+	var collected: Array[Dictionary] = []
+	var waiting: Array[Dictionary] = []
+	for entry in entries:
+		if _progress != null and _progress.photos.has(entry.id):
+			collected.append(entry)
+		else:
+			waiting.append(entry)
+	# Partitioning preserves catalog order within both groups and never changes IDs.
+	collected.append_array(waiting)
+	return collected
+
+func _category_prompt() -> String:
+	match _category:
+		"devil": return "小惡魔拍貼｜完成設施的特別條件，收藏的畫格會先出現。"
+		"time": return "四時明信片｜切換園區時段，留下那一刻的實際照片。"
+		_: return "普通拍貼｜完成遊戲、探索或委託，照片就會收進本子。"
 
 func _entry(photo_id: String, title: String, instructions: String) -> Dictionary:
 	return {"id":photo_id,"title":title,"instructions":instructions}
 
-func _photo_tile(entry: Dictionary, number: int) -> Control:
+func _photo_tile(entry: Dictionary) -> Control:
 	var collected: bool=_progress.photos.has(entry.id)
-	var tile := PanelContainer.new()
+	var tile := Button.new()
 	tile.name="AlbumPhoto_"+str(entry.id)
 	var menu_scale := Paper.physical_scale(self)
-	tile.custom_minimum_size=Vector2(156.0/menu_scale,140.0/menu_scale)
+	tile.custom_minimum_size=Vector2(232.0/menu_scale,200.0/menu_scale)
 	tile.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	tile.focus_mode=Control.FOCUS_ALL
 	tile.mouse_filter=Control.MOUSE_FILTER_STOP
+	tile.text=""
 	tile.tooltip_text=str(entry.instructions)
-	var leaf_color := Color("#fffdf5") if (number%2)==1 else Color("#f5ecd6")
-	tile.add_theme_stylebox_override("panel",Paper.box(leaf_color if collected else leaf_color.darkened(0.05),6))
+	var leaf_color := Color("#fffdf5") if collected else Color("#f5ecd6")
+	var tile_style := Paper.box(leaf_color if collected else leaf_color.darkened(0.05),6)
+	tile.add_theme_stylebox_override("normal",tile_style)
+	tile.add_theme_stylebox_override("hover",Paper.box(leaf_color.lightened(0.03),6))
+	tile.add_theme_stylebox_override("pressed",Paper.box(leaf_color.darkened(0.04),6))
+	tile.add_theme_stylebox_override("disabled",tile_style)
+	tile.add_theme_stylebox_override("focus",Paper.box(Color(0,0,0,0),6))
 	var column := VBoxContainer.new()
+	column.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	column.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation",3)
 	tile.add_child(column)
 	var photo_frame := PanelContainer.new()
 	photo_frame.name="SavedPhotoFrame"
-	photo_frame.custom_minimum_size=Vector2(140.0/menu_scale,72.0/menu_scale)
+	photo_frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	photo_frame.custom_minimum_size=Vector2(220.0/menu_scale,124.0/menu_scale)
 	photo_frame.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	photo_frame.add_theme_stylebox_override("panel",Paper.plaque(Color("#e9dfc5")))
+	var frame_style := Paper.plaque(Color("#e9dfc5"))
+	frame_style.content_margin_left=4.0/menu_scale
+	frame_style.content_margin_right=4.0/menu_scale
+	frame_style.content_margin_top=4.0/menu_scale
+	frame_style.content_margin_bottom=4.0/menu_scale
+	photo_frame.add_theme_stylebox_override("panel",frame_style)
 	column.add_child(photo_frame)
 	var texture := _saved_texture(str(entry.id)) if collected else null
 	if texture!=null:
@@ -209,28 +260,69 @@ func _photo_tile(entry: Dictionary, number: int) -> Control:
 		thumbnail.texture=texture
 		thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 		thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		thumbnail.custom_minimum_size=Vector2(140.0/menu_scale,60.0/menu_scale)
+		thumbnail.custom_minimum_size=Vector2(220.0/menu_scale,124.0/menu_scale)
+		thumbnail.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		thumbnail.size_flags_vertical=Control.SIZE_EXPAND_FILL
 		thumbnail.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		photo_frame.add_child(thumbnail)
 	else:
-		var fallback_text := "已收藏 · 照片檔未讀取" if collected else "✦ %02d · 空白畫格 ✦" % number
+		var fallback_text := "已收藏 · 暫時看不清楚" if collected else "等待一張照片"
 		var blank := Paper.label(fallback_text,16,Paper.TEAL if collected else Color("#827b6b"))
 		blank.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 		blank.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
-		blank.custom_minimum_size=Vector2(140.0/menu_scale,60.0/menu_scale)
+		blank.custom_minimum_size=Vector2(220.0/menu_scale,124.0/menu_scale)
+		blank.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		blank.size_flags_vertical=Control.SIZE_EXPAND_FILL
 		photo_frame.add_child(blank)
 	var title := Paper.label(str(entry.title),17)
 	title.name="AlbumPhotoTitle"
-	title.custom_minimum_size.x=140.0/menu_scale
+	title.custom_minimum_size.x=0
+	title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(title)
-	column.add_child(Paper.label("已收藏" if collected else "尚未收藏",16,Paper.TEAL if collected else Color("#8c694a")))
+	var status := Paper.label("已收藏" if collected else "尚未收藏",16,Paper.TEAL if collected else Color("#8c694a"))
+	status.name="AlbumPhotoStatus"
+	column.add_child(status)
 	var method := Paper.label(str(entry.instructions),16,Paper.DEEP_TEAL)
 	method.visible=false
 	column.add_child(method)
 	var show_details := func(): _photo_details.text=str(entry.title)+"｜"+str(entry.instructions)
 	tile.mouse_entered.connect(show_details)
 	tile.focus_entered.connect(show_details)
+	tile.pressed.connect(func(): _open_collected_photo(entry,tile))
+	_set_children_mouse_ignored(tile)
 	return tile
+
+func _set_children_mouse_ignored(node: Node) -> void:
+	for child in node.get_children():
+		if child is Control:
+			(child as Control).mouse_filter=Control.MOUSE_FILTER_IGNORE
+		_set_children_mouse_ignored(child)
+
+func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
+	if not _progress.photos.has(entry.id):
+		_photo_details.text="這張照片還在等你，完成遊園後再回來翻看。"
+		return
+	var texture := _saved_texture(str(entry.id))
+	if texture == null:
+		_photo_details.text="這張照片暫時看不清楚，先留在本子裡。"
+		return
+	var modal_overlay := _find_modal_overlay()
+	if modal_overlay == null:
+		_photo_details.text="這張照片現在不方便翻開，先留在本子裡。"
+		return
+	var viewer := PhotoViewer.new()
+	viewer.setup(texture,str(entry.title),tile)
+	modal_overlay.add_child(viewer)
+
+func _find_modal_overlay() -> Control:
+	var ancestor: Node = self
+	while ancestor != null:
+		if ancestor is PanelContainer and ancestor.name == "AdaptiveMenuPanel":
+			var center := ancestor.get_parent()
+			if center is CenterContainer and center.get_parent() is Control:
+				return center.get_parent() as Control
+		ancestor=ancestor.get_parent()
+	return null
 
 func _blank_tile() -> Control:
 	var blank := PanelContainer.new()
@@ -244,50 +336,64 @@ func _blank_tile() -> Control:
 func _saved_texture(photo_id: String) -> Texture2D:
 	var photo: Variant=_progress.photos.get(photo_id,{})
 	if not photo is Dictionary:
-		push_warning("Collected photo '%s' has invalid metadata; showing the unreadable-photo fallback." % photo_id)
 		return null
 	var frames: Variant=photo.get("frames",[])
 	if not frames is Array:
-		push_warning("Collected photo '%s' has invalid 'frames' metadata; showing the unreadable-photo fallback." % photo_id)
 		return null
 	var is_game_photo := photo_id.begins_with("photo-welcome-game-") or photo_id.begins_with("photo-welcome-devil-")
-	var is_devil_photo := photo_id.begins_with("photo-welcome-devil-")
-	if frames.is_empty():
-		if is_devil_photo:
-			push_warning("Collected devil photo '%s' has no saved screenshot paths; showing the unreadable-photo fallback." % photo_id)
-		return null
-	if frames.size() > MAX_PHOTO_FRAME_CANDIDATES:
-		push_warning("Collected photo '%s' has %d screenshot paths; only the first %d will be checked." % [photo_id, frames.size(), MAX_PHOTO_FRAME_CANDIDATES])
-	for frame_index in range(mini(frames.size(), MAX_PHOTO_FRAME_CANDIDATES)):
-		var path_value: Variant = frames[frame_index]
+	for frame_index in range(mini(frames.size(),MAX_PHOTO_FRAME_CANDIDATES)):
+		var path_value: Variant=frames[frame_index]
 		if typeof(path_value)!=TYPE_STRING or str(path_value).strip_edges().is_empty():
-			push_warning("Collected photo '%s' has an invalid screenshot path value: %s." % [photo_id,str(path_value)])
 			continue
 		var path := str(path_value)
 		if is_game_photo:
 			if _game_photo_texture_cache.has(path):
-				var cached: Variant = _game_photo_texture_cache[path]
+				var cached: Variant=_game_photo_texture_cache[path]
 				if cached is Texture2D:
 					return cached
-				push_warning("Collected photo '%s' screenshot was already rejected; showing fallback: '%s'." % [photo_id, path])
 				continue
-			_thumbnail_decode_count += 1
-			var image_cache: Dictionary = {}
-			var image: Image = _progress._read_game_photo_image(photo_id, path, image_cache)
-			if image == null:
-				_game_photo_texture_cache[path] = null
+			_thumbnail_decode_count+=1
+			var image_cache: Dictionary={}
+			var image: Image=_progress.call("_read_game_photo_image",photo_id,path,image_cache) if _progress.has_method("_read_game_photo_image") else null
+			if image==null:
+				var legacy_texture := _legacy_ui_photo_texture(path)
+				_game_photo_texture_cache[path]=legacy_texture
+				if legacy_texture!=null:
+					return legacy_texture
 				continue
 			var game_texture := ImageTexture.create_from_image(image)
-			_game_photo_texture_cache[path] = game_texture
+			_game_photo_texture_cache[path]=game_texture
 			return game_texture
-		if not FileAccess.file_exists(path):
-			push_warning("Collected photo '%s' screenshot is missing: '%s'." % [photo_id,path])
-			continue
-		if not _photo_loader.is_valid():
-			push_warning("Collected photo '%s' cannot load screenshot '%s': image loader is unavailable." % [photo_id,path])
-			return null
-		var texture: Variant=_photo_loader.call(path)
-		if texture is Texture2D:
-			return texture
-		push_warning("Collected photo '%s' screenshot could not be decoded: '%s'." % [photo_id,path])
+		if FileAccess.file_exists(path) and _photo_loader.is_valid():
+			var texture: Variant=_photo_loader.call(path)
+			if texture is Texture2D:
+				return texture
 	return null
+
+func _legacy_ui_photo_texture(path: String) -> Texture2D:
+	# Album records also include older exploration images and postcards that are
+	# not minigame captures. Bound the generic UI loader before it decodes them;
+	# Progress keeps its stricter 320x180 validation for game-result records.
+	var file := FileAccess.open(path,FileAccess.READ)
+	if file==null:
+		return null
+	var length := file.get_length()
+	if length<45 or length>MAX_LEGACY_UI_PHOTO_BYTES:
+		file.close()
+		return null
+	var header := file.get_buffer(24)
+	file.close()
+	var signature := PackedByteArray([137,80,78,71,13,10,26,10])
+	if header.size()!=24 or header.slice(0,8)!=signature or header.slice(12,16).get_string_from_ascii()!="IHDR":
+		return null
+	var width := _album_png_u32(header,16)
+	var height := _album_png_u32(header,20)
+	if width<=0 or height<=0 or width>4096 or height>4096 or width*height>4*1024*1024:
+		return null
+	if not _photo_loader.is_valid():
+		return null
+	var texture: Variant=_photo_loader.call(path)
+	return texture as Texture2D if texture is Texture2D else null
+
+func _album_png_u32(bytes: PackedByteArray, offset: int) -> int:
+	return (int(bytes[offset])<<24) | (int(bytes[offset+1])<<16) | (int(bytes[offset+2])<<8) | int(bytes[offset+3])
