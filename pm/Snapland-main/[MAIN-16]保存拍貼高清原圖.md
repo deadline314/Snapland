@@ -59,4 +59,4 @@
 ![時段照片原圖](images/MAIN-16-final-time-original-viewer.png)
 [正式拍貼流程影片](images/MAIN-16-final-gameplay-normal.mp4) · [時段拍貼流程影片](images/MAIN-16-final-time-normal.mp4) · [證據與雜湊](images/MAIN-16-final-evidence.json)
 
-分支：`feature/island-experience`。本輪開始基準維持票內固定 SHA；原生證據採本票提交索引。票況維持進行中，與島上整組交付一起核對。程式提交連結於提交後補齊。
+分支：`feature/island-experience`。本輪開始基準維持票內固定 SHA；原生證據採本票提交索引。票況維持進行中，與島上整組交付一起核對。程式與證據提交：[55466d2](https://github.com/deadline314/Snapland/commit/55466d2)。
