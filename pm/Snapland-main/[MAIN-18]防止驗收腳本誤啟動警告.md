@@ -56,4 +56,4 @@ Godot 專案、可直接執行的驗收入口與介面元件需要有清楚的�
 ![正常啟動主場景](images/MAIN-18-normal-main-startup.png)
 ![使用者回報的快照誤啟動警告](images/MAIN-18-user-invalid-snapshot-alert.png)
 
-分支：`feature/island-experience`；票況進行中，程式與證據提交連結於提交後補齊。
+分支：`feature/island-experience`；票況進行中，程式與證據提交：[0cefb0a](https://github.com/deadline314/Snapland/commit/0cefb0a)。
