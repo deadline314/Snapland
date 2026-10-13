@@ -9,6 +9,11 @@ import subprocess
 import sys
 import tempfile
 
+if __package__:
+    from .godot_entrypoints import run_validated_godot
+else:
+    from godot_entrypoints import run_validated_godot
+
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
@@ -102,13 +107,13 @@ def main() -> int:
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
             try:
-                result = subprocess.run(command, cwd=ROOT, env=env, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=90)
+                result = run_validated_godot(ROOT, command, env=env, timeout=90)
             except subprocess.TimeoutExpired as error:
                 def decoded(value: str | bytes | None) -> str:
                     return value.decode("utf-8", errors="replace") if isinstance(value, bytes) else (value or "")
                 output = decoded(error.stdout) + "\n" + decoded(error.stderr)
                 return fail(f"{label} timed out after 90 seconds:\n{output.strip()[-6000:]}")
-            except (OSError, subprocess.SubprocessError) as error:
+            except (ValueError, OSError, subprocess.SubprocessError) as error:
                 return fail(f"{label} could not run: {error}")
             if result.returncode:
                 output = ((result.stdout or "") + "\n" + (result.stderr or "")).strip()

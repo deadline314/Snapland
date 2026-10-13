@@ -1,0 +1,39 @@
+{
+  "case_results": {
+    "res://game/ui/collection_book_panel.gd": {
+      "result": "rejected before spawning",
+      "message": "game\\ui\\collection_book_panel.gd extends VBoxContainer, not SceneTree/MainLoop; run its .tscn scene instead."
+    },
+    "res://game/tests/native_time_photo_original_review.gd": {
+      "result": "rejected before spawning",
+      "message": "game\\tests\\native_time_photo_original_review.gd extends Node, not SceneTree/MainLoop; run its .tscn scene instead."
+    },
+    "real engine timeout": {
+      "result": "expected bounded failure with owned-process cleanup",
+      "elapsed_seconds": 2.141,
+      "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\n"
+    },
+    "script": {
+      "result": "PASS",
+      "log": "MAIN18-script.log"
+    },
+    "node_scene": {
+      "result": "PASS",
+      "log": "MAIN18-node_scene.log"
+    },
+    "default_main": {
+      "result": "PASS",
+      "log": "MAIN18-default_main.log"
+    }
+  },
+  "human_played": false,
+  "real_profile_hash_before": {
+    "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf",
+    "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json.bak": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b"
+  },
+  "real_profile_hash_after": {
+    "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf",
+    "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json.bak": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b"
+  },
+  "real_profile_unchanged": true
+}

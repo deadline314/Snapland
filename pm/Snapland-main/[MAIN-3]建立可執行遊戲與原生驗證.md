@@ -68,3 +68,5 @@ c1b7b19；feature/island-first-park。
 ![本票原生畫面](images/MAIN-3-startup.png)
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
+
+Related：MAIN-18（驗收入口辨識與失敗收束）。

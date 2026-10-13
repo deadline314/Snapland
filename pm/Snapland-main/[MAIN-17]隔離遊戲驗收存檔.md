@@ -58,3 +58,5 @@ Root 從這次提交的暫存內容重建獨立專案，實際執行拒絕案例
 提交內容的匯入、存檔隔離與核心流程 3/3 通過，0 ERROR。保留負面案例沒有改動資料的標記、兩次普通啟動的成功標記與局部測試結果：[隔離驗收紀錄](images/MAIN-17-isolation-validation.log)、[核心流程紀錄](images/MAIN-17-core-validation.log)、[事故後檔案核對](images/MAIN-17-live-profile-preservation.json)。完整套件交由 CI。
 
 分支：`feature/island-experience`；遠端提交連結於提交後補記。票況：進行中。
+
+Related：MAIN-18（驗收入口辨識與失敗收束）。

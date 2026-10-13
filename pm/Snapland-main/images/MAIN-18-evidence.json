@@ -1,0 +1,40 @@
+{
+  "branch": "feature/island-experience",
+  "fixed_base": "7ce236a",
+  "native_scene": "configured default Main scene; isolated profile, 180 frames at 60FPS, root inspected frame90",
+  "human_played": false,
+  "scripted_cpu_cases": "13 focused tests; 63 entry registrations validated without full suite; real script, scene, default scene, save guard and 2.141-second bounded timeout",
+  "snapshot_cleanup": "25 session-owned commit snapshots renamed to .gd.txt; erroneous owned Node-script process confirmed by its creating agent and stopped. Original user snapshot-alert caller remains unconfirmed.",
+  "files": [
+    {
+      "path": "MAIN-18-preflight-tests.log",
+      "sha256": "58ba7471de186f51aafc3797d54052254f2372aec6477e6eceee3935f5f51504",
+      "bytes": 2286
+    },
+    {
+      "path": "MAIN-18-entrypoint-acceptance.json",
+      "sha256": "889c0d8a9c1ba1ab161c73ffb5d361a9fdb1884916131bb6ce61a6ab5956b715",
+      "bytes": 1800
+    },
+    {
+      "path": "MAIN-18-normal-main-startup.png",
+      "sha256": "e17609fb3b3b5b03a4aa23269ec63247c02c0d320455fb6cc6cbc3a2bbc3dbc0",
+      "bytes": 865939
+    },
+    {
+      "path": "MAIN-18-native-startup.log",
+      "sha256": "758f8cbeb83bb8022d7884f0d6bf71885afb23d1b2071bcc2dcd848676914a91",
+      "bytes": 12339
+    },
+    {
+      "path": "MAIN-18-saveguard.log",
+      "sha256": "8b691397877bbe7c1fa5ccfd0f54ff5c4d90fed7b3642e0976a6c07397faee18",
+      "bytes": 907
+    },
+    {
+      "path": "MAIN-18-user-invalid-snapshot-alert.png",
+      "sha256": "95358ea18f02a179169330b760352e9aeabb2f519d2708fea1cfbe8901dd718c",
+      "bytes": 21140
+    }
+  ]
+}
