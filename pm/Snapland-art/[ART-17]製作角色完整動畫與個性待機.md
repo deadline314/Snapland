@@ -192,6 +192,6 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 **驗收：** 本機局部測試涵蓋路線轉向、長短影格、停步、對話恢復與三位NPC活動，均通過。原生路線驗證exit 0、0 ERROR；Root實際看過22張姿勢與路線截圖及三張聯絡表。這次只接受靜態完整性與回歸條件，沒有新增正常／慢放完整動畫的驗收，也沒有勾選本票尚未完成的動畫條件。
 
-[三角色原生報告](images/ART-17-ui-route-regression-report.json) · [票票／小角聯絡表](images/ART-17-ui-route-contact-1.jpg) · [小角／阿浪聯絡表](images/ART-17-ui-route-contact-2.jpg) · [阿浪聯絡表](images/ART-17-ui-route-contact-3.jpg)。所有驗收使用獨立存檔；本輪開始基準`f1d2feedcf6b58418d2a6682238ce088e92cbbaf`。
+[三角色原生報告](images/ART-17-ui-route-regression-report.json) · [姿勢聯絡表1](images/ART-17-ui-route-contact-1.jpg) · [姿勢聯絡表2](images/ART-17-ui-route-contact-2.jpg) · [姿勢聯絡表3](images/ART-17-ui-route-contact-3.jpg)。所有驗收使用獨立存檔；本輪開始基準`f1d2feedcf6b58418d2a6682238ce088e92cbbaf`。
 
 分支：`feature/island-experience`；[程式與原生截圖提交](https://github.com/deadline314/Snapland/commit/3326f7a722199bb9eda9e511e32541650fc1f2d9)。票況：進行中；待處理完整角色動作／外觀覆蓋、打包播放與降低動態驗收。
