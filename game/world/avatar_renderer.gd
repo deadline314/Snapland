@@ -179,7 +179,9 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if has_manifest_frame:
 		var authored: Texture2D = animation_library.texture("traveller", safe_action, safe_direction, safe_frame, equipped)
 		if authored != null:
-			image = authored.get_image()
+			# ImageTexture.get_image() may expose a cached image. Renderer passes
+			# mutate their working canvas, so detach before stripping or compositing.
+			image = authored.get_image().duplicate()
 			if animation_library.has_anchor("traveller", safe_action, safe_direction, safe_frame, "head", equipped):
 				manifest_head_anchor = animation_library.normalized_anchor("traveller", safe_action, safe_direction, safe_frame, "head", equipped)
 				manifest_has_head_anchor = true
@@ -204,9 +206,11 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if use_walk_source:
 		var rest_head_anchor := walk_head_anchor(safe_direction, walk_idle_frame(safe_direction))
 		species_head_shift_x = walk_head_anchor(safe_direction, walk_frame).x - rest_head_anchor.x
-	# The authored walk cels already contain the approved windswept hairstyle.
-	# Preserve that exact silhouette; only replacement cuts need an overlay.
-	var use_replacement_hair := str(normalized_appearance.get("hair", "windswept")) != "windswept" or not use_walk_source
+	# Authored source frames carry the approved windswept hair outside the walk
+	# atlas too (idle, seated, and other manifest actions). Preserve those cels;
+	# replacement cuts belong only to alternate styles or un-authored fallbacks.
+	var has_authored_source_hair := use_walk_source or has_manifest_frame
+	var use_replacement_hair := str(normalized_appearance.get("hair", "windswept")) != "windswept" or not has_authored_source_hair
 	var has_hair_overlay := use_replacement_hair and ((_hair_atlas_valid and DIRECTIONS.has(safe_direction)) or (_diagonal_hair_valid and not DIRECTIONS.has(safe_direction)))
 	var has_hat_overlay := _hat_atlas_valid and DIRECTIONS.has(safe_direction) or _diagonal_hat_valid and not DIRECTIONS.has(safe_direction)
 	var face_backdrop: Image

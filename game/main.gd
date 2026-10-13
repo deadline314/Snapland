@@ -797,6 +797,11 @@ func _interact(id: String, title: String) -> void:
 			_record_story_mission_event({"type":"interaction","id":id})
 			_show_quest(id)
 		,func(): _record_story_mission_event({"type":"interaction","id":id}))
+	elif id=="ride-tide":
+		if world.is_riding():
+			world.end_ride()
+		else:
+			world.start_ride()
 	elif id=="album": _show_album()
 	elif id=="settings": _show_settings()
 	elif id=="clock":

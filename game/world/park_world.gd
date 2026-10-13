@@ -12,6 +12,7 @@ const NpcActivityScript = preload("res://game/world/npc_activity.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
+const IslandAttractionsScript = preload("res://game/world/island_attractions.gd")
 const IDENTITY_ATLAS_PATH := "res://assets/characters/identities-v3.png"
 const IDENTITY_REGIONS := {
 	"imp": Rect2i(642,350,295,294),
@@ -62,6 +63,7 @@ var facing := "front"
 const WALK_STRIDE_DISTANCE := 2.8
 const WALK_DIRECTION_HYSTERESIS := deg_to_rad(5.0)
 const WALK_DISTANCE_EPSILON := 0.0005
+const CAMERA_OFFSET := Vector3(0.0,15.5,25.0)
 var walk_distance_phase := 0.0
 var avatar_is_walking := false
 var mesh_count := 0
@@ -77,6 +79,7 @@ var sea_material: ShaderMaterial
 var active_time_phase := TimeOfDayScript.DEFAULT_PHASE
 var contact_shadow_material: StandardMaterial3D
 var contact_shadows: Array[Dictionary] = []
+var island_attractions: Node
 
 func _ready() -> void:
 	component_motion=ComponentAnimationScript.new()
@@ -95,6 +98,11 @@ func _ready() -> void:
 	_build_avenue()
 	_build_gates()
 	_build_player()
+	island_attractions = IslandAttractionsScript.new()
+	island_attractions.name = "IslandAttractions"
+	add_child(island_attractions)
+	island_attractions.configure(self, player, Vector3(-6.7, 0.26, 11.2))
+	_point("ride-tide","搭乘潮汐貝殼輪",Vector3(-6.7,0.26,11.2))
 	_build_camera()
 	_update_sprite_grounding()
 	occlusion_controller.configure(player,camera)
@@ -106,6 +114,8 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if is_instance_valid(island_attractions):
+		island_attractions.end_ride()
 	if is_instance_valid(npc_activity):
 		npc_activity.release()
 	if is_instance_valid(occlusion_controller):
@@ -236,7 +246,11 @@ static func sprite_ground_anchor_y(
 	return ground_y - parent_world_y - sprite_local_y + feet_from_center * camera_up_y
 
 static func _ground_surface_y(world_position: Vector3) -> float:
-	# Match the tops of the plaza/avenue path and dock meshes; the lawn is the fallback.
+	# Include the raised tidal ride boardwalk; the lawn remains the fallback elsewhere.
+	if world_position.z >= 8.4 and world_position.z <= 11.6 and world_position.x >= -5.7 and world_position.x <= -3.2:
+		return lerpf(0.26,0.18,clampf(inverse_lerp(-5.7,-4.2,world_position.x),0.0,1.0))
+	if world_position.x >= -13.5 and world_position.x <= -5.7 and world_position.z >= 7.2 and world_position.z <= 13.0:
+		return 0.26
 	if absf(world_position.x) <= 2.46 and world_position.z >= 14.825 and world_position.z <= 26.975:
 		return 0.22
 	if absf(world_position.x) <= 12.5 and absf(world_position.z) <= 8.0:
@@ -795,8 +809,8 @@ func _build_plaza() -> void:
 	add_child(collision)
 	_kiosk(Vector3(-6,0,5),"導覽亭",TEAL)
 	# Keep the whole sprite on one ground level: the raised avenue starts at x=-4.5.
-	_npc(Vector3(-5.8,0,10),CORAL,"票票")
-	_point("guide","與票票合照",Vector3(-5.8,0,10))
+	_npc(Vector3(-3.8,0,8.8),CORAL,"票票")
+	_point("guide","與票票合照",Vector3(-3.8,0,8.8))
 	_kiosk(Vector3(6,0,5),"拍貼本",CORAL)
 	_point("album","翻閱拍貼收藏",Vector3(6,0,7))
 	_kiosk(Vector3(-7,0,-5),"借用道具",GOLD)
@@ -1493,13 +1507,24 @@ func _build_camera() -> void:
 	camera.projection=Camera3D.PROJECTION_ORTHOGONAL
 	camera.size=21.0
 	camera.far=200
-	camera.position=player.position+Vector3(0,15.5,25)
+	camera.position=player.position+CAMERA_OFFSET
 	add_child(camera)
 	camera.look_at(player.position+Vector3(0,1,-3))
 	camera.current=true
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(player): return
+	if is_riding():
+		if blocked:
+			end_ride()
+		else:
+			player.velocity=Vector3.ZERO
+			camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
+			camera.look_at(player.position+Vector3(0,1,-3))
+			_update_sprite_grounding()
+			_refresh_avatar_texture(_ride_pose_frame())
+			nearest={"id":"ride-tide","label":"離開潮汐貝殼輪","position":player.global_position,"marker":null}
+			return
 	var movement := Vector2.ZERO if blocked else Input.get_vector("move_left","move_right","move_up","move_down")
 	player.velocity=Vector3(movement.x*5.0,-4,movement.y*5.0)
 	var previous_position := player.position
@@ -1551,7 +1576,6 @@ func _physics_process(delta: float) -> void:
 		if dist<best:
 			best=dist
 			nearest=point
-
 func _process(delta: float) -> void:
 	if not blocked: time+=delta
 	if is_instance_valid(npc_activity) and npc_activity_paused!=blocked:
@@ -1617,10 +1641,12 @@ static func walk_frame_for_phase(phase: float, frame_count: int = 8) -> int:
 	return clampi(floori(normalized_phase * float(safe_frame_count)), 0, safe_frame_count - 1)
 
 func interact() -> void:
+	if is_riding():
+		end_ride()
+		return
 	if not blocked and not nearest.is_empty():
 		play_action("interact")
 		interaction_requested.emit(nearest.id,nearest.label)
-
 func _unhandled_key_input(event: InputEvent) -> void:
 	if blocked or not event is InputEventKey or not event.pressed or event.echo: return
 	if event.keycode == KEY_F:
@@ -1647,20 +1673,30 @@ func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
 
 func _refresh_avatar_texture(frame: int) -> void:
 	if not is_instance_valid(avatar) or avatar_renderer == null: return
-	var action := avatar_action if avatar_action_remaining > 0.0 and not avatar_is_walking else ("walk" if avatar_is_walking else "idle")
-	var display_frame := frame
-	if action != "walk":
+	var riding := is_riding()
+	var action := "sit" if riding else (avatar_action if avatar_action_remaining > 0.0 and not avatar_is_walking else ("walk" if avatar_is_walking else "idle"))
+	var direction := "front" if riding else facing
+	var display_frame := _ride_pose_frame() if riding else frame
+	if action != "walk" and not riding:
 		var animation_library = avatar_renderer.animation_library
-		if animation_library.has_frame("traveller", action, facing):
-			display_frame=animation_library.frame_for_time("traveller", action, facing, avatar_action_elapsed if action == avatar_action else time, reduced_motion)
-	if last_avatar_direction == facing and last_avatar_frame == display_frame and last_avatar_action == action: return
-	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,facing,display_frame,action)
+		if animation_library.has_frame("traveller", action, direction):
+			display_frame=animation_library.frame_for_time("traveller", action, direction, avatar_action_elapsed if action == avatar_action else time, reduced_motion)
+	if last_avatar_direction == direction and last_avatar_frame == display_frame and last_avatar_action == action: return
+	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,direction,display_frame,action)
 	var avatar_material := avatar.material_override as ShaderMaterial
 	if avatar_material != null:
 		avatar_material.set_shader_parameter("texture_albedo",avatar.texture)
-	last_avatar_direction=facing
+	last_avatar_direction=direction
 	last_avatar_frame=display_frame
 	last_avatar_action=action
+func _ride_pose_frame() -> int:
+	if reduced_motion: return 0
+	var moment := float(island_attractions.ride_elapsed()) if is_instance_valid(island_attractions) else 0.0
+	if moment >= 2.0 and moment < 2.5: return 1
+	if moment >= 5.0 and moment < 5.5: return 2
+	if moment >= 5.5 and moment < 6.0: return 3
+	return 0
+
 
 func set_night(value: bool) -> void:
 	set_time_of_day("night" if value else "noon")
@@ -1711,6 +1747,41 @@ func apply_settings(settings: Dictionary) -> void:
 	if is_instance_valid(component_motion): component_motion.set_reduced_motion(reduced_motion)
 	if is_instance_valid(npc_activity): npc_activity.set_reduced_motion(reduced_motion)
 	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
+	if is_instance_valid(island_attractions): island_attractions.set_reduced_motion(reduced_motion)
+func start_ride() -> bool:
+	if blocked or not is_instance_valid(island_attractions):
+		return false
+	var started: bool = island_attractions.start_ride()
+	if started:
+		avatar_is_walking=false
+		avatar_action=""
+		avatar_action_remaining=0.0
+		avatar_action_elapsed=0.0
+		# The seat raises the player well above the ground; never solve ground
+		# contacts while the 3D walk rig is hidden inside the ride pose.
+		_refresh_avatar_texture(0)
+		nearest={"id":"ride-tide","label":"離開潮汐貝殼輪","position":player.global_position,"marker":null}
+	return started
+
+
+func end_ride() -> void:
+	if is_instance_valid(island_attractions):
+		island_attractions.end_ride()
+	avatar_is_walking=false
+	avatar_action=""
+	avatar_action_remaining=0.0
+	avatar_action_elapsed=0.0
+	_refresh_avatar_texture(0)
+
+
+func is_riding() -> bool:
+	return is_instance_valid(island_attractions) and bool(island_attractions.is_riding())
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and is_instance_valid(island_attractions):
+		island_attractions.end_ride()
+
 
 func update_collection(photos: Dictionary) -> void:
 	for point in points:

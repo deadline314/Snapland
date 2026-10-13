@@ -10,7 +10,7 @@
     }
   },
   "coverage_notes": {
-    "traveller": "This manifest adds front actions only. Existing 8-direction legacy walk, 8 frames/direction, remains legacy coverage and is not counted as a complete new action set. Jump is an 8-pose front action at 12 FPS; other jump directions are not authored here.",
+    "traveller": "This manifest adds front actions only. Existing 8-direction legacy walk, 8 frames/direction, remains legacy coverage and is not counted as a complete new action set. Jump is an 8-pose front action at 12 FPS; other jump directions are not authored here. Seated is a four-pose front-only action at 2 FPS; other seated directions are not authored here.",
     "traveller_outfit_coral": "Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.",
     "ticket": "Walk row is only a walk_candidate pending authored validation.",
     "imp": "42 authored cells (7x6); no frames synthesized.",
@@ -1935,6 +1935,70 @@
                   "layers": []
                 }
               }
+            }
+          ]
+        }
+      },
+      "sit": {
+        "front": {
+          "fps": 2,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-seated-front-v1.png",
+              "region": [200, 75, 291, 541],
+              "anchors": {
+                "feet": [145, 539],
+                "head": [148, 2]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.33,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-seated-front-v1.png",
+              "region": [723, 80, 291, 536],
+              "anchors": {
+                "feet": [144, 534],
+                "head": [151, 2]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.33,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-seated-front-v1.png",
+              "region": [179, 679, 312, 535],
+              "anchors": {
+                "feet": [165, 533],
+                "head": [175, 2]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.33,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-seated-front-v1.png",
+              "region": [723, 678, 291, 536],
+              "anchors": {
+                "feet": [144, 534],
+                "head": [147, 2]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.33,
+              "layers": []
             }
           ]
         }

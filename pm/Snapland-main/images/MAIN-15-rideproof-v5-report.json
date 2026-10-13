@@ -1,0 +1,142 @@
+{
+	"all_checks": [
+		"actual E board",
+		"30-frame pause abort and stable safe return",
+		"actual E manual exit",
+		"actual E revisit",
+		"full timed automatic cycle",
+		"return point",
+		"no collection/reward changes",
+		"three saved viewport captures"
+	],
+	"automatic_cycle": {
+		"camera_override": "close follow, applied after world process",
+		"pivot_moved": true,
+		"process_frames": 716,
+		"returned_position": {
+			"x": -6.7,
+			"y": 0.16,
+			"z": 11.2
+		},
+		"riding_at_end": false,
+		"simulated_process_delta_seconds": 11.9333333333335,
+		"wall_seconds_informational_only": 14.5
+	},
+	"automatic_cycle_occlusion_after_camera_settle": {
+		"active": false,
+		"active_groups": 0,
+		"available": true,
+		"center_px": "(639.9999, 329.7907)",
+		"fade_weight": 0.0,
+		"radius_px": 229.590234375,
+		"ray_samples": 102
+	},
+	"board_ground_target": {
+		"matches_authored_deck_surface": true,
+		"player_global_y_after_settle": 0.160130202770233,
+		"ride_point_y": 0.259999990463257,
+		"world_ground_surface_y": 0.26
+	},
+	"board_input": "Input.parse_input_event(E); Main _unhandled_input -> world.interact -> ride-tide",
+	"checks": [],
+	"display_server": "Windows",
+	"elapsed_seconds": 23.942,
+	"failure_reason": "",
+	"fixture": "staged MAIN15 ride; scripted input, not human-played",
+	"initial_modal": "dialogue",
+	"manual_exit": {
+		"input": "E",
+		"position": {
+			"x": -6.7,
+			"y": 0.16,
+			"z": 11.2
+		},
+		"reference_saved_local_position": {
+			"x": -6.7,
+			"y": 0.16,
+			"z": 11.2
+		},
+		"safe_return": true
+	},
+	"pause_30_frames": {
+		"modal": "pause",
+		"position": {
+			"x": -6.7,
+			"y": 0.16,
+			"z": 11.2
+		},
+		"riding": false,
+		"sample_count": 30,
+		"stable_at_board_point": true
+	},
+	"progress_after": {
+		"coins": 120,
+		"devil_count": 0,
+		"intro_seen": true,
+		"normal_count": 0
+	},
+	"progress_before": {
+		"coins": 120,
+		"devil_count": 0,
+		"intro_seen": true,
+		"normal_count": 0
+	},
+	"requested_window_size": "1280x720",
+	"ride_pivot_start_rotation_y": 0.0157079640775919,
+	"ride_point": {
+		"actual_saved_local_position": {
+			"x": -6.7,
+			"y": 0.16,
+			"z": 11.2
+		},
+		"authored_interaction_position": {
+			"x": -6.7,
+			"y": 0.26,
+			"z": 11.2
+		},
+		"id": "ride-tide",
+		"positioning": "fixture moved player to authored point; reference captured after 30 normal physics frames",
+		"settled_board_position": {
+			"x": -6.7,
+			"y": 0.16,
+			"z": 11.2
+		}
+	},
+	"screenshots": [
+		{
+			"height": 720,
+			"label": "before boarding; standard world camera",
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN15H/pm/Snapland-main/images/MAIN-15-rideproof-v5-approach.png",
+			"width": 1280
+		},
+		{
+			"height": 720,
+			"label": "actual seated ride pose; close camera shows rider and seat",
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN15H/pm/Snapland-main/images/MAIN-15-rideproof-v5-seated.png",
+			"width": 1280
+		},
+		{
+			"height": 720,
+			"label": "automatic cycle completed; standard world camera",
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN15H/pm/Snapland-main/images/MAIN-15-rideproof-v5-return.png",
+			"width": 1280
+		}
+	],
+	"scripted_player_reposition_to_real_ride_point": true,
+	"seat_start": {
+		"x": -8.15,
+		"y": 0.28,
+		"z": 10.0
+	},
+	"seated_capture_occlusion": {
+		"active": false,
+		"active_groups": 0,
+		"available": true,
+		"center_px": "(639.9999, 329.7907)",
+		"fade_weight": 0.0,
+		"radius_px": 229.590234375,
+		"ray_samples": 41
+	},
+	"status": "PASS",
+	"world_scene": ""
+}
