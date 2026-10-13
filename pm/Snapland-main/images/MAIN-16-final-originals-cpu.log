@@ -1,0 +1,21 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: bounded photo originals, shared collection metadata, safe viewer loading
+WARNING: Photo 'photo-welcome-game-1' original screenshot dimensions 2147483647x2147483647 exceed the 4-megapixel limit; decoder was not called.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _read_game_photo_original_image (res://game/core/progress.gd:313)
+       [1] _run (res://game/tests/test_photo_originals.gd:75)
+WARNING: Photo 'photo-welcome-game-1' original screenshot has invalid size (16777217 bytes; allowed 45..16777216).
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _read_game_photo_original_image (res://game/core/progress.gd:301)
+       [1] _run (res://game/tests/test_photo_originals.gd:81)
+WARNING: Photo 'photo-welcome-game-2' original screenshot dimensions 2147483647x2147483647 exceed the 4-megapixel limit; decoder was not called.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _read_game_photo_original_image (res://game/core/progress.gd:313)
+       [1] _saved_original_texture (res://game/ui/collection_book_panel.gd:347)
+       [2] _open_collected_photo (res://game/ui/collection_book_panel.gd:309)
+       [3] <anonymous lambda> (res://game/ui/collection_book_panel.gd:293)
+       [4] _run (res://game/tests/test_photo_originals.gd:120)

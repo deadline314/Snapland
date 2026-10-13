@@ -1,0 +1,455 @@
+{
+	"album": {
+		"devil_count_after_reload": 1,
+		"normal_count_after_reload": 1,
+		"opened_devil_original": true,
+		"opened_normal_original": true,
+		"original_count_after_reload": 3,
+		"original_size": [
+			1280,
+			720
+		],
+		"reload_shared_path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-original-0.png",
+		"thumbnail_paths": [
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-0.png",
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-1.png",
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-2.png"
+		],
+		"thumbnail_size": [
+			320,
+			180
+		]
+	},
+	"devil_run": {
+		"assisted": false,
+		"devil_count": 1,
+		"normal_count": 1,
+		"original_paths": [
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-original-0.png",
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-original-1.png",
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-original-2.png"
+		],
+		"photo_id": "photo-welcome-devil-12",
+		"result": {
+			"assisted": false,
+			"devil": true,
+			"game_id": "game-012",
+			"mistakes": 0,
+			"practice": false,
+			"score": 300,
+			"score_summary": {
+				"label": "演奏分",
+				"rows": [
+					{
+						"amount": 300,
+						"count": 15,
+						"key": "melody_notes",
+						"label": "演奏音符得分"
+					}
+				],
+				"rule": "每個正確音符 +25；完成每段樂句再 +100。",
+				"total": 300
+			},
+			"success": true
+		},
+		"same_paths_as_ordinary": true
+	},
+	"elapsed_seconds": 101.466,
+	"failure_reason": "",
+	"game_id": "game-012",
+	"human_played": false,
+	"input_evidence": "real Input.parse_input_event key and mouse events through Main/Session/Control",
+	"last_melody_run": {
+		"elapsed_seconds": 25.432,
+		"precise_input": true
+	},
+	"ordinary_run": {
+		"assisted": false,
+		"normal_count": 1,
+		"original_paths": [
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-original-0.png",
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-original-1.png",
+			"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-proof-final2/profile/photos/game-012-original-2.png"
+		],
+		"photo_id": "photo-welcome-game-12",
+		"result": {
+			"assisted": false,
+			"devil": false,
+			"game_id": "game-012",
+			"mistakes": 0,
+			"practice": false,
+			"score": 276,
+			"score_summary": {
+				"label": "演奏分",
+				"rows": [
+					{
+						"amount": 276,
+						"count": 15,
+						"key": "melody_notes",
+						"label": "演奏音符得分"
+					}
+				],
+				"rule": "每個正確音符 +25；完成每段樂句再 +100。",
+				"total": 276
+			},
+			"success": true
+		}
+	},
+	"screenshot_capture_opted_in": true,
+	"screenshots": [
+		{
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN16B/pm/Snapland-main/images/MAIN-13-native-ordinary-result.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN16B/pm/Snapland-main/images/MAIN-13-native-devil-result.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN16B/pm/Snapland-main/images/MAIN-13-native-ordinary-album-tiles.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN16B/pm/Snapland-main/images/MAIN-16-native-ordinary-original-viewer.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN16B/pm/Snapland-main/images/MAIN-13-native-devil-album-tiles.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN16B/pm/Snapland-main/images/MAIN-16-native-devil-original-viewer.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/index-MAIN16B/pm/Snapland-main/images/MAIN-13-native-reload-album.png",
+			"size": [
+				1280,
+				720
+			]
+		}
+	],
+	"scripted_gameplay_note": "A script plays the published fixed melody using real keyboard events; this is not a human play session.",
+	"status": "PASS",
+	"tutorial": "Skipped through the visible tutorial button on first entry.",
+	"walk": [
+		{
+			"actual": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.44
+			},
+			"elapsed_seconds": 3.475,
+			"from": {
+				"x": 0.0,
+				"y": 0.12,
+				"z": 23.2
+			},
+			"name": "game-012 approach 1",
+			"target": [
+				0.0,
+				12.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.12,
+				"y": 0.1,
+				"z": 7.4
+			},
+			"elapsed_seconds": 2.347,
+			"from": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.44
+			},
+			"name": "game-012 approach 2",
+			"target": [
+				4.19999980926514,
+				7.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.07,
+				"y": 0.1,
+				"z": -12.59
+			},
+			"elapsed_seconds": 6.686,
+			"from": {
+				"x": 4.12,
+				"y": 0.1,
+				"z": 7.4
+			},
+			"last_wall_contacts": [
+				"@StaticBody3D@1375",
+				"@StaticBody3D@1375",
+				"@StaticBody3D@1375",
+				"@StaticBody3D@1375"
+			],
+			"name": "game-012 approach 3",
+			"target": [
+				3.0,
+				-13.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.07,
+				"y": 0.1,
+				"z": -9.42
+			},
+			"elapsed_seconds": 1.275,
+			"from": {
+				"x": 3.07,
+				"y": 0.1,
+				"z": -12.59
+			},
+			"name": "game-012 approach 4",
+			"target": [
+				3.0,
+				-9.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.98,
+				"y": 0.1,
+				"z": -19.56
+			},
+			"elapsed_seconds": 3.63,
+			"from": {
+				"x": 3.07,
+				"y": 0.1,
+				"z": -9.42
+			},
+			"last_wall_contacts": [
+				"@StaticBody3D@1375",
+				"@StaticBody3D@1375",
+				"@StaticBody3D@608",
+				"@StaticBody3D@1375"
+			],
+			"name": "game-012 approach 5",
+			"target": [
+				5.0,
+				-20.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.98,
+				"y": 0.1,
+				"z": -26.56
+			},
+			"elapsed_seconds": 2.028,
+			"from": {
+				"x": 4.98,
+				"y": 0.1,
+				"z": -19.56
+			},
+			"name": "game-012 approach 6",
+			"target": [
+				5.0,
+				-27.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.27,
+				"y": 0.1,
+				"z": -33.6
+			},
+			"elapsed_seconds": 2.125,
+			"from": {
+				"x": 4.98,
+				"y": 0.1,
+				"z": -26.56
+			},
+			"name": "game-012 approach 7",
+			"target": [
+				4.19999980926514,
+				-34.0
+			]
+		},
+		{
+			"actual": {
+				"x": 5.98,
+				"y": 0.1,
+				"z": -40.06
+			},
+			"elapsed_seconds": 2.061,
+			"from": {
+				"x": 4.27,
+				"y": 0.1,
+				"z": -33.6
+			},
+			"name": "game-012 approach 8",
+			"target": [
+				6.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 4.27,
+				"y": 0.1,
+				"z": -34.43
+			},
+			"elapsed_seconds": 2.032,
+			"from": {
+				"x": 5.98,
+				"y": 0.1,
+				"z": -40.06
+			},
+			"name": "album approach 1",
+			"target": [
+				4.19999980926514,
+				-34.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.98,
+				"y": 0.1,
+				"z": -27.39
+			},
+			"elapsed_seconds": 2.22,
+			"from": {
+				"x": 4.27,
+				"y": 0.1,
+				"z": -34.43
+			},
+			"name": "album approach 2",
+			"target": [
+				5.0,
+				-27.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.98,
+				"y": 0.1,
+				"z": -20.39
+			},
+			"elapsed_seconds": 2.029,
+			"from": {
+				"x": 4.98,
+				"y": 0.1,
+				"z": -27.39
+			},
+			"name": "album approach 3",
+			"target": [
+				5.0,
+				-20.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.03,
+				"y": 0.1,
+				"z": -13.37
+			},
+			"elapsed_seconds": 2.531,
+			"from": {
+				"x": 4.98,
+				"y": 0.1,
+				"z": -20.39
+			},
+			"name": "album approach 4",
+			"target": [
+				3.0,
+				-13.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.03,
+				"y": 0.1,
+				"z": -9.37
+			},
+			"elapsed_seconds": 1.325,
+			"from": {
+				"x": 3.03,
+				"y": 0.1,
+				"z": -13.37
+			},
+			"name": "album approach 5",
+			"target": [
+				3.0,
+				-9.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.15,
+				"y": 0.1,
+				"z": -4.58
+			},
+			"elapsed_seconds": 1.79,
+			"from": {
+				"x": 3.03,
+				"y": 0.1,
+				"z": -9.37
+			},
+			"name": "album approach 6",
+			"target": [
+				4.19999980926514,
+				-4.19999980926514
+			]
+		},
+		{
+			"actual": {
+				"x": 4.15,
+				"y": 0.1,
+				"z": 5.75
+			},
+			"elapsed_seconds": 3.171,
+			"from": {
+				"x": 4.15,
+				"y": 0.1,
+				"z": -4.58
+			},
+			"name": "album approach 7",
+			"target": [
+				4.19999980926514,
+				6.19999980926514
+			]
+		},
+		{
+			"actual": {
+				"x": 7.58,
+				"y": 0.1,
+				"z": 6.93
+			},
+			"elapsed_seconds": 1.37,
+			"from": {
+				"x": 4.15,
+				"y": 0.1,
+				"z": 5.75
+			},
+			"name": "album approach 8",
+			"target": [
+				8.0,
+				7.0
+			]
+		}
+	]
+}

@@ -1,0 +1,80 @@
+{
+	"capture": {
+		"coins_after": 140,
+		"coins_before": 120,
+		"devil_count": 0,
+		"normal_count": 0,
+		"original_path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-time-final2/profile/photos/postcard-time-noon-original.png",
+		"original_size": [
+			1280,
+			720
+		],
+		"photo_id": "postcard-time-noon",
+		"proof_original_copy": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-time-final2/profile/native-time-photo-original.png",
+		"thumbnail_path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-time-final2/profile/photos/postcard-time-noon.png",
+		"thumbnail_size": [
+			320,
+			180
+		]
+	},
+	"display_server": "Windows",
+	"elapsed_seconds": 14.678,
+	"failure_reason": "",
+	"human_played": false,
+	"input_evidence": [
+		"actual T key opened time picker at the authored guide station",
+		"actual mouse clicks selected dawn and then Noon",
+		"actual mouse click activated CollectTimePostcard"
+	],
+	"process_id": 7656,
+	"review": "real time picker and collection button; read-only except intended noon postcard and its 20-coin reward",
+	"screenshots": [
+		{
+			"hold_seconds": 2.0,
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-time-final2/profile/native-time-photo-picker.png",
+			"size": [
+				1280,
+				720
+			],
+			"state": "native-time-photo-picker.png"
+		},
+		{
+			"hold_seconds": 2.0,
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-time-final2/profile/native-time-photo-collected-panel.png",
+			"size": [
+				1280,
+				720
+			],
+			"state": "native-time-photo-collected-panel.png"
+		},
+		{
+			"hold_seconds": 2.0,
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-time-final2/profile/native-time-photo-original-viewer.png",
+			"size": [
+				1280,
+				720
+			],
+			"state": "native-time-photo-original-viewer.png"
+		}
+	],
+	"scripted_placement": "Player root is placed beside the authored guide interaction point; this is not a human free-roam claim.",
+	"status": "PASS",
+	"viewer": {
+		"aspect_mode": "keep_aspect_centered",
+		"closed_by": "actual Escape",
+		"content_rect": [
+			170.0,
+			93.0,
+			940.0,
+			520.0
+		],
+		"dimensions": [
+			1280,
+			720
+		]
+	},
+	"viewport_size": [
+		1280,
+		720
+	]
+}

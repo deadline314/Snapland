@@ -1,0 +1,29 @@
+{
+	"display_server": "Windows",
+	"failure_reason": "Timed out waiting for saved postcard and refreshed time panel",
+	"human_played": false,
+	"input_evidence": [
+		"actual T key opened time picker at the authored guide station",
+		"actual mouse clicks selected dawn and then Noon",
+		"actual mouse click activated CollectTimePostcard"
+	],
+	"process_id": 30104,
+	"review": "real time picker and collection button; read-only except intended noon postcard and its 20-coin reward",
+	"screenshots": [
+		{
+			"hold_seconds": 2.0,
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/.review/main16-time-final/profile/native-time-photo-picker.png",
+			"size": [
+				1280,
+				720
+			],
+			"state": "native-time-photo-picker.png"
+		}
+	],
+	"scripted_placement": "Player root is placed beside the authored guide interaction point; this is not a human free-roam claim.",
+	"status": "FAIL",
+	"viewport_size": [
+		1280,
+		720
+	]
+}

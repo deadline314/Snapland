@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://game/tests/test_photo_originals.gd" id="1"]
+
+[node name="PhotoOriginalTests" type="Node"]
+script = ExtResource("1")

@@ -43,6 +43,7 @@ var reveal := 0.0
 var definitions: Array=[]
 var capture_mode := false
 var photo_frames: Array[Image] = []
+var photo_original_frames: Array[Image] = []
 var next_snapshot := 0.0
 var time_capture_token := 0
 var quitting := false
@@ -222,8 +223,8 @@ func _build_ui() -> void:
 	var banner := PanelContainer.new()
 	banner.name="ParkKeepsakeBanner"
 	banner.position=Vector2(24,20)
-	banner.custom_minimum_size=Vector2(390,106)
-	banner.size=Vector2(390,106)
+	banner.custom_minimum_size=Vector2(390,82)
+	banner.size=Vector2(390,82)
 	var banner_style := Paper.plaque(Color("#f7efd9"))
 	banner_style.content_margin_left=12
 	banner_style.content_margin_right=12
@@ -281,7 +282,7 @@ func _build_ui() -> void:
 	ticket_button.offset_bottom=72.0
 	ticket_button.custom_minimum_size=Vector2(198,48)
 	quest_label=Paper.label("",18,Color("#fffaf0"))
-	quest_label.position=Vector2(28,135)
+	quest_label.position=Vector2(28,108)
 	quest_label.size=Vector2(376,48)
 	quest_label.add_theme_color_override("font_shadow_color",Color("#203e47"))
 	quest_label.add_theme_constant_override("shadow_offset_x",1)
@@ -524,22 +525,23 @@ func _collect_time_postcard(phase_id: String) -> String:
 	if not _can_capture_time_postcard(phase_id, time_capture_token):
 		return ""
 	var token := time_capture_token
-	var frame_path := await _capture_time_postcard_frame(phase_id, token)
+	var saved_paths: Dictionary = await _capture_time_postcard_frame(phase_id, token)
+	var frame_path := str(saved_paths.get("thumbnail", ""))
+	var original_path := str(saved_paths.get("original", ""))
 	if frame_path.is_empty() or not _can_capture_time_postcard(phase_id, token):
-		if not frame_path.is_empty() and FileAccess.file_exists(frame_path):
-			DirAccess.remove_absolute(frame_path)
+		_remove_photo_paths([frame_path, original_path])
 		return ""
-	if not Progress.collect_time_postcard(phase_id, frame_path):
-		DirAccess.remove_absolute(frame_path)
+	if not Progress.collect_time_postcard(phase_id, frame_path, original_path):
+		_remove_photo_paths([frame_path, original_path])
 		return ""
 	return frame_path
 
 func _can_capture_time_postcard(phase_id: String, token: int) -> bool:
 	return token == time_capture_token and modal_kind == "time" and session == null and is_instance_valid(world) and str(world.nearest.get("id", "")) == "guide" and str(Progress.settings.get("time_phase", "")) == phase_id and TimeOfDay.phase_ids().has(phase_id) and not Progress.photos.has(TimeOfDay.postcard_id(phase_id))
 
-func _capture_time_postcard_frame(phase_id: String, token: int) -> String:
+func _capture_time_postcard_frame(phase_id: String, token: int) -> Dictionary:
 	if not _can_capture_time_postcard(phase_id, token):
-		return ""
+		return {}
 	var overlay_was_visible := overlay.visible
 	var hud_was_visible := hud.visible
 	overlay.hide()
@@ -547,30 +549,31 @@ func _capture_time_postcard_frame(phase_id: String, token: int) -> String:
 	await get_tree().process_frame
 	if not _can_capture_time_postcard(phase_id, token):
 		_restore_time_capture_ui(token, overlay_was_visible, hud_was_visible)
-		return ""
+		return {}
 	await RenderingServer.frame_post_draw
 	if not _can_capture_time_postcard(phase_id, token):
 		_restore_time_capture_ui(token, overlay_was_visible, hud_was_visible)
-		return ""
+		return {}
 	var viewport := get_viewport()
 	var snapshot := viewport.get_texture().get_image() if is_instance_valid(viewport) else null
 	_restore_time_capture_ui(token, overlay_was_visible, hud_was_visible)
 	if snapshot == null or snapshot.is_empty() or not _can_capture_time_postcard(phase_id, token):
-		return ""
-	snapshot.resize(320, 180, Image.INTERPOLATE_LANCZOS)
-	snapshot.convert(Image.FORMAT_RGBA8)
+		return {}
+	var original := _prepare_photo_original(snapshot)
+	var thumbnail := _prepare_photo_thumbnail(original)
 	var directory := _photo_directory()
 	var error := DirAccess.make_dir_recursive_absolute(directory)
 	if error != OK and error != ERR_ALREADY_EXISTS:
 		push_warning("Cannot create time postcard directory: " + directory)
-		return ""
-	var path := directory + "/" + TimeOfDay.postcard_id(phase_id) + ".png"
-	if snapshot.save_png(path) != OK:
-		if FileAccess.file_exists(path):
-			DirAccess.remove_absolute(path)
+		return {}
+	var base_path := directory + "/" + TimeOfDay.postcard_id(phase_id)
+	var path := base_path + ".png"
+	var original_path := base_path + "-original.png"
+	if thumbnail.save_png(path) != OK or not _save_bounded_photo_image(original, original_path):
+		_remove_photo_paths([path, original_path])
 		push_warning("Cannot save time postcard image: " + path)
-		return ""
-	return path
+		return {}
+	return {"thumbnail": path, "original": original_path}
 
 func _restore_time_capture_ui(token: int, overlay_visible: bool, hud_visible: bool) -> void:
 	if token != time_capture_token or modal_kind != "time":
@@ -590,7 +593,15 @@ func _show_time_panel() -> void:
 	if session != null:
 		session.process_mode = Node.PROCESS_MODE_DISABLED
 		body.add_child(Paper.label("已暫停本局；關閉面板後會從同一局面繼續。", 18, Paper.TEAL))
-	_back(body)
+	if is_instance_valid(time_panel.collect_button):
+		var actions := HBoxContainer.new()
+		actions.add_theme_constant_override("separation", 12)
+		modal_body.add_child(actions)
+		time_panel.collect_button.reparent(actions)
+		time_panel.collect_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		Paper.button("返回遊園 · Esc", _close, actions)
+	else:
+		_back(body)
 
 func _open_tutorial(target_id: String, origin: String, assisted_mode: bool = false) -> void:
 	if is_instance_valid(tutorial_panel):
@@ -745,7 +756,8 @@ func _finish_dialogue(cancelled: bool = false) -> void:
 	dialogue.clear()
 	overlay.hide()
 	modal_kind=""
-	if is_instance_valid(world): world.blocked=session!=null
+	if is_instance_valid(world):
+		world.blocked=session!=null
 	if is_instance_valid(hud): hud.show()
 	if cancelled:
 		if cancel_callback.is_valid(): cancel_callback.call()
@@ -764,7 +776,8 @@ func _dialogue_panel_exiting(panel: Control) -> void:
 	dialogue.clear()
 	if modal_kind=="dialogue":
 		modal_kind=""
-		if is_instance_valid(world): world.blocked=session!=null
+		if is_instance_valid(world):
+				world.blocked=session!=null
 
 func _dialogue_panel_resized() -> void:
 	if not is_instance_valid(dialogue_panel): return
@@ -899,6 +912,7 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 		_notice("這個設施暫時無法開啟，請先逛逛其他地方。")
 		return
 	photo_frames.clear()
+	photo_original_frames.clear()
 	next_snapshot=1.0
 	overlay.hide()
 	modal_kind=""
@@ -937,17 +951,19 @@ func _game_finished(result: Dictionary) -> void:
 	var id := str(result.get("game_id",""))
 	var practice := bool(result.get("practice",false))
 	var saved_frames: Array[String] = []
+	var saved_original_frames: Array[String] = []
 	if bool(result.get("success",false)) and not practice and DisplayServer.get_name()!="headless":
 		# The completed session will draw its end overlay on the next frame. Keep
 		# the most recent rendered gameplay image instead of photographing that UI.
 		_append_photo_snapshot()
 		saved_frames=_save_photo_frames(id)
+		saved_original_frames=_save_photo_original_frames(id)
 	if bool(result.get("success",false)) and not practice:
 		celebrate_on_close=true
 		Progress.complete_game(id,bool(result.get("devil",false)),bool(result.get("assisted",false)))
 		_record_story_mission_event({"type":"minigame_result","id":id,"success":true,"practice":false})
 		if not saved_frames.is_empty():
-			_sync_finished_photo_thumbnails(result,saved_frames)
+			_sync_finished_photo_thumbnails(result,saved_frames,saved_original_frames)
 	_cancel_game()
 	audio.play_sfx("success" if result.get("success",false) else "miss")
 	var definition := _definition(id)
@@ -1013,12 +1029,10 @@ func _game_finished(result: Dictionary) -> void:
 		Paper.button("輔助重試",func(): _launch_game(id,true),row)
 	_back(body)
 
-func _sync_finished_photo_thumbnails(result: Dictionary, saved_frames: Array[String]) -> bool:
-	if not bool(result.get("success", false)) or bool(result.get("practice", false)):
+func _sync_finished_photo_thumbnails(result: Dictionary, saved_frames: Array[String], saved_original_frames: Array[String] = []) -> bool:
+	if not bool(result.get("success",false)) or bool(result.get("practice",false)):
 		return false
-	return Progress.attach_welcome_game_photo_frames(
-		str(result.get("game_id", "")), saved_frames, bool(result.get("devil", false))
-	)
+	return Progress.attach_welcome_game_photo_frames(str(result.get("game_id","")),saved_frames,bool(result.get("devil",false)),saved_original_frames)
 
 func _show_album() -> void:
 	var body := _open("一張照片，一點小事。","PHOTO COLLECTION","album")
@@ -1365,6 +1379,43 @@ func _save_photo_frames(id: String) -> Array[String]:
 		else: push_warning("Cannot save photo frame: "+path)
 	return paths
 
+func _save_photo_original_frames(id: String) -> Array[String]:
+	var paths: Array[String] = []
+	var directory := _photo_directory()
+	var error := DirAccess.make_dir_recursive_absolute(directory)
+	if error != OK and error != ERR_ALREADY_EXISTS:
+		push_warning("Cannot create original photo directory: " + directory)
+		return paths
+	for index in range(photo_original_frames.size()):
+		var path := "%s/%s-original-%d.png" % [directory, id, index]
+		if _save_bounded_photo_image(photo_original_frames[index], path):
+			paths.append(path)
+	return paths
+
+func _save_bounded_photo_image(image: Image, path: String) -> bool:
+	if image == null or image.is_empty() or image.get_width() * image.get_height() > 4 * 1024 * 1024:
+		push_warning("Skipping original photo outside the 4-megapixel limit: " + path)
+		return false
+	var error := image.save_png(path)
+	var file_size := -1
+	if FileAccess.file_exists(path):
+		var saved_file := FileAccess.open(path, FileAccess.READ)
+		if saved_file != null:
+			file_size = saved_file.get_length()
+			saved_file.close()
+	if error != OK or file_size < 45 or file_size > 16 * 1024 * 1024:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(path)
+		push_warning("Cannot save bounded original photo: " + path)
+		return false
+	return true
+
+func _remove_photo_paths(paths: Array) -> void:
+	for path_value in paths:
+		var path := str(path_value)
+		if not path.is_empty() and FileAccess.file_exists(path):
+			DirAccess.remove_absolute(path)
+
 func _photo_directory() -> String:
 	# Preview sessions never write into the player's real profile.
 	var override := OS.get_environment("SNAPLAND_SAVE_PATH")
@@ -1400,14 +1451,14 @@ func _adapt_hud() -> void:
 	Paper.adapt_menu(hud,scale_factor)
 	var banner := hud.get_node("ParkKeepsakeBanner") as Control
 	banner.position=Vector2(24,20)/scale_factor
-	banner.custom_minimum_size=Vector2(390,106)/scale_factor
+	banner.custom_minimum_size=Vector2(390,82)/scale_factor
 	banner.size=banner.custom_minimum_size
 	ticket_button.offset_left=-222.0/scale_factor
 	ticket_button.offset_right=-24.0/scale_factor
 	ticket_button.offset_top=24.0/scale_factor
 	ticket_button.offset_bottom=72.0/scale_factor
 	ticket_button.custom_minimum_size=Vector2(198,48)/scale_factor
-	quest_label.position=Vector2(28,135)/scale_factor
+	quest_label.position=Vector2(28,108)/scale_factor
 	quest_label.size=Vector2(376,48)/scale_factor
 	context_bar.offset_left=-200.0/scale_factor
 	context_bar.offset_right=200.0/scale_factor
@@ -1418,6 +1469,13 @@ func _adapt_hud() -> void:
 	toast.offset_right=310.0/scale_factor
 	toast.offset_top=190.0/scale_factor
 	toast.offset_bottom=280.0/scale_factor
+
+func _menu_preferred_size(kind: String) -> Vector2:
+	if kind=="pause": return Vector2(720,330)
+	if kind=="album": return Vector2(1080,680)
+	if kind=="time": return Vector2(1000,540)
+	var tall_kinds := ["settings","achievements","map","wardrobe","ticket"]
+	return Vector2(1040,600 if tall_kinds.has(kind) else 350)
 
 func _adapt_open_menu() -> void:
 	if not is_instance_valid(overlay) or not overlay.visible: return
@@ -1457,7 +1515,7 @@ func _show_ticket() -> void:
 			Paper.button(str(entry[0]),entry[1],card)
 	var help_card := Paper.card(list,Color("#f1e8d3"),6)
 	help_card.add_child(Paper.section_title("操作速查",Paper.DEEP_TEAL))
-	help_card.add_child(Paper.label("移動 WASD／方向鍵　·　互動 E　·　招呼 F　·　拍照 P　·　衣櫃 C　·　時段 T　·　暫停 Esc",18))
+	help_card.add_child(Paper.label("移動 WASD／方向鍵　·　慢走 Shift　·　互動 E　·　招呼 F　·　拍照 P　·　衣櫃 C　·　時段 T　·　暫停 Esc",18))
 	Paper.button("園區圖解教學",func(): _open_tutorial("park","ticket"),help_card)
 	_back(body)
 
@@ -1474,7 +1532,7 @@ func _interact_nearest() -> void:
 func _show_controls() -> void:
 	var body := _open("操作速查","PARK CONTROLS","controls")
 	body.add_child(Paper.section_title("移動與互動"))
-	body.add_child(Paper.label("移動：WASD／方向鍵　·　互動：E　·　招呼：F　·　拍照：P",20))
+	body.add_child(Paper.label("移動：WASD／方向鍵　·　按住 Shift 慢走　·　互動：E　·　招呼：F　·　拍照：P",20))
 	body.add_child(Paper.label("衣櫃：C　·　時段：T　·　旅券：M　·　暫停：Esc",20))
 	_back(body)
 
@@ -1484,14 +1542,35 @@ func _append_photo_snapshot() -> void:
 	if snapshot==null or snapshot.is_empty():
 		push_warning("Could not capture gameplay photo for "+str(session.game_id))
 		return
-	snapshot.resize(320,180,Image.INTERPOLATE_LANCZOS)
-	if photo_frames.size()>=4: photo_frames.pop_front()
-	photo_frames.append(snapshot)
+	_append_photo_image(snapshot)
 
-func _menu_preferred_size(kind: String) -> Vector2:
-	if kind=="pause": return Vector2(720,330)
-	if kind=="album": return Vector2(1080,680)
-	if kind=="time": return Vector2(1000,540)
-	var tall_kinds := ["settings","achievements","map","wardrobe","ticket"]
-	return Vector2(1040,600 if tall_kinds.has(kind) else 350)
+func _append_photo_image(snapshot: Image) -> void:
+	var original := _prepare_photo_original(snapshot)
+	if original == null or original.is_empty():
+		return
+	var thumbnail := _prepare_photo_thumbnail(original)
+	if photo_frames.size() >= Progress.MAX_GAME_PHOTO_FRAMES:
+		photo_frames.pop_front()
+	if photo_original_frames.size() >= Progress.MAX_GAME_PHOTO_FRAMES:
+		photo_original_frames.pop_front()
+	photo_frames.append(thumbnail)
+	photo_original_frames.append(original)
 
+func _prepare_photo_original(snapshot: Image) -> Image:
+	if snapshot == null or snapshot.is_empty():
+		return null
+	var original := snapshot.duplicate()
+	var pixels: int = original.get_width() * original.get_height()
+	if pixels > 4 * 1024 * 1024:
+		var scale := sqrt(float(4 * 1024 * 1024) / float(pixels))
+		original.resize(maxi(1, floori(float(original.get_width()) * scale)), maxi(1, floori(float(original.get_height()) * scale)), Image.INTERPOLATE_LANCZOS)
+	original.convert(Image.FORMAT_RGBA8)
+	return original
+
+func _prepare_photo_thumbnail(original: Image) -> Image:
+	if original == null or original.is_empty():
+		return null
+	var thumbnail := original.duplicate()
+	thumbnail.resize(320,180,Image.INTERPOLATE_LANCZOS)
+	thumbnail.convert(Image.FORMAT_RGBA8)
+	return thumbnail

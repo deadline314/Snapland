@@ -9,6 +9,7 @@ const MAX_COINS := 1000000
 const MAX_GAME_PHOTO_FRAMES := 3
 const MAX_GAME_PHOTO_FRAME_CANDIDATES := 12
 const MAX_GAME_PHOTO_FILE_BYTES := 16 * 1024 * 1024
+const MAX_GAME_PHOTO_ORIGINAL_PIXELS := 4 * 1024 * 1024
 const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TestSaveGuard = preload("res://game/core/test_save_guard.gd")
@@ -50,6 +51,7 @@ var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
 var _game_photo_decoder_invocations := 0
+var _game_photo_original_decoder_invocations := 0
 
 func _ready() -> void:
 	if not _guard_test_save_path("startup"):
@@ -93,7 +95,7 @@ func set_time_phase(value: String) -> bool:
 	changed.emit()
 	return true
 
-func collect_time_postcard(value: String, frame_path: String) -> bool:
+func collect_time_postcard(value: String, frame_path: String, original_path: String = "") -> bool:
 	if not TimeOfDay.phase_ids().has(value):
 		return false
 	if settings.get("time_phase", TimeOfDay.DEFAULT_PHASE) != value or not FileAccess.file_exists(frame_path):
@@ -101,12 +103,19 @@ func collect_time_postcard(value: String, frame_path: String) -> bool:
 	var frame := Image.load_from_file(frame_path)
 	if frame == null or frame.get_width() != 320 or frame.get_height() != 180:
 		return false
+	var valid_original := ""
+	if not original_path.is_empty():
+		if _read_game_photo_original_image(TimeOfDay.postcard_id(value), original_path) == null:
+			return false
+		valid_original = original_path
 	var source_id := TimeOfDay.postcard_id(value)
 	if photos.has(source_id):
 		return false
 	var previous_coins := coins
 	coins = mini(clampi(coins, 0, MAX_COINS) + 20, MAX_COINS)
 	photos[source_id] = {"time_phase": value, "frames": [frame_path]}
+	if not valid_original.is_empty():
+		photos[source_id]["original_frames"] = [valid_original]
 	var completes_set := true
 	for postcard in TimeOfDay.all_postcard_ids():
 		if not photos.has(postcard):
@@ -152,15 +161,15 @@ func complete_game(game_id: String, devil: bool, assisted: bool = false) -> void
 		_unlock("ACH_ALL_DEVILS")
 	changed.emit()
 
-## Attach one saved gameplay capture set to the already-granted card(s).
-## Ordinary and devil records point at the same files; this never grants cards.
-func attach_welcome_game_photo_frames(game_id: String, saved_frames: Array, include_devil: bool) -> bool:
+## Attach saved gameplay captures to cards already granted by complete_game.
+## Ordinary and devil records share paths; this method never grants a card.
+func attach_welcome_game_photo_frames(game_id: String, saved_frames: Array, include_devil: bool, saved_original_frames: Array = []) -> bool:
 	var game_number := _welcome_game_number(game_id)
 	if game_number == 0:
 		push_warning("Cannot attach gameplay thumbnails for unknown game '%s'." % game_id)
 		return false
 	var ordinary_id := "photo-welcome-game-%d" % game_number
-	if not photos.has(ordinary_id):
+	if not photos.has(ordinary_id) or not photos[ordinary_id] is Dictionary:
 		push_warning("Cannot attach gameplay thumbnails: collected ordinary photo '%s' is missing." % ordinary_id)
 		return false
 	var image_cache: Dictionary = {}
@@ -171,21 +180,55 @@ func attach_welcome_game_photo_frames(game_id: String, saved_frames: Array, incl
 	if valid_frames.is_empty():
 		push_warning("No readable 320x180 gameplay thumbnails are available for collected photo '%s'." % ordinary_id)
 		return false
-	photos[ordinary_id]["frames"] = valid_frames.duplicate()
+	var valid_originals := _validated_game_photo_original_frames(ordinary_id, saved_original_frames)
+	var previous_ordinary: Variant = photos[ordinary_id].get("frames", null)
+	var had_previous_ordinary: bool = photos[ordinary_id].has("frames")
 	var devil_id := "photo-welcome-devil-%d" % game_number
-	if include_devil and photos.has(devil_id):
+	var update_devil := include_devil and photos.has(devil_id) and photos[devil_id] is Dictionary
+	var previous_devil: Variant = photos[devil_id].get("frames", null) if update_devil else null
+	var had_previous_devil: bool = update_devil and photos[devil_id].has("frames")
+	var previous_ordinary_original: Variant = photos[ordinary_id].get("original_frames", null)
+	var had_previous_ordinary_original: bool = photos[ordinary_id].has("original_frames")
+	var previous_devil_original: Variant = photos[devil_id].get("original_frames", null) if update_devil else null
+	var had_previous_devil_original: bool = update_devil and photos[devil_id].has("original_frames")
+	photos[ordinary_id]["frames"] = valid_frames.duplicate()
+	if update_devil:
 		photos[devil_id]["frames"] = valid_frames.duplicate()
+	if not valid_originals.is_empty():
+		photos[ordinary_id]["original_frames"] = valid_originals.duplicate()
+		if update_devil:
+			photos[devil_id]["original_frames"] = valid_originals.duplicate()
 	if not save_progress():
+		if had_previous_ordinary:
+			photos[ordinary_id]["frames"] = previous_ordinary
+		else:
+			photos[ordinary_id].erase("frames")
+		if update_devil:
+			if had_previous_devil:
+				photos[devil_id]["frames"] = previous_devil
+			else:
+				photos[devil_id].erase("frames")
+		if had_previous_ordinary_original:
+			photos[ordinary_id]["original_frames"] = previous_ordinary_original
+		else:
+			photos[ordinary_id].erase("original_frames")
+		if update_devil:
+			if had_previous_devil_original:
+				photos[devil_id]["original_frames"] = previous_devil_original
+			else:
+				photos[devil_id].erase("original_frames")
 		push_error("Could not save gameplay thumbnail paths for '%s'." % ordinary_id)
 		return false
 	return true
 
+## Add legacy devil-card thumbnails only when their ordinary card has a readable saved image.
+## The migration updates existing metadata; it never creates or rewards a card.
 func _backfill_legacy_devil_photo_frames() -> bool:
 	var changed_any := false
 	var image_cache: Dictionary = {}
 	for game_number in range(1, 13):
 		var devil_id := "photo-welcome-devil-%d" % game_number
-		if not photos.has(devil_id):
+		if not photos.has(devil_id) or not photos[devil_id] is Dictionary:
 			continue
 		var devil_photo: Dictionary = photos[devil_id]
 		var current_frames := _validated_game_photo_frames(devil_id, devil_photo.get("frames", []), image_cache)
@@ -193,23 +236,95 @@ func _backfill_legacy_devil_photo_frames() -> bool:
 			if devil_photo.get("frames", []) != current_frames:
 				devil_photo["frames"] = current_frames
 				changed_any = true
+			if not devil_photo.has("original_frames"):
+				var ordinary_with_originals: Variant = photos.get("photo-welcome-game-%d" % game_number, {})
+				if ordinary_with_originals is Dictionary:
+					var shared_originals := _validated_game_photo_original_frames(devil_id, ordinary_with_originals.get("original_frames", []))
+					if not shared_originals.is_empty():
+						devil_photo["original_frames"] = shared_originals.duplicate()
+						changed_any = true
 			continue
 		var ordinary_id := "photo-welcome-game-%d" % game_number
-		if not photos.has(ordinary_id):
+		if not photos.has(ordinary_id) or not photos[ordinary_id] is Dictionary:
 			if devil_photo.has("frames"):
 				devil_photo.erase("frames")
 				changed_any = true
 			continue
-		var ordinary_photo: Variant = photos[ordinary_id]
-		var source_frames: Array[String] = _validated_game_photo_frames(ordinary_id, ordinary_photo.get("frames", []), image_cache) if ordinary_photo is Dictionary else []
+		var ordinary_photo: Dictionary = photos[ordinary_id]
+		var source_frames := _validated_game_photo_frames(ordinary_id, ordinary_photo.get("frames", []), image_cache)
 		if source_frames.is_empty():
 			if devil_photo.has("frames"):
 				devil_photo.erase("frames")
 				changed_any = true
 			continue
 		devil_photo["frames"] = source_frames.duplicate()
+		var source_originals := _validated_game_photo_original_frames(ordinary_id, ordinary_photo.get("original_frames", []))
+		if not source_originals.is_empty():
+			devil_photo["original_frames"] = source_originals.duplicate()
 		changed_any = true
 	return changed_any
+
+func _validated_game_photo_original_frames(photo_id: String, frame_value: Variant) -> Array[String]:
+	var valid: Array[String] = []
+	if typeof(frame_value) != TYPE_ARRAY:
+		if frame_value != null:
+			push_warning("Photo '%s' has invalid 'original_frames' data (expected an array)." % photo_id)
+		return valid
+	if frame_value.size() > MAX_GAME_PHOTO_FRAME_CANDIDATES:
+		push_warning("Photo '%s' has more than %d original screenshot entries; remaining entries are not inspected." % [photo_id, MAX_GAME_PHOTO_FRAME_CANDIDATES])
+	var seen_paths: Dictionary = {}
+	for frame_index in range(mini(frame_value.size(), MAX_GAME_PHOTO_FRAME_CANDIDATES)):
+		var candidate: Variant = frame_value[frame_index]
+		if typeof(candidate) != TYPE_STRING or str(candidate).strip_edges().is_empty():
+			push_warning("Photo '%s' has an invalid original screenshot path value at index %d." % [photo_id, frame_index])
+			break
+		var path := str(candidate)
+		if seen_paths.has(path):
+			push_warning("Photo '%s' repeats an original screenshot path; later entries are ignored." % photo_id)
+			break
+		seen_paths[path] = true
+		if valid.size() >= MAX_GAME_PHOTO_FRAMES:
+			break
+		if _read_game_photo_original_image(photo_id, path) == null:
+			break
+		valid.append(path)
+	return valid
+
+func _read_game_photo_original_image(photo_id: String, path: String) -> Image:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		push_warning("Photo '%s' original screenshot is missing or cannot be opened: '%s'." % [photo_id, path])
+		return null
+	var file_length := file.get_length()
+	if file_length < 45 or file_length > MAX_GAME_PHOTO_FILE_BYTES:
+		file.close()
+		push_warning("Photo '%s' original screenshot has invalid size (%d bytes; allowed 45..%d)." % [photo_id, file_length, MAX_GAME_PHOTO_FILE_BYTES])
+		return null
+	var header := file.get_buffer(24)
+	var signature := PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10])
+	if header.size() != 24 or header.slice(0, 8) != signature or header.slice(12, 16).get_string_from_ascii() != "IHDR" or _thumbnail_u32(header, 8) != 13:
+		file.close()
+		push_warning("Photo '%s' original screenshot has no standard PNG IHDR header." % photo_id)
+		return null
+	var width := _thumbnail_u32(header, 16)
+	var height := _thumbnail_u32(header, 20)
+	if width <= 0 or height <= 0 or width > MAX_GAME_PHOTO_ORIGINAL_PIXELS or height > MAX_GAME_PHOTO_ORIGINAL_PIXELS or width * height > MAX_GAME_PHOTO_ORIGINAL_PIXELS:
+		file.close()
+		push_warning("Photo '%s' original screenshot dimensions %dx%d exceed the 4-megapixel limit; decoder was not called." % [photo_id, width, height])
+		return null
+	file.seek(0)
+	var png_bytes := file.get_buffer(file_length)
+	file.close()
+	if png_bytes.size() != file_length:
+		push_warning("Photo '%s' original screenshot could not be read completely." % photo_id)
+		return null
+	var image := Image.new()
+	_game_photo_original_decoder_invocations += 1
+	var decode_error: Error = image.load_png_from_buffer(png_bytes)
+	if decode_error != OK or image.is_empty() or image.get_width() != width or image.get_height() != height:
+		push_warning("Photo '%s' original screenshot could not be decoded safely (%s)." % [photo_id, error_string(decode_error)])
+		return null
+	return image
 
 func _validated_game_photo_frames(photo_id: String, frame_value: Variant, image_cache: Dictionary = {}) -> Array[String]:
 	var valid: Array[String] = []

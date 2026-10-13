@@ -1,0 +1,101 @@
+{
+  "branch": "feature/island-experience",
+  "code_base_before_delivery": "442a88f2ddb96a9ba028779ce99530d5af56d5f7",
+  "runtime_code": "staged index snapshots MAIN16B/MAIN16C; later changes were native fixture and CI registration only",
+  "human_played": false,
+  "root_visual_review": "Gameplay 71.4 seconds and time-postcard 7.483333 seconds played to end; album, both original viewers, reopened viewer, original and collected-time panel inspected. Audio Dummy; no listening claim.",
+  "native_errors": 0,
+  "negative_fixture": "First gameplay fixture assumed wrong page; corrected with real Next/Previous roundtrip. First time fixture expected enabled collected button; corrected to the actual disabled state, preserving award and original checks. Failed private proof retained.",
+  "files": [
+    {
+      "path": "MAIN-16-final-ordinary-album-tiles.png",
+      "bytes": 177536,
+      "sha256": "00313d9f735723aa7e46af13f20dc15a9f55fbe4137c496ac6d8ea5160b1b03e"
+    },
+    {
+      "path": "MAIN-16-final-devil-album-tiles.png",
+      "bytes": 180376,
+      "sha256": "37d192a1fb98453aee57d47d41abaefa64d93e497fdb9cd36d3abe07e31f5074"
+    },
+    {
+      "path": "MAIN-16-final-ordinary-original-viewer.png",
+      "bytes": 193934,
+      "sha256": "15510f991d3b580b210e70818da6c9a307df715e6cf85ab903588dfa1942b4da"
+    },
+    {
+      "path": "MAIN-16-final-devil-original-viewer.png",
+      "bytes": 196024,
+      "sha256": "27650d087831154feac794ac5df5602d4cb2b80d941b4340ae2d58f0a458df12"
+    },
+    {
+      "path": "MAIN-16-final-reopened-original.png",
+      "bytes": 188695,
+      "sha256": "852a3e9911be301b1f20b9eb7299a0aceceeca12eb32fc685294a0a722a92ea1"
+    },
+    {
+      "path": "MAIN-16-final-time-original.png",
+      "bytes": 1257986,
+      "sha256": "e9098cde4fc00669c8c3466a284345ca695204d238a306f901af27f80a5dfb56"
+    },
+    {
+      "path": "MAIN-16-final-time-original-viewer.png",
+      "bytes": 709195,
+      "sha256": "3fd49d1f459c9535c973f18fc3c6c8b19cb5ced981c4421230915c600ab41cae"
+    },
+    {
+      "path": "MAIN-16-final-time-collected-panel.png",
+      "bytes": 301484,
+      "sha256": "ac2dbb8d857ea3e3b9375085df24ea5f5a04cc3b63aab4faf7fb15637693740e"
+    },
+    {
+      "path": "MAIN-16-final-time-original-review.json",
+      "bytes": 2306,
+      "sha256": "200d4ecc78caf9e7bbb7cb6b56fc8dbaa2b39d7bb49bb4ac625165fbea09fa0e"
+    },
+    {
+      "path": "MAIN-16-final-gameplay-report.json",
+      "bytes": 8952,
+      "sha256": "be2742b28979d3ebd7e95fe66e1b5b1497c576f3275bfc177fc23b6321b6917a"
+    },
+    {
+      "path": "MAIN-16-final-reopen-report.json",
+      "bytes": 3503,
+      "sha256": "eaef99a300197920688dca2db7a3a8603ae19c87d7d25b9604671756fb607128"
+    },
+    {
+      "path": "MAIN-16-final-gameplay-normal.mp4",
+      "bytes": 59509379,
+      "sha256": "18c1d2b8ace18895725a99e0d881b627104a89ec2a7231cdc90abacd51ccd3f6"
+    },
+    {
+      "path": "MAIN-16-final-time-normal.mp4",
+      "bytes": 2759274,
+      "sha256": "b3597c38b265b2078b380e366596ddf49c08ec24579d3b3fd5d3699ab8e2e8a5"
+    },
+    {
+      "path": "MAIN-16-final-gameplay.log",
+      "bytes": 23227,
+      "sha256": "f283035ed60c03ad5627021b525e10b0f49e0d3acd7cc4c087c36beae8cf0098"
+    },
+    {
+      "path": "MAIN-16-final-reopen.log",
+      "bytes": 17336,
+      "sha256": "02382512d6e0171829bfd3157c9d0fd3acacdbd9988a174b8635189e2fabddf6"
+    },
+    {
+      "path": "MAIN-16-final-time.log",
+      "bytes": 16265,
+      "sha256": "163834468d41d0af86ac52664ca3a5b0d71224a911e8808cb518c79d09c3f520"
+    },
+    {
+      "path": "MAIN-16-final-originals-cpu.log",
+      "bytes": 1553,
+      "sha256": "724e0d5a6dda45add5a71ab7b72775b4537926b274805d228ca0b96cda2a8812"
+    },
+    {
+      "path": "MAIN-16-rejected-time-fixture-report.json",
+      "bytes": 934,
+      "sha256": "c7208d8a223ab276697ed94ffc595c149e4f15be75b8ce51f645ef0951f82734"
+    }
+  ]
+}

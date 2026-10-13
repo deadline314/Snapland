@@ -36,6 +36,7 @@ var _devil_button: Button
 var _time_button: Button
 var _game_photo_texture_cache: Dictionary = {}
 var _thumbnail_decode_count := 0
+var _original_decode_count := 0
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
@@ -48,6 +49,7 @@ func setup(progress: Node, definitions: Array, phases: Array, photo_loader: Call
 	_photo_loader=photo_loader
 	_game_photo_texture_cache.clear()
 	_thumbnail_decode_count=0
+	_original_decode_count=0
 
 func _ready() -> void:
 	custom_minimum_size.y=420
@@ -302,7 +304,15 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 	if not _progress.photos.has(entry.id):
 		_photo_details.text="這張照片還在等你，完成遊園後再回來翻看。"
 		return
-	var texture := _saved_texture(str(entry.id))
+	var photo_id := str(entry.id)
+	var has_original := _has_original_photo_path(photo_id)
+	var texture := _saved_original_texture(photo_id)
+	if texture == null:
+		texture = _saved_texture(photo_id)
+		if texture != null and not has_original:
+			_photo_details.text = str(entry.title) + "｜完整尺寸照片沒有留下來，先看看相簿畫格。"
+		elif texture != null:
+			_photo_details.text = str(entry.title) + "｜原尺寸照片暫時無法打開，先看看相簿畫格。"
 	if texture == null:
 		_photo_details.text="這張照片暫時看不清楚，先留在本子裡。"
 		return
@@ -313,6 +323,31 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 	var viewer := PhotoViewer.new()
 	viewer.setup(texture,str(entry.title),tile)
 	modal_overlay.add_child(viewer)
+
+func _has_original_photo_path(photo_id: String) -> bool:
+	var photo: Variant = _progress.photos.get(photo_id, {})
+	if not photo is Dictionary:
+		return false
+	var originals: Variant = photo.get("original_frames", [])
+	return originals is Array and not originals.is_empty()
+
+func _saved_original_texture(photo_id: String) -> Texture2D:
+	var photo: Variant = _progress.photos.get(photo_id, {})
+	if not photo is Dictionary:
+		return null
+	var original_frames: Variant = photo.get("original_frames", [])
+	if not original_frames is Array or original_frames.is_empty():
+		return null
+	var path_value: Variant = original_frames[0]
+	if typeof(path_value) != TYPE_STRING or str(path_value).strip_edges().is_empty():
+		return null
+	if not _progress.has_method("_read_game_photo_original_image"):
+		return null
+	_original_decode_count += 1
+	var image: Image = _progress.call("_read_game_photo_original_image", photo_id, str(path_value))
+	if image == null or image.is_empty():
+		return null
+	return ImageTexture.create_from_image(image)
 
 func _find_modal_overlay() -> Control:
 	var ancestor: Node = self
