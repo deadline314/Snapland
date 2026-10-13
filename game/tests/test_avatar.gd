@@ -113,15 +113,28 @@ func _initialize() -> void:
 	changed_appearance.species = "elf"
 	var elf_front: Texture2D = renderer.texture(changed_appearance, equipped)
 	assert(_image_data(base) != _image_data(elf_front), "elf species parts change avatar pixels")
-	assert(_region_difference_count(base, elf_front, Rect2i(0, 76, 55, 60)) > 20, "front elf ear tip protrudes outside the left hair silhouette")
-	assert(_region_difference_count(base, elf_front, Rect2i(225, 76, 55, 60)) > 20, "front elf ear tip protrudes outside the right hair silhouette")
+	var elf_front_head: Vector2i = renderer.animation_library.normalized_anchor("traveller", "idle", "front", 0, "head", equipped)
+	assert(_species_extension_pixel_count(base, elf_front, elf_front_head, -1) > 20, "front elf ear adds opaque pixels outside the left base silhouette beside the authored head")
+	assert(_species_extension_pixel_count(base, elf_front, elf_front_head, 1) > 20, "front elf ear adds opaque pixels outside the right base silhouette beside the authored head")
+	assert(_species_extension_touches_base(base, elf_front, elf_front_head, -1), "left front ear extension contacts the base head with at least three strong opaque neighbors")
+	assert(_species_extension_touches_base(base, elf_front, elf_front_head, 1), "right front ear extension contacts the base head with at least three strong opaque neighbors")
 	assert(_image_data(renderer.texture(appearance, equipped, "left")) != _image_data(renderer.texture(changed_appearance, equipped, "left")), "profile elf has a directional ear part")
-	assert(_region_difference_count(renderer.texture(appearance, equipped, "left"), renderer.texture(changed_appearance, equipped, "left"), Rect2i(0, 76, 55, 65)) > 20, "profile elf ear extends beyond the side hair")
-	assert(_region_difference_count(renderer.texture(appearance, equipped, "left"), renderer.texture(changed_appearance, equipped, "left"), Rect2i(32, 82, 48, 56)) > 20, "profile elf ear overlaps the cheek-side silhouette at its root")
-	assert(_region_difference_count(renderer.texture(appearance, equipped, "right"), renderer.texture(changed_appearance, equipped, "right"), Rect2i(225, 76, 55, 65)) > 20, "opposite profile elf ear extends beyond the side hair")
-	assert(_region_difference_count(renderer.texture(appearance, equipped, "right"), renderer.texture(changed_appearance, equipped, "right"), Rect2i(200, 82, 48, 56)) > 20, "opposite profile elf ear overlaps the cheek-side silhouette at its root")
+	var elf_left_base: Texture2D = renderer.texture(appearance, equipped, "left")
+	var elf_left: Texture2D = renderer.texture(changed_appearance, equipped, "left")
+	var elf_left_head: Vector2i = renderer.walk_head_anchor("left", renderer.walk_idle_frame("left"))
+	assert(_species_extension_pixel_count(elf_left_base, elf_left, elf_left_head, 0) > 20, "profile elf ear extends outside the base silhouette beside the measured source head")
+	assert(_species_extension_touches_base(elf_left_base, elf_left, elf_left_head, 0), "profile elf ear root contacts the base head with at least three strong opaque neighbors")
+	var elf_right_base: Texture2D = renderer.texture(appearance, equipped, "right")
+	var elf_right: Texture2D = renderer.texture(changed_appearance, equipped, "right")
+	var elf_right_head: Vector2i = renderer.walk_head_anchor("right", renderer.walk_idle_frame("right"))
+	assert(_species_extension_pixel_count(elf_right_base, elf_right, elf_right_head, 0) > 20, "opposite profile elf ear extends outside the base silhouette beside the authored head")
+	assert(_species_extension_touches_base(elf_right_base, elf_right, elf_right_head, 0), "opposite profile elf ear root contacts the base head with at least three strong opaque neighbors")
 	assert(_image_data(renderer.texture(appearance, equipped, "back")) != _image_data(renderer.texture(changed_appearance, equipped, "back")), "back-facing elf has attached ear parts")
-	assert(_region_difference_count(renderer.texture(appearance, equipped, "back"), renderer.texture(changed_appearance, equipped, "back"), Rect2i(0, 76, 55, 60)) > 20, "back-facing elf ear tips remain visible outside the hair silhouette")
+	var elf_back_base: Texture2D = renderer.texture(appearance, equipped, "back")
+	var elf_back: Texture2D = renderer.texture(changed_appearance, equipped, "back")
+	var elf_back_head: Vector2i = renderer.walk_head_anchor("back", renderer.walk_idle_frame("back"))
+	assert(_species_extension_pixel_count(elf_back_base, elf_back, elf_back_head, -1) > 20 and _species_extension_pixel_count(elf_back_base, elf_back, elf_back_head, 1) > 20, "back elf ear tips extend outside the base silhouette on both sides of the authored head")
+	assert(_species_extension_touches_base(elf_back_base, elf_back, elf_back_head, -1) and _species_extension_touches_base(elf_back_base, elf_back, elf_back_head, 1), "both back ear roots contact the base head with at least three strong opaque neighbors")
 	changed_appearance.species = "imp"
 	assert(_image_data(base) != _image_data(renderer.texture(changed_appearance, equipped)), "imp horns use the species-parts atlas")
 	changed_appearance.species = "human"
@@ -243,6 +256,46 @@ func _region_difference_count(first: Texture2D, second: Texture2D, region: Rect2
 		for x in range(region.position.x, mini(region.end.x, first_image.get_width())):
 			if first_image.get_pixel(x, y) != second_image.get_pixel(x, y): count += 1
 	return count
+
+func _species_extension_pixel_count(base: Texture2D, variant: Texture2D, head_anchor: Vector2i, side: int) -> int:
+	var base_image := base.get_image()
+	var variant_image := variant.get_image()
+	var count := 0
+	var x_start := maxi(0, head_anchor.x - 100)
+	var x_end := mini(variant_image.get_width(), head_anchor.x + 101)
+	var y_start := maxi(0, head_anchor.y - 80)
+	var y_end := mini(variant_image.get_height(), head_anchor.y + 81)
+	for y in range(y_start, y_end):
+		for x in range(x_start, x_end):
+			if (side < 0 and x >= head_anchor.x) or (side > 0 and x <= head_anchor.x):
+				continue
+			if base_image.get_pixel(x, y).a <= 0.63 and variant_image.get_pixel(x, y).a > 0.63:
+				count += 1
+	return count
+
+func _species_extension_touches_base(base: Texture2D, variant: Texture2D, head_anchor: Vector2i, side: int) -> bool:
+	var base_image := base.get_image()
+	var variant_image := variant.get_image()
+	var x_start := maxi(1, head_anchor.x - 100)
+	var x_end := mini(variant_image.get_width() - 1, head_anchor.x + 100)
+	var y_start := maxi(1, head_anchor.y - 80)
+	var y_end := mini(variant_image.get_height() - 1, head_anchor.y + 80)
+	for y in range(y_start, y_end):
+		for x in range(x_start, x_end):
+			if (side < 0 and x >= head_anchor.x) or (side > 0 and x <= head_anchor.x):
+				continue
+			if base_image.get_pixel(x, y).a > 0.63 or variant_image.get_pixel(x, y).a <= 0.63:
+				continue
+			var opaque_neighbors := 0
+			for neighbor_y in range(y - 1, y + 2):
+				for neighbor_x in range(x - 1, x + 2):
+					if neighbor_x == x and neighbor_y == y:
+						continue
+					if base_image.get_pixel(neighbor_x, neighbor_y).a > 0.63:
+						opaque_neighbors += 1
+			if opaque_neighbors >= 3:
+				return true
+	return false
 
 func _difference_outside_region_count(first: Texture2D, second: Texture2D, allowed: Rect2i) -> int:
 	var first_image := first.get_image()
