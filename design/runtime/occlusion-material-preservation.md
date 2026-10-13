@@ -1,0 +1,9 @@
+# Occlusion material preservation
+
+The shared opaque cutaway shader is a bounded rendering path, not a generic material converter. Simple opaque per-pixel `StandardMaterial3D` surfaces retain their albedo, roughness, scalar metallic value, and enabled emission color/energy through per-instance uniforms. The controller uses five instance parameters on this path: tint, roughness, emission color, emission energy, and metallic. This stays below Godot's 16 per-instance shader-uniform limit. Coastal atlas surfaces keep their existing shader and use their existing seven cutaway instance parameters.
+
+Builders may replace a surface after registering its geometry. `finish_building()` now snapshots that final surface identity before finalizing the obstruction group and applies the cutaway only when the final material is supported. This covers the lighthouse lookout lantern, whose emissive material is chosen late. On release, the exact final material resource is restored.
+
+Textured, transparent, non-per-pixel, and feature-rich standard materials are not flattened into the cutaway shader. Unsupported materials stay assigned as authored, are excluded from cutaway registration, and produce a warning with the affected node path. Project custom shaders remain outside this bridge and keep their original behavior. The supported simple-standard path does not yet copy texture maps, alpha modes, clearcoat, anisotropy, refraction, or other advanced shading features.
+
+The CPU regression test uses a sphere obstruction, registers one standard surface, then replaces it with a final emissive/metallic standard surface before `finish_building()`. It checks the final parameters while cutaway is active and exact resource identity after release. Existing box, cylinder, coastal atlas, title restoration, and world arch checks remain in `game/tests/test_occlusion.gd`.

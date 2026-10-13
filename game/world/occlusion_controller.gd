@@ -2,6 +2,7 @@ extends Node
 ## Screen-space building cutaway driven by a low-frequency physics visibility ray.
 
 const OccluderShader := preload("res://game/world/occluder.gdshader")
+const CoastalMaterialShader := preload("res://game/world/coastal_material.gdshader")
 const RAY_COLLISION_LAYER := 1 << 5
 const SAMPLE_INTERVAL := 0.08
 const FADE_SECONDS := 0.15
@@ -22,6 +23,7 @@ var _collider_to_group: Dictionary = {}
 var _capture_active := false
 var _capture_geometry: Array[GeometryInstance3D] = []
 var _capture_originals: Dictionary = {}
+var _capture_managed_materials: Dictionary = {}
 var _capture_labels: Array[Label3D] = []
 var _capture_label_originals: Dictionary = {}
 var _active_group_ids: Dictionary = {}
@@ -33,6 +35,7 @@ var _ray_samples := 0
 var _last_center_px := Vector2.ZERO
 var _last_radius_px := 0.0
 var _last_viewport_size := Vector2.ONE
+var _last_player_depth := 0.0
 
 
 func _ready() -> void:
@@ -70,15 +73,94 @@ func begin_building() -> void:
 func register_geometry(target: GeometryInstance3D, source_material: Material) -> void:
 	if not _capture_active or not is_instance_valid(target):
 		return
-	if not source_material is StandardMaterial3D:
-		push_warning("OcclusionController: unsupported building material on %s; preserving it without cutaway" % target.get_path())
+	var original: Material = target.material_override if target.material_override != null else source_material
+	var coastal_source := _is_coastal_surface(original)
+	if not coastal_source and not _is_supported_standard_surface(original):
+		_warn_unsupported_material(target, original)
 		return
-	var standard := source_material as StandardMaterial3D
-	_capture_originals[target.get_instance_id()] = target.material_override if target.material_override != null else source_material
+	var geometry_id := target.get_instance_id()
+	_capture_originals[geometry_id] = original
+	if coastal_source:
+		_capture_managed_materials[geometry_id] = original
+		_set_coastal_cutaway(target, true)
+	else:
+		_capture_managed_materials[geometry_id] = _shader_material
+		_apply_standard_surface(target, original as StandardMaterial3D)
+	_capture_geometry.append(target)
+
+
+func replace_registered_surface(target: GeometryInstance3D, surface_material: Material) -> bool:
+	if not is_instance_valid(target) or not _is_supported_surface(surface_material):
+		return false
+	var geometry_id := target.get_instance_id()
+	if _capture_active and _capture_originals.has(geometry_id):
+		_capture_originals[geometry_id] = surface_material
+		_capture_managed_materials[geometry_id] = surface_material if _is_coastal_surface(surface_material) else _shader_material
+		_apply_registered_surface(target, surface_material)
+		return true
+	for group in _building_groups:
+		var geometry: Array = group.geometry
+		if not geometry.has(target):
+			continue
+		var originals: Dictionary = group.originals
+		var managed: Dictionary = group.managed_materials
+		originals[geometry_id] = surface_material
+		managed[geometry_id] = surface_material if _is_coastal_surface(surface_material) else _shader_material
+		group.originals = originals
+		group.managed_materials = managed
+		_apply_registered_surface(target, surface_material)
+		return true
+	return false
+
+
+func _is_coastal_surface(surface_material: Material) -> bool:
+	return surface_material is ShaderMaterial and (surface_material as ShaderMaterial).shader == CoastalMaterialShader
+
+
+func _is_supported_surface(surface_material: Material) -> bool:
+	return _is_supported_standard_surface(surface_material) or _is_coastal_surface(surface_material)
+
+
+func _is_supported_standard_surface(surface_material: Material) -> bool:
+	if not surface_material is StandardMaterial3D:
+		return false
+	var standard := surface_material as StandardMaterial3D
+	# The shared opaque cutaway shader only reproduces simple lit surfaces. Keep
+	# textured, transparent, or feature-rich variants on their original material.
+	return (standard.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED
+		and standard.shading_mode == BaseMaterial3D.SHADING_MODE_PER_PIXEL
+		and standard.cull_mode == BaseMaterial3D.CULL_BACK
+		and standard.albedo_texture == null
+		and not standard.normal_enabled and standard.normal_texture == null
+		and standard.metallic_texture == null and standard.roughness_texture == null
+		and not standard.ao_enabled and standard.ao_texture == null
+		and standard.emission_texture == null
+		and not standard.clearcoat_enabled and not standard.anisotropy_enabled
+		and not standard.heightmap_enabled and not standard.refraction_enabled
+		and not standard.proximity_fade_enabled)
+
+
+func _warn_unsupported_material(target: GeometryInstance3D, surface_material: Material) -> void:
+	var material_type := surface_material.get_class() if is_instance_valid(surface_material) else "null"
+	push_warning("OcclusionController: unsupported %s building material on %s; preserving it without cutaway" % [material_type, target.get_path()])
+
+
+func _apply_registered_surface(target: GeometryInstance3D, surface_material: Material) -> void:
+	if _is_coastal_surface(surface_material):
+		target.material_override = surface_material
+		_set_coastal_cutaway(target, true)
+		return
+	var standard := surface_material as StandardMaterial3D
+	_apply_standard_surface(target, standard)
+
+
+func _apply_standard_surface(target: GeometryInstance3D, standard: StandardMaterial3D) -> void:
 	target.material_override = _shader_material
 	target.set_instance_shader_parameter("occluder_tint", Color.WHITE if standard.vertex_color_use_as_albedo else standard.albedo_color)
 	target.set_instance_shader_parameter("occluder_roughness", standard.roughness)
-	_capture_geometry.append(target)
+	target.set_instance_shader_parameter("occluder_emission", standard.emission if standard.emission_enabled else Color.BLACK)
+	target.set_instance_shader_parameter("occluder_emission_energy", standard.emission_energy_multiplier)
+	target.set_instance_shader_parameter("occluder_metallic", standard.metallic)
 
 
 func register_visibility_label(target: Label3D) -> void:
@@ -92,6 +174,7 @@ func register_visibility_label(target: Label3D) -> void:
 func finish_building(blocker: CollisionObject3D) -> bool:
 	if not _capture_active:
 		return false
+	_sync_capture_coastal_surfaces()
 	_capture_active = false
 	if not is_instance_valid(blocker) or _capture_geometry.is_empty():
 		_restore_capture()
@@ -101,7 +184,7 @@ func finish_building(blocker: CollisionObject3D) -> bool:
 	var original_layer := blocker.collision_layer
 	blocker.collision_layer |= RAY_COLLISION_LAYER
 	var ray_body := _create_ray_geometry(blocker, _capture_geometry)
-	var group := {"id": group_id, "blocker": blocker, "ray_body": ray_body, "geometry": _capture_geometry.duplicate(), "originals": _capture_originals.duplicate(), "labels": _capture_labels.duplicate(), "label_originals": _capture_label_originals.duplicate(), "original_layer": original_layer}
+	var group := {"id": group_id, "blocker": blocker, "ray_body": ray_body, "geometry": _capture_geometry.duplicate(), "originals": _capture_originals.duplicate(), "managed_materials": _capture_managed_materials.duplicate(), "labels": _capture_labels.duplicate(), "label_originals": _capture_label_originals.duplicate(), "original_layer": original_layer}
 	_building_groups.append(group)
 	_collider_to_group[blocker.get_instance_id()] = group_id
 	blocker.tree_exiting.connect(_on_group_tree_exiting.bind(group_id), CONNECT_ONE_SHOT)
@@ -115,9 +198,37 @@ func finish_building(blocker: CollisionObject3D) -> bool:
 			label.tree_exiting.connect(_on_label_tree_exiting.bind(group_id, label.get_instance_id()), CONNECT_ONE_SHOT)
 	_capture_geometry.clear()
 	_capture_originals.clear()
+	_capture_managed_materials.clear()
 	_capture_labels.clear()
 	_capture_label_originals.clear()
 	return true
+
+
+func _sync_capture_coastal_surfaces() -> void:
+	# Builders may choose their final surface after registration. Snapshot that
+	# exact material before the group is finalized, then reapply cutaway only to
+	# supported surfaces; unsupported late selections remain untouched.
+	for index in range(_capture_geometry.size() - 1, -1, -1):
+		var geometry := _capture_geometry[index]
+		if not is_instance_valid(geometry):
+			continue
+		var geometry_id := geometry.get_instance_id()
+		var final_surface: Material = geometry.material_override
+		if final_surface == _capture_managed_materials.get(geometry_id):
+			continue
+		if not _is_supported_surface(final_surface):
+			_warn_unsupported_material(geometry, final_surface)
+			_capture_geometry.remove_at(index)
+			_capture_originals.erase(geometry_id)
+			_capture_managed_materials.erase(geometry_id)
+			continue
+		_capture_originals[geometry_id] = final_surface
+		if _is_coastal_surface(final_surface):
+			_capture_managed_materials[geometry_id] = final_surface
+			_set_coastal_cutaway(geometry, true)
+		else:
+			_capture_managed_materials[geometry_id] = _shader_material
+			_apply_standard_surface(geometry, final_surface as StandardMaterial3D)
 
 
 func refresh_visibility() -> void:
@@ -190,6 +301,7 @@ func release() -> void:
 	_capture_active = false
 	_capture_geometry.clear()
 	_capture_originals.clear()
+	_capture_managed_materials.clear()
 	_restore_capture_labels()
 	_building_groups.clear()
 	_collider_to_group.clear()
@@ -244,11 +356,33 @@ func _process(delta: float) -> void:
 func _update_shader_uniforms(player_depth: float) -> void:
 	if _shader_material == null:
 		return
+	_last_player_depth = player_depth
 	_shader_material.set_shader_parameter("viewport_size_px", _last_viewport_size)
 	_shader_material.set_shader_parameter("body_center_px", _last_center_px)
 	_shader_material.set_shader_parameter("body_radius_px", _last_radius_px)
 	_shader_material.set_shader_parameter("player_view_depth", player_depth)
 	_shader_material.set_shader_parameter("cutaway_weight", _fade_weight)
+	for group in _building_groups:
+		var geometry: Array = group.geometry
+		var managed: Dictionary = group.managed_materials
+		for target in geometry:
+			if not is_instance_valid(target) or not _is_coastal_surface(target.material_override):
+				continue
+			if managed.get(target.get_instance_id()) != target.material_override:
+				continue
+			_set_coastal_cutaway(target, true)
+
+
+func _set_coastal_cutaway(target: GeometryInstance3D, enabled: bool) -> void:
+	# Instance uniforms keep one shared atlas material while only registered
+	# building pieces follow the controller's bounded per-frame mask updates.
+	target.set_instance_shader_parameter("occlusion_cutaway_enabled", 1.0 if enabled else 0.0)
+	target.set_instance_shader_parameter("occlusion_viewport_size_px", _last_viewport_size)
+	target.set_instance_shader_parameter("occlusion_body_center_px", _last_center_px)
+	target.set_instance_shader_parameter("occlusion_body_radius_px", _last_radius_px)
+	target.set_instance_shader_parameter("occlusion_player_view_depth", _last_player_depth)
+	target.set_instance_shader_parameter("occlusion_cutaway_weight", _fade_weight if enabled else 0.0)
+	target.set_instance_shader_parameter("occlusion_edge_feather_px", EDGE_FEATHER_PX)
 
 
 func _count_geometry() -> int:
@@ -262,10 +396,16 @@ func _count_geometry() -> int:
 
 func _restore_capture() -> void:
 	for geometry in _capture_geometry:
-		if is_instance_valid(geometry) and geometry.material_override == _shader_material:
-			geometry.material_override = _capture_originals.get(geometry.get_instance_id())
+		if not is_instance_valid(geometry):
+			continue
+		var geometry_id: int = geometry.get_instance_id()
+		if geometry.material_override == _capture_managed_materials.get(geometry_id):
+			geometry.material_override = _capture_originals.get(geometry_id)
+			if _is_coastal_surface(geometry.material_override):
+				_set_coastal_cutaway(geometry, false)
 	_capture_geometry.clear()
 	_capture_originals.clear()
+	_capture_managed_materials.clear()
 	_restore_capture_labels()
 
 
@@ -334,6 +474,12 @@ func _create_ray_geometry(blocker: CollisionObject3D, geometry_list: Array[Geome
 		var box_mesh := geometry as MeshInstance3D
 		if box_mesh != null and box_mesh.mesh is BoxMesh:
 			shape.size = (box_mesh.mesh as BoxMesh).size
+		elif box_mesh != null and (box_mesh.mesh is CylinderMesh or box_mesh.mesh is SphereMesh):
+			var bounds := box_mesh.mesh.get_aabb()
+			if not bounds.has_volume():
+				continue
+			shape.size = bounds.size
+			local_to_blocker *= Transform3D(Basis.IDENTITY, bounds.get_center())
 		elif geometry is MultiMeshInstance3D and (geometry as MultiMeshInstance3D).multimesh != null:
 			var bounds := (geometry as MultiMeshInstance3D).multimesh.get_aabb()
 			if bounds.has_volume():
@@ -409,8 +555,14 @@ func _restore_group(group: Dictionary) -> void:
 	if is_instance_valid(ray_body):
 		ray_body.collision_layer = 0
 	for geometry in group.geometry:
-		if is_instance_valid(geometry) and geometry.material_override == _shader_material:
-			geometry.material_override = group.originals.get(geometry.get_instance_id())
+		if not is_instance_valid(geometry):
+			continue
+		var geometry_id: int = geometry.get_instance_id()
+		var managed: Dictionary = group.managed_materials
+		if geometry.material_override == managed.get(geometry_id):
+			geometry.material_override = group.originals.get(geometry_id)
+			if _is_coastal_surface(geometry.material_override):
+				_set_coastal_cutaway(geometry, false)
 	for label in group.labels:
 		if is_instance_valid(label):
 			var original: Dictionary = group.label_originals.get(label.get_instance_id(), {})

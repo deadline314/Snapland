@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-13",
+  "prompt": "Create a flat production material texture atlas for an original coastal pixel-art amusement park with physically built 3D scenery. Output landscape PNG EXACTLY 4 columns x 2 rows of equal square SEAMLESS MATERIAL SWATCHES, perfectly aligned cells edge-to-edge, no labels, no margins. This is texture data, not a scene or illustration: no objects, perspective, shadows, reflections, gradients, borders, ambient occlusion, lighting baked in, text or alpha. Deliberate clean hand-placed pixel clusters, restrained 16-color seaside palette, 3-4 shades per material, subtle wear not speckled AI noise. Each material tiles seamlessly within its own square. Row1 left to right: (1) muted warm slate cobblestone, small rectangular irregular grey-brown blocks with dark fine grout, base mid-value #766e5e, no bright white; (2) honey weathered timber parallel planks, subtle long grain and narrow seams, #9b784f; (3) dark desaturated teal roof shingles, overlapping scalloped tiles with copper tiny nail dots, #385d60; (4) coral-red painted wood siding horizontal planks, slightly faded edges, #a45c48. Row2: (5) warm sandstone wall blocks with light subtle pore clusters, #ac9875; (6) sea-glass blue mosaic small squared tiles for fountain edge, #417e82 with tiny warm cream highlights; (7) navy and cream striped canvas woven sail cloth, alternating broad stripes with subtle cloth weave, navy #294753 and cream #cfbd93; (8) dull antique bronze riveted metal panels, #8c774f, sparse rivets near corners, no specular baked glints. Medium-density pixel detail readable at walking camera distance; uniform pixel scale across all swatches. Do not add plants, buildings, icons or decorative illustrations. Surface patterns only, true flat albedo with no lighting.",
+  "source": "exec-5326a276-b04b-4e84-8bb3-33557adc796d.png",
+  "layout": {
+    "columns": 4,
+    "rows": 2,
+    "tiles": [
+      "stone",
+      "timber",
+      "teal_roof",
+      "coral_siding",
+      "sandstone",
+      "sea_glass",
+      "striped_canvas",
+      "bronze"
+    ]
+  },
+  "review": "Root viewed raw atlas: deliberate readable material patterns and restrained palette. Native material UVs, tiling and lighting must be reviewed separately."
+}

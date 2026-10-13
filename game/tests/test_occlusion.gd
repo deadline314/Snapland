@@ -2,6 +2,7 @@ extends SceneTree
 
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const OccluderShader = preload("res://game/world/occluder.gdshader")
+const CoastalMaterialShader = preload("res://game/world/coastal_material.gdshader")
 const ParkWorldScript = preload("res://game/world/park_world.gd")
 const OCCLUSION_LAYER := 1 << 5
 
@@ -125,9 +126,137 @@ func _run() -> void:
 	assert(int(controller.statistics().registered_buildings) == 0, "removed building groups clean up without stale ray references")
 	var survivor := _add_registered_building(world, controller, _path_fraction(camera, player, 0.45), Vector3(2.5, 2.5, 0.4), Color("#8a9f76"))
 	var survivor_ray_body: CollisionObject3D = survivor.body.get_child(survivor.body.get_child_count() - 1)
+	var coastal_replacement := ShaderMaterial.new()
+	coastal_replacement.shader = CoastalMaterialShader
+	var atlas := load("res://assets/world/coastal-materials-v1.png") as Texture2D
+	coastal_replacement.set_shader_parameter("atlas_texture", atlas)
+	coastal_replacement.set_shader_parameter("tile_index", 4)
+	controller._fade_weight = 0.43
+	controller._last_center_px = Vector2(420.0, 310.0)
+	controller._last_radius_px = 57.0
+	controller._last_viewport_size = Vector2(800.0,600.0)
+	assert(controller.has_method("replace_registered_surface"), "registered geometry exposes a post-registration surface-material bridge")
+	assert(controller.call("replace_registered_surface", survivor.mesh, coastal_replacement), "bridge accepts the project coastal shader for an already-registered building")
+	controller._update_shader_uniforms(1.25)
+	assert(survivor.mesh.material_override == coastal_replacement, "coastal atlas shader stays assigned after cutaway registration")
+	assert(coastal_replacement.get_shader_parameter("atlas_texture") == atlas, "post-registration cutaway keeps the selected coastal texture")
+	assert(is_equal_approx(float(survivor.mesh.get_instance_shader_parameter("occlusion_cutaway_weight")),0.43), "registered coastal surface receives the current circular cutaway weight")
+	assert(is_equal_approx(float(survivor.mesh.get_instance_shader_parameter("occlusion_body_radius_px")),57.0), "registered coastal surface receives the same projected mask radius")
 	controller.release()
-	assert(survivor.mesh.material_override == survivor.source_material, "controller release restores original building material overrides")
+	assert(survivor.mesh.material_override == coastal_replacement, "controller release restores the final selected coastal surface after late replacement")
+	assert(survivor.mesh.material_override.get_shader_parameter("atlas_texture") == atlas, "late-selected coastal surface keeps its atlas texture after release")
 	assert(int(survivor.body.collision_layer) == 0 and int(survivor_ray_body.collision_layer) == 0, "controller release removes its ray-only collision layer")
+	var direct_body := StaticBody3D.new()
+	direct_body.collision_layer = 0
+	direct_body.collision_mask = 0
+	world.add_child(direct_body)
+	_add_box_collider(direct_body, Vector3(2.0, 2.0, 0.5))
+	var direct_mesh := MeshInstance3D.new()
+	var direct_box := BoxMesh.new()
+	direct_box.size = Vector3(2.0, 2.0, 0.5)
+	direct_mesh.mesh = direct_box
+	direct_body.add_child(direct_mesh)
+	direct_mesh.material_override = coastal_replacement
+	controller.begin_building()
+	controller.register_geometry(direct_mesh, coastal_replacement)
+	assert(controller.finish_building(direct_body), "a registered project coastal shader can be used as the original surface directly")
+	controller._fade_weight = 0.43
+	controller._update_shader_uniforms(1.25)
+	assert(direct_mesh.material_override == coastal_replacement and is_equal_approx(float(direct_mesh.get_instance_shader_parameter("occlusion_cutaway_weight")), 0.43), "directly registered coastal geometry gets the per-instance mask without replacing the atlas shader")
+	controller.configure(player, camera)
+	var cylinder_body := StaticBody3D.new()
+	cylinder_body.collision_layer = 0
+	cylinder_body.collision_mask = 0
+	cylinder_body.position = _path_fraction(camera, player, 0.48)
+	world.add_child(cylinder_body)
+	var cylinder_mesh := MeshInstance3D.new()
+	var curved_mesh := CylinderMesh.new()
+	curved_mesh.top_radius = 0.65
+	curved_mesh.bottom_radius = 0.65
+	curved_mesh.height = 2.0
+	cylinder_mesh.mesh = curved_mesh
+	var cylinder_source := StandardMaterial3D.new()
+	cylinder_source.albedo_color = Color("#718f7c")
+	cylinder_mesh.material_override = cylinder_source
+	cylinder_body.add_child(cylinder_mesh)
+	controller.begin_building()
+	controller.register_geometry(cylinder_mesh, cylinder_source)
+	# Match ParkWorld builders that replace a registered standard surface before
+	# finish_building, without calling replace_registered_surface().
+	cylinder_mesh.material_override = coastal_replacement
+	var cylinder_group_id := int(controller._next_group_id)
+	assert(controller.finish_building(cylinder_body), "curved geometry accepts a final coastal surface selected after registration")
+	var cylinder_ray_body := cylinder_body.get_child(cylinder_body.get_child_count() - 1) as StaticBody3D
+	assert(cylinder_ray_body != null and cylinder_ray_body.get_child_count() == 1, "a cylinder mesh contributes one ray-only blocking box")
+	var cylinder_ray_shape := cylinder_ray_body.get_child(0) as CollisionShape3D
+	assert(cylinder_ray_shape != null and cylinder_ray_shape.shape is BoxShape3D, "the cylinder's bounded mesh extents become a ray shape")
+	assert((cylinder_ray_shape.shape as BoxShape3D).size.is_equal_approx(Vector3(1.3, 2.0, 1.3)), "cylinder blocker uses the mesh's conservative AABB dimensions")
+	assert(cylinder_mesh.material_override == coastal_replacement and coastal_replacement.get_shader_parameter("atlas_texture") == atlas, "finish_building preserves the late-selected coastal atlas surface and texture")
+	var lantern_body := StaticBody3D.new()
+	lantern_body.collision_layer = 0
+	lantern_body.collision_mask = 0
+	lantern_body.position = Vector3(80.0, 2.0, 80.0)
+	world.add_child(lantern_body)
+	var lantern_mesh := MeshInstance3D.new()
+	var lantern_shape := SphereMesh.new()
+	lantern_shape.radius = 0.55
+	lantern_shape.height = 1.1
+	lantern_mesh.mesh = lantern_shape
+	var registered_surface := StandardMaterial3D.new()
+	registered_surface.albedo_color = Color("#8c7257")
+	lantern_mesh.material_override = registered_surface
+	lantern_body.add_child(lantern_mesh)
+	controller.begin_building()
+	controller.register_geometry(lantern_mesh, registered_surface)
+	var final_lantern_surface := StandardMaterial3D.new()
+	final_lantern_surface.albedo_color = Color("#70553f")
+	final_lantern_surface.emission_enabled = true
+	final_lantern_surface.emission = Color("#f1a34b")
+	final_lantern_surface.emission_energy_multiplier = 2.4
+	final_lantern_surface.metallic = 0.63
+	lantern_mesh.material_override = final_lantern_surface
+	var lantern_group_id := int(controller._next_group_id)
+	assert(controller.finish_building(lantern_body), "a late-selected simple standard material remains eligible for cutaway")
+	assert(lantern_mesh.material_override == controller._shader_material, "late-selected standard surface uses the shared cutaway shader while registered")
+	assert(lantern_mesh.get_instance_shader_parameter("occluder_emission") == final_lantern_surface.emission, "registered lantern keeps the final standard material emission color")
+	assert(is_equal_approx(float(lantern_mesh.get_instance_shader_parameter("occluder_emission_energy")), 2.4), "registered lantern keeps the final emission energy")
+	assert(is_equal_approx(float(lantern_mesh.get_instance_shader_parameter("occluder_metallic")), 0.63), "registered lantern keeps the final metallic response")
+	assert(int(controller._collider_to_group.get(lantern_body.get_instance_id(), 0)) == lantern_group_id, "the emissive curved lantern remains a registered obstruction")
+	await physics_frame
+	controller.refresh_visibility()
+	assert(controller._active_group_ids.has(cylinder_group_id), "the curved cylinder blocks the camera-to-avatar visibility ray")
+	var sphere_body := StaticBody3D.new()
+	sphere_body.collision_layer = 0
+	sphere_body.collision_mask = 0
+	sphere_body.position = _path_fraction(camera, player, 0.70)
+	world.add_child(sphere_body)
+	var sphere_mesh := MeshInstance3D.new()
+	var curved_sphere := SphereMesh.new()
+	curved_sphere.radius = 0.7
+	curved_sphere.height = 1.4
+	sphere_mesh.mesh = curved_sphere
+	sphere_mesh.material_override = cylinder_source
+	sphere_body.add_child(sphere_mesh)
+	controller.begin_building()
+	controller.register_geometry(sphere_mesh, cylinder_source)
+	var sphere_group_id := int(controller._next_group_id)
+	assert(controller.finish_building(sphere_body), "sphere geometry registers for obstruction rays")
+	var sphere_ray_body := sphere_body.get_child(sphere_body.get_child_count() - 1) as StaticBody3D
+	assert(sphere_ray_body != null and sphere_ray_body.get_child_count() == 1, "a sphere mesh contributes one ray-only blocking box")
+	await physics_frame
+	controller.refresh_visibility()
+	assert(controller._active_group_ids.has(sphere_group_id), "the curved sphere blocks the camera-to-avatar visibility ray")
+	var unregistered_coastal_mesh := MeshInstance3D.new()
+	unregistered_coastal_mesh.mesh = direct_box
+	unregistered_coastal_mesh.material_override = coastal_replacement
+	world.add_child(unregistered_coastal_mesh)
+	var unregistered_cutaway_enabled: Variant = unregistered_coastal_mesh.get_instance_shader_parameter("occlusion_cutaway_enabled")
+	assert(unregistered_cutaway_enabled == null or is_zero_approx(float(unregistered_cutaway_enabled)), "an unregistered object sharing the coastal atlas material stays outside the cutaway")
+	controller.release()
+	assert(lantern_mesh.material_override == final_lantern_surface, "release restores the exact late-selected standard material identity")
+	assert(direct_mesh.material_override == coastal_replacement and is_zero_approx(float(direct_mesh.get_instance_shader_parameter("occlusion_cutaway_weight"))), "release disables cutaway and retains directly registered coastal surfaces")
+	assert(cylinder_mesh.material_override == coastal_replacement and cylinder_mesh.material_override.get_shader_parameter("atlas_texture") == atlas, "release restores the late-selected coastal surface without losing its atlas texture")
+	assert(int(cylinder_body.collision_layer) == 0 and int(cylinder_ray_body.collision_layer) == 0, "release removes the curved mesh ray layer and restores the blocker layer")
 	world.queue_free()
 	subviewport.queue_free()
 	await process_frame
