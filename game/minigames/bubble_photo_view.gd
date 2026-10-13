@@ -18,7 +18,7 @@ const COVERAGE_TEXT_RECT := Rect2(986.0, 266.0, 88.0, 20.0)
 const FOCUS_TEXT_RECT := Rect2(320.0, 195.0, 250.0, 21.0)
 const FOCUS_BACKPLATE_RECT := Rect2(318.0, 193.0, 254.0, 25.0)
 const PREVIEW_BACKPLATE_RECT := Rect2(732.0, 193.0, 240.0, 25.0)
-const EXPOSURE_TEXT_RECT := Rect2(520.0, 584.0, 240.0, 24.0)
+const EXPOSURE_TEXT_RECT := Rect2(920.0, 584.0, 155.0, 24.0)
 const PHOTO_RAIL := Rect2(205.0, 630.0, 870.0, 86.0)
 const PHOTO_CARD_SIZE := Vector2(205.0, 76.0)
 const PHOTO_CARD_START := Vector2(315.0, 636.0)
@@ -603,17 +603,20 @@ func _draw_camera_controls() -> void:
 	draw_string(ThemeDB.fallback_font, COVERAGE_TEXT_RECT.position + Vector2(0.0, 14.0), "%d%% 入框" % roundi(float(_model_snapshot.get("coverage", 0.0)) * 100.0), HORIZONTAL_ALIGNMENT_CENTER, COVERAGE_TEXT_RECT.size.x, 12, READOUT_INK)
 	if _phase == "exposure":
 		draw_rect(BubblePhotoModelScript.PLAY_RECT, Color("#fff4db", 0.78), false, 3.0)
-		draw_string(ThemeDB.fallback_font, EXPOSURE_TEXT_RECT.position + Vector2(0.0, 18.0), "曝光中  ·  相片正在顯影", HORIZONTAL_ALIGNMENT_CENTER, EXPOSURE_TEXT_RECT.size.x, 15, READOUT_INK)
+		draw_string(ThemeDB.fallback_font, EXPOSURE_TEXT_RECT.position + Vector2(0.0, 18.0), "曝光中・相片顯影", HORIZONTAL_ALIGNMENT_RIGHT, EXPOSURE_TEXT_RECT.size.x, 15, READOUT_INK)
 
 func _draw_photo_rail() -> void:
 	var photos: Array = _model_snapshot.get("photos", [])
 	for index in 3:
 		var card := photo_card_rect(index)
 		var has_photo := index < photos.size()
-		draw_rect(card, PRINT_PAPER, true)
-		draw_rect(card, Color("#c39257"), false, 2.0)
+		# Preserve the photograph itself while giving only its filmstrip chrome
+		# the same square-corner navy treatment as the game's other readouts.
+		draw_rect(card, READOUT_PANEL)
+		draw_rect(card, Color("#dfb95f"), false, 2.0)
 		var image_rect := Rect2(card.position + Vector2(8, 7), Vector2(48, 62))
-		draw_rect(image_rect, Color("#637a79"), true)
+		draw_rect(image_rect, Color("#203f4e"))
+		draw_rect(image_rect, Color("#71c7b5"), false, 1.0)
 		if has_photo:
 			var shot: Dictionary = photos[index]
 			if bool(shot.get("captured", false)) and not _avatar_frames.is_empty():
@@ -622,13 +625,13 @@ func _draw_photo_rail() -> void:
 				if bool(shot.get("bubble_enveloped", false)):
 					draw_arc(image_rect.get_center(), 26.0, 0.0, TAU, 40, Color("#66b9b1", 0.9), 1.5, true)
 			else:
-				draw_line(image_rect.position, image_rect.end, Color("#dba780"), 2.0)
-				draw_line(Vector2(image_rect.end.x, image_rect.position.y), Vector2(image_rect.position.x, image_rect.end.y), Color("#dba780"), 2.0)
+				draw_line(image_rect.position, image_rect.end, Color("#dfb95f"), 2.0)
+				draw_line(Vector2(image_rect.end.x, image_rect.position.y), Vector2(image_rect.position.x, image_rect.end.y), Color("#dfb95f"), 2.0)
 		var text_rect := photo_text_rect(index)
 		var labels := photo_label_text(index)
-		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 14.0), labels[0], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 13, PRINT_INK)
-		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 33.0), labels[1], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 13, Color("#263a3d"))
-		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 52.0), labels[2], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 12, Color("#17272b"))
+		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 14.0), labels[0], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 13, READOUT_INK)
+		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 33.0), labels[1], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 13, Color("#c7dbd4"))
+		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 52.0), labels[2], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 12, Color("#dfb95f"))
 
 func _build_avatar_cache() -> void:
 	_avatar_frames.clear()

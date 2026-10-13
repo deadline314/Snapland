@@ -1788,7 +1788,9 @@ func _feedback_anchor() -> Vector2:
 		"flower_pipes": return Vector2(150, 460)
 		"sign_balance": return Vector2(640, 208)
 		"shadow_alignment": return Vector2(640, 230)
-		"bubble_photo": return Vector2(640, 240)
+		# The camera's composition readouts occupy the top of the viewfinder. Keep
+		# the transient shutter result in the clear footer strip above the photo rail.
+		"bubble_photo": return Vector2(640, 626)
 		"bench_swap":
 			var selected_seat := int(bench_model.snapshot().get("selected_seat", -1))
 			return presentation.seat_geometry_bounds(selected_seat).get_center() if is_instance_valid(presentation) and selected_seat >= 0 else Vector2(640, 420)
@@ -2194,7 +2196,7 @@ func _draw_game() -> void:
 		"bench_swap": pass
 		"melody_memory": pass
 
-func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignment: int = HORIZONTAL_ALIGNMENT_CENTER, color: Color = INK) -> void:
+func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignment: int = HORIZONTAL_ALIGNMENT_CENTER, color: Color = PAPER) -> void:
 	# Keep functional copy readable over every printed backdrop without laying a full-width strip over the scene.
 	var measured_width := FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
 	var plate_width := minf(measured_width + 24.0, 760.0)
@@ -2202,9 +2204,17 @@ func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignmen
 	if alignment == HORIZONTAL_ALIGNMENT_LEFT:
 		left = baseline.x - 8.0
 	var plate := Rect2(left, baseline.y - font_size - 7.0, plate_width, font_size + 15.0)
-	draw_rect(plate, Color("#fff0d2", 0.94), true)
-	draw_rect(plate, Color("#87674d", 0.88), false, 1.5)
-	draw_string(FONT, Vector2(left + 6.0, baseline.y), text, alignment, plate_width - 12.0, font_size, color)
+	draw_rect(plate, Color("#102d43", 0.96), true)
+	draw_rect(plate, Color("#24566a"), false, 3.0)
+	draw_rect(plate.grow(-4.0), Color("#70e1c1"), false, 1.0)
+	# Small brass corner blocks give the plate a crisp pixel-frame edge.
+	var corner := Color("#d9a95f")
+	draw_rect(Rect2(plate.position, Vector2(6, 3)), corner, true)
+	draw_rect(Rect2(Vector2(plate.end.x - 6, plate.position.y), Vector2(6, 3)), corner, true)
+	draw_rect(Rect2(Vector2(plate.position.x, plate.end.y - 3), Vector2(6, 3)), corner, true)
+	draw_rect(Rect2(plate.end - Vector2(6, 3), Vector2(6, 3)), corner, true)
+	var readable_color := color if color.get_luminance() >= 0.45 else Color("#fff2d4")
+	draw_string(FONT, Vector2(left + 6.0, baseline.y), text, alignment, plate_width - 12.0, font_size, readable_color)
 
 func _draw_balloon() -> void:
 	# Three ordered mail drops give the flight short goals and route decisions.
@@ -2288,23 +2298,25 @@ func _draw_balloon() -> void:
 		_draw_scene_label("氣球快遞練習　" + lesson,Vector2(470,205),17)
 
 func _draw_balloon_wind_gauge() -> void:
-	draw_rect(Rect2(930,174,285,92),Color("#fff0d5",0.94),true)
-	draw_rect(Rect2(930,174,285,92),Color("#87674d",0.88),false,2)
+	var plate := Rect2(930,174,285,92)
+	draw_rect(plate,Color("#102d43",0.96),true)
+	draw_rect(plate,Color("#24566a"),false,3)
+	draw_rect(plate.grow(-4),Color("#70e1c1"),false,1)
 	var direction := "→" if balloon_wind_current.x > 0.0 else "←" if balloon_wind_current.x < 0.0 else "↔"
 	var forecast_direction := "→" if balloon_wind_forecast.x > 0.0 else "←" if balloon_wind_forecast.x < 0.0 else "↔"
-	draw_string(FONT,Vector2(944,199),"海風　"+direction,HORIZONTAL_ALIGNMENT_LEFT,100,17,INK)
+	draw_string(FONT,Vector2(944,199),"海風　"+direction,HORIZONTAL_ALIGNMENT_LEFT,100,17,PAPER)
 	var feather_count := clampi(int(ceil(absf(balloon_wind_current.x)/18.0)),0,3)
 	for i in 3:
 		var fx := 1019.0+i*15.0
-		draw_line(Vector2(fx,187),Vector2(fx+(4.0 if balloon_wind_current.x>=0.0 else -4.0),198),Color("#557e80") if i<feather_count else Color("#bba88c",0.55),3)
+		draw_line(Vector2(fx,187),Vector2(fx+(4.0 if balloon_wind_current.x>=0.0 else -4.0),198),Color("#d9a95f") if i<feather_count else Color("#486477"),3)
 	var forecast_value := roundi(balloon_wind_forecast.x)
 	var forecast_signed := "+" + str(forecast_value) if forecast_value > 0 else str(forecast_value)
-	draw_string(FONT,Vector2(944,223),"0.8 秒預報　"+forecast_direction+" "+forecast_signed,HORIZONTAL_ALIGNMENT_LEFT,200,13,Color("#536874"))
+	draw_string(FONT,Vector2(944,223),"0.8 秒預報　"+forecast_direction+" "+forecast_signed,HORIZONTAL_ALIGNMENT_LEFT,200,13,Color("#e5f3e9"))
 	var bar := Rect2(944,237,244,12)
-	draw_rect(bar,Color("#d7c7a5"),true)
-	draw_rect(Rect2(bar.position,Vector2(bar.size.x*clampf(absf(balloon_wind_current.x)/60.0,0.0,1.0),bar.size.y)),Color("#55a99f"),true)
+	draw_rect(bar,Color("#24485b"),true)
+	draw_rect(Rect2(bar.position,Vector2(bar.size.x*clampf(absf(balloon_wind_current.x)/60.0,0.0,1.0),bar.size.y)),Color("#70e1c1"),true)
 	var needle_x := 944.0 + bar.size.x * clampf((balloon_wind_current.x / 60.0 + 1.0) * 0.5,0.0,1.0)
-	draw_line(Vector2(needle_x,232),Vector2(needle_x,253),Color("#bd704f"),3)
+	draw_line(Vector2(needle_x,232),Vector2(needle_x,253),Color("#d9a95f"),3)
 
 
 func _draw_fountain() -> void:

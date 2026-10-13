@@ -373,10 +373,10 @@ func _build_signal_surface() -> void:
 		panel.size = Vector2(220.0, 84.0)
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var style := StyleBoxFlat.new()
-		style.bg_color = Color("#f1e5c7")
-		style.border_color = Color("#a77a53")
+		style.bg_color = Color("#102b35")
+		style.border_color = Color("#c3944f")
 		style.set_border_width_all(2)
-		style.set_corner_radius_all(9)
+		style.set_corner_radius_all(0)
 		style.content_margin_left = 10.0
 		style.content_margin_right = 10.0
 		style.content_margin_top = 6.0
@@ -396,7 +396,7 @@ func _build_signal_surface() -> void:
 		title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		title.text = "橫向" if lane == 0 else "縱向"
 		title.custom_minimum_size = Vector2(86.0, 0.0)
-		title.add_theme_color_override("font_color", Color("#354b4b"))
+		title.add_theme_color_override("font_color", Color("#fff0d2"))
 		title.add_theme_font_size_override("font_size", 19)
 		header.add_child(title)
 		_lane_title_labels.append(title)
@@ -405,7 +405,7 @@ func _build_signal_surface() -> void:
 		queue.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		queue.custom_minimum_size = Vector2(94.0, 0.0)
 		queue.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		queue.add_theme_color_override("font_color", Color("#6a5140"))
+		queue.add_theme_color_override("font_color", Color("#f0c878"))
 		queue.add_theme_font_size_override("font_size", 16)
 		header.add_child(queue)
 		_queue_labels.append(queue)
@@ -413,7 +413,7 @@ func _build_signal_surface() -> void:
 		label.name = "LaneLabel%d" % lane
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		label.custom_minimum_size = Vector2(194.0, 0.0)
-		label.add_theme_color_override("font_color", Color("#3f4846"))
+		label.add_theme_color_override("font_color", Color("#fff0d2"))
 		label.add_theme_font_size_override("font_size", 16)
 		layout.add_child(label)
 		_lane_status_labels.append(label)

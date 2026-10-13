@@ -306,14 +306,15 @@ func _draw_header(palette: Dictionary) -> void:
 
 func _draw_rules(palette: Dictionary) -> void:
 	var rect := Rect2(172, 174, 936, 68)
-	draw_rect(rect, palette.note, true)
+	draw_rect(rect, Color("#102b3a"))
+	draw_rect(rect, Color("#dfb95f"), false, 2.0)
 	var labels := str(_snapshot.get("rule_text", "先看看提示標記")).split("　", false)
 	for index in labels.size():
 		var column := index % 2
 		var row := int(index / 2)
 		var x := rect.position.x + 22.0 + column * 468.0
 		var y := rect.position.y + 24.0 + row * 25.0
-		draw_string(ThemeDB.fallback_font, Vector2(x, y), str(labels[index]), HORIZONTAL_ALIGNMENT_LEFT, 444, 16, palette.ink)
+		draw_string(ThemeDB.fallback_font, Vector2(x, y), str(labels[index]), HORIZONTAL_ALIGNMENT_LEFT, 444, 16, Color("#f4eedc"))
 
 func _draw_footer(palette: Dictionary) -> void:
 	var contracts := footer_text_contracts()

@@ -118,6 +118,7 @@ def main() -> int:
             ("pixel UI collection tests", common + ["res://game/tests/test_pixel_ui_collections.tscn"]),
             ("pixel tutorial page tests", common + ["--script", "res://game/tests/test_tutorial_paged_viewport.gd"]),
             ("pixel UI customization tests", common + ["res://game/tests/test_pixel_ui_customization.tscn"]),
+            ("pixel UI minigame tests", common + ["res://game/tests/test_pixel_ui_minigames.tscn"]),
         ]
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
@@ -145,6 +146,7 @@ def main() -> int:
                 "pixel UI collection tests": "PASS: pixel UI collection, map, achievement, and tutorial checks",
                 "pixel tutorial page tests": "PASS: native-matching tutorial39steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
                 "pixel UI customization tests": "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls",
+                "pixel UI minigame tests": "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes",
                 "game startup": "PASS: game startup and clean shutdown",
                 "core runtime tests": "PASS: core runtime checks",
                 "test/review save isolation tests": "PASS: test/review launch detection, absolute isolated paths, userdata/sidecar rejection, and unchanged fake fixtures",

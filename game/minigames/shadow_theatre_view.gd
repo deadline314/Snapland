@@ -7,6 +7,7 @@ signal lamp_target_requested(target: Vector2)
 signal shutter_requested
 
 const ModelScript = preload("res://game/minigames/shadow_theatre_model.gd")
+const Paper = preload("res://game/ui/paper_ui.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const HUD_SAFE_RECT := Rect2(0.0, 0.0, 1280.0, 130.0)
 const PLAYFIELD_RECT := Rect2(64.0, 136.0, 1152.0, 548.0)
@@ -313,24 +314,32 @@ func _build_shutter_button() -> void:
 	_shutter_button.add_theme_color_override("font_hover_color", Color("#fff9e8"))
 	_shutter_button.add_theme_color_override("font_pressed_color", Color("#f5d89a"))
 	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color("#30464a")
+	normal.bg_color = Color("#102b35")
 	normal.border_color = Color("#c3944f")
 	normal.set_border_width_all(2)
-	normal.set_corner_radius_all(8)
-	normal.shadow_color = Color(0.02, 0.04, 0.05, 0.58)
-	normal.shadow_size = 5
-	normal.shadow_offset = Vector2(2.0, 3.0)
+	normal.set_corner_radius_all(0)
+	normal.shadow_color = Color(0.02, 0.04, 0.05, 0.0)
+	normal.shadow_size = 0
+	normal.shadow_offset = Vector2.ZERO
 	var hover := normal.duplicate() as StyleBoxFlat
-	hover.bg_color = Color("#45605c")
-	hover.border_color = Color("#f0c878")
+	hover.bg_color = Color("#19443f")
+	hover.border_color = Color("#62c3b0")
 	var pressed := normal.duplicate() as StyleBoxFlat
-	pressed.bg_color = Color("#243739")
-	pressed.shadow_size = 1
-	pressed.shadow_offset = Vector2(1.0, 1.0)
+	pressed.bg_color = Color("#263d46")
+	pressed.border_color = Color("#62c3b0")
 	_shutter_button.add_theme_stylebox_override("normal", normal)
 	_shutter_button.add_theme_stylebox_override("hover", hover)
 	_shutter_button.add_theme_stylebox_override("pressed", pressed)
 	_shutter_button.add_theme_stylebox_override("focus", hover)
+	# Measure the owning Control in the main viewport; its SubViewport can report
+	# an identity/empty transform during headless setup before any physical scale exists.
+	var physical_scale := Paper.physical_scale(self)
+	if physical_scale < 0.1:
+		physical_scale = 1.0
+	var current_height := _shutter_button.offset_bottom - _shutter_button.offset_top
+	var minimum_height := 44.0 / physical_scale
+	if current_height < minimum_height:
+		_shutter_button.offset_top = _shutter_button.offset_bottom - minimum_height
 	_shutter_button.pressed.connect(func() -> void: shutter_requested.emit())
 	add_child(_shutter_button)
 

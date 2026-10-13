@@ -10,12 +10,13 @@ signal retry_requested
 signal leave_requested
 
 const DESIGN_SIZE := Vector2(1280, 720)
-const INK := Color("#20394d")
-const PAPER := Color("#fff4d9")
-const MINT := Color("#70e1c1")
-const GOLD := Color("#d6ad76")
+const INK := Color("#f1efdc")
+const PAPER := Color("#f1efdc")
+const MINT := Color("#91e8c9")
+const GOLD := Color("#ffcf72")
 const SHADOW_INK := Color("#071923", 0.48)
 const HUD_FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const Paper := preload("res://game/ui/paper_ui.gd")
 
 var _details: Dictionary = {}
 var _header: PanelContainer
@@ -114,6 +115,7 @@ func set_state(state: Dictionary) -> void:
 		_feedback.modulate.a = 1.0
 	else:
 		_feedback.modulate.a = 1.0
+	_layout()
 
 func set_score_details(details: Dictionary) -> void:
 	_details = details.duplicate(true)
@@ -159,7 +161,7 @@ func _build_header() -> void:
 	title_col.add_child(_title)
 	# Preserve the full goal for assistive discovery without keeping its full
 	# sentence over the active play space.
-	_objective = _label("完成挑戰", 18, Color("#34545b"))
+	_objective = _label("完成挑戰", 18, MINT)
 	_objective.visible = false
 	_objective.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_col.add_child(_objective)
@@ -167,20 +169,19 @@ func _build_header() -> void:
 	status_row.name = "ProgressAndBadges"
 	status_row.add_theme_constant_override("separation", 7)
 	title_col.add_child(status_row)
-	_progress = _label("準備中", 16, Color("#79562b"))
+	_progress = _label("準備中", 16, GOLD)
 	_progress.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	_progress.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	status_row.add_child(_progress)
-	_badge = _label("", 16, Color("#28675d"))
-	_badge.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	status_row.add_child(_badge)
+	_badge = _label("", 16, MINT)
+	_badge.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	_badge.autowrap_mode = TextServer.AUTOWRAP_OFF
 
 	_status_rail = PanelContainer.new()
 	_status_rail.name = "MinigameStatusRail"
 	_status_rail.position = Vector2(640, 18)
 	_status_rail.size = Vector2(616, 84)
 	_status_rail.mouse_filter = Control.MOUSE_FILTER_STOP
-	var rail_style := _panel_style(Color("#e8dfc9"), Color("#af8958"), 0.98, 1)
+	var rail_style := _panel_style(Color("#0c2938"), Color("#31596a"), 1.0, 0)
 	rail_style.content_margin_top = 2
 	rail_style.content_margin_bottom = 2
 	rail_style.border_width_top = 1
@@ -202,17 +203,17 @@ func _build_header() -> void:
 	score_col.alignment = BoxContainer.ALIGNMENT_CENTER
 	score_col.add_theme_constant_override("separation", 5)
 	status_line.add_child(score_col)
-	_score_label = _label("得分", 14, Color("#536b65"))
+	_score_label = _label("得分", 14, MINT)
 	_score_label.name = "ScoreLabel"
 	score_col.add_child(_score_label)
-	_score = _label("0000", 19, Color("#76532a"))
+	_score = _label("0000", 19, GOLD)
 	_score.custom_minimum_size.x = 54
 	score_col.add_child(_score)
 	var time_col := HBoxContainer.new()
 	time_col.name = "TimeReadout"
 	time_col.add_theme_constant_override("separation", 5)
 	status_line.add_child(time_col)
-	_time_label = _label("時間", 14, Color("#536b65"))
+	_time_label = _label("時間", 14, MINT)
 	time_col.add_child(_time_label)
 	_time = _label("01:00", 17, INK)
 	time_col.add_child(_time)
@@ -222,6 +223,9 @@ func _build_header() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	rail_content.add_child(actions)
+	# The practice/assist record shares the actions line instead of competing
+	# with progress for left-header width or adding a third header row.
+	actions.add_child(_badge)
 	var detail_button := _button("分數明細", 16)
 	detail_button.name = "DetailsButton"
 	detail_button.custom_minimum_size = Vector2(132, 44)
@@ -257,7 +261,7 @@ func _build_feedback() -> void:
 func set_feedback_at(message: String, anchor: Vector2) -> void:
 	_feedback_label.text = message
 	_feedback.visible = not message.is_empty()
-	_feedback.position = Vector2(clampf(anchor.x - _feedback.size.x * 0.5, 30, DESIGN_SIZE.x - _feedback.size.x - 30), clampf(anchor.y - 78, 130, DESIGN_SIZE.y - _feedback.size.y - 82))
+	_feedback.position = Vector2(clampf(anchor.x - _feedback.size.x * 0.5, 30, DESIGN_SIZE.x - _feedback.size.x - 30), clampf(anchor.y - 78, _feedback_top(), DESIGN_SIZE.y - _feedback.size.y - 82))
 
 func _build_pause_layer() -> void:
 	_pause_layer = _overlay("PauseOverlay")
@@ -267,7 +271,7 @@ func _build_pause_layer() -> void:
 	_pause_panel.add_child(body)
 	_pause_title = _label("暫停", 27, PAPER)
 	body.add_child(_pause_title)
-	_pause_status = _label("正式挑戰", 14, Color("#d2e3dc"))
+	_pause_status = _label("正式挑戰", 14, MINT)
 	body.add_child(_pause_status)
 	_add_action_button(body, "繼續遊玩", func(): resume_requested.emit()).name = "ResumeButton"
 	_add_action_button(body, "查看教學", func(): help_requested.emit()).name = "HelpFromPauseButton"
@@ -326,7 +330,7 @@ func _render_score_rows() -> void:
 		return
 	for child in _score_rows.get_children():
 		child.queue_free()
-	var rule_label := _label("計分規則：" + str(_details.get("rule", "依實際事件記分")), 13, Color("#d2e3dc"))
+	var rule_label := _label("計分規則：" + str(_details.get("rule", "依實際事件記分")), 15, MINT)
 	rule_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_score_rows.add_child(rule_label)
 	var rows: Array = _details.get("rows", [])
@@ -337,10 +341,10 @@ func _render_score_rows() -> void:
 		var count := int(entry.get("count", 0))
 		var count_text := "　×%d" % count if count > 0 else ""
 		var value := "　" + (("%+d" % amount) if amount < 0 else str(amount)) if not bool(entry.get("progress_only", false)) else "　不計分"
-		_score_rows.add_child(_label(str(entry.get("label", "分數")) + count_text + value, 14, PAPER))
+		_score_rows.add_child(_label(str(entry.get("label", "分數")) + count_text + value, 16, PAPER))
 	if rows.is_empty():
-		_score_rows.add_child(_label("尚無得分事件", 15, PAPER))
-	_score_rows.add_child(_label("目前總分　%d" % int(_details.get("total", 0)), 19, Color("#ffdb82")))
+		_score_rows.add_child(_label("尚無得分事件", 16, PAPER))
+	_score_rows.add_child(_label("目前總分　%d" % int(_details.get("total", 0)), 20, GOLD))
 
 func _overlay(node_name: String) -> ColorRect:
 	var layer := ColorRect.new()
@@ -354,7 +358,7 @@ func _dialog_panel(parent: Control, at: Vector2, dimensions: Vector2) -> PanelCo
 	var panel := PanelContainer.new()
 	panel.position = at
 	panel.size = dimensions
-	panel.add_theme_stylebox_override("panel", _panel_style(Color("#18354a"), GOLD, 1.0, 2))
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#0c2938"), GOLD, 1.0, 0))
 	parent.add_child(panel)
 	return panel
 
@@ -380,9 +384,9 @@ func _button(text: String, font_size: int) -> Button:
 	button.add_theme_color_override("font_pressed_color", Color.WHITE)
 	button.add_theme_color_override("font_focus_color", Color.WHITE)
 	button.add_theme_color_override("font_disabled_color", Color("#b7c3c0"))
-	button.add_theme_stylebox_override("normal", _button_style(Color("#31566a"), Color("#b39a70"), 4, 2, Vector2(2.0, 3.0)))
-	button.add_theme_stylebox_override("hover", _button_style(Color("#416d7b"), MINT, 5, 3, Vector2(2.0, 4.0)))
-	button.add_theme_stylebox_override("pressed", _button_style(Color("#23485b"), GOLD, 2, 0, Vector2(0.0, 1.0)))
+	button.add_theme_stylebox_override("normal", _button_style(Color("#163d4d"), Color("#31596a"), 2, 0, Vector2.ZERO))
+	button.add_theme_stylebox_override("hover", _button_style(Color("#205266"), MINT, 2, 0, Vector2.ZERO))
+	button.add_theme_stylebox_override("pressed", _button_style(Color("#102f40"), GOLD, 2, 0, Vector2.ZERO))
 	button.add_theme_stylebox_override("focus", _focus_style())
 	button.add_theme_stylebox_override("disabled", _button_style(Color("#384b55"), Color("#697a7d"), 2, 0, Vector2.ZERO))
 	return button
@@ -402,11 +406,11 @@ func _panel_style(background: Color, border: Color, alpha: float, elevation: int
 	style.bg_color = Color(background, alpha)
 	style.border_color = border
 	style.set_border_width_all(2)
-	style.border_width_bottom = 4 if elevation == 1 else 5 if elevation >= 2 else 2
-	style.set_corner_radius_all(10)
+	style.border_width_bottom = 2
+	style.set_corner_radius_all(0)
 	style.shadow_color = SHADOW_INK
-	style.shadow_size = 2 if elevation == 1 else 5 if elevation >= 2 else 0
-	style.shadow_offset = Vector2(2.0, 3.0) if elevation == 1 else Vector2(3.0, 5.0) if elevation >= 2 else Vector2.ZERO
+	style.shadow_size = 0
+	style.shadow_offset = Vector2.ZERO
 	style.content_margin_left = 10
 	style.content_margin_right = 10
 	style.content_margin_top = 6
@@ -415,14 +419,14 @@ func _panel_style(background: Color, border: Color, alpha: float, elevation: int
 
 func _ticket_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#f2e7ca")
-	style.border_color = Color("#a77a42")
+	style.bg_color = Color("#0c2938")
+	style.border_color = Color("#31596a")
 	style.set_border_width_all(1)
-	style.border_width_bottom = 3
-	style.set_corner_radius_all(9)
+	style.border_width_bottom = 2
+	style.set_corner_radius_all(0)
 	style.shadow_color = SHADOW_INK
-	style.shadow_size = 3
-	style.shadow_offset = Vector2(2.0, 4.0)
+	style.shadow_size = 0
+	style.shadow_offset = Vector2.ZERO
 	style.content_margin_left = 12
 	style.content_margin_right = 12
 	style.content_margin_top = 7
@@ -434,11 +438,11 @@ func _button_style(background: Color, border: Color, bottom_edge: int, shadow_si
 	style.bg_color = background
 	style.border_color = border
 	style.set_border_width_all(1)
-	style.border_width_bottom = bottom_edge
-	style.set_corner_radius_all(8)
+	style.border_width_bottom = 2
+	style.set_corner_radius_all(0)
 	style.shadow_color = SHADOW_INK
-	style.shadow_size = shadow_size
-	style.shadow_offset = shadow_offset
+	style.shadow_size = 0
+	style.shadow_offset = Vector2.ZERO
 	style.content_margin_left = 12
 	style.content_margin_right = 12
 	style.content_margin_top = 7
@@ -448,9 +452,9 @@ func _button_style(background: Color, border: Color, bottom_edge: int, shadow_si
 func _focus_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.0, 0.0, 0.0, 0.0)
-	style.border_color = Color.WHITE
+	style.border_color = GOLD
 	style.set_border_width_all(3)
-	style.set_corner_radius_all(8)
+	style.set_corner_radius_all(0)
 	style.shadow_size = 0
 	style.content_margin_left = 0
 	style.content_margin_right = 0
@@ -479,6 +483,9 @@ func _confirm_action() -> void:
 	_confirm_kind = ""
 
 func _layout() -> void:
+	# Session completion can detach this HUD before its final state update.
+	# Keep the text/result state, but defer all viewport layout until mounted.
+	if not is_inside_tree(): return
 	var canvas_size := size
 	var parent_control := get_parent_control()
 	if parent_control != null:
@@ -492,14 +499,27 @@ func _layout() -> void:
 	position = (canvas_size - DESIGN_SIZE * fitted) * 0.5
 	size = DESIGN_SIZE
 	_effective_scale = _effective_layout_scale(fitted)
-	var header_height := (24.0 + 16.0) / _effective_scale + 16.0
-	var rail_height := 19.0 / _effective_scale + 3.0 + 44.0 / _effective_scale + 12.0
-	var panel_height := maxf(84.0, maxf(header_height, rail_height))
-	_header.size.y = panel_height
-	_status_rail.size.y = panel_height
 	_fit_semantic_text_and_targets(_effective_scale)
+	# Measure the font's actual shaped line after applying physical text scaling.
+	# The compact two-line plates must remain shorter than a three-row catalogue.
+	for label in [_title,_progress,_badge,_score_label,_score,_time_label,_time]:
+		label.custom_minimum_size.y=ceilf(label.get_line_height(-1))
+	for label in [_progress,_badge]:
+		var font: Font = label.get_theme_font("font")
+		label.custom_minimum_size.x=ceilf(font.get_string_size(label.text,HORIZONTAL_ALIGNMENT_LEFT,-1,label.get_theme_font_size("font_size")).x)
+	var header_minimum := _header.get_combined_minimum_size()
+	var rail_minimum := _status_rail.get_combined_minimum_size()
+	var panel_height := maxf(84.0,ceilf(maxf(header_minimum.y,rail_minimum.y)))
+	_header.size=Vector2(maxf(392.0,ceilf(header_minimum.x)),panel_height)
+	_status_rail.size=Vector2(maxf(616.0,ceilf(rail_minimum.x)),panel_height)
+	_status_rail.position.x=DESIGN_SIZE.x-24.0-_status_rail.size.x
+	_feedback.position.y=_feedback_top()
+
+func _feedback_top() -> float:
+	return maxf(130.0, _header.position.y + _header.size.y + 18.0)
 
 func _queue_layout_refresh() -> void:
+	if not is_inside_tree(): return
 	if _layout_refresh_pending:
 		return
 	_layout_refresh_pending = true
@@ -509,29 +529,39 @@ func _refresh_layout_after_resize() -> void:
 	# A window resize signal can arrive before the viewport's final transform is
 	# updated. Re-read it after two process-frame boundaries so a restored window
 	# does not retain compact-scale text and plate heights.
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var tree := get_tree()
+	if tree==null:
+		_layout_refresh_pending=false
+		return
+	await tree.process_frame
+	await tree.process_frame
 	if is_inside_tree():
 		_layout()
-		# Font overrides alter container minimum sizes; let those settle before
-		# another pass clamps the plates back to their new dimensions.
-		await get_tree().process_frame
+		# Cache the tree across awaits: detaching clears Node.get_tree().
+		await tree.process_frame
 		if is_inside_tree():
 			_layout()
-			await get_tree().process_frame
+			await tree.process_frame
 			if is_inside_tree():
 				_layout()
 	_layout_refresh_pending = false
 
 func _effective_layout_scale(fitted: float) -> float:
-	var scale_factor := maxf(fitted, 0.01)
+	var layout_scale := maxf(fitted, 0.01)
 	var parent_control := get_parent_control()
 	if parent_control != null:
 		var parent_scale := parent_control.get_global_transform().get_scale()
-		scale_factor *= minf(absf(parent_scale.x), absf(parent_scale.y))
-	var viewport_scale := get_viewport().get_final_transform().get_scale()
-	scale_factor *= minf(absf(viewport_scale.x), absf(viewport_scale.y))
-	return maxf(scale_factor, 0.01)
+		layout_scale *= minf(absf(parent_scale.x), absf(parent_scale.y))
+	var viewport := get_viewport()
+	if viewport==null: return maxf(layout_scale,0.01)
+	var viewport_scale := viewport.get_final_transform().get_scale()
+	# Headless SceneTree tests may use Godot's 64×64 default root even when the
+	# HUD's logical canvas is 1280×720. That tiny synthetic transform is not a
+	# display scale; treating it as one makes every semantic font enormous.
+	if minf(absf(viewport_scale.x), absf(viewport_scale.y)) < 0.1:
+		viewport_scale = Vector2.ONE
+	layout_scale *= minf(absf(viewport_scale.x), absf(viewport_scale.y))
+	return maxf(layout_scale, 0.01)
 
 func _fit_semantic_text_and_targets(fitted: float) -> void:
 	var stack: Array[Node] = [self]
@@ -545,7 +575,7 @@ func _fit_semantic_text_and_targets(fitted: float) -> void:
 					button.set_meta("hud_design_minimum_size", button.custom_minimum_size)
 				var base_size: Vector2 = button.get_meta("hud_design_minimum_size")
 				button.custom_minimum_size = Vector2(maxf(base_size.x, 44.0 / fitted), maxf(base_size.y, 44.0 / fitted))
-				button.add_theme_font_size_override("font_size", maxi(int(button.get_meta("hud_base_font_size", 18)), ceili(float(button.get_meta("hud_base_font_size", 18)) / fitted)))
+				button.add_theme_font_size_override("font_size", maxi(int(button.get_meta("hud_base_font_size", 18)), ceili(float(button.get_meta("hud_base_font_size", 18)) * Paper.text_scale() / fitted)))
 			elif child is Label and child.has_meta("hud_base_font_size"):
 				var base_font_size := int(child.get_meta("hud_base_font_size"))
-				(child as Label).add_theme_font_size_override("font_size", maxi(base_font_size, ceili(float(base_font_size) / fitted)))
+				(child as Label).add_theme_font_size_override("font_size", maxi(base_font_size, ceili(float(base_font_size) * Paper.text_scale() / fitted)))

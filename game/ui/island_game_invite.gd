@@ -14,11 +14,10 @@ func _ready() -> void:
 	add_child(dim)
 	var dock := MarginContainer.new()
 	dock.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	for side in ["left","right","bottom"]: dock.add_theme_constant_override("margin_"+side,24)
-	dock.add_theme_constant_override("margin_top",180)
+	for side in ["left","right","top","bottom"]: dock.add_theme_constant_override("margin_"+side,24)
 	add_child(dock)
 	var center := VBoxContainer.new()
-	center.alignment = BoxContainer.ALIGNMENT_END
+	center.alignment = BoxContainer.ALIGNMENT_CENTER
 	dock.add_child(center)
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER

@@ -17,16 +17,16 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	center.anchor_top = 0.70
-	center.offset_left = 24
-	center.offset_right = -24
+	center.anchor_top = 0.66
+	center.offset_left = 18
+	center.offset_right = -18
 	center.offset_top = 0
-	center.offset_bottom = -20
+	center.offset_bottom = -16
 	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(center)
 	var plaque := PanelContainer.new()
 	plaque.name = "DialoguePlaque"
-	plaque.custom_minimum_size = Vector2(0, 190)
+	plaque.custom_minimum_size = Vector2(0, 194)
 	plaque.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	plaque.add_theme_stylebox_override("panel", Paper.plaque(Color("#f7efd9")))
 	plaque.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -49,17 +49,16 @@ func _ready() -> void:
 	columns.add_child(copy)
 	var heading := HBoxContainer.new()
 	copy.add_child(heading)
-	speaker_label = Paper.label("", 22, Paper.DEEP_TEAL)
+	speaker_label = Paper.label("", 22, Paper.TEAL)
 	speaker_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_child(speaker_label)
 	cancel_button = Paper.button("結束對話", _request_cancel, heading)
 	cancel_button.name = "DialogueCancel"
-	text_label = Paper.label("", 24)
+	text_label = Paper.label("", 22, Paper.INK)
 	text_label.name = "DialogueSubtitle"
-	text_label.custom_minimum_size = Vector2(0, 82)
+	text_label.custom_minimum_size = Vector2(0, 80)
 	text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	text_label.clip_contents = true
 	copy.add_child(text_label)
 	advance_button = Paper.button("繼續  ›", _request_advance, copy)
 	advance_button.tooltip_text = "E 或空白鍵：顯示完整內容，再按下一句。"

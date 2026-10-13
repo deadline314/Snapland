@@ -357,10 +357,10 @@ func _draw_instruments(ink: Color, paper: Color, brass: Color, teal: Color, cora
 				2: _draw_wood_block(center, fill, ink, brass, wood)
 				3: _draw_harbor_drum(center, fill, ink, brass, coral)
 		var box: Rect2 = instrument_label_bounds(index)
-		draw_rect(box, paper.darkened(0.03))
-		draw_rect(box, ink, false, 1.4, true)
-		draw_string(FONT, Vector2(box.position.x + 8, box.position.y + 18), KEY_LABELS[index] + "  " + INSTRUMENT_NAMES[index], HORIZONTAL_ALIGNMENT_CENTER, box.size.x - 16, 16, ink)
-		draw_string(FONT, Vector2(box.position.x + 8, box.position.y + 35), "或鍵盤 " + SECONDARY_KEYS[index], HORIZONTAL_ALIGNMENT_CENTER, box.size.x - 16, 12, ink.darkened(0.08))
+		draw_rect(box, Color("#102b3a"))
+		draw_rect(box, brass, false, 2.0)
+		draw_string(FONT, Vector2(box.position.x + 8, box.position.y + 18), KEY_LABELS[index] + "  " + INSTRUMENT_NAMES[index], HORIZONTAL_ALIGNMENT_CENTER, box.size.x - 16, 16, Color("#f4eedc"))
+		draw_string(FONT, Vector2(box.position.x + 8, box.position.y + 35), "或鍵盤 " + SECONDARY_KEYS[index], HORIZONTAL_ALIGNMENT_CENTER, box.size.x - 16, 12, Color("#c7dbd4"))
 
 func _draw_instrument_shadow(center: Vector2, wood: Color) -> void:
 	_draw_ellipse(center + Vector2(0, 69), Vector2(72, 11), wood.darkened(0.10))
@@ -417,38 +417,56 @@ func _draw_harbor_drum(center: Vector2, fill: Color, ink: Color, brass: Color, c
 	draw_circle(center + Vector2(32, -57), 11, brass)
 
 func _draw_controls(ink: Color, paper: Color, coral: Color) -> void:
+	var ui_ink := Color("#102b3a")
+	var ivory := Color("#f4eedc")
 	var phase := str(_snapshot.get("phase", "listen"))
 	var phrase_no := int(_snapshot.get("phrase_number", 1))
 	var phrase_total := int(_snapshot.get("phrase_count", 3))
 	var completed := int(_snapshot.get("completed_phrases", 0))
-	draw_rect(Rect2(190, 592, 230, 39), paper.darkened(0.02))
-	draw_rect(Rect2(190, 592, 230, 39), ink, false, 1.5, true)
-	draw_string(FONT, Vector2(199, 609), "樂句 %d / %d" % [phrase_no, phrase_total], HORIZONTAL_ALIGNMENT_LEFT, 112, 14, ink)
+	draw_rect(Rect2(190, 592, 230, 39), ui_ink)
+	draw_rect(Rect2(190, 592, 230, 39), Color("#dfb95f"), false, 2.0)
+	draw_string(FONT, Vector2(199, 609), "樂句 %d / %d" % [phrase_no, phrase_total], HORIZONTAL_ALIGNMENT_LEFT, 112, 14, ivory)
 	for dot in range(phrase_total):
-		var color := coral if dot < completed else ink.lightened(0.48)
+		var color := Color("#71c7b5") if dot < completed else Color("#607986")
 		draw_circle(Vector2(324 + dot * 28, 611), 7, color)
-	var message := str(_snapshot.get("last_event", "聽第一句海邊樂譜"))
-	draw_rect(Rect2(168, 331, 924, 27), paper)
-	draw_string(FONT, Vector2(177, 350), message, HORIZONTAL_ALIGNMENT_CENTER, 900, 17, ink)
-	draw_rect(Rect2(198, 146, 228, 25), paper)
-	draw_string(FONT, Vector2(202, 165), _phase_label(), HORIZONTAL_ALIGNMENT_LEFT, 216, 18, ink)
+	# Session shows last_event as a brief HUD toast. Keep this persistent stage
+	# strip useful after that toast fades without repeating the same sentence.
+	var message := _stage_feedback_message()
+	draw_rect(Rect2(168, 331, 924, 27), ui_ink)
+	draw_rect(Rect2(168, 331, 924, 27), Color("#dfb95f"), false, 1.0)
+	draw_string(FONT, Vector2(177, 350), message, HORIZONTAL_ALIGNMENT_CENTER, 900, 17, ivory)
+	draw_rect(Rect2(198, 146, 228, 25), ui_ink)
+	draw_rect(Rect2(198, 146, 228, 25), Color("#dfb95f"), false, 1.0)
+	draw_string(FONT, Vector2(202, 165), _phase_label(), HORIZONTAL_ALIGNMENT_LEFT, 216, 18, ivory)
 	if phase == "active" and bool(_snapshot.get("replay_available", false)):
-		draw_rect(REPLAY_RECT, paper)
-		draw_rect(REPLAY_RECT, ink, false, 7.0, true)
+		draw_rect(REPLAY_RECT, ui_ink)
+		draw_rect(REPLAY_RECT, Color("#dfb95f"), false, 2.0)
 		draw_arc(REPLAY_RECT.position + Vector2(28, 29), 13, 0.25, TAU * 0.9, 20, coral, 3.0, true)
-		draw_string(FONT, Vector2(REPLAY_RECT.position.x + 48, REPLAY_RECT.position.y + 36), "重聽 %d/%d" % [int(_snapshot.get("replay_count", 0)), int(_snapshot.get("replay_limit", 2))], HORIZONTAL_ALIGNMENT_LEFT, 95, 17, ink)
+		draw_string(FONT, Vector2(REPLAY_RECT.position.x + 48, REPLAY_RECT.position.y + 36), "重聽 %d/%d" % [int(_snapshot.get("replay_count", 0)), int(_snapshot.get("replay_limit", 2))], HORIZONTAL_ALIGNMENT_LEFT, 95, 17, ivory)
 	else:
-		draw_rect(REPLAY_RECT, paper.darkened(0.1))
-		draw_rect(REPLAY_RECT, ink.darkened(0.2), false, 7.0, true)
-		draw_string(FONT, Vector2(REPLAY_RECT.position.x + 10, REPLAY_RECT.position.y + 36), "重聽（演奏時）", HORIZONTAL_ALIGNMENT_CENTER, 130, 14, ink.darkened(0.2))
-	draw_rect(Rect2(38, 592, 138, 39), paper)
-	draw_string(FONT, Vector2(46, 609), "音高", HORIZONTAL_ALIGNMENT_LEFT, 58, 13, ink)
-	draw_string(FONT, Vector2(46, 626), "＋ 節奏", HORIZONTAL_ALIGNMENT_LEFT, 100, 13, ink)
-	draw_rect(Rect2(682, 603, 362, 28), paper)
-	draw_string(FONT, Vector2(690, 622), "錯誤 %d   精準音 %d" % [int(_snapshot.get("error_count", 0)), int(_snapshot.get("precise_notes", 0))], HORIZONTAL_ALIGNMENT_RIGHT, 346, 14, ink)
+		draw_rect(REPLAY_RECT, Color("#203f4e"))
+		draw_rect(REPLAY_RECT, Color("#70828a"), false, 2.0)
+		draw_string(FONT, Vector2(REPLAY_RECT.position.x + 10, REPLAY_RECT.position.y + 36), "重聽（演奏時）", HORIZONTAL_ALIGNMENT_CENTER, 130, 14, Color("#a7b8b6"))
+	draw_rect(Rect2(38, 592, 138, 39), ui_ink)
+	draw_rect(Rect2(38, 592, 138, 39), Color("#dfb95f"), false, 1.0)
+	draw_string(FONT, Vector2(46, 609), "音高", HORIZONTAL_ALIGNMENT_LEFT, 58, 13, ivory)
+	draw_string(FONT, Vector2(46, 626), "＋ 節奏", HORIZONTAL_ALIGNMENT_LEFT, 100, 13, ivory)
+	draw_rect(Rect2(682, 603, 362, 28), ui_ink)
+	draw_rect(Rect2(682, 603, 362, 28), Color("#dfb95f"), false, 1.0)
+	draw_string(FONT, Vector2(690, 622), "錯誤 %d   精準音 %d" % [int(_snapshot.get("error_count", 0)), int(_snapshot.get("precise_notes", 0))], HORIZONTAL_ALIGNMENT_RIGHT, 346, 14, ivory)
 	if _reduced_motion:
-		draw_rect(Rect2(974, 146, 220, 25), paper)
-		draw_string(FONT, Vector2(973, 163), "靜態音符標記", HORIZONTAL_ALIGNMENT_RIGHT, 220, 14, ink)
+		draw_rect(Rect2(974, 146, 220, 25), ui_ink)
+		draw_rect(Rect2(974, 146, 220, 25), Color("#dfb95f"), false, 1.0)
+		draw_string(FONT, Vector2(973, 163), "靜態音符標記", HORIZONTAL_ALIGNMENT_RIGHT, 220, 14, ivory)
+
+func _stage_feedback_message() -> String:
+	match str(_snapshot.get("phase", "listen")):
+		"listen": return "先聽完樂句，記住四件樂器的順序"
+		"ready": return "準備重現旋律，留意音高與節奏"
+		"active": return "依照剛才聽到的順序演奏"
+		"wrong_pause": return "再聽一次，留意旋律的高低與間隔"
+		"complete": return "這段合奏完成"
+		_: return "跟著手搖樂譜聽拍點"
 
 func _draw_ellipse(center: Vector2, radius: Vector2, color: Color, filled: bool = true, width: float = -1.0) -> void:
 	draw_ellipse(center, radius.x, radius.y, color, filled, width, true)

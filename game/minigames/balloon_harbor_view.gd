@@ -483,10 +483,10 @@ func _build_wind_arrows() -> void:
 	legend.size = Vector2(256,134)
 	legend.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var border := StyleBoxFlat.new()
-	border.bg_color = Color(0.02,0.09,0.13,0.20)
-	border.border_color = Color(0.73,0.82,0.78,0.40)
-	border.set_border_width_all(1)
-	border.set_corner_radius_all(10)
+	border.bg_color = Color("#102b35")
+	border.border_color = Color("#62c3b0")
+	border.set_border_width_all(2)
+	border.set_corner_radius_all(0)
 	legend.add_theme_stylebox_override("panel",border)
 	_viewport.add_child(legend)
 	for row in 2:
@@ -496,8 +496,8 @@ func _build_wind_arrows() -> void:
 		caption.position = Vector2(15,26 + row*60)
 		caption.add_theme_font_override("font",HARBOR_FONT)
 		caption.add_theme_font_size_override("font_size",18)
-		caption.add_theme_color_override("font_color",Color("#e9dfc5"))
-		caption.add_theme_color_override("font_shadow_color",Color("#173e4a"))
+		caption.add_theme_color_override("font_color",Color("#fff0d2"))
+		caption.add_theme_color_override("font_shadow_color",Color("#102b35"))
 		caption.add_theme_constant_override("shadow_offset_x",1)
 		caption.add_theme_constant_override("shadow_offset_y",1)
 		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE

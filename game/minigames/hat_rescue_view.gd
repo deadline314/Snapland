@@ -523,11 +523,13 @@ func _draw_rescue_rack(ink: Color, wood: Color, brass: Color) -> void:
 
 func _draw_score_note(ink: Color, paper: Color, brass: Color, coral: Color) -> void:
 	var note := Rect2(83.0, 151.0, 156.0, 92.0)
-	draw_rect(note, paper.darkened(0.035))
+	var ivory := Color("#f4eedc")
+	draw_rect(note, Color("#102b3a"))
+	draw_rect(note, brass, false, 2.0)
 	draw_rect(Rect2(note.position.x, note.position.y, 5.0, note.size.y), brass)
-	_draw_label(Vector2(note.position.x + 18.0, note.position.y + 22.0), "救回 %d / 6" % int(_snapshot.get("caught", 0)), ink, HORIZONTAL_ALIGNMENT_LEFT, 126, 15)
-	_draw_label(Vector2(note.position.x + 18.0, note.position.y + 46.0), "漏接 %d" % int(_snapshot.get("misses", 0)), coral.darkened(0.08), HORIZONTAL_ALIGNMENT_LEFT, 126, 13)
-	_draw_label(Vector2(note.position.x + 18.0, note.position.y + 72.0), "連續中心 %d" % int(_snapshot.get("combo", 0)), ink, HORIZONTAL_ALIGNMENT_LEFT, 126, 12)
+	_draw_label(Vector2(note.position.x + 18.0, note.position.y + 22.0), "救回 %d / 6" % int(_snapshot.get("caught", 0)), ivory, HORIZONTAL_ALIGNMENT_LEFT, 126, 15)
+	_draw_label(Vector2(note.position.x + 18.0, note.position.y + 46.0), "漏接 %d" % int(_snapshot.get("misses", 0)), coral, HORIZONTAL_ALIGNMENT_LEFT, 126, 13)
+	_draw_label(Vector2(note.position.x + 18.0, note.position.y + 72.0), "連續中心 %d" % int(_snapshot.get("combo", 0)), ivory, HORIZONTAL_ALIGNMENT_LEFT, 126, 12)
 	var prompt := bottom_control_hint()
 	var plate := Rect2(414.0, 653.0, 452.0, 42.0)
 	draw_rect(plate, ink.darkened(0.02))

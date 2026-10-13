@@ -331,8 +331,10 @@ func _draw_phase_badge(phase: String, phase_time: float) -> void:
 	var has_waiting: bool = not queues[0].is_empty() or not queues[1].is_empty()
 	var label := ("紅燈｜選擇一側放行" if has_waiting else "紅燈｜等待人群到達") if phase == "red" else "行人通行" if phase == "walk" else "清空路口" if phase == "clearance" else "全紅切換" if phase == "all_red" else "本輪完成"
 	var center := Vector2(640.0, 568.0)
-	draw_rect(Rect2(center - Vector2(118.0, 18.0), Vector2(236.0, 36.0)), Color("#fff0d4", 0.94), true)
-	draw_string(ThemeDB.fallback_font, center + Vector2(-label.length() * 7.0, 6.0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, Color("#35434a"))
+	draw_rect(Rect2(center - Vector2(118.0, 18.0), Vector2(236.0, 36.0)), Color("#102b35"), true)
+	draw_rect(Rect2(center - Vector2(118.0, 18.0), Vector2(236.0, 36.0)), Color("#c3944f"), false, 2.0)
+	draw_rect(Rect2(center - Vector2(114.0, 14.0), Vector2(228.0, 28.0)), Color("#62c3b0"), false, 1.0)
+	draw_string(ThemeDB.fallback_font, center + Vector2(-label.length() * 7.0, 6.0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, Color("#fff0d2"))
 	if phase == "clearance" or phase == "all_red":
 		var duration := 0.35 if phase == "clearance" else 0.25
 		var ratio := clampf(phase_time / duration, 0.0, 1.0)

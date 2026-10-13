@@ -439,17 +439,19 @@ func _draw() -> void:
 	_draw_round_marks(ink, brass, paper)
 
 func _draw_forecast(ink: Color, brass: Color, terracotta: Color, paper: Color) -> void:
+	var ivory := Color("#f4eedc")
 	var visible := bool(_snapshot.get("forecast_visible", false)) and not bool(_snapshot.get("ended", false))
 	var marker_x := 1004.0
-	draw_round_rect(FORECAST_CARD_BOUNDS, 9.0, paper.darkened(0.04))
+	draw_rect(FORECAST_CARD_BOUNDS, Color("#102b3a"))
+	draw_rect(FORECAST_CARD_BOUNDS, brass, false, 2.0)
 	draw_rect(Rect2(FORECAST_CARD_BOUNDS.position, Vector2(5.0, FORECAST_CARD_BOUNDS.size.y)), brass)
 	var label := str(_snapshot.get("wind_kind", "港風"))
-	_label(Vector2(892.0, 171.0), label, ink, HORIZONTAL_ALIGNMENT_LEFT, 96, 15)
+	_label(Vector2(892.0, 171.0), label, ivory, HORIZONTAL_ALIGNMENT_LEFT, 96, 15)
 	var torque := float(_snapshot.get("forecast_torque", 0.0)) if visible else float(_snapshot.get("wind_torque", 0.0))
 	var arrow_visible := absf(torque) >= 0.035
 	var arrow_dir := -1 if torque < 0.0 else 1
-	var arrow_color := terracotta if torque < 0.0 else brass
-	_label(Vector2(892.0, 199.0), "預告風" if visible else ("當前風" if arrow_visible else "靜風"), ink.darkened(0.2), HORIZONTAL_ALIGNMENT_LEFT, 86, 12)
+	var arrow_color := terracotta if torque < 0.0 else Color("#71c7b5")
+	_label(Vector2(892.0, 199.0), "預告風" if visible else ("當前風" if arrow_visible else "靜風"), ivory, HORIZONTAL_ALIGNMENT_LEFT, 86, 12)
 	if arrow_visible:
 		var arrow_length := lerpf(24.0, 48.0, clampf(absf(torque) / 0.28, 0.0, 1.0))
 		var arrow_from := Vector2(marker_x + (arrow_length if arrow_dir < 0 else 0.0), 185.0)
@@ -469,9 +471,10 @@ func _draw_forecast(ink: Color, brass: Color, terracotta: Color, paper: Color) -
 		draw_line(Vector2(flag_x, 164.0), Vector2(flag_x + 38.0 * arrow_dir, 179.0), arrow_color, 6.0)
 		draw_line(Vector2(flag_x + 38.0 * arrow_dir, 179.0), Vector2(flag_x + 64.0 * arrow_dir, 166.0), arrow_color, 4.0)
 	var seconds := float(_snapshot.get("forecast_seconds", 0.0))
-	_label(Vector2(1140.0, 196.0), "%.1f 秒" % seconds if visible else ("×%.2f" % absf(torque) if arrow_visible else "平靜"), ink, HORIZONTAL_ALIGNMENT_LEFT, 60, 12)
+	_label(Vector2(1140.0, 196.0), "%.1f 秒" % seconds if visible else ("×%.2f" % absf(torque) if arrow_visible else "平靜"), ivory, HORIZONTAL_ALIGNMENT_LEFT, 60, 12)
 
 func _draw_balance_gauges(ink: Color, brass: Color, terracotta: Color, paper: Color) -> void:
+	var ivory := Color("#f4eedc")
 	var target := float(_snapshot.get("target_angle", 0.0))
 	var angle_value := float(_snapshot.get("angle", 0.0))
 	var safe_limit := float(_snapshot.get("safe_limit", 0.13))
@@ -479,52 +482,54 @@ func _draw_balance_gauges(ink: Color, brass: Color, terracotta: Color, paper: Co
 	var scale_left := ANGLE_GAUGE.position.x
 	var scale_width := ANGLE_GAUGE.size.x
 	var units_per_radian := scale_width / 1.64
-	_label(Vector2(352.0, 532.0), "支點角度", ink, HORIZONTAL_ALIGNMENT_LEFT, 120, 14)
-	_label(Vector2(822.0, 532.0), "安全帶 ±%.2f" % safe_limit, ink, HORIZONTAL_ALIGNMENT_RIGHT, 130, 13)
-	draw_rect(Rect2(ANGLE_GAUGE.position, ANGLE_GAUGE.size), paper.darkened(0.05))
+	_label(Vector2(352.0, 532.0), "支點角度", ivory, HORIZONTAL_ALIGNMENT_LEFT, 120, 14)
+	_label(Vector2(822.0, 532.0), "安全帶 ±%.2f" % safe_limit, ivory, HORIZONTAL_ALIGNMENT_RIGHT, 130, 13)
+	draw_rect(Rect2(ANGLE_GAUGE.position, ANGLE_GAUGE.size), Color("#102b3a"))
 	var center_x := scale_left + scale_width * 0.5 + target * units_per_radian
 	var precise_w := precise_limit * units_per_radian
 	var safe_w := safe_limit * units_per_radian
-	draw_rect(Rect2(center_x - safe_w, ANGLE_GAUGE.position.y + 4.0, safe_w * 2.0, 20.0), Color("#78a89e"))
+	draw_rect(Rect2(center_x - safe_w, ANGLE_GAUGE.position.y + 4.0, safe_w * 2.0, 20.0), Color("#3d8f85"))
 	draw_rect(Rect2(center_x - precise_w, ANGLE_GAUGE.position.y + 4.0, precise_w * 2.0, 20.0), brass.lightened(0.12))
 	draw_line(Vector2(center_x, ANGLE_GAUGE.position.y - 4.0), Vector2(center_x, ANGLE_GAUGE.end.y + 4.0), ink, 2.0)
 	var pointer_x := scale_left + scale_width * 0.5 + angle_value * units_per_radian
 	var pointer_color := terracotta if absf(angle_value - target) > safe_limit else ink
 	draw_circle(Vector2(pointer_x, ANGLE_GAUGE.get_center().y), 9.0, pointer_color)
-	_label(Vector2(356.0, 590.0), "撞線 %d / 3" % int(_snapshot.get("impacts", 0)), ink, HORIZONTAL_ALIGNMENT_LEFT, 150, 15)
-	_label(Vector2(565.0, 590.0), "穩住 %d / 7" % int(_snapshot.get("safe_stages", 0)), ink, HORIZONTAL_ALIGNMENT_CENTER, 150, 15)
-	_label(Vector2(774.0, 590.0), "精準 %d / 7" % int(_snapshot.get("precise_stages", 0)), ink, HORIZONTAL_ALIGNMENT_RIGHT, 150, 15)
+	_label(Vector2(356.0, 590.0), "撞線 %d / 3" % int(_snapshot.get("impacts", 0)), ivory, HORIZONTAL_ALIGNMENT_LEFT, 150, 15)
+	_label(Vector2(565.0, 590.0), "穩住 %d / 7" % int(_snapshot.get("safe_stages", 0)), ivory, HORIZONTAL_ALIGNMENT_CENTER, 150, 15)
+	_label(Vector2(774.0, 590.0), "精準 %d / 7" % int(_snapshot.get("precise_stages", 0)), ivory, HORIZONTAL_ALIGNMENT_RIGHT, 150, 15)
 	var rail_y := WEIGHT_RAIL.position.y + WEIGHT_RAIL.size.y * 0.5
-	_label(Vector2(356.0, 617.0), "移動配重", ink, HORIZONTAL_ALIGNMENT_LEFT, 130, 14)
-	_label(Vector2(794.0, 617.0), "左 ←　→ 右", ink.darkened(0.10), HORIZONTAL_ALIGNMENT_RIGHT, 150, 13)
-	draw_rect(Rect2(WEIGHT_RAIL.position.x, rail_y - 4.0, WEIGHT_RAIL.size.x, 8.0), ink.darkened(0.14))
+	_label(Vector2(356.0, 617.0), "移動配重", ivory, HORIZONTAL_ALIGNMENT_LEFT, 130, 14)
+	_label(Vector2(794.0, 617.0), "左 ←　→ 右", ivory, HORIZONTAL_ALIGNMENT_RIGHT, 150, 13)
+	draw_rect(Rect2(WEIGHT_RAIL.position.x, rail_y - 4.0, WEIGHT_RAIL.size.x, 8.0), Color("#102b3a"))
 	for notch in range(9):
 		var x := WEIGHT_RAIL.position.x + float(notch) * WEIGHT_RAIL.size.x / 8.0
 		draw_line(Vector2(x, rail_y - 11.0), Vector2(x, rail_y - 6.0), brass, 2.0)
 	var weight_x := lerpf(WEIGHT_RAIL.position.x + 17.0, WEIGHT_RAIL.end.x - 17.0, (float(_snapshot.get("balance", 0.0)) + 1.0) * 0.5)
 	draw_circle(Vector2(weight_x, rail_y), 16.0, brass.darkened(0.10))
 	draw_circle(Vector2(weight_x, rail_y), 10.0, Color("#f3dd9f"))
-	_label(Vector2(356.0, 672.0), str(_snapshot.get("last_event", "先看風旗預告，再微調配重")), ink, HORIZONTAL_ALIGNMENT_CENTER, 564, 13)
-	_label(Vector2(356.0, 696.0), "按住方向鍵移動配重　·　拖曳滑軌微調", ink.darkened(0.08), HORIZONTAL_ALIGNMENT_CENTER, 564, 13)
+	_label(Vector2(356.0, 672.0), str(_snapshot.get("last_event", "先看風旗預告，再微調配重")), ivory, HORIZONTAL_ALIGNMENT_CENTER, 564, 13)
+	_label(Vector2(356.0, 696.0), "按住方向鍵移動配重　·　拖曳滑軌微調", ivory, HORIZONTAL_ALIGNMENT_CENTER, 564, 13)
 
 func _draw_controls_panel(paper: Color, brass: Color, ink: Color) -> void:
-	draw_round_rect(CONTROLS_PANEL, 13.0, paper)
-	draw_rect(CONTROLS_PANEL, Color(ink, 0.72), false, 2.0)
+	draw_rect(CONTROLS_PANEL, Color("#102b3a"))
+	draw_rect(CONTROLS_PANEL, brass, false, 2.0)
 	draw_rect(Rect2(CONTROLS_PANEL.position, Vector2(7.0, CONTROLS_PANEL.size.y)), brass)
 
 func _draw_round_marks(ink: Color, brass: Color, paper: Color) -> void:
+	var ivory := Color("#f4eedc")
 	var score_value := int(_snapshot.get("score", 0))
 	var score_card := Rect2(58.0, 152.0, 128.0, 68.0)
-	draw_round_rect(score_card, 8.0, paper.darkened(0.03))
-	_label(Vector2(72.0, 177.0), "平衡章", ink, HORIZONTAL_ALIGNMENT_LEFT, 98, 13)
-	_label(Vector2(72.0, 204.0), "%03d" % score_value, brass.darkened(0.32), HORIZONTAL_ALIGNMENT_LEFT, 92, 22)
-	draw_round_rect(STAGE_CARD_BOUNDS, 9.0, paper.darkened(0.03))
-	draw_rect(STAGE_CARD_BOUNDS, Color(ink, 0.72), false, 2.0)
+	draw_rect(score_card, Color("#102b3a"))
+	draw_rect(score_card, brass, false, 2.0)
+	_label(Vector2(72.0, 177.0), "平衡章", ivory, HORIZONTAL_ALIGNMENT_LEFT, 98, 13)
+	_label(Vector2(72.0, 204.0), "%03d" % score_value, brass, HORIZONTAL_ALIGNMENT_LEFT, 92, 22)
+	draw_rect(STAGE_CARD_BOUNDS, Color("#102b3a"))
+	draw_rect(STAGE_CARD_BOUNDS, brass, false, 2.0)
 	draw_rect(Rect2(STAGE_CARD_BOUNDS.position, Vector2(5.0, STAGE_CARD_BOUNDS.size.y)), brass)
 	var stage := int(_snapshot.get("stage", 0))
 	var stable_ratio := clampf(float(_snapshot.get("stable_seconds", 0.0)) / SAFE_DWELL_SECONDS, 0.0, 1.0)
-	_label(Vector2(208.0, 171.0), "風段 %d · %s" % [mini(stage + 1, 7), str(_snapshot.get("wind_kind", "海風"))], ink, HORIZONTAL_ALIGNMENT_CENTER, 166, 14)
-	draw_rect(Rect2(218.0, 181.0, 148.0, 5.0), paper.darkened(0.1))
+	_label(Vector2(208.0, 171.0), "風段 %d · %s" % [mini(stage + 1, 7), str(_snapshot.get("wind_kind", "海風"))], ivory, HORIZONTAL_ALIGNMENT_CENTER, 166, 14)
+	draw_rect(Rect2(218.0, 181.0, 148.0, 5.0), Color("#284958"))
 	draw_rect(Rect2(218.0, 181.0, 148.0 * stable_ratio, 5.0), brass)
 	var forecast_visible := bool(_snapshot.get("forecast_visible", false))
 	var forecast_seconds := float(_snapshot.get("forecast_seconds", 0.0))
@@ -533,7 +538,7 @@ func _draw_round_marks(ink: Color, brass: Color, paper: Color) -> void:
 		message = "%.1f 秒後受風 · 先移配重" % forecast_seconds
 	elif message.is_empty():
 		message = "穩住中央亮帶，抵住來風"
-	_label(Vector2(207.0, 207.0), message, ink, HORIZONTAL_ALIGNMENT_CENTER, 170, 11)
+	_label(Vector2(207.0, 207.0), message, ivory, HORIZONTAL_ALIGNMENT_CENTER, 170, 11)
 
 func draw_round_rect(rect: Rect2, radius: float, color: Color) -> void:
 	draw_rect(Rect2(rect.position.x + radius, rect.position.y, rect.size.x - radius * 2.0, rect.size.y), color)
