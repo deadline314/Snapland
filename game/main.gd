@@ -834,13 +834,35 @@ func _definition(id: String) -> Dictionary:
 
 func _show_game_info(id: String) -> void:
 	var definition := _definition(id)
-	var body := _open(str(definition.get("name",id)),"迎賓大道  /  小遊戲介紹","game_info")
+	if definition.is_empty():
+		_notice("這個設施暫時休息中，先逛逛其他地方吧。")
+		return
+	for child in overlay.get_children():
+		overlay.remove_child(child)
+		child.queue_free()
+	modal_body=null
+	overlay.show()
+	modal_kind="game_info"
+	world.blocked=true
+	world.set_process(true)
+	audio.set_paused(false)
+	var invitation := preload("res://game/ui/island_game_invite.gd").new()
+	invitation.definition=definition
+	invitation.start_requested=_request_game_start.bind(id,bool(Progress.settings.get("assist",false)))
+	invitation.rules_requested=_show_game_rules.bind(id)
+	invitation.close_requested=_close
+	overlay.add_child(invitation)
+
+func _show_game_rules(id: String) -> void:
+	var definition := _definition(id)
+	var body := _open(str(definition.get("name",id)),"迎賓大道  /  玩法與選項","game_rules")
 	var entry_stamp := HBoxContainer.new()
 	entry_stamp.add_theme_constant_override("separation",8)
 	body.add_child(entry_stamp)
 	entry_stamp.add_child(Paper.icon("ticket",23,Paper.CORAL))
 	entry_stamp.add_child(Paper.label("免費重玩   ·   收藏不消耗",18,Paper.TEAL))
 	var objective_card := Paper.card(body,Color("#fffaf0"),8)
+	objective_card.name="GameRulesDetails"
 	objective_card.add_child(Paper.section_title("本局目標"))
 	objective_card.add_child(Paper.label(str(definition.get("goal","完成挑戰")),22))
 	Paper.divider(objective_card)

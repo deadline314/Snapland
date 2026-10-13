@@ -126,7 +126,7 @@ func _test_first_entry_session_lifecycle() -> void:
 
 func _start_first_entry_game(game_id: String, previous_id: int) -> Control:
 	await _interact_at(game_id)
-	_press_button(main.modal_body, "開始遊玩")
+	_press_named_button(main.overlay, "InviteStart")
 	await _frames(2)
 	_check(not is_instance_valid(main.session), game_id + " first-entry tutorial precedes Session creation")
 	_check(is_instance_valid(main.tutorial_panel), game_id + " first-entry opens the actual tutorial")

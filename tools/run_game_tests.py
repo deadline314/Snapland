@@ -86,6 +86,8 @@ def main() -> int:
             ("balloon delivery tests", common + ["--script", "res://game/tests/test_balloon.gd"]),
             ("story runtime tests", common + ["--script", "res://game/tests/test_story.gd"]),
             ("main story integration tests", common + ["res://game/tests/test_story_integration.tscn"]),
+            ("island dialogue tests", common + ["res://game/tests/test_island_dialogue.tscn"]),
+            ("island game entry tests", common + ["res://game/tests/test_island_game_entry.tscn"]),
             ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
             ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
         ]
@@ -158,6 +160,8 @@ def main() -> int:
                 "balloon delivery tests": "PASS: balloon delivery checks",
                 "story runtime tests": "PASS: story data, compatibility, mission evidence, and idempotency",
                 "main story integration tests": "PASS: real Main story interactions and exploration evidence",
+                "island dialogue tests": "PASS: island dialogue panel and bounded, speaker-pitched beep",
+                "island game entry tests": "PASS: 12 compact invites and first-entry/optional-rule flow",
                 "audio runtime tests": "PASS: audio runtime checks",
                 "main scene integration tests": "PASS: main scene integration checks",
             }

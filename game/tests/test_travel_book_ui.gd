@@ -205,7 +205,11 @@ func _test_small_physical_menus() -> void:
 		await _frames(6)
 		var panel := _main.overlay.find_child("AdaptiveMenuPanel",true,false) as Control
 		var scroll := _main.overlay.find_child("AdaptiveMenuScroll",true,false) as ScrollContainer
-		_check(panel!=null and scroll!=null and window.get_visible_rect().encloses(panel.get_global_rect()) and window.get_visible_rect().encloses(scroll.get_global_rect()),"bounded modal with scrolling content fits actual 800px window: "+kind)
+		if kind=="game_info":
+			var invitation := _main.overlay.find_child("InviteCard",true,false) as Control
+			_check(invitation!=null and window.get_visible_rect().encloses(invitation.get_global_rect()) and _all_visible_rects_fit(invitation,window.get_visible_rect()),"compact invitation and every visible control fit actual 800px window")
+		else:
+			_check(panel!=null and scroll!=null and window.get_visible_rect().encloses(panel.get_global_rect()) and window.get_visible_rect().encloses(scroll.get_global_rect()),"bounded modal with scrolling content fits actual 800px window: "+kind)
 		if kind=="album":
 			var grid: Node = _main.overlay.find_child("AlbumPhotoGrid",true,false)
 			var first_row_complete := true
