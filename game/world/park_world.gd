@@ -11,6 +11,7 @@ const ComponentAnimationScript = preload("res://game/world/component_animation.g
 const NpcActivityScript = preload("res://game/world/npc_activity.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const AvatarMotionRigScript = preload("res://game/world/avatar_motion_rig.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const IslandAttractionsScript = preload("res://game/world/island_attractions.gd")
 const CoastalMaterialShader = preload("res://game/world/coastal_material.gdshader")
@@ -28,6 +29,9 @@ const GOLD = Color("#edbb65")
 var player: CharacterBody3D
 var avatar: Sprite3D
 var avatar_renderer: RefCounted
+var avatar_motion_rig
+var avatar_motion_available := false
+var avatar_run_requested := false
 var avatar_appearance: Dictionary = {"skin":"warm","species":"human","gender":"neutral","hair":"windswept","hair_color":"ink","face":"curious"}
 var avatar_equipped: Dictionary = {"outfit":"outfit-tide","hat":"hat-none"}
 var avatar_action := ""
@@ -40,6 +44,7 @@ var camera: Camera3D
 var sun: DirectionalLight3D
 var environment: Environment
 var points: Array[Dictionary] = []
+var district_labels: Array[Label3D] = []
 var component_motion: Node
 var npc_activity: Node
 var occlusion_controller: Node
@@ -54,7 +59,6 @@ var lamp_candidate_distances: Array[float] = []
 var lamp_selection_elapsed := 0.0
 var lamp_selection_player_position := Vector3(INF, INF, INF)
 var lamp_energy_for_phase := 0.0
-var district_labels: Array[Label3D] = []
 var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
 var coastal_atlas: Texture2D
@@ -78,11 +82,18 @@ const WALK_STRIDE_DISTANCE := 2.8
 const WALK_DIRECTION_HYSTERESIS := deg_to_rad(5.0)
 const WALK_DISTANCE_EPSILON := 0.0005
 const CAMERA_OFFSET := Vector3(3.5,16.5,25.0)
-const AVATAR_RUN_SPEED := 5.0
+const AVATAR_WALK_SPEED := 0.55
+const AVATAR_RUN_SPEED := 2.0
+const AVATAR_ACCELERATION_SECONDS := 0.16
+const AVATAR_EXTERNAL_REPOSITION_THRESHOLD := 0.20
+var avatar_motion_speed_limit := AVATAR_WALK_SPEED
+var avatar_last_physics_position := Vector3.ZERO
+var avatar_last_physics_position_valid := false
 var walk_distance_phase := 0.0
 var avatar_is_walking := false
 var mesh_count := 0
 var blocked := false
+var npc_dialogue_hold := false
 var npc_activity_paused := false
 var reduced_motion := false
 var night := false
@@ -237,6 +248,7 @@ func _build_lighting() -> void:
 	sun.light_energy = 1.08
 	add_child(sun)
 	contact_shadow_material = _make_contact_shadow_material()
+
 func _make_contact_shadow_material() -> StandardMaterial3D:
 	var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
 	for y in range(32):
@@ -352,6 +364,10 @@ func _register_sprite_ground_anchor(sprite: Sprite3D, anchor: Node3D, parent: No
 	# Preserve the bottom pixel's entire area, including the one-pixel variation
 	# between authored poses. The guard is less than a centimetre in world space.
 	feet_row += SPRITE_FOOT_GUARD_PIXELS
+	# NPC gait grounding may request a small extra vertical clearance when the
+	# billboard's projected foot silhouette straddles a terrain-height boundary.
+	sprite.set_meta("npc_world_ground_anchor_managed",true)
+	sprite.set_meta("npc_foot_clearance_y",0.0)
 	sprite_ground_anchors.append({
 		"sprite": sprite,
 		"anchor": anchor,
@@ -383,6 +399,7 @@ func _update_sprite_grounding() -> void:
 			sprite.pixel_size,
 			camera_up_y
 		)
+		desired_y += float(sprite.get_meta("npc_foot_clearance_y",0.0))
 		if absf(anchor.position.y - desired_y) > 0.0005:
 			anchor.position.y = desired_y
 	for index in range(contact_shadows.size()):
@@ -402,6 +419,7 @@ func _update_sprite_grounding() -> void:
 		var actor := proxy_record.get("actor") as Node3D
 		if not is_instance_valid(proxy) or not is_instance_valid(actor): continue
 		proxy.position.y = 0.0 if actor == player and is_riding() else _ground_surface_y(actor.global_position) - actor.global_position.y
+
 func _mat(color: Color, emissive := false) -> StandardMaterial3D:
 	var key := "%s:%s" % [color.to_html(true), str(emissive)]
 	if material_cache.has(key): return material_cache[key]
@@ -557,6 +575,7 @@ func _label(text: String, pos: Vector3, size := 32, color := CREAM) -> Label3D:
 	label.modulate = color
 	label.outline_size = maxi(2, int(size / 8))
 	label.outline_modulate = Color("#223f47")
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = false
 	label.visibility_range_end = 34.0
@@ -574,6 +593,7 @@ func _district_label(text: String, pos: Vector3, size: int, color: Color) -> Lab
 	label.visible=false
 	district_labels.append(label)
 	return label
+
 func _update_district_label_visibility() -> void:
 	if not is_instance_valid(player): return
 	var player_x := player.global_position.x
@@ -583,7 +603,6 @@ func _update_district_label_visibility() -> void:
 		var dx := label.global_position.x-player_x
 		var dz := label.global_position.z-player_z
 		label.visible=dx*dx+dz*dz<=100.0
-
 
 func _point(id: String, title: String, pos: Vector3, marker_height := 2.1) -> void:
 	points.append({"id":id,"label":title,"position":pos})
@@ -608,8 +627,57 @@ func _register_npc_activity() -> void:
 		if not npc_activity.register_actor(sprite,role,frames,activity_root,interaction_point,0.0):
 			push_warning("ParkWorld: could not register NPC role '%s' for ambient activity." % role)
 	npc_activity.finish_registration()
+	npc_activity.configure_motion(camera,_avatar_ground_height,true)
+	for actor_record in character_sprites:
+		for activity_record in npc_activity._records:
+			if String(activity_record.role) == String(actor_record.role):
+				var motion: Variant = activity_record.get("motion")
+				if motion != null and motion.supported:
+					actor_record["name_body_height"] = float(motion.target_body_height_px) * motion.rig.PIXEL_SIZE
+	_update_npc_name_labels(true)
 	npc_activity.set_activity_paused(blocked)
 	npc_activity_paused=blocked
+
+func _visible_body_height(sprite: Sprite3D) -> float:
+	if not is_instance_valid(sprite) or sprite.texture == null:
+		return 1.7
+	var source := sprite.texture.get_image()
+	if source == null or source.is_empty():
+		return 1.7
+	var used := source.get_used_rect()
+	return maxf(0.2,float(used.size.y) * sprite.pixel_size)
+
+func _update_npc_name_labels(force := false) -> void:
+	if not is_instance_valid(camera):
+		return
+	var up_y := maxf(0.2,camera.global_basis.y.normalized().y)
+	for record in character_sprites:
+		var label := record.get("name_label") as Label3D
+		var actor_root := record.get("activity_root") as Node3D
+		if not is_instance_valid(label) or not is_instance_valid(actor_root):
+			continue
+		if not force and absf(float(record.get("name_camera_up_y",-1.0))-up_y)<0.001:
+			continue
+		var body_height := float(record.get("name_body_height",0.0))
+		if body_height <= 0.0:
+			body_height = _visible_body_height(record.get("sprite") as Sprite3D)
+			record["name_body_height"] = body_height
+		var font_height := ThemeDB.fallback_font.get_height(label.font_size) * label.pixel_size
+		var outline_height := float(label.outline_size * 2) * label.pixel_size
+		var text_half_height := (font_height + outline_height) * 0.5
+		const HAIR_GAP := 0.075
+		label.position.y = (body_height + HAIR_GAP + text_half_height) / up_y
+		record["name_camera_up_y"] = up_y
+
+func _npc_name_projected_gap(role: String) -> float:
+	var record := _npc_record_for_role(role)
+	if record.is_empty():
+		return -1.0
+	var label := record.get("name_label") as Label3D
+	var up := camera.global_basis.y.normalized()
+	var body_height := float(record.get("name_body_height",0.0))
+	var text_height := ThemeDB.fallback_font.get_height(label.font_size) * label.pixel_size + float(label.outline_size * 2) * label.pixel_size
+	return up.dot(label.global_position - (record.activity_root as Node3D).global_position) - text_height * 0.5 - body_height
 
 func _point_by_id(point_id: String) -> Dictionary:
 	for point in points:
@@ -1683,9 +1751,9 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	_add_contact_shadow(activity_root,Vector3(0,ground_y-activity_root.global_position.y+0.005,0),Vector2(0.78,0.46))
 	_add_actor_shadow_proxy(activity_root,role,ground_y-activity_root.global_position.y)
 	component_motion.register_component(sprite,profile,phase/TAU)
-	character_sprites.append({"sprite":sprite,"activity_root":activity_root,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer")})
 	var name_label := _label(title,pos+Vector3(0,2.65,0),22)
 	name_label.reparent(activity_root,true)
+	character_sprites.append({"sprite":sprite,"activity_root":activity_root,"name_label":name_label,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer"),"name_body_height":_visible_body_height(sprite),"name_camera_up_y":-1.0})
 
 func _load_identity_atlas() -> void:
 	if not ResourceLoader.exists(IDENTITY_ATLAS_PATH):
@@ -1974,7 +2042,26 @@ func _build_player() -> void:
 	_add_actor_shadow_proxy(player,"hero",_ground_surface_y(player.position)-player.position.y)
 	_register_sprite_ground_anchor(avatar,avatar_ground_anchor,player,_ground_surface_y(player.position),float(AvatarRenderer.FEET_BASELINE),float(AvatarRenderer.CANVAS_SIZE.y))
 	component_motion.register_component(avatar,"character_hero",0.18/TAU)
+	var motion_rig := AvatarMotionRigScript.new()
+	motion_rig.name="AvatarMotionRig"
+	motion_rig.role="hero"
+	motion_rig.appearance=avatar_appearance.duplicate(true)
+	motion_rig.equipment=avatar_equipped.duplicate(true)
+	motion_rig.ground_height_provider=Callable(self,"_avatar_ground_height")
+	motion_rig.position.y=_ground_surface_y(player.position)-player.position.y
+	motion_rig.visible=false
+	player.add_child(motion_rig)
 	add_child(player)
+	if motion_sources_ready(motion_rig.source_records):
+		avatar_motion_rig=motion_rig
+		avatar_motion_available=true
+		avatar_motion_rig.visible=true
+		avatar.visible=false
+	else:
+		motion_rig.cleanup()
+		motion_rig.queue_free()
+		avatar_motion_rig=null
+		avatar_motion_available=false
 	# Ground collision covers walkable land and dock. Sea never traps the player.
 	for geometry in [Vector3(40,0.2,66),Vector3(5,0.2,13)]:
 		var floor_body := StaticBody3D.new()
@@ -1985,6 +2072,7 @@ func _build_player() -> void:
 		shape.shape=box
 		floor_body.add_child(shape)
 		add_child(floor_body)
+
 func _build_camera() -> void:
 	camera=Camera3D.new()
 	camera.projection=Camera3D.PROJECTION_ORTHOGONAL
@@ -1994,9 +2082,45 @@ func _build_camera() -> void:
 	add_child(camera)
 	camera.look_at(player.position+Vector3(0,1,0))
 	camera.current=true
+	_sync_avatar_motion_camera()
+	avatar_last_physics_position=player.global_position
+	avatar_last_physics_position_valid=true
+
+func _sync_avatar_motion_camera(discontinuous: bool = false) -> void:
+	if not avatar_motion_available or not is_instance_valid(avatar_motion_rig) or not is_instance_valid(camera): return
+	avatar_motion_rig.set_view_projection(camera.global_basis,atan2(camera.global_basis.z.x,camera.global_basis.z.z),discontinuous)
+
+func _sync_external_avatar_reposition() -> void:
+	if not avatar_motion_available or not is_instance_valid(avatar_motion_rig) or not is_instance_valid(player): return
+	var current_position := player.global_position
+	if not avatar_last_physics_position_valid:
+		avatar_last_physics_position=current_position
+		avatar_last_physics_position_valid=true
+		return
+	var externally_repositioned := current_position.distance_to(avatar_last_physics_position)>AVATAR_EXTERNAL_REPOSITION_THRESHOLD
+	if externally_repositioned and not is_riding() and is_instance_valid(camera):
+		# A world teleport is not camera-follow motion. Snap the camera before
+		# posing so settled world-space feet are rebound under the new projection.
+		camera.position=player.position+CAMERA_OFFSET
+		camera.look_at(player.position+Vector3(0,1,0))
+		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+		_sync_avatar_motion_camera(true)
+	avatar_last_physics_position=current_position
+
+func _avatar_ground_height(point: Vector2) -> float:
+	return _ground_surface_y(Vector3(point.x,0.0,point.y))
+
+static func motion_sources_ready(records: Dictionary) -> bool:
+	const REQUIRED_DIRECTIONS := ["front","front_right","right","back_right","back","back_left","left","front_left"]
+	if records.size()!=REQUIRED_DIRECTIONS.size(): return false
+	for direction in REQUIRED_DIRECTIONS:
+		var record: Variant=records.get(direction,{})
+		if not record is Dictionary or not bool(record.get("valid",false)): return false
+	return true
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(player): return
+	_sync_external_avatar_reposition()
 	_update_district_label_visibility()
 	if is_riding():
 		if blocked:
@@ -2006,15 +2130,29 @@ func _physics_process(delta: float) -> void:
 			camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
 			camera.look_at(player.position+Vector3(0,1,0))
 			_update_sprite_grounding()
+			_update_npc_name_labels()
 			_refresh_avatar_texture(_ride_pose_frame())
 			nearest={"id":"ride-tide","label":"離開潮汐貝殼輪","position":player.global_position,"marker":null}
 			for point in points:
 				var marker := point.get("marker") as Label3D
 				if is_instance_valid(marker): marker.visible=false
+			avatar_last_physics_position=player.global_position
 			return
 	var movement := Vector2.ZERO if blocked else Input.get_vector("move_left","move_right","move_up","move_down")
-	player.velocity=Vector3(movement.x*AVATAR_RUN_SPEED,-4,movement.y*AVATAR_RUN_SPEED)
+	# Default travel is the comfortable jog; Shift keeps a slower, careful pace.
+	avatar_run_requested = not blocked and not Input.is_key_pressed(KEY_SHIFT)
+	var desired_speed := AVATAR_RUN_SPEED if avatar_run_requested else AVATAR_WALK_SPEED
+	var desired_horizontal := movement*desired_speed
+	var current_horizontal := Vector2(player.velocity.x,player.velocity.z)
+	if blocked:
+		current_horizontal=Vector2.ZERO
+	else:
+		if movement.length_squared()>0.0001: avatar_motion_speed_limit=desired_speed
+		current_horizontal=current_horizontal.move_toward(desired_horizontal,avatar_motion_speed_limit*delta/AVATAR_ACCELERATION_SECONDS)
+	player.velocity=Vector3(current_horizontal.x,-4.0,current_horizontal.y)
 	var previous_position: Vector3=player.position
+	var previous_world_position: Vector3=player.global_position
+	var previous_rig_world_position: Vector3=avatar_motion_rig.global_position if avatar_motion_available else Vector3.ZERO
 	player.move_and_slide()
 	player.position.z=clampf(player.position.z,-43.6,26.5)
 	player.position.x=clampf(player.position.x,-18.6,18.6)
@@ -2029,13 +2167,27 @@ func _physics_process(delta: float) -> void:
 	if player.position.y < -1.0:
 		player.position=Vector3(0,0.3,10)
 		previous_position=player.position
-	var actual_delta := player.position - previous_position
-	var horizontal_delta := Vector2(actual_delta.x, actual_delta.z)
+		previous_world_position=player.global_position
+		if avatar_motion_available: previous_rig_world_position=avatar_motion_rig.global_position
+	var actual_world_delta := player.global_position-previous_world_position
+	var horizontal_delta := Vector2(actual_world_delta.x, actual_world_delta.z)
 	var travelled := horizontal_delta.length()
 	avatar_is_walking = travelled > WALK_DISTANCE_EPSILON
 	if avatar_is_walking:
 		facing = quantize_walk_direction(horizontal_delta, facing)
 		walk_distance_phase = advance_walk_phase(walk_distance_phase, travelled)
+	if avatar_motion_available:
+		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+		camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
+		camera.look_at(player.position+Vector3(0,1,0))
+		_sync_avatar_motion_camera()
+		avatar_motion_rig.set_direction(facing)
+		var motion_presented := not blocked and (avatar_action_remaining<=0.0 or avatar_is_walking) and (not reduced_motion or avatar_is_walking)
+		if not motion_presented:
+			avatar_motion_rig.cancel_motion()
+		else:
+			var rig_world_delta: Vector3=avatar_motion_rig.global_position-previous_rig_world_position
+			avatar_motion_rig.advance_from_motion(delta,rig_world_delta,avatar_run_requested)
 	var walk_frame_count := int(avatar_renderer.walk_frame_count(facing)) if avatar_renderer != null else 8
 	var frame := walk_frame_for_phase(walk_distance_phase, walk_frame_count)
 	if avatar_action_remaining > 0.0:
@@ -2052,11 +2204,14 @@ func _physics_process(delta: float) -> void:
 	_refresh_avatar_texture(frame)
 	camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
 	camera.look_at(player.position+Vector3(0,1,0))
+	if avatar_motion_available: _sync_avatar_motion_camera()
 	_update_sprite_grounding()
+	_update_npc_name_labels()
 	var area := "海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場")
 	if area!=current_area:
 		current_area=area
 		area_changed.emit(area)
+	avatar_last_physics_position=player.global_position
 	nearest={}
 	var best := 2.4
 	for point in points:
@@ -2067,17 +2222,32 @@ func _physics_process(delta: float) -> void:
 	for point in points:
 		var marker: Label3D=point.get("marker") as Label3D
 		if is_instance_valid(marker): marker.visible=point.get("id","")==nearest.get("id","")
+
 func _process(delta: float) -> void:
 	if not blocked: time+=delta
 	if is_instance_valid(player):
 		lamp_selection_elapsed += delta
 		if lamp_selection_elapsed >= LAMP_SELECTION_INTERVAL and player.global_position.distance_squared_to(lamp_selection_player_position) >= 0.04:
 			_update_lamp_selection()
-	if is_instance_valid(npc_activity) and npc_activity_paused!=blocked:
-		npc_activity_paused=blocked
-		npc_activity.set_activity_paused(blocked)
+	sync_activity_pause()
 	if not blocked and not pending_npc_interaction.is_empty():
 		_play_pending_npc_interaction()
+
+func sync_activity_pause() -> void:
+	var pause_activity := blocked and not npc_dialogue_hold
+	if is_instance_valid(npc_activity) and npc_activity_paused!=pause_activity:
+		npc_activity_paused=pause_activity
+		npc_activity.set_activity_paused(pause_activity)
+
+func set_dialogue_hold(held: bool) -> void:
+	npc_dialogue_hold=held
+	if not is_instance_valid(npc_activity): return
+	npc_activity.set_dialogue_hold(held)
+	if held:
+		npc_activity_paused=false
+		npc_activity.set_activity_paused(false)
+		_play_pending_npc_interaction()
+
 func _on_interaction_requested(id: String, _label: String) -> void:
 	var role := ""
 	var action := "interact"
@@ -2154,21 +2324,32 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func play_action(name: String) -> void:
 	var action := "photograph" if name == "photo" else name
 	if action not in ["wave", "photograph", "interact", "celebrate"]: return
+	if avatar_motion_available and not is_riding():
+		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+		avatar_motion_rig.cancel_motion()
 	avatar_action=action
 	avatar_action_remaining=0.8
 	avatar_action_elapsed=0.0
 	_refresh_avatar_texture(0)
+
 func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
 	if avatar_appearance == appearance and avatar_equipped == equipped: return
 	avatar_appearance=appearance.duplicate(true)
 	avatar_equipped=equipped.duplicate(true)
+	if avatar_motion_available:
+		avatar_motion_rig.set_appearance(avatar_appearance,avatar_equipped)
 	last_avatar_frame=-1
 	_refresh_avatar_texture(0)
+
 func _refresh_avatar_texture(frame: int) -> void:
 	if not is_instance_valid(avatar) or avatar_renderer == null: return
 	var riding := is_riding()
 	var action := "sit" if riding else (avatar_action if avatar_action_remaining > 0.0 and not avatar_is_walking else ("walk" if avatar_is_walking else "idle"))
 	var direction := "front" if riding else facing
+	var show_motion_rig := avatar_motion_available and not riding and (avatar_action_remaining<=0.0 or avatar_is_walking) and (not reduced_motion or avatar_is_walking)
+	if avatar_motion_available:
+		avatar_motion_rig.visible=show_motion_rig
+		avatar.visible=not show_motion_rig
 	var display_frame := _ride_pose_frame() if riding else frame
 	if action != "walk" and not riding:
 		var animation_library = avatar_renderer.animation_library
@@ -2182,6 +2363,7 @@ func _refresh_avatar_texture(frame: int) -> void:
 	last_avatar_direction=direction
 	last_avatar_frame=display_frame
 	last_avatar_action=action
+
 func _ride_pose_frame() -> int:
 	if reduced_motion: return 0
 	var moment := float(island_attractions.ride_elapsed()) if is_instance_valid(island_attractions) else 0.0
@@ -2216,6 +2398,7 @@ func set_time_of_day(phase_id: Variant) -> void:
 		if not is_instance_valid(shadow): continue
 		var ground_offset: Vector3 = record.get("ground_offset",Vector3.ZERO)
 		shadow.position = ground_offset
+
 func _update_lamp_selection(force := false) -> void:
 	if not is_instance_valid(player): return
 	if not force and lamp_selection_elapsed < LAMP_SELECTION_INTERVAL: return
@@ -2254,7 +2437,6 @@ func _update_lamp_selection(force := false) -> void:
 		lamp.light_energy = 0.0
 		lamp.shadow_enabled = false
 
-
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
 	sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
@@ -2282,11 +2464,15 @@ func start_ride() -> bool:
 func end_ride() -> void:
 	if is_instance_valid(island_attractions):
 		island_attractions.end_ride()
+	if avatar_motion_available:
+		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+		avatar_motion_rig.cancel_motion()
 	avatar_is_walking=false
 	avatar_action=""
 	avatar_action_remaining=0.0
 	avatar_action_elapsed=0.0
 	_refresh_avatar_texture(0)
+
 func is_riding() -> bool:
 	return is_instance_valid(island_attractions) and bool(island_attractions.is_riding())
 

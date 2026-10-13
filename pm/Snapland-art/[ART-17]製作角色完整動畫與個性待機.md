@@ -135,3 +135,51 @@ Root 實際查看兩張 1280×720 原生比較圖：三張全身姿勢均以 200
 本證據包固定基準：`909356b551f280810f860417b1629fa2b5398d45`；分支：`feature/island-first-park`。保存的原生量測保留實際截圖基準，沒有在證據包新基準重跑 GPU。票況：進行中。
 
 [本輪靜態退件證據提交](https://github.com/deadline314/Snapland/commit/9c69d0ae48929a63a356db509c026318261424fb)。
+
+## 2026-10-13 試玩後修訂
+
+使用者否定目前島上畫面／動畫／介面品質。歷史交付證據只代表當時版本與當時範圍；本輪新增品質驗收如下。
+
+- [ ] 重新檢查主角與三位NPC的動作及待機；確認步行接觸、重心、連續姿勢、角色身份與手腳完整，正常及慢放都自然。
+- [x] 保存本輪原生前後畫面與影片，實際查看後記錄通過或拒絕原因。
+
+Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
+
+# Commit-5
+
+## 內文
+
+**問題：** 先前步態與NPC素材候選曾因腳部接地、角色輪廓或手髖缺口而退件，CPU結構測試不足以判斷原生畫面是否完整。
+
+**改動：** 保存主角新步態／待機候選、三位NPC整合呈現，以及實際島上路線的版本化原生影片與截圖；保留先前失敗版本和證據，不將候選參數或測試截圖當作完整動畫已完成。
+
+**驗收：** 主角walk10正常速度54.617秒、四分之一速度218.417秒；idle10正常197.617秒、四分之一790.417秒，四段影片均播放至結尾。Root檢視idle10三種外觀、八方向共72張PNG及正面呼吸／捲髮背右專項圖；先前正面眼鼻透明帶已消失。NPC第11版正常74.433秒、四分之一297.683秒均播放至結尾，Root檢視三位角色21張姿勢／路線PNG及三張聯絡表；先前的手髖缺口已不再出現。這些結果只支持本輪明列的來源、輪廓、接地可見度與路線呈現檢查，不代表全動作、所有外觀或NPC八方向自然度已驗收。
+
+整圈路線原生驗證使用真實WASD與E輸入，5,500個模擬影格、91.667秒遊戲時間、178.545公尺，包含上下觀景坡與搭乘／離開設施；報告記錄0次傳送／復原、0個ERROR，9張路線截圖。正常91.667秒與四分之一速366.617秒影片均已播放至結尾，9張截圖聯絡表均已檢視，另全尺寸檢視碼頭與導覽員畫面。交付影片為正常30FPS/1280寬（CRF28）與四分之一速15FPS/960寬（CRF30、上限1.6Mbps）的壓縮版本；原始60FPS影片保留於私人驗收資料，無需進版控。Godot Movie Maker屬離線錄影，所有片長／編碼規格不代表遊戲即時FPS或效能基準。
+
+NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束後完整3.017秒觀察記錄NPC活動時鐘前進3.133秒、113次足部姿勢改變、rig位移0.320公尺、角色根節點路徑0.496公尺；暫停期間時鐘、動作、貼圖與路徑皆凍結。Root檢視開啟對話、對話後待機、暫停三張原生圖，確認頭、手與腳完整可見。此測試有腳本放置角色／相機並暫時隱藏主角畫面，屬具明示限制的原生測試，不是人類遊玩證據。正常影片7.467秒、四分之一速影片29.850秒均已播放至結尾；443影格是暫停截圖點，不是影片總影格數。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 本輪受影響Godot測試與匯入 | Root回報15項通過；不等同完整測試套件 |
+| Python entrypoint測試 | Root回報13項通過 |
+| 主角步態／待機原生影片 | 正常與四分之一速度均播放至結尾；限於本輪外觀與姿勢檢視 |
+| NPC原生影片／逐姿勢圖 | 正常與四分之一速度均播放至結尾；三角色各7姿勢已檢視 |
+| 島上整圈路線 | 真實輸入與路線條件通過；正常及四分之一速影片播放至結尾；9張聯絡表與兩張全尺寸重點圖已檢視 |
+| NPC對話後待機原生回歸 | GPU exit 0／0 ERROR；三張原生圖與正常／四分之一速影片已檢視 |
+
+### 截圖與影片
+
+[主角walk10正常](images/ART-17-hero-body-tenth-normal.mp4) · [主角walk10四分之一速](images/ART-17-hero-body-tenth-quarter.mp4) · [主角idle10正常](images/ART-17-hero-idle-tenth-normal.mp4) · [主角idle10四分之一速](images/ART-17-hero-idle-tenth-quarter.mp4)
+
+[NPC第11版正常](images/ART-17-npc-island-eleventh-normal.mp4) · [NPC第11版四分之一速](images/ART-17-npc-island-eleventh-quarter.mp4) · [票票姿勢聯絡表](images/ART-17-npc11-ticket-contact.png) · [小角姿勢聯絡表](images/ART-17-npc11-imp-contact.png) · [阿浪姿勢聯絡表](images/ART-17-npc11-announcer-contact.png)
+
+[對話開啟圖](images/ART-17-dialogue-accepted-open.png) · [對話後待機圖](images/ART-17-dialogue-accepted-idle.png) · [暫停凍結圖](images/ART-17-dialogue-accepted-pause.png) · [對話回歸報告](images/ART-17-dialogue-accepted-report.json) · [原生log](images/ART-17-dialogue-accepted.log) · [正常影片](images/ART-17-dialogue-accepted-normal.mp4) · [四分之一速影片](images/ART-17-dialogue-accepted-quarter.mp4)
+
+[整圈路線報告](images/ART-17-island-motion-finalproof-report.json) · [整圈路線log](images/ART-17-island-motion-finalproof.log) · [九張截圖聯絡表](images/ART-17-island-motion-finalproof-contact.png) · [正常影片](images/ART-17-island-motion-finalproof-normal.mp4) · [四分之一速影片](images/ART-17-island-motion-finalproof-quarter.mp4)。兩段影片為離線Movie Maker輸出與壓縮交付，不作即時效能基準。
+
+本輪驗收證據基準：`b2c44bf`；分支：`feature/island-experience`。程式與證據提交連結待Root完成交付整理後補入。
+
+票況維持進行中；完整角色動作／外觀覆蓋、打包播放、降低動態完整驗收仍未勾選。

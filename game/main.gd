@@ -342,6 +342,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	overlay.show()
 	modal_kind=kind
 	world.blocked=true
+	world.sync_activity_pause()
 	world.set_process(kind!="pause")
 	audio.set_paused(kind=="pause" or (kind=="time" and session!=null))
 	var dim := ColorRect.new()
@@ -720,6 +721,7 @@ func _start_dialogue(lines: Array, done: Callable, cancelled: Callable = Callabl
 		dialogue_panel.set_process_unhandled_key_input(true)
 	overlay.hide()
 	hud.show()
+	world.set_dialogue_hold(true)
 	world.blocked=true
 	_render_dialogue()
 
@@ -757,6 +759,7 @@ func _finish_dialogue(cancelled: bool = false) -> void:
 	overlay.hide()
 	modal_kind=""
 	if is_instance_valid(world):
+		world.set_dialogue_hold(false)
 		world.blocked=session!=null
 	if is_instance_valid(hud): hud.show()
 	if cancelled:
@@ -777,7 +780,8 @@ func _dialogue_panel_exiting(panel: Control) -> void:
 	if modal_kind=="dialogue":
 		modal_kind=""
 		if is_instance_valid(world):
-				world.blocked=session!=null
+			world.set_dialogue_hold(false)
+			world.blocked=session!=null
 
 func _dialogue_panel_resized() -> void:
 	if not is_instance_valid(dialogue_panel): return

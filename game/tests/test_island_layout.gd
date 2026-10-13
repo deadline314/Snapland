@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Motion = preload("res://game/world/npc_walk_motion.gd")
+
 var failures: Array[String] = []
 
 func _initialize() -> void:
@@ -51,16 +53,35 @@ func _run() -> void:
 		_check(not world._npc_record_for_role(npc_role).is_empty(), "%s character remains in the world" % npc_role)
 	var announcer_record: Dictionary = world._npc_record_for_role("announcer")
 	var announcer_root := announcer_record.get("activity_root") as Node3D
-	var announcer_origin := announcer_root.global_position if is_instance_valid(announcer_root) else Vector3.INF
-	_check(announcer_origin.distance_to(Vector3(3.4,0,-4.0))<0.01, "announcer stands in the open center-plaza foreground")
+	var announcer_activity_record: Dictionary={}
+	for activity_record in world.npc_activity._records:
+		if String(activity_record.role)=="announcer":
+			announcer_activity_record=activity_record
+			break
+	var authored_anchor: Vector3=announcer_activity_record.get("baseline_anchor_position",Vector3.INF)
+	var announcer_route_origin: Vector3=announcer_root.get_parent().to_global(authored_anchor) if is_instance_valid(announcer_root) and not announcer_activity_record.is_empty() else Vector3.INF
+	_check(Vector2(announcer_route_origin.x-3.4,announcer_route_origin.z+4.0).length()<0.01, "announcer authored route remains in the open center-plaza foreground")
 	var announcer_route_clear := true
-	for route_x in [announcer_origin.x-0.6,announcer_origin.x,announcer_origin.x+0.6]:
+	for route_x in [announcer_route_origin.x-0.6,announcer_route_origin.x,announcer_route_origin.x+0.6]:
 		for lamp in world.lamps:
-			var horizontal_clearance := Vector2(route_x-lamp.global_position.x,announcer_origin.z-lamp.global_position.z).length()
+			var horizontal_clearance := Vector2(route_x-lamp.global_position.x,announcer_route_origin.z-lamp.global_position.z).length()
 			if horizontal_clearance<2.6: announcer_route_clear=false
 	_check(announcer_route_clear, "announcer side-step route stays clear of plaza flower lamps")
-	_check(Vector2(announcer_origin.x-9.0,announcer_origin.z+5.0).length()>5.0, "announcer remains visually separate from the day/night clock")
 	await physics_frame
+	var announcer_live_position: Vector3=announcer_root.global_position if is_instance_valid(announcer_root) else Vector3.INF
+	_check(absf(announcer_live_position.x-announcer_route_origin.x)<=0.61 and absf(announcer_live_position.z-announcer_route_origin.z)<0.01, "announcer live root remains within its authored lateral route and fixed Z")
+	var announcer_motion: Variant=announcer_activity_record.get("motion")
+	var announcer_sprite := announcer_record.get("sprite") as Sprite3D
+	_check(is_instance_valid(announcer_motion) and announcer_motion.supported, "announcer measured motion adapter remains available for projected-foot checks")
+	if is_instance_valid(announcer_motion) and announcer_sprite!=null:
+		for route_x in [announcer_route_origin.x-0.6,announcer_route_origin.x,announcer_route_origin.x+0.6]:
+			_check_projected_npc_feet(world,announcer_motion,announcer_sprite,Vector3(route_x,announcer_route_origin.y,announcer_route_origin.z),"announcer full route x=%.2f" % route_x)
+		var announcer_rig: Node=announcer_motion.rig
+		if is_instance_valid(announcer_rig):
+			for foot_index in range(announcer_rig.foot_world.size()):
+				var foot: Vector3=announcer_rig.foot_world[foot_index]
+				_check(foot.y+0.002>=world._ground_surface_y(foot),"announcer live gait foot %d clears its actual sampled terrain" % foot_index)
+	_check(Vector2(announcer_route_origin.x-9.0,announcer_route_origin.z+5.0).length()>5.0, "announcer full authored route remains visually separate from the day/night clock")
 	# Probe lateral clearance at authored surface heights. This does not prove a
 	# character can climb a ramp; the actual physics traversal below checks that.
 	for index in range(12):
@@ -112,9 +133,9 @@ func _run() -> void:
 	var right:=InputEventKey.new()
 	right.keycode=KEY_D; right.physical_keycode=KEY_D; right.pressed=true
 	Input.parse_input_event(right); Input.flush_buffered_events()
-	# Budget the measured distance at the legacy 5 m/s run speed, with 40 extra frames
-	# for continuous ramp/deck contact settling.
-	var climb_ticks := ceili((10.2-world.player.position.x)/world_script.AVATAR_RUN_SPEED*60.0)+40
+	# Budget the measured distance at the configured 2 m/s jog, then include the
+	# 0.16 s acceleration and 40 frames for continuous ramp/deck contact settling.
+	var climb_ticks := ceili((10.2-world.player.position.x)/world_script.AVATAR_RUN_SPEED*60.0)+ceili(world_script.AVATAR_ACCELERATION_SECONDS*60.0)+40
 	for i in climb_ticks: await physics_frame
 	right=InputEventKey.new()
 	right.keycode=KEY_D; right.physical_keycode=KEY_D; right.pressed=false
@@ -157,6 +178,24 @@ func _has_semantic_landmarks(districts: Node) -> bool:
 func _check(condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)
+
+func _check_projected_npc_feet(world: Node, motion: Variant, sprite: Sprite3D, root_position: Vector3, label: String) -> void:
+	var samples: PackedVector2Array=motion._build_foot_samples(sprite.texture)
+	var camera := world.camera as Camera3D
+	var camera_up := camera.global_basis.y.normalized()
+	var camera_right := camera.global_basis.x.normalized()
+	var ground_y: float=world._ground_surface_y(root_position)
+	var foot_offset: float=(float(Motion.ACTIVITY_FEET_ROW)-float(Motion.ACTIVITY_CANVAS_SIZE.y)*0.5)*sprite.pixel_size
+	var clearance := 0.0
+	for sample in samples:
+		var point := Vector3(root_position.x,ground_y,root_position.z)+camera_up*(foot_offset+sample.y*sprite.pixel_size)+camera_right*(sample.x*sprite.pixel_size)
+		clearance=maxf(clearance,world._ground_surface_y(point)-point.y+Motion.FOOT_GUARD_PIXELS*sprite.pixel_size)
+	clearance=maxf(0.0,clearance)
+	var visible_origin := Vector3(root_position.x,ground_y,root_position.z)+camera_up*foot_offset+Vector3(0.0,sprite.pixel_size+clearance,0.0)
+	for sample in samples:
+		var visible_foot := visible_origin+camera_up*(sample.y*sprite.pixel_size)+camera_right*(sample.x*sprite.pixel_size)
+		_check(visible_foot.y+0.00001>=world._ground_surface_y(visible_foot),"%s projected source-foot sample clears terrain" % label)
+	_check(not samples.is_empty(),"%s checks nonempty alpha-visible source-foot geometry" % label)
 
 func _finish() -> void:
 	if failures.is_empty():

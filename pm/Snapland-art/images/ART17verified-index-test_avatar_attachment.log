@@ -1,0 +1,5 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: 64cels x3styles horn/ear opaque component contacts
+CACHE_BENCH 64celsx3styles first_ms=10186 repeat_ms=4350 source_metrics=64 haircuts=16
+PASS: measured walk head attachments

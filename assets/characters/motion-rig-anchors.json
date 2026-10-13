@@ -1,0 +1,766 @@
+{
+  "schema_version": 1,
+  "source_canvas": [
+    280,
+    360
+  ],
+  "roles": {
+    "hero": {
+      "directions": {
+        "front": {
+          "pelvis": [
+            142,
+            268
+          ],
+          "lower": [
+            [
+              111,
+              275,
+              29,
+              29
+            ],
+            [
+              144,
+              280,
+              27,
+              18
+            ],
+            [
+              94,
+              296,
+              50,
+              51
+            ],
+            [
+              138,
+              286,
+              44,
+              44
+            ]
+          ],
+          "boot": [
+            94,
+            296,
+            50,
+            51
+          ],
+          "skin_rect": [
+            123,
+            285,
+            6,
+            8
+          ],
+          "frame": 0,
+          "boots_reuse": "Both feet use complete primary grounded shoe; malformed trailing footwear is not mirrored with the actor",
+          "boot_pivot_x": 126,
+          "hip_points": [
+            [
+              126,
+              273
+            ],
+            [
+              157,
+              278
+            ]
+          ],
+          "hip_half_width_px": [
+            12.0,
+            12.5
+          ],
+          "opening_spans": [
+            [
+              116,
+              135,
+              278
+            ],
+            [
+              147,
+              167,
+              283
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              88,
+              273,
+              62,
+              87
+            ],
+            [
+              132,
+              278,
+              56,
+              82
+            ]
+          ],
+          "garment_guards": [],
+          "boot_exclusions": [
+            [
+              139,
+              296,
+              5,
+              21
+            ],
+            [
+              141,
+              317,
+              3,
+              2
+            ]
+          ]
+        },
+        "back": {
+          "pelvis": [
+            143,
+            262
+          ],
+          "lower": [
+            [
+              114,
+              269,
+              26,
+              22
+            ],
+            [
+              141,
+              274,
+              28,
+              29
+            ],
+            [
+              106,
+              282,
+              36,
+              65
+            ],
+            [
+              138,
+              292,
+              42,
+              55
+            ]
+          ],
+          "boot": [
+            140,
+            296,
+            38,
+            51
+          ],
+          "skin_rect": [
+            148,
+            283,
+            6,
+            8
+          ],
+          "frame": 0,
+          "boots_reuse": "Both feet use complete primary grounded shoe; malformed trailing footwear is not mirrored with the actor",
+          "boot_asset": "res://assets/characters/traveller-motion-back-boot-v1.png",
+          "boot_asset_region": [
+            424,
+            474,
+            391,
+            517
+          ],
+          "boot_asset_scale": 0.08771929824561403,
+          "boot_asset_pivot": [
+            619,
+            735
+          ],
+          "boot_asset_sole": 989,
+          "hip_points": [
+            [
+              126,
+              267
+            ],
+            [
+              155,
+              272
+            ]
+          ],
+          "boot_palette_reference": {
+            "direction": "right",
+            "rect": [
+              158,
+              311,
+              66,
+              36
+            ]
+          },
+          "hip_half_width_px": [
+            11.0,
+            12.5
+          ],
+          "opening_spans": [
+            [
+              117,
+              134,
+              272
+            ],
+            [
+              145,
+              165,
+              277
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              100,
+              267,
+              48,
+              93
+            ],
+            [
+              132,
+              272,
+              54,
+              88
+            ]
+          ],
+          "garment_guards": [
+            [
+              173,
+              273,
+              9,
+              14
+            ]
+          ],
+          "boot_exclusions": []
+        },
+        "left": {
+          "pelvis": [
+            149,
+            267
+          ],
+          "lower": [
+            [
+              112,
+              274,
+              29,
+              32
+            ],
+            [
+              158,
+              274,
+              30,
+              28
+            ],
+            [
+              69,
+              295,
+              69,
+              52
+            ],
+            [
+              157,
+              290,
+              62,
+              57
+            ]
+          ],
+          "boot": [
+            69,
+            295,
+            69,
+            52
+          ],
+          "skin_rect": [
+            129,
+            285,
+            6,
+            8
+          ],
+          "frame": 0,
+          "boots_reuse": "Both feet use complete primary grounded shoe; malformed trailing footwear is not mirrored with the actor",
+          "boot_pivot_x": 126,
+          "hip_points": [
+            [
+              128,
+              272
+            ],
+            [
+              170,
+              272
+            ]
+          ],
+          "hip_half_width_px": [
+            9.0,
+            12.0
+          ],
+          "opening_spans": [
+            [
+              121,
+              134,
+              277
+            ],
+            [
+              161,
+              180,
+              277
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              63,
+              272,
+              84,
+              88
+            ],
+            [
+              151,
+              272,
+              74,
+              88
+            ]
+          ],
+          "garment_guards": [],
+          "boot_exclusions": []
+        },
+        "right": {
+          "pelvis": [
+            149,
+            267
+          ],
+          "lower": [
+            [
+              109,
+              274,
+              31,
+              25
+            ],
+            [
+              160,
+              275,
+              26,
+              30
+            ],
+            [
+              75,
+              292,
+              54,
+              55
+            ],
+            [
+              158,
+              296,
+              66,
+              51
+            ]
+          ],
+          "boot": [
+            158,
+            296,
+            66,
+            51
+          ],
+          "skin_rect": [
+            165,
+            285,
+            6,
+            8
+          ],
+          "frame": 0,
+          "boots_reuse": "Both feet use complete primary grounded shoe; malformed trailing footwear is not mirrored with the actor",
+          "boot_pivot_x": 173,
+          "hip_points": [
+            [
+              124,
+              271
+            ],
+            [
+              172,
+              273
+            ]
+          ],
+          "hip_half_width_px": [
+            12.0,
+            9.5
+          ],
+          "opening_spans": [
+            [
+              114,
+              133,
+              276
+            ],
+            [
+              165,
+              179,
+              278
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              69,
+              272,
+              77,
+              88
+            ],
+            [
+              152,
+              273,
+              78,
+              87
+            ]
+          ],
+          "garment_guards": [],
+          "boot_exclusions": []
+        },
+        "front_left": {
+          "pelvis": [
+            151,
+            266
+          ],
+          "lower": [
+            [
+              117,
+              273,
+              30,
+              29
+            ],
+            [
+              156,
+              274,
+              27,
+              18
+            ],
+            [
+              79,
+              293,
+              65,
+              54
+            ],
+            [
+              156,
+              284,
+              50,
+              49
+            ]
+          ],
+          "boot": [
+            79,
+            293,
+            65,
+            54
+          ],
+          "skin_rect": [
+            132,
+            282,
+            6,
+            8
+          ],
+          "frame": 0,
+          "boots_reuse": "Both feet use complete primary grounded shoe; malformed trailing footwear is not mirrored with the actor",
+          "boot_pivot_x": 132,
+          "hip_points": [
+            [
+              130,
+              268
+            ],
+            [
+              170,
+              271
+            ]
+          ],
+          "hip_half_width_px": [
+            14.5,
+            13.0
+          ],
+          "opening_spans": [
+            [
+              118,
+              142,
+              273
+            ],
+            [
+              159,
+              180,
+              276
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              73,
+              271,
+              80,
+              89
+            ],
+            [
+              150,
+              272,
+              62,
+              88
+            ]
+          ],
+          "garment_guards": [],
+          "boot_exclusions": []
+        },
+        "front_right": {
+          "pelvis": [
+            136,
+            259
+          ],
+          "lower": [
+            [
+              137,
+              266,
+              33,
+              34
+            ],
+            [
+              104,
+              272,
+              28,
+              19
+            ],
+            [
+              144,
+              291,
+              62,
+              56
+            ],
+            [
+              82,
+              285,
+              49,
+              49
+            ]
+          ],
+          "boot": [
+            144,
+            291,
+            62,
+            56
+          ],
+          "skin_rect": [
+            148,
+            278,
+            6,
+            8
+          ],
+          "frame": 0,
+          "boots_reuse": "Both feet use complete primary grounded shoe; malformed trailing footwear is not mirrored with the actor",
+          "boot_pivot_x": 154,
+          "hip_points": [
+            [
+              157,
+              264
+            ],
+            [
+              118,
+              270
+            ]
+          ],
+          "hip_half_width_px": [
+            14.5,
+            13.0
+          ],
+          "opening_spans": [
+            [
+              145,
+              169,
+              269
+            ],
+            [
+              107,
+              128,
+              275
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              131,
+              264,
+              81,
+              96
+            ],
+            [
+              76,
+              270,
+              62,
+              90
+            ]
+          ],
+          "garment_guards": [],
+          "boot_exclusions": []
+        },
+        "back_left": {
+          "pelvis": [
+            147,
+            265
+          ],
+          "lower": [
+            [
+              160,
+              272,
+              29,
+              29
+            ],
+            [
+              108,
+              272,
+              25,
+              21
+            ],
+            [
+              157,
+              289,
+              49,
+              58
+            ],
+            [
+              84,
+              283,
+              53,
+              51
+            ]
+          ],
+          "boot": [
+            157,
+            289,
+            49,
+            58
+          ],
+          "skin_rect": [
+            165,
+            281,
+            6,
+            8
+          ],
+          "frame": 0,
+          "boots_reuse": "Both feet use complete primary grounded shoe; malformed trailing footwear is not mirrored with the actor",
+          "boot_pivot_x": 174,
+          "hip_points": [
+            [
+              173,
+              270
+            ],
+            [
+              118,
+              270
+            ]
+          ],
+          "hip_half_width_px": [
+            11.5,
+            8.5
+          ],
+          "opening_spans": [
+            [
+              164,
+              182,
+              275
+            ],
+            [
+              112,
+              124,
+              275
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              151,
+              270,
+              61,
+              90
+            ],
+            [
+              78,
+              270,
+              65,
+              90
+            ]
+          ],
+          "garment_guards": [],
+          "boot_exclusions": []
+        },
+        "back_right": {
+          "pelvis": [
+            135,
+            262
+          ],
+          "lower": [
+            [
+              94,
+              271,
+              30,
+              28
+            ],
+            [
+              149,
+              269,
+              26,
+              22
+            ],
+            [
+              78,
+              288,
+              49,
+              59
+            ],
+            [
+              145,
+              282,
+              54,
+              50
+            ]
+          ],
+          "boot": [
+            78,
+            288,
+            49,
+            59
+          ],
+          "skin_rect": [
+            112,
+            279,
+            6,
+            8
+          ],
+          "frame": 0,
+          "boots_reuse": "Both feet use complete primary grounded shoe; malformed trailing footwear is not mirrored with the actor",
+          "boot_pivot_x": 109,
+          "hip_points": [
+            [
+              110,
+              269
+            ],
+            [
+              166,
+              267
+            ]
+          ],
+          "hip_half_width_px": [
+            12.5,
+            8.0
+          ],
+          "opening_spans": [
+            [
+              100,
+              120,
+              274
+            ],
+            [
+              160,
+              171,
+              272
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              72,
+              269,
+              61,
+              91
+            ],
+            [
+              139,
+              267,
+              66,
+              93
+            ]
+          ],
+          "garment_guards": [],
+          "boot_exclusions": []
+        }
+      }
+    }
+  }
+}

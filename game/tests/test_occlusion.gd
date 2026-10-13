@@ -331,7 +331,9 @@ func _run() -> void:
 	park_world.occlusion_controller._process(0.0)
 	assert(not arch_title.visible, "reduced motion retains the active visibility aid and hides only the overlapping title")
 	Input.action_press("move_down")
-	await create_timer(1.35).timeout
+	# Cover the same 5.5m passage at the real travel speed and start acceleration.
+	var arch_walk_frames := ceili((5.5/ParkWorldScript.AVATAR_RUN_SPEED+ParkWorldScript.AVATAR_ACCELERATION_SECONDS)*60.0)
+	for step in range(arch_walk_frames): await physics_frame
 	Input.action_release("move_down")
 	await create_timer(0.2).timeout
 	park_world.occlusion_controller.refresh_visibility()

@@ -1,0 +1,2248 @@
+{
+	"captures": [
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Natural source-Sprite rest; three seconds of controller runtime",
+			"elapsed_ms": 9755,
+			"engine_frame": 11,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-idle-rest.png",
+			"phase": "idle-rest",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (544.3728, 219.4755), S: (257.4094, 307.1998)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (544.3728, 219.4755), S: (257.4094, 307.1998)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "greet",
+			"controller_direction": "front",
+			"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+			"elapsed_ms": 13095,
+			"engine_frame": 122,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-greet.png",
+			"phase": "greet",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (544.3727, 215.8853), S: (257.4094, 310.3835)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (544.3727, 215.8853), S: (257.4094, 310.3835)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "interact",
+			"controller_direction": "front",
+			"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+			"elapsed_ms": 15523,
+			"engine_frame": 202,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-interact.png",
+			"phase": "interact",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (542.0847, 214.2937), S: (259.6974, 311.975)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (542.0847, 214.2937), S: (259.6974, 311.975)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "idle_gesture",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: idle_gesture",
+			"elapsed_ms": 22175,
+			"engine_frame": 431,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-personality-idle_gesture.png",
+			"phase": "personality-idle_gesture",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (542.0847, 215.8853), S: (257.4094, 310.3834)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (542.0847, 215.8853), S: (257.4094, 310.3834)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "emotion_happy",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: emotion_happy",
+			"elapsed_ms": 36757,
+			"engine_frame": 951,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-personality-emotion_happy.png",
+			"phase": "personality-emotion_happy",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (542.0847, 214.2937), S: (259.6974, 311.975)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (542.0847, 214.2937), S: (259.6974, 311.975)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": false,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Actual Main NPC route; measured rig direction=right",
+			"elapsed_ms": 44609,
+			"engine_frame": 1229,
+			"gait_rig_direction": "right",
+			"gait_rig_visible": true,
+			"gait_source_record": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 261.0,
+							"hip_to_ankle_px": 35.0,
+							"leg_length_scale": 0.518518518518518,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.233333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							314.0,
+							150.0,
+							349.0,
+							784.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 262.0,
+							"hip_to_ankle_px": 34.0,
+							"leg_length_scale": 0.503703703703704,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.226666666666667
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							899.0,
+							146.0,
+							324.0,
+							791.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.783665, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-native-route-gait-right.png",
+			"phase": "native-route-gait-right",
+			"rig_visible_part_bounds_px": [
+				{
+					"bounds_px": "[P: (542.907, 208.3822), S: (268.8, 345.6)]",
+					"name": "@Sprite3D@1535"
+				},
+				{
+					"bounds_px": "[P: (654.3678, 457.1918), S: (7.478455, 33.63727)]",
+					"name": "@MeshInstance3D@1539"
+				},
+				{
+					"bounds_px": "[P: (548.2789, 247.3204), S: (268.8, 294.4359)]",
+					"name": "@Sprite3D@1540"
+				},
+				{
+					"bounds_px": "[P: (695.6478, 457.1918), S: (7.478455, 33.63739)]",
+					"name": "@MeshInstance3D@1544"
+				},
+				{
+					"bounds_px": "[P: (593.0659, 247.4368), S: (268.8, 294.4359)]",
+					"name": "@Sprite3D@1545"
+				}
+			],
+			"role": "ticket",
+			"root_world": "(-3.783665, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": false,
+			"visible_full_body_bounds_px": "[P: (542.907, 208.3822), S: (318.9588, 345.6)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Same NPC after actual route deceleration and rig cleanup",
+			"elapsed_ms": 48579,
+			"engine_frame": 1362,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "guide",
+			"interaction_point_world": "(-3.8, 0.18, 5.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-native-route-settle.png",
+			"phase": "native-route-settle",
+			"rig_visible_part_bounds_px": [],
+			"role": "ticket",
+			"root_world": "(-3.8, 0.18, 5.0)",
+			"source_alpha_bounds_px": "[P: (553.5251, 192.6344), S: (244.825, 334.2589)]",
+			"sprite_pixel_size": 0.00552677037194371,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (553.5251, 192.6344), S: (244.825, 334.2589)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Natural source-Sprite rest; three seconds of controller runtime",
+			"elapsed_ms": 48895,
+			"engine_frame": 1363,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-imp-idle-rest.png",
+			"phase": "idle-rest",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (486.286, 235.2309), S: (379.3029, 291.4972)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (486.286, 235.2309), S: (379.3029, 291.4972)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "greet",
+			"controller_direction": "front",
+			"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+			"elapsed_ms": 52168,
+			"engine_frame": 1485,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-imp-greet.png",
+			"phase": "greet",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (541.3875, 271.5352), S: (317.7943, 254.9485)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (541.3875, 271.5352), S: (317.7943, 254.9485)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "interact",
+			"controller_direction": "front",
+			"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+			"elapsed_ms": 54186,
+			"engine_frame": 1555,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-imp-interact.png",
+			"phase": "interact",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (533.6989, 267.3222), S: (329.3272, 259.4057)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (533.6989, 267.3222), S: (329.3272, 259.4057)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "dance",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: dance",
+			"elapsed_ms": 66851,
+			"engine_frame": 2040,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-imp-personality-dance.png",
+			"phase": "personality-dance",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (528.5732, 259.9464), S: (317.7944, 266.5372)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (528.5732, 259.9464), S: (317.7944, 266.5372)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "emotion_proud",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: emotion_proud",
+			"elapsed_ms": 89820,
+			"engine_frame": 2920,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-imp-personality-emotion_proud.png",
+			"phase": "personality-emotion_proud",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (528.5732, 265.2951), S: (331.8901, 261.1885)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (528.5732, 265.2951), S: (331.8901, 261.1885)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": false,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Actual Main NPC route; measured rig direction=right",
+			"elapsed_ms": 97469,
+			"engine_frame": 3212,
+			"gait_rig_direction": "right",
+			"gait_rig_visible": true,
+			"gait_source_record": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 7,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 321.0,
+							"hip_center_y_px": 277.0,
+							"hip_to_ankle_px": 44.0,
+							"leg_length_scale": 0.651851851851852,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.293333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							254.0,
+							140.0,
+							504.0,
+							617.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 320.0,
+							"hip_center_y_px": 279.0,
+							"hip_to_ankle_px": 41.0,
+							"leg_length_scale": 0.607407407407407,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.273333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							1009.0,
+							134.0,
+							511.0,
+							624.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.381005, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-imp-native-route-gait-right.png",
+			"phase": "native-route-gait-right",
+			"rig_visible_part_bounds_px": [
+				{
+					"bounds_px": "[P: (543.2864, 205.7925), S: (268.8002, 345.6)]",
+					"name": "@Sprite3D@1547"
+				},
+				{
+					"bounds_px": "[P: (679.8002, 470.2937), S: (9.212463, 41.43713)]",
+					"name": "@MeshInstance3D@1551"
+				},
+				{
+					"bounds_px": "[P: (561.8931, 247.4367), S: (268.7999, 294.4359)]",
+					"name": "@Sprite3D@1552"
+				},
+				{
+					"bounds_px": "[P: (705.7202, 470.2937), S: (9.212524, 41.43729)]",
+					"name": "@MeshInstance3D@1556"
+				},
+				{
+					"bounds_px": "[P: (592.2874, 247.6218), S: (268.8, 294.4359)]",
+					"name": "@Sprite3D@1557"
+				}
+			],
+			"role": "imp",
+			"root_world": "(-5.381005, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": false,
+			"visible_full_body_bounds_px": "[P: (543.2864, 205.7925), S: (317.801, 345.6)]"
+		},
+		{
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"action_source_match": true,
+			"controller_action": "stand",
+			"controller_direction": "front",
+			"description": "Same NPC after actual route deceleration and rig cleanup",
+			"elapsed_ms": 101165,
+			"engine_frame": 3345,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-001",
+			"interaction_point_world": "(-5.4, 0.18, -7.8)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-imp-native-route-settle.png",
+			"phase": "native-route-settle",
+			"rig_visible_part_bounds_px": [],
+			"role": "imp",
+			"root_world": "(-5.4, 0.18, -7.8)",
+			"source_alpha_bounds_px": "[P: (486.286, 235.2309), S: (379.3029, 291.4972)]",
+			"sprite_pixel_size": 0.00619047600775957,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (486.286, 235.2309), S: (379.3029, 291.4972)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "idle",
+			"controller_direction": "front",
+			"description": "Natural source-Sprite rest; three seconds of controller runtime",
+			"elapsed_ms": 103926,
+			"engine_frame": 3430,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(2.8, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-idle-rest.png",
+			"phase": "idle-rest",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(2.8, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (455.796, 189.8521), S: (252.3428, 307.2003)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (455.796, 189.8521), S: (252.3428, 307.2003)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "greet",
+			"controller_direction": "front",
+			"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+			"elapsed_ms": 111392,
+			"engine_frame": 3690,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(4.0, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-greet.png",
+			"phase": "greet",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(4.0, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (608.9025, 202.3971), S: (267.3633, 307.2001)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (608.9025, 202.3971), S: (267.3633, 307.2001)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "interact",
+			"controller_direction": "front",
+			"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+			"elapsed_ms": 118927,
+			"engine_frame": 3948,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(2.8, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-interact.png",
+			"phase": "interact",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(2.8, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (449.7878, 183.5826), S: (255.347, 313.4696)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (449.7878, 183.5826), S: (255.347, 313.4696)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "emotion_curious",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: emotion_curious",
+			"elapsed_ms": 121897,
+			"engine_frame": 4044,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(2.8, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-personality-emotion_curious.png",
+			"phase": "personality-emotion_curious",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(2.8, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (452.7918, 189.8523), S: (255.347, 307.2001)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (452.7918, 189.8523), S: (255.347, 307.2001)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "special",
+			"controller_direction": "front",
+			"description": "Naturally scheduled individual idle action: special",
+			"elapsed_ms": 126722,
+			"engine_frame": 4207,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(4.0, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-personality-special.png",
+			"phase": "personality-special",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(4.0, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (620.9188, 196.1278), S: (258.3511, 313.4695)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (620.9188, 196.1278), S: (258.3511, 313.4695)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": false,
+			"controller_action": "walk",
+			"controller_direction": "left",
+			"description": "Actual Main NPC route; measured rig direction=left",
+			"elapsed_ms": 130387,
+			"engine_frame": 4328,
+			"gait_rig_direction": "left",
+			"gait_rig_visible": true,
+			"gait_source_record": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							236.0,
+							108.0,
+							391.0,
+							823.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							918.0,
+							116.0,
+							373.0,
+							815.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"interaction_point_delta_m": 0.00999999046325684,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(3.98, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-native-route-gait-left.png",
+			"phase": "native-route-gait-left",
+			"rig_visible_part_bounds_px": [
+				{
+					"bounds_px": "[P: (611.4161, 196.75), S: (268.8, 345.6001)]",
+					"name": "@Sprite3D@1559"
+				},
+				{
+					"bounds_px": "[P: (717.2021, 409.5022), S: (16.90778, 76.04999)]",
+					"name": "@MeshInstance3D@1563"
+				},
+				{
+					"bounds_px": "[P: (562.561, 232.8865), S: (268.8, 294.4359)]",
+					"name": "@Sprite3D@1564"
+				},
+				{
+					"bounds_px": "[P: (755.6022, 409.5022), S: (16.90778, 76.04999)]",
+					"name": "@MeshInstance3D@1568"
+				},
+				{
+					"bounds_px": "[P: (598.3587, 232.6564), S: (268.8, 294.4359)]",
+					"name": "@Sprite3D@1569"
+				}
+			],
+			"role": "announcer",
+			"root_world": "(3.97, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": false,
+			"visible_full_body_bounds_px": "[P: (562.561, 196.75), S: (317.6552, 345.6001)]"
+		},
+		{
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"action_source_match": true,
+			"controller_action": "idle",
+			"controller_direction": "front",
+			"description": "Same NPC after actual route deceleration and rig cleanup",
+			"elapsed_ms": 134464,
+			"engine_frame": 4462,
+			"gait_rig_direction": "",
+			"gait_rig_visible": false,
+			"gait_source_record": {},
+			"interaction_point_delta_m": 0.0,
+			"interaction_point_id": "quest-002",
+			"interaction_point_world": "(2.8, 0.0, -4.0)",
+			"padding_px": 12.0,
+			"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-native-route-settle.png",
+			"phase": "native-route-settle",
+			"rig_visible_part_bounds_px": [],
+			"role": "announcer",
+			"root_world": "(2.8, 0.0, -4.0)",
+			"source_alpha_bounds_px": "[P: (455.796, 189.8521), S: (252.3428, 307.2003)]",
+			"sprite_pixel_size": 0.00725623592734337,
+			"sprite_visible": true,
+			"visible_full_body_bounds_px": "[P: (455.796, 189.8521), S: (252.3428, 307.2003)]"
+		}
+	],
+	"controller_statistics": {
+		"activity_paused": false,
+		"by_role": {
+			"announcer": 1,
+			"imp": 1,
+			"ticket": 1
+		},
+		"dialogue_hold": false,
+		"playing": true,
+		"reduced_motion": false,
+		"registration_count": 3
+	},
+	"failures": [],
+	"fixture": "Main-backed island NPC motion review",
+	"godot_version": {
+		"build": "official",
+		"hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+		"hex": 263938,
+		"major": 4,
+		"minor": 7,
+		"patch": 2,
+		"status": "stable",
+		"string": "4.7.2-stable (official)",
+		"timestamp": 0
+	},
+	"human_played": false,
+	"human_visual_acceptance": "pending parent review",
+	"limitations": "Scripted camera/player positioning only; NPC roots and controller routes were not repositioned. PNGs require human visual review; no gameplay-success claim.",
+	"npc_activity_opted_in_by_main": true,
+	"player_and_child_hero_rig_hidden_for_capture": true,
+	"proof_prefix": "npc_island_eleventh",
+	"result": "PASS",
+	"roles": {
+		"announcer": {
+			"action_frame_counts": {
+				"emotion_curious/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"interact/front": 8,
+				"special/front": 8
+			},
+			"authored_action_coverage": {},
+			"captures": [
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "idle",
+					"controller_direction": "front",
+					"description": "Natural source-Sprite rest; three seconds of controller runtime",
+					"elapsed_ms": 103926,
+					"engine_frame": 3430,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(2.8, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-idle-rest.png",
+					"phase": "idle-rest",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(2.8, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (455.796, 189.8521), S: (252.3428, 307.2003)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (455.796, 189.8521), S: (252.3428, 307.2003)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "greet",
+					"controller_direction": "front",
+					"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+					"elapsed_ms": 111392,
+					"engine_frame": 3690,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(4.0, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-greet.png",
+					"phase": "greet",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(4.0, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (608.9025, 202.3971), S: (267.3633, 307.2001)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (608.9025, 202.3971), S: (267.3633, 307.2001)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "interact",
+					"controller_direction": "front",
+					"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+					"elapsed_ms": 118927,
+					"engine_frame": 3948,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(2.8, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-interact.png",
+					"phase": "interact",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(2.8, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (449.7878, 183.5826), S: (255.347, 313.4696)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (449.7878, 183.5826), S: (255.347, 313.4696)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "emotion_curious",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: emotion_curious",
+					"elapsed_ms": 121897,
+					"engine_frame": 4044,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(2.8, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-personality-emotion_curious.png",
+					"phase": "personality-emotion_curious",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(2.8, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (452.7918, 189.8523), S: (255.347, 307.2001)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (452.7918, 189.8523), S: (255.347, 307.2001)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "special",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: special",
+					"elapsed_ms": 126722,
+					"engine_frame": 4207,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(4.0, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-personality-special.png",
+					"phase": "personality-special",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(4.0, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (620.9188, 196.1278), S: (258.3511, 313.4695)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (620.9188, 196.1278), S: (258.3511, 313.4695)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": false,
+					"controller_action": "walk",
+					"controller_direction": "left",
+					"description": "Actual Main NPC route; measured rig direction=left",
+					"elapsed_ms": 130387,
+					"engine_frame": 4328,
+					"gait_rig_direction": "left",
+					"gait_rig_visible": true,
+					"gait_source_record": {
+						"metadata_path": "res://assets/characters/npc-motion-regions.json",
+						"old_idle_front_frame_count": 8,
+						"required_directions": [
+							"left",
+							"right"
+						],
+						"rig_source_records": {
+							"left": {
+								"leg_measurement": {
+									"ankle_y_px": 306.0,
+									"hip_center_y_px": 228.0,
+									"hip_to_ankle_px": 78.0,
+									"leg_length_scale": 1.15555555555556,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.52
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+								"source_rect": [
+									236.0,
+									108.0,
+									391.0,
+									823.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							},
+							"right": {
+								"leg_measurement": {
+									"ankle_y_px": 306.0,
+									"hip_center_y_px": 228.0,
+									"hip_to_ankle_px": 78.0,
+									"leg_length_scale": 1.15555555555556,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.52
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+								"source_rect": [
+									918.0,
+									116.0,
+									373.0,
+									815.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							}
+						},
+						"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+					},
+					"interaction_point_delta_m": 0.00999999046325684,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(3.98, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-native-route-gait-left.png",
+					"phase": "native-route-gait-left",
+					"rig_visible_part_bounds_px": [
+						{
+							"bounds_px": "[P: (611.4161, 196.75), S: (268.8, 345.6001)]",
+							"name": "@Sprite3D@1559"
+						},
+						{
+							"bounds_px": "[P: (717.2021, 409.5022), S: (16.90778, 76.04999)]",
+							"name": "@MeshInstance3D@1563"
+						},
+						{
+							"bounds_px": "[P: (562.561, 232.8865), S: (268.8, 294.4359)]",
+							"name": "@Sprite3D@1564"
+						},
+						{
+							"bounds_px": "[P: (755.6022, 409.5022), S: (16.90778, 76.04999)]",
+							"name": "@MeshInstance3D@1568"
+						},
+						{
+							"bounds_px": "[P: (598.3587, 232.6564), S: (268.8, 294.4359)]",
+							"name": "@Sprite3D@1569"
+						}
+					],
+					"role": "announcer",
+					"root_world": "(3.97, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": false,
+					"visible_full_body_bounds_px": "[P: (562.561, 196.75), S: (317.6552, 345.6001)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_curious/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"interact/front": 8,
+						"special/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "idle",
+					"controller_direction": "front",
+					"description": "Same NPC after actual route deceleration and rig cleanup",
+					"elapsed_ms": 134464,
+					"engine_frame": 4462,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-002",
+					"interaction_point_world": "(2.8, 0.0, -4.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-announcer-native-route-settle.png",
+					"phase": "native-route-settle",
+					"rig_visible_part_bounds_px": [],
+					"role": "announcer",
+					"root_world": "(2.8, 0.0, -4.0)",
+					"source_alpha_bounds_px": "[P: (455.796, 189.8521), S: (252.3428, 307.2003)]",
+					"sprite_pixel_size": 0.00725623592734337,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (455.796, 189.8521), S: (252.3428, 307.2003)]"
+				}
+			],
+			"elapsed_wall_ms": 33298,
+			"end_point_world": "(2.8, 0.0, -4.0)",
+			"end_root_world": "(2.8, 0.0, -4.0)",
+			"interaction_point_id": "quest-002",
+			"legacy_fallback_used": false,
+			"measured_gait_source": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							236.0,
+							108.0,
+							391.0,
+							823.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							918.0,
+							116.0,
+							373.0,
+							815.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"motion_views": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							236.0,
+							108.0,
+							391.0,
+							823.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 306.0,
+							"hip_center_y_px": 228.0,
+							"hip_to_ankle_px": 78.0,
+							"leg_length_scale": 1.15555555555556,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.52
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+						"source_rect": [
+							918.0,
+							116.0,
+							373.0,
+							815.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"normal_rest_duration_seconds_required": 3.0,
+			"npc_role_motion_enabled": true,
+			"personality_actions": {
+				"emotion_curious": {
+					"action": "emotion_curious",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 8
+				},
+				"special": {
+					"action": "special",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 8
+				}
+			},
+			"point_delta": 0.0,
+			"rest_elapsed_wall_ms": 3396,
+			"rest_max_abs_route_axis_offset_m": 0.599999904632568,
+			"rest_observed_seconds": 3.021,
+			"rest_root_delta": "(0.0, 0.0, 0.0)",
+			"rest_route_bounds_failure": "",
+			"rest_route_origin_world": "(3.4, 0.18, -4.0)",
+			"route_capture_frame_displacement_m": 0.00999999046325684,
+			"route_direction": "left",
+			"route_max_root_displacement_m": 0.0199999809265137,
+			"route_sample_frames": 121,
+			"start_point_world": "(3.49, 0.0, -4.0)",
+			"start_root_world": "(3.48, 0.0, -4.0)"
+		},
+		"imp": {
+			"action_frame_counts": {
+				"dance/front": 7,
+				"emotion_proud/front": 7,
+				"greet/front": 7,
+				"idle/front": 7,
+				"idle_gesture/front": 7,
+				"interact/front": 7
+			},
+			"authored_action_coverage": {},
+			"captures": [
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Natural source-Sprite rest; three seconds of controller runtime",
+					"elapsed_ms": 48895,
+					"engine_frame": 1363,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-imp-idle-rest.png",
+					"phase": "idle-rest",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (486.286, 235.2309), S: (379.3029, 291.4972)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (486.286, 235.2309), S: (379.3029, 291.4972)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "greet",
+					"controller_direction": "front",
+					"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+					"elapsed_ms": 52168,
+					"engine_frame": 1485,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-imp-greet.png",
+					"phase": "greet",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (541.3875, 271.5352), S: (317.7943, 254.9485)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (541.3875, 271.5352), S: (317.7943, 254.9485)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "interact",
+					"controller_direction": "front",
+					"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+					"elapsed_ms": 54186,
+					"engine_frame": 1555,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-imp-interact.png",
+					"phase": "interact",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (533.6989, 267.3222), S: (329.3272, 259.4057)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (533.6989, 267.3222), S: (329.3272, 259.4057)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "dance",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: dance",
+					"elapsed_ms": 66851,
+					"engine_frame": 2040,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-imp-personality-dance.png",
+					"phase": "personality-dance",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (528.5732, 259.9464), S: (317.7944, 266.5372)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (528.5732, 259.9464), S: (317.7944, 266.5372)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "emotion_proud",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: emotion_proud",
+					"elapsed_ms": 89820,
+					"engine_frame": 2920,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-imp-personality-emotion_proud.png",
+					"phase": "personality-emotion_proud",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (528.5732, 265.2951), S: (331.8901, 261.1885)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (528.5732, 265.2951), S: (331.8901, 261.1885)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": false,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Actual Main NPC route; measured rig direction=right",
+					"elapsed_ms": 97469,
+					"engine_frame": 3212,
+					"gait_rig_direction": "right",
+					"gait_rig_visible": true,
+					"gait_source_record": {
+						"metadata_path": "res://assets/characters/npc-motion-regions.json",
+						"old_idle_front_frame_count": 7,
+						"required_directions": [
+							"left",
+							"right"
+						],
+						"rig_source_records": {
+							"left": {
+								"leg_measurement": {
+									"ankle_y_px": 321.0,
+									"hip_center_y_px": 277.0,
+									"hip_to_ankle_px": 44.0,
+									"leg_length_scale": 0.651851851851852,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.293333333333333
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+								"source_rect": [
+									254.0,
+									140.0,
+									504.0,
+									617.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							},
+							"right": {
+								"leg_measurement": {
+									"ankle_y_px": 320.0,
+									"hip_center_y_px": 279.0,
+									"hip_to_ankle_px": 41.0,
+									"leg_length_scale": 0.607407407407407,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.273333333333333
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+								"source_rect": [
+									1009.0,
+									134.0,
+									511.0,
+									624.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							}
+						},
+						"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+					},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.381005, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-imp-native-route-gait-right.png",
+					"phase": "native-route-gait-right",
+					"rig_visible_part_bounds_px": [
+						{
+							"bounds_px": "[P: (543.2864, 205.7925), S: (268.8002, 345.6)]",
+							"name": "@Sprite3D@1547"
+						},
+						{
+							"bounds_px": "[P: (679.8002, 470.2937), S: (9.212463, 41.43713)]",
+							"name": "@MeshInstance3D@1551"
+						},
+						{
+							"bounds_px": "[P: (561.8931, 247.4367), S: (268.7999, 294.4359)]",
+							"name": "@Sprite3D@1552"
+						},
+						{
+							"bounds_px": "[P: (705.7202, 470.2937), S: (9.212524, 41.43729)]",
+							"name": "@MeshInstance3D@1556"
+						},
+						{
+							"bounds_px": "[P: (592.2874, 247.6218), S: (268.8, 294.4359)]",
+							"name": "@Sprite3D@1557"
+						}
+					],
+					"role": "imp",
+					"root_world": "(-5.381005, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": false,
+					"visible_full_body_bounds_px": "[P: (543.2864, 205.7925), S: (317.801, 345.6)]"
+				},
+				{
+					"action_frame_counts": {
+						"dance/front": 7,
+						"emotion_proud/front": 7,
+						"greet/front": 7,
+						"idle/front": 7,
+						"idle_gesture/front": 7,
+						"interact/front": 7
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Same NPC after actual route deceleration and rig cleanup",
+					"elapsed_ms": 101165,
+					"engine_frame": 3345,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "quest-001",
+					"interaction_point_world": "(-5.4, 0.18, -7.8)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-imp-native-route-settle.png",
+					"phase": "native-route-settle",
+					"rig_visible_part_bounds_px": [],
+					"role": "imp",
+					"root_world": "(-5.4, 0.18, -7.8)",
+					"source_alpha_bounds_px": "[P: (486.286, 235.2309), S: (379.3029, 291.4972)]",
+					"sprite_pixel_size": 0.00619047600775957,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (486.286, 235.2309), S: (379.3029, 291.4972)]"
+				}
+			],
+			"elapsed_wall_ms": 52587,
+			"end_point_world": "(-5.4, 0.18, -7.8)",
+			"end_root_world": "(-5.4, 0.18, -7.8)",
+			"interaction_point_id": "quest-001",
+			"legacy_fallback_used": false,
+			"measured_gait_source": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 7,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 321.0,
+							"hip_center_y_px": 277.0,
+							"hip_to_ankle_px": 44.0,
+							"leg_length_scale": 0.651851851851852,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.293333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							254.0,
+							140.0,
+							504.0,
+							617.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 320.0,
+							"hip_center_y_px": 279.0,
+							"hip_to_ankle_px": 41.0,
+							"leg_length_scale": 0.607407407407407,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.273333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							1009.0,
+							134.0,
+							511.0,
+							624.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"motion_views": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 7,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 321.0,
+							"hip_center_y_px": 277.0,
+							"hip_to_ankle_px": 44.0,
+							"leg_length_scale": 0.651851851851852,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.293333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							254.0,
+							140.0,
+							504.0,
+							617.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 320.0,
+							"hip_center_y_px": 279.0,
+							"hip_to_ankle_px": 41.0,
+							"leg_length_scale": 0.607407407407407,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.273333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+						"source_rect": [
+							1009.0,
+							134.0,
+							511.0,
+							624.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"normal_rest_duration_seconds_required": 3.0,
+			"npc_role_motion_enabled": true,
+			"personality_actions": {
+				"dance": {
+					"action": "dance",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 7
+				},
+				"emotion_proud": {
+					"action": "emotion_proud",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 7
+				}
+			},
+			"point_delta": 0.0,
+			"rest_elapsed_wall_ms": 3297,
+			"rest_max_abs_route_axis_offset_m": 0.0,
+			"rest_observed_seconds": 3.018,
+			"rest_root_delta": "(0.0, 0.0, 0.0)",
+			"rest_route_bounds_failure": "",
+			"rest_route_origin_world": "(-5.4, 0.18, -7.8)",
+			"route_capture_frame_displacement_m": 0.00583362579345703,
+			"route_direction": "left",
+			"route_max_root_displacement_m": 0.0131621360778809,
+			"route_sample_frames": 292,
+			"start_point_world": "(-5.4, 0.18, -7.8)",
+			"start_root_world": "(-5.4, 0.18, -7.8)"
+		},
+		"ticket": {
+			"action_frame_counts": {
+				"emotion_happy/front": 8,
+				"greet/front": 8,
+				"idle/front": 8,
+				"idle_gesture/front": 8,
+				"interact/front": 8
+			},
+			"authored_action_coverage": {},
+			"captures": [
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Natural source-Sprite rest; three seconds of controller runtime",
+					"elapsed_ms": 9755,
+					"engine_frame": 11,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-idle-rest.png",
+					"phase": "idle-rest",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (544.3728, 219.4755), S: (257.4094, 307.1998)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (544.3728, 219.4755), S: (257.4094, 307.1998)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "greet",
+					"controller_direction": "front",
+					"description": "NpcActivity.greet from the actor's loaded authored action sequence",
+					"elapsed_ms": 13095,
+					"engine_frame": 122,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-greet.png",
+					"phase": "greet",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (544.3727, 215.8853), S: (257.4094, 310.3835)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (544.3727, 215.8853), S: (257.4094, 310.3835)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "interact",
+					"controller_direction": "front",
+					"description": "NpcActivity.interact from the actor's loaded authored action sequence",
+					"elapsed_ms": 15523,
+					"engine_frame": 202,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-interact.png",
+					"phase": "interact",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (542.0847, 214.2937), S: (259.6974, 311.975)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (542.0847, 214.2937), S: (259.6974, 311.975)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "idle_gesture",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: idle_gesture",
+					"elapsed_ms": 22175,
+					"engine_frame": 431,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-personality-idle_gesture.png",
+					"phase": "personality-idle_gesture",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (542.0847, 215.8853), S: (257.4094, 310.3834)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (542.0847, 215.8853), S: (257.4094, 310.3834)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "emotion_happy",
+					"controller_direction": "front",
+					"description": "Naturally scheduled individual idle action: emotion_happy",
+					"elapsed_ms": 36757,
+					"engine_frame": 951,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-personality-emotion_happy.png",
+					"phase": "personality-emotion_happy",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (542.0847, 214.2937), S: (259.6974, 311.975)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (542.0847, 214.2937), S: (259.6974, 311.975)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": false,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Actual Main NPC route; measured rig direction=right",
+					"elapsed_ms": 44609,
+					"engine_frame": 1229,
+					"gait_rig_direction": "right",
+					"gait_rig_visible": true,
+					"gait_source_record": {
+						"metadata_path": "res://assets/characters/npc-motion-regions.json",
+						"old_idle_front_frame_count": 8,
+						"required_directions": [
+							"left",
+							"right"
+						],
+						"rig_source_records": {
+							"left": {
+								"leg_measurement": {
+									"ankle_y_px": 296.0,
+									"hip_center_y_px": 261.0,
+									"hip_to_ankle_px": 35.0,
+									"leg_length_scale": 0.518518518518518,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.233333333333333
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+								"source_rect": [
+									314.0,
+									150.0,
+									349.0,
+									784.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							},
+							"right": {
+								"leg_measurement": {
+									"ankle_y_px": 296.0,
+									"hip_center_y_px": 262.0,
+									"hip_to_ankle_px": 34.0,
+									"leg_length_scale": 0.503703703703704,
+									"pixel_size_m": 0.00666666666666666,
+									"rig_reference_chain_m": 0.45,
+									"source_hip_to_ankle_m": 0.226666666666667
+								},
+								"measured_source_geometry": true,
+								"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+								"source_rect": [
+									899.0,
+									146.0,
+									324.0,
+									791.0
+								],
+								"source_size_px": "(280, 360)",
+								"valid": true
+							}
+						},
+						"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+					},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.783665, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-native-route-gait-right.png",
+					"phase": "native-route-gait-right",
+					"rig_visible_part_bounds_px": [
+						{
+							"bounds_px": "[P: (542.907, 208.3822), S: (268.8, 345.6)]",
+							"name": "@Sprite3D@1535"
+						},
+						{
+							"bounds_px": "[P: (654.3678, 457.1918), S: (7.478455, 33.63727)]",
+							"name": "@MeshInstance3D@1539"
+						},
+						{
+							"bounds_px": "[P: (548.2789, 247.3204), S: (268.8, 294.4359)]",
+							"name": "@Sprite3D@1540"
+						},
+						{
+							"bounds_px": "[P: (695.6478, 457.1918), S: (7.478455, 33.63739)]",
+							"name": "@MeshInstance3D@1544"
+						},
+						{
+							"bounds_px": "[P: (593.0659, 247.4368), S: (268.8, 294.4359)]",
+							"name": "@Sprite3D@1545"
+						}
+					],
+					"role": "ticket",
+					"root_world": "(-3.783665, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": false,
+					"visible_full_body_bounds_px": "[P: (542.907, 208.3822), S: (318.9588, 345.6)]"
+				},
+				{
+					"action_frame_counts": {
+						"emotion_happy/front": 8,
+						"greet/front": 8,
+						"idle/front": 8,
+						"idle_gesture/front": 8,
+						"interact/front": 8
+					},
+					"action_source_match": true,
+					"controller_action": "stand",
+					"controller_direction": "front",
+					"description": "Same NPC after actual route deceleration and rig cleanup",
+					"elapsed_ms": 48579,
+					"engine_frame": 1362,
+					"gait_rig_direction": "",
+					"gait_rig_visible": false,
+					"gait_source_record": {},
+					"interaction_point_delta_m": 0.0,
+					"interaction_point_id": "guide",
+					"interaction_point_world": "(-3.8, 0.18, 5.0)",
+					"padding_px": 12.0,
+					"path": "pm/Snapland-art/images/npc_island_eleventh-ticket-native-route-settle.png",
+					"phase": "native-route-settle",
+					"rig_visible_part_bounds_px": [],
+					"role": "ticket",
+					"root_world": "(-3.8, 0.18, 5.0)",
+					"source_alpha_bounds_px": "[P: (553.5251, 192.6344), S: (244.825, 334.2589)]",
+					"sprite_pixel_size": 0.00552677037194371,
+					"sprite_visible": true,
+					"visible_full_body_bounds_px": "[P: (553.5251, 192.6344), S: (244.825, 334.2589)]"
+				}
+			],
+			"elapsed_wall_ms": 39183,
+			"end_point_world": "(-3.8, 0.18, 5.0)",
+			"end_root_world": "(-3.8, 0.18, 5.0)",
+			"interaction_point_id": "guide",
+			"legacy_fallback_used": false,
+			"measured_gait_source": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 261.0,
+							"hip_to_ankle_px": 35.0,
+							"leg_length_scale": 0.518518518518518,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.233333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							314.0,
+							150.0,
+							349.0,
+							784.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 262.0,
+							"hip_to_ankle_px": 34.0,
+							"leg_length_scale": 0.503703703703704,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.226666666666667
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							899.0,
+							146.0,
+							324.0,
+							791.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"motion_views": {
+				"metadata_path": "res://assets/characters/npc-motion-regions.json",
+				"old_idle_front_frame_count": 8,
+				"required_directions": [
+					"left",
+					"right"
+				],
+				"rig_source_records": {
+					"left": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 261.0,
+							"hip_to_ankle_px": 35.0,
+							"leg_length_scale": 0.518518518518518,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.233333333333333
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							314.0,
+							150.0,
+							349.0,
+							784.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					},
+					"right": {
+						"leg_measurement": {
+							"ankle_y_px": 296.0,
+							"hip_center_y_px": 262.0,
+							"hip_to_ankle_px": 34.0,
+							"leg_length_scale": 0.503703703703704,
+							"pixel_size_m": 0.00666666666666666,
+							"rig_reference_chain_m": 0.45,
+							"source_hip_to_ankle_m": 0.226666666666667
+						},
+						"measured_source_geometry": true,
+						"source_atlas_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+						"source_rect": [
+							899.0,
+							146.0,
+							324.0,
+							791.0
+						],
+						"source_size_px": "(280, 360)",
+						"valid": true
+					}
+				},
+				"these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true
+			},
+			"normal_rest_duration_seconds_required": 3.0,
+			"npc_role_motion_enabled": true,
+			"personality_actions": {
+				"emotion_happy": {
+					"action": "emotion_happy",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 8
+				},
+				"idle_gesture": {
+					"action": "idle_gesture",
+					"action_elapsed": 0.0333333333333333,
+					"frame_count": 8
+				}
+			},
+			"point_delta": 0.0,
+			"rest_elapsed_wall_ms": 3329,
+			"rest_max_abs_route_axis_offset_m": 0.0,
+			"rest_observed_seconds": 3.011,
+			"rest_root_delta": "(0.0, 0.0, 0.0)",
+			"rest_route_bounds_failure": "",
+			"rest_route_origin_world": "(-3.8, 0.18, 5.0)",
+			"route_capture_frame_displacement_m": 0.00416684150695801,
+			"route_direction": "left",
+			"route_max_root_displacement_m": 0.0121679306030273,
+			"route_sample_frames": 278,
+			"start_point_world": "(-3.8, 0.18, 5.0)",
+			"start_root_world": "(-3.8, 0.18, 5.0)"
+		}
+	},
+	"save_profile_path": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\npc-island-eleventh\\profile\\progress.json",
+	"scripted_fixture": true,
+	"total_review_elapsed_ms": 125069,
+	"total_review_seconds": 125.069,
+	"viewport_px": "(1280.0, 720.0)"
+}

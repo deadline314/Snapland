@@ -1,0 +1,1424 @@
+{
+  "status": "bounded local and native scripted checks passed; primary session viewed normal and quarter playback to completion",
+  "human_played": false,
+  "source_provenance": "assets/characters/npc-turnaround-provenance.json",
+  "files": [
+    {
+      "path": "pm/Snapland-art/images/ART-17-dialogue-accepted-idle.png",
+      "bytes": 906191,
+      "sha256": "f7321e0af8232b79e7bca19f62710083cf7788657add61eccc430e6b0b8ba7db"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-dialogue-accepted-normal.mp4",
+      "bytes": 2615313,
+      "sha256": "1e11ba3046ef5fee09af48bb667df80e93eed368f63ddfadccda00b91f72f6df"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-dialogue-accepted-open.png",
+      "bytes": 621123,
+      "sha256": "4599110789fa4bbe328c89ae5e040cd040b75a9796fc6cbb95aacd551aee5a62"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-dialogue-accepted-pause.png",
+      "bytes": 410123,
+      "sha256": "a99d7533bb4e59c39fc2b88299799fa3dd79728d35f0c0b49635d2519fb6a213"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-dialogue-accepted-quarter.mp4",
+      "bytes": 3455616,
+      "sha256": "f77ca886c0516793399c96a03d30c562d1cfd1324bb8d10966dbd08fda566076"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-dialogue-accepted-report.json",
+      "bytes": 3131,
+      "sha256": "75722761d26fb936c8a46a03d79cfe8157470995dcbbea0e5b32ee9709ef9afe"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-dialogue-accepted.log",
+      "bytes": 14734,
+      "sha256": "9b25fecef0d3d6d6a03735bb2c27b08ea010648b8f39513f204ea44f478f1d6b"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-hero-body-tenth-normal.mp4",
+      "bytes": 6612402,
+      "sha256": "b9201316870e7e5e31c96408ad9538a650bf2a93c3932c60d36a1fd4c8e6aad7"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-hero-body-tenth-quarter.mp4",
+      "bytes": 11710173,
+      "sha256": "cd40caf88412f887942935edd1e2986b9a54b61a39d00c1adb37cc2ffede2326"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-hero-body-tenth.log",
+      "bytes": 21090,
+      "sha256": "eb5a8332900adfbeed79e33f35cc3bd8fcc7930eae0a638d97df48e536e8adb9"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-hero-idle-tenth-normal.mp4",
+      "bytes": 10404204,
+      "sha256": "01bcca7b02bc58d7e784c4581a8c36f142f9499fc206a3ed0ae5e5e628dadc04"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-hero-idle-tenth-quarter.mp4",
+      "bytes": 17475419,
+      "sha256": "94d311aecb0e784851c89afc0f3f5a4998c5a1d5f015f5cd9b3fec5e66e487d4"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-hero-idle-tenth.log",
+      "bytes": 13093,
+      "sha256": "48b5fffca98db3292205e182c5fa2936287be66978bef95edf24d5e6a4001085"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-elf-bob-contact.png",
+      "bytes": 1043522,
+      "sha256": "8616d65b67a00f8c4a121f8461bcc8c6fc87ca70404d7c217e0353e4a62ebd0d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-human-windswept-contact.png",
+      "bytes": 937971,
+      "sha256": "ce377cacdaacd21827534240a7eff744677af5ddb7ca676104ffc2a4fd6aa2a8"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back-breath.png",
+      "bytes": 105168,
+      "sha256": "d9327ab2409b1251c3e9a7f02035b7a30d84a84287c34b719e55eec4205cd844"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back-camera-check.png",
+      "bytes": 107377,
+      "sha256": "c30d99572acbf5a21611d42c35029ef76e38aa1e794565e029187595327be97f"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back-steady.png",
+      "bytes": 105180,
+      "sha256": "89a9a45e2c58db2491e778662c2c79435b0ee837c05ee3c876d8492c6772c9a7"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back_left-breath.png",
+      "bytes": 101392,
+      "sha256": "a3528b8a4f7b788e3c5324f3629434a24a5b0a7bca8a23da2f3604cfeb0d90a2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back_left-camera-check.png",
+      "bytes": 104997,
+      "sha256": "9e8c6d635c355d6164dd87722efdebf0adc05b3330980f1eed0fb35eac625933"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back_left-steady.png",
+      "bytes": 101397,
+      "sha256": "78ff0bf7fc0bc07503beb79c1ef7de3656a74db48a8446103ff6c7e6dfd92e91"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back_right-breath.png",
+      "bytes": 100088,
+      "sha256": "718089ccc6a94dd9acdc6c6a81f35b93b4ec82aea2b8e8206f565ca3c79bc579"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back_right-camera-check.png",
+      "bytes": 103587,
+      "sha256": "f35fbeb21371b80928d4c33d5865eabcd778126c5742b99603f770a01ef8039a"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-back_right-steady.png",
+      "bytes": 100101,
+      "sha256": "6f1086a02b54412418be4fbd222b96929ff155b3a190e8873fb8afbb25ea0ef8"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front-breath.png",
+      "bytes": 107066,
+      "sha256": "7cdd726ebdf32597c7452b7c5bfc3d22178d5a7ce98b0fb641b04c09b564e7e5"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front-camera-check.png",
+      "bytes": 109197,
+      "sha256": "bb1087ce6c20d7c7d2a407204c00e947801cb99ff46476e63113e344ce036d1d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front-steady.png",
+      "bytes": 107070,
+      "sha256": "de7d43f83b846820444858819f0866337445c448968c1cd44db7807c5c6a58e3"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front_left-breath.png",
+      "bytes": 110769,
+      "sha256": "c2eba4ea11998053f4b7f48f459e94af0d38d913a06e0d897d0c655a2ca67698"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front_left-camera-check.png",
+      "bytes": 114950,
+      "sha256": "102ab552d5058c9b289d534ce076568aea303255ad624574cc0712ee129b4f4c"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front_left-steady.png",
+      "bytes": 110777,
+      "sha256": "4f20acd21d2eca9010594277b64c08d572f002183e68b029fc53ea22ea471903"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front_right-breath.png",
+      "bytes": 110496,
+      "sha256": "c490d7e75a5e0c2894932d06516688c9490edbaa5186f186417bd73fed36e845"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front_right-camera-check.png",
+      "bytes": 114651,
+      "sha256": "cb1dd175f413a489a5d108e4dc96234d38449048e67c73706a32ae86a2dab55b"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-front_right-steady.png",
+      "bytes": 110502,
+      "sha256": "a63d843301ee560ba66ad2300652015be86342999d4e5c61ebd50c642317d082"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-left-breath.png",
+      "bytes": 105296,
+      "sha256": "0a81615b678833f81b4ca6c59e7b142426d35623e9d58c7eb8413fb8f7a98db0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-left-camera-check.png",
+      "bytes": 109102,
+      "sha256": "1a666ac5e38943b461e6fc3ea33a0dfca24640159d4457fc85be49fd8cac2ded"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-left-steady.png",
+      "bytes": 105283,
+      "sha256": "16c17c41908ee3d9a49cac7871ec7763fae7d947081874ba3951bdec74cd9692"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-right-breath.png",
+      "bytes": 105298,
+      "sha256": "3bbf2f166d17e8e004868829510df088c48f2e14cfef81b5d72f2de4c77a9e98"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-right-camera-check.png",
+      "bytes": 108944,
+      "sha256": "4e5fa2a7998b8e7d4cc7fb63e3d17036db15c31e2f60681c45ebc08dac3dabfc"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-elf-bob-right-steady.png",
+      "bytes": 105304,
+      "sha256": "6dd40e5647f4f81d4b3a939bc579f04d32444c24629a63a535f787d244d87ca6"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back-breath.png",
+      "bytes": 98908,
+      "sha256": "bb5a9d25818a01e3917922ad5c4fd64251a6333228af454a21e6f41ff57d1fdd"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back-camera-check.png",
+      "bytes": 101199,
+      "sha256": "07ad0308266555e76563f8ad3628873e4e022bce83a0c5fd8febd027e0ef189c"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back-steady.png",
+      "bytes": 98926,
+      "sha256": "9eabb038a4a122fb525ea06986835ba071a50f90a01e48873a100429ebab6151"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back_left-breath.png",
+      "bytes": 98608,
+      "sha256": "b6e0fe31042e8c4917b0a451fa674cc8cfdac3b00e85dbf4930232c5a190b0b7"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back_left-camera-check.png",
+      "bytes": 102020,
+      "sha256": "82998245ff87974b3dc00f2d7b8d9b383830c1743f3cf7af51101f4a70b3f8c0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back_left-steady.png",
+      "bytes": 98630,
+      "sha256": "48e602b486caa14b76ad69036965a04a735276cd9c000c50531525962e983d4b"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back_right-breath.png",
+      "bytes": 98424,
+      "sha256": "7556d274f70c38304222f4807f8380bd60dd7ac6687297c9c02e8c0f8bfce1c1"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back_right-camera-check.png",
+      "bytes": 102060,
+      "sha256": "510e0bccc2fe4b93974fa19597dde9643700f22d9034952fe33e9f3d725f6afd"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-back_right-steady.png",
+      "bytes": 98445,
+      "sha256": "f4658b7b609ad1583ac33e036a13ad1293ad1293f42d8126579e23fc0483c9c0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front-breath.png",
+      "bytes": 103112,
+      "sha256": "bd67b81d12579d53b88a739bdf8a07e0e749d0e66c66e9967d39073112726ba6"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front-camera-check.png",
+      "bytes": 105018,
+      "sha256": "05f383b315b627990c3fa9caa69040c7b2100fa23d1bcd935d30c7fff8c6a2d3"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front-steady.png",
+      "bytes": 103116,
+      "sha256": "cdc44e9a0243d409751f40a63bdd07833c8a79e2a43c50c78b73e7ea9a806bab"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front_left-breath.png",
+      "bytes": 107713,
+      "sha256": "6370fb2f43a34a57ce0ff95bf953e9263a838f12d27abc734ae6b985ee42daee"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front_left-camera-check.png",
+      "bytes": 111548,
+      "sha256": "db6fc967aff2df5c9c4088a9f95d3f479eb1c0e98de597b7100405e55e7ca5df"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front_left-steady.png",
+      "bytes": 107736,
+      "sha256": "38d5c3e598db0796a215c228787cfb411d30bb35e0fdef5646774b360e89c3f0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front_right-breath.png",
+      "bytes": 107201,
+      "sha256": "e700d70fe0adb9a481b8c0202166935ddedf807de71257fa96f5a303cc7b0b28"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front_right-camera-check.png",
+      "bytes": 111031,
+      "sha256": "33cd43949f814ba55be46b60395aff2d5a25ae34bc7ca5aaddca938ef4fcc1d1"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-front_right-steady.png",
+      "bytes": 107225,
+      "sha256": "798bc629066b3449de94356b0bea52ebac74564bf97b201b2d4a2a38eabc8b31"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-left-breath.png",
+      "bytes": 101303,
+      "sha256": "84cd7335d3d2491d33e5d5e2877cde5f7f1c6289db0798104639aa381025d985"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-left-camera-check.png",
+      "bytes": 105004,
+      "sha256": "0c299f0d056957283e3d864d9427f5ff6257171f8c4e78b605521c777818d19f"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-left-steady.png",
+      "bytes": 101338,
+      "sha256": "e17f5903501bc13dc0dbdf570cb05b4684d538fc2db8f945141af5a66d44f297"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-right-breath.png",
+      "bytes": 101445,
+      "sha256": "7fba0fc1a633edffb23ea6f8183bdf2c570111617ecb53723009c4c35e661fbb"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-right-camera-check.png",
+      "bytes": 104925,
+      "sha256": "376beb30b78fcb30d4c8392d8d905f52e9cd7d56153514fffa1ef0a5d6773842"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-human-windswept-right-steady.png",
+      "bytes": 101453,
+      "sha256": "8fae219b86ffbb3fd9c0cc468343ed9b54894a50308ef581f4afd14e54607a78"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back-breath.png",
+      "bytes": 108976,
+      "sha256": "034ef561ad0cdb24c07ed11c12c6e215ff1075e5c817426243a956081516525f"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back-camera-check.png",
+      "bytes": 111077,
+      "sha256": "3b9c23bef3fc248faca409a16e6b83880ec53d6572a915d67bb548ef0dd40762"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back-steady.png",
+      "bytes": 108974,
+      "sha256": "15e2dd4fdc4dd7f20701800193247a085bdb4c4b25cb230b5116fb4bfd33429c"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back_left-breath.png",
+      "bytes": 107250,
+      "sha256": "817e73c83c1c223a5ef3ee7570cbcfb65291c19960b16da06f8fc96a0b9cd951"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back_left-camera-check.png",
+      "bytes": 110953,
+      "sha256": "6ac75af7f6431b8b797a2e96c8bccdfba2d28e43f31c64b809e290e1a4cbf16b"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back_left-steady.png",
+      "bytes": 107257,
+      "sha256": "4e902974cceea19fcba147fff3feb01b3c98ca4314ef99a695b2178886ce982b"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back_right-breath.png",
+      "bytes": 106074,
+      "sha256": "2664120b661ee10cdab7ab0c381fbf06f2b40e36c5df0afd67b59e5958d99818"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back_right-camera-check.png",
+      "bytes": 109500,
+      "sha256": "70106eec53ddffb62eb07c8b44a290cd77b9c9270fd20cba3e2e6a296b5b0716"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-back_right-steady.png",
+      "bytes": 106083,
+      "sha256": "c58bee2bfb1758ef12d144307a78449ee144b03bfd79965aa1bcbf1d157fde22"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front-breath.png",
+      "bytes": 110891,
+      "sha256": "e564fba7bb9440ad1e59acb429bddfff1419f7956581aebcf2defceb7a3320ef"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front-camera-check.png",
+      "bytes": 112618,
+      "sha256": "ea4d98d99b10b1acd0519fa63e4fc5b1a6d525dadb57eb2947a3f2ee5c4783d9"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front-steady.png",
+      "bytes": 110889,
+      "sha256": "b3718a8cb56c90bcc7d0d071048e48ab37c83d9ab1838e8dfd26c7cba219bc12"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front_left-breath.png",
+      "bytes": 118399,
+      "sha256": "8b6517153647ad82dd3543813c4cfba0acb2c5d45a468a410744e885c3477725"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front_left-camera-check.png",
+      "bytes": 123156,
+      "sha256": "4d8241af933b84d9aa93a0c55dd6cab50ef209001cd659e752f4c813f1cd6cd6"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front_left-steady.png",
+      "bytes": 118454,
+      "sha256": "9112bc536b716b6248a56a5eda0c403de363879c7a2f7219daf637a0f747e068"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front_right-breath.png",
+      "bytes": 118198,
+      "sha256": "09343eebcbfca883a670587a90551b80727800884829c923f5d3b1256a2489e0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front_right-camera-check.png",
+      "bytes": 123086,
+      "sha256": "61773910d1bb360ba860b6ff5fd82451a66cd2353d448f92f8ea2e6243d34a86"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-front_right-steady.png",
+      "bytes": 118249,
+      "sha256": "c0269973d9e625526856b46b05a774985bf0e029b40ef357bda636196e72462b"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-left-breath.png",
+      "bytes": 110047,
+      "sha256": "88edc0179c11d19857b87de50b97c32a1d4215a1a2f79926d03b738468d393ba"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-left-camera-check.png",
+      "bytes": 113531,
+      "sha256": "25ad2ea3b8ffbc14814d8c3dcd0be0770b4dbf76d7140e167d6e6bded5a69779"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-left-steady.png",
+      "bytes": 110047,
+      "sha256": "e3da9dd2b0f677156f87a489187ccb50e2ff6da071f5cc279f06d0e16dfab9e8"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-right-breath.png",
+      "bytes": 109944,
+      "sha256": "c5526ac2ab07b94eecee0715858137dddc4341ae1826a8045283e7dacfa23a12"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-right-camera-check.png",
+      "bytes": 113983,
+      "sha256": "463a84b2802d326e9f19d3d596b4123ca14577b61456b0bb29254336d1190c05"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-idle-imp-curly-right-steady.png",
+      "bytes": 109963,
+      "sha256": "122b50c1522830030eca9ebab00263a1dc24f393743f8cd0d33e753667e1305e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-idle10-imp-curly-contact.png",
+      "bytes": 1118276,
+      "sha256": "a324a1e640410d4c63dcee74f9c91a2afbbb0a94c98a8e311abd8bad5bf4f1f7"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-island-motion-finalproof-contact.png",
+      "bytes": 1863831,
+      "sha256": "748585d93f71423f45409fb815afda93d5f56f31266bbc25acb48b2af93e0ceb"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-island-motion-finalproof-normal.mp4",
+      "bytes": 41639933,
+      "sha256": "7f1003e8dbc2a093079d77307b071c4442e89029be0227e3b7991424a5c22bf6"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-island-motion-finalproof-quarter.mp4",
+      "bytes": 36789242,
+      "sha256": "0b3344b9d465eb9b18b7a2bb04b3a3dd438dd82741307338d697bf5da29b13e8"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-island-motion-finalproof-report.json",
+      "bytes": 12760,
+      "sha256": "543d9841855633168de0ae269a0b57d16c43df62f17ad39f2e41d841f119382d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-island-motion-finalproof.log",
+      "bytes": 27096,
+      "sha256": "646791239b2f7434eff46c163f0c9cea8775d07841f373914c19cd8bec795cf0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-npc-island-eleventh-normal.mp4",
+      "bytes": 8532103,
+      "sha256": "b602f18aa0f43b1af2a7858927f29344ffd43894539aaf9300a0b6830383c2c2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-npc-island-eleventh-quarter.mp4",
+      "bytes": 13379459,
+      "sha256": "82813590e1657a0352761f0b6f66ef3ce2075b4be1de694b2f95ff583acb9d80"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-npc-island-eleventh.log",
+      "bytes": 32896,
+      "sha256": "2b5cd6f2da9f5ef0edb2443b6caba84a274a180c3cd40c9441df203d0fb7f664"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-npc11-announcer-contact.png",
+      "bytes": 677615,
+      "sha256": "df1d1fb86e4c044fcd1c909eb241a8bd541e76f5151f0406c7a8ef193a64f949"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-npc11-imp-contact.png",
+      "bytes": 651652,
+      "sha256": "c7ae0f16daae659c11244b100aac560617c7ead58cc486749e4489310197bf0b"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-npc11-ticket-contact.png",
+      "bytes": 572358,
+      "sha256": "1b670e886f1ff525ce5524a64cf151a93cf9da4125e22e394f1ca8d9ea696fa3"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-rejected-idle9-bob-face.png",
+      "bytes": 108633,
+      "sha256": "c07624436d9823373bad364f5dea882f35372e6f70c903bb748583234ad407fc"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-rejected-npc10-imp-cutout.png",
+      "bytes": 724935,
+      "sha256": "9d4c0fd3685dfd6ba9e3b3c1f60993476745c9143c01a98128eb60210985dcbc"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-rejected-walk8-curly-fringe.png",
+      "bytes": 236519,
+      "sha256": "ac90bc147705e9e601a9dd9fc6801da63650b305e42274dd1894422c4396e20d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-run-0.png",
+      "bytes": 96394,
+      "sha256": "3b192130bc51fcdc1e09d2f9f83cb5f4a4b7cccac7414e650b8008fff7f925ab"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-run-1.png",
+      "bytes": 99189,
+      "sha256": "869dac7dce0f7563d9ba1a2544aff8834861a5cb2e01b54d4f074cc8fd82daa0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-run-2.png",
+      "bytes": 100087,
+      "sha256": "bb4e12284e32769e12212ed0ef3053b5dbfe3d0384abf59a604daec53b5acf8a"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-run-3.png",
+      "bytes": 99867,
+      "sha256": "96ae6adcd88d853469fdaf8074f676e8c18582096f64d651b1b4cb7514245303"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-run-4.png",
+      "bytes": 97304,
+      "sha256": "ddd68deb398325ce951871b66889d20978435e836f717282e87a127b6d917bd2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-run-5.png",
+      "bytes": 99555,
+      "sha256": "6d475239f6783649c66919aa6d62696b007399e7858563e2fab7ef299a84de82"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-run-6.png",
+      "bytes": 99726,
+      "sha256": "8a9529fdc74d805e01bcb4a1815c868b39495273378f0f08d3d673e0289d1957"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-run-7.png",
+      "bytes": 99333,
+      "sha256": "35111731bd11f0ae91c71289f6328ef4e871a5b1f450e2ea8054c1ecb70d1e2e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-walk-0.png",
+      "bytes": 97234,
+      "sha256": "a7c6a09c228cb1e970007e080fa4246a55105d8e7d95d2350f40fcdb4e396b37"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-walk-1.png",
+      "bytes": 99932,
+      "sha256": "79022bca1af99d5b4016edc36c3bd1abb0d232b065dd6d3bd1d71501fc83dc8c"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-walk-2.png",
+      "bytes": 100617,
+      "sha256": "29e9d41e29ea402a2523d05e3e1c8634bec2f945235c857512be947a33d2bb7e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-walk-3.png",
+      "bytes": 100073,
+      "sha256": "ff5681b227ee60a5da27dfd05249619c84d9ffc937342c8f051501cc0c1e5875"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-walk-4.png",
+      "bytes": 98072,
+      "sha256": "0aa649d181d9affcd9b434bc691ab3491fd392ed044c27e95675dd196600b9c0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-walk-5.png",
+      "bytes": 100397,
+      "sha256": "c3383b3cb7f7ad95183823b033fe938d3a5ac723556f3387896b26bcf2807868"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-walk-6.png",
+      "bytes": 100828,
+      "sha256": "4d3fdf3907853286e7dcdf71fdf0f9f53b911e937436cbd1ee15287f87d59d44"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back-walk-7.png",
+      "bytes": 100223,
+      "sha256": "45f21e2701fbf59786aa0582fc18f22a2e8dc8fd4bdb912f7e08ba6c05a776f5"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-run-0.png",
+      "bytes": 104610,
+      "sha256": "972ab207dc78afd8a7eb6c766907a02965692b3899eeaf3582d8425646009ef1"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-run-1.png",
+      "bytes": 106788,
+      "sha256": "50c1562040874d72ec5b2f657b1b62e8c7894feb1cc62fefdcaf5008b5be4403"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-run-2.png",
+      "bytes": 107692,
+      "sha256": "bc49c59230e7c39e725dc282372d187e710c77322978d3e70f05ea4e6541831a"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-run-3.png",
+      "bytes": 107220,
+      "sha256": "af19050ec6b982cd4e168e1f004ea3e9afb0590db1d06cb85a25afeaeafa037f"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-run-4.png",
+      "bytes": 105407,
+      "sha256": "9d854bb836e2923879ff744349edaf8f03a70ed7278286b9beb9e12dcca89378"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-run-5.png",
+      "bytes": 105691,
+      "sha256": "6d6b16f42b99cab60a2837b360b09580aa89e65d801fab8e753a6a23457c29a8"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-run-6.png",
+      "bytes": 104952,
+      "sha256": "247bcbf0cf75205c54ebead9b7f28efff6ad33576de52b6dfcfd2fa52494bb76"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-run-7.png",
+      "bytes": 105374,
+      "sha256": "652220103587bd4067636e27fc3a2fe8ff57074deb2bac7122ce4efab1fd8cc1"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-walk-0.png",
+      "bytes": 96351,
+      "sha256": "ab4426cbbf1fbe0a2aecf4c33f3470861cc0e96974078f9ec5fb48c24a070da0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-walk-1.png",
+      "bytes": 99161,
+      "sha256": "6c9a7859062180c5b028fc0b7ab84e2681778bf8e917ac0218f0fcc0821c3146"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-walk-2.png",
+      "bytes": 100312,
+      "sha256": "bc878f20a90ba0772a22c3f98f372761510e56a9178e34731fd1a7e4d43faac8"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-walk-3.png",
+      "bytes": 99804,
+      "sha256": "b5e6aa3a7194b88379884789d16bb100595195ef32f0dcd5862704096d2b4fa4"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-walk-4.png",
+      "bytes": 98201,
+      "sha256": "2f059f7fdf5e57bdc17dc420ec6da5b27d7cca2c799be2619ea80c2847db6fec"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-walk-5.png",
+      "bytes": 100468,
+      "sha256": "b3d01922acd5f942953e724e8fe3d77f585104290edbc56f2aa9cd505fd1849e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-walk-6.png",
+      "bytes": 99841,
+      "sha256": "0f58a0e6193f62ff359241017ece0172cc8c13b72756d86fd53307573ff60f6b"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_left-walk-7.png",
+      "bytes": 99224,
+      "sha256": "eec0e3e7e673ea2dd0583f4f30ba6ddd478bce1872ac937373fb2b129f80fb75"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-run-0.png",
+      "bytes": 104035,
+      "sha256": "cf0ec12f7859eccebecd36a8cc9822f8d6d99d1b6da7bcc20aed110584eb8699"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-run-1.png",
+      "bytes": 105052,
+      "sha256": "2d98edefc3e3940acb8027fe0769b608db2a322406981539dafd98e990270266"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-run-2.png",
+      "bytes": 105306,
+      "sha256": "e199f7fcb81a8400a75f4870fdf333614f1c7900cd1379b3f210ea78a7fa8f3e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-run-3.png",
+      "bytes": 105521,
+      "sha256": "0b012d6ffe2c0d63b08453eaf3b42c8d177e9cc7f4cf975a56691f7d53aa212d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-run-4.png",
+      "bytes": 105003,
+      "sha256": "e8fef6dd106dc389688a484cb62ff1dab6410c7b693eec842f0b4c8777e18242"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-run-5.png",
+      "bytes": 106253,
+      "sha256": "1300116e31e04ddd32f6a65c9b48e7d77d5a06d95611b9a299b0adbba7d73a4d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-run-6.png",
+      "bytes": 105414,
+      "sha256": "4101658776f8cf2ec173573120be3d508d4450e3987b928c6830733a3e8f24fd"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-run-7.png",
+      "bytes": 105592,
+      "sha256": "2e7c75d0509b65cd4c0e1668ebd62facc3b0387660fa165a7339f66f77b5c9b2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-walk-0.png",
+      "bytes": 95909,
+      "sha256": "f04fe6d859be9588280a8351f9b1e000164383836a8674042f9312c7c7cd67c3"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-walk-1.png",
+      "bytes": 98566,
+      "sha256": "d566f6b1d6639d8650f66f14e5cc58c882dab9600594f78848671e8401202a51"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-walk-2.png",
+      "bytes": 99920,
+      "sha256": "e152e0504b10b6dd60d47c2bb35b9c73c4e69076d2a150659bdb1943e7588451"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-walk-3.png",
+      "bytes": 99712,
+      "sha256": "89ec828c7ea75c964d7feede318163be5f578849b8945dbe0c440c0cb1a093bf"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-walk-4.png",
+      "bytes": 98367,
+      "sha256": "27ba7bb592e032bc457a8a0048c19ac401d7b8c2990d8dacf90b1466ad1fd18e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-walk-5.png",
+      "bytes": 100747,
+      "sha256": "9bf21b77419e9e4b9c5496cf674fbb4fe455c6c04ed291616762410958ed97b2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-walk-6.png",
+      "bytes": 99879,
+      "sha256": "31dbb129221fa103225ff533a1068f6464c15adaed8925171f222ef5abf8057d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-back_right-walk-7.png",
+      "bytes": 99222,
+      "sha256": "e852d2b075631ce603378b1fa418d6a16b6eb7230f39a2dae99cf2c26b84e3ff"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-run-0.png",
+      "bytes": 102083,
+      "sha256": "7b7ecb9dfde637eeb6f7b7ada5a8ae0a397b1a10eb72182aa8c9ee78b7afe9ce"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-run-1.png",
+      "bytes": 103344,
+      "sha256": "392008966584a089aedbba10e52fd2a070ad74c17a4117f77e35381696d39e95"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-run-2.png",
+      "bytes": 104791,
+      "sha256": "01957c6e7cb5b8ea9e417823b9abf22043bd4d6394321a2be2222772dc4906f1"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-run-3.png",
+      "bytes": 104781,
+      "sha256": "42c9263839a37cbf4f02a706e3296605e695a264ec268b555d40f063a94f394d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-run-4.png",
+      "bytes": 102788,
+      "sha256": "558cb6a43632755d7e0b4e6f473fcdf74dbf25103a96796f8a13f0a4ed49b5b3"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-run-5.png",
+      "bytes": 104407,
+      "sha256": "f1e598973009226c4ccb2da48c56d81b09387ce080f9cbb0c420e102dac78bc4"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-run-6.png",
+      "bytes": 104377,
+      "sha256": "9235b06dcd1b93fcd9f7b3e6ea7393149c0ef4883a3f6bd9e674379c812ea631"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-run-7.png",
+      "bytes": 104430,
+      "sha256": "39abdb4bb69bcd9b2ff6f0bbc52950680a1e8e71a454dfce0ca88511ec68260e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-walk-0.png",
+      "bytes": 102320,
+      "sha256": "d95e756805cbf12f41cccba1f0694749c1b4373783e939748b5613b35938f8a0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-walk-1.png",
+      "bytes": 104123,
+      "sha256": "e3f0509f86712f1f8d4adf043632113d4ee44f5072bb7c8ec10a33d79fe1729e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-walk-2.png",
+      "bytes": 104551,
+      "sha256": "4444d94fda3040b8b54edb32ce2396644fd24e223ad2668a9eb4b85c95d20909"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-walk-3.png",
+      "bytes": 104406,
+      "sha256": "4e8112ada334b4337b0e72154c6e83b4cf2ae78a47326a2befb0396199183bb9"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-walk-4.png",
+      "bytes": 102904,
+      "sha256": "446c10a8ce017ea11e435feecac82c71e6409f070e06cd30e53f202dc2959a0d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-walk-5.png",
+      "bytes": 104539,
+      "sha256": "619112c217899f6e49e0a3ad230c28c4fcfa7c00198e5e17f485bc4ca563de95"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-walk-6.png",
+      "bytes": 105004,
+      "sha256": "fd0148eae75b7c8df4a3b8ce0ad7135e20404d1316c0ed55302c7e045299ed70"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front-walk-7.png",
+      "bytes": 104672,
+      "sha256": "87767eef2b8cb926463496adef6ff0dff44d4a8a08c22003db5a8ad576b24217"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-run-0.png",
+      "bytes": 115545,
+      "sha256": "a4ff7309af2b93643f8f2be61a9b000571c96fa36e3c18b0eb61a5738070b670"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-run-1.png",
+      "bytes": 115221,
+      "sha256": "7cf1d742a53e6cb1004d4fb5bec04bcf4c71954ba85ed13ec19d725c586dc5b5"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-run-2.png",
+      "bytes": 114468,
+      "sha256": "2cde778d59994ef8315327f86e4771be75bbbf1bb07b28eb7831390a2b140666"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-run-3.png",
+      "bytes": 115558,
+      "sha256": "26344eeac8eecd804bd7679b30d28d5b3d5e6f7271d4d7ed60a6948a6df8024a"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-run-4.png",
+      "bytes": 114963,
+      "sha256": "67a0c149db2ad325820c51c4e82ce52dcf22b3690ba31d9cec0b731ad2763be1"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-run-5.png",
+      "bytes": 115306,
+      "sha256": "b9690fdb5bcfe2401c038f4104452343025fd893538de1ee8c7c6c1d4e257386"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-run-6.png",
+      "bytes": 115228,
+      "sha256": "e25be16f4e5fa89f10ee21353de188417531f8183c525ff3ffaef6f2cc0b46b7"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-run-7.png",
+      "bytes": 115528,
+      "sha256": "b638355cfa4b93519ef0e421dce65b07780d0165c247abccb4c753c1b7e41172"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-walk-0.png",
+      "bytes": 107936,
+      "sha256": "2e9b23cf7ee52de36ead27dea5162cdeb822ad6df73881ada5229964647587b5"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-walk-1.png",
+      "bytes": 109854,
+      "sha256": "ce53f726578ff32255c0a6203f171eb3068e35118d08d80d7b8bdf9f266db275"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-walk-2.png",
+      "bytes": 109771,
+      "sha256": "5a7515df430bfbbad0139fb074dc6377dc8a6f1177cc7f22c18486264a58b032"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-walk-3.png",
+      "bytes": 107954,
+      "sha256": "ec06ac49bda06bfeeeabdff972013fb7c0580c1d9544491fe6587c1a7cccb162"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-walk-4.png",
+      "bytes": 105886,
+      "sha256": "58a19dac03eb0b866d2d73fa91b1b1e2c13bc52c9684b5607284bdd0c0a19940"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-walk-5.png",
+      "bytes": 107349,
+      "sha256": "010dbb70f08c46ed574c8efae6b684af8a77c2c2d09e5a7a7fde024a994733da"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-walk-6.png",
+      "bytes": 108710,
+      "sha256": "7563150ffcfe8497334377379175e5af06641bf333fc70c0026e3097a9af81ca"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_left-walk-7.png",
+      "bytes": 109874,
+      "sha256": "afaa6d4e284d0f7bf0ec48690d285024e70d0ef24dc7dd0c7e16fcfd8565889d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-run-0.png",
+      "bytes": 114194,
+      "sha256": "465656cf5dc9a6c02753fa2c87121fffc45a4a15f57a1f2f8b93d7b2a5f66ad2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-run-1.png",
+      "bytes": 113383,
+      "sha256": "5ca2beb4b50c9f5926834e42c7d3575de267f11733a6f0f3480ba0d780e6ef50"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-run-2.png",
+      "bytes": 112386,
+      "sha256": "152f65ed404ff1c8be18a5bfc3d09f084f5e6d58da2c55563f988db10b7be35c"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-run-3.png",
+      "bytes": 113699,
+      "sha256": "4586beb610512c718e40b7d2002a99bc9bd69b73ed276ec05834427327491c16"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-run-4.png",
+      "bytes": 114254,
+      "sha256": "33e664012edf772c45436fb496a60795ad5834bf6858d918cd1f22c8d4030a8e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-run-5.png",
+      "bytes": 115983,
+      "sha256": "7179b212c083b3748f72853ab2911885ed1bb395d566c223e3fa17948d5137df"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-run-6.png",
+      "bytes": 116255,
+      "sha256": "68b996956584fb019f499e263c810d53fcc28382df98846d91627920cb0c13b2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-run-7.png",
+      "bytes": 115879,
+      "sha256": "80548f0842a6d39ca13854db41496ebc0fc959670dc1b99d5d0c1f655c0e3d7e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-walk-0.png",
+      "bytes": 107263,
+      "sha256": "a4ad5a0b153e65706758ab537b9feb1afed63e6951475084939cabf343a3c939"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-walk-1.png",
+      "bytes": 109143,
+      "sha256": "2ca3a23a6a6a7e0db455a937c4cb98a7823faeb4e306b32fb946553dc2a33284"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-walk-2.png",
+      "bytes": 109251,
+      "sha256": "0128314a993c637ef4db86e9677d3aba98f250c7afdce7b8d0d238b56bf5e62c"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-walk-3.png",
+      "bytes": 107794,
+      "sha256": "eb519d7d12c40bfbefce5e0809bbfad4c6525499e72426bb57ab0301dc4bc2c3"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-walk-4.png",
+      "bytes": 106401,
+      "sha256": "363788156fd9ed7401a49e9f3955f9465257faaae771ba7a0ed106adf135f0e9"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-walk-5.png",
+      "bytes": 107961,
+      "sha256": "b7173c823bc28ca33345def080aec81c40aa34ce8341e7ba89a6104554b185ed"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-walk-6.png",
+      "bytes": 108606,
+      "sha256": "eebb61f7b27bb857d8bf522208492c5280e68f0538ac5b03ca79bb3c57546157"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-front_right-walk-7.png",
+      "bytes": 109536,
+      "sha256": "052bfca636743ccc618578dbd0b8a4e21fa482cc072a62a8209be7784ea7eb82"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-run-0.png",
+      "bytes": 111183,
+      "sha256": "1511dcaf7008c4a7e18bf422f0c4003cad0f530b90831a300c08d06ce60829f6"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-run-1.png",
+      "bytes": 110705,
+      "sha256": "5b7e0af20cfaffec22f0b0e00434774eb0e077db8a92a86829d5d3619bd295d2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-run-2.png",
+      "bytes": 109456,
+      "sha256": "37015f1a0904b7a4d67aeacd65af4768350290a551573156052fc9bf6f605379"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-run-3.png",
+      "bytes": 109170,
+      "sha256": "3d23c6ab4b0ced2d7488c6bcee9fe3b9c65fcb63f2b40c4e1fdb59dbce279e82"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-run-4.png",
+      "bytes": 108898,
+      "sha256": "85773d9ac63937da8b2e2bd37af0adde20303dc221d8ee867318f7e4038b1ba5"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-run-5.png",
+      "bytes": 110874,
+      "sha256": "6361e0b4999a1ebb9129de153148eff6281b7fe14e4bcc7661141ce23d8efef2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-run-6.png",
+      "bytes": 111252,
+      "sha256": "1f71f50c95ede47f6d1fbfe1d3ff1e7087510ca1d092181ecd3a8e32501505b4"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-run-7.png",
+      "bytes": 111566,
+      "sha256": "254e45de57fc949ea6269c3a0e99a29564067991bc8965412eba8905388c1c68"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-walk-0.png",
+      "bytes": 102991,
+      "sha256": "c36eb04ce853be8dbfb1ae887ca3f806f405953862c014814e2fabc2aca55826"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-walk-1.png",
+      "bytes": 104888,
+      "sha256": "80c3358cf37a4051917df28d8617e39fd107c1ea1bdc8952fbfa1929bab524ce"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-walk-2.png",
+      "bytes": 103975,
+      "sha256": "6c57bd2a85bdc70745250b2a08b9197eacb626c6f5b73522437a24114cbb18c7"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-walk-3.png",
+      "bytes": 100804,
+      "sha256": "328bf53f3ed90cfa7f53c6d1449c56dc4e223a47251d7a8ff1301835e2b77ece"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-walk-4.png",
+      "bytes": 98199,
+      "sha256": "e0a941d45f5ffeb1c866cccf5c83d288fcea02b0ad96d595f1ed56b88dee688a"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-walk-5.png",
+      "bytes": 100831,
+      "sha256": "8a609af787e3a547ba441b429b142ca49896eba0c665f2c46d9b23413d907980"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-walk-6.png",
+      "bytes": 102373,
+      "sha256": "28b676a4ccb7df37d050549b4e53181c5d8a29b28db7ab3fdd3e37904711bb72"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-left-walk-7.png",
+      "bytes": 104400,
+      "sha256": "955dc9654964d84edacf399b45cb906ac64ccfea8b75c7ea14cb555541f012a7"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-run-0.png",
+      "bytes": 109139,
+      "sha256": "57bf54ae1c8d4254c5d3686ef5aa538a1b8bb495a18cf65b08880c951f9ec9e2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-run-1.png",
+      "bytes": 110620,
+      "sha256": "bd97e3bdac45cedb09f4427608e7904c5bc67b0facd306d91b7bd60073987600"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-run-2.png",
+      "bytes": 110882,
+      "sha256": "2b0772f2d60ba4d73a8b810a473161cf0cd5695984a233fcbbbda32db2825760"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-run-3.png",
+      "bytes": 111224,
+      "sha256": "051f2e2571c78530927bd26198f7d75a16e9ff2d703ed74e384dc71173a985da"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-run-4.png",
+      "bytes": 111185,
+      "sha256": "0064d2b3d8b2692155855b094eee759d101e3d76640a302a55558cb464d036ca"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-run-5.png",
+      "bytes": 110985,
+      "sha256": "03f1af4f12b359ca7362da2cdadb29da047736f8484e0385a7b0050e21a362ed"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-run-6.png",
+      "bytes": 109091,
+      "sha256": "123ad75cca9435f2aff526766c77a49bb32619c49d96d1f76bf73464e299572c"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-run-7.png",
+      "bytes": 109674,
+      "sha256": "4b5137eb8462634eb77c1d556c72fa9596dee67da03fbe2edf954dfd1f03657f"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-walk-0.png",
+      "bytes": 98254,
+      "sha256": "93c15875b7c9bfe5924b0736941cce8aeff0a2fc130c5242019cc18799257c5a"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-walk-1.png",
+      "bytes": 100680,
+      "sha256": "c84a466b3940bb24e114c826aca511689f076e0b301fa6eb842d61852aaeaed2"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-walk-2.png",
+      "bytes": 103059,
+      "sha256": "f8c04a8f07a470c30e8e2dd61f00910c4c5c7504442fdb1ba194677f61dac98a"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-walk-3.png",
+      "bytes": 103437,
+      "sha256": "c383f0cdf529f13629481a8cff654c1ab330c6ea22e18a0af0833275dcdc7405"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-walk-4.png",
+      "bytes": 103090,
+      "sha256": "fbb97e8fc56e9b6a50850e2ebf3b7499ba739b55082e903e5d8c14986c72f9fe"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-walk-5.png",
+      "bytes": 104854,
+      "sha256": "fcf1f2b4ac0085688eb936e281ed236b05e747319f0c54f18822c6e3bd497244"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-walk-6.png",
+      "bytes": 104777,
+      "sha256": "bb2f5bed5c9aee8fbb2769da0179d7da26c80c66e6e045d5c2a00140f5bb60d1"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-walk10-static-right-walk-7.png",
+      "bytes": 101561,
+      "sha256": "67546f1c30878275e679daf85e933e2d4504e67934f9d0c587a4107a84889010"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-import.log",
+      "bytes": 31192,
+      "sha256": "51143e1f974469c3bb8c525e46e5b01f5c8b6ab052f5efccf950b007829872c0"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_avatar_attachment.log",
+      "bytes": 259,
+      "sha256": "a7254dafeaf7fd24e6c1a854b2916ab5f98ddd252edf863e3d2d420272292e93"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_avatar_motion_rig.log",
+      "bytes": 718,
+      "sha256": "5dc0c480e023e7ab53cb420d3cf02d0b72df0e6a58134083a5714984ebdd7f6a"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_avatar_motion_world.log",
+      "bytes": 11904,
+      "sha256": "5294518724de28041b765af2c7810347aaa7230932f20103f8c0b555af81b510"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_avatar_renderer.log",
+      "bytes": 273,
+      "sha256": "fb65ebff62701d11647dcb0b91c31afb4b808d08d4961c077def2b6e4942be09"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_avatar_role_rig.log",
+      "bytes": 17186,
+      "sha256": "1aafe76f0e46f0b94eca6315773e219b4c2bf2203828842fe99b27c90d0a997e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_avatar_seated.log",
+      "bytes": 1350,
+      "sha256": "036326cc095c368b0a3c4b040d51f65cf9215d6376f2c71794cb85c718fa48e5"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_daylight_lighting.log",
+      "bytes": 11869,
+      "sha256": "5fe35719b00be3738bdabc6a3f0313dc1f72139f92608fde4fce971e11e1bce3"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_integration.log",
+      "bytes": 13501,
+      "sha256": "a061cf2171e3f66e402c727c11f3ce31532e5c055b938362f13ba7e6992e438d"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_island_layout.log",
+      "bytes": 11800,
+      "sha256": "310a6cb82ea54738aa82a7f969dec1da6d417ca851dd303d378e13faf17ec594"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_island_ride.log",
+      "bytes": 11768,
+      "sha256": "c5339d14855bd50dee0ac50e9b32fb01af437e3f920b15f54c7668f2649c8e8e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_npc_dialogue_hold.log",
+      "bytes": 14330,
+      "sha256": "d6750efcd8afeafcb99561638c91ab72c8b03b7c39017634194a2e8e94e919e4"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_npc_motion_sources.log",
+      "bytes": 7062,
+      "sha256": "c8be7cae28ebd71cd70a7997c448cd06bea01895c1d7402a1e7b9bc9aa285156"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_npc_walk_motion.log",
+      "bytes": 253,
+      "sha256": "ac06ebc73f07cb0449603c8e89f15c6f87e62ac6beec76a040f38c56420d2335"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_npc_world_activity.log",
+      "bytes": 12823,
+      "sha256": "058d4c35e5f8c4336cb76c90c5e4af66a2cd4f6a4ab66670883dba940baeaeba"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART17verified-index-test_occlusion.log",
+      "bytes": 11782,
+      "sha256": "5fdeb7c0f7b70899dec483309fc24138a7f7910557dfb2e9a969168f3b0a3a5a"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-announcer-greet.png",
+      "bytes": 1149130,
+      "sha256": "2b5bd22460a3f55e118e9b434f76ec9f66654be2674fdcbaabaaf42173013c96"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-announcer-idle-rest.png",
+      "bytes": 1150260,
+      "sha256": "ecdd092970a26825f96398ab9ae58ead0d33da06625a063d2bbaebab575ae618"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-announcer-interact.png",
+      "bytes": 1151219,
+      "sha256": "cc80e7c96d5eb42e12c3958615de49e92a50d06c6c2d2906ba55a6fd4f04af6b"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-announcer-native-route-gait-left.png",
+      "bytes": 1180802,
+      "sha256": "1545cdd22bbbfc978a6576233c0927b18bdbd406837a0c3fe9d012e5d46d3085"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-announcer-native-route-settle.png",
+      "bytes": 1152302,
+      "sha256": "d9f88e0bfdf621354c3c4cf1f106991b637a05c70a66ef09d201738daff34376"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-announcer-personality-emotion_curious.png",
+      "bytes": 1151127,
+      "sha256": "69d891b49ee88b0aafb881e135df6d7f03890bf697ab453ee7b93085b4837555"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-announcer-personality-special.png",
+      "bytes": 1152672,
+      "sha256": "ad377141b5cceb02b5cf905075123c90e13a508c4d0b2989789d72ebd3bd2cff"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-imp-greet.png",
+      "bytes": 720454,
+      "sha256": "1e4404c218205bb1a9336c6620a9be4221862d208f00c0593b2211700d250ce2"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-imp-idle-rest.png",
+      "bytes": 750918,
+      "sha256": "a8b9cdebbe3aa26e882a36434018c9f4aa28d5f0b321412f1f26524e1fb51415"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-imp-interact.png",
+      "bytes": 722651,
+      "sha256": "1f5ec15578052f452fb0a4022487c40a67e035d840c9e6e0eb1bef647d8471a8"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-imp-native-route-gait-right.png",
+      "bytes": 725760,
+      "sha256": "0a48884cf837f3a6ca1410a6c623bd0c1ece42979f40c67338f10add8318910d"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-imp-native-route-settle.png",
+      "bytes": 751901,
+      "sha256": "159a1ee66dcbadecec40388b691ed5562e7d8f1b980b29a49ebdb308f18fc1ca"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-imp-personality-dance.png",
+      "bytes": 722940,
+      "sha256": "6e5f2ced6758ca39e992c60574bcff5fbf52b604e0f444541ac45410c3274034"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-imp-personality-emotion_proud.png",
+      "bytes": 721276,
+      "sha256": "d9634e1dbb0064787295bc53aacc8fb7522e74b4c432cecaf0d76ef85039ab00"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-report.json",
+      "bytes": 74992,
+      "sha256": "e68da59b8a6ba0c562effa3c8fae9da3abea7491cf86230fcc71e8638b798015"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-ticket-greet.png",
+      "bytes": 956033,
+      "sha256": "143c2944fd7c97671542c318c63cfadb243c78903d881e609502f1dc28ba0cae"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-ticket-idle-rest.png",
+      "bytes": 955681,
+      "sha256": "4f913dc93327b3f050c47ddb0979ab799671b3152143e97873de2fe65c2a36fb"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-ticket-interact.png",
+      "bytes": 955249,
+      "sha256": "a21f01638cc31ad510c08d46a254b1a351b4304292da766a150f92d2a1159f5b"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-ticket-native-route-gait-right.png",
+      "bytes": 978931,
+      "sha256": "36fd6a6f661558398961533591d0fa48b59d67e98fda3962d1c51bb6dd2a0e39"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-ticket-native-route-settle.png",
+      "bytes": 976897,
+      "sha256": "aa93d3d534c511449f451b6afea208cd608c08cec029d94ac0b0464cf34fb4b5"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-ticket-personality-emotion_happy.png",
+      "bytes": 955157,
+      "sha256": "c4ae920e0f9ee81bbb9fad7ac346c7438eb845d7c7648d56fd06e4d447d6f6b8"
+    },
+    {
+      "path": "pm/Snapland-art/images/npc_island_eleventh-ticket-personality-idle_gesture.png",
+      "bytes": 953845,
+      "sha256": "a0b52e94a2dedaf706adf57d5584692c7a4b1cc2eb900081ee59eb798500238c"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-dock-out.png",
+      "bytes": 1060521,
+      "sha256": "120a2e27e25b7bbb5fff02e25441107e939bfe0416c170408aefd8e99b5f3bf2"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-dock-return.png",
+      "bytes": 686775,
+      "sha256": "f9642196c89b7daa84433b694eed830905c08f20e6cd2146966fbb563166c0b3"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-east-district.png",
+      "bytes": 1119586,
+      "sha256": "13506434cab6cbf9051048b8d401700564c203fde872a11bb7aadd230b7258ff"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-fountain-east.png",
+      "bytes": 1223400,
+      "sha256": "8cf8530abeb456a96a9b0aa4f6210e99122f99b80d998965fb082a29d71faa0d"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-fountain-west.png",
+      "bytes": 1289128,
+      "sha256": "3760c1a0c6a1da55845b18edba67b9f81dd0d980c1de72ecb0975c8b1287ea5c"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-guide-ride.png",
+      "bytes": 1035662,
+      "sha256": "08f58a2a88f9ca35900c616069a6210221af68a4d6b6b214ddd855dcb13706c0"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-lookout.png",
+      "bytes": 909995,
+      "sha256": "695ba3242861dcde50437ceec82b3be0a68fd1830ef5d86a593e9bebf0ece3df"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-moonstage.png",
+      "bytes": 1042704,
+      "sha256": "5e1363d1422d7fd644a1eb60058d8662e03163e61f1312b444bd4e76036bd6b5"
+    },
+    {
+      "path": "pm/Snapland-main/images/MAIN-11-motion_finalproof-roam-west-district.png",
+      "bytes": 1208785,
+      "sha256": "f38732bbc0423d621d7dd890241c547d6bb3a38b63ee44f0ae22235d0fbe06fb"
+    }
+  ],
+  "limits": [
+    "No real-time FPS benchmark or audio listening",
+    "NPC walk turnaround sources cover left and right only",
+    "Full authored action sets and final animation quality remain pending"
+  ],
+  "playback_seconds": {
+    "hero_walk": [
+      54.616667,
+      218.416667
+    ],
+    "hero_idle": [
+      197.616667,
+      790.416667
+    ],
+    "npc_main": [
+      74.433333,
+      297.683333
+    ],
+    "island_roam": [
+      91.666667,
+      366.616667
+    ],
+    "npc_dialogue": [
+      7.466667,
+      29.85
+    ]
+  },
+  "visual_review": "72 hero idle PNGs in three contact sheets,21 NPC PNGs in three contact sheets,9 route PNGs in contact sheet,3 dialogue PNGs; selected full-size walk/head/boot images. Does not establish all authored actions or all possible appearances.",
+  "delivery_transcode": {
+    "roam_normal": "1280x720,30fps",
+    "roam_quarter": "960x540,15fps,1.6Mbps ceiling; original lossless PNGs retained"
+  }
+}

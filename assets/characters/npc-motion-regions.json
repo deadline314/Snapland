@@ -1,0 +1,1841 @@
+{
+  "schema_version": 1,
+  "candidate_only": true,
+  "measurement_method": {
+    "component_alpha_threshold": 128,
+    "component_selection": "largest 8-connected component independently inside each atlas half",
+    "normalization": "nearest-neighbour; full strong-alpha character bound scaled into 280x360 canvas; role target heights ticket 320px, imp 260px, announcer 320px; sole at row 346",
+    "source_rgb_policy": "no recolor or palette transform; normalized raw and source streams are identical",
+    "rig_reference": {
+      "canvas": [
+        280,
+        360
+      ],
+      "pixel_size_m": 0.006666666666666666,
+      "reference_leg_chain_m": 0.45
+    },
+    "important_limit": "only left/right candidate views are declared; neither sheet is an authored walk cycle; native visual acceptance remains pending"
+  },
+  "roles": {
+    "ticket": {
+      "candidate_status": "measurement_only_not_production_approved",
+      "source_atlas": "res://assets/characters/ticket-turnaround-candidate-v2.png",
+      "source_sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+      "atlas_halves": [
+        "left",
+        "right"
+      ],
+      "target_body_height_px": 320,
+      "requested_views": [
+        "left",
+        "right"
+      ],
+      "unsupported_views": [
+        "front",
+        "front_right",
+        "back_right",
+        "back",
+        "back_left",
+        "front_left"
+      ],
+      "directions": {
+        "left": {
+          "source_rect": [
+            314,
+            150,
+            349,
+            784
+          ],
+          "normalization": {
+            "body_bounds_alpha_threshold": 128,
+            "destination_body_size": [
+              142,
+              320
+            ],
+            "destination_origin": [
+              69,
+              26
+            ],
+            "feet_row": 346,
+            "target_body_height_px": 320,
+            "nearest_neighbor": true
+          },
+          "pelvis": [
+            139,
+            260
+          ],
+          "lower": [
+            [
+              103,
+              264,
+              39,
+              38
+            ],
+            [
+              150,
+              264,
+              39,
+              38
+            ],
+            [
+              75,
+              300,
+              50,
+              46
+            ],
+            [
+              145,
+              300,
+              52,
+              46
+            ]
+          ],
+          "boot": [
+            75,
+            300,
+            50,
+            46
+          ],
+          "boot_kind": "leather_boot",
+          "skin_rect": [
+            114,
+            276,
+            3,
+            3
+          ],
+          "boot_pivot_x": 100,
+          "ankle_y": 300,
+          "sole_y": 346,
+          "hip_points": [
+            [
+              121,
+              261
+            ],
+            [
+              163,
+              261
+            ]
+          ],
+          "hip_half_width_px": [
+            8.32,
+            8.32
+          ],
+          "opening_spans": [
+            [
+              112,
+              131,
+              262
+            ],
+            [
+              153,
+              174,
+              262
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              74,
+              261,
+              61,
+              85
+            ],
+            [
+              142,
+              261,
+              69,
+              85
+            ]
+          ],
+          "garment_guards": [
+            [
+              80,
+              23,
+              122,
+              111
+            ],
+            [
+              78,
+              127,
+              123,
+              93
+            ],
+            [
+              67,
+              199,
+              56,
+              59
+            ],
+            [
+              96,
+              212,
+              92,
+              56
+            ],
+            [
+              69,
+              0,
+              142,
+              117
+            ],
+            [
+              74,
+              109,
+              132,
+              92
+            ],
+            [
+              63,
+              189,
+              56,
+              60
+            ],
+            [
+              89,
+              200,
+              100,
+              59
+            ]
+          ],
+          "protected_regions": [
+            [
+              74,
+              25,
+              132,
+              108
+            ],
+            [
+              79,
+              127,
+              122,
+              85
+            ],
+            [
+              93,
+              211,
+              93,
+              55
+            ]
+          ],
+          "leg_measurement": {
+            "hip_center_y_px": 261.0,
+            "ankle_y_px": 296,
+            "hip_to_ankle_px": 35.0,
+            "pixel_size_m": 0.006666666666666666,
+            "source_hip_to_ankle_m": 0.2333333333333333,
+            "rig_reference_chain_m": 0.45,
+            "leg_length_scale": 0.5185185185185185
+          },
+          "protected_regions_named": [
+            {
+              "label": "head/hair/glasses",
+              "rect": [
+                69,
+                0,
+                142,
+                117
+              ]
+            },
+            {
+              "label": "jacket and strap",
+              "rect": [
+                74,
+                109,
+                132,
+                92
+              ]
+            },
+            {
+              "label": "satchel",
+              "rect": [
+                63,
+                189,
+                56,
+                60
+              ]
+            },
+            {
+              "label": "cream shorts",
+              "rect": [
+                89,
+                200,
+                100,
+                59
+              ]
+            }
+          ],
+          "measurements": {
+            "boot_or_bare_foot_rect_complete": true,
+            "boot_pivot_x_px": 96,
+            "sole_row_px": 346,
+            "ankle_row_px": 296,
+            "sole_to_ankle_px": 50,
+            "ankle_height_source_m": 0.3333333333333333
+          }
+        },
+        "right": {
+          "source_rect": [
+            899,
+            146,
+            324,
+            791
+          ],
+          "normalization": {
+            "body_bounds_alpha_threshold": 128,
+            "destination_body_size": [
+              131,
+              320
+            ],
+            "destination_origin": [
+              74,
+              26
+            ],
+            "feet_row": 346,
+            "target_body_height_px": 320,
+            "nearest_neighbor": true
+          },
+          "pelvis": [
+            141,
+            261
+          ],
+          "lower": [
+            [
+              100,
+              265,
+              40,
+              38
+            ],
+            [
+              149,
+              265,
+              37,
+              38
+            ],
+            [
+              94,
+              300,
+              50,
+              46
+            ],
+            [
+              144,
+              300,
+              52,
+              46
+            ]
+          ],
+          "boot": [
+            94,
+            300,
+            50,
+            46
+          ],
+          "boot_kind": "leather_boot",
+          "skin_rect": [
+            114,
+            276,
+            3,
+            3
+          ],
+          "boot_pivot_x": 119,
+          "ankle_y": 300,
+          "sole_y": 346,
+          "hip_points": [
+            [
+              120,
+              262
+            ],
+            [
+              163,
+              262
+            ]
+          ],
+          "hip_half_width_px": [
+            8.32,
+            8.32
+          ],
+          "opening_spans": [
+            [
+              110,
+              132,
+              263
+            ],
+            [
+              153,
+              175,
+              263
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              89,
+              262,
+              56,
+              84
+            ],
+            [
+              144,
+              262,
+              61,
+              84
+            ]
+          ],
+          "garment_guards": [
+            [
+              75,
+              23,
+              130,
+              111
+            ],
+            [
+              77,
+              127,
+              123,
+              93
+            ],
+            [
+              74,
+              199,
+              56,
+              59
+            ],
+            [
+              95,
+              212,
+              92,
+              56
+            ],
+            [
+              71,
+              0,
+              139,
+              117
+            ],
+            [
+              74,
+              109,
+              132,
+              92
+            ],
+            [
+              71,
+              189,
+              56,
+              60
+            ],
+            [
+              89,
+              200,
+              100,
+              59
+            ]
+          ],
+          "protected_regions": [
+            [
+              76,
+              25,
+              128,
+              108
+            ],
+            [
+              79,
+              127,
+              122,
+              85
+            ],
+            [
+              92,
+              211,
+              93,
+              55
+            ]
+          ],
+          "leg_measurement": {
+            "hip_center_y_px": 262.0,
+            "ankle_y_px": 296,
+            "hip_to_ankle_px": 34.0,
+            "pixel_size_m": 0.006666666666666666,
+            "source_hip_to_ankle_m": 0.22666666666666666,
+            "rig_reference_chain_m": 0.45,
+            "leg_length_scale": 0.5037037037037037
+          },
+          "protected_regions_named": [
+            {
+              "label": "head/hair/glasses",
+              "rect": [
+                71,
+                0,
+                139,
+                117
+              ]
+            },
+            {
+              "label": "jacket and strap",
+              "rect": [
+                74,
+                109,
+                132,
+                92
+              ]
+            },
+            {
+              "label": "satchel",
+              "rect": [
+                71,
+                189,
+                56,
+                60
+              ]
+            },
+            {
+              "label": "cream shorts",
+              "rect": [
+                89,
+                200,
+                100,
+                59
+              ]
+            }
+          ],
+          "measurements": {
+            "boot_or_bare_foot_rect_complete": true,
+            "boot_pivot_x_px": 118,
+            "sole_row_px": 346,
+            "ankle_row_px": 296,
+            "sole_to_ankle_px": 50,
+            "ankle_height_source_m": 0.3333333333333333
+          }
+        }
+      },
+      "requested_npc_world_height_m": 2.35,
+      "observed_shared_park_sprite_height_m": 2.4,
+      "source_height_m": 2.1333333333333333,
+      "source_height_delta_vs_requested_m": -0.21666666666666679,
+      "source_height_delta_vs_observed_shared_m": -0.2666666666666666
+    },
+    "imp": {
+      "candidate_status": "measurement_only_not_production_approved",
+      "source_atlas": "res://assets/characters/imp-turnaround-candidate-v1.png",
+      "source_sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+      "atlas_halves": [
+        "left",
+        "right"
+      ],
+      "target_body_height_px": 260,
+      "requested_views": [
+        "left",
+        "right"
+      ],
+      "unsupported_views": [
+        "front",
+        "front_right",
+        "back_right",
+        "back",
+        "back_left",
+        "front_left"
+      ],
+      "directions": {
+        "left": {
+          "source_rect": [
+            254,
+            140,
+            504,
+            617
+          ],
+          "normalization": {
+            "body_bounds_alpha_threshold": 128,
+            "destination_body_size": [
+              212,
+              260
+            ],
+            "destination_origin": [
+              34,
+              86
+            ],
+            "feet_row": 346,
+            "target_body_height_px": 260,
+            "nearest_neighbor": true
+          },
+          "pelvis": [
+            140,
+            277
+          ],
+          "lower": [
+            [
+              90,
+              282,
+              42,
+              39
+            ],
+            [
+              128,
+              282,
+              44,
+              39
+            ],
+            [
+              62,
+              320,
+              62,
+              26
+            ],
+            [
+              120,
+              320,
+              62,
+              26
+            ]
+          ],
+          "boot": [
+            120,
+            320,
+            62,
+            26
+          ],
+          "boot_kind": "bare_foot",
+          "skin_rect": [
+            101,
+            304,
+            3,
+            3
+          ],
+          "boot_pivot_x": 150,
+          "ankle_y": 321,
+          "sole_y": 346,
+          "hip_points": [
+            [
+              103,
+              277
+            ],
+            [
+              139,
+              277
+            ]
+          ],
+          "hip_half_width_px": [
+            17.0,
+            17.0
+          ],
+          "opening_spans": [
+            [
+              86,
+              120,
+              277
+            ],
+            [
+              122,
+              156,
+              277
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              60,
+              279,
+              70,
+              67
+            ],
+            [
+              120,
+              279,
+              63,
+              67
+            ]
+          ],
+          "garment_guards": [
+            [
+              31,
+              83,
+              218,
+              146
+            ],
+            [
+              76,
+              203,
+              131,
+              50
+            ],
+            [
+              102,
+              234,
+              70,
+              49
+            ],
+            [
+              173,
+              232,
+              78,
+              58
+            ],
+            [
+              52,
+              132,
+              177,
+              118
+            ],
+            [
+              89,
+              230,
+              105,
+              38
+            ],
+            [
+              110,
+              255,
+              55,
+              39
+            ],
+            [
+              168,
+              254,
+              61,
+              45
+            ]
+          ],
+          "protected_regions": [
+            [
+              33,
+              85,
+              214,
+              143
+            ],
+            [
+              77,
+              205,
+              128,
+              46
+            ],
+            [
+              103,
+              236,
+              67,
+              45
+            ],
+            [
+              175,
+              233,
+              74,
+              55
+            ]
+          ],
+          "leg_measurement": {
+            "hip_center_y_px": 277.0,
+            "ankle_y_px": 321,
+            "hip_to_ankle_px": 44.0,
+            "pixel_size_m": 0.006666666666666666,
+            "source_hip_to_ankle_m": 0.29333333333333333,
+            "rig_reference_chain_m": 0.45,
+            "leg_length_scale": 0.6518518518518518
+          },
+          "boot_exclusions": [
+            [
+              116,
+              320,
+              9,
+              26
+            ]
+          ],
+          "protected_regions_named": [
+            {
+              "label": "horns head and ears",
+              "rect": [
+                52,
+                132,
+                177,
+                118
+              ]
+            },
+            {
+              "label": "scarf and scarf tail",
+              "rect": [
+                89,
+                230,
+                105,
+                38
+              ]
+            },
+            {
+              "label": "cream belly",
+              "rect": [
+                110,
+                255,
+                55,
+                39
+              ]
+            },
+            {
+              "label": "tail",
+              "rect": [
+                168,
+                254,
+                61,
+                45
+              ]
+            }
+          ],
+          "measurements": {
+            "boot_or_bare_foot_rect_complete": true,
+            "boot_pivot_x_px": 150,
+            "sole_row_px": 346,
+            "ankle_row_px": 321,
+            "sole_to_ankle_px": 25,
+            "ankle_height_source_m": 0.16666666666666666
+          },
+          "limb_corridors": [
+            [
+              [
+                83,
+                277
+              ],
+              [
+                128,
+                277
+              ],
+              [
+                129,
+                316
+              ],
+              [
+                130,
+                346
+              ],
+              [
+                60,
+                346
+              ],
+              [
+                60,
+                321
+              ],
+              [
+                88,
+                316
+              ]
+            ],
+            [
+              [
+                122,
+                277
+              ],
+              [
+                155,
+                277
+              ],
+              [
+                180,
+                317
+              ],
+              [
+                183,
+                346
+              ],
+              [
+                120,
+                346
+              ],
+              [
+                120,
+                322
+              ],
+              [
+                133,
+                309
+              ]
+            ]
+          ],
+          "hand_guards": [
+            [
+              [
+                57,
+                258
+              ],
+              [
+                87,
+                258
+              ],
+              [
+                94,
+                269
+              ],
+              [
+                88,
+                283
+              ],
+              [
+                81,
+                295
+              ],
+              [
+                56,
+                295
+              ],
+              [
+                49,
+                280
+              ]
+            ],
+            [
+              [
+                144,
+                258
+              ],
+              [
+                177,
+                258
+              ],
+              [
+                184,
+                276
+              ],
+              [
+                180,
+                289
+              ],
+              [
+                169,
+                297
+              ],
+              [
+                145,
+                297
+              ],
+              [
+                138,
+                281
+              ]
+            ]
+          ],
+          "limb_ownership_measurement_note": "Normalized immutable source contours separate each hand/finger from the boot-connected leg. Proximal X spans cover the actual thigh roots; source hip rows and one fixed role bone chain are unchanged. Corridors constrain flood only; no original leg/foot is restored to the upper."
+        },
+        "right": {
+          "source_rect": [
+            1009,
+            134,
+            511,
+            624
+          ],
+          "normalization": {
+            "body_bounds_alpha_threshold": 128,
+            "destination_body_size": [
+              213,
+              260
+            ],
+            "destination_origin": [
+              33,
+              86
+            ],
+            "feet_row": 346,
+            "target_body_height_px": 260,
+            "nearest_neighbor": true
+          },
+          "pelvis": [
+            141,
+            279
+          ],
+          "lower": [
+            [
+              103,
+              282,
+              39,
+              39
+            ],
+            [
+              141,
+              280,
+              41,
+              40
+            ],
+            [
+              92,
+              320,
+              50,
+              26
+            ],
+            [
+              137,
+              320,
+              50,
+              26
+            ]
+          ],
+          "boot": [
+            92,
+            320,
+            50,
+            26
+          ],
+          "boot_kind": "bare_foot",
+          "skin_rect": [
+            135,
+            302,
+            3,
+            3
+          ],
+          "boot_pivot_x": 117,
+          "ankle_y": 320,
+          "sole_y": 346,
+          "hip_points": [
+            [
+              147,
+              279
+            ],
+            [
+              174,
+              279
+            ]
+          ],
+          "hip_half_width_px": [
+            17.0,
+            19.0
+          ],
+          "opening_spans": [
+            [
+              130,
+              164,
+              279
+            ],
+            [
+              155,
+              193,
+              279
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              90,
+              279,
+              74,
+              67
+            ],
+            [
+              136,
+              279,
+              81,
+              67
+            ]
+          ],
+          "garment_guards": [
+            [
+              30,
+              83,
+              218,
+              146
+            ],
+            [
+              66,
+              203,
+              131,
+              51
+            ],
+            [
+              106,
+              234,
+              65,
+              49
+            ],
+            [
+              29,
+              233,
+              71,
+              63
+            ],
+            [
+              51,
+              132,
+              177,
+              118
+            ],
+            [
+              80,
+              230,
+              105,
+              39
+            ],
+            [
+              113,
+              255,
+              51,
+              39
+            ],
+            [
+              50,
+              255,
+              57,
+              49
+            ]
+          ],
+          "protected_regions": [
+            [
+              32,
+              85,
+              214,
+              143
+            ],
+            [
+              67,
+              205,
+              128,
+              47
+            ],
+            [
+              107,
+              236,
+              62,
+              45
+            ],
+            [
+              31,
+              234,
+              67,
+              60
+            ]
+          ],
+          "leg_measurement": {
+            "hip_center_y_px": 279.0,
+            "ankle_y_px": 320,
+            "hip_to_ankle_px": 41.0,
+            "pixel_size_m": 0.006666666666666666,
+            "source_hip_to_ankle_m": 0.2733333333333333,
+            "rig_reference_chain_m": 0.45,
+            "leg_length_scale": 0.6074074074074074
+          },
+          "protected_regions_named": [
+            {
+              "label": "horns head and ears",
+              "rect": [
+                51,
+                132,
+                177,
+                118
+              ]
+            },
+            {
+              "label": "scarf and scarf tail",
+              "rect": [
+                80,
+                230,
+                105,
+                39
+              ]
+            },
+            {
+              "label": "cream belly",
+              "rect": [
+                113,
+                255,
+                51,
+                39
+              ]
+            },
+            {
+              "label": "tail",
+              "rect": [
+                50,
+                255,
+                57,
+                49
+              ]
+            }
+          ],
+          "measurements": {
+            "boot_or_bare_foot_rect_complete": true,
+            "boot_pivot_x_px": 117,
+            "sole_row_px": 346,
+            "ankle_row_px": 320,
+            "sole_to_ankle_px": 26,
+            "ankle_height_source_m": 0.1733333333333333
+          },
+          "limb_corridors": [
+            [
+              [
+                130,
+                279
+              ],
+              [
+                164,
+                279
+              ],
+              [
+                164,
+                306
+              ],
+              [
+                151,
+                320
+              ],
+              [
+                149,
+                346
+              ],
+              [
+                90,
+                346
+              ],
+              [
+                90,
+                321
+              ],
+              [
+                112,
+                310
+              ],
+              [
+                124,
+                301
+              ]
+            ],
+            [
+              [
+                160,
+                279
+              ],
+              [
+                198,
+                279
+              ],
+              [
+                198,
+                314
+              ],
+              [
+                217,
+                321
+              ],
+              [
+                217,
+                346
+              ],
+              [
+                136,
+                346
+              ],
+              [
+                136,
+                320
+              ],
+              [
+                154,
+                309
+              ]
+            ]
+          ],
+          "hand_guards": [
+            [
+              [
+                100,
+                263
+              ],
+              [
+                128,
+                263
+              ],
+              [
+                143,
+                280
+              ],
+              [
+                138,
+                291
+              ],
+              [
+                129,
+                299
+              ],
+              [
+                101,
+                299
+              ],
+              [
+                97,
+                286
+              ]
+            ],
+            [
+              [
+                197,
+                256
+              ],
+              [
+                220,
+                263
+              ],
+              [
+                227,
+                279
+              ],
+              [
+                221,
+                293
+              ],
+              [
+                199,
+                299
+              ],
+              [
+                194,
+                288
+              ],
+              [
+                193,
+                273
+              ]
+            ]
+          ],
+          "limb_ownership_measurement_note": "Normalized immutable source contours separate each hand/finger from the boot-connected leg. Proximal X spans cover the actual thigh roots; source hip rows and one fixed role bone chain are unchanged. Corridors constrain flood only; no original leg/foot is restored to the upper."
+        }
+      },
+      "requested_npc_world_height_m": 1.75,
+      "observed_shared_park_sprite_height_m": 2.4,
+      "source_height_m": 1.7333333333333334,
+      "source_height_delta_vs_requested_m": -0.016666666666666607,
+      "source_height_delta_vs_observed_shared_m": -0.6666666666666665
+    },
+    "announcer": {
+      "candidate_status": "candidate_measurement_pending_native_acceptance",
+      "source_atlas": "res://assets/characters/announcer-turnaround-candidate-v1.png",
+      "source_sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+      "atlas_halves": [
+        "left",
+        "right"
+      ],
+      "target_body_height_px": 320,
+      "requested_npc_world_height_m": 2.35,
+      "observed_shared_park_sprite_height_m": 2.4,
+      "source_height_m": 2.1333333333333333,
+      "unsupported_views": [
+        "front",
+        "front_right",
+        "back_right",
+        "back",
+        "back_left",
+        "front_left"
+      ],
+      "directions": {
+        "left": {
+          "source_rect": [
+            236,
+            108,
+            391,
+            823
+          ],
+          "normalization": {
+            "body_bounds_alpha_threshold": 128,
+            "destination_body_size": [
+              152,
+              320
+            ],
+            "destination_origin": [
+              64,
+              26
+            ],
+            "feet_row": 346,
+            "target_body_height_px": 320,
+            "nearest_neighbor": true
+          },
+          "pelvis": [
+            140,
+            226
+          ],
+          "lower": [
+            [
+              104,
+              220,
+              34,
+              70
+            ],
+            [
+              144,
+              220,
+              34,
+              70
+            ],
+            [
+              68,
+              286,
+              68,
+              60
+            ],
+            [
+              144,
+              286,
+              68,
+              60
+            ]
+          ],
+          "boot": [
+            142,
+            286,
+            74,
+            60
+          ],
+          "boot_pivot_x": 179,
+          "skin_rect": [
+            119,
+            254,
+            3,
+            3
+          ],
+          "ankle_y": 306,
+          "hip_points": [
+            [
+              119,
+              228
+            ],
+            [
+              159,
+              228
+            ]
+          ],
+          "hip_half_width_px": [
+            9,
+            9
+          ],
+          "opening_spans": [
+            [
+              110,
+              128,
+              228
+            ],
+            [
+              150,
+              168,
+              228
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              66,
+              220,
+              72,
+              126
+            ],
+            [
+              142,
+              220,
+              72,
+              126
+            ]
+          ],
+          "limb_garment_max_y": 285,
+          "garment_guards": [
+            [
+              68,
+              0,
+              145,
+              115
+            ],
+            [
+              76,
+              112,
+              132,
+              104
+            ],
+            [
+              67,
+              178,
+              29,
+              62
+            ],
+            [
+              184,
+              178,
+              30,
+              62
+            ],
+            [
+              68,
+              0,
+              145,
+              112
+            ],
+            [
+              90,
+              75,
+              90,
+              78
+            ],
+            [
+              75,
+              115,
+              132,
+              105
+            ],
+            [
+              68,
+              178,
+              28,
+              59
+            ],
+            [
+              76,
+              197,
+              130,
+              38
+            ]
+          ],
+          "protected_regions_named": [
+            {
+              "label": "hair and sailor cap",
+              "rect": [
+                68,
+                0,
+                145,
+                112
+              ]
+            },
+            {
+              "label": "face and neck",
+              "rect": [
+                90,
+                75,
+                90,
+                78
+              ]
+            },
+            {
+              "label": "striped torso and coat",
+              "rect": [
+                75,
+                115,
+                132,
+                105
+              ]
+            },
+            {
+              "label": "hands and cuffs",
+              "rect": [
+                68,
+                178,
+                28,
+                59
+              ]
+            },
+            {
+              "label": "coat hem",
+              "rect": [
+                76,
+                197,
+                130,
+                38
+              ]
+            }
+          ],
+          "sole_y": 346,
+          "boot_kind": "gold_boot",
+          "protected_regions": [
+            [
+              68,
+              0,
+              145,
+              112
+            ],
+            [
+              90,
+              75,
+              90,
+              78
+            ],
+            [
+              75,
+              115,
+              132,
+              105
+            ],
+            [
+              68,
+              178,
+              28,
+              59
+            ],
+            [
+              76,
+              197,
+              130,
+              38
+            ]
+          ],
+          "leg_measurement": {
+            "hip_center_y_px": 228.0,
+            "ankle_y_px": 306,
+            "hip_to_ankle_px": 78.0,
+            "pixel_size_m": 0.006666666666666666,
+            "source_hip_to_ankle_m": 0.52,
+            "rig_reference_chain_m": 0.45,
+            "leg_length_scale": 1.1555555555555557
+          },
+          "measurements": {
+            "boot_or_bare_foot_rect_complete": true,
+            "boot_pivot_x_px": 179,
+            "sole_row_px": 346,
+            "ankle_row_px": 306,
+            "sole_to_ankle_px": 40,
+            "ankle_height_source_m": 0.26666666666666666
+          }
+        },
+        "right": {
+          "source_rect": [
+            918,
+            116,
+            373,
+            815
+          ],
+          "normalization": {
+            "body_bounds_alpha_threshold": 128,
+            "destination_body_size": [
+              146,
+              320
+            ],
+            "destination_origin": [
+              67,
+              26
+            ],
+            "feet_row": 346,
+            "target_body_height_px": 320,
+            "nearest_neighbor": true
+          },
+          "pelvis": [
+            140,
+            226
+          ],
+          "lower": [
+            [
+              144,
+              220,
+              34,
+              70
+            ],
+            [
+              104,
+              220,
+              34,
+              70
+            ],
+            [
+              144,
+              286,
+              68,
+              60
+            ],
+            [
+              68,
+              286,
+              68,
+              60
+            ]
+          ],
+          "boot": [
+            64,
+            286,
+            74,
+            60
+          ],
+          "boot_pivot_x": 101,
+          "skin_rect": [
+            119,
+            254,
+            3,
+            3
+          ],
+          "ankle_y": 306,
+          "hip_points": [
+            [
+              121,
+              228
+            ],
+            [
+              161,
+              228
+            ]
+          ],
+          "hip_half_width_px": [
+            9,
+            9
+          ],
+          "opening_spans": [
+            [
+              112,
+              130,
+              228
+            ],
+            [
+              152,
+              170,
+              228
+            ]
+          ],
+          "limb_envelopes": [
+            [
+              142,
+              220,
+              72,
+              126
+            ],
+            [
+              66,
+              220,
+              72,
+              126
+            ]
+          ],
+          "limb_garment_max_y": 285,
+          "garment_guards": [
+            [
+              68,
+              0,
+              145,
+              115
+            ],
+            [
+              72,
+              112,
+              132,
+              104
+            ],
+            [
+              184,
+              178,
+              30,
+              62
+            ],
+            [
+              67,
+              178,
+              29,
+              62
+            ],
+            [
+              68,
+              0,
+              145,
+              112
+            ],
+            [
+              100,
+              75,
+              90,
+              78
+            ],
+            [
+              73,
+              115,
+              132,
+              105
+            ],
+            [
+              184,
+              178,
+              28,
+              59
+            ],
+            [
+              74,
+              197,
+              130,
+              38
+            ]
+          ],
+          "protected_regions_named": [
+            {
+              "label": "hair and sailor cap",
+              "rect": [
+                68,
+                0,
+                145,
+                112
+              ]
+            },
+            {
+              "label": "face and neck",
+              "rect": [
+                100,
+                75,
+                90,
+                78
+              ]
+            },
+            {
+              "label": "striped torso and coat",
+              "rect": [
+                73,
+                115,
+                132,
+                105
+              ]
+            },
+            {
+              "label": "hands and cuffs",
+              "rect": [
+                184,
+                178,
+                28,
+                59
+              ]
+            },
+            {
+              "label": "coat hem",
+              "rect": [
+                74,
+                197,
+                130,
+                38
+              ]
+            }
+          ],
+          "sole_y": 346,
+          "boot_kind": "gold_boot",
+          "protected_regions": [
+            [
+              68,
+              0,
+              145,
+              112
+            ],
+            [
+              100,
+              75,
+              90,
+              78
+            ],
+            [
+              73,
+              115,
+              132,
+              105
+            ],
+            [
+              184,
+              178,
+              28,
+              59
+            ],
+            [
+              74,
+              197,
+              130,
+              38
+            ]
+          ],
+          "leg_measurement": {
+            "hip_center_y_px": 228.0,
+            "ankle_y_px": 306,
+            "hip_to_ankle_px": 78.0,
+            "pixel_size_m": 0.006666666666666666,
+            "source_hip_to_ankle_m": 0.52,
+            "rig_reference_chain_m": 0.45,
+            "leg_length_scale": 1.1555555555555557
+          },
+          "measurements": {
+            "boot_or_bare_foot_rect_complete": true,
+            "boot_pivot_x_px": 101,
+            "sole_row_px": 346,
+            "ankle_row_px": 306,
+            "sole_to_ankle_px": 40,
+            "ankle_height_source_m": 0.26666666666666666
+          }
+        }
+      },
+      "source_height_delta_vs_requested_m": -0.21666666666666679,
+      "source_height_delta_vs_observed_shared_m": -0.2666666666666666
+    }
+  },
+  "runtime_height_configuration_note": "ParkWorld._npc currently sets a shared Sprite3D pixel_size of 2.4 / NpcActivity.ACTION_VISIBLE_HEIGHT (420); no per-role 2.35m/1.75m configuration was found in the inspected runtime. The per-role heights below are the requested source targets, recorded separately from the observed shared runtime height."
+}

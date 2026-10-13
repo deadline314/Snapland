@@ -1,0 +1,252 @@
+{
+  "tool": "built-in imagegen.imagegen",
+  "model": "not exposed by tool",
+  "purpose": "immutable left/right NPC base pose candidates; not rendered walk cycles",
+  "references": [
+    "identities-v3.png",
+    "ticket-front-actions-v2.png",
+    "imp-front-actions-v2.png"
+  ],
+  "reference_read": "Root viewed the master and ticket action sheet; imp master viewed, local imp action sheet supplied as identity reference",
+  "status": "candidate; CPU source measurement and rig preparation pass; native identity and gait acceptance pending",
+  "rejected_ticket_v1_reason": "invented pale sock cuffs and incorrect wave emblem; not used",
+  "assets": [
+    {
+      "role": "ticket",
+      "file": "ticket-turnaround-candidate-v2.png",
+      "sha256": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+      "source_dimensions_px": [
+        1536,
+        1024
+      ],
+      "prompt_summary": "Identity-preserving left/right turnaround candidate based on the ticket character master; preserve complete head, hands, boots, canonical accessories/colors, and opaque source pixels. Original full prompt text was not retained in repository.",
+      "original_prompt_available": false,
+      "generation_tool": "built-in imagegen",
+      "generation_model": "not exposed by tool",
+      "status": "candidate_only_native_visual_acceptance_pending",
+      "views": [
+        {
+          "view": "left",
+          "source_alpha_bounds_threshold_128": [
+            314,
+            150,
+            349,
+            784
+          ],
+          "normalized_body_px": [
+            142,
+            320
+          ],
+          "normalized_origin_px": [
+            69,
+            26
+          ],
+          "source_body_height_m_at_2_4_over_360": 2.1333333333333333,
+          "hip_center_y_px": 261.0,
+          "ankle_y_px": 300,
+          "boot_rect_px": [
+            75,
+            300,
+            50,
+            46
+          ],
+          "opaque_sole_row_px": 346,
+          "hip_to_ankle_m": 0.26,
+          "leg_length_scale": 0.5777777777777778,
+          "rig_prepare_source_pass": true
+        },
+        {
+          "view": "right",
+          "source_alpha_bounds_threshold_128": [
+            899,
+            146,
+            324,
+            791
+          ],
+          "normalized_body_px": [
+            131,
+            320
+          ],
+          "normalized_origin_px": [
+            74,
+            26
+          ],
+          "source_body_height_m_at_2_4_over_360": 2.1333333333333333,
+          "hip_center_y_px": 262.0,
+          "ankle_y_px": 300,
+          "boot_rect_px": [
+            94,
+            300,
+            50,
+            46
+          ],
+          "opaque_sole_row_px": 346,
+          "hip_to_ankle_m": 0.2533333333333333,
+          "leg_length_scale": 0.5629629629629629,
+          "rig_prepare_source_pass": true
+        }
+      ],
+      "prompt_summary_basis": "Reconstructed summary from the recorded source specification and candidate content; the original generation prompt was not retained."
+    },
+    {
+      "role": "imp",
+      "file": "imp-turnaround-candidate-v1.png",
+      "sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0",
+      "source_dimensions_px": [
+        1774,
+        887
+      ],
+      "prompt_summary": "Identity-preserving left/right turnaround candidate based on the imp master; preserve asymmetric horns, scarf/tail, full feet, and original palette; no generated direction mirroring. Original full prompt text was not retained in repository.",
+      "original_prompt_available": false,
+      "generation_tool": "built-in imagegen",
+      "generation_model": "not exposed by tool",
+      "status": "candidate_only_native_visual_acceptance_pending",
+      "views": [
+        {
+          "view": "left",
+          "source_alpha_bounds_threshold_128": [
+            254,
+            140,
+            504,
+            617
+          ],
+          "normalized_body_px": [
+            261,
+            320
+          ],
+          "normalized_origin_px": [
+            9,
+            26
+          ],
+          "source_body_height_m_at_2_4_over_360": 2.1333333333333333,
+          "hip_center_y_px": 261.0,
+          "ankle_y_px": 315,
+          "boot_rect_px": [
+            115,
+            314,
+            75,
+            32
+          ],
+          "opaque_sole_row_px": 346,
+          "hip_to_ankle_m": 0.36,
+          "leg_length_scale": 0.7999999999999999,
+          "rig_prepare_source_pass": true
+        },
+        {
+          "view": "right",
+          "source_alpha_bounds_threshold_128": [
+            1009,
+            134,
+            511,
+            624
+          ],
+          "normalized_body_px": [
+            262,
+            320
+          ],
+          "normalized_origin_px": [
+            9,
+            26
+          ],
+          "source_body_height_m_at_2_4_over_360": 2.1333333333333333,
+          "hip_center_y_px": 263.0,
+          "ankle_y_px": 314,
+          "boot_rect_px": [
+            82,
+            314,
+            60,
+            32
+          ],
+          "opaque_sole_row_px": 345,
+          "hip_to_ankle_m": 0.33999999999999997,
+          "leg_length_scale": 0.7555555555555554,
+          "rig_prepare_source_pass": true
+        }
+      ],
+      "prompt_summary_basis": "Reconstructed summary from the recorded source specification and candidate content; the original generation prompt was not retained."
+    },
+    {
+      "role": "announcer",
+      "file": "announcer-turnaround-candidate-v1.png",
+      "sha256": "9541a1b771bb9dff8991681fc4e0d5a843f8d1dd0a5b3f7328696a41760e4af9",
+      "source_dimensions_px": [
+        1536,
+        1024
+      ],
+      "prompt_summary": "New full-length left/right turnaround candidate retaining the approved announcer identity and long teal pants with cream cuffs and yellow boots; transparent source, complete body, no shorts-sheet reuse. Original full prompt text was not retained in repository.",
+      "original_prompt_available": false,
+      "generation_tool": "built-in imagegen",
+      "generation_model": "not exposed by tool",
+      "status": "candidate_only_native_visual_acceptance_pending",
+      "views": [
+        {
+          "view": "left",
+          "source_alpha_bounds_threshold_128": [
+            236,
+            108,
+            391,
+            823
+          ],
+          "normalized_body_px": [
+            152,
+            320
+          ],
+          "normalized_origin_px": [
+            64,
+            26
+          ],
+          "source_body_height_m_at_2_4_over_360": 2.1333333333333333,
+          "hip_center_y_px": 228.0,
+          "ankle_y_px": 306,
+          "boot_rect_px": [
+            142,
+            286,
+            74,
+            60
+          ],
+          "opaque_sole_row_px": 346,
+          "hip_to_ankle_m": 0.52,
+          "leg_length_scale": 1.1555555555555557,
+          "rig_prepare_source_pass": true
+        },
+        {
+          "view": "right",
+          "source_alpha_bounds_threshold_128": [
+            918,
+            116,
+            373,
+            815
+          ],
+          "normalized_body_px": [
+            146,
+            320
+          ],
+          "normalized_origin_px": [
+            67,
+            26
+          ],
+          "source_body_height_m_at_2_4_over_360": 2.1333333333333333,
+          "hip_center_y_px": 228.0,
+          "ankle_y_px": 306,
+          "boot_rect_px": [
+            64,
+            286,
+            74,
+            60
+          ],
+          "opaque_sole_row_px": 346,
+          "hip_to_ankle_m": 0.52,
+          "leg_length_scale": 1.1555555555555557,
+          "rig_prepare_source_pass": true
+        }
+      ],
+      "prompt_summary_basis": "Reconstructed summary from the recorded source specification and candidate content; the original generation prompt was not retained."
+    }
+  ],
+  "invariants": "Candidate pixels are never recolored or rewritten by this provenance record. Left/right halves remain separately authored sources. CPU measurements are not formal visual acceptance or evidence of in-game play; native character identity, silhouette, proportions, and motion acceptance remain pending.",
+  "superseded_candidate": {
+    "file": "announcer-walk-sides-v2.png",
+    "sha256": "70a83037802218e67061fcc3504b3266e7ea66478df33d1232b70fe9487c65a0",
+    "reason": "Not selected as the announcer base source because the sheet depicts shorts, inconsistent with the approved master long-pants outfit."
+  }
+}

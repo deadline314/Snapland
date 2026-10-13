@@ -1,0 +1,410 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 60 FPS...
+[park_world] scenery meshes: 865, nodes: 1714
+PASS: Main opts in all three actors with measured gait sources
+PASS: ticket has its actual world sprite, root, and interaction point
+PASS: ticket has a live NpcActivity record
+PASS: ticket uses exactly the measured left/right rig records
+PASS: ticket capture resolves the real actor
+PASS: ticket keeps its measured adapter for every evidence capture
+PASS: ticket capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: ticket full visible head-to-feet bounds retain 12px padding at idle-rest: [P: (544.3728, 219.4755), S: (257.4094, 307.1998)]
+PASS: ticket source action Sprite is visible with its measured alpha silhouette
+PASS: ticket captured interaction point follows its actual route root
+PASS: ticket visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: ticket accumulates at least three seconds in its authored non-gait rest/activity states
+PASS: ticket remains within its authored route envelope during rest observation; max_abs_x=0.000m half_width=0.250m failure=
+PASS: ticket controller accepts authored greet action
+PASS: ticket presents authored greet on its source Sprite, not the gait rig
+PASS: ticket greet is backed by its named loaded source sequence
+PASS: ticket capture resolves the real actor
+PASS: ticket keeps its measured adapter for every evidence capture
+PASS: ticket capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: ticket full visible head-to-feet bounds retain 12px padding at greet: [P: (544.3727, 215.8853), S: (257.4094, 310.3835)]
+PASS: ticket source action Sprite is visible with its measured alpha silhouette
+PASS: ticket captured interaction point follows its actual route root
+PASS: ticket visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: ticket controller accepts authored interact action
+PASS: ticket presents authored interact on its source Sprite, not the gait rig
+PASS: ticket interact is backed by its named loaded source sequence
+PASS: ticket capture resolves the real actor
+PASS: ticket keeps its measured adapter for every evidence capture
+PASS: ticket capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: ticket full visible head-to-feet bounds retain 12px padding at interact: [P: (542.0847, 214.2937), S: (259.6974, 311.975)]
+PASS: ticket source action Sprite is visible with its measured alpha silhouette
+PASS: ticket captured interaction point follows its actual route root
+PASS: ticket visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: ticket personality action idle_gesture is from its loaded authored sequence
+PASS: ticket capture resolves the real actor
+PASS: ticket keeps its measured adapter for every evidence capture
+PASS: ticket capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: ticket full visible head-to-feet bounds retain 12px padding at personality-idle_gesture: [P: (542.0847, 215.8853), S: (257.4094, 310.3834)]
+PASS: ticket source action Sprite is visible with its measured alpha silhouette
+PASS: ticket captured interaction point follows its actual route root
+PASS: ticket visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: ticket personality action emotion_happy is from its loaded authored sequence
+PASS: ticket capture resolves the real actor
+PASS: ticket keeps its measured adapter for every evidence capture
+PASS: ticket capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: ticket full visible head-to-feet bounds retain 12px padding at personality-emotion_happy: [P: (542.0847, 214.2937), S: (259.6974, 311.975)]
+PASS: ticket source action Sprite is visible with its measured alpha silhouette
+PASS: ticket captured interaction point follows its actual route root
+PASS: ticket visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: ticket naturally presents at least two distinct role-specific personality actions
+PASS: ticket live gait displays a measured source direction while its own route moves
+PASS: ticket gait is driven by actual actor-root displacement, not a fixture-only rig animation
+PASS: ticket interaction point tracks the moving root during measured gait
+PASS: ticket capture resolves the real actor
+PASS: ticket keeps its measured adapter for every evidence capture
+PASS: ticket capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: ticket full visible head-to-feet bounds retain 12px padding at native-route-gait-right: [P: (542.907, 208.3822), S: (318.9588, 345.6)]
+PASS: ticket is presenting actual visible measured-rig parts, not its hidden action Sprite
+PASS: ticket visible gait has its actual upper and both boot instances
+PASS: ticket captured interaction point follows its actual route root
+PASS: ticket gait uses a valid immutable measured image for right
+PASS: ticket rig view is distinct from the old authored six-cel idle Sprite
+PASS: native capture is 1280x720
+PASS: ticket measured gait settles back to the same NPC's authored Sprite
+PASS: ticket capture resolves the real actor
+PASS: ticket keeps its measured adapter for every evidence capture
+PASS: ticket capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: ticket full visible head-to-feet bounds retain 12px padding at native-route-settle: [P: (553.5251, 192.6344), S: (244.825, 334.2589)]
+PASS: ticket source action Sprite is visible with its measured alpha silhouette
+PASS: ticket captured interaction point follows its actual route root
+PASS: ticket visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: ticket receives at least nine seconds of normal live runtime
+PASS: ticket final interaction point follows its live actor root
+PASS: imp has its actual world sprite, root, and interaction point
+PASS: imp has a live NpcActivity record
+PASS: imp uses exactly the measured left/right rig records
+PASS: imp capture resolves the real actor
+PASS: imp keeps its measured adapter for every evidence capture
+PASS: imp capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: imp full visible head-to-feet bounds retain 12px padding at idle-rest: [P: (486.286, 235.2309), S: (379.3029, 291.4972)]
+PASS: imp source action Sprite is visible with its measured alpha silhouette
+PASS: imp captured interaction point follows its actual route root
+PASS: imp visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: imp accumulates at least three seconds in its authored non-gait rest/activity states
+PASS: imp remains within its authored route envelope during rest observation; max_abs_x=0.000m half_width=0.350m failure=
+PASS: imp controller accepts authored greet action
+PASS: imp presents authored greet on its source Sprite, not the gait rig
+PASS: imp greet is backed by its named loaded source sequence
+PASS: imp capture resolves the real actor
+PASS: imp keeps its measured adapter for every evidence capture
+PASS: imp capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: imp full visible head-to-feet bounds retain 12px padding at greet: [P: (541.3875, 271.5352), S: (317.7943, 254.9485)]
+PASS: imp source action Sprite is visible with its measured alpha silhouette
+PASS: imp captured interaction point follows its actual route root
+PASS: imp visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: imp controller accepts authored interact action
+PASS: imp presents authored interact on its source Sprite, not the gait rig
+PASS: imp interact is backed by its named loaded source sequence
+PASS: imp capture resolves the real actor
+PASS: imp keeps its measured adapter for every evidence capture
+PASS: imp capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: imp full visible head-to-feet bounds retain 12px padding at interact: [P: (533.6989, 267.3222), S: (329.3272, 259.4057)]
+PASS: imp source action Sprite is visible with its measured alpha silhouette
+PASS: imp captured interaction point follows its actual route root
+PASS: imp visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: imp personality action dance is from its loaded authored sequence
+PASS: imp capture resolves the real actor
+PASS: imp keeps its measured adapter for every evidence capture
+PASS: imp capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: imp full visible head-to-feet bounds retain 12px padding at personality-dance: [P: (528.5732, 259.9464), S: (317.7944, 266.5372)]
+PASS: imp source action Sprite is visible with its measured alpha silhouette
+PASS: imp captured interaction point follows its actual route root
+PASS: imp visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: imp personality action emotion_proud is from its loaded authored sequence
+PASS: imp capture resolves the real actor
+PASS: imp keeps its measured adapter for every evidence capture
+PASS: imp capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: imp full visible head-to-feet bounds retain 12px padding at personality-emotion_proud: [P: (528.5732, 265.2951), S: (331.8901, 261.1885)]
+PASS: imp source action Sprite is visible with its measured alpha silhouette
+PASS: imp captured interaction point follows its actual route root
+PASS: imp visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: imp naturally presents at least two distinct role-specific personality actions
+PASS: imp live gait displays a measured source direction while its own route moves
+PASS: imp gait is driven by actual actor-root displacement, not a fixture-only rig animation
+PASS: imp interaction point tracks the moving root during measured gait
+PASS: imp capture resolves the real actor
+PASS: imp keeps its measured adapter for every evidence capture
+PASS: imp capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: imp full visible head-to-feet bounds retain 12px padding at native-route-gait-right: [P: (543.2864, 205.7925), S: (317.801, 345.6)]
+PASS: imp is presenting actual visible measured-rig parts, not its hidden action Sprite
+PASS: imp visible gait has its actual upper and both boot instances
+PASS: imp captured interaction point follows its actual route root
+PASS: imp gait uses a valid immutable measured image for right
+PASS: imp rig view is distinct from the old authored six-cel idle Sprite
+PASS: native capture is 1280x720
+PASS: imp measured gait settles back to the same NPC's authored Sprite
+PASS: imp capture resolves the real actor
+PASS: imp keeps its measured adapter for every evidence capture
+PASS: imp capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: imp full visible head-to-feet bounds retain 12px padding at native-route-settle: [P: (486.286, 235.2309), S: (379.3029, 291.4972)]
+PASS: imp source action Sprite is visible with its measured alpha silhouette
+PASS: imp captured interaction point follows its actual route root
+PASS: imp visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: imp receives at least nine seconds of normal live runtime
+PASS: imp final interaction point follows its live actor root
+PASS: announcer has its actual world sprite, root, and interaction point
+PASS: announcer has a live NpcActivity record
+PASS: announcer uses exactly the measured left/right rig records
+PASS: announcer capture resolves the real actor
+PASS: announcer keeps its measured adapter for every evidence capture
+PASS: announcer capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: announcer full visible head-to-feet bounds retain 12px padding at idle-rest: [P: (455.796, 189.8521), S: (252.3428, 307.2003)]
+PASS: announcer source action Sprite is visible with its measured alpha silhouette
+PASS: announcer captured interaction point follows its actual route root
+PASS: announcer visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: announcer accumulates at least three seconds in its authored non-gait rest/activity states
+PASS: announcer remains within its authored route envelope during rest observation; max_abs_x=0.600m half_width=0.600m failure=
+PASS: announcer controller accepts authored greet action
+PASS: announcer presents authored greet on its source Sprite, not the gait rig
+PASS: announcer greet is backed by its named loaded source sequence
+PASS: announcer capture resolves the real actor
+PASS: announcer keeps its measured adapter for every evidence capture
+PASS: announcer capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: announcer full visible head-to-feet bounds retain 12px padding at greet: [P: (608.9025, 202.3971), S: (267.3633, 307.2001)]
+PASS: announcer source action Sprite is visible with its measured alpha silhouette
+PASS: announcer captured interaction point follows its actual route root
+PASS: announcer visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: announcer controller accepts authored interact action
+PASS: announcer presents authored interact on its source Sprite, not the gait rig
+PASS: announcer interact is backed by its named loaded source sequence
+PASS: announcer capture resolves the real actor
+PASS: announcer keeps its measured adapter for every evidence capture
+PASS: announcer capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: announcer full visible head-to-feet bounds retain 12px padding at interact: [P: (449.7878, 183.5826), S: (255.347, 313.4696)]
+PASS: announcer source action Sprite is visible with its measured alpha silhouette
+PASS: announcer captured interaction point follows its actual route root
+PASS: announcer visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: announcer personality action emotion_curious is from its loaded authored sequence
+PASS: announcer capture resolves the real actor
+PASS: announcer keeps its measured adapter for every evidence capture
+PASS: announcer capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: announcer full visible head-to-feet bounds retain 12px padding at personality-emotion_curious: [P: (452.7918, 189.8523), S: (255.347, 307.2001)]
+PASS: announcer source action Sprite is visible with its measured alpha silhouette
+PASS: announcer captured interaction point follows its actual route root
+PASS: announcer visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: announcer personality action special is from its loaded authored sequence
+PASS: announcer capture resolves the real actor
+PASS: announcer keeps its measured adapter for every evidence capture
+PASS: announcer capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: announcer full visible head-to-feet bounds retain 12px padding at personality-special: [P: (620.9188, 196.1278), S: (258.3511, 313.4695)]
+PASS: announcer source action Sprite is visible with its measured alpha silhouette
+PASS: announcer captured interaction point follows its actual route root
+PASS: announcer visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: announcer naturally presents at least two distinct role-specific personality actions
+PASS: announcer live gait displays a measured source direction while its own route moves
+PASS: announcer gait is driven by actual actor-root displacement, not a fixture-only rig animation
+PASS: announcer interaction point tracks the moving root during measured gait
+PASS: announcer capture resolves the real actor
+PASS: announcer keeps its measured adapter for every evidence capture
+PASS: announcer capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: announcer full visible head-to-feet bounds retain 12px padding at native-route-gait-left: [P: (562.561, 196.75), S: (317.6552, 345.6001)]
+PASS: announcer is presenting actual visible measured-rig parts, not its hidden action Sprite
+PASS: announcer visible gait has its actual upper and both boot instances
+PASS: announcer captured interaction point follows its actual route root
+PASS: announcer gait uses a valid immutable measured image for left
+PASS: announcer rig view is distinct from the old authored six-cel idle Sprite
+PASS: native capture is 1280x720
+PASS: announcer measured gait settles back to the same NPC's authored Sprite
+PASS: announcer capture resolves the real actor
+PASS: announcer keeps its measured adapter for every evidence capture
+PASS: announcer capture uses the requested actual visual layer (source Sprite or measured gait rig)
+PASS: announcer full visible head-to-feet bounds retain 12px padding at native-route-settle: [P: (455.796, 189.8521), S: (252.3428, 307.2003)]
+PASS: announcer source action Sprite is visible with its measured alpha silhouette
+PASS: announcer captured interaction point follows its actual route root
+PASS: announcer visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)
+PASS: native capture is 1280x720
+PASS: announcer receives at least nine seconds of normal live runtime
+PASS: announcer final interaction point follows its live actor root
+PASS: three-role review observes at least 30 seconds of real controller runtime
+PASS: Main-backed island NPC evidence fixture; human visual acceptance remains pending: C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-art/images/npc_island_eleventh-report.json
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-experience\Snapland\.review\npc-island-eleventh.avi
+4466 frames at 60 FPS (movie length: 00:01:14:26), recorded in 00:02:14 (55% of real-time speed).
+CPU render time: 3.24 seconds (average: 0.73 ms/frame)
+GPU render time: 29.14 seconds (average: 6.53 ms/frame)
+Encoding time: 41.51 seconds (average: 9.29 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_avenue (res://game/world/park_world.gd:1266)
+       [4] _ready (res://game/world/park_world.gd:138)
+       [5] _ready (res://game/main.gd:59)
+       [6] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_avenue (res://game/world/park_world.gd:1266)
+       [4] _ready (res://game/world/park_world.gd:138)
+       [5] _ready (res://game/main.gd:59)
+       [6] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_avenue (res://game/world/park_world.gd:1266)
+       [4] _ready (res://game/world/park_world.gd:138)
+       [5] _ready (res://game/main.gd:59)
+       [6] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_avenue (res://game/world/park_world.gd:1266)
+       [4] _ready (res://game/world/park_world.gd:138)
+       [5] _ready (res://game/main.gd:59)
+       [6] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1292)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1299)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1299)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1299)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1299)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1299)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1306)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1306)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1313)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1313)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:147)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:222)
+       [2] finish_building (res://game/world/occlusion_controller.gd:179)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1313)
+       [4] _build_avenue (res://game/world/park_world.gd:1267)
+       [5] _ready (res://game/world/park_world.gd:138)
+       [6] _ready (res://game/main.gd:59)
+       [7] _run (res://game/tests/native_island_npc_motion_review.gd:67)

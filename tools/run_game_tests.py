@@ -46,8 +46,12 @@ def main() -> int:
             ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
             ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),
             ("avatar runtime tests", common + ["--script", "res://game/tests/test_avatar.gd"]),
+            ("avatar renderer tests", common + ["--script", "res://game/tests/test_avatar_renderer.gd"]),
             ("avatar attachment tests", common + ["--script", "res://game/tests/test_avatar_attachment.gd"]),
             ("seated avatar tests", common + ["--script", "res://game/tests/test_avatar_seated.gd"]),
+            ("avatar motion rig runtime tests", common + ["--script", "res://game/tests/test_avatar_motion_rig.gd"]),
+            ("avatar role rig tests", common + ["res://game/tests/test_avatar_role_rig.tscn"]),
+            ("avatar motion world integration tests", common + ["--script", "res://game/tests/test_avatar_motion_world.gd"]),
             ("minigame HUD hierarchy tests", common + ["--script", "res://game/tests/test_minigame_hud.gd"]),
             ("eight-direction walk tests", common + ["--script", "res://game/tests/test_avatar_walk.gd"]),
             ("character animation library tests", common + ["--script", "res://game/tests/test_character_animation_library.gd"]),
@@ -60,6 +64,9 @@ def main() -> int:
             ("daylight lighting tests", common + ["--script", "res://game/tests/test_daylight_lighting.gd"]),
             ("NPC activity tests", common + ["--script", "res://game/tests/test_npc_activity.gd"]),
             ("NPC world activity tests", common + ["--script", "res://game/tests/test_npc_world_activity.gd"]),
+            ("NPC motion source tests", common + ["res://game/tests/test_npc_motion_sources.tscn"]),
+            ("NPC walk motion tests", common + ["--script", "res://game/tests/test_npc_walk_motion.gd"]),
+            ("NPC dialogue hold tests", common + ["res://game/tests/test_npc_dialogue_hold.tscn"]),
             ("sprite clearance tests", common + ["--script", "res://game/tests/test_sprite_clearance.gd"]),
             ("wardrobe UI tests", common + ["res://game/tests/test_wardrobe_ui.tscn"]),
             ("component animation tests", common + ["--script", "res://game/tests/test_component_animation.gd"]),
@@ -106,13 +113,14 @@ def main() -> int:
         ]
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
+            timeout = 240 if label == "avatar renderer tests" else 90
             try:
-                result = run_validated_godot(ROOT, command, env=env, timeout=90)
+                result = run_validated_godot(ROOT, command, env=env, timeout=timeout)
             except subprocess.TimeoutExpired as error:
                 def decoded(value: str | bytes | None) -> str:
                     return value.decode("utf-8", errors="replace") if isinstance(value, bytes) else (value or "")
                 output = decoded(error.stdout) + "\n" + decoded(error.stderr)
-                return fail(f"{label} timed out after 90 seconds:\n{output.strip()[-6000:]}")
+                return fail(f"{label} timed out after {timeout} seconds:\n{output.strip()[-6000:]}")
             except (ValueError, OSError, subprocess.SubprocessError) as error:
                 return fail(f"{label} could not run: {error}")
             if result.returncode:
@@ -128,8 +136,12 @@ def main() -> int:
                 "test/review save isolation tests": "PASS: test/review launch detection, absolute isolated paths, userdata/sidecar rejection, and unchanged fake fixtures",
                 "wardrobe runtime tests": "PASS: wardrobe runtime checks",
                 "avatar runtime tests": "PASS: avatar runtime checks",
+                "avatar renderer tests": "PASS: independent bob nose/eye alpha, 64-cel bob/curly face RGBA and opening alpha across all skins/species, two-color original body/palette and haircut RGB, bounded caches; native quality pending",
                 "avatar attachment tests": "PASS: measured walk head attachments",
                 "seated avatar tests": "PASS: four measured front seated poses, head/feet anchors, card bounds, and preserved action coverage",
+                "avatar motion rig runtime tests": "PASS: eight direction 3D gait model/source/sole/cancellation/bounded resource tests; native quality pending",
+                "avatar role rig tests": "PASS: role metadata path, two-view coverage, scaled fixed bones/boots, ground following, actual NPC source-width legs/opaque boot attachment, non-skin trouser limb ownership, and missing-role fallback",
+                "avatar motion world integration tests": "PASS: integrated avatar motion world checks",
                 "minigame HUD hierarchy tests": "PASS: minigame HUD hierarchy checks (69 checks)",
                 "eight-direction walk tests": "PASS: eight-direction avatar walk checks",
                 "character animation library tests": "PASS: character animation library checks",
@@ -142,6 +154,9 @@ def main() -> int:
                 "daylight lighting tests": "PASS: daylight lighting runtime checks",
                 "NPC activity tests": "PASS: NPC activity runtime checks",
                 "NPC world activity tests": "PASS: NPC world activity integration",
+                "NPC motion source tests": "PASS: all three NPC roles' source hashes, measured alpha bounds, nearest normalized RGBA streams, unsupported-view behavior, and rig-prepared limb/boot regions",
+                "NPC walk motion tests": "PASS: optional three-role measured gait, source fallback, pause/hold lifecycle, and measured announcer leg costume",
+                "NPC dialogue hold tests": "PASS: Main NPC dialogue hold lifecycle",
                 "sprite clearance tests": "PASS: billboard sprites keep authored feet on the ground for eight headings and camera pitches",
                 "wardrobe UI tests": "PASS: wardrobe UI runtime checks",
                 "component animation tests": "PASS: component animation runtime checks",

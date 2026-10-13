@@ -1,0 +1,125 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+NPC_GAIT_MEASUREMENT role=ticket fixed_chain_m=0.230000 rendered_slow_peak_m=0.017998 rendered_cautious_peak_m=0.011549
+NPC_GAIT_MEASUREMENT role=imp fixed_chain_m=0.283333 rendered_slow_peak_m=0.019999 rendered_cautious_peak_m=0.012443
+NPC_GAIT_MEASUREMENT role=announcer fixed_chain_m=0.520000 rendered_slow_peak_m=0.023999 rendered_cautious_peak_m=0.014589
+HERO_CHAIN_DIAGNOSTIC view=front camera_up_y=1.0000 source_vertical_chain_m=0.336667 fixed_chain_m=0.374064 neutral_knee_deg=[38.33,62.38] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=front_right camera_up_y=1.0000 source_vertical_chain_m=0.400000 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,54.60] support_drop_m=0.047598
+HERO_CHAIN_DIAGNOSTIC view=right camera_up_y=1.0000 source_vertical_chain_m=0.366667 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,32.56] support_drop_m=0.000932
+HERO_CHAIN_DIAGNOSTIC view=back_right camera_up_y=1.0000 source_vertical_chain_m=0.393333 fixed_chain_m=0.374064 neutral_knee_deg=[32.56,10.81] support_drop_m=0.027598
+HERO_CHAIN_DIAGNOSTIC view=back camera_up_y=1.0000 source_vertical_chain_m=0.368129 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,49.96] support_drop_m=0.012394
+HERO_CHAIN_DIAGNOSTIC view=back_left camera_up_y=1.0000 source_vertical_chain_m=0.380000 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,10.81] support_drop_m=0.007598
+HERO_CHAIN_DIAGNOSTIC view=left camera_up_y=1.0000 source_vertical_chain_m=0.366667 fixed_chain_m=0.374064 neutral_knee_deg=[22.83,22.83] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=front_left camera_up_y=1.0000 source_vertical_chain_m=0.383333 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,39.19] support_drop_m=0.020932
+HERO_CHAIN_DIAGNOSTIC view=front camera_up_y=0.8522 source_vertical_chain_m=0.336667 fixed_chain_m=0.374064 neutral_knee_deg=[40.57,60.90] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=front_right camera_up_y=0.8522 source_vertical_chain_m=0.400000 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,50.51] support_drop_m=0.044642
+HERO_CHAIN_DIAGNOSTIC view=right camera_up_y=0.8522 source_vertical_chain_m=0.366667 fixed_chain_m=0.374064 neutral_knee_deg=[10.98,30.39] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=back_right camera_up_y=0.8522 source_vertical_chain_m=0.393333 fixed_chain_m=0.374064 neutral_knee_deg=[30.33,10.81] support_drop_m=0.026613
+HERO_CHAIN_DIAGNOSTIC view=back camera_up_y=0.8522 source_vertical_chain_m=0.368129 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,46.26] support_drop_m=0.009930
+HERO_CHAIN_DIAGNOSTIC view=back_left camera_up_y=0.8522 source_vertical_chain_m=0.380000 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,10.81] support_drop_m=0.007598
+HERO_CHAIN_DIAGNOSTIC view=left camera_up_y=0.8522 source_vertical_chain_m=0.366667 fixed_chain_m=0.374064 neutral_knee_deg=[22.83,22.83] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=front_left camera_up_y=0.8522 source_vertical_chain_m=0.383333 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,36.39] support_drop_m=0.019453
+HERO_HEAD_GUARD species=human hair=windswept view=front source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=front camera_up_y=1.0000 neutral_max_deg=62.38 walk_max_deg=78.39
+HERO_HEAD_GUARD species=human hair=windswept view=front_right source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=front_right camera_up_y=1.0000 neutral_max_deg=54.60 walk_max_deg=74.39
+HERO_HEAD_GUARD species=human hair=windswept view=right source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=right camera_up_y=1.0000 neutral_max_deg=32.56 walk_max_deg=65.16
+HERO_HEAD_GUARD species=human hair=windswept view=back_right source_guard_bottom=209 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=211.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=back_right camera_up_y=1.0000 neutral_max_deg=32.56 walk_max_deg=59.60
+HERO_HEAD_GUARD species=human hair=windswept view=back source_guard_bottom=209 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=211.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=back camera_up_y=1.0000 neutral_max_deg=49.96 walk_max_deg=70.95
+HERO_HEAD_GUARD species=human hair=windswept view=back_left source_guard_bottom=209 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=211.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=back_left camera_up_y=1.0000 neutral_max_deg=10.81 walk_max_deg=50.79
+HERO_HEAD_GUARD species=human hair=windswept view=left source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=left camera_up_y=1.0000 neutral_max_deg=22.83 walk_max_deg=55.20
+HERO_HEAD_GUARD species=human hair=windswept view=front_left source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=front_left camera_up_y=1.0000 neutral_max_deg=39.19 walk_max_deg=63.58
+HERO_HEAD_GUARD species=human hair=windswept view=front source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=front camera_up_y=0.8522 neutral_max_deg=60.90 walk_max_deg=77.19
+HERO_HEAD_GUARD species=human hair=windswept view=front_right source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=front_right camera_up_y=0.8522 neutral_max_deg=50.51 walk_max_deg=71.35
+HERO_HEAD_GUARD species=human hair=windswept view=right source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=right camera_up_y=0.8522 neutral_max_deg=30.39 walk_max_deg=64.02
+HERO_HEAD_GUARD species=human hair=windswept view=back_right source_guard_bottom=209 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=211.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=back_right camera_up_y=0.8522 neutral_max_deg=30.33 walk_max_deg=58.38
+HERO_HEAD_GUARD species=human hair=windswept view=back source_guard_bottom=209 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=211.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=back camera_up_y=0.8522 neutral_max_deg=46.26 walk_max_deg=68.31
+HERO_HEAD_GUARD species=human hair=windswept view=back_left source_guard_bottom=209 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=211.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=back_left camera_up_y=0.8522 neutral_max_deg=10.81 walk_max_deg=50.79
+HERO_HEAD_GUARD species=human hair=windswept view=left source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=left camera_up_y=0.8522 neutral_max_deg=22.83 walk_max_deg=55.20
+HERO_HEAD_GUARD species=human hair=windswept view=front_left source_guard_bottom=194 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=196.0
+HERO_PIVOT_VARIANT species=human outfit=outfit-tide view=front_left camera_up_y=0.8522 neutral_max_deg=36.39 walk_max_deg=61.85
+HERO_HEAD_GUARD species=elf hair=bob view=front source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=145 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=front camera_up_y=1.0000 neutral_max_deg=62.38 walk_max_deg=78.39
+HERO_HEAD_GUARD species=elf hair=bob view=front_right source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=137 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=front_right camera_up_y=1.0000 neutral_max_deg=54.60 walk_max_deg=74.39
+HERO_HEAD_GUARD species=elf hair=bob view=right source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=130 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=right camera_up_y=1.0000 neutral_max_deg=32.56 walk_max_deg=65.16
+HERO_HEAD_GUARD species=elf hair=bob view=back_right source_guard_bottom=209 actual_hair_changed_last=208 actual_species_added_last=132 rigid_end=211.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=back_right camera_up_y=1.0000 neutral_max_deg=32.56 walk_max_deg=59.60
+HERO_HEAD_GUARD species=elf hair=bob view=back source_guard_bottom=209 actual_hair_changed_last=208 actual_species_added_last=131 rigid_end=211.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=back camera_up_y=1.0000 neutral_max_deg=49.96 walk_max_deg=70.95
+HERO_HEAD_GUARD species=elf hair=bob view=back_left source_guard_bottom=209 actual_hair_changed_last=208 actual_species_added_last=135 rigid_end=211.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=back_left camera_up_y=1.0000 neutral_max_deg=10.81 walk_max_deg=50.79
+HERO_HEAD_GUARD species=elf hair=bob view=left source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=134 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=left camera_up_y=1.0000 neutral_max_deg=22.83 walk_max_deg=55.20
+HERO_HEAD_GUARD species=elf hair=bob view=front_left source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=136 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=front_left camera_up_y=1.0000 neutral_max_deg=39.19 walk_max_deg=63.58
+HERO_HEAD_GUARD species=elf hair=bob view=front source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=145 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=front camera_up_y=0.8522 neutral_max_deg=60.90 walk_max_deg=77.19
+HERO_HEAD_GUARD species=elf hair=bob view=front_right source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=137 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=front_right camera_up_y=0.8522 neutral_max_deg=50.51 walk_max_deg=71.35
+HERO_HEAD_GUARD species=elf hair=bob view=right source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=130 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=right camera_up_y=0.8522 neutral_max_deg=30.39 walk_max_deg=64.02
+HERO_HEAD_GUARD species=elf hair=bob view=back_right source_guard_bottom=209 actual_hair_changed_last=208 actual_species_added_last=132 rigid_end=211.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=back_right camera_up_y=0.8522 neutral_max_deg=30.33 walk_max_deg=58.38
+HERO_HEAD_GUARD species=elf hair=bob view=back source_guard_bottom=209 actual_hair_changed_last=208 actual_species_added_last=131 rigid_end=211.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=back camera_up_y=0.8522 neutral_max_deg=46.26 walk_max_deg=68.31
+HERO_HEAD_GUARD species=elf hair=bob view=back_left source_guard_bottom=209 actual_hair_changed_last=208 actual_species_added_last=135 rigid_end=211.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=back_left camera_up_y=0.8522 neutral_max_deg=10.81 walk_max_deg=50.79
+HERO_HEAD_GUARD species=elf hair=bob view=left source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=134 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=left camera_up_y=0.8522 neutral_max_deg=22.83 walk_max_deg=55.20
+HERO_HEAD_GUARD species=elf hair=bob view=front_left source_guard_bottom=194 actual_hair_changed_last=193 actual_species_added_last=136 rigid_end=196.0
+HERO_PIVOT_VARIANT species=elf outfit=outfit-coral view=front_left camera_up_y=0.8522 neutral_max_deg=36.39 walk_max_deg=61.85
+HERO_HEAD_GUARD species=imp hair=curly view=front source_guard_bottom=196 actual_hair_changed_last=195 actual_species_added_last=65 rigid_end=198.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=front camera_up_y=1.0000 neutral_max_deg=62.38 walk_max_deg=78.39
+HERO_HEAD_GUARD species=imp hair=curly view=front_right source_guard_bottom=221 actual_hair_changed_last=220 actual_species_added_last=45 rigid_end=223.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=front_right camera_up_y=1.0000 neutral_max_deg=54.60 walk_max_deg=74.39
+HERO_HEAD_GUARD species=imp hair=curly view=right source_guard_bottom=215 actual_hair_changed_last=214 actual_species_added_last=53 rigid_end=217.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=right camera_up_y=1.0000 neutral_max_deg=32.56 walk_max_deg=65.16
+HERO_HEAD_GUARD species=imp hair=curly view=back_right source_guard_bottom=246 actual_hair_changed_last=245 actual_species_added_last=83 rigid_end=248.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=back_right camera_up_y=1.0000 neutral_max_deg=32.56 walk_max_deg=59.60
+HERO_HEAD_GUARD species=imp hair=curly view=back source_guard_bottom=220 actual_hair_changed_last=219 actual_species_added_last=75 rigid_end=222.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=back camera_up_y=1.0000 neutral_max_deg=49.96 walk_max_deg=70.95
+HERO_HEAD_GUARD species=imp hair=curly view=back_left source_guard_bottom=243 actual_hair_changed_last=242 actual_species_added_last=78 rigid_end=245.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=back_left camera_up_y=1.0000 neutral_max_deg=10.81 walk_max_deg=50.79
+HERO_HEAD_GUARD species=imp hair=curly view=left source_guard_bottom=209 actual_hair_changed_last=208 actual_species_added_last=48 rigid_end=211.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=left camera_up_y=1.0000 neutral_max_deg=22.83 walk_max_deg=55.20
+HERO_HEAD_GUARD species=imp hair=curly view=front_left source_guard_bottom=217 actual_hair_changed_last=216 actual_species_added_last=43 rigid_end=219.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=front_left camera_up_y=1.0000 neutral_max_deg=39.19 walk_max_deg=63.58
+HERO_HEAD_GUARD species=imp hair=curly view=front source_guard_bottom=196 actual_hair_changed_last=195 actual_species_added_last=65 rigid_end=198.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=front camera_up_y=0.8522 neutral_max_deg=60.90 walk_max_deg=77.19
+HERO_HEAD_GUARD species=imp hair=curly view=front_right source_guard_bottom=221 actual_hair_changed_last=220 actual_species_added_last=45 rigid_end=223.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=front_right camera_up_y=0.8522 neutral_max_deg=50.51 walk_max_deg=71.35
+HERO_HEAD_GUARD species=imp hair=curly view=right source_guard_bottom=215 actual_hair_changed_last=214 actual_species_added_last=53 rigid_end=217.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=right camera_up_y=0.8522 neutral_max_deg=30.39 walk_max_deg=64.02
+HERO_HEAD_GUARD species=imp hair=curly view=back_right source_guard_bottom=246 actual_hair_changed_last=245 actual_species_added_last=83 rigid_end=248.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=back_right camera_up_y=0.8522 neutral_max_deg=30.33 walk_max_deg=58.38
+HERO_HEAD_GUARD species=imp hair=curly view=back source_guard_bottom=220 actual_hair_changed_last=219 actual_species_added_last=75 rigid_end=222.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=back camera_up_y=0.8522 neutral_max_deg=46.26 walk_max_deg=68.31
+HERO_HEAD_GUARD species=imp hair=curly view=back_left source_guard_bottom=243 actual_hair_changed_last=242 actual_species_added_last=78 rigid_end=245.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=back_left camera_up_y=0.8522 neutral_max_deg=10.81 walk_max_deg=50.79
+HERO_HEAD_GUARD species=imp hair=curly view=left source_guard_bottom=209 actual_hair_changed_last=208 actual_species_added_last=48 rigid_end=211.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=left camera_up_y=0.8522 neutral_max_deg=22.83 walk_max_deg=55.20
+HERO_HEAD_GUARD species=imp hair=curly view=front_left source_guard_bottom=217 actual_hair_changed_last=216 actual_species_added_last=43 rigid_end=219.0
+HERO_PIVOT_VARIANT species=imp outfit=outfit-gold view=front_left camera_up_y=0.8522 neutral_max_deg=36.39 walk_max_deg=61.85
+PASS: role metadata path, two-view coverage, scaled fixed bones/boots, ground following, actual NPC source-width legs/opaque boot attachment, non-skin trouser limb ownership, and missing-role fallback
+WARNING: C:/Users/stanl/AppData/Local/Temp/snapland-art17-role-rig-1290570-4211828004.json/roles/unmeasured_npc/directions/left: metadata missing
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] rebuild_sources (res://game/world/avatar_motion_rig.gd:551)
+       [1] _ready (res://game/world/avatar_motion_rig.gd:266)
+       [2] _run_role_contract (res://game/tests/test_avatar_role_rig.gd:93)
+       [3] _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:360)

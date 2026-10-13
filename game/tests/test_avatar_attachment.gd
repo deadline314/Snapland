@@ -1,6 +1,7 @@
 extends SceneTree
 
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const RendererRegression = preload("res://game/tests/test_avatar_renderer.gd")
 
 const DIRECTIONS := ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]
 const HAIRSTYLES := ["windswept", "bob", "curly"]
@@ -38,27 +39,15 @@ func _initialize() -> void:
 			assert(source_difference == 0, "%s/%d retains its authored windswept silhouette without a displaced overlay (%d differing pixels)" % [direction, frame, source_difference])
 			var bob: Texture2D = renderer.texture({"skin":"warm", "species":"human", "hair":"bob", "hair_color":"ink", "face":"curious"}, equipped, direction, frame, "walk")
 			var curly: Texture2D = renderer.texture({"skin":"warm", "species":"human", "hair":"curly", "hair_color":"ink", "face":"curious"}, equipped, direction, frame, "walk")
+			assert(_assert_semantic_face(renderer,direction,frame,base,bob),"exact bob face preservation completed")
+			assert(_assert_semantic_face(renderer,direction,frame,base,curly),"exact curly face preservation completed")
 			if frame == 3:
-				var bob_strays := _uncovered_source_hair_pixels(renderer, direction, base, bob, _replacement_hair_mask(renderer, direction, frame, "bob"), anchor)
-				var curly_strays := _uncovered_source_hair_pixels(renderer, direction, base, curly, _replacement_hair_mask(renderer, direction, frame, "curly"), anchor)
+				var bob_strays := _uncovered_source_hair_pixels(renderer, direction, frame, base, bob, _replacement_hair_mask(renderer, direction, frame, "bob"), anchor)
+				var curly_strays := _uncovered_source_hair_pixels(renderer, direction, frame, base, curly, _replacement_hair_mask(renderer, direction, frame, "curly"), anchor)
 				assert(bob_strays == 0 and curly_strays == 0, "%s/frame3 removes source windswept hair outside both replacement cuts (bob=%d, curly=%d)" % [direction, bob_strays, curly_strays])
-				if direction.begins_with("front"):
-					var face_region := Rect2i(anchor.x - 45, anchor.y, 90, 88)
-					var source_face_skin := _skin_pixels(base, face_region)
-					var source_face_marks := _face_mark_pixels(renderer, base, face_region, null)
-					assert(source_face_skin > 20 and _preserved_skin_pixels(base, bob, face_region) == source_face_skin and _preserved_skin_pixels(base, curly, face_region) == source_face_skin, "%s/frame3 keeps every authored face-skin pixel above both cuts" % direction)
-					assert(source_face_marks > 0 and _face_mark_pixels(renderer, base, face_region, bob) == source_face_marks and _face_mark_pixels(renderer, base, face_region, curly) == source_face_marks, "%s/frame3 keeps every authored eye and mouth mark above both cuts" % direction)
 			assert(_image_data(base) != _image_data(bob) and _image_data(bob) != _image_data(curly), "%s/%d preserves distinct source, bob, and curly appearances" % [direction, frame])
 			var head_region := Rect2i(anchor.x - 90, anchor.y - 2, 180, 34)
 			assert(_source_hair_pixels(renderer, bob, head_region) > 0 and _source_hair_pixels(renderer, curly, head_region) > 0, "%s/%d keeps each replacement hair attached near the measured scalp" % [direction, frame])
-			if frame == attachment_frame_for_test(renderer, direction) and direction.begins_with("front"):
-				var face_region := Rect2i(anchor.x - 45, anchor.y, 90, 88)
-				var base_face_skin := _skin_pixels(base, face_region)
-				assert(base_face_skin > 20 and _preserved_skin_pixels(base, bob, face_region) >= int(float(base_face_skin) * 0.92), "%s/%d keeps the authored face visible under bob hair" % [direction, frame])
-				assert(_preserved_skin_pixels(base, curly, face_region) >= int(float(base_face_skin) * 0.92), "%s/%d keeps the authored face visible under curly hair" % [direction, frame])
-				var base_face_marks := _face_mark_pixels(renderer, base, face_region, null)
-				assert(base_face_marks > 0 and _face_mark_pixels(renderer, base, face_region, bob) >= int(float(base_face_marks) * 0.92), "%s/%d keeps authored eyes and mouth visible under bob hair" % [direction, frame])
-				assert(_face_mark_pixels(renderer, base, face_region, curly) >= int(float(base_face_marks) * 0.92), "%s/%d keeps authored eyes and mouth visible under curly hair" % [direction, frame])
 			if frame == attachment_frame_for_test(renderer, direction):
 				var measured_width := renderer.walk_head_width(direction, frame)
 				var bob_delta := _difference_bounds(base, bob)
@@ -251,6 +240,33 @@ func _source_hair_pixels(renderer, texture: Texture2D, region: Rect2i) -> int:
 				count += 1
 	return count
 
+func _assert_semantic_face(renderer,direction: String,frame: int,reference: Texture2D,candidate: Texture2D) -> bool:
+	# RED before this migration: front/0 failed the old 92%-of-skin rectangle
+	# assertion. That scalp-anchor rectangle included the old cream fringe and
+	# its shadow, while the 4px near-skin mark helper classified its brown ink
+	# as an eye/brow. Keeping those pixels recreates the native rejected forehead
+	# (front_right0 x155/y131, x161/y146). Preserve 100% of semantic facial RGBA
+	# for every cel, plus independent raw-cel witnesses and mandatory fringe
+	# removal, instead of lowering the old percentage or ignoring the failure.
+	var raw: Image = renderer._walk_pose_image(direction,frame)
+	var metrics: Dictionary = renderer._walk_source_hair_metrics(direction,frame,raw)
+	var expected: Image = reference.get_image()
+	var actual: Image = candidate.get_image()
+	var eyes := 0
+	for label: String in metrics.face_features_named:
+		if label.begins_with("eye_"): eyes+=1
+		for index in metrics.face_features_named[label]:
+			var point := Vector2i(index%raw.get_width(),index/raw.get_width())
+			assert(actual.get_pixelv(point)==expected.get_pixelv(point),"every authored semantic eye/brow/mouth/ear RGBA stays exact: %s/%d/%s" % [direction,frame,label])
+	var visible_eyes := 0 if direction.begins_with("back") else (1 if direction=="right" or direction=="left" else 2)
+	assert(eyes==visible_eyes,"all64cels preserve actual visible eyes, not hair highlights")
+	if frame==0 and RendererRegression.FEATURES.has(direction):
+		for point: Vector2i in RendererRegression.FEATURES[direction]: assert(actual.get_pixelv(point)==expected.get_pixelv(point),"independently inspected original feature RGBA remains exact: "+str(point))
+	if direction=="front_right" and frame==0:
+		for point in [Vector2i(155,131),Vector2i(161,146),Vector2i(188,117)]:
+			assert(metrics.face_mask[point.y*280+point.x]==0 and metrics.replacement_source_mask[point.y*280+point.x]!=0,"old brown/cream fringe is owned by replacement, never restored as a face feature")
+	return true
+
 func _skin_pixels(texture: Texture2D, region: Rect2i) -> int:
 	var image := texture.get_image()
 	var clipped := region.intersection(Rect2i(Vector2i.ZERO, Vector2i(image.get_width(), image.get_height())))
@@ -309,16 +325,20 @@ func _replacement_hair_mask(renderer, direction: String, frame: int, style: Stri
 	var target_width := float(renderer.walk_head_width(direction, frame)) * 1.05
 	var shift := anchor.x - mask.get_width() / 2
 	var hair_color: Color = AvatarRenderer.HAIR_COLORS.ink
+	var source: Image = renderer._walk_pose_image(direction,frame)
+	var overlay_metrics: Dictionary = renderer._walk_source_hair_metrics(direction,frame,source).duplicate()
+	overlay_metrics.erase("skull_underlay_indices")
 	if AvatarRenderer.DIRECTIONS.has(direction):
-		renderer._apply_hair_atlas(mask, style, direction, hair_color, anchor.y, shift, target_width, renderer._walk_pose_image(direction, frame))
+		renderer._apply_hair_atlas(mask,style,direction,hair_color,anchor.y,shift,target_width,source,overlay_metrics)
 	else:
-		renderer._apply_diagonal_hair(mask, style, direction, hair_color, anchor.y, shift, target_width, renderer._walk_pose_image(direction, frame))
+		renderer._apply_diagonal_hair(mask,style,direction,hair_color,anchor.y,shift,target_width,source,overlay_metrics)
 	return mask
 
-func _uncovered_source_hair_pixels(renderer, direction: String, source: Texture2D, candidate: Texture2D, overlay_mask: Image, anchor: Vector2i) -> int:
+func _uncovered_source_hair_pixels(renderer, direction: String, frame: int, source: Texture2D, candidate: Texture2D, overlay_mask: Image, anchor: Vector2i) -> int:
 	var source_image := source.get_image()
 	var candidate_image := candidate.get_image()
-	var source_hair_mask: PackedByteArray = renderer._source_hair_mask(source_image, renderer._closest_cardinal(direction))
+	var raw: Image = renderer._walk_pose_image(direction, frame)
+	var source_hair_mask: PackedByteArray = renderer._walk_source_hair_metrics(direction, frame, raw).source_hair_mask
 	var rect := Rect2i(anchor.x - 115, anchor.y - 18, 230, 112).intersection(Rect2i(Vector2i.ZERO, Vector2i(280, 360)))
 	var count := 0
 	for y in range(rect.position.y, rect.end.y):

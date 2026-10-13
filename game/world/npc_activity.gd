@@ -4,11 +4,17 @@ extends Node
 ## bounded, ground-level idle paths for the three named NPCs.
 
 const ANIMATION_NAME := "npc_idle_actions"
-const CYCLE_SECONDS := 6.0
+const CYCLE_SECONDS := 8.6
 const WALK_FRAMES_PER_SECOND := 5.0
 const IMP_FRAMES_PER_SECOND := 3.3333333
 const TICKET_FRAMES_PER_SECOND := 5.0
 const ANNOUNCER_ROUTE_HALF_WIDTH := 0.6
+const ANNOUNCER_OUTBOUND_SECONDS := 1.0
+const ANNOUNCER_FIRST_REST_END := 3.3
+const ANNOUNCER_RETURN_SECONDS := 5.3
+const ANNOUNCER_SECOND_REST_END := 7.6
+const ANNOUNCER_STOP_SETTLE_SECONDS := 0.16
+const ANNOUNCER_PERSONALITY_DELAY := 0.12
 const ROLE_NAMES := ["ticket", "imp", "announcer"]
 const ACTION_REGIONS_PATH := "res://assets/characters/npc-action-regions.json"
 const ANIMATION_LIBRARY_PATH := "res://game/world/character_animation_library.gd"
@@ -18,6 +24,8 @@ const ACTION_FEET_ROW := 448
 const ACTION_MAX_HEIGHT := 420
 const ACTION_VISIBLE_HEIGHT := 420
 const ACTION_SIDE_PADDING := 2
+const NpcWalkMotionScript = preload("res://game/world/npc_walk_motion.gd")
+const NpcCostumeScript = preload("res://game/world/npc_costume.gd")
 
 static var _action_frame_cache: Dictionary = {}
 static var _action_atlas: Texture2D
@@ -33,8 +41,13 @@ var _by_role: Dictionary = {}
 var _finished := false
 var _reduced_motion := false
 var _activity_paused := false
+var _dialogue_hold := false
 var _animation_library: RefCounted
 var _action_clock := 0.0
+var _motion_enabled := false
+var _motion_camera: Camera3D
+var _motion_ground: Callable
+var _npc_costume = NpcCostumeScript.new()
 
 
 func _exit_tree() -> void:
@@ -150,6 +163,8 @@ func register_actor(
 	var shader_uv_rect_baseline: Variant = null
 	var has_shader_texture := false
 	var has_shader_uv_rect := false
+	var motion_baseline := 1.0
+	var has_shader_motion := false
 	if material != null and material.shader != null:
 		var gesture_value: Variant = material.get_shader_parameter("gesture_pixels")
 		if gesture_value != null:
@@ -158,12 +173,20 @@ func register_actor(
 		has_shader_texture = shader_texture_baseline != null
 		shader_uv_rect_baseline = material.get_shader_parameter("uv_rect")
 		has_shader_uv_rect = shader_uv_rect_baseline != null
+		var motion_value: Variant = material.get_shader_parameter("motion")
+		has_shader_motion = motion_value != null
+		if has_shader_motion: motion_baseline = float(motion_value)
 	var point_offset := Vector3.ZERO
 	var original_point_position := Vector3.ZERO
 	var has_point := interaction_point.has("position")
 	if has_point:
 		original_point_position = interaction_point["position"] as Vector3
 		point_offset = original_point_position - anchor.global_position
+	var baseline_texture: Texture2D = target.texture
+	if role == "announcer":
+		baseline_texture = _costume_texture(role, baseline_texture)
+		if has_shader_texture and shader_texture_baseline is Texture2D:
+			shader_texture_baseline = _costume_texture(role, shader_texture_baseline as Texture2D)
 	_registered_ids[instance_id] = role
 	_records.append({
 		"target": weakref(target),
@@ -173,13 +196,15 @@ func register_actor(
 		"role": role,
 		"frames": frames,
 		"seed": seed,
-		"baseline_texture": target.texture,
+		"baseline_texture": baseline_texture,
 		"baseline_flip_h": target.flip_h,
 		"baseline_pixel_size": target.pixel_size,
 		"baseline_shader_texture": shader_texture_baseline,
 		"baseline_shader_uv_rect": shader_uv_rect_baseline,
 		"has_shader_texture": has_shader_texture,
 		"has_shader_uv_rect": has_shader_uv_rect,
+		"baseline_motion": motion_baseline,
+		"has_shader_motion": has_shader_motion,
 		"baseline_anchor_position": anchor.position,
 		"point": interaction_point,
 		"point_offset": point_offset,
@@ -193,6 +218,9 @@ func register_actor(
 		"action_elapsed": 0.0,
 		"action_sequence": {},
 		"idle_due": 5.0 + fposmod(_phase_seed(seed, instance_id) * 7.31, 7.0),
+		"last_idle_action": "",
+		"idle_event_count": 0,
+		"route_rest_started": -1.0,
 		"missing_actions": {},
 	})
 	_ensure_animation_library()
@@ -207,6 +235,8 @@ func register_actor(
 		target.tree_exiting.connect(callback, CONNECT_ONE_SHOT)
 	if anchor != target and not anchor.tree_exiting.is_connected(callback):
 		anchor.tree_exiting.connect(callback, CONNECT_ONE_SHOT)
+	if _motion_enabled:
+		_setup_motion(record_index)
 	return true
 
 
@@ -275,19 +305,179 @@ func set_reduced_motion(enabled: bool) -> void:
 		if is_instance_valid(_player):
 			_player.pause()
 		_restore_baselines()
+		_freeze_shader_motion(true)
+		_update_motion_pause(true)
 		return
-	if _finished and not _activity_paused and is_instance_valid(_player) and _animation != null and _animation.get_track_count() > 0:
+	_freeze_shader_motion(_activity_paused and not _dialogue_hold)
+	_update_motion_pause(_activity_paused and not _dialogue_hold)
+	if _finished and not _activity_paused and not _dialogue_hold and is_instance_valid(_player) and _animation != null and _animation.get_track_count() > 0:
 		_player.play(ANIMATION_NAME)
 
 
 func set_activity_paused(paused: bool) -> void:
 	_activity_paused = paused
+	var freeze := paused and not _dialogue_hold
+	_freeze_shader_motion(freeze or _reduced_motion)
+	_update_motion_pause(freeze or _reduced_motion)
 	if not is_instance_valid(_player) or _reduced_motion:
 		return
-	if paused:
+	if paused or _dialogue_hold:
 		_player.pause()
 	elif _animation != null and _animation.get_track_count() > 0:
 		_player.play(ANIMATION_NAME)
+
+
+func set_dialogue_hold(held: bool) -> void:
+	## Let the current authored pose/action continue while world input and route
+	## motion stay held. The caller pairs this with set_activity_paused(true).
+	if _dialogue_hold == held:
+		return
+	_dialogue_hold = held
+	_freeze_shader_motion(_activity_paused and not held or _reduced_motion)
+	_update_motion_pause(_activity_paused and not held or _reduced_motion)
+	if not is_instance_valid(_player):
+		return
+	if held:
+		_player.pause()
+		# A route may have stopped on a walk cel. Put that actor into its authored
+		# idle loop once; do not advance the route or start another idle gesture.
+		for index in range(_records.size()):
+			if not bool(_records[index].active) or String(_records[index].action) != "walk":
+				continue
+			var direction := String(_records[index].direction)
+			if not _play_actor_action(index,"idle",direction,true):
+				_play_actor_action(index,"stand",direction,true)
+	elif not _activity_paused and not _reduced_motion and _animation != null and _animation.get_track_count() > 0:
+		_player.play(ANIMATION_NAME)
+
+## Root opts in only after native review. Missing/invalid source records retain
+## their original Sprite3D and are not counted as motion coverage.
+func configure_motion(view_camera: Camera3D, ground_height: Callable, enabled: bool = false) -> void:
+	_motion_camera = view_camera
+	_motion_ground = ground_height
+	_motion_enabled = enabled and is_instance_valid(view_camera) and view_camera.is_inside_tree() and ground_height.is_valid()
+	if enabled and not _motion_enabled:
+		var missing: Array[String] = []
+		if not is_instance_valid(view_camera) or not view_camera.is_inside_tree(): missing.append("in-tree Camera3D")
+		if not ground_height.is_valid(): missing.append("valid ground-height Callable")
+		push_warning("NpcActivity: measured gait was requested but disabled because configuration is missing %s." % ", ".join(missing))
+		_motion_camera = null
+		_motion_ground = Callable()
+	for index in range(_records.size()):
+		var old: Variant = _records[index].get("motion")
+		if old != null and is_instance_valid(old):
+			var record: Dictionary = _records[index]
+			var target: Sprite3D = record.target.get_ref()
+			var anchor: Node3D = record.anchor.get_ref()
+			var registered_pixel_size := float(old.original_sprite_pixel_size)
+			var registered_sprite_position: Vector3 = old.original_sprite_position
+			var registered_anchor_position: Vector3 = old.original_anchor_position
+			old.close()
+			old.queue_free()
+			if is_instance_valid(target):
+				record["baseline_pixel_size"] = registered_pixel_size
+				target.position = registered_sprite_position
+			if is_instance_valid(anchor): record["baseline_anchor_position"] = registered_anchor_position
+			_records[index] = record
+			_restore_actor_visual(record)
+		_records[index]["motion"] = null
+		_records[index]["route_base"] = null
+		if _motion_enabled: _setup_motion(index)
+	_update_motion_pause(_reduced_motion or (_activity_paused and not _dialogue_hold))
+
+func motion_report() -> Dictionary:
+	var supported := {}
+	var fallbacks := {}
+	for record in _records:
+		var role := String(record.role)
+		var motion: Variant = record.get("motion")
+		if motion != null and is_instance_valid(motion) and bool(motion.supported): supported[role]=true
+		elif role in ["ticket","imp","announcer"]: fallbacks[role]=true
+	return {"enabled":_motion_enabled,"supported_roles":supported.keys(),"sprite_fallback_roles":fallbacks.keys()}
+
+func costume_report() -> Dictionary:
+	return {"cache_size":_npc_costume.cache_size(),"cache_limit":NpcCostumeScript.CACHE_LIMIT}
+
+func _setup_motion(record_index: int) -> void:
+	if record_index<0 or record_index>=_records.size() or _motion_camera==null or not _motion_ground.is_valid(): return
+	var record: Dictionary=_records[record_index]
+	var role:=String(record.role)
+	if role not in ["ticket","imp","announcer"]: return
+	var target: Sprite3D=record.target.get_ref()
+	var anchor: Node3D=record.anchor.get_ref()
+	if not is_instance_valid(target) or not is_instance_valid(anchor): return
+	var motion=NpcWalkMotionScript.new()
+	motion.name="NpcMeasuredMotion_%s" % role
+	add_child(motion)
+	var configured: bool=motion.configure(anchor,target,role,_motion_camera,_motion_ground)
+	if configured:
+		# Motion calibration is derived from the authored Sprite's measured opaque
+		# height. Keep later authored action restores at that same body scale.
+		record["baseline_pixel_size"] = target.pixel_size
+		record["baseline_anchor_position"] = anchor.position
+		_records[record_index] = record
+		motion.set_enabled(true)
+		var duration:=2.0
+		var radius:=0.25 if role=="ticket" else 0.35
+		var rest:=10.0 if role=="ticket" else 7.0
+		var cycle:=duration+rest
+		record["route_base"]=anchor.position
+		record["route_phase"]=_phase_seed(float(record.seed),int(record.instance_id))*cycle
+		record["route_cycle"]=cycle
+		record["route_walk_seconds"]=duration
+		record["route_radius"]=radius
+		if role=="announcer":
+			# Its existing authored route owns translation and timing; this driver
+			# only consumes that real anchor displacement if measured assets land.
+			record["route_base"]=null
+	else:
+		push_warning("NpcActivity: %s keeps its original sprite; measured gait unavailable: %s" % [role,"; ".join(motion.diagnostics)])
+		motion.queue_free()
+		record["motion"]=null
+		_records[record_index]=record
+		return
+	record["motion"]=motion
+	_records[record_index]=record
+
+func _update_short_route(record: Dictionary, delta: float) -> void:
+	var role:=String(record.role)
+	if role not in ["ticket","imp"] or not _motion_enabled or not bool(record.get("motion",null)!=null): return
+	var anchor: Node3D=record.anchor.get_ref()
+	if not is_instance_valid(anchor) or not record.get("route_base") is Vector3: return
+	var clock:=float(record.get("route_clock",0.0))+delta
+	var phase:=fposmod(clock+float(record.get("route_phase",0.0)),float(record.route_cycle))
+	var offset:=0.0
+	var moving:=phase<float(record.route_walk_seconds)
+	if moving:
+		var progress:=phase/float(record.route_walk_seconds)
+		offset=float(record.route_radius)*(1.0-absf(progress*2.0-1.0))
+	anchor.position=record.route_base+Vector3(offset,0,0)
+	var index:=_record_index(record)
+	if index>=0:
+		_records[index].route_clock=clock
+		if moving and String(_records[index].action)!="walk":
+			var direction:="right" if phase<float(record.route_walk_seconds)*0.5 else "left"
+			_play_actor_action(index,"walk",direction,true)
+		elif not moving and String(_records[index].action)=="walk":
+			if not _play_actor_action(index,"idle","front",true): _play_actor_action(index,"stand","front",true)
+
+func _update_motion_pause(paused: bool) -> void:
+	for record in _records:
+		var motion: Variant=record.get("motion")
+		if motion!=null and is_instance_valid(motion): motion.set_paused(paused)
+
+func _freeze_shader_motion(frozen: bool) -> void:
+	for record in _records:
+		if not bool(record.get("has_shader_motion",false)): continue
+		var material_ref: WeakRef=record.get("material")
+		if material_ref==null: continue
+		var material: ShaderMaterial=material_ref.get_ref()
+		if is_instance_valid(material) and material.shader!=null:
+			material.set_shader_parameter("motion",0.0 if frozen else float(record.get("baseline_motion",1.0)))
+
+func _costume_texture(role: String, texture: Texture2D) -> Texture2D:
+	if role!="announcer" or texture==null: return texture
+	return _npc_costume.decorate(texture).get("texture",texture)
 
 
 func statistics() -> Dictionary:
@@ -302,6 +492,7 @@ func statistics() -> Dictionary:
 		"playing": is_instance_valid(_player) and _player.is_playing() or (_finished and active > 0 and not _reduced_motion and not _activity_paused),
 		"reduced_motion": _reduced_motion,
 		"activity_paused": _activity_paused,
+		"dialogue_hold": _dialogue_hold,
 	}
 
 
@@ -309,6 +500,8 @@ func release() -> void:
 	if is_instance_valid(_player):
 		_player.stop()
 	for record in _records:
+		var motion: Variant = record.get("motion")
+		if motion != null and is_instance_valid(motion): motion.close()
 		_disconnect_actor(record)
 		_restore_record(record)
 	_records.clear()
@@ -322,20 +515,25 @@ func release() -> void:
 
 
 func _process(delta: float) -> void:
-	if _reduced_motion or _activity_paused:
+	if _reduced_motion or (_activity_paused and not _dialogue_hold):
 		return
-	_action_clock += delta
+	if not _dialogue_hold:
+		_action_clock += delta
 	for record in _records:
 		if not bool(record.active):
 			continue
 		var target: Sprite3D = record.target.get_ref()
 		if is_instance_valid(target):
-			if String(record.role) == "announcer":
+			if not _dialogue_hold:
+				_update_short_route(record,delta)
+			if not _dialogue_hold and String(record.role) == "announcer":
 				_update_announcer_action(record)
 			var record_index := _record_index(record)
 			if record_index >= 0:
 				record = _records[record_index]
-			_advance_actor(record, target, delta)
+			_advance_actor(record, target, delta, not _dialogue_hold)
+			var motion: Variant = record.get("motion")
+			if motion != null and is_instance_valid(motion): motion.update(delta,_dialogue_hold,false)
 		if not bool(record.has_point):
 			continue
 		var anchor: Node3D = record.anchor.get_ref()
@@ -360,12 +558,16 @@ func _build_actor_tracks(record_index: int, scene_root: Node) -> void:
 func _add_announcer_route_track(record: Dictionary, anchor: Node3D, scene_root: Node) -> void:
 	var path := NodePath(String(scene_root.get_path_to(anchor)) + ":position")
 	var track := _add_track(path, Animation.INTERPOLATION_LINEAR, Animation.UPDATE_CONTINUOUS)
-	_animation.track_set_interpolation_type(track, Animation.INTERPOLATION_CUBIC)
 	var base: Vector3 = record.baseline_anchor_position
 	var width := ANNOUNCER_ROUTE_HALF_WIDTH
 	for key in [
-		Vector2(0.0, 0.0), Vector2(1.2, width), Vector2(1.65, width),
-		Vector2(3.0, 0.0), Vector2(4.2, -width), Vector2(4.65, -width), Vector2(6.0, 0.0),
+		Vector2(0.0, 0.0), Vector2(ANNOUNCER_OUTBOUND_SECONDS, width),
+		Vector2(ANNOUNCER_OUTBOUND_SECONDS + ANNOUNCER_STOP_SETTLE_SECONDS, width),
+		Vector2(ANNOUNCER_FIRST_REST_END, width), Vector2(ANNOUNCER_RETURN_SECONDS - ANNOUNCER_OUTBOUND_SECONDS, 0.0),
+		Vector2(ANNOUNCER_RETURN_SECONDS, -width),
+		Vector2(ANNOUNCER_RETURN_SECONDS + ANNOUNCER_STOP_SETTLE_SECONDS, -width),
+		Vector2(ANNOUNCER_SECOND_REST_END, -width),
+		Vector2(CYCLE_SECONDS, 0.0),
 	]:
 		var position := base
 		position.x += key.y
@@ -386,6 +588,8 @@ func _on_actor_exiting(instance_id: int) -> void:
 		var record: Dictionary = _records[index]
 		if int(record.instance_id) != instance_id or not bool(record.active):
 			continue
+		var motion: Variant=record.get("motion")
+		if motion!=null and is_instance_valid(motion): motion.close(); motion.queue_free()
 		_disconnect_actor(record)
 		_restore_record(record)
 		for track_index in record.tracks:
@@ -439,6 +643,8 @@ func _restore_record(record: Dictionary) -> void:
 				material.set_shader_parameter("texture_albedo", record.baseline_shader_texture)
 			if bool(record.has_shader_uv_rect):
 				material.set_shader_parameter("uv_rect", record.baseline_shader_uv_rect)
+			if is_instance_valid(material) and material.shader != null and bool(record.get("has_shader_motion",false)):
+				material.set_shader_parameter("motion", 0.0 if _reduced_motion or (_activity_paused and not _dialogue_hold) else float(record.baseline_motion))
 	if bool(record.has_point):
 		var point: Dictionary = record.point
 		point["position"] = record.original_point_position
@@ -500,18 +706,23 @@ func _play_actor_action(record_index: int, action: String, direction: String, re
 	return true
 
 
-func _advance_actor(record: Dictionary, target: Sprite3D, delta: float) -> void:
+func _advance_actor(record: Dictionary, target: Sprite3D, delta: float, allow_idle_actions := true) -> void:
 	var sequence: Dictionary = record.action_sequence
 	var action := String(record.action)
-	if action in ["stand", "idle"] and _action_clock >= float(record.idle_due):
-		var idle_action := _idle_action_for_role(String(record.role), String(record.direction))
-		if _has_sequence(String(record.role), idle_action, String(record.direction)):
-			var current_index := _record_index(record)
-			_play_actor_action(current_index, idle_action, String(record.direction), false)
-			if current_index >= 0:
-				record = _records[current_index]
+	if allow_idle_actions and action in ["stand", "idle"] and _action_clock >= float(record.idle_due):
+		var current_index := _record_index(record)
+		var idle_action := _idle_action_for_role(
+			String(record.role), String(record.direction), String(record.last_idle_action),
+			float(record.seed), int(record.instance_id), int(record.idle_event_count)
+		)
+		if not idle_action.is_empty() and _play_actor_action(current_index, idle_action, String(record.direction), false):
+			record = _records[current_index]
+			record.last_idle_action = idle_action
+			record.idle_event_count = int(record.idle_event_count) + 1
 		record.idle_due = _action_clock + 7.0 + fposmod(_phase_seed(float(record.seed), int(record.instance_id)) * 11.7 + _action_clock, 9.0)
 		sequence = record.action_sequence
+		if current_index >= 0:
+			_records[current_index] = record
 	if sequence.is_empty():
 		var empty_index := _record_index(record)
 		if empty_index >= 0:
@@ -553,6 +764,8 @@ func _apply_actor_frame(record_index: int, frame_index: int) -> void:
 		return
 	var frame: Dictionary = frames[clampi(frame_index, 0, frames.size() - 1)]
 	var texture := frame.get("texture") as Texture2D
+	if String(record.role)=="announcer" and not bool(record.action_sequence.get("legacy_fallback",false)):
+		texture=_costume_texture(String(record.role),texture)
 	if texture == null:
 		return
 	target.texture = texture
@@ -614,18 +827,20 @@ func _has_sequence(role: String, action: String, direction: String) -> bool:
 	return action_coverage is Array and action_coverage.has(direction)
 
 
-func _idle_action_for_role(role: String, direction: String) -> String:
-	var preferred: Array[String] = []
+func _idle_action_for_role(role: String, direction: String, previous_action: String = "", seed: float = 0.0, instance_id: int = 0, event_index: int = 0) -> String:
+	var candidates: Array[String] = []
 	match role:
-		"ticket": preferred = ["idle_adjust_uniform", "idle_look_queue", "idle_blink"]
-		"imp": preferred = ["idle_head_tilt", "idle_tail_flick", "idle_blink"]
-		"announcer": preferred = ["idle_look_harbor", "idle_observe", "idle_blink"]
-	for action in preferred:
-		if _has_sequence(role, action, direction):
-			return action
-	if _has_sequence(role, "idle_gesture", direction):
-		return "idle_gesture"
-	return "gesture"
+		"ticket": candidates = ["idle_gesture", "emotion_happy"]
+		"imp": candidates = ["idle_gesture", "emotion_proud", "dance"]
+		"announcer": candidates = ["special", "emotion_curious"]
+	var available: Array[String] = []
+	for action in candidates:
+		if action != previous_action and _has_sequence(role, action, direction):
+			available.append(action)
+	if available.is_empty():
+		return ""
+	var phase := fposmod(_phase_seed(seed, instance_id) + float(event_index) * 0.61803398875, 1.0)
+	return available[mini(floori(phase * float(available.size())), available.size() - 1)]
 
 
 func _phase_seed(seed: float, instance_id: int) -> float:
@@ -655,25 +870,36 @@ func _legacy_fallback_sequence(record: Dictionary, action: String) -> Dictionary
 func _update_announcer_action(record: Dictionary) -> void:
 	var phase := fposmod(_action_clock, CYCLE_SECONDS)
 	var direction := ""
-	if phase < 1.2 or phase >= 4.65:
+	if phase < ANNOUNCER_OUTBOUND_SECONDS or phase >= ANNOUNCER_SECOND_REST_END:
 		direction = "right"
-	elif phase >= 1.65 and phase < 4.2:
+	elif phase >= ANNOUNCER_FIRST_REST_END and phase < ANNOUNCER_RETURN_SECONDS:
 		direction = "left"
 	var current_action := String(record.action)
 	var current_direction := String(record.direction)
 	var index := _record_index(record)
 	if direction.is_empty():
 		if current_action == "walk":
-			if not _play_actor_action(index, "stand", current_direction, true):
-				_restore_actor_visual(record)
-				if index >= 0:
-					var idle_record: Dictionary = _records[index]
-					idle_record.action_sequence = {}
-					idle_record.action = "stand"
-					_records[index] = idle_record
+			var rest_started := float(record.get("route_rest_started", -1.0))
+			if rest_started < 0.0:
+				record.route_rest_started = _action_clock
+				_records[index] = record
+				return
+			if _action_clock - rest_started < ANNOUNCER_STOP_SETTLE_SECONDS:
+				return
+			if not _play_actor_action(index, "idle", "front", true):
+				_play_actor_action(index, "stand", "front", true)
+			index = _record_index(record)
+			if index >= 0:
+				var idle_record: Dictionary = _records[index]
+				idle_record.direction = "front"
+				idle_record.idle_due = _action_clock + ANNOUNCER_PERSONALITY_DELAY
+				_records[index] = idle_record
 		return
 	if current_action == "walk" and current_direction == direction:
 		return
+	if index >= 0:
+		record.route_rest_started = -1.0
+		_records[index] = record
 	if not _play_actor_action(index, "walk", direction, true) and current_action == "walk":
 		_restore_actor_visual(record)
 		if index >= 0:

@@ -70,7 +70,9 @@ func _test_arrival_and_replay() -> void:
 func _test_movement_and_nearest_interaction() -> void:
 	var start: Vector3 = main.world.player.position
 	_key_down(KEY_W)
-	await _frames(20)
+	# Movement and acceleration use physics time. Headless render frames may
+	# run faster than physics, so observe a real half-second of held input.
+	for step in 30: await get_tree().physics_frame
 	_key_up(KEY_W)
 	await _frames(2)
 	_check(main.world.player.position.z < start.z - 0.4, "W input moves the player forward")

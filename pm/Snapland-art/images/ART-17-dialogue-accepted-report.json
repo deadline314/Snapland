@@ -1,0 +1,101 @@
+{
+	"captures": [
+		{
+			"description": "dialogue open after 3s; guide in natural world position",
+			"frame": 194,
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-art/images/ART-17-npc-dialogue-native-open.png",
+			"saved": true,
+			"wall_ticks_ms": 15012
+		},
+		{
+			"description": "dialogue closed; guide continues idle/breathing",
+			"frame": 378,
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-art/images/ART-17-npc-dialogue-native-idle.png",
+			"saved": true,
+			"wall_ticks_ms": 20325
+		},
+		{
+			"description": "Main pause modal after a one-second animation freeze",
+			"frame": 443,
+			"path": "C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-art/images/ART-17-npc-dialogue-native-pause.png",
+			"saved": true,
+			"wall_ticks_ms": 21836
+		}
+	],
+	"checks": {
+		"dialogue_closed_idle": {
+			"activity_clock_end": 3.13333333333333,
+			"activity_clock_start": 0.116666666666667,
+			"animation_advanced": true,
+			"guide_action_elapsed_end": 0.0,
+			"guide_action_elapsed_positive_progress_seconds": 0.583333333333331,
+			"guide_action_elapsed_start": 1.8,
+			"guide_action_sequence_changes": 0,
+			"guide_foot_pose_change_frames": 113,
+			"guide_motion_rig_present": true,
+			"guide_rig_travel_delta": 0.319767177793715,
+			"guide_rig_travel_end": 0.319767177793715,
+			"guide_rig_travel_start": 0.0,
+			"guide_root_path_distance": 0.496423244476318,
+			"guide_root_position_end": [
+				-3.79999995231628,
+				0.180000007152557,
+				5.0
+			],
+			"guide_root_position_start": [
+				-3.79999995231628,
+				0.180000007152557,
+				5.0
+			],
+			"guide_sprite_frame_changes": 3,
+			"simulation_elapsed_seconds": 3.01666666666666,
+			"simulation_wait_seconds": 3.0,
+			"wall_elapsed_ms": 4981
+		},
+		"dialogue_open": {
+			"announcer_route_held": true,
+			"announcer_route_start": [
+				3.44000005722046,
+				0.0,
+				-4.0
+			],
+			"guide_action_elapsed_end": 1.71666666666667,
+			"guide_action_elapsed_start": 0.0333333333333333,
+			"simulation_wait_seconds": 3.0,
+			"wall_elapsed_ms": 5264
+		},
+		"scripted_camera_and_visibility": {
+			"camera_framing": "scripted close framing for evidence only",
+			"camera_position": [
+				-3.79999995231628,
+				2.1800000667572,
+				9.19999980926514
+			],
+			"guide_in_view": true,
+			"guide_world_position": [
+				-3.79999995231628,
+				0.180000007152557,
+				5.0
+			],
+			"guide_world_position_unchanged": true,
+			"hero_visual_hidden": true,
+			"occlusion_hit_collider": "",
+			"occlusion_ray_clear": true
+		},
+		"true_pause": {
+			"activity_clock_after": 3.14999999999999,
+			"activity_clock_before": 3.14999999999999,
+			"announcer_route_unchanged": true,
+			"freeze_verified": true,
+			"guide_action_elapsed_after": 0.0,
+			"guide_action_elapsed_before": 0.0,
+			"guide_texture_unchanged": true,
+			"simulation_wait_seconds": 1.0,
+			"wall_elapsed_ms": 1226
+		}
+	},
+	"failures": [],
+	"method": "scripted Main instantiation, simulated Escape/E input, scripted player/camera placement; not human gameplay evidence",
+	"result": "PASS",
+	"review": "ART-17 native NPC dialogue and animation review"
+}
