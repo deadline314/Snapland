@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 ## A paged paper book over the existing photo and achievement records.
 
 const Paper = preload("res://game/ui/paper_ui.gd")
@@ -10,14 +10,10 @@ const MAX_LEGACY_UI_PHOTO_BYTES := 16 * 1024 * 1024
 
 class BookSpread extends Control:
 	func _draw() -> void:
-		var page_rect := Rect2(Vector2(4,5),Vector2(maxf(size.x-8,0),maxf(size.y-10,0)))
-		draw_rect(Rect2(page_rect.position+Vector2(0,7),page_rect.size),Color("#795d40"))
-		var half := page_rect.size.x*0.5
-		draw_rect(Rect2(page_rect.position,Vector2(half,page_rect.size.y)),Color("#fffaf0"))
-		draw_rect(Rect2(page_rect.position+Vector2(half,0),Vector2(half,page_rect.size.y)),Color("#f5ecd6"))
-		draw_rect(Rect2(page_rect.position+Vector2(half-5,0),Vector2(10,page_rect.size.y)),Color("#c5a478"))
-		draw_line(Vector2(half,page_rect.position.y+4),Vector2(half,page_rect.end.y-4),Color("#8d704e"),1.5)
-		draw_rect(page_rect,Color("#9d805c"),false,2.0)
+		var bounds := Rect2(Vector2.ZERO, size).grow(-2.0)
+		draw_rect(bounds, Paper.DEEP)
+		draw_rect(bounds, Paper.FRAME, false, 2.0)
+		draw_rect(Rect2(bounds.position + Vector2(6, 6), bounds.size - Vector2(12, 12)), Paper.FRAME, false, 1.0)
 
 var _progress: Node
 var _definitions: Array = []
@@ -27,6 +23,12 @@ var _category := "normal"
 var _page := 0
 var _spread: GridContainer
 var _spread_surface: Control
+var _scroll: ScrollContainer
+var _scroll_content: VBoxContainer
+var _top_spacer: Control
+var _bottom_spacer: Control
+var _tabs: HBoxContainer
+var _nav: HBoxContainer
 var _page_label: Label
 var _empty_message: Label
 var _collection_state: Label
@@ -37,9 +39,12 @@ var _time_button: Button
 var _game_photo_texture_cache: Dictionary = {}
 var _thumbnail_decode_count := 0
 var _original_decode_count := 0
+var _rebuild_queued := false
+var _built_profile := ""
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
+		_layout_book_controls()
 		_apply_responsive_spread_columns()
 
 func setup(progress: Node, definitions: Array, phases: Array, photo_loader: Callable) -> void:
@@ -52,43 +57,41 @@ func setup(progress: Node, definitions: Array, phases: Array, photo_loader: Call
 	_original_decode_count=0
 
 func _ready() -> void:
-	custom_minimum_size.y=420
-	add_theme_constant_override("separation",8)
+	if not get_viewport().size_changed.is_connected(_on_viewport_size_changed):
+		get_viewport().size_changed.connect(_on_viewport_size_changed)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	size_flags_vertical=Control.SIZE_EXPAND_FILL
 	tooltip_text="收藏不消耗；重拍不重複計數。選取畫格，查看收藏方式。"
-	var tabs := HBoxContainer.new()
-	tabs.add_theme_constant_override("separation",6)
-	add_child(tabs)
-	_normal_button=Paper.button("普通拍貼  0 / 18",func(): _set_category("normal"),tabs)
-	_normal_button.name="AlbumTab_normal"
-	_devil_button=Paper.button("小惡魔  0 / 12",func(): _set_category("devil"),tabs)
-	_devil_button.name="AlbumTab_devil"
-	_time_button=Paper.button("四時明信片  0 / 4",func(): _set_category("time"),tabs)
-	_time_button.name="AlbumTab_time"
-	for button in [_normal_button,_devil_button,_time_button]:
-		button.custom_minimum_size=Vector2(0,44)
-	var cover := PanelContainer.new()
-	cover.name="AlbumBookCover"
-	var cover_style := Paper.plaque(Color("#c8a477"))
-	var menu_scale := Paper.physical_scale(self)
-	cover_style.content_margin_left=4.0/menu_scale
-	cover_style.content_margin_right=4.0/menu_scale
-	cover_style.content_margin_top=4.0/menu_scale
-	cover_style.content_margin_bottom=4.0/menu_scale
-	cover.add_theme_stylebox_override("panel",cover_style)
-	cover.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	add_child(cover)
-	var cover_margin := MarginContainer.new()
-	for side in ["left","right","top","bottom"]:
-		cover_margin.add_theme_constant_override("margin_"+side,8.0/menu_scale)
-	cover.add_child(cover_margin)
-	var book_body := VBoxContainer.new()
-	book_body.add_theme_constant_override("separation",4)
-	cover_margin.add_child(book_body)
+	_scroll=ScrollContainer.new()
+	_scroll.name="AdaptiveMenuScroll"
+	_scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_scroll.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	_scroll.vertical_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(_scroll)
+	_scroll_content=VBoxContainer.new()
+	_scroll_content.name="AlbumScrollContent"
+	_scroll_content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	_scroll_content.add_theme_constant_override("separation",8)
+	_scroll.add_child(_scroll_content)
+	_top_spacer=Control.new()
+	_top_spacer.name="AlbumTopControlClearance"
+	_scroll_content.add_child(_top_spacer)
+	_empty_message=Paper.label("這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。",16,Paper.INK)
+	_empty_message.name="AlbumEmptyState"
+	_empty_message.visible=false
+	_scroll_content.add_child(_empty_message)
 	_spread_surface=BookSpread.new()
 	_spread_surface.name="AlbumBookSpread"
-	_spread_surface.custom_minimum_size=Vector2(0,432.0/menu_scale)
+	_spread_surface.custom_minimum_size=Vector2(0,0)
+	_spread_surface.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	_spread_surface.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	book_body.add_child(_spread_surface)
+	_scroll_content.add_child(_spread_surface)
+	_bottom_spacer=Control.new()
+	_bottom_spacer.name="AlbumBottomControlClearance"
+	_scroll_content.add_child(_bottom_spacer)
 	_spread=GridContainer.new()
 	_spread.name="AlbumPhotoGrid"
 	_spread.columns=2
@@ -96,35 +99,79 @@ func _ready() -> void:
 	_spread.add_theme_constant_override("v_separation",8)
 	_spread.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_spread.offset_left=14
-	_spread.offset_top=12
+	_spread.offset_top=2
 	_spread.offset_right=-14
-	_spread.offset_bottom=-12
-	_spread.add_theme_constant_override("h_separation",22)
+	_spread.offset_bottom=-2
 	_spread_surface.add_child(_spread)
-	_photo_details=Paper.label("選取照片，查看收藏方式。",16,Paper.DEEP_TEAL)
+	_tabs=HBoxContainer.new()
+	_tabs.name="AlbumCategoryTabs"
+	_tabs.add_theme_constant_override("separation",6)
+	add_child(_tabs)
+	_normal_button=Paper.button("普通拍貼  0 / 18",func(): _set_category("normal"),_tabs)
+	_normal_button.name="AlbumTab_normal"
+	_devil_button=Paper.button("小惡魔  0 / 12",func(): _set_category("devil"),_tabs)
+	_devil_button.name="AlbumTab_devil"
+	_time_button=Paper.button("四時明信片  0 / 4",func(): _set_category("time"),_tabs)
+	_time_button.name="AlbumTab_time"
+	for button in [_normal_button,_devil_button,_time_button]:
+		button.custom_minimum_size=Vector2(0,44)
+	_photo_details=Paper.label("選取照片，查看收藏方式。",16,Paper.INK)
 	_photo_details.name="AlbumPhotoDetails"
-	book_body.add_child(_photo_details)
-	var nav := HBoxContainer.new()
-	book_body.add_child(nav)
-	var previous := Paper.button("← 上一頁",func(): _change_page(-1),nav)
+	_photo_details.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	_photo_details.custom_minimum_size.y=32.0/Paper.physical_scale(self)
+	add_child(_photo_details)
+	_nav=HBoxContainer.new()
+	_nav.name="AlbumPageControls"
+	add_child(_nav)
+	var previous := Paper.button("← 上一頁",func(): _change_page(-1),_nav)
 	previous.name="AlbumPreviousPage"
 	previous.custom_minimum_size=Vector2(130,44)
-	var next := Paper.button("下一頁 →",func(): _change_page(1),nav)
+	var next := Paper.button("下一頁 →",func(): _change_page(1),_nav)
 	next.name="AlbumNextPage"
 	next.custom_minimum_size=Vector2(130,44)
-	_page_label=Paper.label("第 1 / 1 頁",16,Color("#fff4db"))
+	_page_label=Paper.label("第 1 / 1 頁",16,Paper.INK)
 	_page_label.name="AlbumPageLabel"
 	_page_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	_page_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-	nav.add_child(_page_label)
-	nav.move_child(_page_label,1)
-	_empty_message=Paper.label("這一類目前尚無收藏。拍照或完成對應挑戰後，照片會出現在本頁。",19,Paper.DEEP_TEAL)
-	_empty_message.name="AlbumEmptyState"
-	add_child(_empty_message)
-	_collection_state=Paper.label("",16,Paper.CORAL)
+	_nav.add_child(_page_label)
+	_nav.move_child(_page_label,1)
+	_collection_state=Paper.label("",16,Paper.GOLD)
 	_collection_state.name="AlbumCollectionState"
 	add_child(_collection_state)
+	remove_child(_collection_state)
+	_scroll_content.add_child(_collection_state)
+	_scroll_content.move_child(_collection_state,2)
+	_collection_state.custom_minimum_size.y=0
+	_layout_book_controls()
 	_refresh_book()
+
+func _layout_book_controls() -> void:
+	if not is_instance_valid(_scroll):
+		return
+	var scale_factor := Paper.physical_scale(self)
+	var tabs_height := maxf(44.0/scale_factor,_tabs.get_combined_minimum_size().y if is_instance_valid(_tabs) else 0.0)
+	var detail_height := maxf(32.0/scale_factor,_photo_details.get_combined_minimum_size().y if is_instance_valid(_photo_details) else 0.0)
+	var nav_height := maxf(44.0/scale_factor,_nav.get_combined_minimum_size().y if is_instance_valid(_nav) else 0.0)
+	var top_height := tabs_height + detail_height + 2.0/scale_factor
+	if is_instance_valid(_tabs):
+		_tabs.position=Vector2.ZERO
+		_tabs.size=Vector2(size.x,tabs_height)
+	if is_instance_valid(_collection_state):
+		_collection_state.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	if is_instance_valid(_photo_details):
+		_photo_details.position=Vector2(0,tabs_height+2.0/scale_factor)
+		_photo_details.size=Vector2(size.x,detail_height)
+	if is_instance_valid(_nav):
+		_nav.position=Vector2(0,maxf(0.0,size.y-nav_height-2.0/scale_factor))
+		_nav.size=Vector2(size.x,nav_height)
+	# Keep the actual scroll clip pinned to the book bounds. Spacers reserve the
+	# fixed header and pager bands within that clipped viewport.
+	if is_instance_valid(_top_spacer):
+		_top_spacer.custom_minimum_size=Vector2(0,ceilf(top_height)+2.0)
+	if is_instance_valid(_bottom_spacer):
+		_bottom_spacer.custom_minimum_size=Vector2(0,nav_height+4.0/scale_factor)
+	if is_instance_valid(_scroll_content):
+		_scroll_content.add_theme_constant_override("separation",0)
 
 func _set_category(category: String) -> void:
 	_category=category
@@ -132,11 +179,12 @@ func _set_category(category: String) -> void:
 	_refresh_book()
 
 func _change_page(amount: int) -> void:
-	var pages := maxi(1,ceili(float(_entries().size())/float(PAGE_SIZE)))
+	var pages := maxi(1,ceili(float(_entries().size())/float(_page_capacity())))
 	_page=clampi(_page+amount,0,pages-1)
 	_refresh_book()
 
 func _refresh_book() -> void:
+	_built_profile="%s:%s:%s" % [Paper.physical_scale(self),_compact_cards(),_page_capacity()]
 	if _progress==null or not is_instance_valid(_spread):
 		return
 	_photo_details.text = _category_prompt()
@@ -148,30 +196,64 @@ func _refresh_book() -> void:
 			time_count+=1
 	_time_button.text="四時明信片  %d / 4" % time_count
 	_collection_state.visible=int(_progress.normal_count())+int(_progress.devil_count())+time_count==0
-	_collection_state.text="本子還是空白的。到迎賓大道拍照、完成小遊戲，或切換時段拍明信片，就能蓋下第一張記錄。"
+	_collection_state.text="收藏簿還是空白的。拍照留下第一筆記錄。"
 	if Paper.physical_scale(self)<0.9:
 		_normal_button.text="普通 %d / 18" % int(_progress.normal_count())
 		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count())
 		_time_button.text="四時 %d / 4" % time_count
 	var entries := _entries()
-	var page_count := maxi(1,ceili(float(entries.size())/float(PAGE_SIZE)))
+	var capacity := _page_capacity()
+	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
 	_page=clampi(_page,0,page_count-1)
 	_page_label.text="第 %d / %d 頁" % [_page+1,page_count]
+	var previous := get_node_or_null("AlbumPageControls/AlbumPreviousPage") as Button
+	var next := get_node_or_null("AlbumPageControls/AlbumNextPage") as Button
+	if previous != null:
+		previous.disabled=_page<=0
+	if next != null:
+		next.disabled=_page>=page_count-1
 	_empty_message.visible=entries.is_empty()
 	for child in _spread.get_children():
 		_spread.remove_child(child)
 		child.queue_free()
 	if entries.is_empty():
+		_spread_surface.custom_minimum_size.y=0
 		return
 	_apply_responsive_spread_columns()
 	for entry_index in range(entries.size()):
 		var tile := _photo_tile(entries[entry_index])
 		tile.name="AlbumPhoto_"+str(entries[entry_index].id)
 		tile.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-		tile.visible=entry_index>=_page*PAGE_SIZE and entry_index<(_page+1)*PAGE_SIZE
+		tile.visible=entry_index>=_page*capacity and entry_index<(_page+1)*capacity
 		_spread.add_child(tile)
+	_spread_surface.custom_minimum_size.y=_spread.get_combined_minimum_size().y+4.0/Paper.physical_scale(self)
 	Paper.adapt_menu(self,Paper.physical_scale(self))
 	_apply_responsive_spread_columns()
+	call_deferred("_fit_album_cards_to_available_height")
+
+func _on_viewport_size_changed() -> void:
+	var scale_factor := Paper.physical_scale(self)
+	Paper.adapt_menu(self,scale_factor)
+	_set_tab_labels(scale_factor)
+	if is_instance_valid(_photo_details):
+		_photo_details.custom_minimum_size.y=32.0/scale_factor
+	_layout_book_controls()
+	_apply_responsive_spread_columns()
+	call_deferred("_fit_album_cards_to_available_height")
+
+func _set_tab_labels(scale_factor: float) -> void:
+	if not is_instance_valid(_normal_button):
+		return
+	var normal_count := int(_progress.normal_count()) if _progress != null else 0
+	var devil_count := int(_progress.devil_count()) if _progress != null else 0
+	var time_count := 0
+	if _progress != null:
+		for phase in _time_phases:
+			if phase is Dictionary and _progress.photos.has(TimeOfDay.postcard_id(str(phase.get("id","")))):
+				time_count+=1
+	_normal_button.text=("普通 %d / 18" if scale_factor<0.9 else "普通拍貼  %d / 18") % normal_count
+	_devil_button.text=("小惡魔 %d / 12" if scale_factor<0.9 else "小惡魔  %d / 12") % devil_count
+	_time_button.text=("四時 %d / 4" if scale_factor<0.9 else "四時明信片  %d / 4") % time_count
 
 func _apply_responsive_spread_columns() -> void:
 	if not is_instance_valid(_spread):
@@ -179,10 +261,66 @@ func _apply_responsive_spread_columns() -> void:
 	var physical_width := get_viewport_rect().size.x * Paper.physical_scale(self)
 	var wide_layout := physical_width >= 1200.0
 	_spread.columns=4 if wide_layout else 2
+	_scroll.vertical_scroll_mode=ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	if is_instance_valid(_spread_surface):
-		_spread_surface.custom_minimum_size.y=(224.0 if wide_layout else 432.0)/Paper.physical_scale(self)
+		_spread_surface.custom_minimum_size.y=(_spread.get_combined_minimum_size().y+4.0/Paper.physical_scale(self)) if _spread.get_child_count()>0 else 0.0
 	_spread.add_theme_constant_override("h_separation",8.0/Paper.physical_scale(self))
 	_spread.add_theme_constant_override("v_separation",8.0/Paper.physical_scale(self))
+	if _progress != null and is_instance_valid(_page_label):
+		var page_count := maxi(1, ceili(float(_entries().size()) / float(_page_capacity())))
+		_page=clampi(_page,0,page_count-1)
+		_page_label.text="第 %d / %d 頁" % [_page+1,page_count]
+		for entry_index in range(_spread.get_child_count()):
+			(_spread.get_child(entry_index) as Control).visible=entry_index>=_page*_page_capacity() and entry_index<(_page+1)*_page_capacity()
+		call_deferred("_fit_album_cards_to_available_height")
+
+func _compact_cards() -> bool:
+	return get_viewport_rect().size.y*Paper.physical_scale(self)<550.0
+
+func _queue_profile_rebuild() -> void:
+	if _rebuild_queued or _progress==null:
+		return
+	_rebuild_queued=true
+	call_deferred("_rebuild_profile")
+
+func _rebuild_profile() -> void:
+	_rebuild_queued=false
+	var profile := "%s:%s:%s" % [Paper.physical_scale(self),_compact_cards(),_page_capacity()]
+	if profile==_built_profile:
+		return
+	_built_profile=profile
+	_refresh_book()
+
+func _fit_album_cards_to_available_height() -> void:
+	_layout_book_controls()
+	_queue_profile_rebuild()
+	if not is_instance_valid(_spread) or not is_instance_valid(_nav):
+		return
+	# Let the real caption and image minima win; trim only surplus card padding
+	# when the modal's fixed header and pager leave less than the roomy height.
+	for child in _spread.get_children():
+		var tile := child as Control
+		if not tile.visible or tile.get_child_count()==0:
+			continue
+		var available := _nav.get_global_rect().position.y-tile.get_global_rect().position.y-2.0
+		var natural := (tile.get_child(0) as Control).get_combined_minimum_size().y
+		var roomy := (76.0 if _compact_cards() else 200.0)/Paper.physical_scale(self)
+		var fitted := maxf(natural,minf(roomy,available)) if available>0.0 else maxf(natural,roomy)
+		if not is_equal_approx(fitted,tile.custom_minimum_size.y):
+			tile.custom_minimum_size.y=fitted
+			tile.set_meta("menu_base_minimum",tile.custom_minimum_size)
+	_spread_surface.custom_minimum_size.y=_spread.get_combined_minimum_size().y+4.0/Paper.physical_scale(self)
+
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
+		get_viewport().set_input_as_handled()
+	elif event is InputEventPanGesture or event is InputEventScreenDrag:
+		get_viewport().set_input_as_handled()
+
+func _page_capacity() -> int:
+	var physical_width := get_viewport_rect().size.x * Paper.physical_scale(self)
+	return PAGE_SIZE if physical_width >= 1200.0 or get_viewport_rect().size.y*Paper.physical_scale(self)>=550.0 else 2
 
 func _entries() -> Array[Dictionary]:
 	var entries: Array[Dictionary]=[]
@@ -226,53 +364,65 @@ func _photo_tile(entry: Dictionary) -> Control:
 	var tile := Button.new()
 	tile.name="AlbumPhoto_"+str(entry.id)
 	var menu_scale := Paper.physical_scale(self)
-	tile.custom_minimum_size=Vector2(232.0/menu_scale,200.0/menu_scale)
+	var compact_layout := _compact_cards()
+	tile.custom_minimum_size=Vector2(232.0/menu_scale,(76.0 if compact_layout else 200.0)/menu_scale)
+	tile.set_meta("menu_base_minimum",tile.custom_minimum_size)
 	tile.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	tile.focus_mode=Control.FOCUS_ALL
 	tile.mouse_filter=Control.MOUSE_FILTER_STOP
 	tile.text=""
 	tile.tooltip_text=str(entry.instructions)
-	var leaf_color := Color("#fffdf5") if collected else Color("#f5ecd6")
-	var tile_style := Paper.box(leaf_color if collected else leaf_color.darkened(0.05),6)
+	var tile_style := Paper.button_box(Paper.FRAME, Paper.TEAL if collected else Paper.GOLD, 0, Vector2.ZERO)
 	tile.add_theme_stylebox_override("normal",tile_style)
-	tile.add_theme_stylebox_override("hover",Paper.box(leaf_color.lightened(0.03),6))
-	tile.add_theme_stylebox_override("pressed",Paper.box(leaf_color.darkened(0.04),6))
+	tile.add_theme_stylebox_override("hover",Paper.button_box(Color("#1e5360"),Paper.GOLD,0,Vector2.ZERO))
+	tile.add_theme_stylebox_override("pressed",Paper.button_box(Paper.DEEP,Paper.GOLD,0,Vector2.ZERO))
 	tile.add_theme_stylebox_override("disabled",tile_style)
-	tile.add_theme_stylebox_override("focus",Paper.box(Color(0,0,0,0),6))
-	var column := VBoxContainer.new()
-	column.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	column.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	column.add_theme_constant_override("separation",3)
-	tile.add_child(column)
+	var focus_style := Paper.button_box(Color(0,0,0,0),Paper.GOLD,0,Vector2.ZERO)
+	focus_style.set_border_width_all(3)
+	tile.add_theme_stylebox_override("focus",focus_style)
+	var inset := MarginContainer.new()
+	inset.name="AlbumCardContent"
+	inset.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side in ["left","top","right","bottom"]:
+		inset.add_theme_constant_override("margin_"+side,ceili(8.0/menu_scale))
+	tile.add_child(inset)
+	var content_row: BoxContainer = HBoxContainer.new() if compact_layout else VBoxContainer.new()
+	content_row.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	content_row.add_theme_constant_override("separation",8 if compact_layout else 0)
+	inset.add_child(content_row)
 	var photo_frame := PanelContainer.new()
 	photo_frame.name="SavedPhotoFrame"
 	photo_frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	photo_frame.custom_minimum_size=Vector2(220.0/menu_scale,124.0/menu_scale)
+	photo_frame.custom_minimum_size=Vector2(108.0/menu_scale,60.75/menu_scale) if compact_layout else Vector2(220.0/menu_scale,124.0/menu_scale)
 	photo_frame.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	var frame_style := Paper.plaque(Color("#e9dfc5"))
+	if compact_layout:
+		photo_frame.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
+		photo_frame.size_flags_vertical=Control.SIZE_SHRINK_CENTER
+		photo_frame.size_flags_stretch_ratio=0.0
+	var frame_style := Paper.plaque(Paper.DEEP)
 	frame_style.content_margin_left=4.0/menu_scale
 	frame_style.content_margin_right=4.0/menu_scale
 	frame_style.content_margin_top=4.0/menu_scale
 	frame_style.content_margin_bottom=4.0/menu_scale
 	photo_frame.add_theme_stylebox_override("panel",frame_style)
-	column.add_child(photo_frame)
+	content_row.add_child(photo_frame)
 	var texture := _saved_texture(str(entry.id)) if collected else null
 	if texture!=null:
 		var thumbnail := TextureRect.new()
 		thumbnail.texture=texture
 		thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 		thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		thumbnail.custom_minimum_size=Vector2(220.0/menu_scale,124.0/menu_scale)
+		thumbnail.custom_minimum_size=Vector2.ZERO if compact_layout else Vector2(220.0/menu_scale,124.0/menu_scale)
 		thumbnail.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		thumbnail.size_flags_vertical=Control.SIZE_EXPAND_FILL
 		thumbnail.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		photo_frame.add_child(thumbnail)
 	else:
-		var fallback_text := "已收藏 · 暫時看不清楚" if collected else "等待一張照片"
-		var blank := Paper.label(fallback_text,16,Paper.TEAL if collected else Color("#827b6b"))
+		var fallback_text := "暫時看不清楚" if collected else "等待照片"
+		var blank := Paper.label(fallback_text,16,Paper.TEAL if collected else Paper.INK)
 		blank.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 		blank.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
-		blank.custom_minimum_size=Vector2(220.0/menu_scale,124.0/menu_scale)
+		blank.custom_minimum_size=Vector2.ZERO
 		blank.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		blank.size_flags_vertical=Control.SIZE_EXPAND_FILL
 		photo_frame.add_child(blank)
@@ -280,13 +430,21 @@ func _photo_tile(entry: Dictionary) -> Control:
 	title.name="AlbumPhotoTitle"
 	title.custom_minimum_size.x=0
 	title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(title)
-	var status := Paper.label("已收藏" if collected else "尚未收藏",16,Paper.TEAL if collected else Color("#8c694a"))
+	var copy_column: VBoxContainer = VBoxContainer.new() if compact_layout else null
+	if compact_layout:
+		copy_column.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		copy_column.size_flags_vertical=Control.SIZE_SHRINK_CENTER
+		copy_column.add_theme_constant_override("separation",4)
+		content_row.add_child(copy_column)
+		copy_column.add_child(title)
+	else:
+		content_row.add_child(title)
+	var status := Paper.label("已收藏" if collected else "尚未收藏",16,Paper.TEAL if collected else Paper.INK)
 	status.name="AlbumPhotoStatus"
-	column.add_child(status)
-	var method := Paper.label(str(entry.instructions),16,Paper.DEEP_TEAL)
+	(copy_column if compact_layout else content_row).add_child(status)
+	var method := Paper.label(str(entry.instructions),16,Paper.INK)
 	method.visible=false
-	column.add_child(method)
+	(copy_column if compact_layout else content_row).add_child(method)
 	var show_details := func(): _photo_details.text=str(entry.title)+"｜"+str(entry.instructions)
 	tile.mouse_entered.connect(show_details)
 	tile.focus_entered.connect(show_details)
@@ -353,17 +511,19 @@ func _find_modal_overlay() -> Control:
 	var ancestor: Node = self
 	while ancestor != null:
 		if ancestor is PanelContainer and ancestor.name == "AdaptiveMenuPanel":
-			var center := ancestor.get_parent()
-			if center is CenterContainer and center.get_parent() is Control:
-				return center.get_parent() as Control
+			var host := ancestor.get_parent()
+			if host is CenterContainer:
+				host=host.get_parent()
+			if host is Control:
+				return host as Control
 		ancestor=ancestor.get_parent()
 	return null
 
 func _blank_tile() -> Control:
 	var blank := PanelContainer.new()
 	blank.custom_minimum_size=Vector2(0,98)
-	blank.add_theme_stylebox_override("panel",Paper.box(Color("#f2ead8"),6))
-	var label := Paper.label("空白頁 · 留給下一張旅途照片",16,Color("#8c806a"))
+	blank.add_theme_stylebox_override("panel",Paper.plaque())
+	var label := Paper.label("空白頁 · 留給下一張旅途照片",16,Paper.INK)
 	label.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
 	blank.add_child(label)
 	return blank

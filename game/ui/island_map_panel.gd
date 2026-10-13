@@ -64,37 +64,85 @@ class MapSurface extends Control:
 	func _draw() -> void:
 		var sx := size.x / 720.0
 		var sy := size.y / 360.0
-		draw_rect(Rect2(Vector2.ZERO,size),Color("#a9d0ca"))
+		draw_rect(Rect2(Vector2.ZERO,size),Color("#80b8bd"))
+		# Short two-pixel marks suggest shallow-water bands without competing with the route.
+		for row in range(12):
+			var y := (18.0+row*29.0)*sy
+			var offset := 12.0 if row%2==0 else 30.0
+			for column in range(14):
+				var x := (offset+column*51.0)*sx
+				var length := 12.0 if column%3==0 else 7.0
+				draw_rect(Rect2(Vector2(x,y),Vector2(length*sx,2.0*sy)),Color("#a4ced0"))
 		# Low waterline shadow separates the cut-paper islands from the sea.
-		var main := _scaled_points([
+		var coast := _pixel_steps([
 			Vector2(12,96),Vector2(40,42),Vector2(119,17),Vector2(206,29),Vector2(284,11),
 			Vector2(374,34),Vector2(447,23),Vector2(481,67),Vector2(463,137),Vector2(485,201),
 			Vector2(439,276),Vector2(350,331),Vector2(239,343),Vector2(132,326),Vector2(48,287),Vector2(14,221)
-		],sx,sy)
+		],8.0)
+		var main := _scaled_points(coast,sx,sy)
 		var offset := Vector2(0,12*sy)
 		draw_colored_polygon(_translate(main,offset),Color("#547b78"))
 		draw_colored_polygon(main,Color("#f0dfb7"))
-		draw_polyline(_closed_points(main),Color("#9e805a"),3.0,true)
+		draw_polyline(_closed_points(main),Color("#9e805a"),3.0,false)
 		# A pale green rise and a coral route make the main island read as a map, not a list.
-		var hill := _scaled_points([Vector2(36,87),Vector2(82,48),Vector2(151,42),Vector2(194,64),Vector2(178,93),Vector2(101,107),Vector2(49,119)],sx,sy)
+		var hill := _scaled_points(_pixel_steps([Vector2(36,87),Vector2(82,48),Vector2(151,42),Vector2(194,64),Vector2(178,93),Vector2(101,107),Vector2(49,119)],6.0),sx,sy)
 		draw_colored_polygon(hill,Color("#9eb58a"))
 		var route := _scaled_points([Vector2(86,282),Vector2(125,243),Vector2(197,229),Vector2(262,248),Vector2(322,220),Vector2(388,231),Vector2(414,184),Vector2(379,141),Vector2(328,105),Vector2(244,112),Vector2(170,120),Vector2(105,144)],sx,sy)
-		draw_polyline(route,Color("#fff5d8"),8.0,true)
-		draw_polyline(route,Color("#d97966"),2.0,true)
+		var path := _scaled_points(_pixel_steps([Vector2(86,282),Vector2(125,243),Vector2(197,229),Vector2(262,248),Vector2(322,220),Vector2(388,231),Vector2(414,184),Vector2(379,141),Vector2(328,105),Vector2(244,112),Vector2(170,120),Vector2(105,144)],4.0),sx,sy)
+		draw_polyline(path,Color("#fff5d8"),8.0,false)
+		draw_polyline(path,Color("#d97966"),2.0,false)
+		_draw_trees(sx,sy)
 		# Satellite islands share the same lower-right light direction as the main landmass.
 		for row in range(3):
 			for column in range(3):
 				var center := Vector2((535.0+column*83.0)*sx,(68.0+row*112.0)*sy)
-				draw_circle(center+Vector2(0,5*sy),25*minf(sx,sy),Color("#688985"))
-				draw_circle(center,25*minf(sx,sy),Color("#e5d2a7"))
-				draw_arc(center,24*minf(sx,sy),0.0,TAU,28,Color("#a68d64"),2.0)
+				var island_radius := 25*minf(sx,sy)
+				draw_rect(Rect2(center-Vector2(island_radius,island_radius)+Vector2(0,5*sy),Vector2(island_radius*2,island_radius*2)),Color("#688985"))
+				draw_rect(Rect2(center-Vector2(island_radius,island_radius),Vector2(island_radius*2,island_radius*2)),Color("#e5d2a7"))
+				for pixel in range(4):
+					draw_rect(Rect2(center+Vector2(-14+pixel*8,-17)*minf(sx,sy),Vector2(4*minf(sx,sy),4*minf(sx,sy))),Color("#6f966f"))
+				draw_rect(Rect2(center+Vector2(-2,-9)*minf(sx,sy),Vector2(4*minf(sx,sy),10*minf(sx,sy))),Color("#9b7148"))
+				draw_rect(Rect2(center+Vector2(-island_radius,-island_radius),Vector2(island_radius*2,island_radius*2)),Color("#a68d64"),false,2.0)
 		# Piers and a north mark anchor the island's orientation.
-		draw_colored_polygon(_scaled_points([Vector2(56,279),Vector2(84,282),Vector2(67,322),Vector2(41,315)],sx,sy),Color("#8c694a"))
-		draw_line(Vector2(463*sx,34*sy),Vector2(463*sx,61*sy),Color("#24585d"),2.0)
-		draw_colored_polygon(_scaled_points([Vector2(463,21),Vector2(456,37),Vector2(470,37)],sx,sy),Color("#d97966"))
+		draw_colored_polygon(_scaled_points(_pixel_steps([Vector2(56,279),Vector2(84,282),Vector2(67,322),Vector2(41,315)],4.0),sx,sy),Color("#8c694a"))
+		for plank in range(4):
+			var plank_y := (285.0+plank*7.0)*sy
+			draw_rect(Rect2(Vector2((51.0-plank*1.5)*sx,plank_y),Vector2((24.0-plank*1.2)*sx,2.0*sy)),Color("#d3ad75"))
+		draw_rect(Rect2(Vector2(456*sx,37*sy),Vector2(14*sx,3*sy)),Color("#24585d"))
+		draw_rect(Rect2(Vector2(461*sx,25*sy),Vector2(4*sx,16*sy)),Color("#d97966"))
+		draw_colored_polygon(_scaled_points([Vector2(463,17),Vector2(457,29),Vector2(463,26),Vector2(469,29)],sx,sy),Color("#dfa458"))
+		draw_colored_polygon(_scaled_points([Vector2(463,17),Vector2(457,29),Vector2(463,26)],sx,sy),Color("#d97966"))
 		for leader in leaders:
-			draw_line(leader[0],leader[1],Color("#8c694a"),1.5,true)
-		draw_string(ThemeDB.fallback_font,Vector2(455*sx,17*sy),"N",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("#203e47"))
+			draw_line(leader[0],leader[1],Color("#8c694a"),1.0,false)
+		draw_string(ThemeDB.fallback_font,Vector2(459*sx,13*sy),"N",HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("#203e47"))
+
+	func _pixel_steps(points: Array, step: float) -> Array[Vector2]:
+		var result: Array[Vector2]=[]
+		if points.is_empty():
+			return result
+		for index in range(points.size()):
+			var start: Vector2=points[index]
+			var finish: Vector2=points[(index+1)%points.size()]
+			var count := maxi(1,ceili(maxf(absf(finish.x-start.x),absf(finish.y-start.y))/step))
+			var previous := start
+			if index==0:
+				result.append(start)
+			for segment in range(1,count+1):
+				var target := start.lerp(finish,float(segment)/float(count))
+				result.append(Vector2(target.x,previous.y))
+				result.append(target)
+				previous=target
+		return result
+
+	func _draw_trees(sx: float, sy: float) -> void:
+		for tree in [Vector2(72,79),Vector2(169,56),Vector2(359,61),Vector2(449,93),Vector2(443,259),Vector2(111,211),Vector2(263,307),Vector2(177,286),Vector2(302,73)]:
+			var center := Vector2(tree.x*sx,tree.y*sy)
+			var unit := minf(sx,sy)
+			draw_rect(Rect2(center+Vector2(-2,0)*unit,Vector2(4,8)*unit),Color("#8a6949"))
+			draw_rect(Rect2(center+Vector2(-7,-8)*unit,Vector2(14,6)*unit),Color("#547e68"))
+			draw_rect(Rect2(center+Vector2(-10,-4)*unit,Vector2(20,6)*unit),Color("#739873"))
+			draw_rect(Rect2(center+Vector2(-6,2)*unit,Vector2(12,3)*unit),Color("#9ab485"))
+			draw_rect(Rect2(center+Vector2(-10,-8)*unit,Vector2(20,12)*unit),Color("#3f6a61"),false,1.0)
 
 	func _scaled_points(points: Array, sx: float, sy: float) -> PackedVector2Array:
 		var result := PackedVector2Array()
@@ -121,6 +169,7 @@ var _station_positions: Dictionary = {}
 var _canvas: MapSurface
 var _detail_title: Label
 var _detail_text: Label
+var _selected_map_button := "MapHub"
 
 func setup(zones: Array, games: Array, normal_count: int, park_points: Array = []) -> void:
 	_zones=zones.duplicate(true)
@@ -132,34 +181,66 @@ func setup(zones: Array, games: Array, normal_count: int, park_points: Array = [
 			_station_positions[str(point_value.id)]=point_value.position
 
 func _ready() -> void:
-	add_theme_constant_override("separation",8)
+	if not get_viewport().size_changed.is_connected(_layout_map_buttons):
+		get_viewport().size_changed.connect(_layout_map_buttons)
+	add_theme_constant_override("separation",10)
+	size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	size_flags_vertical=Control.SIZE_EXPAND_FILL
+	var clip := ScrollContainer.new()
+	clip.name="AdaptiveMenuScroll"
+	clip.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	clip.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	clip.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	clip.vertical_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(clip)
+	var workspace := HBoxContainer.new()
+	workspace.name="IslandMapWorkspace"
+	workspace.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	workspace.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	workspace.add_theme_constant_override("separation",10)
+	clip.add_child(workspace)
 	var frame := PanelContainer.new()
 	frame.name="IslandChartFrame"
-	frame.add_theme_stylebox_override("panel",Paper.plaque(Color("#dfd2ad")))
-	add_child(frame)
+	frame.add_theme_stylebox_override("panel",Paper.plaque())
+	frame.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	frame.size_flags_stretch_ratio=2.4
+	frame.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	workspace.add_child(frame)
 	_canvas=MapSurface.new()
 	_canvas.name="IslandChartCanvas"
-	_canvas.custom_minimum_size=Vector2(0,290)
+	_canvas.custom_minimum_size=Vector2(600,0)
 	_canvas.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	_canvas.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	_canvas.clip_contents=true
 	_canvas.resized.connect(_layout_map_buttons)
 	frame.add_child(_canvas)
 	_add_destination_buttons()
-	var legend := HBoxContainer.new()
-	legend.add_theme_constant_override("separation",12)
-	add_child(legend)
-	legend.add_child(Paper.label("珊瑚路線：迎賓大道　·　右側九島：其他園區入口（準備中）",16,Paper.DEEP_TEAL))
+	_set_map_selection(_selected_map_button)
 	var detail := PanelContainer.new()
 	detail.name="DestinationDetails"
-	detail.add_theme_stylebox_override("panel",Paper.plaque(Color("#fffaf0")))
-	add_child(detail)
+	detail.add_theme_stylebox_override("panel",Paper.plaque(Paper.FRAME))
+	detail.custom_minimum_size.x=280
+	detail.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	detail.size_flags_stretch_ratio=1.0
+	detail.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	workspace.add_child(detail)
 	var detail_body := VBoxContainer.new()
-	detail_body.add_theme_constant_override("separation",3)
+	detail_body.add_theme_constant_override("separation",8)
 	detail.add_child(detail_body)
+	var heading := Paper.label("目的地情報",14,Paper.GOLD)
+	detail_body.add_child(heading)
 	_detail_title=Paper.section_title("海風碼頭｜下船起點")
-	_detail_text=Paper.label("由碼頭沿著珊瑚色路線進入迎賓大道。選取地圖標記，查看站點目標與園區門檻。",17)
+	_detail_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	_detail_text=Paper.label("由碼頭沿著珊瑚色路線進入迎賓大道。選取地圖標記，查看站點目標與園區門檻。",17,Paper.INK)
+	_detail_text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	_detail_text.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	detail_body.add_child(_detail_title)
 	detail_body.add_child(_detail_text)
+	var legend := HBoxContainer.new()
+	legend.name="IslandMapLegend"
+	legend.add_theme_constant_override("separation",12)
+	add_child(legend)
+	legend.add_child(Paper.label("珊瑚路線：迎賓大道　·　右側九島：其他園區入口（準備中）",16,Paper.INK))
 	if not _zones.is_empty():
 		_canvas.queue_redraw()
 
@@ -190,15 +271,25 @@ func _add_destination_buttons() -> void:
 			continue
 		var zone_id := str(zone_value.id)
 		var zone_name := str(zone_value.get("name",zone_id))
-		var gate := _make_button("%02d" % (zone_index+1),"MapGate_"+zone_id)
-		gate.add_theme_font_size_override("font_size",13)
+		var short_name := _gate_short_name(zone_id,zone_index+1)
+		var gate := _make_button(short_name,"MapGate_"+zone_id)
+		gate.add_theme_font_size_override("font_size",10 if short_name.length()>2 else 11)
 		gate.custom_minimum_size=Vector2(44,44)
 		gate.tooltip_text="%s｜%d 張不同普通拍貼即可取得資格；園區仍在準備中。" % [zone_name,int(zone_value.get("threshold",0))]
+		var gate_style := gate.get_theme_stylebox("normal").duplicate() as StyleBoxFlat
+		if gate_style != null:
+			gate_style.content_margin_left=2
+			gate_style.content_margin_right=2
+			gate.add_theme_stylebox_override("normal",gate_style)
 		var select_gate := _select_zone.bind(zone_value)
 		gate.pressed.connect(select_gate)
 		gate.mouse_entered.connect(select_gate)
 		gate.focus_entered.connect(select_gate)
 		zone_index+=1
+
+func _gate_short_name(zone_id: String, ordinal: int) -> String:
+	var names := {"harbor":"潮汐","forest":"森林","desert":"沙丘","mountain":"山脈","snow":"雪原","volcano":"火山","sky":"天空","ruins":"遺跡","moon":"月灣","candy":"糖廠","nightmarket":"夜市","circus":"馬戲","toy":"玩具","garden":"花園","hotel":"旅店","cinema":"影城"}
+	return str(names.get(zone_id,"島%02d" % ordinal))
 
 func _make_button(text: String, node_name: String) -> Button:
 	var button := Paper.button(text,func(): pass,_canvas)
@@ -296,16 +387,41 @@ func _layout_map_buttons() -> void:
 	_canvas.queue_redraw()
 
 func _select_hub() -> void:
+	_set_map_selection("MapHub")
 	_detail_title.text="海風碼頭｜下船起點"
 	_detail_text.text="沿木棧橋前往中央廣場，再進入迎賓大道。沿珊瑚色路線尋找迎賓設施。"
 
 func _select_game(game_id: String, number: int, game: Dictionary) -> void:
+	_set_map_selection("MapStop_"+game_id)
 	_detail_title.text="迎賓大道｜第 %02d 站 · %s" % [number,str(game.get("name",game_id))]
 	_detail_text.text="目標：%s\n操作：%s\n依地圖路線走到設施旁，開始互動。" % [str(game.get("goal","完成設施挑戰。")),str(game.get("instructions","依遊戲畫面操作。"))]
 
 func _select_zone(zone: Dictionary) -> void:
+	_set_map_selection("MapGate_"+str(zone.get("id","")))
 	var threshold := int(zone.get("threshold",0))
 	var remaining := maxi(threshold-_normal_count,0)
 	_detail_title.text="%s｜園區入口 · 準備中" % str(zone.get("name","未命名園區"))
 	var qualification := "已達入園資格" if remaining==0 else "還差 %d 張不同普通拍貼" % remaining
 	_detail_text.text="主題：%s\n門檻：%d 張（目前 %d 張；%s）。收藏不消耗。園區內容仍在準備中，先收藏拍貼、累積入園資格。" % [str(zone.get("theme","主題資料準備中。")),threshold,_normal_count,qualification]
+
+func _set_map_selection(node_name: String) -> void:
+	_selected_map_button=node_name
+	if not is_instance_valid(_canvas):
+		return
+	for child in _canvas.get_children():
+		if not child is Button:
+			continue
+		var button := child as Button
+		var selected := button.name==node_name
+		var style := StyleBoxFlat.new()
+		style.bg_color=Color("#276c70") if selected else Color("#f0dfb7")
+		style.border_color=Color("#f2bd68") if selected else Color("#8e7954")
+		style.set_border_width_all(3 if selected else 1)
+		style.set_corner_radius_all(0)
+		style.content_margin_left=2
+		style.content_margin_right=2
+		button.add_theme_stylebox_override("normal",style)
+		button.add_theme_color_override("font_color",Color("#fff4d7") if selected else Color("#24474c"))
+		button.add_theme_color_override("font_hover_color",Color("#fff4d7") if selected else Color("#24474c"))
+		button.add_theme_color_override("font_focus_color",Color("#fff4d7") if selected else Color("#24474c"))
+	_canvas.queue_redraw()

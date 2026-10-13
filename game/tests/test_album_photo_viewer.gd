@@ -41,6 +41,9 @@ func _ready() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	# Headless starts with a 64px window; use the real baseline for physical photo-size assertions.
+	get_window().size = Vector2i(1280, 720)
+	await get_tree().process_frame
 	var save_path := OS.get_environment("SNAPLAND_SAVE_PATH")
 	_frame_path = save_path.get_base_dir().path_join("photos/album-viewer-frame.png")
 	_check(_write_photo(_frame_path), "create a real saved PNG photo fixture")

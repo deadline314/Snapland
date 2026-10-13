@@ -28,23 +28,31 @@ func _ready() -> void:
 	add_child(center)
 	var panel := PanelContainer.new()
 	panel.name="PhotoViewerPanel"
-	var viewport_size := get_viewport_rect().size
-	panel.custom_minimum_size=Vector2(minf(980.0,viewport_size.x-48.0),minf(650.0,viewport_size.y-48.0))
-	panel.add_theme_stylebox_override("panel",Paper.plaque(Color("#f7efd9")))
+	panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel",Paper.plaque())
 	center.add_child(panel)
 	var margin := MarginContainer.new()
-	for side in ["left","right"]: margin.add_theme_constant_override("margin_"+side,18)
-	for side in ["top","bottom"]: margin.add_theme_constant_override("margin_"+side,14)
+	for side in ["left","right"]: margin.add_theme_constant_override("margin_"+side,12)
+	for side in ["top","bottom"]: margin.add_theme_constant_override("margin_"+side,10)
 	panel.add_child(margin)
 	var body := VBoxContainer.new()
-	body.add_theme_constant_override("separation",10)
+	body.add_theme_constant_override("separation",8)
 	margin.add_child(body)
 	var heading := HBoxContainer.new()
 	body.add_child(heading)
 	var title := Paper.label(_photo_title,24)
 	title.name="PhotoViewerTitle"
+	title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	title.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	heading.add_child(title)
+	heading.add_child(Paper.label("原始照片",14,Paper.GOLD))
+	var picture_frame := PanelContainer.new()
+	picture_frame.name="PhotoViewerPictureFrame"
+	picture_frame.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	picture_frame.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	picture_frame.add_theme_stylebox_override("panel",Paper.plaque(Paper.DEEP))
+	body.add_child(picture_frame)
 	var image_rect := TextureRect.new()
 	image_rect.name="PhotoViewerImage"
 	image_rect.texture=_texture
@@ -52,9 +60,9 @@ func _ready() -> void:
 	image_rect.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	image_rect.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	image_rect.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	image_rect.custom_minimum_size=Vector2(minf(940.0,viewport_size.x-96.0),minf(530.0,viewport_size.y-160.0))
+	image_rect.custom_minimum_size=Vector2(0,0)
 	image_rect.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	body.add_child(image_rect)
+	picture_frame.add_child(image_rect)
 	var controls := HBoxContainer.new()
 	controls.alignment=BoxContainer.ALIGNMENT_END
 	body.add_child(controls)
@@ -62,6 +70,7 @@ func _ready() -> void:
 	close_button.name="PhotoViewerClose"
 	close_button.custom_minimum_size=Vector2(156,48)
 	close_button.grab_focus()
+	get_viewport().size_changed.connect(_fit)
 	resized.connect(_fit)
 	_fit()
 
@@ -69,10 +78,10 @@ func _fit() -> void:
 	var scale_factor := Paper.physical_scale(self)
 	Paper.adapt_menu(self,scale_factor)
 	var view_size := get_viewport_rect().size
+	var inset := 20.0/scale_factor
 	var panel := find_child("PhotoViewerPanel",true,false) as Control
-	if panel != null: panel.custom_minimum_size=Vector2(minf(980/scale_factor,view_size.x-48/scale_factor),minf(650/scale_factor,view_size.y-48/scale_factor))
-	var picture := find_child("PhotoViewerImage",true,false) as Control
-	if picture != null: picture.custom_minimum_size=Vector2(minf(940/scale_factor,view_size.x-96/scale_factor),maxf(100,minf(530/scale_factor,view_size.y-200/scale_factor)))
+	if panel != null:
+		panel.custom_minimum_size=Vector2(maxf(280,view_size.x-inset*2),maxf(220,view_size.y-inset*2))
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and (event.keycode==KEY_ESCAPE or event.is_action_pressed("ui_cancel")):

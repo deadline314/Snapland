@@ -114,6 +114,8 @@ def main() -> int:
             ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
             ("pixel UI popup tests", common + ["--script", "res://game/tests/test_pixel_ui_popup_bounds.gd"]),
             ("pixel UI button depth tests", common + ["--script", "res://game/tests/test_pixel_button_depth.gd"]),
+            ("pixel UI collection tests", common + ["res://game/tests/test_pixel_ui_collections.tscn"]),
+            ("pixel tutorial page tests", common + ["--script", "res://game/tests/test_tutorial_paged_viewport.gd"]),
         ]
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
@@ -137,6 +139,8 @@ def main() -> int:
             pass_markers = {
                 "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",
                 "pixel UI button depth tests": "PASS: Paper pixel-button depth, state, focus and contrast checks",
+                "pixel UI collection tests": "PASS: pixel UI collection, map, achievement, and tutorial checks",
+                "pixel tutorial page tests": "PASS: native-matching tutorial39steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
                 "game startup": "PASS: game startup and clean shutdown",
                 "core runtime tests": "PASS: core runtime checks",
                 "test/review save isolation tests": "PASS: test/review launch detection, absolute isolated paths, userdata/sidecar rejection, and unchanged fake fixtures",
