@@ -13,6 +13,8 @@ const OcclusionControllerScript = preload("res://game/world/occlusion_controller
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const IslandAttractionsScript = preload("res://game/world/island_attractions.gd")
+const CoastalMaterialShader = preload("res://game/world/coastal_material.gdshader")
+const COASTAL_MATERIAL_ATLAS := "res://assets/world/coastal-materials-v1.png"
 const IDENTITY_ATLAS_PATH := "res://assets/characters/identities-v3.png"
 const IDENTITY_REGIONS := {
 	"imp": Rect2i(642,350,295,294),
@@ -43,15 +45,18 @@ var npc_activity: Node
 var occlusion_controller: Node
 var pending_npc_interaction: Dictionary = {}
 var lamps: Array[OmniLight3D] = []
+var district_labels: Array[Label3D] = []
 var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
+var coastal_atlas: Texture2D
+var coastal_atlas_warning_shown := false
+var shoreline_rock_count := 0
 var character_frames: Dictionary = {}
 var character_sprites: Array[Dictionary] = []
 var sprite_ground_anchors: Array[Dictionary] = []
 const SPRITE_FOOT_GUARD_PIXELS := 2.0
 var avatar_ground_anchor: Node3D
 var avatar_contact_shadow: MeshInstance3D
-var avatar_last_shadow_offset_y := INF
 var identity_atlas: Texture2D
 var identity_textures: Dictionary = {}
 var identity_warnings: Dictionary = {}
@@ -63,7 +68,8 @@ var facing := "front"
 const WALK_STRIDE_DISTANCE := 2.8
 const WALK_DIRECTION_HYSTERESIS := deg_to_rad(5.0)
 const WALK_DISTANCE_EPSILON := 0.0005
-const CAMERA_OFFSET := Vector3(0.0,15.5,25.0)
+const CAMERA_OFFSET := Vector3(3.5,16.5,25.0)
+const AVATAR_RUN_SPEED := 5.0
 var walk_distance_phase := 0.0
 var avatar_is_walking := false
 var mesh_count := 0
@@ -82,6 +88,11 @@ var contact_shadows: Array[Dictionary] = []
 var island_attractions: Node
 
 func _ready() -> void:
+	if ResourceLoader.exists(COASTAL_MATERIAL_ATLAS):
+		coastal_atlas = load(COASTAL_MATERIAL_ATLAS) as Texture2D
+	else:
+		push_warning("Coastal material atlas is missing; using simple fallback albedos.")
+		coastal_atlas_warning_shown = true
 	component_motion=ComponentAnimationScript.new()
 	component_motion.name="ComponentAnimation"
 	add_child(component_motion)
@@ -102,7 +113,6 @@ func _ready() -> void:
 	island_attractions.name = "IslandAttractions"
 	add_child(island_attractions)
 	island_attractions.configure(self, player, Vector3(-6.7, 0.26, 11.2))
-	_point("ride-tide","搭乘潮汐貝殼輪",Vector3(-6.7,0.26,11.2))
 	_build_camera()
 	_update_sprite_grounding()
 	occlusion_controller.configure(player,camera)
@@ -185,7 +195,8 @@ func _build_lighting() -> void:
 	environment.background_color = Color("#9bc9d9")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color("#fff0d2")
-	environment.ambient_light_energy = 1.0
+	environment.ambient_light_energy = 0.54
+	environment.tonemap_exposure = 0.84
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	environment.glow_enabled = true
 	environment.glow_intensity = 0.10
@@ -202,7 +213,6 @@ func _build_lighting() -> void:
 	sun.light_energy = 1.25
 	add_child(sun)
 	contact_shadow_material = _make_contact_shadow_material()
-
 func _make_contact_shadow_material() -> StandardMaterial3D:
 	var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
 	for y in range(32):
@@ -233,6 +243,37 @@ func _add_contact_shadow(anchor: Node3D, local_ground_offset: Vector3, dimension
 	mesh_count += 1
 	return shadow
 
+static func _ground_surface_y(world_position: Vector3) -> float:
+	# Match the tops of the raised boardwalk and authored district floors as well
+	# as the plaza/avenue path; the lawn is the fallback.
+	if world_position.z >= 8.4 and world_position.z <= 11.6 and world_position.x >= -5.7 and world_position.x <= -3.2:
+		return lerpf(0.26,0.18,clampf(inverse_lerp(-5.7,-4.2,world_position.x),0.0,1.0))
+	if world_position.x >= -13.5 and world_position.x <= -5.7 and world_position.z >= 7.2 and world_position.z <= 13.0:
+		return 0.26
+	if absf(world_position.z + 36.2) <= 1.8:
+		if world_position.x >= 9.0 and world_position.x <= 13.8:
+			return 0.58
+		if world_position.x >= 6.5 and world_position.x < 9.0:
+			return lerpf(0.2,0.60,inverse_lerp(6.5,9.0,world_position.x))
+		if world_position.x >= 4.4 and world_position.x < 6.5:
+			return 0.18
+	if world_position.x >= -13.5 and world_position.x <= -4.5 and world_position.z >= -25.5 and world_position.z <= -15.5:
+		return 0.17
+	if world_position.x >= 4.3 and world_position.x <= 13.7 and world_position.z >= -33.8 and world_position.z <= -26.4:
+		return 0.15
+	if absf(world_position.x) <= 7.0 and world_position.z >= -43.75 and world_position.z <= -37.15:
+		return 0.18
+	if absf(world_position.x) <= 2.46 and world_position.z >= 14.825 and world_position.z <= 26.975:
+		return 0.22
+	if absf(world_position.x) <= 12.5 and absf(world_position.z) <= 8.0:
+		return 0.18
+	if world_position.x >= 4.4 and world_position.x <= 6.5 and absf(world_position.z + 36.2) <= 1.4:
+		return 0.18
+	if absf(world_position.x) <= 4.5 and world_position.z >= -47.0 and world_position.z <= 17.0:
+		return 0.18
+	return 0.055
+
+
 static func sprite_ground_anchor_y(
 	ground_y: float,
 	parent_world_y: float,
@@ -244,20 +285,6 @@ static func sprite_ground_anchor_y(
 ) -> float:
 	var feet_from_center := (feet_row - canvas_height * 0.5) * pixel_size
 	return ground_y - parent_world_y - sprite_local_y + feet_from_center * camera_up_y
-
-static func _ground_surface_y(world_position: Vector3) -> float:
-	# Include the raised tidal ride boardwalk; the lawn remains the fallback elsewhere.
-	if world_position.z >= 8.4 and world_position.z <= 11.6 and world_position.x >= -5.7 and world_position.x <= -3.2:
-		return lerpf(0.26,0.18,clampf(inverse_lerp(-5.7,-4.2,world_position.x),0.0,1.0))
-	if world_position.x >= -13.5 and world_position.x <= -5.7 and world_position.z >= 7.2 and world_position.z <= 13.0:
-		return 0.26
-	if absf(world_position.x) <= 2.46 and world_position.z >= 14.825 and world_position.z <= 26.975:
-		return 0.22
-	if absf(world_position.x) <= 12.5 and absf(world_position.z) <= 8.0:
-		return 0.18
-	if absf(world_position.x) <= 4.5 and world_position.z >= -47.0 and world_position.z <= 17.0:
-		return 0.18
-	return 0.055
 
 func _register_sprite_ground_anchor(sprite: Sprite3D, anchor: Node3D, parent: Node3D, ground_y: float, feet_row: float, canvas_height: float) -> void:
 	# Preserve the bottom pixel's entire area, including the one-pixel variation
@@ -285,7 +312,7 @@ func _update_sprite_grounding() -> void:
 		var ground_y := float(record.ground_y)
 		if parent == player:
 			ground_y = _ground_surface_y(player.global_position)
-		var desired_y := sprite_ground_anchor_y(
+		var desired_y: float = sprite_ground_anchor_y(
 			ground_y,
 			parent.global_position.y,
 			sprite.position.y,
@@ -296,20 +323,18 @@ func _update_sprite_grounding() -> void:
 		)
 		if absf(anchor.position.y - desired_y) > 0.0005:
 			anchor.position.y = desired_y
-	if is_instance_valid(player) and is_instance_valid(avatar_contact_shadow):
-		var ground_y := _ground_surface_y(player.global_position)
-		var shadow_y := ground_y - player.global_position.y + 0.005
-		if absf(shadow_y - avatar_last_shadow_offset_y) > 0.0005:
-			avatar_contact_shadow.position.y = shadow_y
-			avatar_last_shadow_offset_y = shadow_y
-			for index in range(contact_shadows.size()):
-				var record: Dictionary = contact_shadows[index]
-				if record.get("node") == avatar_contact_shadow:
-					var ground_offset: Vector3 = record.get("ground_offset", Vector3.ZERO)
-					ground_offset.y = shadow_y
-					record["ground_offset"] = ground_offset
-					contact_shadows[index] = record
-					break
+	for index in range(contact_shadows.size()):
+		var record: Dictionary = contact_shadows[index]
+		var shadow := record.get("node") as Node3D
+		var anchor := record.get("anchor") as Node3D
+		if not is_instance_valid(shadow) or not is_instance_valid(anchor): continue
+		var shadow_y := _ground_surface_y(anchor.global_position) - anchor.global_position.y + 0.005
+		if absf(shadow.position.y - shadow_y) > 0.0005:
+			shadow.position.y = shadow_y
+		var ground_offset: Vector3 = record.get("ground_offset", Vector3.ZERO)
+		ground_offset.y = shadow_y
+		record["ground_offset"] = ground_offset
+		contact_shadows[index] = record
 
 func _mat(color: Color, emissive := false) -> StandardMaterial3D:
 	var key := "%s:%s" % [color.to_html(true), str(emissive)]
@@ -332,6 +357,44 @@ func _wood_material(color: Color) -> ShaderMaterial:
 	material.set_shader_parameter("base_color",color)
 	material_cache[key]=material
 	return material
+
+func _stone_finish(color: Color) -> ShaderMaterial:
+	var key := "stone:" + color.to_html(true)
+	if material_cache.has(key): return material_cache[key]
+	var material := ShaderMaterial.new()
+	material.shader = STONE
+	material.set_shader_parameter("base_color", color)
+	material_cache[key] = material
+	return material
+
+func _coastal_surface(tile_index: int, world_tile_size: float, tint := Color.WHITE) -> Material:
+	if coastal_atlas == null:
+		if not coastal_atlas_warning_shown:
+			push_warning("Coastal material atlas failed to load; using simple fallback albedos.")
+			coastal_atlas_warning_shown = true
+		var fallback_tints: Array[Color] = [Color("#958064"),Color("#9b784f"),Color("#385d60"),Color("#a45c48"),Color("#ac9875"),Color("#417e82"),Color("#b6a57d"),Color("#8c774f")]
+		var fallback_color: Color = tint if tint != Color.WHITE else fallback_tints[clampi(tile_index,0,7)]
+		if tile_index == 0 or tile_index == 4:
+			return _stone_finish(fallback_color)
+		if tile_index == 1 or tile_index == 2 or tile_index == 3 or tile_index == 6:
+			return _wood_material(fallback_color)
+		return _mat(fallback_color)
+	var key := "coastal:%d:%.2f:%s" % [tile_index,world_tile_size,tint.to_html(true)]
+	if material_cache.has(key): return material_cache[key]
+	var material := ShaderMaterial.new()
+	material.shader = CoastalMaterialShader
+	material.set_shader_parameter("atlas_texture",coastal_atlas)
+	material.set_shader_parameter("tile_index",clampi(tile_index,0,7))
+	material.set_shader_parameter("world_tile_size",maxf(0.1,world_tile_size))
+	material.set_shader_parameter("tint",tint)
+	material_cache[key] = material
+	return material
+
+func _set_registered_surface(target: GeometryInstance3D, surface_material: Material) -> void:
+	if is_instance_valid(occlusion_controller) and occlusion_controller.replace_registered_surface(target, surface_material):
+		return
+	target.material_override = surface_material
+
 
 func _mesh(mesh: Mesh, pos: Vector3, material: Material) -> MeshInstance3D:
 	var instance := MeshInstance3D.new()
@@ -385,13 +448,23 @@ func _box(pos: Vector3, size: Vector3, color: Color, solid := false) -> MeshInst
 		instance.add_child(body)
 	return instance
 
-func _cylinder(pos: Vector3, radius: float, height: float, color: Color, top := -1.0) -> MeshInstance3D:
+func _cylinder(pos: Vector3, radius: float, height: float, color: Color, top := -1.0, solid := false) -> MeshInstance3D:
 	var mesh := CylinderMesh.new()
 	mesh.top_radius = radius if top < 0.0 else top
 	mesh.bottom_radius = radius
 	mesh.height = height
 	mesh.radial_segments = 16
-	return _mesh(mesh, pos, _mat(color))
+	var instance:=_mesh(mesh,pos,_mat(color))
+	if solid:
+		var body:=StaticBody3D.new()
+		var shape:=CollisionShape3D.new()
+		var cylinder:=CylinderShape3D.new()
+		cylinder.radius=maxf(radius,mesh.top_radius)
+		cylinder.height=height
+		shape.shape=cylinder
+		body.add_child(shape)
+		instance.add_child(body)
+	return instance
 
 func _cone(pos: Vector3, color: Color) -> MeshInstance3D:
 	var mesh := CylinderMesh.new()
@@ -420,12 +493,35 @@ func _label(text: String, pos: Vector3, size := 32, color := CREAM) -> Label3D:
 	label.outline_modulate = Color("#223f47")
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = false
+	label.visibility_range_end = 34.0
+	label.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 	add_child(label)
 	return label
 
-func _point(id: String, title: String, pos: Vector3) -> void:
+func _district_label(text: String, pos: Vector3, size: int, color: Color) -> Label3D:
+	# District names are local wayfinding accents; the nearby physical gateway
+	# carries the durable name, so these do not need to hang over the whole island.
+	var label := _label(text,pos,size,color)
+	# The player-distance gate below owns locality. Disable camera-distance culling:
+	# the offset camera can be ~30m from the player even when the title is nearby.
+	label.visibility_range_end=0.0
+	label.visible=false
+	district_labels.append(label)
+	return label
+func _update_district_label_visibility() -> void:
+	if not is_instance_valid(player): return
+	var player_x := player.global_position.x
+	var player_z := player.global_position.z
+	for label in district_labels:
+		if not is_instance_valid(label): continue
+		var dx := label.global_position.x-player_x
+		var dz := label.global_position.z-player_z
+		label.visible=dx*dx+dz*dz<=100.0
+
+
+func _point(id: String, title: String, pos: Vector3, marker_height := 2.1) -> void:
 	points.append({"id":id,"label":title,"position":pos})
-	var marker := _label("◇", pos + Vector3(0,2.1,0), 38, GOLD)
+	var marker := _label("◇", pos + Vector3(0,marker_height,0), 38, GOLD)
 	points[-1]["marker"]=marker
 	component_motion.register_component(marker,"marker",float(points.size())*0.7)
 
@@ -465,9 +561,8 @@ func _build_land() -> void:
 	var grass_material := ShaderMaterial.new()
 	grass_material.shader=GRASS
 	_mesh(_island_lawn_mesh(),Vector3(0,0.055,-14),grass_material)
-	# Paths lead without dead ends from dock to welcome's four clusters.
-	var stone_material := ShaderMaterial.new()
-	stone_material.shader = STONE
+	# A larger, quieter tile scale keeps the avenue legible as a route instead of a single loud cobblestone stripe.
+	var stone_material := _coastal_surface(4,3.0,Color("#ddd8c8"))
 	var path_mesh := BoxMesh.new()
 	path_mesh.size = Vector3(9,0.12,64)
 	_mesh(path_mesh,Vector3(0,0.12,-15),stone_material)
@@ -481,22 +576,56 @@ func _build_land() -> void:
 				continue
 			var z := -44.0 + i*4.5
 			_tree(Vector3(side*(16.0+sin(i*1.2)*1.8),0,z),i)
-			_box(Vector3(side*19.5,0.22,z),Vector3(0.3,0.5,3.8),Color("#d2bc8e"))
-		for i in range(5):
-			_flowerbed(Vector3(side*5.6,0,-14-i*5.8),i)
-	for i in range(26):
-		var a := float(i)/26.0*TAU
-		_box(Vector3(cos(a)*7.7,0.22,sin(a)*7.7),Vector3(0.55,0.22,0.55),CREAM)
-	# Painted stone inlays make the two central paths read as one welcoming route.
-	for i in range(16):
-		var z := -43.0 + i * 4.0
-		for side in [-1.0, 1.0]:
-			var shell := _box(Vector3(side * 4.45, 0.205, z), Vector3(0.08, 0.035, 1.15), Color("#d1bc91"))
-			shell.rotation.y = side * 0.08
+		# One low garden pocket per side keeps the promenade readable around guests.
+		_flowerbed(Vector3(side*6.5,0,-6.4),side+1)
+	# A few low, irregular pebbles soften the fountain court edge without a rigid ring of identical blocks.
+	var pebble_mesh := SphereMesh.new()
+	pebble_mesh.radial_segments = 8
+	pebble_mesh.rings = 4
+	var pebble_transforms: Array[Transform3D] = []
+	var pebble_colors: Array[Color] = []
+	for index in range(10):
+		var angle := TAU * float(index) / 10.0 + sin(float(index) * 1.7) * 0.08
+		var radius := 7.15 + sin(float(index) * 2.3) * 0.42
+		var scale_value := 0.22 + fposmod(float(index) * 0.071, 0.13)
+		var pebble_basis := Basis().rotated(Vector3.UP, angle).scaled(Vector3(scale_value * 1.35, 0.12, scale_value))
+		pebble_transforms.append(Transform3D(pebble_basis, Vector3(cos(angle) * radius, 0.13, sin(angle) * radius)))
+		pebble_colors.append([Color("#897f6a"), Color("#9b927c"), Color("#70877a")][index % 3])
+	_multi_mesh(pebble_mesh, Vector3.ZERO, pebble_transforms, pebble_colors, _vertex_color_material("fountain-pebble-rim"))
+	_build_coastal_planting_pockets()
 	for side in [-1, 1]:
-		for i in range(4):
-			var x: float = float(side) * (11.0 + (i % 2) * 2.2)
-			_flowerbed(Vector3(x,0,-2.0-float(i/2)*7.4),i+8)
+		var x: float = float(side) * 11.8
+		_flowerbed(Vector3(x,0,-3.4),8+side)
+
+func _build_coastal_planting_pockets() -> void:
+	# Four loose edge pockets break up broad lawn patches; foliage is batched into two static multimeshes.
+	var pocket_centers := [Vector3(-15.4,0,-31.8), Vector3(15.3,0,-23.8), Vector3(-15.1,0,-7.2), Vector3(15.2,0,4.0)]
+	var blade_mesh := BoxMesh.new()
+	blade_mesh.size = Vector3.ONE
+	var flower_mesh := SphereMesh.new()
+	flower_mesh.radius = 0.13
+	flower_mesh.height = 0.26
+	flower_mesh.radial_segments = 8
+	flower_mesh.rings = 4
+	var blade_transforms: Array[Transform3D] = []
+	var blade_colors: Array[Color] = []
+	var flower_transforms: Array[Transform3D] = []
+	var flower_colors: Array[Color] = []
+	for pocket_index in range(pocket_centers.size()):
+		var center: Vector3 = pocket_centers[pocket_index]
+		var pocket_radius := 0.5 + fposmod(float(pocket_index) * 0.19, 0.22)
+		for blade_index in range(7):
+			var angle := TAU * float(blade_index) / 7.0 + float(pocket_index) * 0.31
+			var offset := Vector3(cos(angle) * pocket_radius, 0.28, sin(angle) * pocket_radius * 0.68)
+			var tilt := Basis().rotated(Vector3.UP, angle).rotated(Vector3.FORWARD, sin(angle * 1.6) * 0.25)
+			blade_transforms.append(Transform3D(tilt.scaled(Vector3(0.13, 0.58, 0.09)), center + offset))
+			blade_colors.append(Color("#547a58") if blade_index % 2 == 0 else Color("#76905c"))
+			if blade_index in [1, 4]:
+				var flower_scale := 0.82 + fposmod(float(pocket_index + blade_index) * 0.17, 0.3)
+				flower_transforms.append(Transform3D(Basis().scaled(Vector3.ONE * flower_scale), center + offset + Vector3(0,0.54,0)))
+				flower_colors.append(Color("#d98768") if (pocket_index + blade_index) % 2 == 0 else Color("#e6ce8f"))
+	_multi_mesh(blade_mesh, Vector3.ZERO, blade_transforms, blade_colors, _vertex_color_material("coastal-pocket-leaves"))
+	_multi_mesh(flower_mesh, Vector3.ZERO, flower_transforms, flower_colors, _vertex_color_material("coastal-pocket-flowers"))
 
 func _island_lawn_mesh() -> ArrayMesh:
 	var mesh := ArrayMesh.new()
@@ -526,28 +655,41 @@ func _island_lawn_mesh() -> ArrayMesh:
 
 func _build_shoreline() -> void:
 	# Layered cut-paper shore ledges and foam stay outside the playable lawn.
-	for side in [-1.0, 1.0]:
-		for i in range(18):
-			var z := -45.0 + i * 3.1
-			var wobble := sin(i * 2.17) * 0.5
-			var base := Vector3(side * (20.15 + wobble), -0.12, z)
-			if _foliage_has("rocks"):
-				_foliage_sprite("rocks",base+Vector3(0,-0.12,0),0.95+fmod(float(i)*0.11,0.36))
-			else:
-				var rock := _sphere(base+Vector3(0,0.02,0),0.72+fmod(float(i)*0.31,0.42),Color("#967e64") if i%3==0 else Color("#b29a77"))
-				rock.scale=Vector3(1.35,0.55,1.15)
-			var foam := _box(Vector3(side*(20.7+wobble),-0.20,z+0.7),Vector3(0.13,0.035,1.3),Color("#d2e5d8"))
-			foam.rotation.y = side * 0.12
-			if i % 3 == 0:
-				_sea_grass(Vector3(side*19.25,0,z+0.8),i)
-	for i in range(13):
-		var x := -19.0 + i * 3.15
-		var wobble := sin(i * 1.9) * 0.38
-		if _foliage_has("rocks"):
-			_foliage_sprite("rocks",Vector3(x,-0.12,19.0+wobble),1.1)
-		else:
-			_sphere(Vector3(x,-0.1,19.0+wobble),0.68,Color("#a58a6b")).scale=Vector3(1.4,0.48,1.0)
-		_box(Vector3(x+0.6,-0.2,19.7+wobble),Vector3(1.5,0.035,0.12),Color("#d5e5d8"))
+	var shore_clusters := [-42.0,-27.0,-10.0,7.0]
+	for side: float in [-1.0, 1.0]:
+		for cluster_index in range(shore_clusters.size()):
+			var center_z: float = shore_clusters[cluster_index]
+			var rock_count := 2 + cluster_index % 2
+			for rock_index in range(rock_count):
+				var stagger := float(rock_index) - float(rock_count-1)*0.5
+				var z := center_z + stagger*1.08 + sin(float(cluster_index*7+rock_index)*1.73)*0.24
+				var x := side*(20.0 + cos(float(cluster_index*3+rock_index)*1.31)*0.52 + stagger*0.22)
+				_add_shore_rock(Vector3(x,-0.12,z),cluster_index*5+rock_index)
+			if cluster_index % 2 == 0:
+				var foam := _box(Vector3(side*20.28,-0.20,center_z+0.24),Vector3(0.12,0.035,0.86),Color("#d2e5d8"))
+				foam.rotation.y = side * 0.12
+			if cluster_index == 1 or cluster_index == 3:
+				_sea_grass(Vector3(side*19.2,0,center_z+0.45),cluster_index)
+	for cluster_index in range(4):
+		var center_x := -15.0 + cluster_index*10.0
+		for rock_index in range(2):
+			var stagger := float(rock_index)*0.9-0.45
+			var x := center_x + stagger + sin(float(cluster_index*5+rock_index))*0.28
+			var z := 19.0 + cos(float(cluster_index+rock_index)*1.7)*0.58
+			_add_shore_rock(Vector3(x,-0.12,z),20+cluster_index*2+rock_index)
+		if cluster_index % 2 == 0:
+			_box(Vector3(center_x+0.45,-0.2,19.3),Vector3(0.65,0.035,0.11),Color("#d5e5d8"))
+
+func _add_shore_rock(pos: Vector3, seed_value: int) -> void:
+	var scale_value := 0.72 + fposmod(float(seed_value)*0.17,0.32)
+	if _foliage_has("rocks"):
+		var rock := _foliage_sprite("rocks",pos+Vector3(0,-0.12,0),scale_value)
+		rock.rotation.y = fposmod(float(seed_value)*1.93,TAU)
+	else:
+		var rock := _sphere(pos+Vector3(0,0.02,0),scale_value,Color("#967e64") if seed_value%3==0 else Color("#b29a77"))
+		rock.scale=Vector3(1.35,0.55,1.15)
+		rock.rotation.y=fposmod(float(seed_value)*1.93,TAU)
+	shoreline_rock_count += 1
 
 func _sea_grass(pos: Vector3, seed_value: int) -> void:
 	var stem_color := Color("#557961")
@@ -573,6 +715,7 @@ func _tree(pos: Vector3, seed_value: int) -> void:
 		tree_height = 4.3
 	if _foliage_has(key):
 		_foliage_sprite(key,pos,tree_height)
+		_add_tree_shadow_proxy(pos,tree_height,key)
 		return
 	_cylinder(pos+Vector3(0,1.15,0),0.2,2.3,Color("#76583f"))
 	for root in [-1,1]:
@@ -605,6 +748,17 @@ func _tree(pos: Vector3, seed_value: int) -> void:
 	_multi_mesh(glint_mesh,pos,glints,glint_colors,_vertex_color_material("tree-glints"))
 	if seed_value % 3 == 0:
 		_lantern(pos+Vector3(0.4,2,0.7))
+
+func _add_tree_shadow_proxy(ground: Vector3, height: float, kind: String) -> void:
+	# A billboard must not cast a camera-facing rectangle. Small hidden volumes
+	# give its trunk/canopy a stable shadow from the real scene lights instead.
+	var trunk := _cylinder(ground+Vector3(0,height*0.25,0),0.16,height*0.5,Color("#645843"))
+	trunk.name="TreeShadowTrunk"
+	trunk.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	var crown := _sphere(ground+Vector3(0,height*0.68,0),1.0,Color("#42674f"))
+	crown.name="TreeShadowCrown"
+	crown.scale=Vector3(1.25,height*0.25,0.8) if kind=="palm" else Vector3(1.12,height*0.28,0.82)
+	crown.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 
 func _flowerbed(pos: Vector3, seed_value: int) -> void:
 	if _foliage_has("planter"):
@@ -694,16 +848,23 @@ func _lantern(pos: Vector3) -> void:
 		light.light_energy = 0.0
 		add_child(light)
 		lamps.append(light)
-		component_motion.register_light(light,float(lamps.size())*0.17)
+		# Keep local light output stable; animated lantern energy reads as flicker.
 
 func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 	# Register the arch's opaque frame and its title's local visibility. Lanterns
 	# keep their existing materials; the title hides only when it overlaps the mask.
 	occlusion_controller.begin_building()
-	var left_pillar := _box(pos+Vector3(-wide*0.5,1.65,0),Vector3(0.5,3.3,0.6),CREAM,true)
+	var left_pillar := _box(pos+Vector3(-wide*0.5,1.65,0),Vector3(0.72,3.3,0.92),Color("#ac9875"),true)
+	_set_registered_surface(left_pillar, _coastal_surface(4,1.7,Color("#e0cdaa")))
 	var blocker := left_pillar.get_child(0) as StaticBody3D
-	_box(pos+Vector3(wide*0.5,1.65,0),Vector3(0.5,3.3,0.6),CREAM,true)
-	_box(pos+Vector3(0,3.4,0),Vector3(wide+0.8,0.7,0.7),color)
+	var right_pillar := _box(pos+Vector3(wide*0.5,1.65,0),Vector3(0.72,3.3,0.92),Color("#ac9875"),true)
+	_set_registered_surface(right_pillar, _coastal_surface(4,1.7,Color("#e0cdaa")))
+	var arch_beam := _box(pos+Vector3(0,3.35,0),Vector3(wide+1.1,0.86,0.98),color)
+	_set_registered_surface(arch_beam, _coastal_surface(3,2.0,color.lightened(0.08)))
+	var arch_cornice := _box(pos+Vector3(0,3.84,-0.02),Vector3(wide+1.5,0.22,1.2),Color("#315d60"))
+	_set_registered_surface(arch_cornice, _coastal_surface(2,1.5,Color("#92a89a")))
+	var arch_underside := _box(pos+Vector3(0,2.88,-0.03),Vector3(wide+0.95,0.18,0.92),Color("#7e5844"))
+	_set_registered_surface(arch_underside, _coastal_surface(1,1.8,Color("#b99a6f")))
 	for i in range(7):
 		var flag := _box(pos+Vector3(-wide*0.45+i*wide*0.15,2.85,0),Vector3(0.4,0.35,0.04),CORAL if i%2==0 else GOLD)
 		component_motion.register_component(flag,"flag",float(i)*0.6)
@@ -714,7 +875,8 @@ func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 		_lantern(pos+Vector3(side*(wide*0.5-0.4),2.3,0))
 
 func _build_dock() -> void:
-	_box(Vector3(0,0.0,21),Vector3(5,0.3,13),Color("#a17b52"))
+	var dock_base := _box(Vector3(0,0.0,21),Vector3(5,0.3,13),Color("#8d6d4c"))
+	dock_base.material_override = _coastal_surface(1,1.7)
 	for i in range(27):
 		var plank := _box(Vector3(0,0.18,15+i*0.45),Vector3(4.92,0.08,0.35),Color("#9a7149"))
 		plank.material_override = _wood_material(Color("#9a7149"))
@@ -740,12 +902,15 @@ func _build_dock() -> void:
 		_box(Vector3(x,3.75,13.65),Vector3(0.035,0.3,0.035),Color("#6e563c"))
 		_lantern(Vector3(x,3.55,13.65))
 	# Original ferry silhouette, with portholes, lifebuoy, chimney and pennants.
-	var hull := _box(Vector3(5.5,0,25),Vector3(5,0.8,8),Color("#e4d7b6"),true)
-	var bow := _mesh(CylinderMesh.new(),Vector3(5.5,0,20.8),_mat(Color("#e4d7b6")))
+	var hull := _box(Vector3(5.5,0,25),Vector3(5,0.8,8),Color("#77513a"),true)
+	hull.material_override = _coastal_surface(1,1.8,Color("#cfb38a"))
+	var bow := _mesh(CylinderMesh.new(),Vector3(5.5,0,20.8),_coastal_surface(1,1.8,Color("#cfb38a")))
 	bow.scale=Vector3(2.5,0.42,1.4)
 	_box(Vector3(5.5,0.7,25),Vector3(4,0.6,6.5),TEAL)
-	_box(Vector3(5.5,1.8,25.4),Vector3(3,1.6,4),CREAM)
-	_box(Vector3(5.5,2.7,25.4),Vector3(3.7,0.3,4.6),CORAL)
+	var cabin := _box(Vector3(5.5,1.8,25.4),Vector3(3,1.6,4),Color("#ac9875"))
+	cabin.material_override = _coastal_surface(4,1.6)
+	var cabin_roof := _box(Vector3(5.5,2.7,25.4),Vector3(3.7,0.3,4.6),Color("#a45c48"))
+	cabin_roof.material_override = _coastal_surface(3,1.8)
 	_cylinder(Vector3(5.5,3.35,25.5),0.45,1.2,TEAL)
 	for i in range(3):
 		_sphere(Vector3(3.95,1.85,24+i*1.2),0.3,Color("#335b6e"))
@@ -763,12 +928,14 @@ func _build_dock() -> void:
 
 func _build_plaza() -> void:
 	# Tiered fountain anchors the main area's visual silhouette.
-	_cylinder(Vector3(0,0.45,0),2.8,0.6,CREAM)
+	var fountain_base := _cylinder(Vector3(0,0.45,0),2.8,0.6,Color("#ac9875"))
+	fountain_base.material_override = _coastal_surface(4,2.0,Color("#e1cfab"))
 	for i in range(24):
 		var a := i*TAU/24.0
 		var tile := _box(Vector3(cos(a)*2.57,0.79,sin(a)*2.57),Vector3(0.47,0.07,0.2),[Color("#dfc99e"),Color("#e7d7b8")][i%2])
 		tile.rotation.y = -a
-	_cylinder(Vector3(0,0.78,0),2.5,0.13,Color("#7ac3c8"))
+	var fountain_rim := _cylinder(Vector3(0,0.78,0),2.5,0.13,Color("#7ac3c8"))
+	fountain_rim.material_override = _coastal_surface(5,0.8,Color("#d9eee5"))
 	fountain_water = ShaderMaterial.new()
 	fountain_water.shader = WATER
 	var disk := CylinderMesh.new()
@@ -776,8 +943,10 @@ func _build_plaza() -> void:
 	disk.bottom_radius=2.4
 	disk.height=0.07
 	_mesh(disk,Vector3(0,0.86,0),fountain_water)
-	_cylinder(Vector3(0,1.2,0),0.55,1.0,CREAM)
-	_cylinder(Vector3(0,1.8,0),1.5,0.25,CREAM)
+	var fountain_spire := _cylinder(Vector3(0,1.2,0),0.55,1.0,Color("#b89b70"))
+	fountain_spire.material_override = _coastal_surface(4,1.25,Color("#ddc79f"))
+	var fountain_cap := _cylinder(Vector3(0,1.8,0),1.5,0.25,Color("#ad936c"))
+	fountain_cap.material_override = _coastal_surface(7,1.0,Color("#ceb27a"))
 	_sphere(Vector3(0,2.2,0),0.42,GOLD)
 	for i in range(8):
 		var a := i*TAU/8.0
@@ -807,18 +976,18 @@ func _build_plaza() -> void:
 	shape.shape=cylinder
 	collision.add_child(shape)
 	add_child(collision)
-	_kiosk(Vector3(-6,0,5),"導覽亭",TEAL)
+	_kiosk(Vector3(-8,0,5),"導覽亭",TEAL)
 	# Keep the whole sprite on one ground level: the raised avenue starts at x=-4.5.
 	_npc(Vector3(-3.8,0,8.8),CORAL,"票票")
 	_point("guide","與票票合照",Vector3(-3.8,0,8.8))
-	_kiosk(Vector3(6,0,5),"拍貼本",CORAL)
-	_point("album","翻閱拍貼收藏",Vector3(6,0,7))
-	_kiosk(Vector3(-7,0,-5),"借用道具",GOLD)
-	_point("settings","設定與輔助",Vector3(-7,0,-3))
-	_cylinder(Vector3(7,1.1,-5),0.45,2.2,TEAL)
-	_sphere(Vector3(7,2.4,-5),0.7,CREAM)
-	_label("日夜鐘",Vector3(7,3.5,-5),26)
-	_point("clock","切換日夜",Vector3(7,0,-3))
+	_kiosk(Vector3(8,0,5),"拍貼本",CORAL)
+	_point("album","翻閱拍貼收藏",Vector3(8,0,7))
+	_kiosk(Vector3(-9,0,-5),"借用道具",GOLD)
+	_point("settings","設定與輔助",Vector3(-9,0,-3))
+	_cylinder(Vector3(9,1.1,-5),0.45,2.2,TEAL)
+	_sphere(Vector3(9,2.4,-5),0.7,CREAM)
+	_label("日夜鐘",Vector3(9,3.5,-5),26)
+	_point("clock","切換日夜",Vector3(9,0,-3))
 	for side in [-1.0,1.0]:
 		_bench(Vector3(side*12.0,0,5.5))
 		_bench(Vector3(side*12.0,0,-8.0))
@@ -879,8 +1048,8 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 	# Two printed-paper roof planes make the stand read as a little harbor pavilion.
 	var roof_left := _box(pos+Vector3(-1.08,2.62,0),Vector3(2.35,0.28,3.35),color)
 	var roof_right := _box(pos+Vector3(1.08,2.62,0),Vector3(2.35,0.28,3.35),color)
-	roof_left.rotation.z=-0.18
-	roof_right.rotation.z=0.18
+	roof_left.rotation.z=0.18
+	roof_right.rotation.z=-0.18
 	_box(pos+Vector3(0,2.87,0),Vector3(0.22,0.32,3.45),Color("#866b47"))
 	_box(pos+Vector3(0,2.48,1.69),Vector3(4.85,0.14,0.12),Color("#f1d9a9"))
 	var scallop_transforms: Array[Transform3D]=[]
@@ -899,7 +1068,7 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 	for side in [-1.0,1.0]:
 		for row in range(3):
 			for col in range(5):
-				var tile_basis := Basis().rotated(Vector3.FORWARD,side*0.18).scaled(Vector3(0.32,0.035,0.58))
+				var tile_basis := Basis().rotated(Vector3.FORWARD,-side*0.18).scaled(Vector3(0.32,0.035,0.58))
 				tile_transforms.append(Transform3D(tile_basis,Vector3(side*(0.32+col*0.43),2.79-row*0.075,-1.0+row*0.8)))
 				tile_colors.append(Color("#a96d55") if (col+row)%3==0 else color)
 	_multi_mesh(BoxMesh.new(),pos,tile_transforms,tile_colors,_vertex_color_material("kiosk-roof-tiles"))
@@ -921,7 +1090,7 @@ func _lamppost(pos: Vector3) -> void:
 		decorative_light.light_energy=0.0
 		add_child(decorative_light)
 		lamps.append(decorative_light)
-		component_motion.register_light(decorative_light,float(lamps.size())*0.17)
+		# Keep local light output stable; animated lantern energy reads as flicker.
 		return
 	_cylinder(pos+Vector3(0,1.2,0),0.09,2.4,Color("#554c3f"))
 	_cylinder(pos+Vector3(0,2.25,0),0.28,0.12,Color("#92734c"))
@@ -937,28 +1106,270 @@ func _lamppost(pos: Vector3) -> void:
 	light.light_energy=0.0
 	add_child(light)
 	lamps.append(light)
-	component_motion.register_light(light,float(lamps.size())*0.17)
+	# Keep local light output stable; animated lantern energy reads as flicker.
 
 func _build_avenue() -> void:
 	var names := ["氣球快遞","風箏穿環","噴泉跳拍","人潮指揮","帽子救援","彩帶節拍","花壇拼圖","招牌平衡","影子捉迷藏","泡泡合照","長椅換位","迎賓大合奏"]
+	# Each destination has its own approach and footprint; IDs stay stable while the old
+	# alternating kiosk coordinates are retired.
+	var game_positions: Array[Vector3] = [
+		Vector3(-6.0,0,-17.0), Vector3(-10.2,0,-17.8), Vector3(-7.6,0,-22.7), Vector3(-11.6,0,-23.2),
+		Vector3(6.0,0,-27.0), Vector3(10.1,0,-27.5), Vector3(6.3,0,-32.2), Vector3(11.8,0,-32.5),
+		Vector3(9.55,0.88,-35.0), Vector3(13.0,0.88,-37.6),
+		Vector3(-6.0,0,-39.0), Vector3(6.0,0,-40.5),
+	]
 	for i in range(12):
-		var side := -1 if i%2==0 else 1
-		var pos := Vector3(side*8.3,0,-17-float(i/2)*4.8)
-		var color := [CORAL,TEAL,GOLD][i%3] as Color
-		_kiosk(pos,names[i],color)
-		_point("game-%03d"%(i+1),names[i],pos+Vector3(-side*2.3,0,1))
-		_cylinder(pos+Vector3(-side*2.3,0.28,1),0.75,0.16,color)
-		_game_feature(i,pos,color)
-	_npc(Vector3(-3.4,0,-19.5),CORAL,"小角")
-	_point("quest-001","吉祥物的尾巴危機",Vector3(-3.4,0,-19.5))
-	_npc(Vector3(3.4,0,-19.5),TEAL,"阿浪")
-	_point("quest-002","廣播即興救場",Vector3(3.4,0,-19.5))
+		_point("game-%03d"%(i+1),names[i],game_positions[i],1.45)
+		var feature_color: Color = [CORAL,TEAL,GOLD][i%3]
+		var feature_start := get_child_count()
+		occlusion_controller.begin_building()
+		_game_feature(i,game_positions[i],feature_color)
+		var feature_root := Node3D.new()
+		feature_root.name = "GameFeature%03d" % (i+1)
+		add_child(feature_root)
+		_adopt_district_geometry(feature_root,feature_start)
+		var feature_blocker := _district_occlusion_blocker(feature_root, "FeatureOcclusionBlocker")
+		occlusion_controller.finish_building(feature_blocker)
+	_build_attraction_districts()
+	# Keep both story characters in the open foreground of the avenue arch, where
+	# their whole billboards and ground anchors stay visible in the lowered camera.
+	_npc(Vector3(-5.4,0,-7.8),CORAL,"小角")
+	_point("quest-001","吉祥物的尾巴危機",Vector3(-5.4,0,-7.8))
+	_npc(Vector3(3.4,0,-4.0),TEAL,"阿浪")
+	_point("quest-002","廣播即興救場",Vector3(3.4,0,-4.0))
 	_point("explore-001","花壇會眨眼",Vector3(-3,0,-25))
 	_point("explore-002","歡迎字樣的影子",Vector3(3,0,-31))
 	_box(Vector3(-3,0.7,-37),Vector3(2,0.3,0.7),GOLD,true)
 	_point("explore-003","長椅雙人份",Vector3(-3,0,-35.7))
 	_arch(Vector3(0,0,-45),"倒影大道",Color("#655178"),5)
 	_point("rift","查看倒影大道",Vector3(0,0,-43))
+	_point("ride-tide","搭乘潮汐貝殼輪",Vector3(-6.7,0.26,11.2))
+
+func _build_attraction_districts() -> void:
+	var districts := Node3D.new()
+	districts.name = "AttractionDistricts"
+	add_child(districts)
+	var wind := _district(districts, "WindSailTerrace", "風帆工坊", ["game-001", "game-002", "game-003", "game-004"])
+	var scenery_start := get_child_count()
+	var wind_blocker := _district_occlusion_blocker(wind, "DistrictOcclusionBlocker")
+	occlusion_controller.begin_building()
+	_build_wind_sail_terrace(wind)
+	_adopt_district_geometry(wind, scenery_start)
+	occlusion_controller.finish_building(wind_blocker)
+	var tide := _district(districts, "TidepoolCourt", "潮池廣場", ["game-005", "game-006", "game-007", "game-008"])
+	scenery_start = get_child_count()
+	var tide_blocker := _district_occlusion_blocker(tide, "DistrictOcclusionBlocker")
+	occlusion_controller.begin_building()
+	_build_tidepool_court(tide)
+	_adopt_district_geometry(tide, scenery_start)
+	occlusion_controller.finish_building(tide_blocker)
+	var lens := _district(districts, "LighthouseLookout", "海風觀景台", ["game-009", "game-010"])
+	scenery_start = get_child_count()
+	var lens_blocker := _district_occlusion_blocker(lens, "DistrictOcclusionBlocker")
+	occlusion_controller.begin_building()
+	_build_lighthouse_lookout(lens)
+	_adopt_district_geometry(lens, scenery_start)
+	occlusion_controller.finish_building(lens_blocker)
+	var moon := _district(districts, "MoonshadowStage", "月影劇台", ["game-011", "game-012"])
+	scenery_start = get_child_count()
+	var moon_blocker := _district_occlusion_blocker(moon, "DistrictOcclusionBlocker")
+	occlusion_controller.begin_building()
+	_build_moonshadow_stage(moon)
+	_adopt_district_geometry(moon, scenery_start)
+	occlusion_controller.finish_building(moon_blocker)
+
+
+func _district_occlusion_blocker(parent: Node3D, blocker_name: String) -> StaticBody3D:
+	var blocker := StaticBody3D.new()
+	blocker.name = blocker_name
+	blocker.collision_layer = 0
+	blocker.collision_mask = 0
+	parent.add_child(blocker)
+	return blocker
+
+func _adopt_district_geometry(district: Node3D, first_child_index: int) -> void:
+	for child_index in range(get_child_count()-1, first_child_index-1, -1):
+		var scenery := get_child(child_index)
+		if not scenery is GeometryInstance3D and not scenery is Label3D:
+			continue
+		remove_child(scenery)
+		district.add_child(scenery)
+
+func _district(parent: Node3D, node_name: String, title: String, game_ids: Array[String]) -> Node3D:
+	var district := Node3D.new()
+	district.name = node_name
+	district.set_meta("title", title)
+	district.set_meta("game_ids", game_ids.duplicate())
+	parent.add_child(district)
+	return district
+
+func _build_wind_sail_terrace(district: Node3D) -> void:
+	# A little maker's court gives the four wind games a destination, not four lawn markers.
+	var deck := _box(Vector3(-9.0,0.11,-20.5),Vector3(9.0,0.12,10.0),Color("#775b42"))
+	deck.name = "WindWorkshopBoardwalk"
+	deck.material_override = _coastal_surface(1,1.8,Color("#ead8b4"))
+	for plank_index in range(12):
+		var plank_x := -13.3 + plank_index*0.74
+		var seam := _box(Vector3(plank_x,0.178,-20.5),Vector3(0.035,0.012,9.85),Color("#c3a16c"))
+		seam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# Narrow, separated canvas slats leave the kite and balloon silhouettes visible above the counter.
+	for post_x in [-11.7,-6.7]:
+		for post_z in [-21.65,-19.35]:
+			var post := _box(Vector3(post_x,1.2,post_z),Vector3(0.18,2.4,0.18),Color("#594a3b"))
+			post.material_override = _coastal_surface(1,1.2,Color("#bd9c6b"))
+	for panel_index in range(5):
+		var curve := (float(panel_index) - 2.0) / 2.0
+		var panel := _box(Vector3(-9.2,2.36 + (1.0 - absf(curve)) * 0.16,-20.5 + curve * 0.66),Vector3(4.8,0.10,0.60),[Color("#3b7475"),Color("#b87864"),Color("#dcc99e")][panel_index % 3])
+		panel.material_override = _coastal_surface(2,2.8,[Color("#a7b9a5"),Color("#c98c74"),Color("#e0cda5")][panel_index % 3])
+		panel.rotation.x = -curve * 0.14
+	var counter := _box(Vector3(-9.0,0.67,-20.4),Vector3(3.2,0.9,0.82),Color("#80583e"))
+	counter.name = "WindWorkshopCounter"
+	counter.material_override = _coastal_surface(1,1.2,Color("#bd9568"))
+	var counter_lip := _box(Vector3(-9.0,1.16,-20.4),Vector3(3.38,0.12,0.96),Color("#d7ad6c"))
+	counter_lip.material_override = _coastal_surface(7,0.8,Color("#cfac70"))
+	_box(Vector3(-9.0,0.93,-19.97),Vector3(2.9,0.12,0.035),Color("#326e70"))
+	# Split mast heights and offset sails make a readable windward profile around the first four points.
+	for side: float in [-1.0, 1.0]:
+		var x: float = side * 10.7
+		var z: float = -20.4 if side < 0.0 else -17.6
+		var mast := _box(Vector3(x, 2.15, z), Vector3(0.24, 4.3, 0.24), Color("#6e5b43"))
+		mast.material_override = _coastal_surface(1,1.2,Color("#c4a171"))
+		var sail := _box(Vector3(x + side*0.72, 3.05, z), Vector3(1.4, 1.9, 0.08), Color("#4c8488" if side < 0.0 else "#d88767"))
+		sail.material_override = _coastal_surface(6,1.5,Color("#dcd0b6"))
+		var sail_tip := _cone(Vector3(x + side*0.7, 4.25, z), Color("#f1d9a7"))
+		sail_tip.rotation.z = -side*0.18
+		sail_tip.scale = Vector3(0.88, 0.68, 0.16)
+		var lower_sail := _box(Vector3(x - side*0.55, 1.75, z+0.08), Vector3(0.9, 1.15, 0.06), Color("#edbb65"))
+		lower_sail.material_override = _coastal_surface(6,1.5,Color("#e0cda5"))
+		lower_sail.rotation.z = side*0.14
+		for j in range(3):
+			var streamer := _box(Vector3(x + side*(0.22+j*0.2), 4.45+j*0.12, z+0.08), Vector3(0.04, 0.55, 0.035), Color("#fff0c8" if j%2==0 else "#e1a272"))
+			streamer.rotation.z = -side*(0.08+j*0.06)
+	var ridge := _box(Vector3(0, 0.205, -20.7), Vector3(22, 0.035, 0.1), Color("#c7a975"))
+	ridge.material_override = _wood_material(Color("#c7a975"))
+	_district_label("風向與飛行", Vector3(0, 3.8, -25.0), 24, Color("#e9d4a4"))
+
+func _build_tidepool_court(district: Node3D) -> void:
+	# Four shallow basins sit in the gaps between the east-court game points, leaving clear approaches around a low fountain.
+	var court := _box(Vector3(9.0,0.105,-30.1),Vector3(9.4,0.09,7.35),Color("#526d67"))
+	court.name = "TidepoolStoneCourt"
+	court.material_override = _coastal_surface(0,1.8,Color("#cbb995"))
+	var basin_centers := [Vector3(5.2,0.22,-29.8), Vector3(8.15,0.22,-27.5), Vector3(8.85,0.22,-32.5), Vector3(12.4,0.22,-29.9)]
+	var basin_radii := [0.82, 0.78, 0.74, 0.86]
+	for index in range(basin_centers.size()):
+		var center: Vector3 = basin_centers[index]
+		var radius: float = basin_radii[index]
+		var plinth := _cylinder(center, radius + 0.22, 0.30, Color("#958064"))
+		plinth.material_override = _coastal_surface(4,1.5,Color("#d2bf9a"))
+		plinth.rotation.y = float(index)*0.21
+		var pool_surface := _cylinder(center+Vector3(0,0.2,0), radius * 0.78, 0.12, Color("#438f8b"))
+		pool_surface.material_override = sea_material
+		var mosaic := _cylinder(center+Vector3(0,0.29,0), radius * 0.50, 0.07, Color("#418e8a"))
+		mosaic.material_override = _coastal_surface(5,0.65)
+		for shell_index in range(3):
+			var angle := TAU * float(shell_index) / 3.0 + float(index) * 0.37
+			var shell_pos := center + Vector3(cos(angle) * (radius + 0.04),0.43,sin(angle) * (radius + 0.04))
+			var shell := _sphere(shell_pos,0.16,Color("#c5aa77") if (index + shell_index) % 2 == 0 else Color("#ca735b"))
+			shell.scale=Vector3(1.35,0.62,0.82)
+	# A modest shared bubbler gives the four pools one court landmark without filling their walkable gaps.
+	var bubbler_base := _cylinder(Vector3(9.8,0.25,-30.0),0.68,0.20,Color("#87765d"))
+	bubbler_base.material_override = _coastal_surface(4,1.1,Color("#b6a180"))
+	var bubbler_rim := _cylinder(Vector3(9.8,0.39,-30.0),0.49,0.10,Color("#73aaa2"))
+	bubbler_rim.material_override = _coastal_surface(5,0.7,Color("#b9d5c5"))
+	var bubbler_water := _cylinder(Vector3(9.8,0.49,-30.0),0.34,0.06,Color("#438f8b"))
+	bubbler_water.material_override = sea_material
+	var bubbler_spout := _cylinder(Vector3(9.8,0.84,-30.0),0.12,0.64,Color("#c1a877"))
+	bubbler_spout.material_override = _coastal_surface(7,0.7,Color("#c4aa79"))
+	_sphere(Vector3(9.8,1.21,-30.0),0.12,Color("#87c8bf"))
+	_district_label("潮池・拾光",Vector3(9.0, 2.2, -30.8), 22, Color("#d9e2c1"))
+
+func _build_lighthouse_lookout(district: Node3D) -> void:
+	# The narrow lantern tower and low open rail keep the view to the sea unobstructed.
+	var tower_x := 11.4
+	var tower_z := -36.2
+	var deck := _box(Vector3(tower_x,0.48,tower_z),Vector3(4.8,0.2,4.2),Color("#ad9670"),true)
+	deck.name = "CoastalLookoutDeck"
+	deck.material_override = _coastal_surface(1,1.8,Color("#dfc79e"))
+	var deck_body := deck.get_child(0) as StaticBody3D
+	var deck_shape := deck_body.get_child(0) as CollisionShape3D
+	var deck_box := BoxShape3D.new()
+	deck_box.size=Vector3(4.8,0.2,4.2)
+	deck_shape.shape=deck_box
+	var promenade_link := _box(Vector3(5.45,0.10,tower_z),Vector3(2.1,0.20,2.8),Color("#8e7455"),true)
+	promenade_link.name = "LookoutPromenadeLink"
+	promenade_link.material_override = _coastal_surface(1,1.8,Color("#d2ba91"))
+	# Finish the slope at the deck's front edge, with a small overlap above it.
+	# Extending the old shallow ramp behind the deck left a 0.17m blocking lip.
+	var ramp_angle:=atan(0.4/2.5)
+	var ramp_length:=2.5/cos(ramp_angle)
+	var ramp := _box(Vector3(7.75,0.37,tower_z),Vector3(ramp_length,0.06,3.2),Color("#92734f"),true)
+	ramp.material_override = _coastal_surface(1,1.8,Color("#d6b98b"))
+	ramp.rotation.z=ramp_angle
+	var ramp_body := ramp.get_child(0) as StaticBody3D
+	var ramp_shape := ramp_body.get_child(0) as CollisionShape3D
+	var ramp_box := BoxShape3D.new()
+	ramp_box.size=Vector3(ramp_length,0.06,3.2)
+	ramp_shape.shape=ramp_box
+	for index in range(8):
+		var x := 6.6+index*0.35
+		var plank := _box(Vector3(x,0.41+(x-7.75)*0.16,tower_z),Vector3(0.06,0.04,3.08),Color("#ddc79d"))
+		plank.material_override = _coastal_surface(7,0.45,Color("#c4a06e"))
+		plank.rotation.z=ramp_angle
+	_cylinder(Vector3(tower_x,0.42,tower_z),1.55,0.32,Color("#685944"))
+	var tower_wall := _cylinder(Vector3(tower_x,1.55,tower_z),0.65,2.0,Color("#b99a6c"),0.78,true)
+	tower_wall.name="LighthouseWall"
+	tower_wall.get_child(0).name="LighthouseWallCollision"
+	tower_wall.material_override = _coastal_surface(4,1.8,Color("#ddcda8"))
+	var tower_band := _cylinder(Vector3(tower_x,0.82,tower_z),0.72,0.18,Color("#3f7776"),0.84)
+	tower_band.material_override = _mat(Color("#3f7776"))
+	for side: float in [-1.0,1.0]:
+		var rail_post := _box(Vector3(tower_x+side*1.02,0.75,tower_z+0.35),Vector3(0.08,0.92,1.55),Color("#67503b"))
+		rail_post.material_override = _wood_material(Color("#67503b"))
+		_box(Vector3(tower_x+side*1.02,1.3,tower_z+0.35),Vector3(0.08,0.08,1.55),Color("#dfc89c"))
+	for j in range(4):
+		var y: float = 2.55+j*0.38
+		var band := _cylinder(Vector3(tower_x,y,tower_z),1.0-j*0.12,0.16,Color("#5f8b8b") if j%2==0 else Color("#eed39e"))
+		band.material_override = _coastal_surface(2 if j%2==0 else 7,0.75,Color("#acc0a8" if j%2==0 else "#cbb17c"))
+		band.rotation.y=j*0.18
+	var lantern := _sphere(Vector3(tower_x,4.05,tower_z),0.38,Color("#f4d78c"))
+	lantern.material_override = _mat(Color("#f4d78c"),true)
+	for side: float in [-1.0,1.0]:
+		var beam := _box(Vector3(tower_x+side*1.4,4.05,tower_z),Vector3(1.35,0.05,0.05),Color("#e0cf9e"))
+		beam.material_override = _coastal_surface(7,0.5,Color("#c2a16b"))
+		beam.rotation.y=side*0.12
+	_district_label("看見海面",Vector3(tower_x,4.65,tower_z),22,Color("#e5d9bd"))
+
+func _build_moonshadow_stage(district: Node3D) -> void:
+	# A crescent proscenium and stepped open seating give the final pair a stage silhouette.
+	for side in [-1.0,1.0]:
+		var pier := _box(Vector3(side*11.0,1.7,-40.1),Vector3(0.34,3.4,0.42),Color("#725e72"),true)
+		var cap := _cone(Vector3(side*11.0,3.58,-40.1),Color("#c78368" if side<0.0 else "#d6b268"))
+		cap.scale=Vector3(0.45,0.52,0.28)
+	var proscenium := _box(Vector3(0,3.3,-40.1),Vector3(21.2,0.38,0.54),Color("#a45c48"))
+	proscenium.material_override = _coastal_surface(3,1.8,Color("#f0d5bd"))
+	var trim := _box(Vector3(0,3.53,-39.78),Vector3(20.7,0.08,0.11),Color("#ddba78"))
+	trim.material_override = _coastal_surface(7,0.8,Color("#d0b274"))
+	var crescent := _mesh(TorusMesh.new(),Vector3(0.0,2.15,-40.1),_mat(Color("#d9b768")))
+	crescent.scale=Vector3(1.28,1.28,0.16)
+	crescent.rotation_degrees.x=90
+	# A shallow, broken canopy shades the rear seats without covering the crescent or stage face.
+	for panel_index in range(5):
+		var curve := (float(panel_index) - 2.0) / 2.0
+		var shade_panel := _box(Vector3(curve * 1.35,2.34 + (1.0 - absf(curve)) * 0.20,-42.0),Vector3(1.20,0.10,2.15),[Color("#536e73"),Color("#6c5b74"),Color("#8c6d75")][panel_index % 3])
+		shade_panel.material_override = _coastal_surface(6,2.2,[Color("#91aaa1"),Color("#ad95a6"),Color("#c39480")][panel_index % 3])
+		shade_panel.rotation.z = -curve * 0.09
+	for row in range(3):
+		var bench := _box(Vector3(0,0.32+row*0.22,-41.2-row*0.75),Vector3(7.4-row*0.8,0.16,0.36),Color("#8e6c50" if row%2==0 else "#a17d58"))
+		bench.material_override = _wood_material(Color("#8e6c50" if row%2==0 else "#a17d58"))
+	var deck := _box(Vector3(0,0.105,-40.45),Vector3(14.0,0.10,6.6),Color("#73563e"))
+	deck.name = "MoonshadowStageDeck"
+	deck.material_override = _coastal_surface(1,1.7,Color("#d2b893"))
+	for plank_index in range(14):
+		var plank_z := -43.6 + plank_index*0.48
+		var seam := _box(Vector3(0,0.16,plank_z),Vector3(13.7,0.018,0.035),Color("#b8915f"))
+		seam.material_override = _coastal_surface(7,0.7,Color("#ba9a64"))
+		seam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_district_label("月影劇台",Vector3(0,4.05,-40.0),24,Color("#e2d2b0"))
 
 func _game_feature(index: int, pos: Vector3, color: Color) -> void:
 	# Each booth gets a large, readable silhouette of the activity on offer.
@@ -1072,13 +1483,18 @@ func _build_gates() -> void:
 		var side := -1 if i%2==1 else 1
 		var pos := Vector3(side*15.5,0,8-float((i-1)/2)*4.5)
 		var zone_color: Color = [Color("#28737a"),Color("#e2795e"),Color("#e2ae4f"),Color("#725985"),Color("#47718a"),Color("#678858"),Color("#5295a0"),Color("#42638a"),Color("#865d71")][i-1]
-		_box(pos+Vector3(0,0.18,0),Vector3(3.9,0.22,1.5),Color("#d0bc96"))
+		var gate_floor := _box(pos+Vector3(0,0.18,0),Vector3(3.9,0.22,1.5),Color("#958064"))
+		gate_floor.material_override = _coastal_surface(0,1.6,Color("#d8c39f"))
 		for pillar_side in [-1,1]:
-			_box(pos+Vector3(pillar_side*1.25,1.35,0),Vector3(0.42,2.7,0.5),CREAM,true)
-			_box(pos+Vector3(pillar_side*1.25,0.55,0),Vector3(0.8,0.32,0.75),Color("#a98d68"))
-			_box(pos+Vector3(pillar_side*1.25,2.48,0),Vector3(0.76,0.26,0.72),zone_color)
+			var gate_pillar := _box(pos+Vector3(pillar_side*1.25,1.35,0),Vector3(0.42,2.7,0.5),Color("#ac9875"),true)
+			gate_pillar.material_override = _coastal_surface(4,1.5,Color("#e0cdaa"))
+			var gate_foot := _box(pos+Vector3(pillar_side*1.25,0.55,0),Vector3(0.8,0.32,0.75),Color("#a98d68"))
+			gate_foot.material_override = _coastal_surface(7,0.7,Color("#c5a66f"))
+			var gate_cap := _box(pos+Vector3(pillar_side*1.25,2.48,0),Vector3(0.76,0.26,0.72),zone_color)
+			gate_cap.material_override = _coastal_surface(2,0.8,zone_color.lightened(0.14))
 			_lantern(pos+Vector3(pillar_side*1.25,2.08,0.38))
-		_box(pos+Vector3(0,2.8,0),Vector3(3.25,0.48,0.66),zone_color)
+		var gate_header := _box(pos+Vector3(0,2.8,0),Vector3(3.25,0.48,0.66),zone_color)
+		gate_header.material_override = _coastal_surface(3,1.4,zone_color.lightened(0.12))
 		_box(pos+Vector3(0,2.49,0),Vector3(2.65,0.12,0.8),Color("#f2d8a5"))
 		_zone_crown(i,pos,zone_color)
 		_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
@@ -1501,7 +1917,6 @@ func _build_player() -> void:
 		shape.shape=box
 		floor_body.add_child(shape)
 		add_child(floor_body)
-
 func _build_camera() -> void:
 	camera=Camera3D.new()
 	camera.projection=Camera3D.PROJECTION_ORTHOGONAL
@@ -1509,25 +1924,29 @@ func _build_camera() -> void:
 	camera.far=200
 	camera.position=player.position+CAMERA_OFFSET
 	add_child(camera)
-	camera.look_at(player.position+Vector3(0,1,-3))
+	camera.look_at(player.position+Vector3(0,1,0))
 	camera.current=true
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(player): return
+	_update_district_label_visibility()
 	if is_riding():
 		if blocked:
 			end_ride()
 		else:
 			player.velocity=Vector3.ZERO
 			camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
-			camera.look_at(player.position+Vector3(0,1,-3))
+			camera.look_at(player.position+Vector3(0,1,0))
 			_update_sprite_grounding()
 			_refresh_avatar_texture(_ride_pose_frame())
 			nearest={"id":"ride-tide","label":"離開潮汐貝殼輪","position":player.global_position,"marker":null}
+			for point in points:
+				var marker := point.get("marker") as Label3D
+				if is_instance_valid(marker): marker.visible=false
 			return
 	var movement := Vector2.ZERO if blocked else Input.get_vector("move_left","move_right","move_up","move_down")
-	player.velocity=Vector3(movement.x*5.0,-4,movement.y*5.0)
-	var previous_position := player.position
+	player.velocity=Vector3(movement.x*AVATAR_RUN_SPEED,-4,movement.y*AVATAR_RUN_SPEED)
+	var previous_position: Vector3=player.position
 	player.move_and_slide()
 	player.position.z=clampf(player.position.z,-43.6,26.5)
 	player.position.x=clampf(player.position.x,-18.6,18.6)
@@ -1563,7 +1982,8 @@ func _physics_process(delta: float) -> void:
 				avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
 				if avatar_action_remaining == 0.0: avatar_action=""
 	_refresh_avatar_texture(frame)
-	camera.position=camera.position.lerp(player.position+Vector3(0,15.5,25),minf(1,delta*7))
+	camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
+	camera.look_at(player.position+Vector3(0,1,0))
 	_update_sprite_grounding()
 	var area := "海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場")
 	if area!=current_area:
@@ -1576,6 +1996,9 @@ func _physics_process(delta: float) -> void:
 		if dist<best:
 			best=dist
 			nearest=point
+	for point in points:
+		var marker: Label3D=point.get("marker") as Label3D
+		if is_instance_valid(marker): marker.visible=point.get("id","")==nearest.get("id","")
 func _process(delta: float) -> void:
 	if not blocked: time+=delta
 	if is_instance_valid(npc_activity) and npc_activity_paused!=blocked:
@@ -1647,6 +2070,7 @@ func interact() -> void:
 	if not blocked and not nearest.is_empty():
 		play_action("interact")
 		interaction_requested.emit(nearest.id,nearest.label)
+
 func _unhandled_key_input(event: InputEvent) -> void:
 	if blocked or not event is InputEventKey or not event.pressed or event.echo: return
 	if event.keycode == KEY_F:
@@ -1663,14 +2087,12 @@ func play_action(name: String) -> void:
 	avatar_action_remaining=0.8
 	avatar_action_elapsed=0.0
 	_refresh_avatar_texture(0)
-
 func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
 	if avatar_appearance == appearance and avatar_equipped == equipped: return
 	avatar_appearance=appearance.duplicate(true)
 	avatar_equipped=equipped.duplicate(true)
 	last_avatar_frame=-1
 	_refresh_avatar_texture(0)
-
 func _refresh_avatar_texture(frame: int) -> void:
 	if not is_instance_valid(avatar) or avatar_renderer == null: return
 	var riding := is_riding()
@@ -1697,7 +2119,6 @@ func _ride_pose_frame() -> int:
 	if moment >= 5.5 and moment < 6.0: return 3
 	return 0
 
-
 func set_night(value: bool) -> void:
 	set_time_of_day("night" if value else "noon")
 
@@ -1710,7 +2131,7 @@ func set_time_of_day(phase_id: Variant) -> void:
 	sun.light_energy = float(profile.key_energy)
 	environment.background_color = profile.sky_color
 	environment.ambient_light_color = profile.ambient_color
-	environment.ambient_light_energy = float(profile.ambient_energy)
+	environment.ambient_light_energy = float(profile.ambient_energy) * 0.58
 	environment.fog_light_color = profile.sky_color.lerp(profile.ambient_color, 0.28)
 	match active_time_phase:
 		"dawn": environment.glow_intensity = 0.09
@@ -1739,7 +2160,6 @@ func set_time_of_day(phase_id: Variant) -> void:
 		if not is_instance_valid(shadow): continue
 		var ground_offset: Vector3 = record.get("ground_offset",Vector3.ZERO)
 		shadow.position = ground_offset + shadow_offset
-
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
 	sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
@@ -1748,6 +2168,7 @@ func apply_settings(settings: Dictionary) -> void:
 	if is_instance_valid(npc_activity): npc_activity.set_reduced_motion(reduced_motion)
 	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
 	if is_instance_valid(island_attractions): island_attractions.set_reduced_motion(reduced_motion)
+
 func start_ride() -> bool:
 	if blocked or not is_instance_valid(island_attractions):
 		return false
@@ -1763,7 +2184,6 @@ func start_ride() -> bool:
 		nearest={"id":"ride-tide","label":"離開潮汐貝殼輪","position":player.global_position,"marker":null}
 	return started
 
-
 func end_ride() -> void:
 	if is_instance_valid(island_attractions):
 		island_attractions.end_ride()
@@ -1772,16 +2192,12 @@ func end_ride() -> void:
 	avatar_action_remaining=0.0
 	avatar_action_elapsed=0.0
 	_refresh_avatar_texture(0)
-
-
 func is_riding() -> bool:
 	return is_instance_valid(island_attractions) and bool(island_attractions.is_riding())
-
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and is_instance_valid(island_attractions):
 		island_attractions.end_ride()
-
 
 func update_collection(photos: Dictionary) -> void:
 	for point in points:

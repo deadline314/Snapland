@@ -1,0 +1,695 @@
+{
+	"area_transitions": [
+		{
+			"area": "中央廣場",
+			"elapsed_seconds": 16.159,
+			"player": {
+				"x": -0.21,
+				"y": 0.1,
+				"z": 11.99
+			}
+		},
+		{
+			"area": "迎賓大道",
+			"elapsed_seconds": 52.234,
+			"player": {
+				"x": 2.75,
+				"y": 0.1,
+				"z": -11.0
+			}
+		},
+		{
+			"area": "中央廣場",
+			"elapsed_seconds": 124.324,
+			"player": {
+				"x": 3.02,
+				"y": 0.1,
+				"z": -10.97
+			}
+		},
+		{
+			"area": "海風碼頭",
+			"elapsed_seconds": 144.899,
+			"player": {
+				"x": 0.01,
+				"y": 0.1,
+				"z": 12.02
+			}
+		}
+	],
+	"arrival_cancel": {
+		"input": "Escape",
+		"intro_seen": true,
+		"modal_after": ""
+	},
+	"display_server": "Windows",
+	"elapsed_seconds": 155.791,
+	"failure_reason": "",
+	"fixture_note": "scripted movement audit only; not a human play session",
+	"human_played": false,
+	"initial_player": {
+		"x": 0.0,
+		"y": 0.12,
+		"z": 23.2
+	},
+	"player_final": {
+		"x": 0.01,
+		"y": 0.12,
+		"z": 24.69
+	},
+	"requested_window_size": "1280x720",
+	"ride": {
+		"after": {
+			"x": -6.35,
+			"y": 0.16,
+			"z": 11.21
+		},
+		"attempted": true,
+		"before": {
+			"x": -6.35,
+			"y": 0.16,
+			"z": 11.21
+		},
+		"entered_by_e": true,
+		"exit_displacement_m": 0.0,
+		"exited_by_e": true,
+		"nearest_before": "ride-tide",
+		"optional": true
+	},
+	"screenshots": [
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-dock-out.png",
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-guide-ride.png",
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-fountain-west.png",
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-fountain-east.png",
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-west-district.png",
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-east-district.png",
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-lookout.png",
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-moonstage.png",
+		"C:/Users/stanl/.codex/worktrees/island-experience/Snapland/pm/Snapland-main/images/MAIN-11-motion12-roam-dock-return.png"
+	],
+	"scripted_input": "real Input.parse_input_event keyboard events",
+	"status": "PASS",
+	"teleport_or_recovery_used_by_fixture": false,
+	"walked_distance_m": 178.545383185381,
+	"wall_collision_contacts": {
+		"@StaticBody3D@1387": 127,
+		"@StaticBody3D@608": 9
+	},
+	"wall_collision_frames": 46,
+	"waypoints": [
+		{
+			"actual": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.33
+			},
+			"area": "海風碼頭",
+			"elapsed_seconds": 8.997,
+			"from": {
+				"x": 0.0,
+				"y": 0.12,
+				"z": 23.2
+			},
+			"name": "dock-exit",
+			"on_floor": true,
+			"target_xz": [
+				0.0,
+				12.0
+			],
+			"walked_distance_m": 10.87,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": -4.16,
+				"y": 0.11,
+				"z": 11.21
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 4.319,
+			"from": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.3
+			},
+			"name": "tide-ramp-approach",
+			"on_floor": true,
+			"target_xz": [
+				-4.5,
+				11.1999998092651
+			],
+			"walked_distance_m": 4.64,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": -6.35,
+				"y": 0.16,
+				"z": 11.21
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 1.853,
+			"from": {
+				"x": -4.19,
+				"y": 0.11,
+				"z": 11.21
+			},
+			"name": "ride-tide-point",
+			"on_floor": true,
+			"target_xz": [
+				-6.69999980926514,
+				11.1999998092651
+			],
+			"walked_distance_m": 2.16,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": -4.21,
+				"y": 0.11,
+				"z": 6.54
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 4.869,
+			"from": {
+				"x": -6.35,
+				"y": 0.16,
+				"z": 11.21
+			},
+			"name": "west-fountain-approach",
+			"on_floor": true,
+			"target_xz": [
+				-4.19999980926514,
+				6.19999980926514
+			],
+			"walked_distance_m": 5.54,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": -4.21,
+				"y": 0.1,
+				"z": -3.87
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 8.654,
+			"from": {
+				"x": -4.21,
+				"y": 0.11,
+				"z": 6.54
+			},
+			"name": "south-fountain-bypass",
+			"on_floor": true,
+			"target_xz": [
+				-4.19999980926514,
+				-4.19999980926514
+			],
+			"walked_distance_m": 10.41,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 3.87,
+				"y": 0.1,
+				"z": -4.18
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 8.088,
+			"from": {
+				"x": -4.21,
+				"y": 0.1,
+				"z": -3.9
+			},
+			"name": "east-fountain-approach",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				-4.19999980926514
+			],
+			"walked_distance_m": 8.23,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 4.19,
+				"y": 0.1,
+				"z": -10.07
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 4.998,
+			"from": {
+				"x": 3.9,
+				"y": 0.1,
+				"z": -4.18
+			},
+			"name": "avenue-threshold",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				-10.3999996185303
+			],
+			"walked_distance_m": 6.03,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": -5.67,
+				"y": 0.1,
+				"z": -16.99
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 11.162,
+			"from": {
+				"x": 4.19,
+				"y": 0.1,
+				"z": -10.07
+			},
+			"name": "wind-sail-west-district",
+			"on_floor": true,
+			"target_xz": [
+				-6.0,
+				-17.0
+			],
+			"walked_distance_m": 12.75,
+			"wall_collision_frames": 46
+		},
+		{
+			"actual": {
+				"x": -4.21,
+				"y": 0.1,
+				"z": -21.68
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 4.458,
+			"from": {
+				"x": -5.7,
+				"y": 0.1,
+				"z": -16.99
+			},
+			"name": "west-avenue-crossing",
+			"on_floor": true,
+			"target_xz": [
+				-4.19999980926514,
+				-22.0
+			],
+			"walked_distance_m": 5.43,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 3.87,
+				"y": 0.1,
+				"z": -21.98
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 6.443,
+			"from": {
+				"x": -4.21,
+				"y": 0.1,
+				"z": -21.68
+			},
+			"name": "east-avenue-crossing",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				-22.0
+			],
+			"walked_distance_m": 8.24,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 5.98,
+				"y": 0.1,
+				"z": -26.67
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 4.265,
+			"from": {
+				"x": 3.87,
+				"y": 0.1,
+				"z": -21.98
+			},
+			"name": "tidepool-east-district",
+			"on_floor": true,
+			"target_xz": [
+				6.0,
+				-27.0
+			],
+			"walked_distance_m": 5.61,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 4.21,
+				"y": 0.1,
+				"z": -33.66
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 5.814,
+			"from": {
+				"x": 5.98,
+				"y": 0.1,
+				"z": -26.7
+			},
+			"name": "lookout-spine",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				-34.0
+			],
+			"walked_distance_m": 7.67,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 6.45,
+				"y": 0.1,
+				"z": -36.0
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 2.402,
+			"from": {
+				"x": 4.21,
+				"y": 0.1,
+				"z": -33.66
+			},
+			"name": "lookout-ramp-toe",
+			"on_floor": true,
+			"target_xz": [
+				6.69999980926514,
+				-36.2000007629395
+			],
+			"walked_distance_m": 3.25,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 9.21,
+				"y": 0.48,
+				"z": -34.83
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 3.478,
+			"from": {
+				"x": 6.45,
+				"y": 0.1,
+				"z": -36.0
+			},
+			"name": "lookout-front-walkway",
+			"on_floor": true,
+			"target_xz": [
+				9.55000019073486,
+				-34.7999992370605
+			],
+			"walked_distance_m": 3.28,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 12.37,
+				"y": 0.48,
+				"z": -34.83
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 2.255,
+			"from": {
+				"x": 9.21,
+				"y": 0.48,
+				"z": -34.83
+			},
+			"name": "lookout-deck",
+			"on_floor": true,
+			"target_xz": [
+				12.6999998092651,
+				-34.7999992370605
+			],
+			"walked_distance_m": 3.17,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 9.88,
+				"y": 0.48,
+				"z": -34.83
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 2.208,
+			"from": {
+				"x": 12.4,
+				"y": 0.48,
+				"z": -34.83
+			},
+			"name": "lookout-front-walkway-return",
+			"on_floor": true,
+			"target_xz": [
+				9.55000019073486,
+				-34.7999992370605
+			],
+			"walked_distance_m": 2.75,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 7.04,
+				"y": 0.19,
+				"z": -36.2
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 2.18,
+			"from": {
+				"x": 9.88,
+				"y": 0.48,
+				"z": -34.83
+			},
+			"name": "lookout-ramp-descent",
+			"on_floor": true,
+			"target_xz": [
+				6.69999980926514,
+				-36.2000007629395
+			],
+			"walked_distance_m": 3.38,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 4.54,
+				"y": 0.1,
+				"z": -38.49
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 2.394,
+			"from": {
+				"x": 7.04,
+				"y": 0.19,
+				"z": -36.2
+			},
+			"name": "moonshadow-east-approach",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				-38.5
+			],
+			"walked_distance_m": 3.42,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 0.34,
+				"y": 0.1,
+				"z": -38.5
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 3.152,
+			"from": {
+				"x": 4.54,
+				"y": 0.1,
+				"z": -38.49
+			},
+			"name": "moonshadow-stage",
+			"on_floor": true,
+			"target_xz": [
+				0.0,
+				-38.5
+			],
+			"walked_distance_m": 4.2,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 4.17,
+				"y": 0.1,
+				"z": -34.33
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 4.729,
+			"from": {
+				"x": 0.31,
+				"y": 0.1,
+				"z": -38.5
+			},
+			"name": "return-spine-19",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				-34.0
+			],
+			"walked_distance_m": 5.9,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 4.18,
+				"y": 0.1,
+				"z": -22.33
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 9.333,
+			"from": {
+				"x": 4.17,
+				"y": 0.1,
+				"z": -34.33
+			},
+			"name": "return-spine-20",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				-22.0
+			],
+			"walked_distance_m": 12.0,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 3.02,
+				"y": 0.1,
+				"z": -13.34
+			},
+			"area": "迎賓大道",
+			"elapsed_seconds": 7.625,
+			"from": {
+				"x": 4.18,
+				"y": 0.1,
+				"z": -22.33
+			},
+			"name": "return-spine-21",
+			"on_floor": true,
+			"target_xz": [
+				3.0,
+				-13.0
+			],
+			"walked_distance_m": 9.44,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 3.02,
+				"y": 0.1,
+				"z": -9.34
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 3.247,
+			"from": {
+				"x": 3.02,
+				"y": 0.1,
+				"z": -13.34
+			},
+			"name": "return-spine-22",
+			"on_floor": true,
+			"target_xz": [
+				3.0,
+				-9.0
+			],
+			"walked_distance_m": 4.0,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 4.18,
+				"y": 0.1,
+				"z": -4.52
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 4.334,
+			"from": {
+				"x": 3.02,
+				"y": 0.1,
+				"z": -9.34
+			},
+			"name": "return-spine-23",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				-4.19999980926514
+			],
+			"walked_distance_m": 5.28,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 4.18,
+				"y": 0.1,
+				"z": 5.88
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 8.43,
+			"from": {
+				"x": 4.18,
+				"y": 0.1,
+				"z": -4.52
+			},
+			"name": "return-spine-24",
+			"on_floor": true,
+			"target_xz": [
+				4.19999980926514,
+				6.19999980926514
+			],
+			"walked_distance_m": 10.4,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 0.01,
+				"y": 0.1,
+				"z": 11.65
+			},
+			"area": "中央廣場",
+			"elapsed_seconds": 6.188,
+			"from": {
+				"x": 4.18,
+				"y": 0.1,
+				"z": 5.88
+			},
+			"name": "return-spine-25",
+			"on_floor": true,
+			"target_xz": [
+				0.0,
+				12.0
+			],
+			"walked_distance_m": 7.48,
+			"wall_collision_frames": 0
+		},
+		{
+			"actual": {
+				"x": 0.01,
+				"y": 0.12,
+				"z": 24.66
+			},
+			"area": "海風碼頭",
+			"elapsed_seconds": 11.023,
+			"from": {
+				"x": 0.01,
+				"y": 0.1,
+				"z": 11.65
+			},
+			"name": "dock-return",
+			"on_floor": true,
+			"target_xz": [
+				0.0,
+				25.0
+			],
+			"walked_distance_m": 13.01,
+			"wall_collision_frames": 0
+		}
+	]
+}

@@ -169,8 +169,7 @@ func _run() -> void:
 	assert(is_equal_approx(float(survivor.mesh.get_instance_shader_parameter("occlusion_cutaway_weight")),0.43), "registered coastal surface receives the current circular cutaway weight")
 	assert(is_equal_approx(float(survivor.mesh.get_instance_shader_parameter("occlusion_body_radius_px")),57.0), "registered coastal surface receives the same projected mask radius")
 	controller.release()
-	assert(survivor.mesh.material_override == coastal_replacement, "controller release restores the final selected coastal surface after late replacement")
-	assert(survivor.mesh.material_override.get_shader_parameter("atlas_texture") == atlas, "late-selected coastal surface keeps its atlas texture after release")
+	assert(survivor.mesh.material_override == coastal_replacement and survivor.mesh.material_override.get_shader_parameter("atlas_texture") == atlas, "release restores the final intended coastal surface with its texture intact")
 	assert(int(survivor.body.collision_layer) == 0 and int(survivor_ray_body.collision_layer) == 0, "controller release removes its ray-only collision layer")
 	var direct_body := StaticBody3D.new()
 	direct_body.collision_layer = 0
@@ -304,6 +303,10 @@ func _run() -> void:
 	assert(is_instance_valid(arch_blocker), "the center welcome arch frame is registered for obstruction rays")
 	assert((int(arch_blocker.collision_layer) & 1) == 1 and (int(arch_blocker.collision_layer) & OCCLUSION_LAYER) != 0, "arch ray registration preserves its original walk-collision layer")
 	var arch_group_id := int(park_world.occlusion_controller._collider_to_group.get(arch_blocker.get_instance_id(), 0))
+	var arch_surface := arch_blocker.get_parent() as GeometryInstance3D
+	var arch_coastal_material := arch_surface.material_override as ShaderMaterial
+	assert(arch_coastal_material != null and arch_coastal_material.shader == CoastalMaterialShader, "registered arch surface retains its coastal material shader")
+	assert(arch_coastal_material.get_shader_parameter("atlas_texture") != null, "registered arch surface retains the coastal atlas texture")
 	var arch_title: Label3D
 	var rear_arch_title: Label3D
 	var unrelated_label: Label3D
@@ -361,6 +364,8 @@ func _run() -> void:
 	assert(not arch_title.visible, "the title is hidden again before controller release")
 	park_world.occlusion_controller.release()
 	assert(arch_title.visible and arch_title.modulate == arch_title_modulate, "controller release restores the title's exact prior visibility and modulation")
+	assert(arch_surface.material_override == arch_coastal_material, "controller release restores the registered arch's final coastal material")
+	assert(is_equal_approx(float(arch_surface.get_instance_shader_parameter("occlusion_cutaway_weight")),0.0), "release disables the instance cutaway on the restored coastal surface")
 	park_world.queue_free()
 	await process_frame
 	print("PASS: occlusion controller runtime checks")
