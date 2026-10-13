@@ -52,7 +52,7 @@ func _run() -> void:
 	var before_achievements: Dictionary = progress.achievements.duplicate(true)
 	var before_quests: Dictionary = progress.quests.duplicate(true)
 	var before_coins := progress.coins
-	
+
 	_overlay = Control.new()
 	_overlay.name = "AlbumOverlay"
 	_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

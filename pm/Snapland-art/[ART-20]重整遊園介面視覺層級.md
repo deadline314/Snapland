@@ -145,3 +145,5 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 ![島嶼地圖](images/ART-20-island-final-map-1280.png)
 
 本輪提交基準：`e0a332b`；分支：`feature/island-experience`。共用改動涉及 MAIN-13 的收藏卡片顯示，沒有更改收藏資格或重新發獎勵。本段是程式化操作及原生畫面檢查，沒有人工試玩或試聽宣稱。
+
+本輪介面程式與原生證據提交：[442a88f](https://github.com/deadline314/Snapland/commit/442a88f)。文件已核對為分類頁籤在捲動區內、返回操作在區外；僅清除照片檢視測試的尾隨空白，介面行為未變。本輪照片取得與重開原圖另见 [MAIN-16 交付](https://github.com/deadline314/Snapland/commit/55466d2)。
