@@ -180,6 +180,6 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 [整圈路線報告](images/ART-17-island-motion-finalproof-report.json) · [整圈路線log](images/ART-17-island-motion-finalproof.log) · [九張截圖聯絡表](images/ART-17-island-motion-finalproof-contact.png) · [正常影片](images/ART-17-island-motion-finalproof-normal.mp4) · [四分之一速影片](images/ART-17-island-motion-finalproof-quarter.mp4)。兩段影片為離線Movie Maker輸出與壓縮交付，不作即時效能基準。
 
-本輪驗收證據基準：`b2c44bf`；分支：`feature/island-experience`。程式與證據提交連結待Root完成交付整理後補入。
+本輪驗收證據基準：`b2c44bf`；分支：`feature/island-experience`。本輪程式與證據提交：[b4c3f77](https://github.com/deadline314/Snapland/commit/b4c3f77c281e293a43dc69d8b3aca933c1e48a58)。[整組逐票交付紀錄](images/ART-17-session-delivery.md)。
 
 票況維持進行中；完整角色動作／外觀覆蓋、打包播放、降低動態完整驗收仍未勾選。
