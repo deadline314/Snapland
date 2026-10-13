@@ -50,7 +50,7 @@
 
 驗收：三項遊戲局部測試與十八項 Python 檢查通過。主 Session 使用原生 Forward+／WASAPI 從同一個 Main 場景錄製約 32.8 秒混音，核對實際來源切換、完整結算短曲、靜音及恢復；PCM 無飽和，靜音中段峰值為零，恢復音量與原值一致，並實際看過原生截圖。此為腳本驅動的音訊技術驗收，沒有把它描述成三區走訪或小遊戲試玩。**待本機原生耳機／喇叭試聽完整兩次循環、音色、密集操作與耐聽度**，相關條件未勾選；十二款獨立配樂與日夜完整聲景仍依 MIC-2 驗收。
 
-分支：`feature/island-experience`；固定開始基準：`89bf0b4`；[開票 commit](https://github.com/deadline314/Snapland/commit/4916828bb3e75a2783bcd1fbec55fa6a63cead22)。
+分支：`feature/island-experience`；固定開始基準：`89bf0b4`；[程式與證據 commit](https://github.com/deadline314/Snapland/commit/a2ec6985bd989aa46d1be56d3f70cbf1b1f53ccd)；[開票 commit](https://github.com/deadline314/Snapland/commit/4916828bb3e75a2783bcd1fbec55fa6a63cead22)。
 
 跨組最小變動：[主場景的發音連接](../../game/main.gd) 將小遊戲命中與完整結算聲分開；沒有以本票宣稱角色動畫或美術已驗收。
 
