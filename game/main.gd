@@ -8,6 +8,7 @@ const PhotoStage = preload("res://game/ui/photo_stage.gd")
 const WardrobePanel = preload("res://game/ui/wardrobe_panel.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TimePanel = preload("res://game/ui/time_panel.gd")
+const SettingsPanel = preload("res://game/ui/settings_panel.gd")
 const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
 const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 var world: Node3D
@@ -1500,35 +1501,8 @@ func _show_map() -> void:
 
 func _show_settings() -> void:
 	var body := _open("把這趟遊園，調成你的步調。","SETTINGS","settings")
-	var list := _scroll(body,300)
-	var sound_card := Paper.card(list,Color("#fffaf0"),6)
-	sound_card.add_child(Paper.section_title("聲音與閱讀"))
-	for entry in [["master_volume","總音量"],["music_volume","背景音樂"],["sfx_volume","互動音效"],["text_speed","對話文字速度"]]:
-		var row := HBoxContainer.new()
-		sound_card.add_child(row)
-		var label := Paper.label(entry[1],20)
-		label.custom_minimum_size.x=220
-		row.add_child(label)
-		var slider := HSlider.new()
-		slider.custom_minimum_size=Vector2(360,44)
-		slider.min_value=0.5 if entry[0]=="text_speed" else 0.0
-		slider.max_value=2.0 if entry[0]=="text_speed" else 1.0
-		slider.step=0.05
-		slider.value=float(Progress.settings.get(entry[0],1.0))
-		var key: String=entry[0]
-		slider.value_changed.connect(func(value: float): Progress.set_setting(key,value))
-		row.add_child(slider)
-	var access_card := Paper.card(list,Color("#f1e8d3"),5)
-	access_card.add_child(Paper.section_title("遊玩方式與顯示"))
-	for entry in [["assist","輔助遊玩：放寬時間與判定，仍可收藏"],["reduced_motion","降低動態：停止水波與裝飾擺動"],["fullscreen","使用全螢幕"]]:
-		var toggle := CheckButton.new()
-		toggle.text=entry[1]
-		toggle.custom_minimum_size.y=44
-		toggle.button_pressed=bool(Progress.settings.get(entry[0],false))
-		var key: String=entry[0]
-		toggle.toggled.connect(func(value: bool): Progress.set_setting(key,value))
-		access_card.add_child(toggle)
-	access_card.add_child(Paper.label("快捷鍵可在航海旅券「操作速查」重看。",18,Paper.DEEP_TEAL))
+	var settings := SettingsPanel.new()
+	settings.open(self,body)
 	_back(body)
 
 func _show_wardrobe() -> void:
@@ -1918,12 +1892,3 @@ func _fit_modal_viewport() -> void:
 		# Control grows when a category briefly has a larger minimum. Refresh its
 		# parent-sized extent after text/content adaptation so it can shrink again.
 		center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-func _scroll(parent: VBoxContainer, height := 330) -> VBoxContainer:
-	# The generic modal already owns the bounded scrolling region.
-	var box := VBoxContainer.new()
-	box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation",10)
-	parent.add_child(box)
-	return box
-

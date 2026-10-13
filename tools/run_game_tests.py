@@ -112,10 +112,12 @@ def main() -> int:
             ("island game entry tests", common + ["res://game/tests/test_island_game_entry.tscn"]),
             ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
             ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
+            ("pixel UI shell tests", common + ["res://game/tests/test_pixel_ui_shell.tscn"]),
             ("pixel UI popup tests", common + ["--script", "res://game/tests/test_pixel_ui_popup_bounds.gd"]),
             ("pixel UI button depth tests", common + ["--script", "res://game/tests/test_pixel_button_depth.gd"]),
             ("pixel UI collection tests", common + ["res://game/tests/test_pixel_ui_collections.tscn"]),
             ("pixel tutorial page tests", common + ["--script", "res://game/tests/test_tutorial_paged_viewport.gd"]),
+            ("pixel UI customization tests", common + ["res://game/tests/test_pixel_ui_customization.tscn"]),
         ]
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
@@ -137,10 +139,12 @@ def main() -> int:
             if engine_errors:
                 return fail(f"{label} logged engine errors:\n" + "\n".join(engine_errors[-40:]))
             pass_markers = {
+                "pixel UI shell tests": "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920",
                 "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",
                 "pixel UI button depth tests": "PASS: Paper pixel-button depth, state, focus and contrast checks",
                 "pixel UI collection tests": "PASS: pixel UI collection, map, achievement, and tutorial checks",
                 "pixel tutorial page tests": "PASS: native-matching tutorial39steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
+                "pixel UI customization tests": "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls",
                 "game startup": "PASS: game startup and clean shutdown",
                 "core runtime tests": "PASS: core runtime checks",
                 "test/review save isolation tests": "PASS: test/review launch detection, absolute isolated paths, userdata/sidecar rejection, and unchanged fake fixtures",

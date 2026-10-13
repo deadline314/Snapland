@@ -16,6 +16,8 @@ var on_collect_postcard: Callable
 var phase_summary: Label
 var collection_summary: Label
 var status: Label
+var postcard_scroll: ScrollContainer
+var postcard_content: VBoxContainer
 var postcard_grid: GridContainer
 var phase_buttons: Dictionary = {}
 var collect_button: Button
@@ -56,8 +58,9 @@ func open(
 
 
 func _build() -> void:
-	body.add_child(Paper.label("隨時換個時段看看海島。只改光線與景色，不推進遊園進度。", 19, Paper.TEAL))
+	# Keep phase choices and the selected postcard in a fixed, non-scrolling page.
 	phase_summary = Paper.label("", 25)
+	phase_summary.tooltip_text = "選擇島上的光線與景色；套用不會推進遊園進度。"
 	body.add_child(phase_summary)
 	var choices := GridContainer.new()
 	choices.columns = 2
@@ -71,67 +74,79 @@ func _build() -> void:
 		button.name = "TimePhase_%s" % phase_id
 		button.toggle_mode = true
 		phase_buttons[phase_id] = button
-	collection_summary = Paper.label("", 18, Paper.TEAL)
-	body.add_child(collection_summary)
-	var postcard_scroll := ScrollContainer.new()
-	postcard_scroll.custom_minimum_size = Vector2(0, 154)
+	postcard_scroll = ScrollContainer.new()
+	postcard_scroll.name = "TimePostcardScroll"
+	postcard_scroll.custom_minimum_size = Vector2.ZERO
 	postcard_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	postcard_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	postcard_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	postcard_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	body.add_child(postcard_scroll)
+	postcard_content = VBoxContainer.new()
+	postcard_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	postcard_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	postcard_content.add_theme_constant_override("separation", 6)
+	postcard_scroll.add_child(postcard_content)
+	collection_summary = Paper.label("", 18, Paper.TEAL)
+	collection_summary.tooltip_text = "到中央廣場的導覽合照點，可收集目前時段的紀念拍貼。"
+	postcard_content.add_child(collection_summary)
 	postcard_grid = GridContainer.new()
-	postcard_grid.columns = 4
+	postcard_grid.name = "SelectedTimePostcard"
+	postcard_grid.columns = 1
 	postcard_grid.add_theme_constant_override("h_separation", 8)
 	postcard_grid.add_theme_constant_override("v_separation", 8)
-	postcard_scroll.add_child(postcard_grid)
+	postcard_content.add_child(postcard_grid)
 	_refresh_postcard_cards()
 	if can_collect_here:
 		collect_button = Paper.button("", _collect_current, body)
 		collect_button.name = "CollectTimePostcard"
 	else:
 		collect_button = null
-		body.add_child(Paper.label("到中央廣場的導覽合照點，可收集目前時段的紀念拍貼。", 16, Paper.GOLD))
 	status = Paper.label("", 16, Paper.TEAL)
-	body.add_child(status)
+	status.name = "TimePanelStatus"
+	status.visible = false
+	postcard_content.add_child(status)
 
 func _refresh_postcard_cards() -> void:
 	for child in postcard_grid.get_children():
 		postcard_grid.remove_child(child)
 		child.queue_free()
-	for phase: Dictionary in TimeOfDay.PHASES:
-		var phase_id := str(phase.id)
-		var earned := collected.has(TimeOfDay.postcard_id(phase_id))
-		var card := PanelContainer.new()
-		card.custom_minimum_size = Vector2(210, 126)
-		card.add_theme_stylebox_override("panel", Paper.plaque(Color("#fff9e9") if earned else Color("#e9e3d4")))
-		var card_body := VBoxContainer.new()
-		card_body.add_theme_constant_override("separation", 3)
-		card.add_child(card_body)
-		var image := _load_frame(str(frame_paths.get(phase_id, "")))
-		if image != null:
-			var thumbnail := TextureRect.new()
-			thumbnail.texture = image
-			thumbnail.custom_minimum_size = Vector2(178, 72)
-			thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			card_body.add_child(thumbnail)
-		else:
-			card_body.add_child(Paper.icon("album" if earned else "ticket", 30, Paper.TEAL if earned else Color("#978e7a")))
-		var copy := VBoxContainer.new()
-		copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		card_body.add_child(copy)
-		copy.add_child(Paper.label("%s · %s" % [str(phase.label), str(phase.clock)], 18, Paper.TEAL))
-		copy.add_child(Paper.label("已收進紀念拍貼" if earned else "尚未收藏", 15))
-		postcard_grid.add_child(card)
+	var phase: Dictionary = TimeOfDay.phase_for_id(current_phase)
+	var earned := collected.has(TimeOfDay.postcard_id(current_phase))
+	var card := PanelContainer.new()
+	card.name = "TimePostcardDetail"
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override("panel", Paper.plaque(Color("#fff9e9") if earned else Color("#e9e3d4")))
+	var card_body := HBoxContainer.new()
+	card_body.add_theme_constant_override("separation", 12)
+	card.add_child(card_body)
+	var image := _load_frame(str(frame_paths.get(current_phase, "")))
+	if image != null:
+		var thumbnail := TextureRect.new()
+		thumbnail.texture = image
+		thumbnail.custom_minimum_size = Vector2(178, 72)
+		thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		card_body.add_child(thumbnail)
+	else:
+		card_body.add_child(Paper.icon("album" if earned else "ticket", 48, Paper.TEAL if earned else Color("#978e7a")))
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	card_body.add_child(copy)
+	copy.add_child(Paper.label("%s · %s" % [str(phase.label), str(phase.clock)], 20, Paper.TEAL))
+	copy.add_child(Paper.label("已收進紀念拍貼" if earned else "尚未收藏", 16))
+	postcard_grid.add_child(card)
 
 
 func _choose_phase(phase_id: String) -> void:
 	if phase_id == current_phase:
 		return
 	if not on_select_phase.is_valid() or on_select_phase.call(phase_id) != true:
-		status.text = "時段沒有套用，請稍後再試。"
+		_set_status("時段沒有套用，請稍後再試。")
 		return
 	current_phase = phase_id
-	status.text = "已切換到%s。" % TimeOfDay.phase_for_id(current_phase).label
+	_set_status("已切換到%s。" % TimeOfDay.phase_for_id(current_phase).label)
 	_refresh()
 
 
@@ -141,7 +156,7 @@ func _collect_current() -> void:
 	if collecting or not can_collect_here or collected.has(card_id):
 		return
 	if not on_collect_postcard.is_valid():
-		status.text = "拍貼沒有收進收藏，請確認目前位置。"
+		_set_status("拍貼沒有收進收藏，請確認目前位置。")
 		return
 	collecting = true
 	_refresh()
@@ -150,30 +165,35 @@ func _collect_current() -> void:
 		return
 	collecting = false
 	if typeof(frame_path) != TYPE_STRING or str(frame_path).is_empty():
-		status.text = "拍貼沒有收進收藏；請重試，這次不會扣幣。"
+		_set_status("拍貼沒有收進收藏；請重試，這次不會扣幣。")
 		_refresh()
 		return
 	collected.append(card_id)
 	frame_paths[phase_id] = str(frame_path)
-	_refresh_postcard_cards()
-	status.text = "已收藏%s時段拍貼，獲得 20 枚海島幣。" % TimeOfDay.phase_for_id(phase_id).label
+	_set_status("已收藏%s時段拍貼，獲得 20 枚海島幣。" % TimeOfDay.phase_for_id(phase_id).label)
 	_refresh()
 
 
 func _refresh() -> void:
 	var phase: Dictionary = TimeOfDay.phase_for_id(current_phase)
 	phase_summary.text = "目前時段：%s　%s" % [str(phase.label), str(phase.clock)]
-	collection_summary.text = "時段拍貼：%d / %d" % [collected.size(), TimeOfDay.PHASES.size()]
+	var current_collected := collected.has(TimeOfDay.postcard_id(current_phase))
+	collection_summary.text = "四時拍貼：%d / %d　·　%s：%s" % [collected.size(), TimeOfDay.PHASES.size(), str(phase.label), "已收藏" if current_collected else "尚未收藏"]
 	for phase_id in phase_buttons:
 		var button: Button = phase_buttons[phase_id]
 		button.button_pressed = phase_id == current_phase
 		button.disabled = phase_id == current_phase
+	_refresh_postcard_cards()
 	if collect_button == null:
 		return
 	var card_id := TimeOfDay.postcard_id(current_phase)
 	var already_collected := collected.has(card_id)
 	collect_button.text = "目前時段拍貼已收藏" if already_collected else "收集目前時段拍貼　+20 幣"
 	collect_button.disabled = already_collected or collecting
+
+func _set_status(message: String) -> void:
+	status.text = message
+	status.visible = not message.is_empty()
 
 func _load_frame(path: String) -> Texture2D:
 	if path.is_empty() or not FileAccess.file_exists(path):

@@ -26,6 +26,7 @@ const DEFAULT_SETTINGS := {
 	"text_speed": 1.0,
 	"assist": false,
 	"fullscreen": false,
+	"ui_scale": 1.0,
 	"time_phase": TimeOfDay.DEFAULT_PHASE,
 }
 const WELCOME_GAME_IDS := [
@@ -607,6 +608,8 @@ func set_setting(key: String, value: Variant) -> void:
 			return
 		if key.ends_with("_volume"):
 			settings[key] = clampf(float(value), 0.0, 1.0)
+		elif key == "ui_scale":
+			settings[key] = clampf(float(value), 1.0, 1.25)
 		else:
 			settings[key] = clampf(float(value), 0.5, 2.0)
 	_apply_setting(key)
@@ -909,7 +912,7 @@ func _apply_loaded_setting(key: String, value: Variant) -> void:
 			settings[key] = value
 	else:
 		if typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)):
-			settings[key] = clampf(float(value), 0.0, 1.0) if key.ends_with("_volume") else clampf(float(value), 0.5, 2.0)
+			settings[key] = clampf(float(value), 0.0, 1.0) if key.ends_with("_volume") else (clampf(float(value), 1.0, 1.25) if key == "ui_scale" else clampf(float(value), 0.5, 2.0))
 	_apply_setting(key)
 
 func _valid_quest_step(value: Variant) -> bool:
