@@ -1,0 +1,1480 @@
+{
+  "method": "Root targeted CPU suites plus native GPU UI presentation and routed input; not human gameplay, listening or performance acceptance",
+  "cpu_suite_count": 36,
+  "cpu": [
+    {
+      "suite": "test_album_photo_viewer",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: saved album photo viewer, focus return, and immutable progress"
+      ],
+      "private_run": "pixel-test_album_photo_viewer-f16b1852"
+    },
+    {
+      "suite": "test_avatar_motion_rig",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: eight direction 3D gait model/source/sole/cancellation/bounded resource tests; native quality pending"
+      ],
+      "private_run": "pixel-test_avatar_motion_rig-98b32ef2"
+    },
+    {
+      "suite": "test_balloon_harbor_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: isolated miniature harbor view (68 checks)"
+      ],
+      "private_run": "pixel-test_balloon_harbor_view-0f93d4f8"
+    },
+    {
+      "suite": "test_bench_swap_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "Bench swap view: 80 checks passed"
+      ],
+      "private_run": "pixel-test_bench_swap_view-e38dc2b9"
+    },
+    {
+      "suite": "test_bubble_photo_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: bubble photo view (111 checks)"
+      ],
+      "private_run": "pixel-test_bubble_photo_view-36da43b5"
+    },
+    {
+      "suite": "test_core",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: core runtime checks"
+      ],
+      "private_run": "pixel-test_core-f0ff3f4b"
+    },
+    {
+      "suite": "test_crowd_crossing_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: overhead crowd-crossing view (64 checks)"
+      ],
+      "private_run": "pixel-test_crowd_crossing_view-4bd77b80"
+    },
+    {
+      "suite": "test_crowd_semaphore_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: 3D crowd semaphore view (30 checks)"
+      ],
+      "private_run": "pixel-test_crowd_semaphore_view-73e3d167"
+    },
+    {
+      "suite": "test_hat_rescue_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "Hat rescue view: 55 checks passed"
+      ],
+      "private_run": "pixel-test_hat_rescue_view-29c897da"
+    },
+    {
+      "suite": "test_integration",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: main scene integration checks"
+      ],
+      "private_run": "pixel-test_integration-d63c728d"
+    },
+    {
+      "suite": "test_island_dialogue",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: island dialogue panel and bounded, speaker-pitched beep"
+      ],
+      "private_run": "pixel-test_island_dialogue-1adc2c9e"
+    },
+    {
+      "suite": "test_island_game_entry",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: 12 compact invites and first-entry/optional-rule flow; distinct copy, screenshot/replay, practice/assist leave, and no-award rules"
+      ],
+      "private_run": "pixel-test_island_game_entry-4b69c8c7"
+    },
+    {
+      "suite": "test_melody_memory_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "Melody memory view: 54 checks passed"
+      ],
+      "private_run": "pixel-test_melody_memory_view-532d39a2"
+    },
+    {
+      "suite": "test_minigame_hud",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: minigame HUD hierarchy checks (69 checks)"
+      ],
+      "private_run": "pixel-test_minigame_hud-7973df63"
+    },
+    {
+      "suite": "test_minigames",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: welcome minigame checks (81 cases)"
+      ],
+      "private_run": "pixel-test_minigames-6435acb4"
+    },
+    {
+      "suite": "test_missing_walk_idle_lifecycle",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: missing authored side walk preserves idle lifecycle and measured route after dialogue"
+      ],
+      "private_run": "pixel-test_missing_walk_idle_lifecycle-bf30cae4"
+    },
+    {
+      "suite": "test_npc_activity",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: NPC activity runtime checks (role registration, safe fallback, route gating, pause, and cleanup)"
+      ],
+      "private_run": "pixel-test_npc_activity-f14592f6"
+    },
+    {
+      "suite": "test_npc_dialogue_hold",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: Main NPC dialogue hold lifecycle"
+      ],
+      "private_run": "pixel-test_npc_dialogue_hold-daa217b3"
+    },
+    {
+      "suite": "test_npc_walk_direction_lifecycle",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: imp same-view long-frame support epoch, route turns, settlement and tiny-frame restart"
+      ],
+      "private_run": "pixel-test_npc_walk_direction_lifecycle-5e943e04"
+    },
+    {
+      "suite": "test_npc_walk_motion",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: optional three-role measured gait, source fallback, pause/hold lifecycle, and measured announcer leg costume"
+      ],
+      "private_run": "pixel-test_npc_walk_motion-0d58c67d"
+    },
+    {
+      "suite": "test_npc_world_activity",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: NPC world activity integration"
+      ],
+      "private_run": "pixel-test_npc_world_activity-df76ac44"
+    },
+    {
+      "suite": "test_photo_originals",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: bounded photo originals, shared collection metadata, safe viewer loading"
+      ],
+      "private_run": "pixel-test_photo_originals-bca8e80f"
+    },
+    {
+      "suite": "test_pixel_button_depth",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: Paper pixel-button depth, state, focus and contrast checks"
+      ],
+      "private_run": "pixel-test_pixel_button_depth-2f456c8e"
+    },
+    {
+      "suite": "test_pixel_ui_collections",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: pixel UI collection, map, achievement, and tutorial checks"
+      ],
+      "private_run": "pixel-test_pixel_ui_collections-b07af580"
+    },
+    {
+      "suite": "test_pixel_ui_customization",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls"
+      ],
+      "private_run": "pixel-test_pixel_ui_customization-884de3a8"
+    },
+    {
+      "suite": "test_pixel_ui_minigames",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes"
+      ],
+      "private_run": "pixel-test_pixel_ui_minigames-8bdfa89d"
+    },
+    {
+      "suite": "test_pixel_ui_popup_bounds",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text"
+      ],
+      "private_run": "pixel-test_pixel_ui_popup_bounds-dfd0e152"
+    },
+    {
+      "suite": "test_pixel_ui_shell",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920"
+      ],
+      "private_run": "pixel-test_pixel_ui_shell-5516b318"
+    },
+    {
+      "suite": "test_shadow_theatre_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "Shadow theatre view: 50 checks passed"
+      ],
+      "private_run": "pixel-test_shadow_theatre_view-c0b29646"
+    },
+    {
+      "suite": "test_sign_balance_view",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "Sign balance view: 80 checks passed"
+      ],
+      "private_run": "pixel-test_sign_balance_view-569ded52"
+    },
+    {
+      "suite": "test_time_of_day",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: time-of-day runtime checks"
+      ],
+      "private_run": "pixel-test_time_of_day-d4b4dddf"
+    },
+    {
+      "suite": "test_travel_book_ui",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: travel map, paged collection book, achievement stamps, and reduce-motion hook"
+      ],
+      "private_run": "pixel-test_travel_book_ui-6cd03e39"
+    },
+    {
+      "suite": "test_tutorial_paged_viewport",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: native-matching tutorial39steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel"
+      ],
+      "private_run": "pixel-test_tutorial_paged_viewport-392829d1"
+    },
+    {
+      "suite": "test_tutorial_panel",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: tutorial panel/catalog checks"
+      ],
+      "private_run": "pixel-test_tutorial_panel-b46fb46d"
+    },
+    {
+      "suite": "test_tutorial_seen_progress",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: tutorial seen progress and failed-save start checks"
+      ],
+      "private_run": "pixel-test_tutorial_seen_progress-83468453"
+    },
+    {
+      "suite": "test_wardrobe_ui",
+      "status": "PASS",
+      "error_count": 0,
+      "pass_summaries": [
+        "PASS: wardrobe UI runtime checks"
+      ],
+      "private_run": "pixel-test_wardrobe_ui-8db32c26"
+    }
+  ],
+  "native": [
+    {
+      "captures": [
+        {
+          "frame": 17,
+          "page": "hud",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-hud-800x450-scale1.25.png"
+        },
+        {
+          "frame": 28,
+          "page": "pause",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-800x450-scale1.25.png"
+        },
+        {
+          "frame": 33,
+          "page": "pause-hover",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-hover-800x450-scale1.25.png"
+        },
+        {
+          "frame": 38,
+          "page": "pause-pressed",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-pressed-800x450-scale1.25.png"
+        },
+        {
+          "frame": 60,
+          "page": "ticket",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-ticket-800x450-scale1.25.png"
+        },
+        {
+          "frame": 65,
+          "page": "map",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-map-800x450-scale1.25.png"
+        },
+        {
+          "frame": 70,
+          "page": "tasks",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-tasks-800x450-scale1.25.png"
+        },
+        {
+          "frame": 75,
+          "page": "album-empty",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-album-empty-800x450-scale1.25.png"
+        },
+        {
+          "frame": 80,
+          "page": "exploration-photo-stage",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-photo-stage-800x450-scale1.25.png"
+        },
+        {
+          "frame": 85,
+          "page": "exploration-2",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-2-800x450-scale1.25.png"
+        },
+        {
+          "frame": 90,
+          "page": "exploration-3",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-3-800x450-scale1.25.png"
+        },
+        {
+          "frame": 99,
+          "page": "exploration-3-standee",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-3-standee-800x450-scale1.25.png"
+        },
+        {
+          "frame": 105,
+          "page": "album-filled",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-album-filled-800x450-scale1.25.png"
+        },
+        {
+          "frame": 117,
+          "page": "photo-original-viewer",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-photo-original-viewer-800x450-scale1.25.png"
+        },
+        {
+          "frame": 122,
+          "page": "achievements",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-achievements-800x450-scale1.25.png"
+        },
+        {
+          "frame": 127,
+          "page": "tutorial",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-tutorial-800x450-scale1.25.png"
+        },
+        {
+          "frame": 137,
+          "page": "wardrobe-appearance",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-appearance-800x450-scale1.25.png"
+        },
+        {
+          "frame": 149,
+          "page": "wardrobe-popup",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-popup-800x450-scale1.25.png"
+        },
+        {
+          "frame": 158,
+          "page": "wardrobe-closet",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-closet-800x450-scale1.25.png"
+        },
+        {
+          "frame": 163,
+          "page": "wardrobe-shop",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-shop-800x450-scale1.25.png"
+        },
+        {
+          "frame": 168,
+          "page": "settings-audio",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-audio-800x450-scale1.25.png"
+        },
+        {
+          "frame": 177,
+          "page": "settings-play",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-play-800x450-scale1.25.png"
+        },
+        {
+          "frame": 186,
+          "page": "settings-controls",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-controls-800x450-scale1.25.png"
+        },
+        {
+          "frame": 191,
+          "page": "time",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-time-800x450-scale1.25.png"
+        },
+        {
+          "frame": 316,
+          "page": "dialogue",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-dialogue-800x450-scale1.25.png"
+        },
+        {
+          "frame": 321,
+          "page": "invitation",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-invitation-800x450-scale1.25.png"
+        },
+        {
+          "frame": 326,
+          "page": "rules",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-rules-800x450-scale1.25.png"
+        },
+        {
+          "frame": 351,
+          "page": "minigame-hud",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-hud-800x450-scale1.25.png"
+        },
+        {
+          "frame": 356,
+          "page": "minigame-score-details",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-score-details-800x450-scale1.25.png"
+        },
+        {
+          "frame": 361,
+          "page": "minigame-hud-pause",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-hud-pause-800x450-scale1.25.png"
+        },
+        {
+          "frame": 370,
+          "page": "minigame-confirmation",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-confirmation-800x450-scale1.25.png"
+        },
+        {
+          "frame": 375,
+          "page": "minigame-pause",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-pause-800x450-scale1.25.png"
+        },
+        {
+          "frame": 380,
+          "page": "result-practice",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-result-practice-800x450-scale1.25.png"
+        }
+      ],
+      "failures": [],
+      "method": "native Main UI presentation; scripted page opening, routed Escape/Tab and pointer controls; synthetic collection/result data in isolated profile",
+      "physical_window": [
+        800,
+        450
+      ],
+      "result": "PASS",
+      "settings_control_geometry": {
+        "grid": "[P: (56.0, 272.0), S: (1166.0, 319.0)]",
+        "labels": [
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(74.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (56.0, 272.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "移動",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(271.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (350.0, 272.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "W A S D／方向鍵",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(74.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (644.0, 272.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "慢走",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(161.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (938.0, 272.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "按住 Shift",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(74.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (56.0, 333.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "互動",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(23.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (350.0, 333.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "E",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(74.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (644.0, 333.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "招呼",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(22.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (938.0, 333.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "F",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(74.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (56.0, 394.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "拍照",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(25.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (350.0, 394.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "P",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(74.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (644.0, 394.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "衣櫃",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(25.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (938.0, 394.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "C",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(74.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (56.0, 455.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "時段",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(24.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (350.0, 455.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "T",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(74.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (644.0, 455.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "旅券",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(31.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (938.0, 455.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "M",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(182.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (56.0, 516.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "暫停／返回",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(58.0, 57.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (350.0, 516.0), S: (284.0, 57.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "Esc",
+            "visible": true
+          }
+        ],
+        "minimum": "(718.0, 301.0)"
+      },
+      "text_scale": 1.25
+    },
+    {
+      "captures": [
+        {
+          "frame": 17,
+          "page": "hud",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-hud-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 28,
+          "page": "pause",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 33,
+          "page": "pause-hover",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-hover-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 38,
+          "page": "pause-pressed",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-pressed-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 60,
+          "page": "ticket",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-ticket-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 65,
+          "page": "map",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-map-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 70,
+          "page": "tasks",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-tasks-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 75,
+          "page": "album-empty",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-album-empty-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 80,
+          "page": "exploration-photo-stage",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-photo-stage-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 85,
+          "page": "exploration-2",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-2-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 90,
+          "page": "exploration-3",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-3-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 99,
+          "page": "exploration-3-standee",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-3-standee-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 105,
+          "page": "album-filled",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-album-filled-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 117,
+          "page": "photo-original-viewer",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-photo-original-viewer-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 122,
+          "page": "achievements",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-achievements-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 127,
+          "page": "tutorial",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-tutorial-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 137,
+          "page": "wardrobe-appearance",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-appearance-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 149,
+          "page": "wardrobe-popup",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-popup-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 158,
+          "page": "wardrobe-closet",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-closet-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 163,
+          "page": "wardrobe-shop",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-shop-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 168,
+          "page": "settings-audio",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-audio-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 177,
+          "page": "settings-play",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-play-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 186,
+          "page": "settings-controls",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-controls-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 191,
+          "page": "time",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-time-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 316,
+          "page": "dialogue",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-dialogue-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 321,
+          "page": "invitation",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-invitation-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 326,
+          "page": "rules",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-rules-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 351,
+          "page": "minigame-hud",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-hud-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 356,
+          "page": "minigame-score-details",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-score-details-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 361,
+          "page": "minigame-hud-pause",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-hud-pause-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 370,
+          "page": "minigame-confirmation",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-confirmation-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 375,
+          "page": "minigame-pause",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-pause-1280x720-scale1.00.png"
+        },
+        {
+          "frame": 380,
+          "page": "result-practice",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-result-practice-1280x720-scale1.00.png"
+        }
+      ],
+      "failures": [],
+      "method": "native Main UI presentation; scripted page opening, routed Escape/Tab and pointer controls; synthetic collection/result data in isolated profile",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "result": "PASS",
+      "settings_control_geometry": {
+        "grid": "[P: (148.0, 245.0), S: (984.0, 321.0)]",
+        "labels": [
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(38.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (148.0, 245.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "移動",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(136.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (397.0, 245.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "W A S D／方向鍵",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(38.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (646.0, 245.0), S: (238.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "慢走",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(82.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (894.0, 245.0), S: (238.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "按住 Shift",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(38.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (148.0, 281.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "互動",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(13.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (397.0, 281.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "E",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(38.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (646.0, 281.0), S: (238.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "招呼",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(12.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (894.0, 281.0), S: (238.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "F",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(38.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (148.0, 317.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "拍照",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(14.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (397.0, 317.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "P",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(38.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (646.0, 317.0), S: (238.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "衣櫃",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(14.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (894.0, 317.0), S: (238.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "C",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(38.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (148.0, 353.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "時段",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(13.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (397.0, 353.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "T",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(38.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (646.0, 353.0), S: (238.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "旅券",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(17.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (894.0, 353.0), S: (238.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "M",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(92.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (148.0, 389.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "暫停／返回",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(31.0, 32.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (397.0, 389.0), S: (239.0, 32.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "Esc",
+            "visible": true
+          }
+        ],
+        "minimum": "(378.0, 176.0)"
+      },
+      "text_scale": 1.0
+    },
+    {
+      "captures": [
+        {
+          "frame": 17,
+          "page": "hud",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-hud-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 28,
+          "page": "pause",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 33,
+          "page": "pause-hover",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-hover-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 38,
+          "page": "pause-pressed",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-pause-pressed-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 60,
+          "page": "ticket",
+          "path": "pm/Snapland-art/images/ART-23-pixel-final-ticket-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 65,
+          "page": "map",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-map-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 70,
+          "page": "tasks",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-tasks-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 75,
+          "page": "album-empty",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-album-empty-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 80,
+          "page": "exploration-photo-stage",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-photo-stage-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 85,
+          "page": "exploration-2",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-2-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 90,
+          "page": "exploration-3",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-3-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 99,
+          "page": "exploration-3-standee",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-exploration-3-standee-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 105,
+          "page": "album-filled",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-album-filled-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 117,
+          "page": "photo-original-viewer",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-photo-original-viewer-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 122,
+          "page": "achievements",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-achievements-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 127,
+          "page": "tutorial",
+          "path": "pm/Snapland-art/images/ART-24-pixel-final-tutorial-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 137,
+          "page": "wardrobe-appearance",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-appearance-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 149,
+          "page": "wardrobe-popup",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-popup-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 158,
+          "page": "wardrobe-closet",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-closet-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 163,
+          "page": "wardrobe-shop",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-wardrobe-shop-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 168,
+          "page": "settings-audio",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-audio-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 177,
+          "page": "settings-play",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-play-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 186,
+          "page": "settings-controls",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-settings-controls-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 191,
+          "page": "time",
+          "path": "pm/Snapland-art/images/ART-25-pixel-final-time-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 316,
+          "page": "dialogue",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-dialogue-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 321,
+          "page": "invitation",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-invitation-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 326,
+          "page": "rules",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-rules-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 351,
+          "page": "minigame-hud",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-hud-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 356,
+          "page": "minigame-score-details",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-score-details-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 361,
+          "page": "minigame-hud-pause",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-hud-pause-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 370,
+          "page": "minigame-confirmation",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-confirmation-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 375,
+          "page": "minigame-pause",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-minigame-pause-1920x1080-scale1.25.png"
+        },
+        {
+          "frame": 380,
+          "page": "result-practice",
+          "path": "pm/Snapland-art/images/ART-26-pixel-final-result-practice-1920x1080-scale1.25.png"
+        }
+      ],
+      "failures": [],
+      "method": "native Main UI presentation; scripted page opening, routed Escape/Tab and pointer controls; synthetic collection/result data in isolated profile",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "result": "PASS",
+      "settings_control_geometry": {
+        "grid": "[P: (321.0, 335.0), S: (637.0, 151.0)]",
+        "labels": [
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(32.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (321.0, 335.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "移動",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(114.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (483.0, 335.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "W A S D／方向鍵",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(32.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (645.0, 335.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "慢走",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(69.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (807.0, 335.0), S: (151.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "按住 Shift",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(32.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (321.0, 366.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "互動",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(11.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (483.0, 366.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "E",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(32.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (645.0, 366.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "招呼",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(11.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (807.0, 366.0), S: (151.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "F",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(32.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (321.0, 397.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "拍照",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(12.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (483.0, 397.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "P",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(32.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (645.0, 397.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "衣櫃",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(12.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (807.0, 397.0), S: (151.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "C",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(32.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (321.0, 428.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "時段",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(11.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (483.0, 428.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "T",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(32.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (645.0, 428.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "旅券",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(15.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (807.0, 428.0), S: (151.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "M",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+            "minimum": "(77.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (321.0, 459.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "暫停／返回",
+            "visible": true
+          },
+          {
+            "characters": -1,
+            "font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+            "minimum": "(26.0, 27.0)",
+            "modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "ratio": 1.0,
+            "rect": "[P: (483.0, 459.0), S: (152.0, 27.0)]",
+            "self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+            "text": "Esc",
+            "visible": true
+          }
+        ],
+        "minimum": "(322.0, 151.0)"
+      },
+      "text_scale": 1.25
+    }
+  ],
+  "original_test_policy": "70 original selectors and all original markers/assertions preserved; 9 added suites; existing viewer fixture only initializes a real 1280x720 window before construction",
+  "python_entrypoint_tests": 13,
+  "clean_import_run": "pixel-compile-f515f6eb",
+  "formal_profile_sha256": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf",
+  "formal_backup_sha256": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b"
+}

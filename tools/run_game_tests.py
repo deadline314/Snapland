@@ -112,6 +112,8 @@ def main() -> int:
             ("island game entry tests", common + ["res://game/tests/test_island_game_entry.tscn"]),
             ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
             ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
+            ("pixel UI popup tests", common + ["--script", "res://game/tests/test_pixel_ui_popup_bounds.gd"]),
+            ("pixel UI button depth tests", common + ["--script", "res://game/tests/test_pixel_button_depth.gd"]),
         ]
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
@@ -133,6 +135,8 @@ def main() -> int:
             if engine_errors:
                 return fail(f"{label} logged engine errors:\n" + "\n".join(engine_errors[-40:]))
             pass_markers = {
+                "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",
+                "pixel UI button depth tests": "PASS: Paper pixel-button depth, state, focus and contrast checks",
                 "game startup": "PASS: game startup and clean shutdown",
                 "core runtime tests": "PASS: core runtime checks",
                 "test/review save isolation tests": "PASS: test/review launch detection, absolute isolated paths, userdata/sidecar rejection, and unchanged fake fixtures",

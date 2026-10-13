@@ -17,6 +17,7 @@ var ui: Control
 var hud: Control
 var overlay: Control
 var modal_body: VBoxContainer
+var modal_footer: HBoxContainer
 var area_label: Label
 var normal_count_label: Label
 var devil_count_label: Label
@@ -209,6 +210,7 @@ func _quit_game() -> void:
 	get_tree().quit()
 
 func _build_ui() -> void:
+	Paper.set_text_scale(float(Progress.settings.get("ui_scale",1.0)))
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
 	ui=Control.new()
@@ -232,6 +234,10 @@ func _build_ui() -> void:
 	banner_style.content_margin_bottom=8
 	banner.add_theme_stylebox_override("panel",banner_style)
 	hud.add_child(banner)
+	var banner_frame := Paper.PixelFrame.new()
+	banner_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	banner_frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	banner.add_child(banner_frame)
 	var banner_box := VBoxContainer.new()
 	banner_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	banner_box.add_theme_constant_override("separation",4)
@@ -305,6 +311,10 @@ func _build_ui() -> void:
 	context_style.content_margin_bottom=0
 	context_bar.add_theme_stylebox_override("panel",context_style)
 	hud.add_child(context_bar)
+	var context_frame := Paper.PixelFrame.new()
+	context_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	context_frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	context_bar.add_child(context_frame)
 	var row := HBoxContainer.new()
 	context_bar.add_child(row)
 	context_action=Paper.button("",_interact_nearest,row)
@@ -339,6 +349,12 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	for child in overlay.get_children():
 		overlay.remove_child(child)
 		child.queue_free()
+	# Sessions are added later to the same canvas; raise the whole modal,
+	# including its ink and panel face, above that active session.
+	overlay.move_to_front()
+	if is_instance_valid(session):
+		session.set_paused(true)
+		session.set_process_unhandled_input(false)
 	overlay.show()
 	modal_kind=kind
 	world.blocked=true
@@ -349,61 +365,155 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	dim.color=Color(0.06,0.14,0.19,0.74)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.add_child(dim)
+	hud.hide()
 	var center := CenterContainer.new()
+	center.name="AdaptiveMenuCenter"
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	center.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	overlay.add_child(center)
 	var panel := PanelContainer.new()
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var preferred_size := _menu_preferred_size(kind)
 	panel.name="AdaptiveMenuPanel"
-	var menu_scale := Paper.physical_scale(overlay)
-	var menu_width := minf(preferred_size.x/menu_scale,viewport_size.x-32.0/menu_scale)
-	panel.custom_minimum_size=Vector2(menu_width,minf(preferred_size.y/menu_scale,viewport_size.y-32.0/menu_scale))
-	panel.add_theme_stylebox_override("panel",Paper.plaque(Color("#f7efd9")))
+	panel.custom_minimum_size=Vector2.ZERO
+	panel.add_theme_stylebox_override("panel",Paper.plaque())
 	center.add_child(panel)
+	_layout_open_panel(panel)
 	var margin := MarginContainer.new()
-	for side in ["left","right"]: margin.add_theme_constant_override("margin_"+side,18)
-	for side in ["top","bottom"]: margin.add_theme_constant_override("margin_"+side,14)
+	margin.name="AdaptiveMenuMargin"
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side in ["left","right"]: margin.add_theme_constant_override("margin_"+side,14)
+	for side in ["top","bottom"]: margin.add_theme_constant_override("margin_"+side,10)
 	panel.add_child(margin)
-	modal_body=VBoxContainer.new()
-	modal_body.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	modal_body.add_theme_constant_override("separation",10)
-	margin.add_child(modal_body)
+	var shell := VBoxContainer.new()
+	shell.name="AdaptiveMenuShell"
+	shell.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	shell.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	shell.add_theme_constant_override("separation",8)
+	margin.add_child(shell)
+	var frame := Paper.PixelFrame.new()
+	frame.name="PixelOrnamentFrame"
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	panel.add_child(frame)
 	var ticket_heading := HBoxContainer.new()
-	ticket_heading.add_theme_constant_override("separation",10)
-	modal_body.add_child(ticket_heading)
-	ticket_heading.add_child(Paper.icon("ticket",28,Paper.TEAL))
+	ticket_heading.name="AdaptiveMenuHeader"
+	ticket_heading.add_theme_constant_override("separation",12)
+	ticket_heading.custom_minimum_size.y=56
+	shell.add_child(ticket_heading)
+	ticket_heading.add_child(Paper.icon("shell",24,Paper.TEAL))
 	var heading_stack := VBoxContainer.new()
 	heading_stack.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	heading_stack.add_theme_constant_override("separation",1)
 	ticket_heading.add_child(heading_stack)
-	heading_stack.add_child(Paper.label("島郵局   /   "+subtitle,16,Paper.TEAL))
-	heading_stack.add_child(Paper.label(title,30))
-	var content_scroll := ScrollContainer.new()
-	content_scroll.name="AdaptiveMenuScroll"
-	content_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
-	content_scroll.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	content_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	content_scroll.follow_focus=true
-	modal_body.add_child(content_scroll)
+	var eyebrow := Paper.label("SNAPLAND   /   "+subtitle,14,Paper.TEAL)
+	eyebrow.name="AdaptiveMenuEyebrow"
+	heading_stack.add_child(eyebrow)
+	var title_label := Paper.label(title,25)
+	title_label.name="AdaptiveMenuTitle"
+	heading_stack.add_child(title_label)
 	var content := VBoxContainer.new()
 	content.name="AdaptiveMenuContent"
 	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	content.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("separation",10)
-	content_scroll.add_child(content)
+	shell.add_child(content)
+	modal_body=shell
+	modal_footer=HBoxContainer.new()
+	modal_footer.name="AdaptiveMenuFooter"
+	modal_footer.alignment=BoxContainer.ALIGNMENT_END
+	modal_footer.add_theme_constant_override("separation",10)
+	modal_footer.custom_minimum_size.y=0
+	shell.add_child(modal_footer)
 	call_deferred("_adapt_open_menu")
 	if not get_tree().root.size_changed.is_connected(_adapt_open_menu):
 		get_tree().root.size_changed.connect(_adapt_open_menu)
 	return content
 
-func _scroll(parent: VBoxContainer, height := 330) -> VBoxContainer:
-	# The generic modal already owns the bounded scrolling region.
-	var box := VBoxContainer.new()
-	box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation",10)
-	parent.add_child(box)
-	return box
+func _content_pager(parent: VBoxContainer, node_name: String, entries: Array, render: Callable, capacity: int, navigation_parent: Node = null) -> VBoxContainer:
+	var pager := VBoxContainer.new()
+	pager.name=node_name
+	pager.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	pager.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	pager.add_theme_constant_override("separation",8)
+	parent.add_child(pager)
+	pager.set_meta("page_entries",entries)
+	pager.set_meta("page_renderer",render)
+	pager.set_meta("page_capacity",capacity)
+	var view := VBoxContainer.new()
+	view.name="PageContent"
+	view.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	view.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	view.add_theme_constant_override("separation",10)
+	if node_name=="TaskPages":
+		var viewport := ScrollContainer.new()
+		viewport.name="AdaptiveMenuScroll"
+		viewport.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		viewport.size_flags_vertical=Control.SIZE_EXPAND_FILL
+		viewport.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+		viewport.vertical_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+		pager.add_child(viewport)
+		viewport.add_child(view)
+	else:
+		pager.add_child(view)
+	var navigation := HBoxContainer.new()
+	navigation.name=node_name+"Navigation"
+	navigation.add_theme_constant_override("separation",8)
+	navigation.alignment=BoxContainer.ALIGNMENT_END
+	(navigation_parent if navigation_parent!=null else pager).add_child(navigation)
+	pager.set_meta("page_navigation",navigation)
+	var previous := Paper.button("‹",_step_content_page.bind(pager,-1),navigation)
+	previous.name=node_name+"Previous"
+	previous.tooltip_text="上一頁"
+	var counter := Paper.label("",16,Paper.TEAL)
+	counter.name="PageCounter"
+	counter.autowrap_mode=TextServer.AUTOWRAP_OFF
+	counter.size_flags_horizontal=Control.SIZE_SHRINK_CENTER
+	navigation.add_child(counter)
+	var next := Paper.button("›",_step_content_page.bind(pager,1),navigation)
+	next.name=node_name+"Next"
+	next.tooltip_text="下一頁"
+	_render_content_page(pager,0)
+	return pager
+
+func _step_content_page(pager: VBoxContainer, amount: int) -> void:
+	if not is_instance_valid(pager): return
+	_render_content_page(pager,int(pager.get_meta("page_index",0))+amount)
+	var navigation: HBoxContainer=pager.get_meta("page_navigation")
+	for control in navigation.get_children():
+		if control is Button and not control.disabled:
+			control.grab_focus()
+			break
+
+func _render_content_page(pager: VBoxContainer, requested: int) -> void:
+	var entries: Array=pager.get_meta("page_entries")
+	var capacity: int=pager.get_meta("page_capacity")
+	var count := maxi(1,ceili(float(entries.size())/capacity))
+	var index := clampi(requested,0,count-1)
+	pager.set_meta("page_index",index)
+	pager.set_meta("page_count",count)
+	var view := pager.find_child("PageContent",true,false) as VBoxContainer
+	for child in view.get_children():
+		view.remove_child(child)
+		child.queue_free()
+	var renderer: Callable=pager.get_meta("page_renderer")
+	for item in range(index*capacity,mini((index+1)*capacity,entries.size())):
+		renderer.call(view,entries[item],item)
+	var navigation: HBoxContainer=pager.get_meta("page_navigation")
+	(navigation.get_child(0) as Button).disabled=index==0
+	(navigation.get_child(1) as Label).text="%d / %d"%[index+1,count]
+	(navigation.get_child(2) as Button).disabled=index==count-1
+	navigation.visible=count>1
+	call_deferred("_adapt_open_menu")
+
+func _adapt_content_pagers(compact: bool) -> void:
+	for node in overlay.find_children("*","VBoxContainer",true,false):
+		if not node.has_meta("page_entries"): continue
+		var capacity := int(node.get_meta("page_capacity"))
+		var desired := capacity
+		if node.name=="TaskPages": desired=1 if compact else 2
+		elif node.name=="ResultScorePages": desired=1 if compact or Paper.text_scale()>1.1 else 2
+		if desired!=capacity:
+			var first := int(node.get_meta("page_index",0))*capacity
+			node.set_meta("page_capacity",desired)
+			_render_content_page(node,floori(float(first)/desired))
 
 func _close() -> void:
 	if modal_kind=="dialogue":
@@ -420,6 +530,7 @@ func _close() -> void:
 	audio.set_paused(false)
 	if session != null:
 		session.process_mode=Node.PROCESS_MODE_INHERIT
+		session.set_process_unhandled_input(true)
 		if session.has_method("set_paused"):
 			session.set_paused(false)
 	if session==null: hud.show()
@@ -427,12 +538,18 @@ func _close() -> void:
 		world.play_action("celebrate")
 
 func _back(parent: Node) -> void:
-	var button := Paper.button("返回遊園  ·  Esc",_close,modal_body)
+	var button := Paper.button("返回遊園  ·  Esc",_close,modal_footer)
+	button.name="MenuBackButton"
+	button.custom_minimum_size=Vector2(190,44)
 	button.grab_focus()
 
 func _refresh() -> void:
 	if not is_instance_valid(ui): return
 	Paper.set_reduced_motion(bool(Progress.settings.get("reduced_motion",false)))
+	Paper.set_text_scale(float(Progress.settings.get("ui_scale",1.0)))
+	if is_instance_valid(ui): ui.theme=Paper.theme()
+	_adapt_hud()
+	_adapt_open_menu()
 	normal_count_label.text="普通 %d / 18"%Progress.normal_count()
 	devil_count_label.text="小惡魔 %d / 12"%Progress.devil_count()
 	coin_count_label.text="%d 幣"%Progress.coins
@@ -590,17 +707,16 @@ func _show_time_panel() -> void:
 	time_capture_token += 1
 	var at_photo_station := session == null and str(world.nearest.get("id", "")) == "guide"
 	var time_card := Paper.card(body,Color("#fffaf0"),8)
+	time_card.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	(time_card.get_parent() as Control).size_flags_vertical=Control.SIZE_EXPAND_FILL
 	time_panel.open(self, time_card, Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE), Progress.photos, at_photo_station, _select_time_phase, _collect_time_postcard)
 	if session != null:
 		session.process_mode = Node.PROCESS_MODE_DISABLED
 		body.add_child(Paper.label("已暫停本局；關閉面板後會從同一局面繼續。", 18, Paper.TEAL))
 	if is_instance_valid(time_panel.collect_button):
-		var actions := HBoxContainer.new()
-		actions.add_theme_constant_override("separation", 12)
-		modal_body.add_child(actions)
-		time_panel.collect_button.reparent(actions)
+		time_panel.collect_button.reparent(modal_footer)
 		time_panel.collect_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		Paper.button("返回遊園 · Esc", _close, actions)
+		_back(body)
 	else:
 		_back(body)
 
@@ -683,17 +799,145 @@ func _tutorial_practice(_target_id: String) -> void:
 	_launch_game(target,assisted_mode,true)
 
 func _show_pause() -> void:
-	var body := _open("留一點時間，給海風。","PAUSE","pause")
-	var resume_card := Paper.card(body)
-	resume_card.add_child(Paper.section_title("回到旅程"))
-	resume_card.add_child(Paper.label("進度會自動保存。今天想玩哪一款，都可以慢慢選。",20))
-	Paper.button("繼續遊園",_close,resume_card).grab_focus()
-	var links := HBoxContainer.new()
-	body.add_child(links)
-	Paper.button("打開航海旅券",_show_ticket,links)
-	Paper.button("儲存並離開",_quit_game,links)
+	var body := _open("海風島 · 遊園選單","PAUSE","pause")
+	var columns := HBoxContainer.new()
+	columns.name="PauseNavigation"
+	columns.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	columns.add_theme_constant_override("separation",24)
+	body.add_child(columns)
+	var island_panel := PanelContainer.new()
+	island_panel.name="PauseIslandStatus"
+	island_panel.custom_minimum_size.x=270
+	island_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	island_panel.add_theme_stylebox_override("panel",Paper.plaque(Paper.FRAME))
+	columns.add_child(island_panel)
+	var island := VBoxContainer.new()
+	island.add_theme_constant_override("separation",9)
+	island_panel.add_child(island)
+	var island_heading := HBoxContainer.new()
+	island_heading.add_theme_constant_override("separation",8)
+	island.add_child(island_heading)
+	island_heading.add_child(Paper.icon("shell",24,Paper.GOLD))
+	var status_heading := Paper.section_title("島嶼狀態",Paper.TEAL)
+	status_heading.name="PauseIslandHeading"
+	island_heading.add_child(status_heading)
+	var portrait := TextureRect.new()
+	portrait.name="PausePlayerPortrait"
+	portrait.custom_minimum_size=Vector2(176,202)
+	portrait.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+	portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
+	portrait.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	if world.avatar_renderer!=null:
+		portrait.texture=world.avatar_renderer.texture(Progress.appearance,Progress.equipped,"front",0,"idle")
+	island.add_child(portrait)
+	Paper.divider(island,Paper.FRAME)
+	var place_row := HBoxContainer.new()
+	place_row.add_theme_constant_override("separation",7)
+	island.add_child(place_row)
+	place_row.add_child(Paper.icon("pin",20,Paper.GOLD))
+	var place := Paper.label(str(world.current_area if not world.current_area.is_empty() else area_label.text),20,Paper.PAPER)
+	place.name="PauseCurrentArea"
+	place_row.add_child(place)
+	var phase_data := TimeOfDay.phase_for_id(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE))
+	var phase := Paper.label("時間  "+str(phase_data.get("label","中午"))+"  "+str(phase_data.get("clock","12:00")),16,Paper.TEAL)
+	phase.name="PauseCurrentPhase"
+	island.add_child(phase)
+	var collection := VBoxContainer.new()
+	collection.name="PauseCollectionStatus"
+	collection.add_theme_constant_override("separation",2)
+	island.add_child(collection)
+	for stat in [["拍貼","%d / 18"%Progress.normal_count(),Paper.GOLD],["小惡魔","%d / 12"%Progress.devil_count(),Paper.CORAL],["遊園幣","%d"%Progress.coins,Paper.GOLD]]:
+		var stat_row := HBoxContainer.new()
+		stat_row.add_theme_constant_override("separation",8)
+		collection.add_child(stat_row)
+		var stat_label := Paper.label(str(stat[0]),14,Paper.PAPER)
+		stat_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		stat_row.add_child(stat_label)
+		var stat_value := Paper.label(str(stat[1]),14,stat[2])
+		stat_value.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+		stat_value.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		stat_row.add_child(stat_value)
+	var nav_panel := PanelContainer.new()
+	nav_panel.name="PauseMenuPanel"
+	nav_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	nav_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	nav_panel.add_theme_stylebox_override("panel",Paper.plaque(Paper.DEEP))
+	columns.add_child(nav_panel)
+	var actions := GridContainer.new()
+	actions.name="PauseActions"
+	actions.columns=2
+	actions.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	actions.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	actions.add_theme_constant_override("h_separation",18)
+	actions.add_theme_constant_override("v_separation",6)
+	nav_panel.add_child(actions)
+	var island_actions := _pause_action_column(actions,"探索與旅券","map")
+	var keepsake_actions := _pause_action_column(actions,"紀念與整裝","album")
+	var links := [
+		["島嶼地圖",_show_map,"PauseMapButton","map","explore"],
+		["今日任務",_show_tasks,"PauseTasksButton","ticket","explore"],
+		["更多旅券",_show_ticket,"PauseTicketButton","ticket","explore"],
+		["操作速查",_show_controls,"PauseControlsButton","gear","explore"],
+		["拍貼收藏",_show_album,"PauseAlbumButton","album","keepsake"],
+		["遊園成就",_show_achievements,"PauseAchievementsButton","gear","keepsake"],
+		["衣櫃換裝",_show_wardrobe,"PauseWardrobeButton","hat","keepsake"],
+		["切換時段",_show_time_panel,"PauseTimeButton","shell","keepsake"],
+		["設定與輔助",_show_settings,"PauseSettingsButton","gear","keepsake"],
+	]
+	for entry in links:
+		var column: VBoxContainer=island_actions if str(entry[4])=="explore" else keepsake_actions
+		var button := _pause_action(column,str(entry[0]),entry[1],str(entry[2]),str(entry[3]))
+		button.name=str(entry[2])
+		button.tooltip_text=str(entry[0])
 	if session!=null:
-		Paper.button("回看本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),links)
+		var tutorial := _pause_action(island_actions,"本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),"PauseTutorialButton","map")
+		tutorial.tooltip_text="本局圖解教學"
+	modal_footer.alignment=BoxContainer.ALIGNMENT_BEGIN
+	modal_footer.add_child(Paper.icon("gear",18,Paper.GOLD))
+	var saved := Paper.label("進度會自動保存",16,Paper.TEAL)
+	saved.name="PauseSavedStatus"
+	modal_footer.add_child(saved)
+	var spacer := Control.new()
+	spacer.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	modal_footer.add_child(spacer)
+	var resume := Paper.button("繼續遊園  ·  Esc",_close,modal_footer)
+	resume.name="PauseResumeButton"
+	resume.custom_minimum_size=Vector2(210,0)
+	Paper.set_button_role(resume,"primary")
+	var leave := Paper.button("儲存並離開",_quit_game,modal_footer)
+	leave.name="PauseQuitButton"
+	leave.custom_minimum_size=Vector2(180,0)
+	resume.grab_focus()
+
+func _pause_action_column(parent: GridContainer,title: String,motif: String) -> VBoxContainer:
+	var column := VBoxContainer.new()
+	column.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	column.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	column.add_theme_constant_override("separation",3)
+	parent.add_child(column)
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation",7)
+	column.add_child(heading)
+	heading.add_child(Paper.icon(motif,20,Paper.GOLD))
+	var heading_label := Paper.section_title(title,Paper.TEAL)
+	heading_label.custom_minimum_size.y=22
+	heading.add_child(heading_label)
+	Paper.divider(column,Paper.FRAME)
+	return column
+
+func _pause_action(parent: VBoxContainer,label: String,callback: Callable,node_name: String,motif: String) -> Button:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation",8)
+	row.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	parent.add_child(row)
+	row.add_child(Paper.icon(motif,20,Paper.TEAL))
+	var button := Paper.button(label,callback,row)
+	button.name=node_name
+	button.custom_minimum_size=Vector2(0,0)
+	button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	return button
 
 func _show_arrival() -> void:
 	_start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress(),func(): Progress.intro_seen=true; Progress.save_progress())
@@ -732,6 +976,7 @@ func _render_dialogue() -> void:
 	var line: Dictionary=dialogue[dialogue_index]
 	dialogue_panel.show_line(str(line.get("speaker","旁白")),str(line.get("text","")),dialogue_index)
 	dialogue_label=dialogue_panel.text_label
+	call_deferred("_dialogue_panel_resized")
 	reveal=0
 	modal_kind="dialogue"
 
@@ -787,17 +1032,20 @@ func _dialogue_panel_resized() -> void:
 	if not is_instance_valid(dialogue_panel): return
 	var scale_factor := Paper.physical_scale(dialogue_panel)
 	Paper.adapt_menu(dialogue_panel, scale_factor)
+	if is_instance_valid(dialogue_label): dialogue_label.custom_minimum_size.y=82.0/scale_factor
+	var plaque := dialogue_panel.find_child("DialoguePlaque", true, false) as Control
+	var height := 210.0/scale_factor
+	if plaque != null:
+		plaque.custom_minimum_size=Vector2(get_viewport().get_visible_rect().size.x-48.0/scale_factor,0)
+		height=maxf(height,plaque.get_combined_minimum_size().y)
+		plaque.custom_minimum_size.y=height
 	var center := dialogue_panel.get_child(0) as CenterContainer
 	center.anchor_top=1.0
 	center.anchor_bottom=1.0
 	center.offset_left=24.0/scale_factor
 	center.offset_right=-24.0/scale_factor
-	center.offset_top=-252.0/scale_factor
+	center.offset_top=-height-20.0/scale_factor
 	center.offset_bottom=-20.0/scale_factor
-	var plaque := dialogue_panel.find_child("DialoguePlaque", true, false) as Control
-	if plaque != null:
-		plaque.custom_minimum_size=Vector2(get_viewport().get_visible_rect().size.x-48.0/scale_factor,210.0/scale_factor)
-	if is_instance_valid(dialogue_label): dialogue_label.custom_minimum_size.y=82.0/scale_factor
 
 func _interact(id: String, title: String) -> void:
 	audio.play_sfx("interact")
@@ -889,16 +1137,14 @@ func _show_game_rules(id: String) -> void:
 	Paper.divider(objective_card)
 	objective_card.add_child(Paper.section_title("操作方式",Paper.DEEP_TEAL))
 	objective_card.add_child(Paper.label(str(definition.get("instructions","依畫面提示操作。")),20))
-	var reward_note := HBoxContainer.new()
-	reward_note.add_theme_constant_override("separation",7)
-	objective_card.add_child(reward_note)
-	reward_note.add_child(Paper.icon("devil",24,Paper.CORAL))
-	reward_note.add_child(Paper.label("小惡魔："+definition.get("devil_hint","完成特殊互動。"),19,Paper.TEAL))
-	objective_card.add_child(Paper.label("完成一般目標可收藏普通拍貼；達成特別條件也會收進小惡魔拍貼。",18))
-	objective_card.add_child(Paper.label("輔助遊玩會放寬時間或判定，收藏資格相同。練習不記錄分數與收藏。",17,Color("#65746f")))
-	var row := HBoxContainer.new()
+	var notes := [
+		{"text":"小惡魔："+str(definition.get("devil_hint","完成特殊互動。")),"color":Paper.TEAL},
+		{"text":"完成一般目標可收藏普通拍貼；達成特別條件也會收進小惡魔拍貼。","color":Paper.INK},
+		{"text":"輔助遊玩會放寬時間或判定，收藏資格相同。練習不記錄分數與收藏。","color":Paper.TEAL},
+	]
+	_content_pager(body,"GameRulesExtraDetails",notes,_render_rules_note,1,entry_stamp)
+	var row := modal_footer
 	row.add_theme_constant_override("separation",8)
-	body.add_child(row)
 	Paper.button("圖解教學",func(): _open_tutorial(id,"game_info",bool(Progress.settings.get("assist",false))),row)
 	Paper.button("練習操作",func(): _launch_game(id,bool(Progress.settings.get("assist",false)),true),row)
 	Paper.button("開始遊玩",func(): _request_game_start(id,bool(Progress.settings.get("assist",false))),row).grab_focus()
@@ -992,45 +1238,50 @@ func _game_finished(result: Dictionary) -> void:
 		body.add_child(Paper.label("這是私人練習回合；分數、拍貼、任務與成就都沒有寫入紀錄。",20,Paper.DEEP_TEAL))
 	else:
 		body.add_child(Paper.label("沒有扣除任何收藏。也可以開啟輔助，試試別的節奏。",22))
+	var result_columns := HBoxContainer.new()
+	result_columns.name="ResultColumns"
+	result_columns.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	result_columns.add_theme_constant_override("separation",16)
+	body.add_child(result_columns)
+	var detail := VBoxContainer.new()
+	detail.name="ResultScoreDetail"
+	detail.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	detail.size_flags_stretch_ratio=0.65
+	result_columns.add_child(detail)
+	detail.add_child(Paper.section_title("得分明細"))
 	var score_summary: Dictionary=result.get("score_summary",{})
 	var score_rows: Array=score_summary.get("rows",[])
-	var detail_card := Paper.card(body,Color("#fffaf0"),6)
-	detail_card.add_child(Paper.section_title("得分明細"))
+	var rows: Array=[]
 	for score_row in score_rows:
-		if score_row is Dictionary:
-			detail_card.add_child(Paper.label("%s   ·   %d 分"%[str(score_row.get("label","得分")),int(score_row.get("amount",0))],18))
+		if score_row is Dictionary: rows.append(score_row)
+	if rows.is_empty(): rows.append({"label":"本局分數已顯示於上方。","empty":true})
+	_content_pager(detail,"ResultScorePages",rows,_render_score_row,1)
 	if not practice:
-		var frames := HBoxContainer.new()
-		frames.add_theme_constant_override("separation",18)
-		body.add_child(frames)
+		var frames := GridContainer.new()
+		frames.name="ResultPhotoFrames"
+		frames.columns=2
+		frames.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		frames.size_flags_vertical=Control.SIZE_EXPAND_FILL
+		frames.add_theme_constant_override("h_separation",8)
+		frames.add_theme_constant_override("v_separation",8)
+		result_columns.add_child(frames)
 		for i in range(4):
-			var card := PanelContainer.new()
-			card.add_theme_stylebox_override("panel",Paper.plaque(Color("#fff9e9")))
-			card.custom_minimum_size=Vector2(200,145)
 			var content := VBoxContainer.new()
-			card.add_child(content)
-			if not saved_frames.is_empty():
-				var thumbnail := TextureRect.new()
-				thumbnail.texture=_photo_texture(saved_frames[mini(i,saved_frames.size()-1)])
-				thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-				thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-				thumbnail.custom_minimum_size=Vector2(164,84)
-				content.add_child(thumbnail)
-			else:
-				content.add_child(Paper.label("◇ 第 %d 格"%(i+1),25,Paper.TEAL))
-			content.add_child(Paper.deckle_band())
-			var stamp_row := HBoxContainer.new()
-			stamp_row.add_theme_constant_override("separation",4)
-			content.add_child(stamp_row)
-			stamp_row.add_child(Paper.postmark())
-			stamp_row.add_child(Paper.label("郵戳 %02d  ·  %s"%[i+1,definition.get("name",id)],16,Paper.TEAL))
-			frames.add_child(card)
-	var row := HBoxContainer.new()
-	body.add_child(row)
-	Paper.button("練習再來一次" if practice else "再玩一次",func(): _launch_game(id,bool(result.get("assisted",false)),practice),row).grab_focus()
+			content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+			content.size_flags_vertical=Control.SIZE_EXPAND_FILL
+			frames.add_child(content)
+			var thumbnail := TextureRect.new()
+			thumbnail.name="ResultPhoto%d"%i
+			thumbnail.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+			thumbnail.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			thumbnail.size_flags_vertical=Control.SIZE_EXPAND_FILL
+			if not saved_frames.is_empty(): thumbnail.texture=_photo_texture(saved_frames[mini(i,saved_frames.size()-1)])
+			content.add_child(thumbnail)
+			content.add_child(Paper.label("第 %d 格%s"%[i+1," · 未拍攝" if saved_frames.is_empty() else ""],16,Paper.TEAL))
+	Paper.button("再練一次" if practice else "再玩一次",func(): _launch_game(id,bool(result.get("assisted",false)),practice),modal_footer).grab_focus()
 	if not practice:
-		Paper.button("練習操作",func(): _launch_game(id,bool(result.get("assisted",false)),true),row)
-		Paper.button("輔助重試",func(): _launch_game(id,true),row)
+		Paper.button("練習操作",func(): _launch_game(id,bool(result.get("assisted",false)),true),modal_footer)
+		Paper.button("輔助重試",func(): _launch_game(id,true),modal_footer)
 	_back(body)
 
 func _sync_finished_photo_thumbnails(result: Dictionary, saved_frames: Array[String], saved_original_frames: Array[String] = []) -> bool:
@@ -1043,22 +1294,38 @@ func _show_album() -> void:
 	var book_script = load("res://game/ui/collection_book_panel.gd")
 	var book = book_script.new()
 	book.setup(Progress,definitions,TimeOfDay.PHASES,Callable(self,"_photo_texture"))
-	var scroll := _scroll(body,430)
-	scroll.add_child(book)
+	book.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	book.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	body.add_child(book)
 	_back(body)
 
 func _show_tasks() -> void:
 	var body := _open("今天，幫誰一個小忙？","ISLAND QUESTS","tasks")
 	body.add_child(Paper.label("委託會自動保存；選一張旅券即可接續目前進度。",18,Paper.DEEP_TEAL))
-	for id in ["quest-001","quest-002"]:
-		var quest: Dictionary=story.quest_data(id)
-		var step := int(Progress.quests.get(id,0))
-		var card := Paper.card(body,Color("#fffaf0"),6)
-		card.add_child(Paper.section_title(str(quest.get("title",id))))
-		card.add_child(Paper.label("%s  ·  進度 %d / 3"%["已完成" if step>=3 else "進行中" if step>0 else "尚未開始",step],18,Paper.DEEP_TEAL))
-		Paper.button("%s委託"%["查看" if step>=3 else "接續" if step>0 else "開始"],func(): _show_quest(id),card)
+	_content_pager(body,"TaskPages",["quest-001","quest-002"],_render_task_card,1)
 	body.add_child(Paper.label("小角和阿浪在迎賓大道的左右步道等你。",18,Paper.TEAL))
 	_back(body)
+
+func _render_task_card(parent: VBoxContainer, id: String, _index: int) -> void:
+	var quest: Dictionary=story.quest_data(id)
+	var step := int(Progress.quests.get(id,0))
+	var card := Paper.card(parent,Color("#fffaf0"),6)
+	card.name="Task_"+id
+	card.add_child(Paper.section_title(str(quest.get("title",id))))
+	card.add_child(Paper.label("%s  ·  進度 %d / 3"%["已完成" if step>=3 else "進行中" if step>0 else "尚未開始",step],18,Paper.DEEP_TEAL))
+	Paper.button("%s委託"%["查看" if step>=3 else "接續" if step>0 else "開始"],func(): _show_quest(id),card)
+
+func _render_rules_note(parent: VBoxContainer, note: Dictionary, index: int) -> void:
+	var label := Paper.label(str(note.text),18,note.color)
+	label.name="RulesNote%d"%index
+	parent.add_child(label)
+
+func _render_score_row(parent: VBoxContainer, row: Dictionary, index: int) -> void:
+	var text := str(row.get("label","得分"))
+	if not bool(row.get("empty",false)): text+="  ·  %d 分"%int(row.get("amount",0))
+	var label := Paper.label(text,18)
+	label.name="ResultScoreRow%d"%index
+	parent.add_child(label)
 
 func _show_quest(id: String) -> void:
 	var quest: Dictionary=story.quest_data(id)
@@ -1153,11 +1420,25 @@ func _show_exploration(id: String) -> void:
 	var prompts := ["花朵的眼睛跟著你轉。站在笑臉腳印上，要做什麼表情？","展示燈的影子還沒進框。試著把燈轉向歡迎牆。","長椅空著一個座位。免費借用架上有小角的立牌。"]
 	var choices := [["微笑，等花朵一起眨眼","扮鬼臉，逗花朵笑"],["向左轉  ·  對準空框","向右轉  ·  看看影子"],["借一個小角立牌，拍合照","讓立牌戴帽子，再拍一張"]]
 	var body := _open(titles[index-1],"DISCOVERY / 自由探索","explore")
-	body.add_child(Paper.label(prompts[index-1],24))
+	var zones := HBoxContainer.new()
+	zones.name="ExplorationZones"
+	zones.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	zones.add_theme_constant_override("separation",18)
+	body.add_child(zones)
+	var controls := VBoxContainer.new()
+	controls.name="ExplorationControls"
+	controls.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	controls.size_flags_stretch_ratio=0.85
+	controls.add_theme_constant_override("separation",8)
+	controls.add_child(Paper.label(prompts[index-1],20))
 	var stage := PhotoStage.new()
 	stage.kind=["flower","shadow","bench"][index-1]
 	stage.reduced_motion=bool(Progress.settings.get("reduced_motion",false))
-	body.add_child(stage)
+	stage.name="ExplorationPhotoStage"
+	stage.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	stage.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	zones.add_child(stage)
+	zones.add_child(controls)
 	if index==2:
 		stage.offset=-90
 		var slider := HSlider.new()
@@ -1166,15 +1447,17 @@ func _show_exploration(id: String) -> void:
 		slider.value=-90
 		slider.step=1
 		slider.value_changed.connect(func(value: float): stage.offset=value)
-		body.add_child(slider)
+		slider.name="ExplorationLightSlider"
+		slider.custom_minimum_size.y=44
+		controls.add_child(slider)
 	else:
 		for i in range(choices[index-1].size()):
 			var choice_index := i
 			Paper.button(choices[index-1][i],func():
 				if index==1: stage.flower_face=choice_index+1
 				else: stage.borrowed=true; stage.pose=choice_index
-			,body)
-	Paper.button("按下快門，留下合照",func():
+			,controls)
+	Paper.button("按下快門",func():
 		if index==1 and stage.flower_face==0:
 			_notice("先選個表情，花朵正看著你。")
 			return
@@ -1191,7 +1474,7 @@ func _show_exploration(id: String) -> void:
 		audio.play_sfx("success")
 		_close()
 		_notice("探索拍貼已收藏："+titles[index-1])
-	,body)
+	,controls)
 	_back(body)
 
 func _show_achievements() -> void:
@@ -1199,8 +1482,9 @@ func _show_achievements() -> void:
 	var stamp_script = load("res://game/ui/achievement_stamp_book.gd")
 	var stamp_book = stamp_script.new()
 	stamp_book.setup(Progress,definitions)
-	var scroll := _scroll(body,390)
-	scroll.add_child(stamp_book)
+	stamp_book.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	stamp_book.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	body.add_child(stamp_book)
 	_back(body)
 
 func _show_map() -> void:
@@ -1209,8 +1493,9 @@ func _show_map() -> void:
 	var map_panel = map_script.new()
 	var park_data: Dictionary=world.park_data()
 	map_panel.setup(park_data.get("zones",[]),definitions,Progress.normal_count(),world.points)
-	var scroll := _scroll(body,430)
-	scroll.add_child(map_panel)
+	map_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	map_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	body.add_child(map_panel)
 	_back(body)
 
 func _show_settings() -> void:
@@ -1475,52 +1760,99 @@ func _adapt_hud() -> void:
 	toast.offset_bottom=280.0/scale_factor
 
 func _menu_preferred_size(kind: String) -> Vector2:
-	if kind=="pause": return Vector2(720,330)
-	if kind=="album": return Vector2(1080,680)
-	if kind=="time": return Vector2(1000,540)
-	var tall_kinds := ["settings","achievements","map","wardrobe","ticket"]
-	return Vector2(1040,600 if tall_kinds.has(kind) else 350)
+	if kind=="pause": return Vector2(1040,620)
+	if kind=="ticket": return Vector2(1060,560)
+	if kind=="album": return Vector2(1200,720)
+	if kind=="time": return Vector2(1000,650)
+	if kind=="wardrobe": return Vector2(1080,650)
+	if kind=="tasks": return Vector2(1040,650)
+	var tall_kinds := ["settings","achievements","map","wardrobe"]
+	return Vector2(1040,600 if tall_kinds.has(kind) else 520)
 
 func _adapt_open_menu() -> void:
 	if not is_instance_valid(overlay) or not overlay.visible: return
 	var scale_factor := Paper.physical_scale(overlay)
-	var panel := overlay.find_child("AdaptiveMenuPanel",true,false) as Control
-	if panel!=null:
-		var viewport_size := get_viewport().get_visible_rect().size
-		var preferred_size := _menu_preferred_size(modal_kind)
-		panel.custom_minimum_size=Vector2(minf(preferred_size.x/scale_factor,viewport_size.x-32.0/scale_factor),minf(preferred_size.y/scale_factor,viewport_size.y-32.0/scale_factor))
+	_adapt_content_pagers(get_viewport().get_visible_rect().size.y*scale_factor<620.0)
 	Paper.adapt_menu(overlay,scale_factor)
+	var viewport_size := get_viewport().get_visible_rect().size
+	var compact := viewport_size.y*scale_factor<620.0
+	var header := overlay.find_child("AdaptiveMenuHeader",true,false) as Control
+	var footer := overlay.find_child("AdaptiveMenuFooter",true,false) as Control
+	if header!=null: header.custom_minimum_size.y=(40.0 if compact else 56.0)/scale_factor
+	if footer!=null: footer.custom_minimum_size.y=0.0 if footer.get_child_count()==0 else (44.0 if compact else 64.0)/scale_factor
+	var menu_margin := overlay.find_child("AdaptiveMenuMargin",true,false) as MarginContainer
+	if menu_margin!=null:
+		for side in ["top","bottom"]: menu_margin.add_theme_constant_override("margin_"+side,4 if compact else 10)
+	var menu_shell := overlay.find_child("AdaptiveMenuShell",true,false) as VBoxContainer
+	if menu_shell!=null: menu_shell.add_theme_constant_override("separation",4 if compact else 8)
+	var eyebrow := overlay.find_child("AdaptiveMenuEyebrow",true,false) as Label
+	if eyebrow!=null: eyebrow.visible=not compact
+	var title_label := overlay.find_child("AdaptiveMenuTitle",true,false) as Label
+	if title_label!=null and compact and modal_kind=="pause":
+		title_label.add_theme_font_size_override("font_size",ceili(18.0*Paper.text_scale()/scale_factor))
+	var panel := overlay.find_child("AdaptiveMenuPanel",true,false) as Control
+	if panel!=null: _layout_open_panel(panel)
+	call_deferred("_fit_modal_viewport")
+	var pause_actions := overlay.find_child("PauseActions",true,false) as GridContainer
+	if pause_actions!=null:
+		pause_actions.columns=2
+		for button in pause_actions.find_children("*","Button",true,false):
+			button.custom_minimum_size.y=(44.0 if compact else 64.0)/scale_factor
+	var portrait := overlay.find_child("PausePlayerPortrait",true,false) as TextureRect
+	if portrait!=null:
+		var portrait_height := 82.0 if compact else 150.0
+		portrait.custom_minimum_size=Vector2(portrait_height*0.82,portrait_height)
+	var pause_heading := overlay.find_child("PauseIslandHeading",true,false) as Label
+	if pause_heading!=null and compact:
+		pause_heading.add_theme_font_size_override("font_size",ceili(14.0*Paper.text_scale()/scale_factor))
+	var pause_area := overlay.find_child("PauseCurrentArea",true,false) as Label
+	if pause_area!=null and compact:
+		pause_area.add_theme_font_size_override("font_size",ceili(14.0*Paper.text_scale()/scale_factor))
+	var pause_phase := overlay.find_child("PauseCurrentPhase",true,false) as Label
+	if pause_phase!=null and compact:
+		pause_phase.add_theme_font_size_override("font_size",ceili(14.0*Paper.text_scale()/scale_factor))
+	var pause_collection := overlay.find_child("PauseCollectionStatus",true,false) as Control
+	if pause_collection!=null: pause_collection.visible=not compact
 	var chart := overlay.find_child("IslandChartCanvas",true,false)
 	if chart!=null and chart.get_parent().get_parent().has_method("_layout_map_buttons"):
 		chart.get_parent().get_parent().call_deferred("_layout_map_buttons")
 
+func _layout_open_panel(panel: Control) -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	var scale_factor := Paper.physical_scale(overlay)
+	var preferred := _menu_preferred_size(modal_kind)
+	var width := minf(preferred.x/scale_factor,viewport_size.x-36.0/scale_factor)
+	var height := minf(preferred.y/scale_factor,viewport_size.y-36.0/scale_factor)
+	# CenterContainer owns the panel geometry; its minimum is the desired shell
+	# extent, while real content minima remain visible to Godot's layout system.
+	panel.custom_minimum_size=Vector2(width,height)
+
 func _show_ticket() -> void:
-	var body := _open("島上的事，都收在這本旅券裡。","VOYAGE PASS","ticket")
-	var list := _scroll(body,430)
+	var body := _open("航海旅券","ISLAND GUIDE","ticket")
 	var groups := GridContainer.new()
+	groups.name="TicketNavigation"
 	groups.columns=2
-	groups.add_theme_constant_override("h_separation",10)
-	groups.add_theme_constant_override("v_separation",10)
-	list.add_child(groups)
-	var column_width := clampf((get_viewport().get_visible_rect().size.x-112.0)/2.0,280.0,440.0)
-	var sections := [
-		{"title":"探索島嶼","subtitle":"地圖與正在進行的委託","items":[["島嶼地圖",_show_map],["今日任務",_show_tasks]]},
-		{"title":"收藏記錄","subtitle":"拍貼與完成紀念","items":[["拍貼收藏本",_show_album],["遊園成就",_show_achievements]]},
-		{"title":"整裝出發","subtitle":"外觀、衣櫃與服飾店","items":[["衣櫃與服飾店",_show_wardrobe]]},
-		{"title":"遊園安排","subtitle":"光線、聲音與輔助設定","items":[["切換時段",_open_time_panel_from_ticket],["設定與輔助",_show_settings]]},
+	groups.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	groups.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	groups.add_theme_constant_override("h_separation",16)
+	groups.add_theme_constant_override("v_separation",8)
+	body.add_child(groups)
+	var entries := [
+		["島嶼地圖",_show_map,"探索島嶼"], ["今日任務",_show_tasks,"探索島嶼"],
+		["拍貼收藏本",_show_album,"收藏記錄"], ["遊園成就",_show_achievements,"收藏記錄"],
+		["衣櫃與服飾店",_show_wardrobe,"整裝出發"], ["切換時段",_open_time_panel_from_ticket,"遊園安排"],
+		["設定與輔助",_show_settings,"遊園安排"], ["園區圖解教學",func(): _open_tutorial("park","ticket"),"操作速查"],
 	]
-	for section: Dictionary in sections:
-		var card := Paper.card(groups,Color("#fffaf0"),8)
-		card.custom_minimum_size=Vector2(column_width,0)
-		card.add_child(Paper.section_title(str(section.title)))
-		var caption := Paper.label(str(section.subtitle),16,Paper.DEEP_TEAL)
-		card.add_child(caption)
-		for entry: Array in section.items:
-			Paper.button(str(entry[0]),entry[1],card)
-	var help_card := Paper.card(list,Color("#f1e8d3"),6)
-	help_card.add_child(Paper.section_title("操作速查",Paper.DEEP_TEAL))
-	help_card.add_child(Paper.label("移動 WASD／方向鍵　·　慢走 Shift　·　互動 E　·　招呼 F　·　拍照 P　·　衣櫃 C　·　時段 T　·　暫停 Esc",18))
-	Paper.button("園區圖解教學",func(): _open_tutorial("park","ticket"),help_card)
+	for index in range(entries.size()):
+		var entry: Array=entries[index]
+		var button := Paper.button(str(entry[0]),entry[1],groups)
+		button.name="TicketAction%d"%index
+		button.tooltip_text=str(entry[2])
+		button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		button.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	var help := Paper.label("WASD 移動　E 互動　P 拍照　Esc 暫停",16,Paper.TEAL)
+	help.name="TicketQuickHelp"
+	body.add_child(help)
 	_back(body)
 
 func _open_time_panel_from_ticket() -> void:
@@ -1578,3 +1910,20 @@ func _prepare_photo_thumbnail(original: Image) -> Image:
 	thumbnail.resize(320,180,Image.INTERPOLATE_LANCZOS)
 	thumbnail.convert(Image.FORMAT_RGBA8)
 	return thumbnail
+
+func _fit_modal_viewport() -> void:
+	if not is_instance_valid(overlay) or not overlay.visible: return
+	var center := overlay.find_child("AdaptiveMenuCenter",true,false) as CenterContainer
+	if center!=null:
+		# Control grows when a category briefly has a larger minimum. Refresh its
+		# parent-sized extent after text/content adaptation so it can shrink again.
+		center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+func _scroll(parent: VBoxContainer, height := 330) -> VBoxContainer:
+	# The generic modal already owns the bounded scrolling region.
+	var box := VBoxContainer.new()
+	box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation",10)
+	parent.add_child(box)
+	return box
+
