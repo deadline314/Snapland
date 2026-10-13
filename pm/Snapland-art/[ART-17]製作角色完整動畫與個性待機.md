@@ -183,3 +183,15 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 本輪驗收證據基準：`b2c44bf`；分支：`feature/island-experience`。本輪程式與證據提交：[b4c3f77](https://github.com/deadline314/Snapland/commit/b4c3f77c281e293a43dc69d8b3aca933c1e48a58)。[整組逐票交付紀錄](images/ART-17-session-delivery.md)。
 
 票況維持進行中；完整角色動作／外觀覆蓋、打包播放、降低動態完整驗收仍未勾選。
+
+## Commit — 2026-10-14 介面改版發現的角色回歸
+
+**問題：** 島上路線切換與對話結束後，角色可能反覆重置姿勢，讓待機停住或足部接地錯亂。
+
+**改動：** 保留缺少方向動作時的呼吸與待機，讓實際移動和轉向接續正確；缺少的角色動作會明確記錄位置，仍需補完整美術。
+
+**驗收：** 本機局部測試涵蓋路線轉向、長短影格、停步、對話恢復與三位NPC活動，均通過。原生路線驗證exit 0、0 ERROR；Root實際看過22張姿勢與路線截圖及三張聯絡表。這次只接受靜態完整性與回歸條件，沒有新增正常／慢放完整動畫的驗收，也沒有勾選本票尚未完成的動畫條件。
+
+[三角色原生報告](images/ART-17-ui-route-regression-report.json) · [票票／小角聯絡表](images/ART-17-ui-route-contact-1.jpg) · [小角／阿浪聯絡表](images/ART-17-ui-route-contact-2.jpg) · [阿浪聯絡表](images/ART-17-ui-route-contact-3.jpg)。所有驗收使用獨立存檔；本輪開始基準`f1d2feedcf6b58418d2a6682238ce088e92cbbaf`。
+
+分支：`feature/island-experience`；[程式與原生截圖提交](https://github.com/deadline314/Snapland/commit/3326f7a722199bb9eda9e511e32541650fc1f2d9)。票況：進行中；待處理完整角色動作／外觀覆蓋、打包播放與降低動態驗收。
