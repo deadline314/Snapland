@@ -21,7 +21,7 @@ const FRAME = Color("#31596a")
 const MINT = Color("#80e6c2")
 const FIELD = Color("#163d4d")
 const FLOWER_COLORS := [Color("#f08f73"), Color("#ffc66d"), Color("#80e6c2")]
-const FONT = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const CharacterAnimationLibrary = preload("res://game/world/character_animation_library.gd")
 
@@ -239,7 +239,7 @@ func _draw_shadow_scene(width: float,height: float,floor_y: float,pixel: float) 
 	_block(width*0.45,floor_y-pixel*8,pixel*3,pixel*5,GOLD,pixel)
 	_block(width*0.42,floor_y-pixel*2,pixel*9,pixel*2,DEEP,pixel)
 	var font_size := maxi(12,mini(26,int(height*0.12)))
-	draw_string(FONT,Vector2(board.position.x+pixel*4,board.position.y+board.size.y*0.62),"歡迎",HORIZONTAL_ALIGNMENT_LEFT,board.size.x-pixel*8,font_size,IVORY)
+	draw_string(FontProfiles.current_font(),Vector2(board.position.x+pixel*4,board.position.y+board.size.y*0.62),"歡迎",HORIZONTAL_ALIGNMENT_LEFT,board.size.x-pixel*8,font_size,IVORY)
 
 func _draw_bench_scene(width: float,height: float,floor_y: float,pixel: float) -> void:
 	var bench_x := width*0.57

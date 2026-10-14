@@ -25,6 +25,11 @@ func _run() -> void:
 	if bevel==null:
 		_finish(); return
 	_check(bevel.mouse_filter==Control.MOUSE_FILTER_IGNORE and bevel.get_global_rect()==button.get_global_rect(),"bevel matches the button bounds without intercepting clicks or changing layout")
+	var later_panel := PanelContainer.new()
+	later_panel.position=button.position
+	later_panel.size=button.size
+	host.add_child(later_panel)
+	_check(bevel.z_index+button.z_index<=later_panel.z_index and button.get_index()<later_panel.get_index(),"later opaque panels cover the entire button including its bevel")
 	var normal := button.get_theme_stylebox("normal") as StyleBoxFlat
 	var hover := button.get_theme_stylebox("hover") as StyleBoxFlat
 	var pressed := button.get_theme_stylebox("pressed") as StyleBoxFlat

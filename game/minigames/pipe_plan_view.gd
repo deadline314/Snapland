@@ -7,7 +7,7 @@ const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const BOARD_RECT := Rect2(320.0, 166.0, 640.0, 400.0)
 const GRID_SIDE := 4
 const FLOW_SECONDS := 1.15
-const FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const DIRS: Array[Vector2i] = [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
 const BITS: Array[int] = [1, 2, 4, 8]
 const PORT_NORMALS: Array[Vector2] = [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]
@@ -255,15 +255,15 @@ func _draw_blueprint_margins(paper: Color) -> void:
 	draw_rect(UI_LABEL_RECT, Color("#f5e9ce"), true)
 	draw_rect(UI_LABEL_RECT, WOOD, false, 2.0)
 	draw_line(Vector2(108, 191), Vector2(108, 232), TEAL, 4.0)
-	draw_string(FONT, Vector2(122, 200), "配水工單　%d / %d" % [order_index + 1, order_count], HORIZONTAL_ALIGNMENT_LEFT, 178, 16, INK)
-	draw_string(FONT, Vector2(122, 227), _compact_brief(), HORIZONTAL_ALIGNMENT_LEFT, 180, 14, TEAL)
+	draw_string(FontProfiles.current_font(), Vector2(122, 200), "配水工單　%d / %d" % [order_index + 1, order_count], HORIZONTAL_ALIGNMENT_LEFT, 178, 16, INK)
+	draw_string(FontProfiles.current_font(), Vector2(122, 227), _compact_brief(), HORIZONTAL_ALIGNMENT_LEFT, 180, 14, TEAL)
 	draw_rect(UI_TURN_RECT, Color("#f5e9ce"), true)
 	draw_rect(UI_TURN_RECT, WOOD, false, 2.0)
-	draw_string(FONT, Vector2(1096, 199), "轉動管節", HORIZONTAL_ALIGNMENT_LEFT, 90, 14, INK)
-	draw_string(FONT, Vector2(1096, 230), "%02d" % move_count, HORIZONTAL_ALIGNMENT_LEFT, 90, 23, OCHRE)
+	draw_string(FontProfiles.current_font(), Vector2(1096, 199), "轉動管節", HORIZONTAL_ALIGNMENT_LEFT, 90, 14, INK)
+	draw_string(FontProfiles.current_font(), Vector2(1096, 230), "%02d" % move_count, HORIZONTAL_ALIGNMENT_LEFT, 90, 23, OCHRE)
 	draw_line(Vector2(96, 673), Vector2(1184, 673), Color(INK, 0.2), 1.0)
-	draw_string(FONT, Vector2(96, 694), "泉口　・　分流　・　花床", HORIZONTAL_ALIGNMENT_LEFT, 290, 15, Color("#f1dfbb"))
-	draw_string(FONT, Vector2(1090, 694), "4 × 4 配水盤", HORIZONTAL_ALIGNMENT_LEFT, 115, 14, Color("#f1dfbb"))
+	draw_string(FontProfiles.current_font(), Vector2(96, 694), "泉口　・　分流　・　花床", HORIZONTAL_ALIGNMENT_LEFT, 290, 15, Color("#f1dfbb"))
+	draw_string(FontProfiles.current_font(), Vector2(1090, 694), "4 × 4 配水盤", HORIZONTAL_ALIGNMENT_LEFT, 115, 14, Color("#f1dfbb"))
 
 func _draw_board(paper: Color) -> void:
 	var size_per_cell := BOARD_RECT.size / float(GRID_SIDE)
@@ -286,7 +286,7 @@ func _draw_board(paper: Color) -> void:
 		_draw_pipe(index, tile)
 		if selected:
 			draw_circle(tile.position + Vector2(12, 12), 8, CORAL)
-			draw_string(FONT, tile.position + Vector2(9.5, 16), "•", HORIZONTAL_ALIGNMENT_CENTER, 7, 11, paper)
+			draw_string(FontProfiles.current_font(), tile.position + Vector2(9.5, 16), "•", HORIZONTAL_ALIGNMENT_CENTER, 7, 11, paper)
 	_draw_source(cell_rect(source_cell), source_port)
 	for target_index in range(order_targets.size()):
 		var target: Array = order_targets[target_index]
@@ -350,7 +350,7 @@ func _draw_source(source_cell: Rect2, port: int) -> void:
 	draw_line(south, west, INK, 2.0)
 	draw_line(west, north, INK, 2.0)
 	draw_circle(diamond_center, 5, inlet_color)
-	draw_string(FONT, diamond_center + tangent * 23.0 - normal * 4.0, "泉口", HORIZONTAL_ALIGNMENT_LEFT, 52, 15, INK)
+	draw_string(FontProfiles.current_font(), diamond_center + tangent * 23.0 - normal * 4.0, "泉口", HORIZONTAL_ALIGNMENT_LEFT, 52, 15, INK)
 
 func _draw_outlet(last_cell: Rect2, port: int, path: PackedVector2Array) -> void:
 	var point := _edge_point(last_cell, port, 0.0)
@@ -387,7 +387,7 @@ func _draw_flower_bed(target: Array) -> void:
 			_draw_flower(root + Vector2(0, -height - 4), 8.5)
 		else:
 			draw_circle(root + Vector2(0, -height - 2), 3.5, Color("#d7ba83"))
-	draw_string(FONT, Vector2(rect.position.x + 6.0, rect.position.y + rect.size.y - 4.0), "花床", HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 12, 11, Color("#fff2d7"))
+	draw_string(FontProfiles.current_font(), Vector2(rect.position.x + 6.0, rect.position.y + rect.size.y - 4.0), "花床", HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 12, 11, Color("#fff2d7"))
 
 func target_bed_rect(target: Array) -> Rect2:
 	if target.size() != 2:
@@ -545,7 +545,7 @@ func _flow_point(point_index: int) -> Vector2:
 
 func _draw_bloom() -> void:
 	if completed_beds > 0:
-		draw_string(FONT, Vector2(420, 694), completed_order_text(), HORIZONTAL_ALIGNMENT_LEFT, 180, 14, Color("#f1dfbb"))
+		draw_string(FontProfiles.current_font(), Vector2(420, 694), completed_order_text(), HORIZONTAL_ALIGNMENT_LEFT, 180, 14, Color("#f1dfbb"))
 
 func completed_order_text() -> String:
 	return "已完成 %d 單" % completed_beds

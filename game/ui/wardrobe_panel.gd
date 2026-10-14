@@ -73,7 +73,7 @@ func _build() -> void:
 	var compact_spacing := _is_compact_profile(Paper.physical_scale(body))
 	preview_stack.add_theme_constant_override("separation",4 if compact_spacing else 6)
 	preview_card.add_child(preview_stack)
-	preview_stack.add_child(Paper.section_title("試衣鏡  ·  即時預覽"))
+	preview_stack.add_child(Paper.section_title("試衣鏡"))
 	var frame := PanelContainer.new()
 	frame.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	frame.add_theme_stylebox_override("panel",Paper.fitting_frame(Color("#d9cfb6")))

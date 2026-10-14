@@ -15,7 +15,7 @@ const MINT := Color("#70e1c1")
 const PINK := Color("#ff83aa")
 const YELLOW := Color("#ffd166")
 const BLUE := Color("#79bdff")
-const FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const FLOWER_ROUTE: Array[int] = [0, 4, 5, 6, 10, 14, 15]
 const PIPE_DIRS: Array[Vector2i] = [Vector2i(0,-1), Vector2i(1,0), Vector2i(0,1), Vector2i(-1,0)]
 const PIPE_BITS: Array[int] = [1,2,4,8]
@@ -2198,7 +2198,7 @@ func _draw_game() -> void:
 
 func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignment: int = HORIZONTAL_ALIGNMENT_CENTER, color: Color = PAPER) -> void:
 	# Keep functional copy readable over every printed backdrop without laying a full-width strip over the scene.
-	var measured_width := FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	var measured_width := FontProfiles.current_font().get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
 	var plate_width := minf(measured_width + 24.0, 760.0)
 	var left := baseline.x - plate_width * 0.5
 	if alignment == HORIZONTAL_ALIGNMENT_LEFT:
@@ -2214,7 +2214,7 @@ func _draw_scene_label(text: String, baseline: Vector2, font_size: int, alignmen
 	draw_rect(Rect2(Vector2(plate.position.x, plate.end.y - 3), Vector2(6, 3)), corner, true)
 	draw_rect(Rect2(plate.end - Vector2(6, 3), Vector2(6, 3)), corner, true)
 	var readable_color := color if color.get_luminance() >= 0.45 else Color("#fff2d4")
-	draw_string(FONT, Vector2(left + 6.0, baseline.y), text, alignment, plate_width - 12.0, font_size, readable_color)
+	draw_string(FontProfiles.current_font(), Vector2(left + 6.0, baseline.y), text, alignment, plate_width - 12.0, font_size, readable_color)
 
 func _draw_balloon() -> void:
 	# Three ordered mail drops give the flight short goals and route decisions.
@@ -2238,7 +2238,7 @@ func _draw_balloon() -> void:
 			draw_rect(mailbox_rect,Color("#bd704f",alpha),true)
 		draw_rect(Rect2(mailbox_point.x-14,mailbox_point.y-8,28,16),Color("#fff1cb",alpha),true)
 		draw_circle(mailbox_point+Vector2(0,25),13,Color("#e6bf80",alpha))
-		draw_string(FONT,mailbox_point+Vector2(-8,30),"✓" if delivered else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,16,12,INK)
+		draw_string(FontProfiles.current_font(),mailbox_point+Vector2(-8,30),"✓" if delivered else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,16,12,INK)
 	# A ghosted future position forecasts the bounded moving urchin hazard.
 	var thorn := _balloon_hazard_at(phase)
 	var thorn_preview := _balloon_hazard_at(phase + BALLOON_WIND_FORECAST_SECONDS)
@@ -2259,7 +2259,7 @@ func _draw_balloon() -> void:
 		var lane_wind := _balloon_wind_at(phase, yy)
 		var lane_direction := signf(lane_wind.x)
 		var lane_arrow := "→" if lane_direction > 0.0 else "←" if lane_direction < 0.0 else "↔"
-		draw_string(FONT,Vector2(63,yy+5),lane_names[lane]+"  "+lane_arrow,HORIZONTAL_ALIGNMENT_LEFT,110,13,Color("#fff1cb",0.9))
+		draw_string(FontProfiles.current_font(),Vector2(63,yy+5),lane_names[lane]+"  "+lane_arrow,HORIZONTAL_ALIGNMENT_LEFT,110,13,Color("#fff1cb",0.9))
 		for i in 4:
 			var offset := 0.0 if reduced_motion else fposmod(phase * 58.0 + i * 43.0, 110.0)
 			var start_x := 185.0 + float(i) * 54.0 + offset
@@ -2304,14 +2304,14 @@ func _draw_balloon_wind_gauge() -> void:
 	draw_rect(plate.grow(-4),Color("#70e1c1"),false,1)
 	var direction := "→" if balloon_wind_current.x > 0.0 else "←" if balloon_wind_current.x < 0.0 else "↔"
 	var forecast_direction := "→" if balloon_wind_forecast.x > 0.0 else "←" if balloon_wind_forecast.x < 0.0 else "↔"
-	draw_string(FONT,Vector2(944,199),"海風　"+direction,HORIZONTAL_ALIGNMENT_LEFT,100,17,PAPER)
+	draw_string(FontProfiles.current_font(),Vector2(944,199),"海風　"+direction,HORIZONTAL_ALIGNMENT_LEFT,100,17,PAPER)
 	var feather_count := clampi(int(ceil(absf(balloon_wind_current.x)/18.0)),0,3)
 	for i in 3:
 		var fx := 1019.0+i*15.0
 		draw_line(Vector2(fx,187),Vector2(fx+(4.0 if balloon_wind_current.x>=0.0 else -4.0),198),Color("#d9a95f") if i<feather_count else Color("#486477"),3)
 	var forecast_value := roundi(balloon_wind_forecast.x)
 	var forecast_signed := "+" + str(forecast_value) if forecast_value > 0 else str(forecast_value)
-	draw_string(FONT,Vector2(944,223),"0.8 秒預報　"+forecast_direction+" "+forecast_signed,HORIZONTAL_ALIGNMENT_LEFT,200,13,Color("#e5f3e9"))
+	draw_string(FontProfiles.current_font(),Vector2(944,223),"0.8 秒預報　"+forecast_direction+" "+forecast_signed,HORIZONTAL_ALIGNMENT_LEFT,200,13,Color("#e5f3e9"))
 	var bar := Rect2(944,237,244,12)
 	draw_rect(bar,Color("#24485b"),true)
 	draw_rect(Rect2(bar.position,Vector2(bar.size.x*clampf(absf(balloon_wind_current.x)/60.0,0.0,1.0),bar.size.y)),Color("#70e1c1"),true)
@@ -2367,7 +2367,7 @@ func _draw_fountain() -> void:
 		var marker := str(i+1)
 		if finished_attempt:
 			marker = "✓" if fountain_grades[i] != "錯過" else "×"
-		draw_string(FONT,Vector2(cx-10,582),marker,HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
+		draw_string(FontProfiles.current_font(),Vector2(cx-10,582),marker,HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
 
 func _draw_fountain_avatar(jump_lift: float, jump_progress: float, airborne: bool) -> void:
 	# Draw one complete authored pose. The ground shadow stays fixed while the
@@ -2425,7 +2425,7 @@ func _draw_ribbon() -> void:
 		var c := Color("#e78aa2") if active else (Color("#64b5a7") if i < beat else Color("#879089"))
 		draw_circle(Vector2(x,420), 30, c); draw_arc(Vector2(x,420),35,0,TAU,32,Color("#f5d69d"),2)
 	var labels := ["←","→","跳","→","←","跳","←","→"]
-	for i in 8: draw_string(FONT, Vector2(310+i*90,429), labels[i], HORIZONTAL_ALIGNMENT_CENTER, 40, 24, PAPER)
+	for i in 8: draw_string(FontProfiles.current_font(), Vector2(310+i*90,429), labels[i], HORIZONTAL_ALIGNMENT_CENTER, 40, 24, PAPER)
 	_draw_scene_label("跟著舞者依序轉向與跳步　　←　→　空白鍵",Vector2(640,290),20)
 	draw_circle(Vector2(640,535), 26, YELLOW if beat_window else Color("#617b8f")); draw_circle(Vector2(640,535),8,Color("#fff4d3"))
 	for i in mini(8,beat): draw_circle(Vector2(475+i*34,570),5,MINT)
@@ -2437,8 +2437,8 @@ func _draw_flower() -> void:
 	draw_rect(Rect2(295,225,76,37),Color("#a66d4a"),true); draw_rect(Rect2(302,231,60,16),Color("#d8a46a"),true)
 	draw_arc(Vector2(300,243),30,PI,TAU,22,Color("#95603e"),8)
 	draw_rect(Rect2(910,510,75,39),Color("#a66d4a"),true); draw_rect(Rect2(920,517,54,14),Color("#79d3da"),true)
-	draw_string(FONT, Vector2(268,295), "泉", HORIZONTAL_ALIGNMENT_CENTER, 70, 18, PAPER)
-	draw_string(FONT, Vector2(910,580), "花槽", HORIZONTAL_ALIGNMENT_CENTER, 75, 16, INK)
+	draw_string(FontProfiles.current_font(), Vector2(268,295), "泉", HORIZONTAL_ALIGNMENT_CENTER, 70, 18, PAPER)
+	draw_string(FontProfiles.current_font(), Vector2(910,580), "花槽", HORIZONTAL_ALIGNMENT_CENTER, 75, 16, INK)
 	for i in 16:
 		var x := 370.0 + (i%4)*135.0; var y := 205.0 + int(i/4)*85.0
 		draw_rect(Rect2(x,y,112,65), Color("#70916a"), true)
@@ -2477,7 +2477,7 @@ func _draw_sign() -> void:
 	draw_line(left+Vector2(0,56),right+Vector2(0,56),Color("#916444"),8)
 	draw_rect(Rect2(left.x-59,left.y+44,118,54),Color("#e6bd7e"),true); draw_rect(Rect2(right.x-59,right.y+44,118,54),Color("#7db4a2"),true)
 	draw_rect(Rect2(left.x-59,left.y+44,118,54),GOLD,false,3); draw_rect(Rect2(right.x-59,right.y+44,118,54),GOLD,false,3)
-	draw_string(FONT,left+Vector2(-50,79),"珊瑚餅",HORIZONTAL_ALIGNMENT_CENTER,100,14,INK); draw_string(FONT,right+Vector2(-50,79),"海鹽糖",HORIZONTAL_ALIGNMENT_CENTER,100,14,INK)
+	draw_string(FontProfiles.current_font(),left+Vector2(-50,79),"珊瑚餅",HORIZONTAL_ALIGNMENT_CENTER,100,14,INK); draw_string(FontProfiles.current_font(),right+Vector2(-50,79),"海鹽糖",HORIZONTAL_ALIGNMENT_CENTER,100,14,INK)
 	draw_colored_polygon(PackedVector2Array([center+Vector2(-26,0),center+Vector2(26,0),center+Vector2(0,38)]),Color("#d98971")); draw_circle(center,12,YELLOW)
 	# Gauge mirrors balance units; green marks the valid scoring band and outer red marks failure.
 	draw_line(Vector2(300,573),Vector2(980,573),Color("#b3a17e"),9)
@@ -2506,7 +2506,7 @@ func _draw_shadow() -> void:
 		draw_colored_polygon(silhouette,Color("#26384d")); draw_circle(Vector2(x-17,359),4,Color("#ffdb8b")); draw_circle(Vector2(x+17,359),4,Color("#ffdb8b"))
 	draw_circle(Vector2(target_x,374),6,Color("#edafb2",0.9)); draw_circle(Vector2(x,374),5,Color("#ffdb8b"))
 	draw_line(Vector2(x,355),Vector2(x,448),Color("#7797a1",0.45),2)
-	draw_string(FONT,Vector2(805,535),"引燈影",HORIZONTAL_ALIGNMENT_CENTER,270,16,Color("#5c6374"))
+	draw_string(FontProfiles.current_font(),Vector2(805,535),"引燈影",HORIZONTAL_ALIGNMENT_CENTER,270,16,Color("#5c6374"))
 	# Ruler maps one alignment unit to 300 pixels. Its highlighted span equals the hit tolerance.
 	draw_line(Vector2(190,592),Vector2(1090,592),Color("#826c50"),5)
 	for i in 19:
@@ -2529,11 +2529,11 @@ func _draw_bench() -> void:
 		# Paired friendship badge remains attached to person identity while seats swap.
 		var group_color := Color("#ef8e99") if seats[i] < 2 else Color("#7fcdb3")
 		draw_circle(Vector2(x+19,326),10,group_color); draw_circle(Vector2(x+16,323),2,PAPER)
-		draw_circle(Vector2(x,462),18,Color("#e7cc98")); draw_string(FONT,Vector2(x-12,469),str(i+1),HORIZONTAL_ALIGNMENT_CENTER,24,14,INK)
+		draw_circle(Vector2(x,462),18,Color("#e7cc98")); draw_string(FontProfiles.current_font(),Vector2(x-12,469),str(i+1),HORIZONTAL_ALIGNMENT_CENTER,24,14,INK)
 		if select_index == i: draw_arc(Vector2(x,339),58,0,TAU,36,YELLOW,5)
 	var pairs := "整理順序，讓四位朋友坐回編號座位　　好友徽章：珊瑚 1＋2　海草 3＋4"
 	_draw_scene_label(pairs,Vector2(640,245),18)
 	_draw_scene_label("點選／按編號交換　　已交換 " + str(move_count) + " 次",Vector2(640,520),18)
 	for i in 4:
 		draw_circle(Vector2(480+i*108,565),14,MINT if seats[i]==i else Color("#c8b68d"))
-		draw_string(FONT,Vector2(470+i*108,570),"✓" if seats[i]==i else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
+		draw_string(FontProfiles.current_font(),Vector2(470+i*108,570),"✓" if seats[i]==i else str(i+1),HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)

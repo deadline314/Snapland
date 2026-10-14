@@ -78,6 +78,7 @@ func _run() -> void:
 	await _check_achievements()
 	await _check_tutorial()
 	await _check_main_album_host()
+	await _check_main_achievement_capacity()
 	await _finish()
 
 func _check_paper_depth() -> void:
@@ -420,6 +421,45 @@ func _check_tutorial() -> void:
 					print("TUTORIAL_ACTION_FAIL ", physical_size, " viewport=", viewport, " button=", button.name, " rect=", button.get_global_rect(), " scale=", scale_factor)
 	tutorial.queue_free()
 	await _frames(2)
+
+func _check_main_achievement_capacity() -> void:
+	Progress.settings["ui_scale"]=1.25
+	var main=MainScene.instantiate()
+	get_tree().root.add_child(main)
+	await _frames(5)
+	for dimensions in [Vector2i(1280,720),Vector2i(1920,1080)]:
+		get_window().size=dimensions
+		main._show_achievements()
+		await _frames(8)
+		var grid := main.overlay.find_child("MinigameStampGrid",true,false) as GridContainer
+		var book := grid.get_parent() as Control
+		while book!=null and book.get_script()!=AchievementScript: book=book.get_parent() as Control
+		var screen := get_viewport().get_visible_rect()
+		var fixed_fit := true
+		for control_name in ["AdaptiveMenuPanel","AdaptiveMenuHeader","AdaptiveMenuFooter","AchievementCategoryTabs","AchievementPageControls","MenuBackButton"]:
+			var fixed := main.overlay.find_child(control_name,true,false) as Control
+			if fixed==null or (fixed.is_visible_in_tree() and not screen.encloses(fixed.get_global_rect())): fixed_fit=false
+		_check(fixed_fit,"125 percent Main achievement frame and fixed navigation fit viewport at %s" % dimensions)
+		var seen := {}
+		var fits := book!=null
+		if book!=null:
+			var viewport := book.find_child("AdaptiveMenuScroll",true,false) as Control
+			for page in range(int(book.call("_page_count"))):
+				await _frames(3)
+				for tile in grid.get_children():
+					if not tile.visible: continue
+					if seen.has(tile.name): fits=false
+					seen[tile.name]=true
+					for label in tile.find_children("*","Label",true,false):
+						if not viewport.get_global_rect().encloses(label.get_global_rect()):
+							print("ACH_WIDE_DIAG ",dimensions," page=",page," capacity=",book.call("_page_capacity")," label=",label.get_path()," rect=",label.get_global_rect()," viewport=",viewport.get_global_rect())
+							fits=false
+				book.call("_change_page",1)
+		_check(fits and seen.size()==12,"125 percent Main achievement pages fit every full caption and condition at %s" % dimensions)
+	main.audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
+	main.queue_free()
+	await _frames(4)
 
 func _check_main_album_host() -> void:
 	var saved_photos: Dictionary=Progress.photos.duplicate(true)

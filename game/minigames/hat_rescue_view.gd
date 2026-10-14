@@ -7,7 +7,7 @@ signal catch_requested(pressed: bool)
 
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
 const HatRescueModelScript = preload("res://game/minigames/hat_rescue_model.gd")
-const FONT: FontFile = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const PLAY_BOUNDS := Rect2(48.0, 136.0, 1184.0, 548.0)
 const HUD_SAFE_RECT := Rect2(34.0, 18.0, 1212.0, 112.0)
@@ -556,7 +556,7 @@ func _ledger_status(ledger: Array, index: int) -> String:
 
 
 func _draw_label(position: Vector2, text: String, color: Color, alignment: HorizontalAlignment, width: int, size: int) -> void:
-	draw_string(FONT, position, text, alignment, width, size, color)
+	draw_string(FontProfiles.current_font(), position, text, alignment, width, size, color)
 
 func _normalize_phase(value: String) -> String:
 	return value if value == "dawn" or value == "noon" or value == "dusk" or value == "night" else "noon"

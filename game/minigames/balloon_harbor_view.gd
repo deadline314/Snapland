@@ -5,7 +5,7 @@ class_name BalloonHarborView
 ## design plane. Geometry and materials are created once; present() only updates
 ## transforms, visibility, and the existing lighting resources.
 
-const HARBOR_FONT: FontFile = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const MAILBOX_DESIGN_POINTS: Array[Vector2] = [Vector2(520.0, 305.0), Vector2(820.0, 480.0), Vector2(1080.0, 320.0)]
 const CAMERA_ORTHO_SIZE := 28.0
@@ -494,7 +494,7 @@ func _build_wind_arrows() -> void:
 		caption.name = "CurrentCaption" if row == 0 else "ForecastCaption"
 		caption.text = "現在風向" if row == 0 else "預報風向"
 		caption.position = Vector2(15,26 + row*60)
-		caption.add_theme_font_override("font",HARBOR_FONT)
+		caption.add_theme_font_override("font",FontProfiles.current_font())
 		caption.add_theme_font_size_override("font_size",18)
 		caption.add_theme_color_override("font_color",Color("#fff0d2"))
 		caption.add_theme_color_override("font_shadow_color",Color("#102b35"))

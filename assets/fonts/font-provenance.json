@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "checked_on": "2026-10-14",
+  "pixel_release": {
+    "tag": "2026.09.25",
+    "asset": "fusion-pixel-font-12px-proportional-otf-v2026.09.25.zip",
+    "download": "https://github.com/TakWolf/fusion-pixel-font/releases/download/2026.09.25/fusion-pixel-font-12px-proportional-otf-v2026.09.25.zip",
+    "sha256": "b0138dfdb5b9fae0159b1e996710782aaf7f47d2b2db26ddc13cd066f6dbb14b"
+  },
+  "upstream": "https://github.com/TakWolf/fusion-pixel-font",
+  "license_note": "Fonts use SIL OFL 1.1; the user CC0 requirement applies to music and sound effects. Fonts are bundled unmodified, with original font names and upstream license texts. License line endings/trailing whitespace normalized only.",
+  "files": [
+    {
+      "path": "assets/fonts/pixel/fusion-pixel-12px-proportional-zh_tw.otf",
+      "sha256": "27e8ed8d3c0eb6d6cd46d7fa1530afda8251f371f9d52ee87b2af634e8cc5c08",
+      "bytes": 4974596,
+      "language_variant": "zh_tw",
+      "glyph_count": 36999,
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/pixel/OFL.txt"
+    },
+    {
+      "path": "assets/fonts/pixel/fusion-pixel-12px-proportional-latin.otf",
+      "sha256": "9847709e8e09e9b8b060a96c3df61a16509c65910dbbcb8ca14eab923641be8f",
+      "bytes": 4938652,
+      "language_variant": "latin",
+      "glyph_count": 36999,
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/pixel/OFL.txt"
+    },
+    {
+      "path": "assets/fonts/pixel/fusion-pixel-12px-proportional-ja.otf",
+      "sha256": "2ee243b369308c0adcb322023044e47d204c33a4a76e39ea236dfb3ab232a032",
+      "bytes": 4960496,
+      "language_variant": "ja",
+      "glyph_count": 36999,
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/pixel/OFL.txt"
+    },
+    {
+      "path": "assets/fonts/pixel/fusion-pixel-12px-proportional-ko.otf",
+      "sha256": "cc3f5030cff2dcf9dbca0ad9e1b3c7c06821fa85fd6087ebd0f7630b2cd232ca",
+      "bytes": 4949664,
+      "language_variant": "ko",
+      "glyph_count": 36999,
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/pixel/OFL.txt"
+    },
+    {
+      "path": "assets/fonts/NotoSansArabic.ttf",
+      "sha256": "63111b5b2e074dd48cc67692e0a2726d86ee94c1c37fe8598257b7b4e87e869e",
+      "bytes": 844676,
+      "language_variant": "ar",
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/NotoSansArabic-OFL.txt",
+      "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf"
+    },
+    {
+      "path": "assets/fonts/NotoSansCJKtc-Regular.otf",
+      "sha256": "dce08bd4fd91aa8aa76ed8fea4b694c2dfb8550f67871e326843212ddbeb88b4",
+      "bytes": 16435884,
+      "language_variant": "cjk-fallback/readable",
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/OFL.txt",
+      "source_url": "https://github.com/notofonts/noto-cjk"
+    },
+    {
+      "path": "assets/fonts/NotoSansSymbols2.ttf",
+      "sha256": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+      "bytes": 1233128,
+      "language_variant": "symbols-fallback",
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/NotoSansSymbols2-OFL.txt",
+      "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssymbols2/NotoSansSymbols2-Regular.ttf"
+    }
+  ],
+  "fallback": "Bundled Noto Sans CJK TC, Noto Sans Arabic and Noto Sans Symbols 2; no dependence on operating system font availability.",
+  "source_character_coverage": {
+    "scope": [
+      "game/ui/**/*.gd",
+      "game/data/**/*.json",
+      "game/main.gd"
+    ],
+    "unique_characters": 975,
+    "primary_missing": "ابةجحرصطغلمنهوً٤٥٦‹›−✦",
+    "primary_plus_cjk_missing": "ابةجحرصطغلمنهوً٤٥٦✦",
+    "bundled_union_missing": "",
+    "note": "Static cmap snapshot, not a shaping or visual test. Runtime and native checks are separate."
+  }
+}

@@ -9,7 +9,8 @@ const PRICE_INK = Color("#8d3c33")
 const GOLD = Color("#ffc66d")
 const FRAME = Color("#163d4d")
 const DEEP = Color("#071b2b")
-const FONT = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
+static var FONT: Font = FontProfiles.current_font()
 const PIXEL_CHECKED = preload("res://assets/ui/pixel-controls/checked.svg")
 const PIXEL_UNCHECKED = preload("res://assets/ui/pixel-controls/unchecked.svg")
 const PIXEL_CHECKED_DISABLED = preload("res://assets/ui/pixel-controls/checked-disabled.svg")
@@ -19,6 +20,20 @@ const PIXEL_GRABBER_HIGHLIGHT = preload("res://assets/ui/pixel-controls/grabber-
 const PIXEL_GRABBER_DISABLED = preload("res://assets/ui/pixel-controls/grabber-disabled.svg")
 static var _reduced_motion := false
 static var _text_scale := 1.0
+static var _font_style := "pixel"
+
+static func set_font_style(style: String) -> void:
+	_font_style = "readable" if style == "readable" else "pixel"
+	FontProfiles.set_style(_font_style)
+	FONT = FontProfiles.current_font()
+
+static func font_style() -> String:
+	return _font_style
+
+static func font() -> Font:
+	FontProfiles.refresh_context()
+	FONT = FontProfiles.current_font()
+	return FONT
 
 class PrintMark extends Control:
 	var motif := "ticket"
@@ -136,7 +151,8 @@ class PixelButtonBevel extends Control:
 		name="PaperPixelBevel"
 		mouse_filter=Control.MOUSE_FILTER_IGNORE
 		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		z_index=1
+		# Children already draw above their button; stay below later modal siblings.
+		z_index=0
 		target.mouse_entered.connect(_on_mouse_entered)
 		target.mouse_exited.connect(_on_mouse_exited)
 		target.button_down.connect(_on_button_down)
@@ -215,6 +231,8 @@ class PixelButtonBevel extends Control:
 
 static func theme() -> Theme:
 	var result := Theme.new()
+	FontProfiles.refresh_context()
+	FONT=FontProfiles.current_font()
 	result.default_font=FONT
 	result.default_font_size=20
 	result.set_color("font_color", "Label", INK)

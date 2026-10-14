@@ -15,7 +15,7 @@ const PAPER := Color("#f1efdc")
 const MINT := Color("#91e8c9")
 const GOLD := Color("#ffcf72")
 const SHADOW_INK := Color("#071923", 0.48)
-const HUD_FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Paper := preload("res://game/ui/paper_ui.gd")
 
 var _details: Dictionary = {}
@@ -376,7 +376,7 @@ func _button(text: String, font_size: int) -> Button:
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.custom_minimum_size.y = 44
-	button.add_theme_font_override("font", HUD_FONT)
+	button.add_theme_font_override("font", FontProfiles.current_font())
 	button.add_theme_font_size_override("font_size", font_size)
 	button.set_meta("hud_base_font_size", font_size)
 	button.add_theme_color_override("font_color", PAPER)
@@ -394,7 +394,7 @@ func _button(text: String, font_size: int) -> Button:
 func _label(text: String, font_size: int, color: Color) -> Label:
 	var label := Label.new()
 	label.text = text
-	label.add_theme_font_override("font", HUD_FONT)
+	label.add_theme_font_override("font", FontProfiles.current_font())
 	label.add_theme_font_size_override("font_size", font_size)
 	label.set_meta("hud_base_font_size", font_size)
 	label.add_theme_color_override("font_color", color)

@@ -24,7 +24,7 @@ const ROOF_ACCENTS: Array[float] = [158.0, 176.0, 319.0, 484.0, 653.0, 822.0, 10
 const STREAMER_START_X: Array[float] = [154.0, 555.0, 947.0]
 const STREAMER_LENGTH: Array[float] = [188.0, 214.0, 176.0]
 const STREAMER_BASE_Y: Array[float] = [244.0, 299.0, 255.0]
-const FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 
 const INK := Color("#263f50")
 const SEA_GLASS := Color("#4b8985")
@@ -655,7 +655,7 @@ func _draw_flight_caption() -> void:
 	if backplate.a > 0.0:
 		draw_rect(Rect2(82.0, 153.0, 332.0, 30.0), backplate, true)
 	var tint := _flight_caption_color(_time_phase, _phase, _event, day_tint)
-	draw_string(FONT, Vector2(91.0, 174.0), label, HORIZONTAL_ALIGNMENT_LEFT, 300.0, 15, tint)
+	draw_string(FontProfiles.current_font(), Vector2(91.0, 174.0), label, HORIZONTAL_ALIGNMENT_LEFT, 300.0, 15, tint)
 
 func _flight_caption_backplate_color(time_phase: String) -> Color:
 	if time_phase == "dusk" or time_phase == "night":
@@ -679,14 +679,14 @@ func _flight_caption_color(time_phase: String, flight_phase: String, event: Stri
 func _draw_bottom_instruments() -> void:
 	draw_rect(Rect2(80.0, 637.0, 1120.0, 71.0), Color(_instrument_bg(), 0.94), true)
 	draw_line(Vector2(80.0, 637.0), Vector2(1200.0, 637.0), Color(PAPER, 0.52), 1.0)
-	draw_string(FONT, Vector2(98.0, 660.0), "現風", HORIZONTAL_ALIGNMENT_LEFT, 70.0, 14, _instrument_text())
+	draw_string(FontProfiles.current_font(), Vector2(98.0, 660.0), "現風", HORIZONTAL_ALIGNMENT_LEFT, 70.0, 14, _instrument_text())
 	_draw_actual_wind(Vector2(177.0, 668.0), _actual_wind)
-	draw_string(FONT, Vector2(358.0, 660.0), "1.25 秒後", HORIZONTAL_ALIGNMENT_LEFT, 115.0, 14, _instrument_text())
+	draw_string(FontProfiles.current_font(), Vector2(358.0, 660.0), "1.25 秒後", HORIZONTAL_ALIGNMENT_LEFT, 115.0, 14, _instrument_text())
 	_draw_forecast_wind(Vector2(468.0, 668.0), _forecast_wind)
-	draw_string(FONT, Vector2(642.0, 660.0), "線張力", HORIZONTAL_ALIGNMENT_LEFT, 80.0, 14, _instrument_text())
+	draw_string(FontProfiles.current_font(), Vector2(642.0, 660.0), "線張力", HORIZONTAL_ALIGNMENT_LEFT, 80.0, 14, _instrument_text())
 	_draw_tension_gauge()
-	draw_string(FONT, Vector2(883.0, 660.0), "收線減壓" if _tension_warning else "衝刺看線", HORIZONTAL_ALIGNMENT_LEFT, 118.0, 14, _warning_text())
-	draw_string(FONT, Vector2(1024.0, 660.0), "備線", HORIZONTAL_ALIGNMENT_LEFT, 56.0, 14, _instrument_text())
+	draw_string(FontProfiles.current_font(), Vector2(883.0, 660.0), "收線減壓" if _tension_warning else "衝刺看線", HORIZONTAL_ALIGNMENT_LEFT, 118.0, 14, _warning_text())
+	draw_string(FontProfiles.current_font(), Vector2(1024.0, 660.0), "備線", HORIZONTAL_ALIGNMENT_LEFT, 56.0, 14, _instrument_text())
 	for rescue_index in 2:
 		var dot := Vector2(1092.0 + float(rescue_index) * 34.0, 657.0)
 		var used := rescue_index < _rescues_used
@@ -694,8 +694,8 @@ func _draw_bottom_instruments() -> void:
 		draw_arc(dot, 8.5, 0.0, TAU, 20, Color(PAPER, 0.92), 1.5)
 		if not used:
 			draw_line(dot + Vector2(-3, 0), dot + Vector2(3, 0), Color(CREAM, 0.9), 1.3)
-	draw_string(FONT, Vector2(96.0, 692.0), "↑↓迎風　短按衝刺　收線降張力　↑氣流升高", HORIZONTAL_ALIGNMENT_LEFT, 450.0, 12, Color(_instrument_text(), 0.82))
-	draw_string(FONT, Vector2(700.0, 692.0), "五枚風環　中心最穩", HORIZONTAL_ALIGNMENT_LEFT, 280.0, 12, Color(_instrument_text(), 0.82))
+	draw_string(FontProfiles.current_font(), Vector2(96.0, 692.0), "↑↓迎風　短按衝刺　收線降張力　↑氣流升高", HORIZONTAL_ALIGNMENT_LEFT, 450.0, 12, Color(_instrument_text(), 0.82))
+	draw_string(FontProfiles.current_font(), Vector2(700.0, 692.0), "五枚風環　中心最穩", HORIZONTAL_ALIGNMENT_LEFT, 280.0, 12, Color(_instrument_text(), 0.82))
 
 func _draw_actual_wind(origin: Vector2, value: float) -> void:
 	var normalized := clampf(value / 185.0, -1.0, 1.0)

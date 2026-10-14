@@ -1,0 +1,501 @@
+{
+  "kind": "99 native scripted UI captures; not a human playthrough",
+  "text_scale": 1.25,
+  "captures": [
+    {
+      "size": 800,
+      "file": "ART-27-native-hud-800x450-scale1.25.png",
+      "page": "hud"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-pause-800x450-scale1.25.png",
+      "page": "pause"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-pause-hover-800x450-scale1.25.png",
+      "page": "pause-hover"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-pause-pressed-800x450-scale1.25.png",
+      "page": "pause-pressed"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-ticket-800x450-scale1.25.png",
+      "page": "ticket"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-achievements-800x450-scale1.25.png",
+      "page": "achievements"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-album-empty-800x450-scale1.25.png",
+      "page": "album-empty"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-album-filled-800x450-scale1.25.png",
+      "page": "album-filled"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-map-800x450-scale1.25.png",
+      "page": "map"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-photo-original-viewer-800x450-scale1.25.png",
+      "page": "photo-original-viewer"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-tasks-800x450-scale1.25.png",
+      "page": "tasks"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-tutorial-800x450-scale1.25.png",
+      "page": "tutorial"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-settings-audio-800x450-scale1.25.png",
+      "page": "settings-audio"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-settings-controls-800x450-scale1.25.png",
+      "page": "settings-controls"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-settings-play-800x450-scale1.25.png",
+      "page": "settings-play"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-time-800x450-scale1.25.png",
+      "page": "time"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-wardrobe-appearance-800x450-scale1.25.png",
+      "page": "wardrobe-appearance"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-wardrobe-closet-800x450-scale1.25.png",
+      "page": "wardrobe-closet"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-wardrobe-popup-800x450-scale1.25.png",
+      "page": "wardrobe-popup"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-wardrobe-shop-800x450-scale1.25.png",
+      "page": "wardrobe-shop"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-dialogue-800x450-scale1.25.png",
+      "page": "dialogue"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-exploration-2-800x450-scale1.25.png",
+      "page": "exploration-2"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-exploration-3-800x450-scale1.25.png",
+      "page": "exploration-3"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-exploration-3-standee-800x450-scale1.25.png",
+      "page": "exploration-3-standee"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-exploration-photo-stage-800x450-scale1.25.png",
+      "page": "exploration-photo-stage"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-invitation-800x450-scale1.25.png",
+      "page": "invitation"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-minigame-confirmation-800x450-scale1.25.png",
+      "page": "minigame-confirmation"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-minigame-hud-800x450-scale1.25.png",
+      "page": "minigame-hud"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-minigame-hud-pause-800x450-scale1.25.png",
+      "page": "minigame-hud-pause"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-minigame-pause-800x450-scale1.25.png",
+      "page": "minigame-pause"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-minigame-score-details-800x450-scale1.25.png",
+      "page": "minigame-score-details"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-result-practice-800x450-scale1.25.png",
+      "page": "result-practice"
+    },
+    {
+      "size": 800,
+      "file": "ART-27-native-rules-800x450-scale1.25.png",
+      "page": "rules"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-hud-1280x720-scale1.25.png",
+      "page": "hud"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-pause-1280x720-scale1.25.png",
+      "page": "pause"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-pause-hover-1280x720-scale1.25.png",
+      "page": "pause-hover"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-pause-pressed-1280x720-scale1.25.png",
+      "page": "pause-pressed"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-ticket-1280x720-scale1.25.png",
+      "page": "ticket"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-achievements-1280x720-scale1.25.png",
+      "page": "achievements"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-album-empty-1280x720-scale1.25.png",
+      "page": "album-empty"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-album-filled-1280x720-scale1.25.png",
+      "page": "album-filled"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-map-1280x720-scale1.25.png",
+      "page": "map"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-photo-original-viewer-1280x720-scale1.25.png",
+      "page": "photo-original-viewer"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-tasks-1280x720-scale1.25.png",
+      "page": "tasks"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-tutorial-1280x720-scale1.25.png",
+      "page": "tutorial"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-settings-audio-1280x720-scale1.25.png",
+      "page": "settings-audio"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-settings-controls-1280x720-scale1.25.png",
+      "page": "settings-controls"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-settings-play-1280x720-scale1.25.png",
+      "page": "settings-play"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-time-1280x720-scale1.25.png",
+      "page": "time"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-wardrobe-appearance-1280x720-scale1.25.png",
+      "page": "wardrobe-appearance"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-wardrobe-closet-1280x720-scale1.25.png",
+      "page": "wardrobe-closet"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-wardrobe-popup-1280x720-scale1.25.png",
+      "page": "wardrobe-popup"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-wardrobe-shop-1280x720-scale1.25.png",
+      "page": "wardrobe-shop"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-dialogue-1280x720-scale1.25.png",
+      "page": "dialogue"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-exploration-2-1280x720-scale1.25.png",
+      "page": "exploration-2"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-exploration-3-1280x720-scale1.25.png",
+      "page": "exploration-3"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-exploration-3-standee-1280x720-scale1.25.png",
+      "page": "exploration-3-standee"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-exploration-photo-stage-1280x720-scale1.25.png",
+      "page": "exploration-photo-stage"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-invitation-1280x720-scale1.25.png",
+      "page": "invitation"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-minigame-confirmation-1280x720-scale1.25.png",
+      "page": "minigame-confirmation"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-minigame-hud-1280x720-scale1.25.png",
+      "page": "minigame-hud"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-minigame-hud-pause-1280x720-scale1.25.png",
+      "page": "minigame-hud-pause"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-minigame-pause-1280x720-scale1.25.png",
+      "page": "minigame-pause"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-minigame-score-details-1280x720-scale1.25.png",
+      "page": "minigame-score-details"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-result-practice-1280x720-scale1.25.png",
+      "page": "result-practice"
+    },
+    {
+      "size": 1280,
+      "file": "ART-27-native-rules-1280x720-scale1.25.png",
+      "page": "rules"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-hud-1920x1080-scale1.25.png",
+      "page": "hud"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-pause-1920x1080-scale1.25.png",
+      "page": "pause"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-pause-hover-1920x1080-scale1.25.png",
+      "page": "pause-hover"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-pause-pressed-1920x1080-scale1.25.png",
+      "page": "pause-pressed"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-ticket-1920x1080-scale1.25.png",
+      "page": "ticket"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-achievements-1920x1080-scale1.25.png",
+      "page": "achievements"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-album-empty-1920x1080-scale1.25.png",
+      "page": "album-empty"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-album-filled-1920x1080-scale1.25.png",
+      "page": "album-filled"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-map-1920x1080-scale1.25.png",
+      "page": "map"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-photo-original-viewer-1920x1080-scale1.25.png",
+      "page": "photo-original-viewer"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-tasks-1920x1080-scale1.25.png",
+      "page": "tasks"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-tutorial-1920x1080-scale1.25.png",
+      "page": "tutorial"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-settings-audio-1920x1080-scale1.25.png",
+      "page": "settings-audio"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-settings-controls-1920x1080-scale1.25.png",
+      "page": "settings-controls"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-settings-play-1920x1080-scale1.25.png",
+      "page": "settings-play"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-time-1920x1080-scale1.25.png",
+      "page": "time"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-wardrobe-appearance-1920x1080-scale1.25.png",
+      "page": "wardrobe-appearance"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-wardrobe-closet-1920x1080-scale1.25.png",
+      "page": "wardrobe-closet"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-wardrobe-popup-1920x1080-scale1.25.png",
+      "page": "wardrobe-popup"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-wardrobe-shop-1920x1080-scale1.25.png",
+      "page": "wardrobe-shop"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-dialogue-1920x1080-scale1.25.png",
+      "page": "dialogue"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-exploration-2-1920x1080-scale1.25.png",
+      "page": "exploration-2"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-exploration-3-1920x1080-scale1.25.png",
+      "page": "exploration-3"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-exploration-3-standee-1920x1080-scale1.25.png",
+      "page": "exploration-3-standee"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-exploration-photo-stage-1920x1080-scale1.25.png",
+      "page": "exploration-photo-stage"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-invitation-1920x1080-scale1.25.png",
+      "page": "invitation"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-minigame-confirmation-1920x1080-scale1.25.png",
+      "page": "minigame-confirmation"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-minigame-hud-1920x1080-scale1.25.png",
+      "page": "minigame-hud"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-minigame-hud-pause-1920x1080-scale1.25.png",
+      "page": "minigame-hud-pause"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-minigame-pause-1920x1080-scale1.25.png",
+      "page": "minigame-pause"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-minigame-score-details-1920x1080-scale1.25.png",
+      "page": "minigame-score-details"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-result-practice-1920x1080-scale1.25.png",
+      "page": "result-practice"
+    },
+    {
+      "size": 1920,
+      "file": "ART-27-native-rules-1920x1080-scale1.25.png",
+      "page": "rules"
+    }
+  ]
+}

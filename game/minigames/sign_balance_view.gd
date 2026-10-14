@@ -3,7 +3,7 @@ class_name SignBalanceView
 
 signal balance_requested(value: float)
 
-const FONT: FontFile = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const HUD_SAFE_RECT := Rect2(34.0, 18.0, 1212.0, 112.0)
 const SCENE_BOUNDS := Rect2(0.0, 0.0, 1280.0, 720.0)
@@ -179,7 +179,7 @@ func _create_sign_mechanism() -> void:
 	var title := Label3D.new()
 	title.name = "SignTitle"
 	title.text = "潮汐花園"
-	title.font = FONT
+	title.font = FontProfiles.current_font()
 	title.font_size = 96
 	title.pixel_size = 0.006
 	title.modulate = Color("#263b41")
@@ -549,4 +549,4 @@ func draw_round_rect(rect: Rect2, radius: float, color: Color) -> void:
 	draw_circle(rect.end - Vector2(radius, radius), radius, color)
 
 func _label(position: Vector2, text: String, color: Color, alignment: HorizontalAlignment, width: int, size: int) -> void:
-	draw_string(FONT, position, text, alignment, width, size, color)
+	draw_string(FontProfiles.current_font(), position, text, alignment, width, size, color)

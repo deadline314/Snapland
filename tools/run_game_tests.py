@@ -119,6 +119,7 @@ def main() -> int:
             ("pixel tutorial page tests", common + ["--script", "res://game/tests/test_tutorial_paged_viewport.gd"]),
             ("pixel UI customization tests", common + ["res://game/tests/test_pixel_ui_customization.tscn"]),
             ("pixel UI minigame tests", common + ["res://game/tests/test_pixel_ui_minigames.tscn"]),
+            ("pixel typography tests", common + ["res://game/tests/test_pixel_fonts.tscn"]),
         ]
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
@@ -140,6 +141,7 @@ def main() -> int:
             if engine_errors:
                 return fail(f"{label} logged engine errors:\n" + "\n".join(engine_errors[-40:]))
             pass_markers = {
+                "pixel typography tests": "PASS: 30 pixel font checks, 0 failures",
                 "pixel UI shell tests": "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920",
                 "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",
                 "pixel UI button depth tests": "PASS: Paper pixel-button depth, state, focus and contrast checks",

@@ -40,6 +40,7 @@ var _game_body: BoxContainer
 var _game_summary: BoxContainer
 var _summary_title: Label
 var _summary_copy: Label
+var _pagination_queued := false
 var _game_grid: GridContainer
 
 func setup(progress: Node, games: Array) -> void:
@@ -70,6 +71,7 @@ func _ready() -> void:
 	scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode=ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	scroll.gui_input.connect(_on_scroll_gui_input)
+	scroll.resized.connect(_queue_page_fit)
 	add_child(scroll)
 	var content := VBoxContainer.new()
 	content.name="AchievementContent"
@@ -107,6 +109,7 @@ func _ready() -> void:
 	columns.name="MinigameStampGrid"
 	columns.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	columns.resized.connect(_fit_stamp_columns.bind(columns))
+	columns.resized.connect(_queue_page_fit)
 	_fit_stamp_columns.call_deferred(columns)
 	var viewport_width := get_viewport().get_visible_rect().size.x
 	columns.columns=clampi(floori(viewport_width/245.0),2,4)
@@ -247,6 +250,60 @@ func _fit_stamp_columns(grid: GridContainer) -> void:
 			for label in tile.find_children("*","Label",true,false):
 				(label as Label).size.x=maxf(140.0/scale_factor,width-100.0)
 
+func _queue_page_fit() -> void:
+	if _pagination_queued or not is_inside_tree() or is_queued_for_deletion(): return
+	_pagination_queued=true
+	call_deferred("_fit_pages_after_layout")
+
+func _fit_pages_after_layout() -> void:
+	_pagination_queued=false
+	if not is_inside_tree(): return
+	_update_pages()
+
+func _measured_stamp_height(tile: Control, card_width: float) -> float:
+	var panel := tile.get_theme_stylebox("panel")
+	var row := tile.get_child(0) as HBoxContainer
+	var stamp := row.get_child(0) as Control
+	var copy := row.get_child(1) as VBoxContainer
+	var copy_width := maxf(1.0,card_width-panel.get_minimum_size().x-stamp.get_combined_minimum_size().x-row.get_theme_constant("separation"))
+	var copy_height := 0.0
+	for child in copy.get_children():
+		var label := child as Label
+		if label==null or not label.visible: continue
+		var font := label.get_theme_font("font")
+		var font_size := label.get_theme_font_size("font_size")
+		var measured := font.get_multiline_string_size(label.text,HORIZONTAL_ALIGNMENT_LEFT,copy_width,font_size)
+		var lines := maxi(1,ceili(measured.y/font.get_height(font_size)))
+		copy_height+=measured.y+float(lines-1)*label.get_theme_constant("line_spacing")
+	copy_height+=maxi(0,copy.get_child_count()-1)*copy.get_theme_constant("separation")
+	return maxf(tile.get_combined_minimum_size().y,maxf(stamp.get_combined_minimum_size().y,copy_height)+panel.get_minimum_size().y)
+
+func _page_capacity() -> int:
+	var scale_factor := Paper.physical_scale(self)
+	if get_viewport().get_visible_rect().size.x*scale_factor<1200.0: return 2
+	if not is_instance_valid(_page_controls) or _content_scroll.size.y<=0.0: return 4
+	var games := _game_section.visible
+	var columns := 4 if games else 2
+	var entries := _game_section.find_children("AchievementStamp_ACH_GAME_*","PanelContainer",true,false) if games else _milestone_section.find_children("AchievementStamp_*","PanelContainer",true,false)
+	var available := _content_scroll.size.y
+	# Reserve the fixed pager before measuring so showing it cannot invalidate a page.
+	if not _page_controls.visible:
+		available-=_page_controls.get_combined_minimum_size().y+get_theme_constant("separation")
+	var surface := (_game_body.get_parent() if games else _milestone_section.get_parent()).get_theme_stylebox("panel") as StyleBox
+	available-=surface.get_minimum_size().y
+	if games:
+		available-=_game_summary.get_combined_minimum_size().y+_game_body.get_theme_constant("separation")
+	elif _milestone_heading.visible:
+		available-=_milestone_heading.get_combined_minimum_size().y+_milestone_section.get_theme_constant("v_separation")
+	var separation := _game_grid.get_theme_constant("v_separation") if games else _milestone_section.get_theme_constant("v_separation")
+	var spread_width := _content_scroll.size.x-surface.get_minimum_size().x
+	var card_width := (spread_width-float(columns-1)*separation)/float(columns)
+	var row_height := 1.0
+	for tile in entries:
+		row_height=maxf(row_height,_measured_stamp_height(tile,card_width))
+	var rows := maxi(1,floori((available+separation)/(row_height+separation)))
+	return columns*rows
+
 func _fit_milestone_spread() -> void:
 	if not is_instance_valid(_milestone_section): return
 	var scale_factor := Paper.physical_scale(self)
@@ -290,11 +347,8 @@ func _change_page(delta: int) -> void:
 	_update_pages()
 
 func _page_count() -> int:
-	var scale_factor := Paper.physical_scale(self)
-	var physical_width := get_viewport().get_visible_rect().size.x * scale_factor
-	var capacity := 12 if physical_width >= 1200.0 else 2
-	var count := 12 if _game_section != null and _game_section.visible else 4
-	return maxi(1,ceili(float(count)/float(capacity)))
+	var count := mini(12,_games.size()) if _game_section != null and _game_section.visible else 4
+	return maxi(1,ceili(float(count)/float(_page_capacity())))
 
 func _update_pages() -> void:
 	if _page_controls == null or not is_instance_valid(_page_controls): return
@@ -302,11 +356,11 @@ func _update_pages() -> void:
 	var physical_width := get_viewport().get_visible_rect().size.x * scale_factor
 	var compact := physical_width < 1200.0
 	var show_games := _game_section.visible
-	var capacity := 12 if not compact else 2
-	var total := 12 if show_games else 4
+	var capacity := _page_capacity()
+	var total := mini(12,_games.size()) if show_games else 4
 	var pages := maxi(1,ceili(float(total)/float(capacity)))
 	_page=clampi(_page,0,pages-1)
-	_page_controls.visible=compact
+	_page_controls.visible=pages>1
 	# This is the panel's sole flexible content region. Keeping it expand-fill is
 	# important in the compact Main host: shrink-begin can collapse it to zero
 	# after the host removes scroll minimums, clipping the real stamp captions.
@@ -321,7 +375,7 @@ func _update_pages() -> void:
 	# two-card spread in the compact grid. Programmatic scroll positioning alone
 	# leaves later rows simultaneously exposed in a tall logical host.
 	for index in range(entries.size()):
-		(entries[index] as Control).visible=not compact or (index>=_page*capacity and index<(_page+1)*capacity)
+		(entries[index] as Control).visible=index>=_page*capacity and index<(_page+1)*capacity
 	# A page is a complete spread at the viewport origin. Scrolling to a card
 	# can move its summary above the clip when card minima change after sorting.
 	_content_scroll.scroll_vertical=0

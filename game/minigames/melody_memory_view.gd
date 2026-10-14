@@ -5,7 +5,7 @@ signal note_requested(index: int)
 signal replay_requested
 
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
-const FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const INSTRUMENT_ATLAS_PATH := "res://assets/minigames/props/melody-instruments-v2.png"
 const ATLAS_CELL_SIZE := 627
 const ATLAS_ALPHA_BOUNDS: Array[Rect2] = [
@@ -311,7 +311,7 @@ func _draw_music_roll(paper: Color, ink: Color, brass: Color, teal: Color, wood:
 	draw_circle(Vector2(178, 215), 9, teal)
 	draw_rect(CRANK_LABEL_BOUNDS, paper)
 	draw_rect(CRANK_LABEL_BOUNDS, ink, false, 1.5, true)
-	draw_string(FONT, Vector2(45, 308), "手搖樂譜", HORIZONTAL_ALIGNMENT_LEFT, 122, 17, ink)
+	draw_string(FontProfiles.current_font(), Vector2(45, 308), "手搖樂譜", HORIZONTAL_ALIGNMENT_LEFT, 122, 17, ink)
 	var notes: Array = rhythm_markers()
 	var count := notes.size()
 	if count > 0:
@@ -359,8 +359,8 @@ func _draw_instruments(ink: Color, paper: Color, brass: Color, teal: Color, cora
 		var box: Rect2 = instrument_label_bounds(index)
 		draw_rect(box, Color("#102b3a"))
 		draw_rect(box, brass, false, 2.0)
-		draw_string(FONT, Vector2(box.position.x + 8, box.position.y + 18), KEY_LABELS[index] + "  " + INSTRUMENT_NAMES[index], HORIZONTAL_ALIGNMENT_CENTER, box.size.x - 16, 16, Color("#f4eedc"))
-		draw_string(FONT, Vector2(box.position.x + 8, box.position.y + 35), "或鍵盤 " + SECONDARY_KEYS[index], HORIZONTAL_ALIGNMENT_CENTER, box.size.x - 16, 12, Color("#c7dbd4"))
+		draw_string(FontProfiles.current_font(), Vector2(box.position.x + 8, box.position.y + 18), KEY_LABELS[index] + "  " + INSTRUMENT_NAMES[index], HORIZONTAL_ALIGNMENT_CENTER, box.size.x - 16, 16, Color("#f4eedc"))
+		draw_string(FontProfiles.current_font(), Vector2(box.position.x + 8, box.position.y + 35), "或鍵盤 " + SECONDARY_KEYS[index], HORIZONTAL_ALIGNMENT_CENTER, box.size.x - 16, 12, Color("#c7dbd4"))
 
 func _draw_instrument_shadow(center: Vector2, wood: Color) -> void:
 	_draw_ellipse(center + Vector2(0, 69), Vector2(72, 11), wood.darkened(0.10))
@@ -425,7 +425,7 @@ func _draw_controls(ink: Color, paper: Color, coral: Color) -> void:
 	var completed := int(_snapshot.get("completed_phrases", 0))
 	draw_rect(Rect2(190, 592, 230, 39), ui_ink)
 	draw_rect(Rect2(190, 592, 230, 39), Color("#dfb95f"), false, 2.0)
-	draw_string(FONT, Vector2(199, 609), "樂句 %d / %d" % [phrase_no, phrase_total], HORIZONTAL_ALIGNMENT_LEFT, 112, 14, ivory)
+	draw_string(FontProfiles.current_font(), Vector2(199, 609), "樂句 %d / %d" % [phrase_no, phrase_total], HORIZONTAL_ALIGNMENT_LEFT, 112, 14, ivory)
 	for dot in range(phrase_total):
 		var color := Color("#71c7b5") if dot < completed else Color("#607986")
 		draw_circle(Vector2(324 + dot * 28, 611), 7, color)
@@ -434,30 +434,30 @@ func _draw_controls(ink: Color, paper: Color, coral: Color) -> void:
 	var message := _stage_feedback_message()
 	draw_rect(Rect2(168, 331, 924, 27), ui_ink)
 	draw_rect(Rect2(168, 331, 924, 27), Color("#dfb95f"), false, 1.0)
-	draw_string(FONT, Vector2(177, 350), message, HORIZONTAL_ALIGNMENT_CENTER, 900, 17, ivory)
+	draw_string(FontProfiles.current_font(), Vector2(177, 350), message, HORIZONTAL_ALIGNMENT_CENTER, 900, 17, ivory)
 	draw_rect(Rect2(198, 146, 228, 25), ui_ink)
 	draw_rect(Rect2(198, 146, 228, 25), Color("#dfb95f"), false, 1.0)
-	draw_string(FONT, Vector2(202, 165), _phase_label(), HORIZONTAL_ALIGNMENT_LEFT, 216, 18, ivory)
+	draw_string(FontProfiles.current_font(), Vector2(202, 165), _phase_label(), HORIZONTAL_ALIGNMENT_LEFT, 216, 18, ivory)
 	if phase == "active" and bool(_snapshot.get("replay_available", false)):
 		draw_rect(REPLAY_RECT, ui_ink)
 		draw_rect(REPLAY_RECT, Color("#dfb95f"), false, 2.0)
 		draw_arc(REPLAY_RECT.position + Vector2(28, 29), 13, 0.25, TAU * 0.9, 20, coral, 3.0, true)
-		draw_string(FONT, Vector2(REPLAY_RECT.position.x + 48, REPLAY_RECT.position.y + 36), "重聽 %d/%d" % [int(_snapshot.get("replay_count", 0)), int(_snapshot.get("replay_limit", 2))], HORIZONTAL_ALIGNMENT_LEFT, 95, 17, ivory)
+		draw_string(FontProfiles.current_font(), Vector2(REPLAY_RECT.position.x + 48, REPLAY_RECT.position.y + 36), "重聽 %d/%d" % [int(_snapshot.get("replay_count", 0)), int(_snapshot.get("replay_limit", 2))], HORIZONTAL_ALIGNMENT_LEFT, 95, 17, ivory)
 	else:
 		draw_rect(REPLAY_RECT, Color("#203f4e"))
 		draw_rect(REPLAY_RECT, Color("#70828a"), false, 2.0)
-		draw_string(FONT, Vector2(REPLAY_RECT.position.x + 10, REPLAY_RECT.position.y + 36), "重聽（演奏時）", HORIZONTAL_ALIGNMENT_CENTER, 130, 14, Color("#a7b8b6"))
+		draw_string(FontProfiles.current_font(), Vector2(REPLAY_RECT.position.x + 10, REPLAY_RECT.position.y + 36), "重聽（演奏時）", HORIZONTAL_ALIGNMENT_CENTER, 130, 14, Color("#a7b8b6"))
 	draw_rect(Rect2(38, 592, 138, 39), ui_ink)
 	draw_rect(Rect2(38, 592, 138, 39), Color("#dfb95f"), false, 1.0)
-	draw_string(FONT, Vector2(46, 609), "音高", HORIZONTAL_ALIGNMENT_LEFT, 58, 13, ivory)
-	draw_string(FONT, Vector2(46, 626), "＋ 節奏", HORIZONTAL_ALIGNMENT_LEFT, 100, 13, ivory)
+	draw_string(FontProfiles.current_font(), Vector2(46, 609), "音高", HORIZONTAL_ALIGNMENT_LEFT, 58, 13, ivory)
+	draw_string(FontProfiles.current_font(), Vector2(46, 626), "＋ 節奏", HORIZONTAL_ALIGNMENT_LEFT, 100, 13, ivory)
 	draw_rect(Rect2(682, 603, 362, 28), ui_ink)
 	draw_rect(Rect2(682, 603, 362, 28), Color("#dfb95f"), false, 1.0)
-	draw_string(FONT, Vector2(690, 622), "錯誤 %d   精準音 %d" % [int(_snapshot.get("error_count", 0)), int(_snapshot.get("precise_notes", 0))], HORIZONTAL_ALIGNMENT_RIGHT, 346, 14, ivory)
+	draw_string(FontProfiles.current_font(), Vector2(690, 622), "錯誤 %d   精準音 %d" % [int(_snapshot.get("error_count", 0)), int(_snapshot.get("precise_notes", 0))], HORIZONTAL_ALIGNMENT_RIGHT, 346, 14, ivory)
 	if _reduced_motion:
 		draw_rect(Rect2(974, 146, 220, 25), ui_ink)
 		draw_rect(Rect2(974, 146, 220, 25), Color("#dfb95f"), false, 1.0)
-		draw_string(FONT, Vector2(973, 163), "靜態音符標記", HORIZONTAL_ALIGNMENT_RIGHT, 220, 14, ivory)
+		draw_string(FontProfiles.current_font(), Vector2(973, 163), "靜態音符標記", HORIZONTAL_ALIGNMENT_RIGHT, 220, 14, ivory)
 
 func _stage_feedback_message() -> String:
 	match str(_snapshot.get("phase", "listen")):

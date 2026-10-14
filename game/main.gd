@@ -212,6 +212,7 @@ func _quit_game() -> void:
 
 func _build_ui() -> void:
 	Paper.set_text_scale(float(Progress.settings.get("ui_scale",1.0)))
+	Paper.set_font_style(str(Progress.settings.get("font_style", "pixel")))
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
 	ui=Control.new()
@@ -281,6 +282,7 @@ func _build_ui() -> void:
 	keepsakes.add_child(coin_count_label)
 	ticket_button=Paper.button("航海旅券  ·  M",_show_ticket,hud)
 	ticket_button.name="VoyageTicket"
+	ticket_button.grow_horizontal=Control.GROW_DIRECTION_BEGIN
 	ticket_button.anchor_left=1.0
 	ticket_button.anchor_right=1.0
 	ticket_button.offset_left=-222.0
@@ -296,6 +298,8 @@ func _build_ui() -> void:
 	quest_label.add_theme_constant_override("shadow_offset_y",1)
 	hud.add_child(quest_label)
 	context_bar=PanelContainer.new()
+	context_bar.grow_horizontal=Control.GROW_DIRECTION_BOTH
+	context_bar.grow_vertical=Control.GROW_DIRECTION_BEGIN
 	context_bar.anchor_left=0.5
 	context_bar.anchor_right=0.5
 	context_bar.anchor_top=1.0
@@ -546,9 +550,12 @@ func _back(parent: Node) -> void:
 
 func _refresh() -> void:
 	if not is_instance_valid(ui): return
+	Paper.set_font_style(str(Progress.settings.get("font_style", "pixel")))
 	Paper.set_reduced_motion(bool(Progress.settings.get("reduced_motion",false)))
 	Paper.set_text_scale(float(Progress.settings.get("ui_scale",1.0)))
 	if is_instance_valid(ui): ui.theme=Paper.theme()
+	if is_instance_valid(world) and world.has_method("refresh_label_fonts"):
+		world.refresh_label_fonts(Paper.font())
 	_adapt_hud()
 	_adapt_open_menu()
 	normal_count_label.text="普通 %d / 18"%Progress.normal_count()
@@ -1721,6 +1728,9 @@ func _adapt_hud() -> void:
 	ticket_button.offset_top=24.0/scale_factor
 	ticket_button.offset_bottom=72.0/scale_factor
 	ticket_button.custom_minimum_size=Vector2(198,48)/scale_factor
+	var ticket_extent := ticket_button.get_combined_minimum_size().max(Vector2(198,48)/scale_factor)
+	ticket_button.offset_left=ticket_button.offset_right-ticket_extent.x
+	ticket_button.offset_bottom=ticket_button.offset_top+ticket_extent.y
 	quest_label.position=Vector2(28,108)/scale_factor
 	quest_label.size=Vector2(376,48)/scale_factor
 	context_bar.offset_left=-200.0/scale_factor
@@ -1728,6 +1738,10 @@ func _adapt_hud() -> void:
 	context_bar.offset_top=-70.0/scale_factor
 	context_bar.offset_bottom=-18.0/scale_factor
 	context_bar.custom_minimum_size=Vector2(400,52)/scale_factor
+	var context_extent := context_bar.get_combined_minimum_size().max(Vector2(400,52)/scale_factor)
+	context_bar.offset_left=-context_extent.x*0.5
+	context_bar.offset_right=context_extent.x*0.5
+	context_bar.offset_top=context_bar.offset_bottom-context_extent.y
 	toast.offset_left=-310.0/scale_factor
 	toast.offset_right=310.0/scale_factor
 	toast.offset_top=190.0/scale_factor
@@ -1797,6 +1811,8 @@ func _layout_open_panel(panel: Control) -> void:
 	var preferred := _menu_preferred_size(modal_kind)
 	var width := minf(preferred.x/scale_factor,viewport_size.x-36.0/scale_factor)
 	var height := minf(preferred.y/scale_factor,viewport_size.y-36.0/scale_factor)
+	# Stamp pages need the available logical height, including fixed navigation.
+	if modal_kind=="achievements": height=viewport_size.y-36.0/scale_factor
 	# CenterContainer owns the panel geometry; its minimum is the desired shell
 	# extent, while real content minima remain visible to Godot's layout system.
 	panel.custom_minimum_size=Vector2(width,height)

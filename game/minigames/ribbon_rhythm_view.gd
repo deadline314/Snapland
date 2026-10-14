@@ -5,7 +5,7 @@ signal action_pressed(action: String)
 signal action_released(action: String)
 
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
-const FONT: Font = preload("res://assets/fonts/NotoSansCJKtc-Regular.otf")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const CharacterAnimationLibrary = preload("res://game/world/character_animation_library.gd")
 const STAGE_BOUNDS := Rect2(78.0, 142.0, 1124.0, 486.0)
@@ -575,4 +575,4 @@ func _draw_controls(palette: Dictionary) -> void:
 		_draw_label(rect.position + Vector2(0, 32), label, palette.text if not active else palette.sky, HORIZONTAL_ALIGNMENT_CENTER, int(rect.size.x), 15)
 
 func _draw_label(position: Vector2, text: String, color: Color, alignment: HorizontalAlignment, width: int, size_value: int) -> void:
-	draw_string(FONT, position, text, alignment, width, size_value, color)
+	draw_string(FontProfiles.current_font(), position, text, alignment, width, size_value, color)

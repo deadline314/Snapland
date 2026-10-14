@@ -1,0 +1,40 @@
+{
+  "method": "Primary session ran targeted checks and viewed native captures/contact sheets; not a human playthrough",
+  "godot_suites": {
+    "pixel_fonts": "1e3f7f84",
+    "popup_bounds": "7963764b",
+    "button_depth": "b0e3b1f1",
+    "collections": "d3262107",
+    "tutorial_pagination": "95f18ab4",
+    "customization": "20f6d8e8",
+    "minigames": "12554842",
+    "wardrobe": "062f37e6",
+    "core": "e2f611ec",
+    "localization": "c7b5de55",
+    "audio": "6cc03449",
+    "integration": "8520760d",
+    "dialogue": "cb62d6bc",
+    "minigame_hud": "168b77d1"
+  },
+  "shell": "pixel-test_pixel_ui_shell-376a86be exit0 errors[]",
+  "compile": "pixel-compile-0e488d5c exit0 errors[]",
+  "python": "font provenance3 and entrypoint13 passed",
+  "native": {
+    "800x450": "type-ui-800-57590369",
+    "1280x720": "type-ui-1280-c460cc50",
+    "1920x1080": "type-ui-1920-88b47191",
+    "pages_per_size": 33,
+    "text_scale": 1.25,
+    "exit": 0,
+    "engine_errors": []
+  },
+  "typography_cases": 6,
+  "static_source_characters": 975,
+  "bundled_cmap_missing": 0,
+  "limits": [
+    "English and RTL are QA packs only; only zh_TW is released.",
+    "No animation quality approval or music listening approval is inferred.",
+    "Full test suite remains CI work."
+  ],
+  "targeted_godot_suites_passed": 15
+}

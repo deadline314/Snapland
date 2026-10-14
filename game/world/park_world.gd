@@ -49,6 +49,7 @@ var component_motion: Node
 var npc_activity: Node
 var occlusion_controller: Node
 var pending_npc_interaction: Dictionary = {}
+var _last_label_font: Font
 var lamps: Array[OmniLight3D] = []
 const ACTIVE_LAMP_LIMIT := 8
 const SHADOW_LAMP_LIMIT := 2
@@ -2493,3 +2494,10 @@ func update_collection(photos: Dictionary) -> void:
 		var marker: Label3D=point.marker
 		marker.text="✓" if not source.is_empty() and photos.has(source) else "◇"
 		marker.modulate=Color("#83d3ae") if marker.text=="✓" else GOLD
+
+func refresh_label_fonts(font: Font) -> void:
+	if font == null or font == _last_label_font:
+		return
+	_last_label_font = font
+	for node: Node in find_children("*", "Label3D", true, false):
+		(node as Label3D).font = font

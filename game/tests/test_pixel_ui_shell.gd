@@ -61,6 +61,14 @@ func _run() -> void:
 		Progress.settings["ui_scale"]=1.25
 		_main._refresh()
 		_check(_main.coin_count_label.get_theme_font_size("font_size")>hud_base,"changing text scale immediately adapts HUD at %s"%str(dimensions))
+		var context_was_visible: bool=_main.context_bar.visible
+		_main.context_bar.show()
+		await _frames(2)
+		var hud_viewport := get_viewport().get_visible_rect()
+		for hud_control: Control in [_main.ticket_button,_main.context_bar,_main.context_action]:
+			_check(hud_viewport.encloses(hud_control.get_global_rect()),"large-text HUD %s fits actual viewport at %s: %s" % [hud_control.name,dimensions,hud_control.get_global_rect()])
+			_check(hud_control.size.x+0.001>=hud_control.get_combined_minimum_size().x and hud_control.size.y+0.001>=hud_control.get_combined_minimum_size().y,"large-text HUD %s preserves its intrinsic content minimum: size=%s minimum=%s" % [hud_control.name,hud_control.size,hud_control.get_combined_minimum_size()])
+		_main.context_bar.visible=context_was_visible
 		_main._show_wardrobe()
 		await _frames(5)
 		_check(is_equal_approx(get_viewport().get_visible_rect().size.x,1280.0) and is_equal_approx(get_viewport().get_visible_rect().size.y,720.0),"large-text wardrobe uses native-matching logical1280x720")
@@ -239,6 +247,7 @@ func _run() -> void:
 	_check(Paper.PRICE_INK==Color("#8d3c33"),"price ink keeps its light-plate contract")
 	_check(Paper.text_scale()>=1.0 and Paper.text_scale()<=1.25,"text scale remains within its persisted accessible range")
 	_main.audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
 	_main.queue_free()
 	await _frames(2)
 	if _failures.is_empty():
