@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "locales": {
+    "zh_TW": {"name": "繁體中文", "released": true, "qa_only": false, "direction": "ltr", "pack": "zh_TW.json"},
+    "en": {"name": "English (QA)", "released": false, "qa_only": true, "direction": "ltr", "pack": "en.json"},
+    "qa_rtl": {"name": "RTL QA", "released": false, "qa_only": true, "direction": "rtl", "pack": "qa_rtl.json"}
+  }
+}

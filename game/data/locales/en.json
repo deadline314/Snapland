@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "locale": "en",
+  "direction": "ltr",
+  "release_note": "QA pack only. Incomplete translation; not released as an English game.",
+  "messages": {
+    "settings.audio": {
+      "text": "Audio",
+      "source": "聲音"
+    },
+    "settings.play": {
+      "text": "Play and display",
+      "source": "遊玩與畫面"
+    },
+    "settings.controls": {
+      "text": "Controls",
+      "source": "操作"
+    },
+    "settings.text": {
+      "text": "Language and text",
+      "source": "語言與文字"
+    },
+    "settings.locale": {
+      "text": "Interface language",
+      "source": "介面語言"
+    },
+    "settings.font_style": {
+      "text": "Text style",
+      "source": "文字風格"
+    },
+    "settings.audio.title": {
+      "text": "Audio and text speed",
+      "source": "音訊與文字速度"
+    },
+    "settings.master_volume": {
+      "text": "Master volume",
+      "source": "總音量"
+    },
+    "settings.music_volume": {
+      "text": "Music",
+      "source": "背景音樂"
+    },
+    "settings.sfx_volume": {
+      "text": "Interaction sounds",
+      "source": "互動音效"
+    },
+    "settings.text_speed": {
+      "text": "Dialogue speed",
+      "source": "對話文字速度"
+    },
+    "settings.play.title": {
+      "text": "Play and display",
+      "source": "遊玩方式與畫面"
+    },
+    "settings.assist": {
+      "text": "Assist play: relaxed timing and judgment; collection stays enabled",
+      "source": "輔助遊玩：放寬時間與判定，仍可收藏"
+    },
+    "settings.reduced_motion": {
+      "text": "Reduce motion: stop water and decorative movement",
+      "source": "降低動態：停止水波與裝飾擺動"
+    },
+    "settings.fullscreen": {
+      "text": "Fullscreen",
+      "source": "使用全螢幕"
+    },
+    "settings.ui_scale": {
+      "text": "Text size",
+      "source": "文字大小"
+    },
+    "settings.ui_scale.hint": {
+      "text": "Text size enlarges interface text; buttons keep their full control height.",
+      "source": "文字大小會放大介面文字；按鈕仍維持完整操作高度。"
+    },
+    "settings.controls.title": {
+      "text": "Keyboard controls",
+      "source": "鍵盤操作"
+    },
+    "controls.move": {
+      "text": "Move",
+      "source": "移動"
+    },
+    "controls.walk": {
+      "text": "Walk",
+      "source": "慢走"
+    },
+    "controls.interact": {
+      "text": "Interact",
+      "source": "互動"
+    },
+    "controls.greet": {
+      "text": "Greet",
+      "source": "招呼"
+    },
+    "controls.photo": {
+      "text": "Take photo",
+      "source": "拍照"
+    },
+    "controls.wardrobe": {
+      "text": "Wardrobe",
+      "source": "衣櫃"
+    },
+    "controls.time": {
+      "text": "Time",
+      "source": "時段"
+    },
+    "controls.ticket": {
+      "text": "Guide",
+      "source": "旅券"
+    },
+    "controls.pause": {
+      "text": "Pause / return",
+      "source": "暫停／返回"
+    },
+    "controls.move.keys": {
+      "text": "W A S D / arrows",
+      "source": "W A S D／方向鍵"
+    },
+    "controls.walk.keys": {
+      "text": "Hold Shift",
+      "source": "按住 Shift"
+    },
+    "controls.interact.keys": {
+      "text": "E",
+      "source": "E"
+    },
+    "controls.greet.keys": {
+      "text": "F",
+      "source": "F"
+    },
+    "controls.photo.keys": {
+      "text": "P",
+      "source": "P"
+    },
+    "controls.wardrobe.keys": {
+      "text": "C",
+      "source": "C"
+    },
+    "controls.time.keys": {
+      "text": "T",
+      "source": "T"
+    },
+    "controls.ticket.keys": {
+      "text": "M",
+      "source": "M"
+    },
+    "controls.pause.keys": {
+      "text": "Esc",
+      "source": "Esc"
+    },
+    "button.back": {
+      "text": "Return to the park  ·  Esc",
+      "source": "返回遊園  ·  Esc"
+    },
+    "font.pixel": {
+      "text": "Pixel",
+      "source": "像素字型"
+    },
+    "font.readable": {
+      "text": "Readable",
+      "source": "易讀字型"
+    },
+    "locale.zh_TW": {
+      "text": "Traditional Chinese",
+      "source": "繁體中文"
+    },
+    "locale.en": {
+      "text": "English (QA)",
+      "source": "English（QA）"
+    },
+    "pause.resume": {
+      "text": "Resume",
+      "source": "繼續遊園"
+    },
+    "pause.album": {
+      "text": "Photo album",
+      "source": "拍貼收藏本"
+    },
+    "pause.settings": {
+      "text": "Settings",
+      "source": "設定與輔助"
+    },
+    "pause.controls": {
+      "text": "Controls",
+      "source": "操作速查"
+    },
+    "hud.normal_count": {
+      "text": "Normal {count} / 18",
+      "source": "普通 {count} / 18"
+    },
+    "hud.devil_count": {
+      "text": "Little devils {count} / 12",
+      "source": "小惡魔 {count} / 12"
+    },
+    "hud.coins": {
+      "text": "{count} coins",
+      "source": "{count} 幣"
+    },
+    "dialogue.example.one": {
+      "text": "Hello, {name}!",
+      "source": "嗨，{name}！"
+    },
+    "dialogue.example.many": {
+      "text": "{count} photos belong to {name}.",
+      "source": "嗨，{name}！你有 {count} 張照片。"
+    }
+  },
+  "plurals": {
+    "hud.photo_count": {"singular_id": "plural.photo.one", "plural_id": "plural.photo.many", "forms": ["{count} photo", "{count} photos"]}
+  }
+}

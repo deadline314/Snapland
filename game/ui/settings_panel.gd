@@ -15,9 +15,9 @@ func open(main: Node, modal_body: VBoxContainer) -> void:
 	heading.name="SettingsCategories"
 	heading.add_theme_constant_override("separation",6)
 	body.add_child(heading)
-	for entry in [["audio","聲音"],["play","遊玩與畫面"],["controls","操作"]]:
+	for entry in [["audio","settings.audio"],["play","settings.play"],["controls","settings.controls"],["text","settings.text"]]:
 		var key: String=entry[0]
-		var button := Paper.button(entry[1],func(): _show_category(key),heading)
+		var button := Paper.button(_t(str(entry[1])),func(): _show_category(key),heading)
 		button.name="SettingsTab_"+key
 		button.toggle_mode=true
 		button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -28,6 +28,7 @@ func open(main: Node, modal_body: VBoxContainer) -> void:
 	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("separation",8)
 	body.add_child(content)
+	Localization.locale_changed.connect(_refresh_locale)
 	_show_category("audio")
 
 func _show_category(category: String) -> void:
@@ -43,24 +44,60 @@ func _show_category(category: String) -> void:
 		"audio": _fill_audio()
 		"play": _fill_play()
 		"controls": _fill_controls()
+		"text": _fill_text()
 	host.call_deferred("_adapt_open_menu")
 
+func _fill_text() -> void:
+	content.add_child(Paper.section_title(_t("settings.text"),Paper.TEAL))
+	_add_choice("locale", _t("settings.locale"), Localization.available_locales(), _locale_labels())
+	_add_choice("font_style", _t("settings.font_style"), ["pixel", "readable"], {"pixel": _t("font.pixel"), "readable": _t("font.readable")})
+
+func _locale_labels() -> Dictionary:
+	var result := {"zh_TW": _t("locale.zh_TW"), "en": _t("locale.en")}
+	return result
+
+func _add_choice(key: String, title: String, values: Array, labels: Dictionary) -> void:
+	var row := HBoxContainer.new()
+	row.name = "Setting_" + key
+	row.add_theme_constant_override("separation", 10)
+	content.add_child(row)
+	var label := Paper.label(title, 18)
+	label.custom_minimum_size.x = 170
+	row.add_child(label)
+	var choice := OptionButton.new()
+	choice.name = "Value_" + key
+	choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var current := str(Progress.settings.get(key, "zh_TW" if key == "locale" else "pixel"))
+	for value in values:
+		choice.add_item(str(labels.get(value, value)))
+		choice.set_item_metadata(choice.item_count - 1, value)
+		if value == current:
+			choice.select(choice.item_count - 1)
+	row.add_child(choice)
+	choice.item_selected.connect(func(index: int):
+		var selected: Variant = choice.get_item_metadata(index)
+		Progress.set_setting(key, selected)
+	)
+
+func _t(key: String) -> String:
+	return Localization.text(key)
+
 func _fill_audio() -> void:
-	content.add_child(Paper.section_title("音訊與文字速度",Paper.TEAL))
-	for entry in [["master_volume","總音量",0.0,1.0],["music_volume","背景音樂",0.0,1.0],["sfx_volume","互動音效",0.0,1.0],["text_speed","對話文字速度",0.5,2.0]]:
-		_add_slider(str(entry[0]),str(entry[1]),float(entry[2]),float(entry[3]))
+	content.add_child(Paper.section_title(_t("settings.audio.title"),Paper.TEAL))
+	for entry in [["master_volume",0.0,1.0],["music_volume",0.0,1.0],["sfx_volume",0.0,1.0],["text_speed",0.5,2.0]]:
+		_add_slider(str(entry[0]),_t("settings." + str(entry[0])),float(entry[1]),float(entry[2]))
 
 func _fill_play() -> void:
-	content.add_child(Paper.section_title("遊玩方式與畫面",Paper.TEAL))
-	_add_toggle("assist","輔助遊玩：放寬時間與判定，仍可收藏")
-	_add_toggle("reduced_motion","降低動態：停止水波與裝飾擺動")
-	_add_toggle("fullscreen","使用全螢幕")
-	_add_slider("ui_scale","文字大小",1.0,1.25)
-	content.add_child(Paper.label("文字大小會放大介面文字；按鈕仍維持完整操作高度。",16,Paper.TEAL))
+	content.add_child(Paper.section_title(_t("settings.play.title"),Paper.TEAL))
+	_add_toggle("assist",_t("settings.assist"))
+	_add_toggle("reduced_motion",_t("settings.reduced_motion"))
+	_add_toggle("fullscreen",_t("settings.fullscreen"))
+	_add_slider("ui_scale",_t("settings.ui_scale"),1.0,1.25)
+	content.add_child(Paper.label(_t("settings.ui_scale.hint"),16,Paper.TEAL))
 
 func _fill_controls() -> void:
-	content.add_child(Paper.section_title("鍵盤操作",Paper.TEAL))
-	var rows := [["移動","W A S D／方向鍵"],["慢走","按住 Shift"],["互動","E"],["招呼","F"],["拍照","P"],["衣櫃","C"],["時段","T"],["旅券","M"],["暫停／返回","Esc"]]
+	content.add_child(Paper.section_title(_t("settings.controls.title"),Paper.TEAL))
+	var rows := [["move"],["walk"],["interact"],["greet"],["photo"],["wardrobe"],["time"],["ticket"],["pause"]]
 	var grid := GridContainer.new()
 	# Two action/key pairs share each row; every cell keeps one complete line.
 	grid.name="SettingsControlRows"
@@ -72,11 +109,12 @@ func _fill_controls() -> void:
 	grid.add_theme_constant_override("v_separation",4)
 	content.add_child(grid)
 	for row: Array in rows:
-		var label := Paper.label(str(row[0]),18)
+		var row_key := str(row[0])
+		var label := Paper.label(_t("controls." + row_key),18)
 		label.autowrap_mode=TextServer.AUTOWRAP_OFF
 		label.size_flags_vertical=Control.SIZE_FILL
 		grid.add_child(label)
-		var value := Paper.label(str(row[1]),18,Paper.GOLD)
+		var value := Paper.label(_t("controls." + row_key + ".keys"),18,Paper.GOLD)
 		value.autowrap_mode=TextServer.AUTOWRAP_OFF
 		value.size_flags_vertical=Control.SIZE_FILL
 		value.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -144,3 +182,17 @@ func _add_toggle(key: String, title: String) -> void:
 	toggle.button_pressed=bool(Progress.settings.get(key,false))
 	toggle.toggled.connect(func(value: bool): Progress.set_setting(key,value))
 	content.add_child(toggle)
+
+func _refresh_locale(_locale_id: String) -> void:
+	if not is_instance_valid(body) or not body.is_inside_tree():
+		Localization.locale_changed.disconnect(_refresh_locale)
+		return
+	var focus := body.get_viewport().gui_get_focus_owner()
+	var focus_name := str(focus.name) if is_instance_valid(focus) else ""
+	for key in tabs:
+		tabs[key].text = _t("settings." + str(key))
+	_show_category(active_category)
+	if not focus_name.is_empty():
+		var replacement := body.find_child(focus_name, true, false) as Control
+		if replacement != null:
+			replacement.grab_focus()

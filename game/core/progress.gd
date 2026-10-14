@@ -28,6 +28,8 @@ const DEFAULT_SETTINGS := {
 	"fullscreen": false,
 	"ui_scale": 1.0,
 	"time_phase": TimeOfDay.DEFAULT_PHASE,
+	"locale": "zh_TW",
+	"font_style": "pixel",
 }
 const WELCOME_GAME_IDS := [
 	"game-001", "game-002", "game-003", "game-004", "game-005", "game-006",
@@ -518,13 +520,42 @@ func save_progress() -> bool:
 		if mkdir_error != OK:
 			push_error("Cannot create progress directory '%s': %s" % [directory, error_string(mkdir_error)])
 			return false
+	var safe_settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
+	# Preserve forward-compatible settings while validating every known preference.
+	for key: Variant in settings.keys():
+		if not DEFAULT_SETTINGS.has(key):
+			safe_settings[key] = settings[key]
+	for key: Variant in DEFAULT_SETTINGS.keys():
+		if not settings.has(key):
+			continue
+		var value: Variant = settings[key]
+		var default_value: Variant = DEFAULT_SETTINGS[key]
+		var valid := false
+		if key == "locale":
+			valid = typeof(value) == TYPE_STRING and _released_locales().has(str(value))
+		elif key == "font_style":
+			valid = typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value)
+		elif key == "time_phase":
+			valid = typeof(value) == TYPE_STRING and TimeOfDay.phase_ids().has(value)
+		elif typeof(default_value) == TYPE_BOOL:
+			valid = typeof(value) == TYPE_BOOL
+		else:
+			valid = typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value))
+			if valid:
+				var minimum := 0.0 if str(key).ends_with("_volume") else (1.0 if str(key) == "ui_scale" else 0.5)
+				var maximum := 1.0 if str(key).ends_with("_volume") else (1.25 if str(key) == "ui_scale" else 2.0)
+				valid = float(value) >= minimum and float(value) <= maximum
+		if valid:
+			safe_settings[key] = value
+		else:
+			push_warning("Invalid setting '%s' before save to %s; using its default." % [str(key), _save_path()])
 	var payload := _extra_fields.duplicate(true)
 	payload.merge({
 		"version": SAVE_VERSION,
 		"photos": photos,
 		"achievements": achievements,
 		"quests": quests,
-		"settings": settings,
+		"settings": safe_settings,
 		"visited": visited,
 		"intro_seen": intro_seen,
 		"platform_pending_achievements": platform_pending_achievements,
@@ -599,6 +630,22 @@ func set_setting(key: String, value: Variant) -> void:
 	if not DEFAULT_SETTINGS.has(key):
 		return
 	var default_value: Variant = DEFAULT_SETTINGS[key]
+	if key == "locale":
+		if typeof(value) != TYPE_STRING or not _released_locales().has(str(value)):
+			push_warning("Invalid setting 'locale'; using zh_TW.")
+			value = "zh_TW"
+		settings[key] = value
+		_apply_setting(key)
+		changed.emit()
+		return
+	if key == "font_style":
+		if typeof(value) != TYPE_STRING or not ["pixel", "readable"].has(value):
+			push_warning("Invalid setting 'font_style'; using pixel.")
+			value = "pixel"
+		settings[key] = value
+		_apply_setting(key)
+		changed.emit()
+		return
 	if typeof(default_value) == TYPE_BOOL:
 		if typeof(value) != TYPE_BOOL:
 			return
@@ -742,6 +789,10 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 			var valid := typeof(default_value) == TYPE_BOOL and typeof(value) == TYPE_BOOL
 			if str(key) == "time_phase":
 				valid = typeof(value) == TYPE_STRING and TimeOfDay.phase_ids().has(value)
+			if str(key) == "locale":
+				valid = typeof(value) == TYPE_STRING and _released_locales().has(str(value))
+			if str(key) == "font_style":
+				valid = typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value)
 			if typeof(default_value) in [TYPE_INT, TYPE_FLOAT]:
 				valid = typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value))
 				if valid:
@@ -749,7 +800,7 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 					var high := 1.0 if str(key).ends_with("_volume") else 2.0
 					valid = float(value) >= low and float(value) <= high
 			if not valid:
-				if str(key) == "time_phase":
+				if str(key) in ["time_phase", "locale", "font_style"]:
 					push_warning("Invalid setting '%s' in progress file '%s'; using default." % [str(key), path])
 				else:
 					push_error("Invalid setting '%s' in progress file '%s'; using default." % [str(key), path])
@@ -907,6 +958,10 @@ func _apply_loaded_setting(key: String, value: Variant) -> void:
 	if key == "time_phase":
 		if typeof(value) == TYPE_STRING and TimeOfDay.phase_ids().has(value):
 			settings[key] = value
+	elif key == "locale":
+		settings[key] = value if typeof(value) == TYPE_STRING and _released_locales().has(str(value)) else "zh_TW"
+	elif key == "font_style":
+		settings[key] = value if typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value) else "pixel"
 	elif typeof(default_value) == TYPE_BOOL:
 		if typeof(value) == TYPE_BOOL:
 			settings[key] = value
@@ -922,6 +977,8 @@ func _valid_quest_step(value: Variant) -> bool:
 	return numeric >= 0.0 and numeric <= 3.0 and floor(numeric) == numeric
 
 func _apply_setting(key: String) -> void:
+	if key == "locale" and is_instance_valid(get_node_or_null("/root/Localization")):
+		get_node("/root/Localization").set_locale(str(settings.get("locale", "zh_TW")))
 	# AudioDirector combines master and channel gains on each player. Keep the
 	# global Master bus at unity so master_volume is applied exactly once.
 	if key == "fullscreen" and DisplayServer.get_name() != "headless":
@@ -947,3 +1004,9 @@ func _reset_memory() -> void:
 	tutorial_seen_games = []
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
+
+func _released_locales() -> Array:
+	var localization := get_node_or_null("/root/Localization")
+	if localization != null:
+		return localization.available_locales()
+	return ["zh_TW"]

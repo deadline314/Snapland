@@ -71,6 +71,7 @@ func _ready() -> void:
 		if session==null: audio.play_context("harbor" if name=="海風碼頭" else "plaza")
 	)
 	Progress.changed.connect(_refresh)
+	Localization.locale_changed.connect(_on_locale_changed)
 	Progress.achievement_unlocked.connect(_achievement_toast)
 	_refresh()
 	audio.play_context("harbor")
@@ -543,7 +544,7 @@ func _close() -> void:
 		world.play_action("celebrate")
 
 func _back(parent: Node) -> void:
-	var button := Paper.button("返回遊園  ·  Esc",_close,modal_footer)
+	var button := Paper.button(Localization.text("button.back"),_close,modal_footer)
 	button.name="MenuBackButton"
 	button.custom_minimum_size=Vector2(190,44)
 	button.grab_focus()
@@ -556,11 +557,12 @@ func _refresh() -> void:
 	if is_instance_valid(ui): ui.theme=Paper.theme()
 	if is_instance_valid(world) and world.has_method("refresh_label_fonts"):
 		world.refresh_label_fonts(Paper.font())
+	if is_instance_valid(ui): ui.layout_direction=Control.LAYOUT_DIRECTION_RTL if Localization.is_rtl() else Control.LAYOUT_DIRECTION_LTR
 	_adapt_hud()
 	_adapt_open_menu()
-	normal_count_label.text="普通 %d / 18"%Progress.normal_count()
-	devil_count_label.text="小惡魔 %d / 12"%Progress.devil_count()
-	coin_count_label.text="%d 幣"%Progress.coins
+	normal_count_label.text=Localization.text("hud.normal_count", {"count": Progress.normal_count()})
+	devil_count_label.text=Localization.text("hud.devil_count", {"count": Progress.devil_count()})
+	coin_count_label.text=Localization.text("hud.coins", {"count": Progress.coins})
 	var phase := TimeOfDay.phase_for_id(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE))
 	phase_label.text="%s %s"%[str(phase.get("label","中午")),str(phase.get("clock","12:00"))]
 	quest_label.text=""
@@ -982,7 +984,15 @@ func _render_dialogue() -> void:
 		_finish_dialogue()
 		return
 	var line: Dictionary=dialogue[dialogue_index]
-	dialogue_panel.show_line(str(line.get("speaker","旁白")),str(line.get("text","")),dialogue_index)
+	var speaker := str(line.get("speaker", "旁白"))
+	var dialogue_text := str(line.get("text", ""))
+	if line.has("text_key"):
+		var text_args: Dictionary = line.get("text_args", {})
+		dialogue_text=Localization.text(str(line.text_key), text_args)
+	dialogue_panel.show_line(speaker,dialogue_text,dialogue_index)
+	if line.has("speaker_key"):
+		var speaker_args: Dictionary = line.get("speaker_args", {})
+		dialogue_panel.speaker_label.text=Localization.text(str(line.speaker_key), speaker_args)
 	dialogue_label=dialogue_panel.text_label
 	call_deferred("_dialogue_panel_resized")
 	reveal=0
@@ -1511,6 +1521,19 @@ func _show_settings() -> void:
 	var settings := SettingsPanel.new()
 	settings.open(self,body)
 	_back(body)
+
+func _on_locale_changed(_locale_id: String) -> void:
+	_refresh()
+	if is_instance_valid(dialogue_panel) and dialogue_index < dialogue.size():
+		var line: Dictionary = dialogue[dialogue_index]
+		if line.has("speaker_key"):
+			var speaker_args: Dictionary = line.get("speaker_args", {})
+			dialogue_panel.speaker_label.text = Localization.text(str(line.speaker_key), speaker_args)
+		if line.has("text_key") and is_instance_valid(dialogue_label):
+			var text_args: Dictionary = line.get("text_args", {})
+			var shown_characters := dialogue_label.visible_characters
+			dialogue_label.text = Localization.text(str(line.text_key), text_args)
+			dialogue_label.visible_characters = shown_characters
 
 func _show_wardrobe() -> void:
 	var body := _open("把海風穿在身上。","WARDROBE  /  裁縫店","wardrobe")

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "locale": "qa_rtl",
+  "direction": "rtl",
+  "release_note": "Layout QA fixture only. Not a published language pack.",
+  "messages": {
+    "rtl.mixed_numbers": {
+      "text": "مرحبا {name} — 123 / ٤٥٦",
+      "source": "RTL QA：{name} — 123 / ٤٥٦"
+    },
+    "dialogue.example.one": {
+      "text": "مرحبًا {name}!",
+      "source": "嗨，{name}！"
+    },
+    "settings.text": {
+      "text": "لغة ونص",
+      "source": "語言與文字"
+    },
+    "settings.locale": {
+      "text": "لغة الواجهة",
+      "source": "介面語言"
+    },
+    "settings.font_style": {
+      "text": "نمط النص",
+      "source": "文字風格"
+    }
+  }
+}

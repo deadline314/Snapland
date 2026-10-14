@@ -100,8 +100,10 @@ func _run() -> void:
 	await _frames(2)
 	_check(settings_changes.is_empty(),"opening settings reads existing values without saving or emitting Progress.changed")
 	Progress.changed.disconnect(count_setting_changes)
-	_check(settings.tabs.size()==3,"settings expose Audio, Play and Display, and Controls categories")
+	_check(settings.tabs.size()==4 and settings.tabs.has_all(["audio", "play", "controls", "text"]),"settings expose exactly Audio, Play and Display, Controls, and Language and Text categories")
 	_check(settings.content.find_child("Value_master_volume",true,false)!=null and settings.content.find_child("Value_reduced_motion",true,false)==null,"audio category keeps volume and text speed together")
+	settings._show_category("text")
+	_check(settings.tabs["text"].button_pressed and settings.content.find_child("Value_locale",true,false)!=null and settings.content.find_child("Value_font_style",true,false)!=null,"text category exposes locale and font style choices with its fixed tab selected")
 	settings._show_category("play")
 	var scale_slider := settings.content.find_child("Value_ui_scale",true,false) as HSlider
 	_check(scale_slider!=null and scale_slider.min_value==1.0 and scale_slider.max_value==1.25,"text size uses the supported readable range")
@@ -257,6 +259,10 @@ func _run() -> void:
 	_check(selected==[target_phase] and time_panel.current_phase==target_phase,"choosing a valid time phase applies immediately")
 	_check(time_panel.phase_buttons.size()==TimeOfDay.PHASES.size() and time_panel.phase_buttons.size()==4,"all four time phases remain directly selectable")
 
+	main.audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
+	main.queue_free()
+	await _frames(2)
 	if failures.is_empty():
 		print("PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls")
 		get_tree().quit(0)
