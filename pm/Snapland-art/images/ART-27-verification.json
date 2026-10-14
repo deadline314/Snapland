@@ -36,5 +36,11 @@
     "No animation quality approval or music listening approval is inferred.",
     "Full test suite remains CI work."
   ],
-  "targeted_godot_suites_passed": 15
+  "targeted_godot_suites_passed": 15,
+  "formal_profile_and_backup_unchanged": true,
+  "source_commits": {
+    "typography": "82a6f386637b883fe655ac64bd7618f82e012360",
+    "locale": "dd53b97be2ce8be5f3a2e71d2b8e0f9412bdfb80",
+    "audio_reentry": "ed7aae3a7abe5f637b6c538d666ee79ee799452c"
+  }
 }

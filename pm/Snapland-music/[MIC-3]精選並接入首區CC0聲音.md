@@ -107,3 +107,7 @@
 ### 截圖
 
 ![原生選單切換驗收；音訊行為以測試紀錄核對](images/MIC-3-menu-reentry.png)
+
+### 遠端交付
+
+`feature/island-experience`；[本次來源提交](https://github.com/deadline314/Snapland/commit/ed7aae3a7abe5f637b6c538d666ee79ee799452c)。正式存檔與備份雜湊與本輪開始相同。

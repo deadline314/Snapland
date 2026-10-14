@@ -65,3 +65,7 @@
 ### 票況與待處理
 
 框架局部驗收通過；未發布語系需逐語系完成翻譯、校對與全內容驗收。島嶼工作分支尚有既有動畫／完整試聽票待驗，本票隨整組交付保留進行中，沒有把未驗成果併入 main。
+
+### 遠端交付
+
+`feature/island-experience`；[本次來源提交](https://github.com/deadline314/Snapland/commit/dd53b97be2ce8be5f3a2e71d2b8e0f9412bdfb80)。正式存檔與備份雜湊與本輪開始相同。
