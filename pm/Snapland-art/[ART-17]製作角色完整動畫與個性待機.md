@@ -237,3 +237,5 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 影片都是原生場景的腳本輸入錄製，審閱相機拉近；NPC 根節點和路線未移動，主角在 NPC 審閱中只作畫外取景輔助。慢放是正常影片動作段延長四倍，並非另一輪模擬；全部交付影片 30 FPS，不作即時效能基準。舊錄影中屋頂遮住足部或主角擋住 NPC 的版本沒有採作這次全身證據。
 
 固定基準：`4d0a2a814860e54243dd116bed54c564233c0aa0`；分支：`feature/island-experience`；票況：進行中。待完整角色素材、正常／慢放品質與全換裝覆蓋通過後再轉審查。
+
+本輪程式與原生證據已推送：[e8320de](https://github.com/deadline314/Snapland/commit/e8320de7ab71ac2d716d314ba09f95834116535c)。[八方向行走與動作短片](images/ART-17-authored-traveller-v1-walk-actions.mp4)直接取完整影片第 30 秒之後的正常速度動作段。
