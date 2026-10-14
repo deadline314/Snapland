@@ -1,0 +1,3159 @@
+{
+	"actions": [
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -5.40000009536743,
+				"y": 0.0,
+				"z": -7.80000019073486
+			},
+			"authored_frames": 7,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"end_anchor": {
+					"x": -5.40000009536743,
+					"y": 0.0,
+					"z": -7.80000019073486
+				},
+				"observable_source_cel_changes": true,
+				"observed_actions": [
+					"stand",
+					"idle_gesture",
+					"dance",
+					"emotion_proud"
+				],
+				"observed_source_frames": [
+					"stand/1",
+					"stand/2",
+					"stand/3",
+					"stand/4",
+					"stand/5",
+					"stand/6",
+					"stand/0",
+					"idle_gesture/0",
+					"idle_gesture/1",
+					"idle_gesture/2",
+					"idle_gesture/3",
+					"idle_gesture/4",
+					"idle_gesture/5",
+					"idle_gesture/6",
+					"dance/0",
+					"dance/1",
+					"dance/2",
+					"dance/3",
+					"dance/4",
+					"dance/5",
+					"dance/6",
+					"emotion_proud/0",
+					"emotion_proud/1",
+					"emotion_proud/2",
+					"emotion_proud/3",
+					"emotion_proud/4",
+					"emotion_proud/5",
+					"emotion_proud/6"
+				],
+				"observed_sources": [
+					"authored"
+				],
+				"observed_texture_instances": [
+					"-9223371885893380959",
+					"-9223371885792717664",
+					"-9223371885692054369",
+					"-9223371885591391070",
+					"-9223371885490727773",
+					"-9223371885390064476",
+					"-9223371885994044258",
+					"-9223371808315533910",
+					"-9223371808214870613",
+					"-9223371808114207314",
+					"-9223371808013544017",
+					"-9223371807912880720",
+					"-9223371807812217423",
+					"-9223371807711554126",
+					"-9223371806906247750",
+					"-9223371806805584453",
+					"-9223371806704921156",
+					"-9223371806604257859",
+					"-9223371806503594562",
+					"-9223371806402931265",
+					"-9223371806302267968",
+					"-9223371807610890829",
+					"-9223371807510227532",
+					"-9223371807409564235",
+					"-9223371807308900938",
+					"-9223371807208237641",
+					"-9223371807107574344",
+					"-9223371807006911047"
+				],
+				"rendered_observation": {
+					"action": "",
+					"direction": "front",
+					"frames": {
+						"dance/front/0": true,
+						"dance/front/1": true,
+						"dance/front/2": true,
+						"dance/front/3": true,
+						"dance/front/4": true,
+						"dance/front/5": true,
+						"dance/front/6": true,
+						"emotion_proud/front/0": true,
+						"emotion_proud/front/1": true,
+						"emotion_proud/front/2": true,
+						"emotion_proud/front/3": true,
+						"emotion_proud/front/4": true,
+						"emotion_proud/front/5": true,
+						"emotion_proud/front/6": true,
+						"idle_gesture/front/0": true,
+						"idle_gesture/front/1": true,
+						"idle_gesture/front/2": true,
+						"idle_gesture/front/3": true,
+						"idle_gesture/front/4": true,
+						"idle_gesture/front/5": true,
+						"idle_gesture/front/6": true,
+						"stand/front/0": true,
+						"stand/front/1": true,
+						"stand/front/2": true,
+						"stand/front/3": true,
+						"stand/front/4": true,
+						"stand/front/5": true,
+						"stand/front/6": true
+					},
+					"mode": "idle",
+					"presented_action": "stand",
+					"samples": [
+						{
+							"action": "stand",
+							"action_elapsed": 0.525,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 15,
+							"simulation_seconds": 0.525
+						},
+						{
+							"action": "stand",
+							"action_elapsed": 0.691666666666667,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 20,
+							"simulation_seconds": 0.691666666666667
+						},
+						{
+							"action": "stand",
+							"action_elapsed": 1.025,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 30,
+							"simulation_seconds": 1.025
+						},
+						{
+							"action": "stand",
+							"action_elapsed": 1.35833333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 40,
+							"simulation_seconds": 1.35833333333333
+						},
+						{
+							"action": "stand",
+							"action_elapsed": 1.69166666666667,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 50,
+							"simulation_seconds": 1.69166666666667
+						},
+						{
+							"action": "stand",
+							"action_elapsed": 2.025,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 60,
+							"simulation_seconds": 2.025
+						},
+						{
+							"action": "stand",
+							"action_elapsed": 2.35833333333334,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 70,
+							"simulation_seconds": 2.35833333333334
+						},
+						{
+							"action": "idle_gesture",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 211,
+							"simulation_seconds": 7.05833333333332
+						},
+						{
+							"action": "idle_gesture",
+							"action_elapsed": 0.333333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 220,
+							"simulation_seconds": 7.35833333333332
+						},
+						{
+							"action": "idle_gesture",
+							"action_elapsed": 0.666666666666667,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 230,
+							"simulation_seconds": 7.69166666666665
+						},
+						{
+							"action": "idle_gesture",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 241,
+							"simulation_seconds": 8.05833333333332
+						},
+						{
+							"action": "idle_gesture",
+							"action_elapsed": 1.33333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 250,
+							"simulation_seconds": 8.35833333333331
+						},
+						{
+							"action": "idle_gesture",
+							"action_elapsed": 1.66666666666667,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 260,
+							"simulation_seconds": 8.69166666666665
+						},
+						{
+							"action": "idle_gesture",
+							"action_elapsed": 2.0,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 270,
+							"simulation_seconds": 9.02499999999998
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 462,
+							"simulation_seconds": 15.425
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.166666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 466,
+							"simulation_seconds": 15.5583333333333
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.333333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 471,
+							"simulation_seconds": 15.725
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 477,
+							"simulation_seconds": 15.925
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.666666666666667,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 481,
+							"simulation_seconds": 16.0583333333333
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.833333333333333,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 486,
+							"simulation_seconds": 16.225
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 492,
+							"simulation_seconds": 16.425
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 694,
+							"simulation_seconds": 23.1583333333336
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 0.266666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 701,
+							"simulation_seconds": 23.391666666667
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 709,
+							"simulation_seconds": 23.6583333333337
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 0.766666666666667,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 716,
+							"simulation_seconds": 23.891666666667
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 724,
+							"simulation_seconds": 24.1583333333337
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 1.26666666666667,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 731,
+							"simulation_seconds": 24.391666666667
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 1.5,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 738,
+							"simulation_seconds": 24.6250000000004
+						}
+					],
+					"source_consistent": true,
+					"textures": {
+						"-9223371806302267968": true,
+						"-9223371806402931265": true,
+						"-9223371806503594562": true,
+						"-9223371806604257859": true,
+						"-9223371806704921156": true,
+						"-9223371806805584453": true,
+						"-9223371806906247750": true,
+						"-9223371807006911047": true,
+						"-9223371807107574344": true,
+						"-9223371807208237641": true,
+						"-9223371807308900938": true,
+						"-9223371807409564235": true,
+						"-9223371807510227532": true,
+						"-9223371807610890829": true,
+						"-9223371807711554126": true,
+						"-9223371807812217423": true,
+						"-9223371807912880720": true,
+						"-9223371808013544017": true,
+						"-9223371808114207314": true,
+						"-9223371808214870613": true,
+						"-9223371808315533910": true,
+						"-9223371885390064476": true,
+						"-9223371885490727773": true,
+						"-9223371885591391070": true,
+						"-9223371885692054369": true,
+						"-9223371885792717664": true,
+						"-9223371885893380959": true,
+						"-9223371885994044258": true
+					}
+				},
+				"route_max_anchor": {
+					"x": -5.40000009536743,
+					"y": 0.0,
+					"z": -7.80000019073486
+				},
+				"route_min_anchor": {
+					"x": -5.40000009536743,
+					"y": 0.0,
+					"z": -7.80000019073486
+				},
+				"scheduler_live": true,
+				"simulation_seconds": 30.0000000000007,
+				"start_anchor": {
+					"x": -5.40000009536743,
+					"y": 0.0,
+					"z": -7.80000019073486
+				},
+				"transitions": [
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 0.0333333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 0.233333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 0.566666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 0.9,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 1.23333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 1.56666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 1.9,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 2.23333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 2.56666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 2.9,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 3.23333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 3.56666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 3.9,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 4.23333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 4.56666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 4.89999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 5.23333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 5.56666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 5.89999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 6.23333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 6.56666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "idle_gesture",
+						"frame_index": 0,
+						"simulation_seconds": 6.59999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371808315533910
+					},
+					{
+						"action": "idle_gesture",
+						"frame_index": 1,
+						"simulation_seconds": 6.89999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371808214870613
+					},
+					{
+						"action": "idle_gesture",
+						"frame_index": 2,
+						"simulation_seconds": 7.23333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371808114207314
+					},
+					{
+						"action": "idle_gesture",
+						"frame_index": 3,
+						"simulation_seconds": 7.59999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371808013544017
+					},
+					{
+						"action": "idle_gesture",
+						"frame_index": 4,
+						"simulation_seconds": 7.89999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371807912880720
+					},
+					{
+						"action": "idle_gesture",
+						"frame_index": 5,
+						"simulation_seconds": 8.23333333333331,
+						"source": "authored",
+						"visible_texture_instance": -9223371807812217423
+					},
+					{
+						"action": "idle_gesture",
+						"frame_index": 6,
+						"simulation_seconds": 8.56666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371807711554126
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 8.89999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 9.23333333333331,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 9.56666666666664,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 9.93333333333331,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 10.2333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 10.5666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 10.9,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 11.2333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 11.5666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 11.9333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 12.2666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 12.6,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 12.9333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 13.2666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 13.6,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 13.9333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 14.2666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 14.6,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 14.9333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "dance",
+						"frame_index": 0,
+						"simulation_seconds": 14.9666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371806906247750
+					},
+					{
+						"action": "dance",
+						"frame_index": 1,
+						"simulation_seconds": 15.1,
+						"source": "authored",
+						"visible_texture_instance": -9223371806805584453
+					},
+					{
+						"action": "dance",
+						"frame_index": 2,
+						"simulation_seconds": 15.2666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371806704921156
+					},
+					{
+						"action": "dance",
+						"frame_index": 3,
+						"simulation_seconds": 15.4666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371806604257859
+					},
+					{
+						"action": "dance",
+						"frame_index": 4,
+						"simulation_seconds": 15.6,
+						"source": "authored",
+						"visible_texture_instance": -9223371806503594562
+					},
+					{
+						"action": "dance",
+						"frame_index": 5,
+						"simulation_seconds": 15.7666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371806402931265
+					},
+					{
+						"action": "dance",
+						"frame_index": 6,
+						"simulation_seconds": 15.9666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371806302267968
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 16.1,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 16.4333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 16.7666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 17.1333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 17.4333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 17.7666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 18.1000000000001,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 18.4333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 18.7666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 19.1333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 19.4666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 19.8000000000001,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 20.1333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 20.4666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 20.8000000000002,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 21.1333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 21.4666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 21.8000000000002,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 22.1333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 22.4666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "emotion_proud",
+						"frame_index": 0,
+						"simulation_seconds": 22.7000000000003,
+						"source": "authored",
+						"visible_texture_instance": -9223371807610890829
+					},
+					{
+						"action": "emotion_proud",
+						"frame_index": 1,
+						"simulation_seconds": 22.9333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371807510227532
+					},
+					{
+						"action": "emotion_proud",
+						"frame_index": 2,
+						"simulation_seconds": 23.2000000000003,
+						"source": "authored",
+						"visible_texture_instance": -9223371807409564235
+					},
+					{
+						"action": "emotion_proud",
+						"frame_index": 3,
+						"simulation_seconds": 23.4333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371807308900938
+					},
+					{
+						"action": "emotion_proud",
+						"frame_index": 4,
+						"simulation_seconds": 23.7000000000003,
+						"source": "authored",
+						"visible_texture_instance": -9223371807208237641
+					},
+					{
+						"action": "emotion_proud",
+						"frame_index": 5,
+						"simulation_seconds": 23.9333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371807107574344
+					},
+					{
+						"action": "emotion_proud",
+						"frame_index": 6,
+						"simulation_seconds": 24.166666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371807006911047
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 24.4333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 24.7666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 25.1000000000004,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 25.4666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 25.7666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 26.1000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 26.4333333333338,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 26.7666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 27.1000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 27.4666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					},
+					{
+						"action": "stand",
+						"frame_index": 3,
+						"simulation_seconds": 27.8000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371885692054369
+					},
+					{
+						"action": "stand",
+						"frame_index": 4,
+						"simulation_seconds": 28.1333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371885591391070
+					},
+					{
+						"action": "stand",
+						"frame_index": 5,
+						"simulation_seconds": 28.4666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371885490727773
+					},
+					{
+						"action": "stand",
+						"frame_index": 6,
+						"simulation_seconds": 28.8000000000006,
+						"source": "authored",
+						"visible_texture_instance": -9223371885390064476
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 29.1333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371885994044258
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 29.4666666666673,
+						"source": "authored",
+						"visible_texture_instance": -9223371885893380959
+					},
+					{
+						"action": "stand",
+						"frame_index": 2,
+						"simulation_seconds": 29.8000000000006,
+						"source": "authored",
+						"visible_texture_instance": -9223371885792717664
+					}
+				]
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "natural-idle-30s",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -5.40000009536743,
+				"y": 0.0,
+				"z": -7.80000019073486
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "pending-authored-walk-source",
+			"detail": {
+				"note": "No approved walking source; stationary authored idle does not pass walking."
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "natural-route-start-settle",
+			"predicate": false,
+			"source": "pending-authored-walk-source",
+			"status": "pending"
+		},
+		{
+			"action": "greet",
+			"anchor": {
+				"x": -5.40000009536743,
+				"y": 0.0,
+				"z": -7.80000019073486
+			},
+			"authored_frames": 7,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"accepted": true,
+				"playback": {
+					"accepted": true,
+					"authored": true,
+					"complete": true,
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6"
+					],
+					"observed_texture_instances": [
+						"-9223371601955777068",
+						"-9223371601855113780",
+						"-9223371601754450490",
+						"-9223371601653787191",
+						"-9223371601553123899",
+						"-9223371601452460600",
+						"-9223371601351797305"
+					],
+					"rendered_samples": [
+						{
+							"action": "greet",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 915,
+							"simulation_seconds": 30.5250000000007
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.166666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 919,
+							"simulation_seconds": 30.658333333334
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.333333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 924,
+							"simulation_seconds": 30.8250000000007
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 930,
+							"simulation_seconds": 31.0250000000007
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.666666666666667,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 934,
+							"simulation_seconds": 31.158333333334
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.833333333333333,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 939,
+							"simulation_seconds": 31.3250000000007
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 945,
+							"simulation_seconds": 31.5250000000007
+						}
+					],
+					"sequence_duration_seconds": 1.16666666666667,
+					"simulation_seconds": 1.16666666666672,
+					"source_consistent": true,
+					"source_frame_count": 7
+				},
+				"requested": "greet",
+				"source_frames": 7
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "greet",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "interact",
+			"anchor": {
+				"x": -5.40000009536743,
+				"y": 0.0,
+				"z": -7.80000019073486
+			},
+			"authored_frames": 7,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"accepted": true,
+				"playback": {
+					"accepted": true,
+					"authored": true,
+					"complete": true,
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6"
+					],
+					"observed_texture_instances": [
+						"-9223371589490305819",
+						"-9223371589389642303",
+						"-9223371589288979074",
+						"-9223371589188315797",
+						"-9223371589087652629",
+						"-9223371588986989098",
+						"-9223371588886325806"
+					],
+					"rendered_samples": [
+						{
+							"action": "interact",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 951,
+							"simulation_seconds": 31.7250000000007
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.233333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 957,
+							"simulation_seconds": 31.9250000000007
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.433333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 963,
+							"simulation_seconds": 32.1250000000007
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.6,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 968,
+							"simulation_seconds": 32.2916666666674
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.833333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 975,
+							"simulation_seconds": 32.5250000000007
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 981,
+							"simulation_seconds": 32.7250000000007
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.2,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 986,
+							"simulation_seconds": 32.8916666666674
+						}
+					],
+					"sequence_duration_seconds": 1.4,
+					"simulation_seconds": 1.39999999999996,
+					"source_consistent": true,
+					"source_frame_count": 7
+				},
+				"requested": "interact",
+				"source_frames": 7
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "interact",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "emotion_proud",
+			"anchor": {
+				"x": -5.40000009536743,
+				"y": 0.0,
+				"z": -7.80000019073486
+			},
+			"authored_frames": 7,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"accepted": true,
+				"playback": {
+					"accepted": true,
+					"authored": true,
+					"complete": true,
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6"
+					],
+					"observed_texture_instances": [
+						"-9223371807610890829",
+						"-9223371807510227532",
+						"-9223371807409564235",
+						"-9223371807308900938",
+						"-9223371807208237641",
+						"-9223371807107574344",
+						"-9223371807006911047"
+					],
+					"rendered_samples": [
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 994,
+							"simulation_seconds": 33.158333333334
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 0.266666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1001,
+							"simulation_seconds": 33.3916666666673
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1009,
+							"simulation_seconds": 33.658333333334
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 0.766666666666667,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1016,
+							"simulation_seconds": 33.8916666666673
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1024,
+							"simulation_seconds": 34.158333333334
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 1.26666666666667,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1031,
+							"simulation_seconds": 34.3916666666673
+						},
+						{
+							"action": "emotion_proud",
+							"action_elapsed": 1.5,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1038,
+							"simulation_seconds": 34.6250000000006
+						}
+					],
+					"sequence_duration_seconds": 1.75,
+					"simulation_seconds": 1.76666666666657,
+					"source_consistent": true,
+					"source_frame_count": 7
+				},
+				"requested": "emotion_proud",
+				"source_frames": 7
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "emotion_proud",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "dance",
+			"anchor": {
+				"x": -5.40000009536743,
+				"y": 0.0,
+				"z": -7.80000019073486
+			},
+			"authored_frames": 7,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"accepted": true,
+				"playback": {
+					"accepted": true,
+					"authored": true,
+					"complete": true,
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6"
+					],
+					"observed_texture_instances": [
+						"-9223371806906247750",
+						"-9223371806805584453",
+						"-9223371806704921156",
+						"-9223371806604257859",
+						"-9223371806503594562",
+						"-9223371806402931265",
+						"-9223371806302267968"
+					],
+					"rendered_samples": [
+						{
+							"action": "dance",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 1048,
+							"simulation_seconds": 34.9583333333339
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.166666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1052,
+							"simulation_seconds": 35.0916666666672
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.333333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1057,
+							"simulation_seconds": 35.2583333333339
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1063,
+							"simulation_seconds": 35.4583333333339
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.666666666666667,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1067,
+							"simulation_seconds": 35.5916666666672
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 0.833333333333333,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1072,
+							"simulation_seconds": 35.7583333333339
+						},
+						{
+							"action": "dance",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1078,
+							"simulation_seconds": 35.9583333333339
+						}
+					],
+					"sequence_duration_seconds": 1.16666666666667,
+					"simulation_seconds": 1.1666666666666,
+					"source_consistent": true,
+					"source_frame_count": 7
+				},
+				"requested": "dance",
+				"source_frames": 7
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "dance",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "stand",
+			"anchor": {
+				"x": -5.40000009536743,
+				"y": 0.0,
+				"z": -7.80000019073486
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"waited_simulation_seconds": 0.0
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "settled-after-authored-actions",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		}
+	],
+	"actor": "imp",
+	"camera_framing": {
+		"actor_scale_or_npc_route_changed": false,
+		"camera_up_shift": -0.114987157727939,
+		"correction_pinned": true,
+		"fixture_adjusted_camera": true,
+		"foot_padding_pixels": 140.685791015625,
+		"full_silhouette_inside_hud_safe_viewport": true,
+		"head_padding_pixels": 142.331420898438,
+		"hud_safe_bottom": 636.0,
+		"hud_safe_top": 116.0,
+		"orthographic_size": 5.0,
+		"pin_simulation_seconds": 0.458333333333333,
+		"sprite_alpha_screen_rect": [
+			543.725830078125,
+			258.331420898438,
+			212.297180175781,
+			236.982788085938
+		]
+	},
+	"camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+	"camera_size": 5.0,
+	"capture_png": [
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-start.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-stand-front-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-stand-front-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-stand-front-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-stand-front-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-stand-front-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-stand-front-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-stand-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-idle_gesture-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-idle_gesture-front-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-idle_gesture-front-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-idle_gesture-front-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-idle_gesture-front-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-idle_gesture-front-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-idle_gesture-front-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-dance-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-dance-front-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-dance-front-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-dance-front-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-dance-front-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-dance-front-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-dance-front-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-emotion_proud-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-emotion_proud-front-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-emotion_proud-front-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-emotion_proud-front-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-emotion_proud-front-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-emotion_proud-front-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-emotion_proud-front-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-natural-idle-30s.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-greet-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-greet-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-greet-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-greet-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-greet-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-greet-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-greet-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-greet.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-interact-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-interact-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-interact-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-interact-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-interact-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-interact-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-interact-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-interact.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-emotion_proud-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-emotion_proud-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-emotion_proud-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-emotion_proud-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-emotion_proud-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-emotion_proud-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-emotion_proud-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-emotion_proud.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-dance-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-dance-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-dance-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-dance-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-dance-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-dance-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-dance-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-imp-a6bb982f\\evidence/imp-dance.png"
+	],
+	"captured_frame_framing": [
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 140.685516357422,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					256.685516357422,
+					212.297180175781,
+					238.628692626953
+				]
+			},
+			"label": "start"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 140.685516357422,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					256.685516357422,
+					212.297180175781,
+					238.628692626953
+				]
+			},
+			"label": "natural-stand-front-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 140.685516357422,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					536.320129394531,
+					256.685516357422,
+					218.057189941406,
+					238.628692626953
+				]
+			},
+			"label": "natural-stand-front-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331420898438,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					531.382995605469,
+					258.331420898438,
+					224.640014648438,
+					236.982788085938
+				]
+			},
+			"label": "natural-stand-front-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685668945313,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331298828125,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					534.674377441406,
+					258.331298828125,
+					219.702941894531,
+					236.983032226563
+				]
+			},
+			"label": "natural-stand-front-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331298828125,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					258.331298828125,
+					213.942932128906,
+					236.98291015625
+				]
+			},
+			"label": "natural-stand-front-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685668945313,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331298828125,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					545.37158203125,
+					258.331298828125,
+					213.94287109375,
+					236.983032226563
+				]
+			},
+			"label": "natural-stand-front-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331420898438,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					258.331420898438,
+					212.297180175781,
+					236.982788085938
+				]
+			},
+			"label": "natural-stand-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331298828125,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					547.017272949219,
+					258.331298828125,
+					215.588623046875,
+					236.98291015625
+				]
+			},
+			"label": "natural-idle_gesture-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 128.342803955078,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					529.737243652344,
+					244.342803955078,
+					224.640075683594,
+					250.971405029297
+				]
+			},
+			"label": "natural-idle_gesture-front-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 139.039916992188,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					539.611572265625,
+					255.039916992188,
+					222.994323730469,
+					240.274291992188
+				]
+			},
+			"label": "natural-idle_gesture-front-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.63444519043,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					542.080139160156,
+					247.63444519043,
+					222.994262695313,
+					247.679763793945
+				]
+			},
+			"label": "natural-idle_gesture-front-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634170532227,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					547.017272949219,
+					247.634170532227,
+					219.702941894531,
+					247.680038452148
+				]
+			},
+			"label": "natural-idle_gesture-front-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					553.600158691406,
+					250.102798461914,
+					213.94287109375,
+					246.034561157227
+				]
+			},
+			"label": "natural-idle_gesture-front-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748687744141,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					251.748687744141,
+					219.702941894531,
+					244.388671875
+				]
+			},
+			"label": "natural-idle_gesture-front-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 126.697189331055,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					542.080078125,
+					242.697189331055,
+					210.651550292969,
+					252.61701965332
+				]
+			},
+			"label": "natural-dance-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862609863281,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 120.114181518555,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					550.308715820313,
+					236.114181518555,
+					215.588500976563,
+					260.023193359375
+				]
+			},
+			"label": "natural-dance-front-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862609863281,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.75993347168,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					515.748657226563,
+					237.75993347168,
+					229.577209472656,
+					258.37744140625
+				]
+			},
+			"label": "natural-dance-front-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.988418579102,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					547.017272949219,
+					245.988418579102,
+					224.640014648438,
+					249.325790405273
+				]
+			},
+			"label": "natural-dance-front-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 115.999938964844,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					515.748657226563,
+					231.999938964844,
+					221.3486328125,
+					263.314270019531
+				]
+			},
+			"label": "natural-dance-front-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 115.999938964844,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					515.748657226563,
+					231.999938964844,
+					219.702880859375,
+					263.314270019531
+				]
+			},
+			"label": "natural-dance-front-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634170532227,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					247.634170532227,
+					215.588623046875,
+					247.680038452148
+				]
+			},
+			"label": "natural-dance-front-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634307861328,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					247.634307861328,
+					218.057189941406,
+					247.679901123047
+				]
+			},
+			"label": "natural-emotion_proud-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862762451172,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					534.674438476563,
+					250.102798461914,
+					224.640014648438,
+					246.034439086914
+				]
+			},
+			"label": "natural-emotion_proud-front-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685668945313,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634307861328,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					534.674377441406,
+					247.634307861328,
+					222.994384765625,
+					247.680023193359
+				]
+			},
+			"label": "natural-emotion_proud-front-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					556.068725585938,
+					250.102798461914,
+					201.600036621094,
+					246.034561157227
+				]
+			},
+			"label": "natural-emotion_proud-front-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					539.611572265625,
+					251.748550415039,
+					219.702941894531,
+					244.388809204102
+				]
+			},
+			"label": "natural-emotion_proud-front-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634307861328,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					536.320129394531,
+					247.634307861328,
+					227.931518554688,
+					247.679901123047
+				]
+			},
+			"label": "natural-emotion_proud-front-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634307861328,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					542.080139160156,
+					247.634307861328,
+					219.702880859375,
+					247.679901123047
+				]
+			},
+			"label": "natural-emotion_proud-front-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 140.685516357422,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					536.320129394531,
+					256.685516357422,
+					218.057189941406,
+					238.628692626953
+				]
+			},
+			"label": "natural-idle-30s"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 137.394302368164,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					550.308715820313,
+					253.394302368164,
+					210.651489257813,
+					241.919906616211
+				]
+			},
+			"label": "greet-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 137.394302368164,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					547.017272949219,
+					253.394302368164,
+					210.651489257813,
+					241.919906616211
+				]
+			},
+			"label": "greet-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748687744141,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					533.028686523438,
+					251.748687744141,
+					218.057189941406,
+					244.388671875
+				]
+			},
+			"label": "greet-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 137.394302368164,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					539.611511230469,
+					253.394302368164,
+					219.702941894531,
+					241.919906616211
+				]
+			},
+			"label": "greet-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 137.394302368164,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					539.611511230469,
+					253.394302368164,
+					219.702941894531,
+					241.919906616211
+				]
+			},
+			"label": "greet-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748413085938,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					542.080139160156,
+					251.748413085938,
+					218.057189941406,
+					244.388946533203
+				]
+			},
+			"label": "greet-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 137.394439697266,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					253.394439697266,
+					213.942932128906,
+					241.919769287109
+				]
+			},
+			"label": "greet-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331420898438,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					258.331420898438,
+					212.297180175781,
+					236.982788085938
+				]
+			},
+			"label": "greet"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					545.37158203125,
+					250.102798461914,
+					218.057189941406,
+					246.034561157227
+				]
+			},
+			"label": "interact-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					539.611572265625,
+					251.748550415039,
+					221.3486328125,
+					244.388809204102
+				]
+			},
+			"label": "interact-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					537.9658203125,
+					250.102798461914,
+					219.702941894531,
+					246.034561157227
+				]
+			},
+			"label": "interact-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					537.9658203125,
+					250.102798461914,
+					222.994384765625,
+					246.034561157227
+				]
+			},
+			"label": "interact-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685913085938,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 137.394165039063,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					533.028686523438,
+					253.394165039063,
+					233.691528320313,
+					241.919921875
+				]
+			},
+			"label": "interact-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					537.9658203125,
+					250.102798461914,
+					222.994384765625,
+					246.034561157227
+				]
+			},
+			"label": "interact-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748413085938,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					542.080139160156,
+					251.748413085938,
+					218.057189941406,
+					244.388946533203
+				]
+			},
+			"label": "interact-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331420898438,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					258.331420898438,
+					212.297180175781,
+					236.982788085938
+				]
+			},
+			"label": "interact"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634307861328,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					247.634307861328,
+					218.057189941406,
+					247.679901123047
+				]
+			},
+			"label": "emotion_proud-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862762451172,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					534.674438476563,
+					250.102798461914,
+					224.640014648438,
+					246.034439086914
+				]
+			},
+			"label": "emotion_proud-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685668945313,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634307861328,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					534.674377441406,
+					247.634307861328,
+					222.994384765625,
+					247.680023193359
+				]
+			},
+			"label": "emotion_proud-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					556.068725585938,
+					250.102798461914,
+					201.600036621094,
+					246.034561157227
+				]
+			},
+			"label": "emotion_proud-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862640380859,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					539.611572265625,
+					251.748550415039,
+					219.702941894531,
+					244.388809204102
+				]
+			},
+			"label": "emotion_proud-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634307861328,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					536.320129394531,
+					247.634307861328,
+					227.931518554688,
+					247.679901123047
+				]
+			},
+			"label": "emotion_proud-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634307861328,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					542.080139160156,
+					247.634307861328,
+					219.702880859375,
+					247.679901123047
+				]
+			},
+			"label": "emotion_proud-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331420898438,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					258.331420898438,
+					212.297180175781,
+					236.982788085938
+				]
+			},
+			"label": "emotion_proud"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 126.697189331055,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					542.080078125,
+					242.697189331055,
+					210.651550292969,
+					252.61701965332
+				]
+			},
+			"label": "dance-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862609863281,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 120.114181518555,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					550.308715820313,
+					236.114181518555,
+					215.588500976563,
+					260.023193359375
+				]
+			},
+			"label": "dance-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 139.862609863281,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.75993347168,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					515.748657226563,
+					237.75993347168,
+					229.577209472656,
+					258.37744140625
+				]
+			},
+			"label": "dance-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.988418579102,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					547.017272949219,
+					245.988418579102,
+					224.640014648438,
+					249.325790405273
+				]
+			},
+			"label": "dance-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 115.999938964844,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					515.748657226563,
+					231.999938964844,
+					221.3486328125,
+					263.314270019531
+				]
+			},
+			"label": "dance-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 115.999938964844,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					515.748657226563,
+					231.999938964844,
+					219.702880859375,
+					263.314270019531
+				]
+			},
+			"label": "dance-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.634170532227,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					247.634170532227,
+					215.588623046875,
+					247.680038452148
+				]
+			},
+			"label": "dance-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.114987157727939,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 140.685791015625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.331420898438,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.458333333333333,
+				"sprite_alpha_screen_rect": [
+					543.725830078125,
+					258.331420898438,
+					212.297180175781,
+					236.982788085938
+				]
+			},
+			"label": "dance"
+		}
+	],
+	"complete_acceptance": false,
+	"coverage_report": {
+		"authored": {
+			"announcer": {
+				"emotion_curious": [
+					"front"
+				],
+				"greet": [
+					"front"
+				],
+				"idle": [
+					"front"
+				],
+				"interact": [
+					"front"
+				],
+				"special": [
+					"front"
+				],
+				"walk": [
+					"right",
+					"left"
+				],
+				"walk_candidate": [
+					"front"
+				]
+			},
+			"imp": {
+				"dance": [
+					"front"
+				],
+				"emotion_proud": [
+					"front"
+				],
+				"greet": [
+					"front"
+				],
+				"idle": [
+					"front"
+				],
+				"idle_gesture": [
+					"front"
+				],
+				"interact": [
+					"front"
+				]
+			},
+			"ticket": {
+				"emotion_happy": [
+					"front"
+				],
+				"greet": [
+					"front"
+				],
+				"idle": [
+					"front"
+				],
+				"idle_gesture": [
+					"front"
+				],
+				"interact": [
+					"front"
+				],
+				"walk_candidate": [
+					"front"
+				]
+			},
+			"traveller": {
+				"catch": [
+					"front"
+				],
+				"idle": [
+					"front"
+				],
+				"interact": [
+					"front"
+				],
+				"jump": [
+					"front"
+				],
+				"photograph": [
+					"front"
+				],
+				"sit": [
+					"front"
+				],
+				"wave": [
+					"front"
+				]
+			}
+		},
+		"library_loaded": true,
+		"missing_requests": {
+			"announcer": {},
+			"imp": {},
+			"ticket": {}
+		}
+	},
+	"encoded_movie_metadata": "pending ffprobe verification by root",
+	"ending_anchor": {
+		"x": -5.40000009536743,
+		"y": 0.0,
+		"z": -7.80000019073486
+	},
+	"expected_movie_fps": 30.0,
+	"expected_movie_slowdown_factor": 1.0,
+	"failures": [],
+	"fixed_fps": 30.0,
+	"fixture": "Main-backed native island animation acceptance",
+	"hero_scripted_placement": true,
+	"human_played": false,
+	"human_visual_review": "pending",
+	"initial_actor_placement_changed": false,
+	"initial_actor_placement_note": "Selected NPC root and route are unchanged. The hero is repositioned near the NPC every fixture frame as a scripted camera helper; this is not natural hero movement evidence.",
+	"initial_grounding": {
+		"complete": true,
+		"grounded": true,
+		"grounding_method": "runtime Sprite ground-anchor with stationary NPC root",
+		"horizontal_speed": 0.0,
+		"simulation_seconds": 0.1,
+		"stable_process_frames": 3
+	},
+	"initial_hero_position": null,
+	"movie_duration_estimate_seconds": 36.1,
+	"movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+	"movie_fps_source": "Godot fixed movie process delta",
+	"movie_writer_active": true,
+	"movie_writer_frame_count": null,
+	"natural_action_windows": [],
+	"npc_activity_clock": 36.1250000000005,
+	"npc_roots_repositioned": false,
+	"pending": [
+		"natural-route-start-settle: pending-authored-walk-source"
+	],
+	"placed_camera": true,
+	"playback_mode": "normal simulation time_scale=1.0",
+	"process_frames_in_run": 1083,
+	"reduced_motion": false,
+	"scene_rebuild": false,
+	"scripted_input": true,
+	"segment_mode": "natural-idle-and-actions",
+	"simulation_seconds": 36.1250000000005,
+	"simulation_seconds_including_capture_and_startup": 36.1250000000005,
+	"starting_anchor": {
+		"x": -5.40000009536743,
+		"y": 0.0,
+		"z": -7.80000019073486
+	},
+	"status": "CONTENT_PENDING",
+	"technical_status": "PASS"
+}

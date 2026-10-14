@@ -1,0 +1,37 @@
+{
+  "fixed_baseline": "4d0a2a814860e54243dd116bed54c564233c0aa0",
+  "branch": "feature/island-experience",
+  "cpu_checks": [
+    {
+      "test": "test_avatar_authored_walk_loop",
+      "pass": true,
+      "log": "ART-17-authored-test_avatar_authored_walk_loop.log"
+    },
+    {
+      "test": "test_avatar_motion_world",
+      "pass": true,
+      "log": "ART-17-authored-test_avatar_motion_world.log"
+    },
+    {
+      "test": "test_npc_authored_source_walking",
+      "pass": true,
+      "log": "ART-17-authored-test_npc_authored_source_walking.log"
+    },
+    {
+      "test": "test_component_animation",
+      "pass": true,
+      "log": "ART-17-authored-test_component_animation.log"
+    }
+  ],
+  "qa_export_helper_tests": "Root ran3/3",
+  "full_suite_run": false,
+  "additional_renderer_check": "test_avatar_renderer exhausted150s withoutresult; inconclusive, not pass.",
+  "formal_save_sha256_unchanged": true,
+  "content_pending": [
+    "ticket/imp approvedwalking",
+    "nonfront dedicatedheroidle",
+    "fullwardrobe silhouettecoverage",
+    "fullsubjectiveNPCnormal/slowquality"
+  ],
+  "evidence_scope": "Scripted Main input, source pixel consistency and native captures; camera adjusted, not human playtest."
+}

@@ -1,0 +1,1997 @@
+{
+	"actions": [
+		{
+			"action": "scene",
+			"anchor": {},
+			"authored_frames": 0,
+			"authored_or_rig_source": "pending",
+			"detail": {},
+			"direction": "rebuild",
+			"gait_position": {
+				"phase": 0.0,
+				"walking": false
+			},
+			"label": "scene-before-rebuild",
+			"predicate": true,
+			"source": "pending",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.59999990463257,
+				"y": 1.13497352600098,
+				"z": -6.48958539962769
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back",
+				"observed_cels": [
+					"0",
+					"1",
+					"2"
+				],
+				"observed_texture_instances": [
+					"-9223371799524273046",
+					"-9223371797376789231",
+					"-9223371795799733772"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "back",
+			"gait_position": {
+				"phase": 0.989585399627686,
+				"walking": true
+			},
+			"label": "walk-back",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.59999990463257,
+				"y": 1.13426852226257,
+				"z": -6.63333511352539
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "back",
+			"gait_position": {
+				"phase": 1.13333511352539,
+				"walking": false
+			},
+			"label": "stop-back",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -1.90025961399078,
+				"y": 1.1342808008194,
+				"z": -7.33307552337646
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back_right",
+				"observed_cels": [
+					"3",
+					"4",
+					"5",
+					"6"
+				],
+				"observed_texture_instances": [
+					"-9223371790313581438",
+					"-9223371788384201446",
+					"-9223371786740034298",
+					"-9223371785095869984"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "back_right",
+			"gait_position": {
+				"phase": 2.12291742558591,
+				"walking": true
+			},
+			"label": "walk-back_right",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -1.79861307144165,
+				"y": 1.13426852226257,
+				"z": -7.43472242355347
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "back_right",
+			"gait_position": {
+				"phase": 2.26666759909131,
+				"walking": false
+			},
+			"label": "stop-back_right",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -0.809029757976532,
+				"y": 1.13426828384399,
+				"z": -7.43472242355347
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "right",
+				"observed_cels": [
+					"6",
+					"7",
+					"0",
+					"1"
+				],
+				"observed_texture_instances": [
+					"-9223371782445066956",
+					"-9223371781086112501",
+					"-9223371779240618703",
+					"-9223371777630005966"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "right",
+			"gait_position": {
+				"phase": 0.456250912556425,
+				"walking": true
+			},
+			"label": "walk-right",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -0.665279686450958,
+				"y": 1.13426852226257,
+				"z": -7.43472242355347
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "right",
+			"gait_position": {
+				"phase": 0.600000984081999,
+				"walking": false
+			},
+			"label": "stop-right",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": 0.0344612598419189,
+				"y": 1.13426983356476,
+				"z": -6.73498106002808
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "front_right",
+				"observed_cels": [
+					"1",
+					"2",
+					"3",
+					"4"
+				],
+				"observed_texture_instances": [
+					"-9223371774828210882",
+					"-9223371773821577923",
+					"-9223371772210965191",
+					"-9223371770248030908"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front_right",
+			"gait_position": {
+				"phase": 1.58958444702439,
+				"walking": true
+			},
+			"label": "walk-front_right",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": 0.136107847094536,
+				"y": 1.13426852226257,
+				"z": -6.63333559036255
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "front_right",
+			"gait_position": {
+				"phase": 1.73333363798447,
+				"walking": false
+			},
+			"label": "stop-front_right",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": 0.136107847094536,
+				"y": 1.13426983356476,
+				"z": -5.64375162124634
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "front",
+				"observed_cels": [
+					"5",
+					"6",
+					"7"
+				],
+				"observed_texture_instances": [
+					"-9223371766557043397",
+					"-9223371764694772403",
+					"-9223371763117714098"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 2.72291760710068,
+				"walking": true
+			},
+			"label": "walk-front",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": 0.136107847094536,
+				"y": 1.13427007198334,
+				"z": -5.50000143051147
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.0666677978355441,
+				"walking": false
+			},
+			"label": "stop-front",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -0.56363320350647,
+				"y": 1.13426828384399,
+				"z": -4.80025768280029
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "front_left",
+				"observed_cels": [
+					"0",
+					"1",
+					"2",
+					"3"
+				],
+				"observed_texture_instances": [
+					"-9223371758235544237",
+					"-9223371756373273272",
+					"-9223371754796214947",
+					"-9223371753219156638"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front_left",
+			"gait_position": {
+				"phase": 1.05625301981345,
+				"walking": true
+			},
+			"label": "walk-front_left",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -0.665279865264893,
+				"y": 1.13426852226257,
+				"z": -4.69861173629761
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "front_left",
+			"gait_position": {
+				"phase": 1.20000260029919,
+				"walking": false
+			},
+			"label": "stop-front_left",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -1.65486395359039,
+				"y": 1.13426828384399,
+				"z": -4.69861173629761
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "left",
+				"observed_cels": [
+					"3",
+					"4",
+					"5",
+					"6"
+				],
+				"observed_texture_instances": [
+					"-9223371749091961481",
+					"-9223371747514903201",
+					"-9223371745904290443",
+					"-9223371744293677724"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "left",
+			"gait_position": {
+				"phase": 2.1895866886247,
+				"walking": true
+			},
+			"label": "walk-left",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -1.79861426353455,
+				"y": 1.13426852226257,
+				"z": -4.69861173629761
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "left",
+			"gait_position": {
+				"phase": 2.33333699856885,
+				"walking": false
+			},
+			"label": "stop-left",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.49835443496704,
+				"y": 1.13486397266388,
+				"z": -5.39835453033447
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back_left",
+				"observed_cels": [
+					"6",
+					"7",
+					"0",
+					"1"
+				],
+				"observed_texture_instances": [
+					"-9223371741391219327",
+					"-9223371740384586368",
+					"-9223371738572647035",
+					"-9223371736962034330"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "back_left",
+			"gait_position": {
+				"phase": 0.522920912038535,
+				"walking": true
+			},
+			"label": "walk-back_left",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13427007198334,
+				"z": -5.50000095367432
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "back_left",
+			"gait_position": {
+				"phase": 0.666670999396593,
+				"walking": false
+			},
+			"label": "stop-back_left",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "wave",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13426852226257,
+				"z": -5.51389026641846
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"playback": {
+					"action_timer_remaining": 0.0,
+					"authored": true,
+					"complete": true,
+					"input_facing_before_request": "back",
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"presented_action": "wave",
+					"presented_direction": "front",
+					"rendered_samples": [
+						{
+							"action": "wave",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 239,
+							"simulation_seconds": 7.99166666666665
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.166666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 244,
+							"simulation_seconds": 8.15833333333332
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.333333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 249,
+							"simulation_seconds": 8.32499999999998
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 255,
+							"simulation_seconds": 8.52499999999998
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.666666666666667,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 259,
+							"simulation_seconds": 8.65833333333331
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.833333333333334,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 264,
+							"simulation_seconds": 8.82499999999998
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 1.0,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 269,
+							"simulation_seconds": 8.99166666666665
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 1.16666666666667,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 274,
+							"simulation_seconds": 9.15833333333331
+						}
+					],
+					"returned_to_idle": true,
+					"sequence_duration_seconds": 1.33333333333333,
+					"simulation_seconds": 1.33333333333333,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"trigger": "keyboard"
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.680560312140734,
+				"walking": false
+			},
+			"label": "wave",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "photograph",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13427007198334,
+				"z": -5.52777910232544
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"playback": {
+					"action_timer_remaining": 0.0,
+					"authored": true,
+					"complete": true,
+					"input_facing_before_request": "back",
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"presented_action": "photograph",
+					"presented_direction": "front",
+					"rendered_samples": [
+						{
+							"action": "photograph",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 283,
+							"simulation_seconds": 9.45833333333331
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 0.233333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 290,
+							"simulation_seconds": 9.69166666666664
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 0.433333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 296,
+							"simulation_seconds": 9.89166666666664
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 0.6,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 301,
+							"simulation_seconds": 10.0583333333333
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 0.800000000000001,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 307,
+							"simulation_seconds": 10.2583333333333
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 1.0,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 313,
+							"simulation_seconds": 10.4583333333333
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 1.2,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 319,
+							"simulation_seconds": 10.6583333333333
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 1.4,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 325,
+							"simulation_seconds": 10.8583333333333
+						}
+					],
+					"returned_to_idle": true,
+					"sequence_duration_seconds": 1.6,
+					"simulation_seconds": 1.63333333333333,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"trigger": "keyboard"
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.694449148047716,
+				"walking": false
+			},
+			"label": "photograph",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "interact",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13426852226257,
+				"z": -5.54166841506958
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"playback": {
+					"action_timer_remaining": 0.0,
+					"authored": true,
+					"complete": true,
+					"input_facing_before_request": "back",
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"presented_action": "interact",
+					"presented_direction": "front",
+					"rendered_samples": [
+						{
+							"action": "interact",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 336,
+							"simulation_seconds": 11.225
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.233333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 343,
+							"simulation_seconds": 11.4583333333333
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.433333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 349,
+							"simulation_seconds": 11.6583333333333
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.6,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 354,
+							"simulation_seconds": 11.825
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.800000000000001,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 360,
+							"simulation_seconds": 12.025
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.0,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 366,
+							"simulation_seconds": 12.225
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.2,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 372,
+							"simulation_seconds": 12.425
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.4,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 378,
+							"simulation_seconds": 12.625
+						}
+					],
+					"returned_to_idle": true,
+					"sequence_duration_seconds": 1.6,
+					"simulation_seconds": 1.63333333333333,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"trigger": "runtime action API"
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.708338460791857,
+				"walking": false
+			},
+			"label": "interact",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13426876068115,
+				"z": -4.55208301544189
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas+avatar-compositor",
+			"detail": {
+				"appearance": {
+					"face": "curious",
+					"hair": "windswept",
+					"hair_color": "ink",
+					"skin": "warm",
+					"species": "human"
+				},
+				"equipped": {
+					"hat": "hat-straw",
+					"outfit": "outfit-coral"
+				},
+				"look_applied": true,
+				"playback": {
+					"actual_movement": true,
+					"complete": true,
+					"expected_direction": "front",
+					"observed_cels": [
+						"2",
+						"3",
+						"4"
+					],
+					"observed_texture_instances": [
+						"-9223371678325664291",
+						"-9223371676111071759",
+						"-9223371674550790673"
+					],
+					"rig_hidden": true,
+					"rig_instantiated": false,
+					"simulation_seconds": 0.533333333333333,
+					"source_consistent": true,
+					"sprite_visible": true
+				}
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 1.69792386041954,
+				"walking": true
+			},
+			"label": "wardrobe-during-motion-0",
+			"predicate": true,
+			"source": "authored-walk-atlas+avatar-compositor",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13426983356476,
+				"z": -3.41875219345093
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas+avatar-compositor",
+			"detail": {
+				"appearance": {
+					"face": "curious",
+					"hair": "bob",
+					"hair_color": "ink",
+					"skin": "warm",
+					"species": "elf"
+				},
+				"equipped": {
+					"hat": "hat-flower",
+					"outfit": "outfit-tide"
+				},
+				"look_applied": true,
+				"playback": {
+					"actual_movement": true,
+					"complete": true,
+					"expected_direction": "front",
+					"observed_cels": [
+						"5",
+						"6",
+						"7",
+						"0"
+					],
+					"observed_texture_instances": [
+						"-9223371669937056262",
+						"-9223371667907013123",
+						"-9223371666162182658",
+						"-9223371664417352193"
+					],
+					"rig_hidden": true,
+					"rig_instantiated": false,
+					"simulation_seconds": 0.533333333333333,
+					"source_consistent": true,
+					"sprite_visible": true
+				}
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.0312546824105091,
+				"walking": true
+			},
+			"label": "wardrobe-during-motion-1",
+			"predicate": true,
+			"source": "authored-walk-atlas+avatar-compositor",
+			"status": "observed"
+		}
+	],
+	"actor": "traveller",
+	"camera_framing": {
+		"actor_scale_or_npc_route_changed": false,
+		"camera_up_shift": -0.00647354194572681,
+		"correction_pinned": true,
+		"fixture_adjusted_camera": true,
+		"foot_padding_pixels": 118.79345703125,
+		"full_silhouette_inside_hud_safe_viewport": true,
+		"head_padding_pixels": 70.0065002441406,
+		"hud_safe_bottom": 636.0,
+		"hud_safe_top": 116.0,
+		"orthographic_size": 5.0,
+		"pin_simulation_seconds": 1.425,
+		"sprite_alpha_screen_rect": [
+			536.320007324219,
+			186.006500244141,
+			209.280090332031,
+			331.200042724609
+		]
+	},
+	"camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+	"camera_size": 5.0,
+	"capture_png": [
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-start.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-walk-back.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-walk-back_right.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-walk-right.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-walk-front_right.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-walk-front.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-walk-front_left.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-walk-left.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-walk-back_left.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wave-after-playback.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-photograph-after-playback.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-interact-after-playback.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wardrobe-during-motion-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\packed-authored-ad887c8b\\evidence/traveller-wardrobe-during-motion-1.png"
+	],
+	"captured_frame_framing": [
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.880126953125,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.879867553711,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.920043945313,
+					234.879867553711,
+					189.119995117188,
+					282.239990234375
+				]
+			},
+			"label": "start"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.713623046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.406372070313,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					575.680053710938,
+					248.406372070313,
+					137.279968261719,
+					266.880004882813
+				]
+			},
+			"label": "walk-back"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.713195800781,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.486511230469,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					576.639953613281,
+					246.486511230469,
+					131.520080566406,
+					268.80029296875
+				]
+			},
+			"label": "walk-back_right"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.713623046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.406372070313,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					581.440063476563,
+					248.406372070313,
+					139.200012207031,
+					266.880004882813
+				]
+			},
+			"label": "walk-right"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.7138671875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846313476563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					565.120056152344,
+					237.846313476563,
+					149.760070800781,
+					277.439819335938
+				]
+			},
+			"label": "walk-front_right"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.7138671875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.966156005859,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					572.800048828125,
+					258.966156005859,
+					135.360046386719,
+					256.319976806641
+				]
+			},
+			"label": "walk-front"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.713623046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846588134766,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					571.840026855469,
+					237.846588134766,
+					148.800048828125,
+					277.439788818359
+				]
+			},
+			"label": "walk-front_left"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.713745117188,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.406372070313,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					557.440063476563,
+					248.406372070313,
+					135.360046386719,
+					266.8798828125
+				]
+			},
+			"label": "walk-left"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 119.753662109375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 133.366165161133,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					576.640075683594,
+					249.366165161133,
+					133.440002441406,
+					266.880187988281
+				]
+			},
+			"label": "walk-back_left"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.16618347168,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					230.16618347168,
+					193.919982910156,
+					287.0400390625
+				]
+			},
+			"label": "wave-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.166320800781,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					543.0400390625,
+					230.166320800781,
+					192.000122070313,
+					287.039916992188
+				]
+			},
+			"label": "wave-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046112060547,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					520.000061035156,
+					233.046112060547,
+					216.960083007813,
+					284.160125732422
+				]
+			},
+			"label": "wave-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 112.246322631836,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					515.200073242188,
+					228.246322631836,
+					220.800048828125,
+					288.960083007813
+				]
+			},
+			"label": "wave-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.16618347168,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					514.240112304688,
+					230.16618347168,
+					222.720031738281,
+					287.0400390625
+				]
+			},
+			"label": "wave-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.16618347168,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					519.0400390625,
+					230.16618347168,
+					217.920104980469,
+					287.0400390625
+				]
+			},
+			"label": "wave-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.16618347168,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					524.800048828125,
+					230.16618347168,
+					213.120056152344,
+					287.040222167969
+				]
+			},
+			"label": "wave-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.16618347168,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					543.0400390625,
+					230.16618347168,
+					196.800048828125,
+					287.0400390625
+				]
+			},
+			"label": "wave-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.966247558594,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					234.966247558594,
+					189.120056152344,
+					282.239990234375
+				]
+			},
+			"label": "wave-after-playback"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046249389648,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.920043945313,
+					233.046249389648,
+					193.920043945313,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046249389648,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					540.160034179688,
+					233.046249389648,
+					193.920104980469,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046249389648,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					540.160034179688,
+					233.046249389648,
+					194.880065917969,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046249389648,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					542.080078125,
+					233.046249389648,
+					196.800048828125,
+					284.159973144531
+				]
+			},
+			"label": "photograph-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046249389648,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					538.240112304688,
+					233.046249389648,
+					194.879943847656,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046112060547,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					542.080078125,
+					233.046112060547,
+					194.880065917969,
+					284.160125732422
+				]
+			},
+			"label": "photograph-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046112060547,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					542.080078125,
+					233.046112060547,
+					194.880065917969,
+					284.160125732422
+				]
+			},
+			"label": "photograph-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.046249389648,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					543.0400390625,
+					233.046249389648,
+					194.880004882813,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.926177978516,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					544.960083007813,
+					235.926177978516,
+					192.000061035156,
+					281.280059814453
+				]
+			},
+			"label": "photograph-after-playback"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846313476563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.920043945313,
+					237.846313476563,
+					193.920043945313,
+					279.360107421875
+				]
+			},
+			"label": "interact-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846176147461,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					544.960083007813,
+					237.846176147461,
+					205.440002441406,
+					279.360229492188
+				]
+			},
+			"label": "interact-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846313476563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.920043945313,
+					237.846313476563,
+					217.920104980469,
+					279.360107421875
+				]
+			},
+			"label": "interact-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846313476563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					549.760070800781,
+					237.846313476563,
+					205.440063476563,
+					279.359924316406
+				]
+			},
+			"label": "interact-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846313476563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					535.360046386719,
+					237.846313476563,
+					194.880065917969,
+					279.359924316406
+				]
+			},
+			"label": "interact-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846313476563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					542.080078125,
+					237.846313476563,
+					194.880065917969,
+					279.359924316406
+				]
+			},
+			"label": "interact-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793762207031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846313476563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					543.0400390625,
+					237.846313476563,
+					193.920104980469,
+					279.359924316406
+				]
+			},
+			"label": "interact-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.846313476563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.920043945313,
+					237.846313476563,
+					192.000061035156,
+					279.360107421875
+				]
+			},
+			"label": "interact-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.793579101563,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.966247558594,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.920043945313,
+					234.966247558594,
+					190.080017089844,
+					282.240173339844
+				]
+			},
+			"label": "interact-after-playback"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.713745117188,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.446166992188,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					552.640075683594,
+					247.446166992188,
+					199.680114746094,
+					267.840087890625
+				]
+			},
+			"label": "wardrobe-during-motion-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00647354194572681,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.713745117188,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 101.686264038086,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					555.52001953125,
+					217.686264038086,
+					167.040100097656,
+					297.599975585938
+				]
+			},
+			"label": "wardrobe-during-motion-1"
+		}
+	],
+	"complete_acceptance": false,
+	"encoded_movie_metadata": "pending ffprobe verification by root",
+	"ending_anchor": {
+		"x": -2.60000133514404,
+		"y": 1.13426852226257,
+		"z": -3.2750027179718
+	},
+	"expected_movie_fps": 30.0,
+	"expected_movie_slowdown_factor": 1.0,
+	"failures": [],
+	"fixed_fps": 30.0,
+	"fixture": "Main-backed native island animation acceptance",
+	"hero_directions_seen": [
+		"back",
+		"back_right",
+		"right",
+		"front_right",
+		"front",
+		"front_left",
+		"left",
+		"back_left"
+	],
+	"hero_scripted_placement": true,
+	"human_played": false,
+	"human_visual_review": "pending",
+	"initial_actor_placement_changed": true,
+	"initial_actor_placement_note": "Hero is scripted once to the plaza review patch (-2.6, 0.4, -5.5), whose actual movement is verified by this run; subsequent eight-direction movement uses real keyboard input without teleport or facing presets.",
+	"initial_grounding": {
+		"complete": true,
+		"grounded": true,
+		"grounding_method": "live CharacterBody3D is_on_floor",
+		"horizontal_speed": 0.0,
+		"simulation_seconds": 0.166666666666667,
+		"stable_process_frames": 3
+	},
+	"initial_hero_position": [
+		-2.6,
+		0.4,
+		-5.5
+	],
+	"movie_duration_estimate_seconds": 14.4333333333333,
+	"movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+	"movie_fps_source": "Godot fixed movie process delta",
+	"movie_writer_active": true,
+	"movie_writer_frame_count": null,
+	"natural_action_windows": [],
+	"npc_activity_clock": -1.0,
+	"npc_roots_repositioned": false,
+	"placed_camera": true,
+	"playback_mode": "normal simulation time_scale=1.0",
+	"process_frames_in_run": 433,
+	"reduced_motion": false,
+	"scene_rebuild": true,
+	"scripted_input": true,
+	"segment_mode": "actions-only",
+	"simulation_seconds": 14.425,
+	"simulation_seconds_including_capture_and_startup": 14.425,
+	"starting_anchor": {
+		"x": -2.59999990463257,
+		"y": 1.13439667224884,
+		"z": -5.5
+	},
+	"status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+	"technical_status": "PASS"
+}

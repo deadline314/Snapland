@@ -1,0 +1,3974 @@
+{
+	"actions": [
+		{
+			"action": "idle",
+			"anchor": {
+				"x": 4.0,
+				"y": 0.0,
+				"z": -4.0
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"end_anchor": {
+					"x": 2.80000019073486,
+					"y": 0.0,
+					"z": -4.0
+				},
+				"observable_source_cel_changes": true,
+				"observed_actions": [
+					"idle",
+					"emotion_curious",
+					"stand",
+					"walk",
+					"special"
+				],
+				"observed_source_frames": [
+					"idle/0",
+					"emotion_curious/0",
+					"emotion_curious/1",
+					"emotion_curious/2",
+					"emotion_curious/3",
+					"emotion_curious/4",
+					"emotion_curious/5",
+					"emotion_curious/6",
+					"emotion_curious/7",
+					"stand/0",
+					"walk/0",
+					"walk/1",
+					"walk/2",
+					"walk/3",
+					"special/0",
+					"special/1",
+					"special/2",
+					"special/3",
+					"special/4",
+					"special/5",
+					"special/6",
+					"special/7",
+					"stand/1"
+				],
+				"observed_sources": [
+					"authored"
+				],
+				"observed_texture_instances": [
+					"-9223371884920302423",
+					"-9223371862153620114",
+					"-9223371862052956815",
+					"-9223371861952293579",
+					"-9223371861851630282",
+					"-9223371861750966912",
+					"-9223371861650303615",
+					"-9223371861549640318",
+					"-9223371861448977021",
+					"-9223371842826267241",
+					"-9223371883259358023",
+					"-9223371883158694726",
+					"-9223371839118502501",
+					"-9223371822710385250",
+					"-9223371820881668704",
+					"-9223371819052952158",
+					"-9223371817509448284",
+					"-9223371815395519066",
+					"-9223371811956189768",
+					"-9223371810412685894",
+					"-9223371862254283469",
+					"-9223371884819639124",
+					"-9223371874853972631",
+					"-9223371883662011209",
+					"-9223371872656157338",
+					"-9223371870659668628"
+				],
+				"rendered_observation": {
+					"action": "",
+					"direction": "left",
+					"frames": {
+						"emotion_curious/front/0": true,
+						"emotion_curious/front/1": true,
+						"emotion_curious/front/2": true,
+						"emotion_curious/front/3": true,
+						"emotion_curious/front/4": true,
+						"emotion_curious/front/5": true,
+						"emotion_curious/front/6": true,
+						"emotion_curious/front/7": true,
+						"idle/front/0": true,
+						"special/front/0": true,
+						"special/front/1": true,
+						"special/front/2": true,
+						"special/front/3": true,
+						"special/front/4": true,
+						"special/front/5": true,
+						"special/front/6": true,
+						"special/front/7": true,
+						"stand/front/0": true,
+						"stand/front/1": true,
+						"walk/left/0": true,
+						"walk/left/1": true,
+						"walk/left/2": true,
+						"walk/left/3": true,
+						"walk/right/0": true,
+						"walk/right/1": true,
+						"walk/right/2": true,
+						"walk/right/3": true
+					},
+					"mode": "idle",
+					"presented_action": "walk",
+					"samples": [
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 39,
+							"simulation_seconds": 1.325
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 0.266666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 46,
+							"simulation_seconds": 1.55833333333333
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 54,
+							"simulation_seconds": 1.825
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 0.766666666666667,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 61,
+							"simulation_seconds": 2.05833333333334
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 69,
+							"simulation_seconds": 2.325
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 1.26666666666667,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 76,
+							"simulation_seconds": 2.55833333333333
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 1.5,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 83,
+							"simulation_seconds": 2.79166666666667
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 1.76666666666667,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 91,
+							"simulation_seconds": 3.05833333333333
+						},
+						{
+							"action": "stand",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 98,
+							"simulation_seconds": 3.29166666666667
+						},
+						{
+							"action": "walk",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "left",
+							"frame_index": 0,
+							"process_frame": 99,
+							"simulation_seconds": 3.325
+						},
+						{
+							"action": "walk",
+							"action_elapsed": 0.166666666666667,
+							"direction": "left",
+							"frame_index": 1,
+							"process_frame": 103,
+							"simulation_seconds": 3.45833333333333
+						},
+						{
+							"action": "walk",
+							"action_elapsed": 0.3,
+							"direction": "left",
+							"frame_index": 2,
+							"process_frame": 107,
+							"simulation_seconds": 3.59166666666666
+						},
+						{
+							"action": "walk",
+							"action_elapsed": 0.433333333333333,
+							"direction": "left",
+							"frame_index": 3,
+							"process_frame": 111,
+							"simulation_seconds": 3.725
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 164,
+							"simulation_seconds": 5.49166666666666
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 168,
+							"simulation_seconds": 5.62499999999999
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.233333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 174,
+							"simulation_seconds": 5.82499999999999
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.433333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 180,
+							"simulation_seconds": 6.02499999999999
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.6,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 185,
+							"simulation_seconds": 6.19166666666665
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.833333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 192,
+							"simulation_seconds": 6.42499999999999
+						},
+						{
+							"action": "special",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 198,
+							"simulation_seconds": 6.62499999999999
+						},
+						{
+							"action": "special",
+							"action_elapsed": 1.2,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 203,
+							"simulation_seconds": 6.79166666666665
+						},
+						{
+							"action": "special",
+							"action_elapsed": 1.4,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 209,
+							"simulation_seconds": 6.99166666666665
+						},
+						{
+							"action": "stand",
+							"action_elapsed": 0.333333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 225,
+							"simulation_seconds": 7.52499999999998
+						},
+						{
+							"action": "walk",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "right",
+							"frame_index": 0,
+							"process_frame": 228,
+							"simulation_seconds": 7.62499999999998
+						},
+						{
+							"action": "walk",
+							"action_elapsed": 0.166666666666667,
+							"direction": "right",
+							"frame_index": 1,
+							"process_frame": 232,
+							"simulation_seconds": 7.75833333333332
+						},
+						{
+							"action": "walk",
+							"action_elapsed": 0.3,
+							"direction": "right",
+							"frame_index": 2,
+							"process_frame": 236,
+							"simulation_seconds": 7.89166666666665
+						},
+						{
+							"action": "walk",
+							"action_elapsed": 0.433333333333333,
+							"direction": "right",
+							"frame_index": 3,
+							"process_frame": 240,
+							"simulation_seconds": 8.02499999999998
+						}
+					],
+					"source_consistent": true,
+					"textures": {
+						"-9223371810412685894": true,
+						"-9223371811956189768": true,
+						"-9223371815395519066": true,
+						"-9223371817509448284": true,
+						"-9223371819052952158": true,
+						"-9223371820881668704": true,
+						"-9223371822710385250": true,
+						"-9223371839118502501": true,
+						"-9223371842826267241": true,
+						"-9223371861448977021": true,
+						"-9223371861549640318": true,
+						"-9223371861650303615": true,
+						"-9223371861750966912": true,
+						"-9223371861851630282": true,
+						"-9223371861952293579": true,
+						"-9223371862052956815": true,
+						"-9223371862153620114": true,
+						"-9223371862254283469": true,
+						"-9223371870659668628": true,
+						"-9223371872656157338": true,
+						"-9223371874853972631": true,
+						"-9223371883158694726": true,
+						"-9223371883259358023": true,
+						"-9223371883662011209": true,
+						"-9223371884819639124": true,
+						"-9223371884920302423": true
+					}
+				},
+				"route_max_anchor": {
+					"x": 4.0,
+					"y": 0.0,
+					"z": -4.0
+				},
+				"route_min_anchor": {
+					"x": 2.80000019073486,
+					"y": 0.0,
+					"z": -4.0
+				},
+				"scheduler_live": true,
+				"simulation_seconds": 30.0000000000007,
+				"start_anchor": {
+					"x": 4.0,
+					"y": 0.0,
+					"z": -4.0
+				},
+				"transitions": [
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 0.0333333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 0,
+						"simulation_seconds": 0.0666666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371862153620114
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 1,
+						"simulation_seconds": 0.3,
+						"source": "authored",
+						"visible_texture_instance": -9223371862052956815
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 2,
+						"simulation_seconds": 0.566666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371861952293579
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 3,
+						"simulation_seconds": 0.8,
+						"source": "authored",
+						"visible_texture_instance": -9223371861851630282
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 4,
+						"simulation_seconds": 1.06666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371861750966912
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 5,
+						"simulation_seconds": 1.3,
+						"source": "authored",
+						"visible_texture_instance": -9223371861650303615
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 6,
+						"simulation_seconds": 1.53333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371861549640318
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 7,
+						"simulation_seconds": 1.8,
+						"source": "authored",
+						"visible_texture_instance": -9223371861448977021
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 2.03333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 2.06666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 2.2,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 2.33333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 2.46666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 2.63333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 2.76666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 2.9,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 3.06666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 3.2,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 3.33333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 3.46666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 3.63333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 3.76666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 3.9,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 4.03333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 4.19999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 4.23333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "special",
+						"frame_index": 0,
+						"simulation_seconds": 4.36666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371822710385250
+					},
+					{
+						"action": "special",
+						"frame_index": 1,
+						"simulation_seconds": 4.56666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371820881668704
+					},
+					{
+						"action": "special",
+						"frame_index": 2,
+						"simulation_seconds": 4.76666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371819052952158
+					},
+					{
+						"action": "special",
+						"frame_index": 3,
+						"simulation_seconds": 4.93333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371817509448284
+					},
+					{
+						"action": "special",
+						"frame_index": 4,
+						"simulation_seconds": 5.16666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371815395519066
+					},
+					{
+						"action": "special",
+						"frame_index": 5,
+						"simulation_seconds": 5.36666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371811956189768
+					},
+					{
+						"action": "special",
+						"frame_index": 6,
+						"simulation_seconds": 5.53333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371810412685894
+					},
+					{
+						"action": "special",
+						"frame_index": 7,
+						"simulation_seconds": 5.73333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371862254283469
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 5.93333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 6.26666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371884819639124
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 6.36666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 6.49999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 6.63333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 6.76666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 6.93333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 7.06666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 7.19999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 7.36666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 7.49999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 7.63333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 7.76666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 7.93333333333331,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 8.06666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 8.19999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 8.33333333333331,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 8.49999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 8.53333333333331,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 0,
+						"simulation_seconds": 8.66666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371862153620114
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 1,
+						"simulation_seconds": 8.89999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371862052956815
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 2,
+						"simulation_seconds": 9.16666666666664,
+						"source": "authored",
+						"visible_texture_instance": -9223371861952293579
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 3,
+						"simulation_seconds": 9.39999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371861851630282
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 4,
+						"simulation_seconds": 9.66666666666664,
+						"source": "authored",
+						"visible_texture_instance": -9223371861750966912
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 5,
+						"simulation_seconds": 9.89999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371861650303615
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 6,
+						"simulation_seconds": 10.1333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371861549640318
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 7,
+						"simulation_seconds": 10.4,
+						"source": "authored",
+						"visible_texture_instance": -9223371861448977021
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 10.6333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 10.6666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 10.8,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 10.9333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 11.0666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 11.2333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 11.3666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 11.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 11.6666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 11.8,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 11.9333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 12.0666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 12.2333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 12.3666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 12.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 12.6333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 12.8,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 12.8333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "special",
+						"frame_index": 0,
+						"simulation_seconds": 12.9666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371822710385250
+					},
+					{
+						"action": "special",
+						"frame_index": 1,
+						"simulation_seconds": 13.1666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371820881668704
+					},
+					{
+						"action": "special",
+						"frame_index": 2,
+						"simulation_seconds": 13.3666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371819052952158
+					},
+					{
+						"action": "special",
+						"frame_index": 3,
+						"simulation_seconds": 13.5333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371817509448284
+					},
+					{
+						"action": "special",
+						"frame_index": 4,
+						"simulation_seconds": 13.7666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371815395519066
+					},
+					{
+						"action": "special",
+						"frame_index": 5,
+						"simulation_seconds": 13.9666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371811956189768
+					},
+					{
+						"action": "special",
+						"frame_index": 6,
+						"simulation_seconds": 14.1333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371810412685894
+					},
+					{
+						"action": "special",
+						"frame_index": 7,
+						"simulation_seconds": 14.3333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371862254283469
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 14.5333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 14.8666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371884819639124
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 14.9666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 15.1,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 15.2333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 15.3666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 15.5333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 15.6666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 15.8,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 15.9666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 16.1,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 16.2333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 16.3666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 16.5333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 16.6666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 16.8,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 16.9333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 17.1,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 17.1333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 0,
+						"simulation_seconds": 17.2666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371862153620114
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 1,
+						"simulation_seconds": 17.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371862052956815
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 2,
+						"simulation_seconds": 17.7666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371861952293579
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 3,
+						"simulation_seconds": 18.0000000000001,
+						"source": "authored",
+						"visible_texture_instance": -9223371861851630282
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 4,
+						"simulation_seconds": 18.2666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371861750966912
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 5,
+						"simulation_seconds": 18.5000000000001,
+						"source": "authored",
+						"visible_texture_instance": -9223371861650303615
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 6,
+						"simulation_seconds": 18.7333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371861549640318
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 7,
+						"simulation_seconds": 19.0000000000001,
+						"source": "authored",
+						"visible_texture_instance": -9223371861448977021
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 19.2333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 19.2666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 19.4000000000001,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 19.5333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 19.6666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 19.8333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 19.9666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 20.1000000000002,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 20.2666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 20.4000000000002,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 20.5333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 20.6666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 20.8333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 20.9666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 21.1000000000002,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 21.2333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 21.4000000000002,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 21.4333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "special",
+						"frame_index": 0,
+						"simulation_seconds": 21.5666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371822710385250
+					},
+					{
+						"action": "special",
+						"frame_index": 1,
+						"simulation_seconds": 21.7666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371820881668704
+					},
+					{
+						"action": "special",
+						"frame_index": 2,
+						"simulation_seconds": 21.9666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371819052952158
+					},
+					{
+						"action": "special",
+						"frame_index": 3,
+						"simulation_seconds": 22.1333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371817509448284
+					},
+					{
+						"action": "special",
+						"frame_index": 4,
+						"simulation_seconds": 22.3666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371815395519066
+					},
+					{
+						"action": "special",
+						"frame_index": 5,
+						"simulation_seconds": 22.5666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371811956189768
+					},
+					{
+						"action": "special",
+						"frame_index": 6,
+						"simulation_seconds": 22.7333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371810412685894
+					},
+					{
+						"action": "special",
+						"frame_index": 7,
+						"simulation_seconds": 22.9333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371862254283469
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 23.1333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "stand",
+						"frame_index": 1,
+						"simulation_seconds": 23.466666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371884819639124
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 23.566666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 23.7000000000003,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 23.8333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 23.966666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 24.1333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 24.266666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 24.4000000000004,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 24.566666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 24.7000000000004,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 24.8333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 24.9666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 25.1333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 25.2666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371874853972631
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 25.4000000000004,
+						"source": "authored",
+						"visible_texture_instance": -9223371883662011209
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 25.5333333333338,
+						"source": "authored",
+						"visible_texture_instance": -9223371872656157338
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 25.7000000000004,
+						"source": "authored",
+						"visible_texture_instance": -9223371870659668628
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 25.7333333333338,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 0,
+						"simulation_seconds": 25.8666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371862153620114
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 1,
+						"simulation_seconds": 26.1000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371862052956815
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 2,
+						"simulation_seconds": 26.3666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371861952293579
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 3,
+						"simulation_seconds": 26.6000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371861851630282
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 4,
+						"simulation_seconds": 26.8666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371861750966912
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 5,
+						"simulation_seconds": 27.1000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371861650303615
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 6,
+						"simulation_seconds": 27.3333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371861549640318
+					},
+					{
+						"action": "emotion_curious",
+						"frame_index": 7,
+						"simulation_seconds": 27.6000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371861448977021
+					},
+					{
+						"action": "stand",
+						"frame_index": 0,
+						"simulation_seconds": 27.8333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371884920302423
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 27.8666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 28.0000000000006,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 28.1333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 28.2666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 28.4333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 28.5666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 28.7000000000006,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 28.8666666666673,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 29.0000000000006,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 29.1333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 29.2666666666673,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 29.433333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					},
+					{
+						"action": "walk",
+						"frame_index": 0,
+						"simulation_seconds": 29.5666666666673,
+						"source": "authored",
+						"visible_texture_instance": -9223371842826267241
+					},
+					{
+						"action": "walk",
+						"frame_index": 1,
+						"simulation_seconds": 29.7000000000006,
+						"source": "authored",
+						"visible_texture_instance": -9223371883259358023
+					},
+					{
+						"action": "walk",
+						"frame_index": 2,
+						"simulation_seconds": 29.833333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371883158694726
+					},
+					{
+						"action": "walk",
+						"frame_index": 3,
+						"simulation_seconds": 30.0000000000007,
+						"source": "authored",
+						"visible_texture_instance": -9223371839118502501
+					}
+				]
+			},
+			"direction": "left",
+			"gait_position": {},
+			"label": "natural-idle-30s",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": 4.0,
+				"y": 0.0,
+				"z": -4.0
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"distinct_route_positions": 61,
+				"observed_walk_cels": [
+					"0",
+					"1",
+					"2",
+					"3"
+				],
+				"saw_route_start": true,
+				"settle_anchor": {
+					"x": 4.0,
+					"y": 0.0,
+					"z": -4.0
+				},
+				"settled": true,
+				"simulation_seconds": 4.33333333333333,
+				"source_sprite_visible": true,
+				"start_anchor": {
+					"x": 2.80000019073486,
+					"y": 0.0,
+					"z": -4.0
+				}
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "natural-route-start-settle",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "greet",
+			"anchor": {
+				"x": 4.0,
+				"y": 0.0,
+				"z": -4.0
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"accepted": true,
+				"playback": {
+					"accepted": true,
+					"authored": true,
+					"complete": true,
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"observed_texture_instances": [
+						"-9223371562629982763",
+						"-9223371562529319468",
+						"-9223371562428656217",
+						"-9223371557278051101",
+						"-9223371556019759740",
+						"-9223371554476255790",
+						"-9223371562026003047",
+						"-9223371561925339752"
+					],
+					"rendered_samples": [
+						{
+							"action": "greet",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 1069,
+							"simulation_seconds": 35.6583333333339
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.166666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1073,
+							"simulation_seconds": 35.7916666666672
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.333333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1078,
+							"simulation_seconds": 35.9583333333339
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1084,
+							"simulation_seconds": 36.1583333333339
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.666666666666667,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1088,
+							"simulation_seconds": 36.2916666666672
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 0.833333333333333,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1093,
+							"simulation_seconds": 36.4583333333338
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1099,
+							"simulation_seconds": 36.6583333333338
+						},
+						{
+							"action": "greet",
+							"action_elapsed": 1.16666666666667,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 1103,
+							"simulation_seconds": 36.7916666666671
+						}
+					],
+					"sequence_duration_seconds": 1.33333333333333,
+					"simulation_seconds": 1.33333333333326,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"requested": "greet",
+				"source_frames": 8
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "greet",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "interact",
+			"anchor": {
+				"x": 2.80000019073486,
+				"y": 0.0,
+				"z": -4.0
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"accepted": true,
+				"playback": {
+					"accepted": true,
+					"authored": true,
+					"complete": true,
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"observed_texture_instances": [
+						"-9223371522448550430",
+						"-9223371523119639156",
+						"-9223371518774340123",
+						"-9223371522918312485",
+						"-9223371515150461464",
+						"-9223371522716985891",
+						"-9223371511811795477",
+						"-9223371522515659297"
+					],
+					"rendered_samples": [
+						{
+							"action": "interact",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 1197,
+							"simulation_seconds": 39.9250000000003
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.233333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1203,
+							"simulation_seconds": 40.1250000000003
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.433333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1209,
+							"simulation_seconds": 40.3250000000003
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.6,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1214,
+							"simulation_seconds": 40.4916666666669
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.833333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1221,
+							"simulation_seconds": 40.7250000000003
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1227,
+							"simulation_seconds": 40.9250000000002
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.2,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1232,
+							"simulation_seconds": 41.0916666666669
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.4,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 1238,
+							"simulation_seconds": 41.2916666666669
+						}
+					],
+					"sequence_duration_seconds": 1.6,
+					"simulation_seconds": 1.59999999999991,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"requested": "interact",
+				"source_frames": 8
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "interact",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "emotion_curious",
+			"anchor": {
+				"x": 4.0,
+				"y": 0.0,
+				"z": -4.0
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"accepted": true,
+				"playback": {
+					"accepted": true,
+					"authored": true,
+					"complete": true,
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"observed_texture_instances": [
+						"-9223371862153620114",
+						"-9223371862052956815",
+						"-9223371861952293579",
+						"-9223371861851630282",
+						"-9223371861750966912",
+						"-9223371861650303615",
+						"-9223371861549640318",
+						"-9223371861448977021"
+					],
+					"rendered_samples": [
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 1326,
+							"simulation_seconds": 44.2250000000001
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 0.266666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1333,
+							"simulation_seconds": 44.4583333333334
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1341,
+							"simulation_seconds": 44.725
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 0.766666666666667,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1348,
+							"simulation_seconds": 44.9583333333334
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1356,
+							"simulation_seconds": 45.225
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 1.26666666666667,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1363,
+							"simulation_seconds": 45.4583333333333
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 1.5,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1370,
+							"simulation_seconds": 45.6916666666666
+						},
+						{
+							"action": "emotion_curious",
+							"action_elapsed": 1.76666666666667,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 1378,
+							"simulation_seconds": 45.9583333333333
+						}
+					],
+					"sequence_duration_seconds": 2.0,
+					"simulation_seconds": 1.99999999999989,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"requested": "emotion_curious",
+				"source_frames": 8
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "emotion_curious",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "special",
+			"anchor": {
+				"x": 2.80000019073486,
+				"y": 0.0,
+				"z": -4.0
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"accepted": true,
+				"playback": {
+					"accepted": true,
+					"authored": true,
+					"complete": true,
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"observed_texture_instances": [
+						"-9223371822710385250",
+						"-9223371820881668704",
+						"-9223371819052952158",
+						"-9223371817509448284",
+						"-9223371815395519066",
+						"-9223371811956189768",
+						"-9223371810412685894",
+						"-9223371862254283469"
+					],
+					"rendered_samples": [
+						{
+							"action": "special",
+							"action_elapsed": 0.0333333333333333,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 1455,
+							"simulation_seconds": 48.5249999999998
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.233333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1461,
+							"simulation_seconds": 48.7249999999998
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.433333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1467,
+							"simulation_seconds": 48.9249999999998
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.6,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1472,
+							"simulation_seconds": 49.0916666666664
+						},
+						{
+							"action": "special",
+							"action_elapsed": 0.833333333333333,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1479,
+							"simulation_seconds": 49.3249999999998
+						},
+						{
+							"action": "special",
+							"action_elapsed": 1.03333333333333,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1485,
+							"simulation_seconds": 49.5249999999998
+						},
+						{
+							"action": "special",
+							"action_elapsed": 1.2,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1490,
+							"simulation_seconds": 49.6916666666664
+						},
+						{
+							"action": "special",
+							"action_elapsed": 1.4,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 1496,
+							"simulation_seconds": 49.8916666666664
+						}
+					],
+					"sequence_duration_seconds": 1.6,
+					"simulation_seconds": 1.59999999999991,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"requested": "special",
+				"source_frames": 8
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "special",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "special",
+			"anchor": {
+				"x": 2.80000019073486,
+				"y": 0.0,
+				"z": -4.0
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"waited_simulation_seconds": 0.0
+			},
+			"direction": "front",
+			"gait_position": {},
+			"label": "settled-after-authored-actions",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		}
+	],
+	"actor": "announcer",
+	"camera_framing": {
+		"actor_scale_or_npc_route_changed": false,
+		"camera_up_shift": -0.0807009802924262,
+		"correction_pinned": true,
+		"fixture_adjusted_camera": true,
+		"foot_padding_pixels": 135.74853515625,
+		"full_silhouette_inside_hud_safe_viewport": true,
+		"head_padding_pixels": 130.811431884766,
+		"hud_safe_bottom": 636.0,
+		"hud_safe_top": 116.0,
+		"orthographic_size": 5.0,
+		"pin_simulation_seconds": 1.25833333333333,
+		"sprite_alpha_screen_rect": [
+			565.942932128906,
+			246.811431884766,
+			148.114318847656,
+			253.440032958984
+		]
+	},
+	"camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+	"camera_size": 5.0,
+	"capture_png": [
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-start.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-emotion_curious-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-emotion_curious-front-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-emotion_curious-front-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-emotion_curious-front-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-emotion_curious-front-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-emotion_curious-front-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-emotion_curious-front-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-emotion_curious-front-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-stand-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-walk-left-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-walk-left-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-walk-left-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-walk-left-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-idle-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-special-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-special-front-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-special-front-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-special-front-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-special-front-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-special-front-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-special-front-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-special-front-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-stand-front-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-walk-right-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-walk-right-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-walk-right-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-walk-right-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-natural-idle-30s.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-greet.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-interact.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-emotion_curious.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-announcer-81a9e436\\evidence/announcer-special.png"
+	],
+	"captured_frame_framing": [
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					251.748550415039,
+					144.822875976563,
+					248.502914428711
+				]
+			},
+			"label": "start"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					251.748550415039,
+					146.468566894531,
+					248.503067016602
+				]
+			},
+			"label": "natural-emotion_curious-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					250.102798461914,
+					146.468627929688,
+					250.148666381836
+				]
+			},
+			"label": "natural-emotion_curious-front-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					250.102798461914,
+					146.468566894531,
+					250.148818969727
+				]
+			},
+			"label": "natural-emotion_curious-front-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					250.102798461914,
+					148.114318847656,
+					250.148666381836
+				]
+			},
+			"label": "natural-emotion_curious-front-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					250.102798461914,
+					151.405700683594,
+					250.148666381836
+				]
+			},
+			"label": "natural-emotion_curious-front-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					250.102798461914,
+					148.1142578125,
+					250.148666381836
+				]
+			},
+			"label": "natural-emotion_curious-front-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					250.102798461914,
+					148.1142578125,
+					250.148818969727
+				]
+			},
+			"label": "natural-emotion_curious-front-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					250.102798461914,
+					144.822875976563,
+					250.148666381836
+				]
+			},
+			"label": "natural-emotion_curious-front-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					251.748550415039,
+					144.822875976563,
+					248.502914428711
+				]
+			},
+			"label": "natural-stand-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 137.394134521484,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 128.342803955078,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					574.994323730469,
+					244.342803955078,
+					132.480041503906,
+					254.263061523438
+				]
+			},
+			"label": "natural-walk-left-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 137.394134521484,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 127.519927978516,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					593.920043945313,
+					243.519927978516,
+					126.720031738281,
+					255.0859375
+				]
+			},
+			"label": "natural-walk-left-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 137.394134521484,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 127.520065307617,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					590.628601074219,
+					243.520065307617,
+					128.36572265625,
+					255.085800170898
+				]
+			},
+			"label": "natural-walk-left-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 137.394134521484,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 127.520065307617,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					553.600036621094,
+					243.520065307617,
+					129.188598632813,
+					255.085800170898
+				]
+			},
+			"label": "natural-walk-left-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					251.748550415039,
+					144.822875976563,
+					248.502914428711
+				]
+			},
+			"label": "natural-idle-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811431884766,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					246.811431884766,
+					148.114318847656,
+					253.440032958984
+				]
+			},
+			"label": "natural-special-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165542602539,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					245.165542602539,
+					144.822875976563,
+					255.086074829102
+				]
+			},
+			"label": "natural-special-front-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165679931641,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					245.165679931641,
+					176.091430664063,
+					255.085784912109
+				]
+			},
+			"label": "natural-special-front-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165679931641,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					245.165679931641,
+					176.091430664063,
+					255.085784912109
+				]
+			},
+			"label": "natural-special-front-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165679931641,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					245.165679931641,
+					177.737182617188,
+					255.085784912109
+				]
+			},
+			"label": "natural-special-front-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165542602539,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					245.165542602539,
+					146.468566894531,
+					255.086074829102
+				]
+			},
+			"label": "natural-special-front-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165679931641,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					564.297241210938,
+					245.165679931641,
+					149.760009765625,
+					255.085784912109
+				]
+			},
+			"label": "natural-special-front-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811431884766,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					246.811431884766,
+					146.468566894531,
+					253.440185546875
+				]
+			},
+			"label": "natural-special-front-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 137.394439697266,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					253.394439697266,
+					144.822875976563,
+					246.857025146484
+				]
+			},
+			"label": "natural-stand-front-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 137.394287109375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 125.874313354492,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					574.171447753906,
+					241.874313354492,
+					134.948608398438,
+					256.731384277344
+				]
+			},
+			"label": "natural-walk-right-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 137.394287109375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 126.697052001953,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					242.697052001953,
+					129.188598632813,
+					255.908660888672
+				]
+			},
+			"label": "natural-walk-right-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 137.394287109375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 127.520065307617,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					243.520065307617,
+					130.011474609375,
+					255.085647583008
+				]
+			},
+			"label": "natural-walk-right-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 137.394287109375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 125.874176025391,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					600.5029296875,
+					241.874176025391,
+					131.657165527344,
+					256.731536865234
+				]
+			},
+			"label": "natural-walk-right-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					251.748550415039,
+					144.822875976563,
+					248.502914428711
+				]
+			},
+			"label": "natural-idle-30s"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					559.360046386719,
+					251.748550415039,
+					153.051513671875,
+					248.502914428711
+				]
+			},
+			"label": "greet-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					564.297241210938,
+					251.748550415039,
+					149.760009765625,
+					248.502914428711
+				]
+			},
+			"label": "greet-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					556.068664550781,
+					251.748550415039,
+					156.342895507813,
+					248.502914428711
+				]
+			},
+			"label": "greet-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					539.611511230469,
+					251.748550415039,
+					179.3828125,
+					248.503067016602
+				]
+			},
+			"label": "greet-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					534.674377441406,
+					251.748550415039,
+					184.319946289063,
+					248.502914428711
+				]
+			},
+			"label": "greet-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					536.320129394531,
+					251.748550415039,
+					179.3828125,
+					248.502914428711
+				]
+			},
+			"label": "greet-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					251.748550415039,
+					146.468566894531,
+					248.502914428711
+				]
+			},
+			"label": "greet-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					251.748550415039,
+					144.822875976563,
+					248.502914428711
+				]
+			},
+			"label": "greet-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					251.748550415039,
+					146.468566894531,
+					248.503067016602
+				]
+			},
+			"label": "greet"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811294555664,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					246.811294555664,
+					146.468627929688,
+					253.440170288086
+				]
+			},
+			"label": "interact-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811294555664,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					246.811294555664,
+					144.822875976563,
+					253.440322875977
+				]
+			},
+			"label": "interact-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811294555664,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					564.297241210938,
+					246.811294555664,
+					194.1943359375,
+					253.440170288086
+				]
+			},
+			"label": "interact-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811294555664,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					246.811294555664,
+					195.840087890625,
+					253.440170288086
+				]
+			},
+			"label": "interact-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811431884766,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					246.811431884766,
+					199.131469726563,
+					253.440032958984
+				]
+			},
+			"label": "interact-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811294555664,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					246.811294555664,
+					195.840087890625,
+					253.440170288086
+				]
+			},
+			"label": "interact-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.456909179688,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					248.456909179688,
+					148.114379882813,
+					251.794555664063
+				]
+			},
+			"label": "interact-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.457183837891,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					248.457183837891,
+					148.114318847656,
+					251.79443359375
+				]
+			},
+			"label": "interact-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811431884766,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					246.811431884766,
+					148.114318847656,
+					253.440032958984
+				]
+			},
+			"label": "interact"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					251.748550415039,
+					146.468566894531,
+					248.503067016602
+				]
+			},
+			"label": "emotion_curious-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					250.102798461914,
+					146.468627929688,
+					250.148666381836
+				]
+			},
+			"label": "emotion_curious-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					250.102798461914,
+					146.468566894531,
+					250.148818969727
+				]
+			},
+			"label": "emotion_curious-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					250.102798461914,
+					148.114318847656,
+					250.148666381836
+				]
+			},
+			"label": "emotion_curious-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					250.102798461914,
+					151.405700683594,
+					250.148666381836
+				]
+			},
+			"label": "emotion_curious-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					250.102798461914,
+					148.1142578125,
+					250.148666381836
+				]
+			},
+			"label": "emotion_curious-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					250.102798461914,
+					148.1142578125,
+					250.148818969727
+				]
+			},
+			"label": "emotion_curious-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.102798461914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					569.234375,
+					250.102798461914,
+					144.822875976563,
+					250.148666381836
+				]
+			},
+			"label": "emotion_curious-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 135.748550415039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					251.748550415039,
+					146.468566894531,
+					248.503067016602
+				]
+			},
+			"label": "emotion_curious"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811431884766,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					246.811431884766,
+					148.114318847656,
+					253.440032958984
+				]
+			},
+			"label": "special-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165542602539,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					245.165542602539,
+					144.822875976563,
+					255.086074829102
+				]
+			},
+			"label": "special-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165679931641,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					245.165679931641,
+					176.091430664063,
+					255.085784912109
+				]
+			},
+			"label": "special-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165679931641,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					245.165679931641,
+					176.091430664063,
+					255.085784912109
+				]
+			},
+			"label": "special-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165679931641,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					245.165679931641,
+					177.737182617188,
+					255.085784912109
+				]
+			},
+			"label": "special-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165542602539,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					245.165542602539,
+					146.468566894531,
+					255.086074829102
+				]
+			},
+			"label": "special-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 129.165679931641,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					564.297241210938,
+					245.165679931641,
+					149.760009765625,
+					255.085784912109
+				]
+			},
+			"label": "special-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.748382568359,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811431884766,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					567.588684082031,
+					246.811431884766,
+					146.468566894531,
+					253.440185546875
+				]
+			},
+			"label": "special-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0807009802924262,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 135.74853515625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.811431884766,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.25833333333333,
+				"sprite_alpha_screen_rect": [
+					565.942932128906,
+					246.811431884766,
+					148.114318847656,
+					253.440032958984
+				]
+			},
+			"label": "special"
+		}
+	],
+	"complete_acceptance": false,
+	"coverage_report": {
+		"authored": {
+			"announcer": {
+				"emotion_curious": [
+					"front"
+				],
+				"greet": [
+					"front"
+				],
+				"idle": [
+					"front"
+				],
+				"interact": [
+					"front"
+				],
+				"special": [
+					"front"
+				],
+				"walk": [
+					"right",
+					"left"
+				],
+				"walk_candidate": [
+					"front"
+				]
+			},
+			"imp": {
+				"dance": [
+					"front"
+				],
+				"emotion_proud": [
+					"front"
+				],
+				"greet": [
+					"front"
+				],
+				"idle": [
+					"front"
+				],
+				"idle_gesture": [
+					"front"
+				],
+				"interact": [
+					"front"
+				]
+			},
+			"ticket": {
+				"emotion_happy": [
+					"front"
+				],
+				"greet": [
+					"front"
+				],
+				"idle": [
+					"front"
+				],
+				"idle_gesture": [
+					"front"
+				],
+				"interact": [
+					"front"
+				],
+				"walk_candidate": [
+					"front"
+				]
+			},
+			"traveller": {
+				"catch": [
+					"front"
+				],
+				"idle": [
+					"front"
+				],
+				"interact": [
+					"front"
+				],
+				"jump": [
+					"front"
+				],
+				"photograph": [
+					"front"
+				],
+				"sit": [
+					"front"
+				],
+				"wave": [
+					"front"
+				]
+			}
+		},
+		"library_loaded": true,
+		"missing_requests": {
+			"announcer": {},
+			"imp": {},
+			"ticket": {}
+		}
+	},
+	"encoded_movie_metadata": "pending ffprobe verification by root",
+	"ending_anchor": {
+		"x": 2.80000019073486,
+		"y": 0.0,
+		"z": -4.0
+	},
+	"expected_movie_fps": 30.0,
+	"expected_movie_slowdown_factor": 1.0,
+	"failures": [],
+	"fixed_fps": 30.0,
+	"fixture": "Main-backed native island animation acceptance",
+	"hero_scripted_placement": true,
+	"human_played": false,
+	"human_visual_review": "pending",
+	"initial_actor_placement_changed": false,
+	"initial_actor_placement_note": "Selected NPC root and route are unchanged. The hero is repositioned near the NPC every fixture frame as a scripted camera helper; this is not natural hero movement evidence.",
+	"initial_grounding": {
+		"complete": true,
+		"grounded": true,
+		"grounding_method": "runtime Sprite ground-anchor with stationary NPC root",
+		"horizontal_speed": 0.0,
+		"simulation_seconds": 0.900000000000001,
+		"stable_process_frames": 3
+	},
+	"initial_hero_position": null,
+	"movie_duration_estimate_seconds": 50.1,
+	"movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+	"movie_fps_source": "Godot fixed movie process delta",
+	"movie_writer_active": true,
+	"movie_writer_frame_count": null,
+	"natural_action_windows": [
+		{
+			"authored_source_available": true,
+			"clock_or_root_injected": false,
+			"complete": true,
+			"controller_clock_end": 35.6250000000005,
+			"controller_clock_start": 35.5916666666672,
+			"controller_phase": 1.22500000000055,
+			"controller_wait_seconds": 0.0333333333333314,
+			"frame_guard_seconds": 0.0333333333333333,
+			"natural_action_before_request": "idle",
+			"observed_intervals": 1,
+			"reason": "ready",
+			"requested_action": "greet",
+			"required_rest_remaining_seconds": 1.36666666666667,
+			"rest_remaining_seconds": 2.07499999999945,
+			"root_horizontal_speed": 0.0,
+			"sequence_duration_seconds": 1.33333333333333,
+			"simulation_budget_remaining_seconds": 24.3749999999995,
+			"simulation_wait_seconds": 0.0333333333333314,
+			"source_fps": 6.0,
+			"source_frame_count": 8,
+			"source_sprite_visible_and_consistent": true,
+			"watchdog_expired": false
+		},
+		{
+			"authored_source_available": true,
+			"clock_or_root_injected": false,
+			"complete": true,
+			"controller_clock_end": 39.891666666667,
+			"controller_clock_start": 36.9916666666671,
+			"controller_phase": 5.49166666666697,
+			"controller_wait_seconds": 2.89999999999984,
+			"frame_guard_seconds": 0.0333333333333333,
+			"natural_action_before_request": "idle",
+			"observed_intervals": 88,
+			"reason": "ready",
+			"requested_action": "interact",
+			"required_rest_remaining_seconds": 1.63333333333333,
+			"rest_remaining_seconds": 2.10833333333303,
+			"root_horizontal_speed": 0.0,
+			"sequence_duration_seconds": 1.6,
+			"simulation_budget_remaining_seconds": 20.108333333333,
+			"simulation_wait_seconds": 2.89999999999984,
+			"source_fps": 5.0,
+			"source_frame_count": 8,
+			"source_sprite_visible_and_consistent": true,
+			"watchdog_expired": false
+		},
+		{
+			"authored_source_available": true,
+			"clock_or_root_injected": false,
+			"complete": true,
+			"controller_clock_end": 44.1916666666667,
+			"controller_clock_start": 41.5250000000002,
+			"controller_phase": 1.19166666666673,
+			"controller_wait_seconds": 2.66666666666652,
+			"frame_guard_seconds": 0.0333333333333333,
+			"natural_action_before_request": "idle",
+			"observed_intervals": 81,
+			"reason": "ready",
+			"requested_action": "emotion_curious",
+			"required_rest_remaining_seconds": 2.03333333333333,
+			"rest_remaining_seconds": 2.10833333333327,
+			"root_horizontal_speed": 0.0,
+			"sequence_duration_seconds": 2.0,
+			"simulation_budget_remaining_seconds": 15.8083333333333,
+			"simulation_wait_seconds": 2.66666666666652,
+			"source_fps": 4.0,
+			"source_frame_count": 8,
+			"source_sprite_visible_and_consistent": true,
+			"watchdog_expired": false
+		},
+		{
+			"authored_source_available": true,
+			"clock_or_root_injected": false,
+			"complete": true,
+			"controller_clock_end": 48.4916666666665,
+			"controller_clock_start": 46.2249999999999,
+			"controller_phase": 5.49166666666648,
+			"controller_wait_seconds": 2.26666666666654,
+			"frame_guard_seconds": 0.0333333333333333,
+			"natural_action_before_request": "idle",
+			"observed_intervals": 69,
+			"reason": "ready",
+			"requested_action": "special",
+			"required_rest_remaining_seconds": 1.63333333333333,
+			"rest_remaining_seconds": 2.10833333333352,
+			"root_horizontal_speed": 0.0,
+			"sequence_duration_seconds": 1.6,
+			"simulation_budget_remaining_seconds": 11.5083333333335,
+			"simulation_wait_seconds": 2.26666666666654,
+			"source_fps": 5.0,
+			"source_frame_count": 8,
+			"source_sprite_visible_and_consistent": true,
+			"watchdog_expired": false
+		}
+	],
+	"npc_activity_clock": 50.1249999999997,
+	"npc_roots_repositioned": false,
+	"placed_camera": true,
+	"playback_mode": "normal simulation time_scale=1.0",
+	"process_frames_in_run": 1503,
+	"reduced_motion": false,
+	"scene_rebuild": false,
+	"scripted_input": true,
+	"segment_mode": "natural-idle-and-actions",
+	"simulation_seconds": 50.1249999999997,
+	"simulation_seconds_including_capture_and_startup": 50.1249999999997,
+	"starting_anchor": {
+		"x": 4.0,
+		"y": 0.0,
+		"z": -4.0
+	},
+	"status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+	"technical_status": "PASS"
+}

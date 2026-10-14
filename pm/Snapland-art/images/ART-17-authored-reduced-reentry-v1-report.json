@@ -1,0 +1,300 @@
+{
+	"actions": [
+		{
+			"action": "scene",
+			"anchor": {},
+			"authored_frames": 0,
+			"authored_or_rig_source": "pending",
+			"detail": {},
+			"direction": "rebuild",
+			"gait_position": {
+				"phase": 0.0,
+				"walking": false
+			},
+			"label": "scene-before-rebuild",
+			"predicate": true,
+			"source": "pending",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.59999990463257,
+				"y": 1.13446176052094,
+				"z": -5.5
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"end_anchor": {
+					"x": -2.59999990463257,
+					"y": 1.13446176052094,
+					"z": -5.5
+				},
+				"observable_source_cel_changes": false,
+				"observed_actions": [
+					"idle"
+				],
+				"observed_source_frames": [
+					"idle/0"
+				],
+				"observed_sources": [
+					"authored"
+				],
+				"observed_texture_instances": [
+					"-9223371809137617993"
+				],
+				"rendered_observation": {
+					"action": "",
+					"direction": "front",
+					"frames": {
+						"idle/front/0": true
+					},
+					"mode": "idle",
+					"presented_action": "idle",
+					"samples": [
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 44,
+							"simulation_seconds": 1.49166666666667
+						}
+					],
+					"source_consistent": true,
+					"textures": {
+						"-9223371809137617993": true
+					}
+				},
+				"route_max_anchor": {
+					"x": -2.59999990463257,
+					"y": 1.13446176052094,
+					"z": -5.5
+				},
+				"route_min_anchor": {
+					"x": -2.59999990463257,
+					"y": 1.13446176052094,
+					"z": -5.5
+				},
+				"scheduler_live": true,
+				"simulation_seconds": 30.0000000000007,
+				"start_anchor": {
+					"x": -2.59999990463257,
+					"y": 1.13446176052094,
+					"z": -5.5
+				},
+				"transitions": [
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 0.0333333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371809137617993
+					}
+				]
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.0,
+				"walking": false
+			},
+			"label": "natural-idle-30s",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.59999990463257,
+				"y": 1.13446176052094,
+				"z": -5.5
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.0,
+				"walking": false
+			},
+			"label": "reduced-motion",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		}
+	],
+	"actor": "traveller",
+	"camera_framing": {
+		"actor_scale_or_npc_route_changed": false,
+		"camera_up_shift": -0.00975079109942024,
+		"correction_pinned": true,
+		"fixture_adjusted_camera": true,
+		"foot_padding_pixels": 119.359802246094,
+		"full_silhouette_inside_hud_safe_viewport": true,
+		"head_padding_pixels": 119.360107421875,
+		"hud_safe_bottom": 636.0,
+		"hud_safe_top": 116.0,
+		"orthographic_size": 5.0,
+		"pin_simulation_seconds": 1.425,
+		"sprite_alpha_screen_rect": [
+			545.919982910156,
+			235.360107421875,
+			190.080078125,
+			281.280090332031
+		]
+	},
+	"camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+	"camera_size": 5.0,
+	"capture_png": [
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-1ac6d309\\evidence/traveller-start.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-1ac6d309\\evidence/traveller-natural-idle-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-1ac6d309\\evidence/traveller-natural-idle-30s.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-1ac6d309\\evidence/traveller-reduced-motion.png"
+	],
+	"captured_frame_framing": [
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00975079109942024,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 119.359802246094,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.360107421875,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.919982910156,
+					235.360107421875,
+					190.080078125,
+					281.280090332031
+				]
+			},
+			"label": "start"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00975079109942024,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 119.359802246094,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.360107421875,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.919982910156,
+					235.360107421875,
+					190.080078125,
+					281.280090332031
+				]
+			},
+			"label": "natural-idle-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00975079109942024,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 119.359802246094,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.360107421875,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.919982910156,
+					235.360107421875,
+					190.080078125,
+					281.280090332031
+				]
+			},
+			"label": "natural-idle-30s"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00975079109942024,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 119.359802246094,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.360107421875,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 1.425,
+				"sprite_alpha_screen_rect": [
+					545.919982910156,
+					235.360107421875,
+					190.080078125,
+					281.280090332031
+				]
+			},
+			"label": "reduced-motion"
+		}
+	],
+	"complete_acceptance": false,
+	"encoded_movie_metadata": "pending ffprobe verification by root",
+	"ending_anchor": {
+		"x": -2.59999990463257,
+		"y": 1.13446176052094,
+		"z": -5.5
+	},
+	"expected_movie_fps": 30.0,
+	"expected_movie_slowdown_factor": 1.0,
+	"failures": [],
+	"fixed_fps": 30.0,
+	"fixture": "Main-backed native island animation acceptance",
+	"hero_scripted_placement": true,
+	"human_played": false,
+	"human_visual_review": "pending",
+	"initial_actor_placement_changed": true,
+	"initial_actor_placement_note": "Hero is scripted once to the plaza review patch (-2.6, 0.4, -5.5), whose actual movement is verified by this run; subsequent eight-direction movement uses real keyboard input without teleport or facing presets.",
+	"initial_grounding": {
+		"complete": true,
+		"grounded": true,
+		"grounding_method": "live CharacterBody3D is_on_floor",
+		"horizontal_speed": 0.0,
+		"simulation_seconds": 0.166666666666667,
+		"stable_process_frames": 3
+	},
+	"initial_hero_position": [
+		-2.6,
+		0.4,
+		-5.5
+	],
+	"movie_duration_estimate_seconds": 31.4666666666667,
+	"movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+	"movie_fps_source": "Godot fixed movie process delta",
+	"movie_writer_active": true,
+	"movie_writer_frame_count": null,
+	"natural_action_windows": [],
+	"npc_activity_clock": -1.0,
+	"npc_roots_repositioned": false,
+	"placed_camera": true,
+	"playback_mode": "normal simulation time_scale=1.0",
+	"process_frames_in_run": 944,
+	"reduced_motion": true,
+	"scene_rebuild": true,
+	"scripted_input": true,
+	"segment_mode": "natural-idle-and-actions",
+	"simulation_seconds": 31.4916666666674,
+	"simulation_seconds_including_capture_and_startup": 31.4916666666674,
+	"starting_anchor": {
+		"x": -2.59999990463257,
+		"y": 1.13446176052094,
+		"z": -5.5
+	},
+	"status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+	"technical_status": "PASS"
+}

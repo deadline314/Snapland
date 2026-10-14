@@ -11,7 +11,6 @@ const ComponentAnimationScript = preload("res://game/world/component_animation.g
 const NpcActivityScript = preload("res://game/world/npc_activity.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
-const AvatarMotionRigScript = preload("res://game/world/avatar_motion_rig.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const IslandAttractionsScript = preload("res://game/world/island_attractions.gd")
 const CoastalMaterialShader = preload("res://game/world/coastal_material.gdshader")
@@ -37,6 +36,7 @@ var avatar_equipped: Dictionary = {"outfit":"outfit-tide","hat":"hat-none"}
 var avatar_action := ""
 var avatar_action_remaining := 0.0
 var avatar_action_elapsed := 0.0
+var _warned_missing_avatar_actions: Dictionary = {}
 var last_avatar_direction := ""
 var last_avatar_frame := -1
 var last_avatar_action := ""
@@ -628,7 +628,9 @@ func _register_npc_activity() -> void:
 		if not npc_activity.register_actor(sprite,role,frames,activity_root,interaction_point,0.0):
 			push_warning("ParkWorld: could not register NPC role '%s' for ambient activity." % role)
 	npc_activity.finish_registration()
-	npc_activity.configure_motion(camera,_avatar_ground_height,true)
+	# Production island actors use their authored directional Sprite cels. The
+	# measured leg rig remains available to explicit reviews, not as live gait.
+	npc_activity.configure_motion(camera,_avatar_ground_height,false)
 	for actor_record in character_sprites:
 		for activity_record in npc_activity._records:
 			if String(activity_record.role) == String(actor_record.role):
@@ -945,7 +947,7 @@ func _foliage_sprite(kind: String, ground: Vector3, world_height: float) -> Spri
 	return sprite
 
 
-func _set_living_sprite_material(sprite: Sprite3D, kind: int, phase: float, breath_rate: float, idle_role := 0) -> ShaderMaterial:
+func _set_living_sprite_material(sprite: Sprite3D, kind: int, phase: float, breath_rate: float, idle_role := 0, animate_shader := true) -> ShaderMaterial:
 	var material := ShaderMaterial.new()
 	material.shader=LIVING_SPRITE
 	material.set_shader_parameter("motion_kind",kind)
@@ -954,6 +956,7 @@ func _set_living_sprite_material(sprite: Sprite3D, kind: int, phase: float, brea
 	material.set_shader_parameter("breath_rate",breath_rate)
 	material.set_shader_parameter("breath_pixels",0.65)
 	material.set_shader_parameter("gesture_pixels",0.65)
+	material.set_shader_parameter("motion",1.0 if animate_shader else 0.0)
 	material.set_shader_parameter("tint",Color.WHITE)
 	var texture_source: Texture2D=sprite.texture
 	var uv_rect := Rect2(0.0,0.0,1.0,1.0)
@@ -965,7 +968,8 @@ func _set_living_sprite_material(sprite: Sprite3D, kind: int, phase: float, brea
 	material.set_shader_parameter("texture_albedo",texture_source)
 	material.set_shader_parameter("uv_rect",Vector4(uv_rect.position.x,uv_rect.position.y,uv_rect.size.x,uv_rect.size.y))
 	sprite.material_override=material
-	component_motion.register_shader(material)
+	if animate_shader:
+		component_motion.register_shader(material)
 	return material
 
 func _lantern(pos: Vector3) -> void:
@@ -1741,17 +1745,17 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	sprite.position=Vector3(0.0,sprite.pixel_size*feet_offset,0.0)
 	sprite.shaded=true
 	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	var profile := "character_ticket" if role=="ticket" else ("character_imp" if role=="imp" else "character_announcer")
 	var breath_rate := 0.74 if role=="ticket" else (1.23 if role=="imp" else 0.53)
 	var phase := 0.45 if role=="ticket" else (1.9 if role=="imp" else 3.2)
 	var idle_role := 1 if role=="ticket" else (2 if role=="imp" else 3)
-	_set_living_sprite_material(sprite,1,phase,breath_rate,idle_role)
+	# NPC identity and action atlases already author each full-body pose. Keep
+	# Sprite lighting, but do not displace those pixels a second time in shader.
+	_set_living_sprite_material(sprite,1,phase,breath_rate,idle_role,false)
 	ground_anchor.add_child(sprite)
 	var ground_y := _ground_surface_y(pos)
 	_register_sprite_ground_anchor(sprite,ground_anchor,activity_root,ground_y,float(NpcActivityScript.ACTION_FEET_ROW),float(NpcActivityScript.ACTION_CANVAS_SIZE.y))
 	_add_contact_shadow(activity_root,Vector3(0,ground_y-activity_root.global_position.y+0.005,0),Vector2(0.78,0.46))
 	_add_actor_shadow_proxy(activity_root,role,ground_y-activity_root.global_position.y)
-	component_motion.register_component(sprite,profile,phase/TAU)
 	var name_label := _label(title,pos+Vector3(0,2.65,0),22)
 	name_label.reparent(activity_root,true)
 	character_sprites.append({"sprite":sprite,"activity_root":activity_root,"name_label":name_label,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer"),"name_body_height":_visible_body_height(sprite),"name_camera_up_y":-1.0})
@@ -2033,7 +2037,7 @@ func _build_player() -> void:
 	avatar.shaded=true
 	avatar.position.y=1.2
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,"front",0,"idle")
-	_set_living_sprite_material(avatar,1,0.18,0.72)
+	_set_living_sprite_material(avatar,1,0.18,0.72,0,false)
 	avatar_ground_anchor=Node3D.new()
 	avatar_ground_anchor.name="BillboardGroundAnchor"
 	player.add_child(avatar_ground_anchor)
@@ -2042,27 +2046,11 @@ func _build_player() -> void:
 	avatar_contact_shadow=_add_contact_shadow(player,Vector3(0,0,0),Vector2(0.92,0.58))
 	_add_actor_shadow_proxy(player,"hero",_ground_surface_y(player.position)-player.position.y)
 	_register_sprite_ground_anchor(avatar,avatar_ground_anchor,player,_ground_surface_y(player.position),float(AvatarRenderer.FEET_BASELINE),float(AvatarRenderer.CANVAS_SIZE.y))
-	component_motion.register_component(avatar,"character_hero",0.18/TAU)
-	var motion_rig := AvatarMotionRigScript.new()
-	motion_rig.name="AvatarMotionRig"
-	motion_rig.role="hero"
-	motion_rig.appearance=avatar_appearance.duplicate(true)
-	motion_rig.equipment=avatar_equipped.duplicate(true)
-	motion_rig.ground_height_provider=Callable(self,"_avatar_ground_height")
-	motion_rig.position.y=_ground_surface_y(player.position)-player.position.y
-	motion_rig.visible=false
-	player.add_child(motion_rig)
 	add_child(player)
-	if motion_sources_ready(motion_rig.source_records):
-		avatar_motion_rig=motion_rig
-		avatar_motion_available=true
-		avatar_motion_rig.visible=true
-		avatar.visible=false
-	else:
-		motion_rig.cleanup()
-		motion_rig.queue_free()
-		avatar_motion_rig=null
-		avatar_motion_available=false
+	# Production presentation uses the complete authored Sprite atlases directly.
+	# The optional AvatarMotionRig remains available to isolated review scenes.
+	avatar_motion_rig=null
+	avatar_motion_available=false
 	# Ground collision covers walkable land and dock. Sea never traps the player.
 	for geometry in [Vector3(40,0.2,66),Vector3(5,0.2,13)]:
 		var floor_body := StaticBody3D.new()
@@ -2092,20 +2080,25 @@ func _sync_avatar_motion_camera(discontinuous: bool = false) -> void:
 	avatar_motion_rig.set_view_projection(camera.global_basis,atan2(camera.global_basis.z.x,camera.global_basis.z.z),discontinuous)
 
 func _sync_external_avatar_reposition() -> void:
-	if not avatar_motion_available or not is_instance_valid(avatar_motion_rig) or not is_instance_valid(player): return
+	if not is_instance_valid(player): return
 	var current_position := player.global_position
 	if not avatar_last_physics_position_valid:
 		avatar_last_physics_position=current_position
 		avatar_last_physics_position_valid=true
 		return
 	var externally_repositioned := current_position.distance_to(avatar_last_physics_position)>AVATAR_EXTERNAL_REPOSITION_THRESHOLD
-	if externally_repositioned and not is_riding() and is_instance_valid(camera):
-		# A world teleport is not camera-follow motion. Snap the camera before
-		# posing so settled world-space feet are rebound under the new projection.
-		camera.position=player.position+CAMERA_OFFSET
-		camera.look_at(player.position+Vector3(0,1,0))
-		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
-		_sync_avatar_motion_camera(true)
+	if externally_repositioned and not is_riding():
+		# Keep relocation handling independent from the optional gait rig: the
+		# camera must snap and stale velocity must not turn a teleport into a walk.
+		if is_instance_valid(camera):
+			camera.position=player.position+CAMERA_OFFSET
+			camera.look_at(player.position+Vector3(0,1,0))
+		player.velocity=Vector3.ZERO
+		avatar_is_walking=false
+		walk_distance_phase=0.0
+		if avatar_motion_available and is_instance_valid(avatar_motion_rig):
+			avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+			_sync_avatar_motion_camera(true)
 	avatar_last_physics_position=current_position
 
 func _avatar_ground_height(point: Vector2) -> float:
@@ -2153,7 +2146,6 @@ func _physics_process(delta: float) -> void:
 	player.velocity=Vector3(current_horizontal.x,-4.0,current_horizontal.y)
 	var previous_position: Vector3=player.position
 	var previous_world_position: Vector3=player.global_position
-	var previous_rig_world_position: Vector3=avatar_motion_rig.global_position if avatar_motion_available else Vector3.ZERO
 	player.move_and_slide()
 	player.position.z=clampf(player.position.z,-43.6,26.5)
 	player.position.x=clampf(player.position.x,-18.6,18.6)
@@ -2169,7 +2161,6 @@ func _physics_process(delta: float) -> void:
 		player.position=Vector3(0,0.3,10)
 		previous_position=player.position
 		previous_world_position=player.global_position
-		if avatar_motion_available: previous_rig_world_position=avatar_motion_rig.global_position
 	var actual_world_delta := player.global_position-previous_world_position
 	var horizontal_delta := Vector2(actual_world_delta.x, actual_world_delta.z)
 	var travelled := horizontal_delta.length()
@@ -2183,12 +2174,8 @@ func _physics_process(delta: float) -> void:
 		camera.look_at(player.position+Vector3(0,1,0))
 		_sync_avatar_motion_camera()
 		avatar_motion_rig.set_direction(facing)
-		var motion_presented := not blocked and (avatar_action_remaining<=0.0 or avatar_is_walking) and (not reduced_motion or avatar_is_walking)
-		if not motion_presented:
-			avatar_motion_rig.cancel_motion()
-		else:
-			var rig_world_delta: Vector3=avatar_motion_rig.global_position-previous_rig_world_position
-			avatar_motion_rig.advance_from_motion(delta,rig_world_delta,avatar_run_requested)
+		avatar_motion_rig.visible=false
+		avatar_motion_rig.cancel_motion()
 	var walk_frame_count := int(avatar_renderer.walk_frame_count(facing)) if avatar_renderer != null else 8
 	var frame := walk_frame_for_phase(walk_distance_phase, walk_frame_count)
 	if avatar_action_remaining > 0.0:
@@ -2325,13 +2312,70 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func play_action(name: String) -> void:
 	var action := "photograph" if name == "photo" else name
 	if action not in ["wave", "photograph", "interact", "celebrate"]: return
+	var action_direction := _authored_action_direction(action, facing)
+	if not action_direction.is_empty():
+		# Face the authored pose before starting it, and keep that heading after
+		# the sequence so the sprite does not snap back to an unsupported view.
+		facing=action_direction
+	else:
+		_warn_missing_avatar_action_once(action)
 	if avatar_motion_available and not is_riding():
 		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
 		avatar_motion_rig.cancel_motion()
 	avatar_action=action
-	avatar_action_remaining=0.8
+	avatar_action_remaining=_avatar_action_duration(action, action_direction if not action_direction.is_empty() else facing)
 	avatar_action_elapsed=0.0
 	_refresh_avatar_texture(0)
+
+func _authored_action_direction(action: String, preferred_direction: String) -> String:
+	if avatar_renderer == null:
+		return ""
+	if _has_authored_avatar_action(action, preferred_direction):
+		return preferred_direction
+	if _has_authored_avatar_action(action, "front"):
+		return "front"
+	for direction in AvatarRenderer.WALK_DIRECTIONS:
+		if _has_authored_avatar_action(action, direction):
+			return direction
+	return ""
+
+func _has_authored_avatar_action(action: String, direction: String) -> bool:
+	if avatar_renderer == null:
+		return false
+	var library = avatar_renderer.animation_library
+	if library == null:
+		return false
+	var actors: Variant = library.manifest.get("actors", {})
+	var traveller: Variant = actors.get("traveller", {}) if actors is Dictionary else {}
+	var action_entries: Variant = traveller.get(action, {}) if traveller is Dictionary else {}
+	var entry: Variant = action_entries.get(direction, {}) if action_entries is Dictionary else {}
+	if not entry is Dictionary:
+		return false
+	var frames: Variant = entry.get("frames", [])
+	if not frames is Array or frames.is_empty():
+		return false
+	return avatar_renderer.has_authored_action(action, direction)
+
+func _warn_missing_avatar_action_once(action: String) -> void:
+	if _warned_missing_avatar_actions.has(action):
+		return
+	for direction in AvatarRenderer.WALK_DIRECTIONS:
+		if _has_authored_avatar_action(action, direction):
+			return
+	_warned_missing_avatar_actions[action]=true
+	push_warning("ParkWorld: traveller action '%s' has no authored direction in res://assets/characters/complete-animation-regions.json; using the three-frame built-in pose fallback." % action)
+
+func _avatar_action_duration(action: String, direction: String = "front") -> float:
+	if not _has_authored_avatar_action(action, direction):
+		return 0.8
+	var frame_count: int = avatar_renderer.authored_frame_count(action, direction)
+	var fps: float = avatar_renderer.authored_action_fps(action, direction)
+	if frame_count <= 0 or not is_finite(fps) or fps <= 0.0:
+		return 0.8
+	var duration: float = float(frame_count) / fps
+	if not is_finite(duration) or duration <= 0.0:
+		return 0.8
+	return clampf(duration, 0.1, 8.0)
 
 func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
 	if avatar_appearance == appearance and avatar_equipped == equipped: return
@@ -2347,17 +2391,30 @@ func _refresh_avatar_texture(frame: int) -> void:
 	var riding := is_riding()
 	var action := "sit" if riding else (avatar_action if avatar_action_remaining > 0.0 and not avatar_is_walking else ("walk" if avatar_is_walking else "idle"))
 	var direction := "front" if riding else facing
-	var show_motion_rig := avatar_motion_available and not riding and (avatar_action_remaining<=0.0 or avatar_is_walking) and (not reduced_motion or avatar_is_walking)
 	if avatar_motion_available:
-		avatar_motion_rig.visible=show_motion_rig
-		avatar.visible=not show_motion_rig
+		avatar_motion_rig.visible=false
+	avatar.visible=true
 	var display_frame := _ride_pose_frame() if riding else frame
-	if action != "walk" and not riding:
+	var texture_action := action
+	if action == "idle" and direction != "front" and avatar_renderer.has_walk_atlas():
+		# Directions without a dedicated idle sequence hold that direction's
+		# authored walk stance; don't leave the loop on an arbitrary phase cel.
+		display_frame=avatar_renderer.walk_idle_frame(direction)
+		texture_action="walk"
+	if action == "idle" and direction == "front":
 		var animation_library = avatar_renderer.animation_library
-		if animation_library.has_frame("traveller", action, direction):
+		if animation_library.has_frame("traveller", "idle", "front"):
+			display_frame=animation_library.frame_for_time("traveller", "idle", "front", time, reduced_motion)
+	if action != "walk" and action != "idle" and not riding:
+		var animation_library = avatar_renderer.animation_library
+		if _has_authored_avatar_action(action, direction):
 			display_frame=animation_library.frame_for_time("traveller", action, direction, avatar_action_elapsed if action == avatar_action else time, reduced_motion)
+		else:
+			# The built-in fallback has only three authored-looking poses. Advance
+			# those safely instead of leaving it on the unrelated walk phase.
+			display_frame=0 if reduced_motion else mini(floori(maxf(0.0,avatar_action_elapsed)*3.0),2)
 	if last_avatar_direction == direction and last_avatar_frame == display_frame and last_avatar_action == action: return
-	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,direction,display_frame,action)
+	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,direction,display_frame,texture_action)
 	var avatar_material := avatar.material_override as ShaderMaterial
 	if avatar_material != null:
 		avatar_material.set_shader_parameter("texture_albedo",avatar.texture)

@@ -1,0 +1,73 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Vulkan 1.4.356 - Forward+ - Using Device #0: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 30 FPS...
+[park_world] scenery meshes: 865, nodes: 1658
+[park_world] scenery meshes: 865, nodes: 1658
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-experience\Snapland\.review\packed-authored-ad887c8b\packed-traveller.avi
+446 frames at 30 FPS (movie length: 00:00:14:26), recorded in 00:00:29 (48% of real-time speed).
+CPU render time: 0.32 seconds (average: 0.72 ms/frame)
+GPU render time: 2.54 seconds (average: 5.70 ms/frame)
+Encoding time: 4.20 seconds (average: 9.42 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/AnimationAcceptanceMain/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/AnimationAcceptanceMain/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/AnimationAcceptanceMain/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/AnimationAcceptanceMain/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/AnimationAcceptanceMain/@Node3D@1549/GameFeature010/@MeshInstance3D@2316; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/AnimationAcceptanceMain/@Node3D@1549/GameFeature010/@MeshInstance3D@2314; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/AnimationAcceptanceMain/@Node3D@1549/GameFeature010/@MeshInstance3D@2312; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/AnimationAcceptanceMain/@Node3D@1549/GameFeature010/@MeshInstance3D@2310; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/WindSailTerrace/@MeshInstance3D@2398; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/TidepoolCourt/@MeshInstance3D@2466; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/TidepoolCourt/@MeshInstance3D@2459; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/TidepoolCourt/@MeshInstance3D@2453; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/TidepoolCourt/@MeshInstance3D@2447; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/TidepoolCourt/@MeshInstance3D@2441; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/LighthouseLookout/@MeshInstance3D@2519; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/LighthouseLookout/@MeshInstance3D@2517; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/MoonshadowStage/@MeshInstance3D@2570; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/MoonshadowStage/@MeshInstance3D@2569; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/AnimationAcceptanceMain/@Node3D@1549/AttractionDistricts/MoonshadowStage/@MeshInstance3D@2568; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)

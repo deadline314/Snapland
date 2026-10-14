@@ -195,3 +195,45 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 [三角色原生報告](images/ART-17-ui-route-regression-report.json) · [姿勢聯絡表1](images/ART-17-ui-route-contact-1.jpg) · [姿勢聯絡表2](images/ART-17-ui-route-contact-2.jpg) · [姿勢聯絡表3](images/ART-17-ui-route-contact-3.jpg)。所有驗收使用獨立存檔；本輪開始基準`f1d2feedcf6b58418d2a6682238ce088e92cbbaf`。
 
 分支：`feature/island-experience`；[程式與原生截圖提交](https://github.com/deadline314/Snapland/commit/3326f7a722199bb9eda9e511e32541650fc1f2d9)。票況：進行中；待處理完整角色動作／外觀覆蓋、打包播放與降低動態驗收。
+
+## 2026-10-14 接續基準
+
+固定開始 SHA：`4d0a2a814860e54243dd116bed54c564233c0aa0`。本輪接續既有角色完整動畫、服裝同步與島嶼聲音驗收；使用者要求持續修正實際問題，不能把階段素材或局部驗證當成整島完成。
+
+## Commit — 2026-10-14 恢復八方向原圖步行
+
+**問題：** 已有八方向逐幀走路圖，正式遊園卻仍優先套用拆分肢體的動作，並扭動角色頭髮與身體。招手、拍照和互動也可能過早結束，背向時停在舊走姿。
+
+**改動：** 主角直接播放現有八方向原圖，以真實行走距離接續步態，停止時回到對應站姿；正面使用專用待機。招手與拍照等動作播放完整影格，沒有該方向素材時轉向實際具備素材的方向。阿浪恢復真正左右走路圖；票票、小角保留各自待機與專用動作，未批准的步行不冒充完成。角色不再額外扭曲身體，環境動態仍保留。
+
+**驗收：** 主角八方向、起停、背向後招手／拍照、碰撞停步、暫停恢复、外觀切換及場景位移的局部檢查通過；NPC 真實路線與原圖影格檢查通過。四位角色各錄製至少 30 秒自然活動及已具備的完整动作，原生程序均 exit 0、0 ERROR。主 Session 實際查看主角正常／四分之一速度播放、三張主角逐姿勢聯絡表、三位 NPC 不受主角遮擋的全身起始圖及首張姿勢聯絡表。NPC 全套主觀動畫品質仍未勾選；票票、小角的正式走路素材明確列為缺項。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 原圖主角行走／世界狀態／NPC來源行走／角色與環境效果 | 4 項局部測試通過，0 ERROR |
+| 隔離匯出工具 | 本機 3/3 通過 |
+| 原生四角色錄影 | 真實場景與來源影格條件通過；不是真人試玩 |
+| 降低動態與場景重建 | 原生 exit 0、0 ERROR，技術条件通過 |
+| 輸出版本與重入 | 實際 QA 打包後啟動，八方向与動作条件通過；限默认外觀與腳本驗收 |
+| 額外完整髮型矩陣檢查 | 150 秒未得到結果；列為不確定，未算通過 |
+| 正式存檔 | 主檔、備份 SHA256 與本輪開始相同 |
+
+### 截圖與影片
+
+![原圖主角完整全身](images/ART-17-authored-traveller-v1-start.png)
+
+[主角正常速度](images/ART-17-authored-traveller-v1-normal.mp4) · [主角四分之一速度](images/ART-17-authored-traveller-v1-quarter-actions.mp4) · [主角逐姿勢 1](images/ART-17-authored-traveller-v1-cels-1.jpg) · [2](images/ART-17-authored-traveller-v1-cels-2.jpg) · [3](images/ART-17-authored-traveller-v1-cels-3.jpg)
+
+[票票正常](images/ART-17-authored-ticket-v2-normal.mp4) · [慢放](images/ART-17-authored-ticket-v2-quarter-actions.mp4) · [全身圖](images/ART-17-authored-ticket-v2-start.png) · [姿勢圖](images/ART-17-authored-ticket-v2-cels-1.jpg)
+
+[小角正常](images/ART-17-authored-imp-v2-normal.mp4) · [慢放](images/ART-17-authored-imp-v2-quarter-actions.mp4) · [全身圖](images/ART-17-authored-imp-v2-start.png) · [姿勢圖](images/ART-17-authored-imp-v2-cels-1.jpg)
+
+[阿浪正常](images/ART-17-authored-announcer-v2-normal.mp4) · [慢放](images/ART-17-authored-announcer-v2-quarter-actions.mp4) · [全身圖](images/ART-17-authored-announcer-v2-start.png) · [姿勢圖](images/ART-17-authored-announcer-v2-cels-1.jpg)
+
+[降低動態／重入影片](images/ART-17-authored-reduced-reentry-v1-normal.mp4) · [報告](images/ART-17-authored-reduced-reentry-v1-report.json) · [打包原生影片](images/ART-17-authored-packed-v1-normal.mp4) · [報告](images/ART-17-authored-packed-v1-report.json) · [局部測試紀錄](images/ART-17-authored-local-verification.json) · [四角色錄影與編碼資訊](images/ART-17-authored-walking-v1-evidence.json)
+
+影片都是原生場景的腳本輸入錄製，審閱相機拉近；NPC 根節點和路線未移動，主角在 NPC 審閱中只作畫外取景輔助。慢放是正常影片動作段延長四倍，並非另一輪模擬；全部交付影片 30 FPS，不作即時效能基準。舊錄影中屋頂遮住足部或主角擋住 NPC 的版本沒有採作這次全身證據。
+
+固定基準：`4d0a2a814860e54243dd116bed54c564233c0aa0`；分支：`feature/island-experience`；票況：進行中。待完整角色素材、正常／慢放品質與全換裝覆蓋通過後再轉審查。

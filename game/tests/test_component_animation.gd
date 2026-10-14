@@ -3,6 +3,7 @@ extends SceneTree
 const ComponentAnimationScript = preload("res://game/world/component_animation.gd")
 const LivingSpriteShader = preload("res://game/world/living_sprite.gdshader")
 const ParkWorldScript = preload("res://game/world/park_world.gd")
+var _world_failures: Array[String] = []
 
 
 func _initialize() -> void:
@@ -108,17 +109,43 @@ func _run() -> void:
 		var role_material := entry["sprite"].material_override as ShaderMaterial
 		role_materials[str(entry["role"])] = role_material
 	assert(role_materials.size() == 3, "all named NPCs have a distinct living-sprite material")
-	assert(int(role_materials["ticket"].get_shader_parameter("idle_role")) == 1, "Ticket uses the lapel motion mask")
-	assert(int(role_materials["imp"].get_shader_parameter("idle_role")) == 2, "Imp uses the ear and tail motion masks")
-	assert(int(role_materials["announcer"].get_shader_parameter("idle_role")) == 3, "Announcer uses the head-nod motion mask")
-	var ticket_rate := float(role_materials["ticket"].get_shader_parameter("breath_rate"))
-	var imp_rate := float(role_materials["imp"].get_shader_parameter("breath_rate"))
-	var announcer_rate := float(role_materials["announcer"].get_shader_parameter("breath_rate"))
-	assert(ticket_rate != imp_rate and imp_rate != announcer_rate and ticket_rate != announcer_rate, "named NPC idle rhythms are configured differently")
-	for material in role_materials.values():
-		assert(float(material.get_shader_parameter("gesture_pixels")) > 0.0, "each named NPC has a visible local gesture amplitude")
+	var npc_activity = park_world.npc_activity
+	var active_profiles: Dictionary = park_world.component_motion.statistics().get("by_profile", {})
+	for role in ["ticket", "imp", "announcer"]:
+		var role_material: ShaderMaterial = role_materials.get(role) as ShaderMaterial
+		_world_check(is_instance_valid(role_material), "%s has a live shader material for authored NPC cels" % role)
+		if not is_instance_valid(role_material):
+			continue
+		_world_check(float(role_material.get_shader_parameter("motion")) == 0.0, "%s authored NPC cels are not displaced by shader motion" % role)
+		_world_check(int(active_profiles.get("character_%s" % role, 0)) == 0, "%s has no procedural character phase registration" % role)
+		var actor_entry: Dictionary = {}
+		for entry in park_world.character_sprites:
+			if String(entry["role"]) == role:
+				actor_entry = entry
+				break
+		var actor_sprite: Sprite3D = actor_entry.get("sprite") as Sprite3D
+		var record_index := _activity_record_index(npc_activity, role)
+		_world_check(is_instance_valid(actor_sprite) and record_index >= 0, "%s retains its registered NPC source animator" % role)
+		if not is_instance_valid(actor_sprite) or record_index < 0:
+			continue
+		var previous_texture: Texture2D = actor_sprite.texture
+		_world_check(npc_activity.interact(actor_sprite, "front"), "%s starts its authored interaction sequence" % role)
+		var actor_record: Dictionary = npc_activity._records[record_index]
+		var action_sequence: Dictionary = actor_record.get("action_sequence", {})
+		var source_frames: Array = action_sequence.get("frames", [])
+		var source_fps := float(action_sequence.get("fps", 0.0))
+		_world_check(source_frames.size() > 1 and source_fps > 0.0, "%s action uses multiple authored source frames" % role)
+		if source_frames.size() <= 1 or source_fps <= 0.0:
+			continue
+		await create_timer(1.1 / source_fps + 0.05).timeout
+		_world_check(actor_sprite.texture != previous_texture, "%s runtime action advances its source Sprite cel while shader motion stays off" % role)
+		_world_check(role_material.get_shader_parameter("texture_albedo") == actor_sprite.texture, "%s shader sampler stays synchronized with its authored Sprite cel" % role)
+		_world_check(float(role_material.get_shader_parameter("motion")) == 0.0, "%s authored action remains unwarped while its cels advance" % role)
 	var hero_material := park_world.avatar.material_override as ShaderMaterial
-	assert(int(hero_material.get_shader_parameter("idle_role")) == 0, "hero uses the hair-tip and hem motion masks")
+	_world_check(is_instance_valid(hero_material), "hero authored Sprite retains its lighting material")
+	if is_instance_valid(hero_material):
+		_world_check(float(hero_material.get_shader_parameter("motion")) == 0.0, "hero authored cels keep shader displacement disabled")
+		_world_check(int(park_world.component_motion.statistics().get("by_profile", {}).get("character_hero", 0)) == 0, "hero authored idle has no procedural character phase")
 	var shader_source := FileAccess.get_file_as_string("res://game/world/living_sprite.gdshader")
 	assert(shader_source.contains("vec2 local_uv = clamp((UV - uv_rect.xy) / max(uv_rect.zw"), "atlas masks are evaluated in each character crop")
 	assert(shader_source.contains("/ max(1.0, texture_size.x)"), "pixel-space horizontal gestures convert against the full atlas width")
@@ -131,8 +158,27 @@ func _run() -> void:
 	park_world.set_avatar_look(appearance,park_world.avatar_equipped.duplicate(true))
 	assert(hero_material.get_shader_parameter("texture_albedo") == park_world.avatar.texture, "appearance changes refresh the shader texture uniform")
 	park_world.play_action("wave")
-	assert(hero_material.get_shader_parameter("texture_albedo") == park_world.avatar.texture, "action poses refresh the shader texture uniform")
+	if is_instance_valid(hero_material):
+		_world_check(hero_material.get_shader_parameter("texture_albedo") == park_world.avatar.texture, "action poses refresh the shader texture uniform")
 	park_world.queue_free()
 	await process_frame
+	if not _world_failures.is_empty():
+		push_error("Component animation actual-world checks failed with %d failure(s): %s" % [_world_failures.size(), "; ".join(_world_failures)])
+		quit(1)
+		return
 	print("PASS: component animation runtime checks")
 	quit(0)
+
+
+func _activity_record_index(activity, role: String) -> int:
+	for index in range(activity._records.size()):
+		if String(activity._records[index].get("role", "")) == role:
+			return index
+	return -1
+
+
+func _world_check(condition: bool, message: String) -> void:
+	if condition:
+		return
+	_world_failures.append(message)
+	push_error("Component animation actual-world check failed: " + message)

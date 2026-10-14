@@ -1,0 +1,114 @@
+{
+  "traveller": {
+    "technical_status": "PASS",
+    "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+    "failures": [],
+    "content_pending": [],
+    "videos": {
+      "ART-17-authored-traveller-v1-normal.mp4": {
+        "r_frame_rate": "30/1",
+        "duration": "43.966667",
+        "nb_frames": "1319"
+      },
+      "ART-17-authored-traveller-v1-quarter-actions.mp4": {
+        "r_frame_rate": "30/1",
+        "duration": "55.833333",
+        "nb_frames": "1675"
+      }
+    },
+    "contacts": [
+      "ART-17-authored-traveller-v1-cels-1.jpg",
+      "ART-17-authored-traveller-v1-cels-2.jpg",
+      "ART-17-authored-traveller-v1-cels-3.jpg"
+    ],
+    "slowplay_note": "Derived four-times-longer playback of the encoded action segment beginning at video second 30; not a separate simulation run.",
+    "visual_review": "Main session observed normal and derived quarter playback in the browser, all three hero pose sheets, and encoded video frame32; not a continuous human playthrough or full aesthetic acceptance.",
+    "human_played": false
+  },
+  "ticket": {
+    "technical_status": "PASS",
+    "status": "CONTENT_PENDING",
+    "failures": [],
+    "content_pending": [
+      "natural-route-start-settle: pending-authored-walk-source"
+    ],
+    "videos": {
+      "ART-17-authored-ticket-v2-normal.mp4": {
+        "r_frame_rate": "30/1",
+        "duration": "38.666667",
+        "nb_frames": "1160"
+      },
+      "ART-17-authored-ticket-v2-quarter-actions.mp4": {
+        "r_frame_rate": "30/1",
+        "duration": "34.633333",
+        "nb_frames": "1039"
+      }
+    },
+    "contacts": [
+      "ART-17-authored-ticket-v2-cels-1.jpg",
+      "ART-17-authored-ticket-v2-cels-2.jpg",
+      "ART-17-authored-ticket-v2-cels-3.jpg",
+      "ART-17-authored-ticket-v2-cels-4.jpg"
+    ],
+    "slowplay_note": "Derived four-times-longer playback of the encoded action segment beginning at video second 30; not a separate simulation run.",
+    "visual_review": "Main session inspected unobstructed start screenshot and first pose contact sheet; complete normal/slow subjective acceptance remains pending.",
+    "human_played": false
+  },
+  "imp": {
+    "technical_status": "PASS",
+    "status": "CONTENT_PENDING",
+    "failures": [],
+    "content_pending": [
+      "natural-route-start-settle: pending-authored-walk-source"
+    ],
+    "videos": {
+      "ART-17-authored-imp-v2-normal.mp4": {
+        "r_frame_rate": "30/1",
+        "duration": "36.566667",
+        "nb_frames": "1097"
+      },
+      "ART-17-authored-imp-v2-quarter-actions.mp4": {
+        "r_frame_rate": "30/1",
+        "duration": "26.233333",
+        "nb_frames": "787"
+      }
+    },
+    "contacts": [
+      "ART-17-authored-imp-v2-cels-1.jpg",
+      "ART-17-authored-imp-v2-cels-2.jpg",
+      "ART-17-authored-imp-v2-cels-3.jpg",
+      "ART-17-authored-imp-v2-cels-4.jpg"
+    ],
+    "slowplay_note": "Derived four-times-longer playback of the encoded action segment beginning at video second 30; not a separate simulation run.",
+    "visual_review": "Main session inspected unobstructed start screenshot and first pose contact sheet; complete normal/slow subjective acceptance remains pending.",
+    "human_played": false
+  },
+  "announcer": {
+    "technical_status": "PASS",
+    "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+    "failures": [],
+    "content_pending": [],
+    "videos": {
+      "ART-17-authored-announcer-v2-normal.mp4": {
+        "r_frame_rate": "30/1",
+        "duration": "50.566667",
+        "nb_frames": "1517"
+      },
+      "ART-17-authored-announcer-v2-quarter-actions.mp4": {
+        "r_frame_rate": "30/1",
+        "duration": "82.233333",
+        "nb_frames": "2467"
+      }
+    },
+    "contacts": [
+      "ART-17-authored-announcer-v2-cels-1.jpg",
+      "ART-17-authored-announcer-v2-cels-2.jpg",
+      "ART-17-authored-announcer-v2-cels-3.jpg",
+      "ART-17-authored-announcer-v2-cels-4.jpg",
+      "ART-17-authored-announcer-v2-cels-5.jpg"
+    ],
+    "slowplay_note": "Derived four-times-longer playback of the encoded action segment beginning at video second 30; not a separate simulation run.",
+    "visual_review": "Main session inspected unobstructed start screenshot and first pose contact sheet; complete normal/slow subjective acceptance remains pending.",
+    "human_played": false
+  }
+}

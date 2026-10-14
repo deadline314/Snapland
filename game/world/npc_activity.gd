@@ -43,6 +43,7 @@ var _reduced_motion := false
 var _activity_paused := false
 var _dialogue_hold := false
 var _animation_library: RefCounted
+var _sequence_availability: Dictionary = {}
 var _action_clock := 0.0
 var _motion_enabled := false
 var _motion_camera: Camera3D
@@ -828,12 +829,20 @@ func _normalize_frame(texture: Texture2D) -> Texture2D:
 
 
 func _has_sequence(role: String, action: String, direction: String) -> bool:
+	var key := "%s|%s|%s" % [role, action, direction]
+	if _sequence_availability.has(key):
+		return bool(_sequence_availability[key])
+	_ensure_animation_library()
 	if _animation_library == null:
+		_sequence_availability[key] = false
 		return false
-	var coverage: Dictionary = _animation_library.coverage_report()
-	var actor_coverage: Variant = coverage.get(role, {})
-	var action_coverage: Variant = actor_coverage.get(action, []) if actor_coverage is Dictionary else []
-	return action_coverage is Array and action_coverage.has(direction)
+	# Coverage metadata can contain exploratory candidates or entries whose source
+	# texture/regions are unusable. Cache the result of validating the real frames
+	# so route selection never treats metadata coverage alone as a walk source.
+	var sequence := _normalize_sequence(_animation_library.get_sequence(role, action, direction))
+	var available: bool = bool(sequence.get("available", false)) and not sequence.get("frames", []).is_empty()
+	_sequence_availability[key] = available
+	return available
 
 
 func _idle_action_for_role(role: String, direction: String, previous_action: String = "", seed: float = 0.0, instance_id: int = 0, event_index: int = 0) -> String:

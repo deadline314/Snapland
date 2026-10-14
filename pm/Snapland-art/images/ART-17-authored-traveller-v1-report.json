@@ -1,0 +1,2990 @@
+{
+	"actions": [
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.59999990463257,
+				"y": 1.13435411453247,
+				"z": -5.5
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"end_anchor": {
+					"x": -2.59999990463257,
+					"y": 1.13435411453247,
+					"z": -5.5
+				},
+				"observable_source_cel_changes": true,
+				"observed_actions": [
+					"idle"
+				],
+				"observed_source_frames": [
+					"idle/1",
+					"idle/2",
+					"idle/3",
+					"idle/4",
+					"idle/5",
+					"idle/6",
+					"idle/7",
+					"idle/0"
+				],
+				"observed_sources": [
+					"authored"
+				],
+				"observed_texture_instances": [
+					"-9223371871783742097",
+					"-9223371868092754634",
+					"-9223371865005746832",
+					"-9223371860274571895",
+					"-9223371857154009716",
+					"-9223371854033447537",
+					"-9223371850879330926",
+					"-9223371894869191965"
+				],
+				"rendered_observation": {
+					"action": "",
+					"direction": "front",
+					"frames": {
+						"idle/front/0": true,
+						"idle/front/1": true,
+						"idle/front/2": true,
+						"idle/front/3": true,
+						"idle/front/4": true,
+						"idle/front/5": true,
+						"idle/front/6": true,
+						"idle/front/7": true
+					},
+					"mode": "idle",
+					"presented_action": "idle",
+					"samples": [
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 17,
+							"simulation_seconds": 0.591666666666667
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 21,
+							"simulation_seconds": 0.725
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 31,
+							"simulation_seconds": 1.05833333333333
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 41,
+							"simulation_seconds": 1.39166666666667
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 51,
+							"simulation_seconds": 1.725
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 61,
+							"simulation_seconds": 2.05833333333334
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 71,
+							"simulation_seconds": 2.39166666666667
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 81,
+							"simulation_seconds": 2.725
+						}
+					],
+					"source_consistent": true,
+					"textures": {
+						"-9223371850879330926": true,
+						"-9223371854033447537": true,
+						"-9223371857154009716": true,
+						"-9223371860274571895": true,
+						"-9223371865005746832": true,
+						"-9223371868092754634": true,
+						"-9223371871783742097": true,
+						"-9223371894869191965": true
+					}
+				},
+				"route_max_anchor": {
+					"x": -2.59999990463257,
+					"y": 1.13435411453247,
+					"z": -5.5
+				},
+				"route_min_anchor": {
+					"x": -2.59999990463257,
+					"y": 1.13435411453247,
+					"z": -5.5
+				},
+				"scheduler_live": true,
+				"simulation_seconds": 30.0000000000007,
+				"start_anchor": {
+					"x": -2.59999990463257,
+					"y": 1.13435411453247,
+					"z": -5.5
+				},
+				"transitions": [
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 0.0333333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 0.166666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 0.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 0.833333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 1.16666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 1.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 1.83333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 2.16666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 2.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 2.83333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 3.16666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 3.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 3.83333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 4.16666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 4.49999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 4.83333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 5.16666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 5.49999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 5.83333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 6.16666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 6.49999999999999,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 6.83333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 7.16666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 7.49999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 7.83333333333332,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 8.16666666666665,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 8.49999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 8.83333333333331,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 9.16666666666664,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 9.49999999999998,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 9.83333333333331,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 10.1666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 10.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 10.8333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 11.1666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 11.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 11.8333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 12.1666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 12.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 12.8333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 13.1666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 13.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 13.8333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 14.1666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 14.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 14.8333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 15.1666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 15.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 15.8333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 16.1666666666666,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 16.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 16.8333333333333,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 17.1666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 17.5,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 17.8333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 18.1666666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 18.5000000000001,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 18.8333333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 19.1666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 19.5000000000001,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 19.8333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 20.1666666666668,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 20.5000000000002,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 20.8333333333335,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 21.1666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 21.5000000000002,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 21.8333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 22.1666666666669,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 22.5000000000003,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 22.8333333333336,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 23.166666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 23.5000000000003,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 23.8333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 24.166666666667,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 24.5000000000004,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 24.8333333333337,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 25.1666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 25.5000000000004,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 25.8333333333338,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 26.1666666666671,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 26.5000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 26.8333333333338,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 27.1666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					},
+					{
+						"action": "idle",
+						"frame_index": 4,
+						"simulation_seconds": 27.5000000000005,
+						"source": "authored",
+						"visible_texture_instance": -9223371860274571895
+					},
+					{
+						"action": "idle",
+						"frame_index": 5,
+						"simulation_seconds": 27.8333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371857154009716
+					},
+					{
+						"action": "idle",
+						"frame_index": 6,
+						"simulation_seconds": 28.1666666666672,
+						"source": "authored",
+						"visible_texture_instance": -9223371854033447537
+					},
+					{
+						"action": "idle",
+						"frame_index": 7,
+						"simulation_seconds": 28.5000000000006,
+						"source": "authored",
+						"visible_texture_instance": -9223371850879330926
+					},
+					{
+						"action": "idle",
+						"frame_index": 0,
+						"simulation_seconds": 28.8333333333339,
+						"source": "authored",
+						"visible_texture_instance": -9223371894869191965
+					},
+					{
+						"action": "idle",
+						"frame_index": 1,
+						"simulation_seconds": 29.1666666666673,
+						"source": "authored",
+						"visible_texture_instance": -9223371871783742097
+					},
+					{
+						"action": "idle",
+						"frame_index": 2,
+						"simulation_seconds": 29.5000000000006,
+						"source": "authored",
+						"visible_texture_instance": -9223371868092754634
+					},
+					{
+						"action": "idle",
+						"frame_index": 3,
+						"simulation_seconds": 29.833333333334,
+						"source": "authored",
+						"visible_texture_instance": -9223371865005746832
+					}
+				]
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.0,
+				"walking": false
+			},
+			"label": "natural-idle-30s",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.59999990463257,
+				"y": 1.13493609428406,
+				"z": -6.48958539962769
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back",
+				"observed_cels": [
+					"0",
+					"1",
+					"2"
+				],
+				"observed_texture_instances": [
+					"-9223371603130182253",
+					"-9223371600982698555",
+					"-9223371599405640247"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "back",
+			"gait_position": {
+				"phase": 0.989585399627686,
+				"walking": true
+			},
+			"label": "walk-back",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.59999990463257,
+				"y": 1.13421964645386,
+				"z": -6.63333511352539
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.20000000000001,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "back",
+			"gait_position": {
+				"phase": 1.13333511352539,
+				"walking": false
+			},
+			"label": "stop-back",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -1.90025961399078,
+				"y": 1.13423192501068,
+				"z": -7.33307552337646
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back_right",
+				"observed_cels": [
+					"3",
+					"4",
+					"5",
+					"6"
+				],
+				"observed_texture_instances": [
+					"-9223371595597212207",
+					"-9223371593734941245",
+					"-9223371592157882931",
+					"-9223371590580824619"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "back_right",
+			"gait_position": {
+				"phase": 2.12291742558591,
+				"walking": true
+			},
+			"label": "walk-back_right",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -1.79861307144165,
+				"y": 1.13421964645386,
+				"z": -7.43472242355347
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999999,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "back_right",
+			"gait_position": {
+				"phase": 2.26666759909131,
+				"walking": false
+			},
+			"label": "stop-back_right",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -0.809029757976532,
+				"y": 1.13421940803528,
+				"z": -7.43472242355347
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "right",
+				"observed_cels": [
+					"6",
+					"7",
+					"0",
+					"1"
+				],
+				"observed_texture_instances": [
+					"-9223371587997133351",
+					"-9223371586705287823",
+					"-9223371584926902837",
+					"-9223371583349844540"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "right",
+			"gait_position": {
+				"phase": 0.456250912556425,
+				"walking": true
+			},
+			"label": "walk-right",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -0.665279686450958,
+				"y": 1.13421964645386,
+				"z": -7.43472242355347
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999989,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "right",
+			"gait_position": {
+				"phase": 0.600000984081999,
+				"walking": false
+			},
+			"label": "stop-right",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": 0.0344612598419189,
+				"y": 1.13422083854675,
+				"z": -6.73498106002808
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "front_right",
+				"observed_cels": [
+					"1",
+					"2",
+					"3",
+					"4"
+				],
+				"observed_texture_instances": [
+					"-9223371580548049437",
+					"-9223371579541416482",
+					"-9223371577964358174",
+					"-9223371576102087191"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front_right",
+			"gait_position": {
+				"phase": 1.58958444702439,
+				"walking": true
+			},
+			"label": "walk-front_right",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": 0.136107847094536,
+				"y": 1.13421964645386,
+				"z": -6.63333559036255
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999989,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "front_right",
+			"gait_position": {
+				"phase": 1.73333363798447,
+				"walking": false
+			},
+			"label": "stop-front_right",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": 0.136107847094536,
+				"y": 1.13422083854675,
+				"z": -5.64375162124634
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "front",
+				"observed_cels": [
+					"5",
+					"6",
+					"7"
+				],
+				"observed_texture_instances": [
+					"-9223371572511762977",
+					"-9223371570649491985",
+					"-9223371569072433680"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 2.72291760710068,
+				"walking": true
+			},
+			"label": "walk-front",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": 0.136107847094536,
+				"y": 1.13422119617462,
+				"z": -5.50000143051147
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999989,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.0666677978355441,
+				"walking": false
+			},
+			"label": "stop-front",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -0.56363320350647,
+				"y": 1.13421940803528,
+				"z": -4.80025768280029
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "front_left",
+				"observed_cels": [
+					"0",
+					"1",
+					"2",
+					"3"
+				],
+				"observed_texture_instances": [
+					"-9223371565431777803",
+					"-9223371563569506836",
+					"-9223371561992448524",
+					"-9223371560415390214"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front_left",
+			"gait_position": {
+				"phase": 1.05625301981345,
+				"walking": true
+			},
+			"label": "walk-front_left",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -0.665279865264893,
+				"y": 1.13421964645386,
+				"z": -4.69861173629761
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999989,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "front_left",
+			"gait_position": {
+				"phase": 1.20000260029919,
+				"walking": false
+			},
+			"label": "stop-front_left",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -1.65486395359039,
+				"y": 1.13421940803528,
+				"z": -4.69861173629761
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "left",
+				"observed_cels": [
+					"3",
+					"4",
+					"5",
+					"6"
+				],
+				"observed_texture_instances": [
+					"-9223371557898807810",
+					"-9223371556321749513",
+					"-9223371554744691214",
+					"-9223371553167632894"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "left",
+			"gait_position": {
+				"phase": 2.1895866886247,
+				"walking": true
+			},
+			"label": "walk-left",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -1.79861426353455,
+				"y": 1.13421964645386,
+				"z": -4.69861173629761
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999989,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "left",
+			"gait_position": {
+				"phase": 2.33333699856885,
+				"walking": false
+			},
+			"label": "stop-left",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.49835443496704,
+				"y": 1.13482654094696,
+				"z": -5.39835453033447
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back_left",
+				"observed_cels": [
+					"6",
+					"7",
+					"0",
+					"1"
+				],
+				"observed_texture_instances": [
+					"-9223371550298728951",
+					"-9223371549292096021",
+					"-9223371547513711114",
+					"-9223371545936652804"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.533333333333333,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "back_left",
+			"gait_position": {
+				"phase": 0.522920912038535,
+				"walking": true
+			},
+			"label": "walk-back_left",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13422119617462,
+				"z": -5.50000095367432
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "held-authored-walk-stance",
+			"detail": {
+				"facing_retained": true,
+				"rig_hidden": true,
+				"settle": {
+					"complete": true,
+					"horizontal_speed": 0.0,
+					"is_walking": false,
+					"simulation_seconds": 0.199999999999989,
+					"stable_process_frames": 3
+				},
+				"sprite_visible": true
+			},
+			"direction": "back_left",
+			"gait_position": {
+				"phase": 0.666670999396593,
+				"walking": false
+			},
+			"label": "stop-back_left",
+			"predicate": true,
+			"source": "held-authored-walk-stance",
+			"status": "observed"
+		},
+		{
+			"action": "wave",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13421976566315,
+				"z": -5.51389026641846
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"playback": {
+					"action_timer_remaining": 0.0,
+					"authored": true,
+					"complete": true,
+					"input_facing_before_request": "back",
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"presented_action": "wave",
+					"presented_direction": "front",
+					"rendered_samples": [
+						{
+							"action": "wave",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 1112,
+							"simulation_seconds": 37.0916666666671
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.166666666666667,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1117,
+							"simulation_seconds": 37.2583333333338
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.333333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1122,
+							"simulation_seconds": 37.4250000000004
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.533333333333333,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1128,
+							"simulation_seconds": 37.6250000000004
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.666666666666667,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1132,
+							"simulation_seconds": 37.7583333333338
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 0.833333333333334,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1137,
+							"simulation_seconds": 37.9250000000004
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 1.0,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1142,
+							"simulation_seconds": 38.0916666666671
+						},
+						{
+							"action": "wave",
+							"action_elapsed": 1.16666666666667,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 1147,
+							"simulation_seconds": 38.2583333333337
+						}
+					],
+					"returned_to_idle": true,
+					"sequence_duration_seconds": 1.33333333333333,
+					"simulation_seconds": 1.33333333333326,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"trigger": "keyboard"
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.680560312140734,
+				"walking": false
+			},
+			"label": "wave",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "photograph",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13422119617462,
+				"z": -5.52777910232544
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"playback": {
+					"action_timer_remaining": 0.0,
+					"authored": true,
+					"complete": true,
+					"input_facing_before_request": "back",
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"presented_action": "photograph",
+					"presented_direction": "front",
+					"rendered_samples": [
+						{
+							"action": "photograph",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 1156,
+							"simulation_seconds": 38.5583333333337
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 0.233333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1163,
+							"simulation_seconds": 38.791666666667
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 0.433333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1169,
+							"simulation_seconds": 38.991666666667
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 0.6,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1174,
+							"simulation_seconds": 39.1583333333337
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 0.800000000000001,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1180,
+							"simulation_seconds": 39.3583333333337
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 1.0,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1186,
+							"simulation_seconds": 39.5583333333337
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 1.2,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1192,
+							"simulation_seconds": 39.7583333333336
+						},
+						{
+							"action": "photograph",
+							"action_elapsed": 1.4,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 1198,
+							"simulation_seconds": 39.9583333333336
+						}
+					],
+					"returned_to_idle": true,
+					"sequence_duration_seconds": 1.6,
+					"simulation_seconds": 1.63333333333324,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"trigger": "keyboard"
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.694449148047716,
+				"walking": false
+			},
+			"label": "photograph",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "interact",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13421976566315,
+				"z": -5.54166841506958
+			},
+			"authored_frames": 8,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"playback": {
+					"action_timer_remaining": 0.0,
+					"authored": true,
+					"complete": true,
+					"input_facing_before_request": "back",
+					"observed_frame_indices": [
+						"0",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7"
+					],
+					"presented_action": "interact",
+					"presented_direction": "front",
+					"rendered_samples": [
+						{
+							"action": "interact",
+							"action_elapsed": 0.0,
+							"direction": "front",
+							"frame_index": 0,
+							"process_frame": 1209,
+							"simulation_seconds": 40.3250000000003
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.233333333333333,
+							"direction": "front",
+							"frame_index": 1,
+							"process_frame": 1216,
+							"simulation_seconds": 40.5583333333336
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.433333333333333,
+							"direction": "front",
+							"frame_index": 2,
+							"process_frame": 1222,
+							"simulation_seconds": 40.7583333333336
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.6,
+							"direction": "front",
+							"frame_index": 3,
+							"process_frame": 1227,
+							"simulation_seconds": 40.9250000000002
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 0.800000000000001,
+							"direction": "front",
+							"frame_index": 4,
+							"process_frame": 1233,
+							"simulation_seconds": 41.1250000000002
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.0,
+							"direction": "front",
+							"frame_index": 5,
+							"process_frame": 1239,
+							"simulation_seconds": 41.3250000000002
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.2,
+							"direction": "front",
+							"frame_index": 6,
+							"process_frame": 1245,
+							"simulation_seconds": 41.5250000000002
+						},
+						{
+							"action": "interact",
+							"action_elapsed": 1.4,
+							"direction": "front",
+							"frame_index": 7,
+							"process_frame": 1251,
+							"simulation_seconds": 41.7250000000002
+						}
+					],
+					"returned_to_idle": true,
+					"sequence_duration_seconds": 1.6,
+					"simulation_seconds": 1.63333333333324,
+					"source_consistent": true,
+					"source_frame_count": 8
+				},
+				"trigger": "runtime action API"
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.708338460791857,
+				"walking": false
+			},
+			"label": "interact",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13421988487244,
+				"z": -4.55208301544189
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas+avatar-compositor",
+			"detail": {
+				"appearance": {
+					"face": "curious",
+					"hair": "windswept",
+					"hair_color": "ink",
+					"skin": "warm",
+					"species": "human"
+				},
+				"equipped": {
+					"hat": "hat-straw",
+					"outfit": "outfit-coral"
+				},
+				"look_applied": true,
+				"playback": {
+					"actual_movement": true,
+					"complete": true,
+					"expected_direction": "front",
+					"observed_cels": [
+						"2",
+						"3",
+						"4"
+					],
+					"observed_texture_instances": [
+						"-9223371489867196845",
+						"-9223371487652604321",
+						"-9223371486092323249"
+					],
+					"rig_hidden": true,
+					"rig_instantiated": false,
+					"simulation_seconds": 0.533333333333333,
+					"source_consistent": true,
+					"sprite_visible": true
+				}
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 1.69792386041954,
+				"walking": true
+			},
+			"label": "wardrobe-during-motion-0",
+			"predicate": true,
+			"source": "authored-walk-atlas+avatar-compositor",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.60000133514404,
+				"y": 1.13422095775604,
+				"z": -3.41875219345093
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas+avatar-compositor",
+			"detail": {
+				"appearance": {
+					"face": "curious",
+					"hair": "bob",
+					"hair_color": "ink",
+					"skin": "warm",
+					"species": "elf"
+				},
+				"equipped": {
+					"hat": "hat-flower",
+					"outfit": "outfit-tide"
+				},
+				"look_applied": true,
+				"playback": {
+					"actual_movement": true,
+					"complete": true,
+					"expected_direction": "front",
+					"observed_cels": [
+						"5",
+						"6",
+						"7",
+						"0"
+					],
+					"observed_texture_instances": [
+						"-9223371481210153366",
+						"-9223371479180110227",
+						"-9223371477435279762",
+						"-9223371475690449297"
+					],
+					"rig_hidden": true,
+					"rig_instantiated": false,
+					"simulation_seconds": 0.533333333333333,
+					"source_consistent": true,
+					"sprite_visible": true
+				}
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 0.0312546824105091,
+				"walking": true
+			},
+			"label": "wardrobe-during-motion-1",
+			"predicate": true,
+			"source": "authored-walk-atlas+avatar-compositor",
+			"status": "observed"
+		}
+	],
+	"actor": "traveller",
+	"camera_framing": {
+		"actor_scale_or_npc_route_changed": false,
+		"camera_up_shift": -0.00650787353515625,
+		"correction_pinned": true,
+		"fixture_adjusted_camera": true,
+		"foot_padding_pixels": 118.792358398438,
+		"full_silhouette_inside_hud_safe_viewport": true,
+		"head_padding_pixels": 70.9676666259766,
+		"hud_safe_bottom": 636.0,
+		"hud_safe_top": 116.0,
+		"orthographic_size": 5.0,
+		"pin_simulation_seconds": 0.525,
+		"sprite_alpha_screen_rect": [
+			539.200073242188,
+			186.967666625977,
+			208.320007324219,
+			330.239990234375
+		]
+	},
+	"camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+	"camera_size": 5.0,
+	"capture_png": [
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-start.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-front-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-front-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-front-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-front-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-front-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-front-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-front-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-front-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-natural-idle-30s.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-walk-back.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-walk-back_right.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-walk-right.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-walk-front_right.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-walk-front.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-walk-front_left.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-walk-left.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-walk-back_left.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wave-after-playback.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-photograph-after-playback.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-frame-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-frame-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-frame-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-frame-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-frame-4.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-frame-5.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-frame-6.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-frame-7.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-interact-after-playback.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wardrobe-during-motion-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\animation-acceptance-traveller-3ae74ed4\\evidence/traveller-wardrobe-during-motion-1.png"
+	],
+	"captured_frame_framing": [
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.8798828125,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.879867553711,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					234.879867553711,
+					189.120056152344,
+					282.240234375
+				]
+			},
+			"label": "start"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.8798828125,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.879867553711,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					234.879867553711,
+					189.120056152344,
+					282.240234375
+				]
+			},
+			"label": "natural-idle-front-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.879699707031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.879867553711,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					544.960083007813,
+					234.879867553711,
+					190.080078125,
+					282.240417480469
+				]
+			},
+			"label": "natural-idle-front-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.879699707031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.880004882813,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					234.880004882813,
+					190.080017089844,
+					282.240295410156
+				]
+			},
+			"label": "natural-idle-front-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.879699707031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.840072631836,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					544.960144042969,
+					235.840072631836,
+					191.999938964844,
+					281.280212402344
+				]
+			},
+			"label": "natural-idle-front-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.8798828125,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.879867553711,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					543.040100097656,
+					234.879867553711,
+					193.919982910156,
+					282.240234375
+				]
+			},
+			"label": "natural-idle-front-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.879699707031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.840072631836,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					544.960144042969,
+					235.840072631836,
+					191.999938964844,
+					281.280212402344
+				]
+			},
+			"label": "natural-idle-front-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.8798828125,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.880004882813,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					234.880004882813,
+					192.0,
+					282.240112304688
+				]
+			},
+			"label": "natural-idle-front-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.879699707031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.840072631836,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					235.840072631836,
+					190.080017089844,
+					281.280212402344
+				]
+			},
+			"label": "natural-idle-front-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.879699707031,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.880004882813,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					234.880004882813,
+					190.080017089844,
+					282.240295410156
+				]
+			},
+			"label": "natural-idle-30s"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.71240234375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.407608032227,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					575.680053710938,
+					248.407608032227,
+					137.280090332031,
+					266.880004882813
+				]
+			},
+			"label": "walk-back"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.71240234375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.487747192383,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					576.640075683594,
+					246.487747192383,
+					131.52001953125,
+					268.799865722656
+				]
+			},
+			"label": "walk-back_right"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.71240234375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.407608032227,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					581.440063476563,
+					248.407608032227,
+					139.200073242188,
+					266.880004882813
+				]
+			},
+			"label": "walk-right"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.712646484375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847137451172,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					565.1201171875,
+					237.847137451172,
+					149.760070800781,
+					277.440216064453
+				]
+			},
+			"label": "walk-front_right"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.712768554688,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 142.967254638672,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					572.800109863281,
+					258.967254638672,
+					135.360046386719,
+					256.319976806641
+				]
+			},
+			"label": "walk-front"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.712524414063,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847549438477,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					571.840087890625,
+					237.847549438477,
+					148.800048828125,
+					277.43994140625
+				]
+			},
+			"label": "walk-front_left"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.712646484375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.407608032227,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					557.440124511719,
+					248.407608032227,
+					135.359985351563,
+					266.879760742188
+				]
+			},
+			"label": "walk-left"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 119.75244140625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 133.367401123047,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					576.640075683594,
+					249.367401123047,
+					133.440124511719,
+					266.880157470703
+				]
+			},
+			"label": "walk-back_left"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.167419433594,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					230.167419433594,
+					193.920043945313,
+					287.040100097656
+				]
+			},
+			"label": "wave-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.167419433594,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					543.040100097656,
+					230.167419433594,
+					192.000061035156,
+					287.040100097656
+				]
+			},
+			"label": "wave-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047485351563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					520.000122070313,
+					233.047485351563,
+					216.960021972656,
+					284.160034179688
+				]
+			},
+			"label": "wave-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 112.247421264648,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					515.200134277344,
+					228.247421264648,
+					220.800048828125,
+					288.960083007813
+				]
+			},
+			"label": "wave-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.167282104492,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					514.240112304688,
+					230.167282104492,
+					222.720031738281,
+					287.040222167969
+				]
+			},
+			"label": "wave-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.167419433594,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					519.040100097656,
+					230.167419433594,
+					217.920043945313,
+					287.040100097656
+				]
+			},
+			"label": "wave-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.167419433594,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					524.800109863281,
+					230.167419433594,
+					213.120056152344,
+					287.040100097656
+				]
+			},
+			"label": "wave-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 114.167419433594,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					543.040100097656,
+					230.167419433594,
+					196.800048828125,
+					287.040100097656
+				]
+			},
+			"label": "wave-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.967483520508,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					234.967483520508,
+					190.080078125,
+					282.240051269531
+				]
+			},
+			"label": "wave-after-playback"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047348022461,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					233.047348022461,
+					193.920043945313,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.792358398438,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047485351563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					540.160095214844,
+					233.047485351563,
+					193.920104980469,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.792358398438,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047348022461,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					540.160095214844,
+					233.047348022461,
+					194.880065917969,
+					284.160278320313
+				]
+			},
+			"label": "photograph-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.792358398438,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047485351563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					542.080139160156,
+					233.047485351563,
+					196.799987792969,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.792358398438,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047348022461,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					538.240112304688,
+					233.047348022461,
+					194.880004882813,
+					284.160278320313
+				]
+			},
+			"label": "photograph-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047485351563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					542.080139160156,
+					233.047485351563,
+					194.880004882813,
+					284.160034179688
+				]
+			},
+			"label": "photograph-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047485351563,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					542.080139160156,
+					233.047485351563,
+					194.880004882813,
+					284.160034179688
+				]
+			},
+			"label": "photograph-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 117.047348022461,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					543.040100097656,
+					233.047348022461,
+					194.880065917969,
+					284.16015625
+				]
+			},
+			"label": "photograph-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.927688598633,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					235.927688598633,
+					190.080078125,
+					281.279846191406
+				]
+			},
+			"label": "photograph-after-playback"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847549438477,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					237.847549438477,
+					193.919982910156,
+					279.359985351563
+				]
+			},
+			"label": "interact-frame-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847686767578,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					544.960083007813,
+					237.847686767578,
+					205.440063476563,
+					279.359832763672
+				]
+			},
+			"label": "interact-frame-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.792358398438,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847412109375,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					237.847412109375,
+					217.920043945313,
+					279.360229492188
+				]
+			},
+			"label": "interact-frame-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847549438477,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					549.760131835938,
+					237.847549438477,
+					205.440002441406,
+					279.359985351563
+				]
+			},
+			"label": "interact-frame-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.792358398438,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847549438477,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					535.360046386719,
+					237.847549438477,
+					194.880065917969,
+					279.360107421875
+				]
+			},
+			"label": "interact-frame-4"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847686767578,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					542.080078125,
+					237.847686767578,
+					194.880065917969,
+					279.359832763672
+				]
+			},
+			"label": "interact-frame-5"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847686767578,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					543.040100097656,
+					237.847686767578,
+					193.920043945313,
+					279.359832763672
+				]
+			},
+			"label": "interact-frame-6"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.847549438477,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					237.847549438477,
+					192.0,
+					279.359985351563
+				]
+			},
+			"label": "interact-frame-7"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 118.79248046875,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 118.967346191406,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					543.040100097656,
+					234.967346191406,
+					193.919982910156,
+					282.240173339844
+				]
+			},
+			"label": "interact-after-playback"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.712524414063,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 131.447402954102,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					552.64013671875,
+					247.447402954102,
+					199.679992675781,
+					267.840087890625
+				]
+			},
+			"label": "wardrobe-during-motion-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.00650787353515625,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.712890625,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 101.687088012695,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.525,
+				"sprite_alpha_screen_rect": [
+					555.520080566406,
+					217.687088012695,
+					167.0400390625,
+					297.600036621094
+				]
+			},
+			"label": "wardrobe-during-motion-1"
+		}
+	],
+	"complete_acceptance": false,
+	"encoded_movie_metadata": "pending ffprobe verification by root",
+	"ending_anchor": {
+		"x": -2.60000133514404,
+		"y": 1.13421964645386,
+		"z": -3.2750027179718
+	},
+	"expected_movie_fps": 30.0,
+	"expected_movie_slowdown_factor": 1.0,
+	"failures": [],
+	"fixed_fps": 30.0,
+	"fixture": "Main-backed native island animation acceptance",
+	"hero_directions_seen": [
+		"back",
+		"back_right",
+		"right",
+		"front_right",
+		"front",
+		"front_left",
+		"left",
+		"back_left"
+	],
+	"hero_scripted_placement": true,
+	"human_played": false,
+	"human_visual_review": "pending",
+	"initial_actor_placement_changed": true,
+	"initial_actor_placement_note": "Hero is scripted once to the plaza review patch (-2.6, 0.4, -5.5), whose actual movement is verified by this run; subsequent eight-direction movement uses real keyboard input without teleport or facing presets.",
+	"initial_grounding": {
+		"complete": true,
+		"grounded": true,
+		"grounding_method": "live CharacterBody3D is_on_floor",
+		"horizontal_speed": 0.0,
+		"simulation_seconds": 0.166666666666667,
+		"stable_process_frames": 3
+	},
+	"initial_hero_position": [
+		-2.6,
+		0.4,
+		-5.5
+	],
+	"movie_duration_estimate_seconds": 43.5333333333333,
+	"movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+	"movie_fps_source": "Godot fixed movie process delta",
+	"movie_writer_active": true,
+	"movie_writer_frame_count": null,
+	"natural_action_windows": [],
+	"npc_activity_clock": -1.0,
+	"npc_roots_repositioned": false,
+	"placed_camera": true,
+	"playback_mode": "normal simulation time_scale=1.0",
+	"process_frames_in_run": 1306,
+	"reduced_motion": false,
+	"scene_rebuild": false,
+	"scripted_input": true,
+	"segment_mode": "natural-idle-and-actions",
+	"simulation_seconds": 43.5250000000001,
+	"simulation_seconds_including_capture_and_startup": 43.5250000000001,
+	"starting_anchor": {
+		"x": -2.59999990463257,
+		"y": 1.13435411453247,
+		"z": -5.5
+	},
+	"status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+	"technical_status": "PASS"
+}
