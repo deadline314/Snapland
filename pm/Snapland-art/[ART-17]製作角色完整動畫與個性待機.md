@@ -247,3 +247,17 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 **改動：** 以正常 30Hz 檢查自然停留時可完整播放兩種已具備動作；正式島嶼仍直接播放原圖，沒有重新啟用拆腿動作。
 
 **驗收：** 獨立局部測試 exit 0、0 ERROR；[執行紀錄](images/ART-17-optional-motion-rest-v1.log)。這是獨立研究回歸，不算正式角色動畫品質或真人試玩。
+
+獨立檢查提交：[cf7578a](https://github.com/deadline314/Snapland/commit/cf7578a29c4d64ffdf9bd5c471091cd5bb56f247)。
+
+### 2026-10-14 普通試玩包與整組回歸
+
+**問題：** 只交付測試場景或錄影，不能讓玩家確定自己啟動的是本輪修正後的版本。
+
+**改動：** 從已推送的分支製作普通 Windows 試玩包，入口是實際上島遊戲，不包含驗收場景；另附使用獨立存檔的啟動檔。
+
+**驗收：** 實際輸出版本以既有正常保存／退出流程啟動並關閉，exit 0、0 ERROR；主 Session 檢視實際上島與對話畫面。全組改動後再次檢查 Main 整合與主角世界狀態，兩項通過。這是啟動與整合回歸，沒有當成整島試玩成功或完整內容驗收。
+
+![普通試玩包的實際上島畫面](images/ART-17-normal-player-preview-v1.png)
+
+[試玩包來源與啟動紀錄](images/ART-17-normal-player-preview-v1-manifest.json) · [原生啟動紀錄](images/ART-17-normal-player-preview-v1.log) · [Main 整合](images/ART-17-session-main-integration-v1.log) · [世界狀態回歸](images/ART-17-session-world-integration-v1.log)。普通試玩包版本基準為 `cf7578a`，本機檔案在本分支的 `build/island-walk-preview-20261014/`；以 `Play-Island-Preview.cmd` 啟動會使用同資料夾的 `profile/progress.json`，不共用原本正式存檔。

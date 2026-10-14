@@ -1,0 +1,9 @@
+{
+  "source_commit": "cf7578a29c4d64ffdf9bd5c471091cd5bb56f247",
+  "normal_main_scene": "res://game/main.tscn",
+  "test_scenes_included": false,
+  "save_isolation": "Start Play-Island-Preview.cmd; profile/progress.json beside preview",
+  "binary": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\build\\island-walk-preview-20261014\\Snapland-Island-Preview.exe",
+  "scripted_smoke_test": "Actual normal Main package via existing smoke-test and normal quit path; exit0/0ERROR; Dummy audio is only a startup check, not audition.",
+  "preview_launcher": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\build\\island-walk-preview-20261014\\Play-Island-Preview.cmd"
+}
