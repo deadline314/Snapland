@@ -52,7 +52,9 @@ var _active_music := -1
 var _active_context := ""
 var _settings := DEFAULT_SETTINGS.duplicate(true)
 var _fade_tween: Tween
+var _fade_tween_paused := false
 var _ambience_tween: Tween
+var _ambience_tween_paused := false
 var _music_gain := 1.0
 var _music_player_gains: Array[float] = [0.0, 0.0]
 var _ambience_gain := 0.0
@@ -140,6 +142,7 @@ func play_context(name: String) -> void:
 	var incoming_stream := loaded_music as AudioStreamOggVorbis
 	if _fade_tween and _fade_tween.is_valid():
 		_fade_tween.kill()
+	_fade_tween_paused = false
 	var target := 0 if _active_music != 0 else 1
 	if _active_music < 0:
 		target = 0
@@ -162,6 +165,7 @@ func play_context(name: String) -> void:
 		_fade_tween.chain().tween_callback(_stop_music_player.bind(source))
 	if _paused:
 		_fade_tween.pause()
+		_fade_tween_paused = true
 	_set_ambience_enabled(name == "plaza" or name == "harbor")
 
 func play_sfx(name: String) -> void:
@@ -253,18 +257,28 @@ func set_paused(paused: bool) -> void:
 	_paused = paused
 	if _fade_tween and _fade_tween.is_valid():
 		if paused:
-			_fade_tween.pause()
-		else:
+			if _fade_tween.is_running():
+				_fade_tween.pause()
+				_fade_tween_paused = true
+		elif _fade_tween_paused:
 			_fade_tween.play()
+			_fade_tween_paused = false
+	else:
+		_fade_tween_paused = false
 	for player in _music_players:
 		player.stream_paused = paused
 	if _ambience:
 		_ambience.stream_paused = paused
 	if _ambience_tween and _ambience_tween.is_valid():
 		if paused:
-			_ambience_tween.pause()
-		else:
+			if _ambience_tween.is_running():
+				_ambience_tween.pause()
+				_ambience_tween_paused = true
+		elif _ambience_tween_paused:
 			_ambience_tween.play()
+			_ambience_tween_paused = false
+	else:
+		_ambience_tween_paused = false
 	if _sfx:
 		_sfx.stream_paused = paused
 	if _notes:
@@ -275,6 +289,7 @@ func set_paused(paused: bool) -> void:
 func _set_ambience_enabled(enabled: bool) -> void:
 	if _ambience_tween and _ambience_tween.is_valid():
 		_ambience_tween.kill()
+	_ambience_tween_paused = false
 	if enabled:
 		var was_playing := _ambience.playing
 		if not _ambience.playing and _ambience.stream == null:
@@ -300,12 +315,14 @@ func _set_ambience_enabled(enabled: bool) -> void:
 		_ambience_tween.tween_method(_set_ambience_gain, _ambience_gain, 1.0, FADE_SECONDS)
 		if _paused:
 			_ambience_tween.pause()
+			_ambience_tween_paused = true
 	else:
 		_ambience_tween = create_tween()
 		_ambience_tween.tween_method(_set_ambience_gain, _ambience_gain, 0.0, FADE_SECONDS)
 		_ambience_tween.tween_callback(_ambience.stop)
 		if _paused:
 			_ambience_tween.pause()
+			_ambience_tween_paused = true
 
 func _set_music_gain(value: float) -> void:
 	_music_gain = clampf(value, 0.0, 1.0)

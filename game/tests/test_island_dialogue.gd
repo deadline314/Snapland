@@ -53,6 +53,7 @@ func _run() -> void:
 	assert(_audio.DIALOGUE_BEEP_INTERVAL_MSEC["票票"] != _audio.DIALOGUE_BEEP_INTERVAL_MSEC["小角"], "each actor has a distinct but bounded beep cadence")
 	await get_tree().create_timer(0.1).timeout
 	_audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
 	_panel.queue_free()
 	_audio.queue_free()
 	await get_tree().process_frame
@@ -96,6 +97,8 @@ func _run() -> void:
 		assert(bounds.encloses(plaque.get_global_rect()),"whole dialogue card stays within the viewport")
 		assert(bounds.encloses(_main.dialogue_label.get_global_rect()),"subtitle is not clipped below the screen")
 		assert(bounds.encloses(_main.dialogue_panel.advance_button.get_global_rect()),"dialogue next button remains visible")
+	_main.audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
 	_main.queue_free()
 	await get_tree().process_frame
 	print("PASS: island dialogue panel and bounded, speaker-pitched beep")

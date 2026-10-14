@@ -228,6 +228,7 @@ func _check(condition: bool, message: String) -> void:
 func _finish() -> void:
 	if main!=null and is_instance_valid(main):
 		main.audio.shutdown()
+		await get_tree().create_timer(0.15).timeout
 		main.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():

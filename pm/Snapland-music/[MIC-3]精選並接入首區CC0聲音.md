@@ -89,3 +89,21 @@
 - [jasinski 海浪擷取頁](images/MIC-3-reference-waves.png)／[原作者 CC0 頁](images/MIC-3-reference-waves-original.png)
 - [Fupi 結算候選](images/MIC-3-reference-win.png)／[快步調小鎮替代候選](images/MIC-3-reference-loop-town.png)
 - [Cleyton Kauffman 探索替代候選](images/MIC-3-reference-exploration.png)
+
+# Commit-2
+
+## 內文
+
+問題：連續開關選單時，已完成的音樂淡出仍可能被重新播放，產生錯誤；部分測試退出過快，也會留下尚未釋放的播放資源。
+
+改動：只有真正暫停中的淡出會繼續，完成的淡出保持完成。測試依遊戲離開流程等待音訊釋放，既有音量、靜音和淡入淡出行為保留。
+
+驗收：主 Session 以隔離存檔重跑音效測試，exit 0、無 ERROR；原生 Main 連續切換 33 個介面也無 ERROR。這是聲音生命週期與選單流程驗證，不代表每首曲目已完成主觀試聽；完整兩次循環試聽仍待處理，票維持進行中。分支 `feature/island-experience`。
+
+### 測試結果
+
+[精簡驗收紀錄](images/MIC-3-menu-reentry-verification.json)。受影響小遊戲、對話和衣櫃測試的釋放流程一併修正，沒有移除既有斷言。
+
+### 截圖
+
+![原生選單切換驗收；音訊行為以測試紀錄核對](images/MIC-3-menu-reentry.png)

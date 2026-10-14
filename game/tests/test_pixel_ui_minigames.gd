@@ -161,8 +161,9 @@ func _run() -> void:
 		_check(_live_visible_labels_fit(live_hud),"every visible live HUD label has drawable shaped lines and fits its actual ancestors")
 		Paper.set_text_scale(1.0)
 		main.audio.shutdown()
+		await get_tree().create_timer(0.15).timeout
 		main.queue_free()
-		await _frames(2)
+		await get_tree().process_frame
 	if failures.is_empty():
 		print("PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes")
 		get_tree().quit(0)

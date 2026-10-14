@@ -1,0 +1,17 @@
+{
+  "method": "Isolated runtime audio regression and native Main menu transitions; no new listening approval",
+  "audio_cpu": {
+    "directory": "pixel-test_audio-6cc03449",
+    "exit": 0,
+    "engine_errors": [],
+    "marker": "PASS: audio runtime checks"
+  },
+  "native_menu_flow": {
+    "directory": "type-ui-1280-88098597",
+    "exit": 0,
+    "engine_errors": [],
+    "scope": "33 scripted UI views, not human gameplay or full music listening"
+  },
+  "fix": "Only resume tweens that were paused while running; allow the audio thread to release playback before test teardown",
+  "remaining": "Full subjective listening of all music selections and loop boundaries remains pending."
+}

@@ -28,6 +28,10 @@ func _initialize() -> void:
 	assert(is_equal_approx(plaza_player.volume_db, linear_to_db(0.4 * 0.5 * audio._music_gain)))
 	await create_timer(AudioDirector.FADE_SECONDS + 0.1).timeout
 	assert(is_equal_approx(audio._music_gain, 1.0))
+	# Completed fades may still be referenced briefly; pause toggles must not replay them.
+	audio.set_paused(true)
+	audio.set_paused(false)
+	assert(is_equal_approx(audio._music_gain, 1.0))
 	assert(is_equal_approx(plaza_player.volume_db, linear_to_db(0.2)))
 
 	audio.play_context("game")
