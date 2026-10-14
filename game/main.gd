@@ -68,6 +68,7 @@ func _ready() -> void:
 	world.area_changed.connect(func(name: String):
 		area_label.text=name
 		_update_breadcrumb(name)
+		_sync_audio_environment()
 		if session==null: audio.play_context("harbor" if name=="海風碼頭" else "plaza")
 	)
 	Progress.changed.connect(_refresh)
@@ -636,12 +637,20 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _apply_time_phase() -> void:
 	var phase_id := TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE))
+	_sync_audio_environment()
 	if world.has_method("set_time_of_day"):
 		world.set_time_of_day(phase_id)
 	else:
 		world.set_night(phase_id == "night")
 	if session != null and session.has_method("set_time_of_day"):
 		session.set_time_of_day(phase_id)
+
+func _sync_audio_environment() -> void:
+	if not is_instance_valid(audio):
+		return
+	var area := "harbor" if is_instance_valid(world) and world.current_area == "海風碼頭" else "plaza"
+	var phase := TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE))
+	audio.set_island_state(area, phase)
 
 func _select_time_phase(phase_id: String) -> bool:
 	if not Progress.set_time_phase(phase_id):
@@ -956,6 +965,8 @@ func _start_dialogue(lines: Array, done: Callable, cancelled: Callable = Callabl
 	if lines.is_empty():
 		if done.is_valid(): done.call()
 		return
+	if is_instance_valid(audio):
+		audio.set_dialogue_active(true)
 	dialogue=lines.duplicate(true)
 	dialogue_index=0
 	dialogue_done=done
@@ -1019,6 +1030,8 @@ func _finish_dialogue(cancelled: bool = false) -> void:
 	dialogue_panel=null
 	dialogue_label=null
 	dialogue.clear()
+	if is_instance_valid(audio):
+		audio.set_dialogue_active(false)
 	overlay.hide()
 	modal_kind=""
 	if is_instance_valid(world):
@@ -1035,6 +1048,8 @@ func _cancel_dialogue() -> void:
 
 func _dialogue_panel_exiting(panel: Control) -> void:
 	if dialogue_panel!=panel: return
+	if is_instance_valid(audio):
+		audio.set_dialogue_active(false)
 	dialogue_panel=null
 	dialogue_label=null
 	dialogue_done=Callable()
@@ -1209,6 +1224,7 @@ func _cancel_game() -> void:
 		ui.remove_child(session)
 		session.queue_free()
 		session=null
+	_sync_audio_environment()
 	audio.play_context("harbor" if world.current_area=="海風碼頭" else "plaza")
 	hud.show()
 	world.blocked=false

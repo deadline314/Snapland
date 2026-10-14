@@ -113,6 +113,7 @@ def main() -> int:
             ("island dialogue tests", common + ["res://game/tests/test_island_dialogue.tscn"]),
             ("island game entry tests", common + ["res://game/tests/test_island_game_entry.tscn"]),
             ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
+            ("island audio dynamics tests", common + ["--script", "res://game/tests/test_audio_dynamics.gd"]),
             ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
             ("pixel UI shell tests", common + ["res://game/tests/test_pixel_ui_shell.tscn"]),
             ("pixel UI popup tests", common + ["--script", "res://game/tests/test_pixel_ui_popup_bounds.gd"]),
@@ -225,6 +226,7 @@ def main() -> int:
                 "island dialogue tests": "PASS: island dialogue panel and bounded, speaker-pitched beep",
                 "island game entry tests": "PASS: 12 compact invites and first-entry/optional-rule flow",
                 "audio runtime tests": "PASS: audio runtime checks",
+                "island audio dynamics tests": "PASS: phase-aware island audio dynamics and dialogue duck",
                 "main scene integration tests": "PASS: main scene integration checks",
             }
             marker = pass_markers.get(label)

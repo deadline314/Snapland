@@ -26,6 +26,10 @@ const SFX_ALIASES := {
 }
 const AMBIENCE_PATH := "res://assets/audio/plaza_ambience.wav"
 const FADE_SECONDS := 0.85
+const ISLAND_MUSIC_PHASE_GAIN := {"dawn": 0.9, "noon": 1.0, "dusk": 0.84, "night": 0.66}
+const ISLAND_WAVE_PHASE_GAIN := {"dawn": 0.62, "noon": 0.72, "dusk": 0.56, "night": 0.38}
+const ISLAND_WAVE_AREA_GAIN := {"harbor": 1.0, "plaza": 0.36}
+const DIALOGUE_MUSIC_GAIN := 0.82
 const SFX_REPEAT_GATE_MSEC := 40
 const SILENCE_DB := -INF
 const DEFAULT_SETTINGS := {"master": 1.0, "music": 0.8, "sfx": 0.9}
@@ -58,31 +62,45 @@ var _ambience_tween_paused := false
 var _music_gain := 1.0
 var _music_player_gains: Array[float] = [0.0, 0.0]
 var _ambience_gain := 0.0
+var _music_scene_gain := 1.0
+var _ambience_scene_gain := 1.0
+var _island_area := ""
+var _time_phase := ""
+var _dialogue_active := false
 var _paused := false
 var _last_sfx_msec: Dictionary = {}
+var _scene_tween: Tween
+var _scene_tween_paused := false
 
 func _ready() -> void:
-	for index in 2:
-		var player := AudioStreamPlayer.new()
-		player.name = "MusicPlayer%d" % index
-		add_child(player)
-		_music_players.append(player)
-	_ambience = AudioStreamPlayer.new()
-	_ambience.name = "PlazaAmbience"
-	add_child(_ambience)
-	_sfx = AudioStreamPlayer.new()
-	_sfx.name = "SFXPlayer"
-	_sfx.max_polyphony = 4
-	add_child(_sfx)
-	_notes = AudioStreamPlayer.new()
-	_notes.max_polyphony = 4
-	add_child(_notes)
-	_dialogue_beep_player = AudioStreamPlayer.new()
-	_dialogue_beep_player.name = "DialogueBeepPlayer"
-	_dialogue_beep_player.max_polyphony = 4
-	add_child(_dialogue_beep_player)
+	if _music_players.is_empty():
+		for index in 2:
+			var player := AudioStreamPlayer.new()
+			player.name = "MusicPlayer%d" % index
+			add_child(player)
+			_music_players.append(player)
+	if not is_instance_valid(_ambience):
+		_ambience = AudioStreamPlayer.new()
+		_ambience.name = "PlazaAmbience"
+		add_child(_ambience)
+	if not is_instance_valid(_sfx):
+		_sfx = AudioStreamPlayer.new()
+		_sfx.name = "SFXPlayer"
+		_sfx.max_polyphony = 4
+		add_child(_sfx)
+	if not is_instance_valid(_notes):
+		_notes = AudioStreamPlayer.new()
+		_notes.max_polyphony = 4
+		add_child(_notes)
+	if not is_instance_valid(_dialogue_beep_player):
+		_dialogue_beep_player = AudioStreamPlayer.new()
+		_dialogue_beep_player.name = "DialogueBeepPlayer"
+		_dialogue_beep_player.max_polyphony = 4
+		add_child(_dialogue_beep_player)
+	_dialogue_beep_streams.clear()
 	for speaker: String in DIALOGUE_BEEP_PITCH_HZ:
 		_dialogue_beep_streams[speaker] = _make_dialogue_beep(float(DIALOGUE_BEEP_PITCH_HZ[speaker]))
+	_note_streams.clear()
 	for index in range(4):
 		var note_path := "res://assets/audio/note_%d.wav" % index
 		var note_stream: AudioStreamWAV
@@ -99,6 +117,7 @@ func _exit_tree() -> void:
 func shutdown() -> void:
 	if _fade_tween and _fade_tween.is_valid(): _fade_tween.kill()
 	if _ambience_tween and _ambience_tween.is_valid(): _ambience_tween.kill()
+	if _scene_tween and _scene_tween.is_valid(): _scene_tween.kill()
 	for player in _music_players:
 		player.stop()
 		player.stream = null
@@ -121,6 +140,12 @@ func shutdown() -> void:
 	_music_gain = 0.0
 	_music_player_gains = [0.0, 0.0]
 	_ambience_gain = 0.0
+	_music_scene_gain = 1.0
+	_ambience_scene_gain = 1.0
+	_island_area = ""
+	_time_phase = ""
+	_dialogue_active = false
+	_scene_tween_paused = false
 	_last_sfx_msec.clear()
 	_last_dialogue_beep_msec = -100000
 	_paused = false
@@ -167,6 +192,49 @@ func play_context(name: String) -> void:
 		_fade_tween.pause()
 		_fade_tween_paused = true
 	_set_ambience_enabled(name == "plaza" or name == "harbor")
+
+func set_island_state(area: String, phase: String) -> void:
+	var safe_area := area if ISLAND_WAVE_AREA_GAIN.has(area) else "plaza"
+	var safe_phase := phase if ISLAND_MUSIC_PHASE_GAIN.has(phase) else "noon"
+	if safe_area != area:
+		push_warning("Unknown audio area '%s'; using plaza mix" % area)
+	if safe_phase != phase:
+		push_warning("Unknown audio phase '%s'; using noon mix" % phase)
+	if safe_area == _island_area and safe_phase == _time_phase:
+		return
+	_island_area = safe_area
+	_time_phase = safe_phase
+	_retarget_scene_gains()
+
+func set_dialogue_active(active: bool) -> void:
+	if _dialogue_active == active:
+		return
+	_dialogue_active = active
+	_retarget_scene_gains()
+
+func is_dialogue_active() -> bool:
+	return _dialogue_active
+
+func _retarget_scene_gains() -> void:
+	if _scene_tween and _scene_tween.is_valid():
+		_scene_tween.kill()
+	_scene_tween_paused = false
+	var music_target := float(ISLAND_MUSIC_PHASE_GAIN[_time_phase]) * (DIALOGUE_MUSIC_GAIN if _dialogue_active else 1.0)
+	var ambience_target := float(ISLAND_WAVE_PHASE_GAIN[_time_phase]) * float(ISLAND_WAVE_AREA_GAIN[_island_area])
+	_scene_tween = create_tween().set_parallel(true)
+	_scene_tween.tween_method(_set_music_scene_gain, _music_scene_gain, music_target, FADE_SECONDS)
+	_scene_tween.tween_method(_set_ambience_scene_gain, _ambience_scene_gain, ambience_target, FADE_SECONDS)
+	if _paused:
+		_scene_tween.pause()
+		_scene_tween_paused = true
+
+func _set_music_scene_gain(value: float) -> void:
+	_music_scene_gain = clampf(value, 0.0, 1.0)
+	_set_active_music_volume()
+
+func _set_ambience_scene_gain(value: float) -> void:
+	_ambience_scene_gain = clampf(value, 0.0, 1.0)
+	_set_ambience_volume()
 
 func play_sfx(name: String) -> void:
 	var asset_name: String = SFX_ALIASES.get(name, "")
@@ -265,6 +333,16 @@ func set_paused(paused: bool) -> void:
 			_fade_tween_paused = false
 	else:
 		_fade_tween_paused = false
+	if _scene_tween and _scene_tween.is_valid():
+		if paused:
+			if _scene_tween.is_running():
+				_scene_tween.pause()
+				_scene_tween_paused = true
+		elif _scene_tween_paused:
+			_scene_tween.play()
+			_scene_tween_paused = false
+	else:
+		_scene_tween_paused = false
 	for player in _music_players:
 		player.stream_paused = paused
 	if _ambience:
@@ -335,7 +413,7 @@ func _set_music_player_gain(value: float, index: int) -> void:
 	_music_player_gains[index] = clampf(value, 0.0, 1.0)
 	if index == _active_music:
 		_music_gain = _music_player_gains[index]
-	_music_players[index].volume_db = _linear_to_db(_settings.master * _settings.music * _music_player_gains[index])
+	_music_players[index].volume_db = _linear_to_db(_settings.master * _settings.music * _music_player_gains[index] * _music_scene_gain)
 
 func _stop_music_player(index: int) -> void:
 	if index >= 0 and index < _music_players.size():
@@ -348,11 +426,11 @@ func _set_ambience_gain(value: float) -> void:
 
 func _set_active_music_volume() -> void:
 	for index in range(_music_players.size()):
-		_music_players[index].volume_db = _linear_to_db(_settings.master * _settings.music * _music_player_gains[index])
+		_music_players[index].volume_db = _linear_to_db(_settings.master * _settings.music * _music_player_gains[index] * _music_scene_gain)
 
 func _set_ambience_volume() -> void:
 	if _ambience:
-		_ambience.volume_db = _linear_to_db(_settings.master * _settings.music * 0.35 * _ambience_gain)
+		_ambience.volume_db = _linear_to_db(_settings.master * _settings.music * 0.35 * _ambience_gain * _ambience_scene_gain)
 
 func _sfx_volume_db() -> float:
 	return _linear_to_db(_settings.master * _settings.sfx)

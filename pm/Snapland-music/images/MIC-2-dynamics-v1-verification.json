@@ -1,0 +1,18 @@
+{
+  "fixed_baseline": "4d0a2a814860e54243dd116bed54c564233c0aa0",
+  "native_pcm": "PASS on WASAPI, 4phaseintervals havesignal, mute innerinterval0nonzero samples,6beepedges",
+  "wall_recording_seconds": 25.7066666666667,
+  "scenario_seconds": 22.612182,
+  "cpu_tests": [
+    "test_audio",
+    "test_audio_dynamics"
+  ],
+  "screenshots_reviewed": [
+    "harbor-noon",
+    "harbor-night with TimePanel",
+    "dialogue-open"
+  ],
+  "full_suite_run": false,
+  "human_listened": false,
+  "asset_selection": "No new soundasset; retained existing CC0catalog andlicenses; no claim of completed12game music selection orsoundtasteapproval."
+}
