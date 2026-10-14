@@ -72,3 +72,32 @@
 
 ### 程式與證據提交
 分支：feature/island-first-park。更新至最新main後的本票提交：[3f87c63](https://github.com/deadline314/Snapland/commit/3f87c63ff57b93ae451276657651a0d6e922d8bb)。
+
+## 2026-10-14 接續基準
+
+固定開始 SHA：`4d0a2a814860e54243dd116bed54c564233c0aa0`。本輪接續既有角色完整動畫、服裝同步與島嶼聲音驗收；使用者要求持續修正實際問題，不能把階段素材或局部驗證當成整島完成。
+
+## Commit — 2026-10-14 修正珊瑚外套的跨動作身份
+
+**問題：** 衣櫃顯示珊瑚紅外套，但走路是外套，待機、招手與跳躍卻切成未完整製作的背心，角色衣著隨動作突變。
+
+**改動：** 珊瑚紅外套在全部現有姿勢保持外套身份、配色與完整身體，不使用只有部分動作的背心。未批准的背心走路候選没有加入正式遊戲；本輪仍不把外套換色當成不同服飾輪廓已完成。
+
+**驗收：** 本機檢查現有正面動作全部影格及八方向行走的首末影格，珊瑚與原色外套保持同一完整輪廓；髮帽貼合、四個坐姿及真實八方向行走回歸通過，0 ERROR。實際 Main 使用珊瑚外套完成八方向行走、完整招手／拍照／互動及動作中換裝，原生 exit 0、0 ERROR；主 Session 檢視六張全身姿勢聯絡圖。影片已保存供正常／慢放審閱，未以靜態圖宣稱全套動畫品質完成。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 原有角色功能與跨姿勢外套身份 | 通過；保留原有身份共用與快取上限檢查 |
+| 髮帽貼合／坐姿／真實八方向行走 | 3 項局部檢查通過，0 ERROR |
+| 珊瑚外套原生來源檢查 | 技術條件通過，完整招手／拍照／互動影格實際呈現 |
+| 候選素材 | 側向背心候選跨格；重試又改變姿勢，均未採用 |
+
+### 截圖與影片
+
+![珊瑚外套跨姿勢實際畫面](images/ART-18-coral-jacket-consistency-v1-contact.jpg)
+
+[正常速度](images/ART-18-coral-jacket-consistency-v1-normal.mp4) · [四分之一速度](images/ART-18-coral-jacket-consistency-v1-quarter.mp4) · [完整全身圖](images/ART-18-coral-jacket-consistency-v1-start.png) · [原生報告](images/ART-18-coral-jacket-consistency-v1-report.json) · [來源與編碼紀錄](images/ART-18-coral-jacket-consistency-v1-verification.json)
+
+本輪開始基準：`4d0a2a814860e54243dd116bed54c564233c0aa0`；分支：`feature/island-experience`；票況：進行中。不同服裝完整輪廓、全部動作與輸出版本換裝仍需完成，相關驗收未勾選。

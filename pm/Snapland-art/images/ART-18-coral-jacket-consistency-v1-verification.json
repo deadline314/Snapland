@@ -1,0 +1,21 @@
+{
+  "videos": {
+    "ART-18-coral-jacket-consistency-v1-normal.mp4": {
+      "r_frame_rate": "30/1",
+      "duration": "13.966667",
+      "nb_frames": "419"
+    },
+    "ART-18-coral-jacket-consistency-v1-quarter.mp4": {
+      "r_frame_rate": "30/1",
+      "duration": "55.833333",
+      "nb_frames": "1675"
+    }
+  },
+  "native_result": "PASS technical, zero ERROR",
+  "wardrobe_profile": "catalog-coral-jacket",
+  "coverage": "Actual Main eight-direction movement and complete wave/photo/interact source cels; CPU all current authored front actions and first/last cel in8 walkingdirections silhouette checks.",
+  "source_generation": "No new generated sprite adopted. Side vest candidate crossed sourcecellbounds and retrychangedposes; remainedrejected.",
+  "visual_review": "Main session inspected six native full-body poses; normal/quarter full subjective acceptance remains pending.",
+  "complete_wardrobe_acceptance": false,
+  "default_qa_package": "ART-17 packed proof predates coral gate; not coral-clothing packed proof."
+}

@@ -177,13 +177,20 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var manifest_head_anchor := Vector2i.ZERO
 	var manifest_has_head_anchor := false
 	if has_manifest_frame:
-		var authored: Texture2D = animation_library.texture("traveller", safe_action, safe_direction, safe_frame, equipped)
+		# The coral vest atlas is an incomplete silhouette prototype. Keep its
+		# historical metadata intact, but render the catalog's coral jacket by
+		# recoloring each authored base pose until a complete matching set exists.
+		var pose_equipped := equipped
+		if outfit == "outfit-coral":
+			pose_equipped = equipped.duplicate()
+			pose_equipped.erase("outfit")
+		var authored: Texture2D = animation_library.texture("traveller", safe_action, safe_direction, safe_frame, pose_equipped)
 		if authored != null:
 			# ImageTexture.get_image() may expose a cached image. Renderer passes
 			# mutate their working canvas, so detach before stripping or compositing.
 			image = authored.get_image().duplicate()
-			if animation_library.has_anchor("traveller", safe_action, safe_direction, safe_frame, "head", equipped):
-				manifest_head_anchor = animation_library.normalized_anchor("traveller", safe_action, safe_direction, safe_frame, "head", equipped)
+			if animation_library.has_anchor("traveller", safe_action, safe_direction, safe_frame, "head", pose_equipped):
+				manifest_head_anchor = animation_library.normalized_anchor("traveller", safe_action, safe_direction, safe_frame, "head", pose_equipped)
 				manifest_has_head_anchor = true
 	var vertical_offset := 0 if use_walk_source else (_pose_vertical_offsets[pose] if _atlas_valid else 0)
 	var hair_hat_offset := 45 if use_walk_source else vertical_offset

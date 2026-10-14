@@ -2,6 +2,7 @@ extends SceneTree
 
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const ParkWorld = preload("res://game/world/park_world.gd")
+var _outfit_failures: Array[String] = []
 
 func _initialize() -> void:
 	assert(not OS.get_environment("SNAPLAND_SAVE_PATH").is_empty(), "avatar runtime checks require an isolated SNAPLAND_SAVE_PATH")
@@ -27,7 +28,7 @@ func _initialize() -> void:
 	assert(renderer.walk_frame_count("front") == 8, "manifest idle does not replace the compatible eight-frame legacy walk")
 	var authored_tide: Texture2D = renderer.animation_library.texture("traveller", "idle", "front", 0, equipped)
 	var authored_coral: Texture2D = renderer.animation_library.texture("traveller", "idle", "front", 0, {"outfit":"outfit-coral"})
-	assert(authored_tide != null and authored_coral != null and _image_data(authored_tide) != _image_data(authored_coral), "real manifest's outfit-coral variant loads and replaces the traveller body cel")
+	assert(authored_tide != null and authored_coral != null and _image_data(authored_tide) != _image_data(authored_coral), "historical coral vest variant remains available for explicit source inspection")
 	assert(renderer.has_authored_action("jump", "front") and renderer.authored_frame_count("jump", "front") == 8 and is_equal_approx(renderer.authored_action_fps("jump", "front"), 12.0), "renderer exposes the authored jump frame count and cadence")
 	var jump_frames: Array[PackedByteArray] = []
 	for frame_index in range(renderer.authored_frame_count("jump", "front")):
@@ -35,8 +36,6 @@ func _initialize() -> void:
 		assert(jump_pose != null and _opaque_pixels(jump_pose) > 5000, "jump pose %d retains appearance and visible authored pixels" % frame_index)
 		jump_frames.append(_image_data(jump_pose))
 	assert(_unique_bytes(jump_frames) == 8, "renderer selects all eight distinct jump poses without clamping to three frames")
-	var coral_jump: Texture2D = renderer.texture(appearance, {"outfit":"outfit-coral", "hat":"hat-none"}, "front", 7, "jump")
-	assert(coral_jump != null and _image_data(coral_jump) != jump_frames[7], "renderer selects the coral jump variant while preserving avatar appearance processing")
 	assert(renderer.texture(appearance, equipped, "front", 7, "jump") == renderer.texture(appearance, equipped, "front", 7, "jump"), "repeated jump frame requests reuse the composed appearance texture cache")
 
 	var directions := ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]
@@ -155,7 +154,30 @@ func _initialize() -> void:
 	assert(_image_data(renderer.texture(appearance, equipped, "left")) == _image_data(renderer.texture(changed_appearance, equipped, "left")), "expression overlay is not misplaced on profile faces")
 	assert(_image_data(renderer.texture(appearance, equipped, "back")) == _image_data(renderer.texture(changed_appearance, equipped, "back")), "expression overlay never appears on the back of the head")
 	assert(renderer.cached_texture_count() <= 128, "renderer reports a bounded texture cache")
+	_check_coral_outfit_identity(appearance, equipped, jump_frames)
 	call_deferred("_probe_world_integration")
+
+
+func _check_coral_outfit_identity(appearance: Dictionary, tide_equipment: Dictionary, jump_frames: Array[PackedByteArray]) -> void:
+	# Isolate this exhaustive matrix so it cannot evict textures from the cache
+	# identity checks in the primary renderer fixture.
+	var renderer := AvatarRenderer.new()
+	var coral_equipment := {"outfit":"outfit-coral", "hat":"hat-none"}
+	var coral_jump: Texture2D = renderer.texture(appearance, coral_equipment, "front", 7, "jump")
+	var tide_jump_last: Texture2D = renderer.texture(appearance, tide_equipment, "front", 7, "jump")
+	_outfit_check(coral_jump != null and tide_jump_last != null and _image_data(coral_jump) != jump_frames[7] and _same_alpha_mask(coral_jump.get_image(), tide_jump_last.get_image()), "renderer applies the coral jacket palette to jump without changing its authored silhouette")
+	for action in ["idle", "wave", "photograph", "interact", "jump", "sit", "catch"]:
+		for frame_index in range(renderer.authored_frame_count(action, "front")):
+			var tide_pose: Texture2D = renderer.texture(appearance, tide_equipment, "front", frame_index, action)
+			var coral_pose: Texture2D = renderer.texture(appearance, coral_equipment, "front", frame_index, action)
+			_outfit_check(tide_pose != null and coral_pose != null and _same_alpha_mask(tide_pose.get_image(), coral_pose.get_image()), "%s/%d keeps the catalog jacket silhouette in both outfit colors" % [action, frame_index])
+	for direction in ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]:
+		var last_walk_frame := renderer.walk_frame_count(direction) - 1
+		for frame_index in [0, last_walk_frame]:
+			var tide_pose: Texture2D = renderer.texture(appearance, tide_equipment, direction, frame_index, "walk")
+			var coral_pose: Texture2D = renderer.texture(appearance, coral_equipment, direction, frame_index, "walk")
+			_outfit_check(tide_pose != null and coral_pose != null and _same_alpha_mask(tide_pose.get_image(), coral_pose.get_image()), "walk %s/%d keeps the catalog jacket silhouette in both outfit colors" % [direction, frame_index])
+	renderer = null
 
 
 func _probe_world_integration() -> void:
@@ -194,6 +216,10 @@ func _probe_world_integration() -> void:
 	Input.action_release("move_right")
 	assert(world.avatar_action.is_empty(), "walking cancels a gesture so its planted pose never slides")
 	world.queue_free()
+	if not _outfit_failures.is_empty():
+		push_error("Avatar outfit identity checks failed with %d failure(s): %s" % [_outfit_failures.size(), "; ".join(_outfit_failures)])
+		quit(1)
+		return
 	print("PASS: avatar runtime checks")
 	quit(0)
 
@@ -307,3 +333,18 @@ func _difference_outside_region_count(first: Texture2D, second: Texture2D, allow
 				continue
 			if first_image.get_pixel(x,y) != second_image.get_pixel(x,y): count += 1
 	return count
+
+func _same_alpha_mask(first: Image, second: Image) -> bool:
+	if first.get_size() != second.get_size():
+		return false
+	for y in range(first.get_height()):
+		for x in range(first.get_width()):
+			if not is_equal_approx(first.get_pixel(x, y).a, second.get_pixel(x, y).a):
+				return false
+	return true
+
+func _outfit_check(condition: bool, message: String) -> void:
+	if condition:
+		return
+	_outfit_failures.append(message)
+	push_error("Avatar outfit identity check failed: " + message)
