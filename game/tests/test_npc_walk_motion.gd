@@ -25,6 +25,7 @@ func _run() -> void:
 	_check_unmeasured_role_fallback()
 	_check_announcer_costume()
 	await _check_activity_integration()
+	await _check_announcer_natural_rest_at_30hz()
 	_check_detached_rig_close()
 	if _foot_test_failures>0:
 		push_error("NPC projected foot tests failed: %d" % _foot_test_failures)
@@ -266,6 +267,72 @@ func _check_activity_integration() -> void:
 	controller.release()
 	assert(controller.costume_report().cache_size<=48,"controller-owned announcer texture cache remains bounded")
 	scene.queue_free(); await process_frame
+
+func _check_announcer_natural_rest_at_30hz() -> void:
+	var scene := Node3D.new(); root.add_child(scene)
+	var controller = NpcActivity.new(); scene.add_child(controller)
+	var actor := Node3D.new(); actor.position = Vector3(2.0, 0.055, -4.0); scene.add_child(actor)
+	var sprite := Sprite3D.new(); sprite.texture = NpcActivity.load_action_frames("announcer")[0]; actor.add_child(sprite)
+	var point := {"position": actor.global_position}
+	assert(controller.register_actor(sprite, "announcer", NpcActivity.load_action_frames("announcer"), actor, point, 0.0), "30 Hz natural-rest regression registers the real announcer controller")
+	controller.finish_registration()
+	var camera := Camera3D.new(); scene.add_child(camera)
+	controller.configure_motion(camera, Callable(self, "_ground_height"), true)
+	var index := _record_index_by_role(controller, "announcer")
+	var motion: Variant = controller._records[index].motion
+	assert(motion != null and motion.supported, "30 Hz natural-rest regression uses the measured announcer gait adapter")
+	assert(controller._play_actor_action(index, "walk", "right", true), "announcer begins from its authored route walk")
+	actor.position.x += 0.02
+	motion.update(1.0 / 30.0)
+	assert(motion.active and not sprite.visible, "announcer source sprite is replaced by the gait rig while route movement is active")
+	controller._action_clock = 1.0
+	var sample_delta := 1.0 / 30.0
+	var observed_natural_rest := false
+	var action_index := 0
+	var actions := ["greet", "interact"]
+	var action_started_at := -1.0
+	var action_durations := {}
+	controller._ensure_animation_library()
+	for action in actions:
+		var sequence: Dictionary = controller._animation_library.get_sequence("announcer", action, "front")
+		var frames: Array = sequence.get("frames", [])
+		assert(bool(sequence.get("available", false)) and not frames.is_empty(), "30 Hz completion regression loads the authored announcer %s sequence" % action)
+		action_durations[action] = float(frames.size()) / maxf(0.01, float(sequence.get("fps", 1.0)))
+	for _sample in range(30 * 9):
+		controller._action_clock += sample_delta
+		controller._update_announcer_action(controller._records[index])
+		var current: Dictionary = controller._records[index]
+		controller._advance_actor(current, sprite, sample_delta, true)
+		motion.update(sample_delta)
+		current = controller._records[index]
+		var phase := fposmod(float(controller._action_clock), NpcActivity.CYCLE_SECONDS)
+		if action_index < actions.size() and action_started_at < 0.0 and _is_announcer_natural_rest_sample(String(current.action), bool(motion.active), bool(sprite.visible), bool(motion.rig.visible), phase):
+			observed_natural_rest = true
+			var action := String(actions[action_index])
+			var required_remaining := float(action_durations[action]) + NpcActivity.ANNOUNCER_STOP_SETTLE_SECONDS
+			var first_rest := phase < NpcActivity.ANNOUNCER_FIRST_REST_END
+			var rest_end := NpcActivity.ANNOUNCER_FIRST_REST_END if first_rest else NpcActivity.ANNOUNCER_SECOND_REST_END
+			if rest_end - phase >= required_remaining:
+				assert(controller.request_action(sprite, action, "front"), "natural 30 Hz rest accepts the complete authored announcer %s action" % action)
+				action_started_at = float(controller._action_clock)
+		elif action_index < actions.size() and action_started_at >= 0.0:
+			current = controller._records[index]
+			var action := String(actions[action_index])
+			if String(current.action) != action:
+				var elapsed := float(controller._action_clock) - action_started_at
+				assert(elapsed + sample_delta >= float(action_durations[action]), "30 Hz natural route rest allows authored %s to finish before its next route walk" % action)
+				action_index += 1
+				action_started_at = -1.0
+				if action_index >= actions.size(): break
+	assert(observed_natural_rest, "30 Hz samples observe the announcer's real source-sprite rest after the measured rig's 0.24s stop settle within a natural route-rest window")
+	assert(action_index == actions.size(), "30 Hz natural rest test completes both authored announcer actions before the scheduler resumes walking")
+	controller.release(); motion.close(); scene.queue_free(); await process_frame
+
+func _is_announcer_natural_rest_sample(action: String, motion_active: bool, sprite_visible: bool, rig_visible: bool, phase: float) -> bool:
+	var first_rest := phase >= NpcActivity.ANNOUNCER_OUTBOUND_SECONDS and phase < NpcActivity.ANNOUNCER_FIRST_REST_END
+	var second_rest := phase >= NpcActivity.ANNOUNCER_RETURN_SECONDS and phase < NpcActivity.ANNOUNCER_SECOND_REST_END
+	var rest_action := action in ["idle", "stand", "special", "emotion_curious"]
+	return not motion_active and sprite_visible and not rig_visible and rest_action and (first_rest or second_rest)
 
 func _record_index_by_role(controller, role: String) -> int:
 	for index in range(controller._records.size()):

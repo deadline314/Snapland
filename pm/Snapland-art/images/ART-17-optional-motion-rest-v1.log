@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ANNOUNCER_COSTUME checked=19 actions=6 changed=7748 cache=48
+PASS: optional three-role measured gait, source fallback, pause/hold lifecycle, and measured announcer leg costume
+WARNING: NpcActivity: ticket lacks authored walk/left; measured route gait retains the current authored pose.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _update_short_route (res://game/world/npc_activity.gd:470)
+       [1] _process (res://game/world/npc_activity.gd:538)
+       [2] _check_activity_integration (res://game/tests/test_npc_walk_motion.gd:227)
+       [3] _run (res://game/tests/test_npc_walk_motion.gd:27)
+       [4] _check_terrain_contact (res://game/tests/test_npc_walk_motion.gd:377)
+WARNING: NpcActivity: imp lacks authored walk/left; measured route gait retains the current authored pose.
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _update_short_route (res://game/world/npc_activity.gd:470)
+       [1] _process (res://game/world/npc_activity.gd:538)
+       [2] _check_activity_integration (res://game/tests/test_npc_walk_motion.gd:227)
+       [3] _run (res://game/tests/test_npc_walk_motion.gd:27)
+       [4] _check_terrain_contact (res://game/tests/test_npc_walk_motion.gd:377)

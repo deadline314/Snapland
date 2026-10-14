@@ -239,3 +239,11 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 固定基準：`4d0a2a814860e54243dd116bed54c564233c0aa0`；分支：`feature/island-experience`；票況：進行中。待完整角色素材、正常／慢放品質與全換裝覆蓋通過後再轉審查。
 
 本輪程式與原生證據已推送：[e8320de](https://github.com/deadline314/Snapland/commit/e8320de7ab71ac2d716d314ba09f95834116535c)。[八方向行走與動作短片](images/ART-17-authored-traveller-v1-walk-actions.mp4)直接取完整影片第 30 秒之後的正常速度動作段。
+
+### 2026-10-14 獨立動作研究檢查補強
+
+**問題：** 保留的獨立動作研究容易錯過 NPC 很短的自然停留窗口，無法證明招呼／互動在重新走動前完整結束。
+
+**改動：** 以正常 30Hz 檢查自然停留時可完整播放兩種已具備動作；正式島嶼仍直接播放原圖，沒有重新啟用拆腿動作。
+
+**驗收：** 獨立局部測試 exit 0、0 ERROR；[執行紀錄](images/ART-17-optional-motion-rest-v1.log)。這是獨立研究回歸，不算正式角色動畫品質或真人試玩。
