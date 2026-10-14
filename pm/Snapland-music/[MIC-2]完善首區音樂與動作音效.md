@@ -62,3 +62,5 @@
 [夜間切換圖](images/MIC-2-dynamics-v1-harbor-night.png) · [對話圖](images/MIC-2-dynamics-v1-dialogue-open.png) · [完整原生混音 WAV](images/MIC-2-dynamics-v1-main-master-mix.wav) · [原生錄音報告與 CC0 出處](images/MIC-2-dynamics-v1-audio-dynamics-report.json) · [局部驗證摘要](images/MIC-2-dynamics-v1-verification.json)
 
 錄音是整體混音，不能把音樂與海浪各自的音色從 RMS 推斷出來。固定基準：`4d0a2a814860e54243dd116bed54c564233c0aa0`；分支：`feature/island-experience`；票況：進行中。保留待本機耳機／喇叭試聽、完整選材與十二款小遊戲聲音的驗收。
+
+本輪程式與原生錄音證據已推送：[629da35](https://github.com/deadline314/Snapland/commit/629da35d2ff6d7f33e9337c24b735b31beeccb15)。
