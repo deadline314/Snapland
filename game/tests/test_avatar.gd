@@ -22,8 +22,10 @@ func _initialize() -> void:
 	assert(base != null and base.get_height() > 0, "avatar renderer returns a usable default texture")
 	assert(base == renderer.texture(appearance, equipped), "identical poses reuse the bounded texture cache")
 	assert(renderer.animation_library.has_frame("traveller", "idle", "front"), "the real animation manifest provides traveller front idle frames")
-	var authored_idle_first: Texture2D = renderer.texture(appearance, equipped, "front", 0, "idle")
-	var authored_idle_blink: Texture2D = renderer.texture(appearance, equipped, "front", 4, "idle")
+	var source_renderer := AvatarRenderer.new()
+	source_renderer.inspect_authored_idle_sources = true
+	var authored_idle_first: Texture2D = source_renderer.texture(appearance, equipped, "front", 0, "idle")
+	var authored_idle_blink: Texture2D = source_renderer.texture(appearance, equipped, "front", 4, "idle")
 	assert(_image_data(authored_idle_first) != _image_data(authored_idle_blink), "manifest idle frame 0 and blink frame 4 render distinct authored poses")
 	assert(renderer.walk_frame_count("front") == 8, "manifest idle does not replace the compatible eight-frame legacy walk")
 	var authored_tide: Texture2D = renderer.animation_library.texture("traveller", "idle", "front", 0, equipped)
@@ -48,21 +50,26 @@ func _initialize() -> void:
 		assert(idle_frame >= 0 and idle_frame < frame_count, "each heading's authored idle_frame stays within its walk cycle: %s/%d" % [direction, idle_frame])
 		var idle_pose: Texture2D = renderer.texture(appearance, equipped, direction, 0, "idle")
 		assert(idle_pose != null and _opaque_pixels(idle_pose) > 5000, "every idle heading retains visible source pixels")
-		foot_rows.append(_last_opaque_row(idle_pose))
+		assert(_last_opaque_row(idle_pose) == _last_opaque_image_row(renderer._walk_pose_image(direction, idle_frame)), "rest retains its source sole height without recentering: " + direction)
 		var manifest_idle_count: int = renderer.animation_library.frame_count("traveller", "idle", direction)
+		assert(idle_pose == renderer.texture(appearance, equipped, direction, frame_count - 1, "idle"), "production rest holds its registered pose independent of animation phase: " + direction)
+		assert(_image_data(idle_pose) == _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "production start/stop shares the exact registered contact cel: " + direction)
 		if manifest_idle_count > 0:
-			assert(_image_data(idle_pose) != _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "manifest idle uses authored pose art instead of the legacy walk hold cel")
-		else:
-			assert(idle_pose == renderer.texture(appearance, equipped, direction, frame_count - 1, "idle"), "legacy idle holds its metadata-selected pose independent of the walk phase")
-			assert(_image_data(idle_pose) == _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "legacy idle uses the authored contact/hold cel selected by its direction metadata")
+			var source_idle: Texture2D = source_renderer.texture(appearance, equipped, direction, 0, "idle")
+			assert(_image_data(source_idle) != _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "explicit source diagnostics retain the distinct authored idle art: " + direction)
 		var frames: Array[PackedByteArray] = []
+		var first_walk_pose: Texture2D
 		for frame in range(frame_count):
 			var pose: Texture2D = renderer.texture(appearance, equipped, direction, frame, "walk")
 			assert(pose != null and _opaque_pixels(pose) > 5000, "every direction/frame cel has visible pixels: %s/%d" % [direction, frame])
 			assert(_walk_source_has_clear_margin(renderer, direction, frame, 2), "source walk cel keeps a two-pixel alpha-scissor-safe margin: %s/%d" % [direction, frame])
 			assert(_image_has_clear_margin(pose.get_image(), 2), "composed 280x360 walk pose keeps a transparent two-pixel boundary: %s/%d" % [direction, frame])
 			frames.append(_image_data(pose))
-			foot_rows.append(_last_opaque_row(pose))
+			assert(_last_opaque_row(pose) == _last_opaque_image_row(renderer._walk_pose_image(direction, frame)), "walk preserves each registered source sole height: %s/%d" % [direction, frame])
+			if frame == 0:
+				first_walk_pose = pose
+			else:
+				assert(_visible_region_difference_count(first_walk_pose, pose, Rect2i(60, 65, 165, 110)) == 0, "actual head pixels keep the fixed root while feet move: %s/%d" % [direction, frame])
 		assert(_unique_bytes(frames) == frame_count, "all %d authored cels remain distinct for %s" % [frame_count, direction])
 		pose_images.append(frames[0])
 	for action in ["wave", "photograph", "interact", "celebrate"]:
@@ -80,7 +87,7 @@ func _initialize() -> void:
 	var diagonal_wave: Texture2D = renderer.texture(appearance, equipped, "front_right", 0, "wave")
 	assert(not renderer.animation_library.has_frame("traveller", "wave", "front_right") and _opaque_pixels(diagonal_wave) > 5000, "uncovered diagonal wave remains an explicit legacy fallback, not claimed manifest coverage")
 	for row in foot_rows:
-		assert(absi(row - 346) <= 1, "all directions and actions stay within one output pixel of the common foot baseline: %s" % str(foot_rows))
+		assert(absi(row - 346) <= 1, "grounded non-walk actions retain their authored foot baseline: %s" % str(foot_rows))
 
 	var changed_equipped := equipped.duplicate()
 	changed_equipped.outfit = "outfit-coral"
@@ -89,8 +96,8 @@ func _initialize() -> void:
 	changed_equipped.hat = "hat-straw"
 	var straw_hat: Texture2D = renderer.texture(appearance, changed_equipped)
 	assert(_image_data(base) != _image_data(straw_hat), "hat changes avatar pixels")
-	var authored_head: Vector2i = renderer.animation_library.normalized_anchor("traveller", "idle", "front", 0, "head", equipped)
-	var straw_head: Vector2i = renderer.animation_library.normalized_anchor("traveller", "idle", "front", 0, "head", changed_equipped)
+	var authored_head: Vector2i = renderer.walk_head_anchor("front", renderer.walk_idle_frame("front"))
+	var straw_head: Vector2i = renderer.walk_head_anchor("front", renderer.walk_idle_frame("front"))
 	# The fixed y=38 probe belonged to earlier source art. Read the current authored head anchor instead.
 	var crown_probe := Rect2i(authored_head.x - 95, authored_head.y - 8, 190, 20)
 	var hat_envelope := Rect2i(authored_head.x - 110, authored_head.y - 6, 220, 65)
@@ -100,7 +107,7 @@ func _initialize() -> void:
 	assert(_region_difference_count(base, straw_hat, Rect2i(80, 126, 120, 54)) == 0, "straw brim stays above the new front eye and face landmarks")
 	changed_equipped.hat = "hat-sailor"
 	var sailor_hat: Texture2D = renderer.texture(appearance, changed_equipped)
-	assert(renderer.animation_library.normalized_anchor("traveller", "idle", "front", 0, "head", changed_equipped) == authored_head and _region_difference_count(base, sailor_hat, crown_probe) > 0, "sailor crown uses the same current source head without moving its anchor")
+	assert(renderer.walk_head_anchor("front", renderer.walk_idle_frame("front")) == authored_head and _region_difference_count(base, sailor_hat, crown_probe) > 0, "sailor crown uses the same current source head without moving its anchor")
 	assert(_last_opaque_row(base) == _last_opaque_row(sailor_hat), "adding the sailor hat leaves the authored feet baseline unchanged")
 	assert(_difference_outside_region_count(base, sailor_hat, hat_envelope) == 0, "sailor hat changes pixels only within its head-anchored overlay envelope")
 	assert(_region_difference_count(base, sailor_hat, Rect2i(80, 126, 120, 54)) == 0, "sailor brim stays above the new front eye and face landmarks")
@@ -268,7 +275,9 @@ func _image_has_clear_margin(image: Image, margin: int) -> bool:
 	return true
 
 func _last_opaque_row(texture: Texture2D) -> int:
-	var image := texture.get_image()
+	return _last_opaque_image_row(texture.get_image())
+
+func _last_opaque_image_row(image: Image) -> int:
 	for y in range(image.get_height() - 1, -1, -1):
 		for x in range(image.get_width()):
 			if image.get_pixel(x, y).a > 0.4: return y
@@ -348,3 +357,16 @@ func _outfit_check(condition: bool, message: String) -> void:
 		return
 	_outfit_failures.append(message)
 	push_error("Avatar outfit identity check failed: " + message)
+
+func _visible_region_difference_count(first: Texture2D, second: Texture2D, region: Rect2i) -> int:
+	var first_image := first.get_image()
+	var second_image := second.get_image()
+	var count := 0
+	for y in range(region.position.y, mini(region.end.y, first_image.get_height())):
+		for x in range(region.position.x, mini(region.end.x, first_image.get_width())):
+			var a := first_image.get_pixel(x, y)
+			var b := second_image.get_pixel(x, y)
+			# Import padding has arbitrary RGB beneath fully transparent pixels.
+			if (a.a > 0.0 or b.a > 0.0) and a != b:
+				count += 1
+	return count

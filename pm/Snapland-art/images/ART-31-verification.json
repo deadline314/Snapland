@@ -74,6 +74,12 @@
       "result": "PASS",
       "log": "ART-31-test-walk_review_load.log",
       "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "avatar_runtime",
+      "result": "PASS",
+      "log": "ART-31-test-avatar-runtime.log",
+      "scope": "Production fixed rest, distinct explicit idle/blink source art, source sole preservation, visible head pixels and complete avatar/world integration; not a manual gameplay pass"
     }
   ],
   "fixed_root": {
@@ -186,7 +192,8 @@
     "assets/characters/walk-stability-v1/island-raw-front_right.png": "6d18aecaf8c12464e30c1d932655b52fda32fead18064c9cb78cb9e5cda86e41",
     "assets/characters/walk-stability-v1/island-raw-left.png": "ecfe00e5b95b1c0ae85c6460a7902fcd67f3bf9b3902649e9a9e940f31db7197",
     "assets/characters/walk-stability-v1/island-raw-right.png": "ad9414955416b1985fb27bb749e2f232f69aec05a7c2f160399e2ffcbcd10222",
-    "assets/characters/walk-stability-v1/ticket-walk_candidate-front.png": "a23682be1cbd785972b5fe767e064b6c89ab3ca5da5083d048b3a1f67b3c50a5"
+    "assets/characters/walk-stability-v1/ticket-walk_candidate-front.png": "a23682be1cbd785972b5fe767e064b6c89ab3ca5da5083d048b3a1f67b3c50a5",
+    "game/tests/test_avatar.gd": "241c5bc85b61baf740b21af4527db6bf308d48f58ef456dea4588c180725aedc"
   },
   "export_sha256": {
     "build/Snapland.exe": "0b07899c04e2a9ca0fb398702e3752cf3e370c45f99a7d7e38614c341cfe7c38",
@@ -249,5 +256,16 @@
     "ART-31-gpu-right-hat1-rest.png": "d379db11529833c146b016f7619d998facb004c8fb2ba8b516c948bb16c9b210",
     "ART-31-gpu-right-hat1-settled.png": "d379db11529833c146b016f7619d998facb004c8fb2ba8b516c948bb16c9b210"
   },
-  "media_encoding": "Native island copies use a smaller review encoding, retaining 1280x720, 30 FPS, all frames and timing. Original higher-quality movies remain in the isolated review folder. Pixel comparisons use PNGs, not encoded video."
+  "media_encoding": "Native island copies use a smaller review encoding, retaining 1280x720, 30 FPS, all frames and timing. Original higher-quality movies remain in the isolated review folder. Pixel comparisons use PNGs, not encoded video.",
+  "linux_ci": {
+    "run": "https://github.com/deadline314/Snapland/actions/runs/38810776500",
+    "source": "e436d0e",
+    "passed_stages": [
+      "isolated original-style 2D sample",
+      "2D hair contracts",
+      "fixed-root walk pixels",
+      "test/review save isolation"
+    ],
+    "full_result": "Failed: missing SG-1 catalog; old avatar idle assertion subsequently corrected and passed locally. Not a full CI acceptance."
+  }
 }

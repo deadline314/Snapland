@@ -49,3 +49,9 @@ python tools/walk_stability/check_registration.py .review/2d-walk-stability-2026
 來源擷取的 `--raw` 是離線製作入口，不能把已修正圖格再次累加校正。根點圖集生產額外需要 OpenCV／NumPy／Pillow；原生 CI 固定根點契約不依賴 OpenCV。重跑請使用新的 tag，保留前版失敗證據。
 
 [ART-31 驗收](../../pm/Snapland-art/[ART-31]修正全部二維行走像素偏移.md)、[換裝樣本](hero-2d-sample-delivery.md)、[單髮型骨架樣本](hero-2d-hair-sample-delivery.md)。完整遊戲測試由 CI 執行；本輪局部通過不冒充全專案通過。
+
+## 本機隔離試走入口
+
+已更新的原島嶼可由 `build/ART-31-Preview/Play-Island.cmd` 開啟；髮尾限定樣本用同資料夾的 `Play-Hair-Sample.cmd`。兩個入口各有獨立進度位置，不指向玩家既有存檔。這些是當次本機輸出，不是遠端保存的可執行檔。
+
+原島嶼入口已以普通開啟、保存和正常退出流程檢查，結果為 `PASS: game startup and clean shutdown`；[實際紀錄](../../pm/Snapland-art/images/ART-31-launcher-smoke.log)。打包內容沿用本票已核對的輸出雜湊，沒有將未提交試作混入。
