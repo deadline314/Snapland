@@ -82,7 +82,7 @@ func _initialize() -> void:
 	var distinct_right_pixels: Dictionary = {}
 	for side_frame in announcer_right.frames:
 		assert(is_equal_approx(float(side_frame.source_scale), 0.54), "side pose carries the authored uniform source scale")
-		assert(production_library.normalized_anchor("announcer", "walk", "right", distinct_right.size(), "feet") == Vector2i(160,448), "right-side poses retain announcer's canonical foot anchor")
+		assert(production_library.normalized_anchor("announcer", "walk", "right", distinct_right.size(), "feet") == Vector2i(160,448)+production_library._stable_walk_pixels.root_offset("announcer-walk","right",distinct_right.size()), "right-side shoe witness follows root correction without recentering the actor")
 		assert(side_frame.texture.get_width() == 320 and side_frame.texture.get_height() == 460, "side pose is normalized to announcer's 320x460 actor canvas")
 		distinct_right[JSON.stringify(side_frame.region)] = true
 		distinct_right_pixels[Marshalls.raw_to_base64(side_frame.texture.get_image().get_data())] = true

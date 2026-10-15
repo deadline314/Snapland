@@ -41,22 +41,21 @@ class Hero2DAssetsTest(unittest.TestCase):
             for frame in data['poses'][direction]['photo']:
                 for axis in [0,1]:
                     self.assertLessEqual(abs(frame['head_anchor'][axis]-frame['outfits']['long_coat']['head_anchor'][axis]),1,f'{direction}/photo: outfit changes head position')
-    def test_hair_attachment_follows_actual_walk_head_pixels(self):
-        data=json.loads((PACK/'manifest.json').read_text(encoding='utf-8'))
-        # Reviewed head feature translations in the unchanged source: +1 x in front cel 1;
-        # +2 x/+2 y in left cel 1. A fixed guide [140,148] cannot follow either.
-        self.assertEqual(data['poses']['front']['walk'][1]['head_anchor'],[141,148])
-        self.assertEqual(data['poses']['left']['walk'][1]['head_anchor'],[142,150])
-        markers=json.loads((PACK/'head-attachments.json').read_text(encoding='utf-8'))
+    def test_stable_head_part_preserves_original_walking_limbs(self):
         import hashlib
-        for name,expected in markers['unchanged_body_sha256'].items():
-            self.assertEqual(hashlib.sha256((PACK/name).read_bytes()).hexdigest(),expected,'attachment correction must not move or reshape body pixels')
+        from PIL import Image
+        data=json.loads((PACK/'manifest.json').read_text(encoding='utf-8'))
+        profile=json.loads((PACK/'head-stability.json').read_text(encoding='utf-8'))
         for direction in DIRECTIONS:
             for outfit in ['tide_jacket','long_coat']:
-                for frame,point in zip(data['poses'][direction]['walk'],markers['walk'][direction][outfit]):
+                for index,frame in enumerate(data['poses'][direction]['walk']):
                     entry=frame if outfit=='tide_jacket' else frame['outfits'][outfit]
-                    self.assertEqual(entry['head_anchor'],point['attachment'])
+                    self.assertEqual(entry['head_anchor'],[140,148])
                     self.assertEqual(entry['body_guide'],[140,148])
+                    x,y,w,h=entry['region']
+                    image=Image.open(PACK/entry['source']).convert('RGBA').crop((x,y,x+w,y+h))
+                    actual=hashlib.sha256(image.crop((0,profile.get('lower_body_sha256_from_y',206),280,360)).tobytes()).hexdigest()
+                    self.assertEqual(actual,profile['lower_body_sha256'][f'{direction}/{outfit}/{index}'],'head stabilization must preserve arms, camera and legs below the reviewed seam')
 
     def test_pack_files_exist_and_stay_2d(self):
         self.assertTrue((PACK/'manifest.json').is_file(),'2D pack missing')

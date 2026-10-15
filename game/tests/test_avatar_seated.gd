@@ -46,6 +46,8 @@ func _initialize() -> void:
 	assert(coverage == ["front"] and not library.has_action("traveller", "sit", "back"), "manifest claims seated coverage only for the authored front direction")
 	assert(library.frame_count("traveller", "idle", "front") == 8 and library.frame_count("traveller", "jump", "front") == 8 and library.frame_count("traveller", "catch", "front") == 12, "adding the seated action preserves existing traveller front actions")
 	var renderer := AvatarRenderer.new()
+	# This portion checks retained source-atlas idle, separately from production walk-hold rest.
+	renderer.inspect_authored_idle_sources=true
 	var appearance := {"skin":"warm", "species":"human", "gender":"neutral", "hair":"windswept", "hair_color":"ink", "face":"curious"}
 	var equipped := {"outfit":"outfit-tide", "hat":"hat-none"}
 	for action in ["idle","sit"]:

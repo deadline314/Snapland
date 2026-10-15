@@ -31,13 +31,20 @@ func _initialize() -> void:
 	look.hair="bob"
 	var bob_witness: Image = renderer.texture(look,equipped,"front",0,"walk").get_image()
 	assert(bob_witness.save_png(directory.path_join("front-bob-underlay-witness.png"))==OK,"bob witness PNG must be written")
-	for point: Vector2i in OPEN_HEAD_WITNESSES.front:
+	for point: Vector2i in witnesses("front"):
 		assert(bob_witness.get_pixelv(point).a>0.95,"independently measured bob nose/eye band must be opaque: "+str(point))
 	look.hair="curly"
 	var candidate: Image=renderer.texture(look,equipped,"front_right",0,"walk").get_image()
 	for point in [Vector2i(155,131),Vector2i(161,146),Vector2i(188,117),Vector2i(134,125),Vector2i(129,144),Vector2i(143,142)]:
 		var color := candidate.get_pixelv(point)
-		assert(color.a>0.95 and renderer._is_color_family(color,Avatar.SKIN_COLORS.warm,0.06,0.1),"exposed head is skin, not restored fringe/transparent crack at "+str(point))
+		# With crown-attached hair, some former bare-forehead witnesses now lie
+		# under the selected blue cut. Both legitimate owners must stay opaque;
+		# neither the old cream fringe nor a transparent crack is acceptable.
+		var head_skin := renderer._is_color_family(color,Avatar.SKIN_COLORS.warm,0.06,0.1)
+		var selected_hair := renderer._is_color_family(color,Avatar.HAIR_COLORS.ink,0.04,0.025)
+		assert(color.a>0.95 and (head_skin or selected_hair),"attached head is selected skin or selected hair, not restored fringe/transparent crack at "+str(point))
+	for point in [Vector2i(155,131),Vector2i(161,146),Vector2i(188,117)]:
+		assert(candidate.get_pixelv(point)!=raw.get_pixelv(point),"independent known old fringe RGBA must be removed at "+str(point))
 	assert(candidate.save_png(directory.path_join("front_right-curly-frame0.png"))==OK,"curly witness PNG must be written")
 	for view in VIEWS:
 		for frame in range(8):
@@ -57,7 +64,7 @@ func _initialize() -> void:
 				look.hair=style
 				var image: Image=renderer.texture(look,equipped,view,frame,"walk").get_image()
 				if frame==0 and FEATURES.has(view):
-					for point: Vector2i in FEATURES[view]: assert(image.get_pixelv(point)==base.get_pixelv(point),"independent original feature RGBA: %s/%s %s" % [view,style,point])
+					for point: Vector2i in features(view): assert(image.get_pixelv(point)==base.get_pixelv(point),"independent original feature RGBA: %s/%s %s" % [view,style,point])
 				for label in record.face_features_named:
 					for index in record.face_features_named[label]:
 						var point := Vector2i(index%280,index/280)
@@ -91,10 +98,10 @@ func _initialize() -> void:
 								var point:=Vector2i(index%280,index/280)
 								assert(image.get_pixelv(point)==base.get_pixelv(point),"all 64 cels/skins/species keep exact authored feature RGBA")
 						if frame==0 and FEATURES.has(view):
-							for point: Vector2i in FEATURES[view]: assert(image.get_pixelv(point)==base.get_pixelv(point),"all skins/species retain independent facial witnesses")
+							for point: Vector2i in features(view): assert(image.get_pixelv(point)==base.get_pixelv(point),"all skins/species retain independent facial witnesses")
 						if frame==0 and species=="elf" and skin=="warm": assert(image.save_png(directory.path_join(view+"-elf-"+style+"-frame0.png"))==OK,"species PNG must be written: "+view+"/"+style)
 	assert(builds==[renderer._walk_source_image_build_count,renderer._source_metrics_build_count,renderer._hair_cut_build_count],"skins/species reuse source/semantic/cut caches")
-	assert(renderer._walk_source_metrics_cache.size()==64 and renderer._hair_cut_cache.size()<=24 and renderer.cached_texture_count()<=128)
+	assert(renderer._walk_source_metrics_cache.size()==8 and renderer._hair_cut_cache.size()<=24 and renderer.cached_texture_count()<=128)
 	print("PASS: independent bob nose/eye alpha, 64-cel bob/curly face RGBA and opening alpha across all skins/species, two-color original body/palette and haircut RGB, bounded caches; native quality pending")
 	quit()
 func _paint_layers(renderer,source: Image,record: Dictionary,result: Image,look: Dictionary,equipped: Dictionary,view: String,frame: int) -> bool:
@@ -105,7 +112,7 @@ func _paint_layers(renderer,source: Image,record: Dictionary,result: Image,look:
 	if Avatar.DIRECTIONS.has(view): renderer._apply_hair_atlas(overlay,look.hair,view,Avatar.HAIR_COLORS[look.hair_color],anchor.y,anchor.x-140,renderer.walk_head_width(view,frame)*1.05,source,overlay_record)
 	else: renderer._apply_diagonal_hair(overlay,look.hair,view,Avatar.HAIR_COLORS[look.hair_color],anchor.y,anchor.x-140,renderer.walk_head_width(view,frame)*1.05,source,overlay_record)
 	var body := source.duplicate()
-	renderer._apply_palette(body,look,equipped.outfit,renderer._closest_cardinal(view),true)
+	renderer._apply_palette(body,look,equipped.outfit,renderer._closest_cardinal(view),true,record.source_hair_indices,record.palette_hair_indices)
 	for y in range(360):
 		for x in range(280):
 			var index := y*280+x
@@ -136,5 +143,20 @@ func _assert_open_head_surface(renderer,source: Image,result: Image,view: String
 		var point:=Vector2i(index%source.get_width(),index/source.get_width())
 		assert(result.get_pixelv(point).a>0.95,"bounded original head cannot contain a hair-opening crack: %s/%d/%s %s" % [view,frame,style,point])
 	if frame==0 and OPEN_HEAD_WITNESSES.has(view):
-		for point: Vector2i in OPEN_HEAD_WITNESSES[view]: assert(result.get_pixelv(point).a>0.95,"independently measured exposed head alpha: %s/%s %s" % [view,style,point])
+		for point: Vector2i in witnesses(view): assert(result.get_pixelv(point).a>0.95,"independently measured exposed head alpha: %s/%s %s" % [view,style,point])
 	return true
+
+static func _registered_points(view: String, points: Array) -> Array[Vector2i]:
+	# Witnesses were traced on the original cels, independently of runtime face masks.
+	# Apply the same explicit source-to-canvas translation used by the reviewed atlas.
+	var data: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/walk-stability-v1/manifest.json"))
+	var delta: Array=data.sequences["hero/"+view].registration_offsets[0]
+	var result: Array[Vector2i]=[]
+	for point: Vector2i in points:result.append(point+Vector2i(delta[0],delta[1]))
+	return result
+
+static func features(view: String) -> Array[Vector2i]:
+	return _registered_points(view,FEATURES[view])
+
+static func witnesses(view: String) -> Array[Vector2i]:
+	return _registered_points(view,OPEN_HEAD_WITNESSES[view])

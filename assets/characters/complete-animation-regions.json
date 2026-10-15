@@ -1595,7 +1595,21 @@
                     ]
                   }
                 }
-              }
+              },
+              "normalized_face_eyes": [
+                [
+                  117,
+                  153,
+                  25,
+                  24
+                ],
+                [
+                  163,
+                  152,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-front-actions-v2.png",
@@ -1640,7 +1654,21 @@
                     ]
                   }
                 }
-              }
+              },
+              "normalized_face_eyes": [
+                [
+                  117,
+                  153,
+                  25,
+                  24
+                ],
+                [
+                  163,
+                  152,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-front-actions-v2.png",
@@ -1685,7 +1713,223 @@
                     ]
                   }
                 }
-              }
+              },
+              "foreground_polygons": [
+                [
+                  [
+                    119,
+                    160
+                  ],
+                  [
+                    135,
+                    160
+                  ],
+                  [
+                    135,
+                    155
+                  ],
+                  [
+                    153,
+                    155
+                  ],
+                  [
+                    153,
+                    160
+                  ],
+                  [
+                    178,
+                    161
+                  ],
+                  [
+                    178,
+                    205
+                  ],
+                  [
+                    119,
+                    205
+                  ]
+                ],
+                [
+                  [
+                    98,
+                    164
+                  ],
+                  [
+                    108,
+                    160
+                  ],
+                  [
+                    118,
+                    162
+                  ],
+                  [
+                    124,
+                    167
+                  ],
+                  [
+                    123,
+                    180
+                  ],
+                  [
+                    119,
+                    189
+                  ],
+                  [
+                    113,
+                    199
+                  ],
+                  [
+                    108,
+                    207
+                  ],
+                  [
+                    97,
+                    216
+                  ],
+                  [
+                    85,
+                    216
+                  ],
+                  [
+                    79,
+                    208
+                  ],
+                  [
+                    79,
+                    197
+                  ],
+                  [
+                    84,
+                    184
+                  ],
+                  [
+                    88,
+                    173
+                  ]
+                ],
+                [
+                  [
+                    170,
+                    168
+                  ],
+                  [
+                    178,
+                    167
+                  ],
+                  [
+                    187,
+                    174
+                  ],
+                  [
+                    193,
+                    187
+                  ],
+                  [
+                    197,
+                    202
+                  ],
+                  [
+                    195,
+                    214
+                  ],
+                  [
+                    187,
+                    220
+                  ],
+                  [
+                    177,
+                    218
+                  ],
+                  [
+                    169,
+                    209
+                  ],
+                  [
+                    164,
+                    197
+                  ],
+                  [
+                    163,
+                    184
+                  ],
+                  [
+                    164,
+                    175
+                  ]
+                ]
+              ],
+              "normalized_face_eyes": [
+                [
+                  114,
+                  151,
+                  25,
+                  25
+                ],
+                [
+                  164,
+                  151,
+                  24,
+                  24
+                ]
+              ],
+              "normalized_head_contour": [
+                [
+                  96,
+                  139
+                ],
+                [
+                  101,
+                  118
+                ],
+                [
+                  116,
+                  98
+                ],
+                [
+                  140,
+                  87
+                ],
+                [
+                  164,
+                  89
+                ],
+                [
+                  184,
+                  105
+                ],
+                [
+                  198,
+                  130
+                ],
+                [
+                  201,
+                  151
+                ],
+                [
+                  193,
+                  174
+                ],
+                [
+                  176,
+                  190
+                ],
+                [
+                  148,
+                  197
+                ],
+                [
+                  120,
+                  190
+                ],
+                [
+                  101,
+                  174
+                ],
+                [
+                  94,
+                  155
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-front-actions-v2.png",
@@ -1730,7 +1974,227 @@
                     ]
                   }
                 }
-              }
+              },
+              "foreground_polygons": [
+                [
+                  [
+                    110,
+                    160
+                  ],
+                  [
+                    130,
+                    160
+                  ],
+                  [
+                    130,
+                    155
+                  ],
+                  [
+                    149,
+                    155
+                  ],
+                  [
+                    152,
+                    160
+                  ],
+                  [
+                    162,
+                    161
+                  ],
+                  [
+                    162,
+                    205
+                  ],
+                  [
+                    110,
+                    205
+                  ]
+                ],
+                [
+                  [
+                    94,
+                    163
+                  ],
+                  [
+                    103,
+                    163
+                  ],
+                  [
+                    109,
+                    167
+                  ],
+                  [
+                    116,
+                    170
+                  ],
+                  [
+                    117,
+                    181
+                  ],
+                  [
+                    112,
+                    191
+                  ],
+                  [
+                    108,
+                    199
+                  ],
+                  [
+                    105,
+                    209
+                  ],
+                  [
+                    101,
+                    217
+                  ],
+                  [
+                    88,
+                    218
+                  ],
+                  [
+                    81,
+                    209
+                  ],
+                  [
+                    81,
+                    198
+                  ],
+                  [
+                    85,
+                    183
+                  ],
+                  [
+                    88,
+                    171
+                  ]
+                ],
+                [
+                  [
+                    151,
+                    181
+                  ],
+                  [
+                    160,
+                    181
+                  ],
+                  [
+                    170,
+                    187
+                  ],
+                  [
+                    178,
+                    194
+                  ],
+                  [
+                    183,
+                    203
+                  ],
+                  [
+                    186,
+                    213
+                  ],
+                  [
+                    182,
+                    225
+                  ],
+                  [
+                    173,
+                    229
+                  ],
+                  [
+                    162,
+                    223
+                  ],
+                  [
+                    157,
+                    215
+                  ],
+                  [
+                    150,
+                    210
+                  ],
+                  [
+                    148,
+                    198
+                  ],
+                  [
+                    149,
+                    188
+                  ]
+                ]
+              ],
+              "normalized_face_eyes": [
+                [
+                  113,
+                  153,
+                  25,
+                  24
+                ],
+                [
+                  161,
+                  153,
+                  26,
+                  24
+                ]
+              ],
+              "normalized_head_contour": [
+                [
+                  94,
+                  139
+                ],
+                [
+                  100,
+                  117
+                ],
+                [
+                  116,
+                  98
+                ],
+                [
+                  140,
+                  87
+                ],
+                [
+                  164,
+                  89
+                ],
+                [
+                  185,
+                  105
+                ],
+                [
+                  199,
+                  130
+                ],
+                [
+                  202,
+                  151
+                ],
+                [
+                  195,
+                  174
+                ],
+                [
+                  178,
+                  190
+                ],
+                [
+                  149,
+                  197
+                ],
+                [
+                  120,
+                  190
+                ],
+                [
+                  101,
+                  174
+                ],
+                [
+                  93,
+                  155
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-front-actions-v2.png",
@@ -1775,7 +2239,227 @@
                     ]
                   }
                 }
-              }
+              },
+              "foreground_polygons": [
+                [
+                  [
+                    110,
+                    160
+                  ],
+                  [
+                    130,
+                    160
+                  ],
+                  [
+                    130,
+                    155
+                  ],
+                  [
+                    149,
+                    155
+                  ],
+                  [
+                    152,
+                    160
+                  ],
+                  [
+                    162,
+                    161
+                  ],
+                  [
+                    162,
+                    205
+                  ],
+                  [
+                    110,
+                    205
+                  ]
+                ],
+                [
+                  [
+                    94,
+                    163
+                  ],
+                  [
+                    103,
+                    163
+                  ],
+                  [
+                    109,
+                    167
+                  ],
+                  [
+                    116,
+                    170
+                  ],
+                  [
+                    117,
+                    181
+                  ],
+                  [
+                    112,
+                    191
+                  ],
+                  [
+                    108,
+                    199
+                  ],
+                  [
+                    105,
+                    209
+                  ],
+                  [
+                    101,
+                    217
+                  ],
+                  [
+                    88,
+                    218
+                  ],
+                  [
+                    81,
+                    209
+                  ],
+                  [
+                    81,
+                    198
+                  ],
+                  [
+                    85,
+                    183
+                  ],
+                  [
+                    88,
+                    171
+                  ]
+                ],
+                [
+                  [
+                    151,
+                    181
+                  ],
+                  [
+                    160,
+                    181
+                  ],
+                  [
+                    170,
+                    187
+                  ],
+                  [
+                    178,
+                    194
+                  ],
+                  [
+                    183,
+                    203
+                  ],
+                  [
+                    186,
+                    213
+                  ],
+                  [
+                    182,
+                    225
+                  ],
+                  [
+                    173,
+                    229
+                  ],
+                  [
+                    162,
+                    223
+                  ],
+                  [
+                    157,
+                    215
+                  ],
+                  [
+                    150,
+                    210
+                  ],
+                  [
+                    148,
+                    198
+                  ],
+                  [
+                    149,
+                    188
+                  ]
+                ]
+              ],
+              "normalized_face_eyes": [
+                [
+                  113,
+                  153,
+                  25,
+                  24
+                ],
+                [
+                  161,
+                  153,
+                  26,
+                  24
+                ]
+              ],
+              "normalized_head_contour": [
+                [
+                  94,
+                  141
+                ],
+                [
+                  100,
+                  119
+                ],
+                [
+                  116,
+                  100
+                ],
+                [
+                  140,
+                  89
+                ],
+                [
+                  164,
+                  91
+                ],
+                [
+                  182,
+                  107
+                ],
+                [
+                  194,
+                  131
+                ],
+                [
+                  196,
+                  153
+                ],
+                [
+                  190,
+                  176
+                ],
+                [
+                  174,
+                  191
+                ],
+                [
+                  147,
+                  199
+                ],
+                [
+                  120,
+                  192
+                ],
+                [
+                  100,
+                  176
+                ],
+                [
+                  93,
+                  157
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-front-actions-v2.png",
@@ -1820,7 +2504,21 @@
                     ]
                   }
                 }
-              }
+              },
+              "normalized_face_eyes": [
+                [
+                  117,
+                  153,
+                  25,
+                  24
+                ],
+                [
+                  163,
+                  152,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-front-actions-v2.png",
@@ -1865,7 +2563,21 @@
                     ]
                   }
                 }
-              }
+              },
+              "normalized_face_eyes": [
+                [
+                  117,
+                  153,
+                  25,
+                  24
+                ],
+                [
+                  163,
+                  152,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-front-actions-v2.png",
@@ -1910,7 +2622,21 @@
                     ]
                   }
                 }
-              }
+              },
+              "normalized_face_eyes": [
+                [
+                  117,
+                  153,
+                  25,
+                  24
+                ],
+                [
+                  163,
+                  152,
+                  24,
+                  24
+                ]
+              ]
             }
           ]
         }
@@ -2859,7 +3585,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  115,
+                  150,
+                  24,
+                  23
+                ],
+                [
+                  162,
+                  148,
+                  24,
+                  23
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -2884,7 +3624,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  113,
+                  150,
+                  24,
+                  24
+                ],
+                [
+                  161,
+                  151,
+                  24,
+                  22
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -2909,7 +3663,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  114,
+                  150,
+                  24,
+                  24
+                ],
+                [
+                  162,
+                  149,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -2934,7 +3702,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  110,
+                  149,
+                  24,
+                  24
+                ],
+                [
+                  158,
+                  148,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -2959,7 +3741,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  111,
+                  147,
+                  24,
+                  24
+                ],
+                [
+                  159,
+                  146,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -2984,7 +3780,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  110,
+                  142,
+                  24,
+                  24
+                ],
+                [
+                  158,
+                  141,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -3009,7 +3819,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  111,
+                  146,
+                  24,
+                  24
+                ],
+                [
+                  159,
+                  145,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -3034,7 +3858,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  113,
+                  147,
+                  24,
+                  25
+                ],
+                [
+                  162,
+                  148,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -3059,7 +3897,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  108,
+                  148,
+                  24,
+                  24
+                ],
+                [
+                  157,
+                  148,
+                  24,
+                  23
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -3084,7 +3936,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  113,
+                  150,
+                  24,
+                  24
+                ],
+                [
+                  161,
+                  149,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -3109,7 +3975,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  114,
+                  152,
+                  24,
+                  24
+                ],
+                [
+                  161,
+                  152,
+                  24,
+                  24
+                ]
+              ]
             },
             {
               "source": "res://assets/characters/traveller-catch-front-v4.png",
@@ -3134,7 +4014,21 @@
                 "feet_method": "alpha32_shoe_contact_lower_edge",
                 "head_method": "central_navy_hair_top_excluding_raised_hands"
               },
-              "layers": []
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  113,
+                  151,
+                  24,
+                  24
+                ],
+                [
+                  161,
+                  150,
+                  24,
+                  24
+                ]
+              ]
             }
           ]
         }

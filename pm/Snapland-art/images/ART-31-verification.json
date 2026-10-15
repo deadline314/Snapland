@@ -1,0 +1,253 @@
+{
+  "ticket": "ART-31",
+  "date": "2026-10-16",
+  "python_local_tests": 19,
+  "native_local_entries": [
+    {
+      "case": "walk_pixel_stability",
+      "result": "PASS",
+      "log": "ART-31-test-walk_pixel_stability.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "avatar_walk",
+      "result": "PASS",
+      "log": "ART-31-test-avatar_walk.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "avatar_authored_walk_loop",
+      "result": "PASS",
+      "log": "ART-31-test-avatar_authored_walk_loop.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "avatar_side_idle",
+      "result": "PASS",
+      "log": "ART-31-test-avatar_side_idle.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "avatar_idle_attachment",
+      "result": "PASS",
+      "log": "ART-31-test-avatar_idle_attachment.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "avatar_attachment",
+      "result": "PASS",
+      "log": "ART-31-test-avatar_attachment.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "character_animation_library",
+      "result": "PASS",
+      "log": "ART-31-test-character_animation_library.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "npc_authored_source_walking",
+      "result": "PASS",
+      "log": "ART-31-test-npc_authored_source_walking.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "avatar_seated",
+      "result": "PASS",
+      "log": "ART-31-test-avatar_seated.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "wardrobe",
+      "result": "PASS",
+      "log": "ART-31-test-wardrobe.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "avatar_renderer",
+      "result": "PASS",
+      "log": "ART-31-test-avatar_renderer.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    },
+    {
+      "case": "walk_review_load",
+      "result": "PASS",
+      "log": "ART-31-test-walk_review_load.log",
+      "scope": "CPU/source/state regression; not a manual gameplay pass"
+    }
+  ],
+  "fixed_root": {
+    "sequences": 76,
+    "frames": 600,
+    "before_unstable": 76,
+    "after_unstable": 0,
+    "including_unadopted_candidates": {
+      "sequences": 2,
+      "frames": 16
+    }
+  },
+  "registered_source_groups": 12,
+  "gpu_hair_cases": 16,
+  "native_input": {
+    "island_normal": 13,
+    "island_quarter": 13,
+    "full_sample": "both PASS_STATE_CHECKS, eight look configurations; two shutter events",
+    "hair_sample": "both PASS_STATE_CHECKS; actual weighted bones and protected roots"
+  },
+  "media": [
+    {
+      "file": "ART-31-fixed-normal.mp4",
+      "width": 1280,
+      "height": 800,
+      "avg_frame_rate": "30/1",
+      "duration": "76.100000",
+      "nb_frames": "2283",
+      "sha256": "e2ddb368be24dfd248c67650b7a110b292ce0a12ec9ff21f28cb9f837c7e8dda"
+    },
+    {
+      "file": "ART-31-fixed-quarter.mp4",
+      "width": 1280,
+      "height": 800,
+      "avg_frame_rate": "30/1",
+      "duration": "304.433333",
+      "nb_frames": "9133",
+      "sha256": "36e01a403c19e4466a622abc6811ab48e2cbefdbd8962ec91948fab1a879b284"
+    },
+    {
+      "file": "ART-31-island-normal.mp4",
+      "width": 1280,
+      "height": 720,
+      "avg_frame_rate": "30/1",
+      "duration": "19.433333",
+      "nb_frames": "583",
+      "sha256": "fab594da7f26135bb002b3ca752031fc41e9999cf9b654cf5ed87d8a674b73ba"
+    },
+    {
+      "file": "ART-31-island-quarter.mp4",
+      "width": 1280,
+      "height": 720,
+      "avg_frame_rate": "30/1",
+      "duration": "66.133333",
+      "nb_frames": "1984",
+      "sha256": "a44aee6d436f00ff409aea3373ceb9fc34a3644e625918daa7eaa115a45fe1b4"
+    },
+    {
+      "file": "ART-31-sample-normal.mp4",
+      "width": 1280,
+      "height": 800,
+      "avg_frame_rate": "30/1",
+      "duration": "39.133333",
+      "nb_frames": "1174",
+      "sha256": "875584b26ddfcec43639394bf573e468c62c4a755b0744790a6817dc5108bf52"
+    },
+    {
+      "file": "ART-31-sample-quarter.mp4",
+      "width": 1280,
+      "height": 800,
+      "avg_frame_rate": "30/1",
+      "duration": "141.733333",
+      "nb_frames": "4252",
+      "sha256": "fe56908bc93a2b9fb3da92b442fb4ef9c275f065bff4821cc7dc6503cd28bca2"
+    },
+    {
+      "file": "ART-31-hair-normal.mp4",
+      "width": 1280,
+      "height": 800,
+      "avg_frame_rate": "30/1",
+      "duration": "56.800000",
+      "nb_frames": "1704",
+      "sha256": "9479a21771cc22c5d98504b516ad286325f71ce3a27c3b31a5ddd796de8b48dd"
+    },
+    {
+      "file": "ART-31-hair-quarter.mp4",
+      "width": 1280,
+      "height": 800,
+      "avg_frame_rate": "30/1",
+      "duration": "214.133333",
+      "nb_frames": "6424",
+      "sha256": "5338f10f20c129f4269079804e4b2e81f4d7a2c92230703561a3fd01f7844847"
+    }
+  ],
+  "source_sha256": {
+    "game/world/avatar_renderer.gd": "1e5389b968d687186e4de37cea4c580c4594769b60be7ce8136fc2fe9ce1e1f4",
+    "game/world/character_animation_library.gd": "99b92fa90651e3b1b0e3b76782cfb7f7fa80364e388b94e0215696dc42b2f2e7",
+    "game/world/walk_pixel_sources.gd": "8b9462eb69159afdfe1eaf1911d76c2e27c87c65856b9091354871b14d652f80",
+    "assets/characters/walk-stability-v1/manifest.json": "eda93e08339cf2df2c4d91d87dd21ff89239dc806e9e618f1df59c3a054e4b9c",
+    "assets/characters/walk-stability-v1/head-owners.json": "7d22b2f7e94f5bd1d1309c02331760c959ef6f7abdb9b98ec76d9486b2529072",
+    "assets/characters/hero-2d-v1/manifest.json": "d1af3260f338fbb02640fc8c7aed2922e938511b3f64ef48ed6a13fbc7929ad3",
+    "assets/characters/walk-stability-v1/announcer-walk-left.png": "9beaf72e5e4064ce0913adcf61273479b0142ed2c6eabddbb2be9c2bb79e960a",
+    "assets/characters/walk-stability-v1/announcer-walk-right.png": "5258178fc2487d3c3611fa47dee812e2c40e8bd699ce21cb6de196ab53af5c0a",
+    "assets/characters/walk-stability-v1/announcer-walk_candidate-front.png": "8f60110409e22e8b49104d624a2e0e88d700b853d0dbf0add55c12d3fbeccdcf",
+    "assets/characters/walk-stability-v1/island-raw-back.png": "159840faf42a3d6b99c3d3df6dd9e4d5e0cc5e63578cdcbc4087c600e86a174e",
+    "assets/characters/walk-stability-v1/island-raw-back_left.png": "202632af7e9ffd2a2c592a21c036dd8e1a017868a3c09471b60dd968339c9aa5",
+    "assets/characters/walk-stability-v1/island-raw-back_right.png": "bf6478f5723e3a66d66041d24a8ef51f0f43227a7061dbf2e3828081e977dea8",
+    "assets/characters/walk-stability-v1/island-raw-front.png": "7c260a04159721c39a9a171ff6c464b40a81fc55e0605b72883b8157f539129e",
+    "assets/characters/walk-stability-v1/island-raw-front_left.png": "614b8183b90ba4d16af674b5488e1e3a5a105cebf0a5b6a8e1886ed85b6d3b4a",
+    "assets/characters/walk-stability-v1/island-raw-front_right.png": "6d18aecaf8c12464e30c1d932655b52fda32fead18064c9cb78cb9e5cda86e41",
+    "assets/characters/walk-stability-v1/island-raw-left.png": "ecfe00e5b95b1c0ae85c6460a7902fcd67f3bf9b3902649e9a9e940f31db7197",
+    "assets/characters/walk-stability-v1/island-raw-right.png": "ad9414955416b1985fb27bb749e2f232f69aec05a7c2f160399e2ffcbcd10222",
+    "assets/characters/walk-stability-v1/ticket-walk_candidate-front.png": "a23682be1cbd785972b5fe767e064b6c89ab3ca5da5083d048b3a1f67b3c50a5"
+  },
+  "export_sha256": {
+    "build/Snapland.exe": "0b07899c04e2a9ca0fb398702e3752cf3e370c45f99a7d7e38614c341cfe7c38",
+    "build/hero-2d-sample-release/Snapland-Hero-2D-Sample.exe": "25e91c972ff89e2c1681be3ad8ad3d357b1910c639c1a7af1422b4aa9b949d9f",
+    "build/hero-2d-hair-sample-release/Snapland-Hero-2D-Hair-Sample.exe": "4e5c12101db2b22fe80b798a2a1469d3738de74f18aa787b57efdb77efd7364a"
+  },
+  "visual_scope": "Segmented playback at player rate 1x of fixed-canvas comparisons, actual island input movies, complete wardrobe sample and hair-bone movies, plus eight-view appearance matrices. Not every movie frame manually reviewed; no human playtest or full-suite pass claimed.",
+  "limits": [
+    "Hair bones remain in the single-style hero sample; not integrated into the island or NPCs.",
+    "Production island rest shares the walk hold. Separate authored idle/blink is retained for explicit source diagnostics, not production playback.",
+    "NPC front candidates remain unadopted. Existing unsupported-material occlusion warnings remain; final runs have no ERROR/SCRIPT ERROR."
+  ],
+  "gpu_capture_files": {
+    "ART-31-gpu-back-hat0-moving.png": "bc8e4f85bb01ab299747fec5c87c23f2aebcf4f6d230263b1f72288f633655df",
+    "ART-31-gpu-back-hat0-rest.png": "0d1f8102dcd83800deeaa9ed64b1dc9548acf0fcd812d84fa4eecf7eab9bce3d",
+    "ART-31-gpu-back-hat0-settled.png": "0d1f8102dcd83800deeaa9ed64b1dc9548acf0fcd812d84fa4eecf7eab9bce3d",
+    "ART-31-gpu-back-hat1-moving.png": "adf464de3a28350b618a6c9bc9e84c30a37a6491a5fb36a2d022ddf250edefa8",
+    "ART-31-gpu-back-hat1-rest.png": "ff047d50130eb88f516c7a6ddcd763b2b22ff35ccf33352ada732eb8b0879ee0",
+    "ART-31-gpu-back-hat1-settled.png": "ff047d50130eb88f516c7a6ddcd763b2b22ff35ccf33352ada732eb8b0879ee0",
+    "ART-31-gpu-back_left-hat0-moving.png": "21cd9c1db3147e83cecd81c3068b73d365735f707efcc483e05c1496adf55895",
+    "ART-31-gpu-back_left-hat0-rest.png": "890fe9f5faedaef5327ac157c69e33cdb7bb5372ce6fa67bc07b116155cf0b08",
+    "ART-31-gpu-back_left-hat0-settled.png": "890fe9f5faedaef5327ac157c69e33cdb7bb5372ce6fa67bc07b116155cf0b08",
+    "ART-31-gpu-back_left-hat1-moving.png": "b0482d70ab2b6a8aa087cdc5fd2655de31c0ce76a449f0979f919aca32d125de",
+    "ART-31-gpu-back_left-hat1-rest.png": "61d7639fe26e5a5a9e5171e729e594d774a9b2a354a91219d8d0eb9120743af7",
+    "ART-31-gpu-back_left-hat1-settled.png": "61d7639fe26e5a5a9e5171e729e594d774a9b2a354a91219d8d0eb9120743af7",
+    "ART-31-gpu-back_right-hat0-moving.png": "b3e550d28c14a58fe169d808422b2030c7bb97d06a203615ff136cb8071e0487",
+    "ART-31-gpu-back_right-hat0-rest.png": "1b4c4b544aef01847aca7ff96d9ca10de1657ecf8a209a453dd5e2eb24634746",
+    "ART-31-gpu-back_right-hat0-settled.png": "1b4c4b544aef01847aca7ff96d9ca10de1657ecf8a209a453dd5e2eb24634746",
+    "ART-31-gpu-back_right-hat1-moving.png": "d0ce063c7dc6549de2d2b98f92888194d9a5077bfb7ed3e77f723ac3524e270f",
+    "ART-31-gpu-back_right-hat1-rest.png": "177d11024794f00c5f18e1ed6bdfe53fda4ce6e03e02d98da284ae157f96b91f",
+    "ART-31-gpu-back_right-hat1-settled.png": "177d11024794f00c5f18e1ed6bdfe53fda4ce6e03e02d98da284ae157f96b91f",
+    "ART-31-gpu-front-hat0-moving.png": "9130d3044f912de1eb21aedcdbaf3f92380706546792e56377959666dca15d9d",
+    "ART-31-gpu-front-hat0-rest.png": "c4405b8e35cff4e2e264ca737b5e8528a6e1d4ac5e7de5c4b0b858f6cffc6fb6",
+    "ART-31-gpu-front-hat0-settled.png": "c4405b8e35cff4e2e264ca737b5e8528a6e1d4ac5e7de5c4b0b858f6cffc6fb6",
+    "ART-31-gpu-front-hat1-moving.png": "337b373982d5f06c477e3fa5209139cba5c1e1e3b445e618396cb64638da1505",
+    "ART-31-gpu-front-hat1-rest.png": "763468c6858fb269a1578ba642d1019c73940530eae7e2d38ce28f9dd124202c",
+    "ART-31-gpu-front-hat1-settled.png": "763468c6858fb269a1578ba642d1019c73940530eae7e2d38ce28f9dd124202c",
+    "ART-31-gpu-front_left-hat0-moving.png": "8e27553c1f9a1274c3b42f98a1b56704162e4c45c31c484eda5e531de669bdb8",
+    "ART-31-gpu-front_left-hat0-rest.png": "b211f264563f4ebc1baf13446b48bebe4c1d4346ff034869f0c233d474cf6666",
+    "ART-31-gpu-front_left-hat0-settled.png": "b211f264563f4ebc1baf13446b48bebe4c1d4346ff034869f0c233d474cf6666",
+    "ART-31-gpu-front_left-hat1-moving.png": "7d917cdc3170217770b77f6aa05d166b674fad61d03f2a61a4a326705c3b6b4f",
+    "ART-31-gpu-front_left-hat1-rest.png": "957ea755ca0c27a93dea2884e7f99e5da00a147550c406c47da0a68c3ea7a4ed",
+    "ART-31-gpu-front_left-hat1-settled.png": "957ea755ca0c27a93dea2884e7f99e5da00a147550c406c47da0a68c3ea7a4ed",
+    "ART-31-gpu-front_right-hat0-moving.png": "641621e1a27cd347c36612e017a1bf7fae6675be5d90e027eac4f74f8fbb11f3",
+    "ART-31-gpu-front_right-hat0-rest.png": "42267bbcd3af819f0ee8978b1fc0e2e1c88ebcea579fafea5b06bfe223baf41a",
+    "ART-31-gpu-front_right-hat0-settled.png": "42267bbcd3af819f0ee8978b1fc0e2e1c88ebcea579fafea5b06bfe223baf41a",
+    "ART-31-gpu-front_right-hat1-moving.png": "3027a96b51a5dbd5c844a0e045b54efbabcf6fb92f1843044ec804606f89410d",
+    "ART-31-gpu-front_right-hat1-rest.png": "8d8eb62eef2f4465e138d398ced89e0d8d5a20659ce228ab7ab5ee4445966067",
+    "ART-31-gpu-front_right-hat1-settled.png": "8d8eb62eef2f4465e138d398ced89e0d8d5a20659ce228ab7ab5ee4445966067",
+    "ART-31-gpu-left-hat0-moving.png": "ed8042e49a1e54e2b2b8b4d1f28090a48090dd7eb190492a4359150a5ab1a812",
+    "ART-31-gpu-left-hat0-rest.png": "8b0b5c14331db6dd883a9eb23f74e551cda2d856bdf85ae56598dadc134594e7",
+    "ART-31-gpu-left-hat0-settled.png": "8b0b5c14331db6dd883a9eb23f74e551cda2d856bdf85ae56598dadc134594e7",
+    "ART-31-gpu-left-hat1-moving.png": "66a45df4b01f8e476bb1f4f6659defa4fdcc8e8af7a0478a1109206b7d7f47cf",
+    "ART-31-gpu-left-hat1-rest.png": "f4a0e33ea734b9941aafed4e2d9fab22df1ebd6e61418091c5c91f26e5fdcded",
+    "ART-31-gpu-left-hat1-settled.png": "f4a0e33ea734b9941aafed4e2d9fab22df1ebd6e61418091c5c91f26e5fdcded",
+    "ART-31-gpu-right-hat0-moving.png": "eaa6405007b494d91780232e42d2a937f2808a7c0ab8793f690d213f5225f18d",
+    "ART-31-gpu-right-hat0-rest.png": "f3f99e3e5cd97e4cb7040e60e0e3a590cddb5795dcab1ec444e0060147b18dce",
+    "ART-31-gpu-right-hat0-settled.png": "f3f99e3e5cd97e4cb7040e60e0e3a590cddb5795dcab1ec444e0060147b18dce",
+    "ART-31-gpu-right-hat1-moving.png": "5903646b1e6ca3c0973b083b78dd9ef0ef408d54ffd6ba07fd68bf24afc57056",
+    "ART-31-gpu-right-hat1-rest.png": "d379db11529833c146b016f7619d998facb004c8fb2ba8b516c948bb16c9b210",
+    "ART-31-gpu-right-hat1-settled.png": "d379db11529833c146b016f7619d998facb004c8fb2ba8b516c948bb16c9b210"
+  },
+  "media_encoding": "Native island copies use a smaller review encoding, retaining 1280x720, 30 FPS, all frames and timing. Original higher-quality movies remain in the isolated review folder. Pixel comparisons use PNGs, not encoded video."
+}

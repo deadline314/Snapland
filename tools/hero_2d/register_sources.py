@@ -119,6 +119,7 @@ def main():
     except ModuleNotFoundError:
         from head_attachments import apply as attach_heads
     data=attach_heads(data)
+    data['stable_head_parts']=json.loads((PACK/'head-stability.json').read_text(encoding='utf-8'))
     (PACK/'authoring.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print('Registered original 2D source silhouettes and explicit per-cel geometry; not visual acceptance')
 if __name__=='__main__':main()

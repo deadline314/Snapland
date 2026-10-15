@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+FRONT MATERIAL bounds=[P: (69, 72), S: (146, 130)] body=193 palette=8340 hair=8340
+PASS: 64cels x3styles horn/ear opaque component contacts
+CACHE_BENCH 64celsx3styles first_ms=6979 repeat_ms=3640 source_metrics=8 haircuts=16
+PASS: measured walk head attachments

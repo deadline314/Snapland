@@ -6,6 +6,7 @@ const TEXTURE_CACHE_LIMIT := 96
 const IMAGE_CACHE_LIMIT := 8
 const ACTORS := ["traveller", "ticket", "imp", "announcer"]
 
+var _stable_walk_pixels = preload("res://game/world/walk_pixel_sources.gd").new()
 var manifest: Dictionary = {}
 var diagnostics: Array[String] = []
 var _images: Dictionary = {}
@@ -128,6 +129,8 @@ func normalized_anchor(actor: String, action: String, direction: String, frame_i
 	var anchors: Dictionary = anchors_value
 	if not anchors.has(name): return Vector2i.ZERO
 	var layout: Dictionary = _layouts[layout_key]
+	if name=="head" and layout.has("stable_head"):
+		return layout.stable_head
 	var point := _point(anchors[name])
 	var scale_factor := float(layout.scale)
 	var destination: Vector2i = layout.destination
@@ -305,6 +308,13 @@ func texture(actor: String, action: String, direction: String, frame_index: int,
 	fixed_canvas.fill(Color.TRANSPARENT)
 	fixed_canvas.blend_rect(output, Rect2i(Vector2i.ZERO, scaled_size), destination)
 	output = fixed_canvas
+	if action in ["walk","walk_candidate"]:
+		var registered: Image = _stable_walk_pixels.frame(actor+"-"+action,direction,index)
+		if registered!=null:
+			output=registered
+			var registered_layout: Dictionary=_layouts["%s|%s|%s|%d|%s" % [actor, action, direction, index, JSON.stringify(equipped)]]
+			registered_layout.destination += _stable_walk_pixels.root_offset(actor+"-"+action,direction,index)
+			_layouts["%s|%s|%s|%d|%s" % [actor, action, direction, index, JSON.stringify(equipped)]]["stable_head"]=_stable_walk_pixels.head_anchor(actor+"-"+action,direction)
 	var result := ImageTexture.create_from_image(output)
 	_textures[key] = result
 	_texture_order.append(key)

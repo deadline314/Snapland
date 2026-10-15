@@ -1,0 +1,35 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[park_world] scenery meshes: 865, nodes: 1643
+PASS: game startup and clean shutdown
+
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@754; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@752; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@750; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@748; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@836; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@904; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@897; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@891; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@885; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@879; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@957; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@955; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1008; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1007; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1006; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)

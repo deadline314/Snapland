@@ -5,9 +5,9 @@ from tools.hero_2d.check_hair_gpu import validate_cases
 
 class HairGPUReceiptTest(unittest.TestCase):
     def cases(self):
-        return [{"key":f"{view}-hat{int(hat)}","view":view,"hat":hat} for view in ["front","left"] for hat in [False,True]]
+        return [{"key":f"{view}-hat{int(hat)}","view":view,"hat":hat} for view in ["front","front_right","right","back_right","back","back_left","left","front_left"] for hat in [False,True]]
 
-    def test_exact_four_configurations_are_required(self):
+    def test_exact_sixteen_configurations_are_required(self):
         self.assertEqual(validate_cases({"cases":self.cases()}),self.cases())
 
     def test_empty_missing_or_incomplete_evidence_fails(self):

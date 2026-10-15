@@ -17,7 +17,7 @@ func _run() -> void:
 	right = LibraryScript.new();right.position=Vector2(960,500);add_child(right)
 	rig = RigScript.new();left.add_child(rig)
 	if not rig.initialize(left): get_tree().quit(1);return
-	for direction in ["front","left"]:
+	for direction in LibraryScript.DIRECTIONS:
 		for hat in [false,true]:
 			var state := {"action":"idle" if direction=="front" else "walk","direction":direction,"visual_direction":direction,"frame":0 if direction=="front" else 1}
 			left.set_appearance("windswept",hat,"tide_jacket");right.set_appearance("windswept",hat,"tide_jacket")

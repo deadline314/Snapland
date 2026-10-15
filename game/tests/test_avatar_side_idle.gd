@@ -1,5 +1,5 @@
 extends SceneTree
-## Stops must use dedicated side-idle poses, with a brief blink and planted boots.
+## Production stops use a registered walk hold; legacy idle timing remains source data only.
 const ParkWorld = preload("res://game/world/park_world.gd")
 var failures: Array[String] = []
 
@@ -27,9 +27,9 @@ func _run() -> void:
 			world.time = float(sample[0])
 			world.last_avatar_frame = -1
 			world._refresh_avatar_texture(7)
-			_check(world.last_avatar_frame == int(sample[1]), direction + " idle timing holds neutral and keeps blink brief")
+			_check(world.last_avatar_frame == int(sample[1]), direction + " retains legacy timing metadata without changing the grounded hold")
 			var expected = world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, direction, int(sample[1]), "idle")
-			_check(world.avatar.texture == expected, direction + " stop displays its full dedicated source, not a frozen stride")
+			_check(world.avatar.texture == expected, direction + " stop displays the registered grounded hold")
 		world.reduced_motion = true
 		world.time = 2.25
 		world.last_avatar_frame = -1
@@ -48,7 +48,7 @@ func _run() -> void:
 	_check(world.avatar_motion_rig == null, "dedicated side idle keeps procedural gait disabled")
 	world.queue_free()
 	await process_frame
-	if failures.is_empty(): print("PASS: dedicated side-idle sources, brief blink timing, and reduced-motion neutral stance")
+	if failures.is_empty(): print("PASS: registered grounded holds, retained idle source metadata, and reduced-motion stance")
 	quit(0 if failures.is_empty() else 1)
 
 func _check(ok: bool, message: String) -> void:

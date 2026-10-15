@@ -49,7 +49,7 @@ func _run() -> void:
 	var reference: Vector2 = rig.skeleton.position
 	walking.frame = 1
 	rig.sync_pose(walking)
-	check(rig.skeleton.position-reference==Vector2(2,2),"hair root must follow the observed 2px head-pixel translation in the same pose tick")
+	check(rig.skeleton.position==reference,"a rigid authored head must not inherit the discarded source cel jitter")
 	check(rig.mesh.position==rig.skeleton.position,"weighted mesh and root share the same per-cel head attachment")
 	library.free()
 	if failures.is_empty(): print("PASS 2D hair rig: 640 exact rest composites, protected roots/hats, weighted native bones, pause and original fallback")

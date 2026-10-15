@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "part": "Rigid head and neck only; shoulder, camera, backpack, arms and legs remain authored moving cels",
+  "seam_y": 197,
+  "actions": [
+    "walk",
+    "idle",
+    "start",
+    "stop",
+    "turn"
+  ],
+  "head_anchor": [
+    140,
+    148
+  ],
+  "references": {
+    "front": {
+      "tide_jacket": {
+        "action": "walk",
+        "frame": 0
+      },
+      "long_coat": {
+        "action": "walk",
+        "frame": 0
+      }
+    },
+    "front_right": {
+      "tide_jacket": {
+        "action": "walk",
+        "frame": 0
+      },
+      "long_coat": {
+        "action": "walk",
+        "frame": 0
+      }
+    },
+    "right": {
+      "tide_jacket": {
+        "action": "walk",
+        "frame": 0
+      },
+      "long_coat": {
+        "action": "walk",
+        "frame": 0
+      }
+    },
+    "back_right": {
+      "tide_jacket": {
+        "action": "walk",
+        "frame": 0
+      },
+      "long_coat": {
+        "action": "walk",
+        "frame": 0
+      }
+    },
+    "back": {
+      "tide_jacket": {
+        "action": "walk",
+        "frame": 0
+      },
+      "long_coat": {
+        "action": "walk",
+        "frame": 0
+      }
+    },
+    "back_left": {
+      "tide_jacket": {
+        "action": "walk",
+        "frame": 0
+      },
+      "long_coat": {
+        "action": "walk",
+        "frame": 0
+      }
+    },
+    "left": {
+      "tide_jacket": {
+        "action": "walk",
+        "frame": 0
+      },
+      "long_coat": {
+        "action": "walk",
+        "frame": 0
+      }
+    },
+    "front_left": {
+      "tide_jacket": {
+        "action": "walk",
+        "frame": 0
+      },
+      "long_coat": {
+        "action": "walk",
+        "frame": 0
+      }
+    }
+  },
+  "lower_body_sha256": {
+    "front/tide_jacket/0": "3b8c4e915c20418772080a300368edb74e08bad64c13b67fb80c8ee66cc7b1ac",
+    "front/tide_jacket/1": "6c5f4fff944ca29284025ad3d99adfb625eb92463bfdd77f2c7c6563450c1103",
+    "front/tide_jacket/2": "5251152c446ed365c6634889b27cf009d9945ae8fafacb2a7feb37ed1eacca9f",
+    "front/tide_jacket/3": "98a348d1a3f85e660ad5e99b9bef6c583107b831ecabd2abdee2484a47e0b299",
+    "front/tide_jacket/4": "f93356b8fb5652d9551622937295957cfe4f3684421742187abf35b507ce387d",
+    "front/tide_jacket/5": "9727f8f85c11e98a94199df102797c09e12f399a3afe24d9454b726c795a8713",
+    "front/tide_jacket/6": "178472029e88461b6ba904de396bba89cf77e658eae38f2c3713534e0862e2fe",
+    "front/tide_jacket/7": "55bfa0e5d66f4442209cdcfac778cb58747ecb6443d92bb6d00a9483fafdd400",
+    "front/long_coat/0": "f4aa16ed6136d86b8979b096aef5c5c512b0c3d78e6b269fa401dfce08cad9eb",
+    "front/long_coat/1": "e527d76f34663fe5a9bc13c70b8619f709dec3bacfa0131da3e4cd14cc00c4ce",
+    "front/long_coat/2": "b24252723d9dbb4bb49f99231cc25f126202b36a0bbec3a9059b4f68de8393f9",
+    "front/long_coat/3": "838546e293030dde3643024e6a034425e21f1aa08ffcc2f403af6bae0b2b3189",
+    "front/long_coat/4": "5ac18f9a0d90ac665fba26ef0e09f9179ad4da6a3a54b727b28519dec6d19db9",
+    "front/long_coat/5": "f415a0169a6149f4fcfdb728a9a61f9949c766441ed3eb45d4965ce35cbe8209",
+    "front/long_coat/6": "715dd49bbef3cda0957ecef8811abc2f5cdd585e534b4113671fe61422dad7dc",
+    "front/long_coat/7": "327b0b1788ce606a05ab9d6a1eb17c4a861bbdd084e4aabf7d8a70208a7052f4",
+    "front_right/tide_jacket/0": "37045cc043567f8170a16263b50dca827c3f8cffe65156b113b51eb2b6f98700",
+    "front_right/tide_jacket/1": "9ff07dcc882441c8ed75a152a3a9d22d43f0c5b679ae54fe6c7b161b3246c844",
+    "front_right/tide_jacket/2": "d3793b4fbffce9dc7864af88e771c03efa331b5822684e47de39aaa3651a8d60",
+    "front_right/tide_jacket/3": "6402261315e795fa86f464386a1b2e6f9b1e688493aff2ffdaa172ccc7e9c102",
+    "front_right/tide_jacket/4": "e074c99c9991049b814123c3e55455c5ce6e780a8f71b9a07039f11c35050f5c",
+    "front_right/tide_jacket/5": "f68a296d484f0bfeeaa79cdbd0136a1e7fc71dca1f21b864c56425d2138c7bb1",
+    "front_right/tide_jacket/6": "40e9adfb4fdc812682e17ac94cfd1a0f61c43ee38b53c6e10198e594551b20e0",
+    "front_right/tide_jacket/7": "0a4d29b81883ae1f61840c4d480044abd4c10d077e5befa00cafd9b60aba26c9",
+    "front_right/long_coat/0": "8a4d7802d1a48d3be3956a665e28065b50a04a0802096a98d4945aef45879afb",
+    "front_right/long_coat/1": "0268125f6a582d86298ab8dee1a3c4c59ac27d1e8b125e3dd0f404ea4304c04e",
+    "front_right/long_coat/2": "c377f9fa220bfe4bd48bf483e7d3fbfc6728ea5cd372f090d3b861855e849721",
+    "front_right/long_coat/3": "e030465ae3173bf6074ac94005b55fee4a4b021a051f57c5c0e72815791483d7",
+    "front_right/long_coat/4": "66b04c39dc5867e26bc1a1879bafd35f2aff26f77dacd599f933ae344802c49c",
+    "front_right/long_coat/5": "7d368ce3ae0a6f8bd61090e168e882820300c4a0f1b74d15f72c4413dfb6aecf",
+    "front_right/long_coat/6": "1cf48fcbe272d0e8212ea557a7cbfc8725c3d894085480305419ed3b5ff8adbb",
+    "front_right/long_coat/7": "3192506486d835fa46daffb5efffffbc846d084ecd63fee9e7850b72eeb0aede",
+    "right/tide_jacket/0": "cf8638d4b204775b31e215923a604e42a8282f57dde2162178c8106dc3f66986",
+    "right/tide_jacket/1": "219f3dac920a5e7dc2a32df14aa291a38949d998f7393447d12cfaf986916b1f",
+    "right/tide_jacket/2": "e663f5859d484b4ee936577b740c3d55f8f2e5afc49a1ec4ea289763048f877d",
+    "right/tide_jacket/3": "4424683c08a3b1e7766b5f021ae2f212b2d8a4e5dbdf1f7385244fdf38554f0c",
+    "right/tide_jacket/4": "c81146c77de05dcd48f91bc387e22e4a1cb94d5b0f8f64ead685dbac8570b191",
+    "right/tide_jacket/5": "de3b41c937ea682e2b711e2442fd98d5ec590453a36f4738d80fc63285074abe",
+    "right/tide_jacket/6": "770c546db1447514288d38be17a7b86c24557850068e8fe01581f3f548aa4c9a",
+    "right/tide_jacket/7": "b40526f0d52aacb16eff36666881acf937f5a1c3b9cc16bc7053fc98e34381e1",
+    "right/long_coat/0": "e8761f67f80899080d38084cb5cc08415e5bce16aedee73a39e940a08be5a554",
+    "right/long_coat/1": "8d195facc1d0e71278e849b26f5382ea1ced373e8bcd1927077b7db0edb34494",
+    "right/long_coat/2": "d4c2dcc68a718fce31c08012594e21905544aaf4d5a9536a3e63d5add298d18f",
+    "right/long_coat/3": "2efdf6918f2fcb41177f95462acfe88eaa4a85b7fdd9fdcafbe8286f1a7a3f99",
+    "right/long_coat/4": "6e9cec927907c8feb9acea9f3cff59d94bc7a7879143f2633256d9ebb7b4180f",
+    "right/long_coat/5": "1dc7ef72127c7aa6ce257666259a65463787c16470e06dc42caf0094d7c6208d",
+    "right/long_coat/6": "0e12cabbdd45663e5eb1cc4d80a1cc6abb769978fc350ae11563b5ffcecae1ed",
+    "right/long_coat/7": "70fad7993b58d014a9a1b807639f01b35bb6d48281a1a77ca1d20f54d947ed2b",
+    "back_right/tide_jacket/0": "36e6c04a2b1b115a282eb6ade4923f0e55107aec2b11f12b6765143f8a2d8e20",
+    "back_right/tide_jacket/1": "b6b83b20811b1488f9e4d463f3ea8099ec9b33969c7e444db58616050ec5f645",
+    "back_right/tide_jacket/2": "fbf1e2c150e7215f871e766eef9e440e38cb770df9e0db40e2b43ecdccb1e7fc",
+    "back_right/tide_jacket/3": "a4da7d63620149569f319dbf27caedf4621f70ac94fe379d328ed4dcf37ed6e1",
+    "back_right/tide_jacket/4": "5e454d64fd825f4054c11cfc076fbd0890711f2b0835d3a25095070b7c266241",
+    "back_right/tide_jacket/5": "07dc073f098b686c7328410ddf17692f07df5d68b3db71ad5530ab7abea0a1a6",
+    "back_right/tide_jacket/6": "6feeaebcdae5215e2ef9aa4b38ac9e64ded589039f85b0c30795d0ffc96fee85",
+    "back_right/tide_jacket/7": "93bb7173bcc226834be769ac30743d8866579eb4d6b6d7de79f6739c3427533d",
+    "back_right/long_coat/0": "e3345c82a140ca8382b0a624add1c7dd93780dc00a89663a77bb0e0b07f689a6",
+    "back_right/long_coat/1": "494eaed9c3fb6eab1e3e5d20099bed8144b5ea71897269caafa19460f8598d65",
+    "back_right/long_coat/2": "2aaaa307d3b798828badca45d06f95a555a5e2dff733514531d1d53afc12277a",
+    "back_right/long_coat/3": "831dceb04a60986f92db520e0bcd383979d4207ecf549f8c5b98e2d5e5113555",
+    "back_right/long_coat/4": "e627fdb53f2435610960cd8bd631f75e5d8fcdeb8efc1f75fc72a591d1e27f6b",
+    "back_right/long_coat/5": "15cb49a51b889232d8c2a84d9343233610100383aa7131e765b752ec3988b4d6",
+    "back_right/long_coat/6": "2721fb5edbec71125053ef2975add3dd865e0f5dfd58c1af5369fef26d8d6acf",
+    "back_right/long_coat/7": "7e2e882dda08c8aca19355d9f4c3713baad9f56b8635ca6b1fe3abc626f78712",
+    "back/tide_jacket/0": "a6494bbed909c8e0e19799fe8cb83e5eb48b24233b5a3dc7c0cca7ae5bce709f",
+    "back/tide_jacket/1": "22cd34a1e6b5ed38c88b571bfeb36f30305c70c4850914827264a19fe7ed13a5",
+    "back/tide_jacket/2": "02ee0adc83adc06110575debd01b57604ff107c92dd50d9ae4579a19d7d112fa",
+    "back/tide_jacket/3": "6c9613cde5bc044fc2a39d932dba72fc1cfbb773189c80e9dbad31995f690fa8",
+    "back/tide_jacket/4": "794b9e778d69bbc324e43489ba10dabc382dbeb31b9abca38bb1d8dd2c7eaebb",
+    "back/tide_jacket/5": "5b9bd446a1e2d66081b71ba5ad4eef3efce113a1678c5ada70cdad8f8027f5a9",
+    "back/tide_jacket/6": "b4c259678490780f86d38ea3664c4b45184cb50bdd0c57c45c071148a4d058dc",
+    "back/tide_jacket/7": "0010ce6c30a2f176df50ad9fd29ad913bd0969d9e6e415bd1f6e4553007f3753",
+    "back/long_coat/0": "bc6de9abd2120185b8ced9e0b1bdedcf500ed571ce615c495a0cfca8f3ce7c89",
+    "back/long_coat/1": "1f3ebe86a19db3e78a7d8136c4fd6250e0d96e0ec5c37d710f49b0cc181fde9e",
+    "back/long_coat/2": "637626d3218b269c869b4c45a6153ba6367a7da67adec4ef1944e375badf3b4f",
+    "back/long_coat/3": "ede89b9b7d39d7436b161e9d752d82b20355f32e42f6627357abb3620f504cc9",
+    "back/long_coat/4": "73dbff5c6393fd9cea9f66f5612e7d3aba5be07b9d694a1a904009407f0a101f",
+    "back/long_coat/5": "f51c44b202a915b3c9114292c824bc7c112cc80339e811a9ec5d276da2ee3237",
+    "back/long_coat/6": "7e9b147711ebe872646908122100b1f521151e45323524e7562ce3bbeb98faff",
+    "back/long_coat/7": "7ed05a477cd8ea560391bd6c0fa0c8aecd3ead379802f87bef407b49b7634098",
+    "back_left/tide_jacket/0": "17aafd1aa2d2ba062ce41c53aed5ce6b9ecc42f6b3934446caafb2d98d179980",
+    "back_left/tide_jacket/1": "58fdd149aebc11a27fa9a82b5d52ae4cf2fa130c16bef32431e54edc08362a9a",
+    "back_left/tide_jacket/2": "c0d730e4b700f7fec40bee594050949d0a4cc5d298345d664b4677a09f16df98",
+    "back_left/tide_jacket/3": "fa49d19089683179c0b9a7f949747313717d221834542c306f7cab12e73ccf0d",
+    "back_left/tide_jacket/4": "eb0b8f158ddee539a40eb99dd0e47a5a3cd03bc28af7da29419f08c94f414d30",
+    "back_left/tide_jacket/5": "8bd019cb7f2beb094df9716b7e0ffcc189fbea1bdc5c5afe9cb417783c15c860",
+    "back_left/tide_jacket/6": "92e8ae5fe7f34dc11e9cef3e763ffa96064eb6bdcceb064c4d846987b83820e8",
+    "back_left/tide_jacket/7": "4d766529bfafad2a28d9f41628f89754361ce5ba184376ee15b1522accc5d42f",
+    "back_left/long_coat/0": "59806f853354daa689d3448973f04eaa569a49a1acd6673d5b3eb5beb4434f2f",
+    "back_left/long_coat/1": "45fee9a00121daadee5c5f3db5b9bee93eacec13c6cce62f14219bd7ca231024",
+    "back_left/long_coat/2": "0b19a5a4972efd646917f216987233bf29d2a00270f4cae1009e61ee6dcd5d0d",
+    "back_left/long_coat/3": "2ddd202c1fbb12c6a0b0466572de9f732c64f5172dc4dcdc2ddefde659325c41",
+    "back_left/long_coat/4": "ba934509129f0831639b74107756b20987102cf9ddbe75e34fc78e4f6252f260",
+    "back_left/long_coat/5": "e4453f6006ed24fa1ae38309497270ed87096e8ad5a5bc3d29ec76b9b6376597",
+    "back_left/long_coat/6": "94feb46ff33e95d27a1b08caad2d68ed72daf4dc4598ff7df4c448146eacaecf",
+    "back_left/long_coat/7": "e5cc67a6aab43c82579139ceec6ca88186091fcc4107da39306180b46cf3d171",
+    "left/tide_jacket/0": "e42ab6e9b149414c0eeef963d0b7bf5b4451be27f82734a26a56e24c02b0d2e9",
+    "left/tide_jacket/1": "046fdbd26d9e1ff6bc99f2e2305a70647904b48d1d771b8abd31dba1fe1afce8",
+    "left/tide_jacket/2": "f3677337bf6142b01fdde54cd3be532ae6857fc189bfbfe3c718ab63253d5882",
+    "left/tide_jacket/3": "9c9195e225c4682357a62848c14d726863b9d55983334b508190b83c9955026d",
+    "left/tide_jacket/4": "6ec0df3119900204a49854f24c0997a00e9c2a72cc6c44433d32bafd4b2d7379",
+    "left/tide_jacket/5": "47745f3d658e00ebe1eef6ce7959f65fb90d637dfd01d3937c68e158b0671de7",
+    "left/tide_jacket/6": "0904aa9e691dd3812865f646ceab2bbc4c31ae1677d0c00032b996cde5d05373",
+    "left/tide_jacket/7": "409785600eebc33789894271a1f363c705766258544da9864d15537ab2b582ef",
+    "left/long_coat/0": "8c2705bac58551a50197e18af03a6cba701212f02dcdb82967d9e0f811e65522",
+    "left/long_coat/1": "152ccd9b9612763d9c72f2141aef2a763c65665aae5a2e988f935ed8a0146552",
+    "left/long_coat/2": "6d70c2dd088034ec2218d153755b346eeb686c012802945a21fb0cd5486e20f1",
+    "left/long_coat/3": "4e755f1bc6dc7f2881155c43a1770740dab49cf739b298217324367ce41bf151",
+    "left/long_coat/4": "610b517474953eb5da804ec3080c20535745e7d2dc2b763c4e31ddf9676f54e1",
+    "left/long_coat/5": "db339bc9c4eb24a55cf5a4e35c5071dc15def0e28fa7627f7a5ab39e41f76b95",
+    "left/long_coat/6": "0d471596f280b791259483b12a26dff6738952e0f63227f7e012a4f034b58067",
+    "left/long_coat/7": "f8d8881c069c57f693be42be592f02fe73f62e786c613e867ddaaed5fd655217",
+    "front_left/tide_jacket/0": "dc713bf272dd5e916bdbaba86e5740baf9447f265372f0d12f63240b4d297bb1",
+    "front_left/tide_jacket/1": "127f7a484b54c8c8abb8403dda7a328d68ad11d6f071c2eb3c3545bd61f1cc36",
+    "front_left/tide_jacket/2": "34a12560f43539428f2da5124f06543df62b90951393681ae6872031764fd98f",
+    "front_left/tide_jacket/3": "cb5fd70a016233459a5f040ddf964f48531b2063c05f242550707cb600b4d4c9",
+    "front_left/tide_jacket/4": "3822204f696a9320890a17e5e534e2981471ef73e08ce0cd090a869240cb48d7",
+    "front_left/tide_jacket/5": "bf4ddfcb3c6891af8a08387bd20a22eecb072ab4cc9c17d97a17140797e0e0c5",
+    "front_left/tide_jacket/6": "410024532605356b51a76952c2f61665ef3c7751c5f115bac96c47909ab7b8fa",
+    "front_left/tide_jacket/7": "9f283560d3e29c25b55557bad79e89e7c38eeea905e39f618a3bb44ceaa8103f",
+    "front_left/long_coat/0": "57c7f34f29e63e748e5969c8d40d4a84ecf0bd1f6a2308ab894c867ecb8b138d",
+    "front_left/long_coat/1": "b09c42cd831be4e29e1d5081c06775fd4fd21451c08d8c8aac4c571c8b71b465",
+    "front_left/long_coat/2": "5fcb3b9631a24584a4d8fa5a23eb6160c9efcde6fbef22c09d6ee2c5ece5f8a8",
+    "front_left/long_coat/3": "bceec02f7b8e564dbf001fd98175731182873dfd9758e390b29a3e821c7235d5",
+    "front_left/long_coat/4": "8ec4debf9b40244e5cb5e7d64d9a3147e6af13094746f9e1249daf1637091a32",
+    "front_left/long_coat/5": "c13ea11252dadc7ea0d9b3c09daf76c62ce7cc35dd5b2d791e03e9f4cd53cdf8",
+    "front_left/long_coat/6": "ab65d010a0de03d817abeee5b4e00caf66b00e8f1bc48d3324b9806a2035f095",
+    "front_left/long_coat/7": "f98a97f51585fc33cd678798845c6ebd87b2dfc18e4571e339443bda4d3a9f34"
+  },
+  "seams_by_heading": {
+    "front": 197,
+    "front_right": 197,
+    "right": 195,
+    "back_right": 193,
+    "back": 193,
+    "back_left": 193,
+    "left": 195,
+    "front_left": 197
+  },
+  "lower_body_sha256_from_y": 206
+}

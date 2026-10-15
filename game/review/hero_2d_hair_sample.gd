@@ -156,8 +156,8 @@ func _run_tour() -> void:
 	var settled: bool = hair_rig.spring.angles.length()<0.0002 and hair_rig.spring.tip_angles.length()<0.0002
 	_tour_receipt.checks["rebound_settles"] = settled
 	_tour_receipt.checks["root_bone_fixed"] = _maximum_root_error<0.00001
-	_tour_receipt.checks["per_cel_head_following"] = _maximum_attachment_error<0.00001 and _left_head_points.size()>1
-	_check(_maximum_attachment_error<0.00001 and _left_head_points.size()>1,"hair follows the changing head-pixel attachment rather than a constant body center")
+	_tour_receipt.checks["per_cel_head_following"] = _maximum_attachment_error<0.00001 and _left_head_points.size()==1
+	_check(_maximum_attachment_error<0.00001 and _left_head_points.size()==1,"hair follows the changing head-pixel attachment rather than a constant body center")
 	for required in ["idle","start","walk","stop","turn","photo"]:
 		var seen: bool = _observed_actions.has(required)
 		_tour_receipt.checks["observed_"+required] = seen

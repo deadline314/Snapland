@@ -1,0 +1,27 @@
+{
+  "result": "PASS",
+  "files": {
+    "authoring.json": "f0c3d0f59f7d78dadf986137ab9b987ca4ae7b57ed65f747fedd04992056a197",
+    "manifest.json": "d1af3260f338fbb02640fc8c7aed2922e938511b3f64ef48ed6a13fbc7929ad3",
+    "compiled/registration.json": "1520b40b1b66e8e1ee6ec1099348324ec85327f213f952c493940862d426f3cb",
+    "compiled/coat-idle.png": "c49b09ec16281427dc3d33a1c4876b749e327962af7f44e554978d6ec6500483",
+    "compiled/coat-photo.png": "2a33f05fd2d26e0706ec03df5f82a6fd60af24a27f2a8c14324d929f41f9757a",
+    "compiled/coat-start.png": "f88f7baf3fe1c084a38e33d7e58b62eca2dd9b70d5200b25e62a3a2a594bf9ff",
+    "compiled/coat-stop.png": "b318f1217908ca6c209dc160fd19a90953fb9d890a200c98107e1849461b328c",
+    "compiled/coat-turn.png": "3818424e70550f50d59df9b62da67daa9787bbbd05c6cb362da62d708323dd51",
+    "compiled/coat-walk.png": "5760adffaa7658ac3494e19373ab31920da54b298a9cb8fd769d63e71a3a7149",
+    "compiled/fallback.png": "6a9a43091a24f434362691d2ab5eef8fc3ac621f4f60d6657940a68331c864a2",
+    "compiled/hair-bob-underhat.png": "376d5c5d379d8e14b6829c7c0bd67c26a4fea5dc6b58c0235a4dfc2a979c62fb",
+    "compiled/hair-bob.png": "3a81e3961843f18fec353e7e2431f327e38ba17dd9dc88826cc0b0dbea9f52d3",
+    "compiled/hair-windswept-underhat.png": "e686951330937935ab3eaf41335617485e9306e1afb25176f275c330883d2079",
+    "compiled/hair-windswept.png": "1c8857a20824200e48c23c35120a0be2596f1e6b7853710f9d7cb08b9578b5ae",
+    "compiled/hats-traveller.png": "a55d6b11969379c10aafbf4dad0b1dcb9f810dc2acd25e850bf05aa5d164cab1",
+    "compiled/tide-idle.png": "7a23681a85f16f80857085c9cf9b2fc15930b8b544c93482511373e606eb8bbd",
+    "compiled/tide-photo.png": "38bc793ec11662ede7b602f84be536f4e1dcaab5b7ded5593b844b75e7f19505",
+    "compiled/tide-start.png": "841fde146a3feed0dac9975118eee02bda69b83e355a0b1564585ce4608da666",
+    "compiled/tide-stop.png": "024a4da3fe6720368ade07578c28edf841cb5a7c5d50246201eb505c730284fa",
+    "compiled/tide-turn.png": "5ae65fa5d58244e9f79c28dfae8f2a51ec05f005467a89c84a120d812ff44e04",
+    "compiled/tide-walk.png": "76fbbdd47ca4bbdaf9246f2368e2ba4e10f49230b2ee120069b1823384f9458b"
+  },
+  "changed_on_second_build": []
+}

@@ -6,6 +6,8 @@ const ATLAS_PATH := "res://assets/characters/traveller-actions-v1.png"
 const CACHE_LIMIT := 128
 const WALK_SOURCE_METRICS_LIMIT := 64
 const HAIR_CUT_CACHE_LIMIT := 24
+const AUTHORED_HEAD_CACHE_LIMIT := 128
+const HEAD_MATERIAL_OWNERS_PATH := "res://assets/characters/avatar-head-material-owners-v1.json"
 const DIRECTIONS := ["front", "left", "back", "right"]
 const WALK_DIRECTIONS := ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]
 const WALK_METADATA_PATH := "res://assets/characters/walk-regions.json"
@@ -78,6 +80,8 @@ var _atlas_valid := false
 var _cache: Dictionary = {}
 var _cache_order: Array[String] = []
 var _warned_missing := false
+var inspect_authored_idle_sources := false # Source-art diagnostics; production rest uses the shared walk hold.
+var _stable_walk_pixels = preload("res://game/world/walk_pixel_sources.gd").new()
 var _walk_images: Dictionary = {}
 var _walk_metadata: Dictionary = {}
 var _walk_frame_counts: Dictionary = {}
@@ -85,6 +89,10 @@ var _walk_idle_frames: Dictionary = {}
 var _walk_head_anchor_cache: Dictionary = {}
 var _walk_head_width_cache: Dictionary = {}
 var _walk_source_metrics_cache: Dictionary = {}
+var _authored_source_metrics_cache: Dictionary = {}
+var _authored_source_metrics_order: Array[String] = []
+var _head_material_owners: Dictionary = {}
+var _missing_head_owner_warnings: Dictionary = {}
 var _walk_source_image_cache: Dictionary = {}
 var _hair_cut_cache: Dictionary = {}
 var _walk_source_image_build_count := 0
@@ -103,6 +111,22 @@ var animation_library: RefCounted
 func _init() -> void:
 	_load_atlas()
 	animation_library = CharacterAnimationLibraryScript.new()
+	if FileAccess.file_exists(HEAD_MATERIAL_OWNERS_PATH):
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(HEAD_MATERIAL_OWNERS_PATH))
+		if parsed is Dictionary and int(parsed.get("schema_version",0)) == 2:
+			_head_material_owners = parsed.get("owners",{})
+	var stable_owners: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/walk-stability-v1/head-owners.json"))
+	if stable_owners is Dictionary and int(stable_owners.get("schema_version",0))==2:
+		_head_material_owners.merge(stable_owners.get("owners",{}),true)
+
+func head_source_signature(source: Image) -> String:
+	var context := HashingContext.new()
+	context.start(HashingContext.HASH_SHA256)
+	context.update(source.get_data())
+	return context.finish().hex_encode()
+
+func has_head_material_owner(source: Image) -> bool:
+	return _head_material_owners.get(head_source_signature(source),{}).has("hair_owner_spans")
 
 func pose_height() -> int:
 	return _canvas_height if _atlas_valid else 96
@@ -150,7 +174,9 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
 	var authored_action: bool = animation_library != null and animation_library.has_action("traveller", action, safe_direction)
 	var safe_action := action if ACTIONS.has(action) or action == "walk" or authored_action else "idle"
-	var has_manifest_frame: bool = safe_action != "walk" and animation_library.has_frame("traveller", safe_action, safe_direction)
+	# Grounded rest shares the registered walking hold cel. Switching to a separately
+	# cropped idle portrait changes skull size/position at every start and stop.
+	var has_manifest_frame: bool = safe_action != "walk" and (safe_action != "idle" or inspect_authored_idle_sources) and animation_library.has_frame("traveller", safe_action, safe_direction)
 	var authored_frame_count: int = animation_library.frame_count("traveller", safe_action, safe_direction) if has_manifest_frame else 0
 	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, authored_frame_count - 1) if has_manifest_frame else clampi(frame, 0, 2)
 	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction))) and not has_manifest_frame
@@ -228,8 +254,17 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		if use_walk_source:
 			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, image)
 		else:
-			source_metrics = _authored_source_hair_metrics(image, safe_direction, safe_action)
-	if has_hair_overlay and has_manifest_frame and safe_action == "idle" and safe_direction in ["front_left", "front_right"]:
+			source_metrics = _authored_source_hair_metrics(image, safe_direction, safe_action, safe_frame)
+	if has_hair_overlay and not bool(source_metrics.get("hair_owner_valid",false)):
+		# A changed cel needs its own reviewed ownership data. Preserve the
+		# complete source instead of guessing which head/body pixels to erase.
+		has_hair_overlay = false
+		use_replacement_hair = false
+		var missing_signature := head_source_signature(image)
+		if not _missing_head_owner_warnings.has(missing_signature):
+			_missing_head_owner_warnings[missing_signature]=true
+			push_warning("Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.")
+	if has_hair_overlay and has_manifest_frame and ((safe_action == "idle" and safe_direction in ["front_left", "front_right"]) or (safe_action == "celebrate" and safe_direction == "front")):
 		var replacement_cut := _cached_hair_cut(str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.ink)
 		if not bool(source_metrics.get("replacement_geometry_valid", false)) or not bool(replacement_cut.get("face_opening_valid", false)):
 			# Keep a complete authored source if either side of registration is
@@ -240,18 +275,24 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if not has_hair_overlay and str(normalized_appearance.get("hair", "windswept")) == "windswept" and str(normalized_appearance.get("hair_color", "ink")) != "ink":
 		if source_metrics.is_empty():
 			var palette_hair_source := _walk_pose_image(safe_direction, walk_frame) if use_walk_source else image.duplicate()
-			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_source else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action)
+			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_source else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action, safe_frame)
 		palette_hair_indices = source_metrics.source_hair_indices
 	if species=="elf" and source_metrics.is_empty():
-		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action)
+		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
+	if has_authored_source_hair and source_metrics.is_empty():
+		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
 	# Recolor the body before compositing a prepared haircut. Applying the coat
 	# palette afterwards mistakes dark-blue curls over the jacket for cloth.
-	_apply_palette(image, normalized_appearance, outfit, pose_direction, has_hair_overlay, palette_hair_indices)
+	_apply_palette(image, normalized_appearance, outfit, pose_direction, has_hair_overlay, source_metrics.get("source_hair_indices",palette_hair_indices),source_metrics.get("palette_hair_indices",PackedInt32Array()),source_metrics.get("foreground_indices",PackedInt32Array()))
 	if has_hair_overlay:
 		face_backdrop = image.duplicate()
 		source_hair_mask = source_metrics.source_hair_mask
 		face_mask = source_metrics.face_mask
 		_strip_source_hair(image,source_metrics.get("replacement_source_mask",source_hair_mask),source_metrics.get("replacement_source_indices",source_metrics.source_hair_indices))
+		# The neck/collar and the rest of this exact full-body cel are a separate
+		# foreground owner. They cannot disappear with similarly colored hair.
+		var body_start := clampi(int(source_metrics.get("body_start_y",image.get_height())),0,image.get_height())
+		image.blit_rect(face_backdrop,Rect2i(0,body_start,image.get_width(),image.get_height()-body_start),Vector2i(0,body_start))
 
 	if use_replacement_hair and _hair_atlas_valid and DIRECTIONS.has(safe_direction):
 		_apply_hair_atlas(image, str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.get(str(normalized_appearance.get("hair_color", "ink")), HAIR_COLORS.ink), hair_hat_offset, head_shift_x, hair_target_width, face_backdrop, source_metrics, SKIN_COLORS.get(str(normalized_appearance.get("skin", "warm")), SKIN_COLORS.warm))
@@ -265,7 +306,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if species == "elf" and _species_atlas_valid:
 		if source_metrics.is_empty():
 			var raw_pose := _walk_pose_image(safe_direction,walk_frame) if use_walk_source else image
-			source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,raw_pose) if use_walk_source else _authored_source_hair_metrics(raw_pose,safe_direction,safe_action)
+			source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,raw_pose) if use_walk_source else _authored_source_hair_metrics(raw_pose,safe_direction,safe_action,safe_frame)
 		var ear_layer := Image.create(image.get_width(),image.get_height(),false,Image.FORMAT_RGBA8)
 		ear_layer.fill(Color.TRANSPARENT)
 		_apply_species_ears(ear_layer,species,pose_direction,vertical_offset,SKIN_COLORS.get(str(normalized_appearance.get("skin","warm")),SKIN_COLORS.warm),species_head_shift_x,image,source_metrics)
@@ -278,12 +319,41 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		_apply_hat(image, hat, safe_direction, hair_hat_offset, head_shift_x)
 	elif has_hat_overlay:
 		_apply_diagonal_hat(image, hat, safe_direction, hair_hat_offset, head_shift_x)
+	if face_backdrop != null and has_manifest_frame:
+		_restore_authored_foreground(image, face_backdrop, safe_action, safe_direction, safe_frame)
 	var result := ImageTexture.create_from_image(image)
 	_cache[key] = result
 	_cache_order.append(key)
 	while _cache_order.size() > CACHE_LIMIT:
 		_cache.erase(_cache_order.pop_front())
 	return result
+
+func _authored_foreground_mask(source: Image, polygons: Array) -> PackedByteArray:
+	var mask := PackedByteArray()
+	if polygons.is_empty(): return mask
+	mask.resize(source.get_width()*source.get_height())
+	for raw_polygon in polygons:
+		var polygon := PackedVector2Array()
+		for point in raw_polygon: polygon.append(Vector2(float(point[0]),float(point[1])))
+		if polygon.size()<3: continue
+		for y in range(source.get_height()):
+			for x in range(source.get_width()):
+				if source.get_pixel(x,y).a>0.05 and Geometry2D.is_point_in_polygon(Vector2(x+0.5,y+0.5),polygon): mask[y*source.get_width()+x]=1
+	return mask
+
+func _restore_authored_foreground(image: Image, source: Image, action: String, direction: String, frame: int) -> void:
+	var entry: Dictionary = animation_library.manifest.get("actors", {}).get("traveller", {}).get(action, {}).get(direction, {})
+	var frames: Array = entry.get("frames", [])
+	if frame < 0 or frame >= frames.size(): return
+	for raw_polygon in frames[frame].get("foreground_polygons", []):
+		var polygon := PackedVector2Array()
+		for point in raw_polygon: polygon.append(Vector2(float(point[0]), float(point[1])))
+		if polygon.size() < 3: continue
+		for y in range(image.get_height()):
+			for x in range(image.get_width()):
+				if Geometry2D.is_point_in_polygon(Vector2(x + 0.5, y + 0.5), polygon):
+					var pixel := source.get_pixel(x, y)
+					if pixel.a > 0.4: image.set_pixel(x, y, pixel)
 
 func _load_atlas() -> void:
 	if not ResourceLoader.exists(ATLAS_PATH):
@@ -528,6 +598,11 @@ func _walk_pose_image(direction: String, frame: int) -> Image:
 	var cache_key := "%s:%d" % [direction, frame]
 	if _walk_source_image_cache.has(cache_key):
 		return _walk_source_image_cache[cache_key].duplicate()
+	var registered: Image = _stable_walk_pixels.frame("hero",direction,frame)
+	if registered!=null:
+		_walk_source_image_cache[cache_key]=registered.duplicate()
+		_walk_source_image_build_count+=1
+		return registered
 	var data: Dictionary = _walk_metadata["%s:%d" % [direction, frame]]
 	var region: Rect2i = data.region
 	var anchor: Dictionary = data.anchor
@@ -567,7 +642,8 @@ func walk_head_anchor(direction: String, frame: int) -> Vector2i:
 	var face_left := image.get_width()
 	var face_right := -1
 	var source_skin := Color("#fdbb7b")
-	for y in range(image.get_height()):
+	var head_limit := int(_stable_walk_pixels.manifest.get("hero/"+direction,{}).get("head_neck_seam_y",image.get_height()))
+	for y in range(head_limit):
 		for x in range(image.get_width()):
 			var color := image.get_pixel(x, y)
 			if color.a < 0.4:
@@ -621,22 +697,27 @@ func _atlas_pose_image(pose: int) -> Image:
 				image.set_pixel(target_x, target_y, color)
 	return image
 
-func _apply_palette(image: Image, appearance: Dictionary, outfit_id: String, direction: String, use_hair_overlay: bool, source_hair_indices: PackedInt32Array = PackedInt32Array()) -> void:
+func _apply_palette(image: Image, appearance: Dictionary, outfit_id: String, direction: String, use_hair_overlay: bool, source_hair_indices: PackedInt32Array = PackedInt32Array(), coat_exclusion_indices: PackedInt32Array = PackedInt32Array(), foreground_indices: PackedInt32Array = PackedInt32Array()) -> void:
 	var skin_target: Color = SKIN_COLORS.get(str(appearance.get("skin", "warm")), SKIN_COLORS.warm)
 	var hair_target: Color = HAIR_COLORS.get(str(appearance.get("hair_color", "ink")), HAIR_COLORS.ink)
 	var coat_target: Color = OUTFIT_COLORS.get(outfit_id, OUTFIT_COLORS["outfit-tide"])
 	var skin_source := Color("#fdbb7b")
 	var hair_source := Color("#2a2b48")
 	var coat_source := Color("#267e83")
+	var owned_hair := PackedByteArray()
+	owned_hair.resize(image.get_width()*image.get_height())
+	for index in (coat_exclusion_indices if not coat_exclusion_indices.is_empty() else source_hair_indices): owned_hair[index] = 1
+	var coat_excluded := owned_hair.duplicate()
+	for index in foreground_indices: coat_excluded[index]=1
 	for y in range(image.get_height()):
 		for x in range(image.get_width()):
 			var color := image.get_pixel(x, y)
 			if color.a < 0.05: continue
 			var skin_zone := (y >= image.get_height() * 0.16 and y <= image.get_height() * 0.57) or (y >= image.get_height() * 0.62 and y <= image.get_height() * 0.87)
 			var coat_zone := y >= image.get_height() * 0.35 and y <= image.get_height() * 0.78 and not (x >= image.get_width() * 0.40 and x <= image.get_width() * 0.61 and y >= image.get_height() * 0.54)
-			if skin_zone and _is_color_family(color, skin_source, 0.055, 0.35):
+			if skin_zone and owned_hair[y*image.get_width()+x] == 0 and _is_color_family(color, skin_source, 0.055, 0.35):
 				image.set_pixel(x, y, _shade_preserving(color, skin_source, skin_target))
-			elif coat_zone and _is_color_family(color, coat_source, 0.075, 0.12):
+			elif coat_zone and coat_excluded[y*image.get_width()+x] == 0 and _is_color_family(color, coat_source, 0.075, 0.12):
 				image.set_pixel(x, y, _shade_preserving(color, coat_source, coat_target))
 	if not use_hair_overlay and not source_hair_indices.is_empty() and hair_target != HAIR_COLORS.ink:
 		var width := image.get_width()
@@ -644,7 +725,7 @@ func _apply_palette(image: Image, appearance: Dictionary, outfit_id: String, dir
 			var x := index % width
 			var y := index / width
 			var color := image.get_pixel(x, y)
-			if color.a > 0.05 and _is_source_hair(color):
+			if color.a > 0.05:
 				image.set_pixel(x, y, _shade_preserving(color, hair_source, hair_target))
 
 func _is_color_family(color: Color, reference: Color, tolerance: float, minimum_value: float) -> bool:
@@ -799,7 +880,7 @@ func _hair_face_opening(hair: Image) -> Rect2i:
 		result = span if result.size == Vector2i.ZERO else result.merge(span)
 	return result
 
-func _hair_face_opening_mask(hair: Image, opening: Rect2i) -> PackedByteArray:
+func _hair_face_opening_mask(hair: Image, opening: Rect2i, include_antialias: bool = false) -> PackedByteArray:
 	var mask := PackedByteArray()
 	mask.resize(hair.get_width()*hair.get_height())
 	if opening.size.x<=0: return mask
@@ -814,7 +895,7 @@ func _hair_face_opening_mask(hair: Image, opening: Rect2i) -> PackedByteArray:
 		# physical source-head contour distinguishes scalp from exterior gaps;
 		# selecting only the widest channel leaves transparent cracks by an eye.
 		for x in range(left+1,right):
-			if hair.get_pixel(x,y).a<0.05: mask[y*hair.get_width()+x]=1
+			if hair.get_pixel(x,y).a < (1.0 if include_antialias else 0.05): mask[y*hair.get_width()+x]=1
 	return mask
 
 func _mask_bounds(mask: PackedByteArray, width: int) -> Rect2i:
@@ -895,22 +976,16 @@ func _blend_registered_hair(image: Image, hair: Image, direction: String, crown_
 	# independently stretch x/y or fit the body to a changed hairstyle.
 	var resized := Vector2i(maxi(1, roundi(hair.get_width() * ratio)), maxi(1, roundi(hair.get_height() * ratio)))
 	var position := Vector2i(image.get_width() / 2 + shift_x, crown_y) - Vector2i(roundi(used.get_center().x * ratio), roundi(used.position.y * ratio))
-	if opening.size.x > 0 and target_face.size.x > 0 and not direction.begins_with("back"):
-		position.x = roundi(target_face.get_center().x - opening.get_center().x * ratio)
-		position.y = target_face.position.y - roundi(opening.position.y * ratio)
-	elif source_bounds.size.x > 0:
+	if source_bounds.size.x > 0:
 		position.x = roundi(source_bounds.get_center().x - used.get_center().x * ratio)
+	if source_bounds.size.x > 0:
+		# A face opening is an occlusion boundary, never a head attachment point.
+		# Register every cut to this exact source cel's crown, independently of
+		# eye expression, forelock skin colors, action, and animation direction.
 		position.y = source_bounds.position.y - roundi(used.position.y * ratio)
-	if bool(source_metrics.get("constrain_crown", false)) and source_bounds.size.x > 0:
-		# The cream forelock is higher than the anatomical face opening. Letting
-		# that patch register a new cut raises the whole wig and enlarges scalp.
-		position.y = maxi(position.y, source_bounds.position.y - roundi(used.position.y * ratio))
 	hair.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
-	var constrained_opening := PackedByteArray()
-	if bool(source_metrics.get("constrain_crown", false)):
-		constrained_opening = _connected_face_opening_mask(hair, _hair_face_opening(hair))
-	# Reconstruct only the existing, source-opaque anatomical head contour.
-	# Cut alpha tells us which samples are exposed, including open-bottom cuts.
+	# The anatomical head exists independently of the selected haircut. Its
+	# source-derived contour excludes spiky tufts and has a complete neck seam.
 	var underlay_indices: PackedInt32Array = source_metrics.get("skull_underlay_indices", PackedInt32Array())
 	var underlay_colors: PackedColorArray = source_metrics.get("skull_underlay_colors",PackedColorArray())
 	for sample_index in range(underlay_indices.size()):
@@ -918,10 +993,6 @@ func _blend_registered_hair(image: Image, hair: Image, direction: String, crown_
 		var source_point := Vector2i(index % image.get_width(), index / image.get_width())
 		var local_point := source_point - position
 		var inside_cut := local_point.x>=0 and local_point.y>=0 and local_point.x<hair.get_width() and local_point.y<hair.get_height()
-		# A pointed source-hair tuft is not exposed scalp. For registered idle
-		# cuts, fill only the actual transparent face opening between strands.
-		if not constrained_opening.is_empty() and (not inside_cut or constrained_opening[local_point.y * hair.get_width() + local_point.x] == 0):
-			continue
 		var exposed := not inside_cut or hair.get_pixelv(local_point).a<1.0
 		if exposed:
 			# Bob's side strands end above the nose: requiring enclosed hair alpha
@@ -950,43 +1021,91 @@ func _hair_attachment_anchor(hair: Image) -> Vector2i:
 	return Vector2i(hair.get_width() / 2, 0)
 
 func _walk_source_hair_metrics(direction: String, frame: int, source: Image) -> Dictionary:
-	var key := "%s:%d" % [direction, frame]
+	var canonical: bool = _stable_walk_pixels.manifest.has("hero/"+direction)
+	var key := "%s:%d" % [direction, 0 if canonical else frame]
 	if _walk_source_metrics_cache.has(key):
 		return _walk_source_metrics_cache[key]
-	var metrics := _build_source_hair_metrics(source, direction)
+	var guide := _walk_pose_image(direction, 0 if canonical else walk_idle_frame(direction))
+	# One immutable head owns one rig/face mask. Moving limbs cannot alter it.
+	var metrics := _build_source_hair_metrics(guide if canonical else source, direction, guide, 20)
 	_walk_source_metrics_cache[key] = metrics
 	_source_metrics_build_count += 1
 	assert(_walk_source_metrics_cache.size() <= WALK_SOURCE_METRICS_LIMIT)
 	return metrics
 
-func _authored_source_hair_metrics(source: Image, direction: String, action: String) -> Dictionary:
+func _authored_source_hair_metrics(source: Image, direction: String, action: String, frame: int = 0) -> Dictionary:
+	var entries: Array = animation_library.manifest.get("actors",{}).get("traveller",{}).get(action,{}).get(direction,{}).get("frames",[])
+	var entry_hash := hash(entries[frame]) if frame >= 0 and frame < entries.size() else 0
+	var cache_key := "%d:%s:%s:%d:%d:%d" % [animation_library.get_instance_id(),action,direction,frame,hash(source.get_data()),entry_hash]
+	if _authored_source_metrics_cache.has(cache_key):
+		_authored_source_metrics_order.erase(cache_key)
+		_authored_source_metrics_order.append(cache_key)
+		return _authored_source_metrics_cache[cache_key]
 	var guide: Image
-	if action == "idle" and direction in ["front_left", "front_right"]:
-		var neutral: Texture2D = animation_library.texture("traveller", "idle", direction, 0)
+	if direction in ["front", "front_left", "front_right", "left", "right"]:
+		var neutral: Texture2D = animation_library.texture("traveller", action, direction, 0)
 		if neutral != null: guide = neutral.get_image()
-	var metrics := _build_source_hair_metrics(source, direction, guide)
+	# The celebration's closed-eye cel exposes less dark hair below the temple
+	# than its neutral cel (15 canonical pixels); width and crown still match.
+	var explicit_eyes: Array[Rect2i] = []
+	var frames: Array = animation_library.manifest.get("actors",{}).get("traveller",{}).get(action,{}).get(direction,{}).get("frames",[])
+	if frame >= 0 and frame < frames.size():
+		for region in frames[frame].get("normalized_face_eyes",[]):
+			explicit_eyes.append(Rect2i(int(region[0]),int(region[1]),int(region[2]),int(region[3])))
+	var foreground_mask := _authored_foreground_mask(source,frames[frame].get("foreground_polygons",[]) if frame>=0 and frame<frames.size() else [])
+	var head_contour := PackedVector2Array()
+	if frame >= 0 and frame < frames.size():
+		for point in frames[frame].get("normalized_head_contour",[]):
+			head_contour.append(Vector2(point[0],point[1]))
+	var metrics := _build_source_hair_metrics(source, direction, guide, 20, explicit_eyes, foreground_mask, head_contour)
 	var geometry_valid: bool = not metrics.skull_underlay_indices.is_empty() and not metrics.face_indices.is_empty()
 	metrics["replacement_geometry_valid"] = geometry_valid
 	metrics["constrain_crown"] = guide != null and geometry_valid
+	_authored_source_metrics_cache[cache_key] = metrics
+	_authored_source_metrics_order.append(cache_key)
+	while _authored_source_metrics_order.size() > AUTHORED_HEAD_CACHE_LIMIT:
+		_authored_source_metrics_cache.erase(_authored_source_metrics_order.pop_front())
 	return metrics
 
-func _build_source_hair_metrics(source: Image, direction: String, eye_guide: Image = null) -> Dictionary:
+func _build_source_hair_metrics(source: Image, direction: String, eye_guide: Image = null, guide_height_tolerance: int = 8, explicit_eyes: Array[Rect2i] = [], foreground_mask: PackedByteArray = PackedByteArray(), head_contour: PackedVector2Array = PackedVector2Array()) -> Dictionary:
 	var source_hair_mask := _source_hair_mask(source, direction)
 	var skin_bounds_out: Array = [Rect2i()]
 	var face_mask := _source_face_mask(source, source_hair_mask, skin_bounds_out)
 	var source_bounds := _mask_bounds(source_hair_mask, source.get_width())
+	# Material ownership is independent of expression/guide availability. Keep
+	# a missing blink guide from changing the source coat palette in fallback.
+	var palette_hair_indices := PackedInt32Array()
+	var palette_owner: Dictionary = _head_material_owners.get(head_source_signature(source),{})
+	var palette_limit := int(palette_owner.get("body_start_y",source.get_height()))
+	for index in _mask_indices(source_hair_mask):
+		if index/source.get_width() < palette_limit: palette_hair_indices.append(index)
 	var skin_bounds: Rect2i = skin_bounds_out[0]
+	if direction == "back":
+		# A rear view has no face. Hands below the head cannot become an ear or
+		# accessory anchor merely because they share the selected skin palette.
+		face_mask.fill(0)
+		skin_bounds = Rect2i()
 	var guide_eyes: Array[Rect2i] = []
-	if eye_guide != null and eye_guide.get_size() == source.get_size() and direction in ["front_left", "front_right"]:
+	if eye_guide != null and eye_guide.get_size() == source.get_size() and direction in ["front", "front_left", "front_right", "left", "right"]:
 		var guide_hair := _source_hair_mask(eye_guide, direction)
 		var guide_bounds := _mask_bounds(guide_hair, source.get_width())
 		# Only borrow registration from the neutral cel of the same authored
 		# direction. No guide pixels are copied into a closed-eye expression.
-		if guide_bounds.size.x > 0 and abs(source_bounds.size.x - guide_bounds.size.x) <= 8 and abs(source_bounds.size.y - guide_bounds.size.y) <= 8:
+		if guide_bounds.size.x > 0 and abs(source_bounds.size.x - guide_bounds.size.x) <= 8 and abs(source_bounds.size.y - guide_bounds.size.y) <= guide_height_tolerance and abs(source_bounds.position.y - guide_bounds.position.y) <= 8:
 			var delta := Vector2i(roundi(source_bounds.get_center().x - guide_bounds.get_center().x), source_bounds.position.y - guide_bounds.position.y)
 			for eye in _source_eye_regions(eye_guide, guide_bounds):
 				guide_eyes.append(Rect2i(eye.position + delta, eye.size))
-	var face_layers := _semantic_face_layers(source,direction,source_hair_mask,source_bounds,skin_bounds,guide_eyes)
+	var face_layers := _semantic_face_layers(source,direction,source_hair_mask,source_bounds,skin_bounds,guide_eyes,explicit_eyes,foreground_mask,head_contour)
+	# Runtime ownership comes only from this immutable source's baked 2D
+	# spans. Color/guide geometry cannot expand the head cut into the collar.
+	if palette_owner.has("hair_owner_spans"):
+		source_hair_mask.fill(0)
+		for span: Array in palette_owner.hair_owner_spans:
+			for x in range(int(span[1]),int(span[2])): source_hair_mask[int(span[0])*source.get_width()+x]=1
+		palette_hair_indices = _mask_indices(source_hair_mask)
+	if not foreground_mask.is_empty():
+		for index in _mask_indices(foreground_mask): source_hair_mask[index]=0
+		palette_hair_indices=_mask_indices(source_hair_mask)
 	var replacement_mask := source_hair_mask.duplicate()
 	if not face_layers.is_empty():
 		face_mask = face_layers.face_mask
@@ -995,26 +1114,39 @@ func _build_source_hair_metrics(source: Image, direction: String, eye_guide: Ima
 			if face_mask[index]!=0:
 				source_hair_mask[index]=0
 				replacement_mask[index]=0
+	if not foreground_mask.is_empty():
+		for index in _mask_indices(foreground_mask): replacement_mask[index]=0
+	var body_start := int(face_layers.get("body_start_y",source_bounds.end.y))
+	for y in range(clampi(body_start,0,source.get_height()),source.get_height()):
+		for x in range(source.get_width()):
+			source_hair_mask[y*source.get_width()+x]=0
+			replacement_mask[y*source.get_width()+x]=0
 	return {
 		"source_hair_mask": source_hair_mask,
 		"face_mask": face_mask,
 		"source_hair_indices": _mask_indices(source_hair_mask),
+		"palette_hair_indices":palette_hair_indices,
+		"hair_owner_valid":palette_owner.has("hair_owner_spans"),
+		"foreground_indices":_mask_indices(foreground_mask),
 		"replacement_source_mask":replacement_mask,
 		"replacement_source_indices":_mask_indices(replacement_mask),
 		"face_indices": _mask_indices(face_mask),
 		"source_bounds": source_bounds,
-		"skin_bounds": skin_bounds,
+		"skin_bounds": face_layers.get("skin_bounds",skin_bounds),
 		"skull_underlay_indices": face_layers.get("skull_indices",PackedInt32Array()),
 		"skull_underlay_colors": face_layers.get("skull_colors",PackedColorArray()),
 		"skull_contour": face_layers.get("skull_contour",PackedVector2Array()),
 		"face_features_named": face_layers.get("features",{}),
+		"eyes_bounds": face_layers.get("eyes_bounds", Rect2i()),
+		"body_start_y": face_layers.get("body_start_y",source_bounds.end.y),
+		"old_forelock_indices":face_layers.get("old_forelock_indices",PackedInt32Array()),
 		"side_open_head":direction in ["right","left","back_right","back_left"],
 		"target_face": face_layers.get("target_face",_mask_bounds(face_mask,source.get_width())),
 	}
 
 func _source_eye_regions(source: Image, hair_bounds: Rect2i) -> Array[Rect2i]:
 	var width := source.get_width()
-	var limit := mini(source.get_height(),roundi(source.get_height()*0.55))
+	var limit := mini(source.get_height(), hair_bounds.end.y)
 	var visited := PackedByteArray()
 	visited.resize(width*limit)
 	var eyes: Array[Rect2i] = []
@@ -1043,15 +1175,22 @@ func _source_eye_regions(source: Image, hair_bounds: Rect2i) -> Array[Rect2i]:
 					if pixel.a>0.4 and not _is_color_family(pixel,Color("#fdbb7b"),0.055,0.25):
 						visited[neighbor]=1
 						queue.append(neighbor)
-			if queue.size()>=6 and bounds.size.x>=3 and bounds.size.x<hair_bounds.size.x*0.24 and bounds.size.y>=6 and bounds.size.y<hair_bounds.size.y*0.30:
+			if queue.size()>=6 and bounds.size.x>=maxi(3,roundi(hair_bounds.size.x*0.045)) and bounds.size.x<hair_bounds.size.x*0.24 and bounds.size.y>=6 and bounds.size.y<hair_bounds.size.y*0.30 and bounds.position.y >= hair_bounds.position.y + roundi(hair_bounds.size.y * 0.5):
 				eyes.append(bounds)
 	eyes.sort_custom(func(a: Rect2i,b: Rect2i)->bool: return a.position.x<b.position.x)
 	return eyes
 
-func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedByteArray, hair_bounds: Rect2i, skin_bounds: Rect2i, guide_eyes: Array[Rect2i] = []) -> Dictionary:
-	var eyes := _source_eye_regions(source,hair_bounds)
-	var guided_blink := eyes.is_empty() and not guide_eyes.is_empty()
-	if eyes.is_empty(): eyes = guide_eyes
+func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedByteArray, hair_bounds: Rect2i, skin_bounds: Rect2i, guide_eyes: Array[Rect2i] = [], explicit_eyes: Array[Rect2i] = [], foreground_mask: PackedByteArray = PackedByteArray(), head_contour: PackedVector2Array = PackedVector2Array()) -> Dictionary:
+	# Rear camera highlights and hands are not eyes. Rear quarters expose an
+	# ear/side face only; a full rear view exposes neither facial feature.
+	if direction.begins_with("back"): return _side_face_layers(source,direction,hair_mask,hair_bounds,skin_bounds)
+	var eyes := explicit_eyes if not explicit_eyes.is_empty() else _source_eye_regions(source,hair_bounds)
+	var expected_eyes := 1 if direction in ["left","right"] else 2
+	# A closed lash or cream highlight can form one false eye component. A
+	# front view still has two anatomical eyes, even when one or both close.
+	var guided_blink := eyes.size() != expected_eyes and guide_eyes.size() == expected_eyes
+	if guided_blink: eyes = guide_eyes
+	if eyes.size() != expected_eyes: return _side_face_layers(source,direction,hair_mask,hair_bounds,skin_bounds)
 	if eyes.is_empty(): return _side_face_layers(source,direction,hair_mask,hair_bounds,skin_bounds)
 	var width := source.get_width()
 	var height := source.get_height()
@@ -1109,11 +1248,23 @@ func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedBy
 	left=maxi(left,all_eyes.position.x-roundi(all_eyes.size.y*0.30))
 	right=mini(maxi(right,all_eyes.end.x-1),all_eyes.end.x+roundi(all_eyes.size.y*0.30))
 	var contour_points := PackedVector2Array()
+	var anatomical_top := maxi(hair_bounds.position.y+roundi(hair_bounds.size.y*0.22),all_eyes.position.y-roundi(all_eyes.size.y*3.0))
 	var colors := PackedColorArray()
 	var skin_component := PackedByteArray()
 	skin_component.resize(width*height)
-	var skin_queue := PackedInt32Array([cheek_y*width+center_x])
-	skin_component[skin_queue[0]]=1
+	var skin_queue := PackedInt32Array()
+	var skin_source := Color("#fdbb7b")
+	# A raised camera covers the central cheek. Seed the actual visible skin
+	# in the eye band instead of creating a one-pixel "skin" component from
+	# a camera pixel. Disconnected left/right face surfaces share this head.
+	for y in range(all_eyes.position.y,mini(height,cheek_y+1)):
+		for x in range(maxi(0,left),mini(width,right+1)):
+			var index := y*width+x
+			var color := source.get_pixel(x,y)
+			if (foreground_mask.is_empty() or foreground_mask[index]==0) and color.a>0.4 and _is_color_family(color,skin_source,0.055,0.25):
+				skin_component[index]=1
+				skin_queue.append(index)
+	if skin_queue.is_empty(): return {}
 	var cursor := 0
 	while cursor<skin_queue.size():
 		var index := skin_queue[cursor]
@@ -1121,18 +1272,25 @@ func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedBy
 		var point := Vector2i(index%width,index/width)
 		for offset in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
 			var next: Vector2i = point+offset
-			if next.x<0 or next.x>=width or next.y<0 or next.y>=roundi(height*0.60): continue
+			if next.x<0 or next.x>=width or next.y<0 or next.y>=mini(height,hair_bounds.end.y+roundi(hair_bounds.size.x*0.20)): continue
 			var neighbor := next.y*width+next.x
-			if skin_component[neighbor]==0 and source.get_pixelv(next).a>0.4 and _is_color_family(source.get_pixelv(next),Color("#fdbb7b"),0.055,0.25):
+			if (foreground_mask.is_empty() or foreground_mask[neighbor]==0) and skin_component[neighbor]==0 and source.get_pixelv(next).a>0.4 and _is_color_family(source.get_pixelv(next),Color("#fdbb7b"),0.055,0.25):
 				skin_component[neighbor]=1
 				skin_queue.append(neighbor)
+	var surface_color := skin_source
+	var closest_skin := INF
+	for index in skin_queue:
+		var color := source.get_pixel(index%width,index/width)
+		var distance := Vector3(color.r-skin_source.r,color.g-skin_source.g,color.b-skin_source.b).length_squared()
+		if distance<closest_skin:
+			closest_skin=distance;surface_color=color
 	for x in range(left,right+1):
 		# Use the actual source cheek surface palette, not a previously selected
 		# skin color that would be palette-mapped twice. A shared sample avoids
 		# projecting nose/cheek pixel columns as vertical forehead stripes.
-		colors.append(source.get_pixel(center_x,cheek_y))
-		for y in range(maxi(0,hair_bounds.position.y),cheek_y+1):
-			if source.get_pixel(x,y).a>0.4:
+		colors.append(surface_color)
+		for y in range(maxi(0,anatomical_top),cheek_y+1):
+			if (foreground_mask.is_empty() or foreground_mask[y*width+x]==0) and source.get_pixel(x,y).a>0.4:
 				contour_points.append(Vector2(x,y))
 				contour_points.append(Vector2(x+1,y+1))
 				break
@@ -1142,15 +1300,17 @@ func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedBy
 	var ear_pixels := PackedInt32Array()
 	var skull_left := left
 	var skull_right := right
+	var connected_skin_bounds := Rect2i(center_x,cheek_y,1,1)
 	for index in skin_queue:
 		var point := Vector2i(index%width,index/width)
+		connected_skin_bounds = connected_skin_bounds.merge(Rect2i(point,Vector2i.ONE))
 		if point.y<all_eyes.end.y:
 			contour_points.append(Vector2(point))
 			contour_points.append(Vector2(point+Vector2i.ONE))
 			skull_left=mini(skull_left,point.x)
 			skull_right=maxi(skull_right,point.x)
-	for y in range(all_eyes.position.y,mini(height,roundi(height*0.60))):
-		for x in range(maxi(0,skin_bounds.position.x-2),mini(width,skin_bounds.end.x+2)):
+	for y in range(all_eyes.position.y,mini(height,connected_skin_bounds.end.y+3)):
+		for x in range(maxi(0,connected_skin_bounds.position.x-2),mini(width,connected_skin_bounds.end.x+2)):
 			var color := source.get_pixel(x,y)
 			if color.a<=0.4: continue
 			var skin_neighbor := skin_component[y*width+x]!=0
@@ -1161,57 +1321,89 @@ func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedBy
 				mask[y*width+x]=1
 				if y>=all_eyes.end.y: lower_pixels.append(y*width+x)
 				else: ear_pixels.append(y*width+x)
-				if x>=left and x<=right and _is_color_family(color,Color("#fdbb7b"),0.055,0.25): contour_points.append(Vector2(x,y))
+				if (foreground_mask.is_empty() or foreground_mask[y*width+x]==0) and x>=left and x<=right and _is_color_family(color,Color("#fdbb7b"),0.055,0.25): contour_points.append(Vector2(x,y))
 	features["lower_face_mouth"]=lower_pixels
 	features["ears"]=ear_pixels
 	var contour := Geometry2D.convex_hull(contour_points)
+	# Include the anti-aliased boundary around the sampled pixel contour. Final
+	# samples still require source alpha and the replacement's actual opening.
+	var expanded_contours := Geometry2D.offset_polygon(contour,1.0)
+	if not expanded_contours.is_empty(): contour = expanded_contours[0]
+	# A held camera hides both the cheek run and the ear/temple connection.
+	# Those cels carry a reviewed anatomical contour, independent of the prop;
+	# it only supplies skin beneath the cut and never moves source features.
+	if head_contour.size() >= 3:
+		contour = head_contour
+		for point in contour:
+			skull_left = mini(skull_left,floori(point.x))
+			skull_right = maxi(skull_right,ceili(point.x))
 	var indices := PackedInt32Array()
 	var skull_colors := PackedColorArray()
-	for y in range(maxi(0,hair_bounds.position.y),all_eyes.end.y):
+	var body_start_y := all_eyes.end.y+roundi(all_eyes.size.y*(0.9 if direction in ["left","right"] else 1.5))
+	for y in range(maxi(0,anatomical_top),mini(all_eyes.end.y,connected_skin_bounds.end.y)):
 		for x in range(maxi(0,skull_left),mini(width,skull_right+1)):
 			var index := y*width+x
-			if mask[index]==0 and source.get_pixel(x,y).a>0.4 and Geometry2D.is_point_in_polygon(Vector2(x+0.5,y+0.5),contour):
+			if (foreground_mask.is_empty() or foreground_mask[index]==0) and mask[index]==0 and source.get_pixel(x,y).a>0.4 and Geometry2D.is_point_in_polygon(Vector2(x+0.5,y+0.5),contour):
 				indices.append(index)
 				skull_colors.append(colors[clampi(x-left,0,colors.size()-1)])
-	return {"face_mask":mask,"features":features,"skull_indices":indices,"skull_colors":skull_colors,"skull_contour":contour,"target_face":Rect2i(left,skin_bounds.position.y-2,right-left+1,all_eyes.end.y-skin_bounds.position.y+2)}
+	return {"face_mask":mask,"features":features,"skull_indices":indices,"skull_colors":skull_colors,"skull_contour":contour,"eyes_bounds":all_eyes,"body_start_y":body_start_y,"target_face":Rect2i(left,skin_bounds.position.y-2,right-left+1,all_eyes.end.y-skin_bounds.position.y+2)}
 
 func _side_face_layers(source: Image,direction: String,hair_mask: PackedByteArray,hair_bounds: Rect2i,skin_bounds: Rect2i) -> Dictionary:
 	if direction not in ["back_right","back_left"] or skin_bounds.size.x<=0: return {}
 	var width := source.get_width()
 	var mask := PackedByteArray()
 	mask.resize(width*source.get_height())
-	var points := PackedVector2Array()
-	var face_indices := PackedInt32Array()
-	var side_start := skin_bounds.position.y+roundi(skin_bounds.size.y*0.45)
 	var skin_source := Color("#fdbb7b")
-	var widest_side := -1
-	for y in range(skin_bounds.position.y+skin_bounds.size.y/2,mini(source.get_height(),hair_bounds.end.y)):
-		var count := 0
-		for x in range(maxi(0,skin_bounds.position.x),mini(width,skin_bounds.end.x)):
-			if _is_color_family(source.get_pixel(x,y),skin_source,0.055,0.25): count+=1
-		if count>widest_side:
-			widest_side=count
-			side_start=maxi(skin_bounds.position.y,y-2)
+	var visited := PackedByteArray()
+	visited.resize(width*source.get_height())
+	var side_skin := PackedInt32Array()
+	# The actual ear/side face is the largest connected skin surface within
+	# the head. A separate cream forelock and a hand below it are not a face.
+	for y in range(hair_bounds.position.y,mini(source.get_height(),hair_bounds.end.y)):
+		for x in range(maxi(0,hair_bounds.position.x),mini(width,hair_bounds.end.x)):
+			var index := y*width+x
+			var color := source.get_pixel(x,y)
+			if visited[index]!=0 or color.a<=0.4 or not _is_color_family(color,skin_source,0.055,0.25): continue
+			var component := PackedInt32Array([index])
+			visited[index]=1
+			var cursor := 0
+			while cursor<component.size():
+				var current := Vector2i(component[cursor]%width,component[cursor]/width)
+				cursor+=1
+				for offset in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
+					var neighbor: Vector2i=current+offset
+					if not hair_bounds.has_point(neighbor): continue
+					var next := neighbor.y*width+neighbor.x
+					var pixel := source.get_pixelv(neighbor)
+					if visited[next]==0 and pixel.a>0.4 and _is_color_family(pixel,skin_source,0.055,0.25):
+						visited[next]=1
+						component.append(next)
+			if component.size()>side_skin.size(): side_skin=component
+	if side_skin.is_empty(): return {}
+	var active_skin := PackedByteArray()
+	active_skin.resize(width*source.get_height())
+	for index in side_skin: active_skin[index]=1
+	var actual_skin_bounds := _mask_bounds(active_skin,width)
+	var points := PackedVector2Array()
 	var surface_color := skin_source
 	var closest := INF
-	# Back-quarter cels expose an ear/side face but no eye. Their source skin
-	# contour and central crown still prove a solid head beneath an open cut.
-	for y in range(skin_bounds.position.y,mini(source.get_height(),hair_bounds.end.y)):
-		for x in range(maxi(0,skin_bounds.position.x-2),mini(width,skin_bounds.end.x+2)):
+	for index in side_skin:
+		var point := Vector2i(index%width,index/width)
+		points.append(Vector2(point));points.append(Vector2(point+Vector2i.ONE))
+		var color := source.get_pixelv(point)
+		var distance := Vector3(color.r-skin_source.r,color.g-skin_source.g,color.b-skin_source.b).length_squared()
+		if distance<closest:
+			closest=distance;surface_color=color
+		for ny in range(maxi(0,point.y-2),mini(source.get_height(),point.y+3)):
+			for nx in range(maxi(0,point.x-2),mini(width,point.x+3)):
+				if source.get_pixel(nx,ny).a>0.4: mask[ny*width+nx]=1
+	var old_forelock_indices := PackedInt32Array()
+	for y in range(hair_bounds.position.y,actual_skin_bounds.get_center().y):
+		for x in range(maxi(0,hair_bounds.position.x),mini(width,hair_bounds.end.x)):
 			var color := source.get_pixel(x,y)
-			if color.a<=0.4 or not _is_color_family(color,skin_source,0.055,0.25): continue
-			points.append(Vector2(x,y))
-			points.append(Vector2(x+1,y+1))
-			if y>=side_start:
-				var distance := Vector3(color.r-skin_source.r,color.g-skin_source.g,color.b-skin_source.b).length_squared()
-				if distance<closest:
-					closest=distance
-					surface_color=color
-				for ny in range(maxi(0,y-2),mini(source.get_height(),y+3)):
-					for nx in range(maxi(0,x-2),mini(width,x+3)):
-						if source.get_pixel(nx,ny).a>0.4: mask[ny*width+nx]=1
+			if active_skin[y*width+x]==0 and mask[y*width+x]==0 and color.a>0.05 and _is_color_family(color,skin_source,0.055,0.25): old_forelock_indices.append(y*width+x)
 	for x in range(hair_bounds.position.x+roundi(hair_bounds.size.x*0.35),hair_bounds.position.x+roundi(hair_bounds.size.x*0.65)):
-		for y in range(hair_bounds.position.y,hair_bounds.end.y):
+		for y in range(hair_bounds.position.y+roundi(hair_bounds.size.y*0.22),hair_bounds.end.y):
 			if hair_mask[y*width+x]!=0:
 				points.append(Vector2(x,y))
 				points.append(Vector2(x+1,y+1))
@@ -1225,8 +1417,8 @@ func _side_face_layers(source: Image,direction: String,hair_mask: PackedByteArra
 			if mask[index]==0 and source.get_pixel(x,y).a>0.4 and Geometry2D.is_point_in_polygon(Vector2(x+0.5,y+0.5),contour):
 				indices.append(index)
 				colors.append(surface_color)
-	face_indices=_mask_indices(mask)
-	return {"face_mask":mask,"features":{"side_face_ear":face_indices},"skull_indices":indices,"skull_colors":colors,"skull_contour":contour,"target_face":skin_bounds}
+	var face_indices := _mask_indices(mask)
+	return {"face_mask":mask,"features":{"side_face_ear":face_indices},"skull_indices":indices,"skull_colors":colors,"skull_contour":contour,"target_face":actual_skin_bounds,"skin_bounds":actual_skin_bounds,"old_forelock_indices":old_forelock_indices}
 
 func _mask_indices(mask: PackedByteArray) -> PackedInt32Array:
 	var indices := PackedInt32Array()
@@ -1307,9 +1499,29 @@ func _source_hair_mask(source: Image, direction: String) -> PackedByteArray:
 	# Walk down from the crown through contiguous source-hair pixels. A broad
 	# height-only color mask also catches the similarly colored jacket; this
 	# component stays tied to the actual head silhouette and its hanging locks.
-	var hair_limit := mini(height, roundi(float(height) * (0.58 if direction.begins_with("back") else 0.54)))
+	# Locate the crown in this cel before choosing a head-local search window.
+	# A fixed canvas percentage misses a crouched head and strips its face.
+	var crown := -1
+	for y in range(height):
+		for x in range(width):
+			var color := source.get_pixel(x,y)
+			if color.a > 0.4 and _is_source_hair(color):
+				crown = y
+				break
+		if crown >= 0: break
+	if crown < 0: return mask
+	var seed_end := mini(height,crown+roundi(width*0.22))
+	var seed_left := width
+	var seed_right := -1
+	for y in range(crown,seed_end):
+		for x in range(width):
+			var color := source.get_pixel(x,y)
+			if color.a > 0.4 and _is_source_hair(color):
+				seed_left = mini(seed_left,x)
+				seed_right = maxi(seed_right,x)
+	var hair_limit := mini(height,crown+roundi((seed_right-seed_left+1)*0.90))
 	var queue := PackedInt32Array()
-	for y in range(mini(hair_limit, roundi(float(height) * 0.30))):
+	for y in range(crown,mini(hair_limit,seed_end)):
 		for x in range(width):
 			var index := y * width + x
 			var color := source.get_pixel(x, y)
@@ -1344,7 +1556,8 @@ func _source_face_mask(source: Image, source_hair_mask: PackedByteArray, skin_bo
 	var face_mask := PackedByteArray()
 	face_mask.resize(width * height)
 	var skin_source := Color("#fdbb7b")
-	var face_bottom := mini(height, roundi(float(height) * 0.45))
+	var hair_bounds := _mask_bounds(source_hair_mask,width)
+	var face_bottom := mini(height,hair_bounds.end.y)
 	var face_left := width
 	var face_right := -1
 	var face_top := face_bottom
@@ -1560,7 +1773,7 @@ func _species_part_image(source_region: Rect2i, target_width: int, skin_color: C
 func _is_source_hair(color: Color) -> bool:
 	var reference := Color("#2a2b48")
 	var distance := absf(color.h - reference.h)
-	return color.v > 0.025 and color.v < 0.58 and color.s > 0.15 and minf(distance, 1.0 - distance) < 0.065
+	return color.v > 0.025 and color.v < 0.58 and color.s > 0.15 and minf(distance, 1.0 - distance) < 0.10
 
 func _apply_hair_atlas(image: Image, hair_style: String, direction: String, hair_color: Color, vertical_offset: int, head_shift_x: int = 0, target_width_override: float = HAIR_TARGET_WIDTH, source_pose: Image = null, source_metrics: Dictionary = {}, skull_skin_color: Color = Color("#e8b991")) -> void:
 	var row: int = {"windswept": 0, "bob": 1, "curly": 2}.get(hair_style, 0)

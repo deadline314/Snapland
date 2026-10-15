@@ -1,5 +1,5 @@
 extends SceneTree
-## Closed eyelids remain authored while an alternate cut exposes a solid scalp.
+## Source-atlas idle diagnostic only. Production grounded rest has a separate no-pop walk-hold gate.
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const CharacterAnimationLibrary = preload("res://game/world/character_animation_library.gd")
 class MissingNeutralLibrary extends CharacterAnimationLibrary:
@@ -11,6 +11,7 @@ var failures: Array[String] = []
 func _initialize() -> void:
 	assert(not OS.get_environment("SNAPLAND_SAVE_PATH").is_empty())
 	var renderer := AvatarRenderer.new()
+	renderer.inspect_authored_idle_sources=true
 	var output := OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir()
 	DirAccess.make_dir_recursive_absolute(output)
 	for direction in ["front_left", "front_right"]:
@@ -67,16 +68,27 @@ func _initialize() -> void:
 					if candidate.get_pixel(x,y) != baseline.get_pixel(x,y): lower_changes += 1
 			_check(lower_changes == 0, direction + "/" + style + " preserves legs and planted shoes byte-for-byte")
 		var missing_guide := AvatarRenderer.new()
+		missing_guide.inspect_authored_idle_sources=true
 		missing_guide.animation_library = MissingNeutralLibrary.new()
 		var safe_appearance := {"skin":"warm", "species":"human", "hair":"bob", "hair_color":"ink", "face":"curious"}
 		var fallback: Image = missing_guide.texture(safe_appearance, equipment, direction, 2, "idle").get_image()
 		_check(fallback.get_data() == baseline.get_data(), direction + " retains complete original hair when closed-eye registration is unavailable")
 		var missing_opening := AvatarRenderer.new()
+		missing_opening.inspect_authored_idle_sources=true
 		for row in missing_opening._diagonal_hair_regions:
 			for cut: Image in row: cut.fill(Color("#293b50"))
 		var closed_cut: Image = missing_opening.texture(safe_appearance, equipment, direction, 2, "idle").get_image()
 		_check(closed_cut.get_data() == baseline.get_data(), direction + " retains complete original hair when the replacement has no face opening")
-	if failures.is_empty(): print("PASS: directional closed-eye idle hair attachment")
+	var unknown_owner := AvatarRenderer.new()
+	unknown_owner._head_material_owners.clear()
+	var known_raw: Image=unknown_owner._walk_pose_image("front",0)
+	_check(not unknown_owner.has_head_material_owner(known_raw),"missing source ownership is detected")
+	var complete_source: Image=unknown_owner.texture({"hair":"windswept"},{"hat":"hat-none"},"front",0,"walk").get_image()
+	for style in ["bob","curly"]:
+		var safe_source: Image=unknown_owner.texture({"hair":style},{"hat":"hat-none"},"front",0,"walk").get_image()
+		_check(safe_source.get_data()==complete_source.get_data(),"unowned source keeps its complete body, face, and hair instead of stripping a guessed mask")
+	_check(unknown_owner._missing_head_owner_warnings.size()==1,"missing ownership is reported once per immutable source")
+	if failures.is_empty(): print("PASS: source-atlas closed-eye attachment availability (not production idle playback)")
 	quit(0 if failures.is_empty() else 1)
 
 func _check(ok: bool, message: String) -> void:

@@ -1,0 +1,730 @@
+{
+  "schema_version": 1,
+  "method": "Fixed root registration followed by a rigid per-heading head/neck reference part. No runtime anatomy inference.",
+  "sequences": {
+    "announcer-walk/left": {
+      "source": "res://assets/characters/walk-stability-v1/announcer-walk-left.png",
+      "canvas": [
+        320,
+        460
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 308,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          -16,
+          0
+        ],
+        [
+          -13,
+          0
+        ],
+        [
+          31,
+          0
+        ]
+      ],
+      "placement_scores": [
+        0.9999997019767761,
+        0.9456470608711243,
+        0.9440829753875732,
+        0.9261106848716736
+      ],
+      "source_frame_sha256": [
+        "24f35ee91e02ac5e05e1ae02da4c0b529b787d0f6c8a60b53038d19cd0ffe1c4",
+        "5a58982377813b80fc1d82d219debc31a2b8f80bdf46c245b5c96be2e719098a",
+        "675c54b2e4659361f34ecfdd77346bda51bd235eb37a7dbf01eccfd1a960fe2a",
+        "dc012f7170626c9023bb794f024e242814f2e0d9679622e2e137999cd35fd612"
+      ],
+      "head_anchor": [
+        160,
+        143
+      ]
+    },
+    "announcer-walk/right": {
+      "source": "res://assets/characters/walk-stability-v1/announcer-walk-right.png",
+      "canvas": [
+        320,
+        460
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 306,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          17,
+          0
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          -25,
+          0
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        0.9277698397636414,
+        0.9427168369293213,
+        0.9443649053573608
+      ],
+      "source_frame_sha256": [
+        "2ac5bcea86e11304c76cefc6e6af495d07b795cc9a54f02028ba5eb2e66c9776",
+        "191183c49863ed6a7e9b948c6caa48663f52d6d6c0be54d3193c8c657475d9ef",
+        "af47a67b9ebcb63556619b71ab63df71b38361f3f3e49b7484f0d2028b22a82f",
+        "acecbd24e736dee3967355a0cf4d4eb910dd723ae9223ca24f6dc39ae712fc16"
+      ],
+      "head_anchor": [
+        167,
+        140
+      ]
+    },
+    "announcer-walk_candidate/front": {
+      "source": "res://assets/characters/walk-stability-v1/announcer-walk_candidate-front.png",
+      "canvas": [
+        320,
+        460
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 316,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          -6,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          -8,
+          0
+        ],
+        [
+          -4,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          -2,
+          0
+        ]
+      ],
+      "placement_scores": [
+        0.9999995231628418,
+        0.9369451999664307,
+        0.9226069450378418,
+        0.9520148038864136,
+        0.9188981652259827,
+        0.9199663996696472,
+        0.9526811242103577,
+        0.9620891809463501
+      ],
+      "source_frame_sha256": [
+        "9dd87d549b14cb17d79aa8bfc7a10f4b6c4a74e801452d48b0c0c21a48a72e91",
+        "0a2ee550bfd318ddeb33a2dcc802660b274a56694b16b25b0533d8df835b6128",
+        "00280ad84c2cfcb6a707f48334b38cabb9003e340fc52a69ce4c6b215c784d29",
+        "d7aae63695dea4c720f31544551476dcd1d3fa1eb4ba678498fc5e8dcf9c3edc",
+        "16a4101c6ac44a884706a7dfb2a0d7e32359a82f2b0cd8d918a0fb53d7b40c4a",
+        "829543a1000575646e1b6bca16c0976f56e1f8d96ada90ed3a0f9de60a2da40e",
+        "2af99ca56dd09f7086cb0ea14f68d95bb85706b4b32ef33cbca5c33492b5aaed",
+        "e7932591c2b2952b263c487f8853ab65f3db02debed9ff7ca0e184f2e878d3ed"
+      ],
+      "head_anchor": [
+        156,
+        160
+      ]
+    },
+    "hero/back": {
+      "source": "res://assets/characters/walk-stability-v1/island-raw-back.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 178,
+      "registration_offsets": [
+        [
+          0,
+          -2
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -6
+        ],
+        [
+          0,
+          -9
+        ],
+        [
+          0,
+          -2
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -2
+        ],
+        [
+          0,
+          -9
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_frame_sha256": [
+        "886bf01241c0c0753bb3099a462167de9ea0ef2fd0efb6ccc9e128ea7b84e6bb",
+        "1588e3a2768261459a04bba2b20e8e5270a9638ace8bdc33b066ccf7112be4f6",
+        "1d9fb3138850d13d1139716872b2b383b32a9fa828479558f017f9c8a96768b6",
+        "5385f21df746497edd1629ddce53d1893b7897b98087b3b31b17fffb3dd0c075",
+        "559bd68e4ac2c901afc0eb57863489b0ba23fa909a94ad4434a7d95a00fb4a0a",
+        "3814ae5c83eb4a749d7630f1ede7778cdc007ec177d1b713f9dfb647acc44d56",
+        "77931682871297a9932313cab8e4a58f55995285d7579798680367063cc5fd43",
+        "2aefaf067551a38c0603ac36726dfd87aff99f9dabbb1183a491cd112a2f157e"
+      ]
+    },
+    "hero/back_left": {
+      "source": "res://assets/characters/walk-stability-v1/island-raw-back_left.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 178,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -6
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -6
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_frame_sha256": [
+        "cd2c5a8a2d5afd78f403257e16b46bb2562f2e99fb013bd33440d9f3fe3caca9",
+        "fbab4e998760ed24ae2e675c29c3e22e39d9ee60682c127dee8bba99eba4f817",
+        "462a085fd0daa18e65c8b046aa8b1a8d696c88b06482fd6f35fdd6c06992e973",
+        "71aa11588525d33993d17fa8b6420463d48e605dbebfb686472a900689906542",
+        "2daed63016e6e4a5a53f0a1374a80f80f9ad9aa0a22b93ecebc74119a1d28aa2",
+        "3879ad0579ed192dc11da6bfb8808fb2c32bec5b82d7750e4f9ae8e2bf7cbed2",
+        "9bf94505af3d6f8b97a30d5740353b4a100d81227d98a6ce9d9babfd46686571",
+        "fbb4e176a6b4f87d4f036895131a47b47d716d3ec6c1f690f8201e8cf94c91bb"
+      ]
+    },
+    "hero/back_right": {
+      "source": "res://assets/characters/walk-stability-v1/island-raw-back_right.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 178,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_frame_sha256": [
+        "ba294421cf4c8087a626a1fea9f914f8b88673db9d7afedc77fba0c2cf6d9ad0",
+        "2f80631173f2cc649774dec034b33335c9c689e879fc20180653c7222dfef422",
+        "0ea8a29f6ef37075bef66525178a0aea499abcb768125af95b997506975bc898",
+        "79c46edbb71edc8f2ff7e0b0ce8c5f0a6a26f2d181b4c4cec454e7c710d5e6e5",
+        "4f16442d4a9289671474fc7f6b8aad4c160cc6d88fd44a7fdcd501acd55564e9",
+        "58ef801e2568ffdc1c44a68d6f99eb72d862761e18d4186de964eb095c4b219d",
+        "f776c281aaebfd9f2c312397a325fe2eba817f82db3694ecc07b4e3cf1e2b848",
+        "3efd707882b8a0793fa894aa8a8a503f69ddd863975cb8b4bf115881adddd32d"
+      ]
+    },
+    "hero/front": {
+      "source": "res://assets/characters/walk-stability-v1/island-raw-front.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 185,
+      "registration_offsets": [
+        [
+          0,
+          -3
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -8
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_frame_sha256": [
+        "7077ea17d91c7dd549678e5363a879483e73e72fc652f74629aef8f4f1f39981",
+        "e28075b480470e089bfb9c217588c3b6453a2a57dca910263028a31f71fdfb5e",
+        "5703130e343000d8ab176adbb4a1bf3e11de6d4307f4954c49bbf0bf081c0166",
+        "823042514adc06e667a9e986f0a2d7591737b8ed0377cb2b4a2c93ec991ee500",
+        "94bc66b6172a731e256f3951874512743290e198c367e055b86cd0ef205d443d",
+        "cc45f30a4252ee190c877b95fdc6b2c34097392f7088899d0ef3b2003fe8002d",
+        "fefb1627c5a563ce3b0f6bad2d9b57c10bfffd2eb25aae1310c404d922bb3699",
+        "b8981d4588fb6b4bc5cc7f09f2d548db1df91cf30b4705eb636c7511648d7e4e"
+      ]
+    },
+    "hero/front_left": {
+      "source": "res://assets/characters/walk-stability-v1/island-raw-front_left.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 185,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -2
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -2
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_frame_sha256": [
+        "27341629d4634d88711946cec484ff46d587fb809960c91ecf61f108a9155adf",
+        "6b67d3bddf75483ceeb703c77f1f3e2a8c28a7fa075f7d8d9d38e5c63c92e8e3",
+        "a91632422b9758a1cde41c48d3ed01842e401a6678ef828cff8e06840f6dab70",
+        "d1aa437a14e4ebbf28be666df3322480f0b709e1ed98de16c5ccad6a95a02656",
+        "0553664dfd886aac6928955e232574b0e8323a85adb89334f80a62e4f5934de8",
+        "806764eaebf92d86bbf3ade1d9f11a6900ee7f4d3573df785429060ed9903ffe",
+        "4e8f90e767fc781c01d07ed2ac0d49d5741cabbf8e7f5326f7cef97fc83ef09c",
+        "48ef6611cc9b9ff25d3a51df2b41595a19f4627bb82408db782b8cf06d6b49f2"
+      ]
+    },
+    "hero/front_right": {
+      "source": "res://assets/characters/walk-stability-v1/island-raw-front_right.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 185,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -1
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_frame_sha256": [
+        "a56b569e4da33f789e34781068a2c16947a462e6d43ade62744712272b32197a",
+        "32a46c84986e8c9370227038b6221b3859b3e74c657cd169f258867feac89bd4",
+        "67fa45a030f5169eec56a49044f160db0b9ea3f0afc8ab2f1e2f464d18f764c6",
+        "2f6ebc1aca9f01e1d5398dc9fd2becdccb804ea2dad64507b301d76f9a620c3f",
+        "57b1a65ac0f7fbddc9d1eaec941c7b1dfe59f3e0ed9ca809415f8945e5625393",
+        "47120e3040d25c00f64cdd3d957cc59ffae9bbdc768d31462ba7cd70094f2173",
+        "569445d11441e8516fa458cc0ae8147bfae2701ab96675d6171044b1dcea46fc",
+        "b4d5b5e0d33a17f88419a45a7ba8086b870c64bd3c3eae72ad999efa90a4a3fb"
+      ]
+    },
+    "hero/left": {
+      "source": "res://assets/characters/walk-stability-v1/island-raw-left.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 180,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          12,
+          0
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_frame_sha256": [
+        "33ea8cc591367cda4c2ec30568d734960d390f30f2b4edd4c859bdf0e781d96d",
+        "e36bdfe39918cf1007f2ab26c3ff287c96ae9d3074d01dfb759f4b464a520d0a",
+        "47a01a1c87d03d6df85428f5a814ccb9b98a3f5eccc04064dc763ce7f007fec4",
+        "cb9a74b6f28b465eca704fe93d0a3def7c690017901326c6182e4fe725527980",
+        "4c263fda26fef3b1cf8868491fae5db3d386d18d8837d21295688f190cd3a51f",
+        "d01732e811c6536411f16866705b6861f70b62fe4b31266547fb3fe3d17870ec",
+        "f87e488d8c2fe2d62d5cfa151e6f442664121a6930c70dcd57c745fc24009344",
+        "d4648b8232ade55eade6265d43e332cc0bde1a296b8bbc88b046155c22cff8f8"
+      ]
+    },
+    "hero/right": {
+      "source": "res://assets/characters/walk-stability-v1/island-raw-right.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 180,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "placement_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_frame_sha256": [
+        "86a7bbc2245aba1af501af04ab2479a5ed5f1c0e858a362686a4b041461e5225",
+        "1f92a5672245bc6eb5c071ec4550e9b8c00d3bccfff0f416dec9b13ab0466393",
+        "459affe72ba0bc9e539d3656111ae2b9774d4169a54c8645217233b61980d40d",
+        "2b27d09ae13d489069c57076e444e41ab84098106bf777c06787c650fbc21b6f",
+        "8e9df8ab363ae7e3b9788355909e3a67f73436d67b1f79339a923b91828a81c1",
+        "5fcf4110365785b4e47ee5195c388ff011c27235093e0d73e58c2412a2583675",
+        "30b4f372f5ccfdf892f90a43ded3b740482f81ec333bd2dc363a59f9fab483d4",
+        "a88ced323e42eec43d06f0961f665087cdba25b3dc65476622357136d7bacf6f"
+      ]
+    },
+    "ticket-walk_candidate/front": {
+      "source": "res://assets/characters/walk-stability-v1/ticket-walk_candidate-front.png",
+      "canvas": [
+        320,
+        460
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 263,
+      "registration_offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          -3,
+          0
+        ],
+        [
+          64,
+          0
+        ],
+        [
+          -3,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          -5,
+          0
+        ],
+        [
+          -3,
+          0
+        ]
+      ],
+      "placement_scores": [
+        0.9999997019767761,
+        0.9152318835258484,
+        0.9148395657539368,
+        0.9167906045913696,
+        0.916551411151886,
+        0.8960013389587402,
+        0.9276667237281799,
+        0.9519439339637756
+      ],
+      "source_frame_sha256": [
+        "36a93797e6ab8839d883d9b0ff8846cae45d6181e26b8313a95f19f823c3ced4",
+        "5dd7eb35e772da4c24250cb991fff147dac1ee2168bc798361a3b444982af6e5",
+        "eb0884f7af22c7bac949b3dd1cb0af49724c0e3951b2ce014da186c213fde0ef",
+        "d8f0f532f98625843b51e0a374eb6bff03bb302b57e3b96ee7b1ab31c2ae2bfb",
+        "d9110977c2963eac19603130b07d97c9c6fc6e0712c1e82484ef5b0c31d77433",
+        "8eb8cee80b7a8b320f28a52aa862b6ac2dbe7a67932a0ff105cf847ba8ec9a11",
+        "a33863382a4bf82d3d2cea7c082e4de11b59e4b9873c3f4d96ad0247e01dc780",
+        "512898cd830e9d98c8841689d6a0ce2f76a5f9c3da431b839a9416e10fad1268"
+      ],
+      "head_anchor": [
+        183,
+        46
+      ]
+    }
+  }
+}

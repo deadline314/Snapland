@@ -283,6 +283,18 @@ def _compile_poses(data: dict[str, Any], pack: Path, output_dir: Path) -> tuple[
     records_by_direction, action_names = _pose_records(data)
     poses: dict[str, dict[str, list[dict[str, Any]]]] = {direction: {} for direction in DIRECTIONS}
     compiled_files: list[str] = []
+    stable = data.get("stable_head_parts", {})
+    stable_refs = {}
+    seam = 0
+    if stable:
+        seam = int(stable["seam_y"])
+        if not 180 <= seam <= 210 or stable.get("head_anchor") != [140, 148]:
+            raise ValueError("Head/neck part must use the reviewed seam and canonical head anchor")
+        for heading in DIRECTIONS:
+            first = records_by_direction[heading]["walk"][0]
+            for outfit, rec in [("tide_jacket", first), ("long_coat", first["outfits"]["long_coat"])]:
+                reference, _ = source_frame(rec, pack)
+                stable_refs[(heading, outfit)] = reference.crop((0, 0, CANVAS[0], int(stable.get("seams_by_heading", {}).get(heading, seam))))
     for action in action_names:
         max_frames = max(len(records_by_direction[direction][action]) for direction in DIRECTIONS)
         body_atlas = Image.new("RGBA", (CANVAS[0] * max_frames, CANVAS[1] * len(DIRECTIONS)))
@@ -292,13 +304,17 @@ def _compile_poses(data: dict[str, Any], pack: Path, output_dir: Path) -> tuple[
         for row, direction in enumerate(DIRECTIONS):
             for col, record in enumerate(records_by_direction[direction][action]):
                 body, head = source_frame(record, pack)
+                body_guide = [head[i] - round(record.get("head_attachment_offset", [0, 0])[i]) for i in range(2)]
+                if stable and action in stable["actions"]:
+                    body.paste(stable_refs[(direction, "tide_jacket")], (0, 0))
+                    head = tuple(stable["head_anchor"])
                 origin = (col * CANVAS[0], row * CANVAS[1])
                 body_atlas.alpha_composite(body, origin)
                 frame: dict[str, Any] = {
                     "source": body_name,
                     "region": [origin[0], origin[1], CANVAS[0], CANVAS[1]],
                     "head_anchor": list(head),
-                    "body_guide": [head[i] - round(record.get("head_attachment_offset", [0, 0])[i]) for i in range(2)],
+                    "body_guide": body_guide,
                     "feet": list(FEET),
                     "source_record": _copy_record(record),
                 }
@@ -308,12 +324,16 @@ def _compile_poses(data: dict[str, Any], pack: Path, output_dir: Path) -> tuple[
                 coat_record = record.get("outfits", {}).get("long_coat") if isinstance(record.get("outfits", {}), dict) else None
                 if coat_record is not None:
                     coat, coat_head = source_frame(coat_record, pack)
+                    coat_guide = [coat_head[i] - round(coat_record.get("head_attachment_offset", [0, 0])[i]) for i in range(2)]
+                    if stable and action in stable["actions"]:
+                        coat.paste(stable_refs[(direction, "long_coat")], (0, 0))
+                        coat_head = tuple(stable["head_anchor"])
                     coat_atlas.alpha_composite(coat, origin)
                     outfit = {
                         "source": coat_name,
                         "region": [origin[0], origin[1], CANVAS[0], CANVAS[1]],
                         "head_anchor": list(coat_head),
-                        "body_guide": [coat_head[i] - round(coat_record.get("head_attachment_offset", [0, 0])[i]) for i in range(2)],
+                        "body_guide": coat_guide,
                         "feet": list(FEET),
                         "source_record": _copy_record(coat_record),
                     }

@@ -12,9 +12,9 @@ PACK = ROOT / "assets/characters/hero-2d-v1"
 
 def validate_cases(receipt: dict) -> list:
     cases = receipt.get("cases")
-    expected = {(view, hat) for view in ["front", "left"] for hat in [False, True]}
+    expected = {(view, hat) for view in ["front","front_right","right","back_right","back","back_left","left","front_left"] for hat in [False, True]}
     if not isinstance(cases, list) or len(cases) != len(expected):
-        raise ValueError("GPU receipt requires exactly four captured configurations")
+        raise ValueError("GPU receipt requires exactly sixteen captured configurations")
     seen = set()
     for case in cases:
         if not isinstance(case, dict) or type(case.get("hat")) is not bool:

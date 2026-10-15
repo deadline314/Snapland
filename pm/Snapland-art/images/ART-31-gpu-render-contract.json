@@ -1,0 +1,293 @@
+{
+  "cases": [
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": false,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "front-hat0",
+      "predicted_visible_displacement": 1.36186242103577,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "front"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": true,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "front-hat1",
+      "predicted_visible_displacement": 1.56740140914917,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "front"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": false,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "front_right-hat0",
+      "predicted_visible_displacement": 1.65489208698273,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "front_right"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": true,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "front_right-hat1",
+      "predicted_visible_displacement": 2.64090967178345,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "front_right"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": false,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "right-hat0",
+      "predicted_visible_displacement": 2.14445543289185,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "right"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": true,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "right-hat1",
+      "predicted_visible_displacement": 2.14445543289185,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "right"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": false,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "back_right-hat0",
+      "predicted_visible_displacement": 1.36934220790863,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "back_right"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": true,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "back_right-hat1",
+      "predicted_visible_displacement": 1.96946144104004,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "back_right"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": false,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "back-hat0",
+      "predicted_visible_displacement": 1.64651119709015,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "back"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": true,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "back-hat1",
+      "predicted_visible_displacement": 1.64651119709015,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "back"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": false,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "back_left-hat0",
+      "predicted_visible_displacement": 1.37092041969299,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "back_left"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": true,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "back_left-hat1",
+      "predicted_visible_displacement": 1.37092041969299,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "back_left"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": false,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "left-hat0",
+      "predicted_visible_displacement": 2.14616012573242,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "left"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": true,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "left-hat1",
+      "predicted_visible_displacement": 2.14616012573242,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "left"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": false,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "front_left-hat0",
+      "predicted_visible_displacement": 1.16568613052368,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "front_left"
+    },
+    {
+      "hair_origin": [
+        192.0,
+        170.0
+      ],
+      "hat": true,
+      "head": [
+        0.0,
+        -202.0
+      ],
+      "key": "front_left-hat1",
+      "predicted_visible_displacement": 1.21048212051392,
+      "reference_origin": [
+        832.0,
+        170.0
+      ],
+      "view": "front_left"
+    }
+  ],
+  "scope": "Synthetic GPU skinning contract with static body; actual input/animation acceptance is a separate native tour"
+}

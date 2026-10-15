@@ -9,6 +9,11 @@ const HAIRSTYLES := ["windswept", "bob", "curly"]
 func _initialize() -> void:
 	assert(not OS.get_environment("SNAPLAND_SAVE_PATH").is_empty(), "avatar attachment checks require an isolated SNAPLAND_SAVE_PATH")
 	var renderer := AvatarRenderer.new()
+	var diagnostic_source: Image=renderer._walk_pose_image("front",0)
+	var diagnostic: Dictionary=renderer._walk_source_hair_metrics("front",0,diagnostic_source)
+	print("FRONT MATERIAL bounds=",diagnostic.source_bounds," body=",diagnostic.body_start_y," palette=",diagnostic.palette_hair_indices.size()," hair=",diagnostic.source_hair_indices.size())
+	for point in [Vector2i(107,185),Vector2i(101,186),Vector2i(166,186)]:
+		assert(diagnostic.source_hair_mask[point.y*280+point.x]==0,"independently inspected collar cannot become head hair at "+str(point))
 	if not _check_species_component_contacts(renderer):
 		quit(1)
 		return
@@ -34,7 +39,7 @@ func _initialize() -> void:
 			var chestnut_windswept: Texture2D = renderer.texture({"skin":"warm", "species":"human", "gender":"neutral", "hair":"windswept", "hair_color":"chestnut", "face":"curious"}, equipped, direction, frame, "walk")
 			var lower_hair_tint_pixels := _masked_lower_difference_count(chestnut_windswept.get_image(), raw_source, source_metrics.source_hair_indices, roundi(float(raw_source.get_height()) * 0.42), renderer)
 			assert(lower_hair_tint_pixels > 0, "%s/%d alternate windswept color reaches connected hair below the old hard cutoff (%d pixels)" % [direction, frame, lower_hair_tint_pixels])
-			renderer._apply_palette(source, appearance, "outfit-tide", renderer._closest_cardinal(direction), false)
+			renderer._apply_palette(source, appearance, "outfit-tide", renderer._closest_cardinal(direction), false, source_metrics.source_hair_indices,source_metrics.palette_hair_indices)
 			var source_difference := _full_difference_count(base, source)
 			assert(source_difference == 0, "%s/%d retains its authored windswept silhouette without a displaced overlay (%d differing pixels)" % [direction, frame, source_difference])
 			var bob: Texture2D = renderer.texture({"skin":"warm", "species":"human", "hair":"bob", "hair_color":"ink", "face":"curious"}, equipped, direction, frame, "walk")
@@ -154,7 +159,7 @@ func _benchmark_walk_attachment_caches() -> void:
 	_render_walk_attachment_grid(renderer, "outfit-tide")
 	var first_elapsed := Time.get_ticks_usec() - first_started
 	assert(renderer._walk_source_image_cache.size() == 64 and renderer._walk_source_image_build_count == 64, "all 64 normalized walk cels are prepared once and read from immutable cached copies")
-	assert(renderer._walk_source_metrics_cache.size() == 64 and renderer._source_metrics_build_count == 64, "the 64 authored walk cels build source hair/face metrics once")
+	assert(renderer._walk_source_metrics_cache.size() == 8 and renderer._source_metrics_build_count == 8, "eight immutable heading heads each build shared hair/face metrics once")
 	assert(renderer._hair_cut_cache.size() == 16 and renderer._hair_cut_build_count == 16, "the 16 bob/curly cardinal and diagonal cuts are each preprocessed once")
 	var source_builds := renderer._source_metrics_build_count
 	var cut_builds := renderer._hair_cut_build_count
@@ -216,6 +221,7 @@ func _masked_pixel_difference_count(candidate: Image, reference: Image, indices:
 	var width := reference.get_width()
 	for index in indices:
 		if candidate.get_pixel(index % width, index / width) != reference.get_pixel(index % width, index / width):
+			if count < 6: print("HAIR DIFF ",Vector2i(index % width,index / width)," raw=",reference.get_pixel(index % width,index / width)," rendered=",candidate.get_pixel(index % width,index / width))
 			count += 1
 	return count
 
@@ -259,9 +265,9 @@ func _assert_semantic_face(renderer,direction: String,frame: int,reference: Text
 			var point := Vector2i(index%raw.get_width(),index/raw.get_width())
 			assert(actual.get_pixelv(point)==expected.get_pixelv(point),"every authored semantic eye/brow/mouth/ear RGBA stays exact: %s/%d/%s" % [direction,frame,label])
 	var visible_eyes := 0 if direction.begins_with("back") else (1 if direction=="right" or direction=="left" else 2)
-	assert(eyes==visible_eyes,"all64cels preserve actual visible eyes, not hair highlights")
+	assert(eyes==visible_eyes,"all64cels preserve actual visible eyes, not hair highlights: %s/%d got %d expected %d" % [direction,frame,eyes,visible_eyes])
 	if frame==0 and RendererRegression.FEATURES.has(direction):
-		for point: Vector2i in RendererRegression.FEATURES[direction]: assert(actual.get_pixelv(point)==expected.get_pixelv(point),"independently inspected original feature RGBA remains exact: "+str(point))
+		for point: Vector2i in RendererRegression.features(direction): assert(actual.get_pixelv(point)==expected.get_pixelv(point),"independently inspected original feature RGBA remains exact: "+str(point))
 	if direction=="front_right" and frame==0:
 		for point in [Vector2i(155,131),Vector2i(161,146),Vector2i(188,117)]:
 			assert(metrics.face_mask[point.y*280+point.x]==0 and metrics.replacement_source_mask[point.y*280+point.x]!=0,"old brown/cream fringe is owned by replacement, never restored as a face feature")
@@ -349,8 +355,8 @@ func _uncovered_source_hair_pixels(renderer, direction: String, frame: int, sour
 	return count
 
 func _test_open_face_cutout_registration(renderer) -> void:
-	# A deliberately off-center face opening must register by its opening,
-	# rather than the whole cut's crown center. This catches the old wig offset.
+	# The off-center opening registers horizontally. The source crown fixes
+	# vertical attachment; restoring authored face pixels keeps eyes visible.
 	var hair := Image.create(100, 100, false, Image.FORMAT_RGBA8)
 	hair.fill(Color("#293b50"))
 	for y in range(35, 100):
@@ -367,4 +373,7 @@ func _test_open_face_cutout_registration(renderer) -> void:
 	canvas.fill(Color.TRANSPARENT)
 	renderer._blend_registered_hair(canvas, hair, "front", 70, 0, 112.0, source)
 	assert(canvas.get_used_rect().size.x >= 150, "source head scale is retained even when an old 112px target is supplied")
-	assert(canvas.get_pixel(122, 122).a < 0.1, "the off-center cutout exposes the authored face center")
+	assert(canvas.get_used_rect().position.y == 70, "an off-center opening cannot lift hair away from the source crown")
+	var metrics: Dictionary = renderer._build_source_hair_metrics(source,"front")
+	renderer._restore_face_features(canvas,source,metrics.face_mask,metrics.face_indices)
+	assert(canvas.get_pixel(122,122) == source.get_pixel(122,122), "the composed cut retains the exact authored face center")

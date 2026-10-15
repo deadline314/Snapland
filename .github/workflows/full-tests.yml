@@ -68,5 +68,7 @@ jobs:
         run: python tools/hero_2d/run_contract_tests.py
       - name: Verify isolated 2D hair bones and attachment contracts
         run: python tools/hero_2d/run_hair_review.py --contracts
+      - name: Verify fixed-root 2D walk pixels and original limb registration
+        run: python tools/walk_stability/run_audit.py --tag ci --test
       - name: Run native Godot startup and runtime tests
         run: python tools/run_game_tests.py
