@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-15",
+  "ticket": "ART-28",
+  "stage": "research and design proposal; no new runtime implementation",
+  "code_baseline": "c4e42c7",
+  "ticket_registration": "1febb5c",
+  "primary_teams": [
+    "Motion Twin",
+    "Wube",
+    "Esoteric Software",
+    "Igara/Aseprite",
+    "Universal LPC",
+    "Unity Technologies",
+    "Godot",
+    "Epic Games"
+  ],
+  "images": [
+    {
+      "path": "pm/Snapland-art/images/ART-28-reference-dead-cells-rig.jpg",
+      "size": [
+        1280,
+        720
+      ],
+      "sha256": "51afa4a2bfac95aa7321a717f5e3fced05b2fb8a63ea74d8c625f6ecf94a10c4",
+      "inspection": "static screenshot only; no complete animation review"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-28-reference-wube-layers.jpg",
+      "size": [
+        1280,
+        720
+      ],
+      "sha256": "92115a3c8ad43f0f7c9df4c75941c6dc54bbe7f88565e0abc7078485e086fbd1",
+      "inspection": "static screenshot only; no complete animation review"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-28-reference-spine-backpack.jpg",
+      "size": [
+        1265,
+        712
+      ],
+      "sha256": "069249c4529a699481c6f600fecfbf8ab45642eccdf5f189348b7884d0d3d0b7",
+      "inspection": "static screenshot only; no complete animation review"
+    }
+  ],
+  "review": [
+    "Source fact versus Snapland proposal distinguished",
+    "Optional NPC routes and missing walk coverage qualified",
+    "Uncommitted head and hair changes retained and unaccepted",
+    "3D style feasibility requires a future sample",
+    "Shared canvas, versioned pose contract, occlusion recipes, movement ownership, phase and event ownership specified"
+  ],
+  "checks": {
+    "links": "PASS",
+    "design_all": "FAILED after PASS park: baseline design/02-minigames/catalog.json absent; unrelated to this documentation change",
+    "diff_whitespace": "PASS for research delivery files",
+    "reference_images": "PASS: three readable JPEGs with dimensions and SHA-256 recorded"
+  },
+  "gameplay_executed": false,
+  "source_videos_watched": false,
+  "blender_english_manual": "read failed; excluded",
+  "lpc_linked_frame_guide": "read failed; not claimed reviewed",
+  "paused_files": {
+    "game/world/avatar_renderer.gd": "532603b78c07dff72bea4f8946cfb9f7ec691509328df6329da60d3bdb83a5f9",
+    "assets/characters/complete-animation-regions.json": "db1c36175cd708087b7248b26837fe6d46a0c3b501b5e6005d31fd175dfa1b13",
+    "assets/characters/avatar-head-material-owners-v1.json": "ad212915ed7c2216234dea0f1036383bc6158fbd766da682b522e493bd767347"
+  }
+}
