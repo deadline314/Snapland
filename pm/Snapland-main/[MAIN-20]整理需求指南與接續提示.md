@@ -62,3 +62,5 @@
 ![使用者明確否定的不必要捲動介面](images/MAIN-20-user-rejected-scroll-pause.jpg)
 
 分支：`feature/session-guide`。本票的審查中只表示需求指南及接續文件已完成本票驗收，不代表整島、完整動畫、全部換裝或聲音試聽完成。
+
+指南、Prompt、三張原圖及核對紀錄已交付至 main：[746d33b](https://github.com/deadline314/Snapland/commit/746d33b8115eca51e0a488acca17b6b181ed6559)。本次未修改遊戲程式或重新執行遊戲驗收。
