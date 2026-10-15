@@ -4,9 +4,9 @@
 
 使用者明確否定新製作的 3D 主角與外觀，已要求停止。要保留原本 2D 像素畫風，製作完整光頭底圖，再生成同風格的八方向頭髮與配件，綁在製作時確認的正確位置，共享動作／方向／影格與明確前後遮擋。先以主角完成換髮、帽、不同輪廓衣服、相機及起停轉身的正常／四分之一慢放驗收，再擴其他人物。詳細見[最新角色管線決策](../design/runtime/character-production-pipeline-v2.md)；[ART-29](Snapland-art/[ART-29]製作主角完整換裝動作樣本.md) 已交付獨立 2D 主角樣本，局部驗證與正常／慢放已檢視，正式島嶼尚未接入。未提交的 3D 程式、素材、獨立樣本與錄影都是拒收候選，不可因測試數字通過而採用；也沒有接入正式島嶼。舊 3D 計畫已停止，不要繼續補它或聲稱使用者批准改畫風。
 
-最新狀態（2026-10-16）：最新使用者回饋指出人走路有像素級位移、頭髮卻未跟隨；舊的固定人物基準不足以證明髮根對位。ART-29 已補兩件外套、八方向共 128 個明確頭部位移，保留 12 張身體圖集不變，原完整換裝輸出已更新。ART-30 已完成微風短髮的 2D 骨架限定樣本，髮根／帽子跟隨當格頭部，只有外側髮尾輕擺；正常 56.8 秒與真實四分之一模擬 214.133 秒均以 1× 分段播放、抽格檢視，另檢查八方向全身與頭部近看。局部 Python 9＋證據缺漏回歸 4、原生姿勢／部件／1280 合成、骨架 640 休止合成、4 組 GPU 像素比較、匯出啟動及原生事件巡覽通過。輸出 `build/hero-2d-hair-sample-release/Snapland-Hero-2D-Hair-Sample.exe`，證據 `pm/Snapland-art/images/ART-30-*`，詳見[交付說明](../design/runtime/hero-2d-hair-sample-delivery.md)。這是主 Session 對單髮型樣本的接受，不是使用者試玩、所有影格逐一審查或整島驗收。正式島嶼／其他髮型／NPC 尚未套用；不可拿原島嶼舊合成結果宣稱已接上這個樣本。
+2026-10-16 最新回歸 [ART-31](Snapland-art/[ART-31]修正全部二維行走像素偏移.md)：使用者指出所有 2D 走路仍有偏移後，重新驗證正式島嶼及獨立樣本。已取消每格鞋底置中，採固定方向畫布、穩定頭頸來源與共用髮帽基準；600 格／76 組逐格比較、19 項 Python、12 組原生局部測試、八向戴帽／無帽共 16 組 GPU，以及正常／真實四分之一速度錄影通過。原島嶼、換裝與骨架樣本輸出已更新；髮尾骨架仍僅單髮型獨立樣本。正式島嶼停止時目前採同方向穩定停步姿勢，舊專用待機／眨眼保留來源診斷，尚未重新接回正式播放；不能沿用舊待機驗收宣稱仍在播放。這是本次局部接受，不是使用者試玩或全島驗收。
 
-更新：2026-10-15（Asia/Taipei）。**把下方「可直接貼上的 Prompt」整段交給下一個 Session。** 本文件是接續工作指令與狀態快照，不代表又完成一次遊戲驗收。
+更新：2026-10-16（Asia/Taipei）。**把下方「可直接貼上的 Prompt」整段交給下一個 Session。** 本文件是接續工作指令與狀態快照，不代表又完成一次遊戲驗收。
 
 ## 可直接貼上的 Prompt
 
@@ -15,7 +15,7 @@
 ### 先找到真正的遊戲版本
 
 - Repo：`git@github.com:deadline314/Snapland.git`。本機原始 checkout 是 `C:/Github/Snapland`，但不要切換或修改其他 Session 的 checkout／stash。
-- 可執行遊戲在既有獨立工作區 **`C:/Users/stanl/.codex/worktrees/island-experience/Snapland`**，分支 **`feature/island-experience`**。最後已核對的遊戲交付 HEAD 是 **`8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3`**；之後可能有本次文件提交，開始時以 fetch 和實際 HEAD 核對。
+- 可執行遊戲在既有獨立工作區 **`C:/Users/stanl/.codex/worktrees/island-experience/Snapland`**，分支 **`feature/island-experience`**。最後已核對的遊戲交付 HEAD 是 **`2581313e00744f55cd99ab939e87bde681823bcf`**；之後可能有本次文件提交，開始時以 fetch 和實際 HEAD 核對。
 - **main 截至本次整理只有設計／票據等內容，沒有 `project.godot`；不能從 main 另建空白遊戲或把沒有引擎專案當成遊戲程式遺失。** 文件已另外發布至 main，不代表整個遊戲 feature 已合入 main。
 - 優先沿用上述合適工作區；先看 `git worktree list`、目前分支、dirty files 和遠端，不覆寫已有成果。現有工作區有大量先前未追蹤媒體、匯入變動與未完成票；禁止 `git add .`、整棵 clean／reset／stash。
 - 若該工作區仍由另一個活動 Session 使用，從 `origin/feature/island-experience` 建自己的獨立工作區，不能從 main 重建或擅自攜走未提交變更。新工作區需真正驗證依賴、匯入和原生畫面，不能假定原機器上的未追蹤檔也已在遠端。
@@ -54,7 +54,7 @@
 
 ### 第一個具體工作
 
-先讀 ART-29 最新頭部跟隨回歸與 ART-30 已交付限定樣本。保留當格頭部附件點和固定身體基準的區分，不改原全身步態或 3D。先讓使用者檢視這個獨立主角樣本，再擴其他髮型、人物或正式島嶼；不把舊合成路徑視為已同步更新。
+先讀 ART-31 的來源畫布與頭部固定回歸，再看 ART-29／30 最新交付。使用者已指示持續做、不等回報；不要停在等待使用者重新試玩。保留原 2D 畫風與既有腿腳動作，穩定停步來源也不得改回會跳動的舊待機。從既有票選下一個完整缺口，完成局部驗證、正常／慢放與證據再擴充；髮尾骨架接島嶼和其他角色仍是後續範圍，不能提前宣稱完成。
 
 ### 研究、委派、測試與 Git
 
@@ -108,4 +108,4 @@ with tempfile.TemporaryDirectory(prefix="snapland-next-local-") as isolated:
 - 長期需求與三張使用者喜好／否定圖：[user guide](user_guide.md)。
 - 來源雜湊與圖的用途：[三張原圖來源](Snapland-main/images/MAIN-20-reference-provenance.json)。
 - 本次文件整理票：[MAIN-20](Snapland-main/[MAIN-20]整理需求指南與接續提示.md)。
-- 最新角色局部交付與證據：[8f141fb](https://github.com/deadline314/Snapland/commit/8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3)。原分支未完成事項仍要看其票，不能只依本摘要勾完。
+- 最新 2D 穩定性局部交付與證據：[2581313](https://github.com/deadline314/Snapland/commit/2581313e00744f55cd99ab939e87bde681823bcf)。原分支未完成事項仍要看其票，不能只依本摘要勾完。
