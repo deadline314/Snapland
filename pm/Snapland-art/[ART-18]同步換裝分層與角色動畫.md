@@ -103,3 +103,35 @@
 本輪開始基準：`4d0a2a814860e54243dd116bed54c564233c0aa0`；分支：`feature/island-experience`；票況：進行中。不同服裝完整輪廓、全部動作與輸出版本換裝仍需完成，相關驗收未勾選。
 
 本輪程式與原生證據已推送：[48a8ab9](https://github.com/deadline314/Snapland/commit/48a8ab9580508dbb11cae6d269766d0512201091)。
+
+
+# Commit — 2026-10-15 修正前斜閉眼換髮
+
+### 問題
+前斜方向的閉眼姿勢換成短髮／捲髮後會留下原瀏海、抬高髮頂，或露出頭皮缺口；這使待機與換髮不同步。
+
+### 改動
+同向中立姿勢只提供定位，表情仍取閉眼原稿。替換髮型回到原稿髮頂，補色只落在與臉相通的開口；缺少可靠定位或臉部開口時保留完整來源髮型。
+
+### 驗收
+兩個前斜方向的閉眼睫毛像素完整保留，沒有混入睜眼表情；短髮／捲髮的額頭、頭皮與鞋底局部回歸通過。Main 原生正常／四分之一模擬速度中檢查預設、珊瑚外套／草帽及短髮／花飾／精靈三組外觀。正常 60 張全身逐姿勢及編碼影片抽幀已檢查；這是新增五向待機的局部換裝回歸，整票驗收仍保持未勾選與進行中。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 閉眼原稿、頭皮、髮頂與鞋底回歸 | 先重現錯誤後通過，0 ERROR |
+| 缺少定位／無臉部開口 | 先重現錯誤後保留完整原髮，0 ERROR |
+| 既有八向走路髮帽與所有膚色／種族局部矩陣 | 通過；局部結果見 ART-17 的本批驗收摘要 |
+| 原生五向待機與三組外觀 | 正常／慢速來源條件通過；ffprobe 30 FPS |
+| 實際打包 | 五向預設外觀、重入、降低動態與暫停通過；普通包正常退出 |
+| 完整遊戲套件 | 留 CI，本機未執行 |
+
+### 截圖與影片
+
+![前斜閉眼與短髮換裝](images/ART-17-directional-idle-20261015-diagonal-normal-cels-2.jpg)
+![真正慢速模擬的閉眼姿勢](images/ART-17-directional-idle-20261015-diagonal-quarter-video-frames.jpg)
+
+[正常影片](images/ART-17-directional-idle-20261015-diagonal-normal.mp4) · [四分之一模擬速度](images/ART-17-directional-idle-20261015-diagonal-quarter.mp4) · [完整局部驗收與隔離存檔證據](images/ART-17-directional-idle-20261015-verification.json)。
+
+分支：`feature/island-experience`；固定開始 SHA：`ce86d3b`。本批與 ART-17 共用必要的閉眼姿勢修正，程式與證據提交：[3c6ae27](https://github.com/deadline314/Snapland/commit/3c6ae27c071290d12fc2f952ef036319f19257ce)。票況：進行中；沒有將外套換色當作不同衣物輪廓完成。
