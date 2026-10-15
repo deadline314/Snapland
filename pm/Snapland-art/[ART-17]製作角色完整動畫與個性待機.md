@@ -352,3 +352,5 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 普通本機入口：`C:/Users/stanl/.codex/snapland-qa/directional-idle-20261015-v1/Play-Island-Preview.cmd`，啟動檔使用同資料夾 `profile/progress.json`。來源圖以內建 imagegen 生成，原檔保留；沒有使用 CLI／API 生成。
 
 固定開始 SHA：`ce86d3b`；分支：`feature/island-experience`。本批接受範圍是新增五向待機與相關換髮回歸；票況維持進行中，未合入 main。
+
+本批程式、原始素材與原生證據已推送：[3c6ae27](https://github.com/deadline314/Snapland/commit/3c6ae27c071290d12fc2f952ef036319f19257ce)。票況：進行中。
