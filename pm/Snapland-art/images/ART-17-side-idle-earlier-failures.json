@@ -1,0 +1,235 @@
+{
+  "native-side-normal-v2": {
+    "failures": [
+      "action predicate failed: side-walk-1",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-3.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-0.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-1.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-2.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-0.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-1.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-2.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-3.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-left-0.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-left-1.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-left-2.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-left-3.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-3.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-0.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-1.png",
+      "refusing to overwrite PNG: C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\ticket-walk-20261015\\native-side-normal-v2/traveller-natural-idle-right-2.png"
+    ],
+    "failed_actions": [
+      {
+        "action": "walk",
+        "anchor": {
+          "x": -2.59999895095825,
+          "y": 1.13441526889801,
+          "z": -5.5
+        },
+        "authored_frames": 0,
+        "authored_or_rig_source": "authored-walk-atlas",
+        "detail": {
+          "actual_movement": false,
+          "complete": false,
+          "expected_direction": "left",
+          "observed_cels": [],
+          "observed_texture_instances": [],
+          "rig_hidden": true,
+          "rig_instantiated": false,
+          "simulation_seconds": 0.333333333333333,
+          "source_consistent": true,
+          "sprite_visible": true
+        },
+        "direction": "left",
+        "gait_position": {
+          "phase": 1.46666717529297,
+          "walking": false
+        },
+        "label": "side-walk-1",
+        "predicate": false,
+        "source": "authored-walk-atlas",
+        "status": "pending"
+      }
+    ]
+  },
+  "native-side-quarter-v1": {
+    "failures": [
+      "action predicate failed: side-walk-0"
+    ],
+    "failed_actions": [
+      {
+        "action": "walk",
+        "anchor": {
+          "x": -2.60833263397217,
+          "y": 1.13291919231415,
+          "z": -5.5
+        },
+        "authored_frames": 0,
+        "authored_or_rig_source": "authored-walk-atlas",
+        "detail": {
+          "actual_movement": true,
+          "complete": false,
+          "expected_direction": "right",
+          "facing_after_input": "right",
+          "main_modal": "",
+          "observed_cels": [
+            "1",
+            "2",
+            "3"
+          ],
+          "observed_texture_instances": [
+            "-9223371858462632593",
+            "-9223371739914824286",
+            "-9223371738505538324",
+            "-9223371732314745455"
+          ],
+          "rig_hidden": true,
+          "rig_instantiated": false,
+          "simulation_seconds": 0.325,
+          "source_consistent": false,
+          "sprite_visible": true,
+          "world_blocked": false
+        },
+        "direction": "right",
+        "gait_position": {
+          "phase": 1.33958077430725,
+          "walking": false
+        },
+        "label": "side-walk-0",
+        "predicate": false,
+        "source": "authored-walk-atlas",
+        "status": "pending"
+      }
+    ]
+  },
+  "native-side-quarter-v2": {
+    "failures": [
+      "action predicate failed: side-walk-0"
+    ],
+    "failed_actions": [
+      {
+        "action": "walk",
+        "anchor": {
+          "x": -2.60833263397217,
+          "y": 1.13291919231415,
+          "z": -5.5
+        },
+        "authored_frames": 0,
+        "authored_or_rig_source": "authored-walk-atlas",
+        "detail": {
+          "actual_movement": true,
+          "complete": false,
+          "expected_direction": "right",
+          "facing_after_input": "right",
+          "main_modal": "",
+          "observed_cels": [
+            "1",
+            "2",
+            "3"
+          ],
+          "observed_texture_instances": [
+            "-9223371857992870676",
+            "-9223371739243735646",
+            "-9223371737750563425",
+            "-9223371731157117551"
+          ],
+          "rig_hidden": true,
+          "rig_instantiated": false,
+          "simulation_seconds": 0.325,
+          "source_consistent": false,
+          "sprite_visible": true,
+          "world_blocked": false
+        },
+        "direction": "right",
+        "gait_position": {
+          "phase": 1.33958077430725,
+          "walking": false
+        },
+        "label": "side-walk-0",
+        "predicate": false,
+        "source": "authored-walk-atlas",
+        "status": "pending"
+      }
+    ]
+  },
+  "quarter-diagnostic": {
+    "failures": [
+      "action predicate failed: side-walk-0"
+    ],
+    "failed_actions": [
+      {
+        "action": "walk",
+        "anchor": {
+          "x": -2.60833263397217,
+          "y": 1.13291919231415,
+          "z": -5.5
+        },
+        "authored_frames": 0,
+        "authored_or_rig_source": "authored-walk-atlas",
+        "detail": {
+          "actual_movement": true,
+          "complete": false,
+          "expected_direction": "right",
+          "facing_after_input": "right",
+          "inconsistent_samples": [
+            {
+              "action": "walk",
+              "facing": "left",
+              "frame": 1,
+              "pixels_match": true,
+              "presented_direction": "left",
+              "velocity": "(0.208333, 0.0, 0.0)"
+            }
+          ],
+          "main_modal": "",
+          "observed_cels": [
+            "1",
+            "2",
+            "3"
+          ],
+          "observed_texture_instances": [
+            "-9223371860761111317",
+            "-9223371762194967135",
+            "-9223371760785680994",
+            "-9223371754594888304"
+          ],
+          "rig_hidden": true,
+          "rig_instantiated": false,
+          "simulation_seconds": 0.325,
+          "source_consistent": false,
+          "sprite_visible": true,
+          "world_blocked": false
+        },
+        "direction": "right",
+        "gait_position": {
+          "phase": 1.33958077430725,
+          "walking": false
+        },
+        "label": "side-walk-0",
+        "predicate": false,
+        "source": "authored-walk-atlas",
+        "status": "pending"
+      }
+    ]
+  },
+  "native-side-normal": {
+    "launch_errors": [
+      "SCRIPT ERROR: Parse Error: Cannot infer the type of \"complete\" variable because the value doesn't have a set type.",
+      "ERROR: Failed to load script \"res://game/tests/native_avatar_side_idle.gd\" with error \"Parse error\"."
+    ],
+    "counted_as_pass": false
+  },
+  "native-side-packed-v1": {
+    "launch_errors": [
+      "ERROR: `--path` was specified on the command line, but this Godot binary was compiled without support for path overrides. Aborting."
+    ],
+    "counted_as_pass": false
+  },
+  "native-side-packed-v2": {
+    "launch_errors": [
+      "ERROR: Scene path was specified on the command line, but this Godot binary was compiled without support for path overrides. Aborting."
+    ],
+    "counted_as_pass": false
+  }
+}

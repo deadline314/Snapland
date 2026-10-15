@@ -67,8 +67,10 @@ func _run() -> void:
 		world.player.velocity=Vector3.ZERO
 		for _tick in range(8): await physics_frame
 		_check(not world.avatar_is_walking and world.last_avatar_action=="idle","%s stop returns to an idle source stance" % DIRECTIONS[index])
-		if DIRECTIONS[index]=="front":
-			_check(world.avatar_renderer.animation_library.has_action("traveller","idle","front"),"front keeps its authored idle sequence")
+		if DIRECTIONS[index] in ["front", "left", "right"]:
+			_check(world.avatar_renderer.animation_library.has_action("traveller","idle",DIRECTIONS[index]),"%s keeps its dedicated authored idle sequence" % DIRECTIONS[index])
+			var expected_idle: Texture2D = world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, DIRECTIONS[index], world.last_avatar_frame, "idle")
+			_check(world.avatar.texture == expected_idle, "%s stop displays its dedicated full-body idle source" % DIRECTIONS[index])
 		else:
 			_check(world.last_avatar_frame==world.avatar_renderer.walk_idle_frame(DIRECTIONS[index]),"%s idle holds its authored stance cel" % DIRECTIONS[index])
 	Input.action_release("move_right")

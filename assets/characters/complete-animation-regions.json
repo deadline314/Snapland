@@ -10,7 +10,7 @@
     }
   },
   "coverage_notes": {
-    "traveller": "This manifest adds front actions only. Existing 8-direction legacy walk, 8 frames/direction, remains legacy coverage and is not counted as a complete new action set. Jump is an 8-pose front action at 12 FPS; other jump directions are not authored here. Seated is a four-pose front-only action at 2 FPS; other seated directions are not authored here.",
+    "traveller": "Front actions plus four dedicated idle poses each for left/right. Existing eight-direction walk remains in the legacy atlas. Back and diagonal dedicated idle remain uncovered. Jump is an eight-pose front action at 12 FPS; other jump directions are not authored here. Seated and catch actions retain separately authored metadata.",
     "traveller_outfit_coral": "Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.",
     "ticket": "Walk row is only a walk_candidate pending authored validation.",
     "imp": "42 authored cells (7x6); no frames synthesized.",
@@ -391,6 +391,230 @@
                   }
                 }
               }
+            }
+          ]
+        },
+        "left": {
+          "fps": 4,
+          "loop": true,
+          "frame_durations": [
+            1.9,
+            0.3,
+            0.12,
+            0.5
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-idle-sides-v1.png",
+              "region": [
+                170,
+                53,
+                234,
+                385
+              ],
+              "anchors": {
+                "feet": [
+                  114,
+                  383
+                ],
+                "head": [
+                  129,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.46,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-sides-v1.png",
+              "region": [
+                558,
+                52,
+                235,
+                386
+              ],
+              "anchors": {
+                "feet": [
+                  115,
+                  384
+                ],
+                "head": [
+                  129,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.46,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-sides-v1.png",
+              "region": [
+                964,
+                52,
+                236,
+                386
+              ],
+              "anchors": {
+                "feet": [
+                  114,
+                  384
+                ],
+                "head": [
+                  129,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.46,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-sides-v1.png",
+              "region": [
+                1371,
+                52,
+                236,
+                386
+              ],
+              "anchors": {
+                "feet": [
+                  115,
+                  384
+                ],
+                "head": [
+                  129,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.46,
+              "layers": []
+            }
+          ]
+        },
+        "right": {
+          "fps": 4,
+          "loop": true,
+          "frame_durations": [
+            1.9,
+            0.3,
+            0.12,
+            0.5
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-idle-sides-v1.png",
+              "region": [
+                165,
+                469,
+                239,
+                384
+              ],
+              "anchors": {
+                "feet": [
+                  119,
+                  382
+                ],
+                "head": [
+                  108,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.46,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-sides-v1.png",
+              "region": [
+                563,
+                467,
+                241,
+                386
+              ],
+              "anchors": {
+                "feet": [
+                  112,
+                  384
+                ],
+                "head": [
+                  110,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.46,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-sides-v1.png",
+              "region": [
+                968,
+                467,
+                242,
+                386
+              ],
+              "anchors": {
+                "feet": [
+                  113,
+                  384
+                ],
+                "head": [
+                  112,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.46,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-sides-v1.png",
+              "region": [
+                1372,
+                467,
+                243,
+                386
+              ],
+              "anchors": {
+                "feet": [
+                  116,
+                  384
+                ],
+                "head": [
+                  112,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.46,
+              "layers": []
             }
           ]
         }
@@ -1946,10 +2170,21 @@
           "frames": [
             {
               "source": "res://assets/characters/traveller-seated-front-v1.png",
-              "region": [200, 75, 291, 541],
+              "region": [
+                200,
+                75,
+                291,
+                541
+              ],
               "anchors": {
-                "feet": [145, 539],
-                "head": [148, 2]
+                "feet": [
+                  145,
+                  539
+                ],
+                "head": [
+                  148,
+                  2
+                ]
               },
               "anchor_method": {
                 "feet_method": "bottom_8px_two_contact_midpoint",
@@ -1960,10 +2195,21 @@
             },
             {
               "source": "res://assets/characters/traveller-seated-front-v1.png",
-              "region": [723, 80, 291, 536],
+              "region": [
+                723,
+                80,
+                291,
+                536
+              ],
               "anchors": {
-                "feet": [144, 534],
-                "head": [151, 2]
+                "feet": [
+                  144,
+                  534
+                ],
+                "head": [
+                  151,
+                  2
+                ]
               },
               "anchor_method": {
                 "feet_method": "bottom_8px_two_contact_midpoint",
@@ -1974,10 +2220,21 @@
             },
             {
               "source": "res://assets/characters/traveller-seated-front-v1.png",
-              "region": [179, 679, 312, 535],
+              "region": [
+                179,
+                679,
+                312,
+                535
+              ],
               "anchors": {
-                "feet": [165, 533],
-                "head": [175, 2]
+                "feet": [
+                  165,
+                  533
+                ],
+                "head": [
+                  175,
+                  2
+                ]
               },
               "anchor_method": {
                 "feet_method": "bottom_8px_two_contact_midpoint",
@@ -1988,10 +2245,21 @@
             },
             {
               "source": "res://assets/characters/traveller-seated-front-v1.png",
-              "region": [723, 678, 291, 536],
+              "region": [
+                723,
+                678,
+                291,
+                536
+              ],
               "anchors": {
-                "feet": [144, 534],
-                "head": [147, 2]
+                "feet": [
+                  144,
+                  534
+                ],
+                "head": [
+                  147,
+                  2
+                ]
               },
               "anchor_method": {
                 "feet_method": "bottom_8px_two_contact_midpoint",

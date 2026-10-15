@@ -1,0 +1,23 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-10-15",
+  "model": "not exposed by tool",
+  "asset": "traveller-idle-sides-v1.png",
+  "source": "exec-62eb849b-4740-4248-9f7f-a544c85db86d.png",
+  "prompt": "Production pixel-game sprite atlas of ONLY the camera traveller shown in references. Reference1 locks identity/front appearance. Reference2 locks exact left and right profile appearance and clothing. Create dedicated STANDING IDLE animations, NOT walk frames. Strict FOUR COLUMNS by TWO ROWS, EIGHT complete full-body cels. TOP row faces SCREEN LEFT in same strict profile as reference2 top row. BOTTOM row faces SCREEN RIGHT like reference2 bottom row. In all8 cels BOTH BOOTS are flat on ground in a comfortable close-together neutral STANDING stance, knees relaxed, NO stride, no raised foot. Each row 4 sequential idle poses:1 quiet neutral,2 small real shoulder/chest inhalation without scale change,3 brief closed-eye blink with slight relaxed shoulder lowering,4 open eyes returning to neutral. Head/hair/body shapes and scale stay consistent, actual eyes close in pose3, feet remain planted at the exact same ground baseline and positions across each row. Redraw meaningful subtle upper-body poses; no whole-sprite scaling or stretching. Preserve exact compact proportions, ink-blue spiky hair with cream forelock, teal long-sleeved hooded jacket with coral cuff, cream shorts, brown boots, small brick-red camera held at chest, brown backpack with cream rolled paper. Same hands connected to camera, same clothes and accessories across8. Crisp ink-blue stepped pixel outlines and color clusters matching references, no painting or smooth render. Generous true transparent gutters; each full figure occupies max70% of each equal cell height and width with at least12% margins above hair and below boot soles and outside page. No cutoffs, shadows, labels, grid lines, checkerboard or background. Exactly eight complete fullbody figures, no other characters.",
+  "references": [
+    "traveller-front-actions-v2.png",
+    "traveller-walk-sides-v2.png"
+  ],
+  "policy": "Original PNG copied unchanged. Alpha-derived regions and one sequence-wide source scale; four actual poses per direction, no synthetic timing cels. Explicit pose durations hold the open-eye pose and keep the blink brief.",
+  "review": "Accepted for traveller left/right planted idle, breathing and brief blink; source and Main native full-body poses inspected, normal/quarter simulation recordings and packaged three-look checks. Other directions and global animation/wardrobe acceptance remain incomplete.",
+  "sha256": "f68c1e5cda3b891c4de2ac72ac7cdeff3ab030b95d7fffb3ec5acb8d09b142ce",
+  "dimensions": [
+    1774,
+    887
+  ],
+  "references_sha256": {
+    "traveller-front-actions-v2.png": "f5c6aab2fb73076047589e9135aacf95fe5f1a617ebfda42f6f090759bea031e",
+    "traveller-walk-sides-v2.png": "72e01fe0890946227ffd0974101cd85b143a229b6cfb7a19c6756b0f7c7b57f7"
+  }
+}

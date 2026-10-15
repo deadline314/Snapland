@@ -2272,7 +2272,7 @@ func _npc_record_for_role(role: String) -> Dictionary:
 
 static func quantize_walk_direction(world_delta: Vector2, previous_direction: String = "front") -> String:
 	const COMPASS := ["back", "back_right", "right", "front_right", "front", "front_left", "left", "back_left"]
-	if world_delta.length_squared() < 0.000001: return previous_direction if COMPASS.has(previous_direction) else "front"
+	if world_delta.length_squared() <= WALK_DISTANCE_EPSILON * WALK_DISTANCE_EPSILON: return previous_direction if COMPASS.has(previous_direction) else "front"
 	var angle := fposmod(atan2(world_delta.x, -world_delta.y), TAU)
 	var sector_width := TAU / float(COMPASS.size())
 	var nearest := posmod(roundi(angle / sector_width), COMPASS.size())
@@ -2396,15 +2396,14 @@ func _refresh_avatar_texture(frame: int) -> void:
 	avatar.visible=true
 	var display_frame := _ride_pose_frame() if riding else frame
 	var texture_action := action
-	if action == "idle" and direction != "front" and avatar_renderer.has_walk_atlas():
+	if action == "idle" and not avatar_renderer.has_authored_action("idle", direction) and avatar_renderer.has_walk_atlas():
 		# Directions without a dedicated idle sequence hold that direction's
 		# authored walk stance; don't leave the loop on an arbitrary phase cel.
 		display_frame=avatar_renderer.walk_idle_frame(direction)
 		texture_action="walk"
-	if action == "idle" and direction == "front":
+	if action == "idle" and avatar_renderer.has_authored_action("idle", direction):
 		var animation_library = avatar_renderer.animation_library
-		if animation_library.has_frame("traveller", "idle", "front"):
-			display_frame=animation_library.frame_for_time("traveller", "idle", "front", time, reduced_motion)
+		display_frame=animation_library.frame_for_time("traveller", "idle", direction, time, reduced_motion)
 	if action != "walk" and action != "idle" and not riding:
 		var animation_library = avatar_renderer.animation_library
 		if _has_authored_avatar_action(action, direction):

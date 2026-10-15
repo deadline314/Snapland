@@ -59,16 +59,16 @@ func _run() -> void:
 		world.player.velocity = Vector3.ZERO
 		await physics_frame
 		_check(not world.avatar_is_walking and world.last_avatar_action == "idle", "%s stop resolves to an idle stance" % DIRECTIONS[index])
-		if DIRECTIONS[index] == "front":
-			_check(world.avatar_renderer.animation_library.has_action("traveller", "idle", "front"), "front stop retains its dedicated authored idle/breath/blink sequence")
+		if world.avatar_renderer.has_authored_action("idle", DIRECTIONS[index]):
+			_check(world.avatar_renderer.animation_library.has_action("traveller", "idle", DIRECTIONS[index]), "%s stop retains its dedicated authored idle/breath/blink sequence" % DIRECTIONS[index])
 		else:
 			_check(world.last_avatar_frame == world.avatar_renderer.walk_idle_frame(DIRECTIONS[index]), "%s stop holds its authored direction's natural stance cel" % DIRECTIONS[index])
 		var held_texture: Texture2D = world.avatar.texture
 		var held_phase := world.walk_distance_phase
 		for _tick in range(8):
 			await physics_frame
-			if DIRECTIONS[index] == "front":
-				_check(world.avatar.visible and world.avatar_motion_rig == null and world.last_avatar_action == "idle", "front's authored idle animation continues on the source Sprite without procedural rig motion")
+			if world.avatar_renderer.has_authored_action("idle", DIRECTIONS[index]):
+				_check(world.avatar.visible and world.avatar_motion_rig == null and world.last_avatar_action == "idle", "%s authored idle animation continues on the source Sprite without procedural rig motion" % DIRECTIONS[index])
 			else:
 				_check(world.avatar.texture == held_texture and world.walk_distance_phase == held_phase, "%s stopped stance holds without procedural leg motion" % DIRECTIONS[index])
 	_check(changed_direction_count == 8, "the live world loop exercises all eight authored walking directions")

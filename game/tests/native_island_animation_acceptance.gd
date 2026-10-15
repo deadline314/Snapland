@@ -464,16 +464,24 @@ func _observe_hero_walk(seconds: float, expected: String) -> Dictionary:
 	var cels: Dictionary = {}
 	var textures: Dictionary = {}
 	var consistent := true
+	var inconsistent_samples: Array[Dictionary] = []
 	var start := _actor_anchor()
 	while elapsed < seconds and _within_budget():
 		await _frames(1)
+		# Sample after the world has presented its physics state. At quarter time
+		# a physics direction change can precede the next Sprite refresh.
+		await RenderingServer.frame_post_draw
 		elapsed += maxf(0.0, get_process_delta_time())
 		if not _world.avatar_is_walking: continue
 		cels[str(_world.last_avatar_frame)] = true
 		textures[str(_live_texture_id())] = true
-		consistent = consistent and _hero_sprite_source_consistent() and String(_world.facing) == expected and String(_world.last_avatar_action) == "walk"
+		var pixels_match := _hero_sprite_source_consistent()
+		var sample_consistent: bool = pixels_match and String(_world.facing) == expected and String(_world.last_avatar_action) == "walk"
+		if not sample_consistent and inconsistent_samples.size() < 8:
+			inconsistent_samples.append({"pixels_match": pixels_match, "facing": _world.facing, "presented_direction": _world.last_avatar_direction, "action": _world.last_avatar_action, "frame": _world.last_avatar_frame, "velocity": str(_world.player.velocity)})
+		consistent = consistent and sample_consistent
 	var moved := start != _actor_anchor()
-	return {"complete": moved and consistent and cels.size() > 1 and textures.size() > 1 and _world.avatar_is_walking, "actual_movement": moved, "source_consistent": consistent, "sprite_visible": _world.avatar.is_visible_in_tree(), "rig_hidden": _hero_rig_hidden(), "rig_instantiated": is_instance_valid(_world.avatar_motion_rig), "observed_cels": cels.keys(), "observed_texture_instances": textures.keys(), "simulation_seconds": elapsed, "expected_direction": expected}
+	return {"complete": moved and consistent and cels.size() > 1 and textures.size() > 1 and _world.avatar_is_walking, "actual_movement": moved, "source_consistent": consistent, "sprite_visible": _world.avatar.is_visible_in_tree(), "rig_hidden": _hero_rig_hidden(), "rig_instantiated": is_instance_valid(_world.avatar_motion_rig), "observed_cels": cels.keys(), "observed_texture_instances": textures.keys(), "simulation_seconds": elapsed, "expected_direction": expected, "inconsistent_samples": inconsistent_samples}
 
 func _record_authored_playback(action: String, playback: Dictionary) -> void:
 	var available := bool(playback.get("authored", false))
@@ -521,7 +529,7 @@ func _hero_sprite_source_consistent() -> bool:
 	var action: String = _world.last_avatar_action
 	var direction: String = _world.last_avatar_direction
 	if action not in ["walk", "idle"] and not _library.has_frame("traveller", action, direction): return false
-	var texture_action := "walk" if action == "idle" and direction != "front" else action
+	var texture_action := "walk" if action == "idle" and not _library.has_frame("traveller", "idle", direction) else action
 	var expected: Texture2D = _world.avatar_renderer.texture(_world.avatar_appearance, _world.avatar_equipped, direction, int(_world.last_avatar_frame), texture_action)
 	return expected != null and _same_texture_pixels(_world.avatar.texture, expected)
 

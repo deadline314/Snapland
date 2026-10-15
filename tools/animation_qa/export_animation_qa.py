@@ -18,6 +18,9 @@ ROOT = Path(__file__).resolve().parents[2]
 PRESET = Path(__file__).with_name("animation-qa-export-presets.cfg")
 PRESET_NAME = "Snapland Animation QA Windows"
 FIXTURE_FILES = {
+    "game/tests/native_avatar_side_idle.gd",
+    "game/tests/native_avatar_side_idle.tscn",
+    "game/tests/native_avatar_side_idle.gd.uid",
     "game/tests/native_island_animation_acceptance.gd",
     "game/tests/native_island_animation_acceptance.tscn",
     "game/tests/native_island_animation_acceptance.gd.uid",

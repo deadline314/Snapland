@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+AUTHORED HEAD ALPHA: idle/0 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: idle/1 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: idle/2 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: idle/3 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: idle/4 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: idle/5 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: idle/6 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: idle/7 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: sit/0 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: sit/1 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: sit/2 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+AUTHORED HEAD ALPHA: sit/3 opaque upper-pixel gaps=0 measured-head alpha changes=0 (expected 0)
+PASS: four measured front seated poses, head/feet anchors, card bounds, and preserved action coverage

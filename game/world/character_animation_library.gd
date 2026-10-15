@@ -146,6 +146,15 @@ func frame_for_time(actor: String, action: String, direction: String, elapsed: f
 	var frames := _frames(actor, action, direction)
 	if frames.is_empty() or reduced_motion: return 0
 	var entry := _entry(actor, action, direction)
+	var durations: Array = entry.get("frame_durations", [])
+	if not durations.is_empty():
+		var total := 0.0
+		for duration in durations: total += float(duration)
+		var remaining := fposmod(maxf(0.0, elapsed), total) if bool(entry.get("loop", true)) else minf(maxf(0.0, elapsed), total)
+		for index in range(durations.size()):
+			if remaining < float(durations[index]): return index
+			remaining -= float(durations[index])
+		return durations.size() - 1
 	var index := floori(maxf(0.0, elapsed) * frame_fps(actor, action, direction))
 	return posmod(index, frames.size()) if bool(entry.get("loop", true)) else mini(index, frames.size() - 1)
 
@@ -369,6 +378,14 @@ func _entry(actor: String, action: String, direction: String) -> Dictionary:
 		valid_entry = (fps is int or fps is float) and is_finite(float(fps)) and float(fps) > 0.0 and float(fps) <= 60.0
 		var loop_value: Variant = entry.get("loop", true)
 		valid_entry = valid_entry and loop_value is bool
+		if entry.has("frame_durations"):
+			var durations: Variant = entry.frame_durations
+			valid_entry = valid_entry and durations is Array and durations.size() == entry.frames.size() and not durations.is_empty()
+			if valid_entry:
+				for duration in durations:
+					if not (duration is int or duration is float) or not is_finite(float(duration)) or float(duration) <= 0.0 or float(duration) > 30.0:
+						valid_entry = false
+						break
 	if not valid_entry:
 		var key := "%s/%s/%s" % [actor, action, direction]
 		if not _warned.has(key) and _warned.size() < 128:

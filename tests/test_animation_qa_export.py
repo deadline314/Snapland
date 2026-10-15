@@ -32,6 +32,8 @@ class AnimationQaExportTests(unittest.TestCase):
                 "game/runtime.gd": "runtime\n",
                 "game/tests/native_island_animation_acceptance.gd": "fixture script\n",
                 "game/tests/native_island_animation_acceptance.tscn": "fixture scene\n",
+                "game/tests/native_avatar_side_idle.gd": "side idle fixture script\n",
+                "game/tests/native_avatar_side_idle.tscn": "side idle fixture scene\n",
                 "game/tests/other_test.gd": "must be omitted\n",
                 "assets/island.png": "asset\n",
                 "game/data/species.json": "{}\n",
@@ -61,7 +63,7 @@ class AnimationQaExportTests(unittest.TestCase):
             project = destination / "qa-project"
             self.assertEqual(
                 sorted(info["included_tests"]),
-                ["game/tests/native_island_animation_acceptance.gd", "game/tests/native_island_animation_acceptance.tscn"],
+                ["game/tests/native_avatar_side_idle.gd", "game/tests/native_avatar_side_idle.tscn", "game/tests/native_island_animation_acceptance.gd", "game/tests/native_island_animation_acceptance.tscn"],
             )
             self.assertTrue((project / "assets/island.png").is_file())
             self.assertTrue((project / "game/runtime.gd").is_file())

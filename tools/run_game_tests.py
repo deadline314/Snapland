@@ -55,6 +55,7 @@ def main() -> int:
             ("minigame HUD hierarchy tests", common + ["--script", "res://game/tests/test_minigame_hud.gd"]),
             ("eight-direction walk tests", common + ["--script", "res://game/tests/test_avatar_walk.gd"]),
             ("authored avatar walk loop tests", common + ["--script", "res://game/tests/test_avatar_authored_walk_loop.gd"]),
+            ("authored avatar side idle tests", common + ["--script", "res://game/tests/test_avatar_side_idle.gd"]),
             ("authored NPC source walking tests", common + ["--script", "res://game/tests/test_npc_authored_source_walking.gd"]),
             ("character animation library tests", common + ["--script", "res://game/tests/test_character_animation_library.gd"]),
             ("NPC animation state tests", common + ["--script", "res://game/tests/test_npc_animation_states.gd"]),

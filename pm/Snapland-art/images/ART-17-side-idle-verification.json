@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-15 Asia/Taipei",
+  "base_sha": "68ceed09735e6fa02fb25519807d6eb889ecc07a",
+  "branch": "feature/island-experience",
+  "scope": "traveller left/right authored idle; slow-turn heading threshold; existing wardrobe regression",
+  "technical_status": "7 affected Godot checks passed, 16 Python checks passed, source normal and quarter simulation passed, actual packaged normal/reentry/wardrobe passed, ordinary startup and clean shutdown passed",
+  "human_playthrough": false,
+  "native_input": "InputEventKey through Input.parse_input_event, Main-backed scene, scripted camera",
+  "source_native": {
+    "normal": {
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "action_predicates_all_true": true,
+      "action_count": 15
+    },
+    "quarter": {
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "action_predicates_all_true": true,
+      "action_count": 6
+    }
+  },
+  "local_checks": {
+    "test_avatar_side_idle-final": {
+      "errors": [],
+      "pass": [
+        "PASS: dedicated side-idle sources, brief blink timing, and reduced-motion neutral stance"
+      ]
+    },
+    "test_avatar_authored_walk_loop-final": {
+      "errors": [],
+      "pass": [
+        "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig"
+      ]
+    },
+    "test_character_animation_library-final": {
+      "errors": [],
+      "pass": [
+        "PASS: character animation library checks"
+      ]
+    },
+    "test_avatar_seated-final": {
+      "errors": [],
+      "pass": [
+        "PASS: four measured front seated poses, head/feet anchors, card bounds, and preserved action coverage"
+      ]
+    },
+    "test_avatar_attachment-final": {
+      "errors": [],
+      "pass": [
+        "PASS: 64cels x3styles horn/ear opaque component contacts",
+        "PASS: measured walk head attachments"
+      ]
+    },
+    "world-final-v2": {
+      "errors": [],
+      "pass": [
+        "PASS: integrated avatar motion world checks"
+      ]
+    },
+    "integration-final-v2": {
+      "errors": [],
+      "pass": [
+        "PASS: main scene integration checks"
+      ]
+    }
+  },
+  "encoded_video": {
+    "normal": {
+      "file": "ART-17-side-idle-normal-v1.mp4",
+      "streams": [
+        {
+          "codec_name": "h264",
+          "r_frame_rate": "30/1",
+          "duration": "24.600000",
+          "nb_frames": "738"
+        }
+      ],
+      "sha256": "f67d11cbda262e31af9a21fa523e4a9cec69ccc8532152b4642a3166dfef0a38"
+    },
+    "quarter": {
+      "file": "ART-17-side-idle-quarter-v1.mp4",
+      "streams": [
+        {
+          "codec_name": "h264",
+          "r_frame_rate": "30/1",
+          "duration": "30.733333",
+          "nb_frames": "922"
+        }
+      ],
+      "sha256": "683873b14f45a860b3c64d198737eddc5a74d8318741243126f427e0e166f055"
+    },
+    "packaged_normal": {
+      "file": "ART-17-side-idle-packed-normal-v1.mp4",
+      "sha256": "64dd25373c7b8920e08dd1bbbd014127131b8eeb808b3857c69faf87967b4a69",
+      "streams": [
+        {
+          "codec_name": "h264",
+          "r_frame_rate": "30/1",
+          "duration": "24.600000",
+          "nb_frames": "738"
+        }
+      ]
+    }
+  },
+  "visual_review": {
+    "source_sheet_viewed": true,
+    "native_full_body_cels_viewed": 24,
+    "poses_contact_sheets": [
+      "ART-17-side-idle-poses-1.jpg",
+      "ART-17-side-idle-poses-2.jpg"
+    ],
+    "normal_video_played_to_end": true,
+    "quarter_video_played_to_end": true,
+    "quarter_is_separate_simulation": true,
+    "quarter_time_scale": 0.25,
+    "global_animation_quality_accepted": false,
+    "accepted_scope": "left/right planted stance, breathing/blink, 3 displayed looks; not all characters or every appearance"
+  },
+  "formal_progress_before": {
+    "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf",
+    "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json.bak": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b"
+  },
+  "formal_progress_after": {
+    "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf",
+    "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json.bak": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b"
+  },
+  "formal_progress_unchanged": true,
+  "uncompleted": [
+    "traveller back and four diagonal dedicated idles",
+    "ticket and imp approved walking",
+    "all-role full animation/wardrobe coverage"
+  ],
+  "failures_record": "ART-17-side-idle-earlier-failures.json",
+  "packed_native": {
+    "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+    "failures": [],
+    "all_action_predicates_true": true,
+    "exit": 0,
+    "root_fullbody_screens_viewed": 2,
+    "note": "QA executable has its fixture configured as the main scene; release builds reject CLI path/scene overrides."
+  },
+  "python_checks": {
+    "count": 16,
+    "result": "passed",
+    "suites": [
+      "tests.test_godot_entrypoints",
+      "tests.test_animation_qa_export"
+    ]
+  },
+  "design_links": "passed; not gameplay validation",
+  "ordinary_preview": {
+    "exe": "C:\\Users\\stanl\\.codex\\snapland-qa\\side-idle-20261015-v1\\Snapland-Island-Side-Idle.exe",
+    "sha256": "3dd308ef48ee76340dad81a5e09dd73b9fa50d46e67b2598c1e43d419f95c591",
+    "launcher": "C:\\Users\\stanl\\.codex\\snapland-qa\\side-idle-20261015-v1\\Play-Island-Preview.cmd",
+    "save_path": "launcher directory/profile/progress.json",
+    "startup_clean_exit": 0,
+    "source_files_sha256": {
+      "assets/characters/traveller-idle-sides-v1.png": "f68c1e5cda3b891c4de2ac72ac7cdeff3ab030b95d7fffb3ec5acb8d09b142ce",
+      "assets/characters/complete-animation-regions.json": "d330b270e7199d1279ad52a434854f835bcfa5b8e508f4af9d225aa3e1b13275",
+      "game/world/park_world.gd": "bbb0fd34c9939c0bd37724ef62de77bbbc82c010f77b597783a7e1a54e66607f",
+      "game/world/character_animation_library.gd": "acb004fde9bdd30befef359bb40e2638b369382e37ccd43e66d948a1009229bb"
+    },
+    "source_manifest_note": "Packaged actor/frame metadata equals the delivered runtime metadata; the repository coverage-notes prose was clarified after export."
+  },
+  "packaged_actor_metadata_matches_delivery": true
+}
