@@ -102,4 +102,4 @@ with tempfile.TemporaryDirectory(prefix="snapland-next-local-") as isolated:
 - 長期需求與三張使用者喜好／否定圖：[user guide](user_guide.md)。
 - 來源雜湊與圖的用途：[三張原圖來源](Snapland-main/images/MAIN-20-reference-provenance.json)。
 - 本次文件整理票：[MAIN-20](Snapland-main/[MAIN-20]整理需求指南與接續提示.md)。
-- 原遊戲交付與完整證據：[66c73f0](https://github.com/deadline314/Snapland/commit/8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3)。原分支未完成事項仍要看其票，不能只依本摘要勾完。
+- 最新角色局部交付與證據：[8f141fb](https://github.com/deadline314/Snapland/commit/8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3)。原分支未完成事項仍要看其票，不能只依本摘要勾完。
