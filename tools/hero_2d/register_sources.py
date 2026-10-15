@@ -114,6 +114,11 @@ def main():
     except ModuleNotFoundError:
         from align_body_pivots import align
     data=align(data)
+    try:
+        from tools.hero_2d.head_attachments import apply as attach_heads
+    except ModuleNotFoundError:
+        from head_attachments import apply as attach_heads
+    data=attach_heads(data)
     (PACK/'authoring.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print('Registered original 2D source silhouettes and explicit per-cel geometry; not visual acceptance')
 if __name__=='__main__':main()

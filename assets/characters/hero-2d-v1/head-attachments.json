@@ -1,0 +1,1613 @@
+{
+  "schema_version": 1,
+  "method": "Offline normalized grayscale head-feature translation within a fixed authored ROI and +/-6px search; explicit points are reviewed before adoption. Runtime does not infer anatomy.",
+  "reference_roi": [
+    95,
+    110,
+    91,
+    66
+  ],
+  "search_radius": 6,
+  "body_registration": "Unchanged body pixels, feet and scale; attachment is independent of the fixed 140,148 author guide.",
+  "unchanged_body_sha256": {
+    "compiled/coat-idle.png": "816322cb8950c9a5418625c64a5da65395f42cb6190d365493750128b1a39f66",
+    "compiled/coat-photo.png": "2a33f05fd2d26e0706ec03df5f82a6fd60af24a27f2a8c14324d929f41f9757a",
+    "compiled/coat-start.png": "a0d0d1a8b437d2987e92784743287ba92859708dbf3aeb450c240ecf8f3838e8",
+    "compiled/coat-stop.png": "f96bcb1dfdd7d43d659b853d932b170a4233c09b5d37fb15787f89e724d85646",
+    "compiled/coat-turn.png": "3d49b103cbc9c31c0eb69c574e5da3c0501ac34f89b8e77648aff345323f894d",
+    "compiled/coat-walk.png": "a612fc3b2d3d5963aba85041ce10c4f6a4376548bcdf4c8ce6bdde9a2d733f86",
+    "compiled/tide-idle.png": "6e960c92cda06b7e1906084df446d9ffd941da88ace046dc8e2983c0059fdc2b",
+    "compiled/tide-photo.png": "38bc793ec11662ede7b602f84be536f4e1dcaab5b7ded5593b844b75e7f19505",
+    "compiled/tide-start.png": "6a1f20e73a5ce00a259b336c45fa807f527fac3fa7614e3dc35138a9c83bafa0",
+    "compiled/tide-stop.png": "fdca9da10c7905030df6066109775b4aaa1c57d180b047cf71fef2ddf8b42d34",
+    "compiled/tide-turn.png": "9ec2a95ef8ae3031f4db36a1623ebfadf78116f054b66559956fe0192685b747",
+    "compiled/tide-walk.png": "a901186a0e3a8fd4375db9e4808a77553e921260c595f1d23b5e44620e9bbb9e"
+  },
+  "walk": {
+    "front": {
+      "tide_jacket": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.95058,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.941927,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.937005,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.945482,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.95994,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.96292,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.929141,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        }
+      ],
+      "long_coat": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.942598,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.956211,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.963195,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.964341,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.966646,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.953882,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.928523,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        }
+      ]
+    },
+    "front_right": {
+      "tide_jacket": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.938784,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.94456,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.920966,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.936569,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.941093,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.93332,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.931923,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        }
+      ],
+      "long_coat": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.999999,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.956028,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.943728,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.929584,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.953866,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            1
+          ],
+          "attachment": [
+            140,
+            149
+          ],
+          "match_score": 0.950899,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.949322,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.944365,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        }
+      ]
+    },
+    "right": {
+      "tide_jacket": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.952026,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.952446,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.952273,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.955384,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.959343,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.938001,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.946727,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        }
+      ],
+      "long_coat": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.95327,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.956407,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.959475,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.953144,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.958675,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.953853,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.956511,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        }
+      ]
+    },
+    "back_right": {
+      "tide_jacket": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.939396,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.950082,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.946014,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.958763,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.951475,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.9451,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.935555,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        }
+      ],
+      "long_coat": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.960601,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.949808,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.960543,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.953967,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.948668,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.963068,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.952241,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        }
+      ]
+    },
+    "back": {
+      "tide_jacket": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.969667,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.972193,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.982606,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.948852,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.953875,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.966484,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.974955,
+          "original_source_sha256": "9121612e13170c36a2d18dfd65cc7d63c0105d93bed99f6369ab30564eb8f38c"
+        }
+      ],
+      "long_coat": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.956366,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.954694,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.959262,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.958325,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.950244,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.957868,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.972049,
+          "original_source_sha256": "145c9f12871e923927abee9e0ddee3456821c3f7f20f9876b08fb63f94ed2a83"
+        }
+      ]
+    },
+    "back_left": {
+      "tide_jacket": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.97464,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.954313,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.959563,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.95643,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.965105,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.940621,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.949701,
+          "original_source_sha256": "3427064e0e2e8f70c0496649930311cb6cadfae507b03ab932ace8687bedc23d"
+        }
+      ],
+      "long_coat": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.955328,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.951817,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.961221,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.962202,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.95716,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.953581,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.942984,
+          "original_source_sha256": "c29e672e55634db2518526e17cd1dcfefe48a5e48ef7bbfbb6df58d88826be3d"
+        }
+      ]
+    },
+    "left": {
+      "tide_jacket": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            2,
+            2
+          ],
+          "attachment": [
+            142,
+            150
+          ],
+          "match_score": 0.909973,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            -1,
+            2
+          ],
+          "attachment": [
+            139,
+            150
+          ],
+          "match_score": 0.926987,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            0,
+            2
+          ],
+          "attachment": [
+            140,
+            150
+          ],
+          "match_score": 0.929444,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            1,
+            2
+          ],
+          "attachment": [
+            141,
+            150
+          ],
+          "match_score": 0.924081,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            0,
+            2
+          ],
+          "attachment": [
+            140,
+            150
+          ],
+          "match_score": 0.928259,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            0,
+            2
+          ],
+          "attachment": [
+            140,
+            150
+          ],
+          "match_score": 0.930905,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        },
+        {
+          "offset": [
+            1,
+            3
+          ],
+          "attachment": [
+            141,
+            151
+          ],
+          "match_score": 0.925986,
+          "original_source_sha256": "ac61b874631bb6365bc3817c3690d00e7ec4c4fc69b5b1a4fe94267b67bfc0ae"
+        }
+      ],
+      "long_coat": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            1
+          ],
+          "attachment": [
+            140,
+            149
+          ],
+          "match_score": 0.940699,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            2
+          ],
+          "attachment": [
+            140,
+            150
+          ],
+          "match_score": 0.934577,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            2
+          ],
+          "attachment": [
+            140,
+            150
+          ],
+          "match_score": 0.929234,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            1,
+            2
+          ],
+          "attachment": [
+            141,
+            150
+          ],
+          "match_score": 0.92982,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            2
+          ],
+          "attachment": [
+            140,
+            150
+          ],
+          "match_score": 0.939569,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            2
+          ],
+          "attachment": [
+            140,
+            150
+          ],
+          "match_score": 0.936646,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        },
+        {
+          "offset": [
+            0,
+            2
+          ],
+          "attachment": [
+            140,
+            150
+          ],
+          "match_score": 0.93685,
+          "original_source_sha256": "a01210a454c11a7643ec4f9735b201a1993bb125eb5227e4edb77bc02b7234e8"
+        }
+      ]
+    },
+    "front_left": {
+      "tide_jacket": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.999999,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.938008,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.957768,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.935227,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.925896,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            -1,
+            0
+          ],
+          "attachment": [
+            139,
+            148
+          ],
+          "match_score": 0.93119,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.948594,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.953337,
+          "original_source_sha256": "d5465b462519c32e820c7eab32673233343263099e3653faf036ab3a47db3942"
+        }
+      ],
+      "long_coat": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 1.0,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.958041,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.965722,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.955978,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.95828,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.951295,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            1,
+            0
+          ],
+          "attachment": [
+            141,
+            148
+          ],
+          "match_score": 0.955052,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "attachment": [
+            140,
+            148
+          ],
+          "match_score": 0.964464,
+          "original_source_sha256": "9b33b4b18ffaba7619c29e863f7476f7a47e5e5aa2899fefcc9fd6e99e5fa341"
+        }
+      ]
+    }
+  },
+  "author_review": "Eight-direction, two-outfit bald head marker sheets reviewed by main session; actual animation acceptance recorded separately."
+}

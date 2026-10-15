@@ -197,7 +197,9 @@ def source_frame(record: dict[str, Any], pack: Path = PACK) -> tuple[Image.Image
     offset = (round(FEET[0] - feet[0] * scale), round(FEET[1] - feet[1] * scale))
     canvas = Image.new("RGBA", CANVAS)
     canvas.alpha_composite(resized, offset)
-    head = (round(head_anchor[0] * scale + offset[0]), round(head_anchor[1] * scale + offset[1]))
+    guide = (round(head_anchor[0] * scale + offset[0]), round(head_anchor[1] * scale + offset[1]))
+    attachment = _number_pair(record.get("head_attachment_offset", [0, 0]), "pose head_attachment_offset")
+    head = tuple(guide[i] + round(attachment[i]) for i in range(2))
     return canvas, head
 
 
@@ -296,6 +298,7 @@ def _compile_poses(data: dict[str, Any], pack: Path, output_dir: Path) -> tuple[
                     "source": body_name,
                     "region": [origin[0], origin[1], CANVAS[0], CANVAS[1]],
                     "head_anchor": list(head),
+                    "body_guide": [head[i] - round(record.get("head_attachment_offset", [0, 0])[i]) for i in range(2)],
                     "feet": list(FEET),
                     "source_record": _copy_record(record),
                 }
@@ -310,6 +313,7 @@ def _compile_poses(data: dict[str, Any], pack: Path, output_dir: Path) -> tuple[
                         "source": coat_name,
                         "region": [origin[0], origin[1], CANVAS[0], CANVAS[1]],
                         "head_anchor": list(coat_head),
+                        "body_guide": [coat_head[i] - round(coat_record.get("head_attachment_offset", [0, 0])[i]) for i in range(2)],
                         "feet": list(FEET),
                         "source_record": _copy_record(coat_record),
                     }

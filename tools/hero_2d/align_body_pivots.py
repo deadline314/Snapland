@@ -30,7 +30,7 @@ def align(data):
             for r,target in zip(frames,targets):
                 place(r,target);place(r['outfits']['long_coat'],target)
     data['body_registration_guide']={'canvas':[280,360],'root':[140,346],'head_reference':[140,148],
-        'walk':'Every direction, cel and outfit uses the shared author guide. Pixel content moves only according to actual authored limb poses. No per-cel shoe-bottom recentering.',
+        'walk':'Fixed body placement guide only; actual per-cel head attachments are authored separately. No per-cel shoe-bottom recentering or forced static hair root.',
         'photo':'Preserve authored head bow relative to neutral; both outfits use identical per-cel head coordinates.'}
     return data
 

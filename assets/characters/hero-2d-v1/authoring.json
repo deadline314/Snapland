@@ -1,6 +1,10 @@
 {
   "schema_version": 1,
   "note": "Original 2D bitmap sources; explicit per-cel author geometry. Registered components preserve source pixels and remove disconnected neighboring fragments. Human binding QA required.",
+  "part_canvas": [
+    256,
+    256
+  ],
   "walk": {
     "front": [
       {
@@ -60,14 +64,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/00-1.png",
@@ -126,14 +140,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/00-2.png",
@@ -192,14 +216,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/00-3.png",
@@ -258,14 +292,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/00-4.png",
@@ -324,14 +368,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/00-5.png",
@@ -390,14 +444,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/00-6.png",
@@ -456,14 +520,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/00-7.png",
@@ -522,14 +596,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       }
     ],
     "front_right": [
@@ -590,14 +674,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/01-1.png",
@@ -656,14 +750,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/01-2.png",
@@ -722,14 +826,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/01-3.png",
@@ -788,14 +902,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/01-4.png",
@@ -854,14 +978,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/01-5.png",
@@ -920,14 +1054,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              1
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/01-6.png",
@@ -986,14 +1130,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/01-7.png",
@@ -1052,14 +1206,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       }
     ],
     "right": [
@@ -1120,14 +1284,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/01-1.png",
@@ -1186,14 +1360,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/01-2.png",
@@ -1252,14 +1436,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/01-3.png",
@@ -1318,14 +1512,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/01-4.png",
@@ -1384,14 +1588,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/01-5.png",
@@ -1450,14 +1664,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/01-6.png",
@@ -1516,14 +1740,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/01-7.png",
@@ -1582,14 +1816,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       }
     ],
     "back_right": [
@@ -1650,14 +1894,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/01-1.png",
@@ -1716,14 +1970,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/01-2.png",
@@ -1782,14 +2046,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/01-3.png",
@@ -1848,14 +2122,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/01-4.png",
@@ -1914,14 +2198,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/01-5.png",
@@ -1980,14 +2274,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/01-6.png",
@@ -2046,14 +2350,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/01-7.png",
@@ -2112,14 +2426,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       }
     ],
     "back": [
@@ -2180,14 +2504,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/01-1.png",
@@ -2246,14 +2580,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/01-2.png",
@@ -2312,14 +2656,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/01-3.png",
@@ -2378,14 +2732,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/01-4.png",
@@ -2444,14 +2808,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/01-5.png",
@@ -2510,14 +2884,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/01-6.png",
@@ -2576,14 +2960,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-back-v1/01-7.png",
@@ -2642,14 +3036,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       }
     ],
     "back_left": [
@@ -2710,14 +3114,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/00-1.png",
@@ -2776,14 +3190,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/00-2.png",
@@ -2842,14 +3266,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/00-3.png",
@@ -2908,14 +3342,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/00-4.png",
@@ -2974,14 +3418,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/00-5.png",
@@ -3040,14 +3494,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/00-6.png",
@@ -3106,14 +3570,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-back-diagonal-v1/00-7.png",
@@ -3172,14 +3646,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       }
     ],
     "left": [
@@ -3240,14 +3724,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/00-1.png",
@@ -3306,14 +3800,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              1
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          2,
+          2
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/00-2.png",
@@ -3372,14 +3876,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          2
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/00-3.png",
@@ -3438,14 +3952,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          2
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/00-4.png",
@@ -3504,14 +4028,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          2
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/00-5.png",
@@ -3570,14 +4104,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          2
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/00-6.png",
@@ -3636,14 +4180,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          2
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-sides-v1/00-7.png",
@@ -3702,14 +4256,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          3
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       }
     ],
     "front_left": [
@@ -3770,14 +4334,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/00-1.png",
@@ -3836,14 +4410,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/00-2.png",
@@ -3902,14 +4486,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/00-3.png",
@@ -3968,14 +4562,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/00-4.png",
@@ -4034,14 +4638,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/00-5.png",
@@ -4100,14 +4714,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          -1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/00-6.png",
@@ -4166,14 +4790,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          0,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       },
       {
         "source": "registered/bald-walk-front-diagonal-v1/00-7.png",
@@ -4232,14 +4866,24 @@
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           }
         },
         "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
         "registration_target": [
           140.0,
           148.0
-        ]
+        ],
+        "head_attachment_offset": [
+          1,
+          0
+        ],
+        "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
       }
     ]
   },
@@ -12113,10 +12757,6 @@
       }
     }
   },
-  "part_canvas": [
-    256,
-    256
-  ],
   "body_registration_guide": {
     "canvas": [
       280,
@@ -12130,7 +12770,8 @@
       140,
       148
     ],
-    "walk": "Every direction, cel and outfit uses the shared author guide. Pixel content moves only according to actual authored limb poses. No per-cel shoe-bottom recentering.",
+    "walk": "Fixed body placement guide only; actual per-cel head attachments are authored separately. No per-cel shoe-bottom recentering or forced static hair root.",
     "photo": "Preserve authored head bow relative to neutral; both outfits use identical per-cel head coordinates."
-  }
+  },
+  "head_attachment_source": "head-attachments.json"
 }

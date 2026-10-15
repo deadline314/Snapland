@@ -14,6 +14,10 @@
             140,
             148
           ],
+          "body_guide": [
+            140,
+            148
+          ],
           "feet": [
             140,
             346
@@ -97,6 +101,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -147,6 +155,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -233,6 +245,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -283,6 +299,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -347,14 +367,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -366,6 +396,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -403,7 +437,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -417,6 +456,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -481,14 +524,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -500,6 +553,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -537,7 +594,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -551,6 +613,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -615,14 +681,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -634,6 +710,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -671,7 +751,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -685,6 +770,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -749,14 +838,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -768,6 +867,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -805,7 +908,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -819,6 +927,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -883,14 +995,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -902,6 +1024,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -939,7 +1065,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -953,6 +1084,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -1017,14 +1152,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -1036,6 +1181,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -1073,7 +1222,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -1087,6 +1241,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -1151,14 +1309,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -1170,6 +1338,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -1207,7 +1379,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -1221,6 +1398,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -1285,14 +1466,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -1304,6 +1495,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -1341,7 +1536,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -1357,6 +1557,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -1443,6 +1647,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -1491,6 +1699,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -1577,6 +1789,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -1627,6 +1843,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -1713,6 +1933,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -1763,6 +1987,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -1849,6 +2077,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -1897,6 +2129,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            156
+          ],
+          "body_guide": [
             140,
             156
           ],
@@ -2007,6 +2243,10 @@
                 139,
                 156
               ],
+              "body_guide": [
+                139,
+                156
+              ],
               "feet": [
                 140,
                 346
@@ -2071,6 +2311,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            164
+          ],
+          "body_guide": [
             139,
             164
           ],
@@ -2181,6 +2425,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -2245,6 +2493,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            164
+          ],
+          "body_guide": [
             139,
             164
           ],
@@ -2355,6 +2607,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -2419,6 +2675,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            164
+          ],
+          "body_guide": [
             139,
             164
           ],
@@ -2529,6 +2789,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -2593,6 +2857,10 @@
             360
           ],
           "head_anchor": [
+            138,
+            156
+          ],
+          "body_guide": [
             138,
             156
           ],
@@ -2679,6 +2947,10 @@
                 137,
                 155
               ],
+              "body_guide": [
+                137,
+                155
+              ],
               "feet": [
                 140,
                 346
@@ -2727,6 +2999,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -2813,6 +3089,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -2865,6 +3145,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -2951,6 +3235,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -3001,6 +3289,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -3087,6 +3379,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -3137,6 +3433,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -3201,14 +3501,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -3220,6 +3530,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -3257,7 +3571,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -3271,6 +3590,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -3335,14 +3658,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -3354,6 +3687,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -3391,7 +3728,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -3405,6 +3747,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -3469,14 +3815,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  -1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -3488,6 +3844,10 @@
                 360
               ],
               "head_anchor": [
+                139,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -3525,7 +3885,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  -1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -3539,6 +3904,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -3603,14 +3972,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -3622,6 +4001,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -3659,7 +4042,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -3673,6 +4061,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -3737,14 +4129,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -3756,6 +4158,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -3793,7 +4199,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -3807,6 +4218,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -3871,14 +4286,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  1
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -3890,6 +4315,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                149
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -3927,7 +4356,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  1
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -3941,6 +4375,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -4005,14 +4443,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -4024,6 +4472,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -4061,7 +4513,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -4075,6 +4532,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -4139,14 +4600,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -4158,6 +4629,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -4195,7 +4670,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -4211,6 +4691,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -4297,6 +4781,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -4345,6 +4833,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -4431,6 +4923,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -4481,6 +4977,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -4567,6 +5067,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -4617,6 +5121,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -4703,6 +5211,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -4751,6 +5263,10 @@
             360
           ],
           "head_anchor": [
+            142,
+            151
+          ],
+          "body_guide": [
             142,
             151
           ],
@@ -4861,6 +5377,10 @@
                 142,
                 150
               ],
+              "body_guide": [
+                142,
+                150
+              ],
               "feet": [
                 140,
                 346
@@ -4925,6 +5445,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            164
+          ],
+          "body_guide": [
             139,
             164
           ],
@@ -5035,6 +5559,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -5099,6 +5627,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            164
+          ],
+          "body_guide": [
             139,
             164
           ],
@@ -5209,6 +5741,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -5273,6 +5809,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            164
+          ],
+          "body_guide": [
             139,
             164
           ],
@@ -5383,6 +5923,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -5447,6 +5991,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            155
+          ],
+          "body_guide": [
             141,
             155
           ],
@@ -5533,6 +6081,10 @@
                 142,
                 155
               ],
+              "body_guide": [
+                142,
+                155
+              ],
               "feet": [
                 140,
                 346
@@ -5581,6 +6133,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -5667,6 +6223,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -5719,6 +6279,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -5805,6 +6369,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -5855,6 +6423,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -5941,6 +6513,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -5991,6 +6567,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -6055,14 +6635,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -6074,6 +6664,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -6111,7 +6705,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -6125,6 +6724,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -6189,14 +6792,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -6208,6 +6821,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -6245,7 +6862,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -6259,6 +6881,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -6323,14 +6949,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -6342,6 +6978,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -6379,7 +7019,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -6393,6 +7038,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -6457,14 +7106,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -6476,6 +7135,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -6513,7 +7176,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -6527,6 +7195,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -6591,14 +7263,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  -1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -6610,6 +7292,10 @@
                 360
               ],
               "head_anchor": [
+                139,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -6647,7 +7333,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  -1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -6661,6 +7352,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -6725,14 +7420,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -6744,6 +7449,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -6781,7 +7490,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -6795,6 +7509,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -6859,14 +7577,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -6878,6 +7606,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -6915,7 +7647,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -6929,6 +7666,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -6993,14 +7734,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -7012,6 +7763,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -7049,7 +7804,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -7065,6 +7825,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -7151,6 +7915,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -7199,6 +7967,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -7285,6 +8057,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -7335,6 +8111,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -7421,6 +8201,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -7471,6 +8255,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -7557,6 +8345,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -7605,6 +8397,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            153
+          ],
+          "body_guide": [
             140,
             153
           ],
@@ -7715,6 +8511,10 @@
                 140,
                 154
               ],
+              "body_guide": [
+                140,
+                154
+              ],
               "feet": [
                 140,
                 346
@@ -7779,6 +8579,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            160
+          ],
+          "body_guide": [
             141,
             160
           ],
@@ -7889,6 +8693,10 @@
                 140,
                 161
               ],
+              "body_guide": [
+                140,
+                161
+              ],
               "feet": [
                 140,
                 346
@@ -7953,6 +8761,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            160
+          ],
+          "body_guide": [
             141,
             160
           ],
@@ -8063,6 +8875,10 @@
                 140,
                 161
               ],
+              "body_guide": [
+                140,
+                161
+              ],
               "feet": [
                 140,
                 346
@@ -8127,6 +8943,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            160
+          ],
+          "body_guide": [
             141,
             160
           ],
@@ -8237,6 +9057,10 @@
                 140,
                 161
               ],
+              "body_guide": [
+                140,
+                161
+              ],
               "feet": [
                 140,
                 346
@@ -8301,6 +9125,10 @@
             360
           ],
           "head_anchor": [
+            137,
+            154
+          ],
+          "body_guide": [
             137,
             154
           ],
@@ -8387,6 +9215,10 @@
                 137,
                 155
               ],
+              "body_guide": [
+                137,
+                155
+              ],
               "feet": [
                 140,
                 346
@@ -8435,6 +9267,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -8521,6 +9357,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -8573,6 +9413,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -8659,6 +9503,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -8709,6 +9557,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -8795,6 +9647,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -8845,6 +9701,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -8909,14 +9769,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -8928,6 +9798,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -8965,7 +9839,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -8979,6 +9858,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -9043,14 +9926,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -9062,6 +9955,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -9099,7 +9996,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -9113,6 +10015,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -9177,14 +10083,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -9196,6 +10112,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -9233,7 +10153,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -9247,6 +10172,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -9311,14 +10240,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -9330,6 +10269,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -9367,7 +10310,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -9381,6 +10329,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -9445,14 +10397,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -9464,6 +10426,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -9501,7 +10467,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -9515,6 +10486,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -9579,14 +10554,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -9598,6 +10583,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -9635,7 +10624,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -9649,6 +10643,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -9713,14 +10711,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -9732,6 +10740,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -9769,7 +10781,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -9783,6 +10800,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -9847,14 +10868,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -9866,6 +10897,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -9903,7 +10938,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -9919,6 +10959,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -10005,6 +11049,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -10053,6 +11101,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -10139,6 +11191,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -10189,6 +11245,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -10275,6 +11335,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -10325,6 +11389,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -10411,6 +11479,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -10459,6 +11531,10 @@
             360
           ],
           "head_anchor": [
+            142,
+            154
+          ],
+          "body_guide": [
             142,
             154
           ],
@@ -10547,6 +11623,10 @@
                 142,
                 155
               ],
+              "body_guide": [
+                142,
+                155
+              ],
               "feet": [
                 140,
                 346
@@ -10596,6 +11676,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            164
+          ],
+          "body_guide": [
             141,
             164
           ],
@@ -10684,6 +11768,10 @@
                 141,
                 164
               ],
+              "body_guide": [
+                141,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -10733,6 +11821,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            164
+          ],
+          "body_guide": [
             141,
             164
           ],
@@ -10821,6 +11913,10 @@
                 141,
                 164
               ],
+              "body_guide": [
+                141,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -10870,6 +11966,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            164
+          ],
+          "body_guide": [
             141,
             164
           ],
@@ -10958,6 +12058,10 @@
                 141,
                 164
               ],
+              "body_guide": [
+                141,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -11007,6 +12111,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            154
+          ],
+          "body_guide": [
             139,
             154
           ],
@@ -11093,6 +12201,10 @@
                 139,
                 155
               ],
+              "body_guide": [
+                139,
+                155
+              ],
               "feet": [
                 140,
                 346
@@ -11141,6 +12253,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -11227,6 +12343,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -11279,6 +12399,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -11365,6 +12489,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -11415,6 +12543,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -11501,6 +12633,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -11551,6 +12687,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -11615,14 +12755,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -11634,6 +12784,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -11671,7 +12825,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -11685,6 +12844,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -11749,14 +12912,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  -1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -11768,6 +12941,10 @@
                 360
               ],
               "head_anchor": [
+                139,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -11805,7 +12982,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  -1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -11819,6 +13001,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -11883,14 +13069,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -11902,6 +13098,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -11939,7 +13139,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -11953,6 +13158,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -12017,14 +13226,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -12036,6 +13255,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -12073,7 +13296,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -12087,6 +13315,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -12151,14 +13383,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -12170,6 +13412,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -12207,7 +13453,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -12221,6 +13472,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -12285,14 +13540,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -12304,6 +13569,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -12341,7 +13610,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -12355,6 +13629,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -12419,14 +13697,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -12438,6 +13726,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -12475,7 +13767,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -12489,6 +13786,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -12553,14 +13854,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -12572,6 +13883,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -12609,7 +13924,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -12625,6 +13945,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -12711,6 +14035,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -12759,6 +14087,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -12845,6 +14177,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -12895,6 +14231,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -12981,6 +14321,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -13031,6 +14375,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -13117,6 +14465,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -13165,6 +14517,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            153
+          ],
+          "body_guide": [
             140,
             153
           ],
@@ -13253,6 +14609,10 @@
                 140,
                 153
               ],
+              "body_guide": [
+                140,
+                153
+              ],
               "feet": [
                 140,
                 346
@@ -13302,6 +14662,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            163
+          ],
+          "body_guide": [
             140,
             163
           ],
@@ -13390,6 +14754,10 @@
                 140,
                 163
               ],
+              "body_guide": [
+                140,
+                163
+              ],
               "feet": [
                 140,
                 346
@@ -13439,6 +14807,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            163
+          ],
+          "body_guide": [
             140,
             163
           ],
@@ -13527,6 +14899,10 @@
                 140,
                 163
               ],
+              "body_guide": [
+                140,
+                163
+              ],
               "feet": [
                 140,
                 346
@@ -13576,6 +14952,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            163
+          ],
+          "body_guide": [
             140,
             163
           ],
@@ -13664,6 +15044,10 @@
                 140,
                 163
               ],
+              "body_guide": [
+                140,
+                163
+              ],
               "feet": [
                 140,
                 346
@@ -13713,6 +15097,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            156
+          ],
+          "body_guide": [
             140,
             156
           ],
@@ -13799,6 +15187,10 @@
                 140,
                 157
               ],
+              "body_guide": [
+                140,
+                157
+              ],
               "feet": [
                 140,
                 346
@@ -13847,6 +15239,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -13933,6 +15329,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -13985,6 +15385,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -14071,6 +15475,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -14121,6 +15529,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -14207,6 +15619,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -14257,6 +15673,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -14321,14 +15741,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -14340,6 +15770,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -14377,7 +15811,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -14391,6 +15830,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -14455,14 +15898,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -14474,6 +15927,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -14511,7 +15968,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -14525,6 +15987,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -14589,14 +16055,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -14608,6 +16084,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -14645,7 +16125,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -14659,6 +16144,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -14723,14 +16212,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -14742,6 +16241,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -14779,7 +16282,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -14793,6 +16301,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -14857,14 +16369,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -14876,6 +16398,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -14913,7 +16439,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -14927,6 +16458,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -14991,14 +16526,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -15010,6 +16555,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -15047,7 +16596,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -15061,6 +16615,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -15125,14 +16683,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -15144,6 +16712,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -15181,7 +16753,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -15195,6 +16772,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -15259,14 +16840,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -15278,6 +16869,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -15315,7 +16910,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -15331,6 +16931,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -15417,6 +17021,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -15465,6 +17073,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -15551,6 +17163,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -15601,6 +17217,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -15687,6 +17307,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -15737,6 +17361,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -15823,6 +17451,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -15871,6 +17503,10 @@
             360
           ],
           "head_anchor": [
+            136,
+            152
+          ],
+          "body_guide": [
             136,
             152
           ],
@@ -15959,6 +17595,10 @@
                 136,
                 153
               ],
+              "body_guide": [
+                136,
+                153
+              ],
               "feet": [
                 140,
                 346
@@ -16008,6 +17648,10 @@
             360
           ],
           "head_anchor": [
+            133,
+            165
+          ],
+          "body_guide": [
             133,
             165
           ],
@@ -16096,6 +17740,10 @@
                 133,
                 165
               ],
+              "body_guide": [
+                133,
+                165
+              ],
               "feet": [
                 140,
                 346
@@ -16145,6 +17793,10 @@
             360
           ],
           "head_anchor": [
+            133,
+            165
+          ],
+          "body_guide": [
             133,
             165
           ],
@@ -16233,6 +17885,10 @@
                 133,
                 165
               ],
+              "body_guide": [
+                133,
+                165
+              ],
               "feet": [
                 140,
                 346
@@ -16282,6 +17938,10 @@
             360
           ],
           "head_anchor": [
+            133,
+            165
+          ],
+          "body_guide": [
             133,
             165
           ],
@@ -16370,6 +18030,10 @@
                 133,
                 165
               ],
+              "body_guide": [
+                133,
+                165
+              ],
               "feet": [
                 140,
                 346
@@ -16419,6 +18083,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            154
+          ],
+          "body_guide": [
             139,
             154
           ],
@@ -16505,6 +18173,10 @@
                 139,
                 155
               ],
+              "body_guide": [
+                139,
+                155
+              ],
               "feet": [
                 140,
                 346
@@ -16553,6 +18225,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -16639,6 +18315,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -16691,6 +18371,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -16777,6 +18461,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -16827,6 +18515,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -16913,6 +18605,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -16963,6 +18659,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -17027,14 +18727,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -17046,6 +18756,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -17083,7 +18797,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -17097,6 +18816,10 @@
             360
           ],
           "head_anchor": [
+            142,
+            150
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -17161,14 +18884,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  1
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              2,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -17180,6 +18913,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                149
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -17217,7 +18954,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  1
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -17231,6 +18973,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            150
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -17295,14 +19041,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -17314,6 +19070,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                150
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -17351,7 +19111,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -17365,6 +19130,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            150
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -17429,14 +19198,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -17448,6 +19227,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                150
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -17485,7 +19268,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -17499,6 +19287,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            150
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -17563,14 +19355,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -17582,6 +19384,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                150
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -17619,7 +19425,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -17633,6 +19444,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            150
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -17697,14 +19512,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -17716,6 +19541,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                150
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -17753,7 +19582,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -17767,6 +19601,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            150
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -17831,14 +19669,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              2
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -17850,6 +19698,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                150
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -17887,7 +19739,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -17901,6 +19758,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            151
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -17965,14 +19826,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              3
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -17984,6 +19855,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                150
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -18021,7 +19896,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  2
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -18037,6 +19917,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -18123,6 +20007,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -18171,6 +20059,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -18257,6 +20149,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -18307,6 +20203,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -18393,6 +20293,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -18443,6 +20347,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -18529,6 +20437,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -18577,6 +20489,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            151
+          ],
+          "body_guide": [
             139,
             151
           ],
@@ -18687,6 +20603,10 @@
                 139,
                 151
               ],
+              "body_guide": [
+                139,
+                151
+              ],
               "feet": [
                 140,
                 346
@@ -18751,6 +20671,10 @@
             360
           ],
           "head_anchor": [
+            135,
+            161
+          ],
+          "body_guide": [
             135,
             161
           ],
@@ -18861,6 +20785,10 @@
                 135,
                 160
               ],
+              "body_guide": [
+                135,
+                160
+              ],
               "feet": [
                 140,
                 346
@@ -18925,6 +20853,10 @@
             360
           ],
           "head_anchor": [
+            135,
+            161
+          ],
+          "body_guide": [
             135,
             161
           ],
@@ -19035,6 +20967,10 @@
                 135,
                 160
               ],
+              "body_guide": [
+                135,
+                160
+              ],
               "feet": [
                 140,
                 346
@@ -19099,6 +21035,10 @@
             360
           ],
           "head_anchor": [
+            135,
+            161
+          ],
+          "body_guide": [
             135,
             161
           ],
@@ -19209,6 +21149,10 @@
                 135,
                 160
               ],
+              "body_guide": [
+                135,
+                160
+              ],
               "feet": [
                 140,
                 346
@@ -19273,6 +21217,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            154
+          ],
+          "body_guide": [
             139,
             154
           ],
@@ -19359,6 +21307,10 @@
                 139,
                 154
               ],
+              "body_guide": [
+                139,
+                154
+              ],
               "feet": [
                 140,
                 346
@@ -19407,6 +21359,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -19493,6 +21449,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -19545,6 +21505,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -19631,6 +21595,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -19681,6 +21649,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -19767,6 +21739,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -19817,6 +21793,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -19881,14 +21861,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -19900,6 +21890,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -19937,7 +21931,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -19951,6 +21950,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -20015,14 +22018,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -20034,6 +22047,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -20071,7 +22088,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -20085,6 +22107,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -20149,14 +22175,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -20168,6 +22204,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -20205,7 +22245,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -20219,6 +22264,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -20283,14 +22332,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -20302,6 +22361,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -20339,7 +22402,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -20353,6 +22421,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -20417,14 +22489,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -20436,6 +22518,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -20473,7 +22559,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -20487,6 +22578,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -20551,14 +22646,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              -1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -20570,6 +22675,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -20607,7 +22716,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -20621,6 +22735,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -20685,14 +22803,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              0,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -20704,6 +22832,10 @@
                 360
               ],
               "head_anchor": [
+                141,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -20741,7 +22873,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  1,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -20755,6 +22892,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -20819,14 +22960,24 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             },
             "root_registration_method": "explicit shared body guide on fixed 280x360 canvas; independent of trimmed bounds and foot silhouettes",
             "registration_target": [
               140.0,
               148.0
-            ]
+            ],
+            "head_attachment_offset": [
+              1,
+              0
+            ],
+            "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
           },
           "outfits": {
             "long_coat": {
@@ -20838,6 +22989,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],
@@ -20875,7 +23030,12 @@
                 "registration_target": [
                   140.0,
                   148.0
-                ]
+                ],
+                "head_attachment_offset": [
+                  0,
+                  0
+                ],
+                "head_attachment_reference": "head-attachments.json; reviewed offline head-feature translation, independent of body root"
               }
             }
           }
@@ -20891,6 +23051,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -20977,6 +23141,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -21025,6 +23193,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -21111,6 +23283,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -21161,6 +23337,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -21247,6 +23427,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -21297,6 +23481,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -21383,6 +23571,10 @@
                 140,
                 148
               ],
+              "body_guide": [
+                140,
+                148
+              ],
               "feet": [
                 140,
                 346
@@ -21431,6 +23623,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            152
+          ],
+          "body_guide": [
             140,
             152
           ],
@@ -21541,6 +23737,10 @@
                 140,
                 153
               ],
+              "body_guide": [
+                140,
+                153
+              ],
               "feet": [
                 140,
                 346
@@ -21605,6 +23805,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            164
+          ],
+          "body_guide": [
             141,
             164
           ],
@@ -21715,6 +23919,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -21779,6 +23987,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            164
+          ],
+          "body_guide": [
             141,
             164
           ],
@@ -21889,6 +24101,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -21953,6 +24169,10 @@
             360
           ],
           "head_anchor": [
+            141,
+            164
+          ],
+          "body_guide": [
             141,
             164
           ],
@@ -22063,6 +24283,10 @@
                 140,
                 164
               ],
+              "body_guide": [
+                140,
+                164
+              ],
               "feet": [
                 140,
                 346
@@ -22127,6 +24351,10 @@
             360
           ],
           "head_anchor": [
+            139,
+            155
+          ],
+          "body_guide": [
             139,
             155
           ],
@@ -22213,6 +24441,10 @@
                 139,
                 156
               ],
+              "body_guide": [
+                139,
+                156
+              ],
               "feet": [
                 140,
                 346
@@ -22261,6 +24493,10 @@
             360
           ],
           "head_anchor": [
+            140,
+            148
+          ],
+          "body_guide": [
             140,
             148
           ],
@@ -22344,6 +24580,10 @@
                 360
               ],
               "head_anchor": [
+                140,
+                148
+              ],
+              "body_guide": [
                 140,
                 148
               ],

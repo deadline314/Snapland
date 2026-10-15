@@ -1,0 +1,37 @@
+{
+  "scope": "ART-29 binding regression on unchanged original 2D body cels",
+  "python_tests": 9,
+  "pack_composites": 1280,
+  "body_sha_preserved": 12,
+  "reproducibility": {
+    "result": "PASS",
+    "files": 21,
+    "changed": [],
+    "sha256": {
+      "assets\\characters\\hero-2d-v1\\authoring.json": "cbabe66984919e7fe47b7fe5fde37699fab9d8cf154ed1639316d454417b1e41",
+      "assets\\characters\\hero-2d-v1\\manifest.json": "79ccba2edd5a756b4d66cbfbc4e7265bdd848b93e4141078939e6261bbae8e4d",
+      "assets\\characters\\hero-2d-v1\\compiled\\registration.json": "98cf47d67fee66fb0aebf3474e45509be9b89de42861056eaf94d44945135424",
+      "assets\\characters\\hero-2d-v1\\compiled\\coat-idle.png": "816322cb8950c9a5418625c64a5da65395f42cb6190d365493750128b1a39f66",
+      "assets\\characters\\hero-2d-v1\\compiled\\coat-photo.png": "2a33f05fd2d26e0706ec03df5f82a6fd60af24a27f2a8c14324d929f41f9757a",
+      "assets\\characters\\hero-2d-v1\\compiled\\coat-start.png": "a0d0d1a8b437d2987e92784743287ba92859708dbf3aeb450c240ecf8f3838e8",
+      "assets\\characters\\hero-2d-v1\\compiled\\coat-stop.png": "f96bcb1dfdd7d43d659b853d932b170a4233c09b5d37fb15787f89e724d85646",
+      "assets\\characters\\hero-2d-v1\\compiled\\coat-turn.png": "3d49b103cbc9c31c0eb69c574e5da3c0501ac34f89b8e77648aff345323f894d",
+      "assets\\characters\\hero-2d-v1\\compiled\\coat-walk.png": "a612fc3b2d3d5963aba85041ce10c4f6a4376548bcdf4c8ce6bdde9a2d733f86",
+      "assets\\characters\\hero-2d-v1\\compiled\\fallback.png": "f85a8ed8e9c00143ff696ba66546327a01a9526ddd1f873de2d582fc8dd85ab3",
+      "assets\\characters\\hero-2d-v1\\compiled\\hair-bob-underhat.png": "376d5c5d379d8e14b6829c7c0bd67c26a4fea5dc6b58c0235a4dfc2a979c62fb",
+      "assets\\characters\\hero-2d-v1\\compiled\\hair-bob.png": "3a81e3961843f18fec353e7e2431f327e38ba17dd9dc88826cc0b0dbea9f52d3",
+      "assets\\characters\\hero-2d-v1\\compiled\\hair-windswept-underhat.png": "e686951330937935ab3eaf41335617485e9306e1afb25176f275c330883d2079",
+      "assets\\characters\\hero-2d-v1\\compiled\\hair-windswept.png": "1c8857a20824200e48c23c35120a0be2596f1e6b7853710f9d7cb08b9578b5ae",
+      "assets\\characters\\hero-2d-v1\\compiled\\hats-traveller.png": "a55d6b11969379c10aafbf4dad0b1dcb9f810dc2acd25e850bf05aa5d164cab1",
+      "assets\\characters\\hero-2d-v1\\compiled\\tide-idle.png": "6e960c92cda06b7e1906084df446d9ffd941da88ace046dc8e2983c0059fdc2b",
+      "assets\\characters\\hero-2d-v1\\compiled\\tide-photo.png": "38bc793ec11662ede7b602f84be536f4e1dcaab5b7ded5593b844b75e7f19505",
+      "assets\\characters\\hero-2d-v1\\compiled\\tide-start.png": "6a1f20e73a5ce00a259b336c45fa807f527fac3fa7614e3dc35138a9c83bafa0",
+      "assets\\characters\\hero-2d-v1\\compiled\\tide-stop.png": "fdca9da10c7905030df6066109775b4aaa1c57d180b047cf71fef2ddf8b42d34",
+      "assets\\characters\\hero-2d-v1\\compiled\\tide-turn.png": "9ec2a95ef8ae3031f4db36a1623ebfadf78116f054b66559956fe0192685b747",
+      "assets\\characters\\hero-2d-v1\\compiled\\tide-walk.png": "a901186a0e3a8fd4375db9e4808a77553e921260c595f1d23b5e44620e9bbb9e"
+    },
+    "note": "First regeneration normalized authoring annotations only; runtime JSON and all 18 PNGs remained identical. Second complete source registration and compile is byte-stable."
+  },
+  "review": "All 128 marker overlays inspected. Latest native normal/quarter visual and state evidence is in ART-30, using the same manifest. Prior ART-29 eight-appearance media remains prior-version evidence.",
+  "head_markers_sha256": "2a0945f6743ebcdd2ff4f62b6317cf82b121a2f96a63467f4bcb9701ccd27573"
+}
