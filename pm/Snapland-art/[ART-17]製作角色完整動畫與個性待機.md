@@ -308,3 +308,7 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 固定開始 SHA：`68ceed09735e6fa02fb25519807d6eb889ecc07a`；分支：`feature/island-experience`。本批僅接受左右專用待機與換向回歸；其餘五個方向專用待機、票票／小角正式行走與整套角色／換裝驗收仍保留未勾。
 
 本批程式、來源素材與原生證據已推送：[8f141fb](https://github.com/deadline314/Snapland/commit/8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3)。票況：進行中；未合入main。
+
+## 2026-10-15 接續完成剩餘動畫
+
+固定開始 SHA：`ce86d3b`；分支：`feature/island-experience`。使用者要求繼續完成未完票；本輪先補主角後與四個斜向的專用待機，接著補票票／小角正式行走與逐角色完整動作審閱。原圖播放、服飾身份與完整身體持續回歸；依實際完成條件逐項勾選。
