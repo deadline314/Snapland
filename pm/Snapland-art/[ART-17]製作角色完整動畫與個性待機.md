@@ -261,3 +261,7 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 ![普通試玩包的實際上島畫面](images/ART-17-normal-player-preview-v1.png)
 
 [試玩包來源與啟動紀錄](images/ART-17-normal-player-preview-v1-manifest.json) · [原生啟動紀錄](images/ART-17-normal-player-preview-v1.log) · [Main 整合](images/ART-17-session-main-integration-v1.log) · [世界狀態回歸](images/ART-17-session-world-integration-v1.log)。普通試玩包版本基準為 `cf7578a`，本機檔案在本分支的 `build/island-walk-preview-20261014/`；以 `Play-Island-Preview.cmd` 啟動會使用同資料夾的 `profile/progress.json`，不共用原本正式存檔。
+
+## 2026-10-15 票票正式行走接續
+
+固定開始 SHA：`68ceed0a`（以本輪 Git 完整記錄核對）；分支：`feature/island-experience`。本批沿用既有需求，集中完成票票左右正式逐幀行走、短距巡走與起停服務銜接，正常／四分之一速度全身審閱，並回歸主角原圖步行及換裝。候選素材經審閱後才登記正式覆蓋；整張票維持進行中。
