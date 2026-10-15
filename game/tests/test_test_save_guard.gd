@@ -11,13 +11,14 @@ var _owns_fake_userdata := false
 var _fake_profile_hashes: Array[String] = []
 
 func _ready() -> void:
-	var temp_root := OS.get_environment("TEMP").replace("\\", "/")
-	assert(temp_root.is_absolute_path(), "test project fixture uses the OS temporary directory")
+	var temp_root := OS.get_environment("SNAPLAND_SAVE_PATH").replace("\\", "/").get_base_dir()
+	assert(temp_root.is_absolute_path(), "test project fixture uses the externally isolated absolute save directory")
 	var unique := "%d-%d" % [Time.get_ticks_usec(), randi()]
 	_fixture_root = temp_root.path_join("snapland-save-guard-" + unique)
 	_fixture_name = FIXTURE_APP_PREFIX + unique
-	var appdata := OS.get_environment("APPDATA").replace("\\", "/")
-	_fixture_userdata = appdata.path_join("Godot/app_userdata").path_join(_fixture_name)
+	var userdata_parent := OS.get_user_data_dir().replace("\\", "/").get_base_dir()
+	assert(userdata_parent.is_absolute_path(), "Godot provides the platform-specific userdata parent")
+	_fixture_userdata = userdata_parent.path_join(_fixture_name)
 	var make_error := DirAccess.make_dir_recursive_absolute(_fixture_root)
 	assert(make_error == OK, "create only a fresh temporary fixture root")
 	var project_dir := _fixture_root.path_join("project")

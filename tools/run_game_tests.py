@@ -158,7 +158,7 @@ def main() -> int:
                 "pixel UI minigame tests": "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes",
                 "game startup": "PASS: game startup and clean shutdown",
                 "core runtime tests": "PASS: core runtime checks",
-                "test/review save isolation tests": "PASS: test/review launch detection, absolute isolated paths, userdata/sidecar rejection, and unchanged fake fixtures",
+                "test/review save isolation tests": "PASS: save guard child processes use a unique verified fake Godot profile; every rejected-path case preserves seeded sidecars",
                 "wardrobe runtime tests": "PASS: wardrobe runtime checks",
                 "avatar runtime tests": "PASS: avatar runtime checks",
                 "avatar renderer tests": "PASS: independent bob nose/eye alpha, 64-cel bob/curly face RGBA and opening alpha across all skins/species, two-color original body/palette and haircut RGB, bounded caches; native quality pending",

@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+MEASURED: user://progress.json String.is_absolute_path() = true; validator rejects virtual URIs explicitly
+NEGATIVE_FAKE_PROFILE_HASHES_UNCHANGED
+NORMAL_CHILD_BEGIN mode=load-save exit=0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+NORMAL_USERDATA=C:/Users/stanl/AppData/Roaming/Godot/app_userdata/SnaplandSaveGuard-194759-2661354927
+NORMAL_DEFAULT_LOAD_SAVE_OK
+
+NORMAL_CHILD_END mode=load-save
+NORMAL_CHILD_BEGIN mode=reopen exit=0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+NORMAL_USERDATA=C:/Users/stanl/AppData/Roaming/Godot/app_userdata/SnaplandSaveGuard-194759-2661354927
+NORMAL_DEFAULT_REOPEN_OK
+
+NORMAL_CHILD_END mode=reopen
+PASS: save guard child processes use a unique verified fake Godot profile; every rejected-path case preserves seeded sidecars
