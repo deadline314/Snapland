@@ -9,7 +9,7 @@
 ### 先找到真正的遊戲版本
 
 - Repo：`git@github.com:deadline314/Snapland.git`。本機原始 checkout 是 `C:/Github/Snapland`，但不要切換或修改其他 Session 的 checkout／stash。
-- 可執行遊戲在既有獨立工作區 **`C:/Users/stanl/.codex/worktrees/island-experience/Snapland`**，分支 **`feature/island-experience`**。最後已核對的遊戲交付 HEAD 是 **`66c73f0fc41a2b39dbc358ddc5bbe177e4ae5849`**；之後可能有本次文件提交，開始時以 fetch 和實際 HEAD 核對。
+- 可執行遊戲在既有獨立工作區 **`C:/Users/stanl/.codex/worktrees/island-experience/Snapland`**，分支 **`feature/island-experience`**。最後已核對的遊戲交付 HEAD 是 **`8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3`**；之後可能有本次文件提交，開始時以 fetch 和實際 HEAD 核對。
 - **main 截至本次整理只有設計／票據等內容，沒有 `project.godot`；不能從 main 另建空白遊戲或把沒有引擎專案當成遊戲程式遺失。** 文件已另外發布至 main，不代表整個遊戲 feature 已合入 main。
 - 優先沿用上述合適工作區；先看 `git worktree list`、目前分支、dirty files 和遠端，不覆寫已有成果。現有工作區有大量先前未追蹤媒體、匯入變動與未完成票；禁止 `git add .`、整棵 clean／reset／stash。
 - 若該工作區仍由另一個活動 Session 使用，從 `origin/feature/island-experience` 建自己的獨立工作區，不能從 main 重建或擅自攜走未提交變更。新工作區需真正驗證依賴、匯入和原生畫面，不能假定原機器上的未追蹤檔也已在遠端。
@@ -39,16 +39,16 @@
 
 ### 現在實際完成到哪裡
 
-- **ART-17 仍進行中**。`e8320de7ab71ac2d716d314ba09f95834116535c` 恢復主角八方向各八格原圖，停步、真實距離相位、完整招手／拍照／互動，移除角色額外扭曲與正式島嶼的拆腿優先。阿浪用真正左右各四格。票票與小角沒有批准的完整走路，現在保留原地專用待機，不能說整套已完成；主角非正面專用待機也未補齊。
+- **ART-17 仍進行中**。`e8320de7ab71ac2d716d314ba09f95834116535c` 恢復主角八方向各八格原圖，停步、真實距離相位、完整招手／拍照／互動，移除角色額外扭曲與正式島嶼的拆腿優先。阿浪用真正左右各四格。票票與小角沒有批准的完整走路，現在保留原地專用待機，不能說整套已完成；2026-10-15 已補主角左／右各四格專用站立、呼吸與短眨眼，並修正慢速換向仍短暫播相反走姿；後與四個斜向專用待機仍未補齊。來源、正常／四分之一模擬速度、三組外觀、降低動態、重入與實際 Windows exe 本批局部通過，詳見 ART-17-side-idle-verification.json；不是整套角色完成。
 - **ART-18 仍進行中**。`48a8ab9580508dbb11cae6d269766d0512201091` 修正衣櫃「珊瑚紅外套」在前方動作選到不完整背心的身份切換；目前一律用正確外套姿勢配色。這不是不同衣服完整輪廓已完成。被拒收背心走路候選有跨格，重試又改姿勢，沒有採用。
 - **MIC-2 仍進行中**。`629da35d2ff6d7f33e9337c24b735b31beeccb15` 有日夜／區域混音、對話降音、靜音／重入等，先前 WASAPI 25.71秒錄音與局部測試通過。沒有主觀音色試聽完成，也沒完成十二款獨立選曲。
 - 先前局部通過：原圖主角行走、NPC真實來源路線、世界狀態、元件效果、髮帽貼合、坐姿、外套一致性、音訊與 Main 整合；原生四角色來源錄影、降低動態／重入、預設外觀QA包及普通Main啟動都有證據。**不是全部角色與全島的精品品質驗收。** 額外完整髮型矩陣曾150秒逾時，未算過。
 - 證據主要在 `pm/Snapland-art/images/ART-17-authored-*`、`ART-18-coral-jacket-consistency-v1-*`、`pm/Snapland-music/images/MIC-2-dynamics-v1-*`。影片慢放有的是正常影片延長四倍，不能寫成另一輪慢速模擬。報告中的 technical PASS 與 content／visual pending 要分開讀。
-- 普通本機試玩：`build/island-walk-preview-20261014/Play-Island-Preview.cmd`；以同資料夾 `profile/progress.json` 隔離存檔。來源基準 `cf7578a`，不是最新整島完成版本；檔案不存在就依程式重建，不假裝已存在。裸開 exe 不會套用這個 launcher 的隔離設定。
+- 最新普通本機試走：`C:/Users/stanl/.codex/snapland-qa/side-idle-20261015-v1/Play-Island-Preview.cmd`；以同資料夾 `profile/progress.json` 隔離存檔。本批程式／素材交付 `8f141fb`，不是整島完成版本；已實際輸出並經正常啟動／保存／退出檢查。舊 `build/island-walk-preview-20261014/` 仍為 `cf7578a`，不可當最新版。裸開 exe 不會套用 launcher 的隔離設定。
 
 ### 第一個具體工作
 
-先用隔離存檔進入實際島嶼，重看現有原圖步行正常／慢放，確認不曾恢復舊程序步態；讀 ART-17／18 最新覆蓋與逐角色來源表，核對主角非正面待機、票票／小角正式行走及衣物覆蓋缺口。**先選一個缺口做完整小批交付（建議票票的角色專屬正式行走），從研究／素材／接線到正常與慢放全身審閱及換裝回歸真正做完，再推進下一項**；不要把候選升為已批准或反覆推倒已有原圖系統。若有更新的使用者試玩回饋，先解決該回歸。
+先用隔離存檔進入實際島嶼，重看現有原圖步行正常／慢放，確認不曾恢復舊程序步態；讀 ART-17／18 最新覆蓋與逐角色來源表，核對主角非正面待機、票票／小角正式行走及衣物覆蓋缺口。**先讀 ART-17 的 2026-10-15 拒收紀錄：票票五次新候選都沒有可靠的反側接地，最後一次還增加襪口，未接正式巡走；不要重複同一生成方式。先選一個缺口做完整小批交付（票票行走需要可靠的全身關鍵姿勢製作方式），從研究／素材／接線到正常與慢放全身審閱及換裝回歸真正做完，再推進下一項**；不要把候選升為已批准或反覆推倒已有原圖系統。若有更新的使用者試玩回饋，先解決該回歸。
 
 ### 研究、委派、測試與 Git
 
@@ -102,4 +102,4 @@ with tempfile.TemporaryDirectory(prefix="snapland-next-local-") as isolated:
 - 長期需求與三張使用者喜好／否定圖：[user guide](user_guide.md)。
 - 來源雜湊與圖的用途：[三張原圖來源](Snapland-main/images/MAIN-20-reference-provenance.json)。
 - 本次文件整理票：[MAIN-20](Snapland-main/[MAIN-20]整理需求指南與接續提示.md)。
-- 原遊戲交付與完整證據：[66c73f0](https://github.com/deadline314/Snapland/commit/66c73f0fc41a2b39dbc358ddc5bbe177e4ae5849)。原分支未完成事項仍要看其票，不能只依本摘要勾完。
+- 原遊戲交付與完整證據：[66c73f0](https://github.com/deadline314/Snapland/commit/8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3)。原分支未完成事項仍要看其票，不能只依本摘要勾完。

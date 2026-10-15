@@ -306,3 +306,5 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 普通本機試走入口：`C:/Users/stanl/.codex/snapland-qa/side-idle-20261015-v1/Play-Island-Preview.cmd`。啟動檔使用同資料夾的`profile/progress.json`；直接開exe不會套用該隔離設定。來源素材由內建imagegen生成，完整提示與不可變原檔雜湊保存在素材來源紀錄；未使用API／CLI生成。
 
 固定開始 SHA：`68ceed09735e6fa02fb25519807d6eb889ecc07a`；分支：`feature/island-experience`。本批僅接受左右專用待機與換向回歸；其餘五個方向專用待機、票票／小角正式行走與整套角色／換裝驗收仍保留未勾。
+
+本批程式、來源素材與原生證據已推送：[8f141fb](https://github.com/deadline314/Snapland/commit/8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3)。票況：進行中；未合入main。

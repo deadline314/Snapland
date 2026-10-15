@@ -163,5 +163,6 @@
     },
     "source_manifest_note": "Packaged actor/frame metadata equals the delivered runtime metadata; the repository coverage-notes prose was clarified after export."
   },
-  "packaged_actor_metadata_matches_delivery": true
+  "packaged_actor_metadata_matches_delivery": true,
+  "delivery_commit": "8f141fbeed9366d3b61ec0e98ac57b8edf8a58f3"
 }
