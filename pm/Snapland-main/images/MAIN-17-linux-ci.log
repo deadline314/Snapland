@@ -1,0 +1,7 @@
+Linux CI: https://github.com/deadline314/Snapland/actions/runs/38810776500
+Source: e436d0e
+Scope: save isolation stage passed; the entire runtime job later failed a separate legacy idle expectation.
+game-runtime	Run native Godot startup and runtime tests	2026-10-15T21:38:46.7053902Z PASS: clean project import
+game-runtime	Run native Godot startup and runtime tests	2026-10-15T21:38:46.7054768Z PASS: core runtime tests
+game-runtime	Run native Godot startup and runtime tests	2026-10-15T21:38:46.7055354Z PASS: test/review save isolation tests
+game-runtime	Run native Godot startup and runtime tests	2026-10-15T21:38:46.7055738Z PASS: wardrobe runtime tests
