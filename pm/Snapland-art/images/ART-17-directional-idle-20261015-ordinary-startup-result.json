@@ -1,0 +1,8 @@
+{
+  "exit": 0,
+  "errors": [],
+  "pass": [
+    "PASS: game startup and clean shutdown"
+  ],
+  "save_path": "C:\\Users\\stanl\\.codex\\snapland-qa\\directional-idle-20261015-v1\\ordinary-startup-profile\\progress.json"
+}

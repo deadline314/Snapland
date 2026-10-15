@@ -1,0 +1,1052 @@
+{
+	"actions": [
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -3.07723617553711,
+				"y": 1.13292741775513,
+				"z": -5.97723484039307
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back_left",
+				"facing_after_input": "back_left",
+				"inconsistent_samples": [],
+				"main_modal": "",
+				"observed_cels": [
+					"0",
+					"1"
+				],
+				"observed_texture_instances": [
+					"-9223371867136453267",
+					"-9223371858127088274"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.325,
+				"source_consistent": true,
+				"sprite_visible": true,
+				"world_blocked": false
+			},
+			"direction": "back_left",
+			"gait_position": {
+				"phase": 0.673958124243654,
+				"walking": false
+			},
+			"label": "side-walk-0",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -3.07723617553711,
+				"y": 1.13292741775513,
+				"z": -5.97723484039307
+			},
+			"authored_frames": 4,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"end_anchor": {
+					"x": -3.07723617553711,
+					"y": 1.13292741775513,
+					"z": -5.97723484039307
+				},
+				"look": {
+					"appearance": {
+						"face": "curious",
+						"gender": "neutral",
+						"hair": "windswept",
+						"hair_color": "ink",
+						"skin": "warm",
+						"species": "human"
+					},
+					"equipped": {
+						"hat": "hat-none",
+						"outfit": "outfit-tide"
+					}
+				},
+				"max_player_drift_m": 0.0,
+				"max_sprite_grounding_drift_m": 0.0,
+				"rendered": {
+					"action": "",
+					"direction": "back_left",
+					"frames": {
+						"idle/back_left/0": true,
+						"idle/back_left/1": true,
+						"idle/back_left/2": true,
+						"idle/back_left/3": true
+					},
+					"mode": "idle",
+					"presented_action": "idle",
+					"samples": [
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back_left",
+							"frame_index": 0,
+							"process_frame": 85,
+							"simulation_seconds": 0.733333333333333
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back_left",
+							"frame_index": 1,
+							"process_frame": 227,
+							"simulation_seconds": 1.91666666666666
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back_left",
+							"frame_index": 2,
+							"process_frame": 263,
+							"simulation_seconds": 2.21666666666666
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back_left",
+							"frame_index": 3,
+							"process_frame": 277,
+							"simulation_seconds": 2.33333333333333
+						}
+					],
+					"source_consistent": true,
+					"textures": {
+						"-9223371791756421737": true,
+						"-9223371796051389037": true,
+						"-9223371806621035121": true,
+						"-9223371849738480252": true
+					}
+				},
+				"stationary": true
+			},
+			"direction": "back_left",
+			"gait_position": {
+				"phase": 0.673958124243654,
+				"walking": false
+			},
+			"label": "side-idle-look-0",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.60589289665222,
+				"y": 1.1329333782196,
+				"z": -5.50589227676392
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"distance_from_review_start_m": 0.00836748443543911,
+				"expected_direction": "front_right",
+				"inconsistent_samples": [],
+				"observed_cels": [
+					"1",
+					"2",
+					"3"
+				],
+				"observed_texture_instances": [
+					"-9223371739646388832",
+					"-9223371737683454666",
+					"-9223371730284702302"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.325,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front_right",
+			"gait_position": {
+				"phase": 1.33958263503155,
+				"walking": false
+			},
+			"label": "return-to-review-patch-0",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.60589289665222,
+				"y": 1.1329333782196,
+				"z": -6.17247152328491
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back",
+				"facing_after_input": "back",
+				"inconsistent_samples": [],
+				"main_modal": "",
+				"observed_cels": [
+					"3",
+					"4",
+					"5"
+				],
+				"observed_texture_instances": [
+					"-9223371721191451228",
+					"-9223371718020557588",
+					"-9223371710923795029"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.325,
+				"source_consistent": true,
+				"sprite_visible": true,
+				"world_blocked": false
+			},
+			"direction": "back",
+			"gait_position": {
+				"phase": 2.00520725356182,
+				"walking": false
+			},
+			"label": "side-walk-0",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.60589289665222,
+				"y": 1.1329333782196,
+				"z": -6.17247152328491
+			},
+			"authored_frames": 4,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"end_anchor": {
+					"x": -2.60589289665222,
+					"y": 1.1329333782196,
+					"z": -6.17247152328491
+				},
+				"look": {
+					"appearance": {
+						"face": "curious",
+						"gender": "neutral",
+						"hair": "windswept",
+						"hair_color": "ink",
+						"skin": "warm",
+						"species": "human"
+					},
+					"equipped": {
+						"hat": "hat-none",
+						"outfit": "outfit-tide"
+					}
+				},
+				"max_player_drift_m": 0.0,
+				"max_sprite_grounding_drift_m": 0.0,
+				"rendered": {
+					"action": "",
+					"direction": "back",
+					"frames": {
+						"idle/back/0": true,
+						"idle/back/1": true,
+						"idle/back/2": true,
+						"idle/back/3": true
+					},
+					"mode": "idle",
+					"presented_action": "idle",
+					"samples": [
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back",
+							"frame_index": 1,
+							"process_frame": 574,
+							"simulation_seconds": 4.80833333333336
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back",
+							"frame_index": 2,
+							"process_frame": 601,
+							"simulation_seconds": 5.03333333333337
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back",
+							"frame_index": 3,
+							"process_frame": 615,
+							"simulation_seconds": 5.15000000000005
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back",
+							"frame_index": 0,
+							"process_frame": 675,
+							"simulation_seconds": 5.65000000000007
+						}
+					],
+					"source_consistent": true,
+					"textures": {
+						"-9223371674299132489": true,
+						"-9223371691680328268": true,
+						"-9223371695908186705": true,
+						"-9223371704347126352": true
+					}
+				},
+				"stationary": true
+			},
+			"direction": "back",
+			"gait_position": {
+				"phase": 2.00520725356182,
+				"walking": false
+			},
+			"label": "side-idle-look-0",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.60589289665222,
+				"y": 1.13292741775513,
+				"z": -5.50589036941528
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"distance_from_review_start_m": 0.00000634341586192022,
+				"expected_direction": "front",
+				"inconsistent_samples": [],
+				"observed_cels": [
+					"5",
+					"6",
+					"7"
+				],
+				"observed_texture_instances": [
+					"-9223371596922612292",
+					"-9223371592845748833",
+					"-9223371586050976322"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.325,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front",
+			"gait_position": {
+				"phase": 2.67083377944073,
+				"walking": false
+			},
+			"label": "return-to-review-patch-0",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.13455009460449,
+				"y": 1.13292729854584,
+				"z": -5.97723150253296
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"expected_direction": "back_right",
+				"facing_after_input": "back_right",
+				"inconsistent_samples": [],
+				"main_modal": "",
+				"observed_cels": [
+					"7",
+					"0",
+					"1"
+				],
+				"observed_texture_instances": [
+					"-9223371578752887354",
+					"-9223371573853940280",
+					"-9223371567361157696"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.325,
+				"source_consistent": true,
+				"sprite_visible": true,
+				"world_blocked": false
+			},
+			"direction": "back_right",
+			"gait_position": {
+				"phase": 0.5364567735116,
+				"walking": false
+			},
+			"label": "side-walk-0",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.13455009460449,
+				"y": 1.13292729854584,
+				"z": -5.97723150253296
+			},
+			"authored_frames": 4,
+			"authored_or_rig_source": "authored",
+			"detail": {
+				"end_anchor": {
+					"x": -2.13455009460449,
+					"y": 1.13292729854584,
+					"z": -5.97723150253296
+				},
+				"look": {
+					"appearance": {
+						"face": "curious",
+						"gender": "neutral",
+						"hair": "windswept",
+						"hair_color": "ink",
+						"skin": "warm",
+						"species": "human"
+					},
+					"equipped": {
+						"hat": "hat-none",
+						"outfit": "outfit-tide"
+					}
+				},
+				"max_player_drift_m": 0.0,
+				"max_sprite_grounding_drift_m": 0.0,
+				"rendered": {
+					"action": "",
+					"direction": "back_right",
+					"frames": {
+						"idle/back_right/0": true,
+						"idle/back_right/1": true,
+						"idle/back_right/2": true,
+						"idle/back_right/3": true
+					},
+					"mode": "idle",
+					"presented_action": "idle",
+					"samples": [
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back_right",
+							"frame_index": 0,
+							"process_frame": 1062,
+							"simulation_seconds": 8.87500000000014
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back_right",
+							"frame_index": 1,
+							"process_frame": 1242,
+							"simulation_seconds": 10.3750000000001
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back_right",
+							"frame_index": 2,
+							"process_frame": 1278,
+							"simulation_seconds": 10.675
+						},
+						{
+							"action": "idle",
+							"action_elapsed": 0.0,
+							"direction": "back_right",
+							"frame_index": 3,
+							"process_frame": 1292,
+							"simulation_seconds": 10.7916666666667
+						}
+					],
+					"source_consistent": true,
+					"textures": {
+						"-9223371495168797229": true,
+						"-9223371499396655664": true,
+						"-9223371509899192885": true,
+						"-9223371561975671348": true
+					}
+				},
+				"stationary": true
+			},
+			"direction": "back_right",
+			"gait_position": {
+				"phase": 0.5364567735116,
+				"walking": false
+			},
+			"label": "side-idle-look-0",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "walk",
+			"anchor": {
+				"x": -2.60589337348938,
+				"y": 1.1329333782196,
+				"z": -5.50588846206665
+			},
+			"authored_frames": 0,
+			"authored_or_rig_source": "authored-walk-atlas",
+			"detail": {
+				"actual_movement": true,
+				"complete": true,
+				"distance_from_review_start_m": 0.00000631881266599521,
+				"expected_direction": "front_left",
+				"inconsistent_samples": [],
+				"observed_cels": [
+					"1",
+					"2"
+				],
+				"observed_texture_instances": [
+					"-9223371450793060867",
+					"-9223371445206248005"
+				],
+				"rig_hidden": true,
+				"rig_instantiated": false,
+				"simulation_seconds": 0.325,
+				"source_consistent": true,
+				"sprite_visible": true
+			},
+			"direction": "front_left",
+			"gait_position": {
+				"phase": 1.20208145397482,
+				"walking": false
+			},
+			"label": "return-to-review-patch-0",
+			"predicate": true,
+			"source": "authored-walk-atlas",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.60589337348938,
+				"y": 1.1329333782196,
+				"z": -5.50588846206665
+			},
+			"authored_frames": 4,
+			"authored_or_rig_source": "authored",
+			"detail": {},
+			"direction": "front_left",
+			"gait_position": {
+				"phase": 1.20208145397482,
+				"walking": false
+			},
+			"label": "side-idle-pause",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		},
+		{
+			"action": "idle",
+			"anchor": {
+				"x": -2.60589337348938,
+				"y": 1.1329333782196,
+				"z": -5.50588846206665
+			},
+			"authored_frames": 4,
+			"authored_or_rig_source": "authored",
+			"detail": {},
+			"direction": "front_left",
+			"gait_position": {
+				"phase": 1.20208145397482,
+				"walking": false
+			},
+			"label": "side-idle-reduced",
+			"predicate": true,
+			"source": "authored",
+			"status": "observed"
+		}
+	],
+	"actor": "traveller",
+	"camera_framing": {
+		"actor_scale_or_npc_route_changed": false,
+		"camera_up_shift": -0.0109702425495112,
+		"correction_pinned": true,
+		"fixture_adjusted_camera": true,
+		"foot_padding_pixels": 120.230224609375,
+		"full_silhouette_inside_hud_safe_viewport": true,
+		"head_padding_pixels": 126.169708251953,
+		"hud_safe_bottom": 636.0,
+		"hud_safe_top": 116.0,
+		"orthographic_size": 5.0,
+		"pin_simulation_seconds": 0.2,
+		"sprite_alpha_screen_rect": [
+			563.200012207031,
+			242.169708251953,
+			161.280090332031,
+			273.600067138672
+		]
+	},
+	"camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+	"camera_size": 5.0,
+	"capture_png": [
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-initial-start.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back_left-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back_left-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back_left-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back_left-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-side-idle-look-0-back_left.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-side-idle-look-0-back.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back_right-0.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back_right-1.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back_right-2.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-natural-idle-back_right-3.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-side-idle-look-0-back_right.png",
+		"C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final/traveller-look-0-side-idle-reduced.png"
+	],
+	"captured_frame_framing": [
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 119.359924316406,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 119.359832763672,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					545.920104980469,
+					235.359832763672,
+					190.079956054688,
+					281.280242919922
+				]
+			},
+			"label": "initial-start"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.369644165039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					565.1201171875,
+					237.369644165039,
+					153.600036621094,
+					278.400146484375
+				]
+			},
+			"label": "look-0-natural-idle-back_left-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230346679688,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.369644165039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					565.1201171875,
+					237.369644165039,
+					152.640014648438,
+					278.400024414063
+				]
+			},
+			"label": "look-0-natural-idle-back_left-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.969772338867,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					564.160095214844,
+					246.969772338867,
+					152.640014648438,
+					268.799987792969
+				]
+			},
+			"label": "look-0-natural-idle-back_left-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.369644165039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					563.200073242188,
+					237.369644165039,
+					152.640075683594,
+					278.400146484375
+				]
+			},
+			"label": "look-0-natural-idle-back_left-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 121.369644165039,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					565.1201171875,
+					237.369644165039,
+					153.600036621094,
+					278.400146484375
+				]
+			},
+			"label": "look-0-side-idle-look-0-back_left"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.969909667969,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					562.240051269531,
+					246.969909667969,
+					158.400024414063,
+					268.799865722656
+				]
+			},
+			"label": "look-0-natural-idle-back-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.809906005859,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					563.200073242188,
+					250.809906005859,
+					154.559997558594,
+					264.959869384766
+				]
+			},
+			"label": "look-0-natural-idle-back-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.969909667969,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					562.240051269531,
+					246.969909667969,
+					155.52001953125,
+					268.799865722656
+				]
+			},
+			"label": "look-0-natural-idle-back-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.969909667969,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					562.240051269531,
+					246.969909667969,
+					155.52001953125,
+					268.799865722656
+				]
+			},
+			"label": "look-0-natural-idle-back-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 134.809906005859,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					563.200073242188,
+					250.809906005859,
+					154.559997558594,
+					264.959869384766
+				]
+			},
+			"label": "look-0-side-idle-look-0-back"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.969909667969,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					563.200073242188,
+					246.969909667969,
+					151.680053710938,
+					268.799865722656
+				]
+			},
+			"label": "look-0-natural-idle-back_right-0"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.969772338867,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					562.240051269531,
+					246.969772338867,
+					153.600036621094,
+					268.799987792969
+				]
+			},
+			"label": "look-0-natural-idle-back_right-1"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 121.190002441406,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 133.849838256836,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					564.160095214844,
+					249.849838256836,
+					153.599975585938,
+					264.960144042969
+				]
+			},
+			"label": "look-0-natural-idle-back_right-2"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230041503906,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 132.889907836914,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					562.240051269531,
+					248.889907836914,
+					151.680053710938,
+					266.880065917969
+				]
+			},
+			"label": "look-0-natural-idle-back_right-3"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 130.969909667969,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					563.200073242188,
+					246.969909667969,
+					151.680053710938,
+					268.799865722656
+				]
+			},
+			"label": "look-0-side-idle-look-0-back_right"
+		},
+		{
+			"framing": {
+				"actor_scale_or_npc_route_changed": false,
+				"camera_up_shift": -0.0109702425495112,
+				"correction_pinned": true,
+				"fixture_adjusted_camera": true,
+				"foot_padding_pixels": 120.230224609375,
+				"full_silhouette_inside_hud_safe_viewport": true,
+				"head_padding_pixels": 126.169708251953,
+				"hud_safe_bottom": 636.0,
+				"hud_safe_top": 116.0,
+				"orthographic_size": 5.0,
+				"pin_simulation_seconds": 0.2,
+				"sprite_alpha_screen_rect": [
+					563.200012207031,
+					242.169708251953,
+					161.280090332031,
+					273.600067138672
+				]
+			},
+			"label": "look-0-side-idle-reduced"
+		}
+	],
+	"complete_acceptance": false,
+	"encoded_movie_metadata": "pending ffprobe verification by root",
+	"ending_anchor": {
+		"x": -2.60589337348938,
+		"y": 1.1329333782196,
+		"z": -5.50588846206665
+	},
+	"expected_movie_fps": 0.0,
+	"expected_movie_slowdown_factor": 4.0,
+	"failures": [],
+	"fixed_fps": 30.0,
+	"fixture": "Main-backed native island animation acceptance",
+	"hero_scripted_placement": true,
+	"human_played": false,
+	"human_visual_review": "pending",
+	"initial_actor_placement_changed": true,
+	"initial_actor_placement_note": "Hero is scripted once to the plaza review patch (-2.6, 0.4, -5.5), whose actual movement is verified by this run; subsequent eight-direction movement uses real keyboard input without teleport or facing presets.",
+	"initial_grounding": {
+		"complete": true,
+		"grounded": true,
+		"grounding_method": "live CharacterBody3D is_on_floor",
+		"horizontal_speed": 0.0,
+		"simulation_seconds": 0.0916666666666667,
+		"stable_process_frames": 3
+	},
+	"initial_hero_position": [
+		-2.6,
+		0.4,
+		-5.5
+	],
+	"movie_duration_estimate_seconds": 50.1666666666667,
+	"movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+	"movie_fps_source": "Godot fixed movie process delta",
+	"movie_writer_active": true,
+	"movie_writer_frame_count": null,
+	"natural_action_windows": [],
+	"npc_activity_clock": -1.0,
+	"npc_roots_repositioned": false,
+	"placed_camera": true,
+	"playback_mode": "quarter simulation time_scale=0.25",
+	"process_frames_in_run": 1505,
+	"reduced_motion": false,
+	"scene_rebuild": false,
+	"scripted_input": true,
+	"segment_mode": "actions-only",
+	"simulation_seconds": 12.5666666666666,
+	"simulation_seconds_including_capture_and_startup": 12.5666666666666,
+	"starting_anchor": {
+		"x": -2.59999990463257,
+		"y": 1.13291132450104,
+		"z": -5.5
+	},
+	"status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+	"technical_status": "PASS",
+	"wardrobe_profile": "default"
+}

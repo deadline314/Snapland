@@ -10,7 +10,7 @@
     }
   },
   "coverage_notes": {
-    "traveller": "Front actions plus four dedicated idle poses each for left/right. Existing eight-direction walk remains in the legacy atlas. Back and diagonal dedicated idle remain uncovered. Jump is an eight-pose front action at 12 FPS; other jump directions are not authored here. Seated and catch actions retain separately authored metadata.",
+    "traveller": "Front actions with dedicated authored idle in all eight directions. Existing eight-direction walk remains in the legacy atlas. Jump is an eight-pose front action at 12 FPS; other jump directions are not authored here. Seated and catch actions retain separately authored metadata.",
     "traveller_outfit_coral": "Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.",
     "ticket": "Walk row is only a walk_candidate pending authored validation.",
     "imp": "42 authored cells (7x6); no frames synthesized.",
@@ -614,6 +614,566 @@
                 "head_method": "central_upper_alpha_hat_hair_top"
               },
               "source_scale": 0.46,
+              "layers": []
+            }
+          ]
+        },
+        "front_left": {
+          "fps": 4,
+          "loop": true,
+          "frame_durations": [
+            1.9,
+            0.3,
+            0.12,
+            0.5
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-idle-front-diagonal-v1.png",
+              "region": [
+                65,
+                34,
+                276,
+                468
+              ],
+              "anchors": {
+                "feet": [
+                  131,
+                  466
+                ],
+                "head": [
+                  158,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.38,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-front-diagonal-v1.png",
+              "region": [
+                438,
+                34,
+                277,
+                468
+              ],
+              "anchors": {
+                "feet": [
+                  133,
+                  466
+                ],
+                "head": [
+                  158,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.38,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-front-diagonal-v1.png",
+              "region": [
+                823,
+                34,
+                277,
+                468
+              ],
+              "anchors": {
+                "feet": [
+                  132,
+                  466
+                ],
+                "head": [
+                  157,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.38,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-front-diagonal-v1.png",
+              "region": [
+                1207,
+                34,
+                276,
+                468
+              ],
+              "anchors": {
+                "feet": [
+                  132,
+                  466
+                ],
+                "head": [
+                  158,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.38,
+              "layers": []
+            }
+          ]
+        },
+        "front_right": {
+          "fps": 4,
+          "loop": true,
+          "frame_durations": [
+            1.9,
+            0.3,
+            0.12,
+            0.5
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-idle-front-diagonal-v1.png",
+              "region": [
+                65,
+                535,
+                273,
+                457
+              ],
+              "anchors": {
+                "feet": [
+                  134,
+                  455
+                ],
+                "head": [
+                  121,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.38,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-front-diagonal-v1.png",
+              "region": [
+                440,
+                535,
+                273,
+                456
+              ],
+              "anchors": {
+                "feet": [
+                  139,
+                  454
+                ],
+                "head": [
+                  123,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.38,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-front-diagonal-v1.png",
+              "region": [
+                825,
+                535,
+                272,
+                456
+              ],
+              "anchors": {
+                "feet": [
+                  138,
+                  454
+                ],
+                "head": [
+                  122,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.38,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-front-diagonal-v1.png",
+              "region": [
+                1209,
+                535,
+                272,
+                456
+              ],
+              "anchors": {
+                "feet": [
+                  138,
+                  454
+                ],
+                "head": [
+                  122,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.38,
+              "layers": []
+            }
+          ]
+        },
+        "back_left": {
+          "fps": 4,
+          "loop": true,
+          "frame_durations": [
+            1.9,
+            0.3,
+            0.12,
+            0.5
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                176,
+                28,
+                189,
+                342
+              ],
+              "anchors": {
+                "feet": [
+                  92,
+                  340
+                ],
+                "head": [
+                  99,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                470,
+                28,
+                188,
+                342
+              ],
+              "anchors": {
+                "feet": [
+                  92,
+                  340
+                ],
+                "head": [
+                  92,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                788,
+                40,
+                187,
+                330
+              ],
+              "anchors": {
+                "feet": [
+                  93,
+                  328
+                ],
+                "head": [
+                  100,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                1100,
+                28,
+                188,
+                342
+              ],
+              "anchors": {
+                "feet": [
+                  94,
+                  340
+                ],
+                "head": [
+                  94,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            }
+          ]
+        },
+        "back": {
+          "fps": 4,
+          "loop": true,
+          "frame_durations": [
+            1.9,
+            0.3,
+            0.12,
+            0.5
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                171,
+                395,
+                191,
+                330
+              ],
+              "anchors": {
+                "feet": [
+                  95,
+                  328
+                ],
+                "head": [
+                  87,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                469,
+                395,
+                194,
+                330
+              ],
+              "anchors": {
+                "feet": [
+                  96,
+                  328
+                ],
+                "head": [
+                  88,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                784,
+                400,
+                190,
+                325
+              ],
+              "anchors": {
+                "feet": [
+                  94,
+                  323
+                ],
+                "head": [
+                  95,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                1093,
+                395,
+                191,
+                330
+              ],
+              "anchors": {
+                "feet": [
+                  96,
+                  328
+                ],
+                "head": [
+                  96,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            }
+          ]
+        },
+        "back_right": {
+          "fps": 4,
+          "loop": true,
+          "frame_durations": [
+            1.9,
+            0.3,
+            0.12,
+            0.5
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                160,
+                741,
+                186,
+                330
+              ],
+              "anchors": {
+                "feet": [
+                  94,
+                  328
+                ],
+                "head": [
+                  89,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                467,
+                741,
+                189,
+                330
+              ],
+              "anchors": {
+                "feet": [
+                  95,
+                  328
+                ],
+                "head": [
+                  90,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                781,
+                745,
+                189,
+                326
+              ],
+              "anchors": {
+                "feet": [
+                  93,
+                  324
+                ],
+                "head": [
+                  90,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-idle-rear-v1.png",
+              "region": [
+                1092,
+                743,
+                186,
+                328
+              ],
+              "anchors": {
+                "feet": [
+                  95,
+                  326
+                ],
+                "head": [
+                  88,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_joined_contact_centroid",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.53,
               "layers": []
             }
           ]

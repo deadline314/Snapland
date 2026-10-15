@@ -1,0 +1,305 @@
+{
+  "scope": "ART-17: 20 new complete idle cels across five directions; ART-18: front-diagonal idle hair regression only",
+  "overall_tickets_complete": false,
+  "local_godot_tests": [
+    {
+      "test": "test_avatar_idle_attachment",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: directional closed-eye idle hair attachment"
+      ]
+    },
+    {
+      "test": "test_avatar_side_idle",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: dedicated side-idle sources, brief blink timing, and reduced-motion neutral stance"
+      ]
+    },
+    {
+      "test": "test_avatar_motion_world",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: integrated avatar motion world checks"
+      ]
+    },
+    {
+      "test": "test_avatar_authored_walk_loop",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig"
+      ]
+    },
+    {
+      "test": "test_character_animation_library",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: character animation library checks"
+      ]
+    },
+    {
+      "test": "test_avatar_seated",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: four measured front seated poses, head/feet anchors, card bounds, and preserved action coverage"
+      ]
+    },
+    {
+      "test": "test_wardrobe",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: wardrobe runtime checks"
+      ]
+    },
+    {
+      "test": "test_avatar_attachment",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: 64cels x3styles horn/ear opaque component contacts",
+        "PASS: measured walk head attachments"
+      ]
+    },
+    {
+      "test": "test_avatar_renderer",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: independent bob nose/eye alpha, 64-cel bob/curly face RGBA and opening alpha across all skins/species, two-color original body/palette and haircut RGB, bounded caches; native quality pending"
+      ]
+    }
+  ],
+  "additional_regression": {
+    "safe_missing_guide_and_no_face_opening": "idle-safe-fallback-green.log: exit 0; no ERROR; PASS",
+    "positive_blink_png_hashes_unchanged_after_guard": true,
+    "old_test_no_holes_refined": "Replaced a proxy that treated source hair spikes as skull with measured real forehead area; added explicit floating-scalp-crescent check. RED and GREEN retained."
+  },
+  "python_local_cases": 17,
+  "metadata_checks": {
+    "full_builder": 0,
+    "directional_builder": 0,
+    "seated_catch_and_separate_direction_preserved": true
+  },
+  "native_runs": {
+    "diagonal-normal-final": {
+      "exit": 0,
+      "errors": [],
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "all_action_predicates": true,
+      "command": [
+        "C:/Tools/Godot/Godot_v4.7.2-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland",
+        "--rendering-method",
+        "forward_plus",
+        "--audio-driver",
+        "Dummy",
+        "--log-file",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\diagonal-normal-final-live.log",
+        "--write-movie",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\diagonal-normal-final.avi",
+        "--fixed-fps",
+        "30",
+        "res://game/tests/native_avatar_side_idle.tscn",
+        "--",
+        "--actor=traveller",
+        "--actions-only",
+        "--idle-directions=front_left,front_right",
+        "--animation-output=C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-diagonal-normal-final",
+        "--rebuild"
+      ],
+      "save_path": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\diagonal-normal-final-profile\\progress.json"
+    },
+    "diagonal-quarter-final": {
+      "exit": 0,
+      "errors": [],
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "all_action_predicates": true,
+      "command": [
+        "C:/Tools/Godot/Godot_v4.7.2-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland",
+        "--rendering-method",
+        "forward_plus",
+        "--audio-driver",
+        "Dummy",
+        "--log-file",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\diagonal-quarter-final-live.log",
+        "--write-movie",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\diagonal-quarter-final.avi",
+        "--fixed-fps",
+        "30",
+        "res://game/tests/native_avatar_side_idle.tscn",
+        "--",
+        "--actor=traveller",
+        "--actions-only",
+        "--idle-directions=front_left,front_right",
+        "--animation-output=C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-diagonal-quarter-final",
+        "--quarter"
+      ],
+      "save_path": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\diagonal-quarter-final-profile\\progress.json"
+    },
+    "rear-normal-v2": {
+      "exit": 0,
+      "errors": [],
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "all_action_predicates": true,
+      "command": [
+        "C:/Tools/Godot/Godot_v4.7.2-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland",
+        "--rendering-method",
+        "forward_plus",
+        "--audio-driver",
+        "Dummy",
+        "--log-file",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\rear-normal-v2-live.log",
+        "--write-movie",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\rear-normal-v2.avi",
+        "--fixed-fps",
+        "30",
+        "res://game/tests/native_avatar_side_idle.tscn",
+        "--",
+        "--actor=traveller",
+        "--actions-only",
+        "--idle-directions=back_left,back,back_right",
+        "--animation-output=C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-normal-v2",
+        "--rebuild"
+      ],
+      "save_path": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\rear-normal-v2-profile\\progress.json"
+    },
+    "rear-quarter-final": {
+      "exit": 0,
+      "errors": [],
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "all_action_predicates": true,
+      "command": [
+        "C:/Tools/Godot/Godot_v4.7.2-stable_win64_console.exe",
+        "--path",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland",
+        "--rendering-method",
+        "forward_plus",
+        "--audio-driver",
+        "Dummy",
+        "--log-file",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\rear-quarter-final-live.log",
+        "--write-movie",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\rear-quarter-final.avi",
+        "--fixed-fps",
+        "30",
+        "res://game/tests/native_avatar_side_idle.tscn",
+        "--",
+        "--actor=traveller",
+        "--actions-only",
+        "--idle-directions=back_left,back,back_right",
+        "--animation-output=C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\native-rear-quarter-final",
+        "--quarter",
+        "--default-look-only"
+      ],
+      "save_path": "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\rear-quarter-final-profile\\progress.json"
+    },
+    "packed-final": {
+      "exit": 0,
+      "errors": [],
+      "failures": [],
+      "all_action_predicates": true,
+      "command": [
+        "C:\\Users\\stanl\\.codex\\snapland-qa\\directional-idle-20261015-v1\\Snapland-Directional-Idle-QA.exe",
+        "--rendering-method",
+        "forward_plus",
+        "--audio-driver",
+        "Dummy",
+        "--write-movie",
+        "C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\packed-final.avi",
+        "--fixed-fps",
+        "30",
+        "--",
+        "--actor=traveller",
+        "--actions-only",
+        "--idle-directions=front_left,front_right,back_left,back,back_right",
+        "--default-look-only",
+        "--animation-output=C:\\Users\\stanl\\.codex\\worktrees\\island-experience\\Snapland\\.review\\remaining-animation-20261015\\packed-native-final",
+        "--rebuild"
+      ],
+      "save_path": "C:\\Users\\stanl\\.codex\\snapland-qa\\directional-idle-20261015-v1\\packed-profile\\progress.json"
+    }
+  },
+  "video_metadata": {
+    "diagonal-normal": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "28.200000",
+      "nb_frames": "846"
+    },
+    "diagonal-quarter": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "100.133333",
+      "nb_frames": "3004"
+    },
+    "rear-normal": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "41.000000",
+      "nb_frames": "1230"
+    },
+    "rear-quarter": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "51.100000",
+      "nb_frames": "1533"
+    },
+    "packed": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "23.800000",
+      "nb_frames": "714"
+    }
+  },
+  "root_visual_review": {
+    "normal_fullbody_source_cels": 60,
+    "source_cels": 20,
+    "viewed_contact_sheets": 5,
+    "encoded_video_sample_sheets": 4,
+    "native_browser_playback_spot_checks": true,
+    "normal_and_quarter_cels_reviewed": true,
+    "quarter_generated_with_time_scale": 0.25,
+    "human_playthrough": false,
+    "audio_listened": false,
+    "subjective_all_character_acceptance": false,
+    "accepted_scope": "New five-direction idle, source full bodies and tested three-look attachment regression. Not approval of full NPC animation or independent outfit silhouettes."
+  },
+  "real_save_check": {
+    "before": {
+      "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf",
+      "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json.bak": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b"
+    },
+    "after": {
+      "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json": "0a64f04a0cc0f2e7d04aea2bae460428deb89728a091771c538cf62ec268febf",
+      "C:\\Users\\stanl\\AppData\\Roaming\\Godot\\app_userdata\\Snapland\\progress.json.bak": "fee8b124373c084b37f35ff71cc775b14a9c95a9321f4ae482d328acc32d4d8b"
+    },
+    "unchanged": true,
+    "restored_any_file": false
+  },
+  "preview_launcher": "C:/Users/stanl/.codex/snapland-qa/directional-idle-20261015-v1/Play-Island-Preview.cmd",
+  "document_links": {
+    "exit": 0,
+    "result": "PASS links; not gameplay"
+  }
+}

@@ -228,15 +228,22 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		if use_walk_source:
 			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, image)
 		else:
-			source_metrics = _build_source_hair_metrics(image, pose_direction)
+			source_metrics = _authored_source_hair_metrics(image, safe_direction, safe_action)
+	if has_hair_overlay and has_manifest_frame and safe_action == "idle" and safe_direction in ["front_left", "front_right"]:
+		var replacement_cut := _cached_hair_cut(str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.ink)
+		if not bool(source_metrics.get("replacement_geometry_valid", false)) or not bool(replacement_cut.get("face_opening_valid", false)):
+			# Keep a complete authored source if either side of registration is
+			# unavailable. Never strip hair before discovering a missing face cut.
+			has_hair_overlay = false
+			use_replacement_hair = false
 	var palette_hair_indices := PackedInt32Array()
 	if not has_hair_overlay and str(normalized_appearance.get("hair", "windswept")) == "windswept" and str(normalized_appearance.get("hair_color", "ink")) != "ink":
 		if source_metrics.is_empty():
 			var palette_hair_source := _walk_pose_image(safe_direction, walk_frame) if use_walk_source else image.duplicate()
-			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_source else _build_source_hair_metrics(palette_hair_source, pose_direction)
+			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_source else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action)
 		palette_hair_indices = source_metrics.source_hair_indices
 	if species=="elf" and source_metrics.is_empty():
-		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _build_source_hair_metrics(image,pose_direction)
+		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action)
 	# Recolor the body before compositing a prepared haircut. Applying the coat
 	# palette afterwards mistakes dark-blue curls over the jacket for cloth.
 	_apply_palette(image, normalized_appearance, outfit, pose_direction, has_hair_overlay, palette_hair_indices)
@@ -258,7 +265,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if species == "elf" and _species_atlas_valid:
 		if source_metrics.is_empty():
 			var raw_pose := _walk_pose_image(safe_direction,walk_frame) if use_walk_source else image
-			source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,raw_pose) if use_walk_source else _build_source_hair_metrics(raw_pose,pose_direction)
+			source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,raw_pose) if use_walk_source else _authored_source_hair_metrics(raw_pose,safe_direction,safe_action)
 		var ear_layer := Image.create(image.get_width(),image.get_height(),false,Image.FORMAT_RGBA8)
 		ear_layer.fill(Color.TRANSPARENT)
 		_apply_species_ears(ear_layer,species,pose_direction,vertical_offset,SKIN_COLORS.get(str(normalized_appearance.get("skin","warm")),SKIN_COLORS.warm),species_head_shift_x,image,source_metrics)
@@ -818,6 +825,60 @@ func _mask_bounds(mask: PackedByteArray, width: int) -> Rect2i:
 		result = pixel if result.size == Vector2i.ZERO else result.merge(pixel)
 	return result
 
+func _connected_face_opening_mask(hair: Image, opening: Rect2i) -> PackedByteArray:
+	# Keep only the transparent channel connected to the measured face opening.
+	# Isolated holes in crown curls must never expose source-tuft scalp colors.
+	var width := hair.get_width()
+	var height := hair.get_height()
+	var interior := PackedByteArray()
+	interior.resize(width * height)
+	for y in range(height):
+		var left := width
+		var right := -1
+		for x in range(width):
+			if hair.get_pixel(x,y).a > 0.4:
+				left = mini(left,x)
+				right = x
+		for x in range(left + 1,right): interior[y * width + x] = 1
+	var seed := -1
+	var closest := INF
+	var bounds := opening.intersection(Rect2i(0,0,width,height))
+	for y in range(bounds.position.y,bounds.end.y):
+		for x in range(bounds.position.x,bounds.end.x):
+			if interior[y * width + x] == 0 or hair.get_pixel(x,y).a >= 0.4: continue
+			var distance := Vector2(x,y).distance_squared_to(Vector2(opening.get_center()))
+			if distance < closest:
+				closest = distance
+				seed = y * width + x
+	var mask := PackedByteArray()
+	mask.resize(width * height)
+	if seed < 0: return PackedByteArray()
+	var queue := PackedInt32Array([seed])
+	mask[seed] = 1
+	var cursor := 0
+	while cursor < queue.size():
+		var index := queue[cursor]
+		cursor += 1
+		var point := Vector2i(index % width,index / width)
+		for offset in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
+			var next: Vector2i = point + offset
+			if next.x < 0 or next.x >= width or next.y < 0 or next.y >= height: continue
+			var neighbor := next.y * width + next.x
+			if mask[neighbor] != 0 or interior[neighbor] == 0 or hair.get_pixelv(next).a >= 0.4: continue
+			mask[neighbor] = 1
+			queue.append(neighbor)
+	# Fill underneath the opening's partially transparent antialias boundary.
+	# These neighbours are not flood seeds, so a fringe cannot bridge curls.
+	for index in queue:
+		var point := Vector2i(index % width,index / width)
+		for dy in range(-1,2):
+			for dx in range(-1,2):
+				var next := point + Vector2i(dx,dy)
+				if next.x < 0 or next.x >= width or next.y < 0 or next.y >= height: continue
+				var neighbor := next.y * width + next.x
+				if interior[neighbor] != 0 and hair.get_pixelv(next).a < 1.0: mask[neighbor] = 1
+	return mask
+
 func _blend_registered_hair(image: Image, hair: Image, direction: String, crown_y: int, shift_x: int, target_width: float, source_pose: Image, source_metrics: Dictionary = {}, hair_metadata: Dictionary = {}, skull_skin_color: Color = Color("#e8b991")) -> void:
 	var used: Rect2i = hair_metadata.used if hair_metadata.has("used") else hair.get_used_rect()
 	var ratio := target_width * float(image.get_width()) / CANVAS_SIZE.x / maxi(1, used.size.x)
@@ -840,7 +901,14 @@ func _blend_registered_hair(image: Image, hair: Image, direction: String, crown_
 	elif source_bounds.size.x > 0:
 		position.x = roundi(source_bounds.get_center().x - used.get_center().x * ratio)
 		position.y = source_bounds.position.y - roundi(used.position.y * ratio)
+	if bool(source_metrics.get("constrain_crown", false)) and source_bounds.size.x > 0:
+		# The cream forelock is higher than the anatomical face opening. Letting
+		# that patch register a new cut raises the whole wig and enlarges scalp.
+		position.y = maxi(position.y, source_bounds.position.y - roundi(used.position.y * ratio))
 	hair.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
+	var constrained_opening := PackedByteArray()
+	if bool(source_metrics.get("constrain_crown", false)):
+		constrained_opening = _connected_face_opening_mask(hair, _hair_face_opening(hair))
 	# Reconstruct only the existing, source-opaque anatomical head contour.
 	# Cut alpha tells us which samples are exposed, including open-bottom cuts.
 	var underlay_indices: PackedInt32Array = source_metrics.get("skull_underlay_indices", PackedInt32Array())
@@ -850,6 +918,10 @@ func _blend_registered_hair(image: Image, hair: Image, direction: String, crown_
 		var source_point := Vector2i(index % image.get_width(), index / image.get_width())
 		var local_point := source_point - position
 		var inside_cut := local_point.x>=0 and local_point.y>=0 and local_point.x<hair.get_width() and local_point.y<hair.get_height()
+		# A pointed source-hair tuft is not exposed scalp. For registered idle
+		# cuts, fill only the actual transparent face opening between strands.
+		if not constrained_opening.is_empty() and (not inside_cut or constrained_opening[local_point.y * hair.get_width() + local_point.x] == 0):
+			continue
 		var exposed := not inside_cut or hair.get_pixelv(local_point).a<1.0
 		if exposed:
 			# Bob's side strands end above the nose: requiring enclosed hair alpha
@@ -887,13 +959,34 @@ func _walk_source_hair_metrics(direction: String, frame: int, source: Image) -> 
 	assert(_walk_source_metrics_cache.size() <= WALK_SOURCE_METRICS_LIMIT)
 	return metrics
 
-func _build_source_hair_metrics(source: Image, direction: String) -> Dictionary:
+func _authored_source_hair_metrics(source: Image, direction: String, action: String) -> Dictionary:
+	var guide: Image
+	if action == "idle" and direction in ["front_left", "front_right"]:
+		var neutral: Texture2D = animation_library.texture("traveller", "idle", direction, 0)
+		if neutral != null: guide = neutral.get_image()
+	var metrics := _build_source_hair_metrics(source, direction, guide)
+	var geometry_valid: bool = not metrics.skull_underlay_indices.is_empty() and not metrics.face_indices.is_empty()
+	metrics["replacement_geometry_valid"] = geometry_valid
+	metrics["constrain_crown"] = guide != null and geometry_valid
+	return metrics
+
+func _build_source_hair_metrics(source: Image, direction: String, eye_guide: Image = null) -> Dictionary:
 	var source_hair_mask := _source_hair_mask(source, direction)
 	var skin_bounds_out: Array = [Rect2i()]
 	var face_mask := _source_face_mask(source, source_hair_mask, skin_bounds_out)
 	var source_bounds := _mask_bounds(source_hair_mask, source.get_width())
 	var skin_bounds: Rect2i = skin_bounds_out[0]
-	var face_layers := _semantic_face_layers(source,direction,source_hair_mask,source_bounds,skin_bounds)
+	var guide_eyes: Array[Rect2i] = []
+	if eye_guide != null and eye_guide.get_size() == source.get_size() and direction in ["front_left", "front_right"]:
+		var guide_hair := _source_hair_mask(eye_guide, direction)
+		var guide_bounds := _mask_bounds(guide_hair, source.get_width())
+		# Only borrow registration from the neutral cel of the same authored
+		# direction. No guide pixels are copied into a closed-eye expression.
+		if guide_bounds.size.x > 0 and abs(source_bounds.size.x - guide_bounds.size.x) <= 8 and abs(source_bounds.size.y - guide_bounds.size.y) <= 8:
+			var delta := Vector2i(roundi(source_bounds.get_center().x - guide_bounds.get_center().x), source_bounds.position.y - guide_bounds.position.y)
+			for eye in _source_eye_regions(eye_guide, guide_bounds):
+				guide_eyes.append(Rect2i(eye.position + delta, eye.size))
+	var face_layers := _semantic_face_layers(source,direction,source_hair_mask,source_bounds,skin_bounds,guide_eyes)
 	var replacement_mask := source_hair_mask.duplicate()
 	if not face_layers.is_empty():
 		face_mask = face_layers.face_mask
@@ -955,8 +1048,10 @@ func _source_eye_regions(source: Image, hair_bounds: Rect2i) -> Array[Rect2i]:
 	eyes.sort_custom(func(a: Rect2i,b: Rect2i)->bool: return a.position.x<b.position.x)
 	return eyes
 
-func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedByteArray, hair_bounds: Rect2i, skin_bounds: Rect2i) -> Dictionary:
+func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedByteArray, hair_bounds: Rect2i, skin_bounds: Rect2i, guide_eyes: Array[Rect2i] = []) -> Dictionary:
 	var eyes := _source_eye_regions(source,hair_bounds)
+	var guided_blink := eyes.is_empty() and not guide_eyes.is_empty()
+	if eyes.is_empty(): eyes = guide_eyes
 	if eyes.is_empty(): return _side_face_layers(source,direction,hair_mask,hair_bounds,skin_bounds)
 	var width := source.get_width()
 	var height := source.get_height()
@@ -978,7 +1073,8 @@ func _semantic_face_layers(source: Image, direction: String, hair_mask: PackedBy
 	for eye_index in range(eyes.size()):
 		var eye := eyes[eye_index]
 		all_eyes=all_eyes.merge(eye)
-		var eye_guard := eye.grow(1).intersection(Rect2i(0,0,width,height))
+		# Closed lashes extend a few pixels beyond the neutral eye-white box.
+		var eye_guard := eye.grow(3 if guided_blink else 1).intersection(Rect2i(0,0,width,height))
 		var eye_pixels := PackedInt32Array()
 		for y in range(eye_guard.position.y,eye_guard.end.y):
 			for x in range(eye_guard.position.x,eye_guard.end.x):
@@ -1177,10 +1273,12 @@ func _cached_hair_cut(hair_style: String, direction: String, hair_color: Color) 
 					elif pixel.a >= 0.4:
 						tinted.set_pixel(x, y, _recolor_hair_shade(pixel, source_base, tint))
 			variants[color_name] = tinted
+		var opening := _hair_face_opening(hair)
 		entry = {
 			"used": hair.get_used_rect(),
-			"opening": _hair_face_opening(hair),
-			"opening_mask": _hair_face_opening_mask(hair,_hair_face_opening(hair)),
+			"opening": opening,
+			"opening_mask": _hair_face_opening_mask(hair,opening),
+			"face_opening_valid": not _connected_face_opening_mask(hair,opening).is_empty(),
 			"size": hair.get_size(),
 			"variants": variants,
 		}
@@ -1193,7 +1291,7 @@ func _cached_hair_cut(hair_style: String, direction: String, hair_color: Color) 
 			color_key = str(candidate)
 			break
 	var variants: Dictionary = entry.variants
-	return {"image": variants[color_key].duplicate(), "used": entry.used, "opening": entry.opening,"opening_mask":entry.opening_mask,"size":entry.size}
+	return {"image": variants[color_key].duplicate(), "used": entry.used, "opening": entry.opening,"opening_mask":entry.opening_mask,"size":entry.size,"face_opening_valid":entry.face_opening_valid}
 
 func _recolor_hair_shade(pixel: Color, source_base: Color, target_base: Color) -> Color:
 	var shade := clampf(pixel.v / maxf(source_base.v, 0.08), 0.18, 1.65)

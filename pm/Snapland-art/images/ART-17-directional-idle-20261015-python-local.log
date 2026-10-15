@@ -1,0 +1,22 @@
+test_full_build_preserves_separately_authored_actions_and_directions (tests.test_character_animation_manifest_builder.CharacterAnimationManifestBuilderTests.test_full_build_preserves_separately_authored_actions_and_directions) ... ok
+test_design_documents_are_excluded_but_main_runtime_park_json_is_selected (tests.test_animation_qa_export.AnimationQaExportTests.test_design_documents_are_excluded_but_main_runtime_park_json_is_selected) ... ok
+test_formal_helper_discovers_repository_and_sibling_preset (tests.test_animation_qa_export.AnimationQaExportTests.test_formal_helper_discovers_repository_and_sibling_preset) ... ok
+test_sanitized_project_keeps_only_fixture_tests_and_formal_content (tests.test_animation_qa_export.AnimationQaExportTests.test_sanitized_project_keeps_only_fixture_tests_and_formal_content) ... ok
+test_gd_file_passed_as_scene_is_rejected (tests.test_godot_entrypoints.GodotEntrypointTests.test_gd_file_passed_as_scene_is_rejected) ... ok
+test_import_parser_path_is_valid_without_scene_or_script (tests.test_godot_entrypoints.GodotEntrypointTests.test_import_parser_path_is_valid_without_scene_or_script) ... ok
+test_inheritance_cycle_and_unknown_base_fail_actionably (tests.test_godot_entrypoints.GodotEntrypointTests.test_inheritance_cycle_and_unknown_base_fail_actionably) ... ok
+test_invalid_ui_script_is_rejected_before_process_spawn (tests.test_godot_entrypoints.GodotEntrypointTests.test_invalid_ui_script_is_rejected_before_process_spawn) ... ok
+test_missing_and_outside_project_scripts_fail_before_spawn (tests.test_godot_entrypoints.GodotEntrypointTests.test_missing_and_outside_project_scripts_fail_before_spawn) ... ok
+test_node_control_component_must_launch_through_scene (tests.test_godot_entrypoints.GodotEntrypointTests.test_node_control_component_must_launch_through_scene) ... ok
+test_normal_run_returns_captured_text (tests.test_godot_entrypoints.GodotEntrypointTests.test_normal_run_returns_captured_text) ... ok
+test_project_and_default_main_scene_must_exist (tests.test_godot_entrypoints.GodotEntrypointTests.test_project_and_default_main_scene_must_exist) ... ok
+test_review_snapshots_are_not_runnable_even_if_they_extend_scene_tree (tests.test_godot_entrypoints.GodotEntrypointTests.test_review_snapshots_are_not_runnable_even_if_they_extend_scene_tree) ... ok
+test_scene_tree_and_explicit_mainloop_inheritance_are_valid (tests.test_godot_entrypoints.GodotEntrypointTests.test_scene_tree_and_explicit_mainloop_inheritance_are_valid) ... ok
+test_script_and_scene_entrypoints_cannot_be_mixed (tests.test_godot_entrypoints.GodotEntrypointTests.test_script_and_scene_entrypoints_cannot_be_mixed) ... ok
+test_timeout_falls_back_to_killing_owned_process (tests.test_godot_entrypoints.GodotEntrypointTests.test_timeout_falls_back_to_killing_owned_process) ... ok
+test_timeout_kills_only_owned_windows_tree_and_preserves_output (tests.test_godot_entrypoints.GodotEntrypointTests.test_timeout_kills_only_owned_windows_tree_and_preserves_output) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.749s
+
+OK

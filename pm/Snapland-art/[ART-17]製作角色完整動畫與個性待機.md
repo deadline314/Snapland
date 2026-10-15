@@ -312,3 +312,43 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 ## 2026-10-15 接續完成剩餘動畫
 
 固定開始 SHA：`ce86d3b`；分支：`feature/island-experience`。使用者要求繼續完成未完票；本輪先補主角後與四個斜向的專用待機，接著補票票／小角正式行走與逐角色完整動作審閱。原圖播放、服飾身份與完整身體持續回歸；依實際完成條件逐項勾選。
+
+# Commit — 2026-10-15 補齊五向專用待機
+
+### 問題
+主角後與四個斜向停止時只能保留走路格；斜向閉眼換成短髮時又會露出原髮殘片、額頭比例和頭皮缺口。
+
+### 改動
+新增五向共 20 個全身待機姿勢，主角八向合計有 36 個專用待機來源姿勢。前斜向短眨眼，後向以呼吸及輕微頭肩小動作表達，兩腳站定。短髮／捲髮沿同一姿勢與方向顯示，閉眼保留原稿表情；沒有可靠換髮定位時保留完整來源角色。重新整理動畫資料也保留獨立坐姿和接球內容。
+
+### 驗收
+主 Session 檢查兩張原圖的 20 個全身姿勢、三組外觀共 60 張正常原生逐姿勢，以及正常／真正四分之一模擬速度與打包影片的抽幀。腳底、頭髮、手、相機、背包和服裝在本批待機中完整。原生錄製使用 Main 場景、腳本鍵盤事件及審閱相機，不是人類試玩或全島品質完成。整票驗收仍維持原有未勾選項與進行中。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 受影響 Godot 局部測試 | 9 項通過、0 ERROR；另補缺少定位與無臉部開口的失敗／修復回歸 |
+| Python 局部測試 | 17/17；包含完整重建後坐姿、接球及獨立方向保留 |
+| 來源區域與完整資料重建 | 局部及完整檢查均通過；不修改來源 PNG |
+| 正常原生 | 斜向 28.20 秒、後向 41.00 秒；各三組外觀，exit 0、0 ERROR |
+| 四分之一模擬速度 | 斜向 100.133 秒、後向 51.10 秒；獨立 time_scale=0.25，非影片延長 |
+| 實際 Windows 打包 | 五向 23.80 秒，重入／暫停／降低動態條件通過，exit 0、0 ERROR |
+| 普通上島包 | 啟動、保存及正常退出通過；只代表啟動驗收 |
+| 五段影片 | ffprobe 均為 1280×720、30/1 FPS；不代表非固定步長的效能驗收 |
+| 正式進度與備份 | SHA256 不變；所有測試使用獨立絕對存檔 |
+| 完整遊戲套件 | 留 CI，本機沒有執行 |
+
+### 截圖與影片
+
+![五向待機與閉眼換髮](images/ART-17-directional-idle-20261015-diagonal-normal-cels-2.jpg)
+![後向專用站姿與呼吸](images/ART-17-directional-idle-20261015-rear-normal-cels-1.jpg)
+![短髮精靈外觀的實際慢速影格](images/ART-17-directional-idle-20261015-diagonal-quarter-video-frames.jpg)
+
+[斜向正常](images/ART-17-directional-idle-20261015-diagonal-normal.mp4) · [斜向四分之一模擬速度](images/ART-17-directional-idle-20261015-diagonal-quarter.mp4) · [後向正常](images/ART-17-directional-idle-20261015-rear-normal.mp4) · [後向四分之一模擬速度](images/ART-17-directional-idle-20261015-rear-quarter.mp4) · [實際打包影片](images/ART-17-directional-idle-20261015-packed.mp4) · [完整驗收與隔離存檔紀錄](images/ART-17-directional-idle-20261015-verification.json) · [來源、完整提示與雜湊](../../assets/characters/traveller-idle-directional-provenance.json)。
+
+本輪兩次票票行走恢復候選皆拒收，沒有登記為正式行走。[六方方法閱讀與完整姿勢導引](../../design/runtime/character-walk-keypose-recovery.md) · [提示、來源雜湊與拒收理由](images/ART-17-ticket-pose-recovery-20261015.json)。
+
+普通本機入口：`C:/Users/stanl/.codex/snapland-qa/directional-idle-20261015-v1/Play-Island-Preview.cmd`，啟動檔使用同資料夾 `profile/progress.json`。來源圖以內建 imagegen 生成，原檔保留；沒有使用 CLI／API 生成。
+
+固定開始 SHA：`ce86d3b`；分支：`feature/island-experience`。本批接受範圍是新增五向待機與相關換髮回歸；票況維持進行中，未合入 main。

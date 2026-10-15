@@ -1,0 +1,75 @@
+[
+  {
+    "test": "test_avatar_idle_attachment",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: directional closed-eye idle hair attachment"
+    ]
+  },
+  {
+    "test": "test_avatar_side_idle",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: dedicated side-idle sources, brief blink timing, and reduced-motion neutral stance"
+    ]
+  },
+  {
+    "test": "test_avatar_motion_world",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: integrated avatar motion world checks"
+    ]
+  },
+  {
+    "test": "test_avatar_authored_walk_loop",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig"
+    ]
+  },
+  {
+    "test": "test_character_animation_library",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: character animation library checks"
+    ]
+  },
+  {
+    "test": "test_avatar_seated",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: four measured front seated poses, head/feet anchors, card bounds, and preserved action coverage"
+    ]
+  },
+  {
+    "test": "test_wardrobe",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: wardrobe runtime checks"
+    ]
+  },
+  {
+    "test": "test_avatar_attachment",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: 64cels x3styles horn/ear opaque component contacts",
+      "PASS: measured walk head attachments"
+    ]
+  },
+  {
+    "test": "test_avatar_renderer",
+    "exit": 0,
+    "errors": [],
+    "pass": [
+      "PASS: independent bob nose/eye alpha, 64-cel bob/curly face RGBA and opening alpha across all skins/species, two-color original body/palette and haircut RGB, bounded caches; native quality pending"
+    ]
+  }
+]

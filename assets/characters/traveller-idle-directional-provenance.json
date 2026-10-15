@@ -1,0 +1,78 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-10-15",
+  "model": "not exposed by tool",
+  "policy": "Immutable generated source PNGs; alpha-derived cells, shared scale per atlas, no synthetic timing frames or procedural character distortion. Static source review does not establish native animation acceptance.",
+  "entries": [
+    {
+      "asset": "traveller-idle-front-diagonal-v1.png",
+      "source": "exec-6b19e6a3-2aeb-48a7-b90f-8854649de6f3.png",
+      "directions": [
+        "front_left",
+        "front_right"
+      ],
+      "columns": 4,
+      "source_scale": 0.38,
+      "prompt": "Production pixel-game sprite atlas for Snapland, SAME camera traveller as references. Image1 locks FRONT-LEFT and FRONT-RIGHT three-quarter diagonal identities and costume. Image2 shows already-approved dedicated planted-foot side idle, use its calm pose and animation quality. Generate FOUR COLUMNS x TWO ROWS, exactly EIGHT complete full-body cels on true transparency. Top row looks diagonally TOWARD viewer and SCREEN LEFT (front_left, like image1 top row). Bottom row looks diagonally TOWARD viewer and SCREEN RIGHT (front_right, like image1 bottom row). Keep the exact viewing angle in every cel of a row; neither strict side profile nor straight front. BOTH BOOTS remain FLAT on ground in a comfortable neutral standing stance, legs close and relaxed, NO stride, no lifted knee or foot. Every row is four actual consecutive idle poses: 1 quiet open-eye standing, 2 subtle natural shoulder/chest inhalation and small relaxed hand adjustment on camera without resizing head/torso, 3 brief closed-eye blink with shoulder exhalation, 4 eyes open and relaxed return. Actual eyelids close in pose3. Feet stay identical planted positions and baseline across each row. Preserve exact compact proportions, ink-blue spiky windswept hair and cream forelock on its canonical anatomical side, skeptical eyebrows, teal long-sleeved hooded jacket and coral repaired cuff, cream shorts, complete brown boots, brick-red camera held at chest by both connected hands, brown backpack with cream rolled paper. Keep accessories and outfit unchanged between cels and direction views, do not mirror anatomical asymmetries. Clean stepped dark pixel contours, coherent color clusters, reference palette and modest shadows. Equal cells, same body height, large true transparent gutters and 12% clearance around every full figure, including all boot soles, hair and fingers; outside margins too. Neutral uniform sprite lighting, no cast shadow, floor, text, labels, grid or checkerboard. No walking, entire-sprite translation/scaling/stretch, loose body pieces or generic new character.",
+      "references": [
+        "traveller-walk-front-diagonal-v2.png",
+        "traveller-idle-sides-v1.png"
+      ],
+      "sha256": "67383b1544c04315e17b0904ea293497b058eb2365a517adf7ddc3c77ca28028",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "reference_sha256": {
+        "traveller-walk-front-diagonal-v2.png": "2e2386e401cbde8d6b22bce48549b8d00074874987c7d28e8e6724a5f59cae30",
+        "traveller-idle-sides-v1.png": "f68c1e5cda3b891c4de2ac72ac7cdeff3ab030b95d7fffb3ec5acb8d09b142ce"
+      }
+    },
+    {
+      "asset": "traveller-idle-rear-v1.png",
+      "source": "exec-9c7407c8-fee2-4f37-9bc7-3567ff234eef.png",
+      "directions": [
+        "back_left",
+        "back",
+        "back_right"
+      ],
+      "columns": 4,
+      "source_scale": 0.53,
+      "prompt": "Snapland production pixel-game animation spritesheet: SAME camera traveller as reference1 and reference2. Create a dedicated REAR STANDING IDLE atlas, FOUR COLUMNS x THREE ROWS, exactly TWELVE complete full-body cels with true transparent background. Reference1 locks rear diagonal view identities/costume; reference2 bottom row locks straight rear. Row1 looks AWAY from viewer diagonally SCREEN LEFT (back_left, like ref1 top row); row2 looks directly AWAY from viewer (back, like ref2 bottom row); row3 looks AWAY diagonally SCREEN RIGHT (back_right, like ref1 bottom row). Preserve each row's camera angle throughout. TWO boots always planted flat on the ground in relaxed stationary close stance, not stepping; complete connected legs, hands and soles visible. Each row four distinct natural sequential rear idle poses:1 relaxed neutral;2 gentle shoulder/chest inhalation, shoulders subtly lift against backpack straps;3 shoulders relax and slight authored head inclination/breath exhale, face remains turned away (a tiny blink only if the eye is actually visible in diagonal views);4 return relaxed posture. Feet and boot baseline remain identical within each row. No wholebody scaling, translation, stretching, borrowed walking stride or separated parts. Lock exact compact stature, ink-blue spiky hair with canonical cream forelock (mostly hidden from direct rear), teal long-sleeved hooded jacket with one coral cuff, cream shorts, brown work boots, brown backpack with two golden buckles and cream rolled paper on canonical side. Chest camera stays at front, concealed naturally by the body from rear; do not put a camera on backpack. Same anatomy, hairstyle, backpack construction and colors in all12. Crisp stepped dark pixel outlines and connected palette clusters matching existing sources. Generous true transparent gutters, identical equal cells, 12% empty margin around hair/hands/boots and all outer sheet edges. Full bodies occupy at most72% cell height/width. Neutral sprite lighting, no environment, cast shadow, text, labels, grid, checkerboard or opaque glow.",
+      "references": [
+        "traveller-walk-back-diagonal-v2.png",
+        "traveller-walk-front-back-v2.png"
+      ],
+      "sha256": "cd6ab547e615573fb6e0daee28d1c73496fe95375538364326eb97ab8aa0ba1f",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "reference_sha256": {
+        "traveller-walk-back-diagonal-v2.png": "0843139216ac87c3c7f96f13f7eed43f8878eb5e7bead87fdaec24dec5f72dcd",
+        "traveller-walk-front-back-v2.png": "bd155b550a174674890e4139c4d3fb78ce1766e34fdc00f921e461fcef0cbd3b"
+      }
+    }
+  ],
+  "review": {
+    "source_full_body_cels_viewed": 20,
+    "native_normal_source_cels_reviewed": 60,
+    "outfits": [
+      "default",
+      "coral + straw",
+      "bob + elf + flower"
+    ],
+    "normal_clips": [
+      "diagonal-normal",
+      "rear-normal"
+    ],
+    "quarter_simulation_clips": [
+      "diagonal-quarter",
+      "rear-quarter"
+    ],
+    "quarter_is_independent_simulation": true,
+    "movie_fps": 30,
+    "native_evidence_prefix": "ART-17-directional-idle-20261015-",
+    "scope": "Dedicated idle source and local wardrobe regression only; ART-17/18 overall acceptance remains open."
+  }
+}

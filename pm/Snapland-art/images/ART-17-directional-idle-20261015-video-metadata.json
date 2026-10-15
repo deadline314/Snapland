@@ -1,0 +1,37 @@
+{
+  "diagonal-normal": {
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "30/1",
+    "duration": "28.200000",
+    "nb_frames": "846"
+  },
+  "diagonal-quarter": {
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "30/1",
+    "duration": "100.133333",
+    "nb_frames": "3004"
+  },
+  "rear-normal": {
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "30/1",
+    "duration": "41.000000",
+    "nb_frames": "1230"
+  },
+  "rear-quarter": {
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "30/1",
+    "duration": "51.100000",
+    "nb_frames": "1533"
+  },
+  "packed": {
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "30/1",
+    "duration": "23.800000",
+    "nb_frames": "714"
+  }
+}

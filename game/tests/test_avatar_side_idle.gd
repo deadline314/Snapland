@@ -16,7 +16,7 @@ func _run() -> void:
 	world.set_process(false)
 	world.set_physics_process(false)
 	var library = world.avatar_renderer.animation_library
-	for direction in ["left", "right"]:
+	for direction in ["left", "right", "front_left", "front_right", "back_left", "back", "back_right"]:
 		_check(library.has_action("traveller", "idle", direction), direction + " has dedicated full-body idle")
 		if not library.has_action("traveller", "idle", direction): continue
 		world.facing = direction

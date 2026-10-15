@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: IDLE ATTACHMENT: front_left blink has a solid scalp beneath replacement hair
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://game/tests/test_avatar_idle_attachment.gd:25)
+       [1] _initialize (res://game/tests/test_avatar_idle_attachment.gd:14)
+ERROR: IDLE ATTACHMENT: front_right blink has a solid scalp beneath replacement hair
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://game/tests/test_avatar_idle_attachment.gd:25)
+       [1] _initialize (res://game/tests/test_avatar_idle_attachment.gd:14)

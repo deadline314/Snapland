@@ -15,7 +15,7 @@ TRAVELLER_JUMP = ROOT / "assets/characters/traveller-jump-front-v1.png"
 # One sequence-wide scale derived from the largest row-baseline-preserving crop:
 # 360 canonical px / (1.6 actor scale * 343 source px) ~= 0.656.
 TRAVELLER_JUMP_SCALE = 0.656
-TRAVELLER_COVERAGE_NOTE = "Front actions plus four dedicated idle poses each for left/right. Existing eight-direction walk remains in the legacy atlas. Back and diagonal dedicated idle remain uncovered. Jump is an eight-pose front action at 12 FPS; other jump directions are not authored here. Seated and catch actions retain separately authored metadata."
+TRAVELLER_COVERAGE_NOTE = "Front actions with dedicated authored idle in all eight directions. Existing eight-direction walk remains in the legacy atlas. Jump is an eight-pose front action at 12 FPS; other jump directions are not authored here. Seated and catch actions retain separately authored metadata."
 ACTORS = {
     "traveller": {"cols": 8, "rows": ["idle", "wave", "photograph", "interact"], "ref": [175, 220], "canvas": [280, 360], "feet": 346, "fps": {"idle": 3, "wave": 6, "photograph": 5, "interact": 5}},
     "ticket": {"cols": 8, "rows": ["idle", "greet", "interact", "idle_gesture", "emotion_happy", "walk_candidate"], "ref": [130, 200], "canvas": [320, 460], "feet": 448, "fps": {"idle": 3, "greet": 6, "interact": 5, "idle_gesture": 3, "emotion_happy": 4, "walk_candidate": 7}},
@@ -243,15 +243,15 @@ def add_announcer_side_walk(actor_data: dict) -> dict:
     actor_data["walk"]=side_actions
     return {"actor":"announcer","source":ANNOUNCER_SIDE_WALK.relative_to(ROOT).as_posix(),"source_size":[w,h],"atlas_rows":{"right":0,"left":1},"registered_frames_per_direction":4,"repeated_cells_excluded":True,"frame_count":sum(len(entry["frames"]) for entry in side_actions.values()),"grid_from_global_alpha_gutters":True,"source_scale":ANNOUNCER_SIDE_SCALE,"actor_scale":round(actor_scale,4),"effective_scale":round(effective_scale,4),"primary_alpha_boundary_hits":edge_hits,"canonical_margins_min_px":{"left":round(min_margins[0],1),"top":round(min_margins[1],1),"right":round(min_margins[2],1),"bottom":round(min_margins[3],1)},"canonical_aa_margins_min_px":{"left":round(min_aa_margins[0],1),"top":round(min_aa_margins[1],1),"right":round(min_aa_margins[2],1),"bottom":round(min_aa_margins[3],1)},"frames":summaries}
 
-def add_traveller_side_idle(actor_data: dict) -> dict:
-    """Register complete planted-foot profile poses, with one shared source scale."""
-    path = ROOT / "assets/characters/traveller-idle-sides-v1.png"
+def add_traveller_idle_atlas(actor_data: dict, filename: str, directions: tuple[str, ...], source_scale: float) -> dict:
+    """Register complete planted-foot poses with one source scale per atlas."""
+    path = ROOT / "assets/characters" / filename
     alpha = np.asarray(Image.open(path).convert("RGBA"))[:, :, 3]
     h, w = alpha.shape
     xb = boundaries(runs((alpha > 128).any(axis=0)), w, 4, "traveller side-idle columns")
-    yb = boundaries(runs((alpha > 128).any(axis=1)), h, 2, "traveller side-idle rows")
+    yb = boundaries(runs((alpha > 128).any(axis=1)), h, len(directions), filename + " rows")
     summaries = []
-    for row, direction in enumerate(("left", "right")):
+    for row, direction in enumerate(directions):
         frames = []
         for col in range(4):
             x0, x1 = xb[col], xb[col + 1]
@@ -263,18 +263,29 @@ def add_traveller_side_idle(actor_data: dict) -> dict:
             rx0, ry0 = max(0, int(xx.min()) - 2), max(0, int(yy.min()) - 2)
             rx1, ry1 = min(body.shape[1], int(xx.max()) + 3), min(body.shape[0], int(yy.max()) + 3)
             feet, head, methods = authored_anchors(body)
-            frame = {"source": "res://assets/characters/traveller-idle-sides-v1.png",
+            frame = {"source": "res://assets/characters/" + filename,
                      "region": [x0 + rx0, y0 + ry0, rx1 - rx0, ry1 - ry0],
                      "anchors": {"feet": [feet[0] - rx0, feet[1] - ry0], "head": [head[0] - rx0, head[1] - ry0]},
-                     "anchor_method": methods, "source_scale": 0.46, "layers": []}
+                     "anchor_method": methods, "source_scale": source_scale, "layers": []}
             frames.append(frame)
             summaries.append({"direction": direction, "frame": col, "region": frame["region"]})
         # Four authored poses, not duplicated timing cels: neutral, inhale, blink, return.
         actor_data["idle"][direction] = {"fps": 4, "loop": True,
                                           "frame_durations": [1.9, 0.3, 0.12, 0.5], "frames": frames}
-    return {"source": path.relative_to(ROOT).as_posix(), "frame_count": 8,
-            "directions": ["left", "right"], "source_scale": 0.46,
+    return {"source": path.relative_to(ROOT).as_posix(), "frame_count": len(summaries),
+            "directions": list(directions), "source_scale": source_scale,
             "frame_durations": [1.9, 0.3, 0.12, 0.5], "frames": summaries}
+
+
+def add_traveller_side_idle(actor_data: dict) -> dict:
+    return add_traveller_idle_atlas(actor_data, "traveller-idle-sides-v1.png", ("left", "right"), 0.46)
+
+
+def add_traveller_directional_idle(actor_data: dict) -> dict:
+    reports = [add_traveller_side_idle(actor_data),
+               add_traveller_idle_atlas(actor_data, "traveller-idle-front-diagonal-v1.png", ("front_left", "front_right"), 0.38),
+               add_traveller_idle_atlas(actor_data, "traveller-idle-rear-v1.png", ("back_left", "back", "back_right"), 0.53)]
+    return {"frame_count": sum(r["frame_count"] for r in reports), "atlases": reports}
 
 
 def build() -> tuple[dict,dict]:
@@ -287,21 +298,37 @@ def build() -> tuple[dict,dict]:
     reports["traveller"]["jump_front"]={k:v for k,v in jump_report.items() if k not in ("frames","variant_frames")}
     announcer_walk_report=add_announcer_side_walk(actors["announcer"])
     reports["announcer"]["walk_side_atlas"]={k:v for k,v in announcer_walk_report.items() if k!="frames"}
-    reports["traveller"]["idle_side_atlas"] = add_traveller_side_idle(actors["traveller"])
+    reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
+    # This builder owns the atlas rows above. Independent seated/catch sources
+    # and additional authored directions must survive a complete regeneration.
+    if OUT.exists():
+        previous = json.loads(OUT.read_text(encoding="utf-8"))
+        for actor, actions in previous.get("actors", {}).items():
+            if actor not in actors:
+                actors[actor] = actions
+                continue
+            for action, directions in actions.items():
+                if action not in actors[actor]:
+                    actors[actor][action] = directions
+                elif isinstance(directions, dict) and isinstance(actors[actor][action], dict):
+                    for direction, entry in directions.items():
+                        actors[actor][action].setdefault(direction, entry)
     manifest={"schema_version":1,"description":"Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.","runtime_aliases":{"traveller":{"station_stand":"idle/front/frame_0 (same authored frame; not a separate animation)"},"ticket":{"special":"idle_gesture/front (runtime alias; no duplicate frames)"}},"coverage_notes":{"traveller":TRAVELLER_COVERAGE_NOTE,"traveller_outfit_coral":"Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.","ticket":"Walk row is only a walk_candidate pending authored validation.","imp":"42 authored cells (7x6); no frames synthesized.","announcer":"Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."},"actors":actors}
     return manifest,reports
 
 def main() -> int:
     parser=argparse.ArgumentParser(); parser.add_argument("--check",action="store_true",help="validate alpha-derived regions and compare the committed manifest"); parser.add_argument("--write",action="store_true",help="write JSON manifest (source PNGs are read-only)")
     parser.add_argument("--side-idle-only", action="store_true", help="update/check only profile idle; preserve separately authored seated/catch actions")
+    parser.add_argument("--directional-idle-only", action="store_true", help="update/check all dedicated non-front idle sources while preserving unrelated actions")
     args=parser.parse_args()
-    if args.side_idle_only:
+    if args.side_idle_only and args.directional_idle_only: parser.error("choose side-idle-only or directional-idle-only")
+    if args.side_idle_only or args.directional_idle_only:
         try:
             existing = json.loads(OUT.read_text(encoding="utf-8"))
             actor = {"idle": {}}
-            report = add_traveller_side_idle(actor)
+            report = add_traveller_directional_idle(actor) if args.directional_idle_only else add_traveller_side_idle(actor)
             if args.check:
-                for direction in ("left", "right"):
+                for direction in actor["idle"]:
                     if existing["actors"]["traveller"]["idle"].get(direction) != actor["idle"][direction]:
                         raise ValueError(f"traveller/idle/{direction}: differs from alpha-derived source metadata")
             if args.write:
