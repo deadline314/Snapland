@@ -66,4 +66,4 @@
 [全身步行](images/ART-29-2d-windswept-hat0-tide_jacket-walk.png)、[長外套起步](images/ART-29-2d-windswept-hat0-long_coat-start.png)、[停步](images/ART-29-2d-windswept-hat0-long_coat-stop.png)、[轉身](images/ART-29-2d-windswept-hat0-long_coat-turn.png)、[相機全身圖格](images/ART-29-2d-bob-hat1-long_coat-photo.png)。
 [驗收範圍與版本證據](images/ART-29-2d-verification.json)、[樣本操作與重製](../../design/runtime/hero-2d-sample-delivery.md)。
 
-本次交付位於 `feature/island-experience`，限獨立主角樣本；提交為包含本段的 ART-29 交付提交。
+本次交付位於 `feature/island-experience`，限獨立主角樣本；遠端交付提交 [ddba856](https://github.com/deadline314/Snapland/commit/ddba8565590f148b060a868df6b2efb4042dcb06)。
