@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-15",
+  "scope": "documentation and original-reference validation only",
+  "guide_sections": 12,
+  "python_examples_syntax_checked": 1,
+  "examples_executed": false,
+  "original_images_opened_and_reviewed": [
+    "MAIN-20-user-liked-harbor-sheet.png",
+    "MAIN-20-user-liked-personality-sheet.png",
+    "MAIN-20-user-rejected-scroll-pause.jpg"
+  ],
+  "image_hashes_match_original": true,
+  "link_check": "python tools/verify_design.py --scope links: PASS",
+  "review_scope": [
+    "島嶼優先與真正遊樂園體驗",
+    "高精緻像素與降低通用AI感",
+    "原圖八方向步行及完整角色動畫",
+    "服飾輪廓及自由基礎外觀",
+    "日夜光源與遮擋",
+    "全遊戲免捲動像素UIUX",
+    "含截圖完整教學與可對話角色",
+    "各小遊戲獨立體驗與風可見",
+    "CC0及真實試聽界線",
+    "六方參考與實際閱讀證據",
+    "Git票據委派成本隔離存檔",
+    "main與遊戲feature狀態區分"
+  ],
+  "gameplay_run": false,
+  "gpu_capture_run": false,
+  "new_web_survey_run": false
+}

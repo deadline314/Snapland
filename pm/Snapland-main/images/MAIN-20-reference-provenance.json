@@ -1,0 +1,26 @@
+[
+  {
+    "file": "MAIN-20-user-liked-harbor-sheet.png",
+    "source": "C:/Users/stanl/AppData/Local/Temp/codex-clipboard-00b43df9-592b-47a0-b8f1-60ac093e7a91.png",
+    "sha256": "1f8450365511286f6e4ffad7a1f7e5a0b3368b7846bc6f6d937709e4b28b431a",
+    "meaning": "使用者：這個其實我覺得還不錯；不是所有影格與玩法的驗收。",
+    "reviewed_again": "2026-10-15",
+    "new_gameplay_capture": false
+  },
+  {
+    "file": "MAIN-20-user-liked-personality-sheet.png",
+    "source": "C:/Users/stanl/.codex/generated_images/01a12b04-74ea-79a2-8750-6c7f7653b695/exec-7e15bca2-466e-4e55-951c-7e70c7747199.png",
+    "sha256": "2e62aef5566fe4017f14aa22bd3fb8578cfc9e21717c2f4eea9d4e5a4c549be6",
+    "meaning": "使用者：這個確實更有個性，也很好；角色個性參考，非全套動畫批准。",
+    "reviewed_again": "2026-10-15",
+    "new_gameplay_capture": false
+  },
+  {
+    "file": "MAIN-20-user-rejected-scroll-pause.jpg",
+    "source": "C:/Github/Snapland/.codex-remote-attachments/01a12b04-74ea-79a2-8750-6c7f7653b695/1eb40082-e816-404f-981e-87f719ae5824/1-ART-17-dialogue-accepted-pause.jpg",
+    "sha256": "3b634ce8f724ad310feb1e4ab9ed2bfe1033141fa4f50e7566d6213f83ff1119",
+    "meaning": "使用者否定：只用小部分畫面，少量操作仍要捲動，配置不合理；不是合格UI。",
+    "reviewed_again": "2026-10-15",
+    "new_gameplay_capture": false
+  }
+]
