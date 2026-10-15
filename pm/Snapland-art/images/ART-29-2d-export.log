@@ -1,0 +1,62 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started 專案初始化中 (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | 正在掃描檔案結構…[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | 正在載入全域類別名稱…[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | 正在驗證 GDExtension…[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | 正在建立自動載入腳本…[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | 初始化外掛程式...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | 開始掃描檔案...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1msavepack[22m | Started 打包中 (102 steps)[39m[0m
+[   1% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/coat-idle.png-57f01beff2782a099f968f953f5c743d.ctex[39m[0m
+[   1% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/coat-idle.png.import[39m[0m
+[   5% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/coat-photo.png-9bda07cfd595d14255058957a2a7a0b6.ctex[39m[0m
+[   5% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/coat-photo.png.import[39m[0m
+[   9% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/coat-start.png-43c650d586d3899917eea05ad47a1deb.ctex[39m[0m
+[   9% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/coat-start.png.import[39m[0m
+[  14% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/coat-stop.png-516bf8be659fa415b7e4710d95956329.ctex[39m[0m
+[  14% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/coat-stop.png.import[39m[0m
+[  18% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/coat-turn.png-727a9bb5da716809d5cd1b5bfe19d9b9.ctex[39m[0m
+[  18% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/coat-turn.png.import[39m[0m
+[  22% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/coat-walk.png-a824eda07238e97567ddf5655c4d1d73.ctex[39m[0m
+[  22% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/coat-walk.png.import[39m[0m
+[  27% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/fallback.png-9118ba7369641754d298f6fcd94cb518.ctex[39m[0m
+[  27% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/fallback.png.import[39m[0m
+[  31% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/hair-bob-underhat.png-aadc7661caa88ec1ed31e5761b81116d.ctex[39m[0m
+[  31% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/hair-bob-underhat.png.import[39m[0m
+[  34% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/hair-bob.png-00540d1feb08d9609b78ac8bad67754d.ctex[39m[0m
+[  34% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/hair-bob.png.import[39m[0m
+[  39% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/hair-windswept-underhat.png-1d75125386ec2fc665a35acc39350dbb.ctex[39m[0m
+[  39% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/hair-windswept-underhat.png.import[39m[0m
+[  43% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/hair-windswept.png-265955974e69fa0133c1dbbc88e4e518.ctex[39m[0m
+[  43% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/hair-windswept.png.import[39m[0m
+[  47% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/hats-traveller.png-004da74c1bc040c6562d85b74f73b761.ctex[39m[0m
+[  47% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/hats-traveller.png.import[39m[0m
+[  52% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/tide-idle.png-943927865c7a72b4eef906d39ddafe1c.ctex[39m[0m
+[  52% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/tide-idle.png.import[39m[0m
+[  56% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/tide-photo.png-a07f523423e52282cef6e2799939c148.ctex[39m[0m
+[  56% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/tide-photo.png.import[39m[0m
+[  60% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/tide-start.png-5d6a6bcc207b087bc0d7e4d31764b607.ctex[39m[0m
+[  60% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/tide-start.png.import[39m[0m
+[  65% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/tide-stop.png-39c28d40763fd9ef4cb8ee2d35dcbf1b.ctex[39m[0m
+[  65% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/tide-stop.png.import[39m[0m
+[  68% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/tide-turn.png-87b82942faf7c8e2888b932df98e1aba.ctex[39m[0m
+[  68% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/tide-turn.png.import[39m[0m
+[  72% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/imported/tide-walk.png-9d468694e722e385e9bf5b0be1fdd36f.ctex[39m[0m
+[  72% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/compiled/tide-walk.png.import[39m[0m
+[  77% ] [90m[1msavepack[22m | 儲存檔案：res://assets/characters/hero-2d-v1/manifest.json[39m[0m
+[  81% ] [90m[1msavepack[22m | 儲存檔案：res://game/review/hero_2d_sample.gdc[39m[0m
+[  85% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/exported/133200997/export-d680cd5728f9bdb5d7dc40e50463b476-hero_2d_sample.scn[39m[0m
+[  90% ] [90m[1msavepack[22m | 儲存檔案：res://game/world/hero_2d_pose.gdc[39m[0m
+[  94% ] [90m[1msavepack[22m | 儲存檔案：res://game/world/hero_2d_library.gdc[39m[0m
+[  94% ] [90m[1msavepack[22m | 儲存檔案：res://game/review/hero_2d_sample.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 儲存檔案：res://game/review/hero_2d_sample.tscn.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 儲存檔案：res://game/world/hero_2d_pose.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 儲存檔案：res://game/world/hero_2d_library.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/global_script_class_cache.cfg[39m[0m
+[  94% ] [90m[1msavepack[22m | 儲存檔案：res://.godot/uid_cache.bin[39m[0m
+[  94% ] [90m[1msavepack[22m | 儲存檔案：res://project.binary[39m[0m
+[92m[ DONE ][39m [1msavepack[22m
+[0m

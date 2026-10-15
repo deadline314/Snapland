@@ -1,0 +1,96 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS hero 2D library tests
+
+WARNING: Hero2DLibrary: appearance: unknown hair style or outfit
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] _appearance_complete (res://game/world/hero_2d_library.gd:202)
+       [2] set_appearance (res://game/world/hero_2d_library.gd:100)
+       [3] _test_appearance_change_preserves_pose_atomically (res://game/tests/test_hero_2d_library.gd:134)
+       [4] _initialize (res://game/tests/test_hero_2d_library.gd:19)
+WARNING: Hero2DLibrary: appearance: requested appearance is incomplete; current appearance retained
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] set_appearance (res://game/world/hero_2d_library.gd:101)
+       [2] _test_appearance_change_preserves_pose_atomically (res://game/tests/test_hero_2d_library.gd:134)
+       [3] _initialize (res://game/tests/test_hero_2d_library.gd:19)
+WARNING: Hero2DLibrary: front_left/walk: no authored frames
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] _appearance_complete (res://game/world/hero_2d_library.gd:227)
+       [2] initialize (res://game/world/hero_2d_library.gd:89)
+       [3] _init (res://game/world/hero_2d_library.gd:30)
+       [4] _new_library (res://game/tests/test_hero_2d_library.gd:184)
+       [5] _test_missing_frame_uses_complete_fallback_and_diagnostic (res://game/tests/test_hero_2d_library.gd:141)
+       [6] _initialize (res://game/tests/test_hero_2d_library.gd:20)
+WARNING: Hero2DLibrary: coverage: default appearance lacks complete eight-direction/action coverage
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] initialize (res://game/world/hero_2d_library.gd:91)
+       [2] _init (res://game/world/hero_2d_library.gd:30)
+       [3] _new_library (res://game/tests/test_hero_2d_library.gd:184)
+       [4] _test_missing_frame_uses_complete_fallback_and_diagnostic (res://game/tests/test_hero_2d_library.gd:141)
+       [5] _initialize (res://game/tests/test_hero_2d_library.gd:20)
+WARNING: Hero2DLibrary: appearance: cannot change appearance without a valid manifest
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] set_appearance (res://game/world/hero_2d_library.gd:98)
+       [2] _test_missing_frame_uses_complete_fallback_and_diagnostic (res://game/tests/test_hero_2d_library.gd:142)
+       [3] _initialize (res://game/tests/test_hero_2d_library.gd:20)
+WARNING: Hero2DLibrary: schema_version: expected schema_version 1
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] initialize (res://game/world/hero_2d_library.gd:55)
+       [2] _init (res://game/world/hero_2d_library.gd:30)
+       [3] _new_library (res://game/tests/test_hero_2d_library.gd:184)
+       [4] _test_invalid_schema_uses_complete_fallback_and_diagnostic (res://game/tests/test_hero_2d_library.gd:150)
+       [5] _initialize (res://game/tests/test_hero_2d_library.gd:21)
+WARNING: Hero2DLibrary: hair/windswept/front hat_layers: layers must be an array
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] _validate_layers (res://game/world/hero_2d_library.gd:300)
+       [2] _part_style_complete (res://game/world/hero_2d_library.gd:295)
+       [3] _appearance_complete (res://game/world/hero_2d_library.gd:204)
+       [4] initialize (res://game/world/hero_2d_library.gd:89)
+       [5] _init (res://game/world/hero_2d_library.gd:30)
+       [6] _new_library (res://game/tests/test_hero_2d_library.gd:184)
+       [7] _test_invalid_optional_hat_layers_reject_manifest_atomically (res://game/tests/test_hero_2d_library.gd:158)
+       [8] _initialize (res://game/tests/test_hero_2d_library.gd:22)
+WARNING: Hero2DLibrary: coverage: default appearance lacks complete eight-direction/action coverage
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] initialize (res://game/world/hero_2d_library.gd:91)
+       [2] _init (res://game/world/hero_2d_library.gd:30)
+       [3] _new_library (res://game/tests/test_hero_2d_library.gd:184)
+       [4] _test_invalid_optional_hat_layers_reject_manifest_atomically (res://game/tests/test_hero_2d_library.gd:158)
+       [5] _initialize (res://game/tests/test_hero_2d_library.gd:22)
+WARNING: Hero2DLibrary: hair/windswept/front_left: layers must contain at least one authored layer
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] _validate_layers (res://game/world/hero_2d_library.gd:303)
+       [2] _part_style_complete (res://game/world/hero_2d_library.gd:288)
+       [3] _appearance_complete (res://game/world/hero_2d_library.gd:204)
+       [4] initialize (res://game/world/hero_2d_library.gd:89)
+       [5] _init (res://game/world/hero_2d_library.gd:30)
+       [6] _new_library (res://game/tests/test_hero_2d_library.gd:184)
+       [7] _test_empty_hair_direction_rejects_manifest_and_uses_fallback (res://game/tests/test_hero_2d_library.gd:176)
+       [8] _initialize (res://game/tests/test_hero_2d_library.gd:24)
+WARNING: Hero2DLibrary: coverage: default appearance lacks complete eight-direction/action coverage
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _diagnose (res://game/world/hero_2d_library.gd:402)
+       [1] initialize (res://game/world/hero_2d_library.gd:91)
+       [2] _init (res://game/world/hero_2d_library.gd:30)
+       [3] _new_library (res://game/tests/test_hero_2d_library.gd:184)
+       [4] _test_empty_hair_direction_rejects_manifest_and_uses_fallback (res://game/tests/test_hero_2d_library.gd:176)
+       [5] _initialize (res://game/tests/test_hero_2d_library.gd:24)

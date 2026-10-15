@@ -40,6 +40,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install 2D asset authoring test dependency
+        run: python -m pip install Pillow==12.2.0
       - name: Validate all design data and links
         run: python tools/verify_design.py --scope all
       - name: Test validators against invalid designs
@@ -62,5 +64,7 @@ jobs:
           echo "GODOT_BIN=$PWD/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
       - name: Verify runtime test coverage is configured
         run: python tools/check_runtime_tests.py
+      - name: Verify isolated original-style 2D hero sample
+        run: python tools/hero_2d/run_contract_tests.py
       - name: Run native Godot startup and runtime tests
         run: python tools/run_game_tests.py

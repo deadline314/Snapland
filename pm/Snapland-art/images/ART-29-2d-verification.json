@@ -1,0 +1,258 @@
+{
+  "ticket": "ART-29",
+  "date": "2026-10-16",
+  "branch": "feature/island-experience",
+  "base_commit": "99b4a19c13491943270f317c91fa875f595f97fd",
+  "artifact_id": "hero-2d-v1-c5a5eccc0cb8",
+  "scope": "Independent original-style 2D hero sample; not integrated with the formal island or NPCs; no hair bone dynamics implemented.",
+  "production": "2d-authored-layers",
+  "character_model_files": [],
+  "fixed_registration": {
+    "canvas": [
+      280,
+      360
+    ],
+    "root": [
+      140,
+      346
+    ],
+    "grounded_head_guide": [
+      140,
+      148
+    ],
+    "rounding_tolerance_px": 1,
+    "photo": "authored head bow preserved; outfit anchors synchronized"
+  },
+  "focused_tests": {
+    "python": {
+      "passed": 8,
+      "total": 8
+    },
+    "native_contracts": [
+      "clean import",
+      "pose",
+      "library",
+      "real pack: 1280 composed cels"
+    ],
+    "design_links": "PASS",
+    "runtime_test_configuration": "PASS",
+    "full_game_suite": "not run locally; CI; no all-game acceptance claim"
+  },
+  "native_tours": {
+    "normal": {
+      "time_scale": 1.0,
+      "result": "PASS_STATE_CHECKS",
+      "checks": {
+        "all_eight_appearances": true,
+        "all_eight_directions": true,
+        "all_required_actions": true,
+        "halfstep_settles": true,
+        "no_composition_diagnostics": true,
+        "one_shutter_per_trigger": true,
+        "pause_freezes": true,
+        "photo_action": true,
+        "photo_appearance_sync": true,
+        "renderer_initialized": true,
+        "resume": true,
+        "reverse_root_locked": true,
+        "reverse_turn": true,
+        "reverse_turn_capture": true,
+        "wall_approach": true,
+        "wall_clamp": true
+      },
+      "native_input_events": {
+        "keys": 36,
+        "mouse_buttons": 32
+      },
+      "diagnostics": [],
+      "video": {
+        "width": 1280,
+        "height": 800,
+        "r_frame_rate": "30/1",
+        "duration": "39.133333",
+        "nb_frames": "1174"
+      }
+    },
+    "quarter": {
+      "time_scale": 0.25,
+      "result": "PASS_STATE_CHECKS",
+      "checks": {
+        "all_eight_appearances": true,
+        "all_eight_directions": true,
+        "all_required_actions": true,
+        "halfstep_settles": true,
+        "no_composition_diagnostics": true,
+        "one_shutter_per_trigger": true,
+        "pause_freezes": true,
+        "photo_action": true,
+        "photo_appearance_sync": true,
+        "renderer_initialized": true,
+        "resume": true,
+        "reverse_root_locked": true,
+        "reverse_turn": true,
+        "reverse_turn_capture": true,
+        "wall_approach": true,
+        "wall_clamp": true
+      },
+      "native_input_events": {
+        "keys": 36,
+        "mouse_buttons": 32
+      },
+      "diagnostics": [],
+      "video": {
+        "width": 1280,
+        "height": 800,
+        "r_frame_rate": "30/1",
+        "duration": "141.733333",
+        "nb_frames": "4252"
+      }
+    }
+  },
+  "visual_review": {
+    "reviewer": "main session",
+    "method": "Played actual native MP4s in the browser at playbackRate 1, inspecting successive frames and revisiting sections. Quarter video is from time_scale 0.25, not a retimed normal file. Contact sheets inspected separately. This is agent visual inspection and scripted native-event verification, not a human playtest.",
+    "normal_sections_seconds": [
+      [
+        0,
+        18.55
+      ],
+      [
+        19.6,
+        38.22
+      ]
+    ],
+    "quarter_sections_seconds": [
+      [
+        0,
+        42.78
+      ],
+      [
+        45,
+        62.79
+      ],
+      [
+        65.4,
+        91.16
+      ],
+      [
+        100,
+        130.58
+      ],
+      [
+        130,
+        140.9
+      ]
+    ],
+    "coverage": [
+      "all eight headings with two-cycle travel per direction",
+      "all eight looks in idle appearance matrix",
+      "both authored outfit silhouettes across walk, start, stop, turn, photo",
+      "hair/hat root attachment",
+      "camera/hands foreground ordering",
+      "halfstep, reversal, wall, appearance during photo, pause/resume"
+    ],
+    "result": "Accepted for this bounded 2D sample: no previous center-snap or detached hair/hat observed in reviewed sequences; not a claim of pixel-identical original generated art or all-game quality.",
+    "contact_sheet_method": "Factorized review of body actions/outfits and hair/hat combinations; automated coverage includes 48 sheets / 1280 cels, not all 1280 cels individually manually approved.",
+    "contact_sheets": [
+      "ART-29-2d-bob-hat0-tide_jacket-photo.png",
+      "ART-29-2d-bob-hat1-long_coat-photo.png",
+      "ART-29-2d-bob-hat1-long_coat-walk.png",
+      "ART-29-2d-looks.png",
+      "ART-29-2d-windswept-hat0-long_coat-photo.png",
+      "ART-29-2d-windswept-hat0-long_coat-start.png",
+      "ART-29-2d-windswept-hat0-long_coat-stop.png",
+      "ART-29-2d-windswept-hat0-long_coat-turn.png",
+      "ART-29-2d-windswept-hat0-long_coat-walk.png",
+      "ART-29-2d-windswept-hat0-tide_jacket-photo.png",
+      "ART-29-2d-windswept-hat0-tide_jacket-start.png",
+      "ART-29-2d-windswept-hat0-tide_jacket-stop.png",
+      "ART-29-2d-windswept-hat0-tide_jacket-turn.png",
+      "ART-29-2d-windswept-hat0-tide_jacket-walk.png",
+      "ART-29-2d-windswept-hat1-tide_jacket-photo.png"
+    ]
+  },
+  "export": {
+    "path": "build/hero-2d-sample-release/Snapland-Hero-2D-Sample.exe",
+    "sha256": "c4dd8ca2c5ad4ee89b7f3ceacad57b1b50cb959960ee33a96f6a408ef935d23b",
+    "size_bytes": 124415632,
+    "default_main_scene": "PASS startup capture, 30 frames, no --path or --scene override, no ERROR",
+    "controls": "source project native-event tour passed; controls not separately replayed in exported binary",
+    "rejected_attempt": "Release template rejects --scene override; exit 1 retained in local export/native-controls/run.log, not counted as passing."
+  },
+  "review": "Fresh independent read-only code review: no actionable findings; did not claim visual acceptance.",
+  "rejected_candidates": [
+    "3D character sample (not used in this pack)",
+    "hair-eight-view-v1: profile mismatch and neighbor fragments",
+    "straw-hat-eight-view-v1: inconsistent bow orientation",
+    "horizontal clipping of under-hat hair: cut off tips",
+    "per-cel lowest-shoe recentering: measurable head drift"
+  ],
+  "reproducibility": "Fresh source registration and compilation rebuilt all 18 runtime image hashes identically; local detailed result .review/hero-2d-20261016/reproducibility.json",
+  "source_sha256": {
+    "assets/characters/hero-2d-v1/manifest.json": "c5a5eccc0cb8c876445b911b541a05a57d60f1f8711e1c88b74b55092aa22f4e",
+    "assets/characters/hero-2d-v1/authoring.json": "0ebbc74c20d49c07519e25926f077ae7aeb6ed0aa05264b6f9887f342cd130c5",
+    "assets/characters/hero-2d-v1/generation-provenance.json": "64cbab4d16f462943c83574b29927881d6eb2fbfbf2cb169dd912a2c96fe4318",
+    "assets/characters/hero-2d-v1/compiled/coat-idle.png": "816322cb8950c9a5418625c64a5da65395f42cb6190d365493750128b1a39f66",
+    "assets/characters/hero-2d-v1/compiled/coat-photo.png": "2a33f05fd2d26e0706ec03df5f82a6fd60af24a27f2a8c14324d929f41f9757a",
+    "assets/characters/hero-2d-v1/compiled/coat-start.png": "a0d0d1a8b437d2987e92784743287ba92859708dbf3aeb450c240ecf8f3838e8",
+    "assets/characters/hero-2d-v1/compiled/coat-stop.png": "f96bcb1dfdd7d43d659b853d932b170a4233c09b5d37fb15787f89e724d85646",
+    "assets/characters/hero-2d-v1/compiled/coat-turn.png": "3d49b103cbc9c31c0eb69c574e5da3c0501ac34f89b8e77648aff345323f894d",
+    "assets/characters/hero-2d-v1/compiled/coat-walk.png": "a612fc3b2d3d5963aba85041ce10c4f6a4376548bcdf4c8ce6bdde9a2d733f86",
+    "assets/characters/hero-2d-v1/compiled/fallback.png": "f85a8ed8e9c00143ff696ba66546327a01a9526ddd1f873de2d582fc8dd85ab3",
+    "assets/characters/hero-2d-v1/compiled/hair-bob-underhat.png": "376d5c5d379d8e14b6829c7c0bd67c26a4fea5dc6b58c0235a4dfc2a979c62fb",
+    "assets/characters/hero-2d-v1/compiled/hair-bob.png": "3a81e3961843f18fec353e7e2431f327e38ba17dd9dc88826cc0b0dbea9f52d3",
+    "assets/characters/hero-2d-v1/compiled/hair-windswept-underhat.png": "e686951330937935ab3eaf41335617485e9306e1afb25176f275c330883d2079",
+    "assets/characters/hero-2d-v1/compiled/hair-windswept.png": "1c8857a20824200e48c23c35120a0be2596f1e6b7853710f9d7cb08b9578b5ae",
+    "assets/characters/hero-2d-v1/compiled/hats-traveller.png": "a55d6b11969379c10aafbf4dad0b1dcb9f810dc2acd25e850bf05aa5d164cab1",
+    "assets/characters/hero-2d-v1/compiled/tide-idle.png": "6e960c92cda06b7e1906084df446d9ffd941da88ace046dc8e2983c0059fdc2b",
+    "assets/characters/hero-2d-v1/compiled/tide-photo.png": "38bc793ec11662ede7b602f84be536f4e1dcaab5b7ded5593b844b75e7f19505",
+    "assets/characters/hero-2d-v1/compiled/tide-start.png": "6a1f20e73a5ce00a259b336c45fa807f527fac3fa7614e3dc35138a9c83bafa0",
+    "assets/characters/hero-2d-v1/compiled/tide-stop.png": "fdca9da10c7905030df6066109775b4aaa1c57d180b047cf71fef2ddf8b42d34",
+    "assets/characters/hero-2d-v1/compiled/tide-turn.png": "9ec2a95ef8ae3031f4db36a1623ebfadf78116f054b66559956fe0192685b747",
+    "assets/characters/hero-2d-v1/compiled/tide-walk.png": "a901186a0e3a8fd4375db9e4808a77553e921260c595f1d23b5e44620e9bbb9e",
+    "game/world/hero_2d_pose.gd": "b237d4dc1a275ba6d02576847078b58c7bcacbf529ae04a027ff7234a3d43e97",
+    "game/world/hero_2d_library.gd": "0645752eae8ca15ce254e9ae5a1cf935cd48ee1c9ee815ed723062bddc298fe5",
+    "game/review/hero_2d_sample.gd": "fb11d92d4e50bbe5ceb08a38c35c490d3da74efdb07595e2e9791bff9550ffd1",
+    "game/review/hero_2d_sample.tscn": "38ceff986ba5a44bbf102a6a8286c4da8b9271e10024b04b41f60765b1cfd8fc",
+    "game/tests/native_hero_2d_sample.gd": "abed9af51b72bdd7798061ae7cfa2eb2f7059d91ac7aedc36d969ec0633c5c7a",
+    "game/tests/native_hero_2d_sample.tscn": "7034c5cfdfe5cee7c821429830959953fd05703eebc6756bf9f7b8ff07608680",
+    "tools/hero_2d/run_review.py": "7d357f5ea787fb4da3ad17cd981614267e180e983836ee6e0eb4b37b9e27617e",
+    "tools/hero_2d/author_pack.py": "9a0bcd428b54da10497a4dfa4fbdc99fed8a4a2feffb9996ab7bb48e3d5e4d12",
+    "tools/hero_2d/register_sources.py": "b80acd724be25db315ac341c31e4479a7e80061daba0669831dc123dd2b1fdff",
+    "tools/hero_2d/align_body_pivots.py": "1407f762f28a05f63c3b2f101464adaf294e5c244537835c9bbc53f756c61cee"
+  },
+  "evidence_sha256": {
+    "ART-29-2d-bob-hat0-tide_jacket-photo.png": "30a499274ca4cd352618fa85fe1242c6999b84f0056e53e6c103259c51cc6fac",
+    "ART-29-2d-bob-hat1-long_coat-photo.png": "6beb5855b08f8557317768e9f89af06f961f60dfb277c2102f24604e1fb669c3",
+    "ART-29-2d-bob-hat1-long_coat-walk.png": "b596ab49d7030d4e178b8143966ee1b4e45fbe5abb360a4c4f5c6aafb5baaa30",
+    "ART-29-2d-contract-import.log": "215aa8d0f6ac92f04b603c7f87b78a9402d87c693366c0063e52cfc3615364c6",
+    "ART-29-2d-contract-library.log": "e5af22903a8d368013736eaeec946d3c799c0cb6dfb2fc883665a6cb57f25836",
+    "ART-29-2d-contract-pack.log": "9cf3cdf5c4d56136b3d67cefc505684f36964cc0ec8d37ecd26104e5327f7951",
+    "ART-29-2d-contract-pose.log": "b515418267e3fd192023d9c4d928a5b0b81c8665d91e7ec7ac36f9e4d8db032a",
+    "ART-29-2d-export-startup.log": "da88ceffe03e93993b49f8810e24f0f7219a602b68c062386ac1ef4ff098b3a1",
+    "ART-29-2d-export-startup.png": "2fa4baf64d3fe4a544966cc1c6c163e08a2c6ab44327addddee30e63e4cfe4a7",
+    "ART-29-2d-export.log": "492dfc7d19cd7b50d3b401093b2e15637b1122687356e4215a7a0b4ec631842b",
+    "ART-29-2d-looks.png": "5bfdd9baa7f6d61a9d72f6ae20df420aea98be5af2edb57ec56df1040c5ee26a",
+    "ART-29-2d-normal-audit.json": "3a6101cca2d7959e113b1d598d4c7e29e6760675569c674a2262bdac42535a24",
+    "ART-29-2d-normal.log": "a43511e6cb672133440607ab1ce19288669787677c3932b68836241410fe1ba5",
+    "ART-29-2d-normal.mp4": "30694c55f197fcf6f4cbe18b69bc8ca8765983b9361cef14e8538c608462e251",
+    "ART-29-2d-photo.png": "b705cc0c2a1c5f3f6a5942c4c087c99ff1caf05a5e169a7a6314335f2215766e",
+    "ART-29-2d-quarter-audit.json": "cccb85598fbf235d44ad413b75774e1911e9892d9241174339ab9147446464c1",
+    "ART-29-2d-quarter.log": "5fef3fd0927d11a2dfa67d754210e627d93afa2d69865ae40db92926028af6ff",
+    "ART-29-2d-quarter.mp4": "98858f297bcb2a0ccc27d6564a5953fd75546a6026230d353b9b071265ae3a91",
+    "ART-29-2d-turn.png": "b385e58aff75698cf29d85f37b246d8ab3e00129fa7b3abfe45adb81777d25fd",
+    "ART-29-2d-wall-stop.png": "5e982d6d5ee2d16a4354064c9ed6c619fcee50cc7b5821564ebaac1ddbb92d95",
+    "ART-29-2d-windswept-hat0-long_coat-photo.png": "a61655eae904c97d14ccdca889a60a716ecd3c5cb8340888833d2d06980770f8",
+    "ART-29-2d-windswept-hat0-long_coat-start.png": "694bdbb1f654b16051e274639041454ae450ffce6e37c8f56be3ddf84cdb165f",
+    "ART-29-2d-windswept-hat0-long_coat-stop.png": "3d8f2e12af3488c36efc0c762b511519cd6f07f4d5ceedf28dda6eb3c0473777",
+    "ART-29-2d-windswept-hat0-long_coat-turn.png": "9c8c8c3ad171166e66253460d46bf7c7d65be1b7f95238e7e9bc87d7d5f30c2b",
+    "ART-29-2d-windswept-hat0-long_coat-walk.png": "6ac641bc4f45ad78c378f98036bff69698106606163dcd08b4c7131b43d50fe7",
+    "ART-29-2d-windswept-hat0-tide_jacket-photo.png": "536527435bc1abc0a4c7de6635b6b9cf14cf8f64ea87f97e4236a1d26e05e36c",
+    "ART-29-2d-windswept-hat0-tide_jacket-start.png": "cbd4281d9e3c8d4b1d5d705c7806a8fa47172056b8587990a1b83129aede8824",
+    "ART-29-2d-windswept-hat0-tide_jacket-stop.png": "53b713918fd36dca275aa6b7ebe60dd28f8f2795d9bf85043a4bd02c6e05ff2a",
+    "ART-29-2d-windswept-hat0-tide_jacket-turn.png": "c32f9cc5b36a0230cf782116113ae44f5091b712e2ff9b177977f01e45e71fdb",
+    "ART-29-2d-windswept-hat0-tide_jacket-walk.png": "8bc74d766d69b8e5c72e63088484dae93c359810d9b441550cbf213d07440424",
+    "ART-29-2d-windswept-hat1-tide_jacket-photo.png": "afde83e9df1d406884f6cd2f67abeeace9d8c7fc9bf60050747834be64423bce"
+  },
+  "evidence_log_format": "Output content retained; trailing blank lines removed for repository whitespace checks."
+}

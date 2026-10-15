@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 - Build 32.0.101.9033 - Compatibility - Using Device: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×800 @ 30 FPS...
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-experience\Snapland\.review\hero-2d-sample-20261016\export\ordinary-startup-final\startup.png
+30 frames at 30 FPS (movie length: 00:00:01:00), recorded in 00:00:02 (50% of real-time speed).
+CPU render time: 0.01 seconds (average: 0.49 ms/frame)
+GPU render time: 0.01 seconds (average: 0.26 ms/frame)
+Encoding time: 0.96 seconds (average: 31.84 ms/frame)
+--------------------------------------------------------------------------------
