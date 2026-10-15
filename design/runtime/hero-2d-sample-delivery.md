@@ -1,6 +1,6 @@
 # 主角 2D 樣本使用與重製
 
-2026-10-16；ART-29。只包含獨立主角樣本，正式島嶼未接入，尚未製作髮尾骨架動態。
+2026-10-16；ART-29。只包含獨立主角樣本，正式島嶼未接入，單髮型骨架動態另見 [ART-30 交付](hero-2d-hair-sample-delivery.md)。
 
 ## 操作
 
@@ -12,9 +12,15 @@
 
 ## 局部驗證與證據
 
-- `python -m unittest tests.test_hero_2d_assets tests.test_hero_2d_authoring -v`：素材與作者工具 8 項。
+- `python -m unittest tests.test_hero_2d_assets tests.test_hero_2d_authoring -v`：素材與作者工具 9 項。
 - `python tools/hero_2d/run_contract_tests.py`：隔離專案匯入、姿勢／部件及 1280 張實際合成圖格。
 - `python tools/hero_2d/run_review.py`：原生輸入事件巡覽，另錄正常與四分之一模擬時間。需要 Godot 4.7.2、畫面裝置、ffmpeg；設定 GODOT_BIN 指向引擎。
 - `python tools/hero_2d/run_review.py --export-only --smoke-export`：需要官方 Windows 匯出範本，預設畫面啟動擷取；這個選項本身不驗證操作。
 
 每個原生入口都使用絕對隔離存檔與獨立使用者目錄，按序執行，勿同時重建同一個暫存專案。原生狀態 PASS 不能替代親自播放正常／慢放、看全身圖格與輸出版本。驗收範圍及檔案雜湊見 [ART-29 報告](../../pm/Snapland-art/images/ART-29-2d-verification.json)；[影片與圖格](../../pm/Snapland-art/[ART-29]製作主角完整換裝動作樣本.md)。
+
+## 2026-10-16 頭部跟隨回歸
+
+原固定人物基準不能代替每格實際頭部位置。現已為八方向、兩件外套的 128 個行走格採明確頭部位移，固定身體畫布與原圖不變，髮型與帽子共同讀取當格頭部點。12 張身體圖集雜湊保持原值，完整來源登錄及編譯重跑 21 檔一致。原獨立完整換裝輸出已更新，啟動檢查通過。
+
+Commit-1 的兩支八組外觀錄影屬前版；最新單髮型正常／慢放、逐格頭部跟隨與骨架驗收見 [ART-30 交付](hero-2d-hair-sample-delivery.md)；[頭部回歸範圍](../../pm/Snapland-art/images/ART-29-head-follow-verification.json)。

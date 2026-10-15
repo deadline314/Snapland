@@ -1,0 +1,1784 @@
+{
+  "captures": [
+    {
+      "hair": {
+        "context": "front|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.0)",
+          "direction": "front",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, 0.0)",
+          "tip_velocity": "(0.0, 0.0)",
+          "velocity": "(0.0, 0.0)"
+        }
+      },
+      "image": "00-original-style.png",
+      "pose": {
+        "action": "idle",
+        "contact_left": true,
+        "direction": "front",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.0,
+        "phase": 0.0625,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front"
+      }
+    },
+    {
+      "hair": {
+        "context": "front|false",
+        "enabled": true,
+        "head": "(1.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0143991811200976,
+          0.010079275816679,
+          -0.0143991811200976,
+          -0.010079275816679,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.014399)",
+          "direction": "front",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 89.99999)",
+          "tip_angles": "(0.0, 0.010079)",
+          "tip_velocity": "(0.0, 0.000012)",
+          "velocity": "(0.0, 0.000026)"
+        }
+      },
+      "image": "front-hat0-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "front",
+        "events": [],
+        "frame": 1,
+        "gait_phase": 0.134276123046876,
+        "phase": 0.134276123046876,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front"
+      }
+    },
+    {
+      "hair": {
+        "context": "front|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0103355832397938,
+          -0.00787178240716457,
+          0.0103355832397938,
+          0.00787178240716457,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, -0.010336)",
+          "direction": "front",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, -0.007872)",
+          "tip_velocity": "(0.0, -0.015569)",
+          "velocity": "(0.0, -0.044275)"
+        }
+      },
+      "image": "front-hat0-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "front",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.192054443359376,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_right|false",
+        "enabled": true,
+        "head": "(-1.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0165452547371387,
+          -0.0115816220641136,
+          -0.0369091629981995,
+          -0.025836106389761,
+          -0.0267272088676691,
+          -0.0187088642269373
+        ],
+        "spring": {
+          "angles": "(-0.026727, 0.010182)",
+          "direction": "front_right",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(63.63922, 63.64013)",
+          "tip_angles": "(-0.018709, 0.007127)",
+          "tip_velocity": "(-0.000017, 0.000008)",
+          "velocity": "(-0.000036, 0.000017)"
+        }
+      },
+      "image": "front_right-hat0-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "front_right",
+        "events": [],
+        "frame": 2,
+        "gait_phase": 0.334276990294457,
+        "phase": 0.334276990294457,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_right|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.00621514860540628,
+          0.00501654855906963,
+          0.0208321027457714,
+          0.0161490645259619,
+          0.0135236252099276,
+          0.0105828065425158
+        ],
+        "spring": {
+          "angles": "(0.013524, -0.007308)",
+          "direction": "front_right",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.010583, -0.005566)",
+          "tip_velocity": "(0.042001, -0.011008)",
+          "velocity": "(0.092959, -0.031305)"
+        }
+      },
+      "image": "front_right-hat0-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "front_right",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.392054829001427,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "right|false",
+        "enabled": true,
+        "head": "(1.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0377982072532177,
+          -0.0264584943652153,
+          -0.0377982072532177,
+          -0.0264584943652153,
+          -0.0377982072532177,
+          -0.0264584943652153
+        ],
+        "spring": {
+          "angles": "(-0.037798, 0.0)",
+          "direction": "right",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(89.99999, 0.0)",
+          "tip_angles": "(-0.026458, 0.0)",
+          "tip_velocity": "(-0.000024, 0.0)",
+          "velocity": "(-0.000051, 0.0)"
+        }
+      },
+      "image": "right-hat0-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": false,
+        "direction": "right",
+        "events": [],
+        "frame": 4,
+        "gait_phase": 0.53427711904049,
+        "phase": 0.53427711904049,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "right"
+      }
+    },
+    {
+      "hair": {
+        "context": "right|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0191255006939173,
+          0.0149665139615536,
+          0.0191255006939173,
+          0.0149665139615536,
+          0.0191255006939173,
+          0.0149665139615536
+        ],
+        "spring": {
+          "angles": "(0.019126, 0.0)",
+          "direction": "right",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.014967, 0.0)",
+          "tip_velocity": "(0.059398, 0.0)",
+          "velocity": "(0.131463, 0.0)"
+        }
+      },
+      "image": "right-hat0-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": false,
+        "direction": "right",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.59205543935299,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "right"
+      }
+    },
+    {
+      "hair": {
+        "context": "back_right|false",
+        "enabled": true,
+        "head": "(-1.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0369090139865875,
+          -0.0258360020816326,
+          -0.0165454037487507,
+          -0.0115817254409194,
+          -0.0267272088676691,
+          -0.0187088642269373
+        ],
+        "spring": {
+          "angles": "(-0.026727, -0.010182)",
+          "direction": "back_right",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(63.63922, -63.63922)",
+          "tip_angles": "(-0.018709, -0.007127)",
+          "tip_velocity": "(-0.000017, -0.000008)",
+          "velocity": "(-0.000036, -0.000017)"
+        }
+      },
+      "image": "back_right-hat0-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": false,
+        "direction": "back_right",
+        "events": [],
+        "frame": 5,
+        "gait_phase": 0.734271119832994,
+        "phase": 0.734271119832994,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "back_right|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0208319313824177,
+          0.0161489453166723,
+          0.00621531810611486,
+          0.00501666823402047,
+          0.0135236252099276,
+          0.0105828065425158
+        ],
+        "spring": {
+          "angles": "(0.013524, 0.007308)",
+          "direction": "back_right",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.010583, 0.005566)",
+          "tip_velocity": "(0.042001, 0.011009)",
+          "velocity": "(0.092959, 0.031307)"
+        }
+      },
+      "image": "back_right-hat0-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": false,
+        "direction": "back_right",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.792048958539964,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "back|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.00196871836669743,
+          -0.000123061166959815,
+          0.00196871836669743,
+          0.000123061166959815,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, -0.001969)",
+          "direction": "back",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, -0.000123)",
+          "tip_velocity": "(0.0, 0.283483)",
+          "velocity": "(0.0, 0.36157)"
+        }
+      },
+      "image": "back-hat0-walk.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": false,
+        "direction": "back",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.892048958539965,
+        "phase": 0.166666666666667,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back"
+      }
+    },
+    {
+      "hair": {
+        "context": "back|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.00625832471996546,
+          0.00337996054440737,
+          -0.00625832471996546,
+          -0.00337996054440737,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.006258)",
+          "direction": "back",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, 0.00338)",
+          "tip_velocity": "(0.0, -0.057281)",
+          "velocity": "(0.0, -0.079265)"
+        }
+      },
+      "image": "back-hat0-stop.png",
+      "pose": {
+        "action": "idle",
+        "contact_left": false,
+        "direction": "back",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.892048958539965,
+        "phase": 0.0208333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back"
+      }
+    },
+    {
+      "hair": {
+        "context": "back_left|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0165454037487507,
+          0.0115817254409194,
+          0.0369090139865875,
+          0.0258360020816326,
+          0.0267272088676691,
+          0.0187088642269373
+        ],
+        "spring": {
+          "angles": "(0.026727, -0.010182)",
+          "direction": "back_left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(-63.63922, -63.63922)",
+          "tip_angles": "(0.018709, -0.007127)",
+          "tip_velocity": "(0.000017, -0.000008)",
+          "velocity": "(0.000036, -0.000017)"
+        }
+      },
+      "image": "back_left-hat0-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "back_left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.0342646390199689,
+        "phase": 0.0342646390199689,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back_left"
+      }
+    },
+    {
+      "hair": {
+        "context": "back_left|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.00621531810611486,
+          -0.00501666823402047,
+          -0.0208319313824177,
+          -0.0161489453166723,
+          -0.0135236252099276,
+          -0.0105828065425158
+        ],
+        "spring": {
+          "angles": "(-0.013524, 0.007308)",
+          "direction": "back_left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(-0.010583, 0.005566)",
+          "tip_velocity": "(-0.042001, 0.011009)",
+          "velocity": "(-0.092959, 0.031307)"
+        }
+      },
+      "image": "back_left-hat0-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "back_left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.0920424777269391,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back_left"
+      }
+    },
+    {
+      "hair": {
+        "context": "left|false",
+        "enabled": true,
+        "head": "(2.0, -200.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0377982072532177,
+          0.0264584943652153,
+          0.0377982072532177,
+          0.0264584943652153,
+          0.0377982072532177,
+          0.0264584943652153
+        ],
+        "spring": {
+          "angles": "(0.037798, 0.0)",
+          "direction": "left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(-89.99999, 0.0)",
+          "tip_angles": "(0.026458, 0.0)",
+          "tip_velocity": "(0.000024, 0.0)",
+          "velocity": "(0.000051, 0.0)"
+        }
+      },
+      "image": "left-hat0-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "left",
+        "events": [],
+        "frame": 1,
+        "gait_phase": 0.234264767766002,
+        "phase": 0.234264767766002,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "left"
+      }
+    },
+    {
+      "hair": {
+        "context": "left|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0191255267709494,
+          -0.0149665027856827,
+          -0.0191255267709494,
+          -0.0149665027856827,
+          -0.0191255267709494,
+          -0.0149665027856827
+        ],
+        "spring": {
+          "angles": "(-0.019126, 0.0)",
+          "direction": "left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(-0.014967, 0.0)",
+          "tip_velocity": "(-0.059395, 0.0)",
+          "velocity": "(-0.13146, 0.0)"
+        }
+      },
+      "image": "left-hat0-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.29204247772694,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "left"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_left|false",
+        "enabled": true,
+        "head": "(1.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0369091629981995,
+          0.025836106389761,
+          0.0165452547371387,
+          0.0115816220641136,
+          0.0267272088676691,
+          0.0187088642269373
+        ],
+        "spring": {
+          "angles": "(0.026727, 0.010182)",
+          "direction": "front_left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(-63.63922, 63.64013)",
+          "tip_angles": "(0.018709, 0.007127)",
+          "tip_velocity": "(0.000017, 0.000008)",
+          "velocity": "(0.000036, 0.000017)"
+        }
+      },
+      "image": "front_left-hat0-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "front_left",
+        "events": [],
+        "frame": 3,
+        "gait_phase": 0.434265024662021,
+        "phase": 0.434265024662021,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front_left"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_left|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0208321027457714,
+          -0.0161490645259619,
+          -0.00621514860540628,
+          -0.00501654855906963,
+          -0.0135236252099276,
+          -0.0105828065425158
+        ],
+        "spring": {
+          "angles": "(-0.013524, -0.007308)",
+          "direction": "front_left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(-0.010583, -0.005566)",
+          "tip_velocity": "(-0.042001, -0.011008)",
+          "velocity": "(-0.092959, -0.031305)"
+        }
+      },
+      "image": "front_left-hat0-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "front_left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.492042863368991,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front_left"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_right|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.0)",
+          "direction": "front_right",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, 0.0)",
+          "tip_velocity": "(0.0, 0.0)",
+          "velocity": "(0.0, 0.0)"
+        }
+      },
+      "image": "reverse-turn.png",
+      "pose": {
+        "action": "turn",
+        "contact_left": false,
+        "direction": "left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.61585456848145,
+        "phase": 0.277777777777778,
+        "root_locked": true,
+        "turn_from": "right",
+        "visual_direction": "front_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "front|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0143993375822902,
+          0.0100793596357107,
+          -0.0143993375822902,
+          -0.0100793596357107,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.014399)",
+          "direction": "front",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 89.99999)",
+          "tip_angles": "(0.0, 0.010079)",
+          "tip_velocity": "(0.0, 0.000011)",
+          "velocity": "(0.0, 0.000024)"
+        }
+      },
+      "image": "front-hat1-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "front",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.0580768585205131,
+        "phase": 0.0580768585205131,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front"
+      }
+    },
+    {
+      "hair": {
+        "context": "front|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0103357369080186,
+          -0.00787187553942204,
+          0.0103357369080186,
+          0.00787187553942204,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, -0.010336)",
+          "direction": "front",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, -0.007872)",
+          "tip_velocity": "(0.0, -0.015566)",
+          "velocity": "(0.0, -0.044272)"
+        }
+      },
+      "image": "front-hat1-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "front",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.115854568481451,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_right|true",
+        "enabled": true,
+        "head": "(-1.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0165453478693962,
+          -0.0115817934274673,
+          -0.036909393966198,
+          -0.0258365273475647,
+          -0.0267273709177971,
+          -0.018709160387516
+        ],
+        "spring": {
+          "angles": "(-0.026727, 0.010182)",
+          "direction": "front_right",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(63.63922, 63.64013)",
+          "tip_angles": "(-0.018709, 0.007127)",
+          "tip_velocity": "(-0.00001, 0.000005)",
+          "velocity": "(-0.000023, 0.000011)"
+        }
+      },
+      "image": "front_right-hat1-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "front_right",
+        "events": [],
+        "frame": 2,
+        "gait_phase": 0.258077115416532,
+        "phase": 0.258077115416532,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_right|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.00621527805924416,
+          0.0050166230648756,
+          0.0208324324339628,
+          0.0161492470651865,
+          0.0135238552466035,
+          0.0105829350650311
+        ],
+        "spring": {
+          "angles": "(0.013524, -0.007309)",
+          "direction": "front_right",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.010583, -0.005566)",
+          "tip_velocity": "(0.042, -0.011007)",
+          "velocity": "(0.092956, -0.031304)"
+        }
+      },
+      "image": "front_right-hat1-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "front_right",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.315854954123502,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "right|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0377984456717968,
+          -0.0264588929712772,
+          -0.0377984456717968,
+          -0.0264588929712772,
+          -0.0377984456717968,
+          -0.0264588929712772
+        ],
+        "spring": {
+          "angles": "(-0.037798, 0.0)",
+          "direction": "right",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(89.99999, 0.0)",
+          "tip_angles": "(-0.026459, 0.0)",
+          "tip_velocity": "(-0.000014, 0.0)",
+          "velocity": "(-0.000033, 0.0)"
+        }
+      },
+      "image": "right-hat1-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "right",
+        "events": [],
+        "frame": 3,
+        "gait_phase": 0.458077244162565,
+        "phase": 0.458077244162565,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "right"
+      }
+    },
+    {
+      "hair": {
+        "context": "right|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0191258061677217,
+          0.0149666871875525,
+          0.0191258061677217,
+          0.0149666871875525,
+          0.0191258061677217,
+          0.0149666871875525
+        ],
+        "spring": {
+          "angles": "(0.019126, 0.0)",
+          "direction": "right",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.014967, 0.0)",
+          "tip_velocity": "(0.059396, 0.0)",
+          "velocity": "(0.13146, 0.0)"
+        }
+      },
+      "image": "right-hat1-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": false,
+        "direction": "right",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.515855564475065,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "right"
+      }
+    },
+    {
+      "hair": {
+        "context": "back_right|true",
+        "enabled": true,
+        "head": "(-1.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.036909244954586,
+          -0.0258364249020815,
+          -0.0165454968810081,
+          -0.0115818958729506,
+          -0.0267273709177971,
+          -0.018709160387516
+        ],
+        "spring": {
+          "angles": "(-0.026727, -0.010182)",
+          "direction": "back_right",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(63.63922, -63.63922)",
+          "tip_angles": "(-0.018709, -0.007127)",
+          "tip_velocity": "(-0.00001, -0.000005)",
+          "velocity": "(-0.000023, -0.000011)"
+        }
+      },
+      "image": "back_right-hat1-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": false,
+        "direction": "back_right",
+        "events": [],
+        "frame": 5,
+        "gait_phase": 0.658071244955069,
+        "phase": 0.658071244955069,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "back_right|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0208322592079639,
+          0.016149127855897,
+          0.00621545035392046,
+          0.00501674227416515,
+          0.0135238552466035,
+          0.0105829350650311
+        ],
+        "spring": {
+          "angles": "(0.013524, 0.007308)",
+          "direction": "back_right",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.010583, 0.005566)",
+          "tip_velocity": "(0.042, 0.011009)",
+          "velocity": "(0.092956, 0.031306)"
+        }
+      },
+      "image": "back_right-hat1-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": false,
+        "direction": "back_right",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.715849083662039,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "back|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0019882507622242,
+          -0.000139239040436223,
+          0.0019882507622242,
+          0.000139239040436223,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, -0.001988)",
+          "direction": "back",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, -0.000139)",
+          "tip_velocity": "(0.0, 0.280188)",
+          "velocity": "(0.0, 0.357582)"
+        }
+      },
+      "image": "back-hat1-walk.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": false,
+        "direction": "back",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.81584908366204,
+        "phase": 0.166666666666667,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back"
+      }
+    },
+    {
+      "hair": {
+        "context": "back|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.00618753302842379,
+          0.00334020471200347,
+          -0.00618753302842379,
+          -0.00334020471200347,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.006188)",
+          "direction": "back",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, 0.00334)",
+          "tip_velocity": "(0.0, -0.056562)",
+          "velocity": "(0.0, -0.078268)"
+        }
+      },
+      "image": "back-hat1-stop.png",
+      "pose": {
+        "action": "idle",
+        "contact_left": false,
+        "direction": "back",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.81584908366204,
+        "phase": 0.0208333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back"
+      }
+    },
+    {
+      "hair": {
+        "context": "back_left|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0165454968810081,
+          0.0115818958729506,
+          0.036909244954586,
+          0.0258364249020815,
+          0.0267273709177971,
+          0.018709160387516
+        ],
+        "spring": {
+          "angles": "(0.026727, -0.010182)",
+          "direction": "back_left",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(-63.63922, -63.63922)",
+          "tip_angles": "(0.018709, -0.007127)",
+          "tip_velocity": "(0.00001, -0.000005)",
+          "velocity": "(0.000023, -0.000011)"
+        }
+      },
+      "image": "back_left-hat1-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": false,
+        "direction": "back_left",
+        "events": [],
+        "frame": 7,
+        "gait_phase": 0.958064764142044,
+        "phase": 0.958064764142044,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back_left"
+      }
+    },
+    {
+      "hair": {
+        "context": "back_left|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.00621545035392046,
+          -0.00501674227416515,
+          -0.0208322592079639,
+          -0.016149127855897,
+          -0.0135238552466035,
+          -0.0105829350650311
+        ],
+        "spring": {
+          "angles": "(-0.013524, 0.007308)",
+          "direction": "back_left",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(-0.010583, 0.005566)",
+          "tip_velocity": "(-0.042, 0.011009)",
+          "velocity": "(-0.092956, 0.031306)"
+        }
+      },
+      "image": "back_left-hat1-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "back_left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.0158426028490141,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "back_left"
+      }
+    },
+    {
+      "hair": {
+        "context": "left|true",
+        "enabled": true,
+        "head": "(2.0, -200.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0377984456717968,
+          0.0264588929712772,
+          0.0377984456717968,
+          0.0264588929712772,
+          0.0377984456717968,
+          0.0264588929712772
+        ],
+        "spring": {
+          "angles": "(0.037798, 0.0)",
+          "direction": "left",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(-89.99999, 0.0)",
+          "tip_angles": "(0.026459, 0.0)",
+          "tip_velocity": "(0.000014, 0.0)",
+          "velocity": "(0.000033, 0.0)"
+        }
+      },
+      "image": "left-hat1-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "left",
+        "events": [],
+        "frame": 1,
+        "gait_phase": 0.158064892888077,
+        "phase": 0.158064892888077,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "left"
+      }
+    },
+    {
+      "hair": {
+        "context": "left|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0191258359700441,
+          -0.0149666704237461,
+          -0.0191258359700441,
+          -0.0149666704237461,
+          -0.0191258359700441,
+          -0.0149666704237461
+        ],
+        "spring": {
+          "angles": "(-0.019126, 0.0)",
+          "direction": "left",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(-0.014967, 0.0)",
+          "tip_velocity": "(-0.059394, 0.0)",
+          "velocity": "(-0.131457, 0.0)"
+        }
+      },
+      "image": "left-hat1-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.215842602849015,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "left"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_left|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.036909393966198,
+          0.0258365273475647,
+          0.0165453478693962,
+          0.0115817934274673,
+          0.0267273709177971,
+          0.018709160387516
+        ],
+        "spring": {
+          "angles": "(0.026727, 0.010182)",
+          "direction": "front_left",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(-63.63922, 63.64013)",
+          "tip_angles": "(0.018709, 0.007127)",
+          "tip_velocity": "(0.00001, 0.000005)",
+          "velocity": "(0.000023, 0.000011)"
+        }
+      },
+      "image": "front_left-hat1-walk.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": true,
+        "direction": "front_left",
+        "events": [],
+        "frame": 2,
+        "gait_phase": 0.358065149784096,
+        "phase": 0.358065149784096,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front_left"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_left|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -0.0208324324339628,
+          -0.0161492470651865,
+          -0.00621527805924416,
+          -0.0050166230648756,
+          -0.0135238552466035,
+          -0.0105829350650311
+        ],
+        "spring": {
+          "angles": "(-0.013524, -0.007309)",
+          "direction": "front_left",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(-0.010583, -0.005566)",
+          "tip_velocity": "(-0.042, -0.011007)",
+          "velocity": "(-0.092956, -0.031304)"
+        }
+      },
+      "image": "front_left-hat1-stop.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "front_left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.415842988491067,
+        "phase": 0.333333333333333,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "front_left"
+      }
+    },
+    {
+      "hair": {
+        "context": "front_right|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.0)",
+          "direction": "front_right",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.0, 0.0)",
+          "tip_velocity": "(0.0, 0.0)",
+          "velocity": "(0.0, 0.0)"
+        }
+      },
+      "image": "reverse-turn.png",
+      "pose": {
+        "action": "turn",
+        "contact_left": false,
+        "direction": "left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.539654693603525,
+        "phase": 0.277777777777778,
+        "root_locked": true,
+        "turn_from": "right",
+        "visual_direction": "front_right"
+      }
+    },
+    {
+      "hair": {
+        "context": "right|true",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0117530385032296,
+          0.010622582398355,
+          0.0117530385032296,
+          0.010622582398355,
+          0.0117530385032296,
+          0.010622582398355
+        ],
+        "spring": {
+          "angles": "(0.011753, 0.0)",
+          "direction": "right",
+          "enabled": true,
+          "hat_on": true,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(0.010623, 0.0)",
+          "tip_velocity": "(0.23746, 0.0)",
+          "velocity": "(0.359492, 0.0)"
+        }
+      },
+      "image": "pause-during-rebound.png",
+      "pose": {
+        "action": "stop",
+        "contact_left": true,
+        "direction": "right",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.139654693603525,
+        "phase": 0.166666666666667,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "right"
+      }
+    },
+    {
+      "hair": {
+        "context": "left|false",
+        "enabled": true,
+        "head": "(0.0, -200.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.0)",
+          "direction": "left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(-89.99999, 0.0)",
+          "tip_angles": "(0.0, 0.0)",
+          "tip_velocity": "(0.0, 0.0)",
+          "velocity": "(0.0, 0.0)"
+        }
+      },
+      "image": "hat-swap-in-motion.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": false,
+        "direction": "left",
+        "events": [],
+        "frame": 5,
+        "gait_phase": 0.681876983642588,
+        "phase": 0.681876983642588,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "left"
+      }
+    },
+    {
+      "hair": {
+        "context": "left|false",
+        "enabled": false,
+        "head": "(0.0, -200.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spring": {
+          "angles": "(0.0, 0.0)",
+          "direction": "left",
+          "enabled": false,
+          "hat_on": false,
+          "previous_velocity": "(-89.99999, 0.0)",
+          "tip_angles": "(0.0, 0.0)",
+          "tip_velocity": "(0.0, 0.0)",
+          "velocity": "(0.0, 0.0)"
+        }
+      },
+      "image": "dynamic-off-original.png",
+      "pose": {
+        "action": "walk",
+        "contact_left": false,
+        "direction": "left",
+        "events": [],
+        "frame": 6,
+        "gait_phase": 0.831876983642588,
+        "phase": 0.831876983642588,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "left"
+      }
+    },
+    {
+      "hair": {
+        "context": "left|false",
+        "enabled": true,
+        "head": "(-5.0, -189.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -3.74089040633407e-07,
+          -2.57900694577984e-07,
+          -3.74089040633407e-07,
+          -2.57900694577984e-07,
+          -3.74089040633407e-07,
+          -2.57900694577984e-07
+        ],
+        "spring": {
+          "angles": "(-0.0, 0.0)",
+          "direction": "left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(-0.0, 0.0)",
+          "tip_velocity": "(0.000003, 0.0)",
+          "velocity": "(0.000007, 0.0)"
+        }
+      },
+      "image": "photo-foreground.png",
+      "pose": {
+        "action": "photo",
+        "contact_left": true,
+        "direction": "left",
+        "events": [
+          "shutter"
+        ],
+        "frame": 3,
+        "gait_phase": 0.0396546936035258,
+        "phase": 0.5,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "left"
+      }
+    },
+    {
+      "hair": {
+        "context": "left|false",
+        "enabled": true,
+        "head": "(0.0, -202.0)",
+        "root": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+        "rotations": [
+          -4.7363312612723e-15,
+          -2.19143813542217e-15,
+          -4.7363312612723e-15,
+          -2.19143813542217e-15,
+          -4.7363312612723e-15,
+          -2.19143813542217e-15
+        ],
+        "spring": {
+          "angles": "(-0.0, 0.0)",
+          "direction": "left",
+          "enabled": true,
+          "hat_on": false,
+          "previous_velocity": "(0.0, 0.0)",
+          "tip_angles": "(-0.0, 0.0)",
+          "tip_velocity": "(0.0, 0.0)",
+          "velocity": "(0.0, 0.0)"
+        }
+      },
+      "image": "99-settled.png",
+      "pose": {
+        "action": "idle",
+        "contact_left": true,
+        "direction": "left",
+        "events": [],
+        "frame": 0,
+        "gait_phase": 0.0396546936035258,
+        "phase": 0.0833333333333348,
+        "root_locked": false,
+        "turn_from": "",
+        "visual_direction": "left"
+      }
+    }
+  ],
+  "checks": {
+    "actual_native_bones": true,
+    "continuous_turns_hat0": true,
+    "continuous_turns_hat1": true,
+    "eight_views_both_hat_states_move_tips": true,
+    "halfstep_settles": true,
+    "no_composition_diagnostics": true,
+    "observed_idle": true,
+    "observed_photo": true,
+    "observed_start": true,
+    "observed_stop": true,
+    "observed_turn": true,
+    "observed_walk": true,
+    "original_toggle_and_hat_swap": true,
+    "pause_during_motion": true,
+    "per_cel_head_following": true,
+    "photo_foreground": true,
+    "rebound_settles": true,
+    "reverse_root_locked": true,
+    "reverse_turn": true,
+    "reverse_turn_capture": true,
+    "root_bone_fixed": true
+  },
+  "diagnostics": [],
+  "failures": [],
+  "hair_motion": {
+    "attachment_max_error": 0.0,
+    "geometry": {
+      "bones": 7,
+      "mobile_vertices": 242,
+      "protected_weight_error": 0.0,
+      "vertices": 1156,
+      "weight_sum_error": 3.72529029846191e-08
+    },
+    "left_head_points": [
+      "[142.0, 150.0]",
+      "[139.0, 150.0]",
+      "[140.0, 150.0]",
+      "[141.0, 150.0]",
+      "[141.0, 151.0]",
+      "[140.0, 148.0]"
+    ],
+    "per_view_max_pixels": {
+      "back_left|false": 1.35090208053589,
+      "back_left|true": 1.14644014835358,
+      "back_right|false": 1.61963057518005,
+      "back_right|true": 2.328364610672,
+      "back|false": 0.965671598911285,
+      "back|true": 0.965671598911285,
+      "front_left|false": 1.63268208503723,
+      "front_left|true": 1.42679286003113,
+      "front_right|false": 1.15997302532196,
+      "front_right|true": 1.80573570728302,
+      "front|false": 0.815998256206512,
+      "front|true": 0.927046597003937,
+      "left|false": 3.17804265022278,
+      "left|true": 2.70061063766479,
+      "right|false": 3.17804265022278,
+      "right|true": 2.70061063766479
+    },
+    "root_max_error": 0.0,
+    "tip_max_pixels": 3.17804265022278,
+    "trace_summary": {
+      "frames": 1703,
+      "first": {
+        "action": "idle",
+        "base": [
+          0.0,
+          0.0
+        ],
+        "hat": false,
+        "head": [
+          0.0,
+          -202.0
+        ],
+        "heading": "front",
+        "paused": false,
+        "root_error": 0.0,
+        "time": 0.025,
+        "tip": [
+          0.0,
+          0.0
+        ],
+        "tip_displacement": 3.93209984395071e-06
+      },
+      "last": {
+        "action": "idle",
+        "base": [
+          -4.7363312612723e-15,
+          0.0
+        ],
+        "hat": false,
+        "head": [
+          0.0,
+          -202.0
+        ],
+        "heading": "left",
+        "paused": false,
+        "root_error": 0.0,
+        "time": 56.2249999999994,
+        "tip": [
+          -2.19143813542217e-15,
+          0.0
+        ],
+        "tip_displacement": 3.93209984395071e-06
+      }
+    }
+  },
+  "manifest_frame_counts": {
+    "back": {
+      "idle": 1,
+      "photo": 7,
+      "start": 1,
+      "stop": 2,
+      "turn": 1,
+      "walk": 8
+    },
+    "back_left": {
+      "idle": 1,
+      "photo": 7,
+      "start": 1,
+      "stop": 2,
+      "turn": 1,
+      "walk": 8
+    },
+    "back_right": {
+      "idle": 1,
+      "photo": 7,
+      "start": 1,
+      "stop": 2,
+      "turn": 1,
+      "walk": 8
+    },
+    "front": {
+      "idle": 1,
+      "photo": 7,
+      "start": 1,
+      "stop": 2,
+      "turn": 1,
+      "walk": 8
+    },
+    "front_left": {
+      "idle": 1,
+      "photo": 7,
+      "start": 1,
+      "stop": 2,
+      "turn": 1,
+      "walk": 8
+    },
+    "front_right": {
+      "idle": 1,
+      "photo": 7,
+      "start": 1,
+      "stop": 2,
+      "turn": 1,
+      "walk": 8
+    },
+    "left": {
+      "idle": 1,
+      "photo": 7,
+      "start": 1,
+      "stop": 2,
+      "turn": 1,
+      "walk": 8
+    },
+    "right": {
+      "idle": 1,
+      "photo": 7,
+      "start": 1,
+      "stop": 2,
+      "turn": 1,
+      "walk": 8
+    }
+  },
+  "method": "Main sample scene driven by Input.parse_input_event keyboard and mouse events; state receipts and captures are not visual approval",
+  "motion_source": "Unchanged ART-29 windswept textures; real Skeleton2D/Bone2D/Polygon2D; root/cap rigid",
+  "native_input_events": {
+    "keys": 114,
+    "mouse_buttons": 12
+  },
+  "observations": {
+    "appearances": [],
+    "directions": [],
+    "shutter_events": 1,
+    "special_pose_captures": [
+      {
+        "action": "turn",
+        "capture": "reverse-turn.png",
+        "frame": 0,
+        "locked_displacement": 0.0,
+        "visual_direction": "front_right"
+      },
+      {
+        "action": "turn",
+        "capture": "reverse-turn.png",
+        "frame": 0,
+        "locked_displacement": 0.0,
+        "visual_direction": "front_right"
+      }
+    ],
+    "action_counts": {
+      "walk": 846,
+      "start": 156,
+      "turn": 14,
+      "stop": 156,
+      "idle": 480,
+      "photo": 35
+    }
+  },
+  "result": "PASS_STATE_CHECKS",
+  "review": "ART-30 single original-style 2D hair bone sample",
+  "time_scale": 1.0,
+  "visual_review": "not performed by this script; inspect PNG and MP4 captures manually",
+  "lossless_raw_evidence": {
+    "file": "ART-30-export-controls.json.gz",
+    "sha256": "9f564d5fe79b99a04d958c3915fcc728e366561697f15b03ba7fbf636a2c738b",
+    "format": "gzip-compressed original native audit; every recorded frame retained"
+  }
+}

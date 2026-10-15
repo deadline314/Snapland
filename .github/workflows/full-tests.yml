@@ -66,5 +66,7 @@ jobs:
         run: python tools/check_runtime_tests.py
       - name: Verify isolated original-style 2D hero sample
         run: python tools/hero_2d/run_contract_tests.py
+      - name: Verify isolated 2D hair bones and attachment contracts
+        run: python tools/hero_2d/run_hair_review.py --contracts
       - name: Run native Godot startup and runtime tests
         run: python tools/run_game_tests.py

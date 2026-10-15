@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 - Build 32.0.101.9033 - Compatibility - Using Device: Intel - Intel(R) Arc(TM) B580 Graphics
+
+Movie Maker mode enabled, recording movie in 1280×800 @ 30 FPS...
+HERO_2D_HAIR_AUDIT {"attachment_max_error":0.0,"checks":{"actual_native_bones":true,"continuous_turns_hat0":true,"continuous_turns_hat1":true,"eight_views_both_hat_states_move_tips":true,"halfstep_settles":true,"no_composition_diagnostics":true,"observed_idle":true,"observed_photo":true,"observed_start":true,"observed_stop":true,"observed_turn":true,"observed_walk":true,"original_toggle_and_hat_swap":true,"pause_during_motion":true,"per_cel_head_following":true,"photo_foreground":true,"rebound_settles":true,"reverse_root_locked":true,"reverse_turn":true,"reverse_turn_capture":true,"root_bone_fixed":true},"result":"PASS_STATE_CHECKS","tip_max_pixels":3.17804265022278}
+--------------------------------------------------------------------------------
+Done recording movie at path: C:\Users\stanl\.codex\worktrees\island-experience\Snapland\.review\hero-2d-hair-20261016\normal\movie.png
+1704 frames at 30 FPS (movie length: 00:00:56:24), recorded in 00:01:22 (68% of real-time speed).
+CPU render time: 0.90 seconds (average: 0.53 ms/frame)
+GPU render time: 0.58 seconds (average: 0.34 ms/frame)
+Encoding time: 67.61 seconds (average: 39.68 ms/frame)
+--------------------------------------------------------------------------------

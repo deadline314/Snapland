@@ -115,6 +115,23 @@ func render_pose(state: Dictionary) -> bool:
 	return _valid_manifest and _pose_frame(current_pose) != null
 
 func compose_frame(state: Dictionary, appearance: Dictionary = {}) -> Image:
+	return _compose_frame(state, appearance)
+
+func get_hair_rig_layers(state: Dictionary) -> Dictionary:
+	if not _valid_manifest or current_appearance.get("hair_style", "") != "windswept": return {}
+	var frame: Variant = _pose_frame(state)
+	if frame == null: return {}
+	var direction := _direction_for_state(state)
+	var parts := _directional_parts(current_appearance, direction)
+	if parts.is_empty() or parts.hair.size() != 1 or not parts.hat.is_empty(): return {}
+	var layer: Dictionary = parts.hair[0]
+	if layer.order != "front": return {}
+	var variant: Dictionary = frame.get("outfits", {}).get(current_appearance.outfit, {})
+	var anchor: Array = variant.get("head_anchor", frame.head_anchor)
+	var offset: Array = layer.get("offset", [0, 0])
+	return {"body": _compose_frame(state, {}, true), "foreground": _compose_frame(state, {}, true, true), "hair": _read_region(str(layer.source), layer.region, "hair rig"), "anchor": Vector2(layer.anchor[0], layer.anchor[1]), "head": Vector2(anchor[0], anchor[1]) - Vector2(_feet_origin) + Vector2(offset[0], offset[1]), "direction": direction, "hat_on": bool(current_appearance.hat_on)}
+
+func _compose_frame(state: Dictionary, appearance: Dictionary = {}, omit_hair := false, foreground_only := false) -> Image:
 	if not _valid_manifest:
 		return _fallback_image.duplicate() if _fallback_image != null else null
 	var selected := current_appearance.duplicate()
@@ -150,19 +167,23 @@ func compose_frame(state: Dictionary, appearance: Dictionary = {}) -> Image:
 		return _fallback_image.duplicate() if _fallback_image != null else null
 	var hair_layers: Array = part_data.hair
 	var hat_layers: Array = part_data.hat
-	_draw_layers(result, hair_layers, head_anchor, "behind", direction, action)
-	_draw_layers(result, hat_layers, head_anchor, "behind", direction, action)
-	result.blend_rect(body, Rect2i(Vector2i.ZERO, _canvas_size), Vector2i.ZERO)
-	_draw_layers(result, hair_layers, head_anchor, "front", direction, action)
-	_draw_layers(result, hat_layers, head_anchor, "front", direction, action)
+	if not foreground_only:
+		if not omit_hair:
+			_draw_layers(result, hair_layers, head_anchor, "behind", direction, action)
+			_draw_layers(result, hat_layers, head_anchor, "behind", direction, action)
+		result.blend_rect(body, Rect2i(Vector2i.ZERO, _canvas_size), Vector2i.ZERO)
+		if not omit_hair:
+			_draw_layers(result, hair_layers, head_anchor, "front", direction, action)
+			_draw_layers(result, hat_layers, head_anchor, "front", direction, action)
 	var foreground: Variant = outfit_variant.get("foreground_regions", frame.get("foreground_regions", []))
-	if foreground is Array:
+	if foreground is Array and (not omit_hair or foreground_only):
 		for value in foreground:
 			var rect := _rect(value)
 			if not _inside(_canvas_size, rect):
 				_diagnose("%s/%s" % [direction, action], "foreground region is outside canonical body frame")
 				return _fallback_image.duplicate() if _fallback_image != null else null
-			result.blend_rect(body, rect, rect.position)
+			if foreground_only: result.blit_rect(body, rect, rect.position)
+			else: result.blend_rect(body, rect, rect.position)
 	return result
 
 func get_diagnostics() -> Array[String]:

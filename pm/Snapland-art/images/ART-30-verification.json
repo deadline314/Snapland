@@ -1,0 +1,276 @@
+{
+  "date": "2026-10-16 Asia/Taipei",
+  "scope": "One existing 2D windswept hairstyle, isolated hero sample; original island and NPCs not integrated. Agent inspection, not human playtest.",
+  "binding_regression": {
+    "cause": "Fixed body author guide had incorrectly been reused as current-cel head attachment despite 1-3 pixel head feature movement.",
+    "correction": "128 explicit reviewed walk attachments for eight views and two outfits, separate from unchanged body placement guide. Runtime performs no anatomy inference.",
+    "body_atlases_unchanged": 12,
+    "source_to_runtime_byte_stable_files": 21,
+    "python_tests": 9,
+    "original_pack_cpu_composites": 1280
+  },
+  "native": {
+    "normal": {
+      "result": "PASS_STATE_CHECKS",
+      "checks": {
+        "actual_native_bones": true,
+        "continuous_turns_hat0": true,
+        "continuous_turns_hat1": true,
+        "eight_views_both_hat_states_move_tips": true,
+        "halfstep_settles": true,
+        "no_composition_diagnostics": true,
+        "observed_idle": true,
+        "observed_photo": true,
+        "observed_start": true,
+        "observed_stop": true,
+        "observed_turn": true,
+        "observed_walk": true,
+        "original_toggle_and_hat_swap": true,
+        "pause_during_motion": true,
+        "per_cel_head_following": true,
+        "photo_foreground": true,
+        "rebound_settles": true,
+        "reverse_root_locked": true,
+        "reverse_turn": true,
+        "reverse_turn_capture": true,
+        "root_bone_fixed": true
+      },
+      "attachment_max_error": 0.0,
+      "predicted_visible_tip_max_pixels": 3.17804265022278
+    },
+    "quarter": {
+      "result": "PASS_STATE_CHECKS",
+      "checks": {
+        "actual_native_bones": true,
+        "continuous_turns_hat0": true,
+        "continuous_turns_hat1": true,
+        "eight_views_both_hat_states_move_tips": true,
+        "halfstep_settles": true,
+        "no_composition_diagnostics": true,
+        "observed_idle": true,
+        "observed_photo": true,
+        "observed_start": true,
+        "observed_stop": true,
+        "observed_turn": true,
+        "observed_walk": true,
+        "original_toggle_and_hat_swap": true,
+        "pause_during_motion": true,
+        "per_cel_head_following": true,
+        "photo_foreground": true,
+        "rebound_settles": true,
+        "reverse_root_locked": true,
+        "reverse_turn": true,
+        "reverse_turn_capture": true,
+        "root_bone_fixed": true
+      },
+      "attachment_max_error": 0.0,
+      "predicted_visible_tip_max_pixels": 3.19151663780212
+    },
+    "export-controls": {
+      "result": "PASS_STATE_CHECKS",
+      "checks": {
+        "actual_native_bones": true,
+        "continuous_turns_hat0": true,
+        "continuous_turns_hat1": true,
+        "eight_views_both_hat_states_move_tips": true,
+        "halfstep_settles": true,
+        "no_composition_diagnostics": true,
+        "observed_idle": true,
+        "observed_photo": true,
+        "observed_start": true,
+        "observed_stop": true,
+        "observed_turn": true,
+        "observed_walk": true,
+        "original_toggle_and_hat_swap": true,
+        "pause_during_motion": true,
+        "per_cel_head_following": true,
+        "photo_foreground": true,
+        "rebound_settles": true,
+        "reverse_root_locked": true,
+        "reverse_turn": true,
+        "reverse_turn_capture": true,
+        "root_bone_fixed": true
+      },
+      "attachment_max_error": 0.0,
+      "predicted_visible_tip_max_pixels": 3.17804265022278
+    }
+  },
+  "spring_contract": "PASS lag/rebound/convergence, pause/history freeze, zero-dt resume, heading/hat reset, bounded motion, disable, time partition",
+  "rest_composites": {
+    "count": 640,
+    "result": "CPU byte-identical to original compositor at rest; not GPU byte identity claim"
+  },
+  "actual_gpu": {
+    "scope": "Synthetic GPU skinning contract with static body; actual input/animation acceptance is a separate native tour",
+    "source_alpha_note": "Eroded alpha>=240 interior; source hair is mostly alpha253. Reference color differences are independent of root movement.",
+    "cases": [
+      {
+        "key": "front-hat0",
+        "protected_interior_pixels": 3438,
+        "protected_max_channel_difference": 0,
+        "changed_hair_region_pixels": 378,
+        "settled_max_difference": 0,
+        "original_head_translation": [
+          0,
+          0
+        ],
+        "original_head_correlation": 0.9999852776527405,
+        "original_protected_max_color_difference": 2,
+        "predicted_visible_displacement": 1.36186242103577
+      },
+      {
+        "key": "front-hat1",
+        "protected_interior_pixels": 10225,
+        "protected_max_channel_difference": 0,
+        "changed_hair_region_pixels": 402,
+        "settled_max_difference": 0,
+        "original_head_translation": [
+          0,
+          0
+        ],
+        "original_head_correlation": 0.9999923706054688,
+        "original_protected_max_color_difference": 2,
+        "predicted_visible_displacement": 1.56740140914917
+      },
+      {
+        "key": "left-hat0",
+        "protected_interior_pixels": 4775,
+        "protected_max_channel_difference": 0,
+        "changed_hair_region_pixels": 562,
+        "settled_max_difference": 0,
+        "original_head_translation": [
+          0,
+          0
+        ],
+        "original_head_correlation": 0.9999805092811584,
+        "original_protected_max_color_difference": 1,
+        "predicted_visible_displacement": 2.14616012573242
+      },
+      {
+        "key": "left-hat1",
+        "protected_interior_pixels": 10944,
+        "protected_max_channel_difference": 0,
+        "changed_hair_region_pixels": 589,
+        "settled_max_difference": 0,
+        "original_head_translation": [
+          0,
+          0
+        ],
+        "original_head_correlation": 0.9999887943267822,
+        "original_protected_max_color_difference": 2,
+        "predicted_visible_displacement": 2.14616012573242
+      }
+    ],
+    "result": "PASS"
+  },
+  "visual_review": {
+    "method": "Main agent inspected browser playback at rate1 in sections for normal and actual quarter-simulation recordings, repeated left walk/turn/hat/photo sections, and inspected native whole-body/head capture boards for all eight directions and both hat states. Still captures inspected for pause/photo/export. Not a claim of examining every movie frame.",
+    "result": "Accepted within the bounded sample: no observed relative root slip or scalp gaps; restrained peripheral tail response, fixed cap and correct foreground camera/hands. State assertions separately verify freeze, resets and convergence.",
+    "normal_focus_seconds": [
+      0,
+      14,
+      21,
+      28,
+      38,
+      45,
+      53.5,
+      56.8
+    ],
+    "quarter_focus_seconds": [
+      0,
+      37,
+      43,
+      55,
+      60.8,
+      69,
+      77,
+      110,
+      139,
+      180,
+      195,
+      204,
+      211
+    ],
+    "unchanged_art": "Existing ART-29 bitmaps; no new character model or redrawing."
+  },
+  "videos": {
+    "normal": {
+      "width": 1280,
+      "height": 800,
+      "r_frame_rate": "30/1",
+      "duration": "56.800000",
+      "nb_frames": "1704"
+    },
+    "quarter": {
+      "width": 1280,
+      "height": 800,
+      "r_frame_rate": "30/1",
+      "duration": "214.133333",
+      "nb_frames": "6424"
+    }
+  },
+  "source_sha256": {
+    "assets/characters/hero-2d-v1/manifest.json": "79ccba2edd5a756b4d66cbfbc4e7265bdd848b93e4141078939e6261bbae8e4d",
+    "assets/characters/hero-2d-v1/head-attachments.json": "2a0945f6743ebcdd2ff4f62b6317cf82b121a2f96a63467f4bcb9701ccd27573",
+    "assets/characters/hero-2d-v1/hair-rig-windswept.json": "4dc72cecca34e7565d32b2a6cb1be888e950a53fb6ae1b8ab7f3c24a2689123d",
+    "game/world/hero_2d_hair_rig.gd": "bb43c8ff52b9394f1ccbdb958d78482e7eb20cf75caf7e93cd4a0c57f800ba3a",
+    "game/world/hero_2d_hair_spring.gd": "d7852ee1b227c0709cce3471592f48e41dc976f68b915349e6502dae4ff5920c",
+    "game/world/hero_2d_library.gd": "877b07082ef651d02487bbd6aaa50b0899537b964eb928709b24500bfdf5352d",
+    "game/review/hero_2d_hair_sample.gd": "d08f1717caca30129b3751e626bc5d7eaedd56e8c211d63079293dddcd1a48f0",
+    "build/hero-2d-hair-sample-release/Snapland-Hero-2D-Hair-Sample.exe": "5d7c6e2f6736ca733137a18b7a2fbceb7a7df6e0d75aac692ca2f53ee27c4405",
+    "tools/hero_2d/run_hair_review.py": "bfe2d96e2c8ddaf370945bc63bc33eaa74802b61fad32f9acfa4dfa8238fce55",
+    "tools/hero_2d/check_hair_gpu.py": "5488aacc20b899058eee11c572328b491dbd6173759f20c9eb7b5f54b2060e25",
+    "tests/test_hero_2d_hair_gpu_report.py": "9f510acfc7b7b7e672b1fc4ff1e5de4c0c150ef5f19727ad89e0da0a3d8dbfad"
+  },
+  "evidence_sha256": {
+    "pm\\Snapland-art\\images\\ART-30-normal-head-directions.png": "8b02a3ae756ef649586e46389138492dd47df2eb40f380f69e88178cff7bc75e",
+    "pm\\Snapland-art\\images\\ART-30-normal-body-directions.png": "2a64c1e079b7341bd562c4b16a0057375f07077e6f4e3d2ed6a572d743cf66a4",
+    "pm\\Snapland-art\\images\\ART-30-normal-photo-foreground.png": "4369b94278d7924911f25733ab9562c10ce937d10b1cffffa19035713dfbb874",
+    "pm\\Snapland-art\\images\\ART-30-normal-pause-during-rebound.png": "76606b82241e8f205b28960baa953a2160177991f9aaf0dcfc03c0edeae1fbf0",
+    "pm\\Snapland-art\\images\\ART-30-normal-left-hat0-walk.png": "cc9dbb5f8800af8da667d7b8b827f342e86624cbf9fa10c5d90097c31cb1425f",
+    "pm\\Snapland-art\\images\\ART-30-normal-left-hat1-walk.png": "08bb9533508b67744ac14038cc9dbb5629ce61a1eaf0eaf9ef0aaad3bb2a6da7",
+    "pm\\Snapland-art\\images\\ART-30-normal-reverse-turn.png": "fa96caba4dd6795d11c225888e5ed37c5a547bae9e80654d5f5f715d65cb6c3e",
+    "pm\\Snapland-art\\images\\ART-30-normal-dynamic-off-original.png": "a17fa00621e15d599cdfcccd450a93296d5cd0ac518e93d88f91a7060f2c69aa",
+    "pm\\Snapland-art\\images\\ART-30-normal-99-settled.png": "f4ff205d73c63f7d54a357fd4a4ce72558f3eeb102bcf905f136cc0320ce4035",
+    "pm\\Snapland-art\\images\\ART-30-normal-audit.json": "11966a689a11129924ec68bede64cf205185ebdf330f434f1e81c75b47c21306",
+    "pm\\Snapland-art\\images\\ART-30-normal-run.log": "d88ec5e01a224a1171c991732f964acf2da720b63420dcc4b4921a188a7623bb",
+    "pm\\Snapland-art\\images\\ART-30-normal-normal.mp4": "14ea29cf7c9c41e1f48459cf615b3fbe20247a470f9a8337029ef41c81669c8b",
+    "pm\\Snapland-art\\images\\ART-30-quarter-head-directions.png": "d247e283b64c7731e30b028ad58bf76e656cfb32e88007dbb14635ac37940ce4",
+    "pm\\Snapland-art\\images\\ART-30-quarter-body-directions.png": "d0882926048fe76902cfa1552af54fee2a6af58d420dc722648641fc57a77844",
+    "pm\\Snapland-art\\images\\ART-30-quarter-photo-foreground.png": "67d17a612f5348378a54932bf2b5aa19ea2d95938459a6a0737d0a1a6fb3d7ef",
+    "pm\\Snapland-art\\images\\ART-30-quarter-pause-during-rebound.png": "9e0f0a2ae359ae576c6b1ec784df963bab210b3cfa3f5c1f2dbc7dd506750b65",
+    "pm\\Snapland-art\\images\\ART-30-quarter-left-hat0-walk.png": "bec4be982f9b90c976d03d83cf62b2c363362c4c192aa08e1e4da106ce098296",
+    "pm\\Snapland-art\\images\\ART-30-quarter-left-hat1-walk.png": "3dcf8634766776a9a6dd8f4c35cbfdce31d4a7dbe53428290a55d06bd76fac8b",
+    "pm\\Snapland-art\\images\\ART-30-quarter-reverse-turn.png": "8b4f9376249d59c8992953b01a491a49922e61832c12c3254882ab0566d33889",
+    "pm\\Snapland-art\\images\\ART-30-quarter-dynamic-off-original.png": "ae825a949925a8b1c5adbbd720af748b39ea76f3b3c462aeaca37f36d6e10577",
+    "pm\\Snapland-art\\images\\ART-30-quarter-99-settled.png": "48b9e92b116b241324f4c8dbecbbaaee9e752bee999bac34aca9b27bc54993ad",
+    "pm\\Snapland-art\\images\\ART-30-quarter-audit.json": "0ef02c6d22810a405d026e979df937e5913e8bdf90c89a6d4aff62c1b4347090",
+    "pm\\Snapland-art\\images\\ART-30-quarter-run.log": "a5c5179271eb3d963890fb882a3f5bd7803fafdc99951364f0a1be0e9a2d3375",
+    "pm\\Snapland-art\\images\\ART-30-quarter-quarter.mp4": "06453e3d6782835ac6e5946d98ac98eed414ec2aa41fe1eaf9eb53d3bfb81918",
+    "pm\\Snapland-art\\images\\ART-30-gpu-pixel-comparison.json": "92805c8a3cc2d53163d5b1daeb2041471129ed33fc579df7b9402a6948bbebd1",
+    "pm\\Snapland-art\\images\\ART-30-gpu-render-contract.json": "9a44054fda849e34ac5821f751f6584a4e21d327dafe24a8c5005edaaff46639",
+    "pm\\Snapland-art\\images\\ART-30-gpu-front-hat0-rest.png": "5d62f55ad3a0e80b33410b985f74e4a1f706f6818ca190db2d7c8ea829d21522",
+    "pm\\Snapland-art\\images\\ART-30-gpu-front-hat0-moving.png": "18511ab45a0974afe112484611b26b5e9d1130bca5a1e5ace8c4b65bb96ca392",
+    "pm\\Snapland-art\\images\\ART-30-gpu-left-hat1-rest.png": "ea64dc68015b219b0c72af595690ebfa9d4699751e3d95b459beb1107a74816c",
+    "pm\\Snapland-art\\images\\ART-30-gpu-left-hat1-moving.png": "b9f0fc4423cdb23192fffd9d19f5f0293e6b54daa7876339bbb580fd8fe3c92f",
+    "pm\\Snapland-art\\images\\ART-30-gpu-left-hat1-settled.png": "ea64dc68015b219b0c72af595690ebfa9d4699751e3d95b459beb1107a74816c",
+    "pm\\Snapland-art\\images\\ART-30-spring.log": "28a450b1e49a60c247b03c6fb79897360f9abbab9e7d333f36e3c46efa5e74a4",
+    "pm\\Snapland-art\\images\\ART-30-rig.log": "fd71790f516e41ee44983b573eb88ebab1ca9802a6c6feed6e8026e5dd7ba5c8",
+    "pm\\Snapland-art\\images\\ART-30-export-startup.png": "a4ac2b25550cb727c3e8e1011936c596c6804e4508bf13e73192b089ef37e38d",
+    "pm\\Snapland-art\\images\\ART-30-export-controls.json": "4af52a690f6466efd382111af2ea5e815d94b22656d31cbc264b1b080bb4d53e",
+    "pm\\Snapland-art\\images\\ART-30-export-controls.log": "d12d8f85d3ca64f2a060f1c64d24f69b17499d405add90ecfa4f130b144197a5",
+    "pm\\Snapland-art\\images\\ART-30-normal-audit.json.gz": "9f564d5fe79b99a04d958c3915fcc728e366561697f15b03ba7fbf636a2c738b",
+    "pm\\Snapland-art\\images\\ART-30-quarter-audit.json.gz": "347bc3a426742841ad30c096c5b223dfebe77e02b9c2096ede1c1e19cb4ee824",
+    "pm\\Snapland-art\\images\\ART-30-export-controls.json.gz": "9f564d5fe79b99a04d958c3915fcc728e366561697f15b03ba7fbf636a2c738b"
+  },
+  "limits": [
+    "No formal island, NPC, other hair or complete game acceptance.",
+    "Hair motion is subtle and direction-dependent; CPU predicted tip distance is separate from real GPU changed-pixel proof.",
+    "Source grayscale matching only proposes offline attachments; all 128 marker overlays were inspected before adoption.",
+    "Full repository suite is delegated to CI; local verification was affected-scope tests."
+  ],
+  "gpu_receipt_regressions": 4,
+  "review": "Readonly reviewer found empty/incomplete GPU evidence could falsely pass; fixed expected four unique configurations, RED then GREEN four regressions. No other actionable findings.",
+  "binding_fix_commit": "8a28413",
+  "raw_trace_storage": "Native audit summaries link lossless gzip originals to preserve all recorded frames without expanding them in ordinary review."
+}
