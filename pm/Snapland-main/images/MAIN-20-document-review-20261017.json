@@ -1,0 +1,583 @@
+{
+  "base_game_main": "bcd2297f238c584c98ff66df7aeccd1887360183",
+  "scope": "document/image/source provenance, standalone prompt and actual ticket status review; no new gameplay or engine acceptance",
+  "images": [
+    {
+      "file": "MAIN-20-user-liked-harbor-sheet.png",
+      "sha256": "1f8450365511286f6e4ffad7a1f7e5a0b3368b7846bc6f6d937709e4b28b431a",
+      "reviewed_again": "2026-10-17",
+      "method": "original static image viewed with view_image; unchanged bytes",
+      "meaning": "使用者：這個其實我覺得還不錯；不是所有影格與玩法的驗收。",
+      "new_gameplay_capture": false
+    },
+    {
+      "file": "MAIN-20-user-liked-personality-sheet.png",
+      "sha256": "2e62aef5566fe4017f14aa22bd3fb8578cfc9e21717c2f4eea9d4e5a4c549be6",
+      "reviewed_again": "2026-10-17",
+      "method": "original static image viewed with view_image; unchanged bytes",
+      "meaning": "使用者：這個確實更有個性，也很好；角色個性參考，非全套動畫批准。",
+      "new_gameplay_capture": false
+    },
+    {
+      "file": "MAIN-20-user-rejected-scroll-pause.jpg",
+      "sha256": "3b634ce8f724ad310feb1e4ab9ed2bfe1033141fa4f50e7566d6213f83ff1119",
+      "reviewed_again": "2026-10-17",
+      "method": "original static image viewed with view_image; unchanged bytes",
+      "meaning": "使用者否定：只用小部分畫面，少量操作仍要捲動，配置不合理；不是合格UI。",
+      "new_gameplay_capture": false
+    }
+  ],
+  "prompt_python_ast_blocks": 1,
+  "prompt_scope": "one current main baseline, no stale feature checkout instructions",
+  "ticket_counts": {
+    "進行中": 78,
+    "完成": 10,
+    "審查中": 1
+  },
+  "total_tickets": 89,
+  "unclosed": 79,
+  "status_snapshot": [
+    {
+      "id": "ART-1",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-1]建立立體像素園區光影.md"
+    },
+    {
+      "id": "ART-2",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-2]建立遊園介面與操作引導.md"
+    },
+    {
+      "id": "ART-3",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-3]重製島嶼海港與遊園布景.md"
+    },
+    {
+      "id": "ART-4",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-4]重製角色與遊園動作.md"
+    },
+    {
+      "id": "ART-5",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-5]重製十二款小遊戲美術.md"
+    },
+    {
+      "id": "ART-6",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-6]完善遊園與結算介面.md"
+    },
+    {
+      "id": "ART-7",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-7]製作細緻像素角色與動作.md"
+    },
+    {
+      "id": "ART-8",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-8]提供服飾店與衣櫃預覽.md"
+    },
+    {
+      "id": "ART-9",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-9]建立元件動畫與角色待機.md"
+    },
+    {
+      "id": "ART-10",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-10]提供建築遮擋圓形透視.md"
+    },
+    {
+      "id": "ART-11",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-11]擴大透視圈與柔化邊緣.md"
+    },
+    {
+      "id": "ART-12",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-12]安排角色站位與個性動作.md"
+    },
+    {
+      "id": "ART-13",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-13]統一時段光源與遊戲布景.md"
+    },
+    {
+      "id": "ART-14",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-14]細化八方向步行與換裝動作.md"
+    },
+    {
+      "id": "ART-15",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-15]修正角色裁切與完整性檢查.md"
+    },
+    {
+      "id": "ART-16",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-16]提高角色動畫流暢與一致性.md"
+    },
+    {
+      "id": "ART-17",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-17]製作角色完整動畫與個性待機.md"
+    },
+    {
+      "id": "ART-18",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-18]同步換裝分層與角色動畫.md"
+    },
+    {
+      "id": "ART-19",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-19]修正海港背景美術風格.md"
+    },
+    {
+      "id": "ART-20",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-20]重整遊園介面視覺層級.md"
+    },
+    {
+      "id": "ART-21",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-21]重整小遊戲操作畫面.md"
+    },
+    {
+      "id": "ART-22",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-22]修正步行頭髮與身體分離.md"
+    },
+    {
+      "id": "ART-23",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-23]重設全遊戲像素介面與暫停導覽.md"
+    },
+    {
+      "id": "ART-24",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-24]重設旅券收藏與探索介面.md"
+    },
+    {
+      "id": "ART-25",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-25]重設換裝設定與時段介面.md"
+    },
+    {
+      "id": "ART-26",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-26]重設小遊戲與拍貼操作介面.md"
+    },
+    {
+      "id": "ART-27",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-art/[ART-27]完善像素字體與多語可讀性.md"
+    },
+    {
+      "id": "ART-28",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-art/[ART-28]重設角色製作與動作管線.md"
+    },
+    {
+      "id": "ART-29",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-art/[ART-29]製作主角完整換裝動作樣本.md"
+    },
+    {
+      "id": "ART-30",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-art/[ART-30]製作主角髮尾骨架動態樣本.md"
+    },
+    {
+      "id": "ART-31",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-art/[ART-31]修正全部二維行走像素偏移.md"
+    },
+    {
+      "id": "ART-32",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-art/[ART-32]接回穩定八方向待機眨眼.md"
+    },
+    {
+      "id": "ART-33",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-art/[ART-33]接入島上主角髮尾骨架.md"
+    },
+    {
+      "id": "ART-34",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-art/[ART-34]擴充島上其他髮型動態.md"
+    },
+    {
+      "id": "MAIN-1",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-main/[MAIN-1]重整園區與收藏玩法.md"
+    },
+    {
+      "id": "MAIN-2",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-2]建立設計驗證與定時CI.md"
+    },
+    {
+      "id": "MAIN-3",
+      "status": "進行中",
+      "source_status": "進行中（base SHA：c1b7b19）",
+      "path": "Snapland-main/[MAIN-3]建立可執行遊戲與原生驗證.md"
+    },
+    {
+      "id": "MAIN-4",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-4]建立主廣場與園區路口.md"
+    },
+    {
+      "id": "MAIN-5",
+      "status": "進行中",
+      "source_status": "進行中（base SHA：c1b7b19）",
+      "path": "Snapland-main/[MAIN-5]建立遊戲成就與平台接點.md"
+    },
+    {
+      "id": "MAIN-6",
+      "status": "進行中",
+      "source_status": "進行中（base SHA：c1b7b19）",
+      "path": "Snapland-main/[MAIN-6]提供設定與安全存檔.md"
+    },
+    {
+      "id": "MAIN-7",
+      "status": "進行中",
+      "source_status": "進行中（base SHA：c1b7b19）",
+      "path": "Snapland-main/[MAIN-7]建立拍貼結算與收藏冊.md"
+    },
+    {
+      "id": "MAIN-8",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-8]建立自由外觀與服飾收藏.md"
+    },
+    {
+      "id": "MAIN-9",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-9]提供四時段切換與拍貼收藏.md"
+    },
+    {
+      "id": "MAIN-10",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-10]提供截圖教學與重看入口.md"
+    },
+    {
+      "id": "MAIN-11",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-11]完善迎賓大道探索動線.md"
+    },
+    {
+      "id": "MAIN-12",
+      "status": "審查中",
+      "source_status": "審查中",
+      "path": "Snapland-main/[MAIN-12]修復設計入口失效連結.md"
+    },
+    {
+      "id": "MAIN-13",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-13]補齊小惡魔拍貼實際縮圖.md"
+    },
+    {
+      "id": "MAIN-14",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-14]簡化攤位開場與遊玩入口.md"
+    },
+    {
+      "id": "MAIN-15",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-15]加入潮汐遊樂設施體驗.md"
+    },
+    {
+      "id": "MAIN-16",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-16]保存拍貼高清原圖.md"
+    },
+    {
+      "id": "MAIN-17",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-main/[MAIN-17]隔離遊戲驗收存檔.md"
+    },
+    {
+      "id": "MAIN-18",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-18]防止驗收腳本誤啟動警告.md"
+    },
+    {
+      "id": "MAIN-19",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-main/[MAIN-19]建立可擴充多語系框架.md"
+    },
+    {
+      "id": "MAIN-20",
+      "status": "完成",
+      "source_status": "完成",
+      "path": "Snapland-main/[MAIN-20]整理需求指南與接續提示.md"
+    },
+    {
+      "id": "MIC-1",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-music/[MIC-1]製作首區音樂與互動音效.md"
+    },
+    {
+      "id": "MIC-2",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-music/[MIC-2]完善首區音樂與動作音效.md"
+    },
+    {
+      "id": "MIC-3",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-music/[MIC-3]精選並接入首區CC0聲音.md"
+    },
+    {
+      "id": "SG-1",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-1]重設小遊戲樂趣目錄.md"
+    },
+    {
+      "id": "SG-2",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-2]實作氣球快遞.md"
+    },
+    {
+      "id": "SG-3",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-3]實作風箏穿環.md"
+    },
+    {
+      "id": "SG-4",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-4]實作噴泉跳拍.md"
+    },
+    {
+      "id": "SG-5",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-5]實作人潮指揮.md"
+    },
+    {
+      "id": "SG-6",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-6]實作帽子救援.md"
+    },
+    {
+      "id": "SG-7",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-7]實作彩帶節拍.md"
+    },
+    {
+      "id": "SG-8",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-8]實作花壇拼圖.md"
+    },
+    {
+      "id": "SG-9",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-9]實作招牌平衡.md"
+    },
+    {
+      "id": "SG-10",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-10]實作影子捉迷藏.md"
+    },
+    {
+      "id": "SG-11",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-11]實作泡泡合照.md"
+    },
+    {
+      "id": "SG-12",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-12]實作長椅換位.md"
+    },
+    {
+      "id": "SG-13",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-13]實作迎賓大合奏.md"
+    },
+    {
+      "id": "SG-14",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-14]完善十二款遊戲動作回饋.md"
+    },
+    {
+      "id": "SG-15",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-15]重做氣球快遞操控與風場.md"
+    },
+    {
+      "id": "SG-16",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-16]精修氣球快遞玩法與計分.md"
+    },
+    {
+      "id": "SG-17",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-17]精修風箏穿環玩法與計分.md"
+    },
+    {
+      "id": "SG-18",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-18]精修噴泉跳拍玩法與計分.md"
+    },
+    {
+      "id": "SG-19",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-19]精修人潮指揮玩法與計分.md"
+    },
+    {
+      "id": "SG-20",
+      "status": "進行中",
+      "source_status": "進行中（v13 正常與四分之一速度流程及基本角色畫面驗收完成；其餘範圍仍待驗收）",
+      "path": "Snapland-small-game/[SG-20]精修帽子救援玩法與計分.md"
+    },
+    {
+      "id": "SG-21",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-21]精修彩帶節拍玩法與計分.md"
+    },
+    {
+      "id": "SG-22",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-22]精修花壇水路玩法與計分.md"
+    },
+    {
+      "id": "SG-23",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-23]精修招牌平衡玩法與計分.md"
+    },
+    {
+      "id": "SG-24",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-24]精修影子捉迷藏玩法與計分.md"
+    },
+    {
+      "id": "SG-25",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-25]精修泡泡合照玩法與計分.md"
+    },
+    {
+      "id": "SG-26",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-26]精修長椅換位玩法與計分.md"
+    },
+    {
+      "id": "SG-27",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-small-game/[SG-27]精修迎賓大合奏玩法與計分.md"
+    },
+    {
+      "id": "ST-1",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-story/[ST-1]重整主線與園區支線.md"
+    },
+    {
+      "id": "ST-2",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-story/[ST-2]演出上島導覽與對話.md"
+    },
+    {
+      "id": "ST-3",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-story/[ST-3]實作迎賓任務與探索.md"
+    },
+    {
+      "id": "ST-4",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-story/[ST-4]深化迎賓角色與園區故事.md"
+    },
+    {
+      "id": "ST-5",
+      "status": "進行中",
+      "source_status": "進行中",
+      "path": "Snapland-story/[ST-5]提供全角色對話與滴滴語音.md"
+    }
+  ],
+  "source_commit": "2511ee3f661307e3dd7a11e18cd57899fe7594a0",
+  "documents_sha256": {
+    "pm/README.md": "a3c6bc1ed36ecca8036168a930a5bc4adb7ebf4f861f944480e6a4ffa68108fb",
+    "pm/next_session_prompt.md": "0b8a243ecce612a3a05258ece725c3edd768e223c0e59f6e8755d15a7958fdbe",
+    "pm/user_guide.md": "5946b89a6ed54624bde7be90bfc807927572bb01ae8ee16d69997a15e648b37d",
+    "pm/open_tickets.md": "47b89ab2d28a0f2eb2d5c31b1f8065e349dd4abd99e4bfca91dc4b68678b7937"
+  },
+  "links_check": "PASS links; no gameplay/playtesting"
+}
