@@ -1,6 +1,6 @@
 # [ART-34] 擴充島上其他髮型動態
 
-> 狀態：待辦
+> 狀態：進行中
 
 ## 內文
 
@@ -29,3 +29,16 @@
 - Related：ART-17、ART-29、ART-30、ART-31
 
 ---
+
+# Commit-1
+
+## 內文
+
+現有短髮與捲髮換裝可以顯示，但島上移動時仍維持整張靜態髮型。
+開始逐款核對八方向髮根、帽緣與髮尾，保留既有完整人物及步態。
+
+### 製作基準
+
+- 分支：`codex/hairstyle-motion`
+- 基準：[def7970](https://github.com/deadline314/Snapland/commit/def7970bdb2b118900d1d52f2a987785e6617254)
+- 研究沿用並補查 Aseprite、Spine、Godot、Unity、Phaser、Spriter 六方官方文件；實際讀取文字，不宣稱影片試看或玩家偏好調查。
