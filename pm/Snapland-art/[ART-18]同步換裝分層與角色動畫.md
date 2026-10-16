@@ -182,3 +182,33 @@
 ![左側其餘行走及待機衣料](images/ART-18-side-materials-20261017-03.png)
 
 票況：進行中。本輪不把外套換色或安全性修正當成不同服裝輪廓完成。
+
+
+## 2026-10-17 原生、固定引擎與輸出補驗
+
+程式與製作圖提交：[b84746a](https://github.com/deadline314/Snapland/commit/b84746aea2329bc467ed3050faad85e739840357)。本輪使用正式島上角色與原步態，沒有採用全姿勢衣料拒收稿。
+
+| 範圍 | 實際結果 |
+|---|---|
+| 正常速度原生 | 14 組真實按鍵移動、16 項檢查通過；包含行走時衣袖／手部保護區 RGBA 相同及停步配色見證 |
+| 真正四分之一模擬時間 | 14 組移動、14 項檢查通過；使用已保存的固定配色見證版本，沒有擴稱為新的整區 RGBA 檢查 |
+| 實際檢視 | 兩段 1280×720／30 FPS 影片解碼為 93 張全身樣本、9 張聯絡圖，全部實際看過；沒有宣稱連續播放每個編碼格 |
+| Godot 4.7.2 | 取得與 CI 相同的官方 ed1daf0bf，乾淨匯入、服裝兩項、動畫庫、步態保留、八向步行與 432 格待機共六項局部測試通過，0 ERROR |
+| Godot 4.7.2 匯出 PCK | 來源 PNG 隔離後，316 項完整性與 72 組衣料檢查通過；4.7 PCK 亦通過相同探測 |
+| 完整 CI | 衣料修改前的 main `1baf7dd` 實際失敗：設計缺 SG-1 目錄，runtime 在既有腿部樣本來源中位數斷言失敗並逾時；未刪斷言、改選擇器或算成通過 |
+
+原生仍是 Godot 4.7／llvmpipe，環境解析度與特效有明示降成本 fixture，人物合成維持 280×360。4.7.2 補驗是 Linux 來源與 PCK，沒有聲稱 Windows EXE、完整光影、原機器即時效能或真人試玩。暫停選單短暫遮住一個影片樣本，另保留原始角色像素 PNG。
+
+![修正前：珊瑚款側身仍大片藍色](images/ART-18-side-20261017-before-blue-pixels.png)
+![修正後：原生珊瑚側身與原姿勢](images/ART-18-side-20261017-normal-coat-pixels.png)
+![正常速度實際島上取景，右側為人物合成預覽；另附 280×360 原始像素圖](images/ART-18-side-20261017-normal-world.png)
+
+[正常速度影片](images/ART-18-side-20261017-normal.mp4) · [真正慢速影片](images/ART-18-side-20261017-quarter.mp4) · [正常原生報告](images/ART-18-side-20261017-normal-audit.json) · [慢速原生報告](images/ART-18-side-20261017-quarter-audit.json) · [完整驗收範圍與 SHA](images/ART-18-side-20261017-verification.json)。
+
+[正常全身抽樣](images/ART-18-side-20261017-normal-frames-03.png) · [慢速全身抽樣](images/ART-18-side-20261017-quarter-frames-03.png) · [固定 4.7.2 輸出探測](images/ART-18-side-20261017-pack-4.7.2-material-report.json)。兩份 PCK 本身未提交或發布，票內保存來源與雜湊。
+
+### 拒收例與品質防線
+
+[鏡片／跨胸衣袖誤標草稿](images/ART-18-side-20261017-rejected-full-camera.png)、[抬手漏標草稿](images/ART-18-side-20261017-rejected-full-raised-arms.png) 與[第二輪修訂仍有誤標](images/ART-18-side-20261017-rejected-full-v3.png) 均為製作端拒收圖，未作為遊戲素材。乾淨匯入曾抓到型別推斷錯誤，獨立像素檢查另抓到 JSON 數字型別使有效標記未載入；修正後重新執行全部側身矩陣與兩版隔離 PCK。
+
+本輪保存實際流程與結果，整票仍為進行中；不同服飾輪廓及完整動作品質繼續按原驗收判定。

@@ -1,0 +1,14 @@
+{
+  "sha256": "b45bc5e6f2ea9e62208973dad8e611425a1292461ae1deea7f8978707a652add",
+  "bytes": 144816072,
+  "engine": "4.7 Linux official",
+  "shipping_preset": "Windows Desktop PCK only, not Windows EXE acceptance",
+  "probe_exit": 0,
+  "source_pngs_available": false,
+  "code_files": {
+    "game/world/character_animation_library.gd": "fded63dc5065d1a7e4510f24219a10d19281573d458e93f87f8081f5737d7ee4",
+    "game/world/avatar_renderer.gd": "52ec3eaa423939df1b88930ebe94eb1d3da8eafbdf0c5035d7d802d922615f51",
+    "assets/characters/complete-animation-regions.json": "5a655fc85a2c05c5cc92242a759a01ea3e93da1caaa56ce1cfa72f99d3c7099f",
+    "assets/characters/island-side-coat-materials-v1.json": "3d688ea3d275da8dd23b4cc2a0154329771668247484747f2244720f049902a8"
+  }
+}

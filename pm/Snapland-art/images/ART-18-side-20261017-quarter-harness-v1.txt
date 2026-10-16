@@ -1,0 +1,10 @@
+extends "res://game/tests/native_island_hair_binding.gd"
+## Reuse actual input, but also reject the observed blue coral-jacket sleeve.
+func _capture(label: String) -> void:
+	await super._capture(label)
+	if main.world.facing=="right" and main.world.avatar_equipped.get("outfit","")=="outfit-coral":
+		var pixel: Color = main.world.avatar.texture.get_image().get_pixel(135,210)
+		if pixel.r<=pixel.b+0.2:
+			await _fail("native coral jacket kept a blue sleeve during "+label)
+			return
+		checks.native_side_coat=true

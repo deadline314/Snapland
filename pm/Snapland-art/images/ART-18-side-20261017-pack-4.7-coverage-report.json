@@ -1,0 +1,6 @@
+{
+	"checks": 316,
+	"engine": "4.7-stable (official)",
+	"failures": [],
+	"scope": "headless rendered pixels and outfit source selection; not native animation acceptance"
+}

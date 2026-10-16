@@ -6,11 +6,13 @@
 
 - 使用者已明確要求自主接續未完成票，不需要一般設計問題的詢問；每批動手前研究成熟方法，品質不足可重做。
 - ART-32 已接回固定頭頸的待機／眨眼，ART-33 已接入微風短髮，ART-34 現已完成島上人類短髮／捲髮八方向動態。下方舊段落寫「髮尾骨架仍僅獨立樣本」已被這三票的新交付取代。
-- ART-34 來源分支為 `codex/hairstyle-motion`；本次已採使用者指定流程快轉整合，接續以 fetch 後的 main 核對 `project.godot` 與本票提交。主要實作 `50bfcbd2e8c43ba12fe5aa5f6e7bd75f82fbe8fb`，最新程式修正 `82952d5da787aab816e1a50b586ad91631e9d755`；[草稿 PR #2](https://github.com/deadline314/Snapland/pull/2) 疊在 ART-33 的 PR #1 上。雲端工作區 `/workspace/work/Snapland-character`，開始時仍要 fetch 與核對 dirty files；不要覆寫其他工作區。
+- ART-33／34 已快轉合入 main `1baf7dd`，[PR #1](https://github.com/deadline314/Snapland/pull/1) 與 [PR #2](https://github.com/deadline314/Snapland/pull/2) 均已確認 merged。開始以 fetch 後 main 為準，不沿用舊 feature-only 的入口判斷。雲端工作區 `/workspace/work/Snapland-character`，目前本 Session 使用 `codex/wardrobe-silhouettes`；不要切換 `/workspace/Snapland` 的其他 Session `work` 分支。
+- ART-18 接續程式 `b84746aea2329bc467ed3050faad85e739840357`：整套輪廓替換需完整必要姿勢，正式四外套明確換色；左右側走路／待機 24 格有核對過的衣料標記。全 148 格自動草稿因道具／衣袖誤標拒收，不能重新採用。本輪證據完成後依最新使用者流程快轉整合 main，以 fetch 為準。不同服飾輪廓與完整動作品質仍是進行中。
+- ART-18 有正常／真正慢速共 28 組移動及 93 張已看過的全身抽樣。正常版 16 項檢查含行走衣袖／手部整區 RGBA；慢速版 14 項為保存的固定配色見證版本，兩者不可混稱。官方 Godot 4.7.2 ed1daf0bf 的六項局部測試與隔離 PCK 316／72 項均通過；詳細範圍讀票與 verification.json。引擎可在 `work/art18/engine-4.7.2/` 核對，執行仍用入口驗證與獨立絕對存檔。
 - ART-34 留有 96 組原生像素比較、隔離 PCK 額外 200 格渲染、200 格定位、432 格既有待機、兩款兩速度共 56 組島上移動與四趟連續反向／即時換髮的真實證據。影片以完整人物抽幀審閱，不宣稱每一編碼格連續播放或真人試玩。
 - 使用 Godot 4.7／llvmpipe，島上錄影為降低環境成本的明示 fixture；原 Windows 4.7.2 EXE、完整光影與即時效能未重驗。不要拿該雲端錄影當完整光影驗收。
-- 仍有 80 張未結案。角色優先先補 ART-18 主角不同輪廓衣物與完整動作，再擴 ART-17 NPC；票票／小角的正式走路來源仍缺，不可拿拒收候選或拆腿假步態代用。SG-1 缺少設計目錄仍阻擋全域設計 CI，不改選擇器或略過失敗。
-- 詳細範圍與證據讀 ART-34 及 `pm/user_guide.md` 最新段落；下方 Windows 路徑與早期 HEAD 只作歷史背景。
+- 仍有 80 張未結案。角色優先先補 ART-18 主角不同輪廓衣物與完整動作，再擴 ART-17 NPC；票票／小角的正式走路來源仍缺，不可拿拒收候選或拆腿假步態代用。SG-1 缺少設計目錄仍阻擋全域設計 CI；main `1baf7dd` 的 runtime 另在既有腿部樣本來源中位數斷言失敗並逾時。先核對此來源校準與固定畫布轉換，不更改常數、刪斷言或恢復被否定的拆腿步態。執行 https://github.com/deadline314/Snapland/actions/runs/38960091901 。
+- 詳細範圍與證據讀 ART-18、ART-34 及 `pm/user_guide.md` 最新段落；下方 Windows 路徑與早期 HEAD 只作歷史背景。
 
 
 ## 最新優先指示：保留 2D，3D 候選已否定（2026-10-16）

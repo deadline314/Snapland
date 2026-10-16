@@ -1,0 +1,14 @@
+2026-10-16T20:10:57.9186856Z spring exit 0 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:10:57.9188438Z rig exit 0 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:11:21.4069732Z parse Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:11:21.4070492Z export Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:18:12.7464305Z FAIL: avatar motion rig runtime tests timed out after 90 seconds:
+2026-10-16T20:18:12.7465301Z Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:18:12.7470796Z SCRIPT ERROR: Assertion failed: recovery uses the unchanged original source median
+2026-10-16T20:18:12.7474508Z SCRIPT ERROR: Assertion failed: recovery uses the unchanged original source median
+2026-10-16T20:18:12.7477739Z SCRIPT ERROR: Assertion failed: recovery uses the unchanged original source median
+2026-10-16T20:18:12.7481767Z SCRIPT ERROR: Assertion failed: actual Hero binds one fixed median source-pivot chain
+2026-10-16T20:18:12.7544379Z PASS: clean project import
+2026-10-16T20:18:12.7545421Z PASS: game startup
+2026-10-16T20:18:12.7548200Z PASS: avatar renderer tests
+2026-10-16T20:18:12.7549054Z PASS: island hair lifecycle tests

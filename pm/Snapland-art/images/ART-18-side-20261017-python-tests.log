@@ -1,0 +1,9 @@
+test_importer_hidden_rgb_does_not_change_source_identity (tests.test_side_coat_authoring.SideCoatAuthoringTests.test_importer_hidden_rgb_does_not_change_source_identity) ... ok
+test_incomplete_input_cannot_publish_a_partial_side_set (tests.test_side_coat_authoring.SideCoatAuthoringTests.test_incomplete_input_cannot_publish_a_partial_side_set) ... ok
+test_observed_sleeve_is_cloth_but_camera_metal_is_not (tests.test_side_coat_authoring.SideCoatAuthoringTests.test_observed_sleeve_is_cloth_but_camera_metal_is_not) ... ok
+test_reviewed_head_ownership_wins_over_same_coloured_cloth (tests.test_side_coat_authoring.SideCoatAuthoringTests.test_reviewed_head_ownership_wins_over_same_coloured_cloth) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.043s
+
+OK

@@ -1,0 +1,162 @@
+{
+  "ticket": "ART-18",
+  "status": "in progress; partial clothing correctness delivery",
+  "recorded_utc": "2026-10-16T20:48:30.157182+00:00",
+  "base_main": "1baf7dd098b3f01635c76f6364ca6db224468837",
+  "code_commit": "b84746aea2329bc467ed3050faad85e739840357",
+  "code_sha256": {
+    "game/world/avatar_renderer.gd": "52ec3eaa423939df1b88930ebe94eb1d3da8eafbdf0c5035d7d802d922615f51",
+    "game/world/character_animation_library.gd": "fded63dc5065d1a7e4510f24219a10d19281573d458e93f87f8081f5737d7ee4",
+    "assets/characters/complete-animation-regions.json": "5a655fc85a2c05c5cc92242a759a01ea3e93da1caaa56ce1cfa72f99d3c7099f",
+    "assets/characters/island-side-coat-materials-v1.json": "3d688ea3d275da8dd23b4cc2a0154329771668247484747f2244720f049902a8"
+  },
+  "local": {
+    "python_tests": 4,
+    "atomic_coverage_checks": 314,
+    "side_cels": 24,
+    "unique_side_sources": 22,
+    "palette_cases": 72,
+    "outside_material_difference": 0,
+    "rebuild_sha256": "3d688ea3d275da8dd23b4cc2a0154329771668247484747f2244720f049902a8"
+  },
+  "pinned_engine": {
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "source": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
+    "executable_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+    "six_local_tests_passed": true,
+    "clean_import": true,
+    "pack_atomic_checks": 316,
+    "pack_material_cases": 72
+  },
+  "native": {
+    "engine": "4.7.0 official / llvmpipe",
+    "normal_checks": 16,
+    "quarter_checks": 14,
+    "movement_cases": 28,
+    "normal_harness": "current committed body-region comparison plus exposed idle witness",
+    "quarter_harness": "saved v1 fixed exposed-point checker, same game renderer/material code",
+    "software_environment_fixture": {
+      "scaling_3d": 0.25,
+      "ssao": false,
+      "glow": false,
+      "sun_shadows": false,
+      "actor_canvas": [
+        280,
+        360
+      ]
+    },
+    "decoded_full_body_samples_viewed": 93,
+    "contact_sheets_viewed": 9,
+    "sampling": "4 samples per simulation second: normal fps4, quarter fps1",
+    "media": {
+      "normal": {
+        "width": 1280,
+        "height": 720,
+        "r_frame_rate": "30/1",
+        "duration": "12.800000",
+        "nb_frames": "384"
+      },
+      "quarter": {
+        "width": 1280,
+        "height": 720,
+        "r_frame_rate": "30/1",
+        "duration": "42.366667",
+        "nb_frames": "1271"
+      }
+    },
+    "limits": [
+      "sampled decoded frames, no continuous encoded-frame playback or human playtest",
+      "pause menu briefly obscures one inset sample; raw pixel PNGs retained",
+      "no Windows EXE, full lighting or original GPU performance acceptance"
+    ]
+  },
+  "rejected": [
+    "full 148-cel segmentation drafts: camera/raised-arm/cross-body ownership errors",
+    "initial clean-import inferred-type error, corrected before acceptance",
+    "initial JSON float/int array comparison rejected valid mask canvas, corrected and all 24 cels reverified",
+    "a translucent curly-hair edge legitimately blends cloth behind it; final checks use exposed cloth and opaque hair core"
+  ],
+  "ci": {
+    "head": "1baf7dd098b3f01635c76f6364ca6db224468837",
+    "url": "https://github.com/deadline314/Snapland/actions/runs/38960091901",
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "full_suite": "failed: SG-1 design/02-minigames/catalog.json missing",
+    "runtime": "failed: legacy avatar motion rig source-median assertions, then 90-second timeout",
+    "all_ci_passed": false,
+    "assertions_or_selectors_waived": false
+  },
+  "log_copies": "ANSI, trailing whitespace and blank EOF lines removed only; original logs remain in work/.review",
+  "artifact_sha256": {
+    "ART-18-side-20261017-normal-audit.json": "9f3c7817a4db79faa83eac9c3a57195c8e63ee08628d7d2b93f64fd0dfaf7408",
+    "ART-18-side-20261017-normal.mp4": "b6bff09313981714dc124c542296b7e9c45bdffa8eca4e34f8d1d7b66dab76c1",
+    "ART-18-side-20261017-normal-run.log": "22faa622a83390a931dc20effad0274f623e1f7edc081d606f7c5ea84c4c1d90",
+    "ART-18-side-20261017-normal-frames-01.png": "af45e3e23ed57e4657daa884d30f2e5b7cce438d13e1e792433fcfb56022f093",
+    "ART-18-side-20261017-normal-frames-02.png": "de6ed7aac79d438ba354351967db434445eae523cebab64fc804680eb87ed187",
+    "ART-18-side-20261017-normal-frames-03.png": "6fe4fc4fd36843dacd5a8d11159f039db652e611b1630a4afde15515044aed50",
+    "ART-18-side-20261017-normal-frames-04.png": "fddb2e835a13d3c837f497252eecc173fd49b6ea0efdf5ed41115294bdbbede7",
+    "ART-18-side-20261017-normal-frames-05.png": "b8e559626a5445308d2191cd33502e4773130ea9b967b6eb4a733b4bb0caa8df",
+    "ART-18-side-20261017-normal-world.png": "dd15e8c5488c9374793ee779697af123280e5cb1feb47238e786bf19b453c9ce",
+    "ART-18-side-20261017-normal-photograph.png": "90508b68ba78dbf088b6e2d83ef3f87be83c44f2deeb4960e587992efaed7b46",
+    "ART-18-side-20261017-normal-coat-pixels.png": "524b77074858ec73a185c472156d3c991636ae3eda1ec3e817fbf5ffb6e709af",
+    "ART-18-side-20261017-quarter-audit.json": "01147eaffe66b8703deb2ea527b82a882524efbff22347dc2131503cd5ef1d6e",
+    "ART-18-side-20261017-quarter.mp4": "9137eda9a0c3739a80686dde46ce08bd311de99c8b47ee76c4028a597f89b2b8",
+    "ART-18-side-20261017-quarter-run.log": "82ef377f30b238d963cba904d9069884835bb1516caf11db02900643c72b7ee2",
+    "ART-18-side-20261017-quarter-frames-01.png": "3477e6658656d8d9f342e300f8e5f312d2f12002105e562a212ccd1f5424f90a",
+    "ART-18-side-20261017-quarter-frames-02.png": "344c52226d00a6c91098acf9f712b0c962829d182d127ca83015c4c7723158dd",
+    "ART-18-side-20261017-quarter-frames-03.png": "642182db399f2d4543e510c655233b0ddf54c992f5833eac67ae9722d51d7dd0",
+    "ART-18-side-20261017-quarter-frames-04.png": "e759bbe9b361c619700df38bc13a19f3eb650b4a23cd2dc1e29de38a23335326",
+    "ART-18-side-20261017-quarter-world.png": "08328ea3fa8a384fb960db257f935c6cf05fcee756e9d8837efb037fa5154427",
+    "ART-18-side-20261017-quarter-photograph.png": "8764f3af01e18d393d292ba3c9c7f7a1074ae0ec2df58f836a9343168045a87d",
+    "ART-18-side-20261017-quarter-coat-pixels.png": "7fdd446b63fce9cde7fd8de88782d92cc494aeca83fc0e6b0f8950d2572cd4be",
+    "ART-18-side-20261017-before-blue-pixels.png": "36513b435b9513d6791b5da5bb1e4ca795f7f90ec3dd2569903645107f7f608b",
+    "ART-18-side-20261017-curly-composite.png": "a98ad1fdd4cd9f14749141ffbfd2d047561357bd5ae45fc010041420b44d8eb2",
+    "ART-18-side-20261017-material-report.json": "3b3af3cd3c2172c4cc960827d820c491d9c503aeb30d2dd6254c37bbeb641edb",
+    "ART-18-side-20261017-material.log": "e7ee9b37c06591dd1bc37586c7f32a62a303b556cc184fd04096a3695853a6bb",
+    "ART-18-side-20261017-coverage-report.json": "b21efac61be276f058e348343909267844ff7b7b781a5f4fb28c7026e5f33387",
+    "ART-18-side-20261017-coverage.log": "58e6f38d8b8b3aa9fa6fc1f747d038c8bfa2690aa60d4382fc64af5e6d50a8d2",
+    "ART-18-side-20261017-coverage-before.json": "677c3fe2f2462cf6956cead0af3ff54f0b8e695620daa47516b3fa2bc0385130",
+    "ART-18-side-20261017-coverage-before.log": "d6d709925d5609a7529a82557279623cb5e9224b6045885d62c2ddf4848a785b",
+    "ART-18-side-20261017-python-tests.log": "858c8f7f2aa9df4cf9444cfe88773e38efca916d5565f6e265b622495b648420",
+    "ART-18-side-20261017-authoring-rebuild.log": "3cd47f247da10bbe544949d6eb59479f374a570f9c933bb6c19eba5e6d0fac26",
+    "ART-18-side-20261017-local-test_island_idle_stability.log": "f62a53f2d727fe35a0fb1f1dbb3f77e515e7362639e6aeededd84dfffe4f79fe",
+    "ART-18-side-20261017-local-test_avatar_renderer.log": "d332db00c77dbbbc18ade0e2e24cfe0785ba90163e955e8fb70b63d0861794ee",
+    "ART-18-side-20261017-local-test_island_hair_lifecycle.log": "35b148040ea14c74d9ec20deb28cfd19b35ebeeae3a106028b5c4e10cf0342c0",
+    "ART-18-side-20261017-local-test_character_animation_library.log": "482fae2a7c735c444e2558ecf6f0d73463a9640a59aaf7aeb080b3db19804323",
+    "ART-18-side-20261017-pinned-test_island_idle_stability.log": "b069019b361a5d260f802e36e02da7b8469f23bb150a2a0751aca347a2ac64a6",
+    "ART-18-side-20261017-pinned-version.log": "edff16c1721dd4ae989cadf29a01f574ae8d51b118221f664725bd6980bbba5d",
+    "ART-18-side-20261017-pinned-test_walk_pixel_stability.log": "e6d345686e16abecf36846342f26abd7f4373ee3a212390696f8afa4f5c4b134",
+    "ART-18-side-20261017-pinned-import.log": "11425bc98cd1fce3e13670c57e1c2722b85c99a6d8da04891d2e245bd7999c04",
+    "ART-18-side-20261017-pinned-test_outfit_side_palette.log": "9c04061513995c7c8a14ef26c8178073a54daf4a60d8a65f356e6dd806497999",
+    "ART-18-side-20261017-pinned-test_outfit_atomic_coverage.log": "f2731844f5a0bb6cf44b0b0fd0c7b4f65353df08b4866f09e9cf4749dcc8092d",
+    "ART-18-side-20261017-pinned-test_island_hair_lifecycle.log": "41ffa48b3be2d7eb8b00936d62c57e8d8bf657607a84198b99d0cdf87b8c5f28",
+    "ART-18-side-20261017-pinned-test_character_animation_library.log": "fb9232feba84e25b822244c79ba26d3bb6832ad4b3f18a438d92f9c21fae9aed",
+    "ART-18-side-20261017-pack-4.7-import.log": "ed4197f5a0e3aad8468d839332675743b16b0c93470841857f79f3df8687794e",
+    "ART-18-side-20261017-pack-4.7-pack.log": "71133d26f94aa7c2d2fca96fd5ebc45d2eba1519db2d7b8e6113a42c6f4ce3dd",
+    "ART-18-side-20261017-pack-4.7-probe.log": "0d9efd8b2d85b61009010e0a75fad417dc161a7a3037dc253305739eda680c5e",
+    "ART-18-side-20261017-pack-4.7-side-probe.log": "e7ee9b37c06591dd1bc37586c7f32a62a303b556cc184fd04096a3695853a6bb",
+    "ART-18-side-20261017-pack-4.7-provenance.json": "f10ebb344806b9b27848fa090d0fe8e094a34972785203dbebb9a092f683af7b",
+    "ART-18-side-20261017-pack-4.7-coverage-report.json": "67819053338e2523dccab14ff6adc16159111460403fd7f31ebb91cd7a4ca4b6",
+    "ART-18-side-20261017-pack-4.7-material-report.json": "3b3af3cd3c2172c4cc960827d820c491d9c503aeb30d2dd6254c37bbeb641edb",
+    "ART-18-side-20261017-pack-4.7.2-import.log": "50ef1d4c9cfb3460354b20048ddc5c550e85151c8317aee5de46d7b0ac7c6bac",
+    "ART-18-side-20261017-pack-4.7.2-pack.log": "f22533485fbc7f9ba949c3824af0bba43fcae59223fdc31756ca736d1fe25ae6",
+    "ART-18-side-20261017-pack-4.7.2-probe.log": "51a76d79beda99e75c5316d74d0e833897b52cd8a74b145a3c390a32a1c1ecaf",
+    "ART-18-side-20261017-pack-4.7.2-side-probe.log": "9c04061513995c7c8a14ef26c8178073a54daf4a60d8a65f356e6dd806497999",
+    "ART-18-side-20261017-pack-4.7.2-provenance.json": "08d1b34a5b4da05478cceb525b156843ddd5472f8617282deb4c5ba2bc85b288",
+    "ART-18-side-20261017-pack-4.7.2-coverage-report.json": "fcb70a032ab1edc76ec3165c1b78eb0a9b49a99850a0d5af7e1bf0e7eda8ae88",
+    "ART-18-side-20261017-pack-4.7.2-material-report.json": "5087aa68abee75a1392b09899888251ab9ceec3ced0336916a44420cd7126cdf",
+    "ART-18-side-20261017-rejected-full-camera.png": "e9012c619f8f0dc7fdfce8a1c2c18a8f4a60a617a542ec3c50a555b6a99460a0",
+    "ART-18-side-20261017-rejected-full-raised-arms.png": "8c3d26981888a803a38bba8570c02d270ffb9dedf8b87ac8e17ce6ebf92eeb82",
+    "ART-18-side-20261017-rejected-full-v3.png": "aa7753b1ac8b0dbc6b18d6be0251026888cb98170a3f592942eca5a72e60e2c6",
+    "ART-18-side-20261017-rejected-json-loader.json": "89cd4224f695bb56a1a6fc84845b229f3119f307e97d79becf5437e1ee4dffa4",
+    "ART-18-side-20261017-ci-runtime-excerpt.log": "46b45983fa7ad69be4bf38c96288f1476ad9038c20e2b701c1df50d1b0e392c3",
+    "ART-18-side-20261017-quarter-harness-v1.txt": "297b1b62e5657ef791cd0fc019828f7b165a288dac59f6ab27f6212c7596061a",
+    "ART-18-side-20261017-native_outfit_binding-source.txt": "5db83a0ae1122107f8209d037071140072ba8e50e49679139351112278793689",
+    "ART-18-side-20261017-test_outfit_side_palette-source.txt": "a2a9dee50f1a993930ee94e2d34f548cd086711eef20e7fd2b1fd74111513062",
+    "ART-18-side-20261017-test_outfit_atomic_coverage-source.txt": "a3480837fbf29905be7cc02e132cfde45a7fa1ee2bcb167a44bff8da41675cc6"
+  },
+  "material_contact_sheets_sha256": {
+    "ART-18-side-materials-20261017-01.png": "fd4d4888c39db830b8d0e59998a53385a250598db2cd0eb72daca30e018e6524",
+    "ART-18-side-materials-20261017-02.png": "bd63c4f42672c41f93489b93f3bf232490532b3a0e70a20a6387dc01a29e25b7",
+    "ART-18-side-materials-20261017-03.png": "ec59a508ac5c25401bb6aedb89bb0972679924c95a2f1380f721d321fb5078c0"
+  }
+}
