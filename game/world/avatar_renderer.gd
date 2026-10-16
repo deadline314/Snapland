@@ -976,29 +976,10 @@ func _connected_face_opening_mask(hair: Image, opening: Rect2i) -> PackedByteArr
 	return mask
 
 func _blend_registered_hair(image: Image, hair: Image, direction: String, crown_y: int, shift_x: int, target_width: float, source_pose: Image, source_metrics: Dictionary = {}, hair_metadata: Dictionary = {}, skull_skin_color: Color = Color("#e8b991")) -> void:
-	var used: Rect2i = hair_metadata.used if hair_metadata.has("used") else hair.get_used_rect()
-	var ratio := target_width * float(image.get_width()) / CANVAS_SIZE.x / maxi(1, used.size.x)
-	var opening: Rect2i = hair_metadata.opening if hair_metadata.has("opening") else _hair_face_opening(hair)
-	var target_face := Rect2i()
-	var source_bounds := Rect2i()
-	if source_pose != null:
-		var metrics := source_metrics if not source_metrics.is_empty() else _build_source_hair_metrics(source_pose, _closest_cardinal(direction))
-		source_bounds = metrics.source_bounds
-		target_face = metrics.target_face
-		if source_bounds.size.x > 0:
-			ratio = float(source_bounds.size.x) * 1.05 / maxi(1, used.size.x)
-	# Use one uniform scale: the face opening constrains registration, never
-	# independently stretch x/y or fit the body to a changed hairstyle.
-	var resized := Vector2i(maxi(1, roundi(hair.get_width() * ratio)), maxi(1, roundi(hair.get_height() * ratio)))
-	var position := Vector2i(image.get_width() / 2 + shift_x, crown_y) - Vector2i(roundi(used.get_center().x * ratio), roundi(used.position.y * ratio))
-	if source_bounds.size.x > 0:
-		position.x = roundi(source_bounds.get_center().x - used.get_center().x * ratio)
-	if source_bounds.size.x > 0:
-		# A face opening is an occlusion boundary, never a head attachment point.
-		# Register every cut to this exact source cel's crown, independently of
-		# eye expression, forelock skin colors, action, and animation direction.
-		position.y = source_bounds.position.y - roundi(used.position.y * ratio)
-	hair.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
+	var placement := _registered_hair_placement(image.get_size(), direction, hair, crown_y, shift_x, target_width, source_pose, source_metrics, hair_metadata)
+	hair = placement.image
+	var position: Vector2i = placement.position
+	var resized := hair.get_size()
 	# The anatomical head exists independently of the selected haircut. Its
 	# source-derived contour excludes spiky tufts and has a complete neck seam.
 	var underlay_indices: PackedInt32Array = source_metrics.get("skull_underlay_indices", PackedInt32Array())
@@ -1018,6 +999,33 @@ func _blend_registered_hair(image: Image, hair: Image, direction: String, crown_
 			var raw_color := underlay_colors[sample_index] if sample_index<underlay_colors.size() else Color("#fdbb7b")
 			image.set_pixelv(source_point,_shade_preserving(raw_color,Color("#fdbb7b"),skull_skin_color))
 	image.blend_rect(hair, Rect2i(Vector2i.ZERO, resized), position)
+
+func _registered_hair_placement(canvas: Vector2i, direction: String, hair: Image, crown_y: int, shift_x: int, target_width: float, source_pose: Image, source_metrics: Dictionary, hair_metadata: Dictionary) -> Dictionary:
+	var used: Rect2i = hair_metadata.used if hair_metadata.has("used") else hair.get_used_rect()
+	var ratio := target_width * float(canvas.x) / CANVAS_SIZE.x / maxi(1, used.size.x)
+	var opening: Rect2i = hair_metadata.opening if hair_metadata.has("opening") else _hair_face_opening(hair)
+	var target_face := Rect2i()
+	var source_bounds := Rect2i()
+	if source_pose != null:
+		var metrics := source_metrics if not source_metrics.is_empty() else _build_source_hair_metrics(source_pose, _closest_cardinal(direction))
+		source_bounds = metrics.source_bounds
+		target_face = metrics.target_face
+		if source_bounds.size.x > 0:
+			ratio = float(source_bounds.size.x) * 1.05 / maxi(1, used.size.x)
+	# Use one uniform scale: the face opening constrains registration, never
+	# independently stretch x/y or fit the body to a changed hairstyle.
+	var resized := Vector2i(maxi(1, roundi(hair.get_width() * ratio)), maxi(1, roundi(hair.get_height() * ratio)))
+	var position := Vector2i(canvas.x / 2 + shift_x, crown_y) - Vector2i(roundi(used.get_center().x * ratio), roundi(used.position.y * ratio))
+	if source_bounds.size.x > 0:
+		position.x = roundi(source_bounds.get_center().x - used.get_center().x * ratio)
+	if source_bounds.size.x > 0:
+		# A face opening is an occlusion boundary, never a head attachment point.
+		# Register every cut to this exact source cel's crown, independently of
+		# eye expression, forelock skin colors, action, and animation direction.
+		position.y = source_bounds.position.y - roundi(used.position.y * ratio)
+	var registered := hair.duplicate()
+	registered.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
+	return {"image": registered, "position": position}
 
 func _hair_attachment_anchor(hair: Image) -> Vector2i:
 	# Side tufts can be taller than the crown. Anchor on the topmost opaque

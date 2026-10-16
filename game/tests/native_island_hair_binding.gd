@@ -4,6 +4,7 @@ var evidence_dir := ""
 var checks: Dictionary = {}
 var motion_cases: Array = []
 var source_inset: TextureRect
+var selected_look: Dictionary = WalkRenderer.DEFAULT_APPEARANCE.duplicate()
 
 func _run() -> void:
 	evidence_dir = OS.get_environment("SNAPLAND_ISLAND_HAIR_DIR")
@@ -11,6 +12,7 @@ func _run() -> void:
 		await _fail("Island hair acceptance requires native rendering and isolated paths")
 		return
 	Engine.time_scale = 0.25 if OS.get_environment("SNAPLAND_ISLAND_HAIR_QUARTER") == "1" else 1.0
+	selected_look.hair = OS.get_environment("SNAPLAND_ISLAND_HAIR_STYLE") if not OS.get_environment("SNAPLAND_ISLAND_HAIR_STYLE").is_empty() else "windswept"
 	progress = get_tree().root.get_node_or_null("Progress")
 	progress.reset_progress()
 	progress.intro_seen = true
@@ -37,6 +39,7 @@ func _run() -> void:
 		source_inset.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		layer.add_child(source_inset)
 	await _frames(4)
+	main.world.set_avatar_look(selected_look, {"outfit": "outfit-tide", "hat": "hat-none"})
 	main.world.camera.size = 6.5
 	if OS.get_cmdline_user_args().has("--hair-reverse-only"):
 		await _reverse_and_live_swap()
@@ -45,7 +48,7 @@ func _run() -> void:
 		if not await _walk(str(fixture[0]), fixture[1]): return
 	checks.eight_headings = motion_cases.size() == 8
 	for hat in ["hat-straw", "hat-sailor", "hat-flower", "hat-none"]:
-		main.world.set_avatar_look(WalkRenderer.DEFAULT_APPEARANCE, {"outfit": "outfit-coral", "hat": hat})
+		main.world.set_avatar_look(selected_look, {"outfit": "outfit-coral", "hat": hat})
 		if not await _walk("right", [KEY_D]): return
 	checks.all_hat_states = true
 	# Pause while there is still actual rebound, through the real Escape route.
@@ -57,6 +60,16 @@ func _run() -> void:
 	checks.pause_freezes_bones = main.world.avatar_hair_rig.receipt() == before and main.world.time == clock
 	if not checks.pause_freezes_bones: await _fail("pause changed hair/root/pose clock"); return
 	await _capture("paused")
+	var camera_transform: Transform3D = main.world.camera.transform
+	var camera_size: float = main.world.camera.size
+	var paused_pixels: PackedByteArray = main.world.avatar.texture.get_image().get_data()
+	main.world.camera.size = 10.0
+	main.world.camera.position += Vector3(1.0, 1.0, 0.0)
+	await _capture("paused-camera-change")
+	checks.camera_keeps_actor_pixels = main.world.avatar.texture.get_image().get_data() == paused_pixels and main.world.avatar_hair_rig.receipt() == before
+	if not checks.camera_keeps_actor_pixels: await _fail("camera changed paused actor pixels or bones"); return
+	main.world.camera.transform = camera_transform
+	main.world.camera.size = camera_size
 	await _tap(KEY_ESCAPE)
 	if main.world.blocked: await _fail("Escape did not resume island"); return
 	await _tap(KEY_P)
@@ -73,14 +86,14 @@ func _run() -> void:
 	main.world.apply_settings({"reduced_motion": false})
 	if not await _walk("right", [KEY_D]): return
 	checks.reduced_motion_resume = main.world.avatar_hair_rig.active
-	for style in ["bob", "curly"]:
+	for style in ["windswept", "bob", "curly"]:
 		var look: Dictionary = WalkRenderer.DEFAULT_APPEARANCE.duplicate()
 		look.hair = style
 		main.world.set_avatar_look(look, {"outfit": "outfit-tide", "hat": "hat-none"})
-		if main.world.avatar_hair_rig.active: await _fail("uncovered hairstyle must keep original"); return
-		await _capture(style + "-original")
-	checks.other_styles_preserved = true
-	main.world.set_avatar_look(WalkRenderer.DEFAULT_APPEARANCE, {"outfit": "outfit-tide", "hat": "hat-none"})
+		if not main.world.avatar_hair_rig.active: await _fail("covered hairstyle must bind its own profile"); return
+		await _capture(style + "-bound")
+	checks.live_style_swap = true
+	main.world.set_avatar_look(selected_look, {"outfit": "outfit-tide", "hat": "hat-none"})
 	await get_tree().create_timer(1.6).timeout
 	checks.settled = main.world.avatar_hair_rig.spring.angles.length() < 0.0001
 	checks.real_bones = main.world.avatar_hair_rig.skeleton.get_bone_count() == 4
@@ -90,7 +103,7 @@ func _run() -> void:
 		if not checks[label]: await _fail("island hair check failed: " + label); return
 	await _capture("settled")
 	var file := FileAccess.open(evidence_dir.path_join("audit.json"), FileAccess.WRITE)
-	file.store_string(JSON.stringify({"result": "PASS_NATIVE_ISLAND_HAIR_BINDING", "time_scale": Engine.time_scale, "engine": Engine.get_version_info(), "renderer": RenderingServer.get_video_adapter_name(), "software_environment_fixture": OS.get_environment("SNAPLAND_ISLAND_HAIR_SOFTWARE") == "1", "checks": checks, "movement_cases": motion_cases, "scope": "Actual island native key events; relocation, camera and appearance are explicit fixtures. Software mode reduces environment rendering; no human playtest, full lighting-quality or realtime performance claim."}, "  "))
+	file.store_string(JSON.stringify({"result": "PASS_NATIVE_ISLAND_HAIR_BINDING", "style": selected_look.hair, "time_scale": Engine.time_scale, "engine": Engine.get_version_info(), "renderer": RenderingServer.get_video_adapter_name(), "software_environment_fixture": OS.get_environment("SNAPLAND_ISLAND_HAIR_SOFTWARE") == "1", "checks": checks, "movement_cases": motion_cases, "scope": "Actual island native key events; relocation, camera and appearance are explicit fixtures. Software mode reduces environment rendering; no human playtest, full lighting-quality or realtime performance claim."}, "  "))
 	file.close()
 	print("PASS: native island hair binding normal/quarter ", Engine.time_scale, " cases ", motion_cases.size())
 	await main._quit_game()
@@ -108,8 +121,14 @@ func _reverse_and_live_swap() -> void:
 	while main.world.last_avatar_frame < 2 and main.world.time < deadline: await get_tree().physics_frame
 	var frame: int = main.world.last_avatar_frame
 	var phase: float = main.world.walk_distance_phase
-	main.world.set_avatar_look(WalkRenderer.DEFAULT_APPEARANCE, {"outfit": "outfit-coral", "hat": "hat-sailor"})
+	main.world.set_avatar_look(selected_look, {"outfit": "outfit-coral", "hat": "hat-sailor"})
 	checks.live_swap_keeps_step = frame >= 2 and main.world.last_avatar_frame == frame and main.world.walk_distance_phase == phase
+	for style in ["windswept", "bob", "curly"]:
+		var look := selected_look.duplicate()
+		look.hair = style
+		main.world.set_avatar_look(look, {"outfit":"outfit-coral", "hat":"hat-sailor"})
+		checks["live_"+style+"_keeps_step"] = main.world.last_avatar_frame == frame and main.world.walk_distance_phase == phase and main.world.avatar_hair_rig.active and main.world.avatar_hair_rig.receipt().style == style
+	main.world.set_avatar_look(selected_look, {"outfit": "outfit-coral", "hat": "hat-sailor"})
 	main.world.set_avatar_hair_motion_enabled(false)
 	checks.live_motion_off_keeps_step = main.world.last_avatar_frame == frame and main.world.walk_distance_phase == phase and not main.world.avatar_hair_rig.active
 	main.world.set_avatar_hair_motion_enabled(true)
@@ -131,7 +150,7 @@ func _reverse_and_live_swap() -> void:
 	for label in checks:
 		if not checks[label]: await _fail("live reverse/swap check failed: " + label); return
 	var file := FileAccess.open(evidence_dir.path_join("audit.json"), FileAccess.WRITE)
-	file.store_string(JSON.stringify({"result": "PASS_NATIVE_ISLAND_HAIR_BINDING", "mode": "continuous reverse and live pose swap", "time_scale": Engine.time_scale, "engine": Engine.get_version_info(), "checks": checks, "held_cel": frame, "held_phase": phase, "software_environment_fixture": OS.get_environment("SNAPLAND_ISLAND_HAIR_SOFTWARE") == "1"}, "  "))
+	file.store_string(JSON.stringify({"result": "PASS_NATIVE_ISLAND_HAIR_BINDING", "mode": "continuous reverse and live pose swap", "style": selected_look.hair, "time_scale": Engine.time_scale, "engine": Engine.get_version_info(), "checks": checks, "held_cel": frame, "held_phase": phase, "software_environment_fixture": OS.get_environment("SNAPLAND_ISLAND_HAIR_SOFTWARE") == "1"}, "  "))
 	file.close()
 	print("PASS: native island continuous reverse and live swap at ", Engine.time_scale, " held cel ", frame)
 	await main._quit_game()
@@ -167,7 +186,7 @@ func _walk(view: String, keys: Array) -> bool:
 	await get_tree().create_timer(0.18).timeout
 	if main.world.avatar_is_walking: await _fail("native release did not stop walking"); return false
 	await _capture("%02d-%s-stop" % [motion_cases.size(), view])
-	motion_cases.append({"heading": view, "hat": main.world.avatar_equipped.hat, "distance": distance, "max_angle": observed_motion})
+	motion_cases.append({"style": main.world.avatar_appearance.hair, "heading": view, "hat": main.world.avatar_equipped.hat, "distance": distance, "max_angle": observed_motion})
 	return true
 
 func _tap(key: int) -> void:

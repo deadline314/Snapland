@@ -18,8 +18,12 @@ def main():
     parser.add_argument("--tag", required=True)
     parser.add_argument("--quarter", action="store_true")
     parser.add_argument("--pixels", action="store_true")
+    parser.add_argument("--style", choices=["windswept", "bob", "curly"], default="windswept")
+    parser.add_argument("--pack", type=Path, help="Verify pixel rendering from an exported PCK")
     parser.add_argument("--reverse-only", action="store_true")
     args = parser.parse_args()
+    if args.pack and (not args.pixels or not args.pack.is_file()):
+        raise ValueError("An existing exported PCK and --pixels are required for pack verification")
     if not re.fullmatch(r"[a-z][a-z0-9-]{0,79}", args.tag):
         raise ValueError("Simple unique evidence tag required")
     output = ROOT / ".review/island-hair-binding" / args.tag
@@ -27,22 +31,36 @@ def main():
         raise ValueError("Preserve old evidence; choose another tag")
     output.mkdir(parents=True)
     env = dict(os.environ, SNAPLAND_SAVE_PATH=str(output / "profile/progress.json"),
-               SNAPLAND_ISLAND_HAIR_DIR=str(output),
+               SNAPLAND_ISLAND_HAIR_DIR=str(output), SNAPLAND_ISLAND_HAIR_STYLE=args.style,
+               SNAPLAND_ISLAND_HAIR_REQUIRE_PACK="1" if args.pack else "0",
                SNAPLAND_ISLAND_HAIR_QUARTER="1" if args.quarter else "0")
     engine = os.environ.get("GODOT_BIN") or shutil.which("godot4") or shutil.which("godot")
     if not engine:
         raise RuntimeError("Set GODOT_BIN to the actual project engine")
-    command = [engine, "--path", str(ROOT), "--audio-driver", "Dummy",
+    launch_root = ROOT
+    if args.pack:
+        # A PCK mounted beside the source checkout can silently fall back to
+        # loose PNGs. Probe from an empty project containing only this test.
+        launch_root = output / "pack-project"
+        launch_root.mkdir()
+        (launch_root / "project.godot").write_text('config_version=5\n[application]\nconfig/name="Snapland packed resource probe"\n')
+        shutil.copy2(ROOT / "game/tests/test_island_hair_binding.gd", launch_root / "pixel_probe.gd")
+    command = [engine, "--path", str(launch_root), "--audio-driver", "Dummy",
                "--rendering-method", "forward_plus", "--resolution", "640x360",
                "--log-file", str(output / "engine.log")]
     if args.pixels:
-        command += ["--script", "res://game/tests/test_island_hair_binding.gd"]
+        if args.pack:
+            # The probe stays outside the shipping pack; every game resource
+            # it loads uses the PCK's res:// namespace and importer remaps.
+            command += ["--main-pack", str(args.pack.resolve()), "--script", str(launch_root / "pixel_probe.gd")]
+        else:
+            command += ["--script", "res://game/tests/test_island_hair_binding.gd"]
     else:
         command += ["--fixed-fps", "30", "--write-movie", str(output / "movie.png"),
                     "res://game/tests/native_island_hair_binding.tscn"]
         if args.reverse_only:
             command += ["--", "--hair-reverse-only"]
-    result = run_validated_godot(ROOT, command, env=env, timeout=600)
+    result = run_validated_godot(launch_root, command, env=env, timeout=600)
     log = result.stdout + "\n" + result.stderr
     (output / "run.log").write_text(log)
     if result.returncode or "ERROR:" in log or "SCRIPT ERROR" in log:

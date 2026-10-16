@@ -7,6 +7,7 @@ import unittest
 from PIL import Image
 
 from tools.hero_2d.author_island_hair import build
+from tools.hero_2d.author_alternate_hair import build as build_alternate
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -64,6 +65,39 @@ class IslandHairAuthoringTests(unittest.TestCase):
             for frame in range(1, 8):
                 self.assertTrue(all(atlas.getpixel((x, y)) == atlas.getpixel((x + 280 * frame, y)) for x, y in selected),
                                 f"{view}/{frame}: stable head/source registration changed")
+
+
+class AlternateHairAuthoringTests(unittest.TestCase):
+    def test_each_style_rebuilds_with_its_own_owned_disjoint_overlapping_tufts(self):
+        owners = json.loads((ROOT / "assets/characters/island-hair-alternate-owners-v1.json").read_text())
+        for style in ["bob", "curly"]:
+            profile = json.loads((ROOT / f"assets/characters/island-hair-{style}-v1.json").read_text())
+            self.assertEqual(json.loads(json.dumps(build_alternate(style))), profile)
+            self.assertEqual(len(profile["directions"]), 8)
+            for view, spec in profile["directions"].items():
+                owned = pixels(owners["owners"][style][view]["hair_owner_spans"])
+                alpha = pixels(owners["owners"][style][view]["source_alpha_spans"])
+                used = set()
+                for strand in spec["strands"]:
+                    full, cut = pixels(strand["spans"]), pixels(strand["cut_spans"])
+                    self.assertTrue(cut and cut <= full <= owned)
+                    self.assertFalse(full & used)
+                    self.assertGreater(len(full-cut), 10, f"{style}/{view}: needs real root overlap")
+                    used |= full
+                    for x,y in cut:
+                        self.assertTrue(any((xx,yy) not in alpha for yy in range(y-4,y+5) for xx in range(x-4,x+5)),
+                                        f"{style}/{view}: cut must touch outer silhouette")
+
+    def test_alternate_dependencies_match_source_files_and_visible_pixels(self):
+        profile = build_alternate("bob")
+        for dep in profile["dependencies"]:
+            path = ROOT / dep["source"].removeprefix("res://")
+            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), dep["source_sha256"])
+            if "source_pixels_sha256" in dep:
+                data = bytearray(Image.open(path).convert("RGBA").tobytes())
+                for i in range(0,len(data),4):
+                    if data[i+3] < dep["alpha_cutoff"]: data[i:i+4] = b"\0"*4
+                self.assertEqual(hashlib.sha256(data).hexdigest(), dep["source_pixels_sha256"])
 
 
 if __name__ == "__main__":
