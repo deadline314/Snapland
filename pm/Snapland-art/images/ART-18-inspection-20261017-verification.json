@@ -1,0 +1,76 @@
+{
+  "base_main": "bc6a6ecd4872af5a441e0d4f96c211bbb12576a6",
+  "source_commit": "b1100b3c1f76261d39050641de1fead65e4f4e9b",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "source_sha256": {
+    "game/world/character_animation_library.gd": "fa7ca6eaf551dfcb54d041d86b4ad5352e66474cf092fc86475da85e59f690ac",
+    "game/tests/test_avatar.gd": "9cd019a27d8ffb1a8ca6b7aff8473b1bead9a1619c2749543b4ec08d65f748c5",
+    "game/tests/test_outfit_atomic_coverage.gd": "61f157c070bef6448637347482aeb683eaddf3bb085d6701267a372e45ce0aa2"
+  },
+  "pack": {
+    "sha256": "e00179a565cb3dbff7534798a7e08c838033a87bb4f58f6da3ede230e2251a3e",
+    "bytes": 144817640,
+    "engine": "4.7.2 Linux official ed1daf0bf",
+    "shipping_preset": "Windows Desktop PCK only, not Windows EXE acceptance",
+    "probe_exit": 0,
+    "source_pngs_available": false,
+    "code_files": {
+      "game/world/character_animation_library.gd": "fa7ca6eaf551dfcb54d041d86b4ad5352e66474cf092fc86475da85e59f690ac",
+      "game/world/avatar_renderer.gd": "52ec3eaa423939df1b88930ebe94eb1d3da8eafbdf0c5035d7d802d922615f51",
+      "assets/characters/complete-animation-regions.json": "5a655fc85a2c05c5cc92242a759a01ea3e93da1caaa56ce1cfa72f99d3c7099f",
+      "assets/characters/island-side-coat-materials-v1.json": "3d688ea3d275da8dd23b4cc2a0154329771668247484747f2244720f049902a8"
+    }
+  },
+  "pack_raw_import_log_sha256": "8af3c5646b7873198a9d73dfdd009a6b119171dd4f97dc2daf10dbab31a52163",
+  "pack_raw_export_log_sha256": "0a144b3ddba1945940fafcbdc93da5daba2d0d8bc8c8eb61177d9534739935b3",
+  "final_local_checks": [
+    {
+      "name": "atomic",
+      "script": "game/tests/test_outfit_atomic_coverage.gd",
+      "seconds": 0.71,
+      "exit": 0,
+      "passed": true,
+      "library_sha256": "fa7ca6eaf551dfcb54d041d86b4ad5352e66474cf092fc86475da85e59f690ac"
+    },
+    {
+      "name": "rig",
+      "script": "game/tests/test_avatar_motion_rig.gd",
+      "seconds": 38.85,
+      "exit": 0,
+      "passed": true,
+      "library_sha256": "fa7ca6eaf551dfcb54d041d86b4ad5352e66474cf092fc86475da85e59f690ac"
+    }
+  ],
+  "accepted_additional_local": [
+    "side coat 72 cases, final code",
+    "fixed-root walk pixels, final code"
+  ],
+  "accepted_pack_tests": [
+    "atomic coverage 335 checks including 2 no-loose-PNG assertions",
+    "side materials 72 cases",
+    "avatar including migrated historical inspection and unchanged production body",
+    "character animation library",
+    "avatar renderer all skins/species and 64 cels bob/curly"
+  ],
+  "scope": "Linux headless packaged rendering and source inspection, isolated imported PCK with no loose source PNG; Windows Desktop preset PCK only, no Windows EXE or new native visual/playtest acceptance",
+  "prior_ci": {
+    "url": "https://github.com/deadline314/Snapland/actions/runs/38965270551",
+    "observed": "historical inspection assertion and 90-second timeout; resolved locally and in final pack; final remote full run still required"
+  },
+  "artifacts_sha256": {
+    "pm/Snapland-art/images/ART-18-inspection-20261017-packed-probe.log": "5dc64b0b574ecb072fadd1cfcea4b94462c609e035bf7f513dce6463fe842e2d",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-packed-side-probe.log": "9c04061513995c7c8a14ef26c8178073a54daf4a60d8a65f356e6dd806497999",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-packed-avatar.log": "74f015c65fc54fb545b9a94c65bb7a200e21db1c556d1c1c0bdfb897640c89e0",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-packed-character_animation_library.log": "66497135c735cf622efdfb14dab6a2f0992aabcd30e856cca573892c0dafb38e",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-packed-avatar_renderer.log": "f04e8825adb18ad3e252f756c5d01edb02b0ba6c7a1fe8910c3433d16b5d2fc9",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-import-excerpt.log": "0b8c28ef48ad9ce94bb215cd562a3b14157e7eb4cc0b48e488f6a687fe0ea5e9",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-pack-excerpt.log": "5f69acb3a82d6f4d60fe89652244f4519b9500c23b896c202f7c4ec5681ac45e",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-packed-coverage-report.json": "977121573858bba22acd844fc3da5a0c6b5196f454a9d893535d38d59b6527bc",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-packed-side-report.json": "09515b3bf4a3526f1ceea7d44bb88d5c997eaba155229ee10b37c536e99523f7",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-final-atomic.log": "7b8f753ff45bc3f0dcb4dda4ca088575e03a5d00e9706d8eec43c1442d50cffc",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-final-rig.log": "4e53a9358ac5a4890a92857c7d9227f5ee0fb99e2483f2fa0a85a894ed3cc7bf",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-final-side.log": "9c04061513995c7c8a14ef26c8178073a54daf4a60d8a65f356e6dd806497999",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-final-walk.log": "e6d345686e16abecf36846342f26abd7f4373ee3a212390696f8afa4f5c4b134",
+    "pm/Snapland-art/images/ART-18-inspection-20261017-prior-ci-excerpt.log": "22918e79b67443514bb565cfa1e7cd5c356429fa1dccf919ec43c622037e4932"
+  }
+}

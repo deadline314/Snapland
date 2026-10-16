@@ -1,0 +1,26 @@
+2026-10-16T20:53:26.9533458Z ##[group]Run curl --fail --location --retry 3 --output godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+2026-10-16T20:53:26.9535618Z curl --fail --location --retry 3 --output godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+2026-10-16T20:53:26.9537313Z chmod +x Godot_v4.7.2-stable_linux.x86_64
+2026-10-16T20:53:26.9537996Z echo "GODOT_BIN=$PWD/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
+2026-10-16T20:53:28.9381287Z   inflating: Godot_v4.7.2-stable_linux.x86_64
+2026-10-16T20:53:28.9526159Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-16T20:53:29.0092830Z PASS: native runtime test command is configured.
+2026-10-16T20:53:29.0250750Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-16T20:53:47.3823660Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-16T20:54:00.8138847Z spring exit 0 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:54:00.8140216Z rig exit 0 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:54:00.8329933Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-16T20:54:29.4938947Z parse Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:54:29.4939516Z export Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:54:29.5116012Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-16T20:55:16.4960509Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-16T20:57:27.1882827Z FAIL: avatar runtime tests timed out after 90 seconds:
+2026-10-16T20:57:27.1883695Z Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-16T20:57:27.1884583Z SCRIPT ERROR: Assertion failed: historical coral vest variant remains available for explicit source inspection
+2026-10-16T20:57:27.1885442Z           at: _initialize (res://game/tests/test_avatar.gd:33)
+2026-10-16T20:57:27.1886508Z               [0] _initialize (res://game/tests/test_avatar.gd:33)
+2026-10-16T20:57:27.1891009Z PASS: clean project import
+2026-10-16T20:57:27.1891429Z PASS: game startup
+2026-10-16T20:57:27.1891781Z PASS: core runtime tests
+2026-10-16T20:57:27.1892089Z PASS: test/review save isolation tests
+2026-10-16T20:57:27.1892401Z PASS: wardrobe runtime tests

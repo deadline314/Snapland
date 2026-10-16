@@ -212,3 +212,26 @@
 [鏡片／跨胸衣袖誤標草稿](images/ART-18-side-20261017-rejected-full-camera.png)、[抬手漏標草稿](images/ART-18-side-20261017-rejected-full-raised-arms.png) 與[第二輪修訂仍有誤標](images/ART-18-side-20261017-rejected-full-v3.png) 均為製作端拒收圖，未作為遊戲素材。乾淨匯入曾抓到型別推斷錯誤，獨立像素檢查另抓到 JSON 數字型別使有效標記未載入；修正後重新執行全部側身矩陣與兩版隔離 PCK。
 
 本輪保存實際流程與結果，整票仍為進行中；不同服飾輪廓及完整動作品質繼續按原驗收判定。
+
+
+## 2026-10-17 接續：歷史候選檢視相容
+
+固定起始 main `bc6a6ecd4872af5a441e0d4f96c211bbb12576a6`；分支 `codex/outfit-source-inspection`。
+
+上一批局部檢查漏掉 `test_avatar.gd` 的既有候選檢視契約。[遠端 CI 38965270551](https://github.com/deadline314/Snapland/actions/runs/38965270551) 在「historical coral vest variant remains available for explicit source inspection」停止並逾時；正式換色安全回退已使同一入口不再選舊背心。這是漏測造成的相容問題，非已通過驗收。
+
+沿用本票六方換件研究，明確區分正式全套衣物解析與單格製作檢視。預計新增只能明確呼叫的候選檢視入口，共用原本來源／圖框／錨點驗證及固定畫布合成；舊測試保留候選確實不同的斷言，遷移至該明確入口，另檢查正式來源／錨點／快取不被檢視污染。不加 CI known failure、不改測試選擇器、不讓被拒收背心返回衣櫃。
+
+### 改動與驗證
+
+新增 `inspect_variant_texture`，只供明確單格候選檢視；它共用原本合成與來源安全驗證，但使用獨立快取／布局命名空間。正式換裝依然需整套完整，不接入歷史背心。舊角色測試保留候選可讀且不同的原斷言，呼叫改為明確檢視 API，另核對畫布一致及正式衣物不變。未刪斷言、未修改 CI 測試選擇器。
+
+最終程式在官方 Godot 4.7.2 隔離匯出 PCK 通過：335 項整套衣物／檢視契約（含兩項無原 PNG 驗證）、72 組衣料、原有 avatar、角色動畫庫，以及 64 格短髮／捲髮跨膚色／種族完整渲染回歸。打包來源逐檔雜湊與最終程式一致。最終本機另通過 333 項契約、完整八向樣本與損壞來源恢復（38.85 秒）、72 組衣料及固定根點步行回歸；文件連結檢查通過。
+
+[驗證範圍、來源／PCK 雜湊及各測試紀錄](images/ART-18-inspection-20261017-verification.json)。匯出採 Windows Desktop preset 的 PCK，在 Linux 隔離測試，不能稱 Windows EXE 或完整光影／原生美術驗收。這次未再製作新的步態影片；原生正常／慢放範圍沿用上批明示證據。部分故意損壞的反例會發出來源 WARNING，所有採用的測試均無 ERROR。
+
+全套遠端 CI 仍需核對最新 main；SG-1 設計缺檔未解，不能宣稱全綠。ART-18 仍進行中，真正不同衣物輪廓與完整動作原畫尚未交付，不勾選原本未達成的條件。
+
+### Commit
+
+- [b1100b3](https://github.com/deadline314/Snapland/commit/b1100b3c1f76261d39050641de1fead65e4f4e9b)：明確候選檢視 API、共享驗證合成、正式快取／錨點隔離及原有檢查遷移。共通流程已整理至 User-guide。

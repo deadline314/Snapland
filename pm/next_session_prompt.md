@@ -6,12 +6,12 @@
 
 - 使用者已明確要求自主接續未完成票，不需要一般設計問題的詢問；每批動手前研究成熟方法，品質不足可重做。
 - ART-32 已接回固定頭頸的待機／眨眼，ART-33 已接入微風短髮，ART-34 現已完成島上人類短髮／捲髮八方向動態。下方舊段落寫「髮尾骨架仍僅獨立樣本」已被這三票的新交付取代。
-- ART-33／34 已快轉合入 main `1baf7dd`，[PR #1](https://github.com/deadline314/Snapland/pull/1) 與 [PR #2](https://github.com/deadline314/Snapland/pull/2) 均已確認 merged。開始以 fetch 後 main 為準，不沿用舊 feature-only 的入口判斷。雲端工作區 `/workspace/work/Snapland-character`，目前本 Session 使用 `codex/wardrobe-silhouettes`；不要切換 `/workspace/Snapland` 的其他 Session `work` 分支。
-- ART-18 接續程式 `b84746aea2329bc467ed3050faad85e739840357`：整套輪廓替換需完整必要姿勢，正式四外套明確換色；左右側走路／待機 24 格有核對過的衣料標記。全 148 格自動草稿因道具／衣袖誤標拒收，不能重新採用。本輪證據完成後依最新使用者流程快轉整合 main，以 fetch 為準。不同服飾輪廓與完整動作品質仍是進行中。
+- ART-33／34 已快轉合入 main `1baf7dd`，[PR #1](https://github.com/deadline314/Snapland/pull/1) 與 [PR #2](https://github.com/deadline314/Snapland/pull/2) 均已確認 merged。開始以 fetch 後 main 為準，不沿用舊 feature-only 的入口判斷。雲端本批使用 Session 專屬 worktree；交付後先以 `git worktree list` 核對是否仍保留，不把臨時路徑或舊分支當永久入口。不要切換 `/workspace/Snapland` 的其他 Session `work` 分支。
+- ART-18 接續程式 `b84746aea2329bc467ed3050faad85e739840357`：整套輪廓替換需完整必要姿勢，正式四外套明確換色；左右側走路／待機 24 格有核對過的衣料標記。全 148 格自動草稿因道具／衣袖誤標拒收，不能重新採用。已以 `dc32c14` 快轉合入 main，以 fetch 為準。不同服飾輪廓與完整動作品質仍是進行中。
 - ART-18 有正常／真正慢速共 28 組移動及 93 張已看過的全身抽樣。正常版 16 項檢查含行走衣袖／手部整區 RGBA；慢速版 14 項為保存的固定配色見證版本，兩者不可混稱。官方 Godot 4.7.2 ed1daf0bf 的六項局部測試與隔離 PCK 316／72 項均通過；詳細範圍讀票與 verification.json。引擎可在 `work/art18/engine-4.7.2/` 核對，執行仍用入口驗證與獨立絕對存檔。
 - ART-34 留有 96 組原生像素比較、隔離 PCK 額外 200 格渲染、200 格定位、432 格既有待機、兩款兩速度共 56 組島上移動與四趟連續反向／即時換髮的真實證據。影片以完整人物抽幀審閱，不宣稱每一編碼格連續播放或真人試玩。
 - 使用 Godot 4.7／llvmpipe，島上錄影為降低環境成本的明示 fixture；原 Windows 4.7.2 EXE、完整光影與即時效能未重驗。不要拿該雲端錄影當完整光影驗收。
-- 仍有 80 張未結案。角色優先先補 ART-18 主角不同輪廓衣物與完整動作，再擴 ART-17 NPC；票票／小角的正式走路來源仍缺，不可拿拒收候選或拆腿假步態代用。SG-1 缺少設計目錄仍阻擋全域設計 CI；main `1baf7dd` 的 runtime 另在既有腿部樣本來源中位數斷言失敗並逾時。先核對此來源校準與固定畫布轉換，不更改常數、刪斷言或恢復被否定的拆腿步態。執行 https://github.com/deadline314/Snapland/actions/runs/38960091901 。
+- 仍有 80 張未結案。角色優先先補 ART-18 主角不同輪廓衣物與完整動作，再擴 ART-17 NPC；票票／小角的正式走路來源仍缺，不可拿拒收候選或拆腿假步態代用。SG-1 缺少設計目錄仍阻擋全域設計 CI。MAIN-2 已以 `f35e341`／`bc6a6ec` 修復量測與登錄畫布位移，原固定中位數斷言及完整八向回歸通過，沒有恢復拆腿步態。ART-18 遠端 CI `38965270551` 另揭露歷史候選檢視相容問題；後續 `b1100b3` 明確分離製作檢視與正式整套換裝，保留舊候選可讀的斷言並加正式來源／錨點／快取隔離檢查。最終 PCK 的 335 項契約、72 組衣料、avatar／動畫庫／跨膚色種族渲染均通過；最終本機校準及損壞恢復通過。局部與 PCK 範圍見本票新證據；全套 CI 狀態要以最新 main 的實際執行為準，不把局部通過稱全綠。
 - 詳細範圍與證據讀 ART-18、ART-34 及 `pm/user_guide.md` 最新段落；下方 Windows 路徑與早期 HEAD 只作歷史背景。
 
 

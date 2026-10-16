@@ -1,0 +1,53 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: character animation library checks
+
+WARNING: Character animation: traveller/wave/front/frame 2: body region is invalid or outside source
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:537)
+         [1] _render_frame (res://game/world/character_animation_library.gd:221)
+         [2] texture (res://game/world/character_animation_library.gd:175)
+         [3] get_sequence (res://game/world/character_animation_library.gd:103)
+         [4] _initialize (/workspace/work/Snapland-character/.review/art18-inspection-pinned-pack/probe-project/character_animation_library.gd:51)
+WARNING: Character animation: traveller/wave/front/frame 3: layer entries must be objects
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:537)
+         [1] _render_frame (res://game/world/character_animation_library.gd:238)
+         [2] texture (res://game/world/character_animation_library.gd:175)
+         [3] get_sequence (res://game/world/character_animation_library.gd:103)
+         [4] _initialize (/workspace/work/Snapland-character/.review/art18-inspection-pinned-pack/probe-project/character_animation_library.gd:51)
+WARNING: Character animation: traveller/wave/front/frame 4: anchors must be an object
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:537)
+         [1] _render_frame (res://game/world/character_animation_library.gd:204)
+         [2] texture (res://game/world/character_animation_library.gd:175)
+         [3] get_sequence (res://game/world/character_animation_library.gd:103)
+         [4] _initialize (/workspace/work/Snapland-character/.review/art18-inspection-pinned-pack/probe-project/character_animation_library.gd:51)
+WARNING: Character animation: traveller/scaled/front/frame 0: outfit 'outfit-coral' is missing this pose; preserving the whole original outfit
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:537)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:406)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:389)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:347)
+         [4] texture (res://game/world/character_animation_library.gd:174)
+         [5] _initialize (/workspace/work/Snapland-character/.review/art18-inspection-pinned-pack/probe-project/character_animation_library.gd:58)
+WARNING: Character animation: traveller/scaled/front/frame 2: source_scale must be a finite number between 0.01 and 4.0
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:537)
+         [1] _render_frame (res://game/world/character_animation_library.gd:213)
+         [2] texture (res://game/world/character_animation_library.gd:175)
+         [3] get_sequence (res://game/world/character_animation_library.gd:103)
+         [4] _initialize (/workspace/work/Snapland-character/.review/art18-inspection-pinned-pack/probe-project/character_animation_library.gd:69)
+WARNING: Character animation: traveller/scaled/front/frame 3: source_scale must be a finite number between 0.01 and 4.0
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:537)
+         [1] _render_frame (res://game/world/character_animation_library.gd:213)
+         [2] texture (res://game/world/character_animation_library.gd:175)
+         [3] get_sequence (res://game/world/character_animation_library.gd:103)
+         [4] _initialize (/workspace/work/Snapland-character/.review/art18-inspection-pinned-pack/probe-project/character_animation_library.gd:69)
