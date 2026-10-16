@@ -1,5 +1,11 @@
 {
   "schema_version": 1,
+  "outfit_modes": {
+    "outfit-tide": "palette",
+    "outfit-coral": "palette",
+    "outfit-gold": "palette",
+    "outfit-navy": "palette"
+  },
   "description": "Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.",
   "runtime_aliases": {
     "traveller": {
@@ -11,10 +17,52 @@
   },
   "coverage_notes": {
     "traveller": "Front actions with dedicated authored idle in all eight directions. Existing eight-direction walk remains in the legacy atlas. Jump is an eight-pose front action at 12 FPS; other jump directions are not authored here. Seated and catch actions retain separately authored metadata.",
-    "traveller_outfit_coral": "Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.",
+    "traveller_outfit_coral": "Historical incomplete vest candidate only: retained for provenance, never selected. The shipping coral jacket is a palette of the complete base body in every action and direction.",
     "ticket": "Walk row is only a walk_candidate pending authored validation.",
     "imp": "42 authored cells (7x6); no frames synthesized.",
     "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."
+  },
+  "outfit_required_poses": {
+    "traveller": {
+      "idle": {
+        "front": 8,
+        "left": 4,
+        "right": 4,
+        "front_left": 4,
+        "front_right": 4,
+        "back_left": 4,
+        "back": 4,
+        "back_right": 4
+      },
+      "wave": {
+        "front": 8
+      },
+      "photograph": {
+        "front": 8
+      },
+      "interact": {
+        "front": 8
+      },
+      "jump": {
+        "front": 8
+      },
+      "sit": {
+        "front": 4
+      },
+      "catch": {
+        "front": 12
+      },
+      "walk": {
+        "front": 8,
+        "front_right": 8,
+        "right": 8,
+        "back_right": 8,
+        "back": 8,
+        "back_left": 8,
+        "left": 8,
+        "front_left": 8
+      }
+    }
   },
   "actors": {
     "traveller": {

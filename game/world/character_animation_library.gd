@@ -4,6 +4,7 @@ extends RefCounted
 const MANIFEST_PATH := "res://assets/characters/complete-animation-regions.json"
 const TEXTURE_CACHE_LIMIT := 96
 const IMAGE_CACHE_LIMIT := 8
+const OUTFIT_CACHE_LIMIT := 64
 const ACTORS := ["traveller", "ticket", "imp", "announcer"]
 
 var _stable_walk_pixels = preload("res://game/world/walk_pixel_sources.gd").new()
@@ -19,6 +20,7 @@ var _layouts: Dictionary = {}
 var _reference_sizes: Dictionary = {}
 var _warned: Dictionary = {}
 var _diagnostic_keys: Dictionary = {}
+var _outfit_ready: Dictionary = {}
 
 func _init(path: String = MANIFEST_PATH) -> void:
 	load_manifest(path)
@@ -36,6 +38,7 @@ func load_manifest(path: String) -> bool:
 	_layouts.clear()
 	_reference_sizes.clear()
 	_warned.clear()
+	_outfit_ready.clear()
 	if not FileAccess.file_exists(path):
 		_diagnostic("manifest", "missing manifest: %s" % path)
 		return false
@@ -323,49 +326,104 @@ func texture(actor: String, action: String, direction: String, frame_index: int,
 	return result
 
 func _frame_for_equipment(frame: Dictionary, equipped: Dictionary, actor: String, action: String, direction: String, index: int) -> Dictionary:
-	var context := _context(actor, action, direction, index)
-	if not frame.has("variants"):
-		return frame
-	var variants_value: Variant = frame.get("variants")
-	if not variants_value is Dictionary:
-		_diagnostic(context, "variants must be an object; using base frame")
-		return frame
 	var outfit := str(equipped.get("outfit", ""))
-	if outfit.is_empty() or not variants_value.has(outfit):
-		return frame
+	if outfit.is_empty() or not outfit_variant_ready(actor, outfit): return frame
+	var variant := _validated_outfit_variant(frame, outfit, actor, action, direction, index)
+	if variant.is_empty(): return frame
+	var result := frame.duplicate(true)
+	result["source"] = variant.source
+	result["region"] = variant.region.duplicate()
+	result["anchors"] = variant.anchors.duplicate(true)
+	return result
+
+func outfit_variant_ready(actor: String, outfit: String) -> bool:
+	# One decision for every registered pose, never per-cel mixed clothing.
+	# Palette outfits intentionally keep the original complete body source.
+	var key := JSON.stringify([actor, outfit])
+	if _outfit_ready.has(key): return _outfit_ready[key]
+	var modes: Variant = manifest.get("outfit_modes", {})
+	if not modes is Dictionary or modes.get(outfit, "variant") != "variant":
+		if not modes is Dictionary or modes.get(outfit, "") != "palette":
+			_diagnostic("%s/outfit %s" % [actor, outfit], "unknown outfit mode; preserving all original body cels")
+		return _remember_outfit(key, false)
+	var actions: Variant = manifest.get("actors", {}).get(actor, {})
+	if not actions is Dictionary: return _remember_outfit(key, false)
+	# Some source families (the island walk atlas) live outside this library.
+	# Their declared obligations still block activation until unified coverage exists.
+	var required_actors: Variant = manifest.get("outfit_required_poses", {})
+	var required: Variant = required_actors.get(actor, {}) if required_actors is Dictionary else null
+	if not required is Dictionary: return _remember_outfit(key, false)
+	for action in required:
+		if not required[action] is Dictionary: return _remember_outfit(key, false)
+		for direction in required[action]:
+			var expected: Variant = required[action][direction]
+			var actual := _frames(actor, str(action), str(direction)).size()
+			if not (expected is int or expected is float) or not is_finite(float(expected)) or float(expected) != floorf(float(expected)) or expected <= 0 or expected > 256 or actual != int(expected):
+				_diagnostic(_context(actor, str(action), str(direction), actual), "outfit '%s' requires %s poses, found %d; preserving the whole original outfit" % [outfit, str(expected), actual])
+				return _remember_outfit(key, false)
+	var count := 0
+	for action in actions:
+		if str(action) in ["canvas_size", "reference_size", "feet_baseline"]: continue
+		if not actions[action] is Dictionary: return _remember_outfit(key, false)
+		for direction in actions[action]:
+			var frames := _frames(actor, str(action), str(direction))
+			if frames.is_empty(): return _remember_outfit(key, false)
+			for index in range(frames.size()):
+				if not frames[index] is Dictionary or _validated_outfit_variant(frames[index], outfit, actor, str(action), str(direction), index).is_empty():
+					return _remember_outfit(key, false)
+				count += 1
+	return _remember_outfit(key, count > 0)
+
+func _remember_outfit(key: String, ready: bool) -> bool:
+	if _outfit_ready.size() >= OUTFIT_CACHE_LIMIT: _outfit_ready.erase(_outfit_ready.keys()[0])
+	_outfit_ready[key] = ready
+	return ready
+
+func _validated_outfit_variant(frame: Dictionary, outfit: String, actor: String, action: String, direction: String, index: int) -> Dictionary:
+	var context := _context(actor, action, direction, index)
+	var variants_value: Variant = frame.get("variants", {})
+	if not variants_value is Dictionary:
+		_diagnostic(context, "outfit '%s' variants must be an object; preserving the whole original outfit" % outfit)
+		return {}
+	if not variants_value.has(outfit):
+		_diagnostic(context, "outfit '%s' is missing this pose; preserving the whole original outfit" % outfit)
+		return {}
 	var variant_value: Variant = variants_value[outfit]
 	if not variant_value is Dictionary:
 		_diagnostic(context, "variant '%s' must be an object; using base frame" % outfit)
-		return frame
+		return {}
 	var variant: Dictionary = variant_value
 	var source_value: Variant = variant.get("source", "")
 	var region_value: Variant = variant.get("region", [])
 	var anchors_value: Variant = variant.get("anchors", null)
 	if not source_value is String or str(source_value).is_empty() or not _valid_number_array(region_value, 4) or not anchors_value is Dictionary:
 		_diagnostic(context, "variant '%s' requires a source, numeric region, and anchors object; using base frame" % outfit)
-		return frame
+		return {}
+	if not anchors_value.has("head") or not anchors_value.has("feet"):
+		_diagnostic(context, "variant '%s' requires explicit head and feet anchors; preserving the whole original outfit" % outfit)
+		return {}
 	var region := _rect(region_value)
 	if region.size.x > 2048 or region.size.y > 2048 or region.size.x * region.size.y > 4194304:
 		_diagnostic(context, "variant '%s' region exceeds the frame safety limit; using base frame" % outfit)
-		return frame
+		return {}
 	var source_image := _image(str(source_value), actor, action, direction, index)
 	if source_image == null or not _inside(source_image, region):
 		_diagnostic(context, "variant '%s' source region is invalid or outside source; using base frame" % outfit)
-		return frame
+		return {}
 	for anchor_name in anchors_value:
 		var anchor_value: Variant = anchors_value[anchor_name]
-		if not anchor_value is Array or anchor_value.size() != 2 or not (anchor_value[0] is int or anchor_value[0] is float) or not (anchor_value[1] is int or anchor_value[1] is float):
+		if not _valid_number_array(anchor_value, 2):
 			_diagnostic(context, "variant '%s' anchor '%s' must be a numeric [x,y] pair; using base frame" % [outfit, str(anchor_name)])
-			return frame
+			return {}
 		var point := _point(anchor_value)
 		if point.x < 0 or point.y < 0 or point.x > region.size.x or point.y > region.size.y:
 			_diagnostic(context, "variant '%s' anchor '%s' is outside its source frame; using base frame" % [outfit, str(anchor_name)])
-			return frame
-	var result := frame.duplicate(true)
-	result["source"] = source_value
-	result["region"] = region_value.duplicate()
-	result["anchors"] = anchors_value.duplicate(true)
-	return result
+			return {}
+	var scale_value: Variant = frame.get("source_scale", 1.0)
+	if not (scale_value is int or scale_value is float) or not is_finite(float(scale_value)) or float(scale_value) < 0.01 or float(scale_value) > 4.0:
+		_diagnostic(context, "outfit '%s' has invalid shared source_scale; preserving the whole original outfit" % outfit)
+		return {}
+	return variant
 
 func cached_texture_count() -> int:
 	return _textures.size()
@@ -411,9 +469,9 @@ func _image(path: String, actor: String, action: String, direction: String, fram
 		return _images[path]
 	var image: Image
 	if path.begins_with("user://") or path.begins_with("/") or path.contains(":\\"):
-		image = Image.new()
-		var error := image.load(path)
-		if error != OK: image = null
+		if FileAccess.file_exists(path):
+			image = Image.new()
+			if image.load(path) != OK: image = null
 	else:
 		if ResourceLoader.exists(path):
 			var resource := ResourceLoader.load(path) as Texture2D
@@ -444,7 +502,7 @@ func _point(value: Variant) -> Vector2i:
 func _valid_number_array(value: Variant, expected_size: int) -> bool:
 	if not value is Array or value.size() != expected_size: return false
 	for component in value:
-		if not (component is int or component is float): return false
+		if not (component is int or component is float) or not is_finite(float(component)): return false
 	return true
 
 func _inside(image: Image, rect: Rect2i) -> bool:

@@ -19,6 +19,7 @@ func _initialize() -> void:
 	var manifest_path := "user://animation-test-manifest.json"
 	var fixture := {
 		"schema_version": 1,
+		"outfit_modes": {"outfit-tide": "palette"},
 		"actors": {"traveller": {"canvas_size": [12,8], "reference_size": [4,4], "feet_baseline": 6, "wave": {"front": {"fps": 2, "loop": true, "frames": [
 			{"source": source, "region": [0,0,4,4], "anchors": {"feet": [1,3], "head": [2,0]}, "variants": {"outfit-coral": {"source": variant_source, "region": [0,0,4,4], "anchors": {"feet": [2,2], "head": [0,1]}}}, "layers": [
 				{"slot":"shirt", "source":layer, "region":[0,0,2,2], "offset":[1,1], "z":5, "equipped":{"outfit":"outfit-tide"}},
@@ -55,13 +56,13 @@ func _initialize() -> void:
 	assert(composed.get_pixel(6,2).is_equal_approx(Color.BLUE), "equipped clothing layers are selected and draw above the body")
 	assert(composed.get_pixel(4,0).is_equal_approx(Color.RED), "negative z hair layer draws behind the body")
 	var coral: Texture2D = library.texture("traveller", "wave", "front", 0, {"outfit":"outfit-coral"})
-	assert(coral != sequence.frames[0].texture and coral.get_image().get_pixel(8,4).is_equal_approx(Color.GREEN), "selected outfit variant replaces the body source instead of reusing its default cel")
+	assert(coral.get_image().get_pixel(8,4).is_equal_approx(Color.RED), "a broken later variant rejects the whole outfit before its first cel")
 	var coral_sequence: Dictionary = library.get_sequence("traveller", "wave", "front", {"outfit":"outfit-coral"})
 	var source_head: Array = coral_sequence.frames[0].source_anchors.head
 	var normalized_head: Array = coral_sequence.frames[0].anchors.head
-	assert(is_equal_approx(float(source_head[0]), 0.0) and is_equal_approx(float(source_head[1]), 1.0) and normalized_head == [2,4], "sequence source and normalized anchors follow the selected outfit variant")
-	assert(coral_sequence.frames[0].texture.get_image().get_pixel(6,2).is_equal_approx(Color.BLUE), "base frame layers remain composed over an outfit body variant")
-	assert(coral_sequence.frames[1].texture.get_image().get_pixel(8,4).is_equal_approx(Color.RED) and library.diagnostics.any(func(item: String) -> bool: return item.contains("traveller/wave/front/frame 1") and item.contains("outfit-coral")), "invalid variant metadata diagnoses its frame and falls back to the valid base body")
+	assert(is_equal_approx(float(source_head[0]), 2.0) and is_equal_approx(float(source_head[1]), 0.0) and normalized_head == [8,0], "rejected clothing keeps the original body and anchors in every cel")
+	assert(coral_sequence.frames[0].texture.get_image().get_pixel(8,0).is_equal_approx(Color.BLUE), "base frame layers remain composed when the outfit is rejected")
+	assert(coral_sequence.frames[1].texture.get_image().get_pixel(8,4).is_equal_approx(Color.RED) and library.diagnostics.any(func(item: String) -> bool: return item.contains("traveller/") and item.contains("outfit-coral")), "incomplete coverage diagnoses a specific pose and keeps all valid base bodies")
 	assert(sequence.frames[2].texture == null and library.diagnostics.any(func(item: String) -> bool: return item.contains("traveller/wave/front/frame 2")), "out-of-bounds frame reports actor/action/direction/frame context")
 	assert(library.texture("traveller", "wave", "front", 3) == null and library.texture("traveller", "wave", "front", 4) == null, "malformed layer and anchor containers fail safely")
 	assert(library.normalized_anchor("traveller", "wave", "front", 0, "head", {"outfit":"outfit-tide"}) == Vector2i(8,0), "head anchor uses the layout cached for its selected outfit")
@@ -98,7 +99,7 @@ func _initialize() -> void:
 	var jump: Dictionary = production_library.get_sequence("traveller", "jump", "front", {"outfit":"outfit-tide"})
 	var coral_jump: Dictionary = production_library.get_sequence("traveller", "jump", "front", {"outfit":"outfit-coral"})
 	assert(jump.available and jump.frames.size() == 8 and is_equal_approx(float(jump.fps), 12.0) and not jump.loop, "real jump/front action loads eight authored frames at 12 FPS and does not loop")
-	assert(coral_jump.available and coral_jump.frames.size() == 8, "all eight coral jump variants load from the aligned outfit row")
+	assert(coral_jump.available and coral_jump.frames.size() == 8, "all eight coral jacket jump poses retain the complete base row")
 	var jump_regions: Dictionary = {}
 	var jump_pixels: Dictionary = {}
 	var jump_feet_rows: Dictionary = {}
@@ -116,8 +117,8 @@ func _initialize() -> void:
 		jump_feet_rows[JSON.stringify(jump_frame.source_anchors.feet)] = true
 		jump_source_scales[JSON.stringify(jump_frame.source_scale)] = true
 		assert(jump_frame.source == "res://assets/characters/traveller-jump-front-v1.png" and coral_frame.source == jump_frame.source, "base and coral poses keep the immutable shared jump-atlas source")
-		assert(coral_frame.region != jump_frame.region and coral_frame.anchors.head != jump_frame.anchors.head, "coral pose %d uses its own measured source region and anchors" % index)
-		assert(coral_frame.texture != jump_frame.texture, "coral pose %d replaces the body source while preserving its canvas" % index)
+		assert(coral_frame.region == jump_frame.region and coral_frame.anchors.head == jump_frame.anchors.head, "palette pose %d keeps the original body source region and anchors" % index)
+		assert(coral_frame.texture.get_image().get_data() == jump_frame.texture.get_image().get_data(), "palette pose %d cannot load the historical vest candidate" % index)
 	assert(jump_regions.size() == 8 and jump_pixels.size() == 8, "jump action contains eight distinct source regions and composed poses")
 	assert(jump_source_scales.size() == 1, "jump action never auto-fits individual frames")
 	assert(jump_feet_rows.size() > 1, "authored airborne feet offsets vary while canonical feet placement stays aligned")

@@ -61,6 +61,8 @@ def main() -> int:
             ("authored idle hair attachment tests", common + ["--script", "res://game/tests/test_avatar_idle_attachment.gd"]),
             ("authored NPC source walking tests", common + ["--script", "res://game/tests/test_npc_authored_source_walking.gd"]),
             ("character animation library tests", common + ["--script", "res://game/tests/test_character_animation_library.gd"]),
+            ("atomic outfit coverage tests", common + ["--script", "res://game/tests/test_outfit_atomic_coverage.gd"]),
+            ("side outfit palette tests", common + ["--script", "res://game/tests/test_outfit_side_palette.gd"]),
             ("NPC animation state tests", common + ["--script", "res://game/tests/test_npc_animation_states.gd"]),
             ("tutorial panel/catalog tests", common + ["--script", "res://game/tests/test_tutorial_panel.gd"]),
             ("tutorial seen progress tests", common + ["res://game/tests/test_tutorial_seen_progress.tscn"]),

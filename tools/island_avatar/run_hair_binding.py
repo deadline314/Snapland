@@ -21,7 +21,10 @@ def main():
     parser.add_argument("--style", choices=["windswept", "bob", "curly"], default="windswept")
     parser.add_argument("--pack", type=Path, help="Verify pixel rendering from an exported PCK")
     parser.add_argument("--reverse-only", action="store_true")
+    parser.add_argument("--outfit-review", action="store_true", help="Also verify the native coral jacket sleeve during the bob tour")
     args = parser.parse_args()
+    if args.outfit_review and (args.pixels or args.reverse_only or args.style != "bob"):
+        raise ValueError("Outfit review requires a bob normal/quarter actual-island tour")
     if args.pack and (not args.pixels or not args.pack.is_file()):
         raise ValueError("An existing exported PCK and --pixels are required for pack verification")
     if not re.fullmatch(r"[a-z][a-z0-9-]{0,79}", args.tag):
@@ -57,7 +60,7 @@ def main():
             command += ["--script", "res://game/tests/test_island_hair_binding.gd"]
     else:
         command += ["--fixed-fps", "30", "--write-movie", str(output / "movie.png"),
-                    "res://game/tests/native_island_hair_binding.tscn"]
+                    "res://game/tests/native_outfit_binding.tscn" if args.outfit_review else "res://game/tests/native_island_hair_binding.tscn"]
         if args.reverse_only:
             command += ["--", "--hair-reverse-only"]
     result = run_validated_godot(launch_root, command, env=env, timeout=600)

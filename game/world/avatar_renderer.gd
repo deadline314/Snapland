@@ -8,6 +8,8 @@ const WALK_SOURCE_METRICS_LIMIT := 64
 const HAIR_CUT_CACHE_LIMIT := 24
 const AUTHORED_HEAD_CACHE_LIMIT := 128
 const HEAD_MATERIAL_OWNERS_PATH := "res://assets/characters/avatar-head-material-owners-v1.json"
+const SIDE_COAT_MATERIALS_PATH := "res://assets/characters/island-side-coat-materials-v1.json"
+const SIDE_COAT_CACHE_LIMIT := 32
 const DIRECTIONS := ["front", "left", "back", "right"]
 const WALK_DIRECTIONS := ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]
 const WALK_METADATA_PATH := "res://assets/characters/walk-regions.json"
@@ -94,6 +96,8 @@ var _authored_source_metrics_cache: Dictionary = {}
 var _authored_source_metrics_order: Array[String] = []
 var _head_material_owners: Dictionary = {}
 var _missing_head_owner_warnings: Dictionary = {}
+var _side_coat_owners: Dictionary = {}
+var _side_coat_cache: Dictionary = {}
 var _walk_source_image_cache: Dictionary = {}
 var _hair_cut_cache: Dictionary = {}
 var _walk_source_image_build_count := 0
@@ -119,6 +123,13 @@ func _init() -> void:
 	var stable_owners: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/walk-stability-v1/head-owners.json"))
 	if stable_owners is Dictionary and int(stable_owners.get("schema_version",0))==2:
 		_head_material_owners.merge(stable_owners.get("owners",{}),true)
+	if FileAccess.file_exists(SIDE_COAT_MATERIALS_PATH):
+		var materials: Variant = JSON.parse_string(FileAccess.get_file_as_string(SIDE_COAT_MATERIALS_PATH))
+		if materials is Dictionary and int(materials.get("schema_version",0)) == 1 and materials.get("owners",{}) is Dictionary:
+			var canvas: Variant = materials.get("canvas",[])
+			# JSON numbers are floats; Array equality would reject [280.0,360.0].
+			if canvas is Array and canvas.size()==2 and (canvas[0] is int or canvas[0] is float) and (canvas[1] is int or canvas[1] is float) and float(canvas[0])==280.0 and float(canvas[1])==360.0:
+				_side_coat_owners = materials.owners
 
 func head_source_signature(source: Image) -> String:
 	var context := HashingContext.new()
@@ -218,13 +229,8 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var manifest_head_anchor := Vector2i.ZERO
 	var manifest_has_head_anchor := false
 	if has_manifest_frame:
-		# The coral vest atlas is an incomplete silhouette prototype. Keep its
-		# historical metadata intact, but render the catalog's coral jacket by
-		# recoloring each authored base pose until a complete matching set exists.
+		# Clothing completeness and palette-only profiles are resolved by the library.
 		var pose_equipped := equipped
-		if outfit == "outfit-coral":
-			pose_equipped = equipped.duplicate()
-			pose_equipped.erase("outfit")
 		var authored: Texture2D = animation_library.texture("traveller", safe_action, safe_direction, safe_frame, pose_equipped)
 		if authored != null:
 			# ImageTexture.get_image() may expose a cached image. Renderer passes
@@ -719,6 +725,9 @@ func _apply_palette(image: Image, appearance: Dictionary, outfit_id: String, dir
 	var skin_source := Color("#fdbb7b")
 	var hair_source := Color("#2a2b48")
 	var coat_source := Color("#267e83")
+	# Reviewed side-view cloth indices replace the front-shirt cutout. Keep
+	# other source families on the existing path until individually authored.
+	var side_coat := _side_coat_mask(image) if direction in ["left","right"] else PackedByteArray()
 	var owned_hair := PackedByteArray()
 	owned_hair.resize(image.get_width()*image.get_height())
 	for index in (coat_exclusion_indices if not coat_exclusion_indices.is_empty() else source_hair_indices): owned_hair[index] = 1
@@ -732,7 +741,7 @@ func _apply_palette(image: Image, appearance: Dictionary, outfit_id: String, dir
 			var coat_zone := y >= image.get_height() * 0.35 and y <= image.get_height() * 0.78 and not (x >= image.get_width() * 0.40 and x <= image.get_width() * 0.61 and y >= image.get_height() * 0.54)
 			if skin_zone and owned_hair[y*image.get_width()+x] == 0 and _is_color_family(color, skin_source, 0.055, 0.35):
 				image.set_pixel(x, y, _shade_preserving(color, skin_source, skin_target))
-			elif coat_zone and coat_excluded[y*image.get_width()+x] == 0 and _is_color_family(color, coat_source, 0.075, 0.12):
+			elif (not side_coat.is_empty() and side_coat[y*image.get_width()+x] != 0) or (side_coat.is_empty() and coat_zone and coat_excluded[y*image.get_width()+x] == 0 and _is_color_family(color, coat_source, 0.075, 0.12)):
 				image.set_pixel(x, y, _shade_preserving(color, coat_source, coat_target))
 	if not use_hair_overlay and not source_hair_indices.is_empty() and hair_target != HAIR_COLORS.ink:
 		var width := image.get_width()
@@ -742,6 +751,40 @@ func _apply_palette(image: Image, appearance: Dictionary, outfit_id: String, dir
 			var color := image.get_pixel(x, y)
 			if color.a > 0.05:
 				image.set_pixel(x, y, _shade_preserving(color, hair_source, hair_target))
+
+func _side_coat_mask(image: Image) -> PackedByteArray:
+	if image.get_size() != CANVAS_SIZE: return PackedByteArray()
+	var raw_key := head_source_signature(image)
+	if _side_coat_cache.has(raw_key): return _side_coat_cache[raw_key]
+	var canonical: Image = image.duplicate()
+	canonical.convert(Image.FORMAT_RGBA8)
+	var pixels: PackedByteArray = canonical.get_data()
+	for index in range(0,pixels.size(),4):
+		if pixels[index+3] < 13:
+			pixels[index] = 0
+			pixels[index+1] = 0
+			pixels[index+2] = 0
+			pixels[index+3] = 0
+	var context := HashingContext.new()
+	context.start(HashingContext.HASH_SHA256)
+	context.update(pixels)
+	var signature := context.finish().hex_encode()
+	var owner: Variant = _side_coat_owners.get(signature,{})
+	var mask := PackedByteArray()
+	if owner is Dictionary and owner.get("cloth_spans",[]) is Array and not owner.get("cloth_spans",[]).is_empty():
+		mask.resize(CANVAS_SIZE.x*CANVAS_SIZE.y)
+		for span in owner.cloth_spans:
+			if not span is Array or span.size()!=3:
+				mask.clear(); break
+			var valid := true
+			for value in span:
+				if not (value is int or value is float) or not is_finite(float(value)) or float(value)!=floorf(float(value)): valid=false; break
+			if not valid or span[0]<0 or span[0]>=CANVAS_SIZE.y or span[1]<0 or span[2]<span[1] or span[2]>=CANVAS_SIZE.x:
+				mask.clear(); break
+			for x in range(int(span[1]),int(span[2])+1): mask[int(span[0])*CANVAS_SIZE.x+x]=1
+	if _side_coat_cache.size()>=SIDE_COAT_CACHE_LIMIT: _side_coat_cache.erase(_side_coat_cache.keys()[0])
+	_side_coat_cache[raw_key]=mask
+	return mask
 
 func _is_color_family(color: Color, reference: Color, tolerance: float, minimum_value: float) -> bool:
 	var distance := absf(color.h - reference.h)
