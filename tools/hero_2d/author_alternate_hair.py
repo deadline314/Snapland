@@ -47,7 +47,7 @@ def spans(points):
 def build(style):
     data = json.loads(OWNERS.read_text())
     result = {"schema_version": 1, "style": style, "canvas": [280,360],
-              "ownership_sha256": hashlib.sha256(OWNERS.read_bytes()).hexdigest(),
+              "ownership_sha256": hashlib.sha256(OWNERS.read_bytes().replace(b"\r\n", b"\n")).hexdigest(),
               "dependencies": data["dependencies"],
               "motion": {"gain": 0.52 if style == "bob" else 0.72,
                          "strand_gain": [1.0, 0.9, 0.65]}, "directions": {}}

@@ -3,6 +3,8 @@ import hashlib
 import json
 from pathlib import Path
 import unittest
+import tempfile
+from unittest.mock import patch
 
 from PIL import Image
 
@@ -68,6 +70,15 @@ class IslandHairAuthoringTests(unittest.TestCase):
 
 
 class AlternateHairAuthoringTests(unittest.TestCase):
+    def test_windows_checkout_line_endings_preserve_the_authored_artifact(self):
+        normal = build_alternate("bob")
+        source = ROOT / "assets/characters/island-hair-alternate-owners-v1.json"
+        with tempfile.TemporaryDirectory() as directory:
+            windows = Path(directory) / source.name
+            windows.write_bytes(source.read_bytes().replace(b"\r\n",b"\n").replace(b"\n",b"\r\n"))
+            with patch("tools.hero_2d.author_alternate_hair.OWNERS", windows):
+                self.assertEqual(build_alternate("bob"), normal)
+
     def test_each_style_rebuilds_with_its_own_owned_disjoint_overlapping_tufts(self):
         owners = json.loads((ROOT / "assets/characters/island-hair-alternate-owners-v1.json").read_text())
         for style in ["bob", "curly"]:
@@ -92,7 +103,8 @@ class AlternateHairAuthoringTests(unittest.TestCase):
         profile = build_alternate("bob")
         for dep in profile["dependencies"]:
             path = ROOT / dep["source"].removeprefix("res://")
-            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), dep["source_sha256"])
+            source = path.read_bytes().replace(b"\r\n", b"\n") if path.suffix == ".json" else path.read_bytes()
+            self.assertEqual(hashlib.sha256(source).hexdigest(), dep["source_sha256"])
             if "source_pixels_sha256" in dep:
                 data = bytearray(Image.open(path).convert("RGBA").tobytes())
                 for i in range(0,len(data),4):

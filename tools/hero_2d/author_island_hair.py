@@ -61,7 +61,7 @@ def build():
     owners = json.loads(owners_path.read_text())["owners"]
     result = {"schema_version": 1, "style": "windswept", "canvas": [280, 360],
               "grid_step": 3, "scope": "Registered island walk/idle only; other actions retain original complete cels.",
-              "ownership_sha256": hashlib.sha256(owners_path.read_bytes()).hexdigest(), "directions": {}}
+              "ownership_sha256": hashlib.sha256(owners_path.read_bytes().replace(b"\r\n", b"\n")).hexdigest(), "directions": {}}
     crown_tips = {"front": (149, 74), "front_right": (140, 60), "right": (154, 71),
                   "back_right": (144, 70), "back": (140, 65), "back_left": (139, 72),
                   "left": (145, 71), "front_left": (149, 60)}

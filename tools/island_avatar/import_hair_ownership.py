@@ -32,7 +32,10 @@ def build(input_dir):
     dependencies = []
     for relative in paths:
         path = ROOT / relative
-        dependency = {"source": "res://" + relative, "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+        source = path.read_bytes()
+        if path.suffix == ".json":
+            source = source.replace(b"\r\n", b"\n")
+        dependency = {"source": "res://" + relative, "source_sha256": hashlib.sha256(source).hexdigest()}
         if path.suffix == ".png":
             pixels = bytearray(Image.open(path).convert("RGBA").tobytes())
             # The compositor discards alpha < 0.4. Godot pads RGB in those

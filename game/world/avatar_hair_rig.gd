@@ -147,8 +147,12 @@ func _dependencies_match() -> bool:
 			if not ResourceLoader.exists(path): valid = false; break
 			var texture := load(path) as Texture2D
 			if texture == null or _canonical_hash(texture.get_image(), int(dependency.get("alpha_cutoff", 1))) != str(dependency.source_pixels_sha256): valid = false; break
-		elif not FileAccess.file_exists(path) or FileAccess.get_sha256(path) != str(dependency.get("source_sha256", "")):
-			valid = false; break
+		else:
+			if not FileAccess.file_exists(path): valid = false; break
+			# Windows checkouts may convert text manifests to CRLF. Fingerprint
+			# the same LF source text while still rejecting every content change.
+			var fingerprint := FileAccess.get_file_as_string(path).replace("\r\n", "\n").sha256_text() if path.ends_with(".json") else FileAccess.get_sha256(path)
+			if fingerprint != str(dependency.get("source_sha256", "")): valid = false; break
 	_dependency_valid[_style] = valid
 	return valid
 
