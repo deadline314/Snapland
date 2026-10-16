@@ -1,0 +1,170 @@
+{
+  "date": "2026-10-17 Asia/Taipei",
+  "base": "372df05a6db31ef247a59167a7ef00dedaae1bb2",
+  "branch": "codex/character-hair-binding",
+  "scope": "Human windswept walk/idle only; other species/styles and one-shot actions retain whole original art. No generated images or changed body animation.",
+  "engine": {
+    "build": "official",
+    "hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "hex": 263936,
+    "major": 4,
+    "minor": 7,
+    "patch": 0,
+    "status": "stable",
+    "string": "4.7-stable (official)",
+    "timestamp": 0
+  },
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "software_environment_fixture": {
+    "scale_3d": 0.25,
+    "ssao": false,
+    "glow": false,
+    "sun_shadows": false,
+    "actor_pixel_canvas": [
+      280,
+      360
+    ]
+  },
+  "pixel_cases": 32,
+  "pixel_max_rest_error": 0,
+  "pixel_max_protected_error": 0,
+  "pixel_max_settled_error": 0,
+  "local_tests": [
+    {
+      "test": "test_island_hair_lifecycle.gd",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: island hair lifecycle retains live walk phase through appearance, motion and reduced-motion changes"
+      ]
+    },
+    {
+      "test": "test_walk_pixel_stability.gd",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS actual runtime walk pixels: eight hero headings, both NPC sides and nonfrozen limbs"
+      ]
+    },
+    {
+      "test": "test_island_idle_stability.gd",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS stable idle: 432 composed cels; rigid visible head/cap outside five authored eye regions, moving torso and planted legs"
+      ]
+    },
+    {
+      "test": "test_avatar_authored_walk_loop.gd",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig"
+      ]
+    },
+    {
+      "test": "test_avatar_attachment.gd",
+      "exit": 0,
+      "errors": [],
+      "pass": [
+        "PASS: 64cels x3styles horn/ear opaque component contacts",
+        "PASS: measured walk head attachments"
+      ]
+    }
+  ],
+  "python_authoring_tests": {
+    "passed": 4,
+    "scope": "ownership, original overlap/silhouette-only cuts, deterministic rebuild/fingerprints, all 64 source cels"
+  },
+  "native_checks": {
+    "island-normal-software": {
+      "all_hat_states": true,
+      "eight_headings": true,
+      "original_shader_and_grounding": true,
+      "other_styles_preserved": true,
+      "pause_freezes_bones": true,
+      "photo_interruption": true,
+      "photo_original": true,
+      "real_bones": true,
+      "reduced_motion_original": true,
+      "reduced_motion_resume": true,
+      "settled": true,
+      "sprite_visible": true
+    },
+    "island-quarter-software": {
+      "all_hat_states": true,
+      "eight_headings": true,
+      "original_shader_and_grounding": true,
+      "other_styles_preserved": true,
+      "pause_freezes_bones": true,
+      "photo_interruption": true,
+      "photo_original": true,
+      "real_bones": true,
+      "reduced_motion_original": true,
+      "reduced_motion_resume": true,
+      "settled": true,
+      "sprite_visible": true
+    },
+    "live-swap-normal": {
+      "continuous_reverse": true,
+      "live_motion_off_keeps_step": true,
+      "live_motion_on_keeps_step": true,
+      "live_reduced_keeps_step": true,
+      "live_restore_keeps_step": true,
+      "live_swap_keeps_step": true,
+      "reverse_root_fixed": true,
+      "reverse_settles": true
+    },
+    "live-swap-quarter": {
+      "continuous_reverse": true,
+      "live_motion_off_keeps_step": true,
+      "live_motion_on_keeps_step": true,
+      "live_reduced_keeps_step": true,
+      "live_restore_keeps_step": true,
+      "live_swap_keeps_step": true,
+      "reverse_root_fixed": true,
+      "reverse_settles": true
+    }
+  },
+  "movies": {
+    "island-normal-software": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "12.733333",
+      "nb_frames": "382"
+    },
+    "island-quarter-software": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "42.300000",
+      "nb_frames": "1269"
+    },
+    "live-swap-normal": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "3.100000",
+      "nb_frames": "93"
+    },
+    "live-swap-quarter": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "11.633333",
+      "nb_frames": "349"
+    }
+  },
+  "visual_review": {
+    "method": "Actual movie decoding and full-body contact sheets; normal sampled at 4 fps (51 frames), quarter sampled at 1 fps (42 frames). Individual actual-world and 280x360 actor captures inspected. Not a claim that every encoded frame was manually reviewed or that a human played the game.",
+    "normal_contact_sheets": 3,
+    "quarter_contact_sheets": 3
+  },
+  "limitations": [
+    "Cloud Godot 4.7 is not Windows 4.7.2.",
+    "Original hardware, full scene lighting quality and exported Windows package were not revalidated.",
+    "Other hairstyle dynamics remain ART-34; NPC/wardrobe full coverage remain ART-17/18."
+  ],
+  "references": "design/runtime/island-hair-binding.md"
+}

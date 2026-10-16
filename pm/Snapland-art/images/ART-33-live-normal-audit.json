@@ -1,0 +1,29 @@
+{
+  "checks": {
+    "continuous_reverse": true,
+    "live_motion_off_keeps_step": true,
+    "live_motion_on_keeps_step": true,
+    "live_reduced_keeps_step": true,
+    "live_restore_keeps_step": true,
+    "live_swap_keeps_step": true,
+    "reverse_root_fixed": true,
+    "reverse_settles": true
+  },
+  "engine": {
+    "build": "official",
+    "hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "hex": 263936,
+    "major": 4,
+    "minor": 7,
+    "patch": 0,
+    "status": "stable",
+    "string": "4.7-stable (official)",
+    "timestamp": 0
+  },
+  "held_cel": 2,
+  "held_phase": 0.722916126251221,
+  "mode": "continuous reverse and live pose swap",
+  "result": "PASS_NATIVE_ISLAND_HAIR_BINDING",
+  "software_environment_fixture": true,
+  "time_scale": 1.0
+}

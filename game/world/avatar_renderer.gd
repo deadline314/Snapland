@@ -159,6 +159,18 @@ func has_diagonal_parts() -> bool:
 func cached_texture_count() -> int:
 	return _cache.size()
 
+func hair_motion_attachment_guard(direction: String, frame: int, action: String, equipped: Dictionary) -> Image:
+	# Rasterize rigid headwear in precisely the body's fixed canvas.
+	var guard := Image.create(_canvas_width, _canvas_height, false, Image.FORMAT_RGBA8)
+	guard.fill(Color.TRANSPARENT)
+	var index := clampi(frame, 0, walk_frame_count(direction) - 1) if action == "walk" else walk_idle_frame(direction)
+	var head := walk_head_anchor(direction, index)
+	var shift := head.x - _canvas_width / 2
+	var hat := str(equipped.get("hat", "hat-none"))
+	if DIRECTIONS.has(direction): _apply_hat(guard, hat, direction, head.y, shift)
+	else: _apply_diagonal_hat(guard, hat, direction, head.y, shift)
+	return guard
+
 func has_authored_action(action: String, direction: String = "front") -> bool:
 	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
 	return animation_library != null and animation_library.has_action("traveller", action, safe_direction)

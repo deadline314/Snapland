@@ -1,0 +1,276 @@
+{
+  "cases": [
+    {
+      "direction": "front",
+      "hat": "hat-none",
+      "moving_pixels": 1062,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front",
+      "hat": "hat-straw",
+      "moving_pixels": 679,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front",
+      "hat": "hat-sailor",
+      "moving_pixels": 679,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front",
+      "hat": "hat-flower",
+      "moving_pixels": 896,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-none",
+      "moving_pixels": 791,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-straw",
+      "moving_pixels": 226,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-sailor",
+      "moving_pixels": 222,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-flower",
+      "moving_pixels": 496,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "right",
+      "hat": "hat-none",
+      "moving_pixels": 818,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "right",
+      "hat": "hat-straw",
+      "moving_pixels": 248,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "right",
+      "hat": "hat-sailor",
+      "moving_pixels": 419,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "right",
+      "hat": "hat-flower",
+      "moving_pixels": 540,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-none",
+      "moving_pixels": 677,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-straw",
+      "moving_pixels": 375,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-sailor",
+      "moving_pixels": 450,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-flower",
+      "moving_pixels": 546,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back",
+      "hat": "hat-none",
+      "moving_pixels": 587,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back",
+      "hat": "hat-straw",
+      "moving_pixels": 50,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back",
+      "hat": "hat-sailor",
+      "moving_pixels": 50,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back",
+      "hat": "hat-flower",
+      "moving_pixels": 235,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-none",
+      "moving_pixels": 631,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-straw",
+      "moving_pixels": 342,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-sailor",
+      "moving_pixels": 342,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-flower",
+      "moving_pixels": 556,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "left",
+      "hat": "hat-none",
+      "moving_pixels": 636,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "left",
+      "hat": "hat-straw",
+      "moving_pixels": 316,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "left",
+      "hat": "hat-sailor",
+      "moving_pixels": 469,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "left",
+      "hat": "hat-flower",
+      "moving_pixels": 579,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-none",
+      "moving_pixels": 867,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-straw",
+      "moving_pixels": 346,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-sailor",
+      "moving_pixels": 346,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-flower",
+      "moving_pixels": 539,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0
+    }
+  ],
+  "engine": {
+    "build": "official",
+    "hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "hex": 263936,
+    "major": 4,
+    "minor": 7,
+    "patch": 0,
+    "status": "stable",
+    "string": "4.7-stable (official)",
+    "timestamp": 0
+  },
+  "failures": [],
+  "negative_control": "one-pixel static-body shift detected",
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "result": "PASS_NATIVE_ISLAND_HAIR_PIXELS",
+  "scope": "Native 2D viewport pixels, 8 directions x all 4 hat states; not a game playthrough."
+}

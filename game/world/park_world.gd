@@ -11,6 +11,7 @@ const ComponentAnimationScript = preload("res://game/world/component_animation.g
 const NpcActivityScript = preload("res://game/world/npc_activity.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const AvatarHairRig = preload("res://game/world/avatar_hair_rig.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const IslandAttractionsScript = preload("res://game/world/island_attractions.gd")
 const CoastalMaterialShader = preload("res://game/world/coastal_material.gdshader")
@@ -28,6 +29,8 @@ const GOLD = Color("#edbb65")
 var player: CharacterBody3D
 var avatar: Sprite3D
 var avatar_renderer: RefCounted
+var avatar_hair_rig: SubViewport
+var avatar_hair_motion_enabled := true
 var avatar_motion_rig
 var avatar_motion_available := false
 var avatar_run_requested := false
@@ -2037,6 +2040,10 @@ func _build_player() -> void:
 	avatar.shaded=true
 	avatar.position.y=1.2
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,"front",0,"idle")
+	avatar_hair_rig=AvatarHairRig.new()
+	avatar_hair_rig.name="IslandHairViewport"
+	add_child(avatar_hair_rig)
+	avatar_hair_rig.set_motion_enabled(avatar_hair_motion_enabled and not reduced_motion and DisplayServer.get_name()!="headless")
 	_set_living_sprite_material(avatar,1,0.18,0.72,0,false)
 	avatar_ground_anchor=Node3D.new()
 	avatar_ground_anchor.name="BillboardGroundAnchor"
@@ -2088,6 +2095,7 @@ func _sync_external_avatar_reposition() -> void:
 		return
 	var externally_repositioned := current_position.distance_to(avatar_last_physics_position)>AVATAR_EXTERNAL_REPOSITION_THRESHOLD
 	if externally_repositioned and not is_riding():
+		if is_instance_valid(avatar_hair_rig): avatar_hair_rig.reset_motion()
 		# Keep relocation handling independent from the optional gait rig: the
 		# camera must snap and stale velocity must not turn a teleport into a walk.
 		if is_instance_valid(camera):
@@ -2190,6 +2198,9 @@ func _physics_process(delta: float) -> void:
 				avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
 				if avatar_action_remaining == 0.0: avatar_action=""
 	_refresh_avatar_texture(frame)
+	if is_instance_valid(avatar_hair_rig):
+		var pixel_velocity := horizontal_delta / maxf(delta, 0.000001) / avatar.pixel_size
+		avatar_hair_rig.advance(delta, pixel_velocity, blocked)
 	camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
 	camera.look_at(player.position+Vector3(0,1,0))
 	if avatar_motion_available: _sync_avatar_motion_camera()
@@ -2379,12 +2390,13 @@ func _avatar_action_duration(action: String, direction: String = "front") -> flo
 
 func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
 	if avatar_appearance == appearance and avatar_equipped == equipped: return
+	var held_frame := maxi(0,last_avatar_frame)
 	avatar_appearance=appearance.duplicate(true)
 	avatar_equipped=equipped.duplicate(true)
 	if avatar_motion_available:
 		avatar_motion_rig.set_appearance(avatar_appearance,avatar_equipped)
 	last_avatar_frame=-1
-	_refresh_avatar_texture(0)
+	_refresh_avatar_texture(held_frame)
 
 func _refresh_avatar_texture(frame: int) -> void:
 	if not is_instance_valid(avatar) or avatar_renderer == null: return
@@ -2414,6 +2426,8 @@ func _refresh_avatar_texture(frame: int) -> void:
 			display_frame=0 if reduced_motion else mini(floori(maxf(0.0,avatar_action_elapsed)*3.0),2)
 	if last_avatar_direction == direction and last_avatar_frame == display_frame and last_avatar_action == action: return
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,direction,display_frame,texture_action)
+	if is_instance_valid(avatar_hair_rig):
+		avatar.texture=avatar_hair_rig.sync_pose(avatar.texture,avatar_renderer,avatar_appearance,avatar_equipped,direction,display_frame,texture_action)
 	var avatar_material := avatar.material_override as ShaderMaterial
 	if avatar_material != null:
 		avatar_material.set_shader_parameter("texture_albedo",avatar.texture)
@@ -2428,6 +2442,13 @@ func _ride_pose_frame() -> int:
 	if moment >= 5.0 and moment < 5.5: return 2
 	if moment >= 5.5 and moment < 6.0: return 3
 	return 0
+
+func set_avatar_hair_motion_enabled(value: bool) -> void:
+	var held_frame := maxi(0,last_avatar_frame)
+	avatar_hair_motion_enabled=value
+	if is_instance_valid(avatar_hair_rig): avatar_hair_rig.set_motion_enabled(value and not reduced_motion and DisplayServer.get_name()!="headless")
+	last_avatar_frame=-1
+	_refresh_avatar_texture(held_frame)
 
 func set_night(value: bool) -> void:
 	set_time_of_day("night" if value else "noon")
@@ -2496,6 +2517,7 @@ func _update_lamp_selection(force := false) -> void:
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
+	set_avatar_hair_motion_enabled(avatar_hair_motion_enabled)
 	sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	fountain_water.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	if is_instance_valid(component_motion): component_motion.set_reduced_motion(reduced_motion)
