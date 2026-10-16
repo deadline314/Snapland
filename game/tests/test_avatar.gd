@@ -29,8 +29,10 @@ func _initialize() -> void:
 	assert(_image_data(authored_idle_first) != _image_data(authored_idle_blink), "manifest idle frame 0 and blink frame 4 render distinct authored poses")
 	assert(renderer.walk_frame_count("front") == 8, "manifest idle does not replace the compatible eight-frame legacy walk")
 	var authored_tide: Texture2D = renderer.animation_library.texture("traveller", "idle", "front", 0, equipped)
-	var authored_coral: Texture2D = renderer.animation_library.texture("traveller", "idle", "front", 0, {"outfit":"outfit-coral"})
+	var authored_coral: Texture2D = renderer.animation_library.inspect_variant_texture("traveller", "idle", "front", 0, "outfit-coral")
 	assert(authored_tide != null and authored_coral != null and _image_data(authored_tide) != _image_data(authored_coral), "historical coral vest variant remains available for explicit source inspection")
+	assert(authored_tide.get_size()==authored_coral.get_size(), "candidate inspection retains the shared canonical canvas")
+	assert(_image_data(renderer.animation_library.texture("traveller", "idle", "front", 0, {"outfit":"outfit-coral"}))==_image_data(authored_tide), "explicit historical inspection cannot select the rejected vest in production")
 	assert(renderer.has_authored_action("jump", "front") and renderer.authored_frame_count("jump", "front") == 8 and is_equal_approx(renderer.authored_action_fps("jump", "front"), 12.0), "renderer exposes the authored jump frame count and cadence")
 	var jump_frames: Array[PackedByteArray] = []
 	for frame_index in range(renderer.authored_frame_count("jump", "front")):

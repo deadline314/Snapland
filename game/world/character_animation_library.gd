@@ -168,15 +168,32 @@ func texture(actor: String, action: String, direction: String, frame_index: int,
 	var frames := _frames(actor, action, direction)
 	if frames.is_empty(): return null
 	var index := posmod(frame_index, frames.size())
-	var key := "%s|%s|%s|%d|%s" % [actor, action, direction, index, JSON.stringify(equipped)]
-	if _textures.has(key):
-		_texture_order.erase(key)
-		_texture_order.append(key)
-		return _textures[key]
 	if not frames[index] is Dictionary:
 		_diagnostic(_context(actor, action, direction, index), "frame entry must be an object")
 		return null
 	var frame: Dictionary = _frame_for_equipment(frames[index], equipped, actor, action, direction, index)
+	return _render_frame(actor, action, direction, index, frame, equipped)
+
+func inspect_variant_texture(actor: String, action: String, direction: String, frame_index: int, outfit: String) -> Texture2D:
+	# Explicit authoring inspection of one candidate, never production selection.
+	# Incomplete outfits can be inspected without making any of their cels live.
+	var frames := _frames(actor, action, direction)
+	if frame_index<0 or frame_index>=frames.size() or not frames[frame_index] is Dictionary: return null
+	var variant := _validated_outfit_variant(frames[frame_index], outfit, actor, action, direction, frame_index)
+	if variant.is_empty(): return null
+	var frame: Dictionary = frames[frame_index].duplicate(true)
+	frame["source"] = variant.source
+	frame["region"] = variant.region.duplicate()
+	frame["anchors"] = variant.anchors.duplicate(true)
+	# Distinct cache/layout keys keep inspected anchors out of live sequences.
+	return _render_frame(actor, action, direction, frame_index, frame, {"outfit":outfit}, true)
+
+func _render_frame(actor: String, action: String, direction: String, index: int, frame: Dictionary, equipped: Dictionary, inspection: bool = false) -> Texture2D:
+	var key := ("inspection|" if inspection else "") + "%s|%s|%s|%d|%s" % [actor, action, direction, index, JSON.stringify(equipped)]
+	if _textures.has(key):
+		_texture_order.erase(key)
+		_texture_order.append(key)
+		return _textures[key]
 	var entry := _entry(actor, action, direction)
 	var fps_value: Variant = entry.get("fps", 1.0)
 	if not (fps_value is int or fps_value is float) or not is_finite(float(fps_value)):
@@ -306,18 +323,18 @@ func texture(actor: String, action: String, direction: String, frame_index: int,
 	if baseline < 0 or baseline > canvas_size.y:
 		_diagnostic(_context(actor, action, direction, index), "feet_baseline is outside canvas")
 		return null
-	_layouts["%s|%s|%s|%d|%s" % [actor, action, direction, index, JSON.stringify(equipped)]] = {"scale": scale_factor, "destination": destination}
+	_layouts[key] = {"scale": scale_factor, "destination": destination}
 	var fixed_canvas := Image.create(canvas_size.x, canvas_size.y, false, Image.FORMAT_RGBA8)
 	fixed_canvas.fill(Color.TRANSPARENT)
 	fixed_canvas.blend_rect(output, Rect2i(Vector2i.ZERO, scaled_size), destination)
 	output = fixed_canvas
-	if action in ["walk","walk_candidate"]:
+	if not inspection and action in ["walk","walk_candidate"]:
 		var registered: Image = _stable_walk_pixels.frame(actor+"-"+action,direction,index)
 		if registered!=null:
 			output=registered
-			var registered_layout: Dictionary=_layouts["%s|%s|%s|%d|%s" % [actor, action, direction, index, JSON.stringify(equipped)]]
+			var registered_layout: Dictionary=_layouts[key]
 			registered_layout.destination += _stable_walk_pixels.root_offset(actor+"-"+action,direction,index)
-			_layouts["%s|%s|%s|%d|%s" % [actor, action, direction, index, JSON.stringify(equipped)]]["stable_head"]=_stable_walk_pixels.head_anchor(actor+"-"+action,direction)
+			_layouts[key]["stable_head"]=_stable_walk_pixels.head_anchor(actor+"-"+action,direction)
 	var result := ImageTexture.create_from_image(output)
 	_textures[key] = result
 	_texture_order.append(key)

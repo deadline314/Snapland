@@ -57,6 +57,20 @@ func _run() -> void:
 	palette.outfit_modes.coat = "palette"
 	library.load_manifest(_write(palette))
 	_check_all(library, false, "explicit palette keeps original body")
+	var live_before: Texture2D = library.texture("traveller", "idle", "front", 0, {"outfit":"coat"})
+	var anchor_before: Vector2i = library.normalized_anchor("traveller", "idle", "front", 0, "head", {"outfit":"coat"})
+	var inspected: Texture2D = library.inspect_variant_texture("traveller", "idle", "front", 0, "coat")
+	_check(inspected!=null and inspected.get_image().get_pixel(8,4)==Color.GREEN, "explicit inspection reads a palette outfit's retained candidate")
+	_check(library.texture("traveller", "idle", "front", 0, {"outfit":"coat"})==live_before and live_before.get_image().get_pixel(8,4)==Color.RED, "inspection cannot pollute live texture selection or cache")
+	_check(library.texture("traveller", "idle", "front", 0, {"outfit":"coat", "inspection":true}).get_image().get_pixel(8,4)==Color.RED, "save equipment keys cannot collide with the inspection cache namespace")
+	_check(library.normalized_anchor("traveller", "idle", "front", 0, "head", {"outfit":"coat"})==anchor_before, "inspection cannot pollute live anchor layout")
+	_check(library.inspect_variant_texture("traveller", "idle", "front", -1, "coat")==null and library.inspect_variant_texture("traveller", "idle", "front", 2, "coat")==null, "inspection rejects out-of-range frames instead of wrapping")
+	var broken_candidate: Dictionary = valid.duplicate(true)
+	broken_candidate.actors.traveller.wave.left.frames[1].variants.coat.region = [3,3,4,4]
+	library.load_manifest(_write(broken_candidate))
+	_check(library.inspect_variant_texture("traveller", "idle", "front", 0, "coat")!=null, "valid candidate can be inspected while another pose is broken")
+	_check(library.inspect_variant_texture("traveller", "wave", "left", 1, "coat")==null, "inspection still rejects invalid source bounds")
+	_check_all(library, false, "inspection never enables incomplete outfit")
 	# Production coral is a palette of the jacket, never the old vest prototype.
 	library = Library.new()
 	_check(not library.outfit_variant_ready("traveller", "unreleased-coat"), "island obligations reject a silhouette without eight-direction walking")
