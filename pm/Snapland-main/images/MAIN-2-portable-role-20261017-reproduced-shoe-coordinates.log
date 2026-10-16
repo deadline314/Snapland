@@ -1,0 +1,36 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+NPC_GAIT_MEASUREMENT role=ticket fixed_chain_m=0.230000 rendered_slow_peak_m=0.017998 rendered_cautious_peak_m=0.011549
+NPC_GAIT_MEASUREMENT role=imp fixed_chain_m=0.283333 rendered_slow_peak_m=0.019999 rendered_cautious_peak_m=0.012443
+NPC_GAIT_MEASUREMENT role=announcer fixed_chain_m=0.520000 rendered_slow_peak_m=0.023999 rendered_cautious_peak_m=0.014589
+HERO_CHAIN_DIAGNOSTIC view=front camera_up_y=1.0000 source_vertical_chain_m=0.336667 fixed_chain_m=0.374064 neutral_knee_deg=[38.33,62.38] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=front_right camera_up_y=1.0000 source_vertical_chain_m=0.400000 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,54.60] support_drop_m=0.047598
+HERO_CHAIN_DIAGNOSTIC view=right camera_up_y=1.0000 source_vertical_chain_m=0.366667 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,32.56] support_drop_m=0.000932
+HERO_CHAIN_DIAGNOSTIC view=back_right camera_up_y=1.0000 source_vertical_chain_m=0.393333 fixed_chain_m=0.374064 neutral_knee_deg=[32.56,10.81] support_drop_m=0.027598
+HERO_CHAIN_DIAGNOSTIC view=back camera_up_y=1.0000 source_vertical_chain_m=0.368129 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,49.96] support_drop_m=0.012394
+HERO_CHAIN_DIAGNOSTIC view=back_left camera_up_y=1.0000 source_vertical_chain_m=0.380000 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,10.81] support_drop_m=0.007598
+HERO_CHAIN_DIAGNOSTIC view=left camera_up_y=1.0000 source_vertical_chain_m=0.366667 fixed_chain_m=0.374064 neutral_knee_deg=[22.83,22.83] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=front_left camera_up_y=1.0000 source_vertical_chain_m=0.383333 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,39.19] support_drop_m=0.020932
+HERO_CHAIN_DIAGNOSTIC view=front camera_up_y=0.8522 source_vertical_chain_m=0.336667 fixed_chain_m=0.374064 neutral_knee_deg=[40.57,60.90] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=front_right camera_up_y=0.8522 source_vertical_chain_m=0.400000 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,50.51] support_drop_m=0.044642
+HERO_CHAIN_DIAGNOSTIC view=right camera_up_y=0.8522 source_vertical_chain_m=0.366667 fixed_chain_m=0.374064 neutral_knee_deg=[10.98,30.39] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=back_right camera_up_y=0.8522 source_vertical_chain_m=0.393333 fixed_chain_m=0.374064 neutral_knee_deg=[30.33,10.81] support_drop_m=0.026613
+HERO_CHAIN_DIAGNOSTIC view=back camera_up_y=0.8522 source_vertical_chain_m=0.368129 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,46.26] support_drop_m=0.009930
+HERO_CHAIN_DIAGNOSTIC view=back_left camera_up_y=0.8522 source_vertical_chain_m=0.380000 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,10.81] support_drop_m=0.007598
+HERO_CHAIN_DIAGNOSTIC view=left camera_up_y=0.8522 source_vertical_chain_m=0.366667 fixed_chain_m=0.374064 neutral_knee_deg=[22.83,22.83] support_drop_m=0.000000
+HERO_CHAIN_DIAGNOSTIC view=front_left camera_up_y=0.8522 source_vertical_chain_m=0.383333 fixed_chain_m=0.374064 neutral_knee_deg=[10.81,36.39] support_drop_m=0.019453
+HERO_HEAD_GUARD species=human hair=windswept view=front source_guard_bottom=202 actual_hair_changed_last=-1 actual_species_added_last=-1 rigid_end=204.0
+SCRIPT ERROR: Assertion failed: Hero complete source boot pixels retain their original extraction and palette
+          at: _assert_hero_variants (res://game/tests/test_avatar_role_rig.gd:423)
+          GDScript backtrace (most recent call first):
+              [0] _assert_hero_variants (res://game/tests/test_avatar_role_rig.gd:423)
+              [1] _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)
+SCRIPT ERROR: Assertion failed: three Hero wardrobes/species retain source-pivot geometry
+          at: _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)
+          GDScript backtrace (most recent call first):
+              [0] _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)
+SCRIPT ERROR: Assertion failed: hero source-pivot geometry regression completed
+          at: _run_role_contract (res://game/tests/test_avatar_role_rig.gd:92)
+          GDScript backtrace (most recent call first):
+              [0] _run_role_contract (res://game/tests/test_avatar_role_rig.gd:92)
+              [1] _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)

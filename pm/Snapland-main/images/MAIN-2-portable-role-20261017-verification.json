@@ -1,0 +1,167 @@
+{
+  "base_main": "8a41dbe7bb34937fd0e6afa8d6faab53f8968c3f",
+  "original_start_main": "042cc95ab43c76d1c4d559551d9c2430d066f4ae",
+  "source_commit": "9977d054c36108b8fa75fa866ba49e8eb9ce0f67",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "source_sha256": {
+    "game/world/avatar_motion_rig.gd": "bb4b221c0b229529f04184b6d4bc9b11a5ff77db83bbb3de8ade8c553272a624",
+    "game/tests/test_avatar_motion_rig.gd": "2c6306a5a528bc992733760a33ae757e734421b935a29e82827d77e996ea0e6c",
+    "game/tests/test_avatar_role_rig.gd": "cc3bf83b595522b79a670204448eda2e59290506f4d7ec8058e22e6301e83329"
+  },
+  "accepted_runtime_checks": [
+    {
+      "name": "role",
+      "path": "game/tests/test_avatar_role_rig.tscn",
+      "exit": 0,
+      "seconds": 48.16,
+      "passed": true,
+      "TEMP": "unset",
+      "source_sha256": {
+        "game/world/avatar_motion_rig.gd": "bb4b221c0b229529f04184b6d4bc9b11a5ff77db83bbb3de8ade8c553272a624",
+        "game/tests/test_avatar_role_rig.gd": "cc3bf83b595522b79a670204448eda2e59290506f4d7ec8058e22e6301e83329",
+        "game/tests/test_avatar_motion_rig.gd": "2c6306a5a528bc992733760a33ae757e734421b935a29e82827d77e996ea0e6c"
+      }
+    },
+    {
+      "name": "rig",
+      "path": "game/tests/test_avatar_motion_rig.gd",
+      "exit": 0,
+      "seconds": 38.11,
+      "passed": true,
+      "TEMP": "unset",
+      "source_sha256": {
+        "game/world/avatar_motion_rig.gd": "bb4b221c0b229529f04184b6d4bc9b11a5ff77db83bbb3de8ade8c553272a624",
+        "game/tests/test_avatar_role_rig.gd": "cc3bf83b595522b79a670204448eda2e59290506f4d7ec8058e22e6301e83329",
+        "game/tests/test_avatar_motion_rig.gd": "2c6306a5a528bc992733760a33ae757e734421b935a29e82827d77e996ea0e6c"
+      }
+    },
+    {
+      "name": "world",
+      "path": "game/tests/test_avatar_motion_world.gd",
+      "exit": 0,
+      "seconds": 11.7,
+      "passed": true,
+      "TEMP": "unset",
+      "source_sha256": {
+        "game/world/avatar_motion_rig.gd": "bb4b221c0b229529f04184b6d4bc9b11a5ff77db83bbb3de8ade8c553272a624",
+        "game/tests/test_avatar_role_rig.gd": "cc3bf83b595522b79a670204448eda2e59290506f4d7ec8058e22e6301e83329",
+        "game/tests/test_avatar_motion_rig.gd": "2c6306a5a528bc992733760a33ae757e734421b935a29e82827d77e996ea0e6c"
+      }
+    },
+    {
+      "name": "registration",
+      "path": "game/tests/test_source_registration.gd",
+      "exit": 0,
+      "seconds": 0.34,
+      "passed": true,
+      "TEMP": "unset",
+      "source_sha256": {
+        "game/world/avatar_motion_rig.gd": "bb4b221c0b229529f04184b6d4bc9b11a5ff77db83bbb3de8ade8c553272a624",
+        "game/tests/test_avatar_role_rig.gd": "cc3bf83b595522b79a670204448eda2e59290506f4d7ec8058e22e6301e83329",
+        "game/tests/test_avatar_motion_rig.gd": "2c6306a5a528bc992733760a33ae757e734421b935a29e82827d77e996ea0e6c"
+      }
+    }
+  ],
+  "accepted_negative_guards": [
+    {
+      "case": "empty",
+      "exit": 2,
+      "seconds": 1.84,
+      "passed": true,
+      "script_sha256": "cc3bf83b595522b79a670204448eda2e59290506f4d7ec8058e22e6301e83329"
+    },
+    {
+      "case": "relative",
+      "exit": 2,
+      "seconds": 1.64,
+      "passed": true,
+      "script_sha256": "cc3bf83b595522b79a670204448eda2e59290506f4d7ec8058e22e6301e83329"
+    }
+  ],
+  "accepted_downstream": [
+    {
+      "name": "attachments",
+      "path": "game/tests/test_avatar_attachment.gd",
+      "seconds": 63.59,
+      "exit": 0,
+      "passed": true
+    },
+    {
+      "name": "seated",
+      "path": "game/tests/test_avatar_seated.gd",
+      "seconds": 5.93,
+      "exit": 0,
+      "passed": true
+    },
+    {
+      "name": "npc-source",
+      "path": "game/tests/test_npc_authored_source_walking.gd",
+      "seconds": 1.0,
+      "exit": 0,
+      "passed": true
+    }
+  ],
+  "preserved": {
+    "source_median": 0.3740643274853801,
+    "back_authored_ankle_row": 324.719298245614,
+    "head_transition_margin_pixels": 8,
+    "upper_vertex_limit": 128,
+    "per_test_timeout_seconds": 90
+  },
+  "scope": "Linux headless contract regression only: TEMP unset, isolated path with spaces, source-coordinate reference and exact source head boundary. Production world still does not allocate the legacy gait rig. No new native visual/PCK/Windows acceptance for this commit. ART-18 imported PCK evidence applies to its recorded source commit.",
+  "rejected_evidence": "before/reproduced and rejected-* logs intentionally contain errors; none counted as acceptance",
+  "artifacts": {
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-final-role.log": {
+      "sha256": "2536dfc2857115f2f8978cf0be40612f878d4880a70e6de21502d13692dbb2cc",
+      "expected_error": false
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-final-rig.log": {
+      "sha256": "0104be8122203d366bb330b64e7b8953acff4ddf9df51634b7f7cce436658cda",
+      "expected_error": false
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-final-world.log": {
+      "sha256": "3ddc2ddaa9f51874a2ac561ad4ef76887ee67d94e3974ac23ddd301a9cc4c717",
+      "expected_error": false
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-final-registration.log": {
+      "sha256": "7e160e9d25af1a2071a6d1f989f97def49efe9e4ad837046740caaa9ad4bb135",
+      "expected_error": false
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-rejected-empty.log": {
+      "sha256": "c2720aba86af79f864bbff5de18fdda0e8cb483a055bd22cf3016dd28d58542a",
+      "expected_error": true
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-rejected-relative.log": {
+      "sha256": "9127d2f819b72ff746e02092d2c99e73b9993fb46633513e27b7e4ea89d1d18c",
+      "expected_error": true
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-reproduced-windows-temp.log": {
+      "sha256": "150059799831d1bef28de6d65cfe53d171c3e49fbf28d58b1c1734b813dd90e8",
+      "expected_error": true
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-reproduced-shoe-coordinates.log": {
+      "sha256": "77a6ba55ba5d48058ffff9c48f738e711fba9432eb901b4fa1ce5e0e5629c4b6",
+      "expected_error": true
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-rejected-rounded-head-excerpt.log": {
+      "sha256": "f676cad0234d638c9c19a5e1207cf514911873ecbecb82f37206c391a8c3cd3e",
+      "expected_error": true
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-accepted-import-excerpt.log": {
+      "sha256": "08b314ab120ac1a3a9ed3754e9c7cba014859d7aff33025a98a0377672eae27d",
+      "expected_error": false
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-downstream-attachments.log": {
+      "sha256": "6a396fe87a1a1f86583aafc3d46a7b30374b162df95640326d6c9c1c6fb41d33",
+      "expected_error": false
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-downstream-seated.log": {
+      "sha256": "d7e52873b24759b5bf7ff313c19c2d45d0eaebfbec36467b1a8c7612375e0d84",
+      "expected_error": false
+    },
+    "pm/Snapland-main/images/MAIN-2-portable-role-20261017-downstream-npc-source.log": {
+      "sha256": "b29b052f4c5ebe8c82d17dd759d30e500aa219c7143fdb3bb97e6b912a3c9756",
+      "expected_error": false
+    }
+  }
+}

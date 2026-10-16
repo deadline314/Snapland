@@ -45,7 +45,7 @@
 
 ### 存檔、測試與入口安全
 
-所有引擎啟動使用 `tools.godot_entrypoints.run_validated_godot`；每項測試／匯入／原生錄影使用獨立絕對 `SNAPLAND_SAVE_PATH`，不讀寫玩家正式進度。`SceneTree`／`MainLoop` 才用 `--script`；Node／Control 透過實際 `.tscn`。`.review` 快照不能當執行入口。
+角色量測回歸的暫存副本也跟隨隔離存檔目錄，不依賴 Windows TEMP；比較時先回到同一作者／登錄畫布座標，保留原始量測常數。所有引擎啟動使用 `tools.godot_entrypoints.run_validated_godot`；每項測試／匯入／原生錄影使用獨立絕對 `SNAPLAND_SAVE_PATH`，不讀寫玩家正式進度。`SceneTree`／`MainLoop` 才用 `--script`；Node／Control 透過實際 `.tscn`。`.review` 快照不能當執行入口。
 
 只跑受影響局部測試並檢查 exit、ERROR 與 PASS；完整套件交 CI。以下只是可重用範例，**不是這份文件又跑過一次測試**。先在正確 worktree 設定已核對的 `GODOT_BIN`：
 

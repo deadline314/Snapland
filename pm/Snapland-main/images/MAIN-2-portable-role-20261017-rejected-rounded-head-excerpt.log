@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[excerpt]
+              [2] _assert_hero_variants (res://game/tests/test_avatar_role_rig.gd:456)
+              [3] _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)
+SCRIPT ERROR: Assertion failed: counterphase shoulder motion cannot drift either source hip attachment
+          at: _assert_hero_variants (res://game/tests/test_avatar_role_rig.gd:462)
+          GDScript backtrace (most recent call first):
+              [0] _assert_hero_variants (res://game/tests/test_avatar_role_rig.gd:462)
+              [1] _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)
+SCRIPT ERROR: Assertion failed: three Hero wardrobes/species retain source-pivot geometry
+          at: _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)
+          GDScript backtrace (most recent call first):
+              [0] _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)
+SCRIPT ERROR: Assertion failed: hero source-pivot geometry regression completed
+          at: _run_role_contract (res://game/tests/test_avatar_role_rig.gd:92)
+          GDScript backtrace (most recent call first):
+              [0] _run_role_contract (res://game/tests/test_avatar_role_rig.gd:92)
+              [1] _report_hero_geometry (res://game/tests/test_avatar_role_rig.gd:363)
