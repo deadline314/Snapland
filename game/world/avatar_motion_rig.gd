@@ -298,13 +298,25 @@ func _new_sprite() -> Sprite3D:
 func _build_upper_body() -> void:
 	# Fixed source-pixel rows include every waist/hip anchor, so those exact
 	# vertices cannot inherit interpolation from a deforming torso row.
-	var rows: Array[float] = []
-	for pixel in range(0,361,8): rows.append(float(pixel))
+	var rows: Array[float] = [0.0,360.0]
+	var first_transition := 360.0
+	var last_transition := 0.0
 	for record: Dictionary in source_records.values():
-		for pixel in [record.pelvis.y,float(record.hips[0][1]),float(record.hips[1][1])]:
+		var head_end := float(record.rigid_head_end)
+		first_transition = minf(first_transition,head_end)
+		last_transition = maxf(last_transition,maxf(record.pelvis.y,maxf(float(record.hips[0][1]),float(record.hips[1][1]))))
+		for pixel in [head_end,record.pelvis.y,float(record.hips[0][1]),float(record.hips[1][1])]:
 			if not rows.has(pixel): rows.append(pixel)
+	# Outside these transitions the deformation is affine (rigid head or
+	# pinned body). Keep eight-pixel sampling inside, plus exact boundaries.
+	for pixel in range(0,361,8):
+		if pixel>first_transition and pixel<last_transition and not rows.has(float(pixel)): rows.append(float(pixel))
 	rows.sort()
-	_upper_rows = PackedFloat32Array(rows)
+	var next_rows := PackedFloat32Array(rows)
+	if _upper_body_mesh!=null and _upper_rows==next_rows:
+		for record: Dictionary in source_records.values(): _cache_upper_weights(record)
+		return
+	_upper_rows = next_rows
 	_upper_bind.resize(rows.size()*2)
 	var uv := PackedVector2Array()
 	var normals := PackedVector3Array()
@@ -330,23 +342,24 @@ func _build_upper_body() -> void:
 	var mesh := ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays,[],{},Mesh.ARRAY_FLAG_USE_DYNAMIC_UPDATE)
 	mesh.custom_aabb = AABB(Vector3(-1,-1.3,-0.05),Vector3(2,2.6,0.10))
-	_upper_body_mesh = MeshInstance3D.new()
+	if _upper_body_mesh==null:
+		_upper_body_mesh = MeshInstance3D.new()
+		_upper_body_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_upper_body_material = StandardMaterial3D.new()
+		_upper_body_material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+		_upper_body_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		_upper_body_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+		_upper_body_material.alpha_scissor_threshold = 0.4
+		_upper_body_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		_upper_body_mesh.material_override = _upper_body_material
+		_upper_pivot.add_child(_upper_body_mesh)
 	_upper_body_mesh.mesh = mesh
-	_upper_body_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_upper_body_material = StandardMaterial3D.new()
-	_upper_body_material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
-	_upper_body_material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	_upper_body_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
-	_upper_body_material.alpha_scissor_threshold = 0.4
-	_upper_body_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	_upper_body_mesh.material_override = _upper_body_material
-	_upper_pivot.add_child(_upper_body_mesh)
 	_upper.visible = false
 	for record: Dictionary in source_records.values(): _cache_upper_weights(record)
 
 func _cache_upper_weights(record: Dictionary) -> void:
 	var waist := minf(record.pelvis.y,minf(float(record.hips[0][1]),float(record.hips[1][1])))
-	var rigid_head_end: float = ceilf(float(record.rigid_head_end)/8.0)*8.0
+	var rigid_head_end: float = float(record.rigid_head_end)
 	assert(rigid_head_end<=waist-8.0,"measured head must leave a bounded torso transition above the pinned waist")
 	var weights := PackedFloat32Array()
 	weights.resize(_upper_bind.size())
@@ -546,7 +559,6 @@ func rebuild_sources() -> void:
 			record.hip_height = (float(record.source_sole)-record.pelvis.y)*PIXEL_SIZE
 			_measure_boot_roll(record,view)
 			_measure_upper_head(record,view,raw)
-			if not _upper_bind.is_empty(): _cache_upper_weights(record)
 		source_records[view] = record
 		if not record.valid:
 			var message: String = record.reason
@@ -574,6 +586,8 @@ func _calibrate_hero_sources() -> void:
 			if not reason.begins_with(path+":"): reason = path+": "+reason
 		elif not record.has("source_pivot_chain") or not is_finite(float(record.source_pivot_chain)) or float(record.source_pivot_chain)<=0.30 or float(record.source_pivot_chain)>=0.45:
 			reason = path+": source-pivot chain "+str(record.get("source_pivot_chain","missing"))+" is outside the measured supported range (0.30,0.45)"
+		elif not record.has("rigid_head_end") or not is_finite(float(record.rigid_head_end)) or float(record.rigid_head_end)>minf(record.pelvis.y,minf(float(record.hips[0][1]),float(record.hips[1][1])))-8.0:
+			reason = path+": head-to-waist transition must retain eight source pixels; preserving the complete original source set"
 		if not reason.is_empty():
 			complete = false
 			if not diagnostics.has(reason): diagnostics.append(reason)
@@ -606,7 +620,7 @@ func _calibrate_hero_sources() -> void:
 		_contact_valid.fill(false)
 		_boot_anchor_epoch.fill(-1)
 		_last_global_position = global_position
-	if complete and _upper_body_mesh==null: _build_upper_body()
+	if complete: _build_upper_body()
 	for chain: Array in _legs:
 		var skeleton: Skeleton3D = chain[1]
 		skeleton.set_bone_rest(1,Transform3D(Basis.IDENTITY,Vector3(0,-upper_bone_length,0)))

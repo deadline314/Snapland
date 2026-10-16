@@ -20,8 +20,15 @@ func _run_role_contract() -> void:
 	var role_directions := {"left": hero_directions.get("left", {}), "right": hero_directions.get("right", {})}
 	var ticket_direction := _measured_entry(role_directions.left,260,0.3333333333333333)
 	var announcer_direction := _measured_entry(role_directions.right,226,0.26666666666666666)
-	var temp_root := OS.get_environment("TEMP").replace("\\", "/")
-	assert(temp_root.is_absolute_path(), "role metadata fixture is isolated in the OS temporary directory")
+	var save_path := OS.get_environment("SNAPLAND_SAVE_PATH")
+	if not save_path.is_absolute_path():
+		push_error("role metadata fixture requires an isolated absolute SNAPLAND_SAVE_PATH")
+		get_tree().quit(2)
+		return
+	# The runner supplies an owned temporary profile on every platform. TEMP is
+	# Windows-specific and may be absent on Linux CI; never fall back to players.
+	var temp_root := save_path.get_base_dir()
+	assert(DirAccess.make_dir_recursive_absolute(temp_root)==OK, "role metadata fixture uses the isolated test profile directory")
 	_role_metadata_path = temp_root.path_join("snapland-art17-role-rig-%d-%d.json" % [Time.get_ticks_usec(), randi()])
 	var metadata_file := FileAccess.open(_role_metadata_path, FileAccess.WRITE)
 	assert(metadata_file != null)
@@ -412,11 +419,20 @@ func _assert_hero_variants(hero) -> bool:
 							assert(record.upper.get_pixel(x,y)==originals[view].get_pixel(x,y),"Hero upper source guards and all unowned identity pixels remain exact")
 				var source_data := {"source":originals[view],"raw":_source_renderer._walk_pose_image(view,_source_renderer.walk_idle_frame(view))}
 				var palette: Image = _source_renderer._walk_pose_image("right",_source_renderer.walk_idle_frame("right")) if view=="back" else null
-				var legacy_boot: Dictionary = Rig.prepare_source(source_data.source,source_data.raw,anchors[view],"hero-original-boot",palette)
-				assert(record.boot_image.get_data()==legacy_boot.boot_image.get_data(),"Hero complete source boot pixels retain their original extraction and palette")
+				# Independent reference: undo the manifest registration on image
+				# pixels, extract with unchanged authored metadata, then translate
+				# the body boot back. Do not reuse the production metadata adapter.
+				var registration: Vector2i = _source_renderer._stable_walk_pixels.root_offset("hero",view,_source_renderer.walk_idle_frame(view))
+				if palette!=null:
+					var palette_registration: Vector2i = _source_renderer._stable_walk_pixels.root_offset("hero","right",_source_renderer.walk_idle_frame("right"))
+					palette = _translated_image(palette,-palette_registration)
+				var legacy_boot: Dictionary = Rig.prepare_source(_translated_image(source_data.source,-registration),_translated_image(source_data.raw,-registration),anchors[view],"hero-original-boot",palette)
+				assert(legacy_boot.valid,"independent authored-coordinate source extraction remains valid")
+				var expected_boot: Image = legacy_boot.boot_image if record.external_boot else _translated_image(legacy_boot.boot_image,registration)
+				assert(record.boot_image.get_data()==expected_boot.get_data(),"Hero complete source boot pixels retain their original extraction and palette")
 				if view=="back":
 					assert(record.sole==515 and is_equal_approx(record.boot_center,195.0),"back external boot uses sole989/crop474 and pivot619/crop424")
-					assert(absf(record.ankle_height-0.14853801169590643)<0.000001 and absf(record.source_ankle_row-324.719298245614)<0.000001,"back pivot735/crop474 converts through scale0.087719 into the normalized source canvas")
+					assert(absf(record.ankle_height-0.14853801169590643)<0.000001 and absf((record.source_ankle_row-registration.y)-324.719298245614)<0.000001,"back pivot735/crop474 converts through scale0.087719 into the normalized source canvas")
 				var neutral_max := 0.0
 				for leg in range(2): neutral_max = maxf(neutral_max,_knee_bend_degrees(hero,leg))
 				assert(neutral_max<65.0,"Hero neutral joints avoid the rejected deeply crouched stance")
@@ -457,6 +473,12 @@ func _assert_hero_variants(hero) -> bool:
 						assert(actual_source_ankle.distance_to(expected_source_ankle)<0.00001,"toe-off foot orientation must feed the connected anatomical ankle IK, not detach the boot")
 				print("HERO_PIVOT_VARIANT species=%s outfit=%s view=%s camera_up_y=%.4f neutral_max_deg=%.2f walk_max_deg=%.2f" % [profile.species,profile.outfit,view,projection.y.y,neutral_max,maximum_knee])
 	return true
+
+func _translated_image(source: Image, offset: Vector2i) -> Image:
+	var translated := Image.create(source.get_width(),source.get_height(),false,Image.FORMAT_RGBA8)
+	translated.fill(Color.TRANSPARENT)
+	translated.blit_rect(source,Rect2i(Vector2i.ZERO,source.get_size()),offset)
+	return translated
 
 func _assert_leg_outline(actor) -> bool:
 	var outline: StandardMaterial3D = actor._materials[0].next_pass

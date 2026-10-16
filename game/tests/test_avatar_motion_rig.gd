@@ -487,6 +487,12 @@ func _assert_incomplete_hero_recovery() -> void:
 	assert(actor.diagnostics.any(func(message): return str(message).contains("/directions/front") and str(message).contains("source-pivot chain")),"an unreasonable source chain reports its direction and reason without aborting calibration")
 	actor.rebuild_sources()
 	_assert_recovered_hero(actor)
+	actor.source_records.front.rigid_head_end = actor.source_records.front.pelvis.y
+	actor._calibrate_hero_sources()
+	_assert_whole_hero_fallback(actor,false)
+	assert(actor.diagnostics.any(func(message): return str(message).contains("/directions/front") and str(message).contains("head-to-waist transition")),"unsupported head overlap safely rejects the whole set before caching torso weights")
+	actor.rebuild_sources()
+	_assert_recovered_hero(actor)
 	actor.cleanup()
 	actor.queue_free()
 	await process_frame
