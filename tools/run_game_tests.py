@@ -51,6 +51,7 @@ def main() -> int:
             ("island hair lifecycle tests", common + ["--script", "res://game/tests/test_island_hair_lifecycle.gd"]),
             ("island alternate hair source tests", common + ["--script", "res://game/tests/test_island_hair_sources.gd"]),
             ("seated avatar tests", common + ["--script", "res://game/tests/test_avatar_seated.gd"]),
+            ("source registration coordinate tests", common + ["--script", "res://game/tests/test_source_registration.gd"]),
             ("avatar motion rig runtime tests", common + ["--script", "res://game/tests/test_avatar_motion_rig.gd"]),
             ("avatar role rig tests", common + ["res://game/tests/test_avatar_role_rig.tscn"]),
             ("avatar motion world integration tests", common + ["--script", "res://game/tests/test_avatar_motion_world.gd"]),

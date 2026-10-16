@@ -517,8 +517,13 @@ func rebuild_sources() -> void:
 		var raw: Image = source_data.raw
 		var entry: Dictionary = views.get(view,{})
 		var palette_source: Image
+		var palette_offset := Vector2i.ZERO
 		if entry.has("boot_palette_reference"):
-			palette_source = _source_for(entry.boot_palette_reference.direction).raw
+			var palette_data := _source_for(entry.boot_palette_reference.direction)
+			palette_source = palette_data.raw
+			palette_offset = palette_data.get("registration_offset",Vector2i.ZERO)
+		if _renderer!=null and metadata_path==METADATA_PATH:
+			entry = registered_hero_metadata(entry,source_data.get("registration_offset",Vector2i.ZERO),palette_offset)
 		var record := prepare_source(source,raw,entry,"%s/roles/%s/directions/%s" % [metadata_path,role,view],palette_source)
 		if bool(record.get("measured_source_geometry",false)):
 			record.hip_width_scale = 1.0
@@ -612,7 +617,36 @@ func _source_for(view: String) -> Dictionary:
 	if source_provider.is_valid(): return source_provider.call(role,view,appearance,equipment)
 	if role!="hero": return {}
 	var frame: int = _renderer.walk_idle_frame(view)
-	return {"source":_renderer.texture(appearance,equipment,view,frame,"walk").get_image(),"raw":_renderer._walk_pose_image(view,frame)}
+	return {"source":_renderer.texture(appearance,equipment,view,frame,"walk").get_image(),"raw":_renderer._walk_pose_image(view,frame),"registration_offset":_renderer._stable_walk_pixels.root_offset("hero",view,frame)}
+
+static func registered_hero_metadata(authored: Dictionary, offset: Vector2i, palette_offset: Vector2i) -> Dictionary:
+	# The default Hero metadata was authored against the unregistered canvas.
+	# Copy on every rebuild: translating cached metadata would accumulate drift.
+	var registered := authored.duplicate(true)
+	for key in ["pelvis", "boot", "skin_rect"]:
+		if registered.has(key):
+			registered[key][0] += offset.x
+			registered[key][1] += offset.y
+	for key in ["hip_points", "lower", "limb_envelopes", "garment_guards", "boot_exclusions"]:
+		for coordinates: Array in registered.get(key,[]):
+			coordinates[0] += offset.x
+			coordinates[1] += offset.y
+	for key in ["hand_guards", "limb_corridors"]:
+		for polygon: Array in registered.get(key,[]):
+			for point: Array in polygon:
+				point[0] += offset.x
+				point[1] += offset.y
+	for span: Array in registered.get("opening_spans",[]):
+		span[0] += offset.x
+		span[1] += offset.x
+		span[2] += offset.y
+	if registered.has("boot_pivot_x"): registered.boot_pivot_x += offset.x
+	if registered.has("limb_garment_max_y"): registered.limb_garment_max_y += offset.y
+	if registered.has("boot_palette_reference"):
+		registered.boot_palette_reference.rect[0] += palette_offset.x
+		registered.boot_palette_reference.rect[1] += palette_offset.y
+	# boot_asset_* describe a separate atlas and must keep its own coordinates.
+	return registered
 
 static func prepare_source(source: Image, raw: Image, metadata: Dictionary, path: String, palette_source: Image = null) -> Dictionary:
 	var fallback := {"valid":false,"reason":path+": metadata missing","source":source,"upper":source,"texture":ImageTexture.create_from_image(source),"sole":346,"pelvis":Vector2(140,270)}
