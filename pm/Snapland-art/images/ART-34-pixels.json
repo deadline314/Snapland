@@ -1,0 +1,884 @@
+{
+  "cases": [
+    {
+      "direction": "front",
+      "hat": "hat-none",
+      "moving_pixels": 1062,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-straw",
+      "moving_pixels": 679,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-sailor",
+      "moving_pixels": 679,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-flower",
+      "moving_pixels": 896,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-none",
+      "moving_pixels": 791,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-straw",
+      "moving_pixels": 226,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-sailor",
+      "moving_pixels": 222,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-flower",
+      "moving_pixels": 496,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-none",
+      "moving_pixels": 818,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-straw",
+      "moving_pixels": 248,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-sailor",
+      "moving_pixels": 419,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-flower",
+      "moving_pixels": 540,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-none",
+      "moving_pixels": 677,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-straw",
+      "moving_pixels": 375,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-sailor",
+      "moving_pixels": 450,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-flower",
+      "moving_pixels": 546,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-none",
+      "moving_pixels": 587,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-straw",
+      "moving_pixels": 50,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-sailor",
+      "moving_pixels": 50,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-flower",
+      "moving_pixels": 235,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-none",
+      "moving_pixels": 631,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-straw",
+      "moving_pixels": 342,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-sailor",
+      "moving_pixels": 342,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-flower",
+      "moving_pixels": 556,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-none",
+      "moving_pixels": 636,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-straw",
+      "moving_pixels": 316,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-sailor",
+      "moving_pixels": 469,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-flower",
+      "moving_pixels": 579,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-none",
+      "moving_pixels": 867,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-straw",
+      "moving_pixels": 346,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-sailor",
+      "moving_pixels": 346,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-flower",
+      "moving_pixels": 539,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "windswept"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-none",
+      "moving_pixels": 536,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-straw",
+      "moving_pixels": 147,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-sailor",
+      "moving_pixels": 147,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-flower",
+      "moving_pixels": 147,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-none",
+      "moving_pixels": 444,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-straw",
+      "moving_pixels": 76,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-sailor",
+      "moving_pixels": 76,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-flower",
+      "moving_pixels": 76,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-none",
+      "moving_pixels": 325,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-straw",
+      "moving_pixels": 212,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-sailor",
+      "moving_pixels": 212,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-flower",
+      "moving_pixels": 212,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-none",
+      "moving_pixels": 128,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-straw",
+      "moving_pixels": 3,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-sailor",
+      "moving_pixels": 3,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-flower",
+      "moving_pixels": 3,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-none",
+      "moving_pixels": 24,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-straw",
+      "moving_pixels": 0,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-sailor",
+      "moving_pixels": 0,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-flower",
+      "moving_pixels": 0,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-none",
+      "moving_pixels": 235,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-straw",
+      "moving_pixels": 65,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-sailor",
+      "moving_pixels": 65,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-flower",
+      "moving_pixels": 65,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-none",
+      "moving_pixels": 360,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-straw",
+      "moving_pixels": 227,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-sailor",
+      "moving_pixels": 227,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-flower",
+      "moving_pixels": 227,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-none",
+      "moving_pixels": 338,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-straw",
+      "moving_pixels": 24,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-sailor",
+      "moving_pixels": 24,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-flower",
+      "moving_pixels": 24,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "bob"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-none",
+      "moving_pixels": 366,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-straw",
+      "moving_pixels": 139,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-sailor",
+      "moving_pixels": 139,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front",
+      "hat": "hat-flower",
+      "moving_pixels": 139,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-none",
+      "moving_pixels": 413,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-straw",
+      "moving_pixels": 222,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-sailor",
+      "moving_pixels": 222,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front_right",
+      "hat": "hat-flower",
+      "moving_pixels": 222,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-none",
+      "moving_pixels": 145,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-straw",
+      "moving_pixels": 79,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-sailor",
+      "moving_pixels": 79,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "right",
+      "hat": "hat-flower",
+      "moving_pixels": 79,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-none",
+      "moving_pixels": 319,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-straw",
+      "moving_pixels": 171,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-sailor",
+      "moving_pixels": 171,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back_right",
+      "hat": "hat-flower",
+      "moving_pixels": 171,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-none",
+      "moving_pixels": 194,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-straw",
+      "moving_pixels": 92,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-sailor",
+      "moving_pixels": 92,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back",
+      "hat": "hat-flower",
+      "moving_pixels": 92,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-none",
+      "moving_pixels": 95,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-straw",
+      "moving_pixels": 30,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-sailor",
+      "moving_pixels": 30,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "back_left",
+      "hat": "hat-flower",
+      "moving_pixels": 30,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-none",
+      "moving_pixels": 465,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-straw",
+      "moving_pixels": 268,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-sailor",
+      "moving_pixels": 268,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "left",
+      "hat": "hat-flower",
+      "moving_pixels": 268,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-none",
+      "moving_pixels": 238,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-straw",
+      "moving_pixels": 72,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-sailor",
+      "moving_pixels": 72,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    },
+    {
+      "direction": "front_left",
+      "hat": "hat-flower",
+      "moving_pixels": 72,
+      "protected_error": 0,
+      "rest_error": 0,
+      "settled_error": 0,
+      "style": "curly"
+    }
+  ],
+  "engine": {
+    "build": "official",
+    "hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "hex": 263936,
+    "major": 4,
+    "minor": 7,
+    "patch": 0,
+    "status": "stable",
+    "string": "4.7-stable (official)",
+    "timestamp": 0
+  },
+  "failures": [],
+  "negative_control": "one-pixel static-body shift detected",
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "result": "PASS_NATIVE_ISLAND_HAIR_PIXELS",
+  "scope": "Native 2D viewport pixels, 3 styles x 8 directions x all 4 hat states; not a game playthrough."
+}

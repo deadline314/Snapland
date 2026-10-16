@@ -40,7 +40,7 @@
 
 - Blocks：ART-17
 - Blocked by：無
-- Related：MAIN-8、ART-7、ART-8、ART-14、ART-15、ART-16
+- Related：MAIN-8、ART-7、ART-8、ART-14、ART-15、ART-16、ART-34
 
 ---
 

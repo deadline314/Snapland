@@ -1,0 +1,22 @@
+{
+  "code_commit": "82952d5da787aab816e1a50b586ad91631e9d755",
+  "scenario": "Actual dependency manifests converted to Windows CRLF, clean imported, exported using existing Windows Desktop PCK preset, rendered from an empty probe project",
+  "pack_sha256": "6035d61b3ff8c59d057b15bec97ea4c173f64d4324eed11deb177c6e7c154ea9",
+  "manifests": [
+    {
+      "file": "assets/characters/diagonal-parts.json",
+      "crlf_count": 179,
+      "raw_sha256": "318697bc066b128b436bd387a9c64d873523eccb2c9f13d208f13f18749264ca",
+      "canonical_lf_sha256": "af0c3be9639bca4e9253784ea8d2c57698683071f0c3b56a04432b6cd59d7d74"
+    },
+    {
+      "file": "assets/characters/avatar-head-material-owners-v1.json",
+      "crlf_count": 162,
+      "raw_sha256": "4ab441c462e4730401a67c957b4c228c6d48dd875b0f0ba1a91cff7400f706ae",
+      "canonical_lf_sha256": "c82a2f1aa9d6de5c1060a6a69e1d9aa35000ccd7905022d48f58cebc0f6e4c8c"
+    }
+  ],
+  "runtime_sha256": "87eccd4690dd0d8ef62dd1cdb06bb28d4afd3628ee70f14a65ffda9f9697d2d3",
+  "audit": "ART-34-packed-crlf-pixels.json",
+  "limits": "Linux Godot 4.7 native graphics and PCK data; not a Windows EXE test"
+}

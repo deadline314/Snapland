@@ -1,0 +1,12 @@
+test_alternate_dependencies_match_source_files_and_visible_pixels (tests.test_island_hair_authoring.AlternateHairAuthoringTests.test_alternate_dependencies_match_source_files_and_visible_pixels) ... ok
+test_each_style_rebuilds_with_its_own_owned_disjoint_overlapping_tufts (tests.test_island_hair_authoring.AlternateHairAuthoringTests.test_each_style_rebuilds_with_its_own_owned_disjoint_overlapping_tufts) ... ok
+test_windows_checkout_line_endings_preserve_the_authored_artifact (tests.test_island_hair_authoring.AlternateHairAuthoringTests.test_windows_checkout_line_endings_preserve_the_authored_artifact) ... ok
+test_cutouts_never_contain_face_clothes_or_other_unowned_pixels (tests.test_island_hair_authoring.IslandHairAuthoringTests.test_cutouts_never_contain_face_clothes_or_other_unowned_pixels) ... ok
+test_inner_hair_has_real_overlap_and_only_outer_silhouette_is_cut (tests.test_island_hair_authoring.IslandHairAuthoringTests.test_inner_hair_has_real_overlap_and_only_outer_silhouette_is_cut) ... ok
+test_rebuild_preserves_all_author_data_and_source_fingerprints (tests.test_island_hair_authoring.IslandHairAuthoringTests.test_rebuild_preserves_all_author_data_and_source_fingerprints) ... ok
+test_same_cutout_pixels_exist_in_every_authored_walk_frame (tests.test_island_hair_authoring.IslandHairAuthoringTests.test_same_cutout_pixels_exist_in_every_authored_walk_frame) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 5.201s
+
+OK

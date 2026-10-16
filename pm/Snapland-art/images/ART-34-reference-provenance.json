@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-17 Asia/Taipei",
+  "type": "Original embedded static illustrations from official documentation, not full webpage screenshots",
+  "use": "Research comparison only. Not approved Snapland art, not shipped game assets, no reference-video playback claim.",
+  "sources": [
+    {
+      "file": "ART-34-reference-unity-misaligned.png",
+      "source_page": "https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/CharacterParts.html",
+      "image_url": "https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/images/Pivot_Scene_GestureOffset.png",
+      "sha256": "eca8e9e7fc8b25631babbb78228b2bbb138d3389df364229ac4c093fb2b825bd",
+      "observation": "未綁同一骨架的替換手掌因 pivot 不相容而分離。",
+      "reviewed": "static original image"
+    },
+    {
+      "file": "ART-34-reference-unity-aligned.png",
+      "source_page": "https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/CharacterParts.html",
+      "image_url": "https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/images/Pivot_Scene_Fixed.png",
+      "sha256": "534e06296460c10b813f51cded69a2372e1977acef65b3cf754f5e3be61d08a7",
+      "observation": "把替換圖的相對 pivot 對齊，接回手腕。",
+      "reviewed": "static original image"
+    },
+    {
+      "file": "ART-34-reference-godot-pivot.png",
+      "source_page": "https://docs.godotengine.org/en/stable/tutorials/animation/cutout_animation.html",
+      "image_url": "https://docs.godotengine.org/en/stable/_images/tuto_cutout5.png",
+      "sha256": "4909c1712ff76b2243dc45d5bdc475a0dcdea139e217d8bb75a72669b8b8ff03",
+      "observation": "Sprite Offset 屬性；用來核對固定 pivot 的製作位置。",
+      "reviewed": "static original image"
+    },
+    {
+      "file": "ART-34-reference-godot-hierarchy.png",
+      "source_page": "https://docs.godotengine.org/en/stable/tutorials/animation/cutout_animation.html",
+      "image_url": "https://docs.godotengine.org/en/stable/_images/tuto_cutout16.png",
+      "sha256": "022f6af61c2d10d27734f7eaee446de2ad41127b1dc55b08ac449989fb22e55a",
+      "observation": "部件隸屬骨架的階層及端點；借用方法，不更換 Snapland 畫風。",
+      "reviewed": "static original image"
+    },
+    {
+      "file": "ART-34-reference-aseprite-slice.png",
+      "source_page": "https://www.aseprite.org/docs/slices/",
+      "image_url": "https://www.aseprite.org/docs/slices/properties.png",
+      "sha256": "d97f44c5d62c9d039d35d796c28677e9ee7f1602bf91308cd44a00234abb4766",
+      "observation": "Slice 的畫布範圍、中心及 pivot 設定，應在製作期明確記錄。",
+      "reviewed": "static original image"
+    }
+  ],
+  "unavailable": "Spine official HTML/image fetch returned HTTP 503 or web open failure; no Spine image copied or claimed viewed this time."
+}

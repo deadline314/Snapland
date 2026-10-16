@@ -1,5 +1,18 @@
 # 下一個 Session：接續雕琢 Snapland 島上體驗
 
+## 2026-10-17 最新接續狀態（優先於下方舊快照）
+
+使用者最新指定每次 push 前 fetch origin main，必要時 rebase／解衝突／重跑受影響測試，再用 `git push origin HEAD:main` 快轉整合。只因 main 前進而非快轉拒絕可重新同步後正常推；403／權限拒絕不重試。每票之後核對本機 main 與 origin/main；只清理本 Session 已合併且不用的工作區與分支。作者與提交者每次都核對 Stanley Li <stanley890314@gmail.com>。
+
+- 使用者已明確要求自主接續未完成票，不需要一般設計問題的詢問；每批動手前研究成熟方法，品質不足可重做。
+- ART-32 已接回固定頭頸的待機／眨眼，ART-33 已接入微風短髮，ART-34 現已完成島上人類短髮／捲髮八方向動態。下方舊段落寫「髮尾骨架仍僅獨立樣本」已被這三票的新交付取代。
+- ART-34 來源分支為 `codex/hairstyle-motion`；本次已採使用者指定流程快轉整合，接續以 fetch 後的 main 核對 `project.godot` 與本票提交。主要實作 `50bfcbd2e8c43ba12fe5aa5f6e7bd75f82fbe8fb`，最新程式修正 `82952d5da787aab816e1a50b586ad91631e9d755`；[草稿 PR #2](https://github.com/deadline314/Snapland/pull/2) 疊在 ART-33 的 PR #1 上。雲端工作區 `/workspace/work/Snapland-character`，開始時仍要 fetch 與核對 dirty files；不要覆寫其他工作區。
+- ART-34 留有 96 組原生像素比較、隔離 PCK 額外 200 格渲染、200 格定位、432 格既有待機、兩款兩速度共 56 組島上移動與四趟連續反向／即時換髮的真實證據。影片以完整人物抽幀審閱，不宣稱每一編碼格連續播放或真人試玩。
+- 使用 Godot 4.7／llvmpipe，島上錄影為降低環境成本的明示 fixture；原 Windows 4.7.2 EXE、完整光影與即時效能未重驗。不要拿該雲端錄影當完整光影驗收。
+- 仍有 80 張未結案。角色優先先補 ART-18 主角不同輪廓衣物與完整動作，再擴 ART-17 NPC；票票／小角的正式走路來源仍缺，不可拿拒收候選或拆腿假步態代用。SG-1 缺少設計目錄仍阻擋全域設計 CI，不改選擇器或略過失敗。
+- 詳細範圍與證據讀 ART-34 及 `pm/user_guide.md` 最新段落；下方 Windows 路徑與早期 HEAD 只作歷史背景。
+
+
 ## 最新優先指示：保留 2D，3D 候選已否定（2026-10-16）
 
 使用者明確否定新製作的 3D 主角與外觀，已要求停止。要保留原本 2D 像素畫風，製作完整光頭底圖，再生成同風格的八方向頭髮與配件，綁在製作時確認的正確位置，共享動作／方向／影格與明確前後遮擋。先以主角完成換髮、帽、不同輪廓衣服、相機及起停轉身的正常／四分之一慢放驗收，再擴其他人物。詳細見[最新角色管線決策](../design/runtime/character-production-pipeline-v2.md)；[ART-29](Snapland-art/[ART-29]製作主角完整換裝動作樣本.md) 已交付獨立 2D 主角樣本，局部驗證與正常／慢放已檢視，正式島嶼尚未接入。未提交的 3D 程式、素材、獨立樣本與錄影都是拒收候選，不可因測試數字通過而採用；也沒有接入正式島嶼。舊 3D 計畫已停止，不要繼續補它或聲稱使用者批准改畫風。
@@ -16,7 +29,7 @@
 
 - Repo：`git@github.com:deadline314/Snapland.git`。本機原始 checkout 是 `C:/Github/Snapland`，但不要切換或修改其他 Session 的 checkout／stash。
 - 可執行遊戲在既有獨立工作區 **`C:/Users/stanl/.codex/worktrees/island-experience/Snapland`**，分支 **`feature/island-experience`**。最後已核對的遊戲交付 HEAD 是 **`2581313e00744f55cd99ab939e87bde681823bcf`**；之後可能有本次文件提交，開始時以 fetch 和實際 HEAD 核對。
-- **main 截至本次整理只有設計／票據等內容，沒有 `project.godot`；不能從 main 另建空白遊戲或把沒有引擎專案當成遊戲程式遺失。** 文件已另外發布至 main，不代表整個遊戲 feature 已合入 main。
+- **下方是 2026-10-16 舊快照；ART-34 後須先 fetch main 並核對 `project.godot`，不能再直接套用 main 沒有遊戲的舊結論。** 文件已另外發布至 main，不代表整個遊戲 feature 已合入 main。
 - 優先沿用上述合適工作區；先看 `git worktree list`、目前分支、dirty files 和遠端，不覆寫已有成果。現有工作區有大量先前未追蹤媒體、匯入變動與未完成票；禁止 `git add .`、整棵 clean／reset／stash。
 - 若該工作區仍由另一個活動 Session 使用，從 `origin/feature/island-experience` 建自己的獨立工作區，不能從 main 重建或擅自攜走未提交變更。新工作區需真正驗證依賴、匯入和原生畫面，不能假定原機器上的未追蹤檔也已在遠端。
 - Windows／PowerShell；先前實測 Godot 4.7.2 Forward+，路徑 `C:/Tools/Godot/Godot_v4.7.2-stable_win64_console.exe`，GPU 為 Arc B580。當次自己核對引擎版本與資源。若是雲端，先確認 Snapland repo、fetch 成功、Godot 可跑、實際記憶體及磁碟，任一不成立就回報，不捏造原生驗收。

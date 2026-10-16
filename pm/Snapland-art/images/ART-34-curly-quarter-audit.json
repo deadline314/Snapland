@@ -1,0 +1,134 @@
+{
+  "checks": {
+    "all_hat_states": true,
+    "camera_keeps_actor_pixels": true,
+    "eight_headings": true,
+    "live_style_swap": true,
+    "original_shader_and_grounding": true,
+    "pause_freezes_bones": true,
+    "photo_interruption": true,
+    "photo_original": true,
+    "real_bones": true,
+    "reduced_motion_original": true,
+    "reduced_motion_resume": true,
+    "settled": true,
+    "sprite_visible": true
+  },
+  "engine": {
+    "build": "official",
+    "hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "hex": 263936,
+    "major": 4,
+    "minor": 7,
+    "patch": 0,
+    "status": "stable",
+    "string": "4.7-stable (official)",
+    "timestamp": 0
+  },
+  "movement_cases": [
+    {
+      "distance": 0.684813141822815,
+      "hat": "hat-none",
+      "heading": "front",
+      "max_angle": 0.0835214406251907,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684810996055603,
+      "hat": "hat-none",
+      "heading": "front_right",
+      "max_angle": 0.0811812579631805,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684811890125275,
+      "hat": "hat-none",
+      "heading": "right",
+      "max_angle": 0.104719758033752,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684813320636749,
+      "hat": "hat-none",
+      "heading": "back_right",
+      "max_angle": 0.0811815336346626,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684823870658875,
+      "hat": "hat-none",
+      "heading": "back",
+      "max_angle": 0.0815169438719749,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684811532497406,
+      "hat": "hat-none",
+      "heading": "back_left",
+      "max_angle": 0.0811809450387955,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684814989566803,
+      "hat": "hat-none",
+      "heading": "left",
+      "max_angle": 0.104719758033752,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684813380241394,
+      "hat": "hat-none",
+      "heading": "front_left",
+      "max_angle": 0.0811810120940208,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684811890125275,
+      "hat": "hat-straw",
+      "heading": "right",
+      "max_angle": 0.0523598790168762,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684811890125275,
+      "hat": "hat-sailor",
+      "heading": "right",
+      "max_angle": 0.0523598790168762,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684811890125275,
+      "hat": "hat-flower",
+      "heading": "right",
+      "max_angle": 0.0523598790168762,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684811890125275,
+      "hat": "hat-none",
+      "heading": "right",
+      "max_angle": 0.104719758033752,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684814989566803,
+      "hat": "hat-none",
+      "heading": "left",
+      "max_angle": 0.104719758033752,
+      "style": "curly"
+    },
+    {
+      "distance": 0.684811890125275,
+      "hat": "hat-none",
+      "heading": "right",
+      "max_angle": 0.104719758033752,
+      "style": "curly"
+    }
+  ],
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "result": "PASS_NATIVE_ISLAND_HAIR_BINDING",
+  "scope": "Actual island native key events; relocation, camera and appearance are explicit fixtures. Software mode reduces environment rendering; no human playtest, full lighting-quality or realtime performance claim.",
+  "software_environment_fixture": true,
+  "style": "curly",
+  "time_scale": 0.25
+}

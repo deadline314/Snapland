@@ -4,7 +4,7 @@
 
 ## 遊玩
 
-Windows 預覽包在本次交付的 `build/`，雙擊 `Play-Snapland.cmd` 可啟動並把預覽存檔獨立保存。開發環境安裝官方 Godot 4.7.2 後執行 `launch-game.cmd`，或用 Godot 匯入 `project.godot`。WASD／方向鍵移動，E／Space 互動，Esc 返回；滑鼠與鍵盤可操作選單。碼頭開場可跳過與重播，沿棧橋進中央廣場，再往上走進迎賓大道。
+先前交付的 Windows 預覽包不隨 repo 提交，本批未重做 Windows EXE。已有預覽包可用其中的 `Play-Snapland.cmd` 啟動；本批三款髮型動態以最新原始碼及資源包驗證為準。開發環境安裝官方 Godot 4.7.2 後執行 `launch-game.cmd`，或用 Godot 匯入 `project.godot`。WASD／方向鍵移動，E／Space 互動，Esc 返回；滑鼠與鍵盤可操作選單。碼頭開場可跳過與重播，沿棧橋進中央廣場，再往上走進迎賓大道。
 
 本版包含十二款獨立小遊戲、十八個普通收藏來源、十二小惡魔收藏、遊戲內成就、任務、設定與存檔。其他九區有路口及施工提示。船上序章、其他園區內部、異空間完整內容與多人仍屬後續範圍。Steam adapter 保留接口，目前沒有連線到正式 Steam 成就。
 
@@ -26,4 +26,6 @@ python tools/verify_design.py --scope games
 python tools/verify_design.py --scope story
 python tools/verify_design.py --scope items
 
-完整可用驗證由 GitHub Actions 在變更及每小時排程執行，包含 Godot runtime；排程只在 workflow 合併預設分支後生效，並可能受 GitHub 排程延遲影響。設計資料測試與原生遊戲驗證分開報告。既有設計缺 `design/02-minigames/catalog.json`（SG-1），因此 games／links／all 的設計 CI 目前仍會失敗，不代表本版十二款 runtime 缺檔。
+完整可用驗證由 GitHub Actions 在變更及每小時排程執行，包含 Godot runtime；排程只在 workflow 合併預設分支後生效，並可能受 GitHub 排程延遲影響。設計資料測試與原生遊戲驗證分開報告。既有設計缺 `design/02-minigames/catalog.json`（SG-1），因此 games／all 的設計 CI 目前仍會失敗，不代表本版十二款 runtime 缺檔。
+
+角色最新交付見 [ART-34](pm/Snapland-art/[ART-34]擴充島上其他髮型動態.md)：三款人類髮型、八方向及四種帽狀態的局部驗收完成，正常／慢速影片、參考原圖及隔離資源包證據附票。雲端錄影降低環境渲染成本，不代表完整光影或原 GPU 效能驗收。

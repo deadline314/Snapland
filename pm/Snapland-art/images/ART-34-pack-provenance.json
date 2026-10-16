@@ -1,0 +1,24 @@
+{
+  "code_commit": "50bfcbd2e8c43ba12fe5aa5f6e7bd75f82fbe8fb",
+  "preset": "Windows Desktop --export-pack",
+  "type": "PCK resource pack, not Windows EXE",
+  "pack_bytes": 144550940,
+  "pack_sha256": "1dd76da5fd02a05d6b4bce02431c83f59a1c25e3c0c6b6c5e2aa0ab634b07a1e",
+  "runtime_source_sha256": {
+    "game/world/avatar_hair_rig.gd": "ba9aa15b59cbe18cd27715d3b9653f13a4672bf7bfef4c8fd5a66360ad5fb6ad",
+    "game/world/avatar_renderer.gd": "84451ae05224418b08db3e6bdb8461794a10ef3fb314c411e78965b5e13fa32b",
+    "game/world/hero_2d_hair_spring.gd": "98ee55f637c0854262a1243f63688626994912c6e84f37e74d05c0c11c3c6205",
+    "assets/characters/island-hair-windswept-v1.json": "02adcc8a7902fcb00327846e25d30ad70c1c52e3dc4b63c7db5de9052e4c4f9e",
+    "assets/characters/island-hair-bob-v1.json": "fe227eb72d728d897f52712ede5816757fea14fc25c6eaac6c7dfbb608a09262",
+    "assets/characters/island-hair-curly-v1.json": "92ccf6079eb8987aeebd8620c5bb9bbbf7b0b28dbcca5b7dd9209daf0a53b9d3",
+    "assets/characters/island-hair-alternate-owners-v1.json": "d9b329fd857a7157c30109a7f2309098a2bbff7801186b132e5ec554b80cd245"
+  },
+  "resource_pack_isolation": "Empty probe project with no raw source assets; FileAccess raw PNG missing and ResourceLoader imported texture present asserted",
+  "engine": "Godot 4.7 stable official 5b4e0cb0f Linux",
+  "graphics": "Vulkan Forward+ / llvmpipe software",
+  "limits": [
+    "No Windows 4.7.2 EXE or original GPU performance validation",
+    "Native island videos reduce environment raster cost; full lighting not accepted",
+    "Source videos were sampled as full-body contact sheets; no continuous playback or human playtest claim"
+  ]
+}
