@@ -1,0 +1,142 @@
+{
+	"expected_existing": 0.37406432748538,
+	"fixed_chain": 0.37406432748538,
+	"records": {
+		"back": {
+			"chain": 0.36812865497076,
+			"delta": "(0, -2)",
+			"hips": [
+				[
+					126.0,
+					265.0
+				],
+				[
+					155.0,
+					270.0
+				]
+			],
+			"source_ankle": 322.719298245614,
+			"source_sole": 345,
+			"valid": true
+		},
+		"back_left": {
+			"chain": 0.38,
+			"delta": "(0, 0)",
+			"hips": [
+				[
+					173.0,
+					270.0
+				],
+				[
+					118.0,
+					270.0
+				]
+			],
+			"source_ankle": 327.0,
+			"source_sole": 347,
+			"valid": true
+		},
+		"back_right": {
+			"chain": 0.393333333333333,
+			"delta": "(0, 0)",
+			"hips": [
+				[
+					110.0,
+					269.0
+				],
+				[
+					166.0,
+					267.0
+				]
+			],
+			"source_ankle": 327.0,
+			"source_sole": 347,
+			"valid": true
+		},
+		"front": {
+			"chain": 0.336666666666667,
+			"delta": "(0, -3)",
+			"hips": [
+				[
+					126.0,
+					270.0
+				],
+				[
+					157.0,
+					275.0
+				]
+			],
+			"source_ankle": 323.0,
+			"source_sole": 343,
+			"valid": true
+		},
+		"front_left": {
+			"chain": 0.383333333333333,
+			"delta": "(0, 0)",
+			"hips": [
+				[
+					130.0,
+					268.0
+				],
+				[
+					170.0,
+					271.0
+				]
+			],
+			"source_ankle": 327.0,
+			"source_sole": 347,
+			"valid": true
+		},
+		"front_right": {
+			"chain": 0.4,
+			"delta": "(0, 0)",
+			"hips": [
+				[
+					157.0,
+					264.0
+				],
+				[
+					118.0,
+					270.0
+				]
+			],
+			"source_ankle": 327.0,
+			"source_sole": 347,
+			"valid": true
+		},
+		"left": {
+			"chain": 0.366666666666667,
+			"delta": "(0, 0)",
+			"hips": [
+				[
+					128.0,
+					272.0
+				],
+				[
+					170.0,
+					272.0
+				]
+			],
+			"source_ankle": 327.0,
+			"source_sole": 347,
+			"valid": true
+		},
+		"right": {
+			"chain": 0.366666666666667,
+			"delta": "(0, 0)",
+			"hips": [
+				[
+					124.0,
+					271.0
+				],
+				[
+					172.0,
+					273.0
+				]
+			],
+			"source_ankle": 327.0,
+			"source_sole": 347,
+			"valid": true
+		}
+	}
+}

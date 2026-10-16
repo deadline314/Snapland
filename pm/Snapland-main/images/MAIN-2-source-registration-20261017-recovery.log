@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: real Hero ready/source fallback and rebuild recovery
+WARNING: res://assets/characters/motion-rig-anchors.json/roles/hero/directions/front: fixture: measured front source unavailable
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] rebuild_sources (res://game/world/avatar_motion_rig.gd:556)
+         [1] _ready (res://game/world/avatar_motion_rig.gd:266)
+         [2] _assert_incomplete_hero_recovery (res://game/tests/test_avatar_motion_rig.gd:468)
+         [3] _run (res://game/tests/test_avatar_motion_rig.gd:21)

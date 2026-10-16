@@ -1,0 +1,123 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: atomic outfit coverage (314 checks)
+WARNING: Character animation: traveller/wave/left/frame 1: outfit 'coat' is missing this pose; preserving the whole original outfit
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:389)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [4] texture (res://game/world/character_animation_library.gd:179)
+         [5] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [6] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 1: variant 'coat' source region is invalid or outside source; using base frame
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:411)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [4] texture (res://game/world/character_animation_library.gd:179)
+         [5] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [6] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 1: variant 'coat' anchor 'head' is outside its source frame; using base frame
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:420)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [4] texture (res://game/world/character_animation_library.gd:179)
+         [5] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [6] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 1: cannot load source '/workspace/work/Snapland-character/work/main2/checks/outfit-atomic/missing.png'
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _image (res://game/world/character_animation_library.gd:483)
+         [2] _validated_outfit_variant (res://game/world/character_animation_library.gd:409)
+         [3] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [4] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [5] texture (res://game/world/character_animation_library.gd:179)
+         [6] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [7] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 1: variant 'coat' source region is invalid or outside source; using base frame
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:411)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [4] texture (res://game/world/character_animation_library.gd:179)
+         [5] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [6] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 1: outfit 'coat' variants must be an object; preserving the whole original outfit
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:386)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [4] texture (res://game/world/character_animation_library.gd:179)
+         [5] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [6] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 1: variant 'coat' anchor 'head' must be a numeric [x,y] pair; using base frame
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:416)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [4] texture (res://game/world/character_animation_library.gd:179)
+         [5] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [6] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 1: outfit 'coat' has invalid shared source_scale; preserving the whole original outfit
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:424)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [4] texture (res://game/world/character_animation_library.gd:179)
+         [5] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [6] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 1: source_scale must be a finite number between 0.01 and 4.0
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] texture (res://game/world/character_animation_library.gd:196)
+         [2] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [3] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/wave/left/frame 0: outfit 'coat' requires 2.0 poses, found 0; preserving the whole original outfit
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] outfit_variant_ready (res://game/world/character_animation_library.gd:362)
+         [2] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [3] texture (res://game/world/character_animation_library.gd:179)
+         [4] _run (res://game/tests/test_outfit_atomic_coverage.gd:49)
+WARNING: Character animation: traveller/wave/left/frame 0: outfit 'coat' requires 2.0 poses, found 0; preserving the whole original outfit
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] outfit_variant_ready (res://game/world/character_animation_library.gd:362)
+         [2] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [3] texture (res://game/world/character_animation_library.gd:179)
+         [4] _run (res://game/tests/test_outfit_atomic_coverage.gd:49)
+WARNING: Character animation: traveller/wave/left/frame 1: variant 'coat' requires explicit head and feet anchors; preserving the whole original outfit
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] _validated_outfit_variant (res://game/world/character_animation_library.gd:403)
+         [2] outfit_variant_ready (res://game/world/character_animation_library.gd:372)
+         [3] _frame_for_equipment (res://game/world/character_animation_library.gd:330)
+         [4] texture (res://game/world/character_animation_library.gd:179)
+         [5] _check_all (res://game/tests/test_outfit_atomic_coverage.gd:89)
+         [6] _run (res://game/tests/test_outfit_atomic_coverage.gd:51)
+WARNING: Character animation: traveller/walk/front/frame 0: outfit 'unreleased-coat' requires 8.0 poses, found 0; preserving the whole original outfit
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _diagnostic (res://game/world/character_animation_library.gd:520)
+         [1] outfit_variant_ready (res://game/world/character_animation_library.gd:362)
+         [2] _run (res://game/tests/test_outfit_atomic_coverage.gd:62)

@@ -1,0 +1,91 @@
+{
+  "base_main": "dc32c1480301da70c9f2faf0009ad42f1217f17e",
+  "source_commit": "f35e3412ce9f92b51d2e796b06aae6e3b77aed1f",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "source_sha256": {
+    "game/world/avatar_motion_rig.gd": "470544f124efa22b5c50ae0faf5404eccf5f75ff6bad7310cd0176ef5e544413",
+    "game/tests/test_source_registration.gd": "ce32d1df01ad8c339f707810cfc0755aefe2cf75ca8f68c95a75fa73ba16de6b",
+    "tools/run_game_tests.py": "ef31a012b5e673bee825798e731a74310650b66fc8e0544e75e973b60f4a072c"
+  },
+  "checks": [
+    {
+      "name": "registration",
+      "script": "game/tests/test_source_registration.gd",
+      "exit_code": 0,
+      "seconds": 0.34,
+      "passed": true
+    },
+    {
+      "name": "motion-rig",
+      "script": "game/tests/test_avatar_motion_rig.gd",
+      "exit_code": 0,
+      "seconds": 38.69,
+      "passed": true
+    },
+    {
+      "name": "motion-world",
+      "script": "game/tests/test_avatar_motion_world.gd",
+      "exit_code": 0,
+      "seconds": 12.02,
+      "passed": true
+    },
+    {
+      "name": "walk-pixels",
+      "script": "game/tests/test_walk_pixel_stability.gd",
+      "exit_code": 0,
+      "seconds": 10.5,
+      "passed": true
+    },
+    {
+      "name": "hair-lifecycle",
+      "script": "game/tests/test_island_hair_lifecycle.gd",
+      "exit_code": 0,
+      "seconds": 3.05,
+      "passed": true
+    },
+    {
+      "name": "hair-sources",
+      "script": "game/tests/test_island_hair_sources.gd",
+      "exit_code": 0,
+      "seconds": 4.91,
+      "passed": true
+    },
+    {
+      "name": "outfit-atomic",
+      "script": "game/tests/test_outfit_atomic_coverage.gd",
+      "exit_code": 0,
+      "seconds": 0.71,
+      "passed": true
+    },
+    {
+      "name": "outfit-side",
+      "script": "game/tests/test_outfit_side_palette.gd",
+      "exit_code": 0,
+      "seconds": 5.47,
+      "passed": true
+    }
+  ],
+  "additional": [
+    "real source recovery: exit 0, no ERROR",
+    "editor import: exit 0, no ERROR",
+    "runtime coverage command configured",
+    "13 Python entrypoint tests passed"
+  ],
+  "scope": "Godot 4.7.2 Linux headless source registration, recovery and production-world contracts; no new native visual or Windows acceptance",
+  "full_ci": "not green; SG-1 catalog missing; previous ART-18 run 38965270551 also exposed historical variant inspection API mismatch, tracked next in ART-18",
+  "artifacts_sha256": {
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-before-probe.json": "78ffd30299ab032a603d1f1e4acf13dcda75b3eed752cc5f34b91b2089b7b281",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-after-probe.json": "1cc3b43085ea0cfeafb06f2ac2a149b6424676398d02e311e53426d9491823a9",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-recovery.log": "851addbbf00ed28b5b46923ac1362c5da0f5394708a8a85ecc2e4b68003471f2",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-summary.json": "c6b23ee76b1f2ba538ec903810ffd17ce1e22f3896308e599c1aadd98ef55cd1",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-hair-lifecycle.log": "d7b159c309050c790b0f616ef2c935ea9e7391779352f0a9c3d0daeb91361c91",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-hair-sources.log": "1aaed099b12a5d1356ced409f531994f1c998c100f034d58d6a967ce291f7fb4",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-motion-rig.log": "4e53a9358ac5a4890a92857c7d9227f5ee0fb99e2483f2fa0a85a894ed3cc7bf",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-motion-world.log": "3ddc2ddaa9f51874a2ac561ad4ef76887ee67d94e3974ac23ddd301a9cc4c717",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-outfit-atomic.log": "ee117ce69ca231e45dec22f372d30daa614fc649cd85ba90ac3440f84f15d12b",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-outfit-side.log": "9c04061513995c7c8a14ef26c8178073a54daf4a60d8a65f356e6dd806497999",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-registration.log": "7e160e9d25af1a2071a6d1f989f97def49efe9e4ad837046740caaa9ad4bb135",
+    "pm/Snapland-main/images/MAIN-2-source-registration-20261017-walk-pixels.log": "e6d345686e16abecf36846342f26abd7f4373ee3a212390696f8afa4f5c4b134"
+  }
+}

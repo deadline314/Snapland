@@ -1,0 +1,58 @@
+[
+  {
+    "name": "registration",
+    "script": "game/tests/test_source_registration.gd",
+    "exit_code": 0,
+    "seconds": 0.34,
+    "passed": true
+  },
+  {
+    "name": "motion-rig",
+    "script": "game/tests/test_avatar_motion_rig.gd",
+    "exit_code": 0,
+    "seconds": 38.69,
+    "passed": true
+  },
+  {
+    "name": "motion-world",
+    "script": "game/tests/test_avatar_motion_world.gd",
+    "exit_code": 0,
+    "seconds": 12.02,
+    "passed": true
+  },
+  {
+    "name": "walk-pixels",
+    "script": "game/tests/test_walk_pixel_stability.gd",
+    "exit_code": 0,
+    "seconds": 10.5,
+    "passed": true
+  },
+  {
+    "name": "hair-lifecycle",
+    "script": "game/tests/test_island_hair_lifecycle.gd",
+    "exit_code": 0,
+    "seconds": 3.05,
+    "passed": true
+  },
+  {
+    "name": "hair-sources",
+    "script": "game/tests/test_island_hair_sources.gd",
+    "exit_code": 0,
+    "seconds": 4.91,
+    "passed": true
+  },
+  {
+    "name": "outfit-atomic",
+    "script": "game/tests/test_outfit_atomic_coverage.gd",
+    "exit_code": 0,
+    "seconds": 0.71,
+    "passed": true
+  },
+  {
+    "name": "outfit-side",
+    "script": "game/tests/test_outfit_side_palette.gd",
+    "exit_code": 0,
+    "seconds": 5.47,
+    "passed": true
+  }
+]
