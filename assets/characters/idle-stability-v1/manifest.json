@@ -1,0 +1,318 @@
+{
+  "schema_version": 1,
+  "source_settings_sha256": {
+    "sources.json": "efcf96ba8c6067946393a5e5b52ea15ca57d2d9737cadb86af06a98788638427",
+    "standing-registration.json": "675a74d8224071d2784c58fa0379c5e2f6308a11d9574765fbc436be9fc7f8a6"
+  },
+  "sequences": {
+    "hero-idle/back": {
+      "source": "res://assets/characters/idle-stability-v1/back.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 178,
+      "eye_regions": [],
+      "blink_frame": -1,
+      "frame_durations": [
+        1.9,
+        0.3,
+        0.12,
+        0.5
+      ],
+      "body_motion_region": [
+        0,
+        178,
+        280,
+        92
+      ],
+      "source_sha256": {
+        "back-standing.png": "ddc563c0b8911b44f5b3192cc990ed8bc9c8aca9f9893f7021354d3cc2c01c3f",
+        "back-walk.png": "49105f92c042f300034c0895b83daa8bb91e81fced3c8db27ed7a4ed803c162b",
+        "back-idle-0.png": "e389fe644934d9a127d6f2560ceeea02627b2e1a1b8ce36b2a840873d7f42148",
+        "back-idle-1.png": "55f0de28fd42c4dcac764ba351e5ac6b8ea7128e1ce771c6eb3294db1faffd3e",
+        "back-idle-2.png": "b86450f6087801a19013159953e9806295e50aac9b42aa928eb08c16eb4eb05f",
+        "back-idle-3.png": "eb9c099d1e1aadedfe1e2d66287cc1a94b1e51493aff414481a4b6f0f458ce92"
+      }
+    },
+    "hero-idle/back_left": {
+      "source": "res://assets/characters/idle-stability-v1/back_left.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 178,
+      "eye_regions": [],
+      "blink_frame": -1,
+      "frame_durations": [
+        1.9,
+        0.3,
+        0.12,
+        0.5
+      ],
+      "body_motion_region": [
+        0,
+        178,
+        280,
+        92
+      ],
+      "source_sha256": {
+        "back_left-standing.png": "d3375f45e53434ba394a36b5270f3ac19bf904df00997abc3cf7c44f3a632b33",
+        "back_left-walk.png": "bc7bc2d4f9f7b9a4d24b26578218732922fd2df64a5caa1cf275c3acfc0796ae",
+        "back_left-idle-0.png": "afe5ce765a6b744d66d5827df57e7195edcbc08afece86759ff702619bc25ae8",
+        "back_left-idle-1.png": "672259e1d8d106dbec633588cc060bed674c4f1e69c9c3d340b31d5760ff302b",
+        "back_left-idle-2.png": "656120a23ce29d7779b1881e5f7e991da1976fb3838cd8a0db2fd93974092901",
+        "back_left-idle-3.png": "0c1b852525923b2444f40ac7cd8540fe8c9397b5401b894e2fb9738d114a50e9"
+      }
+    },
+    "hero-idle/back_right": {
+      "source": "res://assets/characters/idle-stability-v1/back_right.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 178,
+      "eye_regions": [],
+      "blink_frame": -1,
+      "frame_durations": [
+        1.9,
+        0.3,
+        0.12,
+        0.5
+      ],
+      "body_motion_region": [
+        0,
+        178,
+        280,
+        92
+      ],
+      "source_sha256": {
+        "back_right-standing.png": "171af1de3045c679273eb79df6454e345a011c7b2654a261ee288bd9aee5b308",
+        "back_right-walk.png": "b68fe48d03dc5cf2f4b90735fb462ce6bb5e77a29d78487d4582844a27d0c18a",
+        "back_right-idle-0.png": "b7d8137cac8a994d2bbea05c0a71586fd22fe966fa0ac7a4feaac3831ff80f96",
+        "back_right-idle-1.png": "ac39b1d62c0fb3531fa7d6f997dba41d09efaa1eaa46193d71ea95d079d9e4fe",
+        "back_right-idle-2.png": "29ec4c0f3367929eb65f4e8edc524667f70ce551336ef832a2e924022a62c93e",
+        "back_right-idle-3.png": "d8d12ff42eade5642b9b24427bcf4faeb34170eb267501d14165b7a3cbe8f57a"
+      }
+    },
+    "hero-idle/front": {
+      "source": "res://assets/characters/idle-stability-v1/front.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 8,
+      "head_neck_seam_y": 185,
+      "eye_regions": [
+        [
+          121,
+          152,
+          18,
+          18
+        ],
+        [
+          158,
+          152,
+          17,
+          18
+        ]
+      ],
+      "blink_frame": 4,
+      "frame_durations": [
+        2.1,
+        0.25,
+        0.2,
+        0.08,
+        0.12,
+        0.08,
+        0.25,
+        0.4
+      ],
+      "body_motion_region": [
+        0,
+        185,
+        280,
+        85
+      ],
+      "source_sha256": {
+        "front-standing.png": "94000458b60b46859676d6bb6e7fe5ed75b4c45145c68461c6ddcdfeb6efcebf",
+        "front-walk.png": "e4c8c5086e1f4f892c48f720dbdc94be51572b45058e8d9c705e3941bf3349fa",
+        "front-idle-0.png": "ded0e30c4dc6b79aa013a22c71a57d69b0d3225617a6468c6dec09c8f37c663d",
+        "front-idle-1.png": "3a9dac390c3ea396ef90d720a5128ae5f77c206b301b06f932589121fdf881b7",
+        "front-idle-2.png": "c8a5329dfc10d86fde1b5cafdb6005e6e6a0c505850150e4b0b085f22032681c",
+        "front-idle-3.png": "7a236ec20cebbbbc0c2d3581d841ad02b0103cdcb17059e595302c3c0535ee95",
+        "front-idle-4.png": "568671e94c294b26446ff1587ce800d82d37929c6bb51acee7f8dcd9788ab34d",
+        "front-idle-5.png": "b9bde2f44a71bac81ad701bcfaa384654ddd52362f22789b6c2789f760208169",
+        "front-idle-6.png": "a0e35f062b3911fe7eb4e0544bdc1e6dfd3f583a15980c1f4a77553b6bafe4a1",
+        "front-idle-7.png": "7676d6c48ba8dd79a99c31a58b91be5a57dad2098aa119a82467d48d8bde8ec4"
+      }
+    },
+    "hero-idle/front_left": {
+      "source": "res://assets/characters/idle-stability-v1/front_left.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 185,
+      "eye_regions": [
+        [
+          110,
+          144,
+          16,
+          20
+        ],
+        [
+          143,
+          145,
+          20,
+          19
+        ]
+      ],
+      "blink_frame": 2,
+      "frame_durations": [
+        1.9,
+        0.3,
+        0.12,
+        0.5
+      ],
+      "body_motion_region": [
+        0,
+        185,
+        280,
+        85
+      ],
+      "source_sha256": {
+        "front_left-standing.png": "51e11d9b77f1dc698bd751c54aaada0f0f913c45e61a53367c34cb328f211b6e",
+        "front_left-walk.png": "004e95005d374fa51948d653de9bf35f439aa1ed2c9ff16f5000060928b2a456",
+        "front_left-idle-0.png": "1ff583f78f03f37228fc4232bc1d1d740ae791066226fc2e9a6654fd114f14fc",
+        "front_left-idle-1.png": "f339ad4484f4abac2e2b3dac1cb8969cdbf43a44cc53da59db462092ece8e834",
+        "front_left-idle-2.png": "e81204b8622bb915e709dcc98e18a07baf85be85e8279a5caaa04f53103322b8",
+        "front_left-idle-3.png": "98c0fca80a2cca90394cd800e130e66f268b44de1432d53d76f5efd2dd6a870c"
+      }
+    },
+    "hero-idle/front_right": {
+      "source": "res://assets/characters/idle-stability-v1/front_right.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 185,
+      "eye_regions": [
+        [
+          138,
+          144,
+          19,
+          19
+        ],
+        [
+          173,
+          143,
+          14,
+          19
+        ]
+      ],
+      "blink_frame": 2,
+      "frame_durations": [
+        1.9,
+        0.3,
+        0.12,
+        0.5
+      ],
+      "body_motion_region": [
+        0,
+        185,
+        280,
+        85
+      ],
+      "source_sha256": {
+        "front_right-standing.png": "954b449a092ab20ca8085a00a6ae2995b1c894552c543d8644ad5e5f0a238223",
+        "front_right-walk.png": "dd2dd1dc316f41de9b371fedf8d96b0f89720092a82a21d58e794cb14f341d36",
+        "front_right-idle-0.png": "79a4d06e22483564d25f4e2aec81da1ec4a243f3e3ecd03a33d042760608de21",
+        "front_right-idle-1.png": "5ff9794e6efd609c5efc302e3d0b41cfbcd2bc679923a4c7bd9d812dbe7dcd12",
+        "front_right-idle-2.png": "fc9be0cad09b3721904f3658aaab36169d56c5282ff44c5dd7e21bc3b71eb5bb",
+        "front_right-idle-3.png": "b755ec8ee0a8f5495c3ba72605bcc2b787667493ac533595468ed960f7742a46"
+      }
+    },
+    "hero-idle/left": {
+      "source": "res://assets/characters/idle-stability-v1/left.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 180,
+      "eye_regions": [
+        [
+          111,
+          140,
+          15,
+          20
+        ]
+      ],
+      "blink_frame": 2,
+      "frame_durations": [
+        1.9,
+        0.3,
+        0.12,
+        0.5
+      ],
+      "body_motion_region": [
+        0,
+        180,
+        280,
+        90
+      ],
+      "source_sha256": {
+        "left-standing.png": "28eecce5b88f9aa247e583842486f4e73f1381543ea9ee0d7a2c771b62f48dd3",
+        "left-walk.png": "a5a68459ff90cfc9651ed7094ed2d79d66ee4a6b46f683e6d02baf977774faeb",
+        "left-idle-0.png": "8a73709a007638f048bffbc09a46158f63ba970595e629835fea8b447cc5ff38",
+        "left-idle-1.png": "811778a9d9eb1d49b69870c7f641d709448778d26654e38c2f8e2ba54ba92b87",
+        "left-idle-2.png": "30a932f23902bb6fb9db06dbdd6e8e2b2d6df385cd3bc5c7ce37ed699b73dbb9",
+        "left-idle-3.png": "15dbe32bfa4fd4d03a955d31e868835f56675b340447d585c2261f380caf30b3"
+      }
+    },
+    "hero-idle/right": {
+      "source": "res://assets/characters/idle-stability-v1/right.png",
+      "canvas": [
+        280,
+        360
+      ],
+      "frames": 4,
+      "head_neck_seam_y": 180,
+      "eye_regions": [
+        [
+          169,
+          142,
+          17,
+          20
+        ]
+      ],
+      "blink_frame": 2,
+      "frame_durations": [
+        1.9,
+        0.3,
+        0.12,
+        0.5
+      ],
+      "body_motion_region": [
+        0,
+        180,
+        280,
+        90
+      ],
+      "source_sha256": {
+        "right-standing.png": "a954fc535442aa71d289a5967a3c38d344ddd8c36b35d8e710df822c26c3e526",
+        "right-walk.png": "523b1b8264e854d26074556e1e41a4c00e23b8609916611c7a4ef1de07b83d48",
+        "right-idle-0.png": "7decb3a856a5507d775c8915fd565b3179c50b237d1ad3dc336161ebfd5db988",
+        "right-idle-1.png": "95c80919c717693db43ea3ff4f4aaf5d9346e79de3e70ca1923189eff13caf51",
+        "right-idle-2.png": "74fbc62554d8168a3e3b84c27a34a9ee9994a6bbf31f0bc9d76a1aacad101d0f",
+        "right-idle-3.png": "8a7b4a1d8ffe582a2af867c5aa9816f6d6abfd759049c510c4d83f39a2408f5e"
+      }
+    }
+  }
+}

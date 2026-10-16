@@ -50,10 +50,10 @@ func _initialize() -> void:
 		assert(idle_frame >= 0 and idle_frame < frame_count, "each heading's authored idle_frame stays within its walk cycle: %s/%d" % [direction, idle_frame])
 		var idle_pose: Texture2D = renderer.texture(appearance, equipped, direction, 0, "idle")
 		assert(idle_pose != null and _opaque_pixels(idle_pose) > 5000, "every idle heading retains visible source pixels")
-		assert(_last_opaque_row(idle_pose) == _last_opaque_image_row(renderer._walk_pose_image(direction, idle_frame)), "rest retains its source sole height without recentering: " + direction)
+		assert(_last_opaque_row(idle_pose) == _last_opaque_image_row(renderer._stable_idle_pixels.frame("hero-idle",direction,0)), "rest retains its planted source sole height: " + direction)
 		var manifest_idle_count: int = renderer.animation_library.frame_count("traveller", "idle", direction)
-		assert(idle_pose == renderer.texture(appearance, equipped, direction, frame_count - 1, "idle"), "production rest holds its registered pose independent of animation phase: " + direction)
-		assert(_image_data(idle_pose) == _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "production start/stop shares the exact registered contact cel: " + direction)
+		assert(_image_data(idle_pose) != _image_data(renderer.texture(appearance, equipped, direction, 1 if direction.begins_with("back") else 2, "idle")), "production dedicated idle retains authored torso or blink changes: " + direction)
+		assert(_visible_region_difference_count(idle_pose,renderer.texture(appearance,equipped,direction,0,"walk"),Rect2i(60,65,165,110))==0, "production rest shares the walking head while the torso rests: " + direction)
 		if manifest_idle_count > 0:
 			var source_idle: Texture2D = source_renderer.texture(appearance, equipped, direction, 0, "idle")
 			assert(_image_data(source_idle) != _image_data(renderer.texture(appearance, equipped, direction, idle_frame, "walk")), "explicit source diagnostics retain the distinct authored idle art: " + direction)

@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-16",
+  "tool": "built-in image_gen",
+  "status": "adopted after native normal and quarter-speed segmented playback and pixel contracts",
+  "input": "pm/Snapland-art/images/ART-32-standing-reference.png",
+  "input_sha256": "78fc36d4339acea5d71dc495f13c62fbba18170e9fb1d6799f56e38ddb38a2ab",
+  "output": "assets/characters/traveller-idle-standing-v3.png",
+  "output_sha256": "8a09f55dd822deb9ffd1b6d1476f57b147c9c7be257348b47a7ac10183aafe11",
+  "registration": {
+    "sheet_sha256": "8a09f55dd822deb9ffd1b6d1476f57b147c9c7be257348b47a7ac10183aafe11",
+    "directions": {
+      "front": {
+        "scale": 0.7250639386189247,
+        "offset": [
+          -2,
+          0
+        ],
+        "head_score": 0.7443859577178955,
+        "bottom": 346
+      },
+      "front_right": {
+        "scale": 0.7161125319693085,
+        "offset": [
+          2,
+          2
+        ],
+        "head_score": 0.7494949102401733,
+        "bottom": 346
+      },
+      "right": {
+        "scale": 0.7161125319693085,
+        "offset": [
+          6,
+          2
+        ],
+        "head_score": 0.8118075132369995,
+        "bottom": 346
+      },
+      "back_right": {
+        "scale": 0.7143222506393853,
+        "offset": [
+          3,
+          3
+        ],
+        "head_score": 0.7739238739013672,
+        "bottom": 346
+      },
+      "back": {
+        "scale": 0.7107416879795388,
+        "offset": [
+          1,
+          36
+        ],
+        "head_score": 0.7869315147399902,
+        "bottom": 346
+      },
+      "back_left": {
+        "scale": 0.7107416879795388,
+        "offset": [
+          4,
+          36
+        ],
+        "head_score": 0.7481053471565247,
+        "bottom": 346
+      },
+      "left": {
+        "scale": 0.719693094629155,
+        "offset": [
+          5,
+          32
+        ],
+        "head_score": 0.7208026647567749,
+        "bottom": 346
+      },
+      "front_left": {
+        "scale": 0.719693094629155,
+        "offset": [
+          4,
+          32
+        ],
+        "head_score": 0.7607851624488831,
+        "bottom": 346
+      }
+    }
+  },
+  "prompt": "Edit this exact pixel-art sprite sheet into an eight-direction NEUTRAL STANDING sheet. This is a precise game asset edit, not a character redesign. Keep the same four columns and two rows, same eight heading order (front, front-right, right, back-right; back, back-left, left, front-left), equal-sized cells and transparent background. EACH CHARACTER'S ENTIRE HEAD, HAIR, FACE, IDENTITY, HEAD SIZE AND TOP POSITION MUST STAY IDENTICAL to its reference. Preserve the original crisp detailed 2D pixel art, navy windswept hair, teal coat, cream shorts, brown boots, camera and backpack. Only redraw BELOW THE NECK into relaxed natural planted-feet standing poses, BOTH BOOTS PLANTED ON ONE SHARED CELL GROUND LINE, knees relaxed, camera held naturally. Match the existing walk character's exact head-to-body proportion and body height, never enlarge the head or shorten the torso. Continuous properly drawn neck/shoulder/scarf connections; no horizontal cut, floating head, long neck, missing limb, detached boots or pasted body parts. Keep the camera and backpack appropriate for each heading. Preserve pixel density, outline/shading and palette, no 3D model/render, no smooth painterly upgrade. One complete whole character in each of the eight cells, no other poses, no labels, grid lines, horizontal rules, shadows or background. Do not reproduce any line at the reference image border. Produce a clean production sprite sheet, ideally the same 1120x720 aspect/layout.",
+  "processing": "Uniform per-heading registration under shared ground constraint, canonical original walking head retained, old authored eyelid patches registered, bounded one-pixel chest breath with zero displacement at neck/pelvis. No whole-body stretch or walking rig."
+}

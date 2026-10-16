@@ -2403,7 +2403,7 @@ func _refresh_avatar_texture(frame: int) -> void:
 		texture_action="walk"
 	if action == "idle" and avatar_renderer.has_authored_action("idle", direction):
 		var animation_library = avatar_renderer.animation_library
-		display_frame=animation_library.frame_for_time("traveller", "idle", direction, time, reduced_motion)
+		display_frame=avatar_renderer.idle_frame_for_time(direction,time,reduced_motion)
 	if action != "walk" and action != "idle" and not riding:
 		var animation_library = avatar_renderer.animation_library
 		if _has_authored_avatar_action(action, direction):

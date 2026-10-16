@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "pngs": {
+    "back.png": "fda2befa754875e665619eec141999ac18f16cfd96204c81b3db7836e5e2422b",
+    "back_left.png": "cd362a41ac40397a3f9d7cd8a5d5cd3697417a5fa1f82c8b93aabd5600933828",
+    "back_right.png": "e506181d30046ef0890b9be625321ce660b2af5f7661af3717c71a14200b8b71",
+    "front.png": "1cdb10689a820832f3089fb96876dea54720802607786840c83b2374d7e2bdcb",
+    "front_left.png": "a5131e1acc6531414615d50ba2a847c8e3b649d74bf0260058732901e9eee7db",
+    "front_right.png": "46bd970115f2836ce67b88ee57c2ab338e8a98e867c542b749ff894cb5c446fd",
+    "left.png": "2cb150fe9bfc9856f6678db95c21a9f3ae52e966f95e9001c7ce4155d091af8a",
+    "right.png": "c12408ab0658abd661d6ad11924c5afdf097ec44f4b92ab379f4c1f81b6a9844"
+  },
+  "fresh_export": true,
+  "alpha_ground_threshold": 102
+}

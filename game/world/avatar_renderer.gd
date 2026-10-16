@@ -80,7 +80,8 @@ var _atlas_valid := false
 var _cache: Dictionary = {}
 var _cache_order: Array[String] = []
 var _warned_missing := false
-var inspect_authored_idle_sources := false # Source-art diagnostics; production rest uses the shared walk hold.
+var inspect_authored_idle_sources := false # Source-art diagnostics; production rest uses the fixed-head dedicated idle.
+var _stable_idle_pixels = preload("res://game/world/walk_pixel_sources.gd").new("res://assets/characters/idle-stability-v1/manifest.json")
 var _stable_walk_pixels = preload("res://game/world/walk_pixel_sources.gd").new()
 var _walk_images: Dictionary = {}
 var _walk_metadata: Dictionary = {}
@@ -174,12 +175,14 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
 	var authored_action: bool = animation_library != null and animation_library.has_action("traveller", action, safe_direction)
 	var safe_action := action if ACTIONS.has(action) or action == "walk" or authored_action else "idle"
-	# Grounded rest shares the registered walking hold cel. Switching to a separately
-	# cropped idle portrait changes skull size/position at every start and stop.
+	# Dedicated standing cels share the registered walking head and fixed ground.
+	# Legacy cropped portraits remain available only for source diagnostics.
 	var has_manifest_frame: bool = safe_action != "walk" and (safe_action != "idle" or inspect_authored_idle_sources) and animation_library.has_frame("traveller", safe_action, safe_direction)
 	var authored_frame_count: int = animation_library.frame_count("traveller", safe_action, safe_direction) if has_manifest_frame else 0
 	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, authored_frame_count - 1) if has_manifest_frame else clampi(frame, 0, 2)
 	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction))) and not has_manifest_frame
+	var registered_idle: bool = safe_action == "idle" and not inspect_authored_idle_sources and _stable_idle_pixels.manifest.has("hero-idle/"+safe_direction)
+	var idle_frame := clampi(frame,0,int(_stable_idle_pixels.manifest.get("hero-idle/"+safe_direction,{}).get("frames",1))-1)
 	var walk_frame := IDLE_WALK_FRAME
 	if use_walk_source:
 		var frame_count := walk_frame_count(safe_direction)
@@ -193,13 +196,13 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var pose := _pose_index(pose_direction, safe_frame, safe_action)
 	var render_appearance := normalized_appearance.duplicate()
 	render_appearance.erase("gender")
-	var pose_key := "walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else ("manifest:%s:%s:%d" % [safe_action, safe_direction, safe_frame] if has_manifest_frame else "action:%d" % pose)
+	var pose_key := "stable-idle:%s:%d" % [safe_direction,idle_frame] if registered_idle else ("walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else ("manifest:%s:%s:%d" % [safe_action, safe_direction, safe_frame] if has_manifest_frame else "action:%d" % pose))
 	var key := "%s|%s|%s" % [JSON.stringify(render_appearance), outfit + ":" + hat, pose_key]
 	if _cache.has(key):
 		_cache_order.erase(key)
 		_cache_order.append(key)
 		return _cache[key]
-	var image := _walk_pose_image(safe_direction, walk_frame) if use_walk_source else (_atlas_pose_image(pose) if _atlas_valid else _fallback_image(pose_direction, safe_frame, safe_action))
+	var image: Image = _stable_idle_pixels.frame("hero-idle",safe_direction,idle_frame) if registered_idle else (_walk_pose_image(safe_direction, walk_frame) if use_walk_source else (_atlas_pose_image(pose) if _atlas_valid else _fallback_image(pose_direction, safe_frame, safe_action)))
 	var manifest_head_anchor := Vector2i.ZERO
 	var manifest_has_head_anchor := false
 	if has_manifest_frame:
@@ -1909,3 +1912,16 @@ func _draw_line(image: Image, start: Vector2i, finish: Vector2i, color: Color, t
 	for i in range(steps + 1):
 		var t := float(i) / maxf(1.0, float(steps))
 		_draw_rect(image, roundi(lerpf(start.x, finish.x, t)) - thickness / 2, roundi(lerpf(start.y, finish.y, t)) - thickness / 2, thickness, thickness, color)
+
+func idle_frame_for_time(direction: String, elapsed: float, reduced: bool = false) -> int:
+	if reduced: return 0
+	var spec: Dictionary = _stable_idle_pixels.manifest.get("hero-idle/"+direction,{})
+	var durations: Array = spec.get("frame_durations",[])
+	if durations.is_empty(): return animation_library.frame_for_time("traveller","idle",direction,elapsed,reduced)
+	var total := 0.0
+	for duration in durations: total += float(duration)
+	var phase := fposmod(maxf(0.0,elapsed),total)
+	for i in range(durations.size()):
+		phase -= float(durations[i])
+		if phase < 0.0: return i
+	return 0

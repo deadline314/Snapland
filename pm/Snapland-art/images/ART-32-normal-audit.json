@@ -1,0 +1,56 @@
+{
+  "cases": [
+    {
+      "direction": "front",
+      "expected": 4,
+      "eye_visible": true,
+      "frame": 4
+    },
+    {
+      "direction": "front_right",
+      "expected": 2,
+      "eye_visible": true,
+      "frame": 2
+    },
+    {
+      "direction": "right",
+      "expected": 2,
+      "eye_visible": true,
+      "frame": 2
+    },
+    {
+      "direction": "back_right",
+      "expected": 2,
+      "eye_visible": false,
+      "frame": 2
+    },
+    {
+      "direction": "back",
+      "expected": 2,
+      "eye_visible": false,
+      "frame": 2
+    },
+    {
+      "direction": "back_left",
+      "expected": 2,
+      "eye_visible": false,
+      "frame": 2
+    },
+    {
+      "direction": "left",
+      "expected": 2,
+      "eye_visible": true,
+      "frame": 2
+    },
+    {
+      "direction": "front_left",
+      "expected": 2,
+      "eye_visible": true,
+      "frame": 2
+    }
+  ],
+  "pause_resume": true,
+  "result": "PASS_NATIVE_ISLAND_IDLE",
+  "scale": 1.0,
+  "scope": "Actual island native heading input, stop, authored idle/blink and native pause. Placement, clock reset and camera are explicit review fixtures."
+}

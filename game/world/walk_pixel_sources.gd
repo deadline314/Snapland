@@ -3,8 +3,8 @@ extends RefCounted
 const MANIFEST := "res://assets/characters/walk-stability-v1/manifest.json"
 var manifest: Dictionary = {}
 var images: Dictionary = {}
-func _init() -> void:
-    var value: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST))
+func _init(path: String = MANIFEST) -> void:
+    var value: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
     if value is Dictionary and int(value.get("schema_version",0))==1:
         manifest=value.get("sequences",{})
     else:push_error("Missing or invalid reviewed walk stability manifest")

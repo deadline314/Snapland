@@ -70,5 +70,7 @@ jobs:
         run: python tools/hero_2d/run_hair_review.py --contracts
       - name: Verify fixed-root 2D walk pixels and original limb registration
         run: python tools/walk_stability/run_audit.py --tag ci --test
+      - name: Verify fixed-head island idle and blinking across appearances
+        run: python tools/island_avatar/run_contracts.py
       - name: Run native Godot startup and runtime tests
         run: python tools/run_game_tests.py
