@@ -83,3 +83,5 @@
 ### 本輪 Commit
 
 - [2511ee3](https://github.com/deadline314/Snapland/commit/2511ee3f661307e3dd7a11e18cd57899fe7594a0)：整理可獨立使用的最新主線 Prompt、逐票未結案清單與指南入口。
+
+盤點用語補正：沒有未勾選項的未結案票仍依各自狀態顯示；不一律稱為「審查中」，也不據此自動完成。
