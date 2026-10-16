@@ -1,95 +1,53 @@
-# 下一個 Session：接續雕琢 Snapland 島上體驗
+# 下一個 Session：接續 Snapland 未完成票
 
-## 2026-10-17 最新接續狀態（優先於下方舊快照）
-
-使用者最新指定每次 push 前 fetch origin main，必要時 rebase／解衝突／重跑受影響測試，再用 `git push origin HEAD:main` 快轉整合。只因 main 前進而非快轉拒絕可重新同步後正常推；403／權限拒絕不重試。每票之後核對本機 main 與 origin/main；只清理本 Session 已合併且不用的工作區與分支。作者與提交者每次都核對 Stanley Li <stanley890314@gmail.com>。
-
-- 使用者已明確要求自主接續未完成票，不需要一般設計問題的詢問；每批動手前研究成熟方法，品質不足可重做。
-- ART-32 已接回固定頭頸的待機／眨眼，ART-33 已接入微風短髮，ART-34 現已完成島上人類短髮／捲髮八方向動態。下方舊段落寫「髮尾骨架仍僅獨立樣本」已被這三票的新交付取代。
-- ART-33／34 已快轉合入 main `1baf7dd`，[PR #1](https://github.com/deadline314/Snapland/pull/1) 與 [PR #2](https://github.com/deadline314/Snapland/pull/2) 均已確認 merged。開始以 fetch 後 main 為準，不沿用舊 feature-only 的入口判斷。雲端本批使用 Session 專屬 worktree；交付後先以 `git worktree list` 核對是否仍保留，不把臨時路徑或舊分支當永久入口。不要切換 `/workspace/Snapland` 的其他 Session `work` 分支。
-- ART-18 接續程式 `b84746aea2329bc467ed3050faad85e739840357`：整套輪廓替換需完整必要姿勢，正式四外套明確換色；左右側走路／待機 24 格有核對過的衣料標記。全 148 格自動草稿因道具／衣袖誤標拒收，不能重新採用。已以 `dc32c14` 快轉合入 main，以 fetch 為準。不同服飾輪廓與完整動作品質仍是進行中。
-- ART-18 有正常／真正慢速共 28 組移動及 93 張已看過的全身抽樣。正常版 16 項檢查含行走衣袖／手部整區 RGBA；慢速版 14 項為保存的固定配色見證版本，兩者不可混稱。官方 Godot 4.7.2 ed1daf0bf 的六項局部測試與隔離 PCK 316／72 項均通過；詳細範圍讀票與 verification.json。引擎可在 `work/art18/engine-4.7.2/` 核對，執行仍用入口驗證與獨立絕對存檔。
-- ART-34 留有 96 組原生像素比較、隔離 PCK 額外 200 格渲染、200 格定位、432 格既有待機、兩款兩速度共 56 組島上移動與四趟連續反向／即時換髮的真實證據。影片以完整人物抽幀審閱，不宣稱每一編碼格連續播放或真人試玩。
-- 使用 Godot 4.7／llvmpipe，島上錄影為降低環境成本的明示 fixture；原 Windows 4.7.2 EXE、完整光影與即時效能未重驗。不要拿該雲端錄影當完整光影驗收。
-- 仍有 80 張未結案。角色優先先補 ART-18 主角不同輪廓衣物與完整動作，再擴 ART-17 NPC；票票／小角的正式走路來源仍缺，不可拿拒收候選或拆腿假步態代用。SG-1 缺少設計目錄仍阻擋全域設計 CI。MAIN-2 已以 `f35e341`／`bc6a6ec` 修復量測與登錄畫布位移，原固定中位數斷言及完整八向回歸通過，沒有恢復拆腿步態。ART-18 遠端 CI `38965270551` 另揭露歷史候選檢視相容問題；後續 `b1100b3` 明確分離製作檢視與正式整套換裝，保留舊候選可讀的斷言並加正式來源／錨點／快取隔離檢查。最終 PCK 的 335 項契約、72 組衣料、avatar／動畫庫／跨膚色種族渲染均通過；最終本機校準及損壞恢復通過。局部與 PCK 範圍見本票新證據；全套 CI 狀態要以最新 main 的實際執行為準，不把局部通過稱全綠。
-- 詳細範圍與證據讀 ART-18、ART-34 及 `pm/user_guide.md` 最新段落；下方 Windows 路徑與早期 HEAD 只作歷史背景。
-
-
-## 最新優先指示：保留 2D，3D 候選已否定（2026-10-16）
-
-使用者明確否定新製作的 3D 主角與外觀，已要求停止。要保留原本 2D 像素畫風，製作完整光頭底圖，再生成同風格的八方向頭髮與配件，綁在製作時確認的正確位置，共享動作／方向／影格與明確前後遮擋。先以主角完成換髮、帽、不同輪廓衣服、相機及起停轉身的正常／四分之一慢放驗收，再擴其他人物。詳細見[最新角色管線決策](../design/runtime/character-production-pipeline-v2.md)；[ART-29](Snapland-art/[ART-29]製作主角完整換裝動作樣本.md) 已交付獨立 2D 主角樣本，局部驗證與正常／慢放已檢視，正式島嶼尚未接入。未提交的 3D 程式、素材、獨立樣本與錄影都是拒收候選，不可因測試數字通過而採用；也沒有接入正式島嶼。舊 3D 計畫已停止，不要繼續補它或聲稱使用者批准改畫風。
-
-2026-10-16 最新回歸 [ART-31](Snapland-art/[ART-31]修正全部二維行走像素偏移.md)：使用者指出所有 2D 走路仍有偏移後，重新驗證正式島嶼及獨立樣本。已取消每格鞋底置中，採固定方向畫布、穩定頭頸來源與共用髮帽基準；600 格／76 組逐格比較、19 項 Python、13 組原生局部測試、八向戴帽／無帽共 16 組 GPU，以及正常／真實四分之一速度錄影通過。原島嶼、換裝與骨架樣本輸出已更新；髮尾骨架仍僅單髮型獨立樣本。正式島嶼停止時目前採同方向穩定停步姿勢，舊專用待機／眨眼保留來源診斷，尚未重新接回正式播放；不能沿用舊待機驗收宣稱仍在播放。這是本次局部接受，不是使用者試玩或全島驗收。
-
-更新：2026-10-16（Asia/Taipei）。**把下方「可直接貼上的 Prompt」整段交給下一個 Session。** 本文件是接續工作指令與狀態快照，不代表又完成一次遊戲驗收。
+2026-10-17（Asia/Taipei）。下方 Prompt 可整段獨立使用。這是工作入口與範圍快照，不是新一輪遊戲、GPU 或聲音驗收。實際主線以 fetch 後的 `origin/main` 為準。
 
 ## 可直接貼上的 Prompt
 
-你要接續完成 Snapland。使用者已授權自主研究、設計、實作與原生驗收，先把島上體驗雕琢到可作為後續園區標準；不要再只交研究、生成圖、計畫或半完成展示。保持簡短進度溝通並持續做已授權工作，品質優先於趕進度。以下需求及使用者後續新指示優先。
+接續完成 Snapland。使用者已要求自主研究、設計、實作與驗證，不要為一般設計判斷停下詢問；先處理角色一致性，再依相依改善光影、動畫、玩法與 UIUX。品質不足可重做，保留已接受的原圖與其他 Session 成果。不要只交研究、計畫或生成候選。
 
-### 先找到真正的遊戲版本
+### 先找到正確主線與規範
 
-- Repo：`git@github.com:deadline314/Snapland.git`。本機原始 checkout 是 `C:/Github/Snapland`，但不要切換或修改其他 Session 的 checkout／stash。
-- 可執行遊戲在既有獨立工作區 **`C:/Users/stanl/.codex/worktrees/island-experience/Snapland`**，分支 **`feature/island-experience`**。最後已核對的遊戲交付 HEAD 是 **`2581313e00744f55cd99ab939e87bde681823bcf`**；之後可能有本次文件提交，開始時以 fetch 和實際 HEAD 核對。
-- **下方是 2026-10-16 舊快照；ART-34 後須先 fetch main 並核對 `project.godot`，不能再直接套用 main 沒有遊戲的舊結論。** 文件已另外發布至 main，不代表整個遊戲 feature 已合入 main。
-- 優先沿用上述合適工作區；先看 `git worktree list`、目前分支、dirty files 和遠端，不覆寫已有成果。現有工作區有大量先前未追蹤媒體、匯入變動與未完成票；禁止 `git add .`、整棵 clean／reset／stash。
-- 若該工作區仍由另一個活動 Session 使用，從 `origin/feature/island-experience` 建自己的獨立工作區，不能從 main 重建或擅自攜走未提交變更。新工作區需真正驗證依賴、匯入和原生畫面，不能假定原機器上的未追蹤檔也已在遠端。
-- Windows／PowerShell；先前實測 Godot 4.7.2 Forward+，路徑 `C:/Tools/Godot/Godot_v4.7.2-stable_win64_console.exe`，GPU 為 Arc B580。當次自己核對引擎版本與資源。若是雲端，先確認 Snapland repo、fetch 成功、Godot 可跑、實際記憶體及磁碟，任一不成立就回報，不捏造原生驗收。
+1. Repo：`https://github.com/deadline314/Snapland.git`。先核對 cwd、遠端、`git worktree list` 與 dirty files。不得切換、reset、clean、stash 或攜走其他 Session 的工作區／未提交內容。
+2. 執行 `git fetch origin main`，從最新 `origin/main` 建自己的分支／獨立 worktree。**main 已包含可執行遊戲**；確認 `project.godot` 與入口，不能沿用「main 只有文件」的舊結論。既有 feature 分支不再作為新工作基準。
+3. 本批已核對的遊戲主線是 `bcd2297f238c584c98ff66df7aeccd1887360183`；之後有指南與票況整理提交，仍以最新遠端為準。臨時雲端 worktree 或引擎目錄可能已清理，不能把舊絕對路徑當永久入口。原 `/workspace/Snapland` 的其他 Session `work` checkout 不要切換。
+4. 動手前讀 `AGENTS.md`、`.agents/skills/pm-ticket/SKILL.md`、`pm/user_guide.md`，再讀本組票最新需求、驗收、來源與證據。票在 `pm/`，不是外部票務系統。逐票狀態入口是 `pm/open_tickets.md`；舊勾選不代表本輪已重驗。
+5. 確認實際引擎、依賴、記憶體／磁碟與渲染能力。CI 固定 Godot `4.7.2.stable.official.ed1daf0bf`；設定並核對 `GODOT_BIN`。環境不具備原生 GPU、音訊或 Windows 就照實記錄，不能捏造。
 
-### 只讀必要文件與本組票
+### 已交付與仍待完成
 
-1. 讀工作區的 `AGENTS.md`、若有 `CLAUDE.md`、可用的 ai-desktop-ticket skill，以及 `.agents/skills/pm-ticket/SKILL.md`；若有 `.claude/skills/pm-ticket/SKILL.md` 也依適用規範讀取。票是 `pm/` Markdown，不在 AI Desktop 開。
-2. 讀最新 `pm/user_guide.md`。如果工作區仍是舊指南，先用 `git show origin/main:pm/user_guide.md` 取得本次整理版本，避免丟失最新更正。
-3. 先讀 ART-17、ART-18 的最新需求、Commit 與相依；需要時再讀 ART-3／19（背景）、ART-12／13（角色、光影）、ART-20／21（UI）、MAIN-11／14／15（探索、攤位、設施）、MAIN-17／18（存檔與入口）、MAIN-19／ART-22（多語系、字體）、MIC-2、ST-4／5、SG-14／16–27 的相關段落。只讀本批需要的票，不全 repo 掃完。
-4. 必要設計文件位於遊戲 feature 的 `design/runtime/character-animation-wardrobe.md`、`wardrobe.md`、`component-animation.md` 等。先比對實際程式與素材，不把文件寫有需求當成已實作。
+- ART-31 固定 280×360 畫布、根點與原畫頭部；ART-32 已接回八向專用待機與眨眼。正式島上保留完整 2D 原畫，沒有拆腿 3D 步態。
+- ART-33／34 完成正式島上人類微風短髮、短髮及捲髮的八方向髮尾綁定；髮根、臉、帽緣與肩背不可動區保留原畫。其他種族、NPC、單次動作的完整動態覆蓋沒有因此完成。交付 `1baf7dd`，PR #1／#2 已確認 merged。
+- ART-34 有 96 組渲染比較、隔離 PCK 額外 200 格、200 格定位與 432 格既有待機回歸，正常／真正慢速的島上操作及連續反向／移動中換髮證據。影片以完整人物抽幀檢視，不是逐電影格連續播放或真人試玩。
+- ART-18 四款正式外套明確是換色；左右側走路／待機 24 格的衣料換色已修正，使用核對過且綁定來源指紋的衣料標記。真正輪廓替換必須整套姿勢完整，任一缺件整套保留原衣。148 格自動標記草稿因相機／衣袖誤標拒收；歷史背心不能返回正式衣櫃。主要提交 `b84746a`，證據 `dc32c14`。
+- ART-18 新增明確單格候選檢視，與正式來源／錨點／快取隔離。舊候選可讀的斷言保留；最終 Godot 4.7.2 隔離 PCK 的 335 項衣物／檢視契約、72 組衣料、avatar、動畫庫、64 格髮型跨膚色／種族渲染通過。最終本機來源回退恢復與八向校準也通過。主要提交 `b1100b3`，證據 `bcd2297`。
+- MAIN-2 已修復量測標記與固定畫布校正未一起平移的落差，原固定鏈長 `0.3740643274853801` 斷言未改並恢復通過；獨立鞋圖、借用色樣各守自己的座標。提交 `f35e341`／`bc6a6ec`。
+- 原生島上錄影為 Godot 4.7／llvmpipe 降低環境成本 fixture，人物不降解析度。4.7.2 PCK 是 Linux 隔離測試，採 Windows Desktop preset；不是 Windows EXE、完整光影、原機器效能或完整原生美術驗收。
+- ART-17／18 仍需正式 NPC 行走／個性動作與真正不同衣物輪廓的完整原畫；票票、小角缺正式走路來源，不得用拒收候選或程序拆腿代用。ART-22／其他上位票也不能只因局部髮型完成就自動結案。
+- SG-1 缺 `design/02-minigames/catalog.json` 仍阻擋全域設計 CI；128 款設計未完成，不能捏造目錄或刪檢查讓 CI 變綠。每次核對最新主線的實際 Actions，不把局部通過寫成完整套件成功。
 
-### 使用者品質底線
+具體驗收看：
 
-- **先做好島**：主區域與第一園區完整，其他區域先做路口；從上島開始，未來另接船上序章。探索、特色設施、休閒、拍貼、主支線與可交談角色要形成真的遊樂園，不是一排小遊戲按鈕。多看《炸彈超人樂園3》。
-- **高精緻像素 HD-2D**：像素角色與真正立體布景、光影、遮擋和動態相互成立，不是簡陋像素放大或平面圖加特效。避免通用 AI 插畫；參考使用者肯定的海港圖與更有個性的角色圖，保留自己的世界特色。紙劇場／青綠珊瑚等是先前方案，不是永久不可改的使用者定案。
-- **動畫是目前優先修正項**：主角與每位 NPC 都要專用站姿、呼吸／眨眼、待機小動作、自然行走起停／轉向、互動、情緒與專用動作。主角採八方向，NPC 依活動需要完整覆蓋方向。依角色安排服務、拿盤子、巡走、舞蹈等生活節奏，不能全場同步或永遠招手。
-- **已有八方向走路圖就直接播原圖**。使用者最新再次否定了額外套在上面的怪步態；不能重啟拆腿、膝蓋拼接、轉鞋、整身伸縮或角色 shader 扭曲。更多幀要有真正姿勢變化，不能用重複圖、平移與像素差異充數。
-- **人物一致且完整**：每格頭髮、臉、衣服、手、腳、鞋、包袋、相機、角尾都完整，身份和比例穩定，不分離、不截斷、不穿地。來源裁切、圖集跨格、鏡頭與地物遮擋分開檢查。正常速度、四分之一慢放、全身逐姿勢都真的看過再接受；先前「看過」仍被使用者指出怪異時，必須重查。
-- **紙娃娃**：衣帽可購買收藏自訂，膚色／種族／性別／基礎外觀免費無限換；衣物不鎖性別。髮帽衣物與身體共享動作／方向／影格與正確遮擋，不獨立計時。不同衣服最終有不同輪廓，同一件外套不能待機變背心、走路又變外套；缺素材明確列缺口。
-- **環境與日夜**：物件依材質有合理動態，不把所有剛性物件亂晃；NPC 站位避遮擋。主角後方建築用夠大的圓形透視，可比較柔和邊緣。影子跟光源方向對應。凌晨／中午／傍晚／晚上可隨時切，融入拍貼、任務及小遊戲光影背景。
-- **全遊戲 UIUX**：重新檢查 HUD、暫停、設定、旅券、收藏、拍貼、衣櫃、教學、開場與結算。精緻像素、克制偽3D厚度／高光／投影；充分用畫面，主要操作一次看見，盡量不捲動，長內容分類分頁。不要小窗大卡、不必要／巢狀捲動、文字重疊或裁切。參考《歧路旅人》《幻想水滸傳》等多方案例。像素字體要清楚，保留多語系、缺字後備、長句與文字方向框架。
-- **教學與對話**：少常駐長提示，完整教學要有實際截圖、可略過重看；對話用正常對話框，所有出現的角色都可談話，先用克制的滴滴聲。
-- **每個小遊戲都新鮮**：同園區共用主題，不共用所有場地／鏡頭／動畫。依玩法用2D、2.5D、HD-2D或3D，做專業操控、目標、得分和回饋。氣球快遞特別要修無聊、操控弱、看不見海風與引導弱；風需可見、可預判且真實參與玩法。
-- **音樂音效全部 CC0**，保留授權頁、作者、來源和雜湊，挑真正合適的音色／節奏。不能把免費當CC0、把PCM／音量通過當試聽或好聽。
-- 每款小遊戲、每區通關與小惡魔收集等有遊戲內成就，保留 Steam 接口；未平台確認不算同步。收藏不消耗、離線收藏與平台可交易經濟分開。長期100款以上基本小遊戲／128候選與多人等依 AGENTS；不是這批已完成。
+- `pm/Snapland-art/[ART-18]同步換裝分層與角色動畫.md`
+- `pm/Snapland-art/images/ART-18-side-20261017-verification.json`
+- `pm/Snapland-art/images/ART-18-inspection-20261017-verification.json`
+- `pm/Snapland-art/[ART-33]接入島上主角髮尾骨架.md`
+- `pm/Snapland-art/[ART-34]擴充島上其他髮型動態.md`
+- `pm/Snapland-main/[MAIN-2]建立設計驗證與定時CI.md`
 
-### 現在實際完成到哪裡
+### 接續工作與研究方法
 
-- **ART-17 仍進行中**。`e8320de7ab71ac2d716d314ba09f95834116535c` 恢復主角八方向各八格原圖，停步、真實距離相位、完整招手／拍照／互動，移除角色額外扭曲與正式島嶼的拆腿優先。阿浪用真正左右各四格。票票與小角沒有批准的完整走路，現在保留原地專用待機，不能說整套已完成；2026-10-15 已補主角左／右各四格專用站立、呼吸與短眨眼，並修正慢速換向仍短暫播相反走姿；後與四個斜向專用待機仍未補齊。來源、正常／四分之一模擬速度、三組外觀、降低動態、重入與實際 Windows exe 本批局部通過，詳見 ART-17-side-idle-verification.json；不是整套角色完成。
-- **ART-18 仍進行中**。`48a8ab9580508dbb11cae6d269766d0512201091` 修正衣櫃「珊瑚紅外套」在前方動作選到不完整背心的身份切換；目前一律用正確外套姿勢配色。這不是不同衣服完整輪廓已完成。被拒收背心走路候選有跨格，重試又改姿勢，沒有採用。
-- **MIC-2 仍進行中**。`629da35d2ff6d7f33e9337c24b735b31beeccb15` 有日夜／區域混音、對話降音、靜音／重入等，先前 WASAPI 25.71秒錄音與局部測試通過。沒有主觀音色試聽完成，也沒完成十二款獨立選曲。
-- 先前局部通過：原圖主角行走、NPC真實來源路線、世界狀態、元件效果、髮帽貼合、坐姿、外套一致性、音訊與 Main 整合；原生四角色來源錄影、降低動態／重入、預設外觀QA包及普通Main啟動都有證據。**不是全部角色與全島的精品品質驗收。** 額外完整髮型矩陣曾150秒逾時，未算過。
-- 證據主要在 `pm/Snapland-art/images/ART-17-authored-*`、`ART-18-coral-jacket-consistency-v1-*`、`pm/Snapland-music/images/MIC-2-dynamics-v1-*`。影片慢放有的是正常影片延長四倍，不能寫成另一輪慢速模擬。報告中的 technical PASS 與 content／visual pending 要分開讀。
-- 最新普通本機試走：`C:/Users/stanl/.codex/snapland-qa/side-idle-20261015-v1/Play-Island-Preview.cmd`；以同資料夾 `profile/progress.json` 隔離存檔。本批程式／素材交付 `8f141fb`，不是整島完成版本；已實際輸出並經正常啟動／保存／退出檢查。舊 `build/island-walk-preview-20261014/` 仍為 `cf7578a`，不可當最新版。裸開 exe 不會套用 launcher 的隔離設定。
+先看最新 CI，對本批角色回歸的失敗找真實來源、畫布、錨點或快取原因，不改預期常數、刪斷言、調整測試選擇器或加 known failure。若只是 SG-1 未完成，保留明確失敗並接續角色優先事項。
 
-### 第一個具體工作
+下一個角色製作範圍先從 ART-18 真正不同輪廓的主角衣物做完整小批，再擴 ART-17 NPC 正式行走／完整個性演出。每批實作前至少比較六個不同來源／團隊／方法，優先實際看圖；不局限 Xbox 或 Game Accessibility Guidelines。保留來源、觀察、採用／不採用原因及有用圖例，參考圖不能當自有素材。只讀文字、只看靜態圖或只抽影片影格就照實記錄。
 
-先讀 ART-31 的來源畫布與頭部固定回歸，再看 ART-29／30 最新交付。使用者已指示持續做、不等回報；不要停在等待使用者重新試玩。保留原 2D 畫風與既有腿腳動作，穩定停步來源也不得改回會跳動的舊待機。從既有票選下一個完整缺口，完成局部驗證、正常／慢放與證據再擴充；髮尾骨架接島嶼和其他角色仍是後續範圍，不能提前宣稱完成。
+先核對必要動作／方向／影格清單，再製作素材；不能刪掉缺件項目就稱全套通過。新候選先查固定畫布、髮根／部件、身體完整、持物遮擋與來源覆蓋，再做實際島上正常／真正慢速、起停、轉向、換裝、暫停、降低動態、重入及打包等相關驗證。數值檢查不能代替自然度與美術判斷。跨票可重用流程整理回 User-guide，票記問題、可見改動與實際結果。
 
-### 研究、委派、測試與 Git
+### 存檔、測試與入口安全
 
-- 每個新研究主題至少六個跨作品／團隊／方法來源，記錄實際看到內容、採用理由及圖；未看影片／未試聽就明寫。過去已有八方角色製作文字研究，不要每次從零重讀或假稱新做過。新東西或兩三次不成功先查成熟做法。
-- 可委派工作給 gpt-6-luna，明確檔案／邊界／驗收、只回結論；同件事超過三輪仍失敗才用 gpt-6.1-sol。主 Session 生成、跑GPU並親自驗收。代理不搶檔，不相信自報「通過」。
-- 先fetch、新需求先票。取 origin/main 與自身未合併號碼的最大值+1，按專案分號，先提交推送票檔再實作；同需求沿用既有票，避免重開一批重複票。
-- Git專案身份 `Stanley Li <stanley890314@gmail.com>`；不加助理／模型品牌、Co-Authored-By。每張票固定起始SHA、進行中；只交付本組檔案，必要跨組最小修改並記錄。
-- 只跑受影響局部測試，完整套件給CI，不換selector／刪assert／加knownfailure／把逾時或缺工具算過。完整入口為 `python tools/run_game_tests.py`（留CI）；文件改動可用 `python tools/verify_design.py --scope links`。
-- 原生輸入要測真實事件傳遞。直接呼叫方法、來源像素正確或容器矩形正確，不能當原生手感、動畫自然、UI可讀或聲音適配完成。
-- **任何測試、預覽、錄影都設獨立絕對 `SNAPLAND_SAVE_PATH`**，不在Godot正式userdata，不用舊測試存檔當正式進度復原。當次先記錄正式檔／備份雜湊，之後使用者的正常遊玩可能改變它們，不可強制還原舊雜湊。
-- 用 `tools.godot_entrypoints.run_validated_godot` 驗證入口：SceneTree／MainLoop 才用 `--script`；Node／Control 經 `.tscn`。不可直接跑 `.review/commit-slices/*.gd`，提交快照保留純文字。
-- GPU原生用Forward+；GL compatibility在這個世界曾遇uniform上限。Godot CPU／GPU任務避免同專案搶跑；保留exit、ERROR與PASS摘要。新腳本要真正解析與執行，不把檔案檢查當編譯成功。
-- 錄影30FPS要用ffprobe核對；Root重看實際畫面。瀏覽器video硬體層截圖曾卡首幀，應核對編碼影片／抽幀或可靠canvas播放，不只看currentTime。拉近鏡頭時NPC鞋子不能被主角擋住，角色也不能被屋頂遮住再宣稱完整。
-- 音訊PCM用真實WASAPI與實際時間，不能Dummy/headless或fixed-fps當試聽證據。普通包正常退出用既有 `--smoke-test` 的保存／關閉路徑；先前硬切 `--quit-after` 在MovieWriter時曾報退出資源仍佔用，不得包裝成正常退出通過。
-- 截圖／影片放各票 `images/`；票用「問題—改動—驗收」，附簡短結果、分支與遠端提交。全驗收才依流程fetch／rebase、局部複測、快轉main轉審查；未過留feature push且票進行中。遠端拒絕不重試、不繞過。
-- 不改其他Session分支、工作區或stash；不清未合併交付分支。收尾做本批互相影響檢查，誠實逐票報結果、測試、圖／片、提交、狀態與缺口。
+所有引擎啟動使用 `tools.godot_entrypoints.run_validated_godot`；每項測試／匯入／原生錄影使用獨立絕對 `SNAPLAND_SAVE_PATH`，不讀寫玩家正式進度。`SceneTree`／`MainLoop` 才用 `--script`；Node／Control 透過實際 `.tscn`。`.review` 快照不能當執行入口。
 
-### 安全的局部測試範例（從遊戲工作區執行）
-
-以下是可複用命令範例，**不是這份交接新執行過的測試**。先核對測試檔、引擎與作用範圍，不為無關改動重跑。
+只跑受影響局部測試並檢查 exit、ERROR 與 PASS；完整套件交 CI。以下只是可重用範例，**不是這份文件又跑過一次測試**。先在正確 worktree 設定已核對的 `GODOT_BIN`：
 
 ```python
 from pathlib import Path
@@ -98,7 +56,7 @@ import tempfile
 from tools.godot_entrypoints import run_validated_godot
 
 root = Path.cwd()
-engine = "C:/Tools/Godot/Godot_v4.7.2-stable_win64_console.exe"
+engine = os.environ["GODOT_BIN"]
 with tempfile.TemporaryDirectory(prefix="snapland-next-local-") as isolated:
     env = dict(os.environ)
     env["SNAPLAND_SAVE_PATH"] = str(Path(isolated) / "profile" / "progress.json")
@@ -106,21 +64,24 @@ with tempfile.TemporaryDirectory(prefix="snapland-next-local-") as isolated:
         root,
         [engine, "--headless", "--rendering-method", "gl_compatibility",
          "--path", str(root), "--audio-driver", "Dummy",
-         "--script", "res://game/tests/test_avatar_authored_walk_loop.gd"],
+         "--script", "res://game/tests/test_outfit_atomic_coverage.gd"],
         env=env, timeout=150,
     )
     output = result.stdout + result.stderr
-    failures = [line for line in output.splitlines() if "ERROR:" in line]
-    passed = [line for line in output.splitlines() if "PASS:" in line]
-    print("exit", result.returncode, "errors", failures, "pass", passed)
-    assert result.returncode == 0 and not failures and passed
+    assert result.returncode == 0 and "ERROR:" not in output and "PASS:" in output
 ```
 
-若是 `test_integration`，它是Node場景，應將命令末端改成 `res://game/tests/test_integration.tscn`，不要加 `--script`。原生動畫證據使用 `game/tests/native_island_animation_acceptance.tscn` 與新的絕對輸出目錄，依該檔參數實際操作；它調整了鏡頭且使用腳本輸入，不能稱真人試玩。完成修改後更新指南對應段落及本批票，不要只回覆已理解。
+原生錄影另核對 fixture、速度、輸入事件、解析度及環境成本，保存實際檢視過的證據。音訊需實際試聽；PCM 有值只證明輸出。尚未完成的遊戲、平台與全套美術不可由局部回歸推論。
 
-## 交接附件索引
+### 逐票提交與整合
 
-- 長期需求與三張使用者喜好／否定圖：[user guide](user_guide.md)。
-- 來源雜湊與圖的用途：[三張原圖來源](Snapland-main/images/MAIN-20-reference-provenance.json)。
-- 本次文件整理票：[MAIN-20](Snapland-main/[MAIN-20]整理需求指南與接續提示.md)。
-- 最新 2D 穩定性局部交付與證據：[2581313](https://github.com/deadline314/Snapland/commit/2581313e00744f55cd99ab939e87bde681823bcf)。原分支未完成事項仍要看其票，不能只依本摘要勾完。
+- 一需求一票；新票先 fetch，核對 origin/main 與自己未合併票的最大號 +1，票檔先獨立 commit／push 登記。現有票用原票接續，不另造重複票。只有實際全達成才完成／勾選。
+- 作者與提交者每次均核對 `Stanley Li <stanley890314@gmail.com>`。訊息只寫票號與具體變更，不加模型名稱、Co-Authored-By、Claude-Session 等署名。
+- **每次 push 前 `git fetch origin main`**。若前進，先 rebase 工作分支至最新 origin/main，保留其他 Session 修改、解衝突並重跑受影響測試；使用正確提交者設定。
+- 使用者要求的 merge 是 **`git push origin HEAD:main`** 快轉整合，禁止 force push main。只有因主線再次前進而非快轉拒絕時，才重新 fetch／rebase 後正常推；403／權限拒絕不重試、不繞過，回報。
+- 每票 push 後 fetch；更新本機 main 前確認它沒有其他 checkout／未提交內容，安全快轉後核對本機 main 與 origin/main 一致。不能 reset 或強改其他 Session 分支，受阻就說具體原因。
+- 全部交付後只移除本 Session 已確認合入最新 main 且不用的 worktree／分支及對應遠端舊分支，保留其他 Session、未合併分支與證據。遠端拒絕刪除時停止並回報。交付說明含真實測試、證據、提交與仍未完成範圍。
+
+## 文件入口
+
+[長期 User-guide](user_guide.md) · [逐票未結案清單](open_tickets.md) · [本次指南審閱票](Snapland-main/[MAIN-20]整理需求指南與接續提示.md)
