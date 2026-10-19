@@ -1,0 +1,19 @@
+2026-10-16T21:28:49.6468038Z FAIL: authored idle hair attachment tests exited without its PASS marker ('PASS: directional closed-eye idle hair attachment').
+2026-10-16T21:28:49.6558753Z PASS: clean project import
+2026-10-16T21:28:49.6559153Z PASS: core runtime tests
+2026-10-16T21:28:49.6559374Z PASS: test/review save isolation tests
+2026-10-16T21:28:49.6559535Z PASS: wardrobe runtime tests
+2026-10-16T21:28:49.6559674Z PASS: avatar runtime tests
+2026-10-16T21:28:49.6559808Z PASS: avatar renderer tests
+2026-10-16T21:28:49.6559970Z PASS: avatar attachment tests
+2026-10-16T21:28:49.6560195Z PASS: island hair lifecycle tests
+2026-10-16T21:28:49.6560430Z PASS: island alternate hair source tests
+2026-10-16T21:28:49.6560668Z PASS: seated avatar tests
+2026-10-16T21:28:49.6560886Z PASS: source registration coordinate tests
+2026-10-16T21:28:49.6561131Z PASS: avatar motion rig runtime tests
+2026-10-16T21:28:49.6561279Z PASS: avatar role rig tests
+2026-10-16T21:28:49.6561424Z PASS: avatar motion world integration tests
+2026-10-16T21:28:49.6561591Z PASS: minigame HUD hierarchy tests
+2026-10-16T21:28:49.6561742Z PASS: eight-direction walk tests
+2026-10-16T21:28:49.6562154Z PASS: authored avatar walk loop tests
+2026-10-16T21:28:49.6562307Z PASS: authored avatar side idle tests

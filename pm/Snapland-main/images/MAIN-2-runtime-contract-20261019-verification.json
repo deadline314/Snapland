@@ -1,0 +1,87 @@
+{
+  "base_main": "a8f610a4825671ef4b8a04e53f23530528d77280",
+  "source_commit": "906d314120bcc1052392882cedd5edc9ee347640",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "python": "3.12.14",
+  "python_tests": 23,
+  "native_checks": [
+    {
+      "label": "authored idle hair attachment tests",
+      "exit": 0,
+      "seconds": 10.78,
+      "accepted": true,
+      "script_sha256": "3b10709f1f2c14dbee900cc29f693e5253125532178f97fc21935c1de251a950",
+      "completion_lines": [
+        "PASS: source-atlas closed-eye attachment availability (not production idle playback)"
+      ]
+    },
+    {
+      "label": "authored avatar side idle tests",
+      "exit": 0,
+      "seconds": 4.63,
+      "accepted": true,
+      "script_sha256": "0811e93922054c0d40f956f63efc0aa7fbc944e748e89e6c190aa21e07ef0cc2",
+      "completion_lines": [
+        "PASS: dedicated stable idle timing, source diagnostics, and reduced-motion stance"
+      ]
+    },
+    {
+      "label": "source registration coordinate tests",
+      "exit": 0,
+      "seconds": 0.45,
+      "accepted": true,
+      "script_sha256": "ce32d1df01ad8c339f707810cfc0755aefe2cf75ca8f68c95a75fa73ba16de6b",
+      "completion_lines": [
+        "PASS: body registration, independent palette/boot coordinates and immutable rebuild"
+      ]
+    },
+    {
+      "label": "atomic outfit coverage tests",
+      "exit": 0,
+      "seconds": 0.72,
+      "accepted": true,
+      "script_sha256": "61f157c070bef6448637347482aeb683eaddf3bb085d6701267a372e45ce0aa2",
+      "completion_lines": [
+        "PASS: atomic outfit coverage (333 checks)"
+      ]
+    },
+    {
+      "label": "side outfit palette tests",
+      "exit": 0,
+      "seconds": 5.83,
+      "accepted": true,
+      "script_sha256": "a2a9dee50f1a993930ee94e2d34f548cd086711eef20e7fd2b1fd74111513062",
+      "completion_lines": [
+        "PASS: side jacket palette, 72 source-bound cases, exposed cloth witnesses and curly hair occlusion"
+      ]
+    }
+  ],
+  "runtime_suite_count": 91,
+  "completion_contract_count": 90,
+  "unchanged": [
+    "runtime command/selector AST",
+    "per-test timeout AST",
+    "all five original GDScript fixtures",
+    "Godot version and save isolation",
+    "all game sources and image assets"
+  ],
+  "source_sha256": {
+    "tools/run_game_tests.py": "c883581799a5534a98d09ce0babcc634a07195c60ef60417b53677af5d0f343a",
+    "tests/test_runtime_result_contract.py": "8cc6f402d99291ee6be4d2564fa74832f87f473f399fcb4b1d51e4f0a9b19d04",
+    ".github/workflows/full-tests.yml": "0d055768565704026d0f02d1d1609a5dd72236d5124367e795c32819899673d7"
+  },
+  "prior_ci": "https://github.com/deadline314/Snapland/actions/runs/38968613443",
+  "scope": "Linux headless source-diagnostic and result-protocol verification. Two original diagnostic PNGs viewed, not production idle animation/native movie/PCK/Windows acceptance. Full CI still required; SG-1 design catalog absent.",
+  "artifacts_sha256": {
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-prior-ci-excerpt.log": "072fb0f33cdab69e4e2ad350d2c88ba57e15731824d8dab346d26a6ad16ce794",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-python-tests.log": "a7773fdf2f8476eb5063202f8f33c77a8b11fc4720169d4234e07c817254efb0",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-idle-before.log": "7a008096c24f38c9ac4049f77e0d775636aeab7b36178539d4ba88d7e1003b58",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-native-idle.log": "7a008096c24f38c9ac4049f77e0d775636aeab7b36178539d4ba88d7e1003b58",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-native-side-idle.log": "12bc1404ade96065b857a5a0c0db8c93a69918486987401157c2a8f8a87181bb",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-native-registration.log": "7e160e9d25af1a2071a6d1f989f97def49efe9e4ad837046740caaa9ad4bb135",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-native-outfit.log": "2caf2b1ad25419c810c3643e12047468ff817c1233f4253aafa150812322f2fc",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-native-side-coat.log": "9c04061513995c7c8a14ef26c8178073a54daf4a60d8a65f356e6dd806497999",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-source-idle-bob.png": "bad9780ba2e4a7c32e2ab19291edef877fb0471062b86e509830fa7400a861f9",
+    "pm/Snapland-main/images/MAIN-2-runtime-contract-20261019-source-idle-curly.png": "f9da426931304fbdaba72580f427c2059955b91314a5b0fa504bcfb0df217605"
+  }
+}
