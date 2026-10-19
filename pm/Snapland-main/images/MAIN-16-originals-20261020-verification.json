@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "runtime_base": "9d250cf",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+  "renderer": "Compatibility / llvmpipe / X11",
+  "scope": "Current scripted real-input game capture and both categories/originals are indexed by MAIN-13. This recording shows a new process reopening the persisted album and originals through actual M/mouse/Escape events, with an unchanged profile. Noon capture is indexed by ART-10.",
+  "human_played": false,
+  "audio": "Dummy; no listening claim",
+  "video": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1280,
+        "height": 720,
+        "avg_frame_rate": "15/1",
+        "nb_frames": "167"
+      }
+    ],
+    "format": {
+      "duration": "11.133333"
+    }
+  },
+  "video_decode": "All 167 frames decode without errors; original capture stopped with owned SIGINT (ffmpeg exit 255 after trailer flush), not an engine failure.",
+  "visual_review": "Six evenly spaced decoded samples plus actual ordinary/devil album and original-viewer screenshots viewed. Startup splash and final black desktop are included. No continuous human-playback claim.",
+  "files": [
+    {
+      "path": "MAIN-16-originals-20261020-reopen.mp4",
+      "bytes": 699537,
+      "sha256": "890b97d96017cbadaa665a916cd6636698b4cb09565adfbd5d432619f09dedaf"
+    },
+    {
+      "path": "MAIN-16-originals-20261020-reopen-report.json",
+      "bytes": 3298,
+      "sha256": "d2e4fc2ad78edf472619396dffba93d383566e80227a8817a33e95cbd7d2b738"
+    },
+    {
+      "path": "MAIN-16-originals-20261020-reopen.log",
+      "bytes": 16740,
+      "sha256": "b5d3390b0d85a839e61a4f8bd17656b78cd3c5e05e945bde33dde80c3ae8a13f"
+    }
+  ]
+}

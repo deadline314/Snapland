@@ -1,6 +1,6 @@
 # [MAIN-16] 保存拍貼高清原圖
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -60,3 +60,17 @@
 [正式拍貼流程影片](images/MAIN-16-final-gameplay-normal.mp4) · [時段拍貼流程影片](images/MAIN-16-final-time-normal.mp4) · [證據與雜湊](images/MAIN-16-final-evidence.json)
 
 分支：`feature/island-experience`。本輪開始基準維持票內固定 SHA；原生證據採本票提交索引。票況維持進行中，與島上整組交付一起核對。程式與證據提交：[55466d2](https://github.com/deadline314/Snapland/commit/55466d2)。
+
+
+# Commit — 2026-10-20 完成高清原圖與重開驗收並結案
+
+固定開始 SHA：`9d250cf`；分支：`codex/delivery-batch-20261020`。相依 MAIN-13 已完成正式雙分類共用與真正程序重開。
+
+本輪重新從上島實際按鍵行走、正式普通／小惡魔兩局進入收藏冊，兩張卡皆開啟完整 1280×720 原圖，三份原圖及 320×180 縮圖各只共用一組。另啟程序使用旅券、分類及照片按鈕重開查看，進度檔不變。時段明信片透過實際 T／滑鼠拍攝與原圖檢視通過，保留完整畫面並只給該次 20 枚幣；既有縮圖回退、損毀／過大保護、練習／失敗不附圖三項局部回歸通過。所有原生正向執行 0 個引擎 ERROR。
+
+主 Session 已實際查看兩分類、兩原圖、真正重開兩分類及時段原圖。另保存 1280×720、15 FPS、11.133 秒的本輪重開短片，完整解碼通過並檢視六個等距抽樣；包含啟動圖與結束桌面，不宣稱完整逐格觀看或真人試玩。先前完整正式／時段影片保留為舊版本證據。本輪使用 Godot 4.7.2／llvmpipe／Compatibility，Dummy 音訊不代表試聽或 Windows 硬體驗收。
+
+全部四項驗收已有對應證據，票況完成。[正式兩局、照片共用及局部檢查索引](images/MAIN-13-shared-20261020-verification.json) · [本輪真正重開短片](images/MAIN-16-originals-20261020-reopen.mp4) · [範圍、解碼與雜湊](images/MAIN-16-originals-20261020-verification.json) · [時段明信片與原圖](../Snapland-art/images/ART-10-capacity-20261020-native-report.json)。
+
+![目前版本普通原圖](images/MAIN-13-shared-20261020-ordinary-original-viewer.png)
+![目前版本小惡魔共用原圖](images/MAIN-13-shared-20261020-devil-original-viewer.png)
