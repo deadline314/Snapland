@@ -1,0 +1,29 @@
+test_suite_sidecar_directories_do_not_share_prior_suite_files (tests.test_runtime_result_contract.RuntimeResultContractTests.test_suite_sidecar_directories_do_not_share_prior_suite_files) ... FAIL
+
+======================================================================
+FAIL: test_suite_sidecar_directories_do_not_share_prior_suite_files (tests.test_runtime_result_contract.RuntimeResultContractTests.test_suite_sidecar_directories_do_not_share_prior_suite_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/work/Snapland-character/tests/test_runtime_result_contract.py", line 98, in test_suite_sidecar_directories_do_not_share_prior_suite_files
+    self.assertEqual(main(), 0)
+                     ^^^^^^
+  File "/workspace/work/Snapland-character/tools/run_game_tests.py", line 261, in main
+    result = run_validated_godot(ROOT, command, env=env, timeout=timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/Snapland-character/tests/test_runtime_result_contract.py", line 83, in fake_engine
+    self.assertFalse(sidecar.exists(), f"{label} sees a previous suite sidecar: {sidecar}")
+AssertionError: True is not false : game startup sees a previous suite sidecar: /tmp/snapland-godot-test-0o_k83p5/photos/same-name.png
+
+----------------------------------------------------------------------
+Ran 1 test in 0.006s
+
+FAILED (failures=1)

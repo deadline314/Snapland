@@ -1,0 +1,196 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+MAIN13_SHARED_PATH_12_CARDS_MS=0.77 DECODE_COUNT=1
+NEGATIVE TEST: CRC-valid broken-zlib PNG is expected to reach and fail the native image decoder; subprocess output is isolated.
+PASS: MAIN-13 shared photo paths, replay idempotence, legacy backfill, malformed/missing fallback
+WARNING: Photo 'photo-welcome-game-1' screenshot is missing: 'missing-replay-frame.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:356)
+         [1] attach_welcome_game_photo_frames (res://game/core/progress.gd:179)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:47)
+WARNING: Photo 'photo-welcome-game-1' has more paths after the 3-image limit; remaining entries are not inspected (next: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/bounded-frame-3.png').
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:353)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:91)
+WARNING: Photo 'photo-welcome-game-1' has 100000 screenshot entries; only the first 12 will be inspected.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:339)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 1; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 2; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 3; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 4; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 5; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 6; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 7; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 8; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 9; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 10; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' repeats screenshot path at index 11; duplicate ignored: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/main13-thumbnail-source.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:349)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:102)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-0.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-1.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-2.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-3.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-4.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-5.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-6.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-7.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-8.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-9.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-10.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/ui-missing-11.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)
+WARNING: Photo 'photo-welcome-game-1' screenshot is missing: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/missing-main13-photo.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:356)
+         [1] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)
+         [2] load_progress (res://game/core/progress.gd:618)
+         [3] _run (res://game/tests/test_main_photo_thumbnails.gd:120)
+WARNING: Photo 'photo-welcome-game-1' has invalid 'frames' data (expected an array).
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:336)
+         [1] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)
+         [2] load_progress (res://game/core/progress.gd:618)
+         [3] _run (res://game/tests/test_main_photo_thumbnails.gd:127)
+WARNING: Photo 'photo-welcome-game-1' has an invalid screenshot path value at index 0: 17.0.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_game_photo_frames (res://game/core/progress.gd:345)
+         [1] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)
+         [2] load_progress (res://game/core/progress.gd:618)
+         [3] _run (res://game/tests/test_main_photo_thumbnails.gd:132)
+WARNING: Photo 'photo-welcome-game-1' screenshot has invalid size (9 bytes; allowed 45..16777216): '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/corrupt-main13-photo.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:374)
+         [1] _validated_game_photo_frames (res://game/core/progress.gd:358)
+         [2] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)
+         [3] load_progress (res://game/core/progress.gd:618)
+         [4] _run (res://game/tests/test_main_photo_thumbnails.gd:144)
+WARNING: Photo 'photo-welcome-game-1' screenshot has invalid size (9 bytes; allowed 45..16777216): '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/corrupt-main13-photo.png'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:374)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:149)
+WARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 2147483647x2147483647 at '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/crc-valid-huge-ihdr.png' (expected 320x180); decoder was not called.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:388)
+         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:171)
+WARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 160x90 at '/workspace/work/Snapland-character/work/runtime-isolation-20261020/checks/1/photos/wrong-size-main13-photo.png' (expected 320x180); decoder was not called.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:388)
+         [1] _validated_game_photo_frames (res://game/core/progress.gd:358)
+         [2] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)
+         [3] load_progress (res://game/core/progress.gd:618)
+         [4] _run (res://game/tests/test_main_photo_thumbnails.gd:178)

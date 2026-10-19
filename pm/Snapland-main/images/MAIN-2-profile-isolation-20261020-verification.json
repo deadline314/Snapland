@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "ticket": "MAIN-2",
+  "base": "26a5353eb76922e2085c6fb4c5d68838bb33e5b0",
+  "ci_run": 39339867661,
+  "ci_job": 118358973468,
+  "ci_status": "full-suite success; runtime75suites pass,76 shared-photo failed due shared sidecar directory; overall not green",
+  "change": "Every dispatched runtime suite owns a complete private directory, including photos/cache/negative child proofs; distinct JSON filenames previously shared the same parent",
+  "runtime_selection_ast_unchanged": true,
+  "runtime_suites": 92,
+  "per_suite_time_limits_unchanged": "90sec;avatar renderer240sec",
+  "python_contract_tests": {
+    "count": 24,
+    "result": "pass",
+    "new_test": "actual runner loop with fake engine creating identical relative photo/cache filenames across every92invocation; old configuration fails on second suite; not92real Godot tests"
+  },
+  "real_engine_reproduction": {
+    "results": [
+      {
+        "case": "old-parent",
+        "exit": 1,
+        "seconds": 1.66,
+        "errors": 2,
+        "completion": false,
+        "error": "shared photo thumbnail tests exited 1:\non-20261020/old-common/photos/ui-missing-9.png'.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _read_game_photo_image (res://game/core/progress.gd:368)\n         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)\n         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)\nWARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/old-common/photos/ui-missing-10.png'.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _read_game_photo_image (res://game/core/progress.gd:368)\n         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)\n         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)\nWARNING: Photo 'photo-welcome-game-1' screenshot cannot be opened: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/old-common/photos/ui-missing-11.png'.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _read_game_photo_image (res://game/core/progress.gd:368)\n         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)\n         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:111)\nWARNING: Photo 'photo-welcome-game-1' screenshot is missing: '/workspace/work/Snapland-character/work/runtime-isolation-20261020/old-common/photos/missing-main13-photo.png'.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _validated_game_photo_frames (res://game/core/progress.gd:356)\n         [1] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)\n         [2] load_progress (res://game/core/progress.gd:618)\n         [3] _run (res://game/tests/test_main_photo_thumbnails.gd:120)\nWARNING: Photo 'photo-welcome-game-1' has invalid 'frames' data (expected an array).\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _validated_game_photo_frames (res://game/core/progress.gd:336)\n         [1] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)\n         [2] load_progress (res://game/core/progress.gd:618)\n         [3] _run (res://game/tests/test_main_photo_thumbnails.gd:127)\nWARNING: Photo 'photo-welcome-game-1' has an invalid screenshot path value at index 0: 17.0.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _validated_game_photo_frames (res://game/core/progress.gd:345)\n         [1] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)\n         [2] load_progress (res://game/core/progress.gd:618)\n         [3] _run (res://game/tests/test_main_photo_thumbnails.gd:132)\nWARNING: Photo 'photo-welcome-game-1' screenshot has invalid size (9 bytes; allowed 45..16777216): '/workspace/work/Snapland-character/work/runtime-isolation-20261020/old-common/photos/corrupt-main13-photo.png'.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _read_game_photo_image (res://game/core/progress.gd:374)\n         [1] _validated_game_photo_frames (res://game/core/progress.gd:358)\n         [2] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)\n         [3] load_progress (res://game/core/progress.gd:618)\n         [4] _run (res://game/tests/test_main_photo_thumbnails.gd:144)\nWARNING: Photo 'photo-welcome-game-1' screenshot has invalid size (9 bytes; allowed 45..16777216): '/workspace/work/Snapland-character/work/runtime-isolation-20261020/old-common/photos/corrupt-main13-photo.png'.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _read_game_photo_image (res://game/core/progress.gd:374)\n         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)\n         [2] _run (res://game/tests/test_main_photo_thumbnails.gd:149)\nWARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 2147483647x2147483647 at '/workspace/work/Snapland-character/work/runtime-isolation-20261020/old-common/photos/crc-valid-huge-ihdr.png' (expected 320x180); decoder was not called.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _read_game_photo_image (res://game/core/progress.gd:388)\n         [1] _run (res://game/tests/test_main_photo_thumbnails.gd:171)\nWARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 160x90 at '/workspace/work/Snapland-character/work/runtime-isolation-20261020/old-common/photos/wrong-size-main13-photo.png' (expected 320x180); decoder was not called.\n     at: push_warning (core/variant/variant_utility.cpp:1033)\n     GDScript backtrace (most recent call first):\n         [0] _read_game_photo_image (res://game/core/progress.gd:388)\n         [1] _validated_game_photo_frames (res://game/core/progress.gd:358)\n         [2] _backfill_legacy_devil_photo_frames (res://game/core/progress.gd:257)\n         [3] load_progress (res://game/core/progress.gd:618)\n         [4] _run (res://game/tests/test_main_photo_thumbnails.gd:178)\nERROR: FAIL: one photo file serves both collected cards\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _finish (res://game/tests/test_main_photo_thumbnails.gd:293)\n       [1] _run (res://game/tests/test_main_photo_thumbnails.gd:187)\nERROR: FAIL: replay does not create a duplicate photo file\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _finish (res://game/tests/test_main_photo_thumbnails.gd:293)\n       [1] _run (res://game/tests/test_main_photo_thumbnails.gd:187)"
+      },
+      {
+        "case": "private-parent",
+        "exit": 0,
+        "seconds": 1.65,
+        "errors": 0,
+        "completion": true,
+        "error": null
+      }
+    ],
+    "prior_photo_sha256": "72e12b05439fc56974b2c23b3e9e30cb8e46e8aa8e63f6919bf9bd7d125502cd",
+    "all_prior_suite_files_unchanged": true,
+    "prior_suite_file_count": 13
+  },
+  "local_real_suites": [
+    {
+      "name": "test/review save isolation tests",
+      "exit": 0,
+      "seconds": 2.86,
+      "error": null
+    },
+    {
+      "name": "shared photo thumbnail tests",
+      "exit": 0,
+      "seconds": 1.85,
+      "error": null
+    },
+    {
+      "name": "saved photo viewer tests",
+      "exit": 0,
+      "seconds": 0.72,
+      "error": null
+    },
+    {
+      "name": "photo original preservation tests",
+      "exit": 0,
+      "seconds": 2.3,
+      "error": null
+    }
+  ],
+  "unchanged_photo_assertions_sha256": "9efbf7a74e7d963e1cb235d41acd86c6d45d39c12d4d53b8f3db6e700073546c",
+  "files": {
+    "MAIN-2-profile-isolation-20261020-before-python.log": "70203b6c1e4dd576550cd88e3bd2f7a7e7e804b89e1311434646d3ecd867d2b3",
+    "MAIN-2-profile-isolation-20261020-after-python.log": "fa73e9c57f236242132041053437b54596262a8199834e4029a74a138108f0eb",
+    "MAIN-2-profile-isolation-20261020-old-parent.log": "67459c4b3ad76d33205a4e40c9e16557ad2a4ae2eb72d7b61bb1d693fff27834",
+    "MAIN-2-profile-isolation-20261020-private-parent.log": "3c07129792d1646f442176c23e1acff4d5064c1bc724099ad486061c698009ef",
+    "MAIN-2-profile-isolation-20261020-real-photo-results.json": "90434485545e2113503e261f85046e26f7e324d10de3eb4266233c63bb8468a1",
+    "MAIN-2-profile-isolation-20261020-ci-excerpt.log": "1ffc20bbfa12d07cd31d481ee34b54f746dba1580dd3ce2cc3d0e84d9444f3b8",
+    "MAIN-2-profile-isolation-20261020-test-review-save-isolation-tests.log": "a85bebf093413980cfd3e42a41cb643c394f69ac94b03961a17b5117175a27fc",
+    "MAIN-2-profile-isolation-20261020-shared-photo-thumbnail-tests.log": "798f190fc550c61a85f4db961092eefe872c18528f33e3a62d4d4ccbe68cdf0b",
+    "MAIN-2-profile-isolation-20261020-saved-photo-viewer-tests.log": "3d9c9cd36d5b417f9c82ef613ead08550c1bebd2679ed1732f5abc0494a7f59f",
+    "MAIN-2-profile-isolation-20261020-photo-original-preservation-tests.log": "f457470f41aa149821675393ee10f0b2a4f359de5b524409ba5e5d742a71dbdb"
+  },
+  "scope": "test runner isolation; no production photo save semantics, input, scoring or collections changed"
+}

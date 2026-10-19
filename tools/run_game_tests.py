@@ -253,7 +253,11 @@ def main() -> int:
         if missing_markers:
             return fail(f"Runtime checks have no configured completion marker: {missing_markers!r}.")
         for suite_index, (label, command) in enumerate(checks):
-            env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
+            # Photos, decoder proofs and caches live beside the JSON profile.
+            # Distinct filenames in one parent still let suites affect each other.
+            suite_directory = Path(temporary) / f"suite-{suite_index}"
+            suite_directory.mkdir()
+            env["SNAPLAND_SAVE_PATH"] = str(suite_directory / "progress.json")
             timeout = 240 if label == "avatar renderer tests" else 90
             started = time.monotonic()
             print(f"RUN: {label} ({suite_index + 1}/{len(checks)}, limit {timeout}s)", flush=True)

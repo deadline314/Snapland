@@ -2,9 +2,14 @@
 from __future__ import annotations
 
 import ast
+from contextlib import redirect_stdout
+import io
+import os
+from pathlib import Path
 import inspect
 import subprocess
 import unittest
+from unittest import mock
 
 from tools.run_game_tests import PASS_MARKERS, main, result_error
 
@@ -58,6 +63,42 @@ class RuntimeResultContractTests(unittest.TestCase):
         labels = [ast.literal_eval(row.elts[0]) for row in checks.elts]
         self.assertEqual(len(labels), len(set(labels)), "runtime suite names must be unique")
         self.assertEqual(set(labels) - {"clean project import"}, set(PASS_MARKERS), "new suites require a completion contract; retired suites cannot leave stale contracts")
+
+    def test_suite_sidecar_directories_do_not_share_prior_suite_files(self) -> None:
+        # Exercise the actual runner loop with a fake engine that owns the same
+        # relative photo/cache names in every invocation. Distinct JSON names
+        # alone must not permit any later suite to see those earlier sidecars.
+        tree = ast.parse(inspect.getsource(main))
+        checks = next(node.value for node in ast.walk(tree) if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "checks" for target in node.targets))
+        labels = [ast.literal_eval(row.elts[0]) for row in checks.elts]
+        observed: list[Path] = []
+        protected: dict[Path, bytes] = {}
+
+        def fake_engine(_root, command, *, env, timeout):
+            label = labels[len(observed)]
+            save = Path(env["SNAPLAND_SAVE_PATH"])
+            self.assertTrue(save.is_absolute())
+            self.assertTrue(save.parent.is_dir(), "runner prepares the private writable profile directory")
+            sidecars = [save.parent / "photos" / "same-name.png", save.parent / "cache" / "same-name.bin"]
+            for sidecar in sidecars:
+                self.assertFalse(sidecar.exists(), f"{label} sees a previous suite sidecar: {sidecar}")
+                sidecar.parent.mkdir(parents=True, exist_ok=True)
+                payload = label.encode("utf-8")
+                sidecar.write_bytes(payload)
+                protected[sidecar] = payload
+            for path, payload in protected.items():
+                self.assertEqual(path.read_bytes(), payload, "a later suite overwrote another suite's sidecar")
+            self.assertEqual(timeout, 240 if label == "avatar renderer tests" else 90)
+            observed.append(save)
+            return subprocess.CompletedProcess(command, 0, PASS_MARKERS.get(label, "import complete") + "\n", "")
+
+        with mock.patch.dict(os.environ, {"GODOT_BIN": "fixture-godot"}), \
+             mock.patch("tools.run_game_tests.subprocess.run", return_value=self.result("4.7.2.stable.official.fixture")), \
+             mock.patch("tools.run_game_tests.run_validated_godot", side_effect=fake_engine), \
+             redirect_stdout(io.StringIO()):
+            self.assertEqual(main(), 0)
+        self.assertEqual(len(observed), len(labels), "every configured runtime suite was dispatched")
+        self.assertEqual(len({path.parent for path in observed}), len(labels))
 
     def test_newly_registered_contracts_require_real_completion(self) -> None:
         cases = {

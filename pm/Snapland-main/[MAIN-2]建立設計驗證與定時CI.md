@@ -156,3 +156,12 @@ Godot 4.7.2 的實際園區布局、透視與日光三項回歸全部通過；�
 完整CI39335670613前37項通過，第38項對話測試在退出時回報3個資源仍使用中；設計／Python工作成功，整套原生不能算通過。本機verbose重跑沒有重現這個間歇退出錯誤。對話、招呼持續、路線凍結／恢復、Esc暫停及降低動態斷言全部保留；結束前改走與正式退出相同的音訊停止及短暫收束，再釋放場景。受影響測試8.02秒、exit0、0ERROR、實際完成行通過；不宣稱已證明唯一根因或完成整套回歸。
 
 [實際範圍](images/MAIN-2-dialogue-cleanup-20261020-verification.json) · [遠端失敗摘錄](images/MAIN-2-dialogue-cleanup-20261020-ci-excerpt.log) · [本機修正前](images/MAIN-2-dialogue-cleanup-20261020-before-local.log) · [修正後](images/MAIN-2-dialogue-cleanup-20261020-after.log)。
+
+
+# 2026-10-20 隔離完整套件進度目錄
+
+下一次完整CI已通過前75項，在共享照片的「只有一份檔案、重玩不重複」檢查失敗。不同JSON名稱仍共用照片資料夾，導致前面套件的圖進到本套件計數。現在每套件都有完整私人進度／照片／快取範圍，原兩個照片斷言、92個命令與個別時限保留。
+
+舊布局加一張前套件照片，在真正Godot重現兩個失敗；私人資料夾正常通過，前套件13個檔案原樣保存。四項受影響Godot回歸與24項Python入口／結果契約通過；新增的92次派送保護檔測試使用假引擎，未當成92項遊戲通關。
+
+[原因與六方比較](../../design/runtime/runtime-profile-isolation.md) · [驗收範圍／前後記錄](images/MAIN-2-profile-isolation-20261020-verification.json)。
