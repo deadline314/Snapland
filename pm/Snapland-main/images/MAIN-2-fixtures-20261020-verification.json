@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "base": "c4b4dc290765027b11c793bc3a5eb57f2a644d9c",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "scope": "headless fixture contract corrections; not art approval or whole-suite success",
+  "local_suites": [
+    {
+      "name": "NPC missing walk idle tests",
+      "exit": 0,
+      "seconds": 10.62,
+      "error": null,
+      "log": "MAIN-2-fixtures-20261020-NPC-missing-walk-idle-tests.log",
+      "sha256": "cb88c79a85befa0c308a226a99c32eb7c198d8442727e4d25599a25fcd9dd81f"
+    },
+    {
+      "name": "sprite clearance tests",
+      "exit": 0,
+      "seconds": 12.44,
+      "error": null,
+      "log": "MAIN-2-fixtures-20261020-sprite-clearance-tests.log",
+      "sha256": "2676e57a31fd0df38df7638d345d319aeaced71293bfdceba6bb528daadc8e0c"
+    },
+    {
+      "name": "building occlusion tests",
+      "exit": 0,
+      "seconds": 6.02,
+      "error": null,
+      "log": "MAIN-2-fixtures-20261020-building-occlusion-tests.log",
+      "sha256": "4ca187d1a3e9aba5dc0f6c53f32acd41bca3c6687122fdcda861fa22a89b87c0"
+    },
+    {
+      "name": "bubble photo view tests",
+      "exit": 0,
+      "seconds": 4.63,
+      "error": null,
+      "log": "MAIN-2-fixtures-20261020-bubble-photo-view-tests.log",
+      "sha256": "2ef0a91b96518be655472a3e0c966f783fe3f648191000cb951483a6499dad22"
+    }
+  ],
+  "python_contract_checks": 23,
+  "official_suite_count": 92,
+  "official_runner_unchanged": true,
+  "remaining_failure": "hat rescue view: old catch art differs visibly from current approved idle; not waived",
+  "sources": {
+    "game/tests/test_missing_walk_idle_lifecycle.gd": "9034253ee0783e3becc0df5a9fad432ebe4f473edbf1042b8d1068f6dfa2f7be",
+    "game/tests/test_sprite_clearance.gd": "8d39dded29ca6fe65671bc8e0aeb75dabbf603975c11202632896cad870a6f6b",
+    "game/tests/test_occlusion.gd": "39b089d70ea267b6ceb4023e1d7aee57378438859a5d943ecf91dab3413aca28",
+    "game/tests/test_bubble_photo_view.gd": "09f5da06b7f4f712d8ec744793386e31340cd0983eed5fbf26239525ca49aec0",
+    "tools/run_game_tests.py": "26c0950ffde62960429e5194138caf007e35a8012d66d6c51cbf002f103bbced"
+  }
+}

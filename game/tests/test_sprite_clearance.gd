@@ -45,21 +45,31 @@ func _assert_avatar_frames_share_feet_baseline() -> void:
 		if walk_count > 0:
 			for frame in range(walk_count):
 				var walk: Texture2D = renderer.texture(appearance,equipped,direction,frame,"walk")
-				baseline_rows.append(_visible_bottom(walk))
+				# Moving shoes preserve the reviewed whole-cel projection. Recentring
+				# them per frame would move the head/body and recreate ART-31 drift.
+				var source: Image = renderer._stable_walk_pixels.frame("hero", direction, frame)
+				var seam: int = renderer._stable_walk_pixels.manifest["hero/"+direction].head_neck_seam_y
+				_check(_authored_lower_alpha_matches(source, walk.get_image(), seam), "walk/%s/%d preserves authored lower-body registration without shoe recentering" % [direction,frame])
+				_check(_visible_bottom(walk) <= AvatarRendererScript.FEET_BASELINE + 1, "walk/%s/%d visible pixels do not extend below the authored ground plane" % [direction,frame])
+				if direction == "front" and frame == 0:
+					var shifted := Image.create(source.get_width(),source.get_height(),false,Image.FORMAT_RGBA8)
+					shifted.fill(Color.TRANSPARENT)
+					shifted.blit_rect(source,Rect2i(Vector2i.ZERO,source.get_size()),Vector2i(0,1))
+					_check(not _authored_lower_alpha_matches(source,shifted,seam), "authored lower-body comparison rejects a one-pixel whole-cel shift")
 				_check_canvas_clearance(walk,"avatar walk/%s/%d-of-%d" % [direction,frame+1,walk_count])
 		for action in AvatarRendererScript.ACTIONS:
 			for frame in range(3):
 				var action_texture: Texture2D = renderer.texture(appearance,equipped,direction,frame,action)
 				baseline_rows.append(_visible_bottom(action_texture))
 				_check_canvas_clearance(action_texture,"avatar %s/%s/%d" % [action,direction,frame])
-	_check(not baseline_rows.is_empty(), "avatar frame fixtures include idle, every authored walk frame, and all three frames of every action")
+	_check(not baseline_rows.is_empty(), "grounded frame fixtures include idle and all three frames of every action; all walk frames are independently checked above")
 	if baseline_rows.is_empty(): return
 	var low := baseline_rows[0]
 	var high := baseline_rows[0]
 	for row in baseline_rows:
 		low = mini(low,row)
 		high = maxi(high,row)
-	_check(high - low <= 2, "all eight directions and full action frames stay within two pixels of one visible feet baseline; found %d..%d" % [low,high])
+	_check(high - low <= 2, "all eight grounded idle directions and full action frames stay within two pixels of one visible feet baseline; found %d..%d" % [low,high])
 	_check(high <= AvatarRendererScript.FEET_BASELINE + 1, "avatar artwork keeps its visible pixels within one pixel of its authored feet row")
 	for direction in directions:
 		for hat in ["hat-straw","hat-sailor","hat-flower"]:
@@ -216,13 +226,22 @@ func _assert_projected_feet_touch_their_ground() -> void:
 				var surface_y := ParkWorldScript._ground_surface_y(parent.global_position)
 				_check(absf(projected_foot_y - surface_y) <= 0.001, "%s foot row meets its actual ground mesh at heading %d and pitch %.2f" % [sprite.name,heading,pitch])
 
+func _authored_lower_alpha_matches(source: Image, actual: Image, seam: int) -> bool:
+	if source == null or actual == null or source.get_size() != actual.get_size() or seam <= 0 or seam >= source.get_height(): return false
+	for y in range(seam,source.get_height()):
+		for x in range(source.get_width()):
+			if (source.get_pixel(x,y).a >= 0.5) != (actual.get_pixel(x,y).a >= 0.5): return false
+	return true
+
 func _visible_bottom(texture: Texture2D) -> int:
 	_check(texture != null, "authored sprite frame is available")
 	if texture == null: return 0
 	var image := texture.get_image()
 	_check(image != null and not image.is_empty(), "authored sprite frame pixels are readable")
 	if image == null or image.is_empty(): return 0
-	var used_rect := image.get_used_rect()
+	# Match the live living_sprite shader (ALPHA_SCISSOR_THRESHOLD = 0.5).
+	# Imported weak-alpha fringes are not visible soles.
+	var used_rect := _alpha_bounds(image)
 	_check(used_rect.size.x > 0 and used_rect.size.y > 0, "authored sprite frame contains visible pixels")
 	return used_rect.end.y - 1
 

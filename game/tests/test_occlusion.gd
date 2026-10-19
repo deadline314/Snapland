@@ -338,12 +338,21 @@ func _run() -> void:
 	park_world.player.velocity = Vector3.ZERO
 	park_world.camera.position = park_world.player.position + Vector3(0, 15.5, 25)
 	park_world.camera.look_at(park_world.player.position + Vector3(0, 1, -3))
+	# Locality owns the real distant plaza title. Occlusion must preserve its
+	# current owner-selected state, and must also leave a visible decoy alone.
+	var visible_unregistered_title := Label3D.new()
+	visible_unregistered_title.text = "Nearby unregistered occlusion fixture"
+	park_world.add_child(visible_unregistered_title)
+	visible_unregistered_title.position = park_world.player.position + Vector3(5, 2, 0)
 	await physics_frame
+	park_world._update_district_label_visibility()
+	var unrelated_was_visible: bool = unrelated_label.visible
 	park_world.occlusion_controller.refresh_visibility()
 	assert(arch_group_id != 0 and park_world.occlusion_controller._active_group_ids.has(arch_group_id), "the actual arch beam activates the local body-centered cutaway")
 	park_world.occlusion_controller._process(0.15)
 	assert(not arch_title.visible and arch_title.modulate == arch_title_modulate, "only the intersecting registered arch title hides while the body mask is active")
-	assert(rear_arch_title.visible and unrelated_label.visible, "a title behind the player and an unregistered world label remain visible")
+	assert(rear_arch_title.visible and visible_unregistered_title.visible, "a title behind the player and a visible unregistered world label remain visible")
+	assert(unrelated_label.visible == unrelated_was_visible, "occlusion preserves the distant plaza title state owned by player-distance visibility")
 	assert(int(park_world.player.collision_layer) == player_collision_before, "arch ray setup leaves player collision unchanged")
 	park_world.apply_settings({"reduced_motion": true})
 	park_world.occlusion_controller._process(0.0)

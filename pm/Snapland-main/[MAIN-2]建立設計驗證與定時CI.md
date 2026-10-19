@@ -142,3 +142,10 @@ Godot 4.7.2 的實際園區布局、透視與日光三項回歸全部通過；�
 六項Godot4.7.2局部測試通過，exit0、0ERROR及各自真正完成行均核對。可見腳底的故意下移反例能拒絕；原量測候選的獨立三角色測試沒有改動並仍通過。正式角色程式、來源素材、92項清單及90／240秒門檻未改。
 
 [六方研究、原畫與候選的契約](../../design/runtime/npc-production-test-contract.md) · [六項實際結果及來源雜湊](images/MAIN-2-npc-source-20261020-verification.json) · [世界整合記錄](images/MAIN-2-npc-source-20261020-world.log)。本批是無頭原生回歸，不是新美術試玩。SG-1設計目錄已另票交付；完整CI仍待本批整合後核對，整票暫保留進行中。
+
+
+# Commit — 2026-10-20 隔離候選與正式素材的後段契約
+
+四項測試修正並實際通過：缺來源候選明確opt-in、腳底按可見alpha與已核准原畫比較、透視與遠處招牌管理互不覆寫、泡泡角色大小跟隨正式Session同步。原92項清單及個別時限維持，23項Python啟動／結果反例通過。
+
+[具體原因、限制及六方方法](../../design/runtime/npc-production-test-contract.md) · [四項實際記錄與來源雜湊](images/MAIN-2-fixtures-20261020-verification.json)。後段帽子救援仍有[真實角色差異失敗](images/MAIN-2-fixtures-20261020-hat-failure.log)：接帽序列和現在的原畫待機頭身不一致，尚未調整任何限制掩蓋。整票仍進行中；完整遠端CI另核對。

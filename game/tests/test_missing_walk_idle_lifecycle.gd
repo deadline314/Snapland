@@ -20,6 +20,11 @@ func _run() -> void:
 	await _frames(3)
 	var world: Node = main.world
 	var activity: Variant = world.npc_activity
+	# This fixture deliberately exercises the retained opt-in review adapter.
+	# Production-world source-cel tests independently require it to stay absent.
+	_check(not bool(activity.motion_report().enabled), "Main production startup leaves the review-only measured adapter disabled")
+	activity.configure_motion(world.camera, Callable(world, "_avatar_ground_height"), true)
+	_check(bool(activity.motion_report().enabled) and activity.motion_report().supported_roles.size() == 3, "isolated missing-walk fixture explicitly enables all measured review roles")
 	var actor := _actor_record(main,"ticket")
 	var actor_root := actor.get("activity_root") as Node3D
 	var sprite := actor.get("sprite") as Sprite3D
@@ -155,6 +160,10 @@ func _check(condition: bool, message: String) -> void:
 
 
 func _finish(main: Node) -> void:
+	# Match Main's normal quit lifecycle: let stop commands reach the audio
+	# thread before freeing players/resources, even with the Dummy driver.
+	main.audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
 	main.queue_free()
 	await _frames(2)
 	if _failures.is_empty():

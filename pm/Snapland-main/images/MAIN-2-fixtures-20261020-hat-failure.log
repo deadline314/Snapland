@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: anatomical hair-top anchors stay within twelve normalized pixels of idle while every pose shares the approved foot baseline
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _expect (res://game/tests/test_hat_rescue_view.gd:49)
+       [1] _test_catch_pose_matches_idle_alignment (res://game/tests/test_hat_rescue_view.gd:101)
+       [2] _run (res://game/tests/test_hat_rescue_view.gd:28)
+ERROR: Hat rescue view: 1 check(s) failed
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://game/tests/test_hat_rescue_view.gd:41)

@@ -2,6 +2,7 @@ extends SceneTree
 
 const BubblePhotoModel = preload("res://game/minigames/bubble_photo_model.gd")
 const BubblePhotoView = preload("res://game/minigames/bubble_photo_view.gd")
+const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 
 var checks := 0
 var failures: Array[String] = []
@@ -34,11 +35,13 @@ func _run() -> void:
 func _test_camera_and_subject_bounds() -> void:
 	var model = BubblePhotoModel.new()
 	model.reset(false, "noon")
+	# Session synchronizes the selected appearance before the first presentation.
+	model.set_subject_size(view.measured_subject_size())
 	view.present_state(model.snapshot(), "aim", false, "noon")
 	_expect(view.playfield_rect() == BubblePhotoModel.PLAY_RECT, "the camera window preserves the model's exact safe play rectangle")
 	_expect(view.camera_inset_rect().encloses(BubblePhotoModel.PLAY_RECT) and view.camera_body_rect().encloses(view.camera_inset_rect()), "the carved camera body frames the exact playfield without shrinking its scored window")
 	var alpha_bounds: Rect2i = view.avatar_alpha_bounds()
-	_expect(alpha_bounds.size == Vector2i(206, 298), "the baseline full-body target size is measured from the cached character alpha, including hair and shoes")
+	_expect(alpha_bounds == _independent_avatar_bounds(), "cached bounds match independently scanned authored idle pixels, including hair and shoes")
 	_expect(alpha_bounds.position.x > 0 and alpha_bounds.position.y > 0 and alpha_bounds.end.x < 280 and alpha_bounds.end.y < 360, "visible alpha bounds retain margins around headwear and feet in the original character canvas")
 	_expect(view.cached_avatar_frame_count() >= 1 and view.subject_draw_rect() == model.snapshot().target_box, "one real avatar is drawn within the exact measured model body bounds")
 	var frame: Rect2 = view.camera_frame_rect()
@@ -99,7 +102,8 @@ func _test_camera_layout_and_legibility() -> void:
 	_expect(_contrast_ratio(plaque_ink, shell) >= 7.0 and _contrast_ratio(readout_ink, readout_panel) >= 7.0, "plaque and night readouts retain high luminance contrast")
 	_expect(_contrast_ratio(view.photo_readout_text_color(), view.photo_readout_panel_color()) >= 7.0, "the focus and score labels use the same opaque backplate and ink whose measured contrast exceeds 7:1")
 	var maximum_subject := _sampled_subject_motion_bounds()
-	_expect(maximum_subject.size.x >= 700.0 and maximum_subject.size.y >= 330.0, "the overlap check samples the broad three-round full-body motion envelope")
+	var center_travel: Vector2 = maximum_subject.size - view.measured_subject_size()
+	_expect(center_travel.x >= 500.0 and center_travel.y >= 40.0, "the three-round overlap sample covers broad horizontal and vertical center travel independently of costume size")
 	_expect(not view.focus_backplate_rect().intersects(maximum_subject) and not view.preview_backplate_rect().intersects(maximum_subject), "both readout plates clear the sampled union of all three full-body motion paths")
 	_expect(_contrast_ratio(Color("#17272b"), Color("#e9d8b2")) >= 7.0 and _contrast_ratio(Color("#263a3d"), Color("#e9d8b2")) >= 4.5, "all photo captions remain readable on warm print paper")
 	_expect(screen.encloses(Rect2(view.shutter_primary_rect().position, view.shutter_primary_rect().size)) and screen.encloses(view.exposure_text_rect()), "shutter and exposure copy remain inside the viewport")
@@ -121,10 +125,39 @@ func _sampled_subject_motion_bounds() -> Rect2:
 	model.reset(false, "noon")
 	model.set_subject_size(view.measured_subject_size())
 	var bounds := Rect2()
-	for sample_index in 360:
+	var rounds_seen: Dictionary = {}
+	for sample_index in 480:
+		if model.finished:
+			break
+		rounds_seen[model.round] = true
 		var target: Rect2 = model.snapshot().target_box
 		bounds = target if sample_index == 0 else bounds.merge(target)
 		model.step(0.05)
+	_expect(model.finished and rounds_seen.size() == 3, "the bounded overlap probe reaches the end of all three portrait rounds")
+	return bounds
+
+func _independent_avatar_bounds() -> Rect2i:
+	# Read raw RGBA bytes from a separate renderer, rather than reusing view helpers
+	# or pinning a retired idle sheet's dimensions. UI alpha > .01 means byte >= 3.
+	var renderer = AvatarRenderer.new()
+	var first := true
+	var bounds := Rect2i()
+	var appearance := {"skin":"warm", "species":"human", "hair":"windswept", "hair_color":"ink", "face":"curious"}
+	var equipped := {"outfit":"outfit-coral", "hat":"hat-none"}
+	var count := int(renderer.authored_frame_count("idle", "front"))
+	_expect(count > 0 and count <= 8 and view.cached_avatar_frame_count() == count, "all authored idle frames participate in the avatar bounds cache")
+	for frame in count:
+		var image: Image = renderer.texture(appearance, equipped, "front", frame, "idle").get_image()
+		image.convert(Image.FORMAT_RGBA8)
+		var pixels := image.get_data()
+		for offset in range(3, pixels.size(), 4):
+			if pixels[offset] < 3:
+				continue
+			var pixel_index := offset / 4
+			var point := Rect2i(pixel_index % image.get_width(), pixel_index / image.get_width(), 1, 1)
+			bounds = point if first else bounds.merge(point)
+			first = false
+	_expect(not first, "the independent source contains visible character pixels")
 	return bounds
 
 func _test_live_feedback_and_lighting() -> void:
