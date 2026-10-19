@@ -32,17 +32,26 @@ func _run() -> void:
 	get_tree().quit()
 
 func _resize_window(target: Vector2i) -> bool:
-	DisplayServer.window_set_size(target)
+	var window := get_window()
+	# Update Godot's Window/Viewport owner, not just the display backend. On
+	# X11 a direct DisplayServer request can leave the viewport at the old size.
+	window.size = target
 	var deadline := Time.get_ticks_msec()+2500
-	while DisplayServer.window_get_size()!=target and Time.get_ticks_msec()<deadline:
+	while (window.size != target or DisplayServer.window_get_size(window.get_window_id()) != target) and Time.get_ticks_msec()<deadline:
 		await get_tree().process_frame
-	if DisplayServer.window_get_size()!=target:
-		await _fail("Window rejected requested native size %s; actual %s"%[str(target),str(DisplayServer.window_get_size())])
+	if window.size != target or DisplayServer.window_get_size(window.get_window_id()) != target:
+		await _fail("Window/backend rejected native size %s; Window %s, backend %s" % [target, window.size, DisplayServer.window_get_size(window.get_window_id())])
 		return false
 	await _frames(5)
 	await RenderingServer.frame_post_draw
-	if not is_equal_approx(main.get_viewport().get_visible_rect().size.x,1280.0) or not is_equal_approx(main.get_viewport().get_visible_rect().size.y,720.0):
-		await _fail("Logical viewport changed from 1280x720 at physical size %s: %s"%[str(target),str(main.get_viewport().get_visible_rect().size)])
+	var viewport := main.get_viewport()
+	if not is_equal_approx(viewport.get_visible_rect().size.x,1280.0) or not is_equal_approx(viewport.get_visible_rect().size.y,720.0):
+		await _fail("Logical viewport changed from 1280x720 at physical size %s: %s"%[str(target),str(viewport.get_visible_rect().size)])
+		return false
+	var expected_scale := minf(float(target.x)/1280.0, float(target.y)/720.0)
+	var transform := viewport.get_final_transform()
+	if not is_equal_approx(transform.x.length(), expected_scale) or not is_equal_approx(transform.y.length(), expected_scale):
+		await _fail("Viewport physical scale did not follow actual window %s: %s, expected %.4f" % [target, transform, expected_scale])
 		return false
 	return true
 

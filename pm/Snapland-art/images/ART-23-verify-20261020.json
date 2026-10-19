@@ -1,0 +1,321 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "base_sha": "dd8318b130783c0a0af0b0a7acff6617fc727556",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf / Compatibility / llvmpipe",
+  "ticket": "ART-23",
+  "cases": [
+    {
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "text_scale": 1.25,
+      "phase": "noon",
+      "world_phase": null,
+      "reduced_motion": false
+    },
+    {
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "text_scale": 1.25,
+      "phase": "noon",
+      "world_phase": null,
+      "reduced_motion": false
+    },
+    {
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "text_scale": 1.25,
+      "phase": "night",
+      "world_phase": "night",
+      "reduced_motion": true
+    }
+  ],
+  "accepted_images": [
+    {
+      "file": "ART-23-verify-v2-20261020-hud-800x450-scale1.25.png",
+      "sha256": "55205826300181842afa41c6ce24fdafca7a2a0d5e84371645bef0c8ffcb51af",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-pause-800x450-scale1.25.png",
+      "sha256": "3a61ef5312cc6bfb67de0583f2be287506b0f23bd7a3b335043d190950b258be",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-pause-hover-800x450-scale1.25.png",
+      "sha256": "07363f166795db3da15ca7fd469124004c546ba7626541254213d804e8adcb79",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-pause-pressed-800x450-scale1.25.png",
+      "sha256": "593ee8391d03b78ea5cd077cc4102229959bcdbffd98d54f3e5f38327805970e",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-ticket-800x450-scale1.25.png",
+      "sha256": "5985fecf23927e7c8ba62f9d5dbf1198e0b600c06724693782a2bab015f3066b",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-hud-1280x720-scale1.25.png",
+      "sha256": "786a4465aff07ee54d4342fc418fb7acd6b046471c5b2f40c2c14c7ef85f2d0e",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-pause-1280x720-scale1.25.png",
+      "sha256": "d3b71cc65fd57fd1a96ff746e5adf661891eacc0430992b0f67301b838f128bf",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-pause-hover-1280x720-scale1.25.png",
+      "sha256": "817fefe09fcd8a77dce5c91750cef382044fee7448db51aad4863b0be1aa3a60",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-pause-pressed-1280x720-scale1.25.png",
+      "sha256": "1b9c32a88bd64ae1167c51fdcd6409e0755021b95467f08870671ff060d9793b",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v2-20261020-ticket-1280x720-scale1.25.png",
+      "sha256": "92be26fdbd7b99d8dc2a14ea8fa23e7036169dadfc25589a6d303c474a3a1748",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-23-verify-v3-20261020-hud-1920x1080-scale1.25.png",
+      "sha256": "c39b6da546d28bbf81b0f47a399e144320deaba647c898a0e1be3dddbda900e8",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-23-verify-v3-20261020-pause-1920x1080-scale1.25.png",
+      "sha256": "482eb00f9e501352df61112cb1c9d82145bafecc5efc67f06627ffd7fa8a980c",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-23-verify-v3-20261020-pause-hover-1920x1080-scale1.25.png",
+      "sha256": "80e59383e069a3ce061dd23b7e9dbf0fc041b9e0511aff52d5e37e3acc961c8a",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-23-verify-v3-20261020-pause-pressed-1920x1080-scale1.25.png",
+      "sha256": "583da8c130b3b24e568f801a04803cd580ab7f110e24067414423ef773f36768",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-23-verify-v3-20261020-ticket-1920x1080-scale1.25.png",
+      "sha256": "6c6ad0157b59237577a8ccc4fb702ce57b73cbfe9103dd2b12eec946c3f1e7a4",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    }
+  ],
+  "shared_local_suites": [
+    {
+      "name": "core runtime tests",
+      "exit": 0,
+      "seconds": 0.35,
+      "error": null
+    },
+    {
+      "name": "wardrobe runtime tests",
+      "exit": 0,
+      "seconds": 0.25,
+      "error": null
+    },
+    {
+      "name": "wardrobe UI tests",
+      "exit": 0,
+      "seconds": 11.28,
+      "error": null
+    },
+    {
+      "name": "story runtime tests",
+      "exit": 0,
+      "seconds": 0.28,
+      "error": null
+    },
+    {
+      "name": "main story integration tests",
+      "exit": 0,
+      "seconds": 25.74,
+      "error": null
+    },
+    {
+      "name": "saved photo viewer tests",
+      "exit": 0,
+      "seconds": 0.76,
+      "error": null
+    },
+    {
+      "name": "photo original preservation tests",
+      "exit": 0,
+      "seconds": 2.43,
+      "error": null
+    },
+    {
+      "name": "pixel UI shell tests",
+      "exit": 0,
+      "seconds": 56.51,
+      "error": null
+    },
+    {
+      "name": "pixel UI popup tests",
+      "exit": 0,
+      "seconds": 0.43,
+      "error": null
+    },
+    {
+      "name": "pixel UI button depth tests",
+      "exit": 0,
+      "seconds": 0.34,
+      "error": null
+    },
+    {
+      "name": "pixel UI collection tests",
+      "exit": 0,
+      "seconds": 21.29,
+      "error": null
+    },
+    {
+      "name": "pixel tutorial page tests",
+      "exit": 0,
+      "seconds": 15.49,
+      "error": null
+    },
+    {
+      "name": "pixel UI customization tests",
+      "exit": 0,
+      "seconds": 9.15,
+      "error": null
+    },
+    {
+      "name": "pixel UI minigame tests",
+      "exit": 0,
+      "seconds": 8.19,
+      "error": null
+    }
+  ],
+  "rejected_first_cloud_sizes": "DisplayServer requested800/1920 while Window/viewport remained1280; not accepted as size evidence. Old Windows images were independently confirmed800/1920 and are not invalidated.",
+  "expected_failure": "Backend-only resize rejected: requested800, actualWindow1280, backend800; exit1.",
+  "scope": "UI fixture uses synthetic photos/results and direct page entry plus routed key/pointer controls. Not a successful minigame playthrough, new audio audition or realtime performance measure.",
+  "visual_review": "All four ticket contact sheets covering actual three sizes reviewed; representative pause, tutorial, controls and night dialogue viewed at original size.",
+  "sources": {
+    "game/tests/native_layout_review.gd": "5a5a1e9b4c48f25db7ebac881fb4c30d6bb4baf324eac4c5b85babb89076385d",
+    "game/tests/native_pixel_ui_review.gd": "fba8678851c90d24c4152091d2a2e29e3691ade4e2ca35a6e1db43e593e9209d"
+  },
+  "log_format": "Public wardrobe log trims terminal trailing whitespace; raw subprocess output retained alongside isolated save."
+}

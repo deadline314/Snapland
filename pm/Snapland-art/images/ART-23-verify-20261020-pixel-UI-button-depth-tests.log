@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: Paper buttons receive one real pixel-bevel overlay
+PASS: bevel matches the button bounds without intercepting clicks or changing layout
+PASS: later opaque panels cover the entire button including its bevel
+PASS: normal face is lifted from the panel by a thick lower edge and cast shadow
+PASS: hover brightens the face, raises its edge and deepens the cast shadow
+PASS: pressed state retains a distinct readable face while collapsing its shadow
+PASS: normal, hover, pressed and disabled faces preserve 4.5:1 text contrast
+PASS: gold keyboard-focus frame remains independent from the inset bevel
+PASS: pointer entry redraws the bevel as raised
+PASS: pointer press redraws the bevel in the inset state
+PASS: pointer release restores the raised hover state
+PASS: pointer exit restores the normal paper edge
+PASS: disabled state uses its readable muted edge palette
+PASS: button callback remains connected through the visual overlay
+PASS: Paper pixel-button depth, state, focus and contrast checks

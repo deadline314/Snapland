@@ -1,0 +1,224 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: Progress autoload is available
+[park_world] scenery meshes: 1135, nodes: 2024
+PASS: C opens the native wardrobe modal
+PASS: the fitting mirror renders an avatar preview
+PASS: the current wardrobe category is visibly selected
+PASS: selected tab face reads as the active fitting-room page, not another idle control
+PASS: selected tab pressed text keeps readable contrast against its actual dark face
+PASS: selected tab text stays light and readable in normal, hovered, pressed and focused states
+PASS: keyboard focus remains a separate gold outline on page tabs
+PASS: current profile keeps the fitting mirror at its expected height
+PASS: compact profile reduces the live fitting mirror and column gaps
+PASS: resizing back restores the standard fitting-room profile
+PASS: preview frame has a visible thick lower paper edge and bounded cast shadow
+PASS: static frame depth and preview bounds remain stable when reduced motion is enabled
+PASS: the commit action has more visual weight than cancel
+PASS: preview direction control exists: front
+PASS: preview changes direction without saving: front
+PASS: preview direction control exists: left
+PASS: preview changes direction without saving: left
+PASS: preview direction control exists: right
+PASS: preview changes direction without saving: right
+PASS: preview direction control exists: back
+PASS: preview changes direction without saving: back
+PASS: free appearance exposes all six selectors
+PASS: changing a selector updates the preview draft
+PASS: changing a selector does not save progress
+PASS: button exists: 取消試穿
+PASS: cancel returns to the park
+PASS: cancel keeps the saved appearance
+PASS: C opens the wardrobe without using the movement key
+PASS: shop tab selection follows category changes
+PASS: button exists: 珊瑚紅
+PASS: keyboard selection restores focus to the selected clothing row
+PASS: post-rebuild focus scrolls the selected clothing list to its row
+PASS: Enter on a selected row does not trigger purchase
+PASS: Enter keeps focus on the selected clothing row
+PASS: shop item selection previews the outfit
+PASS: preview does not spend coins or equip the item
+PASS: button exists: 購買所選
+PASS: purchase deducts the price and adds the item to the closet
+PASS: purchase does not force the item to be worn
+PASS: button exists: 珊瑚紅
+PASS: button exists: 穿戴所選
+PASS: owned clothes can be equipped from the closet
+PASS: button exists: 海風花冠
+PASS: insufficient balance leaves ownership and coins unchanged
+PASS: an unaffordable selected item disables purchase
+PASS: item list keeps the exact catalog price visible while purchase is disabled
+PASS: exact price ink contrasts with its actual paper row surface
+PASS: disabled purchase explains the actual catalog price
+PASS: insufficient-funds readout contrasts with the actual paper surface
+PASS: disabled purchase label remains readable against its actual disabled surface
+PASS: wardrobe modal fits an 800×600 viewport
+PASS: raised fitting frame remains inside the compact wardrobe modal
+PASS: compact wardrobe keeps key hierarchy control inside the modal: Tab_appearance modal=[P: (28.0, 28.0), S: (1222.4, 662.4)] control=[P: (427.0, 183.0), S: (261.0, 71.0)]
+PASS: compact wardrobe keeps key hierarchy control inside the modal: Tab_closet modal=[P: (28.0, 28.0), S: (1222.4, 662.4)] control=[P: (693.0, 183.0), S: (262.0, 71.0)]
+PASS: compact wardrobe keeps key hierarchy control inside the modal: Tab_shop modal=[P: (28.0, 28.0), S: (1222.4, 662.4)] control=[P: (960.0, 183.0), S: (262.0, 71.0)]
+PASS: compact wardrobe keeps key hierarchy control inside the modal: ApplyAppearance modal=[P: (28.0, 28.0), S: (1222.4, 662.4)] control=[P: (427.0, 599.0), S: (156.0, 71.0)]
+PASS: compact wardrobe keeps key hierarchy control inside the modal: CancelFitting modal=[P: (28.0, 28.0), S: (1222.4, 662.4)] control=[P: (589.0, 599.0), S: (156.0, 71.0)]
+PASS: HUD wardrobe and utility buttons stay on an 800×600 screen
+PASS: wardrobe UI runtime checks
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@754; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@752; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@750; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@748; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@836; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@904; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@897; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@891; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@885; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@879; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@957; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@955; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1008; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1007; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1006; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_wardrobe_ui.gd:25)

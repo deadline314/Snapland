@@ -1,0 +1,534 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: paper buttons use square hard pixel edges and a cast shadow
+PASS: hover raises paper controls and press collapses their depth
+PASS: album keeps all stable ordinary photo entries in its paged collection
+PASS: a new collection has a clear empty-collection state
+PASS: short option popup clamps within the viewport
+PASS: short option popup shows every item without a scrollbar
+PASS: empty album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: empty album keeps every full photo card and caption inside its content viewport, clear of the pager at 1280x720 and 1.25 text
+PASS: empty album keeps every full photo card and caption inside its content viewport, clear of the pager at 1920x1080 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 1280x720 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 1920x1080 and 1.25 text
+PASS: album fixed navigation remains visible: AlbumTab_normal
+PASS: album fixed navigation remains visible: AlbumTab_devil
+PASS: album fixed navigation remains visible: AlbumTab_time
+PASS: album fixed navigation remains visible: AlbumPreviousPage
+PASS: album fixed navigation remains visible: AlbumNextPage
+PASS: album fixed navigation remains visible: AlbumPageLabel
+PASS: album fixed navigation remains visible: AlbumPhotoDetails
+PASS: wide album fits its one-row photo page without unnecessary scrolling
+PASS: wide album compatibility viewport is not scrollable
+PASS: direct Main overlay opens the full 1280×720 original from a valid thumbnail record
+PASS: photo viewer keeps its keyboard-operable return action visible
+PASS: viewer return closes the photo and restores focus to its album entry
+PASS: fixed page controls navigate long photo collections
+PASS: devil collection retains its twelve records and stable IDs
+PASS: time collection retains the four canonical postcard records
+PASS: compact album paginates every stable photo ID in complete two-card pages without scrolling
+PASS: compact photo frames, titles, statuses, tabs, summary, and page controls have disjoint hit rectangles
+PASS: compact photo frames, titles, statuses, tabs, summary, and page controls have disjoint hit rectangles
+PASS: fixed collection controls remain visible at 800x450
+PASS: fixed collection controls remain visible at 1280x720
+PASS: fixed collection controls remain visible at 1920x1080
+PASS: browsing photos leaves collection progress unchanged
+PASS: map retains all twelve game stations and nine future gates
+PASS: map uses a full-width chart and separate details workspace
+PASS: gate details preserve the original unlock eligibility
+PASS: gate labels name their destination and tooltip retains full zone name and threshold
+PASS: selected gate is visually distinct on the map
+PASS: selecting a station updates its actual destination details
+PASS: selected station is visually distinct on the map
+PASS: destination selection stays inside the map and does not invoke a teleport
+PASS: all 21 map targets remain visible and at least 44 physical pixels at 800x450
+PASS: all 21 map targets remain visible and at least 44 physical pixels at 1280x720
+PASS: all 21 map targets remain visible and at least 44 physical pixels at 1920x1080
+PASS: achievement book keeps all twelve minigame stamp records
+PASS: milestone collection retains its four eligibility records
+PASS: locked achievement still explains its unchanged requirement
+PASS: achievement pages keep the real content viewport but hide manual scroll affordances
+PASS: achievement tabs switch between games and milestones without hiding navigation
+PASS: achievement category tabs stay outside the content scroll
+PASS: compact two-column achievement pages navigate all twelve stable stamps without omission or duplication
+PASS: fixed collection controls remain visible at 800x450
+PASS: fixed collection controls remain visible at 1280x720
+PASS: fixed collection controls remain visible at 1920x1080
+PASS: tutorial opens a valid lesson
+PASS: tutorial uses its actual lesson screenshot
+PASS: tutorial replay returns to the actual first screenshot
+PASS: tutorial keeps all sections in a hidden-scroll viewport and fixed actions outside it
+PASS: tutorial retains all five complete guidance sections in real viewport content
+PASS: tutorial page caption reflects actual adaptive page count
+PASS: tutorial page caption reflects actual adaptive page count
+PASS: tutorial page controls reveal all five complete guidance sections without manual scrolling
+PASS: tutorial keeps replay and return actions visible
+PASS: tutorial fixed actions stay in bounds and usable at 800x450
+PASS: tutorial fixed actions stay in bounds and usable at 1280x720
+PASS: tutorial fixed actions stay in bounds and usable at 1920x1080
+[park_world] scenery meshes: 1135, nodes: 2024
+PASS: empty album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: empty album keeps every full photo card and caption inside its content viewport, clear of the pager at 1280x720 and 1.25 text
+PASS: empty album keeps every full photo card and caption inside its content viewport, clear of the pager at 1920x1080 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 1280x720 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 1920x1080 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: real Main normal pagination reaches every stable catalog ID exactly once
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: real Main devil pagination reaches every stable catalog ID exactly once
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: filled album keeps every full photo card and caption inside its content viewport, clear of the pager at 800x450 and 1.25 text
+PASS: real Main time pagination reaches every stable catalog ID exactly once
+PASS: Main 1280 logical canvas at 800×450 with 1.25 text keeps photos, fixed controls, and return action disjoint
+[park_world] scenery meshes: 1135, nodes: 2024
+PASS: 125 percent Main achievement frame and fixed navigation fit viewport at (1280, 720)
+PASS: 125 percent Main achievement pages fit every full caption and condition at (1280, 720)
+PASS: 125 percent Main achievement frame and fixed navigation fit viewport at (1920, 1080)
+PASS: 125 percent Main achievement pages fit every full caption and condition at (1920, 1080)
+PASS: pixel UI collection, map, achievement, and tutorial checks
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2244/GameFeature010/@MeshInstance3D@2996; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [7] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [8] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [9] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2244/GameFeature010/@MeshInstance3D@2994; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [7] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [8] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [9] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2244/GameFeature010/@MeshInstance3D@2992; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [7] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [8] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [9] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2244/GameFeature010/@MeshInstance3D@2990; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [7] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [8] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [9] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/WindSailTerrace/@MeshInstance3D@3078; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/TidepoolCourt/@MeshInstance3D@3146; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/TidepoolCourt/@MeshInstance3D@3139; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/TidepoolCourt/@MeshInstance3D@3133; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/TidepoolCourt/@MeshInstance3D@3127; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/TidepoolCourt/@MeshInstance3D@3121; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/LighthouseLookout/@MeshInstance3D@3199; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/LighthouseLookout/@MeshInstance3D@3197; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/MoonshadowStage/@MeshInstance3D@3250; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/MoonshadowStage/@MeshInstance3D@3249; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2244/AttractionDistricts/MoonshadowStage/@MeshInstance3D@3248; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:477)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:80)
+         [9] _check_tutorial (res://game/tests/test_pixel_ui_collections.gd:423)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 1280x720 at 'res://assets/ui/tutorials/park-step-01.png' (expected 320x180); decoder was not called.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:388)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:496)
+         [5] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: Loaded resource as image file, this will not work on export: 'res://assets/ui/tutorials/park-step-01.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+     at: load_from_file (core/io/image.cpp:2780)
+     GDScript backtrace (most recent call first):
+         [0] _photo_texture (res://game/main.gd:1694)
+         [1] _legacy_ui_photo_texture (res://game/ui/collection_book_panel.gd:590)
+         [2] _saved_texture (res://game/ui/collection_book_panel.gd:554)
+         [3] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [4] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [5] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:496)
+         [6] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@6311/GameFeature010/@MeshInstance3D@7063; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [7] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [8] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [9] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@6311/GameFeature010/@MeshInstance3D@7061; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [7] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [8] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [9] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@6311/GameFeature010/@MeshInstance3D@7059; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [7] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [8] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [9] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@6311/GameFeature010/@MeshInstance3D@7057; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [7] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [8] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [9] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/WindSailTerrace/@MeshInstance3D@7145; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/TidepoolCourt/@MeshInstance3D@7213; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/TidepoolCourt/@MeshInstance3D@7206; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/TidepoolCourt/@MeshInstance3D@7200; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/TidepoolCourt/@MeshInstance3D@7194; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/TidepoolCourt/@MeshInstance3D@7188; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/LighthouseLookout/@MeshInstance3D@7266; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/LighthouseLookout/@MeshInstance3D@7264; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/MoonshadowStage/@MeshInstance3D@7317; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/MoonshadowStage/@MeshInstance3D@7316; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@6311/AttractionDistricts/MoonshadowStage/@MeshInstance3D@7315; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _check_main_achievement_capacity (res://game/tests/test_pixel_ui_collections.gd:428)
+         [8] _run (res://game/tests/test_pixel_ui_collections.gd:81)
+         [9] _check_main_album_host (res://game/tests/test_pixel_ui_collections.gd:536)
+         [10] _frames (res://game/tests/test_pixel_ui_collections.gd:590)

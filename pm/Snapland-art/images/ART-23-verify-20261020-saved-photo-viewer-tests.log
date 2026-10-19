@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: create a real saved PNG photo fixture
+PASS: collected photo remains in the existing book grid
+PASS: collected photo tile is mouse and keyboard actionable
+PASS: the album tile gives the real saved image a full 220×124 physical frame
+PASS: a collected photo without a saved image gets friendly player-facing copy
+PASS: a collected card with no real image never opens a fake viewer
+PASS: a missing photo gives a gentle explanation in the book
+PASS: Enter opens the saved photo viewer without leaving the album
+PASS: viewer displays an actual saved texture
+PASS: viewer keeps the real saved photo dimensions and aspect ratio
+PASS: viewer centers the complete photo without cropping
+PASS: Escape closes only the viewer and keeps the book open
+PASS: closing the viewer restores focus to the selected photo tile
+PASS: viewer offers a focusable close button for mouse and keyboard
+PASS: close button returns to the collection book
+PASS: opening and closing a photo does not award, consume, or mutate progress
+PASS: saved album photo viewer, focus return, and immutable progress

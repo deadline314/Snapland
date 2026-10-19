@@ -7,9 +7,12 @@ var report := {"method":"native Main UI presentation; scripted page opening, rou
 var review_size := Vector2i(1280,720)
 var review_scale := 1.0
 var output_prefix := "pixel-ui-v1"
+var review_phase := "noon"
+var review_reduced_motion := false
 
 func _run() -> void:
-	if OS.get_environment("SNAPLAND_SAVE_PATH").strip_edges().is_empty() or DisplayServer.get_name()=="headless":
+	var review_save := OS.get_environment("SNAPLAND_SAVE_PATH").strip_edges()
+	if not review_save.is_absolute_path() or review_save.contains("://") or DisplayServer.get_name()=="headless":
 		push_error("Native pixel UI review requires a GPU and absolute isolated SNAPLAND_SAVE_PATH")
 		get_tree().quit(1)
 		return
@@ -19,6 +22,8 @@ func _run() -> void:
 			if parts.size()==2: review_size=Vector2i(int(parts[0]),int(parts[1]))
 		elif argument.begins_with("--ui-scale="): review_scale=float(argument.trim_prefix("--ui-scale="))
 		elif argument.begins_with("--ui-prefix="): output_prefix=argument.trim_prefix("--ui-prefix=")
+		elif argument.begins_with("--ui-phase="): review_phase=argument.trim_prefix("--ui-phase=")
+		elif argument=="--ui-reduced-motion": review_reduced_motion=true
 	if not output_prefix.is_valid_filename():
 		push_error("Invalid pixel UI evidence prefix")
 		get_tree().quit(1)
@@ -27,13 +32,26 @@ func _run() -> void:
 	progress.reset_progress()
 	progress.intro_seen=true
 	progress.set_setting("ui_scale",review_scale)
+	if not progress.set_time_phase(review_phase):
+		push_error("Requested UI review phase was rejected: "+review_phase)
+		get_tree().quit(1)
+		return
+	progress.set_setting("reduced_motion",review_reduced_motion)
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	main=_instantiate_main()
 	if main==null: get_tree().quit(1); return
 	get_tree().root.add_child(main)
 	await _frames(8)
 	if not await _resize_window(review_size): return
-	report["physical_window"]=[review_size.x,review_size.y]
+	report["requested_window"]=[review_size.x,review_size.y]
+	report["physical_window"]=[get_window().size.x,get_window().size.y]
+	report["backend_window"]=str(DisplayServer.window_get_size(get_window().get_window_id()))
+	report["logical_viewport"]=str(get_viewport().get_visible_rect().size)
+	report["physical_scale"]=Paper.physical_scale(main.overlay)
+	report["requested_phase"]=review_phase
+	report["phase"]=str(progress.settings.get("time_phase",""))
+	report["world_phase"]=str(main.world.active_time_phase)
+	report["reduced_motion"]=review_reduced_motion
 	report["text_scale"]=review_scale
 	if not await _shot("hud",23): return
 	await _tap_key(KEY_ESCAPE)
@@ -86,7 +104,7 @@ func _run() -> void:
 	var thumbnail: Image = main._prepare_photo_thumbnail(original)
 	if original.save_png(original_path)!=OK or thumbnail.save_png(image_path)!=OK:
 		await _error("Cannot save isolated synthetic collection image"); return
-	progress.photos["photo-welcome-game-1"]={"frames":[image_path],"original_frames":[original_path],"time_phase":"noon"}
+	progress.photos["photo-welcome-game-1"]={"frames":[image_path],"original_frames":[original_path],"time_phase":review_phase}
 	progress.achievements["ACH_GAME_001"]=true
 	main._show_album()
 	if not await _shot("album-filled",24): return
@@ -212,13 +230,17 @@ func _preview_pause_button_states() -> bool:
 
 func _shot(label: String, ticket: int) -> bool:
 	await _frames(5)
+	if str(progress.settings.get("time_phase",""))!=review_phase or str(main.world.active_time_phase)!=review_phase or bool(main.world.reduced_motion)!=review_reduced_motion:
+		await _error("Actual world time/motion does not match requested review state on "+label)
+		return false
 	await RenderingServer.frame_post_draw
 	var root_control: Control=main.overlay if main.overlay.visible else main.ui
-	var path := "pm/Snapland-art/images/ART-%d-%s-%s-%dx%d-scale%.2f.png"%[ticket,output_prefix,label,review_size.x,review_size.y,review_scale]
-	if not main._capture(path):
+	var path := OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir()+"/ART-%d-%s-%s-%dx%d-scale%.2f.png"%[ticket,output_prefix,label,review_size.x,review_size.y,review_scale]
+	if get_viewport().get_texture().get_image().save_png(path)!=OK:
 		await _error("Screenshot could not be saved: "+path)
 		return false
-	report.captures.append({"page":label,"path":path,"frame":Engine.get_process_frames()})
+	var image_size := get_viewport().get_texture().get_size()
+	report.captures.append({"page":label,"path":path,"frame":Engine.get_process_frames(),"rendered_size":str(image_size),"window_size":str(get_window().size),"physical_scale":Paper.physical_scale(root_control)})
 	if label=="settings-controls" and not _settings_control_rows_fit():
 		await _error("All eighteen settings action/key labels must be readable in the actual content area")
 		return false

@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+POPUP_BOUNDS physical=(800, 450) actual=[P: (1053.0, 13.0), S: (214.0, 694.0)] max=(1254, 694)
+POPUP_BOUNDS physical=(1280, 720) actual=[P: (1052.0, 8.0), S: (220.0, 704.0)] max=(1264, 704)
+POPUP_BOUNDS physical=(1920, 1080) actual=[P: (1049.0, 85.0), S: (226.0, 630.0)] max=(1269, 709)
+PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text
