@@ -1,0 +1,19 @@
+{
+  "missing_engine_exit": 1,
+  "incomplete_runtime_exit": 1,
+  "expected_failures": true,
+  "scope": "no engine launched; actual unmodified guard scripts; disposable incomplete project",
+  "date": "2026-10-20 Asia/Taipei",
+  "ci_run": 39327871481,
+  "ci_sha": "b1c74055e1c274cf4ef9933bd105c7a94fa6faf9",
+  "runtime_job": 118318271549,
+  "runtime_conclusion": "failure; actual native execution, not full-suite acceptance",
+  "design_python_job_conclusion": "success",
+  "contracts": 23,
+  "official_suite_count": 92,
+  "sources": {
+    "tools/run_game_tests.py": "26c0950ffde62960429e5194138caf007e35a8012d66d6c51cbf002f103bbced",
+    "tools/check_runtime_tests.py": "66bce330aa3fd549e814474affad553122d3a65683d28d074f0b010516b2bdbb",
+    ".github/workflows/full-tests.yml": "6632fc0095fabfbff3d7e3ff9de2edf03ca61a6ab9129bdc379bb7304d51854a"
+  }
+}

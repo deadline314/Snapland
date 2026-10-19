@@ -1,6 +1,6 @@
 # [MAIN-3] 建立可執行遊戲與原生驗證
 
-> 狀態：進行中（base SHA：c1b7b19）
+> 狀態：完成
 
 ## 內文
 
@@ -15,7 +15,7 @@
 ### 驗收條件
 
 - [x] Godot 可啟動遊戲且遊戲腳本無解析錯誤。
-- [ ] CI 執行實際遊戲測試，缺少引擎或測試不能略過。
+- [x] CI 執行實際遊戲測試，缺少引擎或測試不能略過。
 
 ### 測試流程
 
@@ -70,3 +70,14 @@ c1b7b19；feature/island-first-park。
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
 
 Related：MAIN-18（驗收入口辨識與失敗收束）。
+
+
+# 2026-10-20 結案：實際CI入口與拒絕略過
+
+本輪已確認主線可實際啟動，Godot4.7.2乾淨匯入exit0、0ERROR；三尺寸原生介面與Main實際鍵鼠流程另有ART-23～26及MAIN-14證據。原程式f2d6b84已在origin/main；早期「只有feature／CI帳戶未啟動」不是目前狀態。
+
+[主線b1c7405的CI](https://github.com/deadline314/Snapland/actions/runs/39327871481)：引擎安裝、結果／入口契約、實際來源／髮根／待機檢查均執行成功，再執行真正Godot runtime並正確回報測試失敗。full-suite的設計與Python工作成功。這證明CI確實執行，不是全套遊戲綠燈；後段接帽素材差異仍由MAIN-2／ART-17／SG-20處理。
+
+用未改動的正式腳本做兩個獨立反例：不存在的GODOT_BIN返回1；包含project.godot但缺正式測試的隔離小專案也返回1，沒有NOT APPLICABLE或成功略過。23項入口／完成契約另已通過，正式92項及原90／240秒上限不變。
+
+[缺引擎反例](images/MAIN-3-runtime-guard-20261020-missing-engine.log) · [缺測試反例](images/MAIN-3-runtime-guard-20261020-missing-suite.log) · [實際結果](images/MAIN-3-runtime-guard-20261020-verification.json) · [當前原生尺寸／導覽證據](../Snapland-art/images/ART-23-verify-20261020.json)。本票按「能啟動且CI真的執行、不能略過」結案；其他美術、內容及全域失敗不隨之結案。
