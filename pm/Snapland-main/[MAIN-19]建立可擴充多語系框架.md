@@ -1,6 +1,6 @@
 # [MAIN-19] 建立可擴充多語系框架
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -62,10 +62,18 @@
 
 [RTL 與多語字形 QA](images/MAIN-19-rtl-qa-gallery.png)；[八個方向的第一手來源與取捨](../../design/runtime/typography-localization.md)；[研究頁截圖與99張正式UI畫面索引](../Snapland-art/[ART-27]完善像素字體與多語可讀性.md)。
 
-### 票況與待處理
+### 歷史交付狀態
 
-框架局部驗收通過；未發布語系需逐語系完成翻譯、校對與全內容驗收。島嶼工作分支尚有既有動畫／完整試聽票待驗，本票隨整組交付保留進行中，沒有把未驗成果併入 main。
+當時框架局部驗收通過；未發布語系需逐語系完成翻譯、校對與全內容驗收。島嶼工作分支尚有既有動畫／完整試聽票待驗，本票隨整組交付保留進行中，沒有把未驗成果併入 main。
 
 ### 遠端交付
 
 `feature/island-experience`；[本次來源提交](https://github.com/deadline314/Snapland/commit/dd53b97be2ce8be5f3a2e71d2b8e0f9412bdfb80)。正式存檔與備份雜湊與本輪開始相同。
+
+# Commit-2：主線重驗並完成框架交付
+
+本輪從已整合的主線重新核對集中語系、變數／複數、缺譯文與損毀資料的安全回退、偏好存讀、未知未來設定保留，以及切換語系時的收藏識別、選單焦點與對話進度。全部局部檢查通過；未發布語系仍不出現在正式選項，也不把英文或 RTL QA 寫成全作翻譯。
+
+與 ART-27 一起補上高行距 RTL 的雙尺寸暫停條件：所有主要入口與繼續／離開完整可見、不重疊，文字與字型不縮小；原中文三尺寸的 Tab／滑鼠返回及設定流程保持通過。原生六組語系／字型與最終標準／窄視窗 RTL 畫面均有可查證資料，具體查看的畫面另列。框架程式及本輪修正已整合 [b441722](https://github.com/deadline314/Snapland/commit/b441722168491a213a867ddfc21701de773f2671)，原先等待工作分支整組交付的阻塞已解除，本票完成。
+
+[本輪語系與版面執行紀錄](../Snapland-art/images/ART-27-text-20261020-locale-and-tall-pause.log) · [原生驗證與具體範圍](../Snapland-art/images/ART-27-text-20261020-verification.json) · [共同第一手研究與回歸方法](../../design/runtime/typography-localization.md)。最終相關執行 exit 0、0 ERROR；故意缺譯文／無效語系的 WARNING 保留，不稱完整翻譯或真人試玩。
