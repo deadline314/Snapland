@@ -1,0 +1,715 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 20 FPS...
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+[park_world] scenery meshes: 1135, nodes: 2039
+REVIEW SCOPE: 2D at full 1280x720; 3D world hidden for software-rendered gesture review; station positioned by fixture
+INPUT: start hat rescue game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@1885/@VBoxContainer@1886/@HBoxContainer@1887/InviteCard/@MarginContainer@1888/@VBoxContainer@1889/@HBoxContainer@1891/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@1885/@VBoxContainer@1886/@HBoxContainer@1887/InviteCard/@MarginContainer@1888/@VBoxContainer@1889/@HBoxContainer@1891/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+HAT_CATCH_POSE index=0 movie_frame=15 model_elapsed=0.038 mask=1 count=1
+HAT_CATCH_POSE index=1 movie_frame=20 model_elapsed=0.100 mask=3 count=2
+HAT_CATCH_POSE index=2 movie_frame=24 model_elapsed=0.150 mask=7 count=3
+HAT_CATCH_POSE index=3 movie_frame=27 model_elapsed=0.188 mask=15 count=4
+HAT_CATCH_POSE index=4 movie_frame=31 model_elapsed=0.238 mask=31 count=5
+HAT_CATCH_POSE index=5 movie_frame=35 model_elapsed=0.288 mask=63 count=6
+HAT_CATCH_POSE index=6 movie_frame=39 model_elapsed=0.338 mask=127 count=7
+HAT_CATCH_POSE index=7 movie_frame=43 model_elapsed=0.388 mask=255 count=8
+HAT_CATCH_POSE index=8 movie_frame=47 model_elapsed=0.438 mask=511 count=9
+HAT_CATCH_POSE index=9 movie_frame=51 model_elapsed=0.488 mask=1023 count=10
+HAT_CATCH_POSE index=10 movie_frame=55 model_elapsed=0.538 mask=2047 count=11
+HAT_CATCH_POSE index=11 movie_frame=60 model_elapsed=0.600 mask=4095 count=12
+HAT_CATCH_SEQUENCE_PASS movie_frame=60 elapsed=0.600 indices=0..11
+INPUT: leave stationary source rehearsal target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: request rehearsal exit target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/PauseOverlay/@PanelContainer@1907/@VBoxContainer@1908/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/PauseOverlay/@PanelContainer@1907/@VBoxContainer@1908/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: confirm rehearsal exit target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/ConfirmOverlay/@PanelContainer@1921/@VBoxContainer@1922/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/ConfirmOverlay/@PanelContainer@1921/@VBoxContainer@1922/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PASS: separate stationary twelve-frame input rehearsal; no collection/progress change
+INPUT: start hat rescue game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@1934/@VBoxContainer@1935/@HBoxContainer@1936/InviteCard/@MarginContainer@1937/@VBoxContainer@1938/@HBoxContainer@1940/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@1934/@VBoxContainer@1935/@HBoxContainer@1936/InviteCard/@MarginContainer@1937/@VBoxContainer@1938/@HBoxContainer@1940/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: pause game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: resume game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/PauseOverlay/@PanelContainer@1956/@VBoxContainer@1957/ResumeButton rect=[P: (430.0, 240.0), S: (420.0, 44.0)] pointer=(640.0, 262.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/PauseOverlay/@PanelContainer@1956/@VBoxContainer@1957/ResumeButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: pause before game-005 retry target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open game-005 retry confirmation target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/PauseOverlay/@PanelContainer@1956/@VBoxContainer@1957/RetryButton rect=[P: (430.0, 390.0), S: (420.0, 44.0)] pointer=(640.0, 412.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/PauseOverlay/@PanelContainer@1956/@VBoxContainer@1957/RetryButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: confirm synchronous game-005 retry target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/ConfirmOverlay/@PanelContainer@1970/@VBoxContainer@1971/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/ConfirmOverlay/@PanelContainer@1970/@VBoxContainer@1971/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+HAT_KEY_STATE session=200588400960 hat=0 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.038
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.038
+HAT_WALK_POST_DRAW direction=left index=0 movie_frame=118 left_mask=1 right_mask=0 count=1
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.075
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.112
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.137
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.175
+HAT_WALK_POST_DRAW direction=left index=1 movie_frame=128 left_mask=3 right_mask=0 count=2
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.200
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.225
+HAT_WALK_POST_DRAW direction=left index=2 movie_frame=133 left_mask=7 right_mask=0 count=3
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.250
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.288
+HAT_WALK_POST_DRAW direction=left index=3 movie_frame=137 left_mask=15 right_mask=0 count=4
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.325
+HAT_WALK_POST_DRAW direction=left index=4 movie_frame=140 left_mask=31 right_mask=0 count=5
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.363
+HAT_WALK_POST_DRAW direction=left index=5 movie_frame=143 left_mask=63 right_mask=0 count=6
+HAT_WALK_POST_DRAW direction=left index=6 movie_frame=145 left_mask=127 right_mask=0 count=7
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.400
+HAT_WALK_POST_DRAW direction=left index=7 movie_frame=148 left_mask=255 right_mask=0 count=8
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.438
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.475
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.513
+HAT_KEY_STATE session=200588400960 hat=0 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.538
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.550
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.587
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.625
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.662
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.700
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.737
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.775
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.812
+HAT_KEY_STATE session=200588400960 hat=0 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.825
+HAT_WALK_POST_DRAW direction=right index=6 movie_frame=180 left_mask=255 right_mask=64 count=9
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.837
+HAT_KEY_STATE session=200588400960 hat=0 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.875
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=-1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.875
+HAT_KEY_STATE session=200588400960 hat=0 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.900
+HAT_KEY_STATE session=200588400960 hat=0 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.912
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.912
+HAT_KEY_STATE session=200588400960 hat=0 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.937
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.950
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.987
+HAT_MOVING_CATCH_WALK movie_frame=194 model_elapsed=1.000 velocity=3.133 walk_index=6
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.025
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.062
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.100
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.137
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.175
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.212
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.250
+HAT_AXIS_SAMPLE session=200588400960 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.287
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.300
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.325
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.362
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.400
+HAT_WALK_POST_DRAW direction=right index=7 movie_frame=228 left_mask=255 right_mask=192 count=10
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.437
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.475
+HAT_WALK_POST_DRAW direction=right index=0 movie_frame=233 left_mask=255 right_mask=193 count=11
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.512
+HAT_WALK_POST_DRAW direction=right index=1 movie_frame=237 left_mask=255 right_mask=195 count=12
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.550
+HAT_WALK_POST_DRAW direction=right index=2 movie_frame=240 left_mask=255 right_mask=199 count=13
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.587
+HAT_WALK_POST_DRAW direction=right index=3 movie_frame=243 left_mask=255 right_mask=207 count=14
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.625
+HAT_WALK_POST_DRAW direction=right index=4 movie_frame=246 left_mask=255 right_mask=223 count=15
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.662
+HAT_WALK_POST_DRAW direction=right index=5 movie_frame=249 left_mask=255 right_mask=255 count=16
+HAT_WALK_SEQUENCE_PASS movie_frame=249 directions=left,right frames=0..7
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.700
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.725
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.762
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.800
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.837
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.875
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.912
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.950
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.987
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.025
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.062
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.100
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.137
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.175
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.212
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.250
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.287
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.325
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.362
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.400
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.438
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.450
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.475
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.513
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.550
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.588
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.625
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.663
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.700
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.738
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.738
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.775
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.775
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.813
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.838
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.875
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.913
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.950
+HAT_KEY_STATE session=200588400960 hat=1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.963
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.988
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=3.013
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=3.050
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=3.088
+HAT_KEY_STATE session=200588400960 hat=1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=3.113
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.125
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.163
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.200
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.238
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.275
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.313
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.350
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.388
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.425
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.463
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.500
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.538
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.575
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.613
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.650
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.688
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.725
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.763
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.800
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.838
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.875
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.913
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.950
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.988
+HAT_AXIS_SAMPLE session=200588400960 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=4.025
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=4.038
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.050
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.088
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.125
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.163
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.200
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.238
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.275
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.313
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.350
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.388
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.425
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.463
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.500
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.538
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.575
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.613
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.650
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.688
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.725
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.763
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.800
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.838
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.850
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=4.875
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=4.913
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=4.950
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=4.988
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.025
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.063
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.100
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.138
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.138
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.175
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.175
+HAT_KEY_STATE session=200588400960 hat=-1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.213
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.213
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.250
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.288
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.325
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.363
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.400
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.438
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.475
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.513
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.550
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.588
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.625
+HAT_KEY_STATE session=200588400960 hat=2 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.650
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.663
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.700
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.738
+HAT_KEY_STATE session=200588400960 hat=2 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.775
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=-1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.775
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.813
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.850
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.888
+HAT_KEY_STATE session=200588400960 hat=2 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.900
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.925
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.963
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.000
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.038
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.075
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.113
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.150
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.188
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.225
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.263
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.300
+HAT_KEY_STATE session=200588400960 hat=2 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.313
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=6.338
+HAT_KEY_STATE session=200588400960 hat=2 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=6.350
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=6.375
+HAT_KEY_STATE session=200588400960 hat=2 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=6.388
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.413
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.450
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.488
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.525
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.563
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.600
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.638
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.663
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.700
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.738
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.775
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.813
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.850
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.888
+HAT_AXIS_SAMPLE session=200588400960 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.925
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.950
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=6.963
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.000
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.038
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.075
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.113
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.150
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.188
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.225
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.263
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.300
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.338
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.375
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.413
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.450
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.488
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.525
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.525
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.563
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.600
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.638
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.675
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.713
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.750
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.788
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.813
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.825
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.850
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.863
+HAT_KEY_STATE session=200588400960 hat=-1 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.888
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=7.900
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=7.938
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=7.975
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.000
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.013
+HAT_KEY_STATE session=200588400960 hat=-1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.025
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.038
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.050
+HAT_KEY_STATE session=200588400960 hat=-1 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.063
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.088
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.125
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.163
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.200
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.238
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.275
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.313
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.350
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.388
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.413
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.450
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.475
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.513
+HAT_KEY_STATE session=200588400960 hat=3 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.550
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=-1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.550
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.588
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.625
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.663
+HAT_KEY_STATE session=200588400960 hat=3 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.675
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.700
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.738
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.775
+HAT_KEY_STATE session=200588400960 hat=3 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.800
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.813
+HAT_KEY_STATE session=200588400960 hat=3 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.838
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.850
+HAT_KEY_STATE session=200588400960 hat=3 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.875
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.888
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.925
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.963
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.000
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.038
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.075
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.113
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.150
+HAT_KEY_STATE session=200588400960 hat=3 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.188
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=-1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.188
+HAT_KEY_STATE session=200588400960 hat=3 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.225
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.225
+HAT_KEY_STATE session=200588400960 hat=3 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=9.263
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=9.263
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.300
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.338
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.375
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.412
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.450
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.487
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.525
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.562
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.600
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.637
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.675
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.712
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.750
+HAT_AXIS_SAMPLE session=200588400960 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.787
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.800
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.825
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.862
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.900
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.937
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.975
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.012
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.050
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.087
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.125
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.162
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.200
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.237
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.275
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.312
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.350
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.387
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.425
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.462
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.500
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.537
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.575
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.612
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.650
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.687
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.725
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.762
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.800
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.837
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.875
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.912
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.950
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.950
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=10.987
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.025
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.062
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.087
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.112
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.150
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.187
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.225
+HAT_KEY_STATE session=200588400960 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.237
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=11.262
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=11.275
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.300
+HAT_KEY_STATE session=200588400960 hat=-1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.312
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.337
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.375
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.412
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.437
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.475
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.512
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.550
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.587
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.625
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.662
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.700
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.737
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.775
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.812
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.850
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.887
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.925
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.962
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.000
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.037
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.075
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.112
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.150
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.187
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.225
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.262
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.300
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.337
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.375
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.412
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.450
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.487
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.525
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.562
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.600
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.637
+HAT_AXIS_SAMPLE session=200588400960 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.675
+HAT_KEY_STATE session=200588400960 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.687
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.712
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.750
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.787
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.825
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.862
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.900
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.937
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.975
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.012
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.050
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.087
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.125
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.162
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.200
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.237
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.275
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.312
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.350
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.387
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.425
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.462
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.500
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.537
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.575
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.612
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.650
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.687
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.725
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.762
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.800
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.837
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.875
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.912
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.950
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.987
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.012
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.050
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.087
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.125
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.162
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.200
+HAT_AXIS_SAMPLE session=200588400960 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.237
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.275
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.312
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.350
+HAT_KEY_STATE session=200588400960 hat=5 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.387
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.387
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.425
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.462
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.500
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.537
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.575
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.612
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.650
+HAT_KEY_STATE session=200588400960 hat=5 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.675
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.687
+HAT_KEY_STATE session=200588400960 hat=5 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.712
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.725
+HAT_KEY_STATE session=200588400960 hat=5 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.750
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=14.762
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=14.800
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=14.837
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=14.875
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=14.912
+HAT_KEY_STATE session=200588400960 hat=5 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=14.937
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.950
+HAT_KEY_STATE session=200588400960 hat=5 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.975
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.987
+HAT_KEY_STATE session=200588400960 hat=5 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=15.012
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.025
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.062
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.087
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.112
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.137
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.162
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.187
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.212
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.250
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.275
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.312
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.350
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.387
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.425
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.462
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.500
+HAT_AXIS_SAMPLE session=200588400960 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.537
+INPUT: return from formal game-005 result target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton rect=[P: (932.0, 534.0), S: (200.0, 64.0)] pointer=(1032.0, 566.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start hat rescue game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@2015/@VBoxContainer@2016/@HBoxContainer@2017/InviteCard/@MarginContainer@2018/@VBoxContainer@2019/@HBoxContainer@2021/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@2015/@VBoxContainer@2016/@HBoxContainer@2017/InviteCard/@MarginContainer@2018/@VBoxContainer@2019/@HBoxContainer@2021/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: pause before game-005 practice target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@2028/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@2028/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: restart as game-005 practice target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@2028/MinigameHUD/PauseOverlay/@PanelContainer@2037/@VBoxContainer@2038/PracticeButton rect=[P: (430.0, 340.0), S: (420.0, 44.0)] pointer=(640.0, 362.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@2028/MinigameHUD/PauseOverlay/@PanelContainer@2037/@VBoxContainer@2038/PracticeButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PASS: game-005 Main launch, pause/resume, confirmed retry reset, six keyboard-timed rescues, then six assisted reduced-motion pointer catches in non-collecting practice
+--------------------------------------------------------------------------------
+Done recording movie at path: /workspace/work/Snapland-character/work/catch-authored-20261020/native-quarter/play.avi
+2642 frames at 20 FPS (movie length: 00:02:12:02), recorded in 00:05:06 (43% of real-time speed).
+CPU render time: 90.74 seconds (average: 34.34 ms/frame)
+GPU render time: 108.97 seconds (average: 41.25 ms/frame)
+Encoding time: 26.47 seconds (average: 10.02 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/catch-authored-20261020/native_hat.gd:51)
+WARNING: ParkWorld: traveller action 'celebrate' has no authored direction in res://assets/characters/complete-animation-regions.json; using the three-frame built-in pose fallback.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_missing_avatar_action_once (res://game/world/park_world.gd:2402)
+         [1] play_action (res://game/world/park_world.gd:2357)
+         [2] _close (res://game/main.gd:543)
+         [3] _native_click_button (res://game/tests/native_review.gd:416)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _refresh_avatar_texture (res://game/world/park_world.gd:2453)
+         [2] play_action (res://game/world/park_world.gd:2364)
+         [3] _close (res://game/main.gd:543)
+         [4] _native_click_button (res://game/tests/native_review.gd:416)

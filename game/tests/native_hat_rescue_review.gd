@@ -20,6 +20,9 @@ var _walk_capture_failed := false
 var _walk_left_mask := 0
 var _walk_right_mask := 0
 var _walk_capture_count := 0
+var _moving_catch_seen := false
+var _stationary_pose_mask := 0
+var _stationary_pose_count := 0
 
 func _process(_delta: float) -> void:
 	if not Engine.get_write_movie_path().is_empty():
@@ -49,6 +52,8 @@ func _run() -> void:
 	RenderingServer.frame_post_draw.connect(_observe_formal_walk_frame)
 	await _frames(3)
 	if not await _launch_hat(false): return
+	if not await _review_stationary_reach(main.session.get_instance_id()): return
+	if not await _launch_hat(false): return
 	var formal_id: int = main.session.get_instance_id()
 	main.session.finished.connect(_capture_result.bind(formal_id), CONNECT_ONE_SHOT)
 	if not await _check_pause_resume_retry(formal_id): return
@@ -58,6 +63,9 @@ func _run() -> void:
 	_walk_capture_enabled = false
 	if _walk_capture_failed or _walk_left_mask != 255 or _walk_right_mask != 255 or _walk_capture_count != 16:
 		await _fail("Formal real movement did not render every cached walk pose in both directions: left_mask=%d right_mask=%d count=%d capture_failed=%s" % [_walk_left_mask, _walk_right_mask, _walk_capture_count, str(_walk_capture_failed)])
+		return
+	if not _moving_catch_seen:
+		await _fail("Formal review never observed locomotion during a still-active model catch cue")
 		return
 	if _result_session_id != formal_id or main.modal_kind != "result" or not bool(_result_snapshot.get("success", false)) or not bool(_result_snapshot.get("devil", false)):
 		await _fail("Six real keyboard rescues did not earn the formal ordinary/devil result: " + str(_result_snapshot))
@@ -115,19 +123,26 @@ func _run() -> void:
 	await main._quit_game()
 
 func _observe_formal_walk_frame() -> void:
-	if not _walk_capture_enabled or _walk_capture_failed or not is_instance_valid(main):
+	if (not _walk_capture_enabled and _moving_catch_seen) or _walk_capture_failed or not is_instance_valid(main):
 		return
 	var session := _session_by_id(_walk_capture_session_id)
 	if session == null:
 		return
 	var view: HatRescueView = session.presentation as HatRescueView
+	if view!=null and not _moving_catch_seen:
+		var state: Dictionary = session.hat_model.snapshot()
+		if float(state.get("catch_pose",0.0))>0.0 and absf(float(state.player_velocity))>HatRescueView.STILL_SPEED and view.visible_walk_frame_index()>=0 and view.visible_catch_frame_index()==-1:
+			_moving_catch_seen=true
+			print("HAT_MOVING_CATCH_WALK movie_frame=%d model_elapsed=%.3f velocity=%.3f walk_index=%d"%[Engine.get_frames_drawn(),float(state.elapsed),float(state.player_velocity),view.visible_walk_frame_index()])
+	if not _walk_capture_enabled:
+		return
 	if view == null or view.visible_catch_frame_index() >= 0:
 		return
 	var frame_index: int = view.visible_walk_frame_index()
 	if frame_index < 0 or frame_index >= 8:
 		return
 	var velocity := float(view._snapshot.get("player_velocity", 0.0))
-	var moving_left := velocity < -36.0
+	var moving_left := velocity < 0.0
 	var bit := 1 << frame_index
 	var mask := _walk_left_mask if moving_left else _walk_right_mask
 	if (mask & bit) != 0:
@@ -325,8 +340,6 @@ func _drive_six_hats(session_id: int, keyboard: bool, label: String) -> bool:
 					_key(KEY_SPACE)
 				else:
 					_click(_hat_viewport_point(session, Vector2(target_x, 540.0)))
-		if label == "formal" and not _catch_sequence_captured:
-			if not await _capture_formal_catch_frame(session_id): return false
 		if label == "formal" and int(state.caught) == 2 and not _formal_mid_captured:
 			await RenderingServer.frame_post_draw
 			if not is_instance_valid(main) or not main._capture(".review/native-hat-rescue-formal-mid.png"):
@@ -337,9 +350,42 @@ func _drive_six_hats(session_id: int, keyboard: bool, label: String) -> bool:
 	if _result_session_id != session_id or _result_snapshot.is_empty():
 		await _fail("Six input-driven hats did not reach a natural result before deadline")
 		return false
-	if label == "formal" and not _catch_sequence_captured:
-		await _fail("Formal retry round ended without one uninterrupted, fully observed 0..11 catch pose sequence: mask=%d count=%d" % [_catch_sequence_mask, _catch_sequence_count])
+	if label == "formal" and (_stationary_pose_mask!=4095 or _stationary_pose_count!=12):
+		await _fail("The separate stationary source rehearsal did not retain twelve verified frames")
 		return false
+	return true
+
+func _review_stationary_reach(session_id: int) -> bool:
+	# Separate harmless input rehearsal: a planted gesture must be reviewed
+	# while stationary, rather than withholding movement during a scored run.
+	var saved: Dictionary = _capture_private_progress(progress)
+	var session := _session_by_id(session_id)
+	if session==null:return false
+	var initial_x: float = session.hat_model.player_x
+	_key(KEY_SPACE)
+	var deadline := _wall_deadline_ms(3000)
+	while not _catch_sequence_captured and Time.get_ticks_msec()<deadline:
+		await get_tree().process_frame
+		session=_session_by_id(session_id)
+		if session==null:return false
+		if absf(float(session.hat_model.player_x)-initial_x)>0.001:
+			await _fail("Stationary source rehearsal moved its actual model root")
+			return false
+		if not await _capture_formal_catch_frame(session_id):return false
+	if not _catch_sequence_captured:
+		await _fail("Stationary real Space input did not display all twelve planted reach frames")
+		return false
+	_stationary_pose_mask=_catch_sequence_mask
+	_stationary_pose_count=_catch_sequence_count
+	if not await _wait_until(func() -> bool: return session.presentation.visible_catch_frame_index()<0,"complete stationary reach recovery"):return false
+	if not await _native_click_button(session.minigame_hud.find_child("PauseButton",true,false),"leave stationary source rehearsal"):return false
+	if not await _native_click_button(session.minigame_hud.find_child("LeaveButton",true,false),"request rehearsal exit"):return false
+	if not await _native_click_button(session.minigame_hud.find_child("ConfirmAction",true,false),"confirm rehearsal exit"):return false
+	if not await _wait_until(func() -> bool:return main.session==null and main.modal_kind=="","stationary rehearsal returns to park"):return false
+	if _capture_private_progress(progress)!=saved:
+		await _fail("Cancelled stationary rehearsal changed private collection or progress")
+		return false
+	print("PASS: separate stationary twelve-frame input rehearsal; no collection/progress change")
 	return true
 
 func _capture_formal_catch_frame(session_id: int) -> bool:
@@ -468,6 +514,7 @@ func _capture_pause_state(session_id: int) -> void:
 	}
 
 func _session_by_id(session_id: int) -> Control:
+	if session_id<=0 or not is_instance_id_valid(session_id):return null
 	var instance: Object = instance_from_id(session_id)
 	if instance is Control and is_instance_valid(instance) and is_instance_valid(main) and main.session == instance:
 		return instance as Control

@@ -1,0 +1,920 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "tickets": [
+    "ART-17",
+    "SG-20"
+  ],
+  "scope": "new authored 12-frame catch identity/whole-cel registration and movement precedence; both full tickets remain open",
+  "native": {
+    "normal": {
+      "result": {
+        "exit": 0,
+        "seconds": 137.89,
+        "errors": 0,
+        "mode": "normal",
+        "success": true,
+        "inputs": {
+          "assets/characters/complete-animation-regions.json": "3efb90b9298d0bf0c306f4c89a92ece83e0b8b217b23cd05f5afb018271b9109",
+          "assets/characters/avatar-head-material-owners-v1.json": "0f036639efb4b75332b96a6fa29d55d48c84422f38e6670a462291e5203a5afe",
+          "assets/characters/traveller-catch-front-v5.png": "63516f9637c22973feb00f863c906fe63819efa307e88dfaac544ebb06b829b9",
+          "assets/characters/traveller-catch-front-v5.png.import": "3663ba5f1e5b43e1202248fc504ce0974037d24f445edca7834a0e37030bd6fb",
+          "game/world/avatar_renderer.gd": "52ec3eaa423939df1b88930ebe94eb1d3da8eafbdf0c5035d7d802d922615f51",
+          "game/minigames/hat_rescue_view.gd": "7943c9704e3d7df7d5eabc6f0be3527a91f246ea905fb585cbd98e75b79d31bc",
+          "game/tests/native_hat_rescue_review.gd": "ab5bdb83ea71bff02371bd5d94eba56c75ee199457dfafc04eb0519ad49748fa"
+        }
+      },
+      "visual_review": {
+        "source_frames": [
+          {
+            "index": 0,
+            "movie_frame": 15,
+            "model_elapsed": 0.1
+          },
+          {
+            "index": 1,
+            "movie_frame": 17,
+            "model_elapsed": 0.167
+          },
+          {
+            "index": 2,
+            "movie_frame": 19,
+            "model_elapsed": 0.233
+          },
+          {
+            "index": 3,
+            "movie_frame": 20,
+            "model_elapsed": 0.267
+          },
+          {
+            "index": 4,
+            "movie_frame": 22,
+            "model_elapsed": 0.333
+          },
+          {
+            "index": 5,
+            "movie_frame": 23,
+            "model_elapsed": 0.367
+          },
+          {
+            "index": 6,
+            "movie_frame": 25,
+            "model_elapsed": 0.433
+          },
+          {
+            "index": 7,
+            "movie_frame": 26,
+            "model_elapsed": 0.467
+          },
+          {
+            "index": 8,
+            "movie_frame": 28,
+            "model_elapsed": 0.533
+          },
+          {
+            "index": 9,
+            "movie_frame": 29,
+            "model_elapsed": 0.567
+          },
+          {
+            "index": 10,
+            "movie_frame": 31,
+            "model_elapsed": 0.633
+          },
+          {
+            "index": 11,
+            "movie_frame": 32,
+            "model_elapsed": 0.667
+          }
+        ],
+        "observed_model_time_per_movie_second": 1.0005882352941178,
+        "decoded_frame_range": [
+          13,
+          34
+        ],
+        "decoded_frames": 22,
+        "video": {
+          "width": 1280,
+          "height": 720,
+          "avg_frame_rate": "30/1",
+          "duration": "34.700000",
+          "nb_frames": "1041"
+        },
+        "method": "all movie frames in bounded stationary gesture interval decoded and fixed crop reviewed; separate full-window post-draw captures retain complete source coverage; not continuous whole-video review"
+      },
+      "moving_catch_observation": "HAT_MOVING_CATCH_WALK movie_frame=108 model_elapsed=1.033 velocity=54.947 walk_index=7"
+    },
+    "quarter": {
+      "result": {
+        "exit": 0,
+        "seconds": 306.5,
+        "errors": 0,
+        "mode": "quarter",
+        "success": true,
+        "inputs": {
+          "assets/characters/complete-animation-regions.json": "3efb90b9298d0bf0c306f4c89a92ece83e0b8b217b23cd05f5afb018271b9109",
+          "assets/characters/avatar-head-material-owners-v1.json": "0f036639efb4b75332b96a6fa29d55d48c84422f38e6670a462291e5203a5afe",
+          "assets/characters/traveller-catch-front-v5.png": "63516f9637c22973feb00f863c906fe63819efa307e88dfaac544ebb06b829b9",
+          "assets/characters/traveller-catch-front-v5.png.import": "3663ba5f1e5b43e1202248fc504ce0974037d24f445edca7834a0e37030bd6fb",
+          "game/world/avatar_renderer.gd": "52ec3eaa423939df1b88930ebe94eb1d3da8eafbdf0c5035d7d802d922615f51",
+          "game/minigames/hat_rescue_view.gd": "7943c9704e3d7df7d5eabc6f0be3527a91f246ea905fb585cbd98e75b79d31bc",
+          "game/tests/native_hat_rescue_review.gd": "ab5bdb83ea71bff02371bd5d94eba56c75ee199457dfafc04eb0519ad49748fa"
+        }
+      },
+      "visual_review": {
+        "source_frames": [
+          {
+            "index": 0,
+            "movie_frame": 15,
+            "model_elapsed": 0.038
+          },
+          {
+            "index": 1,
+            "movie_frame": 20,
+            "model_elapsed": 0.1
+          },
+          {
+            "index": 2,
+            "movie_frame": 24,
+            "model_elapsed": 0.15
+          },
+          {
+            "index": 3,
+            "movie_frame": 27,
+            "model_elapsed": 0.188
+          },
+          {
+            "index": 4,
+            "movie_frame": 31,
+            "model_elapsed": 0.238
+          },
+          {
+            "index": 5,
+            "movie_frame": 35,
+            "model_elapsed": 0.288
+          },
+          {
+            "index": 6,
+            "movie_frame": 39,
+            "model_elapsed": 0.338
+          },
+          {
+            "index": 7,
+            "movie_frame": 43,
+            "model_elapsed": 0.388
+          },
+          {
+            "index": 8,
+            "movie_frame": 47,
+            "model_elapsed": 0.438
+          },
+          {
+            "index": 9,
+            "movie_frame": 51,
+            "model_elapsed": 0.488
+          },
+          {
+            "index": 10,
+            "movie_frame": 55,
+            "model_elapsed": 0.538
+          },
+          {
+            "index": 11,
+            "movie_frame": 60,
+            "model_elapsed": 0.6
+          }
+        ],
+        "observed_model_time_per_movie_second": 0.24977777777777777,
+        "decoded_frame_range": [
+          13,
+          62
+        ],
+        "decoded_frames": 50,
+        "video": {
+          "width": 1280,
+          "height": 720,
+          "avg_frame_rate": "20/1",
+          "duration": "132.100000",
+          "nb_frames": "2642"
+        },
+        "method": "all movie frames in bounded stationary gesture interval decoded and fixed crop reviewed; separate full-window post-draw captures retain complete source coverage; not continuous whole-video review"
+      },
+      "moving_catch_observation": "HAT_MOVING_CATCH_WALK movie_frame=194 model_elapsed=1.000 velocity=3.133 walk_index=6"
+    }
+  },
+  "headless_suites": [
+    "hat rescue model",
+    "hat rescue view including actual bob/curly forehead and palms",
+    "island alternate hair source",
+    "island hair lifecycle"
+  ],
+  "python_checks": 101,
+  "python_result": "OK",
+  "native_hair": {
+    "cases": 96,
+    "additional_rest_cels": 200,
+    "one_pixel_negative_control": true,
+    "protected_pixels_and_original_rest": true,
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)"
+  },
+  "pack": {
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "bytes": 146320616,
+    "sha256": "7a78b1289d5ec6be6474288671ff66bf7956656aaa1185ab431ac36fccd8d012",
+    "scope": "Windows Desktop preset PCK only; Linux native engine; not a Windows EXE run",
+    "exit": 0,
+    "loose_png": false,
+    "catch_frames": 12,
+    "hair_variants": 36,
+    "existing_motion_profiles_validated": 16,
+    "locomotion_priority_verified": true
+  },
+  "rejected": [
+    "old v4 differs from new approved idle",
+    "narrow hand ROIs / arm-as-foreground draft",
+    "short id was fallback, not real bob coverage",
+    "first PCK changed weak-alpha RGB identity",
+    "early native attempts with parser/import-mapping/observer/rehearsal-reset errors; none treated as pass"
+  ],
+  "limitations": [
+    "Linux Compatibility llvmpipe, Dummy audio; not Windows EXE or listening",
+    "3D world hidden for 2D gesture review; station placed by fixture, not an exploration route",
+    "all 22/50 movie frames around the stationary gesture decoded and viewed; not continuous whole-video review",
+    "no source/model/movement eligibility/score/collection changes to HatRescueModel",
+    "NPC walks and all-actor action coverage remain unfinished"
+  ],
+  "sources": {
+    "assets/characters/traveller-catch-front-v5.png": "63516f9637c22973feb00f863c906fe63819efa307e88dfaac544ebb06b829b9",
+    "assets/characters/traveller-catch-front-v5.png.import": "3663ba5f1e5b43e1202248fc504ce0974037d24f445edca7834a0e37030bd6fb",
+    "assets/characters/complete-animation-regions.json": "3efb90b9298d0bf0c306f4c89a92ece83e0b8b217b23cd05f5afb018271b9109",
+    "assets/characters/avatar-head-material-owners-v1.json": "0f036639efb4b75332b96a6fa29d55d48c84422f38e6670a462291e5203a5afe",
+    "assets/characters/island-hair-alternate-owners-v1.json": "33a3ee97f96ae4491646e915e23fcdca94911d1d64492a69589039b063b3732c",
+    "assets/characters/island-hair-bob-v1.json": "6b47e03fedd5a25a2290cb445881d72b8d8535b1809943235c0d0cb4d5651994",
+    "assets/characters/island-hair-curly-v1.json": "6fe175baeaef421eaef05df80a0e154e16591bbd25848f5c2b46591b62f461a3",
+    "game/minigames/hat_rescue_view.gd": "7943c9704e3d7df7d5eabc6f0be3527a91f246ea905fb585cbd98e75b79d31bc",
+    "game/tests/test_hat_rescue_view.gd": "409587dec0ca873d7ebb84276ff103be24b324002ab4fa7bd4420cc46335ebf2",
+    "game/tests/native_hat_rescue_review.gd": "ab5bdb83ea71bff02371bd5d94eba56c75ee199457dfafc04eb0519ad49748fa"
+  },
+  "files": [
+    {
+      "file": "ART-17-catch-v5-20261020-normal.log",
+      "sha256": "9e62fe444dfc195cdbca32d2b08b051350a67c4137f3c2ccd737ad03acd8b203",
+      "bytes": 53754
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-poses.png",
+      "sha256": "db94fbd1dc1ec3c899f2b7547a05f2c4bbe8bdc991459075849e39c584d8bcc4",
+      "bytes": 205122
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-decoded.png",
+      "sha256": "40725823a0c06abcc5c48af15d2e4731a9ccf45f55c9cbf5ff76e36cc8af1977",
+      "bytes": 366513
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal.mp4",
+      "sha256": "52529479d62253f28309bdda1576ccfc1dcc4aab70d3f04a962dd715fc11f6f6",
+      "bytes": 3531818
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-00.png",
+      "sha256": "047915fcb30bc67371e843d19d8585d01a3839cb9c826210cf7b7dffb8e0b459",
+      "bytes": 38539
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-01.png",
+      "sha256": "0c099ac1383bde01b08fdbd9038c8adb0f42e217c89827e4b3180374163ba71b",
+      "bytes": 39392
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-02.png",
+      "sha256": "03d34514e2134e5d61c54a6593141798a337bafffd952ec5c38de4f3f17f1a72",
+      "bytes": 39463
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-03.png",
+      "sha256": "9676601db025ca8e52c949cfa1b4aca0c2b0dc9e9dc1e4b7025aeffd0b59f6fd",
+      "bytes": 40658
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-04.png",
+      "sha256": "442f90f5719bd0e3e2cce94bebbd92b3e3052aa54386835feeef415540ec47e9",
+      "bytes": 39792
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-05.png",
+      "sha256": "0a6ee79eea172cece59665c94769821cb39357d99506e6622712780b5276e3a6",
+      "bytes": 39965
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-06.png",
+      "sha256": "4048325988b9629ca6efdf69fd2145419e0c436624efab0892f54b23a261cb40",
+      "bytes": 38985
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-07.png",
+      "sha256": "e1ed9b9cbf4a22d3c17b4761c10328d083b6b4aae0c1c481f281e3804a8a6a4a",
+      "bytes": 39998
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-08.png",
+      "sha256": "2079a76dcfc3aa61b5473c9f08972c51d7fe86e0c4853eac0183568341e89c42",
+      "bytes": 39864
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-09.png",
+      "sha256": "8ba1fc038f070b70ffb8fb1ff2bfc59557b2f998105891fa975d9999c0e5914f",
+      "bytes": 39998
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-10.png",
+      "sha256": "4d53ecbeb4da2c8387ea1e966dc0dabc5a372968a7f34f32b79181469b07b880",
+      "bytes": 38945
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-catch-pose-11.png",
+      "sha256": "83d59465c3c502c1879f2cbb7322f9faf55dd682cd34c897bbc42b86cb148433",
+      "bytes": 38834
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-formal-816.png",
+      "sha256": "976fe43eda278a50df5e68498b9f64def97ca3cd2006b0989ddbff53a4fe1ab6",
+      "bytes": 430588
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-formal-mid.png",
+      "sha256": "fc5e79311c97f434d40e1fafa311668e9a51e6c1f5f21c2674823b96fbf51654",
+      "bytes": 34589
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-practice.png",
+      "sha256": "8dbdab79e263fbc5ba427beb2408c6ce35297046b78d0ecd63ff297be17bf992",
+      "bytes": 383763
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-left-00.png",
+      "sha256": "1630c7828c524ca873dc19098448c0b2ca92a562ebb4be12062fcd428c26f829",
+      "bytes": 36074
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-left-01.png",
+      "sha256": "5b69ec0291921b8c428be395bcbc62315106a1e8e322dd45693b48aedbdc8412",
+      "bytes": 35162
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-left-02.png",
+      "sha256": "4d3f5d3329768dfeab313ddc125054b3f6f7f8689c838b9654225bf266223416",
+      "bytes": 34037
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-left-03.png",
+      "sha256": "c783a3c1e3c4be11f2dfc6faa9431b54e0301ab7cffb3e7571b6310c1acefe28",
+      "bytes": 35283
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-left-04.png",
+      "sha256": "e866db8a7b951ff678f3e1ec99d3b002860bbd749def021e068502bec4d350e7",
+      "bytes": 35809
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-left-05.png",
+      "sha256": "8225eace510b99124b5773e7f14df638f915498a08e1030e82bad484b5025e00",
+      "bytes": 35504
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-left-06.png",
+      "sha256": "7319e36fe1744ae8c8ac3d84c0e899882fcf302edc66148c5d9b69f860d3f11b",
+      "bytes": 34131
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-left-07.png",
+      "sha256": "26e21d279ef8a1cdb9807ab4f57b27c2aa20331f9eb5ec8bfef5e8ea841a454d",
+      "bytes": 35524
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-right-00.png",
+      "sha256": "0028dd952ba72ef7980b4989bfa9bccf60591871fbde23c81cf3fc2b3c106ae3",
+      "bytes": 35948
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-right-01.png",
+      "sha256": "ff1090796397751d9f0a8584474ff1fc3f2720d2b5746de85b31a50aa9e63056",
+      "bytes": 35152
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-right-02.png",
+      "sha256": "2cac0207e1fbaabf645065ab9d9d2cfe9604100abd70cce066f051dec3bfcdfb",
+      "bytes": 33935
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-right-03.png",
+      "sha256": "4e34f4651db0be01385a4ac54a058f797a0ccb8ad15c11399536f40adace7ddb",
+      "bytes": 35186
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-right-04.png",
+      "sha256": "3395ffc7442e3ec1bbad76edf733222def6f2f34528ea70a47f5d893ba63e5c5",
+      "bytes": 35503
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-right-05.png",
+      "sha256": "3d3bebf5b0d72cc9f43cd97c68a88ecc37c79a906bb3597ead8d7e5002e3207d",
+      "bytes": 35212
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-right-06.png",
+      "sha256": "a17589791a9534ec4d09e033dba4592d5ac8768b06f9c96776a49919ed7a9e69",
+      "bytes": 34209
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-normal-native-hat-rescue-walk-right-07.png",
+      "sha256": "d17a1b12dd6d140396bedf6eacbd51d22db9a7d48f1e573e8b3519f2be8d6090",
+      "bytes": 35743
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter.log",
+      "sha256": "6bc207ba84ba398da4cabe64b52e92aa9b852fe5023a46136bfff7e6bc914879",
+      "bytes": 88761
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-poses.png",
+      "sha256": "3c9fb95e95aa189d6b3f9b5e2b27b3f50938b76b9008882465f172f8c49fb635",
+      "bytes": 205248
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-decoded.png",
+      "sha256": "ed1489c00d451f41e020b7bcfc77235cd39531ef6d3b260c3107b2e334bcea7e",
+      "bytes": 512156
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter.mp4",
+      "sha256": "d1d7ed9b3aa70da981e4031ff2c17e260093a02b378f0517a18f07b2e83b26f5",
+      "bytes": 7584926
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-00.png",
+      "sha256": "69798b3d81e48d922e96977106230b2bd8dc409efce1738aad83c02e23b77d72",
+      "bytes": 38493
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-01.png",
+      "sha256": "cceef46b9dc71825ccd8217c70cd7f04367f4f55d5bdd4587ab720335a36f366",
+      "bytes": 39363
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-02.png",
+      "sha256": "d1e95cdcf8998877decc9bd12956160c1b7f1fcfa29f2c40c65cfcf6fce173b3",
+      "bytes": 39561
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-03.png",
+      "sha256": "54fb1dc75a5c190b8d84f1095da7fdafd092ae07acf08141acfaf81e94fdccea",
+      "bytes": 40698
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-04.png",
+      "sha256": "66d2682c5c112fc268c6445d91c147a54b8aa5be0a2d72c8752860a953db28d8",
+      "bytes": 39724
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-05.png",
+      "sha256": "4426926beea8cc740e72e6347d0099c4a9bab5639e24caedfeabb1473e79ae4e",
+      "bytes": 40006
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-06.png",
+      "sha256": "ee13cb100fac35e698eb9be5aaaf67d09a3bb6feb1efe4401fe0c8f463cd7a60",
+      "bytes": 39030
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-07.png",
+      "sha256": "1b4355b7514609d4c5230c0dc53a349b7b48a7fd3b43b8ec125fb4fbdd9bb8cc",
+      "bytes": 40038
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-08.png",
+      "sha256": "ceda638949332edbfed9b0ad1a8314562d0ff3419512795dcf29ba0f8581740c",
+      "bytes": 39940
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-09.png",
+      "sha256": "36be03078c3785c36bf128d2eaa288d36d57f16d6b13337dbe288a7e12ff0f93",
+      "bytes": 40127
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-10.png",
+      "sha256": "b722991fc46ef57a3e24d8f505190c88e3e9903511fd11cc90f930e60511af8f",
+      "bytes": 38901
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-catch-pose-11.png",
+      "sha256": "4c96dfd7f1e46c7a21f8320ce0c0c8e57bd4bf62a1b225e9bc1b2dd2571cb532",
+      "bytes": 38642
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-formal-816.png",
+      "sha256": "5be3a70822659dcbde3d4bfebf7275f7a8f548f99e87595010845c0649604ebe",
+      "bytes": 430995
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-formal-mid.png",
+      "sha256": "31bce753545f6e20184aa1a1566d1752d95653bf2688aa7bc4632c846a52c037",
+      "bytes": 39886
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-practice.png",
+      "sha256": "52d6fd1137fc379a8f7a618bc78d9958fcce97e32ade8e99b2d8118c3eecce97",
+      "bytes": 383824
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-left-00.png",
+      "sha256": "ffe07b4199c10084b5a375ca7abb7a98811d4d45169e1af60998b5d882924f87",
+      "bytes": 36109
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-left-01.png",
+      "sha256": "c8c5df276b5b0dc4cce695c5ce49661df3e88bd2c2745e57ff840c9aea00096c",
+      "bytes": 35147
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-left-02.png",
+      "sha256": "7df73c7e5cad0a9b65e5ec39f9511a8e7a6fbc27e0d350b405df977d1140e89e",
+      "bytes": 33907
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-left-03.png",
+      "sha256": "91065211b545b9f390c664f3e2d194123b40dbe7b85f0d21b6d14d90b2ac903b",
+      "bytes": 35237
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-left-04.png",
+      "sha256": "cfcfd1133fa2bff684366f3f46cb8f41e40c6e898dd29d8b3e44ff78b440c38f",
+      "bytes": 35881
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-left-05.png",
+      "sha256": "3d21cc0c90a12894c872395743b6a32b07f5ffb0315b76309d86a537d97149f3",
+      "bytes": 35519
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-left-06.png",
+      "sha256": "5b8fe5a2e4e43096d10e0ccb35835fd32d44ba6c81f3a52b022279b756a97978",
+      "bytes": 34250
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-left-07.png",
+      "sha256": "7f428403ed14db77bca602a34a685a7034d30619ef8d47529ff79092ec9d6502",
+      "bytes": 35622
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-right-00.png",
+      "sha256": "36d643c3764d37a1915f15146eb82f23ed14b850ad425f9d5a21c8a1e8d6803e",
+      "bytes": 35674
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-right-01.png",
+      "sha256": "862ac2df8da9aac9427c521bc24689b305b30cf21967f0de3716de761a9a5217",
+      "bytes": 35182
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-right-02.png",
+      "sha256": "4b326fdf9cc2f97b9ff91681ad23009be8e703dbe7597baecd18fe979bbb59d8",
+      "bytes": 33985
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-right-03.png",
+      "sha256": "bb5081f0757f835e1fad609b6c7ed3ce670863d3792befefe5d6a84e62583f4c",
+      "bytes": 35201
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-right-04.png",
+      "sha256": "3039018fa6de2925d93f23fab05fbdb8d730060087dc0552df8d76782dda6667",
+      "bytes": 35612
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-right-05.png",
+      "sha256": "d3d7240129eeeac1d1f644b783b9339b4b29d7a2570caef47627c6acf00ede01",
+      "bytes": 35190
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-right-06.png",
+      "sha256": "adcfc5d623ad5443f17f3844c0e08676e92df394c8a94a0b3dfc9df0cdcd2d17",
+      "bytes": 34622
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-quarter-native-hat-rescue-walk-right-07.png",
+      "sha256": "f50c82ec819bb1e9a01d1f53a3b0a710b8e8002e0735c459c921993bb7fc209e",
+      "bytes": 35599
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-00.png",
+      "sha256": "3c597c7e4a4e08c41d4973aebae112045d5f02c2c0808ff844d163bd6f444a6f",
+      "bytes": 74014
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-01.png",
+      "sha256": "497cf45fcbefce08b9868173553f1a2d2800761a194c656c2a5ffe87d53bf891",
+      "bytes": 76970
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-02.png",
+      "sha256": "d53c570b791921a8c9c55a22d16a452193610059b6602b7ce01c00bdb0723eff",
+      "bytes": 79145
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-03.png",
+      "sha256": "1f518cc913c6ea619e81066fb794691a56b273785ecd2527ef32504418cc28ed",
+      "bytes": 82780
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-04.png",
+      "sha256": "2390fa89117042553bf6e3e5b711f6247c9e0e91279832727b9dd6673f93fd24",
+      "bytes": 78672
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-05.png",
+      "sha256": "1576e8d94d9b18c052c803e349a61872157ee13b440e6b594745db598d7778a6",
+      "bytes": 79187
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-06.png",
+      "sha256": "d23131b13f743c1d97b4a66f37657bcd90791941ae386bd5830a4509f25108f1",
+      "bytes": 76993
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-07.png",
+      "sha256": "6dcb44f42f774a4a23e2066e375b8eadc3e65247626fe29d1eeebbc8bd0f4240",
+      "bytes": 80683
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-08.png",
+      "sha256": "4b4bbb53893091e085c4049bf280b9a71a21ae9cc0e7fdfdcd31583e354e792d",
+      "bytes": 78869
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-09.png",
+      "sha256": "fd89c39b30b6da46062fc2d698c22ad902fe2d4f3d1399a17597b0ebdeda131b",
+      "bytes": 79524
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-10.png",
+      "sha256": "2dd2fd727b0e84549a4c21dac71ab9abe6e4384f43bc9c1a5bde24ca5b71a820",
+      "bytes": 75405
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-0-frame-11.png",
+      "sha256": "900c1aa03b64780632bdfee81cdfc2c395cdc9ffa2feb8dd57fc51a199ca4637",
+      "bytes": 73826
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-00.png",
+      "sha256": "25f9407f75cdc7383f49f63c2da05c1ea27a9b821b1d0aac76caf25930262d92",
+      "bytes": 70953
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-01.png",
+      "sha256": "4b6b755b240106d881725a784c0c6c185bdba1f98788cc9174fd839f876a9974",
+      "bytes": 73779
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-02.png",
+      "sha256": "bf3dbc5df6cacc65907549342e885dae53468cb5e9dd0e91b469415a1a92d184",
+      "bytes": 76175
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-03.png",
+      "sha256": "0de808ec0dba1274447bd75a0aac47b18dd434d699bf27eda928fc65be8f3de6",
+      "bytes": 79282
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-04.png",
+      "sha256": "7c37321531c9cec9bf4a457244a52aa84068f48d38e5e119f35917e1109383a3",
+      "bytes": 75220
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-05.png",
+      "sha256": "350b1ea339ecd30c647caac723325384fdd9d97530f11a2a2249be97bc4c0ec2",
+      "bytes": 77070
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-06.png",
+      "sha256": "670e9c85f48621f30317803be3817b2e43f7aa32b430fdf9c0534514606e8425",
+      "bytes": 72679
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-07.png",
+      "sha256": "ef9124bfc351a9523aa47bf8ad137469ef5b9574027f0c32d72c530b831caa85",
+      "bytes": 76011
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-08.png",
+      "sha256": "3e570fb343e43c9d4d1e4f312167c5f2d17353f4e00ce6d232e64afbe47b6e96",
+      "bytes": 75737
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-09.png",
+      "sha256": "d694209077aeee18a083c4e266e30e2e54415387372bc4d0f6bd69e9fcf6048a",
+      "bytes": 76398
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-10.png",
+      "sha256": "6820930523f762c387b942f845ec5f678f6a8efacce1bcafba80a1a6a2e06c9a",
+      "bytes": 72131
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-1-frame-11.png",
+      "sha256": "b58b3fa2db80af2e42856e913167c2e8df4fc55ac50796ad93df57d630531c82",
+      "bytes": 70705
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-00.png",
+      "sha256": "4d23b35040c079cbeeeb98737643fc42df2c4ff37261cb20c501eb5436f74c2e",
+      "bytes": 76652
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-01.png",
+      "sha256": "1306a987234d276f4d52e65c83a40a43fe3a89f74bdd07e789ce38351cee7413",
+      "bytes": 79105
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-02.png",
+      "sha256": "ee2ba44a542726947218365e63dc90312349f9815352ed956e3beac64830f592",
+      "bytes": 81449
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-03.png",
+      "sha256": "9260c63a0dfc8360d6b39d253e20c9c9e02771597b8cd63bb804973428e714b3",
+      "bytes": 82999
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-04.png",
+      "sha256": "ab10a7d77687d079d360fe27d10eb1745d0bad86ddc2f782c55d24d3a9f798cd",
+      "bytes": 79232
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-05.png",
+      "sha256": "4e354d48252c1f15a3e79b31fe36fbfdd927b9926f982bda6e3ee8dcf72a3004",
+      "bytes": 79879
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-06.png",
+      "sha256": "aef9049554b80c903d0e0a8c0a45814d4b113786271e4141b3d3f55d7e3964fb",
+      "bytes": 79516
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-07.png",
+      "sha256": "fe549bf67c7c5ce0d89576dd9decbd0eb7768ee60b608befdfa46bfa924572cf",
+      "bytes": 83925
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-08.png",
+      "sha256": "2f6067ed36a116654f7248c15f3b2a5f04f6f85057388cef5aac63289051f3f8",
+      "bytes": 77729
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-09.png",
+      "sha256": "eeb0f9934ba35f0e18a56e1addcc783dc524f328145012fd7f879e6493789419",
+      "bytes": 79980
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-10.png",
+      "sha256": "296798aa1e64b1d6eec43b7493ea300b835497d5c3868c1ac0c139efde19c27a",
+      "bytes": 77664
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-2-frame-11.png",
+      "sha256": "7db28de40c12a7a73ed8cd1cf2a5a218ab8fa42f3c920690ec2e3abd806c79eb",
+      "bytes": 76229
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-00.png",
+      "sha256": "822d8d7427f460e192e3c7b01caad34069cd2cfa4ab267aabcfe16ed1e0b3024",
+      "bytes": 72220
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-01.png",
+      "sha256": "6b9ec72842a7c28084c88e6e7481b6a9feb1296c2564572faf23fa8cbe44bbfb",
+      "bytes": 74673
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-02.png",
+      "sha256": "06ad515250d63390ddeea2ccb488e07ce3ffb049ae114dc69addc32759bdeacb",
+      "bytes": 75898
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-03.png",
+      "sha256": "d8e3a615e2adafa51b930084c8e34f2546b78af060b4af1d028d08ccb728a946",
+      "bytes": 78273
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-04.png",
+      "sha256": "68a34258d20c9b23d202b5b136fa4911de4ce7e21f6a9df0e827b39febde55e8",
+      "bytes": 74611
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-05.png",
+      "sha256": "04f71f1945c72b95933a87c0d623dbe3f30d94fa7866f505dbcdaee74457e173",
+      "bytes": 75348
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-06.png",
+      "sha256": "60f1569cecd4bedadede54725bc7aa582926b563639f145c14b2b37ba66318dc",
+      "bytes": 76127
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-07.png",
+      "sha256": "1d2ce8797dedbf53e71accc35390031b30a8868c27fed4cb4523319c4ff2a965",
+      "bytes": 80866
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-08.png",
+      "sha256": "213c5ba53e9c438693db46d11a2b6058f064c03c84113b2b514fddf4bc60a017",
+      "bytes": 74784
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-09.png",
+      "sha256": "c9d219e6f4f1db5f9ca65118a0f347e33be6ae9310472c8b0636e18e3efee437",
+      "bytes": 75373
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-10.png",
+      "sha256": "2bc01f14ab45ae6938b29db5ffa078bf7a9e5c314728f6fca9e2a994f98407ab",
+      "bytes": 73028
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variant-case-3-frame-11.png",
+      "sha256": "3dec00281a6010d6a2851825d65144e32fe63dd5695bd35e848804d0a5e4f846",
+      "bytes": 71798
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-variants.png",
+      "sha256": "79b5b4976e4cc7c00a5314398fd5945ccc17aa025b15434d7f84e80ea19268ae",
+      "bytes": 855227
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-before-v4-comparison.png",
+      "sha256": "7055d17a3cd6492dbd1a7735f6c02a3d2737ade9aa4aa5c4acdca9c48878a41a",
+      "bytes": 975270
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-hair-ownership.png",
+      "sha256": "c5f418e8efb4ac7e978771f3d0aa51a5833c0a267cb685056ba64fed6953b833",
+      "bytes": 729814
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-pack.json",
+      "sha256": "a70a2f0e333af08dd0fd4df2e9f53060569dd9d1fae2d2f5d1cdd215c7fc85c4",
+      "bytes": 406
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-pack.log",
+      "sha256": "16670ae751e67338e417419f1c2674ceb7177934af31e63cce1e31fe0db1c390",
+      "bytes": 191
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-hair-dependencies.json",
+      "sha256": "f01de95370764fd20e08f259444cf326b6bac7d533f3538cde6f69100ddf9de4",
+      "bytes": 195
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-hair-dependencies.log",
+      "sha256": "c39170f7db3451062b1abfd7d9dac30c911842c88acf195d2f43b3dc32f0a753",
+      "bytes": 145
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-gpu-hair.json",
+      "sha256": "7c55b92e0afff935066764d2077328910b11ce0d3f32bfe27923a3bd43767504",
+      "bytes": 19600
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-gpu-hair.log",
+      "sha256": "cd36140ba4f694b7ebd40d6ba8aec9fc7e87328724c8518dd891cba3d00adee8",
+      "bytes": 512
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-python.log",
+      "sha256": "7344561b6cf8d8e94f22368a65423a8a5c7cdcb863d23534c9786b30f4e40b43",
+      "bytes": 15257
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-hat-rescue-model-tests.log",
+      "sha256": "513038a84148ceaaa3c2e4703ea0e65099d886b4d3c4e501b47616d40f9c89b6",
+      "bytes": 108
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-hat-rescue-view-tests.log",
+      "sha256": "816c77807676fdcd00f3b12f1378ad779234183e8173d0b4100359e925c0e773",
+      "bytes": 3545
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-island-alternate-hair-source-tests.log",
+      "sha256": "413aaa3e7ca1c2500cd67b9f341ae4ccc29c36daca198a6368104e42f9543b12",
+      "bytes": 3611
+    },
+    {
+      "file": "ART-17-catch-v5-20261020-island-hair-lifecycle-tests.log",
+      "sha256": "1230beed012dbbd8b34f02cac37fca4d4f061ba77e478e159dfb23b0c18e7749",
+      "bytes": 12109
+    }
+  ],
+  "unchanged_hat_model_sha256": "8efb2a214bda40a79e1032926530fc5a7e499592b60148e225444f31c56d89fd"
+}

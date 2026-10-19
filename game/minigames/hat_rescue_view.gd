@@ -16,6 +16,7 @@ const CATCH_LINE_Y := 518.0
 const PLAYER_GROUND_Y := 638.0
 const PLAYER_DRAW_SIZE := Vector2(126.0, 162.0)
 const WALK_CYCLE_DISTANCE := PLAYER_DRAW_SIZE.x * 0.9
+const STILL_SPEED := 1.0
 const CATCH_LINE_MARKS: Array[float] = [182.0, 326.0, 470.0, 614.0, 758.0, 902.0, 1046.0]
 const CHARACTER_RENDER_BOUNDS := Rect2(113.0, 452.0, 1054.0, 190.0)
 const HAT_RENDER_BOUNDS := Rect2(96.0, 136.0, 1088.0, 432.0)
@@ -84,7 +85,11 @@ func update_frame(snapshot: Dictionary, time_phase: String = "noon", reduced_mot
 			_visual_catch_elapsed += minf(model_elapsed - _last_model_elapsed, 0.1)
 	if float(snapshot.get("catch_pose", 0.0)) > 0.0 and previous_pose <= 0.0:
 		_visual_catch_elapsed = 0.0
-		_visual_catch_active = not _catch_frames.is_empty()
+		_visual_catch_active = not _catch_frames.is_empty() and absf(float(snapshot.get("player_velocity",0.0))) <= STILL_SPEED
+	# These whole-body cels are planted reaches. Locomotion takes precedence;
+	# cosmetic interruption never changes the model's catch eligibility window.
+	if absf(float(snapshot.get("player_velocity",0.0))) > STILL_SPEED:
+		_visual_catch_active = false
 	if _visual_catch_active and _catch_fps > 0.0 and _visual_catch_elapsed >= float(_catch_frames.size()) / _catch_fps:
 		_visual_catch_active = false
 	_last_model_elapsed = model_elapsed if is_finite(model_elapsed) else _last_model_elapsed
@@ -150,7 +155,7 @@ func visible_walk_frame_index() -> int:
 		return -1
 	var velocity := float(_snapshot.get("player_velocity", 0.0))
 	var frames: Array[Texture2D] = _right_walk if velocity > 0.0 else _left_walk
-	if absf(velocity) <= 36.0 or frames.is_empty():
+	if absf(velocity) <= STILL_SPEED or frames.is_empty():
 		return -1
 	return int(floor(_walk_distance / WALK_CYCLE_DISTANCE * float(frames.size()))) % frames.size()
 
@@ -478,12 +483,13 @@ func _draw_avatar(ink: Color, coral: Color) -> void:
 	var velocity := float(_snapshot.get("player_velocity", 0.0))
 	var texture := _idle_texture
 	var catch_frame := visible_catch_frame_index()
+	var walk_frame := visible_walk_frame_index()
 	if catch_frame >= 0:
 		texture = _catch_frames[catch_frame]
-	elif absf(velocity) > 36.0:
+	elif walk_frame >= 0:
 		var frames: Array[Texture2D] = _right_walk if velocity > 0.0 else _left_walk
 		if not frames.is_empty():
-			texture = frames[visible_walk_frame_index()]
+			texture = frames[walk_frame]
 	if texture != null:
 		draw_texture_rect(texture, Rect2(player_x - PLAYER_DRAW_SIZE.x * 0.5, PLAYER_GROUND_Y - PLAYER_DRAW_SIZE.y, PLAYER_DRAW_SIZE.x, PLAYER_DRAW_SIZE.y), false)
 	else:

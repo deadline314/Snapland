@@ -5,7 +5,7 @@
     280,
     360
   ],
-  "ownership_sha256": "d9b329fd857a7157c30109a7f2309098a2bbff7801186b132e5ec554b80cd245",
+  "ownership_sha256": "33a3ee97f96ae4491646e915e23fcdca94911d1d64492a69589039b063b3732c",
   "dependencies": [
     {
       "source": "res://assets/characters/hair-v1.png",
@@ -19,7 +19,7 @@
     },
     {
       "source": "res://assets/characters/avatar-head-material-owners-v1.json",
-      "source_sha256": "c82a2f1aa9d6de5c1060a6a69e1d9aa35000ccd7905022d48f58cebc0f6e4c8c"
+      "source_sha256": "0f036639efb4b75332b96a6fa29d55d48c84422f38e6670a462291e5203a5afe"
     },
     {
       "source": "res://assets/characters/hair-diagonal-v1.png",

@@ -1,0 +1,12 @@
+{
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "bytes": 146320616,
+  "sha256": "7a78b1289d5ec6be6474288671ff66bf7956656aaa1185ab431ac36fccd8d012",
+  "scope": "Windows Desktop preset PCK only; Linux native engine; not a Windows EXE run",
+  "exit": 0,
+  "loose_png": false,
+  "catch_frames": 12,
+  "hair_variants": 36,
+  "existing_motion_profiles_validated": 16,
+  "locomotion_priority_verified": true
+}

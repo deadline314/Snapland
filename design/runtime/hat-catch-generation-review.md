@@ -1,3 +1,9 @@
+# 2026-10-20 current source: v5
+
+The current source is `traveller-catch-front-v5.png`. Dedicated approved idle changed the comparison baseline: historical v4 no longer matches its hair/face/proportions. See [current source, registration, replacement hair and locomotion](catch-character-consistency.md) and [actual scope](../../pm/Snapland-art/images/ART-17-catch-v5-20261020-verification.json). Historical v3/v4 evidence below applies to its recorded baseline, not current source approval.
+
+## Historical v3/v4 record
+
 # Hat rescue catch animation: generation and review record
 
 ## Candidate status and provenance

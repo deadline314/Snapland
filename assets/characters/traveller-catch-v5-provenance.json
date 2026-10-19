@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "status": "authored v5 source; integration acceptance evidence recorded separately",
+  "tool": "image_gen.imagegen",
+  "model_id": null,
+  "raw_generated_path": "/workspace/generated_images/exec-18bf0d5b-9de9-4fff-92e3-8e64de0a5a47.png",
+  "source_sha256": "63516f9637c22973feb00f863c906fe63819efa307e88dfaac544ebb06b829b9",
+  "references": [
+    "work/npc-contract-20261020/hat-probe/00.png",
+    "work/catch-authored-20261020/reach-keypose-v1.png"
+  ],
+  "prompt": "Create a production-quality 12-frame sprite sheet editing the FIRST reference character into a complete hat-catching arm gesture. The FIRST reference is the approved character. The SECOND reference shows a useful raised-arm keypose only. Preserve the FIRST character's exact short dark indigo hair, both visible eyes, small chibi head/body proportions, short legs, dark teal jacket, red camera, tan shorts, brown boots and backpack. Do not redesign or increase the head size. This is the SAME character in every cel.\nGrid: EXACTLY FOUR columns and THREE rows, twelve equal-size rectangular cells. Each cell contains ONE COMPLETE character on a transparent background, same fixed body scale, same head center, same two boot contact baseline, generous clear gutters. No text or grid lines. Front view consistent with the first image, not profile. The whole figure including both hands and boots stays inside each cell. No floor shadow, glow, halo or colored matte.\nRead order left to right, top to bottom. Twelve DIFFERENT consecutive authored poses, one smooth rise and return:\n1 both hands at camera, idle stance; 2 hands release camera just below chest; 3 open hands reach forward at chest height, elbows bent; 4 hands at shoulder height; 5 palms beside cheeks, elbows outward; 6 palms beside ears; 7 both hands just above crown, palms up, fingertips intact; 8 full reaching peak with elbows still slightly bent, head NEVER raised; 9 elbows settle, palms near forehead; 10 palms beside ears on the way down; 11 hands lowering in front of chest, elbows close; 12 hands almost back at camera, relaxed finish.\nThe action is arms moving around a stable head and torso, not body bouncing or stretching. Feet stay planted, camera hangs from its strap in the SAME spot with no hands left behind on it when arms are raised. Exactly two hands and two arms per cel. Raised fingers must not merge with hair. One continuous natural gesture, smooth intermediate poses, no held hat or other object. Match the first reference pixel-art texture, outline thickness and muted colors, avoid adding highlights or a painterly rendering.\n",
+  "registration": {
+    "grid": [
+      4,
+      3
+    ],
+    "cell": [
+      362,
+      362
+    ],
+    "column_centers": [
+      211,
+      182,
+      182,
+      156
+    ],
+    "uniform_pixel_scale": 0.81,
+    "source_scale": 0.50625,
+    "reference_size": [
+      175,
+      220
+    ],
+    "output_canvas": [
+      280,
+      360
+    ],
+    "output_baseline": 346,
+    "method": "fixed authored grid column/row registration, same across four poses per row; one uniform .81 scale; no per-frame alpha-fit, part transforms, warping or mirroring",
+    "fixed_baseline_by_row": [
+      352,
+      350,
+      350
+    ],
+    "normalized_source_region": [
+      330,
+      362
+    ],
+    "feet_anchor_x_in_region": 165
+  },
+  "asset": "assets/characters/traveller-catch-front-v5.png",
+  "input_references": [
+    {
+      "path": "pm/Snapland-art/images/ART-17-catch-v5-reference-idle.png",
+      "sha256": "e3d7b60f591aed6a0f60ba5cc3ff1f4dd233f0c0fe761419ad7a1acfed55942e"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-catch-v5-keypose-candidate.png",
+      "sha256": "3f34aaeef66d77ae83898d812abccc003d6b729a51c9565b99187598dc060480"
+    }
+  ],
+  "keypose_generation": {
+    "prompt": "Edit the FIRST image, which is the approved game character idle pose. Create ONE whole-character frame for that EXACT same character reaching both hands upward to catch a falling hat. This is a precision videogame animation cel, NOT a redesign.\nIdentity lock: preserve the FIRST image's exact small chibi proportions, dark purple-black short swept hair silhouette, face with both eyes, camera, teal jacket, tan shorts, backpack, brown boots, original drawing and shading style. Head size MUST stay the same as the first image. The second image shows ONLY the arm gesture to reach toward; do NOT copy its larger head, blue long hair, face, torso proportions, or art style.\nPose: both arms raised, elbows bent outward, open palms beside and slightly above the ears; fingers intact, hands separated from the head. Camera and backpack hang naturally in the same location. Keep the head upright at the same height as the first image, both boots planted on the same baseline, body at the same scale. The action comes from authored arm rotation/shape, not stretching the whole character or raising the head.\nTransparent background, no colored glow, no shadow halo, no floor, no text, no panel borders, one complete character, all hands and boots safely inside the canvas. Match the first image's front three-quarter drawing direction. Keep every non-moving body part as close to the first image as possible.\n",
+    "raw_generated_path": "/workspace/generated_images/exec-07af1039-be15-4897-b4cd-d42beff67294.png",
+    "sha256": "3f34aaeef66d77ae83898d812abccc003d6b729a51c9565b99187598dc060480",
+    "reference_guide": "pm/Snapland-art/images/ART-17-catch-v5-reference-gesture-v4.png",
+    "reference_note": "old exported gesture input path was later reused by diagnostics; guide reconstructed from unchanged v4 source/metadata and the original default appearance; active sheet prompt uses preserved idle and keypose inputs"
+  },
+  "immutable_raw_art": true,
+  "import_processing": "lossless; fix_alpha_border=false to preserve normalized source RGBA identity across editor and PCK; no warping, split limbs, alpha-fit recenter or mirrored frames"
+}

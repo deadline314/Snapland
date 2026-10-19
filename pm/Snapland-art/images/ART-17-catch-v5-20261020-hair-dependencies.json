@@ -1,0 +1,6 @@
+{
+  "walk_idle_owners_exactly_equal": true,
+  "styles": 2,
+  "views": 8,
+  "scope": "fresh compositor export and exact alpha/ownership comparison; only reviewed dependency fingerprint changes"
+}

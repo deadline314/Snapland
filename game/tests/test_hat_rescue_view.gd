@@ -26,6 +26,7 @@ func _run() -> void:
 	view.update_frame(model.snapshot(), "noon", false)
 	_test_frame_bounds_and_avatar(view)
 	_test_catch_pose_matches_idle_alignment(view)
+	_test_replacement_hair_preserves_catch_head_and_hands(view)
 	_test_hat_lanes_wind_and_motion(view, model)
 	_test_walk_phase_uses_model_travel(view)
 	_test_phase_and_accessibility(view, model)
@@ -73,9 +74,12 @@ func _test_frame_bounds_and_avatar(view) -> void:
 
 func _test_catch_pose_matches_idle_alignment(view) -> void:
 	var library: RefCounted = view._renderer.animation_library
-	var idle_head: Vector2i = library.normalized_anchor("traveller", "idle", "front", 0, "head", view._equipped)
-	var idle_feet: Vector2i = library.normalized_anchor("traveller", "idle", "front", 0, "feet", view._equipped)
-	var idle_bounds: Rect2i = view._idle_texture.get_image().get_used_rect()
+	# The approved registered idle bypasses the retired library idle atlas.
+	# Compare visible pixels from the texture actually drawn in the game.
+	var idle_image: Image = view._idle_texture.get_image()
+	var idle_head_y := _central_hair_top(idle_image)
+	var idle_bottom := _opaque_bottom(idle_image)
+	var idle_bounds: Rect2i = idle_image.get_used_rect()
 	var frame_data: Array = library.manifest.get("actors", {}).get("traveller", {}).get("catch", {}).get("front", {}).get("frames", [])
 	var one_shared_scale := true
 	var shared_scale := -1.0
@@ -93,13 +97,48 @@ func _test_catch_pose_matches_idle_alignment(view) -> void:
 			one_shared_scale = false
 		var head: Vector2i = library.normalized_anchor("traveller", "catch", "front", frame_index, "head", view._equipped)
 		var feet: Vector2i = library.normalized_anchor("traveller", "catch", "front", frame_index, "feet", view._equipped)
-		var bounds: Rect2i = view._catch_frames[frame_index].get_image().get_used_rect()
-		anchors_within_head_range = anchors_within_head_range and abs(head.y - idle_head.y) <= 12
-		all_feet_share_baseline = all_feet_share_baseline and feet == idle_feet and feet == Vector2i(140, 346)
-		all_pose_bounds_fit = all_pose_bounds_fit and bounds.position.x >= 0 and bounds.position.y >= 0 and bounds.end.x <= 280 and bounds.end.y <= 360 and bounds.position.y <= 60 and bounds.end.y >= idle_bounds.end.y - 12
-	_expect(one_shared_scale and is_equal_approx(shared_scale, 0.602), "all twelve catch frames use one measured source scale instead of independently fitted bodies")
+		var image: Image = view._catch_frames[frame_index].get_image()
+		var bounds: Rect2i = image.get_used_rect()
+		anchors_within_head_range = anchors_within_head_range and abs(head.y - idle_head_y) <= 12 and abs(_central_hair_top(image) - idle_head_y) <= 12
+		all_feet_share_baseline = all_feet_share_baseline and feet == Vector2i(140, 346) and abs(_opaque_bottom(image) - idle_bottom) <= 1
+		all_pose_bounds_fit = all_pose_bounds_fit and bounds.position.x >= 0 and bounds.position.y >= 0 and bounds.end.x <= 280 and bounds.end.y <= 360 and bounds.position.y <= idle_bounds.position.y + 12 and bounds.end.y >= idle_bottom - 1
+	_expect(one_shared_scale and is_equal_approx(shared_scale, 0.50625), "all twelve v5 catch frames use the documented uniform .81 pixel scale, never independently fitted bodies")
 	_expect(anchors_within_head_range and all_feet_share_baseline, "anatomical hair-top anchors stay within twelve normalized pixels of idle while every pose shares the approved foot baseline")
 	_expect(all_pose_bounds_fit, "the full-body action textures, including raised hands, remain visible on the shared canvas")
+
+func _central_hair_top(image: Image) -> int:
+	# Exclude the raised hands on either side of the anatomical head.
+	for y in range(180):
+		for x in range(110, 171):
+			if image.get_pixel(x, y).a >= 0.5:
+				return y
+	return image.get_height()
+
+func _opaque_bottom(image: Image) -> int:
+	for y in range(image.get_height() - 1, -1, -1):
+		for x in image.get_width():
+			if image.get_pixel(x, y).a >= 0.5:
+				return y
+	return -1
+
+func _test_replacement_hair_preserves_catch_head_and_hands(view) -> void:
+	# Actual v5 failure sites: an open forehead after replacing hair, and palms
+	# hidden behind the new cut. These probes are independent of mask metadata.
+	var hand_points := {5:[Vector2i(75,160),Vector2i(205,160)],6:[Vector2i(80,114),Vector2i(202,114)]}
+	for frame in [5,6]:
+		var base: Image = view._renderer.texture(view._appearance,view._equipped,"front",frame,"catch").get_image()
+		for style in ["bob","curly"]:
+			var appearance: Dictionary = view._appearance.duplicate()
+			appearance.hair = style
+			var image: Image = view._renderer.texture(appearance,view._equipped,"front",frame,"catch").get_image()
+			var solid_head := true
+			for point in [Vector2i(140,130),Vector2i(145,135),Vector2i(151,140),Vector2i(121,180),Vector2i(163,180)]:
+				solid_head = solid_head and image.get_pixelv(point).a >= 0.95
+			_expect(solid_head,"%s catch frame %d keeps the anatomical forehead and cheeks opaque" % [style,frame])
+			var intact_palms := true
+			for point in hand_points[frame]:
+				intact_palms = intact_palms and base.get_pixelv(point).a >= 0.95 and image.get_pixelv(point) == base.get_pixelv(point)
+			_expect(intact_palms,"%s catch frame %d preserves both original paletted palms in front of hair" % [style,frame])
 
 func _test_hat_lanes_wind_and_motion(view, model) -> void:
 	var state: Dictionary = model.snapshot()
@@ -149,7 +188,15 @@ func _test_walk_phase_uses_model_travel(view) -> void:
 	view.update_frame(turn)
 	_expect(view.visible_walk_frame_index() == int(floor(30.0 / View.WALK_CYCLE_DISTANCE * float(left_count))) % left_count, "turning selects the opposite authored direction while retaining accumulated gait phase")
 	view.update_frame({"elapsed": 0.45, "player_x": 650.0, "player_velocity": -120.0, "catch_pose": 1.0})
-	_expect(view.visible_catch_frame_index() == 0 and view.visible_walk_frame_index() == -1, "the observable gait index yields to the catch pose that the renderer actually draws")
+	_expect(view.visible_catch_frame_index() == -1 and view.visible_walk_frame_index() >= 0, "moving catches retain authored locomotion instead of sliding planted reach cels")
+	view.update_frame({"elapsed":0.46,"player_x":650.0,"player_velocity":0.0,"catch_pose":0.0})
+	view.update_frame({"elapsed":0.47,"player_x":650.0,"player_velocity":0.0,"catch_pose":1.0})
+	_expect(view.visible_catch_frame_index()==0 and view.visible_walk_frame_index()==-1,"a new stationary catch starts its complete planted one-shot")
+	var moving_reach := {"elapsed":0.49,"player_x":652.0,"player_velocity":28.0,"catch_pose":0.8}
+	view.update_frame(moving_reach)
+	_expect(view.visible_catch_frame_index()==-1 and view.visible_walk_frame_index()>=0 and moving_reach.catch_pose==0.8,"starting to move cancels only the cosmetic reach and preserves the model catch cue")
+	view.update_frame({"elapsed":0.51,"player_x":652.0,"player_velocity":0.0,"catch_pose":0.6})
+	_expect(view.visible_catch_frame_index()==-1 and view.visible_walk_frame_index()==-1,"stopping restores idle and never resumes a partly played planted reach")
 	view.update_frame({"elapsed": 0.0, "player_x": 650.0, "player_velocity": 0.0})
 	_expect(is_zero_approx(view._walk_distance) and view.visible_walk_frame_index() == -1, "a model-clock retry resets the gait phase and returns to idle")
 	view.update_frame({"elapsed": 0.1, "player_x": 672.0, "player_velocity": 100.0})
