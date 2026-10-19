@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "ticket": "ART-22",
+  "scope": "fixed hair/hat/species attachment across registered walk/idle and lifecycle; not natural gait certification",
+  "current_main_start": "d424bdb744c32760a20b81abb36e2f8141278de4",
+  "current_engine": "4.7.2.stable.official.ed1daf0bf",
+  "local": [
+    {
+      "name": "avatar attachment tests",
+      "exit": 0,
+      "seconds": 64.17,
+      "error": null
+    },
+    {
+      "name": "island hair lifecycle tests",
+      "exit": 0,
+      "seconds": 3.34,
+      "error": null
+    }
+  ],
+  "current_gpu": "ART-17-catch-v5-20261020-verification.json:96 actual style/view/hat cases +200 alternate walk/idle rest cels; exact protected/body/settled pixels and1pixel negative",
+  "ci_reference": "39335670613 at2cdc3ab: avatar renderer193.59s and attachments75.70s passed; overall runtime failed later at38, not claimed green",
+  "retained_native_tours": [
+    "ART-33-verification.json",
+    "ART-34-verification.json"
+  ],
+  "retained_art34_media_and_json_hashes_verified": 69,
+  "retained_art34_code_and_visual_runtime_are_main_ancestors": true,
+  "visual_review": "Existing accepted normal/true-quarter movement, all hats,14 cases per tour, photo/pause/style/reduced-motion interruption and reverse evidence retained. This pass re-viewed old floating-ear counterexample, bob reverse-quarter sheet and curly quarter first sheet; no claim all videos newly rerun or continuously watched.",
+  "limits": [
+    "Other species keep complete authored people; human three hairstyles have native tip motion",
+    "Current source walk is retained, natural whole-body gait and fullNPC animation remain separateART-16/17 work",
+    "Current4.7.2GPU rest audit plus older4.7Forward+ software tours are distinct; no new Windows EXE or lighting/performance/audio certification"
+  ]
+}
