@@ -147,3 +147,14 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 本輪提交基準：`e0a332b`；分支：`feature/island-experience`。共用改動涉及 MAIN-13 的收藏卡片顯示，沒有更改收藏資格或重新發獎勵。本段是程式化操作及原生畫面檢查，沒有人工試玩或試聽宣稱。
 
 本輪介面程式與原生證據提交：[442a88f](https://github.com/deadline314/Snapland/commit/442a88f)。文件已核對為分類頁籤在捲動區內、返回操作在區外；僅清除照片檢視測試的尾隨空白，介面行為未變。本輪照片取得與重開原圖另见 [MAIN-16 交付](https://github.com/deadline314/Snapland/commit/55466d2)。
+
+# Commit-9：避免分數更新反覆重建字形
+
+同一字級與回饋顏色反覆套用，讓每次遊戲分數及時間更新都重新觸發文字樣式處理。現在沿用未變的樣式，文字、分數、時間及真正的縮放改變仍立即更新。
+
+同一八拍失敗輸入流程，原生引擎無視窗量測由 32.65 秒降至 2.86 秒；不當作渲染 FPS。完整原有首區整合 81 組於 79.37 秒完成、exit 0、0 ERROR，90 秒上限不變。節奏規則／畫面 42／138 項通過；HUD 保留原 69 項並加兩項真實通知與最新文字驗證，共 71 項，完成契約同步計數。
+
+[六方方法比較與範圍](../../design/runtime/hud-update-cost.md) · [完整整合紀錄](images/ART-20-live-theme-20261020-integration.log)。以下為原生 Compatibility／llvmpipe 的靜態 HUD 版面 fixture，人工設定顯示文字，並非正式回合或真人試玩。標準 1280×720 與小視窗 800×600（有效畫布 800×450）已實際查看，0 ERROR。初次小視窗 fixture 把實體尺寸再縮放一次，畫面拒收；修正 fixture 以 viewport 邏輯尺寸配置後重拍，保留原錯誤截圖；本票整套介面驗收仍維持進行中。
+
+![標準視窗 HUD](images/ART-20-live-theme-20261020-corrected-hud-1280x720.png)
+![小視窗 HUD](images/ART-20-live-theme-20261020-corrected-hud-800x600.png)

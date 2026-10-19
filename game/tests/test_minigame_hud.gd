@@ -26,6 +26,7 @@ func _run() -> void:
 		quit(1)
 		return
 	_test_live_content(hud)
+	await _test_live_updates_preserve_text_theme(hud)
 	_test_responsive_targets(hud, Vector2(1280, 720), true)
 	await _test_signals_and_overlays(hud)
 	root.size = Vector2i(800, 600)
@@ -179,3 +180,19 @@ func _relative_luminance(color: Color) -> float:
 
 func _physical_rect(control: Control) -> Rect2:
 	return control.get_viewport().get_final_transform() * control.get_global_rect()
+
+func _test_live_updates_preserve_text_theme(hud: Control) -> void:
+	# Scores and clocks change during play; identical text styling must not force
+	# another font/theme notification and invalidate shaped text every frame.
+	hud.set_state({"title":"節拍舞台", "progress_text":"命中 0 / 8", "feedback_text":"跟上節拍"})
+	await process_frame
+	var title := hud.get("_title") as Label
+	var notifications := [0]
+	var on_theme := func(): notifications[0] += 1
+	title.theme_changed.connect(on_theme)
+	for index in 20:
+		hud.set_state({"title":"節拍舞台", "progress_text":"命中 0 / 8", "feedback_text":"跟上節拍", "score":index, "time_text":"00:%02d" % (59-index)})
+	await process_frame
+	_check(notifications[0] == 0, "live score/clock updates preserve the title theme and shaped-text cache")
+	_check((hud.get("_score") as Label).text == "0019" and (hud.get("_time") as Label).text == "00:40", "style reuse still publishes every final score and clock value")
+	title.theme_changed.disconnect(on_theme)

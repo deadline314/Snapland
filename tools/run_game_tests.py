@@ -41,7 +41,7 @@ PASS_MARKERS = {
     "avatar motion rig runtime tests": "PASS: eight direction 3D gait model/source/sole/cancellation/bounded resource tests; native quality pending",
     "avatar role rig tests": "PASS: role metadata path, two-view coverage, scaled fixed bones/boots, ground following, actual NPC source-width legs/opaque boot attachment, non-skin trouser limb ownership, and missing-role fallback",
     "avatar motion world integration tests": "PASS: integrated avatar motion world checks",
-    "minigame HUD hierarchy tests": "PASS: minigame HUD hierarchy checks (69 checks)",
+    "minigame HUD hierarchy tests": "PASS: minigame HUD hierarchy checks (71 checks)",
     "eight-direction walk tests": "PASS: eight-direction avatar walk checks",
     "authored avatar walk loop tests": "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig",
     "source registration coordinate tests": "PASS: body registration, independent palette/boot coordinates and immutable rebuild",

@@ -95,7 +95,9 @@ func set_state(state: Dictionary) -> void:
 	var feedback_width := clampf(float(state.get("feedback_width", 540.0)), 230.0, 540.0)
 	_feedback_label.custom_minimum_size.x = feedback_width - 30.0
 	_feedback.size.x = feedback_width
-	_feedback_label.add_theme_color_override("font_color", state.get("feedback_color", PAPER))
+	var feedback_color: Color = state.get("feedback_color", PAPER)
+	if _feedback_label.get_theme_color("font_color") != feedback_color:
+		_feedback_label.add_theme_color_override("font_color", feedback_color)
 	_pause_status.text = "練習中" if bool(state.get("practice", false)) else "正式挑戰"
 	# The game name is already visible in the corner header. Keeping this title
 	# short prevents long localized names from forcing the centered dialog wider.
@@ -575,7 +577,11 @@ func _fit_semantic_text_and_targets(fitted: float) -> void:
 					button.set_meta("hud_design_minimum_size", button.custom_minimum_size)
 				var base_size: Vector2 = button.get_meta("hud_design_minimum_size")
 				button.custom_minimum_size = Vector2(maxf(base_size.x, 44.0 / fitted), maxf(base_size.y, 44.0 / fitted))
-				button.add_theme_font_size_override("font_size", maxi(int(button.get_meta("hud_base_font_size", 18)), ceili(float(button.get_meta("hud_base_font_size", 18)) * Paper.text_scale() / fitted)))
+				var desired_size := maxi(int(button.get_meta("hud_base_font_size", 18)), ceili(float(button.get_meta("hud_base_font_size", 18)) * Paper.text_scale() / fitted))
+				if button.get_theme_font_size("font_size") != desired_size:
+					button.add_theme_font_size_override("font_size", desired_size)
 			elif child is Label and child.has_meta("hud_base_font_size"):
 				var base_font_size := int(child.get_meta("hud_base_font_size"))
-				(child as Label).add_theme_font_size_override("font_size", maxi(base_font_size, ceili(float(base_font_size) * Paper.text_scale() / fitted)))
+				var desired_size := maxi(base_font_size, ceili(float(base_font_size) * Paper.text_scale() / fitted))
+				if (child as Label).get_theme_font_size("font_size") != desired_size:
+					(child as Label).add_theme_font_size_override("font_size", desired_size)
