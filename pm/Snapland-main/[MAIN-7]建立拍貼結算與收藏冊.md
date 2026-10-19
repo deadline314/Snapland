@@ -1,6 +1,6 @@
 # [MAIN-7] 建立拍貼結算與收藏冊
 
-> 狀態：進行中（base SHA：c1b7b19）
+> 狀態：完成
 
 ## 內文
 
@@ -70,3 +70,12 @@ c1b7b19；feature/island-first-park。
 ![本票原生畫面](images/MAIN-7-album-earned.png)
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
+
+
+# 2026-10-20 現行第一版結案
+
+重新核對十二設施、三探索、一主線、二支線的固定18來源與普通／惡魔去重；核心、收藏、原圖保護與Main整合回歸通過。本輪MAIN-13／16已從實際輸入完成普通與惡魔正式收藏、三張原圖／縮圖共用及真正新程序重開，沒有重複增計。ART-24／26重驗空收藏、分類、原圖檢視器、結果返回與練習頁；其中合成UI資料未當自然通關。
+
+[實際普通／惡魔收藏與重開](images/MAIN-13-shared-20261020-verification.json) · [目前收藏頁](../Snapland-art/images/ART-24-verify-20261020.json) · [結果／返回](../Snapland-art/images/ART-26-verify-20261020.json)。既有實作與原程式f2d6b84已在main，本輪核對當前規則及證據，不把早期feature狀態當目前阻塞。舊Windows圖仍屬歷史；本輪無頭功能檢查、原生自動輸入與合成UI各按實際範圍記錄，沒有新Windows EXE、真人試玩或聽感認證。
+
+本票按第一版路口／收藏流程範圍結案；MAIN-11完整探索、ART-1光影／ART-17動畫、各玩法精修及更豐富的世界互動仍照各票驗收。
