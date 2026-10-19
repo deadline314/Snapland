@@ -16,19 +16,24 @@ func _run() -> void:
 		push_error("SNAPLAND_SAVE_PATH must be an isolated absolute OS filesystem path.")
 		quit(1)
 		return
-	_check_invalid_motion_configuration()
+	await _check_invalid_motion_configuration()
 	_world = ParkWorldScript.new()
 	root.add_child(_world)
 	await process_frame
+	# Sample route, action and interaction point at the same authored time;
+	# AnimationPlayer may have advanced before this deferred coroutine resumed.
+	_world.npc_activity._player.seek(0.0, true)
+	_world.npc_activity._action_clock = 0.0
+	_world.npc_activity._process(0.0)
 	assert(_world.npc_activity.statistics().registration_count == 3, "the world registers each named NPC once")
 	assert(_world.npc_activity.statistics().by_role.get("ticket", 0) == 1, "ticket is associated with its guide point")
 	assert(_world.npc_activity.statistics().by_role.get("imp", 0) == 1, "imp is associated with quest-001")
 	assert(_world.npc_activity.statistics().by_role.get("announcer", 0) == 1, "announcer is associated with quest-002")
 	assert(_world.avatar != null and _world.avatar.texture != null, "NPC controller integration leaves the player avatar available")
 	var motion_status: Dictionary = _world.npc_activity.motion_report()
-	assert(bool(motion_status.enabled), "World passes a live camera and ground provider when opting into measured NPC gait")
-	assert(motion_status.supported_roles.size() == 3, "all three actual World NPCs have valid measured gait sources, not merely registered actor records")
-	assert(motion_status.sprite_fallback_roles.is_empty(), "valid World motion configuration leaves no candidate NPC silently on source-only fallback")
+	assert(not bool(motion_status.enabled) and motion_status.supported_roles.is_empty(), "production world never enables or counts the rejected procedural gait")
+	assert(motion_status.sprite_fallback_roles.size() == 3, "all three production NPCs retain their complete authored Sprite")
+	assert(_world.find_children("NpcMeasuredMotion_*", "", true, false).is_empty(), "production scene allocates no hidden measured gait adapters")
 	var points := {
 		"ticket": _world._point_by_id("guide"),
 		"imp": _world._point_by_id("quest-001"),
@@ -40,25 +45,25 @@ func _run() -> void:
 		var material := sprite.material_override as ShaderMaterial
 		var activity_record := _activity_record_for_role(role)
 		var motion: Variant = activity_record.get("motion")
-		assert(motion != null and motion.supported and motion.rig.source_records.size() == 2, "%s has the actual measured left/right gait adapter" % role)
-		assert(sprite.visible != motion.rig.visible, "%s world actor renders either its authored Sprite or measured rig, never both" % role)
+		assert(motion == null and sprite.visible, "%s renders only its complete authored Sprite, with no hidden rig" % role)
 		assert(sprite.texture == material.get_shader_parameter("texture_albedo"), "%s Sprite3D and shader uniforms use the same authored frame" % role)
 		assert(material.get_shader_parameter("uv_rect") == Vector4(0.0, 0.0, 1.0, 1.0), "%s normalized action frame uses full-canvas UVs" % role)
-		assert(motion.front_body_height_px > 0 and motion.target_body_height_px > 0, "%s source Sprite and gait target have measured body heights" % role)
-		var expected_pixel_size: float = float(motion.target_body_height_px) * motion.rig.PIXEL_SIZE / float(motion.front_body_height_px)
-		assert(is_equal_approx(sprite.pixel_size, expected_pixel_size) and is_equal_approx(sprite.pixel_size, motion.calibrated_sprite_pixel_size), "%s front Sprite scale matches its measured opaque source height and rig target" % role)
-		var root: Node3D = actor_record.activity_root
-		var sampled_ground: float = _world._avatar_ground_height(Vector2(root.global_position.x, root.global_position.z))
-		assert(absf(root.global_position.y - sampled_ground) < 0.0001, "%s activity root is on the same sampled ground as the measured rig" % role)
+		assert(sprite.texture.get_size() == Vector2(NpcActivityScript.ACTION_CANVAS_SIZE), "%s preserves its complete registered source canvas" % role)
+		assert(sprite.scale == Vector3.ONE and is_equal_approx(sprite.pixel_size, 2.4 / float(NpcActivityScript.ACTION_VISIBLE_HEIGHT)), "%s uses the authored fixed pixel scale without procedural body stretch" % role)
+		var actor_root: Node3D = actor_record.activity_root
+		assert(actor_root.global_position.is_finite(), "%s activity root has a valid world position" % role)
 		assert(sprite.has_meta("npc_world_ground_anchor_managed"), "%s front Sprite is registered with the world's Y-only billboard ground-anchor owner" % role)
-		motion._sync_front_ground_anchor()
 		_world._update_sprite_grounding()
-		_assert_projected_contact_feet(role,sprite,root,motion,sampled_ground)
+		_assert_projected_contact_feet(role, sprite)
+		var original_sprite_position := sprite.position
+		sprite.position.y -= 0.2
+		assert(float(_source_foot_clearance(sprite).minimum) < 0.0, "%s independent visible-foot check rejects an intentionally submerged source Sprite" % role)
+		sprite.position = original_sprite_position
+		_assert_projected_contact_feet(role, sprite)
 		assert(absf(float(points[role].position.x) - float(actor_record.activity_root.global_position.x)) < 0.001, "%s interaction point starts on its actor root" % role)
 	var announcer: Dictionary = _actor_record_for_role("announcer")
 	var announcer_root := announcer.activity_root as Node3D
-	var announcer_ground: float = _world._avatar_ground_height(Vector2(3.4,-4.0))
-	assert(is_equal_approx(announcer_root.position.x,3.4) and is_equal_approx(announcer_root.position.z,-4.0) and is_equal_approx(announcer_root.position.y,announcer_ground), "announcer stays at its open central-plaza x/z location with feet on sampled ground")
+	assert(is_equal_approx(announcer_root.position.x,3.4) and is_equal_approx(announcer_root.position.z,-4.0) and is_zero_approx(announcer_root.position.y), "announcer keeps its authored root; the separate billboard anchor owns visible feet on sampled ground")
 	var baseline_root_position: Vector3 = announcer_root.position
 	var start_point: Vector3 = points["announcer"].position
 	_world.npc_activity._player.seek(0.0, true)
@@ -105,7 +110,7 @@ func _run() -> void:
 	for actor_record in _world.character_sprites:
 		var role := String(actor_record.role)
 		var motion: Variant = _activity_record_for_role(role).get("motion")
-		assert(actor_record.sprite.visible and not motion.rig.visible, "%s reduced-motion world pose renders only the authored Sprite" % role)
+		assert(actor_record.sprite.visible and motion == null, "%s reduced-motion world pose renders only the authored Sprite" % role)
 	assert(announcer_root.position == baseline_root_position and points["announcer"].position == start_point, "reduced motion restores NPC root and world point")
 	assert(announcer_sprite.texture == baseline_texture, "reduced motion restores the original visible idle frame")
 	_world.blocked = true
@@ -125,23 +130,15 @@ func _run() -> void:
 			var role := String(actor_record.role)
 			var gap: float = _world._npc_name_projected_gap(role)
 			assert(gap >= 0.07 and gap <= 0.085, "%s cached name label leaves the measured 75mm hair clearance at camera pitch %.0f (actual %.4fm)" % [role,pitch_degrees,gap])
-			var motion: Variant = _activity_record_for_role(role).motion
-			var rig := motion.rig as Node3D
 			var source_sprite := actor_record.sprite as Sprite3D
 			var body_height := float(actor_record.name_body_height)
-			assert(is_equal_approx(body_height,float(motion.target_body_height_px)*motion.rig.PIXEL_SIZE), "%s name spacing uses its cached measured front/source target height" % role)
-			var gap_key := "%s_idle_%.0f" % [role,pitch_degrees]
-			label_gaps[gap_key] = gap
-			# Both render paths share the same measured body-height target; exercise
-			# the rig visibility state without advancing or teleporting the actor.
-			var was_rig_visible := rig.visible
-			var was_sprite_visible := source_sprite.visible
-			rig.visible = true
-			source_sprite.visible = false
-			assert(is_equal_approx(_world._npc_name_projected_gap(role),gap), "%s name anchor remains above the measured gait body at pitch %.0f" % [role,pitch_degrees])
-			rig.visible = was_rig_visible
-			source_sprite.visible = was_sprite_visible
-			assert(_world._npc_name_projected_gap(role) >= 0.07, "%s restored idle name remains clear of hair" % role)
+			var baseline: Texture2D = _activity_record_for_role(role).baseline_texture
+			var expected_body_height := float(baseline.get_image().get_used_rect().size.y) * source_sprite.pixel_size
+			assert(is_equal_approx(body_height, expected_body_height), "%s name spacing uses its cached authored visible body height, independent of any rig" % role)
+			label_gaps["%s_idle_%.0f" % [role,pitch_degrees]] = gap
+			_world._update_sprite_grounding()
+			_assert_projected_contact_feet(role, source_sprite)
+			assert(source_sprite.visible and _activity_record_for_role(role).motion == null, "%s camera change cannot silently enable a gait rig" % role)
 	assert(announcer_sprite.texture == _world.npc_activity._records[2].frames[0], "resumed announcer displays its authored idle frame")
 	_world.queue_free()
 	await process_frame
@@ -197,21 +194,24 @@ func _activity_record_for_role(role: String) -> Dictionary:
 	return {}
 
 
-func _assert_projected_contact_feet(role: String, sprite: Sprite3D, actor_root: Node3D, motion: Variant, sampled_ground: float) -> void:
+func _assert_projected_contact_feet(role: String, sprite: Sprite3D) -> void:
+	var measured := _source_foot_clearance(sprite)
+	assert(int(measured.samples) > 4, "%s tests nonempty actual alpha-visible foot pixels" % role)
+	assert(float(measured.minimum) >= -0.00001, "%s complete source-foot pixels remain above their local terrain" % role)
+
+
+func _source_foot_clearance(sprite: Sprite3D) -> Dictionary:
+	# Independent source-pixel projection: do not reuse the grounding function
+	# under test, and never measure a hidden/deactivated rig as the visible actor.
+	var image := sprite.texture.get_image()
+	var result := {"samples": 0, "minimum": INF}
 	var camera_up: Vector3 = _world.camera.global_basis.y.normalized()
 	var camera_right: Vector3 = _world.camera.global_basis.x.normalized()
-	var foot_offset: float = (float(NpcActivityScript.ACTION_FEET_ROW)-float(NpcActivityScript.ACTION_CANVAS_SIZE.y)*0.5)*sprite.pixel_size
-	var foot_center: Vector3 = sprite.global_position-camera_up*foot_offset
-	assert(absf(foot_center.x-actor_root.global_position.x)<0.004 and absf(foot_center.z-actor_root.global_position.z)<0.004, "%s nested world anchor keeps the complete billboard contact row above its actual X/Z root point" % role)
-	assert(foot_center.y>=sampled_ground, "%s Y-only world anchor keeps the projected contact row above its sampled surface" % role)
-	var image := sprite.texture.get_image()
-	var checks := 0
-	for y in range(maxi(0,NpcActivityScript.ACTION_FEET_ROW-8),image.get_height()):
+	for y in range(maxi(0, NpcActivityScript.ACTION_FEET_ROW - 8), image.get_height()):
 		for x in range(image.get_width()):
-			if image.get_pixel(x,y).a<0.5: continue
-			var pixel := Vector2(float(x)+0.5-float(image.get_width())*0.5,float(image.get_height())*0.5-float(y)-0.5)
-			var point: Vector3 = sprite.global_position+camera_right*(pixel.x*sprite.pixel_size)+camera_up*(pixel.y*sprite.pixel_size)
-			var surface: float = _world._ground_surface_y(point)
-			assert(point.y+0.00001>=surface, "%s opaque foot pixel (%d,%d) is above its local lawn/plaza/ramp surface" % [role,x,y])
-			checks+=1
-	assert(checks>4 and motion.foot_samples_cache.size()<=64, "%s verifies actual per-column opaque foot pixels with a bounded texture sample cache" % role)
+			if image.get_pixel(x, y).a < 0.5: continue
+			var pixel := Vector2(float(x) + 0.5 - float(image.get_width()) * 0.5, float(image.get_height()) * 0.5 - float(y) - 0.5)
+			var point: Vector3 = sprite.global_position + (camera_right * pixel.x + camera_up * pixel.y) * sprite.pixel_size
+			result.samples += 1
+			result.minimum = minf(float(result.minimum), point.y - _world._ground_surface_y(point))
+	return result

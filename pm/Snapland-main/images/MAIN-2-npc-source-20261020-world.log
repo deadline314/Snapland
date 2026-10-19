@@ -1,0 +1,177 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[park_world] scenery meshes: 1135, nodes: 2024
+PASS: NPC world activity integration
+WARNING: NpcActivity: measured gait was requested but disabled because configuration is missing in-tree Camera3D.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] configure_motion (res://game/world/npc_activity.gd:364)
+         [1] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:163)
+         [2] _run (res://game/tests/test_npc_world_activity.gd:19)
+WARNING: NpcActivity: measured gait was requested but disabled because configuration is missing valid ground-height Callable.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] configure_motion (res://game/world/npc_activity.gd:364)
+         [1] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:168)
+         [2] _run (res://game/tests/test_npc_world_activity.gd:19)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/@Node3D@19/GameFeature010/@MeshInstance3D@771; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [6] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/@Node3D@19/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [6] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/@Node3D@19/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [6] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/@Node3D@19/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [6] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/WindSailTerrace/@MeshInstance3D@853; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/TidepoolCourt/@MeshInstance3D@921; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/TidepoolCourt/@MeshInstance3D@914; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/TidepoolCourt/@MeshInstance3D@908; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/TidepoolCourt/@MeshInstance3D@902; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/TidepoolCourt/@MeshInstance3D@896; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/LighthouseLookout/@MeshInstance3D@974; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1335)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1025; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1024; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/@Node3D@19/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1342)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _run (res://game/tests/test_npc_world_activity.gd:21)
+         [7] _check_invalid_motion_configuration (res://game/tests/test_npc_world_activity.gd:176)

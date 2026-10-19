@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "base_sha": "47f960151f1bf339ef81a4da73e8965c4f443346",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "runtime_suites_unchanged": 92,
+  "per_test_limits_unchanged": true,
+  "production_sources_unchanged": true,
+  "results": [
+    {
+      "name": "world",
+      "seconds": 3.8,
+      "exit": 0,
+      "errors": 0,
+      "completion": "PASS: NPC world activity integration",
+      "sha256": "549f2c39dd946f917cdaca920951631e42b790cdbf3ab16f452ee0b4a89e13a5"
+    },
+    {
+      "name": "source-walk",
+      "seconds": 0.99,
+      "exit": 0,
+      "errors": 0,
+      "completion": "PASS: two data-time cycles route announcer through complete source cels; unsupported ticket/imp actors remain in place and animate persona",
+      "sha256": "b29b052f4c5ebe8c82d17dd759d30e500aa219c7143fdb3bb97e6b912a3c9756"
+    },
+    {
+      "name": "legacy-opt-in",
+      "seconds": 9.38,
+      "exit": 0,
+      "errors": 0,
+      "completion": "PASS: optional three-role measured gait, source fallback, pause/hold lifecycle, and measured announcer leg costume",
+      "sha256": "7fc2a43aa647b1376c48ba53e41a7379179819f60f6339a2725b103cd53b4403"
+    },
+    {
+      "name": "dialogue",
+      "seconds": 7.82,
+      "exit": 0,
+      "errors": 0,
+      "completion": "PASS: Main NPC dialogue hold lifecycle",
+      "sha256": "3c2477f1a774c4075ea3859567ff644258a93f8e49a49b554134bd6bfa184e60"
+    },
+    {
+      "name": "direction",
+      "seconds": 1.27,
+      "exit": 0,
+      "errors": 0,
+      "completion": "PASS: imp same-view long-frame support epoch, route turns, settlement and tiny-frame restart",
+      "sha256": "4803a7e30e6cff5abf61aa0f0ce3c6c041cfe6541b64afc4034147eee7846dd1"
+    },
+    {
+      "name": "layout",
+      "seconds": 7.41,
+      "exit": 0,
+      "errors": 0,
+      "completion": "PASS: island layout contracts",
+      "sha256": "fef98d4621378f69ae6c67b8e0cf80689c3c354a134bbe853cf0cd4e0636ded5"
+    }
+  ],
+  "scope": "headless native regression, not new art or continuous video acceptance",
+  "rejected_attempts": [
+    "Initial scratch helper failed GDScript type inference; explicit Vector3 corrected.",
+    "Initial deferred sample compared two different animation times; synchronized route/action/point at zero.",
+    "Scratch dialogue marker omitted Main; actual exit0 and official completion line verified without unnecessary rerun."
+  ]
+}
