@@ -1,0 +1,608 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "base_sha": "dd8318b130783c0a0af0b0a7acff6617fc727556",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf / Compatibility / llvmpipe",
+  "ticket": "ART-26",
+  "cases": [
+    {
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "text_scale": 1.25,
+      "phase": "noon",
+      "world_phase": null,
+      "reduced_motion": false
+    },
+    {
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "text_scale": 1.25,
+      "phase": "noon",
+      "world_phase": null,
+      "reduced_motion": false
+    },
+    {
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "text_scale": 1.25,
+      "phase": "night",
+      "world_phase": "night",
+      "reduced_motion": true
+    }
+  ],
+  "accepted_images": [
+    {
+      "file": "ART-26-verify-v2-20261020-dialogue-800x450-scale1.25.png",
+      "sha256": "0a5f934bdf259d16ae717aa1783e05111663f8fb55f8d765971319ca6a60fe02",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-exploration-2-800x450-scale1.25.png",
+      "sha256": "b4c6e169f14afcc2c51aa45f2f972c3c505d8c575778cce21ffbec8a82635fd8",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-exploration-3-800x450-scale1.25.png",
+      "sha256": "735e8fe5d98e1a46211dbe009029db73bf20ed995aa6a99f63caf1ff63fc7a86",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-exploration-3-standee-800x450-scale1.25.png",
+      "sha256": "522d656707768aa0887e3cf8dabe35b47118b44f07e0da0c0271c8ad41936777",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-exploration-photo-stage-800x450-scale1.25.png",
+      "sha256": "60133e7e08524ded92a882cd4735e550a8a5ea9f413478dbf11c81bf83a57ec8",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-invitation-800x450-scale1.25.png",
+      "sha256": "8b4dcbad339bff38ab970ffed02266f251b377155458339300d57de72cd9f54d",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-confirmation-800x450-scale1.25.png",
+      "sha256": "6cf5407dc91aac2fc687240641cacb0a158a84b5b1debd460fd930db445da775",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-hud-800x450-scale1.25.png",
+      "sha256": "e428b861369a47db1fd073a04fecb89f892de42ff00e27d55220622cd5be393b",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-hud-pause-800x450-scale1.25.png",
+      "sha256": "a3ebbe4461c1865e18248a69bfbcc29f0ca7433a158c6a984b102537ae5b0875",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-pause-800x450-scale1.25.png",
+      "sha256": "5dbc1645e5c063bb2ea8bc73c6d90630d11b25b0dbe726d5628c81b29993f1d7",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-score-details-800x450-scale1.25.png",
+      "sha256": "cd49fb49d908d695190ea5bcf3df2369dc7b487a21f4f29cfc44d2e9f55a22e7",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-result-practice-800x450-scale1.25.png",
+      "sha256": "2401ea7ee7f4342a69de3ee32762688645f680933bf27fd54da59b2ebfbf498a",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-rules-800x450-scale1.25.png",
+      "sha256": "3a43b5d45825e4db060c1e277f346544274d5e2ed5bbe148acdb4abf3fd7c122",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-dialogue-1280x720-scale1.25.png",
+      "sha256": "a1c1cfadfaaffe80b887cd4d3cb63b22a8edfafa95b853b5830e0e442498b374",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-exploration-2-1280x720-scale1.25.png",
+      "sha256": "8d0c5ee34b1c687201aa1be81a9c88ce1ae67af31476d5276022798dbef8cc0e",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-exploration-3-1280x720-scale1.25.png",
+      "sha256": "d33bdab147beab2d8fa362d705292a2457f8751d5dcec00d4ff8c7ce223c4688",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-exploration-3-standee-1280x720-scale1.25.png",
+      "sha256": "80603d63fd1f1b08a321db41d1ef887985883f93ff80ebf1ddcb8c25c6830beb",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-exploration-photo-stage-1280x720-scale1.25.png",
+      "sha256": "6adbc2b787a7ae1e922e47fd9362332ce19b0f18585cbd899c6ac7b8954975ef",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-invitation-1280x720-scale1.25.png",
+      "sha256": "82ee8315a499f0cc99ebadcd72657440bd842d012dbf96621396f8dfb533df7b",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-confirmation-1280x720-scale1.25.png",
+      "sha256": "db95ebc7fcd032599bcbb6083db66bf5b278dbb8faff77b89dc476b71f0dfab8",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-hud-1280x720-scale1.25.png",
+      "sha256": "066158d03c198d59059eae1a74cde1ab2d8d631ee1a001f572f8fd2de95dda82",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-hud-pause-1280x720-scale1.25.png",
+      "sha256": "6d5c1097bb84d44fe11d913a783a2aa0ff6a01a19b3c47e39a849e9273d0d18b",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-pause-1280x720-scale1.25.png",
+      "sha256": "e02732b4742d87c92bd9c93dd6772352f9995549bac0a2c32da2161ccfe58bb5",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-minigame-score-details-1280x720-scale1.25.png",
+      "sha256": "c1122e3091d08f37d0e1309324d333a6692936203d7dbb5d8140bb211504f0ed",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-result-practice-1280x720-scale1.25.png",
+      "sha256": "590c887d7a52c21a1eb148b132cf33343e60a42271d5b2844bd1988842eea455",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v2-20261020-rules-1280x720-scale1.25.png",
+      "sha256": "c345a10fb187e371b9fe66604fe9215d2c14212803299db41d197402a494da6b",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-dialogue-1920x1080-scale1.25.png",
+      "sha256": "4cbb2b8c474349e4b769bd82fa20b87a7b79e3316af670083f88011a66d5737c",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-exploration-2-1920x1080-scale1.25.png",
+      "sha256": "42d24d90810d14ab23b2621cffa4b878fe5995d51bf2cf4409dd2f4a1267069b",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-exploration-3-1920x1080-scale1.25.png",
+      "sha256": "9b9c2feb93dc0c717a7c5547a11e452af06d9fbfbd74649eb9ea8cd9889dd561",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-exploration-3-standee-1920x1080-scale1.25.png",
+      "sha256": "74f3f54abb1171a6eff15dbd8c786a9a1c751d63b51a0b1936f19cd2f0be655b",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-exploration-photo-stage-1920x1080-scale1.25.png",
+      "sha256": "181a710814b05d4901b15b1b6304df915980a6a23d225260e673b564c81f41d4",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-invitation-1920x1080-scale1.25.png",
+      "sha256": "8ab971bbde500e156e448a39a62fbe2e03fd85ae327d0d9fbbca255e103812fc",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-minigame-confirmation-1920x1080-scale1.25.png",
+      "sha256": "8bdba3922697a9f76f439ef2a6b8bcc19acb1e6b0d435a2b806bb438113a60a5",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-minigame-hud-1920x1080-scale1.25.png",
+      "sha256": "edf2c5416fcef840c9bab6bbb0eab864d64435dfad6cb7a0975c203cce2ac4ce",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-minigame-hud-pause-1920x1080-scale1.25.png",
+      "sha256": "fccb67ba8212a961b718f324ab06d54c5421127023702e2f850ab87a532d13d8",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-minigame-pause-1920x1080-scale1.25.png",
+      "sha256": "cfcdaf2b714f7f17e340a9bfada2e645bf65102446e719c9e2a1d6f5e7f6ff4a",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-minigame-score-details-1920x1080-scale1.25.png",
+      "sha256": "d665bbf0c0af4d2d077343451ae189cdd4810703616f74c05c1004012e0563f4",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-result-practice-1920x1080-scale1.25.png",
+      "sha256": "9c71aa15da9b37411ebb4918d1f802f1cf1dbd7e673613ba0f5de0071a7bbdbe",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-26-verify-v3-20261020-rules-1920x1080-scale1.25.png",
+      "sha256": "0a81abd5a58edca134f5d199eaf804d2827e06169736e39f54d47d8c30e570ee",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    }
+  ],
+  "shared_local_suites": [
+    {
+      "name": "core runtime tests",
+      "exit": 0,
+      "seconds": 0.35,
+      "error": null
+    },
+    {
+      "name": "wardrobe runtime tests",
+      "exit": 0,
+      "seconds": 0.25,
+      "error": null
+    },
+    {
+      "name": "wardrobe UI tests",
+      "exit": 0,
+      "seconds": 11.28,
+      "error": null
+    },
+    {
+      "name": "story runtime tests",
+      "exit": 0,
+      "seconds": 0.28,
+      "error": null
+    },
+    {
+      "name": "main story integration tests",
+      "exit": 0,
+      "seconds": 25.74,
+      "error": null
+    },
+    {
+      "name": "saved photo viewer tests",
+      "exit": 0,
+      "seconds": 0.76,
+      "error": null
+    },
+    {
+      "name": "photo original preservation tests",
+      "exit": 0,
+      "seconds": 2.43,
+      "error": null
+    },
+    {
+      "name": "pixel UI shell tests",
+      "exit": 0,
+      "seconds": 56.51,
+      "error": null
+    },
+    {
+      "name": "pixel UI popup tests",
+      "exit": 0,
+      "seconds": 0.43,
+      "error": null
+    },
+    {
+      "name": "pixel UI button depth tests",
+      "exit": 0,
+      "seconds": 0.34,
+      "error": null
+    },
+    {
+      "name": "pixel UI collection tests",
+      "exit": 0,
+      "seconds": 21.29,
+      "error": null
+    },
+    {
+      "name": "pixel tutorial page tests",
+      "exit": 0,
+      "seconds": 15.49,
+      "error": null
+    },
+    {
+      "name": "pixel UI customization tests",
+      "exit": 0,
+      "seconds": 9.15,
+      "error": null
+    },
+    {
+      "name": "pixel UI minigame tests",
+      "exit": 0,
+      "seconds": 8.19,
+      "error": null
+    }
+  ],
+  "rejected_first_cloud_sizes": "DisplayServer requested800/1920 while Window/viewport remained1280; not accepted as size evidence. Old Windows images were independently confirmed800/1920 and are not invalidated.",
+  "expected_failure": "Backend-only resize rejected: requested800, actualWindow1280, backend800; exit1.",
+  "scope": "UI fixture uses synthetic photos/results and direct page entry plus routed key/pointer controls. Not a successful minigame playthrough, new audio audition or realtime performance measure.",
+  "visual_review": "All four ticket contact sheets covering actual three sizes reviewed; representative pause, tutorial, controls and night dialogue viewed at original size.",
+  "sources": {
+    "game/tests/native_layout_review.gd": "5a5a1e9b4c48f25db7ebac881fb4c30d6bb4baf324eac4c5b85babb89076385d",
+    "game/tests/native_pixel_ui_review.gd": "fba8678851c90d24c4152091d2a2e29e3691ade4e2ca35a6e1db43e593e9209d"
+  }
+}
