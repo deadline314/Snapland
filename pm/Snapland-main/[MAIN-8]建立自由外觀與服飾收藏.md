@@ -1,6 +1,6 @@
 # [MAIN-8] 建立自由外觀與服飾收藏
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -56,3 +56,12 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 ### 程式與證據提交
 分支：feature/island-first-park。更新至最新main後的本票提交：[ca10308](https://github.com/deadline314/Snapland/commit/ca103086e16cf5d36d23ca114ba4c6fe1e1e0456)。
+
+
+# 2026-10-20 結案核對
+
+本輪衣櫃資料與UI回歸通過：免費外觀、購買／不足額／重複購買、未擁有穿戴、取消預覽、舊檔遷移、拒寫回滾。兩個新程序另確認購買、穿戴、餘額、外觀及原有照片／成就保持，完整保存樹及檔案雜湊一致。ART-25三尺寸原生換裝／商店／試穿已查看。正式四款外套仍明列為換色款；不同輪廓與所有動作分層仍由ART-18驗收，未在此票假稱完成。
+
+目前正式進度、交易與重整後介面已核對在main；不將無法解析的早期feature提交連結當合入證明。舊Windows圖與本輪Linux／llvmpipe證據分開；沒有新Windows EXE、真人試玩或聽感認證。
+
+[六份比較、驗證流程與限制](../../design/runtime/progress-restart-verification.md) · [兩程序實際結果](images/MAIN-6-restart-20261020-verification.json) · [核心回歸](../Snapland-art/images/ART-23-verify-20261020-core-runtime-tests.log) · [衣櫃回歸](../Snapland-art/images/ART-23-verify-20261020-wardrobe-runtime-tests.log) · [設定／換裝三尺寸](../Snapland-art/images/ART-25-verify-20261020.json)。全域CI後段仍有其他票的角色素材缺口，本結案不等於全案綠燈。
