@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "test": "res://game/tests/test_minigames.gd",
+  "original_timeout_seconds": 90,
+  "original_outcome": "timeout, owned engine reaped; no completion marker",
+  "diagnostic_timeout_seconds": 240,
+  "diagnostic_outcome": "also timed out, owned engine reaped; not counted as a pass",
+  "trace_observed": [
+    "native input routing",
+    "kite pointer routing",
+    "HUD signals",
+    "photo/rhythm grading",
+    "practice/pause/score summary",
+    "bounded score ledger",
+    "all modes"
+  ],
+  "conclusion": "The broad integration check remains unresolved. Trace establishes progress, not total completion or the specific cause of the later stall/cost. Production test selection, individual time limits, error gates and assertions are unchanged by this investigation.",
+  "successful_local_scope": "Separate melody model/public score summary 39 checks, melody view/Session lifecycle 54 checks, actual score-details pointer opening at two window sizes; these do not replace the failed integration suite."
+}

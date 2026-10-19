@@ -1,6 +1,6 @@
 # 下一個 Session：接續 Snapland 未完成票
 
-2026-10-19（Asia/Taipei）。下方 Prompt 可整段獨立使用。這是工作入口與範圍快照，不是新一輪遊戲、GPU 或聲音驗收。實際主線以 fetch 後的 `origin/main` 為準。
+2026-10-20（Asia/Taipei）。下方 Prompt 可整段獨立使用。這是工作入口與範圍快照，不是新一輪遊戲、GPU 或聲音驗收。實際主線以 fetch 後的 `origin/main` 為準。
 
 ## 可直接貼上的 Prompt
 
@@ -10,7 +10,7 @@
 
 1. Repo：`https://github.com/deadline314/Snapland.git`。先核對 cwd、遠端、`git worktree list` 與 dirty files。不得切換、reset、clean、stash 或攜走其他 Session 的工作區／未提交內容。
 2. 執行 `git fetch origin main`，從最新 `origin/main` 建自己的分支／獨立 worktree。**main 已包含可執行遊戲**；確認 `project.godot` 與入口，不能沿用「main 只有文件」的舊結論。既有 feature 分支不再作為新工作基準。
-3. 本批已核對的遊戲主線是 `bcd2297f238c584c98ff66df7aeccd1887360183`；之後有指南與票況整理提交，仍以最新遠端為準。臨時雲端 worktree 或引擎目錄可能已清理，不能把舊絕對路徑當永久入口。原 `/workspace/Snapland` 的其他 Session `work` checkout 不要切換。
+3. 本批已核對的遊戲主線是 `45c4c94378d9269742700fc3ee18173f7ebe0927`；之後有指南與票況整理提交，仍以最新遠端為準。臨時雲端 worktree 或引擎目錄可能已清理，不能把舊絕對路徑當永久入口。原 `/workspace/Snapland` 的其他 Session `work` checkout 不要切換。
 4. 動手前讀 `AGENTS.md`、`.agents/skills/pm-ticket/SKILL.md`、`pm/user_guide.md`，再讀本組票最新需求、驗收、來源與證據。票在 `pm/`，不是外部票務系統。逐票狀態入口是 `pm/open_tickets.md`；舊勾選不代表本輪已重驗。
 5. 確認實際引擎、依賴、記憶體／磁碟與渲染能力。CI 固定 Godot `4.7.2.stable.official.ed1daf0bf`；設定並核對 `GODOT_BIN`。環境不具備原生 GPU、音訊或 Windows 就照實記錄，不能捏造。
 
@@ -25,6 +25,7 @@
 - 原生島上錄影為 Godot 4.7／llvmpipe 降低環境成本 fixture，人物不降解析度。4.7.2 PCK 是 Linux 隔離測試，採 Windows Desktop preset；不是 Windows EXE、完整光影、原機器效能或完整原生美術驗收。
 - ART-17／18 仍需正式 NPC 行走／個性動作與真正不同衣物輪廓的完整原畫；票票、小角缺正式走路來源，不得用拒收候選或程序拆腿代用。ART-22／其他上位票也不能只因局部髮型完成就自動結案。
 - 2026-10-19 已核對 `a8f610a` 的實際 CI：前批角色／捲髮／NPC 量測與正式世界整合已通過，後續來源待機附件的完成文字與 runner 舊契約不一致。`906d314` 修復完成契約並補齊四項缺少標記的測試；23 項 Python 反例與五項實際 Godot 局部檢查通過，原 91 個執行項目、門檻、GDScript 與遊戲原圖不變。看最新遠端執行確認後續結果，不把這五項稱整套綠燈。細節在 MAIN-2 與 `design/runtime/runtime-result-contract.md`。
+- 2026-10-20 已結案 MAIN-12／18／13／16，目前 75 張進行中。ART-10 `83a6397` 修復相容渲染的每物件參數耗盡，0 ERROR 原生照片流程；MAIN-2 `67906d9` 保留有界完整 CI 預算與獨立 Python 回歸，`9d250cf` 量測阿浪真正可見原圖腳底。SG-27 `45c4c94` 將錯誤計分說明同步成精準20／接近12，39項規則、54項畫面／Session及雙尺寸原生明細通過。全組首區整合在90秒上限中止，獨立240秒量測也未完成；正式個別時限未改，先核對 MAIN-2 最新定位與 CI；不能以局部通過稱全綠。
 - SG-1 缺 `design/02-minigames/catalog.json` 仍阻擋全域設計 CI；128 款設計未完成，不能捏造目錄或刪檢查讓 CI 變綠。每次核對最新主線的實際 Actions，不把局部通過寫成完整套件成功。
 
 具體驗收看：
