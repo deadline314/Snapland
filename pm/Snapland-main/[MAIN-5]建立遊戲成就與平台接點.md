@@ -1,6 +1,6 @@
 # [MAIN-5] 建立遊戲成就與平台接點
 
-> 狀態：進行中（base SHA：c1b7b19）
+> 狀態：完成
 
 ## 內文
 
@@ -68,3 +68,12 @@ c1b7b19；feature/island-first-park。
 ![本票原生畫面](images/MAIN-5-achievements-unlocked.png)
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
+
+
+# 2026-10-20 結案核對
+
+重新核對本輪核心回歸：十二款個別成就、迎賓通關與惡魔全集、去重及平台成功／失敗回饋均通過。新程序重開仍保留ACH_GAME_001與待同步事件；成就列表三尺寸原生導覽已在ART-24重驗。這是遊戲內成就與平台接點，沒有Steam SDK實際上線／overlay／跨機同步認證；原票要求預留接口與離線保存已達成。
+
+目前正式進度、交易與重整後介面已核對在main；不將無法解析的早期feature提交連結當合入證明。舊Windows圖與本輪Linux／llvmpipe證據分開；沒有新Windows EXE、真人試玩或聽感認證。
+
+[六份比較、驗證流程與限制](../../design/runtime/progress-restart-verification.md) · [兩程序實際結果](images/MAIN-6-restart-20261020-verification.json) · [核心回歸](../Snapland-art/images/ART-23-verify-20261020-core-runtime-tests.log) · [衣櫃回歸](../Snapland-art/images/ART-23-verify-20261020-wardrobe-runtime-tests.log) · [設定／換裝三尺寸](../Snapland-art/images/ART-25-verify-20261020.json)。全域CI後段仍有其他票的角色素材缺口，本結案不等於全案綠燈。
