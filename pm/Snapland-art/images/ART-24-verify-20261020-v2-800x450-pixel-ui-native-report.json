@@ -1,0 +1,489 @@
+{
+	"backend_window": "(800, 450)",
+	"captures": [
+		{
+			"frame": 17,
+			"page": "hud",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-23-verify-v2-20261020-hud-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 28,
+			"page": "pause",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-23-verify-v2-20261020-pause-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 33,
+			"page": "pause-hover",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-23-verify-v2-20261020-pause-hover-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 38,
+			"page": "pause-pressed",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-23-verify-v2-20261020-pause-pressed-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 60,
+			"page": "ticket",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-23-verify-v2-20261020-ticket-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 65,
+			"page": "map",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-24-verify-v2-20261020-map-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 70,
+			"page": "tasks",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-24-verify-v2-20261020-tasks-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 75,
+			"page": "album-empty",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-24-verify-v2-20261020-album-empty-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 80,
+			"page": "exploration-photo-stage",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-exploration-photo-stage-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 85,
+			"page": "exploration-2",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-exploration-2-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 90,
+			"page": "exploration-3",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-exploration-3-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 99,
+			"page": "exploration-3-standee",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-exploration-3-standee-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 105,
+			"page": "album-filled",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-24-verify-v2-20261020-album-filled-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 117,
+			"page": "photo-original-viewer",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-24-verify-v2-20261020-photo-original-viewer-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 122,
+			"page": "achievements",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-24-verify-v2-20261020-achievements-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 127,
+			"page": "tutorial",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-24-verify-v2-20261020-tutorial-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 137,
+			"page": "wardrobe-appearance",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-25-verify-v2-20261020-wardrobe-appearance-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 149,
+			"page": "wardrobe-popup",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-25-verify-v2-20261020-wardrobe-popup-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 158,
+			"page": "wardrobe-closet",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-25-verify-v2-20261020-wardrobe-closet-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 163,
+			"page": "wardrobe-shop",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-25-verify-v2-20261020-wardrobe-shop-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 168,
+			"page": "settings-audio",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-25-verify-v2-20261020-settings-audio-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 177,
+			"page": "settings-play",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-25-verify-v2-20261020-settings-play-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 186,
+			"page": "settings-controls",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-25-verify-v2-20261020-settings-controls-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 191,
+			"page": "time",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-25-verify-v2-20261020-time-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 316,
+			"page": "dialogue",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-dialogue-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 321,
+			"page": "invitation",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-invitation-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 326,
+			"page": "rules",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-rules-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 351,
+			"page": "minigame-hud",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-minigame-hud-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 356,
+			"page": "minigame-score-details",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-minigame-score-details-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 361,
+			"page": "minigame-hud-pause",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-minigame-hud-pause-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 370,
+			"page": "minigame-confirmation",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-minigame-confirmation-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 375,
+			"page": "minigame-pause",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-minigame-pause-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		},
+		{
+			"frame": 380,
+			"page": "result-practice",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v2-800x450/ART-26-verify-v2-20261020-result-practice-800x450-scale1.25.png",
+			"physical_scale": 0.625,
+			"rendered_size": "(500.0, 282.0)",
+			"window_size": "(800, 450)"
+		}
+	],
+	"failures": [],
+	"logical_viewport": "(1280.0, 720.0)",
+	"method": "native Main UI presentation; scripted page opening, routed Escape/Tab and pointer controls; synthetic collection/result data in isolated profile",
+	"phase": "noon",
+	"physical_scale": 0.625,
+	"physical_window": [
+		800,
+		450
+	],
+	"reduced_motion": false,
+	"requested_window": [
+		800,
+		450
+	],
+	"result": "PASS",
+	"settings_control_geometry": {
+		"grid": "[P: (56.0, 259.0), S: (1166.0, 337.0)]",
+		"labels": [
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(74.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (56.0, 259.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "移動",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(296.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (346.0, 259.0), S: (296.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "W A S D／方向鍵",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(74.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (652.0, 259.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "慢走",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(173.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (942.0, 259.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "按住 Shift",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(74.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (56.0, 315.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "互動",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(23.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (346.0, 315.0), S: (296.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "E",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(74.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (652.0, 315.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "招呼",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(23.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (942.0, 315.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "F",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(74.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (56.0, 371.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "拍照",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(23.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (346.0, 371.0), S: (296.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "P",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(74.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (652.0, 371.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "衣櫃",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(23.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (942.0, 371.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "C",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(74.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (56.0, 427.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "時段",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(26.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (346.0, 427.0), S: (296.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "T",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(74.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (652.0, 427.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "旅券",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(26.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (942.0, 427.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "M",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(182.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (56.0, 483.0), S: (280.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "暫停／返回",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(59.0, 52.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (346.0, 483.0), S: (296.0, 52.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "Esc",
+				"visible": true
+			}
+		],
+		"minimum": "(755.0, 276.0)"
+	},
+	"text_scale": 1.25
+}
