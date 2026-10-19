@@ -69,7 +69,55 @@
       "url": "https://partner.steamgames.com/doc/features/multiplayer/steamdatagramrelay",
       "evidence": "Steam P2P API 可使用 Valve 中繼。",
       "application": "不必部署專用遊戲伺服器，仍有房主模擬與中斷處理。"
+    },
+    {
+      "id": "catalog-jamboree",
+      "title": "Nintendo Jamboree 小遊戲",
+      "url": "https://www.nintendo.com/ph/switch/a7hl/minigame/index.html",
+      "evidence": "橋上避木、主題拍照、疊影等不同物件目標。",
+      "application": "動詞與控制空間需分化。"
+    },
+    {
+      "id": "catalog-overcooked",
+      "title": "Team17 輔助模式",
+      "url": "https://blog.playstation.com/2020/07/20/overcooked-all-you-can-eat-is-a-visual-feast-for-ps5/",
+      "evidence": "減慢超時、延長回合及跳關。",
+      "application": "共同物件與可調壓力。"
+    },
+    {
+      "id": "catalog-b360",
+      "title": "Panic b360",
+      "url": "https://play.date/games/b360/",
+      "evidence": "旋轉式打磚塊支援方向鍵或曲柄。",
+      "application": "控制方式改變預判。"
+    },
+    {
+      "id": "catalog-donut",
+      "title": "Ben Esposito Donut County",
+      "url": "https://donutcounty.com/",
+      "evidence": "玩家扮演地洞的物理謎題。",
+      "application": "材料第二用途與多解。"
+    },
+    {
+      "id": "catalog-thumper",
+      "title": "Drool Thumper",
+      "url": "https://thumpergame.com/",
+      "evidence": "節奏動作、速度、物理感，2D與VR。",
+      "application": "回饋與拍點同源，保留降低動態。"
+    },
+    {
+      "id": "catalog-lumines",
+      "title": "Enhance Lumines Arise",
+      "url": "https://lumines.game/",
+      "evidence": "2x2方塊由音樂時間線清除，可延後清除。",
+      "application": "延後回饋形成取捨。"
+    },
+    {
+      "id": "catalog-obradinn",
+      "title": "Lucas Pope Obra Dinn 製作說明",
+      "url": "https://obradinn.com/media/prerelease.html",
+      "evidence": "探索推理、固定解析度與可選輸出模式。",
+      "application": "資訊可回看，顯示服務觀察。"
     }
   ]
 }
-

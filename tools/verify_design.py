@@ -10,7 +10,7 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 ZONES = ('welcome', 'harbor', 'candy', 'nightmarket', 'circus', 'toy', 'garden', 'hotel', 'sky', 'cinema')
 CORES = {'掌握', '取捨', '預測', '創意', '協調', '節奏'}
-GAME_FIELDS = ('id', 'name', 'zone', 'core', 'action', 'goal', 'choice', 'feedback', 'variation', 'solo', 'multi', 'demon', 'variant', 'assist', 'test', 'reference', 'revision')
+GAME_FIELDS = ('id', 'name', 'zone', 'core', 'action', 'goal', 'choice', 'feedback', 'variation', 'solo', 'multi', 'ai', 'demon', 'demon_assist_policy', 'variant', 'assist', 'test', 'reference', 'revision', 'revision_reason', 'presentation', 'implementation')
 
 
 def load(root, relative):
@@ -64,6 +64,7 @@ def validate_park(data):
 
 
 def validate_games(data, refs):
+    check(data.get('status') == 'design_spec_not_playtested', 'games: design cannot claim playtest acceptance')
     rows = data['games']
     nonempty(rows, GAME_FIELDS, 'games')
     unique_ids(rows, 'games')
@@ -80,7 +81,23 @@ def validate_games(data, refs):
         check(row['core'] in CORES, f'games {row["id"]}: unknown core')
         check(row['reference'] in refs, f'games {row["id"]}: missing source')
         check(row['revision'] in {'保留', '重設', '替換'}, f'games {row["id"]}: revision status')
+        expected_state = 'single_player_runtime_needs_full_acceptance' if i <= 12 else 'design_only_not_playtested'
+        check(row['implementation'] == expected_state, f'games {row["id"]}: implementation scope mismatch')
     check(CORES.issubset({r['core'] for r in rows}), 'games: missing fun families')
+    prototypes = data.get('prototype_order')
+    check(isinstance(prototypes, list) and len(prototypes) == 6 and len(set(prototypes)) == 6,
+          'games: six distinct prototypes required')
+    check(all(key in {r['id'] for r in rows} for key in prototypes), 'games: unknown prototype')
+
+
+def validate_runtime_game_alignment(data, runtime):
+    """The catalogue may plan modes, but cannot silently redefine live solo rules."""
+    first = [row for row in data['games'] if row['zone'] == 'welcome']
+    check(len(first) == len(runtime) == 12, 'games: first-park runtime coverage')
+    for row, live in zip(sorted(first, key=lambda r: r['id']), sorted(runtime, key=lambda r: r['id'])):
+        for field, live_field in [('id', 'id'), ('name', 'name'), ('action', 'instructions'),
+                                  ('goal', 'ordinary'), ('demon', 'devil'), ('runtime_mode', 'mode')]:
+            check(row.get(field) == live[live_field], f'games {row["id"]}: runtime {field} drift')
 
 
 def validate_story(quests, events):
@@ -170,7 +187,9 @@ def run(root, scope):
             validate_park(load(root, 'design/01-park/park.json'))
         elif part == 'games':
             refs = {r['id'] for r in load(root, 'design/00-principles/references.json')['references']}
-            validate_games(load(root, 'design/02-minigames/catalog.json'), refs)
+            data = load(root, 'design/02-minigames/catalog.json')
+            validate_games(data, refs)
+            validate_runtime_game_alignment(data, load(root, 'game/data/welcome_games.json'))
         elif part == 'story':
             validate_story(load(root, 'design/03-story/quests.json'), load(root, 'design/03-story/exploration.json'))
         elif part == 'items':

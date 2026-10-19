@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "base_sha": "5560c2380fa089a6ef9cfe1fb4d63fba80006e73",
+  "design_candidates": 128,
+  "runtime_first_park": 12,
+  "design_only": 116,
+  "prototypes": [
+    "game-001",
+    "game-004",
+    "game-007",
+    "game-010",
+    "game-011",
+    "game-006"
+  ],
+  "python_tests": 101,
+  "design_scopes": 5,
+  "gameplay_executed": false,
+  "visual_review": "Official b360 static PNG and actual local PDF page raster inspected. First MSung candidate rejected for incorrect glyph rendering. Chromium local file navigation was blocked, no bypass attempted.",
+  "files": {
+    "design/02-minigames/catalog.json": "ce46a55f8f75c20f88c98e0243a50ffe6f0e9591cdaf0b43e180e401143c31ce",
+    "pm/Snapland-small-game/images/SG-1-catalog-review.png": "f425461ddf717ff8155deddae70c9609c9890f7b695b1841a7667c4c3bf8b1ef",
+    "pm/Snapland-small-game/images/SG-1-reference-b360.png": "d40b7bae96b90c08e5875f6bccaed9c5fbbe1b8eee4cabf0ca8e020a7e9ab6e8",
+    "pm/Snapland-small-game/images/SG-1-python-full.log": "a6debcdd0ccfdccb9f25c9ca430561a362fc0609adf0db0bd7ea41f8adad6c37"
+  },
+  "raw_local_pdf_sha256": "59f562df9e526de5501787f72a8cf07b33b9722e686b4fd90eb3a12ba6751c59"
+}

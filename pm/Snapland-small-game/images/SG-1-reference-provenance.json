@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "kind": "official_static_reference_not_game_asset",
+  "author": "Panic",
+  "page": "https://play.date/games/b360/",
+  "original": "https://play.date/media/games/com.panic.b360/b360-2.png",
+  "method": "HTTPS original download, view_image inspected",
+  "sha256": "d40b7bae96b90c08e5875f6bccaed9c5fbbe1b8eee4cabf0ca8e020a7e9ab6e8",
+  "observed": "Right-side playfield and left-side information split; no animation or playtest observed."
+}

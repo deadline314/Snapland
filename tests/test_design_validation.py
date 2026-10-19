@@ -74,6 +74,33 @@ class GameTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'source'):
             v.validate_games(self.data, self.refs)
 
+    def test_missing_ai_and_revision_reason_rejected(self):
+        for field in ('ai', 'revision_reason', 'demon_assist_policy'):
+            with self.subTest(field=field):
+                broken = copy.deepcopy(self.data)
+                broken['games'][12].pop(field)
+                with self.assertRaisesRegex(ValueError, field):
+                    v.validate_games(broken, self.refs)
+
+    def test_unbuilt_games_cannot_claim_runtime(self):
+        self.data['games'][12]['implementation'] = 'single_player_runtime_needs_full_acceptance'
+        with self.assertRaisesRegex(ValueError, 'scope'):
+            v.validate_games(self.data, self.refs)
+
+    def test_prototypes_must_be_six_distinct_existing_games(self):
+        for ids in (['game-001'] * 6, ['game-001'], self.data['prototype_order'][:5] + ['game-999']):
+            with self.subTest(ids=ids):
+                self.data['prototype_order'] = ids
+                with self.assertRaisesRegex(ValueError, 'prototype'):
+                    v.validate_games(self.data, self.refs)
+
+    def test_first_park_matches_current_single_player_rules(self):
+        runtime = v.load(ROOT, 'game/data/welcome_games.json')
+        v.validate_runtime_game_alignment(self.data, runtime)
+        self.data['games'][0]['demon'] = 'a different qualification rule'
+        with self.assertRaisesRegex(ValueError, 'runtime demon drift'):
+            v.validate_runtime_game_alignment(self.data, runtime)
+
 
 class StoryTests(unittest.TestCase):
     def setUp(self):

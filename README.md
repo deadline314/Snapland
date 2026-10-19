@@ -26,6 +26,6 @@ python tools/verify_design.py --scope games
 python tools/verify_design.py --scope story
 python tools/verify_design.py --scope items
 
-完整可用驗證由 GitHub Actions 在變更及每小時排程執行，包含 Godot runtime；排程只在 workflow 合併預設分支後生效，並可能受 GitHub 排程延遲影響。設計資料測試與原生遊戲驗證分開報告。既有設計缺 `design/02-minigames/catalog.json`（SG-1），因此 games／all 的設計 CI 目前仍會失敗，不代表本版十二款 runtime 缺檔。
+完整可用驗證由 GitHub Actions 在變更及每小時排程執行，包含 Godot runtime；排程只在 workflow 合併預設分支後生效，並可能受 GitHub 排程延遲影響。設計資料測試與原生遊戲驗證分開報告。[128款設計目錄](design/02-minigames/catalog.md)已補齊並與首區現行單人規則比對；這不表示其他116款、多人體驗或全部玩法品質已實作／驗收。完整 CI 結果以對應提交的實際 Actions 為準。
 
 角色最新交付見 [ART-34](pm/Snapland-art/[ART-34]擴充島上其他髮型動態.md)：三款人類髮型、八方向及四種帽狀態的局部驗收完成，正常／慢速影片、參考原圖及隔離資源包證據附票。雲端錄影降低環境渲染成本，不代表完整光影或原 GPU 效能驗收。
