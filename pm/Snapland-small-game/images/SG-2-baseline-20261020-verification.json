@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "verification_base": "ea3288bde3b79467737f815d1433d3f17820db87",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "scope": "Current first-version game implementation acceptance; not all per-game polish or new human gameplay",
+  "historical_code": "f2d6b84919a91d534082660a12aec5a9b44eaa2c",
+  "historical_native_images": {
+    "pm/Snapland-small-game/images/SG-2-game.png": "1746db70e9374367f6b74ec644411497d69861c1ffb8fac040edab45969c23f2",
+    "pm/Snapland-small-game/images/SG-2-result.png": "5a6e3a151c0cc3ca87af53c85ac04ffd8278c28500eb581267e59c9ce36e6d85",
+    "pm/Snapland-small-game/images/SG-3-game.png": "4c51158d50c3627c6987ccab6fbc6e0b6183a0773d8f6e4eb460420de2a5d8a7",
+    "pm/Snapland-small-game/images/SG-3-result.png": "0b330f35941d4be6b8ed98c163802210ead616e2d4ea75a8642452c4b6c9286a",
+    "pm/Snapland-small-game/images/SG-4-game.png": "d8f394c3c8ee3e083ddc2d2c6ddfac032bcb95c5b393fadf55ae8e1c7664d4da",
+    "pm/Snapland-small-game/images/SG-4-result.png": "339234dfe8a5c8aca259eb611b0669561267ff27b4806c21fa69ba2887acf89e",
+    "pm/Snapland-small-game/images/SG-5-game.png": "8480062d091da064343d83615061f32656a87e09d1907032b489bb3db5489dd1",
+    "pm/Snapland-small-game/images/SG-5-result.png": "69e24ddbf4b486204629a20bb465af1fb9cf182262cc5a9e264e420cb6aa0940",
+    "pm/Snapland-small-game/images/SG-6-game.png": "264d16d8f369cc3ff61a5cd3c761f97f75cf1462260d0f57a65174ec034ba0f1",
+    "pm/Snapland-small-game/images/SG-6-result.png": "c4d99a651aa06451203b95dbc4a1dcd3f6473ceffabfb4b23d69ed7eb9ed3a8f",
+    "pm/Snapland-small-game/images/SG-7-game.png": "2a07a018eab91c16f3e2c719633299424a211a52cbc9198627c812980c65f82e",
+    "pm/Snapland-small-game/images/SG-7-result.png": "e472c3024c000935612d7ccd7d5fbfc86968235695b75abeff47006e035c3ba3",
+    "pm/Snapland-small-game/images/SG-8-game.png": "b4760f26b3efb2696d73feb33d9418e0a678a00d014fe45692d9e4e0046004a6",
+    "pm/Snapland-small-game/images/SG-8-result.png": "161e1b362725faf96d63ff4f7ac51d558cdd652eae6a6232167329b42175e5e1",
+    "pm/Snapland-small-game/images/SG-9-game.png": "da79ffb49ea4c8c89ad86442193395627d9ff737e31c03280b6a60123aeed46a",
+    "pm/Snapland-small-game/images/SG-9-result.png": "f27ec81884fc6ec267cc2d161798b60589a3395ff999b586843d9df349c14b01",
+    "pm/Snapland-small-game/images/SG-10-game.png": "03d21ae9a513823f737e10900f50df3657ad71d17cdc2c06cce3f79be6c58802",
+    "pm/Snapland-small-game/images/SG-10-result.png": "89f8ab3af18b8d5b6ee27507fa167ff3498dd35e27a56644fb46582f5334ac93",
+    "pm/Snapland-small-game/images/SG-11-game.png": "7c70eecd2eb44c7868b363dca4b81ff0961fc22b277f7245f27d12e352ba607c",
+    "pm/Snapland-small-game/images/SG-11-result.png": "b1c621630ffbd04befc19e53934e360bff25c8263d1ef6a3745301cc8cba906a",
+    "pm/Snapland-small-game/images/SG-12-game.png": "adb42a61c464f75892757ddbe62f4e1baa7165e6a989c2398b4a40ef1d9106fc",
+    "pm/Snapland-small-game/images/SG-12-result.png": "e219c3909a52b3ca63d9bdbf9e9142498f08a7d1ea92ad5e0865d83d016c9c52",
+    "pm/Snapland-small-game/images/SG-13-game.png": "904f46e40c904187e7f378b429a0e54a60d9ce000bb3f93c653e915f6fc00444",
+    "pm/Snapland-small-game/images/SG-13-result.png": "a642708550ba39b9a033af9ffc4689529d40f27a6ced0f55859260a0c69da8c7"
+  },
+  "historical_native_images_reopened": "24 original game/result images viewed together as explicitly historical contact sheet, not current runtime captures",
+  "current_local_suites": [
+    {
+      "name": "core runtime tests",
+      "exit": 0,
+      "seconds": 0.35,
+      "error": null
+    },
+    {
+      "name": "welcome minigame tests",
+      "exit": 0,
+      "seconds": 76.42,
+      "error": null
+    },
+    {
+      "name": "main scene integration tests",
+      "exit": 0,
+      "seconds": 22.7,
+      "error": null
+    }
+  ],
+  "welcome_cases": 81,
+  "all_modes": "Twelve current normal and assist sessions; bounded model/input-driven reachability, failure, score ledgers, pause, retry and escape. Some controllers set model targets; not 24 new GPU human playthroughs.",
+  "current_research": "Seven-team comparison in design/02-minigames/revision-notes.md; previously read text and viewed Panic static source image, no reference video claim",
+  "other_current_evidence": [
+    "MAIN-14 actual all-12 entry/tutorial/cancel/reentry and true-process resume",
+    "MAIN-13/16 actual ordinary/devil photo originals and true-process reopen",
+    "ART-26 actual three-size current UI with explicitly synthetic collection/results",
+    "ART-17 catch-v5 actual normal/quarter keyboard and assisted pointer practice captures"
+  ],
+  "production_not_changed_by_closure": true,
+  "audio_listened": false,
+  "entire_remote_suite_passed": false
+}
