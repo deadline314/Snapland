@@ -4,13 +4,13 @@
 
 ## 可直接貼上的 Prompt
 
-接續完成 Snapland。使用者已要求自主研究、設計、實作與驗證，不要為一般設計判斷停下詢問；先處理角色一致性，再依相依改善光影、動畫、玩法與 UIUX。品質不足可重做，保留已接受的原圖與其他 Session 成果。不要只交研究、計畫或生成候選。
+接續完成 Snapland。使用者已要求自主研究、設計、實作與驗證，不要為一般設計判斷停下詢問；維持角色一致性，並依最新回饋與票的相依改善世界自由互動、光影、動畫、玩法與 UIUX。品質不足可重做，保留已接受的原圖與其他 Session 成果。不要只交研究、計畫或生成候選。
 
 ### 先找到正確主線與規範
 
 1. Repo：`https://github.com/deadline314/Snapland.git`。先核對 cwd、遠端、`git worktree list` 與 dirty files。不得切換、reset、clean、stash 或攜走其他 Session 的工作區／未提交內容。
 2. 執行 `git fetch origin main`，從最新 `origin/main` 建自己的分支／獨立 worktree。**main 已包含可執行遊戲**；確認 `project.godot` 與入口，不能沿用「main 只有文件」的舊結論。既有 feature 分支不再作為新工作基準。
-3. 本批已核對的遊戲主線是 `45c4c94378d9269742700fc3ee18173f7ebe0927`；之後有指南與票況整理提交，仍以最新遠端為準。臨時雲端 worktree 或引擎目錄可能已清理，不能把舊絕對路徑當永久入口。原 `/workspace/Snapland` 的其他 Session `work` checkout 不要切換。
+3. 本輪續作基準為 `244536b`；已合入的攤位／海岸互動／UI 交付包括 `40e27eb`、`c4eaae5`、`2424410`，另有 MAIN-15 完整圈與夜燈交付；一律以最新遠端為準。臨時雲端 worktree 或引擎目錄可能已清理，不能把舊絕對路徑當永久入口。原 `/workspace/Snapland` 的其他 Session `work` checkout 不要切換。
 4. 動手前讀 `AGENTS.md`、`.agents/skills/pm-ticket/SKILL.md`、`pm/user_guide.md`，再讀本組票最新需求、驗收、來源與證據。票在 `pm/`，不是外部票務系統。逐票狀態入口是 `pm/open_tickets.md`；舊勾選不代表本輪已重驗。
 5. 確認實際引擎、依賴、記憶體／磁碟與渲染能力。CI 固定 Godot `4.7.2.stable.official.ed1daf0bf`；設定並核對 `GODOT_BIN`。環境不具備原生 GPU、音訊或 Windows 就照實記錄，不能捏造。
 
@@ -98,3 +98,15 @@ with tempfile.TemporaryDirectory(prefix="snapland-next-local-") as isolated:
 - MAIN-19 已在相同已合入框架重驗存讀、損毀／未知資料回退、變數、複數、焦點／對話進度與穩定識別。正式可選仍只有完整繁中；英／阿是未發布 QA，不能宣稱全作翻譯。
 - 最後推送後核對最新 Actions。`139f1ff` 的獨立 Python 回歸已實際執行 97 項，剩六個錯誤都來自 SG-1 缺 `design/02-minigames/catalog.json`；NumPy import failure 已消除。新 main 的完整 CI 結果依實際 run，不能以局部通過稱全綠。不要偽造 128 款目錄或跳過檢查。
 - 角色優先仍是 ART-18 真正不同輪廓、完整姿勢衣物與 ART-17 正式 NPC 動作；不得用拒收背心、候選走路、程序拆腿或凍結動作代替。沿既有七方海岸研究、八方字體研究與最新原生證據持續完善。
+
+
+## 2026-10-20 最新集中交付（覆蓋前面票況快照）
+
+- 全案 90 張，20 完成、70 進行中；本輪結案 MAIN-14／15／21，ART-20 局部交付仍保持進行中。逐張依 `pm/open_tickets.md`，不要用舊數目判定。
+- 使用者最新補充：世界要生動、有趣且可融入，不能只到攤位拿拍貼；UI 要減負、有風格、善用版面與 Tab，避免堆裝飾和無謂捲動。最新需求已整理進 User-guide。
+- MAIN-14 普通／輔助共用可略過的首次教學，取消不記已讀；十二攤位新檔及真實重開續玩、1.25 大字夜間輸入驗收附票。
+- MAIN-21 接入可控制方向的物理海漂球、節奏潮鐘、開關水閘；不計分、不開結果面板、不改保存內容。原生發現球架搶側面互動，移位並加最近選擇回歸。新自由互動測試已加入完整 runner，舊項目及逾時保留。
+- ART-20 精簡常駐資訊、對話／入口隱藏其他 HUD、縮短動作提示，四十個環境招牌走近才顯示；三尺寸大字及 E／M／Escape、原完整 shell、對話與小遊戲 UI 通過。整票及拍貼品質仍須依實際條件驗收。
+- MAIN-15 修正只繞六成圈，補完整圈、真正夜燈與實際碼頭到入口步行 18.49 公尺、日夜完整搭乘；最終原生 0 ERROR，保存位元不變。
+- 研究與閱讀限制見 `design/runtime/entry-and-freeplay-flow.md`；未下載成功的參考圖不能當作已看過，影片抽幀不等於人工連續播放。
+- 最終完整 CI 仍需核對當前提交的實際 run；SG-1 設計缺檔沒有被繞過。ART-17／18 來源缺口沒有因世界／UI 交付而完成。

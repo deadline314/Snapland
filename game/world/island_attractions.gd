@@ -17,6 +17,7 @@ var _elapsed := 0.0
 var _saved_position := Vector3.ZERO
 var _materials: Dictionary = {}
 var _geometry_parent: Node3D
+var _ride_lights: Array[OmniLight3D] = []
 
 func configure(world: Node3D, player: CharacterBody3D, interaction_position: Vector3) -> void:
 	_world = world
@@ -98,6 +99,21 @@ func _build_coastal_boardwalk() -> void:
 		var lip := _mesh(TorusMesh.new(),float_pos+Vector3(0,0.23,0),_mat(Color("#f3e5c3")))
 		lip.scale=Vector3(0.62,0.62,0.25)
 		lip.rotation_degrees.x=90
+	# Actual light sources match the visible lamps. They join the world's
+	# existing nearest-eight / shadow-two budget, rather than adding a second
+	# lighting system or treating emissive seat decorations as illumination.
+	for position in [Vector3(-13.0,2.15,12.7),Vector3(-6.4,2.15,7.2)]:
+		_world._cylinder(position-Vector3(0,1.0,0),0.065,2.0,Color("#8a7353"))
+		_world._lantern(position)
+		var light := OmniLight3D.new()
+		light.name="CarouselLamp%d"%(_ride_lights.size()+1)
+		light.position=position
+		light.light_color=Color("#ffd49a")
+		light.omni_range=7.2
+		light.light_energy=0.0
+		_world.add_child(light)
+		_world.lamps.append(light)
+		_ride_lights.append(light)
 
 func _build_tide_carousel() -> void:
 	_ride_pivot = Node3D.new()
@@ -193,7 +209,7 @@ func _process(delta: float) -> void:
 		return
 	_elapsed = minf(RIDE_SECONDS,_elapsed+delta)
 	var progress := _elapsed/RIDE_SECONDS
-	_ride_pivot.rotation.y = 0.0 if _reduced_motion else TAU*0.6*progress
+	_ride_pivot.rotation.y = 0.0 if _reduced_motion else TAU*progress
 	if is_instance_valid(_player) and is_instance_valid(_seat_marker):
 		var seat_position := _seat_marker.global_position
 		_player.global_position = seat_position
