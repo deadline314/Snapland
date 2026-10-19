@@ -23,6 +23,7 @@ const IDENTITY_REGIONS := {
 	"ticket": Rect2i(374,667,188,343),
 	"announcer": Rect2i(675,642,207,369),
 }
+const ZONE_ICONS := ["⚓","✿","☼","✦","⚙","❀","⬡","◉","◇"]
 const CREAM = Color("#edddb8")
 const TEAL = Color("#246c6c")
 const CORAL = Color("#da705c")
@@ -1646,7 +1647,7 @@ func _build_gates() -> void:
 		_box(pos+Vector3(0,2.49,0),Vector3(2.65,0.12,0.8),Color("#f2d8a5"))
 		_zone_crown(i,pos,zone_color)
 		_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
-		_label(["⚓","✿","☼","✦","⚙","❀","⌬","◉","◇"][i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
+		_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
 		_point("gate:"+zone["id"],zone["name"],pos+Vector3(0,0,2))
 		_label("%d 張 · 準備中"%zone["threshold"],pos+Vector3(0,1.1,0.48),19)
 

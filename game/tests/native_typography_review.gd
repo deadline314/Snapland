@@ -91,6 +91,11 @@ func _capture_main_views() -> bool:
 	if pause_focus == null or not pause_focus.name.begins_with("Pause"):
 		await _abort("Pause menu did not retain a meaningful focused action")
 		return false
+	var visible_rect := get_viewport().get_visible_rect()
+	for control in main.overlay.find_children("Pause*Button","Button",true,false):
+		if control.is_visible_in_tree() and not visible_rect.grow(1).encloses(control.get_global_rect()):
+			await _abort("Pause action clipped: "+str(control.name))
+			return false
 	if not await _save_capture("pause-menu.png"): return false
 	var lines: Array = main.story.intro_lines()
 	if lines.is_empty():

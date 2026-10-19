@@ -1,0 +1,8 @@
+test_fusion_12px_distribution_includes_all_sublicenses (tests.test_font_provenance.FontProvenanceTests.test_fusion_12px_distribution_includes_all_sublicenses) ... ok
+test_manifest_schema_and_pinned_fusion_archive (tests.test_font_provenance.FontProvenanceTests.test_manifest_schema_and_pinned_fusion_archive) ... ok
+test_records_cover_every_bundled_font_and_match_bytes (tests.test_font_provenance.FontProvenanceTests.test_records_cover_every_bundled_font_and_match_bytes) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.261s
+
+OK

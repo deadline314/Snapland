@@ -1,0 +1,208 @@
+{
+  "captures": [
+    "/workspace/work/Snapland-character/work/runtime-batch-20261020/typography/rtl-readable/settings-text-category.png",
+    "/workspace/work/Snapland-character/work/runtime-batch-20261020/typography/rtl-readable/pause-menu.png",
+    "/workspace/work/Snapland-character/work/runtime-batch-20261020/typography/rtl-readable/dialogue-in-progress.png",
+    "/workspace/work/Snapland-character/work/runtime-batch-20261020/typography/rtl-readable/font-gallery-page-1.png"
+  ],
+  "dialogue_capture_freeze": "fixture process freeze after synchronous locale-state assertion",
+  "dialogue_locale_change": {
+    "callbacks_preserved": true,
+    "index_after": 0,
+    "index_before": 0,
+    "locale": "qa_rtl",
+    "reveal_after": 8.843808,
+    "reveal_before": 8.843808,
+    "visible_characters_after": 5,
+    "visible_characters_before": 5
+  },
+  "english_coverage": "partial; missing entries use source/zh_TW fallback",
+  "fixture": "native typography and locale presentation",
+  "font_style": "readable",
+  "gallery_pages": 1,
+  "labels": [
+    {
+      "autowrap": 3,
+      "clip_contents": false,
+      "fallback_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "font_name": "Noto Sans CJK TC",
+      "font_path": "",
+      "line_count": 1,
+      "locale": "zh_TW",
+      "paragraph_count": 1,
+      "primary_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "rtl_direction": false,
+      "text": "海風裡的島嶼，把每張相遇留成紀念。",
+      "visible_line_count": 1
+    },
+    {
+      "autowrap": 3,
+      "clip_contents": false,
+      "fallback_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "font_name": "Noto Sans CJK TC",
+      "font_path": "",
+      "line_count": 1,
+      "locale": "en",
+      "paragraph_count": 1,
+      "primary_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "rtl_direction": false,
+      "text": "A keepsake remembers every small island moment.",
+      "visible_line_count": 1
+    },
+    {
+      "autowrap": 3,
+      "clip_contents": false,
+      "fallback_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "font_name": "Noto Sans CJK TC",
+      "font_path": "",
+      "line_count": 1,
+      "locale": "ja",
+      "paragraph_count": 1,
+      "primary_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "rtl_direction": false,
+      "text": "島の風と小さな出会いを、思い出に残そう。",
+      "visible_line_count": 1
+    },
+    {
+      "autowrap": 3,
+      "clip_contents": false,
+      "fallback_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "font_name": "Noto Sans CJK TC",
+      "font_path": "",
+      "line_count": 1,
+      "locale": "ko",
+      "paragraph_count": 1,
+      "primary_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "rtl_direction": false,
+      "text": "섬의 바람과 작은 만남을 추억으로 남겨요.",
+      "visible_line_count": 1
+    },
+    {
+      "autowrap": 3,
+      "clip_contents": false,
+      "fallback_glyphs": {
+        "ا": false,
+        "ة": false,
+        "ج": false,
+        "ر": false,
+        "ز": false,
+        "ل": false,
+        "ي": false
+      },
+      "font_name": "Noto Sans Arabic",
+      "font_path": "",
+      "line_count": 1,
+      "locale": "qa_rtl",
+      "paragraph_count": 1,
+      "primary_glyphs": {
+        "ا": true,
+        "ة": true,
+        "ج": true,
+        "ر": true,
+        "ز": true,
+        "ل": true,
+        "ي": true
+      },
+      "rtl_direction": true,
+      "text": "الجزيرة تحفظ كل لحظة جميلة من رحلتك.",
+      "visible_line_count": 1
+    },
+    {
+      "autowrap": 3,
+      "clip_contents": false,
+      "fallback_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "font_name": "Noto Sans CJK TC",
+      "font_path": "",
+      "line_count": 1,
+      "locale": "en-long",
+      "paragraph_count": 1,
+      "primary_glyphs": {
+        "A": true,
+        "ا": true,
+        "ل": true,
+        "あ": true,
+        "島": true,
+        "한": true
+      },
+      "rtl_direction": false,
+      "text": "Welcome, 小旅人! Keep every little memory safe while you explore the long winding paths around the island.",
+      "visible_line_count": 1
+    }
+  ],
+  "locale": "qa_rtl",
+  "qa_locale": true,
+  "setting_controls": {
+    "font_style_items": 2,
+    "locale_items": 1,
+    "qa_locale_unreleased": true,
+    "selected_font_style": "readable",
+    "selected_locale_option": "zh_TW"
+  },
+  "settings_category": "text",
+  "settings_focus": "SettingsTab_text",
+  "translation_qa_only": true,
+  "ui_scale": 1.0
+}

@@ -1,0 +1,11 @@
+{
+  "scope": "non-ASCII characters in current production game GDScript/JSON, including source comments; excludes tests, formatting controls and combining marks; static glyph coverage only",
+  "files": 75,
+  "characters": 1025,
+  "missing": [
+    "⌁",
+    "⌂",
+    "⌬"
+  ],
+  "fonts_verified_by": "tests.test_font_provenance"
+}

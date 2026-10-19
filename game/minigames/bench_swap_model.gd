@@ -269,5 +269,5 @@ func _rule_text(rules: Array) -> String:
 		match str(rule.kind):
 			"together": labels.append("● 海星與貝殼並坐")
 			"apart": labels.append("◇ 海星與螃蟹至少隔一席")
-			"seat": labels.append("⌂ %s靠窗" % GUESTS[int(rule.guest)] if int(rule.seat) == 5 else "№ %s坐%d號" % [GUESTS[int(rule.guest)], int(rule.seat) + 1])
+			"seat": labels.append("▣ %s靠窗" % GUESTS[int(rule.guest)] if int(rule.seat) == 5 else "№ %s坐%d號" % [GUESTS[int(rule.guest)], int(rule.seat) + 1])
 	return "　".join(labels)

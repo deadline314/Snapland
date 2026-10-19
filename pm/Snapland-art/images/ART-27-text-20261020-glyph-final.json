@@ -1,0 +1,7 @@
+{
+  "scope": "non-ASCII in production GDScript/JSON including comments; excludes tests and Unicode format/combining/control characters; not all Unicode coverage",
+  "files": 75,
+  "characters": 1025,
+  "missing": [],
+  "runtime_profile_check": "40 actual Godot typography checks, including symbols in all 5 locales x 2 styles"
+}

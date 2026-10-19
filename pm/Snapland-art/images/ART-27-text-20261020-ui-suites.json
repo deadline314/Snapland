@@ -1,0 +1,20 @@
+[
+  {
+    "label": "pixel UI shell tests",
+    "seconds": 60.67,
+    "exit": 0,
+    "error": null,
+    "pass_lines": [
+      "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920"
+    ]
+  },
+  {
+    "label": "pixel UI customization tests",
+    "seconds": 6.32,
+    "exit": 0,
+    "error": null,
+    "pass_lines": [
+      "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls"
+    ]
+  }
+]

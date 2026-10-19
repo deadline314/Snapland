@@ -1,0 +1,23 @@
+{
+  "scope": "typography/localization technical fixtures, not full-game translations or human playtest",
+  "renderer": "Godot 4.7.2 Compatibility / llvmpipe",
+  "native_cases": "six locale/style cases across 800x450,1280x720,1920x1080, plus targeted final RTL compact/standard rereview",
+  "viewed_captures": [
+    "zh-pixel/settings-text-category.png",
+    "zh-readable/pause-menu.png",
+    "en-pixel/font-gallery-page-1.png",
+    "en-readable/font-gallery-page-2.png",
+    "rtl-readable/font-gallery-page-1.png",
+    "final RTL 1280 pause",
+    "final RTL 800 pause",
+    "production symbol gallery"
+  ],
+  "font_checks": 40,
+  "bench_model_checks": 49,
+  "bench_view_checks": 80,
+  "static_production_files": 75,
+  "static_non_ascii_characters": 1025,
+  "static_missing_bundled_characters": 0,
+  "warnings": "QA packs intentionally incomplete and invalid-pack tests emit explicit fallback warnings; final accepted runs have zero engine ERROR",
+  "rejected": "Initial Unicode union missed three real source symbols; runtime profile test also found missing anchor/gear in pixel RTL. Initial tall RTL pause cropped footer; compact four-column content also needed secondary status removed. Rejected captures and logs retained."
+}

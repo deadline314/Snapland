@@ -141,6 +141,7 @@ func _run() -> void:
 	for setting in ["locale", "font_style"]:
 		var row: Node = main.overlay.find_child("Setting_" + setting, true, false)
 		_check((row.get_child(0) as Label).text == Localization.text("settings." + setting), "English-created settings restores Chinese row: " + setting)
+	await _check_tall_rtl_pause()
 	var broken_base_path := "user://localization-broken-base.json"
 	var broken_base_file := FileAccess.open(broken_base_path, FileAccess.WRITE)
 	broken_base_file.store_string(JSON.stringify({"schema_version": 1, "locale": "zh_TW", "direction": "ltr", "messages": {"hud.coins": ["bad"]}}))
@@ -166,3 +167,28 @@ func _on_dialogue_done() -> void:
 func _check(condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)
+
+func _check_tall_rtl_pause() -> void:
+	main._close()
+	Progress.settings["ui_scale"]=1.25
+	Progress.settings["font_style"]="pixel"
+	Localization.set_locale("qa_rtl",true)
+	main._refresh()
+	for dimensions in [Vector2i(1280,720),Vector2i(800,450)]:
+		get_tree().root.size=dimensions
+		main._show_pause()
+		for frame in 10: await get_tree().process_frame
+		var viewport_rect: Rect2=main.get_viewport().get_visible_rect()
+		var buttons: Array[Control]=[]
+		for button in main.overlay.find_children("Pause*Button","Button",true,false):
+			if not button.is_visible_in_tree(): continue
+			var rectangle: Rect2=button.get_global_rect()
+			_check(viewport_rect.grow(1).encloses(rectangle),"tall RTL pause keeps %s fully visible at %s: %s in %s" % [button.name,dimensions,rectangle,viewport_rect])
+			for other in buttons:
+				_check(not rectangle.intersects(other.get_global_rect()),"tall RTL pause actions do not overlap at %s" % dimensions)
+			buttons.append(button)
+		_check(buttons.size()>=11,"tall RTL pause retains all nine destinations plus resume and quit")
+		main._close()
+	Localization.set_locale("zh_TW")
+	Progress.settings["ui_scale"]=1.0
+	get_tree().root.size=Vector2i(1280,720)

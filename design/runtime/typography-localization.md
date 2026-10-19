@@ -42,3 +42,15 @@
 原生回歸確認 [Godot Font 實作](https://github.com/godotengine/godot/blob/4.7/scene/resources/font.cpp) 會把所有後備的最大上升／下降量納入行高，即使該行沒有使用後備字形。24px 繁中／拉丁主字體原生行高為 32，加入所有後備後變成 51，曾擠出固定介面。以 [FontFile 的 raster cache 度量介面](https://docs.godotengine.org/en/4.7/classes/class_fontfile.html) 約束每個 locale profile 的後備行距，保留字形、字寬與原始檔；阿拉伯主字體仍使用原生 51 行高。覆蓋有界的 1–128px 字級，繪圖只讀已準備資源。
 
 換字體後同時重查真正完整句子的分行：成就卡依可用高度分頁，試衣鏡刪除重複的即時預覽標題；不靠縮小文字或裁切條件句塞入。按鈕立體邊緣留在自己的繪製順序內，後開的對話與遮罩可正確覆蓋。
+
+## 2026-10-20 全字形與高行距回歸
+
+重新盤點 75 個正式程式／JSON（排除測試及 Unicode 格式／組合字控制），共 1025 個非 ASCII 字符。初次查出三個隨附字體沒有的符號：長椅訪客標記、靠窗規則及園區徽記；改用現有合法字型中的波紋、窗格及六角形，玩法與身份識別不變，最終字集聯集 0 缺字。這不是全 Unicode 支援。
+
+字集聯集仍不足以證明每個 locale profile：實際 Godot 回歸另外抓到 pixel RTL 缺少錨與齒輪。該 profile 現在加入已攜帶的 Fusion Latin 後備；不依賴作業系統字型。原 30 項字型斷言保留，另以正式訪客標記、靠窗規則及世界徽記在五個語系 × 兩種風格驗證，共 40 項；完成契約跟隨新增計數，沒有降低字級或篡改原行高度量。
+
+已重讀 [Godot Font](https://docs.godotengine.org/en/stable/classes/class_font.html) 的覆蓋與行高，以及 [Using Fonts](https://docs.godotengine.org/en/stable/tutorials/ui/gui_using_fonts.html) 的後備、授權及繪製尺寸；沿用上文八方研究與原始 OFL 字型。實際符號原生圖另外核對十種 profile，包含 QA RTL。
+
+原生審閱另發現高行距 RTL 在 1.25 文字下把暫停操作擠出底部。維持主要文字、九個入口、繼續與離開按鈕，將兩個用途群組內部依實際行高重排；窄視窗優先顯示操作，收起重複的側邊狀態與保存說明。中文原排列保留。1280×720 與 800×450 的大字 RTL 實際原生重驗通過；新增控制項必須完整在 viewport 內的反例與不重疊檢查。原中文／預設三尺寸的幾何、Tab、滑鼠返回及設定回歸仍通過。
+
+六組語系／字體原生 fixture 含三種尺寸，另重驗最終 RTL 標準／窄視窗。查看的具體畫面及未查看範圍見 ART-27 本輪 JSON；不把生成全組圖片稱全部人工看過。英文與 RTL 依舊是未發布 QA，缺譯文明確回繁中；本輪沒有完整英／阿翻譯、真人試玩或音樂驗收。

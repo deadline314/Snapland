@@ -4,6 +4,9 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const ParkWorld = preload("res://game/world/park_world.gd")
 
+const BenchView = preload("res://game/minigames/bench_swap_view.gd")
+const BenchModel = preload("res://game/minigames/bench_swap_model.gd")
+
 var checks := 0
 var failures := 0
 
@@ -81,6 +84,7 @@ func _ready() -> void:
 	_expect(marker.font == refreshed_font and child_marker.font == refreshed_font, "world refresh updates nested Label3D fonts")
 	world.refresh_label_fonts(refreshed_font)
 	_expect(world._last_label_font == refreshed_font, "repeating the same world font refresh is a no-op")
+	_check_production_marks()
 	container.queue_free()
 	world.free()
 	_set_locale(previous_locale)
@@ -97,3 +101,18 @@ func _expect(condition: bool, message: String) -> void:
 func _set_locale(locale: String) -> void:
 	TranslationServer.set_locale(locale)
 	Paper.theme()
+
+func _check_production_marks() -> void:
+	for style in ["pixel","readable"]:
+		for locale in ["zh_TW","en","ja","ko","qa_rtl"]:
+			var font: Font = FontProfiles.font_for_locale(locale,style)
+			var marks: Array = BenchView.GUEST_MARKS.duplicate()
+			marks.append_array(ParkWorld.ZONE_ICONS)
+			var window_rule := BenchModel.new()._rule_text([{"kind":"seat","guest":0,"seat":5}])
+			marks.append(window_rule)
+			var missing: Array[String] = []
+			for mark in marks:
+				for index in str(mark).length():
+					var code := str(mark).unicode_at(index)
+					if code>32 and not font.has_char(code): missing.append(String.chr(code))
+			_expect(missing.is_empty(), "actual guest marks, window rule and district icons are bundled for %s/%s: %s" % [locale,style,str(missing)])

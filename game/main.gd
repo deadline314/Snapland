@@ -944,13 +944,20 @@ func _pause_action_column(parent: GridContainer,title: String,motif: String) -> 
 	heading_label.custom_minimum_size.y=22
 	heading.add_child(heading_label)
 	Paper.divider(column,Paper.FRAME)
+	var grid := GridContainer.new()
+	grid.name="PauseActionGrid"
+	grid.columns=1
+	grid.add_theme_constant_override("h_separation",8)
+	grid.add_theme_constant_override("v_separation",3)
+	column.add_child(grid)
 	return column
 
 func _pause_action(parent: VBoxContainer,label: String,callback: Callable,node_name: String,motif: String) -> Button:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation",8)
 	row.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	parent.add_child(row)
+	var grid := parent.get_node("PauseActionGrid") as GridContainer
+	grid.add_child(row)
 	row.add_child(Paper.icon(motif,20,Paper.TEAL))
 	var button := Paper.button(label,callback,row)
 	button.name=node_name
@@ -1807,6 +1814,7 @@ func _adapt_open_menu() -> void:
 	Paper.adapt_menu(overlay,scale_factor)
 	var viewport_size := get_viewport().get_visible_rect().size
 	var compact := viewport_size.y*scale_factor<620.0
+	var tall_text := Paper.font().get_height(ceili(20.0*Paper.text_scale()/scale_factor))*scale_factor>44.0
 	var header := overlay.find_child("AdaptiveMenuHeader",true,false) as Control
 	var footer := overlay.find_child("AdaptiveMenuFooter",true,false) as Control
 	if header!=null: header.custom_minimum_size.y=(40.0 if compact else 56.0)/scale_factor
@@ -1827,11 +1835,15 @@ func _adapt_open_menu() -> void:
 	var pause_actions := overlay.find_child("PauseActions",true,false) as GridContainer
 	if pause_actions!=null:
 		pause_actions.columns=2
+		for grid in pause_actions.find_children("PauseActionGrid","GridContainer",true,false):
+			grid.columns=2 if tall_text else 1
 		for button in pause_actions.find_children("*","Button",true,false):
 			button.custom_minimum_size.y=(44.0 if compact else 64.0)/scale_factor
+	var pause_status := overlay.find_child("PauseIslandStatus",true,false) as Control
+	if pause_status!=null: pause_status.visible=not (compact and tall_text)
 	var portrait := overlay.find_child("PausePlayerPortrait",true,false) as TextureRect
 	if portrait!=null:
-		var portrait_height := 82.0 if compact else 150.0
+		var portrait_height := 82.0 if compact or tall_text else 150.0
 		portrait.custom_minimum_size=Vector2(portrait_height*0.82,portrait_height)
 	var pause_heading := overlay.find_child("PauseIslandHeading",true,false) as Label
 	if pause_heading!=null and compact:
@@ -1843,7 +1855,9 @@ func _adapt_open_menu() -> void:
 	if pause_phase!=null and compact:
 		pause_phase.add_theme_font_size_override("font_size",ceili(14.0*Paper.text_scale()/scale_factor))
 	var pause_collection := overlay.find_child("PauseCollectionStatus",true,false) as Control
-	if pause_collection!=null: pause_collection.visible=not compact
+	if pause_collection!=null: pause_collection.visible=not compact and not tall_text
+	var pause_saved := overlay.find_child("PauseSavedStatus",true,false) as Control
+	if pause_saved!=null: pause_saved.visible=not (compact and tall_text)
 	var chart := overlay.find_child("IslandChartCanvas",true,false)
 	if chart!=null and chart.get_parent().get_parent().has_method("_layout_map_buttons"):
 		chart.get_parent().get_parent().call_deferred("_layout_map_buttons")

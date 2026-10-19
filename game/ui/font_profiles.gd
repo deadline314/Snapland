@@ -55,6 +55,8 @@ static func _font_for_key(normalized_locale: String, style: String) -> Font:
 	var fallback_paths: Array[String] = []
 	if style == "pixel":
 		fallback_paths = [CJK_PATH, ARABIC_PATH, SYMBOLS_PATH]
+		if normalized_locale == "qa_rtl":
+			fallback_paths.append(str(PIXEL_PATHS["en"]))
 	else:
 		fallback_paths = [str(PIXEL_PATHS["en"]) if normalized_locale == "qa_rtl" else regional_path, CJK_PATH if normalized_locale == "qa_rtl" else ARABIC_PATH, SYMBOLS_PATH]
 	var profile_fallbacks: Array[Font] = []

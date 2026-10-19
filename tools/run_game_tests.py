@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
-    "pixel typography tests": "PASS: 30 pixel font checks, 0 failures",
+    "pixel typography tests": "PASS: 40 pixel font checks, 0 failures",
     "localization framework tests": "PASS: locale packs, fallback, preferences and live UI state",
     "pixel UI shell tests": "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920",
     "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",

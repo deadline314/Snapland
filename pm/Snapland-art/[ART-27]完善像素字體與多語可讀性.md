@@ -1,6 +1,6 @@
 # [ART-27] 完善像素字體與多語可讀性
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -68,10 +68,28 @@
 - [Fusion](images/ART-27-reference-fusion.png)、[Cubic 11](images/ART-27-reference-cubic.png)、[Galmuri](images/ART-27-reference-galmuri.png)、[Ark Pixel](images/ART-27-reference-ark.png)
 - [Unifont](images/ART-27-reference-unifont.png)、[Godot 國際化](images/ART-27-reference-godot-i18n.png)、[SIL OFL](images/ART-27-reference-ofl.png)
 
-### 票況與待處理
+### 歷史交付狀態
 
-本票局部驗收已通過；交付仍保留在島嶼工作分支。角色整組動畫與配樂完整試聽仍有既有票待驗，沒有把這次文字驗收寫成整座島已完成，也沒有合併尚未整組驗收的分支，票維持進行中。
+當時本票局部驗收已通過；交付仍保留在島嶼工作分支。角色整組動畫與配樂完整試聽仍有既有票待驗，沒有把這次文字驗收寫成整座島已完成，也沒有合併尚未整組驗收的分支，票維持進行中。
 
 ### 遠端交付
 
 `feature/island-experience`；[本次來源提交](https://github.com/deadline314/Snapland/commit/82a6f386637b883fe655ac64bd7618f82e012360)。正式存檔與備份雜湊與本輪開始相同。
+
+# Commit-2：補齊漏字符號與高行距選單
+
+本輪重新檢查正式內容，找出三個未隨遊戲攜帶的符號，以及 RTL 像素字體後備遺漏的錨與齒輪。現在訪客、靠窗規則與園區標記使用已具備的可辨符號；各種語系／文字風格使用隨附字體，不依賴玩家的系統字型。
+
+原生畫面還抓到 1.25 大字 RTL 的暫停按鈕被擠出視窗；修正群組排列與次要狀態空間後，1280×720／800×450 的全部主要入口、繼續與離開均完整可見且不重疊。原中文三尺寸的幾何、Tab 與滑鼠返回保持通過。
+
+原 30 項字型檢查加十組正式符號 profile，共 40 項通過；長椅規則／畫面 49／80 項、語系保存／損毀資料回退／即時狀態與新增雙尺寸高行距條件通過。字型來源／授權三項 Python 檢查通過，75 份正式文字來源的 1025 個非 ASCII 字符由隨附字型覆蓋，0 缺字；不代表全部 Unicode。最終原生 QA 與相關局部執行 exit 0、0 ERROR；故意缺譯文／損毀語系使用明確 WARNING。
+
+既有 99 張主要介面證據保留，本輪另有六組語系／字體 fixture、最終 RTL 雙尺寸與正式符號圖，實際檢視的具體清單見[本輪驗證](images/ART-27-text-20261020-verification.json)。本票文字與字型條件已完成並整合；角色、配樂與全遊戲品質依原票接續，未發布語系也不當成完整翻譯。
+
+[研究與流程](../../design/runtime/typography-localization.md) · [40 項字型紀錄](images/ART-27-text-20261020-40-font-checks.log) · [受影響套件](images/ART-27-text-20261020-glyph-suites.json) · [三尺寸原介面回歸](images/ART-27-text-20261020-ui-suites.json)。
+
+![十種 profile 的正式符號](images/ART-27-text-20261020-production-marks.png)
+![修正後標準 RTL 大字暫停](images/ART-27-text-20261020-rtl-pixel-pause-menu.png)
+![修正後窄視窗 RTL 大字暫停](images/ART-27-text-20261020-rtl-compact-pause-menu.png)
+
+[保留的拒收裁切畫面](images/ART-27-text-20261020-rejected-rtl-pause.png)。
