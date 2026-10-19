@@ -103,6 +103,9 @@ class MapSurface extends Control:
 					draw_rect(Rect2(center+Vector2(-14+pixel*8,-17)*minf(sx,sy),Vector2(4*minf(sx,sy),4*minf(sx,sy))),Color("#6f966f"))
 				draw_rect(Rect2(center+Vector2(-2,-9)*minf(sx,sy),Vector2(4*minf(sx,sy),10*minf(sx,sy))),Color("#9b7148"))
 				draw_rect(Rect2(center+Vector2(-island_radius,-island_radius),Vector2(island_radius*2,island_radius*2)),Color("#a68d64"),false,2.0)
+		# Optional coastal loop: scenic stops, not additional minigame rewards.
+		var coastal := _scaled_points([Vector2(82,274),Vector2(33,232),Vector2(31,143),Vector2(68,65),Vector2(214,47),Vector2(373,58),Vector2(449,112),Vector2(442,229),Vector2(351,295),Vector2(159,308),Vector2(82,274)],sx,sy)
+		draw_polyline(coastal,Color("#4c8b81"),2.5,false)
 		# Piers and a north mark anchor the island's orientation.
 		draw_colored_polygon(_scaled_points(_pixel_steps([Vector2(56,279),Vector2(84,282),Vector2(67,322),Vector2(41,315)],4.0),sx,sy),Color("#8c694a"))
 		for plank in range(4):
@@ -240,7 +243,7 @@ func _ready() -> void:
 	legend.name="IslandMapLegend"
 	legend.add_theme_constant_override("separation",12)
 	add_child(legend)
-	legend.add_child(Paper.label("珊瑚路線：迎賓大道　·　右側九島：其他園區入口（準備中）",16,Paper.INK))
+	legend.add_child(Paper.label("珊瑚線：迎賓大道　·　青綠線：海岸環線　·　右側九島準備中",16,Paper.INK))
 	if not _zones.is_empty():
 		_canvas.queue_redraw()
 

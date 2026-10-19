@@ -1,0 +1,38 @@
+[
+  {
+    "label": "island layout tests",
+    "seconds": 5.61,
+    "error": null,
+    "exit": 0,
+    "pass_lines": [
+      "PASS: island layout contracts"
+    ]
+  },
+  {
+    "label": "coast-loop",
+    "seconds": 18.24,
+    "error": null,
+    "exit": 0,
+    "pass_lines": [
+      "PASS: coastal full physics loop"
+    ]
+  },
+  {
+    "label": "daylight lighting tests",
+    "seconds": 4.29,
+    "error": null,
+    "exit": 0,
+    "pass_lines": [
+      "PASS: daylight lighting runtime checks"
+    ]
+  },
+  {
+    "label": "building occlusion tests",
+    "seconds": 3.82,
+    "error": null,
+    "exit": 0,
+    "pass_lines": [
+      "PASS: occlusion controller runtime checks"
+    ]
+  }
+]

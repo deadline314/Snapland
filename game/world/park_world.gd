@@ -2,6 +2,7 @@ extends Node3D
 ## Original modular island scenery. All interactions remain data driven.
 signal interaction_requested(id: String, label: String)
 signal area_changed(label: String)
+const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const WATER = preload("res://game/world/water.gdshader")
 const STONE = preload("res://game/world/stone.gdshader")
 const WOOD = preload("res://game/world/wood.gdshader")
@@ -110,6 +111,7 @@ var active_time_phase := TimeOfDayScript.DEFAULT_PHASE
 var contact_shadow_material: StandardMaterial3D
 var contact_shadows: Array[Dictionary] = []
 var actor_shadow_proxies: Array[Dictionary] = []
+var coastal_rotors: Array[Node3D] = []
 var island_attractions: Node
 
 func _ready() -> void:
@@ -141,6 +143,7 @@ func _ready() -> void:
 	_build_plaza()
 	_build_avenue()
 	_build_gates()
+	CoastalCircuit.build(self)
 	_build_player()
 	island_attractions = IslandAttractionsScript.new()
 	island_attractions.name = "IslandAttractions"
@@ -362,7 +365,10 @@ static func _ground_surface_y(world_position: Vector3) -> float:
 		return 0.18
 	if absf(world_position.x) <= 4.5 and world_position.z >= -47.0 and world_position.z <= 17.0:
 		return 0.18
-	return 0.055
+	return CoastalCircuit.ground_y(world_position)
+
+func coast_description(id: String) -> Dictionary:
+	return CoastalCircuit.description(id)
 
 func _register_sprite_ground_anchor(sprite: Sprite3D, anchor: Node3D, parent: Node3D, ground_y: float, feet_row: float, canvas_height: float) -> void:
 	# Preserve the bottom pixel's entire area, including the one-pixel variation
@@ -697,10 +703,10 @@ func _build_land() -> void:
 	var sea_mesh := PlaneMesh.new()
 	sea_mesh.size = Vector2(240,240)
 	_mesh(sea_mesh,Vector3(0,-0.42,0),sea_material)
-	_box(Vector3(0,-0.75,-14),Vector3(41,1.4,67),Color("#b89b70"))
+	_box(CoastalCircuit.LAND_CENTER+Vector3(0,-0.75,0),CoastalCircuit.LAND_SIZE,Color("#b89b70"))
 	var grass_material := ShaderMaterial.new()
 	grass_material.shader=GRASS
-	_mesh(_island_lawn_mesh(),Vector3(0,0.055,-14),grass_material)
+	_mesh(_island_lawn_mesh(),CoastalCircuit.LAND_CENTER+Vector3(0,0.055,0),grass_material)
 	# A larger, quieter tile scale keeps the avenue legible as a route instead of a single loud cobblestone stripe.
 	var stone_material := _coastal_surface(4,3.0,Color("#ddd8c8"))
 	var path_mesh := BoxMesh.new()
@@ -776,7 +782,7 @@ func _island_lawn_mesh() -> ArrayMesh:
 		var angle := TAU*float(i)/SEGMENTS
 		var dx := cos(angle)
 		var dz := sin(angle)
-		var extent := minf(20.0/maxf(absf(dx),0.0001),33.0/maxf(absf(dz),0.0001))
+		var extent := minf(36.0/maxf(absf(dx),0.0001),48.0/maxf(absf(dz),0.0001))
 		var ragged := 1.0 + sin(angle*7.0+0.4)*0.022 + sin(angle*13.0-0.8)*0.013
 		vertices.append(Vector3(dx*extent*ragged,0,dz*extent*ragged))
 	for i in range(SEGMENTS):
@@ -795,7 +801,7 @@ func _island_lawn_mesh() -> ArrayMesh:
 
 func _build_shoreline() -> void:
 	# Layered cut-paper shore ledges and foam stay outside the playable lawn.
-	var shore_clusters := [-42.0,-27.0,-10.0,7.0]
+	var shore_clusters := [-69.0,-43.0,-17.0,7.0]
 	for side: float in [-1.0, 1.0]:
 		for cluster_index in range(shore_clusters.size()):
 			var center_z: float = shore_clusters[cluster_index]
@@ -803,15 +809,15 @@ func _build_shoreline() -> void:
 			for rock_index in range(rock_count):
 				var stagger := float(rock_index) - float(rock_count-1)*0.5
 				var z := center_z + stagger*1.08 + sin(float(cluster_index*7+rock_index)*1.73)*0.24
-				var x := side*(20.0 + cos(float(cluster_index*3+rock_index)*1.31)*0.52 + stagger*0.22)
+				var x := side*(35.5 + cos(float(cluster_index*3+rock_index)*1.31)*0.52 + stagger*0.22)
 				_add_shore_rock(Vector3(x,-0.12,z),cluster_index*5+rock_index)
 			if cluster_index % 2 == 0:
-				var foam := _box(Vector3(side*20.28,-0.20,center_z+0.24),Vector3(0.12,0.035,0.86),Color("#d2e5d8"))
+				var foam := _box(Vector3(side*35.78,-0.20,center_z+0.24),Vector3(0.12,0.035,0.86),Color("#d2e5d8"))
 				foam.rotation.y = side * 0.12
 			if cluster_index == 1 or cluster_index == 3:
-				_sea_grass(Vector3(side*19.2,0,center_z+0.45),cluster_index)
+				_sea_grass(Vector3(side*34.5,0,center_z+0.45),cluster_index)
 	for cluster_index in range(4):
-		var center_x := -15.0 + cluster_index*10.0
+		var center_x := -27.0 + cluster_index*18.0
 		for rock_index in range(2):
 			var stagger := float(rock_index)*0.9-0.45
 			var x := center_x + stagger + sin(float(cluster_index*5+rock_index))*0.28
@@ -2059,9 +2065,9 @@ func _build_player() -> void:
 	avatar_motion_rig=null
 	avatar_motion_available=false
 	# Ground collision covers walkable land and dock. Sea never traps the player.
-	for geometry in [Vector3(40,0.2,66),Vector3(5,0.2,13)]:
+	for geometry in [Vector3(72,0.2,96),Vector3(5,0.2,13)]:
 		var floor_body := StaticBody3D.new()
-		floor_body.position=Vector3(0,0.1,-14) if geometry.x>6 else Vector3(0,0.12,21)
+		floor_body.position=Vector3(0,0.1,-29) if geometry.x>6 else Vector3(0,0.12,21)
 		var shape := CollisionShape3D.new()
 		var box := BoxShape3D.new()
 		box.size=geometry
@@ -2155,8 +2161,8 @@ func _physics_process(delta: float) -> void:
 	var previous_position: Vector3=player.position
 	var previous_world_position: Vector3=player.global_position
 	player.move_and_slide()
-	player.position.z=clampf(player.position.z,-43.6,26.5)
-	player.position.x=clampf(player.position.x,-18.6,18.6)
+	player.position.z=clampf(player.position.z,CoastalCircuit.WALK_BOUNDS.position.y,26.5)
+	player.position.x=clampf(player.position.x,CoastalCircuit.WALK_BOUNDS.position.x,CoastalCircuit.WALK_BOUNDS.end.x)
 	# Terrain edge: prevent stepping from the land directly into water.
 	if player.position.z>18.0 and absf(player.position.x)>2.05:
 		if previous_position.z>18.0:
@@ -2206,7 +2212,7 @@ func _physics_process(delta: float) -> void:
 	if avatar_motion_available: _sync_avatar_motion_camera()
 	_update_sprite_grounding()
 	_update_npc_name_labels()
-	var area := "海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場")
+	var area := "海岸環線" if absf(player.position.x)>20.0 or player.position.z < -48.0 else ("海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場"))
 	if area!=current_area:
 		current_area=area
 		area_changed.emit(area)
@@ -2223,7 +2229,11 @@ func _physics_process(delta: float) -> void:
 		if is_instance_valid(marker): marker.visible=point.get("id","")==nearest.get("id","")
 
 func _process(delta: float) -> void:
-	if not blocked: time+=delta
+	if not blocked:
+		time+=delta
+		if not reduced_motion:
+			for rotor in coastal_rotors:
+				rotor.rotate_z(delta*0.18)
 	if is_instance_valid(player):
 		lamp_selection_elapsed += delta
 		if lamp_selection_elapsed >= LAMP_SELECTION_INTERVAL and player.global_position.distance_squared_to(lamp_selection_player_position) >= 0.04:

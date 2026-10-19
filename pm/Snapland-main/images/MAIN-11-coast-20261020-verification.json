@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "renderer": "Godot 4.7.2 Compatibility / Mesa llvmpipe",
+  "visible_land_bounds_before": [
+    41,
+    67
+  ],
+  "visible_land_bounds_after": [
+    72,
+    96
+  ],
+  "bounding_area_ratio": 2.5162,
+  "native_route_metres": 255.590820441954,
+  "native_keyboard_observations": 6,
+  "headless_full_route_with_both_return_spurs_metres": 315.500001685228,
+  "native_video": {
+    "seconds": 141.7,
+    "frames": 1417,
+    "fps": 10,
+    "rendered_size": [
+      1280,
+      720
+    ],
+    "requested_window_size": [
+      800,
+      450
+    ],
+    "note": "Movie Maker retained project render dimensions despite smaller physical window; do not label it an 800x450 movie",
+    "decoded_samples_viewed": 7,
+    "full_decode": "ffmpeg exit 0",
+    "audio": "not reviewed; shared copy contains video only"
+  },
+  "later_clearance_checks": "Final entrance paving moved 1 metre south for lateral clearance; real capsule center and +/-0.8 metre corridor checks plus final full physics loop passed. The recorded path remains within the final paving. Final native day/night/reduced-motion stills captured after adjustment.",
+  "limits": "Not human playtest, continuous human video playback, subjective music review, character-animation acceptance or target-hardware performance certification."
+}

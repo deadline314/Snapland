@@ -148,6 +148,7 @@ func _run() -> void:
 	Input.parse_input_event(right); Input.flush_buffered_events()
 	await physics_frame
 	_check(world.player.position.x>10.2 and world.player.position.y>0.43,"real physics walking climbs continuously from lawn onto lookout deck without a vertical ledge (reached x=%.2f y=%.2f after %d jog ticks)" % [world.player.position.x,world.player.position.y,climb_ticks])
+	await _check_coastal_extension(world)
 	world.queue_free()
 	await process_frame
 	_finish()
@@ -215,3 +216,64 @@ func _finish() -> void:
 		for failure in failures:
 			push_error(failure)
 		quit(1)
+
+func _check_coastal_extension(world: Node) -> void:
+	_check_coastal_clearance(world)
+	var scenic_ids := ["sail-loft","storm-bell","lighthouse","star-court","glass-garden","tide-wheel"]
+	for stop_id in scenic_ids:
+		var point: Dictionary = world._point_by_id("coast:"+stop_id)
+		_check(not point.is_empty(), "%s has a reachable discovery plaque" % stop_id)
+		if point.is_empty(): continue
+		var p: Vector3 = point.position
+		var query := PhysicsRayQueryParameters3D.create(p+Vector3.UP*6,p-Vector3.UP*2,1)
+		var hit: Dictionary = world.get_world_3d().direct_space_state.intersect_ray(query)
+		_check(not hit.is_empty() and absf((hit.get("position",Vector3.INF) as Vector3).y-0.2)<0.025, "%s has actual walkable ground under the plaque, rather than water or an overhead blocker" % stop_id)
+		_check(str(world.coast_description("coast:"+stop_id).get("text","")).length()>20, "%s has its own readable observation" % stop_id)
+	for ground_point in [Vector3(-22,0,-27),Vector3(21,0,-38)]:
+		_check(is_equal_approx(world._ground_surface_y(ground_point),0.18), "mid-route return path keeps sprite soles on the visible paving at %s" % ground_point)
+	world.player.position=Vector3(-18.1,0.35,-27)
+	world.player.velocity=Vector3.ZERO
+	for index in 3: await physics_frame
+	Input.action_press("move_left")
+	for index in 45: await physics_frame
+	Input.action_release("move_left")
+	_check(world.player.position.x < -19.0 and world.player.is_on_floor(), "real movement crosses the old west map clamp onto the coastal connector")
+	world.player.position=Vector3(0,0.35,-43.1)
+	world.player.velocity=Vector3.ZERO
+	Input.action_press("move_up")
+	for index in 45: await physics_frame
+	Input.action_release("move_up")
+	_check(world.player.position.z < -44.0 and world.player.is_on_floor(), "real movement crosses the old north map clamp without falling or respawning")
+	world.player.position=Vector3(-27,0.35,-45)
+	world.set_time_of_day("night")
+	_check(world.lamps.any(func(lamp: OmniLight3D): return lamp.position.distance_to(world.player.position)<8 and lamp.light_energy>0), "the distant lighthouse trail has a real active night light")
+	_check(world.active_lamp_indices.size()==world.ACTIVE_LAMP_LIMIT and world.shadow_lamp_indices.size()==world.SHADOW_LAMP_LIMIT, "larger map retains the bounded active light/shadow budget")
+	var rotor: Node3D = world.get_node_or_null("CoastalWaterwheelRotor")
+	_check(rotor!=null, "waterwheel has its own assembled rotor")
+	if rotor!=null:
+		world.blocked=false
+		world.reduced_motion=false
+		var before:=rotor.rotation.z
+		world._process(0.2)
+		_check(rotor.rotation.z>before, "unpaused waterwheel turns around its axle")
+		world.reduced_motion=true
+		before=rotor.rotation.z
+		world._process(0.2)
+		_check(is_equal_approx(rotor.rotation.z,before), "reduced motion freezes the waterwheel without changing its shape")
+
+func _check_coastal_clearance(world: Node) -> void:
+	var circuit := preload("res://game/world/coastal_circuit.gd")
+	var clear := true
+	for index in range(circuit.ROUTE.size()-1):
+		var a: Vector2 = circuit.ROUTE[index]
+		var b: Vector2 = circuit.ROUTE[index+1]
+		var tangent := (b-a).normalized()
+		var normal := Vector2(-tangent.y,tangent.x)
+		for sample in range(ceili(a.distance_to(b)*2.0)):
+			for offset in [-0.8,0.0,0.8]:
+				var p := a+tangent*minf(float(sample)*0.5,a.distance_to(b))+normal*float(offset)
+				var transform := Transform3D(Basis.IDENTITY,Vector3(p.x,0.35,p.y))
+				if world.player.test_move(transform,Vector3(tangent.x,0,tangent.y)*0.2):
+					clear=false
+					_check(false,"coastal trail corridor blocked near %s offset %.1f" % [p,offset])
+	_check(clear,"actual player capsule clears the whole coastal trail with lateral walking room")

@@ -1,0 +1,6 @@
+{
+  "distance": 315.500001685228,
+  "failures": [],
+  "position": "Vector3(0.020143729, 0.12083929, 22.951664)",
+  "scope": "real CharacterBody movement via Input actions, no mid-route teleport or collision reset"
+}

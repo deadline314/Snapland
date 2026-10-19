@@ -1104,6 +1104,10 @@ func _interact(id: String, title: String) -> void:
 	elif id=="clock":
 		world.set_night(not world.night)
 		_notice("夜晚亮起來了。" if world.night else "陽光回到島上了。")
+	elif id.begins_with("coast:"):
+		var discovery: Dictionary = world.coast_description(id)
+		if not discovery.is_empty():
+			_start_dialogue([{ "speaker":str(discovery.name), "text":str(discovery.text) }],Callable())
 	elif id.begins_with("explore-"): _show_exploration(id)
 	elif id=="rift":
 		var body := _open(title,"LITTLE DEVILS","rift")
