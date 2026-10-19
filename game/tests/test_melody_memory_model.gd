@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Model = preload("res://game/minigames/melody_memory_model.gd")
+const Session = preload("res://game/minigames/session.gd")
 var checks := 0
 var failures := 0
 
@@ -10,6 +11,7 @@ func _initialize() -> void:
 	_test_wrong_note_retry_and_timing_grade()
 	_test_replay_cap_and_assist_policy()
 	_test_rapid_chord_is_ignored()
+	_test_reported_score_grades()
 	if failures == 0:
 		print("Melody memory model: %d checks passed" % checks)
 		quit(0)
@@ -47,6 +49,28 @@ func _test_clean_precise_route() -> void:
 	_expect(model.ended and model.success and model.completed_phrases == 3, "three complete phrases earn ordinary success")
 	_expect(model.devil_success and model.error_count == 0 and model.precise_notes == model.snapshot().total_notes, "only a clean precise unassisted full run earns the devil result: %s" % str(model.snapshot()))
 	_expect(model.score == model.snapshot().total_notes * 20, "score rewards every accurately timed note consistently: %d / %d" % [model.score, model.snapshot().total_notes * 20])
+
+func _test_reported_score_grades() -> void:
+	var model = Model.new()
+	model.reset()
+	_expect(_wait_active(model), "score explanation witness reaches real active input")
+	model.play_note(Model.PHRASES[0][0])
+	var precise_delta: int = model.score
+	_advance(model, float(Model.RHYTHMS[0][1]) + 0.35)
+	model.play_note(Model.PHRASES[0][1])
+	var close_delta: int = model.score - precise_delta
+	_expect(precise_delta == 20 and close_delta == 12 and model.error_count == 0, "actual precise and close note inputs retain the published scoring")
+	var session := Session.new()
+	session.mode = "melody_memory"
+	session.score = model.score
+	var summary: Dictionary = session.score_summary()
+	var numbers := RegEx.new()
+	numbers.compile("\\+(\\d+)")
+	var advertised := numbers.search_all(str(summary.rule))
+	_expect(advertised.size() == 2, "result advertises exactly the two actual scoring grades without an invented phrase bonus")
+	if advertised.size() == 2:
+		_expect(int(advertised[0].get_string(1)) == precise_delta and int(advertised[1].get_string(1)) == close_delta and int(summary.total) == model.score, "result explanation and total agree with scores earned by actual note input")
+	session.free()
 
 func _test_wrong_note_retry_and_timing_grade() -> void:
 	var model = Model.new()

@@ -603,7 +603,7 @@ func _score_rule_text() -> String:
 		"shadow_alignment": return "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。"
 		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。"
 		"bench_swap": return "每桌依完成步數得分；符合本桌全部規則為普通目標，每桌以最少交換完成且未開輔助或重排可得加碼。"
-		"melody_memory": return "每個正確音符 +25；完成每段樂句再 +100。"
+		"melody_memory": return MelodyMemoryModelScript.score_rule_text()
 	return "得分由已記錄的遊戲事件累加。"
 
 func set_time_of_day(phase_id: Variant) -> void:

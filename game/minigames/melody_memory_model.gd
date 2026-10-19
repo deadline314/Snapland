@@ -26,6 +26,8 @@ const ACCEPT_WINDOW := 0.70
 const ASSISTED_ACCEPT_WINDOW := 1.00
 const MIN_INPUT_INTERVAL := 0.12
 const PHRASE_COUNT := 3
+const PRECISE_SCORE := 20
+const CLOSE_SCORE := 12
 
 var assisted := false
 var time_phase := "noon"
@@ -131,16 +133,19 @@ func play_note(index: int) -> Dictionary:
 		_advance_input(false)
 	elif timing_error <= PRECISE_WINDOW:
 		precise_notes += 1
-		score += 20
+		score += PRECISE_SCORE
 		last_event = "音高與節奏都準確"
 		_advance_input(true)
 	else:
 		_phrase_precise = false
-		score += 12
+		score += CLOSE_SCORE
 		last_event = "音高正確，節奏接近"
 		_advance_input(false)
 	_refresh_snapshot()
 	return snapshot()
+
+static func score_rule_text() -> String:
+	return "音高與節奏準確 +%d，節奏接近 +%d；錯音或節奏超出容許範圍不加分。" % [PRECISE_SCORE, CLOSE_SCORE]
 
 func replay_phrase() -> Dictionary:
 	if ended or phase != "active" or replay_count >= REPLAY_LIMIT:
