@@ -1,6 +1,6 @@
 # Godot launch and verification entries
 
-Open the checkout containing `project.godot`, then use **Run Project / F5**. Its configured entry is `res://game/main.tscn`. `C:/Github/Snapland` is currently the design checkout; the executable candidate lives in the `island-experience` worktree.
+Open the checkout containing `project.godot`, then use **Run Project / F5**. Its configured entry is `res://game/main.tscn`. The current `main` includes this executable project. Check the selected checkout and its commit; do not infer the entrypoint from a historical worktree name.
 
 | Purpose | Engine entry |
 | --- | --- |
@@ -16,3 +16,5 @@ The validator and bounded runner are in `tools/godot_entrypoints.py`. Timeout ha
 Session-only commit snapshots use `.gd.txt`, remain outside the game content and are not engine launch targets. The session's erroneous Node-script invocation was identified and stopped; the caller of the user's separate `19-MAIN16-book.gd` alert was not established.
 
 Verification: 13 focused Python tests; all 63 registered entries accepted by preflight without running the entire suite; real engine script, Node scene, default Main smoke launch and a controlled timeout checked in isolated profiles. Native default Main startup was recorded for 180 frames at 60 FPS and its rendered frame inspected. These checks do not establish animation quality or human playtest acceptance.
+
+2026-10-20 review at `67906d9`: all 91 currently registered entries pass structural preflight. Actual Godot 4.7.2 default-project smoke run, core/save isolation, standalone time-of-day and three Node photo scenes pass in separate absolute profiles. A real owned engine times out and is reaped within the recorded bound. These current checks supplement the earlier rendered startup evidence; they do not replace it with a new visual acceptance claim.

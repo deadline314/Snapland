@@ -1,6 +1,6 @@
 # [MAIN-18] 防止驗收腳本誤啟動警告
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -57,3 +57,12 @@ Godot 專案、可直接執行的驗收入口與介面元件需要有清楚的�
 ![使用者回報的快照誤啟動警告](images/MAIN-18-user-invalid-snapshot-alert.png)
 
 分支：`feature/island-experience`；票況進行中，程式與證據提交：[0cefb0a](https://github.com/deadline314/Snapland/commit/0cefb0a)。
+
+
+# Commit — 2026-10-20 重驗入口與存檔保護並結案
+
+固定開始 SHA：`67906d9`；分支：`codex/delivery-batch-20261020`。
+
+重新核對全部五項已交付驗收，修正入口說明中「main 只有設計」的過時指引。現有 91 個正式入口全部可辨識；Godot 4.7.2 的專案主場景啟停、獨立時間測試、場景型照片測試與存檔保護實測通過，另以真實引擎觸發有界逾時並確認收束。13 項入口反例也再次通過，錯選介面元件、快照、外部路徑及混合入口均不能啟動引擎。
+
+[本輪入口與結果反例](images/MAIN-2-ci-budget-20261020-python.log) · [91 個入口及七項實際引擎檢查](images/MAIN-18-entrypoints-20261020.log) · [實際逾時收束](images/MAIN-18-timeout-20261020.log)。本輪使用各項獨立絕對存檔，不啟動玩家預設進度；既有原生啟動圖與先前 Windows 預設存檔前後雜湊保留在 Commit-1，該圖本輪重新查看，不標成新截圖或本輪 Windows 驗收。全部驗收條件已有對應證據，票況完成；任意繞過入口防護的手動引擎指令不在本票範圍。
