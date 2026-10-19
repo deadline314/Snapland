@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "scope": "eight relevant wardrobe/settings pages visually reviewed; full native script routes 33 pages, other 25 not claimed visually reviewed here; synthetic UI data, not natural game completion",
+  "engine": "4.7.2.stable.official.ed1daf0bf / Compatibility / llvmpipe",
+  "result": {
+    "exit": 0,
+    "seconds": 56.7,
+    "errors": 0,
+    "completed": true
+  },
+  "physical_window": [
+    800,
+    600
+  ],
+  "logical_viewport": [
+    1280,
+    720
+  ],
+  "content_pixels": [
+    800,
+    450
+  ],
+  "letterbox_pixels_top_bottom": 75,
+  "text_scale": 1.25,
+  "capture_method": "native X11 client-window image, including letterbox bars; never resized from the content image",
+  "images": [
+    {
+      "file": "ART-8-verify-v4-20261020-settings-audio-800x600-scale1.25.png",
+      "sha256": "a6357ffe688290b1bd5584006dcc23c57a7c7fb4be0e4c9e1b777c66d624c2bd",
+      "size": [
+        800,
+        600
+      ]
+    },
+    {
+      "file": "ART-8-verify-v4-20261020-settings-controls-800x600-scale1.25.png",
+      "sha256": "9cde5eb77b9fcb9336289d0fd396943f44b56740c6486ee1301e0ff8243008f1",
+      "size": [
+        800,
+        600
+      ]
+    },
+    {
+      "file": "ART-8-verify-v4-20261020-settings-play-800x600-scale1.25.png",
+      "sha256": "445977e7959e95d2b72552ea72705468b59f1341061dd5c12b782784efb22210",
+      "size": [
+        800,
+        600
+      ]
+    },
+    {
+      "file": "ART-8-verify-v4-20261020-time-800x600-scale1.25.png",
+      "sha256": "097b94b7ac50b7f71af008c166c7e48c96b64bcab2cd68f6ad623d0b7be18588",
+      "size": [
+        800,
+        600
+      ]
+    },
+    {
+      "file": "ART-8-verify-v4-20261020-wardrobe-appearance-800x600-scale1.25.png",
+      "sha256": "6dce4122a7f1be14146191bd18e9a33a3f094135ad773a9d963c52e977f1f504",
+      "size": [
+        800,
+        600
+      ]
+    },
+    {
+      "file": "ART-8-verify-v4-20261020-wardrobe-closet-800x600-scale1.25.png",
+      "sha256": "e441a6f4e899c86d662cc915e457d9a37e8177739553148b93f79c9178675a45",
+      "size": [
+        800,
+        600
+      ]
+    },
+    {
+      "file": "ART-8-verify-v4-20261020-wardrobe-popup-800x600-scale1.25.png",
+      "sha256": "1135d6580f4fefbf9c1096976de6dc3fa79254dbb6fb3dc0b83c3da0d2671d47",
+      "size": [
+        800,
+        600
+      ]
+    },
+    {
+      "file": "ART-8-verify-v4-20261020-wardrobe-shop-800x600-scale1.25.png",
+      "sha256": "e9357f1f6d2c2ba24a2135ca1c96edb8d6f79d9182ea8708469816af27d89b4f",
+      "size": [
+        800,
+        600
+      ]
+    }
+  ],
+  "helper_sha256": "8449f6b20eb5734c59b8776464d48cddbcb2e77eed9a6fa1af62edd7ef32f5ca"
+}

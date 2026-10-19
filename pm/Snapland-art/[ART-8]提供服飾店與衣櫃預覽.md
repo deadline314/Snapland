@@ -1,6 +1,6 @@
 # [ART-8] 提供服飾店與衣櫃預覽
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -59,3 +59,15 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 ### 程式與證據提交
 分支：feature/island-first-park。更新至最新main後的本票提交：[f2d68bb](https://github.com/deadline314/Snapland/commit/f2d68bb030ad19e766c0fb55bb484c60fc87f3da)。
+
+
+# 2026-10-20 現行介面結案
+
+免費外觀、已擁有衣物與商品分開顯示，預覽不先扣款；購買、穿戴、取消與島上同步由本輪衣櫃資料／UI回歸核對，真正新程序保存另在MAIN-6／8通過。ART-25已重驗三尺寸換裝／商店／草帽預覽。正式四款外套屬換色款，完整不同輪廓與逐姿勢分層仍由ART-18處理。
+
+本輪三尺寸為800×450、1280×720及1920×1080，文字1.25倍；最大尺寸核對實際夜間與降低動態。要求值、Window、後端、viewport縮放與PNG尺寸一致；只改後端而Window未變的反例已拒絕。舊Windows圖保留為歷史；本輪另補800×600完整實體視窗，內容800×450及上下各75px留白分別核對。現行paper與wardrobe來源最新提交82a6f38已在main；不將無法解析的舊feature連結當合入證明。
+
+[尺寸方法與官方比較](../../design/runtime/native-window-verification.md) · [導覽／焦點與14項回歸](images/ART-23-verify-20261020.json) · [分類收藏](images/ART-24-verify-20261020.json) · [換裝／設定](images/ART-25-verify-20261020.json) · [小遊戲／照片UI](images/ART-26-verify-20261020.json)。此結案限本票列明的基礎介面；ART-20實際遊園拍貼流程、ART-21各玩法畫面品質、Windows EXE與真人體驗沒有自動結案。
+
+
+本輪另實際查看800×600的八張衣櫃／設定頁，33頁原生流程exit0、0ERROR；只將這八張列為本次人工圖像檢視。[八頁總覽](images/ART-8-verify-20261020-800x600-overview.png) · [尺寸、來源及範圍](images/ART-8-verify-20261020-800x600.json)。非16:9視窗的viewport圖會排除留白，現直接擷取原生client window，PNG實際800×600；未放大內容圖冒充視窗大小。

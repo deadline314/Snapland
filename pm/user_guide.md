@@ -263,3 +263,6 @@ SG-1已補齊[128款設計候選](../design/02-minigames/catalog.md)、七方研
 
 
 保存驗收要區分同一程序重新載入與真正退出重啟。新增MAIN-6可選兩程序場景：writer退出後reader用不同PID核對完整樹與存檔位元組；全部用隔離絕對路徑，不以一個欄位或UI預覽替代。平台SDK未接入時只聲稱遊戲內成就／待同步事件保存，不能聲稱Steam已收到。見[流程與六份比較](../design/runtime/progress-restart-verification.md)。MAIN-6已依本輪證據結案，最新票況以open_tickets為準。
+
+
+非16:9尺寸另外核對內容和留白：800×600視窗可能含800×450內容，上下各75px。直接擷取完整原生client window，不放大viewport圖；PNG尺寸讀Image／檔案本身，報告另列內容尺寸。ART-8本輪八頁及33頁流程附票，舊Windows圖仍屬歷史證據。

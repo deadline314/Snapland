@@ -236,11 +236,27 @@ func _shot(label: String, ticket: int) -> bool:
 	await RenderingServer.frame_post_draw
 	var root_control: Control=main.overlay if main.overlay.visible else main.ui
 	var path := OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir()+"/ART-%d-%s-%s-%dx%d-scale%.2f.png"%[ticket,output_prefix,label,review_size.x,review_size.y,review_scale]
-	if get_viewport().get_texture().get_image().save_png(path)!=OK:
+	var capture := get_viewport().get_texture().get_image()
+	var viewport_pixels := capture.get_size()
+	var method := "viewport image; same size as physical window"
+	if viewport_pixels != get_window().size:
+		# With letterboxing the viewport excludes the bars. Capture the real
+		# client window; never resize a content image to manufacture size proof.
+		var screen := DisplayServer.screen_get_image(DisplayServer.window_get_current_screen())
+		var origin := DisplayServer.window_get_position(get_window().get_window_id()) - DisplayServer.screen_get_position(DisplayServer.window_get_current_screen())
+		var client := Rect2i(origin,get_window().size)
+		if screen==null or screen.is_empty() or not Rect2i(Vector2i.ZERO,screen.get_size()).encloses(client):
+			await _error("Cannot capture the complete physical client window on "+label)
+			return false
+		capture = screen.get_region(client)
+		method = "native screen client window including letterbox bars"
+	if capture.get_size()!=get_window().size:
+		await _error("Screenshot pixel size differs from physical window on "+label)
+		return false
+	if capture.save_png(path)!=OK:
 		await _error("Screenshot could not be saved: "+path)
 		return false
-	var image_size := get_viewport().get_texture().get_size()
-	report.captures.append({"page":label,"path":path,"frame":Engine.get_process_frames(),"rendered_size":str(image_size),"window_size":str(get_window().size),"physical_scale":Paper.physical_scale(root_control)})
+	report.captures.append({"page":label,"path":path,"frame":Engine.get_process_frames(),"rendered_size":str(capture.get_size()),"viewport_image_size":str(viewport_pixels),"screenshot_method":method,"window_size":str(get_window().size),"physical_scale":Paper.physical_scale(root_control)})
 	if label=="settings-controls" and not _settings_control_rows_fit():
 		await _error("All eighteen settings action/key labels must be readable in the actual content area")
 		return false
