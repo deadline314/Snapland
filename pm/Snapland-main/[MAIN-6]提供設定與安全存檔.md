@@ -1,6 +1,6 @@
 # [MAIN-6] 提供設定與安全存檔
 
-> 狀態：進行中（base SHA：c1b7b19）
+> 狀態：完成
 
 ## 內文
 
@@ -68,3 +68,12 @@ c1b7b19；feature/island-first-park。
 ![本票原生畫面](images/MAIN-6-settings.png)
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
+
+
+# 2026-10-20 結案核對
+
+本輪核心／衣櫃及14項共用UI回歸已通過，設定頁在三種真實視窗、1.25倍文字及實際夜間／降低動態下檢視。另以兩個真正Godot程序核對15個完整保存欄位、未完成任務、外觀／貨幣／衣櫃與離線事件，writer與reader均exit0、0ERROR，啟動後存檔位元組完全不變。原損毀／備份／安全預設與拒寫回滾反例保留。歷史未隔離存檔事故仍保留，本次沒有宣稱已找回該舊資料。
+
+原程式提交已核對為origin/main祖先，不再沿用feature尚未整合的歷史狀態。舊Windows圖與本輪Linux／llvmpipe證據分開；沒有新Windows EXE、真人試玩或聽感認證。
+
+[六份比較、驗證流程與限制](../../design/runtime/progress-restart-verification.md) · [兩程序實際結果](images/MAIN-6-restart-20261020-verification.json) · [核心回歸](../Snapland-art/images/ART-23-verify-20261020-core-runtime-tests.log) · [衣櫃回歸](../Snapland-art/images/ART-23-verify-20261020-wardrobe-runtime-tests.log) · [設定／換裝三尺寸](../Snapland-art/images/ART-25-verify-20261020.json)。全域CI後段仍有其他票的角色素材缺口，本結案不等於全案綠燈。

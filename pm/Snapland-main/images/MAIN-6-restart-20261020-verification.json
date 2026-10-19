@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "scope": "two new native processes; synthetic progress fixture; no natural game completion or Steam service call",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "writer_pid": 17735,
+  "reader_pid": 17745,
+  "results": [
+    {
+      "mode": "writer",
+      "exit": 0,
+      "errors": 0
+    },
+    {
+      "mode": "reader",
+      "exit": 0,
+      "errors": 0
+    }
+  ],
+  "sources": {
+    "game/tests/progress_restart_review.gd": "5a8bce2d3922aa63f75a503aa6290aadd9239dfe0b0e0d35936d8edc1028898a",
+    "game/tests/progress_restart_review.tscn": "dc3205ad899478e0af92f10cc3f115935b08b8911d48a5685e041d404f72b199",
+    "game/core/progress.gd": "8663d38f7e823c9fe05c9896feeb4b344b5b6241b74b27ebef6d9f377cfabb28"
+  }
+}

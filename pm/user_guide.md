@@ -260,3 +260,6 @@ SG-1已補齊[128款設計候選](../design/02-minigames/catalog.md)、七方研
 
 
 測試基準隨正式原畫更新時，先查實際來源、透明門檻與場景入口，不直接改魔術數字。製作候選要在隔離fixture明確啟用，正式世界另驗沒有候選；舊素材比例真的不合時，保留失敗再修素材。2D混合alpha與3D裁切shader門檻不同，不能全域套同一值。泡泡照片的實際角色大小須在首張snapshot之前同步，路線覆蓋另以中心旅行及三輪finished驗證。詳見MAIN-2本輪契約。
+
+
+保存驗收要區分同一程序重新載入與真正退出重啟。新增MAIN-6可選兩程序場景：writer退出後reader用不同PID核對完整樹與存檔位元組；全部用隔離絕對路徑，不以一個欄位或UI預覽替代。平台SDK未接入時只聲稱遊戲內成就／待同步事件保存，不能聲稱Steam已收到。見[流程與六份比較](../design/runtime/progress-restart-verification.md)。MAIN-6已依本輪證據結案，最新票況以open_tickets為準。
