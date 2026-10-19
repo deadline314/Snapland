@@ -1,6 +1,6 @@
 # [ST-2] 演出上島導覽與對話
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -69,3 +69,12 @@ c1b7b19；feature/island-first-park。
 ![本票原生畫面](images/ST-2-arrival.png)
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
+
+
+# 2026-10-20 現行第一版結案
+
+本輪Main整合驗到全新存檔的逐字開場、自然完成、碼頭E重播及取消後仍保留intro_seen；Main故事整合與角色對話回歸通過。MAIN-14原生新玩家從碼頭開場按Esc跳過後，仍完成十二攤位首次教學／取消／返回；同一批真正新程序接續也通過。guide對話由玩家逐段完成取得固定主線拍貼，重播／略過不永久移除該入口。ART-26另看過目前三尺寸對話；船上序章仍是未實作前接點，角色深度與滴滴聲品質留在ST-4／5。
+
+[本輪Main故事整合](../Snapland-art/images/ART-23-verify-20261020-main-story-integration-tests.log) · [故事規則](../Snapland-art/images/ART-23-verify-20261020-story-runtime-tests.log) · [當前對話介面](../Snapland-art/images/ART-26-verify-20261020.json)。既有實作與原程式f2d6b84已在main，本輪核對當前規則及證據，不把早期feature狀態當目前阻塞。舊Windows圖仍屬歷史；本輪無頭功能檢查、原生自動輸入與合成UI各按實際範圍記錄，沒有新Windows EXE、真人試玩或聽感認證。
+
+任務名稱對齊現在的角色動機與實際步驟，未減少三步／三探索／固定獎勵／保存條件。ST-4更深入的角色演出與ST-5語音聽感仍保持進行中；本結案不是全島劇情或全部角色動畫完成。
