@@ -42,7 +42,7 @@ jobs:
           python-version: '3.12'
       - name: Install 2D asset authoring test dependency
         id: authoring-dependency
-        run: python -m pip install Pillow==12.2.0
+        run: python -m pip install Pillow==12.2.0 numpy==2.3.5
       - name: Validate all design data and links
         run: python tools/verify_design.py --scope all
       - name: Test validators against invalid designs

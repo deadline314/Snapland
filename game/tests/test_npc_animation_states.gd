@@ -71,13 +71,11 @@ func _run() -> void:
 	var baseline := _actor.texture
 	var baseline_size := _actor.pixel_size
 	var no_legacy_frames: Array[Texture2D] = []
-	assert(_controller.register_actor(_actor, "ticket", no_legacy_frames, _root, {}, 0.0), "ticket registers")
 	_imp = Sprite3D.new()
 	_imp_baseline = _texture(Color.WHITE)
 	_imp.texture = _imp_baseline
 	_root.add_child(_imp)
 	var legacy_frames: Array[Texture2D] = [_texture(Color.PURPLE), _texture(Color.FUCHSIA), _texture(Color.PINK), _texture(Color.MAGENTA)]
-	assert(_controller.register_actor(_imp, "imp", legacy_frames, _root, {}, 0.0), "imp registers its legacy routine only as fallback")
 	_announcer_root = Node3D.new()
 	_announcer_root.position = Vector3(4, 0, -10)
 	_root.add_child(_announcer_root)
@@ -85,7 +83,6 @@ func _run() -> void:
 	_announcer.texture = _texture(Color.WHITE)
 	_announcer_root.add_child(_announcer)
 	_announcer_point = {"position": _announcer_root.global_position}
-	assert(_controller.register_actor(_announcer, "announcer", no_legacy_frames, _announcer_root, _announcer_point, 0.55), "announcer registers")
 	_stand = [_texture(Color.BLUE), _texture(Color.DARK_BLUE)]
 	_greet = [_texture(Color.RED), _texture(Color.ORANGE), _texture(Color.YELLOW)]
 	library.sequences["ticket/stand/front"] = _sequence(_stand, 2.0, true)
@@ -106,6 +103,11 @@ func _run() -> void:
 	library.sequences["announcer/stand/left"] = _sequence(_stand, 2.0, true)
 	library.sequences["announcer/walk/right"] = _sequence(_greet, 4.0, true)
 	library.sequences["announcer/walk/left"] = _sequence(_greet, 4.0, true)
+	# Registration validates and caches usable source sequences. Install the full
+	# immutable fixture first, just as the production library is ready at startup.
+	assert(_controller.register_actor(_actor, "ticket", no_legacy_frames, _root, {}, 0.0), "ticket registers")
+	assert(_controller.register_actor(_imp, "imp", legacy_frames, _root, {}, 0.0), "imp registers its legacy routine only as fallback")
+	assert(_controller.register_actor(_announcer, "announcer", no_legacy_frames, _announcer_root, _announcer_point, 0.55), "announcer registers")
 	_controller.finish_registration()
 	assert(_controller.request_action(_actor, "stand", "front"), "authored stand loads")
 	assert(_actor.texture == _stand[0], "stand starts on its first authored frame")
