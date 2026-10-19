@@ -1,0 +1,33 @@
+{
+  "cases": [
+    {
+      "near_signs": 1,
+      "requested": "Vector2i(800, 450)",
+      "strip_physical_height": 48.0000019073486,
+      "text_scale": 1.25,
+      "total_local_signs": 40,
+      "viewport": "Vector2(1280, 720)",
+      "window": "Vector2i(800, 450)"
+    },
+    {
+      "near_signs": 1,
+      "requested": "Vector2i(1280, 720)",
+      "strip_physical_height": 51.0,
+      "text_scale": 1.25,
+      "total_local_signs": 40,
+      "viewport": "Vector2(1280, 720)",
+      "window": "Vector2i(1280, 720)"
+    },
+    {
+      "near_signs": 1,
+      "requested": "Vector2i(1920, 1080)",
+      "strip_physical_height": 60.0,
+      "text_scale": 1.25,
+      "total_local_signs": 40,
+      "viewport": "Vector2(1280, 720)",
+      "window": "Vector2i(1920, 1080)"
+    }
+  ],
+  "failures": [],
+  "scope": "native E/M/Escape input; fixture relocation and phase selection, no free walk or full minigame quality claimed"
+}

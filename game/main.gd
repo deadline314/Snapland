@@ -230,19 +230,18 @@ func _build_ui() -> void:
 	var banner := PanelContainer.new()
 	banner.name="ParkKeepsakeBanner"
 	banner.position=Vector2(24,20)
-	banner.custom_minimum_size=Vector2(390,82)
-	banner.size=Vector2(390,82)
-	var banner_style := Paper.plaque(Color("#f7efd9"))
+	banner.custom_minimum_size=Vector2(320,48)
+	banner.size=Vector2(320,48)
+	var banner_style := StyleBoxFlat.new()
+	banner_style.bg_color=Color(0.025,0.09,0.13,0.9)
+	banner_style.border_width_left=3
+	banner_style.border_color=Paper.TEAL
 	banner_style.content_margin_left=12
 	banner_style.content_margin_right=12
 	banner_style.content_margin_top=8
 	banner_style.content_margin_bottom=8
 	banner.add_theme_stylebox_override("panel",banner_style)
 	hud.add_child(banner)
-	var banner_frame := Paper.PixelFrame.new()
-	banner_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	banner_frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	banner.add_child(banner_frame)
 	var banner_box := VBoxContainer.new()
 	banner_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	banner_box.add_theme_constant_override("separation",4)
@@ -251,14 +250,16 @@ func _build_ui() -> void:
 	island_row.add_theme_constant_override("separation",8)
 	banner_box.add_child(island_row)
 	island_row.add_child(Paper.icon("pin",20,Paper.CORAL))
-	area_label=Paper.label("海風碼頭",24)
+	area_label=Paper.label("海風碼頭",20)
 	area_label.autowrap_mode=TextServer.AUTOWRAP_OFF
 	island_row.add_child(area_label)
-	phase_label=Paper.label("",18,Paper.TEAL)
+	phase_label=Paper.label("",16,Paper.TEAL)
 	phase_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
 	phase_label.custom_minimum_size.x=98
 	island_row.add_child(phase_label)
 	var keepsakes := HBoxContainer.new()
+	keepsakes.name="ParkCollectionDetails"
+	keepsakes.visible=false
 	keepsakes.add_theme_constant_override("separation",6)
 	banner_box.add_child(keepsakes)
 	var album_mark := Paper.icon("album",18,Paper.TEAL)
@@ -294,7 +295,7 @@ func _build_ui() -> void:
 	ticket_button.offset_bottom=72.0
 	ticket_button.custom_minimum_size=Vector2(198,48)
 	quest_label=Paper.label("",18,Color("#fffaf0"))
-	quest_label.position=Vector2(28,108)
+	quest_label.position=Vector2(28,80)
 	quest_label.size=Vector2(376,48)
 	quest_label.add_theme_color_override("font_shadow_color",Color("#203e47"))
 	quest_label.add_theme_constant_override("shadow_offset_x",1)
@@ -312,17 +313,13 @@ func _build_ui() -> void:
 	context_bar.offset_top=-62
 	context_bar.offset_bottom=-18
 	context_bar.custom_minimum_size=Vector2(400,44)
-	var context_style := Paper.plaque(Color("#f7efd9"))
+	var context_style := StyleBoxEmpty.new()
 	context_style.content_margin_left=8
 	context_style.content_margin_right=8
 	context_style.content_margin_top=0
 	context_style.content_margin_bottom=0
 	context_bar.add_theme_stylebox_override("panel",context_style)
 	hud.add_child(context_bar)
-	var context_frame := Paper.PixelFrame.new()
-	context_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	context_frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	context_bar.add_child(context_frame)
 	var row := HBoxContainer.new()
 	context_bar.add_child(row)
 	context_action=Paper.button("",_interact_nearest,row)
@@ -572,7 +569,7 @@ func _refresh() -> void:
 		var step := int(Progress.quests.get(id,0))
 		if step>0 and step<3:
 			var quest: Dictionary=story.quest_data(id)
-			quest_label.text="任務  ·  "+quest.get("title",id)+"  %d / 3  ·  M 查看旅券"%step
+			quest_label.text=quest.get("title",id)+"  %d / 3"%step
 	quest_label.visible=not quest_label.text.is_empty()
 	audio.apply_settings(Progress.settings)
 	world.apply_settings(Progress.settings)
@@ -589,12 +586,14 @@ func _process(delta: float) -> void:
 		next_snapshot=session.elapsed+0.9
 		_sample_photo.call_deferred()
 	if is_instance_valid(world) and modal_kind=="" and session==null:
-		var has_context: bool = not world.nearest.is_empty()
+		var has_context: bool = not world.nearest.is_empty() or world.is_riding()
 		context_bar.visible=has_context
 		context_action.visible=has_context
 		if has_context:
-			var play_prompt: String=world.coastal_play.prompt(str(world.nearest.get("id","")))
-			context_action.text="E   %s"%play_prompt if not play_prompt.is_empty() else "E   互動：%s"%str(world.nearest.get("label","附近設施"))
+			var prompt := _context_prompt()
+			if context_action.text!=prompt:
+				context_action.text=prompt
+				_adapt_hud()
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0:
 		var previous_count := dialogue_label.visible_characters
 		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
@@ -603,6 +602,15 @@ func _process(delta: float) -> void:
 		for char_index in range(previous_count, next_count):
 			var current_speaker := str(dialogue[dialogue_index].get("speaker", "")) if dialogue_index < dialogue.size() else ""
 			audio.play_dialogue_beep(current_speaker, dialogue_label.text.substr(char_index, 1))
+
+func _context_prompt() -> String:
+	if world.is_riding(): return "E   下來走走"
+	var id := str(world.nearest.get("id",""))
+	var play_prompt: String=world.coastal_play.prompt(id)
+	if not play_prompt.is_empty(): return "E   "+play_prompt
+	if id.begins_with("game-"): return "E   玩"+str(_definition(id).get("name","這個遊戲"))
+	var actor_prompts := {"guide":"和票票說話","quest-001":"和小角說話","quest-002":"和阿浪說話","arrival":"重看上島導覽","ride-tide":"搭乘貝殼輪"}
+	return "E   "+str(actor_prompts.get(id,world.nearest.get("label","附近設施")))
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_T:
@@ -994,7 +1002,7 @@ func _start_dialogue(lines: Array, done: Callable, cancelled: Callable = Callabl
 		dialogue_panel.show()
 		dialogue_panel.set_process_unhandled_key_input(true)
 	overlay.hide()
-	hud.show()
+	hud.hide()
 	world.set_dialogue_hold(true)
 	world.blocked=true
 	_render_dialogue()
@@ -1776,8 +1784,8 @@ func _adapt_hud() -> void:
 	Paper.adapt_menu(hud,scale_factor)
 	var banner := hud.get_node("ParkKeepsakeBanner") as Control
 	banner.position=Vector2(24,20)/scale_factor
-	banner.custom_minimum_size=Vector2(390,82)/scale_factor
-	banner.size=banner.custom_minimum_size
+	banner.custom_minimum_size=Vector2(320,48)/scale_factor
+	banner.size=banner.get_combined_minimum_size().max(banner.custom_minimum_size)
 	ticket_button.offset_left=-222.0/scale_factor
 	ticket_button.offset_right=-24.0/scale_factor
 	ticket_button.offset_top=24.0/scale_factor
@@ -1786,14 +1794,14 @@ func _adapt_hud() -> void:
 	var ticket_extent := ticket_button.get_combined_minimum_size().max(Vector2(198,48)/scale_factor)
 	ticket_button.offset_left=ticket_button.offset_right-ticket_extent.x
 	ticket_button.offset_bottom=ticket_button.offset_top+ticket_extent.y
-	quest_label.position=Vector2(28,108)/scale_factor
+	quest_label.position=Vector2(28,80)/scale_factor
 	quest_label.size=Vector2(376,48)/scale_factor
 	context_bar.offset_left=-200.0/scale_factor
 	context_bar.offset_right=200.0/scale_factor
 	context_bar.offset_top=-70.0/scale_factor
 	context_bar.offset_bottom=-18.0/scale_factor
-	context_bar.custom_minimum_size=Vector2(400,52)/scale_factor
-	var context_extent := context_bar.get_combined_minimum_size().max(Vector2(400,52)/scale_factor)
+	context_bar.custom_minimum_size=Vector2(240,44)/scale_factor
+	var context_extent := context_bar.get_combined_minimum_size().max(Vector2(240,44)/scale_factor)
 	context_bar.offset_left=-context_extent.x*0.5
 	context_bar.offset_right=context_extent.x*0.5
 	context_bar.offset_top=context_bar.offset_bottom-context_extent.y

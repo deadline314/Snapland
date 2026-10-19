@@ -50,7 +50,7 @@ static func build(world: Node3D) -> void:
 			4: _glasshouse(world,origin)
 			5: _waterwheel(world,origin)
 		world._point("coast:"+str(stop.id),str(stop.name),p)
-		world._label(str(stop.name),p+Vector3(0,1.2,-1.9),20)
+		world._local_label(str(stop.name),p+Vector3(0,1.2,-1.9),20)
 		world._box(p+Vector3(1.9,0.55,0.3),Vector3(0.1,1.1,0.1),Color("#715842"))
 		var plaque: MeshInstance3D = world._box(p+Vector3(1.9,1.05,0.3),Vector3(0.75,0.46,0.1),Color("#366c69"))
 		plaque.rotation.x = -0.18

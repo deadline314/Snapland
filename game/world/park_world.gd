@@ -51,6 +51,7 @@ var sun: DirectionalLight3D
 var environment: Environment
 var points: Array[Dictionary] = []
 var district_labels: Array[Label3D] = []
+var local_sign_labels: Array[Label3D] = []
 var component_motion: Node
 var npc_activity: Node
 var occlusion_controller: Node
@@ -600,6 +601,13 @@ func _label(text: String, pos: Vector3, size := 32, color := CREAM) -> Label3D:
 	add_child(label)
 	return label
 
+func _local_label(text: String, pos: Vector3, size: int, color: Color = CREAM) -> Label3D:
+	var label := _label(text,pos,size,color)
+	label.visibility_range_end=0.0
+	label.visible=false
+	local_sign_labels.append(label)
+	return label
+
 func _district_label(text: String, pos: Vector3, size: int, color: Color) -> Label3D:
 	# District names are local wayfinding accents; the nearby physical gateway
 	# carries the durable name, so these do not need to hang over the whole island.
@@ -615,7 +623,7 @@ func _update_district_label_visibility() -> void:
 	if not is_instance_valid(player): return
 	var player_x := player.global_position.x
 	var player_z := player.global_position.z
-	for label in district_labels:
+	for label in district_labels+local_sign_labels:
 		if not is_instance_valid(label): continue
 		var dx := label.global_position.x-player_x
 		var dz := label.global_position.z-player_z
@@ -1077,9 +1085,9 @@ func _build_dock() -> void:
 		mast.rotation.z = -0.2
 		var pennant_flag := _box(Vector3(4.1+i*0.7,3.3,22.9),Vector3(0.45,0.23,0.05),[CORAL,GOLD,CREAM][i%3])
 		pennant_flag.rotation.z = -0.12
-	_label("晚風號",Vector3(5.5,1.2,28.5),24)
+	_local_label("晚風號",Vector3(5.5,1.2,28.5),24)
 	_point("arrival","重播上島導覽",Vector3(0,0,24))
-	_label("碼頭  /  海風從這裡開始",Vector3(-4,1,19),24)
+	_local_label("碼頭  /  海風從這裡開始",Vector3(-4,1,19),24)
 
 func _build_plaza() -> void:
 	# Tiered fountain anchors the main area's visual silhouette.
@@ -1141,7 +1149,7 @@ func _build_plaza() -> void:
 	_point("settings","設定與輔助",Vector3(-9,0,-3))
 	_cylinder(Vector3(9,1.1,-5),0.45,2.2,TEAL)
 	_sphere(Vector3(9,2.4,-5),0.7,CREAM)
-	_label("日夜鐘",Vector3(9,3.5,-5),26)
+	_local_label("日夜鐘",Vector3(9,3.5,-5),26)
 	_point("clock","切換日夜",Vector3(9,0,-3))
 	for side in [-1.0,1.0]:
 		_bench(Vector3(side*12.0,0,5.5))
@@ -1149,7 +1157,7 @@ func _build_plaza() -> void:
 		_shrub_cluster(Vector3(side*14.0,0,2.0),side)
 		_shrub_cluster(Vector3(side*14.0,0,-5.8),-side)
 	_arch(Vector3(0,0,-11),"迎賓大道",CORAL,8)
-	_label("中央廣場",Vector3(0,4.7,1),30)
+	_local_label("中央廣場",Vector3(0,4.7,1),30)
 
 func _bench(pos: Vector3) -> void:
 	var wood := Color("#956d48")
@@ -1216,7 +1224,7 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 	_multi_mesh(BoxMesh.new(),pos,scallop_transforms,scallop_colors,_vertex_color_material("kiosk-awning-fringe"))
 	var plaque := _box(pos+Vector3(0,2.01,1.59),Vector3(2.7,0.54,0.12),Color("#755a3c"))
 	_box(pos+Vector3(0,2.01,1.67),Vector3(2.55,0.4,0.06),color)
-	_label(title,pos+Vector3(0,1.94,1.73),19)
+	_local_label(title,pos+Vector3(0,1.94,1.73),19)
 	# Small brass studs and roof tiles share batched meshes across each stand.
 	var tile_transforms: Array[Transform3D]=[]
 	var tile_colors: Array[Color]=[]
@@ -1652,10 +1660,10 @@ func _build_gates() -> void:
 		gate_header.material_override = _coastal_surface(3,1.4,zone_color.lightened(0.12))
 		_box(pos+Vector3(0,2.49,0),Vector3(2.65,0.12,0.8),Color("#f2d8a5"))
 		_zone_crown(i,pos,zone_color)
-		_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
-		_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
+		_local_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
+		_local_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
 		_point("gate:"+zone["id"],zone["name"],pos+Vector3(0,0,2))
-		_label("%d 張 · 準備中"%zone["threshold"],pos+Vector3(0,1.1,0.48),19)
+		_local_label("%d 張 · 準備中"%zone["threshold"],pos+Vector3(0,1.1,0.48),19)
 
 func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 	match index:

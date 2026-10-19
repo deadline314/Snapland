@@ -25,6 +25,7 @@ func _run() -> void:
 	_main=MainScene.instantiate()
 	get_tree().root.add_child(_main)
 	await _frames(3)
+	_check(not _main.hud.get_node("ParkKeepsakeBanner").find_child("ParkCollectionDetails",true,false).visible,"park exploration keeps collection totals in the travel tools instead of the permanent HUD")
 	var window := get_window()
 	window.content_scale_size=Vector2i(1280,720)
 	window.content_scale_mode=Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
@@ -61,6 +62,8 @@ func _run() -> void:
 		Progress.settings["ui_scale"]=1.25
 		_main._refresh()
 		_check(_main.coin_count_label.get_theme_font_size("font_size")>hud_base,"changing text scale immediately adapts HUD at %s"%str(dimensions))
+		var location_strip := _main.hud.get_node("ParkKeepsakeBanner") as Control
+		_check(location_strip.size.y*Paper.physical_scale(location_strip)<74.0,"large-text location strip stays below the previous two-row HUD height at %s"%str(dimensions))
 		var context_was_visible: bool=_main.context_bar.visible
 		_main.context_bar.show()
 		await _frames(2)
