@@ -1,6 +1,6 @@
 # [ART-6] 完善遊園與結算介面
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -63,3 +63,12 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 ### 程式與證據提交
 分支：feature/island-first-park。更新至最新main後的本票提交：[7e7f0ff](https://github.com/deadline314/Snapland/commit/7e7f0ff9650c813b9ec67ef8f47dd8e78ed7bf9c)。
+
+
+# 2026-10-20 現行介面結案
+
+目前HUD只保留地點／時段與附近一個動作，完整工具放旅券；收藏用分類與分頁，主要選單固定底部操作，入口／結算／設定與收藏統一像素字階、材質與焦點。ART-23～26共99張真實尺寸圖及14項回歸已完成，包含空收藏、實際原圖檢視器與返回；合成結算只驗布局，正式照片另有MAIN-13／16流程。
+
+本輪三尺寸為800×450、1280×720及1920×1080，文字1.25倍；最大尺寸核對實際夜間與降低動態。要求值、Window、後端、viewport縮放與PNG尺寸一致；只改後端而Window未變的反例已拒絕。舊Windows／800×600圖保留為歷史，不能冒稱本輪驗過。現行paper與wardrobe來源最新提交82a6f38已在main；不將無法解析的舊feature連結當合入證明。
+
+[尺寸方法與官方比較](../../design/runtime/native-window-verification.md) · [導覽／焦點與14項回歸](images/ART-23-verify-20261020.json) · [分類收藏](images/ART-24-verify-20261020.json) · [換裝／設定](images/ART-25-verify-20261020.json) · [小遊戲／照片UI](images/ART-26-verify-20261020.json)。此結案限本票列明的基礎介面；ART-20實際遊園拍貼流程、ART-21各玩法畫面品質、Windows EXE與真人體驗沒有自動結案。
