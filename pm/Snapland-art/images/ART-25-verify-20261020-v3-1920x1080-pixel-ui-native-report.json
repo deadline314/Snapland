@@ -1,0 +1,491 @@
+{
+	"backend_window": "(1920, 1080)",
+	"captures": [
+		{
+			"frame": 17,
+			"page": "hud",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-23-verify-v3-20261020-hud-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 28,
+			"page": "pause",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-23-verify-v3-20261020-pause-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 33,
+			"page": "pause-hover",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-23-verify-v3-20261020-pause-hover-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 38,
+			"page": "pause-pressed",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-23-verify-v3-20261020-pause-pressed-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 60,
+			"page": "ticket",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-23-verify-v3-20261020-ticket-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 65,
+			"page": "map",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-24-verify-v3-20261020-map-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 70,
+			"page": "tasks",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-24-verify-v3-20261020-tasks-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 75,
+			"page": "album-empty",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-24-verify-v3-20261020-album-empty-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 80,
+			"page": "exploration-photo-stage",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-exploration-photo-stage-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 85,
+			"page": "exploration-2",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-exploration-2-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 90,
+			"page": "exploration-3",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-exploration-3-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 99,
+			"page": "exploration-3-standee",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-exploration-3-standee-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 105,
+			"page": "album-filled",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-24-verify-v3-20261020-album-filled-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 117,
+			"page": "photo-original-viewer",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-24-verify-v3-20261020-photo-original-viewer-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 122,
+			"page": "achievements",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-24-verify-v3-20261020-achievements-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 127,
+			"page": "tutorial",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-24-verify-v3-20261020-tutorial-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 137,
+			"page": "wardrobe-appearance",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-25-verify-v3-20261020-wardrobe-appearance-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 149,
+			"page": "wardrobe-popup",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-25-verify-v3-20261020-wardrobe-popup-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 158,
+			"page": "wardrobe-closet",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-25-verify-v3-20261020-wardrobe-closet-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 163,
+			"page": "wardrobe-shop",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-25-verify-v3-20261020-wardrobe-shop-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 168,
+			"page": "settings-audio",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-25-verify-v3-20261020-settings-audio-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 177,
+			"page": "settings-play",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-25-verify-v3-20261020-settings-play-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 186,
+			"page": "settings-controls",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-25-verify-v3-20261020-settings-controls-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 191,
+			"page": "time",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-25-verify-v3-20261020-time-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 316,
+			"page": "dialogue",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-dialogue-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 321,
+			"page": "invitation",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-invitation-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 326,
+			"page": "rules",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-rules-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 351,
+			"page": "minigame-hud",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-minigame-hud-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 356,
+			"page": "minigame-score-details",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-minigame-score-details-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 361,
+			"page": "minigame-hud-pause",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-minigame-hud-pause-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 370,
+			"page": "minigame-confirmation",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-minigame-confirmation-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 375,
+			"page": "minigame-pause",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-minigame-pause-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		},
+		{
+			"frame": 380,
+			"page": "result-practice",
+			"path": "/workspace/work/Snapland-character/work/ui-verification-20261020/v3-1920x1080/ART-26-verify-v3-20261020-result-practice-1920x1080-scale1.25.png",
+			"physical_scale": 1.5,
+			"rendered_size": "(2880.0, 1620.0)",
+			"window_size": "(1920, 1080)"
+		}
+	],
+	"failures": [],
+	"logical_viewport": "(1280.0, 720.0)",
+	"method": "native Main UI presentation; scripted page opening, routed Escape/Tab and pointer controls; synthetic collection/result data in isolated profile",
+	"phase": "night",
+	"physical_scale": 1.5,
+	"physical_window": [
+		1920,
+		1080
+	],
+	"reduced_motion": true,
+	"requested_phase": "night",
+	"requested_window": [
+		1920,
+		1080
+	],
+	"result": "PASS",
+	"settings_control_geometry": {
+		"grid": "[P: (321.0, 332.0), S: (637.0, 154.0)]",
+		"labels": [
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(32.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (321.0, 332.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "移動",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(125.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (483.0, 332.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "W A S D／方向鍵",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(32.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (645.0, 332.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "慢走",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(74.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (807.0, 332.0), S: (151.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "按住 Shift",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(32.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (321.0, 361.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "互動",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(11.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (483.0, 361.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "E",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(32.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (645.0, 361.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "招呼",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(11.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (807.0, 361.0), S: (151.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "F",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(32.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (321.0, 390.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "拍照",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(11.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (483.0, 390.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "P",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(32.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (645.0, 390.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "衣櫃",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(11.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (807.0, 390.0), S: (151.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "C",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(32.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (321.0, 419.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "時段",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(12.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (483.0, 419.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "T",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(32.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (645.0, 419.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "旅券",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(12.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (807.0, 419.0), S: (151.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "M",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(0.9412, 0.9412, 0.8471, 1.0)",
+				"minimum": "(77.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (321.0, 448.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "暫停／返回",
+				"visible": true
+			},
+			{
+				"characters": -1,
+				"font_color": "(1.0, 0.7765, 0.4275, 1.0)",
+				"minimum": "(26.0, 25.0)",
+				"modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"ratio": 1.0,
+				"rect": "[P: (483.0, 448.0), S: (152.0, 25.0)]",
+				"self_modulate": "(1.0, 1.0, 1.0, 1.0)",
+				"text": "Esc",
+				"visible": true
+			}
+		],
+		"minimum": "(338.0, 141.0)"
+	},
+	"text_scale": 1.25,
+	"world_phase": "night"
+}

@@ -1,0 +1,428 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "base_sha": "dd8318b130783c0a0af0b0a7acff6617fc727556",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf / Compatibility / llvmpipe",
+  "ticket": "ART-25",
+  "cases": [
+    {
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "text_scale": 1.25,
+      "phase": "noon",
+      "world_phase": null,
+      "reduced_motion": false
+    },
+    {
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "text_scale": 1.25,
+      "phase": "noon",
+      "world_phase": null,
+      "reduced_motion": false
+    },
+    {
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "text_scale": 1.25,
+      "phase": "night",
+      "world_phase": "night",
+      "reduced_motion": true
+    }
+  ],
+  "accepted_images": [
+    {
+      "file": "ART-25-verify-v2-20261020-settings-audio-800x450-scale1.25.png",
+      "sha256": "b971be8f6dd4f58be8cfae3bc420f167179dc3d53c2024c05b80dc6a613ded8c",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-settings-controls-800x450-scale1.25.png",
+      "sha256": "4ff684ec4e77d0f9808a2dc8e0c2f6f18d0305e4b36b976472be205b54b1da1d",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-settings-play-800x450-scale1.25.png",
+      "sha256": "7543e54d2af5fae3feed485bd391f7e2faefaf05ac5fa593e220d50ec99aa3ec",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-time-800x450-scale1.25.png",
+      "sha256": "8675f54c847b77a5a04ec43dd744225911d73692591356fed54e8e9e3a2cf8c8",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-wardrobe-appearance-800x450-scale1.25.png",
+      "sha256": "ec4d81508879157c2a2f52a6a4ad1f41b61cacfb3c52ef759c79154a36e4ff6f",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-wardrobe-closet-800x450-scale1.25.png",
+      "sha256": "ecb5b171824ec3282810b8b620eaf15f5a7c6debb763a4d500dd7e877bbe8f59",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-wardrobe-popup-800x450-scale1.25.png",
+      "sha256": "0e1c8e356fc6e796ad7b88cde302acbe1397611204e043fb3c350792aaecd8a9",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-wardrobe-shop-800x450-scale1.25.png",
+      "sha256": "3b70f02ec237a02634ebdc8f12f9cf61e7ee8645cb55afc74a1a366f88862a45",
+      "physical_window": [
+        800,
+        450
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 0.625,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-settings-audio-1280x720-scale1.25.png",
+      "sha256": "7ca10ffa2be2f21724f7b7e1a933c8c0ed113d408df65b05e9ba9ba4a31afb5f",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-settings-controls-1280x720-scale1.25.png",
+      "sha256": "800616a1b96993486af65ef146285165f3af47d61d6406a961be0092a006bf97",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-settings-play-1280x720-scale1.25.png",
+      "sha256": "4da314c1c53fc7efe7fb1c06158595f4387b3ce29a4104f02c5bbf05c64bbbf6",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-time-1280x720-scale1.25.png",
+      "sha256": "876a487889b95c945185eadfc573e1d9dab0b7fbaa7b11f166926a050d781a5d",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-wardrobe-appearance-1280x720-scale1.25.png",
+      "sha256": "81c19a9a7d878078dbc2411c64244f3ac23792341f7097d1774cf5956c406626",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-wardrobe-closet-1280x720-scale1.25.png",
+      "sha256": "9c4e7eaef9c284a62fe3bfdf6bff7766c9461c84b2bc203f1320be1d30d32e3e",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-wardrobe-popup-1280x720-scale1.25.png",
+      "sha256": "8878694d02739993d229b7019726b5db8da50275b2558c496a3ada4c7d9736d6",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v2-20261020-wardrobe-shop-1280x720-scale1.25.png",
+      "sha256": "a8dc3e9d3e5b0b6c41f7c97e0bd8454dce707793e04c20abc700dab53253f846",
+      "physical_window": [
+        1280,
+        720
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.0,
+      "phase": "noon",
+      "reduced_motion": false
+    },
+    {
+      "file": "ART-25-verify-v3-20261020-settings-audio-1920x1080-scale1.25.png",
+      "sha256": "ba94461aaf8d723b1f216e724fcc9877715f67e506bee6d25174e33de1dd4254",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-25-verify-v3-20261020-settings-controls-1920x1080-scale1.25.png",
+      "sha256": "d04159ea7a43fced4043e6990ab9b3c20a5b4a1e9f0450dbd26e3df49d1456cc",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-25-verify-v3-20261020-settings-play-1920x1080-scale1.25.png",
+      "sha256": "3e5b04edb2732f2555aa3f71d8d87c9deb65b0c49898251f08c591ac410db098",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-25-verify-v3-20261020-time-1920x1080-scale1.25.png",
+      "sha256": "9758058457319f1ae6678f819b1148081237d06acf2d3c6ffdee3f70dd3b631c",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-25-verify-v3-20261020-wardrobe-appearance-1920x1080-scale1.25.png",
+      "sha256": "ff32022cdb40b9581c2f61b8f9e7e8ad8303819890d03902d488802bac0ae288",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-25-verify-v3-20261020-wardrobe-closet-1920x1080-scale1.25.png",
+      "sha256": "2a1f8e76470110a889302181a65c4f0e735e878047d3635f4239d28d1f93bda0",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-25-verify-v3-20261020-wardrobe-popup-1920x1080-scale1.25.png",
+      "sha256": "59c5340f9700428e6b9f8b9d5efb8407eab635d9853d12e5503f98b71113b447",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    },
+    {
+      "file": "ART-25-verify-v3-20261020-wardrobe-shop-1920x1080-scale1.25.png",
+      "sha256": "f80cc7691c1b3f966fc154b671f5c2b9dfee97ed11400dcc8b5459aa0b5f589a",
+      "physical_window": [
+        1920,
+        1080
+      ],
+      "logical_viewport": "(1280.0, 720.0)",
+      "physical_scale": 1.5,
+      "phase": "night",
+      "reduced_motion": true
+    }
+  ],
+  "shared_local_suites": [
+    {
+      "name": "core runtime tests",
+      "exit": 0,
+      "seconds": 0.35,
+      "error": null
+    },
+    {
+      "name": "wardrobe runtime tests",
+      "exit": 0,
+      "seconds": 0.25,
+      "error": null
+    },
+    {
+      "name": "wardrobe UI tests",
+      "exit": 0,
+      "seconds": 11.28,
+      "error": null
+    },
+    {
+      "name": "story runtime tests",
+      "exit": 0,
+      "seconds": 0.28,
+      "error": null
+    },
+    {
+      "name": "main story integration tests",
+      "exit": 0,
+      "seconds": 25.74,
+      "error": null
+    },
+    {
+      "name": "saved photo viewer tests",
+      "exit": 0,
+      "seconds": 0.76,
+      "error": null
+    },
+    {
+      "name": "photo original preservation tests",
+      "exit": 0,
+      "seconds": 2.43,
+      "error": null
+    },
+    {
+      "name": "pixel UI shell tests",
+      "exit": 0,
+      "seconds": 56.51,
+      "error": null
+    },
+    {
+      "name": "pixel UI popup tests",
+      "exit": 0,
+      "seconds": 0.43,
+      "error": null
+    },
+    {
+      "name": "pixel UI button depth tests",
+      "exit": 0,
+      "seconds": 0.34,
+      "error": null
+    },
+    {
+      "name": "pixel UI collection tests",
+      "exit": 0,
+      "seconds": 21.29,
+      "error": null
+    },
+    {
+      "name": "pixel tutorial page tests",
+      "exit": 0,
+      "seconds": 15.49,
+      "error": null
+    },
+    {
+      "name": "pixel UI customization tests",
+      "exit": 0,
+      "seconds": 9.15,
+      "error": null
+    },
+    {
+      "name": "pixel UI minigame tests",
+      "exit": 0,
+      "seconds": 8.19,
+      "error": null
+    }
+  ],
+  "rejected_first_cloud_sizes": "DisplayServer requested800/1920 while Window/viewport remained1280; not accepted as size evidence. Old Windows images were independently confirmed800/1920 and are not invalidated.",
+  "expected_failure": "Backend-only resize rejected: requested800, actualWindow1280, backend800; exit1.",
+  "scope": "UI fixture uses synthetic photos/results and direct page entry plus routed key/pointer controls. Not a successful minigame playthrough, new audio audition or realtime performance measure.",
+  "visual_review": "All four ticket contact sheets covering actual three sizes reviewed; representative pause, tutorial, controls and night dialogue viewed at original size.",
+  "sources": {
+    "game/tests/native_layout_review.gd": "5a5a1e9b4c48f25db7ebac881fb4c30d6bb4baf324eac4c5b85babb89076385d",
+    "game/tests/native_pixel_ui_review.gd": "fba8678851c90d24c4152091d2a2e29e3691ade4e2ca35a6e1db43e593e9209d"
+  }
+}

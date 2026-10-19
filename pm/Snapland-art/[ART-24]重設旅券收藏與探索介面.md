@@ -81,4 +81,4 @@
 
 ### 遠端交付
 
-本票以正常快轉整合；提交連結於推送後接續補入。其他未達驗收票保持未結案。
+[e542797](https://github.com/deadline314/Snapland/commit/e5427975edcbf037497a702c7451d97fddb9db68)：本票已正常快轉推送，fetch確認HEAD、本機main與origin/main一致。其他未達驗收票保持未結案。
