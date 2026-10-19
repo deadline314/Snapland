@@ -1,11 +1,11 @@
 shader_type spatial;
 render_mode cull_back;
 
-instance uniform vec4 occluder_tint : source_color = vec4(1.0);
-instance uniform float occluder_roughness : hint_range(0.0, 1.0) = 0.92;
-instance uniform vec4 occluder_emission : source_color = vec4(0.0);
-instance uniform float occluder_emission_energy = 1.0;
-instance uniform float occluder_metallic : hint_range(0.0, 1.0) = 0.0;
+uniform vec4 occluder_tint : source_color = vec4(1.0);
+uniform float occluder_roughness : hint_range(0.0, 1.0) = 0.92;
+uniform vec4 occluder_emission : source_color = vec4(0.0);
+uniform float occluder_emission_energy = 1.0;
+uniform float occluder_metallic : hint_range(0.0, 1.0) = 0.0;
 
 uniform vec2 viewport_size_px = vec2(1280.0, 720.0);
 uniform vec2 body_center_px = vec2(640.0, 360.0);

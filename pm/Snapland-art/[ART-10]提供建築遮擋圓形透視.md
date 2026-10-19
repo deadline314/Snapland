@@ -95,3 +95,18 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 ![離開後牆面恢復](images/ART-10-native-v2-restored.png)
 
 [原生測試場景錄影](images/ART-10-native-v2-reveal.mp4)。分支：`feature/island-experience`；本輪固定基準：`86bd44cd7017fb2d4bc05685271f6cdfa618c9da`。遠端連結於推送後補入。
+
+
+# Commit — 2026-10-20 修復大量建築的透視參數容量
+
+固定開始 SHA：`b9619c5`；分支：`codex/delivery-batch-20261020`。
+
+原生拍照流程暴露 OpenGL 相容模式在完整園區產生 270 筆引擎錯誤；只改海港材質的中間候選仍有 55 筆，均拒收。現在透視共用受控材質，保留原本圖集、顏色、發光、金屬與完整影子；地板和不同場景不互相套用透視，離開與未完成登記的清理也恢復原材質。
+
+原有遮擋與日光兩項回歸通過；新增來源不可變、相同來源重用、跨控制器隔離與清理檢查。完整園區仍有 865 個布景網格，1280×720 的實際時段拍照／原圖檢視已重跑為 0 ERROR。使用 Godot 4.7.2、Compatibility、llvmpipe；不是 Windows 硬體、Forward+ 完整光影或真人試玩驗收。原有不支援特殊材質警告保留，票維持進行中。
+
+[六方資料與選擇](../../design/runtime/occlusion.md) · [遮擋實測](images/ART-10-capacity-20261020-occlusion.log) · [日光實測](images/ART-10-capacity-20261020-daylight.log)。修正前後的引擎記錄、照片與雜湊見本批驗證索引。
+
+[本輪來源、範圍、修正前後與圖片雜湊](images/ART-10-capacity-20261020-verification.json)。
+
+![本輪實際原圖檢視；作為渲染容量回歸背景，不是透視動畫驗收](images/ART-10-capacity-20261020-viewer.png)

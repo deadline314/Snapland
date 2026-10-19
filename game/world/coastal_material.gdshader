@@ -4,15 +4,15 @@ uniform sampler2D atlas_texture : source_color, filter_nearest;
 uniform int tile_index = 0;
 uniform float world_tile_size = 2.0;
 uniform vec4 tint : source_color = vec4(1.0);
-// These per-instance controls are only enabled by OcclusionController for a
-// registered building piece. Shared coastal floors keep their default value 0.
-instance uniform float occlusion_cutaway_enabled = 0.0;
-instance uniform vec2 occlusion_viewport_size_px = vec2(1280.0, 720.0);
-instance uniform vec2 occlusion_body_center_px = vec2(640.0, 360.0);
-instance uniform float occlusion_body_radius_px = 50.0;
-instance uniform float occlusion_player_view_depth = 0.0;
-instance uniform float occlusion_cutaway_weight = 0.0;
-instance uniform float occlusion_edge_feather_px = 2.5;
+// Registered buildings use a controller-owned copy of the source material.
+// Floors retain their untouched source; no per-mesh instance buffer is needed.
+uniform float occlusion_cutaway_enabled = 0.0;
+uniform vec2 occlusion_viewport_size_px = vec2(1280.0, 720.0);
+uniform vec2 occlusion_body_center_px = vec2(640.0, 360.0);
+uniform float occlusion_body_radius_px = 50.0;
+uniform float occlusion_player_view_depth = 0.0;
+uniform float occlusion_cutaway_weight = 0.0;
+uniform float occlusion_edge_feather_px = 2.5;
 
 varying vec3 world_position;
 varying vec3 world_normal;

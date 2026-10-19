@@ -79,7 +79,7 @@ func _run() -> void:
 	assert(int(controller.statistics().active_groups) == 2, "multiple eligible blockers before the player remain cut away")
 	var first_mesh: GeometryInstance3D = front_a.mesh
 	assert(first_mesh.material_override is ShaderMaterial, "registered building pieces use the shared shaded cutaway material")
-	assert(first_mesh.get_instance_shader_parameter("occluder_tint") == Color("#e9d8b6"), "source material color is retained on registered architecture")
+	assert(first_mesh.material_override.get_shader_parameter("occluder_tint") == Color("#e9d8b6"), "source material color is retained on registered architecture")
 	var player_layer_before := player.collision_layer
 	var player_mask_before := player.collision_mask
 	controller._process(0.05)
@@ -164,10 +164,11 @@ func _run() -> void:
 	assert(controller.has_method("replace_registered_surface"), "registered geometry exposes a post-registration surface-material bridge")
 	assert(controller.call("replace_registered_surface", survivor.mesh, coastal_replacement), "bridge accepts the project coastal shader for an already-registered building")
 	controller._update_shader_uniforms(1.25)
-	assert(survivor.mesh.material_override == coastal_replacement, "coastal atlas shader stays assigned after cutaway registration")
+	assert(survivor.mesh.material_override != coastal_replacement and survivor.mesh.material_override.shader == CoastalMaterialShader, "registered coastal material keeps the atlas shader in a controller-owned copy")
+	assert(coastal_replacement.get_shader_parameter("occlusion_cutaway_weight") == null, "source coastal material remains immutable while its registered copy reveals")
 	assert(coastal_replacement.get_shader_parameter("atlas_texture") == atlas, "post-registration cutaway keeps the selected coastal texture")
-	assert(is_equal_approx(float(survivor.mesh.get_instance_shader_parameter("occlusion_cutaway_weight")),0.43), "registered coastal surface receives the current circular cutaway weight")
-	assert(is_equal_approx(float(survivor.mesh.get_instance_shader_parameter("occlusion_body_radius_px")),57.0), "registered coastal surface receives the same projected mask radius")
+	assert(is_equal_approx(float(survivor.mesh.material_override.get_shader_parameter("occlusion_cutaway_weight")),0.43), "registered coastal surface receives the current circular cutaway weight")
+	assert(is_equal_approx(float(survivor.mesh.material_override.get_shader_parameter("occlusion_body_radius_px")),57.0), "registered coastal surface receives the same projected mask radius")
 	controller.release()
 	assert(survivor.mesh.material_override == coastal_replacement and survivor.mesh.material_override.get_shader_parameter("atlas_texture") == atlas, "release restores the final intended coastal surface with its texture intact")
 	assert(int(survivor.body.collision_layer) == 0 and int(survivor_ray_body.collision_layer) == 0, "controller release removes its ray-only collision layer")
@@ -187,7 +188,7 @@ func _run() -> void:
 	assert(controller.finish_building(direct_body), "a registered project coastal shader can be used as the original surface directly")
 	controller._fade_weight = 0.43
 	controller._update_shader_uniforms(1.25)
-	assert(direct_mesh.material_override == coastal_replacement and is_equal_approx(float(direct_mesh.get_instance_shader_parameter("occlusion_cutaway_weight")), 0.43), "directly registered coastal geometry gets the per-instance mask without replacing the atlas shader")
+	assert(direct_mesh.material_override != coastal_replacement and direct_mesh.material_override.shader == CoastalMaterialShader and is_equal_approx(float(direct_mesh.material_override.get_shader_parameter("occlusion_cutaway_weight")), 0.43), "directly registered coastal geometry gets the isolated mask without replacing the atlas shader")
 	controller.configure(player, camera)
 	var cylinder_body := StaticBody3D.new()
 	cylinder_body.collision_layer = 0
@@ -216,7 +217,7 @@ func _run() -> void:
 	var cylinder_ray_shape := cylinder_ray_body.get_child(0) as CollisionShape3D
 	assert(cylinder_ray_shape != null and cylinder_ray_shape.shape is BoxShape3D, "the cylinder's bounded mesh extents become a ray shape")
 	assert((cylinder_ray_shape.shape as BoxShape3D).size.is_equal_approx(Vector3(1.3, 2.0, 1.3)), "cylinder blocker uses the mesh's conservative AABB dimensions")
-	assert(cylinder_mesh.material_override == coastal_replacement and coastal_replacement.get_shader_parameter("atlas_texture") == atlas, "finish_building preserves the late-selected coastal atlas surface and texture")
+	assert(cylinder_mesh.material_override == direct_mesh.material_override and cylinder_mesh.material_override.get_shader_parameter("atlas_texture") == atlas, "finish_building preserves the late-selected atlas and shares one managed material per source")
 	var lantern_body := StaticBody3D.new()
 	lantern_body.collision_layer = 0
 	lantern_body.collision_mask = 0
@@ -242,10 +243,10 @@ func _run() -> void:
 	lantern_mesh.material_override = final_lantern_surface
 	var lantern_group_id := int(controller._next_group_id)
 	assert(controller.finish_building(lantern_body), "a late-selected simple standard material remains eligible for cutaway")
-	assert(lantern_mesh.material_override == controller._shader_material, "late-selected standard surface uses the shared cutaway shader while registered")
-	assert(lantern_mesh.get_instance_shader_parameter("occluder_emission") == final_lantern_surface.emission, "registered lantern keeps the final standard material emission color")
-	assert(is_equal_approx(float(lantern_mesh.get_instance_shader_parameter("occluder_emission_energy")), 2.4), "registered lantern keeps the final emission energy")
-	assert(is_equal_approx(float(lantern_mesh.get_instance_shader_parameter("occluder_metallic")), 0.63), "registered lantern keeps the final metallic response")
+	assert(lantern_mesh.material_override.shader == OccluderShader and lantern_mesh.material_override != controller._shader_material, "late-selected standard surface uses the same cutaway shader with isolated authored surface parameters")
+	assert(lantern_mesh.material_override.get_shader_parameter("occluder_emission") == final_lantern_surface.emission, "registered lantern keeps the final standard material emission color")
+	assert(is_equal_approx(float(lantern_mesh.material_override.get_shader_parameter("occluder_emission_energy")), 2.4), "registered lantern keeps the final emission energy")
+	assert(is_equal_approx(float(lantern_mesh.material_override.get_shader_parameter("occluder_metallic")), 0.63), "registered lantern keeps the final metallic response")
 	assert(int(controller._collider_to_group.get(lantern_body.get_instance_id(), 0)) == lantern_group_id, "the emissive curved lantern remains a registered obstruction")
 	await physics_frame
 	controller.refresh_visibility()
@@ -275,11 +276,27 @@ func _run() -> void:
 	unregistered_coastal_mesh.mesh = direct_box
 	unregistered_coastal_mesh.material_override = coastal_replacement
 	world.add_child(unregistered_coastal_mesh)
-	var unregistered_cutaway_enabled: Variant = unregistered_coastal_mesh.get_instance_shader_parameter("occlusion_cutaway_enabled")
+	var unregistered_cutaway_enabled: Variant = unregistered_coastal_mesh.material_override.get_shader_parameter("occlusion_cutaway_enabled")
 	assert(unregistered_cutaway_enabled == null or is_zero_approx(float(unregistered_cutaway_enabled)), "an unregistered object sharing the coastal atlas material stays outside the cutaway")
+	var other_controller = OcclusionControllerScript.new()
+	world.add_child(other_controller)
+	var other_mesh := MeshInstance3D.new()
+	other_mesh.mesh = direct_box
+	other_mesh.material_override = coastal_replacement
+	world.add_child(other_mesh)
+	other_controller.begin_building()
+	other_controller.register_geometry(other_mesh, coastal_replacement)
+	other_controller._fade_weight = 0.81
+	other_controller._set_coastal_cutaway(other_mesh, true)
+	assert(other_mesh.material_override != direct_mesh.material_override, "separate controllers never share mutable mask materials")
+	assert(is_equal_approx(float(direct_mesh.material_override.get_shader_parameter("occlusion_cutaway_weight")), float(controller._fade_weight)), "a second controller cannot change the first controller's reveal")
+	assert(controller._coastal_materials.size() == 1, "repeated source registration reuses one coastal material rather than allocating per mesh")
+	other_controller.release()
+	assert(other_mesh.material_override == coastal_replacement and other_controller._coastal_materials.is_empty(), "release during unfinished registration restores the source and releases copies")
 	controller.release()
+	assert(controller._coastal_materials.is_empty(), "release drops managed coastal material references")
 	assert(lantern_mesh.material_override == final_lantern_surface, "release restores the exact late-selected standard material identity")
-	assert(direct_mesh.material_override == coastal_replacement and is_zero_approx(float(direct_mesh.get_instance_shader_parameter("occlusion_cutaway_weight"))), "release disables cutaway and retains directly registered coastal surfaces")
+	assert(direct_mesh.material_override == coastal_replacement and direct_mesh.material_override.get_shader_parameter("occlusion_cutaway_weight") == null, "release disables cutaway and retains directly registered coastal surfaces")
 	assert(cylinder_mesh.material_override == coastal_replacement and cylinder_mesh.material_override.get_shader_parameter("atlas_texture") == atlas, "release restores the late-selected coastal surface without losing its atlas texture")
 	assert(int(cylinder_body.collision_layer) == 0 and int(cylinder_ray_body.collision_layer) == 0, "release removes the curved mesh ray layer and restores the blocker layer")
 	world.queue_free()
@@ -304,6 +321,7 @@ func _run() -> void:
 	assert((int(arch_blocker.collision_layer) & 1) == 1 and (int(arch_blocker.collision_layer) & OCCLUSION_LAYER) != 0, "arch ray registration preserves its original walk-collision layer")
 	var arch_group_id := int(park_world.occlusion_controller._collider_to_group.get(arch_blocker.get_instance_id(), 0))
 	var arch_surface := arch_blocker.get_parent() as GeometryInstance3D
+	var arch_coastal_original: Material = park_world.occlusion_controller._building_groups.filter(func(group: Dictionary) -> bool: return group.geometry.has(arch_surface))[0].originals[arch_surface.get_instance_id()]
 	var arch_coastal_material := arch_surface.material_override as ShaderMaterial
 	assert(arch_coastal_material != null and arch_coastal_material.shader == CoastalMaterialShader, "registered arch surface retains its coastal material shader")
 	assert(arch_coastal_material.get_shader_parameter("atlas_texture") != null, "registered arch surface retains the coastal atlas texture")
@@ -344,9 +362,10 @@ func _run() -> void:
 	park_world.apply_settings({"reduced_motion": false})
 	var kiosk_mesh := first_kiosk_body.get_parent() as GeometryInstance3D
 	var kiosk_material: Material = kiosk_mesh.material_override
-	var kiosk_tint: Color = kiosk_mesh.get_instance_shader_parameter("occluder_tint")
+	var kiosk_tint_key := "tint" if kiosk_material.shader == CoastalMaterialShader else "occluder_tint"
+	var kiosk_tint: Color = kiosk_material.get_shader_parameter(kiosk_tint_key)
 	park_world.set_night(true)
-	assert(kiosk_mesh.material_override == kiosk_material and kiosk_mesh.get_instance_shader_parameter("occluder_tint") == kiosk_tint, "night lighting preserves architecture material and tint")
+	assert(kiosk_mesh.material_override == kiosk_material and kiosk_mesh.material_override.get_shader_parameter(kiosk_tint_key) == kiosk_tint, "night lighting preserves architecture material and tint")
 	park_world.set_night(false)
 	var hero_material := park_world.avatar.material_override as ShaderMaterial
 	var appearance: Dictionary = park_world.avatar_appearance.duplicate(true)
@@ -366,8 +385,8 @@ func _run() -> void:
 	assert(not arch_title.visible, "the title is hidden again before controller release")
 	park_world.occlusion_controller.release()
 	assert(arch_title.visible and arch_title.modulate == arch_title_modulate, "controller release restores the title's exact prior visibility and modulation")
-	assert(arch_surface.material_override == arch_coastal_material, "controller release restores the registered arch's final coastal material")
-	assert(is_equal_approx(float(arch_surface.get_instance_shader_parameter("occlusion_cutaway_weight")),0.0), "release disables the instance cutaway on the restored coastal surface")
+	assert(arch_surface.material_override == arch_coastal_original and arch_coastal_original != arch_coastal_material, "controller release restores the registered arch's exact original material")
+	assert(arch_surface.material_override.get_shader_parameter("occlusion_cutaway_weight") == null, "release leaves no active cutaway on the restored coastal surface")
 	park_world.queue_free()
 	await process_frame
 	print("PASS: occlusion controller runtime checks")

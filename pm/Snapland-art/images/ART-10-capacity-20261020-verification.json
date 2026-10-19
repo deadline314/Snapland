@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "base": "b9619c5",
+  "renderer": "Compatibility / llvmpipe / Godot 4.7.2.stable.official.ed1daf0bf",
+  "resolution": [
+    1280,
+    720
+  ],
+  "scenery_meshes": 865,
+  "error_lines_before": 270,
+  "error_lines_rejected_coastal_only": 55,
+  "error_lines_after": 0,
+  "human_played": false,
+  "scope": "Actual input-driven noon postcard capture and original viewer, plus numerical cutaway/daylight contracts; not complete native cutaway animation, full lighting, Windows or all renderer acceptance. Special unsupported material warnings retained.",
+  "files": [
+    {
+      "path": "ART-10-capacity-20261020-before.log",
+      "sha256": "04a53d36c665cbff6642a84dbdac8065fb1100dfed37bbe6c9c43d28e2086f79",
+      "bytes": 89815
+    },
+    {
+      "path": "ART-10-capacity-20261020-coastal-only-rejected.log",
+      "sha256": "f6289194d1b7180c08703321fd4a48e3f30edcb1b33d225f5287e5dc9005916e",
+      "bytes": 32298
+    },
+    {
+      "path": "ART-10-capacity-20261020-after.log",
+      "sha256": "803d45a091cf3af4136d63f6b966887de85f1e630c1aa2807b41dffdf1956052",
+      "bytes": 15803
+    },
+    {
+      "path": "ART-10-capacity-20261020-viewer.png",
+      "sha256": "f2705204c9e2ab508ac29f8d9b2c50823d1b0efa0e5b0de27ce8a80ec33d5d07",
+      "bytes": 830955
+    },
+    {
+      "path": "ART-10-capacity-20261020-native-report.json",
+      "sha256": "192c19416c11a03f3ecd4e091ba59d58a18046add6a5414ab293dd93639bae85",
+      "bytes": 2205
+    }
+  ],
+  "code_sha256": {
+    "game/world/occlusion_controller.gd": "8b2302c6097a82bb07b4c1c11b7e65e7f3f294c3c3ee8726727ee6e9923619cf",
+    "game/world/coastal_material.gdshader": "8e93e9bf87e06cc05efee21a3f88c47b5b20751e8991803fc1a91199fe7e7483",
+    "game/world/occluder.gdshader": "c0e0c9d72bbd410623a6b3c89f4ec58d5128cc94da0bac7ace862e60d5aa7faf",
+    "game/tests/test_occlusion.gd": "1d3e4da7fa4daa0029745d1fe813fea84d21d32a4b7e45ba19b96b4b1e9eb30a"
+  }
+}

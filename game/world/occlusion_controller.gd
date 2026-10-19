@@ -17,6 +17,8 @@ const EDGE_FEATHER_PX := 2.5
 var player: Node3D
 var camera: Camera3D
 var reduced_motion := false
+var _coastal_materials: Dictionary = {}
+var _standard_materials: Dictionary = {}
 var _shader_material: ShaderMaterial
 var _ray_query: PhysicsRayQueryParameters3D
 var _ray_exclusions: Array[RID] = []
@@ -83,11 +85,9 @@ func register_geometry(target: GeometryInstance3D, source_material: Material) ->
 	var geometry_id := target.get_instance_id()
 	_capture_originals[geometry_id] = original
 	if coastal_source:
-		_capture_managed_materials[geometry_id] = original
-		_set_coastal_cutaway(target, true)
+		_capture_managed_materials[geometry_id] = _apply_coastal_surface(target, original as ShaderMaterial)
 	else:
-		_capture_managed_materials[geometry_id] = _shader_material
-		_apply_standard_surface(target, original as StandardMaterial3D)
+		_capture_managed_materials[geometry_id] = _apply_standard_surface(target, original as StandardMaterial3D)
 	_capture_geometry.append(target)
 
 
@@ -97,8 +97,7 @@ func replace_registered_surface(target: GeometryInstance3D, surface_material: Ma
 	var geometry_id := target.get_instance_id()
 	if _capture_active and _capture_originals.has(geometry_id):
 		_capture_originals[geometry_id] = surface_material
-		_capture_managed_materials[geometry_id] = surface_material if _is_coastal_surface(surface_material) else _shader_material
-		_apply_registered_surface(target, surface_material)
+		_capture_managed_materials[geometry_id] = _apply_registered_surface(target, surface_material)
 		return true
 	for group in _building_groups:
 		var geometry: Array = group.geometry
@@ -107,10 +106,9 @@ func replace_registered_surface(target: GeometryInstance3D, surface_material: Ma
 		var originals: Dictionary = group.originals
 		var managed: Dictionary = group.managed_materials
 		originals[geometry_id] = surface_material
-		managed[geometry_id] = surface_material if _is_coastal_surface(surface_material) else _shader_material
+		managed[geometry_id] = _apply_registered_surface(target, surface_material)
 		group.originals = originals
 		group.managed_materials = managed
-		_apply_registered_surface(target, surface_material)
 		return true
 	return false
 
@@ -147,22 +145,35 @@ func _warn_unsupported_material(target: GeometryInstance3D, surface_material: Ma
 	push_warning("OcclusionController: unsupported %s building material on %s; preserving it without cutaway" % [material_type, target.get_path()])
 
 
-func _apply_registered_surface(target: GeometryInstance3D, surface_material: Material) -> void:
+func _apply_registered_surface(target: GeometryInstance3D, surface_material: Material) -> Material:
 	if _is_coastal_surface(surface_material):
-		target.material_override = surface_material
-		_set_coastal_cutaway(target, true)
-		return
-	var standard := surface_material as StandardMaterial3D
-	_apply_standard_surface(target, standard)
+		return _apply_coastal_surface(target, surface_material as ShaderMaterial)
+	return _apply_standard_surface(target, surface_material as StandardMaterial3D)
 
 
-func _apply_standard_surface(target: GeometryInstance3D, standard: StandardMaterial3D) -> void:
-	target.material_override = _shader_material
-	target.set_instance_shader_parameter("occluder_tint", Color.WHITE if standard.vertex_color_use_as_albedo else standard.albedo_color)
-	target.set_instance_shader_parameter("occluder_roughness", standard.roughness)
-	target.set_instance_shader_parameter("occluder_emission", standard.emission if standard.emission_enabled else Color.BLACK)
-	target.set_instance_shader_parameter("occluder_emission_energy", standard.emission_energy_multiplier)
-	target.set_instance_shader_parameter("occluder_metallic", standard.metallic)
+func _apply_coastal_surface(target: GeometryInstance3D, source: ShaderMaterial) -> ShaderMaterial:
+	# Share one shallow copy per authored material in this controller. Textures and
+	# shader stay shared, while floors and other worlds keep their own mask state.
+	if not _coastal_materials.has(source):
+		_coastal_materials[source] = source.duplicate(false) as ShaderMaterial
+	var managed: ShaderMaterial = _coastal_materials[source]
+	target.material_override = managed
+	_set_coastal_cutaway(target, true)
+	return managed
+
+
+func _apply_standard_surface(target: GeometryInstance3D, standard: StandardMaterial3D) -> ShaderMaterial:
+	if not _standard_materials.has(standard):
+		_standard_materials[standard] = _shader_material.duplicate(false) as ShaderMaterial
+	var managed: ShaderMaterial = _standard_materials[standard]
+	managed.set_shader_parameter("occluder_tint", Color.WHITE if standard.vertex_color_use_as_albedo else standard.albedo_color)
+	managed.set_shader_parameter("occluder_roughness", standard.roughness)
+	managed.set_shader_parameter("occluder_emission", standard.emission if standard.emission_enabled else Color.BLACK)
+	managed.set_shader_parameter("occluder_emission_energy", standard.emission_energy_multiplier)
+	managed.set_shader_parameter("occluder_metallic", standard.metallic)
+	target.material_override = managed
+	_update_standard_uniforms(managed, _last_player_depth)
+	return managed
 
 
 func register_visibility_label(target: Label3D) -> void:
@@ -226,11 +237,9 @@ func _sync_capture_coastal_surfaces() -> void:
 			continue
 		_capture_originals[geometry_id] = final_surface
 		if _is_coastal_surface(final_surface):
-			_capture_managed_materials[geometry_id] = final_surface
-			_set_coastal_cutaway(geometry, true)
+			_capture_managed_materials[geometry_id] = _apply_coastal_surface(geometry, final_surface as ShaderMaterial)
 		else:
-			_capture_managed_materials[geometry_id] = _shader_material
-			_apply_standard_surface(geometry, final_surface as StandardMaterial3D)
+			_capture_managed_materials[geometry_id] = _apply_standard_surface(geometry, final_surface as StandardMaterial3D)
 
 
 func refresh_visibility() -> void:
@@ -298,6 +307,7 @@ func statistics() -> Dictionary:
 
 
 func release() -> void:
+	_restore_capture()
 	for group in _building_groups:
 		_restore_group(group)
 	_capture_active = false
@@ -306,6 +316,8 @@ func release() -> void:
 	_capture_managed_materials.clear()
 	_restore_capture_labels()
 	_building_groups.clear()
+	_coastal_materials.clear()
+	_standard_materials.clear()
 	_collider_to_group.clear()
 	_active_group_ids.clear()
 	_active_group_id = 0
@@ -369,11 +381,10 @@ func _update_shader_uniforms(player_depth: float) -> void:
 	if _shader_material == null:
 		return
 	_last_player_depth = player_depth
-	_shader_material.set_shader_parameter("viewport_size_px", _last_viewport_size)
-	_shader_material.set_shader_parameter("body_center_px", _last_center_px)
-	_shader_material.set_shader_parameter("body_radius_px", _last_radius_px)
-	_shader_material.set_shader_parameter("player_view_depth", player_depth)
-	_shader_material.set_shader_parameter("cutaway_weight", _fade_weight)
+	_update_standard_uniforms(_shader_material, player_depth)
+	for material in _standard_materials.values():
+		_update_standard_uniforms(material, player_depth)
+	var updated: Dictionary = {}
 	for group in _building_groups:
 		var geometry: Array = group.geometry
 		var managed: Dictionary = group.managed_materials
@@ -382,19 +393,33 @@ func _update_shader_uniforms(player_depth: float) -> void:
 				continue
 			if managed.get(target.get_instance_id()) != target.material_override:
 				continue
+			var material: Material = target.material_override
+			if updated.has(material):
+				continue
+			updated[material] = true
 			_set_coastal_cutaway(target, true)
 
 
+func _update_standard_uniforms(material: ShaderMaterial, player_depth: float) -> void:
+	material.set_shader_parameter("viewport_size_px", _last_viewport_size)
+	material.set_shader_parameter("body_center_px", _last_center_px)
+	material.set_shader_parameter("body_radius_px", _last_radius_px)
+	material.set_shader_parameter("player_view_depth", player_depth)
+	material.set_shader_parameter("cutaway_weight", _fade_weight)
+	material.set_shader_parameter("edge_feather_px", EDGE_FEATHER_PX)
+
+
 func _set_coastal_cutaway(target: GeometryInstance3D, enabled: bool) -> void:
-	# Instance uniforms keep one shared atlas material while only registered
-	# building pieces follow the controller's bounded per-frame mask updates.
-	target.set_instance_shader_parameter("occlusion_cutaway_enabled", 1.0 if enabled else 0.0)
-	target.set_instance_shader_parameter("occlusion_viewport_size_px", _last_viewport_size)
-	target.set_instance_shader_parameter("occlusion_body_center_px", _last_center_px)
-	target.set_instance_shader_parameter("occlusion_body_radius_px", _last_radius_px)
-	target.set_instance_shader_parameter("occlusion_player_view_depth", _last_player_depth)
-	target.set_instance_shader_parameter("occlusion_cutaway_weight", _fade_weight if enabled else 0.0)
-	target.set_instance_shader_parameter("occlusion_edge_feather_px", EDGE_FEATHER_PX)
+	var material := target.material_override as ShaderMaterial
+	if material == null:
+		return
+	material.set_shader_parameter("occlusion_cutaway_enabled", 1.0 if enabled else 0.0)
+	material.set_shader_parameter("occlusion_viewport_size_px", _last_viewport_size)
+	material.set_shader_parameter("occlusion_body_center_px", _last_center_px)
+	material.set_shader_parameter("occlusion_body_radius_px", _last_radius_px)
+	material.set_shader_parameter("occlusion_player_view_depth", _last_player_depth)
+	material.set_shader_parameter("occlusion_cutaway_weight", _fade_weight if enabled else 0.0)
+	material.set_shader_parameter("occlusion_edge_feather_px", EDGE_FEATHER_PX)
 
 
 func _count_geometry() -> int:
@@ -413,8 +438,6 @@ func _restore_capture() -> void:
 		var geometry_id: int = geometry.get_instance_id()
 		if geometry.material_override == _capture_managed_materials.get(geometry_id):
 			geometry.material_override = _capture_originals.get(geometry_id)
-			if _is_coastal_surface(geometry.material_override):
-				_set_coastal_cutaway(geometry, false)
 	_capture_geometry.clear()
 	_capture_originals.clear()
 	_capture_managed_materials.clear()
@@ -573,8 +596,6 @@ func _restore_group(group: Dictionary) -> void:
 		var managed: Dictionary = group.managed_materials
 		if geometry.material_override == managed.get(geometry_id):
 			geometry.material_override = group.originals.get(geometry_id)
-			if _is_coastal_surface(geometry.material_override):
-				_set_coastal_cutaway(geometry, false)
 	for label in group.labels:
 		if is_instance_valid(label):
 			var original: Dictionary = group.label_originals.get(label.get_instance_id(), {})
