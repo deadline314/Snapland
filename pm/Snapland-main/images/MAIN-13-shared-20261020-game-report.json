@@ -1,0 +1,376 @@
+{
+	"album": {
+		"devil_count_after_reload": 1,
+		"normal_count_after_reload": 1,
+		"opened_devil_original": true,
+		"opened_normal_original": true,
+		"original_count_after_reload": 3,
+		"original_size": [
+			1280,
+			720
+		],
+		"reload_shared_path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-0.png",
+		"thumbnail_paths": [
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-0.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-1.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-2.png"
+		],
+		"thumbnail_size": [
+			320,
+			180
+		]
+	},
+	"devil_run": {
+		"assisted": false,
+		"devil_count": 1,
+		"normal_count": 1,
+		"original_paths": [
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-0.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-1.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-2.png"
+		],
+		"photo_id": "photo-welcome-devil-12",
+		"result": {
+			"assisted": false,
+			"devil": true,
+			"game_id": "game-012",
+			"mistakes": 0,
+			"practice": false,
+			"score": 300,
+			"score_summary": {
+				"label": "演奏分",
+				"rows": [
+					{
+						"amount": 300,
+						"count": 15,
+						"key": "melody_notes",
+						"label": "演奏音符得分"
+					}
+				],
+				"rule": "每個正確音符 +25；完成每段樂句再 +100。",
+				"total": 300
+			},
+			"success": true
+		},
+		"same_paths_as_ordinary": true
+	},
+	"elapsed_seconds": 136.775,
+	"failure_reason": "",
+	"game_id": "game-012",
+	"human_played": false,
+	"input_evidence": "real Input.parse_input_event key and mouse events through Main/Session/Control",
+	"last_melody_run": {
+		"elapsed_seconds": 22.717,
+		"precise_input": true
+	},
+	"ordinary_run": {
+		"assisted": false,
+		"normal_count": 1,
+		"original_paths": [
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-0.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-1.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-2.png"
+		],
+		"photo_id": "photo-welcome-game-12",
+		"result": {
+			"assisted": false,
+			"devil": false,
+			"game_id": "game-012",
+			"mistakes": 0,
+			"practice": false,
+			"score": 204,
+			"score_summary": {
+				"label": "演奏分",
+				"rows": [
+					{
+						"amount": 204,
+						"count": 15,
+						"key": "melody_notes",
+						"label": "演奏音符得分"
+					}
+				],
+				"rule": "每個正確音符 +25；完成每段樂句再 +100。",
+				"total": 204
+			},
+			"success": true
+		}
+	},
+	"screenshot_capture_opted_in": true,
+	"screenshots": [
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-ordinary-result.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-devil-result.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-ordinary-album-tiles.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-16-native-ordinary-original-viewer.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-devil-album-tiles.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-16-native-devil-original-viewer.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-reload-album.png",
+			"size": [
+				1280,
+				720
+			]
+		}
+	],
+	"scripted_gameplay_note": "A script plays the published fixed melody using real keyboard events; this is not a human play session.",
+	"status": "PASS",
+	"tutorial": "Skipped through the visible tutorial button on first entry.",
+	"walk": [
+		{
+			"actual": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.43
+			},
+			"elapsed_seconds": 7.716,
+			"from": {
+				"x": 0.0,
+				"y": 0.12,
+				"z": 23.2
+			},
+			"name": "game-012 approach 1",
+			"target": [
+				0.0,
+				12.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.2,
+				"y": 0.1,
+				"z": 7.43
+			},
+			"elapsed_seconds": 5.042,
+			"from": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.43
+			},
+			"name": "game-012 approach 2",
+			"target": [
+				4.19999980926514,
+				7.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -12.56
+			},
+			"elapsed_seconds": 13.599,
+			"from": {
+				"x": 4.2,
+				"y": 0.1,
+				"z": 7.43
+			},
+			"last_wall_contacts": [
+				"@StaticBody3D@1375",
+				"@StaticBody3D@1375",
+				"@StaticBody3D@1375"
+			],
+			"name": "game-012 approach 3",
+			"target": [
+				3.0,
+				-13.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -26.56
+			},
+			"elapsed_seconds": 7.884,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -12.56
+			},
+			"name": "game-012 approach 4",
+			"target": [
+				3.0,
+				-27.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -40.06
+			},
+			"elapsed_seconds": 6.892,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -26.56
+			},
+			"name": "game-012 approach 5",
+			"target": [
+				3.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 5.57,
+				"y": 0.1,
+				"z": -40.5
+			},
+			"elapsed_seconds": 1.849,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -40.06
+			},
+			"name": "game-012 approach 6",
+			"target": [
+				6.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 3.42,
+				"y": 0.1,
+				"z": -40.5
+			},
+			"elapsed_seconds": 1.521,
+			"from": {
+				"x": 5.65,
+				"y": 0.1,
+				"z": -40.5
+			},
+			"name": "album approach 1",
+			"target": [
+				3.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -27.44
+			},
+			"elapsed_seconds": 7.026,
+			"from": {
+				"x": 3.42,
+				"y": 0.1,
+				"z": -40.5
+			},
+			"name": "album approach 2",
+			"target": [
+				3.0,
+				-27.0
+			]
+		},
+		{
+			"actual": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -13.44
+			},
+			"elapsed_seconds": 7.951,
+			"from": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -27.44
+			},
+			"name": "album approach 3",
+			"target": [
+				3.0,
+				-13.0
+			]
+		},
+		{
+			"actual": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -9.44
+			},
+			"elapsed_seconds": 2.453,
+			"from": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -13.44
+			},
+			"name": "album approach 4",
+			"target": [
+				3.0,
+				-9.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.21,
+				"y": 0.1,
+				"z": 5.75
+			},
+			"elapsed_seconds": 10.533,
+			"from": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -9.44
+			},
+			"name": "album approach 5",
+			"target": [
+				4.19999980926514,
+				6.19999980926514
+			]
+		},
+		{
+			"actual": {
+				"x": 7.56,
+				"y": 0.1,
+				"z": 7.02
+			},
+			"elapsed_seconds": 2.67,
+			"from": {
+				"x": 4.21,
+				"y": 0.1,
+				"z": 5.75
+			},
+			"name": "album approach 6",
+			"target": [
+				8.0,
+				7.0
+			]
+		}
+	]
+}

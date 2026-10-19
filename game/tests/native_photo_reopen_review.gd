@@ -3,7 +3,6 @@ extends Node
 
 const MAIN_SCENE_PATH := "res://game/main.tscn"
 const PHOTO_IDS := ["photo-welcome-game-12", "photo-welcome-devil-12"]
-const REVIEW_IMAGE_DIR := "res://pm/Snapland-main/images"
 const CAPTURE_ENV := "SNAPLAND_NATIVE_CAPTURE"
 const REVIEW_TIMEOUT_SECONDS := 30.0
 
@@ -29,7 +28,7 @@ var _report := {
 func _ready() -> void:
 	_profile_path = OS.get_environment("SNAPLAND_SAVE_PATH").strip_edges()
 	if _profile_path.is_empty() or DisplayServer.get_name() == "headless":
-		_fail_now("Requires a GPU-backed display and the persisted isolated SNAPLAND_SAVE_PATH.")
+		_fail_now("Requires a rendered display and the persisted isolated SNAPLAND_SAVE_PATH.")
 		return
 	_started_ms = Time.get_ticks_msec()
 	_report["screenshots_opted_in"] = OS.get_environment(CAPTURE_ENV).strip_edges() == "1"
@@ -235,7 +234,7 @@ func _capture_review_image(file_name: String) -> bool:
 	if image == null or image.is_empty() or image.get_size() != Vector2i(1280, 720):
 		_failure = "Rendered frame for %s must be 1280x720" % file_name
 		return false
-	var directory := ProjectSettings.globalize_path(REVIEW_IMAGE_DIR)
+	var directory := OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir().path_join("native-photo-reopen")
 	var mkdir_error := DirAccess.make_dir_recursive_absolute(directory)
 	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
 		_failure = "Could not create native proof image directory: %s" % directory

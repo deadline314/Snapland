@@ -1,0 +1,570 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+[park_world] scenery meshes: 865, nodes: 1668
+NATIVE_PHOTO_COLLECTION_REPORT_BEGIN
+{
+	"album": {
+		"devil_count_after_reload": 1,
+		"normal_count_after_reload": 1,
+		"opened_devil_original": true,
+		"opened_normal_original": true,
+		"original_count_after_reload": 3,
+		"original_size": [
+			1280,
+			720
+		],
+		"reload_shared_path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-0.png",
+		"thumbnail_paths": [
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-0.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-1.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-2.png"
+		],
+		"thumbnail_size": [
+			320,
+			180
+		]
+	},
+	"devil_run": {
+		"assisted": false,
+		"devil_count": 1,
+		"normal_count": 1,
+		"original_paths": [
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-0.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-1.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-2.png"
+		],
+		"photo_id": "photo-welcome-devil-12",
+		"result": {
+			"assisted": false,
+			"devil": true,
+			"game_id": "game-012",
+			"mistakes": 0,
+			"practice": false,
+			"score": 300,
+			"score_summary": {
+				"label": "演奏分",
+				"rows": [
+					{
+						"amount": 300,
+						"count": 15,
+						"key": "melody_notes",
+						"label": "演奏音符得分"
+					}
+				],
+				"rule": "每個正確音符 +25；完成每段樂句再 +100。",
+				"total": 300
+			},
+			"success": true
+		},
+		"same_paths_as_ordinary": true
+	},
+	"elapsed_seconds": 136.775,
+	"failure_reason": "",
+	"game_id": "game-012",
+	"human_played": false,
+	"input_evidence": "real Input.parse_input_event key and mouse events through Main/Session/Control",
+	"last_melody_run": {
+		"elapsed_seconds": 22.717,
+		"precise_input": true
+	},
+	"ordinary_run": {
+		"assisted": false,
+		"normal_count": 1,
+		"original_paths": [
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-0.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-1.png",
+			"/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/photos/game-012-original-2.png"
+		],
+		"photo_id": "photo-welcome-game-12",
+		"result": {
+			"assisted": false,
+			"devil": false,
+			"game_id": "game-012",
+			"mistakes": 0,
+			"practice": false,
+			"score": 204,
+			"score_summary": {
+				"label": "演奏分",
+				"rows": [
+					{
+						"amount": 204,
+						"count": 15,
+						"key": "melody_notes",
+						"label": "演奏音符得分"
+					}
+				],
+				"rule": "每個正確音符 +25；完成每段樂句再 +100。",
+				"total": 204
+			},
+			"success": true
+		}
+	},
+	"screenshot_capture_opted_in": true,
+	"screenshots": [
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-ordinary-result.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-devil-result.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-ordinary-album-tiles.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-16-native-ordinary-original-viewer.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-devil-album-tiles.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-16-native-devil-original-viewer.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/delivery-20261020/photo-game-delivery/native-photo-collection/MAIN-13-native-reload-album.png",
+			"size": [
+				1280,
+				720
+			]
+		}
+	],
+	"scripted_gameplay_note": "A script plays the published fixed melody using real keyboard events; this is not a human play session.",
+	"status": "PASS",
+	"tutorial": "Skipped through the visible tutorial button on first entry.",
+	"walk": [
+		{
+			"actual": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.43
+			},
+			"elapsed_seconds": 7.716,
+			"from": {
+				"x": 0.0,
+				"y": 0.12,
+				"z": 23.2
+			},
+			"name": "game-012 approach 1",
+			"target": [
+				0.0,
+				12.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.2,
+				"y": 0.1,
+				"z": 7.43
+			},
+			"elapsed_seconds": 5.042,
+			"from": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.43
+			},
+			"name": "game-012 approach 2",
+			"target": [
+				4.19999980926514,
+				7.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -12.56
+			},
+			"elapsed_seconds": 13.599,
+			"from": {
+				"x": 4.2,
+				"y": 0.1,
+				"z": 7.43
+			},
+			"last_wall_contacts": [
+				"@StaticBody3D@1375",
+				"@StaticBody3D@1375",
+				"@StaticBody3D@1375"
+			],
+			"name": "game-012 approach 3",
+			"target": [
+				3.0,
+				-13.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -26.56
+			},
+			"elapsed_seconds": 7.884,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -12.56
+			},
+			"name": "game-012 approach 4",
+			"target": [
+				3.0,
+				-27.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -40.06
+			},
+			"elapsed_seconds": 6.892,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -26.56
+			},
+			"name": "game-012 approach 5",
+			"target": [
+				3.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 5.57,
+				"y": 0.1,
+				"z": -40.5
+			},
+			"elapsed_seconds": 1.849,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -40.06
+			},
+			"name": "game-012 approach 6",
+			"target": [
+				6.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 3.42,
+				"y": 0.1,
+				"z": -40.5
+			},
+			"elapsed_seconds": 1.521,
+			"from": {
+				"x": 5.65,
+				"y": 0.1,
+				"z": -40.5
+			},
+			"name": "album approach 1",
+			"target": [
+				3.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -27.44
+			},
+			"elapsed_seconds": 7.026,
+			"from": {
+				"x": 3.42,
+				"y": 0.1,
+				"z": -40.5
+			},
+			"name": "album approach 2",
+			"target": [
+				3.0,
+				-27.0
+			]
+		},
+		{
+			"actual": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -13.44
+			},
+			"elapsed_seconds": 7.951,
+			"from": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -27.44
+			},
+			"name": "album approach 3",
+			"target": [
+				3.0,
+				-13.0
+			]
+		},
+		{
+			"actual": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -9.44
+			},
+			"elapsed_seconds": 2.453,
+			"from": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -13.44
+			},
+			"name": "album approach 4",
+			"target": [
+				3.0,
+				-9.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.21,
+				"y": 0.1,
+				"z": 5.75
+			},
+			"elapsed_seconds": 10.533,
+			"from": {
+				"x": 2.99,
+				"y": 0.1,
+				"z": -9.44
+			},
+			"name": "album approach 5",
+			"target": [
+				4.19999980926514,
+				6.19999980926514
+			]
+		},
+		{
+			"actual": {
+				"x": 7.56,
+				"y": 0.1,
+				"z": 7.02
+			},
+			"elapsed_seconds": 2.67,
+			"from": {
+				"x": 4.21,
+				"y": 0.1,
+				"z": 5.75
+			},
+			"name": "album approach 6",
+			"target": [
+				8.0,
+				7.0
+			]
+		}
+	]
+}
+NATIVE_PHOTO_COLLECTION_REPORT_END
+PASS: scripted native gameplay photo and album review
+
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/NativePhotoCollectionMain/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1274)
+         [4] _ready (res://game/world/park_world.gd:142)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/NativePhotoCollectionMain/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1274)
+         [4] _ready (res://game/world/park_world.gd:142)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/NativePhotoCollectionMain/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1274)
+         [4] _ready (res://game/world/park_world.gd:142)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/NativePhotoCollectionMain/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1274)
+         [4] _ready (res://game/world/park_world.gd:142)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1300)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1307)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1307)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1307)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1307)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1307)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1314)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1314)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/NativePhotoCollectionMain/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1275)
+         [5] _ready (res://game/world/park_world.gd:142)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:54)
+WARNING: ParkWorld: traveller action 'celebrate' has no authored direction in res://assets/characters/complete-animation-regions.json; using the three-frame built-in pose fallback.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_missing_avatar_action_once (res://game/world/park_world.gd:2377)
+         [1] play_action (res://game/world/park_world.gd:2332)
+         [2] _close (res://game/main.gd:545)
+         [3] _unhandled_input (res://game/main.gd:619)
+         [4] _set_key (res://game/tests/native_photo_collection_review.gd:508)
+         [5] _send_key (res://game/tests/native_photo_collection_review.gd:515)
+         [6] _run (res://game/tests/native_photo_collection_review.gd:158)
+         [7] _capture_review_image (res://game/tests/native_photo_collection_review.gd:396)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _refresh_avatar_texture (res://game/world/park_world.gd:2428)
+         [2] play_action (res://game/world/park_world.gd:2339)
+         [3] _close (res://game/main.gd:545)
+         [4] _unhandled_input (res://game/main.gd:619)
+         [5] _set_key (res://game/tests/native_photo_collection_review.gd:508)
+         [6] _send_key (res://game/tests/native_photo_collection_review.gd:515)
+         [7] _run (res://game/tests/native_photo_collection_review.gd:158)
+         [8] _capture_review_image (res://game/tests/native_photo_collection_review.gd:396)

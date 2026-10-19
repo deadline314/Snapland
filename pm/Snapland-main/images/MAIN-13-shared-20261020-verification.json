@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "runtime_base": "9d250cf",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+  "renderer": "Compatibility / llvmpipe / X11",
+  "native_resolution": [
+    1280,
+    720
+  ],
+  "human_played": false,
+  "game_seconds": 136.775,
+  "ordinary_score": 204,
+  "devil_score": 300,
+  "ordinary_devil_shared_originals": true,
+  "normal_count": 1,
+  "devil_count": 1,
+  "originals": 3,
+  "thumbnails": 3,
+  "original_size": [
+    1280,
+    720
+  ],
+  "thumbnail_size": [
+    320,
+    180
+  ],
+  "restart_read_only": true,
+  "native_engine_errors": 0,
+  "fixture_corrections": "Two rejected path fixtures crossed the arch pillars. Both failures retained in private scratch; corrected actual keyboard route via the open promenade, preserving collision, distance and deadline guards. Screenshot outputs now accompany the isolated absolute profile instead of shared repo proofs.",
+  "scope": "Scripted real-input gameplay, both album categories, native original viewers and actual new-process restart. Separate noon postcard proof under ART-10; not human play, listening, Windows, full renderer/lighting or character-animation acceptance. Score-rule text discrepancy found during this run is addressed separately in SG-27.",
+  "fixture_sha256": {
+    "game/tests/native_photo_collection_review.gd": "17774125e71eb56d0975f46b82f734fd7c62d908bc0f40a09c2059ddf0ae0e47",
+    "game/tests/native_photo_reopen_review.gd": "5f097eea84a562e709e91e52a89d0c7a77613066d64874c8979449a1d40b0e86"
+  },
+  "files": [
+    {
+      "path": "MAIN-13-shared-20261020-game.log",
+      "bytes": 22862,
+      "sha256": "f437677b49b5072bbd736faaee8165cba361d2e30a86ab65e5e4ef9a33daae2f"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-game-report.json",
+      "bytes": 7599,
+      "sha256": "2d53362aa61e248cbd13962a3bfca7b54472e96b016e5a682b2d6115d86a772e"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-reopen.log",
+      "bytes": 16767,
+      "sha256": "d9fb03a10859909f9529fbc412d51bc57da42e705b7f2c7e4c66bdc9c0d3fdf7"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-reopen-report.json",
+      "bytes": 3325,
+      "sha256": "a2297ced01bc81a9f38a24b7c49366a4ea22ab6cc628ce9cf7b3935dec2bf652"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-ordinary-album-tiles.png",
+      "bytes": 121032,
+      "sha256": "1da55ca0ee318766ed8f3be5782f359424017f43bff7e1cff4e9f89b8e1998da"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-devil-album-tiles.png",
+      "bytes": 121588,
+      "sha256": "de0c76e5913efe842cdbd306090d5683da97b092d0acb55d03dd93754412da53"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-ordinary-original-viewer.png",
+      "bytes": 173098,
+      "sha256": "8fadbf21266159fff527eada1fc1b9b368c04dcbd943a5fc9eb0a38d825b963c"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-devil-original-viewer.png",
+      "bytes": 173049,
+      "sha256": "db085dcbe71bfd0ba6ba5105aa537b60ade8c25907643841b4bc0df37d3804b6"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-reopened-ordinary.png",
+      "bytes": 112528,
+      "sha256": "34c9db42342fbc2f9658cf5f389f08c4b56acb3a7510cda144b86dbfd98010b9"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-reopened-devil.png",
+      "bytes": 113229,
+      "sha256": "20975eda45c9eb76f2953cbf576056add1da8f6c1ca15c567b897425eba4a83a"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-thumbnails.log",
+      "bytes": 16604,
+      "sha256": "6d452acbe3ea7a90fb68e6225f90b9d35177d7d6d2fac5a6db4d83359b10f0aa"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-viewer.log",
+      "bytes": 1150,
+      "sha256": "3d9c9cd36d5b417f9c82ef613ead08550c1bebd2679ed1732f5abc0494a7f59f"
+    },
+    {
+      "path": "MAIN-13-shared-20261020-originals.log",
+      "bytes": 1563,
+      "sha256": "6a68bcdb400a73e63a45ef3cd4ceb5a3ba14a3a11eee31dbb0c7e2932641bcae"
+    }
+  ],
+  "log_normalization": "Trailing empty lines removed from copied logs; substantive engine output preserved."
+}

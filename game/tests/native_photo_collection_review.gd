@@ -8,7 +8,6 @@ const RHYTHMS: Array[Array] = [[0.0, 0.50, 0.88], [0.0, 0.86, 0.43, 0.43, 0.86],
 const MAX_REVIEW_SECONDS := 360.0
 const MAX_WAIT_SECONDS := 30.0
 const STUCK_SECONDS := 2.0
-const REVIEW_IMAGE_DIR := "res://pm/Snapland-main/images"
 const CAPTURE_ENV := "SNAPLAND_NATIVE_CAPTURE"
 
 var _main: Node
@@ -34,7 +33,7 @@ var _report: Dictionary = {
 
 func _ready() -> void:
 	if OS.get_environment("SNAPLAND_SAVE_PATH").strip_edges().is_empty() or DisplayServer.get_name() == "headless":
-		_fail_now("Requires a GPU-backed display and an isolated SNAPLAND_SAVE_PATH.")
+		_fail_now("Requires a rendered display and an isolated SNAPLAND_SAVE_PATH.")
 		return
 	_started_ms = Time.get_ticks_msec()
 	_report["screenshot_capture_opted_in"] = OS.get_environment(CAPTURE_ENV).strip_edges() == "1"
@@ -205,7 +204,9 @@ func _run() -> void:
 	await _finish(true, "")
 
 func _walk_to_game_012() -> bool:
-	var path: Array[Vector2] = [Vector2(0, 12), Vector2(4.2, 7), Vector2(3, -13), Vector2(3, -9), Vector2(5, -20), Vector2(5, -27), Vector2(4.2, -34), Vector2(6, -40.5)]
+	# Follow the open promenade through the arch before approaching the stage.
+	# The former diagonal from (3,-9) to (5,-20) crossed an arch pillar.
+	var path: Array[Vector2] = [Vector2(0, 12), Vector2(4.2, 7), Vector2(3, -13), Vector2(3, -27), Vector2(3, -40.5), Vector2(6, -40.5)]
 	for index in range(path.size()):
 		if not await _walk_to(path[index], "game-012 approach %d" % (index + 1)):
 			return false
@@ -213,7 +214,7 @@ func _walk_to_game_012() -> bool:
 	return true
 
 func _walk_to_album() -> bool:
-	var path: Array[Vector2] = [Vector2(4.2, -34), Vector2(5, -27), Vector2(5, -20), Vector2(3, -13), Vector2(3, -9), Vector2(4.2, -4.2), Vector2(4.2, 6.2), Vector2(8, 7)]
+	var path: Array[Vector2] = [Vector2(3, -40.5), Vector2(3, -27), Vector2(3, -13), Vector2(3, -9), Vector2(4.2, 6.2), Vector2(8, 7)]
 	for index in range(path.size()):
 		if not await _walk_to(path[index], "album approach %d" % (index + 1)):
 			return false
@@ -373,7 +374,7 @@ func _capture_review_image(file_name: String) -> bool:
 	if image.get_size() != Vector2i(1280, 720):
 		_failure = "Review screenshot %s must be 1280x720; actual=%s" % [file_name, str(image.get_size())]
 		return false
-	var directory := ProjectSettings.globalize_path(REVIEW_IMAGE_DIR)
+	var directory := OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir().path_join("native-photo-collection")
 	var mkdir_error := DirAccess.make_dir_recursive_absolute(directory)
 	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
 		_failure = "Could not create review screenshot directory: %s" % directory
