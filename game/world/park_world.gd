@@ -3,6 +3,7 @@ extends Node3D
 signal interaction_requested(id: String, label: String)
 signal area_changed(label: String)
 const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
+const CoastalPlay = preload("res://game/world/coastal_play.gd")
 const WATER = preload("res://game/world/water.gdshader")
 const STONE = preload("res://game/world/stone.gdshader")
 const WOOD = preload("res://game/world/wood.gdshader")
@@ -113,6 +114,7 @@ var contact_shadow_material: StandardMaterial3D
 var contact_shadows: Array[Dictionary] = []
 var actor_shadow_proxies: Array[Dictionary] = []
 var coastal_rotors: Array[Node3D] = []
+var coastal_play: Node3D
 var island_attractions: Node
 
 func _ready() -> void:
@@ -146,6 +148,10 @@ func _ready() -> void:
 	_build_gates()
 	CoastalCircuit.build(self)
 	_build_player()
+	coastal_play=CoastalPlay.new()
+	coastal_play.name="CoastalFreePlay"
+	add_child(coastal_play)
+	coastal_play.configure(self)
 	island_attractions = IslandAttractionsScript.new()
 	island_attractions.name = "IslandAttractions"
 	add_child(island_attractions)
@@ -2234,7 +2240,7 @@ func _process(delta: float) -> void:
 		time+=delta
 		if not reduced_motion:
 			for rotor in coastal_rotors:
-				rotor.rotate_z(delta*0.18)
+				rotor.rotate_z(delta*float(rotor.get_meta("play_speed",0.18)))
 	if is_instance_valid(player):
 		lamp_selection_elapsed += delta
 		if lamp_selection_elapsed >= LAMP_SELECTION_INTERVAL and player.global_position.distance_squared_to(lamp_selection_player_position) >= 0.04:

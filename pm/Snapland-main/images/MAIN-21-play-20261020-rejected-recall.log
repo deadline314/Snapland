@@ -1,0 +1,191 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 20 FPS...
+[park_world] scenery meshes: 1123, nodes: 2025
+--------------------------------------------------------------------------------
+Done recording movie at path: /workspace/work/Snapland-character/work/entry-batch-20261020/play-v2/play.avi
+169 frames at 20 FPS (movie length: 00:00:08:09), recorded in 00:00:34 (23% of real-time speed).
+CPU render time: 20.86 seconds (average: 123.42 ms/frame)
+GPU render time: 20.99 seconds (average: 124.18 ms/frame)
+Encoding time: 2.39 seconds (average: 14.13 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1287)
+         [4] _ready (res://game/world/park_world.gd:147)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1287)
+         [4] _ready (res://game/world/park_world.gd:147)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1287)
+         [4] _ready (res://game/world/park_world.gd:147)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1287)
+         [4] _ready (res://game/world/park_world.gd:147)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1313)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1320)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1320)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1320)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1320)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1320)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1327)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1327)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1334)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1334)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1334)
+         [4] _build_avenue (res://game/world/park_world.gd:1288)
+         [5] _ready (res://game/world/park_world.gd:147)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/native_coastal_play_review.gd:14)
+ERROR: could not select play:ball got play:recall
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://game/tests/native_coastal_play_review.gd:79)
+       [1] _place (res://game/tests/native_coastal_play_review.gd:68)
+ERROR: second side changes the physical kick direction
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://game/tests/native_coastal_play_review.gd:79)
+       [1] _run (res://game/tests/native_coastal_play_review.gd:34)
+       [2] _frames (res://game/tests/native_coastal_play_review.gd:77)
+ERROR: ["could not select play:ball got play:recall", "second side changes the physical kick direction"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://game/tests/native_coastal_play_review.gd:62)
+       [1] _frames (res://game/tests/native_coastal_play_review.gd:77)

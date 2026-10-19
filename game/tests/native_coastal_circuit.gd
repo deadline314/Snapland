@@ -33,6 +33,13 @@ func _run():
    root.get_texture().get_image().save_png(out+"/"+nearest_id.trim_prefix("coast:")+".png")
    _key(KEY_E)
    for frame in 3: await process_frame
+   if not world.coastal_play.prompt(nearest_id).is_empty():
+    if main.modal_kind!="" or main.session!=null:
+     failures.append("coastal free play unexpectedly opened a modal: "+nearest_id);break
+    await RenderingServer.frame_post_draw
+    root.get_texture().get_image().save_png(out+"/"+nearest_id.trim_prefix("coast:")+"-action.png")
+    inspected.append(nearest_id)
+    continue
    if main.modal_kind!="dialogue" or main.dialogue.is_empty():
     failures.append("real E did not open coastal observation: "+nearest_id);break
    _key(KEY_E)

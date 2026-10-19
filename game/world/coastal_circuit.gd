@@ -178,9 +178,16 @@ static func _bell(world: Node3D, p: Vector3) -> void:
 	for x in [-1.15,1.15]:
 		world._box(p+Vector3(x,1.7,0),Vector3(0.27,3.4,0.35),Color("#705a43"),true)
 	_beam(world,p+Vector3(-1.5,3.35,0),p+Vector3(1.5,3.35,0),0.3,Color("#937249"))
-	_lathe(world,p+Vector3(0,1.8,0),[Vector2(0,0),Vector2(0.8,0),Vector2(0.86,0.14),Vector2(0.46,0.85),Vector2(0.4,1.0),Vector2(0,1.05)],Color("#a98347"))
-	world._sphere(p+Vector3(0,1.68,0),0.14,Color("#70563b"))
-	_beam(world,p+Vector3(0,1.65,0),p+Vector3(0,0.6,0),0.04,Color("#d5bf91"))
+	var pivot := Node3D.new()
+	pivot.name = "CoastalBellSwing"
+	world.add_child(pivot)
+	pivot.position = p+Vector3(0,2.85,0)
+	var shell := _lathe(world,p+Vector3(0,1.8,0),[Vector2(0,0),Vector2(0.8,0),Vector2(0.86,0.14),Vector2(0.46,0.85),Vector2(0.4,1.0),Vector2(0,1.05)],Color("#a98347"))
+	shell.reparent(pivot)
+	var clapper: MeshInstance3D = world._sphere(p+Vector3(0,1.68,0),0.14,Color("#70563b"))
+	clapper.reparent(pivot)
+	var rope := _beam(world,p+Vector3(0,1.65,0),p+Vector3(0,0.6,0),0.04,Color("#d5bf91"))
+	rope.reparent(pivot)
 
 static func _lighthouse(world: Node3D, p: Vector3) -> void:
 	var tower := _lathe(world,p,[Vector2(0,0),Vector2(1.7,0),Vector2(1.8,0.25),Vector2(1.15,0.5),Vector2(0.88,5.9),Vector2(0,5.9)],Color("#d0c6a4"))
@@ -255,7 +262,8 @@ static func _waterwheel(world: Node3D, p: Vector3) -> void:
 		var paddle: MeshInstance3D = world._box(end,Vector3(0.38,0.14,1.3),Color("#627554"))
 		paddle.rotation.z = angle
 		paddle.reparent(pivot)
-	world._box(p+Vector3(0,0.2,0),Vector3(2.4,0.16,5.4),Color("#285d62"))
+	var flow: MeshInstance3D = world._box(p+Vector3(0,0.2,0),Vector3(2.4,0.16,5.4),Color("#285d62"))
+	flow.name = "CoastalWaterFlow"
 	for side in [-1,1]:
 		world._box(p+Vector3(float(side)*1.25,0.32,0),Vector3(0.18,0.38,5.6),Color("#7c8067"),true)
 

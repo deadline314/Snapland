@@ -61,6 +61,7 @@ func _ready() -> void:
 	add_child(world)
 	audio=Audio.new()
 	add_child(audio)
+	world.coastal_play.note_requested.connect(audio.play_note)
 	story=Story.new()
 	definitions=Session.definitions()
 	_build_ui()
@@ -592,7 +593,8 @@ func _process(delta: float) -> void:
 		context_bar.visible=has_context
 		context_action.visible=has_context
 		if has_context:
-			context_action.text="E   互動：%s"%str(world.nearest.get("label","附近設施"))
+			var play_prompt: String=world.coastal_play.prompt(str(world.nearest.get("id","")))
+			context_action.text="E   %s"%play_prompt if not play_prompt.is_empty() else "E   互動：%s"%str(world.nearest.get("label","附近設施"))
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0:
 		var previous_count := dialogue_label.visible_characters
 		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
@@ -1089,6 +1091,8 @@ func _dialogue_panel_resized() -> void:
 
 func _interact(id: String, title: String) -> void:
 	audio.play_sfx("interact")
+	if world.coastal_play.activate(id):
+		return
 	if id.begins_with("game-"):
 		_show_game_info(id)
 	elif id=="arrival":
