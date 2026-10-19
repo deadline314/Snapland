@@ -1296,8 +1296,10 @@ func _build_avenue() -> void:
 	_build_attraction_districts()
 	# Keep both story characters in the open foreground of the avenue arch, where
 	# their whole billboards and ground anchors stay visible in the lowered camera.
-	_npc(Vector3(-5.4,0,-7.8),CORAL,"小角")
-	_point("quest-001","吉祥物的尾巴危機",Vector3(-5.4,0,-7.8))
+	# Leave the complete imp silhouette clear of the foreground lamp planter.
+	var imp_position := Vector3(-4.1,0,-7.5)
+	_npc(imp_position,CORAL,"小角")
+	_point("quest-001","吉祥物的尾巴危機",imp_position)
 	_npc(Vector3(3.4,0,-4.0),TEAL,"阿浪")
 	_point("quest-002","廣播即興救場",Vector3(3.4,0,-4.0))
 	_point("explore-001","花壇會眨眼",Vector3(-3,0,-25))

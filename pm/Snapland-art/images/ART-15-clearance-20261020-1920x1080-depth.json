@@ -1,0 +1,164 @@
+[
+  {
+    "body_pixels": 105732,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC ticket frame 0"
+  },
+  {
+    "body_pixels": 108087,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC ticket frame 1"
+  },
+  {
+    "body_pixels": 107891,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC ticket frame 2"
+  },
+  {
+    "body_pixels": 102582,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC ticket frame 3"
+  },
+  {
+    "body_pixels": 100566,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC imp frame 0"
+  },
+  {
+    "body_pixels": 99184,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC imp frame 1"
+  },
+  {
+    "body_pixels": 101578,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC imp frame 2"
+  },
+  {
+    "body_pixels": 100922,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC imp frame 3"
+  },
+  {
+    "body_pixels": 104370,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC announcer frame 0"
+  },
+  {
+    "body_pixels": 100888,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC announcer frame 1"
+  },
+  {
+    "body_pixels": 106569,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC announcer frame 2"
+  },
+  {
+    "body_pixels": 97984,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC announcer frame 3"
+  },
+  {
+    "body_pixels": 105679,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "reduced-motion NPC ticket"
+  },
+  {
+    "body_pixels": 100539,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "reduced-motion NPC imp"
+  },
+  {
+    "body_pixels": 104440,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "reduced-motion NPC announcer"
+  },
+  {
+    "body_pixels": 63168,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/front"
+  },
+  {
+    "body_pixels": 68310,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/front_right"
+  },
+  {
+    "body_pixels": 58393,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/right"
+  },
+  {
+    "body_pixels": 61651,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/back_right"
+  },
+  {
+    "body_pixels": 64422,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/back"
+  },
+  {
+    "body_pixels": 61122,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/back_left"
+  },
+  {
+    "body_pixels": 59673,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/left"
+  },
+  {
+    "body_pixels": 68182,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/front_left"
+  },
+  {
+    "body_pixels": 69199,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero walk/front_right/5-of-8"
+  },
+  {
+    "body_pixels": 91489,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero photograph"
+  },
+  {
+    "body_pixels": 92369,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero wave"
+  },
+  {
+    "body_pixels": 99790,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero celebrate"
+  }
+]

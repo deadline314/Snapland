@@ -1,0 +1,17 @@
+{
+  "observed_model_seconds_per_movie_second": 0.25000000000000144,
+  "begin_frame": 7,
+  "end_frame": 695,
+  "model_elapsed": 8.60000000000005,
+  "decoded_samples": 35,
+  "sample_step_movie_frames": 20,
+  "full_window_pose_count": 7,
+  "video": {
+    "width": 1280,
+    "height": 720,
+    "avg_frame_rate": "20/1",
+    "duration": "37.000000",
+    "nb_frames": "740"
+  },
+  "method": "Fixed full-body crop sampled every quarter model second plus all observed unique postdraw poses; not continuous playback, not player-input movement, audio not listened"
+}

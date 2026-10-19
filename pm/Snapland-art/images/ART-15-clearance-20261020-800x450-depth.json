@@ -1,0 +1,164 @@
+[
+  {
+    "body_pixels": 18356,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC ticket frame 0"
+  },
+  {
+    "body_pixels": 18803,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC ticket frame 1"
+  },
+  {
+    "body_pixels": 18721,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC ticket frame 2"
+  },
+  {
+    "body_pixels": 17783,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC ticket frame 3"
+  },
+  {
+    "body_pixels": 17453,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC imp frame 0"
+  },
+  {
+    "body_pixels": 17239,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC imp frame 1"
+  },
+  {
+    "body_pixels": 17645,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC imp frame 2"
+  },
+  {
+    "body_pixels": 17495,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC imp frame 3"
+  },
+  {
+    "body_pixels": 18123,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC announcer frame 0"
+  },
+  {
+    "body_pixels": 17559,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC announcer frame 1"
+  },
+  {
+    "body_pixels": 18508,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC announcer frame 2"
+  },
+  {
+    "body_pixels": 16999,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "NPC announcer frame 3"
+  },
+  {
+    "body_pixels": 18374,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "reduced-motion NPC ticket"
+  },
+  {
+    "body_pixels": 17456,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "reduced-motion NPC imp"
+  },
+  {
+    "body_pixels": 18151,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "reduced-motion NPC announcer"
+  },
+  {
+    "body_pixels": 10963,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/front"
+  },
+  {
+    "body_pixels": 11884,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/front_right"
+  },
+  {
+    "body_pixels": 10118,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/right"
+  },
+  {
+    "body_pixels": 10691,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/back_right"
+  },
+  {
+    "body_pixels": 11167,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/back"
+  },
+  {
+    "body_pixels": 10630,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/back_left"
+  },
+  {
+    "body_pixels": 10360,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/left"
+  },
+  {
+    "body_pixels": 11853,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero idle/front_left"
+  },
+  {
+    "body_pixels": 12033,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero walk/front_right/5-of-8"
+  },
+  {
+    "body_pixels": 15879,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero photograph"
+  },
+  {
+    "body_pixels": 16045,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero wave"
+  },
+  {
+    "body_pixels": 17321,
+    "covered_fraction": 0.0,
+    "covered_pixels": 0,
+    "description": "hero celebrate"
+  }
+]

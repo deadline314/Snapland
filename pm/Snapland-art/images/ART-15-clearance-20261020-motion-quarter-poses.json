@@ -1,0 +1,58 @@
+[
+  {
+    "action": "stand",
+    "frame": 7,
+    "model_time": 0.0,
+    "path": "work/sprite-clearance-20261020/motion-quarter/captures/pose-00.png",
+    "pitch_degrees": 19.86,
+    "sha256": "309febb4cf4306fbfd5a028b34414da0852b629482d31e4fe394830745de223a"
+  },
+  {
+    "action": "stand",
+    "frame": 26,
+    "model_time": 0.2375,
+    "path": "work/sprite-clearance-20261020/motion-quarter/captures/pose-01.png",
+    "pitch_degrees": 19.86,
+    "sha256": "281edd7080bfe7c20751b718510921192cf5bfcf77bff1482153f6ea44c38b4b"
+  },
+  {
+    "action": "stand",
+    "frame": 53,
+    "model_time": 0.575,
+    "path": "work/sprite-clearance-20261020/motion-quarter/captures/pose-02.png",
+    "pitch_degrees": 19.86,
+    "sha256": "8e89b69bc44dce513a960385257d1379348d76c3476309b234e7859f8a11d1b6"
+  },
+  {
+    "action": "stand",
+    "frame": 80,
+    "model_time": 0.912499999999999,
+    "path": "work/sprite-clearance-20261020/motion-quarter/captures/pose-03.png",
+    "pitch_degrees": 19.86,
+    "sha256": "88c9c2bc423d5dd3cef9ad33d82f784b98bcec1c34ca570b659122191c0f7327"
+  },
+  {
+    "action": "stand",
+    "frame": 106,
+    "model_time": 1.2375,
+    "path": "work/sprite-clearance-20261020/motion-quarter/captures/pose-04.png",
+    "pitch_degrees": 19.86,
+    "sha256": "c6326200f9f3cdb346b5a10e276137b3594358dc9cbf3ed3adc8b6e486f3282e"
+  },
+  {
+    "action": "stand",
+    "frame": 133,
+    "model_time": 1.575,
+    "path": "work/sprite-clearance-20261020/motion-quarter/captures/pose-05.png",
+    "pitch_degrees": 19.86,
+    "sha256": "a0ab21852348f5c5d248c925fb411d5bb26094c4fd0619c6bff57c93529328bc"
+  },
+  {
+    "action": "stand",
+    "frame": 160,
+    "model_time": 1.9125,
+    "path": "work/sprite-clearance-20261020/motion-quarter/captures/pose-06.png",
+    "pitch_degrees": 19.86,
+    "sha256": "c509bf842c8918ec061c8347f74f25f507baef29aed6daa65b91722038aa9f3f"
+  }
+]

@@ -25,7 +25,8 @@ func _run() -> void:
 	_watchdog.timeout.connect(_on_watchdog_timeout)
 	add_child(_watchdog)
 	_watchdog.start()
-	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty() or DisplayServer.get_name() == "headless":
+	var save_path := OS.get_environment("SNAPLAND_SAVE_PATH").strip_edges()
+	if save_path.is_empty() or not save_path.is_absolute_path() or save_path.contains("://") or DisplayServer.get_name() == "headless":
 		push_error("Native sprite clearance review requires GPU and isolated SNAPLAND_SAVE_PATH")
 		get_tree().quit(1)
 		return
@@ -132,7 +133,7 @@ func _review_npc_frames() -> bool:
 			if not await _check_visible_sprite_and_contact(sprite, frame, anchor, activity_root, NpcActivityScript.ACTION_FEET_ROW, NpcActivityScript.ACTION_CANVAS_SIZE.y, "NPC %s frame %d" % [role, frame_index]):
 				return false
 			var suffix: String = NPC_FRAME_NAMES[frame_index]
-			if not main._capture("pm/Snapland-art/images/ART-15-sprite-clearance-npc-%s-%s.png" % [role, suffix]):
+			if not _save_clearance_capture("ART-15-sprite-clearance-npc-%s-%s.png" % [role, suffix]):
 				await _fail("Could not save native NPC clearance capture: %s/%s" % [role, suffix])
 				return false
 	return true
@@ -188,7 +189,7 @@ func _review_reduced_motion_npcs() -> bool:
 			return false
 		if not await _check_visible_sprite_and_contact(sprite, texture, anchor, activity_root, NpcActivityScript.ACTION_FEET_ROW, NpcActivityScript.ACTION_CANVAS_SIZE.y, "reduced-motion NPC %s" % role):
 			return false
-		if not main._capture("pm/Snapland-art/images/ART-15-sprite-clearance-npc-%s-reduced.png" % role):
+		if not _save_clearance_capture("ART-15-sprite-clearance-npc-%s-reduced.png" % role):
 			await _fail("Could not save reduced-motion NPC clearance capture: " + role)
 			return false
 	main.world.apply_settings({"reduced_motion": false})
@@ -238,7 +239,7 @@ func _review_avatar_poses() -> bool:
 		world._refresh_avatar_texture(0)
 		await RenderingServer.frame_post_draw
 		if not await _check_avatar_frame(avatar, "idle/%s" % direction): return false
-		if not main._capture("pm/Snapland-art/images/ART-15-sprite-clearance-avatar-idle-%s.png" % direction):
+		if not _save_clearance_capture("ART-15-sprite-clearance-avatar-idle-%s.png" % direction):
 			await _fail("Could not save native avatar idle capture for " + direction)
 			return false
 	var walk_direction := "front_right"
@@ -256,7 +257,7 @@ func _review_avatar_poses() -> bool:
 	world._refresh_avatar_texture(walk_frame)
 	await RenderingServer.frame_post_draw
 	if not await _check_avatar_frame(avatar, "walk/%s/%d-of-%d" % [walk_direction, walk_frame + 1, walk_frame_count]): return false
-	if not main._capture("pm/Snapland-art/images/ART-15-sprite-clearance-avatar-walk-%s-%d-of-%d.png" % [walk_direction, walk_frame + 1, walk_frame_count]):
+	if not _save_clearance_capture("ART-15-sprite-clearance-avatar-walk-%s-%d-of-%d.png" % [walk_direction, walk_frame + 1, walk_frame_count]):
 		await _fail("Could not save native avatar walk capture")
 		return false
 	world.avatar_is_walking = false
@@ -268,7 +269,7 @@ func _review_avatar_poses() -> bool:
 			await _fail("Hero action fixture did not select its requested pose: " + action)
 			return false
 		if not await _check_avatar_frame(avatar, action): return false
-		if not main._capture("pm/Snapland-art/images/ART-15-sprite-clearance-avatar-%s.png" % action):
+		if not _save_clearance_capture("ART-15-sprite-clearance-avatar-%s.png" % action):
 			await _fail("Could not save native avatar action capture for " + action)
 			return false
 	return true
@@ -344,7 +345,7 @@ func _check_visible_sprite_and_contact(sprite: Sprite3D, texture: Texture2D, anc
 		if main.world.camera.is_position_behind(world_point) or not view.has_point(main.world.camera.unproject_position(world_point)):
 			await _fail("Sprite %s opaque bounds, including its feet, are outside the camera view" % description)
 			return false
-	return true
+	return await _review_depth_coverage(sprite, description)
 
 func _visible_alpha_bounds(image: Image) -> Rect2i:
 	var left := image.get_width()
@@ -401,3 +402,65 @@ func _material_state_unchanged(material: ShaderMaterial, baseline: Dictionary, e
 		if material.get_shader_parameter(parameter) != baseline.get(parameter):
 			return false
 	return material.get_shader_parameter("texture_albedo") == expected_texture
+
+
+# Compare the same lit sprite with and without scene geometry, then restore
+# the original layer/visibility state. Bounds and physics rays alone miss
+# decorative meshes that have no collision shape. Review-only GPU readback.
+var _depth_records: Array[Dictionary] = []
+func _review_depth_coverage(sprite: Sprite3D, description: String) -> bool:
+	var camera := main.world.camera as Camera3D
+	var saved_layers := sprite.layers
+	var saved_cull := camera.cull_mask
+	var review_layer := 1 << 19
+	for visual in main.world.find_children("*", "VisualInstance3D", true, false):
+		if visual != sprite and (visual.layers & review_layer) != 0:
+			await _fail("Sprite coverage review layer is already used by scene geometry")
+			return false
+	sprite.layers = review_layer
+	camera.cull_mask = saved_cull | review_layer
+	await RenderingServer.frame_post_draw
+	var normal := get_viewport().get_texture().get_image()
+	camera.cull_mask = review_layer
+	await RenderingServer.frame_post_draw
+	var alone := get_viewport().get_texture().get_image()
+	sprite.visible = false
+	await RenderingServer.frame_post_draw
+	var blank := get_viewport().get_texture().get_image()
+	sprite.visible = true
+	sprite.layers = saved_layers
+	camera.cull_mask = saved_cull
+	await RenderingServer.frame_post_draw
+	var body_pixels := 0
+	var covered_pixels := 0
+	for y in range(alone.get_height()):
+		for x in range(alone.get_width()):
+			var a := alone.get_pixel(x,y)
+			var b := blank.get_pixel(x,y)
+			var difference := maxf(absf(a.r-b.r), maxf(absf(a.g-b.g),absf(a.b-b.b)))
+			if difference < 0.10: continue
+			body_pixels += 1
+			var n := normal.get_pixel(x,y)
+			if maxf(absf(a.r-n.r),maxf(absf(a.g-n.g),absf(a.b-n.b))) > 0.035:
+				covered_pixels += 1
+	var ratio := float(covered_pixels)/float(maxi(body_pixels,1))
+	_depth_records.append({"description":description,"body_pixels":body_pixels,"covered_pixels":covered_pixels,"covered_fraction":ratio})
+	var report_path := OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir().path_join("sprite-depth-coverage.json")
+	var report := FileAccess.open(report_path,FileAccess.WRITE)
+	if report == null:
+		await _fail("Could not save sprite depth coverage report: " + report_path)
+		return false
+	report.store_string(JSON.stringify(_depth_records,"  "))
+	print("DEPTH COVERAGE ",description," ",covered_pixels,"/",body_pixels," fraction=",ratio)
+	if body_pixels == 0 or covered_pixels != 0:
+		await _fail("Sprite %s has %d/%d rendered body pixels hidden by scene geometry or overlays" % [description, covered_pixels, body_pixels])
+		return false
+	return true
+
+func _save_clearance_capture(filename: String) -> bool:
+	# New reviews stay with their isolated profile, never overwrite ticket history.
+	var directory := OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir().path_join("captures")
+	var directory_error := DirAccess.make_dir_recursive_absolute(directory)
+	if directory_error != OK and directory_error != ERR_ALREADY_EXISTS:
+		return false
+	return get_viewport().get_texture().get_image().save_png(directory.path_join(filename)) == OK
