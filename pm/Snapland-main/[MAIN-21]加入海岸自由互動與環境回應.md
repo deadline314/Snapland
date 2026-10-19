@@ -61,3 +61,5 @@
 [實際操作短片](images/MAIN-21-play-20261020-play.mp4) · [原生報告](images/MAIN-21-play-20261020-report.json) · [原生日誌](images/MAIN-21-play-20261020-native.log) · [物理與生命週期測試](images/MAIN-21-play-20261020-freeplay.log) · [布局測試](images/MAIN-21-play-20261020-layout.log) · [原先球架搶互動的拒收紀錄](images/MAIN-21-play-20261020-rejected-recall.log) · [啟動檢視工具的拒收紀錄](images/MAIN-21-play-20261020-rejected-capture.log) · [證據雜湊](images/MAIN-21-play-20261020-manifest.json)。
 
 本票結案限已開放海岸三種自由互動；所有園區的內容豐富度及整體美術仍依其他票接續。
+
+本輪遠端交付：[提交 c4eaae5](https://github.com/deadline314/Snapland/commit/c4eaae50740f8d8e6cba6862248e110fedc77430)；已依正常快轉流程整合 main。

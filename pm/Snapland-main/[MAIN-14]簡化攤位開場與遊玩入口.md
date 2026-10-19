@@ -86,3 +86,5 @@
 [新存檔報告](images/MAIN-14-entry-20261020-new.json) · [續玩報告](images/MAIN-14-entry-20261020-returning.json) · [原版反例](images/MAIN-14-entry-20261020-rejected-assist.log) · [最終入口測試](images/MAIN-14-entry-20261020-entry.log) · [教學存檔測試](images/MAIN-14-entry-20261020-tutorial-progress.log) · [整合測試](images/MAIN-14-entry-20261020-integration.log) · [證據雜湊](images/MAIN-14-entry-20261020-manifest.json)。
 
 開始基準 `244536b`；分支 `codex/finish-runtime-batch-20261020`。本票結案限攤位入口完整流程；教學截圖的當前版本覆蓋仍由 MAIN-10 追蹤。
+
+本輪遠端交付：[提交 40e27eb](https://github.com/deadline314/Snapland/commit/40e27eb2b5151a686356cd1dd15a2ff8c6644aca)；已依正常快轉流程整合 main。

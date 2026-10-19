@@ -93,3 +93,5 @@ Root 實際查看三張提交內容的原生截圖，並將正常 15.7 秒與四
 [步行與完整乘坐報告](images/MAIN-15-ride-20261020-report.json) · [原生紀錄](images/MAIN-15-ride-20261020-native.log) · [設施局部驗證](images/MAIN-15-ride-20261020-ride.log) · [日夜光源預算](images/MAIN-15-ride-20261020-daylight.log) · [補燈前畫面](images/MAIN-15-ride-20261020-before-night-lights.png) · [匯入](images/MAIN-15-ride-20261020-import.log) · [證據雜湊](images/MAIN-15-ride-20261020-manifest.json)。
 
 接續基準 `2424410`；分支 `codex/finish-runtime-batch-20261020`。本票結案限這座休閒設施，不代表所有園區、角色動畫或整套光影品質完成。
+
+本輪遠端交付：[提交 39570aa](https://github.com/deadline314/Snapland/commit/39570aaf01c12d29d368225cdcaad469d9238e06)；已依正常快轉流程整合 main。

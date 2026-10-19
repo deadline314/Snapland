@@ -180,3 +180,5 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 [減負前的相同潮鐘位置](../Snapland-main/images/MAIN-21-play-20261020-bell-before.png) · [800 像素探索](images/ART-20-light-20261020-800-exploration.png) · [最終互動短片](images/ART-20-light-20261020-play.mp4) · [原生報告](images/ART-20-light-20261020-report.json) · [三尺寸 shell](images/ART-20-light-20261020-shell.log) · [對話](images/ART-20-light-20261020-dialogue.log) · [小遊戲 UI](images/ART-20-light-20261020-ui-minigames.log) · [來源雜湊](images/ART-20-light-20261020-manifest.json)。
 
 本輪交付以 `c4eaae5` 接續，限遊園常駐資訊、附近操作與場景文字層級；全套介面和拍貼流程仍依未勾選條件驗收，狀態保持進行中。
+
+本輪遠端交付：[提交 2424410](https://github.com/deadline314/Snapland/commit/24244109d8600596e910ac4c6ccd17b95becfc4a)；已依正常快轉流程整合 main。
