@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+PASS: tutorial seen progress and failed-save start checks
+
+WARNING: Invalid seen tutorial ID 'unknown' in progress file 'fixture'; skipping.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_payload (res://game/core/progress.gd:822)
+         [1] _run (res://game/tests/test_tutorial_seen_progress.gd:31)
+WARNING: Invalid seen tutorial ID '2' in progress file 'fixture'; skipping.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_payload (res://game/core/progress.gd:822)
+         [1] _run (res://game/tests/test_tutorial_seen_progress.gd:31)
+WARNING: Invalid 'tutorial_seen_games' field in progress file 'fixture'; using defaults.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validated_payload (res://game/core/progress.gd:816)
+         [1] _run (res://game/tests/test_tutorial_seen_progress.gd:33)

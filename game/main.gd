@@ -1156,6 +1156,7 @@ func _show_game_info(id: String) -> void:
 	modal_body=null
 	overlay.show()
 	modal_kind="game_info"
+	hud.hide()
 	world.blocked=true
 	world.set_process(true)
 	audio.set_paused(false)
@@ -1192,7 +1193,7 @@ func _show_game_rules(id: String) -> void:
 	Paper.button("圖解教學",func(): _open_tutorial(id,"game_info",bool(Progress.settings.get("assist",false))),row)
 	Paper.button("練習操作",func(): _launch_game(id,bool(Progress.settings.get("assist",false)),true),row)
 	Paper.button("開始遊玩",func(): _request_game_start(id,bool(Progress.settings.get("assist",false))),row).grab_focus()
-	Paper.button("輔助挑戰",func(): _launch_game(id,true),row)
+	Paper.button("輔助挑戰",func(): _request_game_start(id,true),row)
 	_back(body)
 
 func _request_game_start(id: String, assist: bool) -> void:

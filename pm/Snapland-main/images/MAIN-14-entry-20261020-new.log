@@ -1,0 +1,196 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+[park_world] scenery meshes: 1113, nodes: 2007
+PASS: entry game-001 returning=false
+PASS: entry game-002 returning=false
+PASS: entry game-003 returning=false
+PASS: entry game-004 returning=false
+PASS: entry game-005 returning=false
+PASS: entry game-006 returning=false
+PASS: entry game-007 returning=false
+PASS: entry game-008 returning=false
+PASS: entry game-009 returning=false
+PASS: entry game-010 returning=false
+PASS: entry game-011 returning=false
+PASS: entry game-012 returning=false
+PASS: native twelve-station new entry/assist/tutorial/cancel
+
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1281)
+         [4] _ready (res://game/world/park_world.gd:145)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1281)
+         [4] _ready (res://game/world/park_world.gd:145)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1281)
+         [4] _ready (res://game/world/park_world.gd:145)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1281)
+         [4] _ready (res://game/world/park_world.gd:145)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1307)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1314)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1314)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1314)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1314)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1314)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1321)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1328)
+         [4] _build_avenue (res://game/world/park_world.gd:1282)
+         [5] _ready (res://game/world/park_world.gd:145)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/entry-batch-20261020/native_entry.gd:28)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _validate_authored_avatar_actions (res://game/minigames/ribbon_rhythm_view.gd:236)
+         [2] configure_avatar (res://game/minigames/ribbon_rhythm_view.gd:75)
+         [3] _sync_presentation (res://game/minigames/session.gd:369)
+         [4] reset_round (res://game/minigames/session.gd:784)
+         [5] start (res://game/minigames/session.gd:251)
+         [6] _launch_game (res://game/main.gd:1228)
+         [7] _tutorial_start (res://game/main.gd:801)
+         [8] _tutorial_skip (res://game/main.gd:782)
+         [9] request_skip (res://game/ui/tutorial_panel.gd:373)
+         [10] _click (res://work/entry-batch-20261020/native_entry.gd:126)
+         [11] _frames (res://work/entry-batch-20261020/native_entry.gd:133)

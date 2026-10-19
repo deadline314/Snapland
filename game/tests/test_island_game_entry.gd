@@ -13,6 +13,7 @@ func _run() -> void:
 		for i in 2: await get_tree().process_frame
 		var entry = main.overlay.find_child("IslandGameInvite",true,false)
 		if entry == null: failures.append("Compact invite missing: "+definition.id); break
+		if main.hud.visible: failures.append("Invite must hide unrelated park counters and the stale nearby action: "+definition.id)
 		if main.overlay.find_child("GameRulesDetails",true,false) != null: failures.append("Rules shown before request: "+definition.id)
 		var buttons = entry.find_children("*","Button",true,false)
 		if buttons.size() != 3: failures.append("Invite requires start/rules/return only: "+definition.id)
@@ -37,6 +38,7 @@ func _run() -> void:
 					failures.append("Invite title must be unique across the usable game catalog: "+definition.id)
 					break
 		main._close()
+		if not main.hud.visible or main.world.blocked: failures.append("Closing the invitation must restore the park HUD and movement: "+definition.id)
 	if failures.is_empty():
 		main._show_game_info("game-002")
 		main.overlay.find_child("InviteStart",true,false).pressed.emit()
@@ -107,6 +109,21 @@ func _run() -> void:
 			if assist_button == null: failures.append("Optional rules must preserve the assisted challenge action")
 			else: assist_button.pressed.emit()
 			for i in 4: await get_tree().process_frame
+			if not is_instance_valid(main.tutorial_panel) or is_instance_valid(main.session) or not main.tutorial_assist:
+				failures.append("First assisted entry must offer the same tutorial before the round starts")
+			else:
+				var cancel_assist := _find_button_text(main.tutorial_panel, "關閉")
+				if cancel_assist != null: cancel_assist.pressed.emit()
+				for i in 3: await get_tree().process_frame
+				if Progress.has_seen_tutorial("game-002") or main.modal_kind != "game_rules":
+					failures.append("Cancelling assisted onboarding must keep the lesson unseen and restore optional rules")
+				_check_no_awards("assisted tutorial cancel")
+				assist_button.pressed.emit()
+				for i in 3: await get_tree().process_frame
+				var skip_assist := _find_button_text(main.tutorial_panel, "略過")
+				if skip_assist == null: failures.append("Assisted onboarding must remain skippable")
+				else: skip_assist.pressed.emit()
+				for i in 4: await get_tree().process_frame
 			if not is_instance_valid(main.session) or not bool(main.session.assisted) or bool(main.session.practice_mode):
 				failures.append("Rules assisted challenge must start an assisted, non-practice session")
 			else:

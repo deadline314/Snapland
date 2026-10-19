@@ -1,0 +1,22 @@
+{
+  "checked": [
+    "game-001",
+    "game-002",
+    "game-003",
+    "game-004",
+    "game-005",
+    "game-006",
+    "game-007",
+    "game-008",
+    "game-009",
+    "game-010",
+    "game-011",
+    "game-012"
+  ],
+  "failures": [],
+  "physical_window": "Vector2i(1280, 720)",
+  "returning": false,
+  "scope": "actual Main and real window key/mouse events; fixture positions between stations; no wins or complete-game quality claimed",
+  "text_scale": 1.0,
+  "viewport": "Vector2(1280, 720)"
+}
