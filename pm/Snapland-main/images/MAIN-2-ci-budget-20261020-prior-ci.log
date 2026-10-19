@@ -1,0 +1,39 @@
+2026-10-19T13:53:29.8232707Z ##[group]Run python tools/run_game_tests.py
+2026-10-19T13:53:29.8233296Z [36;1mpython tools/run_game_tests.py[0m
+2026-10-19T13:53:29.8304713Z shell: /usr/bin/bash -e {0}
+2026-10-19T13:53:29.8305151Z env:
+2026-10-19T13:53:29.8305607Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T13:53:29.8306387Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-19T13:53:29.8307350Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T13:53:29.8307775Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T13:53:29.8308183Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T13:53:29.8308573Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-19T13:53:29.8309040Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-19T13:53:29.8309430Z ##[endgroup]
+2026-10-19T13:54:01.3783324Z PASS: clean project import
+2026-10-19T13:54:05.5481470Z PASS: game startup
+2026-10-19T13:54:05.8912658Z PASS: core runtime tests
+2026-10-19T13:54:08.6517041Z PASS: test/review save isolation tests
+2026-10-19T13:54:08.9019450Z PASS: wardrobe runtime tests
+2026-10-19T13:54:51.2965425Z PASS: avatar runtime tests
+2026-10-19T13:58:32.1967613Z PASS: avatar renderer tests
+2026-10-19T13:59:42.9938768Z ##[error]The operation was canceled.
+2026-10-19T13:59:43.0074602Z Post job cleanup.
+2026-10-19T13:59:43.1089859Z [command]/usr/bin/git version
+2026-10-19T13:59:43.1172399Z git version 2.55.0
+2026-10-19T13:59:43.1203163Z Temporarily overriding HOME='/home/runner/work/_temp/dc920caf-c8e8-4ae3-9d57-d9bfb004710a' before making global git config changes
+2026-10-19T13:59:43.1211931Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-19T13:59:43.1226191Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Snapland/Snapland
+2026-10-19T13:59:43.1297475Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-19T13:59:43.1353235Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-19T13:59:43.1693940Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-19T13:59:43.1735942Z http.https://github.com/.extraheader
+2026-10-19T13:59:43.1760758Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-19T13:59:43.1822542Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-19T13:59:43.2362892Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-19T13:59:43.2433859Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-19T13:59:43.2904710Z Cleaning up orphan processes
+2026-10-19T13:59:43.3210724Z Terminate orphan process: pid (2674) (python)
+2026-10-19T13:59:43.3238735Z Terminate orphan process: pid (2936) (Godot_v4.7.2-stable_linux.x86_64)
+2026-10-19T13:59:43.3259607Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

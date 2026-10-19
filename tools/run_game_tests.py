@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 
 if __package__:
     from .godot_entrypoints import run_validated_godot
@@ -252,6 +253,8 @@ def main() -> int:
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
             timeout = 240 if label == "avatar renderer tests" else 90
+            started = time.monotonic()
+            print(f"RUN: {label} ({suite_index + 1}/{len(checks)}, limit {timeout}s)", flush=True)
             try:
                 result = run_validated_godot(ROOT, command, env=env, timeout=timeout)
             except subprocess.TimeoutExpired as error:
@@ -264,7 +267,7 @@ def main() -> int:
             error = result_error(label, result)
             if error:
                 return fail(error)
-            print(f"PASS: {label}", flush=True)
+            print(f"PASS: {label} ({time.monotonic() - started:.2f}s)", flush=True)
     return 0
 
 
