@@ -72,3 +72,5 @@ Windows 輸出以 Intel Arc B580 原生 GPU 檢查角色、NPC、場景動畫與
 ![本輪修正前：花台擋住小角左腳與左側](images/ART-15-clearance-20261020-before-npc-imp-third.png)
 ![本輪修正後：完整手腳與輪廓](images/ART-15-clearance-20261020-1280x720-npc-imp-third.png)
 ![三位NPC、主角八向與動作完整性](images/ART-15-clearance-20261020-pack-overview.png)
+
+本輪交付：[573f95f](https://github.com/deadline314/Snapland/commit/573f95f60e340697a7c761aa1c185fb14427a526)，已快轉整合main並確認本機與origin/main一致。

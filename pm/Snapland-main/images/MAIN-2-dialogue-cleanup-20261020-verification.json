@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "start": "2cdc3abbd8776ca518d7c2b5a0cdd205a51d96ef",
+  "ci_run": 39335670613,
+  "ci_job": 118344829611,
+  "ci_runtime_result": "failure after37 successful suites;38 NPC dialogue hold exit had3resources still in use",
+  "local_before": "exit0/0ERROR with verbose, intermittent CI symptom not reproduced locally",
+  "change": "explicit Audio.shutdown plus150ms normal Main quit grace before freeing scene; all lifecycle assertions retained",
+  "local_after": [
+    {
+      "name": "NPC dialogue hold tests",
+      "exit": 0,
+      "seconds": 8.02,
+      "error": null
+    }
+  ],
+  "official_runner": "unchanged92commands and90/240s limits",
+  "scope": "fixture teardown correction, no audio quality or whole-suite pass claim"
+}

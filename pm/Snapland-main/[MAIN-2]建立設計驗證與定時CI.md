@@ -149,3 +149,10 @@ Godot 4.7.2 的實際園區布局、透視與日光三項回歸全部通過；�
 四項測試修正並實際通過：缺來源候選明確opt-in、腳底按可見alpha與已核准原畫比較、透視與遠處招牌管理互不覆寫、泡泡角色大小跟隨正式Session同步。原92項清單及個別時限維持，23項Python啟動／結果反例通過。
 
 [具體原因、限制及六方方法](../../design/runtime/npc-production-test-contract.md) · [四項實際記錄與來源雜湊](images/MAIN-2-fixtures-20261020-verification.json)。後段帽子救援仍有[真實角色差異失敗](images/MAIN-2-fixtures-20261020-hat-failure.log)：接帽序列和現在的原畫待機頭身不一致，尚未調整任何限制掩蓋。整票仍進行中；完整遠端CI另核對。
+
+
+# 2026-10-20 NPC對話測試正常收尾
+
+完整CI39335670613前37項通過，第38項對話測試在退出時回報3個資源仍使用中；設計／Python工作成功，整套原生不能算通過。本機verbose重跑沒有重現這個間歇退出錯誤。對話、招呼持續、路線凍結／恢復、Esc暫停及降低動態斷言全部保留；結束前改走與正式退出相同的音訊停止及短暫收束，再釋放場景。受影響測試8.02秒、exit0、0ERROR、實際完成行通過；不宣稱已證明唯一根因或完成整套回歸。
+
+[實際範圍](images/MAIN-2-dialogue-cleanup-20261020-verification.json) · [遠端失敗摘錄](images/MAIN-2-dialogue-cleanup-20261020-ci-excerpt.log) · [本機修正前](images/MAIN-2-dialogue-cleanup-20261020-before-local.log) · [修正後](images/MAIN-2-dialogue-cleanup-20261020-after.log)。

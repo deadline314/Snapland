@@ -141,6 +141,10 @@ func _check(condition: bool, message: String) -> void:
 
 
 func _finish(main: Node) -> void:
+	# Stop audio while players still exist, as in Main's normal quit path.
+	# Allow the audio thread to release stopped streams before node teardown.
+	main.audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
 	main.queue_free()
 	await _frames(2)
 	if _failures.is_empty():
