@@ -55,6 +55,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Verify runtime completion and entrypoint contracts
+        run: python -m unittest tests.test_runtime_result_contract tests.test_godot_entrypoints -v
       - name: Install pinned Godot 4.7.2
         shell: bash
         run: |

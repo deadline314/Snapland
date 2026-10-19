@@ -17,10 +17,124 @@ else:
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
+PASS_MARKERS = {
+    "pixel typography tests": "PASS: 30 pixel font checks, 0 failures",
+    "localization framework tests": "PASS: locale packs, fallback, preferences and live UI state",
+    "pixel UI shell tests": "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920",
+    "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",
+    "pixel UI button depth tests": "PASS: Paper pixel-button depth, state, focus and contrast checks",
+    "pixel UI collection tests": "PASS: pixel UI collection, map, achievement, and tutorial checks",
+    "pixel tutorial page tests": "PASS: native-matching tutorial39steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
+    "pixel UI customization tests": "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls",
+    "pixel UI minigame tests": "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes",
+    "game startup": "PASS: game startup and clean shutdown",
+    "core runtime tests": "PASS: core runtime checks",
+    "test/review save isolation tests": "PASS: save guard child processes use a unique verified fake Godot profile; every rejected-path case preserves seeded sidecars",
+    "wardrobe runtime tests": "PASS: wardrobe runtime checks",
+    "avatar runtime tests": "PASS: avatar runtime checks",
+    "avatar renderer tests": "PASS: independent bob nose/eye alpha, 64-cel bob/curly face RGBA and opening alpha across all skins/species, two-color original body/palette and haircut RGB, bounded caches; native quality pending",
+    "avatar attachment tests": "PASS: measured walk head attachments",
+    "island hair lifecycle tests": "PASS: island hair lifecycle retains live walk phase through appearance, motion and reduced-motion changes",
+    "island alternate hair source tests": "PASS: alternate island hair ownership remains registered across",
+    "seated avatar tests": "PASS: four measured front seated poses, head/feet anchors, card bounds, and preserved action coverage",
+    "avatar motion rig runtime tests": "PASS: eight direction 3D gait model/source/sole/cancellation/bounded resource tests; native quality pending",
+    "avatar role rig tests": "PASS: role metadata path, two-view coverage, scaled fixed bones/boots, ground following, actual NPC source-width legs/opaque boot attachment, non-skin trouser limb ownership, and missing-role fallback",
+    "avatar motion world integration tests": "PASS: integrated avatar motion world checks",
+    "minigame HUD hierarchy tests": "PASS: minigame HUD hierarchy checks (69 checks)",
+    "eight-direction walk tests": "PASS: eight-direction avatar walk checks",
+    "authored avatar walk loop tests": "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig",
+    "source registration coordinate tests": "PASS: body registration, independent palette/boot coordinates and immutable rebuild",
+    "authored avatar side idle tests": "PASS: dedicated stable idle timing, source diagnostics, and reduced-motion stance",
+    "atomic outfit coverage tests": "PASS: atomic outfit coverage (",
+    "side outfit palette tests": "PASS: side jacket palette, 72 source-bound cases, exposed cloth witnesses and curly hair occlusion",
+    "authored idle hair attachment tests": "PASS: source-atlas closed-eye attachment availability (not production idle playback)",
+    "authored NPC source walking tests": "PASS: two data-time cycles route announcer through complete source cels; unsupported ticket/imp actors remain in place and animate persona",
+    "character animation library tests": "PASS: character animation library checks",
+    "NPC animation state tests": "PASS: NPC animation state progression, interruption, pause, fallback, and cleanup",
+    "tutorial panel/catalog tests": "PASS: tutorial panel/catalog checks",
+    "tutorial seen progress tests": "PASS: tutorial seen progress and failed-save start checks",
+    "travel collection UI tests": "PASS: travel map, paged collection book, achievement stamps, and reduce-motion hook",
+    "tutorial image/control tests": "PASS: tutorial controls/assets preflight",
+    "time-of-day tests": "PASS: time-of-day runtime checks",
+    "daylight lighting tests": "PASS: daylight lighting runtime checks",
+    "NPC activity tests": "PASS: NPC activity runtime checks",
+    "NPC world activity tests": "PASS: NPC world activity integration",
+    "NPC motion source tests": "PASS: all three NPC roles' source hashes, measured alpha bounds, nearest normalized RGBA streams, unsupported-view behavior, and rig-prepared limb/boot regions",
+    "NPC walk motion tests": "PASS: optional three-role measured gait, source fallback, pause/hold lifecycle, and measured announcer leg costume",
+    "NPC direction lifecycle tests": "PASS: imp same-view long-frame support epoch, route turns, settlement and tiny-frame restart",
+    "NPC missing walk idle tests": "PASS: missing authored side walk preserves idle lifecycle and measured route after dialogue",
+    "NPC dialogue hold tests": "PASS: Main NPC dialogue hold lifecycle",
+    "sprite clearance tests": "PASS: billboard sprites keep authored feet on the ground for eight headings and camera pitches",
+    "wardrobe UI tests": "PASS: wardrobe UI runtime checks",
+    "component animation tests": "PASS: component animation runtime checks",
+    "building occlusion tests": "PASS: occlusion controller runtime checks",
+    "kite flight model tests": "Kite flight model: ",
+    "kite flight view tests": "Kite flight view: ",
+    "bubble photo model tests": "PASS: bubble photo model (",
+    "bubble photo view tests": "PASS: bubble photo view (",
+    "bench swap model tests": "Bench swap model: ",
+    "bench swap view tests": "Bench swap view: ",
+    "sign balance model tests": "Sign balance model: ",
+    "sign balance view tests": "Sign balance view: ",
+    "hat rescue model tests": "Hat rescue model: ",
+    "hat rescue view tests": "Hat rescue view: ",
+    "melody memory model tests": "Melody memory model: ",
+    "melody memory view tests": "Melody memory view: ",
+    "ribbon rhythm model tests": "PASS: ribbon rhythm model (",
+    "ribbon rhythm view tests": "PASS: ribbon rhythm view (",
+    "ribbon Session startup tests": "PASS: Ribbon Session startup (3 checks)",
+    "ribbon Session lifecycle tests": "PASS: Ribbon Session lifecycle (61 checks)",
+    "shadow theatre model tests": "Shadow theatre model: ",
+    "shadow theatre view tests": "Shadow theatre view: ",
+    "crowd semaphore view tests": "PASS: 3D crowd semaphore view (",
+    "welcome minigame tests": "PASS: welcome minigame checks",
+    "pipe round model tests": "PASS: pipe round model checks",
+    "pipe plan presentation tests": "PASS: pipe plan view checks",
+    "balloon harbor presentation tests": "PASS: isolated miniature harbor view",
+    "crowd traffic model tests": "PASS: crowd traffic model (",
+    "crowd crossing view tests": "PASS: overhead crowd-crossing view (",
+    "fountain jump view tests": "FountainJumpView tests: ",
+    "fountain timing tests": "PASS: fountain timing checks",
+    "balloon delivery tests": "PASS: balloon delivery checks",
+    "story runtime tests": "PASS: story data, compatibility, mission evidence, and idempotency",
+    "main story integration tests": "PASS: real Main story interactions and exploration evidence",
+    "island ride tests": "PASS: island ride lifecycle",
+    "island layout tests": "PASS: island layout contracts",
+    "shared photo thumbnail tests": "PASS: MAIN-13 shared photo paths, replay idempotence, legacy backfill, malformed/missing fallback",
+    "saved photo viewer tests": "PASS: saved album photo viewer, focus return, and immutable progress",
+    "photo original preservation tests": "PASS: bounded photo originals, shared collection metadata, safe viewer loading",
+    "island dialogue tests": "PASS: island dialogue panel and bounded, speaker-pitched beep",
+    "island game entry tests": "PASS: 12 compact invites and first-entry/optional-rule flow",
+    "audio runtime tests": "PASS: audio runtime checks",
+    "island audio dynamics tests": "PASS: phase-aware island audio dynamics and dialogue duck",
+    "main scene integration tests": "PASS: main scene integration checks",
+}
+
+
 
 def fail(message: str) -> int:
     print(f"FAIL: {message}", file=sys.stderr)
     return 1
+
+
+def result_error(label: str, result: subprocess.CompletedProcess[str]) -> str | None:
+    """A completed engine process still needs its own error-free completion line."""
+    output = (result.stdout or "") + "\n" + (result.stderr or "")
+    if result.returncode:
+        return f"{label} exited {result.returncode}:\n{output.strip()[-6000:]}"
+    engine_errors = [line for line in output.splitlines() if "ERROR:" in line]
+    if engine_errors:
+        return f"{label} logged engine errors:\n" + "\n".join(engine_errors[-40:])
+    marker = PASS_MARKERS.get(label)
+    if marker is None:
+        if label == "clean project import":
+            return None
+        return f"{label} has no configured completion marker."
+    stdout_lines = (result.stdout or "").splitlines()
+    if not any(line.startswith(marker) for line in stdout_lines):
+        observed = [line for line in stdout_lines if line.startswith("PASS")]
+        return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
+    return None
 
 
 def main() -> int:
@@ -132,6 +246,9 @@ def main() -> int:
             ("pixel typography tests", common + ["res://game/tests/test_pixel_fonts.tscn"]),
             ("localization framework tests", common + ["res://game/tests/test_localization.tscn"]),
         ]
+        missing_markers = [label for label, _ in checks if label != "clean project import" and label not in PASS_MARKERS]
+        if missing_markers:
+            return fail(f"Runtime checks have no configured completion marker: {missing_markers!r}.")
         for suite_index, (label, command) in enumerate(checks):
             env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / f"profile-{suite_index}.json")
             timeout = 240 if label == "avatar renderer tests" else 90
@@ -144,105 +261,10 @@ def main() -> int:
                 return fail(f"{label} timed out after {timeout} seconds:\n{output.strip()[-6000:]}")
             except (ValueError, OSError, subprocess.SubprocessError) as error:
                 return fail(f"{label} could not run: {error}")
-            if result.returncode:
-                output = ((result.stdout or "") + "\n" + (result.stderr or "")).strip()
-                return fail(f"{label} exited {result.returncode}:\n{output[-6000:]}")
-            output = (result.stdout or "") + "\n" + (result.stderr or "")
-            engine_errors = [line for line in output.splitlines() if "ERROR:" in line or "SCRIPT ERROR:" in line]
-            if engine_errors:
-                return fail(f"{label} logged engine errors:\n" + "\n".join(engine_errors[-40:]))
-            pass_markers = {
-                "pixel typography tests": "PASS: 30 pixel font checks, 0 failures",
-                "localization framework tests": "PASS: locale packs, fallback, preferences and live UI state",
-                "pixel UI shell tests": "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920",
-                "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",
-                "pixel UI button depth tests": "PASS: Paper pixel-button depth, state, focus and contrast checks",
-                "pixel UI collection tests": "PASS: pixel UI collection, map, achievement, and tutorial checks",
-                "pixel tutorial page tests": "PASS: native-matching tutorial39steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
-                "pixel UI customization tests": "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls",
-                "pixel UI minigame tests": "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes",
-                "game startup": "PASS: game startup and clean shutdown",
-                "core runtime tests": "PASS: core runtime checks",
-                "test/review save isolation tests": "PASS: save guard child processes use a unique verified fake Godot profile; every rejected-path case preserves seeded sidecars",
-                "wardrobe runtime tests": "PASS: wardrobe runtime checks",
-                "avatar runtime tests": "PASS: avatar runtime checks",
-                "avatar renderer tests": "PASS: independent bob nose/eye alpha, 64-cel bob/curly face RGBA and opening alpha across all skins/species, two-color original body/palette and haircut RGB, bounded caches; native quality pending",
-                "avatar attachment tests": "PASS: measured walk head attachments",
-                "island hair lifecycle tests": "PASS: island hair lifecycle retains live walk phase through appearance, motion and reduced-motion changes",
-                "island alternate hair source tests": "PASS: alternate island hair ownership remains registered across",
-                "seated avatar tests": "PASS: four measured front seated poses, head/feet anchors, card bounds, and preserved action coverage",
-                "avatar motion rig runtime tests": "PASS: eight direction 3D gait model/source/sole/cancellation/bounded resource tests; native quality pending",
-                "avatar role rig tests": "PASS: role metadata path, two-view coverage, scaled fixed bones/boots, ground following, actual NPC source-width legs/opaque boot attachment, non-skin trouser limb ownership, and missing-role fallback",
-                "avatar motion world integration tests": "PASS: integrated avatar motion world checks",
-                "minigame HUD hierarchy tests": "PASS: minigame HUD hierarchy checks (69 checks)",
-                "eight-direction walk tests": "PASS: eight-direction avatar walk checks",
-                "authored avatar walk loop tests": "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig",
-                "authored idle hair attachment tests": "PASS: directional closed-eye idle hair attachment",
-                "authored NPC source walking tests": "PASS: two data-time cycles route announcer through complete source cels; unsupported ticket/imp actors remain in place and animate persona",
-                "character animation library tests": "PASS: character animation library checks",
-                "NPC animation state tests": "PASS: NPC animation state progression, interruption, pause, fallback, and cleanup",
-                "tutorial panel/catalog tests": "PASS: tutorial panel/catalog checks",
-                "tutorial seen progress tests": "PASS: tutorial seen progress and failed-save start checks",
-                "travel collection UI tests": "PASS: travel map, paged collection book, achievement stamps, and reduce-motion hook",
-                "tutorial image/control tests": "PASS: tutorial controls/assets preflight",
-                "time-of-day tests": "PASS: time-of-day runtime checks",
-                "daylight lighting tests": "PASS: daylight lighting runtime checks",
-                "NPC activity tests": "PASS: NPC activity runtime checks",
-                "NPC world activity tests": "PASS: NPC world activity integration",
-                "NPC motion source tests": "PASS: all three NPC roles' source hashes, measured alpha bounds, nearest normalized RGBA streams, unsupported-view behavior, and rig-prepared limb/boot regions",
-                "NPC walk motion tests": "PASS: optional three-role measured gait, source fallback, pause/hold lifecycle, and measured announcer leg costume",
-                "NPC direction lifecycle tests": "PASS: imp same-view long-frame support epoch, route turns, settlement and tiny-frame restart",
-                "NPC missing walk idle tests": "PASS: missing authored side walk preserves idle lifecycle and measured route after dialogue",
-                "NPC dialogue hold tests": "PASS: Main NPC dialogue hold lifecycle",
-                "sprite clearance tests": "PASS: billboard sprites keep authored feet on the ground for eight headings and camera pitches",
-                "wardrobe UI tests": "PASS: wardrobe UI runtime checks",
-                "component animation tests": "PASS: component animation runtime checks",
-                "building occlusion tests": "PASS: occlusion controller runtime checks",
-                "kite flight model tests": "Kite flight model: ",
-                "kite flight view tests": "Kite flight view: ",
-                "bubble photo model tests": "PASS: bubble photo model (",
-                "bubble photo view tests": "PASS: bubble photo view (",
-                "bench swap model tests": "Bench swap model: ",
-                "bench swap view tests": "Bench swap view: ",
-                "sign balance model tests": "Sign balance model: ",
-                "sign balance view tests": "Sign balance view: ",
-                "hat rescue model tests": "Hat rescue model: ",
-                "hat rescue view tests": "Hat rescue view: ",
-                "melody memory model tests": "Melody memory model: ",
-                "melody memory view tests": "Melody memory view: ",
-                "ribbon rhythm model tests": "PASS: ribbon rhythm model (",
-                "ribbon rhythm view tests": "PASS: ribbon rhythm view (",
-                "ribbon Session startup tests": "PASS: Ribbon Session startup (3 checks)",
-                "ribbon Session lifecycle tests": "PASS: Ribbon Session lifecycle (61 checks)",
-                "shadow theatre model tests": "Shadow theatre model: ",
-                "shadow theatre view tests": "Shadow theatre view: ",
-                "crowd semaphore view tests": "PASS: 3D crowd semaphore view (",
-                "welcome minigame tests": "PASS: welcome minigame checks",
-                "pipe round model tests": "PASS: pipe round model checks",
-                "pipe plan presentation tests": "PASS: pipe plan view checks",
-                "balloon harbor presentation tests": "PASS: isolated miniature harbor view",
-                "crowd traffic model tests": "PASS: crowd traffic model (",
-                "crowd crossing view tests": "PASS: overhead crowd-crossing view (",
-                "fountain jump view tests": "FountainJumpView tests: ",
-                "fountain timing tests": "PASS: fountain timing checks",
-                "balloon delivery tests": "PASS: balloon delivery checks",
-                "story runtime tests": "PASS: story data, compatibility, mission evidence, and idempotency",
-                "main story integration tests": "PASS: real Main story interactions and exploration evidence",
-                "island ride tests": "PASS: island ride lifecycle",
-                "island layout tests": "PASS: island layout contracts",
-                "shared photo thumbnail tests": "PASS: MAIN-13 shared photo paths, replay idempotence, legacy backfill, malformed/missing fallback",
-                "saved photo viewer tests": "PASS: saved album photo viewer, focus return, and immutable progress",
-                "photo original preservation tests": "PASS: bounded photo originals, shared collection metadata, safe viewer loading",
-                "island dialogue tests": "PASS: island dialogue panel and bounded, speaker-pitched beep",
-                "island game entry tests": "PASS: 12 compact invites and first-entry/optional-rule flow",
-                "audio runtime tests": "PASS: audio runtime checks",
-                "island audio dynamics tests": "PASS: phase-aware island audio dynamics and dialogue duck",
-                "main scene integration tests": "PASS: main scene integration checks",
-            }
-            marker = pass_markers.get(label)
-            if marker and marker not in (result.stdout or ""):
-                return fail(f"{label} exited without its PASS marker ({marker!r}).")
-            print(f"PASS: {label}")
+            error = result_error(label, result)
+            if error:
+                return fail(error)
+            print(f"PASS: {label}", flush=True)
     return 0
 
 
