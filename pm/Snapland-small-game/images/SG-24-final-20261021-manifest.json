@@ -353,6 +353,16 @@
       "file": "SG-24-final-20261021-review-sources.zip",
       "source": "work/puzzle-batch-20261020/SG-24-review-sources.zip",
       "sha256": "b979b1ab725cd9d74df5935ef4cc9ac9d9149451e96d0d125614029195b78546"
+    },
+    {
+      "file": "SG-24-final-20261021-design-final.log",
+      "source": "final verification log / explicit prepublication attempt history",
+      "sha256": "86ff4586fb870397fe32c5e2385514cad71ec4890ac583f8de57e29b92a9102d"
+    },
+    {
+      "file": "SG-24-final-20261021-verification-history.json",
+      "source": "final verification log / explicit prepublication attempt history",
+      "sha256": "246662d6f97bcae488becc3b39d292984bbd59ba8c2f75c6f68db242378d99de"
     }
   ]
 }

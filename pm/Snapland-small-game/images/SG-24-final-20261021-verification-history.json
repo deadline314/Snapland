@@ -1,0 +1,20 @@
+{
+  "prepublication_design_check": {
+    "exit": 1,
+    "reason": "The draft design linked its future SG-24 research artifact before publication created that artifact.",
+    "partial_stdout": "SG-24-final-20261021-design-checks.log",
+    "stderr_preservation": "Original stderr was returned by the execution tool but not saved by stdout-only redirection. Reason is reconstructed from the visible tool result; no claim that the raw failed stderr was preserved."
+  },
+  "final_design_check": {
+    "exit": 0,
+    "scopes": [
+      "park",
+      "games",
+      "story",
+      "items",
+      "links"
+    ],
+    "log": "SG-24-final-20261021-design-final.log",
+    "note": "After all evidence was published and the ticket/index closed; gameplay not executed by this design validator."
+  }
+}
