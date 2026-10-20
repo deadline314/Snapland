@@ -1,0 +1,111 @@
+{
+  "baked": 8,
+  "frames": [
+    {
+      "action": "walk",
+      "baked_pixel_sha256": "4cb86126ab062aa097e8f321611493b03cd9fd977ecc5205e0d298a0da58f17c",
+      "changed_garment_pixels": 5312,
+      "direction": "front",
+      "frame": 0,
+      "head_owner_preserved": true,
+      "immutable_regions_equal": true,
+      "original_head_owner_signature": "4cc7a7ec39ec5bae8c001253e6fafa466c649032fdb7b61dd75c56ab6039f91d",
+      "protected_pixel_visits": 18853,
+      "source_pixel_sha256": "4cc7a7ec39ec5bae8c001253e6fafa466c649032fdb7b61dd75c56ab6039f91d",
+      "status": "inspection_only"
+    },
+    {
+      "action": "walk",
+      "baked_pixel_sha256": "937d48df4cfd67c91aa4f61fd1b5443409994791248a7b88b66fc9257147ec97",
+      "changed_garment_pixels": 5218,
+      "direction": "front",
+      "frame": 1,
+      "head_owner_preserved": true,
+      "immutable_regions_equal": true,
+      "original_head_owner_signature": "a5e6f6074052c20fde1a73535055f83256e55778df46727f10abef712020d540",
+      "protected_pixel_visits": 19175,
+      "source_pixel_sha256": "a5e6f6074052c20fde1a73535055f83256e55778df46727f10abef712020d540",
+      "status": "inspection_only"
+    },
+    {
+      "action": "walk",
+      "baked_pixel_sha256": "113e81fc7c8640f454af3ad28ecbd9576b0616147c1503a42fae2d744d1c2754",
+      "changed_garment_pixels": 5356,
+      "direction": "front",
+      "frame": 2,
+      "head_owner_preserved": true,
+      "immutable_regions_equal": true,
+      "original_head_owner_signature": "c6be5561134b56e7ca4cfe6c0ed1cc6d221034556cee00aa778bbe9abfe88ce8",
+      "protected_pixel_visits": 19004,
+      "source_pixel_sha256": "c6be5561134b56e7ca4cfe6c0ed1cc6d221034556cee00aa778bbe9abfe88ce8",
+      "status": "inspection_only"
+    },
+    {
+      "action": "walk",
+      "baked_pixel_sha256": "4e79e1d08adbcf535358a14d76ff837229fcd3c6952310158b5780a419932b54",
+      "changed_garment_pixels": 4971,
+      "direction": "front",
+      "frame": 3,
+      "head_owner_preserved": true,
+      "immutable_regions_equal": true,
+      "original_head_owner_signature": "8d053ee811d7644c7cde8e29f0d35dc8769ce2e6336b60236ce35206e4020ffd",
+      "protected_pixel_visits": 19283,
+      "source_pixel_sha256": "8d053ee811d7644c7cde8e29f0d35dc8769ce2e6336b60236ce35206e4020ffd",
+      "status": "inspection_only"
+    },
+    {
+      "action": "walk",
+      "baked_pixel_sha256": "434cd2ea74aebefb6368c036adae50e167992a920f730d3e8e55e34f840e3d76",
+      "changed_garment_pixels": 4933,
+      "direction": "front",
+      "frame": 4,
+      "head_owner_preserved": true,
+      "immutable_regions_equal": true,
+      "original_head_owner_signature": "e8a1c4079c1d48fc279fc1254c0436db848de473d1a1b04cb300b39314dd8638",
+      "protected_pixel_visits": 19284,
+      "source_pixel_sha256": "e8a1c4079c1d48fc279fc1254c0436db848de473d1a1b04cb300b39314dd8638",
+      "status": "inspection_only"
+    },
+    {
+      "action": "walk",
+      "baked_pixel_sha256": "d78868e52d80648128550b039f03845bcdb2951755b4d876ec28b651c1db1e59",
+      "changed_garment_pixels": 5197,
+      "direction": "front",
+      "frame": 5,
+      "head_owner_preserved": true,
+      "immutable_regions_equal": true,
+      "original_head_owner_signature": "912e16a928fd881f63521407d71aa1dadb3a714ceab61554af66bfc1a325ce57",
+      "protected_pixel_visits": 19195,
+      "source_pixel_sha256": "912e16a928fd881f63521407d71aa1dadb3a714ceab61554af66bfc1a325ce57",
+      "status": "inspection_only"
+    },
+    {
+      "action": "walk",
+      "baked_pixel_sha256": "d876cfbed474fa68a4d11859dd03ed9f2511d901e0531f0074a6c00599282858",
+      "changed_garment_pixels": 5691,
+      "direction": "front",
+      "frame": 6,
+      "head_owner_preserved": true,
+      "immutable_regions_equal": true,
+      "original_head_owner_signature": "74570df34b693214208575ffdbe725fbe1695f1f61ece0395ff771dc33479574",
+      "protected_pixel_visits": 19029,
+      "source_pixel_sha256": "74570df34b693214208575ffdbe725fbe1695f1f61ece0395ff771dc33479574",
+      "status": "inspection_only"
+    },
+    {
+      "action": "walk",
+      "baked_pixel_sha256": "c77d3c2ca073b42e4a99cd3d8af29a9691917b3d2760374a7fda6409752a7817",
+      "changed_garment_pixels": 4940,
+      "direction": "front",
+      "frame": 7,
+      "head_owner_preserved": true,
+      "immutable_regions_equal": true,
+      "original_head_owner_signature": "01d3c757a0ca1c7a9ca5f60dde27d23ad2b36d8290c76a9afa3e9b6e4cfd4d95",
+      "protected_pixel_visits": 19127,
+      "source_pixel_sha256": "01d3c757a0ca1c7a9ca5f60dde27d23ad2b36d8290c76a9afa3e9b6e4cfd4d95",
+      "status": "inspection_only"
+    }
+  ],
+  "status": "inspection_only",
+  "wardrobe_registered": false
+}

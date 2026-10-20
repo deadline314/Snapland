@@ -1,0 +1,15 @@
+{
+  "probe-v1": "Rejected: wrong assumed atlas dimensions; actual exit 3, no ERROR.",
+  "probe-v2": "Completed numerically; rejected after visual review for hand/cuff mismatch and fragments.",
+  "probe-v3": "Rejected: 30-second timeout and only seven outputs; raw engine failure text was not retained by the old runner. See original attempt-history.json; no invented raw log.",
+  "probe-v4": "Rejected: frame 7 failed unchanged silhouette assertion; exit 1, one ERROR; guard was not relaxed.",
+  "probe-v5": "Completed numerically; rejected visually for camera/stray pixels and sleeve registration.",
+  "rig-v1": "Rejected parse failure: inferred dy type; engine log retained.",
+  "rig-v2": "Rejected visually: duplicate cuffs and torso ownership overlap.",
+  "rig-v3": "Rejected visually: cuff guides used palm instead of wrist.",
+  "rig-v4": "Provisional clothing-only authoring accepted; later final bake adds explicit strap/paper and reviewed hair ownership.",
+  "invisible-garment-guard-final": "Invalid negative fixture: coat outside original silhouette remained visible, so a successful bake was correct. Not counted as a successful rejection.",
+  "changed-original-guard-final": "Expected rejection: changed wearer fingerprint. Pending first seven outputs never become compiled.",
+  "empty-clip-guard-final": "Expected rejection: no visible output. No compiled artifact.",
+  "negative-reviewed": "Expected native rejection: one physical pixel of horizontal drift changes protected head/foot viewport regions."
+}

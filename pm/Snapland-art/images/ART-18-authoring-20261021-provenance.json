@@ -1,0 +1,45 @@
+{
+  "generation_tool": "Built-in imagegen; original generated files preserved without alteration.",
+  "source_parts": {
+    "file": "tools/island_avatar/garments/mustard-front-parts-v2.png",
+    "sha256": "d4a887564e7fcd032a8b6c73929e08046f27434450acd7a7b5a8b0c64368c55c",
+    "actual_size": [
+      1564,
+      1006
+    ]
+  },
+  "scope": "Clothing-only authoring candidate. Original wearer pixels are copied unchanged before clothing composition; no whole-body warp or generated hands, legs, hair, head or camera is adopted.",
+  "reviewed": {
+    "authored_cels": 8,
+    "required_authored_cels": 148,
+    "missing_authored_cels": 140,
+    "additional_legacy_runtime_requests": 24,
+    "ready_for_wardrobe": false
+  },
+  "originals": [
+    {
+      "file": "front-coat-v1.png",
+      "sha256": "c814ac7cd82a00b46ca26f460e4508fc43a88acd0da5100a0f673781f85e9e73",
+      "used_as_garment_source": false
+    },
+    {
+      "file": "front-coat-parts-v2.png",
+      "sha256": "d4a887564e7fcd032a8b6c73929e08046f27434450acd7a7b5a8b0c64368c55c",
+      "used_as_garment_source": true
+    },
+    {
+      "file": "front-frame7-coat-v3.png",
+      "sha256": "f29fa5808351708ccdd65aab586589b7e216ef768cd88156a52f8fa0eeb3767d",
+      "used_as_garment_source": false
+    },
+    {
+      "file": "front-frame7-coat-v4.png",
+      "sha256": "8f0753e53d3ce7484c48902c6320e92d1529dcd39d71a8591c7787a0ae644350",
+      "used_as_garment_source": false
+    }
+  ],
+  "reproduction": "Run tools/island_avatar/build_garment_layers.py with a fresh absolute --profile parent and the pinned Godot engine. --verify-live-fallback checks production originals without registering the candidate.",
+  "native_scope": "Private 2D authoring viewport, fixed eight-fps preview timeline, time_scale 1 and 0.25. Not ParkWorld traveled-distance walk timing, wardrobe input, hair spring, reduced motion, packaged output, human play or audio listening.",
+  "visual_review": "All 16 final normal/quarter viewport poses and joint diagram viewed. Both silent movies fully decoded; no claim of continuous video viewing.",
+  "snapshot_scope": "Current rebake compiled PNGs equal the earlier reviewed PNGs byte for byte; script equality is checked after final runs, not retroactively claimed at launch of rejected attempts."
+}

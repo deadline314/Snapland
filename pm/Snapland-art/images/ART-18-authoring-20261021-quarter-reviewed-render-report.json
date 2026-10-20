@@ -1,0 +1,66 @@
+[
+  {
+    "feet_render_exact": true,
+    "frame": 0,
+    "head_render_exact": true,
+    "negative": false,
+    "source_seconds": 0.0104166666666667,
+    "time_scale": 0.25
+  },
+  {
+    "feet_render_exact": true,
+    "frame": 1,
+    "head_render_exact": true,
+    "negative": false,
+    "source_seconds": 0.135416666666667,
+    "time_scale": 0.25
+  },
+  {
+    "feet_render_exact": true,
+    "frame": 2,
+    "head_render_exact": true,
+    "negative": false,
+    "source_seconds": 0.260416666666667,
+    "time_scale": 0.25
+  },
+  {
+    "feet_render_exact": true,
+    "frame": 3,
+    "head_render_exact": true,
+    "negative": false,
+    "source_seconds": 0.385416666666667,
+    "time_scale": 0.25
+  },
+  {
+    "feet_render_exact": true,
+    "frame": 4,
+    "head_render_exact": true,
+    "negative": false,
+    "source_seconds": 0.510416666666667,
+    "time_scale": 0.25
+  },
+  {
+    "feet_render_exact": true,
+    "frame": 5,
+    "head_render_exact": true,
+    "negative": false,
+    "source_seconds": 0.635416666666667,
+    "time_scale": 0.25
+  },
+  {
+    "feet_render_exact": true,
+    "frame": 6,
+    "head_render_exact": true,
+    "negative": false,
+    "source_seconds": 0.760416666666666,
+    "time_scale": 0.25
+  },
+  {
+    "feet_render_exact": true,
+    "frame": 7,
+    "head_render_exact": true,
+    "negative": false,
+    "source_seconds": 0.885416666666666,
+    "time_scale": 0.25
+  }
+]

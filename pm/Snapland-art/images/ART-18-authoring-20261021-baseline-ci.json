@@ -1,0 +1,404 @@
+{
+  "run": {
+    "id": 39499981872,
+    "sha": "5daf281f563652b0112cb3e0f150d47dd59dd911",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/deadline314/Snapland/actions/runs/39499981872"
+  },
+  "jobs": [
+    {
+      "id": 118894861224,
+      "name": "game-runtime",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 118894861534,
+      "name": "full-suite",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "full_suite": {
+    "design_scopes": 5,
+    "python_tests": 115
+  },
+  "game_runtime": {
+    "runs": 92,
+    "passes": 92,
+    "all_original_limits_retained": true,
+    "results": [
+      {
+        "name": "clean project import",
+        "seconds": 31.38
+      },
+      {
+        "name": "game startup",
+        "seconds": 4.55
+      },
+      {
+        "name": "core runtime tests",
+        "seconds": 0.34
+      },
+      {
+        "name": "test/review save isolation tests",
+        "seconds": 2.76
+      },
+      {
+        "name": "wardrobe runtime tests",
+        "seconds": 0.34
+      },
+      {
+        "name": "avatar runtime tests",
+        "seconds": 40.17
+      },
+      {
+        "name": "avatar renderer tests",
+        "seconds": 221.57
+      },
+      {
+        "name": "avatar attachment tests",
+        "seconds": 84.89
+      },
+      {
+        "name": "island hair lifecycle tests",
+        "seconds": 3.8
+      },
+      {
+        "name": "island alternate hair source tests",
+        "seconds": 6.31
+      },
+      {
+        "name": "seated avatar tests",
+        "seconds": 7.42
+      },
+      {
+        "name": "source registration coordinate tests",
+        "seconds": 0.44
+      },
+      {
+        "name": "avatar motion rig runtime tests",
+        "seconds": 53.92
+      },
+      {
+        "name": "avatar role rig tests",
+        "seconds": 66.74
+      },
+      {
+        "name": "avatar motion world integration tests",
+        "seconds": 13
+      },
+      {
+        "name": "minigame HUD hierarchy tests",
+        "seconds": 0.44
+      },
+      {
+        "name": "eight-direction walk tests",
+        "seconds": 3.42
+      },
+      {
+        "name": "authored avatar walk loop tests",
+        "seconds": 21.56
+      },
+      {
+        "name": "authored avatar side idle tests",
+        "seconds": 5.1
+      },
+      {
+        "name": "authored idle hair attachment tests",
+        "seconds": 13.84
+      },
+      {
+        "name": "authored NPC source walking tests",
+        "seconds": 1.1
+      },
+      {
+        "name": "character animation library tests",
+        "seconds": 0.44
+      },
+      {
+        "name": "atomic outfit coverage tests",
+        "seconds": 0.72
+      },
+      {
+        "name": "side outfit palette tests",
+        "seconds": 6.77
+      },
+      {
+        "name": "NPC animation state tests",
+        "seconds": 0.72
+      },
+      {
+        "name": "tutorial panel/catalog tests",
+        "seconds": 7.14
+      },
+      {
+        "name": "tutorial seen progress tests",
+        "seconds": 5.74
+      },
+      {
+        "name": "travel collection UI tests",
+        "seconds": 5.67
+      },
+      {
+        "name": "tutorial image/control tests",
+        "seconds": 1.56
+      },
+      {
+        "name": "time-of-day tests",
+        "seconds": 0.25
+      },
+      {
+        "name": "daylight lighting tests",
+        "seconds": 3.79
+      },
+      {
+        "name": "NPC activity tests",
+        "seconds": 0.54
+      },
+      {
+        "name": "NPC world activity tests",
+        "seconds": 4.17
+      },
+      {
+        "name": "NPC motion source tests",
+        "seconds": 4.53
+      },
+      {
+        "name": "NPC walk motion tests",
+        "seconds": 12.34
+      },
+      {
+        "name": "NPC direction lifecycle tests",
+        "seconds": 1.56
+      },
+      {
+        "name": "NPC missing walk idle tests",
+        "seconds": 12.22
+      },
+      {
+        "name": "NPC dialogue hold tests",
+        "seconds": 9.13
+      },
+      {
+        "name": "sprite clearance tests",
+        "seconds": 14.86
+      },
+      {
+        "name": "wardrobe UI tests",
+        "seconds": 11.94
+      },
+      {
+        "name": "component animation tests",
+        "seconds": 5.1
+      },
+      {
+        "name": "building occlusion tests",
+        "seconds": 6.31
+      },
+      {
+        "name": "kite flight model tests",
+        "seconds": 0.25
+      },
+      {
+        "name": "kite flight view tests",
+        "seconds": 0.35
+      },
+      {
+        "name": "bubble photo model tests",
+        "seconds": 0.35
+      },
+      {
+        "name": "bubble photo view tests",
+        "seconds": 5.93
+      },
+      {
+        "name": "bench swap model tests",
+        "seconds": 0.35
+      },
+      {
+        "name": "bench swap view tests",
+        "seconds": 3.14
+      },
+      {
+        "name": "sign balance model tests",
+        "seconds": 0.35
+      },
+      {
+        "name": "sign balance view tests",
+        "seconds": 1
+      },
+      {
+        "name": "hat rescue model tests",
+        "seconds": 0.35
+      },
+      {
+        "name": "hat rescue view tests",
+        "seconds": 8.16
+      },
+      {
+        "name": "melody memory model tests",
+        "seconds": 0.91
+      },
+      {
+        "name": "melody memory view tests",
+        "seconds": 1.1
+      },
+      {
+        "name": "ribbon rhythm model tests",
+        "seconds": 0.26
+      },
+      {
+        "name": "ribbon rhythm view tests",
+        "seconds": 2.96
+      },
+      {
+        "name": "ribbon Session startup tests",
+        "seconds": 3.51
+      },
+      {
+        "name": "ribbon Session lifecycle tests",
+        "seconds": 14.13
+      },
+      {
+        "name": "shadow theatre model tests",
+        "seconds": 0.25
+      },
+      {
+        "name": "shadow theatre view tests",
+        "seconds": 0.53
+      },
+      {
+        "name": "crowd semaphore view tests",
+        "seconds": 0.35
+      },
+      {
+        "name": "welcome minigame tests",
+        "seconds": 75.67
+      },
+      {
+        "name": "pipe round model tests",
+        "seconds": 0.25
+      },
+      {
+        "name": "pipe plan presentation tests",
+        "seconds": 1
+      },
+      {
+        "name": "balloon harbor presentation tests",
+        "seconds": 0.35
+      },
+      {
+        "name": "crowd traffic model tests",
+        "seconds": 0.25
+      },
+      {
+        "name": "crowd crossing view tests",
+        "seconds": 0.25
+      },
+      {
+        "name": "fountain jump view tests",
+        "seconds": 8.35
+      },
+      {
+        "name": "fountain timing tests",
+        "seconds": 6.03
+      },
+      {
+        "name": "balloon delivery tests",
+        "seconds": 1.37
+      },
+      {
+        "name": "story runtime tests",
+        "seconds": 0.25
+      },
+      {
+        "name": "main story integration tests",
+        "seconds": 25.03
+      },
+      {
+        "name": "island ride tests",
+        "seconds": 23.14
+      },
+      {
+        "name": "island layout tests",
+        "seconds": 7.89
+      },
+      {
+        "name": "coastal free play tests",
+        "seconds": 13.9
+      },
+      {
+        "name": "shared photo thumbnail tests",
+        "seconds": 1.84
+      },
+      {
+        "name": "saved photo viewer tests",
+        "seconds": 0.53
+      },
+      {
+        "name": "photo original preservation tests",
+        "seconds": 1.93
+      },
+      {
+        "name": "island dialogue tests",
+        "seconds": 4.73
+      },
+      {
+        "name": "island game entry tests",
+        "seconds": 5.11
+      },
+      {
+        "name": "audio runtime tests",
+        "seconds": 9.61
+      },
+      {
+        "name": "island audio dynamics tests",
+        "seconds": 12.14
+      },
+      {
+        "name": "main scene integration tests",
+        "seconds": 27.01
+      },
+      {
+        "name": "pixel UI shell tests",
+        "seconds": 56.69
+      },
+      {
+        "name": "pixel UI popup tests",
+        "seconds": 0.44
+      },
+      {
+        "name": "pixel UI button depth tests",
+        "seconds": 0.35
+      },
+      {
+        "name": "pixel UI collection tests",
+        "seconds": 14.5
+      },
+      {
+        "name": "pixel tutorial page tests",
+        "seconds": 15.13
+      },
+      {
+        "name": "pixel UI customization tests",
+        "seconds": 7.16
+      },
+      {
+        "name": "pixel UI minigame tests",
+        "seconds": 7.52
+      },
+      {
+        "name": "pixel typography tests",
+        "seconds": 0.91
+      },
+      {
+        "name": "localization framework tests",
+        "seconds": 4.74
+      }
+    ]
+  },
+  "scope": "Baseline before ART-18 authoring changes: contains completed SG-24 and SG-26. New authoring tests are local only until the next CI run.",
+  "public_log_normalization": "Decoded UTF-8 logs: trailing line whitespace stripped for repository whitespace checks; source API logs remain authoritative."
+}

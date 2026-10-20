@@ -235,3 +235,34 @@
 ### Commit
 
 - [b1100b3](https://github.com/deadline314/Snapland/commit/b1100b3c1f76261d39050641de1fead65e4f4e9b)：明確候選檢視 API、共享驗證合成、正式快取／錨點隔離及原有檢查遷移。共通流程已整理至 User-guide。
+
+
+# Commit — 2026-10-21 純衣料長外套預覽與完整路線檢查
+
+整身長衣生成會改掉已批准人物的頭、手及腳。現在先保留原人物，只讓純衣料隨當格肩、肘、腕變化；相機、手、頭髮、背帶與腳保留原像素。正面八個行走姿勢可重建不同輪廓的長外套製作預覽；預覽不在正式衣櫃，不改變既有四款外套的可玩內容。
+
+[六方重新閱讀、來源圖、製作與拒收流程](../../design/runtime/outfit-completeness.md)已記錄，共通規則同步至 User-guide。數值通過但袖口／相機錯位的版本仍拒收，沒有為接受候選而放寬原人物保護。
+
+### 測試結果
+
+| 範圍 | 實際結果 |
+|---|---|
+| 衣料覆蓋 | 正面行走8/148個必要原畫格；140個缺格逐一列出。慶祝另外24個既有回退請求，不當成新原畫 |
+| 最終重建 | 8格保留固定畫布、原頭髮所有權及頭／腳保護區；24張來源／衣料／合成PNG與原生檢視所用圖逐位元一致 |
+| 來源變更反例 | 最後一格原人物指紋錯誤，exit2明確拒絕，前7格沒有被當成完整可用輸出 |
+| 空白衣料反例 | 無可見衣料時exit2拒絕，沒有已接受輸出 |
+| 正式完整回退 | 真正衣櫃無候選；148個原畫格＋24個回退請求保留完整原人物，exit0、0ERROR；限預設人類／原微風髮型 |
+| 原生正常／四分之一時間 | 兩段1280×720、20FPS無聲製作預覽，63格3.15秒／249格12.45秒，exit0、0ERROR；逐姿勢16張已查看 |
+| 實際1px錯位反例 | 頭／腳視窗比較立即拒絕，exit1、0ERROR；不是只驗錨點數值 |
+| Python完整可用套件 | 本機124/124通過，40.990秒，含9項新衣料資料反例 |
+| Godot完整套件 | 新工具留CI；既有5daf281的92項通過只作前置基線，不當成本批結果 |
+
+原生內容是8FPS製作時間軸，沒有代表正式世界的行走距離時序、即時衣櫃操作、髮尾物理、降低動態或輸出包。兩段影片完整解碼；沒有聲稱連續看完或真人試玩。整票維持進行中，原驗收未勾項保持不變。
+
+### 截圖與影片
+
+![正常製作預覽的完整八姿勢](images/ART-18-authoring-20261021-normal-reviewed-all-poses.png)
+![真正四分之一時間的八姿勢](images/ART-18-authoring-20261021-quarter-reviewed-all-poses.png)
+![純衣料與原人物的明確關節對照](images/ART-18-authoring-20261021-joint-guide-diagram.png)
+
+[正常短片](images/ART-18-authoring-20261021-normal-reviewed.mp4) · [四分之一時間](images/ART-18-authoring-20261021-quarter-reviewed.mp4) · [完整缺件與回退清單](images/ART-18-authoring-20261021-fallback-runtime-reviewed-coverage.json) · [正式172個請求的逐項結果](images/ART-18-authoring-20261021-fallback-runtime-reviewed-fallback-report.json) · [重建結果](images/ART-18-authoring-20261021-bake-delivery-bake-report.json) · [來源與範圍](images/ART-18-authoring-20261021-provenance.json) · [拒收歷史](images/ART-18-authoring-20261021-attempt-history.json) · [原檔、完整提示及診斷快照](images/ART-18-authoring-20261021-source-and-diagnostics.zip) · [附件雜湊清單](images/ART-18-authoring-20261021-manifest.json)。

@@ -1,0 +1,7 @@
+{
+  "status": "rejected",
+  "timeout_seconds": 30,
+  "output": "Only cells 0 through 6 were written, no complete report.",
+  "reason_scope": "A script assertion apparently stopped the synchronous probe before quit; exact engine text was not saved by the previous runner. Next attempt adds diagnostics and explicit failure exit without relaxing guards.",
+  "raw_failure_log_preserved": false
+}

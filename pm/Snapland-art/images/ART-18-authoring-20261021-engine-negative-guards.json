@@ -1,0 +1,22 @@
+[
+  {
+    "case": "changed-original",
+    "expected_rejection": true,
+    "partial_bake_never_accepted": true,
+    "result": {
+      "exit": 2,
+      "errors": 0,
+      "completed": false
+    }
+  },
+  {
+    "case": "empty-clip",
+    "expected_rejection": true,
+    "partial_bake_never_accepted": true,
+    "result": {
+      "exit": 2,
+      "errors": 0,
+      "completed": false
+    }
+  }
+]

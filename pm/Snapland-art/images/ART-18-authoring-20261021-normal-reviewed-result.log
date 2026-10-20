@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 20 FPS...
+PASS: native garment authoring eight-pose normal/quarter preview with exact rendered original head and foot regions; no wardrobe adoption
+--------------------------------------------------------------------------------
+Done recording movie at path: /workspace/work/Snapland-character/work/outfit-authoring-20261021/normal-reviewed/play.avi
+63 frames at 20 FPS (movie length: 00:00:03:03), recorded in 00:00:02 (150% of real-time speed).
+CPU render time: 0.03 seconds (average: 0.50 ms/frame)
+GPU render time: 0.26 seconds (average: 4.11 ms/frame)
+Encoding time: 0.62 seconds (average: 9.85 ms/frame)
+--------------------------------------------------------------------------------
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)

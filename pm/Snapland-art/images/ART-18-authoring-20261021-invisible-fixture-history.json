@@ -1,0 +1,9 @@
+{
+  "state": "invalid_negative_fixture",
+  "result": {
+    "exit": 0,
+    "errors": 0,
+    "completed": true
+  },
+  "reason": "Opaque original protection retains the original body but leaves the new coat visible outside its old silhouette. It was not an invisible garment. The outer integration assertion failed; no runtime failure or successful rejection is claimed. Use an empty draw clip for the real no-visible-output counterexample."
+}
