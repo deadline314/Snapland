@@ -1,0 +1,231 @@
+{
+  "run_id": 39347247066,
+  "head_sha": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "event": "schedule",
+  "conclusion": "success",
+  "html_url": "https://github.com/deadline314/Snapland/actions/runs/39347247066",
+  "created_at": "2026-10-20T00:22:25Z",
+  "updated_at": "2026-10-20T00:43:40Z",
+  "jobs": [
+    {
+      "id": 118382868526,
+      "name": "full-suite",
+      "conclusion": "success",
+      "started_at": "2026-10-20T00:22:59Z",
+      "completed_at": "2026-10-20T00:24:51Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-20T00:22:59Z",
+          "completed_at": "2026-10-20T00:23:00Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-20T00:23:00Z",
+          "completed_at": "2026-10-20T00:23:52Z"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-20T00:23:52Z",
+          "completed_at": "2026-10-20T00:23:53Z"
+        },
+        {
+          "name": "Install 2D asset authoring test dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-20T00:23:53Z",
+          "completed_at": "2026-10-20T00:23:57Z"
+        },
+        {
+          "name": "Validate all design data and links",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-20T00:23:57Z",
+          "completed_at": "2026-10-20T00:23:58Z"
+        },
+        {
+          "name": "Test validators against invalid designs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-20T00:23:58Z",
+          "completed_at": "2026-10-20T00:24:49Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-20T00:24:49Z",
+          "completed_at": "2026-10-20T00:24:50Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-20T00:24:50Z",
+          "completed_at": "2026-10-20T00:24:50Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-20T00:24:50Z",
+          "completed_at": "2026-10-20T00:24:50Z"
+        }
+      ]
+    },
+    {
+      "id": 118382868766,
+      "name": "game-runtime",
+      "conclusion": "success",
+      "started_at": "2026-10-20T00:22:59Z",
+      "completed_at": "2026-10-20T00:43:39Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-20T00:23:00Z",
+          "completed_at": "2026-10-20T00:23:00Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-20T00:23:00Z",
+          "completed_at": "2026-10-20T00:23:53Z"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-20T00:23:53Z",
+          "completed_at": "2026-10-20T00:23:54Z"
+        },
+        {
+          "name": "Verify runtime completion and entrypoint contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-20T00:23:54Z",
+          "completed_at": "2026-10-20T00:23:54Z"
+        },
+        {
+          "name": "Install pinned Godot 4.7.2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-20T00:23:54Z",
+          "completed_at": "2026-10-20T00:23:56Z"
+        },
+        {
+          "name": "Verify runtime test coverage is configured",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-20T00:23:56Z",
+          "completed_at": "2026-10-20T00:23:56Z"
+        },
+        {
+          "name": "Verify isolated original-style 2D hero sample",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-20T00:23:56Z",
+          "completed_at": "2026-10-20T00:24:13Z"
+        },
+        {
+          "name": "Verify isolated 2D hair bones and attachment contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-20T00:24:13Z",
+          "completed_at": "2026-10-20T00:24:26Z"
+        },
+        {
+          "name": "Verify fixed-root 2D walk pixels and original limb registration",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-20T00:24:26Z",
+          "completed_at": "2026-10-20T00:24:55Z"
+        },
+        {
+          "name": "Verify fixed-head island idle and blinking across appearances",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-20T00:24:55Z",
+          "completed_at": "2026-10-20T00:25:44Z"
+        },
+        {
+          "name": "Run native Godot startup and runtime tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-20T00:25:44Z",
+          "completed_at": "2026-10-20T00:43:37Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-20T00:43:37Z",
+          "completed_at": "2026-10-20T00:43:37Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-20T00:43:37Z",
+          "completed_at": "2026-10-20T00:43:37Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-20T00:43:37Z",
+          "completed_at": "2026-10-20T00:43:38Z"
+        }
+      ]
+    }
+  ],
+  "runtime_passed": 92,
+  "python_tests": 104,
+  "scope": "Actual scheduled CI at056b5d4. Later ST-1 design-only revision has16 targeted story tests and5 scopes locally; not claimed part of this run. Not GPU visual acceptance or listening.",
+  "artifact_sha256": {
+    "MAIN-2-full-green-20261020-local-contracts.log": "60f3cd74780579783ebab8be5a16a553cd2b9fac906f950b55a3d0a6cdd5e451",
+    "MAIN-2-full-green-20261020-validation.png": "2509ee34a1c2a290ebedb071841ce229fb34839a5ae8cbf9a6f0cf65a9861dc7",
+    "MAIN-2-full-green-20261020-local-design.json": "28b43000919b6513bafe2a571e35edc17f9d6f16882356dfbac197990750e4e0",
+    "MAIN-2-full-green-20261020-full-suite.log": "70e765955c1685e6b821571a01fc1c0913b741c5f6f88c64f3a80a086d0677a8",
+    "MAIN-2-full-green-20261020-workflow.png": "25cfe75a1e4f6681d3b077b606a3165d4a46705de167f75fecd51ee3acb41ba9",
+    "MAIN-2-full-green-20261020-preview-source.py.txt": "7d2d9b37627d758cf06925bf810311ce055c51cb944ff17bac61673f187964d1",
+    "MAIN-2-full-green-20261020-runtime.log": "bf9db378b9e3d67a58abbf96ec62b75a5ffaab47152236affadd47f7c67101b9"
+  },
+  "local_contract_tests": 65,
+  "local_independent_scopes": 5,
+  "full_suite_log_format": {
+    "raw_sha256": "1b9ba90c7e2e34aba25e7d06971d5943697a4e36139f24016066fe88e13effa3",
+    "publication": "Only trailing whitespace removed from timestamp-only blank lines for git whitespace checks; status, warnings, errors, tests and all other content preserved"
+  }
+}

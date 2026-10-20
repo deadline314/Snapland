@@ -1,0 +1,29 @@
+from pathlib import Path
+import fitz,textwrap,json,hashlib,shutil
+r=Path.cwd();b=r/'work/ci-close-20261020';out=r/'pm/Snapland-main/images';doc=fitz.open();font=r/'assets/fonts/NotoSansCJKtc-Regular.otf'
+def page(title,subtitle):
+ p=doc.new_page(width=1200,height=880);p.insert_font(fontname='Noto',fontfile=str(font));p.insert_text((30,42),title,fontname='Noto',fontsize=25,color=(.05,.2,.25));p.insert_text((30,70),subtitle,fontname='Noto',fontsize=13,color=(.05,.2,.25));return p
+def code(p,lines):
+ middle=(len(lines)+1)//2
+ for i,line in enumerate(lines):
+  col=0 if i<middle else 1;row=i if col==0 else i-middle
+  p.insert_text((30+col*585,112+row*12.5),line,fontname='cour',fontsize=9,color=(.07,.14,.18))
+workflow=(r/'.github/workflows/full-tests.yml').read_text();p=page('MAIN-2｜CI 設定檔預覽','實際 YAML 文件的點陣預覽；不是 GitHub 網頁或遊戲畫面。每小時／變更／手動觸發，有界測試與明確失敗。');lines=[]
+for index,line in enumerate(workflow.splitlines(),1):
+ chunks=textwrap.wrap(line,width=96,replace_whitespace=False,drop_whitespace=False) or ['']
+ lines += [('%02d '%index if j==0 else '   ')+chunk for j,chunk in enumerate(chunks)]
+code(p,lines);p.insert_text((30,844),'來源：.github/workflows/full-tests.yml · SHA-256 '+hashlib.sha256(workflow.encode()).hexdigest(),fontname='Noto',fontsize=11)
+p=page('MAIN-2｜本機驗證與遠端結果','實際紀錄的文件預覽；不是終端機截圖或遊戲試玩。遠端完整執行基準056b5d4。');y=118
+for scope in ['park','games','story','items','links']:
+ p.insert_text((30,y),'python tools/verify_design.py --scope '+scope,fontname='cour',fontsize=14);y+=23
+ for line in (b/(scope+'.log')).read_text().splitlines():p.insert_text((42,y),line,fontname='cour',fontsize=12);y+=19
+ y+=13
+for line in (b/'local-contracts.log').read_text().splitlines()[-5:]:p.insert_text((30,y),line,fontname='cour',fontsize=14);y+=22
+for i,line in enumerate(['遠端排程 run39347247066','兩個工作皆為 success','104項 Python＋五個設計範圍','92個 Godot 執行項目全部通過','單項90秒／renderer240秒保持','沒有跳過或濾除 ERROR','本機65項：目前入口／結果／資料契約','不冒稱完整115項本機 Python','Dummy不代表試聽；無頭不代表視覺品質']):
+ p.insert_text((625,130+i*38),line,fontname='Noto',fontsize=16,color=(.05,.2,.25))
+p.insert_text((30,835),'來源：本票原始log、GitHub Actions API結果與完整job紀錄。文件預覽只幫助閱讀，不取代原始記錄。',fontname='Noto',fontsize=13)
+pdf=b/'verification-preview.pdf';doc.save(pdf,deflate=True);doc.close()
+with fitz.open(pdf) as d:
+ for i in range(len(d)):d[i].get_pixmap(matrix=fitz.Matrix(1.5,1.5)).save(out/('MAIN-2-full-green-20261020-'+['workflow','validation'][i]+'.png'))
+shutil.copy2(b/'local-contracts.log',out/'MAIN-2-full-green-20261020-local-contracts.log');shutil.copy2(b/'local-design.json',out/'MAIN-2-full-green-20261020-local-design.json');shutil.copy2(b/'render.py',out/'MAIN-2-full-green-20261020-preview-source.py.txt')
+print('Current workflow/local-record PDF rastered, explicit non-browser/non-game scope')
