@@ -165,6 +165,7 @@ func _run() -> void:
 	world.end_ride()
 	_check(world.avatar.visible and world.avatar_motion_rig == null and world.last_avatar_action == "idle", "leaving the ride restores the authored front idle")
 
+	_check_fallback_cache_direction()
 	_release_movement()
 	world.queue_free()
 	await process_frame
@@ -183,3 +184,22 @@ func _check(condition: bool, label: String) -> void:
 		return
 	_failures.append(label)
 	push_error("AUTHORED WALK LOOP: " + label)
+
+func _check_fallback_cache_direction() -> void:
+	# A fresh renderer is the oracle: cache warming must never choose a different
+	# hat view. Missing authored celebration remains an explicit fallback.
+	var renderer = preload("res://game/world/avatar_renderer.gd").new()
+	var equipment := {"outfit": "outfit-tide", "hat": "hat-straw"}
+	var first: Texture2D = renderer.texture({}, equipment, "front", 0, "celebrate")
+	var saw_direction_difference := false
+	for direction in DIRECTIONS:
+		var reference = preload("res://game/world/avatar_renderer.gd").new()
+		for frame in range(3):
+			var warmed: Texture2D = renderer.texture({}, equipment, direction, frame, "celebrate")
+			var cold: Texture2D = reference.texture({}, equipment, direction, frame, "celebrate")
+			_check(warmed != null and cold != null, "celebration fallback produces a complete texture")
+			if warmed == null or cold == null: continue
+			_check(warmed.get_image().get_data() == cold.get_image().get_data(), "%s/%d fallback is independent of previously rendered directions" % [direction, frame])
+			_check(renderer.texture({}, equipment, direction, frame, "celebrate") == warmed, "same fallback request reuses its own cached texture")
+			if frame == 0 and first.get_image().get_data() != cold.get_image().get_data(): saw_direction_difference = true
+	_check(saw_direction_difference, "cache oracle includes genuinely different direction-specific hat pixels")

@@ -219,7 +219,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var pose := _pose_index(pose_direction, safe_frame, safe_action)
 	var render_appearance := normalized_appearance.duplicate()
 	render_appearance.erase("gender")
-	var pose_key := "stable-idle:%s:%d" % [safe_direction,idle_frame] if registered_idle else ("walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else ("manifest:%s:%s:%d" % [safe_action, safe_direction, safe_frame] if has_manifest_frame else "action:%d" % pose))
+	var pose_key := "stable-idle:%s:%d" % [safe_direction,idle_frame] if registered_idle else ("walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else ("manifest:%s:%s:%d" % [safe_action, safe_direction, safe_frame] if has_manifest_frame else "action:%s:%d" % [safe_direction, pose]))
 	var key := "%s|%s|%s" % [JSON.stringify(render_appearance), outfit + ":" + hat, pose_key]
 	if _cache.has(key):
 		_cache_order.erase(key)

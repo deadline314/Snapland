@@ -1,0 +1,30 @@
+[
+  {
+    "label": "authored avatar walk loop tests",
+    "seconds": 35.06,
+    "exit": 0,
+    "errors": 0,
+    "failure": null
+  },
+  {
+    "label": "character animation library tests",
+    "seconds": 0.43,
+    "exit": 0,
+    "errors": 0,
+    "failure": null
+  },
+  {
+    "label": "atomic outfit coverage tests",
+    "seconds": 0.72,
+    "exit": 0,
+    "errors": 0,
+    "failure": null
+  },
+  {
+    "label": "side outfit palette tests",
+    "seconds": 5.46,
+    "exit": 0,
+    "errors": 0,
+    "failure": null
+  }
+]
