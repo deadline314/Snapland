@@ -1,0 +1,34 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-007",
+    "mistakes": 0,
+    "observed_frame": 387,
+    "observed_process_id": 30649,
+    "observer_only": true,
+    "practice": false,
+    "score": 2620,
+    "score_summary": {
+      "label": "路線轉動分",
+      "rows": [
+        {
+          "amount": 2620,
+          "count": 18,
+          "key": "pipe_orders",
+          "label": "供水工單與轉動計分"
+        },
+        {
+          "amount": 0,
+          "count": 19,
+          "key": "move_progress",
+          "label": "操作步數（不計分）",
+          "progress_only": true
+        }
+      ],
+      "rule": "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。",
+      "total": 2620
+    },
+    "success": true
+  }
+]

@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: tutorial panel/catalog checks
+WARNING: TutorialPanel: screenshot missing or unreadable for game-001 step 1: res://assets/ui/tutorials/fixture-deliberately-missing.png
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _render_step (res://game/ui/tutorial_panel.gd:671)
+         [1] open_tutorial (res://game/ui/tutorial_panel.gd:116)
+         [2] _run (res://game/tests/test_tutorial_panel.gd:102)

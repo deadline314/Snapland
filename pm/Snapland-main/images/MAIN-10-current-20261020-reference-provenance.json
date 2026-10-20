@@ -1,0 +1,8 @@
+{
+  "page": "https://partner.steamgames.com/doc/features/steam_controller/steam_input_gamepad_emulation_bestpractices",
+  "image": "https://shared.fastly.steamstatic.com/community_assets/images/steamworks_docs/english/intothebreach_xbox.PNG",
+  "file": "reference-into-the-breach-input.png",
+  "sha256": "8f266c34bca24525323a3e5f52412af71e39a3b0aca5cb0684b84aeac7ac3fe9",
+  "method": "unaltered primary static image download, not video or screenshot capture",
+  "use": "input explanations must match actual bindings; not game art"
+}

@@ -104,6 +104,7 @@ var ended := false
 var won := false
 var devil_won := false
 var paused := false
+var _paused_render_targets: Array[Dictionary] = []
 var _discard_next_delta := false
 var practice_mode := false
 var minigame_hud: Control
@@ -389,6 +390,7 @@ func _sync_presentation() -> void:
 		"melody_memory": presentation.update_frame(melody_snapshot, time_phase, reduced_motion)
 		"bench_swap": presentation.update_frame(bench_model.snapshot(), time_phase, reduced_motion)
 		"ribbon_rhythm": presentation.update_frame(_ribbon_snapshot, time_phase, reduced_motion)
+	if paused: _refresh_paused_render_targets()
 
 func _layout_presentation() -> void:
 	if not is_instance_valid(presentation): return
@@ -397,6 +399,7 @@ func _layout_presentation() -> void:
 	presentation.size = DESIGN_SIZE
 	presentation.scale = Vector2.ONE * factor
 	presentation.position = (size - DESIGN_SIZE * factor) * 0.5
+	if paused: _refresh_paused_render_targets()
 
 func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
 	if texture == null:
@@ -412,6 +415,28 @@ func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
 	output.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	view.add_child(output)
 	return output
+
+func _pause_presentation_rendering() -> void:
+	if not _paused_render_targets.is_empty() or not is_instance_valid(presentation): return
+	for viewport in presentation.find_children("*", "SubViewport", true, false):
+		var previous: int = viewport.render_target_update_mode
+		if previous == SubViewport.UPDATE_DISABLED: continue
+		_paused_render_targets.append({"viewport": weakref(viewport), "mode": previous})
+		# Paint the final frozen state once, then retain its full-size texture.
+		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+
+func _refresh_paused_render_targets() -> void:
+	for record in _paused_render_targets:
+		var viewport := record.viewport.get_ref() as SubViewport
+		if is_instance_valid(viewport) and not viewport.is_queued_for_deletion():
+			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+
+func _resume_presentation_rendering() -> void:
+	for record in _paused_render_targets:
+		var viewport := record.viewport.get_ref() as SubViewport
+		if is_instance_valid(viewport) and not viewport.is_queued_for_deletion():
+			viewport.render_target_update_mode = int(record.mode)
+	_paused_render_targets.clear()
 
 func set_paused(value: bool) -> void:
 	if ended and value:
@@ -440,9 +465,16 @@ func set_paused(value: bool) -> void:
 					presentation.set(field, false)
 			presentation.set_process(not value)
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE if value else Control.MOUSE_FILTER_STOP
+	var entering_pause := value and not paused
+	if entering_pause:
+		_pause_presentation_rendering()
 	if paused and not value:
 		_discard_next_delta = true
+	if not value:
+		_resume_presentation_rendering()
 	paused = value
+	if entering_pause:
+		_sync_presentation()
 	if minigame_hud != null:
 		minigame_hud.set_paused(value)
 	_refresh_hud(true)
@@ -639,12 +671,14 @@ func set_time_of_day(phase_id: Variant) -> void:
 	var rotation: Vector3 = profile.key_rotation_degrees
 	phase_shadow_x = clampf(sin(deg_to_rad(rotation.y))*14.0,-9.0,9.0)
 	phase_shadow_color = Color("#203a4b",0.18 if time_phase == "noon" else 0.25)
+	if paused: _sync_presentation()
 	queue_redraw()
 
 func _rng_reset() -> void:
 	rng.seed = hash(game_id) + int(Time.get_ticks_msec())
 
 func reset_round() -> void:
+	_resume_presentation_rendering()
 	pipe_connected = false
 	pipe_finish_at = -1.0
 	elapsed = 0.0
@@ -829,7 +863,7 @@ func _process(delta: float) -> void:
 	if mode == "shadow_alignment":
 		shadow_delta = minf(shadow_delta, 0.5)
 		_shadow_frame_delta = minf(shadow_delta, ShadowTheatreModelScript.MAX_STEP)
-	_sync_presentation()
+	if not paused: _sync_presentation()
 	_hud_refresh_clock += maxf(delta, 0.0)
 	if _hud_dirty and _hud_refresh_clock >= HUD_REFRESH_INTERVAL:
 		_refresh_hud(true)

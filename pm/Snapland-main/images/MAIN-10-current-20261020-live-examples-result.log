@@ -1,0 +1,247 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+[park_world] scenery meshes: 1135, nodes: 2039
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/000-park-step-01.png","frame":42,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=park step=01 context=live park path with movement and HUD path=pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/001-park-step-02.png","frame":46,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=park step=02 context=live station interaction/details modal path=pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-02.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/002-park-step-03.png","frame":51,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-03.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=park step=03 context=live voyage ticket and park tools path=pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-03.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/003-game-001-step-01.png","frame":86,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-001 step=01 context=先練習操縱｜live balloon practice with sustained directional steering; no result simulated path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/004-game-001-step-02.png","frame":112,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-001 step=02 context=進圈前減速｜real brake-plus-steer input held before mailbox; no delivery asserted path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-02.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/005-game-001-step-03.png","frame":143,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-03.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-001 step=03 context=照順序送完三站｜active first mailbox and live wind display; no delivery asserted path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-03.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/006-game-002-step-01.png","frame":181,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-002-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-002 step=01 context=迎風修正高度｜real sustained up input changes kite aim against the first ring path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-002-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/007-game-002-step-02.png","frame":214,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-002-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-002 step=02 context=預判陣風與風環｜live ring, boost and reel controls; no ring completion asserted path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-002-step-02.png
+KEEP_SOURCE lesson=game-002 step=03 title=控制張力完成旅程 reason=--include-scripted-results was not supplied
+KEEP_SOURCE lesson=game-003 step=01 title=先看水柱節奏 reason=live presentation does not expose a representative state safely
+KEEP_SOURCE lesson=game-003 step=02 title=在亮起時跳 reason=live presentation does not expose a representative state safely
+KEEP_SOURCE lesson=game-003 step=03 title=看懂結果條件 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/008-game-004-step-01.png","frame":357,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-004-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-004 step=01 context=看兩側等候隊伍｜actual left/right arrival queues after live simulation path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-004-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/009-game-004-step-02.png","frame":358,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-004-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-004 step=02 context=先清場再換方向｜actual Q signal selection with queue and selected lane visible path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-004-step-02.png
+KEEP_SOURCE lesson=game-004 step=03 title=完成六隊通行 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/010-game-005-step-01.png","frame":396,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-005-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-005 step=01 context=左右跟上落點｜real sustained left movement toward the first falling hat path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-005-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/011-game-005-step-02.png","frame":433,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-005-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-005 step=02 context=接帽時機｜short Space catch press at the falling hat's contact zone; outcome not claimed path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-005-step-02.png
+KEEP_SOURCE lesson=game-005 step=03 title=一般與加碼條件 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/012-game-006-step-01.png","frame":499,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-006-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-006 step=01 context=看懂舞步與留拍｜real first left cue response with the next-beat ribbon preview path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-006-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/013-game-006-step-02.png","frame":688,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-006-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-006 step=02 context=讀兩拍預告｜real 0.36-second left ribbon hold at the sustained cue; no phrase completion path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-006-step-02.png
+KEEP_SOURCE lesson=game-006 step=03 title=完成並讀取分數 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/014-game-007-step-01.png","frame":702,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-007-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-007 step=01 context=看泉口和所有花床｜actual keyboard selection moves the pipe cursor to a flower bed path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-007-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/015-game-007-step-02.png","frame":703,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-007-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-007 step=02 context=旋轉管節，觀察水流｜actual Space rotates the selected pipe and updates the water network path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-007-step-02.png
+KEEP_SOURCE lesson=game-007 step=03 title=完成三張工單 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/016-game-008-step-01.png","frame":741,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-008-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-008 step=01 context=讀風與移配重｜sustained left input moves the live counterweight path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-008-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/017-game-008-step-02.png","frame":767,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-008-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-008 step=02 context=保持角度再得分｜sustained right correction with live angle and gust forecast path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-008-step-02.png
+KEEP_SOURCE lesson=game-008 step=03 title=穩住七段風 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/018-game-009-step-01.png","frame":805,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-009-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-009 step=01 context=看清光源、紙偶與投影｜sustained lamp movement changes the projected shadow path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-009-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/019-game-009-step-02.png","frame":832,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-009-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-009 step=02 context=Shift 細調後定影｜Shift fine-adjustment followed by the real Space freeze action path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-009-step-02.png
+KEEP_SOURCE lesson=game-009 step=03 title=核對三輪結果 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/020-game-010-step-01.png","frame":867,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-010-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-010 step=01 context=先吹泡泡，再放飛｜real E charge-release launches a bubble while the live frame follows path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-010-step-01.png
+KEEP_SOURCE lesson=game-010 step=02 title=泡泡包住全身才拍 reason=live presentation does not expose a representative state safely
+KEEP_SOURCE lesson=game-010 step=03 title=檢視三張拍貼結果 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/021-game-011-step-01.png","frame":935,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-011-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-011 step=01 context=讀本桌條件｜actual seat-one selection with current table rules visible path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-011-step-01.png
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/022-game-011-step-02.png","frame":936,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-011-step-02.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-011 step=02 context=解下一桌規則｜actual seat-two selection or first exchange with rules still visible path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-011-step-02.png
+KEEP_SOURCE lesson=game-011 step=03 title=完成三桌看結果 reason=--include-scripted-results was not supplied
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/023-game-012-step-01.png","frame":949,"request":"pm/Snapland-art/images/ART-24-tutorial-refresh/game-012-step-01.png","size":[1280,720],"window":[1280,720]}
+NATIVE TUTORIAL CANDIDATE lesson=game-012 step=01 context=先聽音高與長短拍｜real opening listen phrase with no player note input path=pm/Snapland-art/images/ART-24-tutorial-refresh/game-012-step-01.png
+KEEP_SOURCE lesson=game-012 step=02 title=照著節奏回奏 reason=live presentation does not expose a representative state safely
+KEEP_SOURCE lesson=game-012 step=03 title=完成三句樂曲 reason=--include-scripted-results was not supplied
+PASS: native tutorial refresh candidates captured=24; unmatched/result assets preserved=15; source tutorial PNGs were read-only
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1323)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:48)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _validate_authored_avatar_actions (res://game/minigames/ribbon_rhythm_view.gd:236)
+         [2] configure_avatar (res://game/minigames/ribbon_rhythm_view.gd:75)
+         [3] _sync_presentation (res://game/minigames/session.gd:369)
+         [4] reset_round (res://game/minigames/session.gd:784)
+         [5] start (res://game/minigames/session.gd:251)
+         [6] _launch_game (res://game/main.gd:1250)
+         [7] _launch_game (res://work/tutorial-current-20261020/private_main.gd:24)
+         [8] _capture_game_examples (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:107)
+         [9] _run (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:59)
+         [10] _capture_game_examples (res://work/tutorial-current-20261020/live-examples/native_pixel_tutorial_assets.gd:135)
+         [11] _frames (res://work/tutorial-current-20261020/live-examples/native_layout_review.gd:295)

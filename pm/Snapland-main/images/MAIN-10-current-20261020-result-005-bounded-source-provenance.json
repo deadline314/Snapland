@@ -1,0 +1,19 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "entry": "native_hat_rescue_review",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_fountain_review.gd": {
+      "source_sha256": "78633fab810b33d449f7611ab95254eb723b4810ca973e058ad71293e5e7be63",
+      "copy_sha256": "99bc5a6802aab48eeafbf74d9bcb00519fa6e4c092a24becf7416f4c28ec4159"
+    },
+    "game/tests/native_hat_rescue_review.gd": {
+      "source_sha256": "ab5bdb83ea71bff02371bd5d94eba56c75ee199457dfafc04eb0519ad49748fa",
+      "copy_sha256": "bdf665390d86730e1f829f05126aa78d3e919315f59d391f4e569f14027f4422"
+    }
+  }
+}

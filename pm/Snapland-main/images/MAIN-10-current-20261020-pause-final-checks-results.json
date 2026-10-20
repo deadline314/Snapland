@@ -1,0 +1,23 @@
+[
+  {
+    "name": "pipe plan presentation tests",
+    "exit": 0,
+    "seconds": 1.0,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "fountain timing tests",
+    "exit": 0,
+    "seconds": 7.04,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 27.1,
+    "errors": 0,
+    "error": null
+  }
+]

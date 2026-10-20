@@ -1,0 +1,57 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-005",
+    "mistakes": 0,
+    "observed_frame": 1032,
+    "observed_process_id": 30889,
+    "observer_only": true,
+    "practice": false,
+    "score": 816,
+    "score_summary": {
+      "label": "接帽分",
+      "rows": [
+        {
+          "amount": 120,
+          "count": 1,
+          "key": "hat_0",
+          "label": "第 1 頂・中心接住"
+        },
+        {
+          "amount": 128,
+          "count": 1,
+          "key": "hat_1",
+          "label": "第 2 頂・中心接住"
+        },
+        {
+          "amount": 136,
+          "count": 1,
+          "key": "hat_2",
+          "label": "第 3 頂・中心接住"
+        },
+        {
+          "amount": 144,
+          "count": 1,
+          "key": "hat_3",
+          "label": "第 4 頂・中心接住"
+        },
+        {
+          "amount": 144,
+          "count": 1,
+          "key": "hat_4",
+          "label": "第 5 頂・中心接住"
+        },
+        {
+          "amount": 144,
+          "count": 1,
+          "key": "hat_5",
+          "label": "第 6 頂・中心接住"
+        }
+      ],
+      "rule": "每接住一頂帽子 +100。",
+      "total": 816
+    },
+    "success": true
+  }
+]

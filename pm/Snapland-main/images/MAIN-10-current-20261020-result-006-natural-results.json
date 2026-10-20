@@ -1,0 +1,69 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-006",
+    "mistakes": 0,
+    "observed_frame": 689,
+    "observed_process_id": 29965,
+    "observer_only": true,
+    "practice": false,
+    "score": 900,
+    "score_summary": {
+      "label": "節拍分",
+      "rows": [
+        {
+          "amount": 125,
+          "count": 1,
+          "key": "ribbon_gesture_0",
+          "label": "第 1 拍・精準・重拍"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "ribbon_gesture_1",
+          "label": "第 2 拍・精準"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "ribbon_gesture_2",
+          "label": "第 3 拍・精準"
+        },
+        {
+          "amount": 125,
+          "count": 1,
+          "key": "ribbon_gesture_3",
+          "label": "第 4 拍・精準・重拍"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "ribbon_gesture_4",
+          "label": "第 5 拍・精準"
+        },
+        {
+          "amount": 125,
+          "count": 1,
+          "key": "ribbon_gesture_5",
+          "label": "第 6 拍・精準・重拍"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "ribbon_gesture_6",
+          "label": "第 7 拍・精準"
+        },
+        {
+          "amount": 125,
+          "count": 1,
+          "key": "ribbon_gesture_7",
+          "label": "第 8 拍・精準・重拍"
+        }
+      ],
+      "rule": "精準 +100、合拍 +60；四個重拍另 +25。六拍一般成功；未輔助、八拍全精準且零錯誤才得惡魔拍貼。",
+      "total": 900
+    },
+    "success": true
+  }
+]

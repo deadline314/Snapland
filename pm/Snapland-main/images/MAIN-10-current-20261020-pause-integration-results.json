@@ -1,0 +1,37 @@
+[
+  {
+    "name": "tutorial seen progress tests",
+    "exit": 0,
+    "seconds": 5.65,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "welcome minigame tests",
+    "exit": 0,
+    "seconds": 73.74,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "fountain timing tests",
+    "exit": 0,
+    "seconds": 5.64,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 23.07,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel tutorial page tests",
+    "exit": 0,
+    "seconds": 15.14,
+    "errors": 0,
+    "error": null
+  }
+]

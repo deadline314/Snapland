@@ -1,0 +1,4 @@
+{
+  "scope": "Same first formal route and original per-order/result assertions; offline waits retain 3/4 model-second bounds plus 90 wall seconds, outer360; gameplay and grading untouched",
+  "failed_predecessor": "result-007 expired 3 wall seconds while connected water was still flowing; not counted as passed"
+}

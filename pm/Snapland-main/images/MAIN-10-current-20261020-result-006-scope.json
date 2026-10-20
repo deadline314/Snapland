@@ -1,0 +1,8 @@
+{
+  "scope": "Only the original first formal route through its original result assertions and native screenshot; later practice/album flow is not run or claimed",
+  "source": "native_ribbon_rhythm_review.gd",
+  "original_run_sha256": "0745a0d6155fad789bf1b90cc1838c6bf56c71b670525396e975de248f910ecb",
+  "cut_before": "\tif not await _activate_button(\"返回遊園\", \"return to park after formal Ribbon\"): return",
+  "inputs": "Original native event helpers, models and grading untouched; finite original guards plus outer 360 wall seconds",
+  "mode": "GPU fixed60 without movie; source PNGs, not continuous video or real-time performance"
+}

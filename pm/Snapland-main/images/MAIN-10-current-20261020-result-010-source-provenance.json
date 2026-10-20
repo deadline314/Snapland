@@ -1,0 +1,19 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "entry": "native_bubble_photo_review",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_fountain_review.gd": {
+      "source_sha256": "78633fab810b33d449f7611ab95254eb723b4810ca973e058ad71293e5e7be63",
+      "copy_sha256": "d5e8b30abce66715a191649939ca37689a8940eccdf55ac6ba27432ef4279714"
+    },
+    "game/tests/native_bubble_photo_review.gd": {
+      "source_sha256": "864eb74ba6e54ff15af3a2808f45fd280ba878b58a9b96c257181ae1698c3c9b",
+      "copy_sha256": "cf0fb7388117241ab7f4bdc5ad84a60010dc56487579973c27a0ce6e6792c881"
+    }
+  }
+}

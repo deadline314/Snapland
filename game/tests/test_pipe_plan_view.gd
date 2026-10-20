@@ -2,6 +2,7 @@ extends SceneTree
 
 const View = preload("res://game/minigames/pipe_plan_view.gd")
 const Model = preload("res://game/minigames/pipe_round_model.gd")
+const Session = preload("res://game/minigames/session.gd")
 var failures := 0
 var checks := 0
 
@@ -19,6 +20,7 @@ func _run() -> void:
 	_test_multi_target_order(view)
 	_test_flower_bed_bounds_and_bloom(view)
 	_test_actual_hud_clearance(view)
+	_test_session_pause_delivery()
 	view.queue_free()
 	await process_frame
 	if failures == 0:
@@ -38,6 +40,21 @@ func _test_board_mapping(view: Control) -> void:
 	view.size = Vector2(640, 360)
 	var local_center := (rect.position + rect.size / 8.0) * 0.5
 	_expect(view.cell_at(view.design_point_from_local(local_center)) == 0, "scaled local pointer maps through design coordinates")
+
+func _test_session_pause_delivery() -> void:
+	var session: Control = Session.new()
+	root.add_child(session)
+	session.start("game-007", false)
+	var presentation: Control = session.presentation
+	_expect(presentation != null and presentation.animation_active, "live Session starts the water presentation")
+	session.set_paused(true)
+	_expect(not presentation.animation_active, "pause immediately delivers the paused state to the 2D water animation")
+	session._process(0.5)
+	_expect(not presentation.animation_active, "paused ticks keep the 2D water animation stopped")
+	session.set_paused(false)
+	session._process(0.0)
+	_expect(presentation.animation_active, "resume restores the live 2D water animation")
+	session.queue_free()
 
 func _test_present_is_immutable(view: Control) -> void:
 	var cells: Array = [5,3,10,0,3,10,12,0,0,0,5,0,0,0,3,12]

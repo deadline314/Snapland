@@ -1,0 +1,15 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "entry": "native_ribbon_rhythm_review",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_ribbon_rhythm_review.gd": {
+      "source_sha256": "9e090e0deceaebe36183b0927045ee542dd9e960d7ae17f4c78c8838bdd2d48f",
+      "copy_sha256": "8c215286eee1f08682e289cd0f625f25ade3705c5108fa4da8492fac283b721c"
+    }
+  }
+}

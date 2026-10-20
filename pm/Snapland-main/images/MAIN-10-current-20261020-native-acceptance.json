@@ -1,0 +1,66 @@
+{
+  "accepted": [
+    {
+      "case": "park",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 32.57,
+      "passes": [
+        "PASS: park three-step native key/pointer help, all five copy fields through real page controls, blocked movement, screenshot zoom/Escape/focus, replay/close/reopen/skip and unchanged progression"
+      ],
+      "captures": 5
+    },
+    {
+      "case": "first-six",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 221.76,
+      "passes": [
+        "PASS: native tutorial lifecycle game-001",
+        "PASS: native tutorial lifecycle game-002",
+        "PASS: native tutorial lifecycle game-003",
+        "PASS: native tutorial lifecycle game-004",
+        "PASS: native tutorial lifecycle game-005",
+        "PASS: native tutorial lifecycle game-006"
+      ],
+      "captures": 36
+    },
+    {
+      "case": "last-six",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 194.64,
+      "passes": [
+        "PASS: native tutorial lifecycle game-007",
+        "PASS: native tutorial lifecycle game-008",
+        "PASS: native tutorial lifecycle game-009",
+        "PASS: native tutorial lifecycle game-010",
+        "PASS: native tutorial lifecycle game-011",
+        "PASS: native tutorial lifecycle game-012"
+      ],
+      "captures": 36
+    },
+    {
+      "case": "before-v2",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 31.64,
+      "passes": [
+        "PASS: native three-stage pause/help exact pixels and clocks, actual resume and original viewport policy; retained_expected=false"
+      ]
+    },
+    {
+      "case": "after-current",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 30.81,
+      "passes": [
+        "PASS: native three-stage pause/help exact pixels and clocks, actual resume and original viewport policy; retained_expected=true"
+      ]
+    }
+  ],
+  "scope": "13 lessons; park in one process, games 1–6 and 7–12 in two independent processes/profiles; each game 60 seconds, each game-batch 360 seconds; current acceptance is not 12 games in one continuous process",
+  "audio": "Dummy audio; no listening claim",
+  "review": "actual still frames and contact sheets; no continuous video viewing claim",
+  "pause_metrics": "Node UPDATE_ONCE getter and per-viewport last-render counters are cached; whole-frame paused/resumed compositions differ; no hardware performance percentage claim"
+}

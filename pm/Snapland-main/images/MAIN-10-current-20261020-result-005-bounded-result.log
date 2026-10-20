@@ -1,0 +1,466 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+[park_world] scenery meshes: 1135, nodes: 2039
+INPUT: start hat rescue game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@1885/@VBoxContainer@1886/@HBoxContainer@1887/InviteCard/@MarginContainer@1888/@VBoxContainer@1889/@HBoxContainer@1891/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@1885/@VBoxContainer@1886/@HBoxContainer@1887/InviteCard/@MarginContainer@1888/@VBoxContainer@1889/@HBoxContainer@1891/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/000-native-hat-rescue-catch-pose-00.png","frame":16,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-00.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=0 movie_frame=16 model_elapsed=0.067 mask=1 count=1
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/001-native-hat-rescue-catch-pose-01.png","frame":20,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-01.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=1 movie_frame=20 model_elapsed=0.133 mask=3 count=2
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/002-native-hat-rescue-catch-pose-02.png","frame":23,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-02.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=2 movie_frame=23 model_elapsed=0.183 mask=7 count=3
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/003-native-hat-rescue-catch-pose-03.png","frame":26,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-03.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=3 movie_frame=26 model_elapsed=0.233 mask=15 count=4
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/004-native-hat-rescue-catch-pose-04.png","frame":29,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-04.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=4 movie_frame=29 model_elapsed=0.283 mask=31 count=5
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/005-native-hat-rescue-catch-pose-05.png","frame":32,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-05.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=5 movie_frame=32 model_elapsed=0.333 mask=63 count=6
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/006-native-hat-rescue-catch-pose-06.png","frame":35,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-06.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=6 movie_frame=35 model_elapsed=0.383 mask=127 count=7
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/007-native-hat-rescue-catch-pose-07.png","frame":38,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-07.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=7 movie_frame=38 model_elapsed=0.433 mask=255 count=8
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/008-native-hat-rescue-catch-pose-08.png","frame":41,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-08.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=8 movie_frame=41 model_elapsed=0.483 mask=511 count=9
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/009-native-hat-rescue-catch-pose-09.png","frame":44,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-09.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=9 movie_frame=44 model_elapsed=0.533 mask=1023 count=10
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/010-native-hat-rescue-catch-pose-10.png","frame":46,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-10.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=10 movie_frame=46 model_elapsed=0.567 mask=2047 count=11
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/011-native-hat-rescue-catch-pose-11.png","frame":49,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-catch-pose-11.png","size":[1280,720],"window":[1280,720]}
+HAT_CATCH_POSE index=11 movie_frame=49 model_elapsed=0.617 mask=4095 count=12
+HAT_CATCH_SEQUENCE_PASS movie_frame=49 elapsed=0.617 indices=0..11
+INPUT: leave stationary source rehearsal target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: request rehearsal exit target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/PauseOverlay/@PanelContainer@1907/@VBoxContainer@1908/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/PauseOverlay/@PanelContainer@1907/@VBoxContainer@1908/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: confirm rehearsal exit target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/ConfirmOverlay/@PanelContainer@1921/@VBoxContainer@1922/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1898/MinigameHUD/ConfirmOverlay/@PanelContainer@1921/@VBoxContainer@1922/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PASS: separate stationary twelve-frame input rehearsal; no collection/progress change
+INPUT: start hat rescue game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@1934/@VBoxContainer@1935/@HBoxContainer@1936/InviteCard/@MarginContainer@1937/@VBoxContainer@1938/@HBoxContainer@1940/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1882/IslandGameInvite/@MarginContainer@1934/@VBoxContainer@1935/@HBoxContainer@1936/InviteCard/@MarginContainer@1937/@VBoxContainer@1938/@HBoxContainer@1940/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: pause game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: resume game-005 target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/PauseOverlay/@PanelContainer@1956/@VBoxContainer@1957/ResumeButton rect=[P: (430.0, 240.0), S: (420.0, 44.0)] pointer=(640.0, 262.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/PauseOverlay/@PanelContainer@1956/@VBoxContainer@1957/ResumeButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: pause before game-005 retry target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open game-005 retry confirmation target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/PauseOverlay/@PanelContainer@1956/@VBoxContainer@1957/RetryButton rect=[P: (430.0, 390.0), S: (420.0, 44.0)] pointer=(640.0, 412.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/PauseOverlay/@PanelContainer@1956/@VBoxContainer@1957/RetryButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: confirm synchronous game-005 retry target=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/ConfirmOverlay/@PanelContainer@1970/@VBoxContainer@1971/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1860/@Control@1861/@Control@1947/MinigameHUD/ConfirmOverlay/@PanelContainer@1970/@VBoxContainer@1971/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+HAT_KEY_STATE session=196914190659 hat=0 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.050
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=-1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.050
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/012-native-hat-rescue-walk-left-00.png","frame":105,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-left-00.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=left index=0 movie_frame=105 left_mask=1 right_mask=0 count=1
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.133
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/013-native-hat-rescue-walk-left-01.png","frame":113,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-left-01.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=left index=1 movie_frame=113 left_mask=3 right_mask=0 count=2
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.217
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/014-native-hat-rescue-walk-left-02.png","frame":116,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-left-02.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=left index=2 movie_frame=116 left_mask=7 right_mask=0 count=3
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.300
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/015-native-hat-rescue-walk-left-03.png","frame":119,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-left-03.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=left index=3 movie_frame=119 left_mask=15 right_mask=0 count=4
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/016-native-hat-rescue-walk-left-04.png","frame":121,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-left-04.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=left index=4 movie_frame=121 left_mask=31 right_mask=0 count=5
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/017-native-hat-rescue-walk-left-05.png","frame":123,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-left-05.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=left index=5 movie_frame=123 left_mask=63 right_mask=0 count=6
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.383
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/018-native-hat-rescue-walk-left-06.png","frame":125,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-left-06.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=left index=6 movie_frame=125 left_mask=127 right_mask=0 count=7
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/019-native-hat-rescue-walk-left-07.png","frame":127,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-left-07.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=left index=7 movie_frame=127 left_mask=255 right_mask=0 count=8
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.467
+HAT_KEY_STATE session=196914190659 hat=0 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.550
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.567
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.683
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.783
+HAT_KEY_STATE session=196914190659 hat=0 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.850
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/020-native-hat-rescue-walk-right-06.png","frame":152,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-right-06.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=right index=6 movie_frame=152 left_mask=255 right_mask=64 count=9
+HAT_KEY_STATE session=196914190659 hat=0 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.867
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=-1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=0.867
+HAT_KEY_STATE session=196914190659 hat=0 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=0.917
+HAT_KEY_STATE session=196914190659 hat=0 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.967
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=0 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=0.967
+HAT_MOVING_CATCH_WALK movie_frame=161 model_elapsed=1.017 velocity=14.965 walk_index=6
+HAT_KEY_STATE session=196914190659 hat=0 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.067
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=-1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.067
+HAT_KEY_STATE session=196914190659 hat=0 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=1.083
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.167
+HAT_AXIS_SAMPLE session=196914190659 hat=0 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.267
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=1.300
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.367
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/021-native-hat-rescue-walk-right-07.png","frame":185,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-right-07.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=right index=7 movie_frame=185 left_mask=255 right_mask=192 count=10
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.450
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/022-native-hat-rescue-walk-right-00.png","frame":190,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-right-00.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=right index=0 movie_frame=190 left_mask=255 right_mask=193 count=11
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.517
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/023-native-hat-rescue-walk-right-01.png","frame":193,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-right-01.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=right index=1 movie_frame=193 left_mask=255 right_mask=195 count=12
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/024-native-hat-rescue-walk-right-02.png","frame":195,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-right-02.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=right index=2 movie_frame=195 left_mask=255 right_mask=199 count=13
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.583
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/025-native-hat-rescue-walk-right-03.png","frame":197,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-right-03.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=right index=3 movie_frame=197 left_mask=255 right_mask=207 count=14
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/026-native-hat-rescue-walk-right-04.png","frame":199,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-right-04.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=right index=4 movie_frame=199 left_mask=255 right_mask=223 count=15
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.650
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/027-native-hat-rescue-walk-right-05.png","frame":201,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-walk-right-05.png","size":[1280,720],"window":[1280,720]}
+HAT_WALK_POST_DRAW direction=right index=5 movie_frame=201 left_mask=255 right_mask=255 count=16
+HAT_WALK_SEQUENCE_PASS movie_frame=201 directions=left,right frames=0..7
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.733
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.833
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=1.933
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.033
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.133
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.233
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.350
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.450
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.450
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.550
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.667
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.750
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.750
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=2.800
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.850
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.950
+HAT_KEY_STATE session=196914190659 hat=1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=2.983
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=3.050
+HAT_KEY_STATE session=196914190659 hat=1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=3.133
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.150
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.250
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.350
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.467
+HAT_KEY_STATE session=196914190659 hat=1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.517
+HAT_KEY_STATE session=196914190659 hat=1 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=3.550
+HAT_KEY_STATE session=196914190659 hat=1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.567
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.567
+HAT_KEY_STATE session=196914190659 hat=1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=3.600
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.683
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.783
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=3.900
+HAT_AXIS_SAMPLE session=196914190659 hat=1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=4.017
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=4.050
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/028-native-hat-rescue-formal-mid.png","frame":344,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-formal-mid.png","size":[1280,720],"window":[1280,720]}
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.100
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.183
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.250
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.317
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.400
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.500
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.617
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.717
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.833
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=4.867
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=4.950
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.050
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.150
+HAT_KEY_STATE session=196914190659 hat=-1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.167
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.267
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.317
+HAT_KEY_STATE session=196914190659 hat=-1 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.350
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.367
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.383
+HAT_KEY_STATE session=196914190659 hat=-1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.400
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.483
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.583
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.600
+HAT_KEY_STATE session=196914190659 hat=-1 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.633
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.650
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.683
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.783
+HAT_KEY_STATE session=196914190659 hat=2 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=5.817
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.883
+HAT_KEY_STATE session=196914190659 hat=2 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=5.967
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=5.983
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.100
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.200
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.300
+HAT_KEY_STATE session=196914190659 hat=2 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.317
+HAT_KEY_STATE session=196914190659 hat=2 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=6.367
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=6.400
+HAT_KEY_STATE session=196914190659 hat=2 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=6.417
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.500
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.583
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.700
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.783
+HAT_AXIS_SAMPLE session=196914190659 hat=2 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.883
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=6.967
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=6.983
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.083
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.183
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.283
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.383
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.483
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=7.550
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.583
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.683
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.800
+HAT_KEY_STATE session=196914190659 hat=-1 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=7.850
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=7.900
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.017
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.117
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.217
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.317
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.417
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.533
+HAT_KEY_STATE session=196914190659 hat=3 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.550
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.617
+HAT_KEY_STATE session=196914190659 hat=3 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=8.683
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.717
+HAT_KEY_STATE session=196914190659 hat=3 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.817
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=8.817
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=8.917
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.017
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.133
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.233
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.333
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.433
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.533
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.633
+HAT_AXIS_SAMPLE session=196914190659 hat=3 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.733
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=9.800
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.833
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=9.933
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.033
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.133
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.233
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.333
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.450
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.550
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.667
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.767
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.867
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=10.950
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=10.967
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.050
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.150
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.250
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=-1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.250
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=11.300
+HAT_KEY_STATE session=196914190659 hat=-1 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.350
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=0 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.350
+HAT_KEY_STATE session=196914190659 hat=-1 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.367
+HAT_KEY_STATE session=196914190659 hat=4 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=11.400
+HAT_KEY_STATE session=196914190659 hat=4 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.417
+HAT_KEY_STATE session=196914190659 hat=4 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.450
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=11.450
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.533
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.633
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.717
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.817
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=11.933
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.033
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.133
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.233
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.333
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.433
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.533
+HAT_AXIS_SAMPLE session=196914190659 hat=4 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.633
+HAT_KEY_STATE session=196914190659 hat=-1 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=12.667
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.733
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.833
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=12.933
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.033
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.133
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.233
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.333
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.433
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.533
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.633
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.733
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.833
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=13.933
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.033
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.133
+HAT_AXIS_SAMPLE session=196914190659 hat=-1 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.233
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.333
+HAT_KEY_STATE session=196914190659 hat=5 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.350
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.433
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.533
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.633
+HAT_KEY_STATE session=196914190659 hat=5 requested=1 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.650
+HAT_KEY_STATE session=196914190659 hat=5 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.700
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.733
+HAT_KEY_STATE session=196914190659 hat=5 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.750
+HAT_KEY_STATE session=196914190659 hat=5 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=14.767
+HAT_KEY_STATE session=196914190659 hat=5 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.817
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=-1 model_axis=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.833
+HAT_KEY_STATE session=196914190659 hat=5 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=14.867
+HAT_KEY_STATE session=196914190659 hat=5 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=14.900
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=1 model_axis=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.933
+HAT_KEY_STATE session=196914190659 hat=5 requested=-1 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=14.950
+HAT_KEY_STATE session=196914190659 hat=5 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=15.000
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.033
+HAT_KEY_STATE session=196914190659 hat=5 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.133
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.133
+HAT_KEY_STATE session=196914190659 hat=5 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=15.167
+HAT_KEY_STATE session=196914190659 hat=5 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.183
+HAT_KEY_STATE session=196914190659 hat=5 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=15.217
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.233
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.333
+HAT_KEY_STATE session=196914190659 hat=5 requested=1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.367
+HAT_KEY_STATE session=196914190659 hat=5 requested=0 model_axis_before=+1 engine_pressed_left=false engine_pressed_right=true elapsed=15.400
+HAT_KEY_STATE session=196914190659 hat=5 requested=-1 model_axis_before=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.417
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=-1 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.417
+HAT_KEY_STATE session=196914190659 hat=5 requested=0 model_axis_before=-1 engine_pressed_left=true engine_pressed_right=false elapsed=15.450
+HAT_AXIS_SAMPLE session=196914190659 hat=5 held=0 model_axis=+0 engine_pressed_left=false engine_pressed_right=false elapsed=15.517
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/029-natural-00-game-005-score-816.png","frame":1032,"request":"natural-00-game-005-score-816.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/tutorial-current-20261020/result-005-bounded/captures/030-native-hat-rescue-formal-816.png","frame":1033,"request":"work/tutorial-current-20261020/result-005-bounded/captures/native-hat-rescue-formal-816.png","size":[1280,720],"window":[1280,720]}
+PASS: tutorial source 005, naturally completed formal input route and original first-result assertions
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1323)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/tutorial-current-20261020/result-005-bounded/source_result.gd:21)

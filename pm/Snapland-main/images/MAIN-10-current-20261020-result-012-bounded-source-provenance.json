@@ -1,0 +1,15 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "entry": "native_melody_memory_review",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_melody_memory_review.gd": {
+      "source_sha256": "0eb876c542b726640f135c47e575958eb08630c02829cf464fa779bf84240ad3",
+      "copy_sha256": "20e3144a09a69e654f065e8ac94892969c0c096e88efc47abf3007279118438e"
+    }
+  }
+}

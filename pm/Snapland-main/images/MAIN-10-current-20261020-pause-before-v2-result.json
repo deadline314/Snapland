@@ -1,0 +1,9 @@
+{
+  "case": "before-v2",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 31.64,
+  "passes": [
+    "PASS: native three-stage pause/help exact pixels and clocks, actual resume and original viewport policy; retained_expected=false"
+  ]
+}

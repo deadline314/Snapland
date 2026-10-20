@@ -1,0 +1,19 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "entry": "native_kite_main_flow_review",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_fountain_review.gd": {
+      "source_sha256": "78633fab810b33d449f7611ab95254eb723b4810ca973e058ad71293e5e7be63",
+      "copy_sha256": "9a21bce8691c9389382195c0636d28502a9319749177a6bd28ce10d489a85a0b"
+    },
+    "game/tests/native_kite_main_flow_review.gd": {
+      "source_sha256": "8e8fe18d7b414eca0e1fe7e38cbf853030362e419504b5b5119ebe2915cff366",
+      "copy_sha256": "a6942232d9c151ee39dd76aa88393c8fc4b7803e429c5d0f28b58e2ed63d5f77"
+    }
+  }
+}

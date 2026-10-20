@@ -1,0 +1,15 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "entry": "native_bench_swap_review",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_bench_swap_review.gd": {
+      "source_sha256": "91e2894e0e1c13836a844ed5539d06b11e643debd85ce2ac03067278eec8273b",
+      "copy_sha256": "83a612f3bd663f9daaf310240715b1eb9a89c14fc3b934af21f4f83f605e679c"
+    }
+  }
+}

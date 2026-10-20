@@ -1,0 +1,63 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-008",
+    "mistakes": 0,
+    "observed_frame": 1216,
+    "observed_process_id": 30991,
+    "observer_only": true,
+    "practice": false,
+    "score": 700,
+    "score_summary": {
+      "label": "平衡段落分",
+      "rows": [
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "sign_stage_1",
+          "label": "第 1 段・中心精準"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "sign_stage_2",
+          "label": "第 2 段・中心精準"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "sign_stage_3",
+          "label": "第 3 段・中心精準"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "sign_stage_4",
+          "label": "第 4 段・中心精準"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "sign_stage_5",
+          "label": "第 5 段・中心精準"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "sign_stage_6",
+          "label": "第 6 段・中心精準"
+        },
+        {
+          "amount": 100,
+          "count": 1,
+          "key": "sign_stage_7",
+          "label": "第 7 段・中心精準"
+        }
+      ],
+      "rule": "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。",
+      "total": 700
+    },
+    "success": true
+  }
+]

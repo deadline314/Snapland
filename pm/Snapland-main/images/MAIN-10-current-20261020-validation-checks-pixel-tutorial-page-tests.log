@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: requested actual page group appears fully in its viewport: (800, 450)/game-009/2/page2 group=[P: (540.0, 266.0), S: (634.0, 252.0)] clip=[P: (540.0, 266.0), S: (634.0, 242.0)]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://game/tests/test_tutorial_paged_viewport.gd:69)
+       [1] _frames (res://game/tests/test_tutorial_paged_viewport.gd:72)
+ERROR: semantic field2 is genuinely readable on page2
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://game/tests/test_tutorial_paged_viewport.gd:69)
+       [1] _frames (res://game/tests/test_tutorial_paged_viewport.gd:72)
+ERROR: paged visible copy never partially clips: (800, 450)/game-009/2/page2 text=至少兩輪合格為普通成功；三輪精準、零失誤且未開輔助才有小惡魔。圖中 1353 分是本次實際示例，並非固定總分。 rect=[P: (540.0, 317.0), S: (634.0, 201.0)] clip=[P: (540.0, 266.0), S: (634.0, 242.0)]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://game/tests/test_tutorial_paged_viewport.gd:69)
+       [1] _frames (res://game/tests/test_tutorial_paged_viewport.gd:72)
+ERROR: all original five fields fully appear at least once: (800, 450)/game-009/2/field2
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://game/tests/test_tutorial_paged_viewport.gd:69)
+       [1] _frames (res://game/tests/test_tutorial_paged_viewport.gd:72)

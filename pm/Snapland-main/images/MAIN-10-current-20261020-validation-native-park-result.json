@@ -1,0 +1,9 @@
+{
+  "case": "park",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 32.57,
+  "passes": [
+    "PASS: park three-step native key/pointer help, all five copy fields through real page controls, blocked movement, screenshot zoom/Escape/focus, replay/close/reopen/skip and unchanged progression"
+  ]
+}

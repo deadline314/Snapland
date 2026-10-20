@@ -1,0 +1,39 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-003",
+    "mistakes": 0,
+    "observed_frame": 104,
+    "observed_process_id": 29478,
+    "observer_only": true,
+    "practice": false,
+    "score": 900,
+    "score_summary": {
+      "label": "跳拍分",
+      "rows": [
+        {
+          "amount": 300,
+          "count": 1,
+          "key": "fountain_jump_1",
+          "label": "第 1 跳・完美（晚 +50ms）"
+        },
+        {
+          "amount": 300,
+          "count": 1,
+          "key": "fountain_jump_2",
+          "label": "第 2 跳・完美（晚 +50ms）"
+        },
+        {
+          "amount": 300,
+          "count": 1,
+          "key": "fountain_jump_3",
+          "label": "第 3 跳・完美（晚 +50ms）"
+        }
+      ],
+      "rule": "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。",
+      "total": 900
+    },
+    "success": true
+  }
+]

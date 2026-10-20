@@ -1,0 +1,27 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-012",
+    "mistakes": 0,
+    "observed_frame": 1448,
+    "observed_process_id": 31085,
+    "observer_only": true,
+    "practice": false,
+    "score": 300,
+    "score_summary": {
+      "label": "演奏分",
+      "rows": [
+        {
+          "amount": 300,
+          "count": 15,
+          "key": "melody_notes",
+          "label": "演奏音符得分"
+        }
+      ],
+      "rule": "音高與節奏準確 +20，節奏接近 +12；錯音或節奏超出容許範圍不加分。",
+      "total": 300
+    },
+    "success": true
+  }
+]

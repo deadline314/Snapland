@@ -1,0 +1,37 @@
+[
+  {
+    "name": "tutorial panel/catalog tests",
+    "exit": 0,
+    "seconds": 7.23,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "tutorial seen progress tests",
+    "exit": 0,
+    "seconds": 5.02,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "tutorial image/control tests",
+    "exit": 0,
+    "seconds": 1.47,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 22.89,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel tutorial page tests",
+    "exit": 1,
+    "seconds": 15.13,
+    "errors": 4,
+    "error": "pixel tutorial page tests exited 1:\nGodot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\n\nERROR: requested actual page group appears fully in its viewport: (800, 450)/game-009/2/page2 group=[P: (540.0, 266.0), S: (634.0, 252.0)] clip=[P: (540.0, 266.0), S: (634.0, 242.0)]\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_tutorial_paged_viewport.gd:69)\n       [1] _frames (res://game/tests/test_tutorial_paged_viewport.gd:72)\nERROR: semantic field2 is genuinely readable on page2\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_tutorial_paged_viewport.gd:69)\n       [1] _frames (res://game/tests/test_tutorial_paged_viewport.gd:72)\nERROR: paged visible copy never partially clips: (800, 450)/game-009/2/page2 text=\u81f3\u5c11\u5169\u8f2a\u5408\u683c\u70ba\u666e\u901a\u6210\u529f\uff1b\u4e09\u8f2a\u7cbe\u6e96\u3001\u96f6\u5931\u8aa4\u4e14\u672a\u958b\u8f14\u52a9\u624d\u6709\u5c0f\u60e1\u9b54\u3002\u5716\u4e2d 1353 \u5206\u662f\u672c\u6b21\u5be6\u969b\u793a\u4f8b\uff0c\u4e26\u975e\u56fa\u5b9a\u7e3d\u5206\u3002 rect=[P: (540.0, 317.0), S: (634.0, 201.0)] clip=[P: (540.0, 266.0), S: (634.0, 242.0)]\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_tutorial_paged_viewport.gd:69)\n       [1] _frames (res://game/tests/test_tutorial_paged_viewport.gd:72)\nERROR: all original five fields fully appear at least once: (800, 450)/game-009/2/field2\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_tutorial_paged_viewport.gd:69)\n       [1] _frames (res://game/tests/test_tutorial_paged_viewport.gd:72)"
+  }
+]

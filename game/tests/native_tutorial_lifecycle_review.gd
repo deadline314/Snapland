@@ -34,6 +34,18 @@ func _check(ok: bool, message: String) -> void:
 		push_error("FAIL: " + message)
 
 func _run() -> void:
+	var first_game := 1
+	var last_game := 12
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--tutorial-first=") or argument.begins_with("--tutorial-last="):
+			var value: String = argument.get_slice("=", 1)
+			_check(value.is_valid_int(), "tutorial batch bounds are integers")
+			if argument.begins_with("--tutorial-first="): first_game = value.to_int()
+			else: last_game = value.to_int()
+	_check(first_game >= 1 and last_game <= 12 and first_game <= last_game, "tutorial batch stays within the twelve real games")
+	if not failures.is_empty():
+		_finish(1)
+		return
 	var progress := get_tree().root.get_node_or_null("Progress")
 	_check(progress != null, "Progress autoload exists")
 	if progress == null:
@@ -49,11 +61,14 @@ func _run() -> void:
 	native_review.free()
 	get_tree().root.add_child(main)
 	await get_tree().create_timer(0.5).timeout
-	for number in range(1, 13):
+	for number in range(first_game, last_game + 1):
 		if finished: return
 		_begin_game_watchdog("game-%03d" % number)
 		await _review_game(number, progress)
 		_end_game_watchdog()
+		if not failures.is_empty():
+			_finish(1)
+			return
 	_finish()
 
 func _review_game(number: int, progress: Node) -> void:
@@ -75,12 +90,13 @@ func _review_game(number: int, progress: Node) -> void:
 	if main.modal_kind != "game_info": return
 	_check(not Progress.has_seen_tutorial(id), id + " begins with an unseen tutorial")
 	_set_phase(id, "first Start opens tutorial")
-	await _click_text(main.modal_body, "開始遊玩")
+	await _click_text(main.overlay, "開始遊玩")
 	await _wait_until(func(): return is_instance_valid(main.tutorial_panel), id + " first-entry tutorial from Start")
 	if not is_instance_valid(main.tutorial_panel): return
 	var panel: Control = main.tutorial_panel
 	_check(panel.current_step_data().size() > 0 and panel.current_step_data().has("image"), id + " first lesson step has real screenshot data")
 	_assert_lesson_image(panel, id + " step 1")
+	await _review_copy_pages(panel, id + " step 1")
 	await _draw_and_capture("%s-first-step.png" % id)
 	for step in range(1, 3):
 		_set_phase(id, "navigate tutorial step %d" % (step + 1))
@@ -91,6 +107,7 @@ func _review_game(number: int, progress: Node) -> void:
 			await _click_text(panel, "下一步")
 		_check(panel.current_step == step, "%s lesson reaches step %d by %s input" % [id, step + 1, "keyboard" if use_keyboard else "mouse"])
 		_assert_lesson_image(panel, id + " step " + str(step + 1))
+		await _review_copy_pages(panel, id + " step " + str(step + 1))
 		await _draw_and_capture("%s-step-%02d.png" % [id, step + 1])
 	_set_phase(id, "keyboard previous/next round trip")
 	await _key(KEY_LEFT)
@@ -160,7 +177,7 @@ func _review_game(number: int, progress: Node) -> void:
 	await _key(KEY_E)
 	await _wait_until(func(): return main.modal_kind == "game_info", id + " reentry information screen")
 	_check(not is_instance_valid(main.tutorial_panel), id + " reentry does not automatically reopen tutorial")
-	await _click_text(main.modal_body, "開始遊玩")
+	await _click_text(main.overlay, "開始遊玩")
 	await _wait_until(func(): return main.session != null, id + " reentry launches directly")
 	_check(not is_instance_valid(main.tutorial_panel), id + " reentry skips first-entry tutorial")
 	if main.session == null: return
@@ -209,7 +226,7 @@ func _review_game(number: int, progress: Node) -> void:
 	await _key(KEY_E)
 	await _wait_until(func(): return main.modal_kind == "game_info", id + " post-practice Start information screen")
 	_check(not is_instance_valid(main.tutorial_panel), id + " practice return keeps the game marked learned")
-	await _click_text(main.modal_body, "開始遊玩")
+	await _click_text(main.overlay, "開始遊玩")
 	await _wait_until(func(): return main.session != null, id + " post-practice Start launches directly")
 	_check(not is_instance_valid(main.tutorial_panel), id + " post-practice Start does not repeat the tutorial")
 	_check(main.session != null and not main.session.practice_mode, id + " direct post-practice launch remains a formal session")
@@ -259,6 +276,7 @@ func _click_named(root: Node, node_name: String) -> void:
 	await _native_click(found, node_name)
 
 func _find_button(root: Node, label: String) -> BaseButton:
+	if root == null: return null
 	for child in root.get_children():
 		if child is BaseButton and str(child.text) == label and child.is_visible_in_tree() and not child.disabled:
 			return child
@@ -328,6 +346,32 @@ func _draw_and_capture(filename: String) -> void:
 func _assert_lesson_image(panel: Control, context: String) -> void:
 	_check(panel._image.texture is Texture2D and not panel._image_placeholder.visible, context + " displays its actual tutorial screenshot")
 
+func _review_copy_pages(panel: Control, context: String) -> void:
+	await _wait_frames(4)
+	var seen: Array[bool] = [false, false, false, false, false]
+	_check(panel._copy_sections.size() == 5, context + " retains all five instruction fields")
+	for page_index in range(panel._copy_pages.size()):
+		if page_index > 0:
+			await _click_named(panel, "TutorialCopyNext")
+		await _wait_frames(2)
+		_check(panel._copy_page == page_index, context + " actual pointer opens copy page " + str(page_index))
+		var clip: Rect2 = panel._text_scroll.get_global_rect()
+		var group: Control = panel._copy_pages[page_index]
+		_check(clip.encloses(group.get_global_rect()), context + " complete page fits without scrolling")
+		for index in range(panel._copy_sections.size()):
+			var section: Control = panel._copy_sections[index]
+			if not section.is_visible_in_tree() or not clip.intersects(section.get_global_rect()): continue
+			var readable := clip.encloses(section.get_global_rect())
+			_check(readable, context + " complete field " + str(index) + " is visible")
+			if readable: seen[index] = true
+			for label in section.get_children():
+				if label is Label:
+					_check(clip.grow(1).encloses(label.get_global_rect()), context + " visible text is not partially clipped")
+	for index in range(seen.size()):
+		_check(seen[index], context + " field " + str(index) + " was actually shown")
+	while panel._copy_page > 0:
+		await _click_named(panel, "TutorialCopyPrevious")
+
 func _persistent_snapshot(progress: Node) -> Dictionary:
 	return {
 		"photos": progress.photos.duplicate(true),
@@ -368,7 +412,11 @@ func _finish(exit_code := -1) -> void:
 	finished = true
 	if exit_code < 0: exit_code = 1 if not failures.is_empty() else 0
 	if main != null and is_instance_valid(main):
+		if is_instance_valid(main.world):
+			main.world.set_process(false)
+			main.world.set_physics_process(false)
 		if is_instance_valid(main.audio): main.audio.shutdown()
+		await get_tree().create_timer(0.15).timeout
 		main.queue_free()
 	await get_tree().process_frame
 	get_tree().quit(exit_code)

@@ -1,0 +1,80 @@
+[
+  {
+    "exact_paused_pixels_unchanged": true,
+    "game": "game-003",
+    "original_mode": 4,
+    "pause_clock_unchanged": true,
+    "paused_mode": 4,
+    "resume_clock_advances": true,
+    "resume_mode": 4,
+    "ten_frame_wall_ms": 1305,
+    "ten_paused_frame_draw_calls": [
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180
+    ],
+    "viewport_size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "exact_paused_pixels_unchanged": true,
+    "game": "game-008",
+    "original_mode": 2,
+    "pause_clock_unchanged": true,
+    "paused_mode": 2,
+    "resume_clock_advances": true,
+    "resume_mode": 2,
+    "ten_frame_wall_ms": 799,
+    "ten_paused_frame_draw_calls": [
+      121,
+      121,
+      121,
+      121,
+      121,
+      121,
+      121,
+      121,
+      121,
+      121
+    ],
+    "viewport_size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "exact_paused_pixels_unchanged": true,
+    "game": "game-009",
+    "original_mode": 4,
+    "pause_clock_unchanged": true,
+    "paused_mode": 4,
+    "resume_clock_advances": true,
+    "resume_mode": 4,
+    "ten_frame_wall_ms": 628,
+    "ten_paused_frame_draw_calls": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ],
+    "viewport_size": [
+      1280,
+      720
+    ]
+  }
+]

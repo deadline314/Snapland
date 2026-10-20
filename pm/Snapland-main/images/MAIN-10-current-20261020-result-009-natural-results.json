@@ -1,0 +1,39 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-009",
+    "mistakes": 0,
+    "observed_frame": 345,
+    "observed_process_id": 30140,
+    "observer_only": true,
+    "practice": false,
+    "score": 1353,
+    "score_summary": {
+      "label": "影子對準分",
+      "rows": [
+        {
+          "amount": 430,
+          "count": 1,
+          "key": "shadow_round_1",
+          "label": "第 1 輪影形定影"
+        },
+        {
+          "amount": 445,
+          "count": 1,
+          "key": "shadow_round_2",
+          "label": "第 2 輪影形定影"
+        },
+        {
+          "amount": 478,
+          "count": 1,
+          "key": "shadow_round_3",
+          "label": "第 3 輪影形定影"
+        }
+      ],
+      "rule": "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。",
+      "total": 1353
+    },
+    "success": true
+  }
+]

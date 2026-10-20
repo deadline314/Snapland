@@ -1,0 +1,19 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "entry": "native_pixel_tutorial_assets",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_layout_review.gd": {
+      "source_sha256": "5a5a1e9b4c48f25db7ebac881fb4c30d6bb4baf324eac4c5b85babb89076385d",
+      "copy_sha256": "162750cf251d0d7306cff7473a179b5e9de7fefff547ae4244a081ca03977e73"
+    },
+    "game/tests/native_pixel_tutorial_assets.gd": {
+      "source_sha256": "956eb6e13217acec1a2428be14f4b4597d4784c8e6209561908780f3f882d2b4",
+      "copy_sha256": "be769069cb2146b885ae70749e4561aec6729d18f6b2cdd775490dc62f08f695"
+    }
+  }
+}

@@ -14,6 +14,7 @@ func _run() -> void:
 		return
 	_test_timing_bands()
 	_test_session_view_output_and_headless_guard()
+	_test_paused_viewport_retention()
 	_test_three_jump_gate_and_equivalent_input()
 	_test_misses_spam_and_slow_frames()
 	_test_pause_assist_and_reduced_motion()
@@ -23,6 +24,37 @@ func _run() -> void:
 	else:
 		push_error("Fountain timing checks: %d failures" % failures)
 		quit(1)
+
+func _test_paused_viewport_retention() -> void:
+	# Renderer policy is independent of GPU availability. Native paired evidence
+	# separately checks that UPDATE_ONCE retains exact pixels after the draw.
+	var game: Control = Session.new()
+	var view := Control.new()
+	game.add_child(view)
+	game.presentation = view
+	var continuous := SubViewport.new()
+	continuous.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	view.add_child(continuous)
+	var visible := SubViewport.new()
+	visible.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
+	view.add_child(visible)
+	var dormant := SubViewport.new()
+	dormant.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	view.add_child(dormant)
+	game.set_paused(true)
+	_expect(continuous.render_target_update_mode == SubViewport.UPDATE_ONCE and visible.render_target_update_mode == SubViewport.UPDATE_ONCE, "pause schedules one complete retained frame for live stages")
+	_expect(dormant.render_target_update_mode == SubViewport.UPDATE_DISABLED, "pause never wakes an intentionally disabled viewport")
+	game.set_paused(true)
+	game.set_paused(false)
+	_expect(continuous.render_target_update_mode == SubViewport.UPDATE_ALWAYS and visible.render_target_update_mode == SubViewport.UPDATE_WHEN_VISIBLE, "repeated pause preserves each stage's original resume policy")
+	game.set_paused(true)
+	game.reset_round()
+	_expect(not game.paused and continuous.render_target_update_mode == SubViewport.UPDATE_ALWAYS and visible.render_target_update_mode == SubViewport.UPDATE_WHEN_VISIBLE, "retry restores live renderer policies before resetting the round")
+	game.set_paused(true)
+	visible.free()
+	game.set_paused(false)
+	_expect(continuous.render_target_update_mode == SubViewport.UPDATE_ALWAYS, "restoring a stage safely ignores a freed sibling")
+	game.free()
 
 func _test_timing_bands() -> void:
 	for sample in [

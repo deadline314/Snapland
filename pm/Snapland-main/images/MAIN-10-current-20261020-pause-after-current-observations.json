@@ -1,0 +1,122 @@
+[
+  {
+    "exact_paused_pixels_unchanged": true,
+    "game": "game-003",
+    "last_subviewport_draw_calls_counter": [
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180
+    ],
+    "original_mode": 4,
+    "pause_clock_unchanged": true,
+    "paused_explicit_lighting_refresh_and_exact_noon_return": true,
+    "paused_mode": 1,
+    "resume_clock_advances": true,
+    "resume_mode": 4,
+    "resume_whole_frame_draw_calls": 263,
+    "ten_frame_wall_ms": 608,
+    "viewport_size": [
+      1280,
+      720
+    ],
+    "whole_frame_paused_draw_calls": [
+      138,
+      138,
+      138,
+      138,
+      138,
+      138,
+      138,
+      138,
+      138,
+      138
+    ]
+  },
+  {
+    "exact_paused_pixels_unchanged": true,
+    "game": "game-008",
+    "last_subviewport_draw_calls_counter": [
+      121,
+      121,
+      121,
+      121,
+      121,
+      121,
+      121,
+      121,
+      121,
+      121
+    ],
+    "original_mode": 2,
+    "pause_clock_unchanged": true,
+    "paused_explicit_lighting_refresh_and_exact_noon_return": true,
+    "paused_mode": 1,
+    "resume_clock_advances": true,
+    "resume_mode": 2,
+    "resume_whole_frame_draw_calls": 170,
+    "ten_frame_wall_ms": 572,
+    "viewport_size": [
+      1280,
+      720
+    ],
+    "whole_frame_paused_draw_calls": [
+      155,
+      155,
+      155,
+      155,
+      155,
+      155,
+      155,
+      155,
+      155,
+      155
+    ]
+  },
+  {
+    "exact_paused_pixels_unchanged": true,
+    "game": "game-009",
+    "last_subviewport_draw_calls_counter": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ],
+    "original_mode": 4,
+    "pause_clock_unchanged": true,
+    "paused_explicit_lighting_refresh_and_exact_noon_return": true,
+    "paused_mode": 1,
+    "resume_clock_advances": true,
+    "resume_mode": 4,
+    "resume_whole_frame_draw_calls": 152,
+    "ten_frame_wall_ms": 620,
+    "viewport_size": [
+      1280,
+      720
+    ],
+    "whole_frame_paused_draw_calls": [
+      223,
+      223,
+      223,
+      223,
+      223,
+      223,
+      223,
+      223,
+      223,
+      223
+    ]
+  }
+]

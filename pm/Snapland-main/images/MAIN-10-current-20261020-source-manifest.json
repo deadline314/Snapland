@@ -1,0 +1,1023 @@
+{
+  "scope": "Current source candidates, unaltered full1280x720; not promoted until review and clean import",
+  "records": [
+    {
+      "file": "game-001-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/003-game-001-step-01.png",
+      "sha256": "08af82ae6f1c54e0f9acaf6a426d4162c63c31fb7ee2aa9aaca0af1ca866274b",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/003-game-001-step-01.png",
+        "frame": 86,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-001-step-02.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/004-game-001-step-02.png",
+      "sha256": "7bc2904ac7dfc528e320e5a49a389201f3bcfd7675743fe955130810ffc73f12",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/004-game-001-step-02.png",
+        "frame": 112,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-02.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-001-step-03.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/005-game-001-step-03.png",
+      "sha256": "f1b00a85c87a8d82aafe461517ee6ffa00e5e7389102f02f7e1fb1e7b6ab1302",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/005-game-001-step-03.png",
+        "frame": 143,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-001-step-03.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-002-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/006-game-002-step-01.png",
+      "sha256": "a2d3f33eeee4328e0a6dd974d55ac65758ba74c1b9f88c0317f33ea43794f75d",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/006-game-002-step-01.png",
+        "frame": 181,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-002-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-002-step-02.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/007-game-002-step-02.png",
+      "sha256": "16ae14bd1bdd1e867a05e559292da34df1c99228874d15ce38b6f7dc2055e42f",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/007-game-002-step-02.png",
+        "frame": 214,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-002-step-02.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-002-step-03.png",
+      "source": "work/tutorial-current-20261020/result-002/captures/003-natural-00-game-002-score-500.png",
+      "sha256": "a6dffe4f3f405d3b5b998742b2aca28d2927500d348a075dff5bda5ba6ef1bdf",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-002",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-002",
+        "mistakes": 0,
+        "observed_frame": 1276,
+        "observed_process_id": 29764,
+        "observer_only": true,
+        "practice": false,
+        "score": 500,
+        "score_summary": {
+          "label": "穿環分",
+          "rows": [
+            {
+              "amount": 500,
+              "count": 5,
+              "key": "kite_center",
+              "label": "中心穿環"
+            }
+          ],
+          "rule": "中心穿環 +100，擦邊穿環 +60，漏環或斷線不加分。",
+          "total": 500
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-003-step-01.png",
+      "source": "work/tutorial-current-20261020/game-003-perfect/decoded/beat-01.png",
+      "sha256": "a9a0fe89cc72858aab49a8cb89a20d6e5134c1faa9540dfab9a5cc84a10376aa",
+      "kind": "Decoded full native Movie frame",
+      "case": "game-003-perfect",
+      "detail": {
+        "frame_zero_based": 31,
+        "fps": 20,
+        "meaning": "First beat countdown0.2seconds before any successful input"
+      }
+    },
+    {
+      "file": "game-003-step-02.png",
+      "source": "work/tutorial-current-20261020/game-003-perfect/decoded/beat-02.png",
+      "sha256": "a3f344ab9e864b490793b48ddb4aa6c14c725609fd3515dd8a216d5f646d7205",
+      "kind": "Decoded full native Movie frame",
+      "case": "game-003-perfect",
+      "detail": {
+        "frame_zero_based": 36,
+        "fps": 20,
+        "meaning": "First actual Space jump,300points,perfect+50ms"
+      }
+    },
+    {
+      "file": "game-003-step-03.png",
+      "source": "work/tutorial-current-20261020/game-003-perfect/captures/000-natural-00-game-003-score-900.png",
+      "sha256": "382587ec2080b4db03ed0be37c1bd64182f56e8b2cf5f0f8a055b0be8e925ede",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "game-003-perfect",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-003",
+        "mistakes": 0,
+        "observed_frame": 104,
+        "observed_process_id": 29478,
+        "observer_only": true,
+        "practice": false,
+        "score": 900,
+        "score_summary": {
+          "label": "跳拍分",
+          "rows": [
+            {
+              "amount": 300,
+              "count": 1,
+              "key": "fountain_jump_1",
+              "label": "第 1 跳・完美（晚 +50ms）"
+            },
+            {
+              "amount": 300,
+              "count": 1,
+              "key": "fountain_jump_2",
+              "label": "第 2 跳・完美（晚 +50ms）"
+            },
+            {
+              "amount": 300,
+              "count": 1,
+              "key": "fountain_jump_3",
+              "label": "第 3 跳・完美（晚 +50ms）"
+            }
+          ],
+          "rule": "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。",
+          "total": 900
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-004-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/008-game-004-step-01.png",
+      "sha256": "0c0ca3aa0e612933e10fce1282733c86a8142723c584f7668e8b526a85514b9a",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/008-game-004-step-01.png",
+        "frame": 357,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-004-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-004-step-02.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/009-game-004-step-02.png",
+      "sha256": "dca412063163a8df2382140b50839a98f453b0443b3da483bb77160fb849ff0a",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/009-game-004-step-02.png",
+        "frame": 358,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-004-step-02.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-004-step-03.png",
+      "source": "work/tutorial-current-20261020/result-004/captures/000-natural-00-game-004-score-430.png",
+      "sha256": "f3b55c3b23a5cade03f5f4d79764f82209e891da03fbbd3adef4d1cd232d4a44",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-004",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-004",
+        "mistakes": 0,
+        "observed_frame": 961,
+        "observed_process_id": 29870,
+        "observer_only": true,
+        "practice": false,
+        "score": 430,
+        "score_summary": {
+          "label": "安全通行分",
+          "rows": [
+            {
+              "amount": 300,
+              "count": 6,
+              "key": "crowd",
+              "label": "隊伍安全通過"
+            },
+            {
+              "amount": 80,
+              "count": 5,
+              "key": "crowd_wait",
+              "label": "等候效率"
+            },
+            {
+              "amount": 50,
+              "count": 1,
+              "key": "crowd_rescue",
+              "label": "救援隊及時通行"
+            }
+          ],
+          "rule": "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。",
+          "total": 430
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-005-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/010-game-005-step-01.png",
+      "sha256": "b43bff1585d96576b7a165d73e21066c9b7a291811d2e2c64b804574d3d48c84",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/010-game-005-step-01.png",
+        "frame": 396,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-005-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-005-step-02.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/011-game-005-step-02.png",
+      "sha256": "d88cb9cb04dbc6266367b17465466e7c7763318d016d3f88397f07a0cf951b2c",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/011-game-005-step-02.png",
+        "frame": 433,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-005-step-02.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-005-step-03.png",
+      "source": "work/tutorial-current-20261020/result-005-bounded/captures/029-natural-00-game-005-score-816.png",
+      "sha256": "e2838994948f56618b3aea3e4776591b7f9e54a94ad592e2d40425e0e918f8c5",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-005-bounded",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-005",
+        "mistakes": 0,
+        "observed_frame": 1032,
+        "observed_process_id": 30889,
+        "observer_only": true,
+        "practice": false,
+        "score": 816,
+        "score_summary": {
+          "label": "接帽分",
+          "rows": [
+            {
+              "amount": 120,
+              "count": 1,
+              "key": "hat_0",
+              "label": "第 1 頂・中心接住"
+            },
+            {
+              "amount": 128,
+              "count": 1,
+              "key": "hat_1",
+              "label": "第 2 頂・中心接住"
+            },
+            {
+              "amount": 136,
+              "count": 1,
+              "key": "hat_2",
+              "label": "第 3 頂・中心接住"
+            },
+            {
+              "amount": 144,
+              "count": 1,
+              "key": "hat_3",
+              "label": "第 4 頂・中心接住"
+            },
+            {
+              "amount": 144,
+              "count": 1,
+              "key": "hat_4",
+              "label": "第 5 頂・中心接住"
+            },
+            {
+              "amount": 144,
+              "count": 1,
+              "key": "hat_5",
+              "label": "第 6 頂・中心接住"
+            }
+          ],
+          "rule": "每接住一頂帽子 +100。",
+          "total": 816
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-006-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/012-game-006-step-01.png",
+      "sha256": "a341d3e22b0b5d07ecf8b11c2eb5bbd223684ea92db3ac83679cdaac9313b3c4",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/012-game-006-step-01.png",
+        "frame": 499,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-006-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-006-step-02.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/013-game-006-step-02.png",
+      "sha256": "d045c65467f712ef4fe2eca0c06eb9e4fdfc186b690d8a54c5ddecabb6400f9f",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/013-game-006-step-02.png",
+        "frame": 688,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-006-step-02.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-006-step-03.png",
+      "source": "work/tutorial-current-20261020/result-006/captures/013-natural-00-game-006-score-900.png",
+      "sha256": "2006d4f92aa74e45cfe0921bdf218632bb69908e1048472ab25c0a226bfc6d0d",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-006",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-006",
+        "mistakes": 0,
+        "observed_frame": 689,
+        "observed_process_id": 29965,
+        "observer_only": true,
+        "practice": false,
+        "score": 900,
+        "score_summary": {
+          "label": "節拍分",
+          "rows": [
+            {
+              "amount": 125,
+              "count": 1,
+              "key": "ribbon_gesture_0",
+              "label": "第 1 拍・精準・重拍"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "ribbon_gesture_1",
+              "label": "第 2 拍・精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "ribbon_gesture_2",
+              "label": "第 3 拍・精準"
+            },
+            {
+              "amount": 125,
+              "count": 1,
+              "key": "ribbon_gesture_3",
+              "label": "第 4 拍・精準・重拍"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "ribbon_gesture_4",
+              "label": "第 5 拍・精準"
+            },
+            {
+              "amount": 125,
+              "count": 1,
+              "key": "ribbon_gesture_5",
+              "label": "第 6 拍・精準・重拍"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "ribbon_gesture_6",
+              "label": "第 7 拍・精準"
+            },
+            {
+              "amount": 125,
+              "count": 1,
+              "key": "ribbon_gesture_7",
+              "label": "第 8 拍・精準・重拍"
+            }
+          ],
+          "rule": "精準 +100、合拍 +60；四個重拍另 +25。六拍一般成功；未輔助、八拍全精準且零錯誤才得惡魔拍貼。",
+          "total": 900
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-007-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/014-game-007-step-01.png",
+      "sha256": "f7c2b95fd013f1c61cdf56f82d33dfa14ec517305baef911481c17182db0c395",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/014-game-007-step-01.png",
+        "frame": 702,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-007-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-007-step-02.png",
+      "source": "work/tutorial-current-20261020/result-007-bounded/captures/diversity-pipe-controls-keyboard-flow-1.png",
+      "sha256": "5540d91e742c74a6c377183ad1721a19e967729791fd7cbe181df84e16d2431a",
+      "kind": "Real four-rotation connected water path",
+      "case": "result-007-bounded",
+      "detail": null
+    },
+    {
+      "file": "game-007-step-03.png",
+      "source": "work/tutorial-current-20261020/result-007-bounded/captures/000-natural-00-game-007-score-2620.png",
+      "sha256": "41bcdb99791077767fb57978f156f8bf2460a64f35e3c711579646543deff479",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-007-bounded",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-007",
+        "mistakes": 0,
+        "observed_frame": 387,
+        "observed_process_id": 30649,
+        "observer_only": true,
+        "practice": false,
+        "score": 2620,
+        "score_summary": {
+          "label": "路線轉動分",
+          "rows": [
+            {
+              "amount": 2620,
+              "count": 18,
+              "key": "pipe_orders",
+              "label": "供水工單與轉動計分"
+            },
+            {
+              "amount": 0,
+              "count": 19,
+              "key": "move_progress",
+              "label": "操作步數（不計分）",
+              "progress_only": true
+            }
+          ],
+          "rule": "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。",
+          "total": 2620
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-008-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/016-game-008-step-01.png",
+      "sha256": "5aaf87b3cea8c491e76f85ba297e5c12353f83fad771b4c58ad475a2924cfb23",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/016-game-008-step-01.png",
+        "frame": 741,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-008-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-008-step-02.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/017-game-008-step-02.png",
+      "sha256": "d68e534e1596c5121f92aa6e0c59e9862f9dd288e5ad5c14d4cc8b876e50ca0a",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/017-game-008-step-02.png",
+        "frame": 767,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-008-step-02.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-008-step-03.png",
+      "source": "work/tutorial-current-20261020/result-008-bounded/captures/002-natural-00-game-008-score-700.png",
+      "sha256": "6dd0b787c065ef9a1debc33c1e23caf2baa89657428008586536c15adc8a1fe6",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-008-bounded",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-008",
+        "mistakes": 0,
+        "observed_frame": 1216,
+        "observed_process_id": 30991,
+        "observer_only": true,
+        "practice": false,
+        "score": 700,
+        "score_summary": {
+          "label": "平衡段落分",
+          "rows": [
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_1",
+              "label": "第 1 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_2",
+              "label": "第 2 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_3",
+              "label": "第 3 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_4",
+              "label": "第 4 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_5",
+              "label": "第 5 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_6",
+              "label": "第 6 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_7",
+              "label": "第 7 段・中心精準"
+            }
+          ],
+          "rule": "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。",
+          "total": 700
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-009-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/018-game-009-step-01.png",
+      "sha256": "f57b641cc383e05eb35354b00be732fb8354b804a542b853d06fa33789bb7526",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/018-game-009-step-01.png",
+        "frame": 805,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-009-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-009-step-02.png",
+      "source": "work/tutorial-current-20261020/result-009/captures/003-native-shadow-theatre-formal-round-3-cast.png",
+      "sha256": "4b52531ee45fccbfbcc2fddddead6cb1b8bfb67a8d9fad0494ea0ada180b860a",
+      "kind": "Real third-round pre-shutter cast aligned by native keys",
+      "case": "result-009",
+      "detail": null
+    },
+    {
+      "file": "game-009-step-03.png",
+      "source": "work/tutorial-current-20261020/result-009/captures/004-natural-00-game-009-score-1353.png",
+      "sha256": "10b14a566631a98fd2c556f4936f3c0180f1101df90af7667fb565045bc42f2d",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-009",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-009",
+        "mistakes": 0,
+        "observed_frame": 345,
+        "observed_process_id": 30140,
+        "observer_only": true,
+        "practice": false,
+        "score": 1353,
+        "score_summary": {
+          "label": "影子對準分",
+          "rows": [
+            {
+              "amount": 430,
+              "count": 1,
+              "key": "shadow_round_1",
+              "label": "第 1 輪影形定影"
+            },
+            {
+              "amount": 445,
+              "count": 1,
+              "key": "shadow_round_2",
+              "label": "第 2 輪影形定影"
+            },
+            {
+              "amount": 478,
+              "count": 1,
+              "key": "shadow_round_3",
+              "label": "第 3 輪影形定影"
+            }
+          ],
+          "rule": "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。",
+          "total": 1353
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-010-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/020-game-010-step-01.png",
+      "sha256": "c3f30f0e867c174cedc62f6ddaa4688a120e1966da52a1749236655f5d6e2e06",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/020-game-010-step-01.png",
+        "frame": 867,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-010-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-010-step-02.png",
+      "source": "work/tutorial-current-20261020/result-010/captures/003-native-bubble-photo-formal-keyboard-exposure.png",
+      "sha256": "ecae97850771f214cb5929fe1bfe26e598083bbb04a71ccaed77e62b9ca62682",
+      "kind": "Actual first full-body keyboard exposure,99points",
+      "case": "result-010",
+      "detail": null
+    },
+    {
+      "file": "game-010-step-03.png",
+      "source": "work/tutorial-current-20261020/result-010/captures/005-natural-00-game-010-score-295.png",
+      "sha256": "e9a911b6a759c944714ef534cde7f04d9fab836b4344c4af9c78c0c292e0f481",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-010",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-010",
+        "mistakes": 0,
+        "observed_frame": 775,
+        "observed_process_id": 30216,
+        "observer_only": true,
+        "practice": false,
+        "score": 295,
+        "score_summary": {
+          "label": "合照分",
+          "rows": [
+            {
+              "amount": 99,
+              "count": 1,
+              "key": "photo_0",
+              "label": "第 1 張・構圖得分"
+            },
+            {
+              "amount": 98,
+              "count": 1,
+              "key": "photo_1",
+              "label": "第 2 張・構圖得分"
+            },
+            {
+              "amount": 98,
+              "count": 1,
+              "key": "photo_2",
+              "label": "第 3 張・構圖得分"
+            }
+          ],
+          "rule": "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。",
+          "total": 295
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-011-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/021-game-011-step-01.png",
+      "sha256": "f4a5a193c50aa88bb0a7c8413864938013d6fb83a8326ddba9f0bb361dddfe33",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/021-game-011-step-01.png",
+        "frame": 935,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/game-011-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "game-011-step-02.png",
+      "source": "work/tutorial-current-20261020/result-011/captures/003-native-bench-swap-formal-table-2.png",
+      "sha256": "57e72d598d5d8dfd5923e5ff6e667b0e8ec68355d317cbf1ec95941c90f9d0fe",
+      "kind": "Actual second-table rules after first-table completion",
+      "case": "result-011",
+      "detail": null
+    },
+    {
+      "file": "game-011-step-03.png",
+      "source": "work/tutorial-current-20261020/result-011/captures/005-natural-00-game-011-score-750.png",
+      "sha256": "7389d9820c7e641cb1e6c4224c2095e00e5dbe0d43ea2a66186f878ea6c95ef5",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-011",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-011",
+        "mistakes": 0,
+        "observed_frame": 254,
+        "observed_process_id": 30298,
+        "observer_only": true,
+        "practice": false,
+        "score": 750,
+        "score_summary": {
+          "label": "換位分",
+          "rows": [
+            {
+              "amount": 275,
+              "count": 1,
+              "key": "bench_table_1",
+              "label": "第 1 桌・符合座位規則"
+            },
+            {
+              "amount": 250,
+              "count": 1,
+              "key": "bench_table_2",
+              "label": "第 2 桌・符合座位規則"
+            },
+            {
+              "amount": 225,
+              "count": 1,
+              "key": "bench_table_3",
+              "label": "第 3 桌・符合座位規則"
+            },
+            {
+              "amount": 0,
+              "count": 6,
+              "key": "move_progress",
+              "label": "操作步數（不計分）",
+              "progress_only": true
+            }
+          ],
+          "rule": "每桌依完成步數得分；符合本桌全部規則為普通目標，每桌以最少交換完成且未開輔助或重排可得加碼。",
+          "total": 750
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "game-012-step-01.png",
+      "source": "work/tutorial-current-20261020/melody-listen-source-v2/captures/000-melody-two-actual-demonstration-notes.png",
+      "sha256": "fbcf2a4094b04f46be75dd1a3a110b9080391c1a0ebcf9bfcddfdc228693817d",
+      "kind": "Actual listen phase after two authored visual demonstration cues, no listening claim",
+      "case": "melody-listen-source-v2",
+      "detail": null
+    },
+    {
+      "file": "game-012-step-02.png",
+      "source": "work/tutorial-current-20261020/result-012-bounded/captures/002-melody-actual-first-note.png",
+      "sha256": "60a63d83ae37c7de1add4e4d05c54d807d9a1e57ec7718bd4a853de6cb06f09b",
+      "kind": "Actual first accepted keyboard melody note",
+      "case": "result-012-bounded",
+      "detail": null
+    },
+    {
+      "file": "game-012-step-03.png",
+      "source": "work/tutorial-current-20261020/result-012-bounded/captures/003-natural-00-game-012-score-300.png",
+      "sha256": "3d606b9b7c789b26df65cb983c480b09ffb3395a84b54e19c399bf142ae98f58",
+      "kind": "Actual completed formal unassisted result, observed after normal Main handler",
+      "case": "result-012-bounded",
+      "detail": null,
+      "earned_result": {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-012",
+        "mistakes": 0,
+        "observed_frame": 1448,
+        "observed_process_id": 31085,
+        "observer_only": true,
+        "practice": false,
+        "score": 300,
+        "score_summary": {
+          "label": "演奏分",
+          "rows": [
+            {
+              "amount": 300,
+              "count": 15,
+              "key": "melody_notes",
+              "label": "演奏音符得分"
+            }
+          ],
+          "rule": "音高與節奏準確 +20，節奏接近 +12；錯音或節奏超出容許範圍不加分。",
+          "total": 300
+        },
+        "success": true
+      }
+    },
+    {
+      "file": "park-step-01.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/000-park-step-01.png",
+      "sha256": "723563511d1d12f3f8d45f40ba1154b8832e45ca8e2158e0147171227e243f5b",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/000-park-step-01.png",
+        "frame": 42,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-01.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "park-step-02.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/001-park-step-02.png",
+      "sha256": "5633369f2204842dd7f7f14dd7aa6d96cdf25d240e0a776115248a95b74c6bcd",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/001-park-step-02.png",
+        "frame": 46,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-02.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "file": "park-step-03.png",
+      "source": "work/tutorial-current-20261020/live-examples/captures/002-park-step-03.png",
+      "sha256": "89bd3de545dfd13273f9d5e65c42456f57e6a34687fcb5bafdd69deb02141d54",
+      "kind": "Actual native private-practice/park input example",
+      "case": "live-examples",
+      "detail": {
+        "file": "/workspace/work/Snapland-character/work/tutorial-current-20261020/live-examples/captures/002-park-step-03.png",
+        "frame": 51,
+        "request": "pm/Snapland-art/images/ART-24-tutorial-refresh/park-step-03.png",
+        "size": [
+          1280,
+          720
+        ],
+        "window": [
+          1280,
+          720
+        ]
+      }
+    }
+  ],
+  "missing": []
+}

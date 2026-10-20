@@ -1,0 +1,672 @@
+[
+  {
+    "case": "game-003-perfect",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 42.28,
+    "passes": [
+      "PASS: current tutorial source, three real perfect keyboard Fountain inputs, actual 900 result and ordinary/devil/achievement awards"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-003",
+        "mistakes": 0,
+        "observed_frame": 104,
+        "observed_process_id": 29478,
+        "observer_only": true,
+        "practice": false,
+        "score": 900,
+        "score_summary": {
+          "label": "跳拍分",
+          "rows": [
+            {
+              "amount": 300,
+              "count": 1,
+              "key": "fountain_jump_1",
+              "label": "第 1 跳・完美（晚 +50ms）"
+            },
+            {
+              "amount": 300,
+              "count": 1,
+              "key": "fountain_jump_2",
+              "label": "第 2 跳・完美（晚 +50ms）"
+            },
+            {
+              "amount": 300,
+              "count": 1,
+              "key": "fountain_jump_3",
+              "label": "第 3 跳・完美（晚 +50ms）"
+            }
+          ],
+          "rule": "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。",
+          "total": 900
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "capture_result.gd": "1d6335ca1d06630219c54bbd7fc5cfac2831570db3cd498b826fbb7d632bd705",
+      "native_fountain_review.gd": "39718cde36d0b47bb2d59a5651510caeaf33deee445220a7be9e5f7c74859bb4"
+    }
+  },
+  {
+    "case": "live-examples",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 103.03,
+    "passes": [
+      "PASS: native tutorial refresh candidates captured=24; unmatched/result assets preserved=15; source tutorial PNGs were read-only"
+    ],
+    "diagnostic_source_sha256": {
+      "native_layout_review.gd": "162750cf251d0d7306cff7473a179b5e9de7fefff547ae4244a081ca03977e73",
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "native_pixel_tutorial_assets.gd": "be769069cb2146b885ae70749e4561aec6729d18f6b2cdd775490dc62f08f695"
+    }
+  },
+  {
+    "case": "melody-listen-source-v2",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 10.86,
+    "passes": [
+      "PASS: tutorial source actual listen phase after two authored visual note cues; no player notes, score or result injected; Dummy audio, no listening claim"
+    ],
+    "diagnostic_source_sha256": {
+      "native_melody_memory_review.gd": "ff8c3cbbd69efa2ae292ba3565e7c9025528ec8761c9553a3f3cdde4f231f1e1",
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "source_listen.gd": "6558a4ca8b5be48dc05097bc4e024a720b95f9cc6eb21c6d51fa66619799fae9"
+    }
+  },
+  {
+    "case": "result-002",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 72.52,
+    "passes": [
+      "PASS: tutorial source 002, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-002",
+        "mistakes": 0,
+        "observed_frame": 1276,
+        "observed_process_id": 29764,
+        "observer_only": true,
+        "practice": false,
+        "score": 500,
+        "score_summary": {
+          "label": "穿環分",
+          "rows": [
+            {
+              "amount": 500,
+              "count": 5,
+              "key": "kite_center",
+              "label": "中心穿環"
+            }
+          ],
+          "rule": "中心穿環 +100，擦邊穿環 +60，漏環或斷線不加分。",
+          "total": 500
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "native_kite_main_flow_review.gd": "a6942232d9c151ee39dd76aa88393c8fc4b7803e429c5d0f28b58e2ed63d5f77",
+      "source_result.gd": "a7730aa5b1f03ca3a44dccaaaef2e0cbd5ea031a093a3de8f8b65c380d5dc56b",
+      "native_fountain_review.gd": "9a21bce8691c9389382195c0636d28502a9319749177a6bd28ce10d489a85a0b"
+    }
+  },
+  {
+    "case": "result-004",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 75.22,
+    "passes": [
+      "PASS: tutorial source 004, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-004",
+        "mistakes": 0,
+        "observed_frame": 961,
+        "observed_process_id": 29870,
+        "observer_only": true,
+        "practice": false,
+        "score": 430,
+        "score_summary": {
+          "label": "安全通行分",
+          "rows": [
+            {
+              "amount": 300,
+              "count": 6,
+              "key": "crowd",
+              "label": "隊伍安全通過"
+            },
+            {
+              "amount": 80,
+              "count": 5,
+              "key": "crowd_wait",
+              "label": "等候效率"
+            },
+            {
+              "amount": 50,
+              "count": 1,
+              "key": "crowd_rescue",
+              "label": "救援隊及時通行"
+            }
+          ],
+          "rule": "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。",
+          "total": 430
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "native_crowd_semaphore_review.gd": "d78151f6ffda6c42f455d8ea54a1d5ff44be24b9d75512d442f3454b8adf544a",
+      "source_result.gd": "3da14160cb331fb1b20629f909c12e21819d93e34d21f9895ec404afc1850b4d"
+    }
+  },
+  {
+    "case": "result-005-bounded",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 67.84,
+    "passes": [
+      "PASS: separate stationary twelve-frame input rehearsal; no collection/progress change",
+      "PASS: tutorial source 005, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-005",
+        "mistakes": 0,
+        "observed_frame": 1032,
+        "observed_process_id": 30889,
+        "observer_only": true,
+        "practice": false,
+        "score": 816,
+        "score_summary": {
+          "label": "接帽分",
+          "rows": [
+            {
+              "amount": 120,
+              "count": 1,
+              "key": "hat_0",
+              "label": "第 1 頂・中心接住"
+            },
+            {
+              "amount": 128,
+              "count": 1,
+              "key": "hat_1",
+              "label": "第 2 頂・中心接住"
+            },
+            {
+              "amount": 136,
+              "count": 1,
+              "key": "hat_2",
+              "label": "第 3 頂・中心接住"
+            },
+            {
+              "amount": 144,
+              "count": 1,
+              "key": "hat_3",
+              "label": "第 4 頂・中心接住"
+            },
+            {
+              "amount": 144,
+              "count": 1,
+              "key": "hat_4",
+              "label": "第 5 頂・中心接住"
+            },
+            {
+              "amount": 144,
+              "count": 1,
+              "key": "hat_5",
+              "label": "第 6 頂・中心接住"
+            }
+          ],
+          "rule": "每接住一頂帽子 +100。",
+          "total": 816
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "native_hat_rescue_review.gd": "bdf665390d86730e1f829f05126aa78d3e919315f59d391f4e569f14027f4422",
+      "source_result.gd": "ef4cc769f8252afc36087be2b96045be7c2d0970cf1f31969a615165425f676b",
+      "native_fountain_review.gd": "99bc5a6802aab48eeafbf74d9bcb00519fa6e4c092a24becf7416f4c28ec4159"
+    }
+  },
+  {
+    "case": "result-006",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 63.11,
+    "passes": [
+      "PASS: Main park station/menu, wrong-action retry, keyboard eight gestures/two holds, exact devil score ledger and ordinary/devil persistence; formal Engine.time_scale=1.00x",
+      "PASS: tutorial source 006, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-006",
+        "mistakes": 0,
+        "observed_frame": 689,
+        "observed_process_id": 29965,
+        "observer_only": true,
+        "practice": false,
+        "score": 900,
+        "score_summary": {
+          "label": "節拍分",
+          "rows": [
+            {
+              "amount": 125,
+              "count": 1,
+              "key": "ribbon_gesture_0",
+              "label": "第 1 拍・精準・重拍"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "ribbon_gesture_1",
+              "label": "第 2 拍・精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "ribbon_gesture_2",
+              "label": "第 3 拍・精準"
+            },
+            {
+              "amount": 125,
+              "count": 1,
+              "key": "ribbon_gesture_3",
+              "label": "第 4 拍・精準・重拍"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "ribbon_gesture_4",
+              "label": "第 5 拍・精準"
+            },
+            {
+              "amount": 125,
+              "count": 1,
+              "key": "ribbon_gesture_5",
+              "label": "第 6 拍・精準・重拍"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "ribbon_gesture_6",
+              "label": "第 7 拍・精準"
+            },
+            {
+              "amount": 125,
+              "count": 1,
+              "key": "ribbon_gesture_7",
+              "label": "第 8 拍・精準・重拍"
+            }
+          ],
+          "rule": "精準 +100、合拍 +60；四個重拍另 +25。六拍一般成功；未輔助、八拍全精準且零錯誤才得惡魔拍貼。",
+          "total": 900
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "source_result.gd": "b44b83228154393d936191d45465dd5cc6d6ef21c3b1aa30140f3c736804403c",
+      "native_ribbon_rhythm_review.gd": "8c215286eee1f08682e289cd0f625f25ade3705c5108fa4da8492fac283b721c"
+    }
+  },
+  {
+    "case": "result-007-bounded",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 35.63,
+    "passes": [
+      "PASS: tutorial source 007, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-007",
+        "mistakes": 0,
+        "observed_frame": 387,
+        "observed_process_id": 30649,
+        "observer_only": true,
+        "practice": false,
+        "score": 2620,
+        "score_summary": {
+          "label": "路線轉動分",
+          "rows": [
+            {
+              "amount": 2620,
+              "count": 18,
+              "key": "pipe_orders",
+              "label": "供水工單與轉動計分"
+            },
+            {
+              "amount": 0,
+              "count": 19,
+              "key": "move_progress",
+              "label": "操作步數（不計分）",
+              "progress_only": true
+            }
+          ],
+          "rule": "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。",
+          "total": 2620
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "native_pipe_controls_review.gd": "5ba0135c7b4203d7dc631792ff3360aec98467d23049a8085482acdf2f7404e4",
+      "native_pipe_orders_review.gd": "5b63b5cea0f472b819a0f5c7fd3cd9566f58a4387a63dc711e629e31540d3499",
+      "source_result.gd": "104164c9c3443c1acd26e01371e53de7626b5d3f61e89952904cb48153ae609e"
+    }
+  },
+  {
+    "case": "result-008-bounded",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 86.14,
+    "passes": [
+      "PASS: tutorial source 008, real seven precise formal stages, 700 score, normal and devil photos"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-008",
+        "mistakes": 0,
+        "observed_frame": 1216,
+        "observed_process_id": 30991,
+        "observer_only": true,
+        "practice": false,
+        "score": 700,
+        "score_summary": {
+          "label": "平衡段落分",
+          "rows": [
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_1",
+              "label": "第 1 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_2",
+              "label": "第 2 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_3",
+              "label": "第 3 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_4",
+              "label": "第 4 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_5",
+              "label": "第 5 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_6",
+              "label": "第 6 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_7",
+              "label": "第 7 段・中心精準"
+            }
+          ],
+          "rule": "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。",
+          "total": 700
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "native_sign_balance_review.gd": "1c65bfd7114a030e976de73736a5b412b001eabf3ea1e645c24cdc6780c570fc",
+      "source_result.gd": "09fcefa6298bbcf85a879194f69ded13d32c1bbd25953a9514343511c522c13f",
+      "native_fountain_review.gd": "bc70c35f4e36832901bffd83bf60424d1351d87ab29b39c7522d520b75c96165"
+    }
+  },
+  {
+    "case": "result-009",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 36.63,
+    "passes": [
+      "PASS: tutorial source 009, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-009",
+        "mistakes": 0,
+        "observed_frame": 345,
+        "observed_process_id": 30140,
+        "observer_only": true,
+        "practice": false,
+        "score": 1353,
+        "score_summary": {
+          "label": "影子對準分",
+          "rows": [
+            {
+              "amount": 430,
+              "count": 1,
+              "key": "shadow_round_1",
+              "label": "第 1 輪影形定影"
+            },
+            {
+              "amount": 445,
+              "count": 1,
+              "key": "shadow_round_2",
+              "label": "第 2 輪影形定影"
+            },
+            {
+              "amount": 478,
+              "count": 1,
+              "key": "shadow_round_3",
+              "label": "第 3 輪影形定影"
+            }
+          ],
+          "rule": "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。",
+          "total": 1353
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "native_shadow_theatre_review.gd": "42bb58236fa9af0c4c22bc2e18f528868f758ec2abd7b4620b04a7a0e5b6980b",
+      "source_result.gd": "5377c70357699fd9b03b86cfe84df4582324b839f9ced3e57cf3999f55a7304d",
+      "native_fountain_review.gd": "6e2403d35df5440851db9b15e1cd0d5a8ba7792e0baf17cbb2d29044b83b417a"
+    }
+  },
+  {
+    "case": "result-010",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 54.38,
+    "passes": [
+      "PASS: tutorial source 010, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-010",
+        "mistakes": 0,
+        "observed_frame": 775,
+        "observed_process_id": 30216,
+        "observer_only": true,
+        "practice": false,
+        "score": 295,
+        "score_summary": {
+          "label": "合照分",
+          "rows": [
+            {
+              "amount": 99,
+              "count": 1,
+              "key": "photo_0",
+              "label": "第 1 張・構圖得分"
+            },
+            {
+              "amount": 98,
+              "count": 1,
+              "key": "photo_1",
+              "label": "第 2 張・構圖得分"
+            },
+            {
+              "amount": 98,
+              "count": 1,
+              "key": "photo_2",
+              "label": "第 3 張・構圖得分"
+            }
+          ],
+          "rule": "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。",
+          "total": 295
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_bubble_photo_review.gd": "cf0fb7388117241ab7f4bdc5ad84a60010dc56487579973c27a0ce6e6792c881",
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "source_result.gd": "6ae3caccb1f007c172d96789183b3a93f1da8a45a13aad6c341953e1a410db99",
+      "native_fountain_review.gd": "d5e8b30abce66715a191649939ca37689a8940eccdf55ac6ba27432ef4279714"
+    }
+  },
+  {
+    "case": "result-011",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 28.28,
+    "passes": [
+      "PASS: native Main BenchSwap station/menu launch, pause/resume, synchronous retry reset, keyboard BFS minimum tables 1/2/3, exact-result latch, and result capture",
+      "PASS: tutorial source 011, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-011",
+        "mistakes": 0,
+        "observed_frame": 254,
+        "observed_process_id": 30298,
+        "observer_only": true,
+        "practice": false,
+        "score": 750,
+        "score_summary": {
+          "label": "換位分",
+          "rows": [
+            {
+              "amount": 275,
+              "count": 1,
+              "key": "bench_table_1",
+              "label": "第 1 桌・符合座位規則"
+            },
+            {
+              "amount": 250,
+              "count": 1,
+              "key": "bench_table_2",
+              "label": "第 2 桌・符合座位規則"
+            },
+            {
+              "amount": 225,
+              "count": 1,
+              "key": "bench_table_3",
+              "label": "第 3 桌・符合座位規則"
+            },
+            {
+              "amount": 0,
+              "count": 6,
+              "key": "move_progress",
+              "label": "操作步數（不計分）",
+              "progress_only": true
+            }
+          ],
+          "rule": "每桌依完成步數得分；符合本桌全部規則為普通目標，每桌以最少交換完成且未開輔助或重排可得加碼。",
+          "total": 750
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_bench_swap_review.gd": "83a612f3bd663f9daaf310240715b1eb9a89c14fc3b934af21f4f83f605e679c",
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "source_result.gd": "7a74ebc9185defd161fcdd0c383769bcd31f3c5bc09b3e70a09e5b78c45810fd"
+    }
+  },
+  {
+    "case": "result-012-bounded",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 99.45,
+    "passes": [
+      "PASS: tutorial source 012, naturally completed formal input route and original first-result assertions"
+    ],
+    "real_observed_results": [
+      {
+        "assisted": false,
+        "devil": true,
+        "game_id": "game-012",
+        "mistakes": 0,
+        "observed_frame": 1448,
+        "observed_process_id": 31085,
+        "observer_only": true,
+        "practice": false,
+        "score": 300,
+        "score_summary": {
+          "label": "演奏分",
+          "rows": [
+            {
+              "amount": 300,
+              "count": 15,
+              "key": "melody_notes",
+              "label": "演奏音符得分"
+            }
+          ],
+          "rule": "音高與節奏準確 +20，節奏接近 +12；錯音或節奏超出容許範圍不加分。",
+          "total": 300
+        },
+        "success": true
+      }
+    ],
+    "diagnostic_source_sha256": {
+      "native_melody_memory_review.gd": "20e3144a09a69e654f065e8ac94892969c0c096e88efc47abf3007279118438e",
+      "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+      "source_result.gd": "61df3ed07c567df05adf9be83fcae641f6498ed18ef969bd9a9a1d10e81687bd"
+    }
+  }
+]

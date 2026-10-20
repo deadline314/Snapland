@@ -1,0 +1,27 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-002",
+    "mistakes": 0,
+    "observed_frame": 1276,
+    "observed_process_id": 29764,
+    "observer_only": true,
+    "practice": false,
+    "score": 500,
+    "score_summary": {
+      "label": "穿環分",
+      "rows": [
+        {
+          "amount": 500,
+          "count": 5,
+          "key": "kite_center",
+          "label": "中心穿環"
+        }
+      ],
+      "rule": "中心穿環 +100，擦邊穿環 +60，漏環或斷線不加分。",
+      "total": 500
+    },
+    "success": true
+  }
+]

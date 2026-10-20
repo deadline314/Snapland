@@ -1,0 +1,157 @@
+[
+  {
+    "case": "game-003",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 15.88,
+    "passes": [],
+    "log_sha256": "f6231f1e1c1df65d738dcc9fdab6ee054a8528f5a536e4ae65127949fa9f5885",
+    "diagnostic_lines": [
+      "ERROR: Actual Space input did not land in the accurate band: grades=[\"錯過\"] score=0 phase=1.319"
+    ]
+  },
+  {
+    "case": "game-003-clean",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 30.27,
+    "passes": [],
+    "log_sha256": "0d4fc1efdb1fb8f459a0c46d944eb650a5ee15a0a469f8b944524a1ec7b1dcb2",
+    "diagnostic_lines": [
+      "ERROR: Actual clean-round input 2 was not perfect: grades=[\"完美\", \"準確\"] score=500 phase=2.450"
+    ]
+  },
+  {
+    "case": "game-003-clean60",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 28.0,
+    "passes": [],
+    "log_sha256": "d5f26bc16f66a8793225e4bdaf5782cc473352f0b2460c4edf7db3236697a806",
+    "diagnostic_lines": [
+      "ERROR: Native fountain review timed out waiting for actual phase/state transition; modal_kind= session=live"
+    ]
+  },
+  {
+    "case": "game-002",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 77.93,
+    "passes": [],
+    "log_sha256": "5d71c4c1ed7f7272af299db7e34ef48ea56c17b2b65f0d34c8b8c49141b7c9c2",
+    "diagnostic_lines": [
+      "ERROR: Native SG-17 Main flow: Native review could not find button '練習操作' to launch private Kite practice"
+    ]
+  },
+  {
+    "case": "result-012",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 72.68,
+    "passes": [],
+    "log_sha256": "cd30a86b5a37808eb8bf3396f13df144980a7150eca39dc5082e0bb3cfd0d302",
+    "diagnostic_lines": [
+      "ERROR: Observed-note driver timed out before natural model completion"
+    ]
+  },
+  {
+    "case": "result-007",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 24.04,
+    "passes": [],
+    "log_sha256": "1b9d26773be10bcb4dffbc482d06762200115bc832acd521487bfa7316a6a4e6",
+    "diagnostic_lines": [
+      "ERROR: Connected order did not complete into the next work order (1): { \"cells\": [5, 0, 0, 0, 3, 10, 12, 0, 0, 0, 5, 0, 0, 0, 3, 12], \"board_revision\": 10, \"order_index\": 0, \"order_count\": 3, \"order_id\": \"south_single\", \"brief\": \"南側單花床\", \"source\": [0, 0], \"targets\": [[15, 2]], \"turn_par\": 4, \"order_revision\": 2, \"reachable_cells\": [0, 4, 5, 6, 10, 14, 15], \"flow_edges\": [[0, 4], [4, 5], [5, 6], [6, 10], [10, 14], [14, 15]], \"network_revision\": 10, \"cursor\": 15, \"elapsed\": 1.03333333333333, \"remaining\": 58.9666666666667, \"total_turns\": 4, \"order_turns\": [4, 0, 0], \"completed_beds\": 0, \"score\": 0, \"connected\": true, \"flow_remaining\": 0.3, \"flow_progress\": 0.73913043478261, \"ended\": false, \"success\": false, \"timed_out\": false }"
+    ]
+  },
+  {
+    "case": "game-003-keys",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 31.06,
+    "passes": [],
+    "log_sha256": "1024bac4bd75f42a8987ba8cea5e98694b18dfe4edc6e8157059213dcee7cffa",
+    "diagnostic_lines": [
+      "ERROR: Keyboard source input did not earn its exact perfect grade: [\"完美\", \"準確\"]"
+    ]
+  },
+  {
+    "case": "melody-listen-source",
+    "exit": -15,
+    "errors": 2,
+    "seconds": 96.37,
+    "passes": [],
+    "log_sha256": "4dc59292f1580f24eca7d19ed856ea037ed78ca8ccdc1123f2473d12f2d19b62",
+    "diagnostic_lines": [
+      "SCRIPT ERROR: Parse Error: Function \"_frames()\" not found in base self.",
+      "ERROR: Failed to load script \"res://work/tutorial-current-20261020/melody-listen-source/source_listen.gd\" with error \"Parse error\"."
+    ]
+  },
+  {
+    "case": "result-005",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 57.45,
+    "passes": [
+      "PASS: separate stationary twelve-frame input rehearsal; no collection/progress change"
+    ],
+    "log_sha256": "890f92f6cf7257985eaffa4b3ad65b46e47fe1fc48347b585aa9e6d7a82f1efc",
+    "diagnostic_lines": [
+      "ERROR: Six input-driven hats did not reach a natural result before deadline"
+    ]
+  },
+  {
+    "case": "result-008",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 43.13,
+    "passes": [],
+    "log_sha256": "f09fbe725ed818b8cc8b4f08b03de471782278d1774357861187f2838e31487a",
+    "diagnostic_lines": [
+      "ERROR: Sign balance route did not reach its natural result before the review deadline"
+    ]
+  },
+  {
+    "case": "validation-native/lifecycle",
+    "exit": 1,
+    "errors": 36,
+    "seconds": 53.56,
+    "passes": []
+  },
+  {
+    "case": "validation-native-v2/lifecycle",
+    "exit": 1,
+    "errors": 2,
+    "seconds": 68.63,
+    "passes": []
+  },
+  {
+    "case": "validation-native-v3/lifecycle",
+    "exit": 1,
+    "errors": 14,
+    "seconds": 93.12,
+    "passes": []
+  },
+  {
+    "case": "validation-native-v4/lifecycle",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 145.79,
+    "passes": [
+      "PASS: native tutorial lifecycle game-001",
+      "PASS: native tutorial lifecycle game-002"
+    ]
+  },
+  {
+    "case": "validation-native-v5/lifecycle",
+    "exit": 1,
+    "errors": 45,
+    "seconds": 145.21,
+    "passes": [
+      "PASS: native tutorial lifecycle game-001",
+      "PASS: native tutorial lifecycle game-002",
+      "PASS: native tutorial lifecycle game-003"
+    ]
+  }
+]

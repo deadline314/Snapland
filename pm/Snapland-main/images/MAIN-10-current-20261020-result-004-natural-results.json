@@ -1,0 +1,39 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-004",
+    "mistakes": 0,
+    "observed_frame": 961,
+    "observed_process_id": 29870,
+    "observer_only": true,
+    "practice": false,
+    "score": 430,
+    "score_summary": {
+      "label": "安全通行分",
+      "rows": [
+        {
+          "amount": 300,
+          "count": 6,
+          "key": "crowd",
+          "label": "隊伍安全通過"
+        },
+        {
+          "amount": 80,
+          "count": 5,
+          "key": "crowd_wait",
+          "label": "等候效率"
+        },
+        {
+          "amount": 50,
+          "count": 1,
+          "key": "crowd_rescue",
+          "label": "救援隊及時通行"
+        }
+      ],
+      "rule": "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。",
+      "total": 430
+    },
+    "success": true
+  }
+]

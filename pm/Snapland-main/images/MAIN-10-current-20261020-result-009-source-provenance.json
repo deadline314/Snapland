@@ -1,0 +1,19 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "entry": "native_shadow_theatre_review",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_fountain_review.gd": {
+      "source_sha256": "78633fab810b33d449f7611ab95254eb723b4810ca973e058ad71293e5e7be63",
+      "copy_sha256": "6e2403d35df5440851db9b15e1cd0d5a8ba7792e0baf17cbb2d29044b83b417a"
+    },
+    "game/tests/native_shadow_theatre_review.gd": {
+      "source_sha256": "a2cb89d350ba8c38f8004c893a32bc5551e8ac64a9323da631e4ea233d41c7db",
+      "copy_sha256": "42bb58236fa9af0c4c22bc2e18f528868f758ec2abd7b4620b04a7a0e5b6980b"
+    }
+  }
+}

@@ -1,0 +1,1335 @@
+{
+  "artifacts": [
+    {
+      "file": "MAIN-10-current-20261020-before-source-sha256.json",
+      "bytes": 8442,
+      "sha256": "8e3ca3b612b351f1bddf089bfdf669bc413fd3e4d5596dd3f03bcd7e39018106"
+    },
+    {
+      "file": "MAIN-10-current-20261020-clean-import.json",
+      "bytes": 51,
+      "sha256": "89a03c3d3be14e858ec4b2193d6a33619bca382cbb3cd205b2da1637eabc24f5"
+    },
+    {
+      "file": "MAIN-10-current-20261020-clean-import.log",
+      "bytes": 111826,
+      "sha256": "8ac56bf4af8ca607dadaf36a75bad5dafef8c4b9e302a56aba0779a12d55f316"
+    },
+    {
+      "file": "MAIN-10-current-20261020-clean-stage-final.json",
+      "bytes": 300302,
+      "sha256": "d3ad5ca496f80a5eed80de1ee5c7b257abbc89018eea26e9f9072823a1ef8053"
+    },
+    {
+      "file": "MAIN-10-current-20261020-diagnostic-source-archive.json",
+      "bytes": 946394,
+      "sha256": "86215d361192bb551bcb950237d086a8099b999fd3718ca4613c91dc961075cb"
+    },
+    {
+      "file": "MAIN-10-current-20261020-final-diagnostic-source.json",
+      "bytes": 146593,
+      "sha256": "01c3457db4d7f8b3e8687d610d0fb580d5e5c0913cf8e62e270c345ebd8f2535"
+    },
+    {
+      "file": "MAIN-10-current-20261020-game-003-perfect-captures.jsonl",
+      "bytes": 454,
+      "sha256": "73a7bc45d297ca5f69cbd66c7eb71e9e7d7add67479bdf8ac37bc1248ffda2e3"
+    },
+    {
+      "file": "MAIN-10-current-20261020-game-003-perfect-natural-results.json",
+      "bytes": 1001,
+      "sha256": "98bb3fecbad222fc2e3f9912938edaea50ca8ebb7e4d42c2984e05a948aa7640"
+    },
+    {
+      "file": "MAIN-10-current-20261020-game-003-perfect-result.log",
+      "bytes": 15695,
+      "sha256": "857d75d45376b1ccf94283c7ee728e8cccbcc527f898e78335a9ad967beb1e4c"
+    },
+    {
+      "file": "MAIN-10-current-20261020-game-003-perfect-source-provenance.json",
+      "bytes": 751,
+      "sha256": "8e46324c190913992eac7163ea3a6d8bbe9fd3b7cd2f55fbac058fa61f72cf74"
+    },
+    {
+      "file": "MAIN-10-current-20261020-live-examples-captures.jsonl",
+      "bytes": 6092,
+      "sha256": "be01e66b5eb21d7fc0f634d44e45871248be19de3b87739ca19490103a095664"
+    },
+    {
+      "file": "MAIN-10-current-20261020-live-examples-result.log",
+      "bytes": 28580,
+      "sha256": "a3b0becb6176584970dd8192361b80f1796fbb55aceb7777ae7c113a9a42a0f2"
+    },
+    {
+      "file": "MAIN-10-current-20261020-live-examples-source-provenance.json",
+      "bytes": 993,
+      "sha256": "502316f49dfe7b9718d48d6a86786209366bf61665fd8ab504fa5edeaaf17cfc"
+    },
+    {
+      "file": "MAIN-10-current-20261020-melody-listen-source-v2-captures.jsonl",
+      "bytes": 259,
+      "sha256": "881b67b7e007164c827707cd04b2d320aab0dcd2e6204eb3954dd893cd552524"
+    },
+    {
+      "file": "MAIN-10-current-20261020-melody-listen-source-v2-result.log",
+      "bytes": 14739,
+      "sha256": "e2d441b28632f2fee93710aa5304a5705a3407e18ec100b449f2ad4fd36100ea"
+    },
+    {
+      "file": "MAIN-10-current-20261020-melody-listen-source-v2-source-provenance.json",
+      "bytes": 761,
+      "sha256": "a116321793c17224d6c0dd503dc90e53d4d2472b6c88025b2f13e72014627e1c"
+    },
+    {
+      "file": "MAIN-10-current-20261020-native-acceptance.json",
+      "bytes": 2363,
+      "sha256": "c2419c9e579f160c65cb3d0b5e228cdaf6fbf023983bd448b01a67feae1fcab6"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-000-game-003-paused-help.png",
+      "bytes": 153538,
+      "sha256": "ad4dd63880485f7ac4b52c1b523edf7844dfc0eea3ddecd8ba9fe099a7808fa9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-001-game-008-paused-help.png",
+      "bytes": 57674,
+      "sha256": "04a65e9172947f424d97794d9d70f1f6e98f459fe379fcecc703f17d27eca75a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-002-game-009-paused-help.png",
+      "bytes": 67149,
+      "sha256": "b83e74ba27812d61aee5d5a7010b6ee5eb726d8e9c0c6e278aa5349a712f1758"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-game-003-paused-night.png",
+      "bytes": 459934,
+      "sha256": "4db10149ec4086163b88b26cb030d53bfa146fe77391ce23d5d109b0586d2f11"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-game-003-paused-stage.png",
+      "bytes": 384078,
+      "sha256": "e96cdf69e8baa265a74eba4c67282226a20ffe989d2911107b167016be554696"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-game-008-paused-night.png",
+      "bytes": 50099,
+      "sha256": "02e7af54a0ffc6f7463c5aa234acb31c70c3f97b2dc0be0588f8fbebdeb4444d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-game-008-paused-stage.png",
+      "bytes": 56411,
+      "sha256": "7fa5dcd03bff1dad469da755d804c17c70a3d6b9bf3f67e184b47e0526578549"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-game-009-paused-night.png",
+      "bytes": 116845,
+      "sha256": "c2c3d73e6efb95acafa6cd11408d7365293dc4d46faa21dcf0c5a9006e250ebf"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-game-009-paused-stage.png",
+      "bytes": 107313,
+      "sha256": "25c549c1b85b81d8553e1f63604739a852475facfb5e6d126fca3db2516d940c"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-observations.json",
+      "bytes": 2155,
+      "sha256": "4d1f28945c4f0bdc51debf52a38113bf29bbc63ae0a916756f767298950ad3da"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-result.json",
+      "bytes": 231,
+      "sha256": "69ee6587fe1227dd5b3bd1bbc0797c024f65d742cc21b3e0d75c28a55c96c8e5"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-after-current-result.log",
+      "bytes": 25805,
+      "sha256": "0653503bfb24acf5f05aef9e27d52799e21dea845c98bad2f7a9daf21833b251"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-000-game-003-paused-help.png",
+      "bytes": 153538,
+      "sha256": "ad4dd63880485f7ac4b52c1b523edf7844dfc0eea3ddecd8ba9fe099a7808fa9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-001-game-008-paused-help.png",
+      "bytes": 57674,
+      "sha256": "04a65e9172947f424d97794d9d70f1f6e98f459fe379fcecc703f17d27eca75a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-002-game-009-paused-help.png",
+      "bytes": 67149,
+      "sha256": "b83e74ba27812d61aee5d5a7010b6ee5eb726d8e9c0c6e278aa5349a712f1758"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-game-003-paused-stage.png",
+      "bytes": 384078,
+      "sha256": "e96cdf69e8baa265a74eba4c67282226a20ffe989d2911107b167016be554696"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-game-008-paused-stage.png",
+      "bytes": 56411,
+      "sha256": "7fa5dcd03bff1dad469da755d804c17c70a3d6b9bf3f67e184b47e0526578549"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-game-009-paused-stage.png",
+      "bytes": 107313,
+      "sha256": "25c549c1b85b81d8553e1f63604739a852475facfb5e6d126fca3db2516d940c"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-observations.json",
+      "bytes": 1337,
+      "sha256": "31c76f3f07e1a9b7b14ab61111a5793aaf9dfa4ae3b9b4616e0c6f82fd9c723b"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-result.json",
+      "bytes": 228,
+      "sha256": "b66c2496a51634d4167d68cfbec4595869c914e51642516c7517dd29d2b7915f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-before-v2-result.log",
+      "bytes": 25398,
+      "sha256": "82f5cc92c9eb017b07e1a3691ae188dc1ff6da3f60faaba2b9572d388291279a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-final-checks-fountain-timing-tests.log",
+      "bytes": 113,
+      "sha256": "237ea0fb3cf0d63d87cc79b30fde834a5946c8f003a58dfee52b3c60d6ecfcda"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-final-checks-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "31e4f2647cc52d36ee2769daf7f321c598b6ab8220b9be303d07e25581fce875"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-final-checks-pipe-plan-presentation-tests.log",
+      "bytes": 114,
+      "sha256": "e2a35c6a42c37cf2cac68ab385f9a43d6bccf87fb69756a786fd021a8071ab87"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-final-checks-results.json",
+      "bytes": 367,
+      "sha256": "f0431854a59f714f0a4690f632d6a3f7c493d0c162872cc368078532b85d4e6f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-integration-fountain-timing-tests.log",
+      "bytes": 113,
+      "sha256": "237ea0fb3cf0d63d87cc79b30fde834a5946c8f003a58dfee52b3c60d6ecfcda"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-integration-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "31e4f2647cc52d36ee2769daf7f321c598b6ab8220b9be303d07e25581fce875"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-integration-pixel-tutorial-page-tests.log",
+      "bytes": 235,
+      "sha256": "a09a2f2e279be713abd7825bedacbff6c715d4bfc2965047409369edfcb46103"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-integration-results.json",
+      "bytes": 610,
+      "sha256": "629de472609288b5b5db6e6fd7311640808c18f10d3485c1940ae7846f086d05"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-integration-tutorial-seen-progress-tests.log",
+      "bytes": 1201,
+      "sha256": "aec9bf269564d5e6900cf4d90f1bc6b9047d1949a894f91f3cf08af5a52acd88"
+    },
+    {
+      "file": "MAIN-10-current-20261020-pause-integration-welcome-minigame-tests.log",
+      "bytes": 14439,
+      "sha256": "886abcaaa4616edd50afa69004ee0872e32161ee1efa714084cdd9a1a03a1b71"
+    },
+    {
+      "file": "MAIN-10-current-20261020-reference-input.png",
+      "bytes": 87854,
+      "sha256": "8f266c34bca24525323a3e5f52412af71e39a3b0aca5cb0684b84aeac7ac3fe9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-reference-provenance.json",
+      "bytes": 533,
+      "sha256": "2edd9cd9738a3070a67bdd71de5ca74e4885d4a67b81d40261da3cfe2abd011b"
+    },
+    {
+      "file": "MAIN-10-current-20261020-rejected-attempts.json",
+      "bytes": 5114,
+      "sha256": "b2f0415c355231289c9e82ebbb9896048c24e81955a159014c298b9902dc276d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-rejected-validation-native-lifecycle.log",
+      "bytes": 36966,
+      "sha256": "09915684b12472c3fece1c26131c43cb2420225649f42f4f3aaff34ccabfc2a4"
+    },
+    {
+      "file": "MAIN-10-current-20261020-rejected-validation-native-v2-lifecycle.log",
+      "bytes": 16070,
+      "sha256": "bd2cd79a78c7a3d720b9dba0e48afb1771a6cb4e654b15b44087bf5e97d05953"
+    },
+    {
+      "file": "MAIN-10-current-20261020-rejected-validation-native-v3-lifecycle.log",
+      "bytes": 22127,
+      "sha256": "afc06021e6714c1bf7520135d45c1b282b3fe30a3e539aace53157d867f07665"
+    },
+    {
+      "file": "MAIN-10-current-20261020-rejected-validation-native-v4-lifecycle.log",
+      "bytes": 17921,
+      "sha256": "28471149f7e9d061a3038b150542c6cc78a4274bd53f9003fd3d5fb233a76a77"
+    },
+    {
+      "file": "MAIN-10-current-20261020-rejected-validation-native-v5-lifecycle.log",
+      "bytes": 41673,
+      "sha256": "148ea29edee2d6a85a94b02245d74b844a6d20f96ba28b75dc3dc303cf54a572"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-002-captures.jsonl",
+      "bytes": 1332,
+      "sha256": "10a9131faaa52400dfd340fc3c35de84cca8dd325998f015a121a19e1a81580d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-002-natural-results.json",
+      "bytes": 568,
+      "sha256": "2f9964929b6cc4994c1aca6b13d69eccd78b217310ae6d2c87359b490c59d76a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-002-result.log",
+      "bytes": 16139,
+      "sha256": "1959ab820a4255797ea7db98e10b16eb743e4a52c1e486d7d6373d6341588942"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-002-scope.json",
+      "bytes": 593,
+      "sha256": "d236c859e6f9edf1110e43e6f286eba90c2cfcf9fc1d651a8be45798c5918147"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-002-source-provenance.json",
+      "bytes": 995,
+      "sha256": "b1be9caac90cd0ae7a044d2fa54d533e85bc5c1fd2d89b883b9ae8c37b5ef0d9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-004-captures.jsonl",
+      "bytes": 231,
+      "sha256": "01a68384efe96370fc2b8c4dba2b36c3dd4e8293bd99bdbf1f0d773b2a27e762"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-004-natural-results.json",
+      "bytes": 862,
+      "sha256": "1c6075f47d689bb20426efa17b7bae3c924095ce3300c5333bfba81cb044ac2d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-004-result.log",
+      "bytes": 17644,
+      "sha256": "db718e820ef22a8f2e60c3e87e20fe297a5f4ca6ec512531cf0674eb53dcc167"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-004-scope.json",
+      "bytes": 650,
+      "sha256": "34a6565d90784474bf0c976aacc914bc74f018187cfb2d044cb7ff8f273e3ffc"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-004-source-provenance.json",
+      "bytes": 765,
+      "sha256": "75a4a807d44207f38301a576e3c7433eab7b0aa33530612f47364098ac0a2239"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-005-bounded-captures.jsonl",
+      "bytes": 9261,
+      "sha256": "7bb2eb9a1a5b5592eeee64ee94086a0fd53247d88948c59b876178d750993e8a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-005-bounded-natural-results.json",
+      "bytes": 1237,
+      "sha256": "86c161e88c34cab98ec73f0c381d07280977d474c162ce0abd8376bbea9786cb"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-005-bounded-result.log",
+      "bytes": 61892,
+      "sha256": "e042907d73c5138230b6697036a1cee5ce011a8077c2e57ebf91fd788b03c589"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-005-bounded-scope.json",
+      "bytes": 224,
+      "sha256": "7a33e07f0d53193fd149e78e8861c0da7e43f4223fd1a35ea8ce206ef739c662"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-005-bounded-source-provenance.json",
+      "bytes": 987,
+      "sha256": "899718b24196d5ebd4b7522a5cb26099bf77710e86662831c6a2bf8e3eb7ef2d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-006-captures.jsonl",
+      "bytes": 4140,
+      "sha256": "a40137362736e38ffed5e026a8daabdd91b017e48315bd381f9e468030e4a036"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-006-natural-results.json",
+      "bytes": 1693,
+      "sha256": "a9ca8b50d8a564ad620571aaf277630a7bd439f585f7852305596a42d54756af"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-006-result.log",
+      "bytes": 27006,
+      "sha256": "47f57dd71602eea273f12fb78300d108da56b3fccc9599c8ff4da1657a969194"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-006-scope.json",
+      "bytes": 646,
+      "sha256": "fcbbe5599d5c10424b480f5667db7b84a87eff223aa27ffc17342f82e5d4c89f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-006-source-provenance.json",
+      "bytes": 761,
+      "sha256": "d148d818926bf919593e180c622a5ed7bc07d3ad34bd6941c4f6e073d9851124"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-007-bounded-captures.jsonl",
+      "bytes": 241,
+      "sha256": "3b7125a8d9b1a3ef3b0880c60758a154a9e92d4f6fbfcec9348c9043e4218976"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-007-bounded-natural-results.json",
+      "bytes": 802,
+      "sha256": "5cdc95a47da568fa1e5cd46bbdd14a52e5a064bae213315506e32465c12bf654"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-007-bounded-result.log",
+      "bytes": 17702,
+      "sha256": "a928f109ca938ca2c8d392f5e768dd1fa04b6f964ea8fa3cc4044875ca0ee887"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-007-bounded-scope.json",
+      "bytes": 315,
+      "sha256": "74b0b6480dd0e820d636f6494aa22a9af7f654556b8253b221817ec78b12fb70"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-007-bounded-source-provenance.json",
+      "bytes": 996,
+      "sha256": "04e31430fd31e2ed4e0efaa53210510753406acd297b78921f164f03f88999fb"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-008-bounded-captures.jsonl",
+      "bytes": 1175,
+      "sha256": "8088ed9c20b1fade53feba11b02e345cc8c8e203f95528d5eeda07dfb391e7fe"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-008-bounded-natural-results.json",
+      "bytes": 1562,
+      "sha256": "cc0e6f30b26259cac16b78a2f6d75f086bdfd6437380ed287b6b52e74a3dcbd8"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-008-bounded-result.log",
+      "bytes": 16218,
+      "sha256": "b50bebd1fea3b9669c9549ff6acc3790c637783d83ac1eace2afc5c34e6bc5e8"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-008-bounded-scope.json",
+      "bytes": 192,
+      "sha256": "8b295d98a93390217728e367f34566686ea6f4c19d4a5a90bd9b51f228fb0d28"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-008-bounded-source-provenance.json",
+      "bytes": 991,
+      "sha256": "5f482508f400058584638ec65065f11689bfa042aada3bf5b098b6da8e9c5924"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-009-captures.jsonl",
+      "bytes": 1724,
+      "sha256": "210d9e92a5508843580094fe5a957cfd28c609acbe54eec4957bbd444a44a276"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-009-natural-results.json",
+      "bytes": 987,
+      "sha256": "4608591bc743515c197357138443e1fd6f408b1143fcee4a8dac7564ddc5c4cb"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-009-result.log",
+      "bytes": 19942,
+      "sha256": "970b789807b6ba3995766f5716858614f8d699bd02192e9b04e8810d142ed43d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-009-scope.json",
+      "bytes": 649,
+      "sha256": "9702ffec82fdb87bda0e427e1b22722983fa44933f88578fe7391c1a11bd460e"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-009-source-provenance.json",
+      "bytes": 995,
+      "sha256": "60285190a4aa9cc37b09075c9f39ec82779a43153a3a0f65013d3494e333f51a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-010-captures.jsonl",
+      "bytes": 2100,
+      "sha256": "39cb07c54a7c54fb69c0e4944bf07a460de97cd38473ad57a824eb0ddfff6a4e"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-010-natural-results.json",
+      "bytes": 964,
+      "sha256": "91ecfcc5d183d05b22669a0d9407cd54ce98cb52bcce13bd771d1eb7b298f0f4"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-010-result.log",
+      "bytes": 16477,
+      "sha256": "f29194cacf7967b7661d80a661568051f29dddcf6bb7bd49fd7e6b53bee086f0"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-010-scope.json",
+      "bytes": 647,
+      "sha256": "d2bc88b7badc2ae1104163350e5b2568bd3ffe802caf1cea6b66348408a31954"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-010-source-provenance.json",
+      "bytes": 991,
+      "sha256": "5d392b04ce0554885439a89e3060be207cc257e1f160701af5cfc4fc48563299"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-011-captures.jsonl",
+      "bytes": 1926,
+      "sha256": "eac892cd01c9e5d6bd14d38473d13e3940dd0c2d6686cddc1824c647f4034d91"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-011-natural-results.json",
+      "bytes": 1149,
+      "sha256": "87670c5eeaa8f425b82f8866e159858b6ab385a22a12c074bcf067cb3dcdfe55"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-011-result.log",
+      "bytes": 19003,
+      "sha256": "c06ef7cceec8d9151e3a7c8c67f6cfd403a45c7d55bebaa1c05f35d0c4560343"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-011-scope.json",
+      "bytes": 588,
+      "sha256": "2f2352ee9738d749cf8cbd918c4f1ff1d6a79f98ab6c13a9e95a36cb7592ab47"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-011-source-provenance.json",
+      "bytes": 755,
+      "sha256": "e0e6067ceb72e851746c86c8895c727623982bf06d3afc0a0da46b929a683c18"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-012-bounded-captures.jsonl",
+      "bytes": 1393,
+      "sha256": "6f9f0f0ee29dce44e5440628f99463d2836976ca1d26853ca543deac73433643"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-012-bounded-natural-results.json",
+      "bytes": 602,
+      "sha256": "2d73f4499b1e6b30ee19a1185443e04f97b7cd05606815da6ecd55b4f12dad06"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-012-bounded-result.log",
+      "bytes": 18354,
+      "sha256": "a80e689f4f165874cc71fd2503087e73c8b2169cbad310042a472035c7cbbf1d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-012-bounded-scope.json",
+      "bytes": 244,
+      "sha256": "81c4c592f832beac99b67c8619ddacfc95b8e44b96c51d763ff232fdad779684"
+    },
+    {
+      "file": "MAIN-10-current-20261020-result-012-bounded-source-provenance.json",
+      "bytes": 761,
+      "sha256": "00acb8ab05bf4723712bbb7388ab7f97424acf853c58106fd41b697b608c8e08"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-001-step-01.png",
+      "bytes": 225553,
+      "sha256": "08af82ae6f1c54e0f9acaf6a426d4162c63c31fb7ee2aa9aaca0af1ca866274b"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-001-step-02.png",
+      "bytes": 225923,
+      "sha256": "7bc2904ac7dfc528e320e5a49a389201f3bcfd7675743fe955130810ffc73f12"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-001-step-03.png",
+      "bytes": 224858,
+      "sha256": "f1b00a85c87a8d82aafe461517ee6ffa00e5e7389102f02f7e1fb1e7b6ab1302"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-002-step-01.png",
+      "bytes": 74598,
+      "sha256": "a2d3f33eeee4328e0a6dd974d55ac65758ba74c1b9f88c0317f33ea43794f75d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-002-step-02.png",
+      "bytes": 75604,
+      "sha256": "16ae14bd1bdd1e867a05e559292da34df1c99228874d15ce38b6f7dc2055e42f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-002-step-03.png",
+      "bytes": 489312,
+      "sha256": "a6dffe4f3f405d3b5b998742b2aca28d2927500d348a075dff5bda5ba6ef1bdf"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-003-step-01.png",
+      "bytes": 421088,
+      "sha256": "a9a0fe89cc72858aab49a8cb89a20d6e5134c1faa9540dfab9a5cc84a10376aa"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-003-step-02.png",
+      "bytes": 431627,
+      "sha256": "a3f344ab9e864b490793b48ddb4aa6c14c725609fd3515dd8a216d5f646d7205"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-003-step-03.png",
+      "bytes": 506418,
+      "sha256": "382587ec2080b4db03ed0be37c1bd64182f56e8b2cf5f0f8a055b0be8e925ede"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-004-step-01.png",
+      "bytes": 72551,
+      "sha256": "0c0ca3aa0e612933e10fce1282733c86a8142723c584f7668e8b526a85514b9a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-004-step-02.png",
+      "bytes": 71106,
+      "sha256": "dca412063163a8df2382140b50839a98f453b0443b3da483bb77160fb849ff0a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-004-step-03.png",
+      "bytes": 467121,
+      "sha256": "f3b55c3b23a5cade03f5f4d79764f82209e891da03fbbd3adef4d1cd232d4a44"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-005-step-01.png",
+      "bytes": 35910,
+      "sha256": "b43bff1585d96576b7a165d73e21066c9b7a291811d2e2c64b804574d3d48c84"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-005-step-02.png",
+      "bytes": 35950,
+      "sha256": "d88cb9cb04dbc6266367b17465466e7c7763318d016d3f88397f07a0cf951b2c"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-005-step-03.png",
+      "bytes": 429525,
+      "sha256": "e2838994948f56618b3aea3e4776591b7f9e54a94ad592e2d40425e0e918f8c5"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-006-step-01.png",
+      "bytes": 98566,
+      "sha256": "a341d3e22b0b5d07ecf8b11c2eb5bbd223684ea92db3ac83679cdaac9313b3c4"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-006-step-02.png",
+      "bytes": 112225,
+      "sha256": "d045c65467f712ef4fe2eca0c06eb9e4fdfc186b690d8a54c5ddecabb6400f9f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-006-step-03.png",
+      "bytes": 487673,
+      "sha256": "2006d4f92aa74e45cfe0921bdf218632bb69908e1048472ab25c0a226bfc6d0d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-007-step-01.png",
+      "bytes": 15280,
+      "sha256": "f7c2b95fd013f1c61cdf56f82d33dfa14ec517305baef911481c17182db0c395"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-007-step-02.png",
+      "bytes": 15664,
+      "sha256": "5540d91e742c74a6c377183ad1721a19e967729791fd7cbe181df84e16d2431a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-007-step-03.png",
+      "bytes": 362523,
+      "sha256": "41bcdb99791077767fb57978f156f8bf2460a64f35e3c711579646543deff479"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-008-step-01.png",
+      "bytes": 58862,
+      "sha256": "5aaf87b3cea8c491e76f85ba297e5c12353f83fad771b4c58ad475a2924cfb23"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-008-step-02.png",
+      "bytes": 60710,
+      "sha256": "d68e534e1596c5121f92aa6e0c59e9862f9dd288e5ad5c14d4cc8b876e50ca0a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-008-step-03.png",
+      "bytes": 446403,
+      "sha256": "6dd0b787c065ef9a1debc33c1e23caf2baa89657428008586536c15adc8a1fe6"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-009-step-01.png",
+      "bytes": 109005,
+      "sha256": "f57b641cc383e05eb35354b00be732fb8354b804a542b853d06fa33789bb7526"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-009-step-02.png",
+      "bytes": 103126,
+      "sha256": "4b52531ee45fccbfbcc2fddddead6cb1b8bfb67a8d9fad0494ea0ada180b860a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-009-step-03.png",
+      "bytes": 413211,
+      "sha256": "10b14a566631a98fd2c556f4936f3c0180f1101df90af7667fb565045bc42f2d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-010-step-01.png",
+      "bytes": 123632,
+      "sha256": "c3f30f0e867c174cedc62f6ddaa4688a120e1966da52a1749236655f5d6e2e06"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-010-step-02.png",
+      "bytes": 131410,
+      "sha256": "ecae97850771f214cb5929fe1bfe26e598083bbb04a71ccaed77e62b9ca62682"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-010-step-03.png",
+      "bytes": 448745,
+      "sha256": "e9a911b6a759c944714ef534cde7f04d9fab836b4344c4af9c78c0c292e0f481"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-011-step-01.png",
+      "bytes": 115029,
+      "sha256": "f4a5a193c50aa88bb0a7c8413864938013d6fb83a8326ddba9f0bb361dddfe33"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-011-step-02.png",
+      "bytes": 112701,
+      "sha256": "57e72d598d5d8dfd5923e5ff6e667b0e8ec68355d317cbf1ec95941c90f9d0fe"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-011-step-03.png",
+      "bytes": 455485,
+      "sha256": "7389d9820c7e641cb1e6c4224c2095e00e5dbe0d43ea2a66186f878ea6c95ef5"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-012-step-01.png",
+      "bytes": 177315,
+      "sha256": "fbcf2a4094b04f46be75dd1a3a110b9080391c1a0ebcf9bfcddfdc228693817d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-012-step-02.png",
+      "bytes": 178221,
+      "sha256": "60a63d83ae37c7de1add4e4d05c54d807d9a1e57ec7718bd4a853de6cb06f09b"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-game-012-step-03.png",
+      "bytes": 422260,
+      "sha256": "3d606b9b7c789b26df65cb983c480b09ffb3395a84b54e19c399bf142ae98f58"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-manifest.json",
+      "bytes": 35463,
+      "sha256": "f96a7127ca761fab60f219f6165722db18afad6c552006bc930df3ac85e8f284"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-park-step-01.png",
+      "bytes": 1575081,
+      "sha256": "723563511d1d12f3f8d45f40ba1154b8832e45ca8e2158e0147171227e243f5b"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-park-step-02.png",
+      "bytes": 1291475,
+      "sha256": "5633369f2204842dd7f7f14dd7aa6d96cdf25d240e0a776115248a95b74c6bcd"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-park-step-03.png",
+      "bytes": 354266,
+      "sha256": "89bd3de545dfd13273f9d5e65c42456f57e6a34687fcb5bafdd69deb02141d54"
+    },
+    {
+      "file": "MAIN-10-current-20261020-source-results.json",
+      "bytes": 22119,
+      "sha256": "89c2c20d09897e1582619b1470d574c4985aa135c4c43d107135937619ae0879"
+    },
+    {
+      "file": "MAIN-10-current-20261020-sources-review-01.png",
+      "bytes": 589826,
+      "sha256": "cc28e43857273bad8c2e7c0fd57a45bd39ae4b5f61738e02f6a61ddaecfd1582"
+    },
+    {
+      "file": "MAIN-10-current-20261020-sources-review-02.png",
+      "bytes": 600625,
+      "sha256": "b420766b6f467cab5139a20531966951b701a32b885bf907a307604bc0b514c3"
+    },
+    {
+      "file": "MAIN-10-current-20261020-sources-review-03.png",
+      "bytes": 546391,
+      "sha256": "c4bd7f185137df3640fc28bf40a34720288dc4167bc6669ad890e2c310679916"
+    },
+    {
+      "file": "MAIN-10-current-20261020-sources-review-04.png",
+      "bytes": 458127,
+      "sha256": "c021c2cacd59cb699737ba2f0c4eb1cd1cc8aacc0c31162d229ab4b8d9abd5ee"
+    },
+    {
+      "file": "MAIN-10-current-20261020-sources-review-05.png",
+      "bytes": 543605,
+      "sha256": "8bca25dd42418b5425257dc1097b26502f5e763670f6360927815cae14ca7ea9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-sources-review-06.png",
+      "bytes": 560812,
+      "sha256": "2e139a51279c779922c22d0056a1b3b469594799deee2dca747e6d08a4476f1d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-sources-review-07.png",
+      "bytes": 820403,
+      "sha256": "6a1adccca01f550aaf544393580f55cfdb84e23886ab3afdcc9623debfa731b6"
+    },
+    {
+      "file": "MAIN-10-current-20261020-ui-overview-01.png",
+      "bytes": 403925,
+      "sha256": "7ebee44220673b93746e3b2237ad70100e967002ad4e11831637650887f70ab4"
+    },
+    {
+      "file": "MAIN-10-current-20261020-ui-overview-02.png",
+      "bytes": 339038,
+      "sha256": "7058b0fcbe43d08adac6af42ca20e80987f6a1423fe2d6701e501faba27db8f8"
+    },
+    {
+      "file": "MAIN-10-current-20261020-ui-overview-03.png",
+      "bytes": 308660,
+      "sha256": "e8fc572977ee242ff1fdca8df96a55acef2a464f5bfd5083da0727dfbd461ec3"
+    },
+    {
+      "file": "MAIN-10-current-20261020-ui-overview-04.png",
+      "bytes": 301824,
+      "sha256": "68adfd9708f541adac2cf7edf9ea066daf17ecaa2e9f2f099f9df60398b7dad6"
+    },
+    {
+      "file": "MAIN-10-current-20261020-ui-overview-05.png",
+      "bytes": 316658,
+      "sha256": "96ad2742234cb52b1e060914d0346db079457a86b85ff6d037df8cf285230b4b"
+    },
+    {
+      "file": "MAIN-10-current-20261020-ui-overview-06.png",
+      "bytes": 333296,
+      "sha256": "c6500152614784ca3cad13774fe2e11e9b2dfe7ca2f702392f8143a29dae5c01"
+    },
+    {
+      "file": "MAIN-10-current-20261020-ui-overview-07.png",
+      "bytes": 131204,
+      "sha256": "82f66fa67e86a67f984454dafab95ca79bb2e8bb285587c1bb0c524a17663cd6"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-checks-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "31e4f2647cc52d36ee2769daf7f321c598b6ab8220b9be303d07e25581fce875"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-checks-pixel-tutorial-page-tests.log",
+      "bytes": 1719,
+      "sha256": "a1fba7c5ddef0dd2faef65eaedc48d4000005ff616f8f578118a9fac72b99b55"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-checks-results.json",
+      "bytes": 2545,
+      "sha256": "1eb4c5a0c60a0539b293c5f2044d67e352bf70442719506db727e3c9b8686d0e"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-checks-tutorial-image-control-tests.log",
+      "bytes": 191,
+      "sha256": "519129471295d1472147aa2b83aa5b49de7d662da4c4a2e2f2e2ae04a34752e5"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-checks-tutorial-panel-catalog-tests.log",
+      "bytes": 551,
+      "sha256": "adf18e0f32d39c4e3fc802fc84f88ce5469de25ca74acfdd0eaa1d0219087482"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-checks-tutorial-seen-progress-tests.log",
+      "bytes": 1201,
+      "sha256": "aec9bf269564d5e6900cf4d90f1bc6b9047d1949a894f91f3cf08af5a52acd88"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-park-park-after-skip.png",
+      "bytes": 263767,
+      "sha256": "2acc24d72a92329995878665d4dc264b2b672f985fa9046fdeb0475ae3d9165f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-park-park-step-01.png",
+      "bytes": 435438,
+      "sha256": "c72cafd9dcb0647fac51e1363ab659a841bf8de0a1b2156a31cc28b90926942d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-park-park-step-02.png",
+      "bytes": 380702,
+      "sha256": "7884da9961d0ead7184fc317c002076139eb11e321299315ec2598742741cf4c"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-park-park-step-03.png",
+      "bytes": 190106,
+      "sha256": "226b628fea3feabf52024e93e63e5439ef1f6bf49cf085d6a7b92162379ccd33"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-park-park-zoom.png",
+      "bytes": 311557,
+      "sha256": "024221d2d12613499788f15afc93d16c04b22d59b496d6629daed0b0497d3ac4"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-park-result.json",
+      "bytes": 289,
+      "sha256": "737ecaaa326aa63a7672ffbaf2284c69210465d63f632cbd9038d054a0de1ed1"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-park-result.log",
+      "bytes": 14120,
+      "sha256": "5fb30cf88d6d26d4990a5faee5ec4504bdde8b85279d0075fc802aad6f941167"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-001-first-step.png",
+      "bytes": 301166,
+      "sha256": "f04524f0b29b55ad999b5eb0576e633b5404cb0601027a2e4ebe3234710850c9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-001-help-reopened.png",
+      "bytes": 118948,
+      "sha256": "be9b9eb022b0f15097031d82a0fcc647d1cdb9ef9a8dfa83995afbac3decf2c0"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-001-help-step-01.png",
+      "bytes": 119425,
+      "sha256": "a74bbba298b1fd68845b16e05e0fa99c3dcb4651e3c9a35e0ad40ac505668d9a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-001-private-help-step-01.png",
+      "bytes": 119340,
+      "sha256": "c9e4c8a86d07a02706481bafaf960c10a8f237a85f9d95347e4b743ff0be32a5"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-001-step-02.png",
+      "bytes": 301963,
+      "sha256": "d230406ef9359077bd0a1462dcbec7f195fd729d5e17a4a8b7b72935c9ec5dfe"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-001-step-03.png",
+      "bytes": 301083,
+      "sha256": "15230e3510be2e9393ae6b7dfee2325af1d7460b17844cd828784baeb8118cb9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-002-first-step.png",
+      "bytes": 260677,
+      "sha256": "2378a0638614984c900f0612425d91666bae3129c321b4b738efdd0f62e52bf4"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-002-help-reopened.png",
+      "bytes": 67613,
+      "sha256": "e5d08ca8e7fd0641f80aed65dca97e8c887a828ceda15960b08ff7dd69fefbe8"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-002-help-step-01.png",
+      "bytes": 67648,
+      "sha256": "cd88546129a8c3575a444d2d44b62385f54db881c0fb5e0002e59417c1a6bd41"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-002-private-help-step-01.png",
+      "bytes": 67599,
+      "sha256": "1c5698a42745edebb78b562b4397a89bfeb417b40519b84b2ccd71a7a1259dca"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-002-step-02.png",
+      "bytes": 263097,
+      "sha256": "b298b812a6ce94f92db636873aa4821954b0c5323d48431580af3f5fd7c7d5c5"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-002-step-03.png",
+      "bytes": 343011,
+      "sha256": "ddeac991e1196bdaf46492efd50553a26529a8ce0a47fe93dac6223b8955d45d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-003-first-step.png",
+      "bytes": 330997,
+      "sha256": "0b075f489ae4bcb97b06c01079e9de4082133af0250f73bdd4088eda8030709d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-003-help-reopened.png",
+      "bytes": 153538,
+      "sha256": "ad4dd63880485f7ac4b52c1b523edf7844dfc0eea3ddecd8ba9fe099a7808fa9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-003-help-step-01.png",
+      "bytes": 153538,
+      "sha256": "ad4dd63880485f7ac4b52c1b523edf7844dfc0eea3ddecd8ba9fe099a7808fa9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-003-private-help-step-01.png",
+      "bytes": 153538,
+      "sha256": "ad4dd63880485f7ac4b52c1b523edf7844dfc0eea3ddecd8ba9fe099a7808fa9"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-003-step-02.png",
+      "bytes": 332401,
+      "sha256": "798f9f5c2e16ed39f1996db24ba00b09cad4efa8fbd579b72e5686387106ee82"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-003-step-03.png",
+      "bytes": 353477,
+      "sha256": "b925be6f8690c55404aabeaa932c114ec8073dcac01dce6e95ef6fde528e274a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-004-first-step.png",
+      "bytes": 245920,
+      "sha256": "f270580dca8cce1bc6b894e89e6e614741c4f16e13b7f6597d3ecd9653927256"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-004-help-reopened.png",
+      "bytes": 52485,
+      "sha256": "94e553ebdd7768cf2ae228aecda1a5a9af2850793322179638cfbb7713aa6e72"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-004-help-step-01.png",
+      "bytes": 52485,
+      "sha256": "94e553ebdd7768cf2ae228aecda1a5a9af2850793322179638cfbb7713aa6e72"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-004-private-help-step-01.png",
+      "bytes": 52485,
+      "sha256": "94e553ebdd7768cf2ae228aecda1a5a9af2850793322179638cfbb7713aa6e72"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-004-step-02.png",
+      "bytes": 247212,
+      "sha256": "6d9fee3c21a86773aa5b07b2cf8dafd2f71f9da193444b2194b05286cb2a2874"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-004-step-03.png",
+      "bytes": 340546,
+      "sha256": "f81bcf38017c30e6082258ce7736ca185338dda72094ba4804361bad38159213"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-005-first-step.png",
+      "bytes": 212738,
+      "sha256": "5b9d1f638ea4469dbaac33a14564f7925c8a6abc8440d9631114f2ccb5d2602a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-005-help-reopened.png",
+      "bytes": 49240,
+      "sha256": "a7d329ba979f3ce4ac3dcdd7a5391e30c5aa194cc5e916570b385d218250b91e"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-005-help-step-01.png",
+      "bytes": 49240,
+      "sha256": "a7d329ba979f3ce4ac3dcdd7a5391e30c5aa194cc5e916570b385d218250b91e"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-005-private-help-step-01.png",
+      "bytes": 49240,
+      "sha256": "a7d329ba979f3ce4ac3dcdd7a5391e30c5aa194cc5e916570b385d218250b91e"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-005-step-02.png",
+      "bytes": 212635,
+      "sha256": "5c29ed3df8a39d403bde1b4509fe7e1c464d1eb7415d1acc01ab64b26d7a11a6"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-005-step-03.png",
+      "bytes": 304574,
+      "sha256": "70d74b60da3b8eac691527897aa523c97f77058ff5c59f82dc49b026e17c6b81"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-006-first-step.png",
+      "bytes": 257804,
+      "sha256": "792d0164da84a1259bca70d2adf5453f1382a88fd28341ff64106bac98799691"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-006-help-reopened.png",
+      "bytes": 70988,
+      "sha256": "36823e65510998c6e7c1baf937b91577923ae5e847917ac06128e9881785ea5f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-006-help-step-01.png",
+      "bytes": 70988,
+      "sha256": "36823e65510998c6e7c1baf937b91577923ae5e847917ac06128e9881785ea5f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-006-private-help-step-01.png",
+      "bytes": 70988,
+      "sha256": "36823e65510998c6e7c1baf937b91577923ae5e847917ac06128e9881785ea5f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-006-step-02.png",
+      "bytes": 268195,
+      "sha256": "4c5790420bad9823d224a0e8282f6090d1684f404034020e6abe98f211e7bf15"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-game-006-step-03.png",
+      "bytes": 340998,
+      "sha256": "409f54bb383bd6ae57faad83bed5a90be98196f7dfeb9087794b741a43b27bc8"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-result.json",
+      "bytes": 381,
+      "sha256": "09804aaa28a7aeccf72f94be0d7ae51aa6032edf6b1b7c9cdffb0f710e04ce99"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-first-six-result.log",
+      "bytes": 24893,
+      "sha256": "84d028ade82fcd7679c69989d4b389d733216eba92ef27d46b53ee61b81fd15d"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-007-first-step.png",
+      "bytes": 178285,
+      "sha256": "4a5ac47301230c95475676b3f70f8621e989fef3c46618f7fbabda82380b7413"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-007-help-reopened.png",
+      "bytes": 34881,
+      "sha256": "99aadab3190d2cbad9502b4163da4d30ccba7ed21321b72399ba3873db4ff1f0"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-007-help-step-01.png",
+      "bytes": 34881,
+      "sha256": "99aadab3190d2cbad9502b4163da4d30ccba7ed21321b72399ba3873db4ff1f0"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-007-private-help-step-01.png",
+      "bytes": 34881,
+      "sha256": "99aadab3190d2cbad9502b4163da4d30ccba7ed21321b72399ba3873db4ff1f0"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-007-step-02.png",
+      "bytes": 179836,
+      "sha256": "a0ce1872bbb6f47abe17148d832e9f2af200a0689c7b7a39c633746d24b81ea2"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-007-step-03.png",
+      "bytes": 269975,
+      "sha256": "3747f24815ebad142b0fce439aab1fbd05ae789b7d388820c0f7fe0e0cf8986c"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-008-first-step.png",
+      "bytes": 240547,
+      "sha256": "686723521d773fd2223001d0675c6da1a64ca1ea431195a29daf49de0254bc1a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-008-help-reopened.png",
+      "bytes": 57674,
+      "sha256": "04a65e9172947f424d97794d9d70f1f6e98f459fe379fcecc703f17d27eca75a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-008-help-step-01.png",
+      "bytes": 57674,
+      "sha256": "04a65e9172947f424d97794d9d70f1f6e98f459fe379fcecc703f17d27eca75a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-008-private-help-step-01.png",
+      "bytes": 57674,
+      "sha256": "04a65e9172947f424d97794d9d70f1f6e98f459fe379fcecc703f17d27eca75a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-008-step-02.png",
+      "bytes": 242099,
+      "sha256": "38ee82f03197fde805ffbea08b6ac08cd0d3f8137a5c94f2c7d1dd3aee3ca0a5"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-008-step-03.png",
+      "bytes": 326232,
+      "sha256": "05c31722b3dbca9282691cf72a14284e0c7775ad512d6d8df9296d1cd1472b88"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-009-first-step.png",
+      "bytes": 243190,
+      "sha256": "96c077f5a2b04243b0bc876233f7327f364fb060374a7cc60a26e5c10b6f47fb"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-009-help-reopened.png",
+      "bytes": 67149,
+      "sha256": "b83e74ba27812d61aee5d5a7010b6ee5eb726d8e9c0c6e278aa5349a712f1758"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-009-help-step-01.png",
+      "bytes": 67149,
+      "sha256": "b83e74ba27812d61aee5d5a7010b6ee5eb726d8e9c0c6e278aa5349a712f1758"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-009-private-help-step-01.png",
+      "bytes": 67149,
+      "sha256": "b83e74ba27812d61aee5d5a7010b6ee5eb726d8e9c0c6e278aa5349a712f1758"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-009-step-02.png",
+      "bytes": 240724,
+      "sha256": "7143996eaa70ed2d2fb336ab296506916574ae04959f67bca25440513f71325c"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-009-step-03.png",
+      "bytes": 313678,
+      "sha256": "39d8ee5e72aec0a45156fbf9d513f1753969cc5326b87af52f2d303e3e06f5ed"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-010-first-step.png",
+      "bytes": 247302,
+      "sha256": "81889a38e1ef1029cd6a566ac24de6f79d21c9fb48d9693e85e9806d25485fe3"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-010-help-reopened.png",
+      "bytes": 68224,
+      "sha256": "ad32c7201c1b869ba64404007a932ed8aac25457baa3f552c90b3a2dda906722"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-010-help-step-01.png",
+      "bytes": 68224,
+      "sha256": "ad32c7201c1b869ba64404007a932ed8aac25457baa3f552c90b3a2dda906722"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-010-private-help-step-01.png",
+      "bytes": 68224,
+      "sha256": "ad32c7201c1b869ba64404007a932ed8aac25457baa3f552c90b3a2dda906722"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-010-step-02.png",
+      "bytes": 250946,
+      "sha256": "b1cbe5590d0315c41d66fcbd1a349eca71a2380d03358f16ba6d9e0ad9b2e2c6"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-010-step-03.png",
+      "bytes": 323078,
+      "sha256": "56d65d0761503fdf3ea1be4faa29cfefe0e49d52a0aeb011bcbb3c9475d06d7a"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-011-first-step.png",
+      "bytes": 239372,
+      "sha256": "18d16a6cf4fc017932628e672ebe03816480e98d21f75f7c859aa3f5a24d38f4"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-011-help-reopened.png",
+      "bytes": 71457,
+      "sha256": "46bda6f2ea06f83e2768fa800a18cbed0431234c1c25b5fac511398b847aa093"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-011-help-step-01.png",
+      "bytes": 71457,
+      "sha256": "46bda6f2ea06f83e2768fa800a18cbed0431234c1c25b5fac511398b847aa093"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-011-private-help-step-01.png",
+      "bytes": 71457,
+      "sha256": "46bda6f2ea06f83e2768fa800a18cbed0431234c1c25b5fac511398b847aa093"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-011-step-02.png",
+      "bytes": 239637,
+      "sha256": "fd4350d45632043704d35dea06963077908889acbff38e0de76f88184e5ec9c1"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-011-step-03.png",
+      "bytes": 312409,
+      "sha256": "4ad72a8842a39de53543ef2b3099814cd02ff125f2eac18b6fba2afc235f3329"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-012-first-step.png",
+      "bytes": 247416,
+      "sha256": "e4226823288831369a3d265b92be0c26548c9469007de9c03ad3cdcd568265b4"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-012-help-reopened.png",
+      "bytes": 95448,
+      "sha256": "dcb30eedd9fb10ca4f50cf3ee3d0e1db30a9fc0a1f6f4519823e644aea645acf"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-012-help-step-01.png",
+      "bytes": 95448,
+      "sha256": "dcb30eedd9fb10ca4f50cf3ee3d0e1db30a9fc0a1f6f4519823e644aea645acf"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-012-private-help-step-01.png",
+      "bytes": 95448,
+      "sha256": "dcb30eedd9fb10ca4f50cf3ee3d0e1db30a9fc0a1f6f4519823e644aea645acf"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-012-step-02.png",
+      "bytes": 247339,
+      "sha256": "53ad162a3d316a940f52a2db0417f274a88eef2b607273f278b139d81fd601fa"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-game-012-step-03.png",
+      "bytes": 294330,
+      "sha256": "e942da0bbcd731baf6a9407c4f8595634e270aa32a030297dfd17c338264d36f"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-result.json",
+      "bytes": 380,
+      "sha256": "4535c1baa26b7f9e6286c11ef1aeedf6b5e7d2257c8dfed80e5422d649d764bb"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-native-v6-last-six-result.log",
+      "bytes": 21289,
+      "sha256": "d1f43584ee4faccbca64916a64e952b16720ef86734f666c5623f05a50f25db8"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-recheck-pixel-tutorial-page-tests.log",
+      "bytes": 235,
+      "sha256": "a09a2f2e279be713abd7825bedacbff6c715d4bfc2965047409369edfcb46103"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-recheck-results.json",
+      "bytes": 249,
+      "sha256": "07cd3d0bcab2d8672a522726f7f85cc957ef0cec727627787834f76ecb128236"
+    },
+    {
+      "file": "MAIN-10-current-20261020-validation-recheck-tutorial-image-control-tests.log",
+      "bytes": 191,
+      "sha256": "519129471295d1472147aa2b83aa5b49de7d662da4c4a2e2f2e2ae04a34752e5"
+    }
+  ],
+  "native": [
+    {
+      "case": "park",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 32.57,
+      "passes": [
+        "PASS: park three-step native key/pointer help, all five copy fields through real page controls, blocked movement, screenshot zoom/Escape/focus, replay/close/reopen/skip and unchanged progression"
+      ],
+      "captures": 5
+    },
+    {
+      "case": "first-six",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 221.76,
+      "passes": [
+        "PASS: native tutorial lifecycle game-001",
+        "PASS: native tutorial lifecycle game-002",
+        "PASS: native tutorial lifecycle game-003",
+        "PASS: native tutorial lifecycle game-004",
+        "PASS: native tutorial lifecycle game-005",
+        "PASS: native tutorial lifecycle game-006"
+      ],
+      "captures": 36
+    },
+    {
+      "case": "last-six",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 194.64,
+      "passes": [
+        "PASS: native tutorial lifecycle game-007",
+        "PASS: native tutorial lifecycle game-008",
+        "PASS: native tutorial lifecycle game-009",
+        "PASS: native tutorial lifecycle game-010",
+        "PASS: native tutorial lifecycle game-011",
+        "PASS: native tutorial lifecycle game-012"
+      ],
+      "captures": 36
+    },
+    {
+      "case": "before-v2",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 31.64,
+      "passes": [
+        "PASS: native three-stage pause/help exact pixels and clocks, actual resume and original viewport policy; retained_expected=false"
+      ]
+    },
+    {
+      "case": "after-current",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 30.81,
+      "passes": [
+        "PASS: native three-stage pause/help exact pixels and clocks, actual resume and original viewport policy; retained_expected=true"
+      ]
+    }
+  ],
+  "source_images": 39,
+  "genuine_formal_results": 11,
+  "ui_images": 77,
+  "stage_equal_files": 1193,
+  "unaccepted_runs_preserved": true,
+  "limits": "No claims of final minigame polish, human listening, player approval or complete NPC animations."
+}

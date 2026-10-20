@@ -1,0 +1,14 @@
+{
+  "case": "first-six",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 221.76,
+  "passes": [
+    "PASS: native tutorial lifecycle game-001",
+    "PASS: native tutorial lifecycle game-002",
+    "PASS: native tutorial lifecycle game-003",
+    "PASS: native tutorial lifecycle game-004",
+    "PASS: native tutorial lifecycle game-005",
+    "PASS: native tutorial lifecycle game-006"
+  ]
+}
