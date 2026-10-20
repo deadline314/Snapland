@@ -1,0 +1,481 @@
+{
+  "base": "f61188c plus this ticket source edits identified by SHA-256",
+  "native_cases": [
+    {
+      "case": "pipe-accepted-controls",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 54.47,
+      "passes": [
+        "PASS: native SG pipe keyboard cursor/Space and pointer-only three-order routes, pause/resume, retry reset, reduced-motion flow payoff, and non-collecting practice"
+      ]
+    },
+    {
+      "case": "pipe-accepted-outcomes",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 183.71,
+      "passes": [
+        "PASS: native pipe natural 60-second partial timeout, complete-save safety, actual result retry and ordinary 23-turn 2540-point completion without devil award"
+      ]
+    }
+  ],
+  "native_images": 21,
+  "videos": {
+    "work/tutorial-current-20261020/pipe-accepted-controls/play.avi": {
+      "bytes": 29781734,
+      "sha256": "2b0071ecd79e1e42bd956816b3178d9a5affe53a7280528ad2a6297d5142b55c",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mjpeg",
+            "codec_type": "video",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "20/1",
+            "nb_frames": "294"
+          },
+          {
+            "codec_name": "pcm_s16le",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "nb_frames": "705600"
+          }
+        ],
+        "format": {
+          "duration": "14.700000"
+        }
+      },
+      "full_video_decode_exit": 0
+    },
+    "work/pipe-final-20261020/pipe-accepted-controls.mp4": {
+      "bytes": 1828404,
+      "sha256": "8b71808fd386a0db74bb63a66cccf1b5abe4a00d4a247e98af3898444210d337",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "20/1",
+            "nb_frames": "294"
+          }
+        ],
+        "format": {
+          "duration": "14.700000"
+        }
+      },
+      "full_video_decode_exit": 0
+    },
+    "work/tutorial-current-20261020/pipe-accepted-outcomes/play.avi": {
+      "bytes": 131528578,
+      "sha256": "51b7d2beb5615f6485f6d43f8a0d61a892540d8c1eb9ecfae0f589c4cdf5f269",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mjpeg",
+            "codec_type": "video",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "20/1",
+            "nb_frames": "1351"
+          },
+          {
+            "codec_name": "pcm_s16le",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "nb_frames": "3242400"
+          }
+        ],
+        "format": {
+          "duration": "67.550000"
+        }
+      },
+      "full_video_decode_exit": 0
+    },
+    "work/pipe-final-20261020/pipe-accepted-outcomes.mp4": {
+      "bytes": 1556018,
+      "sha256": "95cbdd3cd63cfd02eb2228726eb2bbe9748642071bc8f31b6691070f475c400d",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "20/1",
+            "nb_frames": "1351"
+          }
+        ],
+        "format": {
+          "duration": "67.550000"
+        }
+      },
+      "full_video_decode_exit": 0
+    }
+  },
+  "artifacts": [
+    {
+      "file": "SG-22-final-20261020-attempt-history.json",
+      "bytes": 1294,
+      "sha256": "ebeec7e56b688d3e0197853ccee52d9f31eaba56dac30f98f658bcf49cf26f15"
+    },
+    {
+      "file": "SG-22-final-20261020-before-pipe-current-controls-result.json",
+      "bytes": 274,
+      "sha256": "ff46af03c72fac8d08fff64c345173d77db05746efc1d0261d7c56eb7efdd126"
+    },
+    {
+      "file": "SG-22-final-20261020-before-pipe-current-controls-result.log",
+      "bytes": 23594,
+      "sha256": "7ec9af1e55e7eebe83f6ecd5b97b4946402725c46ea0c05f0dbedee5a4d94036"
+    },
+    {
+      "file": "SG-22-final-20261020-before-pipe-current-outcomes-result.json",
+      "bytes": 270,
+      "sha256": "80a18de18965987ab255a93988a6924ac98db362a63832231f201ee70de83bad"
+    },
+    {
+      "file": "SG-22-final-20261020-before-pipe-current-outcomes-result.log",
+      "bytes": 17855,
+      "sha256": "3650d70aebf508956b57ae3c4d5e6bcc36d1c43efe30ed34c5a58178f8e8b979"
+    },
+    {
+      "file": "SG-22-final-20261020-before-pipe-final-controls-result.json",
+      "bytes": 100,
+      "sha256": "0b6cb038bcb2509169ca4db4d8c9ad9e1c87d4ea20eddf0329240fa2dfa3778a"
+    },
+    {
+      "file": "SG-22-final-20261020-before-pipe-final-controls-result.log",
+      "bytes": 19410,
+      "sha256": "b01d186c3f14e60e844ae2aa074948dd70589a205cb7eea761e81283ffa582cd"
+    },
+    {
+      "file": "SG-22-final-20261020-before-two-row-paging.png",
+      "bytes": 362986,
+      "sha256": "95834bbad6516e57c17290977d13a82fdb45819c3d679cdf646d92c062682c5b"
+    },
+    {
+      "file": "SG-22-final-20261020-before-zero-points-display.png",
+      "bytes": 327995,
+      "sha256": "3c09baeb47fa654b3aa1aa42afad901cd01e1f9ac1f865916a4baa725fa1c2e6"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-final-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "c198e47bbe9fc1daf09e10f429c811d8633f4b5bc88922ca872f95f86baf934f"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-final-minigame-HUD-hierarchy-tests.log",
+      "bytes": 121,
+      "sha256": "fee9202ac3e546c127d5531b469e6f1b7448fef294ed4ae480c682d67596421b"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-final-pipe-plan-presentation-tests.log",
+      "bytes": 114,
+      "sha256": "e2a35c6a42c37cf2cac68ab385f9a43d6bccf87fb69756a786fd021a8071ab87"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-final-pipe-round-model-tests.log",
+      "bytes": 613,
+      "sha256": "166a2648fec0bff22c7b3206a69fab6bf9c8b07d388c38b15942f5411925dd24"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-final-pixel-UI-minigame-tests.log",
+      "bytes": 13937,
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-final-results.json",
+      "bytes": 613,
+      "sha256": "6f621a38b54a3252c73e7e7e764e8d8ec08771e79729365a7453ca281ad77df9"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-pipe-plan-presentation-tests.log",
+      "bytes": 114,
+      "sha256": "e2a35c6a42c37cf2cac68ab385f9a43d6bccf87fb69756a786fd021a8071ab87"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-pipe-round-model-tests.log",
+      "bytes": 613,
+      "sha256": "166a2648fec0bff22c7b3206a69fab6bf9c8b07d388c38b15942f5411925dd24"
+    },
+    {
+      "file": "SG-22-final-20261020-checks-results.json",
+      "bytes": 245,
+      "sha256": "1777742122ee6fc852aa1cb7ad2d8ad3f375e6be17202520b92b4e61b6afaf01"
+    },
+    {
+      "file": "SG-22-final-20261020-comparison-sources.json",
+      "bytes": 2638,
+      "sha256": "37275bea6e841a1c1ee84bf3c98512bf7c29a54a4bb72d307516a100f1f93749"
+    },
+    {
+      "file": "SG-22-final-20261020-overview-1.png",
+      "bytes": 231860,
+      "sha256": "60a9758f1163d34acfc354f836931a95ff892e9801aa3ff6092bb31ba58cf4ad"
+    },
+    {
+      "file": "SG-22-final-20261020-overview-2.png",
+      "bytes": 230511,
+      "sha256": "ead06dd36c75da1ba0aa79421a31c4c86c1921b2dcb9db16f3780523133a08a1"
+    },
+    {
+      "file": "SG-22-final-20261020-parse-detail.log",
+      "bytes": 756,
+      "sha256": "902c8f1ed5d47db4f1218c6fb3e91d03c5c935629be3c07f0cd6ad9c928c06e3"
+    },
+    {
+      "file": "SG-22-final-20261020-parse-fixed.log",
+      "bytes": 139,
+      "sha256": "19f1047b0f9d44c2c738e16d5e87b6bf4c57d2ee69378ebf8d13523c08fa0e28"
+    },
+    {
+      "file": "SG-22-final-20261020-parse-production.log",
+      "bytes": 151,
+      "sha256": "a798b5fd0466f8475e208bebafff32906f6db829dc35f58a51ae3bd48b3e81c6"
+    },
+    {
+      "file": "SG-22-final-20261020-parse.log",
+      "bytes": 791,
+      "sha256": "28ab3731c490376a4ef9b63bf86ade756c0495bd8a1f378676eaf211f5478f47"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-000-diversity-pipe-controls-keyboard-flow-1.png",
+      "bytes": 15703,
+      "sha256": "f9e7afad1d00df3cb507ced60a5ed44fe26f0741a40dbc0b00260b6b2f162a2f"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-000-natural-00-game-007-score-2620.png",
+      "bytes": 363941,
+      "sha256": "6d9491d44d5197a790d10c8c43012ab8886cc4cf9e3a9b2b827764b9a2108329"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-001-diversity-pipe-controls-retry-reset.png",
+      "bytes": 14849,
+      "sha256": "8346d9766609f44a33c43eca694b96692ab3b176dbd7b63a4643f6d4dbcceaef"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-001-natural-01-game-007-score-2620.png",
+      "bytes": 328346,
+      "sha256": "ccbd21fff778dce04e2290971d0f43ac1f572ca018089b5d3dcae0fb0b75f1d2"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-002-diversity-pipe-controls-keyboard-flow-1.png",
+      "bytes": 15703,
+      "sha256": "f9e7afad1d00df3cb507ced60a5ed44fe26f0741a40dbc0b00260b6b2f162a2f"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-003-diversity-pipe-controls-keyboard-flow-2.png",
+      "bytes": 16846,
+      "sha256": "aa9b78ac60e645f10e1b479407910f27f594b0c74e96b849446eba0898f2915e"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-004-diversity-pipe-controls-keyboard-flow-3.png",
+      "bytes": 17227,
+      "sha256": "aef5ee2b5da8f2912b8da1c07b169546067850f162f96d7ffe34abf40c21ef89"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-005-diversity-pipe-controls-pointer-reduced-flow-1.png",
+      "bytes": 16379,
+      "sha256": "0db35356c374436196366b6a3789f58f03e40a5dfc85055a2bf6f79a6d1dde7d"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-006-diversity-pipe-controls-pointer-reduced-flow-2.png",
+      "bytes": 17670,
+      "sha256": "61559a826f806c602339a75efcdda69a46d58668b4eb4cf8fa51e1adc943547e"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-007-diversity-pipe-controls-pointer-reduced-flow-3.png",
+      "bytes": 18321,
+      "sha256": "ac1e31a32a0f0730e5373c4874029df8cc5c27d2a1d297c87ac89df9a6b08414"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-008-diversity-pipe-controls-pointer-practice-result.png",
+      "bytes": 328251,
+      "sha256": "7e0ab31c623e2fdc63913e11e624cfd9e0f29af8e684aede7c8c9f41b3a2f99a"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-captures.jsonl",
+      "bytes": 490,
+      "sha256": "6f966dd44e8657880f1d20caffc8c46af63e1b6c65ae694620e0732055119469"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-final-provenance.json",
+      "bytes": 829,
+      "sha256": "5e71054db4eb37230f30b0624c2b89f4413cc681a20b1fbb914f99ac3009c50e"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-launched-source-sha256.json",
+      "bytes": 605,
+      "sha256": "16922bc46edb38bf1ac33866cd78512ddad862cca69993e48e460326199c9cca"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-natural-results.json",
+      "bytes": 2752,
+      "sha256": "f9830e9248b3ca4d2fc60c08139faf8780c0254c39c34830aa70e3c6e365f4c0"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-result.json",
+      "bytes": 275,
+      "sha256": "34d1fa4adeead09fef9a3c134d033a30b3a96a536822536701e83f8e48c5a26d"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-result.log",
+      "bytes": 23623,
+      "sha256": "620684bb9918f0bc9ef1b67e206af59faa8c01245841402fa1f1f5cd54d53b82"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls-source-provenance.json",
+      "bytes": 996,
+      "sha256": "5a1f33596eba556a30a7996c61ae65a2a178222b094027f8c5cf6adb4bbfdf2b"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-controls.mp4",
+      "bytes": 1828404,
+      "sha256": "8b71808fd386a0db74bb63a66cccf1b5abe4a00d4a247e98af3898444210d337"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-000-diversity-pipe-controls-keyboard-flow-1.png",
+      "bytes": 15703,
+      "sha256": "f9e7afad1d00df3cb507ced60a5ed44fe26f0741a40dbc0b00260b6b2f162a2f"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-000-natural-00-game-007-score-900.png",
+      "bytes": 329819,
+      "sha256": "ba370ac39262105717ff2a1b33976365390159279f7e79b952349dcab11f4e62"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-001-diversity-pipe-partial-before-timeout.png",
+      "bytes": 16329,
+      "sha256": "91cbe312d2f90f8a5e826963a8b8dd01e3dd664a41b5757d55095c9ecd29ff9e"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-001-natural-01-game-007-score-2540.png",
+      "bytes": 363821,
+      "sha256": "78ece04669e3416bd3d6274131e08824d0d3df5562b0dfaea907fbdbcb64bb4c"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-002-diversity-pipe-real-partial-timeout-result.png",
+      "bytes": 329654,
+      "sha256": "31e096b6202456fb1840f35bd06afc7dfb07ff4e0cd99d7942c3706106b6d90c"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-003-diversity-pipe-failure-retry-reset.png",
+      "bytes": 14849,
+      "sha256": "8346d9766609f44a33c43eca694b96692ab3b176dbd7b63a4643f6d4dbcceaef"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-004-diversity-pipe-ordinary-extra-turns-order-1.png",
+      "bytes": 15685,
+      "sha256": "72f7c518e83527f48c293ae3f15ef1e5b68e2421360bc04fe35a773f2981c234"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-005-diversity-pipe-ordinary-extra-turns-order-2.png",
+      "bytes": 16881,
+      "sha256": "1a2b449ca2f12efe888737498300540ae54562df0d7e87bac63b19d508b4d154"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-006-diversity-pipe-ordinary-extra-turns-order-3.png",
+      "bytes": 17251,
+      "sha256": "d468d3eae2f41dcc4ef1da3594c403fda1aa858204c59391819e48ddc5f70ff7"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-007-diversity-pipe-real-ordinary-result.png",
+      "bytes": 363821,
+      "sha256": "78ece04669e3416bd3d6274131e08824d0d3df5562b0dfaea907fbdbcb64bb4c"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-captures.jsonl",
+      "bytes": 490,
+      "sha256": "2425c27eb78c9103a5540a4dde60b07c893381d406e6f01c3b02b8a655a8e2ca"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-final-provenance.json",
+      "bytes": 935,
+      "sha256": "974728aade5b9fa4206d98204dfdf320222db751a62cfbf655cb782defeb9747"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-launched-source-sha256.json",
+      "bytes": 763,
+      "sha256": "91ffa1aa2947f1a939793c1344255715e9c0091b3e14e67228064d98a548e98c"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-natural-results.json",
+      "bytes": 2754,
+      "sha256": "43eb64bb7e5a5895fc0b38adc88714e6ae249c35b1def33e435ad4b68ff82c6a"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-outcomes.json",
+      "bytes": 3696,
+      "sha256": "cae5e5a8d3e87a556aca12f6f8ddda8c6f376bb83c058bd079653ac47f76e600"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-result.json",
+      "bytes": 271,
+      "sha256": "577ab4f12e811d1d4ce5617e3f5c59c70f3d6cdb14825324c06e462ef61b700c"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-result.log",
+      "bytes": 17881,
+      "sha256": "0fe01bd71346e5b1d9349ba9f6f1418cd6012a4551f622d613e65b519845c111"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes-source-provenance.json",
+      "bytes": 1233,
+      "sha256": "7436a79a89f459e20e725d7a106c7e3efd305ad4c02a95b6f5210a8bda0a93de"
+    },
+    {
+      "file": "SG-22-final-20261020-pipe-accepted-outcomes.mp4",
+      "bytes": 1556018,
+      "sha256": "95cbdd3cd63cfd02eb2228726eb2bbe9748642071bc8f31b6691070f475c400d"
+    },
+    {
+      "file": "SG-22-final-20261020-score-layout-checks-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "c198e47bbe9fc1daf09e10f429c811d8633f4b5bc88922ca872f95f86baf934f"
+    },
+    {
+      "file": "SG-22-final-20261020-score-layout-checks-pixel-UI-minigame-tests.log",
+      "bytes": 13937,
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039"
+    },
+    {
+      "file": "SG-22-final-20261020-score-layout-checks-pixel-UI-shell-tests.log",
+      "bytes": 18023,
+      "sha256": "8bb58a73e05e23b135e932bc26fb253b54837e3a52cea372d6d8973b98623549"
+    },
+    {
+      "file": "SG-22-final-20261020-score-layout-checks-results.json",
+      "bytes": 483,
+      "sha256": "25a2db9db018c80f79bb4d45f06d0387054b8bce21d0808ea3af2d0d369f76f8"
+    },
+    {
+      "file": "SG-22-final-20261020-score-layout-checks-welcome-minigame-tests.log",
+      "bytes": 14439,
+      "sha256": "adade6f86392869ec8d0692afde1ce1580e5d53657606ba2dde5f82d0a89ded0"
+    },
+    {
+      "file": "SG-22-final-20261020-sources.json",
+      "bytes": 477471,
+      "sha256": "42777b9707895d4f03dfff209ae578c56d9250b1f0d479730b3d9be4c3a943db"
+    },
+    {
+      "file": "SG-22-final-20261020-twelve-scene-comparison.png",
+      "bytes": 619198,
+      "sha256": "2a2c66c71c87144d41158f81b6426242014bc3735eaa048507e4464dca3184a9"
+    }
+  ],
+  "first_tutorial": "MAIN-10 current acceptance game-007, two-process 12-game proof at 53364e3; all game-007 tutorial assets unchanged in this ticket",
+  "scope": "two independent processes/profiles; returning-player tutorial state seeded in gameplay probes; original 60-second game timeout; 360-second outer bound; original 3/4-second model waits plus 90-second wall guards; no modified rules, time scale, scores or emitted results",
+  "review": "Native result stills, all contact sheets and the static 12-scene comparison viewed; videos fully decoded, not continuously watched; Dummy audio not heard. Existing normal/quarter-speed gameplay evidence remains separately dated in the ticket."
+}

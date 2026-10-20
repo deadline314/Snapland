@@ -34,7 +34,7 @@ func _run() -> void:
 	get_tree().quit(0)
 
 func _native_preflight(label: String) -> bool:
-	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty() or DisplayServer.get_name() == "headless":
+	if not OS.get_environment("SNAPLAND_SAVE_PATH").is_absolute_path() or DisplayServer.get_name() == "headless":
 		push_error(label + " requires a GPU and isolated SNAPLAND_SAVE_PATH")
 		get_tree().quit(1)
 		return false
@@ -62,9 +62,15 @@ func _remove() -> void:
 	await get_tree().process_frame
 	active = null
 
+var _evidence_serial := 0
 func _shot(label: String) -> void:
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()
 	assert(image != null and not image.is_empty())
-	assert(image.save_png(".review/diversity-" + label + ".png") == OK)
-	print("CAPTURE: " + label)
+	var folder := OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir().path_join("captures")
+	DirAccess.make_dir_recursive_absolute(folder)
+	var path := folder.path_join("%03d-diversity-%s.png" % [_evidence_serial,label])
+	_evidence_serial += 1
+	assert(not FileAccess.file_exists(path))
+	assert(image.save_png(path)==OK)
+	print("CAPTURE: "+label+" "+path)

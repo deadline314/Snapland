@@ -1,0 +1,30 @@
+[
+  {
+    "name": "welcome minigame tests",
+    "exit": 0,
+    "seconds": 79.13,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 25.23,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI shell tests",
+    "exit": 0,
+    "seconds": 54.83,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI minigame tests",
+    "exit": 0,
+    "seconds": 7.88,
+    "errors": 0,
+    "error": null
+  }
+]

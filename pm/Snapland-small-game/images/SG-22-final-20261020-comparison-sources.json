@@ -1,0 +1,77 @@
+{
+  "scope": "12 current MAIN-10 actual tutorial source stills; not 12 newly played games",
+  "sources": [
+    {
+      "id": "game-001",
+      "name": "氣球快遞",
+      "source": "assets/ui/tutorials/game-001-step-01.png",
+      "sha256": "08af82ae6f1c54e0f9acaf6a426d4162c63c31fb7ee2aa9aaca0af1ca866274b"
+    },
+    {
+      "id": "game-002",
+      "name": "風箏穿環",
+      "source": "assets/ui/tutorials/game-002-step-01.png",
+      "sha256": "a2d3f33eeee4328e0a6dd974d55ac65758ba74c1b9f88c0317f33ea43794f75d"
+    },
+    {
+      "id": "game-003",
+      "name": "噴泉跳拍",
+      "source": "assets/ui/tutorials/game-003-step-01.png",
+      "sha256": "a9a0fe89cc72858aab49a8cb89a20d6e5134c1faa9540dfab9a5cc84a10376aa"
+    },
+    {
+      "id": "game-004",
+      "name": "人潮指揮",
+      "source": "assets/ui/tutorials/game-004-step-01.png",
+      "sha256": "0c0ca3aa0e612933e10fce1282733c86a8142723c584f7668e8b526a85514b9a"
+    },
+    {
+      "id": "game-005",
+      "name": "帽子救援",
+      "source": "assets/ui/tutorials/game-005-step-01.png",
+      "sha256": "b43bff1585d96576b7a165d73e21066c9b7a291811d2e2c64b804574d3d48c84"
+    },
+    {
+      "id": "game-006",
+      "name": "彩帶節拍",
+      "source": "assets/ui/tutorials/game-006-step-01.png",
+      "sha256": "a341d3e22b0b5d07ecf8b11c2eb5bbd223684ea92db3ac83679cdaac9313b3c4"
+    },
+    {
+      "id": "game-007",
+      "name": "花壇水路",
+      "source": "assets/ui/tutorials/game-007-step-01.png",
+      "sha256": "f7c2b95fd013f1c61cdf56f82d33dfa14ec517305baef911481c17182db0c395"
+    },
+    {
+      "id": "game-008",
+      "name": "招牌平衡",
+      "source": "assets/ui/tutorials/game-008-step-01.png",
+      "sha256": "5aaf87b3cea8c491e76f85ba297e5c12353f83fad771b4c58ad475a2924cfb23"
+    },
+    {
+      "id": "game-009",
+      "name": "影子捉迷藏",
+      "source": "assets/ui/tutorials/game-009-step-01.png",
+      "sha256": "f57b641cc383e05eb35354b00be732fb8354b804a542b853d06fa33789bb7526"
+    },
+    {
+      "id": "game-010",
+      "name": "泡泡拍貼",
+      "source": "assets/ui/tutorials/game-010-step-01.png",
+      "sha256": "c3f30f0e867c174cedc62f6ddaa4688a120e1966da52a1749236655f5d6e2e06"
+    },
+    {
+      "id": "game-011",
+      "name": "長椅換位",
+      "source": "assets/ui/tutorials/game-011-step-01.png",
+      "sha256": "f4a5a193c50aa88bb0a7c8413864938013d6fb83a8326ddba9f0bb361dddfe33"
+    },
+    {
+      "id": "game-012",
+      "name": "迎賓大合奏",
+      "source": "assets/ui/tutorials/game-012-step-01.png",
+      "sha256": "fbcf2a4094b04f46be75dd1a3a110b9080391c1a0ebcf9bfcddfdc228693817d"
+    }
+  ]
+}

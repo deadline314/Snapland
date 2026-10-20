@@ -1,0 +1,154 @@
+[
+  {
+    "case": "partial-timeout",
+    "complete_save_unchanged": true,
+    "metrics": {
+      "assisted": false,
+      "completed_beds": 1,
+      "elapsed": 60.0499999999987,
+      "order_pars": [
+        4,
+        7,
+        8
+      ],
+      "order_turns": [
+        4,
+        1,
+        0
+      ],
+      "practice": false,
+      "score": 900,
+      "turns": 5
+    },
+    "result": {
+      "assisted": false,
+      "devil": false,
+      "game_id": "game-007",
+      "mistakes": 0,
+      "practice": false,
+      "score": 900,
+      "score_summary": {
+        "label": "路線轉動分",
+        "rows": [
+          {
+            "amount": 900,
+            "count": 2,
+            "key": "pipe_orders",
+            "label": "供水工單與轉動計分"
+          },
+          {
+            "amount": 0,
+            "count": 5,
+            "key": "move_progress",
+            "label": "總轉動（已計入得分）",
+            "progress_only": true
+          },
+          {
+            "amount": 0,
+            "count": 4,
+            "key": "pipe_order_0",
+            "label": "工單 1 · 目標 4 次 · 已供水",
+            "progress_only": true
+          },
+          {
+            "amount": 0,
+            "count": 1,
+            "key": "pipe_order_1",
+            "label": "工單 2 · 目標 7 次 · 未完成",
+            "progress_only": true
+          },
+          {
+            "amount": 0,
+            "count": 0,
+            "key": "pipe_order_2",
+            "label": "工單 3 · 目標 8 次 · 未完成",
+            "progress_only": true
+          }
+        ],
+        "rule": "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。",
+        "total": 900
+      },
+      "success": false
+    }
+  },
+  {
+    "case": "ordinary-extra-turns",
+    "metrics": {
+      "assisted": false,
+      "completed_beds": 3,
+      "elapsed": 5.94999999999999,
+      "order_pars": [
+        4,
+        7,
+        8
+      ],
+      "order_turns": [
+        8,
+        7,
+        8
+      ],
+      "practice": false,
+      "score": 2540,
+      "turns": 23
+    },
+    "result": {
+      "assisted": false,
+      "devil": false,
+      "game_id": "game-007",
+      "mistakes": 0,
+      "practice": false,
+      "score": 2540,
+      "score_summary": {
+        "label": "路線轉動分",
+        "rows": [
+          {
+            "amount": 2540,
+            "count": 18,
+            "key": "pipe_orders",
+            "label": "供水工單與轉動計分"
+          },
+          {
+            "amount": 0,
+            "count": 23,
+            "key": "move_progress",
+            "label": "總轉動（已計入得分）",
+            "progress_only": true
+          },
+          {
+            "amount": 0,
+            "count": 8,
+            "key": "pipe_order_0",
+            "label": "工單 1 · 目標 4 次 · 已供水",
+            "progress_only": true
+          },
+          {
+            "amount": 0,
+            "count": 7,
+            "key": "pipe_order_1",
+            "label": "工單 2 · 目標 7 次 · 已供水",
+            "progress_only": true
+          },
+          {
+            "amount": 0,
+            "count": 8,
+            "key": "pipe_order_2",
+            "label": "工單 3 · 目標 8 次 · 已供水",
+            "progress_only": true
+          }
+        ],
+        "rule": "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。",
+        "total": 2540
+      },
+      "success": true
+    },
+    "retry_at_input": {
+      "assisted": false,
+      "completed": 0,
+      "elapsed": 0.0,
+      "order": 0,
+      "practice": false,
+      "score": 0,
+      "turns": 0
+    }
+  }
+]

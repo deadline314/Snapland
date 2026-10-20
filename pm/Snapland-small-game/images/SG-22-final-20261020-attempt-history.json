@@ -1,0 +1,30 @@
+[
+  {
+    "case": "pipe-current-controls",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 50.35,
+    "passes": [
+      "PASS: native SG pipe keyboard cursor/Space and pointer-only three-order routes, pause/resume, retry reset, reduced-motion flow payoff, and non-collecting practice"
+    ],
+    "scope": "before final score presentation; first two passed gameplay but had the old insufficient result display; third failed because per-order rows remained behind hard-coded two-row paging"
+  },
+  {
+    "case": "pipe-current-outcomes",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 185.04,
+    "passes": [
+      "PASS: native pipe natural 60-second partial timeout, complete-save safety, actual result retry and ordinary 23-turn 2540-point completion without devil award"
+    ],
+    "scope": "before final score presentation; first two passed gameplay but had the old insufficient result display; third failed because per-order rows remained behind hard-coded two-row paging"
+  },
+  {
+    "case": "pipe-final-controls",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 35.02,
+    "passes": [],
+    "scope": "before final score presentation; first two passed gameplay but had the old insufficient result display; third failed because per-order rows remained behind hard-coded two-row paging"
+  }
+]

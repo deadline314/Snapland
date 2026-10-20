@@ -1,0 +1,9 @@
+{
+  "case": "pipe-accepted-controls",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 54.47,
+  "passes": [
+    "PASS: native SG pipe keyboard cursor/Space and pointer-only three-order routes, pause/resume, retry reset, reduced-motion flow payoff, and non-collecting practice"
+  ]
+}

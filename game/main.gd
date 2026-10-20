@@ -523,7 +523,7 @@ func _adapt_content_pagers(compact: bool) -> void:
 		var capacity := int(node.get_meta("page_capacity"))
 		var desired := capacity
 		if node.name=="TaskPages": desired=1 if compact else 2
-		elif node.name=="ResultScorePages": desired=1 if compact or Paper.text_scale()>1.1 else 2
+		elif node.name=="ResultScorePages": desired=1 if compact or Paper.text_scale()>1.1 else 5
 		if desired!=capacity:
 			var first := int(node.get_meta("page_index",0))*capacity
 			node.set_meta("page_capacity",desired)
@@ -1391,7 +1391,10 @@ func _render_rules_note(parent: VBoxContainer, note: Dictionary, index: int) -> 
 
 func _render_score_row(parent: VBoxContainer, row: Dictionary, index: int) -> void:
 	var text := str(row.get("label","得分"))
-	if not bool(row.get("empty",false)): text+="  ·  %d 分"%int(row.get("amount",0))
+	if bool(row.get("progress_only",false)):
+		text+="  ·  %d 次"%int(row.get("count",0))
+	elif not bool(row.get("empty",false)):
+		text+="  ·  %d 分"%int(row.get("amount",0))
 	var label := Paper.label(text,18)
 	label.name="ResultScoreRow%d"%index
 	parent.add_child(label)

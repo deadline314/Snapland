@@ -115,6 +115,12 @@ func _enter_station() -> bool:
 func _launch_from_station(action: String) -> bool:
 	if not await _require_live_main("_launch_from_station"): return false
 	var button := _find(main.overlay, action)
+	if button == null and action == "練習操作":
+		var options := _find(main.overlay, "玩法與選項")
+		if options == null or not await _native_click_button(options, "open pipe rules and practice options"):
+			await _fail("Pipe practice options could not be opened from the compact invite")
+			return false
+		button = _find(main.overlay, action)
 	if button == null or not await _native_click_button(button, "game-007 " + action):
 		await _fail("Station action did not start game-007: " + action)
 		return false
@@ -334,6 +340,8 @@ func _wait_for_result() -> bool:
 	return true
 
 func _assert_result(label: String, expect_assisted: bool, expect_practice: bool) -> bool:
+	await get_tree().process_frame
+	await get_tree().process_frame
 	if str(observed_result.get("game_id", "")) != "game-007" or not bool(observed_result.get("success", false)):
 		await _fail(label + " did not complete the actual game-007 objective: " + str(observed_result))
 		return false
@@ -359,6 +367,9 @@ func _assert_result(label: String, expect_assisted: bool, expect_practice: bool)
 		return false
 	if not observed_result.has("mistakes") or not (observed_result.get("score_summary", {}) is Dictionary) or not (observed_result.score_summary.get("rows", []) is Array):
 		await _fail(label + " result omitted the established mistakes/score-summary schema")
+		return false
+	if not _result_has_text("19 次") or not _result_has_text("工單 1") or not _result_has_text("目標 4 次"):
+		await _fail(label + " result did not display real turn counts and per-order precision targets")
 		return false
 	return true
 

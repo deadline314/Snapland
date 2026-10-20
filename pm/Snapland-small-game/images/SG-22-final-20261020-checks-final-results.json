@@ -1,0 +1,37 @@
+[
+  {
+    "name": "minigame HUD hierarchy tests",
+    "exit": 0,
+    "seconds": 0.54,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pipe round model tests",
+    "exit": 0,
+    "seconds": 0.25,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pipe plan presentation tests",
+    "exit": 0,
+    "seconds": 1.09,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 23.63,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI minigame tests",
+    "exit": 0,
+    "seconds": 6.39,
+    "errors": 0,
+    "error": null
+  }
+]

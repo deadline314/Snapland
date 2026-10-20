@@ -599,7 +599,12 @@ func score_summary() -> Dictionary:
 	if sum != score:
 		rows.append({"key": "score_adjustment", "label": "目前計分調整", "amount": score - sum, "count": 1})
 	if mode == "flower_pipes" or mode == "bench_swap":
-		rows.append({"key": "move_progress", "label": "操作步數（不計分）", "amount": 0, "count": move_count, "progress_only": true})
+		var move_label := "總轉動（已計入得分）" if mode == "flower_pipes" else "操作步數（不計分）"
+		rows.append({"key": "move_progress", "label": move_label, "amount": 0, "count": move_count, "progress_only": true})
+	if mode == "flower_pipes":
+		for index in pipe_model.orders.size():
+			var state := "已供水" if index < pipe_model.completed_beds else ("供水中" if index == pipe_model.order_index and pipe_model.connected else "未完成")
+			rows.append({"key": "pipe_order_%d" % index, "label": "工單 %d · 目標 %d 次 · %s" % [index + 1, int(pipe_model.orders[index].turn_par), state], "amount": 0, "count": int(pipe_model.order_turns[index]), "progress_only": true})
 	if mistakes > 0:
 		rows.append({"key": "mistakes", "label": "失誤（不計分）", "amount": 0, "count": mistakes, "progress_only": true})
 	if rows.is_empty():

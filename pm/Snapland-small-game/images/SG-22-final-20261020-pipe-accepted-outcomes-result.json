@@ -1,0 +1,9 @@
+{
+  "case": "pipe-accepted-outcomes",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 183.71,
+  "passes": [
+    "PASS: native pipe natural 60-second partial timeout, complete-save safety, actual result retry and ordinary 23-turn 2540-point completion without devil award"
+  ]
+}

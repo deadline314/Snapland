@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Used space character for indentation instead of tab as used before in the file.
+          at: GDScript::reload (res://work/tutorial-current-20261020/pipe-current-controls/native_pipe_orders_review.gd:67)
+          GDScript backtrace (most recent call first):
+              [0] _initialize (res://work/pipe-final-20261020/parse.gd:4)
+ERROR: Failed to load script "res://work/tutorial-current-20261020/pipe-current-controls/native_pipe_orders_review.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://work/pipe-final-20261020/parse.gd:4)

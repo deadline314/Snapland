@@ -1,0 +1,11 @@
+{
+  "base": "f61188c26ae2a5fd19014d8d407af63aeb02d6d1",
+  "scope": "actual Main and rules; returning-player tutorial state seeded; fixture relocation to station; all scoring/board/award/timer logic inherited unchanged",
+  "diagnostic_changes": "absolute exclusive screenshot routing and serial names; original 3/4-second model waits with separate 90-second wall bound; overall 360-second wall bound",
+  "private_source_sha256": {
+    "native_review.gd": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d",
+    "native_pipe_controls_review.gd": "636c906baa84360eb00198265c4d12873e738d39e2911fbbff6f2155340ef31c",
+    "review_driver.gd": "4f62e0122d5e89c7bf8212a09b75c9d50d87f0af5057aa7935f6ea2f9cc76c97",
+    "native_pipe_orders_review.gd": "d3b8737cd0d97ae492051222b69ee6b17bb42bf855788e9563d050bafc7f08a7"
+  }
+}

@@ -139,6 +139,12 @@ func _run() -> void:
 	var main := MainScript.new()
 	get_tree().root.add_child(main)
 	await _frames(3)
+	var breakdown := VBoxContainer.new()
+	main._render_score_row(breakdown,{"label":"操作步數（不計分）","amount":0,"count":23,"progress_only":true},0)
+	main._render_score_row(breakdown,{"label":"扣分","amount":-20,"count":1},1)
+	_check(breakdown.get_child(0).text.contains("23 次") and not breakdown.get_child(0).text.contains("0 分"),"result shows the actual non-scoring operation count rather than zero points")
+	_check(breakdown.get_child(1).text.contains("-20 分"),"point-bearing rows retain their signed score")
+	breakdown.free()
 	main._launch_game("game-001",false,true)
 	await _frames(6)
 	var live_hud := main.session.minigame_hud as Control if main.session != null else null

@@ -1,0 +1,23 @@
+{
+  "base": "f61188c26ae2a5fd19014d8d407af63aeb02d6d1",
+  "entry": "native_pipe_outcomes_review",
+  "changes": "Diagnostic dependency paths, private capture routing, Main subclass with read-only natural-result observer only; controls, assertions, thresholds and models unchanged",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_pipe_orders_review.gd": {
+      "source_sha256": "600d1232e7cfe6dbae9aa00245f8176f50b383468db4128406dd2c66a6bd3aa3",
+      "copy_sha256": "90d3914c200219a395edc2b0cf2e62e0d38dc7a1df50ca0a5c0a0fbf3b57c482"
+    },
+    "game/tests/native_pipe_controls_review.gd": {
+      "source_sha256": "d89228b424b7153db7f0ae29a2b51289057b41f95e186a9044a8ed5d6903151b",
+      "copy_sha256": "2899d5b8f17ea367bc143b5190b2d69a2781a8f44c8c716b33f4088c281f4132"
+    },
+    "game/tests/native_pipe_outcomes_review.gd": {
+      "source_sha256": "6ccc79ade71060e8e805585738df40d6b19eb4c33592cd87e01c7bf36f864081",
+      "copy_sha256": "56b3f8dedb7ed10e3747ff5ba8ccf71e6a9a7a3dbf9ae863c9feb8437359cf35"
+    }
+  }
+}
