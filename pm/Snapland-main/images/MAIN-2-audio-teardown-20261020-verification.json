@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "base": "6af27d0786db70f5c20265fb53db449f87315a41",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "remote_failure": {
+    "run": 39342800511,
+    "sha": "baceed6e37b73ee476692bffaf604f133b7fb8d3",
+    "passed_before_failure": 27,
+    "suite": "travel collection UI tests",
+    "error": "3 resources still in use at exit"
+  },
+  "before_local": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 5.28
+  },
+  "before_reproduced": false,
+  "after_local": [
+    {
+      "name": "tutorial seen progress tests",
+      "exit": 0,
+      "seconds": 5.09,
+      "error": null
+    },
+    {
+      "name": "travel collection UI tests",
+      "exit": 0,
+      "seconds": 5.28,
+      "error": null
+    },
+    {
+      "name": "coastal free play tests",
+      "exit": 0,
+      "seconds": 8.09,
+      "error": null
+    },
+    {
+      "name": "island game entry tests",
+      "exit": 0,
+      "seconds": 4.44,
+      "error": null
+    }
+  ],
+  "repeat_travel": [
+    {
+      "run": 0,
+      "exit": 0,
+      "error": null,
+      "seconds": 5.66
+    },
+    {
+      "run": 1,
+      "exit": 0,
+      "error": null,
+      "seconds": 5.66
+    }
+  ],
+  "method": "Four actual affected Godot suites and two additional independent-profile travel UI runs; exit0,0ERROR and official completion contracts. No input/award assertions removed, no stderr filtering, no selector or90/240s budget changes.",
+  "runtime_suites": 92,
+  "production_gameplay_changed": false,
+  "audio_driver": "Dummy",
+  "audio_listened": false,
+  "entire_remote_ci_passed": false,
+  "files": {
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-before-verbose.log": "2d9e97be0e91ca860fd7388c22154c8b7336ebb13cde91d40b9d6c733b6bf1fc",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-before-verbose.json": "525f47f07acbe51cdf9a8bdc07e7e6c6cd72276e159da7fa8580287241e0526a",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-ci-bace-excerpt.log": "8e8f7e7dda3fa4c010f8878112466f80a9db7e8cb6e10da4f29b6b7631df969b",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-repeat-0.log": "8aec8b18372eeadd31377bef0921bcb6e139bb556fe2aec83513485de8cf2507",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-repeat-1.log": "b11557ffbd8832e71cf89546d9535c5dc33c876db0c147cbbdef7ff84e080edd",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-repeats.json": "3eb16660f93ccb3414275088686179042efa553efbce96c93c03460239bca15c",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-tutorial-seen-progress-tests.log": "aec9bf269564d5e6900cf4d90f1bc6b9047d1949a894f91f3cf08af5a52acd88",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-travel-collection-UI-tests.log": "21b8dca2d7846cd26a49a5665c1ee38a1858415e608983ddd4bf257c6497d8ba",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-island-game-entry-tests.log": "2ac9a555bf940e7b009addd4b3c33ef63a6718374b60f5fcc6ed4d91352d970d",
+    "pm/Snapland-main/images/MAIN-2-audio-teardown-20261020-coastal-free-play-tests.log": "5d61f1bddc36e763763a0cc47f81331f352592910e00c54c52d32a7ec538649f"
+  }
+}

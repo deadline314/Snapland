@@ -79,7 +79,10 @@ func _run() -> void:
  _check(is_equal_approx(stopped,play.rotor.rotation.z) and play.streams[0].visible,"reduced motion keeps water's open state without ambient rotation")
  _check(before==FileAccess.get_file_as_string(OS.get_environment("SNAPLAND_SAVE_PATH")),"all free play preserves the complete save bytes")
  var ball_ref: WeakRef=weakref(play.ball)
- main.audio.shutdown();main.queue_free();await _frames(5)
+ main.world.set_process(false);main.world.set_physics_process(false)
+ main.audio.shutdown()
+ await create_timer(0.15).timeout
+ main.queue_free();await _frames(5)
  _check(ball_ref.get_ref()==null,"scene exit frees the body and its free-play owner")
  if failures.is_empty():print("PASS: coastal free play direction, physics, recall, bell, water, pause/focus/reduced-motion and unchanged save");quit(0)
  else:push_error(str(failures));quit(1)

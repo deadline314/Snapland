@@ -52,6 +52,7 @@ func _run() -> void:
 	_check(not progress.has_seen_tutorial("game-002"), "failed seen state remains absent after profile reload")
 	if is_instance_valid(main.get("audio")):
 		main.get("audio").call("shutdown")
+		await get_tree().create_timer(0.15).timeout
 	main.queue_free()
 	await get_tree().process_frame
 	DirAccess.remove_absolute(obstruction_path)

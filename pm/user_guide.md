@@ -124,6 +124,8 @@
 - 既有角色製作研究比較 Aseprite、Spine、Unity Sprite Swap、Godot AnimationTree、Motion Twin／Dead Cells、Universal LPC、Kenney 與 BrashMonkey；記錄可參閱[既有研究文件](https://github.com/deadline314/Snapland/blob/66c73f0fc41a2b39dbc358ddc5bbe177e4ae5849/design/runtime/character-animation-wardrobe.md)。這是過去閱讀紀錄，不是本次新增八方網路調研或影片試看。
 - 本指南三張圖是使用者先前提供／指認的原圖，本次重看後原樣保存；[來源與雜湊](Snapland-main/images/MAIN-20-reference-provenance.json)。沒有把文件整理算成新一輪遊戲試玩。
 
+- **測試退出要收束音訊**：釋放Main之前先停止自己的世界更新／音訊、清掉stream引用，沿用正式退出的0.15秒命令收束間隔，再等待deferred free；幾張無頭process frame不等於同樣時間。保持exit0、0ERROR、真完成行，不能濾掉退出錯誤；Dummy通過不代表試聽。[六來源與本輪界線](../design/runtime/test-audio-teardown.md)。
+
 - **桌面成品驗收**：編輯器＋PCK、release執行檔、Windows EXE與Linux成品分開記錄。先驗官方範本與來源雜湊；從乾淨成品資料夾啟動，不能借開發素材或繞過release的場景覆寫限制。用真入口、外部鍵鼠、正常退出及新程序重開核對原圖與存檔。各款獨立renderer的實際繪製，和共用圖集完整解析要分開留證；故意漏包的反例仍必須失敗。[流程與六來源](../design/runtime/desktop-release-acceptance.md)。
 
 ### 共通研究與製作流程

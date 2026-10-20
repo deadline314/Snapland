@@ -1,0 +1,452 @@
+WorkerThreadPool: 5 threads, 1 max low-priority.
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+SDL: Init OK!
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 2004498165
+EDITOR API HASH: 1696660745
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://game/core/localization.gd remapped: res://game/core/localization.gd
+Completed load for: 'res://game/core/localization.gd' remapped 'res://game/core/localization.gd' at thread -1
+Loading resource: res://game/core/progress.gd remapped: res://game/core/progress.gd
+Completed load for: 'res://game/core/progress.gd' remapped 'res://game/core/progress.gd' at thread -1
+Loading resource: res://game/core/steam_bridge.gd remapped: res://game/core/steam_bridge.gd
+Completed load for: 'res://game/core/steam_bridge.gd' remapped 'res://game/core/steam_bridge.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://game/tests/test_travel_book_ui.tscn remapped: res://game/tests/test_travel_book_ui.tscn
+Loading resource: res://game/tests/test_travel_book_ui.gd remapped: res://game/tests/test_travel_book_ui.gd
+Loading resource: res://game/main.tscn remapped: res://game/main.tscn
+Loading resource: res://game/main.gd remapped: res://game/main.gd
+Loading resource: res://game/world/water.gdshader remapped: res://game/world/water.gdshader
+Completed load for: 'res://game/world/water.gdshader' remapped 'res://game/world/water.gdshader' at thread -1
+Loading resource: res://game/world/stone.gdshader remapped: res://game/world/stone.gdshader
+Completed load for: 'res://game/world/stone.gdshader' remapped 'res://game/world/stone.gdshader' at thread -1
+Loading resource: res://game/world/wood.gdshader remapped: res://game/world/wood.gdshader
+Completed load for: 'res://game/world/wood.gdshader' remapped 'res://game/world/wood.gdshader' at thread -1
+Loading resource: res://game/world/grass.gdshader remapped: res://game/world/grass.gdshader
+Completed load for: 'res://game/world/grass.gdshader' remapped 'res://game/world/grass.gdshader' at thread -1
+Loading resource: res://game/world/living_sprite.gdshader remapped: res://game/world/living_sprite.gdshader
+Completed load for: 'res://game/world/living_sprite.gdshader' remapped 'res://game/world/living_sprite.gdshader' at thread -1
+Loading resource: res://game/world/coastal_material.gdshader remapped: res://game/world/coastal_material.gdshader
+Completed load for: 'res://game/world/coastal_material.gdshader' remapped 'res://game/world/coastal_material.gdshader' at thread -1
+Loading resource: res://game/world/occluder.gdshader remapped: res://game/world/occluder.gdshader
+Completed load for: 'res://game/world/occluder.gdshader' remapped 'res://game/world/occluder.gdshader' at thread -1
+Loading resource: res://assets/ui/pixel-controls/checked.svg remapped: res://assets/ui/pixel-controls/checked.svg
+Loading resource: res://.godot/imported/checked.svg-d1c5d5bf673c70e638ee0abaf9eefcff.ctex remapped: res://.godot/imported/checked.svg-d1c5d5bf673c70e638ee0abaf9eefcff.ctex
+Completed load for: 'res://assets/ui/pixel-controls/checked.svg' remapped 'res://assets/ui/pixel-controls/checked.svg' at thread -1
+Loading resource: res://assets/ui/pixel-controls/unchecked.svg remapped: res://assets/ui/pixel-controls/unchecked.svg
+Loading resource: res://.godot/imported/unchecked.svg-eed0186a02f5c9dcffa87199e861b3bd.ctex remapped: res://.godot/imported/unchecked.svg-eed0186a02f5c9dcffa87199e861b3bd.ctex
+Completed load for: 'res://assets/ui/pixel-controls/unchecked.svg' remapped 'res://assets/ui/pixel-controls/unchecked.svg' at thread -1
+Loading resource: res://assets/ui/pixel-controls/checked-disabled.svg remapped: res://assets/ui/pixel-controls/checked-disabled.svg
+Loading resource: res://.godot/imported/checked-disabled.svg-6c90c059f8e8b9c1a9e6c42cbc484050.ctex remapped: res://.godot/imported/checked-disabled.svg-6c90c059f8e8b9c1a9e6c42cbc484050.ctex
+Completed load for: 'res://assets/ui/pixel-controls/checked-disabled.svg' remapped 'res://assets/ui/pixel-controls/checked-disabled.svg' at thread -1
+Loading resource: res://assets/ui/pixel-controls/unchecked-disabled.svg remapped: res://assets/ui/pixel-controls/unchecked-disabled.svg
+Loading resource: res://.godot/imported/unchecked-disabled.svg-dd6ec7078e0b446517d5cf686356cb11.ctex remapped: res://.godot/imported/unchecked-disabled.svg-dd6ec7078e0b446517d5cf686356cb11.ctex
+Completed load for: 'res://assets/ui/pixel-controls/unchecked-disabled.svg' remapped 'res://assets/ui/pixel-controls/unchecked-disabled.svg' at thread -1
+Loading resource: res://assets/ui/pixel-controls/grabber.svg remapped: res://assets/ui/pixel-controls/grabber.svg
+Loading resource: res://.godot/imported/grabber.svg-89a8f4b7b22413b5706f0f7779bf67c3.ctex remapped: res://.godot/imported/grabber.svg-89a8f4b7b22413b5706f0f7779bf67c3.ctex
+Completed load for: 'res://assets/ui/pixel-controls/grabber.svg' remapped 'res://assets/ui/pixel-controls/grabber.svg' at thread -1
+Loading resource: res://assets/ui/pixel-controls/grabber-highlight.svg remapped: res://assets/ui/pixel-controls/grabber-highlight.svg
+Loading resource: res://.godot/imported/grabber-highlight.svg-fef146e6694f0c703532d5d82e08798a.ctex remapped: res://.godot/imported/grabber-highlight.svg-fef146e6694f0c703532d5d82e08798a.ctex
+Completed load for: 'res://assets/ui/pixel-controls/grabber-highlight.svg' remapped 'res://assets/ui/pixel-controls/grabber-highlight.svg' at thread -1
+Loading resource: res://assets/ui/pixel-controls/grabber-disabled.svg remapped: res://assets/ui/pixel-controls/grabber-disabled.svg
+Loading resource: res://.godot/imported/grabber-disabled.svg-99651330301cc77540f651712bb266f2.ctex remapped: res://.godot/imported/grabber-disabled.svg-99651330301cc77540f651712bb266f2.ctex
+Completed load for: 'res://assets/ui/pixel-controls/grabber-disabled.svg' remapped 'res://assets/ui/pixel-controls/grabber-disabled.svg' at thread -1
+Completed load for: 'res://game/main.gd' remapped 'res://game/main.gd' at thread -1
+Completed load for: 'res://game/main.tscn' remapped 'res://game/main.tscn' at thread -1
+Completed load for: 'res://game/tests/test_travel_book_ui.gd' remapped 'res://game/tests/test_travel_book_ui.gd' at thread -1
+Completed load for: 'res://game/tests/test_travel_book_ui.tscn' remapped 'res://game/tests/test_travel_book_ui.tscn' at thread -1
+PASS: Progress autoload exists
+Loading resource: res://assets/world/coastal-materials-v1.png remapped: res://assets/world/coastal-materials-v1.png
+Loading resource: res://.godot/imported/coastal-materials-v1.png-6112ca68f019dec1b839a82120b1e7f7.ctex remapped: res://.godot/imported/coastal-materials-v1.png-6112ca68f019dec1b839a82120b1e7f7.ctex
+Completed load for: 'res://assets/world/coastal-materials-v1.png' remapped 'res://assets/world/coastal-materials-v1.png' at thread -1
+Loading resource: res://assets/world/tidal-foliage-v2.png remapped: res://assets/world/tidal-foliage-v2.png
+Loading resource: res://.godot/imported/tidal-foliage-v2.png-611953257e2e6c5c8ea703fbcd0a6526.ctex remapped: res://.godot/imported/tidal-foliage-v2.png-611953257e2e6c5c8ea703fbcd0a6526.ctex
+Completed load for: 'res://assets/world/tidal-foliage-v2.png' remapped 'res://assets/world/tidal-foliage-v2.png' at thread -1
+Loading resource: res://assets/characters/identities-v3.png remapped: res://assets/characters/identities-v3.png
+Loading resource: res://.godot/imported/identities-v3.png-532fadbc3cdf98967c48dd4d13cb656e.ctex remapped: res://.godot/imported/identities-v3.png-532fadbc3cdf98967c48dd4d13cb656e.ctex
+Completed load for: 'res://assets/characters/identities-v3.png' remapped 'res://assets/characters/identities-v3.png' at thread -1
+Loading resource: res://assets/characters/npc-actions-v1.png remapped: res://assets/characters/npc-actions-v1.png
+Loading resource: res://.godot/imported/npc-actions-v1.png-a37c4687fcd454f76035d8a56101b69c.ctex remapped: res://.godot/imported/npc-actions-v1.png-a37c4687fcd454f76035d8a56101b69c.ctex
+Completed load for: 'res://assets/characters/npc-actions-v1.png' remapped 'res://assets/characters/npc-actions-v1.png' at thread -1
+Loading resource: res://assets/characters/traveller-actions-v1.png remapped: res://assets/characters/traveller-actions-v1.png
+Loading resource: res://.godot/imported/traveller-actions-v1.png-f16d3121650c2aeaa23207d5aed50677.ctex remapped: res://.godot/imported/traveller-actions-v1.png-f16d3121650c2aeaa23207d5aed50677.ctex
+Completed load for: 'res://assets/characters/traveller-actions-v1.png' remapped 'res://assets/characters/traveller-actions-v1.png' at thread -1
+Loading resource: res://assets/characters/traveller-walk-front-back-v2.png remapped: res://assets/characters/traveller-walk-front-back-v2.png
+Loading resource: res://.godot/imported/traveller-walk-front-back-v2.png-ae2c7d74e13486026706f79dd76c3be7.ctex remapped: res://.godot/imported/traveller-walk-front-back-v2.png-ae2c7d74e13486026706f79dd76c3be7.ctex
+Completed load for: 'res://assets/characters/traveller-walk-front-back-v2.png' remapped 'res://assets/characters/traveller-walk-front-back-v2.png' at thread -1
+Loading resource: res://assets/characters/traveller-walk-front-diagonal-v2.png remapped: res://assets/characters/traveller-walk-front-diagonal-v2.png
+Loading resource: res://.godot/imported/traveller-walk-front-diagonal-v2.png-f7ef6669dc0303a7b90a2d2bbcc2b9a0.ctex remapped: res://.godot/imported/traveller-walk-front-diagonal-v2.png-f7ef6669dc0303a7b90a2d2bbcc2b9a0.ctex
+Completed load for: 'res://assets/characters/traveller-walk-front-diagonal-v2.png' remapped 'res://assets/characters/traveller-walk-front-diagonal-v2.png' at thread -1
+Loading resource: res://assets/characters/traveller-walk-sides-v2.png remapped: res://assets/characters/traveller-walk-sides-v2.png
+Loading resource: res://.godot/imported/traveller-walk-sides-v2.png-2713ffe278ff8e4d2c2113701ea9efc3.ctex remapped: res://.godot/imported/traveller-walk-sides-v2.png-2713ffe278ff8e4d2c2113701ea9efc3.ctex
+Completed load for: 'res://assets/characters/traveller-walk-sides-v2.png' remapped 'res://assets/characters/traveller-walk-sides-v2.png' at thread -1
+Loading resource: res://assets/characters/traveller-walk-back-diagonal-v2.png remapped: res://assets/characters/traveller-walk-back-diagonal-v2.png
+Loading resource: res://.godot/imported/traveller-walk-back-diagonal-v2.png-e5b35ace32f1bd3d58e45f091fe2d6b2.ctex remapped: res://.godot/imported/traveller-walk-back-diagonal-v2.png-e5b35ace32f1bd3d58e45f091fe2d6b2.ctex
+Completed load for: 'res://assets/characters/traveller-walk-back-diagonal-v2.png' remapped 'res://assets/characters/traveller-walk-back-diagonal-v2.png' at thread -1
+Loading resource: res://assets/characters/hats-v1.png remapped: res://assets/characters/hats-v1.png
+Loading resource: res://.godot/imported/hats-v1.png-b84c78dee29cbe58150193c96764aa41.ctex remapped: res://.godot/imported/hats-v1.png-b84c78dee29cbe58150193c96764aa41.ctex
+Completed load for: 'res://assets/characters/hats-v1.png' remapped 'res://assets/characters/hats-v1.png' at thread -1
+Loading resource: res://assets/characters/hair-v1.png remapped: res://assets/characters/hair-v1.png
+Loading resource: res://.godot/imported/hair-v1.png-2f4cb6f61699e7ca0f5f7698e555e462.ctex remapped: res://.godot/imported/hair-v1.png-2f4cb6f61699e7ca0f5f7698e555e462.ctex
+Completed load for: 'res://assets/characters/hair-v1.png' remapped 'res://assets/characters/hair-v1.png' at thread -1
+Loading resource: res://assets/characters/hair-diagonal-v1.png remapped: res://assets/characters/hair-diagonal-v1.png
+Loading resource: res://.godot/imported/hair-diagonal-v1.png-f97ec58b7fb91a112244fe8a09e5be06.ctex remapped: res://.godot/imported/hair-diagonal-v1.png-f97ec58b7fb91a112244fe8a09e5be06.ctex
+Completed load for: 'res://assets/characters/hair-diagonal-v1.png' remapped 'res://assets/characters/hair-diagonal-v1.png' at thread -1
+Loading resource: res://assets/characters/hats-diagonal-v1.png remapped: res://assets/characters/hats-diagonal-v1.png
+Loading resource: res://.godot/imported/hats-diagonal-v1.png-01f0ec187cb8cdac8def26fa4a52adf6.ctex remapped: res://.godot/imported/hats-diagonal-v1.png-01f0ec187cb8cdac8def26fa4a52adf6.ctex
+Completed load for: 'res://assets/characters/hats-diagonal-v1.png' remapped 'res://assets/characters/hats-diagonal-v1.png' at thread -1
+Loading resource: res://assets/characters/species-parts-v1.png remapped: res://assets/characters/species-parts-v1.png
+Loading resource: res://.godot/imported/species-parts-v1.png-c1b91fa7c1701a142aa9b88912c7a8c6.ctex remapped: res://.godot/imported/species-parts-v1.png-c1b91fa7c1701a142aa9b88912c7a8c6.ctex
+Completed load for: 'res://assets/characters/species-parts-v1.png' remapped 'res://assets/characters/species-parts-v1.png' at thread -1
+Loading resource: res://assets/characters/idle-stability-v1/front.png remapped: res://assets/characters/idle-stability-v1/front.png
+Loading resource: res://.godot/imported/front.png-5deb2fe22c541c788c9922326b7b6595.ctex remapped: res://.godot/imported/front.png-5deb2fe22c541c788c9922326b7b6595.ctex
+Completed load for: 'res://assets/characters/idle-stability-v1/front.png' remapped 'res://assets/characters/idle-stability-v1/front.png' at thread -1
+Loading resource: res://assets/characters/walk-stability-v1/island-raw-front.png remapped: res://assets/characters/walk-stability-v1/island-raw-front.png
+Loading resource: res://.godot/imported/island-raw-front.png-29699c8b47bfad891b86f1626e723373.ctex remapped: res://.godot/imported/island-raw-front.png-29699c8b47bfad891b86f1626e723373.ctex
+Completed load for: 'res://assets/characters/walk-stability-v1/island-raw-front.png' remapped 'res://assets/characters/walk-stability-v1/island-raw-front.png' at thread -1
+Loading resource: res://assets/characters/ticket-front-actions-v2.png remapped: res://assets/characters/ticket-front-actions-v2.png
+Loading resource: res://.godot/imported/ticket-front-actions-v2.png-f28ede3f9253304f47fdec06ab52dd42.ctex remapped: res://.godot/imported/ticket-front-actions-v2.png-f28ede3f9253304f47fdec06ab52dd42.ctex
+Completed load for: 'res://assets/characters/ticket-front-actions-v2.png' remapped 'res://assets/characters/ticket-front-actions-v2.png' at thread -1
+Loading resource: res://assets/characters/imp-front-actions-v2.png remapped: res://assets/characters/imp-front-actions-v2.png
+Loading resource: res://.godot/imported/imp-front-actions-v2.png-2495c8954ab43bfb77d4b1a6462c3fb2.ctex remapped: res://.godot/imported/imp-front-actions-v2.png-2495c8954ab43bfb77d4b1a6462c3fb2.ctex
+Completed load for: 'res://assets/characters/imp-front-actions-v2.png' remapped 'res://assets/characters/imp-front-actions-v2.png' at thread -1
+Loading resource: res://assets/characters/announcer-front-actions-v2.png remapped: res://assets/characters/announcer-front-actions-v2.png
+Loading resource: res://.godot/imported/announcer-front-actions-v2.png-d6014a806cb77a22bd5c2c299fbe8b00.ctex remapped: res://.godot/imported/announcer-front-actions-v2.png-d6014a806cb77a22bd5c2c299fbe8b00.ctex
+Completed load for: 'res://assets/characters/announcer-front-actions-v2.png' remapped 'res://assets/characters/announcer-front-actions-v2.png' at thread -1
+Loading resource: res://assets/characters/announcer-walk-sides-v2.png remapped: res://assets/characters/announcer-walk-sides-v2.png
+Loading resource: res://.godot/imported/announcer-walk-sides-v2.png-120f5fa0848a8cee2f045bfa72395e54.ctex remapped: res://.godot/imported/announcer-walk-sides-v2.png-120f5fa0848a8cee2f045bfa72395e54.ctex
+Completed load for: 'res://assets/characters/announcer-walk-sides-v2.png' remapped 'res://assets/characters/announcer-walk-sides-v2.png' at thread -1
+Loading resource: res://assets/characters/walk-stability-v1/announcer-walk-right.png remapped: res://assets/characters/walk-stability-v1/announcer-walk-right.png
+Loading resource: res://.godot/imported/announcer-walk-right.png-1aebd5523ca511dcd8a7289aaca813de.ctex remapped: res://.godot/imported/announcer-walk-right.png-1aebd5523ca511dcd8a7289aaca813de.ctex
+Completed load for: 'res://assets/characters/walk-stability-v1/announcer-walk-right.png' remapped 'res://assets/characters/walk-stability-v1/announcer-walk-right.png' at thread -1
+Loading resource: res://assets/characters/walk-stability-v1/announcer-walk-left.png remapped: res://assets/characters/walk-stability-v1/announcer-walk-left.png
+Loading resource: res://.godot/imported/announcer-walk-left.png-de02ec48d1aa30347caabdef923a27a7.ctex remapped: res://.godot/imported/announcer-walk-left.png-de02ec48d1aa30347caabdef923a27a7.ctex
+Completed load for: 'res://assets/characters/walk-stability-v1/announcer-walk-left.png' remapped 'res://assets/characters/walk-stability-v1/announcer-walk-left.png' at thread -1
+[park_world] scenery meshes: 1135, nodes: 2024
+Loading resource: res://assets/audio/note_0.wav remapped: res://assets/audio/note_0.wav
+Loading resource: res://.godot/imported/note_0.wav-683750d3bb1eddb1366061e2a174f1e3.sample remapped: res://.godot/imported/note_0.wav-683750d3bb1eddb1366061e2a174f1e3.sample
+Completed load for: 'res://assets/audio/note_0.wav' remapped 'res://assets/audio/note_0.wav' at thread -1
+Loading resource: res://assets/audio/note_1.wav remapped: res://assets/audio/note_1.wav
+Loading resource: res://.godot/imported/note_1.wav-e25be2ffdce9f5d8dbce44b56f01e490.sample remapped: res://.godot/imported/note_1.wav-e25be2ffdce9f5d8dbce44b56f01e490.sample
+Completed load for: 'res://assets/audio/note_1.wav' remapped 'res://assets/audio/note_1.wav' at thread -1
+Loading resource: res://assets/audio/note_2.wav remapped: res://assets/audio/note_2.wav
+Loading resource: res://.godot/imported/note_2.wav-ed858d171dfb2674c06e42eb57201541.sample remapped: res://.godot/imported/note_2.wav-ed858d171dfb2674c06e42eb57201541.sample
+Completed load for: 'res://assets/audio/note_2.wav' remapped 'res://assets/audio/note_2.wav' at thread -1
+Loading resource: res://assets/audio/note_3.wav remapped: res://assets/audio/note_3.wav
+Loading resource: res://.godot/imported/note_3.wav-e6d8d994920ce19268f82a4e28a0a484.sample remapped: res://.godot/imported/note_3.wav-e6d8d994920ce19268f82a4e28a0a484.sample
+Completed load for: 'res://assets/audio/note_3.wav' remapped 'res://assets/audio/note_3.wav' at thread -1
+Loading resource: res://assets/fonts/pixel/fusion-pixel-12px-proportional-zh_tw.otf remapped: res://assets/fonts/pixel/fusion-pixel-12px-proportional-zh_tw.otf
+Loading resource: res://.godot/imported/fusion-pixel-12px-proportional-zh_tw.otf-8321d284ba1287346cdf0859dc4d4c00.fontdata remapped: res://.godot/imported/fusion-pixel-12px-proportional-zh_tw.otf-8321d284ba1287346cdf0859dc4d4c00.fontdata
+Completed load for: 'res://assets/fonts/pixel/fusion-pixel-12px-proportional-zh_tw.otf' remapped 'res://assets/fonts/pixel/fusion-pixel-12px-proportional-zh_tw.otf' at thread -1
+Loading resource: res://assets/fonts/NotoSansCJKtc-Regular.otf remapped: res://assets/fonts/NotoSansCJKtc-Regular.otf
+Loading resource: res://.godot/imported/NotoSansCJKtc-Regular.otf-b1ff3682adaddc3e8eb8868b4babb0ef.fontdata remapped: res://.godot/imported/NotoSansCJKtc-Regular.otf-b1ff3682adaddc3e8eb8868b4babb0ef.fontdata
+Completed load for: 'res://assets/fonts/NotoSansCJKtc-Regular.otf' remapped 'res://assets/fonts/NotoSansCJKtc-Regular.otf' at thread -1
+Loading resource: res://assets/fonts/NotoSansArabic.ttf remapped: res://assets/fonts/NotoSansArabic.ttf
+Loading resource: res://.godot/imported/NotoSansArabic.ttf-8252d6f8f52729edbe389f806fc22a98.fontdata remapped: res://.godot/imported/NotoSansArabic.ttf-8252d6f8f52729edbe389f806fc22a98.fontdata
+Completed load for: 'res://assets/fonts/NotoSansArabic.ttf' remapped 'res://assets/fonts/NotoSansArabic.ttf' at thread -1
+Loading resource: res://assets/fonts/NotoSansSymbols2.ttf remapped: res://assets/fonts/NotoSansSymbols2.ttf
+Loading resource: res://.godot/imported/NotoSansSymbols2.ttf-e21ca4eeb369da14057f4f5767bca9bd.fontdata remapped: res://.godot/imported/NotoSansSymbols2.ttf-e21ca4eeb369da14057f4f5767bca9bd.fontdata
+Completed load for: 'res://assets/fonts/NotoSansSymbols2.ttf' remapped 'res://assets/fonts/NotoSansSymbols2.ttf' at thread -1
+Loading resource: res://assets/audio/cc0/harbor.ogg remapped: res://assets/audio/cc0/harbor.ogg
+Loading resource: res://.godot/imported/harbor.ogg-f7e9a31f4400d0473faff942701ffe56.oggvorbisstr remapped: res://.godot/imported/harbor.ogg-f7e9a31f4400d0473faff942701ffe56.oggvorbisstr
+Completed load for: 'res://assets/audio/cc0/harbor.ogg' remapped 'res://assets/audio/cc0/harbor.ogg' at thread -1
+Loading resource: res://assets/audio/plaza_ambience.wav remapped: res://assets/audio/plaza_ambience.wav
+Loading resource: res://.godot/imported/plaza_ambience.wav-8dfd5a70d0fd85caaaa85a26e2675caf.sample remapped: res://.godot/imported/plaza_ambience.wav-8dfd5a70d0fd85caaaa85a26e2675caf.sample
+Completed load for: 'res://assets/audio/plaza_ambience.wav' remapped 'res://assets/audio/plaza_ambience.wav' at thread -1
+Loading resource: res://game/ui/collection_book_panel.gd remapped: res://game/ui/collection_book_panel.gd
+Completed load for: 'res://game/ui/collection_book_panel.gd' remapped 'res://game/ui/collection_book_panel.gd' at thread -1
+PASS: a new collection shows an explicit first-photo state
+Loading resource: res://game/ui/island_map_panel.gd remapped: res://game/ui/island_map_panel.gd
+Completed load for: 'res://game/ui/island_map_panel.gd' remapped 'res://game/ui/island_map_panel.gd' at thread -1
+PASS: map opens through the existing ticket callback
+PASS: map labels the sea-wind harbor hub
+PASS: map exposes all twelve real welcome-game stations
+PASS: map exposes the other nine park entrances
+PASS: map has a readable destination details panel
+PASS: tested book/map control is visible and keyboard focusable
+PASS: harbor detail explains its actual threshold and unavailable state
+PASS: selecting a map destination does not teleport the avatar
+PASS: tested book/map control is visible and keyboard focusable
+PASS: station detail shows the real game goal and instructions
+PASS: map harbor and station hit targets stay disjoint at 800x600
+PASS: map future gates retain eight pixels of shadow padding at 800x600
+PASS: map station hit targets never overlap at 800x600
+PASS: map stations and entrances stay visible, keyboard focusable, at least 44px and inside the island chart at 800x600
+PASS: map harbor and station hit targets stay disjoint at 1280x720
+PASS: map future gates retain eight pixels of shadow padding at 1280x720
+PASS: map station hit targets never overlap at 1280x720
+PASS: map stations and entrances stay visible, keyboard focusable, at least 44px and inside the island chart at 1280x720
+PASS: book keeps all eighteen ordinary photo IDs in its actual paged grid
+PASS: four album cards keep at least 232×200px, 16:9 photos, and readable captions
+PASS: the ordinary collection shows one four-photo row at wide physical widths
+PASS: wide album keeps four complete cards, category/detail/page controls inside the book paper and actual Scroll clip
+ALBUM_FRAME_PHYSICAL (257.0, 132.0)
+PASS: earned ordinary photos rise first without changing their stable catalog IDs
+PASS: a saved readable photo appears as its real thumbnail
+PASS: real photos expand into the full saved-photo frame while preserving aspect ratio
+ALBUM_SAVED_IMAGE_PHYSICAL (220.4444, 124.0)
+PASS: album texture uses a complete centered 16:9 image at 220×124 minimum without crop or distortion
+PASS: an unreadable saved image falls back to an honest labeled print frame
+PASS: tested book/map control is visible and keyboard focusable
+PASS: all ordinary IDs remain browsable across five four-slot pages
+PASS: tested book/map control is visible and keyboard focusable
+PASS: tested book/map control is visible and keyboard focusable
+PASS: devil album page uses the twelve existing devil photo IDs
+PASS: changing to the devil category clears the previous ordinary-photo detail
+PASS: locked devil print explains its real special condition
+PASS: tested book/map control is visible and keyboard focusable
+PASS: book page control advances to the next four devil prints
+PASS: tested book/map control is visible and keyboard focusable
+PASS: time book shows four canonical TimeOfDay postcard IDs
+PASS: time postcard retains the canonical dawn photo ID
+PASS: changing to the time category clears the previous devil-photo detail
+Loading resource: res://game/ui/achievement_stamp_book.gd remapped: res://game/ui/achievement_stamp_book.gd
+Completed load for: 'res://game/ui/achievement_stamp_book.gd' remapped 'res://game/ui/achievement_stamp_book.gd' at thread -1
+PASS: achievement page contains twelve stable minigame stamp IDs
+PASS: full-size stamp rows fill available width with 200–300px cards and readable two-line captions
+PASS: earned achievement is shown as a stamped record
+PASS: achievement page groups four island milestones after game stamps
+PASS: all-devil milestone states its unchanged 120-card requirement
+PASS: saved reduce-motion preference reaches the paper UI hook
+PASS: reduced motion skips optional UI transitions
+PASS: normal motion preference preserves requested short duration
+PASS: all visible HUD rectangles including empty toast and quest fit at 1280px
+PASS: all visible HUD rectangles including empty toast and quest fit at physical800px
+PASS: small physical HUD keeps stats and voyage ticket inside viewport and apart
+PASS: small physical HUD preserves 44px ticket and readable island heading
+PASS: small-window validation uses actual 0.625 viewport transform
+PASS: bounded modal with scrolling content fits actual 800px window: tasks
+PASS: physical menu targets remain at least 44px: tasks
+PASS: bounded modal with scrolling content fits actual 800px window: map
+PASS: physical menu targets remain at least 44px: map
+PASS: bounded modal with scrolling content fits actual 800px window: album
+PASS: small album keeps all three category tabs reachable at the top of its scroll region
+ALBUM_SMALL_FRAME_PHYSICAL (335.625, 132.5)
+PASS: small album initially shows a complete two-card first row with full-size photos, captions, and status
+PASS: small album scroll reaches a fully visible second row and complete page navigation without hiding category navigation
+PASS: physical menu targets remain at least 44px: album
+PASS: bounded modal with scrolling content fits actual 800px window: achievements
+PASS: small stamp rows fill available width with readable captions and at most two lines
+PASS: physical menu targets remain at least 44px: achievements
+PASS: compact invitation and every visible control fit actual 800px window
+PASS: physical menu targets remain at least 44px: game_info
+PASS: travel map, paged collection book, achievement stamps, and reduce-motion hook
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+Orphan StringName: 阿浪ActivityRoot (static: 0, total: 2)
+Orphan StringName: position (static: 0, total: 3)
+StringName: 2 unclaimed string names at exit.
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@754; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@752; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@750; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@748; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@836; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1323)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@904; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@897; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@891; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@885; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@879; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@957; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@955; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1008; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1007; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1006; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 32x18 at '/workspace/work/Snapland-character/work/audio-teardown-20261020/before/album-test-frame.png' (expected 320x180); decoder was not called.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:388)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _ready (res://game/ui/collection_book_panel.gd:146)
+         [5] _show_album (res://game/main.gd:1366)
+         [6] _test_album (res://game/tests/test_travel_book_ui.gd:110)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:37)
+         [8] _test_map (res://game/tests/test_travel_book_ui.gd:107)
+         [9] _frames (res://game/tests/test_travel_book_ui.gd:371)
+WARNING: Photo 'photo-welcome-game-2' screenshot cannot be opened: '/workspace/work/Snapland-character/work/audio-teardown-20261020/before/album-test-frame.png.missing'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _ready (res://game/ui/collection_book_panel.gd:146)
+         [5] _show_album (res://game/main.gd:1366)
+         [6] _test_album (res://game/tests/test_travel_book_ui.gd:110)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:37)
+         [8] _test_map (res://game/tests/test_travel_book_ui.gd:107)
+         [9] _frames (res://game/tests/test_travel_book_ui.gd:371)
+WARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 32x18 at '/workspace/work/Snapland-character/work/audio-teardown-20261020/before/album-test-frame.png' (expected 320x180); decoder was not called.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:388)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _ready (res://game/ui/collection_book_panel.gd:146)
+         [5] _show_album (res://game/main.gd:1366)
+         [6] _test_small_physical_menus (res://game/tests/test_travel_book_ui.gd:256)
+         [7] _frames (res://game/tests/test_travel_book_ui.gd:371)
+WARNING: Photo 'photo-welcome-game-2' screenshot cannot be opened: '/workspace/work/Snapland-character/work/audio-teardown-20261020/before/album-test-frame.png.missing'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _ready (res://game/ui/collection_book_panel.gd:146)
+         [5] _show_album (res://game/main.gd:1366)
+         [6] _test_small_physical_menus (res://game/tests/test_travel_book_ui.gd:256)
+         [7] _frames (res://game/tests/test_travel_book_ui.gd:371)

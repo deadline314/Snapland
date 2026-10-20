@@ -385,6 +385,8 @@ func _finish() -> void:
 		_main.audio.shutdown()
 		_main.world.set_process(false)
 		_main.world.set_physics_process(false)
+		# Match normal quit: let the audio server consume stop commands first.
+		await get_tree().create_timer(0.15).timeout
 		_main.queue_free()
 	for _frame in 3:
 		await get_tree().process_frame

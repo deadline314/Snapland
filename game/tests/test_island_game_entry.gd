@@ -130,6 +130,10 @@ func _run() -> void:
 				if not await _cancel_live_session(main, "assist"):
 					failures.append("Assisted session must be leaveable through its pause and confirmation controls")
 			_check_no_awards("assisted cancel")
+	main.world.set_process(false)
+	main.world.set_physics_process(false)
+	main.audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
 	main.queue_free()
 	# Let the main scene, tutorial textures, and both cancelled HUD overlays finish
 	# their deferred frees before this isolated fixture asks Godot to tear down.

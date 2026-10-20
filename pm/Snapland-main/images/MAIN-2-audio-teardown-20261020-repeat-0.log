@@ -1,0 +1,285 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: Progress autoload exists
+[park_world] scenery meshes: 1135, nodes: 2024
+PASS: a new collection shows an explicit first-photo state
+PASS: map opens through the existing ticket callback
+PASS: map labels the sea-wind harbor hub
+PASS: map exposes all twelve real welcome-game stations
+PASS: map exposes the other nine park entrances
+PASS: map has a readable destination details panel
+PASS: tested book/map control is visible and keyboard focusable
+PASS: harbor detail explains its actual threshold and unavailable state
+PASS: selecting a map destination does not teleport the avatar
+PASS: tested book/map control is visible and keyboard focusable
+PASS: station detail shows the real game goal and instructions
+PASS: map harbor and station hit targets stay disjoint at 800x600
+PASS: map future gates retain eight pixels of shadow padding at 800x600
+PASS: map station hit targets never overlap at 800x600
+PASS: map stations and entrances stay visible, keyboard focusable, at least 44px and inside the island chart at 800x600
+PASS: map harbor and station hit targets stay disjoint at 1280x720
+PASS: map future gates retain eight pixels of shadow padding at 1280x720
+PASS: map station hit targets never overlap at 1280x720
+PASS: map stations and entrances stay visible, keyboard focusable, at least 44px and inside the island chart at 1280x720
+PASS: book keeps all eighteen ordinary photo IDs in its actual paged grid
+PASS: four album cards keep at least 232×200px, 16:9 photos, and readable captions
+PASS: the ordinary collection shows one four-photo row at wide physical widths
+PASS: wide album keeps four complete cards, category/detail/page controls inside the book paper and actual Scroll clip
+ALBUM_FRAME_PHYSICAL (257.0, 132.0)
+PASS: earned ordinary photos rise first without changing their stable catalog IDs
+PASS: a saved readable photo appears as its real thumbnail
+PASS: real photos expand into the full saved-photo frame while preserving aspect ratio
+ALBUM_SAVED_IMAGE_PHYSICAL (220.4444, 124.0)
+PASS: album texture uses a complete centered 16:9 image at 220×124 minimum without crop or distortion
+PASS: an unreadable saved image falls back to an honest labeled print frame
+PASS: tested book/map control is visible and keyboard focusable
+PASS: all ordinary IDs remain browsable across five four-slot pages
+PASS: tested book/map control is visible and keyboard focusable
+PASS: tested book/map control is visible and keyboard focusable
+PASS: devil album page uses the twelve existing devil photo IDs
+PASS: changing to the devil category clears the previous ordinary-photo detail
+PASS: locked devil print explains its real special condition
+PASS: tested book/map control is visible and keyboard focusable
+PASS: book page control advances to the next four devil prints
+PASS: tested book/map control is visible and keyboard focusable
+PASS: time book shows four canonical TimeOfDay postcard IDs
+PASS: time postcard retains the canonical dawn photo ID
+PASS: changing to the time category clears the previous devil-photo detail
+PASS: achievement page contains twelve stable minigame stamp IDs
+PASS: full-size stamp rows fill available width with 200–300px cards and readable two-line captions
+PASS: earned achievement is shown as a stamped record
+PASS: achievement page groups four island milestones after game stamps
+PASS: all-devil milestone states its unchanged 120-card requirement
+PASS: saved reduce-motion preference reaches the paper UI hook
+PASS: reduced motion skips optional UI transitions
+PASS: normal motion preference preserves requested short duration
+PASS: all visible HUD rectangles including empty toast and quest fit at 1280px
+PASS: all visible HUD rectangles including empty toast and quest fit at physical800px
+PASS: small physical HUD keeps stats and voyage ticket inside viewport and apart
+PASS: small physical HUD preserves 44px ticket and readable island heading
+PASS: small-window validation uses actual 0.625 viewport transform
+PASS: bounded modal with scrolling content fits actual 800px window: tasks
+PASS: physical menu targets remain at least 44px: tasks
+PASS: bounded modal with scrolling content fits actual 800px window: map
+PASS: physical menu targets remain at least 44px: map
+PASS: bounded modal with scrolling content fits actual 800px window: album
+PASS: small album keeps all three category tabs reachable at the top of its scroll region
+ALBUM_SMALL_FRAME_PHYSICAL (335.625, 132.5)
+PASS: small album initially shows a complete two-card first row with full-size photos, captions, and status
+PASS: small album scroll reaches a fully visible second row and complete page navigation without hiding category navigation
+PASS: physical menu targets remain at least 44px: album
+PASS: bounded modal with scrolling content fits actual 800px window: achievements
+PASS: small stamp rows fill available width with readable captions and at most two lines
+PASS: physical menu targets remain at least 44px: achievements
+PASS: compact invitation and every visible control fit actual 800px window
+PASS: physical menu targets remain at least 44px: game_info
+PASS: travel map, paged collection book, achievement stamps, and reduce-motion hook
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@754; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@752; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@750; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@748; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@836; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1323)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@904; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@897; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@891; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@885; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@879; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@957; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@955; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1008; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1007; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1006; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:33)
+WARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 32x18 at '/workspace/work/Snapland-character/work/audio-teardown-20261020/repeat-0/album-test-frame.png' (expected 320x180); decoder was not called.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:388)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _ready (res://game/ui/collection_book_panel.gd:146)
+         [5] _show_album (res://game/main.gd:1366)
+         [6] _test_album (res://game/tests/test_travel_book_ui.gd:110)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:37)
+         [8] _test_map (res://game/tests/test_travel_book_ui.gd:107)
+         [9] _frames (res://game/tests/test_travel_book_ui.gd:371)
+WARNING: Photo 'photo-welcome-game-2' screenshot cannot be opened: '/workspace/work/Snapland-character/work/audio-teardown-20261020/repeat-0/album-test-frame.png.missing'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _ready (res://game/ui/collection_book_panel.gd:146)
+         [5] _show_album (res://game/main.gd:1366)
+         [6] _test_album (res://game/tests/test_travel_book_ui.gd:110)
+         [7] _run (res://game/tests/test_travel_book_ui.gd:37)
+         [8] _test_map (res://game/tests/test_travel_book_ui.gd:107)
+         [9] _frames (res://game/tests/test_travel_book_ui.gd:371)
+WARNING: Photo 'photo-welcome-game-1' screenshot has unexpected IHDR dimensions 32x18 at '/workspace/work/Snapland-character/work/audio-teardown-20261020/repeat-0/album-test-frame.png' (expected 320x180); decoder was not called.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:388)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _ready (res://game/ui/collection_book_panel.gd:146)
+         [5] _show_album (res://game/main.gd:1366)
+         [6] _test_small_physical_menus (res://game/tests/test_travel_book_ui.gd:256)
+         [7] _frames (res://game/tests/test_travel_book_ui.gd:371)
+WARNING: Photo 'photo-welcome-game-2' screenshot cannot be opened: '/workspace/work/Snapland-character/work/audio-teardown-20261020/repeat-0/album-test-frame.png.missing'.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_game_photo_image (res://game/core/progress.gd:368)
+         [1] _saved_texture (res://game/ui/collection_book_panel.gd:552)
+         [2] _photo_tile (res://game/ui/collection_book_panel.gd:409)
+         [3] _refresh_book (res://game/ui/collection_book_panel.gd:224)
+         [4] _ready (res://game/ui/collection_book_panel.gd:146)
+         [5] _show_album (res://game/main.gd:1366)
+         [6] _test_small_physical_menus (res://game/tests/test_travel_book_ui.gd:256)
+         [7] _frames (res://game/tests/test_travel_book_ui.gd:371)
