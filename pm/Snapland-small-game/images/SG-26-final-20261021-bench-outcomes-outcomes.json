@@ -1,0 +1,295 @@
+{
+  "incomplete_complete_save_unchanged": true,
+  "result": {
+    "assisted": false,
+    "devil": false,
+    "game_id": "game-011",
+    "mistakes": 0,
+    "practice": false,
+    "score": 700,
+    "score_summary": {
+      "label": "換位分",
+      "rows": [
+        {
+          "amount": 225,
+          "count": 1,
+          "key": "bench_table_1",
+          "label": "第 1 桌 · 最少 1 次 · 實際 3 次"
+        },
+        {
+          "amount": 250,
+          "count": 1,
+          "key": "bench_table_2",
+          "label": "第 2 桌 · 最少 2 次 · 實際 2 次"
+        },
+        {
+          "amount": 225,
+          "count": 1,
+          "key": "bench_table_3",
+          "label": "第 3 桌 · 最少 3 次 · 實際 3 次"
+        },
+        {
+          "amount": 0,
+          "count": 11,
+          "key": "move_progress",
+          "label": "總交換（含重排）",
+          "progress_only": true
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "bench_restarts",
+          "label": "額度用完重排",
+          "progress_only": true
+        }
+      ],
+      "rule": "每桌 300 分 − 交換次數 × 25；三桌完成得普通拍貼。三桌皆最少交換、未輔助且未重排才得小惡魔拍貼。",
+      "total": 700
+    },
+    "success": true
+  },
+  "result_retry_at_input": {
+    "elapsed": 0.0,
+    "ledger_size": 0,
+    "level": 0,
+    "moves": 0,
+    "score": 0
+  },
+  "session_id": 181680478700,
+  "snapshot": {
+    "assisted": false,
+    "devil": false,
+    "elapsed": 3.5,
+    "finished": true,
+    "guests": [
+      "小燈",
+      "海星",
+      "貝殼",
+      "小帆",
+      "螃蟹",
+      "水母"
+    ],
+    "hint_pair": [],
+    "last_event": "三桌朋友都重逢了",
+    "ledger": [
+      {
+        "from": 0,
+        "level": 0,
+        "moves": 1,
+        "optimal_moves": 1,
+        "order": [
+          2,
+          1,
+          0,
+          3,
+          4,
+          5
+        ],
+        "solved": false,
+        "to": 2,
+        "valid": true
+      },
+      {
+        "from": 0,
+        "level": 0,
+        "moves": 2,
+        "optimal_moves": 1,
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "solved": false,
+        "to": 2,
+        "valid": true
+      },
+      {
+        "from": 0,
+        "level": 0,
+        "moves": 3,
+        "optimal_moves": 1,
+        "order": [
+          2,
+          1,
+          0,
+          3,
+          4,
+          5
+        ],
+        "solved": false,
+        "to": 2,
+        "valid": true
+      },
+      {
+        "from": 0,
+        "level": 0,
+        "moves": 1,
+        "optimal_moves": 1,
+        "order": [
+          2,
+          1,
+          0,
+          3,
+          4,
+          5
+        ],
+        "solved": false,
+        "to": 2,
+        "valid": true
+      },
+      {
+        "from": 0,
+        "level": 0,
+        "moves": 2,
+        "optimal_moves": 1,
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "solved": false,
+        "to": 2,
+        "valid": true
+      },
+      {
+        "from": 0,
+        "level": 0,
+        "moves": 3,
+        "optimal_moves": 1,
+        "order": [
+          5,
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        "points": 225,
+        "solved": true,
+        "to": 5,
+        "valid": true
+      },
+      {
+        "from": 0,
+        "level": 1,
+        "moves": 1,
+        "optimal_moves": 2,
+        "order": [
+          3,
+          1,
+          2,
+          0,
+          5,
+          4
+        ],
+        "solved": false,
+        "to": 3,
+        "valid": true
+      },
+      {
+        "from": 3,
+        "level": 1,
+        "moves": 2,
+        "optimal_moves": 2,
+        "order": [
+          3,
+          1,
+          2,
+          4,
+          5,
+          0
+        ],
+        "points": 250,
+        "solved": true,
+        "to": 5,
+        "valid": true
+      },
+      {
+        "from": 0,
+        "level": 2,
+        "moves": 1,
+        "optimal_moves": 3,
+        "order": [
+          2,
+          1,
+          0,
+          3,
+          4,
+          5
+        ],
+        "solved": false,
+        "to": 2,
+        "valid": true
+      },
+      {
+        "from": 2,
+        "level": 2,
+        "moves": 2,
+        "optimal_moves": 3,
+        "order": [
+          2,
+          1,
+          3,
+          0,
+          4,
+          5
+        ],
+        "solved": false,
+        "to": 3,
+        "valid": true
+      },
+      {
+        "from": 3,
+        "level": 2,
+        "moves": 3,
+        "optimal_moves": 3,
+        "order": [
+          2,
+          1,
+          3,
+          5,
+          4,
+          0
+        ],
+        "points": 225,
+        "solved": true,
+        "to": 5,
+        "valid": true
+      }
+    ],
+    "level": 2,
+    "level_name": "長椅邀約",
+    "levels": 3,
+    "move_budget": 0,
+    "moves": 3,
+    "moving_guest_from": 0,
+    "moving_guest_to": 5,
+    "optimal_moves": 3,
+    "revision": 83,
+    "rule_text": "三桌完成",
+    "rules": [],
+    "score": 700,
+    "seats": [
+      2,
+      1,
+      3,
+      5,
+      4,
+      0
+    ],
+    "selected_seat": -1,
+    "success": true,
+    "swap_from": -1,
+    "swap_progress": 1.0,
+    "swap_to": -1,
+    "time_phase": "noon",
+    "timed_out": false,
+    "total_score": 700
+  }
+}

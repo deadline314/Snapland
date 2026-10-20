@@ -1,0 +1,14 @@
+{
+  "base": "8899e2a45ca3cf87d39cdff963b6c9ec7ac2c6b0",
+  "diagnostic_changes": "dependency paths and private Main screenshot observer only; returning-player tutorial fixture and station relocation; no gameplay thresholds or clocks changed",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_bench_swap_review.gd": {
+      "source_sha256": "842cba82bb8076370aaeb7d32ba12451b58efab973f4e1ee87e668a472cc1b97",
+      "copy_sha256": "177b52997450b11d5db0c079c05b195c33ca3d7569dc917a9b3180db4e38f923"
+    }
+  }
+}

@@ -92,6 +92,8 @@ func _launch_bench() -> bool:
 	deadline = Time.get_ticks_msec() + 3000
 	while main.modal_kind != "game_info" and Time.get_ticks_msec() < deadline: await get_tree().process_frame
 	if main.modal_kind != "game_info": await _fail("Real E input did not open the BenchSwap station menu"); return false
+	if _find(main.overlay,"開始遊玩") == null:
+		if not await _activate_main_button("玩法與選項", "open BenchSwap options"): return false
 	if not await _activate_main_button("開始遊玩", "launch BenchSwap through its station menu"): return false
 	deadline = Time.get_ticks_msec() + 3000
 	while main.session == null and Time.get_ticks_msec() < deadline: await get_tree().process_frame

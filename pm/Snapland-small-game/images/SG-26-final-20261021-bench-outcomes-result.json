@@ -1,0 +1,9 @@
+{
+  "case": "bench-outcomes",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 27.53,
+  "passes": [
+    "PASS: native bench wrong-budget recovery, unchanged nonempty complete save, genuine 11-swap 700-point ordinary route and synchronous result retry reset"
+  ]
+}

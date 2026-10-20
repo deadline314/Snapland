@@ -1,0 +1,288 @@
+{
+  "ticket": "SG-26",
+  "date": "2026-10-21 Asia/Taipei",
+  "runtime": "Godot 4.7.2 official, Compatibility, llvmpipe, 1280x720, Dummy audio",
+  "evidence_limits": "Actual input-driven native runs. Movies fully decoded; still captures viewed, not continuous playback or audio listening. Returning-player tutorial fixture and station relocation in controls/outcomes; separate new-player tutorial lifecycle. Original source and diagnostic copies in archive. No model scoring, clock or award injection.",
+  "files": [
+    {
+      "file": "SG-26-final-20261021-bench-controls-000-native-bench-swap-gameplay.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/000-native-bench-swap-gameplay.png",
+      "sha256": "435d9601c747da3c424a2339d62423f838e39a344316be40ee62ae2539e5c50c"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-001-native-bench-swap-formal-retry.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/001-native-bench-swap-formal-retry.png",
+      "sha256": "435d9601c747da3c424a2339d62423f838e39a344316be40ee62ae2539e5c50c"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-002-native-bench-swap-formal-table-1.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/002-native-bench-swap-formal-table-1.png",
+      "sha256": "435d9601c747da3c424a2339d62423f838e39a344316be40ee62ae2539e5c50c"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-003-native-bench-swap-formal-table-2.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/003-native-bench-swap-formal-table-2.png",
+      "sha256": "57e72d598d5d8dfd5923e5ff6e667b0e8ec68355d317cbf1ec95941c90f9d0fe"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-004-native-bench-swap-formal-table-3.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/004-native-bench-swap-formal-table-3.png",
+      "sha256": "75cfe5be761062db70cbfc4b002eb1a601e834789c5344b4ae84a712df3e374a"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-005-natural-00-game-011-score-750.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/005-natural-00-game-011-score-750.png",
+      "sha256": "3e71ba1007dd2d381fbdd72534ce0c8673728a92ae0b8abd4599277e6488ba0f"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-006-native-bench-swap-result.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/006-native-bench-swap-result.png",
+      "sha256": "3e71ba1007dd2d381fbdd72534ce0c8673728a92ae0b8abd4599277e6488ba0f"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-007-native-bench-swap-gameplay.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/007-native-bench-swap-gameplay.png",
+      "sha256": "7eafb27c00184b35f1ac74238120c7973441857f949f1c732117ed045064c11c"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-008-native-bench-swap-private-retry.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/008-native-bench-swap-private-retry.png",
+      "sha256": "1884ba401976f17ccf1d7842bc926ac30e9e641f7dc0c30e0f4f731c0d0f01fe"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-009-native-bench-swap-private-table-1.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/009-native-bench-swap-private-table-1.png",
+      "sha256": "1884ba401976f17ccf1d7842bc926ac30e9e641f7dc0c30e0f4f731c0d0f01fe"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-010-native-bench-swap-private-table-2.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/010-native-bench-swap-private-table-2.png",
+      "sha256": "b5e25a05539f32b9544324983a7b630c5e3f70baa5f99a8f638567e38c7256a9"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-011-native-bench-swap-private-table-3.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/011-native-bench-swap-private-table-3.png",
+      "sha256": "e154e9e6af19a246be2ac2ad24e54b19a220e34f12ba66b0e1e3749f41ca8ae0"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-012-natural-01-game-011-score-750.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/012-natural-01-game-011-score-750.png",
+      "sha256": "d93a8ad1b98704acc884bfa696d91e4c81d0382d3947f3570f293463e7e36f8d"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-013-native-bench-swap-private-result.png",
+      "source": "work/puzzle-batch-20261020/bench-controls/captures/013-native-bench-swap-private-result.png",
+      "sha256": "d93a8ad1b98704acc884bfa696d91e4c81d0382d3947f3570f293463e7e36f8d"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-result.log",
+      "source": "work/puzzle-batch-20261020/bench-controls/result.log",
+      "sha256": "0e13b50bb955190d8b18808fffae06fbd53c8d00ef8865f55e478f34d5fd68cc"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-result.json",
+      "source": "work/puzzle-batch-20261020/bench-controls/result.json",
+      "sha256": "483b31f2a29e265f6a06104012d6ff512a7ecaaac743fcccd9e68d7c67b3ed74"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-source-provenance.json",
+      "source": "work/puzzle-batch-20261020/bench-controls/source-provenance.json",
+      "sha256": "a0cd7da00af10cc9f73bce815b872c9c64fe05c07b82d6713a5d792725bbd110"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-natural-results.json",
+      "source": "work/puzzle-batch-20261020/bench-controls/natural-results.json",
+      "sha256": "9ea9885574901dd2f3794c33798673b590e901a4d130f48ab2d358ee16531146"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-video-metadata.json",
+      "source": "work/puzzle-batch-20261020/bench-controls/video-metadata.json",
+      "sha256": "9b473ae85a00d4fde3f5e2b51b270b2e62ccb3a11f68f848b9ad324906faad89"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-controls-play.mp4",
+      "source": "work/puzzle-batch-20261020/bench-controls/play.mp4",
+      "sha256": "1b8811c55e033d95f5e2bbc2c40b3158ea1635fc2e065d69ae51ccbc14dd6e68"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-000-native-bench-swap-gameplay.png",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/captures/000-native-bench-swap-gameplay.png",
+      "sha256": "435d9601c747da3c424a2339d62423f838e39a344316be40ee62ae2539e5c50c"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-001-bench-real-budget-recovery.png",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/captures/001-bench-real-budget-recovery.png",
+      "sha256": "6d0164d3a6e581f20cced390943fbd75565d99174395ede66415b6a12be46a95"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-002-natural-00-game-011-score-700.png",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/captures/002-natural-00-game-011-score-700.png",
+      "sha256": "871b833dee3f196010436a2554d7276402dc2b0299f3bc31bd14b5a82996b497"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-003-bench-real-ordinary-700.png",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/captures/003-bench-real-ordinary-700.png",
+      "sha256": "513f321dfe55c96648863e4992f4339ded86e0ba42881ed3ce82fbab7a9f5c1c"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-004-bench-result-retry-reset.png",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/captures/004-bench-result-retry-reset.png",
+      "sha256": "435d9601c747da3c424a2339d62423f838e39a344316be40ee62ae2539e5c50c"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-result.log",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/result.log",
+      "sha256": "e5b8a746ec76d39e92f1b9f4b3d052fb3b44e9334dd8aab7733d44aeb13e4e20"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-result.json",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/result.json",
+      "sha256": "f2c97ffc56b7274719c9dbe8eaaf3f6886d43eeb37f1b51327fb7b2d9cceb178"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-source-provenance.json",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/source-provenance.json",
+      "sha256": "fea8eb428efac6e2ce8e4684d572bf5cb8dcd986d34fd97fbdc3d362fd76827b"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-natural-results.json",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/natural-results.json",
+      "sha256": "71ebc4f55bd4082ac2e9f91c2901a7044e932c8d0ef3660cdef98922558dce5e"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-outcomes.json",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/outcomes.json",
+      "sha256": "74495232351e0e6054e8c4ff98511218b018fad66d1ab88e1614f41c95f16a87"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-video-metadata.json",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/video-metadata.json",
+      "sha256": "97dbc34bf0756474ba17ab41c2edd5499dfd8cf79f51cbd1a90bca7ec3e78040"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-outcomes-play.mp4",
+      "source": "work/puzzle-batch-20261020/bench-outcomes/play.mp4",
+      "sha256": "f42bbfca42e774026c95adae9e8e98043fcf246c8d9fcb707ff56f228d66d3c9"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-game-011-first-step.png",
+      "source": "work/puzzle-batch-20261020/bench-lesson/captures/game-011-first-step.png",
+      "sha256": "d0b3a03e958833522348f10853d8141dfe1622cce93507c4f8b0e50c1e6c19ca"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-game-011-help-reopened.png",
+      "source": "work/puzzle-batch-20261020/bench-lesson/captures/game-011-help-reopened.png",
+      "sha256": "46bda6f2ea06f83e2768fa800a18cbed0431234c1c25b5fac511398b847aa093"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-game-011-help-step-01.png",
+      "source": "work/puzzle-batch-20261020/bench-lesson/captures/game-011-help-step-01.png",
+      "sha256": "46bda6f2ea06f83e2768fa800a18cbed0431234c1c25b5fac511398b847aa093"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-game-011-private-help-step-01.png",
+      "source": "work/puzzle-batch-20261020/bench-lesson/captures/game-011-private-help-step-01.png",
+      "sha256": "46bda6f2ea06f83e2768fa800a18cbed0431234c1c25b5fac511398b847aa093"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-game-011-step-02.png",
+      "source": "work/puzzle-batch-20261020/bench-lesson/captures/game-011-step-02.png",
+      "sha256": "5fd64b34ea8427526ade85b4b1f121eb2fc9bcd3d8ad7140fc0bebfb0f7fca18"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-game-011-step-03.png",
+      "source": "work/puzzle-batch-20261020/bench-lesson/captures/game-011-step-03.png",
+      "sha256": "8fe04d0a994e01fad899728a80d8da4c9aec9bdb69005489beea06c634232fe3"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-result.log",
+      "source": "work/puzzle-batch-20261020/bench-lesson/result.log",
+      "sha256": "1eb6f313de474ba43b38ea6bf810e4027476281b49b0b0b8c155d59bea3e6e6e"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-result.json",
+      "source": "work/puzzle-batch-20261020/bench-lesson/result.json",
+      "sha256": "fd2440748a79be40172f6a57607d63482abb005bbbcd3f4bc928cf25f0ff7f1d"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-lesson-source-provenance.json",
+      "source": "work/puzzle-batch-20261020/bench-lesson/source-provenance.json",
+      "sha256": "baf200722bc3d0a87fb80ca41f9622b165447875185ec3703d31b670f7e70622"
+    },
+    {
+      "file": "SG-26-final-20261021-research.md",
+      "source": "work/puzzle-batch-20261020/research.md",
+      "sha256": "80e26d8dd0c2580ca6483f01a2a41cf614cca138cf22a9c2ad73f7eaf926692f"
+    },
+    {
+      "file": "SG-26-final-20261021-reference-provenance.json",
+      "source": "work/puzzle-batch-20261020/reference-provenance.json",
+      "sha256": "f5b4eb2a0e08fc31f6ea575f71a4d7d88a7a456564a699fe4a52bd28aadc1538"
+    },
+    {
+      "file": "SG-26-final-20261021-reference-nintendo-prime-cut.webp",
+      "source": "work/puzzle-batch-20261020/reference-nintendo-prime-cut.webp",
+      "sha256": "aedc4fa84ac4c5e50e0a6f17767fe009bc1f6d3bded657fadd4b9ae4bae0d0ad"
+    },
+    {
+      "file": "SG-26-final-20261021-reference-review-overview.jpg",
+      "source": "work/puzzle-batch-20261020/reference-review-overview.jpg",
+      "sha256": "02cf1fa425796c69287ca16352898550941c37b3d01051d18048d7659dd33f54"
+    },
+    {
+      "file": "SG-26-final-20261021-current-component-sha256.json",
+      "source": "work/puzzle-batch-20261020/current-component-sha256.json",
+      "sha256": "c370c1dac3b940892bfffcab044928c964ec1159bb464c2bf695bc69238af620"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-overview-0.jpg",
+      "source": "work/puzzle-batch-20261020/bench-overview-0.jpg",
+      "sha256": "a868e3d4d0012a74afd9b17dbf094b125687504d137c37e00a05b9c372a756ba"
+    },
+    {
+      "file": "SG-26-final-20261021-bench-overview-1.jpg",
+      "source": "work/puzzle-batch-20261020/bench-overview-1.jpg",
+      "sha256": "c2a2203f08aaf67c4f334733954c4f15230369f55024d8e3f022631e88b07b4c"
+    },
+    {
+      "file": "SG-26-final-20261021-checks-results.json",
+      "source": "work/puzzle-batch-20261020/checks-v1/results.json",
+      "sha256": "8a160789d2994f68541c86c7c21168a9958de57c2791fa83cddedfb73f0023ab"
+    },
+    {
+      "file": "SG-26-final-20261021-checks-pixel-UI-minigame-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-v1/pixel-UI-minigame-tests.log",
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039"
+    },
+    {
+      "file": "SG-26-final-20261021-checks-bench-swap-view-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-v1/bench-swap-view-tests.log",
+      "sha256": "b7cd4e3641a5aa592c9d737fee2befbf64a275d732ce8ea29fd2e5cc55d95ab5"
+    },
+    {
+      "file": "SG-26-final-20261021-checks-welcome-minigame-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-v1/welcome-minigame-tests.log",
+      "sha256": "0a43742629a4d896e1d79d2608501f6cf99e3597bab9335b20d71b6095d4aebf"
+    },
+    {
+      "file": "SG-26-final-20261021-checks-main-scene-integration-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-v1/main-scene-integration-tests.log",
+      "sha256": "c198e47bbe9fc1daf09e10f429c811d8633f4b5bc88922ca872f95f86baf934f"
+    },
+    {
+      "file": "SG-26-final-20261021-checks-bench-swap-model-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-v1/bench-swap-model-tests.log",
+      "sha256": "5673d8f1f5aa84c40b42853954c82c31276fcb692d4973af737af2b56e9ccdaf"
+    },
+    {
+      "file": "SG-26-final-20261021-review-sources.zip",
+      "source": "work/puzzle-batch-20261020/SG-26-review-sources.zip",
+      "sha256": "5806dccce36347c03e77e00b5837d90233568ee34a4895c16463e32d78060d73"
+    },
+    {
+      "file": "SG-26-final-20261021-lesson-overview.jpg",
+      "source": "contact sheet of six current bench lesson captures",
+      "sha256": "d2acef297433da0940f7683d2d940f19d540114ae59699e0e7a015bcaa1731fa"
+    }
+  ]
+}

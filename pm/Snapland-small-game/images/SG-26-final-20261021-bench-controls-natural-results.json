@@ -1,0 +1,90 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-011",
+    "mistakes": 0,
+    "observed_frame": 104,
+    "observed_process_id": 37485,
+    "observer_only": true,
+    "practice": false,
+    "score": 750,
+    "score_summary": {
+      "label": "換位分",
+      "rows": [
+        {
+          "amount": 275,
+          "count": 1,
+          "key": "bench_table_1",
+          "label": "第 1 桌 · 最少 1 次 · 實際 1 次"
+        },
+        {
+          "amount": 250,
+          "count": 1,
+          "key": "bench_table_2",
+          "label": "第 2 桌 · 最少 2 次 · 實際 2 次"
+        },
+        {
+          "amount": 225,
+          "count": 1,
+          "key": "bench_table_3",
+          "label": "第 3 桌 · 最少 3 次 · 實際 3 次"
+        },
+        {
+          "amount": 0,
+          "count": 6,
+          "key": "move_progress",
+          "label": "總交換（含重排）",
+          "progress_only": true
+        }
+      ],
+      "rule": "每桌 300 分 − 交換次數 × 25；三桌完成得普通拍貼。三桌皆最少交換、未輔助且未重排才得小惡魔拍貼。",
+      "total": 750
+    },
+    "success": true
+  },
+  {
+    "assisted": true,
+    "devil": false,
+    "game_id": "game-011",
+    "mistakes": 0,
+    "observed_frame": 201,
+    "observed_process_id": 37485,
+    "observer_only": true,
+    "practice": true,
+    "score": 750,
+    "score_summary": {
+      "label": "換位分",
+      "rows": [
+        {
+          "amount": 275,
+          "count": 1,
+          "key": "bench_table_1",
+          "label": "第 1 桌 · 最少 1 次 · 實際 1 次"
+        },
+        {
+          "amount": 250,
+          "count": 1,
+          "key": "bench_table_2",
+          "label": "第 2 桌 · 最少 2 次 · 實際 2 次"
+        },
+        {
+          "amount": 225,
+          "count": 1,
+          "key": "bench_table_3",
+          "label": "第 3 桌 · 最少 3 次 · 實際 3 次"
+        },
+        {
+          "amount": 0,
+          "count": 6,
+          "key": "move_progress",
+          "label": "總交換（含重排）",
+          "progress_only": true
+        }
+      ],
+      "rule": "每桌 300 分 − 交換次數 × 25；三桌完成得普通拍貼。三桌皆最少交換、未輔助且未重排才得小惡魔拍貼。",
+      "total": 750
+    },
+    "success": true
+  }
+]

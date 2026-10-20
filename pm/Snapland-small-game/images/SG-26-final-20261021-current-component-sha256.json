@@ -1,0 +1,11 @@
+{
+  "scope": "Current root and imported-stage component equality after preparation; recorded now, not launch hashes for earlier runs. Models, views, tutorials and Main unchanged throughout batch. Session score text changes are ticket-specific.",
+  "sources": {
+    "game/minigames/bench_swap_model.gd": "5fce8f00477ffefda4580cd4e0a0a06b955e8611919b4d39798c7718e4bbe92c",
+    "game/minigames/bench_swap_view.gd": "0f501cdde13d758b819c647c5cabe07ff044df983e5171f29c28dec27a6cd920",
+    "game/minigames/shadow_theatre_model.gd": "880cc3c3d4a1074f8c85cbae29fee2db2152f3e6959b366bc251db844fca2c12",
+    "game/minigames/shadow_theatre_view.gd": "7c55a183fc035ccc7ab9e6d9fd2c69f053db8724f352040c82982f4056c57169",
+    "game/main.gd": "eee2f564157685946ac8d4e3c257dd3a86b5ab9f65f5c4d2ea03788756427157",
+    "game/data/tutorials.json": "c315fa1607d8d20e7d7e0fc7579f3d6c916fd9aa696cd3b58b853fb34affc961"
+  }
+}

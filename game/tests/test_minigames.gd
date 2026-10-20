@@ -944,6 +944,8 @@ func _test_bench_swaps_and_devil_boundary() -> void:
 	_expect(exact_results.size() == 1 and exact_results[0].success and exact_results[0].devil and not exact_results[0].assisted, "natural exact solution of all three visible-rule orders earns devil success")
 	_expect(final_state.finished and final_state.ledger.filter(func(row: Dictionary) -> bool: return bool(row.solved)).size() == 3, "model ledger carries all three naturally solved orders")
 	_expect(exact.score == expected_points and exact.score_summary().total == exact.score and exact.score_events.size() == 3, "three per-table score events reconcile exactly to summary total")
+	var exact_rows: Array = exact.score_summary().rows
+	_expect(str(exact_rows[0].label).contains("最少 1 次 · 實際 1 次") and str(exact_rows[3].label) == "總交換（含重排）" and int(exact_rows[3].count) == 6, "bench result exposes actual per-table costs and total swaps with truthful units")
 	exact.queue_free()
 
 	var assisted := _new_session("game-011", true)

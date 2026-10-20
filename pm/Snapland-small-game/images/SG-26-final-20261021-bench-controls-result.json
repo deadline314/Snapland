@@ -1,0 +1,10 @@
+{
+  "case": "bench-controls",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 45.18,
+  "passes": [
+    "PASS: native Main BenchSwap station/menu launch, pause/resume, synchronous retry reset, keyboard BFS minimum tables 1/2/3, exact-result latch, and result capture",
+    "PASS: assisted reduced-motion HUD practice/retry, pointer BFS minimum tables 1/2/3, unchanged private progression"
+  ]
+}

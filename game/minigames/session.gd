@@ -599,8 +599,14 @@ func score_summary() -> Dictionary:
 	if sum != score:
 		rows.append({"key": "score_adjustment", "label": "目前計分調整", "amount": score - sum, "count": 1})
 	if mode == "flower_pipes" or mode == "bench_swap":
-		var move_label := "總轉動（已計入得分）" if mode == "flower_pipes" else "操作步數（不計分）"
+		var move_label := "總轉動（已計入得分）" if mode == "flower_pipes" else "總交換（含重排）"
 		rows.append({"key": "move_progress", "label": move_label, "amount": 0, "count": move_count, "progress_only": true})
+	if mode == "bench_swap":
+		var restarts := 0
+		for entry in bench_model.snapshot().ledger:
+			if not bool(entry.solved) and int(entry.moves) >= int(BenchSwapModelScript.LEVELS[int(entry.level)].budget): restarts += 1
+		if restarts > 0:
+			rows.append({"key":"bench_restarts", "label":"額度用完重排", "amount":0, "count":restarts, "progress_only":true})
 	if mode == "flower_pipes":
 		for index in pipe_model.orders.size():
 			var state := "已供水" if index < pipe_model.completed_beds else ("供水中" if index == pipe_model.order_index and pipe_model.connected else "未完成")
@@ -639,7 +645,7 @@ func _score_rule_text() -> String:
 		"sign_balance": return "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
 		"shadow_alignment": return "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。"
 		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。"
-		"bench_swap": return "每桌依完成步數得分；符合本桌全部規則為普通目標，每桌以最少交換完成且未開輔助或重排可得加碼。"
+		"bench_swap": return "每桌 300 分 − 交換次數 × 25；三桌完成得普通拍貼。三桌皆最少交換、未輔助且未重排才得小惡魔拍貼。"
 		"melody_memory": return MelodyMemoryModelScript.score_rule_text()
 	return "得分由已記錄的遊戲事件累加。"
 
@@ -1730,7 +1736,8 @@ func _sync_bench_state() -> void:
 	var model_score := int(state.get("score", 0))
 	if model_score > _bench_score_published:
 		var table_number := mini(count, BenchSwapModelScript.LEVELS.size())
-		_award_points("bench_table_%d" % table_number, "第 %d 桌・符合座位規則" % table_number, model_score - _bench_score_published)
+		var solved: Dictionary = ledger.back()
+		_award_points("bench_table_%d" % table_number, "第 %d 桌 · 最少 %d 次 · 實際 %d 次" % [table_number, int(solved.optimal_moves), int(solved.moves)], model_score - _bench_score_published)
 	_bench_score_published = model_score
 	var current_event := str(state.get("last_event", ""))
 	if current_event != _bench_last_event:
