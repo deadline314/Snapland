@@ -246,7 +246,7 @@ func _check_coastal_extension(world: Node) -> void:
 	_check(world.player.position.z < -44.0 and world.player.is_on_floor(), "real movement crosses the old north map clamp without falling or respawning")
 	world.player.position=Vector3(-27,0.35,-45)
 	world.set_time_of_day("night")
-	_check(world.lamps.any(func(lamp: OmniLight3D): return lamp.position.distance_to(world.player.position)<8 and lamp.light_energy>0), "the distant lighthouse trail has a real active night light")
+	_check(world.lamps.any(func(lamp: Light3D): return lamp.position.distance_to(world.player.position)<8 and lamp.light_energy>0), "the distant lighthouse trail has a real active night light")
 	_check(world.active_lamp_indices.size()==world.ACTIVE_LAMP_LIMIT and world.shadow_lamp_indices.size()==world.SHADOW_LAMP_LIMIT, "larger map retains the bounded active light/shadow budget")
 	var rotor: Node3D = world.get_node_or_null("CoastalWaterwheelRotor")
 	_check(rotor!=null, "waterwheel has its own assembled rotor")

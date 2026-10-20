@@ -2,6 +2,8 @@ extends Node3D
 ## Scene-owned free play. Nothing here writes Progress or opens a game session.
 signal note_requested(note: int)
 const Ball = preload("res://game/world/drift_ball.gd")
+const Discoveries = preload("res://game/world/coastal_discoveries.gd")
+var discoveries: Node3D
 var world: Node3D
 var ball: RigidBody3D
 var bell: Node3D
@@ -42,6 +44,10 @@ func configure(owner_world: Node3D) -> void:
   var stream: MeshInstance3D=world._box(Vector3(31.15+index*0.38,0.31,-20.0),Vector3(0.12,0.035,0.6),Color("#a6e1d0"))
   streams.append(stream)
  _update_gate()
+ discoveries=Discoveries.new()
+ discoveries.name="CoastalDiscoveries"
+ add_child(discoveries)
+ discoveries.configure(world)
 
 func _build_ball() -> void:
  ball=Ball.new()
@@ -81,6 +87,7 @@ func _build_ball() -> void:
 
 func activate(id: String) -> bool:
  if not is_instance_valid(world) or world.blocked or not world.is_processing() or not _focused:return false
+ if discoveries.activate(id):return true
  if id not in ["play:ball","play:recall","coast:storm-bell","coast:tide-wheel"]:return false
  if _cooldown>0.0:return true
  _cooldown=0.18
@@ -104,6 +111,8 @@ func activate(id: String) -> bool:
  return true
 
 func prompt(id: String) -> String:
+ var discovery_prompt: String=discoveries.prompt(id)
+ if not discovery_prompt.is_empty():return discovery_prompt
  match id:
   "play:ball":return "踢海漂球"
   "play:recall":return "拿回海漂球"
@@ -129,6 +138,7 @@ func _physics_process(delta: float) -> void:
    ball.freeze=false
    ball.linear_velocity=_ball_velocity;ball.angular_velocity=_ball_spin
  if paused:return
+ discoveries.advance(delta)
  _cooldown=maxf(0,_cooldown-delta)
  ball_point.position=ball.global_position
  if is_instance_valid(ball_point.get("marker")):
@@ -140,5 +150,7 @@ func _physics_process(delta: float) -> void:
   for index in streams.size():streams[index].position.z=-22.2+fposmod(_flow_clock*1.5+index*0.8,4.3)
 
 func _notification(what: int) -> void:
- if what==NOTIFICATION_APPLICATION_FOCUS_OUT:_focused=false
+ if what==NOTIFICATION_APPLICATION_FOCUS_OUT:
+  _focused=false
+  if is_instance_valid(discoveries):discoveries.end_control()
  elif what==NOTIFICATION_APPLICATION_FOCUS_IN:_focused=true

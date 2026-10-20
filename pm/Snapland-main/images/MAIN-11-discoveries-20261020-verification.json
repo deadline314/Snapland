@@ -1,0 +1,383 @@
+{
+  "cases": [
+    {
+      "case": "accepted-native-v2",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 86.59,
+      "passes": [
+        "PASS: native coastal free play direction, bell, gate, pause and reduced motion"
+      ]
+    },
+    {
+      "case": "native-phase-v1",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 41.16,
+      "passes": [
+        "PASS: coastal discoveries actual noon/night time panel, paused optics, all receiver bounds, small-window controls and daylight blooms"
+      ]
+    }
+  ],
+  "video": {
+    "accepted-native-v2/play.avi": {
+      "bytes": 51231566,
+      "sha256": "c5621a9ea81b10e52bbe509251eeecddb57e4da49662b8ebe60b78814200cd0c",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mjpeg",
+            "codec_type": "video",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "60/1",
+            "nb_frames": "486"
+          },
+          {
+            "codec_name": "pcm_s16le",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "nb_frames": "388800"
+          }
+        ],
+        "format": {
+          "duration": "8.100000"
+        }
+      },
+      "complete_video_decode_exit": 0
+    },
+    "discoveries-native.mp4": {
+      "bytes": 3750092,
+      "sha256": "29e04e254607cbb6fc4f3d6434174ca2818bf4a193920c5047b9f795e4ada50b",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "60/1",
+            "nb_frames": "486"
+          }
+        ],
+        "format": {
+          "duration": "8.100000"
+        }
+      },
+      "complete_video_decode_exit": 0
+    }
+  },
+  "images": 31,
+  "artifacts": [
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-ball-before.png",
+      "bytes": 1124679,
+      "sha256": "7f117a00f9c00d73809705f51c031b4212a3fd4f55c0749d28b90d9f282666fb"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-ball-kicked.png",
+      "bytes": 1118493,
+      "sha256": "2f4515f817e548f6c2fcacee0b6d7e6dfee51e2322d0cac56a59b56e1db31f04"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-ball-side-kick.png",
+      "bytes": 1175941,
+      "sha256": "1bb3acc6c22e1a1bcfdb4779f1b0099eec2db8ef9f480592016fd23af51db5eb"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-bell-before.png",
+      "bytes": 1092374,
+      "sha256": "164a6fb84b884c28b219a5917aae640ebf918af99d781f6e6d06893424cffe69"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-bell-played.png",
+      "bytes": 1090448,
+      "sha256": "a8155f177943bb5bdc9b5f5b9e6c9413b87ea72f31378a17f7cdf8f6790be071"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-garden-before.png",
+      "bytes": 902542,
+      "sha256": "89a36c8ae189e5f20997deec3f0295e661f099212e37ab3a13e3aff9f1333992"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-garden-blooms-retained.png",
+      "bytes": 903371,
+      "sha256": "c1fc313fba2165a28a5904af05c41d2da5fb7f201f646a4eb0912b100f6f5aa3"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-garden-watered-reduced.png",
+      "bytes": 901893,
+      "sha256": "1a992f339d79847ef8b663b2a2b4e805e16ae8f75e001256a0477d86d791e890"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-lighthouse-before.png",
+      "bytes": 858669,
+      "sha256": "86b6a7222ba93109b47dec567b9b9556778a15ec3f7f6387600a2894d453b7fd"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-lighthouse-keyboard-center.png",
+      "bytes": 864576,
+      "sha256": "e02fa3ee15f6521deda6af918239f95a1e2b1a55462e7a03bab504483c937c80"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-lighthouse-mouse-right.png",
+      "bytes": 865042,
+      "sha256": "9170b57ec538b72af9c4463969caa504076e2b446ef3b71e602419be5e3210e9"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-native.log",
+      "bytes": 13783,
+      "sha256": "fac139212650a55a70016fa67d86af2ef4981097d43dd057bf72b238166df9b9"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-report.json",
+      "bytes": 282,
+      "sha256": "02546ddb4e3873e00e58eac498ecf5825e18f3340349691c22648146abb23841"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-result.json",
+      "bytes": 155,
+      "sha256": "9296215f29f19571224cc31d8913b9efb0de9012feca793ab339e2a359774b0b"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-wheel-night-closed.png",
+      "bytes": 942883,
+      "sha256": "1addb03eb43e0160698284dd3481d781f460346708a50716176b3e3507d2145d"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-wheel-night-open.png",
+      "bytes": 942966,
+      "sha256": "46b0d4ab30c0f2b910dd3c1c61dc9e28abcb729ed73cdb5d0d254b4042ae5c78"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-accepted-native-v2-wheel-reduced-open.png",
+      "bytes": 952644,
+      "sha256": "30b556db9438dee26ba2f4ca04a95473d35315a7bb4b6fa9393b0ceb45fd4e24"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-attempt-history.json",
+      "bytes": 857,
+      "sha256": "45877d24b65802aef188542d27a40c151528ce81f6340a428fb8cf2e79ad55ad"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-checks-coastal-free-play-tests.log",
+      "bytes": 12774,
+      "sha256": "0350b48d1ac9de9066210691b254d92d0be257de9f926e4bdf594ccb044a41e8"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-checks-daylight-lighting-tests.log",
+      "bytes": 11982,
+      "sha256": "3bdfa3d761d167824dc56e23eb3d2aad7e38b246eebc94a10904a14aa7d17ce0"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-checks-final-coastal-free-play-tests.log",
+      "bytes": 12774,
+      "sha256": "3943081bf9fc9a00911749995dd531462aee7ca6d739b25e790c3b3a0eca9b46"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-checks-final-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "c198e47bbe9fc1daf09e10f429c811d8633f4b5bc88922ca872f95f86baf934f"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-checks-final-results.json",
+      "bytes": 248,
+      "sha256": "ac19753739b7760ffc2d33b1c1d9e06bb9522de1bc77f5575dd0b7f6e850ba3f"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-checks-island-layout-tests.log",
+      "bytes": 11913,
+      "sha256": "75dbb99451f804c140ae93dd3a4b8c5ec902f4416580c1060728e29673f4af53"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-checks-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "b690c9e122b0bd87cc67aae6cdbdceb2fecd056735ccb933947d3b43f655efe7"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-checks-results.json",
+      "bytes": 482,
+      "sha256": "99b3c97d43827de7b3d3ec724be29fdd264a70119cd19e0682203496c8fed0d5"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native-phase-v1-garden-noon-before.png",
+      "bytes": 1107226,
+      "sha256": "e970759ff67e3776a48be369fa2a25d328f61e6dff83c9459b497227fe6025c0"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native-phase-v1-garden-noon-bloomed.png",
+      "bytes": 1102252,
+      "sha256": "86f7f094b1d0f9bcb925285dbc18f3d37333f2996f566cf8c54612061334ed58"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native-phase-v1-lighthouse-night.png",
+      "bytes": 864067,
+      "sha256": "f4476716a05e46e26c1aa0a50722435071c21e60d1b4adcf2ac5af43c8c3e7e4"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native-phase-v1-lighthouse-noon.png",
+      "bytes": 1093171,
+      "sha256": "adaf5df2cf1cf9a6d90c42c31617dd68cfdf9ef550f7d5a85deed602d2f6b7d5"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native-phase-v1-lighthouse-small-controls.png",
+      "bytes": 385948,
+      "sha256": "28f2fc3ff36e2969c911e4ebc0de1a444bc0819fc096a0eb072d8e60299429a6"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native-phase-v1-native.log",
+      "bytes": 13317,
+      "sha256": "97bc941ecbd2c22c85fa626c2c027c619d8e010a6beae47b77b77f84591411e3"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native-phase-v1-report.json",
+      "bytes": 329,
+      "sha256": "e69e04ed85c3ffcbaa10e222715ba1803268c5200c2169047875e30df22dcc15"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native-phase-v1-result.json",
+      "bytes": 210,
+      "sha256": "9bd226b7327639a893e9b36947d6d9d784fb3294f49ae3732ef9d6e261ad5499"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-native.mp4",
+      "bytes": 3750092,
+      "sha256": "29e04e254607cbb6fc4f3d6434174ca2818bf4a193920c5047b9f795e4ada50b"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-overview-1.png",
+      "bytes": 882954,
+      "sha256": "62a750b5b92d2e2852935897bd1297906e9b8f964a94e83ef8de582893541f8c"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-overview-2.png",
+      "bytes": 603336,
+      "sha256": "35ca8451040b5701fee46db6b93be01e408d183a8310363e43171a2a7cdded11"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-reference-nintendo-day-night.jpg",
+      "bytes": 144860,
+      "sha256": "dd46b10c6c63094b5d19a3652fef3be923b9cb0e60416179025e43db23aa1911"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-reference-nintendo-day-night.json",
+      "bytes": 373,
+      "sha256": "ba60fdda73aa061c887e1cdf85203af03910f244fd73a4ba737df5ea8a8d31a7"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-sources.json",
+      "bytes": 300349,
+      "sha256": "c9339f2ba161d893799c260092ef62bfa0416c45fa28bc0563695a3cf21bb7f3"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-glass-garden-action.png",
+      "bytes": 476159,
+      "sha256": "65e0b944da752fdc997a1793ba0afe2e1ed8db08e8772985dd438bb7a4f92a5f"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-glass-garden.png",
+      "bytes": 475960,
+      "sha256": "4f7e6bb17196c44803c9bf4b52ccaaea220fab43395866ed77eb4bd898bd0c83"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-lighthouse-action.png",
+      "bytes": 474641,
+      "sha256": "56d51c464ad73806317584753846bce34c223962273e391ae28ad6a10fcd891a"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-lighthouse.png",
+      "bytes": 476288,
+      "sha256": "74623fc311b5eed146b39a7604a5ce82504f7068f1b278dc43712f7d5e2974d8"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-overview.png",
+      "bytes": 1034331,
+      "sha256": "78382bdbbeed53e792344280f717643231b7254a1e00fe5b2b6fad25ff0c882b"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-result.json",
+      "bytes": 133,
+      "sha256": "0b8c60a90c759471535c8c1c0ba968ce1ef33f20bf19f7f39e55a9a9a2bcd655"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-result.log",
+      "bytes": 14597,
+      "sha256": "4d2f7dc66fd5dd239c2fbe6fbb5c87956d9d977e613c4c51149365af309f08cd"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-sail-loft-dialogue.png",
+      "bytes": 312320,
+      "sha256": "69411f0281d0c4bb9d7667254eeed521c0f47e489007a1269b654019c988315e"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-sail-loft.png",
+      "bytes": 489279,
+      "sha256": "c0413a6b87e9ba8126b421f16e79a60d4366d161a4e3bbf58c2dad5c4cf76bfe"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-star-court-dialogue.png",
+      "bytes": 250163,
+      "sha256": "8a2901f6957ca4212b5edc61950d6335787378131d3c3cb3c7cc87cbd24db4eb"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-star-court.png",
+      "bytes": 427276,
+      "sha256": "fcab165bae5be4b6807cf69f4ea13832a6cf45b8176512df8de6154362e61923"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-storm-bell-action.png",
+      "bytes": 486947,
+      "sha256": "fcbd053962995e1cff520b6cbfd0ce5c979b5c54d30557c85227a54e02021e3e"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-storm-bell.png",
+      "bytes": 486873,
+      "sha256": "966ea91b07571aa64aaa7fb93fd3c106328014225ea353ba10912b8468b4ed88"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-tide-wheel-action.png",
+      "bytes": 497566,
+      "sha256": "622f02103ff35940e837b38e5b251e88f2c046bc7688acca6cc1f3e95d9b9c6b"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-tide-wheel.png",
+      "bytes": 496689,
+      "sha256": "7e5b145a2e18c0421dd3347c927f72888d6c9f59b86c3b5dcf87adc6a3495f3f"
+    },
+    {
+      "file": "MAIN-11-discoveries-20261020-walk-walk.json",
+      "bytes": 382,
+      "sha256": "a9761c589880a135b1f2e6bd2f8b580582031763648bfdb1c8230e8341fa3039"
+    }
+  ],
+  "review": "Current native stills and overviews viewed. Video fully decoded, not continuously watched; Dummy audio not heard. Fixture relocation between sites, not a walking-route claim.",
+  "scope": "MAIN-11 optional optics/garden only; story route and full NPC/environment polish remain unchecked.",
+  "attempt_history": "First failed raw output was overwritten by a runner directory reuse; documented accurately in attempt-history.json. Accepted rerun copied immutably; phase probe used an exclusive fresh directory.",
+  "walk": {
+    "distance": 255.590820441954,
+    "failures": [],
+    "inspected": [
+      "coast:sail-loft",
+      "coast:storm-bell",
+      "coast:lighthouse",
+      "coast:star-court",
+      "coast:glass-garden",
+      "coast:tide-wheel"
+    ],
+    "position": "Vector3(0.0065893377, 0.120825544, 23.12002)",
+    "scope": "real CharacterBody movement via Input actions, no mid-route teleport or collision reset",
+    "run": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 125.83,
+      "passes": [
+        "PASS: native coastal walk and six keyboard observations"
+      ]
+    },
+    "video": "not recorded; current physical walk and stills only"
+  }
+}

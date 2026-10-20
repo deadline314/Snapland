@@ -616,6 +616,7 @@ func _context_prompt() -> String:
 	if world.is_riding(): return "E   下來走走"
 	var id := str(world.nearest.get("id",""))
 	var play_prompt: String=world.coastal_play.prompt(id)
+	if world.coastal_play.discoveries.controlling: return play_prompt
 	if not play_prompt.is_empty(): return "E   "+play_prompt
 	if id.begins_with("game-"): return "E   玩"+str(_definition(id).get("name","這個遊戲"))
 	var actor_prompts := {"guide":"和票票說話","quest-001":"和小角說話","quest-002":"和阿浪說話","arrival":"重看上島導覽","ride-tide":"搭乘貝殼輪"}
@@ -634,7 +635,8 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
-		if modal_kind=="dialogue": _cancel_dialogue()
+		if modal_kind=="" and session==null and world.coastal_play.discoveries.end_control(): pass
+		elif modal_kind=="dialogue": _cancel_dialogue()
 		elif modal_kind!="": _close()
 		elif session==null: _show_pause()
 		get_viewport().set_input_as_handled()

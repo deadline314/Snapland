@@ -1,0 +1,9 @@
+{
+  "failures": [],
+  "receiver_screen_positions": [
+    "Vector2(266.75583, 173.66658)",
+    "Vector2(144.16832, 291.58322)",
+    "Vector2(200.2874, 422.61877)"
+  ],
+  "scope": "fresh process/profile; actual E, held D, T, pointer time selection and Escape; fixture relocation between sites; no reward or audio-listening claim"
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "name": "coastal free play tests",
+    "exit": 0,
+    "seconds": 13.62,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 23.73,
+    "errors": 0,
+    "error": null
+  }
+]

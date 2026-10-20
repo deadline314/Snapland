@@ -77,6 +77,7 @@ func _run() -> void:
  main.world.reduced_motion=true
  await _frames(2);stopped=play.rotor.rotation.z;await _frames(12)
  _check(is_equal_approx(stopped,play.rotor.rotation.z) and play.streams[0].visible,"reduced motion keeps water's open state without ambient rotation")
+ await _test_discoveries()
  _check(before==FileAccess.get_file_as_string(OS.get_environment("SNAPLAND_SAVE_PATH")),"all free play preserves the complete save bytes")
  var ball_ref: WeakRef=weakref(play.ball)
  main.world.set_process(false);main.world.set_physics_process(false)
@@ -88,5 +89,58 @@ func _run() -> void:
  else:push_error(str(failures));quit(1)
 func _frames(count: int) -> void:
  for i in count:await physics_frame
+func _test_discoveries() -> void:
+ var discovery: Node3D=play.discoveries
+ main.world.player.position=Vector3(-27,0.3,-45)
+ main.world.player.velocity=Vector3.ZERO
+ await _frames(3)
+ var start: Vector3=main.world.player.position
+ main._interact("coast:lighthouse","燈鏡")
+ _check(discovery.controlling and main.session==null and main.modal_kind=="","lens control stays in the live world without opening a modal")
+ var initial: float=discovery.lens_angle
+ Input.action_press("move_right")
+ await _frames(25)
+ Input.action_release("move_right")
+ _check(discovery.lens_angle>initial+0.2,"real movement input turns the optical axis")
+ _check(Vector2(main.world.player.position.x-start.x,main.world.player.position.z-start.z).length()<0.01,"lens input does not also walk the player")
+ main.world.blocked=true
+ var held: float=discovery.lens_angle
+ Input.action_press("move_left");await _frames(5);Input.action_release("move_left")
+ _check(is_equal_approx(held,discovery.lens_angle),"modal pause blocks lens input")
+ main.world.blocked=false
+ play._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+ _check(not discovery.controlling,"focus loss releases the manual control mode")
+ play._notification(NOTIFICATION_APPLICATION_FOCUS_IN)
+ discovery.turn_lens(-100)
+ _check(is_equal_approx(discovery.lens_angle,-0.9) and discovery.receiver_active==-1,"out-of-range wheel input clamps safely without a false reflected hit")
+ discovery.turn_lens(0.18)
+ _check(discovery.receiver_active==0,"optical direction selects the actual aligned sea reflector")
+ var direction: Vector3=-discovery.beacon_light.global_basis.z
+ var target: Vector3=discovery.receivers[0].global_position-discovery.beacon_light.global_position
+ _check(direction.normalized().dot(target.normalized())>0.999,"real spotlight and lit reflector share the same three-dimensional ray")
+ main.world.set_time_of_day("night")
+ main.world._update_lamp_selection(true)
+ _check(main.world.lamps.has(discovery.beacon_light) and discovery.beacon_light.light_energy>0.0,"nearby steerable light joins the real night-light budget")
+ _check(main.world.lamps.filter(func(light: Light3D):return light.light_energy>0.0).size()<=8 and main.world.lamps.filter(func(light: Light3D):return light.shadow_enabled).size()<=2,"manual optics preserve the global light and shadow caps")
+ main.world.player.position=Vector3(27,0.3,-52)
+ await _frames(15)
+ main._interact("coast:glass-garden","溫室")
+ _check(discovery.garden_open and discovery.droplets[0].visible,"opening the real garden valve shows water")
+ await _frames(25)
+ var growth: float=discovery.garden_growth
+ _check(growth>0.0 and growth<1.0,"manual watering produces gradual visible bloom")
+ main.world.blocked=true
+ await _frames(10)
+ _check(is_equal_approx(growth,discovery.garden_growth),"garden does not grow behind a modal")
+ main.world.blocked=false
+ await _frames(15)
+ main._interact("coast:glass-garden","溫室")
+ growth=discovery.garden_growth
+ await _frames(20)
+ _check(not discovery.garden_open and not discovery.droplets[0].visible and is_equal_approx(growth,discovery.garden_growth),"closing water stops flow and growth but retains the flowers")
+ main._interact("coast:glass-garden","溫室")
+ await _frames(200)
+ _check(is_equal_approx(discovery.garden_growth,1.0) and discovery.flowers.all(func(flower: Node3D):return flower.scale.is_equal_approx(Vector3.ONE)),"all four blooms finish without giving a score or forcing another scene")
+ _check(main.session==null and main.modal_kind=="","garden stays in ordinary exploration")
 func _check(ok: bool,message: String) -> void:
  if not ok:failures.append(message);push_error(message)

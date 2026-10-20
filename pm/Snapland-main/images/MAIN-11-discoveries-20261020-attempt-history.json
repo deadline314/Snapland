@@ -1,0 +1,22 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "exit": 1,
+      "errors": 2,
+      "seconds": 93.93,
+      "error": "second side changes the physical kick direction",
+      "cause": "20 FPS diagnostic reused at 60 FPS sent the second E before the unchanged 0.18-second toy cooldown elapsed",
+      "evidence_limit": "The second runner accidentally reused native-v1; raw failed output was overwritten. This entry is reconstructed from the recorded tool result, not a preserved raw failed log."
+    },
+    {
+      "attempt": 2,
+      "exit": 0,
+      "errors": 0,
+      "seconds": 86.59,
+      "raw": "accepted-native-v2/native.log",
+      "profile": "same task-private parent, progress reset at process start; not a fresh parent directory"
+    }
+  ],
+  "correction": "New runners use exclusive fresh directories and fail when an output already exists."
+}

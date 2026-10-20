@@ -38,6 +38,11 @@ func _run():
      failures.append("coastal free play unexpectedly opened a modal: "+nearest_id);break
     await RenderingServer.frame_post_draw
     root.get_texture().get_image().save_png(out+"/"+nearest_id.trim_prefix("coast:")+"-action.png")
+    if world.coastal_play.discoveries.controlling:
+     _key(KEY_ESCAPE)
+     for frame in 3: await process_frame
+     if world.coastal_play.discoveries.controlling or main.modal_kind!="":
+      failures.append("could not leave the manual lens and resume the trail");break
     inspected.append(nearest_id)
     continue
    if main.modal_kind!="dialogue" or main.dialogue.is_empty():

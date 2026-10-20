@@ -1,0 +1,8 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 41.16,
+  "passes": [
+    "PASS: coastal discoveries actual noon/night time panel, paused optics, all receiver bounds, small-window controls and daylight blooms"
+  ]
+}

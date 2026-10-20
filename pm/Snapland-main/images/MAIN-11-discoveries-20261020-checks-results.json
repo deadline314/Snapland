@@ -1,0 +1,30 @@
+[
+  {
+    "name": "daylight lighting tests",
+    "exit": 0,
+    "seconds": 3.62,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "island layout tests",
+    "exit": 0,
+    "seconds": 7.52,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "coastal free play tests",
+    "exit": 0,
+    "seconds": 13.42,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 23.16,
+    "errors": 0,
+    "error": null
+  }
+]

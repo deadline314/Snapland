@@ -57,7 +57,7 @@ var npc_activity: Node
 var occlusion_controller: Node
 var pending_npc_interaction: Dictionary = {}
 var _last_label_font: Font
-var lamps: Array[OmniLight3D] = []
+var lamps: Array[Light3D] = []
 const ACTIVE_LAMP_LIMIT := 8
 const SHADOW_LAMP_LIMIT := 2
 const LAMP_SELECTION_INTERVAL := 0.4
@@ -2163,13 +2163,14 @@ func _physics_process(delta: float) -> void:
 				if is_instance_valid(marker): marker.visible=false
 			avatar_last_physics_position=player.global_position
 			return
-	var movement := Vector2.ZERO if blocked else Input.get_vector("move_left","move_right","move_up","move_down")
+	var operating_lens: bool = is_instance_valid(coastal_play) and is_instance_valid(coastal_play.discoveries) and coastal_play.discoveries.controlling
+	var movement := Vector2.ZERO if blocked or operating_lens else Input.get_vector("move_left","move_right","move_up","move_down")
 	# Default travel is the comfortable jog; Shift keeps a slower, careful pace.
 	avatar_run_requested = not blocked and not Input.is_key_pressed(KEY_SHIFT)
 	var desired_speed := AVATAR_RUN_SPEED if avatar_run_requested else AVATAR_WALK_SPEED
 	var desired_horizontal := movement*desired_speed
 	var current_horizontal := Vector2(player.velocity.x,player.velocity.z)
-	if blocked:
+	if blocked or operating_lens:
 		current_horizontal=Vector2.ZERO
 	else:
 		if movement.length_squared()>0.0001: avatar_motion_speed_limit=desired_speed

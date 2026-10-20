@@ -1,0 +1,14 @@
+{
+  "distance": 255.590820441954,
+  "failures": [],
+  "inspected": [
+    "coast:sail-loft",
+    "coast:storm-bell",
+    "coast:lighthouse",
+    "coast:star-court",
+    "coast:glass-garden",
+    "coast:tide-wheel"
+  ],
+  "position": "Vector3(0.0065893377, 0.120825544, 23.12002)",
+  "scope": "real CharacterBody movement via Input actions, no mid-route teleport or collision reset"
+}
