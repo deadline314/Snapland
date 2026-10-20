@@ -1,7 +1,7 @@
 import copy
 import json
 import unittest
-from tools.island_avatar.garment_manifest import DEFAULT_GUIDE, ROOT, validate
+from tools.island_avatar.garment_manifest import DEFAULT_GUIDE, IDLE_GUIDE, ROOT, validate, validate_collection
 
 class GarmentManifestTests(unittest.TestCase):
     @classmethod
@@ -29,6 +29,30 @@ class GarmentManifestTests(unittest.TestCase):
         self.assertIn({'action': 'walk', 'direction': 'back', 'frame': 7}, report['missing'])
         self.assertNotIn({'action': 'walk', 'direction': 'front', 'frame': 7}, report['missing'])
 
+    def test_two_validated_atlases_report_exact_union_without_enabling_the_outfit(self):
+        idle = json.loads(IDLE_GUIDE.read_text())
+        report = validate_collection([self.guide, idle], self.required)
+        self.assertEqual((report['required'], report['provided'], report['missing_count']), (148, 44, 104))
+        self.assertEqual(report['source_guides'], 2)
+        self.assertEqual(report['runtime_fallback_request_count'], 24)
+        self.assertFalse(report['ready_for_wardrobe'])
+        self.assertIn({'action': 'walk', 'direction': 'back', 'frame': 7}, report['missing'])
+        self.assertNotIn({'action': 'idle', 'direction': 'back', 'frame': 3}, report['missing'])
+
+    def test_source_atlases_cannot_double_count_or_combine_different_garments(self):
+        with self.assertRaisesRegex(ValueError, 'duplicate cel across'):
+            validate_collection([self.guide, self.guide], self.required)
+        other = json.loads(IDLE_GUIDE.read_text())
+        other['outfit'] = 'another-garment'
+        with self.assertRaisesRegex(ValueError, 'different garments'):
+            validate_collection([self.guide, other], self.required)
+        with self.assertRaisesRegex(ValueError, 'at least one'):
+            validate_collection([], self.required)
+
+    def test_outfit_identity_cannot_be_empty_or_a_container(self):
+        for value in ['', [], '../outside', 'contains spaces']:
+            self.check_invalid(lambda g: g.update(outfit=value), 'stable nonempty identifier')
+
     def test_duplicate_preview_cannot_count_as_additional_coverage(self):
         self.check_invalid(lambda g: g['frames'].append(copy.deepcopy(g['frames'][0])), 'duplicate cel')
 
@@ -36,6 +60,13 @@ class GarmentManifestTests(unittest.TestCase):
         for frame in [-1, 8, True, '0']:
             with self.subTest(frame=frame):
                 self.check_invalid(lambda g: g['frames'][0].update(frame=frame), 'unknown required pose')
+
+    def test_explicit_cloth_torso_scale_is_finite_bounded_and_inspection_only(self):
+        guide = copy.deepcopy(self.guide)
+        guide['torso_scale'] = [0.5, 0.4]
+        self.assertFalse(validate(guide, self.required)['ready_for_wardrobe'])
+        for scale in [[float('nan'), 0.4], [0.5, 0], [0.5, 4.1], [0.5]]:
+            self.check_invalid(lambda g: g.update(torso_scale=scale), 'torso_scale|torso scale')
 
     def test_source_and_target_bones_must_have_finite_nonzero_geometry(self):
         for name in ['source_arms', 'target_arms']:

@@ -1,0 +1,11 @@
+{
+  "precommit_whitespace": "Pre-commit whitespace check stopped before any commit or push because normalized CI logs retained extra blank lines at EOF. Those blank lines were removed; GitHub source logs remain authoritative.",
+  "parts_v1": "Eight clothing views present, but sleeves dangled rather than holding a camera. Rejected. No generated wearer or anatomy adopted.",
+  "probe_v1": "Safety rejection: dedicated idle whole-cel signatures do not directly identify canonical walking-head ownership.",
+  "early_static_probes": "Numerical success was rejected visually for duplicate cuffs, wrong roots, excessive length, fragments and wrist/foreground errors. Sources and guides retained.",
+  "idle36_v1": "Numerical engine and native head/foot checks passed. The 36 normal viewport poses exposed old trouser edges and stray sleeve pixels. Shared normal/quarter input rejected. Old quarter movie decoded, not visually reviewed pose-by-pose.",
+  "ownership_check_v1": "Fixture parse error: untyped color. Raw log retained; initial fixture source not retained. Corrected typed fixture and full 36-cel check pass in v3.",
+  "first_part_driver": "Bug reproduced with 121 intended plus23 adjacent pixels. Outer driver incorrectly predicted48 and asserted. Raw engine log/result retained. Next driver checks nonzero before and strict zero after; no production threshold relaxed.",
+  "part_regression": "Before:121 intended plus23 forbidden adjacent pixels,exit1/one ERROR. After:121 intended,zero forbidden,unassigned torso retained,exit0/zero ERROR.",
+  "idle36_v2": "Hand ownership excludes trouser edges; sleeves respect assigned source regions. 36 cels;72 final normal/quarter viewport poses viewed;1px rendered shift rejected."
+}

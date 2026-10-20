@@ -266,3 +266,32 @@
 ![純衣料與原人物的明確關節對照](images/ART-18-authoring-20261021-joint-guide-diagram.png)
 
 [正常短片](images/ART-18-authoring-20261021-normal-reviewed.mp4) · [四分之一時間](images/ART-18-authoring-20261021-quarter-reviewed.mp4) · [完整缺件與回退清單](images/ART-18-authoring-20261021-fallback-runtime-reviewed-coverage.json) · [正式172個請求的逐項結果](images/ART-18-authoring-20261021-fallback-runtime-reviewed-fallback-report.json) · [重建結果](images/ART-18-authoring-20261021-bake-delivery-bake-report.json) · [來源與範圍](images/ART-18-authoring-20261021-provenance.json) · [拒收歷史](images/ART-18-authoring-20261021-attempt-history.json) · [原檔、完整提示及診斷快照](images/ART-18-authoring-20261021-source-and-diagnostics.zip) · [附件雜湊清單](images/ART-18-authoring-20261021-manifest.json)。
+
+
+# Commit — 2026-10-21 補齊八向專用待機衣料預覽
+
+長外套製作預覽新增36個八方向專用待機姿勢，保留原人物眨眼、相機、紙張、背包、手與腳。配合先前正面行走8格，同一衣物的製作聯集為44/148個必要原畫格，另列104個缺格和24個慶祝回退請求；預覽持續隔離，沒有進入正式衣櫃。整票仍進行中，驗收條件維持原未勾項。
+
+來源與目標關節都畫出後修正袖口與腕點；頭髮只有在原像素完全相同時才共用原保護。第一次數值通過的原生版本仍因短褲邊線透進長衣和袖片取進鄰片而拒收，修正後重新輸出。多份來源不能用重複姿勢或不同衣物湊出完整覆蓋。研究取捨與共通流程已同步[設計紀錄](../../design/runtime/outfit-completeness.md)及User-guide。
+
+### 測試結果
+
+| 範圍 | 實際結果 |
+|---|---|
+| 同一衣物的多來源聯集 | 44/148、缺104；另列24個非新原畫的回退請求；重複格、不同衣物及錯誤身份皆拒絕 |
+| 既有頭髮與新待機身體 | 36個實際待機格、八向變更髮像素及錯用動作反例通過；整套衣物局部394項，2.58秒、0ERROR |
+| 袖片鄰片反例 | 修正前保有121正確像素卻誤取23鄰片；修正後121正確、0鄰片且衣身保留，0.34秒、0ERROR；加入官方第93項檢查 |
+| 原生正常／真正四分之一時間 | 1280×720、20FPS、無聲；468格23.40秒／1870格93.50秒；兩段exit0、0ERROR |
+| 逐姿勢與錯位反例 | 兩速共72張實際視窗姿勢及關節圖已查看；注入1個實際螢幕像素的位移即拒絕 |
+| 最後重建 | 108張新待機原人物／衣料／合成PNG與原生輸入逐位元相同；舊正面原人物／完整合成16張PNG保持逐位元相同 |
+| Python完整可用套件 | 本機128/128，42.493秒，包含13項衣料清單檢查 |
+| 前批完整CI | 460db2a的124項Python、92個Godot實際執行皆成功；不含本批新待機與第93項檢查，本批留新CI |
+
+這是2D製作視窗，採原待機每格時長；不是正式衣櫃輸入、髮尾動態、降低動態或輸出包驗收。影片完整解碼，不聲稱連續觀看或真人試玩。
+
+![實際製作視窗八方向，原人物部件保留](images/ART-18-idle-cloth-20261021-native-eight-overview.png)
+![實際來源與目標關節對照](images/ART-18-idle-cloth-20261021-final-joints-diagram.png)
+
+[正常短片](images/ART-18-idle-cloth-20261021-normal-v2.mp4) · [真正四分之一時間](images/ART-18-idle-cloth-20261021-quarter-v2.mp4) · [正常逐姿勢1](images/ART-18-idle-cloth-20261021-normal-v2-poses-1.png)／[2](images/ART-18-idle-cloth-20261021-normal-v2-poses-2.png)／[3](images/ART-18-idle-cloth-20261021-normal-v2-poses-3.png) · [慢放逐姿勢1](images/ART-18-idle-cloth-20261021-quarter-v2-poses-1.png)／[2](images/ART-18-idle-cloth-20261021-quarter-v2-poses-2.png)／[3](images/ART-18-idle-cloth-20261021-quarter-v2-poses-3.png)。
+
+[缺件與回退清單](images/ART-18-idle-cloth-20261021-combined-coverage.json) · [全部範圍與來源](images/ART-18-idle-cloth-20261021-verification.json) · [拒收歷史](images/ART-18-idle-cloth-20261021-attempt-history.json) · [前批實際完整CI](images/ART-18-idle-cloth-20261021-ci-460db-verification.json) · [完整提示、原檔與診斷](images/ART-18-idle-cloth-20261021-source-and-diagnostics.zip) · [附件雜湊](images/ART-18-idle-cloth-20261021-manifest.json)。

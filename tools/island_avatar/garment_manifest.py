@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_GUIDE = ROOT / 'tools/island_avatar/garments/mustard-front-guide.json'
+IDLE_GUIDE = ROOT / 'tools/island_avatar/garments/mustard-idle-eight-guide.json'
 
 def _numbers(value: object, count: int, label: str) -> list[float]:
     if not isinstance(value, list) or len(value) != count or any(isinstance(n, bool) or not isinstance(n, (int, float)) or not math.isfinite(n) for n in value):
@@ -39,10 +40,15 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
         raise ValueError('garment guide must be an object')
     if guide.get('schema_version') != 1 or guide.get('status') != 'inspection_only':
         raise ValueError('garment guides must remain explicitly inspection_only')
+    if not isinstance(guide.get('outfit'), str) or re.fullmatch(r'[a-z][a-z0-9-]{1,79}', guide['outfit']) is None:
+        raise ValueError('garment outfit must have a stable nonempty identifier')
     if guide.get('actor') != 'traveller' or guide.get('canvas') != [280, 360]:
         raise ValueError('garment wearer must use the fixed traveller canvas')
     width_scale = _numbers([guide.get('width_scale')], 1, 'width_scale')[0]
     radius = _numbers([guide.get('source_arm_radius')], 1, 'source_arm_radius')[0]
+    torso_scale = _numbers(guide.get('torso_scale', [width_scale, width_scale]), 2, 'torso_scale')
+    if any(not 0.05 <= n <= 4 for n in torso_scale):
+        raise ValueError('torso scale is outside authoring bounds')
     if not 0.05 <= width_scale <= 4 or not 1 <= radius <= 128:
         raise ValueError('garment scale or sleeve corridor is outside authoring bounds')
     atlas_size = _numbers(guide.get('atlas_size'), 2, 'atlas_size')
@@ -118,6 +124,11 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
             x, y, w, h = _numbers(protected, 4, f'{key}/region')
             if any(n != int(n) for n in (x, y, w, h)) or x < 0 or y < 0 or w < 1 or h < 1 or x + w > 280 or y + h > 360:
                 raise ValueError(f'{key}: region outside fixed wearer canvas')
+    return _coverage(required, seen, root)
+
+
+def _coverage(required: dict, seen: set, root: Path) -> dict:
+    expected = {(a, d, f) for a, dirs in required.items() for d, count in dirs.items() for f in range(count)}
     missing = sorted(expected - seen)
     # Read the real renderer inventory rather than treating the authored table
     # as the entire runtime. ParkWorld keeps a three-frame legacy path when an
@@ -141,13 +152,35 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
             'missing': [{'action': a, 'direction': d, 'frame': f} for a, d, f in missing]}
 
 
+def validate_collection(guides: list[dict], required: dict, root: Path = ROOT) -> dict:
+    if not isinstance(guides, list) or not guides:
+        raise ValueError('at least one validated garment guide is required')
+    seen: set = set()
+    outfit = None
+    for guide in guides:
+        validate(guide, required, root)
+        if outfit is not None and guide['outfit'] != outfit:
+            raise ValueError('different garments cannot combine their pose coverage')
+        outfit = guide['outfit']
+        for row in guide['frames']:
+            key = (row['action'], row['direction'], row['frame'])
+            if key in seen:
+                raise ValueError(f'{key}: duplicate cel across garment guides')
+            seen.add(key)
+    report = _coverage(required, seen, root)
+    report.update(outfit=outfit, source_guides=len(guides))
+    return report
+
+
 def main() -> None:
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--guide', type=Path, default=DEFAULT_GUIDE)
+    parser.add_argument('--guide', type=Path, action='append', help='repeat to report the union of validated source atlases')
     args = parser.parse_args()
     required = json.loads((ROOT / 'assets/characters/complete-animation-regions.json').read_text())['outfit_required_poses']['traveller']
-    print(json.dumps(validate(json.loads(args.guide.read_text()), required), ensure_ascii=False, indent=2))
+    guides = [json.loads(path.read_text()) for path in (args.guide or [DEFAULT_GUIDE])]
+    report = validate(guides[0], required) if len(guides) == 1 else validate_collection(guides, required)
+    print(json.dumps(report, ensure_ascii=False, indent=2))
 
 if __name__ == '__main__':
     main()

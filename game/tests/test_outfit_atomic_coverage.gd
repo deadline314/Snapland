@@ -85,6 +85,7 @@ func _run() -> void:
 					_check(coral.frames[index].texture.get_image().get_data() == base.frames[index].texture.get_image().get_data(), "coral uses complete original jacket for %s/%s/%d" % [action,direction,index])
 	var report := {"checks": checked, "failures": failures, "engine": Engine.get_version_info().string, "scope": "headless rendered pixels and outfit source selection; not native animation acceptance"}
 	FileAccess.open(output.path_join("report.json"), FileAccess.WRITE).store_string(JSON.stringify(report, "\t"))
+	_check_fixed_idle_head_ownership()
 	if failures.is_empty(): print("PASS: atomic outfit coverage (%d checks)" % checked)
 	else: printerr("FAIL: " + "; ".join(failures))
 	quit(0 if failures.is_empty() else 1)
@@ -118,3 +119,28 @@ func _check_all(library: RefCounted, enabled: bool, label: String) -> void:
 func _check(ok: bool, label: String) -> void:
 	checked += 1
 	if not ok: failures.append(label)
+
+func _check_fixed_idle_head_ownership() -> void:
+	var avatar = preload("res://game/world/avatar_renderer.gd").new()
+	var ownership = preload("res://tools/island_avatar/garment_ownership.gd")
+	for direction in avatar.WALK_DIRECTIONS:
+		var count: int = int(avatar._stable_idle_pixels.manifest["hero-idle/" + direction].frames)
+		for frame in range(count):
+			var cel: Image = avatar._stable_idle_pixels.frame("hero-idle", direction, frame)
+			_check(not ownership.resolve(avatar, cel, direction, "idle").is_empty(), "%s/%d actual standing cel has pixel-proven hair ownership" % [direction, frame])
+		var original: Image = avatar._stable_idle_pixels.frame("hero-idle", direction, 0)
+		var resolved: Dictionary = ownership.resolve(avatar, original, direction, "idle")
+		_check(not resolved.is_empty(), direction + " standing clothing reuses only pixel-proven original hair ownership")
+		if resolved.is_empty(): continue
+		var span: Array = resolved.owner.hair_owner_spans[0]
+		var changed: Image = original.duplicate()
+		var point := Vector2i(int(span[1]), int(span[0]))
+		var color: Color = changed.get_pixelv(point)
+		color.r = 1.0 - color.r
+		changed.set_pixelv(point, color)
+		_check(ownership.resolve(avatar, changed, direction, "idle").is_empty(), direction + " changed original hair cannot inherit another cel's approved mask")
+		var unknown_body: Image = original.duplicate()
+		unknown_body.set_pixel(0, 359, Color.MAGENTA)
+		_check(ownership.resolve(avatar, unknown_body, direction, "celebrate").is_empty(), direction + " non-idle whole-cel absence cannot borrow standing ownership")
+	var walk: Image = avatar._walk_pose_image("front", 0)
+	_check(ownership.resolve(avatar, walk, "front", "walk").method == "exact_original_owner", "existing direct original ownership remains unchanged")

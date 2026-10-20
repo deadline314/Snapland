@@ -2,10 +2,12 @@ extends SceneTree
 ## Explicit garment-only authoring bake. Run via build_garment_layers.py.
 ## Does not enable an outfit or modify the immutable source wearer.
 const Avatar = preload("res://game/world/avatar_renderer.gd")
+const Ownership = preload("res://tools/island_avatar/garment_ownership.gd")
 var output: Image
 var garment_layer: Image
 var target_root: Vector2
 var width_scale := 0.55
+var torso_scale := Vector2(0.55,0.55)
 var arm_radius := 25.0
 var draw_clip: Rect2i
 var mesh_regions: Array[Rect2i] = []
@@ -28,6 +30,7 @@ func _initialize() -> void:
 	if DirAccess.dir_exists_absolute(folder) or DirAccess.dir_exists_absolute(final_folder):_reject("Authoring output already exists; use a fresh profile parent");return
 	DirAccess.make_dir_recursive_absolute(folder)
 	width_scale=float(config.width_scale);arm_radius=float(config.source_arm_radius)
+	torso_scale=_point(config.get("torso_scale",[width_scale,width_scale]))
 	var avatar=Avatar.new()
 	var records: Array = []
 	for row in config.frames:
@@ -71,12 +74,14 @@ func _initialize() -> void:
 						output.set_pixel(x,y,color);garment_layer.set_pixel(x,y,Color.TRANSPARENT);protected_count+=1
 		# Reuse only reviewed original head ownership, with exact source-pixel proof.
 		var original_signature:=avatar.head_source_signature(original)
-		var owner: Dictionary=avatar._head_material_owners.get(original_signature,{})
-		if not owner.has("hair_owner_spans"):_reject("Original cel has no reviewed head ownership");return
-		var all_spans: Array=row.protection_spans.duplicate()
-		all_spans.append_array(owner.hair_owner_spans)
-		for span in all_spans:
+		var ownership: Dictionary=Ownership.resolve(avatar,original,direction,action)
+		if ownership.is_empty():_reject("Original cel has no pixel-verified reviewed head ownership");return
+		for span in row.protection_spans:
 			for x in range(int(span[1]),int(span[2])+1):
+				var point:=Vector2i(x,int(span[0]))
+				output.set_pixelv(point,original.get_pixelv(point));garment_layer.set_pixelv(point,Color.TRANSPARENT)
+		for span in ownership.owner.hair_owner_spans:
+			for x in range(int(span[1]),int(span[2])):
 				var point:=Vector2i(x,int(span[0]))
 				output.set_pixelv(point,original.get_pixelv(point));garment_layer.set_pixelv(point,Color.TRANSPARENT)
 		var changed_pixels := 0
@@ -89,7 +94,7 @@ func _initialize() -> void:
 			if output.get_region(region).get_data()!=original.get_region(region).get_data():_reject("Garment changed an immutable original region");return
 		var name:="%s-%s-%02d"%[action,direction,index]
 		if original.save_png(folder.path_join(name+"-original.png"))!=OK or output.save_png(folder.path_join(name+".png"))!=OK or garment_layer.save_png(folder.path_join(name+"-garment.png"))!=OK:_reject("Could not save baked authoring frame");return
-		records.append({"action":action,"direction":direction,"frame":index,"protected_pixel_visits":protected_count,"immutable_regions_equal":true,"head_owner_preserved":true,"changed_garment_pixels":changed_pixels,"original_head_owner_signature":original_signature,"baked_pixel_sha256":avatar.head_source_signature(output),"source_pixel_sha256":row.source_pixel_sha256,"status":"inspection_only"})
+		records.append({"action":action,"direction":direction,"frame":index,"protected_pixel_visits":protected_count,"immutable_regions_equal":true,"head_owner_preserved":true,"changed_garment_pixels":changed_pixels,"original_head_owner_signature":original_signature,"head_owner_reference_signature":ownership.reference_signature,"head_owner_method":ownership.method,"baked_pixel_sha256":avatar.head_source_signature(output),"source_pixel_sha256":row.source_pixel_sha256,"status":"inspection_only"})
 	if DirAccess.rename_absolute(folder,final_folder)!=OK:_reject("Could not atomically accept the complete authoring bake");return
 	FileAccess.open(profile.get_base_dir().path_join("bake-report.json"),FileAccess.WRITE).store_string(JSON.stringify({"status":"inspection_only","baked":records.size(),"frames":records,"wardrobe_registered":false},"  "))
 	print("PASS: garment-only authoring bake ",records.size()," fixed original cels; no wardrobe registration")
@@ -103,7 +108,7 @@ func _reject(message:String) -> void:
 func _draw_torso(cel: Image, polygon: PackedVector2Array, source_root: Vector2, arms: Array) -> void:
 	for y in range(draw_clip.position.y,draw_clip.end.y):
 		for x in range(draw_clip.position.x,draw_clip.end.x):
-			var uv := (Vector2(x+0.5,y+0.5)-target_root)/width_scale+source_root
+			var uv := (Vector2(x+0.5,y+0.5)-target_root)/torso_scale+source_root
 			if not Geometry2D.is_point_in_polygon(uv,polygon): continue
 			var owned_by_arm := false
 			for side in 2:
@@ -122,6 +127,7 @@ func _skin(p:Vector2,src:Array,dst:Array) -> Vector2:
 	return _bone_point(p,src[0],src[1],dst[0],dst[1]).lerp(_bone_point(p,src[1],src[2],dst[1],dst[2]),weight)
 
 func _arm_owns(p:Vector2,src:Array,side:int) -> bool:
+	if not mesh_regions[side].has_point(Vector2i(floori(p.x),floori(p.y))):return false
 	var du:=p.distance_to(Geometry2D.get_closest_point_to_segment(p,src[0],src[1]))
 	var dl:=p.distance_to(Geometry2D.get_closest_point_to_segment(p,src[1],src[2]))
 	# Explicit garment-side corridor prevents pulling the opposite torso panel.

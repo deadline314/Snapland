@@ -1,0 +1,41 @@
+{
+  "scope": "ART-18 authoring-only partial delivery; not a live wardrobe item or whole-ticket completion.",
+  "provided_authored_cels": 44,
+  "missing_authored_cels": 104,
+  "extra_legacy_runtime_requests": 24,
+  "ready_for_wardrobe": false,
+  "new_idle_cels": 36,
+  "native_final_poses_viewed": 72,
+  "new_idle_compiled_files_equal_native_inputs": 108,
+  "old_front_original_and_full_images_byte_identical": 16,
+  "old_front_garment_changes": "Only invisible alpha-zero RGB differences from correct half-open hair spans.",
+  "local_python": 128,
+  "local_atomic_outfit_checks": 394,
+  "new_official_godot_selector": "garment part ownership tests;93 configured,not93 passed until new CI completes.Existing bounds unchanged.",
+  "baseline_ci": "39509800870 at460db2a:124 Python and92 bounded Godot passes.Does not include current idle/ownership/collection changes.",
+  "generation": {
+    "tool": "built-in imagegen",
+    "original": "/workspace/generated_images/exec-b5fe7335-4807-4f5a-8770-63dad6dd66e7.png",
+    "sha256": "a280c03c8f69b48e45870312eb9242c3260213de7a4641cb087fb21a086d2baf",
+    "size": [
+      1564,
+      1006
+    ],
+    "prompt": "prompt-v2-sleeves.txt in source archive",
+    "reference_inputs": [
+      "parts-v1.png",
+      "original-eight-idle-reference.png",
+      "mustard-front-parts-v2.png"
+    ]
+  },
+  "native_scope": "Private GPU2D authoring with original idle durations and time_scale1/.25. Original anatomy retained. No wardrobe input,hair spring,reduced motion,PCK,hardware FPS,human play or listening claim. Silent movies decoded;no continuous watching claim.",
+  "current_stage_source_equality_sha256": {
+    "tools/island_avatar/build_garment_layers.gd": "f64a3a2d4ead1bfb2fa044a18d369c8d0dc629c6e018ce1c7a6e18bcc490ef84",
+    "tools/island_avatar/garment_ownership.gd": "b48867406af0b5083f06a5774574f89cc860bcd694401e2d3a59eafa739f4a3f",
+    "game/tests/test_outfit_atomic_coverage.gd": "9bfbc9467890ddefdc11dfb7439f98ef6df226506db2a9769e012db404313cf5",
+    "game/tests/test_garment_part_ownership.gd": "b449e47364012b9f6d02f4d9d37eec1f3f903b11adbcd11541205168a4a0a02c",
+    "tools/island_avatar/garments/mustard-idle-eight-guide.json": "697d6e8e401013e8c9c3f7778cb0ea75a3e899fbbe95f78d2e04755cf814fbad",
+    "tools/island_avatar/garments/mustard-idle-eight-parts-v2.png": "a280c03c8f69b48e45870312eb9242c3260213de7a4641cb087fb21a086d2baf"
+  },
+  "equality_scope": "After final runs,not retroactive launch hashes for rejected attempts."
+}

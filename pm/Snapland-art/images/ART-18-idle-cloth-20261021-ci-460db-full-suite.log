@@ -1,0 +1,397 @@
+﻿2026-10-20T22:41:51.5324228Z Current runner version: '2.338.0'
+2026-10-20T22:41:51.5351335Z ##[group]Runner Image Provisioner
+2026-10-20T22:41:51.5352186Z Hosted Compute Agent
+2026-10-20T22:41:51.5352882Z Version: 20261012.601
+2026-10-20T22:41:51.5353528Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-20T22:41:51.5354292Z Build Date: 2026-10-12T17:48:21Z
+2026-10-20T22:41:51.5355581Z Worker ID: {26455ec0-c766-45ab-9d72-02657a5a904a}
+2026-10-20T22:41:51.5356362Z Region: eastus
+2026-10-20T22:41:51.5356998Z Cloud: Azure
+2026-10-20T22:41:51.5357575Z ##[endgroup]
+2026-10-20T22:41:51.5359258Z ##[group]Operating System
+2026-10-20T22:41:51.5359987Z Ubuntu
+2026-10-20T22:41:51.5360502Z 24.04.5
+2026-10-20T22:41:51.5361060Z LTS
+2026-10-20T22:41:51.5361568Z ##[endgroup]
+2026-10-20T22:41:51.5362108Z ##[group]Runner Image
+2026-10-20T22:41:51.5362839Z Image: ubuntu-24.04
+2026-10-20T22:41:51.5363446Z Version: 20261012.334.1
+2026-10-20T22:41:51.5364979Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-20T22:41:51.5366612Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-20T22:41:51.5367642Z ##[endgroup]
+2026-10-20T22:41:51.5369201Z ##[group]GITHUB_TOKEN Permissions
+2026-10-20T22:41:51.5371472Z Contents: read
+2026-10-20T22:41:51.5372130Z Metadata: read
+2026-10-20T22:41:51.5372830Z ##[endgroup]
+2026-10-20T22:41:51.5375756Z Secret source: Actions
+2026-10-20T22:41:51.5376851Z Cache mode: write
+2026-10-20T22:41:51.5377584Z Prepare workflow directory
+2026-10-20T22:41:51.5721342Z Prepare all required actions
+2026-10-20T22:41:51.5771638Z Getting action download info
+2026-10-20T22:41:51.8011068Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-20T22:41:51.8911609Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-20T22:41:52.0754206Z Complete job name: full-suite
+2026-10-20T22:41:52.1680481Z ##[group]Run actions/checkout@v4
+2026-10-20T22:41:52.1681437Z with:
+2026-10-20T22:41:52.1681894Z   repository: deadline314/Snapland
+2026-10-20T22:41:52.1686000Z   token: ***
+2026-10-20T22:41:52.1686448Z   ssh-strict: true
+2026-10-20T22:41:52.1686888Z   ssh-user: git
+2026-10-20T22:41:52.1687332Z   persist-credentials: true
+2026-10-20T22:41:52.1687815Z   clean: true
+2026-10-20T22:41:52.1688262Z   sparse-checkout-cone-mode: true
+2026-10-20T22:41:52.1688782Z   fetch-depth: 1
+2026-10-20T22:41:52.1689207Z   fetch-tags: false
+2026-10-20T22:41:52.1689647Z   show-progress: true
+2026-10-20T22:41:52.1690104Z   lfs: false
+2026-10-20T22:41:52.1690523Z   submodules: false
+2026-10-20T22:41:52.1690972Z   set-safe-directory: true
+2026-10-20T22:41:52.1691479Z   allow-unsafe-pr-checkout: false
+2026-10-20T22:41:52.1692276Z ##[endgroup]
+2026-10-20T22:41:52.2735380Z Syncing repository: deadline314/Snapland
+2026-10-20T22:41:52.2738091Z ##[group]Getting Git version info
+2026-10-20T22:41:52.2739328Z Working directory is '/home/runner/work/Snapland/Snapland'
+2026-10-20T22:41:52.2740958Z [command]/usr/bin/git version
+2026-10-20T22:41:52.2801227Z git version 2.55.0
+2026-10-20T22:41:52.2823218Z ##[endgroup]
+2026-10-20T22:41:52.2838790Z Temporarily overriding HOME='/home/runner/work/_temp/4c78fe14-28e2-4383-845c-29fc867a3569' before making global git config changes
+2026-10-20T22:41:52.2841212Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T22:41:52.2845357Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Snapland/Snapland
+2026-10-20T22:41:52.2903666Z Deleting the contents of '/home/runner/work/Snapland/Snapland'
+2026-10-20T22:41:52.2913251Z ##[group]Initializing the repository
+2026-10-20T22:41:52.2923428Z [command]/usr/bin/git init /home/runner/work/Snapland/Snapland
+2026-10-20T22:41:52.3031868Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-20T22:41:52.3034090Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-20T22:41:52.3036576Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-20T22:41:52.3037960Z hint: call:
+2026-10-20T22:41:52.3038647Z hint:
+2026-10-20T22:41:52.3039497Z hint: 	git config --global init.defaultBranch <name>
+2026-10-20T22:41:52.3040523Z hint:
+2026-10-20T22:41:52.3041460Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-20T22:41:52.3043171Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-20T22:41:52.3044529Z hint:
+2026-10-20T22:41:52.3045716Z hint: 	git branch -m <name>
+2026-10-20T22:41:52.3046574Z hint:
+2026-10-20T22:41:52.3047624Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-20T22:41:52.3049261Z Initialized empty Git repository in /home/runner/work/Snapland/Snapland/.git/
+2026-10-20T22:41:52.3055659Z [command]/usr/bin/git remote add origin https://github.com/deadline314/Snapland
+2026-10-20T22:41:52.3104205Z ##[endgroup]
+2026-10-20T22:41:52.3106097Z ##[group]Disabling automatic garbage collection
+2026-10-20T22:41:52.3109881Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-20T22:41:52.3146340Z ##[endgroup]
+2026-10-20T22:41:52.3147654Z ##[group]Setting up auth
+2026-10-20T22:41:52.3155656Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T22:41:52.3193239Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T22:41:52.3585038Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T22:41:52.3629647Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T22:41:52.3868362Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T22:41:52.3908410Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T22:41:52.4140711Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-20T22:41:52.4185327Z ##[endgroup]
+2026-10-20T22:41:52.4186400Z ##[group]Fetching the repository
+2026-10-20T22:41:52.4195522Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +460db2a878d24e3c891a9e20b4b9d2b56c65df00:refs/remotes/origin/main
+2026-10-20T22:42:26.4946943Z From https://github.com/deadline314/Snapland
+2026-10-20T22:42:26.4948133Z  * [new ref]         460db2a878d24e3c891a9e20b4b9d2b56c65df00 -> origin/main
+2026-10-20T22:42:26.4950832Z ##[endgroup]
+2026-10-20T22:42:26.4951322Z ##[group]Determining the checkout info
+2026-10-20T22:42:26.4965949Z ##[endgroup]
+2026-10-20T22:42:26.4968635Z [command]/usr/bin/git sparse-checkout disable
+2026-10-20T22:42:26.5054295Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-20T22:42:26.5093454Z ##[group]Checking out the ref
+2026-10-20T22:42:26.5095129Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-20T22:42:27.5657447Z Updating files:  30% (1629/5327)
+2026-10-20T22:42:27.5907205Z Updating files:  31% (1652/5327)
+2026-10-20T22:42:27.6238749Z Updating files:  32% (1705/5327)
+2026-10-20T22:42:27.6692321Z Updating files:  33% (1758/5327)
+2026-10-20T22:42:27.7630139Z Updating files:  34% (1812/5327)
+2026-10-20T22:42:27.8213072Z Updating files:  35% (1865/5327)
+2026-10-20T22:42:27.9353463Z Updating files:  36% (1918/5327)
+2026-10-20T22:42:28.0644585Z Updating files:  37% (1971/5327)
+2026-10-20T22:42:28.2279403Z Updating files:  38% (2025/5327)
+2026-10-20T22:42:28.2656874Z Updating files:  39% (2078/5327)
+2026-10-20T22:42:28.3431561Z Updating files:  40% (2131/5327)
+2026-10-20T22:42:28.3784193Z Updating files:  41% (2185/5327)
+2026-10-20T22:42:28.4039501Z Updating files:  42% (2238/5327)
+2026-10-20T22:42:28.4284492Z Updating files:  43% (2291/5327)
+2026-10-20T22:42:28.4675058Z Updating files:  44% (2344/5327)
+2026-10-20T22:42:28.4864410Z Updating files:  45% (2398/5327)
+2026-10-20T22:42:28.5200241Z Updating files:  46% (2451/5327)
+2026-10-20T22:42:28.5613818Z Updating files:  46% (2480/5327)
+2026-10-20T22:42:28.6377920Z Updating files:  47% (2504/5327)
+2026-10-20T22:42:28.6715657Z Updating files:  48% (2557/5327)
+2026-10-20T22:42:28.7050862Z Updating files:  49% (2611/5327)
+2026-10-20T22:42:28.7641537Z Updating files:  50% (2664/5327)
+2026-10-20T22:42:28.7976195Z Updating files:  51% (2717/5327)
+2026-10-20T22:42:28.8452790Z Updating files:  52% (2771/5327)
+2026-10-20T22:42:28.8867194Z Updating files:  53% (2824/5327)
+2026-10-20T22:42:28.9301978Z Updating files:  54% (2877/5327)
+2026-10-20T22:42:28.9713274Z Updating files:  55% (2930/5327)
+2026-10-20T22:42:29.0096239Z Updating files:  56% (2984/5327)
+2026-10-20T22:42:29.0430060Z Updating files:  57% (3037/5327)
+2026-10-20T22:42:29.0758095Z Updating files:  58% (3090/5327)
+2026-10-20T22:42:29.1201994Z Updating files:  59% (3143/5327)
+2026-10-20T22:42:29.2230110Z Updating files:  60% (3197/5327)
+2026-10-20T22:42:29.3417639Z Updating files:  61% (3250/5327)
+2026-10-20T22:42:29.3951872Z Updating files:  62% (3303/5327)
+2026-10-20T22:42:29.4918558Z Updating files:  63% (3357/5327)
+2026-10-20T22:42:29.5210426Z Updating files:  64% (3410/5327)
+2026-10-20T22:42:29.5612231Z Updating files:  64% (3438/5327)
+2026-10-20T22:42:29.6171689Z Updating files:  65% (3463/5327)
+2026-10-20T22:42:29.6812162Z Updating files:  66% (3516/5327)
+2026-10-20T22:42:29.7405593Z Updating files:  67% (3570/5327)
+2026-10-20T22:42:29.7659192Z Updating files:  68% (3623/5327)
+2026-10-20T22:42:29.7823427Z Updating files:  69% (3676/5327)
+2026-10-20T22:42:29.7853769Z Updating files:  70% (3729/5327)
+2026-10-20T22:42:29.8236375Z Updating files:  71% (3783/5327)
+2026-10-20T22:42:29.8614618Z Updating files:  72% (3836/5327)
+2026-10-20T22:42:29.8913262Z Updating files:  73% (3889/5327)
+2026-10-20T22:42:29.9821027Z Updating files:  74% (3942/5327)
+2026-10-20T22:42:30.0257716Z Updating files:  75% (3996/5327)
+2026-10-20T22:42:30.0842828Z Updating files:  76% (4049/5327)
+2026-10-20T22:42:30.1632251Z Updating files:  77% (4102/5327)
+2026-10-20T22:42:30.2047598Z Updating files:  78% (4156/5327)
+2026-10-20T22:42:30.3498033Z Updating files:  79% (4209/5327)
+2026-10-20T22:42:30.3564322Z Updating files:  80% (4262/5327)
+2026-10-20T22:42:30.3590739Z Updating files:  81% (4315/5327)
+2026-10-20T22:42:30.4188108Z Updating files:  82% (4369/5327)
+2026-10-20T22:42:30.4375885Z Updating files:  83% (4422/5327)
+2026-10-20T22:42:30.5110915Z Updating files:  84% (4475/5327)
+2026-10-20T22:42:30.5238127Z Updating files:  85% (4528/5327)
+2026-10-20T22:42:30.5750664Z Updating files:  85% (4563/5327)
+2026-10-20T22:42:30.6096956Z Updating files:  86% (4582/5327)
+2026-10-20T22:42:30.8690898Z Updating files:  87% (4635/5327)
+2026-10-20T22:42:31.0286567Z Updating files:  88% (4688/5327)
+2026-10-20T22:42:31.1696226Z Updating files:  89% (4742/5327)
+2026-10-20T22:42:31.2349417Z Updating files:  90% (4795/5327)
+2026-10-20T22:42:31.2703932Z Updating files:  91% (4848/5327)
+2026-10-20T22:42:31.2981032Z Updating files:  92% (4901/5327)
+2026-10-20T22:42:31.3612838Z Updating files:  93% (4955/5327)
+2026-10-20T22:42:31.3950002Z Updating files:  94% (5008/5327)
+2026-10-20T22:42:31.4763416Z Updating files:  95% (5061/5327)
+2026-10-20T22:42:31.5262337Z Updating files:  96% (5114/5327)
+2026-10-20T22:42:31.5712223Z Updating files:  96% (5122/5327)
+2026-10-20T22:42:31.6358271Z Updating files:  97% (5168/5327)
+2026-10-20T22:42:31.6906294Z Updating files:  98% (5221/5327)
+2026-10-20T22:42:31.6969940Z Updating files:  99% (5274/5327)
+2026-10-20T22:42:31.6970476Z Updating files: 100% (5327/5327)
+2026-10-20T22:42:31.6970986Z Updating files: 100% (5327/5327), done.
+2026-10-20T22:42:31.7780420Z Switched to a new branch 'main'
+2026-10-20T22:42:31.7782399Z branch 'main' set up to track 'origin/main'.
+2026-10-20T22:42:31.8113042Z ##[endgroup]
+2026-10-20T22:42:31.8162852Z [command]/usr/bin/git log -1 --format=%H
+2026-10-20T22:42:31.8201024Z 460db2a878d24e3c891a9e20b4b9d2b56c65df00
+2026-10-20T22:42:31.8567630Z ##[group]Run actions/setup-python@v5
+2026-10-20T22:42:31.8567977Z with:
+2026-10-20T22:42:31.8568207Z   python-version: 3.12
+2026-10-20T22:42:31.8568454Z   check-latest: false
+2026-10-20T22:42:31.8571207Z   token: ***
+2026-10-20T22:42:31.8571432Z   update-environment: true
+2026-10-20T22:42:31.8571683Z   allow-prereleases: false
+2026-10-20T22:42:31.8571921Z   freethreaded: false
+2026-10-20T22:42:31.8572156Z ##[endgroup]
+2026-10-20T22:42:31.9935025Z ##[group]Installed versions
+2026-10-20T22:42:32.0033186Z (node:2308) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-20T22:42:32.0034466Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-20T22:42:32.0035477Z Successfully set up CPython (3.12.15)
+2026-10-20T22:42:32.0036327Z ##[endgroup]
+2026-10-20T22:42:32.0220245Z ##[group]Run python -m pip install Pillow==12.2.0 numpy==2.3.5
+2026-10-20T22:42:32.0220781Z [36;1mpython -m pip install Pillow==12.2.0 numpy==2.3.5[0m
+2026-10-20T22:42:32.0546223Z shell: /usr/bin/bash -e {0}
+2026-10-20T22:42:32.0546559Z env:
+2026-10-20T22:42:32.0546901Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:32.0547439Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-20T22:42:32.0547956Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:32.0548413Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:32.0548881Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:32.0549368Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-20T22:42:32.0549760Z ##[endgroup]
+2026-10-20T22:42:33.2549339Z Collecting Pillow==12.2.0
+2026-10-20T22:42:33.3574495Z   Downloading pillow-12.2.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (8.8 kB)
+2026-10-20T22:42:33.5786296Z Collecting numpy==2.3.5
+2026-10-20T22:42:33.5950966Z   Downloading numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-10-20T22:42:33.6473125Z Downloading pillow-12.2.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+2026-10-20T22:42:33.9218832Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.1/7.1 MB 28.1 MB/s  0:00:00
+2026-10-20T22:42:33.9385651Z Downloading numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+2026-10-20T22:42:34.6331155Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 23.7 MB/s  0:00:00
+2026-10-20T22:42:34.7227758Z Installing collected packages: Pillow, numpy
+2026-10-20T22:42:37.0639282Z
+2026-10-20T22:42:37.0650043Z Successfully installed Pillow-12.2.0 numpy-2.3.5
+2026-10-20T22:42:37.0659109Z
+2026-10-20T22:42:37.0659500Z [notice] A new release of pip is available: 26.2.1 -> 26.2.2
+2026-10-20T22:42:37.0660273Z [notice] To update, run: pip install --upgrade pip
+2026-10-20T22:42:37.1377942Z ##[group]Run python tools/verify_design.py --scope all
+2026-10-20T22:42:37.1378388Z [36;1mpython tools/verify_design.py --scope all[0m
+2026-10-20T22:42:37.1444705Z shell: /usr/bin/bash -e {0}
+2026-10-20T22:42:37.1445150Z env:
+2026-10-20T22:42:37.1445423Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:37.1445881Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-20T22:42:37.1446331Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:37.1446734Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:37.1447142Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:37.1447537Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-20T22:42:37.1447872Z ##[endgroup]
+2026-10-20T22:42:37.3756430Z PASS park
+2026-10-20T22:42:37.3757239Z PASS games
+2026-10-20T22:42:37.3757841Z PASS story
+2026-10-20T22:42:37.3758549Z PASS items
+2026-10-20T22:42:37.3758936Z PASS links
+2026-10-20T22:42:37.3759374Z PASS 5 design scope(s); gameplay/playtesting not executed
+2026-10-20T22:42:37.3862726Z ##[group]Run python -m unittest discover -s tests -v
+2026-10-20T22:42:37.3863156Z [36;1mpython -m unittest discover -s tests -v[0m
+2026-10-20T22:42:37.3928687Z shell: /usr/bin/bash -e {0}
+2026-10-20T22:42:37.3928949Z env:
+2026-10-20T22:42:37.3929222Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:37.3929680Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-20T22:42:37.3930119Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:37.3930514Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:37.3930903Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-20T22:42:37.3931295Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-20T22:42:37.3931629Z ##[endgroup]
+2026-10-20T22:42:37.8351366Z test_design_documents_are_excluded_but_main_runtime_park_json_is_selected (test_animation_qa_export.AnimationQaExportTests.test_design_documents_are_excluded_but_main_runtime_park_json_is_selected) ... ok
+2026-10-20T22:42:37.8353688Z test_formal_helper_discovers_repository_and_sibling_preset (test_animation_qa_export.AnimationQaExportTests.test_formal_helper_discovers_repository_and_sibling_preset) ... ok
+2026-10-20T22:42:37.8476451Z test_sanitized_project_keeps_only_fixture_tests_and_formal_content (test_animation_qa_export.AnimationQaExportTests.test_sanitized_project_keeps_only_fixture_tests_and_formal_content) ... ok
+2026-10-20T22:42:37.8967609Z test_audio_container_headers_and_catalog_measurements (test_audio_licenses.AudioLicenseTests.test_audio_container_headers_and_catalog_measurements) ... ok
+2026-10-20T22:42:37.8969405Z test_audio_review_remains_pending_listening (test_audio_licenses.AudioLicenseTests.test_audio_review_remains_pending_listening) ... ok
+2026-10-20T22:42:37.8974506Z test_every_routed_audio_path_has_exactly_one_manifest_asset (test_audio_licenses.AudioLicenseTests.test_every_routed_audio_path_has_exactly_one_manifest_asset) ... ok
+2026-10-20T22:42:37.9074214Z test_manifest_files_stay_inside_repository_and_match_digest_and_size (test_audio_licenses.AudioLicenseTests.test_manifest_files_stay_inside_repository_and_match_digest_and_size) ... ok
+2026-10-20T22:42:37.9092159Z test_sources_have_cc0_and_verifiable_origin_records (test_audio_licenses.AudioLicenseTests.test_sources_have_cc0_and_verifiable_origin_records) ... ok
+2026-10-20T22:42:38.5654605Z test_full_build_preserves_separately_authored_actions_and_directions (test_character_animation_manifest_builder.CharacterAnimationManifestBuilderTests.test_full_build_preserves_separately_authored_actions_and_directions) ... ok
+2026-10-20T22:42:38.5668132Z test_existing_link_accepted (test_design_validation.EvidenceAndRuntimeTests.test_existing_link_accepted) ... ok
+2026-10-20T22:42:38.5674849Z test_missing_local_link_rejected (test_design_validation.EvidenceAndRuntimeTests.test_missing_local_link_rejected) ... ok
+2026-10-20T22:42:38.6212714Z test_runtime_files_require_real_test_configuration (test_design_validation.EvidenceAndRuntimeTests.test_runtime_files_require_real_test_configuration) ... ok
+2026-10-20T22:42:38.6238716Z test_complete_catalog_accepted (test_design_validation.GameTests.test_complete_catalog_accepted) ... ok
+2026-10-20T22:42:38.6261746Z test_copy_of_mechanics_rejected (test_design_validation.GameTests.test_copy_of_mechanics_rejected) ... ok
+2026-10-20T22:42:38.6282656Z test_duplicate_id_rejected (test_design_validation.GameTests.test_duplicate_id_rejected) ... ok
+2026-10-20T22:42:38.6298670Z test_first_park_matches_current_single_player_rules (test_design_validation.GameTests.test_first_park_matches_current_single_player_rules) ... ok
+2026-10-20T22:42:38.6367250Z test_missing_ai_and_revision_reason_rejected (test_design_validation.GameTests.test_missing_ai_and_revision_reason_rejected) ... ok
+2026-10-20T22:42:38.6380913Z test_missing_player_choice_rejected (test_design_validation.GameTests.test_missing_player_choice_rejected) ... ok
+2026-10-20T22:42:38.6426418Z test_prototypes_must_be_six_distinct_existing_games (test_design_validation.GameTests.test_prototypes_must_be_six_distinct_existing_games) ... ok
+2026-10-20T22:42:38.6449400Z test_unbuilt_games_cannot_claim_runtime (test_design_validation.GameTests.test_unbuilt_games_cannot_claim_runtime) ... ok
+2026-10-20T22:42:38.6475309Z test_untraceable_reference_rejected (test_design_validation.GameTests.test_untraceable_reference_rejected) ... ok
+2026-10-20T22:42:38.6496368Z test_variants_cannot_inflate_game_count (test_design_validation.GameTests.test_variants_cannot_inflate_game_count) ... ok
+2026-10-20T22:42:38.6508576Z test_boolean_definition_id_rejected (test_design_validation.ItemTests.test_boolean_definition_id_rejected) ... ok
+2026-10-20T22:42:38.6549700Z test_complete_items_accepted (test_design_validation.ItemTests.test_complete_items_accepted) ... ok
+2026-10-20T22:42:38.6565963Z test_duplicate_item_id_rejected (test_design_validation.ItemTests.test_duplicate_item_id_rejected) ... ok
+2026-10-20T22:42:38.6577014Z test_market_activation_rejected (test_design_validation.ItemTests.test_market_activation_rejected) ... ok
+2026-10-20T22:42:38.6595631Z test_wrong_game_mapping_rejected (test_design_validation.ItemTests.test_wrong_game_mapping_rejected) ... ok
+2026-10-20T22:42:38.6599142Z test_approved_gates_are_reachable (test_design_validation.ParkTests.test_approved_gates_are_reachable) ... ok
+2026-10-20T22:42:38.6602248Z test_devil_requirement_rejected (test_design_validation.ParkTests.test_devil_requirement_rejected) ... ok
+2026-10-20T22:42:38.6605002Z test_ending_cannot_require_full_collection (test_design_validation.ParkTests.test_ending_cannot_require_full_collection) ... ok
+2026-10-20T22:42:38.6607793Z test_spending_collection_rejected (test_design_validation.ParkTests.test_spending_collection_rejected) ... ok
+2026-10-20T22:42:38.6610130Z test_unreachable_gate_rejected (test_design_validation.ParkTests.test_unreachable_gate_rejected) ... ok
+2026-10-20T22:42:38.6620854Z test_ai_paid_randomness_and_host_only_rewards_rejected (test_design_validation.StoryStructureTests.test_ai_paid_randomness_and_host_only_rewards_rejected) ... ok
+2026-10-20T22:42:38.6625230Z test_current_design_and_runtime_scope_agree (test_design_validation.StoryStructureTests.test_current_design_and_runtime_scope_agree) ... ok
+2026-10-20T22:42:38.6630160Z test_design_cannot_claim_all_regions_implemented (test_design_validation.StoryStructureTests.test_design_cannot_claim_all_regions_implemented) ... ok
+2026-10-20T22:42:38.6634845Z test_finale_cannot_borrow_devil_card_count (test_design_validation.StoryStructureTests.test_finale_cannot_borrow_devil_card_count) ... ok
+2026-10-20T22:42:38.6642498Z test_finale_cannot_require_devil_cards_or_share_authentication_album (test_design_validation.StoryStructureTests.test_finale_cannot_require_devil_cards_or_share_authentication_album) ... ok
+2026-10-20T22:42:38.6647260Z test_full_collection_cannot_replace_ordinary_ending (test_design_validation.StoryStructureTests.test_full_collection_cannot_replace_ordinary_ending) ... ok
+2026-10-20T22:42:38.6651407Z test_missing_character_rejected (test_design_validation.StoryStructureTests.test_missing_character_rejected) ... ok
+2026-10-20T22:42:38.6656278Z test_normal_ending_cannot_depend_on_optional_finale (test_design_validation.StoryStructureTests.test_normal_ending_cannot_depend_on_optional_finale) ... ok
+2026-10-20T22:42:38.6668795Z test_recovery_and_late_join_cannot_be_removed (test_design_validation.StoryStructureTests.test_recovery_and_late_join_cannot_be_removed) ... ok
+2026-10-20T22:42:38.6673561Z test_runtime_character_name_mismatch_rejected (test_design_validation.StoryStructureTests.test_runtime_character_name_mismatch_rejected) ... ok
+2026-10-20T22:42:38.6678259Z test_unknown_act_cast_rejected (test_design_validation.StoryStructureTests.test_unknown_act_cast_rejected) ... ok
+2026-10-20T22:42:38.6685286Z test_complete_story_accepted (test_design_validation.StoryTests.test_complete_story_accepted) ... ok
+2026-10-20T22:42:38.6692969Z test_dependency_cycle_rejected (test_design_validation.StoryTests.test_dependency_cycle_rejected) ... ok
+2026-10-20T22:42:38.6699427Z test_duplicate_photo_reward_rejected (test_design_validation.StoryTests.test_duplicate_photo_reward_rejected) ... ok
+2026-10-20T22:42:38.6706442Z test_later_zone_dependency_rejected (test_design_validation.StoryTests.test_later_zone_dependency_rejected) ... ok
+2026-10-20T22:42:38.6713458Z test_unknown_prerequisite_rejected (test_design_validation.StoryTests.test_unknown_prerequisite_rejected) ... ok
+2026-10-20T22:42:38.6728309Z test_fusion_12px_distribution_includes_all_sublicenses (test_font_provenance.FontProvenanceTests.test_fusion_12px_distribution_includes_all_sublicenses) ... ok
+2026-10-20T22:42:38.6731284Z test_manifest_schema_and_pinned_fusion_archive (test_font_provenance.FontProvenanceTests.test_manifest_schema_and_pinned_fusion_archive) ... ok
+2026-10-20T22:42:38.7085278Z test_records_cover_every_bundled_font_and_match_bytes (test_font_provenance.FontProvenanceTests.test_records_cover_every_bundled_font_and_match_bytes) ... ok
+2026-10-20T22:42:38.7155529Z test_changed_atlas_requires_review_instead_of_silent_rebind (test_garment_manifest.GarmentManifestTests.test_changed_atlas_requires_review_instead_of_silent_rebind) ... ok
+2026-10-20T22:42:38.7199658Z test_duplicate_preview_cannot_count_as_additional_coverage (test_garment_manifest.GarmentManifestTests.test_duplicate_preview_cannot_count_as_additional_coverage) ... ok
+2026-10-20T22:42:38.7270201Z test_head_and_feet_cannot_lose_their_ownership_contract (test_garment_manifest.GarmentManifestTests.test_head_and_feet_cannot_lose_their_ownership_contract) ... ok
+2026-10-20T22:42:38.7312245Z test_invalid_roots_or_source_regions_are_rejected (test_garment_manifest.GarmentManifestTests.test_invalid_roots_or_source_regions_are_rejected) ... ok
+2026-10-20T22:42:38.7438478Z test_malformed_cel_or_guides_fail_before_engine_dispatch (test_garment_manifest.GarmentManifestTests.test_malformed_cel_or_guides_fail_before_engine_dispatch) ... ok
+2026-10-20T22:42:38.7471612Z test_partial_front_preview_identifies_all_other_required_cels (test_garment_manifest.GarmentManifestTests.test_partial_front_preview_identifies_all_other_required_cels) ... ok
+2026-10-20T22:42:38.7486744Z test_preview_cannot_promote_itself_to_a_live_outfit (test_garment_manifest.GarmentManifestTests.test_preview_cannot_promote_itself_to_a_live_outfit) ... ok
+2026-10-20T22:42:38.7568959Z test_renaming_frame_cannot_hide_a_missing_required_pose (test_garment_manifest.GarmentManifestTests.test_renaming_frame_cannot_hide_a_missing_required_pose) ... ok
+2026-10-20T22:42:38.7656390Z test_source_and_target_bones_must_have_finite_nonzero_geometry (test_garment_manifest.GarmentManifestTests.test_source_and_target_bones_must_have_finite_nonzero_geometry) ... ok
+2026-10-20T22:42:38.7703905Z test_export_acceptance_cannot_override_or_use_loose_project (test_godot_entrypoints.GodotEntrypointTests.test_export_acceptance_cannot_override_or_use_loose_project) ... ok
+2026-10-20T22:42:38.7727934Z test_exported_binary_boots_from_clean_release_directory (test_godot_entrypoints.GodotEntrypointTests.test_exported_binary_boots_from_clean_release_directory) ... ok
+2026-10-20T22:42:38.7743047Z test_gd_file_passed_as_scene_is_rejected (test_godot_entrypoints.GodotEntrypointTests.test_gd_file_passed_as_scene_is_rejected) ... ok
+2026-10-20T22:42:38.7759149Z test_import_parser_path_is_valid_without_scene_or_script (test_godot_entrypoints.GodotEntrypointTests.test_import_parser_path_is_valid_without_scene_or_script) ... ok
+2026-10-20T22:42:38.7788723Z test_inheritance_cycle_and_unknown_base_fail_actionably (test_godot_entrypoints.GodotEntrypointTests.test_inheritance_cycle_and_unknown_base_fail_actionably) ... ok
+2026-10-20T22:42:38.7809461Z test_invalid_ui_script_is_rejected_before_process_spawn (test_godot_entrypoints.GodotEntrypointTests.test_invalid_ui_script_is_rejected_before_process_spawn) ... ok
+2026-10-20T22:42:38.7830971Z test_missing_and_outside_project_scripts_fail_before_spawn (test_godot_entrypoints.GodotEntrypointTests.test_missing_and_outside_project_scripts_fail_before_spawn) ... ok
+2026-10-20T22:42:38.7852770Z test_node_control_component_must_launch_through_scene (test_godot_entrypoints.GodotEntrypointTests.test_node_control_component_must_launch_through_scene) ... ok
+2026-10-20T22:42:38.7874460Z test_normal_run_returns_captured_text (test_godot_entrypoints.GodotEntrypointTests.test_normal_run_returns_captured_text) ... ok
+2026-10-20T22:42:38.7893844Z test_project_and_default_main_scene_must_exist (test_godot_entrypoints.GodotEntrypointTests.test_project_and_default_main_scene_must_exist) ... ok
+2026-10-20T22:42:38.7913804Z test_review_snapshots_are_not_runnable_even_if_they_extend_scene_tree (test_godot_entrypoints.GodotEntrypointTests.test_review_snapshots_are_not_runnable_even_if_they_extend_scene_tree) ... ok
+2026-10-20T22:42:38.7942764Z test_scene_tree_and_explicit_mainloop_inheritance_are_valid (test_godot_entrypoints.GodotEntrypointTests.test_scene_tree_and_explicit_mainloop_inheritance_are_valid) ... ok
+2026-10-20T22:42:38.7958687Z test_script_and_scene_entrypoints_cannot_be_mixed (test_godot_entrypoints.GodotEntrypointTests.test_script_and_scene_entrypoints_cannot_be_mixed) ... ok
+2026-10-20T22:42:38.7983852Z test_timeout_falls_back_to_killing_owned_process (test_godot_entrypoints.GodotEntrypointTests.test_timeout_falls_back_to_killing_owned_process) ... ok
+2026-10-20T22:42:38.8008016Z test_timeout_kills_only_owned_windows_tree_and_preserves_output (test_godot_entrypoints.GodotEntrypointTests.test_timeout_kills_only_owned_windows_tree_and_preserves_output) ... ok
+2026-10-20T22:42:38.8054711Z test_complete_2d_source_and_parts_are_registered (test_hero_2d_assets.Hero2DAssetsTest.test_complete_2d_source_and_parts_are_registered) ... ok
+2026-10-20T22:42:38.8097277Z test_grounded_actions_keep_registration_across_cels_directions_and_outfits (test_hero_2d_assets.Hero2DAssetsTest.test_grounded_actions_keep_registration_across_cels_directions_and_outfits) ... ok
+2026-10-20T22:42:38.8141099Z test_pack_files_exist_and_stay_2d (test_hero_2d_assets.Hero2DAssetsTest.test_pack_files_exist_and_stay_2d) ... ok
+2026-10-20T22:42:54.0049752Z test_stable_head_part_preserves_original_walking_limbs (test_hero_2d_assets.Hero2DAssetsTest.test_stable_head_part_preserves_original_walking_limbs) ... ok
+2026-10-20T22:42:54.0093312Z test_walk_cycle_root_does_not_snap_horizontally_at_loop (test_hero_2d_assets.Hero2DAssetsTest.test_walk_cycle_root_does_not_snap_horizontally_at_loop) ... ok
+2026-10-20T22:42:56.0148676Z test_complete_manifest_atlases_fallback_and_action_coverage (test_hero_2d_authoring.Hero2DAuthoringCompilerTest.test_complete_manifest_atlases_fallback_and_action_coverage) ... ok
+2026-10-20T22:42:57.7910184Z test_large_combined_hat_variant_keeps_cap_and_disconnected_hair (test_hero_2d_authoring.Hero2DAuthoringCompilerTest.test_large_combined_hat_variant_keeps_cap_and_disconnected_hair) ... ok
+2026-10-20T22:42:57.8132028Z test_part_cleanup_and_hat_clipping_are_explicit_and_local (test_hero_2d_authoring.Hero2DAuthoringCompilerTest.test_part_cleanup_and_hat_clipping_are_explicit_and_local) ... ok
+2026-10-20T22:42:57.8169937Z test_source_crop_feet_alignment_and_head_anchor_normalization (test_hero_2d_authoring.Hero2DAuthoringCompilerTest.test_source_crop_feet_alignment_and_head_anchor_normalization) ... ok
+2026-10-20T22:42:57.8172000Z test_duplicate_configuration_fails (test_hero_2d_hair_gpu_report.HairGPUReceiptTest.test_duplicate_configuration_fails) ... ok
+2026-10-20T22:42:57.8173785Z test_empty_missing_or_incomplete_evidence_fails (test_hero_2d_hair_gpu_report.HairGPUReceiptTest.test_empty_missing_or_incomplete_evidence_fails) ... ok
+2026-10-20T22:42:57.8176428Z test_exact_sixteen_configurations_are_required (test_hero_2d_hair_gpu_report.HairGPUReceiptTest.test_exact_sixteen_configurations_are_required) ... ok
+2026-10-20T22:42:57.8178339Z test_label_cannot_hide_wrong_rendered_configuration (test_hero_2d_hair_gpu_report.HairGPUReceiptTest.test_label_cannot_hide_wrong_rendered_configuration) ... ok
+2026-10-20T22:42:59.3101646Z test_alternate_dependencies_match_source_files_and_visible_pixels (test_island_hair_authoring.AlternateHairAuthoringTests.test_alternate_dependencies_match_source_files_and_visible_pixels) ... ok
+2026-10-20T22:43:01.0817810Z test_each_style_rebuilds_with_its_own_owned_disjoint_overlapping_tufts (test_island_hair_authoring.AlternateHairAuthoringTests.test_each_style_rebuilds_with_its_own_owned_disjoint_overlapping_tufts) ... ok
+2026-10-20T22:43:02.5605249Z test_windows_checkout_line_endings_preserve_the_authored_artifact (test_island_hair_authoring.AlternateHairAuthoringTests.test_windows_checkout_line_endings_preserve_the_authored_artifact) ... ok
+2026-10-20T22:43:02.5956571Z test_cutouts_never_contain_face_clothes_or_other_unowned_pixels (test_island_hair_authoring.IslandHairAuthoringTests.test_cutouts_never_contain_face_clothes_or_other_unowned_pixels) ... ok
+2026-10-20T22:43:02.8898144Z test_inner_hair_has_real_overlap_and_only_outer_silhouette_is_cut (test_island_hair_authoring.IslandHairAuthoringTests.test_inner_hair_has_real_overlap_and_only_outer_silhouette_is_cut) ... ok
+2026-10-20T22:43:04.9805537Z test_rebuild_preserves_all_author_data_and_source_fingerprints (test_island_hair_authoring.IslandHairAuthoringTests.test_rebuild_preserves_all_author_data_and_source_fingerprints) ... ok
+2026-10-20T22:43:05.4932122Z test_same_cutout_pixels_exist_in_every_authored_walk_frame (test_island_hair_authoring.IslandHairAuthoringTests.test_same_cutout_pixels_exist_in_every_authored_walk_frame) ... ok
+2026-10-20T22:43:07.8045973Z test_all_eight_sources (test_island_idle_assets.IdleAssetTests.test_all_eight_sources) ... ok
+2026-10-20T22:43:07.8181214Z test_clipped_standing_placement_rejected (test_island_idle_assets.IdleAssetTests.test_clipped_standing_placement_rejected) ... ok
+2026-10-20T22:43:08.1385149Z test_missing_blink_rejected (test_island_idle_assets.IdleAssetTests.test_missing_blink_rejected) ... ok
+2026-10-20T22:43:08.2163234Z test_nonblink_eye_change_rejected (test_island_idle_assets.IdleAssetTests.test_nonblink_eye_change_rejected) ... ok
+2026-10-20T22:43:08.2701119Z test_old_oversized_chin_rejected (test_island_idle_assets.IdleAssetTests.test_old_oversized_chin_rejected) ... ok
+2026-10-20T22:43:08.3495476Z test_one_pixel_head_change_rejected (test_island_idle_assets.IdleAssetTests.test_one_pixel_head_change_rejected) ... ok
+2026-10-20T22:43:08.4378365Z test_one_pixel_leg_shift_rejected (test_island_idle_assets.IdleAssetTests.test_one_pixel_leg_shift_rejected) ... ok
+2026-10-20T22:43:08.4513064Z test_semivisible_foot_counts_in_ground (test_island_idle_assets.IdleAssetTests.test_semivisible_foot_counts_in_ground) ... ok
+2026-10-20T22:43:08.4515247Z test_current_source_diagnostic_completion_is_accepted (test_runtime_result_contract.RuntimeResultContractTests.test_current_source_diagnostic_completion_is_accepted) ... ok
+2026-10-20T22:43:08.4517861Z test_errors_on_either_stream_override_a_valid_completion (test_runtime_result_contract.RuntimeResultContractTests.test_errors_on_either_stream_override_a_valid_completion) ... ok
+2026-10-20T22:43:08.4566330Z test_every_selected_runtime_suite_has_one_completion_contract (test_runtime_result_contract.RuntimeResultContractTests.test_every_selected_runtime_suite_has_one_completion_contract) ... ok
+2026-10-20T22:43:08.4569195Z test_newly_registered_contracts_require_real_completion (test_runtime_result_contract.RuntimeResultContractTests.test_newly_registered_contracts_require_real_completion) ... ok
+2026-10-20T22:43:08.4571669Z test_nonzero_exit_overrides_a_valid_completion (test_runtime_result_contract.RuntimeResultContractTests.test_nonzero_exit_overrides_a_valid_completion) ... ok
+2026-10-20T22:43:08.4573849Z test_only_clean_import_can_complete_without_a_test_marker (test_runtime_result_contract.RuntimeResultContractTests.test_only_clean_import_can_complete_without_a_test_marker) ... ok
+2026-10-20T22:43:08.4575473Z test_other_suites_completion_is_rejected (test_runtime_result_contract.RuntimeResultContractTests.test_other_suites_completion_is_rejected) ... ok
+2026-10-20T22:43:08.4577568Z test_previous_wording_is_rejected_and_observed_completion_is_reported (test_runtime_result_contract.RuntimeResultContractTests.test_previous_wording_is_rejected_and_observed_completion_is_reported) ... ok
+2026-10-20T22:43:08.4579295Z test_quoted_or_stderr_only_marker_cannot_claim_suite_completion (test_runtime_result_contract.RuntimeResultContractTests.test_quoted_or_stderr_only_marker_cannot_claim_suite_completion) ... ok
+2026-10-20T22:43:08.6333651Z test_suite_sidecar_directories_do_not_share_prior_suite_files (test_runtime_result_contract.RuntimeResultContractTests.test_suite_sidecar_directories_do_not_share_prior_suite_files) ... ok
+2026-10-20T22:43:08.6336082Z test_zero_exit_without_executed_suite_is_rejected (test_runtime_result_contract.RuntimeResultContractTests.test_zero_exit_without_executed_suite_is_rejected) ... ok
+2026-10-20T22:43:08.6337665Z test_importer_hidden_rgb_does_not_change_source_identity (test_side_coat_authoring.SideCoatAuthoringTests.test_importer_hidden_rgb_does_not_change_source_identity) ... ok
+2026-10-20T22:43:08.6342073Z test_incomplete_input_cannot_publish_a_partial_side_set (test_side_coat_authoring.SideCoatAuthoringTests.test_incomplete_input_cannot_publish_a_partial_side_set) ... ok
+2026-10-20T22:43:08.6701476Z test_observed_sleeve_is_cloth_but_camera_metal_is_not (test_side_coat_authoring.SideCoatAuthoringTests.test_observed_sleeve_is_cloth_but_camera_metal_is_not) ... ok
+2026-10-20T22:43:08.7060508Z test_reviewed_head_ownership_wins_over_same_coloured_cloth (test_side_coat_authoring.SideCoatAuthoringTests.test_reviewed_head_ownership_wins_over_same_coloured_cloth) ... ok
+2026-10-20T22:43:08.7110462Z test_empty_registration_manifest_cannot_report_pass (test_walk_pixel_stability.WalkPixelStabilityTest.test_empty_registration_manifest_cannot_report_pass) ... ok
+2026-10-20T22:43:08.7112442Z test_head_boundary_cannot_hide_the_whole_lower_body (test_walk_pixel_stability.WalkPixelStabilityTest.test_head_boundary_cannot_hide_the_whole_lower_body) ... ok
+2026-10-20T22:43:08.7114462Z test_invisible_rgb_does_not_count_as_visible_jitter (test_walk_pixel_stability.WalkPixelStabilityTest.test_invisible_rgb_does_not_count_as_visible_jitter) ... ok
+2026-10-20T22:43:08.7137619Z test_lower_body_one_pixel_shift_fails_even_with_a_rigid_head (test_walk_pixel_stability.WalkPixelStabilityTest.test_lower_body_one_pixel_shift_fails_even_with_a_rigid_head) ... ok
+2026-10-20T22:43:08.7142002Z test_one_pixel_displacement_is_detectable (test_walk_pixel_stability.WalkPixelStabilityTest.test_one_pixel_displacement_is_detectable) ... ok
+2026-10-20T22:43:23.8853505Z test_walk_head_pixels_stay_rigid_while_limbs_animate (test_walk_pixel_stability.WalkPixelStabilityTest.test_walk_head_pixels_stay_rigid_while_limbs_animate) ... ok
+2026-10-20T22:43:23.8854545Z
+2026-10-20T22:43:23.8855078Z ----------------------------------------------------------------------
+2026-10-20T22:43:23.8855638Z Ran 124 tests in 46.050s
+2026-10-20T22:43:23.8855889Z
+2026-10-20T22:43:23.8856005Z OK
+2026-10-20T22:43:23.9286973Z Post job cleanup.
+2026-10-20T22:43:24.0502611Z (node:2361) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-20T22:43:24.0503549Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-20T22:43:24.0727379Z Post job cleanup.
+2026-10-20T22:43:24.1597334Z [command]/usr/bin/git version
+2026-10-20T22:43:24.1646731Z git version 2.55.0
+2026-10-20T22:43:24.1683680Z Temporarily overriding HOME='/home/runner/work/_temp/7ad6a851-73b1-422c-943b-f0d82f968c7a' before making global git config changes
+2026-10-20T22:43:24.1685260Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T22:43:24.1691018Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Snapland/Snapland
+2026-10-20T22:43:24.1736412Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T22:43:24.1783924Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T22:43:24.2050846Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T22:43:24.2075266Z http.https://github.com/.extraheader
+2026-10-20T22:43:24.2087463Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-20T22:43:24.2129784Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T22:43:24.2440901Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T22:43:24.2488909Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T22:43:24.2953263Z Cleaning up orphan processes
+2026-10-20T22:43:24.3269752Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

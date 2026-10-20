@@ -1,0 +1,55 @@
+{
+  "byte_identical": [
+    "walk-front-05.png",
+    "walk-front-01-original.png",
+    "walk-front-01.png",
+    "walk-front-05-original.png",
+    "walk-front-06.png",
+    "walk-front-02-original.png",
+    "walk-front-06-original.png",
+    "walk-front-03-original.png",
+    "walk-front-00-original.png",
+    "walk-front-02.png",
+    "walk-front-04.png",
+    "walk-front-00.png",
+    "walk-front-07-original.png",
+    "walk-front-03.png",
+    "walk-front-04-original.png",
+    "walk-front-07.png"
+  ],
+  "only_alpha_zero_rgb_changes": [
+    {
+      "name": "walk-front-03-garment.png",
+      "invisible_rgba_changes": 134
+    },
+    {
+      "name": "walk-front-02-garment.png",
+      "invisible_rgba_changes": 134
+    },
+    {
+      "name": "walk-front-06-garment.png",
+      "invisible_rgba_changes": 134
+    },
+    {
+      "name": "walk-front-00-garment.png",
+      "invisible_rgba_changes": 134
+    },
+    {
+      "name": "walk-front-01-garment.png",
+      "invisible_rgba_changes": 134
+    },
+    {
+      "name": "walk-front-04-garment.png",
+      "invisible_rgba_changes": 134
+    },
+    {
+      "name": "walk-front-07-garment.png",
+      "invisible_rgba_changes": 134
+    },
+    {
+      "name": "walk-front-05-garment.png",
+      "invisible_rgba_changes": 134
+    }
+  ],
+  "scope": "Correct half-open reviewed-hair spans. All eight original and eight full composed images byte-identical; old normal/quarter full-body viewport evidence remains applicable."
+}

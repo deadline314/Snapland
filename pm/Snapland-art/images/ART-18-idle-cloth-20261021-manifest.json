@@ -1,0 +1,200 @@
+{
+  "scope": "Inspection-only ART-18 continuation;excludes manifest itself.",
+  "files": [
+    {
+      "name": "ART-18-idle-cloth-20261021-attempt-history.json",
+      "bytes": 1731,
+      "sha256": "0d6865d1e275f12c9582a6fe0a89dddbf3da455f79eab49279aefd5f31940aa9"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-ci-460db-full-suite.log",
+      "bytes": 42589,
+      "sha256": "1f47c5a2d178e248f998026ad0c5a07e5102c0be05dd147152af3ed89f6df714"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-ci-460db-game-runtime.log",
+      "bytes": 46829,
+      "sha256": "de09a9acc0e73f07d34fa32cc0c40ed289308d9c4dbc3978639f09cbe8772afa"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-ci-460db-verification.json",
+      "bytes": 10366,
+      "sha256": "3c8d979b807b53372cf956a9a907ff935261dc4addd98011c16b1269818bfc3d"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-combined-coverage.json",
+      "bytes": 11306,
+      "sha256": "e85349d4e93e05b469b7539acd76d32550451735b1d5c41b6f025bed66fdd1a3"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-final-joints-diagram.png",
+      "bytes": 159129,
+      "sha256": "bb3e093cf151853ad1c1856686aa7876d8e098d27926fbeb24b27dc245351d51"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-front-regression-proof.json",
+      "bytes": 1462,
+      "sha256": "70097a8e8cb4e0a0db7c9907f7a9c5bb09ca8ab19234e5621aa0efca7fdfd354"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-idle36-delivery-v2-bake-report.json",
+      "bytes": 26882,
+      "sha256": "b09faebf26cd75b7356c7b7ec33603e5ef06fd1ab02f2b5bcba60b9f3e3ab0f5"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-idle36-delivery-v2-result.json",
+      "bytes": 52,
+      "sha256": "d61a8c252f7dc54b606825d19693f932a47b4e27df736053808622e119e1597b"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-idle36-delivery-v2-result.log",
+      "bytes": 156,
+      "sha256": "9797907273abb9141af02b01dd0671cd41b653b56cf8ee8c7e4b92e5b676495d"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-native-eight-overview.png",
+      "bytes": 502897,
+      "sha256": "03f6d0f3051563daa5f76004b6651ab32d5909d7677a0675f29219ccfec576d8"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-negative-v2-render-report.json",
+      "bytes": 203,
+      "sha256": "9df57e6864ea66189de8d42fc059cf4b805c250c537918466c1479ef54e4deb6"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-negative-v2-result.json",
+      "bytes": 49,
+      "sha256": "91b129048178ff285f3399d36fbd6e46af0413ce6ed722670f0e153ebe54071e"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-negative-v2-result.log",
+      "bytes": 445,
+      "sha256": "4bf01cee27a55370f75604104d12857f33d6a273a0b074eeb2f3c16edefb3bb1"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-normal-v2-poses-1.png",
+      "bytes": 252009,
+      "sha256": "91dc5d95315f8f0afb4f56e88fb98fa62cb380066a3d3881facb1599ecffc47a"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-normal-v2-poses-2.png",
+      "bytes": 225073,
+      "sha256": "7105c5eccb2b7c4f48c336aa17a430d5dc44e77f684399394e71f9f2a2fc8382"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-normal-v2-poses-3.png",
+      "bytes": 236434,
+      "sha256": "f9e100ef1b46f3d82eba217fc673ca409a66fd9ea3ffaa36f37526ba3e7561b7"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-normal-v2-render-report.json",
+      "bytes": 7204,
+      "sha256": "c0bdc873516cd140e6df116fe2b93e6a92a4d8d4f1bcde6703c4155ce7f49f31"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-normal-v2-result.json",
+      "bytes": 51,
+      "sha256": "57b17704a16acd72fe6c322922e1dcaf896cca0e1ee466951d7d3772686ed547"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-normal-v2-result.log",
+      "bytes": 1096,
+      "sha256": "919ea7e085fce8756f56c5980d47c69ea7c767ab8e281bd753e353aad4785f8e"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-normal-v2-video-metadata.json",
+      "bytes": 220,
+      "sha256": "98d16c7b92d04239d450b004537a253fd1d7aeaae965c44050c9db4a399e4d17"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-normal-v2.mp4",
+      "bytes": 417798,
+      "sha256": "01d5be977c192bc0bf029b57ced23b75ea0340ecc02f100beec9777868b27935"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-ownership-check-v3-result.json",
+      "bytes": 69,
+      "sha256": "215cfa4106b9a85a4d8e71b467af3125b910eed20277bb6f114c303c112c8579"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-ownership-check-v3-result.log",
+      "bytes": 10626,
+      "sha256": "eb6762096df6ff2fe6bfeaa794c67c42da01defb366a457201b252e516da85f7"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-part-after-v2-result.json",
+      "bytes": 50,
+      "sha256": "b3d3d3856f564a86803fc72524a2e73ff4af008e1443f69cc7e3da2989e38483"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-part-after-v2-result.log",
+      "bytes": 193,
+      "sha256": "efbffac05c1d7c140f1ff6e22608707b2127f3c1d6a2effd39dfc159ed3bebe0"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-part-before-v2-result.json",
+      "bytes": 50,
+      "sha256": "93776688c3066c38be87d90a91cac5c750aef351a98dd9f44bdd733f02c0c688"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-part-before-v2-result.log",
+      "bytes": 327,
+      "sha256": "e6d91e8f678fa66751adf45b6de6da87af781cfafd28208a9b2dcceed080d188"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-python-full-delivery.log",
+      "bytes": 19632,
+      "sha256": "c8bf383a69de717b44db8d08a4a6e4c61351bbc5617e100ce48937c55001f840"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-quarter-v2-poses-1.png",
+      "bytes": 252246,
+      "sha256": "b7ab7bee1a7bbff575d0ee40067f9457b7ea32ecc2673517dd6a875695d601a8"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-quarter-v2-poses-2.png",
+      "bytes": 225107,
+      "sha256": "1898251983901d0ec831ab9ae8dde517bf8b9cc019076465cddbe10a722f3150"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-quarter-v2-poses-3.png",
+      "bytes": 236617,
+      "sha256": "2a61764fffaa5bb5b1545a569e68b227c6f771fbf8ba94e250e46ed3d01476b8"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-quarter-v2-render-report.json",
+      "bytes": 7239,
+      "sha256": "fb306c4cc8a9a02ecd3f848e8c082ba6cf33ea1aa6d8c3425f23d9a2b3762767"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-quarter-v2-result.json",
+      "bytes": 51,
+      "sha256": "6d359c8ff526a33ede44c140491dd89e77963f2a53fc1d0949e56f60a04f8178"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-quarter-v2-result.log",
+      "bytes": 1100,
+      "sha256": "551b68b71fcd15ab2c5163eebddd7b6cdcae8e6bbb6f460979fe71b518839b47"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-quarter-v2-video-metadata.json",
+      "bytes": 221,
+      "sha256": "87eab2e683fc9d3f9778beb53330678d848b4b2ab3115ac0bb11e20a1daca895"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-quarter-v2.mp4",
+      "bytes": 894840,
+      "sha256": "9047d98652c673a6a9f49a4967c5ae45e9dee108ac34b0a93c6a21cb2386af67"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-source-and-diagnostics.zip",
+      "bytes": 22566881,
+      "sha256": "14497a85b0f4035dceeb17dbfbed323e65b916f6fae66ec99557cd5fa034e2e3"
+    },
+    {
+      "name": "ART-18-idle-cloth-20261021-verification.json",
+      "bytes": 2479,
+      "sha256": "71eada9b738a7c0cb58e22bcc5417e9185512b11360f58ffa2d00e807cadd8c5"
+    }
+  ]
+}
