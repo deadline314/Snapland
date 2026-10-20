@@ -112,8 +112,15 @@ def run_validated_godot(
     command: Sequence[str],
     env: Mapping[str, str] | None = None,
     timeout: float = 90.0,
+    *,
+    release_directory: str | Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
-    """Validate, then run one owned Godot process with a bounded timeout."""
+    """Validate, then run one owned Godot process with a bounded timeout.
+
+    An exported binary can boot its embedded main scene from its own clean
+    directory. The source project is still validated; no path/scene overrides
+    or loose project are allowed in this mode.
+    """
     if timeout <= 0:
         raise ValueError("Godot timeout must be positive.")
     project = Path(root).resolve()
@@ -121,9 +128,21 @@ def run_validated_godot(
     error = validate_godot_command(project, args)
     if error:
         raise ValueError(error)
+    directory = project
+    if release_directory is not None:
+        directory = Path(release_directory).resolve()
+        executable = Path(args[0]).resolve()
+        engine_args = args[1:args.index("--")] if "--" in args else args[1:]
+        overrides = {"--path", "--script", "--scene", "--main-pack", "--editor", "--import"}
+        if any(arg.split("=", 1)[0] in overrides or arg.endswith((".gd", ".tscn")) for arg in engine_args):
+            raise ValueError("Release acceptance boots the embedded main scene without path or scene overrides.")
+        if not directory.is_dir() or executable.parent != directory or not executable.is_file():
+            raise ValueError("Release executable must exist inside its release directory.")
+        if (directory / "project.godot").exists() or (directory / ".godot").exists():
+            raise ValueError("Release directory must not contain a loose project or editor cache.")
     process = subprocess.Popen(
         args,
-        cwd=project,
+        cwd=directory,
         env=dict(env) if env is not None else None,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,

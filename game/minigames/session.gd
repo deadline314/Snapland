@@ -1904,40 +1904,8 @@ func _draw_backdrop() -> void:
 		"bench_swap": scene = "garden"; tint = Color("#80aa95")
 		"melody_memory": scene = "night"; tint = Color("#697794")
 	draw_rect(Rect2(0,0,1280,720), tint)
-	var atlas_path := "res://assets/minigames/backdrops/tidal-atlas-v3.png"
-	if not _backdrop_checked:
-		_backdrop_checked = true
-		if ResourceLoader.exists(atlas_path):
-			var loaded_atlas: Resource = load(atlas_path)
-			if loaded_atlas is Texture2D:
-				_backdrop_texture = loaded_atlas
-			else:
-				_warn_backdrop_asset("Invalid minigame backdrop atlas: " + atlas_path)
-		else:
-			_warn_backdrop_asset("Missing minigame backdrop atlas: " + atlas_path)
-	if _backdrop_texture:
-		if not _scene_textures.has(scene):
-			var atlas_size := _backdrop_texture.get_size()
-			var split_x := int(atlas_size.x / 2)
-			var split_y := int(atlas_size.y / 2)
-			var source := Vector2i.ZERO
-			var region_size := Vector2i(split_x,split_y)
-			match scene:
-				"garden": source = Vector2i(split_x,0); region_size = Vector2i(atlas_size.x-split_x,split_y)
-				"stage": source = Vector2i(0,split_y); region_size = Vector2i(split_x,atlas_size.y-split_y)
-				"night": source = Vector2i(split_x,split_y); region_size = Vector2i(atlas_size.x-split_x,atlas_size.y-split_y)
-			if region_size.x <= 0 or region_size.y <= 0:
-				_warn_backdrop_asset("Invalid minigame backdrop dimensions at " + atlas_path)
-				_backdrop_texture = null
-				return
-			# Each quadrant uses its exact half-size bounds; AtlasTexture clips filtering to the region.
-			var region := Rect2(Vector2(source),Vector2(region_size))
-			var scene_texture := AtlasTexture.new()
-			scene_texture.atlas = _backdrop_texture
-			scene_texture.region = region
-			scene_texture.filter_clip = true
-			_scene_textures[scene] = scene_texture
-		var texture: Texture2D = _scene_textures[scene]
+	var texture := _backdrop_scene_texture(scene)
+	if texture != null:
 		var target := Rect2(29,122,1222,492)
 		# Cover the play area at one uniform scale; wheels and window frames keep their proportions.
 		var source_size := texture.get_size()
@@ -1979,13 +1947,60 @@ func _draw_backdrop() -> void:
 	if phase_wash.a > 0.0:
 		draw_rect(Rect2(29,122,1222,492),phase_wash,true)
 
+func _backdrop_scene_texture(scene: String) -> Texture2D:
+	if not BACKDROP_SCENES.has(scene):
+		_warn_backdrop_asset("Unknown backdrop scene: " + scene)
+		return null
+	var atlas_path := "res://assets/minigames/backdrops/tidal-atlas-v3.png"
+	if not _backdrop_checked:
+		_backdrop_checked = true
+		if ResourceLoader.exists(atlas_path):
+			var loaded_atlas: Resource = load(atlas_path)
+			if loaded_atlas is Texture2D:
+				_backdrop_texture = loaded_atlas
+			else:
+				_warn_backdrop_asset("Invalid minigame backdrop atlas: " + atlas_path)
+		else:
+			_warn_backdrop_asset("Missing minigame backdrop atlas: " + atlas_path)
+	if _backdrop_texture:
+		if not _scene_textures.has(scene):
+			var atlas_size := _backdrop_texture.get_size()
+			var split_x := int(atlas_size.x / 2)
+			var split_y := int(atlas_size.y / 2)
+			var source := Vector2i.ZERO
+			var region_size := Vector2i(split_x,split_y)
+			match scene:
+				"garden": source = Vector2i(split_x,0); region_size = Vector2i(atlas_size.x-split_x,split_y)
+				"stage": source = Vector2i(0,split_y); region_size = Vector2i(split_x,atlas_size.y-split_y)
+				"night": source = Vector2i(split_x,split_y); region_size = Vector2i(atlas_size.x-split_x,atlas_size.y-split_y)
+			if region_size.x <= 0 or region_size.y <= 0:
+				_warn_backdrop_asset("Invalid minigame backdrop dimensions at " + atlas_path)
+				_backdrop_texture = null
+				return null
+			# Each quadrant uses its exact half-size bounds; AtlasTexture clips filtering to the region.
+			var region := Rect2(Vector2(source),Vector2(region_size))
+			var scene_texture := AtlasTexture.new()
+			scene_texture.atlas = _backdrop_texture
+			scene_texture.region = region
+			scene_texture.filter_clip = true
+			_scene_textures[scene] = scene_texture
+	return _scene_textures.get(scene) as Texture2D
+
+func resolve_shared_art_resources() -> bool:
+	# Explicit load proof, independent of which bespoke renderer uses these regions.
+	for scene in BACKDROP_SCENES:
+		if _backdrop_scene_texture(scene) == null: return false
+	for key in REQUIRED_PROP_KEYS:
+		if _prop_texture(key) == null: return false
+	return art_assets_ready()
+
 func _warn_backdrop_asset(message: String) -> void:
 	if _backdrop_warning_emitted: return
 	_backdrop_warning_emitted = true
 	push_warning(message)
 
 func art_cache_status() -> Dictionary:
-	# Read-only smoke hook: call after drawing each mode to confirm real assets and regions loaded.
+	# Read-only cache report; draw evidence and explicit resolution are recorded separately.
 	var loaded_props: Array[String] = []
 	var missing_props: Array[String] = []
 	for key in REQUIRED_PROP_KEYS:

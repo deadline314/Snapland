@@ -100,6 +100,28 @@ class GodotEntrypointTests(unittest.TestCase):
                 run_validated_godot(self.root, command, timeout=1)
         spawn.assert_not_called()
 
+    def test_exported_binary_boots_from_clean_release_directory(self) -> None:
+        binary = self._write("release/Snapland.x86_64", "fixture binary")
+        process = Mock(returncode=0)
+        process.communicate.return_value = ("release output", "")
+        with patch.object(entrypoints.subprocess, "Popen", return_value=process) as spawn:
+            result = run_validated_godot(self.root, [str(binary), "--", "--smoke-test"], timeout=4, release_directory=binary.parent)
+        self.assertEqual(result.stdout, "release output")
+        self.assertEqual(spawn.call_args.kwargs["cwd"], binary.parent)
+
+    def test_export_acceptance_cannot_override_or_use_loose_project(self) -> None:
+        binary = self._write("release/Snapland.x86_64", "fixture binary")
+        for args in (["--path", str(self.root)], ["--script=game/tests/test_valid.gd"], ["res://game/main.tscn"], ["--main-pack", "elsewhere.pck"]):
+            with self.subTest(args=args), patch.object(entrypoints.subprocess, "Popen") as spawn:
+                with self.assertRaisesRegex(ValueError, "without path or scene overrides"):
+                    run_validated_godot(self.root, [str(binary), *args], release_directory=binary.parent)
+                spawn.assert_not_called()
+        self._write("release/project.godot", "loose source")
+        with patch.object(entrypoints.subprocess, "Popen") as spawn:
+            with self.assertRaisesRegex(ValueError, "loose project"):
+                run_validated_godot(self.root, [str(binary)], release_directory=binary.parent)
+            spawn.assert_not_called()
+
     def test_normal_run_returns_captured_text(self) -> None:
         process = Mock()
         process.communicate.return_value = ("Godot output", "warning text")

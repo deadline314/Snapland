@@ -1,0 +1,22 @@
+{"t": 8.444, "action": {"key": "m", "wait": 1.0, "shot": "01-voyage"}}
+{"t": 31.695, "action": {"click": [386, 296], "wait": 1.0, "shot": "02-album"}}
+{"t": 59.232, "action": {"click": [386, 296], "wait": 1.0, "shot": "03-album-open"}}
+{"t": 80.506, "action": {"click": [535, 130], "wait": 0.8}}
+{"t": 81.939, "action": {"click": [535, 130], "wait": 0.8, "shot": "04-time-album"}}
+{"t": 83.453, "action": {"click": [220, 270], "wait": 0.8}}
+{"t": 84.887, "action": {"click": [220, 270], "wait": 0.8, "shot": "05-original-first"}}
+{"t": 114.221, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 115.278, "action": {"click": [500, 270], "wait": 0.6}}
+{"t": 116.516, "action": {"click": [500, 270], "wait": 0.6, "shot": "06-original-noon"}}
+{"t": 117.882, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 118.939, "action": {"click": [780, 270], "wait": 0.6}}
+{"t": 120.171, "action": {"click": [780, 270], "wait": 0.6, "shot": "07-original-dusk"}}
+{"t": 121.558, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 122.611, "action": {"click": [1060, 270], "wait": 0.6}}
+{"t": 123.843, "action": {"click": [1060, 270], "wait": 0.6, "shot": "08-original-night"}}
+{"t": 145.135, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 146.187, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 147.242, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 148.296, "action": {"click": [1040, 617], "wait": 0.8}}
+{"t": 149.733, "action": {"click": [1040, 617], "wait": 0.8, "shot": "09-after-save-quit"}}
+{"t": 151.18, "action": {"end": true}}

@@ -1,0 +1,94 @@
+{
+  "profile_sha256": "0ff23d07947c3d52b34348a39d46a80ea85f006dac35f0bebefc939a3cc84f7c",
+  "snapshot": {
+    "achievements": {
+      "ACH_ALL_TIME_POSTCARDS": true
+    },
+    "appearance": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "windswept",
+      "hair_color": "ink",
+      "skin": "warm",
+      "species": "human"
+    },
+    "coins": 200,
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-tide"
+    },
+    "intro_seen": true,
+    "owned_clothes": [
+      "outfit-tide"
+    ],
+    "photos": {
+      "postcard-time-dawn": {
+        "frames": [
+          "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dawn.png"
+        ],
+        "original_frames": [
+          "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dawn-original.png"
+        ],
+        "time_phase": "dawn"
+      },
+      "postcard-time-dusk": {
+        "frames": [
+          "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dusk.png"
+        ],
+        "original_frames": [
+          "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dusk-original.png"
+        ],
+        "time_phase": "dusk"
+      },
+      "postcard-time-night": {
+        "frames": [
+          "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-night.png"
+        ],
+        "original_frames": [
+          "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-night-original.png"
+        ],
+        "time_phase": "night"
+      },
+      "postcard-time-noon": {
+        "frames": [
+          "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-noon.png"
+        ],
+        "original_frames": [
+          "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-noon-original.png"
+        ],
+        "time_phase": "noon"
+      }
+    },
+    "platform_pending_achievements": [
+      "ACH_ALL_TIME_POSTCARDS"
+    ],
+    "quests": {},
+    "settings": {
+      "assist": false,
+      "font_style": "pixel",
+      "fullscreen": false,
+      "locale": "zh_TW",
+      "master_volume": 0.7,
+      "music_volume": 0.6,
+      "reduced_motion": false,
+      "sfx_volume": 0.8,
+      "text_speed": 1.0,
+      "time_phase": "night",
+      "ui_scale": 1.0
+    },
+    "tutorial_seen_games": [],
+    "version": 1,
+    "visited": {},
+    "wardrobe_rewarded_games": []
+  },
+  "photo_sha256": {
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dawn.png": "9b7f4e97331e00bbefcc6b7af6995c3cc738a3fdc3c245c02edc9c4898c93cd9",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dawn-original.png": "3a82693a3204baf52c499b52138c6a8b1c56739a3b7b9463cc319daef645b132",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dusk.png": "80ea594eae65ae7d07c8f2db3009d0b6007ed0c0fcae2188a8cba5ce71f3f399",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dusk-original.png": "ce41ee692f0b521ba15b57046c4f0884ae2a9b9a6f067f34f1b4de787efc1359",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-night.png": "8b2c7a545e7a26a22a54ad4762bab833c4f6d2d97308f6243fc6c43a8a840384",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-night-original.png": "d3c8aade264bcf46913fb2360e9f11919130c7c0e6c895c3cbf3c1a3a2be7575",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-noon.png": "681cb1093bf368f0b2c67e0a40fea5c16f046365285c5ba31b1042ca98b4dbf9",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-noon-original.png": "2f9c398fe52ac0e6483e2bd6edb717ce70b5f5c7138c5436bacffd6e0e605a7a"
+  }
+}

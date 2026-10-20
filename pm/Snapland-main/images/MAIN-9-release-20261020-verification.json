@@ -1,0 +1,443 @@
+{
+  "date": "2026-10-20 Asia/Taipei",
+  "baseline": "baceed6e37b73ee476692bffaf604f133b7fb8d3",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "initial_binary": {
+    "file": "Snapland.x86_64",
+    "bytes": 219517464,
+    "sha256": "ded7716e95ad939cf342eaef6e56bd7bba59af6221112c280d80e95e177a1998"
+  },
+  "final_binary": {
+    "file": "Snapland.x86_64",
+    "bytes": 219518104,
+    "sha256": "4c5324395b5aceb9459001623a9a50e5544db0c12bc7f2c448d7926bd90201e7"
+  },
+  "release_directory_contents": [
+    "Snapland.x86_64"
+  ],
+  "initial_writer": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 218.44
+  },
+  "initial_reader": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 149.24
+  },
+  "final_reader": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 149.27
+  },
+  "method": "Actual release ELF from a clean directory, embedded PCK, external XTest keyboard/mouse and full-window PNGs; no --path/script/main-pack injection or internal game signals; profile inspected read-only",
+  "initial_input_notes": "Some early inputs did not activate and were retried; all attempted actions retained. Source filename 10-dawn-collected.png actually shows Noon and is publicly named noon-collected. Final settled UI single clicks separately reopened album/time tab/night original.",
+  "collected_phases": [
+    "dawn",
+    "noon",
+    "dusk",
+    "night"
+  ],
+  "coins_before": 120,
+  "coins_after": 200,
+  "achievement": "ACH_ALL_TIME_POSTCARDS",
+  "normal_count": 0,
+  "devil_count": 0,
+  "profile_sha256_unchanged": "0ff23d07947c3d52b34348a39d46a80ea85f006dac35f0bebefc939a3cc84f7c",
+  "photo_sha256_unchanged": {
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dawn.png": "9b7f4e97331e00bbefcc6b7af6995c3cc738a3fdc3c245c02edc9c4898c93cd9",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dawn-original.png": "3a82693a3204baf52c499b52138c6a8b1c56739a3b7b9463cc319daef645b132",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dusk.png": "80ea594eae65ae7d07c8f2db3009d0b6007ed0c0fcae2188a8cba5ce71f3f399",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dusk-original.png": "ce41ee692f0b521ba15b57046c4f0884ae2a9b9a6f067f34f1b4de787efc1359",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-night.png": "8b2c7a545e7a26a22a54ad4762bab833c4f6d2d97308f6243fc6c43a8a840384",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-night-original.png": "d3c8aade264bcf46913fb2360e9f11919130c7c0e6c895c3cbf3c1a3a2be7575",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-noon.png": "681cb1093bf368f0b2c67e0a40fea5c16f046365285c5ba31b1042ca98b4dbf9",
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-noon-original.png": "2f9c398fe52ac0e6483e2bd6edb717ce70b5f5c7138c5436bacffd6e0e605a7a"
+  },
+  "photo_dimensions": {
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dawn.png": [
+      320,
+      180
+    ],
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dawn-original.png": [
+      1280,
+      720
+    ],
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dusk.png": [
+      320,
+      180
+    ],
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-dusk-original.png": [
+      1280,
+      720
+    ],
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-night.png": [
+      320,
+      180
+    ],
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-night-original.png": [
+      1280,
+      720
+    ],
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-noon.png": [
+      320,
+      180
+    ],
+    "/workspace/work/Snapland-character/work/export-app-20261020/external-profile/photos/postcard-time-noon-original.png": [
+      1280,
+      720
+    ]
+  },
+  "final_art_smoke": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 24.3,
+    "completion": true
+  },
+  "art_scope": "Twelve actual bespoke renderer frames, sixteen shared prop textures, four shared backdrop regions resolved independently, eight foliage textures, complete actors/scene motion/cutaway registration. No minigame win or player-experience claim from these frames.",
+  "negative_missing_atlas": {
+    "exit": 1,
+    "errors": 1,
+    "seconds": 11.78,
+    "completion": false
+  },
+  "local_godot": [
+    {
+      "name": "game startup",
+      "exit": 0,
+      "seconds": 4.17,
+      "error": null
+    },
+    {
+      "name": "welcome minigame tests",
+      "exit": 0,
+      "seconds": 80.0,
+      "error": null
+    },
+    {
+      "name": "balloon delivery tests",
+      "exit": 0,
+      "seconds": 2.11,
+      "error": null
+    },
+    {
+      "name": "main scene integration tests",
+      "exit": 0,
+      "seconds": 27.23,
+      "error": null
+    }
+  ],
+  "python_tests": 104,
+  "video_scope": "Actual X11 recording 1280x720,15fps,362frames,24.133s; twelve unique engine postdraw frames viewed in contact sheet; no continuous video or audio listening claim",
+  "windows_exe_run": false,
+  "human_playtest": false,
+  "audio_listened": false,
+  "entire_remote_ci_passed": false,
+  "files": {
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-result.json": {
+      "source": "work/export-app-20261020/external-writer/result.json",
+      "bytes": 52,
+      "sha256": "7347725d4a48798618206ec936ebebce9af2b2c79d37f0c0c06c5143709cae17"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-result.log": {
+      "source": "work/export-app-20261020/external-writer/result.log",
+      "bytes": 4124,
+      "sha256": "6d5146efed77bab26a275dbef2e1fb95f0ab4b2cbe966b10e5771136991e7ab9"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-inputs.jsonl": {
+      "source": "work/export-app-20261020/external-writer/inputs.jsonl",
+      "bytes": 2045,
+      "sha256": "8b56eb57438f08cfcfa92bfba3fff899dc0b2f9aa9926a6a642b42ac36eaef25"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-reader-result.json": {
+      "source": "work/export-app-20261020/external-reader/result.json",
+      "bytes": 52,
+      "sha256": "39bcfbcef964fe278c9643cdc827b3f0bf97a5b4911f97a90a74c30435e86c39"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-reader-result.log": {
+      "source": "work/export-app-20261020/external-reader/result.log",
+      "bytes": 4124,
+      "sha256": "6d5146efed77bab26a275dbef2e1fb95f0ab4b2cbe966b10e5771136991e7ab9"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-reader-inputs.jsonl": {
+      "source": "work/export-app-20261020/external-reader/inputs.jsonl",
+      "bytes": 1602,
+      "sha256": "ebcace23066cb152e3f4ca512b4268207748e5414ea61bba427ffc3fc8e3dba7"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-final-result.json": {
+      "source": "work/export-app-20261020/external-final/result.json",
+      "bytes": 52,
+      "sha256": "82b03a94d1da461ed6c6b02f133bc63c9e5cc874da515c4582b1ade8f1e7f8bc"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-final-result.log": {
+      "source": "work/export-app-20261020/external-final/result.log",
+      "bytes": 4124,
+      "sha256": "6d5146efed77bab26a275dbef2e1fb95f0ab4b2cbe966b10e5771136991e7ab9"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-final-inputs.jsonl": {
+      "source": "work/export-app-20261020/external-final/inputs.jsonl",
+      "bytes": 1191,
+      "sha256": "18890dc7da15498828edc95325b2409a556d54bd793bb376d301389b3ad7a95f"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-template-provenance.json": {
+      "source": "work/export-app-20261020/template-provenance.json",
+      "bytes": 384,
+      "sha256": "6acf6f5cdf77d1d8334b486cfa192d7f856f9dafb4c839a4c73f444eed393b58"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-build-negative-results.json": {
+      "source": "work/export-app-20261020/build-negative-results.json",
+      "bytes": 456,
+      "sha256": "bdd6227ef62c31c4394e55aa979fc8a3ddbffcbe30d4bb296bf8c4d0725420c5"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-entrypoint-tests.log": {
+      "source": "work/export-app-20261020/entrypoint-tests.log",
+      "bytes": 4641,
+      "sha256": "d88121f8bcff20f109da091f17391860aee2076c52d2b4262b7a202dfe28cba2"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-python-full.log": {
+      "source": "work/export-app-20261020/python-full.log",
+      "bytes": 15784,
+      "sha256": "f292adfdfe9c3eddcb6ea96d8042e51d6328220001897ddb94d165e658d395f6"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-build-build.json": {
+      "source": "work/export-app-20261020/build/build.json",
+      "bytes": 150178,
+      "sha256": "0b15a7d74202e582afdafa1a284acbab130f54657fc6d5deaef5e31613d23fa2"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-build-import.log": {
+      "source": "work/export-app-20261020/build/import.log",
+      "bytes": 111826,
+      "sha256": "a6fe7f926984ce3503e1cc68c9f43f1730fef086db86743059c4a035330a1dfa"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-build-export.log": {
+      "source": "work/export-app-20261020/build/export.log",
+      "bytes": 146520,
+      "sha256": "a37640aa9061fecc7df58e07747c3fb598c1de1e4d845a373cb7b085f2cef1cc"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-build-final-build.json": {
+      "source": "work/export-app-20261020/build-final/build.json",
+      "bytes": 150178,
+      "sha256": "a6a506ad5eeea406b2c9d6c0a7e6ee589990b019d92a8095582c149b8defac66"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-build-final-import.log": {
+      "source": "work/export-app-20261020/build-final/import.log",
+      "bytes": 111826,
+      "sha256": "34be13dc7fa108a15038b5a115080e4e7e3f1b5272849d37a647e86bca3dbf75"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-build-final-export.log": {
+      "source": "work/export-app-20261020/build-final/export.log",
+      "bytes": 146520,
+      "sha256": "a37640aa9061fecc7df58e07747c3fb598c1de1e4d845a373cb7b085f2cef1cc"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-result.json": {
+      "source": "work/export-app-20261020/art-smoke-final/result.json",
+      "bytes": 72,
+      "sha256": "8f8e6454fff7c499043c63110a333ada06b7d6fb76ae3bb11d1ce5f09fade7e1"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-result.log": {
+      "source": "work/export-app-20261020/art-smoke-final/result.log",
+      "bytes": 6766,
+      "sha256": "8f8e6eba358063a87790302a484977d8cf8bc09978738e352a66ead26f07394c"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-actual-release.mp4": {
+      "source": "work/export-app-20261020/art-smoke-final/actual-release.mp4",
+      "bytes": 5509621,
+      "sha256": "ea69b2e8294b8fe9b031b2cea6cdc4287cabf396dadc74abce3c515091f6f94e"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-twelve-overview.png": {
+      "source": "work/export-app-20261020/art-smoke-final/twelve-overview.png",
+      "bytes": 401374,
+      "sha256": "7c08f311bb2fa38b78a379de41ab6806e4e32b5e47f6211154ecb591c2441475"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-001.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-001.png",
+      "bytes": 225846,
+      "sha256": "8aa758e1e8d6787edea510bd85f42cd487ba39debf84ea7d66f80428c226bc10"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-002.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-002.png",
+      "bytes": 70371,
+      "sha256": "4a8d21dfe85c108988d1e27bd651ba9086539552d477f7af1bce1fad09d43765"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-003.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-003.png",
+      "bytes": 338134,
+      "sha256": "adc09e7f9b3f20c24a47657678742fca8cf108435ccf789a38fd6d09e9b983a9"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-004.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-004.png",
+      "bytes": 66393,
+      "sha256": "0251df0ff94c28a1c0de29598e72bce02b2b4f8e75967217236f2c4483b3b2d5"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-005.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-005.png",
+      "bytes": 36660,
+      "sha256": "15a8bb6c3504b57f19c8fd7903b0c54158a77c4cbaf2342c3e88796ac12a3c60"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-006.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-006.png",
+      "bytes": 92569,
+      "sha256": "8a149271c849829a5afe161d569b97ac9d1c9cf39c44c4e2acb07575d9cf3fe5"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-007.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-007.png",
+      "bytes": 14849,
+      "sha256": "8346d9766609f44a33c43eca694b96692ab3b176dbd7b63a4643f6d4dbcceaef"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-008.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-008.png",
+      "bytes": 57024,
+      "sha256": "efc9704a2f6e828221581a0f29dc67d1e65651c0385ba43df4eb43c589f8a72b"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-009.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-009.png",
+      "bytes": 109830,
+      "sha256": "05217a09e09a005dfe16ae6c144881cb75bee481b032c44f6ea62cd6266c5622"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-010.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-010.png",
+      "bytes": 108628,
+      "sha256": "24cbd01308f96b75240727ac74725f8b2c230f41455eb991104cccd9f8bc004e"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-011.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-011.png",
+      "bytes": 115345,
+      "sha256": "435d9601c747da3c424a2339d62423f838e39a344316be40ee62ae2539e5c50c"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-art-smoke-game-012.png": {
+      "source": "work/export-app-20261020/art-smoke-final/profile/art-smoke-game-012.png",
+      "bytes": 175563,
+      "sha256": "ba40454b47830f77f1b654be2fcae0aa99e8a3f23c5bd114303dba7fb87e0fe2"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-rejected-old-cache-assumption.log": {
+      "source": "work/export-app-20261020/art-smoke/result.log",
+      "bytes": 4255,
+      "sha256": "5326643266c681bdf02835e06df306f0d93521fbb9e78c4463dca759970b42d2"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-rejected-old-cache-assumption.json": {
+      "source": "work/export-app-20261020/art-smoke/result.json",
+      "bytes": 73,
+      "sha256": "e4aff9aaabb47f6c6b6c9771588a79be0fdd68496affd77f6833e7204b72920e"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-rejected-path-override.log": {
+      "source": "work/export-app-20261020/time/writer.log",
+      "bytes": 260,
+      "sha256": "0a0bac803290bbf86126f5bb10f16cf097820f4fac3f50207ee54f6f6cd6bb71"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-negative-missing-backdrop.log": {
+      "source": "work/export-app-20261020/art-smoke-negative/result.log",
+      "bytes": 5003,
+      "sha256": "d254c932685659ec1379f1cca0d626029bfda5e7ab6e503e7cab4a49c7410fe4"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-negative-missing-backdrop.json": {
+      "source": "work/export-app-20261020/art-smoke-negative/result.json",
+      "bytes": 74,
+      "sha256": "f7ed7c1789528085a7b6779d91f657f8a7af6b0b21ead839cc9d134fdeed20c5"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-check-game-startup.log": {
+      "source": "work/export-app-20261020/checks/game-startup.log",
+      "bytes": 11786,
+      "sha256": "1afd8534befb25e2c62fdeb66cc0b1d7eee3e610f798b0377dbcdeda3c90c7bb"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-check-balloon-delivery-tests.log": {
+      "source": "work/export-app-20261020/checks/balloon-delivery-tests.log",
+      "bytes": 113,
+      "sha256": "a31fd4927b79afe31c30fc69ac407231be18a64a0d81b3e0ae4db3e41601fde1"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-check-welcome-minigame-tests.log": {
+      "source": "work/export-app-20261020/checks/welcome-minigame-tests.log",
+      "bytes": 14439,
+      "sha256": "1a15aaf1d324cc9456d278a8117c66d7cbbf687e0b3669c997a4432a9adf759e"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-check-main-scene-integration-tests.log": {
+      "source": "work/export-app-20261020/checks/main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "31e4f2647cc52d36ee2769daf7f321c598b6ab8220b9be303d07e25581fce875"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-01-skip.png": {
+      "source": "work/export-app-20261020/external-writer/01-skip.png",
+      "bytes": 1028989,
+      "sha256": "ca0f3e6237788faaf9f82b72f4897155a5e05928a23f3b1f6810c27e743d52ad"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-02-north.png": {
+      "source": "work/export-app-20261020/external-writer/02-north.png",
+      "bytes": 1290177,
+      "sha256": "dee245231a7486bd671154607bb47957847514fe8cc52cdcb383a1d23639b231"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-05-guide.png": {
+      "source": "work/export-app-20261020/external-writer/05-guide.png",
+      "bytes": 1312548,
+      "sha256": "af8315ba2556fa3d2dcd2df7a283b3050864314ece90634a98b97f68f0277b22"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-noon-collected.png": {
+      "source": "work/export-app-20261020/external-writer/10-dawn-collected.png",
+      "bytes": 262664,
+      "sha256": "e24dca1df4e7d80de4533c3399ba13beaa2513c90ef0956a533e3e85b4853143"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-12-dawn-collected.png": {
+      "source": "work/export-app-20261020/external-writer/12-dawn-collected.png",
+      "bytes": 234112,
+      "sha256": "0fdd7e3f441bfc4ad46abbcec5e9e72e72e9e79cbad9ac66f631866bc82a2081"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-13-dusk-collected.png": {
+      "source": "work/export-app-20261020/external-writer/13-dusk-collected.png",
+      "bytes": 230580,
+      "sha256": "d565ae82da32cec52a66c33212f897a6ac85519d47e63bcf75105518f569b596"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-14-night-collected.png": {
+      "source": "work/export-app-20261020/external-writer/14-night-collected.png",
+      "bytes": 213221,
+      "sha256": "105288cdaa56071d30f4185c73db7eaba1c0b6b2842a10cb72f8e011815aaa18"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-writer-15-pause-quit.png": {
+      "source": "work/export-app-20261020/external-writer/15-pause-quit.png",
+      "bytes": 207060,
+      "sha256": "16559f98a58eb756d7db77e7f2bc400e856c18fb1c164b131c16b7abc01ccf0d"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-reader-04-time-album.png": {
+      "source": "work/export-app-20261020/external-reader/04-time-album.png",
+      "bytes": 282074,
+      "sha256": "93bc868c55465e273d0200cbed3cc3f2f60e4866cf20cfcee675c2bca96a693a"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-reader-05-original-first.png": {
+      "source": "work/export-app-20261020/external-reader/05-original-first.png",
+      "bytes": 715998,
+      "sha256": "b0338e1a20e9d22c4d7e861013088596d97db6cfffe71f013bb1a74ff7d536e5"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-reader-06-original-noon.png": {
+      "source": "work/export-app-20261020/external-reader/06-original-noon.png",
+      "bytes": 769992,
+      "sha256": "1eae24a39f2a4d778c55b34478905a19542cce9511f3168c4500ce3a3d4c7603"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-reader-07-original-dusk.png": {
+      "source": "work/export-app-20261020/external-reader/07-original-dusk.png",
+      "bytes": 716925,
+      "sha256": "a6c5f63a9138eacc0f0a7d8caf27c8e69a8136fad26ca45e62a62bfb2273b460"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-reader-08-original-night.png": {
+      "source": "work/export-app-20261020/external-reader/08-original-night.png",
+      "bytes": 688513,
+      "sha256": "283003bba3c4b932cc70ba33f345fe83c3b806ff945f38406836bf09f195596b"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-final-05-album-first.png": {
+      "source": "work/export-app-20261020/external-final/05-album-first.png",
+      "bytes": 71181,
+      "sha256": "69efb87f69dc095b3ad24ef10c5f7325bc1f40bcc5174a234c7a3c7cd4a7b9f1"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-final-07-time-tab-single.png": {
+      "source": "work/export-app-20261020/external-final/07-time-tab-single.png",
+      "bytes": 282156,
+      "sha256": "9378a9d2b7c06835e4c543cca688341bfc2fa07d68ba48361212ef243898f46b"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-final-08-night-original-single.png": {
+      "source": "work/export-app-20261020/external-final/08-night-original-single.png",
+      "bytes": 688298,
+      "sha256": "7b00622a39674c5488992983b7adcb6f98ebcf86ecc11bcc524222f832f0aedb"
+    },
+    "pm/Snapland-main/images/MAIN-9-release-20261020-two-process-expected.json": {
+      "source": "work/export-app-20261020/external-profile/expected.json",
+      "bytes": 4131,
+      "sha256": "d8a2d6236b1a5405847baa52c7d1bd7a97d1cd183ad33547fd9deaa18f813ae6"
+    }
+  }
+}

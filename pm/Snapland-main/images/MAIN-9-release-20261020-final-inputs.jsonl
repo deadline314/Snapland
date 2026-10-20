@@ -1,0 +1,15 @@
+{"t": 9.0, "action": {"key": "m", "hold": 0.25, "wait": 0.8}}
+{"t": 10.252, "action": {"click": [386, 296], "wait": 0.8, "shot": "01-album-first-click"}}
+{"t": 12.182, "action": {"click": [535, 130], "wait": 0.8, "shot": "02-time-album-first-click"}}
+{"t": 14.17, "action": {"click": [1060, 270], "wait": 0.8, "shot": "03-night-original-first-click"}}
+{"t": 59.769, "action": {"key": "Escape", "hold": 0.25, "wait": 0.8}}
+{"t": 61.021, "action": {"key": "m", "hold": 0.25, "wait": 0.8, "shot": "04-reopen-ticket"}}
+{"t": 62.36, "action": {"click": [386, 296], "wait": 0.8, "shot": "05-album-first"}}
+{"t": 64.239, "action": {"click": [386, 296], "wait": 0.8, "shot": "06-album-second"}}
+{"t": 127.469, "action": {"click": [535, 130], "wait": 0.8, "shot": "07-time-tab-single"}}
+{"t": 129.394, "action": {"click": [1060, 270], "wait": 0.8, "shot": "08-night-original-single"}}
+{"t": 144.922, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 145.976, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 147.027, "action": {"key": "Escape", "hold": 0.25, "wait": 0.6}}
+{"t": 148.085, "action": {"click": [1040, 617], "wait": 0.8}}
+{"t": 149.929, "action": {"end": true}}

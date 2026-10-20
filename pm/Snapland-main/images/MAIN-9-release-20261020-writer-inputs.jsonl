@@ -1,0 +1,29 @@
+{"t": 5.482, "action": {"key": "Escape", "shot": "01-skip"}}
+{"t": 6.045, "action": {"key": "w", "hold": 8.4, "shot": "02-north"}}
+{"t": 22.674, "action": {"key": "a", "hold": 1.8, "shot": "03-west"}}
+{"t": 24.95, "action": {"key": "t", "shot": "04-time"}}
+{"t": 42.763, "action": {"key": "Escape"}}
+{"t": 43.034, "action": {"key": "w", "hold": 1.6, "shot": "05-guide"}}
+{"t": 45.125, "action": {"key": "t", "shot": "06-time-at-guide"}}
+{"t": 63.029, "action": {"key": "t", "wait": 1.0, "shot": "07-time-retry"}}
+{"t": 84.015, "action": {"key": "w", "hold": 0.7, "wait": 0.8, "shot": "08-close-guide"}}
+{"t": 85.985, "action": {"key": "t", "hold": 0.25, "wait": 0.8, "shot": "09-time"}}
+{"t": 108.662, "action": {"click": [268, 199], "wait": 0.8}}
+{"t": 109.98, "action": {"click": [530, 632], "wait": 2.0, "shot": "10-dawn-collected"}}
+{"t": 140.246, "action": {"click": [268, 199], "wait": 1.0}}
+{"t": 141.767, "action": {"click": [268, 199], "wait": 1.0, "shot": "11-dawn-selected"}}
+{"t": 161.394, "action": {"click": [530, 632], "wait": 1.0}}
+{"t": 162.909, "action": {"click": [530, 632], "wait": 1.0, "shot": "12-dawn-collected"}}
+{"t": 164.511, "action": {"click": [268, 253], "wait": 0.7}}
+{"t": 165.731, "action": {"click": [268, 253], "wait": 0.7}}
+{"t": 166.946, "action": {"click": [530, 632], "wait": 1.0}}
+{"t": 168.462, "action": {"click": [530, 632], "wait": 1.0, "shot": "13-dusk-collected"}}
+{"t": 170.046, "action": {"click": [450, 253], "wait": 0.7}}
+{"t": 171.257, "action": {"click": [450, 253], "wait": 0.7}}
+{"t": 172.469, "action": {"click": [530, 632], "wait": 1.0}}
+{"t": 173.987, "action": {"click": [530, 632], "wait": 1.0, "shot": "14-night-collected"}}
+{"t": 195.57, "action": {"key": "Escape", "hold": 0.25, "wait": 0.8}}
+{"t": 196.825, "action": {"key": "Escape", "hold": 0.25, "wait": 0.8, "shot": "15-pause-quit"}}
+{"t": 217.673, "action": {"click": [1040, 617], "wait": 1.0}}
+{"t": 219.191, "action": {"click": [1040, 617], "wait": 1.0, "shot": "16-after-save-quit"}}
+{"t": 220.716, "action": {"end": true}}

@@ -102,8 +102,14 @@ func _smoke_art_test() -> void:
 	if DisplayServer.get_name()=="headless":
 		await _smoke_art_abort("--smoke-art requires a GPU-backed, non-headless display")
 		return
-	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty():
-		await _smoke_art_abort("--smoke-art requires isolated SNAPLAND_SAVE_PATH")
+	var review_profile := OS.get_environment("SNAPLAND_SAVE_PATH")
+	if not review_profile.is_absolute_path():
+		await _smoke_art_abort("--smoke-art requires an absolute isolated SNAPLAND_SAVE_PATH")
+		return
+	var review_directory := review_profile.get_base_dir()
+	var directory_error := DirAccess.make_dir_recursive_absolute(review_directory)
+	if directory_error != OK and directory_error != ERR_ALREADY_EXISTS:
+		await _smoke_art_abort("Could not prepare the private art review directory")
 		return
 	var final_status: Dictionary={}
 	var final_ready := false
@@ -118,21 +124,24 @@ func _smoke_art_test() -> void:
 		await RenderingServer.frame_post_draw
 		await get_tree().create_timer(0.08).timeout
 		await RenderingServer.frame_post_draw
-		var drawn_status: Dictionary=session.art_cache_status()
-		if not bool(drawn_status.get("backdrop_atlas_loaded",false)) or not bool(drawn_status.get("props_atlas_loaded",false)) or not bool(drawn_status.get("props_regions_loaded",false)):
-			await _smoke_art_abort("Art atlases did not load while drawing %s"%id)
+		if not is_instance_valid(session.presentation) or not session.presentation.is_visible_in_tree() or session.presentation_mode != session.mode:
+			await _smoke_art_abort("The actual minigame renderer did not become visible: %s"%id)
 			return
+		var image := get_viewport().get_texture().get_image()
+		var capture := review_directory.path_join("art-smoke-%s.png"%id)
+		if image == null or image.is_empty() or FileAccess.file_exists(capture) or image.save_png(capture) != OK:
+			await _smoke_art_abort("Could not preserve a fresh rendered frame for %s"%id)
+			return
+		print("ART SMOKE DRAW: %s renderer=%s capture=%s"%[id,session.presentation.get_script().resource_path,capture])
 		if Session._backdrop_warning_emitted or Session._props_warning_emitted or not world.foliage_warnings.is_empty():
 			await _smoke_art_abort("An art resource warning occurred while drawing %s"%id)
 			return
 		if game_index==12:
-			# Resolve entries not reached by any game's draw path, then preserve the
-			# final live session's cache snapshot/readiness before cancelling it.
-			for key in Session.REQUIRED_PROP_KEYS:
-				var prop_texture: Texture2D=session._prop_texture(key)
-				if not prop_texture is Texture2D:
-					await _smoke_art_abort("Missing prop Texture2D: %s"%key)
-					return
+			# Bespoke 2D/3D renderers need not draw the old common backdrop.
+			# Resolve every shared region separately; do not call it gameplay use.
+			if not session.resolve_shared_art_resources():
+				await _smoke_art_abort("Shared art resource resolution is incomplete")
+				return
 			final_status=session.art_cache_status()
 			final_ready=session.art_assets_ready()
 		_cancel_game()

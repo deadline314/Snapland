@@ -1,0 +1,13 @@
+{
+  "results": [
+    {
+      "case": "wrong-template",
+      "rejected": "Provide the official Godot 4.7.2 Linux x86_64 release template; SHA256 mismatch"
+    },
+    {
+      "case": "existing-output",
+      "rejected": "Output must be an empty private directory: /workspace/work/Snapland-character/work/export-app-20261020/build/release"
+    }
+  ],
+  "existing_binary_sha256_unchanged": "ded7716e95ad939cf342eaef6e56bd7bba59af6221112c280d80e95e177a1998"
+}
