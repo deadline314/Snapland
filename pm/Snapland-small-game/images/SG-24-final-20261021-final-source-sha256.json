@@ -1,0 +1,13 @@
+{
+  "scope": "Final current production and tests root equal staged validation project, after score description clarification. Native output source versions retained in archives and explicit final-rule note.",
+  "sha256": {
+    "game/minigames/session.gd": "009b7648d1f8234a9332feded006448317e0a7d2dd0aec8ac45cac2a6a95df4f",
+    "game/tests/test_minigames.gd": "815fd491205e91d34a07a7d8d6cda9945981081f5b00390d5297bde82e7f31f9",
+    "game/tests/native_shadow_theatre_review.gd": "5813573dab2a11d826b461c96f6259937f95791dc5cc574c87988fcc8f78a70e",
+    "game/tests/native_shadow_outcomes_review.gd": "2e6408749a9d3eb5c82f50699d131657946f514a7c40088c1e122f0e350376d4",
+    "game/minigames/shadow_theatre_model.gd": "880cc3c3d4a1074f8c85cbae29fee2db2152f3e6959b366bc251db844fca2c12",
+    "game/minigames/shadow_theatre_view.gd": "7c55a183fc035ccc7ab9e6d9fd2c69f053db8724f352040c82982f4056c57169",
+    "game/main.gd": "eee2f564157685946ac8d4e3c257dd3a86b5ab9f65f5c4d2ea03788756427157",
+    "game/data/tutorials.json": "c315fa1607d8d20e7d7e0fc7579f3d6c916fd9aa696cd3b58b853fb34affc961"
+  }
+}

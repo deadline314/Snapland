@@ -118,6 +118,8 @@ func _launch_shadow(assisted_run: bool, practice_run: bool) -> bool:
 		await _fail("Native E did not open the shadow station menu")
 		return false
 	var button_text := "練習操作" if practice_run else "開始遊玩"
+	if _find(main.overlay, button_text) == null:
+		if not await _activate_main_button("玩法與選項", "open shadow theatre options"): return false
 	if not await _activate_main_button(button_text, "launch game-009 %s" % ("practice" if practice_run else "formal mode")):
 		return false
 	deadline = _wall_deadline_ms(2500)
@@ -258,7 +260,7 @@ func _move_keyboard_lamp_to(session_id: int, target: Vector2) -> bool:
 		var key := KEY_RIGHT if difference.x > 0.0 else KEY_LEFT
 		if absf(difference.y) > absf(difference.x):
 			key = KEY_UP if difference.y > 0.0 else KEY_DOWN
-		_send_key(KEY_SHIFT, difference.length() <= 0.08)
+		_send_key(KEY_SHIFT, difference.length() <= 0.30)
 		_send_key(key, true)
 		# Hold across an actual idle update; physics ticks can precede View._process.
 		await get_tree().process_frame

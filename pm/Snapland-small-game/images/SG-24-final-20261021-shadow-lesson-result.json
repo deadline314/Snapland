@@ -1,0 +1,9 @@
+{
+  "case": "shadow-lesson",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 41.25,
+  "passes": [
+    "PASS: native tutorial lifecycle game-009"
+  ]
+}

@@ -1,0 +1,76 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-009",
+    "mistakes": 0,
+    "observed_frame": 212,
+    "observed_process_id": 37912,
+    "observer_only": true,
+    "practice": false,
+    "score": 1365,
+    "score_summary": {
+      "label": "影子對準分",
+      "rows": [
+        {
+          "amount": 420,
+          "count": 1,
+          "key": "shadow_round_1",
+          "label": "第 1 輪 · 精準定影"
+        },
+        {
+          "amount": 452,
+          "count": 1,
+          "key": "shadow_round_2",
+          "label": "第 2 輪 · 精準定影"
+        },
+        {
+          "amount": 493,
+          "count": 1,
+          "key": "shadow_round_3",
+          "label": "第 3 輪 · 精準定影"
+        }
+      ],
+      "rule": "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。",
+      "total": 1365
+    },
+    "success": true
+  },
+  {
+    "assisted": true,
+    "devil": false,
+    "game_id": "game-009",
+    "mistakes": 0,
+    "observed_frame": 301,
+    "observed_process_id": 37912,
+    "observer_only": true,
+    "practice": true,
+    "score": 1500,
+    "score_summary": {
+      "label": "影子對準分",
+      "rows": [
+        {
+          "amount": 500,
+          "count": 1,
+          "key": "shadow_round_1",
+          "label": "第 1 輪 · 精準定影"
+        },
+        {
+          "amount": 500,
+          "count": 1,
+          "key": "shadow_round_2",
+          "label": "第 2 輪 · 精準定影"
+        },
+        {
+          "amount": 500,
+          "count": 1,
+          "key": "shadow_round_3",
+          "label": "第 3 輪 · 精準定影"
+        }
+      ],
+      "rule": "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。",
+      "total": 1500
+    },
+    "success": true
+  }
+]

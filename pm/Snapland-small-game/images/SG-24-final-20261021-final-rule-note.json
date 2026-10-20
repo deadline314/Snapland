@@ -1,0 +1,5 @@
+{
+  "change": "After native capture, clarified the public score rule: each qualified plate earns at most 500; better outline alignment scores higher.",
+  "scope": "Rule description only. Actual grading, score, projection and result row labels unchanged from accepted native runs.",
+  "verification": "Final welcome minigame suite reruns the two-exact-plate ordinary route, requires 1000 and the public 500-point maximum. Original six-suite regression retained separately."
+}

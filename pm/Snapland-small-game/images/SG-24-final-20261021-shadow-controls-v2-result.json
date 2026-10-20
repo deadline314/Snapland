@@ -1,0 +1,9 @@
+{
+  "case": "shadow-controls-v2",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 58.36,
+  "passes": [
+    "PASS: real game-009 station/menu launch, keyboard lateral/depth and Space captures, pause/resume and confirmed retry reset, formal three-round photo awards, and assisted night practice via pointer lamp plus real mouse shutter with unchanged progress"
+  ]
+}

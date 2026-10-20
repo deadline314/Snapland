@@ -1,0 +1,90 @@
+[
+  {
+    "assisted": false,
+    "devil": false,
+    "game_id": "game-009",
+    "mistakes": 3,
+    "observed_frame": 37,
+    "observed_process_id": 38015,
+    "observer_only": true,
+    "practice": false,
+    "score": 0,
+    "score_summary": {
+      "label": "影子對準分",
+      "rows": [
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "shadow_round_1",
+          "label": "第 1 輪未達投影門檻"
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "shadow_round_2",
+          "label": "第 2 輪未達投影門檻"
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "shadow_round_3",
+          "label": "第 3 輪未達投影門檻"
+        },
+        {
+          "amount": 0,
+          "count": 3,
+          "key": "mistakes",
+          "label": "失誤（不計分）",
+          "progress_only": true
+        }
+      ],
+      "rule": "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。",
+      "total": 0
+    },
+    "success": false
+  },
+  {
+    "assisted": false,
+    "devil": false,
+    "game_id": "game-009",
+    "mistakes": 1,
+    "observed_frame": 136,
+    "observed_process_id": 38015,
+    "observer_only": true,
+    "practice": false,
+    "score": 913,
+    "score_summary": {
+      "label": "影子對準分",
+      "rows": [
+        {
+          "amount": 420,
+          "count": 1,
+          "key": "shadow_round_1",
+          "label": "第 1 輪 · 精準定影"
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "shadow_round_2",
+          "label": "第 2 輪未達投影門檻"
+        },
+        {
+          "amount": 493,
+          "count": 1,
+          "key": "shadow_round_3",
+          "label": "第 3 輪 · 精準定影"
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "mistakes",
+          "label": "失誤（不計分）",
+          "progress_only": true
+        }
+      ],
+      "rule": "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。",
+      "total": 913
+    },
+    "success": true
+  }
+]

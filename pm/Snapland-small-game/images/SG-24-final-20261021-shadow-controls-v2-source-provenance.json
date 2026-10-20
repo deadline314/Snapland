@@ -1,0 +1,18 @@
+{
+  "base": "8899e2a45ca3cf87d39cdff963b6c9ec7ac2c6b0",
+  "diagnostic_changes": "dependency paths and private Main screenshot observer only; returning-player tutorial fixture and station relocation; no gameplay thresholds or clocks changed",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_fountain_review.gd": {
+      "source_sha256": "78633fab810b33d449f7611ab95254eb723b4810ca973e058ad71293e5e7be63",
+      "copy_sha256": "3384ea3d3106bbf66af74884a891b0ec1e52eaf218b121348b78942c8b0bc20c"
+    },
+    "game/tests/native_shadow_theatre_review.gd": {
+      "source_sha256": "5813573dab2a11d826b461c96f6259937f95791dc5cc574c87988fcc8f78a70e",
+      "copy_sha256": "b23141a4e7815b13c9f936479fa6fcbce46177946c343b2cfec0276cd7f0a3ef"
+    }
+  }
+}

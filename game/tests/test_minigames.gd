@@ -631,6 +631,8 @@ func _test_shadow_boundaries() -> void:
 	_expect(ordinary_rows[0].perfect and ordinary_rows[1].status == "miss" and ordinary_rows[2].perfect and ordinary.mistakes == 1, "misaligned shutter remains in the real three-round ledger as a miss")
 	_expect(ordinary.score > 0 and ordinary.score == ordinary.shadow_model.score and ordinary.score_summary().total == ordinary.score, "captured model points flow into the shared score total and result summary")
 	var ordinary_summary: Dictionary = ordinary_results[0].score_summary
+	_expect(str(ordinary_summary.rows[0].label).contains("精準定影") and str(ordinary_summary.rows[1].label).contains("未達投影門檻"), "shadow result distinguishes precise captures from a missed projection")
+	_expect(ordinary.score == 1000 and str(ordinary_summary.rule).contains("最高 500 分"), "two exactly aligned ordinary plates earn 500 each and the public rule explains the maximum")
 	var ordinary_row_total := 0
 	for row in ordinary_summary.rows:
 		ordinary_row_total += int(row.amount)

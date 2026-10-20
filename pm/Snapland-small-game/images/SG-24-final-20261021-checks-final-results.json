@@ -1,0 +1,44 @@
+[
+  {
+    "name": "shadow theatre model tests",
+    "exit": 0,
+    "seconds": 0.24,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "shadow theatre view tests",
+    "exit": 0,
+    "seconds": 0.53,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "welcome minigame tests",
+    "exit": 0,
+    "seconds": 74.05,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 23.45,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI shell tests",
+    "exit": 0,
+    "seconds": 48.51,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI minigame tests",
+    "exit": 0,
+    "seconds": 6.87,
+    "errors": 0,
+    "error": null
+  }
+]

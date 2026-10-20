@@ -1,0 +1,358 @@
+{
+  "ticket": "SG-24",
+  "date": "2026-10-21 Asia/Taipei",
+  "runtime": "Godot 4.7.2 official, Compatibility, llvmpipe, 1280x720, Dummy audio",
+  "evidence_limits": "Actual input-driven native runs. Movies fully decoded; still captures viewed, not continuous playback or audio listening. Returning-player tutorial fixture and station relocation in controls/outcomes; separate new-player tutorial lifecycle. Original source and diagnostic copies in archive. No model scoring, clock or award injection.",
+  "files": [
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-000-native-shadow-theatre-paused.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/000-native-shadow-theatre-paused.png",
+      "sha256": "22b39bb1e27eaec2a8dd30f79b0afed4ff775186f9e88f4c4103e8a4d79779c9"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-001-native-shadow-theatre-formal-round-1-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/001-native-shadow-theatre-formal-round-1-cast.png",
+      "sha256": "24e91193c4aa3a151552b4d59b77854e973cffcca152096e476a0504af00e3a7"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-002-native-shadow-theatre-formal-round-2-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/002-native-shadow-theatre-formal-round-2-cast.png",
+      "sha256": "d4c362c4c44e8b2e6920ebd208e8a3dc8cbc2cc416d395c0b45fd4de2554c1bb"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-003-native-shadow-theatre-formal-round-3-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/003-native-shadow-theatre-formal-round-3-cast.png",
+      "sha256": "cd6bc8c1bb712dec2ab568cfaaa7b6aeb673ed9617bce34adf2a434ded1df330"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-004-natural-00-game-009-score-1365.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/004-natural-00-game-009-score-1365.png",
+      "sha256": "6a2d14afc46638511ea43b38cfbad0fc1e0453792c79c78b5cc8c215eac2e297"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-005-native-shadow-theatre-formal-result.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/005-native-shadow-theatre-formal-result.png",
+      "sha256": "4b969fcc05cf92c5312ad6be4f5a1cf1777be0cb6ae6c08ab804bb87ba14ea00"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-006-native-shadow-theatre-paused.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/006-native-shadow-theatre-paused.png",
+      "sha256": "459d5c6193647dd9e9c42f8603adf4e04f393e623b1f0328e8dfa8621c3fdede"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-007-native-shadow-theatre-practice-round-1-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/007-native-shadow-theatre-practice-round-1-cast.png",
+      "sha256": "c88392125eef27940c6836814282cbd04e5ef6d08dde745e63d7dc6198a6af6d"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-008-native-shadow-theatre-practice-round-2-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/008-native-shadow-theatre-practice-round-2-cast.png",
+      "sha256": "0c88a29b2a6be870c53c1fa20afd4240b629b41621fd0af1b612caf9250c75a4"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-009-native-shadow-theatre-practice-round-3-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/009-native-shadow-theatre-practice-round-3-cast.png",
+      "sha256": "33e977c2e79352a481bfa20945adac2fd13c6eed50a592fb4c95f0cab935eb0a"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-010-natural-01-game-009-score-1500.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/010-natural-01-game-009-score-1500.png",
+      "sha256": "5583f754efde7035b57903f6e82817965af60303912e5d412772fec23e50481a"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-011-native-shadow-theatre-practice-result.png",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/captures/011-native-shadow-theatre-practice-result.png",
+      "sha256": "0bd50173399e47ef0f787208d6b4e67404585d4f114f692ed6839a72839f54e9"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-result.log",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/result.log",
+      "sha256": "54ddc3f3573f15b1333969840b0709fd976ce610e2c731b1df2681e12497bae1"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-result.json",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/result.json",
+      "sha256": "cb9d7cece1634ea0db1000bbb2b230a99609414807654b7b9bab90a89ae855d2"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-source-provenance.json",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/source-provenance.json",
+      "sha256": "7ebb141bcca762b787f02cb39a46892afea14cdea5332607e2aa978f31084c94"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-natural-results.json",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/natural-results.json",
+      "sha256": "56f39cbc47043f78e3e03c08769126f11da99d88fba089b9ec124ce541dfa2d1"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-video-metadata.json",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/video-metadata.json",
+      "sha256": "7faf00845f10913c875e1a1dc86b7ffb31d51c9dc0774a68c53f1d3350ef4375"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-controls-v2-play.mp4",
+      "source": "work/puzzle-batch-20261020/shadow-controls-v2/play.mp4",
+      "sha256": "44f79056ff1bf25aa0f0464c01baf1791161af6f93b916f40341b6d5a998124c"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-000-native-shadow-theatre-miss-round-1-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/000-native-shadow-theatre-miss-round-1-cast.png",
+      "sha256": "7f8cecbd620cdcb40a72830047b6327c51a76d6bf0abb67523f78226fccfd618"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-001-native-shadow-theatre-miss-round-2-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/001-native-shadow-theatre-miss-round-2-cast.png",
+      "sha256": "bb230f27cc0d69100460eedb930c558b6d128af94c631c659881d976b81fa8fa"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-002-native-shadow-theatre-miss-round-3-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/002-native-shadow-theatre-miss-round-3-cast.png",
+      "sha256": "a9fe810e6735e91fead328befcfcb3b4a6d10a43bd6edba2b3d9da54cf4325fa"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-003-natural-00-game-009-score-0.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/003-natural-00-game-009-score-0.png",
+      "sha256": "b6194fa1ec29e05457f5b8565a62d161453b7557bd554e3d32e24b80381c589f"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-004-shadow-real-three-misses.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/004-shadow-real-three-misses.png",
+      "sha256": "ac451f191f6d280437498daea23d69fb71383f26ee1dbdc43a3a13cb89efab48"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-005-shadow-result-retry-reset.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/005-shadow-result-retry-reset.png",
+      "sha256": "7f8cecbd620cdcb40a72830047b6327c51a76d6bf0abb67523f78226fccfd618"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-006-native-shadow-theatre-ordinary-round-1-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/006-native-shadow-theatre-ordinary-round-1-cast.png",
+      "sha256": "24e91193c4aa3a151552b4d59b77854e973cffcca152096e476a0504af00e3a7"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-007-native-shadow-theatre-ordinary-round-2-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/007-native-shadow-theatre-ordinary-round-2-cast.png",
+      "sha256": "a986360ee75d144966af3e0e722b7b841e555cd386d96f4ec4c06a186e71285c"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-008-native-shadow-theatre-ordinary-round-3-cast.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/008-native-shadow-theatre-ordinary-round-3-cast.png",
+      "sha256": "7fa6e4878891c1fb82133fd210dc7199c11a44ea800ae903460b5a2f70fae058"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-009-natural-01-game-009-score-913.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/009-natural-01-game-009-score-913.png",
+      "sha256": "90b5a70ecf6ca23a205acf7391facff6b6a591b662224004662d8b3094942283"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-010-shadow-real-ordinary-result.png",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/captures/010-shadow-real-ordinary-result.png",
+      "sha256": "9206062013c8ca0eb986094e6eca79253a8669d9bbff253f63b8efa4bdbe3412"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-result.log",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/result.log",
+      "sha256": "179eebea19686e657d0fb44c981212e0f3c9bbcb73b90191f876cd23cee70164"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-result.json",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/result.json",
+      "sha256": "1791f280d1ea35f2b806bfc2f25eb06aeb9294c8742eb0b424816711ba8db15f"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-source-provenance.json",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/source-provenance.json",
+      "sha256": "739847442534f66073335d41128a44e94e687c32fc518ec392ebeb99c4c0eaa9"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-natural-results.json",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/natural-results.json",
+      "sha256": "49c1c34c2c3d5988690552d709e1e9515ed291dcfcea2e0cb25b949bc54a5008"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-outcomes.json",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/outcomes.json",
+      "sha256": "b42a9f9ae7cca4f5ac5ac3e526e35115893ce10911514b289284c289c4e6a141"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-video-metadata.json",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/video-metadata.json",
+      "sha256": "8d8248de0d7a8e6dadaa60bf4249bf31873296c6b4e192aee14cd547715ae50b"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-outcomes-v2-play.mp4",
+      "source": "work/puzzle-batch-20261020/shadow-outcomes-v2/play.mp4",
+      "sha256": "4b296c823e964b3475e87d28a297170a736dae03129aad116521c6cce7a05801"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-game-009-first-step.png",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/captures/game-009-first-step.png",
+      "sha256": "8a2d7cac6dab07f7ef84388a558ae7e64e074c06bf56148a46ae7321533a93e8"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-game-009-help-reopened.png",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/captures/game-009-help-reopened.png",
+      "sha256": "b83e74ba27812d61aee5d5a7010b6ee5eb726d8e9c0c6e278aa5349a712f1758"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-game-009-help-step-01.png",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/captures/game-009-help-step-01.png",
+      "sha256": "b83e74ba27812d61aee5d5a7010b6ee5eb726d8e9c0c6e278aa5349a712f1758"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-game-009-private-help-step-01.png",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/captures/game-009-private-help-step-01.png",
+      "sha256": "b83e74ba27812d61aee5d5a7010b6ee5eb726d8e9c0c6e278aa5349a712f1758"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-game-009-step-02.png",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/captures/game-009-step-02.png",
+      "sha256": "1350fa850ebb59327b4a60625dfd67e1a4baaf368ab0d1b96524d8f81b03dc16"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-game-009-step-03.png",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/captures/game-009-step-03.png",
+      "sha256": "1e4a2caf16431593690ec2b577fc0384a56c12cb057869f446964bc7abac985c"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-result.log",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/result.log",
+      "sha256": "0c5d6e0450456efa89dff47dc1f3f84312f0a68ce41f67c96513854329d63bf4"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-result.json",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/result.json",
+      "sha256": "d9106c078592cf45dfefc5788e94ea786a1fa0b56dbd11af3f132350a398c1ef"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-lesson-source-provenance.json",
+      "source": "work/puzzle-batch-20261020/shadow-lesson/source-provenance.json",
+      "sha256": "baf200722bc3d0a87fb80ca41f9622b165447875185ec3703d31b670f7e70622"
+    },
+    {
+      "file": "SG-24-final-20261021-research.md",
+      "source": "work/puzzle-batch-20261020/research.md",
+      "sha256": "80e26d8dd0c2580ca6483f01a2a41cf614cca138cf22a9c2ad73f7eaf926692f"
+    },
+    {
+      "file": "SG-24-final-20261021-reference-provenance.json",
+      "source": "work/puzzle-batch-20261020/reference-provenance.json",
+      "sha256": "f5b4eb2a0e08fc31f6ea575f71a4d7d88a7a456564a699fe4a52bd28aadc1538"
+    },
+    {
+      "file": "SG-24-final-20261021-reference-nintendo-prime-cut.webp",
+      "source": "work/puzzle-batch-20261020/reference-nintendo-prime-cut.webp",
+      "sha256": "aedc4fa84ac4c5e50e0a6f17767fe009bc1f6d3bded657fadd4b9ae4bae0d0ad"
+    },
+    {
+      "file": "SG-24-final-20261021-reference-review-overview.jpg",
+      "source": "work/puzzle-batch-20261020/reference-review-overview.jpg",
+      "sha256": "02cf1fa425796c69287ca16352898550941c37b3d01051d18048d7659dd33f54"
+    },
+    {
+      "file": "SG-24-final-20261021-current-component-sha256.json",
+      "source": "work/puzzle-batch-20261020/current-component-sha256.json",
+      "sha256": "c370c1dac3b940892bfffcab044928c964ec1159bb464c2bf695bc69238af620"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-overview-lessons.jpg",
+      "source": "work/puzzle-batch-20261020/shadow-overview-lessons.jpg",
+      "sha256": "447eac613a114ceb357e521de44935b7faacaf5f703a87e74f5700b6128c42bb"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-overview-1.jpg",
+      "source": "work/puzzle-batch-20261020/shadow-overview-1.jpg",
+      "sha256": "bd1eca3390662baefe6893895ad59f3782d0a937e3b17c3a169f5690b818afe4"
+    },
+    {
+      "file": "SG-24-final-20261021-shadow-overview-0.jpg",
+      "source": "work/puzzle-batch-20261020/shadow-overview-0.jpg",
+      "sha256": "7cad52cacf5f2a26bb9c065947f97f45ee6518760a9e6f177fcfaf4b8ced3aa0"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-final-results.json",
+      "source": "work/puzzle-batch-20261020/checks-final/results.json",
+      "sha256": "4bae07150582dbcd489f208ea92cd16067cdd1260206e06b6884305dfb6ca12e"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-final-pixel-UI-shell-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-final/pixel-UI-shell-tests.log",
+      "sha256": "8bb58a73e05e23b135e932bc26fb253b54837e3a52cea372d6d8973b98623549"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-final-pixel-UI-minigame-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-final/pixel-UI-minigame-tests.log",
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-final-welcome-minigame-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-final/welcome-minigame-tests.log",
+      "sha256": "5f3503b68797a7edf97f98c28f3c5af8d6c2c70fde6e04fc51d112014cd6f968"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-final-shadow-theatre-view-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-final/shadow-theatre-view-tests.log",
+      "sha256": "eb2989d68f33d70c7ad07a63fb10c101cafafbac9e252385439b1554a018c5e7"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-final-main-scene-integration-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-final/main-scene-integration-tests.log",
+      "sha256": "c198e47bbe9fc1daf09e10f429c811d8633f4b5bc88922ca872f95f86baf934f"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-final-shadow-theatre-model-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-final/shadow-theatre-model-tests.log",
+      "sha256": "7fdf9d003947385a23ca10c8e2d302144ba5329a3bd79afcf682707de4707cb1"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-rule-final-results.json",
+      "source": "work/puzzle-batch-20261020/checks-rule-final/results.json",
+      "sha256": "92154be8e94b4979dbc2789b35217a541404d6910db761e7ac18a5fac24dcba7"
+    },
+    {
+      "file": "SG-24-final-20261021-checks-rule-final-welcome-minigame-tests.log",
+      "source": "work/puzzle-batch-20261020/checks-rule-final/welcome-minigame-tests.log",
+      "sha256": "e4153496a19896c2443260636ca1fea65581746e77e6d18a2a871dd7d170d422"
+    },
+    {
+      "file": "SG-24-final-20261021-final-source-sha256.json",
+      "source": "work/puzzle-batch-20261020/final-source-sha256.json",
+      "sha256": "78824cc6194638aa19c5fff444cc85cdb09ade38081a921aca5174775d48c4ec"
+    },
+    {
+      "file": "SG-24-final-20261021-final-rule-note.json",
+      "source": "work/puzzle-batch-20261020/final-rule-note.json",
+      "sha256": "e5078f8402a55d4c075ce132fbbef9a288fb81550003b171528bb85e21118b7a"
+    },
+    {
+      "file": "SG-24-final-20261021-design-checks.log",
+      "source": "work/puzzle-batch-20261020/design-checks.log",
+      "sha256": "b2131fa9905eb5f22e6b0727ed07f45adcd31742903349ae0e54ee6fc57563dd"
+    },
+    {
+      "file": "SG-24-final-20261021-design-before-SG26.log",
+      "source": "work/puzzle-batch-20261020/design-before-SG26.log",
+      "sha256": "86ff4586fb870397fe32c5e2385514cad71ec4890ac583f8de57e29b92a9102d"
+    },
+    {
+      "file": "SG-24-final-20261021-rejected-shadow-controls-result.log",
+      "source": "work/puzzle-batch-20261020/shadow-controls/result.log",
+      "sha256": "6806e87266989f6e9358608f54740d42b33826d594139135e8fbbd699b80f5fc"
+    },
+    {
+      "file": "SG-24-final-20261021-rejected-shadow-controls-result.json",
+      "source": "work/puzzle-batch-20261020/shadow-controls/result.json",
+      "sha256": "f4f2ffd2d5a781185ae9fd7a91c0a44b5dadd1427aade07e003cfa46699dbb67"
+    },
+    {
+      "file": "SG-24-final-20261021-rejected-shadow-controls-source-provenance.json",
+      "source": "work/puzzle-batch-20261020/shadow-controls/source-provenance.json",
+      "sha256": "e5bcdca8d36815612f08ea5bedfae9e6c6b534df73ea0db90540fcde63ea89f3"
+    },
+    {
+      "file": "SG-24-final-20261021-review-sources.zip",
+      "source": "work/puzzle-batch-20261020/SG-24-review-sources.zip",
+      "sha256": "b979b1ab725cd9d74df5935ef4cc9ac9d9149451e96d0d125614029195b78546"
+    }
+  ]
+}

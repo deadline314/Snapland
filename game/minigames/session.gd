@@ -643,7 +643,7 @@ func _score_rule_text() -> String:
 		"ribbon_rhythm": return "精準 +100、合拍 +60；四個重拍另 +25。六拍一般成功；未輔助、八拍全精準且零錯誤才得惡魔拍貼。"
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
 		"sign_balance": return "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
-		"shadow_alignment": return "三輪以實際點光源投影定影；每輪形狀誤差達門檻才合格。至少兩輪合格得普通成功；三輪精準且零失誤、未開輔助得小惡魔拍貼。"
+		"shadow_alignment": return "每輪合格最高 500 分，輪廓越吻合分數越高；三輪至少兩輪合格得普通拍貼，三輪精準且零失誤、未輔助才得小惡魔拍貼。"
 		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。"
 		"bench_swap": return "每桌 300 分 − 交換次數 × 25；三桌完成得普通拍貼。三桌皆最少交換、未輔助且未重排才得小惡魔拍貼。"
 		"melody_memory": return MelodyMemoryModelScript.score_rule_text()
@@ -1063,7 +1063,7 @@ func _on_shadow_shutter_requested() -> void:
 		return
 	var round_number := int(result.round) + 1
 	if bool(result.qualified):
-		_award_points("shadow_round_%d" % round_number, "第 %d 輪影形定影" % round_number, int(result.score))
+		_award_points("shadow_round_%d" % round_number, "第 %d 輪 · %s" % [round_number, "精準定影" if bool(result.perfect) else "合格定影"], int(result.score))
 		_feedback("影形吻合並完成定影" if bool(result.perfect) else "影形合格，進入下一輪", MINT if bool(result.perfect) else YELLOW)
 	else:
 		_record_score_event("shadow_round_%d" % round_number, "第 %d 輪未達投影門檻" % round_number, 0)
