@@ -1,0 +1,24 @@
+from pathlib import Path
+import fitz,json,textwrap
+r=Path.cwd();data=json.loads((r/'design/03-story/story-structure.json').read_text());o=r/'pm/Snapland-story/images';doc=fitz.open();page=doc.new_page(width=1000,height=900);page.insert_font(fontname='Noto',fontfile=str(r/'assets/fonts/NotoSansCJKtc-Regular.otf'))
+def text(x,y,s,size=14,color=(.08,.20,.25)):
+ page.insert_text((x,y),s,fontname='Noto',fontsize=size,color=color)
+def lines(x,y,s,width=29,size=14):
+ for line in textwrap.wrap(s,width=width):text(x,y,line,size);y+=21
+text(30,42,'Snapland｜六名角色・四段主線',27)
+text(30,70,'ST-1 · 2026-10-20 · 設計文件預覽，不是遊戲畫面或完整玩法驗收',14)
+for i,c in enumerate(data['characters']):
+ x=30+i%2*475;y=112+i//2*102
+ page.draw_line((x,y-15),(x+440,y-15),color=(.2,.5,.52));text(x,y+7,c['name']+'｜'+c['role'],18)
+ lines(x,y+32,c['motivation'],29,14)
+for i,a in enumerate(data['acts']):
+ x=30+i%2*475;y=440+i//2*130
+ text(x,y,str(i+1)+'  '+a['title'],19);lines(x,y+26,a['player_action'],29,14)
+text(30,735,'普通結局：60 張普通卡＋十區造訪；可選首演：普通結局後＋180 張完整普通卡。',16)
+text(30,764,'十區各 2 支線＋3 探索；固定來源可重做、道具免費補回、個人領卡、晚加入可補做。',15)
+text(30,796,'機器檢查：人物引用、四段順序、結局門檻、20／30 覆蓋、無區外／循環前置。',15)
+text(30,832,'目前程式：迎賓三人與兩條任務原型；其餘九區、三角色、兩種結局及多人仍是設計。',14)
+text(30,866,'來源：story-structure.json、story.md、quests.json、exploration.json；實際 PDF 的點陣預覽。',12)
+pdf=r/'work/story-design-20261020/design-preview.pdf';doc.save(pdf);doc.close()
+with fitz.open(pdf) as p:p[0].get_pixmap(matrix=fitz.Matrix(1.5,1.5)).save(o/'ST-1-20261020-design-preview.png')
+print('Created actual PDF and raster preview; not gameplay')

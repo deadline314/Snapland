@@ -1,0 +1,29 @@
+{
+  "base": "056b5d4cba0bf7c907ad8a207c367aed95726c98",
+  "scope": "Design acceptance only: six characters, four main acts,20 quests,30 exploration events; current welcome prototype scope explicit, no game execution in this ticket",
+  "checks": {
+    "design_scopes": 5,
+    "story_python_tests": 16,
+    "python_exit": 0
+  },
+  "source_sha256": {
+    "design/03-story/story-structure.json": "2777ebcbf71cc2c143a32b4cafc05cdf4062bdb23de5eb4e0ef24bdc289970e7",
+    "design/03-story/story.md": "a670356f503b26abb8095ab21be476eefbd63a3dabf69f159883ad0d82c1c9ff",
+    "design/03-story/quest-guide.md": "bf75a394dc08aca8c397afe581403ebc8adb4da0fa9ef7cea8ac3eea0cd10418",
+    "design/03-story/quests.json": "c39561fc016220e9cf3d3bd1c5eb7196152ec39453faef4e2172b1b108e13b74",
+    "design/03-story/exploration.json": "248fc6deff89959c8d571e34dfc94fb3094a776723c922119d15139b32f224e8",
+    "design/03-story/narrative-survey.md": "fbcf83a2c6adcd9a455680399cbc2b93ac1c8e686ae95733ed6d582062b8bab4",
+    "tools/verify_design.py": "f8cba475bb6f7fc9e269c30fd57a7db7ee2c83a43a0f8d1c6412b5e04db6da9a",
+    "tests/test_design_validation.py": "068bdee69824a38aeff6a1d4e7abea5acef876b96ed3fb859761cb4463a8c680"
+  },
+  "images": {
+    "ST-1-20261020-reference-short-hike.png": "35ae73221ff59f77c24807d02a3f49470850adeea46852ba715e2138c256806a",
+    "ST-1-20261020-design-preview.png": "84f96d8699aa5b2e8bd5d2a25f5b2011a954cb1fbc5fdc3b4e8084cd3b648a44"
+  },
+  "review": {
+    "references": "Six primary team texts; one unaltered A Short Hike official static PNG actually viewed",
+    "document": "Actual PDF raster viewed, no clips; accepted rerender uses full embedded font without subsetting error",
+    "initial_preview": "First font-subset render reported a MuPDF font error; regenerated without subsetting, not counted as error-free output"
+  },
+  "pdf_retained_in_workspace_sha256": "cee1a9ac8d88b2836c9ac49ec2c721748638a4218eb8b82ff68acff727d22567"
+}

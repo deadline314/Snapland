@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "status": "design_spec_not_playtested",
+  "characters": [
+    {
+      "id": "ticket",
+      "name": "票票",
+      "role": "迎賓與收藏引導",
+      "motivation": "希望第一次上島的人找到方向，也帶走自己的照片。",
+      "comic_beat": "總先核對路牌，冷笑話比指路更熟。"
+    },
+    {
+      "id": "announcer",
+      "name": "阿浪",
+      "role": "現場廣播與機關維修",
+      "motivation": "希望自己的方向指引與免費工作台真的幫上忙。",
+      "comic_beat": "能修好複雜機關，卻把入口說成出口。"
+    },
+    {
+      "id": "auntie",
+      "name": "糖姨",
+      "role": "休息與餐飲照應",
+      "motivation": "讓每位累了的遊客都有一處能坐下。",
+      "comic_beat": "嘴上說點心賣完，手裡總多留一份。"
+    },
+    {
+      "id": "lulu",
+      "name": "露露",
+      "role": "攝影、相冊與補拍",
+      "motivation": "讓玩家珍惜自己做出的有趣瞬間，不被完美成績綁住。",
+      "comic_beat": "總覺得意外入鏡的照片比排好的更有意思。"
+    },
+    {
+      "id": "imp",
+      "name": "小角",
+      "role": "惡魔實習與日常即興",
+      "motivation": "想自然地加入人類的遊園日常，也幫團長準備首演。",
+      "comic_beat": "藏不好的尾巴被自己說成新構圖。"
+    },
+    {
+      "id": "director",
+      "name": "幕幕",
+      "role": "可選劇場與後日談",
+      "motivation": "想把整本相冊裡的人都留在首演與謝幕合照中。",
+      "comic_beat": "台上氣勢很足，緊張時卻站到鏡頭外。"
+    }
+  ],
+  "acts": [
+    {
+      "id": "arrival",
+      "kind": "onboarding",
+      "title": "照片多了一條尾巴",
+      "cast": [
+        "ticket",
+        "imp"
+      ],
+      "requires": [],
+      "player_action": "移動、選擇導覽或跳過、使用固定合照點。",
+      "payoff": "拍下第一張自己的遊園照片，開始自由探索。"
+    },
+    {
+      "id": "roam",
+      "kind": "free_roam",
+      "title": "今天想玩哪一區",
+      "cast": [
+        "ticket",
+        "announcer",
+        "auntie",
+        "lulu",
+        "imp"
+      ],
+      "requires": [
+        "arrival"
+      ],
+      "player_action": "依園區開放門檻自由選順序，觀察、調整裝置並幫角色即興救場。",
+      "payoff": "每區一次固定迎賓合照登記造訪；重拍不增加分母。"
+    },
+    {
+      "id": "party",
+      "kind": "normal_ending",
+      "title": "六十張就有六十種笑法",
+      "cast": [
+        "ticket",
+        "announcer",
+        "auntie",
+        "lulu",
+        "imp",
+        "director"
+      ],
+      "requires": [
+        "roam"
+      ],
+      "player_action": "回迎賓大道選照片佈景、安排點心座位，拍員工合照。",
+      "payoff": "普通結局後園區永久開放；不額外增加普通卡分母。"
+    },
+    {
+      "id": "premiere",
+      "kind": "optional_final",
+      "title": "一本相冊，一整晚的故事",
+      "cast": [
+        "director",
+        "imp",
+        "lulu"
+      ],
+      "requires": [
+        "party"
+      ],
+      "player_action": "通過完整普通相冊認證後，選玩八款劇場短遊戲，重試並完成謝幕合照。",
+      "payoff": "可選後日談；劇場收藏另冊，不回填入場認證。"
+    }
+  ],
+  "normal_ending": {
+    "threshold": 60,
+    "visited_zones": 10,
+    "requires_devil": false
+  },
+  "optional_final": {
+    "normal_required": 180,
+    "requires_normal_ending": true,
+    "requires_devil": false,
+    "game_count": 8,
+    "separate_album": true
+  },
+  "quest_event_policy": {
+    "permanent_sources": true,
+    "replay_missing_steps": true,
+    "free_prop_recovery": true,
+    "single_player_completion": true,
+    "reward_owner": "each_participant",
+    "late_join_replay": true,
+    "required_ai_level": null,
+    "paid_random_reward": false,
+    "cross_zone_prerequisites": false
+  },
+  "runtime_scope": {
+    "implemented_zone_ids": [
+      "welcome"
+    ],
+    "implemented_character_ids": [
+      "ticket",
+      "imp",
+      "announcer"
+    ],
+    "welcome_quest_ids": [
+      "quest-001",
+      "quest-002"
+    ],
+    "all_ten_zone_story_implemented": false,
+    "notes": "ST-2／3 的迎賓流程為目前原型；其餘角色、主線結局與九區任務仍是設計。詳細行為以 game/data/first_park_story.json 與對應實作票為準。"
+  }
+}

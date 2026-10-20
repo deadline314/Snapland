@@ -135,6 +135,79 @@ class StoryTests(unittest.TestCase):
             v.validate_story(self.q, self.e)
 
 
+
+class StoryStructureTests(unittest.TestCase):
+    def setUp(self):
+        self.data = v.load(ROOT, 'design/03-story/story-structure.json')
+        self.park = v.load(ROOT, 'design/01-park/park.json')
+        self.runtime = v.load(ROOT, 'game/data/first_park_story.json')
+
+    def validate(self):
+        v.validate_story_structure(self.data, self.park, self.runtime)
+
+    def test_current_design_and_runtime_scope_agree(self):
+        self.validate()
+
+    def test_missing_character_rejected(self):
+        self.data['characters'].pop()
+        with self.assertRaisesRegex(ValueError, 'six characters'):
+            self.validate()
+
+    def test_unknown_act_cast_rejected(self):
+        self.data['acts'][0]['cast'].append('missing')
+        with self.assertRaisesRegex(ValueError, 'cast'):
+            self.validate()
+
+    def test_full_collection_cannot_replace_ordinary_ending(self):
+        self.data['normal_ending']['threshold'] = 180
+        with self.assertRaisesRegex(ValueError, 'normal ending'):
+            self.validate()
+
+    def test_normal_ending_cannot_depend_on_optional_finale(self):
+        self.data['acts'][2]['requires'] = ['premiere']
+        with self.assertRaisesRegex(ValueError, 'prerequisite'):
+            self.validate()
+
+    def test_finale_cannot_borrow_devil_card_count(self):
+        self.data['optional_final']['normal_required'] = 120
+        with self.assertRaisesRegex(ValueError, 'ordinary photos'):
+            self.validate()
+
+    def test_finale_cannot_require_devil_cards_or_share_authentication_album(self):
+        for field, value in [('requires_devil', True), ('separate_album', False)]:
+            with self.subTest(field=field):
+                broken = copy.deepcopy(self.data)
+                broken['optional_final'][field] = value
+                with self.assertRaisesRegex(ValueError, 'optional finale'):
+                    v.validate_story_structure(broken, self.park, self.runtime)
+
+    def test_recovery_and_late_join_cannot_be_removed(self):
+        for field in ('permanent_sources', 'replay_missing_steps', 'free_prop_recovery', 'single_player_completion', 'late_join_replay'):
+            with self.subTest(field=field):
+                broken = copy.deepcopy(self.data)
+                broken['quest_event_policy'][field] = False
+                with self.assertRaisesRegex(ValueError, field):
+                    v.validate_story_structure(broken, self.park, self.runtime)
+
+    def test_ai_paid_randomness_and_host_only_rewards_rejected(self):
+        for field, value in [('required_ai_level', 'hard'), ('paid_random_reward', True), ('reward_owner', 'host'), ('cross_zone_prerequisites', True)]:
+            with self.subTest(field=field):
+                broken = copy.deepcopy(self.data)
+                broken['quest_event_policy'][field] = value
+                with self.assertRaisesRegex(ValueError, 'story policy'):
+                    v.validate_story_structure(broken, self.park, self.runtime)
+
+    def test_design_cannot_claim_all_regions_implemented(self):
+        self.data['runtime_scope']['all_ten_zone_story_implemented'] = True
+        with self.assertRaisesRegex(ValueError, 'story scope'):
+            self.validate()
+
+    def test_runtime_character_name_mismatch_rejected(self):
+        self.data['characters'][0]['name'] = 'different character'
+        with self.assertRaisesRegex(ValueError, 'character name'):
+            self.validate()
+
+
 class ItemTests(unittest.TestCase):
     def setUp(self):
         self.data = v.load(ROOT, 'design/04-items/itemdefs.json')

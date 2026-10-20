@@ -135,6 +135,46 @@ def validate_story(quests, events):
         visit(key)
 
 
+
+def validate_story_structure(data, park, runtime):
+    check(data.get('status') == 'design_spec_not_playtested', 'story structure: explicit design scope required')
+    characters = data.get('characters', [])
+    check(isinstance(characters, list) and len(characters) == 6, 'story structure: six characters required')
+    nonempty(characters, ('id', 'name', 'role', 'motivation', 'comic_beat'), 'story characters')
+    unique_ids(characters, 'story characters')
+    check(len({c['name'] for c in characters}) == 6, 'story characters: duplicate names')
+    character_ids = {c['id'] for c in characters}
+    acts = data.get('acts', [])
+    kinds = ['onboarding', 'free_roam', 'normal_ending', 'optional_final']
+    check(isinstance(acts, list) and len(acts) == 4, 'story structure: four acts required')
+    nonempty(acts, ('id', 'kind', 'title', 'player_action', 'payoff'), 'story acts')
+    unique_ids(acts, 'story acts')
+    check([a['kind'] for a in acts] == kinds, 'story structure: ordinary ending must precede optional finale')
+    for index, act in enumerate(acts):
+        cast = act.get('cast')
+        check(isinstance(cast, list) and cast and len(set(cast)) == len(cast) and set(cast) <= character_ids, 'story act: unknown or repeated cast')
+        expected = [] if index == 0 else [acts[index-1]['id']]
+        check(act.get('requires') == expected, 'story act: dangling, cyclic or optional-ending prerequisite')
+    check(set().union(*(set(a['cast']) for a in acts)) == character_ids, 'story structure: every character needs a story role')
+    ending = data.get('normal_ending', {})
+    check(ending == park['normal_ending'] and type(ending.get('threshold')) is int and type(ending.get('visited_zones')) is int, 'story structure: normal ending differs from park gates')
+    final = data.get('optional_final', {})
+    check(type(final.get('normal_required')) is int and final['normal_required'] == park['final']['normal_required'] == park['collectible_counts']['normal_total'], 'story structure: finale must authenticate all ordinary photos')
+    check(type(final.get('game_count')) is int and final['game_count'] == park['final']['game_count'], 'story structure: finale game count differs from park')
+    check(final.get('requires_normal_ending') is True and final.get('requires_devil') is False and final.get('separate_album') is True, 'story structure: optional finale must follow ordinary ending with separate album, no devil gate')
+    policy = data.get('quest_event_policy', {})
+    for key in ('permanent_sources', 'replay_missing_steps', 'free_prop_recovery', 'single_player_completion', 'late_join_replay'):
+        check(policy.get(key) is True, f'story policy: {key} must remain available')
+    check(policy.get('reward_owner') == 'each_participant' and 'required_ai_level' in policy and policy['required_ai_level'] is None and policy.get('paid_random_reward') is False and policy.get('cross_zone_prerequisites') is False, 'story policy: personal rewards, no required AI, paid randomness or cross-zone gate')
+    scope = data.get('runtime_scope', {})
+    check(scope.get('all_ten_zone_story_implemented') is False and scope.get('implemented_zone_ids') == ['welcome'], 'story scope: ten-zone story is a design, not implemented runtime')
+    check(set(scope.get('implemented_character_ids', [])) == set(runtime['characters']) <= character_ids, 'story scope: runtime cast differs from actual welcome data')
+    check(set(scope.get('welcome_quest_ids', [])) == set(runtime['quest_missions']), 'story scope: runtime quests differ from actual welcome data')
+    for char in characters:
+        if char['id'] in runtime['characters']:
+            check(char['name'] == runtime['characters'][char['id']]['name'], 'story scope: character name differs from actual welcome data')
+
+
 def validate_items(rows):
     check(isinstance(rows, list) and len(rows) == 339, 'items: expected 308 photos + 30 cosmetics + currency')
     ids, keys = [], []
@@ -192,6 +232,7 @@ def run(root, scope):
             validate_runtime_game_alignment(data, load(root, 'game/data/welcome_games.json'))
         elif part == 'story':
             validate_story(load(root, 'design/03-story/quests.json'), load(root, 'design/03-story/exploration.json'))
+            validate_story_structure(load(root, 'design/03-story/story-structure.json'), load(root, 'design/01-park/park.json'), load(root, 'game/data/first_park_story.json'))
         elif part == 'items':
             validate_items(load(root, 'design/04-items/itemdefs.json'))
         elif part == 'links':
