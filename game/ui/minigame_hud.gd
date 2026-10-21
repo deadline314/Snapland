@@ -31,6 +31,7 @@ var _time: Label
 var _badge: Label
 var _feedback: PanelContainer
 var _feedback_label: Label
+var _feedback_anchor_override: Variant = null
 var _pause_layer: ColorRect
 var _pause_panel: PanelContainer
 var _pause_title: Label
@@ -71,6 +72,7 @@ func _ready() -> void:
 	set_state({})
 
 func set_state(state: Dictionary) -> void:
+	_feedback_anchor_override = state.get("feedback_anchor") if state.get("feedback_anchor") is Vector2 else null
 	if _title == null:
 		return
 	_title.text = str(state.get("title", "小遊戲"))
@@ -516,6 +518,8 @@ func _layout() -> void:
 	_status_rail.size=Vector2(maxf(616.0,ceilf(rail_minimum.x)),panel_height)
 	_status_rail.position.x=DESIGN_SIZE.x-24.0-_status_rail.size.x
 	_feedback.position.y=_feedback_top()
+	if _feedback_anchor_override is Vector2:
+		set_feedback_at(_feedback_label.text, _feedback_anchor_override)
 
 func _feedback_top() -> float:
 	return maxf(130.0, _header.position.y + _header.size.y + 18.0)

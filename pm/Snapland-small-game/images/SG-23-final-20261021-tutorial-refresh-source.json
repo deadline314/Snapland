@@ -1,0 +1,26 @@
+[
+  {
+    "step": 1,
+    "actual_native_capture": "work/sign-final-20261021/controls-final/captures/004-native-sign-balance-formal-stage-03.png",
+    "destination": "assets/ui/tutorials/game-008-step-01.png",
+    "previous_sha256": "5aaf87b3cea8c491e76f85ba297e5c12353f83fad771b4c58ad475a2924cfb23",
+    "new_sha256": "32c61b96095b1b580415706ac0564a755d944b3fb1a47d2ede285cd582dda8eb",
+    "unmodified_capture_bytes": true
+  },
+  {
+    "step": 2,
+    "actual_native_capture": "work/sign-final-20261021/controls-final/captures/005-native-sign-balance-formal-stage-06.png",
+    "destination": "assets/ui/tutorials/game-008-step-02.png",
+    "previous_sha256": "d68e534e1596c5121f92aa6e0c59e9862f9dd288e5ad5c14d4cc8b876e50ca0a",
+    "new_sha256": "4934f23bb43f6f00917a9a314e164714a082523bba29559300b57a7a9047f02c",
+    "unmodified_capture_bytes": true
+  },
+  {
+    "step": 3,
+    "actual_native_capture": "work/sign-final-20261021/controls-final/captures/007-native-sign-balance-formal-result-700.png",
+    "destination": "assets/ui/tutorials/game-008-step-03.png",
+    "previous_sha256": "6dd0b787c065ef9a1debc33c1e23caf2baa89657428008586536c15adc8a1fe6",
+    "new_sha256": "662f41fd8803fa850dcb3a9781c00ea3264c5b50264c0b49b392fa0457a201b9",
+    "unmodified_capture_bytes": true
+  }
+]

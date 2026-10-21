@@ -542,7 +542,8 @@ func _refresh_hud(force: bool = false) -> void:
 		"score": score,
 		"time_text": time_text,
 		"feedback_text": feedback_text,
-		"feedback_width": 240.0 if mode == "flower_pipes" else (420.0 if mode in ["sign_balance", "kite_rings"] else 540.0),
+		"feedback_width": 240.0 if mode in ["flower_pipes", "sign_balance"] else (420.0 if mode == "kite_rings" else 540.0),
+		"feedback_anchor": SignBalanceViewScript.FEEDBACK_ANCHOR if mode == "sign_balance" else null,
 		"feedback_color": feedback_color,
 		"assisted": assisted,
 		"practice": practice_mode,
@@ -612,7 +613,7 @@ func score_summary() -> Dictionary:
 			var state := "已供水" if index < pipe_model.completed_beds else ("供水中" if index == pipe_model.order_index and pipe_model.connected else "未完成")
 			rows.append({"key": "pipe_order_%d" % index, "label": "工單 %d · 目標 %d 次 · %s" % [index + 1, int(pipe_model.orders[index].turn_par), state], "amount": 0, "count": int(pipe_model.order_turns[index]), "progress_only": true})
 	if mistakes > 0:
-		rows.append({"key": "mistakes", "label": "失誤（不計分）", "amount": 0, "count": mistakes, "progress_only": true})
+		rows.append({"key": "mistakes", "label": "撞線（不計分）" if mode == "sign_balance" else "失誤（不計分）", "amount": 0, "count": mistakes, "progress_only": true})
 	if rows.is_empty():
 		rows.append({"key": "no_score", "label": _score_label(), "amount": 0, "count": 0})
 	return {"total": score, "label": _score_label(), "rule": _score_rule_text(), "rows": rows}
@@ -642,7 +643,7 @@ func _score_rule_text() -> String:
 		"hat_catching": return "每接住一頂帽子 +100。"
 		"ribbon_rhythm": return "精準 +100、合拍 +60；四個重拍另 +25。六拍一般成功；未輔助、八拍全精準且零錯誤才得惡魔拍貼。"
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
-		"sign_balance": return "每段連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
+		"sign_balance": return "每段調整配重並連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
 		"shadow_alignment": return "每輪合格最高 500 分，輪廓越吻合分數越高；三輪至少兩輪合格得普通拍貼，三輪精準且零失誤、未輔助才得小惡魔拍貼。"
 		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。"
 		"bench_swap": return "每桌 300 分 − 交換次數 × 25；三桌完成得普通拍貼。三桌皆最少交換、未輔助且未重排才得小惡魔拍貼。"
@@ -1009,6 +1010,7 @@ func _tick_game(delta: float) -> void:
 					_award_points("sign_stage_%d" % stage_number, stage_label, 100 if bool(stage_result.precise) else 70)
 					_feedback("中心精準！" if bool(stage_result.precise) else "穩住安全帶！", MINT if bool(stage_result.precise) else YELLOW)
 				else:
+					_record_score_event("sign_stage_%d" % (_sign_stage_cursor + 1), "第 %d 段・未完成穩定" % (_sign_stage_cursor + 1), 0)
 					_feedback("這段沒有穩在安全帶", PINK)
 				_sign_stage_cursor += 1
 			while _sign_impact_cursor < int(state.impacts):
@@ -1834,7 +1836,7 @@ func _feedback_anchor() -> Vector2:
 		"hat_catching": return Vector2(640.0, 448.0)
 		"ribbon_rhythm": return Vector2(640, 230)
 		"flower_pipes": return Vector2(150, 460)
-		"sign_balance": return Vector2(640, 208)
+		"sign_balance": return SignBalanceViewScript.FEEDBACK_ANCHOR
 		"shadow_alignment": return Vector2(640, 230)
 		# The camera's composition readouts occupy the top of the viewfinder. Keep
 		# the transient shutter result in the clear footer strip above the photo rail.

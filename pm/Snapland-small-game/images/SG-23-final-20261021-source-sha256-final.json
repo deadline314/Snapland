@@ -1,0 +1,13 @@
+{
+  "game/minigames/session.gd": "8ab10a175b6127cdc7712e1cb824064c7844fbfad59574975e92f028cb7db7d7",
+  "game/minigames/sign_balance_model.gd": "72793cf022660beb9f86d917a74fa5c23504d8feb3228353db93b42840701d29",
+  "game/minigames/sign_balance_view.gd": "64d0e2ce100042fb9dbf710c3aa3d177a7c9c31d53e1dfda233563d996815888",
+  "game/ui/minigame_hud.gd": "04e428d6fdd6a297c352a4ae84ab70b2aeba2b9611e595473213f627bda0eb2d",
+  "game/tests/native_sign_balance_review.gd": "37351a52c06b3d4d12e7d611f79ffe5cf74646d256f37489c579a0a30db60e31",
+  "game/tests/native_sign_outcomes_review.gd": "252de59519f6cbdab65e72e1ee46be3a14c4aad3c720816072ac9d391288f6b8",
+  "game/tests/test_minigames.gd": "9e32fd80017468c424c969fddea8c8bf4f7189ffca8a6fa977af868ee7f05f82",
+  "game/tests/test_sign_balance_view.gd": "a990c0aac701148056d6189a93764df9bec0270d096e128f9e43357f10468ece",
+  "assets/ui/tutorials/game-008-step-01.png": "32c61b96095b1b580415706ac0564a755d944b3fb1a47d2ede285cd582dda8eb",
+  "assets/ui/tutorials/game-008-step-02.png": "4934f23bb43f6f00917a9a314e164714a082523bba29559300b57a7a9047f02c",
+  "assets/ui/tutorials/game-008-step-03.png": "662f41fd8803fa850dcb3a9781c00ea3264c5b50264c0b49b392fa0457a201b9"
+}

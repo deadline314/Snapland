@@ -1,0 +1,9 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 27.73,
+  "passes": [
+    "PASS: native sign four time phases and reduced-motion on/off retain colored water, actual3D camera, apparatus clearance and real pause/leave confirmation"
+  ],
+  "scope": "Actual realtime engine clock, uncapped rendering. External silent15FPS full-window recording; original35-second per-route and300-second fixture/global240-second process limits preserved. Not hardware FPS."
+}

@@ -1,0 +1,22 @@
+{
+  "base": "b91a854205454248d5635e24b61f61b3b84c1313",
+  "diagnostic_changes": "dependency paths and private Main screenshot observer only; returning-player tutorial fixture and station relocation; no gameplay thresholds or clocks changed",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_fountain_review.gd": {
+      "source_sha256": "78633fab810b33d449f7611ab95254eb723b4810ca973e058ad71293e5e7be63",
+      "copy_sha256": "0129d61a082efe241047a715c5bb371a18d65cbcfba2dbdb6a94fa08b72999fe"
+    },
+    "game/tests/native_sign_balance_review.gd": {
+      "source_sha256": "00d7a910d318a95984416b0b6b8e1739ef78a7ad6840103a63208d9822f1659a",
+      "copy_sha256": "1bd3673d5826f417c95d74a7f42e08b4ed92a4a25480247e216c6ad7f347ec72"
+    },
+    "game/tests/native_sign_outcomes_review.gd": {
+      "source_sha256": "252de59519f6cbdab65e72e1ee46be3a14c4aad3c720816072ac9d391288f6b8",
+      "copy_sha256": "a11eb027025044ae1e5e8aa07cf4cd2595593c77071835102bbef7f604515ffb"
+    }
+  }
+}

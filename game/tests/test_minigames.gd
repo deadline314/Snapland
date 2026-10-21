@@ -533,6 +533,14 @@ func _test_sign_boundaries() -> void:
 		for event in wrong.score_events:
 			failure_event_total += int(event.amount)
 		_expect(int(failure_summary.get("total", -1)) == wrong.score and failure_event_total == wrong.score and int(failure_results[0].get("score_summary", {}).get("total", -1)) == wrong.score, "failed Sign result and score summary retain the earned score ledger")
+		var completed: int = wrong.sign_model.snapshot().completed_stage_count
+		var stage_rows: Array = failure_summary.rows.filter(func(row): return str(row.key).begins_with("sign_stage_"))
+		_expect(completed > 0 and stage_rows.size() == completed, "failed Sign result retains exactly the completed stage outcomes, including zero-point stages")
+		for index in stage_rows.size():
+			var state: Dictionary = wrong.sign_model.snapshot().stage_results[index]
+			if not bool(state.passed):
+				_expect(int(stage_rows[index].amount) == 0 and str(stage_rows[index].label) == "第 %d 段・未完成穩定" % (index + 1), "unsuccessful actual Sign stage remains visible with zero points")
+		_expect(str(failure_summary.rows.back().label) == "撞線（不計分）", "Sign result identifies the physical line impacts instead of an unspecified error")
 	wrong.queue_free()
 
 func _test_sign_seven_stage_score_ledger() -> void:

@@ -1,0 +1,479 @@
+{
+  "run_id": 39521520007,
+  "url": "https://github.com/deadline314/Snapland/actions/runs/39521520007",
+  "head_sha": "b91a854205454248d5635e24b61f61b3b84c1313",
+  "conclusion": "success",
+  "python": 137,
+  "design_scopes": 5,
+  "godot_runs": 93,
+  "godot_passes": 93,
+  "names_order_bounds_verified": true,
+  "scope": "Includes MAIN-9 clean release stage fix, ART-17 source hand correction and SG-25 full-flow result labels. Subsequent SG-23 score/feedback/water/tutorial changes have separate local/native/release evidence, not this earlier CI.",
+  "items": [
+    {
+      "name": "clean project import",
+      "seconds": 32.5,
+      "limit_seconds": 90
+    },
+    {
+      "name": "game startup",
+      "seconds": 4.56,
+      "limit_seconds": 90
+    },
+    {
+      "name": "core runtime tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "test/review save isolation tests",
+      "seconds": 2.77,
+      "limit_seconds": 90
+    },
+    {
+      "name": "wardrobe runtime tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "avatar runtime tests",
+      "seconds": 41.14,
+      "limit_seconds": 90
+    },
+    {
+      "name": "avatar renderer tests",
+      "seconds": 224.4,
+      "limit_seconds": 240
+    },
+    {
+      "name": "avatar attachment tests",
+      "seconds": 85.85,
+      "limit_seconds": 90
+    },
+    {
+      "name": "island hair lifecycle tests",
+      "seconds": 3.9,
+      "limit_seconds": 90
+    },
+    {
+      "name": "island alternate hair source tests",
+      "seconds": 6.5,
+      "limit_seconds": 90
+    },
+    {
+      "name": "seated avatar tests",
+      "seconds": 7.61,
+      "limit_seconds": 90
+    },
+    {
+      "name": "source registration coordinate tests",
+      "seconds": 0.44,
+      "limit_seconds": 90
+    },
+    {
+      "name": "avatar motion rig runtime tests",
+      "seconds": 53.48,
+      "limit_seconds": 90
+    },
+    {
+      "name": "avatar role rig tests",
+      "seconds": 68.08,
+      "limit_seconds": 90
+    },
+    {
+      "name": "avatar motion world integration tests",
+      "seconds": 13.21,
+      "limit_seconds": 90
+    },
+    {
+      "name": "minigame HUD hierarchy tests",
+      "seconds": 0.54,
+      "limit_seconds": 90
+    },
+    {
+      "name": "eight-direction walk tests",
+      "seconds": 3.53,
+      "limit_seconds": 90
+    },
+    {
+      "name": "authored avatar walk loop tests",
+      "seconds": 41.6,
+      "limit_seconds": 90
+    },
+    {
+      "name": "authored avatar side idle tests",
+      "seconds": 5.29,
+      "limit_seconds": 90
+    },
+    {
+      "name": "authored idle hair attachment tests",
+      "seconds": 14.05,
+      "limit_seconds": 90
+    },
+    {
+      "name": "authored NPC source walking tests",
+      "seconds": 1.1,
+      "limit_seconds": 90
+    },
+    {
+      "name": "character animation library tests",
+      "seconds": 0.44,
+      "limit_seconds": 90
+    },
+    {
+      "name": "atomic outfit coverage tests",
+      "seconds": 2.87,
+      "limit_seconds": 90
+    },
+    {
+      "name": "garment part ownership tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "side outfit palette tests",
+      "seconds": 6.87,
+      "limit_seconds": 90
+    },
+    {
+      "name": "NPC animation state tests",
+      "seconds": 0.72,
+      "limit_seconds": 90
+    },
+    {
+      "name": "tutorial panel/catalog tests",
+      "seconds": 7.23,
+      "limit_seconds": 90
+    },
+    {
+      "name": "tutorial seen progress tests",
+      "seconds": 5.94,
+      "limit_seconds": 90
+    },
+    {
+      "name": "travel collection UI tests",
+      "seconds": 5.77,
+      "limit_seconds": 90
+    },
+    {
+      "name": "tutorial image/control tests",
+      "seconds": 1.57,
+      "limit_seconds": 90
+    },
+    {
+      "name": "time-of-day tests",
+      "seconds": 0.25,
+      "limit_seconds": 90
+    },
+    {
+      "name": "daylight lighting tests",
+      "seconds": 3.9,
+      "limit_seconds": 90
+    },
+    {
+      "name": "NPC activity tests",
+      "seconds": 0.54,
+      "limit_seconds": 90
+    },
+    {
+      "name": "NPC world activity tests",
+      "seconds": 4.18,
+      "limit_seconds": 90
+    },
+    {
+      "name": "NPC motion source tests",
+      "seconds": 4.63,
+      "limit_seconds": 90
+    },
+    {
+      "name": "NPC walk motion tests",
+      "seconds": 12.54,
+      "limit_seconds": 90
+    },
+    {
+      "name": "NPC direction lifecycle tests",
+      "seconds": 1.56,
+      "limit_seconds": 90
+    },
+    {
+      "name": "NPC missing walk idle tests",
+      "seconds": 11.95,
+      "limit_seconds": 90
+    },
+    {
+      "name": "NPC dialogue hold tests",
+      "seconds": 9.05,
+      "limit_seconds": 90
+    },
+    {
+      "name": "sprite clearance tests",
+      "seconds": 21.03,
+      "limit_seconds": 90
+    },
+    {
+      "name": "wardrobe UI tests",
+      "seconds": 12.53,
+      "limit_seconds": 90
+    },
+    {
+      "name": "component animation tests",
+      "seconds": 5.2,
+      "limit_seconds": 90
+    },
+    {
+      "name": "building occlusion tests",
+      "seconds": 6.41,
+      "limit_seconds": 90
+    },
+    {
+      "name": "kite flight model tests",
+      "seconds": 0.26,
+      "limit_seconds": 90
+    },
+    {
+      "name": "kite flight view tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "bubble photo model tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "bubble photo view tests",
+      "seconds": 6.04,
+      "limit_seconds": 90
+    },
+    {
+      "name": "bench swap model tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "bench swap view tests",
+      "seconds": 3.24,
+      "limit_seconds": 90
+    },
+    {
+      "name": "sign balance model tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "sign balance view tests",
+      "seconds": 1.01,
+      "limit_seconds": 90
+    },
+    {
+      "name": "hat rescue model tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "hat rescue view tests",
+      "seconds": 8.27,
+      "limit_seconds": 90
+    },
+    {
+      "name": "melody memory model tests",
+      "seconds": 1.01,
+      "limit_seconds": 90
+    },
+    {
+      "name": "melody memory view tests",
+      "seconds": 1.1,
+      "limit_seconds": 90
+    },
+    {
+      "name": "ribbon rhythm model tests",
+      "seconds": 0.26,
+      "limit_seconds": 90
+    },
+    {
+      "name": "ribbon rhythm view tests",
+      "seconds": 2.96,
+      "limit_seconds": 90
+    },
+    {
+      "name": "ribbon Session startup tests",
+      "seconds": 3.61,
+      "limit_seconds": 90
+    },
+    {
+      "name": "ribbon Session lifecycle tests",
+      "seconds": 14.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "shadow theatre model tests",
+      "seconds": 0.26,
+      "limit_seconds": 90
+    },
+    {
+      "name": "shadow theatre view tests",
+      "seconds": 0.54,
+      "limit_seconds": 90
+    },
+    {
+      "name": "crowd semaphore view tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "welcome minigame tests",
+      "seconds": 77.66,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pipe round model tests",
+      "seconds": 0.26,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pipe plan presentation tests",
+      "seconds": 1.01,
+      "limit_seconds": 90
+    },
+    {
+      "name": "balloon harbor presentation tests",
+      "seconds": 0.35,
+      "limit_seconds": 90
+    },
+    {
+      "name": "crowd traffic model tests",
+      "seconds": 0.26,
+      "limit_seconds": 90
+    },
+    {
+      "name": "crowd crossing view tests",
+      "seconds": 0.26,
+      "limit_seconds": 90
+    },
+    {
+      "name": "fountain jump view tests",
+      "seconds": 8.46,
+      "limit_seconds": 90
+    },
+    {
+      "name": "fountain timing tests",
+      "seconds": 6.03,
+      "limit_seconds": 90
+    },
+    {
+      "name": "balloon delivery tests",
+      "seconds": 1.38,
+      "limit_seconds": 90
+    },
+    {
+      "name": "story runtime tests",
+      "seconds": 0.26,
+      "limit_seconds": 90
+    },
+    {
+      "name": "main story integration tests",
+      "seconds": 25.34,
+      "limit_seconds": 90
+    },
+    {
+      "name": "island ride tests",
+      "seconds": 23.24,
+      "limit_seconds": 90
+    },
+    {
+      "name": "island layout tests",
+      "seconds": 7.99,
+      "limit_seconds": 90
+    },
+    {
+      "name": "coastal free play tests",
+      "seconds": 14.1,
+      "limit_seconds": 90
+    },
+    {
+      "name": "shared photo thumbnail tests",
+      "seconds": 1.94,
+      "limit_seconds": 90
+    },
+    {
+      "name": "saved photo viewer tests",
+      "seconds": 0.54,
+      "limit_seconds": 90
+    },
+    {
+      "name": "photo original preservation tests",
+      "seconds": 2.13,
+      "limit_seconds": 90
+    },
+    {
+      "name": "island dialogue tests",
+      "seconds": 4.74,
+      "limit_seconds": 90
+    },
+    {
+      "name": "island game entry tests",
+      "seconds": 5.22,
+      "limit_seconds": 90
+    },
+    {
+      "name": "audio runtime tests",
+      "seconds": 9.62,
+      "limit_seconds": 90
+    },
+    {
+      "name": "island audio dynamics tests",
+      "seconds": 12.14,
+      "limit_seconds": 90
+    },
+    {
+      "name": "main scene integration tests",
+      "seconds": 27.61,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pixel UI shell tests",
+      "seconds": 57.38,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pixel UI popup tests",
+      "seconds": 0.54,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pixel UI button depth tests",
+      "seconds": 0.45,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pixel UI collection tests",
+      "seconds": 14.99,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pixel tutorial page tests",
+      "seconds": 15.14,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pixel UI customization tests",
+      "seconds": 7.28,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pixel UI minigame tests",
+      "seconds": 7.63,
+      "limit_seconds": 90
+    },
+    {
+      "name": "pixel typography tests",
+      "seconds": 0.91,
+      "limit_seconds": 90
+    },
+    {
+      "name": "localization framework tests",
+      "seconds": 4.85,
+      "limit_seconds": 90
+    }
+  ]
+}

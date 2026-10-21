@@ -1,0 +1,584 @@
+﻿2026-10-21T00:28:43.5496367Z Current runner version: '2.338.0'
+2026-10-21T00:28:43.5532815Z ##[group]Runner Image Provisioner
+2026-10-21T00:28:43.5534203Z Hosted Compute Agent
+2026-10-21T00:28:43.5535660Z Version: 20261015.610
+2026-10-21T00:28:43.5536759Z Commit: 267fdb4e8bbec4ab5ea31367f3a00d5c480c7656
+2026-10-21T00:28:43.5538059Z Build Date: 2026-10-14T17:06:54Z
+2026-10-21T00:28:43.5539357Z Worker ID: {adeb1bf3-2521-4c72-8305-417f61f9708a}
+2026-10-21T00:28:43.5540576Z Region: eastus
+2026-10-21T00:28:43.5541638Z Cloud: Azure
+2026-10-21T00:28:43.5542548Z ##[endgroup]
+2026-10-21T00:28:43.5545239Z ##[group]Operating System
+2026-10-21T00:28:43.5546461Z Ubuntu
+2026-10-21T00:28:43.5547337Z 24.04.5
+2026-10-21T00:28:43.5548292Z LTS
+2026-10-21T00:28:43.5549199Z ##[endgroup]
+2026-10-21T00:28:43.5550087Z ##[group]Runner Image
+2026-10-21T00:28:43.5551228Z Image: ubuntu-24.04
+2026-10-21T00:28:43.5552313Z Version: 20261018.339.1
+2026-10-21T00:28:43.5555295Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261018.339/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T00:28:43.5558082Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261018.339
+2026-10-21T00:28:43.5559768Z ##[endgroup]
+2026-10-21T00:28:43.5561654Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T00:28:43.5564745Z Contents: read
+2026-10-21T00:28:43.5566084Z Metadata: read
+2026-10-21T00:28:43.5567132Z ##[endgroup]
+2026-10-21T00:28:43.5570315Z Secret source: Actions
+2026-10-21T00:28:43.5571957Z Cache mode: write
+2026-10-21T00:28:43.5573454Z Prepare workflow directory
+2026-10-21T00:28:43.6069465Z Prepare all required actions
+2026-10-21T00:28:43.6141814Z Getting action download info
+2026-10-21T00:28:43.8102734Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-21T00:28:43.9442860Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-21T00:28:44.3060765Z Complete job name: game-runtime
+2026-10-21T00:28:44.3910542Z ##[group]Run actions/checkout@v4
+2026-10-21T00:28:44.3911461Z with:
+2026-10-21T00:28:44.3911935Z   repository: deadline314/Snapland
+2026-10-21T00:28:44.3916305Z   token: ***
+2026-10-21T00:28:44.3916763Z   ssh-strict: true
+2026-10-21T00:28:44.3917217Z   ssh-user: git
+2026-10-21T00:28:44.3917677Z   persist-credentials: true
+2026-10-21T00:28:44.3918175Z   clean: true
+2026-10-21T00:28:44.3918639Z   sparse-checkout-cone-mode: true
+2026-10-21T00:28:44.3919174Z   fetch-depth: 1
+2026-10-21T00:28:44.3919615Z   fetch-tags: false
+2026-10-21T00:28:44.3920061Z   show-progress: true
+2026-10-21T00:28:44.3920531Z   lfs: false
+2026-10-21T00:28:44.3920967Z   submodules: false
+2026-10-21T00:28:44.3921424Z   set-safe-directory: true
+2026-10-21T00:28:44.3921935Z   allow-unsafe-pr-checkout: false
+2026-10-21T00:28:44.3922718Z ##[endgroup]
+2026-10-21T00:28:44.5045689Z Syncing repository: deadline314/Snapland
+2026-10-21T00:28:44.5048571Z ##[group]Getting Git version info
+2026-10-21T00:28:44.5049908Z Working directory is '/home/runner/work/Snapland/Snapland'
+2026-10-21T00:28:44.5051643Z [command]/usr/bin/git version
+2026-10-21T00:28:44.5136653Z git version 2.55.0
+2026-10-21T00:28:44.5156489Z ##[endgroup]
+2026-10-21T00:28:44.5178342Z Temporarily overriding HOME='/home/runner/work/_temp/fef39d30-38d5-486a-9cfd-21bdf10b59d8' before making global git config changes
+2026-10-21T00:28:44.5180944Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T00:28:44.5185304Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Snapland/Snapland
+2026-10-21T00:28:44.5246368Z Deleting the contents of '/home/runner/work/Snapland/Snapland'
+2026-10-21T00:28:44.5271184Z ##[group]Initializing the repository
+2026-10-21T00:28:44.5276582Z [command]/usr/bin/git init /home/runner/work/Snapland/Snapland
+2026-10-21T00:28:44.5423093Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-21T00:28:44.5425317Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-21T00:28:44.5427421Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-21T00:28:44.5428876Z hint: call:
+2026-10-21T00:28:44.5429625Z hint:
+2026-10-21T00:28:44.5430540Z hint: 	git config --global init.defaultBranch <name>
+2026-10-21T00:28:44.5431642Z hint:
+2026-10-21T00:28:44.5432785Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-21T00:28:44.5434514Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-21T00:28:44.5436099Z hint:
+2026-10-21T00:28:44.5436928Z hint: 	git branch -m <name>
+2026-10-21T00:28:44.5438075Z hint:
+2026-10-21T00:28:44.5439444Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-21T00:28:44.5441510Z Initialized empty Git repository in /home/runner/work/Snapland/Snapland/.git/
+2026-10-21T00:28:44.5446579Z [command]/usr/bin/git remote add origin https://github.com/deadline314/Snapland
+2026-10-21T00:28:44.5512578Z ##[endgroup]
+2026-10-21T00:28:44.5514002Z ##[group]Disabling automatic garbage collection
+2026-10-21T00:28:44.5519363Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-21T00:28:44.5566366Z ##[endgroup]
+2026-10-21T00:28:44.5567755Z ##[group]Setting up auth
+2026-10-21T00:28:44.5578336Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T00:28:44.5628161Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T00:28:44.6157345Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T00:28:44.6213361Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T00:28:44.6515582Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T00:28:44.6569315Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T00:28:44.6832504Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-21T00:28:44.6888644Z ##[endgroup]
+2026-10-21T00:28:44.6890505Z ##[group]Fetching the repository
+2026-10-21T00:28:44.6901351Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b91a854205454248d5635e24b61f61b3b84c1313:refs/remotes/origin/main
+2026-10-21T00:29:23.6189269Z From https://github.com/deadline314/Snapland
+2026-10-21T00:29:23.6191032Z  * [new ref]         b91a854205454248d5635e24b61f61b3b84c1313 -> origin/main
+2026-10-21T00:29:23.6204216Z ##[endgroup]
+2026-10-21T00:29:23.6205340Z ##[group]Determining the checkout info
+2026-10-21T00:29:23.6206187Z ##[endgroup]
+2026-10-21T00:29:23.6207324Z [command]/usr/bin/git sparse-checkout disable
+2026-10-21T00:29:23.6275735Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-21T00:29:23.6318086Z ##[group]Checking out the ref
+2026-10-21T00:29:23.6323305Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-21T00:29:24.6759849Z Updating files:  28% (1610/5555)
+2026-10-21T00:29:24.7503501Z Updating files:  29% (1611/5555)
+2026-10-21T00:29:24.7753177Z Updating files:  30% (1667/5555)
+2026-10-21T00:29:24.8098775Z Updating files:  31% (1723/5555)
+2026-10-21T00:29:24.8842421Z Updating files:  32% (1778/5555)
+2026-10-21T00:29:24.9892362Z Updating files:  33% (1834/5555)
+2026-10-21T00:29:25.0822566Z Updating files:  34% (1889/5555)
+2026-10-21T00:29:25.2692871Z Updating files:  35% (1945/5555)
+2026-10-21T00:29:25.3158990Z Updating files:  36% (2000/5555)
+2026-10-21T00:29:25.5038322Z Updating files:  37% (2056/5555)
+2026-10-21T00:29:25.5777395Z Updating files:  38% (2111/5555)
+2026-10-21T00:29:25.6154379Z Updating files:  39% (2167/5555)
+2026-10-21T00:29:25.6481494Z Updating files:  40% (2222/5555)
+2026-10-21T00:29:25.6672983Z Updating files:  41% (2278/5555)
+2026-10-21T00:29:25.6947072Z Updating files:  41% (2294/5555)
+2026-10-21T00:29:25.7209530Z Updating files:  42% (2334/5555)
+2026-10-21T00:29:25.7484636Z Updating files:  43% (2389/5555)
+2026-10-21T00:29:25.7895192Z Updating files:  44% (2445/5555)
+2026-10-21T00:29:25.8392742Z Updating files:  45% (2500/5555)
+2026-10-21T00:29:25.8652970Z Updating files:  46% (2556/5555)
+2026-10-21T00:29:25.9598800Z Updating files:  47% (2611/5555)
+2026-10-21T00:29:26.0192485Z Updating files:  48% (2667/5555)
+2026-10-21T00:29:26.0551086Z Updating files:  49% (2722/5555)
+2026-10-21T00:29:26.0834067Z Updating files:  50% (2778/5555)
+2026-10-21T00:29:26.1576494Z Updating files:  51% (2834/5555)
+2026-10-21T00:29:26.1897730Z Updating files:  52% (2889/5555)
+2026-10-21T00:29:26.2290599Z Updating files:  53% (2945/5555)
+2026-10-21T00:29:26.2782173Z Updating files:  54% (3000/5555)
+2026-10-21T00:29:26.3252167Z Updating files:  55% (3056/5555)
+2026-10-21T00:29:26.3641450Z Updating files:  56% (3111/5555)
+2026-10-21T00:29:26.4004463Z Updating files:  57% (3167/5555)
+2026-10-21T00:29:26.4377208Z Updating files:  58% (3222/5555)
+2026-10-21T00:29:26.4779886Z Updating files:  59% (3278/5555)
+2026-10-21T00:29:26.5867498Z Updating files:  60% (3333/5555)
+2026-10-21T00:29:26.7095566Z Updating files:  61% (3389/5555)
+2026-10-21T00:29:26.7112614Z Updating files:  61% (3440/5555)
+2026-10-21T00:29:26.7666304Z Updating files:  62% (3445/5555)
+2026-10-21T00:29:26.8777272Z Updating files:  63% (3500/5555)
+2026-10-21T00:29:26.9500896Z Updating files:  64% (3556/5555)
+2026-10-21T00:29:27.0052780Z Updating files:  65% (3611/5555)
+2026-10-21T00:29:27.0837869Z Updating files:  66% (3667/5555)
+2026-10-21T00:29:27.1379453Z Updating files:  67% (3722/5555)
+2026-10-21T00:29:27.1660128Z Updating files:  68% (3778/5555)
+2026-10-21T00:29:27.1753419Z Updating files:  69% (3833/5555)
+2026-10-21T00:29:27.1869481Z Updating files:  70% (3889/5555)
+2026-10-21T00:29:27.2329377Z Updating files:  71% (3945/5555)
+2026-10-21T00:29:27.2712900Z Updating files:  72% (4000/5555)
+2026-10-21T00:29:27.3134452Z Updating files:  73% (4056/5555)
+2026-10-21T00:29:27.4064466Z Updating files:  74% (4111/5555)
+2026-10-21T00:29:27.4595872Z Updating files:  75% (4167/5555)
+2026-10-21T00:29:27.5034274Z Updating files:  76% (4222/5555)
+2026-10-21T00:29:27.5920593Z Updating files:  77% (4278/5555)
+2026-10-21T00:29:27.6836720Z Updating files:  78% (4333/5555)
+2026-10-21T00:29:27.8045932Z Updating files:  78% (4372/5555)
+2026-10-21T00:29:27.8210342Z Updating files:  79% (4389/5555)
+2026-10-21T00:29:27.8265075Z Updating files:  80% (4444/5555)
+2026-10-21T00:29:27.8599321Z Updating files:  81% (4500/5555)
+2026-10-21T00:29:27.8993148Z Updating files:  82% (4556/5555)
+2026-10-21T00:29:27.9796211Z Updating files:  83% (4611/5555)
+2026-10-21T00:29:28.0071494Z Updating files:  84% (4667/5555)
+2026-10-21T00:29:28.0785166Z Updating files:  85% (4722/5555)
+2026-10-21T00:29:28.1536576Z Updating files:  86% (4778/5555)
+2026-10-21T00:29:28.5194795Z Updating files:  87% (4833/5555)
+2026-10-21T00:29:28.6677414Z Updating files:  88% (4889/5555)
+2026-10-21T00:29:28.6766985Z Updating files:  88% (4939/5555)
+2026-10-21T00:29:28.7459109Z Updating files:  89% (4944/5555)
+2026-10-21T00:29:28.7809216Z Updating files:  90% (5000/5555)
+2026-10-21T00:29:28.8362197Z Updating files:  91% (5056/5555)
+2026-10-21T00:29:28.8793311Z Updating files:  92% (5111/5555)
+2026-10-21T00:29:28.9136368Z Updating files:  93% (5167/5555)
+2026-10-21T00:29:28.9936681Z Updating files:  94% (5222/5555)
+2026-10-21T00:29:29.0380162Z Updating files:  95% (5278/5555)
+2026-10-21T00:29:29.1231890Z Updating files:  96% (5333/5555)
+2026-10-21T00:29:29.1910688Z Updating files:  97% (5389/5555)
+2026-10-21T00:29:29.2456540Z Updating files:  98% (5444/5555)
+2026-10-21T00:29:29.2560882Z Updating files:  99% (5500/5555)
+2026-10-21T00:29:29.2561389Z Updating files: 100% (5555/5555)
+2026-10-21T00:29:29.2561890Z Updating files: 100% (5555/5555), done.
+2026-10-21T00:29:29.5122302Z Switched to a new branch 'main'
+2026-10-21T00:29:29.5124678Z branch 'main' set up to track 'origin/main'.
+2026-10-21T00:29:29.5612531Z ##[endgroup]
+2026-10-21T00:29:29.5620130Z [command]/usr/bin/git log -1 --format=%H
+2026-10-21T00:29:29.5661007Z b91a854205454248d5635e24b61f61b3b84c1313
+2026-10-21T00:29:29.7215907Z ##[group]Run actions/setup-python@v5
+2026-10-21T00:29:29.7216240Z with:
+2026-10-21T00:29:29.7216453Z   python-version: 3.12
+2026-10-21T00:29:29.7216703Z   check-latest: false
+2026-10-21T00:29:29.7219497Z   token: ***
+2026-10-21T00:29:29.7219712Z   update-environment: true
+2026-10-21T00:29:29.7219964Z   allow-prereleases: false
+2026-10-21T00:29:29.7220191Z   freethreaded: false
+2026-10-21T00:29:29.7220407Z ##[endgroup]
+2026-10-21T00:29:29.8683194Z ##[group]Installed versions
+2026-10-21T00:29:30.2302502Z (node:2322) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T00:29:30.2303713Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T00:29:30.2304440Z Successfully set up CPython (3.12.15)
+2026-10-21T00:29:30.2305750Z ##[endgroup]
+2026-10-21T00:29:30.2461335Z ##[group]Run python -m unittest tests.test_runtime_result_contract tests.test_godot_entrypoints -v
+2026-10-21T00:29:30.2462583Z python -m unittest tests.test_runtime_result_contract tests.test_godot_entrypoints -v
+2026-10-21T00:29:30.2681001Z shell: /usr/bin/bash -e {0}
+2026-10-21T00:29:30.2681489Z env:
+2026-10-21T00:29:30.2681949Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:30.2682710Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-21T00:29:30.2683445Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:30.2684095Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:30.2684760Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:30.2685682Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-21T00:29:30.2686388Z ##[endgroup]
+2026-10-21T00:29:31.0508432Z test_current_source_diagnostic_completion_is_accepted (tests.test_runtime_result_contract.RuntimeResultContractTests.test_current_source_diagnostic_completion_is_accepted) ... ok
+2026-10-21T00:29:31.0511661Z test_errors_on_either_stream_override_a_valid_completion (tests.test_runtime_result_contract.RuntimeResultContractTests.test_errors_on_either_stream_override_a_valid_completion) ... ok
+2026-10-21T00:29:31.0562169Z test_every_selected_runtime_suite_has_one_completion_contract (tests.test_runtime_result_contract.RuntimeResultContractTests.test_every_selected_runtime_suite_has_one_completion_contract) ... ok
+2026-10-21T00:29:31.0566134Z test_newly_registered_contracts_require_real_completion (tests.test_runtime_result_contract.RuntimeResultContractTests.test_newly_registered_contracts_require_real_completion) ... ok
+2026-10-21T00:29:31.0569605Z test_nonzero_exit_overrides_a_valid_completion (tests.test_runtime_result_contract.RuntimeResultContractTests.test_nonzero_exit_overrides_a_valid_completion) ... ok
+2026-10-21T00:29:31.0571892Z test_only_clean_import_can_complete_without_a_test_marker (tests.test_runtime_result_contract.RuntimeResultContractTests.test_only_clean_import_can_complete_without_a_test_marker) ... ok
+2026-10-21T00:29:31.0573871Z test_other_suites_completion_is_rejected (tests.test_runtime_result_contract.RuntimeResultContractTests.test_other_suites_completion_is_rejected) ... ok
+2026-10-21T00:29:31.0576263Z test_previous_wording_is_rejected_and_observed_completion_is_reported (tests.test_runtime_result_contract.RuntimeResultContractTests.test_previous_wording_is_rejected_and_observed_completion_is_reported) ... ok
+2026-10-21T00:29:31.0577809Z test_quoted_or_stderr_only_marker_cannot_claim_suite_completion (tests.test_runtime_result_contract.RuntimeResultContractTests.test_quoted_or_stderr_only_marker_cannot_claim_suite_completion) ... ok
+2026-10-21T00:29:31.2198082Z test_suite_sidecar_directories_do_not_share_prior_suite_files (tests.test_runtime_result_contract.RuntimeResultContractTests.test_suite_sidecar_directories_do_not_share_prior_suite_files) ... ok
+2026-10-21T00:29:31.2201618Z test_zero_exit_without_executed_suite_is_rejected (tests.test_runtime_result_contract.RuntimeResultContractTests.test_zero_exit_without_executed_suite_is_rejected) ... ok
+2026-10-21T00:29:31.2248881Z test_export_acceptance_cannot_override_or_use_loose_project (tests.test_godot_entrypoints.GodotEntrypointTests.test_export_acceptance_cannot_override_or_use_loose_project) ... ok
+2026-10-21T00:29:31.2272593Z test_exported_binary_boots_from_clean_release_directory (tests.test_godot_entrypoints.GodotEntrypointTests.test_exported_binary_boots_from_clean_release_directory) ... ok
+2026-10-21T00:29:31.2287809Z test_gd_file_passed_as_scene_is_rejected (tests.test_godot_entrypoints.GodotEntrypointTests.test_gd_file_passed_as_scene_is_rejected) ... ok
+2026-10-21T00:29:31.2303425Z test_import_parser_path_is_valid_without_scene_or_script (tests.test_godot_entrypoints.GodotEntrypointTests.test_import_parser_path_is_valid_without_scene_or_script) ... ok
+2026-10-21T00:29:31.2333681Z test_inheritance_cycle_and_unknown_base_fail_actionably (tests.test_godot_entrypoints.GodotEntrypointTests.test_inheritance_cycle_and_unknown_base_fail_actionably) ... ok
+2026-10-21T00:29:31.2355583Z test_invalid_ui_script_is_rejected_before_process_spawn (tests.test_godot_entrypoints.GodotEntrypointTests.test_invalid_ui_script_is_rejected_before_process_spawn) ... ok
+2026-10-21T00:29:31.2382032Z test_missing_and_outside_project_scripts_fail_before_spawn (tests.test_godot_entrypoints.GodotEntrypointTests.test_missing_and_outside_project_scripts_fail_before_spawn) ... ok
+2026-10-21T00:29:31.2405668Z test_node_control_component_must_launch_through_scene (tests.test_godot_entrypoints.GodotEntrypointTests.test_node_control_component_must_launch_through_scene) ... ok
+2026-10-21T00:29:31.2429304Z test_normal_run_returns_captured_text (tests.test_godot_entrypoints.GodotEntrypointTests.test_normal_run_returns_captured_text) ... ok
+2026-10-21T00:29:31.2449952Z test_project_and_default_main_scene_must_exist (tests.test_godot_entrypoints.GodotEntrypointTests.test_project_and_default_main_scene_must_exist) ... ok
+2026-10-21T00:29:31.2471239Z test_review_snapshots_are_not_runnable_even_if_they_extend_scene_tree (tests.test_godot_entrypoints.GodotEntrypointTests.test_review_snapshots_are_not_runnable_even_if_they_extend_scene_tree) ... ok
+2026-10-21T00:29:31.2500769Z test_scene_tree_and_explicit_mainloop_inheritance_are_valid (tests.test_godot_entrypoints.GodotEntrypointTests.test_scene_tree_and_explicit_mainloop_inheritance_are_valid) ... ok
+2026-10-21T00:29:31.2516833Z test_script_and_scene_entrypoints_cannot_be_mixed (tests.test_godot_entrypoints.GodotEntrypointTests.test_script_and_scene_entrypoints_cannot_be_mixed) ... ok
+2026-10-21T00:29:31.2543548Z test_timeout_falls_back_to_killing_owned_process (tests.test_godot_entrypoints.GodotEntrypointTests.test_timeout_falls_back_to_killing_owned_process) ... ok
+2026-10-21T00:29:31.2569394Z test_timeout_kills_only_owned_windows_tree_and_preserves_output (tests.test_godot_entrypoints.GodotEntrypointTests.test_timeout_kills_only_owned_windows_tree_and_preserves_output) ... ok
+2026-10-21T00:29:31.2570762Z
+2026-10-21T00:29:31.2571049Z ----------------------------------------------------------------------
+2026-10-21T00:29:31.2571666Z Ran 26 tests in 0.206s
+2026-10-21T00:29:31.2571919Z
+2026-10-21T00:29:31.2572055Z OK
+2026-10-21T00:29:31.2795545Z ##[group]Run curl --fail --location --retry 3 --output godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+2026-10-21T00:29:31.2796903Z curl --fail --location --retry 3 --output godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+2026-10-21T00:29:31.2797634Z unzip godot.zip
+2026-10-21T00:29:31.2797912Z chmod +x Godot_v4.7.2-stable_linux.x86_64
+2026-10-21T00:29:31.2798551Z echo "GODOT_BIN=$PWD/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
+2026-10-21T00:29:31.2855692Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T00:29:31.2856084Z env:
+2026-10-21T00:29:31.2856386Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:31.2856885Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-21T00:29:31.2857434Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:31.2857869Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:31.2858296Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:31.2858738Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-21T00:29:31.2859102Z ##[endgroup]
+2026-10-21T00:29:31.3049752Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2026-10-21T00:29:31.3050707Z                                  Dload  Upload   Total   Spent    Left  Speed
+2026-10-21T00:29:31.3051252Z
+2026-10-21T00:29:31.4089668Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-10-21T00:29:31.4090558Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-10-21T00:29:31.6131537Z
+2026-10-21T00:29:31.6947953Z  67 74.2M   67 50.0M    0     0   162M      0 --:--:-- --:--:-- --:--:--  162M
+2026-10-21T00:29:31.6948750Z 100 74.2M  100 74.2M    0     0   190M      0 --:--:-- --:--:-- --:--:--  299M
+2026-10-21T00:29:31.7013563Z Archive:  godot.zip
+2026-10-21T00:29:32.6876595Z   inflating: Godot_v4.7.2-stable_linux.x86_64
+2026-10-21T00:29:32.6932605Z ##[group]Run python tools/check_runtime_tests.py
+2026-10-21T00:29:32.6933010Z python tools/check_runtime_tests.py
+2026-10-21T00:29:32.6985606Z shell: /usr/bin/bash -e {0}
+2026-10-21T00:29:32.6985885Z env:
+2026-10-21T00:29:32.6986208Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:32.6986740Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-21T00:29:32.6987267Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:32.6987728Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:32.6988183Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:32.6988640Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-21T00:29:32.6989188Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-21T00:29:32.6989673Z ##[endgroup]
+2026-10-21T00:29:32.7296224Z PASS: native runtime test command is configured.
+2026-10-21T00:29:32.7371798Z ##[group]Run python tools/hero_2d/run_contract_tests.py
+2026-10-21T00:29:32.7372267Z python tools/hero_2d/run_contract_tests.py
+2026-10-21T00:29:32.7426972Z shell: /usr/bin/bash -e {0}
+2026-10-21T00:29:32.7427291Z env:
+2026-10-21T00:29:32.7427610Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:32.7428141Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-21T00:29:32.7428674Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:32.7429139Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:32.7429604Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:32.7430068Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-21T00:29:32.7430623Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-21T00:29:32.7431106Z ##[endgroup]
+2026-10-21T00:29:48.1482586Z import: imported cleanly
+2026-10-21T00:29:48.1483975Z pose: PASS hero 2D pose: resolved travel, octants, reversal, pause, photo, and configuration
+2026-10-21T00:29:48.1485255Z library: PASS hero 2D library tests
+2026-10-21T00:29:48.1486329Z pack: PASS hero 2D real pack: 1280 composed cels across 0 appearance/action galleries
+2026-10-21T00:29:48.1596419Z ##[group]Run python tools/hero_2d/run_hair_review.py --contracts
+2026-10-21T00:29:48.1597116Z python tools/hero_2d/run_hair_review.py --contracts
+2026-10-21T00:29:48.1649076Z shell: /usr/bin/bash -e {0}
+2026-10-21T00:29:48.1649363Z env:
+2026-10-21T00:29:48.1649660Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:48.1650153Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-21T00:29:48.1650629Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:48.1651063Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:48.1651485Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:29:48.1651914Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-21T00:29:48.1652426Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-21T00:29:48.1652891Z ##[endgroup]
+2026-10-21T00:30:01.3702503Z spring exit 0 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-21T00:30:01.3703225Z
+2026-10-21T00:30:01.3703841Z PASS 2D hair spring: lag, rebound, convergence, pause, view/hat reset, disable and time partition
+2026-10-21T00:30:01.3704624Z
+2026-10-21T00:30:01.3704633Z
+2026-10-21T00:30:01.3705446Z rig exit 0 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-21T00:30:01.3706168Z
+2026-10-21T00:30:01.3706908Z PASS 2D hair rig: 640 exact rest composites, protected roots/hats, weighted native bones, pause and original fallback
+2026-10-21T00:30:01.3707844Z
+2026-10-21T00:30:01.3707851Z
+2026-10-21T00:30:01.5128751Z ##[group]Run python tools/walk_stability/run_audit.py --tag ci --test
+2026-10-21T00:30:01.5129647Z python tools/walk_stability/run_audit.py --tag ci --test
+2026-10-21T00:30:01.5194314Z shell: /usr/bin/bash -e {0}
+2026-10-21T00:30:01.5194586Z env:
+2026-10-21T00:30:01.5195051Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:30:01.5195539Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-21T00:30:01.5195992Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:30:01.5196397Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:30:01.5196777Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:30:01.5197158Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-21T00:30:01.5197623Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-21T00:30:01.5198030Z ##[endgroup]
+2026-10-21T00:30:31.9000690Z import -front.png
+2026-10-21T00:30:31.9001506Z [  96% ] reimport | island-raw-back.png
+2026-10-21T00:30:31.9002294Z [  98% ] reimport | Finalizing Asset Import...
+2026-10-21T00:30:31.9002952Z [ DONE ] reimport
+2026-10-21T00:30:31.9003396Z
+2026-10-21T00:30:31.9003990Z [   0% ] reimport | Started (Re)Importing Assets (60 steps)
+2026-10-21T00:30:31.9005130Z [   0% ] reimport | Executing post-reimport operations...
+2026-10-21T00:30:31.9005835Z [ DONE ] reimport
+2026-10-21T00:30:31.9006262Z
+2026-10-21T00:30:31.9006840Z [   0% ] loading_editor_layout | Started Loading editor (5 steps)
+2026-10-21T00:30:31.9007723Z [   0% ] loading_editor_layout | Loading editor layout...
+2026-10-21T00:30:31.9008523Z [  16% ] loading_editor_layout | Loading docks...
+2026-10-21T00:30:31.9009191Z [ DONE ] loading_editor_layout
+2026-10-21T00:30:31.9009659Z
+2026-10-21T00:30:31.9009860Z
+2026-10-21T00:30:31.9009868Z
+2026-10-21T00:30:31.9010378Z parse Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-21T00:30:31.9011034Z
+2026-10-21T00:30:31.9011042Z
+2026-10-21T00:30:31.9011049Z
+2026-10-21T00:30:31.9011529Z export Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+2026-10-21T00:30:31.9012222Z
+2026-10-21T00:30:31.9012759Z PASS actual runtime walk pixels: eight hero headings, both NPC sides and nonfrozen limbs
+2026-10-21T00:30:31.9013832Z
+2026-10-21T00:30:31.9013838Z
+2026-10-21T00:30:31.9014330Z Runtime frames: /home/runner/work/Snapland/Snapland/.review/2d-walk-stability-20261016/ci
+2026-10-21T00:30:31.9114451Z ##[group]Run python tools/island_avatar/run_contracts.py
+2026-10-21T00:30:31.9115186Z python tools/island_avatar/run_contracts.py
+2026-10-21T00:30:31.9166522Z shell: /usr/bin/bash -e {0}
+2026-10-21T00:30:31.9166795Z env:
+2026-10-21T00:30:31.9167084Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:30:31.9167580Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-21T00:30:31.9168074Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:30:31.9168501Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:30:31.9168924Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:30:31.9169352Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-21T00:30:31.9169870Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-21T00:30:31.9170316Z ##[endgroup]
+2026-10-21T00:31:21.5080040Z
+2026-10-21T00:31:21.5084597Z PASS stable idle: 432 composed cels; rigid visible head/cap outside five authored eye regions, moving torso and planted legs
+2026-10-21T00:31:21.5212174Z ##[group]Run python tools/run_game_tests.py
+2026-10-21T00:31:21.5212815Z python tools/run_game_tests.py
+2026-10-21T00:31:21.5273663Z shell: /usr/bin/bash -e {0}
+2026-10-21T00:31:21.5274110Z env:
+2026-10-21T00:31:21.5274584Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:31:21.5275655Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-21T00:31:21.5276459Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:31:21.5276893Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:31:21.5277300Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-21T00:31:21.5277724Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-21T00:31:21.5278204Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+2026-10-21T00:31:21.5278632Z ##[endgroup]
+2026-10-21T00:31:21.5969005Z RUN: clean project import (1/93, limit 90s)
+2026-10-21T00:31:54.0969978Z PASS: clean project import (32.50s)
+2026-10-21T00:31:54.0972909Z RUN: game startup (2/93, limit 90s)
+2026-10-21T00:31:58.6525417Z PASS: game startup (4.56s)
+2026-10-21T00:31:58.6526894Z RUN: core runtime tests (3/93, limit 90s)
+2026-10-21T00:31:59.0017462Z PASS: core runtime tests (0.35s)
+2026-10-21T00:31:59.0018319Z RUN: test/review save isolation tests (4/93, limit 90s)
+2026-10-21T00:32:01.7672980Z PASS: test/review save isolation tests (2.77s)
+2026-10-21T00:32:01.7673803Z RUN: wardrobe runtime tests (5/93, limit 90s)
+2026-10-21T00:32:02.1153701Z PASS: wardrobe runtime tests (0.35s)
+2026-10-21T00:32:02.1154476Z RUN: avatar runtime tests (6/93, limit 90s)
+2026-10-21T00:32:43.2540463Z PASS: avatar runtime tests (41.14s)
+2026-10-21T00:32:43.2541210Z RUN: avatar renderer tests (7/93, limit 240s)
+2026-10-21T00:36:27.6500319Z PASS: avatar renderer tests (224.40s)
+2026-10-21T00:36:27.6501095Z RUN: avatar attachment tests (8/93, limit 90s)
+2026-10-21T00:37:53.4991567Z PASS: avatar attachment tests (85.85s)
+2026-10-21T00:37:53.4992206Z RUN: island hair lifecycle tests (9/93, limit 90s)
+2026-10-21T00:37:57.3985468Z PASS: island hair lifecycle tests (3.90s)
+2026-10-21T00:37:57.3986779Z RUN: island alternate hair source tests (10/93, limit 90s)
+2026-10-21T00:38:03.8983914Z PASS: island alternate hair source tests (6.50s)
+2026-10-21T00:38:03.8984675Z RUN: seated avatar tests (11/93, limit 90s)
+2026-10-21T00:38:11.5116596Z PASS: seated avatar tests (7.61s)
+2026-10-21T00:38:11.5117573Z RUN: source registration coordinate tests (12/93, limit 90s)
+2026-10-21T00:38:11.9545477Z PASS: source registration coordinate tests (0.44s)
+2026-10-21T00:38:11.9546623Z RUN: avatar motion rig runtime tests (13/93, limit 90s)
+2026-10-21T00:39:05.4309297Z PASS: avatar motion rig runtime tests (53.48s)
+2026-10-21T00:39:05.4310502Z RUN: avatar role rig tests (14/93, limit 90s)
+2026-10-21T00:40:13.5083605Z PASS: avatar role rig tests (68.08s)
+2026-10-21T00:40:13.5084370Z RUN: avatar motion world integration tests (15/93, limit 90s)
+2026-10-21T00:40:26.7181480Z PASS: avatar motion world integration tests (13.21s)
+2026-10-21T00:40:26.7182640Z RUN: minigame HUD hierarchy tests (16/93, limit 90s)
+2026-10-21T00:40:27.2569611Z PASS: minigame HUD hierarchy tests (0.54s)
+2026-10-21T00:40:27.2571133Z RUN: eight-direction walk tests (17/93, limit 90s)
+2026-10-21T00:40:30.7850310Z PASS: eight-direction walk tests (3.53s)
+2026-10-21T00:40:30.7851111Z RUN: authored avatar walk loop tests (18/93, limit 90s)
+2026-10-21T00:41:12.3812145Z PASS: authored avatar walk loop tests (41.60s)
+2026-10-21T00:41:12.3812956Z RUN: authored avatar side idle tests (19/93, limit 90s)
+2026-10-21T00:41:17.6748027Z PASS: authored avatar side idle tests (5.29s)
+2026-10-21T00:41:17.6749013Z RUN: authored idle hair attachment tests (20/93, limit 90s)
+2026-10-21T00:41:31.7231248Z PASS: authored idle hair attachment tests (14.05s)
+2026-10-21T00:41:31.7232420Z RUN: authored NPC source walking tests (21/93, limit 90s)
+2026-10-21T00:41:32.8213907Z PASS: authored NPC source walking tests (1.10s)
+2026-10-21T00:41:32.8215343Z RUN: character animation library tests (22/93, limit 90s)
+2026-10-21T00:41:33.2661920Z PASS: character animation library tests (0.44s)
+2026-10-21T00:41:33.2662639Z RUN: atomic outfit coverage tests (23/93, limit 90s)
+2026-10-21T00:41:36.1373288Z PASS: atomic outfit coverage tests (2.87s)
+2026-10-21T00:41:36.1374467Z RUN: garment part ownership tests (24/93, limit 90s)
+2026-10-21T00:41:36.4882650Z PASS: garment part ownership tests (0.35s)
+2026-10-21T00:41:36.4883713Z RUN: side outfit palette tests (25/93, limit 90s)
+2026-10-21T00:41:43.3568569Z PASS: side outfit palette tests (6.87s)
+2026-10-21T00:41:43.3569760Z RUN: NPC animation state tests (26/93, limit 90s)
+2026-10-21T00:41:44.0811427Z PASS: NPC animation state tests (0.72s)
+2026-10-21T00:41:44.0812389Z RUN: tutorial panel/catalog tests (27/93, limit 90s)
+2026-10-21T00:41:51.3156736Z PASS: tutorial panel/catalog tests (7.23s)
+2026-10-21T00:41:51.3157815Z RUN: tutorial seen progress tests (28/93, limit 90s)
+2026-10-21T00:41:57.2518907Z PASS: tutorial seen progress tests (5.94s)
+2026-10-21T00:41:57.2519867Z RUN: travel collection UI tests (29/93, limit 90s)
+2026-10-21T00:42:03.0261977Z PASS: travel collection UI tests (5.77s)
+2026-10-21T00:42:03.0263189Z RUN: tutorial image/control tests (30/93, limit 90s)
+2026-10-21T00:42:04.5928511Z PASS: tutorial image/control tests (1.57s)
+2026-10-21T00:42:04.5929153Z RUN: time-of-day tests (31/93, limit 90s)
+2026-10-21T00:42:04.8473271Z PASS: time-of-day tests (0.25s)
+2026-10-21T00:42:04.8474138Z RUN: daylight lighting tests (32/93, limit 90s)
+2026-10-21T00:42:08.7441721Z PASS: daylight lighting tests (3.90s)
+2026-10-21T00:42:08.7442766Z RUN: NPC activity tests (33/93, limit 90s)
+2026-10-21T00:42:09.2829429Z PASS: NPC activity tests (0.54s)
+2026-10-21T00:42:09.2830441Z RUN: NPC world activity tests (34/93, limit 90s)
+2026-10-21T00:42:13.4609079Z PASS: NPC world activity tests (4.18s)
+2026-10-21T00:42:13.4609942Z RUN: NPC motion source tests (35/93, limit 90s)
+2026-10-21T00:42:18.0917087Z PASS: NPC motion source tests (4.63s)
+2026-10-21T00:42:18.0917958Z RUN: NPC walk motion tests (36/93, limit 90s)
+2026-10-21T00:42:30.6277581Z PASS: NPC walk motion tests (12.54s)
+2026-10-21T00:42:30.6278391Z RUN: NPC direction lifecycle tests (37/93, limit 90s)
+2026-10-21T00:42:32.1882636Z PASS: NPC direction lifecycle tests (1.56s)
+2026-10-21T00:42:32.1883888Z RUN: NPC missing walk idle tests (38/93, limit 90s)
+2026-10-21T00:42:44.1403333Z PASS: NPC missing walk idle tests (11.95s)
+2026-10-21T00:42:44.1404279Z RUN: NPC dialogue hold tests (39/93, limit 90s)
+2026-10-21T00:42:53.1887892Z PASS: NPC dialogue hold tests (9.05s)
+2026-10-21T00:42:53.1888879Z RUN: sprite clearance tests (40/93, limit 90s)
+2026-10-21T00:43:14.2140828Z PASS: sprite clearance tests (21.03s)
+2026-10-21T00:43:14.2141451Z RUN: wardrobe UI tests (41/93, limit 90s)
+2026-10-21T00:43:26.7415577Z PASS: wardrobe UI tests (12.53s)
+2026-10-21T00:43:26.7416710Z RUN: component animation tests (42/93, limit 90s)
+2026-10-21T00:43:31.9429023Z PASS: component animation tests (5.20s)
+2026-10-21T00:43:31.9430097Z RUN: building occlusion tests (43/93, limit 90s)
+2026-10-21T00:43:38.3519823Z PASS: building occlusion tests (6.41s)
+2026-10-21T00:43:38.3520992Z RUN: kite flight model tests (44/93, limit 90s)
+2026-10-21T00:43:38.6075202Z PASS: kite flight model tests (0.26s)
+2026-10-21T00:43:38.6076181Z RUN: kite flight view tests (45/93, limit 90s)
+2026-10-21T00:43:38.9554164Z PASS: kite flight view tests (0.35s)
+2026-10-21T00:43:38.9555375Z RUN: bubble photo model tests (46/93, limit 90s)
+2026-10-21T00:43:39.3039595Z PASS: bubble photo model tests (0.35s)
+2026-10-21T00:43:39.3040602Z RUN: bubble photo view tests (47/93, limit 90s)
+2026-10-21T00:43:45.3401020Z PASS: bubble photo view tests (6.04s)
+2026-10-21T00:43:45.3401997Z RUN: bench swap model tests (48/93, limit 90s)
+2026-10-21T00:43:45.6897589Z PASS: bench swap model tests (0.35s)
+2026-10-21T00:43:45.6898629Z RUN: bench swap view tests (49/93, limit 90s)
+2026-10-21T00:43:48.9308721Z PASS: bench swap view tests (3.24s)
+2026-10-21T00:43:48.9309405Z RUN: sign balance model tests (50/93, limit 90s)
+2026-10-21T00:43:49.2803876Z PASS: sign balance model tests (0.35s)
+2026-10-21T00:43:49.2804880Z RUN: sign balance view tests (51/93, limit 90s)
+2026-10-21T00:43:50.2880717Z PASS: sign balance view tests (1.01s)
+2026-10-21T00:43:50.2883871Z RUN: hat rescue model tests (52/93, limit 90s)
+2026-10-21T00:43:50.6358234Z PASS: hat rescue model tests (0.35s)
+2026-10-21T00:43:50.6359177Z RUN: hat rescue view tests (53/93, limit 90s)
+2026-10-21T00:43:58.9032136Z PASS: hat rescue view tests (8.27s)
+2026-10-21T00:43:58.9033080Z RUN: melody memory model tests (54/93, limit 90s)
+2026-10-21T00:43:59.9101904Z PASS: melody memory model tests (1.01s)
+2026-10-21T00:43:59.9103016Z RUN: melody memory view tests (55/93, limit 90s)
+2026-10-21T00:44:01.0106091Z PASS: melody memory view tests (1.10s)
+2026-10-21T00:44:01.0106988Z RUN: ribbon rhythm model tests (56/93, limit 90s)
+2026-10-21T00:44:01.2661975Z PASS: ribbon rhythm model tests (0.26s)
+2026-10-21T00:44:01.2662957Z RUN: ribbon rhythm view tests (57/93, limit 90s)
+2026-10-21T00:44:04.2271621Z PASS: ribbon rhythm view tests (2.96s)
+2026-10-21T00:44:04.2272540Z RUN: ribbon Session startup tests (58/93, limit 90s)
+2026-10-21T00:44:07.8379974Z PASS: ribbon Session startup tests (3.61s)
+2026-10-21T00:44:07.8380911Z RUN: ribbon Session lifecycle tests (59/93, limit 90s)
+2026-10-21T00:44:22.1883358Z PASS: ribbon Session lifecycle tests (14.35s)
+2026-10-21T00:44:22.1884198Z RUN: shadow theatre model tests (60/93, limit 90s)
+2026-10-21T00:44:22.4439669Z PASS: shadow theatre model tests (0.26s)
+2026-10-21T00:44:22.4440935Z RUN: shadow theatre view tests (61/93, limit 90s)
+2026-10-21T00:44:22.9798744Z PASS: shadow theatre view tests (0.54s)
+2026-10-21T00:44:22.9799712Z RUN: crowd semaphore view tests (62/93, limit 90s)
+2026-10-21T00:44:23.3288054Z PASS: crowd semaphore view tests (0.35s)
+2026-10-21T00:44:23.3289002Z RUN: welcome minigame tests (63/93, limit 90s)
+2026-10-21T00:45:40.9866315Z PASS: welcome minigame tests (77.66s)
+2026-10-21T00:45:40.9868951Z RUN: pipe round model tests (64/93, limit 90s)
+2026-10-21T00:45:41.2487674Z PASS: pipe round model tests (0.26s)
+2026-10-21T00:45:41.2488613Z RUN: pipe plan presentation tests (65/93, limit 90s)
+2026-10-21T00:45:42.2605252Z PASS: pipe plan presentation tests (1.01s)
+2026-10-21T00:45:42.2606611Z RUN: balloon harbor presentation tests (66/93, limit 90s)
+2026-10-21T00:45:42.6103189Z PASS: balloon harbor presentation tests (0.35s)
+2026-10-21T00:45:42.6104764Z RUN: crowd traffic model tests (67/93, limit 90s)
+2026-10-21T00:45:42.8671042Z PASS: crowd traffic model tests (0.26s)
+2026-10-21T00:45:42.8672214Z RUN: crowd crossing view tests (68/93, limit 90s)
+2026-10-21T00:45:43.1236396Z PASS: crowd crossing view tests (0.26s)
+2026-10-21T00:45:43.1238327Z RUN: fountain jump view tests (69/93, limit 90s)
+2026-10-21T00:45:51.5823088Z PASS: fountain jump view tests (8.46s)
+2026-10-21T00:45:51.5823956Z RUN: fountain timing tests (70/93, limit 90s)
+2026-10-21T00:45:57.6129658Z PASS: fountain timing tests (6.03s)
+2026-10-21T00:45:57.6130789Z RUN: balloon delivery tests (71/93, limit 90s)
+2026-10-21T00:45:58.9939252Z PASS: balloon delivery tests (1.38s)
+2026-10-21T00:45:58.9940283Z RUN: story runtime tests (72/93, limit 90s)
+2026-10-21T00:45:59.2532842Z PASS: story runtime tests (0.26s)
+2026-10-21T00:45:59.2534299Z RUN: main story integration tests (73/93, limit 90s)
+2026-10-21T00:46:24.5886780Z PASS: main story integration tests (25.34s)
+2026-10-21T00:46:24.5888039Z RUN: island ride tests (74/93, limit 90s)
+2026-10-21T00:46:47.8335183Z PASS: island ride tests (23.24s)
+2026-10-21T00:46:47.8344290Z RUN: island layout tests (75/93, limit 90s)
+2026-10-21T00:46:55.8266553Z PASS: island layout tests (7.99s)
+2026-10-21T00:46:55.8267699Z RUN: coastal free play tests (76/93, limit 90s)
+2026-10-21T00:47:09.9309591Z PASS: coastal free play tests (14.10s)
+2026-10-21T00:47:09.9310763Z RUN: shared photo thumbnail tests (77/93, limit 90s)
+2026-10-21T00:47:11.8708499Z PASS: shared photo thumbnail tests (1.94s)
+2026-10-21T00:47:11.8709483Z RUN: saved photo viewer tests (78/93, limit 90s)
+2026-10-21T00:47:12.4115371Z PASS: saved photo viewer tests (0.54s)
+2026-10-21T00:47:12.4116192Z RUN: photo original preservation tests (79/93, limit 90s)
+2026-10-21T00:47:14.5370678Z PASS: photo original preservation tests (2.13s)
+2026-10-21T00:47:14.5372227Z RUN: island dialogue tests (80/93, limit 90s)
+2026-10-21T00:47:19.2783726Z PASS: island dialogue tests (4.74s)
+2026-10-21T00:47:19.2784826Z RUN: island game entry tests (81/93, limit 90s)
+2026-10-21T00:47:24.4940222Z PASS: island game entry tests (5.22s)
+2026-10-21T00:47:24.4941553Z RUN: audio runtime tests (82/93, limit 90s)
+2026-10-21T00:47:34.1094824Z PASS: audio runtime tests (9.62s)
+2026-10-21T00:47:34.1096181Z RUN: island audio dynamics tests (83/93, limit 90s)
+2026-10-21T00:47:46.2525875Z PASS: island audio dynamics tests (12.14s)
+2026-10-21T00:47:46.2527629Z RUN: main scene integration tests (84/93, limit 90s)
+2026-10-21T00:48:13.8620407Z PASS: main scene integration tests (27.61s)
+2026-10-21T00:48:13.8621351Z RUN: pixel UI shell tests (85/93, limit 90s)
+2026-10-21T00:49:11.2443638Z PASS: pixel UI shell tests (57.38s)
+2026-10-21T00:49:11.2445316Z RUN: pixel UI popup tests (86/93, limit 90s)
+2026-10-21T00:49:11.7817452Z PASS: pixel UI popup tests (0.54s)
+2026-10-21T00:49:11.7818325Z RUN: pixel UI button depth tests (87/93, limit 90s)
+2026-10-21T00:49:12.2276482Z PASS: pixel UI button depth tests (0.45s)
+2026-10-21T00:49:12.2278076Z RUN: pixel UI collection tests (88/93, limit 90s)
+2026-10-21T00:49:27.2178713Z PASS: pixel UI collection tests (14.99s)
+2026-10-21T00:49:27.2181295Z RUN: pixel tutorial page tests (89/93, limit 90s)
+2026-10-21T00:49:42.3564070Z PASS: pixel tutorial page tests (15.14s)
+2026-10-21T00:49:42.3565824Z RUN: pixel UI customization tests (90/93, limit 90s)
+2026-10-21T00:49:49.6323082Z PASS: pixel UI customization tests (7.28s)
+2026-10-21T00:49:49.6323694Z RUN: pixel UI minigame tests (91/93, limit 90s)
+2026-10-21T00:49:57.2581724Z PASS: pixel UI minigame tests (7.63s)
+2026-10-21T00:49:57.2582642Z RUN: pixel typography tests (92/93, limit 90s)
+2026-10-21T00:49:58.1719721Z PASS: pixel typography tests (0.91s)
+2026-10-21T00:49:58.1720613Z RUN: localization framework tests (93/93, limit 90s)
+2026-10-21T00:50:03.0173028Z PASS: localization framework tests (4.85s)
+2026-10-21T00:50:03.0504835Z Post job cleanup.
+2026-10-21T00:50:03.1807928Z (node:3966) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T00:50:03.1809407Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T00:50:03.2172483Z Post job cleanup.
+2026-10-21T00:50:03.3143897Z [command]/usr/bin/git version
+2026-10-21T00:50:03.3208640Z git version 2.55.0
+2026-10-21T00:50:03.3259806Z Temporarily overriding HOME='/home/runner/work/_temp/48afe2d4-e2ef-4ae3-83c8-a43fc2adcd08' before making global git config changes
+2026-10-21T00:50:03.3260929Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T00:50:03.3266461Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Snapland/Snapland
+2026-10-21T00:50:03.3313904Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T00:50:03.3386932Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T00:50:03.3687521Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T00:50:03.3715397Z http.https://github.com/.extraheader
+2026-10-21T00:50:03.3727939Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-21T00:50:03.3769008Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T00:50:03.4074165Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T00:50:03.4124679Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T00:50:03.4581812Z Cleaning up orphan processes
+2026-10-21T00:50:03.4992168Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

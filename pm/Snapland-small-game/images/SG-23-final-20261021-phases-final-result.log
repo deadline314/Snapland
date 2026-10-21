@@ -1,0 +1,217 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+[park_world] scenery meshes: 1182, nodes: 2094
+INPUT: start sign balance target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1932/@VBoxContainer@1933/@HBoxContainer@1934/InviteCard/@MarginContainer@1935/@VBoxContainer@1936/@HBoxContainer@1938/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1932/@VBoxContainer@1933/@HBoxContainer@1934/InviteCard/@MarginContainer@1935/@VBoxContainer@1936/@HBoxContainer@1938/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Sign balance rendered stage: source_range=1.471 final_range=1.471 matched=515/518
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/sign-final-20261021/phases-final/captures/000-sign-dawn-reduced-false.png","frame":18,"request":"sign-dawn-reduced-false.png","size":[1280,720],"window":[1280,720]}
+INPUT: leave phase through PauseButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1945/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1945/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through LeaveButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1945/MinigameHUD/PauseOverlay/@PanelContainer@1954/@VBoxContainer@1955/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1945/MinigameHUD/PauseOverlay/@PanelContainer@1954/@VBoxContainer@1955/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through ConfirmAction target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1945/MinigameHUD/ConfirmOverlay/@PanelContainer@1968/@VBoxContainer@1969/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1945/MinigameHUD/ConfirmOverlay/@PanelContainer@1968/@VBoxContainer@1969/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start sign balance target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1993/@VBoxContainer@1994/@HBoxContainer@1995/InviteCard/@MarginContainer@1996/@VBoxContainer@1997/@HBoxContainer@1999/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1993/@VBoxContainer@1994/@HBoxContainer@1995/InviteCard/@MarginContainer@1996/@VBoxContainer@1997/@HBoxContainer@1999/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Sign balance rendered stage: source_range=1.471 final_range=1.471 matched=515/518
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/sign-final-20261021/phases-final/captures/001-sign-dawn-reduced-true.png","frame":44,"request":"sign-dawn-reduced-true.png","size":[1280,720],"window":[1280,720]}
+INPUT: leave phase through PauseButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2006/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2006/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through LeaveButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2006/MinigameHUD/PauseOverlay/@PanelContainer@2015/@VBoxContainer@2016/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2006/MinigameHUD/PauseOverlay/@PanelContainer@2015/@VBoxContainer@2016/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through ConfirmAction target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2006/MinigameHUD/ConfirmOverlay/@PanelContainer@2029/@VBoxContainer@2030/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2006/MinigameHUD/ConfirmOverlay/@PanelContainer@2029/@VBoxContainer@2030/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start sign balance target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2054/@VBoxContainer@2055/@HBoxContainer@2056/InviteCard/@MarginContainer@2057/@VBoxContainer@2058/@HBoxContainer@2060/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2054/@VBoxContainer@2055/@HBoxContainer@2056/InviteCard/@MarginContainer@2057/@VBoxContainer@2058/@HBoxContainer@2060/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Sign balance rendered stage: source_range=1.490 final_range=1.490 matched=515/518
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/sign-final-20261021/phases-final/captures/002-sign-noon-reduced-false.png","frame":70,"request":"sign-noon-reduced-false.png","size":[1280,720],"window":[1280,720]}
+INPUT: leave phase through PauseButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2067/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2067/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through LeaveButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2067/MinigameHUD/PauseOverlay/@PanelContainer@2076/@VBoxContainer@2077/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2067/MinigameHUD/PauseOverlay/@PanelContainer@2076/@VBoxContainer@2077/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through ConfirmAction target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2067/MinigameHUD/ConfirmOverlay/@PanelContainer@2090/@VBoxContainer@2091/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2067/MinigameHUD/ConfirmOverlay/@PanelContainer@2090/@VBoxContainer@2091/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start sign balance target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2115/@VBoxContainer@2116/@HBoxContainer@2117/InviteCard/@MarginContainer@2118/@VBoxContainer@2119/@HBoxContainer@2121/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2115/@VBoxContainer@2116/@HBoxContainer@2117/InviteCard/@MarginContainer@2118/@VBoxContainer@2119/@HBoxContainer@2121/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Sign balance rendered stage: source_range=1.490 final_range=1.490 matched=515/518
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/sign-final-20261021/phases-final/captures/003-sign-noon-reduced-true.png","frame":96,"request":"sign-noon-reduced-true.png","size":[1280,720],"window":[1280,720]}
+INPUT: leave phase through PauseButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2128/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2128/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through LeaveButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2128/MinigameHUD/PauseOverlay/@PanelContainer@2137/@VBoxContainer@2138/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2128/MinigameHUD/PauseOverlay/@PanelContainer@2137/@VBoxContainer@2138/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through ConfirmAction target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2128/MinigameHUD/ConfirmOverlay/@PanelContainer@2151/@VBoxContainer@2152/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2128/MinigameHUD/ConfirmOverlay/@PanelContainer@2151/@VBoxContainer@2152/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start sign balance target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2176/@VBoxContainer@2177/@HBoxContainer@2178/InviteCard/@MarginContainer@2179/@VBoxContainer@2180/@HBoxContainer@2182/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2176/@VBoxContainer@2177/@HBoxContainer@2178/InviteCard/@MarginContainer@2179/@VBoxContainer@2180/@HBoxContainer@2182/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Sign balance rendered stage: source_range=1.105 final_range=1.105 matched=513/518
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/sign-final-20261021/phases-final/captures/004-sign-dusk-reduced-false.png","frame":122,"request":"sign-dusk-reduced-false.png","size":[1280,720],"window":[1280,720]}
+INPUT: leave phase through PauseButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2189/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2189/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through LeaveButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2189/MinigameHUD/PauseOverlay/@PanelContainer@2198/@VBoxContainer@2199/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2189/MinigameHUD/PauseOverlay/@PanelContainer@2198/@VBoxContainer@2199/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through ConfirmAction target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2189/MinigameHUD/ConfirmOverlay/@PanelContainer@2212/@VBoxContainer@2213/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2189/MinigameHUD/ConfirmOverlay/@PanelContainer@2212/@VBoxContainer@2213/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start sign balance target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2237/@VBoxContainer@2238/@HBoxContainer@2239/InviteCard/@MarginContainer@2240/@VBoxContainer@2241/@HBoxContainer@2243/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2237/@VBoxContainer@2238/@HBoxContainer@2239/InviteCard/@MarginContainer@2240/@VBoxContainer@2241/@HBoxContainer@2243/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Sign balance rendered stage: source_range=1.105 final_range=1.105 matched=513/518
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/sign-final-20261021/phases-final/captures/005-sign-dusk-reduced-true.png","frame":148,"request":"sign-dusk-reduced-true.png","size":[1280,720],"window":[1280,720]}
+INPUT: leave phase through PauseButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2250/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2250/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through LeaveButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2250/MinigameHUD/PauseOverlay/@PanelContainer@2259/@VBoxContainer@2260/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2250/MinigameHUD/PauseOverlay/@PanelContainer@2259/@VBoxContainer@2260/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through ConfirmAction target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2250/MinigameHUD/ConfirmOverlay/@PanelContainer@2273/@VBoxContainer@2274/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2250/MinigameHUD/ConfirmOverlay/@PanelContainer@2273/@VBoxContainer@2274/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start sign balance target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2298/@VBoxContainer@2299/@HBoxContainer@2300/InviteCard/@MarginContainer@2301/@VBoxContainer@2302/@HBoxContainer@2304/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2298/@VBoxContainer@2299/@HBoxContainer@2300/InviteCard/@MarginContainer@2301/@VBoxContainer@2302/@HBoxContainer@2304/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Sign balance rendered stage: source_range=0.818 final_range=0.818 matched=515/518
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/sign-final-20261021/phases-final/captures/006-sign-night-reduced-false.png","frame":174,"request":"sign-night-reduced-false.png","size":[1280,720],"window":[1280,720]}
+INPUT: leave phase through PauseButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2311/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2311/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through LeaveButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2311/MinigameHUD/PauseOverlay/@PanelContainer@2320/@VBoxContainer@2321/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2311/MinigameHUD/PauseOverlay/@PanelContainer@2320/@VBoxContainer@2321/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through ConfirmAction target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2311/MinigameHUD/ConfirmOverlay/@PanelContainer@2334/@VBoxContainer@2335/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2311/MinigameHUD/ConfirmOverlay/@PanelContainer@2334/@VBoxContainer@2335/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: start sign balance target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2359/@VBoxContainer@2360/@HBoxContainer@2361/InviteCard/@MarginContainer@2362/@VBoxContainer@2363/@HBoxContainer@2365/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2359/@VBoxContainer@2360/@HBoxContainer@2361/InviteCard/@MarginContainer@2362/@VBoxContainer@2363/@HBoxContainer@2365/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Sign balance rendered stage: source_range=0.818 final_range=0.818 matched=515/518
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/sign-final-20261021/phases-final/captures/007-sign-night-reduced-true.png","frame":200,"request":"sign-night-reduced-true.png","size":[1280,720],"window":[1280,720]}
+INPUT: leave phase through PauseButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2372/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2372/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through LeaveButton target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2372/MinigameHUD/PauseOverlay/@PanelContainer@2381/@VBoxContainer@2382/LeaveButton rect=[P: (430.0, 440.0), S: (420.0, 44.0)] pointer=(640.0, 462.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2372/MinigameHUD/PauseOverlay/@PanelContainer@2381/@VBoxContainer@2382/LeaveButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: leave phase through ConfirmAction target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2372/MinigameHUD/ConfirmOverlay/@PanelContainer@2395/@VBoxContainer@2396/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2372/MinigameHUD/ConfirmOverlay/@PanelContainer@2395/@VBoxContainer@2396/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PASS: native sign four time phases and reduced-motion on/off retain colored water, actual3D camera, apparatus clearance and real pause/leave confirmation
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1323)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/sign-final-20261021/phases-final/phase_review.gd:5)

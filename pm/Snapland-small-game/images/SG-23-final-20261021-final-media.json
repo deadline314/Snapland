@@ -1,0 +1,65 @@
+[
+  {
+    "case": "outcomes-final",
+    "movie": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "15/1",
+          "nb_read_frames": "812"
+        }
+      ],
+      "format": {
+        "duration": "54.133333"
+      }
+    },
+    "decoded_all_frames": true,
+    "actual_stills": 11,
+    "silent_external_window_recording": true
+  },
+  {
+    "case": "controls-final",
+    "movie": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "15/1",
+          "nb_read_frames": "805"
+        }
+      ],
+      "format": {
+        "duration": "53.666667"
+      }
+    },
+    "decoded_all_frames": true,
+    "actual_stills": 8,
+    "silent_external_window_recording": true
+  },
+  {
+    "case": "phases-final",
+    "movie": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "15/1",
+          "nb_read_frames": "414"
+        }
+      ],
+      "format": {
+        "duration": "27.600000"
+      }
+    },
+    "decoded_all_frames": true,
+    "actual_stills": 8,
+    "silent_external_window_recording": true
+  }
+]

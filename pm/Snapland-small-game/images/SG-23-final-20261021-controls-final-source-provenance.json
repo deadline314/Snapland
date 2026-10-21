@@ -1,0 +1,18 @@
+{
+  "base": "b91a854205454248d5635e24b61f61b3b84c1313",
+  "diagnostic_changes": "dependency paths and private Main capture observer only; source hashes authoritative for uncommitted SG23 source. No scoring, physics or timing changes. Original35-second per-route limit preserved.",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_fountain_review.gd": {
+      "source_sha256": "78633fab810b33d449f7611ab95254eb723b4810ca973e058ad71293e5e7be63",
+      "copy_sha256": "eeb2424989312911329d146e15253ef1be0f5d9e5787cd1c6a3946cd9bd08596"
+    },
+    "game/tests/native_sign_balance_review.gd": {
+      "source_sha256": "37351a52c06b3d4d12e7d611f79ffe5cf74646d256f37489c579a0a30db60e31",
+      "copy_sha256": "776f6d28dc4a2f21456b516b2d7e695af7ae1fcf121f87c67231fecfc78540b3"
+    }
+  }
+}

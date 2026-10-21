@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Poly Bridge 3",
+    "developer": [
+      "Dry Cactus"
+    ],
+    "page": "https://store.steampowered.com/app/1850160/",
+    "metadata_url": "https://store.steampowered.com/api/appdetails?appids=1850160&l=english",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1850160/ss_fb052e505876079099f8e686741033ba1824ca1e.1920x1080.jpg?t=1771622248",
+    "file": "reference-poly-bridge.jpg",
+    "bytes": 491997,
+    "sha256": "dfd938b978f85ba85271159e08db509be783b151869de8aa1537b20b96b7737c",
+    "type": "Official product static screenshot, not continuous play or Snapland game asset"
+  },
+  {
+    "name": "A Little to the Left",
+    "developer": [
+      "Max Inferno"
+    ],
+    "page": "https://store.steampowered.com/app/1629520/",
+    "metadata_url": "https://store.steampowered.com/api/appdetails?appids=1629520&l=english",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1629520/ss_dfd3c87efd52db3ea48b4de22de569bd9eb42ca2.1920x1080.jpg?t=1791454263",
+    "file": "reference-little-left.jpg",
+    "bytes": 442331,
+    "sha256": "e0ce845c14e3fa57733477f71c275f6ecb0e73fba8f94c7be8bdc188c0f8e465",
+    "type": "Official product static screenshot, not continuous play or Snapland game asset"
+  },
+  {
+    "name": "Dorfromantik",
+    "developer": [
+      "Toukana Interactive"
+    ],
+    "page": "https://store.steampowered.com/app/1455840/",
+    "metadata_url": "https://store.steampowered.com/api/appdetails?appids=1455840&l=english",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1455840/ss_a49e5fcc5301e8a05a1da7ce233a5377cf680e98.1920x1080.jpg?t=1786951108",
+    "file": "reference-dorfromantik.jpg",
+    "bytes": 357455,
+    "sha256": "ca0790e1dcc782c72c6504ba497f92df03f74dd638355738fcacdc032dab6f48",
+    "type": "Official product static screenshot, not continuous play or Snapland game asset"
+  },
+  {
+    "name": "Poly Bridge 3",
+    "developer": [
+      "Dry Cactus"
+    ],
+    "page": "https://store.steampowered.com/app/1850160/",
+    "image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1850160/ss_fb17a2f482c7b479e1de9831a74e2d7615808b51.1920x1080.jpg?t=1771622248",
+    "file": "reference-poly-bridge-play.jpg",
+    "bytes": 409776,
+    "sha256": "e451a820f49bead04972bcd217e77c578588256826e447bb901fcddce8eb2e5b",
+    "type": "Second official static product image; distinguish marketing illustration from actual play view"
+  }
+]

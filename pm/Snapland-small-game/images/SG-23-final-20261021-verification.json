@@ -1,0 +1,1676 @@
+{
+  "ticket": "SG-23",
+  "date": "2026-10-21 Asia/Taipei",
+  "runtime": "Godot4.7.2 Compatibility llvmpipe1280x720 Dummy audio",
+  "scope": "Native actual station/input/HUD paths, full-world menus and actual3D mechanism; station relocation, returning-player and time/reduced settings are fixtures. Separate new-player tutorial lifecycle. No model/score/clock/award writes.",
+  "accepted_changes": [
+    "Right-side short feedback retains its anchor through every layout/refresh; all55 model angles protect board/title/weight/card clearance.",
+    "Actual completed unsuccessful stages retain zero-point rows; impacts named separately.",
+    "Four water material colors calibrated from actual GPU output; whole-scene tonemap/exposure candidates rejected.",
+    "Three current lesson images are byte-identical actual native final formal captures."
+  ],
+  "outcomes": {
+    "failed": {
+      "complete_save_unchanged": true,
+      "model": {
+        "angle": 0.954299115863553,
+        "angular_velocity": -0.00250538109271022,
+        "assisted": false,
+        "balance": 1.0,
+        "completed_stage_count": 7,
+        "devil_success": false,
+        "elapsed": 20.082716,
+        "ended": true,
+        "forecast_seconds": 0.55,
+        "forecast_torque": -0.21,
+        "forecast_visible": false,
+        "impacts": 1,
+        "last_event": "穩定段不足五段",
+        "precise_limit": 0.055,
+        "precise_stages": 0,
+        "safe_limit": 0.13,
+        "safe_stages": 0,
+        "score": 0,
+        "stable_seconds": 0.0,
+        "stage": 6,
+        "stage_elapsed": 0.0,
+        "stage_input_seen": false,
+        "stage_number": 7,
+        "stage_results": [
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": 0.0
+          },
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": 0.025
+          },
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": -0.02
+          },
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": 0.035
+          },
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": -0.025
+          },
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": 0.015
+          },
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": 0.0
+          }
+        ],
+        "stage_seconds": 2.85714285714286,
+        "success": false,
+        "target_angle": 0.0,
+        "timed_out": false,
+        "wind_direction": -1,
+        "wind_kind": "海風",
+        "wind_strength": 0.21,
+        "wind_torque": 0.0
+      },
+      "result": {
+        "assisted": false,
+        "devil": false,
+        "game_id": "game-008",
+        "mistakes": 1,
+        "practice": false,
+        "score": 0,
+        "score_summary": {
+          "label": "平衡段落分",
+          "rows": [
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_1",
+              "label": "第 1 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_2",
+              "label": "第 2 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_3",
+              "label": "第 3 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_4",
+              "label": "第 4 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_5",
+              "label": "第 5 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_6",
+              "label": "第 6 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_7",
+              "label": "第 7 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "mistakes",
+              "label": "撞線（不計分）",
+              "progress_only": true
+            }
+          ],
+          "rule": "每段調整配重並連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。",
+          "total": 0
+        },
+        "success": false
+      }
+    },
+    "ordinary": {
+      "model": {
+        "angle": 0.902232031552752,
+        "angular_velocity": 0.0676802249663644,
+        "assisted": false,
+        "balance": 1.0,
+        "completed_stage_count": 7,
+        "devil_success": false,
+        "elapsed": 20.0950886666666,
+        "ended": true,
+        "forecast_seconds": 0.55,
+        "forecast_torque": -0.21,
+        "forecast_visible": false,
+        "impacts": 1,
+        "last_event": "七段平衡完成",
+        "precise_limit": 0.055,
+        "precise_stages": 5,
+        "safe_limit": 0.13,
+        "safe_stages": 5,
+        "score": 500,
+        "stable_seconds": 0.0,
+        "stage": 6,
+        "stage_elapsed": 0.0,
+        "stage_input_seen": false,
+        "stage_number": 7,
+        "stage_results": [
+          {
+            "passed": true,
+            "precise": true,
+            "stable_seconds": 2.872694,
+            "target_angle": 0.0
+          },
+          {
+            "passed": true,
+            "precise": true,
+            "stable_seconds": 2.86056466666666,
+            "target_angle": 0.025
+          },
+          {
+            "passed": true,
+            "precise": true,
+            "stable_seconds": 2.87260233333333,
+            "target_angle": -0.02
+          },
+          {
+            "passed": true,
+            "precise": true,
+            "stable_seconds": 2.87500366666666,
+            "target_angle": 0.035
+          },
+          {
+            "passed": true,
+            "precise": true,
+            "stable_seconds": 2.863584,
+            "target_angle": -0.025
+          },
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": 0.015
+          },
+          {
+            "passed": false,
+            "precise": false,
+            "stable_seconds": 0.0,
+            "target_angle": 0.0
+          }
+        ],
+        "stage_seconds": 2.85714285714286,
+        "success": true,
+        "target_angle": 0.0,
+        "timed_out": false,
+        "wind_direction": -1,
+        "wind_kind": "海風",
+        "wind_strength": 0.21,
+        "wind_torque": 0.0
+      },
+      "result": {
+        "assisted": false,
+        "devil": false,
+        "game_id": "game-008",
+        "mistakes": 1,
+        "practice": false,
+        "score": 500,
+        "score_summary": {
+          "label": "平衡段落分",
+          "rows": [
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_1",
+              "label": "第 1 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_2",
+              "label": "第 2 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_3",
+              "label": "第 3 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_4",
+              "label": "第 4 段・中心精準"
+            },
+            {
+              "amount": 100,
+              "count": 1,
+              "key": "sign_stage_5",
+              "label": "第 5 段・中心精準"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_6",
+              "label": "第 6 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "sign_stage_7",
+              "label": "第 7 段・未完成穩定"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "mistakes",
+              "label": "撞線（不計分）",
+              "progress_only": true
+            }
+          ],
+          "rule": "每段調整配重並連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。",
+          "total": 500
+        },
+        "success": true
+      }
+    },
+    "result_pages_actual_pointer": true,
+    "retry_at_input": {
+      "angle": 0.0,
+      "balance": 0.0,
+      "elapsed": 0.0,
+      "events": 0,
+      "impacts": 0,
+      "score": 0,
+      "stage": 0,
+      "stage_elapsed": 0.0
+    }
+  },
+  "phase_audit": {
+    "cases": [
+      {
+        "camera_actual_gpu_checked": true,
+        "phase": "dawn",
+        "reduced": false,
+        "water_sample": "(0.3216, 0.6353, 0.5529, 1.0)"
+      },
+      {
+        "camera_actual_gpu_checked": true,
+        "phase": "dawn",
+        "reduced": true,
+        "water_sample": "(0.3216, 0.6353, 0.5529, 1.0)"
+      },
+      {
+        "camera_actual_gpu_checked": true,
+        "phase": "noon",
+        "reduced": false,
+        "water_sample": "(0.2275, 0.8157, 0.8196, 1.0)"
+      },
+      {
+        "camera_actual_gpu_checked": true,
+        "phase": "noon",
+        "reduced": true,
+        "water_sample": "(0.2275, 0.8157, 0.8196, 1.0)"
+      },
+      {
+        "camera_actual_gpu_checked": true,
+        "phase": "dusk",
+        "reduced": false,
+        "water_sample": "(0.4235, 0.3843, 0.3412, 1.0)"
+      },
+      {
+        "camera_actual_gpu_checked": true,
+        "phase": "dusk",
+        "reduced": true,
+        "water_sample": "(0.4235, 0.3843, 0.3412, 1.0)"
+      },
+      {
+        "camera_actual_gpu_checked": true,
+        "phase": "night",
+        "reduced": false,
+        "water_sample": "(0.0392, 0.1529, 0.2627, 1.0)"
+      },
+      {
+        "camera_actual_gpu_checked": true,
+        "phase": "night",
+        "reduced": true,
+        "water_sample": "(0.0392, 0.1529, 0.2627, 1.0)"
+      }
+    ],
+    "scope": "Actual Main station input, eight actual GPU scenes, time/reduced settings are fixture state; real pause/leave/confirm each time. Not time-settings UI or hardware FPS."
+  },
+  "seven_formal_checks": [
+    {
+      "name": "sign balance model tests",
+      "exit": 0,
+      "seconds": 0.34,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "sign balance view tests",
+      "exit": 0,
+      "seconds": 1.0,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "welcome minigame tests",
+      "exit": 0,
+      "seconds": 79.17,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "main scene integration tests",
+      "exit": 0,
+      "seconds": 26.2,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "pixel UI shell tests",
+      "exit": 0,
+      "seconds": 47.95,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "pixel UI minigame tests",
+      "exit": 0,
+      "seconds": 6.41,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 0.63,
+      "error": null
+    }
+  ],
+  "post_water_view_check": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 1.1,
+    "error": null
+  },
+  "tutorial_lifecycle": {
+    "case": "lesson-final",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 35.72,
+    "passes": [
+      "PASS: native tutorial lifecycle game-008"
+    ]
+  },
+  "final_media": [
+    {
+      "case": "outcomes-final",
+      "movie": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "15/1",
+            "nb_read_frames": "812"
+          }
+        ],
+        "format": {
+          "duration": "54.133333"
+        }
+      },
+      "decoded_all_frames": true,
+      "actual_stills": 11,
+      "silent_external_window_recording": true
+    },
+    {
+      "case": "controls-final",
+      "movie": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "15/1",
+            "nb_read_frames": "805"
+          }
+        ],
+        "format": {
+          "duration": "53.666667"
+        }
+      },
+      "decoded_all_frames": true,
+      "actual_stills": 8,
+      "silent_external_window_recording": true
+    },
+    {
+      "case": "phases-final",
+      "movie": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "15/1",
+            "nb_read_frames": "414"
+          }
+        ],
+        "format": {
+          "duration": "27.600000"
+        }
+      },
+      "decoded_all_frames": true,
+      "actual_stills": 8,
+      "silent_external_window_recording": true
+    }
+  ],
+  "release_build": {
+    "source_commit": "b91a854205454248d5635e24b61f61b3b84c1313",
+    "steps": [
+      {
+        "step": "import",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 21.85
+      },
+      {
+        "step": "export",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 4.66
+      }
+    ],
+    "binary": {
+      "file": "Snapland.x86_64",
+      "bytes": 219555128,
+      "sha256": "0fbfc4f9c73b86bfac6e1513914b73b0c052b8db1893139661b4681e7cfcf55a"
+    },
+    "selected_runtime_source_hashes_match_current": true,
+    "scope": "Source SHA map authoritative: export base precedes this uncommitted SG23 change. Linux embedded PCK release boots its own Main; actual twelve-scene smoke separate from native fixture routes. Not Windows or hardware FPS."
+  },
+  "release_smoke": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 24.28,
+    "completion": true
+  },
+  "prior_ci": {
+    "run_id": 39521520007,
+    "url": "https://github.com/deadline314/Snapland/actions/runs/39521520007",
+    "head_sha": "b91a854205454248d5635e24b61f61b3b84c1313",
+    "conclusion": "success",
+    "python": 137,
+    "design_scopes": 5,
+    "godot_runs": 93,
+    "godot_passes": 93,
+    "names_order_bounds_verified": true,
+    "scope": "Includes MAIN-9 clean release stage fix, ART-17 source hand correction and SG-25 full-flow result labels. Subsequent SG-23 score/feedback/water/tutorial changes have separate local/native/release evidence, not this earlier CI.",
+    "items": [
+      {
+        "name": "clean project import",
+        "seconds": 32.5,
+        "limit_seconds": 90
+      },
+      {
+        "name": "game startup",
+        "seconds": 4.56,
+        "limit_seconds": 90
+      },
+      {
+        "name": "core runtime tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "test/review save isolation tests",
+        "seconds": 2.77,
+        "limit_seconds": 90
+      },
+      {
+        "name": "wardrobe runtime tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar runtime tests",
+        "seconds": 41.14,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar renderer tests",
+        "seconds": 224.4,
+        "limit_seconds": 240
+      },
+      {
+        "name": "avatar attachment tests",
+        "seconds": 85.85,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island hair lifecycle tests",
+        "seconds": 3.9,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island alternate hair source tests",
+        "seconds": 6.5,
+        "limit_seconds": 90
+      },
+      {
+        "name": "seated avatar tests",
+        "seconds": 7.61,
+        "limit_seconds": 90
+      },
+      {
+        "name": "source registration coordinate tests",
+        "seconds": 0.44,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar motion rig runtime tests",
+        "seconds": 53.48,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar role rig tests",
+        "seconds": 68.08,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar motion world integration tests",
+        "seconds": 13.21,
+        "limit_seconds": 90
+      },
+      {
+        "name": "minigame HUD hierarchy tests",
+        "seconds": 0.54,
+        "limit_seconds": 90
+      },
+      {
+        "name": "eight-direction walk tests",
+        "seconds": 3.53,
+        "limit_seconds": 90
+      },
+      {
+        "name": "authored avatar walk loop tests",
+        "seconds": 41.6,
+        "limit_seconds": 90
+      },
+      {
+        "name": "authored avatar side idle tests",
+        "seconds": 5.29,
+        "limit_seconds": 90
+      },
+      {
+        "name": "authored idle hair attachment tests",
+        "seconds": 14.05,
+        "limit_seconds": 90
+      },
+      {
+        "name": "authored NPC source walking tests",
+        "seconds": 1.1,
+        "limit_seconds": 90
+      },
+      {
+        "name": "character animation library tests",
+        "seconds": 0.44,
+        "limit_seconds": 90
+      },
+      {
+        "name": "atomic outfit coverage tests",
+        "seconds": 2.87,
+        "limit_seconds": 90
+      },
+      {
+        "name": "garment part ownership tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "side outfit palette tests",
+        "seconds": 6.87,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC animation state tests",
+        "seconds": 0.72,
+        "limit_seconds": 90
+      },
+      {
+        "name": "tutorial panel/catalog tests",
+        "seconds": 7.23,
+        "limit_seconds": 90
+      },
+      {
+        "name": "tutorial seen progress tests",
+        "seconds": 5.94,
+        "limit_seconds": 90
+      },
+      {
+        "name": "travel collection UI tests",
+        "seconds": 5.77,
+        "limit_seconds": 90
+      },
+      {
+        "name": "tutorial image/control tests",
+        "seconds": 1.57,
+        "limit_seconds": 90
+      },
+      {
+        "name": "time-of-day tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "daylight lighting tests",
+        "seconds": 3.9,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC activity tests",
+        "seconds": 0.54,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC world activity tests",
+        "seconds": 4.18,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC motion source tests",
+        "seconds": 4.63,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC walk motion tests",
+        "seconds": 12.54,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC direction lifecycle tests",
+        "seconds": 1.56,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC missing walk idle tests",
+        "seconds": 11.95,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC dialogue hold tests",
+        "seconds": 9.05,
+        "limit_seconds": 90
+      },
+      {
+        "name": "sprite clearance tests",
+        "seconds": 21.03,
+        "limit_seconds": 90
+      },
+      {
+        "name": "wardrobe UI tests",
+        "seconds": 12.53,
+        "limit_seconds": 90
+      },
+      {
+        "name": "component animation tests",
+        "seconds": 5.2,
+        "limit_seconds": 90
+      },
+      {
+        "name": "building occlusion tests",
+        "seconds": 6.41,
+        "limit_seconds": 90
+      },
+      {
+        "name": "kite flight model tests",
+        "seconds": 0.26,
+        "limit_seconds": 90
+      },
+      {
+        "name": "kite flight view tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "bubble photo model tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "bubble photo view tests",
+        "seconds": 6.04,
+        "limit_seconds": 90
+      },
+      {
+        "name": "bench swap model tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "bench swap view tests",
+        "seconds": 3.24,
+        "limit_seconds": 90
+      },
+      {
+        "name": "sign balance model tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "sign balance view tests",
+        "seconds": 1.01,
+        "limit_seconds": 90
+      },
+      {
+        "name": "hat rescue model tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "hat rescue view tests",
+        "seconds": 8.27,
+        "limit_seconds": 90
+      },
+      {
+        "name": "melody memory model tests",
+        "seconds": 1.01,
+        "limit_seconds": 90
+      },
+      {
+        "name": "melody memory view tests",
+        "seconds": 1.1,
+        "limit_seconds": 90
+      },
+      {
+        "name": "ribbon rhythm model tests",
+        "seconds": 0.26,
+        "limit_seconds": 90
+      },
+      {
+        "name": "ribbon rhythm view tests",
+        "seconds": 2.96,
+        "limit_seconds": 90
+      },
+      {
+        "name": "ribbon Session startup tests",
+        "seconds": 3.61,
+        "limit_seconds": 90
+      },
+      {
+        "name": "ribbon Session lifecycle tests",
+        "seconds": 14.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "shadow theatre model tests",
+        "seconds": 0.26,
+        "limit_seconds": 90
+      },
+      {
+        "name": "shadow theatre view tests",
+        "seconds": 0.54,
+        "limit_seconds": 90
+      },
+      {
+        "name": "crowd semaphore view tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "welcome minigame tests",
+        "seconds": 77.66,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pipe round model tests",
+        "seconds": 0.26,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pipe plan presentation tests",
+        "seconds": 1.01,
+        "limit_seconds": 90
+      },
+      {
+        "name": "balloon harbor presentation tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "crowd traffic model tests",
+        "seconds": 0.26,
+        "limit_seconds": 90
+      },
+      {
+        "name": "crowd crossing view tests",
+        "seconds": 0.26,
+        "limit_seconds": 90
+      },
+      {
+        "name": "fountain jump view tests",
+        "seconds": 8.46,
+        "limit_seconds": 90
+      },
+      {
+        "name": "fountain timing tests",
+        "seconds": 6.03,
+        "limit_seconds": 90
+      },
+      {
+        "name": "balloon delivery tests",
+        "seconds": 1.38,
+        "limit_seconds": 90
+      },
+      {
+        "name": "story runtime tests",
+        "seconds": 0.26,
+        "limit_seconds": 90
+      },
+      {
+        "name": "main story integration tests",
+        "seconds": 25.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island ride tests",
+        "seconds": 23.24,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island layout tests",
+        "seconds": 7.99,
+        "limit_seconds": 90
+      },
+      {
+        "name": "coastal free play tests",
+        "seconds": 14.1,
+        "limit_seconds": 90
+      },
+      {
+        "name": "shared photo thumbnail tests",
+        "seconds": 1.94,
+        "limit_seconds": 90
+      },
+      {
+        "name": "saved photo viewer tests",
+        "seconds": 0.54,
+        "limit_seconds": 90
+      },
+      {
+        "name": "photo original preservation tests",
+        "seconds": 2.13,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island dialogue tests",
+        "seconds": 4.74,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island game entry tests",
+        "seconds": 5.22,
+        "limit_seconds": 90
+      },
+      {
+        "name": "audio runtime tests",
+        "seconds": 9.62,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island audio dynamics tests",
+        "seconds": 12.14,
+        "limit_seconds": 90
+      },
+      {
+        "name": "main scene integration tests",
+        "seconds": 27.61,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI shell tests",
+        "seconds": 57.38,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI popup tests",
+        "seconds": 0.54,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI button depth tests",
+        "seconds": 0.45,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI collection tests",
+        "seconds": 14.99,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel tutorial page tests",
+        "seconds": 15.14,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI customization tests",
+        "seconds": 7.28,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI minigame tests",
+        "seconds": 7.63,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel typography tests",
+        "seconds": 0.91,
+        "limit_seconds": 90
+      },
+      {
+        "name": "localization framework tests",
+        "seconds": 4.85,
+        "limit_seconds": 90
+      }
+    ]
+  },
+  "attempts": [
+    "Original native guard rejected upper feedback intersection with extreme tilted board AABB,18.16s. Original local test allowed board-corner overlap at extreme angles; new test is stricter across55angles.",
+    "Fixed20FPS internal recording run hit the original35-second route deadline before its result latch;44.15s exit1 with an additional resource-at-exit error. Its later naturally observed zero result is partial evidence only, not a completed route.",
+    "Final runs use actual realtime clock and separate15FPS desktop recording. Original35s per-route,300s fixture and240s external process caps retained.",
+    "Pre-water control/outcome/lesson/release successes are superseded for final appearance by explicitly named final cases; preserved privately.",
+    "Four whole-scene tonemap/energy candidates retain clipping or unwanted tint; no whole-scene lighting change adopted. Water-only four-phase candidates followed by eight actual Main phase/reduced runs accepted."
+  ],
+  "evidence_limits": "Three silent external15FPS movies fully decoded.27 final gameplay/phase stills and6 refreshed-lesson stills reviewed in contact sheets. Not continuous movie watching, a new quarter-speed run, human play, listening or entire ART21 acceptance. Older quarter-speed evidence remains separately cited.",
+  "files": [
+    {
+      "file": "SG-23-final-20261021-outcomes-final-000-native-sign-balance-formal-stage-03.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/000-native-sign-balance-formal-stage-03.png",
+      "bytes": 76606,
+      "sha256": "09cd09e91241886979849e694d597e0a637c7cb05ea04f6150d172914fa319ae"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-001-native-sign-balance-formal-stage-06.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/001-native-sign-balance-formal-stage-06.png",
+      "bytes": 77042,
+      "sha256": "198f650e3fdd1995a1d13f932e596c34636520c39ce49d8094a5f8249c42435f"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-002-natural-00-game-008-score-0.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/002-natural-00-game-008-score-0.png",
+      "bytes": 395302,
+      "sha256": "8807fde808255481ce216d1de1be0e48b7f92100b0d472f88a7099a201b4c92e"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-003-sign-failed-page-1.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/003-sign-failed-page-1.png",
+      "bytes": 395154,
+      "sha256": "64ea4fa083fccc1f16ebdf4febe9fd31e0e17236751a53add0df790de8315140"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-004-sign-failed-page-2.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/004-sign-failed-page-2.png",
+      "bytes": 393732,
+      "sha256": "751025a1cb02267039297e7eef325ca5e81ac4d42a999709a3592c6e4a879be4"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-005-sign-result-retry-reset.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/005-sign-result-retry-reset.png",
+      "bytes": 61470,
+      "sha256": "4dd6c8c1fba220a2caa285be0175ac0307342b5c22316f4595f5dba1dd3ce410"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-006-native-sign-balance-formal-stage-03.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/006-native-sign-balance-formal-stage-03.png",
+      "bytes": 62117,
+      "sha256": "8dab2fe9948ba1b771c018d9f262d940b1f9fa97e482c3abd88633f613ded7c3"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-007-native-sign-balance-formal-stage-06.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/007-native-sign-balance-formal-stage-06.png",
+      "bytes": 63840,
+      "sha256": "09d4bfcbdd5d9a60297b6dc3f7b16f46b98b6e83ac7b01bc0a114df3bf8e98bc"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-008-natural-01-game-008-score-500.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/008-natural-01-game-008-score-500.png",
+      "bytes": 456832,
+      "sha256": "ac63069e9cb09b2f2cb8ba76a2d20546a88b7ffd415ffa38347bf7a577480071"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-009-sign-ordinary-page-1.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/009-sign-ordinary-page-1.png",
+      "bytes": 456743,
+      "sha256": "fb46c410d76fcb8edde67f290dc3b40a127d3cefdfde39385e06df0fbc532a86"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-010-sign-ordinary-page-2.png",
+      "source": "work/sign-final-20261021/outcomes-final/captures/010-sign-ordinary-page-2.png",
+      "bytes": 455272,
+      "sha256": "b75ddcac32d5ce05f8fdcd1ff02fe66841c0b382601fa38c65f35db9e05c2a92"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-result.json",
+      "source": "work/sign-final-20261021/outcomes-final/result.json",
+      "bytes": 509,
+      "sha256": "4a6070ba234ab81611a158bf7463527149da14063416fe2c188642fb267700ae"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-result.log",
+      "source": "work/sign-final-20261021/outcomes-final/result.log",
+      "bytes": 22206,
+      "sha256": "5c40b00f3844d1febe3915cf665a930ac453eb9d63bbc9c7af69d0585d8863d4"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-source-provenance.json",
+      "source": "work/sign-final-20261021/outcomes-final/source-provenance.json",
+      "bytes": 1229,
+      "sha256": "ca3d1e9c39e3c86516aede22be981f8d387ac2d389ffd56f470faf8dba863af8"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-natural-results.json",
+      "source": "work/sign-final-20261021/outcomes-final/natural-results.json",
+      "bytes": 3500,
+      "sha256": "5552d0bad01586068601e2cd2de50e8109920d19f0ea11ea5e3069c215cd1548"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-outcomes.json",
+      "source": "work/sign-final-20261021/outcomes-final/outcomes.json",
+      "bytes": 7797,
+      "sha256": "eb2359dbb09f8719afb19086b0aa88daee5cd13e4dcb92ece3e6cbdd975424de"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-video-metadata.json",
+      "source": "work/sign-final-20261021/outcomes-final/video-metadata.json",
+      "bytes": 225,
+      "sha256": "1b1ef81c9118833d4a60c15668c2c78e8aed1d1271582d5aa2fafe91d92e82ff"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-play.mp4",
+      "source": "work/sign-final-20261021/outcomes-final/play.mp4",
+      "bytes": 9171123,
+      "sha256": "1952d3b238a50778ecfb7afef48336359a38dee5aa716a3d45270945a89d0787"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-000-native-sign-balance-practice-stage-03.png",
+      "source": "work/sign-final-20261021/controls-final/captures/000-native-sign-balance-practice-stage-03.png",
+      "bytes": 62709,
+      "sha256": "55fc83dea03ea431f583155df0e0bf892340335a525142ceee43175ba144db7c"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-001-native-sign-balance-practice-stage-06.png",
+      "source": "work/sign-final-20261021/controls-final/captures/001-native-sign-balance-practice-stage-06.png",
+      "bytes": 64688,
+      "sha256": "3c494b21173d8fb0f65fed63b8536fd1070f36e15da63450f4ebee77e18fe4e3"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-002-natural-00-game-008-score-700.png",
+      "source": "work/sign-final-20261021/controls-final/captures/002-natural-00-game-008-score-700.png",
+      "bytes": 393230,
+      "sha256": "32fbc7e3bd806e6b151a3ad3175f297e50fd7945169be93fa73c5aeb03f4ddc2"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-003-native-sign-balance-practice-result.png",
+      "source": "work/sign-final-20261021/controls-final/captures/003-native-sign-balance-practice-result.png",
+      "bytes": 393230,
+      "sha256": "32fbc7e3bd806e6b151a3ad3175f297e50fd7945169be93fa73c5aeb03f4ddc2"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-004-native-sign-balance-formal-stage-03.png",
+      "source": "work/sign-final-20261021/controls-final/captures/004-native-sign-balance-formal-stage-03.png",
+      "bytes": 62139,
+      "sha256": "32c61b96095b1b580415706ac0564a755d944b3fb1a47d2ede285cd582dda8eb"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-005-native-sign-balance-formal-stage-06.png",
+      "source": "work/sign-final-20261021/controls-final/captures/005-native-sign-balance-formal-stage-06.png",
+      "bytes": 63783,
+      "sha256": "4934f23bb43f6f00917a9a314e164714a082523bba29559300b57a7a9047f02c"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-006-natural-01-game-008-score-700.png",
+      "source": "work/sign-final-20261021/controls-final/captures/006-natural-01-game-008-score-700.png",
+      "bytes": 451202,
+      "sha256": "323a2963d345886b4622899b3ff0613380bce81141e5642cbc9642c2b409a430"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-007-native-sign-balance-formal-result-700.png",
+      "source": "work/sign-final-20261021/controls-final/captures/007-native-sign-balance-formal-result-700.png",
+      "bytes": 451244,
+      "sha256": "662f41fd8803fa850dcb3a9781c00ea3264c5b50264c0b49b392fa0457a201b9"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-result.json",
+      "source": "work/sign-final-20261021/controls-final/result.json",
+      "bytes": 471,
+      "sha256": "4b8894846ecd919dd758505999ce469b08106466d912d633f80f3512e54c8bbe"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-result.log",
+      "source": "work/sign-final-20261021/controls-final/result.log",
+      "bytes": 22611,
+      "sha256": "b4403b6fce0d831843fec840144926180308e0844104df72089f5cb33b413b9d"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-source-provenance.json",
+      "source": "work/sign-final-20261021/controls-final/source-provenance.json",
+      "bytes": 992,
+      "sha256": "333e08981f970c172d6126ac2db02f0d44b5557ed4fce30cda0d3791201f57f8"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-natural-results.json",
+      "source": "work/sign-final-20261021/controls-final/natural-results.json",
+      "bytes": 3148,
+      "sha256": "5fd3df216c96b61952d0c1b64d315e7f4b34633887f9a64c2d6149659cf2a938"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-video-metadata.json",
+      "source": "work/sign-final-20261021/controls-final/video-metadata.json",
+      "bytes": 225,
+      "sha256": "7781d0da305b811e6acad30dc13bf7616e4701b804c84b24fed3895facf72344"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-play.mp4",
+      "source": "work/sign-final-20261021/controls-final/play.mp4",
+      "bytes": 7573210,
+      "sha256": "4a77b2c19b0aab50c7b92cfe894f976bd1f969249b3edd04c386a96ebf0032a5"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-000-sign-dawn-reduced-false.png",
+      "source": "work/sign-final-20261021/phases-final/captures/000-sign-dawn-reduced-false.png",
+      "bytes": 61958,
+      "sha256": "4cb965ce881d871897a654c9ece84c442e5200023bf61c73f00dd7d789fddd67"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-001-sign-dawn-reduced-true.png",
+      "source": "work/sign-final-20261021/phases-final/captures/001-sign-dawn-reduced-true.png",
+      "bytes": 61954,
+      "sha256": "e97666b4ce298fc91ebbdcc355bcb23f5e666f0d6a785489b1ca3ea490ef019f"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-002-sign-noon-reduced-false.png",
+      "source": "work/sign-final-20261021/phases-final/captures/002-sign-noon-reduced-false.png",
+      "bytes": 61449,
+      "sha256": "5b1bc03af8e02b899dfaeea9dd523decdbc2d988bcb8e7db60c0bb70337dea1b"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-003-sign-noon-reduced-true.png",
+      "source": "work/sign-final-20261021/phases-final/captures/003-sign-noon-reduced-true.png",
+      "bytes": 61459,
+      "sha256": "f4a841f79bac0254bef73facb2201c5e9ecf26f33aff9b96a0d9d9dbcf1e82e9"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-004-sign-dusk-reduced-false.png",
+      "source": "work/sign-final-20261021/phases-final/captures/004-sign-dusk-reduced-false.png",
+      "bytes": 50041,
+      "sha256": "059a924bcf1f786a77dd6899d52797ef22657effacfac96975dcdb7f0977f52e"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-005-sign-dusk-reduced-true.png",
+      "source": "work/sign-final-20261021/phases-final/captures/005-sign-dusk-reduced-true.png",
+      "bytes": 50041,
+      "sha256": "059a924bcf1f786a77dd6899d52797ef22657effacfac96975dcdb7f0977f52e"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-006-sign-night-reduced-false.png",
+      "source": "work/sign-final-20261021/phases-final/captures/006-sign-night-reduced-false.png",
+      "bytes": 52047,
+      "sha256": "eca6c8b90bd673fa29af69ff07062554cf3898bd3c4453e74fe65c6df98f18dc"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-007-sign-night-reduced-true.png",
+      "source": "work/sign-final-20261021/phases-final/captures/007-sign-night-reduced-true.png",
+      "bytes": 52057,
+      "sha256": "31a0fc8ce74f0858016d726a1423019c47900ed746c4eed55d0f4e915a60a10a"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-result.json",
+      "source": "work/sign-final-20261021/phases-final/result.json",
+      "bytes": 449,
+      "sha256": "03c6a66dd43d7a22f164062baf22a934b25974f4ace9377acccba412ee84021d"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-result.log",
+      "source": "work/sign-final-20261021/phases-final/result.log",
+      "bytes": 33767,
+      "sha256": "a334bc7e20c48d721fe8fc9519bfe3bf4b2ff671b5773ea3b1bc2521455e1371"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-source-provenance.json",
+      "source": "work/sign-final-20261021/phases-final/source-provenance.json",
+      "bytes": 1228,
+      "sha256": "e2f25a1454d6375079c6d342b8050bbaeed0a94daa7b96dc73965ae76b00b914"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-phase-audit.json",
+      "source": "work/sign-final-20261021/phases-final/phase-audit.json",
+      "bytes": 1438,
+      "sha256": "4559183cfa88147158b89a2dadcaea7bdf0e41af67e69414dd805595e381c60f"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-video-metadata.json",
+      "source": "work/sign-final-20261021/phases-final/video-metadata.json",
+      "bytes": 225,
+      "sha256": "b40632fc0a6968c19a2f6a9857f43308e27e0bcdaf7e427f695bc693f3ab4253"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-play.mp4",
+      "source": "work/sign-final-20261021/phases-final/play.mp4",
+      "bytes": 12263149,
+      "sha256": "1ea3d717714c2dd1093760b2a578f88ea427049d24dd6c04ecf52d766bee41eb"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-game-008-first-step.png",
+      "source": "work/sign-final-20261021/lesson-final/captures/game-008-first-step.png",
+      "bytes": 243065,
+      "sha256": "8ddbc5c37dd42f9474ee39b34b90173b21c5690b613176299cd618874266d6c0"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-game-008-help-reopened.png",
+      "source": "work/sign-final-20261021/lesson-final/captures/game-008-help-reopened.png",
+      "bytes": 59963,
+      "sha256": "db90ce93617414f1daa961b14366d9f6106b5400468e1854c9bab3c444705403"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-game-008-help-step-01.png",
+      "source": "work/sign-final-20261021/lesson-final/captures/game-008-help-step-01.png",
+      "bytes": 59963,
+      "sha256": "db90ce93617414f1daa961b14366d9f6106b5400468e1854c9bab3c444705403"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-game-008-private-help-step-01.png",
+      "source": "work/sign-final-20261021/lesson-final/captures/game-008-private-help-step-01.png",
+      "bytes": 59963,
+      "sha256": "db90ce93617414f1daa961b14366d9f6106b5400468e1854c9bab3c444705403"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-game-008-step-02.png",
+      "source": "work/sign-final-20261021/lesson-final/captures/game-008-step-02.png",
+      "bytes": 244157,
+      "sha256": "f3511d17435a80c54adc5b52bbe748854e014d33ead74957f41d55f05c7eae14"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-game-008-step-03.png",
+      "source": "work/sign-final-20261021/lesson-final/captures/game-008-step-03.png",
+      "bytes": 331725,
+      "sha256": "de68af02ca3325f97c3e50bb450c493bef23d51256a9db1461451cab411a03e6"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-result.json",
+      "source": "work/sign-final-20261021/lesson-final/result.json",
+      "bytes": 143,
+      "sha256": "4422a48a08c001ccf119cbfe7102fe213b44ac59c93f0597e98e4a09eddd53a2"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-result.log",
+      "source": "work/sign-final-20261021/lesson-final/result.log",
+      "bytes": 14471,
+      "sha256": "d0782a0136c0de237e7e7c740be8560e56275ce070a4071651f55fbe257bf44b"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-source-provenance.json",
+      "source": "work/sign-final-20261021/lesson-final/source-provenance.json",
+      "bytes": 264,
+      "sha256": "baf200722bc3d0a87fb80ca41f9622b165447875185ec3703d31b670f7e70622"
+    },
+    {
+      "file": "SG-23-final-20261021-checks-final-main-scene-integration-tests.log",
+      "source": "work/sign-final-20261021/checks-final/main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "c198e47bbe9fc1daf09e10f429c811d8633f4b5bc88922ca872f95f86baf934f"
+    },
+    {
+      "file": "SG-23-final-20261021-checks-final-pixel-UI-minigame-tests.log",
+      "source": "work/sign-final-20261021/checks-final/pixel-UI-minigame-tests.log",
+      "bytes": 13937,
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039"
+    },
+    {
+      "file": "SG-23-final-20261021-checks-final-pixel-UI-shell-tests.log",
+      "source": "work/sign-final-20261021/checks-final/pixel-UI-shell-tests.log",
+      "bytes": 18023,
+      "sha256": "8bb58a73e05e23b135e932bc26fb253b54837e3a52cea372d6d8973b98623549"
+    },
+    {
+      "file": "SG-23-final-20261021-checks-final-results.json",
+      "source": "work/sign-final-20261021/checks-final/results.json",
+      "bytes": 720,
+      "sha256": "2036b94bc4f668d3588ef88751d4e5156b99d136c311bde5ba538391ad9c6ab6"
+    },
+    {
+      "file": "SG-23-final-20261021-checks-final-sign-balance-model-tests.log",
+      "source": "work/sign-final-20261021/checks-final/sign-balance-model-tests.log",
+      "bytes": 110,
+      "sha256": "84d47b63b3906cd454bd95e4820c02173f086a29411c1419e8d3c244ca76ec4b"
+    },
+    {
+      "file": "SG-23-final-20261021-checks-final-sign-balance-view-tests.log",
+      "source": "work/sign-final-20261021/checks-final/sign-balance-view-tests.log",
+      "bytes": 110,
+      "sha256": "1e5c79e61c3a58750f0c5d1f5128f94e32693584d3597ba27a9b701faef9d658"
+    },
+    {
+      "file": "SG-23-final-20261021-checks-final-welcome-minigame-tests.log",
+      "source": "work/sign-final-20261021/checks-final/welcome-minigame-tests.log",
+      "bytes": 14439,
+      "sha256": "25862a04795706a02eaaed46208131d4ea79521781811b401fb3219ba03ab2d6"
+    },
+    {
+      "file": "SG-23-final-20261021-hud-check-result.json",
+      "source": "work/sign-final-20261021/hud-check/result.json",
+      "bytes": 67,
+      "sha256": "4476d1398b892fd0fa5b812e533d4bc5d2c585f59fa8e4f821f5f5870581480f"
+    },
+    {
+      "file": "SG-23-final-20261021-hud-check-result.log",
+      "source": "work/sign-final-20261021/hud-check/result.log",
+      "bytes": 121,
+      "sha256": "fee9202ac3e546c127d5531b469e6f1b7448fef294ed4ae480c682d67596421b"
+    },
+    {
+      "file": "SG-23-final-20261021-water-check-result.json",
+      "source": "work/sign-final-20261021/water-check/result.json",
+      "bytes": 66,
+      "sha256": "c1f8f8fb88dd365702ef9c0c58622d11801180ef408da3b411dfaaf6eff610f7"
+    },
+    {
+      "file": "SG-23-final-20261021-water-check-result.log",
+      "source": "work/sign-final-20261021/water-check/result.log",
+      "bytes": 110,
+      "sha256": "1e5c79e61c3a58750f0c5d1f5128f94e32693584d3597ba27a9b701faef9d658"
+    },
+    {
+      "file": "SG-23-final-20261021-import-final-result.json",
+      "source": "work/sign-final-20261021/import-final/result.json",
+      "bytes": 50,
+      "sha256": "2bdd6c6fb4b75c550a45bc060ac5fddf0388412e00e183a67bb8988fe288ec73"
+    },
+    {
+      "file": "SG-23-final-20261021-import-final-result.log",
+      "source": "work/sign-final-20261021/import-final/result.log",
+      "bytes": 3914,
+      "sha256": "7d3ee716dfe15a1489c326fd161f9c7392c18f6a12e145e57f2b5b3c66179c68"
+    },
+    {
+      "file": "SG-23-final-20261021-rejected-outcomes-result.json",
+      "source": "work/sign-final-20261021/outcomes/result.json",
+      "bytes": 89,
+      "sha256": "12aabdee99e9fe45ec51bfe7d75f39e20f30953b8a2ae6d8b23ed93eed71234d"
+    },
+    {
+      "file": "SG-23-final-20261021-rejected-outcomes-result.log",
+      "source": "work/sign-final-20261021/outcomes/result.log",
+      "bytes": 15738,
+      "sha256": "881358dc15cf33cc6de44751c3b418d516151c18b8477e77754448a78eed9d02"
+    },
+    {
+      "file": "SG-23-final-20261021-rejected-outcomes-source-provenance.json",
+      "source": "work/sign-final-20261021/outcomes/source-provenance.json",
+      "bytes": 1190,
+      "sha256": "6ab7e2c81c344a1d8e11fa4d0464ef1df61a6134554f85aadeb9adab4c8b7b8a"
+    },
+    {
+      "file": "SG-23-final-20261021-rejected-outcomes-v2-result.json",
+      "source": "work/sign-final-20261021/outcomes-v2/result.json",
+      "bytes": 92,
+      "sha256": "63a92b451cefd2f4b724ce0fb79ccf21ee7b8f859de7902449e3312f5392e5d0"
+    },
+    {
+      "file": "SG-23-final-20261021-rejected-outcomes-v2-result.log",
+      "source": "work/sign-final-20261021/outcomes-v2/result.log",
+      "bytes": 17077,
+      "sha256": "c0c70a803fa81f37946d62aa7bc8a1c5e18a778e38c13731b36bf78a24c20562"
+    },
+    {
+      "file": "SG-23-final-20261021-rejected-outcomes-v2-source-provenance.json",
+      "source": "work/sign-final-20261021/outcomes-v2/source-provenance.json",
+      "bytes": 1190,
+      "sha256": "060583f977d6a8d075e6e4ac3b1c2cc2b2280e52df5fdb032ff1647ad9c8e9ae"
+    },
+    {
+      "file": "SG-23-final-20261021-calibration-audit.json",
+      "source": "work/sign-final-20261021/calibration/audit.json",
+      "bytes": 489,
+      "sha256": "a5256be456f3465a35bfb653a8adbf648b823a1bf0ec1eb0e804cfca247e3ffa"
+    },
+    {
+      "file": "SG-23-final-20261021-calibration-filmic-half.png",
+      "source": "work/sign-final-20261021/calibration/filmic-half.png",
+      "bytes": 85378,
+      "sha256": "c5001b3871c90e35b67c35655af76d2f40309c767cd294548325d46797941c89"
+    },
+    {
+      "file": "SG-23-final-20261021-calibration-linear-balanced.png",
+      "source": "work/sign-final-20261021/calibration/linear-balanced.png",
+      "bytes": 85867,
+      "sha256": "ac01ee0a960124f6afea2cf669046c1626830ae252b7dd1564a8bc43fac4f079"
+    },
+    {
+      "file": "SG-23-final-20261021-calibration-linear.png",
+      "source": "work/sign-final-20261021/calibration/linear.png",
+      "bytes": 84840,
+      "sha256": "9ba2ef718027aa04ddb106cb7562edbefbe2643ed88300f506daea448480eb16"
+    },
+    {
+      "file": "SG-23-final-20261021-calibration-original.png",
+      "source": "work/sign-final-20261021/calibration/original.png",
+      "bytes": 82498,
+      "sha256": "09ccdd86aeed8a63e7cb739784220b8c928ac2355630f776132795ea2ddc3b37"
+    },
+    {
+      "file": "SG-23-final-20261021-calibration-result.json",
+      "source": "work/sign-final-20261021/calibration/result.json",
+      "bytes": 24,
+      "sha256": "9422d7e816e5b55b45c60c75752e4b83df1cb7e6a1b4a5cd3b24e4b1f8a85811"
+    },
+    {
+      "file": "SG-23-final-20261021-calibration-result.log",
+      "source": "work/sign-final-20261021/calibration/result.log",
+      "bytes": 451,
+      "sha256": "42a974054a85a6abf29afd2dfa8c6baa2ca9c834f4d0681bac074881e746d893"
+    },
+    {
+      "file": "SG-23-final-20261021-water-calibration-audit.json",
+      "source": "work/sign-final-20261021/water-calibration/audit.json",
+      "bytes": 510,
+      "sha256": "ca2b1968ececb7a2fc08d55cd4c196bae672a7e8acb68de254e9007219b6476e"
+    },
+    {
+      "file": "SG-23-final-20261021-water-calibration-result.json",
+      "source": "work/sign-final-20261021/water-calibration/result.json",
+      "bytes": 24,
+      "sha256": "9422d7e816e5b55b45c60c75752e4b83df1cb7e6a1b4a5cd3b24e4b1f8a85811"
+    },
+    {
+      "file": "SG-23-final-20261021-water-calibration-result.log",
+      "source": "work/sign-final-20261021/water-calibration/result.log",
+      "bytes": 451,
+      "sha256": "42a974054a85a6abf29afd2dfa8c6baa2ca9c834f4d0681bac074881e746d893"
+    },
+    {
+      "file": "SG-23-final-20261021-water-calibration-water-dawn.png",
+      "source": "work/sign-final-20261021/water-calibration/water-dawn.png",
+      "bytes": 88526,
+      "sha256": "34fef782a5055fdf89773c125f9b032ac5560b6387e7faf289ffd7487de3c7e6"
+    },
+    {
+      "file": "SG-23-final-20261021-water-calibration-water-dusk.png",
+      "source": "work/sign-final-20261021/water-calibration/water-dusk.png",
+      "bytes": 76977,
+      "sha256": "fbd1bac3dd6dc141de9dee742c452c0f393e97438444e4086eb861ed4fa671fb"
+    },
+    {
+      "file": "SG-23-final-20261021-water-calibration-water-night.png",
+      "source": "work/sign-final-20261021/water-calibration/water-night.png",
+      "bytes": 79497,
+      "sha256": "59f6f7c0ccbb970b28e62fe08b2a0e323792302153ce1a411b37f194d436c44e"
+    },
+    {
+      "file": "SG-23-final-20261021-water-calibration-water-noon.png",
+      "source": "work/sign-final-20261021/water-calibration/water-noon.png",
+      "bytes": 87781,
+      "sha256": "4d9fc25a2f684d486877936151da605e722f134edd9760e54694ee71516983a8"
+    },
+    {
+      "file": "SG-23-final-20261021-research.md",
+      "source": "work/sign-final-20261021/research.md",
+      "bytes": 3624,
+      "sha256": "6fafef28857bd16ab128befbefc2beb2a5bdaef0a98606a04a8d7c31e9e503db"
+    },
+    {
+      "file": "SG-23-final-20261021-reference-provenance.json",
+      "source": "work/sign-final-20261021/reference-provenance.json",
+      "bytes": 2503,
+      "sha256": "7f8a3ff08a051548de55feb69afa388ea9c8d57a520d100ef642cd7a644507e3"
+    },
+    {
+      "file": "SG-23-final-20261021-final-media.json",
+      "source": "work/sign-final-20261021/final-media.json",
+      "bytes": 1307,
+      "sha256": "c47e05beb894d1c164c0c544e72b84cf925e8fd5af4f7a2eb6ed3b8c5a2ac615"
+    },
+    {
+      "file": "SG-23-final-20261021-ci-b91-verification.json",
+      "source": "work/sign-final-20261021/ci-b91-verification.json",
+      "bytes": 10329,
+      "sha256": "9d56f4c9c6c0d68306e553cb86d63a8579b18cb4b1ff7345d36835077f64fef8"
+    },
+    {
+      "file": "SG-23-final-20261021-ci-b91-full-suite.log",
+      "source": "work/sign-final-20261021/ci-b91-full-suite.log",
+      "bytes": 44863,
+      "sha256": "5a71889583e6c564485b62216d1e689ec3c6ab190cb7fbbd8dd8f1d0745c935d"
+    },
+    {
+      "file": "SG-23-final-20261021-ci-b91-game-runtime.log",
+      "source": "work/sign-final-20261021/ci-b91-game-runtime.log",
+      "bytes": 46782,
+      "sha256": "b3ff01eccd5faff1414b30b1801d55e9114d6136b88afae5f60c9df38f120d46"
+    },
+    {
+      "file": "SG-23-final-20261021-tutorial-refresh-source.json",
+      "source": "work/sign-final-20261021/tutorial-refresh/source.json",
+      "bytes": 1283,
+      "sha256": "de0f52fca9c1674db8ff773955bed2f385bddc1c9a3e138c7ad93493bc197aaf"
+    },
+    {
+      "file": "SG-23-final-20261021-reference-dorfromantik.jpg",
+      "source": "work/sign-final-20261021/reference-dorfromantik.jpg",
+      "bytes": 357455,
+      "sha256": "ca0790e1dcc782c72c6504ba497f92df03f74dd638355738fcacdc032dab6f48"
+    },
+    {
+      "file": "SG-23-final-20261021-reference-little-left.jpg",
+      "source": "work/sign-final-20261021/reference-little-left.jpg",
+      "bytes": 442331,
+      "sha256": "e0ce845c14e3fa57733477f71c275f6ecb0e73fba8f94c7be8bdc188c0f8e465"
+    },
+    {
+      "file": "SG-23-final-20261021-reference-poly-bridge-play.jpg",
+      "source": "work/sign-final-20261021/reference-poly-bridge-play.jpg",
+      "bytes": 409776,
+      "sha256": "e451a820f49bead04972bcd217e77c578588256826e447bb901fcddce8eb2e5b"
+    },
+    {
+      "file": "SG-23-final-20261021-reference-poly-bridge.jpg",
+      "source": "work/sign-final-20261021/reference-poly-bridge.jpg",
+      "bytes": 491997,
+      "sha256": "dfd938b978f85ba85271159e08db509be783b151869de8aa1537b20b96b7737c"
+    },
+    {
+      "file": "SG-23-final-20261021-outcomes-final-overview-0.jpg",
+      "source": "work/sign-final-20261021/outcomes-final-overview-0.jpg",
+      "bytes": 163345,
+      "sha256": "4f9252d3b67dfe79603ce6c9642e86c859fc9c28c9fec61880ac2c4ad88f4e3c"
+    },
+    {
+      "file": "SG-23-final-20261021-controls-final-overview-0.jpg",
+      "source": "work/sign-final-20261021/controls-final-overview-0.jpg",
+      "bytes": 118915,
+      "sha256": "352c15fd7120241c4c9a83e141c5260dddfba485588a1bb64056178ff703b65d"
+    },
+    {
+      "file": "SG-23-final-20261021-phases-final-overview-0.jpg",
+      "source": "work/sign-final-20261021/phases-final-overview-0.jpg",
+      "bytes": 111091,
+      "sha256": "dd4e2680aed525b7ed255533db199071daa325a4b90d22ea4d82ddf911835964"
+    },
+    {
+      "file": "SG-23-final-20261021-lesson-final-overview.jpg",
+      "source": "work/sign-final-20261021/lesson-final-overview.jpg",
+      "bytes": 98538,
+      "sha256": "7a5b319c017df0dbd38c4bfa65aaa5240cbb92e23475a6a0fed2bbef9efe2781"
+    },
+    {
+      "file": "SG-23-final-20261021-release-build.json",
+      "source": "work/sign-final-20261021/release-water-final/build.json",
+      "bytes": 102848,
+      "sha256": "557b9401a4be136ccf3746ce79179ef41de1dbe2658f5297b5b8b0a836568e23"
+    },
+    {
+      "file": "SG-23-final-20261021-release-import.log",
+      "source": "work/sign-final-20261021/release-water-final/import.log",
+      "bytes": 67709,
+      "sha256": "076d489a70127c2c2e6f4740aa9c5c222f2545568a37313294effa833d774139"
+    },
+    {
+      "file": "SG-23-final-20261021-release-export.log",
+      "source": "work/sign-final-20261021/release-water-final/export.log",
+      "bytes": 120339,
+      "sha256": "3a4fb24299b11d7bfd0c1aa1e8f999735f90cb6022930729c026e1758a035ad3"
+    },
+    {
+      "file": "SG-23-final-20261021-release-smoke-result.json",
+      "source": "work/sign-final-20261021/release-water-smoke-final/result.json",
+      "bytes": 73,
+      "sha256": "ccbf1480a6dbff6d08eca5e50307e55b932f6408f66fb74d34ef59fa5d447d25"
+    },
+    {
+      "file": "SG-23-final-20261021-release-smoke-result.log",
+      "source": "work/sign-final-20261021/release-water-smoke-final/result.log",
+      "bytes": 6886,
+      "sha256": "f706272269a6f02ff31d5bae7477d9f328fdbe60f31df5579252cabd67b28c1f"
+    },
+    {
+      "file": "SG-23-final-20261021-source-sha256-final.json",
+      "source": "work/sign-final-20261021/source-sha256-final.json",
+      "bytes": 1201,
+      "sha256": "a85a7eb6a737ef254cd955d4f461d1ca94476530a12396b0a0463b8c5f1540a5"
+    },
+    {
+      "file": "SG-23-final-20261021-review-sources.zip",
+      "source": "work/sign-final-20261021/review-sources.zip",
+      "bytes": 1393184,
+      "sha256": "0d08c95f6ca022e23937ff6a1b43c6fc0b8df57e2b999b539e74b88938fe5647"
+    }
+  ]
+}

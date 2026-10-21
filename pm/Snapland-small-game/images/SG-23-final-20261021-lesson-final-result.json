@@ -1,0 +1,9 @@
+{
+  "case": "lesson-final",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 35.72,
+  "passes": [
+    "PASS: native tutorial lifecycle game-008"
+  ]
+}

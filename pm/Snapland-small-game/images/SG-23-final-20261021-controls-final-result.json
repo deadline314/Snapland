@@ -1,0 +1,9 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 53.8,
+  "passes": [
+    "PASS: game-008 park launch, live weight controls, pointer rail, pause/resume, confirmed retry reset, reduced-motion practice without awards, and seven-stage formal devil result"
+  ],
+  "scope": "Actual realtime engine clock, uncapped rendering. External silent15FPS full-window recording; original35-second per-route and300-second fixture/global240-second process limits preserved. Not hardware FPS."
+}

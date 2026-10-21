@@ -143,6 +143,10 @@ func _check_rendered_stage(session: Control) -> bool:
 	if source_image == null or source_image.is_empty() or final_image == null or final_image.is_empty():
 		await _fail("Completed sign GPU frame returned an empty source or final viewport texture")
 		return false
+	var water := source_image.get_pixel(20, 260)
+	if maxf(water.r, maxf(water.g, water.b)) >= 0.98 or maxf(water.r, maxf(water.g, water.b)) - minf(water.r, minf(water.g, water.b)) <= 0.04:
+		await _fail("Actual rendered harbor water must retain its color without white clipping: " + str(water))
+		return false
 	# These samples cover the mechanism below the transient HUD feedback bar
 	# and above the paper controls; score/stage/forecast cards cannot pass it.
 	var source_min := Vector3(INF, INF, INF)
@@ -192,7 +196,7 @@ func _check_live_feedback_clearance(session: Control) -> bool:
 	var board_rect: Rect2 = presentation.projected_sign_bounds()
 	var title_rect := _projected_geometry_bounds(camera, title)
 	var weight_rect := _projected_geometry_bounds(camera, mass)
-	if not is_equal_approx(feedback.size.x, 420.0) or feedback.position.y != 130.0 or feedback_rect.intersects(board_rect) or feedback_rect.intersects(title_rect) or feedback_rect.intersects(weight_rect) or feedback_rect.intersects(presentation.stage_card_bounds()) or feedback_rect.intersects(presentation.FORECAST_CARD_BOUNDS) or feedback_rect.intersects(presentation.controls_panel_bounds()):
+	if feedback.size.x > 260.0 or feedback_rect.position.x <= presentation.FORECAST_CARD_BOUNDS.position.x or feedback_rect.position.y <= presentation.FORECAST_CARD_BOUNDS.end.y or feedback_rect.intersects(board_rect) or feedback_rect.intersects(title_rect) or feedback_rect.intersects(weight_rect) or feedback_rect.intersects(presentation.stage_card_bounds()) or feedback_rect.intersects(presentation.FORECAST_CARD_BOUNDS) or feedback_rect.intersects(presentation.controls_panel_bounds()):
 		await _fail("Actual sign feedback must clear the live sign face/title, hanging weight and cards: feedback=%s sign=%s title=%s" % [str(feedback_rect), str(board_rect), str(title_rect)])
 		return false
 	print("Sign balance feedback clear: feedback=%s sign=%s title=%s" % [str(feedback_rect), str(board_rect), str(title_rect)])
@@ -317,7 +321,7 @@ func _check_pointer_and_pause_retry(session: Control) -> bool:
 		return false
 	return true
 
-func _drive_seven_stages(session: Control, use_practice_result: bool) -> bool:
+func _drive_seven_stages(session: Control, use_practice_result: bool, fail_after_stage: int = 7) -> bool:
 	var held_key := 0
 	var captures := {2: "initial", 5: "middle"}
 	var deadline := _wall_deadline_ms(35000)
@@ -347,6 +351,7 @@ func _drive_seven_stages(session: Control, use_practice_result: bool) -> bool:
 		var restoring: float = -session.sign_model.RESTORE_TORQUE * error
 		var desired_balance := clampf((desired_accel - torque - restoring + session.sign_model.ANGULAR_DAMPING * float(state.angular_velocity)) / session.sign_model.COUNTERWEIGHT_TORQUE, -1.0, 1.0)
 		var next_key := KEY_RIGHT if desired_balance > float(state.balance) + 0.025 else (KEY_LEFT if desired_balance < float(state.balance) - 0.025 else 0)
+		if int(state.stage) >= fail_after_stage: next_key = KEY_RIGHT
 		if next_key != held_key:
 			if held_key != 0: _held_key(held_key, false)
 			if next_key != 0: _held_key(next_key, true)

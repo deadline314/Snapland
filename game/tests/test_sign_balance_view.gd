@@ -257,22 +257,22 @@ func _test_actual_session_feedback(view: Control, fixture_viewport: SubViewport)
 	if feedback == null: return
 	var to_design := view.get_global_transform_with_canvas().affine_inverse()
 	var feedback_rect := Rect2(to_design * feedback.get_global_rect().position, feedback.size * session.minigame_hud.scale / view.scale).grow(4.0)
-	_expect(is_equal_approx(feedback.size.x, 420.0) and feedback.position.y == 130.0, "actual sign-only feedback uses the 420px upper gap below the shared HUD")
+	_expect(feedback.size.x <= 260.0 and feedback_rect.position.x > View.FORECAST_CARD_BOUNDS.position.x and feedback_rect.position.y > View.FORECAST_CARD_BOUNDS.end.y, "actual sign feedback occupies the right side below forecast and outside the apparatus sweep")
 	_expect(not feedback_rect.intersects(view.stage_card_bounds()) and not feedback_rect.intersects(View.FORECAST_CARD_BOUNDS) and not feedback_rect.intersects(view.controls_panel_bounds()), "actual feedback including its shadow clears stage, forecast and counterweight-control cards")
 	var camera := view.find_child("StageCamera", true, false) as Camera3D
 	var title := view.find_child("SignTitle", true, false) as Label3D
 	var mass := view.find_child("WeightForging", true, false) as MeshInstance3D
-	for angle in [-0.13, 0.0, 0.13]:
+	for index in range(-27, 28):
+		var angle := float(index) * 0.05
 		view.update_frame({"angle": angle}, "noon", false)
 		var board_rect: Rect2 = view.projected_sign_bounds()
 		var title_rect := _projected_geometry_bounds(camera, title)
 		var weight_rect := _projected_geometry_bounds(camera, mass)
 		_expect(not feedback_rect.intersects(board_rect) and not feedback_rect.intersects(title_rect) and not feedback_rect.intersects(weight_rect), "actual success feedback leaves the sign, its title and hanging mass clear at angle %.3f: feedback=%s sign=%s title=%s" % [angle, str(feedback_rect), str(board_rect), str(title_rect)])
-	for angle in [-Model.IMPACT_ANGLE, Model.IMPACT_ANGLE]:
-		view.update_frame({"angle": angle}, "noon", false)
-		var title_rect := _projected_geometry_bounds(camera, title)
-		var weight_rect := _projected_geometry_bounds(camera, mass)
-		_expect(not feedback_rect.intersects(title_rect) and not feedback_rect.intersects(weight_rect), "extreme recoverable tilt keeps the title and hanging mass outside transient feedback even when the board-corner AABB reaches the upper gap")
+	session._refresh_hud(true)
+	await process_frame
+	await process_frame
+	_expect(feedback.position.x >= 990.0 and feedback.position.y > View.FORECAST_CARD_BOUNDS.end.y, "later HUD refresh/layout preserves the side feedback anchor")
 
 func _projected_geometry_bounds(camera: Camera3D, geometry: GeometryInstance3D) -> Rect2:
 	geometry.force_update_transform()
