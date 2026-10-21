@@ -1,0 +1,9 @@
+{
+  "case": "outcomes-v2",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 98.49,
+  "passes": [
+    "PASS: native bubble three natural timeout failure with complete-save safety, focus-loss charge cancellation, actual result retry reset, two keyboard full-body photos plus one timeout ordinary-only and return to park"
+  ]
+}

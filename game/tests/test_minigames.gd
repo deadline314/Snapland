@@ -1548,6 +1548,7 @@ func _test_photo_and_rhythm_grades() -> void:
 	var score_once: int = repeated_photo.score
 	_key(repeated_photo, KEY_SPACE)
 	assert(captured_once == 1 and repeated_photo.bubble_model.snapshot().photos.size() == captured_once and repeated_photo.score == score_once, "a repeated shutter during one exposure cannot create another photo or score")
+	assert(str(repeated_photo.score_summary().rows[0].label) == "第 1 張 · 泡泡未包全身", "a scored exposure without a real bubble explains its failed qualification")
 	while str(repeated_photo.bubble_model.phase) == "exposure":
 		repeated_photo._process(0.05)
 	assert(repeated_photo.bubble_model.snapshot().photos.size() == 1, "exposure completion advances without replaying the previous shutter")
@@ -1565,6 +1566,8 @@ func _test_photo_and_rhythm_grades() -> void:
 	var ledger_total := int(two_and_timeout.score_summary().total)
 	assert(two_and_timeout.won and not two_and_timeout.devil_won and timeout_photos.size() == 3 and str(timeout_photos[2].reason) == "timeout", "two qualified full-body photos and a genuine third-round timeout award ordinary success only")
 	assert(two_and_timeout.score == captured_score_total and ledger_total == captured_score_total, "timeout result and score ledger equal the scores of the two actual captures")
+	var photo_rows: Array = two_and_timeout.score_summary().rows
+	assert(photo_rows.size() == 4 and str(photo_rows[0].label).contains("完美全身") and str(photo_rows[1].label).contains("完美全身") and str(photo_rows[2].label) == "第 3 張 · 錯過快門" and int(photo_rows[2].amount) == 0, "ordinary photo result explains both complete photos and the zero-point timeout without score adjustment")
 	two_and_timeout.queue_free()
 
 	for assisted in [false, true]:
@@ -1578,6 +1581,7 @@ func _test_photo_and_rhythm_grades() -> void:
 			recorded_photo_score += int(photo_entry.score)
 		var final_photo: Dictionary = photo.bubble_model.snapshot().photos[2]
 		assert(photo.score == recorded_photo_score and int(final_photo.score) < 100 and photo.mistakes == 0, "off-center image keeps its exact lower ledger score without a fabricated miss")
+		assert(str(photo.score_summary().rows[2].label) == "第 3 張 · 合格全身", "offset qualifying photograph is distinguished from the two perfect full-body photographs")
 		photo.queue_free()
 		var rhythm := _new_session("game-006", assisted)
 		var gestures: Array = rhythm.ribbon_model.GESTURES

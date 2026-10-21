@@ -1,0 +1,90 @@
+[
+  {
+    "assisted": false,
+    "devil": false,
+    "game_id": "game-010",
+    "mistakes": 3,
+    "observed_frame": 412,
+    "observed_process_id": 45203,
+    "observer_only": true,
+    "practice": false,
+    "score": 0,
+    "score_summary": {
+      "label": "合照分",
+      "rows": [
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "photo_0",
+          "label": "第 1 張 · 錯過快門"
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "photo_1",
+          "label": "第 2 張 · 錯過快門"
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "photo_2",
+          "label": "第 3 張 · 錯過快門"
+        },
+        {
+          "amount": 0,
+          "count": 3,
+          "key": "mistakes",
+          "label": "失誤（不計分）",
+          "progress_only": true
+        }
+      ],
+      "rule": "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。",
+      "total": 0
+    },
+    "success": false
+  },
+  {
+    "assisted": false,
+    "devil": false,
+    "game_id": "game-010",
+    "mistakes": 1,
+    "observed_frame": 694,
+    "observed_process_id": 45203,
+    "observer_only": true,
+    "practice": false,
+    "score": 197,
+    "score_summary": {
+      "label": "合照分",
+      "rows": [
+        {
+          "amount": 99,
+          "count": 1,
+          "key": "photo_0",
+          "label": "第 1 張 · 完美全身"
+        },
+        {
+          "amount": 98,
+          "count": 1,
+          "key": "photo_1",
+          "label": "第 2 張 · 完美全身"
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "photo_2",
+          "label": "第 3 張 · 錯過快門"
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "mistakes",
+          "label": "失誤（不計分）",
+          "progress_only": true
+        }
+      ],
+      "rule": "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。",
+      "total": 197
+    },
+    "success": true
+  }
+]

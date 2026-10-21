@@ -1689,7 +1689,8 @@ func _sync_bubble_photo_events() -> void:
 		var round_index := int(shot.get("round", _bubble_photo_cursor))
 		if bool(shot.get("captured", false)):
 			var amount := int(shot.get("score", 0))
-			_award_points("photo_%d" % round_index, "第 %d 張・構圖得分" % (round_index + 1), amount)
+			var grade := "完美全身" if bool(shot.get("perfect", false)) else "合格全身" if bool(shot.get("qualified", false)) else "泡泡未包全身" if not bool(shot.get("bubble_enveloped", false)) else "相框裁切" if not bool(shot.get("frame_enclosed", false)) else "構圖未達標"
+			_award_points("photo_%d" % round_index, "第 %d 張 · %s" % [round_index + 1, grade], amount)
 			if bool(shot.get("qualified", false)):
 				_feedback("第 %d 張合格・%d 分" % [round_index + 1, amount], MINT if bool(shot.get("perfect", false)) else YELLOW)
 			elif not bool(shot.get("bubble_enveloped", false)):
@@ -1698,6 +1699,7 @@ func _sync_bubble_photo_events() -> void:
 				_feedback("第 %d 張未達合格構圖・%d 分" % [round_index + 1, amount], PINK)
 		else:
 			mistakes += 1
+			_record_score_event("photo_%d" % round_index, "第 %d 張 · 錯過快門" % (round_index + 1), 0)
 			_feedback("第 %d 次錯過快門" % (round_index + 1), PINK)
 		_bubble_photo_cursor += 1
 	count = photos.size()

@@ -69,3 +69,16 @@ The final bubble-envelope candidate was exercised through the isolated native fi
 The player-facing sequence now follows the actual interaction: first place the frame and manually charge/release one bubble; then wait for the bubble and frame to contain the whole body and for the focus cue before taking the one permitted shot; finally compare all three print scores and the ordinary/devil qualification. The result example is the observed 99/98/98 (295 total), not a perfect 300. The three lesson images are actual formal keyboard captures: charge, launched envelope with readiness cues, and the three-print result.
 
 Two earlier fixture runs failed on fixture defects, not game behavior: the first inverted the boolean check for whether the photo list was empty; the second read the held-E charge state before flushing the buffered input. The corrected fixture kept the actual behavior assertions, and both final gameplay speeds completed with zero engine errors.
+
+
+## 2026-10-21 最終流程與逐張原因
+
+新增的可見行為只有結算帳本標籤與逾時零分列。Session依實際photo的perfect／qualified／bubble_enveloped／frame_enclosed決定短原因，與原照片分數共用同一事件；逾時列也保留在零分帳本。沒有改BubblePhotoModel幾何、風、時間、成績或資格。測試以實際兩張完整照片＋逾時、偏移合格照片與未蓄泡曝光驗證列名及總和。
+
+原生新增`native_bubble_outcomes_review`，只送實際按鍵／UI和明確失焦通知，透過finished同步觀察結果；不寫模型時鐘／照片／分數。第一次完整controls已得295，但舊fixture找不到新邀請卡內不存在的直接輔助按鈕；修正為實際點「玩法與選項」後再點原輔助入口。保留失敗48.96秒及原copy／SHA；原時限不變。
+
+新一輪正式295、輔助降低動態私人練習296並返回、三自然逾時0失敗、真重試與兩完美照片＋逾時197普通-only都通過。整個非空存檔在失敗前後相同；已發射泡泡在暫停中保留，尚未發射蓄泡經失焦通知取消。通知是engine路徑測試，不是外部作業系統焦點切換。首次教學本輪用實際Main站點及按鈕走完整生命週期，50.35秒，另查看6張畫面。
+
+六正式局部項目通過：模型0.25／視圖5.51／十二款85.06／Main23.03／shell55.23／minigame UI6.87秒，均原90秒門檻內。正常兩段無聲20FPS電影615格30.75秒、709格35.45秒全部解碼，27遊戲圖與6教學圖已看；沒有連續看電影、試聽、真人遊玩或新增慢放驗收的宣稱。既有三張教學圖及過往慢放仍保留。
+
+[本輪六團隊閱讀及新官方靜圖](../../pm/Snapland-small-game/images/SG-25-final-20261021-research.md) · [完整版本／原始結果與SHA](../../pm/Snapland-small-game/images/SG-25-final-20261021-verification.json)。本次依SG-25整票條件結案，整體角色／UI及其他十一款不由此自動結案。

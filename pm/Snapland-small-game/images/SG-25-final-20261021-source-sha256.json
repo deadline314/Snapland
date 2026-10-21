@@ -1,0 +1,12 @@
+{
+  "game/minigames/session.gd": "9d07f1e99ba5c4043cca319cb406ec27340c555cd6ba5fd1eba98c1c82c00eef",
+  "game/minigames/bubble_photo_model.gd": "120ea541af2245f0b7d5992f607121b19858e98b74a044a4b5fa6007e2b628a5",
+  "game/minigames/bubble_photo_view.gd": "7029acca8ae52b65cf2ed8fca8494c45d33eea3c2667347487abb5c56f5fd727",
+  "game/tests/native_bubble_photo_review.gd": "5f1fef580c6e88131c1e522a0cd38d42a3724149a8c404200b3153c22dd58638",
+  "game/tests/native_bubble_outcomes_review.gd": "2efb6cf52918e651781a9aede1b9f4955315f317e437a1ab656accc6562f2813",
+  "game/tests/test_minigames.gd": "e3b058119c3d88bcdc9fb55e715bb49c29d7f89c37de0273e3471173514d1b0b",
+  "game/main.gd": "eee2f564157685946ac8d4e3c257dd3a86b5ab9f65f5c4d2ea03788756427157",
+  "assets/ui/tutorials/game-010-step-01.png": "c3f30f0e867c174cedc62f6ddaa4688a120e1966da52a1749236655f5d6e2e06",
+  "assets/ui/tutorials/game-010-step-02.png": "ecae97850771f214cb5929fe1bfe26e598083bbb04a71ccaed77e62b9ca62682",
+  "assets/ui/tutorials/game-010-step-03.png": "e9a911b6a759c944714ef534cde7f04d9fab836b4344c4af9c78c0c292e0f481"
+}

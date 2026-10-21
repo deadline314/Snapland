@@ -1,0 +1,44 @@
+[
+  {
+    "name": "bubble photo model tests",
+    "exit": 0,
+    "seconds": 0.25,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "bubble photo view tests",
+    "exit": 0,
+    "seconds": 5.51,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "welcome minigame tests",
+    "exit": 0,
+    "seconds": 85.06,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 23.03,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI shell tests",
+    "exit": 0,
+    "seconds": 55.23,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI minigame tests",
+    "exit": 0,
+    "seconds": 6.87,
+    "errors": 0,
+    "error": null
+  }
+]

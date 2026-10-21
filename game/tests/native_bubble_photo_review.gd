@@ -216,6 +216,10 @@ func _run() -> void:
 	if not _find_label_text(main.overlay, "練習完成") or not _find_label_text(main.overlay, "練習分數 %d（不保存）" % _practice_expected_score):
 		await _fail("Practice result did not show the actual ledger-derived no-award score")
 		return
+	if not await _activate_main_button("返回遊園", "leave private bubble practice result"): return
+	if not await _wait_until(func() -> bool: return is_instance_valid(main) and main.session == null and main.modal_kind == "", "private practice returns to the park"): return
+	if _capture_progress_state() != _earned_progress:
+		await _fail("Leaving private practice changed earned collection or reward state"); return
 	print("PASS: keyboard-only earned score=%d, pointer-only practice score=%d, three perfect full-coverage photos per run, actual Space/click shutter, time-of-day metadata, real pause/resume/retry and unchanged practice progress" % [_earned_expected_score, _practice_expected_score])
 	await main._quit_game()
 
@@ -249,6 +253,8 @@ func _launch_bubble(assisted_run: bool) -> bool:
 		await _fail("Native E input did not open bubble photo station details")
 		return false
 	var start_text := "輔助挑戰" if assisted_run else "開始遊玩"
+	if _find(main.overlay, start_text) == null:
+		if not await _activate_main_button("玩法與選項", "open optional bubble photo modes"): return false
 	if not await _activate_main_button(start_text, "start bubble photo"):
 		return false
 	deadline = _wall_deadline_ms(2500)
@@ -268,7 +274,7 @@ func _launch_bubble(assisted_run: bool) -> bool:
 		return false
 	return true
 
-func _capture_three_photos(session: Control, input_mode: String) -> bool:
+func _capture_three_photos(session: Control, input_mode: String, shot_count: int = 3) -> bool:
 	if not await _require_live_session(session, "beginning three real camera exposures"): return false
 	var session_id := session.get_instance_id()
 	var captured_view: Control = session.presentation
@@ -282,7 +288,7 @@ func _capture_three_photos(session: Control, input_mode: String) -> bool:
 	if not main._capture(screenshots[0]):
 		await _fail("Could not capture initial whole-body camera composition")
 		return false
-	for round_index in 3:
+	for round_index in shot_count:
 		var deadline := _wall_deadline_ms(12000)
 		var shot_fired := false
 		var bubble_button_held := false

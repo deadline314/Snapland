@@ -1,0 +1,9 @@
+{
+  "case": "controls-v2",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 91.44,
+  "passes": [
+    "PASS: keyboard-only earned score=295, pointer-only practice score=296, three perfect full-coverage photos per run, actual Space/click shutter, time-of-day metadata, real pause/resume/retry and unchanged practice progress"
+  ]
+}

@@ -1,0 +1,705 @@
+{
+  "ticket": "SG-25",
+  "date": "2026-10-21 Asia/Taipei",
+  "runtime": "Godot4.7.2 Compatibility llvmpipe1280x720 Dummy audio",
+  "scope": "Actual key/pointer-driven Main/Session routes. Station relocation and returning-player fixtures; separate actual new-player tutorial lifecycle. Focus loss is explicitly delivered as an engine notification, not external OS focus. No score/clock/model/award injection.",
+  "new_behavior": "Result labels distinguish perfect, qualified, bubble/frame failure and timeout. Scoring, bounds, bubble size/path and success criteria unchanged.",
+  "controls": {
+    "case": "controls-v2",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 91.44,
+    "passes": [
+      "PASS: keyboard-only earned score=295, pointer-only practice score=296, three perfect full-coverage photos per run, actual Space/click shutter, time-of-day metadata, real pause/resume/retry and unchanged practice progress"
+    ]
+  },
+  "outcomes": {
+    "failed": {
+      "actual_launched_bubble_pause_clock_frozen": true,
+      "complete_save_unchanged": true,
+      "focus_loss_notification_cancels_charge": true,
+      "photos": [
+        {
+          "bubble_center": "(673.7625, 368.0852)",
+          "bubble_enveloped": false,
+          "bubble_phase": "popped",
+          "bubble_radius": 200.222222222222,
+          "captured": false,
+          "centering": 0.0,
+          "coverage": 0.0,
+          "frame_rect": "[P: (460.0, 170.0), S: (360.0, 440.0)]",
+          "light_cue": "warm-neutral daylight",
+          "perfect": false,
+          "qualified": false,
+          "reason": "timeout",
+          "round": 0,
+          "score": 0,
+          "target_box": "[P: (280.1713, 265.736), S: (146.0, 276.0)]",
+          "time_of_day": "noon",
+          "timing_quality": 0.0
+        },
+        {
+          "bubble_center": "(640.0, 390.0)",
+          "bubble_enveloped": false,
+          "bubble_phase": "idle",
+          "bubble_radius": 0.0,
+          "captured": false,
+          "centering": 0.0,
+          "coverage": 0.177733975127029,
+          "frame_rect": "[P: (460.0, 170.0), S: (360.0, 440.0)]",
+          "light_cue": "warm-neutral daylight",
+          "perfect": false,
+          "qualified": false,
+          "reason": "timeout",
+          "round": 1,
+          "score": 0,
+          "target_box": "[P: (794.0508, 273.8977), S: (146.0, 276.0)]",
+          "time_of_day": "noon",
+          "timing_quality": 0.0
+        },
+        {
+          "bubble_center": "(640.0, 390.0)",
+          "bubble_enveloped": false,
+          "bubble_phase": "idle",
+          "bubble_radius": 0.0,
+          "captured": false,
+          "centering": 0.586366138559534,
+          "coverage": 1.0,
+          "frame_rect": "[P: (460.0, 170.0), S: (360.0, 440.0)]",
+          "light_cue": "warm-neutral daylight",
+          "perfect": false,
+          "qualified": false,
+          "reason": "timeout",
+          "round": 2,
+          "score": 0,
+          "target_box": "[P: (486.4242, 268.7766), S: (146.0, 276.0)]",
+          "time_of_day": "noon",
+          "timing_quality": 0.0
+        }
+      ],
+      "result": {
+        "assisted": false,
+        "devil": false,
+        "game_id": "game-010",
+        "mistakes": 3,
+        "practice": false,
+        "score": 0,
+        "score_summary": {
+          "label": "合照分",
+          "rows": [
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "photo_0",
+              "label": "第 1 張 · 錯過快門"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "photo_1",
+              "label": "第 2 張 · 錯過快門"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "photo_2",
+              "label": "第 3 張 · 錯過快門"
+            },
+            {
+              "amount": 0,
+              "count": 3,
+              "key": "mistakes",
+              "label": "失誤（不計分）",
+              "progress_only": true
+            }
+          ],
+          "rule": "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。",
+          "total": 0
+        },
+        "success": false
+      }
+    },
+    "ordinary": {
+      "photos": [
+        {
+          "bubble_center": "(571.3, 399.5199)",
+          "bubble_charge": 1.0,
+          "bubble_enveloped": true,
+          "bubble_phase": "launched",
+          "bubble_radius": 230.0,
+          "captured": true,
+          "center_error": 6.2165994644165,
+          "centering": 0.96875725737548,
+          "coverage": 1.0,
+          "frame_enclosed": true,
+          "frame_rect": "[P: (390.0, 166.0), S: (360.0, 440.0)]",
+          "light_cue": "warm-neutral daylight",
+          "perfect": true,
+          "qualified": true,
+          "round": 0,
+          "score": 99,
+          "shutter_time": 2.65,
+          "target_box": "[P: (498.3557, 254.067), S: (146.0, 276.0)]",
+          "time_of_day": "noon",
+          "timing_quality": 0.979166666666667
+        },
+        {
+          "bubble_center": "(680.7, 379.5199)",
+          "bubble_charge": 1.0,
+          "bubble_enveloped": true,
+          "bubble_phase": "launched",
+          "bubble_radius": 230.0,
+          "captured": true,
+          "center_error": 11.8569631576538,
+          "centering": 0.94041050089146,
+          "coverage": 1.0,
+          "frame_enclosed": true,
+          "frame_rect": "[P: (516.0, 160.0), S: (360.0, 440.0)]",
+          "light_cue": "warm-neutral daylight",
+          "perfect": true,
+          "qualified": true,
+          "round": 1,
+          "score": 98,
+          "shutter_time": 3.25,
+          "target_box": "[P: (620.8718, 230.3356), S: (146.0, 276.0)]",
+          "time_of_day": "noon",
+          "timing_quality": 0.979166666666668
+        },
+        {
+          "bubble_center": "(696.0, 380.0)",
+          "bubble_enveloped": false,
+          "bubble_phase": "idle",
+          "bubble_radius": 0.0,
+          "captured": false,
+          "centering": 0.300544062941942,
+          "coverage": 0.797426000719674,
+          "frame_rect": "[P: (516.0, 160.0), S: (360.0, 440.0)]",
+          "light_cue": "warm-neutral daylight",
+          "perfect": false,
+          "qualified": false,
+          "reason": "timeout",
+          "round": 2,
+          "score": 0,
+          "target_box": "[P: (486.4242, 268.7766), S: (146.0, 276.0)]",
+          "time_of_day": "noon",
+          "timing_quality": 0.0
+        }
+      ],
+      "result": {
+        "assisted": false,
+        "devil": false,
+        "game_id": "game-010",
+        "mistakes": 1,
+        "practice": false,
+        "score": 197,
+        "score_summary": {
+          "label": "合照分",
+          "rows": [
+            {
+              "amount": 99,
+              "count": 1,
+              "key": "photo_0",
+              "label": "第 1 張 · 完美全身"
+            },
+            {
+              "amount": 98,
+              "count": 1,
+              "key": "photo_1",
+              "label": "第 2 張 · 完美全身"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "photo_2",
+              "label": "第 3 張 · 錯過快門"
+            },
+            {
+              "amount": 0,
+              "count": 1,
+              "key": "mistakes",
+              "label": "失誤（不計分）",
+              "progress_only": true
+            }
+          ],
+          "rule": "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。",
+          "total": 197
+        },
+        "success": true
+      }
+    },
+    "retry_at_input": {
+      "bubble": "idle",
+      "elapsed": 0.0,
+      "misses": 0,
+      "photos": 0,
+      "round": 0,
+      "round_elapsed": 0.0,
+      "score": 0
+    }
+  },
+  "lesson": {
+    "case": "lesson",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 50.35,
+    "passes": [
+      "PASS: native tutorial lifecycle game-010"
+    ]
+  },
+  "checks": [
+    {
+      "name": "bubble photo model tests",
+      "exit": 0,
+      "seconds": 0.25,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "bubble photo view tests",
+      "exit": 0,
+      "seconds": 5.51,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "welcome minigame tests",
+      "exit": 0,
+      "seconds": 85.06,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "main scene integration tests",
+      "exit": 0,
+      "seconds": 23.03,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "pixel UI shell tests",
+      "exit": 0,
+      "seconds": 55.23,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "pixel UI minigame tests",
+      "exit": 0,
+      "seconds": 6.87,
+      "errors": 0,
+      "error": null
+    }
+  ],
+  "evidence_limits": "Two silent20FPS movies fully decoded.27 gameplay/result captures and6 lesson captures reviewed; not continuous movie watching, new slow-motion acceptance, human play or listening. Prior quarter-speed acceptance remains separately cited in ticket.",
+  "earlier_attempt": "First current run reached earned295, then looked for legacy auxiliary button directly in compact invitation. Fixture now actually opens existing options before auxiliary control.48.96s exit1 retained, no gameplay acceptance threshold removed.",
+  "files": [
+    {
+      "file": "SG-25-final-20261021-controls-v2-000-native-bubble-photo-formal-keyboard-initial.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/000-native-bubble-photo-formal-keyboard-initial.png",
+      "sha256": "50cd30b9adc12ae7e7949d2433b46504f40b5b8b90fb604a93b26f3f88a92cbc",
+      "bytes": 109580
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-001-native-bubble-photo-formal-keyboard-charge.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/001-native-bubble-photo-formal-keyboard-charge.png",
+      "sha256": "98c0394f996565fe51616d95acfb5a6921979b73e0407756d2a6ebc43dda6110",
+      "bytes": 121023
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-002-native-bubble-photo-formal-keyboard-envelope-launched.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/002-native-bubble-photo-formal-keyboard-envelope-launched.png",
+      "sha256": "201b73bdcb1f781954abd557e4e09a78d79e099927fef232ad1d1194554dc84a",
+      "bytes": 121672
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-003-native-bubble-photo-formal-keyboard-exposure.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/003-native-bubble-photo-formal-keyboard-exposure.png",
+      "sha256": "632128380daefb2e67fc1f216c3d226e400b505b7f87f23ec6ebceb6057143cc",
+      "bytes": 131344
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-004-native-bubble-photo-formal-keyboard-three-prints.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/004-native-bubble-photo-formal-keyboard-three-prints.png",
+      "sha256": "7f2f709838ab9cf1beca714111f9d6452256e5324dfb279df2862260d5a7b711",
+      "bytes": 130371
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-005-natural-00-game-010-score-295.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/005-natural-00-game-010-score-295.png",
+      "sha256": "96ce027d105835de437362bd577b47b63e5c5f1661a5d66d502aa9ae544badcb",
+      "bytes": 448418
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-006-native-bubble-photo-earned-result.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/006-native-bubble-photo-earned-result.png",
+      "sha256": "96ce027d105835de437362bd577b47b63e5c5f1661a5d66d502aa9ae544badcb",
+      "bytes": 448418
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-007-native-bubble-photo-assist-reduced-initial.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/007-native-bubble-photo-assist-reduced-initial.png",
+      "sha256": "3a161339cf56a2ae5404d21fb7faf37e5428ce0530eb039f4ea4b8ecddd6bc70",
+      "bytes": 107849
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-008-native-bubble-photo-paused.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/008-native-bubble-photo-paused.png",
+      "sha256": "6c513257ffe6e3f92c40c596c0901b88b99183512ee73efd9925f8cdd254476b",
+      "bytes": 35380
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-009-native-bubble-photo-retry-reset.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/009-native-bubble-photo-retry-reset.png",
+      "sha256": "3a161339cf56a2ae5404d21fb7faf37e5428ce0530eb039f4ea4b8ecddd6bc70",
+      "bytes": 107849
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-010-native-bubble-photo-private-practice-pointer-initial.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/010-native-bubble-photo-private-practice-pointer-initial.png",
+      "sha256": "7a94af7f4ad932604f1883bca7e03f19f986540cdcb4a7725b9fae7b2a550243",
+      "bytes": 108161
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-011-native-bubble-photo-private-practice-pointer-charge.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/011-native-bubble-photo-private-practice-pointer-charge.png",
+      "sha256": "197edae01c0bdd0c95315bd0452aa710be8aa7e5577e3ebdff71d7d8b07927c3",
+      "bytes": 123102
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-012-native-bubble-photo-private-practice-pointer-envelope-launched.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/012-native-bubble-photo-private-practice-pointer-envelope-launched.png",
+      "sha256": "501a93ff2171dd8db3cc592d7aab841bfc8261bf7682ab84b74f8fe38d7108b9",
+      "bytes": 124597
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-013-native-bubble-photo-private-practice-pointer-exposure.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/013-native-bubble-photo-private-practice-pointer-exposure.png",
+      "sha256": "af10d9a7d020a66ad4e9ddafce7dac2ec4e8ad8f131dc28852082d3163e2e1df",
+      "bytes": 132734
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-014-native-bubble-photo-private-practice-pointer-three-prints.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/014-native-bubble-photo-private-practice-pointer-three-prints.png",
+      "sha256": "11826fd887fab115a92d2538956b8b013dcc5fbef4ca7e3ee2fa545e70245ee8",
+      "bytes": 132871
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-015-natural-01-game-010-score-296.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/015-natural-01-game-010-score-296.png",
+      "sha256": "c93274f09c40cee18bedd0ec5558f54cf2b1994d8a9f2cf89ca8913e39833653",
+      "bytes": 391589
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-016-native-bubble-photo-practice-result.png",
+      "source": "work/bubble-final-20261021/controls-v2/captures/016-native-bubble-photo-practice-result.png",
+      "sha256": "c93274f09c40cee18bedd0ec5558f54cf2b1994d8a9f2cf89ca8913e39833653",
+      "bytes": 391589
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-result.json",
+      "source": "work/bubble-final-20261021/controls-v2/result.json",
+      "sha256": "420f6a26bd13d6d22e2799fabbc07c0864acb7db4660bc2b057cade41b42d00e",
+      "bytes": 322
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-result.log",
+      "source": "work/bubble-final-20261021/controls-v2/result.log",
+      "sha256": "2b07d69eab929af89c05690d238565bd060033ee3e954488e2fde5ce6ae07e34",
+      "bytes": 27298
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-source-provenance.json",
+      "source": "work/bubble-final-20261021/controls-v2/source-provenance.json",
+      "sha256": "a9afbb9101c66b8a32f9acdab16f792577624a2ac0acd4325c87d03a51576772",
+      "bytes": 953
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-natural-results.json",
+      "source": "work/bubble-final-20261021/controls-v2/natural-results.json",
+      "sha256": "9886035fdc7e7e6052b65619bcc54cfb9ab6d154f807ca0b2399d81a6156a232",
+      "bytes": 1931
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-video-metadata.json",
+      "source": "work/bubble-final-20261021/controls-v2/video-metadata.json",
+      "sha256": "06ce92633da1d1ae3e51d53a371fc7f2236afb8237ce7e8f916a6827d2ef024e",
+      "bytes": 220
+    },
+    {
+      "file": "SG-25-final-20261021-controls-v2-play.mp4",
+      "source": "work/bubble-final-20261021/controls-v2/play.mp4",
+      "sha256": "afdce5bc0c7825f4d21f94e64f3c5aa354db32df405ae8a125c6aa17a6b2facb",
+      "bytes": 2608364
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-000-bubble-real-launched-pause.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/000-bubble-real-launched-pause.png",
+      "sha256": "58f7d477bb86526358dace907ff02572d4b3f1b341415c11a3297a6af4eaaba5",
+      "bytes": 35456
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-001-natural-00-game-010-score-0.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/001-natural-00-game-010-score-0.png",
+      "sha256": "731a60dcb7cb97d2e1c9bcbac5a9eb30679712bd4af3b43c4e7564cc3df34590",
+      "bytes": 394168
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-002-bubble-real-three-timeouts.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/002-bubble-real-three-timeouts.png",
+      "sha256": "9aefe9030056c044b744b8078e44f34f16a0ff4bb026ee96fa5ea40b177b26c3",
+      "bytes": 394160
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-003-bubble-result-retry-reset.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/003-bubble-result-retry-reset.png",
+      "sha256": "1db4b21fdc904f1740aa61213342643195143f6f92c97ffde780327e84366181",
+      "bytes": 108554
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-004-native-bubble-photo-formal-keyboard-initial.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/004-native-bubble-photo-formal-keyboard-initial.png",
+      "sha256": "1db4b21fdc904f1740aa61213342643195143f6f92c97ffde780327e84366181",
+      "bytes": 108554
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-005-native-bubble-photo-formal-keyboard-charge.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/005-native-bubble-photo-formal-keyboard-charge.png",
+      "sha256": "98c0394f996565fe51616d95acfb5a6921979b73e0407756d2a6ebc43dda6110",
+      "bytes": 121023
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-006-native-bubble-photo-formal-keyboard-envelope-launched.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/006-native-bubble-photo-formal-keyboard-envelope-launched.png",
+      "sha256": "201b73bdcb1f781954abd557e4e09a78d79e099927fef232ad1d1194554dc84a",
+      "bytes": 121672
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-007-native-bubble-photo-formal-keyboard-exposure.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/007-native-bubble-photo-formal-keyboard-exposure.png",
+      "sha256": "632128380daefb2e67fc1f216c3d226e400b505b7f87f23ec6ebceb6057143cc",
+      "bytes": 131344
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-008-natural-01-game-010-score-197.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/008-natural-01-game-010-score-197.png",
+      "sha256": "3d6fa78e586391739ca4977332142bed82e3b6831f8f20a5fadeee86656d60c1",
+      "bytes": 441765
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-009-bubble-real-ordinary-result.png",
+      "source": "work/bubble-final-20261021/outcomes-v2/captures/009-bubble-real-ordinary-result.png",
+      "sha256": "31a9dfbeec166f2605bff78b2d0ede3522ece289a5b374098148c39cd60544e8",
+      "bytes": 441764
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-result.json",
+      "source": "work/bubble-final-20261021/outcomes-v2/result.json",
+      "sha256": "a8a2ede6624ffcec56e849cbc668d729d67c88022339a88a98501e583fd4f7e1",
+      "bytes": 317
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-result.log",
+      "source": "work/bubble-final-20261021/outcomes-v2/result.log",
+      "sha256": "d4501afcb1bd1c5021d4e0dc4032994137bd7557216a46173306cf8fc304d1f4",
+      "bytes": 21334
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-source-provenance.json",
+      "source": "work/bubble-final-20261021/outcomes-v2/source-provenance.json",
+      "sha256": "b0a1a8aaf243e2bf80791df9886eec3b83ce97bb68060a29a51c6c0832d02076",
+      "bytes": 1192
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-natural-results.json",
+      "source": "work/bubble-final-20261021/outcomes-v2/natural-results.json",
+      "sha256": "434aad81dda6d611ecbf7ed78d78caa497d92eb2b749b906a2d65d92f7c6d750",
+      "bytes": 2269
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-outcomes.json",
+      "source": "work/bubble-final-20261021/outcomes-v2/outcomes.json",
+      "sha256": "334982693ade11390ab7391a253be27ef6f9d1b764ac8cbfb5fbbcb528077b17",
+      "bytes": 6607
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-video-metadata.json",
+      "source": "work/bubble-final-20261021/outcomes-v2/video-metadata.json",
+      "sha256": "b77f40bf8d5094baad576509b5f18340d6edd14bebaff6293878a84564813db5",
+      "bytes": 220
+    },
+    {
+      "file": "SG-25-final-20261021-outcomes-v2-play.mp4",
+      "source": "work/bubble-final-20261021/outcomes-v2/play.mp4",
+      "sha256": "2183048b8a01488ed4468487802fee98bb868934436bd66fa01bf7217a40120b",
+      "bytes": 2025833
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-game-010-first-step.png",
+      "source": "work/bubble-final-20261021/lesson/captures/game-010-first-step.png",
+      "sha256": "017198358a61c344f3d29ef5850367d6366be34732c3eb697014d90d495a1e64",
+      "bytes": 247149
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-game-010-help-reopened.png",
+      "source": "work/bubble-final-20261021/lesson/captures/game-010-help-reopened.png",
+      "sha256": "ad32c7201c1b869ba64404007a932ed8aac25457baa3f552c90b3a2dda906722",
+      "bytes": 68224
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-game-010-help-step-01.png",
+      "source": "work/bubble-final-20261021/lesson/captures/game-010-help-step-01.png",
+      "sha256": "ad32c7201c1b869ba64404007a932ed8aac25457baa3f552c90b3a2dda906722",
+      "bytes": 68224
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-game-010-private-help-step-01.png",
+      "source": "work/bubble-final-20261021/lesson/captures/game-010-private-help-step-01.png",
+      "sha256": "ad32c7201c1b869ba64404007a932ed8aac25457baa3f552c90b3a2dda906722",
+      "bytes": 68224
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-game-010-step-02.png",
+      "source": "work/bubble-final-20261021/lesson/captures/game-010-step-02.png",
+      "sha256": "01addbad48d641ab2e983246c75b36d05ac3ec977e3481671fe9abbd28177656",
+      "bytes": 250678
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-game-010-step-03.png",
+      "source": "work/bubble-final-20261021/lesson/captures/game-010-step-03.png",
+      "sha256": "3e81bc1b2ae1357bbea09a352854a8162b7c3b392037f73ff96b0b9136fd3230",
+      "bytes": 322717
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-result.json",
+      "source": "work/bubble-final-20261021/lesson/result.json",
+      "sha256": "3fd239e05687c3a1bfecf4ae6882f05922b15807c6a928fd1d15a0d9405f8845",
+      "bytes": 137
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-result.log",
+      "source": "work/bubble-final-20261021/lesson/result.log",
+      "sha256": "af11ef07d1207e054914f348ed0b63b0e5bd7fcc79dec839051c0f62c311f874",
+      "bytes": 14411
+    },
+    {
+      "file": "SG-25-final-20261021-lesson-source-provenance.json",
+      "source": "work/bubble-final-20261021/lesson/source-provenance.json",
+      "sha256": "baf200722bc3d0a87fb80ca41f9622b165447875185ec3703d31b670f7e70622",
+      "bytes": 264
+    },
+    {
+      "file": "SG-25-final-20261021-checks-bubble-photo-model-tests.log",
+      "source": "work/bubble-final-20261021/checks-final/bubble-photo-model-tests.log",
+      "sha256": "ae1d95010e4f0127359694082583b9644e8e9774dc2620d5ce03c105dad2f3e8",
+      "bytes": 110
+    },
+    {
+      "file": "SG-25-final-20261021-checks-bubble-photo-view-tests.log",
+      "source": "work/bubble-final-20261021/checks-final/bubble-photo-view-tests.log",
+      "sha256": "2ef0a91b96518be655472a3e0c966f783fe3f648191000cb951483a6499dad22",
+      "bytes": 110
+    },
+    {
+      "file": "SG-25-final-20261021-checks-main-scene-integration-tests.log",
+      "source": "work/bubble-final-20261021/checks-final/main-scene-integration-tests.log",
+      "sha256": "c198e47bbe9fc1daf09e10f429c811d8633f4b5bc88922ca872f95f86baf934f",
+      "bytes": 15104
+    },
+    {
+      "file": "SG-25-final-20261021-checks-pixel-UI-minigame-tests.log",
+      "source": "work/bubble-final-20261021/checks-final/pixel-UI-minigame-tests.log",
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039",
+      "bytes": 13937
+    },
+    {
+      "file": "SG-25-final-20261021-checks-pixel-UI-shell-tests.log",
+      "source": "work/bubble-final-20261021/checks-final/pixel-UI-shell-tests.log",
+      "sha256": "8bb58a73e05e23b135e932bc26fb253b54837e3a52cea372d6d8973b98623549",
+      "bytes": 18023
+    },
+    {
+      "file": "SG-25-final-20261021-checks-results.json",
+      "source": "work/bubble-final-20261021/checks-final/results.json",
+      "sha256": "9648d10229503b77bcb6d584087c375d210939d290b7edc262407ded00483a56",
+      "bytes": 722
+    },
+    {
+      "file": "SG-25-final-20261021-checks-welcome-minigame-tests.log",
+      "source": "work/bubble-final-20261021/checks-final/welcome-minigame-tests.log",
+      "sha256": "6a440f0c60d6fea12adc70578d8d11c463fe6c043023d6849a02daa9e7fae7e9",
+      "bytes": 14439
+    },
+    {
+      "file": "SG-25-final-20261021-research.md",
+      "source": "work/bubble-final-20261021/research.md",
+      "sha256": "0b1db666ef37153db4c63d3cb051ef0e680bf959623f5e680a16a09577764fc4",
+      "bytes": 2217
+    },
+    {
+      "file": "SG-25-final-20261021-reference-camera-ready.webp",
+      "source": "work/bubble-final-20261021/reference-camera-ready.webp",
+      "sha256": "c6ba043edd012e54d29efd5daff225362085a4bda3bf089397536fa1f4a733d8",
+      "bytes": 249916
+    },
+    {
+      "file": "SG-25-final-20261021-reference-provenance.json",
+      "source": "work/bubble-final-20261021/reference-provenance.json",
+      "sha256": "7922a3e9dd08b81412720a9eb49bca7b8b39921c126b9aa97af06c42f7dd97dd",
+      "bytes": 378
+    },
+    {
+      "file": "SG-25-final-20261021-bubble-lesson-overview-0.jpg",
+      "source": "work/bubble-final-20261021/bubble-lesson-overview-0.jpg",
+      "sha256": "378aa0ee7495a79d002768a1642e58ce099f5714f8a853c60a5dec2096c0dfe9",
+      "bytes": 97228
+    },
+    {
+      "file": "SG-25-final-20261021-bubble-overview-0.jpg",
+      "source": "work/bubble-final-20261021/bubble-overview-0.jpg",
+      "sha256": "8a0ce2b968c9c2960b3a2d9dd62af5a0fa1b19f38700500589fb83ebf2610a66",
+      "bytes": 166818
+    },
+    {
+      "file": "SG-25-final-20261021-bubble-overview-1.jpg",
+      "source": "work/bubble-final-20261021/bubble-overview-1.jpg",
+      "sha256": "5921f873fd56338a18fe443d75e097f61689eea51afc0ac0fc83326a144b1443",
+      "bytes": 160849
+    },
+    {
+      "file": "SG-25-final-20261021-bubble-overview-2.jpg",
+      "source": "work/bubble-final-20261021/bubble-overview-2.jpg",
+      "sha256": "037382bfd2b760015a03c963f9762144509a3bffff235c4175ed1fc9f4e306e5",
+      "bytes": 44482
+    },
+    {
+      "file": "SG-25-final-20261021-rejected-controls-result.json",
+      "source": "work/bubble-final-20261021/controls/result.json",
+      "sha256": "2f92b668e7e557fae64c2423bfb82570f5e0d3a502af708062f6ccb695bd48b5",
+      "bytes": 89
+    },
+    {
+      "file": "SG-25-final-20261021-rejected-controls-result.log",
+      "source": "work/bubble-final-20261021/controls/result.log",
+      "sha256": "c1beab61f05abafff77ee9980fd1e12569d1c0591aa2bc699d899a94c88fa3fa",
+      "bytes": 19264
+    },
+    {
+      "file": "SG-25-final-20261021-rejected-controls-source-provenance.json",
+      "source": "work/bubble-final-20261021/controls/source-provenance.json",
+      "sha256": "356dae7dde31769b10a86b76663f109af4d76c7db05a9f52186655f2edd2b4dd",
+      "bytes": 953
+    },
+    {
+      "file": "SG-25-final-20261021-source-sha256.json",
+      "source": "work/bubble-final-20261021/source-sha256.json",
+      "sha256": "bc17028dbd0a98cb0124a5bdcdba4176f6a1aa1689f0d166a2dcc9132468a530",
+      "bytes": 1082
+    },
+    {
+      "file": "SG-25-final-20261021-review-sources.zip",
+      "source": "work/bubble-final-20261021/sources.zip",
+      "sha256": "c61864ad7bdae98931781731b06777c13ee79db3810646b797f0f607f8b318dd",
+      "bytes": 171732
+    }
+  ]
+}
