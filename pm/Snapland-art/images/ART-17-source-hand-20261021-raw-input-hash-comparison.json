@@ -1,0 +1,5 @@
+{
+  "input_files": 88,
+  "exact_old_png_hash_matches": 88,
+  "scope": "PNG byte identity is reported separately from pixel identity and independently guarded repair inputs."
+}

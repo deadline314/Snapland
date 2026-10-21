@@ -1,0 +1,10 @@
+{
+  "all_eight_raw_source_alpha_union_equal": false,
+  "all_other_seven_cels_byte_equal": true,
+  "only_original_region_changed": [
+    68,
+    218,
+    37,
+    47
+  ]
+}

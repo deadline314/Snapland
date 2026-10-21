@@ -1,0 +1,38 @@
+{
+  "profiles": [
+    {
+      "style": "windswept",
+      "roots_tips_and_owned_hair_pixels_unchanged": true,
+      "cut_span_changes": []
+    },
+    {
+      "style": "bob",
+      "roots_tips_and_owned_hair_pixels_unchanged": true,
+      "cut_span_changes": []
+    },
+    {
+      "style": "curly",
+      "roots_tips_and_owned_hair_pixels_unchanged": true,
+      "cut_span_changes": []
+    }
+  ],
+  "actual_compositor_union_changes": [
+    {
+      "style": "bob",
+      "direction": "front_right",
+      "union_alpha_changed": true
+    },
+    {
+      "style": "curly",
+      "direction": "front_right",
+      "union_alpha_changed": true
+    }
+  ],
+  "dependency_scope": "Fresh actual two-style/eight-direction compositor ownership and walk+idle pose alpha unions, not assumed unchanged from the raw source union.",
+  "sha256": {
+    "island-hair-windswept-v1.json": "44ab2ee02a3748f8d664b5bb3325467cd4d5839ca312fe6b5017103607a53660",
+    "island-hair-bob-v1.json": "4467264b38d89c0094443af1e90ef954ecffa5c43983a52ced995e6c5dd140bb",
+    "island-hair-curly-v1.json": "973476f46d3c674bcf1dd079e6b4cba57772cf2d04041a6ad0faeb7e9c92b2ca",
+    "island-hair-alternate-owners-v1.json": "9914cba08012fe1148f8c0350a15466db56fe536ce0a431555dbca1fea6ed167"
+  }
+}

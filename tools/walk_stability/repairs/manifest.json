@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "signature": "SHA256 lower RGBA; RGB cleared below alpha128 while alpha remains exact. Does not change the actual source pixels.",
+  "repairs": [
+    {
+      "sequence": "hero/front_right",
+      "frame": 3,
+      "canvas": [
+        280,
+        360
+      ],
+      "review_status": "accepted_local_correction",
+      "reason": "Remove the extra hand behind the backpack; preserve both original camera hands and the original gait.",
+      "region": [
+        68,
+        218,
+        37,
+        47
+      ],
+      "lower_y": 185,
+      "protected_regions": {
+        "head": [
+          0,
+          0,
+          280,
+          185
+        ],
+        "feet": [
+          0,
+          300,
+          280,
+          60
+        ],
+        "camera_hands": [
+          115,
+          202,
+          88,
+          55
+        ]
+      },
+      "reference": "tools/walk_stability/repairs/front-right-03-before.png",
+      "reference_png_sha256": "a06737be0b838666fce474ebb0bd23cc5d0ba4c57256b189d490df50a3f351d7",
+      "patch": "tools/walk_stability/repairs/front-right-03-hand-patch.png",
+      "patch_png_sha256": "99af464ac450a09648879739fe21a4d918117b9d9f2bb1665bced5ab8102dadd",
+      "before_lower_visible_sha256": "8349e93d76895b87bd32dc7796d4f12ef99e63ff145c0babf498eab8a47f4d8c",
+      "after_lower_visible_sha256": "913c1c7a8fe7f2731cd3fe46e16495ff20a79877cfeffe71383f4d62786270c8",
+      "generation": {
+        "original": "/workspace/generated_images/exec-a6053592-9f70-4c84-9aca-586bf1d67311.png",
+        "sha256": "afcf0ecfe38ff6e39db526877657b35938d1cc2799d4d4fdebbc9f74d2aaf95a",
+        "prompt": "retained in ART-17 source correction evidence",
+        "derivation": "Godot nearest sampling to the fixed 280x360 full canvas; take only the 37x47 tile. New tile alpha below0.05 is cleared. No generated anatomy or body outside this region is adopted."
+      },
+      "runtime_reference": "tools/walk_stability/repairs/front-right-03-before-runtime.png",
+      "runtime_reference_png_sha256": "faadf3f2f6c3ad95c767b311628a77073bcac1a4215e7656c2015a9c7d45495a"
+    }
+  ]
+}

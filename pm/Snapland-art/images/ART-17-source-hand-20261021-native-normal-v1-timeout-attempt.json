@@ -1,0 +1,11 @@
+{
+  "completed": false,
+  "timeout_seconds": 120,
+  "completed_case_lines": 13,
+  "screenshots": 13,
+  "last_stage": "Second Main world created; full review did not reach its completion marker.",
+  "movie_finalized": false,
+  "engine_log_preserved": true,
+  "raw_stdout_stderr_separate_copy": false,
+  "scope": "Partial checks are not counted as a completed native route. Final harness keeps the same14 cases and bounds, using one full-world appearance then role-only live Main views."
+}

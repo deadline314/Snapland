@@ -1,4 +1,4 @@
-"""Independently check waist placement, ground clearance and unchanged authored limbs.
+"""Independently check waist placement, ground clearance and authored limbs outside reviewed local art corrections.
 
 Head rigidity alone cannot pass this audit: a one-pixel lower-body translation
 fails against the original source cel under its explicit root correction.
@@ -10,6 +10,7 @@ import sys
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT))
 from tools.walk_stability.check_frames import visible
+from tools.walk_stability.source_repairs import apply_repairs
 
 def lower_difference(expected,actual,seam):
     if expected.size!=actual.size or not 0<seam<actual.height:raise ValueError("Lower-body comparison must contain real pixels on equal canvases")
@@ -61,8 +62,9 @@ def inspect(raw,registered,pack):
             original_count=sum(a>=128 for a in before.getchannel("A").get_flattened_data())
             shifted_count=sum(a>=128 for a in expected.getchannel("A").get_flattened_data())
             if original_count!=shifted_count:errors.append("Root correction clips authored pixels: "+name)
+            expected=apply_repairs(expected,key,i,{"schema_version":1,"repairs":manifest.get("source_repairs",[])})
             diff=lower_difference(expected,after,spec["head_neck_seam_y"]);diffs.append(diff)
-            if diff:errors.append("Authored lower body warped or shifted beyond correction: "+name)
+            if diff:errors.append("Authored lower body changed outside root/approved local correction: "+name)
             box=bounds(after);foot.append(box[3])
             if box[0]<=0 or box[1]<=0 or box[2]>=after.width or box[3]>=after.height:errors.append("Canvas edge clipping: "+name)
             old.append(before);new.append(after)
@@ -73,7 +75,7 @@ def inspect(raw,registered,pack):
             if any(v["score"]<.90 or abs(v["delta"][0])>8 or abs(v["delta"][1])>8 for v in after_waist):errors.append("Independent waist reference exceeds authored sway bound: "+key)
             if len(set(foot))!=1 or foot[0]!=448:errors.append("NPC ground plane shifts: "+key)
         cases.append(case)
-    result={"result":"PASS_ROOT_AND_AUTHORED_LIMBS" if not errors else "FAIL_ROOT_AND_AUTHORED_LIMBS","scope":"Native fixed-canvas output, lower pixels compared with original source under explicit integer root translation; independent waist template and shoe bottom checks for accepted NPC walking. Moving shoe midpoint is never treated as actor root.","cases":cases,"errors":errors}
+    result={"result":"PASS_ROOT_AND_AUTHORED_LIMBS" if not errors else "FAIL_ROOT_AND_AUTHORED_LIMBS","scope":"Native fixed-canvas output, lower pixels compared with original source under explicit integer root translation and fingerprint-locked local art corrections; independent waist template and shoe bottom checks for accepted NPC walking. Moving shoe midpoint is never treated as actor root.","cases":cases,"errors":errors}
     (registered/"root-stability.json").write_text(json.dumps(result,indent=2)+"\n",encoding="utf-8")
     return result
 if __name__=="__main__":

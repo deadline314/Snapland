@@ -1,0 +1,50 @@
+[
+  {
+    "label": "authored avatar walk loop tests",
+    "seconds": 35.24,
+    "exit": 0,
+    "errors": 0,
+    "failure": null,
+    "limit_seconds": 90
+  },
+  {
+    "label": "island hair lifecycle tests",
+    "seconds": 3.42,
+    "exit": 0,
+    "errors": 0,
+    "failure": null,
+    "limit_seconds": 90
+  },
+  {
+    "label": "island alternate hair source tests",
+    "seconds": 4.81,
+    "exit": 0,
+    "errors": 0,
+    "failure": null,
+    "limit_seconds": 90
+  },
+  {
+    "label": "avatar attachment tests",
+    "seconds": 63.89,
+    "exit": 0,
+    "errors": 0,
+    "failure": null,
+    "limit_seconds": 90
+  },
+  {
+    "label": "avatar renderer tests",
+    "seconds": 162.65,
+    "exit": 0,
+    "errors": 0,
+    "failure": null,
+    "limit_seconds": 240
+  },
+  {
+    "label": "atomic outfit coverage tests",
+    "seconds": 2.46,
+    "exit": 0,
+    "errors": 0,
+    "failure": null,
+    "limit_seconds": 90
+  }
+]

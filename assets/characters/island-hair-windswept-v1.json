@@ -7,7 +7,7 @@
   ],
   "grid_step": 3,
   "scope": "Registered island walk/idle only; other actions retain original complete cels.",
-  "ownership_sha256": "a33e9fd4b93316847c7b919d285bb7ad95875d171fa30649f36c79cc3af106a8",
+  "ownership_sha256": "329085a879756bce15bebb4e0be1a3dbb59cb1a8f3de950ed5dc56e897fa334b",
   "directions": {
     "front": {
       "source": "res://assets/characters/walk-stability-v1/island-raw-front.png",
@@ -1566,7 +1566,7 @@
     },
     "front_right": {
       "source": "res://assets/characters/walk-stability-v1/island-raw-front_right.png",
-      "source_sha256": "6d18aecaf8c12464e30c1d932655b52fda32fead18064c9cb78cb9e5cda86e41",
+      "source_sha256": "6424dc9564895d3aa5ff798802b758fc235b467f2ddfec8f8bb6915cebf86e77",
       "source_pixels_sha256": "3a2117065176aa0aacf6e22d5f0ccca7e1bd53bc7caace0324871c3ad269118c",
       "strands": [
         {

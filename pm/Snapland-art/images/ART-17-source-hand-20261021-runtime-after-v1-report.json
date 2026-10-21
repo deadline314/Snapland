@@ -1,0 +1,132 @@
+{
+  "appearances": [
+    {
+      "frame": 0,
+      "hair": "windswept",
+      "source_correction": true
+    },
+    {
+      "frame": 1,
+      "hair": "windswept",
+      "source_correction": true
+    },
+    {
+      "frame": 2,
+      "hair": "windswept",
+      "source_correction": true
+    },
+    {
+      "frame": 3,
+      "hair": "windswept",
+      "source_correction": true
+    },
+    {
+      "frame": 4,
+      "hair": "windswept",
+      "source_correction": true
+    },
+    {
+      "frame": 5,
+      "hair": "windswept",
+      "source_correction": true
+    },
+    {
+      "frame": 6,
+      "hair": "windswept",
+      "source_correction": true
+    },
+    {
+      "frame": 7,
+      "hair": "windswept",
+      "source_correction": true
+    },
+    {
+      "frame": 0,
+      "hair": "bob",
+      "source_correction": true
+    },
+    {
+      "frame": 1,
+      "hair": "bob",
+      "source_correction": true
+    },
+    {
+      "frame": 2,
+      "hair": "bob",
+      "source_correction": true
+    },
+    {
+      "frame": 3,
+      "hair": "bob",
+      "source_correction": true
+    },
+    {
+      "frame": 4,
+      "hair": "bob",
+      "source_correction": true
+    },
+    {
+      "frame": 5,
+      "hair": "bob",
+      "source_correction": true
+    },
+    {
+      "frame": 6,
+      "hair": "bob",
+      "source_correction": true
+    },
+    {
+      "frame": 7,
+      "hair": "bob",
+      "source_correction": true
+    },
+    {
+      "frame": 0,
+      "hair": "curly",
+      "source_correction": true
+    },
+    {
+      "frame": 1,
+      "hair": "curly",
+      "source_correction": true
+    },
+    {
+      "frame": 2,
+      "hair": "curly",
+      "source_correction": true
+    },
+    {
+      "frame": 3,
+      "hair": "curly",
+      "source_correction": true
+    },
+    {
+      "frame": 4,
+      "hair": "curly",
+      "source_correction": true
+    },
+    {
+      "frame": 5,
+      "hair": "curly",
+      "source_correction": true
+    },
+    {
+      "frame": 6,
+      "hair": "curly",
+      "source_correction": true
+    },
+    {
+      "frame": 7,
+      "hair": "curly",
+      "source_correction": true
+    }
+  ],
+  "camera_hands_exact": true,
+  "corrected": true,
+  "feet_exact": true,
+  "head_exact": true,
+  "original_runtime_rgba_sha256": "484c75ff12ef5f321997819cfb53982b7066249fb6a03a24adcc420c499688c1",
+  "outside_rgba_changed": 72,
+  "outside_visible_changed": 0,
+  "source_rgba_sha256": "d0247653d44007566eb24624a8b7d9f705bd8bc0dd46835e71c468f12960ac2c"
+}

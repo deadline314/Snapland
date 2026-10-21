@@ -1,0 +1,1186 @@
+{
+  "date": "2026-10-21",
+  "ticket_status": "in_progress",
+  "scope": "Exactly one existing main character walk cel local source correction. Not new NPC walks, a complete outfit, new full-world lighting, human play or listening.",
+  "correction": {
+    "sequence": "hero/front_right",
+    "frame": 3,
+    "region": [
+      68,
+      218,
+      37,
+      47
+    ],
+    "changed_source_rgba_pixels": 1566,
+    "visible_changes_outside_region": 0,
+    "head_feet_camera_hands_exact": true,
+    "raw_original_sources_preserved": true,
+    "whole_generated_body_adopted": false
+  },
+  "hair": {
+    "roots_tips_owned_hair_cut_spans_unchanged": true,
+    "whole_cel_owner_hash_updated": true,
+    "actual_body_union_reexported": true,
+    "source_fingerprints_not_waived": true
+  },
+  "local_python": {
+    "exit": 0,
+    "seconds": 40.02,
+    "completed": true
+  },
+  "official_suites": [
+    {
+      "label": "authored avatar walk loop tests",
+      "seconds": 35.24,
+      "exit": 0,
+      "errors": 0,
+      "failure": null,
+      "limit_seconds": 90
+    },
+    {
+      "label": "island hair lifecycle tests",
+      "seconds": 3.42,
+      "exit": 0,
+      "errors": 0,
+      "failure": null,
+      "limit_seconds": 90
+    },
+    {
+      "label": "island alternate hair source tests",
+      "seconds": 4.81,
+      "exit": 0,
+      "errors": 0,
+      "failure": null,
+      "limit_seconds": 90
+    },
+    {
+      "label": "avatar attachment tests",
+      "seconds": 63.89,
+      "exit": 0,
+      "errors": 0,
+      "failure": null,
+      "limit_seconds": 90
+    },
+    {
+      "label": "avatar renderer tests",
+      "seconds": 162.65,
+      "exit": 0,
+      "errors": 0,
+      "failure": null,
+      "limit_seconds": 240
+    },
+    {
+      "label": "atomic outfit coverage tests",
+      "seconds": 2.46,
+      "exit": 0,
+      "errors": 0,
+      "failure": null,
+      "limit_seconds": 90
+    }
+  ],
+  "native_normal": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 80.49
+  },
+  "native_quarter": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 131.06
+  },
+  "native_scope": "14 cases each. Actual Main S/D movement, all eight distance-selected frames, stop, pause, reduced motion, reentry. First appearance renders full 3D; other cases hide 3D/HUD, mirror actual live sprite. Appearance/open-ground placement/returning-player are fixtures.",
+  "earlier_attempts": [
+    "Full-world native v1 timeout after 13 cases: no complete audit; unfinalized AVI preserved privately, not accepted.",
+    "Native v2 normal passed, quarter failed movement/stop; fixed-frame settle wait was inadequate at quarter speed. V3 observes actual idle with bounded wait and still requires >=2 world units.",
+    "Raw 88-source export passed and all old PNG hashes matched; compiler stopped before writing output because cv2 was missing. Restored opencv-python-headless 4.13.0.92 in private venv, resumed same immutable inputs; all twelve groups and root/limb audit passed.",
+    "Proposal v1 invisible black RGB under alpha0 was rejected for presentation; v2 normalizes new tile alpha0 RGB. Native imported atlas has72 outside-region RGBA differences, all fully transparent; no outside visible or alpha changes."
+  ],
+  "packed_resource_probe": {
+    "all_24_style_direction_profiles_valid": true,
+    "cases": [
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "windswept",
+        "hat": "hat-none",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "windswept",
+        "hat": "hat-straw",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "windswept",
+        "hat": "hat-sailor",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "windswept",
+        "hat": "hat-flower",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "bob",
+        "hat": "hat-none",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "bob",
+        "hat": "hat-straw",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "bob",
+        "hat": "hat-sailor",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "bob",
+        "hat": "hat-flower",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "curly",
+        "hat": "hat-none",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "curly",
+        "hat": "hat-straw",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "curly",
+        "hat": "hat-sailor",
+        "root_identity": true,
+        "source_corrected": true
+      },
+      {
+        "feet_exact": true,
+        "gpu_hair_active": true,
+        "hair": "curly",
+        "hat": "hat-flower",
+        "root_identity": true,
+        "source_corrected": true
+      }
+    ],
+    "raw_png_absent": true,
+    "scope": "Editor GPU probe loads separately exported player PCK from a clean probe directory. Separate actual release main smoke; not wardrobe or human play.",
+    "tools_and_tests_absent": true
+  },
+  "actual_release_smoke": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 25.3,
+    "completion": true
+  },
+  "release_scope": "Actual Linux embedded release boots its own Main and renders twelve minigame scenes; editor PCK GPU probe is separate. Source file hashes authoritative; export base commit preceded uncommitted source repair.",
+  "prior_ci": {
+    "run_id": 39514075590,
+    "url": "https://github.com/deadline314/Snapland/actions/runs/39514075590",
+    "head_sha": "d39de0f89956298733dc4b09d13cc974b235261d",
+    "conclusion": "success",
+    "python": 128,
+    "design_scopes": 5,
+    "godot_runs": 93,
+    "godot_passes": 93,
+    "names_and_order_match": true,
+    "bounds_unchanged": true,
+    "scope": "Prior ART-18 idle authoring revision, including mandatory part ownership test. Does not cover subsequent MAIN-9 stage fix or ART-17 local source correction.",
+    "items": [
+      {
+        "name": "clean project import",
+        "seconds": 31.47,
+        "limit_seconds": 90
+      },
+      {
+        "name": "game startup",
+        "seconds": 4.45,
+        "limit_seconds": 90
+      },
+      {
+        "name": "core runtime tests",
+        "seconds": 0.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "test/review save isolation tests",
+        "seconds": 2.76,
+        "limit_seconds": 90
+      },
+      {
+        "name": "wardrobe runtime tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar runtime tests",
+        "seconds": 40.54,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar renderer tests",
+        "seconds": 221.66,
+        "limit_seconds": 240
+      },
+      {
+        "name": "avatar attachment tests",
+        "seconds": 85.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island hair lifecycle tests",
+        "seconds": 3.79,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island alternate hair source tests",
+        "seconds": 6.4,
+        "limit_seconds": 90
+      },
+      {
+        "name": "seated avatar tests",
+        "seconds": 7.51,
+        "limit_seconds": 90
+      },
+      {
+        "name": "source registration coordinate tests",
+        "seconds": 0.44,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar motion rig runtime tests",
+        "seconds": 54.1,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar role rig tests",
+        "seconds": 66.84,
+        "limit_seconds": 90
+      },
+      {
+        "name": "avatar motion world integration tests",
+        "seconds": 13.0,
+        "limit_seconds": 90
+      },
+      {
+        "name": "minigame HUD hierarchy tests",
+        "seconds": 0.53,
+        "limit_seconds": 90
+      },
+      {
+        "name": "eight-direction walk tests",
+        "seconds": 3.42,
+        "limit_seconds": 90
+      },
+      {
+        "name": "authored avatar walk loop tests",
+        "seconds": 40.73,
+        "limit_seconds": 90
+      },
+      {
+        "name": "authored avatar side idle tests",
+        "seconds": 5.09,
+        "limit_seconds": 90
+      },
+      {
+        "name": "authored idle hair attachment tests",
+        "seconds": 13.84,
+        "limit_seconds": 90
+      },
+      {
+        "name": "authored NPC source walking tests",
+        "seconds": 1.09,
+        "limit_seconds": 90
+      },
+      {
+        "name": "character animation library tests",
+        "seconds": 0.44,
+        "limit_seconds": 90
+      },
+      {
+        "name": "atomic outfit coverage tests",
+        "seconds": 2.86,
+        "limit_seconds": 90
+      },
+      {
+        "name": "garment part ownership tests",
+        "seconds": 0.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "side outfit palette tests",
+        "seconds": 6.77,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC animation state tests",
+        "seconds": 0.72,
+        "limit_seconds": 90
+      },
+      {
+        "name": "tutorial panel/catalog tests",
+        "seconds": 7.13,
+        "limit_seconds": 90
+      },
+      {
+        "name": "tutorial seen progress tests",
+        "seconds": 5.74,
+        "limit_seconds": 90
+      },
+      {
+        "name": "travel collection UI tests",
+        "seconds": 5.57,
+        "limit_seconds": 90
+      },
+      {
+        "name": "tutorial image/control tests",
+        "seconds": 1.56,
+        "limit_seconds": 90
+      },
+      {
+        "name": "time-of-day tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "daylight lighting tests",
+        "seconds": 3.79,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC activity tests",
+        "seconds": 0.53,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC world activity tests",
+        "seconds": 4.07,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC motion source tests",
+        "seconds": 4.53,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC walk motion tests",
+        "seconds": 12.53,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC direction lifecycle tests",
+        "seconds": 1.55,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC missing walk idle tests",
+        "seconds": 12.21,
+        "limit_seconds": 90
+      },
+      {
+        "name": "NPC dialogue hold tests",
+        "seconds": 8.94,
+        "limit_seconds": 90
+      },
+      {
+        "name": "sprite clearance tests",
+        "seconds": 20.07,
+        "limit_seconds": 90
+      },
+      {
+        "name": "wardrobe UI tests",
+        "seconds": 12.12,
+        "limit_seconds": 90
+      },
+      {
+        "name": "component animation tests",
+        "seconds": 5.09,
+        "limit_seconds": 90
+      },
+      {
+        "name": "building occlusion tests",
+        "seconds": 6.31,
+        "limit_seconds": 90
+      },
+      {
+        "name": "kite flight model tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "kite flight view tests",
+        "seconds": 0.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "bubble photo model tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "bubble photo view tests",
+        "seconds": 5.93,
+        "limit_seconds": 90
+      },
+      {
+        "name": "bench swap model tests",
+        "seconds": 0.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "bench swap view tests",
+        "seconds": 3.14,
+        "limit_seconds": 90
+      },
+      {
+        "name": "sign balance model tests",
+        "seconds": 0.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "sign balance view tests",
+        "seconds": 1.0,
+        "limit_seconds": 90
+      },
+      {
+        "name": "hat rescue model tests",
+        "seconds": 0.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "hat rescue view tests",
+        "seconds": 8.16,
+        "limit_seconds": 90
+      },
+      {
+        "name": "melody memory model tests",
+        "seconds": 0.91,
+        "limit_seconds": 90
+      },
+      {
+        "name": "melody memory view tests",
+        "seconds": 1.09,
+        "limit_seconds": 90
+      },
+      {
+        "name": "ribbon rhythm model tests",
+        "seconds": 0.26,
+        "limit_seconds": 90
+      },
+      {
+        "name": "ribbon rhythm view tests",
+        "seconds": 2.96,
+        "limit_seconds": 90
+      },
+      {
+        "name": "ribbon Session startup tests",
+        "seconds": 3.51,
+        "limit_seconds": 90
+      },
+      {
+        "name": "ribbon Session lifecycle tests",
+        "seconds": 14.12,
+        "limit_seconds": 90
+      },
+      {
+        "name": "shadow theatre model tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "shadow theatre view tests",
+        "seconds": 0.53,
+        "limit_seconds": 90
+      },
+      {
+        "name": "crowd semaphore view tests",
+        "seconds": 0.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "welcome minigame tests",
+        "seconds": 75.47,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pipe round model tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pipe plan presentation tests",
+        "seconds": 1.0,
+        "limit_seconds": 90
+      },
+      {
+        "name": "balloon harbor presentation tests",
+        "seconds": 0.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "crowd traffic model tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "crowd crossing view tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "fountain jump view tests",
+        "seconds": 8.35,
+        "limit_seconds": 90
+      },
+      {
+        "name": "fountain timing tests",
+        "seconds": 5.93,
+        "limit_seconds": 90
+      },
+      {
+        "name": "balloon delivery tests",
+        "seconds": 1.37,
+        "limit_seconds": 90
+      },
+      {
+        "name": "story runtime tests",
+        "seconds": 0.25,
+        "limit_seconds": 90
+      },
+      {
+        "name": "main story integration tests",
+        "seconds": 25.11,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island ride tests",
+        "seconds": 23.13,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island layout tests",
+        "seconds": 7.89,
+        "limit_seconds": 90
+      },
+      {
+        "name": "coastal free play tests",
+        "seconds": 14.08,
+        "limit_seconds": 90
+      },
+      {
+        "name": "shared photo thumbnail tests",
+        "seconds": 1.75,
+        "limit_seconds": 90
+      },
+      {
+        "name": "saved photo viewer tests",
+        "seconds": 0.53,
+        "limit_seconds": 90
+      },
+      {
+        "name": "photo original preservation tests",
+        "seconds": 1.93,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island dialogue tests",
+        "seconds": 4.73,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island game entry tests",
+        "seconds": 5.2,
+        "limit_seconds": 90
+      },
+      {
+        "name": "audio runtime tests",
+        "seconds": 9.61,
+        "limit_seconds": 90
+      },
+      {
+        "name": "island audio dynamics tests",
+        "seconds": 12.13,
+        "limit_seconds": 90
+      },
+      {
+        "name": "main scene integration tests",
+        "seconds": 27.0,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI shell tests",
+        "seconds": 56.75,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI popup tests",
+        "seconds": 0.44,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI button depth tests",
+        "seconds": 0.34,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI collection tests",
+        "seconds": 14.41,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel tutorial page tests",
+        "seconds": 15.13,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI customization tests",
+        "seconds": 7.07,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel UI minigame tests",
+        "seconds": 7.43,
+        "limit_seconds": 90
+      },
+      {
+        "name": "pixel typography tests",
+        "seconds": 0.91,
+        "limit_seconds": 90
+      },
+      {
+        "name": "localization framework tests",
+        "seconds": 4.64,
+        "limit_seconds": 90
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "file": "ART-17-source-hand-20261021-three-hair-before-after.png",
+      "bytes": 195743,
+      "sha256": "9be9a095bcd6976fd16112c0e88108829e66b427e7fb63ed522fbd5652e03c12"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-windswept-corrected-poses.png",
+      "bytes": 309781,
+      "sha256": "f8c1cf37cad4326c6f734da79bd817e03b74ae9cb75ee9dc60c7c574a8ce857d"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-bob-corrected-poses-full.png",
+      "bytes": 308109,
+      "sha256": "cf44340f7120040a1e04d1a037f8a4affb9f5c034d5f9eecaf698a7ed9d957b1"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-curly-corrected-poses-full.png",
+      "bytes": 286548,
+      "sha256": "b513789c075377df62f847cb22ff0291b433732ee02077c26292e3d6cf9ec29a"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-extra-hand-grid.png",
+      "bytes": 18685,
+      "sha256": "e991eccf4d491b195261158fd79c7aafd44125cd63c146b63ef99a462f5ba68d"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-prompt.txt",
+      "bytes": 1495,
+      "sha256": "5616d7795476873154e8a441dd1557b55d5e7bb6208f3ccced4bf54095049681"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-hair-rebuild-report.json",
+      "bytes": 1250,
+      "sha256": "0c0bf150e6b21453ae447f9f728118c0be797248957ef2b5b8b52cd8a125ba66"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-raw-union-proof.json",
+      "bytes": 170,
+      "sha256": "313b81bee6662968dbeb18d65d10455dff844ca8c687fa5b78a28163bc9a4423"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-raw-input-hash-comparison.json",
+      "bytes": 176,
+      "sha256": "04f1912b92df356c244c2a5586fb7b595180b27dda4ffbce567467a5f34d8bae"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-source-rebuild-verification.json",
+      "bytes": 1542,
+      "sha256": "3c5aab564468d19e9c975f6e80bce45c3516c1ee63cc105938537c31bb4ba188"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-source-rebuild-resume.log",
+      "bytes": 3458,
+      "sha256": "f6791725c5e38b2a90cb4143a70b98d31c21912e1415083d4f1406564ab7a05f"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-rebuild-first-attempt.json",
+      "bytes": 295,
+      "sha256": "20a425ca0cbaf288419315f78665495a2725349a854edf11251cf62de0b16a31"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-python-full-v3.json",
+      "bytes": 57,
+      "sha256": "152a23494244fa6ba620a847e3f240a5b9427d8d1311c532fc46d5d46fd6d204"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-python-full-v3.log",
+      "bytes": 21191,
+      "sha256": "87b81a75d90afc6924bbc9c2802aa1a3bc0a1282388aa3f1dfdff3efc3c7cc97"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-media-report.json",
+      "bytes": 835,
+      "sha256": "8f87a337bada50b7f00d4a18d2d45fa92a92b0816b0786da7d2f1fe047a5b0b3"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-ci-d39-verification.json",
+      "bytes": 10284,
+      "sha256": "610a0f088411aa2589fd54a219921cda67661a515ca572fa93259afdc1a92485"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-ci-d39-game-runtime.log",
+      "bytes": 46666,
+      "sha256": "a95412697372f7bfe59a6ac76afd99d99a84b22e8474c602fc5105b02299ee3e"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-ci-d39-full-suite.log",
+      "bytes": 42917,
+      "sha256": "810f29c51ce71adb2c142bf6c5c2ad017869f6a907f0531e09e9d5eab3c26c97"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-runtime-before-report.json",
+      "bytes": 2480,
+      "sha256": "e906fafcce18f4a0cf2fe1a5a914af86996edce6b30b97df0803292c4d6fc80d"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-runtime-before-result.log",
+      "bytes": 171,
+      "sha256": "37f03fc1ee63065bbdaf3ad89989eee79ca65164f223a1263cc6488d054e4e4c"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-runtime-after-v1-report.json",
+      "bytes": 2456,
+      "sha256": "823af704b279adb9f430dca7a7bc93d45abb554995f0bdea794be37868720817"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-runtime-after-v1-result.json",
+      "bytes": 50,
+      "sha256": "80611b644b6e07d88c94a2831fbb93365847d2533baa055db07de36663667766"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-runtime-after-v1-result.log",
+      "bytes": 164,
+      "sha256": "a58cd7be7e652eaafcaf26317218a468f58d441ced8bac9a852e2c12a6a846d3"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-official-v1-results.json",
+      "bytes": 916,
+      "sha256": "5d334b4bd1275d484efb0ff8028f52d985f3ae0bdc646c90d2593defbfc976d0"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v1-timeout-attempt.json",
+      "bytes": 488,
+      "sha256": "33a609672b5f4581dadf3d003abca1384be9a98ebf7d4f5d25505f37de76fb7e"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v1-engine.log",
+      "bytes": 27856,
+      "sha256": "ae966358c9964a0928f8b1bba6405d7c20dbc8e60fe426ddc3177fe804538857"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v2-result.json",
+      "bytes": 51,
+      "sha256": "fb62b6db7965a836777edb5f8604dfcbecc843d2cada7c74f7dd45cb9cf0256f"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v2-result.log",
+      "bytes": 14373,
+      "sha256": "5af7de0664fc69acf679848a8ff2d8fe3906e314d56caca6d72aeead4d06e3ce"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-result.json",
+      "bytes": 51,
+      "sha256": "d5606316ad4a8042128b355fa5f6028aada8e7ecbea4448ecbd99f076c98bb26"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-result.log",
+      "bytes": 29234,
+      "sha256": "11a15dcc10921ac12ebb8b3a8ab397d4d7ec7dfe4e46410e6b3e0383011db729"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-audit.json",
+      "bytes": 5984,
+      "sha256": "aae9153556f13e68602d6612b5c1e84d66c16299e0917ae52dbd702e9533c993"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-review.mp4",
+      "bytes": 4170469,
+      "sha256": "72e0bdb58729ad572efd81d274d2a0eee40f7c183248b91961ae475af7b5f0f8"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-result.json",
+      "bytes": 52,
+      "sha256": "4156b9bd4dca0387fd8448682a0f0be91e08d71e49dbefad678032e80430f066"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-result.log",
+      "bytes": 29236,
+      "sha256": "252397450762147380861656bacd1e68e8d3215b39b4a588ded7a7782a612b01"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-audit.json",
+      "bytes": 5985,
+      "sha256": "62b5f648d782d1793e2230b2a171056ad3a636d0ec98860e39dd591218f839a6"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-review.mp4",
+      "bytes": 8398482,
+      "sha256": "a9f06e1c0a1ab9255e66def5c7b714f8f355bfdff3a14be14c7d45decbc07cfd"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-export-result.json",
+      "bytes": 50,
+      "sha256": "a8f32b9c1bf6ef7626ac49fccf73536fe688c177bb0597c2343be9adb2eadd0c"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-export-result.log",
+      "bytes": 120339,
+      "sha256": "3a4fb24299b11d7bfd0c1aa1e8f999735f90cb6022930729c026e1758a035ad3"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-result.json",
+      "bytes": 50,
+      "sha256": "73f9a99f2cc316606b995b14d03fa62050c4c358dc3bdd1cb5e3686829c5294b"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-result.log",
+      "bytes": 507,
+      "sha256": "3218ed15d992a5a5a1e87a025f9ea7aa1c5b5d68583dbb879fa3ed8472d199e7"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-audit.json",
+      "bytes": 2449,
+      "sha256": "bf6b8d8e174421f9c0b279b4d0a071615734c1eda16f3ac2ad1ad9d30623a8aa"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-release-v1-build.json",
+      "bytes": 102847,
+      "sha256": "e37f2714c8df2f869e5e3149625829e123052ce954360264ed4897be51fb3af0"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-release-art-smoke-v1-result.json",
+      "bytes": 72,
+      "sha256": "5c6da3eb0307ba4efd08076ea9e12bf637e6ec54e9668a72d5b8e5d4a13fc891"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-release-art-smoke-v1-result.log",
+      "bytes": 6922,
+      "sha256": "1233cbc2b33278fd773962ea4f6df3a5fae7ae000dc496dcfba3cb65c52526a9"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-official-v1-test_avatar_attachment-result.log",
+      "bytes": 335,
+      "sha256": "0d5041c432dedd228b21477ad03e7edeeed8372d62d86279531d679046bc7433"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-official-v1-test_avatar_authored_walk_loop-result.log",
+      "bytes": 17488,
+      "sha256": "690d8314b18524409ec0780c772eec1906e96adfe81bfda98b90f70fd58e36d5"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-official-v1-test_avatar_renderer-result.log",
+      "bytes": 270,
+      "sha256": "f04e8825adb18ad3e252f756c5d01edb02b0ba6c7a1fe8910c3433d16b5d2fc9"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-official-v1-test_island_hair_lifecycle-result.log",
+      "bytes": 12109,
+      "sha256": "d9ed54f04068f2cf029d7ecdaffd5090d2c128b92e735f6f33908c5ead323481"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-official-v1-test_island_hair_sources-result.log",
+      "bytes": 173,
+      "sha256": "1aaed099b12a5d1356ced409f531994f1c998c100f034d58d6a967ce291f7fb4"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-official-v1-test_outfit_atomic_coverage-result.log",
+      "bytes": 10648,
+      "sha256": "dfeec27608cf1cefc7d26eeddbebcd7e775edf93e5d321787d9ca7b436a25697"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-00-live-windswept-hat-none.png",
+      "bytes": 1120242,
+      "sha256": "17a6df4abce7de623627bc46dc1608fe090cbc42b0d46a317d419a63dd6a0d7e"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-01-live-windswept-hat-straw.png",
+      "bytes": 100986,
+      "sha256": "c89fbe8261ace67f9682197eb484a5f478b6ad0e5c782a2cdb482410414bf9e3"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-02-live-windswept-hat-sailor.png",
+      "bytes": 96243,
+      "sha256": "5358fad273fbbef2e11cc549469890745e91341bc48c9d155d61539bda06aaa9"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-03-live-windswept-hat-flower.png",
+      "bytes": 93652,
+      "sha256": "551b02400605ecbaf9bdd4b25aad9c8feb0d2e26d2d6bf018e7f03ce3fd02b1c"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-04-live-bob-hat-none.png",
+      "bytes": 89994,
+      "sha256": "64bd0f45ac8fee22d5e8f4e1e02bc0bd7382f0cd4cf89cdeca09cc0910509b50"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-05-live-bob-hat-straw.png",
+      "bytes": 99014,
+      "sha256": "768ce2ece8b8a005ca8c63d92dd4dabd6c93160ed53d6c2347f213d469269ba1"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-06-live-bob-hat-sailor.png",
+      "bytes": 94125,
+      "sha256": "42dfe1c8d38e3f86387159d93348bbc97594f7abfbb3cc9363ca27ddaf5a8d52"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-07-live-bob-hat-flower.png",
+      "bytes": 91479,
+      "sha256": "4f0ade2cc6615e7b4ce4b845a0ffc91de766fe2119a9a22b490c88994fa29af2"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-08-live-curly-hat-none.png",
+      "bytes": 91115,
+      "sha256": "de0d5d75e0bb74c3c7b9878295e5ea34d5b9929cb1e2e4078c02f06af134dde3"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-09-live-curly-hat-straw.png",
+      "bytes": 100539,
+      "sha256": "3b82314b9154cf0ef6116376e434751607c391db6a5a130dd73da16a1e65c369"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-10-live-curly-hat-sailor.png",
+      "bytes": 95612,
+      "sha256": "359085004837034d5d56b2e82f76ad49dfd0aa6cd88f38a4ed9bc59ef41eb75a"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-11-live-curly-hat-flower.png",
+      "bytes": 92358,
+      "sha256": "44cd81d9deac92f41e7fc6011a8483b68a03d31d746611cea2abac06a55a7f5d"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-12-reduced-curly-hat-sailor.png",
+      "bytes": 95591,
+      "sha256": "f623a73a78432868afb9e4252d3eae86b7fb0fda572097ef6cfed586a7c301e5"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-captures-13-reentry-curly-hat-sailor.png",
+      "bytes": 95612,
+      "sha256": "359085004837034d5d56b2e82f76ad49dfd0aa6cd88f38a4ed9bc59ef41eb75a"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-live-sprite-contact-0.png",
+      "bytes": 104576,
+      "sha256": "e229eba736a7e1661db7bd6197504de87a0b13e949b33c9acc14016ea4dd150b"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-live-sprite-contact-1.png",
+      "bytes": 103455,
+      "sha256": "899171e5a2d2d09ce36f3a0d113a22ab81dd6aa219b47db38bfd4bb95575ed5d"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-live-sprite-contact-2.png",
+      "bytes": 105422,
+      "sha256": "8ad099241295ece02b3490cdfdbc5f0b79af06e99c2c6bc715a400e82f12753e"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-normal-v3-live-sprite-contact-3.png",
+      "bytes": 77009,
+      "sha256": "11002fa4176e5eb2605f4bec1b44540f0c3fce052559f598a5c8c98ea1634642"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-00-live-windswept-hat-none.png",
+      "bytes": 1119757,
+      "sha256": "f5c0d98c33f7b7f36f45d1a23df07415c2e44b3455fc62d150c55ac8d87e7b21"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-01-live-windswept-hat-straw.png",
+      "bytes": 100986,
+      "sha256": "c89fbe8261ace67f9682197eb484a5f478b6ad0e5c782a2cdb482410414bf9e3"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-02-live-windswept-hat-sailor.png",
+      "bytes": 96243,
+      "sha256": "5358fad273fbbef2e11cc549469890745e91341bc48c9d155d61539bda06aaa9"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-03-live-windswept-hat-flower.png",
+      "bytes": 93652,
+      "sha256": "551b02400605ecbaf9bdd4b25aad9c8feb0d2e26d2d6bf018e7f03ce3fd02b1c"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-04-live-bob-hat-none.png",
+      "bytes": 89994,
+      "sha256": "64bd0f45ac8fee22d5e8f4e1e02bc0bd7382f0cd4cf89cdeca09cc0910509b50"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-05-live-bob-hat-straw.png",
+      "bytes": 99014,
+      "sha256": "768ce2ece8b8a005ca8c63d92dd4dabd6c93160ed53d6c2347f213d469269ba1"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-06-live-bob-hat-sailor.png",
+      "bytes": 94125,
+      "sha256": "42dfe1c8d38e3f86387159d93348bbc97594f7abfbb3cc9363ca27ddaf5a8d52"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-07-live-bob-hat-flower.png",
+      "bytes": 91479,
+      "sha256": "4f0ade2cc6615e7b4ce4b845a0ffc91de766fe2119a9a22b490c88994fa29af2"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-08-live-curly-hat-none.png",
+      "bytes": 91115,
+      "sha256": "de0d5d75e0bb74c3c7b9878295e5ea34d5b9929cb1e2e4078c02f06af134dde3"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-09-live-curly-hat-straw.png",
+      "bytes": 100539,
+      "sha256": "3b82314b9154cf0ef6116376e434751607c391db6a5a130dd73da16a1e65c369"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-10-live-curly-hat-sailor.png",
+      "bytes": 95612,
+      "sha256": "359085004837034d5d56b2e82f76ad49dfd0aa6cd88f38a4ed9bc59ef41eb75a"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-11-live-curly-hat-flower.png",
+      "bytes": 92358,
+      "sha256": "44cd81d9deac92f41e7fc6011a8483b68a03d31d746611cea2abac06a55a7f5d"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-12-reduced-curly-hat-sailor.png",
+      "bytes": 95591,
+      "sha256": "f623a73a78432868afb9e4252d3eae86b7fb0fda572097ef6cfed586a7c301e5"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-captures-13-reentry-curly-hat-sailor.png",
+      "bytes": 95612,
+      "sha256": "359085004837034d5d56b2e82f76ad49dfd0aa6cd88f38a4ed9bc59ef41eb75a"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-live-sprite-contact-0.png",
+      "bytes": 104653,
+      "sha256": "3cafa110e340eee01490d569ceda0302b2806c7d6038146f7b0b9fd597b55995"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-live-sprite-contact-1.png",
+      "bytes": 103553,
+      "sha256": "fb5bffe4cb267b7d2b7abd16202bb8e86927c3f66e135880520efd44e9c560f1"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-live-sprite-contact-2.png",
+      "bytes": 105528,
+      "sha256": "07ff88ba3249f803106232f0a73fbae45e9dfcc1d9c3211b94b10193a9812e03"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-native-quarter-v3-live-sprite-contact-3.png",
+      "bytes": 77031,
+      "sha256": "4fc8c26ad2b713eb4ffa7bf8cccbff9e1faaedd6cb28f1d9744e82d71ae75973"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-bob-hat-flower.png",
+      "bytes": 64583,
+      "sha256": "33ab07cd165c5fe9af13f4e91ad81b8280fd70da7c62b4c2617fd38be36c8ce1"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-bob-hat-none.png",
+      "bytes": 63703,
+      "sha256": "4218e8849095aa3663c69a07c71bb8ea1dddf498769ddcc72f27549449c0a2aa"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-bob-hat-sailor.png",
+      "bytes": 67059,
+      "sha256": "85f52a760e02ac007c05db27c4d3430e6826b61fa7d71c3cad6cb5ddbadff9f3"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-bob-hat-straw.png",
+      "bytes": 71341,
+      "sha256": "47df18a1d7b2ca263ce41c643c930dea9eee9dccfce090ea4402cf8e69a59e4a"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-curly-hat-flower.png",
+      "bytes": 65548,
+      "sha256": "bca46555d0a7c02fa2fdf42d3552d48e7d0e2fba8c4abaf8c1693de8501e3c80"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-curly-hat-none.png",
+      "bytes": 64750,
+      "sha256": "06bb8f21918c1cd65936254277fad8940e2bd08121d90667df906cbfd8a59666"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-curly-hat-sailor.png",
+      "bytes": 68159,
+      "sha256": "d86674facdd8bb1b356454f4a69d8367cbe2ae0603a59a23e0998717d779377e"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-curly-hat-straw.png",
+      "bytes": 72352,
+      "sha256": "9d6cd42e6573d4940ba8ce599cc627d151ce38a6eab9ddc5061cdac31151991d"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-windswept-hat-flower.png",
+      "bytes": 66142,
+      "sha256": "60831a23b2afe05da1a26993ac7e899f7b07f110f7d218b3fbaf8240a533e586"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-windswept-hat-none.png",
+      "bytes": 65294,
+      "sha256": "1850e66be36ff10443c26a76c62af0cd124dc185a7dd9d18f160985f5d889946"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-windswept-hat-sailor.png",
+      "bytes": 68552,
+      "sha256": "b6ee0007010ad09399d9322eafc87983107d5ab68ff9805523151f4645cfa6d7"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-pack-v1-gpu-windswept-hat-straw.png",
+      "bytes": 72222,
+      "sha256": "f0e478d3eaf772558760dd771bf5338618899b16c6a52d1ffd38d9a3073d4c91"
+    },
+    {
+      "file": "ART-17-source-hand-20261021-sources.zip",
+      "bytes": 10198377,
+      "sha256": "dd416482fae8bd66cbdc5861bbd0179fc28ff6eee437b35d61f8acffed84cb68"
+    }
+  ]
+}

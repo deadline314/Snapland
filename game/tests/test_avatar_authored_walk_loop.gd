@@ -166,6 +166,7 @@ func _run() -> void:
 	_check(world.avatar.visible and world.avatar_motion_rig == null and world.last_avatar_action == "idle", "leaving the ride restores the authored front idle")
 
 	_check_fallback_cache_direction()
+	_check_repaired_source_hand(world.avatar_renderer)
 	_release_movement()
 	world.queue_free()
 	await process_frame
@@ -203,3 +204,32 @@ func _check_fallback_cache_direction() -> void:
 			_check(renderer.texture({}, equipment, direction, frame, "celebrate") == warmed, "same fallback request reuses its own cached texture")
 			if frame == 0 and first.get_image().get_data() != cold.get_image().get_data(): saw_direction_difference = true
 	_check(saw_direction_difference, "cache oracle includes genuinely different direction-specific hat pixels")
+
+func _check_repaired_source_hand(renderer: RefCounted) -> void:
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tools/walk_stability/repairs/manifest.json"))
+	var repair: Dictionary = manifest.repairs[0]
+	var reference_path := ProjectSettings.globalize_path("res://" + str(repair.runtime_reference))
+	_check(FileAccess.get_sha256(reference_path) == repair.runtime_reference_png_sha256, "source repair's independent runtime reference is unchanged")
+	var before := Image.load_from_file(reference_path)
+	before.convert(Image.FORMAT_RGBA8)
+	var source: Image = renderer._walk_pose_image("front_right", 3)
+	for name in repair.protected_regions:
+		var box: Array = repair.protected_regions[name]
+		var region := Rect2i(int(box[0]), int(box[1]), int(box[2]), int(box[3]))
+		_check(source.get_region(region).get_data() == before.get_region(region).get_data(), "source repair retains original " + name + " RGBA")
+	var owned := Rect2i(68, 218, 37, 47)
+	var outside_changed := 0
+	for y in 360:
+		for x in 280:
+			if owned.has_point(Vector2i(x, y)): continue
+			var old := before.get_pixel(x, y)
+			var actual := source.get_pixel(x, y)
+			if old.a != actual.a or (old.a >= 0.5 and old != actual): outside_changed += 1
+	_check(outside_changed == 0, "source repair changes no visible original pixel outside its approved rectangle")
+	_check(renderer.has_head_material_owner(source), "corrected whole cel retains reviewed hair ownership")
+	for style in ["windswept", "bob", "curly"]:
+		var appearance: Dictionary = renderer.DEFAULT_APPEARANCE.duplicate()
+		appearance.hair = style
+		var texture: Texture2D = renderer.texture(appearance, {"outfit": "outfit-tide", "hat": "hat-none"}, "front_right", 3, "walk")
+		var ghost := texture.get_image().get_pixel(82, 248)
+		_check(ghost.a < 0.5 or ghost.r <= ghost.b, "actual " + style + " texture has no warm extra hand behind the backpack")

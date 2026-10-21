@@ -4,9 +4,11 @@ No runtime image inference: root corrections and rigid head/neck reference parts
 are baked into atlases. Source frames and their provenance remain available.
 """
 from pathlib import Path
-import argparse,hashlib,json,math
+import argparse,hashlib,json,math,sys
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT))
+from tools.walk_stability.source_repairs import apply_repairs,load_recipe,RECIPE
 def rounded(x):return math.floor(x+.5) if x>=0 else math.ceil(x-.5)
 def compile_frames(baseline,output):
     import cv2,numpy as np
@@ -19,6 +21,9 @@ def compile_frames(baseline,output):
     if len(groups)!=12:raise ValueError("Expected eight hero and four NPC walk sequences")
     old=json.loads((ROOT/"assets/characters/walk-regions.json").read_text(encoding="utf-8"))
     manifest={"schema_version":1,"method":"Fixed root registration followed by a rigid per-heading head/neck reference part. No runtime anatomy inference.","sequences":{}}
+    recipe=load_recipe()
+    manifest["source_repairs"]=recipe["repairs"]
+    manifest["source_repairs_file_sha256"]=hashlib.sha256(RECIPE.read_bytes()).hexdigest()
     review=[]
     for (family,view),items in sorted(groups.items()):
         items.sort(key=lambda v:v["frame"])
@@ -48,9 +53,10 @@ def compile_frames(baseline,output):
         placed=[]
         for im,delta in zip(images,offsets):
             canvas=Image.new("RGBA",im.size);canvas.paste(im,tuple(delta));placed.append(canvas)
+        key=("hero" if family=="island-raw" else family)+"/"+view
         reference=placed[0].crop((0,0,w,seam));atlas=Image.new("RGBA",(w*len(items),h))
         for i,canvas in enumerate(placed):
-            canvas.paste(reference,(0,0));atlas.paste(canvas,(w*i,0))
+            canvas.paste(reference,(0,0));canvas=apply_repairs(canvas,key,i,recipe);atlas.paste(canvas,(w*i,0))
         assert all(len(delta)==2 for delta in offsets)
         name=f"{family}-{view}.png";atlas.save(output/name)
         key=("hero" if family=="island-raw" else family)+"/"+view

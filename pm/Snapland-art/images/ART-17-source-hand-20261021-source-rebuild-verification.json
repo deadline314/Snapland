@@ -1,0 +1,55 @@
+{
+  "sequences": [
+    {
+      "sequence": "announcer-walk/left",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "announcer-walk/right",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "announcer-walk_candidate/front",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "hero/back",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "hero/back_left",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "hero/back_right",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "hero/front",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "hero/front_left",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "hero/front_right",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "hero/left",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "hero/right",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    },
+    {
+      "sequence": "ticket-walk_candidate/front",
+      "alpha_and_opaque_rgb_equal_current_atlas": true
+    }
+  ],
+  "raw_inputs": 88,
+  "root_audit": "PASS_ROOT_AND_AUTHORED_LIMBS",
+  "scope": "All twelve groups rebuilt; all visible runtime pixels match, with exactly the approved local hand correction. Original candidate NPC diagnostics are not adopted."
+}

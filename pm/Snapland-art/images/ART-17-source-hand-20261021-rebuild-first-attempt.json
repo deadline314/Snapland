@@ -1,0 +1,1 @@
+{"raw_export_exit":0,"raw_inputs_exact_old_png_hashes":88,"compilation_completed":false,"failure":"ModuleNotFoundError: cv2 before compilation; restored pinned offline-authoring dependency in a private venv, then resumed from the same 88 immutable raw inputs","separate_raw_stderr_saved":false}

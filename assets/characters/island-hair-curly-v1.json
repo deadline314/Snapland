@@ -5,7 +5,7 @@
     280,
     360
   ],
-  "ownership_sha256": "33a3ee97f96ae4491646e915e23fcdca94911d1d64492a69589039b063b3732c",
+  "ownership_sha256": "9914cba08012fe1148f8c0350a15466db56fe536ce0a431555dbca1fea6ed167",
   "dependencies": [
     {
       "source": "res://assets/characters/hair-v1.png",
@@ -1632,7 +1632,7 @@
     },
     "front_right": {
       "source": "res://assets/characters/walk-stability-v1/island-raw-front_right.png",
-      "source_sha256": "6d18aecaf8c12464e30c1d932655b52fda32fead18064c9cb78cb9e5cda86e41",
+      "source_sha256": "6424dc9564895d3aa5ff798802b758fc235b467f2ddfec8f8bb6915cebf86e77",
       "source_pixels_sha256": "3a2117065176aa0aacf6e22d5f0ccca7e1bd53bc7caace0324871c3ad269118c",
       "strands": [
         {

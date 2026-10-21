@@ -391,3 +391,16 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 ![實際回退貼圖：修正前、獨立基準與修正後](images/ART-17-fallback-cache-20261021-comparison.png)
 
 [前反例](images/ART-17-fallback-cache-20261021-before-probe.json) · [修正後對照](images/ART-17-fallback-cache-20261021-after-probe.json) · [四項局部結果](images/ART-17-fallback-cache-20261021-local-results.json) · [正式世界回歸日誌](images/ART-17-fallback-cache-20261021-test_avatar_authored_walk_loop.log)。貼圖對照是渲染來源檢查，不是新增動畫、美術自然度或輸出包試玩。
+
+
+# Commit — 2026-10-21 修正斜向行走多手原畫
+
+主角斜前右第4格在相機前已有兩隻手，背包下卻多出一隻。現在只修這一小塊來源，保留原臉、頭髮、相機雙手、腳底、人物位置及其餘七格；三款髮型都不再顯示多手。保存原圖與修正片，重新製作也能得到相同結果；整票維持進行中。
+
+137項Python、六組正式角色測試通過。原速與真正四分之一速度各14組實際Main檢查均exit0／0ERROR，包含三髮型／四帽、八格行走、停步、暫停恢復、降低動態及場景重進；28張原生姿勢及三髮型24張對照已檢視。第一組顯示完整世界，其餘在相同Main隱藏3D、放大實際角色檢查；不是衣櫃UI、全島光影或真人試玩。早期完整世界錄製超時與慢放停步失敗都保留。
+
+原88張輸入完整重建與原四肢保護通過。真正Linux成品十二場景啟動／繪製／退出通過；另在無散落圖片的玩家PCK檢查十二髮帽組合GPU及24組髮型／方向來源。來源、成品與本輪實際範圍逐項保存，先前CI不冒充本次CI。
+
+![三髮型原畫修正前後](images/ART-17-source-hand-20261021-three-hair-before-after.png)
+
+[原速短片](images/ART-17-source-hand-20261021-native-normal-v3-review.mp4) · [真正四分之一速度](images/ART-17-source-hand-20261021-native-quarter-v3-review.mp4) · [六方資料、製作與拒收流程](../../design/runtime/source-art-repairs.md) · [完整證據、結果與雜湊](images/ART-17-source-hand-20261021-verification.json)。

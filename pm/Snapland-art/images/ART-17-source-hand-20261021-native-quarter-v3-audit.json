@@ -1,0 +1,302 @@
+{
+  "actual_key_input": true,
+  "cases": [
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "windswept",
+      "hat": "hat-straw",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "windswept",
+      "hat": "hat-sailor",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "windswept",
+      "hat": "hat-flower",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "bob",
+      "hat": "hat-none",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "bob",
+      "hat": "hat-straw",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "bob",
+      "hat": "hat-sailor",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "bob",
+      "hat": "hat-flower",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-none",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-straw",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-sailor",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-flower",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "live"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": false,
+      "hair": "curly",
+      "hat": "hat-sailor",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "reduced"
+    },
+    {
+      "distance": 2.62485456466675,
+      "extra_hand_absent": true,
+      "frame3_feet_exact": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-sailor",
+      "root_identity": true,
+      "sprite_material_synced": true,
+      "tag": "reentry"
+    }
+  ],
+  "pause_resume": true,
+  "scope": "Actual Main S/D movement and distance-selected frames; returning-player, appearance and open-ground placement fixtures. First appearance renders the full world; remaining appearances hide 3D/HUD and mirror the same actual Main Sprite/GPU hair texture. Not wardrobe UI, human play or all-world lighting acceptance.",
+  "time_scale": 0.25
+}

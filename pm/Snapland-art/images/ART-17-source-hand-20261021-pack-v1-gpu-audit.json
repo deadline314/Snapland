@@ -1,0 +1,104 @@
+{
+  "all_24_style_direction_profiles_valid": true,
+  "cases": [
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "windswept",
+      "hat": "hat-straw",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "windswept",
+      "hat": "hat-sailor",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "windswept",
+      "hat": "hat-flower",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "bob",
+      "hat": "hat-none",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "bob",
+      "hat": "hat-straw",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "bob",
+      "hat": "hat-sailor",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "bob",
+      "hat": "hat-flower",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-none",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-straw",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-sailor",
+      "root_identity": true,
+      "source_corrected": true
+    },
+    {
+      "feet_exact": true,
+      "gpu_hair_active": true,
+      "hair": "curly",
+      "hat": "hat-flower",
+      "root_identity": true,
+      "source_corrected": true
+    }
+  ],
+  "raw_png_absent": true,
+  "scope": "Editor GPU probe loads separately exported player PCK from a clean probe directory. Separate actual release main smoke; not wardrobe or human play.",
+  "tools_and_tests_absent": true
+}

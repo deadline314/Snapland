@@ -1,0 +1,28 @@
+[
+  {
+    "mode": "normal",
+    "video": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "20/1",
+      "duration": "31.950000",
+      "nb_read_frames": "639"
+    },
+    "decoded_all_frames": true,
+    "actual_viewport_captures": 14,
+    "scope": "Silent fixed 20FPS authoring movie; first appearance full Main world, later actual Main sprite isolated, not measured hardware FPS or human play."
+  },
+  {
+    "mode": "quarter",
+    "video": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "20/1",
+      "duration": "94.050000",
+      "nb_read_frames": "1881"
+    },
+    "decoded_all_frames": true,
+    "actual_viewport_captures": 14,
+    "scope": "Silent fixed 20FPS authoring movie; first appearance full Main world, later actual Main sprite isolated, not measured hardware FPS or human play."
+  }
+]
