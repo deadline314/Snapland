@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step": "import",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 32.51
+    },
+    {
+      "step": "export",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 5.4
+    }
+  ],
+  "tracked_runtime_files": 784,
+  "game_tests_tools_private_evidence_absent_before_import": true,
+  "binary": {
+    "file": "Snapland.x86_64",
+    "bytes": 219546344,
+    "sha256": "fca0f426aed61743bc815334420a65bec67ed60be7e3d51468af84747c579522"
+  },
+  "scope": "Real Linux release import/export, not runtime acceptance. Build source map contains current uncommitted ART-17 local source-art correction; base commit alone is not a clean artifact provenance claim. Existing MAIN-9 runtime acceptance remains separate.",
+  "unit_fixture": "Authoring-dependent test scripts, nested fixtures, development tools, private evidence and untracked runtime candidates excluded; player scripts, locale, park data and licenses retained."
+}

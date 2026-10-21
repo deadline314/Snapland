@@ -20,6 +20,31 @@ ROOT = Path(__file__).resolve().parents[1]
 LINUX_TEMPLATE_SHA256 = "d9f79ab89b5ae369aeed11c6052d402e8218cd503bf85b4a235f9c30c46a7c63"
 
 
+def prepare_runtime_stage(root: Path, stage: Path, tracked: list[str]) -> dict[str, str]:
+    """Copy player resources without importing development-only test scripts.
+
+    Export exclusions run after editor import. Tests may depend on authoring
+    tools, which intentionally do not belong in a player build, so omit tests
+    from the import stage too.
+    """
+    copied = {}
+    for name in tracked:
+        if not name:
+            continue
+        path = Path(name)
+        if path.parts[:2] == ("game", "tests"):
+            continue
+        if path.parts[0] not in {"assets", "game"} and name not in {"project.godot", "export_presets.cfg", "design/01-park/park.json"}:
+            continue
+        source = root / path
+        if source.is_file():
+            destination = stage / path
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+            copied[name] = hashlib.sha256(source.read_bytes()).hexdigest()
+    return copied
+
+
 def build(engine: Path, template: Path, output: Path) -> dict:
     if output.exists() and any(output.iterdir()):
         raise ValueError(f"Output must be an empty private directory: {output}")
@@ -36,19 +61,7 @@ def build(engine: Path, template: Path, output: Path) -> dict:
     if version.returncode or not version.stdout.startswith("4.7.2.stable."):
         raise ValueError("Build requires Godot 4.7.2 stable, matching the export template")
     tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT, text=True).split("\0")
-    copied = {}
-    for name in tracked:
-        if not name:
-            continue
-        path = Path(name)
-        if path.parts[0] not in {"assets", "game"} and name not in {"project.godot", "export_presets.cfg", "design/01-park/park.json"}:
-            continue
-        source = ROOT / path
-        if source.is_file():
-            destination = stage / path
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, destination)
-            copied[name] = hashlib.sha256(source.read_bytes()).hexdigest()
+    copied = prepare_runtime_stage(ROOT, stage, tracked)
     presets = stage / "export_presets.cfg"
     text = presets.read_text()
     header, linux = text.split('[preset.1.options]', 1)

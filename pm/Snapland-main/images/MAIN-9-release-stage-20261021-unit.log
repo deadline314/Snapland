@@ -1,0 +1,6 @@
+test_authoring_dependent_tests_are_absent_before_import (test_desktop_release_stage.DesktopReleaseStageTests.test_authoring_dependent_tests_are_absent_before_import) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+OK

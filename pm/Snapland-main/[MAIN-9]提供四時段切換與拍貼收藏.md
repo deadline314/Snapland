@@ -89,3 +89,8 @@
 最終成品逐一畫出十二款專用場景，四背景／十六道具／八類植栽完整載入，角色、場景動畫及遮擋資源門檻保留。故意漏包背景圖的真正成品仍報缺圖退出1；錯誤版本範本及覆寫舊成品也被拒絕。四項受影響Godot回歸及104項Python回歸通過。本次是Linux Compatibility／軟體GPU與外部程式化輸入，不冒稱Windows EXE、真人試玩、硬體效能或聽感。
 
 [六團隊研究與可重現成品流程](../../design/runtime/desktop-release-acceptance.md) · [來源／成品SHA與完整驗證範圍](images/MAIN-9-release-20261020-verification.json) · [實際成品十二款總覽](images/MAIN-9-release-20261020-art-twelve-overview.png) · [實際重開後四時收藏](images/MAIN-9-release-20261020-reader-04-time-album.png) · [最後成品夜間原圖](images/MAIN-9-release-20261020-final-08-night-original-single.png)。大型成品依流程可重建，未將219MB二進位塞入Git。
+
+
+# Commit-3 — 2026-10-21 玩家成品建置回歸
+
+製作工具的測試相依曾有機會阻止玩家版匯入。現在成品準備階段完整隔離開發測試，保留玩家需要的場景、語系、園區資料與授權。回歸反例通過，實際重新匯入及產生獨立 Linux 成品均 exit0／0ERROR；本段是建置驗證。[驗證與來源範圍](images/MAIN-9-release-stage-20261021-verification.json) · [原始匯入紀錄](images/MAIN-9-release-stage-20261021-import.log) · [既有研究及更新流程](../../design/runtime/desktop-release-acceptance.md)。
