@@ -1,0 +1,23 @@
+[
+  {
+    "target": "assets/ui/tutorials/game-001-step-01.png",
+    "source": "sources-v2/captures/000-balloon-safe-intro.png",
+    "previous_sha256": "08af82ae6f1c54e0f9acaf6a426d4162c63c31fb7ee2aa9aaca0af1ca866274b",
+    "sha256": "b26f2062a203acdadb03d5181718529a8f5734b3a2c67e37c8d162e277354291",
+    "transformation": "none; native PNG byte-identical copy"
+  },
+  {
+    "target": "assets/ui/tutorials/game-001-step-02.png",
+    "source": "sources-v2/captures/001-balloon-safe-brake.png",
+    "previous_sha256": "7bc2904ac7dfc528e320e5a49a389201f3bcfd7675743fe955130810ffc73f12",
+    "sha256": "8c17b2759f120e01ebc8b1dcc12d5d0e443fb7e7e0c0958066e0b977b360aa79",
+    "transformation": "none; native PNG byte-identical copy"
+  },
+  {
+    "target": "assets/ui/tutorials/game-001-step-03.png",
+    "source": "controls-trace/captures/005-balloon-keyboard-precise-result.png",
+    "previous_sha256": "f1b00a85c87a8d82aafe461517ee6ffa00e5e7389102f02f7e1fb1e7b6ab1302",
+    "sha256": "09736306bdd27a3bbb06e27b557f2a3061bce6e456ae686b621b0cd96c2a4cc9",
+    "transformation": "none; native PNG byte-identical copy"
+  }
+]

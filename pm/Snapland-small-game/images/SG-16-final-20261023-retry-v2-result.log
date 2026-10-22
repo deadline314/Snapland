@@ -1,0 +1,182 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+[park_world] scenery meshes: 1182, nodes: 2094
+INPUT: game-001 開始遊玩 target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1932/@VBoxContainer@1933/@HBoxContainer@1934/InviteCard/@MarginContainer@1935/@VBoxContainer@1936/@HBoxContainer@1938/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1932/@VBoxContainer@1933/@HBoxContainer@1934/InviteCard/@MarginContainer@1935/@VBoxContainer@1936/@HBoxContainer@1938/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/retry-v2/captures/000-balloon-first-tutorial-1.png","frame":66,"request":"balloon-first-tutorial-1.png","size":[1280,720],"window":[1280,720]}
+INPUT: next first lesson page target=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1989 rect=[P: (372.0, 612.0), S: (92.0, 48.0)] pointer=(418.0, 636.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1989 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/retry-v2/captures/001-balloon-first-tutorial-2.png","frame":70,"request":"balloon-first-tutorial-2.png","size":[1280,720],"window":[1280,720]}
+INPUT: next first lesson page target=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1989 rect=[P: (372.0, 612.0), S: (92.0, 48.0)] pointer=(418.0, 636.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1989 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/retry-v2/captures/002-balloon-first-tutorial-3.png","frame":74,"request":"balloon-first-tutorial-3.png","size":[1280,720],"window":[1280,720]}
+INPUT: begin first balloon lesson target=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1997 rect=[P: (808.0, 612.0), S: (112.0, 48.0)] pointer=(864.0, 636.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1997 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: pause active keyboard delivery target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: resume same balloon round target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/PauseOverlay/@PanelContainer@2013/@VBoxContainer@2014/ResumeButton rect=[P: (430.0, 240.0), S: (420.0, 44.0)] pointer=(640.0, 262.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/PauseOverlay/@PanelContainer@2013/@VBoxContainer@2014/ResumeButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: pause before confirmed retry target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: request balloon retry target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/PauseOverlay/@PanelContainer@2013/@VBoxContainer@2014/RetryButton rect=[P: (430.0, 390.0), S: (420.0, 44.0)] pointer=(640.0, 412.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/PauseOverlay/@PanelContainer@2013/@VBoxContainer@2014/RetryButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: confirm balloon retry target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/ConfirmOverlay/@PanelContainer@2027/@VBoxContainer@2028/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@2004/MinigameHUD/ConfirmOverlay/@PanelContainer@2027/@VBoxContainer@2028/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+BALLOON RETRY RESET: { "instance_id": 185656679068, "paused": false, "ended": false, "elapsed": 0.0, "score": 0, "mistakes": 0, "delivery": 0, "position": (250.0, 380.0) } post_click_elapsed=0.0333
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/retry-v2/captures/003-balloon-controls-retry-reset.png","frame":143,"request":"balloon-controls-retry-reset.png","size":[1280,720],"window":[1280,720]}
+PASS: actual first tutorial and paused/resumed confirmed retry, exact signal-time reset and original0.20-second post-click bound
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1323)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/retry-v2/native_balloon_controls_review.gd:30)

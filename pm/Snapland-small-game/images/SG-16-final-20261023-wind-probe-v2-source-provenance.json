@@ -1,0 +1,5 @@
+{
+  "old_source_sha256": "69ae79097b4247e8ae4ec572dd0708a08ef72c1fe0f6282f665c8b8f59a1e0ee",
+  "old_diagnostic_sha256": "8d7c4d64ce4868388279fb80ca661ea1e7a31fee12699935fc09a8925bb52012",
+  "diagnostic_change": "Remove only duplicate global class_name from old copied view. Current production remains unchanged. View-only fixed vectors, night/reduced, not a playthrough."
+}

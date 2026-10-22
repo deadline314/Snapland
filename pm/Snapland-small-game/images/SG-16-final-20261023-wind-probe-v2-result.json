@@ -1,0 +1,9 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 2.73,
+  "passes": [
+    "PASS: actual rendered wind direction pixels reject covered old arrows and retain both foreground directions in night/reduced-motion"
+  ],
+  "scope": "Actual realtime engine clock;original62-second route and240 process caps;external silent15FPS wall capture,not hardware FPS."
+}

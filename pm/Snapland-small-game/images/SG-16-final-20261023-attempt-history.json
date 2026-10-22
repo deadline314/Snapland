@@ -1,0 +1,22 @@
+{
+  "baseline": "94de1a95373007f17cd9abf7692b795d025c9bc6",
+  "rejected_or_incomplete": {
+    "controls-v1": "Real-clock route stopped after confirmed retry because two post-click frames exceeded the original0.20s post-state bound; exact signal-time reset had passed. No gameplay defect claimed.",
+    "controls-v2": "Fixed60 entire-route test reached2stations/zero mistakes but failed original62s wall route watchdog due slow software rendering. No cap increase.",
+    "checks": "First six-selector batch timed out welcome at original90s while native rendering competed for CPU; console was not retained by first driver, no inferred failure cause. Sequential repeated six suites all passed.",
+    "wind-probe": "Copied old class_name conflicted with global class registry; terminated only its own PID after saved engine log; not a valid before/after result.",
+    "controls-final": "Current visible-wind view but actual keyboard route collided once, completed ordinary450; rejected as precise route.",
+    "controls-final-v2": "Longer waypoint detour still had one actual hazard collision; ordinary450 correct, not a precise pass."
+  },
+  "superseded_visuals": {
+    "controls-v4": "Actual-clock independent standard keyboard450/devil, assisted/reduced private450, protected progression unchanged;40.74s0/0. Still covered wind arrows, not final visual acceptance. Its broad PASS line mentions pause/retry, but --balloon-routes-only did not execute that branch; use separate retry-v2 evidence.",
+    "outcomes-v2": "Actual-clock fast approach, hazard, recovery ordinary450, assisted night/reduced formal ordinary-only, natural55s timeout/fullsave unchanged;92.33s0/0. Before visible-wind fix.",
+    "outcomes-final-v3": "Actual input routes passed93.87s0/0, but full-size review found per-cause counts were only in data. Final counted run now verifies actual visible count labels."
+  },
+  "separate_retry": "retry-v2 fixed60 limited to original first tutorial/pause/resume/confirmed retry assertions24.27s0/0; not flight realtime performance. Original0.20s bound unchanged.",
+  "wind_visibility": "Before0/0 direction pixels, after232/174 in same native view-only night/reduced frame.2.73s0/0; class_name removed only in old diagnostic copy.",
+  "scope": "Silent Dummy audio; llvmpipe; no human feel, source-game play or hardwareFPS claim. No thresholds, force, brake, delivery score or original limits weakened.",
+  "route_diagnostics": "controls-trace retains actual waypoint/position/velocity/event trace; current longer southern approach and original caps; true keyboard zero-error450/devil plus private assisted/reduced pointer450 pass46.26s0/0. Gameplay positions/speeds/forces never assigned by route.",
+  "final_counted": "outcomes-counted actual1 fast approach+1hazard then ordinary450, assisted night/reduced formal zero-error450 ordinary-only, natural55s timeout0/fullsave unchanged,96.80s0/0. Mistake counts visible as times, not points; final unit2.04s0/0.",
+  "python_history": "Initial full143 had one catalog/runtime-text alignment error while both copies were being updated; preserved log. Both sources synchronized;39design tests and final full143 pass47.550s."
+}

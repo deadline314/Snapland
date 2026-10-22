@@ -1,0 +1,118 @@
+[
+  {
+    "assisted": false,
+    "devil": false,
+    "game_id": "game-001",
+    "mistakes": 2,
+    "observed_frame": 116,
+    "observed_process_id": 1855,
+    "observer_only": true,
+    "practice": false,
+    "score": 450,
+    "score_summary": {
+      "label": "郵袋交付分",
+      "qualification_text": "普通拍貼：三站全送達。小惡魔需未輔助且零失誤（本次失誤 2）。",
+      "rows": [
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "balloon_fast_dock",
+          "label": "過快進站（不計分）",
+          "progress_only": true
+        },
+        {
+          "amount": 0,
+          "count": 1,
+          "key": "balloon_hazard",
+          "label": "撞海膽（不計分）",
+          "progress_only": true
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_1",
+          "label": "第 1 站・郵袋送達"
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_2",
+          "label": "第 2 站・郵袋送達"
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_3",
+          "label": "第 3 站・郵袋送達"
+        }
+      ],
+      "rule": "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站得普通拍貼；未輔助且零失誤才得小惡魔拍貼。",
+      "total": 450
+    },
+    "success": true
+  },
+  {
+    "assisted": true,
+    "devil": false,
+    "game_id": "game-001",
+    "mistakes": 0,
+    "observed_frame": 207,
+    "observed_process_id": 1855,
+    "observer_only": true,
+    "practice": false,
+    "score": 450,
+    "score_summary": {
+      "label": "郵袋交付分",
+      "qualification_text": "三站全送達，取得普通拍貼；輔助回合不取得小惡魔拍貼。",
+      "rows": [
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_1",
+          "label": "第 1 站・郵袋送達"
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_2",
+          "label": "第 2 站・郵袋送達"
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_3",
+          "label": "第 3 站・郵袋送達"
+        }
+      ],
+      "rule": "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站得普通拍貼；未輔助且零失誤才得小惡魔拍貼。",
+      "total": 450
+    },
+    "success": true
+  },
+  {
+    "assisted": false,
+    "devil": false,
+    "game_id": "game-001",
+    "mistakes": 0,
+    "observed_frame": 647,
+    "observed_process_id": 1855,
+    "observer_only": true,
+    "practice": false,
+    "score": 0,
+    "score_summary": {
+      "label": "郵袋交付分",
+      "qualification_text": "普通拍貼需限時送達三站（本次 0 / 3）；小惡魔需未輔助且零失誤。",
+      "rows": [
+        {
+          "amount": 0,
+          "count": 0,
+          "key": "no_score",
+          "label": "郵袋交付分"
+        }
+      ],
+      "rule": "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站得普通拍貼；未輔助且零失誤才得小惡魔拍貼。",
+      "total": 0
+    },
+    "success": false
+  }
+]

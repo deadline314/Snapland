@@ -597,6 +597,8 @@ func score_summary() -> Dictionary:
 		var amount := int(totals[key])
 		sum += amount
 		rows.append({"key": key, "label": str(labels[key]), "amount": amount, "count": int(counts[key])})
+		if mode == "balloon_delivery" and key in ["balloon_hazard", "balloon_fast_dock"]:
+			rows[-1]["progress_only"] = true
 	if sum != score:
 		rows.append({"key": "score_adjustment", "label": "目前計分調整", "amount": score - sum, "count": 1})
 	if mode == "flower_pipes" or mode == "bench_swap":
@@ -612,7 +614,7 @@ func score_summary() -> Dictionary:
 		for index in pipe_model.orders.size():
 			var state := "已供水" if index < pipe_model.completed_beds else ("供水中" if index == pipe_model.order_index and pipe_model.connected else "未完成")
 			rows.append({"key": "pipe_order_%d" % index, "label": "工單 %d · 目標 %d 次 · %s" % [index + 1, int(pipe_model.orders[index].turn_par), state], "amount": 0, "count": int(pipe_model.order_turns[index]), "progress_only": true})
-	if mistakes > 0:
+	if mistakes > 0 and mode != "balloon_delivery":
 		rows.append({"key": "mistakes", "label": "撞線（不計分）" if mode == "sign_balance" else "失誤（不計分）", "amount": 0, "count": mistakes, "progress_only": true})
 	if rows.is_empty():
 		rows.append({"key": "no_score", "label": _score_label(), "amount": 0, "count": 0})
@@ -626,6 +628,15 @@ func score_summary() -> Dictionary:
 			summary["qualification_text"]="五環全中心、零救援，已達成小惡魔條件。"
 		else:
 			summary["qualification_text"]="普通拍貼：五環全過。小惡魔需五次中心、零救援（本次中心 %d / 5、救援 %d）。"%[kite_model.center_hits,kite_model.rescues_used]
+	if mode == "balloon_delivery" and ended and not practice_mode:
+		if not won:
+			summary["qualification_text"] = "普通拍貼需限時送達三站（本次 %d / 3）；小惡魔需未輔助且零失誤。" % balloon_delivery_index
+		elif assisted:
+			summary["qualification_text"] = "三站全送達，取得普通拍貼；輔助回合不取得小惡魔拍貼。"
+		elif devil_won:
+			summary["qualification_text"] = "三站全送達、零失誤，已達成小惡魔條件。"
+		else:
+			summary["qualification_text"] = "普通拍貼：三站全送達。小惡魔需未輔助且零失誤（本次失誤 %d）。" % mistakes
 	return summary
 
 func _score_label() -> String:
@@ -646,7 +657,7 @@ func _score_label() -> String:
 
 func _score_rule_text() -> String:
 	match mode:
-		"balloon_delivery": return "每送達一封郵袋 +150。"
+		"balloon_delivery": return "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站得普通拍貼；未輔助且零失誤才得小惡魔拍貼。"
 		"kite_rings": return "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過得普通拍貼；未輔助、五環全中心且零救援才得小惡魔拍貼。"
 		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。"
 		"crowd_traffic": return "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。"
@@ -1141,6 +1152,7 @@ func _tick_balloon(delta: float) -> void:
 		velocity *= 0.48
 		balloon_hazard_cooldown = 1.0
 		mistakes += 1
+		_award_points("balloon_hazard", "撞海膽（不計分）", 0)
 		balloon_dock_hold = 0.0
 		_feedback("海膽擦到氣球！看風向繞過它", PINK)
 	var distance_to_mailbox := p.distance_to(target)
@@ -1152,12 +1164,12 @@ func _tick_balloon(delta: float) -> void:
 				balloon_delivery_index += 1
 				count = balloon_delivery_index
 				devil_progress += 1
-				_score(150)
+				_award_points("mailbag_%d" % balloon_delivery_index, "第 %d 站・郵袋送達" % balloon_delivery_index, 150)
 				balloon_dock_hold = 0.0
 				balloon_dock_miss_latched = false
 				if balloon_delivery_index >= BALLOON_MAILBOXES.size():
 					_feedback("三封郵袋都送達！", MINT)
-					_finish(true, mistakes == 0 and devil_progress == 3)
+					_finish(true, not assisted and mistakes == 0 and devil_progress == 3)
 				else:
 					target = BALLOON_MAILBOXES[balloon_delivery_index]
 					_feedback("郵袋送達！下一站亮起了", MINT)
@@ -1166,6 +1178,7 @@ func _tick_balloon(delta: float) -> void:
 			if not balloon_dock_miss_latched:
 				balloon_dock_miss_latched = true
 				mistakes += 1
+				_award_points("balloon_fast_dock", "過快進站（不計分）", 0)
 				_feedback("郵箱前按空白鍵或右鍵煞車", YELLOW)
 	else:
 		balloon_dock_hold = 0.0

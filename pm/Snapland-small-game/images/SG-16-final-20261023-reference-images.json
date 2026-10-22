@@ -1,0 +1,28 @@
+[
+  {
+    "file": "nintendo-official-capture.jpg",
+    "url": "https://www.nintendo.co.jp/wiiu/alcj/attraction/files/img/balloon/capture.jpg",
+    "page": "https://www.nintendo.co.jp/wiiu/alcj/attraction/balloon.html",
+    "bytes": 61567,
+    "size": [
+      800,
+      450
+    ],
+    "format": "JPEG",
+    "sha256": "879b2d5aeda554942a0523ba6d6e78c2ac885e1e5d1fb8318c6372f86fabc01d",
+    "scope": "Official static screenshot, unmodified source; not video watched or source game played."
+  },
+  {
+    "file": "mini-metro-official-capture.jpg",
+    "url": "https://dinopoloclub.com/wp-content/uploads/2019/09/MM-screenshot-0-1024x576.jpg",
+    "page": "https://dinopoloclub.com/press/mini-metro/",
+    "bytes": 38408,
+    "size": [
+      1024,
+      576
+    ],
+    "format": "JPEG",
+    "sha256": "3d3afdb1321b102dbba570227c9bbc2ce6ce96ce22e3aad21bde37bbb503757a",
+    "scope": "Official static screenshot, unmodified source; not video watched or source game played."
+  }
+]

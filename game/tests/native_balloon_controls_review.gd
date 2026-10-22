@@ -3,7 +3,7 @@ extends "res://game/tests/native_balloon_harbor_review.gd"
 ## Separate native SG-16 control review. The only launched minigame is game-001.
 const ROUTE: Array[Vector2] = [
 	Vector2(520, 305), Vector2(780, 270), Vector2(880, 270),
-	Vector2(960, 360), Vector2(820, 480), Vector2(1080, 320)
+	Vector2(1000, 510), Vector2(820, 510), Vector2(1080, 320)
 ]
 
 var _keyboard_axis := Vector2i.ZERO
@@ -12,6 +12,7 @@ var _right_mouse_held := false
 var _case_result: Dictionary = {}
 var _case_stats: Dictionary = {}
 var _retry_event_state: Dictionary = {}
+var _wind_pixels_verified := false
 
 func _process(delta: float) -> void:
 	super._process(delta)
@@ -23,7 +24,7 @@ func _run() -> void:
 	progress.intro_seen = true
 	progress.settings["assist"] = false
 	progress.settings["reduced_motion"] = false
-	main = _instantiate_main()
+	main = _instantiate_main(false)
 	if main == null:
 		get_tree().quit(1)
 		return
@@ -39,14 +40,23 @@ func _run() -> void:
 	_key(KEY_ENTER)
 	await get_tree().create_timer(0.2).timeout
 	if not await _require_live_session("formal start wait"): return
-	if not await _review_pause_and_retry(): return
+	if not OS.get_cmdline_user_args().has("--balloon-routes-only"):
+		if not await _review_pause_and_retry(): return
+	if OS.get_cmdline_user_args().has("--balloon-retry-only"):
+		print("PASS: actual first tutorial and paused/resumed confirmed retry, exact signal-time reset and original0.20-second post-click bound")
+		await main._quit_game()
+		return
 	if not await _drive_route(false): return
 	if not await _wait_for_result(): return
 	if not await _assert_completed_case("keyboard-standard", false, false): return
+	if int(_case_result.mistakes) != 0 or not bool(_case_result.devil) or not progress.photos.has("photo-welcome-devil-1"):
+		await _fail("Keyboard route did not earn its actual zero-error devil result");return
 	if not await _require_live_main("formal result collection"): return
 	if not progress.photos.has("photo-welcome-game-1") or progress.normal_count() < 1:
 		await _fail("Successful formal keyboard challenge did not use the normal collection result path")
 		return
+	await _shot("balloon-keyboard-precise-result")
+	var formal_state := _protected_progress()
 	var formal_photos: Dictionary = progress.photos.duplicate(true)
 	var formal_normal: int = progress.normal_count()
 	var formal_devil: int = progress.devil_count()
@@ -78,6 +88,8 @@ func _run() -> void:
 	if not await _wait_for_result(): return
 	if not await _assert_completed_case("pointer-assisted-reduced-practice", true, true): return
 	if not await _require_live_main("practice collection verification"): return
+	if _protected_progress() != formal_state:
+		await _fail("Private practice changed protected progression");return
 	if progress.photos != formal_photos or progress.normal_count() != formal_normal or progress.devil_count() != formal_devil or progress.achievements != formal_achievements:
 		await _fail("Successful practice changed saved photos, completion counts, or achievements")
 		return
@@ -87,7 +99,7 @@ func _run() -> void:
 	await _shot("balloon-controls-pointer-practice-result")
 	if not await _require_live_main("practice result capture"): return
 	print("BALLOON CASE: pointer-assisted-reduced-practice score=%d mistakes=%d devil=%s schema=%s; saved collections unchanged" % [int(_case_result.get("score", -1)), int(_case_result.get("mistakes", -1)), str(_case_result.get("devil", false)), str(_case_result.keys())])
-	print("PASS: native SG-16 keyboard and pointer routes, pause/resume, confirmed retry, reduced-motion wind legend, and non-collecting practice")
+	print("PASS: native SG-16 independent keyboard and pointer routes, reduced-motion wind legend, and non-collecting practice")
 	await main._quit_game()
 
 func _enter_station() -> bool:
@@ -122,10 +134,22 @@ func _enter_station() -> bool:
 func _launch_from_station(button_text: String) -> bool:
 	if not await _require_live_main("_launch_from_station"): return false
 	var button := _find(main.overlay, button_text)
+	if button == null and button_text == "練習操作":
+		if not await _native_click_button(_find(main.overlay, "玩法與選項"), "open optional practice modes"): return false
+		button = _find(main.overlay, button_text)
 	if button == null or not await _native_click_button(button, "game-001 " + button_text):
 		await _fail("Station action did not launch game-001: " + button_text)
 		return false
 	if not await _require_live_main("station action completion"): return false
+	if is_instance_valid(main.tutorial_panel):
+		if progress.has_seen_tutorial("game-001") or is_instance_valid(main.session):
+			await _fail("First tutorial did not precede a fresh session");return false
+		for step in 3:
+			if main.tutorial_panel.current_step != step:
+				await _fail("First tutorial skipped a page");return false
+			await _shot("balloon-first-tutorial-%d" % (step + 1))
+			if step < 2 and not await _native_click_button(_find(main.tutorial_panel, "下一步"), "next first lesson page"): return false
+		if not await _native_click_button(_find(main.tutorial_panel, "開始挑戰"), "begin first balloon lesson"): return false
 	var deadline := _wall_deadline(4.0)
 	while is_instance_valid(main) and not is_instance_valid(main.session) and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
@@ -134,6 +158,7 @@ func _launch_from_station(button_text: String) -> bool:
 		await _fail("Station action left no active Session")
 		return false
 	active = main.session
+	_wind_pixels_verified = false
 	_case_result.clear()
 	_case_stats.clear()
 	active.finished.connect(_capture_case_result)
@@ -227,6 +252,8 @@ func _drive_route(pointer_only: bool) -> bool:
 	var waypoint := 0
 	var brake_held := false
 	var first_delivery_captured := false
+	var observed_events := 0
+	var previous_waypoint := -1
 	var deadline := _wall_deadline(62.0)
 	while _session_is_live() and not active.ended and Time.get_ticks_msec() < deadline:
 		if active.balloon_delivery_index >= 1 and waypoint == 0:
@@ -235,6 +262,10 @@ func _drive_route(pointer_only: bool) -> bool:
 			waypoint = 5
 		if waypoint >= 1 and waypoint <= 3 and active.p.distance_to(ROUTE[waypoint]) < 30.0:
 			waypoint += 1
+		if previous_waypoint != waypoint or active.score_events.size() != observed_events:
+			print("BALLOON ROUTE TRACE: pointer=%s wp=%d position=%s target=%s velocity=%s phase=%.3f events=%s" % [pointer_only,waypoint,active.p,active.target,active.velocity,active.phase,active.score_events])
+			previous_waypoint = waypoint
+			observed_events = active.score_events.size()
 		var desired_point := ROUTE[waypoint]
 		if not pointer_only:
 			desired_point = _keyboard_docking_aim(desired_point)
@@ -376,6 +407,12 @@ func _assert_completed_case(label: String, expect_assisted: bool, expect_practic
 	if not _case_result.has("success") or not _case_result.has("devil") or not _case_result.has("mistakes") or not _case_result.has("score_summary") or not (_case_result.get("score_summary", {}) is Dictionary) or not (_case_result.score_summary.get("rows", []) is Array):
 		await _fail(label + " result is missing the established score-summary schema")
 		return false
+	if bool(_case_result.devil) != (int(_case_result.mistakes) == 0 and not expect_assisted):
+		await _fail(label + " contradicts the zero-error unassisted devil condition");return false
+	if not expect_practice:
+		var qualification := main.overlay.find_child("ResultQualification", true, false) as Label
+		if qualification == null or qualification.text != str(_case_result.score_summary.get("qualification_text", "")):
+			await _fail(label + " hides its actual eligibility explanation");return false
 	return true
 
 func _check_reduced_wind_legend() -> bool:
@@ -395,6 +432,26 @@ func _check_reduced_wind_legend() -> bool:
 		if absf(angle_difference(arrow.rotation.y, active.presentation._wind_heading(direction))) > 0.0001 or not arrow.scale.is_equal_approx(Vector3.ONE * expected_size):
 			await _fail("Reduced-motion wind arrow heading/strength differs from the applied force/forecast")
 			return false
+	var indicators: Array = [active.presentation._current_indicator, active.presentation._forecast_indicator]
+	for index in 2:
+		if not indicators[index].is_visible_in_tree() or not indicators[index].force.is_equal_approx([current,forecast][index]):
+			await _fail("Visible canvas wind differs from the real force/forecast");return false
+	if not _wind_pixels_verified:
+		await RenderingServer.frame_post_draw
+		if not await _require_live_session("rendered wind pixel check"): return false
+		var image: Image = active.presentation.texture().get_image()
+		for index in 2:
+			var ink := Color("#62c3b0") if index == 0 else Color("#efbd71")
+			var pixels := 0
+			# Arrow-only interior: excludes labels, strength values and border.
+			for y in range(593 + index*60,629 + index*60):
+				for x in range(130,218):
+					var color := image.get_pixel(x,y)
+					if absf(color.r-ink.r)+absf(color.g-ink.g)+absf(color.b-ink.b) < 0.05: pixels += 1
+			if pixels < 20:
+				await _fail("Wind direction is covered in actual rendered pixels: row=%d pixels=%d" % [index,pixels]);return false
+			print("WIND PIXELS: row=%d visible_direction_pixels=%d" % [index,pixels])
+		_wind_pixels_verified = true
 	return true
 
 func _return_to_station_info() -> bool:
@@ -529,3 +586,11 @@ func _fail(message: String) -> void:
 		main.audio.shutdown()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().quit(1)
+
+func _shot(label: String) -> void:
+	await RenderingServer.frame_post_draw
+	if not main._capture(label + ".png"):
+		await _fail("Could not preserve exclusive native capture " + label)
+
+func _protected_progress() -> Dictionary:
+	return {"photos":progress.photos.duplicate(true), "achievements":progress.achievements.duplicate(true), "quests":progress.quests.duplicate(true), "coins":progress.coins, "owned_clothes":progress.owned_clothes.duplicate(), "wardrobe_rewarded_games":progress.wardrobe_rewarded_games.duplicate(), "pending_achievements":progress.platform_pending_achievements.duplicate()}

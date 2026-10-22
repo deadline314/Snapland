@@ -1,0 +1,44 @@
+[
+  {
+    "name": "welcome minigame tests",
+    "exit": 0,
+    "seconds": 80.69,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "balloon harbor presentation tests",
+    "exit": 0,
+    "seconds": 0.36,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "balloon delivery tests",
+    "exit": 0,
+    "seconds": 2.22,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 24.68,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI shell tests",
+    "exit": 0,
+    "seconds": 49.27,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI minigame tests",
+    "exit": 0,
+    "seconds": 6.49,
+    "errors": 0,
+    "error": null
+  }
+]

@@ -33,6 +33,8 @@ var _dock_lights: Array[Array] = []
 var _delivery_stamps: Array[MeshInstance3D] = []
 var _delivery_bags: Array[Node3D] = []
 var _current_wind: Node3D
+var _current_indicator: WindIndicator
+var _forecast_indicator: WindIndicator
 var _forecast_wind: Node3D
 var _brake_glow: MeshInstance3D
 var _urchin: Node3D
@@ -79,6 +81,8 @@ func present(position: Vector2, velocity: Vector2, wind: Vector2, forecast: Vect
 	_brake_glow.visible = braking
 	_set_wind_heading(_current_wind, wind)
 	_set_wind_heading(_forecast_wind, forecast)
+	_current_indicator.present(wind)
+	_forecast_indicator.present(forecast)
 	var flag_vector := wind if wind.length_squared() > 0.01 else forecast
 	var flag_heading := _wind_heading(flag_vector) if flag_vector.length_squared() > 0.01 else 0.0
 	for flag in _harbor_flags:
@@ -502,6 +506,13 @@ func _build_wind_arrows() -> void:
 		caption.add_theme_constant_override("shadow_offset_y",1)
 		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		legend.add_child(caption)
+		var indicator := WindIndicator.new()
+		indicator.name = "CurrentIndicator" if row == 0 else "ForecastIndicator"
+		indicator.position = Vector2(163,43 + row*60)
+		indicator.forecast = row == 1
+		legend.add_child(indicator)
+		if row == 0: _current_indicator = indicator
+		else: _forecast_indicator = indicator
 
 func _build_hazard() -> void:
 	var warning_material := _material("#f0d089", 0.42, 0.06)
@@ -792,3 +803,34 @@ func _torus(radius: float, thickness: float) -> TorusMesh:
 	mesh.rings = 24
 	mesh.ring_segments = 8
 	return mesh
+
+class WindIndicator extends Node2D:
+	## Canvas arrows are drawn above the legend; world geometry is behind it.
+	var force := Vector2.ZERO
+	var forecast := false
+	var font: Font = FontProfiles.current_font()
+
+	func present(value: Vector2) -> void:
+		if force.is_equal_approx(value): return
+		force = value
+		queue_redraw()
+
+	func _draw() -> void:
+		var ink := Color("#efbd71") if forecast else Color("#62c3b0")
+		var strength := force.length()
+		if strength < 0.1:
+			draw_line(Vector2(-12,0),Vector2(12,0),ink,3)
+			draw_circle(Vector2.ZERO,5,ink,false,2)
+		else:
+			var direction := force.normalized()
+			var tail := -direction * 25.0
+			var tip := direction * 25.0
+			var side := direction.orthogonal() * 7.0
+			var neck := tip - direction * 11.0
+			if forecast:
+				for index in 3:
+					var start := tail.lerp(neck,float(index)/3.0)
+					draw_line(start,tail.lerp(neck,(float(index)+0.62)/3.0),ink,4)
+			else: draw_line(tail,neck,ink,4)
+			draw_colored_polygon(PackedVector2Array([tip,neck+side,neck-side]),ink)
+		draw_string(font,Vector2(42,6),"%d" % roundi(strength),HORIZONTAL_ALIGNMENT_LEFT,-1,18,ink)

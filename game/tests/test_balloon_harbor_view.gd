@@ -51,11 +51,13 @@ func _run() -> void:
 	var delivered_bag: Node3D = world.get_node("DeliveredBag0")
 	_expect(delivered_bag.get_parent() == world and delivered_bag.get_node("BagBody") is MeshInstance3D, "delivered bag is a mailbox-side parcel in the shared harbor world")
 	_expect(view._viewport.has_node("WindLegend/CurrentCaption") and view._viewport.has_node("WindLegend/ForecastCaption"), "fixed wind legend labels current and forecast separately")
+	_expect(view._current_indicator.get_parent() == view._viewport.get_node("WindLegend") and view._forecast_indicator.get_parent() == view._current_indicator.get_parent(), "actual wind indicators render on the legend canvas above its opaque background")
 	var legend_position: Vector3 = view._current_wind.position
 	for edge_position: Vector2 in [Vector2(220,210),Vector2(1080,585)]:
 		view.present(edge_position,Vector2.ZERO,Vector2.UP*42.0,Vector2.DOWN*42.0,0,0.0,false,0.0,true,"noon",0)
 		_expect(view._current_wind.position.is_equal_approx(legend_position), "wind legend stays clear of the header at legal route endpoint %s" % str(edge_position))
 	view.present(Vector2(500,330),Vector2.ZERO,Vector2(30,-30),Vector2(-20,30),0,0.0,false,0.0,true,"noon",0)
+	_expect(view._current_indicator.force == Vector2(30,-30) and view._forecast_indicator.force == Vector2(-20,30), "visible foreground indicators receive the actual current and independent forecast vectors")
 	var wind_base: Vector2 = view._camera.unproject_position(view._current_wind.position)
 	var wind_tip: Vector2 = view._camera.unproject_position(view._current_wind.position + view._current_wind.basis.x)
 	_expect((wind_tip-wind_base).normalized().dot(Vector2(1,-1).normalized()) > 0.999, "diagonal live wind remains aligned with its gameplay vector after projection")

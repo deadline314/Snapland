@@ -1,0 +1,9 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 8.74,
+  "passes": [
+    "PASS: actual safe intro movement and braking with zero formal elapsed, exclusive current tutorial source screenshots"
+  ],
+  "scope": "Actual realtime engine clock;original62-second route and240 process caps;external silent15FPS wall capture,not hardware FPS."
+}

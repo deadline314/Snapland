@@ -1,0 +1,9 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 46.26,
+  "passes": [
+    "PASS: native SG-16 independent keyboard and pointer routes, reduced-motion wind legend, and non-collecting practice"
+  ],
+  "scope": "Actual realtime engine clock;original62-second route and240 process caps;external silent15FPS wall capture,not hardware FPS."
+}

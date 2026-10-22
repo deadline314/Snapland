@@ -1,0 +1,9 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 96.8,
+  "passes": [
+    "PASS: actual fast approach and hazard, recovered ordinary delivery, formal assisted night/reduced ordinary-only replay, natural55-second timeout and complete earned save unchanged"
+  ],
+  "scope": "Actual realtime engine clock;original62-second route and240 process caps;external silent15FPS wall capture,not hardware FPS."
+}

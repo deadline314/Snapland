@@ -1,0 +1,535 @@
+{
+  "scope": "SG16 final evidence, manifest excludes itself",
+  "files": [
+    {
+      "name": "SG-16-final-20261023-actual-release-balloon-initial.png",
+      "bytes": 225858,
+      "sha256": "17cc62a7c1aa2a6fd0bb08b84822495bb08498b33372a9e02705e9572e2f5a09"
+    },
+    {
+      "name": "SG-16-final-20261023-attempt-history.json",
+      "bytes": 3182,
+      "sha256": "0fadec2ab857b6ea658668b08df0345d76c8380b77820cbc110b0905ec13dbe8"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-v2-balloon-delivery-tests.log",
+      "bytes": 113,
+      "sha256": "f5ce2d0e4fe496bebf2ae8578441e361f1bc35168c38a191a78cd655dc7b528a"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-v2-balloon-harbor-presentation-tests.log",
+      "bytes": 122,
+      "sha256": "0f2b2724db687ef14a315cfc41fb080df5bcb3db57f8a6edd056e7089658628a"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-v2-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "07ffae3eed3306639486a94a54675d088297defdcd408a4550ecf47df7b182b5"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-v2-pixel-UI-minigame-tests.log",
+      "bytes": 13937,
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-v2-pixel-UI-shell-tests.log",
+      "bytes": 18023,
+      "sha256": "5a5e6f22942b09975fa41008fb3fe0c6508a66f8757dff41f42a16a26afe4123"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-v2-results.json",
+      "bytes": 730,
+      "sha256": "c84b990820f1843c3c7eb5e5db5a60223071c262ac9de7f6b364cf25e77f8e1c"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-v2-welcome-minigame-tests.log",
+      "bytes": 14439,
+      "sha256": "d7cd2d7c490f68c6c35ce98b7d11cab55841cd2176bd97ec729e2aecb7682c6f"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-wind-balloon-harbor-presentation-tests.log",
+      "bytes": 122,
+      "sha256": "1dd22fdd48ddbd98f5601bf6aa33275ae115058e62f2abd4138a11445255ff25"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-wind-pixel-UI-minigame-tests.log",
+      "bytes": 13937,
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-wind-results.json",
+      "bytes": 370,
+      "sha256": "672f7794a0bf3999286d88cc41fc42bd512e0e5837832ede80ed6bd17a59955f"
+    },
+    {
+      "name": "SG-16-final-20261023-checks-wind-welcome-minigame-tests.log",
+      "bytes": 14439,
+      "sha256": "d7cd2d7c490f68c6c35ce98b7d11cab55841cd2176bd97ec729e2aecb7682c6f"
+    },
+    {
+      "name": "SG-16-final-20261023-ci-94-full.log",
+      "bytes": 46519,
+      "sha256": "fd505e04330071005a2f712a0d5f895767f7e4e2e8e2847802a3ab7e4f745ff0"
+    },
+    {
+      "name": "SG-16-final-20261023-ci-94-runtime.log",
+      "bytes": 46782,
+      "sha256": "793d4cad2a883d9a2d59bdabbd5d5cc4f2eff8a1b6dbc41264dd8304ad8b0408"
+    },
+    {
+      "name": "SG-16-final-20261023-ci-94-verification.json",
+      "bytes": 306,
+      "sha256": "7ad8453a3348f4091e681c537320431d36012a0a6cddaafb59c570d3f5ac5484"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-000-balloon-first-tutorial-1.png",
+      "bytes": 301091,
+      "sha256": "7d71792e7a9f12033e33d050b525c45b2b76fce90f4018535a8cd7f17529a837"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-001-balloon-first-tutorial-2.png",
+      "bytes": 302460,
+      "sha256": "93c6c5f27604bd22ce25169fe153b6eed5e62640be5c3a787f9e76c7afc21e7d"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-002-balloon-first-tutorial-3.png",
+      "bytes": 301008,
+      "sha256": "549b98e68060b7b957fbb675ce9daed4b1385b2284a0d8f21fd2496f273f100b"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-003-balloon-controls-keyboard-first-delivery.png",
+      "bytes": 227325,
+      "sha256": "f8718e1d4a9a56018bac8743cd7d3e5bd0b7f2ec9a5a18a144aeba4ade3827f0"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-004-natural-00-game-001-score-450.png",
+      "bytes": 517512,
+      "sha256": "d48ea793c3f24de5d5092d9a34cf2567a2ddfec36520d3dff21276155ed5c6b6"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-005-balloon-keyboard-precise-result.png",
+      "bytes": 517378,
+      "sha256": "09736306bdd27a3bbb06e27b557f2a3061bce6e456ae686b621b0cd96c2a4cc9"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-006-balloon-controls-pointer-reduced-wind.png",
+      "bytes": 226394,
+      "sha256": "add7fc776d149db67a76e65dbf60f7dab94efea66174144f59b62e28c5c6839d"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-007-balloon-controls-pointer-first-delivery.png",
+      "bytes": 229762,
+      "sha256": "08fc841b3013270a9be6ca771c4aba76c2be901c9201b7c55336aadc043116c4"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-008-natural-01-game-001-score-450.png",
+      "bytes": 445733,
+      "sha256": "45e0f0848ced9ae3e529580f20859b828003df8ad611e0e3e2790b00f457446b"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-captures-009-balloon-controls-pointer-practice-result.png",
+      "bytes": 445834,
+      "sha256": "dac618313b4b8c737f2ccb0eb355c084fd1d5484e444d55442ba33f323429f6f"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-natural-results.json",
+      "bytes": 2002,
+      "sha256": "ab836367e50431d74a95e807536362624b7367a43d405a20a9ec89b47fdc6aee"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-result.json",
+      "bytes": 331,
+      "sha256": "6bf96b1206c72404f0e280021143a72c0e5930cb9f5f55a1814cf0c739334372"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-result.log",
+      "bytes": 24839,
+      "sha256": "f1e01d1ec0faa81a66d86e840080f65dd67b77d982b63838f7f231bc51954142"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-review-1.jpg",
+      "bytes": 193031,
+      "sha256": "56fd73e347012f7044f395dbe40667d894b46b48a88d79810f6a6a210bff4a53"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-review-2.jpg",
+      "bytes": 117944,
+      "sha256": "296de8a1744c762e4e862063180d6228880c5bbb1e80bcabe901b43cc08cb79e"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-source-provenance.json",
+      "bytes": 963,
+      "sha256": "14c645701680693443c730114b95b5f4c9f6a222675dd657660c33af61762911"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace-video-metadata.json",
+      "bytes": 209,
+      "sha256": "1268d906a06c9e29614b4dab1868472d4d4eb5048143fc89dc349e1f10627615"
+    },
+    {
+      "name": "SG-16-final-20261023-controls-trace.mp4",
+      "bytes": 8745144,
+      "sha256": "bbbcf15c2ba42b29e312148f182086210e7c450210fcee9147fb1e1da9babd74"
+    },
+    {
+      "name": "SG-16-final-20261023-delivery-counted-balloon-delivery-tests.log",
+      "bytes": 113,
+      "sha256": "f5ce2d0e4fe496bebf2ae8578441e361f1bc35168c38a191a78cd655dc7b528a"
+    },
+    {
+      "name": "SG-16-final-20261023-delivery-counted-results.json",
+      "bytes": 121,
+      "sha256": "ed0d4b67724b6325c93ebc830b867e526c2443014d711637be2306e550a0d45d"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-captures-game-001-first-step.png",
+      "bytes": 301633,
+      "sha256": "9fe2611840fbe00452a25e13cddcb35a17d4658e538f30b8c73f9dd68a2f22ec"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-captures-game-001-help-reopened.png",
+      "bytes": 119193,
+      "sha256": "9d448507359bc1d9718393bc33ab217c405f705ffb60eadf4a79ccec7d987a93"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-captures-game-001-help-step-01.png",
+      "bytes": 119598,
+      "sha256": "6f96d788e4d817a588e4ee89f197bf6703e313b4a594398142764cb16b3e75b0"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-captures-game-001-private-help-step-01.png",
+      "bytes": 119527,
+      "sha256": "c04e480ea7448be1cb405c6e4991db3dc05c82fe25bf38bfae42cfa32cd50ef5"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-captures-game-001-step-02.png",
+      "bytes": 301989,
+      "sha256": "b217e8c98009b561038f718afa7fd179acacd68f77961fe4720a2dee5bdf9220"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-captures-game-001-step-03.png",
+      "bytes": 353479,
+      "sha256": "4252475a48a117096dd87ea31d974a59a3681ce9f5716115cf54dc4e1a7dd5aa"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-result.json",
+      "bytes": 143,
+      "sha256": "659aea9291d6df67f8a4093293da966e434a1880e8d59e9c18819eb06fd12af8"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-result.log",
+      "bytes": 14597,
+      "sha256": "a7f5a025e18e8c17db85ed07537906a59306d12fa823f2ed8ad1f7634d4998dc"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-review-1.jpg",
+      "bytes": 196361,
+      "sha256": "7cdaaded277196424057405eeb078f64d098811da6b663178cc6818a44899357"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-final-source-provenance.json",
+      "bytes": 264,
+      "sha256": "baf200722bc3d0a87fb80ca41f9622b165447875185ec3703d31b670f7e70622"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-import-result.json",
+      "bytes": 50,
+      "sha256": "97ba8f778bef43e15d4cd61b4b9946b884c9fc76cf9b795d022ec18941da7a89"
+    },
+    {
+      "name": "SG-16-final-20261023-lesson-import-result.log",
+      "bytes": 4040,
+      "sha256": "47ac4610562536936ac8c21f0f75967c9013384ad6408a7341dcc81a9254700b"
+    },
+    {
+      "name": "SG-16-final-20261023-mini-metro-official-capture.jpg",
+      "bytes": 38408,
+      "sha256": "3d3afdb1321b102dbba570227c9bbc2ce6ce96ce22e3aad21bde37bbb503757a"
+    },
+    {
+      "name": "SG-16-final-20261023-nintendo-official-capture.jpg",
+      "bytes": 61567,
+      "sha256": "879b2d5aeda554942a0523ba6d6e78c2ac885e1e5d1fb8318c6372f86fabc01d"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-000-balloon-fast-approach.png",
+      "bytes": 225878,
+      "sha256": "f659dbdcfc6e1dc28e0fc2285c898bb8ce10b68055b540e07ec0e7db85b50f30"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-001-balloon-hazard-recovery.png",
+      "bytes": 222421,
+      "sha256": "d757440ee6aee50b3a7973e2ef15820a72c23acc9e0e62b198a912df06614eb5"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-002-balloon-controls-pointer-first-delivery.png",
+      "bytes": 234382,
+      "sha256": "e6ade7f9f89799c28cae3324205e7c7e9acf326473ba2473b6a520c2fc2a8c40"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-003-natural-00-game-001-score-450.png",
+      "bytes": 518018,
+      "sha256": "81ee73acf09645cbac61af8968bfa3e71137c9a20d00a57a2e63feff51c6ec34"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-004-balloon-ordinary-after-errors-result.png",
+      "bytes": 517783,
+      "sha256": "a88797a162a2ede2d3063ffcf2c500025720461edc7b0e16aef140ea4a61f867"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-005-balloon-assisted-night-start.png",
+      "bytes": 198029,
+      "sha256": "22480e2750965b7d378a03541c7c1ff6826a27566a29176fdc19d6e3d4e5cb29"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-006-balloon-controls-pointer-first-delivery.png",
+      "bytes": 196720,
+      "sha256": "f9913be7106c6265a7750d16c64e500a999e0cb4cb823dab0e7820ff720d41ce"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-007-natural-01-game-001-score-450.png",
+      "bytes": 430420,
+      "sha256": "4de1a674a463d45920de43f9e49f2fe546f018af23c3caa66eb3cdba4f211c62"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-008-balloon-assisted-night-ordinary-result.png",
+      "bytes": 430420,
+      "sha256": "4de1a674a463d45920de43f9e49f2fe546f018af23c3caa66eb3cdba4f211c62"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-009-natural-02-game-001-score-0.png",
+      "bytes": 371309,
+      "sha256": "79c11b3521025a401fcd0821d9a6b0a2143475b68d5bcd85a5d89dc85342bf8d"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-captures-010-balloon-natural-timeout-result.png",
+      "bytes": 371309,
+      "sha256": "79c11b3521025a401fcd0821d9a6b0a2143475b68d5bcd85a5d89dc85342bf8d"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-natural-results.json",
+      "bytes": 3291,
+      "sha256": "28167ff77a8f2eef441dcd6c3e2a69ac7aa3f018ffae7227bcc3a87c48d2f8a9"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-result.json",
+      "bytes": 394,
+      "sha256": "5f27c76c5d8ae139c8d049694c00350ba59f09e754578205079073d3a3225d8e"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-result.log",
+      "bytes": 25132,
+      "sha256": "9a1743a002113f27e5a88b72afd4435247e9a05b16dde492d420814b8d68d992"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-review-1.jpg",
+      "bytes": 178130,
+      "sha256": "815a9054183092186dc0c49925ffd98c7a1b510ea57278ea33a9cb91775183a2"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-review-2.jpg",
+      "bytes": 135462,
+      "sha256": "c1d4ae578f4b3d34f6526d212f31cfdfe4dceaba5277c6b5dd273e175cc0e25b"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-source-provenance.json",
+      "bytes": 1203,
+      "sha256": "54ee610f375aa9a62d1e29556d17aa137ce57b701010b48b5507cc02892f86ce"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted-video-metadata.json",
+      "bytes": 210,
+      "sha256": "b57fae4199e53bd26e22c2bded6274a43d150a2dbb27869f663df41bc56f5b9d"
+    },
+    {
+      "name": "SG-16-final-20261023-outcomes-counted.mp4",
+      "bytes": 16391224,
+      "sha256": "5c2d9dd3b0e45669430fd0e397e5286ee10dfeeffc1a23bb76f967a6c628af4b"
+    },
+    {
+      "name": "SG-16-final-20261023-python-design-final.log",
+      "bytes": 4946,
+      "sha256": "1636088b06149785169d486091fbb83c9b3f12300f39826db25bf00c72c9ce2c"
+    },
+    {
+      "name": "SG-16-final-20261023-python-final.log",
+      "bytes": 22303,
+      "sha256": "a84f6ce9b10fbe5a12be17bf003750595fd2271295b627e639c00f281df7f40a"
+    },
+    {
+      "name": "SG-16-final-20261023-python-tests.log",
+      "bytes": 23212,
+      "sha256": "f641e768ead1726023ff8896ab638f9edf9272a09c600a924cd15bda9b26503a"
+    },
+    {
+      "name": "SG-16-final-20261023-reference-images.json",
+      "bytes": 973,
+      "sha256": "31a8de47cc6158821783754b010a30efa6da5b960d666d724c036d7863f74e84"
+    },
+    {
+      "name": "SG-16-final-20261023-release-counted-build.json",
+      "bytes": 102848,
+      "sha256": "7394b69d0936a74a90104e0166443174c002da6e502aa97408c558bc1596c36a"
+    },
+    {
+      "name": "SG-16-final-20261023-release-counted-export.log",
+      "bytes": 120339,
+      "sha256": "3a4fb24299b11d7bfd0c1aa1e8f999735f90cb6022930729c026e1758a035ad3"
+    },
+    {
+      "name": "SG-16-final-20261023-release-counted-import.log",
+      "bytes": 67709,
+      "sha256": "a485ce2e0d15d9054072ad386ef657a13ccc00773ec9cc354191d78b895929ca"
+    },
+    {
+      "name": "SG-16-final-20261023-release-smoke-final-result.json",
+      "bytes": 73,
+      "sha256": "d016597f8ee41828fc9194ee12a9992095ff63328d546e324850acd31ee19314"
+    },
+    {
+      "name": "SG-16-final-20261023-release-smoke-final-result.log",
+      "bytes": 6850,
+      "sha256": "15d017e01de292d8cc6c56e66fee6cf6e40a432fa9d4340a3db91f31c0e7f9c2"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-captures-000-balloon-first-tutorial-1.png",
+      "bytes": 301027,
+      "sha256": "e537650cda85a3da068ea1f01787b46775e435d4b0e3e41a1e0875ab1f512f9a"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-captures-001-balloon-first-tutorial-2.png",
+      "bytes": 302321,
+      "sha256": "a355683e06d7f3a5ea90746f5147fda7e0e5b3c42d90f9c8424079c253b22537"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-captures-002-balloon-first-tutorial-3.png",
+      "bytes": 300860,
+      "sha256": "7e22a80b61094cda8bdb235fe653effed632828701f2982677aff89b2838be28"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-captures-003-balloon-controls-retry-reset.png",
+      "bytes": 230388,
+      "sha256": "a5de38aa52586a0bfe061f005cf69d4d3093f17fb248de70357ba1c1fbd2aae9"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-result.json",
+      "bytes": 414,
+      "sha256": "508fa8b32eeab0f2e8fc180688dc256d8030f2230d06aafdbab0bf996b9c21a1"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-result.log",
+      "bytes": 19619,
+      "sha256": "3ba795771e093e898c162060457ecb771a456e7ffcb2b5f49b29e5f81f72ff06"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-review-1.jpg",
+      "bytes": 135702,
+      "sha256": "ac6125be3a3c3399467504b1d4787947670762e42632f19bcfc02bbb55aa4a91"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-source-provenance.json",
+      "bytes": 963,
+      "sha256": "81df52d862603b669ee0e303206826ded44324ba4cc7ec8e8fc69fc71c078d9a"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2-video-metadata.json",
+      "bytes": 209,
+      "sha256": "e58344eda91be3becdf61abe17cc7a630adf614a3c8e761661ff232a04b27556"
+    },
+    {
+      "name": "SG-16-final-20261023-retry-v2.mp4",
+      "bytes": 6354708,
+      "sha256": "50594c0ca653dd5bbb909224bd0b7895a3daf05263c544a7107c35f772f0da7c"
+    },
+    {
+      "name": "SG-16-final-20261023-sources-and-diagnostics.zip",
+      "bytes": 9398589,
+      "sha256": "f6dc7d2b19dcb2fdbbe4fe4dde5e32fc3d9e6606f0ba719c6de125cb608837d8"
+    },
+    {
+      "name": "SG-16-final-20261023-sources-v2-captures-000-balloon-safe-intro.png",
+      "bytes": 225387,
+      "sha256": "b26f2062a203acdadb03d5181718529a8f5734b3a2c67e37c8d162e277354291"
+    },
+    {
+      "name": "SG-16-final-20261023-sources-v2-captures-001-balloon-safe-brake.png",
+      "bytes": 224838,
+      "sha256": "8c17b2759f120e01ebc8b1dcc12d5d0e443fb7e7e0c0958066e0b977b360aa79"
+    },
+    {
+      "name": "SG-16-final-20261023-sources-v2-result.json",
+      "bytes": 331,
+      "sha256": "a8a0849fe156588e9dc72cce3eaf10f65c6b3eae60755180ee3d04c653b9a149"
+    },
+    {
+      "name": "SG-16-final-20261023-sources-v2-result.log",
+      "bytes": 14974,
+      "sha256": "303cc0f5e01c6cda58548cd77d81f7ec84ef0385c7aaff41a79ce55c183488a6"
+    },
+    {
+      "name": "SG-16-final-20261023-sources-v2-review-1.jpg",
+      "bytes": 74297,
+      "sha256": "ee96dc17fdf03b761a29a2e59b86f7215672a05ba58c2f358389883aaffd2ee5"
+    },
+    {
+      "name": "SG-16-final-20261023-sources-v2-source-provenance.json",
+      "bytes": 1209,
+      "sha256": "0101833d7bd8b868a326ac59913ca8a24785e36f329fd88794408082741fa2e9"
+    },
+    {
+      "name": "SG-16-final-20261023-twelve-game-comparison-1.jpg",
+      "bytes": 167655,
+      "sha256": "543277c3f66996362cebed1ba88d7a747c5815b49f6f2577de347154c6bd726a"
+    },
+    {
+      "name": "SG-16-final-20261023-twelve-game-comparison-2.jpg",
+      "bytes": 179526,
+      "sha256": "4e96f3a18018c94d3bfdb4820f023d06e8390110da79fb809179677b61f48e63"
+    },
+    {
+      "name": "SG-16-final-20261023-twelve-game-source-sha256.json",
+      "bytes": 4050,
+      "sha256": "9f776f3458edab3f7913ecddfbc8e5256f8c97d3cf4aa60252d3bf7847092746"
+    },
+    {
+      "name": "SG-16-final-20261023-updated-tutorial-sources.json",
+      "bytes": 1115,
+      "sha256": "0e3cf220807d123844dcac888357bb95eb3ae63ed337df64b711987fc6bbbaad"
+    },
+    {
+      "name": "SG-16-final-20261023-verification.json",
+      "bytes": 8146,
+      "sha256": "978f4392d1c1699c443ec7933e12d2eb39364cea9fef4b1c209d66f8b5a2a8b9"
+    },
+    {
+      "name": "SG-16-final-20261023-wind-probe-v2-after-actual-subviewport.png",
+      "bytes": 202402,
+      "sha256": "92f0b426855ad34be3474af66e499060f302713355ee24fa6a6a76761705c80d"
+    },
+    {
+      "name": "SG-16-final-20261023-wind-probe-v2-before-actual-subviewport.png",
+      "bytes": 200892,
+      "sha256": "81723a6ea48521afcd2f5a84c93c4841a78511bcffb010f5468a1581a0019e99"
+    },
+    {
+      "name": "SG-16-final-20261023-wind-probe-v2-pixel-comparison.json",
+      "bytes": 505,
+      "sha256": "7688928375c3ea3c98b9312ae6d5021bdc0356a3ff5a65e981f41615eed22cc7"
+    },
+    {
+      "name": "SG-16-final-20261023-wind-probe-v2-result.json",
+      "bytes": 346,
+      "sha256": "9a6e5daa87a9577dfb950e7c7f7eda5837a4ea980546e77ea47306160e9727b5"
+    },
+    {
+      "name": "SG-16-final-20261023-wind-probe-v2-result.log",
+      "bytes": 500,
+      "sha256": "0c70942aa0dc1b4fa883d3df04c25d5c8645aa4e84f90ce72341d88031ac8b4f"
+    },
+    {
+      "name": "SG-16-final-20261023-wind-probe-v2-source-provenance.json",
+      "bytes": 374,
+      "sha256": "18e40c4bde87453fdbf108d86db4f8dae8cbe615e458857da1611c97543a743d"
+    }
+  ]
+}

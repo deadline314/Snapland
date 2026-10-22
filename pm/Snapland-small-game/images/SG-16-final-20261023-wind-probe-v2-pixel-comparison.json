@@ -1,0 +1,18 @@
+[
+  {
+    "capture": "/workspace/work/Snapland-character/work/balloon-final-20261022/wind-probe-v2/before-actual-subviewport.png",
+    "direction_pixels": [
+      0,
+      0
+    ],
+    "source": "res://work/balloon-final-20261022/before-wind-harbor.gd"
+  },
+  {
+    "capture": "/workspace/work/Snapland-character/work/balloon-final-20261022/wind-probe-v2/after-actual-subviewport.png",
+    "direction_pixels": [
+      232,
+      174
+    ],
+    "source": "res://game/minigames/balloon_harbor_view.gd"
+  }
+]

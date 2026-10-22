@@ -1,0 +1,22 @@
+{
+  "base": "94de1a95373007f17cd9abf7692b795d025c9bc6",
+  "diagnostic_changes": "dependency paths and private Main screenshot observer only; returning-player tutorial fixture and station relocation; no gameplay thresholds or clocks changed",
+  "sources": {
+    "game/tests/native_review.gd": {
+      "source_sha256": "b2221f091cecf826f1db1947fcb91de3fe42eafe4b17e5cb38a79eadc3eace78",
+      "copy_sha256": "b2b16af6d5cf93e441835c02804ff2e3bab2e7a08548cbbd93139c036fbc0b6d"
+    },
+    "game/tests/native_balloon_harbor_review.gd": {
+      "source_sha256": "548e96746f6968d0ba47bb4184736526e0c5a9e2aa00fbc30f553978f94234ff",
+      "copy_sha256": "8cf3205659c4708998317816264272fa3a3ab0dc085e8edd75230e676271ee5d"
+    },
+    "game/tests/native_balloon_controls_review.gd": {
+      "source_sha256": "317830c196cf9d7a8d873d5daa04d86c9fcd1943baff2ed99a87b215e403c43e",
+      "copy_sha256": "e8f6d77f6398c6bd7bfe5829fe3cdce13573f654fef38466e5963f51043acdd5"
+    },
+    "game/tests/native_balloon_outcomes_review.gd": {
+      "source_sha256": "dcbbedb595b72f5dd39c6716bdc16de247428524f47818c6a731b24d67ec4597",
+      "copy_sha256": "61000f707a3fbfde1afae0c805a61fc57680019e7db5fb6006a357e3fdbad935"
+    }
+  }
+}

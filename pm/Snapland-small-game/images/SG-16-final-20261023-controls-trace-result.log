@@ -1,0 +1,216 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+[park_world] scenery meshes: 1182, nodes: 2094
+INPUT: game-001 開始遊玩 target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1932/@VBoxContainer@1933/@HBoxContainer@1934/InviteCard/@MarginContainer@1935/@VBoxContainer@1936/@HBoxContainer@1938/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1932/@VBoxContainer@1933/@HBoxContainer@1934/InviteCard/@MarginContainer@1935/@VBoxContainer@1936/@HBoxContainer@1938/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/000-balloon-first-tutorial-1.png","frame":13,"request":"balloon-first-tutorial-1.png","size":[1280,720],"window":[1280,720]}
+INPUT: next first lesson page target=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1989 rect=[P: (372.0, 612.0), S: (92.0, 48.0)] pointer=(418.0, 636.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1989 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/001-balloon-first-tutorial-2.png","frame":17,"request":"balloon-first-tutorial-2.png","size":[1280,720],"window":[1280,720]}
+INPUT: next first lesson page target=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1989 rect=[P: (372.0, 612.0), S: (92.0, 48.0)] pointer=(418.0, 636.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1989 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/002-balloon-first-tutorial-3.png","frame":21,"request":"balloon-first-tutorial-3.png","size":[1280,720],"window":[1280,720]}
+INPUT: begin first balloon lesson target=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1997 rect=[P: (808.0, 612.0), S: (112.0, 48.0)] pointer=(864.0, 636.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/TutorialPanel/TutorialCard/@MarginContainer@1946/@VBoxContainer@1947/@HFlowContainer@1982/@Button@1997 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+BALLOON ROUTE TRACE: pointer=false wp=0 position=(250.7254, 380.0) target=(520.0, 305.0) velocity=(7.0, 0.0) phase=0.104 events=[]
+BALLOON ROUTE TRACE: pointer=false wp=1 position=(489.6428, 299.1308) target=(820.0, 480.0) velocity=(62.84867, 0.0) phase=2.717 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }]
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/003-balloon-controls-keyboard-first-delivery.png","frame":50,"request":"balloon-controls-keyboard-first-delivery.png","size":[1280,720],"window":[1280,720]}
+BALLOON ROUTE TRACE: pointer=false wp=2 position=(771.0035, 244.5629) target=(820.0, 480.0) velocity=(-132.0903, 107.1763) phase=9.339 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }]
+BALLOON ROUTE TRACE: pointer=false wp=3 position=(850.8945, 271.8385) target=(820.0, 480.0) velocity=(201.6382, -164.1403) phase=10.405 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }]
+BALLOON ROUTE TRACE: pointer=false wp=4 position=(981.7493, 507.233) target=(820.0, 480.0) velocity=(86.61585, 135.1988) phase=14.639 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }]
+BALLOON ROUTE TRACE: pointer=false wp=5 position=(850.2899, 507.5876) target=(1080.0, 320.0) velocity=(-50.02749, 0.0) phase=18.158 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }, { "key": "mailbag_2", "label": "第 2 站・郵袋送達", "amount": 150, "count": 1 }]
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/004-natural-00-game-001-score-450.png","frame":207,"request":"natural-00-game-001-score-450.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/005-balloon-keyboard-precise-result.png","frame":208,"request":"balloon-keyboard-precise-result.png","size":[1280,720],"window":[1280,720]}
+BALLOON CASE: keyboard-standard score=450 mistakes=0 devil=true schema=["game_id", "success", "devil", "score", "assisted", "practice", "mistakes", "score_summary"]
+INPUT: return to harbor park target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton rect=[P: (932.0, 534.0), S: (200.0, 64.0)] pointer=(1032.0, 566.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open optional practice modes target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2072/@VBoxContainer@2073/@HBoxContainer@2074/InviteCard/@MarginContainer@2075/@VBoxContainer@2076/@HBoxContainer@2078/InviteRules rect=[P: (655.0, 395.0), S: (128.0, 47.0)] pointer=(719.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2072/@VBoxContainer@2073/@HBoxContainer@2074/InviteCard/@MarginContainer@2075/@VBoxContainer@2076/@HBoxContainer@2078/InviteRules button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: game-001 練習操作 target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/@Button@2105 rect=[P: (584.0, 534.0), S: (108.0, 64.0)] pointer=(638.0, 566.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/@Button@2105 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+WIND PIXELS: row=0 visible_direction_pixels=232
+WIND PIXELS: row=1 visible_direction_pixels=172
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/006-balloon-controls-pointer-reduced-wind.png","frame":223,"request":"balloon-controls-pointer-reduced-wind.png","size":[1280,720],"window":[1280,720]}
+BALLOON ROUTE TRACE: pointer=true wp=0 position=(250.5655, 380.0) target=(520.0, 305.0) velocity=(5.04, 0.0) phase=0.112 events=[]
+BALLOON ROUTE TRACE: pointer=true wp=1 position=(470.2878, 319.9846) target=(820.0, 480.0) velocity=(57.98093, -16.47808) phase=2.443 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }]
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/007-balloon-controls-pointer-first-delivery.png","frame":244,"request":"balloon-controls-pointer-first-delivery.png","size":[1280,720],"window":[1280,720]}
+BALLOON ROUTE TRACE: pointer=true wp=2 position=(779.6256, 270.5635) target=(820.0, 480.0) velocity=(238.8835, -45.54118) phase=3.860 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }]
+BALLOON ROUTE TRACE: pointer=true wp=3 position=(878.6242, 269.9753) target=(820.0, 480.0) velocity=(247.67, 1.617024) phase=4.243 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }]
+BALLOON ROUTE TRACE: pointer=true wp=4 position=(996.6706, 501.5505) target=(820.0, 480.0) velocity=(42.64799, 251.1449) phase=5.414 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }]
+BALLOON ROUTE TRACE: pointer=true wp=5 position=(861.2075, 519.5578) target=(1080.0, 320.0) velocity=(-60.56269, -12.88814) phase=7.948 events=[{ "key": "mailbag_1", "label": "第 1 站・郵袋送達", "amount": 150, "count": 1 }, { "key": "mailbag_2", "label": "第 2 站・郵袋送達", "amount": 150, "count": 1 }]
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/008-natural-01-game-001-score-450.png","frame":311,"request":"natural-01-game-001-score-450.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/balloon-final-20261022/controls-trace/captures/009-balloon-controls-pointer-practice-result.png","frame":312,"request":"balloon-controls-pointer-practice-result.png","size":[1280,720],"window":[1280,720]}
+BALLOON CASE: pointer-assisted-reduced-practice score=450 mistakes=0 devil=false schema=["game_id", "success", "devil", "score", "assisted", "practice", "mistakes", "score_summary"]; saved collections unchanged
+PASS: native SG-16 independent keyboard and pointer routes, reduced-motion wind legend, and non-collecting practice
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1323)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:31)
+WARNING: ParkWorld: traveller action 'celebrate' has no authored direction in res://assets/characters/complete-animation-regions.json; using the three-frame built-in pose fallback.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_missing_avatar_action_once (res://game/world/park_world.gd:2405)
+         [1] play_action (res://game/world/park_world.gd:2360)
+         [2] _close (res://game/main.gd:559)
+         [3] _native_click_button (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:563)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _refresh_avatar_texture (res://game/world/park_world.gd:2456)
+         [2] play_action (res://game/world/park_world.gd:2367)
+         [3] _close (res://game/main.gd:559)
+         [4] _native_click_button (res://work/balloon-final-20261022/controls-trace/native_balloon_controls_review.gd:563)

@@ -1,0 +1,9 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 24.27,
+  "passes": [
+    "PASS: actual first tutorial and paused/resumed confirmed retry, exact signal-time reset and original0.20-second post-click bound"
+  ],
+  "scope": "Fixed60FPS simulation for original0.20-second post-click retry contract;original62-second route and240 process caps. External silent15FPS wall capture is not realtime simulation or hardware FPS."
+}

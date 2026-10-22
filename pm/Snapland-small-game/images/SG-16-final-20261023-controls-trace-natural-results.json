@@ -1,0 +1,77 @@
+[
+  {
+    "assisted": false,
+    "devil": true,
+    "game_id": "game-001",
+    "mistakes": 0,
+    "observed_frame": 207,
+    "observed_process_id": 662,
+    "observer_only": true,
+    "practice": false,
+    "score": 450,
+    "score_summary": {
+      "label": "郵袋交付分",
+      "qualification_text": "三站全送達、零失誤，已達成小惡魔條件。",
+      "rows": [
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_1",
+          "label": "第 1 站・郵袋送達"
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_2",
+          "label": "第 2 站・郵袋送達"
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_3",
+          "label": "第 3 站・郵袋送達"
+        }
+      ],
+      "rule": "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站得普通拍貼；未輔助且零失誤才得小惡魔拍貼。",
+      "total": 450
+    },
+    "success": true
+  },
+  {
+    "assisted": true,
+    "devil": false,
+    "game_id": "game-001",
+    "mistakes": 0,
+    "observed_frame": 311,
+    "observed_process_id": 662,
+    "observer_only": true,
+    "practice": true,
+    "score": 450,
+    "score_summary": {
+      "label": "郵袋交付分",
+      "rows": [
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_1",
+          "label": "第 1 站・郵袋送達"
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_2",
+          "label": "第 2 站・郵袋送達"
+        },
+        {
+          "amount": 150,
+          "count": 1,
+          "key": "mailbag_3",
+          "label": "第 3 站・郵袋送達"
+        }
+      ],
+      "rule": "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站得普通拍貼；未輔助且零失誤才得小惡魔拍貼。",
+      "total": 450
+    },
+    "success": true
+  }
+]

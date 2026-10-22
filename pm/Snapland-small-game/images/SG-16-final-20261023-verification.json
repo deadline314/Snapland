@@ -1,0 +1,208 @@
+{
+  "starting_commit": "94de1a95373007f17cd9abf7692b795d025c9bc6",
+  "client_delivery_date": "2026-10-23 Asia/Taipei",
+  "scope": "SG16 actual game001 acceptance only. Not full ART20/21, hardware performance, human feel, hearing or Windows acceptance.",
+  "core_checks": {
+    "checks-v2": [
+      {
+        "name": "welcome minigame tests",
+        "exit": 0,
+        "seconds": 80.69,
+        "errors": 0,
+        "error": null
+      },
+      {
+        "name": "balloon harbor presentation tests",
+        "exit": 0,
+        "seconds": 0.36,
+        "errors": 0,
+        "error": null
+      },
+      {
+        "name": "balloon delivery tests",
+        "exit": 0,
+        "seconds": 2.22,
+        "errors": 0,
+        "error": null
+      },
+      {
+        "name": "main scene integration tests",
+        "exit": 0,
+        "seconds": 24.68,
+        "errors": 0,
+        "error": null
+      },
+      {
+        "name": "pixel UI shell tests",
+        "exit": 0,
+        "seconds": 49.27,
+        "errors": 0,
+        "error": null
+      },
+      {
+        "name": "pixel UI minigame tests",
+        "exit": 0,
+        "seconds": 6.49,
+        "errors": 0,
+        "error": null
+      }
+    ],
+    "checks-wind": [
+      {
+        "name": "welcome minigame tests",
+        "exit": 0,
+        "seconds": 75.55,
+        "errors": 0,
+        "error": null
+      },
+      {
+        "name": "balloon harbor presentation tests",
+        "exit": 0,
+        "seconds": 0.34,
+        "errors": 0,
+        "error": null
+      },
+      {
+        "name": "pixel UI minigame tests",
+        "exit": 0,
+        "seconds": 6.59,
+        "errors": 0,
+        "error": null
+      }
+    ],
+    "delivery-counted": [
+      {
+        "name": "balloon delivery tests",
+        "exit": 0,
+        "seconds": 2.04,
+        "errors": 0,
+        "error": null
+      }
+    ]
+  },
+  "python": "143/143 final full suite; earlier single catalog alignment failure retained, fixed both runtime and source design strings,39design tests also pass.",
+  "final_native": {
+    "controls-trace": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 46.26,
+      "passes": [
+        "PASS: native SG-16 independent keyboard and pointer routes, reduced-motion wind legend, and non-collecting practice"
+      ],
+      "scope": "Actual realtime engine clock;original62-second route and240 process caps;external silent15FPS wall capture,not hardware FPS."
+    },
+    "outcomes-counted": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 96.8,
+      "passes": [
+        "PASS: actual fast approach and hazard, recovered ordinary delivery, formal assisted night/reduced ordinary-only replay, natural55-second timeout and complete earned save unchanged"
+      ],
+      "scope": "Actual realtime engine clock;original62-second route and240 process caps;external silent15FPS wall capture,not hardware FPS."
+    },
+    "retry-v2": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 24.27,
+      "passes": [
+        "PASS: actual first tutorial and paused/resumed confirmed retry, exact signal-time reset and original0.20-second post-click bound"
+      ],
+      "scope": "Fixed60FPS simulation for original0.20-second post-click retry contract;original62-second route and240 process caps. External silent15FPS wall capture is not realtime simulation or hardware FPS."
+    },
+    "sources-v2": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 8.74,
+      "passes": [
+        "PASS: actual safe intro movement and braking with zero formal elapsed, exclusive current tutorial source screenshots"
+      ],
+      "scope": "Actual realtime engine clock;original62-second route and240 process caps;external silent15FPS wall capture,not hardware FPS."
+    },
+    "lesson-final": {
+      "case": "lesson-final",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 41.53,
+      "passes": [
+        "PASS: native tutorial lifecycle game-001"
+      ]
+    }
+  },
+  "wind_comparison": [
+    {
+      "capture": "/workspace/work/Snapland-character/work/balloon-final-20261022/wind-probe-v2/before-actual-subviewport.png",
+      "direction_pixels": [
+        0,
+        0
+      ],
+      "source": "res://work/balloon-final-20261022/before-wind-harbor.gd"
+    },
+    {
+      "capture": "/workspace/work/Snapland-character/work/balloon-final-20261022/wind-probe-v2/after-actual-subviewport.png",
+      "direction_pixels": [
+        232,
+        174
+      ],
+      "source": "res://game/minigames/balloon_harbor_view.gd"
+    }
+  ],
+  "source_sha256": {
+    "game/minigames/session.gd": "eb20de19627e452c50b1fbfbdeb8f20c68fa999fbded3faffc859e7d3756926f",
+    "game/minigames/balloon_harbor_view.gd": "eac8f1ea0b7979e5f20610aade636a8905f11c5e71d18fa1dab5db7db3e0bff0",
+    "game/data/welcome_games.json": "d54f6d582aae09b85209f04873593c47df6a44aac3d346b5fd2c1817e59ad63b",
+    "game/data/tutorials.json": "db0e38eb69bcebfe6e8ccb3c6590d543b43330731f0f68dbc608e82f4f651dc7",
+    "game/tests/test_balloon.gd": "85186ab422de926eb42b6c07b65d67bba33770c5aff83c6d8f942e4f81f0053d",
+    "game/tests/test_balloon_harbor_view.gd": "e9bfd1e010c7ff04caaf986d804449ebe44c62f10abe1f73bae7a6c66eee59da",
+    "game/tests/test_minigames.gd": "5b41468344082a480972a94b878aef7dc0de52df41ef4f0328e662198e51ad92",
+    "game/tests/native_balloon_controls_review.gd": "317830c196cf9d7a8d873d5daa04d86c9fcd1943baff2ed99a87b215e403c43e",
+    "game/tests/native_balloon_outcomes_review.gd": "dcbbedb595b72f5dd39c6716bdc16de247428524f47818c6a731b24d67ec4597",
+    "game/tests/native_balloon_outcomes_review.tscn": "af485f62c2d79440b4ef90a2c248a8bb728bac87cea8e63f1ad2b5c42282ba53",
+    "game/tests/native_balloon_lesson_capture_review.gd": "d1b1358ba675628e18a061d00d44f8cd1d212f80f81c3e8f62aa4265b6c3c0b6",
+    "game/tests/native_balloon_lesson_capture_review.tscn": "dbb56c423377cf37b93f59496104bfca4fe433dde75c8448263aeba19da7a5ad",
+    "assets/ui/tutorials/game-001-step-01.png": "b26f2062a203acdadb03d5181718529a8f5734b3a2c67e37c8d162e277354291",
+    "assets/ui/tutorials/game-001-step-02.png": "8c17b2759f120e01ebc8b1dcc12d5d0e443fb7e7e0c0958066e0b977b360aa79",
+    "assets/ui/tutorials/game-001-step-03.png": "09736306bdd27a3bbb06e27b557f2a3061bce6e456ae686b621b0cd96c2a4cc9"
+  },
+  "review_scope": "All listed final capture contacts and key full-size result/tutorial images viewed; final input videos fully decoded, not continuous watching. Real-clock controls/outcomes at external silent15FPS; retry and lesson retain fixed60 simulation contract. No new quarter-speed run.",
+  "source_timing": "Final lesson PNGs and clearer tutorial/catalog text changed after controls/outcome films; fresh lesson process/import validates updated lesson. Counted outcome is final per-cause-count UI; zero-mistake controls source predates adding progress_only for mistake rows, which are absent from its precise result. Runtime wind/physics/rules unchanged after final routes.",
+  "release": {
+    "binary": {
+      "file": "Snapland.x86_64",
+      "bytes": 219736728,
+      "sha256": "b9baaf4cfd0173dd0fcdb06cf59b217ecdfb371878a315100898fe1ea179401e"
+    },
+    "source_base": "94de1a95373007f17cd9abf7692b795d025c9bc6",
+    "provenance": "Built from current tracked working-tree runtime bytes including SG16, not a clean94de release. SHA map verified. Tests/tools/work and rejected art excluded.",
+    "steps": [
+      {
+        "step": "import",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 23.01
+      },
+      {
+        "step": "export",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 4.82
+      }
+    ],
+    "smoke": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 25.73,
+      "completion": true
+    },
+    "scope": "Real embedded-PCK Linux executable boots its own Main and all12 initial renderers. Not packaged full balloon input or listening."
+  },
+  "baseline_ci": {
+    "commit": "94de1a95373007f17cd9abf7692b795d025c9bc6",
+    "run": 39742027025,
+    "python": 143,
+    "godot_runs": 93,
+    "godot_passes": 93,
+    "design_scopes": 5,
+    "names_order_original_caps_verified": true,
+    "scope": "Successful delivered SG17 main baseline; excludes current uncommitted SG16 changes."
+  }
+}

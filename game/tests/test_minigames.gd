@@ -1525,7 +1525,7 @@ func _test_all_modes() -> void:
 						assert(balloon_steps < 1100, "Balloon route solver made no bounded progress assist=%s index=%d pos=%s target=%s" % [assisted, s.balloon_delivery_index, s.p, s.target])
 			Input.action_release("ui_right"); Input.action_release("ui_left")
 			if number == 1:
-				assert(results.size() == 1 and results[0].success and results[0].devil, "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
+				assert(results.size() == 1 and results[0].success and bool(results[0].devil) == (not assisted), "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
 			else:
 				var expected_devil: bool = (not assisted) if number in [2, 5, 6, 9, 11, 12] else true
 				assert(results.size() == 1 and results[0].success and results[0].devil == expected_devil, "Reachability game-%03d assist=%s results=%s" % [number, assisted, str(results)])
