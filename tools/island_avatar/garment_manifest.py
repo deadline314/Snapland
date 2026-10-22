@@ -35,6 +35,35 @@ def _bones(value: object, size: list[int], label: str) -> None:
         if any(math.dist(arm[i], arm[i + 1]) < 1 for i in range(2)):
             raise ValueError(f'{label}/{side}: zero-length or subpixel bone')
 
+def _atlas(guide: dict, root: Path, prefix: str = '') -> list[int]:
+    size = _numbers(guide.get(prefix + 'atlas_size'), 2, prefix + 'atlas_size')
+    if any(n != int(n) or n < 1 or n > 4096 for n in size) or math.prod(size) > 8388608:
+        raise ValueError(prefix + 'atlas exceeds the source image budget')
+    name = guide.get(prefix + 'atlas')
+    if not isinstance(name, str) or Path(name).is_absolute() or '..' in Path(name).parts:
+        raise ValueError(prefix + 'atlas must be a repository-relative source')
+    path = root / name
+    if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != guide.get(prefix + 'atlas_sha256'):
+        raise ValueError(prefix + 'garment source changed or is missing; artist review is required')
+    raw = path.read_bytes()
+    if raw[:8] != b'\x89PNG\r\n\x1a\n' or len(raw) < 24 or list(int.from_bytes(raw[i:i + 4], 'big') for i in (16, 20)) != size:
+        raise ValueError(prefix + 'garment PNG dimensions disagree with its source record')
+    return size
+
+def _region(value: object, size: list[int], label: str) -> list[int]:
+    region = _numbers(value, 4, label)
+    if any(n != int(n) for n in region) or min(region[:2]) < 0 or min(region[2:]) < 1 or any(region[i] + region[i + 2] > size[i] for i in range(2)):
+        raise ValueError(label + ': garment cel is outside the atlas')
+    return region[2:]
+
+def _spans(value: object, label: str) -> None:
+    if not isinstance(value, list):
+        raise ValueError(label + ': explicit original foreground spans are required')
+    for span in value:
+        y, lo, hi = _numbers(span, 3, label)
+        if any(n != int(n) for n in (y, lo, hi)) or not 0 <= y < 360 or not 0 <= lo <= hi < 280:
+            raise ValueError(label + ': foreground span outside fixed original canvas')
+
 def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
     if not isinstance(guide, dict):
         raise ValueError('garment guide must be an object')
@@ -44,6 +73,9 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
         raise ValueError('garment outfit must have a stable nonempty identifier')
     if guide.get('actor') != 'traveller' or guide.get('canvas') != [280, 360]:
         raise ValueError('garment wearer must use the fixed traveller canvas')
+    construction = guide.get('construction', 'coat')
+    if construction not in ['coat', 'sleeveless_overlay']:
+        raise ValueError('unsupported garment construction')
     width_scale = _numbers([guide.get('width_scale')], 1, 'width_scale')[0]
     radius = _numbers([guide.get('source_arm_radius')], 1, 'source_arm_radius')[0]
     torso_scale = _numbers(guide.get('torso_scale', [width_scale, width_scale]), 2, 'torso_scale')
@@ -51,19 +83,12 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
         raise ValueError('torso scale is outside authoring bounds')
     if not 0.05 <= width_scale <= 4 or not 1 <= radius <= 128:
         raise ValueError('garment scale or sleeve corridor is outside authoring bounds')
-    atlas_size = _numbers(guide.get('atlas_size'), 2, 'atlas_size')
-    if any(n != int(n) or n < 1 or n > 4096 for n in atlas_size) or math.prod(atlas_size) > 8388608:
-        raise ValueError('atlas exceeds the source image budget')
-    atlas_name = guide.get('atlas')
-    if not isinstance(atlas_name, str) or Path(atlas_name).is_absolute() or '..' in Path(atlas_name).parts:
-        raise ValueError('atlas must be a repository-relative source')
-    atlas = root / atlas_name
-    if not atlas.is_file() or hashlib.sha256(atlas.read_bytes()).hexdigest() != guide.get('atlas_sha256'):
-        raise ValueError('garment source changed or is missing; artist review is required')
     # Header checks avoid an optional imaging dependency in verification/CI.
-    raw = atlas.read_bytes()
-    if raw[:8] != b'\x89PNG\r\n\x1a\n' or len(raw) < 24 or list(int.from_bytes(raw[i:i + 4], 'big') for i in (16, 20)) != atlas_size:
-        raise ValueError('garment PNG dimensions disagree with its source record')
+    atlas_size = _atlas(guide, root)
+    separate_body = any(k.startswith('body_atlas') for k in guide)
+    body_size = _atlas(guide, root, 'body_') if separate_body else atlas_size
+    if construction == 'sleeveless_overlay' and not separate_body:
+        raise ValueError('a sleeveless overlay requires its own uninterrupted torso source')
     expected = {(action, direction, frame) for action, dirs in required.items() for direction, count in dirs.items() for frame in range(count)}
     rows = guide.get('frames')
     if not isinstance(rows, list) or not rows:
@@ -81,38 +106,40 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
         signature = row.get('source_pixel_sha256')
         if not isinstance(signature, str) or len(signature) != 64 or any(c not in '0123456789abcdef' for c in signature):
             raise ValueError(f'{key}: exact original wearer signature is required')
-        region = _numbers(row.get('atlas_region'), 4, f'{key}/atlas_region')
-        if any(n != int(n) for n in region) or min(region[:2]) < 0 or min(region[2:]) < 1 or any(region[i] + region[i + 2] > atlas_size[i] for i in range(2)):
-            raise ValueError(f'{key}: garment cel is outside the atlas')
-        size = region[2:]
-        _point(row.get('source_root'), size, f'{key}/source_root')
+        size = _region(row.get('atlas_region'), atlas_size, f'{key}/atlas_region')
+        torso_size = _region(row.get('body_atlas_region'), body_size, f'{key}/body_atlas_region') if separate_body else size
+        if not separate_body and 'body_atlas_region' in row:
+            raise ValueError(f'{key}: body atlas metadata is required for a separate body region')
+        _point(row.get('source_root'), torso_size, f'{key}/source_root')
         _point(row.get('target_root'), [280, 360], f'{key}/target_root')
         polygon = row.get('body_polygon')
         if not isinstance(polygon, list) or len(polygon) < 3:
             raise ValueError(f'{key}: explicit torso ownership polygon is required')
         for p in polygon:
-            _point(p, size, f'{key}/torso')
-        _bones(row.get('source_arms'), size, f'{key}/source_arms')
-        _bones(row.get('target_arms'), [280, 360], f'{key}/target_arms')
+            _point(p, torso_size, f'{key}/torso')
+        if construction == 'coat':
+            _bones(row.get('source_arms'), size, f'{key}/source_arms')
+            _bones(row.get('target_arms'), [280, 360], f'{key}/target_arms')
+        else:
+            arms = row.get('original_arm_spans')
+            if not isinstance(arms, list) or len(arms) != 2 or any(not arm for arm in arms):
+                raise ValueError(f'{key}: both original arm ownership guides are required')
+            for side, arm in enumerate(arms):
+                _spans(arm, f'{key}/original_arm/{side}')
         order = row.get('part_order')
-        if not isinstance(order, list) or not all(isinstance(part, str) for part in order) or sorted(order) != ['arm_0', 'arm_1', 'body']:
+        expected_order = ['arm_0', 'arm_1', 'body'] if construction == 'coat' else ['body']
+        if not isinstance(order, list) or not all(isinstance(part, str) for part in order) or sorted(order) != expected_order:
             raise ValueError(f'{key}: explicit body and sleeve order is required')
         mesh_regions = row.get('arm_mesh_regions')
         owner_bounds = row.get('arm_owner_bounds')
-        if not isinstance(mesh_regions, list) or len(mesh_regions) != 2 or not isinstance(owner_bounds, list) or len(owner_bounds) != 2:
+        if construction == 'coat' and (not isinstance(mesh_regions, list) or len(mesh_regions) != 2 or not isinstance(owner_bounds, list) or len(owner_bounds) != 2):
             raise ValueError(f'{key}: two explicit source sleeve regions are required')
-        for mesh, bounds in zip(mesh_regions, owner_bounds):
+        for mesh, bounds in zip(mesh_regions, owner_bounds) if construction == 'coat' else []:
             x, y, w, h = _numbers(mesh, 4, f'{key}/sleeve mesh')
             lo, hi = _numbers(bounds, 2, f'{key}/sleeve ownership')
             if any(n != int(n) for n in (x, y, w, h)) or x < 0 or y < 0 or w < 1 or h < 1 or x + w > size[0] or y + h > size[1] or not 0 <= lo < hi <= size[0]:
                 raise ValueError(f'{key}: invalid source sleeve region')
-        spans = row.get('protection_spans')
-        if not isinstance(spans, list):
-            raise ValueError(f'{key}: explicit original foreground spans are required')
-        for span in spans:
-            y, lo, hi = _numbers(span, 3, f'{key}/foreground span')
-            if any(n != int(n) for n in (y, lo, hi)) or not 0 <= y < 360 or not 0 <= lo <= hi < 280:
-                raise ValueError(f'{key}: foreground span outside fixed original canvas')
+        _spans(row.get('protection_spans'), f'{key}/foreground span')
         protection = row.get('protection')
         if not isinstance(protection, dict) or not {'head', 'feet'}.issubset(protection):
             raise ValueError(f'{key}: explicit original head and foot ownership is required')

@@ -295,3 +295,28 @@
 [正常短片](images/ART-18-idle-cloth-20261021-normal-v2.mp4) · [真正四分之一時間](images/ART-18-idle-cloth-20261021-quarter-v2.mp4) · [正常逐姿勢1](images/ART-18-idle-cloth-20261021-normal-v2-poses-1.png)／[2](images/ART-18-idle-cloth-20261021-normal-v2-poses-2.png)／[3](images/ART-18-idle-cloth-20261021-normal-v2-poses-3.png) · [慢放逐姿勢1](images/ART-18-idle-cloth-20261021-quarter-v2-poses-1.png)／[2](images/ART-18-idle-cloth-20261021-quarter-v2-poses-2.png)／[3](images/ART-18-idle-cloth-20261021-quarter-v2-poses-3.png)。
 
 [缺件與回退清單](images/ART-18-idle-cloth-20261021-combined-coverage.json) · [全部範圍與來源](images/ART-18-idle-cloth-20261021-verification.json) · [拒收歷史](images/ART-18-idle-cloth-20261021-attempt-history.json) · [前批實際完整CI](images/ART-18-idle-cloth-20261021-ci-460db-verification.json) · [完整提示、原檔與診斷](images/ART-18-idle-cloth-20261021-source-and-diagnostics.zip) · [附件雜湊](images/ART-18-idle-cloth-20261021-manifest.json)。
+
+
+# Commit — 2026-10-22 衣身底料保護與拒收流程
+
+固定起點 `59a494f`；分支 `codex/finish-runtime-batch-20261020`。
+
+持相機的衣料改到擺臂時，舊袖子範圍會在獨立衣身上挖出缺口。現在製作預覽可分別核對衣身與袖片來源；無袖款明確保留原臂所有權。錯誤來源、越界、尺寸與缺件會拒絕，原人物與正式衣櫃不因製作試驗而改變。
+
+本輪重新實際閱讀Spine、Unity、Aseprite、Godot、Universal LPC及Spriter六個團隊的相關原文件，保存兩張已查看的官方靜態圖。採用原則、原件、完整提示及製作取捨見[研究與設計紀錄](../../design/runtime/outfit-completeness.md)。
+
+| 驗證 | 結果 |
+|---|---|
+| 局部資料驗證 | 19項通過；獨立衣身來源、自己的圖格尺寸、原臂所有權與構造反例均有核對 |
+| 真引擎缺口反例 | 保留舊排除行為時exit1／1ERROR；正確版本0.35秒、exit0／0ERROR，原袖片與鄰片保護仍成立 |
+| 既有衣料回歸 | 原正面24張、八向待機108張，共132張PNG逐位元相同 |
+| 新衣物審圖 | 56格外套與100格另一款長背心草稿均拒收；新批准衣料格為0，不與舊44格混算 |
+| 拒收原生紀錄 | 正常速度100格製作檢視，頭腳數值通過仍因遮擋／接縫破綻拒收；1280×720、20FPS、628幀31.40秒無聲影片完整解碼 |
+| 前置main完整CI | 59a494f的137項Python、93項Godot及5範圍實際成功；不含本輪製作能力改動，本輪留新CI |
+
+審圖拒絕原因包括舊短褲邊線、背包被切去下半部、手掌被衣料覆蓋及原臂範圍不準。這些草稿未上架，也不計為新增已批准覆蓋；原長外套維持44/148，缺104格與24個非新原畫的慶祝回退請求。整票仍進行中，未勾條件保持原狀。本輪沒有新的正常／慢放正式換裝、降低動態或輸出包驗收。
+
+![拒收：原臂邊界不準，衣料侵入袖子](images/ART-18-underlay-20261022-vest-bake-v8-walk-left.png)
+![拒收：依色塊推測背包會切去下半部](images/ART-18-underlay-20261022-vest-bake-v3-back_left.png)
+
+[局部驗證與完整範圍](images/ART-18-underlay-20261022-verification.json) · [反例與修正](images/ART-18-underlay-20261022-part-delivery.json) · [拒收影片](images/ART-18-underlay-20261022-rejected-native.mp4) · [來源／完整提示與診斷](images/ART-18-underlay-20261022-rejected-sources-and-diagnostics.zip) · [附件指紋](images/ART-18-underlay-20261022-manifest.json)。

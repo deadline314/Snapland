@@ -25,6 +25,15 @@ func _initialize() -> void:
 	var sheet := Image.load_from_file(atlas_path)
 	if sheet==null or sheet.get_size()!=Vector2i(int(config.atlas_size[0]),int(config.atlas_size[1])):_reject("Garment atlas size differs");return
 	sheet.convert(Image.FORMAT_RGBA8)
+	var body_sheet: Image = sheet
+	var separate_body: bool = config.has("body_atlas")
+	var sleeveless: bool = config.get("construction","coat")=="sleeveless_overlay"
+	if separate_body:
+		var body_path := ProjectSettings.globalize_path("res://"+str(config.body_atlas))
+		if FileAccess.get_sha256(body_path)!=str(config.body_atlas_sha256):_reject("Torso fabric changed after validation");return
+		body_sheet=Image.load_from_file(body_path)
+		if body_sheet==null or body_sheet.get_size()!=Vector2i(int(config.body_atlas_size[0]),int(config.body_atlas_size[1])):_reject("Torso fabric size differs");return
+		body_sheet.convert(Image.FORMAT_RGBA8)
 	var final_folder := profile.get_base_dir().path_join("compiled")
 	var folder := profile.get_base_dir().path_join(".pending-compiled")
 	if DirAccess.dir_exists_absolute(folder) or DirAccess.dir_exists_absolute(final_folder):_reject("Authoring output already exists; use a fresh profile parent");return
@@ -47,23 +56,28 @@ func _initialize() -> void:
 		if context.finish().hex_encode()!=str(row.source_pixel_sha256):_reject("Original wearer changed; re-author guides before baking "+action+"/"+direction+"/"+str(index));return
 		output=original.duplicate();garment_layer=Image.create(280,360,false,Image.FORMAT_RGBA8)
 		var cel:=sheet.get_region(_rect(row.atlas_region))
-		target_root=_point(row.target_root);draw_clip=_rect(row.draw_clip);owner_bounds=row.arm_owner_bounds
+		var body_cel: Image = body_sheet.get_region(_rect(row.body_atlas_region)) if separate_body else cel
+		target_root=_point(row.target_root);draw_clip=_rect(row.draw_clip);owner_bounds=row.get("arm_owner_bounds",[])
 		mesh_regions.clear()
-		for region in row.arm_mesh_regions:mesh_regions.append(_rect(region))
+		for region in row.get("arm_mesh_regions",[]):mesh_regions.append(_rect(region))
 		var source_root:=_point(row.source_root)
 		var torso:=PackedVector2Array()
 		for p in row.body_polygon:torso.append(_point(p))
 		var source_arms: Array = [];var target_arms: Array = []
-		for side in 2:
-			var src: Array[Vector2] = [];var dst: Array[Vector2] = []
-			for p in row.source_arms[side]:src.append(_point(p))
-			for p in row.target_arms[side]:dst.append(_point(p))
-			source_arms.append(src);target_arms.append(dst)
+		if not sleeveless:
+			for side in 2:
+				var src: Array[Vector2] = [];var dst: Array[Vector2] = []
+				for p in row.source_arms[side]:src.append(_point(p))
+				for p in row.target_arms[side]:dst.append(_point(p))
+				source_arms.append(src);target_arms.append(dst)
 		for part in row.part_order:
-			if part=="body":_draw_torso(cel,torso,source_root,source_arms)
+			if part=="body":_draw_torso(body_cel,torso,source_root,source_arms,separate_body)
 			else:
 				var side:=0 if part=="arm_0" else 1
 				_draw_arm(cel,source_arms[side],target_arms[side],side)
+		if sleeveless:
+			for arm in row.original_arm_spans:
+				_restore_spans(original,arm)
 		var protected_count := 0
 		for raw in row.protection.values():
 			var region:=_rect(raw)
@@ -91,7 +105,7 @@ func _initialize() -> void:
 		if changed_pixels==0:_reject("No visible garment output; check source and target guides");return
 		for raw in row.unchanged_regions:
 			var region:=_rect(raw)
-			if output.get_region(region).get_data()!=original.get_region(region).get_data():_reject("Garment changed an immutable original region");return
+			if output.get_region(region).get_data()!=original.get_region(region).get_data():_reject("Garment changed an immutable original region "+action+"/"+direction+"/"+str(index));return
 		var name:="%s-%s-%02d"%[action,direction,index]
 		if original.save_png(folder.path_join(name+"-original.png"))!=OK or output.save_png(folder.path_join(name+".png"))!=OK or garment_layer.save_png(folder.path_join(name+"-garment.png"))!=OK:_reject("Could not save baked authoring frame");return
 		records.append({"action":action,"direction":direction,"frame":index,"protected_pixel_visits":protected_count,"immutable_regions_equal":true,"head_owner_preserved":true,"changed_garment_pixels":changed_pixels,"original_head_owner_signature":original_signature,"head_owner_reference_signature":ownership.reference_signature,"head_owner_method":ownership.method,"baked_pixel_sha256":avatar.head_source_signature(output),"source_pixel_sha256":row.source_pixel_sha256,"status":"inspection_only"})
@@ -105,14 +119,21 @@ func _rect(raw: Array) -> Rect2i:return Rect2i(int(raw[0]),int(raw[1]),int(raw[2
 func _reject(message:String) -> void:
 	printerr("REJECTED: "+message);quit(2)
 
-func _draw_torso(cel: Image, polygon: PackedVector2Array, source_root: Vector2, arms: Array) -> void:
+func _restore_spans(original:Image, spans:Array) -> void:
+	for span in spans:
+		for x in range(int(span[1]),int(span[2])+1):
+			var point:=Vector2i(x,int(span[0]))
+			output.set_pixelv(point,original.get_pixelv(point));garment_layer.set_pixelv(point,Color.TRANSPARENT)
+
+func _draw_torso(cel: Image, polygon: PackedVector2Array, source_root: Vector2, arms: Array, separate_body: bool = false) -> void:
 	for y in range(draw_clip.position.y,draw_clip.end.y):
 		for x in range(draw_clip.position.x,draw_clip.end.x):
 			var uv := (Vector2(x+0.5,y+0.5)-target_root)/torso_scale+source_root
 			if not Geometry2D.is_point_in_polygon(uv,polygon): continue
 			var owned_by_arm := false
-			for side in 2:
-				if uv.y>Vector2(arms[side][0]).y+10.0 and _arm_owns(uv,arms[side],side): owned_by_arm=true
+			if not separate_body:
+				for side in 2:
+					if uv.y>Vector2(arms[side][0]).y+10.0 and _arm_owns(uv,arms[side],side): owned_by_arm=true
 			if not owned_by_arm:_sample(cel,uv,Vector2i(x,y))
 
 func _bone_point(p:Vector2,a:Vector2,b:Vector2,c:Vector2,d:Vector2) -> Vector2:

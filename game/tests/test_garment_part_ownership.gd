@@ -28,5 +28,24 @@ func _initialize() -> void:
 	_draw_torso(cel,polygon,Vector2.ZERO,[bones,bones])
 	if output.get_pixel(10,18)!=Color.MAGENTA:
 		push_error("Sleeve ownership removed an unassigned torso pixel");quit(1);return
+	# A complete separate fabric underlay must remain behind a moving sleeve.
+	# The camera-pose sleeve mask must not cut a hole in that independent image.
+	mesh_regions=[Rect2i(2,2,11,18),Rect2i(18,18,1,1)]
+	var held_arm: Array=[Vector2(6,2),Vector2(6,10),Vector2(6,18)]
+	output.fill(Color.TRANSPARENT)
+	_draw_torso(cel,polygon,Vector2.ZERO,[held_arm,held_arm])
+	if output.get_pixel(6,16).a!=0.0:
+		push_error("Shared-source sleeve exclusion counterexample was not exercised");quit(1);return
+	output.fill(Color.TRANSPARENT)
+	_draw_torso(cel,polygon,Vector2.ZERO,[held_arm,held_arm],true)
+	if output.get_pixel(6,16)!=cel.get_pixel(6,16):
+		push_error("Independent torso fabric retained a camera-pose sleeve hole");quit(1);return
+	output.fill(Color.GREEN);garment_layer.fill(Color.GREEN)
+	_restore_spans(cel,[[16,5,7]])
+	for x in range(5,8):
+		if output.get_pixel(x,16)!=cel.get_pixel(x,16) or garment_layer.get_pixel(x,16).a!=0.0:
+			push_error("Sleeveless layer changed an owned original arm pixel");quit(1);return
+	if output.get_pixel(8,16)!=Color.GREEN or garment_layer.get_pixel(8,16)!=Color.GREEN:
+		push_error("Original arm restoration erased adjacent vest fabric");quit(1);return
 	print("PASS: garment sleeves retain 121 owned source pixels, reject adjacent raster tiles and preserve unassigned torso pixels")
 	quit()

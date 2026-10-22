@@ -1,0 +1,55 @@
+{
+  "starting_commit": "59a494f7c8b719c4f0e103057ea7d754ae086e2e",
+  "scope": "ART-18 authoring-only underlay safety and review process. All new clothing candidates rejected. No new approved poses, wardrobe or whole-ticket completion.",
+  "approved_existing_coat_cels": 44,
+  "existing_missing_cels": 104,
+  "extra_legacy_requests": 24,
+  "rejected_vest_draft_cels": 100,
+  "new_approved_cels": 0,
+  "python_focused_tests": 19,
+  "native_godot_guard": [
+    {
+      "case": "part-negative",
+      "exit": 1,
+      "errors": 1,
+      "seconds": 0.34
+    },
+    {
+      "case": "part-final",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 0.35
+    }
+  ],
+  "unchanged_old_outputs": [
+    {
+      "name": "front-regression",
+      "exit": 0,
+      "pngs_byte_identical": 24,
+      "errors": 0
+    },
+    {
+      "name": "idle-regression",
+      "exit": 0,
+      "pngs_byte_identical": 108,
+      "errors": 0
+    }
+  ],
+  "native_rejected_scope": "100-cel2D authoring with head/foot exactness; normal simulation only. Silent20FPS movie decoded; not a formal Main/wardrobe/slow/reduced/PCK,human play or listening acceptance.",
+  "source_sha256": {
+    "tools/island_avatar/garment_manifest.py": "6edbfec0896f1b158a0e52f70592482c1d928d2e76db7f00e86fe7e6d545c3f9",
+    "tools/island_avatar/build_garment_layers.gd": "f03fdecd195500c6354a72f717c19495380f095d62e0390c18bcd4693d2516c6",
+    "tests/test_garment_manifest.py": "71a386d0005c6792cec6a3ce11162ba7066086c97ecaae8abf644241dbd23758",
+    "game/tests/test_garment_part_ownership.gd": "af57f9b55bae8dc324e49a5eee36a86abca7d14a19ec241a780d82ea660b2f95"
+  },
+  "baseline_ci": {
+    "commit": "59a494f7c8b719c4f0e103057ea7d754ae086e2e",
+    "run": 39524314595,
+    "python": 137,
+    "godot_runs": 93,
+    "godot_passes": 93,
+    "scope_count": 5,
+    "names_order_caps_verified": true,
+    "scope": "Prior published main baseline only; excludes current authoring changes."
+  }
+}

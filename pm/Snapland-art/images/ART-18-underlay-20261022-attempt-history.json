@@ -1,0 +1,12 @@
+{
+  "scope": "Authoring support and rejected visual candidates only; no new approved garment coverage or live wardrobe adoption.",
+  "coat_v1_v2": "56 numerical original-head/foot-safe cels rejected for exposed original sleeves, incomplete torso silhouette and incorrect shorts foreground.",
+  "coat_v3_v4": "Independent generated torso was a better underlay, but sleeve joints/sockets and inconsistent shoulder ownership remain rejected.",
+  "vest_v1": "100-cel numerical safety rejection because draw clip overlapped the enlarged immutable head region. No accepted output.",
+  "vest_v2_v3": "100 numerical cels; shorts fragments and/or backpack lower-body occlusion remained. First native normal run numerically passed; visually rejected.",
+  "vest_v4_v5": "Explicit backpack silhouette restores bag, but hand ownership and broad camera protection still expose unrelated original pixels.",
+  "vest_v6_v7": "Normal native head/foot checks pass, but missing palms/waist fragments still fail visual acceptance. No quarter-speed claim.",
+  "vest_v8": "Manual sleeve envelopes are still inaccurate and cut into some sleeves. Rejected; draft100 cels do not add to the existing approved coat44.",
+  "v3_author_script": "Initial local assumption that generated image width was1564 failed before baking. Actual1563 width retained, reviewed and used; no image resizing to force that assumption.",
+  "pipeline_delivery": "Independent torso underlay and original-arm span restoration are explicit authoring options, not wardrobe enablement. Both-atlas source validation, bounded geometry and inspection-only status remain mandatory."
+}

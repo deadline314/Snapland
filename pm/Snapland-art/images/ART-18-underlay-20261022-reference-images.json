@@ -1,0 +1,16 @@
+[
+  {
+    "file": "spine-mesh.png",
+    "url": "https://esotericsoftware.com/img/spine-user-guide/meshes/mesh.png",
+    "page": "https://esotericsoftware.com/spine-meshes",
+    "sha256": "d8b3a15c7ce2baaca3ad8ecd8d307cf9543cedf82a65c4e62b9dcfca69249a8a",
+    "method": "original static image from official documentation; not a page screenshot or game asset"
+  },
+  {
+    "file": "aseprite-fixed-grid.png",
+    "url": "https://www.aseprite.org/docs/sprite-sheet/running-guy-horz.png",
+    "page": "https://www.aseprite.org/docs/sprite-sheet/",
+    "sha256": "c505be304d7dd9f85dd052d92c1fea2af0afa7587bd0a434a49fb36a3a783cb6",
+    "method": "original static image from official documentation; not a page screenshot or game asset"
+  }
+]

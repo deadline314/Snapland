@@ -101,4 +101,38 @@ python tools/island_avatar/garment_manifest.py --guide tools/island_avatar/garme
 
 最終原生使用專用待機的原始每格時長，正常23.40秒／真正四分之一時間93.50秒，兩段無聲20FPS；實際查看全部72張逐姿勢畫面及關節圖，影片完整解碼，沒有聲稱連續觀看。108張最後重建的原人物／衣料／合成PNG與原生輸入逐位元相同。舊正面8格的原人物與完整合成16張PNG也逐位元相同，衣料獨立層只改到alpha為0的RGB。
 
+## 2026-10-22：獨立衣身保護與拒收紀錄
+
+固定起點 `59a494f`。本輪交付的是製作入口的安全能力，**新服裝草稿全部未採用**；既有長外套仍為44/148，缺104格與另列24個慶祝回退請求。新的長背心是不同衣物身份，100格草稿不能與舊長外套44格相加，也不能因數值通過就計為已批准覆蓋。
+
+持相機的衣料來源將袖子畫在衣身上。當袖子移開，若仍從同一張圖排除袖片範圍，身體就留下原姿勢的缺口。現在可提供獨立 `body_atlas`、`body_atlas_sha256`、`body_atlas_size` 與逐格 `body_atlas_region`。軀幹根點／多邊形依自己的圖格驗證；袖子仍依原袖片圖格驗證。另一來源不完整、越界、雜湊或尺寸不同，都在引擎執行前拒絕。引擎也重新核對實際來源。
+
+預設 `coat` 保留原製作行為。明確的 `construction: sleeveless_overlay` 只畫衣身，必須有獨立衣身來源、`part_order: [body]` 及兩份非空 `original_arm_spans`。原袖子／手的所有權由來源指紋約束，恢復原像素時同時清空衣料層對應像素，避免往後把衣身蓋到手上；不把刪去袖子當作缺少來源也可上架。這仍是 `inspection_only` 製作契約，沒有正式衣櫃登錄能力。
+
+局部測試19項通過，包含獨立來源、不同圖格尺寸、錯誤來源、缺少原臂所有權及錯誤構造反例。實際Godot反例先保有舊袖片排除行為：獨立衣身仍有洞，exit1／1ERROR；正確版本exit0／0ERROR，0.35秒。既有121個袖片像素、0鄰片與未分配衣身保護仍成立，另檢查原臂恢復不抹去旁邊衣料。重建舊正面與八向待機，共132張原人物／衣料／合成PNG逐位元相同。
+
+### 視覺拒收與下一輪製作界線
+
+56格外套與100格長背心草稿均能保護固定頭腳，但審圖仍發現袖片太窄、腕點與持物不合、來源臂洞、背包下半部被切掉、短褲邊線穿過衣身，以及原臂範圍不準造成的黃色衣料缺口。全身人物沒有被新生成的人物替換。兩張新生成的八向純衣身原件、原參考、完整提示、來源指紋及各次拒收診斷保留在附件；未加入正式資源。
+
+過寬的相機保護矩形也會連原短褲一起保護。縮小範圍雖能改善單格，仍不能代替真實手臂／道具的逐格部件所有權。顏色草稿、近似骨頭走廊或粗略多邊形都不能在肉眼有破綻時升格為正式部件資料。下一輪需逐格完成明確袖子、手、背包與道具邊界；本批不以增加影格數或繼續放寬保護範圍表示完成。
+
+保存的拒收原生正常影片為1280×720、20FPS、628格31.40秒，完整解碼。其頭腳比較數值通過，但視覺仍拒收；不是正式換裝、慢放、降低動態、Main、打包或真人試玩驗收。
+
+### 本輪實際閱讀與圖例
+
+| 團隊／來源 | 採用的製作原則 | 本輪範圍 |
+|---|---|---|
+| [Esoteric Software／Spine Meshes](https://esotericsoftware.com/spine-meshes) | 圖像所有權邊界與變形邊界分開；獨立部件不能被另一片的排除區挖洞 | 讀網格、邊界及洞的說明，下載並查看官方靜態網格圖；未看影片 |
+| [Unity／Sprite Swap 10.0.3](https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/SpriteSwapIntro.html) | 一致骨架和單一播放來源，避免兩套動畫同時改寫外觀 | 讀必要元件及骨架／動畫器限制；未使用其套件 |
+| [Igara／Aseprite Sprite Sheets](https://www.aseprite.org/docs/sprite-sheet/) | 保留固定圖格、偏移、圖層及動作身份 | 讀匯入／輸出說明，下載並查看官方水平圖格靜態圖 |
+| [Godot／Cutout Animation](https://docs.godotengine.org/en/stable/tutorials/animation/cutout_animation.html) | 混用逐格與部件，複雜手部保留原逐格來源 | 讀方法與階層說明；頁面仍標示4.7未更新，另以本機4.7.2驗證 |
+| [Universal LPC團隊](https://github.com/liberatedpixelcup/Universal-LPC-Spritesheet-Character-Generator) | 每個動作／格與外觀身份分別核對，來源授權逐件保留 | 讀動畫指南、授權／素材說明；不採用其美術 |
+| [BrashMonkey／Character Maps](https://www.brashmonkey.com/spriter_manual/what%20are%20character%20maps.htm) | 替換件維持一致尺寸／命名，衣物身份不能混算覆蓋 | 讀完整說明；不把平滑補間套到原像素人物 |
+
+![官方網格原圖：部件與變形邊界參考](../../pm/Snapland-art/images/ART-18-underlay-20261022-spine-mesh.png)
+![官方固定圖格原圖](../../pm/Snapland-art/images/ART-18-underlay-20261022-aseprite-fixed-grid.png)
+
+以上是官方靜態原圖，非網頁截圖或遊戲素材；不能由文件推論玩家偏好。[驗證與範圍](../../pm/Snapland-art/images/ART-18-underlay-20261022-verification.json) · [拒收歷史](../../pm/Snapland-art/images/ART-18-underlay-20261022-attempt-history.json) · [拒收原生短片](../../pm/Snapland-art/images/ART-18-underlay-20261022-rejected-native.mp4) · [原件、完整提示與診斷](../../pm/Snapland-art/images/ART-18-underlay-20261022-rejected-sources-and-diagnostics.zip)。前置main的[完整CI](https://github.com/deadline314/Snapland/actions/runs/39524314595)已核對137項Python、93個Godot的名稱／順序／原上限及5個設計範圍；不包含本輪尚未推送的改動。
+
 [最終原生與資料證據](../../pm/Snapland-art/images/ART-18-idle-cloth-20261021-verification.json) · [104缺格與24回退請求](../../pm/Snapland-art/images/ART-18-idle-cloth-20261021-combined-coverage.json) · [完整提示、原檔與拒收診斷](../../pm/Snapland-art/images/ART-18-idle-cloth-20261021-source-and-diagnostics.zip)。正式未知衣物仍完整回退；本批沒有啟用新服裝、即時換髮、降低動態或PCK驗收。

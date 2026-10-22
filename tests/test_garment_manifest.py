@@ -78,6 +78,81 @@ class GarmentManifestTests(unittest.TestCase):
         self.check_invalid(lambda g: g.update(atlas_sha256='0' * 64), 'source changed')
         self.check_invalid(lambda g: g.update(atlas_size=[1560, 1006]), 'dimensions disagree')
 
+    def body_guide(self):
+        guide = copy.deepcopy(self.guide)
+        for key in ['atlas', 'atlas_size', 'atlas_sha256']:
+            guide['body_' + key] = copy.deepcopy(guide[key])
+        for row in guide['frames']:
+            row['body_atlas_region'] = row['atlas_region'][:]
+        return guide
+
+    def test_separate_torso_is_reviewed_without_promoting_partial_outfit(self):
+        report = validate(self.body_guide(), self.required)
+        self.assertEqual(report['provided'], 8)
+        self.assertFalse(report['ready_for_wardrobe'])
+
+    def test_separate_torso_rejects_missing_changed_or_outside_source(self):
+        for mutate, message in [
+            (lambda g: g.pop('body_atlas'), 'repository-relative'),
+            (lambda g: g.update(body_atlas='../outside.png'), 'repository-relative'),
+            (lambda g: g.update(body_atlas_sha256='0' * 64), 'source changed'),
+            (lambda g: g.update(body_atlas_size=[1, 1]), 'dimensions disagree'),
+            (lambda g: g['frames'][0].pop('body_atlas_region'), 'finite numbers'),
+            (lambda g: g['frames'][0].update(body_atlas_region=[1500, 0, 391, 503]), 'outside the atlas'),
+        ]:
+            with self.subTest(message=message):
+                guide = self.body_guide()
+                mutate(guide)
+                with self.assertRaisesRegex(ValueError, message):
+                    validate(guide, self.required)
+
+    def test_torso_geometry_uses_its_own_canvas_while_sleeves_keep_theirs(self):
+        guide = self.body_guide()
+        row = guide['frames'][0]
+        row.update(body_atlas_region=[0, 0, 80, 90], source_root=[40, 40],
+                   body_polygon=[[1, 1], [79, 1], [79, 89], [1, 89]])
+        self.assertFalse(validate(guide, self.required)['ready_for_wardrobe'])
+        row['source_root'] = [81, 40]
+        with self.assertRaisesRegex(ValueError, 'source_root.*outside its fixed canvas'):
+            validate(guide, self.required)
+        row['source_root'] = [40, 40]
+        row['body_polygon'][0] = [81, 1]
+        with self.assertRaisesRegex(ValueError, 'torso.*outside its fixed canvas'):
+            validate(guide, self.required)
+
+    def test_separate_region_without_reviewed_torso_source_is_rejected(self):
+        self.check_invalid(lambda g: g['frames'][0].update(body_atlas_region=[0, 0, 80, 90]), 'body atlas metadata')
+
+    def sleeveless_guide(self):
+        guide = self.body_guide()
+        guide['construction'] = 'sleeveless_overlay'
+        for row in guide['frames']:
+            row['part_order'] = ['body']
+            row['original_arm_spans'] = [[[220, 85, 110]], [[220, 175, 200]]]
+            for name in ['source_arms', 'target_arms', 'arm_mesh_regions', 'arm_owner_bounds']:
+                row.pop(name)
+        return guide
+
+    def test_sleeveless_garment_explicitly_keeps_both_original_arms(self):
+        self.assertEqual(validate(self.sleeveless_guide(), self.required)['provided'], 8)
+        for arms in [None, [], [[]], [[], []], [[[360, 0, 1]], [[220, 0, 1]]]]:
+            guide = self.sleeveless_guide()
+            guide['frames'][0]['original_arm_spans'] = arms
+            with self.assertRaisesRegex(ValueError, 'original arm ownership|outside fixed'):
+                validate(guide, self.required)
+
+    def test_sleeveless_construction_cannot_silently_use_missing_underlay_or_generated_arms(self):
+        guide = self.sleeveless_guide()
+        guide['frames'][0]['part_order'].append('arm_0')
+        with self.assertRaisesRegex(ValueError, 'sleeve order'):
+            validate(guide, self.required)
+        guide = self.sleeveless_guide()
+        for name in ['body_atlas', 'body_atlas_size', 'body_atlas_sha256']:
+            guide.pop(name)
+        with self.assertRaisesRegex(ValueError, 'uninterrupted torso source'):
+            validate(guide, self.required)
+        self.check_invalid(lambda g: g.update(construction='automatic'), 'unsupported garment construction')
+
     def test_head_and_feet_cannot_lose_their_ownership_contract(self):
         for name in ['head', 'feet']:
             self.check_invalid(lambda g: g['frames'][0]['protection'].pop(name), 'head and foot ownership')

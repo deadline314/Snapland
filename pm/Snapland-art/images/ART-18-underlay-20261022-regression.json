@@ -1,0 +1,14 @@
+[
+  {
+    "name": "front-regression",
+    "exit": 0,
+    "pngs_byte_identical": 24,
+    "errors": 0
+  },
+  {
+    "name": "idle-regression",
+    "exit": 0,
+    "pngs_byte_identical": 108,
+    "errors": 0
+  }
+]

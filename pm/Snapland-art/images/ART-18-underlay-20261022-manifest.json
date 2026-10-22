@@ -1,0 +1,130 @@
+{
+  "status": "Authoring support + rejected art; no new approved garment cels",
+  "files": [
+    {
+      "name": "ART-18-underlay-20261022-aseprite-fixed-grid.png",
+      "bytes": 1678,
+      "sha256": "c505be304d7dd9f85dd052d92c1fea2af0afa7587bd0a434a49fb36a3a783cb6"
+    },
+    {
+      "name": "ART-18-underlay-20261022-attempt-history.json",
+      "bytes": 1626,
+      "sha256": "27ae18b0647c7c28846a9acc75dfc488b519925648f8a78077a0ab91804c228d"
+    },
+    {
+      "name": "ART-18-underlay-20261022-ci-59a-full.log",
+      "bytes": 45295,
+      "sha256": "871f76e2cb3d33942a127a562a42fa653a112d25de354ffbf4a0aa8bd60e7aa8"
+    },
+    {
+      "name": "ART-18-underlay-20261022-ci-59a-runtime.log",
+      "bytes": 46865,
+      "sha256": "29ceecacd69fe4638a660a07d581fb689e5dc71e805151313cba46d204b1d268"
+    },
+    {
+      "name": "ART-18-underlay-20261022-ci-59a-verification.json",
+      "bytes": 283,
+      "sha256": "abbb2ed189a8f4bccffb2bda8f6fa52d1b0a975946694a7673aab37351ac6376"
+    },
+    {
+      "name": "ART-18-underlay-20261022-front-regression.log",
+      "bytes": 155,
+      "sha256": "9e0efeae6c8419975aac823c5d46cd71bcf143b27c8222eb826a6bba95a0c46f"
+    },
+    {
+      "name": "ART-18-underlay-20261022-idle-regression.log",
+      "bytes": 156,
+      "sha256": "9797907273abb9141af02b01dd0671cd41b653b56cf8ee8c7e4b92e5b676495d"
+    },
+    {
+      "name": "ART-18-underlay-20261022-part-delivery.json",
+      "bytes": 180,
+      "sha256": "b53b122f63d0d2bd9019b0bfa6aa7557dbb3735817f07ee40ab4fc225ad9d5dd"
+    },
+    {
+      "name": "ART-18-underlay-20261022-part-final-result.json",
+      "bytes": 50,
+      "sha256": "752f89c8c4e505bc81faa3304f50d1dce2b15edd63eda2809ff5c825f76b8441"
+    },
+    {
+      "name": "ART-18-underlay-20261022-part-final-result.log",
+      "bytes": 193,
+      "sha256": "efbffac05c1d7c140f1ff6e22608707b2127f3c1d6a2effd39dfc159ed3bebe0"
+    },
+    {
+      "name": "ART-18-underlay-20261022-part-negative-result.json",
+      "bytes": 50,
+      "sha256": "695ce2556a990ac95d6b35ce2babb87937c9cc165cf4eb10c20be660587e1fce"
+    },
+    {
+      "name": "ART-18-underlay-20261022-part-negative-result.log",
+      "bytes": 321,
+      "sha256": "b560101a6b68f38cacecafb90294f8559b06dca84fb87faac5e5321e03d60551"
+    },
+    {
+      "name": "ART-18-underlay-20261022-python-19.log",
+      "bytes": 3563,
+      "sha256": "8638649ab7b1182191f8f7faf101b185f2fd4588511ee1cfef2b3b6f43e7f0f9"
+    },
+    {
+      "name": "ART-18-underlay-20261022-reference-images.json",
+      "bytes": 734,
+      "sha256": "ae43c482a3fc452cb6361d72b0954f37a80e072e8ca5ccbd687696699972a28c"
+    },
+    {
+      "name": "ART-18-underlay-20261022-regression.json",
+      "bytes": 209,
+      "sha256": "de5f2e0fc25255e172dbcaf014d6612d7a700a8d2fb6b97698d36fe18812d57b"
+    },
+    {
+      "name": "ART-18-underlay-20261022-rejected-native-result.json",
+      "bytes": 50,
+      "sha256": "1c5bd1f49ab570a05075e85f4ed58ffd7b2083c1e278dbc2c9e7eb46f5c60cd5"
+    },
+    {
+      "name": "ART-18-underlay-20261022-rejected-native-result.log",
+      "bytes": 1292,
+      "sha256": "11a4cc080abed3d87c4edf5fe309d0feaeac9abd6eb2bd9c1652b5251f6ee067"
+    },
+    {
+      "name": "ART-18-underlay-20261022-rejected-native-video-metadata.json",
+      "bytes": 301,
+      "sha256": "90d7a8fa6a6401f74404f8a394775692345349e640ad18a1b17a55ca11b03f40"
+    },
+    {
+      "name": "ART-18-underlay-20261022-rejected-native.mp4",
+      "bytes": 1207102,
+      "sha256": "f87572dfc1383a76d179fb3b6da38025e8c00338d2e88e259565963912666870"
+    },
+    {
+      "name": "ART-18-underlay-20261022-rejected-sources-and-diagnostics.zip",
+      "bytes": 33082310,
+      "sha256": "1cb47fd2ff8a44671dfce6cec0a66fb34cd6766624da7ae784b0e77845276505"
+    },
+    {
+      "name": "ART-18-underlay-20261022-spine-mesh.png",
+      "bytes": 77890,
+      "sha256": "d8b3a15c7ce2baaca3ad8ecd8d307cf9543cedf82a65c4e62b9dcfca69249a8a"
+    },
+    {
+      "name": "ART-18-underlay-20261022-verification.json",
+      "bytes": 1931,
+      "sha256": "baaf00d252426a546a31782a2836dbd3da65dd003bf4a04bc72d7843323348ea"
+    },
+    {
+      "name": "ART-18-underlay-20261022-vest-bake-v3-back_left.png",
+      "bytes": 223882,
+      "sha256": "1817b6c56667adfd9c82ce6fd3f15d779b0e2977229c6297cf70484ccb9ea49b"
+    },
+    {
+      "name": "ART-18-underlay-20261022-vest-bake-v7-walk-back_left.png",
+      "bytes": 241983,
+      "sha256": "929dbd92f8df70ca6d6b89980441b3d47fd01c5918e0ddd5051970e9a4666177"
+    },
+    {
+      "name": "ART-18-underlay-20261022-vest-bake-v8-walk-left.png",
+      "bytes": 256658,
+      "sha256": "07c501fd49c29e6328124988d1d36e1738294b3ecdbeef9c11e8004ea7468eda"
+    }
+  ]
+}

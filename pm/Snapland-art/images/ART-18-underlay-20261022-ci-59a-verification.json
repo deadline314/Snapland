@@ -1,0 +1,10 @@
+{
+  "commit": "59a494f7c8b719c4f0e103057ea7d754ae086e2e",
+  "run": 39524314595,
+  "python": 137,
+  "godot_runs": 93,
+  "godot_passes": 93,
+  "scope_count": 5,
+  "names_order_caps_verified": true,
+  "scope": "Prior published main baseline only; excludes current authoring changes."
+}

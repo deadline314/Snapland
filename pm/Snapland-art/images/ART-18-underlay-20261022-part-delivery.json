@@ -1,0 +1,14 @@
+[
+  {
+    "case": "part-negative",
+    "exit": 1,
+    "errors": 1,
+    "seconds": 0.34
+  },
+  {
+    "case": "part-final",
+    "exit": 0,
+    "errors": 0,
+    "seconds": 0.35
+  }
+]
