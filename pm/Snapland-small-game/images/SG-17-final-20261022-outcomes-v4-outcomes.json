@@ -1,0 +1,446 @@
+{
+  "assisted_night_reduced": {
+    "model": {
+      "actualwind": 0.0,
+      "aim": -0.000579704122340426,
+      "assisted": true,
+      "boost": false,
+      "center_hits": 5,
+      "devil": false,
+      "edge_hits": 0,
+      "elapsed": 21.0039322222224,
+      "ended": true,
+      "event": "center",
+      "eventmarkers": [
+        {
+          "at": 0.0,
+          "kind": "gust"
+        },
+        {
+          "at": 8.0,
+          "kind": "gust"
+        },
+        {
+          "at": 16.0,
+          "kind": "gust"
+        },
+        {
+          "at": 24.0,
+          "kind": "gust"
+        },
+        {
+          "at": 32.0,
+          "kind": "gust"
+        },
+        {
+          "at": 40.0,
+          "kind": "gust"
+        },
+        {
+          "at": 48.0,
+          "kind": "gust"
+        },
+        {
+          "at": 56.0,
+          "kind": "gust"
+        },
+        {
+          "height": 390.0,
+          "kind": "center",
+          "ring": 0,
+          "x": 520.0
+        },
+        {
+          "height": 285.0,
+          "kind": "center",
+          "ring": 1,
+          "x": 1040.0
+        },
+        {
+          "height": 430.0,
+          "kind": "center",
+          "ring": 2,
+          "x": 1560.0
+        },
+        {
+          "height": 315.0,
+          "kind": "center",
+          "ring": 3,
+          "x": 2080.0
+        },
+        {
+          "height": 405.0,
+          "kind": "center",
+          "ring": 4,
+          "x": 2600.0
+        }
+      ],
+      "forecast": 0.0,
+      "forecast_seconds": 1.25,
+      "gust_seconds": 2.99606777777763,
+      "height": 404.940262273159,
+      "line_snaps": 0,
+      "misses": 0,
+      "mistakes": 0,
+      "nextRing": 5,
+      "progress": 0.913711949549562,
+      "reel": false,
+      "rescues_used": 0,
+      "reset_cooldown": 0.0,
+      "ring_height": -1.0,
+      "ring_x": -1.0,
+      "speed": 118.0,
+      "tension": 0.404938018035239,
+      "tension_risk": 0.0,
+      "tension_warning": false,
+      "time_left": 38.9960677777776,
+      "vy": -0.30013370147928,
+      "won": true,
+      "x": 2604.07905621625
+    },
+    "persistent_rewards_unchanged": true,
+    "result": {
+      "assisted": true,
+      "devil": false,
+      "game_id": "game-002",
+      "mistakes": 0,
+      "practice": false,
+      "score": 500,
+      "score_summary": {
+        "label": "穿環分",
+        "qualification_text": "五環全過，取得普通拍貼；輔助回合不取得小惡魔拍貼。",
+        "rows": [
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_0",
+            "label": "第 1 環・中心穿環"
+          },
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_1",
+            "label": "第 2 環・中心穿環"
+          },
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_2",
+            "label": "第 3 環・中心穿環"
+          },
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_3",
+            "label": "第 4 環・中心穿環"
+          },
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_4",
+            "label": "第 5 環・中心穿環"
+          }
+        ],
+        "rule": "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過得普通拍貼；未輔助、五環全中心且零救援才得小惡魔拍貼。",
+        "total": 500
+      },
+      "success": true
+    }
+  },
+  "failed": {
+    "complete_save_unchanged": true,
+    "model": {
+      "actualwind": 0.0,
+      "aim": -1.0,
+      "assisted": false,
+      "boost": false,
+      "center_hits": 0,
+      "devil": false,
+      "edge_hits": 0,
+      "elapsed": 6.9249944112554,
+      "ended": true,
+      "event": "miss",
+      "eventmarkers": [
+        {
+          "at": 0.0,
+          "kind": "gust"
+        },
+        {
+          "at": 8.0,
+          "kind": "gust"
+        },
+        {
+          "at": 16.0,
+          "kind": "gust"
+        },
+        {
+          "at": 24.0,
+          "kind": "gust"
+        },
+        {
+          "at": 32.0,
+          "kind": "gust"
+        },
+        {
+          "at": 40.0,
+          "kind": "gust"
+        },
+        {
+          "at": 48.0,
+          "kind": "gust"
+        },
+        {
+          "at": 56.0,
+          "kind": "gust"
+        },
+        {
+          "height": 390.0,
+          "kind": "miss",
+          "ring": 0,
+          "x": 520.0
+        },
+        {
+          "height": 390.0,
+          "kind": "miss",
+          "ring": 0,
+          "x": 520.0
+        },
+        {
+          "height": 390.0,
+          "kind": "miss",
+          "ring": 0,
+          "x": 520.0
+        }
+      ],
+      "forecast": 47.8800293087504,
+      "forecast_seconds": 1.25,
+      "gust_seconds": 1.0750055887446,
+      "height": 650.0,
+      "line_snaps": 0,
+      "misses": 3,
+      "mistakes": 3,
+      "nextRing": 0,
+      "progress": 0.182943278518518,
+      "reel": false,
+      "rescues_used": 2,
+      "reset_cooldown": 0.0,
+      "ring_height": 390.0,
+      "ring_x": 520.0,
+      "speed": 118.0,
+      "tension": 0.29808,
+      "tension_risk": 0.0,
+      "tension_warning": false,
+      "time_left": 53.0750055887446,
+      "vy": 0.0,
+      "won": false,
+      "x": 521.388343777777
+    },
+    "result": {
+      "assisted": false,
+      "devil": false,
+      "game_id": "game-002",
+      "mistakes": 3,
+      "practice": false,
+      "score": 0,
+      "score_summary": {
+        "label": "穿環分",
+        "qualification_text": "普通拍貼需五環全過（本次 0 / 5）；小惡魔需未輔助、五次中心且零救援。",
+        "rows": [
+          {
+            "amount": 0,
+            "count": 1,
+            "key": "kite_miss_8",
+            "label": "第 1 環・漏環（不計分）"
+          },
+          {
+            "amount": 0,
+            "count": 1,
+            "key": "kite_miss_9",
+            "label": "第 1 環・漏環（不計分）"
+          },
+          {
+            "amount": 0,
+            "count": 1,
+            "key": "kite_miss_10",
+            "label": "第 1 環・漏環（不計分）"
+          },
+          {
+            "amount": 0,
+            "count": 3,
+            "key": "mistakes",
+            "label": "失誤（不計分）",
+            "progress_only": true
+          }
+        ],
+        "rule": "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過得普通拍貼；未輔助、五環全中心且零救援才得小惡魔拍貼。",
+        "total": 0
+      },
+      "success": false
+    }
+  },
+  "ordinary": {
+    "model": {
+      "actualwind": 0.0,
+      "aim": 0.00124524704953457,
+      "assisted": false,
+      "boost": false,
+      "center_hits": 4,
+      "devil": false,
+      "edge_hits": 1,
+      "elapsed": 20.9765706868688,
+      "ended": true,
+      "event": "center",
+      "eventmarkers": [
+        {
+          "at": 0.0,
+          "kind": "gust"
+        },
+        {
+          "at": 8.0,
+          "kind": "gust"
+        },
+        {
+          "at": 16.0,
+          "kind": "gust"
+        },
+        {
+          "at": 24.0,
+          "kind": "gust"
+        },
+        {
+          "at": 32.0,
+          "kind": "gust"
+        },
+        {
+          "at": 40.0,
+          "kind": "gust"
+        },
+        {
+          "at": 48.0,
+          "kind": "gust"
+        },
+        {
+          "at": 56.0,
+          "kind": "gust"
+        },
+        {
+          "height": 390.0,
+          "kind": "edge",
+          "ring": 0,
+          "x": 520.0
+        },
+        {
+          "height": 285.0,
+          "kind": "center",
+          "ring": 1,
+          "x": 1040.0
+        },
+        {
+          "height": 430.0,
+          "kind": "center",
+          "ring": 2,
+          "x": 1560.0
+        },
+        {
+          "height": 315.0,
+          "kind": "center",
+          "ring": 3,
+          "x": 2080.0
+        },
+        {
+          "height": 405.0,
+          "kind": "center",
+          "ring": 4,
+          "x": 2600.0
+        }
+      ],
+      "forecast": 0.0,
+      "forecast_seconds": 1.25,
+      "gust_seconds": 3.02342931313118,
+      "height": 404.99994521994,
+      "line_snaps": 0,
+      "misses": 0,
+      "mistakes": 1,
+      "nextRing": 5,
+      "progress": 0.9125796329088,
+      "reel": false,
+      "rescues_used": 0,
+      "reset_cooldown": 0.0,
+      "ring_height": -1.0,
+      "ring_x": -1.0,
+      "speed": 118.0,
+      "tension": 0.405133141814536,
+      "tension_risk": 0.0,
+      "tension_warning": false,
+      "time_left": 39.0234293131312,
+      "vy": -0.103732627704105,
+      "won": true,
+      "x": 2600.85195379008
+    },
+    "result": {
+      "assisted": false,
+      "devil": false,
+      "game_id": "game-002",
+      "mistakes": 1,
+      "practice": false,
+      "score": 460,
+      "score_summary": {
+        "label": "穿環分",
+        "qualification_text": "普通拍貼：五環全過。小惡魔需五次中心、零救援（本次中心 4 / 5、救援 0）。",
+        "rows": [
+          {
+            "amount": 60,
+            "count": 1,
+            "key": "kite_edge_0",
+            "label": "第 1 環・擦邊穿環"
+          },
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_1",
+            "label": "第 2 環・中心穿環"
+          },
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_2",
+            "label": "第 3 環・中心穿環"
+          },
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_3",
+            "label": "第 4 環・中心穿環"
+          },
+          {
+            "amount": 100,
+            "count": 1,
+            "key": "kite_center_4",
+            "label": "第 5 環・中心穿環"
+          },
+          {
+            "amount": 0,
+            "count": 1,
+            "key": "mistakes",
+            "label": "失誤（不計分）",
+            "progress_only": true
+          }
+        ],
+        "rule": "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過得普通拍貼；未輔助、五環全中心且零救援才得小惡魔拍貼。",
+        "total": 460
+      },
+      "success": true
+    }
+  },
+  "result_pages_actual_pointer": true,
+  "retry_at_input": {
+    "centers": 0,
+    "edges": 0,
+    "elapsed": 0.0,
+    "events": 0,
+    "misses": 0,
+    "rescues": 0,
+    "ring": 0,
+    "score": 0
+  }
+}

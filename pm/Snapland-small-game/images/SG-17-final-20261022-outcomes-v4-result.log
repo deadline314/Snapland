@@ -1,0 +1,209 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+[park_world] scenery meshes: 1182, nodes: 2094
+INPUT: start actual kite failure route target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1932/@VBoxContainer@1933/@HBoxContainer@1934/InviteCard/@MarginContainer@1935/@VBoxContainer@1936/@HBoxContainer@1938/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@1932/@VBoxContainer@1933/@HBoxContainer@1934/InviteCard/@MarginContainer@1935/@VBoxContainer@1936/@HBoxContainer@1938/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/000-natural-00-game-002-score-0.png","frame":152,"request":"natural-00-game-002-score-0.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/001-kite-failed-page-1.png","frame":157,"request":"kite-failed-page-1.png","size":[1280,720],"window":[1280,720]}
+INPUT: retry actual missed-ring result target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/@Button@2000 rect=[P: (578.0, 534.0), S: (108.0, 64.0)] pointer=(632.0, 566.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/@Button@2000 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/002-kite-real-result-retry.png","frame":161,"request":"kite-real-result-retry.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/003-kite-edge-route-ring-1.png","frame":161,"request":"kite-edge-route-ring-1.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/004-kite-edge-route-ring-2.png","frame":230,"request":"kite-edge-route-ring-2.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/005-kite-edge-route-ring-3.png","frame":318,"request":"kite-edge-route-ring-3.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/006-kite-edge-route-ring-4.png","frame":407,"request":"kite-edge-route-ring-4.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/007-kite-edge-route-ring-5.png","frame":496,"request":"kite-edge-route-ring-5.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/008-natural-01-game-002-score-460.png","frame":583,"request":"natural-01-game-002-score-460.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/009-kite-ordinary-page-1.png","frame":588,"request":"kite-ordinary-page-1.png","size":[1280,720],"window":[1280,720]}
+INPUT: read next actual Kite score page target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/ResultColumns/ResultScoreDetail/ResultScorePages/ResultScorePagesNavigation/ResultScorePagesNext rect=[P: (485.0, 491.0), S: (44.0, 47.0)] pointer=(507.0, 514.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/ResultColumns/ResultScoreDetail/ResultScorePages/ResultScorePagesNavigation/ResultScorePagesNext button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/010-kite-ordinary-page-2.png","frame":594,"request":"kite-ordinary-page-2.png","size":[1280,720],"window":[1280,720]}
+INPUT: return from actual ordinary Kite result target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton rect=[P: (932.0, 546.0), S: (200.0, 64.0)] pointer=(1032.0, 578.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open optional formal assist target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2073/@VBoxContainer@2074/@HBoxContainer@2075/InviteCard/@MarginContainer@2076/@VBoxContainer@2077/@HBoxContainer@2079/InviteRules rect=[P: (655.0, 395.0), S: (128.0, 47.0)] pointer=(719.0, 418.5) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/IslandGameInvite/@MarginContainer@2073/@VBoxContainer@2074/@HBoxContainer@2075/InviteCard/@MarginContainer@2076/@VBoxContainer@2077/@HBoxContainer@2079/InviteRules button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: launch real assisted formal Kite target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/@Button@2110 rect=[P: (816.0, 534.0), S: (108.0, 64.0)] pointer=(870.0, 566.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/@Button@2110 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/011-kite-assist-night-ring-1.png","frame":624,"request":"kite-assist-night-ring-1.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/012-kite-assist-night-ring-2.png","frame":691,"request":"kite-assist-night-ring-2.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/013-kite-assist-night-ring-3.png","frame":780,"request":"kite-assist-night-ring-3.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/014-kite-assist-night-ring-4.png","frame":868,"request":"kite-assist-night-ring-4.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/015-kite-assist-night-ring-5.png","frame":957,"request":"kite-assist-night-ring-5.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/016-natural-02-game-002-score-500.png","frame":1046,"request":"natural-02-game-002-score-500.png","size":[1280,720],"window":[1280,720]}
+PRIVATE_NATIVE_CAPTURE {"file":"/workspace/work/Snapland-character/work/kite-final-20261022/outcomes-v4/captures/017-kite-assisted-night-page-1.png","frame":1051,"request":"kite-assisted-night-page-1.png","size":[1280,720],"window":[1280,720]}
+INPUT: return from assisted formal replay target=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton rect=[P: (932.0, 534.0), S: (200.0, 64.0)] pointer=(1032.0, 566.0) hovered=/root/Snapland/@CanvasLayer@1907/@Control@1908/@Control@1929/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PASS: native Kite three real misses fail safely, result retry resets, pointer edge+four centers earn460 ordinary only, assisted night/reduced five centers earn500 ordinary only without duplicate rewards; all result pages clicked
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@769; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@767; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@765; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@763; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_avenue (res://game/world/park_world.gd:1295)
+         [4] _ready (res://game/world/park_world.gd:148)
+         [5] _ready (res://game/main.gd:61)
+         [6] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@851; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1323)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@919; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@912; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@906; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@900; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@894; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1330)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@972; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@970; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1337)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1023; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1022; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1021; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:145)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:233)
+         [2] finish_building (res://game/world/occlusion_controller.gd:190)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1344)
+         [4] _build_avenue (res://game/world/park_world.gd:1296)
+         [5] _ready (res://game/world/park_world.gd:148)
+         [6] _ready (res://game/main.gd:61)
+         [7] _run (res://work/kite-final-20261022/outcomes-v4/native_kite_outcomes_review.gd:11)
+WARNING: ParkWorld: traveller action 'celebrate' has no authored direction in res://assets/characters/complete-animation-regions.json; using the three-frame built-in pose fallback.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_missing_avatar_action_once (res://game/world/park_world.gd:2405)
+         [1] play_action (res://game/world/park_world.gd:2360)
+         [2] _close (res://game/main.gd:559)
+         [3] _native_click_button (res://work/kite-final-20261022/outcomes-v4/native_review.gd:416)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _refresh_avatar_texture (res://game/world/park_world.gd:2456)
+         [2] play_action (res://game/world/park_world.gd:2367)
+         [3] _close (res://game/main.gd:559)
+         [4] _native_click_button (res://work/kite-final-20261022/outcomes-v4/native_review.gd:416)

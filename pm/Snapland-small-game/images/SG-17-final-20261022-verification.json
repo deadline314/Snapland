@@ -1,0 +1,197 @@
+{
+  "starting_commit": "f6b48d064addd1715dde835bd51ac2c309d0a71b",
+  "scope": "SG17 game002 complete ticket acceptance; not ART20/21 all-game art, human play, hearing or Windows acceptance.",
+  "core_checks": [
+    {
+      "name": "kite flight model tests",
+      "exit": 0,
+      "seconds": 0.26,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "kite flight view tests",
+      "exit": 0,
+      "seconds": 0.36,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "welcome minigame tests",
+      "exit": 0,
+      "seconds": 76.05,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "main scene integration tests",
+      "exit": 0,
+      "seconds": 23.47,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "pixel UI shell tests",
+      "exit": 0,
+      "seconds": 48.69,
+      "errors": 0,
+      "error": null
+    },
+    {
+      "name": "pixel UI minigame tests",
+      "exit": 0,
+      "seconds": 6.58,
+      "errors": 0,
+      "error": null
+    }
+  ],
+  "additional_layout_regression": [
+    {
+      "case": "ui-before-realistic",
+      "exit": 1,
+      "errors": 20,
+      "seconds": 48.52,
+      "main_sha256": "04edba204666c1adff122e7db725935156cbf8c3d046aad5e7e0ddb79e8be2de",
+      "result_error": "pixel UI shell tests exited 1:\non keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)\nERROR: result pagination keeps every photo position and size stable at (1920, 1080)\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run (res://game/tests/test_pixel_ui_shell.gd:260)\n       [1] _frames (res://game/tests/test_pixel_ui_shell.gd:290)"
+    },
+    {
+      "case": "ui-final-realistic",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 47.18,
+      "main_sha256": "06a5a524833eb6d56145fa79765c7f788d091fd7aadd0aa54e6944bc09e05250",
+      "result_error": null
+    }
+  ],
+  "final_native": {
+    "controls-v3": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 108.87,
+      "passes": [
+        "PASS: first-visit tutorial, native keyboard Kite play, five center rings/500 and one ordinary+devil+achievement award, real return and achievement UI, isolated-save reload, assisted/reduced private practice with confirmed retry and leave, unchanged progression"
+      ],
+      "scope": "Fixed60FPS simulation for original two-frame retry contract;180 scaled/300 wall fixture and240 process caps. External silent15FPS wall capture is not realtime simulation or hardware FPS."
+    },
+    "outcomes-v4": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 76.36,
+      "passes": [
+        "PASS: native Kite three real misses fail safely, result retry resets, pointer edge+four centers earn460 ordinary only, assisted night/reduced five centers earn500 ordinary only without duplicate rewards; all result pages clicked"
+      ],
+      "scope": "Actual realtime engine clock;45-second outcome route/300 fixture/240 process caps;external silent15FPS wall capture,not hardware FPS."
+    },
+    "restart-v3": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 10.41,
+      "complete_progress_bytes_equal": true,
+      "all_photo_files_equal": true,
+      "photo_file_count": 6,
+      "scope": "Second actual Godot4.7.2 process reading only this Session earned private profile, without reset. Not a desktop-release acceptance."
+    },
+    "lesson-final": {
+      "case": "lesson-final",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 37.85,
+      "passes": [
+        "PASS: native tutorial lifecycle game-002"
+      ]
+    }
+  },
+  "native_captures_viewed": {
+    "controls_and_restart": 18,
+    "outcomes": 18,
+    "new_lesson": 6
+  },
+  "final_movies": {
+    "controls-v3": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "15/1",
+          "duration": "108.733333",
+          "nb_read_frames": "1631"
+        }
+      ]
+    },
+    "outcomes-v4": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1280,
+          "height": 720,
+          "r_frame_rate": "15/1",
+          "duration": "76.200000",
+          "nb_read_frames": "1143"
+        }
+      ]
+    }
+  },
+  "movie_review_scope": "Full files decoded; all42 native still captures viewed via contacts plus critical full-size result pages; no continuous watching claim. Controls fixed60 simulation for original retry contract, outcome actual engine clock, external15FPS silent wall captures. No new quarter-speed run; prior approved quarter evidence remains historical.",
+  "current_runtime_source_equality": "Post-run equality to clean validation project and export source map, not retroactive launch hashes. Diagnostic sources retain their recorded copy hashes.",
+  "source_sha256": {
+    "game/main.gd": "06a5a524833eb6d56145fa79765c7f788d091fd7aadd0aa54e6944bc09e05250",
+    "game/minigames/session.gd": "2621444fd99bf07b056d730f7162dd6329096ba766944cc0993a26ff2bfe7c3c",
+    "game/tests/test_minigames.gd": "f40ca8af394a5e1442adc17a8b94be68e9a1b784837b1e0fffe1361372b49a05",
+    "game/tests/test_pixel_ui_shell.gd": "8640eac06c21b7b321cd66ffeda98fea6ef899f619de3397820374ab9c9206f9",
+    "game/tests/native_kite_main_flow_review.gd": "856ced8d63eb9beda8df9c3ae32f738a8ba367b8fb26a74736fc63861fdda111",
+    "game/tests/native_kite_outcomes_review.gd": "51911ed27a957f7d53a515a8b2b5b228c4c527c986790758b72db2399849a2c6",
+    "game/tests/native_kite_outcomes_review.tscn": "6336402d230f9ff57a717669602afe9ca715192d8cb03520d53e83cdd97b49af",
+    "game/tests/native_kite_restart_review.gd": "a4fa8b082862f9d90f66a4066282b38358b0b95cb05ce3d09417af7b4faea8e1",
+    "game/tests/native_kite_restart_review.tscn": "fc14c97ceb7671a8813fd35956ae07b938e447be85f4efa627d23cc774ec89de",
+    "assets/ui/tutorials/game-002-step-01.png": "274f87b01a0a1cdbeeb59ca74b9b25af496b7333ba94dd2cd0015dd6a7074d24",
+    "assets/ui/tutorials/game-002-step-02.png": "1249c1672f3d2bd4c03d79b9fca0ecfb4837215c8755f9d1034e4c39cd0d95e4",
+    "assets/ui/tutorials/game-002-step-03.png": "4ac9a71677b68f07486358b0858668a7f56c8319831b1c31a9adc19db79d3cd3"
+  },
+  "release": {
+    "binary": {
+      "file": "Snapland.x86_64",
+      "bytes": 219543272,
+      "sha256": "72e85aa0f7faa51263131e91cbd78c20996f2ba9010d28b84389ca420580349a"
+    },
+    "source_base": "f6b48d064addd1715dde835bd51ac2c309d0a71b",
+    "provenance": "Built from tracked working-tree runtime bytes, including uncommitted SG17 changes; source_sha256 map verified. Not a clean f6 release claim.",
+    "steps": [
+      {
+        "step": "import",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 25.44
+      },
+      {
+        "step": "export",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 5.33
+      }
+    ],
+    "smoke": {
+      "exit": 0,
+      "errors": 0,
+      "seconds": 24.74,
+      "completion": true
+    },
+    "real_main_initial_renderers": 12,
+    "excluded": "game/tests,tools,work and rejected garments",
+    "scope": "Real Linux embedded-PCK executable own Main/resource startup and initial12renderer draws; not packaged full Kite input flow."
+  },
+  "baseline_ci": {
+    "commit": "f6b48d064addd1715dde835bd51ac2c309d0a71b",
+    "run": 39734104571,
+    "python": 143,
+    "godot_runs": 93,
+    "godot_passes": 93,
+    "design_scopes": 5,
+    "names_order_original_caps_verified": true,
+    "scope": "Published ART18 support baseline; does NOT include current SG17 code or new lesson PNGs."
+  }
+}

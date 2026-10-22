@@ -1,0 +1,44 @@
+[
+  {
+    "name": "kite flight model tests",
+    "exit": 0,
+    "seconds": 0.26,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "kite flight view tests",
+    "exit": 0,
+    "seconds": 0.36,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "welcome minigame tests",
+    "exit": 0,
+    "seconds": 76.05,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "seconds": 23.47,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI shell tests",
+    "exit": 0,
+    "seconds": 48.69,
+    "errors": 0,
+    "error": null
+  },
+  {
+    "name": "pixel UI minigame tests",
+    "exit": 0,
+    "seconds": 6.58,
+    "errors": 0,
+    "error": null
+  }
+]

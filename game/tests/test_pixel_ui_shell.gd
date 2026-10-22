@@ -175,10 +175,10 @@ func _run() -> void:
 			await _frames(4)
 			_check_active_layout(discovery,dimensions)
 			await _click_return(dimensions)
-		_main._game_finished({"game_id":"game-001","practice":false,"success":false,"score":120,"score_summary":{"rows":[{"label":"命中","amount":100},{"label":"連續加分","amount":20},{"label":"回合節奏","amount":30},{"label":"完成獎勵","amount":40},{"label":"準確操作","amount":50}]}})
+		_main._game_finished({"game_id":"game-001","practice":false,"success":false,"score":120,"score_summary":{"qualification_text":"本次未達成普通拍貼；可重試或開啟輔助，既有收藏不變。","rows":[{"label":"命中：第 1 環・中心穿環","amount":100},{"label":"連續加分","amount":20},{"label":"回合節奏","amount":30},{"label":"完成獎勵","amount":40},{"label":"準確操作","amount":50},{"label":"失誤","amount":0,"count":1,"progress_only":true}]}})
 		await _frames(4)
 		_check_active_layout("result",dimensions)
-		await _check_page_sequence("ResultScorePages",["ResultScoreRow0","ResultScoreRow1","ResultScoreRow2","ResultScoreRow3","ResultScoreRow4"],dimensions)
+		await _check_page_sequence("ResultScorePages",["ResultScoreRow0","ResultScoreRow1","ResultScoreRow2","ResultScoreRow3","ResultScoreRow4","ResultScoreRow5"],dimensions)
 		await _click_return(dimensions)
 		_main._launch_game("game-001",false,true)
 		await _frames(5)
@@ -364,7 +364,15 @@ func _check_page_sequence(pager_name: String, expected: Array, dimensions: Vecto
 	_check(pager!=null,"%s provides real paged content"%pager_name)
 	if pager==null: return
 	var seen: Array[String]=[]
+	var photo_rectangles:Array[Rect2]=[]
 	for index in range(int(pager.get_meta("page_count"))):
+		if pager_name=="ResultScorePages":
+			for photo_index in 4:
+				var photo:=_main.overlay.find_child("ResultPhoto%d"%photo_index,true,false) as Control
+				_check(photo!=null,"result pagination retains its photo slot")
+				if photo==null:continue
+				if index==0:photo_rectangles.append(photo.get_global_rect())
+				else:_check(photo_rectangles[photo_index].is_equal_approx(photo.get_global_rect()),"result pagination keeps every photo position and size stable at %s"%dimensions)
 		var view := pager.find_child("PageContent",true,false) as Control
 		var labels: Array[Label]=[]
 		for label in view.find_children("*","Label",true,false):

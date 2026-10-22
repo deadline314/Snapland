@@ -1,0 +1,29 @@
+[
+  {
+    "file": "feather-official-animation.gif",
+    "url": "https://steamcdn-a.akamaihd.net/steam/apps/545040/extras/Logo5.jpg?t=1554429232",
+    "page": "https://samuraipunk.itch.io/feather",
+    "team": "Samurai Punk",
+    "scope": "Official animated image; only its first frame was visually inspected. No continuous animation or flight-controls watching claim.",
+    "sha256": "35f00577ac22b3a5007908d2e29ba4800eebb77455f9f5534a3ee7bd2e356957",
+    "frames": 39,
+    "first_frame": "feather-official-first-frame.png",
+    "first_frame_sha256": "1201d9e7c2d636016469b1e72b865b97b960e58c534462771afc996681e0f963"
+  },
+  {
+    "file": "flock-official.jpg",
+    "url": "https://cdn.sanity.io/images/u8gx7vr2/production/baa3a4871c1b040c406065e1d612964cab31f060-1920x1080.jpg?auto=format&fit=max&h=1125&q=95&w=3400",
+    "page": "https://www.annapurna.com/interactive/flock",
+    "team": "Hollow Ponds",
+    "scope": "Official static page image; not captured play",
+    "sha256": "f4224720fc8bf47de00105a3fd0bcd8158e11ebc19091c14e6a49e15d1c3ca90"
+  },
+  {
+    "file": "alba-official.png",
+    "url": "https://www.albawildlife.com/static/aa8cbe1c5f959d0900fb5f61bdedcc6c/6ea17/screenshot4.png",
+    "page": "https://www.albawildlife.com/",
+    "team": "ustwo games",
+    "scope": "Official static screenshot source, not my play",
+    "sha256": "138b5f7acd0021093e42bf580c593e3cd72e91d6d17da127cfdd9fc70723e012"
+  }
+]

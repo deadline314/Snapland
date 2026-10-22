@@ -1,0 +1,9 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 10.41,
+  "complete_progress_bytes_equal": true,
+  "all_photo_files_equal": true,
+  "photo_file_count": 6,
+  "scope": "Second actual Godot4.7.2 process reading only this Session earned private profile, without reset. Not a desktop-release acceptance."
+}

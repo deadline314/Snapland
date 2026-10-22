@@ -81,6 +81,10 @@ func _run() -> void:
 	if not main._capture(MAIN_REVIEW_DIR + "/ordinary-result.png"):
 		_fail("Could not capture the natural Main result screen")
 		return
+	var qualification:=main.overlay.find_child("ResultQualification",true,false) as Label
+	if qualification==null or not qualification.text.contains("已達成小惡魔"):
+		_fail("Precise result hides its earned devil qualification");return
+	if not await _review_kite_result_pages("kite-precise"):return
 	if not await _capture_live_achievement():
 		return
 	if not await _wait_until(func() -> bool: return main.session == null and main.modal_kind == "", "result returns to the park"):
@@ -185,6 +189,8 @@ func _launch_private_practice() -> bool:
 	_key(KEY_E)
 	if not await _wait_until(func() -> bool: return main.modal_kind == "game_info", "open game-002 details for private practice"):
 		return false
+	if _find(main.overlay,"練習操作")==null:
+		if not await _activate_main_button("玩法與選項","open optional Kite practice modes"):return false
 	if not await _activate_main_button("練習操作", "launch private Kite practice"):
 		return false
 	if not await _wait_until(func() -> bool: return is_instance_valid(main.session) and main.session.game_id == TARGET_GAME_ID, "private practice launches from Main"):
@@ -550,3 +556,37 @@ func _fail(message: String) -> void:
 	if is_instance_valid(main) and is_instance_valid(main.audio):
 		main.audio.shutdown()
 	get_tree().quit(1)
+
+func _review_kite_result_pages(prefix:String) -> bool:
+	var pager:=main.overlay.find_child("ResultScorePages",true,false) as VBoxContainer
+	if pager==null or not pager.has_meta("page_entries"):await _fail("Missing live score pager");return false
+	var entries:Array=pager.get_meta("page_entries");var seen:Dictionary={}
+	var next:=main.overlay.find_child("ResultScorePagesNext",true,false) as Button
+	var photo_layout:Array[Rect2]=[]
+	var layouts:Array=[]
+	for page in int(pager.get_meta("page_count",0)):
+		await _frames(2)
+		var page_photos:Array=[]
+		for photo_index in 4:
+			var photo:=main.overlay.find_child("ResultPhoto%d"%photo_index,true,false) as Control
+			if photo==null:await _fail("Missing actual result photo slot");return false
+			page_photos.append([photo.global_position.x,photo.global_position.y,photo.size.x,photo.size.y])
+			if page==0:photo_layout.append(photo.get_global_rect())
+			elif photo_layout[photo_index].position.distance_to(photo.global_position)>1.0 or photo_layout[photo_index].size.distance_to(photo.size)>1.0:
+				await _fail("Actual result pagination moved/resized a photo slot");return false
+		layouts.append({"page":page+1,"photo_rectangles":page_photos})
+		var content:=pager.find_child("PageContent",true,false)
+		for node in content.get_children():
+			if not node is Label or not node.visible:continue
+			var label:=node as Label
+			if not get_viewport().get_visible_rect().encloses(label.get_global_rect()):await _fail("Actual result row is clipped");return false
+			var index:=int(str(label.name).trim_prefix("ResultScoreRow"))
+			if index>=entries.size() or not label.text.contains(str(entries[index].label)):await _fail("Actual result row text differs");return false
+			seen[index]=label.text
+		await RenderingServer.frame_post_draw
+		if not main._capture("%s-page-%d.png"%[prefix,page+1]):await _fail("Capture actual result page");return false
+		if page+1<int(pager.get_meta("page_count")):
+			if not await _native_click_button(next,"read next actual Kite score page"):return false
+	if seen.size()!=entries.size():await _fail("Not all actual Kite score rows were shown");return false
+	FileAccess.open(OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir().path_join(prefix+"-result-layout.json"),FileAccess.WRITE).store_string(JSON.stringify(layouts,"  "))
+	return true

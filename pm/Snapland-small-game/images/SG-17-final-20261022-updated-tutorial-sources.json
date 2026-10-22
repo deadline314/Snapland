@@ -1,0 +1,20 @@
+[
+  {
+    "source": "work/kite-final-20261022/controls-v3/captures/001-ordinary-action.png",
+    "asset": "assets/ui/tutorials/game-002-step-01.png",
+    "sha256": "274f87b01a0a1cdbeeb59ca74b9b25af496b7333ba94dd2cd0015dd6a7074d24",
+    "bytes_equal": true
+  },
+  {
+    "source": "work/kite-final-20261022/controls-v3/captures/002-ordinary-gust.png",
+    "asset": "assets/ui/tutorials/game-002-step-02.png",
+    "sha256": "1249c1672f3d2bd4c03d79b9fca0ecfb4837215c8755f9d1034e4c39cd0d95e4",
+    "bytes_equal": true
+  },
+  {
+    "source": "work/kite-final-20261022/controls-v3/captures/004-ordinary-result.png",
+    "asset": "assets/ui/tutorials/game-002-step-03.png",
+    "sha256": "4ac9a71677b68f07486358b0858668a7f56c8319831b1c31a9adc19db79d3cd3",
+    "bytes_equal": true
+  }
+]

@@ -616,7 +616,17 @@ func score_summary() -> Dictionary:
 		rows.append({"key": "mistakes", "label": "撞線（不計分）" if mode == "sign_balance" else "失誤（不計分）", "amount": 0, "count": mistakes, "progress_only": true})
 	if rows.is_empty():
 		rows.append({"key": "no_score", "label": _score_label(), "amount": 0, "count": 0})
-	return {"total": score, "label": _score_label(), "rule": _score_rule_text(), "rows": rows}
+	var summary := {"total": score, "label": _score_label(), "rule": _score_rule_text(), "rows": rows}
+	if mode=="kite_rings" and ended and not practice_mode:
+		if not kite_model.won:
+			summary["qualification_text"]="普通拍貼需五環全過（本次 %d / 5）；小惡魔需未輔助、五次中心且零救援。"%kite_model.ring_index
+		elif assisted:
+			summary["qualification_text"]="五環全過，取得普通拍貼；輔助回合不取得小惡魔拍貼。"
+		elif kite_model.devil_won:
+			summary["qualification_text"]="五環全中心、零救援，已達成小惡魔條件。"
+		else:
+			summary["qualification_text"]="普通拍貼：五環全過。小惡魔需五次中心、零救援（本次中心 %d / 5、救援 %d）。"%[kite_model.center_hits,kite_model.rescues_used]
+	return summary
 
 func _score_label() -> String:
 	match mode:
@@ -637,7 +647,7 @@ func _score_label() -> String:
 func _score_rule_text() -> String:
 	match mode:
 		"balloon_delivery": return "每送達一封郵袋 +150。"
-		"kite_rings": return "中心穿環 +100，擦邊穿環 +60，漏環或斷線不加分。"
+		"kite_rings": return "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過得普通拍貼；未輔助、五環全中心且零救援才得小惡魔拍貼。"
 		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。"
 		"crowd_traffic": return "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。"
 		"hat_catching": return "每接住一頂帽子 +100。"
@@ -966,15 +976,18 @@ func _tick_kite(delta: float) -> void:
 	while _kite_marker_cursor < markers.size():
 		var marker: Dictionary = markers[_kite_marker_cursor]
 		var kind := str(marker.get("kind", ""))
+		var ring_label := "第 %d 環・" % (int(marker.get("ring", 0)) + 1)
 		if kind == "center":
-			_award_points("kite_center", "中心穿環", 100)
+			_award_points("kite_center_" + str(marker.get("ring",0)), ring_label + "中心穿環", 100)
 			_feedback("穿過風環中心！", MINT)
 		elif kind == "edge":
-			_award_points("kite_edge", "擦邊穿環", 60)
+			_award_points("kite_edge_" + str(marker.get("ring",0)), ring_label + "擦邊穿環", 60)
 			_feedback("擦邊穿過風環", YELLOW)
 		elif kind == "miss":
+			_award_points("kite_miss_" + str(_kite_marker_cursor), ring_label + "漏環（不計分）", 0)
 			_feedback("漏過風環，風箏已退回安全距離", PINK)
 		elif kind == "line_snap":
+			_award_points("kite_line_snap_" + str(_kite_marker_cursor), ring_label + "斷線（不計分）", 0)
 			_feedback("風箏線張力過高，已安全復位", PINK)
 		_kite_marker_cursor += 1
 	if bool(state.get("ended", false)):

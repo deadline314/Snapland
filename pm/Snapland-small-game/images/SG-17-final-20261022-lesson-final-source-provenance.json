@@ -1,0 +1,4 @@
+{
+  "source_sha256": "054b998494b88e3ae8bc56d38cee187d58cd3b242158ae835a767afe81b4c12e",
+  "diagnostic_changes": "dependency paths, isolated screenshot output and reject overwrite; original 60-second per-game and 360-second global bounds and gameplay unchanged"
+}

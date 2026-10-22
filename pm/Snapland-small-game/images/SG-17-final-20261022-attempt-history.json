@@ -1,0 +1,12 @@
+{
+  "scope": "Earlier native passes cover their stated routes, not final UI/source claims.",
+  "outcomes_v1": "Three actual misses + retry + edge/centers passed, but individual eligibility not yet visible.",
+  "outcomes_v2": "Eligibility and per-attempt zero rows passed. Viewed result pages exposed modal/photo-grid resizing; visually rejected as final layout.",
+  "outcomes_v3": "Final layout guard passes; did not include final assisted night/reduced replay.",
+  "outcomes_v4": "Final genuine miss/retry/edge ordinary and assisted night/reduced ordinary-only replay; no thresholds weakened.",
+  "controls_v1_v2": "Pass their first tutorial/precise/album/private routes; before final stable result layout. V3 is final.",
+  "lesson_assets": "Final3 PNGs copied from v3 actual action,gust,natural500result AFTER the controls film. Separate new lesson process/import validates refreshed images; do not describe the controls film as showing the new lesson assets.",
+  "reference_failures": "Initial Pilotwings Nintendo URL, old Panic Playdate URL, incorrectly guessed Tiny&Big and Humanity store URLs were inaccessible and not counted. Six successful primary teams are documented separately.",
+  "first_headless_counterexample": "The short-label fixture had no qualification row and did not reproduce the observed layout jump (exit0). It is inconclusive, not a failed-before proof. Realistic long row/qualification data and a sixth partial-page item retain old assertions and exercise the real minimum-content difference.",
+  "audio": "All native engines used Dummy. Silent video, not listening/hardware performance/human play."
+}

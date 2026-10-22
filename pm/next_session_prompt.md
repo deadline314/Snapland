@@ -115,3 +115,8 @@ with tempfile.TemporaryDirectory(prefix="snapland-next-local-") as isolated:
 ## 最新接續：SG-1設計交付（2026-10-20）
 
 SG-1完整設計已交付，舊缺檔敘述只代表歷史。全案90張、21完成、69未結案；本機五範圍與101項Python通過。上一主線5560c23遠端runtime在第33／92項NPC世界整合停止，仍要求已停用的程序拆腿；需改以正式原畫與完整接地／姓名／暫停／互動契約驗證，不能恢復被否定步態。後九區116款設計不等於可玩，不做新入口擴張。角色及主區優先繼續。
+
+
+## 2026-10-22 接續索引
+
+目前票況以 [open_tickets.md](open_tickets.md) 與 [User-guide](user_guide.md) 為準；上方各輪次的數量與遠端SHA是歷史紀錄，不當成最新main。SG-17已完成逐次成績／資格、穩定結果翻頁、原生普通／精準／輔助／私人練習及真正新程序重開；來源與界線見本票最新Commit。ART-18本輪新衣物候選仍全數拒收，沒有新增已批准格數或正式衣櫃內容。接續前先fetch最新main及核對CI，保留其他Session工作。

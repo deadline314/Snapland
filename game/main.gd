@@ -496,7 +496,7 @@ func _step_content_page(pager: VBoxContainer, amount: int) -> void:
 			control.grab_focus()
 			break
 
-func _render_content_page(pager: VBoxContainer, requested: int) -> void:
+func _render_content_page(pager: VBoxContainer, requested: int, reset_reserved_height: bool = false) -> void:
 	var entries: Array=pager.get_meta("page_entries")
 	var capacity: int=pager.get_meta("page_capacity")
 	var count := maxi(1,ceili(float(entries.size())/capacity))
@@ -504,6 +504,13 @@ func _render_content_page(pager: VBoxContainer, requested: int) -> void:
 	pager.set_meta("page_index",index)
 	pager.set_meta("page_count",count)
 	var view := pager.find_child("PageContent",true,false) as VBoxContainer
+	if pager.name=="ResultScorePages":
+		if reset_reserved_height:
+			view.custom_minimum_size.y=0.0
+		elif view.get_child_count()>0:
+			# A short last page must retain the previous score area's height;
+			# otherwise the modal and neighboring photo grid shrink mid-navigation.
+			view.custom_minimum_size.y=maxf(view.custom_minimum_size.y,view.get_combined_minimum_size().y)
 	for child in view.get_children():
 		view.remove_child(child)
 		child.queue_free()
@@ -527,7 +534,7 @@ func _adapt_content_pagers(compact: bool) -> void:
 		if desired!=capacity:
 			var first := int(node.get_meta("page_index",0))*capacity
 			node.set_meta("page_capacity",desired)
-			_render_content_page(node,floori(float(first)/desired))
+			_render_content_page(node,floori(float(first)/desired),true)
 
 func _close() -> void:
 	if modal_kind=="dialogue":
@@ -1307,6 +1314,13 @@ func _game_finished(result: Dictionary) -> void:
 		body.add_child(Paper.label("這是私人練習回合；分數、拍貼、任務與成就都沒有寫入紀錄。",20,Paper.DEEP_TEAL))
 	else:
 		body.add_child(Paper.label("沒有扣除任何收藏。也可以開啟輔助，試試別的節奏。",22))
+	var qualification_text:=str(result.get("score_summary",{}).get("qualification_text",""))
+	if not qualification_text.is_empty():
+		var qualification:=Paper.label(qualification_text,17,Paper.TEAL)
+		qualification.name="ResultQualification"
+		qualification.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+		qualification.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		body.add_child(qualification)
 	var result_columns := HBoxContainer.new()
 	result_columns.name="ResultColumns"
 	result_columns.size_flags_vertical=Control.SIZE_EXPAND_FILL
@@ -1397,6 +1411,8 @@ func _render_score_row(parent: VBoxContainer, row: Dictionary, index: int) -> vo
 		text+="  ·  %d 分"%int(row.get("amount",0))
 	var label := Paper.label(text,18)
 	label.name="ResultScoreRow%d"%index
+	label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	parent.add_child(label)
 
 func _show_quest(id: String) -> void:

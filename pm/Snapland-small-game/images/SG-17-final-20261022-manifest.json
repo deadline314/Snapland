@@ -1,0 +1,545 @@
+{
+  "scope": "SG17 final bounded native evidence; manifest excludes itself.",
+  "files": [
+    {
+      "name": "SG-17-final-20261022-actual-release-kite-initial.png",
+      "bytes": 70371,
+      "sha256": "4a8d21dfe85c108988d1e27bd651ba9086539552d477f7af1bce1fad09d43765"
+    },
+    {
+      "name": "SG-17-final-20261022-alba-official.png",
+      "bytes": 1082313,
+      "sha256": "138b5f7acd0021093e42bf580c593e3cd72e91d6d17da127cfdd9fc70723e012"
+    },
+    {
+      "name": "SG-17-final-20261022-attempt-history.json",
+      "bytes": 1629,
+      "sha256": "2f6097d294673e18c3e7a85a77028b11d950fccde4f00c47696ac30f15e24552"
+    },
+    {
+      "name": "SG-17-final-20261022-checks-layout-kite-flight-model-tests.log",
+      "bytes": 109,
+      "sha256": "2fb35e1f818b58e5707f3fbb8907f1faa9fbe17280974f4bbee5a44843735753"
+    },
+    {
+      "name": "SG-17-final-20261022-checks-layout-kite-flight-view-tests.log",
+      "bytes": 109,
+      "sha256": "2a2dddb6784fdac2cc1bd3a675a9f0da2427b237da014d13e89e1ab54a3bb38a"
+    },
+    {
+      "name": "SG-17-final-20261022-checks-layout-main-scene-integration-tests.log",
+      "bytes": 15104,
+      "sha256": "07ffae3eed3306639486a94a54675d088297defdcd408a4550ecf47df7b182b5"
+    },
+    {
+      "name": "SG-17-final-20261022-checks-layout-pixel-UI-minigame-tests.log",
+      "bytes": 13937,
+      "sha256": "0b63495d172dca96e3ecfd96948d7cf0828c7db5ebb8f6d826b2ea47a3e46039"
+    },
+    {
+      "name": "SG-17-final-20261022-checks-layout-pixel-UI-shell-tests.log",
+      "bytes": 18023,
+      "sha256": "5a5e6f22942b09975fa41008fb3fe0c6508a66f8757dff41f42a16a26afe4123"
+    },
+    {
+      "name": "SG-17-final-20261022-checks-layout-results.json",
+      "bytes": 720,
+      "sha256": "872726625e6022287b0408d73c2e6a18978295ff53bc86f7f6aff055b4d660e0"
+    },
+    {
+      "name": "SG-17-final-20261022-checks-layout-welcome-minigame-tests.log",
+      "bytes": 14439,
+      "sha256": "e4dc6e024b45339cffb66bd6c797743f6ba4b27930570bb23a88039675d11822"
+    },
+    {
+      "name": "SG-17-final-20261022-ci-f6-full.log",
+      "bytes": 46643,
+      "sha256": "070de95f1176a1a0bf66dd3ccf80d76a16c019094cd17ba1604297128f34e7d4"
+    },
+    {
+      "name": "SG-17-final-20261022-ci-f6-runtime.log",
+      "bytes": 46537,
+      "sha256": "ced432a5ec4c58c96cbfb60c0249501205e65b0c666555bf5f902e93024c2d27"
+    },
+    {
+      "name": "SG-17-final-20261022-ci-f6-verification.json",
+      "bytes": 311,
+      "sha256": "20478d03482cd1d0c81d91c09bcfc085e52ef2e7a813af6fac70827e984e518f"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-000-first-visit-tutorial.png",
+      "bytes": 260689,
+      "sha256": "373e358265bd25c5c2d91fc9e850e030a2768182e25495c9b96d223a5550880f"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-000-restart-ordinary-album.png",
+      "bytes": 111252,
+      "sha256": "6b18fc4297c4d112a2480fb4c2aed9d92ab12dc5d3d8579eaf476acb02f7f68d"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-001-ordinary-action.png",
+      "bytes": 68121,
+      "sha256": "274f87b01a0a1cdbeeb59ca74b9b25af496b7333ba94dd2cd0015dd6a7074d24"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-001-restart-devil-album.png",
+      "bytes": 112144,
+      "sha256": "b0e0b8382f53a195270b6e7b7229d7d7e9f700e28c6849ad18d2daca4538158d"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-002-ordinary-gust.png",
+      "bytes": 70253,
+      "sha256": "1249c1672f3d2bd4c03d79b9fca0ecfb4837215c8755f9d1034e4c39cd0d95e4"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-003-natural-00-game-002-score-500.png",
+      "bytes": 481443,
+      "sha256": "c3b1ce46749c32922d4fd17bbf53d15bf240b872c60a86d2f7cef1b85b1a2553"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-004-ordinary-result.png",
+      "bytes": 481472,
+      "sha256": "4ac9a71677b68f07486358b0858668a7f56c8319831b1c31a9adc19db79d3cd3"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-005-kite-precise-page-1.png",
+      "bytes": 481312,
+      "sha256": "a3e1e33ec3d486dc5d6a89ff0fcba746aa9f7fa47a25e7d0b8f0ce233d710b14"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-006-ordinary-album.png",
+      "bytes": 154202,
+      "sha256": "0bbc47c360d6a172c4af24dcfa70b37c93a8add7e60992220f50ef0b8670e4a8"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-007-devil-album.png",
+      "bytes": 155177,
+      "sha256": "aaa3c29342a314b18bd2fdef6e577dc93bf841f25f508ef30ea6466b7e8e2382"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-008-earned-achievement.png",
+      "bytes": 253686,
+      "sha256": "31062c37a600bb005a16eae700f299f68b03da822554c1efc5f6775f6024e6db"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-009-assisted-reduced-practice-start.png",
+      "bytes": 68496,
+      "sha256": "b0d40ebda103201c94ea1a7a4fb65b870537aac2aaff96ec2d6c9d3dc2af49a8"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-010-practice-before-retry-action.png",
+      "bytes": 68496,
+      "sha256": "b0d40ebda103201c94ea1a7a4fb65b870537aac2aaff96ec2d6c9d3dc2af49a8"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-011-practice-before-retry-gust.png",
+      "bytes": 70777,
+      "sha256": "439ce718a3d078512ebe03d47772cebeb165fbd329ac2bebd2bb79e0a301d6c7"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-012-practice-retried.png",
+      "bytes": 68496,
+      "sha256": "b0d40ebda103201c94ea1a7a4fb65b870537aac2aaff96ec2d6c9d3dc2af49a8"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-013-practice-after-retry-action.png",
+      "bytes": 68496,
+      "sha256": "b0d40ebda103201c94ea1a7a4fb65b870537aac2aaff96ec2d6c9d3dc2af49a8"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-014-practice-after-retry-gust.png",
+      "bytes": 70777,
+      "sha256": "439ce718a3d078512ebe03d47772cebeb165fbd329ac2bebd2bb79e0a301d6c7"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-captures-015-park-after-private-leave.png",
+      "bytes": 1553572,
+      "sha256": "5cd0eb824a0da1e9aa06caaca278567193ed5833692b1140561e8eeb2a98bf03"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-kite-precise-result-layout.json",
+      "bytes": 357,
+      "sha256": "76bbedcc01223974b588cbfe1cdfd4fe21de66d2809a43583a880cbfd734a71b"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-result.json",
+      "bytes": 539,
+      "sha256": "4bf20159b5de652378bdc5c4a53004570fceb9587e5ef33c0f6daf9a5b37f74d"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-result.log",
+      "bytes": 27069,
+      "sha256": "6a36eafc43824f0123837c278fb4722f00148371d3ce5bd220452a80c990fe5d"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-review-1.jpg",
+      "bytes": 164060,
+      "sha256": "f044e297bfe661b7d5298678d0f5594a7696beb59ab658e0ae0255d403745fc9"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-review-2.jpg",
+      "bytes": 176658,
+      "sha256": "ef81499c069e8189ce2abbcd915abd74d7eec3b67f2412db3eaf839a88ab81a8"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-review-3.jpg",
+      "bytes": 167165,
+      "sha256": "e4c42e3af5cf673c9a44f39bc7cd787d8b9b5c95baed779ffbfeeb77e9f9de9a"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-source-provenance.json",
+      "bytes": 955,
+      "sha256": "a1b36dcfb36f4a5bb3ca1a030d2fb7bc2c72f05737bf23c142185e6ec6f496b8"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3-video-metadata.json",
+      "bytes": 239,
+      "sha256": "bed0428583acbde8e9f7b9f5841d8f60dce96c7059af0085d126697e52a0da34"
+    },
+    {
+      "name": "SG-17-final-20261022-controls-v3.mp4",
+      "bytes": 28871461,
+      "sha256": "6461da0fd04ee37464ebd9480966241a65ac17bc03489b418bcf75dab6722b00"
+    },
+    {
+      "name": "SG-17-final-20261022-feather-official-animation.gif",
+      "bytes": 1360545,
+      "sha256": "35f00577ac22b3a5007908d2e29ba4800eebb77455f9f5534a3ee7bd2e356957"
+    },
+    {
+      "name": "SG-17-final-20261022-feather-official-first-frame.png",
+      "bytes": 54587,
+      "sha256": "1201d9e7c2d636016469b1e72b865b97b960e58c534462771afc996681e0f963"
+    },
+    {
+      "name": "SG-17-final-20261022-flock-official.jpg",
+      "bytes": 379600,
+      "sha256": "f4224720fc8bf47de00105a3fd0bcd8158e11ebc19091c14e6a49e15d1c3ca90"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-captures-game-002-first-step.png",
+      "bytes": 257435,
+      "sha256": "666ac70db58a96135045a2b44ce344f7fb98e8fedafd4b5ae7527ce402862f9c"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-captures-game-002-help-reopened.png",
+      "bytes": 64060,
+      "sha256": "cf0c83673c2b0f1fb70b3525e4ba2ec11961af23924398d14827f6687f7db5f9"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-captures-game-002-help-step-01.png",
+      "bytes": 64080,
+      "sha256": "17c9cde40b3167d0a74c95740bf1be4dfaf4a1b274c35f3229bb0b0b398f99ff"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-captures-game-002-private-help-step-01.png",
+      "bytes": 64024,
+      "sha256": "5512a6a0a28259b5e0e44a67d0415092370059d3ba2e445c82cbb393bcdb862f"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-captures-game-002-step-02.png",
+      "bytes": 260541,
+      "sha256": "cf7cb1262ab85c46e9a529a1e03b4436546f7ff4bc72e85678d0b8221f122ca8"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-captures-game-002-step-03.png",
+      "bytes": 350266,
+      "sha256": "2b06ed2895f77351d8f66f1f576cfebdd6d3a106bb2a51a1256a4f9e53f55bd3"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-result.json",
+      "bytes": 143,
+      "sha256": "c72cb9df1d0210ffdd22b988e91085d269d7eb4135f438e8675b092934f0d1bd"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-result.log",
+      "bytes": 14471,
+      "sha256": "3f9947ee2ef714374abb6642867c12e1bb52fca6c8cbf9e87f749286da8d9e4d"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-review-1.jpg",
+      "bytes": 182179,
+      "sha256": "62da61fdc32fa447785168b8bc9eeb11f4e6ea2eeb2f01051655ae322307c538"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-final-source-provenance.json",
+      "bytes": 264,
+      "sha256": "baf200722bc3d0a87fb80ca41f9622b165447875185ec3703d31b670f7e70622"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-import-result.json",
+      "bytes": 51,
+      "sha256": "9c298316bf664e527c8671966d061eb7133433cd26f8716e2526916915f6eee3"
+    },
+    {
+      "name": "SG-17-final-20261022-lesson-import-result.log",
+      "bytes": 142629,
+      "sha256": "aa736a28bc8e2e1363c50a565211e077142d1de7998fb3dae85cc734585b1525"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-000-natural-00-game-002-score-0.png",
+      "bytes": 443305,
+      "sha256": "2541803e5cac24e0c7793533b7eb51729c89abf05c25902d3abcc7e48bb3ac12"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-001-kite-failed-page-1.png",
+      "bytes": 443776,
+      "sha256": "f642b65b5750f457bbebd0421cc985f0e1547cc8c463f5f998d631952db91400"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-002-kite-real-result-retry.png",
+      "bytes": 69985,
+      "sha256": "36d8454ae2cb3c45cbc5b1b04453ff23798c67b8f8cdbb05272cb59c1bc32ca6"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-003-kite-edge-route-ring-1.png",
+      "bytes": 69985,
+      "sha256": "36d8454ae2cb3c45cbc5b1b04453ff23798c67b8f8cdbb05272cb59c1bc32ca6"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-004-kite-edge-route-ring-2.png",
+      "bytes": 67010,
+      "sha256": "3159a00e703f5251f9bb830a7ce8a1a6dba34fef09c27cecf86cff0105b5f5b1"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-005-kite-edge-route-ring-3.png",
+      "bytes": 69373,
+      "sha256": "6eaeffde381d0948da47545ee2a1f197346ed9e9ecc7bc228edc4e91d80dcab4"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-006-kite-edge-route-ring-4.png",
+      "bytes": 65761,
+      "sha256": "176a48fca3af8adaa1d3759f30f28414626f07b301bc2b890253b3549ad158bf"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-007-kite-edge-route-ring-5.png",
+      "bytes": 71474,
+      "sha256": "b50b70d5a4497c10a94a7378da472df85b9771c683297e31ff936b61ccf50bb8"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-008-natural-01-game-002-score-460.png",
+      "bytes": 463257,
+      "sha256": "cfc7183aed04359f2b33c792b0115f1131ec2af36345b873eee618f1e729d6ae"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-009-kite-ordinary-page-1.png",
+      "bytes": 463892,
+      "sha256": "778a4fe42f372244fa429b13b625752c200bb6784a020c985a3277718f1abab0"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-010-kite-ordinary-page-2.png",
+      "bytes": 461088,
+      "sha256": "dc9a4ff429725dc9079e158bd3cdad73e2dfc40b8980e181807f9cb8ec78473f"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-011-kite-assist-night-ring-1.png",
+      "bytes": 70433,
+      "sha256": "792986a9d6183c0d431e1416aaf8e3e9d9510fb54efd87c84713f1c8d044bdb3"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-012-kite-assist-night-ring-2.png",
+      "bytes": 67019,
+      "sha256": "c468cb5016d68270464c04142fc07d2081ae992a479cf36d411c553f4ae35a47"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-013-kite-assist-night-ring-3.png",
+      "bytes": 68687,
+      "sha256": "cc6c72f8dca57a2f6da4962ef651dbc220daafc9b0df48816d79454e3ee3aaa3"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-014-kite-assist-night-ring-4.png",
+      "bytes": 65926,
+      "sha256": "186405e86f0c936ed7d23f468cd0ddbffb47bdf2d487aa58e6758c4b1a2f2456"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-015-kite-assist-night-ring-5.png",
+      "bytes": 70886,
+      "sha256": "8b480e4db0225ac8c2ccc535bd20d65d0ab96845878df06b35645ca553e0b1de"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-016-natural-02-game-002-score-500.png",
+      "bytes": 420157,
+      "sha256": "33b77f956db547588a9a17c20c99a3ee11ae10031bc232e03f25fda7238eee30"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-captures-017-kite-assisted-night-page-1.png",
+      "bytes": 420234,
+      "sha256": "c76c4e4361d9cd7aed6a4e694c33b4d6ac86fad44906305c47f3a5838cce641f"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-kite-assisted-night-result-layout.json",
+      "bytes": 357,
+      "sha256": "76bbedcc01223974b588cbfe1cdfd4fe21de66d2809a43583a880cbfd734a71b"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-kite-failed-result-layout.json",
+      "bytes": 357,
+      "sha256": "47209b274dcfa2cc77fe6ee2bad3169210b0c142f7eb99be6cb110a07388540f"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-kite-ordinary-result-layout.json",
+      "bytes": 712,
+      "sha256": "551da75cbe291226be367e947e9a66b2e3d15e44ce82c0692b0dad84fe7ab189"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-outcomes.json",
+      "bytes": 10479,
+      "sha256": "3b82fc327c411fddd3aa50d43f2d3b46b5f3a7698bb8a5cbe8e3377cdb3ecb58"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-result.json",
+      "bytes": 453,
+      "sha256": "dc3f5a7948838ea1fdc0d3050b66f32a464859d926b221d3f81819a29d731bbf"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-result.log",
+      "bytes": 23668,
+      "sha256": "785419b858256c52215a09c60f903e2e31a1ddc608919d67fdf67a48e8ec6aad"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-review-1.jpg",
+      "bytes": 154874,
+      "sha256": "c135aa8e1b01707dfe8e89a9fec75dcd74bd099b124b3249cf40decdf6140f7d"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-review-2.jpg",
+      "bytes": 162888,
+      "sha256": "bbff56ff31324657da2b65c5bc9583c6112757d75ee2f23f24853b7863e2332c"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-review-3.jpg",
+      "bytes": 144740,
+      "sha256": "99d9999c5fa7609349fd7ad6a3dbbecc5234c05bb5add95d2d4a709f52368c44"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-source-provenance.json",
+      "bytes": 1192,
+      "sha256": "c99861823152c6e643890568a2a303a42e48182360742e8d1185fff075550c91"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4-video-metadata.json",
+      "bytes": 238,
+      "sha256": "ce2a9dd0b1f41b9afb58c8bd3fdadf6313bdb7b991ef0a6c2fddbed4b0efd7f9"
+    },
+    {
+      "name": "SG-17-final-20261022-outcomes-v4.mp4",
+      "bytes": 15962499,
+      "sha256": "0b172ca2854bd939af7a1c1f6c02c64b6f6f5d3a613e2481f2887b958f995e1c"
+    },
+    {
+      "name": "SG-17-final-20261022-previous-tutorial-sha256.json",
+      "bytes": 345,
+      "sha256": "7807b908d3d95eac3404ef70d41b0cf48a34a4fe56c874534aca8daf290de41c"
+    },
+    {
+      "name": "SG-17-final-20261022-reference-images.json",
+      "bytes": 1417,
+      "sha256": "29c5c84ccfa550ba33850c67dacbacbd196348179f94e3dcac9efea8045ffbed"
+    },
+    {
+      "name": "SG-17-final-20261022-release-final-build.json",
+      "bytes": 102848,
+      "sha256": "777336a02371c03710d3a796488b8574cd5e64a4b1fbd9c849c167a25d090ab5"
+    },
+    {
+      "name": "SG-17-final-20261022-release-final-export.log",
+      "bytes": 120339,
+      "sha256": "3a4fb24299b11d7bfd0c1aa1e8f999735f90cb6022930729c026e1758a035ad3"
+    },
+    {
+      "name": "SG-17-final-20261022-release-final-import.log",
+      "bytes": 67709,
+      "sha256": "8df0b2190bb9954ef94322f046729809615cb9d6410c39016c742cea8f78135e"
+    },
+    {
+      "name": "SG-17-final-20261022-release-smoke-final-result.json",
+      "bytes": 73,
+      "sha256": "856bd267843d3e1c1f00d45a9ee0f08f777e46d697b09d4ea461c7110f0bb40a"
+    },
+    {
+      "name": "SG-17-final-20261022-release-smoke-final-result.log",
+      "bytes": 6814,
+      "sha256": "de85ec2f4acf96cdd25acc15e68dd06d5087024464f241c09048b6bd33d73714"
+    },
+    {
+      "name": "SG-17-final-20261022-restart-v3-before-sha256.json",
+      "bytes": 712,
+      "sha256": "a913fb45315015c8af6a34b99fe0b966353c7f0eceb4c9ec89f8831469d631ff"
+    },
+    {
+      "name": "SG-17-final-20261022-restart-v3-restart-check.json",
+      "bytes": 205,
+      "sha256": "08955554556583293f334916e48295cff8b4a4e4e634f2085a9653520b3d5a9b"
+    },
+    {
+      "name": "SG-17-final-20261022-restart-v3-result.json",
+      "bytes": 296,
+      "sha256": "a286f54de531e11bb4889f41dc4fc44a62e6a466f2a17e267cb17d67f7ba70f0"
+    },
+    {
+      "name": "SG-17-final-20261022-restart-v3-result.log",
+      "bytes": 15324,
+      "sha256": "a278a88a306459d3d285132278cb8eee2fb913dbbdfd414119cfb258ba39b5c8"
+    },
+    {
+      "name": "SG-17-final-20261022-restart-v3-source-provenance.json",
+      "bytes": 1191,
+      "sha256": "afe2af6ce250656ebb5d55c9b3404ad07f6a001334485e380a489dfeecd99a88"
+    },
+    {
+      "name": "SG-17-final-20261022-sources-and-diagnostics.zip",
+      "bytes": 2698390,
+      "sha256": "e32feb205dc842b2178442730c0121bb8ad8ba350e5aa93848acd39f23520dd9"
+    },
+    {
+      "name": "SG-17-final-20261022-twelve-game-comparison-1.jpg",
+      "bytes": 168391,
+      "sha256": "ebaa5c53b10c77439c48e15fde01f9269b82f485f53742db5c330dd6ce69133c"
+    },
+    {
+      "name": "SG-17-final-20261022-twelve-game-comparison-2.jpg",
+      "bytes": 180498,
+      "sha256": "3fb748b433eac8814257ae68bae77b61e20366a0e2eebb2963c45064fac32505"
+    },
+    {
+      "name": "SG-17-final-20261022-twelve-game-source-sha256.json",
+      "bytes": 3438,
+      "sha256": "e3adb3cd80f38bf521307ea0d101f14cfdb2c4ae6da6843ece13b931d67bb26a"
+    },
+    {
+      "name": "SG-17-final-20261022-ui-before-realistic-result.json",
+      "bytes": 6285,
+      "sha256": "e9c3bdc9ea99774a36eb0ddb03be9ccfca9369ee9824012900965f971414d533"
+    },
+    {
+      "name": "SG-17-final-20261022-ui-before-realistic-result.log",
+      "bytes": 24214,
+      "sha256": "6856696af4023a26c831f07c3c310aa3eae59fdd2a61fb7b404032ca4b88be0c"
+    },
+    {
+      "name": "SG-17-final-20261022-ui-final-realistic-result.json",
+      "bytes": 160,
+      "sha256": "638491d57a6f81023fdb03ea9e31680ba5865a95ff47f85cd39eb56045ee6010"
+    },
+    {
+      "name": "SG-17-final-20261022-ui-final-realistic-result.log",
+      "bytes": 18023,
+      "sha256": "5a5e6f22942b09975fa41008fb3fe0c6508a66f8757dff41f42a16a26afe4123"
+    },
+    {
+      "name": "SG-17-final-20261022-ui-regression.json",
+      "bytes": 6547,
+      "sha256": "922d6cda0879b6bf0de1b355774b65a38c5a2f860c81dc56ab35956ff0b53aaf"
+    },
+    {
+      "name": "SG-17-final-20261022-updated-tutorial-sources.json",
+      "bytes": 778,
+      "sha256": "86791bc377d6fed2b5a1c759a1e9701abf5c2148ca83ff1fa277a80e8c03da8b"
+    },
+    {
+      "name": "SG-17-final-20261022-verification.json",
+      "bytes": 13310,
+      "sha256": "58d6e3ce5e3508c88e97363bbbdb90c2565c9a83687000b118af3dc14cd17726"
+    }
+  ]
+}

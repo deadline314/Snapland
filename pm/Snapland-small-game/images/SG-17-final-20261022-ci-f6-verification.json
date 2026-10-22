@@ -1,0 +1,10 @@
+{
+  "commit": "f6b48d064addd1715dde835bd51ac2c309d0a71b",
+  "run": 39734104571,
+  "python": 143,
+  "godot_runs": 93,
+  "godot_passes": 93,
+  "design_scopes": 5,
+  "names_order_original_caps_verified": true,
+  "scope": "Published ART18 support baseline; does NOT include current SG17 code or new lesson PNGs."
+}

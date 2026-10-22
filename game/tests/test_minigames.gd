@@ -122,7 +122,27 @@ func _test_kite_boundaries() -> void:
 	while not missed.ended: missed._process(0.05)
 	assert(missed_results.size() == 1 and not missed_results[0].success)
 	assert(missed.kite_model.rescues_used == missed.kite_model.MAX_RESCUES)
+	var missed_rows := 0
+	for event in missed.score_events:
+		if str(event.key).begins_with("kite_miss_"):
+			missed_rows += int(event.count)
+			_expect(int(event.amount)==0 and str(event.label).contains("環・漏環（不計分）"),"actual missed ring has a numbered zero-point ledger row")
+	_expect(missed_rows==missed.kite_model.misses and missed_rows>0,"ledger includes each actual miss, including the final unsaved attempt")
+	_expect(missed.score_events.filter(func(event):return str(event.key).begins_with("kite_miss_")).size()==missed_rows,"repeated missed rings remain separate visible attempts")
 	missed.queue_free()
+
+	var snapped := _new_session("game-002", false)
+	_key(snapped, KEY_UP);_key(snapped, KEY_SPACE)
+	var snap_budget := 400
+	while not snapped.ended and snap_budget>0:
+		snapped._process(0.05);snap_budget-=1
+	var snap_rows := 0
+	for event in snapped.score_events:
+		if str(event.key).begins_with("kite_line_snap_"):
+			snap_rows+=int(event.count)
+			_expect(int(event.amount)==0 and str(event.label).contains("斷線（不計分）"),"real sustained tension yields a zero-point line-snap row")
+	_expect(snap_budget>0 and snapped.ended and snap_rows==3 and snapped.kite_model.line_snaps==3,"three actual line snaps exhaust the original two-rescue budget")
+	snapped.queue_free()
 
 	var flown := _new_session("game-002", false)
 	var flown_results: Array[Dictionary] = []
@@ -134,6 +154,8 @@ func _test_kite_boundaries() -> void:
 	assert(budget > 0 and flown_results.size() == 1 and flown_results[0].success and flown_results[0].devil, "actual input-driven flight must center all five rings: %s" % str(flown.kite_model.snapshot()))
 	assert(flown.kite_model.center_hits == 5 and flown.kite_model.edge_hits == 0 and flown.kite_model.rescues_used == 0)
 	assert(flown.score == 500 and flown.mistakes == 0 and flown.score_summary().total == flown.score)
+	_expect(str(flown.score_events[0].label)=="第 1 環・中心穿環" and flown._score_rule_text().contains("五環全過") and flown._score_rule_text().contains("零救援"),"numbered score ledger and ordinary/devil rules match actual five-ring qualification")
+	_expect(str(flown.score_summary().get("qualification_text","")).contains("已達成小惡魔"),"actual five-center result supplies its earned qualification text")
 	flown.queue_free()
 
 	var keyed := _new_session("game-002", true)
@@ -145,6 +167,7 @@ func _test_kite_boundaries() -> void:
 		budget -= 1
 	assert(budget > 0 and keyed_results.size() == 1 and keyed_results[0].success and not keyed_results[0].devil, "assisted keyboard controls must fly the complete route: %s" % str(keyed.kite_model.snapshot()))
 	assert(keyed.kite_model.ring_index == 5 and keyed.kite_model.assisted)
+	_expect(str(keyed.score_summary().get("qualification_text","")).contains("輔助回合不取得"),"assisted completion explains its ordinary-only qualification")
 	_key_release(keyed, KEY_UP); _key_release(keyed, KEY_DOWN)
 	keyed.queue_free()
 	checks += 1
