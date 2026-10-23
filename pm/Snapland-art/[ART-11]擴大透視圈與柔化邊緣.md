@@ -1,6 +1,6 @@
 # [ART-11] 擴大透視圈與柔化邊緣
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -20,7 +20,7 @@
 ### 驗收條件
 - [x] 至少六個來源記錄實際觀察及效果取捨。
 - [x] 原生畫面可辨識較大的透視圈，邊緣過渡不遮住臉部且圈外建築正常。
-- [ ] 不同視窗、日夜、換裝、進出遮擋及降低動態正常；局部測試與截圖、短片齊全。
+- [x] 不同視窗、日夜、換裝、進出遮擋及降低動態正常；局部測試與截圖、短片齊全。
 
 ### 研究來源
 已閱讀六個以上來源的文字內容；逐項觀察及採用取捨記錄於[建築遮擋研究](../../design/runtime/occlusion.md)。相關原始文件：[Godot 射線](https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html)、[Godot 深度與後處理](https://docs.godotengine.org/en/stable/tutorials/shaders/advanced_postprocessing.html)、[Godot Spatial Shader](https://docs.godotengine.org/en/stable/tutorials/shaders/shader_reference/spatial_shader.html)、[Godot Camera3D](https://docs.godotengine.org/en/stable/classes/class_camera3d.html)、[Godot smoothstep](https://docs.godotengine.org/en/4.4/tutorials/shaders/shader_reference/shader_functions.html)、[Unity Cinemachine Deoccluder](https://docs.unity.cn/Packages/com.unity.cinemachine@6.6/manual/CinemachineDeoccluder.html)、[Unity Stencil](https://docs.unity3d.com/Manual/SL-Stencil.html)、[Chris Kurhan 的 URP 遮擋淡出說明](https://discussions.unity.com/t/tutorial-opaque-objects-making-it-hard-to-see-fade-them-out-with-the-standard-urp-shaders/888353)。未宣稱看過教學影片。
@@ -103,3 +103,24 @@
 ![近景完整角色與建築陰影](images/ART-11-zoom-v3-reveal.png)
 ![離開後恢復完整建築](images/ART-11-zoom-v3-restored.png)
 [正常速度](images/ART-11-zoom-v3-normal.mp4) · [四分之一速度](images/ART-11-zoom-v3-quarter.mp4) · [原生記錄](images/ART-11-zoom-v3-native.log)
+
+# Commit — 2026-10-23 較大透視圈的各情境驗收
+
+固定開始 SHA：`2e95cc6`；分支：`work/occlusion-light`。
+
+## 問題
+
+一般遊園鏡頭下透視圈偏小，頭頂和靴底在建築邊緣會被吃掉；各視窗、時段、換裝與降低動態也缺少同一套可重現的原生量測。
+
+## 改動
+
+透視圈依主角立牌的實際畫面大小放大（同一路線由 41.6 擴為 58.6 像素），柔邊仍是約 2.5 像素的穩定抖動帶，臉與腳都在圈內；圈外建築保留原材質、光影與完整影子。細節見 ART-10 同批交付。
+
+## 驗收
+
+四時段（凌晨、中午、傍晚、晚上）兩種建築、換裝後、降低動態、800×600 與 1600×900 視窗、離開後恢復與重建 Main 共 13 案全部通過：主角像素透過透視圈 100% 相同，頭頂與靴底列一致，圈外建築像素改變 0。正常與四分之一速度短片附在 ART-10。Godot 4.7.2 Compatibility、Xvfb 上的 llvmpipe 軟體繪製，腳本送出實際方向鍵；不是 GPU 硬體、Windows 或真人試玩。
+
+![四時段、換裝與降低動態](images/ART-11-occlusion-20261023-conditions.png)
+![兩種視窗與重建 Main 後](images/ART-11-occlusion-20261023-windows-reentry.png)
+
+量測截圖為比較用畫面，已隱藏其他立牌與標籤；完整畫面見短片。[逐案量測](images/ART-10-occlusion-20261023-verification.json)
