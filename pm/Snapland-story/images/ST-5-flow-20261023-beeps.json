@@ -1,0 +1,43 @@
+{
+  "sample_rate": 48000,
+  "seconds": 220.87,
+  "fps": 15.0,
+  "engine_frame_offset": 0,
+  "beep_onsets": 294,
+  "revealed_glyphs": 870,
+  "skipped_glyphs": 7,
+  "onsets_without_revealed_letter": [],
+  "tones_outside_dialogue_reveal": [
+    38.426,
+    43.238,
+    48.003,
+    124.842,
+    129.637,
+    134.405,
+    149.979
+  ],
+  "onsets_with_other_speaker_pitch": [],
+  "punctuation_only_frames_silent": 20,
+  "punctuation_only_frames_with_beep": [],
+  "skip_reveal_bursts": [],
+  "minimum_gap_ms": 62.4,
+  "volume_segments": [
+    {
+      "sfx_volume": 1.0,
+      "beeps": 24,
+      "median_peak": 0.061250648518326366
+    },
+    {
+      "sfx_volume": 0.5,
+      "beeps": 24,
+      "median_peak": 0.03064058351390118
+    },
+    {
+      "sfx_volume": 0.0,
+      "beeps": 0,
+      "median_peak": 0.0
+    }
+  ],
+  "half_to_full_peak_ratio": 0.5,
+  "note": "PCM/time alignment check only; not a listening test."
+}

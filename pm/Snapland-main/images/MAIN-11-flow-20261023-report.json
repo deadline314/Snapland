@@ -1,0 +1,6480 @@
+{
+  "arrival_after_first_e": {
+    "button": "下一句  ›",
+    "line": 0,
+    "visible": -1
+  },
+  "arrival_mid_reveal": {
+    "button": "顯示整句  ›",
+    "length": 27,
+    "line": 0,
+    "revealing": true,
+    "speaker": "票票",
+    "visible": 20
+  },
+  "capture_fps": 15,
+  "continue": {
+    "after": {
+      "coins": 120,
+      "photos": 1,
+      "quests": {
+        "quest-001": 1,
+        "quest-002": 1
+      }
+    },
+    "before": {
+      "coins": 120,
+      "photos": 1,
+      "quests": {
+        "quest-001": 1,
+        "quest-002": 1
+      }
+    },
+    "modal_after_load": ""
+  },
+  "conversations": [
+    {
+      "conversation_id": "",
+      "frame": 13,
+      "label": "arrival",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "票票",
+          "text": "船已靠岸。沿木棧橋進廣場，找戴圓眼鏡、背棕色包的票票。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "主角",
+          "text": "我先把相機拿好。這裡的路牌和海風都值得拍。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "小角",
+          "text": "等等，我想到新點子了：把尾巴彩帶當成構圖靈感。可以先用你的角色試拍看看嗎？"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "票票",
+          "text": "他在大道左側。先逛一圈，想幫忙或補拍都隨時可以回來。"
+        }
+      ],
+      "note": "first line was completed with E mid-reveal",
+      "phase": "noon"
+    },
+    {
+      "conversation_id": "",
+      "frame": 378,
+      "label": "ticket-first",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "票票",
+          "text": "迎賓大道的設施都能重玩。拍貼也能補拍，不必趕行程。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "我剛核對過入口方向，入口在前方——這次我看過牌子才播。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "小角",
+          "text": "我還在構思尾巴彩帶主題。先看看長椅的拍照構圖，再用你的角色幫我試拍吧。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "阿浪",
+          "text": "人潮交給我。若我又把出口說成入口，請直接提醒我。"
+        }
+      ],
+      "phase": "noon"
+    },
+    {
+      "conversation_id": "imp-ask",
+      "frame": 641,
+      "label": "imp-request",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "小角",
+          "text": "啊，你來得剛好！我的尾巴又打結了……不對，這是彩帶主題的新構圖！"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "小角",
+          "text": "長椅那邊有我的立牌。先拍一張雙人位置，再用泡泡相機試你的全身——拜託你了！"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "小角",
+          "text": "中午太亮了！我的蝴蝶結要閃到別人了。"
+        }
+      ],
+      "phase": "noon"
+    },
+    {
+      "conversation_id": "announcer-ask",
+      "frame": 856,
+      "label": "announcer-request",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "廣播測試——呃，等等。入口和出口的箭頭剛被調換，我差點把大家播回碼頭。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "你能先去展示燈那邊核對歡迎字樣嗎？確定箭頭朝哪裡，我才敢開麥克風。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "阿浪",
+          "text": "中午人潮最多，我會每十分鐘提醒一次方向。"
+        }
+      ],
+      "phase": "noon"
+    },
+    {
+      "conversation_id": "ticket-underway",
+      "frame": 1139,
+      "label": "ticket-underway",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "票票",
+          "text": "委託做到一半也沒關係，旅券都記著。按 M 打開旅券，就能看到下一步。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "票票",
+          "text": "想先玩設施也可以——拍貼和委託不會因為你繞路而消失。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "票票",
+          "text": "中午攤位最熱鬧，玩之前記得找陰涼處喘口氣。"
+        }
+      ],
+      "phase": "noon"
+    },
+    {
+      "conversation_id": "announcer-sign",
+      "frame": 1651,
+      "label": "announcer-night",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "展示燈在大道後段右側。把字樣的影子對進牆上的空框，就看得出箭頭方向。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "我先在這裡顧著人潮，你確認好再回來告訴我。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "阿浪",
+          "text": "夜場廣播要放低音量，海浪聲也是節目的一部分。"
+        }
+      ],
+      "phase": "night"
+    },
+    {
+      "conversation_id": "announcer-sign",
+      "frame": 2039,
+      "label": "announcer-dusk",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "展示燈在大道後段右側。把字樣的影子對進牆上的空框，就看得出箭頭方向。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "我先在這裡顧著人潮，你確認好再回來告訴我。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "阿浪",
+          "text": "傍晚有人趕最後一班船，我得把出口說得特別清楚。"
+        }
+      ],
+      "phase": "dusk"
+    },
+    {
+      "conversation_id": "announcer-sign",
+      "frame": 2430,
+      "label": "announcer-dawn",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "展示燈在大道後段右側。把字樣的影子對進牆上的空框，就看得出箭頭方向。"
+        },
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "我先在這裡顧著人潮，你確認好再回來告訴我。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "阿浪",
+          "text": "清晨班船的人少，我先練習發音：入口、入口、入口。"
+        }
+      ],
+      "phase": "dawn"
+    },
+    {
+      "conversation_id": "announcer-sign",
+      "frame": 2830,
+      "label": "volume-1.0",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "展示燈在大道後段右側。把字樣的影子對進牆上的空框，就看得出箭頭方向。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "阿浪",
+          "text": "我先在這裡顧著人潮，你確認好再回來告訴我。"
+        }
+      ],
+      "phase": "dawn"
+    },
+    {
+      "conversation_id": "announcer-sign",
+      "frame": 2955,
+      "label": "volume-0.5",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "展示燈在大道後段右側。把字樣的影子對進牆上的空框，就看得出箭頭方向。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "阿浪",
+          "text": "我先在這裡顧著人潮，你確認好再回來告訴我。"
+        }
+      ],
+      "phase": "dawn"
+    },
+    {
+      "conversation_id": "announcer-sign",
+      "frame": 3080,
+      "label": "volume-0.0",
+      "lines": [
+        {
+          "button": "下一句  ›",
+          "speaker": "阿浪",
+          "text": "展示燈在大道後段右側。把字樣的影子對進牆上的空框，就看得出箭頭方向。"
+        },
+        {
+          "button": "完成  ›",
+          "speaker": "阿浪",
+          "text": "我先在這裡顧著人潮，你確認好再回來告訴我。"
+        }
+      ],
+      "phase": "dawn"
+    }
+  ],
+  "first_frame": 0,
+  "fps": 1.0,
+  "glyphs": [
+    {
+      "frame": 1,
+      "glyph": "船",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1,
+      "glyph": "已",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 2,
+      "glyph": "靠",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 2,
+      "glyph": "岸",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 3,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 3,
+      "glyph": "沿",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 4,
+      "glyph": "木",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 4,
+      "glyph": "棧",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 5,
+      "glyph": "橋",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 5,
+      "glyph": "進",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 5,
+      "glyph": "廣",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 6,
+      "glyph": "場",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 6,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 7,
+      "glyph": "找",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 7,
+      "glyph": "戴",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 8,
+      "glyph": "圓",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 8,
+      "glyph": "眼",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 9,
+      "glyph": "鏡",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 9,
+      "glyph": "、",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 9,
+      "glyph": "背",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 10,
+      "glyph": "棕",
+      "skipped": true,
+      "speaker": "票票"
+    },
+    {
+      "frame": 10,
+      "glyph": "色",
+      "skipped": true,
+      "speaker": "票票"
+    },
+    {
+      "frame": 10,
+      "glyph": "包",
+      "skipped": true,
+      "speaker": "票票"
+    },
+    {
+      "frame": 10,
+      "glyph": "的",
+      "skipped": true,
+      "speaker": "票票"
+    },
+    {
+      "frame": 10,
+      "glyph": "票",
+      "skipped": true,
+      "speaker": "票票"
+    },
+    {
+      "frame": 10,
+      "glyph": "票",
+      "skipped": true,
+      "speaker": "票票"
+    },
+    {
+      "frame": 10,
+      "glyph": "。",
+      "skipped": true,
+      "speaker": "票票"
+    },
+    {
+      "frame": 39,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 39,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 40,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 40,
+      "glyph": "相",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 41,
+      "glyph": "機",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 41,
+      "glyph": "拿",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 42,
+      "glyph": "好",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 42,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 42,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 43,
+      "glyph": "裡",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 43,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 44,
+      "glyph": "路",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 44,
+      "glyph": "牌",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 45,
+      "glyph": "和",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 45,
+      "glyph": "海",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 46,
+      "glyph": "風",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 46,
+      "glyph": "都",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 46,
+      "glyph": "值",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 47,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 47,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 48,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "主角"
+    },
+    {
+      "frame": 74,
+      "glyph": "等",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 74,
+      "glyph": "等",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 75,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 75,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 76,
+      "glyph": "想",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 76,
+      "glyph": "到",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 77,
+      "glyph": "新",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 77,
+      "glyph": "點",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 77,
+      "glyph": "子",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 78,
+      "glyph": "了",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 78,
+      "glyph": "：",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 79,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 79,
+      "glyph": "尾",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 80,
+      "glyph": "巴",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 80,
+      "glyph": "彩",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 81,
+      "glyph": "帶",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 81,
+      "glyph": "當",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 81,
+      "glyph": "成",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 82,
+      "glyph": "構",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 82,
+      "glyph": "圖",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 83,
+      "glyph": "靈",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 83,
+      "glyph": "感",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 84,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 84,
+      "glyph": "可",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 85,
+      "glyph": "以",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 85,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 85,
+      "glyph": "用",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 86,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 86,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 87,
+      "glyph": "角",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 87,
+      "glyph": "色",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 88,
+      "glyph": "試",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 88,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 89,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 89,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 89,
+      "glyph": "嗎",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 90,
+      "glyph": "？",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 116,
+      "glyph": "他",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 116,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 117,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 117,
+      "glyph": "道",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 118,
+      "glyph": "左",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 118,
+      "glyph": "側",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 119,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 119,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 119,
+      "glyph": "逛",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 120,
+      "glyph": "一",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 120,
+      "glyph": "圈",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 121,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 121,
+      "glyph": "想",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 122,
+      "glyph": "幫",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 122,
+      "glyph": "忙",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 123,
+      "glyph": "或",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 123,
+      "glyph": "補",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 123,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 124,
+      "glyph": "都",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 124,
+      "glyph": "隨",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 125,
+      "glyph": "時",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 125,
+      "glyph": "可",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 126,
+      "glyph": "以",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 126,
+      "glyph": "回",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 127,
+      "glyph": "來",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 127,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 364,
+      "glyph": "迎",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 364,
+      "glyph": "賓",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 365,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 365,
+      "glyph": "道",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 366,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 366,
+      "glyph": "設",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 367,
+      "glyph": "施",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 367,
+      "glyph": "都",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 367,
+      "glyph": "能",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 368,
+      "glyph": "重",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 368,
+      "glyph": "玩",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 369,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 369,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 370,
+      "glyph": "貼",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 370,
+      "glyph": "也",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 371,
+      "glyph": "能",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 371,
+      "glyph": "補",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 371,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 372,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 372,
+      "glyph": "不",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 373,
+      "glyph": "必",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 373,
+      "glyph": "趕",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 374,
+      "glyph": "行",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 374,
+      "glyph": "程",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 375,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 404,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 404,
+      "glyph": "剛",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 405,
+      "glyph": "核",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 405,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 406,
+      "glyph": "過",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 406,
+      "glyph": "入",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 407,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 407,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 407,
+      "glyph": "向",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 408,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 408,
+      "glyph": "入",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 409,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 409,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 410,
+      "glyph": "前",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 410,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 411,
+      "glyph": "—",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 411,
+      "glyph": "—",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 411,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 412,
+      "glyph": "次",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 412,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 413,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 413,
+      "glyph": "過",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 414,
+      "glyph": "牌",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 414,
+      "glyph": "子",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 415,
+      "glyph": "才",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 415,
+      "glyph": "播",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 415,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 441,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 441,
+      "glyph": "還",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 442,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 442,
+      "glyph": "構",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 443,
+      "glyph": "思",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 443,
+      "glyph": "尾",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 444,
+      "glyph": "巴",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 444,
+      "glyph": "彩",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 444,
+      "glyph": "帶",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 445,
+      "glyph": "主",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 445,
+      "glyph": "題",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 446,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 446,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 447,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 447,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 448,
+      "glyph": "長",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 448,
+      "glyph": "椅",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 448,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 449,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 449,
+      "glyph": "照",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 450,
+      "glyph": "構",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 450,
+      "glyph": "圖",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 451,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 451,
+      "glyph": "再",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 452,
+      "glyph": "用",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 452,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 452,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 453,
+      "glyph": "角",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 453,
+      "glyph": "色",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 454,
+      "glyph": "幫",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 454,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 455,
+      "glyph": "試",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 455,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 456,
+      "glyph": "吧",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 456,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 482,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 482,
+      "glyph": "潮",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 483,
+      "glyph": "交",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 483,
+      "glyph": "給",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 484,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 484,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 485,
+      "glyph": "若",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 485,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 485,
+      "glyph": "又",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 486,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 486,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 487,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 487,
+      "glyph": "說",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 488,
+      "glyph": "成",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 488,
+      "glyph": "入",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 489,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 489,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 489,
+      "glyph": "請",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 490,
+      "glyph": "直",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 490,
+      "glyph": "接",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 491,
+      "glyph": "提",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 491,
+      "glyph": "醒",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 492,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 492,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 627,
+      "glyph": "啊",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 627,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 628,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 628,
+      "glyph": "來",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 629,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 629,
+      "glyph": "剛",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 630,
+      "glyph": "好",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 630,
+      "glyph": "！",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 630,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 631,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 631,
+      "glyph": "尾",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 632,
+      "glyph": "巴",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 632,
+      "glyph": "又",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 633,
+      "glyph": "打",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 633,
+      "glyph": "結",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 634,
+      "glyph": "了",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 634,
+      "glyph": "…",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 634,
+      "glyph": "…",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 635,
+      "glyph": "不",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 635,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 636,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 636,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 637,
+      "glyph": "是",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 637,
+      "glyph": "彩",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 638,
+      "glyph": "帶",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 638,
+      "glyph": "主",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 638,
+      "glyph": "題",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 639,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 639,
+      "glyph": "新",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 640,
+      "glyph": "構",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 640,
+      "glyph": "圖",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 641,
+      "glyph": "！",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 667,
+      "glyph": "長",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 667,
+      "glyph": "椅",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 668,
+      "glyph": "那",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 668,
+      "glyph": "邊",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 669,
+      "glyph": "有",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 669,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 670,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 670,
+      "glyph": "立",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 670,
+      "glyph": "牌",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 671,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 671,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 672,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 672,
+      "glyph": "一",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 673,
+      "glyph": "張",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 673,
+      "glyph": "雙",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 674,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 674,
+      "glyph": "位",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 674,
+      "glyph": "置",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 675,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 675,
+      "glyph": "再",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 676,
+      "glyph": "用",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 676,
+      "glyph": "泡",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 677,
+      "glyph": "泡",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 677,
+      "glyph": "相",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 678,
+      "glyph": "機",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 678,
+      "glyph": "試",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 678,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 679,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 679,
+      "glyph": "全",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 680,
+      "glyph": "身",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 680,
+      "glyph": "—",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 681,
+      "glyph": "—",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 681,
+      "glyph": "拜",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 682,
+      "glyph": "託",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 682,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 682,
+      "glyph": "了",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 683,
+      "glyph": "！",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 709,
+      "glyph": "中",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 709,
+      "glyph": "午",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 710,
+      "glyph": "太",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 710,
+      "glyph": "亮",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 711,
+      "glyph": "了",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 711,
+      "glyph": "！",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 712,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 712,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 712,
+      "glyph": "蝴",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 713,
+      "glyph": "蝶",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 713,
+      "glyph": "結",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 714,
+      "glyph": "要",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 714,
+      "glyph": "閃",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 715,
+      "glyph": "到",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 715,
+      "glyph": "別",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 716,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 716,
+      "glyph": "了",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 716,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "小角"
+    },
+    {
+      "frame": 842,
+      "glyph": "廣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 842,
+      "glyph": "播",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 843,
+      "glyph": "測",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 843,
+      "glyph": "試",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 844,
+      "glyph": "—",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 844,
+      "glyph": "—",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 845,
+      "glyph": "呃",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 845,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 845,
+      "glyph": "等",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 846,
+      "glyph": "等",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 846,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 847,
+      "glyph": "入",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 847,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 848,
+      "glyph": "和",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 848,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 849,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 849,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 849,
+      "glyph": "箭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 850,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 850,
+      "glyph": "剛",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 851,
+      "glyph": "被",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 851,
+      "glyph": "調",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 852,
+      "glyph": "換",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 852,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 853,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 853,
+      "glyph": "差",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 853,
+      "glyph": "點",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 854,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 854,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 855,
+      "glyph": "家",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 855,
+      "glyph": "播",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 856,
+      "glyph": "回",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 856,
+      "glyph": "碼",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 857,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 857,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 882,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 882,
+      "glyph": "能",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 883,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 883,
+      "glyph": "去",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 884,
+      "glyph": "展",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 884,
+      "glyph": "示",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 885,
+      "glyph": "燈",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 885,
+      "glyph": "那",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 885,
+      "glyph": "邊",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 886,
+      "glyph": "核",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 886,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 887,
+      "glyph": "歡",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 887,
+      "glyph": "迎",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 888,
+      "glyph": "字",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 888,
+      "glyph": "樣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 889,
+      "glyph": "嗎",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 889,
+      "glyph": "？",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 889,
+      "glyph": "確",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 890,
+      "glyph": "定",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 890,
+      "glyph": "箭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 891,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 891,
+      "glyph": "朝",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 892,
+      "glyph": "哪",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 892,
+      "glyph": "裡",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 893,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 893,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 893,
+      "glyph": "才",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 894,
+      "glyph": "敢",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 894,
+      "glyph": "開",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 895,
+      "glyph": "麥",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 895,
+      "glyph": "克",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 896,
+      "glyph": "風",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 896,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 922,
+      "glyph": "中",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 922,
+      "glyph": "午",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 923,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 923,
+      "glyph": "潮",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 924,
+      "glyph": "最",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 924,
+      "glyph": "多",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 925,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 925,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 925,
+      "glyph": "會",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 926,
+      "glyph": "每",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 926,
+      "glyph": "十",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 927,
+      "glyph": "分",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 927,
+      "glyph": "鐘",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 928,
+      "glyph": "提",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 928,
+      "glyph": "醒",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 929,
+      "glyph": "一",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 929,
+      "glyph": "次",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 929,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 930,
+      "glyph": "向",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 930,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1125,
+      "glyph": "委",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1125,
+      "glyph": "託",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1126,
+      "glyph": "做",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1126,
+      "glyph": "到",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1127,
+      "glyph": "一",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1127,
+      "glyph": "半",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1128,
+      "glyph": "也",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1128,
+      "glyph": "沒",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1128,
+      "glyph": "關",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1129,
+      "glyph": "係",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1129,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1130,
+      "glyph": "旅",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1130,
+      "glyph": "券",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1131,
+      "glyph": "都",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1131,
+      "glyph": "記",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1132,
+      "glyph": "著",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1132,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1132,
+      "glyph": "按",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1133,
+      "glyph": " ",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1133,
+      "glyph": "M",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1134,
+      "glyph": " ",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1134,
+      "glyph": "打",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1135,
+      "glyph": "開",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1135,
+      "glyph": "旅",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1136,
+      "glyph": "券",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1136,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1136,
+      "glyph": "就",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1137,
+      "glyph": "能",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1137,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1138,
+      "glyph": "到",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1138,
+      "glyph": "下",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1139,
+      "glyph": "一",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1139,
+      "glyph": "步",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1140,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1165,
+      "glyph": "想",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1165,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1166,
+      "glyph": "玩",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1166,
+      "glyph": "設",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1167,
+      "glyph": "施",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1167,
+      "glyph": "也",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1168,
+      "glyph": "可",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1168,
+      "glyph": "以",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1168,
+      "glyph": "—",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1169,
+      "glyph": "—",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1169,
+      "glyph": "拍",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1170,
+      "glyph": "貼",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1170,
+      "glyph": "和",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1171,
+      "glyph": "委",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1171,
+      "glyph": "託",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1172,
+      "glyph": "不",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1172,
+      "glyph": "會",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1172,
+      "glyph": "因",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1173,
+      "glyph": "為",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1173,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1174,
+      "glyph": "繞",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1174,
+      "glyph": "路",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1175,
+      "glyph": "而",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1175,
+      "glyph": "消",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1176,
+      "glyph": "失",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1176,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1202,
+      "glyph": "中",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1202,
+      "glyph": "午",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1203,
+      "glyph": "攤",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1203,
+      "glyph": "位",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1204,
+      "glyph": "最",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1204,
+      "glyph": "熱",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1205,
+      "glyph": "鬧",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1205,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1205,
+      "glyph": "玩",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1206,
+      "glyph": "之",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1206,
+      "glyph": "前",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1207,
+      "glyph": "記",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1207,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1208,
+      "glyph": "找",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1208,
+      "glyph": "陰",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1209,
+      "glyph": "涼",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1209,
+      "glyph": "處",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1209,
+      "glyph": "喘",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1210,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1210,
+      "glyph": "氣",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1211,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "票票"
+    },
+    {
+      "frame": 1637,
+      "glyph": "展",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1637,
+      "glyph": "示",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1638,
+      "glyph": "燈",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1638,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1639,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1639,
+      "glyph": "道",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1640,
+      "glyph": "後",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1640,
+      "glyph": "段",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1640,
+      "glyph": "右",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1641,
+      "glyph": "側",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1641,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1642,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1642,
+      "glyph": "字",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1643,
+      "glyph": "樣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1643,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1644,
+      "glyph": "影",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1644,
+      "glyph": "子",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1644,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1645,
+      "glyph": "進",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1645,
+      "glyph": "牆",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1646,
+      "glyph": "上",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1646,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1647,
+      "glyph": "空",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1647,
+      "glyph": "框",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1648,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1648,
+      "glyph": "就",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1648,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1649,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1649,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1650,
+      "glyph": "箭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1650,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1651,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1651,
+      "glyph": "向",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1652,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1677,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1677,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1678,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1678,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1679,
+      "glyph": "裡",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1679,
+      "glyph": "顧",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1680,
+      "glyph": "著",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1680,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1680,
+      "glyph": "潮",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1681,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1681,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1682,
+      "glyph": "確",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1682,
+      "glyph": "認",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1683,
+      "glyph": "好",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1683,
+      "glyph": "再",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1684,
+      "glyph": "回",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1684,
+      "glyph": "來",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1684,
+      "glyph": "告",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1685,
+      "glyph": "訴",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1685,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1686,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1712,
+      "glyph": "夜",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1712,
+      "glyph": "場",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1713,
+      "glyph": "廣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1713,
+      "glyph": "播",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1714,
+      "glyph": "要",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1714,
+      "glyph": "放",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1715,
+      "glyph": "低",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1715,
+      "glyph": "音",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1715,
+      "glyph": "量",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1716,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1716,
+      "glyph": "海",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1717,
+      "glyph": "浪",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1717,
+      "glyph": "聲",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1718,
+      "glyph": "也",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1718,
+      "glyph": "是",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1719,
+      "glyph": "節",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1719,
+      "glyph": "目",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1719,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1720,
+      "glyph": "一",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1720,
+      "glyph": "部",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1721,
+      "glyph": "分",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 1721,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2025,
+      "glyph": "展",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2025,
+      "glyph": "示",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2026,
+      "glyph": "燈",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2026,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2027,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2027,
+      "glyph": "道",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2028,
+      "glyph": "後",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2028,
+      "glyph": "段",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2028,
+      "glyph": "右",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2029,
+      "glyph": "側",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2029,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2030,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2030,
+      "glyph": "字",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2031,
+      "glyph": "樣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2031,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2032,
+      "glyph": "影",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2032,
+      "glyph": "子",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2032,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2033,
+      "glyph": "進",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2033,
+      "glyph": "牆",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2034,
+      "glyph": "上",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2034,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2035,
+      "glyph": "空",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2035,
+      "glyph": "框",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2036,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2036,
+      "glyph": "就",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2036,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2037,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2037,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2038,
+      "glyph": "箭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2038,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2039,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2039,
+      "glyph": "向",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2040,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2065,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2065,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2066,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2066,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2067,
+      "glyph": "裡",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2067,
+      "glyph": "顧",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2068,
+      "glyph": "著",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2068,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2068,
+      "glyph": "潮",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2069,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2069,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2070,
+      "glyph": "確",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2070,
+      "glyph": "認",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2071,
+      "glyph": "好",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2071,
+      "glyph": "再",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2072,
+      "glyph": "回",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2072,
+      "glyph": "來",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2072,
+      "glyph": "告",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2073,
+      "glyph": "訴",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2073,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2074,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2100,
+      "glyph": "傍",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2100,
+      "glyph": "晚",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2101,
+      "glyph": "有",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2101,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2102,
+      "glyph": "趕",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2102,
+      "glyph": "最",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2103,
+      "glyph": "後",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2103,
+      "glyph": "一",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2103,
+      "glyph": "班",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2104,
+      "glyph": "船",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2104,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2105,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2105,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2106,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2106,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2107,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2107,
+      "glyph": "說",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2107,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2108,
+      "glyph": "特",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2108,
+      "glyph": "別",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2109,
+      "glyph": "清",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2109,
+      "glyph": "楚",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2110,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2416,
+      "glyph": "展",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2416,
+      "glyph": "示",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2417,
+      "glyph": "燈",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2417,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2418,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2418,
+      "glyph": "道",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2419,
+      "glyph": "後",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2419,
+      "glyph": "段",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2419,
+      "glyph": "右",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2420,
+      "glyph": "側",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2420,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2421,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2421,
+      "glyph": "字",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2422,
+      "glyph": "樣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2422,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2423,
+      "glyph": "影",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2423,
+      "glyph": "子",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2423,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2424,
+      "glyph": "進",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2424,
+      "glyph": "牆",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2425,
+      "glyph": "上",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2425,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2426,
+      "glyph": "空",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2426,
+      "glyph": "框",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2427,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2427,
+      "glyph": "就",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2427,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2428,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2428,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2429,
+      "glyph": "箭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2429,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2430,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2430,
+      "glyph": "向",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2431,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2456,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2456,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2457,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2457,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2458,
+      "glyph": "裡",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2458,
+      "glyph": "顧",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2459,
+      "glyph": "著",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2459,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2459,
+      "glyph": "潮",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2460,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2460,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2461,
+      "glyph": "確",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2461,
+      "glyph": "認",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2462,
+      "glyph": "好",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2462,
+      "glyph": "再",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2463,
+      "glyph": "回",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2463,
+      "glyph": "來",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2463,
+      "glyph": "告",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2464,
+      "glyph": "訴",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2464,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2465,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2491,
+      "glyph": "清",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2491,
+      "glyph": "晨",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2492,
+      "glyph": "班",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2492,
+      "glyph": "船",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2493,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2493,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2494,
+      "glyph": "少",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2494,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2494,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2495,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2495,
+      "glyph": "練",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2496,
+      "glyph": "習",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2496,
+      "glyph": "發",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2497,
+      "glyph": "音",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2497,
+      "glyph": "：",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2498,
+      "glyph": "入",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2498,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2498,
+      "glyph": "、",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2499,
+      "glyph": "入",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2499,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2500,
+      "glyph": "、",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2500,
+      "glyph": "入",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2501,
+      "glyph": "口",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2501,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2816,
+      "glyph": "展",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2816,
+      "glyph": "示",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2817,
+      "glyph": "燈",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2817,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2818,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2818,
+      "glyph": "道",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2819,
+      "glyph": "後",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2819,
+      "glyph": "段",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2819,
+      "glyph": "右",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2820,
+      "glyph": "側",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2820,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2821,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2821,
+      "glyph": "字",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2822,
+      "glyph": "樣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2822,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2823,
+      "glyph": "影",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2823,
+      "glyph": "子",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2823,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2824,
+      "glyph": "進",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2824,
+      "glyph": "牆",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2825,
+      "glyph": "上",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2825,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2826,
+      "glyph": "空",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2826,
+      "glyph": "框",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2827,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2827,
+      "glyph": "就",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2827,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2828,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2828,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2829,
+      "glyph": "箭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2829,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2830,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2830,
+      "glyph": "向",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2831,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2856,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2856,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2857,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2857,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2858,
+      "glyph": "裡",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2858,
+      "glyph": "顧",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2859,
+      "glyph": "著",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2859,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2859,
+      "glyph": "潮",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2860,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2860,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2861,
+      "glyph": "確",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2861,
+      "glyph": "認",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2862,
+      "glyph": "好",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2862,
+      "glyph": "再",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2863,
+      "glyph": "回",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2863,
+      "glyph": "來",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2863,
+      "glyph": "告",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2864,
+      "glyph": "訴",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2864,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2865,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2941,
+      "glyph": "展",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2941,
+      "glyph": "示",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2942,
+      "glyph": "燈",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2942,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2943,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2943,
+      "glyph": "道",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2944,
+      "glyph": "後",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2944,
+      "glyph": "段",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2944,
+      "glyph": "右",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2945,
+      "glyph": "側",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2945,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2946,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2946,
+      "glyph": "字",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2947,
+      "glyph": "樣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2947,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2948,
+      "glyph": "影",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2948,
+      "glyph": "子",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2948,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2949,
+      "glyph": "進",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2949,
+      "glyph": "牆",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2950,
+      "glyph": "上",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2950,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2951,
+      "glyph": "空",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2951,
+      "glyph": "框",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2952,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2952,
+      "glyph": "就",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2952,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2953,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2953,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2954,
+      "glyph": "箭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2954,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2955,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2955,
+      "glyph": "向",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2956,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2981,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2981,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2982,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2982,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2983,
+      "glyph": "裡",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2983,
+      "glyph": "顧",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2984,
+      "glyph": "著",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2984,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2984,
+      "glyph": "潮",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2985,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2985,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2986,
+      "glyph": "確",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2986,
+      "glyph": "認",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2987,
+      "glyph": "好",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2987,
+      "glyph": "再",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2988,
+      "glyph": "回",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2988,
+      "glyph": "來",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2988,
+      "glyph": "告",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2989,
+      "glyph": "訴",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2989,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 2990,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3066,
+      "glyph": "展",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3066,
+      "glyph": "示",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3067,
+      "glyph": "燈",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3067,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3068,
+      "glyph": "大",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3068,
+      "glyph": "道",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3069,
+      "glyph": "後",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3069,
+      "glyph": "段",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3069,
+      "glyph": "右",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3070,
+      "glyph": "側",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3070,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3071,
+      "glyph": "把",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3071,
+      "glyph": "字",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3072,
+      "glyph": "樣",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3072,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3073,
+      "glyph": "影",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3073,
+      "glyph": "子",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3073,
+      "glyph": "對",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3074,
+      "glyph": "進",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3074,
+      "glyph": "牆",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3075,
+      "glyph": "上",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3075,
+      "glyph": "的",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3076,
+      "glyph": "空",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3076,
+      "glyph": "框",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3077,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3077,
+      "glyph": "就",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3077,
+      "glyph": "看",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3078,
+      "glyph": "得",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3078,
+      "glyph": "出",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3079,
+      "glyph": "箭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3079,
+      "glyph": "頭",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3080,
+      "glyph": "方",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3080,
+      "glyph": "向",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3081,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3106,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3106,
+      "glyph": "先",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3107,
+      "glyph": "在",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3107,
+      "glyph": "這",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3108,
+      "glyph": "裡",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3108,
+      "glyph": "顧",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3109,
+      "glyph": "著",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3109,
+      "glyph": "人",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3109,
+      "glyph": "潮",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3110,
+      "glyph": "，",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3110,
+      "glyph": "你",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3111,
+      "glyph": "確",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3111,
+      "glyph": "認",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3112,
+      "glyph": "好",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3112,
+      "glyph": "再",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3113,
+      "glyph": "回",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3113,
+      "glyph": "來",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3113,
+      "glyph": "告",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3114,
+      "glyph": "訴",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3114,
+      "glyph": "我",
+      "skipped": false,
+      "speaker": "阿浪"
+    },
+    {
+      "frame": 3115,
+      "glyph": "。",
+      "skipped": false,
+      "speaker": "阿浪"
+    }
+  ],
+  "human_played": false,
+  "movie": true,
+  "phases": [
+    {
+      "applied": "night",
+      "modal_after": "",
+      "phase": "night"
+    },
+    {
+      "applied": "dusk",
+      "modal_after": "",
+      "phase": "dusk"
+    },
+    {
+      "applied": "dawn",
+      "modal_after": "",
+      "phase": "dawn"
+    }
+  ],
+  "screenshots": [
+    {
+      "frame": 9,
+      "name": "arrival-typewriter",
+      "path": "ISLAND-FLOW-01-arrival-typewriter.png",
+      "phase": "noon",
+      "player": [
+        0.0,
+        23.2
+      ]
+    },
+    {
+      "frame": 13,
+      "name": "arrival-line-complete",
+      "path": "ISLAND-FLOW-02-arrival-line-complete.png",
+      "phase": "noon",
+      "player": [
+        0.0,
+        23.2
+      ]
+    },
+    {
+      "frame": 227,
+      "name": "sign-dock-noon",
+      "path": "ISLAND-FLOW-03-sign-dock-noon.png",
+      "phase": "noon",
+      "player": [
+        1.67,
+        16.29
+      ]
+    },
+    {
+      "frame": 329,
+      "name": "sign-plaza-before",
+      "path": "ISLAND-FLOW-04-sign-plaza-before.png",
+      "phase": "noon",
+      "player": [
+        0.0,
+        5.76
+      ]
+    },
+    {
+      "frame": 378,
+      "name": "talk-ticket-first",
+      "path": "ISLAND-FLOW-05-talk-ticket-first.png",
+      "phase": "noon",
+      "player": [
+        -3.66,
+        5.91
+      ]
+    },
+    {
+      "frame": 641,
+      "name": "talk-imp-request",
+      "path": "ISLAND-FLOW-06-talk-imp-request.png",
+      "phase": "noon",
+      "player": [
+        -4.2,
+        -6.27
+      ]
+    },
+    {
+      "frame": 746,
+      "name": "imp-quest-card",
+      "path": "ISLAND-FLOW-07-imp-quest-card.png",
+      "phase": "noon",
+      "player": [
+        -4.2,
+        -6.27
+      ]
+    },
+    {
+      "frame": 856,
+      "name": "talk-announcer-request",
+      "path": "ISLAND-FLOW-08-talk-announcer-request.png",
+      "phase": "noon",
+      "player": [
+        3.04,
+        -2.9
+      ]
+    },
+    {
+      "frame": 1088,
+      "name": "sign-plaza-after-requests",
+      "path": "ISLAND-FLOW-09-sign-plaza-after-requests.png",
+      "phase": "noon",
+      "player": [
+        0.11,
+        5.5
+      ]
+    },
+    {
+      "frame": 1139,
+      "name": "talk-ticket-underway",
+      "path": "ISLAND-FLOW-10-talk-ticket-underway.png",
+      "phase": "noon",
+      "player": [
+        -3.71,
+        5.94
+      ]
+    },
+    {
+      "frame": 1458,
+      "name": "sign-avenue-noon",
+      "path": "ISLAND-FLOW-11-sign-avenue-noon.png",
+      "phase": "noon",
+      "player": [
+        0.04,
+        -17.93
+      ]
+    },
+    {
+      "frame": 1651,
+      "name": "talk-announcer-night",
+      "path": "ISLAND-FLOW-12-talk-announcer-night.png",
+      "phase": "night",
+      "player": [
+        3.03,
+        -2.91
+      ]
+    },
+    {
+      "frame": 1879,
+      "name": "sign-plaza-night",
+      "path": "ISLAND-FLOW-13-sign-plaza-night.png",
+      "phase": "night",
+      "player": [
+        0.1,
+        5.49
+      ]
+    },
+    {
+      "frame": 2039,
+      "name": "talk-announcer-dusk",
+      "path": "ISLAND-FLOW-14-talk-announcer-dusk.png",
+      "phase": "dusk",
+      "player": [
+        3.11,
+        -2.79
+      ]
+    },
+    {
+      "frame": 2268,
+      "name": "sign-plaza-dusk",
+      "path": "ISLAND-FLOW-15-sign-plaza-dusk.png",
+      "phase": "dusk",
+      "player": [
+        0.05,
+        5.53
+      ]
+    },
+    {
+      "frame": 2430,
+      "name": "talk-announcer-dawn",
+      "path": "ISLAND-FLOW-16-talk-announcer-dawn.png",
+      "phase": "dawn",
+      "player": [
+        3.07,
+        -2.81
+      ]
+    },
+    {
+      "frame": 2659,
+      "name": "sign-plaza-dawn",
+      "path": "ISLAND-FLOW-17-sign-plaza-dawn.png",
+      "phase": "dawn",
+      "player": [
+        0.08,
+        5.61
+      ]
+    },
+    {
+      "frame": 2830,
+      "name": "talk-volume-1.0",
+      "path": "ISLAND-FLOW-18-talk-volume-1.0.png",
+      "phase": "dawn",
+      "player": [
+        3.09,
+        -2.81
+      ]
+    },
+    {
+      "frame": 2955,
+      "name": "talk-volume-0.5",
+      "path": "ISLAND-FLOW-19-talk-volume-0.5.png",
+      "phase": "dawn",
+      "player": [
+        3.09,
+        -2.81
+      ]
+    },
+    {
+      "frame": 3080,
+      "name": "talk-volume-0.0",
+      "path": "ISLAND-FLOW-20-talk-volume-0.0.png",
+      "phase": "dawn",
+      "player": [
+        3.09,
+        -2.81
+      ]
+    },
+    {
+      "frame": 3309,
+      "name": "sign-plaza-continue",
+      "path": "ISLAND-FLOW-21-sign-plaza-continue.png",
+      "phase": "dawn",
+      "player": [
+        0.0,
+        5.72
+      ]
+    }
+  ],
+  "scripted_input": "Input.parse_input_event keyboard/mouse events; walking only, no teleport",
+  "signposts": [
+    {
+      "id": "dock",
+      "lines": [
+        "↑ 中央廣場　先打招呼",
+        "← 海岸環線　6 處地標"
+      ],
+      "phase": "noon",
+      "shot": "sign-dock-noon"
+    },
+    {
+      "id": "plaza",
+      "lines": [
+        "← 票票・導覽亭　先打招呼",
+        "↖ 小角　有事相求",
+        "↗ 阿浪　有事相求",
+        "↑ 迎賓大道　拍貼 0/12"
+      ],
+      "phase": "noon",
+      "shot": "sign-plaza-before"
+    },
+    {
+      "id": "plaza",
+      "lines": [
+        "← 票票・導覽亭　導覽亭",
+        "↖ 小角　委託 1/3",
+        "↗ 阿浪　委託 1/3",
+        "↑ 迎賓大道　拍貼 0/12"
+      ],
+      "phase": "noon",
+      "shot": "sign-plaza-after-requests"
+    },
+    {
+      "id": "avenue",
+      "lines": [
+        "← 風帆工坊　拍貼 0/4",
+        "↗ 潮池廣場　拍貼 0/4",
+        "↗ 海風觀景台　拍貼 0/2",
+        "↑ 月影劇台　拍貼 0/2"
+      ],
+      "phase": "noon",
+      "shot": "sign-avenue-noon"
+    },
+    {
+      "id": "plaza",
+      "lines": [
+        "← 票票・導覽亭　導覽亭",
+        "↖ 小角　委託 1/3",
+        "↗ 阿浪　委託 1/3",
+        "↑ 迎賓大道　拍貼 0/12"
+      ],
+      "phase": "night",
+      "shot": "sign-plaza-night"
+    },
+    {
+      "id": "plaza",
+      "lines": [
+        "← 票票・導覽亭　導覽亭",
+        "↖ 小角　委託 1/3",
+        "↗ 阿浪　委託 1/3",
+        "↑ 迎賓大道　拍貼 0/12"
+      ],
+      "phase": "dusk",
+      "shot": "sign-plaza-dusk"
+    },
+    {
+      "id": "plaza",
+      "lines": [
+        "← 票票・導覽亭　導覽亭",
+        "↖ 小角　委託 1/3",
+        "↗ 阿浪　委託 1/3",
+        "↑ 迎賓大道　拍貼 0/12"
+      ],
+      "phase": "dawn",
+      "shot": "sign-plaza-dawn"
+    },
+    {
+      "id": "plaza",
+      "lines": [
+        "← 票票・導覽亭　導覽亭",
+        "↖ 小角　委託 1/3",
+        "↗ 阿浪　委託 1/3",
+        "↑ 迎賓大道　拍貼 0/12"
+      ],
+      "phase": "dawn",
+      "shot": "sign-plaza-continue"
+    }
+  ],
+  "status": "passed",
+  "volume_segments": [
+    {
+      "end_frame": 2899,
+      "saved_sfx": 1.0,
+      "sfx_volume": 1.0,
+      "start_frame": 2814
+    },
+    {
+      "end_frame": 3024,
+      "saved_sfx": 0.5,
+      "sfx_volume": 0.5,
+      "start_frame": 2939
+    },
+    {
+      "end_frame": 3149,
+      "saved_sfx": 0.0,
+      "sfx_volume": 0.0,
+      "start_frame": 3064
+    }
+  ],
+  "walk": [
+    {
+      "area": "海風碼頭",
+      "end": [
+        1.67,
+        16.29
+      ],
+      "frames": 226,
+      "label": "dock-sign-0",
+      "metres": 7.34,
+      "nearest": "",
+      "target": [
+        1.60000002384186,
+        16.2000007629395
+      ]
+    },
+    {
+      "area": "海風碼頭",
+      "end": [
+        0.0,
+        12.16
+      ],
+      "frames": 144,
+      "label": "plaza-sign-0",
+      "metres": 4.64,
+      "nearest": "",
+      "target": [
+        0.0,
+        12.0
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        0.0,
+        5.76
+      ],
+      "frames": 192,
+      "label": "plaza-sign-1",
+      "metres": 6.22,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -3.66,
+        5.91
+      ],
+      "frames": 112,
+      "label": "ticket-0",
+      "metres": 3.53,
+      "nearest": "guide",
+      "target": [
+        -3.79999995231628,
+        5.90000009536743
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -4.2,
+        -4.14
+      ],
+      "frames": 305,
+      "label": "imp-0",
+      "metres": 9.98,
+      "nearest": "",
+      "target": [
+        -4.19999980926514,
+        -4.19999980926514
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -4.2,
+        -6.27
+      ],
+      "frames": 64,
+      "label": "imp-1",
+      "metres": 1.96,
+      "nearest": "quest-001",
+      "target": [
+        -4.09999990463257,
+        -6.40000009536743
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -4.2,
+        -4.54
+      ],
+      "frames": 51,
+      "label": "announcer-0",
+      "metres": 1.52,
+      "nearest": "",
+      "target": [
+        -4.19999980926514,
+        -4.40000009536743
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        2.13,
+        -4.39
+      ],
+      "frames": 189,
+      "label": "announcer-1",
+      "metres": 6.1,
+      "nearest": "quest-002",
+      "target": [
+        2.20000004768372,
+        -4.40000009536743
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        3.04,
+        -2.9
+      ],
+      "frames": 55,
+      "label": "announcer-2",
+      "metres": 1.64,
+      "nearest": "quest-002",
+      "target": [
+        3.0,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.11,
+        -2.9
+      ],
+      "frames": 30,
+      "label": "plaza-sign-return-0",
+      "metres": 0.82,
+      "nearest": "quest-002",
+      "target": [
+        4.19999980926514,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.11,
+        5.5
+      ],
+      "frames": 251,
+      "label": "plaza-sign-return-1",
+      "metres": 8.19,
+      "nearest": "",
+      "target": [
+        4.19999980926514,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        0.11,
+        5.5
+      ],
+      "frames": 119,
+      "label": "plaza-sign-return-2",
+      "metres": 3.79,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -3.71,
+        5.94
+      ],
+      "frames": 118,
+      "label": "ticket-again-0",
+      "metres": 3.74,
+      "nearest": "guide",
+      "target": [
+        -3.79999995231628,
+        5.90000009536743
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -4.24,
+        -4.1
+      ],
+      "frames": 306,
+      "label": "avenue-sign-0",
+      "metres": 10.01,
+      "nearest": "",
+      "target": [
+        -4.19999980926514,
+        -4.19999980926514
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -1.54,
+        -8.85
+      ],
+      "frames": 176,
+      "label": "avenue-sign-1",
+      "metres": 5.68,
+      "nearest": "",
+      "target": [
+        -1.60000002384186,
+        -9.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        0.04,
+        -17.93
+      ],
+      "frames": 290,
+      "label": "avenue-sign-2",
+      "metres": 9.48,
+      "nearest": "",
+      "target": [
+        0.0,
+        -18.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        3.03,
+        -13.17
+      ],
+      "frames": 180,
+      "label": "avenue-return-0",
+      "metres": 5.81,
+      "nearest": "",
+      "target": [
+        3.0,
+        -13.0
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        3.03,
+        -9.17
+      ],
+      "frames": 120,
+      "label": "avenue-return-1",
+      "metres": 3.82,
+      "nearest": "",
+      "target": [
+        3.0,
+        -9.0
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        2.21,
+        -4.71
+      ],
+      "frames": 143,
+      "label": "avenue-return-2",
+      "metres": 4.58,
+      "nearest": "quest-002",
+      "target": [
+        2.20000004768372,
+        -4.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        3.03,
+        -2.91
+      ],
+      "frames": 63,
+      "label": "avenue-return-3",
+      "metres": 1.91,
+      "nearest": "quest-002",
+      "target": [
+        3.0,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.1,
+        -2.91
+      ],
+      "frames": 31,
+      "label": "plaza-sign-night-0",
+      "metres": 0.86,
+      "nearest": "quest-002",
+      "target": [
+        4.19999980926514,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.1,
+        5.49
+      ],
+      "frames": 251,
+      "label": "plaza-sign-night-1",
+      "metres": 8.19,
+      "nearest": "",
+      "target": [
+        4.19999980926514,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        0.1,
+        5.49
+      ],
+      "frames": 119,
+      "label": "plaza-sign-night-2",
+      "metres": 3.79,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.1,
+        5.49
+      ],
+      "frames": 119,
+      "label": "announcer-dusk-0",
+      "metres": 3.79,
+      "nearest": "",
+      "target": [
+        4.19999980926514,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.1,
+        -2.65
+      ],
+      "frames": 244,
+      "label": "announcer-dusk-1",
+      "metres": 7.96,
+      "nearest": "quest-002",
+      "target": [
+        4.19999980926514,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        3.11,
+        -2.79
+      ],
+      "frames": 30,
+      "label": "announcer-dusk-2",
+      "metres": 0.8,
+      "nearest": "quest-002",
+      "target": [
+        3.0,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.04,
+        -2.79
+      ],
+      "frames": 28,
+      "label": "plaza-sign-dusk-0",
+      "metres": 0.76,
+      "nearest": "quest-002",
+      "target": [
+        4.19999980926514,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.18,
+        5.53
+      ],
+      "frames": 249,
+      "label": "plaza-sign-dusk-1",
+      "metres": 8.1,
+      "nearest": "",
+      "target": [
+        4.19999980926514,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        0.05,
+        5.53
+      ],
+      "frames": 121,
+      "label": "plaza-sign-dusk-2",
+      "metres": 3.86,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.05,
+        5.53
+      ],
+      "frames": 120,
+      "label": "announcer-dawn-0",
+      "metres": 3.82,
+      "nearest": "",
+      "target": [
+        4.19999980926514,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.2,
+        -2.66
+      ],
+      "frames": 247,
+      "label": "announcer-dawn-1",
+      "metres": 8.03,
+      "nearest": "quest-002",
+      "target": [
+        4.19999980926514,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        3.07,
+        -2.81
+      ],
+      "frames": 33,
+      "label": "announcer-dawn-2",
+      "metres": 0.9,
+      "nearest": "quest-002",
+      "target": [
+        3.0,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.14,
+        -2.81
+      ],
+      "frames": 29,
+      "label": "plaza-sign-dawn-0",
+      "metres": 0.79,
+      "nearest": "quest-002",
+      "target": [
+        4.19999980926514,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.14,
+        5.46
+      ],
+      "frames": 248,
+      "label": "plaza-sign-dawn-1",
+      "metres": 8.09,
+      "nearest": "",
+      "target": [
+        4.19999980926514,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        0.08,
+        5.61
+      ],
+      "frames": 122,
+      "label": "plaza-sign-dawn-2",
+      "metres": 3.86,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.08,
+        5.61
+      ],
+      "frames": 119,
+      "label": "announcer-volume-0",
+      "metres": 3.79,
+      "nearest": "",
+      "target": [
+        4.19999980926514,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        4.08,
+        -2.66
+      ],
+      "frames": 248,
+      "label": "announcer-volume-1",
+      "metres": 8.09,
+      "nearest": "quest-002",
+      "target": [
+        4.19999980926514,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        3.09,
+        -2.81
+      ],
+      "frames": 30,
+      "label": "announcer-volume-2",
+      "metres": 0.8,
+      "nearest": "quest-002",
+      "target": [
+        3.0,
+        -2.79999995231628
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        0.0,
+        5.72
+      ],
+      "frames": 523,
+      "label": "continue-plaza",
+      "metres": 17.27,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    }
+  ]
+}

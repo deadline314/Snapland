@@ -99,6 +99,8 @@ func _check_completed_announcer() -> void:
 	await _interact_at("quest-002", false)
 	_check(main.last_conversation_id == "announcer-done-ferry", "a second visit rotates to a different finished-state line")
 	_check(progress.photos.size() == photo_count and progress.coins == coins and int(progress.quests.get("quest-002", 0)) == 3, "repeat conversations never re-award or move progress")
+	for reaction in main.STORY_CELEBRATION.values():
+		_check(main.world.react_story_npc(str(reaction[0]), str(reaction[1])), "finished-request reaction %s plays an authored %s action" % [reaction[0], reaction[1]])
 	main._show_quest("quest-002")
 	await _frames(2)
 	_check_quest_card("廣播即興救場", "旅券 · 已完成", "今天的小麻煩，已經變成了拍貼裡的笑話。", "completed quest-002")
