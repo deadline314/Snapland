@@ -36,3 +36,12 @@ Registered surfaces now share a shallow, controller-owned material copy per orig
 | [MultiMesh optimization](https://docs.godotengine.org/en/stable/tutorials/performance/using_multimesh.html) | MultiMesh has different custom-data and culling semantics. Retain existing geometry batching and vertex-color shading; do not rebuild the park to repair this storage defect. The page warns its 4.7 examples may lag. |
 
 Text and upstream code review only, not tutorial-video viewing. New game screenshots are actual rendered fixture evidence, not external reference art. The accepted time-postcard run has zero engine ERROR lines at unchanged 865 scenery meshes. Numerical tests cover preserved source/atlas, emitters/metal, multiple-controller isolation, shared-copy count, unfinished-registration release, daylight and existing ray/resize/reduced-motion behavior. Full Forward+/Mobile, Windows hardware and animation quality are not inferred from this Compatibility run. Existing warnings about unsupported special materials remain explicit and preserve those surfaces.
+
+
+## 2026-10-23 依實際立牌決定透視圈（ART-10／ART-11）
+
+原生實測發現：透視圈以「主角腳底往上 1.9 公尺」的垂直投影估算大小、並以 1 公尺高的身體點為中心；但主角是 2.4 公尺、永遠面向鏡頭的立牌，斜俯視時畫面上更高。拍貼本亭後方實測立牌約 91 像素高，圓半徑只有 41.6 像素，頭頂兩側與髮型約一成像素仍被屋頂蓋住。
+
+現在控制器可設定實際立牌：以立牌在畫面上的矩形中心為圓心，半徑取整個立牌畫布的半對角線再加柔邊與 4 像素邊距，並維持原本的最小、最大與短邊比例上限；同一個立牌也多打一條頭部高度的射線，只擋住頭的建築也會開啟透視。沒有設定立牌的呼叫方（例如乘坐時隱藏立牌）維持原本 1.9 公尺估算，既有斷言全部保留。
+
+驗證方式：同一凍結畫面中，先拍「建築在、透視開啟」，再隱藏該建築拍參考；參考中屬於主角的每一個像素，透過透視圈必須顏色相同（≥97%），且頭頂與腳底列完全一致。另外只在該建築的畫面範圍內比較開圈前後，圈外的建築像素不得改變。測試涵蓋兩種建築（拍貼本亭、迎賓大道拱門）、四時段、換裝、降低動態、800×600 與 1600×900 視窗、離開後恢復及重新建立 Main。這些是 Godot 4.7.2 Compatibility／llvmpipe 軟體繪製與腳本實際按鍵，不是 Windows 硬體或真人試玩。

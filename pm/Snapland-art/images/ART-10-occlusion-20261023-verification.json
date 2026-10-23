@@ -1,0 +1,681 @@
+{
+ "scope": "Godot 4.7.2 Compatibility on llvmpipe software GL under Xvfb; scripted key input; not GPU hardware, Windows or a human playtest",
+ "renderer": "llvmpipe (LLVM 20.1.2, 256 bits) / gl_compatibility",
+ "occlusion": [
+  {
+   "active": false,
+   "case": "in-front-of-kiosk",
+   "pass": true
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 1395,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    483.564605712891,
+    308.695709228516,
+    175.426849365234,
+    147.598876953125
+   ],
+   "case": "kiosk-dawn",
+   "center_px": [
+    640.0,
+    359.012054443359
+   ],
+   "equipped": {
+    "hat": "hat-none",
+    "outfit": "outfit-tide"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    335.0,
+    335.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.6223258972168,
+   "reduced_motion": false,
+   "time_phase": "dawn",
+   "unoccluded_player_pixels": 1376,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1376,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 957,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    468.830230712891,
+    280.570526123047,
+    328.273040771484,
+    157.250091552734
+   ],
+   "case": "arch-dawn",
+   "center_px": [
+    640.0,
+    359.009246826172
+   ],
+   "equipped": {
+    "hat": "hat-none",
+    "outfit": "outfit-tide"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    334.0,
+    334.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.622314453125,
+   "reduced_motion": false,
+   "time_phase": "dawn",
+   "unoccluded_player_pixels": 1493,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1493,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 1395,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    483.564605712891,
+    308.695709228516,
+    175.426849365234,
+    147.598876953125
+   ],
+   "case": "kiosk-noon",
+   "center_px": [
+    640.0,
+    359.012054443359
+   ],
+   "equipped": {
+    "hat": "hat-none",
+    "outfit": "outfit-tide"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    335.0,
+    335.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.6223258972168,
+   "reduced_motion": false,
+   "time_phase": "noon",
+   "unoccluded_player_pixels": 1376,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1376,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 958,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    468.830230712891,
+    280.570526123047,
+    328.273040771484,
+    157.250091552734
+   ],
+   "case": "arch-noon",
+   "center_px": [
+    640.0,
+    359.009246826172
+   ],
+   "equipped": {
+    "hat": "hat-none",
+    "outfit": "outfit-tide"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    334.0,
+    334.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.622314453125,
+   "reduced_motion": false,
+   "time_phase": "noon",
+   "unoccluded_player_pixels": 1499,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1499,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 1395,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    483.564605712891,
+    308.695709228516,
+    175.426849365234,
+    147.598876953125
+   ],
+   "case": "kiosk-dusk",
+   "center_px": [
+    640.0,
+    359.012054443359
+   ],
+   "equipped": {
+    "hat": "hat-none",
+    "outfit": "outfit-tide"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    335.0,
+    335.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.6223258972168,
+   "reduced_motion": false,
+   "time_phase": "dusk",
+   "unoccluded_player_pixels": 1374,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1374,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 958,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    468.830230712891,
+    280.570526123047,
+    328.273040771484,
+    157.250091552734
+   ],
+   "case": "arch-dusk",
+   "center_px": [
+    640.0,
+    359.009246826172
+   ],
+   "equipped": {
+    "hat": "hat-none",
+    "outfit": "outfit-tide"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    334.0,
+    334.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.622314453125,
+   "reduced_motion": false,
+   "time_phase": "dusk",
+   "unoccluded_player_pixels": 1492,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1492,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 1368,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    483.564605712891,
+    308.695709228516,
+    175.426849365234,
+    147.598876953125
+   ],
+   "case": "kiosk-night",
+   "center_px": [
+    640.0,
+    359.012054443359
+   ],
+   "equipped": {
+    "hat": "hat-none",
+    "outfit": "outfit-tide"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    335.0,
+    335.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.6223258972168,
+   "reduced_motion": false,
+   "time_phase": "night",
+   "unoccluded_player_pixels": 1376,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1376,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 957,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    468.830230712891,
+    280.570526123047,
+    328.273040771484,
+    157.250091552734
+   ],
+   "case": "arch-night",
+   "center_px": [
+    640.0,
+    359.009246826172
+   ],
+   "equipped": {
+    "hat": "hat-none",
+    "outfit": "outfit-tide"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    334.0,
+    334.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.622314453125,
+   "reduced_motion": false,
+   "time_phase": "night",
+   "unoccluded_player_pixels": 1494,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1494,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 1395,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    483.604949951172,
+    308.719818115234,
+    175.395721435547,
+    147.577819824219
+   ],
+   "case": "kiosk-outfit-change",
+   "center_px": [
+    640.0,
+    359.012054443359
+   ],
+   "equipped": {
+    "hat": "hat-sailor",
+    "outfit": "outfit-coral"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    333.0,
+    333.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.622314453125,
+   "reduced_motion": false,
+   "time_phase": "noon",
+   "unoccluded_player_pixels": 1484,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1484,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 1395,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    483.605651855469,
+    308.720275878906,
+    175.395202636719,
+    147.577453613281
+   ],
+   "case": "kiosk-reduced-motion",
+   "center_px": [
+    640.0,
+    359.012084960938
+   ],
+   "equipped": {
+    "hat": "hat-sailor",
+    "outfit": "outfit-coral"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    333.0,
+    333.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.6223220825195,
+   "reduced_motion": true,
+   "time_phase": "noon",
+   "unoccluded_player_pixels": 1486,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1486,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 628,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    492.618804931641,
+    309.360534667969,
+    175.426910400391,
+    147.598937988281
+   ],
+   "case": "kiosk-window-800x600",
+   "center_px": [
+    400.0,
+    224.382537841797
+   ],
+   "equipped": {
+    "hat": "hat-sailor",
+    "outfit": "outfit-coral"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    247.0,
+    247.0
+   ],
+   "figure_window": [
+    378,
+    196,
+    42,
+    53
+   ],
+   "head_row": [
+    208.0,
+    208.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 0.625,
+   "pass": true,
+   "radius_px": 36.6389536857605,
+   "reduced_motion": false,
+   "time_phase": "noon",
+   "unoccluded_player_pixels": 579,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 579,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 2179,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    483.564605712891,
+    308.695709228516,
+    175.426849365234,
+    147.598876953125
+   ],
+   "case": "kiosk-window-1600x900",
+   "center_px": [
+    800.0,
+    448.765075683594
+   ],
+   "equipped": {
+    "hat": "hat-sailor",
+    "outfit": "outfit-coral"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    495.0,
+    495.0
+   ],
+   "figure_window": [
+    757,
+    393,
+    85,
+    107
+   ],
+   "head_row": [
+    416.0,
+    416.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.25,
+   "pass": true,
+   "radius_px": 73.277907371521,
+   "reduced_motion": false,
+   "time_phase": "noon",
+   "unoccluded_player_pixels": 2319,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 2319,
+   "visible_ratio": 1.0
+  },
+  {
+   "active": false,
+   "case": "main-reentry",
+   "fade_weight": 0.0,
+   "pass": true,
+   "registered_buildings": 31
+  },
+  {
+   "active": true,
+   "building_pixels_changed_inside": 958,
+   "building_pixels_changed_outside": 0,
+   "building_screen_bounds": [
+    468.830230712891,
+    280.570526123047,
+    328.273040771484,
+    157.250091552734
+   ],
+   "case": "arch-after-reentry",
+   "center_px": [
+    640.0,
+    359.009246826172
+   ],
+   "equipped": {
+    "hat": "hat-sailor",
+    "outfit": "outfit-coral"
+   },
+   "fade_weight": 1.0,
+   "feet_row": [
+    396.0,
+    396.0
+   ],
+   "figure_window": [
+    606,
+    315,
+    68,
+    86
+   ],
+   "head_row": [
+    332.0,
+    332.0
+   ],
+   "image_offset": [
+    0.0,
+    0.0
+   ],
+   "image_scale": 1.0,
+   "pass": true,
+   "radius_px": 58.622314453125,
+   "reduced_motion": false,
+   "time_phase": "noon",
+   "unoccluded_player_pixels": 1633,
+   "viewport": [
+    1280.0,
+    720.0
+   ],
+   "visible_player_pixels": 1633,
+   "visible_ratio": 1.0
+  }
+ ]
+}

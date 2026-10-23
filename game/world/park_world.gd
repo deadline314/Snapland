@@ -160,6 +160,7 @@ func _ready() -> void:
 	_build_camera()
 	_update_sprite_grounding()
 	occlusion_controller.configure(player,camera)
+	occlusion_controller.set_reveal_visual(avatar)
 	_register_npc_activity()
 	interaction_requested.connect(_on_interaction_requested)
 	component_motion.finish_registration()
