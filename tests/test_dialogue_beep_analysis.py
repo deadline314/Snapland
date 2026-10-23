@@ -53,9 +53,10 @@ class DialogueBeepAnalysisTests(unittest.TestCase):
         self.assertEqual(result["onsets_without_revealed_letter"], [])
 
     def test_beep_without_a_letter_or_with_wrong_pitch_fails(self) -> None:
-        code, result = self.run_case([(40 / FPS, "票票", 1.0)], [glyph(6, "票票", "船")])
+        code, result = self.run_case([(12 / FPS, "票票", 1.0), (60 / FPS, "票票", 1.0)], [glyph(6, "票票", "船")])
         self.assertEqual(code, 1)
-        self.assertEqual(len(result["onsets_without_revealed_letter"]), 1)
+        self.assertEqual(len(result["onsets_without_revealed_letter"]), 1, "a stray tone during the reveal fails")
+        self.assertEqual(len(result["tones_outside_dialogue_reveal"]), 1, "a tone far from any text is reported separately")
         code, result = self.run_case([(6 / FPS, "小角", 1.0)], [glyph(6, "票票", "船")])
         self.assertEqual(code, 1)
         self.assertEqual(len(result["onsets_with_other_speaker_pitch"]), 1)

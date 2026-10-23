@@ -19,10 +19,8 @@ import numpy as np
 PITCH_HZ = {"票票": 760.0, "小角": 910.0, "阿浪": 620.0, "主角": 700.0}
 INTERVAL_MS = {"票票": 54, "小角": 42, "阿浪": 50, "主角": 48}
 PUNCTUATION = set("，。！？；：、…—,.!?;:·「」『』（）()《》〈〉“”‘’\"'～~・　 ")
-WINDOW_S = 0.016
-HOP_S = 0.004
-BAND_HZ = 25.0
-LOBE_HZ = 130.0
+NCC_THRESHOLD = 0.8
+ENVIRONMENT_FRAMES = 6
 
 
 def read_mono(path: Path) -> tuple[np.ndarray, int]:
@@ -38,37 +36,49 @@ def read_mono(path: Path) -> tuple[np.ndarray, int]:
     return data, rate
 
 
+def beep_template(pitch: float, rate: int) -> np.ndarray:
+    """The exact synthesized beep: 24 ms sine with a 3 ms attack and 6 ms release."""
+    t = np.arange(int(0.024 * rate)) / rate
+    fade = np.clip(np.minimum(t / 0.003, (0.024 - t) / 0.006), 0.0, 1.0)
+    return np.sin(2 * np.pi * pitch * t) * fade
+
+
 def detect_beeps(samples: np.ndarray, rate: int) -> list[dict]:
-    """Windows whose energy is dominated by one speaker pitch; merged into onsets."""
-    window = int(WINDOW_S * rate)
-    hop = int(HOP_S * rate)
-    n_fft = 4096  # zero-padded so each speaker pitch has its own bins
-    freqs = np.fft.rfftfreq(n_fft, 1.0 / rate)
-    taper = np.hanning(window)
-    hits: list[tuple[float, str, float]] = []
-    for start in range(0, len(samples) - window, hop):
-        chunk = samples[start:start + window]
-        spectrum = np.abs(np.fft.rfft(chunk * taper, n_fft)) ** 2
-        total = spectrum[(freqs > 80) & (freqs < 8000)].sum()
-        if total <= 1e-9:
-            continue
-        # A beep is a near-pure tone: most energy sits in one main lobe, and the
-        # lobe's peak frequency names the speaker (pitches are 60–150 Hz apart).
-        search = (freqs > 500) & (freqs < 1100)
-        peak_index = int(np.argmax(np.where(search, spectrum, 0.0)))
-        peak_hz = float(freqs[peak_index])
-        lobe = spectrum[np.abs(freqs - peak_hz) <= LOBE_HZ].sum()
-        speaker = min(PITCH_HZ, key=lambda name: abs(PITCH_HZ[name] - peak_hz))
-        amplitude = float(np.abs(chunk).max())
-        if lobe / total >= 0.6 and abs(PITCH_HZ[speaker] - peak_hz) <= BAND_HZ and amplitude >= 0.002:
-            hits.append((start / rate, speaker, amplitude))
+    """Matched filter per speaker: normalized correlation with the exact beep shape.
+
+    A lone beep scores ~1; music or noise rarely exceeds the threshold because the
+    template is a fixed pitch and envelope. Peaks closer than 30 ms are merged.
+    """
+    length = len(samples)
+    size = 1 << int(np.ceil(np.log2(length + int(0.03 * rate))))
+    spectrum = np.fft.rfft(samples, size)
+    squared = np.concatenate(([0.0], np.cumsum(samples ** 2)))
+    best = np.zeros(length)
+    owner = np.full(length, -1)
+    names = list(PITCH_HZ)
+    for index, name in enumerate(names):
+        template = beep_template(PITCH_HZ[name], rate)
+        width = len(template)
+        correlation = np.fft.irfft(spectrum * np.conj(np.fft.rfft(template, size)), size)[:length]
+        local = np.sqrt(np.maximum(squared[np.minimum(np.arange(length) + width, length)] - squared[:length], 1e-12))
+        score = correlation / (np.linalg.norm(template) * local)
+        better = score > best
+        best[better] = score[better]
+        owner[better] = index
     onsets: list[dict] = []
-    for time_s, speaker, peak in hits:
-        if onsets and time_s - onsets[-1]["last"] <= 0.03 and onsets[-1]["speaker"] == speaker:
-            onsets[-1]["last"] = time_s
-            onsets[-1]["peak"] = max(onsets[-1]["peak"], peak)
+    candidates = np.flatnonzero(best >= NCC_THRESHOLD)
+    gap = int(0.03 * rate)
+    window = int(0.024 * rate)
+    for position in candidates:
+        if onsets and position - onsets[-1]["sample"] < gap:
+            if best[position] > onsets[-1]["score"]:
+                onsets[-1].update(sample=int(position), score=float(best[position]), speaker=names[owner[position]])
             continue
-        onsets.append({"time": time_s, "last": time_s, "speaker": speaker, "peak": peak})
+        onsets.append({"sample": int(position), "score": float(best[position]), "speaker": names[owner[position]]})
+    for onset in onsets:
+        chunk = samples[onset["sample"]:onset["sample"] + window]
+        onset["time"] = onset["sample"] / rate
+        onset["peak"] = float(np.abs(chunk).max()) if len(chunk) else 0.0
     return onsets
 
 
@@ -79,7 +89,7 @@ def _best_offset(onsets: list[dict], glyphs: list[dict], fps: float) -> int:
     if not letter_frames or not onsets:
         return 0
     best, best_score = 0, -1
-    for offset in sorted(range(-10, 11), key=abs):
+    for offset in sorted(range(-3, 4), key=abs):
         score = sum(1 for o in onsets if any((int(round(o["time"] * fps)) + offset + d) in letter_frames for d in (-1, 0, 1)))
         if score > best_score:
             best, best_score = offset, score
@@ -99,12 +109,20 @@ def main(argv: list[str]) -> int:
         by_frame.setdefault(int(glyph["frame"]) - first_frame, []).append(glyph)
 
     unmatched = []
+    environment = []
     pitch_mismatch = []
+    reveal_frames = sorted(by_frame)
     for onset in onsets:
         frame = int(round(onset["time"] * fps))
         nearby = [g for f in range(frame - 2, frame + 2) for g in by_frame.get(f, []) if not g["skipped"] and g["glyph"] not in PUNCTUATION]
         if not nearby:
-            unmatched.append(round(onset["time"], 3))
+            # Far from any revealed text, a matching tone belongs to the scene's
+            # own sounds; it is reported, but only in-dialogue strays fail.
+            # A tone at another speaker's pitch is not this conversation's beep.
+            closest = min(reveal_frames, key=lambda f: abs(frame - f), default=None)
+            near_speakers = {g["speaker"] for g in by_frame.get(closest, [])} if closest is not None else set()
+            stray = closest is not None and abs(frame - closest) <= ENVIRONMENT_FRAMES and onset["speaker"] in near_speakers
+            (unmatched if stray else environment).append(round(onset["time"], 3))
         elif onset["speaker"] not in {g["speaker"] for g in nearby}:
             pitch_mismatch.append({"time": round(onset["time"], 3), "detected": onset["speaker"], "speakers": sorted({g["speaker"] for g in nearby})})
 
@@ -149,6 +167,7 @@ def main(argv: list[str]) -> int:
         "beep_onsets": len(onsets), "revealed_glyphs": sum(1 for g in glyphs if not g["skipped"]),
         "skipped_glyphs": sum(1 for g in glyphs if g["skipped"]),
         "onsets_without_revealed_letter": unmatched,
+        "tones_outside_dialogue_reveal": environment,
         "onsets_with_other_speaker_pitch": pitch_mismatch,
         "punctuation_only_frames_silent": len(punctuation_only),
         "punctuation_only_frames_with_beep": punctuation_with_beep,

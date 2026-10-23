@@ -158,7 +158,8 @@ func _build_broadcast_stand(world: Node3D) -> void:
 	# whose arrow is wrong until his request is finished.
 	var root := _group("BroadcastStand")
 	var p := BROADCAST_STAND
-	_adopt(world._cylinder(p + Vector3(0, 1.3, 0), 0.07, 2.6, Color("#4a5458"), -1.0, true), root)
+	# Thin and non-solid so the walk from the arch to 阿浪 never snags on it.
+	_adopt(world._cylinder(p + Vector3(0, 1.3, 0), 0.07, 2.6, Color("#4a5458")), root)
 	for side in [-1.0, 1.0]:
 		var horn: MeshInstance3D = _adopt(world._cylinder(p + Vector3(side * 0.26, 2.5, 0.05), 0.07, 0.42, Color("#e8dcc0"), 0.2), root)
 		horn.rotation.z = side * -1.2
