@@ -41,7 +41,7 @@ const DIALOGUE_BEEP_SAMPLE_RATE := 22050
 const DIALOGUE_BEEP_SECONDS := 0.024
 const DIALOGUE_BEEP_PITCH_HZ := {"票票": 760.0, "小角": 910.0, "阿浪": 620.0, "主角": 700.0}
 const DIALOGUE_BEEP_INTERVAL_MSEC := {"票票": 54, "小角": 42, "阿浪": 50, "主角": 48}
-const DIALOGUE_PUNCTUATION := "，。！？；：、…—,.!?;:·"
+const DIALOGUE_PUNCTUATION := "，。！？；：、…—,.!?;:·「」『』（）()《》〈〉“”‘’\"'～~・　"
 const SETTING_KEYS := {
 	"master": "master_volume",
 	"music": "music_volume",
@@ -368,13 +368,17 @@ func play_note(note: int) -> void:
 	_notes.play()
 	_notes.stream_paused = _paused
 
-func play_dialogue_beep(speaker: String, character: String) -> bool:
+## clock_msec lets the caller pace beeps on game time (the typewriter's own
+## clock), so a hitch or an offline recording keeps the same spacing.
+func play_dialogue_beep(speaker: String, character: String, clock_msec: int = -1) -> bool:
 	if not _dialogue_beep_streams.has(speaker) or not _is_dialogue_beep_glyph(character):
 		return false
 	if _settings.master * _settings.sfx <= 0.000001 or _paused:
 		return false
-	var now := Time.get_ticks_msec()
-	if now - _last_dialogue_beep_msec < int(DIALOGUE_BEEP_INTERVAL_MSEC[speaker]):
+	var now := clock_msec if clock_msec >= 0 else Time.get_ticks_msec()
+	var elapsed := now - _last_dialogue_beep_msec
+	# A negative gap means the caller switched clocks; it never blocks a beep.
+	if elapsed >= 0 and elapsed < int(DIALOGUE_BEEP_INTERVAL_MSEC[speaker]):
 		return false
 	_last_dialogue_beep_msec = now
 	_dialogue_beep_player.stream = _dialogue_beep_streams[speaker]

@@ -11,6 +11,7 @@ const GRASS = preload("res://game/world/grass.gdshader")
 const LIVING_SPRITE = preload("res://game/world/living_sprite.gdshader")
 const ComponentAnimationScript = preload("res://game/world/component_animation.gd")
 const NpcActivityScript = preload("res://game/world/npc_activity.gd")
+const StoryLandmarksScript = preload("res://game/world/story_landmarks.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const AvatarHairRig = preload("res://game/world/avatar_hair_rig.gd")
@@ -54,6 +55,7 @@ var district_labels: Array[Label3D] = []
 var local_sign_labels: Array[Label3D] = []
 var component_motion: Node
 var npc_activity: Node
+var story_landmarks: Node3D
 var occlusion_controller: Node
 var pending_npc_interaction: Dictionary = {}
 var _last_label_font: Font
@@ -157,6 +159,9 @@ func _ready() -> void:
 	_build_avenue()
 	_build_gates()
 	CoastalCircuit.build(self)
+	story_landmarks = StoryLandmarksScript.new()
+	add_child(story_landmarks)
+	story_landmarks.configure(self)
 	_build_player()
 	coastal_play=CoastalPlay.new()
 	coastal_play.name="CoastalFreePlay"
@@ -2314,6 +2319,18 @@ func _play_pending_npc_interaction() -> void:
 	match String(request.action):
 		"greet": npc_activity.greet(sprite, String(request.direction))
 		"interact": npc_activity.interact(sprite, String(request.direction))
+
+## Updates signposts and quest results from saved progress (see StoryLandmarks).
+func set_story_progress(snapshot: Dictionary) -> void:
+	if is_instance_valid(story_landmarks):
+		story_landmarks.apply_progress(snapshot)
+
+## Plays a one-off authored reaction (for example a finished request) on an NPC.
+func react_story_npc(role: String, action: String) -> bool:
+	var sprite := _npc_record_for_role(role).get("sprite") as Sprite3D
+	if not is_instance_valid(sprite) or not is_instance_valid(npc_activity):
+		return false
+	return npc_activity.request_action(sprite, action, "front")
 
 func _npc_record_for_role(role: String) -> Dictionary:
 	for actor_record in character_sprites:

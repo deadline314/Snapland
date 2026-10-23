@@ -110,6 +110,7 @@ func _run() -> void:
 		var quest_transform := Transform3D(world.player.global_basis, quest_position + Vector3(0.0,0.3,0.0))
 		_check(quest_position.is_finite() and quest_position.z > -11.0, "%s character stands in front of the avenue arch beam" % quest_id)
 		_check(not world.player.test_move(quest_transform, Vector3(0.0, 0.0, 0.7)), "%s character talking space remains open" % quest_id)
+	_check_wayfinding(world)
 	var landmark_count := 0
 	for node in world.find_children("*", "Node3D", true, false):
 		if String(node.name).begins_with("GameFeature"):
@@ -217,6 +218,38 @@ func _finish() -> void:
 		for failure in failures:
 			push_error(failure)
 		quit(1)
+
+## Signposts are solid landmarks at each fork, leave walking room on both sides,
+## and every direction shows a status line once progress is applied.
+func _check_wayfinding(world: Node) -> void:
+	var landmarks: Node = world.story_landmarks
+	_check(landmarks != null, "story landmarks are built into the island")
+	if landmarks == null: return
+	world.set_story_progress({"story_photo": false, "steps": {"quest-001": 0, "quest-002": 0}, "next_steps": {}, "photos": {}})
+	var report: Array = landmarks.signpost_report()
+	_check(report.size() == 3, "three wayfinding signposts stand at the dock, plaza and avenue forks")
+	var bounds: Rect2 = preload("res://game/world/coastal_circuit.gd").WALK_BOUNDS
+	for record in report:
+		var base: Vector3 = record.position
+		_check(bounds.has_point(Vector2(base.x, base.z)), "%s signpost stands inside the walkable island" % record.id)
+		for line in record.lines:
+			_check(str(line).split("　").size() == 2 and not str(line).split("　")[1].strip_edges().is_empty(), "%s direction shows a live status: %s" % [record.id, line])
+		_check(str(record.label_text) == "\n".join(record.lines) and (record.lines as Array).size() >= 2, "%s billboard shows every direction on its own line" % record.id)
+		var facing := Transform3D(world.player.global_basis, base + Vector3(0.0, 0.35, 0.9))
+		_check(world.player.test_move(facing, Vector3(0.0, 0.0, -1.2)), "%s signpost is a solid landmark, not a floating label" % record.id)
+		for side in [-1.15, 1.15]:
+			var beside := Transform3D(world.player.global_basis, base + Vector3(side, 0.35, 1.2))
+			_check(not world.player.test_move(beside, Vector3(0.0, 0.0, -2.0)), "%s signpost leaves walking room on side %.2f" % [record.id, side])
+	var outcomes: Dictionary = landmarks.outcome_state()
+	_check(not outcomes.ribbon_visible and not outcomes.entry_sign_corrected, "unfinished requests leave the arch and entry sign unchanged")
+	world.set_story_progress({"story_photo": true, "steps": {"quest-001": 3, "quest-002": 3}, "next_steps": {}, "photos": {}})
+	outcomes = landmarks.outcome_state()
+	_check(outcomes.ribbon_visible and outcomes.entry_sign_corrected, "finished requests show the ribbon garland and corrected entry sign")
+	for quest_id in ["quest-001", "quest-002"]:
+		var quest_position: Vector3 = world._point_by_id(quest_id).get("position", Vector3.INF)
+		var quest_transform := Transform3D(world.player.global_basis, quest_position + Vector3(0.0,0.3,0.0))
+		_check(not world.player.test_move(quest_transform, Vector3(0.0, 0.0, 0.7)), "%s talking space stays open beside the story props" % quest_id)
+	world.set_story_progress({"story_photo": false, "steps": {"quest-001": 0, "quest-002": 0}, "next_steps": {}, "photos": {}})
 
 func _check_coastal_extension(world: Node) -> void:
 	_check_coastal_clearance(world)

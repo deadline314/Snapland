@@ -6,6 +6,9 @@ var _crowd_session_id := 0
 var _phase_failures := 0
 var _crowd_finished := false
 var _crowd_model_evidence: Dictionary = {}
+## Wall-clock budgets stretch on a loaded machine (SNAPLAND_REVIEW_WALL_SCALE >= 1).
+## Game time, inputs and scoring are unchanged; only the review's patience grows.
+var _wall_scale := maxf(1.0, float(OS.get_environment("SNAPLAND_REVIEW_WALL_SCALE"))) if OS.get_environment("SNAPLAND_REVIEW_WALL_SCALE").is_valid_float() else 1.0
 
 func _ready() -> void:
 	_started_at_ms = Time.get_ticks_msec()
@@ -14,10 +17,24 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not Engine.get_write_movie_path().is_empty():
 		RenderingServer.force_draw(false, 0.0)
-	if _started_at_ms > 0 and Time.get_ticks_msec() - _started_at_ms > 300000:
+	if _started_at_ms > 0 and Time.get_ticks_msec() - _started_at_ms > _watchdog_ms():
 		_started_at_ms = 0
 		push_error("Native ST-4 story review exceeded its 300-second wall-clock watchdog")
 		get_tree().quit(1)
+
+## On a slow machine the previous click's UI can appear a few frames later;
+## wait (within the scaled budget) for the button before clicking it.
+func _activate_main_button(needle: String, context: String) -> bool:
+	var deadline := _wall_deadline_ms(3000)
+	while Time.get_ticks_msec() < deadline and is_instance_valid(main) and _find(main.overlay, needle) == null:
+		await get_tree().process_frame
+	return await super._activate_main_button(needle, context)
+
+func _watchdog_ms() -> int:
+	return int(300000 * _wall_scale)
+
+func _wall_deadline_ms(milliseconds: int) -> int:
+	return super._wall_deadline_ms(int(milliseconds * _wall_scale))
 
 ## GPU review only. Stations are reached by the same E/menu controls as play;
 ## the fixture teleports only the park player's position to each documented station.
@@ -63,7 +80,7 @@ func _run_story_review() -> void:
 	if not await _activate_main_button("返回遊園", "close quest-001 step 1"): return
 	if not await _interact_at_station("explore-003", "explore"): return
 	if not await _activate_main_button("借一個小角立牌", "borrow bench standee"): return
-	if not await _activate_main_button("按下快門，留下合照", "take actual bench photo"): return
+	if not await _activate_main_button("按下快門", "take actual bench photo"): return
 	if not await _wait_until(func() -> bool: return progress.photos.has("photo-welcome-explore-3") and int(progress.quests.get("quest-001", 0)) == 2, "real bench photo and quest-001 step 2"): return
 	if not await _capture_story("quest001-step2"): return
 	if main.modal_kind != "":
@@ -84,10 +101,7 @@ func _run_story_review() -> void:
 		return
 	if not await _capture_story("game010-result-and-reward"): return
 	if not await _activate_main_button("返回遊園", "return from game-010 result"): return
-	if not await _interact_at_station("quest-001", "quest"): return
-	if not _find_label_text(main.overlay, "今天的小麻煩"):
-		await _fail("Reopened quest-001 ticket does not show its completed state")
-		return
+	if not await _check_finished_request("quest-001", "imp-done", "ribbon_visible"): return
 	if not await _capture_story("quest001-completed-reopened"): return
 	if not await _activate_main_button("返回遊園", "close completed quest-001"): return
 	if not await _save_reload_story_state(): return
@@ -108,7 +122,7 @@ func _run_story_review() -> void:
 	if absf(slider.value) > 15.0:
 		await _fail("Actual mouse input did not align the welcome-wall projection; value=%s" % str(slider.value))
 		return
-	if not await _activate_main_button("按下快門，留下合照", "take aligned welcome-wall photo"): return
+	if not await _activate_main_button("按下快門", "take aligned welcome-wall photo"): return
 	if not await _wait_until(func() -> bool: return progress.photos.has("photo-welcome-explore-2") and int(progress.quests.get("quest-002", 0)) == 2, "real wall photo and quest-002 step 2"): return
 	if not await _capture_story("quest002-step2"): return
 	if main.modal_kind != "":
@@ -131,10 +145,7 @@ func _run_story_review() -> void:
 	if not await _capture_story("game004-result-and-reward"): return
 	if not await _activate_main_button("返回遊園", "return from game-004 result"): return
 	if not await _save_reload_story_state(): return
-	if not await _interact_at_station("quest-002", "quest"): return
-	if not _find_label_text(main.overlay, "今天的小麻煩"):
-		await _fail("Reopened quest-002 ticket does not show its completed state")
-		return
+	if not await _check_finished_request("quest-002", "announcer-done", "entry_sign_corrected"): return
 	if not await _capture_story("quest002-completed-reopened"): return
 	print("PASS: native ST-4 arrival, both quests, real game-010/game-004 results, rewards and save reloads")
 	await main._quit_game()
@@ -185,7 +196,7 @@ func _live_story_crowd_session(session_id: int) -> Control:
 	return candidate if candidate.game_id == "game-004" else null
 
 func _run_crowd_with_real_inputs(session_id: int) -> bool:
-	var deadline := Time.get_ticks_msec() + 60000
+	var deadline := Time.get_ticks_msec() + int(60000 * _wall_scale)
 	# Main frees its finished Session before the next physics frame. Observe the
 	# synchronous finished latch first, then resolve a fresh validated reference.
 	while not _crowd_finished and Time.get_ticks_msec() < deadline:
@@ -199,7 +210,7 @@ func _run_crowd_with_real_inputs(session_id: int) -> bool:
 			_key(KEY_Q if lane == 0 else KEY_E)
 			Input.flush_buffered_events()
 		await get_tree().physics_frame
-		if Time.get_ticks_msec() - _started_at_ms > 300000:
+		if Time.get_ticks_msec() - _started_at_ms > _watchdog_ms():
 			await _fail("Global native ST-4 watchdog expired during game-004")
 			return false
 	if not _crowd_finished:
@@ -244,7 +255,12 @@ func _interact_at_station(id: String, expected_modal: String) -> bool:
 		return false
 	print("ST-4 INPUT: E at actual station ", id, " (player-position-only setup)")
 	_key(KEY_E)
-	if expected_modal == "quest" and main.modal_kind == "dialogue":
+	# Buffered input can reach Main on a later frame; wait for the first UI it opens.
+	var opened_deadline := _wall_deadline_ms(4000)
+	while main.modal_kind == "" and Time.get_ticks_msec() < opened_deadline:
+		await get_tree().process_frame
+		if not await _require_live_main("waiting for %s to respond" % id): return false
+	if (expected_modal == "quest" or expected_modal == "") and main.modal_kind == "dialogue":
 		if not await _complete_story_dialogue(): return false
 	deadline = _wall_deadline_ms(8000)
 	while Time.get_ticks_msec() < deadline and main.modal_kind != expected_modal:
@@ -252,6 +268,26 @@ func _interact_at_station(id: String, expected_modal: String) -> bool:
 		if not await _require_live_main("opening actual " + id + " UI"): return false
 	if main.modal_kind != expected_modal:
 		await _fail("Actual E interaction at %s opened %s, expected %s" % [id, main.modal_kind, expected_modal])
+		return false
+	return true
+
+## After a request is finished, talking gives the result conversation (no card)
+## and the island shows the result; the ticket reached from 今日任務 says so too.
+func _check_finished_request(quest_id: String, conversation_id: String, outcome_key: String) -> bool:
+	if not await _interact_at_station(quest_id, ""): return false
+	if main.last_conversation_id != conversation_id:
+		await _fail("%s finished conversation was %s, expected %s" % [quest_id, main.last_conversation_id, conversation_id])
+		return false
+	if not bool(main.world.story_landmarks.outcome_state().get(outcome_key, false)):
+		await _fail("%s result (%s) is not visible on the island" % [quest_id, outcome_key])
+		return false
+	if not await _capture_story(quest_id.replace("-", "") + "-result-on-island"): return false
+	main._show_tasks()
+	await get_tree().process_frame
+	main._show_quest(quest_id)
+	await get_tree().process_frame
+	if not _find_label_text(main.overlay, "今天的小麻煩"):
+		await _fail("Finished %s ticket does not show its completed state" % quest_id)
 		return false
 	return true
 

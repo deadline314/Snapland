@@ -6,10 +6,15 @@ signal finished
 
 const Paper := preload("res://game/ui/paper_ui.gd")
 
+const ADVANCE_REVEAL_TEXT := "顯示整句  ›"
+const ADVANCE_NEXT_TEXT := "下一句  ›"
+const ADVANCE_LAST_TEXT := "完成  ›"
+
 var speaker_label: Label
 var text_label: Label
 var advance_button: Button
 var cancel_button: Button
+var _is_last_line := false
 
 func _ready() -> void:
 	name = "IslandDialoguePanel"
@@ -60,17 +65,19 @@ func _ready() -> void:
 	text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	copy.add_child(text_label)
-	advance_button = Paper.button("繼續  ›", _request_advance, copy)
-	advance_button.tooltip_text = "E 或空白鍵：顯示完整內容，再按下一句。"
+	advance_button = Paper.button(ADVANCE_REVEAL_TEXT, _request_advance, copy)
+	advance_button.tooltip_text = "E 或空白鍵：先顯示整句，再按一次到下一句。"
 	advance_button.name = "DialogueAdvance"
 	advance_button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	advance_button.custom_minimum_size.y = 42
 	advance_button.grab_focus()
 
-func show_line(speaker: String, text: String, _line_index: int = 0) -> void:
+func show_line(speaker: String, text: String, _line_index: int = 0, is_last := false) -> void:
 	speaker_label.text = speaker
 	text_label.text = text
 	text_label.visible_characters = 0
+	_is_last_line = is_last
+	_sync_advance_text()
 	var portrait := find_child("DialoguePortrait", true, false) as Control
 	if portrait != null:
 		portrait.set("speaker", speaker)
@@ -80,6 +87,24 @@ func show_line(speaker: String, text: String, _line_index: int = 0) -> void:
 func reveal_all() -> void:
 	if is_instance_valid(text_label):
 		text_label.visible_characters = -1
+	_sync_advance_text()
+
+## True while the typewriter is still revealing the current line.
+func is_revealing() -> bool:
+	return is_instance_valid(text_label) and text_label.visible_characters >= 0 and text_label.visible_characters < text_label.text.length()
+
+func _process(_delta: float) -> void:
+	if visible:
+		_sync_advance_text()
+
+## The one advance control names what it will do next: finish the line,
+## go to the next line, or close the conversation.
+func _sync_advance_text() -> void:
+	if not is_instance_valid(advance_button):
+		return
+	var wanted := ADVANCE_REVEAL_TEXT if is_revealing() else ADVANCE_LAST_TEXT if _is_last_line else ADVANCE_NEXT_TEXT
+	if advance_button.text != wanted:
+		advance_button.text = wanted
 
 func _request_advance() -> void:
 	advance_requested.emit()

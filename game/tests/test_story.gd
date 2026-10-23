@@ -1,6 +1,7 @@
 extends SceneTree
 
 const StoryDirector = preload("res://game/story/story_director.gd")
+const Wayfinding = preload("res://game/story/wayfinding.gd")
 
 func _initialize() -> void:
 	if OS.get_environment("SNAPLAND_SAVE_PATH").strip_edges().is_empty():
@@ -50,6 +51,8 @@ func _run() -> void:
 
 	_test_mission_one(story)
 	_test_mission_two(story)
+	_test_conversations()
+	_test_wayfinding()
 	var explorations := story.exploration_data()
 	_check(explorations.size() == 3, "all legacy exploration entries remain")
 	_check(explorations.map(func(item: Dictionary) -> String: return item.id) == ["explore-001", "explore-002", "explore-003"], "exploration ids are stable")
@@ -68,6 +71,82 @@ func _check(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)
 		push_error("FAIL: " + message)
+
+func _state(story_photo: bool, first: int, second: int, phase := "noon") -> Dictionary:
+	return {"story_photo": story_photo, "steps": {"quest-001": first, "quest-002": second}, "time_phase": phase}
+
+func _test_conversations() -> void:
+	var story := StoryDirector.new()
+	# The request a character makes follows the saved step and reacts to the last thing done.
+	var imp_ids: Array[String] = []
+	for step in range(4):
+		imp_ids.append(str(story.conversation_for("imp", _state(true, step, 0)).get("id", "")))
+	_check(imp_ids == ["imp-ask", "imp-bench", "imp-bubble", "imp-done"], "Xiao Jiao's lines follow each quest step: %s" % str(imp_ids))
+	var announcer_ids: Array[String] = []
+	for step in range(4):
+		announcer_ids.append(str(story.conversation_for("announcer", _state(true, 0, step)).get("id", "")))
+	_check(announcer_ids == ["announcer-ask", "announcer-sign", "announcer-crowd", "announcer-done"], "阿浪's lines follow each quest step: %s" % str(announcer_ids))
+	_check(str(story.conversation_for("imp", _state(true, 3, 0)).get("id", "")) == "imp-done-encore", "equally specific finished lines rotate instead of repeating")
+	_check(str(story.conversation_for("imp", _state(true, 3, 0)).get("id", "")) == "imp-done", "rotation returns to the least recently heard line")
+	var ticket_cases := {
+		"ticket-open-day": _state(true, 0, 0), "ticket-underway": _state(true, 1, 0),
+		"ticket-imp-done": _state(true, 3, 2), "ticket-announcer-done": _state(true, 1, 3),
+		"ticket-both-done": _state(true, 3, 3), "ticket-fallback": _state(false, 0, 0),
+	}
+	for expected in ticket_cases:
+		_check(str(story.conversation_for("ticket", ticket_cases[expected]).get("id", "")) == expected, "票票 picks %s for its matching progress" % expected)
+	# Result lines only appear once the result really exists.
+	for step in range(3):
+		for line in story.conversation_for("imp", _state(true, step, 0)).get("lines", []):
+			_check(not str(line.text).contains("綁上"), "unfinished Xiao Jiao never claims the ribbon is tied (step %d)" % step)
+		for line in story.conversation_for("announcer", _state(true, 0, step)).get("lines", []):
+			_check(not str(line.text).contains("轉正"), "unfinished 阿浪 never claims the sign was turned (step %d)" % step)
+	# Time asides join a conversation once per phase, in the speaker's own voice.
+	var fresh := StoryDirector.new()
+	var first: Dictionary = fresh.conversation_for("announcer", _state(true, 0, 0, "night"))
+	var last_line: Dictionary = (first.get("lines", []) as Array).back()
+	_check(bool(first.get("time_aside", false)) and str(last_line.speaker) == "阿浪" and str(last_line.text) == fresh.time_aside("announcer", "night"), "a night visit ends with 阿浪's night remark")
+	_check(not bool(fresh.conversation_for("announcer", _state(true, 0, 0, "night")).get("time_aside", true)), "the same phase remark is not repeated on the next visit")
+	_check(bool(fresh.conversation_for("announcer", _state(true, 0, 0, "dawn")).get("time_aside", false)), "a new phase brings a new remark")
+	for character_id in ["ticket", "imp", "announcer"]:
+		for phase_id in ["dawn", "noon", "dusk", "night"]:
+			_check(not fresh.time_aside(character_id, phase_id).is_empty(), "%s has a %s remark" % [character_id, phase_id])
+		_check(not (fresh.conversation_for(character_id, {}).get("lines", []) as Array).is_empty(), "%s always has something to say" % character_id)
+	# Broken data is reported rather than silently accepted.
+	var broken_path := "user://story-conversation-negative.json"
+	var parsed: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(StoryDirector.STORY_DATA_PATH))
+	var conversations: Dictionary = parsed.conversations
+	conversations["imp"] = (conversations["imp"] as Array).filter(func(entry: Dictionary) -> bool: return not (entry.when as Dictionary).is_empty())
+	(conversations["announcer"] as Array)[0]["when"] = {"weather": "rain"}
+	var file := FileAccess.open(broken_path, FileAccess.WRITE)
+	file.store_string(JSON.stringify(parsed))
+	file.close()
+	var broken_report: Dictionary = StoryDirector.new(broken_path, false).validation_report()
+	var diagnostics := str(broken_report.get("diagnostics", []))
+	_check(not bool(broken_report.get("ok", true)) and diagnostics.contains("fallback") and diagnostics.contains("weather"), "missing fallback and unknown conditions are reported: %s" % diagnostics)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(broken_path))
+
+func _test_wayfinding() -> void:
+	var wayfinding := Wayfinding.new()
+	_check(wayfinding.diagnostics().is_empty() and wayfinding.signposts().size() == 3, "three signposts load without diagnostics")
+	var ids: Array = wayfinding.signposts().map(func(signpost: Dictionary) -> String: return str(signpost.id))
+	_check(ids == ["dock", "plaza", "avenue"], "signposts cover the dock, plaza and avenue forks")
+	var snapshot := {"story_photo": false, "steps": {"quest-001": 1, "quest-002": 3}, "photos": {"photo-welcome-game-1": {}, "photo-welcome-game-3": {}}}
+	var quest_entry := {"arrow": "↖", "label": "小角", "target": {"kind": "quest", "id": "quest-001"}}
+	_check(Wayfinding.entry_status(quest_entry, snapshot) == "委託 1/3" and Wayfinding.entry_line(quest_entry, snapshot) == "↖ 小角　委託 1/3", "quest direction counts finished steps like the HUD")
+	_check(Wayfinding.entry_status({"target": {"kind": "quest", "id": "quest-002"}}, snapshot) == "完成 ✓", "finished quest direction says so")
+	_check(Wayfinding.entry_status({"target": {"kind": "quest", "id": "quest-002"}}, {"steps": {}}) == "有事相求", "unstarted quest direction invites the player")
+	var group := {"target": {"kind": "games", "ids": ["game-001", "game-002", "game-003", "game-004"]}}
+	_check(Wayfinding.entry_status(group, snapshot) == "拍貼 2/4", "district direction counts only that district's photos")
+	_check(Wayfinding.entry_status({"target": {"kind": "games", "ids": ["game-001"]}}, snapshot).ends_with("✓"), "a completed district is marked")
+	_check(Wayfinding.entry_status({"target": {"kind": "character", "id": "ticket"}}, snapshot) == "先打招呼", "before meeting 票票 the sign points the player to her")
+	var bad_path := "user://wayfinding-negative.json"
+	var file := FileAccess.open(bad_path, FileAccess.WRITE)
+	file.store_string(JSON.stringify({"schema_version": 1, "signposts": [{"id": "x", "position": [0, 0], "entries": [{"arrow": "↑", "label": "?", "target": {"kind": "teleport"}}]}, {"id": "y", "position": [1], "entries": []}]}))
+	file.close()
+	var broken := Wayfinding.new(bad_path)
+	_check(broken.signposts().is_empty() and broken.diagnostics().size() == 2, "invalid signposts are skipped with diagnostics")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(bad_path))
 
 func _test_mission_one(story: RefCounted) -> void:
 	var progress := 0
