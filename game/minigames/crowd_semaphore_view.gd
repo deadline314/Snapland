@@ -28,6 +28,17 @@ const LANE_WEST := -3.5
 const LANE_EAST := 3.5
 const LANE_SOUTH := 3.35
 const LANE_NORTH := -3.35
+const CARD_TOP := 160.0
+const CARD_SIZE := Vector2(220.0, 84.0)
+const CROSSING_CARD_X := 170.0
+const FORECAST_CARD_X := 890.0
+const CARD_BG := Color("#102b35")
+const CARD_BORDER := Color("#c3944f")
+const RISK_BORDER := Color("#ef6f7a")
+const ADVICE_BORDER := Color("#7fe3c4")
+const TEXT_LIGHT := Color("#fff0d2")
+const TEXT_GOLD := Color("#f0c878")
+const TEXT_RISK := Color("#ff9a8f")
 
 var _viewport: SubViewport
 var _viewport_container: SubViewportContainer
@@ -46,6 +57,10 @@ var _lane_status_labels: Array[Label] = []
 var _queue_labels: Array[Label] = []
 var _lane_title_labels: Array[Label] = []
 var _queue_strips: Array[ColorRect] = []
+var _card_styles: Array[StyleBoxFlat] = []
+var _crossing_label: Label
+var _forecast_labels: Array[Label] = []
+var _assisted := false
 var _clearance_pennants: Array[MeshInstance3D] = []
 var _material_cache: Dictionary = {}
 var _phase := "noon"
@@ -78,6 +93,7 @@ func is_3d_stage_ready() -> bool:
 ## immediately; only primitive visual fields are retained, never model timers.
 func present_traffic(snapshot: Dictionary, elapsed: float, reduced_motion: bool, time_phase: String) -> void:
 	_reduced_motion = reduced_motion
+	_assisted = bool(snapshot.get("assisted", false))
 	_phase = time_phase if PHASES.has(time_phase) else "noon"
 	var valid := _is_valid_snapshot(snapshot)
 	_walk_lane = -1
@@ -366,57 +382,18 @@ func signal_card_status(lane: int) -> String:
 func _build_signal_surface() -> void:
 	for lane in LANES:
 		var center := HORIZONTAL_SIGNAL if lane == 0 else VERTICAL_SIGNAL
-		var panel := PanelContainer.new()
-		panel.name = "SignalControl%d" % lane
-		panel.position = center - Vector2(110.0, 62.0)
-		panel.position.y = 160.0
-		panel.size = Vector2(220.0, 84.0)
-		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color("#102b35")
-		style.border_color = Color("#c3944f")
-		style.set_border_width_all(2)
-		style.set_corner_radius_all(0)
-		style.content_margin_left = 10.0
-		style.content_margin_right = 10.0
-		style.content_margin_top = 6.0
-		style.content_margin_bottom = 5.0
-		panel.add_theme_stylebox_override("panel", style)
-		add_child(panel)
-		var layout := VBoxContainer.new()
-		layout.add_theme_constant_override("separation", 1)
-		layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		panel.add_child(layout)
+		var layout := _make_card("SignalControl%d" % lane, Vector2(center.x - CARD_SIZE.x * 0.5, CARD_TOP))
 		var header := HBoxContainer.new()
 		header.add_theme_constant_override("separation", 4)
 		header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		layout.add_child(header)
-		var title := Label.new()
-		title.name = "LaneTitle%d" % lane
-		title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var title := _card_label(header, "LaneTitle%d" % lane, 19, TEXT_LIGHT, 52.0)
 		title.text = "橫向" if lane == 0 else "縱向"
-		title.custom_minimum_size = Vector2(86.0, 0.0)
-		title.add_theme_color_override("font_color", Color("#fff0d2"))
-		title.add_theme_font_size_override("font_size", 19)
-		header.add_child(title)
 		_lane_title_labels.append(title)
-		var queue := Label.new()
-		queue.name = "QueueCount%d" % lane
-		queue.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		queue.custom_minimum_size = Vector2(94.0, 0.0)
+		var queue := _card_label(header, "QueueCount%d" % lane, 16, TEXT_GOLD, 138.0)
 		queue.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		queue.add_theme_color_override("font_color", Color("#f0c878"))
-		queue.add_theme_font_size_override("font_size", 16)
-		header.add_child(queue)
 		_queue_labels.append(queue)
-		var label := Label.new()
-		label.name = "LaneLabel%d" % lane
-		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		label.custom_minimum_size = Vector2(194.0, 0.0)
-		label.add_theme_color_override("font_color", Color("#fff0d2"))
-		label.add_theme_font_size_override("font_size", 16)
-		layout.add_child(label)
-		_lane_status_labels.append(label)
+		_lane_status_labels.append(_card_label(layout, "LaneLabel%d" % lane, 16, TEXT_LIGHT, 194.0))
 		var strip := ColorRect.new()
 		strip.name = "QueuePatience%d" % lane
 		strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -424,6 +401,61 @@ func _build_signal_surface() -> void:
 		strip.color = Color("#79a891")
 		layout.add_child(strip)
 		_queue_strips.append(strip)
+	var crossing := _make_card("CrossingStateCard", Vector2(CROSSING_CARD_X, CARD_TOP))
+	_card_label(crossing, "CrossingTitle", 19, TEXT_LIGHT, 194.0).text = "路口"
+	_crossing_label = _card_label(crossing, "CrossingState", 16, TEXT_GOLD, 194.0)
+	var forecast := _make_card("ArrivalForecastCard", Vector2(FORECAST_CARD_X, CARD_TOP))
+	_card_label(forecast, "ForecastTitle", 19, TEXT_LIGHT, 194.0).text = "到站預告"
+	for row in 2:
+		_forecast_labels.append(_card_label(forecast, "ForecastRow%d" % row, 15, TEXT_GOLD, 194.0))
+
+## One planning card: dark panel with a brass border that turns coral for risk.
+func _make_card(card_name: String, position: Vector2) -> VBoxContainer:
+	var panel := PanelContainer.new()
+	panel.name = card_name
+	panel.position = position
+	panel.size = CARD_SIZE
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var style := StyleBoxFlat.new()
+	style.bg_color = CARD_BG
+	style.border_color = CARD_BORDER
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(0)
+	style.content_margin_left = 10.0
+	style.content_margin_right = 10.0
+	style.content_margin_top = 6.0
+	style.content_margin_bottom = 5.0
+	panel.add_theme_stylebox_override("panel", style)
+	_card_styles.append(style)
+	add_child(panel)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 1)
+	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(layout)
+	return layout
+
+func _card_label(parent: Control, label_name: String, font_size: int, color: Color, width: float) -> Label:
+	var label := Label.new()
+	label.name = label_name
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.custom_minimum_size = Vector2(width, 0.0)
+	label.clip_text = true
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_font_size_override("font_size", font_size)
+	parent.add_child(label)
+	return label
+
+func lane_card_border(lane: int) -> Color:
+	return _card_styles[lane].border_color if lane >= 0 and lane < LANES else Color.TRANSPARENT
+
+func crossing_text() -> String:
+	return _crossing_label.text if _crossing_label != null else ""
+
+func forecast_texts() -> Array[String]:
+	var texts: Array[String] = []
+	for label in _forecast_labels:
+		texts.append(label.text)
+	return texts
 
 func _apply_group_state(snapshot: Dictionary, elapsed: float) -> void:
 	var queues: Array = snapshot.get("queues", [])
@@ -508,17 +540,43 @@ func _update_gates_and_lamps(snapshot: Dictionary, phase_name: String) -> void:
 
 func _update_signal_surface(snapshot: Dictionary) -> void:
 	var queues: Array = snapshot.get("queues", [])
+	var risks: Array = snapshot.get("lane_risk", [])
 	var phase_value := str(snapshot.get("phase", "red"))
+	var recommended := int(snapshot.get("recommended_lane", -1))
 	for lane in LANES:
 		var queue: Array = queues[lane] if queues.size() > lane and queues[lane] is Array else []
-		_queue_labels[lane].text = "等候 %d" % queue.size()
+		var risk: Dictionary = risks[lane] if risks.size() > lane and risks[lane] is Dictionary else {}
 		var least_ratio := 1.0
 		for entry_variant in queue:
 			if entry_variant is Dictionary:
 				least_ratio = minf(least_ratio, clampf(float(entry_variant.get("patience_remaining", 0.0)) / maxf(0.1, float(entry_variant.get("patience", 1.0))), 0.0, 1.0))
-		_queue_strips[lane].color = Color("#d17662") if not queue.is_empty() and least_ratio < 0.28 else Color("#78a890")
-		var lane_state := "紅燈・暢通" if phase_value in ["red", "all_red"] else "黃燈・請停" if phase_value == "clearance" else ("綠燈・通行" if lane == _walk_lane else "紅燈・請等")
-		_lane_status_labels[lane].text = lane_state
+		var must_go := bool(risk.get("must_go_next", false))
+		var advised := _assisted and lane == recommended and not queue.is_empty()
+		_queue_labels[lane].text = "空" if queue.is_empty() else "%d 隊 %d 人%s" % [queue.size(), int(risk.get("people", 0)), "・救援" if bool(risk.get("rescue", false)) else ""]
+		_queue_strips[lane].color = Color("#d17662") if not queue.is_empty() and (least_ratio < 0.28 or must_go) else Color("#78a890")
+		var lamp := "黃燈" if phase_value == "clearance" else ("綠燈" if lane == _walk_lane else "紅燈")
+		var detail := "暢通" if queue.is_empty() else "最急 %.1f 秒" % float(risk.get("patience_remaining", 0.0))
+		if must_go: detail = "先放這側！剩 %.1f 秒" % float(risk.get("patience_remaining", 0.0))
+		elif bool(risk.get("lost", false)): detail = "來不及了"
+		elif advised: detail = "建議先放 %.1f 秒" % float(risk.get("patience_remaining", 0.0))
+		_lane_status_labels[lane].text = "%s・%s" % [lamp, detail]
+		_lane_status_labels[lane].add_theme_color_override("font_color", TEXT_RISK if must_go else TEXT_LIGHT)
+		_lane_title_labels[lane].text = "橫向" if lane == 0 else "縱向"
+		_card_styles[lane].border_color = RISK_BORDER if must_go else (ADVICE_BORDER if advised else CARD_BORDER)
+	if _crossing_label != null:
+		var free_in := float(snapshot.get("time_to_free", 0.0))
+		match phase_value:
+			"walk": _crossing_label.text = "%s通行中・%.1f 秒後可換" % ["橫向" if _walk_lane == 0 else "縱向", free_in]
+			"clearance", "all_red": _crossing_label.text = "清場中・%.1f 秒後放行" % free_in
+			"finished": _crossing_label.text = "六隊已處理完"
+			_: _crossing_label.text = "空出・可立即放行"
+	var upcoming: Array = snapshot.get("upcoming", [])
+	for row in _forecast_labels.size():
+		if row < upcoming.size() and upcoming[row] is Dictionary:
+			var next: Dictionary = upcoming[row]
+			_forecast_labels[row].text = "%.1f 秒後 %s %d 人%s" % [float(next.get("eta", 0.0)), "橫向" if int(next.get("lane", 0)) == 0 else "縱向", int(next.get("people", 0)), "・救援" if bool(next.get("rescue", false)) else ""]
+		else:
+			_forecast_labels[row].text = "—" if row > 0 or not upcoming.is_empty() else "已無新隊伍"
 
 func _update_lighting() -> void:
 	if _environment != null:

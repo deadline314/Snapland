@@ -2,6 +2,7 @@ extends SceneTree
 
 const View = preload("res://game/minigames/fountain_jump_view.gd")
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
+const FountainModel = preload("res://game/minigames/fountain_jump_model.gd")
 
 var _failures: Array[String] = []
 var _checks := 0
@@ -67,7 +68,7 @@ func _run() -> void:
 	_check(first_stream_material is StandardMaterial3D and (first_stream_material as StandardMaterial3D).transparency == BaseMaterial3D.TRANSPARENCY_ALPHA, "water ribbons remain translucent so the other stream lines read through them")
 	_check(center_crest.mesh is TorusMesh, "crest is a thin spray ring, not a ball")
 	for attempt in 3:
-		var beat := 1.0 + float(attempt) * 1.35
+		var beat := FountainModel.beat_time(attempt)
 		view.update_frame({"phase":beat,"fountain_attempts":attempt,"fountain_jump_started":-1.0,"beat_window":true}, "noon", false)
 		var measured := center_jet.scale.y
 		var expected := view.timed_jet_height_pixels(beat,attempt,false) * view.WATER_PIXELS_TO_WORLD
@@ -80,15 +81,26 @@ func _run() -> void:
 		_check(_inside_safe_frame(_projected_geometry_bounds(world, camera, avatar if view.avatar_available() else null)), "all actual stage meshes and avatar remain inside safe frame at peak %d" % (attempt+1))
 		view.update_frame({"phase":beat-0.22,"attempt":attempt,"jump_started":-1.0}, "noon", false)
 		_check(center_jet.scale.y < measured, "pre-beat charge height differs causally from the timed peak")
-	view.update_frame({"phase":3.7,"fountain_attempts":2,"fountain_jump_started":3.7,"beat_window":true}, "noon", false)
+		view.update_frame({"phase":beat-FountainModel.interval(attempt)-0.05,"attempt":attempt,"jump_started":-1.0}, "noon", false)
+		_check(is_equal_approx(center_jet.scale.y, view.HIT_HEIGHT_BASE * view.WATER_PIXELS_TO_WORLD), "central crest rests low before the phrase's final interval %d" % (attempt+1))
+	_check_count_in(view, world)
+	var last_beat := FountainModel.beat_time(2)
+	view.update_frame({"phase":last_beat,"fountain_attempts":2,"fountain_jump_started":last_beat,"beat_window":true}, "noon", false)
 	_check(view._last_avatar_pose == "jump_0" and avatar.position.y > (AvatarRendererScript.FEET_BASELINE - 180.0) * avatar.pixel_size, "starting a jump selects authored frame and moves the complete sprite on the model arc")
 	var airborne_y := avatar.position.y
-	view.update_frame({"phase":3.7 + 4.0/12.0,"fountain_attempts":2,"fountain_jump_started":3.7}, "noon", false)
+	view.update_frame({"phase":last_beat + 4.0/12.0,"fountain_attempts":2,"fountain_jump_started":last_beat}, "noon", false)
 	_check(avatar.position.y > airborne_y and view._last_avatar_pose.begins_with("jump_"), "mid-arc uses an authored jump frame and measured lift")
 	_check(_inside_safe_frame(_projected_geometry_bounds(world, camera, avatar)), "full airborne avatar and all actual 3D geometry remain inside the HUD-safe frame")
-	view.update_frame({"phase":4.5,"fountain_attempts":3,"fountain_jump_started":3.7}, "noon", false)
+	var landed_phase := last_beat + view.JUMP_DURATION + 0.05
+	view.update_frame({"phase":landed_phase,"fountain_attempts":3,"fountain_jump_started":last_beat,"fountain_grades":["完美","準確","完美"]}, "noon", false)
 	_check(view._last_avatar_pose == "idle" and is_equal_approx(avatar.position.y,(AvatarRendererScript.FEET_BASELINE - 180.0) * avatar.pixel_size + 0.02), "post-landing returns to authored idle with the feet still grounded")
-	view.update_frame({"phase":1.0,"attempt":0,"jump_started":1.0}, "noon", true)
+	_check(view.splash_visible(), "landing shows a ripple at the visitor's feet right after the authored jump ends")
+	var gems := view.grade_gem_colors()
+	_check(gems.size() == 3 and gems[0] == view.GRADE_COLORS["完美"] and gems[1] == view.GRADE_COLORS["準確"] and gems[2] == view.GRADE_COLORS["完美"], "three grade gems keep each jump's actual grade color")
+	view.update_frame({"phase":landed_phase + view.SPLASH_SECONDS,"fountain_attempts":3,"fountain_jump_started":last_beat,"fountain_grades":["完美","準確","完美"]}, "noon", false)
+	_check(not view.splash_visible(), "the landing ripple ends after its fixed duration")
+	var first_beat := FountainModel.beat_time(0)
+	view.update_frame({"phase":first_beat,"attempt":0,"jump_started":first_beat}, "noon", true)
 	_check(is_equal_approx(center_jet.scale.y,108.0*view.WATER_PIXELS_TO_WORLD), "reduced motion keeps the model's stable 108-pixel water cue")
 	_check(is_equal_approx(avatar.position.y,(AvatarRendererScript.FEET_BASELINE - 180.0) * avatar.pixel_size + 0.02), "reduced motion disables vertical jump travel")
 	var noon_energy := sun.light_energy
@@ -107,6 +119,11 @@ func _run() -> void:
 	for index in 5:
 		var reused_jet := world.get_node("WaterJet%d" % index) as MeshInstance3D
 		_check(reused_jet.mesh == stream_meshes[index] and reused_jet.material_override == stream_materials[index], "stream %d keeps its original mesh and material resources" % index)
+	view.update_frame({"phase":first_beat,"attempt":0,"jump_started":-1.0}, "noon", true)
+	for index in [0, 1, 3, 4]:
+		_check(is_equal_approx((world.get_node("WaterJet%d" % index) as MeshInstance3D).scale.y, 78.0 * view.WATER_PIXELS_TO_WORLD), "reduced motion holds side jet %d still" % index)
+	view.update_frame({"phase":FountainModel.counts(0)[0].time + 0.01,"attempt":0,"jump_started":-1.0}, "noon", true)
+	_check(view.beat_lamp_colors()[0] == view.LAMP_COUNT, "reduced motion still lights the first count lamp")
 	view.update_frame({"phase":NAN,"attempt":-12,"jump_started":INF}, "unknown", false)
 	_check(is_finite(center_jet.scale.y) and center_jet.scale.y > 0.0 and view._last_phase == "noon", "non-finite snapshot values and invalid time phases take safe finite defaults")
 	var missing := View.new()
@@ -119,6 +136,29 @@ func _run() -> void:
 	for failure in _failures:
 		printerr("FAIL: " + failure)
 	quit(0 if _failures.is_empty() else 1)
+
+## Side jets surge on sounded counts, rests stay calm, and the lamp row tracks
+## counts, the rest and the jump lamp from the shared phrase schedule.
+func _check_count_in(view: Control, world: Node3D) -> void:
+	for attempt in FountainModel.phrase_count():
+		var counts: Array[Dictionary] = FountainModel.counts(attempt)
+		for count in counts:
+			var jet_index: int = FountainModel.COUNT_JETS[int(count.slot)]
+			var jet := world.get_node("WaterJet%d" % jet_index) as MeshInstance3D
+			view.update_frame({"phase":float(count.time) - 0.02,"attempt":attempt,"jump_started":-1.0}, "noon", false)
+			var before := jet.scale.y
+			view.update_frame({"phase":float(count.time) + 0.01,"attempt":attempt,"jump_started":-1.0}, "noon", false)
+			if bool(count.sounded):
+				_check(jet.scale.y > before + 0.4, "phrase %d count %d surges its side jet" % [attempt + 1, int(count.slot) + 1])
+				_check(view.beat_lamp_colors()[int(count.slot)] == view.LAMP_COUNT, "phrase %d count %d lights its lamp" % [attempt + 1, int(count.slot) + 1])
+			else:
+				_check(is_equal_approx(jet.scale.y, before), "phrase %d rest %d keeps its jet calm" % [attempt + 1, int(count.slot) + 1])
+				_check(view.beat_lamp_colors()[int(count.slot)] == view.LAMP_REST, "phrase %d rest %d shows the rest lamp color" % [attempt + 1, int(count.slot) + 1])
+		view.update_frame({"phase":FountainModel.beat_time(attempt),"attempt":attempt,"jump_started":-1.0,"beat_window":true}, "noon", false)
+		var lamps: Array[Color] = view.beat_lamp_colors()
+		_check(lamps.size() == counts.size() + 1 and lamps[-1] == view.LAMP_JUMP, "phrase %d jump lamp is brightest on the judged beat" % (attempt + 1))
+	_check(FountainModel.phrase(2).pattern.has(false), "the final phrase teaches a silent rest before the jump")
+	_check(FountainModel.interval(1) < FountainModel.interval(0), "the second phrase is quicker than the first")
 
 func _check(condition: bool, description: String) -> void:
 	_checks += 1

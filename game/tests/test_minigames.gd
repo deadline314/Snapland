@@ -220,7 +220,10 @@ func _test_crowd_boundaries() -> void:
 			played._process(0.05)
 			budget -= 1
 		assert(budget > 0 and results.size() == 1)
-		assert(results[0].success and results[0].devil and results[0].assisted == use_assist)
+		assert(results[0].success and results[0].devil == (not use_assist) and results[0].assisted == use_assist)
+		var crowd_rows: Array = results[0].score_summary.rows
+		assert(crowd_rows.size() == 6 and crowd_rows.any(func(row: Dictionary) -> bool: return str(row.label).contains("第 4 隊（救援）") and str(row.label).contains("救援 50")))
+		assert(str(results[0].score_summary.get("qualification_text", "")).contains("輔助回合不取得小惡魔" if use_assist else "已達成小惡魔條件"))
 		assert(played.crowd_model.safe_count == 6 and played.score == played.crowd_model.score)
 		assert(played.score_summary().total == played.score and played.mistakes == 0)
 		checks += 8
@@ -233,6 +236,8 @@ func _test_crowd_boundaries() -> void:
 		missed._process(0.05)
 	assert(missed_results.size() == 1 and not missed_results[0].success)
 	assert(missed.mistakes == 6 and missed.score == 0)
+	assert(str(missed_results[0].score_summary.get("qualification_text", "")).contains("本次 0 / 6，改道 6"))
+	assert(missed_results[0].score_summary.rows.all(func(row: Dictionary) -> bool: return int(row.amount) == 0))
 	missed.queue_free()
 	checks += 1
 
@@ -1054,7 +1059,7 @@ func _test_timed_action() -> void:
 	var exact := _new_session("game-003")
 	var results: Array[Dictionary] = []
 	exact.finished.connect(func(value: Dictionary): results.append(value))
-	_advance_to(exact, exact.FOUNTAIN_FIRST_BEAT)
+	_advance_to(exact, exact._fountain_beat_time(0))
 	_key(exact, KEY_SPACE)
 	assert(exact.count == 1 and exact.fountain_attempts == 1)
 	_key(exact, KEY_SPACE) # A repeated press before the next pre-cue is ignored.
@@ -1082,14 +1087,15 @@ func _test_timed_action() -> void:
 			assert(perfect_results.is_empty() and perfect.fountain_finish_pending and not perfect.ended)
 	perfect._process(perfect.fountain_finish_at - perfect.phase)
 	assert(perfect_results.size() == 1)
-	assert(perfect_results[0].success and perfect_results[0].devil and perfect_results[0].assisted and perfect.score == 900)
+	# Assist widens timing but, like every refined welcome game, withholds the devil photo.
+	assert(perfect_results[0].success and not perfect_results[0].devil and perfect_results[0].assisted and perfect.score == 900)
 	checks += 1
 
 func _test_fountain_quality() -> void:
 	# Both sides of each scoring threshold have intentionally distinct outcomes.
 	for sample in [[-0.071, "準確", 200], [-0.070, "完美", 300], [0.070, "完美", 300], [0.071, "準確", 200], [-0.161, "踩中", 100], [0.160, "準確", 200], [0.161, "踩中", 100], [0.220, "踩中", 100]]:
 		var timing := _new_session("game-003")
-		_advance_to(timing, timing.FOUNTAIN_FIRST_BEAT + float(sample[0]))
+		_advance_to(timing, timing._fountain_beat_time(0) + float(sample[0]))
 		_key(timing, KEY_SPACE)
 		if timing.fountain_grades != [sample[1]] or timing.score != int(sample[2]):
 			print("FOUNTAIN boundary mismatch input=", sample[0], " phase=", timing.phase, " grades=", timing.fountain_grades, " score=", timing.score)
@@ -1098,7 +1104,7 @@ func _test_fountain_quality() -> void:
 	checks += 1
 
 	var too_early := _new_session("game-003")
-	_advance_to(too_early, too_early.FOUNTAIN_FIRST_BEAT - too_early._fountain_hit_tolerance() - 0.01)
+	_advance_to(too_early, too_early._fountain_beat_time(0) - too_early._fountain_hit_tolerance() - 0.01)
 	_key(too_early, KEY_SPACE)
 	assert(too_early.fountain_attempts == 0 and too_early.mistakes == 0)
 	too_early.queue_free()
@@ -1107,7 +1113,7 @@ func _test_fountain_quality() -> void:
 	var normal_miss := _new_session("game-003")
 	var miss_results: Array[Dictionary] = []
 	normal_miss.finished.connect(func(value: Dictionary): miss_results.append(value))
-	normal_miss._process(normal_miss.FOUNTAIN_FIRST_BEAT + normal_miss._fountain_hit_tolerance() + 0.01)
+	normal_miss._process(normal_miss._fountain_beat_time(0) + normal_miss._fountain_hit_tolerance() + 0.01)
 	assert(normal_miss.fountain_attempts == 1 and normal_miss.count == 0 and normal_miss.mistakes == 1)
 	assert(normal_miss.score_events[0].label.contains("錯過") and int(normal_miss.score_events[0].amount) == 0)
 	# Two successes do not unlock the ordinary sticker when the third opportunity is missed.
@@ -1124,18 +1130,18 @@ func _test_fountain_quality() -> void:
 	checks += 1
 
 	var assisted := _new_session("game-003", true)
-	_advance_to(assisted, assisted.FOUNTAIN_FIRST_BEAT + 0.30)
+	_advance_to(assisted, assisted._fountain_beat_time(0) + 0.30)
 	_key(assisted, KEY_SPACE)
 	assert(assisted.count == 1 and assisted.score == 100 and assisted.fountain_grades[0] == "踩中")
 	assisted.queue_free()
 	var standard := _new_session("game-003")
-	_advance_to(standard, standard.FOUNTAIN_FIRST_BEAT + 0.30)
+	_advance_to(standard, standard._fountain_beat_time(0) + 0.30)
 	assert(standard.fountain_attempts == 1 and standard.mistakes == 1 and standard.count == 0)
 	standard.queue_free()
 	checks += 1
 
 	var paused := _new_session("game-003")
-	_advance_to(paused, paused.FOUNTAIN_FIRST_BEAT)
+	_advance_to(paused, paused._fountain_beat_time(0))
 	_key(paused, KEY_SPACE)
 	var stopped_phase: float = paused.phase
 	paused.set_paused(true)
@@ -1152,7 +1158,7 @@ func _test_fountain_quality() -> void:
 	var slow_frame := _new_session("game-003")
 	var slow_results: Array[Dictionary] = []
 	slow_frame.finished.connect(func(value: Dictionary): slow_results.append(value))
-	slow_frame._process(4.5)
+	slow_frame._process(slow_frame._fountain_beat_time(2) + slow_frame._fountain_hit_tolerance() + 0.05)
 	assert(slow_results.size() == 1 and slow_frame.fountain_attempts == 3 and slow_frame.count == 0 and slow_frame.mistakes == 3)
 	slow_frame.queue_free()
 	checks += 1
@@ -1527,7 +1533,7 @@ func _test_all_modes() -> void:
 			if number == 1:
 				assert(results.size() == 1 and results[0].success and bool(results[0].devil) == (not assisted), "Reachability balloon assist=%s state=%s mistakes=%d elapsed=%f" % [assisted, str(results), s.mistakes, s.elapsed])
 			else:
-				var expected_devil: bool = (not assisted) if number in [2, 5, 6, 9, 11, 12] else true
+				var expected_devil: bool = (not assisted) if number in [2, 3, 4, 5, 6, 9, 11, 12] else true
 				assert(results.size() == 1 and results[0].success and results[0].devil == expected_devil, "Reachability game-%03d assist=%s results=%s" % [number, assisted, str(results)])
 			var score_detail: Dictionary = results[0].get("score_summary", {})
 			var displayed_total := 0

@@ -62,10 +62,21 @@ func _run() -> void:
 	_expect(not horizontal_card.intersects(vertical_card), "Traditional Chinese signal cards have separate measured hit surfaces")
 	_expect(view.HUD_SAFE_RECT.encloses(horizontal_card) and view.HUD_SAFE_RECT.encloses(vertical_card), "both signal cards stay inside the HUD-safe playfield")
 	_expect(not bounds.intersects(horizontal_card) and not bounds.intersects(vertical_card), "3D harbor image does not cover either signal card")
+	var planning_cards: Array[Rect2] = [horizontal_card, vertical_card]
+	for card_name in ["CrossingStateCard", "ArrivalForecastCard"]:
+		var card := view.get_node_or_null(card_name) as Control
+		_expect(card != null, "%s exists" % card_name)
+		if card == null: continue
+		var rect := Rect2(card.position, card.size)
+		_expect(view.HUD_SAFE_RECT.encloses(rect) and not bounds.intersects(rect), "%s stays in the safe frame above the stage" % card_name)
+		for other in planning_cards:
+			_expect(not rect.intersects(other), "%s does not overlap another planning card" % card_name)
+		planning_cards.append(rect)
 	_expect((view.signal_card_status(0).contains("紅燈") or view.signal_card_status(0).contains("黃燈") or view.signal_card_status(0).contains("綠燈")) and not view.signal_card_status(0).contains("HORIZONTAL"), "signal status is readable Traditional Chinese")
 	_expect(view.PLAYFIELD_RECT.position.y >= 160.0 and view.PLAYFIELD_RECT.end.y <= 615.0, "playfield stays between the HUD-safe bands")
 	_expect(view.signal_lane_at(Vector2(520.0 + 64.0, 235.0)) == 0, "canonical hit radius includes its edge")
 	_expect(view.signal_lane_at(Vector2(520.0 + 64.1, 235.0)) == -1, "canonical hit radius excludes points beyond its edge")
+	_check_planning_cards(view)
 	var tree_size := _descendants(view)
 	for index in 100:
 		view.present_traffic(model.snapshot(), model.elapsed, index % 2 == 0, ["dawn", "noon", "dusk", "night"][index % 4])
@@ -92,6 +103,28 @@ func _descendants(node: Node) -> int:
 	for child: Node in node.get_children():
 		total += _descendants(child)
 	return total
+
+## Risk, forecast and crossing state come from the real model snapshot.
+func _check_planning_cards(view: Control) -> void:
+	var model: RefCounted = TrafficModel.new()
+	model.reset(false)
+	model.step(0.1)
+	view.present_traffic(model.snapshot(), model.elapsed, false, "noon")
+	_expect(view.forecast_texts()[0].contains("橫向 2 人") and view.crossing_text().contains("可立即放行"), "opening board announces the first arrival and a free crossing")
+	model.step(0.85)
+	model.request_lane(0)
+	model.step(3.61)
+	view.present_traffic(model.snapshot(), model.elapsed, false, "noon")
+	_expect(view.lane_card_border(0) == view.RISK_BORDER and view.signal_card_status(0).contains("先放這側"), "the rescue lane card turns into a must-go-next warning")
+	_expect(view.lane_card_border(1) == view.CARD_BORDER and view.signal_card_status(1).contains("最急"), "the safe lane shows its own most urgent patience")
+	_expect(view.get_node("SignalControl0").find_child("QueueCount0", true, false).text.contains("救援"), "the queue count calls out the waiting rescue")
+	var assisted: RefCounted = TrafficModel.new()
+	assisted.reset(true)
+	assisted.step(0.95)
+	view.present_traffic(assisted.snapshot(), assisted.elapsed, false, "noon")
+	_expect(view.signal_card_status(0).contains("建議先放") and view.lane_card_border(0) == view.ADVICE_BORDER, "assist marks the recommended lane on its status line and border")
+	model.reset(false)
+	view.present_traffic(model.snapshot(), model.elapsed, false, "noon")
 
 func _expect(condition: bool, message: String) -> void:
 	checks += 1

@@ -200,7 +200,7 @@ func _capture_retry_state(session_id: int) -> void:
 func _play_two_hits_one_miss(session_id: int) -> bool:
 	var session := _live_session(session_id)
 	if session == null: return false
-	if not await _wait_for_phase(session_id, session.FOUNTAIN_FIRST_BEAT + 0.12): return false
+	if not await _wait_for_phase(session_id, session._fountain_beat_time(0) + 0.12): return false
 	_key(KEY_SPACE)
 	if not await _wait_for_attempts(session_id, 1): return false
 	session = _live_session(session_id)

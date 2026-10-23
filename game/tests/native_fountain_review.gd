@@ -128,7 +128,7 @@ func _capture_standard_timing_review() -> bool:
 	if not main._capture(".review/native-fountain-initial-count-in.png"):
 		await _fail("Could not capture fountain count-in")
 		return false
-	if not await _wait_until(func() -> bool: return session.phase >= session.FOUNTAIN_FIRST_BEAT - 0.30): return false
+	if not await _wait_until(func() -> bool: return session.phase >= session._fountain_beat_time(0) - 0.30): return false
 	await RenderingServer.frame_post_draw
 	if not main._capture(".review/native-fountain-pre-cue.png"):
 		await _fail("Could not capture fountain pre-cue")
@@ -171,7 +171,7 @@ func _capture_assist_reduced_review() -> bool:
 	if not main._capture(".review/native-fountain-assist-reduced-initial.png"):
 		await _fail("Could not capture assisted/reduced-motion initial state")
 		return false
-	if not await _wait_until(func() -> bool: return session.phase >= session.FOUNTAIN_FIRST_BEAT + 0.20): return false
+	if not await _wait_until(func() -> bool: return session.phase >= session._fountain_beat_time(0) + 0.20): return false
 	_key(KEY_SPACE)
 	await _frames(2)
 	if session.fountain_grades.size() != 1 or session.fountain_grades[0] != "準確" or session.score != 200:
