@@ -2192,7 +2192,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		if movement.length_squared()>0.0001: avatar_motion_speed_limit=desired_speed
 		current_horizontal=current_horizontal.move_toward(desired_horizontal,avatar_motion_speed_limit*delta/AVATAR_ACCELERATION_SECONDS)
-	player.velocity=Vector3(current_horizontal.x,-4.0,current_horizontal.y)
+	# Gravity only while airborne; floor snapping keeps the feet down on ramps. A constant
+	# downward pull while grounded made Godot's stop-on-slope rule read slow starts (for
+	# example at a quarter time scale) as standing still and zero them every tick.
+	player.velocity=Vector3(current_horizontal.x,0.0 if player.is_on_floor() else -4.0,current_horizontal.y)
 	var previous_position: Vector3=player.position
 	var previous_world_position: Vector3=player.global_position
 	player.move_and_slide()

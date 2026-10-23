@@ -66,7 +66,7 @@ func _review_heading(direction: String, keys: Array) -> bool:
 	if displacement.length() < 0.5 or main.world.facing != direction or not main.world.avatar_is_walking or phase_error > 0.015:
 		var failed_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		for code in keys: _held_key(int(code), false)
-		await _fail("Native heading/gait mismatch expected=%s actual=%s distance=%.3f phase_error=%.5f input_vector=%s position=%s/%s" % [direction, main.world.facing, displacement.length(), phase_error, failed_vector, start_position, end_position])
+		await _fail("Native heading/gait mismatch expected=%s actual=%s distance=%.3f phase_error=%.5f input_vector=%s position=%s/%s blocked=%s velocity=%s overlay=%s" % [direction, main.world.facing, displacement.length(), phase_error, failed_vector, start_position, end_position, main.world.blocked, main.world.player.velocity, main.overlay.get_children().map(func(n): return n.name) if main.overlay != null else []])
 		return false
 	if not _avatar_texture_synced():
 		for code in keys: _held_key(int(code), false)

@@ -89,6 +89,16 @@ func _probe_world_travel() -> void:
 	assert(absf(wrapf(world.walk_distance_phase - expected_right, -1.4, 1.4)) < 0.002, "world advances the cycle by real travel over the measured right stride")
 	assert(not is_equal_approx(world.walk_stride_for("right"), ParkWorld.WALK_STRIDE_DISTANCE), "world uses the calibrated stride, not the phase span")
 	assert(world.avatar.texture != null, "world presents a cached authored walk texture")
+	# Slow starts (a quarter time scale gives a tiny first acceleration step) must still move.
+	Engine.time_scale = 0.25
+	world.player.velocity = Vector3.ZERO
+	for _step in range(4): await physics_frame
+	var slow_start: Vector3 = world.player.global_position
+	Input.action_press("move_left")
+	for _step in range(24): await physics_frame
+	Input.action_release("move_left")
+	Engine.time_scale = 1.0
+	assert(slow_start.distance_to(world.player.global_position) > 0.01, "a quarter time scale still accelerates the avatar instead of reading it as standing still")
 	world.blocked = true
 	var blocked_phase: float = world.walk_distance_phase
 	for _step in range(3): await physics_frame
