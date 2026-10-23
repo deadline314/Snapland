@@ -91,6 +91,47 @@ func _run() -> void:
 				_fail("A moving NPC's contact cue is not kept at its feet.")
 	moving_npc.position = saved_npc_position
 	world._update_sprite_grounding()
+	# Painted billboards keep their card out of the shadow map, but each tall kind
+	# owns hidden volumes so lamps, planters and shrubs shade like trees and actors.
+	for kind in world.SPRITE_SHADOW_VOLUMES:
+		for spec: Dictionary in world.SPRITE_SHADOW_VOLUMES[kind]:
+			var part_name := str(kind).capitalize() + "Shadow" + str(spec.part)
+			var volumes := world.find_children(part_name + "*", "MeshInstance3D", true, false)
+			if volumes.is_empty():
+				_fail("No %s volume was built for %s billboards." % [spec.part, kind])
+			for volume: MeshInstance3D in volumes:
+				if volume.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:
+					_fail("%s is visible in the camera pass." % volume.name)
+				if volume.find_children("*", "CollisionObject3D", true, false).size() > 0:
+					_fail("%s adds collision." % volume.name)
+				if bool(spec.get("grounded", false)):
+					# A grounded part may sink into the ground, but never hover above it.
+					var bottom: float = (volume.global_transform * volume.get_aabb()).position.y
+					var lift := bottom - world._ground_surface_y(volume.global_position)
+					if lift > 0.05:
+						_fail("%s floats %.2fm above the ground." % [volume.name, lift])
+	# The lawn's top face must face the sky, or it ignores the key light and hides
+	# every cast shadow that falls on grass.
+	var lawn_found := false
+	for node in world.find_children("*", "MeshInstance3D", true, false):
+		var lawn := node as MeshInstance3D
+		if not (lawn.material_override is ShaderMaterial) or (lawn.material_override as ShaderMaterial).shader != world.GRASS: continue
+		lawn_found = true
+		var arrays: Array = lawn.mesh.surface_get_arrays(0)
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+		for triangle in range(0, indices.size(), 3):
+			var a := vertices[indices[triangle]]
+			var b := vertices[indices[triangle + 1]]
+			var c := vertices[indices[triangle + 2]]
+			if not _front_faces_up(a, b, c):
+				_fail("Lawn triangle %d faces downward; the sunlit side would be a back face." % (triangle / 3))
+				break
+	if not lawn_found:
+		_fail("The island lawn mesh was not found.")
+	# Counter-example: the former centre -> next -> current fan order is rejected.
+	if _front_faces_up(Vector3.ZERO, Vector3(cos(0.2), 0, sin(0.2)), Vector3(1, 0, 0)):
+		_fail("The lawn winding check accepts the old downward-facing fan order.")
 	if not world.material_cache.has("contact_shadow"):
 		_fail("The world contact-shadow material is not cached.")
 	var session := SessionScript.new()
@@ -105,6 +146,12 @@ func _run() -> void:
 	session.queue_free()
 	await process_frame
 	quit(0 if failures == 0 else 1)
+
+
+## Godot front faces are clockwise as seen by the viewer, so a face visible from
+## above has (b-a)x(c-a) pointing down.
+func _front_faces_up(a: Vector3, b: Vector3, c: Vector3) -> bool:
+	return (b - a).cross(c - a).y < 0.0
 
 
 func _fail(message: String) -> void:

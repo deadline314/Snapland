@@ -13,9 +13,18 @@ const BODY_RADIUS_MIN_PX := 32.0
 const BODY_RADIUS_COMPACT_MAX_PX := 120.0
 const BODY_RADIUS_MAX_PX := 320.0
 const EDGE_FEATHER_PX := 2.5
+## Extra pixels around a camera-facing billboard so its outline and the soft
+## edge band never touch the painted figure.
+const VISUAL_MARGIN_PX := 4.0
+## A head-level ray, as a fraction of the billboard's half height above its
+## centre, lets a covered face open the view even when the torso is clear.
+const HEAD_SAMPLE_FRACTION := 0.6
 
 var player: Node3D
 var camera: Camera3D
+## Optional camera-facing figure (the hero billboard). When set, the opening is
+## centred and sized on what is actually drawn instead of a 1.9m vertical guess.
+var reveal_visual: SpriteBase3D
 var reduced_motion := false
 var _coastal_materials: Dictionary = {}
 var _standard_materials: Dictionary = {}
@@ -62,6 +71,30 @@ func configure(target_player: Node3D, target_camera: Camera3D) -> void:
 	_ray_query.collide_with_areas = false
 	_ray_query.collide_with_bodies = true
 	_ray_query.exclude = [player.get_rid()] if player is CollisionObject3D else []
+
+
+func set_reveal_visual(visual: SpriteBase3D) -> void:
+	reveal_visual = visual
+
+
+## The billboard's centre and camera-aligned half extents in world space, or an
+## empty dictionary when no visible billboard is configured.
+func _reveal_frame() -> Dictionary:
+	if not is_instance_valid(reveal_visual) or not reveal_visual.is_visible_in_tree() or not is_instance_valid(camera):
+		return {}
+	# The item rect is the drawn quad in texture pixels (a billboard's AABB is a
+	# cube covering every orientation, so it cannot give the on-screen size).
+	var rect := reveal_visual.get_item_rect()
+	if rect.size.x <= 0.0 or rect.size.y <= 0.0:
+		return {}
+	var scale := reveal_visual.global_basis.get_scale()
+	var size := rect.size * reveal_visual.pixel_size * Vector2(absf(scale.x), absf(scale.y))
+	var offset := rect.get_center() * reveal_visual.pixel_size * Vector2(absf(scale.x), absf(scale.y))
+	var right := camera.global_basis.x.normalized()
+	var up := camera.global_basis.y.normalized()
+	# Item-rect y grows downward in texture space; flip it onto the camera's up.
+	var centre: Vector3 = reveal_visual.global_position + right * offset.x - up * offset.y
+	return {"centre": centre, "half_up": up * size.y * 0.5, "half_right": right * size.x * 0.5}
 
 
 func begin_building() -> void:
@@ -248,7 +281,16 @@ func refresh_visibility() -> void:
 	_active_group_ids.clear()
 	if not is_instance_valid(player) or not is_instance_valid(camera) or _ray_query == null:
 		return
-	var body_point := player.global_position + Vector3.UP * 1.0
+	var frame := _reveal_frame()
+	var samples: Array[Vector3] = [player.global_position + Vector3.UP * 1.0]
+	if not frame.is_empty():
+		samples = [frame.centre, frame.centre + frame.half_up * HEAD_SAMPLE_FRACTION]
+	var space: PhysicsDirectSpaceState3D = player.get_world_3d().direct_space_state
+	for body_point in samples:
+		_collect_blockers(space, body_point)
+
+
+func _collect_blockers(space: PhysicsDirectSpaceState3D, body_point: Vector3) -> void:
 	var screen_point := camera.unproject_position(body_point)
 	var ray_from := camera.project_ray_origin(screen_point)
 	var ray_direction := camera.project_ray_normal(screen_point).normalized()
@@ -257,7 +299,6 @@ func refresh_visibility() -> void:
 		return
 	_ray_query.from = ray_from
 	_ray_query.to = ray_from + ray_direction * (ray_length - 0.025)
-	var space: PhysicsDirectSpaceState3D = player.get_world_3d().direct_space_state
 	_ray_exclusions.clear()
 	if player is CollisionObject3D:
 		_ray_exclusions.append(player.get_rid())
@@ -283,7 +324,9 @@ func set_reduced_motion(value: bool) -> void:
 		_fade_weight = 1.0 if not _active_group_ids.is_empty() else 0.0
 		var player_depth := 0.0
 		if is_instance_valid(player) and is_instance_valid(camera):
-			player_depth = maxf(0.0, -camera.to_local(player.global_position + Vector3.UP).z)
+			var frame := _reveal_frame()
+			var depth_point: Vector3 = frame.centre if not frame.is_empty() else player.global_position + Vector3.UP
+			player_depth = maxf(0.0, -camera.to_local(depth_point).z)
 		_update_shader_uniforms(player_depth)
 		_refresh_registered_labels()
 		return
@@ -324,6 +367,7 @@ func release() -> void:
 	_fade_weight = 0.0
 	player = null
 	camera = null
+	reveal_visual = null
 	_ray_query = null
 	_ray_exclusions.clear()
 
@@ -346,12 +390,20 @@ func _process(delta: float) -> void:
 		return
 	var body_point := player.global_position + Vector3.UP * 1.0
 	var center := camera.unproject_position(body_point)
-	var feet := camera.unproject_position(player.global_position)
-	var head := camera.unproject_position(player.global_position + Vector3.UP * 1.9)
-	var projected_height := feet.distance_to(head)
-	# Scale with the projected body. Keep the usual distant radius compact, while
-	# allowing a close actor's face and feet to fit inside the opening.
-	var radius := reveal_radius_px(projected_height,viewport_size)
+	var radius := 0.0
+	var frame := _reveal_frame()
+	if frame.is_empty():
+		var feet := camera.unproject_position(player.global_position)
+		var head := camera.unproject_position(player.global_position + Vector3.UP * 1.9)
+		# Scale with the projected body. Keep the usual distant radius compact, while
+		# allowing a close actor's face and feet to fit inside the opening.
+		radius = reveal_radius_px(feet.distance_to(head),viewport_size)
+	else:
+		body_point = frame.centre
+		center = camera.unproject_position(body_point)
+		var screen_height := camera.unproject_position(body_point + frame.half_up).distance_to(camera.unproject_position(body_point - frame.half_up))
+		var screen_width := camera.unproject_position(body_point + frame.half_right).distance_to(camera.unproject_position(body_point - frame.half_right))
+		radius = visual_reveal_radius_px(Vector2(screen_width, screen_height), viewport_size)
 	var camera_space_body := camera.to_local(body_point)
 	var player_depth := maxf(0.0, -camera_space_body.z)
 	var target_weight := 1.0 if not _active_group_ids.is_empty() else 0.0
@@ -375,6 +427,15 @@ static func reveal_radius_px(projected_height: float, viewport_size: Vector2) ->
 	# around its y=1m center while keeping the ordinary view unchanged.
 	var desired := maxf(compact_radius,projected_height*BODY_RADIUS_FIT_RATIO)
 	return minf(desired,minf(BODY_RADIUS_MAX_PX,short_edge_limit))
+
+
+## Radius that contains the whole camera-facing canvas (its half diagonal plus
+## the soft edge), so painted hair, hats and feet stay inside the opening.
+static func visual_reveal_radius_px(screen_size: Vector2, viewport_size: Vector2) -> float:
+	if screen_size.x <= 0.0 or screen_size.y <= 0.0 or viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		return 0.0
+	var desired := maxf(BODY_RADIUS_MIN_PX, screen_size.length() * 0.5 + EDGE_FEATHER_PX + VISUAL_MARGIN_PX)
+	return minf(desired, minf(BODY_RADIUS_MAX_PX, minf(viewport_size.x, viewport_size.y) * BODY_RADIUS_VIEWPORT_RATIO))
 
 
 func _update_shader_uniforms(player_depth: float) -> void:

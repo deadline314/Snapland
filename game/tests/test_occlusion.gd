@@ -398,8 +398,67 @@ func _run() -> void:
 	assert(arch_surface.material_override.get_shader_parameter("occlusion_cutaway_weight") == null, "release leaves no active cutaway on the restored coastal surface")
 	park_world.queue_free()
 	await process_frame
+	await _test_billboard_reveal()
 	print("PASS: occlusion controller runtime checks")
 	quit(0)
+
+
+## A camera-facing 2.4m billboard: the opening must cover its whole canvas, and
+## a blocker in front of only the head must still open the view.
+func _test_billboard_reveal() -> void:
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1280, 720)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(viewport)
+	var world := Node3D.new()
+	viewport.add_child(world)
+	var controller = OcclusionControllerScript.new()
+	world.add_child(controller)
+	var player := CharacterBody3D.new()
+	world.add_child(player)
+	var sprite := Sprite3D.new()
+	var image := Image.create(50, 60, false, Image.FORMAT_RGBA8)
+	image.fill(Color.WHITE)
+	sprite.texture = ImageTexture.create_from_image(image)
+	sprite.pixel_size = 0.04
+	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	sprite.position.y = 1.2
+	player.add_child(sprite)
+	var camera := Camera3D.new()
+	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	camera.size = 12.0
+	world.add_child(camera)
+	camera.position = Vector3(0.0, 2.0, 12.0)
+	camera.look_at(Vector3(0.0, 1.0, 0.0))
+	camera.current = true
+	controller.configure(player, camera)
+	controller.set_reveal_visual(sprite)
+	await process_frame
+	controller._process(0.0)
+	var centre := sprite.global_position
+	var screen_height := camera.unproject_position(centre + camera.global_basis.y * 1.2).distance_to(camera.unproject_position(centre - camera.global_basis.y * 1.2))
+	var screen_width := camera.unproject_position(centre + camera.global_basis.x * 1.0).distance_to(camera.unproject_position(centre - camera.global_basis.x * 1.0))
+	var radius := float(controller.statistics().radius_px)
+	assert(is_equal_approx(radius, OcclusionControllerScript.visual_reveal_radius_px(Vector2(screen_width, screen_height), Vector2(1280, 720))), "a configured billboard sizes the opening from its drawn canvas")
+	assert(radius >= Vector2(screen_width, screen_height).length() * 0.5 + 2.5, "the opening contains the whole billboard canvas plus its soft edge")
+	assert(Vector2(controller.statistics().center_px).distance_to(camera.unproject_position(centre)) < 0.5, "the opening is centred on the billboard, not a fixed 1m body point")
+	assert(radius > OcclusionControllerScript.reveal_radius_px(camera.unproject_position(Vector3.ZERO).distance_to(camera.unproject_position(Vector3.UP * 1.9)), Vector2(1280, 720)), "the drawn 2.4m billboard needs a larger opening than the legacy 1.9m estimate")
+	# Blocker covering only the head line.
+	var head_point := centre + camera.global_basis.y.normalized() * 1.2 * OcclusionControllerScript.HEAD_SAMPLE_FRACTION
+	var head_screen := camera.unproject_position(head_point)
+	var head_origin := camera.project_ray_origin(head_screen)
+	var head_direction := camera.project_ray_normal(head_screen).normalized()
+	var head_blocker := _add_registered_building(world, controller, head_origin + head_direction * head_direction.dot(head_point - head_origin) * 0.5, Vector3(1.0, 0.3, 0.3), Color("#c9a77a"))
+	await physics_frame
+	controller.refresh_visibility()
+	assert(controller.statistics().active, "a building in front of only the head opens the view")
+	controller.set_reveal_visual(null)
+	controller.refresh_visibility()
+	assert(not controller.statistics().active, "counter-example: the legacy single 1m ray misses a head-only blocker")
+	head_blocker.body.queue_free()
+	controller.release()
+	viewport.queue_free()
+	await process_frame
 
 
 func _path_midpoint(camera: Camera3D, player: Node3D) -> Vector3:
