@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "note": "MIC-2 per-game candidates; listening acceptance pending. Games without an entry use the shared game set.",
+  "games": {
+    "game-001": {
+      "music": "res://assets/audio/cc0/games/game-001-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-001-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-001-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-001-miss.wav"
+      }
+    },
+    "game-002": {
+      "music": "res://assets/audio/cc0/games/game-002-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-002-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-002-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-002-miss.wav"
+      }
+    },
+    "game-003": {
+      "music": "res://assets/audio/cc0/games/game-003-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-003-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-003-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-003-miss.wav"
+      }
+    },
+    "game-004": {
+      "music": "res://assets/audio/cc0/games/game-004-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-004-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-004-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-004-miss.wav"
+      }
+    },
+    "game-005": {
+      "music": "res://assets/audio/cc0/games/game-005-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-005-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-005-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-005-miss.wav"
+      }
+    },
+    "game-007": {
+      "music": "res://assets/audio/cc0/games/game-007-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-007-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-007-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-007-miss.wav"
+      }
+    },
+    "game-008": {
+      "music": "res://assets/audio/cc0/games/game-008-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-008-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-008-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-008-miss.wav"
+      }
+    },
+    "game-009": {
+      "music": "res://assets/audio/cc0/games/game-009-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-009-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-009-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-009-miss.wav"
+      }
+    },
+    "game-010": {
+      "music": "res://assets/audio/cc0/games/game-010-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-010-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-010-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-010-miss.wav"
+      }
+    },
+    "game-011": {
+      "music": "res://assets/audio/cc0/games/game-011-music.ogg",
+      "sfx": {
+        "interact": "res://assets/audio/cc0/games/game-011-interact.wav",
+        "success": "res://assets/audio/cc0/games/game-011-success.wav",
+        "miss": "res://assets/audio/cc0/games/game-011-miss.wav"
+      }
+    }
+  }
+}

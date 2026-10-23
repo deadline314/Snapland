@@ -35,10 +35,19 @@ def measure(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source-dir', required=True, type=Path)
+    parser.add_argument('--ids', nargs='*', default=None,
+                        help='prepare only these asset ids; others keep their recorded files and hashes')
     args = parser.parse_args()
+    selected = set(args.ids) if args.ids else None
     folder = ROOT / 'assets/audio/cc0'
     catalog = json.loads((folder / 'catalog.json').read_text(encoding='utf-8'))
+    if selected is not None:
+        unknown = selected - {item['id'] for item in catalog['assets']}
+        if unknown:
+            raise ValueError(f'Unknown asset ids: {sorted(unknown)}')
     for item in catalog['assets']:
+        if selected is not None and item['id'] not in selected:
+            continue
         if item.get('preparation') == 'generated-unchanged':
             if sha(ROOT / item['path']) != item['sha256']:
                 raise ValueError(f'Generated reference changed: {item["path"]}')

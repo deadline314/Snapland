@@ -21,8 +21,11 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = ROOT / "assets/audio/cc0/catalog.json"
 AUDIO_DIRECTOR_PATH = ROOT / "game/audio/audio_director.gd"
+GAME_AUDIO_PATH = ROOT / "game/data/game_audio.json"
+WELCOME_GAMES_PATH = ROOT / "game/data/welcome_games.json"
 CC0_URL = "https://creativecommons.org/publicdomain/zero/1.0/"
-EXPECTED_COUNTS = {"music": 3, "effect": 5, "ambience": 1, "note": 4}
+# Shared routes plus MIC-2 per-game profiles (ten games x one track and three feedback sounds).
+EXPECTED_COUNTS = {"music": 13, "effect": 35, "ambience": 1, "note": 4}
 EXPECTED_TOTAL = sum(EXPECTED_COUNTS.values())
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -39,6 +42,7 @@ class AudioLicenseTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
         cls.audio_director = AUDIO_DIRECTOR_PATH.read_text(encoding="utf-8")
+        cls.game_audio = json.loads(GAME_AUDIO_PATH.read_text(encoding="utf-8"))
         cls.assets = cls.catalog["assets"]
         cls.sources = {source["id"]: source for source in cls.catalog["sources"]}
         cls.assets_by_path: dict[str, list[dict]] = {}
@@ -60,6 +64,12 @@ class AudioLicenseTests(unittest.TestCase):
                 for path in re.findall(r'"res://(assets/audio/[^"\n]+)"', match.group(1))
             }
             routed[kind] = paths
+
+        for profile in self.game_audio["games"].values():
+            if profile.get("music"):
+                routed["music"].add(profile["music"].removeprefix("res://"))
+            for sfx_path in profile.get("sfx", {}).values():
+                routed["effect"].add(sfx_path.removeprefix("res://"))
 
         ambience = re.search(
             r'const\s+AMBIENCE_PATH\s*:=\s*"res://(assets/audio/[^"\n]+)"',
@@ -90,6 +100,23 @@ class AudioLicenseTests(unittest.TestCase):
                 entries = self.assets_by_path.get(path, [])
                 self.assertEqual(1, len(entries), f"{path} must have exactly one manifest record")
                 self.assertEqual(kind, entries[0]["kind"], f"wrong kind for {path}")
+
+    def test_game_audio_profiles_route_real_games_and_known_feedback(self) -> None:
+        self.assertIn("GAME_AUDIO_PROFILES_PATH", self.audio_director)
+        self.assertIn('"res://game/data/game_audio.json"', self.audio_director)
+        game_ids = {game["id"] for game in json.loads(WELCOME_GAMES_PATH.read_text(encoding="utf-8"))}
+        profiles = self.game_audio["games"]
+        self.assertTrue(profiles)
+        self.assertLessEqual(set(profiles), game_ids, "profiles may only name real welcome games")
+        music_paths = [profile["music"] for profile in profiles.values() if profile.get("music")]
+        self.assertEqual(len(music_paths), len(set(music_paths)), "each profiled game keeps its own track")
+        for game_id, profile in profiles.items():
+            with self.subTest(game=game_id):
+                self.assertTrue(profile["music"].startswith("res://assets/audio/") and profile["music"].endswith(".ogg"))
+                self.assertEqual({"interact", "success", "miss"}, set(profile["sfx"]))
+                self.assertEqual(3, len(set(profile["sfx"].values())), "feedback kinds must stay distinguishable")
+                for sfx_path in profile["sfx"].values():
+                    self.assertTrue(sfx_path.startswith("res://assets/audio/") and sfx_path.endswith(".wav"))
 
     def test_manifest_files_stay_inside_repository_and_match_digest_and_size(self) -> None:
         for asset in self.assets:

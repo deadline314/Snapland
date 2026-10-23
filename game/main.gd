@@ -1259,7 +1259,7 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	session.start(id,assist)
 	if practice and session.has_method("set_practice_mode"):
 		session.set_practice_mode(true)
-	audio.play_context("game")
+	audio.play_context("game", id)
 
 func _cancel_game() -> void:
 	if session!=null:

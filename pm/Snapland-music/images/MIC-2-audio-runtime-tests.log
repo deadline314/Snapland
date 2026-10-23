@@ -1,0 +1,30 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: ambience remained playing beyond full cycle: 3.650s, 160965 frames, format 3
+WARNING: Game audio profile game-001 has an invalid music path: res://game/main.gd
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_game_profiles (res://game/audio/audio_director.gd:143)
+         [1] _initialize (res://game/tests/test_audio.gd:190)
+WARNING: Game audio profile game-001 has an invalid boom sound: res://assets/audio/ui_click.wav
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_game_profiles (res://game/audio/audio_director.gd:151)
+         [1] _initialize (res://game/tests/test_audio.gd:190)
+WARNING: Game audio profile game-001 has an invalid success sound: user://x.wav
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_game_profiles (res://game/audio/audio_director.gd:151)
+         [1] _initialize (res://game/tests/test_audio.gd:190)
+WARNING: Game audio profile game-002 is not an object
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_game_profiles (res://game/audio/audio_director.gd:135)
+         [1] _initialize (res://game/tests/test_audio.gd:190)
+WARNING: Game audio profiles are missing at res://missing_game_audio.json; using the shared game sounds
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_game_profiles (res://game/audio/audio_director.gd:126)
+         [1] _initialize (res://game/tests/test_audio.gd:194)
+PASS: per-game audio profiles route 10 games
+PASS: audio runtime checks

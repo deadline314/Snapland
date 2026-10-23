@@ -148,6 +148,53 @@ func _initialize() -> void:
 	assert(not audio._notes.stream_paused)
 	await create_timer(0.7).timeout
 
+	# MIC-2: each profiled game uses its own track and feedback set; others keep the shared game set.
+	var profiles: Dictionary = AudioDirector.load_game_profiles(AudioDirector.GAME_AUDIO_PROFILES_PATH)
+	assert(profiles.size() >= 10)
+	var crowd: Dictionary = profiles["game-004"]
+	audio.play_context("game", "game-004")
+	var crowd_player: AudioStreamPlayer = audio._music_players[audio._active_music]
+	assert(audio._active_context == "game:game-004")
+	assert(crowd_player.stream.resource_path == crowd.music)
+	assert((crowd_player.stream as AudioStreamOggVorbis).loop)
+	var crowd_stream: AudioStream = crowd_player.stream
+	audio.play_context("game", "game-004")
+	assert(audio._music_players[audio._active_music].stream == crowd_stream)
+	for kind: String in ["interact", "success", "miss"]:
+		await create_timer(float(AudioDirector.SFX_REPEAT_GATE_MSEC + 10) / 1000.0).timeout
+		audio.play_gameplay_feedback(kind)
+		assert(audio._sfx.stream.resource_path == crowd.sfx[kind])
+	# Switching to another profiled game crossfades to that game's own track.
+	audio.play_context("game", "game-011")
+	assert(audio._active_context == "game:game-011")
+	assert(audio._music_players[audio._active_music].stream.resource_path == profiles["game-011"].music)
+	# A game without a profile (or an unknown id) uses the shared track and hit sound.
+	audio.play_context("game", "game-006" if not profiles.has("game-006") else "game-unknown")
+	assert(audio._active_context == "game")
+	assert(audio._music_players[audio._active_music].stream.resource_path == "res://assets/audio/cc0/game.ogg")
+	await create_timer(float(AudioDirector.SFX_REPEAT_GATE_MSEC + 10) / 1000.0).timeout
+	audio.play_gameplay_feedback("success")
+	assert(audio._sfx.stream.resource_path == "res://assets/audio/cc0/game_hit.wav")
+	# Leaving the game clears its feedback set.
+	audio.play_context("game", "game-004")
+	audio.play_context("plaza")
+	assert(audio.active_game_profile_id().is_empty())
+	await create_timer(float(AudioDirector.SFX_REPEAT_GATE_MSEC + 10) / 1000.0).timeout
+	audio.play_gameplay_feedback("success")
+	assert(audio._sfx.stream.resource_path == "res://assets/audio/cc0/game_hit.wav")
+	# Malformed or out-of-tree routes are rejected instead of reaching the players.
+	var bad_path := "user://bad_game_audio.json"
+	var bad := FileAccess.open(bad_path, FileAccess.WRITE)
+	bad.store_string(JSON.stringify({"games": {"game-001": {"music": "res://game/main.gd", "sfx": {"success": "user://x.wav", "boom": "res://assets/audio/ui_click.wav", "miss": "res://assets/audio/soft_error.wav"}}, "game-002": "oops"}}))
+	bad.close()
+	var bad_profiles := AudioDirector.load_game_profiles(bad_path)
+	assert(bad_profiles.size() == 1)
+	assert(str(bad_profiles["game-001"].music).is_empty())
+	assert(bad_profiles["game-001"].sfx.keys() == ["miss"])
+	assert(AudioDirector.load_game_profiles("res://missing_game_audio.json").is_empty())
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(bad_path))
+	print("PASS: per-game audio profiles route %d games" % profiles.size())
+
 	audio.shutdown()
 	for player: AudioStreamPlayer in audio._music_players:
 		assert(player.stream == null)

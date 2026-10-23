@@ -25,6 +25,10 @@ const SFX_ALIASES := {
 	"hit": "game_hit",
 }
 const AMBIENCE_PATH := "res://assets/audio/plaza_ambience.wav"
+## Per-game music and feedback sounds. Missing or invalid entries fall back to the shared game set.
+const GAME_AUDIO_PROFILES_PATH := "res://game/data/game_audio.json"
+const GAME_AUDIO_FEEDBACK_KINDS := ["interact", "success", "miss"]
+const GAME_AUDIO_ROOT := "res://assets/audio/"
 const FADE_SECONDS := 0.85
 const ISLAND_MUSIC_PHASE_GAIN := {"dawn": 0.9, "noon": 1.0, "dusk": 0.84, "night": 0.66}
 const ISLAND_WAVE_PHASE_GAIN := {"dawn": 0.62, "noon": 0.72, "dusk": 0.56, "night": 0.38}
@@ -69,6 +73,8 @@ var _time_phase := ""
 var _dialogue_active := false
 var _paused := false
 var _last_sfx_msec: Dictionary = {}
+var _game_profiles: Dictionary = {}
+var _active_game_profile: Dictionary = {}
 var _scene_tween: Tween
 var _scene_tween_paused := false
 
@@ -109,7 +115,48 @@ func _ready() -> void:
 		if note_stream == null:
 			push_warning("Unable to load note stream at %s" % note_path)
 		_note_streams.append(note_stream)
+	_game_profiles = load_game_profiles(GAME_AUDIO_PROFILES_PATH)
 	apply_settings(_settings)
+
+## Reads and validates per-game audio routes; any malformed entry is dropped with a warning
+## so a bad data edit can never stop a game from starting.
+static func load_game_profiles(path: String) -> Dictionary:
+	var profiles := {}
+	if not FileAccess.file_exists(path):
+		push_warning("Game audio profiles are missing at %s; using the shared game sounds" % path)
+		return profiles
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not (parsed is Dictionary) or not (parsed.get("games") is Dictionary):
+		push_warning("Game audio profiles at %s are malformed; using the shared game sounds" % path)
+		return profiles
+	for game_id: Variant in parsed.games:
+		var entry: Variant = parsed.games[game_id]
+		if not (entry is Dictionary):
+			push_warning("Game audio profile %s is not an object" % str(game_id))
+			continue
+		var profile := {"music": "", "sfx": {}}
+		var music := str(entry.get("music", ""))
+		if not music.is_empty():
+			if music.begins_with(GAME_AUDIO_ROOT) and music.get_extension() == "ogg":
+				profile.music = music
+			else:
+				push_warning("Game audio profile %s has an invalid music path: %s" % [str(game_id), music])
+		var sfx: Variant = entry.get("sfx", {})
+		if sfx is Dictionary:
+			for kind: Variant in sfx:
+				var sfx_path := str(sfx[kind])
+				if str(kind) in GAME_AUDIO_FEEDBACK_KINDS and sfx_path.begins_with(GAME_AUDIO_ROOT) and sfx_path.get_extension() == "wav":
+					profile.sfx[str(kind)] = sfx_path
+				else:
+					push_warning("Game audio profile %s has an invalid %s sound: %s" % [str(game_id), str(kind), sfx_path])
+		profiles[str(game_id)] = profile
+	return profiles
+
+func game_profile(game_id: String) -> Dictionary:
+	return _game_profiles.get(game_id, {}).duplicate(true)
+
+func active_game_profile_id() -> String:
+	return str(_active_game_profile.get("id", ""))
 
 func _exit_tree() -> void:
 	shutdown()
@@ -147,16 +194,30 @@ func shutdown() -> void:
 	_dialogue_active = false
 	_scene_tween_paused = false
 	_last_sfx_msec.clear()
+	_active_game_profile = {}
 	_last_dialogue_beep_msec = -100000
 	_paused = false
 
-func play_context(name: String) -> void:
+## `game_id` picks that game's own track and feedback set for the "game" context.
+func play_context(name: String, game_id: String = "") -> void:
 	if not MUSIC_PATHS.has(name):
 		push_warning("Unknown audio context: %s" % name)
 		return
-	if name == _active_context and _active_music >= 0 and _music_players[_active_music].stream != null:
-		return
 	var music_path: String = MUSIC_PATHS[name]
+	var context_key := name
+	if name == "game":
+		var profile: Dictionary = _game_profiles.get(game_id, {})
+		_active_game_profile = {"id": game_id, "sfx": profile.get("sfx", {})}
+		var game_music := str(profile.get("music", ""))
+		if not game_music.is_empty() and ResourceLoader.exists(game_music):
+			music_path = game_music
+			context_key = "game:" + game_id
+		elif not game_music.is_empty():
+			push_warning("Game music for %s is missing at %s; using the shared game track" % [game_id, game_music])
+	else:
+		_active_game_profile = {}
+	if context_key == _active_context and _active_music >= 0 and _music_players[_active_music].stream != null:
+		return
 	if not ResourceLoader.exists(music_path):
 		push_warning("Unable to load music stream at %s" % music_path)
 		return
@@ -181,7 +242,7 @@ func play_context(name: String) -> void:
 	incoming.play()
 	incoming.stream_paused = _paused
 	_active_music = target
-	_active_context = name
+	_active_context = context_key
 	_music_gain = 0.0
 	_fade_tween = create_tween().set_parallel(true)
 	_fade_tween.tween_method(_set_music_player_gain.bind(target), 0.0, 1.0, FADE_SECONDS)
@@ -241,12 +302,14 @@ func play_sfx(name: String) -> void:
 	if asset_name.is_empty():
 		push_warning("Unknown sound effect: %s" % name)
 		return
+	_play_sfx_path(asset_name, SFX_PATHS[asset_name])
+
+func _play_sfx_path(asset_name: String, path: String) -> void:
 	if _paused or _settings.master * _settings.sfx <= 0.000001:
 		return
 	var now := Time.get_ticks_msec()
 	if now - int(_last_sfx_msec.get(asset_name, -100000)) < SFX_REPEAT_GATE_MSEC:
 		return
-	var path: String = SFX_PATHS[asset_name]
 	if not ResourceLoader.exists(path):
 		push_warning("Unable to load sound effect at %s" % path)
 		return
@@ -262,6 +325,10 @@ func play_sfx(name: String) -> void:
 	_sfx.stream_paused = _paused
 
 func play_gameplay_feedback(name: String) -> void:
+	var game_sfx: Dictionary = _active_game_profile.get("sfx", {})
+	if game_sfx.has(name) and ResourceLoader.exists(str(game_sfx[name])):
+		_play_sfx_path("game:%s:%s" % [active_game_profile_id(), name], str(game_sfx[name]))
+		return
 	play_sfx("hit" if name == "success" else name)
 
 func apply_settings(settings: Dictionary) -> void:

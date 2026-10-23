@@ -1,0 +1,174 @@
+{
+ "method": "Offline render from the shipped files at default in-game gains (music 0.8, sfx 0.9, master 1.0); not an in-engine capture and not an audition",
+ "total_seconds": 115.2,
+ "cues": [
+  {
+   "game": "game-001",
+   "name": "氣球快遞",
+   "start_s": 0.0,
+   "interact_s": 5.0,
+   "success_s": 6.2,
+   "miss_s": 7.4,
+   "music": "assets/audio/cc0/games/game-001-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-001-interact.wav",
+    "success": "assets/audio/cc0/games/game-001-success.wav",
+    "miss": "assets/audio/cc0/games/game-001-miss.wav"
+   }
+  },
+  {
+   "game": "game-002",
+   "name": "風箏穿環",
+   "start_s": 9.6,
+   "interact_s": 14.6,
+   "success_s": 15.8,
+   "miss_s": 17.0,
+   "music": "assets/audio/cc0/games/game-002-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-002-interact.wav",
+    "success": "assets/audio/cc0/games/game-002-success.wav",
+    "miss": "assets/audio/cc0/games/game-002-miss.wav"
+   }
+  },
+  {
+   "game": "game-003",
+   "name": "噴泉跳拍",
+   "start_s": 19.2,
+   "interact_s": 24.2,
+   "success_s": 25.4,
+   "miss_s": 26.6,
+   "music": "assets/audio/cc0/games/game-003-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-003-interact.wav",
+    "success": "assets/audio/cc0/games/game-003-success.wav",
+    "miss": "assets/audio/cc0/games/game-003-miss.wav"
+   }
+  },
+  {
+   "game": "game-004",
+   "name": "人潮指揮",
+   "start_s": 28.8,
+   "interact_s": 33.8,
+   "success_s": 35.0,
+   "miss_s": 36.2,
+   "music": "assets/audio/cc0/games/game-004-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-004-interact.wav",
+    "success": "assets/audio/cc0/games/game-004-success.wav",
+    "miss": "assets/audio/cc0/games/game-004-miss.wav"
+   }
+  },
+  {
+   "game": "game-005",
+   "name": "帽子救援",
+   "start_s": 38.4,
+   "interact_s": 43.4,
+   "success_s": 44.6,
+   "miss_s": 45.8,
+   "music": "assets/audio/cc0/games/game-005-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-005-interact.wav",
+    "success": "assets/audio/cc0/games/game-005-success.wav",
+    "miss": "assets/audio/cc0/games/game-005-miss.wav"
+   }
+  },
+  {
+   "game": "game-006",
+   "name": "彩帶節拍",
+   "start_s": 48.0,
+   "interact_s": 53.0,
+   "success_s": 54.2,
+   "miss_s": 55.4,
+   "music": "assets/audio/cc0/game.ogg",
+   "sfx": {
+    "interact": "assets/audio/ui_click.wav",
+    "success": "assets/audio/cc0/game_hit.wav",
+    "miss": "assets/audio/soft_error.wav"
+   }
+  },
+  {
+   "game": "game-007",
+   "name": "花壇水路",
+   "start_s": 57.6,
+   "interact_s": 62.6,
+   "success_s": 63.8,
+   "miss_s": 65.0,
+   "music": "assets/audio/cc0/games/game-007-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-007-interact.wav",
+    "success": "assets/audio/cc0/games/game-007-success.wav",
+    "miss": "assets/audio/cc0/games/game-007-miss.wav"
+   }
+  },
+  {
+   "game": "game-008",
+   "name": "招牌平衡",
+   "start_s": 67.2,
+   "interact_s": 72.2,
+   "success_s": 73.4,
+   "miss_s": 74.6,
+   "music": "assets/audio/cc0/games/game-008-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-008-interact.wav",
+    "success": "assets/audio/cc0/games/game-008-success.wav",
+    "miss": "assets/audio/cc0/games/game-008-miss.wav"
+   }
+  },
+  {
+   "game": "game-009",
+   "name": "影子捉迷藏",
+   "start_s": 76.8,
+   "interact_s": 81.8,
+   "success_s": 83.0,
+   "miss_s": 84.2,
+   "music": "assets/audio/cc0/games/game-009-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-009-interact.wav",
+    "success": "assets/audio/cc0/games/game-009-success.wav",
+    "miss": "assets/audio/cc0/games/game-009-miss.wav"
+   }
+  },
+  {
+   "game": "game-010",
+   "name": "泡泡拍貼",
+   "start_s": 86.4,
+   "interact_s": 91.4,
+   "success_s": 92.6,
+   "miss_s": 93.8,
+   "music": "assets/audio/cc0/games/game-010-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-010-interact.wav",
+    "success": "assets/audio/cc0/games/game-010-success.wav",
+    "miss": "assets/audio/cc0/games/game-010-miss.wav"
+   }
+  },
+  {
+   "game": "game-011",
+   "name": "長椅換位",
+   "start_s": 96.0,
+   "interact_s": 101.0,
+   "success_s": 102.2,
+   "miss_s": 103.4,
+   "music": "assets/audio/cc0/games/game-011-music.ogg",
+   "sfx": {
+    "interact": "assets/audio/cc0/games/game-011-interact.wav",
+    "success": "assets/audio/cc0/games/game-011-success.wav",
+    "miss": "assets/audio/cc0/games/game-011-miss.wav"
+   }
+  },
+  {
+   "game": "game-012",
+   "name": "迎賓大合奏",
+   "start_s": 105.6,
+   "interact_s": 110.6,
+   "success_s": 111.8,
+   "miss_s": 113.0,
+   "music": "assets/audio/cc0/game.ogg",
+   "sfx": {
+    "interact": "assets/audio/ui_click.wav",
+    "success": "assets/audio/cc0/game_hit.wav",
+    "miss": "assets/audio/soft_error.wav"
+   }
+  }
+ ]
+}
