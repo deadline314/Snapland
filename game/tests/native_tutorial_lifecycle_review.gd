@@ -10,6 +10,8 @@ var active_game := ""
 var active_phase := "startup"
 var global_deadline_msec := 0
 var game_deadline_msec := 0
+## --watchdog-scale=N (>= 1) only lengthens the wall-clock watchdogs on slow shared machines.
+var watchdog_scale := 1.0
 
 func _process(_delta: float) -> void:
 	var now := Time.get_ticks_msec()
@@ -25,7 +27,10 @@ func _ready() -> void:
 		push_error("Native tutorial lifecycle review requires a GPU window and isolated SNAPLAND_SAVE_PATH")
 		get_tree().quit(1)
 		return
-	global_deadline_msec = Time.get_ticks_msec() + int(GLOBAL_TIMEOUT_SECONDS * 1000.0)
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--watchdog-scale=") and argument.get_slice("=", 1).is_valid_float():
+			watchdog_scale = maxf(1.0, argument.get_slice("=", 1).to_float())
+	global_deadline_msec = Time.get_ticks_msec() + int(GLOBAL_TIMEOUT_SECONDS * watchdog_scale * 1000.0)
 	call_deferred("_run")
 
 func _check(ok: bool, message: String) -> void:
@@ -388,7 +393,7 @@ func _persistent_snapshot(progress: Node) -> Dictionary:
 func _begin_game_watchdog(id: String) -> void:
 	active_game = id
 	active_phase = "starting"
-	game_deadline_msec = Time.get_ticks_msec() + int(PER_GAME_TIMEOUT_SECONDS * 1000.0)
+	game_deadline_msec = Time.get_ticks_msec() + int(PER_GAME_TIMEOUT_SECONDS * watchdog_scale * 1000.0)
 	print("NATIVE LIFECYCLE: ", id, " phase=starting (60-second wall-clock deadline)")
 
 func _end_game_watchdog() -> void:

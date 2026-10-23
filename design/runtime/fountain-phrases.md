@@ -12,7 +12,7 @@
 |---|---|---|---|
 | 慢拍 | 0.60 秒 | 三拍都響、側邊水柱依序湧起、拍燈逐格亮 | 數拍與起跳的關係 |
 | 快拍 | 0.45 秒 | 同上，但更快 | 跟上較快的節奏 |
-| 休止拍 | 0.45 秒 | 前兩拍響，第三拍不響、拍燈亮成藍色空格 | 在心裡補上休止，維持節拍 |
+| 休止拍 | 0.45 秒 | 前兩拍響，第三拍不響、拍燈改亮藍色 | 在心裡補上休止，維持節拍 |
 
 - 起跳拍永遠落在最後一拍之後一個間隔；中央水柱只在最後一個間隔升起，在起跳拍到達最高，其餘時間保持低水位，避免和數拍混淆。
 - 前景踏台上的拍燈從左到右是三格數拍與一盞較大的起跳燈。起跳後起跳燈改成該跳評價的顏色；水池前緣的三顆寶石保留每跳評價。落地時腳邊出現對應評價顏色的水花。
@@ -30,7 +30,7 @@
 | 來源 | 實際讀到 | 採用／不採用 |
 |---|---|---|
 | [Rhythm Heaven（Wikipedia 條目）](https://en.wikipedia.org/wiki/Rhythm_Heaven_(video_game)) | 「mainly through audio cues」跟拍；多數關卡可先練習；後期關卡沿用同機制但提高難度 | 採同機制分段加難與正式前可練習；不採只靠聲音，畫面另有完整預告 |
-| [Game Accessibility Guidelines：不要只用聲音傳達必要資訊](https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-sounds-alone/) | 必要資訊不可只靠聲音；建議關聲音讓新玩家試玩檢查 | 數拍同時有聲音、水柱和拍燈；休止拍以藍色空格表示 |
+| [Game Accessibility Guidelines：不要只用聲音傳達必要資訊](https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-sounds-alone/) | 必要資訊不可只靠聲音；建議關聲音讓新玩家試玩檢查 | 數拍同時有聲音、水柱和拍燈；休止拍以藍色拍燈表示 |
 
 Nintendo Iwata Asks 的兩篇 Rhythm Heaven 訪談頁面這次讀取時回應 503，未計入已讀來源。
 
