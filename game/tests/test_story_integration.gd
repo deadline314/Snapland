@@ -34,13 +34,18 @@ func _run() -> void:
 	await _frames(2)
 	_check(main.modal_kind == "" and progress.intro_seen, "natural arrival dialogue completion opens the park and preserves intro progress")
 
+	_check(_sign_line("plaza", 1).ends_with("有事相求"), "plaza signpost shows that Xiao Jiao has an unstarted request")
+	_check(not main.world.story_landmarks.outcome_state().ribbon_visible and not main.world.story_landmarks.outcome_state().entry_sign_corrected, "a fresh island shows neither quest result")
 	await _interact_at("quest-001")
+	_check(main.last_conversation_id == "imp-ask", "first Xiao Jiao conversation explains his request")
 	_check(int(progress.quests.get("quest-001", 0)) == 1, "real Xiao Jiao interaction starts mission 1")
+	_check(_sign_line("plaza", 1).ends_with("委託 2/3"), "plaza signpost names the next real quest-001 step")
 	_check(main.modal_kind == "quest", "quest ticket opens at the current objective")
 	_check_quest_card("小角的尾巴彩帶試拍", "旅券 · 第2步 / 3", "看看長椅的合照構圖", "quest-001 current step")
 	_press_button(main.modal_body, "返回遊園")
 	await _frames(2)
 	await _interact_at("quest-001")
+	_check(main.last_conversation_id == "imp-bench", "returning before the bench photo hears the bench reminder, not the request again")
 	_check(int(progress.quests.get("quest-001", 0)) == 1, "reopening the ticket preserves its current step")
 	_check_quest_card("小角的尾巴彩帶試拍", "旅券 · 第2步 / 3", "看看長椅的合照構圖", "reopened quest-001 current step")
 	_press_button(main.modal_body, "返回遊園")
@@ -48,12 +53,14 @@ func _run() -> void:
 	await _complete_exploration(3)
 	_check(int(progress.quests.get("quest-001", 0)) == 2, "real bench photo advances framing step")
 	await _interact_at("quest-001")
+	_check(main.last_conversation_id == "imp-bubble", "Xiao Jiao reacts to the bench photo the player just took")
 	_check_quest_card("小角的尾巴彩帶試拍", "旅券 · 第3步 / 3", "替新構圖試一次泡泡快門", "quest-001 current step after bench photo")
 	_press_button(main.modal_body, "返回遊園")
 	await _frames(2)
 	_check(not progress.photos.has("photo-welcome-quest-1"), "unfinished mission has no completion reward")
 
 	await _interact_at("quest-002")
+	_check(main.last_conversation_id == "announcer-ask", "first 阿浪 conversation explains the swapped arrows")
 	_check(int(progress.quests.get("quest-002", 0)) == 1, "real 阿浪 interaction starts mission 2")
 	_check_quest_card("廣播即興救場", "旅券 · 第2步 / 3", "核對歡迎字樣與入口方向", "quest-002 current step")
 	_press_button(main.modal_body, "返回遊園")
@@ -61,6 +68,7 @@ func _run() -> void:
 	await _complete_exploration(2)
 	_check(int(progress.quests.get("quest-002", 0)) == 2, "real aligned welcome-wall photo proves observation step")
 	await _interact_at("quest-002")
+	_check(main.last_conversation_id == "announcer-crowd", "阿浪 acknowledges the checked sign before the crowd test")
 	_check_quest_card("廣播即興救場", "旅券 · 第3步 / 3", "試播人潮號誌", "quest-002 current step after wall photo")
 	_press_button(main.modal_body, "返回遊園")
 	await _frames(2)
@@ -69,8 +77,7 @@ func _run() -> void:
 	await _test_first_entry_session_lifecycle()
 	_press_button(main.modal_body, "返回遊園")
 	await _frames(2)
-	await _interact_at("quest-002")
-	_check_quest_card("廣播即興救場", "旅券 · 已完成", "今天的小麻煩，已經變成了拍貼裡的笑話。", "completed quest-002")
+	await _check_completed_announcer()
 
 	if failures.is_empty():
 		print("PASS: real Main story interactions and exploration evidence")
@@ -79,6 +86,50 @@ func _run() -> void:
 		for failure in failures:
 			push_error("FAIL: " + failure)
 	_finish()
+
+func _check_completed_announcer() -> void:
+	_check(int(progress.quests.get("quest-002", 0)) == 3 and progress.photos.has("photo-welcome-quest-2"), "natural crowd success completes quest-002 with its reward")
+	var outcomes: Dictionary = main.world.story_landmarks.outcome_state()
+	_check(outcomes.entry_sign_corrected and not outcomes.ribbon_visible, "only the finished request changes the island: the entry sign turns, the ribbon waits for Xiao Jiao")
+	_check(_sign_line("plaza", 2).ends_with("完成 ✓"), "plaza signpost marks 阿浪's request finished")
+	var photo_count: int = progress.photos.size()
+	var coins: int = progress.coins
+	await _interact_at("quest-002", false)
+	_check(main.last_conversation_id == "announcer-done" and main.modal_kind == "", "after completion 阿浪 talks about the result instead of reopening a ticket")
+	await _interact_at("quest-002", false)
+	_check(main.last_conversation_id == "announcer-done-ferry", "a second visit rotates to a different finished-state line")
+	_check(progress.photos.size() == photo_count and progress.coins == coins and int(progress.quests.get("quest-002", 0)) == 3, "repeat conversations never re-award or move progress")
+	main._show_quest("quest-002")
+	await _frames(2)
+	_check_quest_card("廣播即興救場", "旅券 · 已完成", "今天的小麻煩，已經變成了拍貼裡的笑話。", "completed quest-002")
+	var labels: Array[String] = []
+	_collect_label_texts(main.modal_body, labels)
+	_check(_label_text_contains(labels, "入口牌轉正了"), "completed ticket states the visible result")
+	_press_button(main.modal_body, "返回遊園")
+	await _frames(2)
+	await _interact_at("guide", false)
+	_check(main.modal_kind == "", "guide first story conversation completes in the park")
+	_check(progress.photos.has("photo-welcome-story-1"), "first guide conversation grants the story photo once")
+	await _interact_at("guide", false)
+	_check(main.last_conversation_id == "ticket-announcer-done", "票票 notices which request the player finished")
+	# Reload a fresh Main from the saved profile: the result stays visible and nothing repeats.
+	progress.save_progress()
+	main.queue_free()
+	await _frames(3)
+	progress.load_progress()
+	main = MAIN_SCENE.instantiate()
+	get_tree().root.add_child(main)
+	await _frames(4)
+	var reloaded: Dictionary = main.world.story_landmarks.outcome_state()
+	_check(main.modal_kind == "" and reloaded.entry_sign_corrected and not reloaded.ribbon_visible, "reloaded island keeps the corrected entry sign without replaying arrival")
+	_check(progress.photos.size() == photo_count + 1, "reload adds no photos beyond the one story photo")
+
+func _sign_line(signpost_id: String, index: int) -> String:
+	for record in main.world.story_landmarks.signpost_report():
+		if str(record.id) == signpost_id:
+			var lines: Array = record.lines
+			return str(lines[index]) if index < lines.size() else ""
+	return ""
 
 func _test_first_entry_session_lifecycle() -> void:
 	var photo := await _start_first_entry_game("game-010", 0)
@@ -155,7 +206,7 @@ func _latch_natural_crowd_finish(result: Dictionary, session_id: int) -> void:
 	crowd_finish_evidence["model_score"] = int(completed.crowd_model.score)
 	_check(not is_instance_valid(main.session) and completed.is_queued_for_deletion(), "Main's earlier finished listener clears and queues Session before our latch")
 
-func _interact_at(id: String) -> void:
+func _interact_at(id: String, expect_quest := true) -> void:
 	for point in main.world.points:
 		if str(point.id) != id:
 			continue
@@ -167,15 +218,16 @@ func _interact_at(id: String) -> void:
 		if str(main.world.nearest.get("id", "")) != id:
 			return
 		_key(KEY_E, true)
-		var expected := "dialogue" if id.begins_with("quest-") else "explore" if id.begins_with("explore-") else "game_info"
+		var expected := "dialogue" if id.begins_with("quest-") or id == "guide" else "explore" if id.begins_with("explore-") else "game_info"
 		deadline = Time.get_ticks_msec() + 1500
 		while Time.get_ticks_msec() < deadline and main.modal_kind != expected:
 			await get_tree().process_frame
 		_key(KEY_E, false)
 		_check(main.modal_kind == expected, "E opens actual " + expected + " UI at " + id)
-		if id.begins_with("quest-") and main.modal_kind == "dialogue":
+		if expected == "dialogue" and main.modal_kind == "dialogue":
 			await _complete_dialogue()
-			_check(main.modal_kind == "quest", "natural actor dialogue completion opens the existing quest at " + id)
+			if expect_quest:
+				_check(main.modal_kind == "quest", "natural actor dialogue completion opens the existing quest at " + id)
 		return
 	_check(false, "world has interaction point " + id)
 

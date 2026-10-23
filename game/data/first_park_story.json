@@ -43,7 +43,8 @@
         {"step_id": "meet_imp", "kind": "interaction", "target_id": "quest-001", "title": "到大道左側找小角", "goal": "走到小角旁，聽他介紹尾巴彩帶構圖的試拍點子。", "evidence": "玩家與既有 quest-001 互動點互動。"},
         {"step_id": "frame_the_tail", "kind": "photo", "target_id": "photo-welcome-explore-3", "title": "看看長椅的合照構圖", "goal": "到長椅借用小角立牌並拍下合照，先試試兩個位置的安排。", "evidence": "既有 explore-003 拍照成功，Progress.photos 含指定 photo_id。"},
         {"step_id": "test_bubble_camera", "kind": "minigame_result", "target_id": "game-010", "title": "替新構圖試一次泡泡快門", "goal": "完成泡泡合照遊戲，用自己的角色試拍全身構圖。", "evidence": "game-010 正式或輔助回合成功；practice 回合不算。"}
-      ]
+      ],
+      "outcome": "小角把彩帶綁上了迎賓大道拱門，就照你試拍的位置。"
     },
     "quest-002": {
       "title": "廣播即興救場",
@@ -55,7 +56,158 @@
         {"step_id": "meet_announcer", "kind": "interaction", "target_id": "quest-002", "title": "到大道右側找阿浪", "goal": "走到廣播亭旁，聽阿浪說明指示牌的錯向。", "evidence": "玩家與既有 quest-002 互動點互動。"},
         {"step_id": "inspect_welcome_sign", "kind": "observation", "target_id": "explore-002", "proof_photo_id": "photo-welcome-explore-2", "title": "核對歡迎字樣與入口方向", "goal": "到展示燈前檢視歡迎字樣投影，確認箭頭指向大道入口。", "evidence": "既有 explore-002 展示燈／影子互動完成；可用其成功拍照 photo-welcome-explore-2 記錄。"},
         {"step_id": "guide_the_crowd", "kind": "minigame_result", "target_id": "game-004", "title": "試播人潮號誌", "goal": "完成路口指揮遊戲，讓六隊遊客安全通行。", "evidence": "game-004 正式或輔助回合成功；practice 回合不算。"}
-      ]
+      ],
+      "outcome": "廣播亭旁的入口牌轉正了，阿浪照著牌子廣播。"
+    }
+  },
+  "conversations": {
+    "ticket": [
+      {
+        "id": "ticket-both-done",
+        "when": {"story_photo": true, "complete": ["quest-001", "quest-002"]},
+        "lines": [
+          {"speaker": "票票", "text": "兩件委託都辦完了。拱門上多了小角的彩帶，廣播亭的入口牌也轉正了。"},
+          {"speaker": "票票", "text": "接下來就照你的步調逛吧。普通拍貼收得越多，兩側通往其他園區的門就會一一亮起。"}
+        ]
+      },
+      {
+        "id": "ticket-imp-done",
+        "when": {"story_photo": true, "complete": ["quest-001"], "incomplete": ["quest-002"]},
+        "lines": [
+          {"speaker": "票票", "text": "拱門上的彩帶看到了嗎？小角從剛才就一直拉著路過的人介紹。"},
+          {"speaker": "票票", "text": "阿浪還在為入口和出口的箭頭煩惱。經過廣播亭時，聽聽他怎麼說。"}
+        ]
+      },
+      {
+        "id": "ticket-announcer-done",
+        "when": {"story_photo": true, "complete": ["quest-002"], "incomplete": ["quest-001"]},
+        "lines": [
+          {"speaker": "票票", "text": "廣播終於把入口說對了，剛才那團遊客一次就走進大道。"},
+          {"speaker": "票票", "text": "小角還在拱門邊擺弄尾巴。他需要一個願意替他試拍的人。"}
+        ]
+      },
+      {
+        "id": "ticket-underway",
+        "when": {"story_photo": true, "started_any": true},
+        "lines": [
+          {"speaker": "票票", "text": "委託做到一半也沒關係，旅券都記著。按 M 打開旅券，就能看到下一步。"},
+          {"speaker": "票票", "text": "想先玩設施也可以——拍貼和委託不會因為你繞路而消失。"}
+        ]
+      },
+      {
+        "id": "ticket-open-day",
+        "when": {"story_photo": true},
+        "lines": [
+          {"speaker": "票票", "text": "小角在拱門左邊，阿浪在噴泉右側的廣播亭。先幫誰都行，也可以直接去大道玩設施。"},
+          {"speaker": "票票", "text": "不確定往哪走時，看看廣場上的路標；它會告訴你每個方向還剩什麼。"}
+        ]
+      },
+      {"id": "ticket-fallback", "when": {}, "lines": [{"speaker": "票票", "text": "有什麼需要，回來找我就好。"}]}
+    ],
+    "imp": [
+      {
+        "id": "imp-ask",
+        "when": {"steps": {"quest-001": 0}},
+        "lines": [
+          {"speaker": "小角", "text": "啊，你來得剛好！我的尾巴又打結了……不對，這是彩帶主題的新構圖！"},
+          {"speaker": "小角", "text": "長椅那邊有我的立牌。先拍一張雙人位置，再用泡泡相機試你的全身——拜託你了！"}
+        ]
+      },
+      {
+        "id": "imp-bench",
+        "when": {"steps": {"quest-001": 1}},
+        "lines": [
+          {"speaker": "小角", "text": "立牌還在長椅上等你喔。坐左邊或右邊都行，我想看兩個位置排起來好不好看。"},
+          {"speaker": "主角", "text": "長椅在大道後段左側，對吧？"},
+          {"speaker": "小角", "text": "對！月影劇台前面那張。"}
+        ]
+      },
+      {
+        "id": "imp-bubble",
+        "when": {"steps": {"quest-001": 2}},
+        "lines": [
+          {"speaker": "小角", "text": "長椅那張合照我看了！兩個人並排，彩帶剛好能從中間繞過去。"},
+          {"speaker": "小角", "text": "最後一步：到觀景台用泡泡相機拍一次你的全身。泡泡破之前按快門，構圖就成立了。"}
+        ]
+      },
+      {
+        "id": "imp-done",
+        "when": {"complete": ["quest-001"]},
+        "lines": [
+          {"speaker": "小角", "text": "成功了！彩帶我已經綁上大道拱門，就照你試拍的位置。"},
+          {"speaker": "小角", "text": "尾巴？……現在是蝴蝶結。我宣布這也是設計。"}
+        ]
+      },
+      {
+        "id": "imp-done-encore",
+        "when": {"complete": ["quest-001"]},
+        "lines": [
+          {"speaker": "小角", "text": "有空再去拍一次泡泡吧。我想收集你不同表情的版本，貼在拱門旁邊。"}
+        ]
+      },
+      {"id": "imp-fallback", "when": {}, "lines": [{"speaker": "小角", "text": "今天的拱門也很適合入鏡！"}]}
+    ],
+    "announcer": [
+      {
+        "id": "announcer-ask",
+        "when": {"steps": {"quest-002": 0}},
+        "lines": [
+          {"speaker": "阿浪", "text": "廣播測試——呃，等等。入口和出口的箭頭剛被調換，我差點把大家播回碼頭。"},
+          {"speaker": "阿浪", "text": "你能先去展示燈那邊核對歡迎字樣嗎？確定箭頭朝哪裡，我才敢開麥克風。"}
+        ]
+      },
+      {
+        "id": "announcer-sign",
+        "when": {"steps": {"quest-002": 1}},
+        "lines": [
+          {"speaker": "阿浪", "text": "展示燈在大道後段右側。把字樣的影子對進牆上的空框，就看得出箭頭方向。"},
+          {"speaker": "阿浪", "text": "我先在這裡顧著人潮，你確認好再回來告訴我。"}
+        ]
+      },
+      {
+        "id": "announcer-crowd",
+        "when": {"steps": {"quest-002": 2}},
+        "lines": [
+          {"speaker": "阿浪", "text": "你確認了：箭頭朝園區裡面。好，我就照這個播。"},
+          {"speaker": "阿浪", "text": "剩下是真的人潮了。路口號誌交給你，讓六隊遊客都安全過去。"}
+        ]
+      },
+      {
+        "id": "announcer-done",
+        "when": {"complete": ["quest-002"]},
+        "lines": [
+          {"speaker": "阿浪", "text": "剛才那波人一次就走進大道，沒有人回頭找碼頭！"},
+          {"speaker": "阿浪", "text": "廣播亭旁的入口牌我也轉正了。以後我照牌子播——說好了。"}
+        ]
+      },
+      {
+        "id": "announcer-done-ferry",
+        "when": {"complete": ["quest-002"]},
+        "lines": [
+          {"speaker": "阿浪", "text": "下一班船快到了。要是我又把出口說成入口，請直接提醒我。"}
+        ]
+      },
+      {"id": "announcer-fallback", "when": {}, "lines": [{"speaker": "阿浪", "text": "這裡是迎賓大道廣播亭，祝你玩得開心。"}]}
+    ]
+  },
+  "time_asides": {
+    "ticket": {
+      "dawn": "清晨碼頭的霧散得快，趁人少慢慢拍吧。",
+      "noon": "中午攤位最熱鬧，玩之前記得找陰涼處喘口氣。",
+      "dusk": "傍晚影子拉得很長，月影劇台那邊特別好看。",
+      "night": "晚上燈塔會轉光，海岸那條路也點著燈。"
+    },
+    "imp": {
+      "dawn": "清晨的光好軟……適合拍不用逞強的表情。",
+      "noon": "中午太亮了！我的蝴蝶結要閃到別人了。",
+      "dusk": "夕陽把彩帶照成金色，這是我設計的——好吧，是太陽。",
+      "night": "晚上我的角會反光嗎？幫我看一下。"
+    },
+    "announcer": {
+      "dawn": "清晨班船的人少，我先練習發音：入口、入口、入口。",
+      "noon": "中午人潮最多，我會每十分鐘提醒一次方向。",
+      "dusk": "傍晚有人趕最後一班船，我得把出口說得特別清楚。",
+      "night": "夜場廣播要放低音量，海浪聲也是節目的一部分。"
     }
   }
 }

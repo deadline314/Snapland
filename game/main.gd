@@ -53,6 +53,12 @@ var tutorial_panel: Control
 var tutorial_target := ""
 var tutorial_origin := ""
 var tutorial_assist := false
+## Last contextual conversation id chosen for an island character (review/tests).
+var last_conversation_id := ""
+## A quest result finished during a game is announced after returning to the park.
+var pending_story_notice := ""
+const STORY_CHARACTER_BY_POINT := {"guide": "ticket", "quest-001": "imp", "quest-002": "announcer"}
+const STORY_CELEBRATION := {"quest-001": ["imp", "dance"], "quest-002": ["announcer", "special"]}
 
 func _ready() -> void:
 	get_tree().auto_accept_quit=false
@@ -555,6 +561,9 @@ func _close() -> void:
 		if session.has_method("set_paused"):
 			session.set_paused(false)
 	if session==null: hud.show()
+	if session==null and modal_kind=="" and not pending_story_notice.is_empty():
+		_notice(pending_story_notice)
+		pending_story_notice=""
 	if celebrate and session==null and world.has_method("play_action"):
 		world.play_action("celebrate")
 
@@ -591,6 +600,8 @@ func _refresh() -> void:
 	world.apply_settings(Progress.settings)
 	_apply_time_phase()
 	world.update_collection(Progress.photos)
+	if world.has_method("set_story_progress"):
+		world.set_story_progress(_story_snapshot())
 	if world.has_method("set_avatar_look"):
 		world.set_avatar_look(Progress.appearance,Progress.equipped)
 	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if Progress.settings.get("fullscreen",false) else DisplayServer.WINDOW_MODE_WINDOWED
@@ -1035,7 +1046,7 @@ func _render_dialogue() -> void:
 	if line.has("text_key"):
 		var text_args: Dictionary = line.get("text_args", {})
 		dialogue_text=Localization.text(str(line.text_key), text_args)
-	dialogue_panel.show_line(speaker,dialogue_text,dialogue_index)
+	dialogue_panel.show_line(speaker,dialogue_text,dialogue_index,dialogue_index==dialogue.size()-1)
 	if line.has("speaker_key"):
 		var speaker_args: Dictionary = line.get("speaker_args", {})
 		dialogue_panel.speaker_label.text=Localization.text(str(line.speaker_key), speaker_args)
@@ -1124,12 +1135,22 @@ func _interact(id: String, title: String) -> void:
 	elif id=="arrival":
 		_start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress(),func(): Progress.intro_seen=true; Progress.save_progress())
 	elif id=="guide":
-		_start_dialogue(story.main_lines(),func(): Progress.grant_photo("photo-welcome-story-1"); _notice("第一張主線拍貼，收進本子裡了。"))
+		if Progress.photos.has("photo-welcome-story-1"):
+			_start_dialogue(_character_conversation("ticket"),Callable())
+		else:
+			_start_dialogue(story.main_lines(),func(): Progress.grant_photo("photo-welcome-story-1"); _notice("第一張主線拍貼，收進本子裡了。"))
 	elif id=="quest-001" or id=="quest-002":
-		var actor_lines := _actor_dialogue_lines(id)
+		# What the character says follows the saved quest step; finished requests
+		# only chat and celebrate, so revisiting never reopens or re-awards them.
+		var finished_before := int(Progress.quests.get(id,0))>=3
+		var actor_lines := _character_conversation(str(STORY_CHARACTER_BY_POINT[id]))
 		_start_dialogue(actor_lines,func():
 			_record_story_mission_event({"type":"interaction","id":id})
-			_show_quest(id)
+			if finished_before:
+				var reaction: Array = STORY_CELEBRATION[id]
+				world.react_story_npc(str(reaction[0]),str(reaction[1]))
+			else:
+				_show_quest(id)
 		,func(): _record_story_mission_event({"type":"interaction","id":id}))
 	elif id=="ride-tide":
 		if world.is_riding():
@@ -1161,14 +1182,22 @@ func _interact(id: String, title: String) -> void:
 				_back(body)
 				break
 
-func _actor_dialogue_lines(quest_id: String) -> Array:
-	var mission: Dictionary=story.quest_data(quest_id).get("mission",{})
-	var speaker := str(mission.get("speaker", ""))
-	var lines: Array=[]
-	for line: Dictionary in story.main_lines():
-		if str(line.get("speaker", "")) == speaker:
-			lines.append(line)
-	return lines
+func _character_conversation(character_id: String) -> Array:
+	var conversation: Dictionary=story.conversation_for(character_id,_story_snapshot())
+	last_conversation_id=str(conversation.get("id",""))
+	return conversation.get("lines",[])
+
+## Saved-progress view shared by conversations, signposts and quest results.
+func _story_snapshot() -> Dictionary:
+	var steps := {}
+	for quest_id in ["quest-001","quest-002"]:
+		steps[quest_id]=int(Progress.quests.get(quest_id,0))
+	return {
+		"story_photo":Progress.photos.has("photo-welcome-story-1"),
+		"steps":steps,
+		"photos":Progress.photos,
+		"time_phase":TimeOfDay.normalize(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE)),
+	}
 
 func _definition(id: String) -> Dictionary:
 	for definition in definitions:
@@ -1422,11 +1451,14 @@ func _show_quest(id: String) -> void:
 	if quest_title.is_empty(): quest_title="任務目標"
 	var subtitle := "旅券 · 已完成" if step>=3 else "旅券 · 第%d步 / 3"%(step+1)
 	var body := _open(quest_title,subtitle,"quest")
+	var mission: Dictionary=story.quest_mission_data(id)
 	if step>=3:
+		var outcome := str(mission.get("outcome","")).strip_edges()
+		if not outcome.is_empty():
+			body.add_child(Paper.label(outcome,22,Paper.DEEP_TEAL))
 		body.add_child(Paper.label("今天的小麻煩，已經變成了拍貼裡的笑話。",24))
 		_back(body)
 		return
-	var mission: Dictionary=story.quest_mission_data(id)
 	var steps: Array=mission.get("steps",[])
 	if step < 0 or step >= steps.size():
 		push_error("Story mission '%s' has no step at saved cursor %d." % [id, step])
@@ -1476,10 +1508,19 @@ func _record_story_mission_event(evidence: Dictionary) -> void:
 				if not reward_id.is_empty() and not Progress.photos.has(reward_id):
 					Progress.grant_photo(reward_id)
 				audio.play_sfx("success")
+				_announce_story_outcome(quest_id)
 				break
 			event = _stored_mission_evidence(quest_id, cursor)
 			if event.is_empty():
 				break
+
+func _announce_story_outcome(quest_id: String) -> void:
+	var outcome := str(story.quest_mission_data(quest_id).get("outcome","")).strip_edges()
+	if outcome.is_empty(): return
+	if session==null and modal_kind=="":
+		_notice(outcome)
+	else:
+		pending_story_notice=outcome
 
 func _stored_mission_evidence(quest_id: String, cursor: int) -> Dictionary:
 	var mission: Dictionary = story.quest_mission_data(quest_id)

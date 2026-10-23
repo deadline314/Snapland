@@ -1,8 +1,13 @@
 extends RefCounted
 
+const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const STORY_DATA_PATH := "res://game/data/first_park_story.json"
 const REQUIRED_CHARACTER_IDS := ["ticket", "imp", "announcer"]
 const ALLOWED_SPEAKERS := ["票票", "小角", "阿浪", "主角"]
+## Conversation conditions. Each listed atom adds one point of salience.
+const CONVERSATION_CONDITIONS := ["story_photo", "steps", "complete", "incomplete", "started_any", "time_phase"]
+const QUEST_IDS := ["quest-001", "quest-002"]
+const QUEST_STEP_COUNT := 3
 
 # Keep the original three-step quiz data available to existing main.gd callers.
 const QUESTS: Dictionary = {
@@ -37,26 +42,33 @@ const PROLOGUE_ENTRY: Dictionary = {
 
 var _story_data: Dictionary = {}
 var _diagnostics: Array[String] = []
+# Session-only memory: which conversation each line came from and which time
+# aside a character last mentioned. Nothing here is saved, so it cannot affect
+# rewards or progress; it only avoids repeating the same visit text.
+var _conversation_views: Dictionary = {}
+var _conversation_view_serial := 0
+var _last_aside_phase: Dictionary = {}
 
-func _init(path: String = STORY_DATA_PATH) -> void:
-	_load_story_data(path)
+## report_errors=false is for validator self-tests that load deliberately broken
+## data and read validation_report() instead of failing the engine log.
+func _init(path: String = STORY_DATA_PATH, report_errors := true) -> void:
+	_load_story_data(path, report_errors)
 
-func _load_story_data(path: String) -> void:
+func _load_story_data(path: String, report_errors := true) -> void:
 	_story_data.clear()
 	_diagnostics.clear()
 	if not FileAccess.file_exists(path):
 		_diagnostics.append("missing story data: %s" % path)
-		push_error("StoryDirector: " + _diagnostics.back())
-		return
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if not parsed is Dictionary or int(parsed.get("schema_version", 0)) != 1:
-		_diagnostics.append("expected story JSON object with schema_version 1")
-		push_error("StoryDirector: " + _diagnostics.back())
-		return
-	_story_data = parsed
-	_diagnostics = _validate_story_data()
-	for diagnostic in _diagnostics:
-		push_error("StoryDirector: " + diagnostic)
+	else:
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		if not parsed is Dictionary or int(parsed.get("schema_version", 0)) != 1:
+			_diagnostics.append("expected story JSON object with schema_version 1")
+		else:
+			_story_data = parsed
+			_diagnostics = _validate_story_data()
+	if report_errors:
+		for diagnostic in _diagnostics:
+			push_error("StoryDirector: " + diagnostic)
 
 func validation_report() -> Dictionary:
 	var diagnostics := _diagnostics.duplicate()
@@ -89,6 +101,7 @@ func _validate_story_data() -> Array[String]:
 				errors.append("%s[%d] has unknown speaker or empty text" % [field, index])
 			elif str(line.get("speaker", "")) == "露露":
 				errors.append("%s[%d] uses unavailable character 露露" % [field, index])
+	errors.append_array(_validate_conversations())
 	var missions: Variant = _story_data.get("quest_missions", {})
 	if not missions is Dictionary:
 		errors.append("quest_missions must be an object")
@@ -119,6 +132,120 @@ func _validate_story_data() -> Array[String]:
 				if not ["interaction", "photo", "observation", "minigame_result", "time_phase"].has(str(step.get("kind", ""))) or str(step.get("target_id", "")).is_empty() or str(step.get("goal", "")).is_empty():
 					errors.append("mission '%s' step %d has invalid kind, target_id or goal" % [quest_id, index])
 	return errors
+
+func _validate_conversations() -> Array[String]:
+	var errors: Array[String] = []
+	var conversations: Variant = _story_data.get("conversations", {})
+	var asides: Variant = _story_data.get("time_asides", {})
+	if not conversations is Dictionary or not asides is Dictionary:
+		errors.append("conversations and time_asides must be objects")
+		return errors
+	var seen_ids: Dictionary = {}
+	for character_id in REQUIRED_CHARACTER_IDS:
+		var entries: Variant = conversations.get(character_id, [])
+		if not entries is Array or entries.is_empty():
+			errors.append("character '%s' requires conversations" % character_id)
+			continue
+		var has_fallback := false
+		for index in range(entries.size()):
+			var entry: Variant = entries[index]
+			var label := "%s conversation %d" % [character_id, index]
+			if not entry is Dictionary or not entry.get("when", null) is Dictionary or not entry.get("lines", null) is Array or (entry.lines as Array).is_empty():
+				errors.append("%s requires when and non-empty lines" % label)
+				continue
+			var entry_id := str(entry.get("id", ""))
+			if entry_id.is_empty() or seen_ids.has(entry_id):
+				errors.append("%s has a missing or duplicate id" % label)
+			seen_ids[entry_id] = true
+			var when: Dictionary = entry.when
+			has_fallback = has_fallback or when.is_empty()
+			for key in when:
+				if not CONVERSATION_CONDITIONS.has(str(key)):
+					errors.append("%s uses unknown condition '%s'" % [label, str(key)])
+			for quest_id in (when.get("steps", {}) as Dictionary).keys() + Array(when.get("complete", [])) + Array(when.get("incomplete", [])):
+				if not QUEST_IDS.has(str(quest_id)):
+					errors.append("%s names unknown quest '%s'" % [label, str(quest_id)])
+			if when.has("time_phase") and not TimeOfDay.phase_ids().has(str(when.time_phase)):
+				errors.append("%s names unknown time phase" % label)
+			for line in entry.lines:
+				if not line is Dictionary or not ALLOWED_SPEAKERS.has(str(line.get("speaker", ""))) or str(line.get("text", "")).strip_edges().is_empty():
+					errors.append("%s has unknown speaker or empty text" % label)
+		if not has_fallback:
+			errors.append("character '%s' requires an unconditional fallback conversation" % character_id)
+		var character_asides: Variant = asides.get(character_id, {})
+		for phase_id in TimeOfDay.phase_ids():
+			if not character_asides is Dictionary or str(character_asides.get(phase_id, "")).strip_edges().is_empty():
+				errors.append("character '%s' requires a %s time aside" % [character_id, phase_id])
+	return errors
+
+## Picks what a character says for the current saved state. The most specific
+## matching entry wins; equally specific entries rotate by least recent view.
+## state: {"story_photo": bool, "steps": {quest_id: int}, "time_phase": String}.
+func conversation_for(character_id: String, state: Dictionary) -> Dictionary:
+	var conversations: Dictionary = _story_data.get("conversations", {})
+	var entries: Array = conversations.get(character_id, [])
+	var best: Dictionary = {}
+	var best_salience := -1
+	var best_view := 0
+	for entry: Dictionary in entries:
+		var when: Dictionary = entry.get("when", {})
+		if not _conversation_matches(when, state):
+			continue
+		var salience := _conversation_salience(when)
+		var view := int(_conversation_views.get(str(entry.get("id", "")), 0))
+		if salience > best_salience or (salience == best_salience and view < best_view):
+			best = entry
+			best_salience = salience
+			best_view = view
+	if best.is_empty():
+		return {}
+	_conversation_view_serial += 1
+	_conversation_views[str(best.get("id", ""))] = _conversation_view_serial
+	var lines: Array = (best.get("lines", []) as Array).duplicate(true)
+	var aside := time_aside(character_id, str(state.get("time_phase", "")))
+	var aside_added := false
+	if not aside.is_empty() and str(_last_aside_phase.get(character_id, "")) != str(state.get("time_phase", "")):
+		lines.append({"speaker": str(character_profile(character_id).get("name", "")), "text": aside})
+		_last_aside_phase[character_id] = str(state.get("time_phase", ""))
+		aside_added = true
+	return {"id": str(best.get("id", "")), "lines": lines, "time_aside": aside_added, "salience": best_salience}
+
+func time_aside(character_id: String, phase_id: String) -> String:
+	var asides: Dictionary = _story_data.get("time_asides", {})
+	return str((asides.get(character_id, {}) as Dictionary).get(phase_id, ""))
+
+func _conversation_salience(when: Dictionary) -> int:
+	var salience := 0
+	for key in when:
+		match str(key):
+			"steps": salience += (when.steps as Dictionary).size()
+			"complete", "incomplete": salience += (when[key] as Array).size()
+			_: salience += 1
+	return salience
+
+func _conversation_matches(when: Dictionary, state: Dictionary) -> bool:
+	var steps: Dictionary = state.get("steps", {})
+	if when.has("story_photo") and bool(when.story_photo) != bool(state.get("story_photo", false)):
+		return false
+	for quest_id in (when.get("steps", {}) as Dictionary):
+		if int(steps.get(quest_id, 0)) != int(when.steps[quest_id]):
+			return false
+	for quest_id in when.get("complete", []):
+		if int(steps.get(quest_id, 0)) < QUEST_STEP_COUNT:
+			return false
+	for quest_id in when.get("incomplete", []):
+		if int(steps.get(quest_id, 0)) >= QUEST_STEP_COUNT:
+			return false
+	if when.has("started_any"):
+		var underway := false
+		for quest_id in QUEST_IDS:
+			var step := int(steps.get(quest_id, 0))
+			underway = underway or (step > 0 and step < QUEST_STEP_COUNT)
+		if underway != bool(when.started_any):
+			return false
+	if when.has("time_phase") and str(when.time_phase) != str(state.get("time_phase", "")):
+		return false
+	return true
 
 func intro_lines() -> Array:
 	return (_story_data.get("intro_lines", []) as Array).duplicate(true)

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "signposts": [
+    {
+      "id": "dock",
+      "title": "海風碼頭",
+      "position": [3.7, 15.9],
+      "entries": [
+        {"arrow": "↑", "label": "中央廣場", "target": {"kind": "character", "id": "ticket"}},
+        {"arrow": "←", "label": "海岸環線", "target": {"kind": "coast"}}
+      ]
+    },
+    {
+      "id": "plaza",
+      "title": "中央廣場",
+      "position": [0.0, 4.2],
+      "entries": [
+        {"arrow": "←", "label": "票票・導覽亭", "target": {"kind": "character", "id": "ticket"}},
+        {"arrow": "↖", "label": "小角", "target": {"kind": "quest", "id": "quest-001"}},
+        {"arrow": "↗", "label": "阿浪", "target": {"kind": "quest", "id": "quest-002"}},
+        {"arrow": "↑", "label": "迎賓大道", "target": {"kind": "games", "ids": ["game-001", "game-002", "game-003", "game-004", "game-005", "game-006", "game-007", "game-008", "game-009", "game-010", "game-011", "game-012"]}}
+      ]
+    },
+    {
+      "id": "avenue",
+      "title": "迎賓大道",
+      "position": [0.0, -19.4],
+      "entries": [
+        {"arrow": "←", "label": "風帆工坊", "target": {"kind": "games", "ids": ["game-001", "game-002", "game-003", "game-004"]}},
+        {"arrow": "↗", "label": "潮池廣場", "target": {"kind": "games", "ids": ["game-005", "game-006", "game-007", "game-008"]}},
+        {"arrow": "↗", "label": "海風觀景台", "target": {"kind": "games", "ids": ["game-009", "game-010"]}},
+        {"arrow": "↑", "label": "月影劇台", "target": {"kind": "games", "ids": ["game-011", "game-012"]}}
+      ]
+    }
+  ]
+}
