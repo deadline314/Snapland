@@ -36,3 +36,29 @@
 | Godot Engine，[鍵盤／控制器導覽與焦點](https://docs.godotengine.org/en/4.5/tutorials/ui/gui_navigation.html) | 官方文件指出鍵盤與控制器需有可聚焦的 Control，並提醒 UI 的 `ui_*` 按鍵有焦點用途。 | View 進入時取得鍵盤焦點，左／右／Space 作遊戲訊號；滑鼠只在場景設走位目標，兩路操作都進同一模型。 |
 
 上述六張圖也已在 `design/runtime/minigame-visual-diversity-review.md` 逐張記錄官方文字與畫面觀察。參考用來決定鏡頭比例、資訊層次、輪廓對比和場景尺度，不複製作品的美術素材、配色或玩法。v13 正常及四分之一速度原生流程、12 格伸手和左右各8格步態觀察均通過；Root 已檢視正常與四分之一速度影片，基本角色畫面驗收通過，尚未宣稱全衣物剪影、Park私人離開或三位完整NPC動畫驗收。
+
+## 2026-10-23：成對陣風、救援取捨與完整流程（SG-20）
+
+### 問題
+
+原圖表六頂帽子一頂接一頂落下，從不同時在空中，玩家只有「追上落點再按」一種解法，沒有救援取捨；結算說明仍寫「每接住一頂 +100」，與實際中心 120／擦帽 70／連續加分不符。帽子憑空出現，漂浮文字（沿接帽線移動、下一頂、帽影落點、接帽線、救回帽架）像除錯標籤；開始即落帽，沒有準備時間。實機另發現：以滑鼠點過 HUD 按鈕（教學／繼續）後，焦點留在按鈕上，方向鍵與空白鍵被吞掉。
+
+### 改動
+
+- **共同海風**：陣風改為一條全場時序，同一陣風同時推動空中所有帽子；帽形受風不同（寬簷草帽、花邊遮陽帽最怕風，便帽、鴨舌帽較穩）。桅旗、海面風紋與帽子受力取自同一函式。
+- **成對陣風**：第 3、4 頂與第 5、6 頂由同一陣風一起吹走（落點相隔約 1.17 秒／229 px 與 1.35 秒／324 px）。兩頂同時在空中時落點環標 1、2 號，提示列只說「先接 1 號」。可以先穩接一頂、讓另一頂落海（仍可達普通），或規劃走位連救（小惡魔需要）；漏接中斷連續中心加分。
+- **畫面**：背景改為渡輪上層甲板，帽子從實際旅客頭上被吹走、由遠而近放大；旅客失帽後舉手，下一位會被吹帽的旅客有圓圈提示。桅旗移到船頭，避開 HUD 回饋列；右側失物帽架加大，逐頂掛回、中心接住加亮點、漏接留海浪記號，六盞連續中心燈。移除漂浮說明字。
+- **流程**：開局 1.5 秒平靜期可先走位；結算逐頂列出帽名、等級與分數（含連續加分），規則與資格說明由模型常數產生並說明本次未達原因。恢復遊戲時鍵盤焦點交回遊戲畫面（所有小遊戲共用）。
+
+### 六個來源（2026-10-23 實際閱讀，頁面截圖見 SG-20 票）
+
+| 團隊／來源 | 實際讀到 | 採用 | 不採用 |
+|---|---|---|---|
+| Nintendo Game & Watch《Fire》（[Home Computer Museum 館藏頁](https://www.homecomputermuseum.nl/en/collectie/nintendo/nintendo-gamewatch-fire/)） | 兩名消防員抬救生墊接住從火場落下的人，三人落地即結束；實機只有 LEFT／RIGHT 兩鍵 | 同時有多個下落目標才產生「先救誰」；只用左右移動加一個動作 | 生命數與無限加速 |
+| Activision《Kaboom!》（[Creative Computing 1984 評測](https://www.atarimagazines.com/creative/v10n1/114_A_bakers_half_dozen_game.php)） | 每波炸彈數與速度遞增，接住分數等於關數；漏接失去水桶、下波減半；作者自述只到第三、四波 | 分數隨連續表現遞增但有上限（連續中心 +8／最多 +24） | 漏接懲罰與耐力式難度 |
+| Ghost Town Games《Overcooked》（[Develop post-mortem](https://mcvuk.com/development-news/the-develop-post-mortem-overcooked/)） | 「任務比人手多」製造緊張；玩家背熟路線後刻意打散例行 | 只在後段放入兩組成對陣風，前兩頂先教單頂 | 計時混亂與多任務 |
+| Mike Stout〈Enemy Attacks and Telegraphing〉（[Game Developer](https://www.gamedeveloper.com/design/enemy-attacks-and-telegraphing)） | 攻擊前要有短延遲告知「要來了」，失誤才公平 | 0.72 秒陣風預告、亮圈標示下一位失帽旅客、編號落點環 | 長前搖 |
+| Extremely OK Games《Celeste》輔助模式（[Vice 訪談](https://www.vice.com/en/article/d3w887/celeste-difficulty-assist-mode)） | 輔助是選項不是預設，設計者「放手」讓玩家調整 | 輔助隨時可開、仍取得普通拍貼，結算明說輔助不取得小惡魔 | Celeste 連成就都可在輔助取得 |
+| Game Accessibility Guidelines（[顏色不可為唯一資訊](https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-a-colour-alone/)） | 顏色應作為文字、符號或形狀的備援 | 落點環加 1、2 數字；預告旗為空心輪廓、實際陣風為實心；預告風紋虛線、實際實線 | 全畫面濾色 |
+
+下載後發現不適用而拒收：Game Developer 文章附圖是電報機示意，Vice 頁首圖是另一款遊戲，都未使用。參考只用於設計判斷，不作遊戲素材；沒有試玩這些作品。

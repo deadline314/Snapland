@@ -1260,6 +1260,7 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	if practice and session.has_method("set_practice_mode"):
 		session.set_practice_mode(true)
 	audio.play_context("game", id)
+	audio.set_music_suppressed(session.has_method("owns_music") and session.owns_music())
 
 func _cancel_game() -> void:
 	if session!=null:
@@ -1267,6 +1268,7 @@ func _cancel_game() -> void:
 		session.queue_free()
 		session=null
 	_sync_audio_environment()
+	audio.set_music_suppressed(false)
 	audio.play_context("harbor" if world.current_area=="海風碼頭" else "plaza")
 	hud.show()
 	world.blocked=false

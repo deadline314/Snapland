@@ -77,6 +77,8 @@ var _game_profiles: Dictionary = {}
 var _active_game_profile: Dictionary = {}
 var _scene_tween: Tween
 var _scene_tween_paused := false
+## True while a minigame plays its own beat-locked track (see set_music_suppressed).
+var _music_suppressed := false
 
 func _ready() -> void:
 	if _music_players.is_empty():
@@ -273,6 +275,17 @@ func set_dialogue_active(active: bool) -> void:
 	_dialogue_active = active
 	_retarget_scene_gains()
 
+## A minigame with its own beat-locked music (彩帶節拍) asks the shared track to
+## fade out so two tempos never play at once; false restores the normal mix.
+func set_music_suppressed(suppressed: bool) -> void:
+	if _music_suppressed == suppressed:
+		return
+	_music_suppressed = suppressed
+	_retarget_scene_gains()
+
+func is_music_suppressed() -> bool:
+	return _music_suppressed
+
 func is_dialogue_active() -> bool:
 	return _dialogue_active
 
@@ -280,8 +293,8 @@ func _retarget_scene_gains() -> void:
 	if _scene_tween and _scene_tween.is_valid():
 		_scene_tween.kill()
 	_scene_tween_paused = false
-	var music_target := float(ISLAND_MUSIC_PHASE_GAIN[_time_phase]) * (DIALOGUE_MUSIC_GAIN if _dialogue_active else 1.0)
-	var ambience_target := float(ISLAND_WAVE_PHASE_GAIN[_time_phase]) * float(ISLAND_WAVE_AREA_GAIN[_island_area])
+	var music_target := float(ISLAND_MUSIC_PHASE_GAIN.get(_time_phase, 1.0)) * (DIALOGUE_MUSIC_GAIN if _dialogue_active else 1.0) * (0.0 if _music_suppressed else 1.0)
+	var ambience_target := float(ISLAND_WAVE_PHASE_GAIN.get(_time_phase, 0.72)) * float(ISLAND_WAVE_AREA_GAIN.get(_island_area, 0.36))
 	_scene_tween = create_tween().set_parallel(true)
 	_scene_tween.tween_method(_set_music_scene_gain, _music_scene_gain, music_target, FADE_SECONDS)
 	_scene_tween.tween_method(_set_ambience_scene_gain, _ambience_scene_gain, ambience_target, FADE_SECONDS)

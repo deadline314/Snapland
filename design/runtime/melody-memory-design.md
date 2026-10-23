@@ -57,3 +57,20 @@ The lesson's listening and performing screenshots are unmodified frames at secon
 ### 2026-10-20 Score explanation correction
 
 The live session result still described the retired +25-per-note/+100-per-phrase rule while the model and successful native play awarded precise +20 / close +12. Session now formats the explanation from the same two model constants used by accepted note inputs. No scoring/timing/qualification change. The model suite also compares advertised numeric grades and public summary total against actual precise/close note inputs (39 checks total); existing view/Session lifecycle coverage passes 54 checks. Actual mouse opening at 800×600 and 1280×720 is rendered and inspected; this is not an audio review. Full welcome-game integration hit its existing 90-second limit and is being measured separately under MAIN-2, not waived.
+
+## 2026-10-23：示範／記住／演奏／合奏與樂器音色（SG-27）
+
+### 問題
+
+四件樂器共用四個純正弦音，聽不出貝殼簧片、玻璃潮鈴、漂木音板與小港鼓的差別；完成一句只有文字，沒有音樂回饋；記住階段紙帶清空卻沒有說明要記幾個音；結算只有一列「演奏音符得分」。
+
+### 改動
+
+- **樂器音色**：保留原四個音高（C5、E5、G5、C6），改為遊戲自有合成音色：簧片撥奏、玻璃鐘的非整數泛音、漂木的短木質音加槌擊聲、小港鼓的鼓皮下滑音與拍擊聲；只在遊戲內播放，跟隨音效音量與暫停。
+- **四段指示**：紙帶上方「1 示範／2 記住／3 演奏／4 合奏」標出目前階段；記住與演奏時紙帶顯示該句音數的問號格，已演奏的格子點亮。
+- **合奏回放與終曲**：第一、二句完成後，四件樂器以原節奏合奏回放剛完成的樂句（加上和聲），再示範下一句；第三句完成後播放終曲合奏與收尾和弦，再進結算。終曲中輸入不計分。
+- **結算**：每句一列分數，資格說明列出本次精準音數與失誤。
+
+### 來源
+
+沿用本文件前段已讀的官方 Simon 規則、Nintendo Rhythm Heaven、Enhance Lumines、W3C 動態可及性與 Godot 文件，以及六張跨方向官方圖例。本輪另讀 Nintendo《Rhythm Heaven Groove》商店頁（「聽拍子與顯示速度的提示」，採用：示範後才要求輸入）與 Godot 音訊同步文件（同一音訊路徑播放即時音）。沒有試玩上述作品；沒有實際試聽音色。

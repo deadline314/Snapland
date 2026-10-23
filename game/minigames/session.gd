@@ -45,12 +45,14 @@ const HatRescueModelScript = preload("res://game/minigames/hat_rescue_model.gd")
 const HatRescueViewScript = preload("res://game/minigames/hat_rescue_view.gd")
 const MelodyMemoryModelScript = preload("res://game/minigames/melody_memory_model.gd")
 const MelodyMemoryViewScript = preload("res://game/minigames/melody_memory_view.gd")
+const MelodyVoicesScript = preload("res://game/minigames/melody_voices.gd")
 const ShadowTheatreModelScript = preload("res://game/minigames/shadow_theatre_model.gd")
 const ShadowTheatreViewScript = preload("res://game/minigames/shadow_theatre_view.gd")
 const BenchSwapModelScript = preload("res://game/minigames/bench_swap_model.gd")
 const BenchSwapViewScript = preload("res://game/minigames/bench_swap_view.gd")
 const RibbonRhythmModelScript = preload("res://game/minigames/ribbon_rhythm_model.gd")
 const RibbonRhythmViewScript = preload("res://game/minigames/ribbon_rhythm_view.gd")
+const RibbonGrooveScript = preload("res://game/minigames/ribbon_groove.gd")
 const BALLOON_MAILBOXES: Array[Vector2] = [Vector2(520, 305), Vector2(820, 480), Vector2(1080, 320)]
 const BALLOON_WIND_FORECAST_SECONDS := 0.8
 const BALLOON_MAX_SPEED := 260.0
@@ -118,6 +120,8 @@ var crowd_model: RefCounted = CrowdTrafficScript.new()
 var kite_model: RefCounted = KiteFlightModelScript.new()
 var bubble_model: RefCounted = BubblePhotoModelScript.new()
 var sign_model: RefCounted = SignBalanceModelScript.new()
+## Calm seconds after Start so the player can read the ferry deck before the first gust.
+const HAT_LEAD_IN := 1.5
 var hat_model: RefCounted = HatRescueModelScript.new()
 var melody_model: RefCounted = MelodyMemoryModelScript.new()
 var ribbon_model: RefCounted = RibbonRhythmModelScript.new()
@@ -125,6 +129,18 @@ var melody_snapshot: Dictionary = {}
 var _melody_audio_cursor := 0
 var _melody_error_cursor := 0
 var _melody_last_event := ""
+## Game-owned instrument voices; null in headless rule tests (then notes use note_played).
+var _melody_voices: Node
+## Final ensemble: the last phrase replays with harmony and a closing chord before the result.
+const MELODY_FINALE_DELAY := 0.35
+const MELODY_FINALE_TAIL := 1.1
+var melody_finale_pending := false
+var _melody_finale_clock := 0.0
+var _melody_finale_index := 0
+var _melody_finale_next := 0.0
+var _melody_finale_success := false
+var _melody_finale_devil := false
+var _melody_finale_snapshot: Dictionary = {}
 var shadow_model: RefCounted = ShadowTheatreModelScript.new()
 var _shadow_frame_delta := 1.0 / 60.0
 var _shadow_left_held := false
@@ -143,7 +159,8 @@ var _kite_down_held := false
 var _kite_boost_held := false
 var _kite_reel_held := false
 var _crowd_event_cursor := 0
-var _hat_ledger_cursor := 0
+## Bit per hat already turned into score/feedback; paired hats may resolve in any order.
+var _hat_reported_mask := 0
 var _hat_left_held := false
 var _hat_right_held := false
 var _ribbon_snapshot: Dictionary = {}
@@ -151,6 +168,11 @@ var _ribbon_note_cursor := 0
 var _ribbon_score_cursor := 0
 var _ribbon_error_cursor := 0
 var _ribbon_last_event := ""
+## Count-in seconds left before the ribbon model clock starts (music already playing).
+var ribbon_preroll_left := 0.0
+var _ribbon_step_cap := -1.0
+## Game-owned beat-locked backing track; null in headless rule tests.
+var _ribbon_groove: Node
 var _fountain_avatar_renderer: RefCounted
 var _fountain_jump_textures: Array[Texture2D] = []
 var _fountain_idle_texture: Texture2D
@@ -448,6 +470,14 @@ func set_paused(value: bool) -> void:
 		_sync_presentation()
 	if mode == "ribbon_rhythm" and is_instance_valid(presentation):
 		presentation.set_process(not value)
+	if mode == "melody_memory" and is_instance_valid(_melody_voices):
+		_melody_voices.set_paused(value)
+		if not value:
+			_melody_voices.set_volume_linear(_sfx_volume_linear())
+	if mode == "ribbon_rhythm" and is_instance_valid(_ribbon_groove):
+		_ribbon_groove.set_paused(value)
+		if not value:
+			_ribbon_groove.set_volume_linear(_music_volume_linear())
 	if value and mode == "hat_catching":
 		_hat_left_held = false
 		_hat_right_held = false
@@ -470,14 +500,27 @@ func set_paused(value: bool) -> void:
 		_pause_presentation_rendering()
 	if paused and not value:
 		_discard_next_delta = true
+	var leaving_pause := paused and not value
 	if not value:
 		_resume_presentation_rendering()
 	paused = value
+	if leaving_pause:
+		_restore_play_focus.call_deferred()
 	if entering_pause:
 		_sync_presentation()
 	if minigame_hud != null:
 		minigame_hud.set_paused(value)
 	_refresh_hud(true)
+
+## After a pause/lesson the mouse-clicked HUD button may still own focus and would
+## swallow arrows or Space; hand keyboard focus back to the play surface.
+func _restore_play_focus() -> void:
+	if paused or ended or not is_inside_tree():
+		return
+	if is_instance_valid(presentation) and presentation.focus_mode != Control.FOCUS_NONE and presentation.is_visible_in_tree():
+		presentation.grab_focus()
+	else:
+		get_viewport().gui_release_focus()
 
 func set_practice_mode(value: bool) -> void:
 	if practice_mode == value:
@@ -502,6 +545,9 @@ func _retry_from_hud() -> void:
 func _leave_from_hud() -> void:
 	paused = false
 	_cancel_ribbon_finish_gate()
+	if is_instance_valid(_ribbon_groove):
+		_ribbon_groove.stop()
+	_cancel_melody_finale()
 	if mode == "shadow_alignment" and is_instance_valid(presentation):
 		presentation.set_process(false)
 	cancelled.emit()
@@ -518,6 +564,8 @@ func _refresh_hud(force: bool = false) -> void:
 	var time_left := maxf(0.0, round_seconds - elapsed)
 	var time_text := "練習" if mode == "balloon_delivery" and not balloon_started else "%02d:%02d" % [int(time_left / 60.0), int(time_left) % 60]
 	if mode == "melody_memory": time_text = "自由節奏"
+	if mode == "ribbon_rhythm":
+		time_text = "預備 %d" % ceili(ribbon_preroll_left / RibbonRhythmModelScript.BEAT_INTERVAL) if ribbon_preroll_left > 0.0 else "第 %d / 8 拍" % mini(8, int(_ribbon_snapshot.get("gesture_index", 0)) + 1)
 	if mode == "bubble_photo":
 		var photo_state: Dictionary = bubble_model.snapshot()
 		time_text = "已拍滿" if bool(photo_state.finished) else ("顯影中" if str(photo_state.phase) == "exposure" else "本張 %.1fs" % maxf(0.0, BubblePhotoModelScript.ROUND_SECONDS - float(photo_state.round_elapsed)))
@@ -560,7 +608,7 @@ func _progress_text() -> String:
 		"fountain_timing": return "機會 %d / 3　成功 %d" % [fountain_attempts, count]
 		"crowd_traffic": return "隊伍 %d / 6" % count
 		"hat_catching": return "接住 %d / 6" % count
-		"ribbon_rhythm": return "命中 %d / 8　失拍 %d　錯誤 %d" % [devil_progress, int(_ribbon_snapshot.get("missed_count", 0)), mistakes]
+		"ribbon_rhythm": return "命中 %d / 8　漏拍 %d　錯按 %d" % [devil_progress, int(_ribbon_snapshot.get("missed_count", 0)), int(_ribbon_snapshot.get("wrong_press_count", 0))]
 		"flower_pipes": return "工單 %d / 3　轉動 %d 次" % [mini(pipe_model.order_index + 1, 3), move_count]
 		"sign_balance": return "穩住 %d / 7 拍" % count
 		"shadow_alignment":
@@ -576,6 +624,12 @@ func _progress_text() -> String:
 		"melody_memory":
 			var phase_name := str(melody_snapshot.get("phase", "listen"))
 			var phrase := int(melody_snapshot.get("phrase_number", 1))
+			if melody_finale_pending:
+				return "三句完成　終曲合奏"
+			if phase_name == "encore":
+				return "樂句 %d / 3 完成　合奏中" % int(melody_snapshot.get("completed_phrases", 0))
+			if phase_name == "ready":
+				return "樂句 %d / 3　記住 %d 個音" % [phrase, int(melody_snapshot.get("phrase_length", 0))]
 			if phase_name != "active":
 				var heard: Array = melody_snapshot.get("heard_notes", [])
 				return "樂句 %d / 3　聽看 %d / %d" % [phrase, heard.size(), int(melody_snapshot.get("phrase_length", 0))]
@@ -614,7 +668,13 @@ func score_summary() -> Dictionary:
 		for index in pipe_model.orders.size():
 			var state := "已供水" if index < pipe_model.completed_beds else ("供水中" if index == pipe_model.order_index and pipe_model.connected else "未完成")
 			rows.append({"key": "pipe_order_%d" % index, "label": "工單 %d · 目標 %d 次 · %s" % [index + 1, int(pipe_model.orders[index].turn_par), state], "amount": 0, "count": int(pipe_model.order_turns[index]), "progress_only": true})
-	if mistakes > 0 and mode != "balloon_delivery":
+	if mode == "ribbon_rhythm":
+		var ribbon_state: Dictionary = ribbon_model.snapshot()
+		if int(ribbon_state.get("missed_count", 0)) > 0:
+			rows.append({"key": "ribbon_missed", "label": "漏拍（不計分）", "amount": 0, "count": int(ribbon_state.missed_count), "progress_only": true})
+		if int(ribbon_state.get("wrong_press_count", 0)) > 0:
+			rows.append({"key": "ribbon_wrong", "label": "錯按（不計分）", "amount": 0, "count": int(ribbon_state.wrong_press_count), "progress_only": true})
+	if mistakes > 0 and mode not in ["balloon_delivery", "hat_catching", "ribbon_rhythm"]:
 		rows.append({"key": "mistakes", "label": "撞線（不計分）" if mode == "sign_balance" else "失誤（不計分）", "amount": 0, "count": mistakes, "progress_only": true})
 	if rows.is_empty():
 		rows.append({"key": "no_score", "label": _score_label(), "amount": 0, "count": 0})
@@ -628,6 +688,12 @@ func score_summary() -> Dictionary:
 			summary["qualification_text"]="五環全中心、零救援，已達成小惡魔條件。"
 		else:
 			summary["qualification_text"]="普通拍貼：五環全過。小惡魔需五次中心、零救援（本次中心 %d / 5、救援 %d）。"%[kite_model.center_hits,kite_model.rescues_used]
+	if mode == "melody_memory" and ended and not practice_mode:
+		summary["qualification_text"] = MelodyMemoryModelScript.qualification_text(melody_model.snapshot())
+	if mode == "ribbon_rhythm" and ended and not practice_mode:
+		summary["qualification_text"] = RibbonRhythmModelScript.qualification_text(ribbon_model.snapshot())
+	if mode == "hat_catching" and ended and not practice_mode:
+		summary["qualification_text"] = HatRescueModelScript.qualification_text(hat_model.snapshot())
 	if mode == "balloon_delivery" and ended and not practice_mode:
 		if not won:
 			summary["qualification_text"] = "普通拍貼需限時送達三站（本次 %d / 3）；小惡魔需未輔助且零失誤。" % balloon_delivery_index
@@ -661,8 +727,8 @@ func _score_rule_text() -> String:
 		"kite_rings": return "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過得普通拍貼；未輔助、五環全中心且零救援才得小惡魔拍貼。"
 		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。"
 		"crowd_traffic": return "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。"
-		"hat_catching": return "每接住一頂帽子 +100。"
-		"ribbon_rhythm": return "精準 +100、合拍 +60；四個重拍另 +25。六拍一般成功；未輔助、八拍全精準且零錯誤才得惡魔拍貼。"
+		"hat_catching": return HatRescueModelScript.score_rule_text()
+		"ribbon_rhythm": return RibbonRhythmModelScript.score_rule_text()
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
 		"sign_balance": return "每段調整配重並連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
 		"shadow_alignment": return "每輪合格最高 500 分，輪廓越吻合分數越高；三輪至少兩輪合格得普通拍貼，三輪精準且零失誤、未輔助才得小惡魔拍貼。"
@@ -786,7 +852,7 @@ func reset_round() -> void:
 	_bubble_photo_cursor = 0
 	seats.clear()
 	flower_cells.clear()
-	_hat_ledger_cursor = 0
+	_hat_reported_mask = 0
 	_hat_left_held = false
 	_hat_right_held = false
 	_sign_stage_cursor = 0
@@ -808,12 +874,16 @@ func reset_round() -> void:
 			crowd_model.reset(assisted)
 			_crowd_event_cursor = 0
 		"hat_catching":
-			hat_model.reset(assisted, time_phase)
+			hat_model.reset(assisted, time_phase, HAT_LEAD_IN)
 			var initial_hat_state: Dictionary = hat_model.snapshot()
 			p.x = float(initial_hat_state.player_x)
 		"ribbon_rhythm":
 			ribbon_model.reset(assisted, time_phase)
+			ribbon_preroll_left = RibbonGrooveScript.preroll_seconds()
+			_ribbon_step_cap = -1.0
+			_restart_ribbon_groove()
 			_ribbon_snapshot = ribbon_model.snapshot().duplicate(true)
+			_ribbon_snapshot["count_in_left"] = ribbon_preroll_left
 			_ribbon_last_event = str(_ribbon_snapshot.get("last_event", ""))
 			prompt = _ribbon_last_event
 		"flower_pipes":
@@ -844,6 +914,8 @@ func reset_round() -> void:
 			_melody_error_cursor = int(melody_snapshot.get("error_count", 0))
 			_melody_last_event = str(melody_snapshot.get("last_event", ""))
 			prompt = _melody_last_event
+			_cancel_melody_finale()
+			_ensure_melody_voices()
 	if assisted:
 		prompt = "輔助已開：目標會標亮，判定範圍加寬"
 	if mode == "fountain_timing":
@@ -907,6 +979,9 @@ func _process(delta: float) -> void:
 		_refresh_hud()
 		queue_redraw()
 		return
+	if mode == "melody_memory" and melody_finale_pending:
+		_tick_melody_finale(minf(maxf(delta, 0.0), 0.1))
+		return
 	if mode == "ribbon_rhythm" and ribbon_finish_pending:
 		# The model has already produced its immutable result. Keep the Session
 		# alive just long enough for the authored final dance to be seen.
@@ -918,6 +993,18 @@ func _process(delta: float) -> void:
 			ribbon_finish_pending = false
 			_finish(ribbon_finish_success, ribbon_finish_devil)
 		return
+	if mode == "ribbon_rhythm" and ribbon_preroll_left > 0.0:
+		var groove_time := _ribbon_groove_time()
+		var preroll_before := ribbon_preroll_left
+		ribbon_preroll_left = maxf(0.0, RibbonGrooveScript.preroll_seconds() - groove_time) if groove_time >= 0.0 else maxf(0.0, ribbon_preroll_left - maxf(delta, 0.0))
+		_ribbon_snapshot["count_in_left"] = ribbon_preroll_left
+		if ribbon_preroll_left > 0.0:
+			_sync_presentation()
+			_refresh_hud()
+			queue_redraw()
+			return
+		# The count-in ended inside this frame: the rules only receive the remainder.
+		_ribbon_step_cap = maxf(0.0, delta - preroll_before) if groove_time < 0.0 else -1.0
 	if mode == "balloon_delivery" and not balloon_started:
 		feedback_age += delta
 		# The tutorial is learn-by-doing, with a short fallback per lesson. Cap a
@@ -1012,7 +1099,7 @@ func _tick_game(delta: float) -> void:
 		"crowd_traffic": _tick_crowd(delta)
 		"hat_catching": _tick_hats(delta)
 		"ribbon_rhythm":
-			ribbon_model.step(delta)
+			ribbon_model.step(_ribbon_model_delta(delta))
 			_sync_ribbon_model("elapsed")
 		"flower_pipes": _tick_pipe(delta)
 		"sign_balance":
@@ -1265,18 +1352,23 @@ func _tick_hats(delta: float) -> void:
 	mistakes = int(state.get("misses", 0))
 	p.x = float(state.get("player_x", p.x))
 	var ledger: Array = state.get("ledger", [])
-	while _hat_ledger_cursor < mini(HatRescueModelScript.HAT_COUNT, ledger.size()):
-		var entry: Dictionary = ledger[_hat_ledger_cursor]
+	for index in mini(HatRescueModelScript.HAT_COUNT, ledger.size()):
+		if _hat_reported_mask & (1 << index) or not ledger[index] is Dictionary:
+			continue
+		var entry: Dictionary = ledger[index]
 		var status := str(entry.get("status", "waiting"))
 		if status == "waiting":
-			break
+			continue
+		_hat_reported_mask |= 1 << index
 		var points := int(entry.get("points", 0))
 		if points > 0:
-			_award_points("hat_%d" % _hat_ledger_cursor, "第 %d 頂・%s接住" % [_hat_ledger_cursor + 1, str(entry.get("grade", ""))], points)
-			_feedback("第 %d 頂%s　+%d" % [_hat_ledger_cursor + 1, str(entry.get("grade", "")), points], MINT if status == "center" else YELLOW)
+			_award_points("hat_%d" % index, "第 %d 頂 %s・%s接住" % [index + 1, str(entry.get("name", "")), str(entry.get("grade", ""))], points)
+			var bonus := points - (HatRescueModelScript.CENTER_POINTS if status == "center" else HatRescueModelScript.EDGE_POINTS)
+			var bonus_text := "（連續中心 +%d）" % bonus if bonus > 0 else ""
+			_feedback("第 %d 頂%s　+%d%s" % [index + 1, str(entry.get("grade", "")), points, bonus_text], MINT if status == "center" else YELLOW)
 		else:
-			_feedback("第 %d 頂漏接" % (_hat_ledger_cursor + 1), PINK)
-		_hat_ledger_cursor += 1
+			_award_points("hat_miss_%d" % index, "第 %d 頂 %s・漏接" % [index + 1, str(entry.get("name", ""))], 0)
+			_feedback("第 %d 頂漏接" % (index + 1), PINK)
 	_sync_presentation()
 	if bool(state.get("finished", false)):
 		_finish(bool(state.get("success", false)), bool(state.get("devil", false)))
@@ -1285,7 +1377,7 @@ func _tick_melody(delta: float) -> void:
 	melody_model.step(delta)
 	_sync_melody_state()
 	if bool(melody_snapshot.get("ended", false)):
-		_finish(bool(melody_snapshot.get("success", false)), bool(melody_snapshot.get("devil_success", false)) and not practice_mode)
+		_settle_melody()
 
 func _axis_x() -> float:
 	return clampf(Input.get_axis("ui_left", "ui_right") + Input.get_axis("move_left", "move_right"), -1.0, 1.0)
@@ -1604,6 +1696,42 @@ func _on_ribbon_action_released(action: String) -> void:
 	ribbon_model.release_action(action)
 	_sync_ribbon_model("input")
 
+## True when this round plays its own beat-locked music (Main then mutes shared music).
+func owns_music() -> bool:
+	return mode == "ribbon_rhythm" and is_instance_valid(_ribbon_groove)
+
+func _restart_ribbon_groove() -> void:
+	if DisplayServer.get_name() == "headless" or not is_inside_tree():
+		return
+	if not is_instance_valid(_ribbon_groove):
+		_ribbon_groove = RibbonGrooveScript.new()
+		_ribbon_groove.name = "RibbonGroove"
+		add_child(_ribbon_groove)
+	_ribbon_groove.set_volume_linear(_music_volume_linear())
+	_ribbon_groove.play_from(0.0)
+	_ribbon_groove.set_paused(paused)
+
+## Groove playback time, or -1 when no advancing audio clock exists.
+func _ribbon_groove_time() -> float:
+	return _ribbon_groove.audio_time() if is_instance_valid(_ribbon_groove) else -1.0
+
+## Model time follows the music: step to the groove clock, falling back to frame delta.
+func _ribbon_model_delta(delta: float) -> float:
+	var groove_time := _ribbon_groove_time()
+	if groove_time < 0.0:
+		var capped := minf(delta, _ribbon_step_cap) if _ribbon_step_cap >= 0.0 else delta
+		_ribbon_step_cap = -1.0
+		return capped
+	var target := groove_time - RibbonGrooveScript.preroll_seconds()
+	return clampf(target - float(ribbon_model.elapsed), 0.0, RibbonRhythmModelScript.MAX_DELTA)
+
+func _music_volume_linear() -> float:
+	var progress := get_node_or_null("/root/Progress")
+	if progress == null or not progress.get("settings") is Dictionary:
+		return 0.72
+	var settings: Dictionary = progress.settings
+	return clampf(float(settings.get("master_volume", 1.0)), 0.0, 1.0) * clampf(float(settings.get("music_volume", 0.8)), 0.0, 1.0)
+
 func _sync_ribbon_model(_source: String) -> void:
 	var state: Dictionary = ribbon_model.snapshot().duplicate(true)
 	var trail: Array = state.get("ribbon_trail", [])
@@ -1618,8 +1746,10 @@ func _sync_ribbon_model(_source: String) -> void:
 	var notes := int(state.get("note_played_serial", 0))
 	while _ribbon_note_cursor < notes:
 		var cue: Dictionary = RibbonRhythmModelScript.GESTURES[_ribbon_note_cursor]
-		note_played.emit(0 if str(cue.action) == "left" else (1 if str(cue.action) == "right" else 2))
+		if not is_instance_valid(_ribbon_groove):
+			note_played.emit(0 if str(cue.action) == "left" else (1 if str(cue.action) == "right" else 2))
 		_ribbon_note_cursor += 1
+	state["count_in_left"] = ribbon_preroll_left
 	_ribbon_snapshot = state
 	beat = int(state.get("gesture_index", 0))
 	devil_progress = int(state.get("correct_count", 0))
@@ -1787,11 +1917,15 @@ func _sync_melody_state(input_note: int = -1) -> void:
 		_melody_audio_cursor += 1
 		var note := input_note if _melody_audio_cursor == serial and input_note >= 0 else int(melody_snapshot.get("current_cue", -1))
 		if note >= 0 and note < 4:
-			note_played.emit(note)
+			if is_instance_valid(_melody_voices):
+				_melody_voices.play(note, str(melody_snapshot.get("phase", "")) == "encore")
+			else:
+				note_played.emit(note)
 	var previous_score := score
 	var model_score := int(melody_snapshot.get("score", 0))
 	if model_score > score:
-		_record_score_event("melody_notes", "演奏音符得分", model_score - score)
+		var scored_phrase := int(melody_snapshot.get("last_scored_phrase", 0))
+		_record_score_event("melody_phrase_%d" % scored_phrase, "第 %d 句（%d 音）" % [scored_phrase + 1, (MelodyMemoryModelScript.PHRASES[scored_phrase] as Array).size()], model_score - score)
 	score = model_score
 	count = int(melody_snapshot.get("completed_phrases", 0))
 	devil_progress = int(melody_snapshot.get("precise_notes", 0))
@@ -1812,13 +1946,90 @@ func _sync_melody_state(input_note: int = -1) -> void:
 	if score != previous_score:
 		_refresh_hud(true)
 
+func _ensure_melody_voices() -> void:
+	if DisplayServer.get_name() == "headless" or not is_inside_tree():
+		return
+	if not is_instance_valid(_melody_voices):
+		_melody_voices = MelodyVoicesScript.new()
+		_melody_voices.name = "MelodyVoices"
+		add_child(_melody_voices)
+	_melody_voices.stop_all()
+	_melody_voices.set_volume_linear(_sfx_volume_linear())
+	_melody_voices.set_paused(paused)
+
+func _sfx_volume_linear() -> float:
+	var progress := get_node_or_null("/root/Progress")
+	if progress == null or not progress.get("settings") is Dictionary:
+		return 0.9
+	var settings: Dictionary = progress.settings
+	return clampf(float(settings.get("master_volume", 1.0)), 0.0, 1.0) * clampf(float(settings.get("sfx_volume", 0.9)), 0.0, 1.0)
+
+## A completed three-phrase round plays its finale before the result when a stage exists.
+func _settle_melody() -> void:
+	var success := bool(melody_snapshot.get("success", false))
+	var devil := bool(melody_snapshot.get("devil_success", false)) and not practice_mode
+	if not success or not is_instance_valid(presentation):
+		_finish(success, devil)
+		return
+	if melody_finale_pending or ended:
+		return
+	melody_finale_pending = true
+	_melody_finale_success = success
+	_melody_finale_devil = devil
+	_melody_finale_clock = 0.0
+	_melody_finale_index = 0
+	_melody_finale_next = MELODY_FINALE_DELAY
+	_melody_finale_snapshot = melody_snapshot.duplicate(true)
+	_melody_finale_snapshot["phase"] = "finale"
+	_melody_finale_snapshot["heard_notes"] = []
+	_melody_finale_snapshot["rhythm"] = MelodyMemoryModelScript.RHYTHMS[MelodyMemoryModelScript.PHRASE_COUNT - 1]
+	_melody_finale_snapshot["current_cue"] = -1
+	prompt = "三句合奏完成：終曲"
+	_refresh_hud(true)
+
+func _tick_melody_finale(delta: float) -> void:
+	_melody_finale_clock += delta
+	var notes: Array = MelodyMemoryModelScript.PHRASES[MelodyMemoryModelScript.PHRASE_COUNT - 1]
+	var rhythm: Array = MelodyMemoryModelScript.RHYTHMS[MelodyMemoryModelScript.PHRASE_COUNT - 1]
+	while _melody_finale_index < notes.size() and _melody_finale_clock >= _melody_finale_next:
+		var note := int(notes[_melody_finale_index])
+		(_melody_finale_snapshot["heard_notes"] as Array).append(note)
+		_melody_finale_snapshot["current_cue"] = note
+		if is_instance_valid(_melody_voices):
+			_melody_voices.play(note, true)
+		_melody_finale_index += 1
+		if _melody_finale_index < notes.size():
+			_melody_finale_next += float(rhythm[_melody_finale_index])
+		else:
+			_melody_finale_next += 0.43
+			# Closing chord: all three upper voices together.
+			if is_instance_valid(_melody_voices):
+				for chord_note in [0, 1, 2]:
+					_melody_voices.play(chord_note, chord_note == 0)
+	if _melody_finale_index >= notes.size():
+		_melody_finale_snapshot["current_cue"] = -1 if _melody_finale_clock >= _melody_finale_next else -2
+	if is_instance_valid(presentation):
+		presentation.update_frame(_melody_finale_snapshot, time_phase, reduced_motion)
+	_refresh_hud()
+	if _melody_finale_index >= notes.size() and _melody_finale_clock >= _melody_finale_next + MELODY_FINALE_TAIL:
+		melody_finale_pending = false
+		_finish(_melody_finale_success, _melody_finale_devil)
+
+func _cancel_melody_finale() -> void:
+	melody_finale_pending = false
+	_melody_finale_clock = 0.0
+	_melody_finale_index = 0
+	_melody_finale_snapshot = {}
+	if is_instance_valid(_melody_voices):
+		_melody_voices.stop_all()
+
 func _melody_input(note: int) -> void:
-	if mode != "melody_memory" or ended or paused:
+	if mode != "melody_memory" or ended or paused or melody_finale_pending:
 		return
 	melody_model.play_note(note)
 	_sync_melody_state(note)
 	if bool(melody_snapshot.get("ended", false)):
-		_finish(bool(melody_snapshot.get("success", false)), bool(melody_snapshot.get("devil_success", false)) and not practice_mode)
+		_settle_melody()
 		return
 	queue_redraw()
 

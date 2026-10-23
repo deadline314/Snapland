@@ -14,24 +14,38 @@ const PLAYER_MAX_SPEED := 400.0
 const CENTER_WINDOW := 19.0
 const EDGE_WINDOW := 49.0
 const ASSIST_EDGE_WINDOW := 66.0
+const CENTER_POINTS := 120
+const EDGE_POINTS := 70
+const STREAK_STEP := 8
+const STREAK_CAP := 24
+const ORDINARY_CATCHES := 4
 const CATCH_WINDOW := 0.38
 const ASSIST_CATCH_WINDOW := 0.58
 const WIND_STRENGTH := 156.0
-const GUST_DELAY := 0.52
 const GUST_DURATION := 1.22
 const FORECAST_SECONDS := 0.72
 const MAX_FRAME_DELTA := 0.25
 const MAX_STEP := 0.025
-const SPAWN_TIMES: Array[float] = [0.0, 2.8, 5.65, 8.55, 11.4, 14.25]
-const SPAWN_X: Array[float] = [346.0, 918.0, 525.0, 816.0, 294.0, 1001.0]
-const SPAWN_Y: Array[float] = [176.0, 202.0, 166.0, 194.0, 182.0, 170.0]
-const INITIAL_VX: Array[float] = [38.0, -34.0, 22.0, -28.0, 32.0, -20.0]
-const INITIAL_VY: Array[float] = [128.0, 119.0, 132.0, 123.0, 126.0, 130.0]
-const WIND_DIRECTIONS: Array[int] = [1, -1, 1, -1, -1, 1]
+## One shared sea wind: each gust pushes every airborne hat at once. Hats 3–4 and
+## 5–6 leave their owners in the same gust, so two brims are airborne together and
+## the player must plan a route (or choose which one to save).
+const GUST_STARTS: Array[float] = [0.52, 3.32, 6.1, 9.9]
+const GUST_DIRECTIONS: Array[int] = [1, -1, -1, 1]
+const HAT_GUST: Array[int] = [0, 1, 2, 2, 3, 3]
+const SPAWN_TIMES: Array[float] = [0.0, 2.8, 5.6, 6.7, 9.4, 10.65]
+const SPAWN_X: Array[float] = [346.0, 918.0, 520.0, 780.0, 300.0, 620.0]
+const SPAWN_Y: Array[float] = [176.0, 202.0, 170.0, 160.0, 176.0, 160.0]
+const INITIAL_VX: Array[float] = [38.0, -34.0, -20.0, -24.0, 30.0, 24.0]
+const INITIAL_VY: Array[float] = [128.0, 119.0, 118.0, 104.0, 118.0, 100.0]
+## How strongly each brim shape catches the same gust (wide brims drift farthest).
+const HAT_WIND_RESPONSE: Array[float] = [1.25, 0.8, 1.35, 0.95, 0.85, 0.7]
+const WIND_DIRECTIONS: Array[int] = [1, -1, -1, -1, 1, 1]
 const HAT_NAMES: Array[String] = ["草編寬簷", "水手帽", "花邊遮陽帽", "漁夫帽", "港務便帽", "帆布鴨舌帽"]
 const LEDGER_FIELDS: Array[String] = ["status", "grade", "offset", "wind_direction", "points", "contact_time"]
 
 var assisted := false
+## Calm seconds before the fixed chart starts; the catcher can already move.
+var lead_in := 0.0
 var time_phase := "noon"
 var elapsed := 0.0
 var player_x := 640.0
@@ -61,8 +75,9 @@ var _snapshot_revision := 0
 func _init() -> void:
 	reset()
 
-func reset(p_assisted: bool = false, p_time_phase: String = "noon") -> void:
+func reset(p_assisted: bool = false, p_time_phase: String = "noon", p_lead_in: float = 0.0) -> void:
 	assisted = p_assisted
+	lead_in = clampf(p_lead_in, 0.0, 5.0) if is_finite(p_lead_in) else 0.0
 	time_phase = _normalize_phase(p_time_phase)
 	elapsed = 0.0
 	player_x = 640.0
@@ -153,7 +168,8 @@ func _step_slice(dt: float) -> void:
 		if bool(hat["resolved"]):
 			continue
 		if not bool(hat["active"]):
-			if previous_elapsed <= SPAWN_TIMES[index] + 0.000001 and elapsed >= SPAWN_TIMES[index]:
+			var spawn_at := SPAWN_TIMES[index] + lead_in
+			if previous_elapsed <= spawn_at + 0.000001 and elapsed >= spawn_at:
 				hat["active"] = true
 			else:
 				continue
@@ -194,15 +210,15 @@ func _resolve_contact(index: int, contact_x: float, contact_player_x: float, con
 			center_catches += 1
 			combo += 1
 			best_combo = maxi(best_combo, combo)
-			points = 120 + mini(24, maxi(0, combo - 1) * 8)
+			points = CENTER_POINTS + mini(STREAK_CAP, maxi(0, combo - 1) * STREAK_STEP)
 		else:
 			status = "edge"
 			grade = "擦帽"
 			edge_catches += 1
 			combo = 0
-			points = 70
+			points = EDGE_POINTS
 		score += points
-		last_event = "中心接住 +%d" % points if status == "center" else "擦帽接住 +70"
+		last_event = "中心接住 +%d" % points if status == "center" else "擦帽接住 +%d" % EDGE_POINTS
 	else:
 		misses += 1
 		combo = 0
@@ -231,10 +247,28 @@ func _set_ledger(index: int, status: String, grade: String, offset: float, point
 
 func _finish() -> void:
 	finished = true
-	success = caught >= 4
+	success = caught >= ORDINARY_CATCHES
 	devil = success and not assisted and caught == HAT_COUNT and misses == 0 and center_catches == HAT_COUNT
 	last_event = "六頂全救回，完美救援" if devil else ("救回 %d 頂，完成救援" % caught if success else "只救回 %d 頂，再試一次" % caught)
 	_refresh_snapshot()
+
+## Player-facing rule text, built from the same constants the round scores with.
+static func score_rule_text() -> String:
+	return "中心接住 +%d，從第二頂連續中心起每頂再加 %d（最多 +%d）；擦帽接住 +%d、漏接 0 分並中斷連續。接住至少 %d 頂得普通拍貼；未開輔助、六頂全部中心且零漏接才得小惡魔拍貼。" % [CENTER_POINTS, STREAK_STEP, STREAK_CAP, EDGE_POINTS, ORDINARY_CATCHES]
+
+## Explains this finished formal round's ordinary/devil eligibility with its real counts.
+static func qualification_text(state: Dictionary) -> String:
+	var caught_count := int(state.get("caught", 0))
+	var centers := int(state.get("center_catches", 0))
+	var missed := int(state.get("misses", 0))
+	if not bool(state.get("success", false)):
+		var reason := "時間到" if bool(state.get("timed_out", false)) else "救回 %d / 6" % caught_count
+		return "普通拍貼需接住至少 %d 頂（本次%s）；小惡魔需未輔助、六頂全中心且零漏接。" % [ORDINARY_CATCHES, reason]
+	if bool(state.get("assisted", false)):
+		return "救回 %d 頂，取得普通拍貼；輔助回合不取得小惡魔拍貼。" % caught_count
+	if bool(state.get("devil", false)):
+		return "六頂全部中心接住、零漏接，已達成小惡魔條件。"
+	return "救回 %d 頂，取得普通拍貼。小惡魔需六頂全中心、零漏接（本次中心 %d / 6、漏接 %d）。" % [caught_count, centers, missed]
 
 func _resolved_count() -> int:
 	var count := 0
@@ -243,22 +277,33 @@ func _resolved_count() -> int:
 			count += 1
 	return count
 
-func _gust_force(index: int, at_time: float) -> float:
-	var gust_start := SPAWN_TIMES[index] + GUST_DELAY
-	var local_time := at_time - gust_start
-	if local_time < 0.0 or local_time > GUST_DURATION:
+## Signed shared sea-wind acceleration at a moment (zero between gusts).
+func wind_at(at_time: float) -> float:
+	var gust := _gust_at(at_time)
+	if gust < 0:
 		return 0.0
+	var local_time := at_time - lead_in - GUST_STARTS[gust]
 	var rise := smoothstep(0.0, 0.24, local_time)
 	var fall := 1.0 - smoothstep(GUST_DURATION - 0.3, GUST_DURATION, local_time)
 	var scale := 0.68 if assisted else 1.0
-	return float(WIND_DIRECTIONS[index]) * WIND_STRENGTH * rise * fall * scale
+	return float(GUST_DIRECTIONS[gust]) * WIND_STRENGTH * rise * fall * scale
+
+func _gust_at(at_time: float) -> int:
+	for gust in GUST_STARTS.size():
+		var local_time := at_time - lead_in - GUST_STARTS[gust]
+		if local_time >= 0.0 and local_time <= GUST_DURATION:
+			return gust
+	return -1
+
+func _gust_force(index: int, at_time: float) -> float:
+	return wind_at(at_time) * HAT_WIND_RESPONSE[index]
 
 func _refresh_snapshot() -> void:
 	if _snapshot.is_empty():
-		_snapshot = {"revision": 0, "elapsed": 0.0, "time_left": ROUND_SECONDS, "time_phase": "noon", "player_x": player_x, "player_velocity": 0.0, "catch_window": 0.0, "catch_pose": 0.0, "catch_y": CATCH_Y, "caught": 0, "misses": 0, "center_catches": 0, "edge_catches": 0, "combo": 0, "best_combo": 0, "score": 0, "assisted": false, "finished": false, "success": false, "devil": false, "timed_out": false, "last_event": "", "wind_direction": 0, "wind_strength": 0.0, "forecast_direction": 0, "forecast_seconds": 0.0, "forecast_visible": false, "wind_hat_index": -1, "next_hat_index": 0, "next_spawn_x": SPAWN_X[0], "next_spawn_time": SPAWN_TIMES[0], "hats": [], "ledger": []}
+		_snapshot = {"revision": 0, "elapsed": 0.0, "time_left": ROUND_SECONDS, "time_phase": "noon", "player_x": player_x, "player_velocity": 0.0, "catch_window": 0.0, "catch_pose": 0.0, "catch_y": CATCH_Y, "caught": 0, "misses": 0, "center_catches": 0, "edge_catches": 0, "combo": 0, "best_combo": 0, "score": 0, "assisted": false, "finished": false, "success": false, "devil": false, "timed_out": false, "last_event": "", "wind_direction": 0, "wind_strength": 0.0, "forecast_direction": 0, "forecast_seconds": 0.0, "forecast_visible": false, "wind_hat_index": -1, "next_hat_index": 0, "next_spawn_x": SPAWN_X[0], "next_spawn_time": SPAWN_TIMES[0], "airborne_count": 0, "gust_hat_count": 0, "lead_in_left": 0.0, "hats": [], "ledger": []}
 	if _snapshot["hats"].is_empty():
 		for index in HAT_COUNT:
-			_snapshot["hats"].append({"index": index, "name": HAT_NAMES[index], "active": false, "resolved": false, "caught": false, "x": SPAWN_X[index], "y": SPAWN_Y[index], "vx": INITIAL_VX[index], "vy": INITIAL_VY[index], "rotation": 0.0, "midpoint_x": SPAWN_X[index], "midpoint_y": SPAWN_Y[index], "landing_x": SPAWN_X[index], "eta": 0.0, "spawn_time": SPAWN_TIMES[index], "wind_direction": WIND_DIRECTIONS[index]})
+			_snapshot["hats"].append({"index": index, "name": HAT_NAMES[index], "active": false, "resolved": false, "caught": false, "x": SPAWN_X[index], "y": SPAWN_Y[index], "vx": INITIAL_VX[index], "vy": INITIAL_VY[index], "rotation": 0.0, "midpoint_x": SPAWN_X[index], "midpoint_y": SPAWN_Y[index], "landing_x": SPAWN_X[index], "eta": 0.0, "spawn_time": SPAWN_TIMES[index], "wind_direction": WIND_DIRECTIONS[index], "wind_response": HAT_WIND_RESPONSE[index], "airborne_rank": 0})
 			_snapshot["ledger"].append({"index": index, "name": HAT_NAMES[index], "status": "waiting", "grade": "", "offset": 0.0, "wind_direction": WIND_DIRECTIONS[index], "points": 0, "contact_time": 0.0})
 	_snapshot["revision"] = _snapshot_revision
 	_snapshot["elapsed"] = elapsed
@@ -287,30 +332,35 @@ func _refresh_snapshot() -> void:
 	var forecast_seconds := 0.0
 	var forecast_visible := false
 	var wind_hat_index := -1
-	for index in HAT_COUNT:
-		if bool(_hat_states[index]["resolved"]):
-			continue
-		var gust_start := SPAWN_TIMES[index] + GUST_DELAY
-		var until_gust := gust_start - elapsed
-		var local_time := elapsed - gust_start
-		if local_time >= 0.0 and local_time <= GUST_DURATION:
-			wind_direction = WIND_DIRECTIONS[index]
-			wind_strength = _gust_force(index, elapsed)
-			forecast_direction = WIND_DIRECTIONS[index]
-			wind_hat_index = index
-			break
-		if until_gust >= 0.0 and until_gust <= FORECAST_SECONDS:
-			forecast_direction = WIND_DIRECTIONS[index]
-			forecast_seconds = until_gust
-			forecast_visible = true
-			wind_hat_index = index
-			break
+	var gust_hat_count := 0
+	var current_gust := _gust_at(elapsed)
+	if current_gust >= 0:
+		wind_direction = GUST_DIRECTIONS[current_gust]
+		wind_strength = wind_at(elapsed)
+		forecast_direction = wind_direction
+	else:
+		for gust in GUST_STARTS.size():
+			var until_gust := GUST_STARTS[gust] + lead_in - elapsed
+			if until_gust >= 0.0 and until_gust <= FORECAST_SECONDS:
+				current_gust = gust
+				forecast_direction = GUST_DIRECTIONS[gust]
+				forecast_seconds = until_gust
+				forecast_visible = true
+				break
+	if current_gust >= 0:
+		for index in HAT_COUNT:
+			if HAT_GUST[index] != current_gust:
+				continue
+			gust_hat_count += 1
+			if wind_hat_index < 0 and not bool(_hat_states[index]["resolved"]):
+				wind_hat_index = index
 	_snapshot["wind_direction"] = wind_direction
 	_snapshot["wind_strength"] = wind_strength
 	_snapshot["forecast_direction"] = forecast_direction
 	_snapshot["forecast_seconds"] = forecast_seconds
 	_snapshot["forecast_visible"] = forecast_visible
 	_snapshot["wind_hat_index"] = wind_hat_index
+	_snapshot["gust_hat_count"] = gust_hat_count
 	_snapshot["time_phase"] = time_phase
 	var next_hat_index := -1
 	for index in HAT_COUNT:
@@ -319,7 +369,8 @@ func _refresh_snapshot() -> void:
 			break
 	_snapshot["next_hat_index"] = next_hat_index
 	_snapshot["next_spawn_x"] = SPAWN_X[next_hat_index] if next_hat_index >= 0 else -1.0
-	_snapshot["next_spawn_time"] = SPAWN_TIMES[next_hat_index] if next_hat_index >= 0 else -1.0
+	_snapshot["next_spawn_time"] = SPAWN_TIMES[next_hat_index] + lead_in if next_hat_index >= 0 else -1.0
+	_snapshot["lead_in_left"] = maxf(0.0, lead_in - elapsed)
 	for index in HAT_COUNT:
 		var hat: Dictionary = _hat_states[index]
 		var view: Dictionary = _snapshot["hats"][index]
@@ -347,6 +398,23 @@ func _refresh_snapshot() -> void:
 		var ledger_view: Dictionary = _snapshot["ledger"][index]
 		for key in LEDGER_FIELDS:
 			ledger_view[key] = _ledger[index][key]
+	# Rank airborne hats by time to the hand line so the view can number the route.
+	var airborne := 0
+	for index in HAT_COUNT:
+		var view: Dictionary = _snapshot["hats"][index]
+		if not bool(view["active"]) or bool(view["resolved"]):
+			view["airborne_rank"] = 0
+			continue
+		airborne += 1
+		var rank := 1
+		for other in HAT_COUNT:
+			var other_view: Dictionary = _snapshot["hats"][other]
+			if other == index or not bool(other_view["active"]) or bool(other_view["resolved"]):
+				continue
+			if float(other_view["eta"]) < float(view["eta"]) or (is_equal_approx(float(other_view["eta"]), float(view["eta"])) and other < index):
+				rank += 1
+		view["airborne_rank"] = rank
+	_snapshot["airborne_count"] = airborne
 
 func _time_to_contact(y: float, velocity_y: float) -> float:
 	var discriminant := velocity_y * velocity_y + 2.0 * 218.0 * maxf(0.0, CATCH_Y - y)

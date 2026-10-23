@@ -91,6 +91,9 @@ func _launch_station(assist: bool, practice: bool) -> bool:
 	while main.modal_kind != "game_info" and Time.get_ticks_msec() < deadline: await get_tree().process_frame
 	if main.modal_kind != "game_info": await _fail("E did not open the real Ribbon station menu"); return false
 	if assist: progress.settings["assist"] = true
+	if practice and _find(main.overlay, "練習操作") == null:
+		# Practice lives behind the station's optional-modes disclosure.
+		if not await _activate_button("玩法與選項", "open optional practice modes"): return false
 	if not await _activate_button("練習操作" if practice else "開始遊玩", "launch game-006 from station menu"): return false
 	deadline = _wall_deadline(3.0)
 	while main.session == null and Time.get_ticks_msec() < deadline: await get_tree().process_frame
@@ -325,7 +328,7 @@ func _find(node: Node, needle: String) -> Button:
 ## Treat every budget as game-time seconds. Slow-motion practice gets a
 ## proportionally longer wall budget, bounded by a one-hour safety ceiling.
 func _wall_deadline(game_seconds: float) -> int:
-	var wall_ms := mini(3600000, int(ceil(game_seconds * 1000.0 / maxf(Engine.time_scale, 0.05))))
+	var wall_ms := mini(3600000, int(ceil(game_seconds * 1000.0 * _fixed_clock_slack() / maxf(Engine.time_scale, 0.05))))
 	return Time.get_ticks_msec() + wall_ms
 
 func _private_progress() -> Dictionary:
@@ -340,3 +343,8 @@ func _fail(message: String) -> void:
 	Engine.time_scale = 1.0
 	await get_tree().create_timer(0.15).timeout
 	get_tree().quit(1)
+
+## Hang guards only: a fixed-FPS (or Movie Maker) run on a loaded host renders far
+## slower than real time, so wall budgets stretch there; gameplay windows do not.
+func _fixed_clock_slack() -> float:
+	return 40.0 if not Engine.get_write_movie_path().is_empty() or OS.get_cmdline_args().has("--fixed-fps") else 1.0

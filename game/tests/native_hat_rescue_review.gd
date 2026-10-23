@@ -456,6 +456,13 @@ func _capture_formal_catch_frame(session_id: int) -> bool:
 		print("HAT_CATCH_SEQUENCE_PASS movie_frame=%d elapsed=%.3f indices=0..11" % [movie_frame, model_elapsed])
 	return true
 
+## Hang guards only: a fixed-FPS (or Movie Maker) run on a loaded host renders far slower
+## than real time, so wall-clock limits are stretched there (unchanged otherwise).
+func _wall_deadline_ms(simulated_milliseconds: int) -> int:
+	var fixed_clock := not Engine.get_write_movie_path().is_empty() or OS.get_cmdline_args().has("--fixed-fps")
+	var slack := 40.0 if fixed_clock else 1.0
+	return Time.get_ticks_msec() + ceili(float(simulated_milliseconds) * slack / maxf(Engine.time_scale, 0.01))
+
 func _hat_viewport_point(session: Control, design_point: Vector2) -> Vector2:
 	var canvas_point: Vector2 = session.presentation.get_global_transform_with_canvas() * design_point
 	return get_viewport().get_final_transform() * canvas_point
