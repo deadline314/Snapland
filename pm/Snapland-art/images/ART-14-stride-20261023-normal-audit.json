@@ -1,0 +1,98 @@
+{
+  "cases": [
+    {
+      "distance": 1.1343789100647,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "heading": "front",
+      "phase_error": 0.000000000000000888178419700125
+    },
+    {
+      "distance": 1.13437807559967,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "heading": "front_right",
+      "phase_error": 0.0000000516851174081623
+    },
+    {
+      "distance": 1.13437449932098,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "heading": "right",
+      "phase_error": 0.00000000000000166533453693773
+    },
+    {
+      "distance": 1.13437807559967,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "heading": "back_right",
+      "phase_error": 0.0000000525643256699126
+    },
+    {
+      "distance": 1.1343789100647,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "heading": "back",
+      "phase_error": 0.000000000000000888178419700125
+    },
+    {
+      "distance": 1.13437807559967,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "heading": "back_left",
+      "phase_error": 0.0000000493518450828123
+    },
+    {
+      "distance": 1.13437449932098,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "heading": "left",
+      "phase_error": 0.00000000000000122124532708767
+    },
+    {
+      "distance": 1.13437807559967,
+      "hair": "windswept",
+      "hat": "hat-none",
+      "heading": "front_left",
+      "phase_error": 0.0000000467616461108378
+    },
+    {
+      "distance": 1.13437449932098,
+      "hair": "bob",
+      "hat": "hat-sailor",
+      "heading": "right",
+      "phase_error": 0.00000000000000166533453693773
+    },
+    {
+      "distance": 1.13437449932098,
+      "hair": "bob",
+      "hat": "hat-sailor",
+      "heading": "left",
+      "phase_error": 0.00000000000000122124532708767
+    },
+    {
+      "distance": 1.13437449932098,
+      "hair": "curly",
+      "hat": "hat-sailor",
+      "heading": "right",
+      "phase_error": 0.00000000000000166533453693773
+    },
+    {
+      "distance": 1.13437449932098,
+      "hair": "curly",
+      "hat": "hat-sailor",
+      "heading": "left",
+      "phase_error": 0.00000000000000122124532708767
+    },
+    {
+      "distance": 1.1343789100647,
+      "hair": "curly",
+      "hat": "hat-sailor",
+      "heading": "front",
+      "phase_error": 0.000000000000000888178419700125
+    }
+  ],
+  "result": "PASS_NATIVE_ISLAND_INPUT",
+  "scope": "Real island key events, distance-driven gait, stopped hold, reversal and blocked/resumed input; appearance and open-ground placement are explicit fixtures. Pixel/root stability is independently checked by fixed-canvas native exports.",
+  "time_scale": 1.0
+}
