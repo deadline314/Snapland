@@ -2,11 +2,12 @@
 from __future__ import annotations
 
 import ast
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 import io
 import os
 from pathlib import Path
 import inspect
+import re
 import subprocess
 import unittest
 from unittest import mock
@@ -99,6 +100,65 @@ class RuntimeResultContractTests(unittest.TestCase):
             self.assertEqual(main(), 0)
         self.assertEqual(len(observed), len(labels), "every configured runtime suite was dispatched")
         self.assertEqual(len({path.parent for path in observed}), len(labels))
+
+    def run_with_fake_engine(self, argv: list[str], failing: set[str]) -> tuple[int, list[tuple[str, float]], str]:
+        """Drive the real runner loop; returns exit code, dispatched (label, timeout) and stderr."""
+        dispatched: list[tuple[str, float]] = []
+        tree = ast.parse(inspect.getsource(main))
+        checks = next(node.value for node in ast.walk(tree) if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "checks" for target in node.targets))
+        # Each suite command carries one unique key: its res:// entry, the smoke flag or the import flag.
+        keys = {}
+        for row in checks.elts:
+            label = ast.literal_eval(row.elts[0])
+            found = re.findall(r"res://[^'\"]+|--smoke-test|--import", ast.unparse(row.elts[1]))
+            keys[found[0]] = label
+
+        def fake_engine(_root, command, *, env, timeout):
+            label = next(keys[part] for part in command if part in keys)
+            dispatched.append((label, timeout))
+            stdout = "" if label in failing else (PASS_MARKERS.get(label, "import complete") + "\n")
+            return subprocess.CompletedProcess(command, 0, stdout, "")
+
+        errors = io.StringIO()
+        with mock.patch.dict(os.environ, {"GODOT_BIN": "fixture-godot"}), \
+             mock.patch("tools.run_game_tests.subprocess.run", return_value=self.result("4.7.2.stable.official.fixture")), \
+             mock.patch("tools.run_game_tests.run_validated_godot", side_effect=fake_engine), \
+             redirect_stdout(io.StringIO()), redirect_stderr(errors):
+            try:
+                code = main(argv)
+            except SystemExit as exit_error:
+                code = int(exit_error.code or 0)
+        return code, dispatched, errors.getvalue()
+
+    def test_default_run_stops_at_first_failure(self) -> None:
+        code, dispatched, _ = self.run_with_fake_engine([], {"core runtime tests", "audio runtime tests"})
+        self.assertEqual(code, 1)
+        self.assertEqual(dispatched[-1][0], "core runtime tests", "CI behaviour is unchanged: the first failure ends the run")
+
+    def test_keep_going_reports_every_failure(self) -> None:
+        code, dispatched, errors = self.run_with_fake_engine(["--keep-going"], {"core runtime tests", "audio runtime tests"})
+        self.assertEqual(code, 1)
+        self.assertEqual(len(dispatched), len(PASS_MARKERS) + 1, "every suite still runs after a failure")
+        self.assertIn("2 of", errors)
+        self.assertIn("core runtime tests", errors)
+        self.assertIn("audio runtime tests", errors)
+
+    def test_only_selects_matching_suites_after_import(self) -> None:
+        code, dispatched, _ = self.run_with_fake_engine(["--only", "fountain"], set())
+        self.assertEqual(code, 0)
+        self.assertEqual([label for label, _ in dispatched], ["clean project import", "fountain jump view tests", "fountain timing tests"])
+        code, dispatched, errors = self.run_with_fake_engine(["--only", "no-such-suite"], set())
+        self.assertEqual(code, 1)
+        self.assertIn("matched no runtime suite", errors)
+
+    def test_timeout_scale_only_lengthens_limits(self) -> None:
+        code, dispatched, _ = self.run_with_fake_engine(["--only", "avatar renderer", "--timeout-scale", "2"], set())
+        self.assertEqual(code, 0)
+        self.assertEqual(dict(dispatched)["avatar renderer tests"], 480)
+        self.assertEqual(dict(dispatched)["clean project import"], 180)
+        code, dispatched, _ = self.run_with_fake_engine(["--timeout-scale", "0.5"], set())
+        self.assertEqual(code, 2, "argparse rejects a shorter limit")
+        self.assertEqual(dispatched, [])
 
     def test_newly_registered_contracts_require_real_completion(self) -> None:
         cases = {

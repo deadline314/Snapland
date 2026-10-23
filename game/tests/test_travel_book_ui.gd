@@ -181,7 +181,7 @@ func _test_album() -> void:
 		_check(grid!=null and grid.get_child_count()==12,"devil album page uses the twelve existing devil photo IDs")
 		var devil_detail := _main.overlay.find_child("AlbumPhotoDetails",true,false) as Label
 		_check(devil_detail!=null and devil_detail.text.contains("小惡魔拍貼"),"changing to the devil category clears the previous ordinary-photo detail")
-		_check(_has_label(grid,"零碰撞"),"locked devil print explains its real special condition")
+		_check(_has_label(grid,_first_devil_hint()),"locked devil print explains its real special condition")
 		var next := _main.overlay.find_child("AlbumNextPage",true,false) as Button
 		if next!=null:
 			await _activate(next)
@@ -343,6 +343,13 @@ func _find_named_buttons(node: Node, prefix: String) -> Array[Button]:
 	for child in node.get_children():
 		result.append_array(_find_named_buttons(child,prefix))
 	return result
+
+## Reads the authored condition so the check follows data edits instead of a stale copy.
+func _first_devil_hint() -> String:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json"))
+	if not (parsed is Array) or parsed.is_empty() or not (parsed[0] is Dictionary): return "<missing welcome game data>"
+	var hint := str(parsed[0].get("devil_hint",""))
+	return hint if not hint.is_empty() else "<missing devil hint>"
 
 func _has_label(node: Node, value: String) -> bool:
 	if node==null: return false

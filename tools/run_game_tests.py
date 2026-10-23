@@ -1,6 +1,7 @@
 """Run project startup and GDScript runtime tests in isolated user data."""
 from __future__ import annotations
 
+import argparse
 import os
 from pathlib import Path
 import re
@@ -140,7 +141,23 @@ def result_error(label: str, result: subprocess.CompletedProcess[str]) -> str | 
     return None
 
 
-def main() -> int:
+def parse_options(argv: list[str]) -> argparse.Namespace:
+    """CI runs with no options; flags only narrow or slow down local diagnosis."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--only", action="append", default=[], metavar="TEXT",
+                        help="run only suites whose label contains TEXT (repeatable); the clean import still runs first")
+    parser.add_argument("--keep-going", action="store_true",
+                        help="run every selected suite and report all failures instead of stopping at the first")
+    parser.add_argument("--timeout-scale", type=float, default=1.0, metavar="FACTOR",
+                        help="multiply per-suite limits on slower local machines (>= 1; CI keeps 1)")
+    options = parser.parse_args(argv)
+    if not options.timeout_scale >= 1.0:
+        parser.error("--timeout-scale cannot shorten the configured limits")
+    return options
+
+
+def main(argv: list[str] | None = None) -> int:
+    options = parse_options(list(argv or []))
     configured = os.environ.get("GODOT_BIN")
     executable = configured or shutil.which("godot") or shutil.which("godot4")
     if not executable:
@@ -254,13 +271,20 @@ def main() -> int:
         missing_markers = [label for label, _ in checks if label != "clean project import" and label not in PASS_MARKERS]
         if missing_markers:
             return fail(f"Runtime checks have no configured completion marker: {missing_markers!r}.")
+        if options.only:
+            selected = [(label, command) for label, command in checks
+                        if label == "clean project import" or any(text in label for text in options.only)]
+            if len(selected) == 1:
+                return fail(f"--only {options.only!r} matched no runtime suite.")
+            checks = selected
+        failures: list[str] = []
         for suite_index, (label, command) in enumerate(checks):
             # Photos, decoder proofs and caches live beside the JSON profile.
             # Distinct filenames in one parent still let suites affect each other.
             suite_directory = Path(temporary) / f"suite-{suite_index}"
             suite_directory.mkdir()
             env["SNAPLAND_SAVE_PATH"] = str(suite_directory / "progress.json")
-            timeout = 240 if label == "avatar renderer tests" else 90
+            timeout = (240 if label == "avatar renderer tests" else 90) * options.timeout_scale
             started = time.monotonic()
             print(f"RUN: {label} ({suite_index + 1}/{len(checks)}, limit {timeout}s)", flush=True)
             try:
@@ -269,15 +293,22 @@ def main() -> int:
                 def decoded(value: str | bytes | None) -> str:
                     return value.decode("utf-8", errors="replace") if isinstance(value, bytes) else (value or "")
                 output = decoded(error.stdout) + "\n" + decoded(error.stderr)
-                return fail(f"{label} timed out after {timeout} seconds:\n{output.strip()[-6000:]}")
+                message = f"{label} timed out after {timeout:g} seconds:\n{output.strip()[-6000:]}"
             except (ValueError, OSError, subprocess.SubprocessError) as error:
-                return fail(f"{label} could not run: {error}")
-            error = result_error(label, result)
-            if error:
-                return fail(error)
+                message = f"{label} could not run: {error}"
+            else:
+                message = result_error(label, result)
+            if message:
+                if label == "clean project import" or not options.keep_going:
+                    return fail(message)
+                fail(message)
+                failures.append(label)
+                continue
             print(f"PASS: {label} ({time.monotonic() - started:.2f}s)", flush=True)
+    if failures:
+        return fail(f"{len(failures)} of {len(checks)} runtime checks failed: {failures!r}")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))
