@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode cull_disabled;
+render_mode cull_back;
 varying vec3 world_position;
 
 void vertex() {
@@ -13,8 +13,11 @@ void fragment() {
 	float blade_seed = fract(sin(dot(blade_grid, vec2(4.13, 71.7))) * 24634.6);
 	float blade = step(0.94, blade_seed) * step(0.32, fract(world_position.z * 0.42 + blade_seed));
 	float paper_speckle = fract(sin(dot(floor(world_position.xz * 7.0), vec2(18.1, 3.7))) * 19817.4);
-	vec3 meadow = mix(vec3(0.22, 0.42, 0.28), vec3(0.27, 0.47, 0.30), patch);
-	meadow += vec3((paper_speckle - 0.5) * 0.026 + blade * 0.035);
+	// The lawn now receives the key light, so its albedo is about half of the
+	// former ambient-only value: sunlit grass keeps the authored meadow tone and
+	// cast shadows read as shadows instead of disappearing on grass.
+	vec3 meadow = mix(vec3(0.11, 0.21, 0.14), vec3(0.135, 0.235, 0.15), patch);
+	meadow += vec3((paper_speckle - 0.5) * 0.013 + blade * 0.018);
 	ALBEDO = meadow;
 	ROUGHNESS = 0.97;
 }

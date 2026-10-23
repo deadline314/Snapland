@@ -27,3 +27,16 @@ Research performed on 2026-10-12 before implementation. The sources below were o
 ## Limits and validation
 
 The sprite/leaf atlas is a 2D card with artwork that includes painted shading. The result can be phase-tinted and receive the key light as a shaded Sprite3D, but its painted highlight direction cannot be physically rotated with the 3D sun; the asset has no normal map. Realtime alpha-card shadows would be view-dependent and would conflict with its baked shading, so those are intentionally not claimed as physically exact. Visual appearance still requires native GPU capture; headless checks only verify API wiring, profile selection, and safe ranges.
+
+
+## 2026-10-23 Measured light/shadow agreement (ART-13)
+
+A native review (`game/tests/native_light_occlusion_review.tscn -- --lighting`) now measures each caster's shadow in the real Main scene for all four phases instead of judging screenshots only. For one caster at a time it silences every other shadow caster, renders OFF/ON/OFF frames (only pixels that are identical in both OFF frames count, so animated water/flags drop out), keeps the shadow region connected to the caster's base, and compares its centroid direction with the projected key-light (or lamp) direction. Casters: the hero and three NPC actor proxies, a tree, a lamp post, a planter, a shrub and a kiosk.
+
+Defects it found and the fixes:
+
+- **The lawn ignored the sun.** The island lawn fan was wound so its top was a back face; with `cull_disabled` Godot flipped the normal downward. Grass therefore received no key light and every cast shadow vanished on lawns (a tree's trunk shadow appeared to start ~55px from its base where the paving began). The fan now runs centre → current rim → next rim (front face up) with back-face culling, and the lawn albedo was halved so the sunlit meadow keeps its authored tone. `test_daylight_lighting` checks every lawn triangle faces up and rejects the old order as a counter-example.
+- **Painted lamp posts, planters and shrubs cast no shadow** while trees and actors did. Each now owns hidden `SHADOWS_ONLY` volumes sized from its painted silhouette (`SPRITE_SHADOW_VOLUMES` in `park_world.gd`): pole/lantern/arm/bed, pot/foliage, dome. Grounded parts are checked never to hover above the ground; none adds collision.
+- **Dawn lamps were almost invisible** (weakest ground pool +1.5 luma at 0.18 energy). Dawn lamp energy is 0.32: visible but well below dusk 0.48 / night 0.82. Noon lamps stay off.
+
+Accepted limits: only the two lamps nearest the player cast lamp shadows (bounded shadow atlas); an actor beyond 70% of such a lamp's range is not expected to show a lamp shadow. Painted highlights on billboards are fixed art and do not rotate with the sun. All evidence is Godot 4.7.2 Compatibility on llvmpipe (software GL), not Forward+, Windows hardware or a human playtest.

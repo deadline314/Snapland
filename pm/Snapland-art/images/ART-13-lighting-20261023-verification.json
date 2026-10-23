@@ -1,0 +1,1238 @@
+{
+ "scope": "Godot 4.7.2 Compatibility on llvmpipe software GL under Xvfb; scripted key input; not GPU hardware, Windows or a human playtest",
+ "renderer": "llvmpipe (LLVM 20.1.2, 256 bits) / gl_compatibility",
+ "lighting": [
+  {
+   "alignment_cos": 0.999989986419678,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    458.682586669922,
+    572.891235351562
+   ],
+   "candidate_samples": 518,
+   "caster": "actor-ticket",
+   "expected_dir": [
+    0.957359492778778,
+    0.288899272680283
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.335530877113342,
+   "observed_dir": [
+    0.958642423152924,
+    0.284613132476807
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 416,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999989867210388,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    507.916717529297,
+    350.033782958984
+   ],
+   "candidate_samples": 540,
+   "caster": "actor-imp",
+   "expected_dir": [
+    0.957359790802002,
+    0.288898378610611
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.0898735672235489,
+   "observed_dir": [
+    0.958650946617126,
+    0.284584522247314
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 540,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999988257884979,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    732.696044921875,
+    429.912048339844
+   ],
+   "candidate_samples": 612,
+   "caster": "actor-announcer",
+   "expected_dir": [
+    0.957359433174133,
+    0.288899540901184
+   ],
+   "height_px": 43.8243713378906,
+   "nearest_to_base_px": 0.316424041986465,
+   "observed_dir": [
+    0.958752274513245,
+    0.284243166446686
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 498,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999989092350006,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    640.0,
+    386.886474609375
+   ],
+   "candidate_samples": 548,
+   "caster": "actor-hero",
+   "expected_dir": [
+    0.957359790802002,
+    0.288898080587387
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.113525390625,
+   "observed_dir": [
+    0.958698213100433,
+    0.284425348043442
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 548,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999578833580017,
+   "attach_limit_px": 24.249462890625,
+   "base_px": [
+    144.795837402344,
+    401.15771484375
+   ],
+   "candidate_samples": 1317,
+   "caster": "tree",
+   "expected_dir": [
+    0.957359671592712,
+    0.288898646831512
+   ],
+   "height_px": 121.247314453125,
+   "nearest_to_base_px": 0.811314463615417,
+   "observed_dir": [
+    0.965340137481689,
+    0.260995119810104
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 1317,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.998870551586151,
+   "attach_limit_px": 12.1247314453125,
+   "base_px": [
+    144.795837402344,
+    401.15771484375
+   ],
+   "candidate_samples": 350,
+   "caster": "tree-trunk",
+   "expected_dir": [
+    0.957359671592712,
+    0.288898646831512
+   ],
+   "height_px": 60.6236572265625,
+   "nearest_to_base_px": 1.15879309177399,
+   "observed_dir": [
+    0.970005631446838,
+    0.243082672357559
+   ],
+   "other_casters_silenced": 1254,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 350,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999997079372406,
+   "attach_limit_px": 11.6864929199219,
+   "base_px": [
+    649.50732421875,
+    351.348693847656
+   ],
+   "candidate_samples": 826,
+   "caster": "lamp-post",
+   "expected_dir": [
+    0.957359671592712,
+    0.288898646831512
+   ],
+   "height_px": 58.4324645996094,
+   "nearest_to_base_px": 0.816657304763794,
+   "observed_dir": [
+    0.956658601760864,
+    0.291211783885956
+   ],
+   "other_casters_silenced": 1251,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 801,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.99998664855957,
+   "attach_limit_px": 10.5178405761719,
+   "base_px": [
+    421.196746826172,
+    363.609252929688
+   ],
+   "candidate_samples": 1029,
+   "caster": "planter",
+   "expected_dir": [
+    0.957360208034515,
+    0.288896828889847
+   ],
+   "height_px": 52.5892028808594,
+   "nearest_to_base_px": 0.893251895904541,
+   "observed_dir": [
+    0.958835184574127,
+    0.283963054418564
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 923,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999578475952148,
+   "attach_limit_px": 10.5178405761719,
+   "base_px": [
+    163.685272216797,
+    359.265289306641
+   ],
+   "candidate_samples": 974,
+   "caster": "shrub",
+   "expected_dir": [
+    0.95736038684845,
+    0.288896292448044
+   ],
+   "height_px": 52.5892028808594,
+   "nearest_to_base_px": 2.42853116989136,
+   "observed_dir": [
+    0.9653440117836,
+    0.260980606079102
+   ],
+   "other_casters_silenced": 1254,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 974,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999971151351929,
+   "attach_limit_px": 15.1924438476562,
+   "base_px": [
+    859.346557617188,
+    607.50439453125
+   ],
+   "candidate_samples": 7147,
+   "caster": "kiosk",
+   "expected_dir": [
+    0.957359611988068,
+    0.288899004459381
+   ],
+   "height_px": 75.9622192382812,
+   "nearest_to_base_px": 0.611977159976959,
+   "observed_dir": [
+    0.959530115127563,
+    0.2816062271595
+   ],
+   "other_casters_silenced": 1244,
+   "pass": true,
+   "phase": "dawn",
+   "shadow_samples": 6562,
+   "source": "key"
+  },
+  {
+   "active_lamps": 8,
+   "lamp_energy": 0.32,
+   "minimum_gain": 1.5,
+   "pass": true,
+   "phase": "dawn",
+   "pool_gain_luma": [
+    6.95529410273445,
+    5.37950354520561,
+    2.56271378827744,
+    4.12737610008644,
+    3.18367271956538,
+    9.45554222430096,
+    7.55837873283292,
+    11.7021682331351
+   ],
+   "reduced_motion": false,
+   "source": "lamp-glow"
+  },
+  {
+   "alignment_cos": 1.0,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    458.682586669922,
+    572.891235351562
+   ],
+   "candidate_samples": 308,
+   "caster": "actor-ticket",
+   "expected_dir": [
+    0.698073983192444,
+    0.716025650501251
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.335530877113342,
+   "observed_dir": [
+    0.697852551937103,
+    0.716241478919983
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 117,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999847769737244,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    507.916717529297,
+    350.033782958984
+   ],
+   "candidate_samples": 267,
+   "caster": "actor-imp",
+   "expected_dir": [
+    0.698073267936707,
+    0.716026306152344
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.0898735672235489,
+   "observed_dir": [
+    0.710461258888245,
+    0.703736305236816
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 160,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999939322471619,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    750.432983398438,
+    431.211547851562
+   ],
+   "candidate_samples": 136,
+   "caster": "actor-announcer",
+   "expected_dir": [
+    0.698073983192444,
+    0.716025650501251
+   ],
+   "height_px": 43.8243713378906,
+   "nearest_to_base_px": 0.971166610717773,
+   "observed_dir": [
+    0.705923497676849,
+    0.708288133144379
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 136,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999985814094543,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    640.0,
+    386.886474609375
+   ],
+   "candidate_samples": 155,
+   "caster": "actor-hero",
+   "expected_dir": [
+    0.698074638843536,
+    0.716024935245514
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.113525390625,
+   "observed_dir": [
+    0.701873481273651,
+    0.712301671504974
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 155,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.994471311569214,
+   "attach_limit_px": 24.249462890625,
+   "base_px": [
+    144.795837402344,
+    401.15771484375
+   ],
+   "candidate_samples": 599,
+   "caster": "tree",
+   "expected_dir": [
+    0.698074340820312,
+    0.716025292873383
+   ],
+   "height_px": 121.247314453125,
+   "nearest_to_base_px": 0.811314463615417,
+   "observed_dir": [
+    0.769404172897339,
+    0.638762295246124
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 599,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.998272120952606,
+   "attach_limit_px": 12.1247314453125,
+   "base_px": [
+    144.795837402344,
+    401.15771484375
+   ],
+   "candidate_samples": 102,
+   "caster": "tree-trunk",
+   "expected_dir": [
+    0.698074340820312,
+    0.716025292873383
+   ],
+   "height_px": 60.6236572265625,
+   "nearest_to_base_px": 1.15879309177399,
+   "observed_dir": [
+    0.738942325115204,
+    0.673768758773804
+   ],
+   "other_casters_silenced": 1254,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 102,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.994461178779602,
+   "attach_limit_px": 11.6864929199219,
+   "base_px": [
+    649.50732421875,
+    351.348693847656
+   ],
+   "candidate_samples": 399,
+   "caster": "lamp-post",
+   "expected_dir": [
+    0.698073983192444,
+    0.716025650501251
+   ],
+   "height_px": 58.4324645996094,
+   "nearest_to_base_px": 0.816657304763794,
+   "observed_dir": [
+    0.618949770927429,
+    0.785430610179901
+   ],
+   "other_casters_silenced": 1251,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 359,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999797224998474,
+   "attach_limit_px": 10.5178405761719,
+   "base_px": [
+    421.196746826172,
+    363.609252929688
+   ],
+   "candidate_samples": 449,
+   "caster": "planter",
+   "expected_dir": [
+    0.698074638843536,
+    0.716024994850159
+   ],
+   "height_px": 52.5892028808594,
+   "nearest_to_base_px": 0.893251895904541,
+   "observed_dir": [
+    0.71235454082489,
+    0.701819837093353
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 348,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.951396584510803,
+   "attach_limit_px": 10.5178405761719,
+   "base_px": [
+    163.685272216797,
+    359.265289306641
+   ],
+   "candidate_samples": 524,
+   "caster": "shrub",
+   "expected_dir": [
+    0.698073267936707,
+    0.716026365756989
+   ],
+   "height_px": 52.5892028808594,
+   "nearest_to_base_px": 2.42853116989136,
+   "observed_dir": [
+    0.88465815782547,
+    0.466240346431732
+   ],
+   "other_casters_silenced": 1254,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 524,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.99848997592926,
+   "attach_limit_px": 15.1924438476562,
+   "base_px": [
+    859.346557617188,
+    607.50439453125
+   ],
+   "candidate_samples": 4026,
+   "caster": "kiosk",
+   "expected_dir": [
+    0.698073983192444,
+    0.716025650501251
+   ],
+   "height_px": 75.9622192382812,
+   "nearest_to_base_px": 0.611977159976959,
+   "observed_dir": [
+    0.736353933811188,
+    0.676596581935883
+   ],
+   "other_casters_silenced": 1244,
+   "pass": true,
+   "phase": "noon",
+   "shadow_samples": 3293,
+   "source": "key"
+  },
+  {
+   "active_lamps": 0,
+   "lamp_energy": 0.0,
+   "pass": true,
+   "phase": "noon",
+   "reduced_motion": false,
+   "source": "lamp-glow"
+  },
+  {
+   "alignment_cos": 0.999999761581421,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    458.682586669922,
+    572.891235351562
+   ],
+   "candidate_samples": 404,
+   "caster": "actor-ticket",
+   "expected_dir": [
+    -0.698074638843536,
+    -0.716024994850159
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.335530877113342,
+   "observed_dir": [
+    -0.697651386260986,
+    -0.71643728017807
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 343,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999605298042297,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    507.916717529297,
+    350.033782958984
+   ],
+   "candidate_samples": 758,
+   "caster": "actor-imp",
+   "expected_dir": [
+    -0.698073923587799,
+    -0.716025590896606
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.0898735672235489,
+   "observed_dir": [
+    -0.717913210391998,
+    -0.696132600307465
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 758,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.99999988079071,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    760.797729492188,
+    431.970916748047
+   ],
+   "candidate_samples": 675,
+   "caster": "actor-announcer",
+   "expected_dir": [
+    -0.698074638843536,
+    -0.716024935245514
+   ],
+   "height_px": 43.8243713378906,
+   "nearest_to_base_px": 0.204350665211678,
+   "observed_dir": [
+    -0.697857618331909,
+    -0.716236531734467
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 670,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999994814395905,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    640.0,
+    386.886474609375
+   ],
+   "candidate_samples": 861,
+   "caster": "actor-hero",
+   "expected_dir": [
+    -0.698073267936707,
+    -0.716026365756989
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.113525390625,
+   "observed_dir": [
+    -0.695745527744293,
+    -0.718288421630859
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 607,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.775270283222198,
+   "attach_limit_px": 24.249462890625,
+   "base_px": [
+    144.795837402344,
+    401.15771484375
+   ],
+   "candidate_samples": 1527,
+   "caster": "tree",
+   "expected_dir": [
+    -0.698075354099274,
+    -0.716024219989777
+   ],
+   "height_px": 121.247314453125,
+   "nearest_to_base_px": 0.811314463615417,
+   "observed_dir": [
+    -0.088934950530529,
+    -0.996037483215332
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 18,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.798301756381989,
+   "attach_limit_px": 12.1247314453125,
+   "base_px": [
+    144.795837402344,
+    401.15771484375
+   ],
+   "candidate_samples": 188,
+   "caster": "tree-trunk",
+   "expected_dir": [
+    -0.698075354099274,
+    -0.716024219989777
+   ],
+   "height_px": 60.6236572265625,
+   "nearest_to_base_px": 1.40487039089203,
+   "observed_dir": [
+    -0.126043751835823,
+    -0.992024719715118
+   ],
+   "other_casters_silenced": 1254,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 14,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999574422836304,
+   "attach_limit_px": 11.6864929199219,
+   "base_px": [
+    649.50732421875,
+    351.348693847656
+   ],
+   "candidate_samples": 998,
+   "caster": "lamp-post",
+   "expected_dir": [
+    -0.698073983192444,
+    -0.716025650501251
+   ],
+   "height_px": 58.4324645996094,
+   "nearest_to_base_px": 0.816657304763794,
+   "observed_dir": [
+    -0.676888406276703,
+    -0.736085653305054
+   ],
+   "other_casters_silenced": 1251,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 610,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.980550587177277,
+   "attach_limit_px": 10.5178405761719,
+   "base_px": [
+    421.196746826172,
+    363.609252929688
+   ],
+   "candidate_samples": 594,
+   "caster": "planter",
+   "expected_dir": [
+    -0.698072552680969,
+    -0.716026961803436
+   ],
+   "height_px": 52.5892028808594,
+   "nearest_to_base_px": 0.893251895904541,
+   "observed_dir": [
+    -0.543963670730591,
+    -0.83910870552063
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 213,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999145150184631,
+   "attach_limit_px": 10.5178405761719,
+   "base_px": [
+    163.685272216797,
+    359.265289306641
+   ],
+   "candidate_samples": 1333,
+   "caster": "shrub",
+   "expected_dir": [
+    -0.698073327541351,
+    -0.716026306152344
+   ],
+   "height_px": 52.5892028808594,
+   "nearest_to_base_px": 1.30384457111359,
+   "observed_dir": [
+    -0.667875051498413,
+    -0.74427342414856
+   ],
+   "other_casters_silenced": 1254,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 989,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.997178077697754,
+   "attach_limit_px": 15.1924438476562,
+   "base_px": [
+    859.346557617188,
+    607.50439453125
+   ],
+   "candidate_samples": 8571,
+   "caster": "kiosk",
+   "expected_dir": [
+    -0.698073923587799,
+    -0.716025650501251
+   ],
+   "height_px": 75.9622192382812,
+   "nearest_to_base_px": 0.611977159976959,
+   "observed_dir": [
+    -0.642351031303406,
+    -0.766410529613495
+   ],
+   "other_casters_silenced": 1244,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 8445,
+   "source": "key"
+  },
+  {
+   "caster": "actor-ticket",
+   "lamp_distance_m": 11.0678834915161,
+   "lamp_range_m": 5.19999980926514,
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "reason": "outside shadow lamp reach",
+   "source": "lamp"
+  },
+  {
+   "alignment_cos": 0.999172568321228,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    507.916717529297,
+    350.033782958984
+   ],
+   "candidate_samples": 95,
+   "caster": "actor-imp",
+   "expected_dir": [
+    0.967697262763977,
+    -0.252115041017532
+   ],
+   "height_px": 43.8243408203125,
+   "lamp_distance_m": 3.25940799713135,
+   "lamp_range_m": 5.19999980926514,
+   "nearest_to_base_px": 0.0898735672235489,
+   "observed_dir": [
+    0.956642687320709,
+    -0.291264176368713
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 95,
+   "source": "lamp"
+  },
+  {
+   "caster": "actor-announcer",
+   "lamp_distance_m": 5.54322814941406,
+   "lamp_range_m": 5.19999980926514,
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "reason": "outside shadow lamp reach",
+   "source": "lamp"
+  },
+  {
+   "alignment_cos": 0.999996662139893,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    640.0,
+    386.886474609375
+   ],
+   "candidate_samples": 256,
+   "caster": "actor-hero",
+   "expected_dir": [
+    -0.258435636758804,
+    0.9660285115242
+   ],
+   "height_px": 43.8243408203125,
+   "lamp_distance_m": 2.0,
+   "lamp_range_m": 5.19999980926514,
+   "nearest_to_base_px": 0.113525390625,
+   "observed_dir": [
+    -0.255908519029617,
+    0.966701030731201
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "dusk",
+   "shadow_samples": 256,
+   "source": "lamp"
+  },
+  {
+   "active_lamps": 8,
+   "lamp_energy": 0.48,
+   "minimum_gain": 4.0,
+   "pass": true,
+   "phase": "dusk",
+   "pool_gain_luma": [
+    13.582887232405,
+    8.66694499136639,
+    4.04849112021173,
+    6.52316822740091,
+    5.67307721392638,
+    13.7984672340812,
+    21.4475162836666,
+    20.2664683888457
+   ],
+   "reduced_motion": false,
+   "source": "lamp-glow"
+  },
+  {
+   "alignment_cos": 0.99999988079071,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    458.682586669922,
+    572.891235351562
+   ],
+   "candidate_samples": 249,
+   "caster": "actor-ticket",
+   "expected_dir": [
+    -0.648534119129181,
+    -0.761185526847839
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.335530877113342,
+   "observed_dir": [
+    -0.648877322673798,
+    -0.760893046855927
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 248,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.998932003974915,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    507.916717529297,
+    350.033782958984
+   ],
+   "candidate_samples": 390,
+   "caster": "actor-imp",
+   "expected_dir": [
+    -0.648531973361969,
+    -0.761187493801117
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.0898735672235489,
+   "observed_dir": [
+    -0.683010697364807,
+    -0.730408370494843
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 343,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.99998950958252,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    725.565551757812,
+    429.3896484375
+   ],
+   "candidate_samples": 302,
+   "caster": "actor-announcer",
+   "expected_dir": [
+    -0.648532629013062,
+    -0.761186897754669
+   ],
+   "height_px": 43.8243713378906,
+   "nearest_to_base_px": 0.749182403087616,
+   "observed_dir": [
+    -0.652014553546906,
+    -0.758206427097321
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 302,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999999940395355,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    640.0,
+    386.886474609375
+   ],
+   "candidate_samples": 338,
+   "caster": "actor-hero",
+   "expected_dir": [
+    -0.648531973361969,
+    -0.761187493801117
+   ],
+   "height_px": 43.8243408203125,
+   "nearest_to_base_px": 0.113525390625,
+   "observed_dir": [
+    -0.648289084434509,
+    -0.761394202709198
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 330,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.825560569763184,
+   "attach_limit_px": 24.249462890625,
+   "base_px": [
+    144.795837402344,
+    401.15771484375
+   ],
+   "candidate_samples": 1193,
+   "caster": "tree",
+   "expected_dir": [
+    -0.648533701896667,
+    -0.761185944080353
+   ],
+   "height_px": 121.247314453125,
+   "nearest_to_base_px": 0.811314463615417,
+   "observed_dir": [
+    -0.10585629940033,
+    -0.994381427764893
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 20,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.805321455001831,
+   "attach_limit_px": 12.1247314453125,
+   "base_px": [
+    144.795837402344,
+    401.15771484375
+   ],
+   "candidate_samples": 40,
+   "caster": "tree-trunk",
+   "expected_dir": [
+    -0.648533701896667,
+    -0.761185944080353
+   ],
+   "height_px": 60.6236572265625,
+   "nearest_to_base_px": 1.40487039089203,
+   "observed_dir": [
+    -0.0710178166627884,
+    -0.99747508764267
+   ],
+   "other_casters_silenced": 1254,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 18,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999549746513367,
+   "attach_limit_px": 11.6864929199219,
+   "base_px": [
+    649.50732421875,
+    351.348693847656
+   ],
+   "candidate_samples": 683,
+   "caster": "lamp-post",
+   "expected_dir": [
+    -0.648531973361969,
+    -0.761187493801117
+   ],
+   "height_px": 58.4324645996094,
+   "nearest_to_base_px": 0.816657304763794,
+   "observed_dir": [
+    -0.67108154296875,
+    -0.74138355255127
+   ],
+   "other_casters_silenced": 1251,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 636,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.968904614448547,
+   "attach_limit_px": 10.5178405761719,
+   "base_px": [
+    421.196746826172,
+    363.609252929688
+   ],
+   "candidate_samples": 265,
+   "caster": "planter",
+   "expected_dir": [
+    -0.648532032966614,
+    -0.761187374591827
+   ],
+   "height_px": 52.5892028808594,
+   "nearest_to_base_px": 0.893251895904541,
+   "observed_dir": [
+    -0.440021336078644,
+    -0.897987365722656
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 254,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.997781813144684,
+   "attach_limit_px": 10.5178405761719,
+   "base_px": [
+    163.685272216797,
+    359.265289306641
+   ],
+   "candidate_samples": 1000,
+   "caster": "shrub",
+   "expected_dir": [
+    -0.648532807826996,
+    -0.76118677854538
+   ],
+   "height_px": 52.5892028808594,
+   "nearest_to_base_px": 1.30384457111359,
+   "observed_dir": [
+    -0.596421420574188,
+    -0.802671492099762
+   ],
+   "other_casters_silenced": 1254,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 1000,
+   "source": "key"
+  },
+  {
+   "alignment_cos": 0.999934911727905,
+   "attach_limit_px": 15.1924438476562,
+   "base_px": [
+    859.346557617188,
+    607.50439453125
+   ],
+   "candidate_samples": 4685,
+   "caster": "kiosk",
+   "expected_dir": [
+    -0.648531973361969,
+    -0.761187493801117
+   ],
+   "height_px": 75.9622192382812,
+   "nearest_to_base_px": 0.611977159976959,
+   "observed_dir": [
+    -0.6398024559021,
+    -0.768539369106293
+   ],
+   "other_casters_silenced": 1244,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 4681,
+   "source": "key"
+  },
+  {
+   "caster": "actor-ticket",
+   "lamp_distance_m": 11.0678834915161,
+   "lamp_range_m": 5.19999980926514,
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "reason": "outside shadow lamp reach",
+   "source": "lamp"
+  },
+  {
+   "alignment_cos": 0.99947726726532,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    507.916717529297,
+    350.033782958984
+   ],
+   "candidate_samples": 173,
+   "caster": "actor-imp",
+   "expected_dir": [
+    0.967697262763977,
+    -0.252115041017532
+   ],
+   "height_px": 43.8243408203125,
+   "lamp_distance_m": 3.25940799713135,
+   "lamp_range_m": 5.19999980926514,
+   "nearest_to_base_px": 0.0898735672235489,
+   "observed_dir": [
+    0.959040701389313,
+    -0.283268362283707
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 132,
+   "source": "lamp"
+  },
+  {
+   "caster": "actor-announcer",
+   "lamp_distance_m": 4.88262224197388,
+   "lamp_range_m": 5.19999980926514,
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "reason": "outside shadow lamp reach",
+   "source": "lamp"
+  },
+  {
+   "alignment_cos": 0.999990880489349,
+   "attach_limit_px": 10.0,
+   "base_px": [
+    640.0,
+    386.886474609375
+   ],
+   "candidate_samples": 311,
+   "caster": "actor-hero",
+   "expected_dir": [
+    -0.258435636758804,
+    0.9660285115242
+   ],
+   "height_px": 43.8243408203125,
+   "lamp_distance_m": 2.0,
+   "lamp_range_m": 5.19999980926514,
+   "nearest_to_base_px": 0.113525390625,
+   "observed_dir": [
+    -0.254285573959351,
+    0.967129230499268
+   ],
+   "other_casters_silenced": 1253,
+   "pass": true,
+   "phase": "night",
+   "shadow_samples": 261,
+   "source": "lamp"
+  },
+  {
+   "active_lamps": 8,
+   "lamp_energy": 0.82,
+   "minimum_gain": 6.0,
+   "pass": true,
+   "phase": "night",
+   "pool_gain_luma": [
+    32.3274742837577,
+    21.5347420701719,
+    10.2384078487767,
+    15.4400484307652,
+    14.0624033354324,
+    23.7293705726866,
+    30.6017470063656,
+    47.1780654418656
+   ],
+   "reduced_motion": false,
+   "source": "lamp-glow"
+  },
+  {
+   "active_lamps": 8,
+   "lamp_energy": 0.82,
+   "minimum_gain": 6.0,
+   "pass": true,
+   "phase": "night",
+   "pool_gain_luma": [
+    32.3274742837577,
+    21.5347420701719,
+    10.2384078487767,
+    15.4400484307652,
+    14.0625670454687,
+    23.7298526384291,
+    30.6847084764721,
+    47.1780654418656
+   ],
+   "reduced_motion": true,
+   "source": "lamp-glow"
+  }
+ ]
+}

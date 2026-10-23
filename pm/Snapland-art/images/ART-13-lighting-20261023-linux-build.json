@@ -1,0 +1,31 @@
+{
+ "engine": "4.7.2.stable.official.ed1daf0bf",
+ "source_commit": "92322a0ea93422021fad9196fb3744dd402821b0",
+ "template_sha256": "d9f79ab89b5ae369aeed11c6052d402e8218cd503bf85b4a235f9c30c46a7c63",
+ "steps": [
+  {
+   "step": "import",
+   "exit": 0,
+   "errors": 0,
+   "seconds": 132.48
+  },
+  {
+   "step": "export",
+   "exit": 0,
+   "errors": 0,
+   "seconds": 12.46
+  }
+ ],
+ "binary": {
+  "file": "Snapland.x86_64",
+  "bytes": 219740280,
+  "sha256": "78a15b36603806dcca2158aa6c480f4865fe01c06231a27e1dc191168fbad844"
+ },
+ "scope": "Linux x86_64 release executable with embedded PCK; runtime acceptance is a separate step",
+ "runtime_smoke": {
+  "command": "Snapland.x86_64 --rendering-method gl_compatibility --audio-driver Dummy -- --smoke-test (Xvfb, isolated SNAPLAND_SAVE_PATH)",
+  "exit": 0,
+  "engine_errors": 0,
+  "marker": "PASS: game startup and clean shutdown"
+ }
+}

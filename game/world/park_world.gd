@@ -800,10 +800,14 @@ func _island_lawn_mesh() -> ArrayMesh:
 		var extent := minf(36.0/maxf(absf(dx),0.0001),48.0/maxf(absf(dz),0.0001))
 		var ragged := 1.0 + sin(angle*7.0+0.4)*0.022 + sin(angle*13.0-0.8)*0.013
 		vertices.append(Vector3(dx*extent*ragged,0,dz*extent*ragged))
+	# Godot treats clockwise triangles as front faces. Seen from above, the fan
+	# must run centre -> current rim -> next rim so the lawn's top side faces up;
+	# the reverse order made the sunlit side a flipped back face that ignored the
+	# key light and every cast shadow.
 	for i in range(SEGMENTS):
 		indices.append(0)
-		indices.append((i+1)%SEGMENTS+1)
 		indices.append(i+1)
+		indices.append((i+1)%SEGMENTS+1)
 	var arrays: Array=[]
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX]=vertices
@@ -921,9 +925,46 @@ func _add_tree_shadow_proxy(ground: Vector3, height: float, kind: String) -> voi
 	crown.scale=Vector3(1.25,height*0.25,0.8) if kind=="palm" else Vector3(1.12,height*0.28,0.82)
 	crown.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 
+## Hidden volumes that give a painted billboard the same real-light shadow as
+## trees and actors. Sizes are fractions of the sprite height, measured from the
+## painted silhouette in tidal-foliage-v2 (x offsets follow the drawn pole/head).
+const SPRITE_SHADOW_VOLUMES := {
+	"lamp": [
+		{"part": "Pole", "grounded": true, "shape": "cylinder", "radius": 0.035, "height": 0.95, "offset": Vector3(0.075, 0.475, 0.0)},
+		{"part": "Lantern", "shape": "box", "size": Vector3(0.15, 0.32, 0.15), "offset": Vector3(-0.11, 0.72, 0.0)},
+		{"part": "Arm", "shape": "box", "size": Vector3(0.2, 0.03, 0.03), "offset": Vector3(-0.02, 0.93, 0.0)},
+		{"part": "Bed", "grounded": true, "shape": "ellipsoid", "radii": Vector3(0.25, 0.12, 0.18), "offset": Vector3(0.0, 0.1, 0.0)},
+	],
+	"planter": [
+		{"part": "Pot", "grounded": true, "shape": "cylinder", "radius": 0.23, "top": 0.3, "height": 0.6, "offset": Vector3(0.0, 0.3, 0.0)},
+		{"part": "Foliage", "shape": "ellipsoid", "radii": Vector3(0.48, 0.2, 0.33), "offset": Vector3(0.0, 0.8, 0.0)},
+	],
+	"shrub": [
+		{"part": "Dome", "grounded": true, "shape": "ellipsoid", "radii": Vector3(0.64, 0.5, 0.4), "offset": Vector3(0.0, 0.42, 0.0)},
+	],
+}
+
+func _add_sprite_shadow_proxy(kind: String, ground: Vector3, height: float) -> void:
+	var volumes: Array = SPRITE_SHADOW_VOLUMES.get(kind, [])
+	for spec: Dictionary in volumes:
+		var center: Vector3 = ground + Vector3(spec.offset) * height
+		var volume: MeshInstance3D
+		match str(spec.shape):
+			"cylinder":
+				volume = _cylinder(center, float(spec.radius) * height, float(spec.height) * height, Color.WHITE, float(spec.get("top", spec.radius)) * height)
+			"box":
+				volume = _box(center, Vector3(spec.size) * height, Color.WHITE)
+			_:
+				volume = _sphere(center, 1.0, Color.WHITE)
+				volume.scale = Vector3(spec.radii) * height
+		volume.name = "%sShadow%s" % [kind.capitalize(), str(spec.part)]
+		volume.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+
 func _flowerbed(pos: Vector3, seed_value: int) -> void:
 	if _foliage_has("planter"):
-		_foliage_sprite("planter",pos,1.75+fmod(float(seed_value)*0.07,0.25))
+		var planter_height := 1.75+fmod(float(seed_value)*0.07,0.25)
+		_foliage_sprite("planter",pos,planter_height)
+		_add_sprite_shadow_proxy("planter",pos,planter_height)
 		return
 	_box(pos+Vector3(0,0.3,0),Vector3(1.7,0.5,1.3),Color("#ccba92"),true)
 	_box(pos+Vector3(0,0.58,0),Vector3(1.5,0.12,1.1),Color("#425c42"))
@@ -1174,6 +1215,7 @@ func _bench(pos: Vector3) -> void:
 func _shrub_cluster(pos: Vector3, seed_value: float) -> void:
 	if _foliage_has("shrub"):
 		_foliage_sprite("shrub",pos,2.05)
+		_add_sprite_shadow_proxy("shrub",pos,2.05)
 		return
 	var branch := _cylinder(pos+Vector3(0,0.34,0),0.07,0.68,Color("#806143"))
 	var leaves: Array[Transform3D]=[]
@@ -1246,6 +1288,7 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 func _lamppost(pos: Vector3) -> void:
 	if _foliage_has("lamp"):
 		_foliage_sprite("lamp",pos,2.85)
+		_add_sprite_shadow_proxy("lamp",pos,2.85)
 		var decorative_light := OmniLight3D.new()
 		decorative_light.position=pos+Vector3(0,2.18,0)
 		decorative_light.light_color=Color("#ffd79a")
@@ -2497,7 +2540,9 @@ func set_time_of_day(phase_id: Variant) -> void:
 		"noon": environment.glow_intensity = 0.025
 		"dusk": environment.glow_intensity = 0.045
 		"night": environment.glow_intensity = 0.08
-	lamp_energy_for_phase = float({"dawn": 0.18, "noon": 0.0, "dusk": 0.48, "night": 0.82}[active_time_phase])
+	# Dawn lamps are still on at 05:30 but subdued; 0.18 left their pools almost
+	# invisible on the newly sunlit paving, so they read as switched off.
+	lamp_energy_for_phase = float({"dawn": 0.32, "noon": 0.0, "dusk": 0.48, "night": 0.82}[active_time_phase])
 	_update_lamp_selection(true)
 	for record in contact_shadows:
 		var shadow := record.get("node") as Node3D
