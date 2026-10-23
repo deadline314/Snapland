@@ -73,7 +73,8 @@ static func entry_status(entry: Dictionary, snapshot: Dictionary) -> String:
 			var step := int(steps.get(str(target.get("id", "")), 0))
 			if step >= QUEST_STEP_COUNT:
 				return "完成 ✓"
-			return "有事相求" if step <= 0 else "委託 %d/3" % (step + 1)
+			# Same count as the HUD quest line: steps already done out of three.
+			return "有事相求" if step <= 0 else "委託 %d/3" % step
 		"games":
 			var ids: Array = target.get("ids", [])
 			var collected := 0

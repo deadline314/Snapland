@@ -39,7 +39,7 @@ func _run() -> void:
 	await _interact_at("quest-001")
 	_check(main.last_conversation_id == "imp-ask", "first Xiao Jiao conversation explains his request")
 	_check(int(progress.quests.get("quest-001", 0)) == 1, "real Xiao Jiao interaction starts mission 1")
-	_check(_sign_line("plaza", 1).ends_with("委託 2/3"), "plaza signpost names the next real quest-001 step")
+	_check(_sign_line("plaza", 1).ends_with("委託 1/3"), "plaza signpost counts the finished quest-001 step like the HUD")
 	_check(main.modal_kind == "quest", "quest ticket opens at the current objective")
 	_check_quest_card("小角的尾巴彩帶試拍", "旅券 · 第2步 / 3", "看看長椅的合照構圖", "quest-001 current step")
 	_press_button(main.modal_body, "返回遊園")

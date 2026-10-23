@@ -133,7 +133,7 @@ func _test_wayfinding() -> void:
 	_check(ids == ["dock", "plaza", "avenue"], "signposts cover the dock, plaza and avenue forks")
 	var snapshot := {"story_photo": false, "steps": {"quest-001": 1, "quest-002": 3}, "photos": {"photo-welcome-game-1": {}, "photo-welcome-game-3": {}}}
 	var quest_entry := {"arrow": "↖", "label": "小角", "target": {"kind": "quest", "id": "quest-001"}}
-	_check(Wayfinding.entry_status(quest_entry, snapshot) == "委託 2/3" and Wayfinding.entry_line(quest_entry, snapshot) == "↖ 小角　委託 2/3", "quest direction shows the current request step")
+	_check(Wayfinding.entry_status(quest_entry, snapshot) == "委託 1/3" and Wayfinding.entry_line(quest_entry, snapshot) == "↖ 小角　委託 1/3", "quest direction counts finished steps like the HUD")
 	_check(Wayfinding.entry_status({"target": {"kind": "quest", "id": "quest-002"}}, snapshot) == "完成 ✓", "finished quest direction says so")
 	_check(Wayfinding.entry_status({"target": {"kind": "quest", "id": "quest-002"}}, {"steps": {}}) == "有事相求", "unstarted quest direction invites the player")
 	var group := {"target": {"kind": "games", "ids": ["game-001", "game-002", "game-003", "game-004"]}}
