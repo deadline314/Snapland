@@ -86,18 +86,27 @@ var foliage_textures: Dictionary = {}
 var foliage_atlas_loaded := false
 var foliage_warnings: Dictionary = {}
 var facing := "front"
+## Phase span of one walk cycle. Real travel per cycle comes from the measured artwork
+## (walk_stride_for), so the planted foot keeps pace with the body instead of gliding.
 const WALK_STRIDE_DISTANCE := 2.8
+const WALK_STRIDE_CALIBRATION_PATH := "res://assets/characters/walk-stride-calibration.json"
+## Used only if the calibration file is missing or invalid: the measured side stride, rounded.
+const FALLBACK_WALK_STRIDE := 1.0
+const WALK_STRIDE_LIMITS := Vector2(0.3, 3.0)
 const WALK_DIRECTION_HYSTERESIS := deg_to_rad(5.0)
 const WALK_DISTANCE_EPSILON := 0.0005
 const CAMERA_OFFSET := Vector3(3.5,16.5,25.0)
 const AVATAR_WALK_SPEED := 0.55
-const AVATAR_RUN_SPEED := 2.0
+## Default brisk pace. The authored art is a walk (about 1 world unit per two steps), so
+## 1.5 keeps it near three steps a second; faster would read as a frantic walk, not a run.
+const AVATAR_RUN_SPEED := 1.5
 const AVATAR_ACCELERATION_SECONDS := 0.16
 const AVATAR_EXTERNAL_REPOSITION_THRESHOLD := 0.20
 var avatar_motion_speed_limit := AVATAR_WALK_SPEED
 var avatar_last_physics_position := Vector3.ZERO
 var avatar_last_physics_position_valid := false
 var walk_distance_phase := 0.0
+var walk_strides: Dictionary = {}
 var avatar_is_walking := false
 var mesh_count := 0
 var blocked := false
@@ -2047,6 +2056,9 @@ func _character_texture(role: String, accent: Color, direction: String, frame: i
 func _build_player() -> void:
 	avatar_renderer=AvatarRenderer.new()
 	player=CharacterBody3D.new()
+	# Ramps keep the requested ground speed; otherwise gravity bleeds uphill travel and the
+	# distance-driven walk cycle visibly slows mid-climb.
+	player.floor_constant_speed=true
 	player.position=Vector3(0,0.3,23.2)
 	var collision := CollisionShape3D.new()
 	var capsule := CapsuleShape3D.new()
@@ -2165,7 +2177,7 @@ func _physics_process(delta: float) -> void:
 			return
 	var operating_lens: bool = is_instance_valid(coastal_play) and is_instance_valid(coastal_play.discoveries) and coastal_play.discoveries.controlling
 	var movement := Vector2.ZERO if blocked or operating_lens else Input.get_vector("move_left","move_right","move_up","move_down")
-	# Default travel is the comfortable jog; Shift keeps a slower, careful pace.
+	# Default travel is a brisk walk; Shift keeps a slower, careful pace.
 	avatar_run_requested = not blocked and not Input.is_key_pressed(KEY_SHIFT)
 	var desired_speed := AVATAR_RUN_SPEED if avatar_run_requested else AVATAR_WALK_SPEED
 	var desired_horizontal := movement*desired_speed
@@ -2199,7 +2211,7 @@ func _physics_process(delta: float) -> void:
 	avatar_is_walking = travelled > WALK_DISTANCE_EPSILON
 	if avatar_is_walking:
 		facing = quantize_walk_direction(horizontal_delta, facing)
-		walk_distance_phase = advance_walk_phase(walk_distance_phase, travelled)
+		walk_distance_phase = advance_walk_phase(walk_distance_phase, travelled, walk_stride_for(facing))
 	if avatar_motion_available:
 		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
 		camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
@@ -2323,8 +2335,33 @@ static func quantize_walk_direction(world_delta: Vector2, previous_direction: St
 			return previous_direction
 	return COMPASS[nearest]
 
-static func advance_walk_phase(phase: float, travelled: float) -> float:
-	return fposmod(phase + maxf(0.0, travelled), WALK_STRIDE_DISTANCE)
+## `stride` is the world distance one full cycle covers in the current direction. The phase
+## stays in WALK_STRIDE_DISTANCE units so turning keeps the same point of the step.
+static func advance_walk_phase(phase: float, travelled: float, stride: float = WALK_STRIDE_DISTANCE) -> float:
+	var safe_stride := stride if stride > 0.0 and is_finite(stride) else WALK_STRIDE_DISTANCE
+	return fposmod(phase + maxf(0.0, travelled) * WALK_STRIDE_DISTANCE / safe_stride, WALK_STRIDE_DISTANCE)
+
+## Reads per-direction strides measured from the walk artwork by tools/walk_stride_calibration.py.
+static func load_walk_strides(path: String) -> Dictionary:
+	var strides := {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if FileAccess.file_exists(path) else null
+	if not (parsed is Dictionary) or not (parsed.get("directions") is Dictionary):
+		push_warning("Walk stride calibration is missing or invalid at %s; using %.2f for every direction" % [path, FALLBACK_WALK_STRIDE])
+		return strides
+	for direction: Variant in parsed.directions:
+		var entry: Variant = parsed.directions[direction]
+		var value: Variant = entry.get("stride_world") if entry is Dictionary else null
+		if (value is float or value is int) and float(value) >= WALK_STRIDE_LIMITS.x and float(value) <= WALK_STRIDE_LIMITS.y:
+			strides[str(direction)] = float(value)
+		else:
+			push_warning("Walk stride for '%s' is outside %s; using %.2f" % [str(direction), str(WALK_STRIDE_LIMITS), FALLBACK_WALK_STRIDE])
+	return strides
+
+func walk_stride_for(direction: String) -> float:
+	if walk_strides.is_empty():
+		walk_strides = load_walk_strides(WALK_STRIDE_CALIBRATION_PATH)
+		if walk_strides.is_empty(): walk_strides = {"": FALLBACK_WALK_STRIDE}
+	return float(walk_strides.get(direction, FALLBACK_WALK_STRIDE))
 
 static func walk_frame_for_phase(phase: float, frame_count: int = 8) -> int:
 	var normalized_phase := fposmod(phase, WALK_STRIDE_DISTANCE) / WALK_STRIDE_DISTANCE

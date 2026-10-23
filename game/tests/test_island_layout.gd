@@ -139,7 +139,8 @@ func _run() -> void:
 	var right:=InputEventKey.new()
 	right.keycode=KEY_D; right.physical_keycode=KEY_D; right.pressed=true
 	Input.parse_input_event(right); Input.flush_buffered_events()
-	# Budget the measured distance at the configured 2 m/s jog, then include the
+	_check(world.player.floor_constant_speed,"avatar keeps its ground speed on ramps instead of slowing uphill")
+	# Budget the measured distance at the configured default pace, then include the
 	# 0.16 s acceleration and 40 frames for continuous ramp/deck contact settling.
 	var climb_ticks := ceili((10.2-world.player.position.x)/world_script.AVATAR_RUN_SPEED*60.0)+ceili(world_script.AVATAR_ACCELERATION_SECONDS*60.0)+40
 	for i in climb_ticks: await physics_frame

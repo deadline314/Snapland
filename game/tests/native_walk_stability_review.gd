@@ -61,7 +61,7 @@ func _review_heading(direction: String, keys: Array) -> bool:
 		await get_tree().process_frame
 	var end_position: Vector3 = main.world.player.position
 	var displacement := Vector2(end_position.x - start_position.x, end_position.z - start_position.z)
-	var expected_phase: float = fposmod(start_phase + displacement.length(), main.world.WALK_STRIDE_DISTANCE)
+	var expected_phase: float = main.world.advance_walk_phase(start_phase, displacement.length(), main.world.walk_stride_for(direction))
 	var phase_error: float = absf(wrapf(main.world.walk_distance_phase - expected_phase, -main.world.WALK_STRIDE_DISTANCE * 0.5, main.world.WALK_STRIDE_DISTANCE * 0.5))
 	if displacement.length() < 0.5 or main.world.facing != direction or not main.world.avatar_is_walking or phase_error > 0.015:
 		var failed_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")

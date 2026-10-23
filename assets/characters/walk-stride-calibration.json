@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "tool": "tools/walk_stride_calibration.py",
+  "regions_sha256": "6f06002f1fbe74133c89d3c893d8d664d860a753f5fcfcfa3e38989991ad0726",
+  "atlas_sha256": {
+    "assets/characters/traveller-walk-back-diagonal-v2.png": "0843139216ac87c3c7f96f13f7eed43f8878eb5e7bead87fdaec24dec5f72dcd",
+    "assets/characters/traveller-walk-front-back-v2.png": "bd155b550a174674890e4139c4d3fb78ce1766e34fdc00f921e461fcef0cbd3b",
+    "assets/characters/traveller-walk-front-diagonal-v2.png": "2e2386e401cbde8d6b22bce48549b8d00074874987c7d28e8e6724a5f59cae30",
+    "assets/characters/traveller-walk-sides-v2.png": "72e01fe0890946227ffd0974101cd85b143a229b6cfb7a19c6756b0f7c7b57f7"
+  },
+  "world_per_source_px": 0.005405,
+  "directions": {
+    "right": {
+      "step_px": 91.47,
+      "double_support_poses": 6,
+      "screen_angle_degrees": 0.0,
+      "stride_world": 0.9888
+    },
+    "left": {
+      "step_px": 86.52,
+      "double_support_poses": 5,
+      "screen_angle_degrees": 0.0,
+      "stride_world": 0.9354
+    },
+    "front_right": {
+      "step_px": 67.65,
+      "double_support_poses": 6,
+      "screen_angle_degrees": 45.0,
+      "stride_world": 1.0343
+    },
+    "front_left": {
+      "step_px": 74.78,
+      "double_support_poses": 6,
+      "screen_angle_degrees": 45.0,
+      "stride_world": 1.1432
+    },
+    "back_right": {
+      "step_px": 66.52,
+      "double_support_poses": 5,
+      "screen_angle_degrees": 45.0,
+      "stride_world": 1.017
+    },
+    "back_left": {
+      "step_px": 70.85,
+      "double_support_poses": 3,
+      "screen_angle_degrees": 45.0,
+      "stride_world": 1.0832
+    },
+    "front": {
+      "reuses": "side",
+      "stride_world": 0.9621
+    },
+    "back": {
+      "reuses": "side",
+      "stride_world": 0.9621
+    }
+  }
+}
