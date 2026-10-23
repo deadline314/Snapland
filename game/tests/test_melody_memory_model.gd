@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Model = preload("res://game/minigames/melody_memory_model.gd")
+const Voices = preload("res://game/minigames/melody_voices.gd")
 const Session = preload("res://game/minigames/session.gd")
 var checks := 0
 var failures := 0
@@ -11,6 +12,7 @@ func _initialize() -> void:
 	_test_wrong_note_retry_and_timing_grade()
 	_test_replay_cap_and_assist_policy()
 	_test_rapid_chord_is_ignored()
+	_test_encore_voices_and_qualification()
 	_test_reported_score_grades()
 	if failures == 0:
 		print("Melody memory model: %d checks passed" % checks)
@@ -119,6 +121,27 @@ func _test_rapid_chord_is_ignored() -> void:
 	model.play_note((int(Model.PHRASES[0][1]) + 1) % 4)
 	_expect(model.snapshot().input_index == 1 and model.error_count == 0, "a second same-frame key is ignored instead of becoming a chord or false mistake")
 	_expect(model.snapshot().note_start_serial == serial, "ignored chord does not create a second sound event")
+
+func _test_encore_voices_and_qualification() -> void:
+	var model = Model.new()
+	model.reset()
+	_expect(_wait_active(model), "encore witness reaches the first active phrase")
+	_play_phrase(model, 0, false)
+	_expect(model.snapshot().phase == "encore" and model.completed_phrases == 1, "a completed phrase is first played back as an ensemble encore")
+	var serial := int(model.snapshot().note_start_serial)
+	var heard: Array = []
+	var guard := 0
+	while model.snapshot().phase == "encore" and guard < 400:
+		model.step(0.025)
+		if int(model.snapshot().note_start_serial) > serial:
+			serial = int(model.snapshot().note_start_serial)
+			heard.append(int(model.snapshot().current_cue))
+		guard += 1
+	_expect(heard == Model.PHRASES[0] and model.snapshot().phase == "listen" and int(model.snapshot().phrase_index) == 1, "the encore replays exactly the finished phrase, then the next demonstration begins")
+	var voices: Array = Voices.voice_streams()
+	_expect(voices.size() == 4 and Voices.voice_streams() == voices and voices.all(func(stream: AudioStreamWAV) -> bool: return stream.data.size() > 4000), "four distinct cached instrument voices are synthesized")
+	_expect(Model.qualification_text({"success": true, "total_notes": 15, "precise_notes": 12, "error_count": 1}).contains("精準 12 / 15、失誤 1"), "an ordinary result states real precision and error counts")
+	_expect(Model.qualification_text({"success": true, "assisted": true}).contains("輔助回合不取得"), "an assisted result explains no devil print")
 
 func _wait_active(model, limit: float = 18.0) -> bool:
 	var elapsed := 0.0

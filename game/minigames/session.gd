@@ -45,6 +45,7 @@ const HatRescueModelScript = preload("res://game/minigames/hat_rescue_model.gd")
 const HatRescueViewScript = preload("res://game/minigames/hat_rescue_view.gd")
 const MelodyMemoryModelScript = preload("res://game/minigames/melody_memory_model.gd")
 const MelodyMemoryViewScript = preload("res://game/minigames/melody_memory_view.gd")
+const MelodyVoicesScript = preload("res://game/minigames/melody_voices.gd")
 const ShadowTheatreModelScript = preload("res://game/minigames/shadow_theatre_model.gd")
 const ShadowTheatreViewScript = preload("res://game/minigames/shadow_theatre_view.gd")
 const BenchSwapModelScript = preload("res://game/minigames/bench_swap_model.gd")
@@ -128,6 +129,18 @@ var melody_snapshot: Dictionary = {}
 var _melody_audio_cursor := 0
 var _melody_error_cursor := 0
 var _melody_last_event := ""
+## Game-owned instrument voices; null in headless rule tests (then notes use note_played).
+var _melody_voices: Node
+## Final ensemble: the last phrase replays with harmony and a closing chord before the result.
+const MELODY_FINALE_DELAY := 0.35
+const MELODY_FINALE_TAIL := 1.1
+var melody_finale_pending := false
+var _melody_finale_clock := 0.0
+var _melody_finale_index := 0
+var _melody_finale_next := 0.0
+var _melody_finale_success := false
+var _melody_finale_devil := false
+var _melody_finale_snapshot: Dictionary = {}
 var shadow_model: RefCounted = ShadowTheatreModelScript.new()
 var _shadow_frame_delta := 1.0 / 60.0
 var _shadow_left_held := false
@@ -457,6 +470,10 @@ func set_paused(value: bool) -> void:
 		_sync_presentation()
 	if mode == "ribbon_rhythm" and is_instance_valid(presentation):
 		presentation.set_process(not value)
+	if mode == "melody_memory" and is_instance_valid(_melody_voices):
+		_melody_voices.set_paused(value)
+		if not value:
+			_melody_voices.set_volume_linear(_sfx_volume_linear())
 	if mode == "ribbon_rhythm" and is_instance_valid(_ribbon_groove):
 		_ribbon_groove.set_paused(value)
 		if not value:
@@ -530,6 +547,7 @@ func _leave_from_hud() -> void:
 	_cancel_ribbon_finish_gate()
 	if is_instance_valid(_ribbon_groove):
 		_ribbon_groove.stop()
+	_cancel_melody_finale()
 	if mode == "shadow_alignment" and is_instance_valid(presentation):
 		presentation.set_process(false)
 	cancelled.emit()
@@ -606,6 +624,12 @@ func _progress_text() -> String:
 		"melody_memory":
 			var phase_name := str(melody_snapshot.get("phase", "listen"))
 			var phrase := int(melody_snapshot.get("phrase_number", 1))
+			if melody_finale_pending:
+				return "三句完成　終曲合奏"
+			if phase_name == "encore":
+				return "樂句 %d / 3 完成　合奏中" % int(melody_snapshot.get("completed_phrases", 0))
+			if phase_name == "ready":
+				return "樂句 %d / 3　記住 %d 個音" % [phrase, int(melody_snapshot.get("phrase_length", 0))]
 			if phase_name != "active":
 				var heard: Array = melody_snapshot.get("heard_notes", [])
 				return "樂句 %d / 3　聽看 %d / %d" % [phrase, heard.size(), int(melody_snapshot.get("phrase_length", 0))]
@@ -664,6 +688,8 @@ func score_summary() -> Dictionary:
 			summary["qualification_text"]="五環全中心、零救援，已達成小惡魔條件。"
 		else:
 			summary["qualification_text"]="普通拍貼：五環全過。小惡魔需五次中心、零救援（本次中心 %d / 5、救援 %d）。"%[kite_model.center_hits,kite_model.rescues_used]
+	if mode == "melody_memory" and ended and not practice_mode:
+		summary["qualification_text"] = MelodyMemoryModelScript.qualification_text(melody_model.snapshot())
 	if mode == "ribbon_rhythm" and ended and not practice_mode:
 		summary["qualification_text"] = RibbonRhythmModelScript.qualification_text(ribbon_model.snapshot())
 	if mode == "hat_catching" and ended and not practice_mode:
@@ -888,6 +914,8 @@ func reset_round() -> void:
 			_melody_error_cursor = int(melody_snapshot.get("error_count", 0))
 			_melody_last_event = str(melody_snapshot.get("last_event", ""))
 			prompt = _melody_last_event
+			_cancel_melody_finale()
+			_ensure_melody_voices()
 	if assisted:
 		prompt = "輔助已開：目標會標亮，判定範圍加寬"
 	if mode == "fountain_timing":
@@ -950,6 +978,9 @@ func _process(delta: float) -> void:
 		_discard_next_delta = false
 		_refresh_hud()
 		queue_redraw()
+		return
+	if mode == "melody_memory" and melody_finale_pending:
+		_tick_melody_finale(minf(maxf(delta, 0.0), 0.1))
 		return
 	if mode == "ribbon_rhythm" and ribbon_finish_pending:
 		# The model has already produced its immutable result. Keep the Session
@@ -1346,7 +1377,7 @@ func _tick_melody(delta: float) -> void:
 	melody_model.step(delta)
 	_sync_melody_state()
 	if bool(melody_snapshot.get("ended", false)):
-		_finish(bool(melody_snapshot.get("success", false)), bool(melody_snapshot.get("devil_success", false)) and not practice_mode)
+		_settle_melody()
 
 func _axis_x() -> float:
 	return clampf(Input.get_axis("ui_left", "ui_right") + Input.get_axis("move_left", "move_right"), -1.0, 1.0)
@@ -1886,11 +1917,15 @@ func _sync_melody_state(input_note: int = -1) -> void:
 		_melody_audio_cursor += 1
 		var note := input_note if _melody_audio_cursor == serial and input_note >= 0 else int(melody_snapshot.get("current_cue", -1))
 		if note >= 0 and note < 4:
-			note_played.emit(note)
+			if is_instance_valid(_melody_voices):
+				_melody_voices.play(note, str(melody_snapshot.get("phase", "")) == "encore")
+			else:
+				note_played.emit(note)
 	var previous_score := score
 	var model_score := int(melody_snapshot.get("score", 0))
 	if model_score > score:
-		_record_score_event("melody_notes", "演奏音符得分", model_score - score)
+		var scored_phrase := int(melody_snapshot.get("last_scored_phrase", 0))
+		_record_score_event("melody_phrase_%d" % scored_phrase, "第 %d 句（%d 音）" % [scored_phrase + 1, (MelodyMemoryModelScript.PHRASES[scored_phrase] as Array).size()], model_score - score)
 	score = model_score
 	count = int(melody_snapshot.get("completed_phrases", 0))
 	devil_progress = int(melody_snapshot.get("precise_notes", 0))
@@ -1911,13 +1946,90 @@ func _sync_melody_state(input_note: int = -1) -> void:
 	if score != previous_score:
 		_refresh_hud(true)
 
+func _ensure_melody_voices() -> void:
+	if DisplayServer.get_name() == "headless" or not is_inside_tree():
+		return
+	if not is_instance_valid(_melody_voices):
+		_melody_voices = MelodyVoicesScript.new()
+		_melody_voices.name = "MelodyVoices"
+		add_child(_melody_voices)
+	_melody_voices.stop_all()
+	_melody_voices.set_volume_linear(_sfx_volume_linear())
+	_melody_voices.set_paused(paused)
+
+func _sfx_volume_linear() -> float:
+	var progress := get_node_or_null("/root/Progress")
+	if progress == null or not progress.get("settings") is Dictionary:
+		return 0.9
+	var settings: Dictionary = progress.settings
+	return clampf(float(settings.get("master_volume", 1.0)), 0.0, 1.0) * clampf(float(settings.get("sfx_volume", 0.9)), 0.0, 1.0)
+
+## A completed three-phrase round plays its finale before the result when a stage exists.
+func _settle_melody() -> void:
+	var success := bool(melody_snapshot.get("success", false))
+	var devil := bool(melody_snapshot.get("devil_success", false)) and not practice_mode
+	if not success or not is_instance_valid(presentation):
+		_finish(success, devil)
+		return
+	if melody_finale_pending or ended:
+		return
+	melody_finale_pending = true
+	_melody_finale_success = success
+	_melody_finale_devil = devil
+	_melody_finale_clock = 0.0
+	_melody_finale_index = 0
+	_melody_finale_next = MELODY_FINALE_DELAY
+	_melody_finale_snapshot = melody_snapshot.duplicate(true)
+	_melody_finale_snapshot["phase"] = "finale"
+	_melody_finale_snapshot["heard_notes"] = []
+	_melody_finale_snapshot["rhythm"] = MelodyMemoryModelScript.RHYTHMS[MelodyMemoryModelScript.PHRASE_COUNT - 1]
+	_melody_finale_snapshot["current_cue"] = -1
+	prompt = "三句合奏完成：終曲"
+	_refresh_hud(true)
+
+func _tick_melody_finale(delta: float) -> void:
+	_melody_finale_clock += delta
+	var notes: Array = MelodyMemoryModelScript.PHRASES[MelodyMemoryModelScript.PHRASE_COUNT - 1]
+	var rhythm: Array = MelodyMemoryModelScript.RHYTHMS[MelodyMemoryModelScript.PHRASE_COUNT - 1]
+	while _melody_finale_index < notes.size() and _melody_finale_clock >= _melody_finale_next:
+		var note := int(notes[_melody_finale_index])
+		(_melody_finale_snapshot["heard_notes"] as Array).append(note)
+		_melody_finale_snapshot["current_cue"] = note
+		if is_instance_valid(_melody_voices):
+			_melody_voices.play(note, true)
+		_melody_finale_index += 1
+		if _melody_finale_index < notes.size():
+			_melody_finale_next += float(rhythm[_melody_finale_index])
+		else:
+			_melody_finale_next += 0.43
+			# Closing chord: all three upper voices together.
+			if is_instance_valid(_melody_voices):
+				for chord_note in [0, 1, 2]:
+					_melody_voices.play(chord_note, chord_note == 0)
+	if _melody_finale_index >= notes.size():
+		_melody_finale_snapshot["current_cue"] = -1 if _melody_finale_clock >= _melody_finale_next else -2
+	if is_instance_valid(presentation):
+		presentation.update_frame(_melody_finale_snapshot, time_phase, reduced_motion)
+	_refresh_hud()
+	if _melody_finale_index >= notes.size() and _melody_finale_clock >= _melody_finale_next + MELODY_FINALE_TAIL:
+		melody_finale_pending = false
+		_finish(_melody_finale_success, _melody_finale_devil)
+
+func _cancel_melody_finale() -> void:
+	melody_finale_pending = false
+	_melody_finale_clock = 0.0
+	_melody_finale_index = 0
+	_melody_finale_snapshot = {}
+	if is_instance_valid(_melody_voices):
+		_melody_voices.stop_all()
+
 func _melody_input(note: int) -> void:
-	if mode != "melody_memory" or ended or paused:
+	if mode != "melody_memory" or ended or paused or melody_finale_pending:
 		return
 	melody_model.play_note(note)
 	_sync_melody_state(note)
 	if bool(melody_snapshot.get("ended", false)):
-		_finish(bool(melody_snapshot.get("success", false)), bool(melody_snapshot.get("devil_success", false)) and not practice_mode)
+		_settle_melody()
 		return
 	queue_redraw()
 

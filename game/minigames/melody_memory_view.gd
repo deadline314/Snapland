@@ -244,6 +244,7 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, DESIGN_SIZE), colors.sky)
 	_draw_seaside_backdrop(paper, ink, sea, wood, brass)
 	_draw_music_roll(paper, ink, brass, teal, wood)
+	_draw_phase_steps(ink, brass, teal)
 	_draw_instruments(ink, paper, brass, teal, coral, wood)
 	_draw_controls(ink, paper, coral)
 
@@ -466,10 +467,47 @@ func _stage_feedback_message() -> String:
 		"active": return "依照剛才聽到的順序演奏"
 		"wrong_pause": return "再聽一次，留意旋律的高低與間隔"
 		"complete": return "這段合奏完成"
+		"encore": return "全體樂器一起合奏剛完成的樂句"
+		"finale": return "三句完成：終曲合奏"
 		_: return "跟著手搖樂譜聽拍點"
 
 func _draw_ellipse(center: Vector2, radius: Vector2, color: Color, filled: bool = true, width: float = -1.0) -> void:
 	draw_ellipse(center, radius.x, radius.y, color, filled, width, true)
+
+## 0 示範, 1 記住, 2 演奏, 3 合奏 — the step the stage is in now.
+func phase_step(snapshot: Dictionary = {}) -> int:
+	var state := snapshot if not snapshot.is_empty() else _snapshot
+	match str(state.get("phase", "listen")):
+		"listen", "wrong_pause": return 0
+		"ready": return 1
+		"active": return 2
+		"encore", "finale", "complete": return 3
+	return 0
+
+## Hidden note slots the player must recall: total and how many are already played.
+func memory_slots(snapshot: Dictionary = {}) -> Vector2i:
+	var state := snapshot if not snapshot.is_empty() else _snapshot
+	var phase := str(state.get("phase", "listen"))
+	if phase != "ready" and phase != "active":
+		return Vector2i.ZERO
+	return Vector2i(int(state.get("phrase_length", 0)), int(state.get("input_index", 0)) if phase == "active" else 0)
+
+func _draw_phase_steps(ink: Color, brass: Color, teal: Color) -> void:
+	var labels: Array[String] = ["示範", "記住", "演奏", "合奏"]
+	var current := phase_step()
+	for index in labels.size():
+		var chip := Rect2(560.0 + float(index) * 96.0, 146.0, 88.0, 25.0)
+		var active := index == current
+		draw_rect(chip, teal if active else Color("#102b3a"))
+		draw_rect(chip, brass if active else Color("#55707a"), false, 1.5)
+		draw_string(FontProfiles.current_font(), chip.position + Vector2(0.0, 18.0), "%d %s" % [index + 1, labels[index]], HORIZONTAL_ALIGNMENT_CENTER, chip.size.x, 14, Color("#f4eedc") if active else Color("#a7b8b6"))
+	var slots := memory_slots()
+	for slot in slots.x:
+		var center := Vector2(250.0 + float(slot) * 62.0, 245.0)
+		draw_circle(center, 13.0, Color("#102b3a") if slot >= slots.y else teal)
+		draw_arc(center, 13.0, 0.0, TAU, 24, brass, 2.0, true)
+		if slot >= slots.y:
+			draw_string(FontProfiles.current_font(), center + Vector2(-8.0, 6.0), "?", HORIZONTAL_ALIGNMENT_CENTER, 16, 16, Color("#f4eedc"))
 
 func _phase_label() -> String:
 	match str(_snapshot.get("phase", "listen")):
@@ -478,4 +516,6 @@ func _phase_label() -> String:
 		"active": return "照節奏重現"
 		"wrong_pause": return "再聽一次"
 		"complete": return "合奏完成"
+		"encore": return "合奏回放"
+		"finale": return "終曲合奏"
 		_: return "海風樂譜"

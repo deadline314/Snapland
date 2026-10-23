@@ -28,6 +28,11 @@ const MIN_INPUT_INTERVAL := 0.12
 const PHRASE_COUNT := 3
 const PRECISE_SCORE := 20
 const CLOSE_SCORE := 12
+## After phrases 1 and 2 the stage plays the finished phrase back once as a full
+## ensemble before the next demonstration; the final phrase's encore is staged
+## by the Session before the result so the model can settle immediately.
+const ENCORE_DELAY := 0.35
+const ENCORE_TAIL := 0.75
 
 var assisted := false
 var time_phase := "noon"
@@ -59,6 +64,13 @@ var _pending_return_to_active := false
 var _heard_notes: Array[int] = []
 var _replays: Array[int] = []
 var _snapshot_cache: Dictionary = {}
+var _encore_phrase := -1
+var _encore_index := 0
+var _next_encore_time := 0.0
+## Phrase that earned the most recent note score (for per-phrase result rows).
+var last_scored_phrase := -1
+## Grade of the latest played note: "precise", "close", "off_time" or "wrong".
+var last_note_grade := ""
 
 func reset(p_assisted: bool = false, p_time_phase: String = "noon") -> void:
 	assisted = p_assisted
@@ -88,6 +100,11 @@ func reset(p_assisted: bool = false, p_time_phase: String = "noon") -> void:
 	_listen_index = 0
 	_next_note_time = FIRST_NOTE_DELAY
 	_pending_return_to_active = false
+	_encore_phrase = -1
+	_encore_index = 0
+	_next_encore_time = 0.0
+	last_scored_phrase = -1
+	last_note_grade = ""
 	_heard_notes.clear()
 	_replays.clear()
 	for _phrase in PHRASE_COUNT:
@@ -125,6 +142,8 @@ func play_note(index: int) -> Dictionary:
 	var late := _input_clock > _expected_input_time + timing_window
 	var early := _input_clock < _expected_input_time - timing_window
 	var correct := index == expected
+	last_scored_phrase = phrase_index
+	last_note_grade = "wrong" if not correct else ("off_time" if late or early else ("precise" if timing_error <= PRECISE_WINDOW else "close"))
 	if not correct:
 		_register_error("音符錯了，樂句從頭再聽一次")
 		_begin_listen(WRONG_PAUSE, false)
@@ -146,6 +165,19 @@ func play_note(index: int) -> Dictionary:
 
 static func score_rule_text() -> String:
 	return "音高與節奏準確 +%d，節奏接近 +%d；錯音或節奏超出容許範圍不加分。" % [PRECISE_SCORE, CLOSE_SCORE]
+
+## Ordinary/devil eligibility of a finished formal round with its real counts.
+static func qualification_text(state: Dictionary) -> String:
+	var total := int(state.get("total_notes", 0))
+	var precise := int(state.get("precise_notes", 0))
+	var errors := int(state.get("error_count", 0))
+	if not bool(state.get("success", false)):
+		return "普通拍貼需完成三句（本次 %d / 3）。" % int(state.get("completed_phrases", 0))
+	if bool(state.get("assisted", false)):
+		return "三句合奏完成，取得普通拍貼；輔助回合不取得小惡魔拍貼。"
+	if bool(state.get("devil_success", false)):
+		return "三句全對、零失誤且每音都踩準拍點，已達成小惡魔條件。"
+	return "三句合奏完成，取得普通拍貼。小惡魔需零失誤且每音踩準（本次精準 %d / %d、失誤 %d）。" % [precise, total, errors]
 
 func replay_phrase() -> Dictionary:
 	if ended or phase != "active" or replay_count >= REPLAY_LIMIT:
@@ -204,6 +236,17 @@ func _step_slice(dt: float) -> void:
 		cue_index = -1
 	elif phase == "active":
 		_input_clock += dt
+	elif phase == "encore":
+		var encore_notes: Array = PHRASES[_encore_phrase]
+		if _encore_index < encore_notes.size() and phase_elapsed >= _next_encore_time:
+			current_cue = int(encore_notes[_encore_index])
+			cue_index = current_cue
+			note_start_serial += 1
+			_heard_notes.append(current_cue)
+			_encore_index += 1
+			_next_encore_time += float(RHYTHMS[_encore_phrase][_encore_index]) if _encore_index < encore_notes.size() else ENCORE_TAIL
+		elif _encore_index >= encore_notes.size() and phase_elapsed >= _next_encore_time:
+			_begin_next_phrase()
 
 func _advance_input(precise: bool) -> void:
 	if not precise:
@@ -228,20 +271,32 @@ func _advance_input(precise: bool) -> void:
 			if devil_success:
 				last_event += "：零失誤精準演奏"
 		else:
-			phase = "listen"
-			input_index = 0
-			replay_count = 0
-			_replays[phrase_index] = 0
-			_phrase_precise = true
-			_listen_index = 0
-			_next_note_time = FIRST_NOTE_DELAY
+			# Ensemble encore of the phrase just completed, then the next demonstration.
+			phase = "encore"
+			_encore_phrase = phrase_index - 1
+			_encore_index = 0
+			_next_encore_time = ENCORE_DELAY
 			phase_elapsed = 0.0
-			_input_clock = 0.0
-			_expected_input_time = 0.0
-			_has_input_anchor = false
 			_heard_notes.clear()
 			current_cue = -1
 			cue_index = -1
+
+func _begin_next_phrase() -> void:
+	phase = "listen"
+	_encore_phrase = -1
+	input_index = 0
+	replay_count = 0
+	_replays[phrase_index] = 0
+	_phrase_precise = true
+	_listen_index = 0
+	_next_note_time = FIRST_NOTE_DELAY
+	phase_elapsed = 0.0
+	_input_clock = 0.0
+	_expected_input_time = 0.0
+	_has_input_anchor = false
+	_heard_notes.clear()
+	current_cue = -1
+	cue_index = -1
 
 func _register_error(message: String) -> void:
 	error_count += 1
@@ -293,7 +348,7 @@ func _refresh_snapshot() -> void:
 	_snapshot_cache["current_cue"] = current_cue
 	_snapshot_cache["note_start_serial"] = note_start_serial
 	_snapshot_cache["heard_notes"] = _heard_notes
-	_snapshot_cache["rhythm"] = RHYTHMS[mini(phrase_index, PHRASE_COUNT - 1)] if phase == "listen" else []
+	_snapshot_cache["rhythm"] = RHYTHMS[mini(phrase_index, PHRASE_COUNT - 1)] if phase == "listen" else (RHYTHMS[_encore_phrase] if phase == "encore" and _encore_phrase >= 0 else [])
 	_snapshot_cache["last_event"] = last_event
 	_snapshot_cache["ended"] = ended
 	_snapshot_cache["success"] = success
@@ -301,3 +356,6 @@ func _refresh_snapshot() -> void:
 	_snapshot_cache["timing_window"] = ASSISTED_ACCEPT_WINDOW if assisted else ACCEPT_WINDOW
 	_snapshot_cache["precise_window"] = PRECISE_WINDOW
 	_snapshot_cache["replay_available"] = phase == "active" and replay_count < REPLAY_LIMIT
+	_snapshot_cache["encore_phrase"] = _encore_phrase
+	_snapshot_cache["last_scored_phrase"] = last_scored_phrase
+	_snapshot_cache["last_note_grade"] = last_note_grade
