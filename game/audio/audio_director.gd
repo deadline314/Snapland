@@ -37,7 +37,7 @@ const DIALOGUE_BEEP_SAMPLE_RATE := 22050
 const DIALOGUE_BEEP_SECONDS := 0.024
 const DIALOGUE_BEEP_PITCH_HZ := {"票票": 760.0, "小角": 910.0, "阿浪": 620.0, "主角": 700.0}
 const DIALOGUE_BEEP_INTERVAL_MSEC := {"票票": 54, "小角": 42, "阿浪": 50, "主角": 48}
-const DIALOGUE_PUNCTUATION := "，。！？；：、…—,.!?;:·"
+const DIALOGUE_PUNCTUATION := "，。！？；：、…—,.!?;:·「」『』（）()《》〈〉“”‘’\"'～~・　"
 const SETTING_KEYS := {
 	"master": "master_volume",
 	"music": "music_volume",

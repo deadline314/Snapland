@@ -35,8 +35,16 @@ func _run() -> void:
 	assert(_panel.visible and _panel.speaker_label.text == "票票", "the dialogue panel shows the current speaker")
 	assert(_panel.text_label.text == "船已靠岸。沿木棧橋進廣場。", "the dialogue panel keeps the complete subtitle visible to assistive readers")
 	assert(_panel.text_label.visible_characters == 0, "the dialogue line starts with typewriter reveal")
+	assert(_panel.advance_button.text == _panel.ADVANCE_REVEAL_TEXT and _panel.is_revealing(), "while text is revealing the one advance control offers to show the whole line")
 	_panel.reveal_all()
 	assert(_panel.text_label.visible_characters == -1, "the first advance reveals the full line")
+	assert(_panel.advance_button.text == _panel.ADVANCE_NEXT_TEXT and not _panel.is_revealing(), "a fully shown line offers the next line")
+	_panel.show_line("票票", "最後一句。", 2, true)
+	_panel.text_label.visible_characters = _panel.text_label.text.length()
+	await get_tree().process_frame
+	assert(_panel.advance_button.text == _panel.ADVANCE_LAST_TEXT, "a naturally finished last line offers to finish the conversation")
+	_panel.show_line("票票", "船已靠岸。沿木棧橋進廣場。", 0)
+	_panel.reveal_all()
 	_panel.advance_button.pressed.emit()
 	assert(_panel.speaker_label.text == "小角", "the advance button proceeds to the next speaker")
 	_panel.cancel_button.pressed.emit()
@@ -46,6 +54,8 @@ func _run() -> void:
 	assert(not _audio.play_dialogue_beep("票票", "你"), "dialogue beeps respect zero SFX volume")
 	_audio.apply_settings({"master_volume": 1.0, "sfx_volume": 1.0})
 	assert(not _audio.play_dialogue_beep("票票", "，"), "punctuation never triggers a dialogue beep")
+	for quiet_glyph in ["「", "」", "（", "…", "—", "　", " ", "!", "・"]:
+		assert(not _audio.play_dialogue_beep("票票", quiet_glyph), "quotes, brackets, spaces and marks stay silent: %s" % quiet_glyph)
 	assert(_audio.play_dialogue_beep("票票", "你"), "a spoken character triggers the synthesized dialogue beep")
 	assert(not _audio.play_dialogue_beep("小角", "好"), "rapid reveal characters are bounded by the shared beep interval")
 	await get_tree().create_timer(0.1).timeout
