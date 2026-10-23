@@ -43,6 +43,9 @@ var success := false
 var devil_success := false
 var note_played_serial := 0
 var last_grade := ""
+## Signed timing of the latest judged press (seconds, + is late) and when it was judged.
+var last_offset := 0.0
+var last_judged_at := -1.0
 var last_event := "看向前方兩拍預告，依節奏踩步、躍起或按住揮帶"
 
 var _cue_times: Array[float] = []
@@ -72,6 +75,8 @@ func reset(p_assisted: bool = false, p_time_phase: String = "noon") -> void:
 	devil_success = false
 	note_played_serial = 0
 	last_grade = ""
+	last_offset = 0.0
+	last_judged_at = -1.0
 	last_event = "看向前方兩拍預告，依節奏踩步、躍起或按住揮帶"
 	_cue_times.clear()
 	for index in range(GESTURES.size()):
@@ -135,6 +140,7 @@ func press_action(action: String) -> Dictionary:
 		last_event = "按住，讓彩帶走過整個弧線"
 		_refresh_snapshot()
 		return snapshot()
+	last_offset = offset
 	_complete_gesture(absf(offset), 0.0)
 	_refresh_snapshot()
 	return snapshot()
@@ -152,9 +158,28 @@ func release_action(action: String) -> Dictionary:
 	elif absf(held_for - required) > _hold_tolerance():
 		_register_miss("彩帶留拍長度不準")
 	else:
+		last_offset = _held_started_at - _cue_times[gesture_index]
 		_complete_gesture(absf(_held_started_at - _cue_times[gesture_index]), absf(held_for - required))
 	_refresh_snapshot()
 	return snapshot()
+
+## Player-facing rule text built from the scoring constants above.
+static func score_rule_text() -> String:
+	return "精準（拍心 ±%d 毫秒）+%d、合拍（±%d 毫秒）+%d；四個重拍另 +%d。漏拍與錯按不扣分但會記錄。八拍中命中 %d 拍得普通拍貼；未開輔助、八拍全精準且零漏拍、零錯按才得小惡魔拍貼。輔助放寬為 ±%d 毫秒。" % [roundi(PRECISE_WINDOW * 1000.0), PERFECT_POINTS, roundi(ACCEPT_WINDOW * 1000.0), GOOD_POINTS, STRONG_BONUS, ORDINARY_SUCCESS_HITS, roundi(ASSISTED_WINDOW * 1000.0)]
+
+## Explains a finished formal round's ordinary/devil eligibility with its real counts.
+static func qualification_text(state: Dictionary) -> String:
+	var hits := int(state.get("correct_count", 0))
+	var precise := int(state.get("precise_count", 0))
+	var missed := int(state.get("missed_count", 0))
+	var wrong := int(state.get("error_count", 0)) - missed
+	if not bool(state.get("success", false)):
+		return "普通拍貼需命中 %d / 8 拍（本次 %d 拍）；小惡魔需未輔助、八拍全精準且零失誤。" % [ORDINARY_SUCCESS_HITS, hits]
+	if bool(state.get("assisted", false)):
+		return "命中 %d 拍，取得普通拍貼；輔助回合不取得小惡魔拍貼。" % hits
+	if bool(state.get("devil_success", false)):
+		return "八拍全精準、零漏拍與錯按，已達成小惡魔條件。"
+	return "命中 %d 拍，取得普通拍貼。小惡魔需八拍全精準且零失誤（本次精準 %d / 8、漏拍 %d、錯按 %d）。" % [hits, precise, missed, wrong]
 
 func snapshot() -> Dictionary:
 	return _snapshot_cache
@@ -187,6 +212,7 @@ func _complete_gesture(timing_error: float, hold_error: float) -> void:
 	var cue: Dictionary = GESTURES[gesture_index]
 	var precise := timing_error <= PRECISE_WINDOW and hold_error <= HOLD_TOLERANCE * 0.5
 	correct_count += 1
+	last_judged_at = elapsed
 	if precise:
 		precise_count += 1
 		last_grade = "精準"
@@ -221,6 +247,7 @@ func _register_error(message: String) -> void:
 	error_count += 1
 	_errors_for_gesture[gesture_index] = true
 	last_grade = "失拍"
+	last_judged_at = elapsed
 	last_event = message
 
 func _finish_if_complete() -> void:
@@ -269,6 +296,9 @@ func _refresh_snapshot() -> void:
 	_snapshot_cache["score"] = score
 	_snapshot_cache["note_played_serial"] = note_played_serial
 	_snapshot_cache["last_grade"] = last_grade
+	_snapshot_cache["last_offset"] = last_offset
+	_snapshot_cache["last_judged_at"] = last_judged_at
+	_snapshot_cache["wrong_press_count"] = error_count - missed_count
 	_snapshot_cache["last_event"] = last_event
 	_snapshot_cache["ribbon_trail"] = _trail
 	_snapshot_cache["ended"] = ended

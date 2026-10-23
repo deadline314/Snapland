@@ -256,6 +256,8 @@ func _test_hat_boundaries() -> void:
 	missed.finished.connect(func(value: Dictionary): missed_results.append(value))
 	while not missed.ended: missed._process(0.05)
 	assert(missed_results.size() == 1 and not missed_results[0].success and missed.mistakes == 6, "no timed reaches means six real misses and no completion")
+	_expect(str(missed.score_summary().get("qualification_text", "")).contains("救回 0 / 6") and missed.score_summary().rows.size() == 6, "a zero-catch result lists each real miss and explains the unmet ordinary count")
+	checks += 1
 	missed.queue_free()
 
 	var feedback_session := _new_session("game-005")
@@ -307,9 +309,21 @@ func _test_hat_boundaries() -> void:
 	var keyboard := _new_session("game-005")
 	var keyboard_results: Array[Dictionary] = []
 	keyboard.finished.connect(func(value: Dictionary): keyboard_results.append(value))
+	var clicked_hud_button: Button = keyboard.minigame_hud.find_child("HelpButton", true, false)
+	clicked_hud_button.grab_focus()
+	keyboard.set_paused(true)
+	keyboard.set_paused(false)
+	keyboard._restore_play_focus()
+	_expect(not clicked_hud_button.has_focus() and (keyboard.presentation.has_focus() if is_instance_valid(keyboard.presentation) else keyboard.get_viewport().gui_get_focus_owner() == null), "resuming hands keyboard focus back to the play surface instead of a clicked HUD button")
+	checks += 1
 	_drive_hat_session(keyboard, true)
 	assert(keyboard_results.size() == 1 and keyboard_results[0].success and keyboard_results[0].devil and keyboard_results[0].score >= 720, "real left/right and Space routing earns six center catches and the model result")
 	assert(keyboard.hat_model.snapshot().ledger.size() == 6 and keyboard.score == keyboard.hat_model.score and keyboard.devil_progress == 6, "session score, progress and result stay sourced from the six real model ledger entries")
+	var hat_summary: Dictionary = keyboard.score_summary()
+	var hat_row_total := 0
+	for row in hat_summary.rows: hat_row_total += int(row.amount)
+	_expect(hat_row_total == keyboard.score and hat_summary.rows.size() == 6 and str(hat_summary.rule).contains("+120") and str(hat_summary.rule).contains("擦帽接住 +70") and str(hat_summary.get("qualification_text", "")).contains("已達成小惡魔"), "hat result rows add up to the real score and the shown rule/qualification match the model constants")
+	checks += 1
 	keyboard.queue_free()
 
 	var pointer := _new_session("game-005", true)

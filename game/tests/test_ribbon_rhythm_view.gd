@@ -13,6 +13,7 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	_test_beat_guides()
 	var view = RibbonView.new()
 	root.add_child(view)
 	view.size = Vector2(1280.0, 720.0)
@@ -205,3 +206,17 @@ func _expect(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		push_error("FAIL: " + label)
+
+func _test_beat_guides() -> void:
+	var guide = RibbonView.new()
+	var current := {"time": 1.02, "strong": true, "action": "left"}
+	_expect(guide.approach_radius(RibbonView.APPROACH_SECONDS) == 40.0 and guide.approach_radius(0.0) == 14.0 and guide.approach_radius(RibbonView.APPROACH_SECONDS + 0.1) == -1.0, "the approach ring closes from 40 px to the glyph exactly on the beat")
+	_expect(is_equal_approx(guide.time_to_current_beat({"current_gesture": current, "elapsed": 0.0, "count_in_left": 2.82}), 3.84), "time to the first beat includes the music count-in")
+	_expect(guide.count_in_number({"count_in_left": 2.82}) == 3 and guide.count_in_number({"count_in_left": 0.5}) == 1 and guide.count_in_number({"count_in_left": 0.0}) == 0, "the count-in shows 3, 2, 1 and disappears when the round runs")
+	_expect(guide.judgement_text({"last_grade": "精準", "last_offset": 0.06, "last_judged_at": 1.0, "elapsed": 1.2}) == "精準　晚 60 毫秒", "a judged press shows its grade with a late offset")
+	_expect(guide.judgement_text({"last_grade": "合拍", "last_offset": -0.15, "last_judged_at": 1.0, "elapsed": 1.1}) == "合拍　早 150 毫秒", "an early press is labelled early")
+	_expect(guide.judgement_text({"last_grade": "精準", "last_offset": 0.06, "last_judged_at": 1.0, "elapsed": 2.0}).is_empty(), "the stamp disappears after its short display time")
+	_expect(not RibbonView.JUDGEMENT_RECT.intersects(RibbonView.MAIN_AVATAR_RECT) and not RibbonView.JUDGEMENT_RECT.intersects(RibbonView.PARTNER_AVATAR_RECT) and not RibbonView.JUDGEMENT_RECT.intersects(RibbonView.JUMP_AVATAR_RECT), "the judgement stamp never covers either dancer")
+	var medallion := Rect2(RibbonView.COUNT_IN_CENTER - Vector2(46, 46), Vector2(92, 92))
+	_expect(not medallion.intersects(RibbonView.MAIN_AVATAR_RECT) and not medallion.intersects(RibbonView.JUMP_AVATAR_RECT), "the count-in medallion stays beside the dancer")
+	guide.free()

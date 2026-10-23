@@ -17,6 +17,13 @@ const JUMP_AVATAR_RECT := Rect2(503.0, 246.0, 230.0, 296.0)
 const CURRENT_CUE_RECT := Rect2(133.0, 229.0, 170.0, 76.0)
 const UPCOMING_CUE_RECTS := [Rect2(977.0, 229.0, 170.0, 76.0), Rect2(1018.0, 319.0, 132.0, 63.0)]
 const BEAT_MARKER_COUNT := 8
+const RibbonModel = preload("res://game/minigames/ribbon_rhythm_model.gd")
+const BEAT_INTERVAL := RibbonModel.BEAT_INTERVAL
+## A closing ring reaches the glyph exactly on the beat; it starts two beats early.
+const APPROACH_SECONDS := BEAT_INTERVAL * 2.0
+const COUNT_IN_CENTER := Vector2(398.0, 432.0)
+const JUDGEMENT_RECT := Rect2(748.0, 286.0, 140.0, 40.0)
+const JUDGEMENT_SECONDS := 0.7
 const STRONG_BEATS := [0, 3, 5, 7]
 const CONTROL_RECTS := {
 	"left": Rect2(342.0, 647.0, 176.0, 50.0),
@@ -191,6 +198,43 @@ func visual_cue_state(snapshot: Dictionary = {}) -> Dictionary:
 		"held_action": str(state.get("hold_action", "")),
 	}
 
+## Seconds until the current gesture's beat, including any count-in still playing.
+func time_to_current_beat(snapshot: Dictionary = {}) -> float:
+	var state := snapshot if not snapshot.is_empty() else _snapshot
+	var current: Variant = state.get("current_gesture", {})
+	if not current is Dictionary or (current as Dictionary).is_empty():
+		return INF
+	return float((current as Dictionary).get("time", 0.0)) - float(state.get("elapsed", 0.0)) + float(state.get("count_in_left", 0.0))
+
+## Approach ring radius: 40 px two beats out, 14 px (the glyph) on the beat.
+func approach_radius(seconds_to_beat: float) -> float:
+	if not is_finite(seconds_to_beat) or seconds_to_beat > APPROACH_SECONDS or seconds_to_beat < -0.12:
+		return -1.0
+	return lerpf(14.0, 40.0, clampf(seconds_to_beat / APPROACH_SECONDS, 0.0, 1.0))
+
+## Count-in number shown before the first gesture (3, 2, 1), or 0 once the round runs.
+func count_in_number(snapshot: Dictionary = {}) -> int:
+	var state := snapshot if not snapshot.is_empty() else _snapshot
+	var left := float(state.get("count_in_left", 0.0))
+	if left <= 0.0:
+		return 0
+	return clampi(ceili(left / BEAT_INTERVAL), 1, 3)
+
+## Grade + early/late text for the latest judged press while its stamp is visible.
+func judgement_text(snapshot: Dictionary = {}) -> String:
+	var state := snapshot if not snapshot.is_empty() else _snapshot
+	var judged_at := float(state.get("last_judged_at", -1.0))
+	var grade := str(state.get("last_grade", ""))
+	if judged_at < 0.0 or grade.is_empty() or float(state.get("elapsed", 0.0)) - judged_at > JUDGEMENT_SECONDS:
+		return ""
+	if grade == "失拍":
+		return "失拍"
+	var offset := float(state.get("last_offset", 0.0))
+	var milliseconds := roundi(absf(offset) * 1000.0)
+	if milliseconds <= 20:
+		return "%s　正中" % grade
+	return "%s　%s %d 毫秒" % [grade, "晚" if offset > 0.0 else "早", milliseconds]
+
 func control_center(action: String) -> Vector2:
 	if not CONTROL_RECTS.has(action):
 		return Vector2.ZERO
@@ -331,6 +375,7 @@ func _draw() -> void:
 	_draw_timeline(palette)
 	_draw_ribbon_trails(palette)
 	_draw_performers(palette)
+	_draw_beat_guides(palette)
 	_draw_controls(palette)
 
 func _draw_stage(palette: Dictionary) -> void:
@@ -573,6 +618,41 @@ func _draw_controls(palette: Dictionary) -> void:
 		draw_rect(rect, palette.gold.darkened(0.16) if active else palette.accent.darkened(0.12), false, 2.0, true)
 		var label := "←  A / ←" if action == "left" else ("跳起  SPACE" if action == "jump" else "D / →  →")
 		_draw_label(rect.position + Vector2(0, 32), label, palette.text if not active else palette.sky, HORIZONTAL_ALIGNMENT_CENTER, int(rect.size.x), 15)
+
+func _draw_beat_guides(palette: Dictionary) -> void:
+	var number := count_in_number()
+	if number > 0:
+		# Count-in medallion beside the dancer: the music is already playing the clicks.
+		draw_circle(COUNT_IN_CENTER, 46.0, Color(palette.sky.darkened(0.25), 0.92))
+		draw_arc(COUNT_IN_CENTER, 46.0, 0.0, TAU, 40, palette.gold, 3.0, true)
+		var beat_fraction := fposmod(float(_snapshot.get("count_in_left", 0.0)), BEAT_INTERVAL) / BEAT_INTERVAL
+		draw_arc(COUNT_IN_CENTER, 38.0, -PI * 0.5, -PI * 0.5 + TAU * beat_fraction, 40, palette.accent, 4.0, true)
+		_draw_label(COUNT_IN_CENTER + Vector2(-40.0, 14.0), str(number), palette.gold, HORIZONTAL_ALIGNMENT_CENTER, 80, 40)
+		_draw_label(COUNT_IN_CENTER + Vector2(-60.0, 70.0), "預備", palette.text, HORIZONTAL_ALIGNMENT_CENTER, 120, 15)
+	var radius := approach_radius(time_to_current_beat())
+	if radius > 0.0:
+		var current: Dictionary = _snapshot.get("current_gesture", {})
+		var ring_color: Color = palette.gold if bool(current.get("strong", false)) else palette.accent
+		var card_center := CURRENT_CUE_RECT.position + Vector2(34.0, CURRENT_CUE_RECT.size.y * 0.52)
+		draw_arc(card_center, radius, 0.0, TAU, 36, ring_color, 3.0, true)
+		var light := beat_marker_rect(int(_snapshot.get("gesture_index", 0))).get_center()
+		draw_arc(light, radius * 0.5, 0.0, TAU, 28, ring_color, 2.0, true)
+	if not _reduced_motion:
+		# Decorative lamp pulse on every beat of the groove (count-in included).
+		var beat_clock := float(_snapshot.get("elapsed", 0.0)) - float(_snapshot.get("count_in_left", 0.0)) - RibbonModel.FIRST_BEAT_TIME
+		var since := fposmod(beat_clock, BEAT_INTERVAL)
+		var pulse := exp(-since * 7.0)
+		for lamp in [Vector2(275, 192), Vector2(520, 182), Vector2(760, 182), Vector2(1005, 192)]:
+			draw_circle(lamp, 8.0 + pulse * 6.0, Color(palette.gold, 0.25 + pulse * 0.5))
+	var stamp := judgement_text()
+	if not stamp.is_empty():
+		var missed := stamp == "失拍"
+		var precise := stamp.begins_with("精準")
+		var tone: Color = palette.coral if missed else (palette.gold if precise else palette.accent)
+		draw_rect(Rect2(JUDGEMENT_RECT.position + Vector2(3, 4), JUDGEMENT_RECT.size), Color.BLACK, true)
+		draw_rect(JUDGEMENT_RECT, palette.sky.darkened(0.2), true)
+		draw_rect(JUDGEMENT_RECT, tone, false, 2.0, true)
+		_draw_label(JUDGEMENT_RECT.position + Vector2(0.0, 26.0), stamp, tone, HORIZONTAL_ALIGNMENT_CENTER, int(JUDGEMENT_RECT.size.x), 14)
 
 func _draw_label(position: Vector2, text: String, color: Color, alignment: HorizontalAlignment, width: int, size_value: int) -> void:
 	draw_string(FontProfiles.current_font(), position, text, alignment, width, size_value, color)

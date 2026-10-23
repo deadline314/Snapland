@@ -1,6 +1,7 @@
 extends SceneTree
 
 const RibbonModel = preload("res://game/minigames/ribbon_rhythm_model.gd")
+const Groove = preload("res://game/minigames/ribbon_groove.gd")
 
 var failures := 0
 var checks := 0
@@ -16,6 +17,8 @@ func _run() -> void:
 	_test_six_of_eight_is_ordinary_success()
 	_test_assist_widens_timing_but_never_plays_for_the_player()
 	_test_idle_and_bounded_clock()
+	_test_groove_is_built_from_the_same_beat_chart()
+	_test_published_rules_and_qualification_text()
 	if failures > 0:
 		push_error("FAIL: ribbon rhythm model (%d/%d checks failed)" % [failures, checks])
 		quit(1)
@@ -173,3 +176,51 @@ func _expect(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		push_error("FAIL: " + label)
+
+func _test_groove_is_built_from_the_same_beat_chart() -> void:
+	var clicks: Array[float] = Groove.count_in_times()
+	var gestures: Array[float] = Groove.gesture_times()
+	var model = RibbonModel.new()
+	model.reset()
+	var cues: Array = model.snapshot().cue_times
+	var aligned := gestures.size() == cues.size()
+	for index in mini(gestures.size(), cues.size()):
+		aligned = aligned and is_equal_approx(gestures[index] - Groove.preroll_seconds(), float(cues[index]))
+	_expect(aligned, "every groove gesture sits exactly on its rule cue after the count-in")
+	_expect(clicks.size() == 3 and is_equal_approx(clicks[2] + RibbonModel.BEAT_INTERVAL, gestures[0]) and is_equal_approx(clicks[1] - clicks[0], RibbonModel.BEAT_INTERVAL), "three count-in clicks keep the same tempo up to the first gesture")
+	var stream: AudioStreamWAV = Groove.groove_stream()
+	_expect(stream != null and stream.format == AudioStreamWAV.FORMAT_16_BITS and not stream.stereo and stream.mix_rate == Groove.RATE, "the groove is a 16-bit mono stream at the declared rate")
+	var samples := stream.data.size() / 2
+	_expect(samples >= int(Groove.total_seconds() * Groove.RATE) - 1, "the groove covers the count-in, eight beats and the finale")
+	_expect(Groove.groove_stream() == stream, "the synthesized groove is cached instead of re-rendered per round")
+	# Onset check: each scheduled hit starts a burst louder than the quiet just before it.
+	var onsets_ok := true
+	var all_times: Array[float] = []
+	all_times.append_array(clicks)
+	all_times.append_array(gestures)
+	for at in all_times:
+		var before := _rms(stream.data, at - 0.06, at - 0.01)
+		var after := _rms(stream.data, at, at + 0.05)
+		onsets_ok = onsets_ok and after > before * 1.8 and after > 0.02
+	_expect(onsets_ok, "the audible attack of every count-in click and gesture note lands on its scheduled time")
+	var player_less = Groove.new()
+	_expect(player_less.audio_time() == -1.0, "a groove that is not playing reports no audio clock")
+	player_less.free()
+
+func _rms(data: PackedByteArray, from_seconds: float, to_seconds: float) -> float:
+	var first := clampi(int(from_seconds * Groove.RATE), 0, data.size() / 2)
+	var last := clampi(int(to_seconds * Groove.RATE), 0, data.size() / 2)
+	if last <= first:
+		return 0.0
+	var total := 0.0
+	for i in range(first, last):
+		var value := float(data.decode_s16(i * 2)) / 32768.0
+		total += value * value
+	return sqrt(total / float(last - first))
+
+func _test_published_rules_and_qualification_text() -> void:
+	var rule := RibbonModel.score_rule_text()
+	_expect(rule.contains("+%d" % RibbonModel.PERFECT_POINTS) and rule.contains("±%d" % roundi(RibbonModel.PRECISE_WINDOW * 1000.0)) and rule.contains("+%d" % RibbonModel.STRONG_BONUS), "the shown rule text comes from the scoring constants")
+	_expect(RibbonModel.qualification_text({"success": false, "correct_count": 4}).contains("本次 4 拍"), "a failed result states its real hit count")
+	_expect(RibbonModel.qualification_text({"success": true, "assisted": true, "correct_count": 8}).contains("輔助回合不取得"), "an assisted success explains why no devil print")
+	_expect(RibbonModel.qualification_text({"success": true, "correct_count": 7, "precise_count": 6, "missed_count": 1, "error_count": 2}).contains("漏拍 1、錯按 1"), "an ordinary result separates misses from wrong presses")

@@ -10,6 +10,9 @@ func _initialize() -> void:
 	_test_edge_grade_and_center_offset()
 	_test_assist_timeout_and_retry()
 	_test_bounded_clock_and_stable_snapshot()
+	_test_paired_gusts_share_one_visible_wind()
+	_test_securing_one_hat_per_pair_is_an_ordinary_choice()
+	_test_calm_lead_in_shifts_the_whole_chart()
 	if failures == 0:
 		print("Hat rescue model: %d checks passed" % checks)
 		quit(0)
@@ -162,3 +165,84 @@ func _drive_to_resolution_without_catching(model, index: int) -> void:
 		model.step(0.02)
 		guard += 1
 	_expect(guard < 160, "falling hat crosses the hand plane within its expected flight duration")
+
+func _test_paired_gusts_share_one_visible_wind() -> void:
+	var model = Model.new()
+	model.reset()
+	var max_airborne := 0
+	var pair_ranks_seen := false
+	var wind_consistent := true
+	var response_shapes_differ := false
+	var guard := 0
+	while not model.finished and guard < 3200:
+		model.step(0.02)
+		var state: Dictionary = model.snapshot()
+		max_airborne = maxi(max_airborne, int(state.airborne_count))
+		if int(state.airborne_count) == 2:
+			var ranks: Array = []
+			for hat in state.hats:
+				if hat.active and not hat.resolved: ranks.append(int(hat.airborne_rank))
+			ranks.sort()
+			pair_ranks_seen = pair_ranks_seen or ranks == [1, 2]
+		var force := model.wind_at(model.elapsed)
+		if absf(force) > 1.0 and signi(int(signf(force))) != int(state.wind_direction):
+			wind_consistent = false
+		if absf(force) > 1.0:
+			var first := Model.HAT_GUST.find(model._gust_at(model.elapsed))
+			if first >= 0 and not is_equal_approx(model._gust_force(first, model.elapsed), force * Model.HAT_WIND_RESPONSE[first]):
+				wind_consistent = false
+		guard += 1
+	for index in Model.HAT_COUNT:
+		if Model.HAT_WIND_RESPONSE[index] != Model.HAT_WIND_RESPONSE[0]: response_shapes_differ = true
+	_expect(max_airborne == 2 and pair_ranks_seen, "paired gusts put two brims in the air together and rank them by time to the hand line")
+	_expect(wind_consistent, "displayed wind direction and every hat's push come from one shared gust")
+	_expect(response_shapes_differ and Model.HAT_WIND_RESPONSE[2] > Model.HAT_WIND_RESPONSE[5], "wide sun hat drifts farther than the canvas cap in the same gust")
+	_expect(Model.HAT_GUST[2] == Model.HAT_GUST[3] and Model.HAT_GUST[4] == Model.HAT_GUST[5] and Model.WIND_DIRECTIONS[3] == Model.GUST_DIRECTIONS[Model.HAT_GUST[3]], "each pair leaves in one gust and its ledger wind matches that gust")
+
+## A cautious player saves the first brim of each pair and lets the second fall.
+func _test_securing_one_hat_per_pair_is_an_ordinary_choice() -> void:
+	var model = Model.new()
+	model.reset()
+	var guard := 0
+	while not model.finished and guard < 1900:
+		var state: Dictionary = model.snapshot()
+		var target := -1
+		for index in Model.HAT_COUNT:
+			var hat: Dictionary = state.hats[index]
+			if hat.active and not hat.resolved and index != 3 and index != 5:
+				target = index
+				break
+		if target >= 0:
+			var hat: Dictionary = state.hats[target]
+			_apply_digital_axis(model, float(hat.landing_x))
+			if float(hat.eta) <= 0.30 and float(state.catch_window) <= 0.0:
+				model.set_catch(true)
+		else:
+			model.set_axis(0.0)
+		model.step(0.02)
+		guard += 1
+	var final: Dictionary = model.snapshot()
+	_expect(final.finished and final.success and not final.devil, "securing one hat per pair still completes the ordinary rescue but not the devil chart")
+	_expect(final.caught == 4 and final.misses == 2 and final.ledger[3].status == "miss" and final.ledger[5].status == "miss", "the skipped brims are recorded as real misses in chart order")
+	_expect(final.best_combo < 6 and final.score < 816, "skipping a pair member breaks the centre streak bonus")
+
+func _test_calm_lead_in_shifts_the_whole_chart() -> void:
+	var model = Model.new()
+	model.reset(false, "noon", 1.5)
+	model.set_axis(1.0)
+	model.step(0.2)
+	model.step(0.2)
+	model.step(0.2)
+	model.step(0.2)
+	model.step(0.2)
+	model.step(0.2)
+	model.step(0.2)
+	var calm: Dictionary = model.snapshot()
+	_expect(model.elapsed > 1.39 and not calm.hats[0].active and absf(model.wind_at(model.elapsed)) < 0.001 and model.player_x > 640.0, "during the lead-in the catcher moves freely while no hat or gust has started")
+	_expect(float(calm.lead_in_left) > 0.0 and is_equal_approx(float(calm.next_spawn_time), 1.5), "the snapshot reports the remaining calm time and the shifted first launch")
+	model.set_axis(0.0)
+	model.step(0.2)
+	_expect(model.snapshot().hats[0].active and float(model.snapshot().lead_in_left) == 0.0, "the first hat leaves its passenger exactly after the calm")
+	var invalid = Model.new()
+	invalid.reset(false, "noon", NAN)
+	_expect(invalid.lead_in == 0.0, "a non-finite lead-in falls back to an immediate chart")

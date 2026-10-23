@@ -32,6 +32,7 @@ func _run() -> void:
 	_test_phase_and_accessibility(view, model)
 	_test_controls(view)
 	_test_empty_and_malformed_snapshot(view)
+	_test_paired_gust_cues(view)
 	await _test_authored_catch_sequence_and_feedback(view)
 	await process_frame
 	if failures == 0:
@@ -321,3 +322,22 @@ func _test_authored_catch_sequence_and_feedback(view) -> void:
 	session.free()
 	hud.queue_free()
 	_expect(view.bottom_control_hint().length() <= 24, "bottom hint stays a compact control legend; full instructions belong in tutorial")
+
+func _test_paired_gust_cues(view) -> void:
+	var model = Model.new()
+	model.reset()
+	var guard := 0
+	while int(model.snapshot().airborne_count) < 2 and guard < 600:
+		model.step(0.02)
+		guard += 1
+	var state: Dictionary = model.snapshot()
+	view.update_frame(state, "noon", false)
+	var airborne: Array[int] = view._airborne_hat_indices()
+	var ranks := {}
+	for index in airborne: ranks[int(state.hats[index].airborne_rank)] = index
+	_expect(airborne.size() == 2 and ranks.has(1) and ranks.has(2), "both brims of a paired gust get their own landing ring numbered by arrival")
+	_expect(view.bottom_control_hint().contains("1 號") and view.bottom_control_hint().length() <= 24, "the compact hint names the first arrival only while two hats are airborne")
+	var spawn_y: float = Model.SPAWN_Y[airborne[1]]
+	_expect(is_equal_approx(view.hat_draw_scale(spawn_y, spawn_y), 0.42) and is_equal_approx(view.hat_draw_scale(spawn_y + 150.0, spawn_y), 1.0) and is_equal_approx(view.hat_draw_scale(Model.CATCH_Y, spawn_y), 1.0), "hats grow from the far ferry deck and reach full size well before the hand line")
+	_expect(View.MAST_X - 60.0 > 910.0 and View.MAST_X + 172.0 < View.DESIGN_SIZE.x, "the bow wind pennant and its plaque stay right of the top HUD feedback band")
+	view.update_frame({}, "noon", false)
