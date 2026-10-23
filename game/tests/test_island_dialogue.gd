@@ -58,6 +58,9 @@ func _run() -> void:
 		assert(not _audio.play_dialogue_beep("票票", quiet_glyph), "quotes, brackets, spaces and marks stay silent: %s" % quiet_glyph)
 	assert(_audio.play_dialogue_beep("票票", "你"), "a spoken character triggers the synthesized dialogue beep")
 	assert(not _audio.play_dialogue_beep("小角", "好"), "rapid reveal characters are bounded by the shared beep interval")
+	assert(_audio.play_dialogue_beep("阿浪", "好", 1000), "a caller-supplied game clock can start a beep")
+	assert(not _audio.play_dialogue_beep("阿浪", "好", 1020), "beeps 20 ms apart on the game clock are merged")
+	assert(_audio.play_dialogue_beep("阿浪", "好", 1060), "the next beep follows the speaker's own game-time interval")
 	await get_tree().create_timer(0.1).timeout
 	assert(_audio._dialogue_beep_streams["票票"].data != _audio._dialogue_beep_streams["小角"].data, "each actor uses a distinct synthesized pitch")
 	assert(_audio.DIALOGUE_BEEP_INTERVAL_MSEC["票票"] != _audio.DIALOGUE_BEEP_INTERVAL_MSEC["小角"], "each actor has a distinct but bounded beep cadence")

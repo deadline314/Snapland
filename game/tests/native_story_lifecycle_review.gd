@@ -84,10 +84,7 @@ func _run_story_review() -> void:
 		return
 	if not await _capture_story("game010-result-and-reward"): return
 	if not await _activate_main_button("返回遊園", "return from game-010 result"): return
-	if not await _interact_at_station("quest-001", "quest"): return
-	if not _find_label_text(main.overlay, "今天的小麻煩"):
-		await _fail("Reopened quest-001 ticket does not show its completed state")
-		return
+	if not await _check_finished_request("quest-001", "imp-done", "ribbon_visible"): return
 	if not await _capture_story("quest001-completed-reopened"): return
 	if not await _activate_main_button("返回遊園", "close completed quest-001"): return
 	if not await _save_reload_story_state(): return
@@ -131,10 +128,7 @@ func _run_story_review() -> void:
 	if not await _capture_story("game004-result-and-reward"): return
 	if not await _activate_main_button("返回遊園", "return from game-004 result"): return
 	if not await _save_reload_story_state(): return
-	if not await _interact_at_station("quest-002", "quest"): return
-	if not _find_label_text(main.overlay, "今天的小麻煩"):
-		await _fail("Reopened quest-002 ticket does not show its completed state")
-		return
+	if not await _check_finished_request("quest-002", "announcer-done", "entry_sign_corrected"): return
 	if not await _capture_story("quest002-completed-reopened"): return
 	print("PASS: native ST-4 arrival, both quests, real game-010/game-004 results, rewards and save reloads")
 	await main._quit_game()
@@ -244,7 +238,7 @@ func _interact_at_station(id: String, expected_modal: String) -> bool:
 		return false
 	print("ST-4 INPUT: E at actual station ", id, " (player-position-only setup)")
 	_key(KEY_E)
-	if expected_modal == "quest" and main.modal_kind == "dialogue":
+	if (expected_modal == "quest" or expected_modal == "") and main.modal_kind == "dialogue":
 		if not await _complete_story_dialogue(): return false
 	deadline = _wall_deadline_ms(8000)
 	while Time.get_ticks_msec() < deadline and main.modal_kind != expected_modal:
@@ -252,6 +246,26 @@ func _interact_at_station(id: String, expected_modal: String) -> bool:
 		if not await _require_live_main("opening actual " + id + " UI"): return false
 	if main.modal_kind != expected_modal:
 		await _fail("Actual E interaction at %s opened %s, expected %s" % [id, main.modal_kind, expected_modal])
+		return false
+	return true
+
+## After a request is finished, talking gives the result conversation (no card)
+## and the island shows the result; the ticket reached from 今日任務 says so too.
+func _check_finished_request(quest_id: String, conversation_id: String, outcome_key: String) -> bool:
+	if not await _interact_at_station(quest_id, ""): return false
+	if main.last_conversation_id != conversation_id:
+		await _fail("%s finished conversation was %s, expected %s" % [quest_id, main.last_conversation_id, conversation_id])
+		return false
+	if not bool(main.world.story_landmarks.outcome_state().get(outcome_key, false)):
+		await _fail("%s result (%s) is not visible on the island" % [quest_id, outcome_key])
+		return false
+	if not await _capture_story(quest_id.replace("-", "") + "-result-on-island"): return false
+	main._show_tasks()
+	await get_tree().process_frame
+	main._show_quest(quest_id)
+	await get_tree().process_frame
+	if not _find_label_text(main.overlay, "今天的小麻煩"):
+		await _fail("Finished %s ticket does not show its completed state" % quest_id)
 		return false
 	return true
 

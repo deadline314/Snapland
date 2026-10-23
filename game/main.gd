@@ -42,6 +42,8 @@ var dialogue_panel: Control
 var dialogue_done := Callable()
 var dialogue_cancelled := Callable()
 var reveal := 0.0
+## Game-time clock that paces dialogue beeps; only advances while text reveals.
+var dialogue_clock_msec := 100000
 var definitions: Array=[]
 var capture_mode := false
 var photo_frames: Array[Image] = []
@@ -624,11 +626,12 @@ func _process(delta: float) -> void:
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0:
 		var previous_count := dialogue_label.visible_characters
 		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
+		dialogue_clock_msec+=int(round(delta*1000.0))
 		var next_count := mini(int(reveal), dialogue_label.text.length())
 		dialogue_label.visible_characters=next_count
 		for char_index in range(previous_count, next_count):
 			var current_speaker := str(dialogue[dialogue_index].get("speaker", "")) if dialogue_index < dialogue.size() else ""
-			audio.play_dialogue_beep(current_speaker, dialogue_label.text.substr(char_index, 1))
+			audio.play_dialogue_beep(current_speaker, dialogue_label.text.substr(char_index, 1), dialogue_clock_msec)
 
 func _context_prompt() -> String:
 	if world.is_riding(): return "E   下來走走"
