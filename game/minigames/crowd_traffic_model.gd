@@ -14,6 +14,10 @@ const ARRIVAL_LANES: Array[int] = [0, 0, 1, 0, 1, 1]
 const ARRIVAL_PEOPLE: Array[int] = [2, 3, 2, 4, 2, 3]
 const RESCUE_INDEX := 3
 const DEVIL_SCORE := 430
+## One full service of the other lane: walk, clearance and all-red.
+const CYCLE_DURATION := WALK_DURATION + CLEARANCE_DURATION + ALL_RED_DURATION
+## How many future arrivals the planning board announces.
+const FORECAST_COUNT := 2
 
 var assisted := false
 var elapsed := 0.0
@@ -38,6 +42,10 @@ var _snapshot_queues: Array = [[], []]
 var _snapshot_active: Dictionary = {}
 var _snapshot_group_views: Dictionary = {}
 var _snapshot_revision := 0
+## Planning views are allocated once and refreshed in place, like the queues.
+var _snapshot_upcoming: Array[Dictionary] = []
+var _snapshot_lane_risk: Array[Dictionary] = [{}, {}]
+var _upcoming_pool: Array[Dictionary] = [{}, {}]
 
 func _init() -> void:
 	_snapshot_cache = {
@@ -46,7 +54,9 @@ func _init() -> void:
 		"active": _snapshot_active, "active_progress": 0.0, "arrival_index": 0,
 		"safe_count": 0, "missed_count": 0, "mistakes": 0, "score": 0,
 		"devil_progress": 0, "finished": false, "success": false, "devil": false,
-		"events": events, "revision": 0
+		"events": events, "revision": 0,
+		"upcoming": _snapshot_upcoming, "lane_risk": _snapshot_lane_risk,
+		"time_to_free": 0.0, "recommended_lane": -1
 	}
 
 func reset(is_assisted: bool = false) -> void:
@@ -125,13 +135,79 @@ func _refresh_snapshot() -> void:
 	_snapshot_cache["devil_progress"] = devil_progress
 	_snapshot_cache["finished"] = finished
 	_snapshot_cache["success"] = finished and safe_count == 6
-	_snapshot_cache["devil"] = finished and safe_count == 6 and devil_progress == 6 and missed_count == 0 and score >= DEVIL_SCORE
+	_snapshot_cache["devil"] = finished and devil_qualified()
 	_snapshot_cache["revision"] = _snapshot_revision
 	for lane in 2:
 		for view_variant in _snapshot_queues[lane]:
 			_update_group_view(view_variant)
 	if not _snapshot_active.is_empty():
 		_update_group_view(_snapshot_active)
+	_refresh_forecast()
+
+## Devil photo: every group safe, none expired, efficient enough, in a standard round.
+func devil_qualified() -> bool:
+	return safe_count == 6 and devil_progress == 6 and missed_count == 0 and score >= DEVIL_SCORE and not assisted
+
+## Seconds until the crossing can start a new group, whichever lane is chosen.
+func time_to_free() -> float:
+	match phase:
+		"walk": return maxf(0.0, WALK_DURATION - phase_time) + CLEARANCE_DURATION + ALL_RED_DURATION
+		"clearance": return maxf(0.0, CLEARANCE_DURATION - phase_time) + ALL_RED_DURATION
+		"all_red": return maxf(0.0, ALL_RED_DURATION - phase_time)
+	return 0.0
+
+## Fills the planning board: the next arrivals, and for each lane whether its
+## head group survives waiting for one crossing of the other lane. A lane is
+## "must go next" when serving the other side first would make its head expire.
+func _refresh_forecast() -> void:
+	_snapshot_upcoming.resize(0)
+	for slot in FORECAST_COUNT:
+		var index := arrival_index + slot
+		if index >= ARRIVAL_TIMES.size():
+			break
+		var row: Dictionary = _upcoming_pool[slot]
+		row["id"] = index
+		row["lane"] = ARRIVAL_LANES[index]
+		row["people"] = ARRIVAL_PEOPLE[index]
+		row["rescue"] = index == RESCUE_INDEX
+		row["eta"] = maxf(0.0, ARRIVAL_TIMES[index] - elapsed)
+		row["patience"] = (RESCUE_PATIENCE if index == RESCUE_INDEX else NORMAL_PATIENCE) + (2.2 if assisted else 0.0)
+		_snapshot_upcoming.append(row)
+	var free_in := time_to_free()
+	_snapshot_cache["time_to_free"] = free_in
+	var heads_waiting := 0
+	for lane in 2:
+		if not queues[lane].is_empty(): heads_waiting += 1
+	var recommended := -1
+	var tightest := INF
+	for lane in 2:
+		var risk: Dictionary = _snapshot_lane_risk[lane]
+		risk.clear()
+		risk["lane"] = lane
+		if queues[lane].is_empty():
+			risk["waiting"] = 0
+			continue
+		var head: Dictionary = queues[lane][0]
+		var remaining := maxf(0.0, float(head.patience) - (elapsed - float(head.arrived_at)))
+		var people := 0
+		var rescue := false
+		for group_variant in queues[lane]:
+			people += int((group_variant as Dictionary).people)
+			rescue = rescue or bool((group_variant as Dictionary).rescue)
+		risk["waiting"] = queues[lane].size()
+		risk["people"] = people
+		risk["rescue"] = rescue
+		risk["head_id"] = int(head.id)
+		risk["head_rescue"] = bool(head.rescue)
+		risk["patience_remaining"] = remaining
+		risk["start_if_next"] = free_in
+		risk["lost"] = remaining < free_in
+		risk["must_go_next"] = heads_waiting == 2 and not risk.lost and remaining < free_in + CYCLE_DURATION
+		var slack := remaining - free_in
+		if not risk.lost and slack < tightest:
+			tightest = slack
+			recommended = lane
+	_snapshot_cache["recommended_lane"] = recommended
 
 func _update_group_view(view: Dictionary) -> void:
 	var wait_elapsed := maxf(0.0, elapsed - float(view.get("arrived_at", elapsed)))
@@ -175,7 +251,7 @@ func _process_boundaries() -> void:
 				view["status"] = "missed"
 				view["wait"] = group.wait
 				groups.append(group)
-				_record("expired", {"id": group.id, "lane": lane, "rescue": group.rescue})
+				_record("expired", {"id": group.id, "lane": lane, "people": group.people, "rescue": group.rescue, "wait": group.wait})
 			index -= 1
 	if phase == "walk" and phase_time + 0.000001 >= WALK_DURATION:
 		_complete_active_group()
@@ -248,7 +324,7 @@ func _complete_active_group() -> void:
 	score += earned
 	devil_progress += 1
 	groups.append(group)
-	_record("safe", {"id": group.id, "lane": group.lane, "wait": wait, "entry_wait": entry_wait, "base": 50, "efficiency": efficiency, "rescue_bonus": 50 if group.rescue else 0, "score": earned})
+	_record("safe", {"id": group.id, "lane": group.lane, "people": group.people, "rescue": group.rescue, "wait": wait, "entry_wait": entry_wait, "base": 50, "efficiency": efficiency, "rescue_bonus": 50 if group.rescue else 0, "score": earned})
 	active_group.clear()
 	_snapshot_active.clear()
 	active_progress = 0.0
@@ -260,7 +336,7 @@ func _maybe_finish() -> void:
 		return
 	finished = true
 	phase = "finished"
-	_record("finished", {"success": safe_count == 6, "devil": safe_count == 6 and devil_progress == 6 and score >= DEVIL_SCORE})
+	_record("finished", {"success": safe_count == 6, "devil": devil_qualified()})
 
 func _copy_group_view(target: Dictionary, source: Dictionary) -> void:
 	for key_variant in source:

@@ -2,13 +2,23 @@ extends Control
 class_name FountainJumpView
 
 ## Close orthographic fountain court for fountain_timing. The host owns game
-## rules; this view consumes the same phase/attempt/jump-start snapshot.
+## rules; this view consumes the same phase/attempt/jump-start snapshot and reads
+## the authored phrase schedule from FountainJumpModel, so the side-jet count-in,
+## the beat lamps and the central crest always agree with the judged beat.
 
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
+const FountainModel = preload("res://game/minigames/fountain_jump_model.gd")
 const DESIGN_SIZE := Vector2i(1280, 720)
 const CONTENT_BOUNDS := Rect2(142.0, 130.0, 996.0, 550.0)
-const PERIOD := 1.35
-const FIRST_BEAT := 1.0
+## A sounded count makes its side jet surge for this long.
+const COUNT_PULSE_SECONDS := 0.40
+## Landing ripple duration after the authored jump finishes.
+const SPLASH_SECONDS := 0.42
+const GRADE_COLORS := {"完美": Color("#ffe27a"), "準確": Color("#7fe3c4"), "踩中": Color("#f5b26b"), "錯過": Color("#ef6f7a")}
+const LAMP_OFF := Color("#2c3d40")
+const LAMP_COUNT := Color("#ffb836")
+const LAMP_REST := Color("#4fa7d8")
+const LAMP_JUMP := Color("#fff4c4")
 const HIT_HEIGHT_BASE := 42.0
 const HIT_HEIGHT_SWING := 132.0
 const WATER_PIXELS_TO_WORLD := 5.4 / 720.0
@@ -43,6 +53,12 @@ var _jet_materials: Array[StandardMaterial3D] = []
 var _ornament_nodes: Array[MeshInstance3D] = []
 var _lantern_glass_material: StandardMaterial3D
 var _water_glaze_material: StandardMaterial3D
+var _beat_lamps: Array[MeshInstance3D] = []
+var _beat_lamp_materials: Array[StandardMaterial3D] = []
+var _grade_gems: Array[MeshInstance3D] = []
+var _grade_gem_materials: Array[StandardMaterial3D] = []
+var _splash: MeshInstance3D
+var _splash_material: StandardMaterial3D
 var _initialized := false
 var _reduced_motion := false
 var _last_phase := "noon"
@@ -65,6 +81,7 @@ func initialize() -> void:
 	_viewport.add_child(_world)
 	_build_environment()
 	_build_stage()
+	_build_beat_lamps()
 	_build_avatar()
 	_apply_time_phase("noon")
 
@@ -109,23 +126,37 @@ func update_frame(snapshot: Dictionary, time_phase: String = "noon", reduced_mot
 	var phase := _finite_or(phase_value, 0.0)
 	var attempt := clampi(int(attempt_value) if _is_finite_number(attempt_value) else 0, 0, 3)
 	var jump_started := _finite_or(jump_value, -1.0)
+	var grades_value: Variant = snapshot.get("fountain_grades", [])
+	var grades: Array = grades_value if grades_value is Array else []
+	var beat_ready := bool(snapshot.get("beat_window", false))
 	for index in _jet_nodes.size():
 		var height_pixels: float
-		if index == 2 and attempt < 3:
-			var beat := FIRST_BEAT + float(attempt) * PERIOD
-			var offset := phase - beat
-			height_pixels = 108.0 if reduced_motion else HIT_HEIGHT_BASE + HIT_HEIGHT_SWING * (0.5 + 0.5 * cos(PI * offset / (PERIOD * 0.5)))
+		var water_color := Color("#75d2d1")
+		var energy := 0.13
+		var alpha := 0.52
+		if index == 2:
+			height_pixels = timed_jet_height_pixels(phase, attempt, reduced_motion) if attempt < 3 else (108.0 if reduced_motion else HIT_HEIGHT_BASE)
+			var near_cue := attempt < 3 and absf(phase - FountainModel.beat_time(attempt)) <= FountainModel.interval(attempt)
+			if near_cue:
+				water_color = Color("#fff3c1") if beat_ready else Color("#e6c773")
+				energy = 0.36 if beat_ready else 0.22
+				alpha = 0.72 if beat_ready else 0.52
 		else:
-			height_pixels = 78.0 if reduced_motion else HIT_HEIGHT_BASE + absf(sin(phase * 2.3 + float(index) * 0.7)) * HIT_HEIGHT_SWING
+			var pulse := count_pulse(phase, attempt, index)
+			height_pixels = 78.0 if reduced_motion else HIT_HEIGHT_BASE * 0.72 + HIT_HEIGHT_SWING * 0.82 * pulse
+			if pulse > 0.0:
+				water_color = Color("#75d2d1").lerp(LAMP_COUNT, pulse)
+				energy = 0.13 + 0.25 * pulse
+				alpha = 0.52 + 0.18 * pulse
 		var height := clampf(height_pixels * WATER_PIXELS_TO_WORLD, 0.18, 1.42)
 		_set_jet_height(index, height)
-		var near_cue := index == 2 and attempt < 3 and absf(phase - (FIRST_BEAT + float(attempt) * PERIOD)) <= 0.44
-		var grade_ready: bool = bool(snapshot.get("beat_window", false)) and near_cue
-		var water_color := Color("#fff3c1") if grade_ready else Color("#e6c773") if near_cue else Color("#75d2d1")
-		_jet_materials[index].albedo_color = Color(water_color, 0.72 if grade_ready else 0.52)
+		_jet_materials[index].albedo_color = Color(water_color, alpha)
 		_jet_materials[index].emission = water_color.lightened(0.08)
-		_jet_materials[index].emission_energy_multiplier = 0.36 if grade_ready else 0.22 if near_cue else 0.13
+		_jet_materials[index].emission_energy_multiplier = energy
+	_update_beat_lamps(phase, attempt, grades, beat_ready)
+	_update_grade_gems(grades)
 	_update_avatar(phase, jump_started, reduced_motion)
+	_update_splash(phase, jump_started, grades, reduced_motion)
 
 func get_texture() -> Texture2D:
 	return _viewport.get_texture() if _initialized and is_instance_valid(_viewport) else null
@@ -148,15 +179,148 @@ func avatar_available() -> bool:
 func avatar_sprite() -> Sprite3D:
 	return _avatar if _initialized and is_instance_valid(_avatar) else null
 
+## Central crest height: it rests low, rises during the phrase's last interval
+## and peaks exactly on the judged beat, then falls over one interval.
 func timed_jet_height_pixels(phase: float, attempt: int, reduced_motion: bool = false) -> float:
 	if not is_finite(phase):
 		return 108.0 if reduced_motion else HIT_HEIGHT_BASE
 	var safe_attempt := clampi(attempt, 0, 2)
 	if reduced_motion:
 		return 108.0
-	var beat := FIRST_BEAT + float(safe_attempt) * PERIOD
-	var offset := phase - beat
-	return HIT_HEIGHT_BASE + HIT_HEIGHT_SWING * (0.5 + 0.5 * cos(PI * offset / (PERIOD * 0.5)))
+	var span := FountainModel.interval(safe_attempt)
+	var offset := phase - FountainModel.beat_time(safe_attempt)
+	if absf(offset) >= span:
+		return HIT_HEIGHT_BASE
+	return HIT_HEIGHT_BASE + HIT_HEIGHT_SWING * (0.5 + 0.5 * cos(PI * offset / span))
+
+## 0…1 surge of a side jet for the current phrase's sounded counts (rests stay 0).
+func count_pulse(phase: float, attempt: int, jet_index: int) -> float:
+	if attempt >= FountainModel.phrase_count() or not is_finite(phase):
+		return 0.0
+	for count in FountainModel.counts(attempt):
+		var slot := int(count.slot)
+		if not bool(count.sounded) or FountainModel.COUNT_JETS[slot % FountainModel.COUNT_JETS.size()] != jet_index:
+			continue
+		var age := phase - float(count.time)
+		if age >= 0.0 and age < COUNT_PULSE_SECONDS:
+			var fall := 1.0 - age / COUNT_PULSE_SECONDS
+			return fall * fall
+	return 0.0
+
+## Lamp colors for tests and captures: count slots, then the jump lamp.
+func beat_lamp_colors() -> Array[Color]:
+	var colors: Array[Color] = []
+	for material in _beat_lamp_materials:
+		colors.append(material.albedo_color)
+	return colors
+
+func grade_gem_colors() -> Array[Color]:
+	var colors: Array[Color] = []
+	for material in _grade_gem_materials:
+		colors.append(material.albedo_color)
+	return colors
+
+func splash_visible() -> bool:
+	return is_instance_valid(_splash) and _splash.visible
+
+## Four lamps on the top tread: three count slots (a ring marks a rest) and a
+## larger jump lamp. They stay readable with reduced motion because only color changes.
+func _build_beat_lamps() -> void:
+	var slots: int = (FountainModel.phrase(0).pattern as Array).size()
+	# The camera looks toward +z, so world +x is screen-left: lamps read left to
+	# right from the first count to the larger jump lamp on a dark brass rail.
+	_world.add_child(_mesh_node("BeatLampRail", _box(Vector3(2.2, 0.03, 0.44)), _mat("#24363a", 0.6, 0.3), Vector3(0.12, 0.06, -1.92)))
+	for slot in slots + 1:
+		var jump_lamp := slot == slots
+		var material := _signal_material()
+		var radius := 0.21 if jump_lamp else 0.145
+		var x := 0.88 - float(slot) * 0.5 - (0.08 if jump_lamp else 0.0)
+		var lamp := _mesh_node("BeatLamp%d" % slot if not jump_lamp else "BeatLampJump", _cylinder(radius, 0.05), material, Vector3(x, 0.09, -1.92))
+		_world.add_child(lamp)
+		_beat_lamps.append(lamp)
+		_beat_lamp_materials.append(material)
+	for index in FountainModel.phrase_count():
+		var gem_material := _signal_material()
+		var gem := _mesh_node("JumpGradeGem%d" % index, _cylinder(0.09, 0.06), gem_material, Vector3(0.34 - float(index) * 0.34, 0.8, -1.36))
+		gem.rotation.x = -PI * 0.5
+		_world.add_child(gem)
+		_grade_gems.append(gem)
+		_grade_gem_materials.append(gem_material)
+	_splash_material = _mat("#e8fff8", 0.2)
+	_splash_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_splash_material.emission_enabled = true
+	_splash_material.emission = Color("#bff6ee")
+	_splash_material.emission_energy_multiplier = 0.3
+	_splash = _mesh_node("LandingSplash", _torus(0.34, 0.03), _splash_material, Vector3(1.36, 0.06, -2.42))
+	_splash.visible = false
+	_world.add_child(_splash)
+
+## Lamps and gems are unshaded so noon sun or night shade never changes what a color means.
+func _signal_material() -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = LAMP_OFF
+	return material
+
+func _set_lamp(index: int, color: Color, energy: float) -> void:
+	var material := _beat_lamp_materials[index]
+	material.albedo_color = color
+	material.emission = color
+	material.emission_energy_multiplier = energy
+
+func _update_beat_lamps(phase: float, attempt: int, grades: Array, beat_ready: bool) -> void:
+	if _beat_lamp_materials.is_empty():
+		return
+	var jump_index := _beat_lamp_materials.size() - 1
+	# Between phrases the previous grade stays on the jump lamp until the next count-in starts.
+	var shown := attempt
+	if attempt > 0 and (attempt >= FountainModel.phrase_count() or phase < FountainModel.phrase_start(attempt)):
+		shown = attempt - 1
+	var counts := FountainModel.counts(shown)
+	for slot in jump_index:
+		var count: Dictionary = counts[slot]
+		var reached := phase + 0.0005 >= float(count.time) or shown < attempt
+		if not bool(count.sounded):
+			_set_lamp(slot, LAMP_REST if reached else LAMP_OFF.lerp(LAMP_REST, 0.3), 0.35 if reached else 0.05)
+		else:
+			_set_lamp(slot, LAMP_COUNT if reached else LAMP_OFF, 0.55 if reached else 0.0)
+	if shown < attempt and shown < grades.size():
+		_set_lamp(jump_index, GRADE_COLORS.get(str(grades[shown]), LAMP_JUMP), 0.7)
+	elif beat_ready:
+		_set_lamp(jump_index, LAMP_JUMP, 1.0)
+	elif shown < FountainModel.phrase_count() and absf(phase - FountainModel.beat_time(shown)) <= FountainModel.interval(shown):
+		_set_lamp(jump_index, LAMP_OFF.lerp(LAMP_JUMP, 0.55), 0.3)
+	else:
+		_set_lamp(jump_index, LAMP_OFF, 0.0)
+
+func _update_grade_gems(grades: Array) -> void:
+	for index in _grade_gem_materials.size():
+		var material := _grade_gem_materials[index]
+		var color := LAMP_OFF
+		var energy := 0.0
+		if index < grades.size():
+			color = GRADE_COLORS.get(str(grades[index]), LAMP_OFF)
+			energy = 0.6
+		material.albedo_color = color
+		material.emission = color
+		material.emission_energy_multiplier = energy
+
+func _update_splash(phase: float, jump_started: float, grades: Array, reduced: bool) -> void:
+	if not is_instance_valid(_splash):
+		return
+	var age := phase - (jump_started + JUMP_DURATION)
+	if jump_started < 0.0 or age < 0.0 or age >= SPLASH_SECONDS:
+		_splash.visible = false
+		return
+	var t := age / SPLASH_SECONDS
+	_splash.visible = true
+	var grade := str(grades[grades.size() - 1]) if not grades.is_empty() else ""
+	var color: Color = GRADE_COLORS.get(grade, Color("#e8fff8"))
+	_splash_material.albedo_color = Color(color, 0.8 * (1.0 - t))
+	_splash_material.emission = color
+	# Reduced motion keeps the ripple in place and only fades it.
+	var ring_scale := 1.0 if reduced else 0.55 + 0.9 * t
+	_splash.scale = Vector3(ring_scale, 1.0, ring_scale)
 
 func _build_environment() -> void:
 	var world_environment := WorldEnvironment.new()

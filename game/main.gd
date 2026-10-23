@@ -1247,7 +1247,7 @@ func _show_game_rules(id: String) -> void:
 	var notes := [
 		{"text":"小惡魔："+str(definition.get("devil_hint","完成特殊互動。")),"color":Paper.TEAL},
 		{"text":"完成一般目標可收藏普通拍貼；達成特別條件也會收進小惡魔拍貼。","color":Paper.INK},
-		{"text":"輔助遊玩會放寬時間或判定，收藏資格相同。練習不記錄分數與收藏。","color":Paper.TEAL},
+		{"text":"輔助遊玩會放寬時間或判定，仍可收藏普通拍貼；小惡魔是否要求未開輔助，以上方條件為準。練習不記錄分數與收藏。","color":Paper.TEAL},
 	]
 	_content_pager(body,"GameRulesExtraDetails",notes,_render_rules_note,1,entry_stamp)
 	var row := modal_footer

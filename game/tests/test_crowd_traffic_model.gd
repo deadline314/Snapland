@@ -18,6 +18,7 @@ func _run() -> void:
 	_test_patience_pause_reset_and_assist()
 	_test_view_tracks_safety_state()
 	_test_snapshot_reuse_and_initial_red()
+	_test_planning_forecast_and_risk()
 	if failures.is_empty():
 		print("PASS: crowd traffic model (%d checks)" % checks)
 		quit(0)
@@ -117,6 +118,7 @@ func _test_assisted_priority_dispatch() -> void:
 	var result: Dictionary = model.snapshot()
 	_expect(result.assisted and result.finished and result.success and result.safe_count == 6, "the same deliberate six-group strategy can complete in assisted mode")
 	_expect(result.missed_count == 0 and result.score == 430, "assistance extends patience without auto-serving or changing earned event points")
+	_expect(not result.devil, "an assisted round earns the ordinary photo only, like the other refined welcome games")
 
 func _test_ordinary_efficiency_below_bonus() -> void:
 	var model = TrafficModel.new()
@@ -125,6 +127,33 @@ func _test_ordinary_efficiency_below_bonus() -> void:
 	var result: Dictionary = model.snapshot()
 	_expect(result.finished and result.success and result.safe_count == 6, "a slower but safe six-group route still earns ordinary completion")
 	_expect(result.score < model.DEVIL_SCORE and not result.devil, "ordinary completion below the visible efficiency target does not grant devil qualification")
+
+func _test_planning_forecast_and_risk() -> void:
+	var model = TrafficModel.new()
+	model.reset(false)
+	model.step(0.1)
+	var opening: Dictionary = model.snapshot()
+	_expect(opening.upcoming.size() == 2 and int(opening.upcoming[0].id) == 0 and int(opening.upcoming[0].lane) == 0 and is_equal_approx(float(opening.upcoming[0].eta), 0.65), "the arrival board announces the first group's lane and time before it arrives")
+	_expect(float(opening.time_to_free) == 0.0 and int(opening.recommended_lane) == -1, "an empty red crossing is free and recommends nothing")
+	model.step(0.85)
+	model.request_lane(0)
+	model.step(0.5)
+	var walking: Dictionary = model.snapshot()
+	_expect(is_equal_approx(float(walking.time_to_free), model.WALK_DURATION - 0.5 + model.CLEARANCE_DURATION + model.ALL_RED_DURATION), "while a group walks, the board reports when the crossing frees up")
+	model.step(3.11)
+	var competing: Dictionary = model.snapshot()
+	var horizontal: Dictionary = competing.lane_risk[0]
+	var vertical: Dictionary = competing.lane_risk[1]
+	_expect(bool(horizontal.head_rescue) and int(vertical.waiting) == 1, "the rescue heads the horizontal queue while a vertical group waits")
+	_expect(bool(horizontal.must_go_next) and not bool(vertical.must_go_next), "only the rescue would expire if the other side went first")
+	_expect(int(competing.recommended_lane) == 0, "the recommendation follows the tighter real patience deadline")
+	var head_deadline := INF
+	for lane in 2:
+		if not model.queues[lane].is_empty():
+			head_deadline = minf(head_deadline, float(model.queues[lane][0].arrived_at) + float(model.queues[lane][0].patience))
+	_expect(is_equal_approx(float(model.queues[0][0].arrived_at) + float(model.queues[0][0].patience), head_deadline), "the recommended lane owns the earliest head deadline")
+	var reused: Dictionary = model.snapshot()
+	_expect(reused.upcoming == competing.upcoming and reused.lane_risk == competing.lane_risk, "planning containers are refreshed in place")
 
 func _run_rescue_priority_dispatch(model, opening_seconds: float = 0.95) -> void:
 	# 0.65 s opening instruction plus 0.30 s of player reaction.

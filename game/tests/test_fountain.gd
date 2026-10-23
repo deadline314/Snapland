@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Session = preload("res://game/minigames/session.gd")
+const FountainModel = preload("res://game/minigames/fountain_jump_model.gd")
 var cases := 0
 var failures := 0
 
@@ -18,6 +19,8 @@ func _run() -> void:
 	_test_three_jump_gate_and_equivalent_input()
 	_test_misses_spam_and_slow_frames()
 	_test_pause_assist_and_reduced_motion()
+	_test_phrase_schedule_and_count_in()
+	_test_assisted_eligibility_and_qualification()
 	if failures == 0:
 		print("PASS: fountain timing checks (%d cases)" % cases)
 		quit(0)
@@ -64,7 +67,7 @@ func _test_timing_bands() -> void:
 		[0.161, "踩中", 100], [0.220, "踩中", 100]
 	]:
 		var game := _new(false)
-		game._process(game.FOUNTAIN_FIRST_BEAT + float(sample[0]))
+		game._process(game._fountain_beat_time(0) + float(sample[0]))
 		_press_key(game)
 		_expect(game.fountain_grades == [sample[1]] and game.score == int(sample[2]), "timing band at %s sec" % sample[0])
 		game.queue_free()
@@ -122,14 +125,14 @@ func _test_three_jump_gate_and_equivalent_input() -> void:
 
 func _test_misses_spam_and_slow_frames() -> void:
 	var too_early := _new(false)
-	too_early._process(too_early.FOUNTAIN_FIRST_BEAT - too_early._fountain_hit_tolerance() - 0.02)
+	too_early._process(too_early._fountain_beat_time(0) - too_early._fountain_hit_tolerance() - 0.02)
 	_press_key(too_early)
 	_expect(too_early.fountain_attempts == 0 and too_early.mistakes == 0, "pre-cue input does not burn a jump")
 	too_early.queue_free()
 	var no_input := _new(false)
 	var results: Array[Dictionary] = []
 	no_input.finished.connect(func(result: Dictionary): results.append(result))
-	no_input._process(4.5)
+	no_input._process(FountainModel.last_deadline(no_input._fountain_hit_tolerance()) + 0.05)
 	_expect(results.size() == 1 and not results[0].success and no_input.fountain_attempts == 3 and no_input.mistakes == 3 and not no_input.fountain_finish_pending, "idle deadlines resolve all three chances once without a nonexistent last jump")
 	_expect(no_input.score_events.size() == 3 and no_input.score_events.all(func(row: Dictionary): return int(row.amount) == 0), "misses remain visible zero-point score rows")
 	no_input.queue_free()
@@ -137,7 +140,7 @@ func _test_misses_spam_and_slow_frames() -> void:
 
 func _test_pause_assist_and_reduced_motion() -> void:
 	var paused := _new(false)
-	paused._process(paused.FOUNTAIN_FIRST_BEAT)
+	paused._process(paused._fountain_beat_time(0))
 	_press_key(paused)
 	var phase_before: float = paused.phase
 	paused.set_paused(true)
@@ -146,7 +149,7 @@ func _test_pause_assist_and_reduced_motion() -> void:
 	paused.set_paused(false)
 	paused.queue_free()
 	var assisted := _new(true)
-	assisted._process(assisted.FOUNTAIN_FIRST_BEAT + 0.30)
+	assisted._process(assisted._fountain_beat_time(0) + 0.30)
 	_press_key(assisted)
 	_expect(assisted.count == 1 and assisted.fountain_grades == ["踩中"], "assist widens timing without autoplay")
 	assisted.queue_free()
@@ -179,6 +182,69 @@ func _test_pause_assist_and_reduced_motion() -> void:
 	_expect(settle_results.size() == 1 and settle_results[0].success and settle_results[0].devil and settle_results[0].score == 900, "pending perfect result emits exactly once after the landing")
 	settling.queue_free()
 	cases += 3
+
+func _test_phrase_schedule_and_count_in() -> void:
+	# Progressive phrases: slow, then quicker, then a silent rest the player keeps.
+	_expect(FountainModel.phrase_count() == 3 and FountainModel.interval(1) < FountainModel.interval(0), "phrases speed up from the first to the second jump")
+	_expect(not bool(FountainModel.counts(2)[2].sounded) and FountainModel.counts(0).all(func(count: Dictionary) -> bool: return bool(count.sounded)), "only the last phrase uses a silent rest")
+	for index in FountainModel.phrase_count():
+		var counts: Array[Dictionary] = FountainModel.counts(index)
+		var spacing := FountainModel.interval(index)
+		_expect(is_equal_approx(FountainModel.beat_time(index) - float(counts[-1].time), spacing), "phrase %d jump lands one count after its last count" % (index + 1))
+		if index > 0:
+			var late_landing := FountainModel.beat_time(index - 1) + Session.FOUNTAIN_ASSIST_HIT_WINDOW + Session.FOUNTAIN_JUMP_DURATION + Session.FOUNTAIN_LANDING_SETTLE_SECONDS
+			_expect(float(counts[0].time) > late_landing, "phrase %d count-in starts after even the latest assisted landing" % (index + 1))
+	var game := _new(false)
+	var notes: Array[int] = []
+	game.note_played.connect(func(note: int): notes.append(note))
+	var sounded_times: Array[float] = []
+	for index in FountainModel.phrase_count():
+		for count in FountainModel.counts(index):
+			game._process(float(count.time) + 0.01 - game.phase)
+			if bool(count.sounded): sounded_times.append(float(count.time))
+		game._process(FountainModel.beat_time(index) - game.phase)
+		_press_key(game)
+	_expect(notes.size() == sounded_times.size() + 3, "each sounded count plays once and each jump plays one landing note (%d notes)" % notes.size())
+	_expect(notes.slice(0, 3) == [0, 1, 2], "the first count-in climbs through three pitches")
+	game.queue_free()
+	var stalled := _new(false)
+	var stalled_notes: Array[int] = []
+	stalled.note_played.connect(func(note: int): stalled_notes.append(note))
+	stalled._process(FountainModel.counts(1)[0].time - 0.01)
+	_expect(stalled_notes.is_empty(), "a long stalled frame drops passed count-ins instead of bursting them")
+	stalled.queue_free()
+	cases += 1
+
+func _test_assisted_eligibility_and_qualification() -> void:
+	var assisted := _new(true)
+	for index in 3:
+		assisted._process(assisted._fountain_beat_time(index) - assisted.phase)
+		_press_key(assisted)
+	assisted._process(assisted.fountain_finish_at - assisted.phase)
+	var summary: Dictionary = assisted.score_summary()
+	_expect(assisted.won and not assisted.devil_won and assisted.score == 900, "assisted three-perfect round earns ordinary only")
+	_expect(str(summary.get("qualification_text", "")).contains("輔助回合不取得小惡魔"), "assisted result explains why the devil photo was withheld")
+	_expect(str(summary.rows[0].label).contains("慢拍") and str(summary.rows[2].label).contains("休止拍"), "score rows name each phrase")
+	assisted.queue_free()
+	var standard := _new(false)
+	for index in 3:
+		standard._process(standard._fountain_beat_time(index) + (0.10 if index == 1 else 0.0) - standard.phase)
+		_press_key(standard)
+	standard._process(standard.fountain_finish_at - standard.phase)
+	var ordinary_text := str(standard.score_summary().get("qualification_text", ""))
+	_expect(standard.won and not standard.devil_won and ordinary_text.contains("本次完美 2 / 3"), "ordinary result states the actual perfect count needed for devil")
+	standard.queue_free()
+	var missed := _new(false)
+	missed._process(FountainModel.last_deadline(missed._fountain_hit_tolerance()) + 0.05)
+	var missed_text := str(missed.score_summary().get("qualification_text", ""))
+	_expect(not missed.won and missed_text.contains("本次 0 / 3") and missed_text.contains("錯過 3"), "failed result states the hits and misses behind the ordinary gate")
+	missed.queue_free()
+	var practice := _new(false)
+	practice.set_practice_mode(true)
+	practice._process(FountainModel.last_deadline(practice._fountain_hit_tolerance()) + 0.05)
+	_expect(not practice.score_summary().has("qualification_text"), "private practice never claims collection eligibility")
+	practice.queue_free()
+	cases += 1
 
 func _new(assist: bool) -> Control:
 	var game: Control = Session.new()

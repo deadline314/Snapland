@@ -29,6 +29,7 @@ const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const MinigameHUDScript = preload("res://game/ui/minigame_hud.gd")
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
 const FountainJumpViewScript = preload("res://game/minigames/fountain_jump_view.gd")
+const FountainJumpModelScript = preload("res://game/minigames/fountain_jump_model.gd")
 const BalloonHarborScript = preload("res://game/minigames/balloon_harbor_view.gd")
 const PipePlanScript = preload("res://game/minigames/pipe_plan_view.gd")
 const PipeRoundScript = preload("res://game/minigames/pipe_round_model.gd")
@@ -65,8 +66,6 @@ const BALLOON_WIND_SCALE := 1.0
 const BALLOON_ASSIST_DOCK_RADIUS := 88.0
 const BALLOON_ASSIST_DOCK_SPEED := 102.0
 const BALLOON_ASSIST_WIND_SCALE := 0.72
-const FOUNTAIN_PERIOD := 1.35
-const FOUNTAIN_FIRST_BEAT := 1.0
 const FOUNTAIN_PERFECT_WINDOW := 0.07
 const FOUNTAIN_GOOD_WINDOW := 0.16
 const FOUNTAIN_HIT_WINDOW := 0.22
@@ -76,9 +75,6 @@ const FOUNTAIN_ASSIST_HIT_WINDOW := 0.34
 const FOUNTAIN_TIMING_EPSILON := 0.0005
 const FOUNTAIN_JUMP_DURATION := 8.0 / 12.0
 const FOUNTAIN_LANDING_SETTLE_SECONDS := 0.07
-const FOUNTAIN_POSE_CACHE_META := "_snapland_fountain_pose_cache"
-const FOUNTAIN_RENDERER_META := "_snapland_fountain_avatar_renderer"
-const FOUNTAIN_POSE_CACHE_LIMIT := 4
 const REQUIRED_PROP_KEYS: Array[String] = ["balloon", "mailbox", "kite", "urchin", "hat", "visitor", "mascot", "lantern", "tourist_coral", "tourist_blue", "tourist_gold", "tourist_green", "flower_horn", "camera", "sign", "bench"]
 const BACKDROP_SCENES: Array[String] = ["harbor", "garden", "stage", "night"]
 static var _catalog_cache: Array = []
@@ -173,9 +169,6 @@ var ribbon_preroll_left := 0.0
 var _ribbon_step_cap := -1.0
 ## Game-owned beat-locked backing track; null in headless rule tests.
 var _ribbon_groove: Node
-var _fountain_avatar_renderer: RefCounted
-var _fountain_jump_textures: Array[Texture2D] = []
-var _fountain_idle_texture: Texture2D
 var score_events: Array[Dictionary] = []
 var _hud_refresh_clock := 1.0
 var _hud_dirty := true
@@ -217,6 +210,8 @@ var ribbon_finish_success := false
 var ribbon_finish_devil := false
 var fountain_grades: Array[String] = []
 var fountain_errors_ms: Array[int] = []
+## Index into the flattened count-in list of every phrase; counts already passed are never replayed.
+var _fountain_count_cursor := 0
 var feedback_color := MINT
 var reduced_motion := false
 var time_phase := TimeOfDayScript.DEFAULT_PHASE
@@ -397,7 +392,7 @@ func _sync_presentation() -> void:
 		"balloon_delivery":
 			presentation.present(p, velocity, balloon_wind_current, balloon_wind_forecast, balloon_delivery_index, balloon_dock_hold, balloon_braking, phase, reduced_motion, time_phase, balloon_delivery_index, _balloon_hazard_at(phase), 65.0)
 		"fountain_timing":
-			presentation.call("update_frame", {"phase": phase, "fountain_attempts": fountain_attempts, "fountain_jump_started": fountain_jump_started, "beat_window": beat_window}, time_phase, reduced_motion)
+			presentation.call("update_frame", {"phase": phase, "fountain_attempts": fountain_attempts, "fountain_jump_started": fountain_jump_started, "beat_window": beat_window, "fountain_grades": fountain_grades}, time_phase, reduced_motion)
 		"flower_pipes":
 			presentation.configure(reduced_motion, time_phase)
 			presentation.set_animation_active(not paused)
@@ -573,8 +568,8 @@ func _refresh_hud(force: bool = false) -> void:
 		if ended:
 			time_text = "3 / 3 拍"
 		else:
-			var next_beat := _fountain_beat_time(mini(fountain_attempts, 2))
-			time_text = "第%d拍 %.1fs" % [mini(fountain_attempts + 1, 3), maxf(0.0, next_beat - phase)]
+			var upcoming := mini(fountain_attempts, 2)
+			time_text = "%s 起跳 %.1fs" % [FountainJumpModelScript.phrase_name(upcoming), maxf(0.0, _fountain_beat_time(upcoming) - phase)]
 	if mode == "shadow_alignment":
 		var shadow_time_left := maxf(0.0, float(shadow_model.snapshot().time_left))
 		time_text = "%02d:%02d" % [int(shadow_time_left / 60.0), int(shadow_time_left) % 60]
@@ -694,6 +689,28 @@ func score_summary() -> Dictionary:
 		summary["qualification_text"] = RibbonRhythmModelScript.qualification_text(ribbon_model.snapshot())
 	if mode == "hat_catching" and ended and not practice_mode:
 		summary["qualification_text"] = HatRescueModelScript.qualification_text(hat_model.snapshot())
+	if mode == "crowd_traffic" and ended and not practice_mode:
+		var crowd_state: Dictionary = crowd_model.snapshot()
+		var safe_groups := int(crowd_state.safe_count)
+		var missed_groups := int(crowd_state.missed_count)
+		if not won:
+			summary["qualification_text"] = "普通拍貼需六隊全部安全通過（本次 %d / 6，改道 %d）；小惡魔另需未輔助、總分至少 %d。" % [safe_groups, missed_groups, CrowdTrafficScript.DEVIL_SCORE]
+		elif assisted:
+			summary["qualification_text"] = "六隊全部安全通過，取得普通拍貼；輔助回合不取得小惡魔拍貼（本次 %d 分）。" % score
+		elif devil_won:
+			summary["qualification_text"] = "六隊全部安全、沒有隊伍改道，總分 %d 達 %d，已達成小惡魔條件。" % [score, CrowdTrafficScript.DEVIL_SCORE]
+		else:
+			summary["qualification_text"] = "普通拍貼：六隊全部安全。小惡魔需總分至少 %d，本次 %d（差 %d，縮短等候可多拿效率分）。" % [CrowdTrafficScript.DEVIL_SCORE, score, CrowdTrafficScript.DEVIL_SCORE - score]
+	if mode == "fountain_timing" and ended and not practice_mode:
+		var perfect_count := fountain_grades.count("完美")
+		if not won:
+			summary["qualification_text"] = "普通拍貼需三跳全部踩中（本次 %d / 3，錯過 %d）；小惡魔需未輔助且三跳完美。" % [count, mistakes]
+		elif assisted:
+			summary["qualification_text"] = "三跳全中，取得普通拍貼；輔助回合不取得小惡魔拍貼（本次完美 %d / 3）。" % perfect_count
+		elif devil_won:
+			summary["qualification_text"] = "三跳都在 ±70ms 內完美起跳，已達成小惡魔條件。"
+		else:
+			summary["qualification_text"] = "普通拍貼：三跳全中。小惡魔需未輔助且三跳完美（±70ms），本次完美 %d / 3。" % perfect_count
 	if mode == "balloon_delivery" and ended and not practice_mode:
 		if not won:
 			summary["qualification_text"] = "普通拍貼需限時送達三站（本次 %d / 3）；小惡魔需未輔助且零失誤。" % balloon_delivery_index
@@ -725,8 +742,8 @@ func _score_rule_text() -> String:
 	match mode:
 		"balloon_delivery": return "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站得普通拍貼；未輔助且零失誤才得小惡魔拍貼。"
 		"kite_rings": return "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過得普通拍貼；未輔助、五環全中心且零救援才得小惡魔拍貼。"
-		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100。三跳全中得普通拍貼，三跳完美得小惡魔拍貼。"
-		"crowd_traffic": return "每隊安全通過 +50；等候效率 +20／10；救援隊及時通行另 +50。"
+		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100，超出或沒跳為錯過 0 分。輔助放寬為 ±110／240／340ms。三跳全中得普通拍貼；未輔助且三跳完美才得小惡魔拍貼。"
+		"crowd_traffic": return "每隊安全通過 +50；開始過路前等不到 2.2 秒 +20、不到 4.4 秒 +10；救援隊及時通行另 +50。六隊全部安全得普通拍貼；未輔助、無隊伍改道且總分至少 430 才得小惡魔拍貼。"
 		"hat_catching": return HatRescueModelScript.score_rule_text()
 		"ribbon_rhythm": return RibbonRhythmModelScript.score_rule_text()
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
@@ -818,8 +835,7 @@ func reset_round() -> void:
 	_cancel_ribbon_finish_gate()
 	fountain_grades.clear()
 	fountain_errors_ms.clear()
-	_fountain_jump_textures.clear()
-	_fountain_idle_texture = null
+	_fountain_count_cursor = 0
 	feedback_age = 99.0
 	particles.clear()
 	feedback_color = MINT
@@ -918,50 +934,9 @@ func reset_round() -> void:
 			_ensure_melody_voices()
 	if assisted:
 		prompt = "輔助已開：目標會標亮，判定範圍加寬"
-	if mode == "fountain_timing":
-		_prepare_fountain_avatar_poses()
 	_sync_presentation()
 	_refresh_hud(true)
 	queue_redraw()
-
-func _prepare_fountain_avatar_poses() -> void:
-	var progress := get_node_or_null("/root/Progress")
-	var appearance: Dictionary = progress.appearance if progress != null and progress.get("appearance") is Dictionary else {}
-	var equipped: Dictionary = progress.equipped if progress != null and progress.get("equipped") is Dictionary else {}
-	var cache_key := JSON.stringify([appearance, equipped])
-	var pose_cache: Dictionary = {}
-	if progress != null and progress.has_meta(FOUNTAIN_POSE_CACHE_META):
-		pose_cache = progress.get_meta(FOUNTAIN_POSE_CACHE_META) as Dictionary
-	if pose_cache.has(cache_key):
-		var cached: Dictionary = pose_cache[cache_key]
-		_fountain_idle_texture = cached.get("idle") as Texture2D
-		_fountain_jump_textures.assign(cached.get("jump", []))
-		return
-	if progress != null:
-		var shared_renderer: Variant = null
-		if progress.has_meta(FOUNTAIN_RENDERER_META):
-			shared_renderer = progress.get_meta(FOUNTAIN_RENDERER_META)
-		if shared_renderer is RefCounted:
-			_fountain_avatar_renderer = shared_renderer
-	if _fountain_avatar_renderer == null:
-		_fountain_avatar_renderer = AvatarRendererScript.new()
-		if progress != null:
-			progress.set_meta(FOUNTAIN_RENDERER_META, _fountain_avatar_renderer)
-	_fountain_idle_texture = _fountain_avatar_renderer.texture(appearance, equipped, "front", 0, "idle")
-	if not _fountain_avatar_renderer.has_authored_action("jump", "front"):
-		return
-	var frame_count: int = _fountain_avatar_renderer.authored_frame_count("jump", "front")
-	for index in frame_count:
-		# AvatarRenderer applies the saved face/hair/skin, equipped layers, and the
-		# authored outfit variant. Its texture cache makes these one-time lookups.
-		var frame_texture: Texture2D = _fountain_avatar_renderer.texture(appearance, equipped, "front", index, "jump")
-		if frame_texture != null:
-			_fountain_jump_textures.append(frame_texture)
-	if progress != null and _fountain_jump_textures.size() > 0:
-		pose_cache[cache_key] = {"idle": _fountain_idle_texture, "jump": _fountain_jump_textures.duplicate()}
-		while pose_cache.size() > FOUNTAIN_POSE_CACHE_LIMIT:
-			pose_cache.erase(pose_cache.keys()[0])
-		progress.set_meta(FOUNTAIN_POSE_CACHE_META, pose_cache)
 
 func _process(delta: float) -> void:
 	var shadow_delta := delta if is_finite(delta) and delta > 0.0 else 0.0
@@ -1305,12 +1280,19 @@ func _tick_crowd(delta: float) -> void:
 		_crowd_event_cursor += 1
 		if event.kind == "safe":
 			var data: Dictionary = event.data
-			_award_points("crowd", "隊伍安全通過", int(data.base))
-			if int(data.efficiency) > 0: _award_points("crowd_wait", "等候效率", int(data.efficiency))
-			if int(data.rescue_bonus) > 0: _award_points("crowd_rescue", "救援隊及時通行", int(data.rescue_bonus))
-			_feedback("隊伍安全通過", MINT)
-		elif event.kind == "expired": _feedback("等候太久，隊伍改走別條路", PINK)
+			var earned := int(data.base) + int(data.efficiency) + int(data.rescue_bonus)
+			var parts := "通行 %d＋效率 %d" % [int(data.base), int(data.efficiency)]
+			if int(data.rescue_bonus) > 0: parts += "＋救援 %d" % int(data.rescue_bonus)
+			_award_points("crowd_group_%d" % int(data.id), "%s・等 %.1f 秒（%s）" % [_crowd_group_name(data), float(data.entry_wait), parts], earned)
+			_feedback("%s安全通過 +%d" % ["救援隊" if bool(data.get("rescue", false)) else "隊伍", earned], MINT)
+		elif event.kind == "expired":
+			var expired: Dictionary = event.data
+			_record_score_event("crowd_group_%d" % int(expired.id), "%s・等太久改道" % _crowd_group_name(expired), 0)
+			_feedback("%s等太久，改走別條路" % ("救援隊" if bool(expired.get("rescue", false)) else "隊伍"), PINK)
 	if bool(state.finished): _finish(bool(state.success), bool(state.devil))
+
+func _crowd_group_name(data: Dictionary) -> String:
+	return "第 %d 隊%s・%s %d 人" % [int(data.get("id", 0)) + 1, "（救援）" if bool(data.get("rescue", false)) else "", "橫向" if int(data.get("lane", 0)) == 0 else "縱向", int(data.get("people", 0))]
 
 func _request_crowd_lane(value: int) -> void:
 	if ended or paused: return
@@ -1616,7 +1598,7 @@ func _press_action() -> void:
 			var tolerance := _fountain_hit_tolerance()
 			# An early spammed key before the water's pre-cue cannot burn the next jump.
 			if error < -tolerance - FOUNTAIN_TIMING_EPSILON:
-				_feedback("水柱還在蓄水，等中央水簾預亮", BLUE)
+				_feedback("還沒到起跳拍：跟著側邊水柱數拍，下一拍再跳", BLUE)
 				return
 			if error > tolerance + FOUNTAIN_TIMING_EPSILON:
 				_tick_fountain()
@@ -1624,7 +1606,21 @@ func _press_action() -> void:
 			_resolve_fountain_jump(error)
 
 func _fountain_beat_time(index: int) -> float:
-	return FOUNTAIN_FIRST_BEAT + float(index) * FOUNTAIN_PERIOD
+	return FountainJumpModelScript.beat_time(index)
+
+## Sounds each newly reached count-in through the shared note channel. Rests stay
+## silent; counts skipped by a long frame or a resume are dropped, never burst.
+func _sound_fountain_counts() -> void:
+	var per_phrase: int = (FountainJumpModelScript.phrase(0).pattern as Array).size()
+	while _fountain_count_cursor < FountainJumpModelScript.phrase_count() * per_phrase:
+		var phrase_index := _fountain_count_cursor / per_phrase
+		var slot := _fountain_count_cursor % per_phrase
+		var cue: Dictionary = FountainJumpModelScript.counts(phrase_index)[slot]
+		if phase + FOUNTAIN_TIMING_EPSILON < float(cue.time):
+			return
+		_fountain_count_cursor += 1
+		if bool(cue.sounded) and phase - float(cue.time) <= 0.15 and phrase_index >= fountain_attempts:
+			note_played.emit(slot)
 
 func _fountain_perfect_tolerance() -> float:
 	return FOUNTAIN_ASSIST_PERFECT_WINDOW if assisted else FOUNTAIN_PERFECT_WINDOW
@@ -1639,19 +1635,24 @@ func _tick_fountain() -> void:
 	if fountain_finish_pending:
 		if phase + FOUNTAIN_TIMING_EPSILON >= fountain_finish_at:
 			fountain_finish_pending = false
-			_finish(count == 3, devil_progress == 3 and mistakes == 0)
+			_finish(count == 3, _fountain_devil_earned())
 		return
+	_sound_fountain_counts()
 	while fountain_attempts < 3 and phase >= _fountain_beat_time(fountain_attempts) + _fountain_hit_tolerance() + FOUNTAIN_TIMING_EPSILON:
 		var missed_index := fountain_attempts + 1
 		fountain_attempts += 1
 		fountain_grades.append("錯過")
 		fountain_errors_ms.append(0)
 		mistakes += 1
-		_record_score_event("fountain_jump_%d" % missed_index, "第 %d 跳・錯過拍點　0 分" % missed_index, 0)
+		_record_score_event("fountain_jump_%d" % missed_index, "第%d跳・%s・錯過拍點" % [missed_index, FountainJumpModelScript.phrase_name(missed_index - 1)], 0)
 		_feedback("第 %d 跳錯過拍點・沒有輸入" % missed_index, PINK)
 		if fountain_attempts >= 3:
-			_finish(count == 3, devil_progress == 3 and mistakes == 0)
+			_finish(count == 3, _fountain_devil_earned())
 	beat_window = fountain_attempts < 3 and absf(phase - _fountain_beat_time(fountain_attempts)) <= _fountain_perfect_tolerance() + FOUNTAIN_TIMING_EPSILON
+
+## Devil eligibility matches the catalog: three perfect jumps in a standard round.
+func _fountain_devil_earned() -> bool:
+	return devil_progress == 3 and mistakes == 0 and not assisted
 
 func _resolve_fountain_jump(error: float) -> void:
 	if fountain_attempts >= 3:
@@ -1680,8 +1681,10 @@ func _resolve_fountain_jump(error: float) -> void:
 	var signed_ms := roundi(error * 1000.0)
 	fountain_errors_ms.append(signed_ms)
 	var timing := "晚 +%dms" % signed_ms if signed_ms >= 0 else "早 %dms" % abs(signed_ms)
-	_award_points("fountain_jump_%d" % index, "第 %d 跳・%s（%s）" % [index, grade, timing], points)
+	# Compact ledger copy keeps the points on the same line in the result column.
+	_award_points("fountain_jump_%d" % index, "第%d跳・%s・%s %s" % [index, FountainJumpModelScript.phrase_name(index - 1), grade, timing.replace(" ", "")], points)
 	_feedback("%s　%s　+%d" % [grade, timing, points], color)
+	note_played.emit(3 if grade == "完美" else 2)
 	if fountain_attempts >= 3:
 		fountain_finish_pending = true
 		fountain_finish_at = fountain_jump_started + FOUNTAIN_JUMP_DURATION + FOUNTAIN_LANDING_SETTLE_SECONDS
@@ -2620,75 +2623,6 @@ func _draw_balloon_wind_gauge() -> void:
 	var needle_x := 944.0 + bar.size.x * clampf((balloon_wind_current.x / 60.0 + 1.0) * 0.5,0.0,1.0)
 	draw_line(Vector2(needle_x,232),Vector2(needle_x,253),Color("#d9a95f"),3)
 
-
-func _draw_fountain() -> void:
-	draw_rect(Rect2(151,464,978,94),Color("#5c8b8e"),true); draw_circle(Vector2(151,511),47,Color("#5c8b8e")); draw_circle(Vector2(1129,511),47,Color("#5c8b8e"))
-	draw_rect(Rect2(150,480,980,51),Color("#77aaa3"),true)
-	for i in 5:
-		var x := 260.0 + i * 190.0
-		var height: float
-		if i == 2 and fountain_attempts < 3:
-			var offset := phase - _fountain_beat_time(fountain_attempts)
-			height = 108.0 if reduced_motion else 42.0 + 132.0 * (0.5 + 0.5 * cos(PI * offset / (FOUNTAIN_PERIOD * 0.5)))
-		else:
-			height = 78.0 if reduced_motion else 42.0 + absf(sin(phase * 2.3 + i * 0.7)) * 132.0
-		var near_cue := i == 2 and fountain_attempts < 3 and absf(phase - _fountain_beat_time(fountain_attempts)) <= 0.44
-		var active := near_cue and beat_window
-		var jet_color := MINT if active else YELLOW if near_cue else Color("#75aac0")
-		draw_line(Vector2(x,484), Vector2(x,484-height), Color("#a8eff0",0.35), 24)
-		draw_line(Vector2(x,484), Vector2(x,484-height), Color("#78dfe3") if near_cue else Color("#75aac0"), 13)
-		draw_circle(Vector2(x,484-height), 11, Color("#f1ffff") if active else BLUE if not near_cue else PAPER)
-		draw_arc(Vector2(x,484-height),18,PI,TAU,16,jet_color,3 if active else 2)
-	var jump_age := phase - fountain_jump_started
-	var airborne := fountain_jump_started >= 0.0 and jump_age >= 0.0 and jump_age < FOUNTAIN_JUMP_DURATION
-	var jump_progress := clampf(jump_age / FOUNTAIN_JUMP_DURATION, 0.0, 1.0) if airborne else 0.0
-	var jump_lift := 48.0 * sin(PI * jump_progress) if airborne and not reduced_motion else 0.0
-	draw_circle(Vector2(640,465-jump_lift),54,Color(MINT,0.18) if airborne else Color(BLUE,0.10))
-	_draw_fountain_avatar(jump_lift, jump_progress, airborne)
-	var jump_label := "完成三跳　·　查看分數明細" if fountain_attempts >= 3 else "Space／點擊起跳　·　機會 %d / 3" % (fountain_attempts + 1)
-	if fountain_attempts < 3:
-		var seconds_to_beat := _fountain_beat_time(fountain_attempts) - phase
-		if seconds_to_beat > _fountain_hit_tolerance():
-			jump_label = ("水柱蓄水　·　%.1fs 後預亮" % maxf(0.0, seconds_to_beat - 0.44)) if seconds_to_beat > 0.44 else "中央水簾預亮　·　準備起跳"
-		elif beat_window:
-			jump_label = "現在起跳！　·　Space／點擊"
-		elif seconds_to_beat > 0.0:
-			jump_label = "中央水簾升至拍點　·　準備起跳"
-		elif absf(seconds_to_beat) <= _fountain_hit_tolerance():
-			jump_label = "拍點落下中　·　現在仍可起跳"
-		else:
-			jump_label = "中央水簾正在亮起　·　Space／點擊"
-	_draw_scene_label(jump_label,Vector2(640,276),21)
-	for i in 3:
-		var cx := 565.0 + i*75.0
-		var finished_attempt := i < fountain_grades.size()
-		var grade_color := PAPER
-		if finished_attempt:
-			grade_color = MINT if fountain_grades[i] == "完美" else YELLOW if fountain_grades[i] in ["準確", "踩中"] else PINK
-		draw_circle(Vector2(cx,576),16,grade_color if finished_attempt else PAPER)
-		var marker := str(i+1)
-		if finished_attempt:
-			marker = "✓" if fountain_grades[i] != "錯過" else "×"
-		draw_string(FontProfiles.current_font(),Vector2(cx-10,582),marker,HORIZONTAL_ALIGNMENT_CENTER,20,12,INK)
-
-func _draw_fountain_avatar(jump_lift: float, jump_progress: float, airborne: bool) -> void:
-	# Draw one complete authored pose. The ground shadow stays fixed while the
-	# whole character follows the jump arc; no separate limb overlays are used.
-	var ground := Vector2(640.0, 504.0)
-	_draw_actor_contact_shadow(ground, Vector2(25.0, 6.0))
-	var pose: Texture2D = _fountain_idle_texture
-	if airborne and not _fountain_jump_textures.is_empty():
-		var frame_index := 0
-		if not reduced_motion:
-			frame_index = clampi(floori(jump_progress * _fountain_jump_textures.size()), 0, _fountain_jump_textures.size() - 1)
-		pose = _fountain_jump_textures[frame_index]
-	if pose == null:
-		_draw_tourist("visitor", Rect2(611.0, 386.0 - jump_lift, 58.0, 118.0), Color("#e77e83"), ground.y)
-		return
-	var size := Vector2(140.0, 180.0)
-	var feet_y := ground.y - jump_lift
-	var top := feet_y - (346.0 / 360.0) * size.y
-	draw_texture_rect(pose, Rect2(Vector2(ground.x - size.x * 0.5, top), size), false)
 
 func _draw_crowd() -> void:
 	# Two promenade lanes, zebra markings, direction chevrons and a brass signal post.
