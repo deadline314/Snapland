@@ -311,5 +311,10 @@ func _activate_main_button(needle: String, context: String) -> bool:
 ## Engine slowdown extends wall-clock budgets, never gameplay windows or inputs.
 ## A 0.05 floor and one-hour ceiling keep every wait finite even at zero scale.
 func _wall_deadline(game_seconds: float) -> int:
-	var wall_ms := mini(3600000, int(ceil(game_seconds * 1000.0 / maxf(Engine.time_scale, 0.05))))
+	var wall_ms := mini(3600000, int(ceil(game_seconds * 1000.0 * _fixed_clock_slack() / maxf(Engine.time_scale, 0.05))))
 	return Time.get_ticks_msec() + wall_ms
+
+## Hang guards only: a fixed-FPS (or Movie Maker) run on a loaded host renders far
+## slower than real time, so wall budgets stretch there; gameplay windows do not.
+func _fixed_clock_slack() -> float:
+	return 40.0 if not Engine.get_write_movie_path().is_empty() or OS.get_cmdline_args().has("--fixed-fps") else 1.0

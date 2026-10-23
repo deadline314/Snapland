@@ -22,7 +22,8 @@ static var _cached_stream: AudioStreamWAV
 
 var player: AudioStreamPlayer
 var _last_audio_time := -1.0
-var _stalled_frames := 0
+var _game_clock := 0.0
+const AUDIO_CLOCK_TOLERANCE := 0.2
 
 func _ready() -> void:
 	player = AudioStreamPlayer.new()
@@ -61,9 +62,9 @@ func play_from(groove_time: float) -> void:
 	if player == null:
 		return
 	_last_audio_time = -1.0
-	_stalled_frames = 0
+	_game_clock = clampf(groove_time, 0.0, total_seconds())
 	player.stream_paused = false
-	player.play(clampf(groove_time, 0.0, total_seconds()))
+	player.play(_game_clock)
 
 func stop() -> void:
 	if player != null:
@@ -78,20 +79,21 @@ func set_volume_linear(value: float) -> void:
 	if player != null:
 		player.volume_db = linear_to_db(value) if value > 0.000001 else -80.0
 
-## Latency-compensated playback time, or -1 when the audio clock is not advancing
-## (not playing, paused, or a driver that never mixes such as Dummy).
+## Latency-compensated playback time, or -1 when the audio clock is unusable (not
+## playing, paused, or a driver that does not mix in real time such as Dummy). The
+## reading must agree with this node's own game-time clock within AUDIO_CLOCK_TOLERANCE.
 func audio_time() -> float:
 	if player == null or not player.playing or player.stream_paused:
 		return -1.0
 	var position := player.get_playback_position() + AudioServer.get_time_since_last_mix() - AudioServer.get_output_latency()
-	if _last_audio_time >= 0.0 and position <= _last_audio_time + 0.000001:
-		_stalled_frames += 1
-		if _stalled_frames > 6:
-			return -1.0
-	else:
-		_stalled_frames = 0
+	if not is_finite(position) or absf(position - _game_clock) > AUDIO_CLOCK_TOLERANCE:
+		return -1.0
 	_last_audio_time = maxf(position, _last_audio_time)
 	return maxf(0.0, _last_audio_time)
+
+func _process(delta: float) -> void:
+	if player != null and player.playing and not player.stream_paused and is_finite(delta) and delta > 0.0:
+		_game_clock += minf(delta, 0.25)
 
 static func _render() -> AudioStreamWAV:
 	var length := int(ceil(total_seconds() * RATE))
