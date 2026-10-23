@@ -23,6 +23,10 @@ func _run() -> void:
 	get_tree().root.add_child(main)
 	await get_tree().create_timer(1.0).timeout
 	if not await _first_entry_lesson(): return
+	if OS.get_cmdline_user_args().has("--lesson-only"):
+		print("PASS: SG-20 first lesson pages shown before any round clock (lesson-only capture)")
+		await main._quit_game()
+		return
 	var formal_id: int = main.session.get_instance_id()
 	main.session.finished.connect(_capture_result.bind(formal_id), CONNECT_ONE_SHOT)
 	if not await _in_round_lesson_pause(formal_id): return
