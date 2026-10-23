@@ -140,6 +140,9 @@ func _test_wayfinding() -> void:
 	_check(Wayfinding.entry_status(group, snapshot) == "拍貼 2/4", "district direction counts only that district's photos")
 	_check(Wayfinding.entry_status({"target": {"kind": "games", "ids": ["game-001"]}}, snapshot).ends_with("✓"), "a completed district is marked")
 	_check(Wayfinding.entry_status({"target": {"kind": "character", "id": "ticket"}}, snapshot) == "先打招呼", "before meeting 票票 the sign points the player to her")
+	var met_entry := {"arrow": "←", "label": "票票・導覽亭", "target": {"kind": "character", "id": "ticket"}}
+	var met_line := Wayfinding.entry_line(met_entry, {"story_photo": true})
+	_check(Wayfinding.entry_status(met_entry, {"story_photo": true}) == "已見面 ✓" and met_line.count("導覽亭") == 1, "after meeting 票票 the sign says so without repeating the place name: %s" % met_line)
 	var bad_path := "user://wayfinding-negative.json"
 	var file := FileAccess.open(bad_path, FileAccess.WRITE)
 	file.store_string(JSON.stringify({"schema_version": 1, "signposts": [{"id": "x", "position": [0, 0], "entries": [{"arrow": "↑", "label": "?", "target": {"kind": "teleport"}}]}, {"id": "y", "position": [1], "entries": []}]}))

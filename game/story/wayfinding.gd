@@ -68,7 +68,7 @@ static func entry_status(entry: Dictionary, snapshot: Dictionary) -> String:
 	var photos: Dictionary = snapshot.get("photos", {})
 	match str(target.get("kind", "")):
 		"character":
-			return "導覽亭" if bool(snapshot.get("story_photo", false)) else "先打招呼"
+			return "已見面 ✓" if bool(snapshot.get("story_photo", false)) else "先打招呼"
 		"quest":
 			var step := int(steps.get(str(target.get("id", "")), 0))
 			if step >= QUEST_STEP_COUNT:
