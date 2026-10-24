@@ -1,0 +1,130 @@
+[
+  {
+    "file": "ART-12-live-20261024-NPC-activity-tests.log",
+    "sha256": "faab9d4de9639c372e1ff8bedfa2efed28c08fb2bc9aef9df8f4ee15f3a479ea"
+  },
+  {
+    "file": "ART-12-live-20261024-NPC-world-activity-tests.log",
+    "sha256": "c11b6e73e858a090366f98cd2eded1d76c3873713c7ea578e52a4113ff17883a"
+  },
+  {
+    "file": "ART-12-live-20261024-announcer-0.png",
+    "sha256": "2f2d3cf8395e862a92d3717bae9d58203547c8a8efffef20f4960c1934522419"
+  },
+  {
+    "file": "ART-12-live-20261024-announcer-1.png",
+    "sha256": "cdede0e07b4f9142a0cf25d25eaa29be3403ba7a3e839d13439f30400e1ff3fa"
+  },
+  {
+    "file": "ART-12-live-20261024-announcer-2.png",
+    "sha256": "e2d07f88987c01bed6d9c43fa5ce85a30adc2f3d9b3887856f7857da639693e7"
+  },
+  {
+    "file": "ART-12-live-20261024-announcer-3.png",
+    "sha256": "f8463e4893e8ca20858769333dbd27c8c27684e42146cffced0b0a8d96b8d4e1"
+  },
+  {
+    "file": "ART-12-live-20261024-authored-NPC-source-walking-tests.log",
+    "sha256": "b29b052f4c5ebe8c82d17dd759d30e500aa219c7143fdb3bb97e6b912a3c9756"
+  },
+  {
+    "file": "ART-12-live-20261024-imp-0.png",
+    "sha256": "2e2053bddeda6b12f87c5c1e682d8bfd036be945fcebc636abcd93998b9bd6c0"
+  },
+  {
+    "file": "ART-12-live-20261024-imp-1.png",
+    "sha256": "1a4bcef0b17a68be7de48693a7def69ea5e59b8c8d8723de95b4a0d0d25de79e"
+  },
+  {
+    "file": "ART-12-live-20261024-imp-2.png",
+    "sha256": "9fb33344c5a6f353fd9dc5e0ee750359f14329fb02b19abec7c677b5cd797db7"
+  },
+  {
+    "file": "ART-12-live-20261024-imp-3.png",
+    "sha256": "d56d21be4934167cd9a8efefe0f5ed42b3fbcdc3a57809438e8a095c4a9c0b03"
+  },
+  {
+    "file": "ART-12-live-20261024-layout-result.json",
+    "sha256": "6ca01766f4056ec31ab302383159195e7587b857299186956c5913cf4941d2ac"
+  },
+  {
+    "file": "ART-12-live-20261024-layout-result.log",
+    "sha256": "18808810592c9566ac7ed5a25f45758d2701943150da4bbc46b18d179d9dfbb6"
+  },
+  {
+    "file": "ART-12-live-20261024-npc-checks-results.json",
+    "sha256": "0489179644932eaaac14b8bc4603e4fdd81f97d67716e99d47938e5302d4b475"
+  },
+  {
+    "file": "ART-12-live-20261024-npc-live-v2-contact-1.jpg",
+    "sha256": "0ff774e5a5ebd857f0f4d85b7a7b0d22ca0f0ea838f389b62a326c8a65f9c4fa"
+  },
+  {
+    "file": "ART-12-live-20261024-npc-live-v2-contact-2.jpg",
+    "sha256": "39840fdd476b0ce5c00be415c49458997ad09a5b04d77b5da543abb157fdcb76"
+  },
+  {
+    "file": "ART-12-live-20261024-npc-live-v2-feet.json",
+    "sha256": "a0e27e795827598f41ec0ef2da402233220eaa834091854fec86619e64d6e55b"
+  },
+  {
+    "file": "ART-12-live-20261024-npc-live-v2-live.mp4",
+    "sha256": "97aab3df2e69fe5423d54095341f0e0d9456f3e2e6b4c07795d773f154185659"
+  },
+  {
+    "file": "ART-12-live-20261024-npc-live-v2-result.json",
+    "sha256": "562cbef0a9880bb8cdb2b52d1d91c09d4edbef455e9cf5253d92b01c7a0f21b0"
+  },
+  {
+    "file": "ART-12-live-20261024-npc-live-v2-result.log",
+    "sha256": "30aca73cb2d71caa84c1c6646d01431ed34ff47afdbe9cf193c8dea1ac7813e9"
+  },
+  {
+    "file": "ART-12-live-20261024-npc-live-v2-video.json",
+    "sha256": "cac68f5261937cd505560d5a6cee87a08229fe98e754a1286f3ff29f79e874d5"
+  },
+  {
+    "file": "ART-12-live-20261024-release-build.json",
+    "sha256": "a6edc0299a9b18b6330f35e73fd6cae910be46bea00acf06cbff5d8489d04569"
+  },
+  {
+    "file": "ART-12-live-20261024-release-export.log",
+    "sha256": "3cd68e55f18dda45fe7ccb2e5df92617668e24bff21be8642e85b942c673901f"
+  },
+  {
+    "file": "ART-12-live-20261024-release-import.log",
+    "sha256": "e2ed61e4937561b4e92bb2ce5b805ddb17f5625b4d6f77014151d6cc2ab926b5"
+  },
+  {
+    "file": "ART-12-live-20261024-release-smoke-final-result.json",
+    "sha256": "b55dcdda69484f074262daddd9073a73a0c6a4ec38679e9ff270af8b2d059e1c"
+  },
+  {
+    "file": "ART-12-live-20261024-release-smoke-final-result.log",
+    "sha256": "c79c7153fbcd032e69502aba965315536431dc3ab3f9de9900b82fc678674b83"
+  },
+  {
+    "file": "ART-12-live-20261024-sources.zip",
+    "sha256": "e7e4ec6ca45d968438baa39c6c520416556974662f83a8b66442020e77df6029"
+  },
+  {
+    "file": "ART-12-live-20261024-ticket-0.png",
+    "sha256": "ee5f89a1eb922044e9c8e2ae92a73124df40507fb07025ca82812d1b277bfac4"
+  },
+  {
+    "file": "ART-12-live-20261024-ticket-1.png",
+    "sha256": "0f86e8d3788ba9adea3c08f6e7be337d225029a7ea019eb62f6d02c6c2494cf5"
+  },
+  {
+    "file": "ART-12-live-20261024-ticket-2.png",
+    "sha256": "766f4665515f8db4cf284a1b951414533a33904dbe617b3d4b9535be4225b9b6"
+  },
+  {
+    "file": "ART-12-live-20261024-ticket-3.png",
+    "sha256": "2d1896afdf4cd8c4d086e941d40a1458fadf6aabd6fc08222a712bfc0cf4a2d2"
+  },
+  {
+    "file": "ART-12-live-20261024-verification.json",
+    "sha256": "fb3f3d05d59f2157d8b22471adb92c38e7da3981b198837866e5898b854c64d1"
+  }
+]

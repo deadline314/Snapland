@@ -1,0 +1,20 @@
+[
+  {
+    "name": "authored NPC source walking tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 1.0
+  },
+  {
+    "name": "NPC activity tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.53
+  },
+  {
+    "name": "NPC world activity tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 3.42
+  }
+]

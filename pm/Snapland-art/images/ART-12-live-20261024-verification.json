@@ -1,0 +1,21 @@
+{
+  "base": "e64ecd9d4940cdd9c3be549f8e5f02e13b23d842",
+  "scope": "ART12 limited existing NPC activities; not ART17 missing full-direction walks or whole animation acceptance",
+  "observations": 36,
+  "minimum_clearance_m": 0.00768429756164551,
+  "maximum_clearance_m": 0.0171513032913208,
+  "native": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 44.79,
+    "complete": true
+  },
+  "video": "Actual realtime native process, external silent15FPS X11,670frames44.666667s; decoded fully,12stills viewed via contacts plus prior ticket fullsize; not continuous watching, hearing or hardwareFPS.",
+  "fixture": "Relocates player between three viewpoints, never sets NPC poses, routes or clocks. Samples naturally running activities after render.",
+  "release": "Actual Linux ownMain12initialrenderer/resource smoke only; not full packaged NPC activity playback.",
+  "accepted_scope": "Current fixed complete2D sprites, three registered personas, independent alpha-foot terrain sampling, existing dialogue/reduced-motion lifecycle and open talking paths.",
+  "source_sha256": {
+    "game/world/npc_activity.gd": "3e8b625a34e599be25b6301ac6205c3a6d6b1adbfa79c2cc2beeb98ea3eda1d1",
+    "game/world/park_world.gd": "40c72862dd5f1dda252ef915028dfecebbae42c2a293c7ffd9545d4907b5d4cc"
+  }
+}

@@ -1,0 +1,254 @@
+[
+  {
+    "minimum": 0.0122816038131714,
+    "role": "ticket",
+    "samples": 1083,
+    "shot": 0,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "imp",
+    "samples": 766,
+    "shot": 0,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "announcer",
+    "samples": 549,
+    "shot": 0,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "ticket",
+    "samples": 1076,
+    "shot": 1,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "imp",
+    "samples": 782,
+    "shot": 1,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "announcer",
+    "samples": 524,
+    "shot": 1,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "ticket",
+    "samples": 1084,
+    "shot": 2,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "imp",
+    "samples": 723,
+    "shot": 2,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "announcer",
+    "samples": 475,
+    "shot": 2,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0171513032913208,
+    "role": "ticket",
+    "samples": 789,
+    "shot": 3,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "imp",
+    "samples": 782,
+    "shot": 3,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0122816038131714,
+    "role": "announcer",
+    "samples": 700,
+    "shot": 3,
+    "view_role": "ticket"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "ticket",
+    "samples": 1076,
+    "shot": 0,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "imp",
+    "samples": 782,
+    "shot": 0,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "announcer",
+    "samples": 246,
+    "shot": 0,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "ticket",
+    "samples": 1084,
+    "shot": 1,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "imp",
+    "samples": 782,
+    "shot": 1,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "announcer",
+    "samples": 716,
+    "shot": 1,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "ticket",
+    "samples": 1094,
+    "shot": 2,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "imp",
+    "samples": 765,
+    "shot": 2,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "announcer",
+    "samples": 478,
+    "shot": 2,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "ticket",
+    "samples": 1072,
+    "shot": 3,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "imp",
+    "samples": 765,
+    "shot": 3,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "announcer",
+    "samples": 700,
+    "shot": 3,
+    "view_role": "imp"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "ticket",
+    "samples": 1089,
+    "shot": 0,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "imp",
+    "samples": 765,
+    "shot": 0,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "announcer",
+    "samples": 246,
+    "shot": 0,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "ticket",
+    "samples": 1098,
+    "shot": 1,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.00768429756164551,
+    "role": "imp",
+    "samples": 906,
+    "shot": 1,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "announcer",
+    "samples": 716,
+    "shot": 1,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "ticket",
+    "samples": 1095,
+    "shot": 2,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "imp",
+    "samples": 775,
+    "shot": 2,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "announcer",
+    "samples": 478,
+    "shot": 2,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "ticket",
+    "samples": 1076,
+    "shot": 3,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "imp",
+    "samples": 766,
+    "shot": 3,
+    "view_role": "announcer"
+  },
+  {
+    "minimum": 0.0125537586212158,
+    "role": "announcer",
+    "samples": 664,
+    "shot": 3,
+    "view_role": "announcer"
+  }
+]

@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: NPC activity runtime checks (role registration, safe fallback, route gating, pause, and cleanup)
+WARNING: NpcActivity: cannot load authored frames for unknown role unknown.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_action_frames (res://game/world/npc_activity.gd:63)
+         [1] _run (res://game/tests/test_npc_activity.gd:44)
+WARNING: NpcActivity: duplicate actor registration rejected for role ticket.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] register_actor (res://game/world/npc_activity.gd:155)
+         [1] _run (res://game/tests/test_npc_activity.gd:54)
+WARNING: NpcActivity: unknown role or invalid Sprite3D target: unsupported
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] register_actor (res://game/world/npc_activity.gd:144)
+         [1] _run (res://game/tests/test_npc_activity.gd:55)
