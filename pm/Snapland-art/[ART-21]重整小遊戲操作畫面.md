@@ -49,7 +49,7 @@
 
 - Blocks：無
 - Blocked by：無
-- Related：ART-20、ART-5、SG-14、MAIN-10
+- Related：ART-19、ART-20、ART-5、SG-14、MAIN-10
 
 ---
 

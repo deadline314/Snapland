@@ -1,6 +1,6 @@
 # [ART-19] 修正海港背景美術風格
 
-> 狀態：進行中
+> 狀態：封存（由 ART-5 取代）
 
 開始基準：`5d74214`；分支：`feature/island-first-park`。
 
@@ -31,7 +31,7 @@
 
 - Blocks：無
 - Blocked by：無
-- Related：ART-5、ART-13、ART-17、ART-18
+- Related：ART-5、ART-13、ART-17、ART-18、ART-21
 
 ---
 
@@ -64,3 +64,30 @@
 48 張完整畫面依 images/ART-19-game-01–12-dawn/noon/dusk/night.png 命名；降低動態畫面為 images/ART-19-reduced-motion-on.png。
 
 分支：`feature/island-first-park`。[遠端提交](https://github.com/deadline314/Snapland/commit/64fcf8cbd313ba350c7165a2e4ec914398a8f943)。
+
+
+# 封存
+
+2026-10-24 核對現行十二款小遊戲後，四格共用背景已由 ART-5 的各款專用場景取代，時段與降低動態畫面由 ART-21 的 60 格現行矩陣驗收。延續使用者允許重做簡陋場景的方向，保留原圖與歷史紀錄，停止把已不在玩家畫面中的舊四格圖當作現行美術交付。舊圖固定光影與原輸出條件保持未勾選；封存不代表這兩項原畫要求已完成。
+
+# Commit-2
+
+## 內文
+
+逐一確認十二款現行入口均有自己的場景。凍結動作並收起暫停遮罩後，原背景、整幅洋紅測試背景及完全不畫舊背景三種狀態，1280×720 全畫面像素逐位元組一致，12／12 通過。四款仍有舊背景繪製呼叫的場景，再暫時隱藏新版場景，洋紅與空白比較均能偵測出差異，4／4 反向對照通過。其餘八款已不呼叫舊背景。這輪只查可見性，不改遊戲程式、不刪原圖、不新增玩法通關或輸出版本聲稱。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 原生初始場景比較 | 12／12 全畫面相同，28.32 秒，exit 0、0 ERROR |
+| 反向對照 | 4／4 能偵測裸露的舊背景替換 |
+| 實際查看 | 三頁共 36 張正向畫面及一頁 8 張反向畫面 |
+| 現行時段／降低動態 | 沿用 ART-21 的已交付 60 格驗收，不冒稱本輪重跑 |
+
+[完整畫面、原始紀錄及重播程序](images/ART-19-retired-20261024-evidence.zip)；[來源版本、範圍及雜湊](images/ART-19-retired-20261024-review.json)。
+
+![十二款比較一](images/ART-19-retired-20261024-contact-1.png)
+![十二款比較二](images/ART-19-retired-20261024-contact-2.png)
+![十二款比較三](images/ART-19-retired-20261024-contact-3.png)
+![裸露舊背景的反向對照](images/ART-19-retired-20261024-contact-negative.png)

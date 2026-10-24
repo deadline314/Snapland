@@ -1,0 +1,108 @@
+{
+  "baseline": "209119d2a3d7493f8663a828114ebaca0e0a17b4",
+  "result": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 28.32
+  },
+  "cases": [
+    {
+      "backdrop_calls": 0,
+      "full_viewport_pixels_identical": true,
+      "id": "game-001",
+      "mode": "balloon_delivery",
+      "presentation": "res://game/minigames/balloon_harbor_view.gd"
+    },
+    {
+      "backdrop_calls": 0,
+      "full_viewport_pixels_identical": true,
+      "id": "game-002",
+      "mode": "kite_rings",
+      "presentation": "res://game/minigames/kite_flight_view.gd"
+    },
+    {
+      "backdrop_calls": 10,
+      "full_viewport_pixels_identical": true,
+      "id": "game-003",
+      "mode": "fountain_timing",
+      "negative_control_detects_exposed_backdrop": true,
+      "presentation": "res://game/minigames/fountain_jump_view.gd"
+    },
+    {
+      "backdrop_calls": 0,
+      "full_viewport_pixels_identical": true,
+      "id": "game-004",
+      "mode": "crowd_traffic",
+      "presentation": "res://game/minigames/crowd_semaphore_view.gd"
+    },
+    {
+      "backdrop_calls": 0,
+      "full_viewport_pixels_identical": true,
+      "id": "game-005",
+      "mode": "hat_catching",
+      "presentation": "res://game/minigames/hat_rescue_view.gd"
+    },
+    {
+      "backdrop_calls": 22,
+      "full_viewport_pixels_identical": true,
+      "id": "game-006",
+      "mode": "ribbon_rhythm",
+      "negative_control_detects_exposed_backdrop": true,
+      "presentation": "res://game/minigames/ribbon_rhythm_view.gd"
+    },
+    {
+      "backdrop_calls": 0,
+      "full_viewport_pixels_identical": true,
+      "id": "game-007",
+      "mode": "flower_pipes",
+      "presentation": "res://game/minigames/pipe_plan_view.gd"
+    },
+    {
+      "backdrop_calls": 0,
+      "full_viewport_pixels_identical": true,
+      "id": "game-008",
+      "mode": "sign_balance",
+      "presentation": "res://game/minigames/sign_balance_view.gd"
+    },
+    {
+      "backdrop_calls": 17,
+      "full_viewport_pixels_identical": true,
+      "id": "game-009",
+      "mode": "shadow_alignment",
+      "negative_control_detects_exposed_backdrop": true,
+      "presentation": "res://game/minigames/shadow_theatre_view.gd"
+    },
+    {
+      "backdrop_calls": 0,
+      "full_viewport_pixels_identical": true,
+      "id": "game-010",
+      "mode": "bubble_photo",
+      "presentation": "res://game/minigames/bubble_photo_view.gd"
+    },
+    {
+      "backdrop_calls": 0,
+      "full_viewport_pixels_identical": true,
+      "id": "game-011",
+      "mode": "bench_swap",
+      "presentation": "res://game/minigames/bench_swap_view.gd"
+    },
+    {
+      "backdrop_calls": 20,
+      "full_viewport_pixels_identical": true,
+      "id": "game-012",
+      "mode": "melody_memory",
+      "negative_control_detects_exposed_backdrop": true,
+      "presentation": "res://game/minigames/melody_memory_view.gd"
+    }
+  ],
+  "scope": "12 initial current scenes, frozen with no pause overlay; original vs magenta vs absent, complete 1280x720 RGBA equality; four exposed-scene negatives differ. Not gameplay completion or a new four-time/reduced/export review.",
+  "engine": "Godot 4.7.2 OpenGL llvmpipe; Dummy audio",
+  "images_viewed": "36 positive screenshots in three labelled contact sheets and eight exposed-scene negative screenshots in one contact sheet",
+  "files": {
+    "ART-19-retired-20261024-contact-1.png": "513b994e43fcde00ac2aefe2adeacaf7624b375b22267f3dabe9ec155b07e804",
+    "ART-19-retired-20261024-contact-2.png": "aa8d4dacacf7795fd52444a23172e35cfd43544175278829c940e107d358e36c",
+    "ART-19-retired-20261024-contact-3.png": "92c369cbba35b3ad2d06cfb47e9f6838138777becda571b918a5453f331d0479",
+    "ART-19-retired-20261024-contact-negative.png": "44d3d8c08ed492f370bbad2bdc8fad14611f0e17886bbedf7cba67e16f7ff4ff",
+    "ART-19-retired-20261024-evidence.zip": "4d6691b11d24f423c4b94f40bbb34c3cadea8d0cd44fcff6b4a9748318802433"
+  }
+}

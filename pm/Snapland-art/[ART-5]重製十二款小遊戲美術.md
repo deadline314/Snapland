@@ -26,7 +26,7 @@
 
 - Blocks：無
 - Blocked by：無
-- Related：ART-3、ART-4、ART-5、ART-6、SG-14
+- Related：ART-3、ART-4、ART-5、ART-6、ART-19、ART-21、SG-14
 
 ---
 
