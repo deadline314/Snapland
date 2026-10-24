@@ -61,6 +61,7 @@ class StationIcon extends Control:
 
 class MapSurface extends Control:
 	var leaders: Array = []
+	var satellite_centers: Array[Vector2] = []
 	func _draw() -> void:
 		var sx := size.x / 720.0
 		var sy := size.y / 360.0
@@ -96,6 +97,9 @@ class MapSurface extends Control:
 		for row in range(3):
 			for column in range(3):
 				var center := Vector2((535.0+column*83.0)*sx,(68.0+row*112.0)*sy)
+				var satellite_index := row*3+column
+				if satellite_index<satellite_centers.size():
+					center=satellite_centers[satellite_index]
 				var island_radius := 25*minf(sx,sy)
 				draw_rect(Rect2(center-Vector2(island_radius,island_radius)+Vector2(0,5*sy),Vector2(island_radius*2,island_radius*2)),Color("#688985"))
 				draw_rect(Rect2(center-Vector2(island_radius,island_radius),Vector2(island_radius*2,island_radius*2)),Color("#e5d2a7"))
@@ -277,13 +281,15 @@ func _add_destination_buttons() -> void:
 		var short_name := _gate_short_name(zone_id,zone_index+1)
 		var gate := _make_button(short_name,"MapGate_"+zone_id)
 		gate.add_theme_font_size_override("font_size",10 if short_name.length()>2 else 11)
+		gate.set_meta("menu_base_font",16)
 		gate.custom_minimum_size=Vector2(44,44)
 		gate.tooltip_text="%s｜%d 張不同普通拍貼即可取得資格；園區仍在準備中。" % [zone_name,int(zone_value.get("threshold",0))]
-		var gate_style := gate.get_theme_stylebox("normal").duplicate() as StyleBoxFlat
-		if gate_style != null:
-			gate_style.content_margin_left=2
-			gate_style.content_margin_right=2
-			gate.add_theme_stylebox_override("normal",gate_style)
+		for state in ["normal","hover","pressed","hover_pressed","disabled","focus"]:
+			var gate_style := gate.get_theme_stylebox(state).duplicate() as StyleBoxFlat
+			if gate_style != null:
+				gate_style.content_margin_left=2
+				gate_style.content_margin_right=2
+				gate.add_theme_stylebox_override(state,gate_style)
 		var select_gate := _select_zone.bind(zone_value)
 		gate.pressed.connect(select_gate)
 		gate.mouse_entered.connect(select_gate)
@@ -352,13 +358,24 @@ func _layout_map_buttons() -> void:
 		if button != null:
 			var column := zone_index%3
 			var row := floori(float(zone_index)/3.0)
-			button.position=Vector2((513+column*83)*sx,(44+row*112)*sy)
 			button.custom_minimum_size=hit_size
 			button.size=hit_size
+			# Fixed physical hit targets need room after scaling. Clamping the
+			# final column alone pushed it over the middle column on small windows.
+			var gap := 6.0/menu_scale
+			var first_x := minf(_canvas.size.x*0.70,_canvas.size.x-8.0-3.0*hit_size.x-2.0*gap)
+			var column_step := (_canvas.size.x-8.0-hit_size.x-first_x)*0.5
+			button.position=Vector2(first_x+column*column_step,(44+row*112)*sy)
 		zone_index+=1
 	for child in _canvas.get_children():
 		if child is Button:
 			child.position=Vector2(clampf(child.position.x,8.0,maxf(8.0,_canvas.size.x-child.size.x-8)),clampf(child.position.y,8.0,maxf(8.0,_canvas.size.y-child.size.y-8)))
+	_canvas.satellite_centers.clear()
+	for zone in _zones:
+		if zone is Dictionary and str(zone.get("id",""))!="welcome":
+			var gate := _canvas.get_node_or_null("MapGate_"+str(zone.get("id",""))) as Button
+			if gate!=null:
+				_canvas.satellite_centers.append(gate.position+gate.size*0.5)
 	# Resolve collision in screen pixels, keeping leader lines to the world-derived route anchors.
 	for iteration in range(48):
 		var moved := false
@@ -396,16 +413,16 @@ func _select_hub() -> void:
 
 func _select_game(game_id: String, number: int, game: Dictionary) -> void:
 	_set_map_selection("MapStop_"+game_id)
-	_detail_title.text="迎賓大道｜第 %02d 站 · %s" % [number,str(game.get("name",game_id))]
-	_detail_text.text="目標：%s\n操作：%s\n依地圖路線走到設施旁，開始互動。" % [str(game.get("goal","完成設施挑戰。")),str(game.get("instructions","依遊戲畫面操作。"))]
+	_detail_title.text="第 %02d 站｜%s" % [number,str(game.get("name",game_id))]
+	_detail_text.text="目標：%s" % str(game.get("goal","完成設施挑戰。"))
 
 func _select_zone(zone: Dictionary) -> void:
 	_set_map_selection("MapGate_"+str(zone.get("id","")))
 	var threshold := int(zone.get("threshold",0))
 	var remaining := maxi(threshold-_normal_count,0)
-	_detail_title.text="%s｜園區入口 · 準備中" % str(zone.get("name","未命名園區"))
+	_detail_title.text="%s｜準備中" % str(zone.get("name","未命名園區"))
 	var qualification := "已達入園資格" if remaining==0 else "還差 %d 張不同普通拍貼" % remaining
-	_detail_text.text="主題：%s\n門檻：%d 張（目前 %d 張；%s）。收藏不消耗。園區內容仍在準備中，先收藏拍貼、累積入園資格。" % [str(zone.get("theme","主題資料準備中。")),threshold,_normal_count,qualification]
+	_detail_text.text="主題：%s\n普通拍貼：%d / %d 張\n%s；收藏不消耗。" % [str(zone.get("theme","主題資料準備中。")),_normal_count,threshold,qualification]
 
 func _set_map_selection(node_name: String) -> void:
 	_selected_map_button=node_name

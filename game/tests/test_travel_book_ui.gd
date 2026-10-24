@@ -74,7 +74,9 @@ func _test_map() -> void:
 		await _activate(station)
 		_check(_has_label(map_detail,"泡泡"),"station detail shows the real game goal and instructions")
 	_main._close()
-	for viewport_size in [Vector2i(800,600),Vector2i(1280,720)]:
+	for review_case in [[Vector2i(800,600),1.0],[Vector2i(1280,720),1.0],[Vector2i(800,600),1.25]]:
+		var viewport_size: Vector2i=review_case[0]
+		_progress.set_setting("ui_scale",review_case[1])
 		get_tree().root.size=viewport_size
 		await _frames(2)
 		_main._show_map()
@@ -101,10 +103,38 @@ func _test_map() -> void:
 		for gate in all_gates:
 			if canvas!=null and not canvas.get_global_rect().grow(-8.0).encloses(gate.get_global_rect()): gate_padding=false
 		_check(gate_padding,"map future gates retain eight pixels of shadow padding at %dx%d" % [viewport_size.x,viewport_size.y])
+		var gates_separated := true
+		for first in range(all_gates.size()):
+			for second in range(first+1,all_gates.size()):
+				if all_gates[first].get_global_rect().intersects(all_gates[second].get_global_rect()): gates_separated=false
+		_check(gates_separated,"all nine future gate targets remain distinct at %dx%d, text scale %.2f" % [viewport_size.x,viewport_size.y,float(review_case[1])])
+		var gate_copy_fits := true
+		var selection_fits := true
+		for gate in all_gates:
+			var ink_width := gate.get_theme_font("font").get_string_size(gate.text,HORIZONTAL_ALIGNMENT_LEFT,-1,gate.get_theme_font_size("font_size")).x
+			if ink_width+gate.get_theme_stylebox("normal").get_minimum_size().x>gate.size.x: gate_copy_fits=false
+			await _activate(gate)
+			await _frames(3)
+			if not _all_visible_rects_fit(_main.overlay,get_tree().root.get_visible_rect()): selection_fits=false
+			for target in all_gates:
+				if not canvas.get_global_rect().grow(-8.0).encloses(target.get_global_rect()): selection_fits=false
+				for other in all_gates:
+					if other!=target and target.get_global_rect().intersects(other.get_global_rect()): selection_fits=false
+		_check(gate_copy_fits,"future gate labels fit their actual font and target at %dx%d" % [viewport_size.x,viewport_size.y])
+		_check(selection_fits,"selecting every future gate keeps map details and return visible at %dx%d" % [viewport_size.x,viewport_size.y])
+		var station_details_fit := true
+		for station_button in all_stops:
+			await _activate(station_button)
+			await _frames(3)
+			if not _all_visible_rects_fit(_main.overlay,get_tree().root.get_visible_rect()): station_details_fit=false
+		_check(station_details_fit,"all twelve station descriptions preserve the map and return control at %dx%d" % [viewport_size.x,viewport_size.y])
 		_check(separated,"map station hit targets never overlap at %dx%d" % [viewport_size.x,viewport_size.y])
 		_check(contained,"map stations and entrances stay visible, keyboard focusable, at least 44px and inside the island chart at %dx%d" % [viewport_size.x,viewport_size.y])
 		_main._close()
+	_progress.set_setting("ui_scale",1.0)
 	get_tree().root.size=Vector2i(1280,720)
+	_main._refresh()
+	await _frames(3)
 
 func _test_album() -> void:
 	_main._show_album()

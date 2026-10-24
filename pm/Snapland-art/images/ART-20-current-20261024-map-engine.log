@@ -1,0 +1,199 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+   at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@813; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_avenue (res://game/world/park_world.gd:1353)
+       [4] _ready (res://game/world/park_world.gd:159)
+       [5] _ready (res://game/main.gd:69)
+       [6] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@811; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_avenue (res://game/world/park_world.gd:1353)
+       [4] _ready (res://game/world/park_world.gd:159)
+       [5] _ready (res://game/main.gd:69)
+       [6] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@809; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_avenue (res://game/world/park_world.gd:1353)
+       [4] _ready (res://game/world/park_world.gd:159)
+       [5] _ready (res://game/main.gd:69)
+       [6] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@807; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_avenue (res://game/world/park_world.gd:1353)
+       [4] _ready (res://game/world/park_world.gd:159)
+       [5] _ready (res://game/main.gd:69)
+       [6] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@895; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1381)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@963; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@956; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@950; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@944; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@938; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@1016; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1395)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@1014; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1395)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1067; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1402)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1066; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1402)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1065; preserving it without cutaway
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+       [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+       [2] finish_building (res://game/world/occlusion_controller.gd:223)
+       [3] _build_attraction_districts (res://game/world/park_world.gd:1402)
+       [4] _build_avenue (res://game/world/park_world.gd:1354)
+       [5] _ready (res://game/world/park_world.gd:159)
+       [6] _ready (res://game/main.gd:69)
+       [7] _run (res://work/remaining-20261024/map-native/review.gd:6)
+[park_world] scenery meshes: 1272, nodes: 2203
+INPUT: open map through travel pass target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/TicketNavigation/TicketAction0 rect=[P: (138.0, 168.0), S: (494.0, 81.0)] pointer=(385.0, 208.5) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/TicketNavigation/TicketAction0 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_harbor target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_harbor rect=[P: (623.3, 204.2444), S: (44.0, 48.0)] pointer=(645.3, 228.2444) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_harbor button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_candy target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_candy rect=[P: (696.15, 204.2444), S: (44.0, 48.0)] pointer=(718.15, 228.2444) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_candy button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_nightmarket target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_nightmarket rect=[P: (769.0, 204.2444), S: (44.0, 48.0)] pointer=(791.0, 228.2444) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_nightmarket button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_circus target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_circus rect=[P: (623.3, 316.8667), S: (44.0, 48.0)] pointer=(645.3, 340.8667) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_circus button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_toy target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_toy rect=[P: (696.15, 316.8667), S: (44.0, 48.0)] pointer=(718.15, 340.8667) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_toy button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_garden target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_garden rect=[P: (769.0, 316.8667), S: (44.0, 48.0)] pointer=(791.0, 340.8667) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_garden button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_hotel target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_hotel rect=[P: (623.3, 429.4889), S: (44.0, 48.0)] pointer=(645.3, 453.4889) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_hotel button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_sky target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_sky rect=[P: (696.15, 429.4889), S: (44.0, 48.0)] pointer=(718.15, 453.4889) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_sky button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_cinema target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_cinema rect=[P: (769.0, 429.4889), S: (44.0, 48.0)] pointer=(791.0, 453.4889) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2056/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_cinema button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open map through travel pass target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/TicketNavigation/TicketAction0 rect=[P: (56.0, 116.0), S: (575.0, 101.0)] pointer=(214.6875, 179.0625) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/TicketNavigation/TicketAction0 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_harbor target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_harbor rect=[P: (619.6, 177.2556), S: (70.40002, 76.8)] pointer=(409.25, 209.7847) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_harbor button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_candy target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_candy rect=[P: (699.6, 174.3556), S: (70.40002, 76.8)] pointer=(459.25, 207.9722) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_candy button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_nightmarket target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_nightmarket rect=[P: (779.6, 174.3556), S: (70.40002, 76.8)] pointer=(509.25, 207.9722) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_nightmarket button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_circus target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_circus rect=[P: (619.6, 302.5333), S: (70.40002, 76.8)] pointer=(409.25, 288.0833) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_circus button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_toy target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_toy rect=[P: (699.6, 299.7667), S: (70.40002, 76.8)] pointer=(459.25, 286.3542) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_toy button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_garden target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_garden rect=[P: (779.6, 299.7667), S: (70.40002, 76.8)] pointer=(509.25, 286.3542) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_garden button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_hotel target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_hotel rect=[P: (619.6, 443.1889), S: (70.40002, 76.8)] pointer=(409.25, 375.9931) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_hotel button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_sky target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_sky rect=[P: (699.6, 443.1889), S: (70.40002, 76.8)] pointer=(459.25, 375.9931) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_sky button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_cinema target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_cinema rect=[P: (779.6, 443.1889), S: (70.40002, 76.8)] pointer=(509.25, 375.9931) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2146/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_cinema button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open map through travel pass target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/TicketNavigation/TicketAction0 rect=[P: (314.0, 248.0), S: (317.0, 44.0)] pointer=(708.75, 405.0) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/TicketNavigation/TicketAction0 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_harbor target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_harbor rect=[P: (615.0, 275.4667), S: (32.0, 32.0)] pointer=(946.5, 437.2) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_harbor button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_candy target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_candy rect=[P: (686.3334, 275.4667), S: (32.00003, 32.0)] pointer=(1053.5, 437.2) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_candy button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_nightmarket target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_nightmarket rect=[P: (755.0, 275.4667), S: (32.0, 32.0)] pointer=(1156.5, 437.2) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_nightmarket button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_circus target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_circus rect=[P: (615.0, 335.2), S: (32.0, 32.0)] pointer=(946.5, 526.8) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_circus button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_toy target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_toy rect=[P: (686.3334, 335.2), S: (32.00003, 32.0)] pointer=(1053.5, 526.8) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_toy button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_garden target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_garden rect=[P: (755.0, 335.2), S: (32.0, 32.0)] pointer=(1156.5, 526.8) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_garden button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_hotel target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_hotel rect=[P: (615.0, 394.9333), S: (32.0, 32.0)] pointer=(946.5, 616.4) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_hotel button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_sky target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_sky rect=[P: (686.3334, 394.9333), S: (32.00003, 32.0)] pointer=(1053.5, 616.4) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_sky button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: select MapGate_cinema target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_cinema rect=[P: (755.0, 394.9333), S: (32.0, 32.0)] pointer=(1156.5, 616.4) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuContent/@VBoxContainer@2236/AdaptiveMenuScroll/IslandMapWorkspace/IslandChartFrame/IslandChartCanvas/MapGate_cinema button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+PASS: map geometry diagnostic captured; visual/input acceptance separate

@@ -1,0 +1,106 @@
+{
+  "base_commit": "224ec4073c439201eba47c64e648561b37172be3",
+  "full_ui": {
+    "standard": {
+      "exit": 0,
+      "errors": 0,
+      "complete": true,
+      "seconds": 76.86
+    },
+    "compact": {
+      "exit": 0,
+      "errors": 0,
+      "complete": true,
+      "seconds": 51.94
+    },
+    "large": {
+      "exit": 0,
+      "errors": 0,
+      "complete": true,
+      "seconds": 127.57
+    }
+  },
+  "full_ui_scope": "33 pages each /99 actual native PNGs, all18 contacts inspected. Standard1280 noon1.0,800x600 night1.25 reduced,1920x1080 dusk1.25. Synthetic collection and practice result are UI fixtures, not earned photos/game completion. Real earlier ART20 photo flow and cold restart remain separate.",
+  "changed_scope": "Only island map layout and copy. Final map target routes rechecked; non-map UI pages unchanged. No gameplay/rules/data/art changes.",
+  "map": {
+    "exit": 0,
+    "errors": 0,
+    "complete": true,
+    "seconds": 95.74
+  },
+  "local_checks": [
+    {
+      "name": "travel collection UI tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 8.85
+    },
+    {
+      "name": "main scene integration tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 22.98
+    },
+    {
+      "name": "pixel UI collection tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 21.02
+    }
+  ],
+  "negative": {
+    "exit": 1,
+    "seconds": 8.56,
+    "expected_failure": true
+  },
+  "reviews": "Final map whole-frame captures and native movie decoded/sampled; see ticket for actual reviewed images. No continuous watching, hearing, player testing or hardware FPS claim.",
+  "rejections": "Original800 map had6 intersecting targets(3pairs). First numeric fix missed hover/focus style expansion and long selected destination descriptions. Earlier 33-page matrix passed but map visual defect rejected. V5 negative station regressions retained; restored test text scale/refresh after added large-text case to prevent fixture-state leak. Early film800x600 crops larger windows and is rejected; final film captures entire1920x1080 X11 screen. Unrelated copied ART21 subfolders excluded.",
+  "source_sha256": {
+    "game/ui/island_map_panel.gd": "2be43684c69d2bd0373805c8c246d7776eb6a34d9881ff837b71ef6355c5880c",
+    "game/tests/test_travel_book_ui.gd": "cd032b1c3827fc08230fbb98cc9eea06f8e22abf7a448b91520949f6ebced354"
+  },
+  "files": {
+    "ART-20-current-20261024-standard-contact-3.jpg": "928e974d3f3396673ba57da087ad831bfbcfd769cd6f42f4fb6aa48817bce761",
+    "ART-20-current-20261024-standard-contact-2.jpg": "2f3b35e7af0d136089ca5353e277b978b6381af569c1abb04c282b8e7bc534f5",
+    "ART-20-current-20261024-standard-contact-5.jpg": "39509cfed2d5a94c1a3b0c4d97626e2e22134ee4347191b8bb90a3be73340098",
+    "ART-20-current-20261024-standard-contact-4.jpg": "9c08354fc8b2b216fdd7060c12a949cb3f7d5d7416ae4721d3cd16ac9cce9f94",
+    "ART-20-current-20261024-standard-contact-6.jpg": "0734157f9c3ca4ad0365c34fb9a7425d99ced3bb5762c04c7cb363217f34c8fa",
+    "ART-20-current-20261024-standard-contact-1.jpg": "75eb4e0ebd5b742e77a8ceb896a53a3bd3176656e6b2c0481a1870cfe742db35",
+    "ART-20-current-20261024-compact-contact-3.jpg": "c9206fc18ae74bf9ddde300940a698ae63c87e8cc5bec81d0945b34ebaa16ef7",
+    "ART-20-current-20261024-compact-contact-2.jpg": "896302bcedc54fc419c95cffcef3b4edaf82f2fbaaeed55b6821ed314b058b90",
+    "ART-20-current-20261024-compact-contact-5.jpg": "c0c5d9ca6aa5dba32582455c4d98c8e47c50c6c1dc862965c5032fea4d610ffa",
+    "ART-20-current-20261024-compact-contact-4.jpg": "cbc22b528d9411babb3fa79aa453776fab11fca3304240c1cb4d69d3018efecb",
+    "ART-20-current-20261024-compact-contact-6.jpg": "eba86aa2540fcafa06f788c6fba524faf4065646be20a87db42a7d07c9c5541e",
+    "ART-20-current-20261024-compact-contact-1.jpg": "a58d7a2321bd4492c28e3c6d37653b5ef33aab8fb39c2897554367ef7d6dcc94",
+    "ART-20-current-20261024-large-contact-3.jpg": "6e268389b4597cc008f6befd2ce2c7b26add828cf68032eb5378d315124d1797",
+    "ART-20-current-20261024-large-contact-2.jpg": "263043d5bb1cc2260a4ad9c3a539b6ceb750133a97a30ffbbe35d95c25958612",
+    "ART-20-current-20261024-large-contact-5.jpg": "bc59b1d5cb2e9b3e648de32cee1b86922af959654c3ffdb554ec540200555433",
+    "ART-20-current-20261024-large-contact-4.jpg": "a7ad51a50389f9ebb260988a1459ffb35e504402316f8b7f783eec3a2d2abe66",
+    "ART-20-current-20261024-large-contact-6.jpg": "e80d4a70c1e9ca1d840d0f7ce39daa4674ccfcdeb08792e7c09ba082eab16bb1",
+    "ART-20-current-20261024-large-contact-1.jpg": "f45509185cf99a099ed2c5c0e2c1ea4f16c9f006156f40a737e1abf6241a9950",
+    "ART-20-current-20261024-map-result.json": "344342fa324351ab6813906eca8463b2ac32842e5c52819848f8cbca8c753bf1",
+    "ART-20-current-20261024-map-result.log": "4ee281683de1e709befbda63a12d9e655ad05842c51b71922fee23d420fc64ea",
+    "ART-20-current-20261024-map-engine.log": "507e74935ae2fb018fe495dbb93ef806d722f85e6592830369453b06944d822e",
+    "ART-20-current-20261024-map-map.json": "96fc05d1b198015a9c0df64659c561475f4bd819bdeed073c9dbf0646b70c14d",
+    "ART-20-current-20261024-map-native.mp4": "cc6c8e14460b73c810be484afd9f96d1637fa45f46cd372da53d5cf83ca6e00c",
+    "ART-20-current-20261024-map-video-samples.jpg": "562fe356453f81adf372949c3f0d309da41da4246b977946a71580c556e50ea7",
+    "ART-20-current-20261024-map-video.json": "e5e44d3311d280d265d4095677419120428cbd1b75ce85027beb68e5f024dc81",
+    "ART-20-current-20261024-map-review-1920.jpg": "2696a74d65bb399472f59800b2b5ad40a93bd986fed55200764fd06f285e3a78",
+    "ART-20-current-20261024-map-review-800.jpg": "b4cec3218d71a129b00478723287b0e49cd898e8b100f73f31dbbcf011a284b0",
+    "ART-20-current-20261024-map-review-1280.jpg": "cc270ac2a6282dc0520051764d5527f011731a861deb30a63ab65540016aed89",
+    "ART-20-current-20261024-MapStop_game-012-1920.png": "991a5a874569d536eaf3bf520830e6d5b259b2f783585696477cc69016ff2b2e",
+    "ART-20-current-20261024-MapStop_game-005-1920.png": "582ff4582a5db8d0ba8738e073b808fa76d54d2208eaa9ecbddb4e9120ad5acc",
+    "ART-20-current-20261024-MapStop_game-012-800.png": "ea401363c70505f508c3c21fc61ab5a47256c4a064195e698c1489ee24fb1d92",
+    "ART-20-current-20261024-map-800.png": "02d2adbab3d9a54366ad8c30ab1707ef12da4c73f234c4bde42ec38c976afb41",
+    "ART-20-current-20261024-MapStop_game-005-1280.png": "b709fef1918d9357f1cbf98da806e95142f2feab699d8ad7b0d96a6bfd67ddd8",
+    "ART-20-current-20261024-MapStop_game-012-1280.png": "2101e71a98d2fe022a5fed84e3c1331c06592f895c2159f71dbebd03dfd192fa",
+    "ART-20-current-20261024-map-1280.png": "6ebced21b9850f49da267cb4668fc3657704c5078f7e1ab29fd37766176e93f7",
+    "ART-20-current-20261024-map-1920.png": "34c07836b8b63a5f1fbd0cf500ca01bd5b2b2bb9e7a233a8c05eb652acfa6e90",
+    "ART-20-current-20261024-MapStop_game-005-800.png": "6e1db159ec7c40f7a9ac1c309d835119f7c99a0b28c36d8efc440010318f9d1b",
+    "ART-20-current-20261024-map-before-800.png": "21b42e0f6eed33ab1e5a4e7dadd6038da36c458028c8b4aef405422f01346593",
+    "ART-20-current-20261024-map-before.json": "c1cda31c78b59904f960a1152dd75edab0ce4906296ba8ccdf179ceea8704ebd",
+    "ART-20-current-20261024-local-checks.json": "3980732da61118646b27dfffd3c3f8b5018bd43f3719f4261ed744d3e5a8ff7f",
+    "ART-20-current-20261024-negative.json": "329819be61fdad1889b428d0d472fc5166025140c66ce0cda812391fd1e789c9",
+    "ART-20-current-20261024-full-captures-and-replay.zip": "b66cf01afc674701565dab69f65e5637d17a8f18b894aa6c5122c376882c2c16"
+  }
+}

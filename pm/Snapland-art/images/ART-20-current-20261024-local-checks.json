@@ -1,0 +1,20 @@
+[
+  {
+    "name": "travel collection UI tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 8.85
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 22.98
+  },
+  {
+    "name": "pixel UI collection tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 21.02
+  }
+]

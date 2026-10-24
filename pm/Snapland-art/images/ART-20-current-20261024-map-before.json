@@ -1,0 +1,248 @@
+[
+  {
+    "canvas": "Rect2(162, 160, 659, 362)",
+    "gates": [
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_harbor",
+        "overlaps": [],
+        "rect": "Rect2(631.5375, 204.24445, 44, 48)",
+        "text": "潮汐"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_candy",
+        "overlaps": [],
+        "rect": "Rect2(707.50555, 204.24445, 44, 48)",
+        "text": "糖廠"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_nightmarket",
+        "overlaps": [],
+        "rect": "Rect2(769, 204.24445, 44, 48)",
+        "text": "夜市"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_circus",
+        "overlaps": [],
+        "rect": "Rect2(631.5375, 316.86667, 44, 48)",
+        "text": "馬戲"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_toy",
+        "overlaps": [],
+        "rect": "Rect2(707.50555, 316.86667, 44, 48)",
+        "text": "玩具"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_garden",
+        "overlaps": [],
+        "rect": "Rect2(769, 316.86667, 44, 48)",
+        "text": "花園"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_hotel",
+        "overlaps": [],
+        "rect": "Rect2(631.5375, 429.4889, 44, 48)",
+        "text": "旅店"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_sky",
+        "overlaps": [],
+        "rect": "Rect2(707.50555, 429.4889, 44, 48)",
+        "text": "天空"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(44, 48)",
+        "name": "MapGate_cinema",
+        "overlaps": [],
+        "rect": "Rect2(769, 429.4889, 44, 48)",
+        "text": "影城"
+      }
+    ],
+    "width": 1280
+  },
+  {
+    "canvas": "Rect2(70, 128, 788, 403)",
+    "gates": [
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_harbor",
+        "overlaps": [],
+        "rect": "Rect2(631.45, 177.25555, 70.400024, 76.8)",
+        "text": "潮汐"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_candy",
+        "overlaps": [
+          "MapGate_nightmarket"
+        ],
+        "rect": "Rect2(722.2889, 177.25555, 70.400024, 76.8)",
+        "text": "糖廠"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_nightmarket",
+        "overlaps": [
+          "MapGate_candy"
+        ],
+        "rect": "Rect2(779.6, 177.25555, 70.400024, 76.8)",
+        "text": "夜市"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_circus",
+        "overlaps": [],
+        "rect": "Rect2(631.45, 302.63333, 70.400024, 76.8)",
+        "text": "馬戲"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_toy",
+        "overlaps": [
+          "MapGate_garden"
+        ],
+        "rect": "Rect2(722.2889, 302.63333, 70.400024, 76.8)",
+        "text": "玩具"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_garden",
+        "overlaps": [
+          "MapGate_toy"
+        ],
+        "rect": "Rect2(779.6, 302.63333, 70.400024, 76.8)",
+        "text": "花園"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_hotel",
+        "overlaps": [],
+        "rect": "Rect2(631.45, 428.0111, 70.400024, 76.8)",
+        "text": "旅店"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_sky",
+        "overlaps": [
+          "MapGate_cinema"
+        ],
+        "rect": "Rect2(722.2889, 428.0111, 70.400024, 76.8)",
+        "text": "天空"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(70.4, 76.8)",
+        "name": "MapGate_cinema",
+        "overlaps": [
+          "MapGate_sky"
+        ],
+        "rect": "Rect2(779.6, 428.0111, 70.400024, 76.8)",
+        "text": "影城"
+      }
+    ],
+    "width": 800
+  },
+  {
+    "canvas": "Rect2(195, 252, 600, 192)",
+    "gates": [
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_harbor",
+        "overlaps": [],
+        "rect": "Rect2(622.5, 275.46667, 32, 32)",
+        "text": "潮汐"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_candy",
+        "overlaps": [],
+        "rect": "Rect2(691.6666, 275.46667, 32, 32)",
+        "text": "糖廠"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_nightmarket",
+        "overlaps": [],
+        "rect": "Rect2(755, 275.46667, 32, 32)",
+        "text": "夜市"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_circus",
+        "overlaps": [],
+        "rect": "Rect2(622.5, 335.2, 32, 32)",
+        "text": "馬戲"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_toy",
+        "overlaps": [],
+        "rect": "Rect2(691.6666, 335.2, 32, 32)",
+        "text": "玩具"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_garden",
+        "overlaps": [],
+        "rect": "Rect2(755, 335.2, 32, 32)",
+        "text": "花園"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_hotel",
+        "overlaps": [],
+        "rect": "Rect2(622.5, 394.93335, 32, 32)",
+        "text": "旅店"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_sky",
+        "overlaps": [],
+        "rect": "Rect2(691.6666, 394.93335, 32, 32)",
+        "text": "天空"
+      },
+      {
+        "inside": true,
+        "minimum": "Vector2(32, 32)",
+        "name": "MapGate_cinema",
+        "overlaps": [],
+        "rect": "Rect2(755, 394.93335, 32, 32)",
+        "text": "影城"
+      }
+    ],
+    "width": 1920
+  }
+]
