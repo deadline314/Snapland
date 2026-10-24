@@ -307,6 +307,9 @@ func _play_fixed_melody(precise: bool) -> bool:
 		if Time.get_ticks_msec() - run_started > 120000:
 			_failure = "Gameplay input exceeded 120 seconds"
 			return false
+	# The final note starts the authored encore; the real result follows its finish.
+	if not await _wait_for(func() -> bool: return not _last_result.is_empty(), "natural final ensemble finish"):
+		return false
 	if not bool(_last_result.get("success", false)) or (precise and not bool(_last_result.get("devil", false))):
 		_failure = "Melody ended without expected %s success: %s" % ["devil" if precise else "ordinary", str(_last_result)]
 		return false

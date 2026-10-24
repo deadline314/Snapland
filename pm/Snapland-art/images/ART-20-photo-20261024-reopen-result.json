@@ -1,0 +1,15 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 9.4,
+  "unchanged": true,
+  "before": {
+    "progress.json": "52a5f99f8e7a816914f50312299ca54fbfce01c9f18b335e6e3efda5e818971f",
+    "photos/game-012-0.png": "a6177521f1c1ec0b489f227d8858a201ee9f34153af1670a1dc2dda99b7cc901",
+    "photos/game-012-1.png": "eb3752fcff4f5326c560083eb0bdd990cc020cb24cb83a19a99785d55782f2f5",
+    "photos/game-012-2.png": "3b96648c2bc07f9190b0ac15be33e35ec9d15c0000085d1d2345eea7d6c01354",
+    "photos/game-012-original-0.png": "c1d5943e9fb47848069430b0d07405b11676b64d0dfe53457957ae60cba17486",
+    "photos/game-012-original-1.png": "6daec56b1c99400b013b79db465a7b6b1505f620600f0b81a7bd800ccd48f4af",
+    "photos/game-012-original-2.png": "17b92d1b6208588d2c81b21efe8856a649f11d6c2fbd3cf1a7125be005b562cf"
+  }
+}

@@ -1,0 +1,109 @@
+{
+	"display_server": "X11",
+	"elapsed_seconds": 8.638,
+	"engine_version": {
+		"build": "official",
+		"hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+		"hex": 263938,
+		"major": 4,
+		"minor": 7,
+		"patch": 2,
+		"status": "stable",
+		"string": "4.7.2-stable (official)",
+		"timestamp": 0
+	},
+	"failure_reason": "",
+	"final_counts": {
+		"achievements": {
+			"ACH_GAME_012": true
+		},
+		"coins": 160,
+		"devil": 1,
+		"normal": 1,
+		"quests": {}
+	},
+	"images": [
+		{
+			"dimensions": [
+				1280,
+				720
+			],
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-reopen/MAIN-13-native-reopened-ordinary.png",
+			"state": "MAIN-13-native-reopened-ordinary.png"
+		},
+		{
+			"dimensions": [
+				1280,
+				720
+			],
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-reopen/MAIN-16-native-reopened-original.png",
+			"state": "MAIN-16-native-reopened-original.png"
+		},
+		{
+			"dimensions": [
+				1280,
+				720
+			],
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-reopen/MAIN-13-native-reopened-devil.png",
+			"state": "MAIN-13-native-reopened-devil.png"
+		}
+	],
+	"input_evidence": [
+		"actual M key opens voyage pass",
+		"real mouse clicks: M-ticket collection button, ordinary/devil tabs and first-page photo cards; Escape and album back button"
+	],
+	"process_id": 1126,
+	"records": {
+		"devil_count": 1,
+		"devil_id": "photo-welcome-devil-12",
+		"devil_viewer": {
+			"original_decode_count": 2,
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-0.png",
+			"photo_id": "photo-welcome-devil-12",
+			"stretch_mode": "keep_aspect_centered",
+			"texture_dimensions": [
+				1280,
+				720
+			]
+		},
+		"normal_count": 1,
+		"normal_viewer": {
+			"original_decode_count": 1,
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-0.png",
+			"photo_id": "photo-welcome-game-12",
+			"stretch_mode": "keep_aspect_centered",
+			"texture_dimensions": [
+				1280,
+				720
+			]
+		},
+		"ordinary_id": "photo-welcome-game-12",
+		"original_dimensions": [
+			1280,
+			720
+		],
+		"shared_original_paths": [
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-0.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-1.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-2.png"
+		],
+		"shared_thumbnail_paths": [
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-0.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-1.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-2.png"
+		],
+		"thumbnail_dimensions": [
+			320,
+			180
+		]
+	},
+	"review": "persisted app-restart album and original viewer; read-only profile",
+	"save_file_unchanged": true,
+	"save_path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/progress.json",
+	"screenshots_opted_in": true,
+	"status": "PASS",
+	"viewport_size": [
+		1280,
+		720
+	]
+}

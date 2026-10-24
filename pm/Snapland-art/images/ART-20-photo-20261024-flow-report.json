@@ -1,0 +1,401 @@
+{
+	"album": {
+		"devil_count_after_reload": 1,
+		"normal_count_after_reload": 1,
+		"opened_devil_original": true,
+		"opened_normal_original": true,
+		"original_count_after_reload": 3,
+		"original_size": [
+			1280,
+			720
+		],
+		"reload_shared_path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-0.png",
+		"thumbnail_paths": [
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-0.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-1.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-2.png"
+		],
+		"thumbnail_size": [
+			320,
+			180
+		]
+	},
+	"devil_run": {
+		"assisted": false,
+		"devil_count": 1,
+		"normal_count": 1,
+		"original_paths": [
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-0.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-1.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-2.png"
+		],
+		"photo_id": "photo-welcome-devil-12",
+		"result": {
+			"assisted": false,
+			"devil": true,
+			"game_id": "game-012",
+			"mistakes": 0,
+			"practice": false,
+			"score": 300,
+			"score_summary": {
+				"label": "演奏分",
+				"qualification_text": "三句全對、零失誤且每音都踩準拍點，已達成小惡魔條件。",
+				"rows": [
+					{
+						"amount": 60,
+						"count": 3,
+						"key": "melody_phrase_0",
+						"label": "第 1 句（3 音）"
+					},
+					{
+						"amount": 100,
+						"count": 5,
+						"key": "melody_phrase_1",
+						"label": "第 2 句（5 音）"
+					},
+					{
+						"amount": 140,
+						"count": 7,
+						"key": "melody_phrase_2",
+						"label": "第 3 句（7 音）"
+					}
+				],
+				"rule": "音高與節奏準確 +20，節奏接近 +12；錯音或節奏超出容許範圍不加分。",
+				"total": 300
+			},
+			"success": true
+		},
+		"same_paths_as_ordinary": true
+	},
+	"elapsed_seconds": 182.211,
+	"failure_reason": "",
+	"game_id": "game-012",
+	"human_played": false,
+	"input_evidence": "real Input.parse_input_event key and mouse events through Main/Session/Control",
+	"last_melody_run": {
+		"elapsed_seconds": 34.032,
+		"precise_input": true
+	},
+	"ordinary_run": {
+		"assisted": false,
+		"normal_count": 1,
+		"original_paths": [
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-0.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-1.png",
+			"/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/photos/game-012-original-2.png"
+		],
+		"photo_id": "photo-welcome-game-12",
+		"result": {
+			"assisted": false,
+			"devil": false,
+			"game_id": "game-012",
+			"mistakes": 0,
+			"practice": false,
+			"score": 204,
+			"score_summary": {
+				"label": "演奏分",
+				"qualification_text": "三句合奏完成，取得普通拍貼。小惡魔需零失誤且每音踩準（本次精準 3 / 15、失誤 0）。",
+				"rows": [
+					{
+						"amount": 44,
+						"count": 3,
+						"key": "melody_phrase_0",
+						"label": "第 1 句（3 音）"
+					},
+					{
+						"amount": 68,
+						"count": 5,
+						"key": "melody_phrase_1",
+						"label": "第 2 句（5 音）"
+					},
+					{
+						"amount": 92,
+						"count": 7,
+						"key": "melody_phrase_2",
+						"label": "第 3 句（7 音）"
+					}
+				],
+				"rule": "音高與節奏準確 +20，節奏接近 +12；錯音或節奏超出容許範圍不加分。",
+				"total": 204
+			},
+			"success": true
+		}
+	},
+	"screenshot_capture_opted_in": true,
+	"screenshots": [
+		{
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-collection/MAIN-13-native-ordinary-result.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-collection/MAIN-13-native-devil-result.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-collection/MAIN-13-native-ordinary-album-tiles.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-collection/MAIN-16-native-ordinary-original-viewer.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-collection/MAIN-13-native-devil-album-tiles.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-collection/MAIN-16-native-devil-original-viewer.png",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "/workspace/work/Snapland-character/work/remaining-20261024/photo-flow-v2/native-photo-collection/MAIN-13-native-reload-album.png",
+			"size": [
+				1280,
+				720
+			]
+		}
+	],
+	"scripted_gameplay_note": "A script plays the published fixed melody using real keyboard events; this is not a human play session.",
+	"status": "PASS",
+	"tutorial": "Skipped through the visible tutorial button on first entry.",
+	"walk": [
+		{
+			"actual": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.43
+			},
+			"elapsed_seconds": 9.129,
+			"from": {
+				"x": 0.0,
+				"y": 0.12,
+				"z": 23.2
+			},
+			"name": "game-012 approach 1",
+			"target": [
+				0.0,
+				12.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.19,
+				"y": 0.1,
+				"z": 7.45
+			},
+			"elapsed_seconds": 5.85,
+			"from": {
+				"x": 0.0,
+				"y": 0.1,
+				"z": 12.43
+			},
+			"name": "game-012 approach 2",
+			"target": [
+				4.19999980926514,
+				7.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -12.57
+			},
+			"elapsed_seconds": 17.306,
+			"from": {
+				"x": 4.19,
+				"y": 0.1,
+				"z": 7.45
+			},
+			"last_wall_contacts": [
+				"@StaticBody3D@489",
+				"@StaticBody3D@1787"
+			],
+			"name": "game-012 approach 3",
+			"target": [
+				3.0,
+				-13.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -26.57
+			},
+			"elapsed_seconds": 10.591,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -12.57
+			},
+			"name": "game-012 approach 4",
+			"target": [
+				3.0,
+				-27.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -40.07
+			},
+			"elapsed_seconds": 9.583,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -26.57
+			},
+			"name": "game-012 approach 5",
+			"target": [
+				3.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 5.56,
+				"y": 0.1,
+				"z": -40.49
+			},
+			"elapsed_seconds": 2.445,
+			"from": {
+				"x": 3.08,
+				"y": 0.1,
+				"z": -40.07
+			},
+			"name": "game-012 approach 6",
+			"target": [
+				6.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 3.43,
+				"y": 0.1,
+				"z": -40.49
+			},
+			"elapsed_seconds": 2.025,
+			"from": {
+				"x": 5.62,
+				"y": 0.1,
+				"z": -40.49
+			},
+			"name": "album approach 1",
+			"target": [
+				3.0,
+				-40.5
+			]
+		},
+		{
+			"actual": {
+				"x": 3.01,
+				"y": 0.1,
+				"z": -27.43
+			},
+			"elapsed_seconds": 10.282,
+			"from": {
+				"x": 3.43,
+				"y": 0.1,
+				"z": -40.49
+			},
+			"name": "album approach 2",
+			"target": [
+				3.0,
+				-27.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.01,
+				"y": 0.1,
+				"z": -13.43
+			},
+			"elapsed_seconds": 10.471,
+			"from": {
+				"x": 3.01,
+				"y": 0.1,
+				"z": -27.43
+			},
+			"name": "album approach 3",
+			"target": [
+				3.0,
+				-13.0
+			]
+		},
+		{
+			"actual": {
+				"x": 3.01,
+				"y": 0.1,
+				"z": -9.43
+			},
+			"elapsed_seconds": 3.395,
+			"from": {
+				"x": 3.01,
+				"y": 0.1,
+				"z": -13.43
+			},
+			"name": "album approach 4",
+			"target": [
+				3.0,
+				-9.0
+			]
+		},
+		{
+			"actual": {
+				"x": 4.19,
+				"y": 0.1,
+				"z": 5.75
+			},
+			"elapsed_seconds": 13.619,
+			"from": {
+				"x": 3.01,
+				"y": 0.1,
+				"z": -9.43
+			},
+			"name": "album approach 5",
+			"target": [
+				4.19999980926514,
+				6.19999980926514
+			]
+		},
+		{
+			"actual": {
+				"x": 7.56,
+				"y": 0.1,
+				"z": 6.98
+			},
+			"elapsed_seconds": 3.088,
+			"from": {
+				"x": 4.19,
+				"y": 0.1,
+				"z": 5.75
+			},
+			"name": "album approach 6",
+			"target": [
+				8.0,
+				7.0
+			]
+		}
+	]
+}
