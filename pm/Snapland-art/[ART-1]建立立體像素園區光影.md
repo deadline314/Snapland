@@ -1,6 +1,6 @@
 # [ART-1] 建立立體像素園區光影
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -80,8 +80,8 @@ c1b7b19；feature/island-first-park。
 
 使用者否定目前島上畫面／動畫／介面品質。歷史交付證據只代表當時版本與當時範圍；本輪新增品質驗收如下。
 
-- [ ] 新島畫面有清楚前景、中景、遠景、高度與材質層次；角色接地、陰影與實際光源一致，不以存在3D節點判定HD-2D美術通過。
-- [ ] 保存本輪原生前後畫面與影片，實際查看後記錄通過或拒絕原因。
+- [x] 新島畫面有清楚前景、中景、遠景、高度與材質層次；角色接地、陰影與實際光源一致，不以存在3D節點判定HD-2D美術通過。
+- [x] 保存本輪原生前後畫面與影片，實際查看後記錄通過或拒絕原因。
 
 Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 
@@ -173,3 +173,71 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 [原外套原生紀錄](images/ART-1-character-alpha-20261024-base-execution.log) ·
 [長背心原生紀錄](images/ART-1-character-alpha-20261024-vest-hat-wave-execution.log) ·
 [證據指紋](images/ART-1-character-alpha-20261024-hashes.json)。
+
+
+# Commit-5
+
+## 內文
+
+正式園區的主角與三位NPC改用當下完整人物輪廓投影，主角的髮帽、長背心和
+手腳都取自最後顯示的合成圖，不另外播放一套陰影。原人物、頭髮綁點、碰撞
+及既有柔和接地提示保持原樣；目前正常素材只啟用一個輪廓投影，安全預設
+不會疊成雙重人物。
+
+第一輪直接沿用傾向鏡頭的平面，凌晨／中午的八組人物陰影離腳邊10–12像素，
+拒收。改用直立投射面後，相同條件約0.1–1.9像素內，光向與腳邊連接通過。
+生命週期檢查另抓到角色暫時離開場景時殘留備用陰影，已補離開／重入保護，
+重新輸出最後成品。原始失敗與較早的來源指紋均保留。
+
+四時段廣場、碼頭、入口與攤位共16張Main畫面、正常與四分之一速度32張動作
+狀態、四組前後對照及投影遮罩頁均已實際查看。路面、屋簷、植栽、角色的
+前中後景和受光方向可分辨；既有首島布局沿用MAIN-11本輪原生往返驗收，
+本次沒有改場景布局。兩部實際原生影片完整解碼，各取6格查看；不稱連續
+看完整片或真人試玩。這完成本票園區光影條件，完整新原畫與動作仍由
+ART-7／9／16／17／18分別驗收。
+
+### 測試結果
+
+| 範圍 | 實際結果 |
+|---|---|
+| Main四時段光影 | 53項原條件全通過，110.39秒、exit0／0ERROR；包含不在選定夜燈範圍的條件 |
+| 夜間與降低動態重驗 | 16項通過，33.66秒、0ERROR；拍攝時設定確實為true |
+| 世界正常／真實四分之一速度 | 42.80／96.41秒，皆exit0／0ERROR；四時段、三動作、八個實際輸入方向與降低動態 |
+| 動態貼圖與反例 | 同貼圖物件L形→方卡→L形能更新；方卡與低解析度按原條件拒絕；像素讀取改為正確中心位置，沒有放寬85%判定 |
+| 受影響局部驗證 | 13組通過；含固定原畫行走、圖集／翻轉、接地、NPC、乘坐、遮擋、主線、衣櫃及兩類自由互動 |
+| Python全套 | 161／161，47.277秒 |
+| 最後Linux成品 | 12場景啟動／初次繪製／退出27.27秒，exit0／0ERROR；保留長背心、降低動態與120幣 |
+
+最後成品241252096bytes，SHA256：`14bf913415b2d022abee7d27c569419b17712291abbc9368e34f664c12ea9ca5`。
+本輪為Linux GL Compatibility原生渲染；沒有Windows、實際試聽、完整動畫
+自然度或硬體效能宣稱。正式太陽與燈光資源上限保留。
+
+### 圖片、影片與重跑證據
+
+![凌晨前後，左為舊近似體積、右為當格輪廓](images/ART-1-upright-20261024-before-after-dawn.png)
+![中午前後，腳邊投影取自人物輪廓](images/ART-1-upright-20261024-before-after-noon.png)
+![傍晚前後](images/ART-1-upright-20261024-before-after-dusk.png)
+![夜間前後](images/ART-1-upright-20261024-before-after-night.png)
+![正式Main夜間降低動態，擷取設定另有紀錄](images/ART-1-upright-20261024-main-reduced.png)
+
+[正常原生錄影](images/ART-1-upright-20261024-normal.mp4) ·
+[真正四分之一速度](images/ART-1-upright-20261024-quarter.mp4) ·
+[逐項結果與限制](images/ART-1-upright-20261024-verification.json) ·
+[Main完整光影與夜間重驗](images/ART-1-upright-20261024-main-lighting.zip) ·
+[正常狀態原尺寸像素](images/ART-1-upright-20261024-world-normal.zip)／[慢放](images/ART-1-upright-20261024-world-quarter.zip) ·
+[舊版取景](images/ART-1-upright-20261024-world-before.zip) ·
+[原始失敗](images/ART-1-upright-20261024-negative.zip) ·
+[契約與輪廓反例](images/ART-1-upright-20261024-contracts.zip) ·
+[重跑與圖片還原工具](images/ART-1-upright-20261024-replay.zip) ·
+[成品初次繪製及原始輸出紀錄](images/ART-1-upright-20261024-elf-captures.zip) ·
+[來源指紋與輸出](images/ART-1-upright-20261024-build.json) ·
+[證據指紋](images/ART-1-upright-20261024-hashes.json)。
+
+截圖矩陣採無損保存，逐張核對193張解碼RGBA；並實際還原正常組16張核對。
+重建PNG壓縮位元組可不同，像素不變；矩陣不是動畫影片。原片兩組保留全部
+640／1444格，1280×720、15fps、無聲。透明來源仍保留原PNG。
+
+[本輪研究、舊版拒收與共同流程](../../design/runtime/character-lighting-shadows.md)
+重新檢視Godot的透明裁切、光源視角與陰影設定，以及已保存的
+[Octopath開發訪談圖例](images/ART-1-reference-octopath.jpg)，採分清人物與場景
+層次、讓實際光源產生一致投影的方法。

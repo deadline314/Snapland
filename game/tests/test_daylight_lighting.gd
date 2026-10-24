@@ -60,11 +60,20 @@ func _run() -> void:
 		_fail("Expected one shadow-only proxy for each player/NPC actor; found %d." % world.actor_shadow_proxies.size())
 	for proxy_record in world.actor_shadow_proxies:
 		var proxy := proxy_record.get("node") as Node3D
-		if not is_instance_valid(proxy) or proxy.get_child_count() != 2:
-			_fail("Each actor proxy must contain separate torso and head shadow volumes.")
+		if not is_instance_valid(proxy) or proxy.get_child_count() != 3:
+			_fail("Each actor proxy must contain its composed silhouette and two fallback volumes.")
 			continue
 		if proxy.get_parent() != proxy_record.get("actor"):
 			_fail("An actor shadow proxy is not parented to its moving actor anchor.")
+		var silhouette = proxy_record.get("silhouette")
+		if not is_instance_valid(silhouette) or not silhouette.visible:
+			_fail("Current actor art must use its composed alpha silhouette.")
+		else:
+			var active := 0
+			for geometry in proxy.get_children():
+				if geometry is GeometryInstance3D and geometry.visible: active += 1
+			if active != 1:
+				_fail("Fallback volumes must not duplicate a supported alpha silhouette.")
 		var actor := proxy_record.get("actor") as Node3D
 		if actor != world.player:
 			var expected_ground_offset := world._ground_surface_y(actor.global_position) - actor.global_position.y

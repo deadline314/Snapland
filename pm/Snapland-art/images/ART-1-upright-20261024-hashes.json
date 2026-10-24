@@ -1,0 +1,106 @@
+{
+  "ART-1-upright-20261024-before-after-dawn.png": {
+    "sha256": "c82a7a902c07a8747e9526cc3ab9c2d055deed867dfb989e846b539c45f0bd12",
+    "bytes": 289005
+  },
+  "ART-1-upright-20261024-before-after-dusk.png": {
+    "sha256": "7b58aed1cbbf6edde0722f4994423a5933b2649d20951d5ad3e1a0eddded0b62",
+    "bytes": 305445
+  },
+  "ART-1-upright-20261024-before-after-night.png": {
+    "sha256": "bf20cd3922699c0053f8c2d5c035c1796c08d5a56fe896996424edacad7fe9a4",
+    "bytes": 302691
+  },
+  "ART-1-upright-20261024-before-after-noon.png": {
+    "sha256": "e6730ebfaf82c9904cf46b8d7ab39e37500bb6bfee54ff3bcc269a6e52186e51",
+    "bytes": 305615
+  },
+  "ART-1-upright-20261024-build.json": {
+    "sha256": "71f61679a46b4013439a72bc23b36b52b5a96c55dc94f25d0caa1e613f8c1c60",
+    "bytes": 137575
+  },
+  "ART-1-upright-20261024-contracts.zip": {
+    "sha256": "93cca6dae6148710fabc7e27cbc171838e5f277938574acece409741cc2de906",
+    "bytes": 2714203
+  },
+  "ART-1-upright-20261024-elf-captures.zip": {
+    "sha256": "6b24b9989342374ce21ef4509a6b5358bfc9549975dda846bafcd639ca550bd0",
+    "bytes": 1615860
+  },
+  "ART-1-upright-20261024-elf-smoke.json": {
+    "sha256": "a57b1570494561eea898f46aec882d4862dcf138437ad033938302da8cb67c11",
+    "bytes": 73
+  },
+  "ART-1-upright-20261024-elf-smoke.log": {
+    "sha256": "a0c5f49eb8c1af7e87eef4e690d56896ac0c46109b367b57bf62794ef71b24b9",
+    "bytes": 6960
+  },
+  "ART-1-upright-20261024-export.log": {
+    "sha256": "be479e07c51605c726b43e2650b309c1066c00b51e02bac412d876e344aa69dd",
+    "bytes": 179102
+  },
+  "ART-1-upright-20261024-import.log": {
+    "sha256": "f15ffd4c558b01611d562c8c257508942bdc2dc542124f423ae2a592a46edfa6",
+    "bytes": 1017
+  },
+  "ART-1-upright-20261024-main-dawn.png": {
+    "sha256": "09aed2447b0f95f6c7be2d2cdb699fa0e28f75b9be158d7bd3a74f11eeace9ea",
+    "bytes": 1584968
+  },
+  "ART-1-upright-20261024-main-dusk.png": {
+    "sha256": "e59c87c14a74f6fdb2dacc9836b7e9124d5e12bc7995318f3e4729670ff7ecb6",
+    "bytes": 1605983
+  },
+  "ART-1-upright-20261024-main-lighting.zip": {
+    "sha256": "65c9a2016e51a1be46ba966eb7aa46fb28768c0fbddb8d43c79a3bbac884a207",
+    "bytes": 43608273
+  },
+  "ART-1-upright-20261024-main-night.png": {
+    "sha256": "d07e4e6ddcc6619c996a582b78d9ebd2d5daf8e2105a4dfed5099449b0441442",
+    "bytes": 1543356
+  },
+  "ART-1-upright-20261024-main-noon.png": {
+    "sha256": "261f73f128ebd00577810f0bf7027c65f26b46bd287fbbe54ce7f27dfa88b85d",
+    "bytes": 1713645
+  },
+  "ART-1-upright-20261024-main-reduced.png": {
+    "sha256": "18eeb9422b0864df2b9c6fcfc1f6015659b6209912251e962c1f8da9abb77e5c",
+    "bytes": 1543533
+  },
+  "ART-1-upright-20261024-negative.zip": {
+    "sha256": "c8deafcce74d6f74f0684e2935d266cfa5b6bb7f29dde61df7b645b365d6b6ed",
+    "bytes": 35783803
+  },
+  "ART-1-upright-20261024-normal.mp4": {
+    "sha256": "8d96672bdee7ca6b7205df0da578ee8dfdae3b8f36407ee429c2876493e6ca0c",
+    "bytes": 7986795
+  },
+  "ART-1-upright-20261024-python.log": {
+    "sha256": "cabc9e2d6d86f3fd68d7e3a8e163ac07d42984bed6437a567cdae45a9c1842b5",
+    "bytes": 494
+  },
+  "ART-1-upright-20261024-quarter.mp4": {
+    "sha256": "6a640e1c1352e987c6528ca66f35cd33972f52b523f704706673c4492b449f63",
+    "bytes": 17404705
+  },
+  "ART-1-upright-20261024-replay.zip": {
+    "sha256": "4d5704db1eb6f9667e9ff6dbb1cf069568c33897774f074cfeb3b37711cee35b",
+    "bytes": 17915
+  },
+  "ART-1-upright-20261024-verification.json": {
+    "sha256": "14b70062fe8b8c2dd6e6854401b78e810e359a43ce6697247181f0f9fd6e8b4e",
+    "bytes": 11543
+  },
+  "ART-1-upright-20261024-world-before.zip": {
+    "sha256": "a9c7e55379b40e61ae634c1691ba23b5da73d42867b946f4476cf66e8e1fccb5",
+    "bytes": 19732029
+  },
+  "ART-1-upright-20261024-world-normal.zip": {
+    "sha256": "67c5f6762fcafe5af29689a4db201b05ff1f823ee12c48e0f2f39cd4a4971c98",
+    "bytes": 19741851
+  },
+  "ART-1-upright-20261024-world-quarter.zip": {
+    "sha256": "8576ac70ad128bc622e85154ad1b205748174655fc8274e396b34c017f54185d",
+    "bytes": 19662710
+  }
+}

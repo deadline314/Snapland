@@ -11,6 +11,9 @@ var point_light: OmniLight3D
 var point_mode := false
 var caster: MeshInstance3D
 var caster_material: StandardMaterial3D
+var shadow_source: Sprite3D
+var live_image: TextureRect
+var live_texture_identity := 0
 var folder := ""
 var shape: Image
 var reports: Array=[]
@@ -41,13 +44,45 @@ func run() -> void:
 	light=DirectionalLight3D.new();scene.add_child(light);light.look_at_from_position(Vector3(-4,8,4),Vector3.ZERO,Vector3.UP)
 	light.shadow_enabled=true;light.shadow_blur=0.0;light.shadow_bias=0.0;light.shadow_normal_bias=0.0;light.directional_shadow_max_distance=20.0
 	configure_shape()
-	caster=MeshInstance3D.new();var quad:=QuadMesh.new();quad.size=Vector2(shape.get_size())*pixel_size;caster.mesh=quad
-	caster_material=StandardMaterial3D.new();caster_material.albedo_texture=ImageTexture.create_from_image(shape)
-	caster_material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR;caster_material.alpha_scissor_threshold=0.5
-	caster_material.cull_mode=BaseMaterial3D.CULL_DISABLED;caster_material.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	caster.material_override=caster_material;caster.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-	scene.add_child(caster);caster.global_basis=camera.global_basis
-	caster.position.y=(feet_row-float(shape.get_height())*0.5)*pixel_size*camera.global_basis.y.y
+	if OS.get_cmdline_user_args().has("--candidate"):
+		# The hidden visible-pass source retains the same texture/pose API as an
+		# island Sprite3D; layer masking, rather than hide(), keeps it observable
+		# to the candidate while removing it from the diagnostic camera pass.
+		camera.cull_mask=1
+		shadow_source=Sprite3D.new()
+		shadow_source.layers=2
+		shadow_source.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		if OS.get_cmdline_user_args().has("--live-texture"):
+			var viewport := SubViewport.new()
+			viewport.size=shape.get_size()
+			viewport.transparent_bg=true
+			viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+			scene.add_child(viewport)
+			live_image=TextureRect.new()
+			live_image.texture=ImageTexture.create_from_image(shape)
+			live_image.size=Vector2(shape.get_size())
+			viewport.add_child(live_image)
+			shadow_source.texture=viewport.get_texture()
+			live_texture_identity=shadow_source.texture.get_instance_id()
+		else:
+			shadow_source.texture=ImageTexture.create_from_image(shape)
+		shadow_source.pixel_size=pixel_size
+		shadow_source.position.y=(feet_row-float(shape.get_height())*0.5)*pixel_size*camera.global_basis.y.y
+		scene.add_child(shadow_source)
+		caster=load("res://game/world/actor_shadow_silhouette.gd").new()
+		scene.add_child(caster)
+		caster.set("upright",OS.get_cmdline_user_args().has("--upright"))
+		caster.call("configure",shadow_source,camera)
+		caster_material=caster.get("silhouette_material")
+		caster.set_process(false) # OFF/ON probes control visibility explicitly.
+	else:
+		caster=MeshInstance3D.new();var quad:=QuadMesh.new();quad.size=Vector2(shape.get_size())*pixel_size;caster.mesh=quad
+		caster_material=StandardMaterial3D.new();caster_material.albedo_texture=ImageTexture.create_from_image(shape)
+		caster_material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR;caster_material.alpha_scissor_threshold=0.5
+		caster_material.cull_mode=BaseMaterial3D.CULL_DISABLED;caster_material.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		caster.material_override=caster_material;caster.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+		scene.add_child(caster);caster.global_basis=camera.global_basis
+		caster.position.y=(feet_row-float(shape.get_height())*0.5)*pixel_size*camera.global_basis.y.y
 	await frames(5)
 	# Hiding disables casting without drawing a visible card in the baseline.
 	caster.hide()
@@ -55,10 +90,19 @@ func run() -> void:
 	caster.show()
 	await frames(4);var on:=await shot("alpha-L")
 	var result:=audit(off,on);result["case"]="correct_alpha";reports.append(result)
-	var solid:=Image.create(shape.get_width(),shape.get_height(),false,Image.FORMAT_RGBA8);solid.fill(Color.WHITE);caster_material.albedo_texture=ImageTexture.create_from_image(solid)
+	var solid:=Image.create(shape.get_width(),shape.get_height(),false,Image.FORMAT_RGBA8);solid.fill(Color.WHITE);set_texture(ImageTexture.create_from_image(solid))
 	await frames(4);var wrong:=await shot("opaque-card-negative")
 	var negative:=audit(off,wrong);negative["case"]="opaque_card_negative";reports.append(negative)
-	caster_material.albedo_texture=ImageTexture.create_from_image(shape)
+	set_texture(ImageTexture.create_from_image(shape))
+	if is_instance_valid(live_image):
+		# Same source texture object, caster and light transform throughout L ->
+		# full card -> L. A cached or snapshotted alpha silhouette must fail.
+		await frames(4)
+		var restored:=audit(off,await shot("live-restored-alpha"))
+		restored["case"]="live_texture_restored"
+		restored["same_texture_object"]=shadow_source.texture.get_instance_id()==live_texture_identity
+		restored["pass"]=bool(restored.pass) and bool(restored.same_texture_object)
+		reports.append(restored)
 	light.look_at_from_position(Vector3(4,3,-8),Vector3.ZERO,Vector3.UP)
 	caster.hide();await frames(4);var back_off:=await shot("back-off")
 	caster.show();await frames(4);var back_on:=await shot("back-alpha")
@@ -70,7 +114,10 @@ func run() -> void:
 	caster.show();await frames(4);var point_on:=await shot("point-alpha")
 	var point_result:=audit(point_off,point_on);point_result["case"]="point_light_alpha";reports.append(point_result)
 	FileAccess.open(folder.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify(reports,"  "))
-	if not bool(result.pass) or bool(negative.pass) or not bool(back.pass) or not bool(point_result.pass):push_error("Alpha shadow projection or opaque-card negative failed");quit(1);return
+	var live_pass := true
+	for row in reports:
+		if str(row.get("case",""))=="live_texture_restored":live_pass=bool(row.pass)
+	if not bool(result.pass) or bool(negative.pass) or not bool(back.pass) or not bool(point_result.pass) or not live_pass:push_error("Alpha shadow projection or opaque-card negative failed");quit(1);return
 	print("PASS: independent projected alpha silhouette shadow, transparent holes preserved and opaque-card negative rejected")
 	quit()
 func audit(off: Image,on: Image) -> Dictionary:
@@ -90,7 +137,9 @@ func audit(off: Image,on: Image) -> Dictionary:
 			var sample_ray: Vector3=(point-point_light.global_position).normalized() if point_mode else ray
 			var floor_point: Vector3=point-sample_ray*(point.y/sample_ray.y)
 			var screen: Vector2=camera.unproject_position(floor_point)
-			var pixel:=Vector2i(roundi(screen.x),roundi(screen.y))
+			# Viewport coordinates describe pixel boundaries; image index i samples
+			# center i+0.5. Rounding first shifts the read by up to a whole pixel.
+			var pixel:=Vector2i(floori(screen.x),floori(screen.y))
 			if not Rect2i(0,0,1280,720).has_point(pixel):continue
 			var dark: bool=off.get_pixelv(pixel).get_luminance()-on.get_pixelv(pixel).get_luminance()>0.04
 			if expected!=dark:missed.append([x,y,expected,off.get_pixelv(pixel).get_luminance()-on.get_pixelv(pixel).get_luminance()])
@@ -126,3 +175,12 @@ func configure_shape() -> void:
 	sample_end=Vector2i(269,337)
 	sample_step=12
 	boundary_radius=4
+
+func set_texture(texture: Texture2D) -> void:
+	if is_instance_valid(live_image):
+		live_image.texture=texture
+	elif is_instance_valid(shadow_source):
+		shadow_source.texture=texture
+		caster.call("sync_pose")
+	else:
+		caster_material.albedo_texture=texture

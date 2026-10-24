@@ -14,6 +14,7 @@ const NpcActivityScript = preload("res://game/world/npc_activity.gd")
 const StoryLandmarksScript = preload("res://game/world/story_landmarks.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const ActorShadowSilhouette = preload("res://game/world/actor_shadow_silhouette.gd")
 const AvatarHairRig = preload("res://game/world/avatar_hair_rig.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const IslandAttractionsScript = preload("res://game/world/island_attractions.gd")
@@ -309,9 +310,9 @@ func _add_contact_shadow(anchor: Node3D, local_ground_offset: Vector3, dimension
 	mesh_count += 1
 	return shadow
 
-func _add_actor_shadow_proxy(actor: Node3D, role: String, ground_offset_y: float) -> Node3D:
-	# Coarse opaque volumes stand in for the alpha-tested sprite in shadow maps.
-	# SHADOWS_ONLY keeps them out of the camera pass and they have no colliders.
+func _add_actor_shadow_proxy(actor: Node3D, role: String, ground_offset_y: float, source_sprite: Sprite3D) -> Node3D:
+	# Keep collision-free coarse volumes as a safe fallback for unsupported
+	# texture layouts. Normally only the final composed alpha silhouette casts.
 	var proportions := {
 		"hero": Vector3(0.30, 1.20, 0.32),
 		"ticket": Vector3(0.25, 1.05, 0.28),
@@ -344,8 +345,13 @@ func _add_actor_shadow_proxy(actor: Node3D, role: String, ground_offset_y: float
 	head.material_override = shadow_material
 	head.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 	proxy.add_child(head)
-	actor_shadow_proxies.append({"node": proxy, "actor": actor, "role": role})
-	mesh_count += 2
+	var silhouette := ActorShadowSilhouette.new()
+	silhouette.upright = true
+	proxy.add_child(silhouette)
+	var fallback: Array[GeometryInstance3D] = [torso, head]
+	silhouette.configure(source_sprite, camera, fallback)
+	actor_shadow_proxies.append({"node": proxy, "actor": actor, "role": role, "silhouette": silhouette})
+	mesh_count += 3
 	return proxy
 
 static func sprite_ground_anchor_y(
@@ -452,6 +458,10 @@ func _update_sprite_grounding() -> void:
 		var actor := proxy_record.get("actor") as Node3D
 		if not is_instance_valid(proxy) or not is_instance_valid(actor): continue
 		proxy.position.y = 0.0 if actor == player and is_riding() else _ground_surface_y(actor.global_position) - actor.global_position.y
+		var silhouette = proxy_record.get("silhouette")
+		if is_instance_valid(silhouette):
+			silhouette.scene_camera = camera
+			silhouette.refresh()
 
 func _mat(color: Color, emissive := false) -> StandardMaterial3D:
 	var key := "%s:%s" % [color.to_html(true), str(emissive)]
@@ -1839,7 +1849,7 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	var ground_y := _ground_surface_y(pos)
 	_register_sprite_ground_anchor(sprite,ground_anchor,activity_root,ground_y,float(NpcActivityScript.ACTION_FEET_ROW),float(NpcActivityScript.ACTION_CANVAS_SIZE.y))
 	_add_contact_shadow(activity_root,Vector3(0,ground_y-activity_root.global_position.y+0.005,0),Vector2(0.78,0.46))
-	_add_actor_shadow_proxy(activity_root,role,ground_y-activity_root.global_position.y)
+	_add_actor_shadow_proxy(activity_root,role,ground_y-activity_root.global_position.y,sprite)
 	var name_label := _label(title,pos+Vector3(0,2.65,0),22)
 	name_label.reparent(activity_root,true)
 	character_sprites.append({"sprite":sprite,"activity_root":activity_root,"name_label":name_label,"role":role,"color":color,"base_position":sprite.position,"idle_profile":"mascot" if role=="imp" else ("welcoming" if role=="ticket" else "announcer"),"name_body_height":_visible_body_height(sprite),"name_camera_up_y":-1.0})
@@ -2135,7 +2145,7 @@ func _build_player() -> void:
 	avatar_ground_anchor.add_child(avatar)
 	avatar.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	avatar_contact_shadow=_add_contact_shadow(player,Vector3(0,0,0),Vector2(0.92,0.58))
-	_add_actor_shadow_proxy(player,"hero",_ground_surface_y(player.position)-player.position.y)
+	_add_actor_shadow_proxy(player,"hero",_ground_surface_y(player.position)-player.position.y,avatar)
 	_register_sprite_ground_anchor(avatar,avatar_ground_anchor,player,_ground_surface_y(player.position),float(AvatarRenderer.FEET_BASELINE),float(AvatarRenderer.CANVAS_SIZE.y))
 	add_child(player)
 	# Production presentation uses the complete authored Sprite atlases directly.

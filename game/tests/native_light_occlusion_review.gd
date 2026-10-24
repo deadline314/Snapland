@@ -57,6 +57,9 @@ func _save(name: String) -> bool:
 	if error != OK:
 		await _fail("Capture failed: " + name)
 		return false
+	var captures: Array = report.get("captures", [])
+	captures.append({"name":name,"reduced_motion":main.world.reduced_motion,"phase":main.world.active_time_phase})
+	report["captures"]=captures
 	return true
 
 
@@ -111,13 +114,13 @@ func _review_lighting() -> bool:
 	var reduced: Dictionary = await _measure_lamp_glow("night", true)
 	report.lighting.append(reduced)
 	var reduced_sun: bool = main.world.sun.shadow_enabled and main.world.sun.light_energy > 0.0
-	main.world.apply_settings({"reduced_motion": false})
 	if not bool(reduced.pass) or not reduced_sun: lighting_failures.append(reduced)
 	_write_report()
 	if not lighting_failures.is_empty():
 		await _fail("Lighting checks failed: " + JSON.stringify(lighting_failures))
 		return false
 	if not await _save("light-night-reduced-plaza"): return false
+	main.world.apply_settings({"reduced_motion": false})
 	main._select_time_phase("noon")
 	return true
 
@@ -130,7 +133,7 @@ func _plaza_casters() -> Array[Dictionary]:
 		var proxy := record.node as Node3D
 		var geometry: Array[GeometryInstance3D] = []
 		for child in proxy.get_children():
-			if child is GeometryInstance3D: geometry.append(child)
+			if child is GeometryInstance3D and child.visible: geometry.append(child)
 		casters.append({"name": "actor-" + str(record.role), "geometry": geometry, "base": proxy.global_position, "height": 1.5})
 	var view_center: Vector3 = world.player.global_position
 	var best_trunk: MeshInstance3D = null

@@ -1,0 +1,364 @@
+{
+  "scope": "first-island lighting and composed actor shadows; not complete character animation, human play, listening, Windows or hardware performance",
+  "regressions": [
+    {
+      "name": "authored avatar walk loop tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 37.91
+    },
+    {
+      "name": "daylight lighting tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.44
+    },
+    {
+      "name": "actor alpha silhouette tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.25
+    },
+    {
+      "name": "NPC world activity tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.35
+    },
+    {
+      "name": "sprite clearance tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 19.28
+    },
+    {
+      "name": "main story integration tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 27.8
+    },
+    {
+      "name": "island ride tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 22.94
+    },
+    {
+      "name": "island layout tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 8.59
+    },
+    {
+      "name": "promenade free play tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 9.22
+    },
+    {
+      "name": "coastal free play tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 13.42
+    },
+    {
+      "name": "main scene integration tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 23.09
+    },
+    {
+      "name": "pixel UI customization tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 8.79
+    },
+    {
+      "name": "building occlusion tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 6.86
+    }
+  ],
+  "python": {
+    "passed": 161,
+    "seconds": 47.277
+  },
+  "main_light_conditions": 53,
+  "night_recheck_conditions": 16,
+  "conditions_include_outside_selected_lamp_reach": true,
+  "world_normal": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 42.8,
+    "engine_time_scale": 1.0
+  },
+  "world_quarter": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 96.41,
+    "engine_time_scale": 0.25
+  },
+  "films": [
+    {
+      "label": "normal",
+      "source": "work/remaining-20261024/shadow-world-after-upright-normal-v1/native-world.mp4",
+      "source_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "15/1",
+            "nb_read_frames": "640"
+          }
+        ],
+        "format": {
+          "duration": "42.666667"
+        }
+      },
+      "share": "work/remaining-20261024/actor-shadow-normal-native-share.mp4",
+      "shared_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "15/1",
+            "nb_read_frames": "640"
+          }
+        ],
+        "format": {
+          "duration": "42.666667"
+        }
+      },
+      "shared_bytes": 7986795,
+      "fully_decoded": true,
+      "all_source_frames_preserved": true
+    },
+    {
+      "label": "quarter",
+      "source": "work/remaining-20261024/shadow-world-after-upright-quarter-v1/native-world.mp4",
+      "source_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "15/1",
+            "nb_read_frames": "1444"
+          }
+        ],
+        "format": {
+          "duration": "96.333333"
+        }
+      },
+      "share": "work/remaining-20261024/actor-shadow-quarter-native-share.mp4",
+      "shared_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "15/1",
+            "nb_read_frames": "1444"
+          }
+        ],
+        "format": {
+          "duration": "96.333333"
+        }
+      },
+      "shared_bytes": 17404705,
+      "fully_decoded": true,
+      "all_source_frames_preserved": true
+    }
+  ],
+  "film_visual_scope": "six sampled source frames per world clip, complete decode; not continuous watching",
+  "release": {
+    "file": "release-final/Snapland.x86_64",
+    "bytes": 241252096,
+    "sha256": "14bf913415b2d022abee7d27c569419b17712291abbc9368e34f664c12ea9ca5"
+  },
+  "elf_smoke": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 27.27,
+    "completion": true
+  },
+  "active_case_source_sha256": "be6ac7ead78fe0a39ce89093b81bbc57a0c9cefc0b048f68594b62ee44f6e4ed",
+  "final_source_sha256": "0943923c667892ab0823c23e5b70b2e4b62de945351e3b11422495cd334ac11b",
+  "source_version_note": "Active-pose GPU cases used the archived earlier source. Final tree-membership guards affect detached actors/cameras only, and were separately verified by the final contract, building-occlusion check and rebuilt ELF. No image, body placement or collider changes.",
+  "capture_correction": "The earlier full-light pass captured its reduced-labelled still after restoring the toggle; that still is in negative.zip, excluded from accepted reduced evidence. The final night repeat records reduced_motion=true at capture time.",
+  "pixel_sample_correction": "Image pixel index floors viewport boundary coordinates; previous rounding shifted reads by up to a whole pixel. The 85% sample criterion and minimum counts stayed unchanged. Earlier failed read saved in negative.zip.",
+  "reviewed_contacts": [
+    {
+      "file": "before-after-dawn.png",
+      "sha256": "c82a7a902c07a8747e9526cc3ab9c2d055deed867dfb989e846b539c45f0bd12"
+    },
+    {
+      "file": "before-after-dusk.png",
+      "sha256": "7b58aed1cbbf6edde0722f4994423a5933b2649d20951d5ad3e1a0eddded0b62"
+    },
+    {
+      "file": "before-after-night.png",
+      "sha256": "bf20cd3922699c0053f8c2d5c035c1796c08d5a56fe896996424edacad7fe9a4"
+    },
+    {
+      "file": "before-after-noon.png",
+      "sha256": "e6730ebfaf82c9904cf46b8d7ab39e37500bb6bfee54ff3bcc269a6e52186e51"
+    },
+    {
+      "file": "film-normal-contact-1.png",
+      "sha256": "896258301f7c01dcc96c98c73f13f03bf2f539a7c187031d6e78c1aa7be3ff74"
+    },
+    {
+      "file": "film-normal-contact-2.png",
+      "sha256": "5c2ef39adda199900ed0b5f468c24b4df25602ca7cb48980c1fd46e087bde59f"
+    },
+    {
+      "file": "film-quarter-contact-1.png",
+      "sha256": "0b3fa3f57051c3016adab7f26e5490f253061a49384628bd7ffd5be669bb03ca"
+    },
+    {
+      "file": "film-quarter-contact-2.png",
+      "sha256": "f75869fa125ab1779c0fa22f53af3e0669a58646635c2a0e0fe861feb390e7de"
+    },
+    {
+      "file": "film-release-contact-1.png",
+      "sha256": "ac7cbf2edb6cff0d4e72fa8824cbdf23c048abbbebb23202fed186c3176f7c95"
+    },
+    {
+      "file": "film-release-contact-2.png",
+      "sha256": "a762e03e90c65d5c7195f3769f3e55a3b47880089226a0db5fb03effec4c4827"
+    },
+    {
+      "file": "main-phases-1.png",
+      "sha256": "01224a25c7e97d485e8c96408b6036fca811b21e890531ec2c01a827d9bf9ce6"
+    },
+    {
+      "file": "main-phases-2.png",
+      "sha256": "a0ec42788e93bb3d93fd2b32657a8005a978219341e09fc058716e37b7a1f25d"
+    },
+    {
+      "file": "main-phases-3.png",
+      "sha256": "8b3426ba82686b6b4f9841a4d639b627ea45f0e43db11dd2b602b246bda42192"
+    },
+    {
+      "file": "main-phases-4.png",
+      "sha256": "c20d6cb15bff63fadb5546f10c5b03fcb7de044162f366974a6662231e66a64f"
+    },
+    {
+      "file": "main-shadow-masks-1.png",
+      "sha256": "f497a0eead994244630ae1d5b805f8ebbba509ff365beb8086cb700c112cbd8e"
+    },
+    {
+      "file": "main-shadow-masks-2.png",
+      "sha256": "6a200114e58d887e7886aa7ebdfc12ade4db62453d01649eee8a723f3dc80b7c"
+    },
+    {
+      "file": "main-shadow-masks-3.png",
+      "sha256": "3c0c83a7baf520fd4f7183c0078b845c62474db21b287a93c4124098c5059c24"
+    },
+    {
+      "file": "main-shadow-masks-4.png",
+      "sha256": "ef7797f52898ecbb34c4b4819d80a39ec51f0a4aedc06982b4e7bf9d9ddf46a3"
+    },
+    {
+      "file": "release-final-1.png",
+      "sha256": "4dd0923ef31fec20518e93d8f86d5fa8ca7cd0ae29bf0465ac99b1ee05cc47ca"
+    },
+    {
+      "file": "release-final-2.png",
+      "sha256": "acd8a5e3f90f2b8d0da0441c33ba5acf27b6c4d1db804f261a8bbcc222b9ab7b"
+    },
+    {
+      "file": "release-final-3.png",
+      "sha256": "134a2586fb03457979185f8c69ae125621e94c0479e4af98212c6f70dc9523df"
+    },
+    {
+      "file": "release-smoke-1.png",
+      "sha256": "fa7d0c1562272d0363f91e9305e8e74c4f1b77273e41204e765f50a148183a54"
+    },
+    {
+      "file": "release-smoke-2.png",
+      "sha256": "41ba907f0f9f09f5b1657c5eb9e9eb756c98d4bf2522c4e92651ed6a7194618f"
+    },
+    {
+      "file": "release-smoke-3.png",
+      "sha256": "f4fce6fadbe4f4c859428cd76d9831a18cf9e7e687cfc3afb57283de6ce84a1a"
+    },
+    {
+      "file": "world-normal-1.png",
+      "sha256": "7514bc3d864b6a275712301522279d076f4e5bd45153da7608a5290acd153854"
+    },
+    {
+      "file": "world-normal-2.png",
+      "sha256": "a1b81b240a5b9ff299dcee0c6b085713b52cd3fb0d84ad4e7427258c5b1a0386"
+    },
+    {
+      "file": "world-normal-3.png",
+      "sha256": "c929c12737893c33142bf2493ae5a2b2b9066a855a682fa462ffd684e833c318"
+    },
+    {
+      "file": "world-normal-4.png",
+      "sha256": "de4b8b73d381be8deca0774a28821647938990d9eb551ada58a7a618e701b283"
+    },
+    {
+      "file": "world-quarter-1.png",
+      "sha256": "4c5c42b9bac3b84395d8d9402d68a227396f8c18589707d3c634f0ae9b13970a"
+    },
+    {
+      "file": "world-quarter-2.png",
+      "sha256": "000e2b153611e1a7e1f5412a2c8bed2fc8322920e316e292a1bb7ebfc47369a1"
+    },
+    {
+      "file": "world-quarter-3.png",
+      "sha256": "2b8c92738ceb410fc01638fb51b7ab5a698d72ad06a3ce90ae04a474d74209bc"
+    },
+    {
+      "file": "world-quarter-4.png",
+      "sha256": "acce30bda5992702d2fbdef30d63e780dab720a50e676af4d7fdf66f2000cd6e"
+    }
+  ],
+  "lossless_matrices": [
+    {
+      "file": "pm/Snapland-art/images/ART-1-upright-20261024-world-before.zip",
+      "original_bytes": 25519124,
+      "packed_bytes": 19732029,
+      "pixel_verified_frames": 16
+    },
+    {
+      "file": "pm/Snapland-art/images/ART-1-upright-20261024-world-normal.zip",
+      "original_bytes": 25519620,
+      "packed_bytes": 19741851,
+      "pixel_verified_frames": 16
+    },
+    {
+      "file": "pm/Snapland-art/images/ART-1-upright-20261024-world-quarter.zip",
+      "original_bytes": 25509175,
+      "packed_bytes": 19662710,
+      "pixel_verified_frames": 16
+    },
+    {
+      "file": "pm/Snapland-art/images/ART-1-upright-20261024-main-lighting.zip",
+      "original_bytes": 50992651,
+      "packed_bytes": 43608273,
+      "pixel_verified_frames": 77
+    },
+    {
+      "file": "pm/Snapland-art/images/ART-1-upright-20261024-negative.zip",
+      "original_bytes": 41781492,
+      "packed_bytes": 35783803,
+      "pixel_verified_frames": 68
+    }
+  ],
+  "matrix_pixel_verified_frames": 193,
+  "matrix_extraction": "Actual extraction of all 16 normal world screenshots reran all RGBA checks; temporary decoded copies removed afterwards. Recreated PNG compressed bytes may differ.",
+  "standalone_logs": "Trailing whitespace normalized; exact final release logs are in elf-captures.zip. Original test logs remain in the corresponding raw archives.",
+  "caster_record_note": "source:ViewportTexture/source:ImageTexture entries describe texture type; only ActorAlphaShadow is active geometry. The live fixture checks geometry count before adding that descriptive tag.",
+  "matrix_color_metadata": "Original sRGB rendering intent 0 retained for all packed native frames; actual extraction checks both RGBA hashes and sRGB intent."
+}
