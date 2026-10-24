@@ -1,0 +1,25 @@
+{
+  "baseline": "ce0eb87533e368eeb3b249b018482363ccaa9358",
+  "source_signature": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+  "source": "Existing normalized original legacy celebration portrait (atlas pose 15), not new artwork.",
+  "candidate_accepted": false,
+  "runtime_changed": false,
+  "rejection": "Authoring-only automatic head candidate includes original raised-arm outlines, jacket and bag/strap ink. Never install these spans as hair ownership.",
+  "fallback_result": {
+    "all_three_hair_styles_preserve_the_same_complete_fallback": true,
+    "original_and_one_pixel_changed_source_have_no_owner": true,
+    "renders": 72
+  },
+  "execution": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 4.91
+  },
+  "scope": "Headless image composition and source ownership check; three styles x eight requested headings x three legacy frame requests. This is ONE original static front-facing portrait reused for all requests, not eight direction animations or human/native motion review. Rendered palette remains the existing palette; equality is across hair styles for the same request, not source-to-render RGBA parity.",
+  "viewed": "Original/candidate-owner/candidate-cut individually viewed, plus 11-tile contact containing those and eight frame-zero fallback renders.",
+  "warning": "Expected missing reviewed head ownership warning; full portrait retained.",
+  "artifacts": {
+    "ART-18-legacy-head-20261024-contact.png": "8211ec500bb3032b70283b04342873c287c7fc1a972bd68808d7fad010dc2d0e",
+    "ART-18-legacy-head-20261024-evidence.zip": "d8b86b7269f5636e91aab1680782ad8a93daea71b3babbde4b4302d4d18153d0"
+  }
+}
