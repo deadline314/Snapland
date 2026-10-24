@@ -1,0 +1,19 @@
+{
+  "exit": 0,
+  "errors": 0,
+  "seconds": 2.38,
+  "expected_failure": false,
+  "command": [
+    "/workspace/work/Snapland-character/work/art18/engine-4.7.2/Godot_v4.7.2-stable_linux.x86_64",
+    "--path",
+    "/workspace/work/Snapland-character/work/tutorial-current-20261020/validation-project",
+    "--audio-driver",
+    "Dummy",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1280x720",
+    "--script",
+    "res://game/tests/native_actor_alpha_shadow_review.gd"
+  ]
+}

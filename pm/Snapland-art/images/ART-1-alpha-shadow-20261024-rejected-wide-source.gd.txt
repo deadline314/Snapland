@@ -1,0 +1,98 @@
+extends SceneTree
+## Independent alpha-shadow feasibility fixture; does not change park rendering.
+## Run on a GPU display with an absolute, fresh SNAPLAND_SAVE_PATH.
+## Results and raw captures are stored beside that isolated save.
+## The 4096 atlas/24m camera/20m sun range are local test conditions, not
+## evidence that the full island has the same shadow quality or frame rate.
+var scene: Node3D
+var camera: Camera3D
+var light: DirectionalLight3D
+var point_light: OmniLight3D
+var point_mode := false
+var caster: MeshInstance3D
+var caster_material: StandardMaterial3D
+var folder := ""
+var shape: Image
+var reports: Array=[]
+const PIXEL := 0.08
+func _initialize() -> void:
+	var profile := OS.get_environment("SNAPLAND_SAVE_PATH")
+	if not profile.is_absolute_path() or DisplayServer.get_name()=="headless":quit(2);return
+	folder=profile.get_base_dir();DirAccess.make_dir_recursive_absolute(folder)
+	call_deferred("run")
+func run() -> void:
+	root.size=Vector2i(1280,720)
+	scene=Node3D.new();root.add_child(scene)
+	var world_env:=WorldEnvironment.new();var environment:=Environment.new()
+	environment.background_mode=Environment.BG_COLOR;environment.background_color=Color("#325362")
+	environment.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR;environment.ambient_light_color=Color.WHITE;environment.ambient_light_energy=0.3
+	world_env.environment=environment;scene.add_child(world_env)
+	var ground:=MeshInstance3D.new();var plane:=PlaneMesh.new();plane.size=Vector2(16,16);ground.mesh=plane;ground.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var material:=StandardMaterial3D.new();material.albedo_color=Color("#869481");material.roughness=1.0;ground.material_override=material;scene.add_child(ground)
+	camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=8;scene.add_child(camera)
+	camera.look_at_from_position(Vector3(6,8,10),Vector3(0,0,0),Vector3.UP);camera.current=true
+	light=DirectionalLight3D.new();scene.add_child(light);light.look_at_from_position(Vector3(-4,8,4),Vector3.ZERO,Vector3.UP)
+	light.shadow_enabled=true;light.shadow_blur=0.0;light.shadow_bias=0.0;light.shadow_normal_bias=0.0;light.directional_shadow_max_distance=30.0
+	shape=Image.create(32,32,false,Image.FORMAT_RGBA8);shape.fill(Color.TRANSPARENT)
+	shape.fill_rect(Rect2i(3,4,6,24),Color.WHITE);shape.fill_rect(Rect2i(3,22,22,6),Color.WHITE)
+	caster=MeshInstance3D.new();var quad:=QuadMesh.new();quad.size=Vector2(32,32)*PIXEL;caster.mesh=quad
+	caster_material=StandardMaterial3D.new();caster_material.albedo_texture=ImageTexture.create_from_image(shape)
+	caster_material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR;caster_material.alpha_scissor_threshold=0.5
+	caster_material.cull_mode=BaseMaterial3D.CULL_DISABLED;caster_material.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	caster.material_override=caster_material;caster.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	scene.add_child(caster);caster.global_basis=camera.global_basis
+	caster.position.y=(28.0-16.0)*PIXEL*camera.global_basis.y.y
+	await frames(5)
+	# Hiding disables casting without drawing a visible card in the baseline.
+	caster.hide()
+	await frames(4);var off:=await shot("off")
+	caster.show()
+	await frames(4);var on:=await shot("alpha-L")
+	var result:=audit(off,on);result["case"]="correct_alpha";reports.append(result)
+	var solid:=Image.create(32,32,false,Image.FORMAT_RGBA8);solid.fill(Color.WHITE);caster_material.albedo_texture=ImageTexture.create_from_image(solid)
+	await frames(4);var wrong:=await shot("opaque-card-negative")
+	var negative:=audit(off,wrong);negative["case"]="opaque_card_negative";reports.append(negative)
+	caster_material.albedo_texture=ImageTexture.create_from_image(shape)
+	light.look_at_from_position(Vector3(4,3,-8),Vector3.ZERO,Vector3.UP)
+	caster.hide();await frames(4);var back_off:=await shot("back-off")
+	caster.show();await frames(4);var back_on:=await shot("back-alpha")
+	var back:=audit(back_off,back_on);back["case"]="back_light_alpha";reports.append(back)
+	light.light_energy=0.0
+	point_light=OmniLight3D.new();point_light.position=Vector3(-1.5,3,3);point_light.light_energy=2.4;point_light.omni_range=12.0
+	point_light.shadow_enabled=true;point_light.shadow_blur=0.0;point_light.shadow_bias=0.0;point_light.shadow_normal_bias=0.0;scene.add_child(point_light);point_mode=true
+	caster.hide();await frames(4);var point_off:=await shot("point-off")
+	caster.show();await frames(4);var point_on:=await shot("point-alpha")
+	var point_result:=audit(point_off,point_on);point_result["case"]="point_light_alpha";reports.append(point_result)
+	FileAccess.open(folder.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify(reports,"  "))
+	if not bool(result.pass) or bool(negative.pass) or not bool(back.pass) or not bool(point_result.pass):push_error("Alpha shadow projection or opaque-card negative failed");quit(1);return
+	print("PASS: independent projected alpha L shadow, transparent holes preserved and opaque-card negative rejected")
+	quit()
+func audit(off: Image,on: Image) -> Dictionary:
+	var opaque:=0;var correct_opaque:=0;var empty:=0;var correct_empty:=0;var missed: Array=[]
+	# Source-space alpha is the oracle. Project pixel centers along the actual
+	# light ray, independent of the shadow-map image being tested.
+	var ray: Vector3=-light.global_basis.z
+	for y in range(6,27,3):
+		for x in range(2,29,3):
+			var expected:=shape.get_pixel(x,y).a>0.5
+			var boundary:=false
+			for dy in [-1,0,1]:
+				for dx in [-1,0,1]:
+					if (shape.get_pixel(x+dx,y+dy).a>0.5)!=expected:boundary=true
+			if boundary:continue
+			var point: Vector3=caster.global_transform*Vector3((float(x)+0.5-16.0)*PIXEL,(16.0-float(y)-0.5)*PIXEL,0)
+			var sample_ray: Vector3=(point-point_light.global_position).normalized() if point_mode else ray
+			var floor_point: Vector3=point-sample_ray*(point.y/sample_ray.y)
+			var screen: Vector2=camera.unproject_position(floor_point)
+			var pixel:=Vector2i(roundi(screen.x),roundi(screen.y))
+			if not Rect2i(0,0,1280,720).has_point(pixel):continue
+			var dark: bool=off.get_pixelv(pixel).get_luminance()-on.get_pixelv(pixel).get_luminance()>0.04
+			if expected!=dark:missed.append([x,y,expected,off.get_pixelv(pixel).get_luminance()-on.get_pixelv(pixel).get_luminance()])
+			if expected:opaque+=1;correct_opaque+=1 if dark else 0
+			else:empty+=1;correct_empty+=0 if dark else 1
+	return {"missed":missed,"opaque":opaque,"opaque_correct":correct_opaque,"empty":empty,"empty_correct":correct_empty,"pass":opaque>=8 and empty>=8 and correct_opaque>=opaque*0.85 and correct_empty>=empty*0.85}
+func frames(count: int) -> void:
+	for index in count:await process_frame
+func shot(label: String) -> Image:
+	await RenderingServer.frame_post_draw
+	var image:=root.get_texture().get_image();image.save_png(folder.path_join(label+".png"));return image

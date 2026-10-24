@@ -105,3 +105,40 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 ![夜晚附近燈光](images/ART-1-island-final-night.png)
 
 本輪固定基準：`939130f`；分支：`feature/island-experience`；票況：進行中。共用變動包括 MAIN-11 的票票站位與 MAIN-15 的入口距離驗證，保留原有通路、互動及設施測試斷言；本段為受控場景檢查，沒有人工試玩或試聽宣稱。
+
+
+# Commit-3
+
+## 內文
+
+先驗證透明輪廓能否保留缺口，避免正式角色從近似體積換成整張方卡陰影。
+獨立原生場景以正面方向光、背面方向光及夜燈逐一投影透明 L 形；三組各
+13 個實心與 32 個透明內部採樣全部符合。故意換成不透明方卡時，32 個缺口
+全部被填滿，驗證明確拒絕。低解析度反例亦失敗；之前寬範圍試作的方向光
+失敗結果保留。四張投影／反例畫面均已實際查看。
+
+這是獨立輪廓可行性驗證，正式島嶼角色仍維持原近似陰影；角色、衣髮、動作
+和整島品質不由這組幾何樣本代替驗收。原有未勾選條件及進行中狀態保留。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 原生 GPU 正常樣本 | 2.38 秒，exit 0，0 ERROR |
+| 不透明方卡反例 | 32／32 透明缺口不符，按預期拒絕 |
+| 低解析度反例 | 2.19 秒，exit 1，1 預期驗證 ERROR |
+| 正式遊戲光影改動 | 無；本輪僅獨立驗證 |
+
+### 截圖與紀錄
+
+![正面方向光透明缺口](images/ART-1-alpha-shadow-20261024-alpha-L.png)
+![背面低角度方向光](images/ART-1-alpha-shadow-20261024-back-alpha.png)
+![夜燈透明缺口](images/ART-1-alpha-shadow-20261024-point-alpha.png)
+![被拒絕的不透明方卡](images/ART-1-alpha-shadow-20261024-opaque-card-negative.png)
+
+[正常採樣](images/ART-1-alpha-shadow-20261024-accepted-samples.json) ·
+[原生執行紀錄](images/ART-1-alpha-shadow-20261024-accepted-execution.log) ·
+[低解析度反例](images/ART-1-alpha-shadow-20261024-low-resolution-negative-samples.json) ·
+[先前失敗採樣](images/ART-1-alpha-shadow-20261024-rejected-wide-samples.json) ·
+[證據雜湊](images/ART-1-alpha-shadow-20261024-hashes.json) ·
+[研究與重跑流程](../../design/runtime/character-lighting-shadows.md#alpha-silhouette-feasibility-review-2026-10-24)。
