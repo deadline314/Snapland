@@ -1,0 +1,8 @@
+----------------------------------------------------------------------
+Ran 161 tests in 41.628s
+
+OK
+{"beep_onsets": 2, "revealed_glyphs": 1, "half_to_full_peak_ratio": null, "minimum_gap_ms": 1600.0}
+{"beep_onsets": 1, "revealed_glyphs": 1, "half_to_full_peak_ratio": null, "minimum_gap_ms": null}
+{"beep_onsets": 6, "revealed_glyphs": 6, "half_to_full_peak_ratio": 0.5, "minimum_gap_ms": 100.0}
+{"beep_onsets": 4, "revealed_glyphs": 5, "half_to_full_peak_ratio": null, "minimum_gap_ms": 66.7}

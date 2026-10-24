@@ -1,0 +1,8 @@
+{
+  "ART-18-catalog-ci-20261024-negative.log": "d744efc88eec6b47bcdda18d89ecfcede079909c056ea5e47f007b1bc0b2bf60",
+  "ART-18-catalog-ci-20261024-negative.json": "617fa72e4d2c1cf53abe0f71f04978d37301c478466b600096463f1297c0805f",
+  "ART-18-catalog-ci-20261024-python-full.log": "f8aa974f59fc27298be29a47a4497818e83730f72ae5b9582ac8357c11b2f412",
+  "ART-18-catalog-ci-20261024-fixed.log": "dc463b3214ff4d44ff27d62fb3f581b472141501482b8b41bc69eb2736f77ad3",
+  "ART-18-catalog-ci-20261024-remote-failure.log": "c362d9dfe875680c13a2062b5bed97197d97cafa5c4696dfc90bd7bdf0573a88",
+  "ART-18-catalog-ci-20261024-fixed.json": "dd4c957d228a8c487e469213bdc697c249b181a6db134ea22dcb26f44e4560e1"
+}

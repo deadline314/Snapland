@@ -171,7 +171,20 @@ func _run() -> void:
 	var retained_rows: Array[Control]=[]
 	for child in panel.item_page_list.get_children():
 		if child.has_meta("wardrobe_item_row"): retained_rows.append(child as Control)
-	_check(retained_rows.size()==8 and panel.visible_items.size()==8,"catalog retains all eight real item rows independently of Godot sibling names")
+	# The independent catalog is the inventory oracle; UI counts alone would
+	# accept a lost row duplicated elsewhere or the same stale eight-item list.
+	var expected_item_ids := {}
+	for item: Dictionary in Progress.wardrobe_items():
+		_check(not expected_item_ids.has(str(item.id)),"catalog item identities are unique: "+str(item.id))
+		expected_item_ids[str(item.id)]=true
+	for required_id in ["outfit-tide","outfit-coral","outfit-gold","outfit-navy","outfit-rainvest","hat-none","hat-straw","hat-sailor","hat-flower"]:
+		_check(expected_item_ids.has(required_id),"catalog preserves the existing clothes and free silhouette: "+required_id)
+	_check(retained_rows.size()==expected_item_ids.size() and panel.visible_items.size()==expected_item_ids.size(),"catalog retains every real item row independently of Godot sibling names")
+	var retained_item_ids := {}
+	for row in retained_rows:
+		var retained_id := str(row.get_meta("wardrobe_item_id",""))
+		_check(expected_item_ids.has(retained_id) and not retained_item_ids.has(retained_id),"each catalog identity has exactly one retained row: "+retained_id)
+		retained_item_ids[retained_id]=true
 	var reached_items := {}
 	for page_index in panel.item_page_count:
 		if page_index>0 and next_item_page!=null:
@@ -195,7 +208,10 @@ func _run() -> void:
 			var item_button:=panel.content.find_child("WardrobeItem_"+item_id,true,false) as Button
 			var row_rect: Rect2=item_button.get_parent().get_global_rect() if item_button!=null else Rect2()
 			_check(item_button!=null and panel.item_scroll.get_global_rect().encloses(row_rect),"shop page %d fully reveals catalog item %s"%[page_index+1,item_id])
-	_check(reached_items.size()==8,"actual shop page navigation reaches all eight stable catalog items")
+	_check(reached_items.size()==expected_item_ids.size(),"actual shop page navigation reaches the complete catalog")
+	for expected_id in expected_item_ids:
+		_check(reached_items.has(expected_id),"actual shop page navigation reaches catalog identity: "+str(expected_id))
+	_check(Progress.owned_clothes.has("outfit-rainvest") and Progress.coins==0,"zero-coin player already owns the free silhouette while browsing the shop")
 	var final_page_item := panel.content.find_child("WardrobeItem_hat-flower",true,false) as Button
 	_check(final_page_item!=null and panel.item_scroll.get_global_rect().encloses(final_page_item.get_parent().get_global_rect()),"shop page navigation reveals the final item inside the fixed viewport")
 	_check(panel.item_scroll.scroll_vertical>0,"page navigation uses a real internal content offset")

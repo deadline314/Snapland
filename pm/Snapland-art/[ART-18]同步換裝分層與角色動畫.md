@@ -387,3 +387,29 @@
 這是審查目錄的資源路徑修正；整票狀態與其餘未勾條件維持。完整場景套件依各次CI實際結果記錄，不由兩項局部入口通過推論。
 
 [原始遠端失敗](images/ART-18-ci-paths-20261024-remote-failure.log) · [修正前反例](images/ART-18-ci-paths-20261024-negative.log)／[修正後](images/ART-18-ci-paths-20261024-regression.log) · [固定原點命令](images/ART-18-ci-paths-20261024-walk-audit.log) · [待機命令](images/ART-18-ci-paths-20261024-idle-contracts.log) · [161項Python](images/ART-18-ci-paths-20261024-python-full.log) · [隔離來源指紋](images/ART-18-ci-paths-20261024-source-hashes.json) · [範圍](images/ART-18-ci-paths-20261024-verification.json)。
+
+
+# Commit — 2026-10-24 核對衣櫃完整目錄與實際分頁
+
+[MAIN-11交付的遠端驗證](https://github.com/deadline314/Snapland/actions/runs/40088232697)
+指出商店分頁驗證仍固定要求八件衣物；新增免費長背心後，真正目錄已是九件。
+原測試在本機實際重現兩項錯誤，並非匯入或商品顯示失敗。
+
+現在以獨立商品目錄逐一核對保留的列與實際翻頁能到達的商品身份，另外確認
+原八件及新長背心都存在，且沒有重複列。全部既有小視窗、完整價格文字、
+整列可見、沒有半截前後頁及最後一件可達條件保留；零幣玩家瀏覽時長背心
+仍已收藏。沒有刪除商品、限制分頁或修改免費／購買規則。
+
+| 檢查 | 結果 |
+|---|---|
+| 原始驗證反例 | 8.00秒，exit 1，兩項固定八件條件失敗 |
+| 修正後完整UI自訂路線 | 7.55秒，exit 0，0ERROR；800×450、1.25字級及原設定／衣櫃／時間流程全通過 |
+| 本機Python全套 | 161／161通過 |
+
+[原始遠端失敗](images/ART-18-catalog-ci-20261024-remote-failure.log) ·
+[本機反例](images/ART-18-catalog-ci-20261024-negative.log) ·
+[修正後完整路線](images/ART-18-catalog-ci-20261024-fixed.log) ·
+[161項Python](images/ART-18-catalog-ci-20261024-python-full.log) ·
+[證據指紋](images/ART-18-catalog-ci-20261024-hashes.json)。
+
+本段是驗證條件隨實際商品增長的修正，不等於新增原生圖片審閱或完整動畫驗收。
