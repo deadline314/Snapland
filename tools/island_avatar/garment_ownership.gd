@@ -5,6 +5,17 @@ static func resolve(avatar: RefCounted, original: Image, direction: String, acti
 	var owner: Dictionary = avatar._head_material_owners.get(signature, {})
 	if owner.has("hair_owner_spans"):
 		return {"owner": owner, "reference_signature": signature, "method": "exact_original_owner"}
+	# The existing celebration route has one original foreground, aliased by
+	# 24 render requests. This is an authoring-only freeze of its whole upper
+	# foreground, not a new hair material owner or a runtime palette change.
+	if action=="celebrate":
+		var path := "res://tools/island_avatar/legacy_foreground_owners.json"
+		if FileAccess.file_exists(path):
+			var parsed: Variant=JSON.parse_string(FileAccess.get_file_as_string(path))
+			if parsed is Dictionary and parsed.get("schema_version",0)==1:
+				var legacy: Dictionary=parsed.get("sources",{}).get(signature,{})
+				if legacy.get("action","")==action and legacy.get("canvas",[])==[280.0,360.0]:
+					return {"head_foreground_rect":legacy.head_foreground_rect,"reference_signature":signature,"method":"exact_legacy_upper_foreground_freeze"}
 	# Registered standing bodies have independent whole-cel signatures. Their
 	# head is copied from the direction's canonical walk reference, not inferred
 	# from body colors or accepted merely because the direction name matches.

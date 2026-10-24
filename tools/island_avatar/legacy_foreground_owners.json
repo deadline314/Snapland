@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "scope": "Authoring-only exact original upper-foreground preservation. Not hair-only ownership; not loaded by the player renderer. Existing celebration has one source,24 aliases, no new animation.",
+  "sources": {
+    "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24": {
+      "action": "celebrate",
+      "canvas": [
+        280,
+        360
+      ],
+      "head_foreground_rect": [
+        0,
+        0,
+        280,
+        205
+      ],
+      "source_pose": 15,
+      "review": "Complete original face, hair, raised hands and shoulder foreground above205 visually checked on exported raw pose. Cloth must remain completely absent in this region; no recoloring or source-body placement change."
+    }
+  }
+}

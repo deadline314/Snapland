@@ -74,6 +74,55 @@ class GarmentManifestTests(unittest.TestCase):
                 self.check_invalid(lambda g: g['frames'][0][name][0][1].__setitem__(0, float('nan')), 'finite numbers')
                 self.check_invalid(lambda g: g['frames'][0][name][0].__setitem__(1, g['frames'][0][name][0][0][:]), 'zero-length')
 
+    def legacy_request_guide(self):
+        guide = copy.deepcopy(self.guide)
+        row = copy.deepcopy(guide['frames'][0])
+        row.update(action='celebrate', direction='front', frame=0, source_kind='runtime_fallback')
+        guide['runtime_fallback_frames'] = [row]
+        return guide
+
+    def test_legacy_coverage_never_inflates_authored_art_or_enables_preview(self):
+        guide = self.legacy_request_guide()
+        report = validate(guide, self.required)
+        self.assertEqual((report['provided'], report['missing_count']), (8, 140))
+        self.assertEqual((report['runtime_fallback_provided'], report['runtime_fallback_missing_count']), (1, 23))
+        self.assertFalse(report['runtime_fallbacks_are_authored_art'])
+        self.assertFalse(report['ready_for_wardrobe'])
+        guide['frames'].append(guide['runtime_fallback_frames'].pop())
+        with self.assertRaisesRegex(ValueError, 'unknown required pose'):
+            validate(guide, self.required)
+
+    def test_legacy_requests_require_real_inventory_identity_and_unique_keys(self):
+        for change, error in [({'frame': 3}, 'unknown required pose'),
+                              ({'action': 'wave'}, 'unknown required pose'),
+                              ({'source_kind': 'authored'}, 'not new art')]:
+            guide = self.legacy_request_guide()
+            guide['runtime_fallback_frames'][0].update(change)
+            with self.assertRaisesRegex(ValueError, error):
+                validate(guide, self.required)
+        guide = self.legacy_request_guide()
+        guide['runtime_fallback_frames'] *= 2
+        with self.assertRaisesRegex(ValueError, 'duplicate cel'):
+            validate(guide, self.required)
+        self.check_invalid(lambda g: g.update(runtime_fallback_frames={}), 'explicit list')
+
+    def test_combined_guides_cannot_double_count_a_legacy_request(self):
+        guide = self.legacy_request_guide()
+        idle = json.loads(IDLE_GUIDE.read_text())
+        idle['runtime_fallback_frames'] = copy.deepcopy(guide['runtime_fallback_frames'])
+        with self.assertRaisesRegex(ValueError, 'duplicate runtime request'):
+            validate_collection([guide, idle], self.required)
+
+    def test_pose_cloth_scale_cannot_escape_bounds_or_enable_partial_art(self):
+        guide = copy.deepcopy(self.guide)
+        guide['frames'][0]['torso_scale'] = [0.55, 0.22]
+        report = validate(guide, self.required)
+        self.assertEqual((report['provided'], report['missing_count']), (8, 140))
+        self.assertFalse(report['ready_for_wardrobe'])
+        for scale in [[float('nan'), 0.4], [0.5, float('inf')], [0.5, 0], [0.5, 4.1], [0.5], [True, 0.5]]:
+            with self.subTest(scale=scale):
+                self.check_invalid(lambda g: g['frames'][0].update(torso_scale=scale), 'torso_scale|torso scale')
+
     def test_changed_atlas_requires_review_instead_of_silent_rebind(self):
         self.check_invalid(lambda g: g.update(atlas_sha256='0' * 64), 'source changed')
         self.check_invalid(lambda g: g.update(atlas_size=[1560, 1006]), 'dimensions disagree')

@@ -47,5 +47,23 @@ func _initialize() -> void:
 			push_error("Sleeveless layer changed an owned original arm pixel");quit(1);return
 	if output.get_pixel(8,16)!=Color.GREEN or garment_layer.get_pixel(8,16)!=Color.GREEN:
 		push_error("Original arm restoration erased adjacent vest fabric");quit(1);return
+	var avatar=Avatar.new()
+	var legacy: Image=avatar._atlas_pose_image(avatar._pose_index("front",0,"celebrate"))
+	var ownership: Dictionary=Ownership.resolve(avatar,legacy,"front","celebrate")
+	if ownership.get("method","")!="exact_legacy_upper_foreground_freeze":
+		push_error("Existing legacy source has no exact authoring foreground proof");quit(1);return
+	var head_rect:=_rect(ownership.head_foreground_rect)
+	output=legacy.duplicate();garment_layer=Image.create(280,360,false,Image.FORMAT_RGBA8)
+	if not _upper_foreground_unchanged(legacy,head_rect):
+		push_error("Untouched original legacy foreground was rejected");quit(1);return
+	garment_layer.set_pixel(140,100,legacy.get_pixel(140,100))
+	if _upper_foreground_unchanged(legacy,head_rect):
+		push_error("A same-color cloth pixel incorrectly claimed the original head");quit(1);return
+	garment_layer.fill(Color.TRANSPARENT);output.set_pixel(140,100,Color.MAGENTA)
+	if _upper_foreground_unchanged(legacy,head_rect):
+		push_error("A one-pixel head change escaped the legacy foreground proof");quit(1);return
+	var changed:=legacy.duplicate();changed.set_pixel(140,100,Color.MAGENTA)
+	if not Ownership.resolve(avatar,changed,"front","celebrate").is_empty() or not Ownership.resolve(avatar,legacy,"front","unregistered").is_empty():
+		push_error("An unknown original or action borrowed legacy source ownership");quit(1);return
 	print("PASS: garment sleeves retain 121 owned source pixels, reject adjacent raster tiles and preserve unassigned torso pixels")
 	quit()

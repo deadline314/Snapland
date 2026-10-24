@@ -136,3 +136,13 @@ python tools/island_avatar/garment_manifest.py --guide tools/island_avatar/garme
 以上是官方靜態原圖，非網頁截圖或遊戲素材；不能由文件推論玩家偏好。[驗證與範圍](../../pm/Snapland-art/images/ART-18-underlay-20261022-verification.json) · [拒收歷史](../../pm/Snapland-art/images/ART-18-underlay-20261022-attempt-history.json) · [拒收原生短片](../../pm/Snapland-art/images/ART-18-underlay-20261022-rejected-native.mp4) · [原件、完整提示與診斷](../../pm/Snapland-art/images/ART-18-underlay-20261022-rejected-sources-and-diagnostics.zip)。前置main的[完整CI](https://github.com/deadline314/Snapland/actions/runs/39524314595)已核對137項Python、93個Godot的名稱／順序／原上限及5個設計範圍；不包含本輪尚未推送的改動。
 
 [最終原生與資料證據](../../pm/Snapland-art/images/ART-18-idle-cloth-20261021-verification.json) · [104缺格與24回退請求](../../pm/Snapland-art/images/ART-18-idle-cloth-20261021-combined-coverage.json) · [完整提示、原檔與拒收診斷](../../pm/Snapland-art/images/ART-18-idle-cloth-20261021-source-and-diagnostics.zip)。正式未知衣物仍完整回退；本批沒有啟用新服裝、即時換髮、降低動態或PCK驗收。
+
+## 2026-10-24：完整來源製作與舊動作相容
+
+新的低領無袖長背心為獨立身份，不與舊長外套44格混合。重新生成的八方向純衣料保留原人物；正面／斜前方的開襟採凹形衣料範圍，不能把背面內裡畫到原本胸前。蹲下只調衣料的局部長度；身體、頭、相機與腳底的畫布和位置不變。袖口、背帶、手掌使用逐來源前景範圍；由膚色連通塊猜測手掌的試作曾誤把褲子恢復到長背心上，已拒收，未成為通用生產規則。
+
+製作清單現在可分列148個已登記原畫格與24個既有慶祝請求。實際匯出證明慶祝24次均指向同一個既有原畫；不能宣稱增加24張動畫。舊慶祝沒有可用的髮材質owner，因此只以完整原圖精確指紋及上半部全區不變證明允許衣料製作，衣料alpha也必須完全不進該區；這不是頭髮材質的所有權，不開放正式染髮或換髮。任意一像素原圖更改或未登記動作都拒絕借用。
+
+本輪V20製作輸出148原畫格及24次舊來源覆蓋，22張全身靜態聯絡圖已查看；其中四張斜前方採V20重看，其餘原有方向已看V18且以逐位元相同結果確認。新衣料只供製作整合，`ready_for_wardrobe`仍為false，不能由覆蓋完整直接上架。正式路線預計先對原身體染色，再疊純衣料，最後用原頭部資料處理髮型與帽子；不能把合成後的整身圖當原髮材質來源。
+
+本輪再次閱讀[Aseprite Layers](https://www.aseprite.org/docs/layers/)、[Godot Cutout animation](https://docs.godotengine.org/en/stable/tutorials/animation/cutout_animation.html)及[Spine Meshes](https://en.esotericsoftware.com/spine-meshes)：保留獨立cel與鎖定原身體，複雜手腳不作全身骨架扭曲，衣料範圍明確處理凹形開襟。Godot該教學有版本更新提醒，實作仍以固定4.7.2驗證。文件與靜態圖不能代替正常／慢放原生換裝、降低動態或打包驗收。

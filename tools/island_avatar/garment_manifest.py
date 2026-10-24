@@ -94,15 +94,29 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
     if not isinstance(rows, list) or not rows:
         raise ValueError('at least one explicit authoring cel is required')
     seen = set()
-    for row in rows:
+    fallback_seen = set()
+    fallback_expected = {(r['action'], r['direction'], r['frame'])
+                         for r in _coverage(required, set(), root)['runtime_fallback_requests']}
+    fallback_rows = guide.get('runtime_fallback_frames', [])
+    if not isinstance(fallback_rows, list):
+        raise ValueError('runtime fallback frames must be an explicit list')
+    for row, is_fallback in [(r, False) for r in rows] + [(r, True) for r in fallback_rows]:
         if not isinstance(row, dict):
             raise ValueError('every authoring cel must be an object')
         key = (row.get('action'), row.get('direction'), row.get('frame'))
-        if row.get('actor') != 'traveller' or not isinstance(key[0], str) or not isinstance(key[1], str) or isinstance(key[2], bool) or not isinstance(key[2], int) or key not in expected:
+        if row.get('actor') != 'traveller' or not isinstance(key[0], str) or not isinstance(key[1], str) or isinstance(key[2], bool) or not isinstance(key[2], int) or key not in (fallback_expected if is_fallback else expected):
             raise ValueError(f'{key}: unknown required pose')
-        if key in seen:
+        if is_fallback and row.get('source_kind') != 'runtime_fallback':
+            raise ValueError(f'{key}: a legacy request must be marked runtime_fallback, not new art')
+        if not is_fallback and row.get('source_kind', 'authored') != 'authored':
+            raise ValueError(f'{key}: authored and runtime fallback coverage must remain separate')
+        destination = fallback_seen if is_fallback else seen
+        if key in destination:
             raise ValueError(f'{key}: duplicate cel cannot fill a missing pose')
-        seen.add(key)
+        destination.add(key)
+        cel_scale = _numbers(row.get('torso_scale', torso_scale), 2, f'{key}/torso_scale')
+        if any(not 0.05 <= n <= 4 for n in cel_scale):
+            raise ValueError(f'{key}: torso scale is outside authoring bounds')
         signature = row.get('source_pixel_sha256')
         if not isinstance(signature, str) or len(signature) != 64 or any(c not in '0123456789abcdef' for c in signature):
             raise ValueError(f'{key}: exact original wearer signature is required')
@@ -151,10 +165,10 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
             x, y, w, h = _numbers(protected, 4, f'{key}/region')
             if any(n != int(n) for n in (x, y, w, h)) or x < 0 or y < 0 or w < 1 or h < 1 or x + w > 280 or y + h > 360:
                 raise ValueError(f'{key}: region outside fixed wearer canvas')
-    return _coverage(required, seen, root)
+    return _coverage(required, seen, root, fallback_seen)
 
 
-def _coverage(required: dict, seen: set, root: Path) -> dict:
+def _coverage(required: dict, seen: set, root: Path, fallback_seen: set | None = None) -> dict:
     expected = {(a, d, f) for a, dirs in required.items() for d, count in dirs.items() for f in range(count)}
     missing = sorted(expected - seen)
     # Read the real renderer inventory rather than treating the authored table
@@ -169,12 +183,18 @@ def _coverage(required: dict, seen: set, root: Path) -> dict:
     fallback_requests = [{'action': a, 'direction': d, 'frame': f}
                          for a in inventory('ACTIONS') if not required.get(a)
                          for d in inventory('WALK_DIRECTIONS') for f in range(3)]
+    fallback_seen = fallback_seen or set()
+    fallback_missing = [row for row in fallback_requests
+                        if (row['action'], row['direction'], row['frame']) not in fallback_seen]
     return {'status': 'inspection_only', 'required': len(expected), 'provided': len(seen),
             'missing_count': len(missing), 'authored_coverage_complete': not missing,
             'runtime_fallback_request_count': len(fallback_requests),
             'runtime_fallback_requests': fallback_requests,
+            'runtime_fallback_provided': len(fallback_seen),
+            'runtime_fallback_missing_count': len(fallback_missing),
+            'runtime_fallback_missing': fallback_missing,
             'runtime_fallbacks_are_authored_art': False,
-            'coverage_complete': not missing and not fallback_requests,
+            'coverage_complete': not missing and not fallback_missing,
             'ready_for_wardrobe': False,
             'missing': [{'action': a, 'direction': d, 'frame': f} for a, d, f in missing]}
 
@@ -183,6 +203,7 @@ def validate_collection(guides: list[dict], required: dict, root: Path = ROOT) -
     if not isinstance(guides, list) or not guides:
         raise ValueError('at least one validated garment guide is required')
     seen: set = set()
+    fallback_seen: set = set()
     outfit = None
     for guide in guides:
         validate(guide, required, root)
@@ -194,7 +215,12 @@ def validate_collection(guides: list[dict], required: dict, root: Path = ROOT) -
             if key in seen:
                 raise ValueError(f'{key}: duplicate cel across garment guides')
             seen.add(key)
-    report = _coverage(required, seen, root)
+        for row in guide.get('runtime_fallback_frames', []):
+            key = (row['action'], row['direction'], row['frame'])
+            if key in fallback_seen:
+                raise ValueError(f'{key}: duplicate runtime request across garment guides')
+            fallback_seen.add(key)
+    report = _coverage(required, seen, root, fallback_seen)
     report.update(outfit=outfit, source_guides=len(guides))
     return report
 

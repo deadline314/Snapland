@@ -1,0 +1,137 @@
+{
+  "status": "inspection_only",
+  "required": 148,
+  "provided": 148,
+  "missing_count": 0,
+  "authored_coverage_complete": true,
+  "runtime_fallback_request_count": 24,
+  "runtime_fallback_requests": [
+    {
+      "action": "celebrate",
+      "direction": "front",
+      "frame": 0
+    },
+    {
+      "action": "celebrate",
+      "direction": "front",
+      "frame": 1
+    },
+    {
+      "action": "celebrate",
+      "direction": "front",
+      "frame": 2
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_right",
+      "frame": 0
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_right",
+      "frame": 1
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_right",
+      "frame": 2
+    },
+    {
+      "action": "celebrate",
+      "direction": "right",
+      "frame": 0
+    },
+    {
+      "action": "celebrate",
+      "direction": "right",
+      "frame": 1
+    },
+    {
+      "action": "celebrate",
+      "direction": "right",
+      "frame": 2
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_right",
+      "frame": 0
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_right",
+      "frame": 1
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_right",
+      "frame": 2
+    },
+    {
+      "action": "celebrate",
+      "direction": "back",
+      "frame": 0
+    },
+    {
+      "action": "celebrate",
+      "direction": "back",
+      "frame": 1
+    },
+    {
+      "action": "celebrate",
+      "direction": "back",
+      "frame": 2
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_left",
+      "frame": 0
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_left",
+      "frame": 1
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_left",
+      "frame": 2
+    },
+    {
+      "action": "celebrate",
+      "direction": "left",
+      "frame": 0
+    },
+    {
+      "action": "celebrate",
+      "direction": "left",
+      "frame": 1
+    },
+    {
+      "action": "celebrate",
+      "direction": "left",
+      "frame": 2
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_left",
+      "frame": 0
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_left",
+      "frame": 1
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_left",
+      "frame": 2
+    }
+  ],
+  "runtime_fallback_provided": 24,
+  "runtime_fallback_missing_count": 0,
+  "runtime_fallback_missing": [],
+  "runtime_fallbacks_are_authored_art": false,
+  "coverage_complete": true,
+  "ready_for_wardrobe": false,
+  "missing": []
+}

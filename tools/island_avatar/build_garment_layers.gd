@@ -39,13 +39,22 @@ func _initialize() -> void:
 	if DirAccess.dir_exists_absolute(folder) or DirAccess.dir_exists_absolute(final_folder):_reject("Authoring output already exists; use a fresh profile parent");return
 	DirAccess.make_dir_recursive_absolute(folder)
 	width_scale=float(config.width_scale);arm_radius=float(config.source_arm_radius)
-	torso_scale=_point(config.get("torso_scale",[width_scale,width_scale]))
+	var default_torso_scale := _point(config.get("torso_scale",[width_scale,width_scale]))
 	var avatar=Avatar.new()
 	var records: Array = []
-	for row in config.frames:
+	var source_rows: Array=config.frames.duplicate()
+	source_rows.append_array(config.get("runtime_fallback_frames",[]))
+	for row in source_rows:
+		# Only fabric follows the authored pose; never transform the wearer.
+		torso_scale=_point(row.get("torso_scale",[default_torso_scale.x,default_torso_scale.y]))
+		if not torso_scale.is_finite() or torso_scale.x<0.05 or torso_scale.y<0.05 or torso_scale.x>4.0 or torso_scale.y>4.0:
+			_reject("Garment cel torso scale is outside finite authoring bounds");return
 		var original: Image
 		var action:=str(row.action);var direction:=str(row.direction);var index:=int(row.frame)
-		if action=="walk":original=avatar._walk_pose_image(direction,index)
+		if row.get("source_kind","")=="runtime_fallback":
+			var pose_direction: String=direction if avatar.DIRECTIONS.has(direction) else avatar._closest_cardinal(direction)
+			original=avatar._atlas_pose_image(avatar._pose_index(pose_direction,index,action))
+		elif action=="walk":original=avatar._walk_pose_image(direction,index)
 		elif action=="idle":original=avatar._stable_idle_pixels.frame("hero-idle",direction,index)
 		else:
 			var texture: Texture2D=avatar.animation_library.texture("traveller",action,direction,index)
@@ -94,10 +103,14 @@ func _initialize() -> void:
 			for x in range(int(span[1]),int(span[2])+1):
 				var point:=Vector2i(x,int(span[0]))
 				output.set_pixelv(point,original.get_pixelv(point));garment_layer.set_pixelv(point,Color.TRANSPARENT)
-		for span in ownership.owner.hair_owner_spans:
-			for x in range(int(span[1]),int(span[2])):
-				var point:=Vector2i(x,int(span[0]))
-				output.set_pixelv(point,original.get_pixelv(point));garment_layer.set_pixelv(point,Color.TRANSPARENT)
+		if ownership.has("head_foreground_rect"):
+			if not _upper_foreground_unchanged(original,_rect(ownership.head_foreground_rect)):
+				_reject("Garment touched the reviewed original legacy head/upper foreground");return
+		else:
+			for span in ownership.owner.hair_owner_spans:
+				for x in range(int(span[1]),int(span[2])):
+					var point:=Vector2i(x,int(span[0]))
+					output.set_pixelv(point,original.get_pixelv(point));garment_layer.set_pixelv(point,Color.TRANSPARENT)
 		var changed_pixels := 0
 		for y in 360:
 			for x in 280:
@@ -108,11 +121,20 @@ func _initialize() -> void:
 			if output.get_region(region).get_data()!=original.get_region(region).get_data():_reject("Garment changed an immutable original region "+action+"/"+direction+"/"+str(index));return
 		var name:="%s-%s-%02d"%[action,direction,index]
 		if original.save_png(folder.path_join(name+"-original.png"))!=OK or output.save_png(folder.path_join(name+".png"))!=OK or garment_layer.save_png(folder.path_join(name+"-garment.png"))!=OK:_reject("Could not save baked authoring frame");return
-		records.append({"action":action,"direction":direction,"frame":index,"protected_pixel_visits":protected_count,"immutable_regions_equal":true,"head_owner_preserved":true,"changed_garment_pixels":changed_pixels,"original_head_owner_signature":original_signature,"head_owner_reference_signature":ownership.reference_signature,"head_owner_method":ownership.method,"baked_pixel_sha256":avatar.head_source_signature(output),"source_pixel_sha256":row.source_pixel_sha256,"status":"inspection_only"})
+		records.append({"action":action,"direction":direction,"frame":index,"source_kind":row.get("source_kind","authored"),"protected_pixel_visits":protected_count,"immutable_regions_equal":true,"head_owner_preserved":true,"changed_garment_pixels":changed_pixels,"original_head_owner_signature":original_signature,"head_owner_reference_signature":ownership.reference_signature,"head_owner_method":ownership.method,"baked_pixel_sha256":avatar.head_source_signature(output),"source_pixel_sha256":row.source_pixel_sha256,"status":"inspection_only"})
 	if DirAccess.rename_absolute(folder,final_folder)!=OK:_reject("Could not atomically accept the complete authoring bake");return
-	FileAccess.open(profile.get_base_dir().path_join("bake-report.json"),FileAccess.WRITE).store_string(JSON.stringify({"status":"inspection_only","baked":records.size(),"frames":records,"wardrobe_registered":false},"  "))
-	print("PASS: garment-only authoring bake ",records.size()," fixed original cels; no wardrobe registration")
+	FileAccess.open(profile.get_base_dir().path_join("bake-report.json"),FileAccess.WRITE).store_string(JSON.stringify({"status":"inspection_only","baked":records.size(),"authored_cels":config.frames.size(),"runtime_fallback_requests":config.get("runtime_fallback_frames",[]).size(),"frames":records,"wardrobe_registered":false},"  "))
+	print("PASS: garment-only authoring bake ",config.frames.size()," authored cels + ",config.get("runtime_fallback_frames",[]).size()," existing runtime requests; no wardrobe registration")
 	quit()
+
+func _upper_foreground_unchanged(original: Image, region: Rect2i) -> bool:
+	if not Rect2i(Vector2i.ZERO,original.get_size()).encloses(region) or region.size.x<=0 or region.size.y<=0:
+		return false
+	if output.get_region(region).get_data()!=original.get_region(region).get_data():return false
+	for y in range(region.position.y,region.end.y):
+		for x in range(region.position.x,region.end.x):
+			if garment_layer.get_pixel(x,y).a>0.0:return false
+	return true
 
 func _point(raw: Array) -> Vector2:return Vector2(float(raw[0]),float(raw[1]))
 func _rect(raw: Array) -> Rect2i:return Rect2i(int(raw[0]),int(raw[1]),int(raw[2]),int(raw[3]))

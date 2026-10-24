@@ -320,3 +320,22 @@
 ![拒收：依色塊推測背包會切去下半部](images/ART-18-underlay-20261022-vest-bake-v3-back_left.png)
 
 [局部驗證與完整範圍](images/ART-18-underlay-20261022-verification.json) · [反例與修正](images/ART-18-underlay-20261022-part-delivery.json) · [拒收影片](images/ART-18-underlay-20261022-rejected-native.mp4) · [來源／完整提示與診斷](images/ART-18-underlay-20261022-rejected-sources-and-diagnostics.zip) · [附件指紋](images/ART-18-underlay-20261022-manifest.json)。
+
+# Commit — 2026-10-24 補齊長背心來源與舊動作覆蓋
+
+長背心製作預覽覆蓋同一衣物的148個必要原畫格；另外24個慶祝呼叫經實際匯出證明皆使用同一張既有原圖，分開計數。低領、開襟、袖口與背帶依原人物調整，蹲下只改衣料，頭、手、相機和鞋底保持原畫。靜態全身聯絡圖已查看；錯把褲子當手掌範圍的顏色推測版本已拒收。原畫及舊動作保護、已重讀一手來源與取捨記入[設計紀錄](../../design/runtime/outfit-completeness.md)。整票維持進行中，正式衣櫃不開放製作候選。
+
+| 檢查 | 實際結果 |
+|---|---|
+| 製作覆蓋 | 148/148原畫格，另24/24既有呼叫；缺件0，正式衣櫃就緒仍為false |
+| 原畫保護 | 172次輸出頭部／腳部等保護通過；慶祝只凍結完整上半部，不聲稱具有換髮材質所有權 |
+| 相容性 | 加入舊動作後既有148格共444張PNG逐位元不變；衣料單格縮放能力加入前後舊100格共300張PNG不變 |
+| Python局部 | 23項通過，涵蓋無窮／NaN／bool／越界縮放、重複舊呼叫及原畫與回退混算反例 |
+| 固定引擎局部 | 原袖片121像素、鄰片0；同色衣料侵入頭部、一像素原圖／頭部改變及錯動作均拒絕；1.75秒、exit0、0ERROR |
+| 審圖範圍 | 八向走路／待機與正面六種動作共22張全身聯絡圖，加既有慶祝原圖／合成；這批為靜態製作檢查 |
+
+![走路斜前方，原袖口與相機帶保留](images/ART-18-full-source-20261024-v20-walk-front_left.jpg)
+![拍照全動作，手掌與相機前景保留](images/ART-18-full-source-20261024-v20-photograph-front.jpg)
+![蹲下僅調整衣料，原人物不縮放](images/ART-18-full-source-20261024-v20-jump-front.jpg)
+
+[逐格保護結果](images/ART-18-full-source-20261024-bake-report.json) · [真實覆蓋範圍](images/ART-18-full-source-20261024-coverage.json) · [相容逐位元比較](images/ART-18-full-source-20261024-legacy-parity.json) · [局部引擎檢查](images/ART-18-full-source-20261024-ownership.log) · [23項資料測試](images/ART-18-full-source-20261024-python-23.log) · [原件、完整提示、拒收與診斷](images/ART-18-full-source-20261024-source-and-diagnostics.zip) · [附件雜湊](images/ART-18-full-source-20261024-manifest.json)。
