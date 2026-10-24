@@ -1,0 +1,26 @@
+import -front.png[39m[0m
+[  96% ] [90m[1mreimport[22m | island-raw-back.png[39m[0m
+[  98% ] [90m[1mreimport[22m | Finalizing Asset Import...[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started (Re)Importing Assets (60 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Executing post-reimport operations...[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Loading editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Loading editor layout...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Loading docks...[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+
+
+parse Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+
+export Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS actual runtime walk pixels: eight hero headings, both NPC sides and nonfrozen limbs
+
+
+Runtime frames: /workspace/work/Snapland-character/.review/2d-walk-stability-20261016/art18-ci-fix-20261024

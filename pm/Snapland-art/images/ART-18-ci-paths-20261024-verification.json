@@ -1,0 +1,15 @@
+{
+  "ci_run": 40084795989,
+  "ci_commit": "875963ce699f31d72bce4f0e91e4d6e15c955340",
+  "failed_before_engine": "FileNotFoundError: assets/characters/rainvest-v1/idle-front-03.png",
+  "full_suite_job_conclusion": "success",
+  "negative_tests": 2,
+  "fixed_tests_passed": 2,
+  "local_python_total": 161,
+  "copied_raw_png_data": 172,
+  "payload_hashes_match": true,
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "local_walk_audit": "passed",
+  "local_idle_contracts": "432 composed cels passed",
+  "scope": "Isolated stage path fix and original pixel/idle contracts; not a new animation, complete gameplay or human listening claim"
+}

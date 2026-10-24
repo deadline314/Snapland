@@ -1,0 +1,30 @@
+test_island_audit_keeps_raw_png_data_extension_and_dependency_graph (tests.test_audit_resource_staging.AuditResourceStagingTests.test_island_audit_keeps_raw_png_data_extension_and_dependency_graph) ... ERROR
+test_walk_audit_keeps_raw_png_data_extension_and_dependency_graph (tests.test_audit_resource_staging.AuditResourceStagingTests.test_walk_audit_keeps_raw_png_data_extension_and_dependency_graph) ... ERROR
+
+======================================================================
+ERROR: test_island_audit_keeps_raw_png_data_extension_and_dependency_graph (tests.test_audit_resource_staging.AuditResourceStagingTests.test_island_audit_keeps_raw_png_data_extension_and_dependency_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/work/Snapland-character/tests/test_audit_resource_staging.py", line 39, in test_island_audit_keeps_raw_png_data_extension_and_dependency_graph
+    project = staging.prepare('island-avatar-raw-data', ['game/entry.gd'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/Snapland-character/tools/island_avatar/staging.py", line 15, in prepare
+    if not file.is_file():raise FileNotFoundError(rel)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: assets/coat.png
+
+======================================================================
+ERROR: test_walk_audit_keeps_raw_png_data_extension_and_dependency_graph (tests.test_audit_resource_staging.AuditResourceStagingTests.test_walk_audit_keeps_raw_png_data_extension_and_dependency_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/work/Snapland-character/tests/test_audit_resource_staging.py", line 48, in test_walk_audit_keeps_raw_png_data_extension_and_dependency_graph
+    run_audit.prepare()
+  File "/workspace/work/Snapland-character/tools/walk_stability/run_audit.py", line 25, in prepare
+    if not source.is_file():raise FileNotFoundError(name)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: assets/archive.png
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.003s
+
+FAILED (errors=2)

@@ -369,3 +369,21 @@
 ![真正輸出包的接帽首幀，保留新長背心](images/ART-18-live-20261024-release-rainvest.png)
 
 [原生操作結果](images/ART-18-live-20261024-world-inputs.json) · [正常172次](images/ART-18-live-20261024-normal-172.json)／[慢放172次](images/ART-18-live-20261024-quarter-172.json) · [慢放影片](images/ART-18-live-20261024-quarter.mp4) · [純包內檢查](images/ART-18-live-20261024-pack-result.log) · [Linux匯出來源與指紋](images/ART-18-live-20261024-linux-build.json) · [實際冷啟動](images/ART-18-live-20261024-release-result.log) · [最後衣料來源一致性](images/ART-18-live-20261024-final-pck-parity.json) · [正常原始截圖](images/ART-18-live-20261024-normal-final-raw-captures.zip)／[慢放原始截圖](images/ART-18-live-20261024-quarter-raw-captures.zip) · [驅動器、診斷與拒收歷史](images/ART-18-live-20261024-replays-and-rejections.zip) · [附件指紋](images/ART-18-live-20261024-manifest.json)。
+
+# Commit — 2026-10-24 修正兩個隔離審查入口
+
+新衣料在本機與輸出包驗證後，遠端[875963c的CI](https://github.com/deadline314/Snapland/actions/runs/40084795989)完整Python／設計檢查成功，但角色固定原點稽核在準備目錄時，將原PNG資料的副檔名截成另一個不存在的PNG檔，尚未啟動該項引擎驗證。
+
+現在兩個角色隔離審查入口共用完整檔名判讀，保留原資料副檔名；單／雙引號的已知資源都能複製，不把未支援的更長副檔名截成別的資源。沒有略過缺件、放寬像素判定或更改人物／衣料原圖。相同的兩個正式CI命令已在固定引擎重跑。
+
+| 檢查 | 結果 |
+|---|---|
+| 反例與修正 | 真正執行兩種隔離複製器，修正前2項皆失敗，修正後2/2通過；檔案內容逐位元一致 |
+| 固定原點稽核 | 匯入、解析、實際原像素／肢體登記檢查成功，0ERROR；保留原步態驗證條件，不聲稱新增自然步態 |
+| 專用待機隔離檢查 | 432個合成格通過，頭部／帽子、眼睛區域及原腿部契約保持，0ERROR |
+| 原PNG資料覆蓋 | 隔離目錄實際保留172個完整原資料路徑，全部指紋等於正式衣料來源 |
+| 本機完整Python套件 | 161/161通過，包含兩項新複製器回歸 |
+
+這是審查目錄的資源路徑修正；整票狀態與其餘未勾條件維持。完整場景套件依各次CI實際結果記錄，不由兩項局部入口通過推論。
+
+[原始遠端失敗](images/ART-18-ci-paths-20261024-remote-failure.log) · [修正前反例](images/ART-18-ci-paths-20261024-negative.log)／[修正後](images/ART-18-ci-paths-20261024-regression.log) · [固定原點命令](images/ART-18-ci-paths-20261024-walk-audit.log) · [待機命令](images/ART-18-ci-paths-20261024-idle-contracts.log) · [161項Python](images/ART-18-ci-paths-20261024-python-full.log) · [隔離來源指紋](images/ART-18-ci-paths-20261024-source-hashes.json) · [範圍](images/ART-18-ci-paths-20261024-verification.json)。

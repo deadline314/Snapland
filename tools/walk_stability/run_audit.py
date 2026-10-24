@@ -4,6 +4,7 @@ import argparse,json,re,shutil,sys,os
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT))
 from tools.godot_entrypoints import run_validated_godot
+from tools.runtime_resource_refs import referenced_resources
 from tools.hero_2d.run_review import _isolated_environment,ENGINE,_listed_pack_files
 PROJECT=ROOT/"build/walk-stability-audit"
 REVIEW=ROOT/".review/2d-walk-stability-20261016"
@@ -26,7 +27,7 @@ def prepare():
         target=PROJECT/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,target);copied.add(name)
         if source.suffix in [".gd",".json"]:
             content=source.read_text(encoding="utf-8")
-            pending.update(re.findall(r'res://([^"\s]+\.(?:gd|json|png))',content))
+            pending.update(referenced_resources(content))
     (PROJECT/"project.godot").write_text('[application]\nconfig/name="Walk pixel audit"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n',encoding="utf-8")
     return copied
 

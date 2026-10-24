@@ -1,0 +1,24 @@
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	﻿2026-10-24T10:11:47.4957109Z ##[group]Run python tools/walk_stability/run_audit.py --tag ci --test
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.4957519Z [36;1mpython tools/walk_stability/run_audit.py --tag ci --test[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5012144Z shell: /usr/bin/bash -e {0}
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5012351Z env:
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5012565Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5012901Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5013256Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5013561Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5013845Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5014132Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5014478Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5014794Z ##[endgroup]
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5603488Z Traceback (most recent call last):
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5609070Z   File "/home/runner/work/Snapland/Snapland/tools/walk_stability/run_audit.py", line 47, in <module>
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5609511Z     if __name__=="__main__":main()
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5609723Z                             ^^^^^^
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5610455Z   File "/home/runner/work/Snapland/Snapland/tools/walk_stability/run_audit.py", line 38, in main
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5611454Z     out.mkdir(parents=True);copied=prepare();env=_isolated_environment(out,False);env["SNAPLAND_WALK_AUDIT_DIR"]=str(out.resolve());env["SNAPLAND_WALK_AUDIT_RAW"]="1" if args.raw else "0"
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5612011Z                                    ^^^^^^^^^
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5612397Z   File "/home/runner/work/Snapland/Snapland/tools/walk_stability/run_audit.py", line 25, in prepare
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5612812Z     if not source.is_file():raise FileNotFoundError(name)
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5613305Z                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5613624Z FileNotFoundError: assets/characters/rainvest-v1/idle-front-03.png
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T10:11:47.5667609Z ##[error]Process completed with exit code 1.

@@ -1,0 +1,7 @@
+test_island_audit_keeps_raw_png_data_extension_and_dependency_graph (tests.test_audit_resource_staging.AuditResourceStagingTests.test_island_audit_keeps_raw_png_data_extension_and_dependency_graph) ... ok
+test_walk_audit_keeps_raw_png_data_extension_and_dependency_graph (tests.test_audit_resource_staging.AuditResourceStagingTests.test_walk_audit_keeps_raw_png_data_extension_and_dependency_graph) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.003s
+
+OK
