@@ -1,0 +1,22 @@
+{
+  "exit": 0,
+  "error": null,
+  "seconds": 96.1,
+  "base_timeout": 90,
+  "local_timeout_scale": 2,
+  "effective_timeout": 180,
+  "command": [
+    "/workspace/work/Snapland-character/work/art18/engine-4.7.2/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/workspace/work/Snapland-character/work/tutorial-current-20261020/validation-project",
+    "--audio-driver",
+    "Dummy",
+    "--rendering-method",
+    "gl_compatibility",
+    "--log-file",
+    "/workspace/work/Snapland-character/work/remaining-20261024/minigames-local2x/engine.log",
+    "--script",
+    "res://game/tests/test_minigames.gd"
+  ]
+}

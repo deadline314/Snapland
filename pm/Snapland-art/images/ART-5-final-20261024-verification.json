@@ -1,0 +1,297 @@
+{
+  "date": "2026-10-24",
+  "base_commit": "8d01db4cac095dbc5afa98fb9a80ef87e21199c4",
+  "accepted_scope": "Twelve current minigame scene/prop/readability audit; Bench waiting-room background and standalone resizing; Crowd phase lighting.",
+  "native_cases": {
+    "1": {
+      "result": {
+        "game": 1,
+        "route": "balloon_controls",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 41.94,
+        "passes": [
+          "PASS: native SG-16 independent keyboard and pointer routes, reduced-motion wind legend, and non-collecting practice"
+        ],
+        "captures": []
+      },
+      "artifact_folder": "work/remaining-20261024/games-batch/01-balloon_controls"
+    },
+    "2": {
+      "result": {
+        "game": 2,
+        "route": "kite_outcomes",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 68.83,
+        "passes": [
+          "PASS: native Kite three real misses fail safely, result retry resets, pointer edge+four centers earn460 ordinary only, assisted night/reduced five centers earn500 ordinary only without duplicate rewards; all result pages clicked"
+        ],
+        "captures": []
+      },
+      "artifact_folder": "work/remaining-20261024/games-batch/02-kite_outcomes"
+    },
+    "3": {
+      "result": {
+        "game": 3,
+        "route": "fountain_acceptance",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 292.86,
+        "passes": [
+          "PASS: native SG-18 fountain phrases with real keyboard/mouse, assist/reduced-motion ordinary-only, three-perfect devil, real miss, pause/retry, practice and return"
+        ],
+        "captures": [
+          ".review/sg18-acceptance/sg18-assist-reduced-night-rest.png",
+          ".review/sg18-acceptance/sg18-early-press-feedback.png",
+          ".review/sg18-acceptance/sg18-mouse-miss-result.png",
+          ".review/sg18-acceptance/sg18-practice-result.png",
+          ".review/sg18-acceptance/sg18-noon-slow-count.png",
+          ".review/sg18-acceptance/sg18-assist-reduced-night-count.png",
+          ".review/sg18-acceptance/sg18-noon-airborne.png",
+          ".review/sg18-acceptance/sg18-assist-result.png",
+          ".review/sg18-acceptance/sg18-standard-devil-result.png",
+          ".review/sg18-acceptance/sg18-noon-quick-count.png",
+          ".review/sg18-acceptance/sg18-noon-rest-phrase.png",
+          ".review/sg18-acceptance/sg18-dusk-mouse-airborne.png",
+          ".review/sg18-acceptance/sg18-noon-landing-splash.png"
+        ]
+      },
+      "artifact_folder": "work/remaining-20261024/games-fixed/03-fountain_acceptance"
+    },
+    "4": {
+      "result": {
+        "exit": 0,
+        "errors": 0,
+        "seconds": 80.34,
+        "passes": [
+          "PASS: native video route (standard formal round only)"
+        ],
+        "game": 4
+      },
+      "artifact_folder": "work/remaining-20261024/crowd-main"
+    },
+    "5": {
+      "result": {
+        "game": 5,
+        "route": "hat_rescue_outcomes",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 80.87,
+        "passes": [
+          "PASS: SG-20 first lesson before the round clock, in-round lesson pause, one-per-pair keyboard ordinary result with all pages, assisted formal pointer dusk ordinary-only, zero-input night failure with byte-identical save"
+        ],
+        "captures": [
+          ".review/hat-outcomes/06-pair-gust-keyboard.png",
+          ".review/hat-outcomes/12-night-zero-input-failure.png",
+          ".review/hat-outcomes/01-first-lesson-1.png",
+          ".review/hat-outcomes/03-first-lesson-3.png",
+          ".review/hat-outcomes/11-result-assisted-dusk-page-2.png",
+          ".review/hat-outcomes/10-result-assisted-dusk-page-1.png",
+          ".review/hat-outcomes/04-lead-in.png",
+          ".review/hat-outcomes/09-pair-gust-pointer.png",
+          ".review/hat-outcomes/08-result-ordinary-page-2.png",
+          ".review/hat-outcomes/02-first-lesson-2.png",
+          ".review/hat-outcomes/07-result-ordinary-page-1.png",
+          ".review/hat-outcomes/05-mid-round-lesson.png"
+        ]
+      },
+      "artifact_folder": "work/remaining-20261024/games-batch/05-hat_rescue_outcomes"
+    },
+    "6": {
+      "result": {
+        "game": 6,
+        "route": "ribbon_rhythm",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 223.41,
+        "passes": [
+          "PASS: Main park station/menu, wrong-action retry, keyboard eight gestures/two holds, exact devil score ledger and ordinary/devil persistence; formal Engine.time_scale=1.00x",
+          "PASS: assisted reduced-motion station launch and pointer gameplay at Engine.time_scale=0.25x; pointer phrase required all eight player inputs; result capture at 1.00x; ordinary-only private result and unchanged Progress"
+        ],
+        "captures": [
+          ".review/native-ribbon-finish-start.png",
+          ".review/native-ribbon-pointer-cue-08.png",
+          ".review/native-ribbon-assisted-gameplay.png",
+          ".review/native-ribbon-keyboard-cue-01.png",
+          ".review/native-ribbon-keyboard-cue-06.png",
+          ".review/native-ribbon-keyboard-cue-02.png",
+          ".review/native-ribbon-keyboard-cue-07.png",
+          ".review/native-ribbon-keyboard-cue-05.png",
+          ".review/native-ribbon-pointer-cue-01.png",
+          ".review/native-ribbon-retry-zero.png",
+          ".review/native-ribbon-pointer-cue-06.png",
+          ".review/native-ribbon-keyboard-cue-08.png",
+          ".review/native-ribbon-pointer-cue-05.png",
+          ".review/native-ribbon-finish-late.png",
+          ".review/native-ribbon-pointer-cue-07.png",
+          ".review/native-ribbon-formal-result.png",
+          ".review/native-ribbon-finish-mid.png",
+          ".review/native-ribbon-keyboard-cue-04.png",
+          ".review/native-ribbon-pointer-cue-02.png",
+          ".review/native-ribbon-pointer-cue-03.png",
+          ".review/native-ribbon-assisted-finish-static.png",
+          ".review/native-ribbon-formal-gameplay.png",
+          ".review/native-ribbon-assisted-result.png",
+          ".review/native-ribbon-pointer-cue-04.png",
+          ".review/native-ribbon-keyboard-cue-03.png"
+        ]
+      },
+      "artifact_folder": "work/remaining-20261024/ribbon-fixed-final/06-ribbon_rhythm"
+    },
+    "7": {
+      "result": {
+        "game": 7,
+        "route": "pipe_outcomes",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 74.6,
+        "passes": [
+          "PASS: native pipe natural 60-second partial timeout, complete-save safety, actual result retry and ordinary 23-turn 2540-point completion without devil award"
+        ],
+        "captures": []
+      },
+      "artifact_folder": "work/remaining-20261024/games-batch/07-pipe_outcomes"
+    },
+    "8": {
+      "result": {
+        "game": 8,
+        "route": "sign_outcomes",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 53.02,
+        "passes": [
+          "PASS: native sign seven actual wrong-direction stages fail with complete-save safety, real retry reset, five precise stages plus two missed stages earn500 ordinary only; all result pages clicked and return to park"
+        ],
+        "captures": [
+          ".review/native-sign-balance-formal-stage-03.png",
+          ".review/native-sign-balance-formal-stage-06.png"
+        ]
+      },
+      "artifact_folder": "work/remaining-20261024/games-batch/08-sign_outcomes"
+    },
+    "9": {
+      "result": {
+        "game": 9,
+        "route": "shadow_outcomes",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 15.03,
+        "passes": [
+          "PASS: native shadow three genuine misses with complete-save safety, actual failure-result retry and two precise keyboard plates plus one miss earning ordinary-only success"
+        ],
+        "captures": [
+          ".review/native-shadow-theatre-ordinary-round-2-cast.png",
+          ".review/native-shadow-theatre-miss-round-3-cast.png",
+          ".review/native-shadow-theatre-miss-round-2-cast.png",
+          ".review/native-shadow-theatre-ordinary-round-1-cast.png",
+          ".review/native-shadow-theatre-miss-round-1-cast.png",
+          ".review/native-shadow-theatre-ordinary-round-3-cast.png"
+        ]
+      },
+      "artifact_folder": "work/remaining-20261024/games-batch/09-shadow_outcomes"
+    },
+    "10": {
+      "result": {
+        "game": 10,
+        "route": "bubble_outcomes",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 46.86,
+        "passes": [
+          "PASS: native bubble three natural timeout failure with complete-save safety, focus-loss charge cancellation, actual result retry reset, two keyboard full-body photos plus one timeout ordinary-only and return to park"
+        ],
+        "captures": [
+          ".review/native-bubble-photo-formal-keyboard-initial.png",
+          ".review/native-bubble-photo-formal-keyboard-exposure.png",
+          ".review/native-bubble-photo-formal-keyboard-envelope-launched.png",
+          ".review/native-bubble-photo-formal-keyboard-charge.png"
+        ]
+      },
+      "artifact_folder": "work/remaining-20261024/games-batch/10-bubble_outcomes"
+    },
+    "11": {
+      "result": {
+        "exit": 0,
+        "errors": 0,
+        "seconds": 23.28,
+        "passes": [
+          "PASS: native Main BenchSwap station/menu launch, pause/resume, synchronous retry reset, keyboard BFS minimum tables 1/2/3, exact-result latch, and result capture",
+          "PASS: assisted reduced-motion HUD practice/retry, pointer BFS minimum tables 1/2/3, unchanged private progression"
+        ],
+        "game": 11
+      },
+      "artifact_folder": "work/remaining-20261024/bench-main"
+    },
+    "12": {
+      "result": {
+        "game": 12,
+        "route": "melody_memory",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 246.89,
+        "passes": [
+          "PASS: Main station launch, observed keyboard melody, pause/resume/retry, and assisted reduced-motion pointer practice; formal collection unchanged by practice"
+        ],
+        "captures": [
+          ".review/native-melody-memory-formal-listen.png",
+          ".review/native-melody-memory-practice.png",
+          ".review/native-melody-memory-formal-result.png",
+          ".review/native-melody-memory-formal-active.png"
+        ]
+      },
+      "artifact_folder": "work/remaining-20261024/games-fixed-v2/12-melody_memory"
+    }
+  },
+  "bench": "Before/after standalone 800x450,1280x720,1920x1080 noon/night; actual GUI outer seats 0/5. Main already used outer scaling and was not claimed previously clipped. Current Main keyboard750+devil and assisted/reduced pointer private750 pass23.28s. Full-body six native after images actually inspected.",
+  "bench_pixels": "Flat-interior source position sampling: before13/36 after36/36; naive double-resampling comparison retained as a rejected diagnostic (before12/36 after26/36). Not pixel-identical resizing or animation jitter proof.",
+  "crowd": "Fixed posed snapshot byte-identical across before/after four phases; daytime fill/key adjusted, night whole frame byte-identical. Uniform0.3-fill candidate rejected for dark night. Current Main standard route430+devil pass80.34s; previous full acceptance includes assist/reduced/night/practice/miss/retry.",
+  "review": "All selected native contact pages viewed; Bench and Crowd silent movies fully decoded and sampled, not continuously watched. Dummy audio is not listening.",
+  "clock": "Game3/4 fixed60; game6 final fixed60 with explicit fixed-review mode, formal1x and private0.25x; game12 fixed60 explicit mode. Initial timing and guard failures preserved. Scores, windows and models unchanged.",
+  "headless": "6 selected official suites pass at original90s; changed Crowd view/model rechecked after final lights. Shared welcome84cases pass96.10s at supported local timeout_scale2 (180s); initial90s timeout and20s tracing retained, traces show ordinary forward model progress, no model fix invented. No entire suite claim.",
+  "stage": "Before first native batch,40 game audio files and grass shader differed in owned stage; synchronized before final imports/retests. Minigame gd/png matched; initial legacy captures do not claim current complete island lighting or listening.",
+  "linux": "Pinned4.7.2 true ELF b313b7a992b1a6c454346d50afd79178085e2ecfe05358a00171aa39e47e321e,238774616bytes; source file hashes match current root. Build source_commit is precommit base; hash map includes working changes. True player executable12 initial scene/resource draws pass21.74s. Not twelve packaged complete playthroughs or Windows/hardware FPS.",
+  "initial_failures": "Fixture script API errors stopped/timeout, non-fixed score deviations and wrong guard detection retained. No failing process represented as passed.",
+  "source_after_sha256": {
+    "game/minigames/bench_swap_view.gd": "7b70a36ec63beccc92bd4360353247e7b7c63fa6f0f608771ab99995129721b2",
+    "game/minigames/crowd_semaphore_view.gd": "6bcebc186f4e3ede18352ae0a563226db77333488e5ea7707b52821483dbc772"
+  },
+  "files": {
+    "ART-5-final-20261024-game-captures.zip": "fddb05e4847d4e0ba3b16fcecc44823d0e1735eb9c11e7c0e490568be9069592",
+    "ART-5-final-20261024-game-01.png": "95d6a5eafb5e606a85e4f5d8010b95e6242a04ab2ad0268cb9b2d8397bebd89b",
+    "ART-5-final-20261024-game-02.png": "14bcce1e9e5e4d621ed7cee2107d32a879809b094cbe257c50c2d1a9ebe891b3",
+    "ART-5-final-20261024-game-03.png": "025345cefeaec70b0243050aba26600cf49f5df7367423fea3669ff09be99358",
+    "ART-5-final-20261024-game-04.png": "75605b78f913716c9f5aaf8a92f6deb58e5cd93ead3c1afdd2a55e70333b3512",
+    "ART-5-final-20261024-game-05.png": "49e694bf3629b52a2d097d7d93ccb3fe3e525c651c6afc7dc19e21a32d803e12",
+    "ART-5-final-20261024-game-06.png": "1c64e1d604908e5eae49b192a6b422a0df60a6b1c73b433baef0eda51e1d0e03",
+    "ART-5-final-20261024-game-07.png": "a0a18c9abff0b49c9b45a4d87c44a25abdf74e4ae17bbb6fd412ef434dd654c6",
+    "ART-5-final-20261024-game-08.png": "bd26af8a089b9f0081f11c09fa1c704c1d03735ed5fb3a6a38c3a26f48e47930",
+    "ART-5-final-20261024-game-09.png": "6e3cc0ffe3ec0f0cdd81d1bdc39cd9bdd6d9214e6c1b8c111b3e07bf95116ce8",
+    "ART-5-final-20261024-game-10.png": "65dbe182a55b6f4d8c27bffbce75de5911ccfdd113d3a74293ed0c9ed2b7d4d1",
+    "ART-5-final-20261024-game-11.png": "d7c9a2f3df43bb6522e3c26945f1e16206cfff6f8fab68152df3e6be23df7bfb",
+    "ART-5-final-20261024-game-12.png": "71bfe4472c2da911de58ef7ba5d318bbc681904762e4f3ec9f4b071997808b09",
+    "ART-5-final-20261024-games-1.jpg": "51f27bda3a2cc3c1fc5f06c0cca564bc8676f5468b55453024dbd4d76f74b074",
+    "ART-5-final-20261024-games-2.jpg": "04b0f62ecd5c9a0a39d864335d446d910501c52bd63aba3bc034c263ce50c2ca",
+    "ART-5-final-20261024-games-3.jpg": "b4e2b091e4e3770407a0aeac8532a7a83c6a106b68f266ebe660a46e8d2ba88d",
+    "ART-5-final-20261024-bench-room-comparison.jpg": "fe4d8c4610d00a8f14a6a03db4f8fd991f6d6b0714e482d8fcb4f9299ae5c3bc",
+    "ART-5-final-20261024-crowd-light-comparison.jpg": "a758fb8fc9706fc59deb914a7305812b9f7590d9adb5c8cc09e8689177f4dbdb",
+    "ART-5-final-20261024-crowd-light-pixels.json": "7986a1b179928eabe9542812ae11604dd66bbd6bf1605c2ac902166e8521d758",
+    "ART-5-final-20261024-bench-resize-before.json": "1847123153f1c48a1a78c3d36ba0a77a444505499f733d9a855d7c057129320f",
+    "ART-5-final-20261024-bench-resize-after.json": "1e95f6bd38dff45f0f1ea95f8cd77f5cdd845518e67ef7854633229d3e72e8af",
+    "ART-5-final-20261024-bench-main.mp4": "26cb52a7c9eeb397e0d4000a37064f408a9e2225c7279f684434946c4b0b8e66",
+    "ART-5-final-20261024-bench-main-samples.jpg": "519647957f4408d558bdcda0f494702d7af4f9545381918b452aa61240dc9719",
+    "ART-5-final-20261024-crowd-main-fixed.mp4": "8f0a2c6103646ec6ecca63f12f0ecc419034316252fd9b2d256d56a310ce3651",
+    "ART-5-final-20261024-crowd-main-frames.jpg": "bc815e63af79f3493805a03d3ee6a7979edcebbbe64f2fff5ddbb202f60fe847",
+    "ART-5-final-20261024-crowd-main-fixed-samples.jpg": "c04d0ee206f6edebaede5ebbaec334ccc7b0c8ffe41848fbc921d19a9a3f3bd2",
+    "ART-5-final-20261024-local-checks.json": "1190de3bb8d6bcb182a7da152dc4d95f3d9a2a873e8cba3b5f8a616296c60984",
+    "ART-5-final-20261024-lighting-checks.json": "5322bfb46c6f4fe5f159811d9aa0c4dcffc75f19594cb9870c865a2a44871e19",
+    "ART-5-final-20261024-welcome-84.json": "40b699a3c78adba631026c31158b71885ea597af59679816957b839a3da8adea",
+    "ART-5-final-20261024-welcome-84.log": "24bf90fd9f6d10459fde2c8fa9d344c7ea1fd41d520fbab37431c96d0fee08d1",
+    "ART-5-final-20261024-linux-build.json": "5f136a1e40dada8a118e4f327e386da0e0040a03bc895187e7af183650804873",
+    "ART-5-final-20261024-linux-import.log": "b753877eafc178aabfea7db45e166e8db93b16f6322bfeabcff3ad7ba6beb96f",
+    "ART-5-final-20261024-linux-export.log": "ff2aac077189218197be3651b4a2ae7c703c0f58900f01b2adbc623f4bc34d35",
+    "ART-5-final-20261024-linux-smoke.json": "16c4e8661a019e83a87770bc3736ef10c150d789b7814c7221a2e50ebbf1f625",
+    "ART-5-final-20261024-linux-smoke.log": "38be71b798819cf2bae1c46dcf24fa8a541cfcb4c8527d2b94539286e5430488",
+    "ART-5-final-20261024-sources-and-diagnostics.zip": "4644090d0f905acfa6e8194911ca487f1808ac03a8114e9ef3c0453729d337f5"
+  }
+}

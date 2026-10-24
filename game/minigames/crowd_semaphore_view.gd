@@ -22,7 +22,10 @@ const PHASE_SKY := {
 	"dawn": Color("#edc19c"), "noon": Color("#a8c9c2"),
 	"dusk": Color("#c47f75"), "night": Color("#263f57")
 }
-const PHASE_KEY_LIGHT := {"dawn": 1.1, "noon": 1.25, "dusk": 0.92, "night": 0.68}
+const PHASE_KEY_LIGHT := {"dawn": 1.0, "noon": 0.95, "dusk": 0.92, "night": 0.68}
+## Daylight fill stays below the key to preserve stone and pastel clothing.
+## Night retains its original fill so waiting guests do not disappear into asphalt.
+const PHASE_AMBIENT_FILL_RATIO := {"dawn": 0.4, "noon": 0.35, "dusk": 0.65, "night": 1.0}
 const PERSON_COLORS: Array[Color] = [Color("#e8ae72"), Color("#b9d8cc"), Color("#e38e77"), Color("#92b4cf"), Color("#d7c18c"), Color("#b6a0c9")]
 const LANE_WEST := -3.5
 const LANE_EAST := 3.5
@@ -231,7 +234,7 @@ func _build_scene() -> void:
 	_environment.background_mode = Environment.BG_SKY
 	_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	_environment.ambient_light_color = PHASE_AMBIENT["noon"]
-	_environment.ambient_light_energy = phase_light_energy("noon")
+	_environment.ambient_light_energy = _ambient_fill_energy("noon")
 	_environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	world.environment = _environment
 	_viewport.world_3d = world
@@ -581,7 +584,7 @@ func _update_signal_surface(snapshot: Dictionary) -> void:
 func _update_lighting() -> void:
 	if _environment != null:
 		_environment.ambient_light_color = PHASE_AMBIENT[_phase]
-		_environment.ambient_light_energy = phase_light_energy(_phase)
+		_environment.ambient_light_energy = _ambient_fill_energy(_phase)
 	if _key_light != null:
 		_key_light.light_color = PHASE_SKY[_phase]
 		_key_light.light_energy = phase_light_energy(_phase)
@@ -591,6 +594,9 @@ func _update_lighting() -> void:
 	if _stage != null and _reduced_motion:
 		# Static lens/gate states continue to describe model phase; no extra flapping.
 		_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+
+func _ambient_fill_energy(phase_name: String) -> float:
+	return phase_light_energy(phase_name) * float(PHASE_AMBIENT_FILL_RATIO.get(phase_name, 1.0))
 
 func _is_valid_snapshot(snapshot: Dictionary) -> bool:
 	if not snapshot.has("phase") or not snapshot.has("queues") or not snapshot.has("active"):

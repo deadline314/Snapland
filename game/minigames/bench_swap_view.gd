@@ -31,7 +31,7 @@ var _renderer: RefCounted
 var _keyboard_seat := 0
 
 func _ready() -> void:
-	custom_minimum_size = DESIGN_SIZE
+	custom_minimum_size = Vector2.ZERO
 	focus_mode = Control.FOCUS_ALL
 	_renderer = AvatarRendererScript.new()
 	_resize_seats()
@@ -191,15 +191,50 @@ func _draw() -> void:
 	draw_set_transform(offset, 0.0, Vector2.ONE * scale_value)
 	var palette := _palette()
 	draw_rect(Rect2(Vector2.ZERO, DESIGN_SIZE), palette.paper)
+	_draw_waiting_room(palette)
 	_draw_header(palette)
-	_draw_diorama(palette)
+	_draw_diorama(palette, offset, scale_value)
 	draw_set_transform(offset, 0.0, Vector2.ONE * scale_value)
 	_draw_rules(palette)
 	_draw_footer(palette)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
-func _draw_diorama(palette: Dictionary) -> void:
-	draw_set_transform(Vector2(640, 402), 0.0, Vector2.ONE)
+func _draw_waiting_room(palette: Dictionary) -> void:
+	# Quiet architectural detail stays behind the puzzle; no extra controls or
+	# moving decoration compete with the six guests and their seat markers.
+	var wall: Color = palette.paper.lerp(palette.window_light, 0.12)
+	var floor_color: Color = palette.paper.lerp(palette.wood, 0.24)
+	var join_color: Color = floor_color.lerp(palette.wood_edge, 0.17)
+	draw_rect(Rect2(0, 128, 1280, 266), wall)
+	draw_rect(Rect2(0, 394, 1280, 326), floor_color)
+	for x in [36.0, 1244.0]:
+		draw_rect(Rect2(x - 11, 128, 22, 279), palette.wood_edge)
+		draw_rect(Rect2(x - 7, 128, 7, 279), palette.wood)
+	# Wainscot and receding floor boards give the room a shared horizon.
+	draw_rect(Rect2(0, 350, 1280, 44), wall.lerp(palette.wood, 0.14))
+	for x in range(0, 1281, 80):
+		draw_line(Vector2(x, 352), Vector2(x, 390), join_color, 1.0)
+	draw_rect(Rect2(0, 390, 1280, 8), palette.wood_edge)
+	draw_line(Vector2(0, 390), Vector2(1280, 390), palette.base_wood, 2.0)
+	for x in range(-640, 1921, 160):
+		var back_x := 640.0 + (float(x) - 640.0) * 0.4
+		draw_line(Vector2(back_x, 398), Vector2(x, 720), join_color, 1.0)
+	for y in [426.0, 466.0, 524.0, 606.0, 714.0]:
+		draw_line(Vector2(0, y), Vector2(1280, y), join_color, 1.0)
+	_draw_window(Vector2(120, 286), palette)
+	_draw_window(Vector2(1160, 286), palette)
+	for x in [63.0, 1217.0]:
+		_draw_ellipse(Vector2(x, 497), Vector2(31, 9), palette.shadow)
+		draw_colored_polygon(PackedVector2Array([Vector2(x-22, 459), Vector2(x+22, 459), Vector2(x+16, 493), Vector2(x-16, 493)]), palette.curtain)
+		draw_rect(Rect2(x-24, 455, 48, 8), palette.wood_edge)
+		for branch in [-1.0, 0.0, 1.0]:
+			var tip := Vector2(x + branch * 24.0, 408 + absf(branch) * 14.0)
+			draw_line(Vector2(x, 456), tip, palette.wood_edge, 2.0)
+			var leaf := PackedVector2Array([tip, tip + Vector2(-12, 11), tip + Vector2(0, 29), tip + Vector2(11, 13)])
+			draw_colored_polygon(leaf, palette.sea)
+
+func _draw_diorama(palette: Dictionary, offset: Vector2, scale_value: float) -> void:
+	draw_set_transform(offset + Vector2(640, 402) * scale_value, 0.0, Vector2.ONE * scale_value)
 	_draw_table_legs(palette)
 	_draw_window(Vector2(0, -114), palette)
 	_draw_ellipse(Vector2(0, 88), Vector2(480, 126), palette.shadow)

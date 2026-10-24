@@ -1,0 +1,38 @@
+[
+  {
+    "name": "minigame HUD hierarchy tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.54
+  },
+  {
+    "name": "bench swap model tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.25
+  },
+  {
+    "name": "bench swap view tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 2.49
+  },
+  {
+    "name": "crowd semaphore view tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.81
+  },
+  {
+    "name": "crowd traffic model tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.25
+  },
+  {
+    "name": "main scene integration tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 22.5
+  }
+]

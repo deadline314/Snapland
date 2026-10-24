@@ -1,0 +1,52 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+[park_world] scenery meshes: 1272, nodes: 2203
+ART SMOKE DRAW: game-001 renderer=res://game/minigames/balloon_harbor_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-001.png
+ART SMOKE DRAW: game-002 renderer=res://game/minigames/kite_flight_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-002.png
+ART SMOKE DRAW: game-003 renderer=res://game/minigames/fountain_jump_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-003.png
+ART SMOKE DRAW: game-004 renderer=res://game/minigames/crowd_semaphore_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-004.png
+ART SMOKE DRAW: game-005 renderer=res://game/minigames/hat_rescue_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-005.png
+ART SMOKE DRAW: game-006 renderer=res://game/minigames/ribbon_rhythm_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-006.png
+ART SMOKE DRAW: game-007 renderer=res://game/minigames/pipe_plan_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-007.png
+ART SMOKE DRAW: game-008 renderer=res://game/minigames/sign_balance_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-008.png
+ART SMOKE DRAW: game-009 renderer=res://game/minigames/shadow_theatre_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-009.png
+ART SMOKE DRAW: game-010 renderer=res://game/minigames/bubble_photo_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-010.png
+ART SMOKE DRAW: game-011 renderer=res://game/minigames/bench_swap_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-011.png
+ART SMOKE DRAW: game-012 renderer=res://game/minigames/melody_memory_view.gd capture=/workspace/work/Snapland-character/work/remaining-20261024/release-art5-smoke/profile/art-smoke-game-012.png
+PASS: character source assets, three NPC regions, component animation and building cutaway registration
+PASS: art resources loaded (props=16, scenes=4, foliage=8)
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@813; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@811; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@809; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@807; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@895; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@963; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@956; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@950; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@944; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@938; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@1016; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@1014; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1067; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1066; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1065; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)

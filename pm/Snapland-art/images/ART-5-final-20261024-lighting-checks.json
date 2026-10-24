@@ -1,0 +1,14 @@
+[
+  {
+    "name": "crowd semaphore view tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.82
+  },
+  {
+    "name": "crowd traffic model tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.25
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "phase": "dawn",
+    "pixels": 413280,
+    "before_rgb_ge250": 6990,
+    "after_rgb_ge250": 52,
+    "identical_whole_frame": false
+  },
+  {
+    "phase": "noon",
+    "pixels": 413280,
+    "before_rgb_ge250": 54726,
+    "after_rgb_ge250": 5683,
+    "identical_whole_frame": false
+  },
+  {
+    "phase": "dusk",
+    "pixels": 413280,
+    "before_rgb_ge250": 1,
+    "after_rgb_ge250": 1,
+    "identical_whole_frame": false
+  },
+  {
+    "phase": "night",
+    "pixels": 413280,
+    "before_rgb_ge250": 0,
+    "after_rgb_ge250": 0,
+    "identical_whole_frame": true
+  }
+]

@@ -1,0 +1,439 @@
+{
+  "method": "Independent 1280 native canonical flat-interior samples projected into each size at fixed contractual seat-body locations. Source alpha>=250/255 (interiors predominantly252/253), 3x3 RGB range<=12 excludes aliasing edges, at least16 reference samples per figure. Unchanged RGB MAE limit20. Both original/fixed builds use the same method. Not an animation jitter or pixel-identical-resize claim.",
+  "pass_count": 36,
+  "count": 36,
+  "observations": [
+    {
+      "phase": "noon",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 0,
+      "reference_samples": 26,
+      "unique_target_pixels": 16,
+      "mean_absolute_rgb_error": 0.2821,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 1,
+      "reference_samples": 77,
+      "unique_target_pixels": 44,
+      "mean_absolute_rgb_error": 0.3333,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 2,
+      "reference_samples": 32,
+      "unique_target_pixels": 18,
+      "mean_absolute_rgb_error": 0.5208,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 3,
+      "reference_samples": 40,
+      "unique_target_pixels": 22,
+      "mean_absolute_rgb_error": 0.4917,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 4,
+      "reference_samples": 69,
+      "unique_target_pixels": 37,
+      "mean_absolute_rgb_error": 0.3092,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 5,
+      "reference_samples": 29,
+      "unique_target_pixels": 18,
+      "mean_absolute_rgb_error": 0.6667,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 0,
+      "reference_samples": 26,
+      "unique_target_pixels": 26,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 1,
+      "reference_samples": 77,
+      "unique_target_pixels": 77,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 2,
+      "reference_samples": 32,
+      "unique_target_pixels": 32,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 3,
+      "reference_samples": 40,
+      "unique_target_pixels": 40,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 4,
+      "reference_samples": 69,
+      "unique_target_pixels": 69,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 5,
+      "reference_samples": 29,
+      "unique_target_pixels": 29,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 0,
+      "reference_samples": 26,
+      "unique_target_pixels": 26,
+      "mean_absolute_rgb_error": 0.0897,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 1,
+      "reference_samples": 77,
+      "unique_target_pixels": 77,
+      "mean_absolute_rgb_error": 0.1299,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 2,
+      "reference_samples": 32,
+      "unique_target_pixels": 32,
+      "mean_absolute_rgb_error": 0.3333,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 3,
+      "reference_samples": 40,
+      "unique_target_pixels": 40,
+      "mean_absolute_rgb_error": 0.325,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 4,
+      "reference_samples": 69,
+      "unique_target_pixels": 69,
+      "mean_absolute_rgb_error": 0.1498,
+      "within_20": true
+    },
+    {
+      "phase": "noon",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 5,
+      "reference_samples": 29,
+      "unique_target_pixels": 29,
+      "mean_absolute_rgb_error": 0.5977,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 0,
+      "reference_samples": 26,
+      "unique_target_pixels": 16,
+      "mean_absolute_rgb_error": 0.2821,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 1,
+      "reference_samples": 76,
+      "unique_target_pixels": 44,
+      "mean_absolute_rgb_error": 0.3377,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 2,
+      "reference_samples": 31,
+      "unique_target_pixels": 17,
+      "mean_absolute_rgb_error": 0.4301,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 3,
+      "reference_samples": 40,
+      "unique_target_pixels": 22,
+      "mean_absolute_rgb_error": 0.4917,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 4,
+      "reference_samples": 69,
+      "unique_target_pixels": 37,
+      "mean_absolute_rgb_error": 0.2899,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        800,
+        450
+      ],
+      "guest": 5,
+      "reference_samples": 30,
+      "unique_target_pixels": 19,
+      "mean_absolute_rgb_error": 0.8222,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 0,
+      "reference_samples": 26,
+      "unique_target_pixels": 26,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 1,
+      "reference_samples": 76,
+      "unique_target_pixels": 76,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 2,
+      "reference_samples": 31,
+      "unique_target_pixels": 31,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 3,
+      "reference_samples": 40,
+      "unique_target_pixels": 40,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 4,
+      "reference_samples": 69,
+      "unique_target_pixels": 69,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1280,
+        720
+      ],
+      "guest": 5,
+      "reference_samples": 30,
+      "unique_target_pixels": 30,
+      "mean_absolute_rgb_error": 0.0,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 0,
+      "reference_samples": 26,
+      "unique_target_pixels": 26,
+      "mean_absolute_rgb_error": 0.0897,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 1,
+      "reference_samples": 76,
+      "unique_target_pixels": 76,
+      "mean_absolute_rgb_error": 0.1272,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 2,
+      "reference_samples": 31,
+      "unique_target_pixels": 31,
+      "mean_absolute_rgb_error": 0.3118,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 3,
+      "reference_samples": 40,
+      "unique_target_pixels": 40,
+      "mean_absolute_rgb_error": 0.325,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 4,
+      "reference_samples": 69,
+      "unique_target_pixels": 69,
+      "mean_absolute_rgb_error": 0.1304,
+      "within_20": true
+    },
+    {
+      "phase": "night",
+      "size": [
+        1920,
+        1080
+      ],
+      "guest": 5,
+      "reference_samples": 30,
+      "unique_target_pixels": 30,
+      "mean_absolute_rgb_error": 0.6111,
+      "within_20": true
+    }
+  ]
+}
