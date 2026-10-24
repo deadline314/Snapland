@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-24",
+  "tool": "image_gen.imagegen",
+  "transparent_background_requested": true,
+  "attempts": [
+    {
+      "output": "ART-17-front-walk-20261024-candidate-1.png",
+      "original_output": "/workspace/generated_images/exec-5a4916e2-09ca-466f-a5fd-f6d9fa2f88f7.png",
+      "sha256": "856ebb385c69e587f44b4490d9293c37227926333370532fd6650e4ecd939d5b",
+      "referenced_images": [
+        {
+          "path": "assets/characters/ticket-front-actions-v2.png",
+          "sha256": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1"
+        }
+      ],
+      "prompt": "Make a NEW whole-character WALK CYCLE of this exact existing ticket clerk boy, matching his fine detailed hand-drawn pixel-art rendering, same proportions and identity: tousled chestnut brown hair, round brown glasses, blue sweatshirt with small white mountain chest motif, cream shorts, brown boots, brown crossbody bag on his anatomical right hip (viewer left), his anatomical right hand holding the strap. Do not change any clothes or facial features. Output ONLY 8 full-body cels in one horizontal row, equally spaced transparent cells with generous gutters. FRONT VIEW facing directly toward viewer, walking IN PLACE. Camera fixed, head and pelvis center same x within each cell, same canvas scale and ground baseline, only subtle natural vertical body translation, no body stretching. Sequence matters: 1 LEFT foot forward contact (viewer RIGHT boot visibly lower and larger), RIGHT foot behind; 2 left knee bends to accept weight, right heel lifts behind; 3 left leg straight supports body, right knee bent passing forward; 4 left heel lifts, right leg reaches; 5 RIGHT foot forward contact (viewer LEFT boot visibly lower and larger), LEFT foot behind; 6 right knee bends, left heel lifts; 7 right leg supports, left knee bent passing forward; 8 right heel lifts, left leg reaches, closing to pose1. The 2 halves must be genuinely opposite legs, changing the entire connected thigh/knee/shin/boot silhouette. Both arms visible, free arm modest counter-swing, strap hand stays attached, satchel same side. Preserve head volume, hair silhouette, eye spacing, glasses, connected neck/body and both full legs and boots in all 8. Avoid robotic marching, kicking, extreme strides, duplicate same contact 8 times, swapping only boot brightness, adding extra limbs or objects, shadows, floor, labels, text, grid, borders. Whole connected cels, never separated limbs.",
+      "runtime_adopted": false,
+      "accepted_cycle": false,
+      "review": "All eight cels keep the same viewer-right foot forward; no complete alternating gait."
+    },
+    {
+      "output": "ART-17-front-walk-20261024-candidate-2.png",
+      "original_output": "/workspace/generated_images/exec-6acaaeb7-6652-4281-8444-e42907e4059a.png",
+      "sha256": "3a93bd155aba07f91eabeb55f9472b5ba6d7ad3a615706b0837f3b66d0aa2a0b",
+      "referenced_images": [
+        {
+          "path": "/workspace/generated_images/exec-5a4916e2-09ca-466f-a5fd-f6d9fa2f88f7.png",
+          "sha256": "856ebb385c69e587f44b4490d9293c37227926333370532fd6650e4ecd939d5b"
+        }
+      ],
+      "prompt": "Correct the gait error. Produce just ONE FULL BODY SPRITE of this SAME boy, front view, same style/clothes/face/bag/head. Do not produce a sheet or multiple figures. ALL of the reference poses incorrectly have the boot on IMAGE RIGHT forward. The NEW single pose must have the BOOT ON IMAGE LEFT forward instead. This is the boy's anatomical RIGHT leg, on the side of the BAG. Extend the cream shorts leg under the BAG into a forward bent bare knee, shin and LARGE BROWN BOOT at IMAGE LEFT, low on canvas. The other leg at IMAGE RIGHT is BEHIND the pelvis, bent backwards, small boot higher on canvas with visible heel, not a second forward foot. Opposite contact to the reference: IMAGE LEFT boot takes weight in FRONT and IMAGE RIGHT boot trails BACK. Whole connected thigh/knee/shin geometry must change, not just boot color or leg shading. Keep the crossbody BAG on IMAGE LEFT exactly as before, hand on bag strap, blue mountain sweatshirt, brown glasses, chestnut hair. Don't mirror character horizontally. Preserve the whole head, both arms, shorts, both knees and full boots with no clipping or separated pieces. Modest walking stride, calm smile. Transparent background, no ground, shadow, label or text.",
+      "runtime_adopted": false,
+      "accepted_cycle": false,
+      "review": "Opposite contact anatomy is clearer, but scale/proportions, exaggerated stride and smooth painted rendering differ from the approved fine sprite sheet. A pose guide only; not a runtime cel."
+    },
+    {
+      "output": "ART-17-front-walk-20261024-candidate-3.png",
+      "original_output": "/workspace/generated_images/exec-c0765994-2c37-468b-8065-4a2ae995177b.png",
+      "sha256": "46bba71664c386528c508136fa1fad710d339bab9785196ccbe2d5547fa8edb9",
+      "referenced_images": [
+        {
+          "path": "assets/characters/ticket-front-actions-v2.png",
+          "sha256": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1"
+        },
+        {
+          "path": "/workspace/generated_images/exec-6acaaeb7-6652-4281-8444-e42907e4059a.png",
+          "sha256": "3a93bd155aba07f91eabeb55f9472b5ba6d7ad3a615706b0837f3b66d0aa2a0b"
+        }
+      ],
+      "prompt": "Draw an animation sprite sheet with 8 whole connected cels in a 4-column x 2-row grid. FIRST REFERENCE sets the exact pixel-art style and character identity and proportions. SECOND REFERENCE is ONLY anatomical left-forward pose guide: do NOT copy its painting style or extreme large foot, do not draw a background glow. Fine crisp low-resolution pixel art like FIRST reference, original big chibi head, short body/limbs, no smooth illustration. Same boy blue sweatshirt, mountain emblem, cream shorts, brown satchel at IMAGE LEFT, hand on strap, round glasses, chestnut hair. Front-facing in-place WALK cycle. Arrange exactly: TOP LEFT contact with IMAGE RIGHT boot forward. TOP second DOWN weight on IMAGE RIGHT leg. TOP third PASS with IMAGE RIGHT leg straight supporting and IMAGE LEFT knee up passing. TOP fourth UP pushing off IMAGE RIGHT leg while IMAGE LEFT reaches forward. BOTTOM LEFT OPPOSITE CONTACT: IMAGE LEFT boot forward (as second reference but shorter stride). BOTTOM second DOWN weight on IMAGE LEFT leg. BOTTOM third PASS with IMAGE LEFT leg straight supporting and IMAGE RIGHT knee up passing. BOTTOM fourth UP pushing off IMAGE LEFT leg while IMAGE RIGHT reaches. This is a row of 4 poses on right-foot support then a row of 4 poses on left-foot support. Top vs bottom must switch leg silhouette, NOT repeat the same foot in front. Small calm walking stride, not high kicking. Exact same head scale, head center X relative cell, same body volume, bag and hand side, same foot ground plane. Only subtle head bob. Stable bag shape and hair. Each full character has generous transparent gutters and no clipping. No background, floor or shadow, no scene or frame decorations. Place small labels 1 CONTACT R, 2 DOWN R, 3 PASS L, 4 UP R above first row cels and 5 CONTACT L, 6 DOWN L, 7 PASS R, 8 UP L above second row cels, clearly away from sprites. Labels only outside sprite silhouette. Sprite bodies fully connected with 2 legs and 2 arms, no dismembered parts.",
+      "runtime_adopted": false,
+      "accepted_cycle": false,
+      "review": "Cells 1 and 5 repeat the same contact and cells 4 and 8 repeat the same reaching leg; cell 7 does correctly alternate the passing leg. Labels do not prove poses."
+    },
+    {
+      "output": "ART-17-front-walk-20261024-candidate-4.png",
+      "original_output": "/workspace/generated_images/exec-6469b967-37d8-4af9-872d-d2f71423be08.png",
+      "sha256": "1649ea84b6e2c3924c564f52b74b3160c2b0667b45e9e5a097a8957d6bb7ebc1",
+      "referenced_images": [
+        {
+          "path": "/workspace/generated_images/exec-c0765994-2c37-468b-8065-4a2ae995177b.png",
+          "sha256": "46bba71664c386528c508136fa1fad710d339bab9785196ccbe2d5547fa8edb9"
+        }
+      ],
+      "prompt": "Edit this 4x2 sheet conservatively. Preserve the exact pixel art and head/body size, character identity and cell positions. Make the background genuinely fully transparent, remove ALL black/colored glow/halo around every sprite, and remove ALL labels/text. Keep sprites crisp with clean alpha edges. Most important gait corrections: CEL 5 (bottom left) is wrong, it currently repeats cel1 with IMAGE LEFT foot forward. Change CEL5 into the opposite contact: IMAGE RIGHT boot forward and touching ground, IMAGE LEFT boot trails behind. Keep the bag on IMAGE LEFT and change the connected legs beneath shorts, not recolor. CEL6 bottom second already has IMAGE RIGHT boot supporting; make this a small knee bend down pose, preserve its correct leg arrangement. CEL7 bottom third already correctly passes IMAGE LEFT knee while IMAGE RIGHT leg supports; preserve that pose. CEL8 bottom right is wrong, currently repeats cel4. Change CEL8 to IMAGE LEFT boot reaching toward viewer with visible sole, IMAGE RIGHT boot behind on toe, opposite of CEL4. Keep all original top row poses1,2,3,4 as they are (image left foot contact/down/support then image right reaching). Do not mirror bag/hair/face. Do not change character design. Output 8 complete connected sprites, four columns two rows, shared ground baseline per row, wide transparent gutters, same modest gait. No floor, shadow, labels, strokes, outlines around cells or decorative background.",
+      "runtime_adopted": false,
+      "accepted_cycle": false,
+      "review": "Cell 8 now reaches with the opposite foot, but cell 5 still repeats contact 1 and cell 7 has regressed to the same passing leg as cell 3. Partial corrections are not an accepted cycle."
+    }
+  ],
+  "research": [
+    {
+      "page": "https://animation.monmouth.edu/instruct/animation/walk-cycle/",
+      "image": "https://animation.monmouth.edu/instruct/wp-content/uploads/sites/3/2021/01/PuppetWalk1.gif",
+      "download_sha256": "70b05820d51a6a12fa43977354025c0a87aba9a9cb268f039f739a7d5298688b",
+      "review_capture": "ART-17-front-walk-20261024-reference-1.png",
+      "viewed": true,
+      "usage": "Small attributed research diagram contact capture only; not game assets or image generation references."
+    },
+    {
+      "page": "https://animation.monmouth.edu/instruct/animation/walk-cycle/",
+      "image": "https://animation.monmouth.edu/instruct/wp-content/uploads/sites/3/2021/01/PuppetWalk2.gif",
+      "download_sha256": "ceae5671f55fa3564d6cfae882c8ddf401ba1ab5368ef58da6b103ed526df2cc",
+      "review_capture": "ART-17-front-walk-20261024-reference-2.png",
+      "viewed": true,
+      "usage": "Small attributed research diagram contact capture only; not game assets or image generation references."
+    },
+    {
+      "page": "https://animation.monmouth.edu/instruct/animation/walk-cycle/",
+      "image": "https://animation.monmouth.edu/instruct/wp-content/uploads/sites/3/2021/01/PuppetWalk3.gif",
+      "download_sha256": "df8171971d10b1497fd49e8c4d1b602818d9eadd88ae57606f5ec90314ed6f3e",
+      "review_capture": "ART-17-front-walk-20261024-reference-3.png",
+      "viewed": true,
+      "usage": "Small attributed research diagram contact capture only; not game assets or image generation references."
+    },
+    {
+      "page": "https://animation.monmouth.edu/instruct/animation/walk-cycle/",
+      "image": "https://animation.monmouth.edu/instruct/wp-content/uploads/sites/3/2021/01/PuppetWalk4.gif",
+      "download_sha256": "ebf2baa58b7a6eafc1a440a6cc55745fdae94c0fa5e385e2b303e79689550b1b",
+      "review_capture": "ART-17-front-walk-20261024-reference-4.png",
+      "viewed": true,
+      "usage": "Small attributed research diagram contact capture only; not game assets or image generation references."
+    }
+  ],
+  "transparency_correction": "Black-view preview appeared to have a glow, but actual white compositing was viewed for both 4x2 outputs and showed no background halo. Preview RGB outside alpha is not evidence of a composited defect; transparency is not the rejection reason.",
+  "adoption": "No production source, frame timing, baseline, limb splitting or whole-body deformation changed."
+}

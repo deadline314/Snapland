@@ -414,3 +414,23 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 ![拒收：明暗不同不等於雙腿交換](images/ART-17-ticket-walk-20261024-rejected-contacts.png)
 
 [實際閱讀、完整提示、來源及輸出雜湊、拒收原因](images/ART-17-ticket-walk-20261024-review.json)。本輪是原畫品質檢查，沒有通過的動畫，因此不宣稱原生播放或新增動作完成。
+
+
+# Commit — 2026-10-24 核對相反接觸姿勢與四次候選
+
+## 內文
+
+補讀 [Monmouth 動畫課程的步行圖解](https://animation.monmouth.edu/instruct/animation/walk-cycle/)，實際查看接觸、跨步、下沉與推離四張圖：先確認兩次接觸交換前後腿，再補中間姿勢；循環結尾不重複起始格。採用其檢查方法，沒有把參考圖當作遊戲素材或生成輸入。Toon Boom 圖解頁回傳 403，BMCC 頁逾時，兩者不算已閱讀來源。
+
+四次新候選包含正面八格、單張相反接觸、帶標記兩列八格及局部修正。單張相反接觸有改善，但渲染與步幅不符原角色；兩列候選仍有重複接觸，後續修改修好了推離格卻改壞另一跨步格。逐張實際查看，均未採用為正式動畫，原驗收保持未勾。黑底預覽疑似光暈的觀察，經白底合成覆核後撤回，拒收原因為姿勢與風格，不是預覽底色。
+
+[四次完整提示詞、來源與輸出雜湊、逐格拒收理由](images/ART-17-front-walk-20261024-review.json)。原輸出完整保存，沒有拆腿拼接、整身伸縮或用淡化冒充新姿勢。
+
+![接觸交換圖解；Monmouth，僅研究參考](images/ART-17-front-walk-20261024-reference-1.png)
+![跨步圖解；Monmouth，僅研究參考](images/ART-17-front-walk-20261024-reference-2.png)
+![下沉圖解；Monmouth，僅研究參考](images/ART-17-front-walk-20261024-reference-3.png)
+![推離圖解；Monmouth，僅研究參考](images/ART-17-front-walk-20261024-reference-4.png)
+![帶標記候選的白底實際合成](images/ART-17-front-walk-20261024-labelled-white.png)
+![局部修正候選的白底實際合成](images/ART-17-front-walk-20261024-corrected-white.png)
+
+本輪是素材與圖解審閱，沒有新增原生動畫、效能或打包通過聲稱。
