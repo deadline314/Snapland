@@ -1,0 +1,16 @@
+{
+  "game": 12,
+  "route": "melody_memory",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 246.89,
+  "passes": [
+    "PASS: Main station launch, observed keyboard melody, pause/resume/retry, and assisted reduced-motion pointer practice; formal collection unchanged by practice"
+  ],
+  "captures": [
+    ".review/native-melody-memory-formal-listen.png",
+    ".review/native-melody-memory-practice.png",
+    ".review/native-melody-memory-formal-result.png",
+    ".review/native-melody-memory-formal-active.png"
+  ]
+}

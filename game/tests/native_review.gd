@@ -1,6 +1,12 @@
 extends Node
 const MAIN_SCENE_PATH = 'res://game/main.tscn'
 const GAME_SESSION = preload('res://game/minigames/session.gd')
+## Godot consumes --fixed-fps before exposing OS.get_cmdline_args(). Drivers
+## using that engine option must also pass -- --review-fixed-clock. This only
+## selects bounded wall-clock hang guards; it never changes gameplay timing.
+func _uses_fixed_review_clock() -> bool:
+ return not Engine.get_write_movie_path().is_empty() or OS.get_cmdline_user_args().has("--review-fixed-clock")
+
 var main: Node
 var progress: Node
 func _ready() -> void:

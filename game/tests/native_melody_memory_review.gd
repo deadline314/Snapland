@@ -317,4 +317,4 @@ func _wall_deadline(game_seconds: float) -> int:
 ## Hang guards only: a fixed-FPS (or Movie Maker) run on a loaded host renders far
 ## slower than real time, so wall budgets stretch there; gameplay windows do not.
 func _fixed_clock_slack() -> float:
-	return 40.0 if not Engine.get_write_movie_path().is_empty() or OS.get_cmdline_args().has("--fixed-fps") else 1.0
+	return 40.0 if _uses_fixed_review_clock() else 1.0

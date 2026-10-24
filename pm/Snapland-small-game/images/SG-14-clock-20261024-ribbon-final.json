@@ -1,0 +1,38 @@
+{
+  "game": 6,
+  "route": "ribbon_rhythm",
+  "exit": 0,
+  "errors": 0,
+  "seconds": 223.41,
+  "passes": [
+    "PASS: Main park station/menu, wrong-action retry, keyboard eight gestures/two holds, exact devil score ledger and ordinary/devil persistence; formal Engine.time_scale=1.00x",
+    "PASS: assisted reduced-motion station launch and pointer gameplay at Engine.time_scale=0.25x; pointer phrase required all eight player inputs; result capture at 1.00x; ordinary-only private result and unchanged Progress"
+  ],
+  "captures": [
+    ".review/native-ribbon-finish-start.png",
+    ".review/native-ribbon-pointer-cue-08.png",
+    ".review/native-ribbon-assisted-gameplay.png",
+    ".review/native-ribbon-keyboard-cue-01.png",
+    ".review/native-ribbon-keyboard-cue-06.png",
+    ".review/native-ribbon-keyboard-cue-02.png",
+    ".review/native-ribbon-keyboard-cue-07.png",
+    ".review/native-ribbon-keyboard-cue-05.png",
+    ".review/native-ribbon-pointer-cue-01.png",
+    ".review/native-ribbon-retry-zero.png",
+    ".review/native-ribbon-pointer-cue-06.png",
+    ".review/native-ribbon-keyboard-cue-08.png",
+    ".review/native-ribbon-pointer-cue-05.png",
+    ".review/native-ribbon-finish-late.png",
+    ".review/native-ribbon-pointer-cue-07.png",
+    ".review/native-ribbon-formal-result.png",
+    ".review/native-ribbon-finish-mid.png",
+    ".review/native-ribbon-keyboard-cue-04.png",
+    ".review/native-ribbon-pointer-cue-02.png",
+    ".review/native-ribbon-pointer-cue-03.png",
+    ".review/native-ribbon-assisted-finish-static.png",
+    ".review/native-ribbon-formal-gameplay.png",
+    ".review/native-ribbon-assisted-result.png",
+    ".review/native-ribbon-pointer-cue-04.png",
+    ".review/native-ribbon-keyboard-cue-03.png"
+  ]
+}

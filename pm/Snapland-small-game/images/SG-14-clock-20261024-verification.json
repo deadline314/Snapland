@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-24",
+  "base_commit": "282875309251f6fa2da0fbe484e8b8a246f1f5cb",
+  "scope": "Native review clock detection and bounded slow-motion waits; no player timing/model/scoring changes. No listening or hardware FPS claim.",
+  "engine": "Godot 4.7.2 official ed1daf0bf",
+  "driver": "llvmpipe / Dummy",
+  "args_probe": "Engine consumes --fixed-fps; explicit --review-fixed-clock user flag is visible and helper true.",
+  "ribbon": "Actual Main keyboard1x900 ordinary+devil, wrong-action/retry, pointer0.25x assisted/reduced private900 with unchanged Progress; entire final process exit0/error0.",
+  "melody": "Actual Main observed-note keyboard300 ordinary+devil, pause/resume/retry, assisted/reduced pointer private300 unchanged formal collection; entire final process exit0/error0.",
+  "budgets": "Retain existing40x fixed wall allowance and finite cap; scale game-time-to-frame allowance by Engine.time_scale; outer420 seconds per route. Original failures preserved.",
+  "source_after_sha256": {
+    "game/tests/native_review.gd": "8a632c0170fd588e1de37d4524dec375506621cbde5ae7796e77d58edc05df9c",
+    "game/tests/native_ribbon_rhythm_review.gd": "531a945b68b9a6a2bc377934ed875b40ce347f5c53617b06dd0357079980940d",
+    "game/tests/native_melody_memory_review.gd": "fa81a107642ca3086945b7fca81ba61cd73814222035178e365987c6f4d436f2"
+  },
+  "files": {
+    "SG-14-clock-20261024-args-before.log": "47c499ea4d07a6153fc567a75d8199971d535b7d2110c273b2da1b253e7572f7",
+    "SG-14-clock-20261024-args-after.log": "c6c63528499ae89695cf176097c60fec31cef3cd96ae415637c5683ed2372dc3",
+    "SG-14-clock-20261024-ribbon-fixed-before.log": "6f2477a6b51eba5800c7b45d254e63a72adc51206ea39842f48061ab96c86ce6",
+    "SG-14-clock-20261024-ribbon-quarter-before.log": "bfa20924664ceb5a358f18822ca72206ed961d2b2de902d5c9179724672ff9b6",
+    "SG-14-clock-20261024-ribbon-final.log": "45011649cd6347e6e395e4c40af7ada9e859d54b311db3191667c5ea5ae944bb",
+    "SG-14-clock-20261024-melody-final.log": "4f29ecde04346d404271c1d1d70ddf5ef0e2d3e8b4f0bb2defb2be87926f2d31",
+    "SG-14-clock-20261024-ribbon-final.json": "b004bb1ceba3fcafba3c0c56185b928c75efcf1d1de39f50f74be5731ce4ca17",
+    "SG-14-clock-20261024-melody-final.json": "50896baca014069cfa8f0fb2da2cb4fa0e1f98dfab70322f8318301ae96df1f2",
+    "SG-14-clock-20261024-ribbon-formal.png": "b518c6206488cf26ecf0e03a6239e9cfd0e40c6b0cfb6eaa5ff59476974aca41",
+    "SG-14-clock-20261024-ribbon-private.png": "0baaa0414da94be64c870151bf3c97deb0a7bb0edc28b5761c20f38fd498971b",
+    "SG-14-clock-20261024-melody-formal.png": "a015869e0ef3b592d4e85e92a68e55c09b52e6d62b6673a32b6e31a1a7f1a86d",
+    "SG-14-clock-20261024-melody-private.png": "a5cb4ad8a29e0a6aaa28357511a2e217b910de0b863684f00d3d14ba83fc5002",
+    "SG-14-clock-20261024-sources-and-captures.zip": "ddfbf0e53d620ca5a14245592e1cad83d0ba42ef7dda3cc9e4631a95e4e3eac0"
+  }
+}

@@ -245,7 +245,9 @@ func _wait_ribbon_elapsed(sid: int, target: float) -> bool:
 	# clock budget scaled by Engine.time_scale and add a bounded capture allowance.
 	var capture_multiplier := 8.0 if not Engine.get_write_movie_path().is_empty() else 2.0
 	var deadline := _wall_deadline(game_budget * capture_multiplier)
-	var frame_budget := mini(216000, int(ceil(game_budget * 60.0 * capture_multiplier)))
+	# Physics frames still arrive at the fixed rate during quarter-speed review;
+	# each advances only a quarter as much game time, including the count-in.
+	var frame_budget := mini(216000, int(ceil(game_budget * 60.0 * capture_multiplier / maxf(Engine.time_scale, 0.05))))
 	var waited_frames := 0
 	while Time.get_ticks_msec() < deadline and waited_frames < frame_budget:
 		var live := _node_for_id(sid)
@@ -347,4 +349,4 @@ func _fail(message: String) -> void:
 ## Hang guards only: a fixed-FPS (or Movie Maker) run on a loaded host renders far
 ## slower than real time, so wall budgets stretch there; gameplay windows do not.
 func _fixed_clock_slack() -> float:
-	return 40.0 if not Engine.get_write_movie_path().is_empty() or OS.get_cmdline_args().has("--fixed-fps") else 1.0
+	return 40.0 if _uses_fixed_review_clock() else 1.0

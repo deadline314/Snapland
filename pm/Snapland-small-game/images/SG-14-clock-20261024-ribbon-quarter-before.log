@@ -1,0 +1,225 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+NATIVE PROFILE: returning-player tutorial state seeded for 12 welcome games
+[park_world] scenery meshes: 1272, nodes: 2203
+INPUT: launch game-006 from station menu target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/IslandGameInvite/@MarginContainer@2034/@VBoxContainer@2035/@HBoxContainer@2036/InviteCard/@MarginContainer@2037/@VBoxContainer@2038/@HBoxContainer@2040/InviteStart rect=[P: (377.0, 395.0), S: (266.0, 47.0)] pointer=(510.0, 418.5) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/IslandGameInvite/@MarginContainer@2034/@VBoxContainer@2035/@HBoxContainer@2036/InviteCard/@MarginContainer@2037/@VBoxContainer@2038/@HBoxContainer@2040/InviteStart button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Ribbon wrong-action trace: before={ "assisted": false, "time_phase": "noon", "phase": "active", "elapsed": 1.03, "gesture_index": 0, "gesture_count": 8, "current_gesture": { "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "左步", "time": 1.02, "index": 0 }, "gestures": [{ "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "左步" }, { "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步" }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": false, "ribbon": "jump_loop", "label": "跳起" }, { "action": "left", "pose": "wave_front", "hold": 0.34, "strong": true, "ribbon": "high_left_sweep", "label": "左側留拍" }, { "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步" }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": true, "ribbon": "jump_loop", "label": "重拍躍起" }, { "action": "right", "pose": "wave_front", "hold": 0.4, "strong": false, "ribbon": "high_right_sweep", "label": "右側留拍" }, { "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "收步" }], "upcoming": [{ "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步", "time": 1.96, "index": 1 }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": false, "ribbon": "jump_loop", "label": "跳起", "time": 2.9, "index": 2 }], "cue_times": [1.02, 1.96, 2.9, 3.84, 4.78, 5.72, 6.66, 7.6], "timing_window": 0.27, "precise_window": 0.105, "hold_action": "", "hold_elapsed": 0.0, "hold_required": 0.0, "correct_count": 0, "precise_count": 0, "missed_count": 0, "error_count": 0, "score": 0, "note_played_serial": 1, "last_grade": "", "last_offset": 0.0, "last_judged_at": -1.0, "wrong_press_count": 0, "last_event": "看向前方兩拍預告，依節奏踩步、躍起或按住揮帶", "ribbon_trail": [], "ended": false, "success": false, "devil_success": false, "ordinary_success_hits": 6, "strong_beats": [0, 3, 5, 7] } after={ "assisted": false, "time_phase": "noon", "phase": "active", "elapsed": 1.03, "gesture_index": 0, "gesture_count": 8, "current_gesture": { "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "左步", "time": 1.02, "index": 0 }, "gestures": [{ "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "左步" }, { "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步" }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": false, "ribbon": "jump_loop", "label": "跳起" }, { "action": "left", "pose": "wave_front", "hold": 0.34, "strong": true, "ribbon": "high_left_sweep", "label": "左側留拍" }, { "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步" }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": true, "ribbon": "jump_loop", "label": "重拍躍起" }, { "action": "right", "pose": "wave_front", "hold": 0.4, "strong": false, "ribbon": "high_right_sweep", "label": "右側留拍" }, { "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "收步" }], "upcoming": [{ "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步", "time": 1.96, "index": 1 }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": false, "ribbon": "jump_loop", "label": "跳起", "time": 2.9, "index": 2 }], "cue_times": [1.02, 1.96, 2.9, 3.84, 4.78, 5.72, 6.66, 7.6], "timing_window": 0.27, "precise_window": 0.105, "hold_action": "", "hold_elapsed": 0.0, "hold_required": 0.0, "correct_count": 0, "precise_count": 0, "missed_count": 0, "error_count": 1, "score": 0, "note_played_serial": 1, "last_grade": "失拍", "last_offset": 0.0, "last_judged_at": 1.03, "wrong_press_count": 1, "last_event": "方向不符，下一拍再試", "ribbon_trail": [], "ended": false, "success": false, "devil_success": false, "ordinary_success_hits": 6, "strong_beats": [0, 3, 5, 7] } sent_key_events=0->2 focus=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/GamePresentation->/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/GamePresentation view_has_focus=true key_right_down_after=false
+INPUT: pause after real wrong action target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open retry confirmation target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/PauseOverlay/@PanelContainer@2056/@VBoxContainer@2057/RetryButton rect=[P: (430.0, 390.0), S: (420.0, 44.0)] pointer=(640.0, 412.0) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/PauseOverlay/@PanelContainer@2056/@VBoxContainer@2057/RetryButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: confirm exact-zero Ribbon retry target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/ConfirmOverlay/@PanelContainer@2070/@VBoxContainer@2071/ConfirmAction rect=[P: (440.0, 294.0), S: (400.0, 44.0)] pointer=(640.0, 316.0) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/ConfirmOverlay/@PanelContainer@2070/@VBoxContainer@2071/ConfirmAction button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: pause during Ribbon finish performance target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton rect=[P: (1170.0, 52.0), S: (76.0, 44.0)] pointer=(1208.0, 74.0) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/MinigameStatusRail/StatusAndActions/HUDActions/PauseButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: resume Ribbon finish performance target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/PauseOverlay/@PanelContainer@2056/@VBoxContainer@2057/ResumeButton rect=[P: (430.0, 240.0), S: (420.0, 44.0)] pointer=(640.0, 262.0) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2047/MinigameHUD/PauseOverlay/@PanelContainer@2056/@VBoxContainer@2057/ResumeButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+Ribbon finish gate observed: start/mid/late captures; paused elapsed and authored companion frame stayed fixed; duration=1.30s
+PASS: Main park station/menu, wrong-action retry, keyboard eight gestures/two holds, exact devil score ledger and ordinary/devil persistence; formal Engine.time_scale=1.00x
+INPUT: return to park after formal Ribbon target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton rect=[P: (932.0, 546.0), S: (200.0, 64.0)] pointer=(1032.0, 578.0) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/MenuBackButton button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: open optional practice modes target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/IslandGameInvite/@MarginContainer@2115/@VBoxContainer@2116/@HBoxContainer@2117/InviteCard/@MarginContainer@2118/@VBoxContainer@2119/@HBoxContainer@2121/InviteRules rect=[P: (655.0, 395.0), S: (128.0, 47.0)] pointer=(719.0, 418.5) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/IslandGameInvite/@MarginContainer@2115/@VBoxContainer@2116/@HBoxContainer@2117/InviteCard/@MarginContainer@2118/@VBoxContainer@2119/@HBoxContainer@2121/InviteRules button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+INPUT: launch game-006 from station menu target=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/@Button@2148 rect=[P: (584.0, 534.0), S: (108.0, 64.0)] pointer=(638.0, 566.0) hovered=/root/Snapland/@CanvasLayer@2009/@Control@2010/@Control@2031/AdaptiveMenuCenter/AdaptiveMenuPanel/AdaptiveMenuMargin/AdaptiveMenuShell/AdaptiveMenuFooter/@Button@2148 button_hovered=true initial_mask=0 observed={ "down": 1, "up": 1, "pressed": 1, "gui": ["down", "up"] } final_mask=0
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@813; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_avenue (res://game/world/park_world.gd:1353)
+         [4] _ready (res://game/world/park_world.gd:159)
+         [5] _ready (res://game/main.gd:69)
+         [6] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@811; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_avenue (res://game/world/park_world.gd:1353)
+         [4] _ready (res://game/world/park_world.gd:159)
+         [5] _ready (res://game/main.gd:69)
+         [6] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@809; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_avenue (res://game/world/park_world.gd:1353)
+         [4] _ready (res://game/world/park_world.gd:159)
+         [5] _ready (res://game/main.gd:69)
+         [6] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported StandardMaterial3D building material on /root/Snapland/@Node3D@2/GameFeature010/@MeshInstance3D@807; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_avenue (res://game/world/park_world.gd:1353)
+         [4] _ready (res://game/world/park_world.gd:159)
+         [5] _ready (res://game/main.gd:69)
+         [6] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/WindSailTerrace/@MeshInstance3D@895; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1381)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@963; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@956; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@950; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@944; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/TidepoolCourt/@MeshInstance3D@938; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1388)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@1016; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1395)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/LighthouseLookout/@MeshInstance3D@1014; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1395)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1067; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1402)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1066; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1402)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: OcclusionController: unsupported ShaderMaterial building material on /root/Snapland/@Node3D@2/AttractionDistricts/MoonshadowStage/@MeshInstance3D@1065; preserving it without cutaway
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unsupported_material (res://game/world/occlusion_controller.gd:178)
+         [1] _sync_capture_coastal_surfaces (res://game/world/occlusion_controller.gd:266)
+         [2] finish_building (res://game/world/occlusion_controller.gd:223)
+         [3] _build_attraction_districts (res://game/world/park_world.gd:1402)
+         [4] _build_avenue (res://game/world/park_world.gd:1354)
+         [5] _ready (res://game/world/park_world.gd:159)
+         [6] _ready (res://game/main.gd:69)
+         [7] _run (res://game/tests/native_ribbon_rhythm_review.gd:31)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _validate_authored_avatar_actions (res://game/minigames/ribbon_rhythm_view.gd:280)
+         [2] configure_avatar (res://game/minigames/ribbon_rhythm_view.gd:82)
+         [3] _sync_presentation (res://game/minigames/session.gd:387)
+         [4] reset_round (res://game/minigames/session.gd:937)
+         [5] start (res://game/minigames/session.gd:269)
+         [6] _launch_game (res://game/main.gd:1291)
+         [7] _request_game_start (res://game/main.gd:1265)
+         [8] <anonymous lambda> (res://game/ui/island_game_invite.gd:49)
+         [9] _native_click_button (res://game/tests/native_review.gd:422)
+WARNING: ParkWorld: traveller action 'celebrate' has no authored direction in res://assets/characters/complete-animation-regions.json; using the three-frame built-in pose fallback.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_missing_avatar_action_once (res://game/world/park_world.gd:2506)
+         [1] play_action (res://game/world/park_world.gd:2461)
+         [2] _close (res://game/main.gd:570)
+         [3] _native_click_button (res://game/tests/native_review.gd:422)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _refresh_avatar_texture (res://game/world/park_world.gd:2557)
+         [2] play_action (res://game/world/park_world.gd:2468)
+         [3] _close (res://game/main.gd:570)
+         [4] _native_click_button (res://game/tests/native_review.gd:422)
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:287)
+         [1] _validate_authored_avatar_actions (res://game/minigames/ribbon_rhythm_view.gd:280)
+         [2] configure_avatar (res://game/minigames/ribbon_rhythm_view.gd:82)
+         [3] _sync_presentation (res://game/minigames/session.gd:387)
+         [4] reset_round (res://game/minigames/session.gd:937)
+         [5] start (res://game/minigames/session.gd:269)
+         [6] _launch_game (res://game/main.gd:1291)
+         [7] <anonymous lambda> (res://game/main.gd:1256)
+         [8] _native_click_button (res://game/tests/native_review.gd:422)
+ERROR: Native RibbonRhythm review: Ribbon model elapsed clock stalled: { "target": 1.02, "waited_frames": 483, "frame_budget": 483, "session_valid": true, "session_paused": false, "session_ended": false, "session_processing": true, "time_scale": 0.25, "snapshot": { "assisted": true, "time_phase": "noon", "phase": "active", "elapsed": 0.0, "gesture_index": 0, "gesture_count": 8, "current_gesture": { "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "左步", "time": 1.02, "index": 0 }, "gestures": [{ "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "左步" }, { "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步" }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": false, "ribbon": "jump_loop", "label": "跳起" }, { "action": "left", "pose": "wave_front", "hold": 0.34, "strong": true, "ribbon": "high_left_sweep", "label": "左側留拍" }, { "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步" }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": true, "ribbon": "jump_loop", "label": "重拍躍起" }, { "action": "right", "pose": "wave_front", "hold": 0.4, "strong": false, "ribbon": "high_right_sweep", "label": "右側留拍" }, { "action": "left", "pose": "walk_left", "hold": 0.0, "strong": true, "ribbon": "low_left", "label": "收步" }], "upcoming": [{ "action": "right", "pose": "walk_right", "hold": 0.0, "strong": false, "ribbon": "low_right", "label": "右步", "time": 1.96, "index": 1 }, { "action": "jump", "pose": "jump_front", "hold": 0.0, "strong": false, "ribbon": "jump_loop", "label": "跳起", "time": 2.9, "index": 2 }], "cue_times": [1.02, 1.96, 2.9, 3.84, 4.78, 5.72, 6.66, 7.6], "timing_window": 0.46, "precise_window": 0.105, "hold_action": "", "hold_elapsed": 0.0, "hold_required": 0.0, "correct_count": 0, "precise_count": 0, "missed_count": 0, "error_count": 0, "score": 0, "note_played_serial": 0, "last_grade": "", "last_offset": 0.0, "last_judged_at": -1.0, "wrong_press_count": 0, "last_event": "看向前方兩拍預告，依節奏踩步、躍起或按住揮帶", "ribbon_trail": [], "ended": false, "success": false, "devil_success": false, "ordinary_success_hits": 6, "strong_beats": [0, 3, 5, 7] } }
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://game/tests/native_ribbon_rhythm_review.gd:341)
+       [1] _wait_ribbon_elapsed (res://game/tests/native_ribbon_rhythm_review.gd:258)
