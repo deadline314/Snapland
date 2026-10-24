@@ -1,0 +1,1342 @@
+[
+  {
+    "capture": "game-001-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.116666666666667,
+      "mistakes": 0,
+      "phase": 0.116666666666667,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.0666666666666667,
+      "mistakes": 0,
+      "phase": 0.0666666666666667,
+      "score": 0
+    },
+    "game": "game-001",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-001-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.166666666666667,
+      "mistakes": 0,
+      "phase": 0.166666666666667,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.116666666666667,
+      "mistakes": 0,
+      "phase": 0.116666666666667,
+      "score": 0
+    },
+    "game": "game-001",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-001-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.216666666666667,
+      "mistakes": 0,
+      "phase": 0.216666666666667,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.166666666666667,
+      "mistakes": 0,
+      "phase": 0.166666666666667,
+      "score": 0
+    },
+    "game": "game-001",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-001-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.266666666666667,
+      "mistakes": 0,
+      "phase": 0.266666666666667,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.216666666666667,
+      "mistakes": 0,
+      "phase": 0.216666666666667,
+      "score": 0
+    },
+    "game": "game-001",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-002-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-002",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-002-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-002",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-002-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-002",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-002-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_elapsed": 0.25,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-002",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-003-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-003",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-003-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-003",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-003-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-003",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-003-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-003",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-004-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.1,
+      "model_phase_time": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.05,
+      "model_phase_time": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-004",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-004-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.15,
+      "model_phase_time": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.1,
+      "model_phase_time": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-004",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-004-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.2,
+      "model_phase_time": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.15,
+      "model_phase_time": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-004",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-004-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.25,
+      "model_phase_time": 0.25,
+      "model_score": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.2,
+      "model_phase_time": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-004",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-005-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-005",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-005-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-005",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-005-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-005",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-005-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_elapsed": 0.25,
+      "model_score": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-005",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-006-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "game": "game-006",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-006-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "game": "game-006",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-006-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "game": "game-006",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-006-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "game": "game-006",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-007-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-007",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-007-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-007",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-007-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-007",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-007-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_elapsed": 0.25,
+      "model_score": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-007",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-008-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-008",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-008-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-008",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-008-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-008",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-008-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_elapsed": 0.25,
+      "model_score": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-008",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-009-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-009",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-009-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-009",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-009-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-009",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-009-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_elapsed": 0.25,
+      "model_score": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-009",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-010-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_round_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_round_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-010",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-010-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_round_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_round_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-010",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-010-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_round_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_round_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-010",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-010-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_round_elapsed": 0.25,
+      "model_score": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_round_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-010",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-011-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-011",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-011-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-011",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-011-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-011",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-011-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_elapsed": 0.25,
+      "model_score": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-011",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-012-dawn.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-012",
+    "phase": "dawn",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-012-noon.png",
+    "clock_after_resume": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "game": "game-012",
+    "phase": "noon",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-012-dusk.png",
+    "clock_after_resume": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.15,
+      "mistakes": 0,
+      "model_elapsed": 0.15,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.15,
+      "model_score": 0,
+      "phase": 0.15,
+      "score": 0
+    },
+    "game": "game-012",
+    "phase": "dusk",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-012-night.png",
+    "clock_after_resume": {
+      "elapsed": 0.25,
+      "mistakes": 0,
+      "model_elapsed": 0.25,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.25,
+      "model_score": 0,
+      "phase": 0.25,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.2,
+      "mistakes": 0,
+      "model_elapsed": 0.2,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.2,
+      "model_score": 0,
+      "phase": 0.2,
+      "score": 0
+    },
+    "game": "game-012",
+    "phase": "night",
+    "reduced_motion": false
+  },
+  {
+    "capture": "game-001-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.116666666666667,
+      "mistakes": 0,
+      "phase": 0.116666666666667,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.0666666666666667,
+      "mistakes": 0,
+      "phase": 0.0666666666666667,
+      "score": 0
+    },
+    "game": "game-001",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-002-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-002",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-003-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-003",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-004-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.1,
+      "model_phase_time": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_active_progress": 0.0,
+      "model_elapsed": 0.05,
+      "model_phase_time": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-004",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-005-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-005",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-006-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.0,
+      "mistakes": 0,
+      "model_elapsed": 0.0,
+      "model_error_count": 0,
+      "model_gesture_index": 0,
+      "model_score": 0,
+      "phase": 0.0,
+      "score": 0
+    },
+    "game": "game-006",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-007-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-007",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-008-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-008",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-009-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-009",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-010-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_round_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_round_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-010",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-011-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-011",
+    "phase": "night",
+    "reduced_motion": true
+  },
+  {
+    "capture": "game-012-night-reduced.png",
+    "clock_after_resume": {
+      "elapsed": 0.1,
+      "mistakes": 0,
+      "model_elapsed": 0.1,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.1,
+      "model_score": 0,
+      "phase": 0.1,
+      "score": 0
+    },
+    "clock_before_time_panel": {
+      "elapsed": 0.05,
+      "mistakes": 0,
+      "model_elapsed": 0.05,
+      "model_error_count": 0,
+      "model_input_index": 0,
+      "model_phase_elapsed": 0.05,
+      "model_score": 0,
+      "phase": 0.05,
+      "score": 0
+    },
+    "game": "game-012",
+    "phase": "night",
+    "reduced_motion": true
+  }
+]

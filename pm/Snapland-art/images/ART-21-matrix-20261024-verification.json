@@ -1,0 +1,33 @@
+{
+  "source_commit": "402a3969e13500ca2dfd51c58a54ec93abe05d03",
+  "result": {
+    "exit": 0,
+    "errors": 0,
+    "complete": true,
+    "seconds": 169.28
+  },
+  "review": "All 12 contact sheets / 60 full-frame captures visually inspected. Each includes dawn, noon, dusk, night and night reduced motion. No subject/HUD overlap found; night subjects and targets remain readable.",
+  "input": "Actual Main E / station start; actual T panel / phase buttons; Escape returns to identical Session, clock/score/mistakes frozen during modal; actual pause/leave confirmation. Reduced setting enabled through real settings checkbox.",
+  "scope": "Fixture station positions; fresh isolated save. Not walking, full gameplay, listening or hardware performance. Full gameplay and result routes reference SG-14 final and ART-5 final current acceptance; no score/grade/result writes.",
+  "clock": "Fixed60 simulation with explicit --review-fixed-clock; bounded360s. No motion naturalness claim from static captures.",
+  "source_unchanged": "No player source or art changed since canonical ART-5 f0c482e; ART-21 is accumulated evidence acceptance.",
+  "files": {
+    "ART-21-matrix-20261024-game-01.jpg": "fad9667b2a29dad420af6719fc09122bc03c1631e384b17e2d7572c7de1af24d",
+    "ART-21-matrix-20261024-game-02.jpg": "9345f3ab5af2d5af2f3f8b71ee090c002c6e7cfcf14ed77dbbdcee431ddc5377",
+    "ART-21-matrix-20261024-game-03.jpg": "770d87345192076dc4b217227444e2e273f961b6f582d54668d6b6a54364ac47",
+    "ART-21-matrix-20261024-game-04.jpg": "0aea9ced6b2096bf27abda67c1cda7cd58aa1de25c4aa1f6efe0e53a3a85490b",
+    "ART-21-matrix-20261024-game-05.jpg": "f9eeed9ef2843de2b77dd9533c2228b48115168ebc64cce96b8860f1be409868",
+    "ART-21-matrix-20261024-game-06.jpg": "2ef1b6c3a6f48ae3647aff809f2611dd81a1860cbdacc53e143d5c8b67b5df4e",
+    "ART-21-matrix-20261024-game-07.jpg": "fbbf501e71e561ba57d0d274be7e5df24847b3e4009e0056782fd4ddb9dfb657",
+    "ART-21-matrix-20261024-game-08.jpg": "0a5f0014a90a2f633c1100e85b82849d084da0830e06e42dc3caf536696d61ba",
+    "ART-21-matrix-20261024-game-09.jpg": "f00fa0ca9849edc02c0acfe3275f166f4a4c067ca75cd40cefa5e00e42016b84",
+    "ART-21-matrix-20261024-game-10.jpg": "aab4b80a06c0ac138725b666c954dd4472c3cc3b54a86bf774ba490108089fc8",
+    "ART-21-matrix-20261024-game-11.jpg": "840afb84218ba1e2cd2a5aa737a88c9734c5f0b5b677e99b66edfd15d150c43e",
+    "ART-21-matrix-20261024-game-12.jpg": "ac6c9bb580574b4d10eee8fe38ab908abca7a2082ededa61fd0916a8e2e9bdfe",
+    "ART-21-matrix-20261024-matrix.json": "3f3cd2de368a51483841d70f70e271e73b6e9e39b0b724ea70f5b0457972bf39",
+    "ART-21-matrix-20261024-result.json": "fae6461fba920e39df16131fd39d9128b4bea109cfacf03640416ab7beca2e13",
+    "ART-21-matrix-20261024-result.log": "a3bd86e22aad1dd93259a8bd15bbb93c0d9a2237eb0c9b744628c09b94995ed2",
+    "ART-21-matrix-20261024-engine.log": "773c14f586e8e72582d0dca8ca05e4efdfd437a7d1a1eeca3302da99c22a7ffe",
+    "ART-21-matrix-20261024-raw-and-fixture.zip": "db6f652d8bf789280856567c81d2dd42b91a47f477686fceecb384e666cdf658"
+  }
+}

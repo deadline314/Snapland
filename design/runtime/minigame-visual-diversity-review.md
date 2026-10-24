@@ -98,3 +98,14 @@ These statements describe current source structure and documented behavior only.
 此圖以 3 欄 × 4 列並列十二款已保存的原生畫面；完整 1280×720 畫面依比例縮放，沒有裁切。媒材分類依上方 renderer／scene-node 稽核，而不是單憑截圖推測。這張歷史圖的四款媒材分類是 game-001、003、004、009；它早於目前 game-008 招牌平衡的 3D renderer。依目前 HEAD 程式結構共有五款 renderer 使用 3D 場景（001、003、004、008、009），但這張舊靜格沒有呈現目前五款狀態，也不代表目前 Main 已完成十二款 GPU 試玩或驗收。
 
 SG-20 帽子救援圖使用 Hat checkpoint `f2919ac` 的 v13 原生截圖；SG-25 泡泡拍貼使用 Photo checkpoint `80ca160` 的 v2 畫面。逐張來源、SHA-256、輸出雜湊及候選限制見[比較圖來源清單](ART-21-twelve-native-comparison-manifest.md)。
+
+
+## 2026-10-24 current acceptance
+
+The 12 current native scenes were reviewed as 60 complete-frame images: four actual time-panel selections plus night with the actual reduced-motion setting for each game. All twelve contact sheets were inspected. Camera and action spaces are distinct: harbour delivery, side-on kite flight, fountain timing, oblique traffic junction, dock catching, performer stage, overhead plumbing grid, projected 3D balancing sign, lamp-driven shadow stage, camera framing, waiting-room seating and instrument memory. Common corner HUDs retain identity, progress, time/score and pause while each renderer supplies its own action feedback. No subject/control overlap was observed in this matrix. Night lighting preserves target recognition; indoor pipe and melody boards retain deliberately stable task lighting instead of forcing the outdoor palette over them.
+
+The six first-party directions above were reread and all six saved reference images inspected again: Nintendo for bounded tasks, b360 for a distinct field/status split, Obra Dinn for silhouette, Thumper for a focused track, Donut County for framing a physical subject, Lumines for separating board from peripheral decoration. The stills do not establish their animation, usability or player preference. Snapland does not copy the intense peripheral motion in the Lumines example.
+
+The phase fixture checks that opening the time modal freezes the same Session and active model, real phase buttons update the environment, Escape resumes that Session, and real settings enable reduced motion. Real pause/leave confirmation preserves progress. Station placement is a fixture, not a walk-through; fixed60 simulation is not a hardware benchmark. The separate current full-input result/qualification routes are traced by SG-14 final evidence, with ART-5 final native gameplay captures and the final Bench/Crowd revisions. This matrix alone is not twelve completions or listening. No player source changed for this acceptance.
+
+[Ticket and all 12 comparisons](../../pm/Snapland-art/[ART-21]重整小遊戲操作畫面.md) · [Raw matrix and replay fixture](../../pm/Snapland-art/images/ART-21-matrix-20261024-raw-and-fixture.zip).
