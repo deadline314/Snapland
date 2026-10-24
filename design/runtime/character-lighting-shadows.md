@@ -47,3 +47,24 @@ animation, packaged-build, frame-rate or full ART-1 acceptance.
 References read: [SpriteBase3D alpha cut and billboard caveats](https://docs.godotengine.org/en/stable/classes/class_spritebase3d.html),
 [GeometryInstance3D shadow-only mode](https://docs.godotengine.org/en/stable/classes/class_geometryinstance3d.html),
 [shader pass matrices](https://docs.godotengine.org/en/stable/tutorials/shaders/shader_reference/spatial_shader.html).
+
+
+### Static character source extension
+
+The same fixture also accepts `-- --character` for the current default front
+idle cel; add `--rainvest --hat --wave` for the current free vest, straw hat and
+front wave **frame zero**. It uses the final static AvatarRenderer composition,
+fixed 280×360 canvas, 346 feet baseline and original pixel size. Its independent
+alpha samples exclude a four-source-pixel boundary neighborhood; this checks
+interior silhouette occupancy, not every hair strand or filtered edge. Neither
+body placement nor appearance assets are modified. The source image is saved
+with the captures, and JSON rows identify the exact appearance/action/frame.
+
+Both cases passed front/back directional and point lights; all 156/263 opaque
+interior samples were shadowed. Transparent agreement was respectively
+370/370, 365/370, 370/370 and 254/257, 251/257, 257/257. The unchanged 85% floor
+is a coarse diagnostic criterion, not visual acceptance. Solid-card negatives
+failed all 370/257 transparent interiors. The L-shape and low-resolution
+negative were rerun after this extension. Two full static sources and both
+four-image crop contact sheets were actually viewed. This remains separate
+from production caster adoption and dynamic hair, animation or release review.

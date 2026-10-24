@@ -14,7 +14,13 @@ var caster_material: StandardMaterial3D
 var folder := ""
 var shape: Image
 var reports: Array=[]
-const PIXEL := 0.08
+var pixel_size := 0.08
+var feet_row := 28.0
+var sample_start := Vector2i(2,6)
+var sample_end := Vector2i(29,27)
+var sample_step := 3
+var boundary_radius := 1
+var source_kind := "alpha-L"
 func _initialize() -> void:
 	var profile := OS.get_environment("SNAPLAND_SAVE_PATH")
 	if not profile.is_absolute_path() or DisplayServer.get_name()=="headless":quit(2);return
@@ -34,15 +40,14 @@ func run() -> void:
 	camera.look_at_from_position(Vector3(6,8,10),Vector3(0,0,0),Vector3.UP);camera.current=true
 	light=DirectionalLight3D.new();scene.add_child(light);light.look_at_from_position(Vector3(-4,8,4),Vector3.ZERO,Vector3.UP)
 	light.shadow_enabled=true;light.shadow_blur=0.0;light.shadow_bias=0.0;light.shadow_normal_bias=0.0;light.directional_shadow_max_distance=20.0
-	shape=Image.create(32,32,false,Image.FORMAT_RGBA8);shape.fill(Color.TRANSPARENT)
-	shape.fill_rect(Rect2i(3,4,6,24),Color.WHITE);shape.fill_rect(Rect2i(3,22,22,6),Color.WHITE)
-	caster=MeshInstance3D.new();var quad:=QuadMesh.new();quad.size=Vector2(32,32)*PIXEL;caster.mesh=quad
+	configure_shape()
+	caster=MeshInstance3D.new();var quad:=QuadMesh.new();quad.size=Vector2(shape.get_size())*pixel_size;caster.mesh=quad
 	caster_material=StandardMaterial3D.new();caster_material.albedo_texture=ImageTexture.create_from_image(shape)
 	caster_material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR;caster_material.alpha_scissor_threshold=0.5
 	caster_material.cull_mode=BaseMaterial3D.CULL_DISABLED;caster_material.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	caster.material_override=caster_material;caster.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 	scene.add_child(caster);caster.global_basis=camera.global_basis
-	caster.position.y=(28.0-16.0)*PIXEL*camera.global_basis.y.y
+	caster.position.y=(feet_row-float(shape.get_height())*0.5)*pixel_size*camera.global_basis.y.y
 	await frames(5)
 	# Hiding disables casting without drawing a visible card in the baseline.
 	caster.hide()
@@ -50,7 +55,7 @@ func run() -> void:
 	caster.show()
 	await frames(4);var on:=await shot("alpha-L")
 	var result:=audit(off,on);result["case"]="correct_alpha";reports.append(result)
-	var solid:=Image.create(32,32,false,Image.FORMAT_RGBA8);solid.fill(Color.WHITE);caster_material.albedo_texture=ImageTexture.create_from_image(solid)
+	var solid:=Image.create(shape.get_width(),shape.get_height(),false,Image.FORMAT_RGBA8);solid.fill(Color.WHITE);caster_material.albedo_texture=ImageTexture.create_from_image(solid)
 	await frames(4);var wrong:=await shot("opaque-card-negative")
 	var negative:=audit(off,wrong);negative["case"]="opaque_card_negative";reports.append(negative)
 	caster_material.albedo_texture=ImageTexture.create_from_image(shape)
@@ -66,22 +71,22 @@ func run() -> void:
 	var point_result:=audit(point_off,point_on);point_result["case"]="point_light_alpha";reports.append(point_result)
 	FileAccess.open(folder.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify(reports,"  "))
 	if not bool(result.pass) or bool(negative.pass) or not bool(back.pass) or not bool(point_result.pass):push_error("Alpha shadow projection or opaque-card negative failed");quit(1);return
-	print("PASS: independent projected alpha L shadow, transparent holes preserved and opaque-card negative rejected")
+	print("PASS: independent projected alpha silhouette shadow, transparent holes preserved and opaque-card negative rejected")
 	quit()
 func audit(off: Image,on: Image) -> Dictionary:
 	var opaque:=0;var correct_opaque:=0;var empty:=0;var correct_empty:=0;var missed: Array=[]
 	# Source-space alpha is the oracle. Project pixel centers along the actual
 	# light ray, independent of the shadow-map image being tested.
 	var ray: Vector3=-light.global_basis.z
-	for y in range(6,27,3):
-		for x in range(2,29,3):
+	for y in range(sample_start.y,sample_end.y,sample_step):
+		for x in range(sample_start.x,sample_end.x,sample_step):
 			var expected:=shape.get_pixel(x,y).a>0.5
 			var boundary:=false
-			for dy in [-1,0,1]:
-				for dx in [-1,0,1]:
+			for dy in range(-boundary_radius,boundary_radius+1):
+				for dx in range(-boundary_radius,boundary_radius+1):
 					if (shape.get_pixel(x+dx,y+dy).a>0.5)!=expected:boundary=true
 			if boundary:continue
-			var point: Vector3=caster.global_transform*Vector3((float(x)+0.5-16.0)*PIXEL,(16.0-float(y)-0.5)*PIXEL,0)
+			var point: Vector3=caster.global_transform*Vector3((float(x)+0.5-float(shape.get_width())*0.5)*pixel_size,(float(shape.get_height())*0.5-float(y)-0.5)*pixel_size,0)
 			var sample_ray: Vector3=(point-point_light.global_position).normalized() if point_mode else ray
 			var floor_point: Vector3=point-sample_ray*(point.y/sample_ray.y)
 			var screen: Vector2=camera.unproject_position(floor_point)
@@ -91,9 +96,33 @@ func audit(off: Image,on: Image) -> Dictionary:
 			if expected!=dark:missed.append([x,y,expected,off.get_pixelv(pixel).get_luminance()-on.get_pixelv(pixel).get_luminance()])
 			if expected:opaque+=1;correct_opaque+=1 if dark else 0
 			else:empty+=1;correct_empty+=0 if dark else 1
-	return {"missed":missed,"opaque":opaque,"opaque_correct":correct_opaque,"empty":empty,"empty_correct":correct_empty,"pass":opaque>=8 and empty>=8 and correct_opaque>=opaque*0.85 and correct_empty>=empty*0.85}
+	return {"source_kind":source_kind,"missed":missed,"opaque":opaque,"opaque_correct":correct_opaque,"empty":empty,"empty_correct":correct_empty,"pass":opaque>=8 and empty>=8 and correct_opaque>=opaque*0.85 and correct_empty>=empty*0.85}
 func frames(count: int) -> void:
 	for index in count:await process_frame
 func shot(label: String) -> Image:
 	await RenderingServer.frame_post_draw
 	var image:=root.get_texture().get_image();image.save_png(folder.path_join(label+".png"));return image
+
+func configure_shape() -> void:
+	var args := OS.get_cmdline_user_args()
+	if not args.has("--character"):
+		shape=Image.create(32,32,false,Image.FORMAT_RGBA8)
+		shape.fill(Color.TRANSPARENT)
+		shape.fill_rect(Rect2i(3,4,6,24),Color.WHITE)
+		shape.fill_rect(Rect2i(3,22,22,6),Color.WHITE)
+		return
+	# Final static renderer composition, including original body, garment and
+	# rigid hair/hat. This does not exercise the dynamic hair SubViewport.
+	var renderer = load("res://game/world/avatar_renderer.gd").new()
+	var outfit := "outfit-rainvest" if args.has("--rainvest") else "outfit-tide"
+	var hat := "hat-straw" if args.has("--hat") else "hat-none"
+	var action := "wave" if args.has("--wave") else "idle"
+	shape=renderer.texture(renderer.DEFAULT_APPEARANCE,{"outfit":outfit,"hat":hat},"front",0,action).get_image()
+	shape.save_png(folder.path_join("source.png"))
+	source_kind="%s/%s/%s/front/0"%[outfit,hat,action]
+	pixel_size=2.4/360.0
+	feet_row=346.0
+	sample_start=Vector2i(12,20)
+	sample_end=Vector2i(269,337)
+	sample_step=12
+	boundary_radius=4

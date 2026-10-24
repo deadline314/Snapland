@@ -142,3 +142,34 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 [先前失敗採樣](images/ART-1-alpha-shadow-20261024-rejected-wide-samples.json) ·
 [證據雜湊](images/ART-1-alpha-shadow-20261024-hashes.json) ·
 [研究與重跑流程](../../design/runtime/character-lighting-shadows.md#alpha-silhouette-feasibility-review-2026-10-24)。
+
+
+# Commit-4
+
+## 內文
+
+把同一獨立投影檢查延伸到正式主角的兩張完整合成圖：原外套正面待機第0格，
+以及免費長背心、草帽、正面招手第0格。保留原人物畫布與腳底位置，沒有重畫
+或調整人物；兩張來源及兩組四格投影對照已實際查看，頭髮／帽緣與鞋間缺口
+可在投影辨認。背向低角度長影另保留完整原生圖片。
+
+| 實際範圍 | 結果 |
+|---|---|
+| 原外套靜態合成 | 4.26秒，exit0／0ERROR；三光源實心156／156符合；透明370／370、365／370、370／370符合 |
+| 長背心＋草帽＋招手首格 | 5.38秒，exit0／0ERROR；三光源實心263／263符合；透明254／257、251／257、257／257符合 |
+| 方卡反例 | 兩組透明採樣各0／370、0／257符合，按原條件拒絕 |
+| 原L形／低解析度反例重跑 | 正常2.57秒exit0／0ERROR；低解析度2.14秒exit1／1項預期ERROR |
+
+以上只驗靜態合成的內部輪廓，不是全部頭髮邊緣、完整招手、動態髮尾、坐姿、
+八方向、正式島嶼、影片或輸出包驗收。原判定維持，整票及品質條件不勾選。
+
+![原外套投影對照，從原生畫面裁切供檢視](images/ART-1-character-alpha-20261024-base-contact.png)
+![長背心與草帽投影對照，從原生畫面裁切供檢視](images/ART-1-character-alpha-20261024-vest-hat-wave-contact.png)
+
+[原外套逐樣本](images/ART-1-character-alpha-20261024-base-samples.json) ·
+[長背心逐樣本](images/ART-1-character-alpha-20261024-vest-hat-wave-samples.json) ·
+[原外套來源](images/ART-1-character-alpha-20261024-base-source.png) ·
+[長背心來源](images/ART-1-character-alpha-20261024-vest-hat-wave-source.png) ·
+[原外套原生紀錄](images/ART-1-character-alpha-20261024-base-execution.log) ·
+[長背心原生紀錄](images/ART-1-character-alpha-20261024-vest-hat-wave-execution.log) ·
+[證據指紋](images/ART-1-character-alpha-20261024-hashes.json)。
