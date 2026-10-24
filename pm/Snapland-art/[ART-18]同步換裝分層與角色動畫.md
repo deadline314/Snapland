@@ -413,3 +413,24 @@
 [證據指紋](images/ART-18-catalog-ci-20261024-hashes.json)。
 
 本段是驗證條件隨實際商品增長的修正，不等於新增原生圖片審閱或完整動畫驗收。
+
+
+# Commit — 2026-10-24 完整回歸與遠端驗證
+
+免費長背心、衣櫃商品身份及分頁修正後，遠端
+[ab31c1e完整CI](https://github.com/deadline314/Snapland/actions/runs/40090970811)
+已成功。設計／Python、固定原點、髮根綁定、專用待機及95項Godot驗證均完成，
+保留正式時限與判定。
+
+本機另實際執行全部95項：前63項沿原時限通過，小遊戲整合先在90秒逾時，
+保留0ERROR的原始日誌後，以180秒本機診斷上限於96.28秒完成；後續31項沿
+原時限通過。沒有修改正式測試時限、玩法或計分來通過。衣櫃完整分頁在整輪
+再次通過，7.63秒、exit0／0ERROR。全部測試有獨立存檔及各自完成標記。
+
+以上驗證正式產品基準；後續獨立角色投影候選不由此回歸替代其整合驗收。
+整票仍依其餘美術／動態條件維持進行中。
+
+[逐項結果與實際時限](images/ART-18-full-runtime-20261024-report.json) ·
+[遠端成功日誌](images/ART-18-full-runtime-20261024-ci-success.log) ·
+[本機原始逾時及全部成功日誌](images/ART-18-full-runtime-20261024-local-logs.zip) ·
+[證據指紋](images/ART-18-full-runtime-20261024-hashes.json)。

@@ -1,0 +1,588 @@
+game-runtime	Set up job	﻿2026-10-24T11:43:39.4441289Z Current runner version: '2.338.0'
+game-runtime	Set up job	2026-10-24T11:43:39.4459592Z ##[group]Runner Image Provisioner
+game-runtime	Set up job	2026-10-24T11:43:39.4460234Z Hosted Compute Agent
+game-runtime	Set up job	2026-10-24T11:43:39.4460629Z Version: 20261012.601
+game-runtime	Set up job	2026-10-24T11:43:39.4461044Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+game-runtime	Set up job	2026-10-24T11:43:39.4461500Z Build Date: 2026-10-12T17:48:21Z
+game-runtime	Set up job	2026-10-24T11:43:39.4461919Z Worker ID: {4e879fa3-0d8a-433d-b43a-d6d8f7a18597}
+game-runtime	Set up job	2026-10-24T11:43:39.4462447Z Region: centralus
+game-runtime	Set up job	2026-10-24T11:43:39.4462851Z Cloud: Azure
+game-runtime	Set up job	2026-10-24T11:43:39.4463218Z ##[endgroup]
+game-runtime	Set up job	2026-10-24T11:43:39.4463989Z ##[group]Operating System
+game-runtime	Set up job	2026-10-24T11:43:39.4464363Z Ubuntu
+game-runtime	Set up job	2026-10-24T11:43:39.4464727Z 24.04.5
+game-runtime	Set up job	2026-10-24T11:43:39.4465077Z LTS
+game-runtime	Set up job	2026-10-24T11:43:39.4465390Z ##[endgroup]
+game-runtime	Set up job	2026-10-24T11:43:39.4465774Z ##[group]Runner Image
+game-runtime	Set up job	2026-10-24T11:43:39.4466142Z Image: ubuntu-24.04
+game-runtime	Set up job	2026-10-24T11:43:39.4466522Z Version: 20261012.334.1
+game-runtime	Set up job	2026-10-24T11:43:39.4467443Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+game-runtime	Set up job	2026-10-24T11:43:39.4468517Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+game-runtime	Set up job	2026-10-24T11:43:39.4469094Z ##[endgroup]
+game-runtime	Set up job	2026-10-24T11:43:39.4470075Z ##[group]GITHUB_TOKEN Permissions
+game-runtime	Set up job	2026-10-24T11:43:39.4471416Z Contents: read
+game-runtime	Set up job	2026-10-24T11:43:39.4471820Z Metadata: read
+game-runtime	Set up job	2026-10-24T11:43:39.4472166Z ##[endgroup]
+game-runtime	Set up job	2026-10-24T11:43:39.4473455Z Secret source: Actions
+game-runtime	Set up job	2026-10-24T11:43:39.4474092Z Cache mode: write
+game-runtime	Set up job	2026-10-24T11:43:39.4474527Z Prepare workflow directory
+game-runtime	Set up job	2026-10-24T11:43:39.4680417Z Prepare all required actions
+game-runtime	Set up job	2026-10-24T11:43:39.4713760Z Getting action download info
+game-runtime	Set up job	2026-10-24T11:43:39.6909301Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+game-runtime	Set up job	2026-10-24T11:43:39.7901844Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+game-runtime	Set up job	2026-10-24T11:43:39.9579515Z Complete job name: game-runtime
+game-runtime	Run actions/checkout@v4	﻿2026-10-24T11:43:40.0062622Z ##[group]Run actions/checkout@v4
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0064003Z with:
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0064401Z   repository: deadline314/Snapland
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0066460Z   token: ***
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0066821Z   ssh-strict: true
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0067070Z   ssh-user: git
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0067335Z   persist-credentials: true
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0067610Z   clean: true
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0067865Z   sparse-checkout-cone-mode: true
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0068156Z   fetch-depth: 1
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0068398Z   fetch-tags: false
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0068648Z   show-progress: true
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0068901Z   lfs: false
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0069159Z   submodules: false
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0069414Z   set-safe-directory: true
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0069732Z   allow-unsafe-pr-checkout: false
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0070163Z ##[endgroup]
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0766097Z Syncing repository: deadline314/Snapland
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0767939Z ##[group]Getting Git version info
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0768626Z Working directory is '/home/runner/work/Snapland/Snapland'
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0769617Z [command]/usr/bin/git version
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0814987Z git version 2.55.0
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0829266Z ##[endgroup]
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0841857Z Temporarily overriding HOME='/home/runner/work/_temp/b144fb97-d36a-4c0b-b969-3058a4b46661' before making global git config changes
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0843327Z Adding repository directory to the temporary git global config as a safe directory
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0845953Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Snapland/Snapland
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0890639Z Deleting the contents of '/home/runner/work/Snapland/Snapland'
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0897426Z ##[group]Initializing the repository
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0898107Z [command]/usr/bin/git init /home/runner/work/Snapland/Snapland
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0978651Z hint: Using 'master' as the name for the initial branch. This default branch name
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0979845Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0981438Z hint: to use in all of your new repositories, which will suppress this warning,
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0982697Z hint: call:
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0983235Z hint:
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0983900Z hint: 	git config --global init.defaultBranch <name>
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0984571Z hint:
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0985230Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0986242Z hint: 'development'. The just-created branch can be renamed via this command:
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0987196Z hint:
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0987896Z hint: 	git branch -m <name>
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0988465Z hint:
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0989032Z hint: Disable this message with "git config set advice.defaultBranchName false"
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0989804Z Initialized empty Git repository in /home/runner/work/Snapland/Snapland/.git/
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.0990855Z [command]/usr/bin/git remote add origin https://github.com/deadline314/Snapland
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1039800Z ##[endgroup]
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1040648Z ##[group]Disabling automatic garbage collection
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1043544Z [command]/usr/bin/git config --local gc.auto 0
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1080473Z ##[endgroup]
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1081138Z ##[group]Setting up auth
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1086529Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1120954Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1406520Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1439526Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1622040Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1652998Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1838072Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1875119Z ##[endgroup]
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1875623Z ##[group]Fetching the repository
+game-runtime	Run actions/checkout@v4	2026-10-24T11:43:40.1882042Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ab31c1ec08e1085e3319f06d1850007bfbc17abb:refs/remotes/origin/main
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2338138Z From https://github.com/deadline314/Snapland
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2338894Z  * [new ref]         ab31c1ec08e1085e3319f06d1850007bfbc17abb -> origin/main
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2357541Z ##[endgroup]
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2358206Z ##[group]Determining the checkout info
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2358782Z ##[endgroup]
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2359099Z [command]/usr/bin/git sparse-checkout disable
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2402208Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2431503Z ##[group]Checking out the ref
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:50.2435091Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.2562766Z Updating files:  32% (2203/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.3454304Z Updating files:  33% (2210/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.3913742Z Updating files:  34% (2277/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.5563799Z Updating files:  35% (2344/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.5945642Z Updating files:  36% (2411/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.7171924Z Updating files:  37% (2478/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.7700040Z Updating files:  38% (2545/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.7980458Z Updating files:  39% (2612/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.8439848Z Updating files:  40% (2679/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.8678450Z Updating files:  41% (2746/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.8886145Z Updating files:  42% (2813/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:51.9635993Z Updating files:  43% (2880/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.0026433Z Updating files:  44% (2947/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.1474455Z Updating files:  45% (3014/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.1817993Z Updating files:  46% (3081/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.2509399Z Updating files:  47% (3148/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.2595289Z Updating files:  47% (3208/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.4067418Z Updating files:  48% (3215/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.4446322Z Updating files:  49% (3282/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.4699087Z Updating files:  50% (3348/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.5007544Z Updating files:  51% (3415/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.5545841Z Updating files:  52% (3482/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.5900049Z Updating files:  53% (3549/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.6303153Z Updating files:  54% (3616/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.6704992Z Updating files:  55% (3683/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.7035195Z Updating files:  56% (3750/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.7352565Z Updating files:  57% (3817/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.7608748Z Updating files:  58% (3884/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.8453953Z Updating files:  59% (3951/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:52.9523717Z Updating files:  60% (4018/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.0183556Z Updating files:  61% (4085/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.0699445Z Updating files:  62% (4152/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.1487763Z Updating files:  63% (4219/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.2462565Z Updating files:  64% (4286/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.2516135Z Updating files:  65% (4353/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.3079460Z Updating files:  65% (4364/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.3403009Z Updating files:  66% (4420/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.3530274Z Updating files:  67% (4487/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.3576238Z Updating files:  68% (4554/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.3967692Z Updating files:  69% (4621/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.4278120Z Updating files:  70% (4688/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.4984988Z Updating files:  71% (4755/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.5395172Z Updating files:  72% (4822/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.5865273Z Updating files:  73% (4889/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.6722404Z Updating files:  74% (4956/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:53.7488712Z Updating files:  75% (5022/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.2507294Z Updating files:  76% (5089/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.2508033Z Updating files:  76% (5155/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.2541168Z Updating files:  77% (5156/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.3496961Z Updating files:  78% (5223/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.3952232Z Updating files:  79% (5290/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.4862822Z Updating files:  80% (5357/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.5707634Z Updating files:  81% (5424/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.6860293Z Updating files:  82% (5491/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.8511934Z Updating files:  83% (5558/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:54.9527162Z Updating files:  84% (5625/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:55.2652169Z Updating files:  85% (5692/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:55.2721652Z Updating files:  85% (5746/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:55.3660712Z Updating files:  86% (5759/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:55.7005548Z Updating files:  87% (5826/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:55.9197620Z Updating files:  88% (5893/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.0613643Z Updating files:  89% (5960/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.1268124Z Updating files:  90% (6027/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.1988747Z Updating files:  91% (6094/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.2581918Z Updating files:  92% (6161/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.3344317Z Updating files:  92% (6177/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.4605115Z Updating files:  93% (6228/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.5525570Z Updating files:  94% (6295/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.6744546Z Updating files:  95% (6362/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.8426659Z Updating files:  96% (6429/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:56.9764422Z Updating files:  97% (6496/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.1432491Z Updating files:  98% (6563/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.1584333Z Updating files:  99% (6630/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.1584589Z Updating files: 100% (6696/6696)
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.1584744Z Updating files: 100% (6696/6696), done.
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.3703692Z Switched to a new branch 'main'
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.3704761Z branch 'main' set up to track 'origin/main'.
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.4085637Z ##[endgroup]
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.4127086Z [command]/usr/bin/git log -1 --format=%H
+game-runtime	Run actions/checkout@v4	2026-10-24T11:44:57.4157820Z ab31c1ec08e1085e3319f06d1850007bfbc17abb
+game-runtime	Run actions/setup-python@v5	﻿2026-10-24T11:44:57.5031693Z ##[group]Run actions/setup-python@v5
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.5031875Z with:
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.5032009Z   python-version: 3.12
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.5032141Z   check-latest: false
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.5033533Z   token: ***
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.5033654Z   update-environment: true
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.5033793Z   allow-prereleases: false
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.5033927Z   freethreaded: false
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.5034052Z ##[endgroup]
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.6003841Z ##[group]Installed versions
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.6066651Z (node:2098) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.6067282Z (Use `node --trace-deprecation ...` to show where the warning was created)
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.6068032Z Successfully set up CPython (3.12.15)
+game-runtime	Run actions/setup-python@v5	2026-10-24T11:44:57.6068466Z ##[endgroup]
+game-runtime	Verify runtime completion and entrypoint contracts	﻿2026-10-24T11:44:57.6520173Z ##[group]Run python -m unittest tests.test_runtime_result_contract tests.test_godot_entrypoints -v
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6520908Z [36;1mpython -m unittest tests.test_runtime_result_contract tests.test_godot_entrypoints -v[0m
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6791036Z shell: /usr/bin/bash -e {0}
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6791257Z env:
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6791449Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6791720Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6791961Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6792175Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6792389Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6792606Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:57.6792791Z ##[endgroup]
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.6859450Z test_current_source_diagnostic_completion_is_accepted (tests.test_runtime_result_contract.RuntimeResultContractTests.test_current_source_diagnostic_completion_is_accepted) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.6920560Z test_default_run_stops_at_first_failure (tests.test_runtime_result_contract.RuntimeResultContractTests.test_default_run_stops_at_first_failure) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.6921601Z test_errors_on_either_stream_override_a_valid_completion (tests.test_runtime_result_contract.RuntimeResultContractTests.test_errors_on_either_stream_override_a_valid_completion) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.6950650Z test_every_selected_runtime_suite_has_one_completion_contract (tests.test_runtime_result_contract.RuntimeResultContractTests.test_every_selected_runtime_suite_has_one_completion_contract) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.7072759Z test_keep_going_reports_every_failure (tests.test_runtime_result_contract.RuntimeResultContractTests.test_keep_going_reports_every_failure) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.7073875Z test_newly_registered_contracts_require_real_completion (tests.test_runtime_result_contract.RuntimeResultContractTests.test_newly_registered_contracts_require_real_completion) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.7074563Z test_nonzero_exit_overrides_a_valid_completion (tests.test_runtime_result_contract.RuntimeResultContractTests.test_nonzero_exit_overrides_a_valid_completion) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.7075200Z test_only_clean_import_can_complete_without_a_test_marker (tests.test_runtime_result_contract.RuntimeResultContractTests.test_only_clean_import_can_complete_without_a_test_marker) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.7181237Z test_only_selects_matching_suites_after_import (tests.test_runtime_result_contract.RuntimeResultContractTests.test_only_selects_matching_suites_after_import) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.7181920Z test_other_suites_completion_is_rejected (tests.test_runtime_result_contract.RuntimeResultContractTests.test_other_suites_completion_is_rejected) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.7182578Z test_previous_wording_is_rejected_and_observed_completion_is_reported (tests.test_runtime_result_contract.RuntimeResultContractTests.test_previous_wording_is_rejected_and_observed_completion_is_reported) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.7183619Z test_quoted_or_stderr_only_marker_cannot_claim_suite_completion (tests.test_runtime_result_contract.RuntimeResultContractTests.test_quoted_or_stderr_only_marker_cannot_claim_suite_completion) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8274629Z test_suite_sidecar_directories_do_not_share_prior_suite_files (tests.test_runtime_result_contract.RuntimeResultContractTests.test_suite_sidecar_directories_do_not_share_prior_suite_files) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8382570Z test_timeout_scale_only_lengthens_limits (tests.test_runtime_result_contract.RuntimeResultContractTests.test_timeout_scale_only_lengthens_limits) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8383278Z test_zero_exit_without_executed_suite_is_rejected (tests.test_runtime_result_contract.RuntimeResultContractTests.test_zero_exit_without_executed_suite_is_rejected) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8410941Z test_export_acceptance_cannot_override_or_use_loose_project (tests.test_godot_entrypoints.GodotEntrypointTests.test_export_acceptance_cannot_override_or_use_loose_project) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8423843Z test_exported_binary_boots_from_clean_release_directory (tests.test_godot_entrypoints.GodotEntrypointTests.test_exported_binary_boots_from_clean_release_directory) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8432013Z test_gd_file_passed_as_scene_is_rejected (tests.test_godot_entrypoints.GodotEntrypointTests.test_gd_file_passed_as_scene_is_rejected) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8440183Z test_import_parser_path_is_valid_without_scene_or_script (tests.test_godot_entrypoints.GodotEntrypointTests.test_import_parser_path_is_valid_without_scene_or_script) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8454891Z test_inheritance_cycle_and_unknown_base_fail_actionably (tests.test_godot_entrypoints.GodotEntrypointTests.test_inheritance_cycle_and_unknown_base_fail_actionably) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8466116Z test_invalid_ui_script_is_rejected_before_process_spawn (tests.test_godot_entrypoints.GodotEntrypointTests.test_invalid_ui_script_is_rejected_before_process_spawn) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8477184Z test_missing_and_outside_project_scripts_fail_before_spawn (tests.test_godot_entrypoints.GodotEntrypointTests.test_missing_and_outside_project_scripts_fail_before_spawn) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8488320Z test_node_control_component_must_launch_through_scene (tests.test_godot_entrypoints.GodotEntrypointTests.test_node_control_component_must_launch_through_scene) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8501482Z test_normal_run_returns_captured_text (tests.test_godot_entrypoints.GodotEntrypointTests.test_normal_run_returns_captured_text) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8511618Z test_project_and_default_main_scene_must_exist (tests.test_godot_entrypoints.GodotEntrypointTests.test_project_and_default_main_scene_must_exist) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8522065Z test_review_snapshots_are_not_runnable_even_if_they_extend_scene_tree (tests.test_godot_entrypoints.GodotEntrypointTests.test_review_snapshots_are_not_runnable_even_if_they_extend_scene_tree) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8535966Z test_scene_tree_and_explicit_mainloop_inheritance_are_valid (tests.test_godot_entrypoints.GodotEntrypointTests.test_scene_tree_and_explicit_mainloop_inheritance_are_valid) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8544280Z test_script_and_scene_entrypoints_cannot_be_mixed (tests.test_godot_entrypoints.GodotEntrypointTests.test_script_and_scene_entrypoints_cannot_be_mixed) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8558252Z test_timeout_falls_back_to_killing_owned_process (tests.test_godot_entrypoints.GodotEntrypointTests.test_timeout_falls_back_to_killing_owned_process) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8571427Z test_timeout_kills_only_owned_windows_tree_and_preserves_output (tests.test_godot_entrypoints.GodotEntrypointTests.test_timeout_kills_only_owned_windows_tree_and_preserves_output) ... ok
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8572089Z
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8572232Z ----------------------------------------------------------------------
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8572440Z Ran 30 tests in 0.171s
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8572521Z
+game-runtime	Verify runtime completion and entrypoint contracts	2026-10-24T11:44:59.8572727Z OK
+game-runtime	Install pinned Godot 4.7.2	﻿2026-10-24T11:44:59.9510020Z ##[group]Run curl --fail --location --retry 3 --output godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9510739Z [36;1mcurl --fail --location --retry 3 --output godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip[0m
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9511116Z [36;1munzip godot.zip[0m
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9511269Z [36;1mchmod +x Godot_v4.7.2-stable_linux.x86_64[0m
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9511501Z [36;1mecho "GODOT_BIN=$PWD/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"[0m
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9569774Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9569995Z env:
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9570159Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9570398Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9570635Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9570949Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9571160Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9571377Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:44:59.9571560Z ##[endgroup]
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:00.0876160Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:00.0876617Z                                  Dload  Upload   Total   Spent    Left  Speed
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:00.0876946Z
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:00.1870478Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:00.1870824Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:00.5871077Z
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:00.5871800Z 100 74.2M  100 74.2M    0     0   148M      0 --:--:-- --:--:-- --:--:--  148M
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:00.6071889Z Archive:  godot.zip
+game-runtime	Install pinned Godot 4.7.2	2026-10-24T11:45:01.4010425Z   inflating: Godot_v4.7.2-stable_linux.x86_64
+game-runtime	Verify runtime test coverage is configured	﻿2026-10-24T11:45:01.4613482Z ##[group]Run python tools/check_runtime_tests.py
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4613841Z [36;1mpython tools/check_runtime_tests.py[0m
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4667723Z shell: /usr/bin/bash -e {0}
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4667874Z env:
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4668031Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4668272Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4668502Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4668714Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4668929Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4669141Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4669389Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.4669606Z ##[endgroup]
+game-runtime	Verify runtime test coverage is configured	2026-10-24T11:45:01.5280840Z PASS: native runtime test command is configured.
+game-runtime	Verify isolated original-style 2D hero sample	﻿2026-10-24T11:45:01.6325133Z ##[group]Run python tools/hero_2d/run_contract_tests.py
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6325405Z [36;1mpython tools/hero_2d/run_contract_tests.py[0m
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6380446Z shell: /usr/bin/bash -e {0}
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6380608Z env:
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6380772Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6381013Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6381249Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6381469Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6381680Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6381893Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6382148Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:01.6382371Z ##[endgroup]
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:15.2945081Z import: imported cleanly
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:15.2945491Z pose: PASS hero 2D pose: resolved travel, octants, reversal, pause, photo, and configuration
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:15.2945860Z library: PASS hero 2D library tests
+game-runtime	Verify isolated original-style 2D hero sample	2026-10-24T11:45:15.2946083Z pack: PASS hero 2D real pack: 1280 composed cels across 0 appearance/action galleries
+game-runtime	Verify isolated 2D hair bones and attachment contracts	﻿2026-10-24T11:45:15.3031628Z ##[group]Run python tools/hero_2d/run_hair_review.py --contracts
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3031922Z [36;1mpython tools/hero_2d/run_hair_review.py --contracts[0m
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3083702Z shell: /usr/bin/bash -e {0}
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3083849Z env:
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3084007Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3084256Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3084491Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3084710Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3084925Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3085157Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3085407Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:15.3085629Z ##[endgroup]
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1469289Z spring exit 0 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1469793Z
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1470040Z PASS 2D hair spring: lag, rebound, convergence, pause, view/hat reset, disable and time partition
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1470244Z
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1470248Z
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1470389Z rig exit 0 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1470574Z
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1470879Z PASS 2D hair rig: 640 exact rest composites, protected roots/hats, weighted native bones, pause and original fallback
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1471252Z
+game-runtime	Verify isolated 2D hair bones and attachment contracts	2026-10-24T11:45:24.1471256Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	﻿2026-10-24T11:45:24.1556411Z ##[group]Run python tools/walk_stability/run_audit.py --tag ci --test
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1556931Z [36;1mpython tools/walk_stability/run_audit.py --tag ci --test[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1626394Z shell: /usr/bin/bash -e {0}
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1626571Z env:
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1626864Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1627239Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1627501Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1627715Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1627927Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1628141Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1628396Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:24.1628617Z ##[endgroup]
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9668806Z import -front.png[39m[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9669442Z [  96% ] [90m[1mreimport[22m | island-raw-back.png[39m[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9669880Z [  98% ] [90m[1mreimport[22m | Finalizing Asset Import...[39m[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9670232Z [92m[ DONE ][39m [1mreimport[22m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9670465Z [0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9670788Z [   0% ] [90m[1mreimport[22m | Started (Re)Importing Assets (60 steps)[39m[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9671277Z [   0% ] [90m[1mreimport[22m | Executing post-reimport operations...[39m[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9671653Z [92m[ DONE ][39m [1mreimport[22m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9671889Z [0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9672237Z [   0% ] [90m[1mloading_editor_layout[22m | Started Loading editor (5 steps)[39m[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9672724Z [   0% ] [90m[1mloading_editor_layout[22m | Loading editor layout...[39m[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9673157Z [  16% ] [90m[1mloading_editor_layout[22m | Loading docks...[39m[0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9673514Z [92m[ DONE ][39m [1mloading_editor_layout[22m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9674026Z [0m
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9674115Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9674126Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9674344Z parse Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9674619Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9674623Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9674626Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9674818Z export Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9675089Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9675302Z PASS actual runtime walk pixels: eight hero headings, both NPC sides and nonfrozen limbs
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9675595Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9675598Z
+game-runtime	Verify fixed-root 2D walk pixels and original limb registration	2026-10-24T11:45:41.9675824Z Runtime frames: /home/runner/work/Snapland/Snapland/.review/2d-walk-stability-20261016/ci
+game-runtime	Verify fixed-head island idle and blinking across appearances	﻿2026-10-24T11:45:41.9763835Z ##[group]Run python tools/island_avatar/run_contracts.py
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9764100Z [36;1mpython tools/island_avatar/run_contracts.py[0m
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9816867Z shell: /usr/bin/bash -e {0}
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9817020Z env:
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9817177Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9817441Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9817708Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9817925Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9818140Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9818361Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9818622Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:45:41.9818847Z ##[endgroup]
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:46:09.3410512Z
+game-runtime	Verify fixed-head island idle and blinking across appearances	2026-10-24T11:46:09.3411202Z PASS stable idle: 432 composed cels; rigid visible head/cap outside five authored eye regions, moving torso and planted legs
+game-runtime	Run native Godot startup and runtime tests	﻿2026-10-24T11:46:09.3508052Z ##[group]Run python tools/run_game_tests.py
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3508297Z [36;1mpython tools/run_game_tests.py[0m
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3561287Z shell: /usr/bin/bash -e {0}
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3561455Z env:
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3561608Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3561849Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3562082Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3562296Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3562508Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3562722Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3562976Z   GODOT_BIN: /home/runner/work/Snapland/Snapland/Godot_v4.7.2-stable_linux.x86_64
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.3563193Z ##[endgroup]
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:09.4058929Z RUN: clean project import (1/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:30.3947764Z PASS: clean project import (20.99s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:30.3950394Z RUN: game startup (2/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:33.4378522Z PASS: game startup (3.04s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:33.4379137Z RUN: core runtime tests (3/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:33.6764045Z PASS: core runtime tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:33.6764486Z RUN: test/review save isolation tests (4/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:35.3088160Z PASS: test/review save isolation tests (1.63s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:35.3088769Z RUN: wardrobe runtime tests (5/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:35.5504189Z PASS: wardrobe runtime tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:35.5504600Z RUN: avatar runtime tests (6/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:57.5686646Z PASS: avatar runtime tests (22.02s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:46:57.5687267Z RUN: avatar renderer tests (7/95, limit 240.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:48:53.1946154Z PASS: avatar renderer tests (115.63s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:48:53.1946879Z RUN: avatar attachment tests (8/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:37.7909352Z PASS: avatar attachment tests (44.60s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:37.7910197Z RUN: island hair lifecycle tests (9/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:40.0859124Z PASS: island hair lifecycle tests (2.29s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:40.0859975Z RUN: island alternate hair source tests (10/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:43.4930362Z PASS: island alternate hair source tests (3.41s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:43.4931017Z RUN: seated avatar tests (11/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:47.6416687Z PASS: seated avatar tests (4.15s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:47.6417298Z RUN: source registration coordinate tests (12/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:47.9764882Z PASS: source registration coordinate tests (0.33s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:49:47.9765700Z RUN: avatar motion rig runtime tests (13/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:50:14.6319408Z PASS: avatar motion rig runtime tests (26.66s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:50:14.6320012Z RUN: avatar role rig tests (14/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:50:50.4929131Z PASS: avatar role rig tests (35.86s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:50:50.4929783Z RUN: avatar motion world integration tests (15/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:01.1604826Z PASS: avatar motion world integration tests (10.67s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:01.1605648Z RUN: minigame HUD hierarchy tests (16/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:01.4942657Z PASS: minigame HUD hierarchy tests (0.33s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:01.4943166Z RUN: eight-direction walk tests (17/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:03.9720834Z PASS: eight-direction walk tests (2.48s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:03.9723102Z RUN: authored avatar walk loop tests (18/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:30.7322123Z PASS: authored avatar walk loop tests (26.76s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:30.7324496Z RUN: authored avatar side idle tests (19/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:33.7680768Z PASS: authored avatar side idle tests (3.04s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:33.7681366Z RUN: authored idle hair attachment tests (20/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:41.0865640Z PASS: authored idle hair attachment tests (7.32s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:41.0866108Z RUN: authored NPC source walking tests (21/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:41.7970198Z PASS: authored NPC source walking tests (0.71s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:41.7971051Z RUN: character animation library tests (22/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:42.1297156Z PASS: character animation library tests (0.33s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:42.1297756Z RUN: atomic outfit coverage tests (23/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:43.7720744Z PASS: atomic outfit coverage tests (1.64s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:51:43.7721437Z RUN: garment overlay tests (24/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:01.5127172Z PASS: garment overlay tests (17.74s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:01.5128445Z RUN: garment part ownership tests (25/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:02.6830613Z PASS: garment part ownership tests (1.17s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:02.6831185Z RUN: side outfit palette tests (26/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:06.4614222Z PASS: side outfit palette tests (3.78s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:06.4614859Z RUN: NPC animation state tests (27/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:06.9834936Z PASS: NPC animation state tests (0.52s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:06.9835565Z RUN: tutorial panel/catalog tests (28/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:14.0122240Z PASS: tutorial panel/catalog tests (7.03s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:14.0122787Z RUN: tutorial seen progress tests (29/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:18.0705909Z PASS: tutorial seen progress tests (4.06s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:18.0706674Z RUN: travel collection UI tests (30/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:24.9445446Z PASS: travel collection UI tests (6.87s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:24.9446036Z RUN: tutorial image/control tests (31/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:26.2197612Z PASS: tutorial image/control tests (1.28s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:26.2198301Z RUN: time-of-day tests (32/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:26.4598339Z PASS: time-of-day tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:26.4598917Z RUN: daylight lighting tests (33/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:28.8504485Z PASS: daylight lighting tests (2.39s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:28.8505381Z RUN: NPC activity tests (34/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:29.2802611Z PASS: NPC activity tests (0.43s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:29.2803180Z RUN: NPC world activity tests (35/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:31.6691790Z PASS: NPC world activity tests (2.39s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:31.6694172Z RUN: NPC motion source tests (36/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:34.2419516Z PASS: NPC motion source tests (2.57s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:34.2420144Z RUN: NPC walk motion tests (37/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:40.8094614Z PASS: NPC walk motion tests (6.57s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:40.8095280Z RUN: NPC direction lifecycle tests (38/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:41.7057853Z PASS: NPC direction lifecycle tests (0.90s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:41.7058622Z RUN: NPC missing walk idle tests (39/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:49.7885721Z PASS: NPC missing walk idle tests (8.08s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:49.7886235Z RUN: NPC dialogue hold tests (40/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:56.2832411Z PASS: NPC dialogue hold tests (6.49s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:52:56.2833108Z RUN: sprite clearance tests (41/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:07.4191024Z PASS: sprite clearance tests (11.14s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:07.4191525Z RUN: wardrobe UI tests (42/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:15.1361238Z PASS: wardrobe UI tests (7.72s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:15.1361935Z RUN: component animation tests (43/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:18.8254335Z PASS: component animation tests (3.69s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:18.8255017Z RUN: building occlusion tests (44/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:24.7432961Z PASS: building occlusion tests (5.92s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:24.7433806Z RUN: kite flight model tests (45/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:24.9830859Z PASS: kite flight model tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:24.9832989Z RUN: kite flight view tests (46/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:25.2213941Z PASS: kite flight view tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:25.2214496Z RUN: bubble photo model tests (47/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:25.4664308Z PASS: bubble photo model tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:25.4664818Z RUN: bubble photo view tests (48/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:28.6925839Z PASS: bubble photo view tests (3.23s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:28.6926234Z RUN: bench swap model tests (49/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:28.9376412Z PASS: bench swap model tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:28.9377334Z RUN: bench swap view tests (50/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:30.6752266Z PASS: bench swap view tests (1.74s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:30.6752782Z RUN: sign balance model tests (51/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:30.9203917Z PASS: sign balance model tests (0.25s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:30.9204549Z RUN: sign balance view tests (52/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:31.7273365Z PASS: sign balance view tests (0.81s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:31.7273798Z RUN: hat rescue model tests (53/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:32.0623347Z PASS: hat rescue model tests (0.33s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:32.0623785Z RUN: hat rescue view tests (54/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:36.8653916Z PASS: hat rescue view tests (4.80s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:36.8658338Z RUN: melody memory model tests (55/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:37.6705993Z PASS: melody memory model tests (0.81s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:37.6706444Z RUN: melody memory view tests (56/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:38.5686344Z PASS: melody memory view tests (0.90s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:38.5687081Z RUN: ribbon rhythm model tests (57/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:38.9061370Z PASS: ribbon rhythm model tests (0.34s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:38.9061808Z RUN: ribbon rhythm view tests (58/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:40.6390402Z PASS: ribbon rhythm view tests (1.73s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:40.6390891Z RUN: ribbon Session startup tests (59/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:42.7474373Z PASS: ribbon Session startup tests (2.11s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:42.7474978Z RUN: ribbon Session lifecycle tests (60/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:50.6298746Z PASS: ribbon Session lifecycle tests (7.88s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:50.6299224Z RUN: shadow theatre model tests (61/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:50.8735351Z PASS: shadow theatre model tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:50.8735968Z RUN: shadow theatre view tests (62/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:51.2987391Z PASS: shadow theatre view tests (0.43s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:51.2988223Z RUN: crowd semaphore view tests (63/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:51.7250290Z PASS: crowd semaphore view tests (0.43s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:53:51.7250702Z RUN: welcome minigame tests (64/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:36.1167627Z PASS: welcome minigame tests (44.39s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:36.1168298Z RUN: pipe round model tests (65/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:36.3586092Z PASS: pipe round model tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:36.3586563Z RUN: pipe plan presentation tests (66/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:37.1664264Z PASS: pipe plan presentation tests (0.81s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:37.1665018Z RUN: balloon harbor presentation tests (67/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:37.4084600Z PASS: balloon harbor presentation tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:37.4085144Z RUN: crowd traffic model tests (68/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:37.6494989Z PASS: crowd traffic model tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:37.6495696Z RUN: crowd crossing view tests (69/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:37.8905724Z PASS: crowd crossing view tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:37.8906341Z RUN: fountain jump view tests (70/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:42.3235271Z PASS: fountain jump view tests (4.43s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:42.3235820Z RUN: fountain timing tests (71/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:43.7791829Z PASS: fountain timing tests (1.46s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:43.7792512Z RUN: balloon delivery tests (72/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:44.8624446Z PASS: balloon delivery tests (1.08s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:44.8624932Z RUN: story runtime tests (73/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:45.1019342Z PASS: story runtime tests (0.24s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:54:45.1019996Z RUN: main story integration tests (74/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:07.4486494Z PASS: main story integration tests (22.35s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:07.4488900Z RUN: island ride tests (75/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:29.1730916Z PASS: island ride tests (21.72s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:29.1732531Z RUN: island layout tests (76/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:36.3025129Z PASS: island layout tests (7.13s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:36.3026091Z RUN: promenade free play tests (77/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:44.8513557Z PASS: promenade free play tests (8.55s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:44.8514075Z RUN: coastal free play tests (78/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:57.4114903Z PASS: coastal free play tests (12.56s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:57.4115482Z RUN: shared photo thumbnail tests (79/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:58.8682278Z PASS: shared photo thumbnail tests (1.46s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:58.8682779Z RUN: saved photo viewer tests (80/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:59.2957972Z PASS: saved photo viewer tests (0.43s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:55:59.2958834Z RUN: photo original preservation tests (81/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:00.8472898Z PASS: photo original preservation tests (1.55s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:00.8473340Z RUN: island dialogue tests (82/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:04.1690335Z PASS: island dialogue tests (3.32s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:04.1690933Z RUN: island game entry tests (83/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:07.6831901Z PASS: island game entry tests (3.51s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:07.6832438Z RUN: audio runtime tests (84/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:17.5381611Z PASS: audio runtime tests (9.85s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:17.5382154Z RUN: island audio dynamics tests (85/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:29.6284283Z PASS: island audio dynamics tests (12.09s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:29.6284794Z RUN: main scene integration tests (86/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:46.5954598Z PASS: main scene integration tests (16.97s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:56:46.5955394Z RUN: pixel UI shell tests (87/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:20.0057649Z PASS: pixel UI shell tests (33.41s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:20.0058204Z RUN: pixel UI popup tests (88/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:20.4344384Z PASS: pixel UI popup tests (0.43s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:20.4344844Z RUN: pixel UI button depth tests (89/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:20.7729469Z PASS: pixel UI button depth tests (0.34s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:20.7729915Z RUN: pixel UI collection tests (90/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:30.0511689Z PASS: pixel UI collection tests (9.28s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:30.0512335Z RUN: pixel tutorial page tests (91/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:45.0781344Z PASS: pixel tutorial page tests (15.03s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:45.0782382Z RUN: pixel UI customization tests (92/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:50.4623301Z PASS: pixel UI customization tests (5.38s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:50.4623962Z RUN: pixel UI minigame tests (93/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:55.1784298Z PASS: pixel UI minigame tests (4.72s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:55.1784795Z RUN: pixel typography tests (94/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:55.8917681Z PASS: pixel typography tests (0.71s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:55.8918263Z RUN: localization framework tests (95/95, limit 90.0s)
+game-runtime	Run native Godot startup and runtime tests	2026-10-24T11:57:59.1307775Z PASS: localization framework tests (3.24s)
+game-runtime	Post Run actions/setup-python@v5	﻿2026-10-24T11:57:59.1649917Z Post job cleanup.
+game-runtime	Post Run actions/setup-python@v5	2026-10-24T11:57:59.2412311Z (node:3631) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+game-runtime	Post Run actions/setup-python@v5	2026-10-24T11:57:59.2412768Z (Use `node --trace-deprecation ...` to show where the warning was created)
+game-runtime	Post Run actions/checkout@v4	﻿2026-10-24T11:57:59.2551515Z Post job cleanup.
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3119842Z [command]/usr/bin/git version
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3151921Z git version 2.55.0
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3176921Z Temporarily overriding HOME='/home/runner/work/_temp/c6a3f7a8-d57a-4e75-a792-91e473a7682d' before making global git config changes
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3177636Z Adding repository directory to the temporary git global config as a safe directory
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3180887Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Snapland/Snapland
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3211401Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3240192Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3451844Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3473461Z http.https://github.com/.extraheader
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3481987Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3513142Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3724133Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+game-runtime	Post Run actions/checkout@v4	2026-10-24T11:57:59.3755467Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+game-runtime	Complete job	﻿2026-10-24T11:57:59.4065627Z Cleaning up orphan processes
+game-runtime	Complete job	2026-10-24T11:57:59.4275686Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

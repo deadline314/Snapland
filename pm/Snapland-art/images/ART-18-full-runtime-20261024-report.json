@@ -1,0 +1,590 @@
+{
+  "production_baseline": "bc1f8f4931fab5607e73ea6f969d9979533470f9",
+  "ci_commit": "ab31c1ec08e1085e3319f06d1850007bfbc17abb",
+  "ci_url": "https://github.com/deadline314/Snapland/actions/runs/40090970811",
+  "ci_result": "success",
+  "local_completed": 95,
+  "local_original_timeout": {
+    "name": "welcome minigame tests",
+    "exit": 124,
+    "error": "finite suite timeout",
+    "seconds": 90.06
+  },
+  "local_diagnostic_limit": 180,
+  "local_welcome_seconds": 96.28,
+  "results": [
+    {
+      "name": "clean project import",
+      "exit": 0,
+      "error": null,
+      "seconds": 5.96
+    },
+    {
+      "name": "game startup",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.0
+    },
+    {
+      "name": "core runtime tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.35
+    },
+    {
+      "name": "test/review save isolation tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 2.76
+    },
+    {
+      "name": "wardrobe runtime tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.26
+    },
+    {
+      "name": "avatar runtime tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 32.26
+    },
+    {
+      "name": "avatar renderer tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 162.68
+    },
+    {
+      "name": "avatar attachment tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 63.24
+    },
+    {
+      "name": "island hair lifecycle tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 3.32
+    },
+    {
+      "name": "island alternate hair source tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.62
+    },
+    {
+      "name": "seated avatar tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 5.93
+    },
+    {
+      "name": "source registration coordinate tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.45
+    },
+    {
+      "name": "avatar motion rig runtime tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 38.01
+    },
+    {
+      "name": "avatar role rig tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 48.25
+    },
+    {
+      "name": "avatar motion world integration tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 12.17
+    },
+    {
+      "name": "minigame HUD hierarchy tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.53
+    },
+    {
+      "name": "eight-direction walk tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 3.42
+    },
+    {
+      "name": "authored avatar walk loop tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 34.86
+    },
+    {
+      "name": "authored avatar side idle tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.44
+    },
+    {
+      "name": "authored idle hair attachment tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 10.6
+    },
+    {
+      "name": "authored NPC source walking tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.02
+    },
+    {
+      "name": "character animation library tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.44
+    },
+    {
+      "name": "atomic outfit coverage tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 2.31
+    },
+    {
+      "name": "garment overlay tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 25.66
+    },
+    {
+      "name": "garment part ownership tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.84
+    },
+    {
+      "name": "side outfit palette tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 5.67
+    },
+    {
+      "name": "NPC animation state tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.72
+    },
+    {
+      "name": "tutorial panel/catalog tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 7.24
+    },
+    {
+      "name": "tutorial seen progress tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 5.47
+    },
+    {
+      "name": "travel collection UI tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 9.03
+    },
+    {
+      "name": "tutorial image/control tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.66
+    },
+    {
+      "name": "time-of-day tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.26
+    },
+    {
+      "name": "daylight lighting tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 3.71
+    },
+    {
+      "name": "NPC activity tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.54
+    },
+    {
+      "name": "NPC world activity tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 3.51
+    },
+    {
+      "name": "NPC motion source tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 3.7
+    },
+    {
+      "name": "NPC walk motion tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 9.29
+    },
+    {
+      "name": "NPC direction lifecycle tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.28
+    },
+    {
+      "name": "NPC missing walk idle tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 10.15
+    },
+    {
+      "name": "NPC dialogue hold tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 7.91
+    },
+    {
+      "name": "sprite clearance tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 16.26
+    },
+    {
+      "name": "wardrobe UI tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 11.56
+    },
+    {
+      "name": "component animation tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.72
+    },
+    {
+      "name": "building occlusion tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 6.86
+    },
+    {
+      "name": "kite flight model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.25
+    },
+    {
+      "name": "kite flight view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.35
+    },
+    {
+      "name": "bubble photo model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.25
+    },
+    {
+      "name": "bubble photo view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.72
+    },
+    {
+      "name": "bench swap model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.25
+    },
+    {
+      "name": "bench swap view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 2.49
+    },
+    {
+      "name": "sign balance model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.35
+    },
+    {
+      "name": "sign balance view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.19
+    },
+    {
+      "name": "hat rescue model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.46
+    },
+    {
+      "name": "hat rescue view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 6.76
+    },
+    {
+      "name": "melody memory model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.0
+    },
+    {
+      "name": "melody memory view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.2
+    },
+    {
+      "name": "ribbon rhythm model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.45
+    },
+    {
+      "name": "ribbon rhythm view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 2.39
+    },
+    {
+      "name": "ribbon Session startup tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 3.07
+    },
+    {
+      "name": "ribbon Session lifecycle tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 12.08
+    },
+    {
+      "name": "shadow theatre model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.25
+    },
+    {
+      "name": "shadow theatre view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.54
+    },
+    {
+      "name": "crowd semaphore view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.82
+    },
+    {
+      "name": "welcome minigame tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 96.28
+    },
+    {
+      "name": "pipe round model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.25
+    },
+    {
+      "name": "pipe plan presentation tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.0
+    },
+    {
+      "name": "balloon harbor presentation tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.34
+    },
+    {
+      "name": "crowd traffic model tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.25
+    },
+    {
+      "name": "crowd crossing view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.25
+    },
+    {
+      "name": "fountain jump view tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 6.58
+    },
+    {
+      "name": "fountain timing tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 3.51
+    },
+    {
+      "name": "balloon delivery tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.84
+    },
+    {
+      "name": "story runtime tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.26
+    },
+    {
+      "name": "main story integration tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 25.75
+    },
+    {
+      "name": "island ride tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 22.68
+    },
+    {
+      "name": "island layout tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 8.17
+    },
+    {
+      "name": "promenade free play tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 9.31
+    },
+    {
+      "name": "coastal free play tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 13.32
+    },
+    {
+      "name": "shared photo thumbnail tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 1.74
+    },
+    {
+      "name": "saved photo viewer tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.73
+    },
+    {
+      "name": "photo original preservation tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 2.3
+    },
+    {
+      "name": "island dialogue tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.35
+    },
+    {
+      "name": "island game entry tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.63
+    },
+    {
+      "name": "audio runtime tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 9.79
+    },
+    {
+      "name": "island audio dynamics tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 12.12
+    },
+    {
+      "name": "main scene integration tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 23.26
+    },
+    {
+      "name": "pixel UI shell tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 47.19
+    },
+    {
+      "name": "pixel UI popup tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.44
+    },
+    {
+      "name": "pixel UI button depth tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.35
+    },
+    {
+      "name": "pixel UI collection tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 21.41
+    },
+    {
+      "name": "pixel tutorial page tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 15.23
+    },
+    {
+      "name": "pixel UI customization tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 7.63
+    },
+    {
+      "name": "pixel UI minigame tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 6.59
+    },
+    {
+      "name": "pixel typography tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 0.91
+    },
+    {
+      "name": "localization framework tests",
+      "exit": 0,
+      "error": null,
+      "seconds": 4.45
+    }
+  ],
+  "limits_note": "All original limits retained except this local diagnostic rerun of welcome minigame tests. CI used unchanged official limits. New unintegrated shadow helper is outside this accepted production baseline.",
+  "shared_ci_log": "Trailing whitespace normalized only; exact raw bytes retained in ZIP remote/ci-ab31c1e-runtime-success-raw.log",
+  "raw_ci_sha256": "0c4c47b0811a743c3b3d5c5717838dede8f0371f9a854ae81eeaee7dfe242288"
+}
