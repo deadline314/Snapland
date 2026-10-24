@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-24",
+  "tool": "image_gen.imagegen",
+  "accepted": false,
+  "runtime_adopted": false,
+  "research": [
+    {
+      "url": "https://www.adobe.com/creativecloud/animation/discover/animation-walk-cycle.html",
+      "read": "Contact/passing alternation, weight, head/torso/arm motion and revise/redraw; text actually read; reference images not retrieved."
+    },
+    {
+      "url": "https://www.aseprite.org/docs/animation/",
+      "read": "Frame/cel/layer timeline, preview, tags and onion skinning; text actually read."
+    }
+  ],
+  "attempts": [
+    {
+      "source": "assets/characters/ticket-front-actions-v2.png",
+      "output": "ART-17-ticket-walk-20261024-rejected-cycle.png",
+      "prompt": "Create a production animation candidate for the SAME ticket clerk boy shown in the reference. This is a new SIDE WALK animation, not a redraw of the reference sheet. Exactly ONE horizontal row of EIGHT equally spaced full-body cels, character always facing screen RIGHT in strict side view, walking IN PLACE. Transparent background. Preserve the reference's hand-drawn fine pixel-art HD2D look, large round head/body ratio, tousled chestnut hair, round brown glasses, royal blue sweatshirt, cream shorts, brown boots, brown crossbody satchel. No identity changes, no missing glasses or satchel. Draw the WHOLE connected character in every cel, including hair, hands and both feet, with wide transparent gutters. Same scale, torso center x within each cell, shared ground baseline, stable head size, restrained head bob. Do NOT progressively move across the canvas within the cells. Eight DIFFERENT actual sequential poses in order: 1 near leg forward heel contact/far leg back toe; 2 near leg receives weight/far heel rises; 3 near leg supporting below pelvis/far leg passes with bent knee; 4 near leg behind/far leg reaching forward; 5 FAR leg forward heel contact/NEAR leg behind toe; 6 FAR leg supports/NEAR heel rises; 7 FAR leg supports below pelvis/NEAR leg passes bent knee; 8 FAR leg behind/NEAR leg reaches forward, closing to pose1. Crucial second half switches which leg is forward; do not repeat same forward boot for all eight. Far leg slightly darker for readable overlap. No running, jumping, floating, extreme knee bends, torso stretching, multiple arms, detached hair, smear, ghosting or duplicated limbs. Hand nearest satchel holds its strap as the reference; other arm modest counter swing. Keep satchel side and strap continuous, no prop appearing/disappearing. No text, frame numbers, labels, grids, shadows, background or floor.",
+      "rejection": "Viewed entire eight-cell sheet: rear four cels repeat the same near-leg-forward pattern. Not a complete alternating gait.",
+      "source_sha256": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1",
+      "output_sha256": "84ba0a836b273d16725e8ec786755611943d84688c4fdc7f80c43266097895f6"
+    },
+    {
+      "source": "ART-17-ticket-walk-20261024-rejected-cycle.png",
+      "output": "ART-17-ticket-walk-20261024-rejected-contacts.png",
+      "prompt": "Edit this ticket clerk animation sheet into ONLY TWO full-body KEY POSES, side by side with transparent generous gutters, both facing screen RIGHT. Keep exact same boy, scale, hair, glasses, sweatshirt, shorts, strap-holding near hand and satchel. TWO OPPOSITE CONTACT POSES, NOT THE SAME LEG TWICE. LEFT image: the NEAR light leg and boot are extended to screen RIGHT in front; FAR dark leg and boot extend screen LEFT behind. RIGHT image: the NEAR light leg and boot now extend screen LEFT BEHIND and the FAR dark leg and boot extend screen RIGHT IN FRONT. On the right pose the forward shin emerges from the far/back side of the shorts; near rear boot overlaps in front of far leg where they cross. Keep the darker FAR boot dark even when forward. Both poses contact SAME ground baseline, head above identical pelvis x, no scaling, no change in facing, no mirroring the entire character, satchel stays on same visible side. Small relaxed stride, natural knees. Both whole cels intact, no duplicate arms or legs or detached hair. Fine hand drawn pixel-art style identical to input, transparent background, no labels or shadows. The requested change is the LEG SWAP in the SECOND pose; do not just reuse the first contact again.",
+      "rejection": "Viewed both full-body contact poses: second changes shin/sock brightness, but near shorts/thigh still lead to the same forward contour. Recolour alone does not establish an opposite contact pose. No animation/runtime acceptance.",
+      "source_sha256": "84ba0a836b273d16725e8ec786755611943d84688c4fdc7f80c43266097895f6",
+      "output_sha256": "54e40e91afc500e7ae08b26e8b7cfd0120d3f963f95398707452bbfde12333d6"
+    }
+  ]
+}

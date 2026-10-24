@@ -404,3 +404,13 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 ![三髮型原畫修正前後](images/ART-17-source-hand-20261021-three-hair-before-after.png)
 
 [原速短片](images/ART-17-source-hand-20261021-native-normal-v3-review.mp4) · [真正四分之一速度](images/ART-17-source-hand-20261021-native-quarter-v3-review.mp4) · [六方資料、製作與拒收流程](../../design/runtime/source-art-repairs.md) · [完整證據、結果與雜湊](images/ART-17-source-hand-20261021-verification.json)。
+
+
+# Commit — 2026-10-24 正式行走候選拒收
+
+重新閱讀 Adobe 的雙腳接觸／交叉、重心與回頭重畫說明，以及 Aseprite 的逐格、時間軸與疊影流程，並核對既有八方研究。以現行票票原畫製作右向八格候選；整張查看後，後半循環仍重複同一側腿前伸。再縮小為兩張相反接觸姿勢，第二張只改變小腿與襪子明暗，近側短褲／大腿仍連向相同前伸輪廓，不能當成真正換腿。兩次均拒收，沒有接入正式角色、改動既有原畫或勾選完整行走驗收。
+
+![拒收：後半循環沒有換腿](images/ART-17-ticket-walk-20261024-rejected-cycle.png)
+![拒收：明暗不同不等於雙腿交換](images/ART-17-ticket-walk-20261024-rejected-contacts.png)
+
+[實際閱讀、完整提示、來源及輸出雜湊、拒收原因](images/ART-17-ticket-walk-20261024-review.json)。本輪是原畫品質檢查，沒有通過的動畫，因此不宣稱原生播放或新增動作完成。
