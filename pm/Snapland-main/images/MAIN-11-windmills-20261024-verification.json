@@ -1,0 +1,30 @@
+{
+  "route_segments": 25,
+  "walk_metres": 174.2,
+  "teleport": false,
+  "native_pngs": 14,
+  "toy_kind_count": 1,
+  "toy_locations": 4,
+  "native_clock": "actual engine delta, no fixed-fps option",
+  "native_exit": 0,
+  "native_errors": 0,
+  "native_seconds": 280.54,
+  "saved_progress_unchanged_by_toys": true,
+  "original_video": [
+    1280,
+    720,
+    15,
+    4206
+  ],
+  "shared_video": [
+    960,
+    540,
+    15,
+    4206
+  ],
+  "video_seconds": 280.4,
+  "video_fully_decoded": true,
+  "video_samples_viewed": 8,
+  "native_contact_pages_viewed": 4,
+  "scope": "One unscored toy at four avenue gaps; not four minigames. No new light sources or player physics/collision changes. Reduced-motion result checked through real settings input. Dummy audio, not human listening. Existing NPC activity integration follows ART-12; full roles/animation remain ART-16/17/18."
+}

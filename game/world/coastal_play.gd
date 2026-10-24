@@ -2,6 +2,8 @@ extends Node3D
 ## Scene-owned free play. Nothing here writes Progress or opens a game session.
 signal note_requested(note: int)
 const Ball = preload("res://game/world/drift_ball.gd")
+const Promenade = preload("res://game/world/promenade_play.gd")
+var promenade: Node3D
 const Discoveries = preload("res://game/world/coastal_discoveries.gd")
 var discoveries: Node3D
 var world: Node3D
@@ -48,6 +50,11 @@ func configure(owner_world: Node3D) -> void:
  discoveries.name="CoastalDiscoveries"
  add_child(discoveries)
  discoveries.configure(world)
+ promenade=Promenade.new()
+ promenade.name="PromenadeFreePlay"
+ add_child(promenade)
+ promenade.configure(world)
+ promenade.note_requested.connect(func(note: int):note_requested.emit(note))
 
 func _build_ball() -> void:
  ball=Ball.new()
@@ -87,6 +94,7 @@ func _build_ball() -> void:
 
 func activate(id: String) -> bool:
  if not is_instance_valid(world) or world.blocked or not world.is_processing() or not _focused:return false
+ if promenade.activate(id):return true
  if discoveries.activate(id):return true
  if id not in ["play:ball","play:recall","coast:storm-bell","coast:tide-wheel"]:return false
  if _cooldown>0.0:return true
@@ -111,6 +119,8 @@ func activate(id: String) -> bool:
  return true
 
 func prompt(id: String) -> String:
+ var avenue_prompt: String=promenade.prompt(id)
+ if not avenue_prompt.is_empty():return avenue_prompt
  var discovery_prompt: String=discoveries.prompt(id)
  if not discovery_prompt.is_empty():return discovery_prompt
  match id:
@@ -139,6 +149,7 @@ func _physics_process(delta: float) -> void:
    ball.linear_velocity=_ball_velocity;ball.angular_velocity=_ball_spin
  if paused:return
  discoveries.advance(delta)
+ promenade.advance(delta)
  _cooldown=maxf(0,_cooldown-delta)
  ball_point.position=ball.global_position
  if is_instance_valid(ball_point.get("marker")):

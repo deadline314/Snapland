@@ -1,0 +1,32 @@
+[
+  {
+    "name": "wardrobe UI tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 12.66
+  },
+  {
+    "name": "main story integration tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 27.02
+  },
+  {
+    "name": "island layout tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 8.48
+  },
+  {
+    "name": "promenade free play tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 9.56
+  },
+  {
+    "name": "coastal free play tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 13.84
+  }
+]

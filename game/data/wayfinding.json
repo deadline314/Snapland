@@ -15,7 +15,7 @@
       "title": "中央廣場",
       "position": [0.0, 4.2],
       "entries": [
-        {"arrow": "←", "label": "票票・導覽亭", "target": {"kind": "character", "id": "ticket"}},
+        {"arrow": "←", "label": "票票", "target": {"kind": "character", "id": "ticket"}},
         {"arrow": "↖", "label": "小角", "target": {"kind": "quest", "id": "quest-001"}},
         {"arrow": "↗", "label": "阿浪", "target": {"kind": "quest", "id": "quest-002"}},
         {"arrow": "↑", "label": "迎賓大道", "target": {"kind": "games", "ids": ["game-001", "game-002", "game-003", "game-004", "game-005", "game-006", "game-007", "game-008", "game-009", "game-010", "game-011", "game-012"]}}

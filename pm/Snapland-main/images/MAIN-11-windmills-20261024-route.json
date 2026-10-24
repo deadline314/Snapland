@@ -1,0 +1,580 @@
+{
+  "capture_fps": 0,
+  "conversations": [],
+  "first_frame": 0,
+  "fps": 6.0,
+  "glyphs": [],
+  "human_played": false,
+  "movie": false,
+  "phases": [
+    {
+      "applied": "dawn",
+      "modal_after": "",
+      "phase": "dawn"
+    },
+    {
+      "applied": "dusk",
+      "modal_after": "",
+      "phase": "dusk"
+    },
+    {
+      "applied": "night",
+      "modal_after": "",
+      "phase": "night"
+    }
+  ],
+  "save_unchanged_by_toys": true,
+  "screenshots": [
+    {
+      "frame": 300,
+      "name": "pad-0-stepped",
+      "path": "ISLAND-FLOW-01-pad-0-stepped.png",
+      "phase": "noon",
+      "player": [
+        -1.36,
+        -15.9
+      ]
+    },
+    {
+      "frame": 352,
+      "name": "pad-0-context",
+      "path": "ISLAND-FLOW-02-pad-0-context.png",
+      "phase": "noon",
+      "player": [
+        -1.36,
+        -15.9
+      ]
+    },
+    {
+      "frame": 413,
+      "name": "pad-1-stepped",
+      "path": "ISLAND-FLOW-03-pad-1-stepped.png",
+      "phase": "noon",
+      "player": [
+        1.23,
+        -23.06
+      ]
+    },
+    {
+      "frame": 465,
+      "name": "pad-1-context",
+      "path": "ISLAND-FLOW-04-pad-1-context.png",
+      "phase": "noon",
+      "player": [
+        1.23,
+        -23.06
+      ]
+    },
+    {
+      "frame": 518,
+      "name": "pad-2-stepped",
+      "path": "ISLAND-FLOW-05-pad-2-stepped.png",
+      "phase": "noon",
+      "player": [
+        -1.44,
+        -29.95
+      ]
+    },
+    {
+      "frame": 570,
+      "name": "pad-2-context",
+      "path": "ISLAND-FLOW-06-pad-2-context.png",
+      "phase": "noon",
+      "player": [
+        -1.44,
+        -29.95
+      ]
+    },
+    {
+      "frame": 623,
+      "name": "pad-3-stepped",
+      "path": "ISLAND-FLOW-07-pad-3-stepped.png",
+      "phase": "noon",
+      "player": [
+        1.37,
+        -36.79
+      ]
+    },
+    {
+      "frame": 675,
+      "name": "pad-3-context",
+      "path": "ISLAND-FLOW-08-pad-3-context.png",
+      "phase": "noon",
+      "player": [
+        1.37,
+        -36.79
+      ]
+    },
+    {
+      "frame": 1075,
+      "name": "dock-return",
+      "path": "ISLAND-FLOW-09-dock-return.png",
+      "phase": "noon",
+      "player": [
+        -0.08,
+        23.01
+      ]
+    },
+    {
+      "frame": 1105,
+      "name": "dock-dawn",
+      "path": "ISLAND-FLOW-10-dock-dawn.png",
+      "phase": "dawn",
+      "player": [
+        -0.08,
+        23.01
+      ]
+    },
+    {
+      "frame": 1135,
+      "name": "dock-dusk",
+      "path": "ISLAND-FLOW-11-dock-dusk.png",
+      "phase": "dusk",
+      "player": [
+        -0.08,
+        23.01
+      ]
+    },
+    {
+      "frame": 1165,
+      "name": "dock-night",
+      "path": "ISLAND-FLOW-12-dock-night.png",
+      "phase": "night",
+      "player": [
+        -0.08,
+        23.01
+      ]
+    },
+    {
+      "frame": 1416,
+      "name": "pad-night",
+      "path": "ISLAND-FLOW-13-pad-night.png",
+      "phase": "night",
+      "player": [
+        -1.51,
+        -15.85
+      ]
+    },
+    {
+      "frame": 1468,
+      "name": "pad-night-reduced",
+      "path": "ISLAND-FLOW-14-pad-night-reduced.png",
+      "phase": "night",
+      "player": [
+        -1.51,
+        -15.85
+      ]
+    }
+  ],
+  "scripted_input": "Input.parse_input_event keyboard/mouse events; walking only, no teleport",
+  "signposts": [],
+  "status": "passed",
+  "toys": [
+    {
+      "angle": 3.14159202575684,
+      "context_activated": true,
+      "id": "play:wind-0",
+      "turns": 2,
+      "walk_activated": true
+    },
+    {
+      "angle": 3.14159202575684,
+      "context_activated": true,
+      "id": "play:wind-1",
+      "turns": 2,
+      "walk_activated": true
+    },
+    {
+      "angle": 3.14159202575684,
+      "context_activated": true,
+      "id": "play:wind-2",
+      "turns": 2,
+      "walk_activated": true
+    },
+    {
+      "angle": 3.14159202575684,
+      "context_activated": true,
+      "id": "play:wind-3",
+      "turns": 2,
+      "walk_activated": true
+    }
+  ],
+  "volume_segments": [],
+  "walk": [
+    {
+      "area": "海風碼頭",
+      "end": [
+        0.0,
+        15.2
+      ],
+      "frames": 320,
+      "label": "plaza-and-ticket-0",
+      "metres": 7.87,
+      "nearest": "",
+      "target": [
+        0.0,
+        15.0
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        0.0,
+        5.8
+      ],
+      "frames": 376,
+      "label": "plaza-and-ticket-1",
+      "metres": 9.27,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -3.6,
+        5.8
+      ],
+      "frames": 144,
+      "label": "plaza-and-ticket-2",
+      "metres": 3.47,
+      "nearest": "guide",
+      "target": [
+        -3.79999995231628,
+        5.90000009536743
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -4.29,
+        -4.11
+      ],
+      "frames": 404,
+      "label": "plaza-and-ticket-3",
+      "metres": 9.96,
+      "nearest": "",
+      "target": [
+        -4.19999980926514,
+        -4.19999980926514
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -1.62,
+        -8.81
+      ],
+      "frames": 231,
+      "label": "plaza-and-ticket-4",
+      "metres": 5.63,
+      "nearest": "",
+      "target": [
+        -1.60000002384186,
+        -9.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        -1.36,
+        -15.9
+      ],
+      "frames": 284,
+      "label": "pressure-pad-0",
+      "metres": 6.96,
+      "nearest": "play:wind-0",
+      "target": [
+        -1.39999997615814,
+        -16.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        -1.36,
+        -21.1
+      ],
+      "frames": 204,
+      "label": "bypass-avenue-sign",
+      "metres": 4.97,
+      "nearest": "",
+      "target": [
+        -1.39999997615814,
+        -21.2000007629395
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        1.23,
+        -23.06
+      ],
+      "frames": 135,
+      "label": "pressure-pad-1",
+      "metres": 3.23,
+      "nearest": "play:wind-1",
+      "target": [
+        1.39999997615814,
+        -23.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        -1.44,
+        -29.95
+      ],
+      "frames": 314,
+      "label": "pressure-pad-2",
+      "metres": 7.71,
+      "nearest": "play:wind-2",
+      "target": [
+        -1.39999997615814,
+        -30.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        1.37,
+        -36.79
+      ],
+      "frames": 320,
+      "label": "pressure-pad-3",
+      "metres": 7.86,
+      "nearest": "play:wind-3",
+      "target": [
+        1.39999997615814,
+        -37.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        -0.02,
+        -35.17
+      ],
+      "frames": 87,
+      "label": "return-to-dock-0",
+      "metres": 2.03,
+      "nearest": "play:wind-3",
+      "target": [
+        0.0,
+        -35.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        -1.56,
+        -21.41
+      ],
+      "frames": 576,
+      "label": "return-to-dock-1",
+      "metres": 14.26,
+      "nearest": "",
+      "target": [
+        -1.5,
+        -21.2000007629395
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        -1.56,
+        -18.21
+      ],
+      "frames": 128,
+      "label": "return-to-dock-2",
+      "metres": 3.07,
+      "nearest": "play:wind-0",
+      "target": [
+        -1.5,
+        -18.0
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -1.56,
+        -9.21
+      ],
+      "frames": 360,
+      "label": "return-to-dock-3",
+      "metres": 8.87,
+      "nearest": "",
+      "target": [
+        -1.60000002384186,
+        -9.0
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -4.22,
+        -4.31
+      ],
+      "frames": 236,
+      "label": "return-to-dock-4",
+      "metres": 5.76,
+      "nearest": "",
+      "target": [
+        -4.19999980926514,
+        -4.19999980926514
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -3.82,
+        5.72
+      ],
+      "frames": 407,
+      "label": "return-to-dock-5",
+      "metres": 10.03,
+      "nearest": "guide",
+      "target": [
+        -3.79999995231628,
+        5.90000009536743
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -0.08,
+        5.61
+      ],
+      "frames": 147,
+      "label": "return-to-dock-6",
+      "metres": 3.52,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "海風碼頭",
+      "end": [
+        -0.08,
+        14.81
+      ],
+      "frames": 368,
+      "label": "return-to-dock-7",
+      "metres": 9.06,
+      "nearest": "",
+      "target": [
+        0.0,
+        15.0
+      ]
+    },
+    {
+      "area": "海風碼頭",
+      "end": [
+        -0.08,
+        23.01
+      ],
+      "frames": 328,
+      "label": "return-to-dock-8",
+      "metres": 8.07,
+      "nearest": "arrival",
+      "target": [
+        0.0,
+        23.2000007629395
+      ]
+    },
+    {
+      "area": "海風碼頭",
+      "end": [
+        -0.08,
+        15.01
+      ],
+      "frames": 313,
+      "label": "night-avenue-0",
+      "metres": 7.69,
+      "nearest": "",
+      "target": [
+        0.0,
+        15.0
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -0.08,
+        5.61
+      ],
+      "frames": 369,
+      "label": "night-avenue-1",
+      "metres": 9.09,
+      "nearest": "",
+      "target": [
+        0.0,
+        5.59999990463257
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -3.77,
+        5.88
+      ],
+      "frames": 145,
+      "label": "night-avenue-2",
+      "metres": 3.48,
+      "nearest": "guide",
+      "target": [
+        -3.79999995231628,
+        5.90000009536743
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -4.17,
+        -4.16
+      ],
+      "frames": 402,
+      "label": "night-avenue-3",
+      "metres": 9.91,
+      "nearest": "",
+      "target": [
+        -4.19999980926514,
+        -4.19999980926514
+      ]
+    },
+    {
+      "area": "中央廣場",
+      "end": [
+        -1.51,
+        -8.85
+      ],
+      "frames": 230,
+      "label": "night-avenue-4",
+      "metres": 5.61,
+      "nearest": "",
+      "target": [
+        -1.60000002384186,
+        -9.0
+      ]
+    },
+    {
+      "area": "迎賓大道",
+      "end": [
+        -1.51,
+        -15.85
+      ],
+      "frames": 278,
+      "label": "night-avenue-5",
+      "metres": 6.82,
+      "nearest": "play:wind-0",
+      "target": [
+        -1.39999997615814,
+        -16.0
+      ]
+    }
+  ]
+}

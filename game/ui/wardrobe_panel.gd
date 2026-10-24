@@ -731,7 +731,7 @@ func _show_status(message: String, tint: Color) -> void:
 	_sync_status_visibility()
 	status_label.add_theme_color_override("font_color",tint)
 	_set_status_price_plate(tint==Paper.PRICE_INK)
-	if host.has_method("_notice"): host._notice(message)
+	# Feedback already lives in this panel; do not repeat it over world wayfinding.
 
 func _refresh_ledger() -> void:
 	if is_instance_valid(balance_label): balance_label.text="海島幣：%d"%Progress.coins
