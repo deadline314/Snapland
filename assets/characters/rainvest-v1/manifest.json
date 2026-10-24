@@ -1,0 +1,1559 @@
+{
+  "schema_version": 1,
+  "outfit": "outfit-rainvest",
+  "canvas": [
+    280,
+    360
+  ],
+  "frames": [
+    {
+      "action": "walk",
+      "direction": "front_right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "9926bf113342fc92822daa87fda2a4fd29d4cc9dd20755e4244a1aeaf199d3fc",
+      "path": "res://assets/characters/rainvest-v1/walk-front_right-00.pngdata",
+      "png_sha256": "42d6501fc84612df675f24ab4838cdcbeeaf23310294160e667f920cf594657a"
+    },
+    {
+      "action": "walk",
+      "direction": "front_right",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "b01082e4d84f8567a111e84b763bb07b99628faa55bea9e531596f52d762da17",
+      "path": "res://assets/characters/rainvest-v1/walk-front_right-01.pngdata",
+      "png_sha256": "d751a7d94e6a4f82a9aaf2901ea049d72a58cee974d327f345b9699edc1dadf8"
+    },
+    {
+      "action": "walk",
+      "direction": "front_right",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5be626b4f52a5a46f548da6365d701122d8411344b0d763427760470c5607264",
+      "path": "res://assets/characters/rainvest-v1/walk-front_right-02.pngdata",
+      "png_sha256": "a391e6835c86e5741f078fcf2271e39f1f4119824480555ff9c792ab6c9c074e"
+    },
+    {
+      "action": "walk",
+      "direction": "front_right",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "d0247653d44007566eb24624a8b7d9f705bd8bc0dd46835e71c468f12960ac2c",
+      "path": "res://assets/characters/rainvest-v1/walk-front_right-03.pngdata",
+      "png_sha256": "d637335b8c59069b5b74c0ea7fc7bea2c710e548517cc238c2e6c5e73604cb15"
+    },
+    {
+      "action": "walk",
+      "direction": "front_right",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "1f708369272d506347ac2eaa95aba64326a61dcf52548d4d996e0a8592a94778",
+      "path": "res://assets/characters/rainvest-v1/walk-front_right-04.pngdata",
+      "png_sha256": "2310b01c1064d6ef840afadcda8eabddcd791b6409e7cd1e237c3a0d9fa0d67c"
+    },
+    {
+      "action": "walk",
+      "direction": "front_right",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "c665d24830b866ee943850565ca6dc31c7e77288ab0d11b54187b63d8119d800",
+      "path": "res://assets/characters/rainvest-v1/walk-front_right-05.pngdata",
+      "png_sha256": "ed231c4290b01b7bbbe95b53f7bd3f3acff6d26bf82f46b8d44ff02fe6130cee"
+    },
+    {
+      "action": "walk",
+      "direction": "front_right",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "6857c837a3b5aebc3bce3635b5a4a4cccdf9f5220651c7c307658b0f62ce9d64",
+      "path": "res://assets/characters/rainvest-v1/walk-front_right-06.pngdata",
+      "png_sha256": "72e69b368ef76f916b1d1b71381840ce4e56dec2a3acb5ab0da92fc08c9ee98b"
+    },
+    {
+      "action": "walk",
+      "direction": "front_right",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "34b0dbced624010aaee55129ac6b3fd664360ad0c1f33dac97ff72b5793f2c9d",
+      "path": "res://assets/characters/rainvest-v1/walk-front_right-07.pngdata",
+      "png_sha256": "8e7cb0f4b1ed287623ca84f3c3ceb6bc6762f619a35d7ac8f253ff3ea59826e9"
+    },
+    {
+      "action": "walk",
+      "direction": "right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "82f93071366e366fec7e7ea8c4800a9bf18ecac1ea4cd9096ff6a5d3b096b395",
+      "path": "res://assets/characters/rainvest-v1/walk-right-00.pngdata",
+      "png_sha256": "b1a610aad24e3d2b3078f2fbcab70db9bcb886e9545475aca1e7790ae7d8847b"
+    },
+    {
+      "action": "walk",
+      "direction": "right",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "cbf6667d4a312fd9710667827befadf365aecf75e1ba4e645673770ff100d973",
+      "path": "res://assets/characters/rainvest-v1/walk-right-01.pngdata",
+      "png_sha256": "2610924f65b244955f65d8b09e7c15adc8340c46c3f36968ebd4094a7c471d95"
+    },
+    {
+      "action": "walk",
+      "direction": "right",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "149ff7fd9b06956ab8e3703a2d877916028ebfb17dc3bdd7ca52b75e39141b41",
+      "path": "res://assets/characters/rainvest-v1/walk-right-02.pngdata",
+      "png_sha256": "f990150d77605c8633bee2a744bd18f9ae8156f209d17d4e49a8dd03ee8edd81"
+    },
+    {
+      "action": "walk",
+      "direction": "right",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "0b09926799b088b48f68b13b1071e100d68fa392d2ad74689f6cddc2865ebe1c",
+      "path": "res://assets/characters/rainvest-v1/walk-right-03.pngdata",
+      "png_sha256": "c09b6dd94d229ad4edc2ee050507cf1d865236fbe7c111df5f01728cfb74b087"
+    },
+    {
+      "action": "walk",
+      "direction": "right",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7a49144ffff2081bbe8fc897b7de35c49ed6b6e527aa3382c24e797466777314",
+      "path": "res://assets/characters/rainvest-v1/walk-right-04.pngdata",
+      "png_sha256": "337dcd31181e0e66e504f0f98889ad134a2dd99432adf8b112de4f9810fcb04a"
+    },
+    {
+      "action": "walk",
+      "direction": "right",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "4f506ed7533d41f07deb36b338e091efd74f1603fff73e358515f114a583302a",
+      "path": "res://assets/characters/rainvest-v1/walk-right-05.pngdata",
+      "png_sha256": "67c7845ac788cc16860cc734bc3d16b3a463fae13b2d2364e687bd6495a25e19"
+    },
+    {
+      "action": "walk",
+      "direction": "right",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5f605676585c8790db4874ee6fa703733d1ed4359e7f062f8cb05e277849486a",
+      "path": "res://assets/characters/rainvest-v1/walk-right-06.pngdata",
+      "png_sha256": "b0d7b9d6d67e4dd6233922fa5beda7fad20da4a5c0889e219da4c67896925c22"
+    },
+    {
+      "action": "walk",
+      "direction": "right",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "92d25c83cef5485617c8b9f268ff27848ae80cac75f1683af7bfbcebb68439aa",
+      "path": "res://assets/characters/rainvest-v1/walk-right-07.pngdata",
+      "png_sha256": "b15cc3a0330441ea1567403465a7255c32154247ba2bc51f23482ed70acd85e8"
+    },
+    {
+      "action": "walk",
+      "direction": "back_right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "6568fba823821457b6fc00bf45fb3326315ad039fdd17e0a2f5787cfba8d8ed9",
+      "path": "res://assets/characters/rainvest-v1/walk-back_right-00.pngdata",
+      "png_sha256": "827baa3baf8a772c1215d9c2ac92ccfdac72100a103fc05dc5c2a166f1574f6c"
+    },
+    {
+      "action": "walk",
+      "direction": "back_right",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "931d55a6dc1a8695dcfab91bc14e2018aaeabf0eb632671e83b9b083d0e71058",
+      "path": "res://assets/characters/rainvest-v1/walk-back_right-01.pngdata",
+      "png_sha256": "b34b026adfa0488cc723b14c61b86bb33756ecdf6f127e12c002f2afcd8802ce"
+    },
+    {
+      "action": "walk",
+      "direction": "back_right",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "e03108f9a8a757dec7744be45478ae842a4e1757d2b1fc1ce83ae023584628ee",
+      "path": "res://assets/characters/rainvest-v1/walk-back_right-02.pngdata",
+      "png_sha256": "e11ca35f2b88540d2a3044817836a31c70a0f96bd1ad50ed9eb249cf65d9c149"
+    },
+    {
+      "action": "walk",
+      "direction": "back_right",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "b611663fb867e8a59fefd4a8fffbbddf555710745132038c80b8a4422012a55b",
+      "path": "res://assets/characters/rainvest-v1/walk-back_right-03.pngdata",
+      "png_sha256": "e78217b86e9c7bbc9337554c33f2693afbdf88fe147d21527948eb25bfacf1c7"
+    },
+    {
+      "action": "walk",
+      "direction": "back_right",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "eba59c18f0ade279d2d3571649ca052301e4e61e4a7b6da4a70c7de294d622d4",
+      "path": "res://assets/characters/rainvest-v1/walk-back_right-04.pngdata",
+      "png_sha256": "4f947a14fb0862cbf0e0c49b8c2b962221dfa860a0b04ef9b721c13467b0138c"
+    },
+    {
+      "action": "walk",
+      "direction": "back_right",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "563a4e45f359d3ff4c2b42fffca5cbd51e4744ea8cf0ba9673684749dceb8175",
+      "path": "res://assets/characters/rainvest-v1/walk-back_right-05.pngdata",
+      "png_sha256": "be3e3ee7d0542ade664fe8a269d731bc810ce7438c0522afa4f80207e344995d"
+    },
+    {
+      "action": "walk",
+      "direction": "back_right",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "32634498f50e7544cde9c39a44bf6e45786aaf39741ac405fd341f3749dbde81",
+      "path": "res://assets/characters/rainvest-v1/walk-back_right-06.pngdata",
+      "png_sha256": "e5a3d2c680ad7f64e44e7da1e9336c6116bd0d6d590c6af10fa106870d44ce17"
+    },
+    {
+      "action": "walk",
+      "direction": "back_right",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a13d87ebfce9904f54d7ee20d7caa0380a21e162c551c795bb454084b7f8ef59",
+      "path": "res://assets/characters/rainvest-v1/walk-back_right-07.pngdata",
+      "png_sha256": "8b8fdb8f6fc500926bfd816dab9c5193d7ed28bcca6d5a6d94673be77e2a5903"
+    },
+    {
+      "action": "walk",
+      "direction": "back",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "56bfacef67e48458fcc17fe45b026222f20e8d62ba07049b05326c3f4d29ff85",
+      "path": "res://assets/characters/rainvest-v1/walk-back-00.pngdata",
+      "png_sha256": "cdb419aaaa1d016223d0a09a808c5120b2db893bbab61578682d462f8bb73c87"
+    },
+    {
+      "action": "walk",
+      "direction": "back",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "b1aec4171867dfeebb747743e28ebb3c7bac16177ae6b4a6ffd7e3ad807b78df",
+      "path": "res://assets/characters/rainvest-v1/walk-back-01.pngdata",
+      "png_sha256": "a9e57a4ed4bc4fc3cf81faf0978546b502e6a7bbf1b89c927fdd682d34e46720"
+    },
+    {
+      "action": "walk",
+      "direction": "back",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "ec2908dbecdf5a0a31b102e641fb42f852c33fe58b6fac10ea18ae52fbb7c8b3",
+      "path": "res://assets/characters/rainvest-v1/walk-back-02.pngdata",
+      "png_sha256": "c6b607b263c2cd90dd0361830e6349b2ca7b8d1f04c3d1c5e56e613eae85bf04"
+    },
+    {
+      "action": "walk",
+      "direction": "back",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5a3ee0a8bc60dbe101f260dc3c291b2ef540f16675779c902a92c8d3e817c15f",
+      "path": "res://assets/characters/rainvest-v1/walk-back-03.pngdata",
+      "png_sha256": "d5e68afb527ecd30c618d6c5035c257b120d3932834bb6f968289ad5174a8901"
+    },
+    {
+      "action": "walk",
+      "direction": "back",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "c33cb389dfd1476d75a18ae914aec3cdc069a5169dff372299b655431369202c",
+      "path": "res://assets/characters/rainvest-v1/walk-back-04.pngdata",
+      "png_sha256": "fcf45699b2e3d0298cc602f48837e1e4bb96c61a0708e5680057d74ebd042594"
+    },
+    {
+      "action": "walk",
+      "direction": "back",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "85bdd86a0fb97274f2607c91fc4b5c8e8d9f2fe76481a1959a8a8408480a60eb",
+      "path": "res://assets/characters/rainvest-v1/walk-back-05.pngdata",
+      "png_sha256": "75eaa4e3f00f2eff4838d7ff08bafb123689e261eb55388f756e5c4dbd0ad505"
+    },
+    {
+      "action": "walk",
+      "direction": "back",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "0d6d7624378c14913c0ee82c411adf2bef489430dc7b27500d3ffa51278d26b1",
+      "path": "res://assets/characters/rainvest-v1/walk-back-06.pngdata",
+      "png_sha256": "69ee508cf2e3fce045cc904b44d372ca34cf43d93b199ccbbb0d48193d355669"
+    },
+    {
+      "action": "walk",
+      "direction": "back",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "e679f23fd99059a3aa5db030a64df7655a2b60295e37d2fc6b1c4a4e9e6e1c65",
+      "path": "res://assets/characters/rainvest-v1/walk-back-07.pngdata",
+      "png_sha256": "ae18e1cb71f0327e0f0b642e4a6b613a9d97038a58031156cf80642913db83d0"
+    },
+    {
+      "action": "walk",
+      "direction": "back_left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "55dbb79ee88314b09b65130a207007ba0ee1230bfad120894d72cdfdaa00d3a1",
+      "path": "res://assets/characters/rainvest-v1/walk-back_left-00.pngdata",
+      "png_sha256": "251adb39a1c686ee3730f15c30bb71bcea18e294b4da813c787c49203e22338a"
+    },
+    {
+      "action": "walk",
+      "direction": "back_left",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "63f5a4f66d464c05d3bcf854a14ac0eab84bc4e30393bc7f2c32a0bb3e98c68c",
+      "path": "res://assets/characters/rainvest-v1/walk-back_left-01.pngdata",
+      "png_sha256": "ef410d69626e06e5d93fc966946e4f68b9398e508ae26f9cd8d0699cee6098d0"
+    },
+    {
+      "action": "walk",
+      "direction": "back_left",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "4c934d9255a996f9027fc3a13ca78c851fe9530df37cf9f73861b8afe74f77b2",
+      "path": "res://assets/characters/rainvest-v1/walk-back_left-02.pngdata",
+      "png_sha256": "2f7b816633171531aaaf66167f39db5ca0b09040548982873c04105d1a5291eb"
+    },
+    {
+      "action": "walk",
+      "direction": "back_left",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "8ba9393f31089598f73cf0f40091d65e87e3656e056a79b36b35194d71bfe9ac",
+      "path": "res://assets/characters/rainvest-v1/walk-back_left-03.pngdata",
+      "png_sha256": "08656f1472db51762b2cbf3b5073e37ed7129180dea978defc5d776ad233efc5"
+    },
+    {
+      "action": "walk",
+      "direction": "back_left",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "68d16473a815bb7ea39a8d852e04eafbbfe78aab8d4d9715e2775eaeafac874f",
+      "path": "res://assets/characters/rainvest-v1/walk-back_left-04.pngdata",
+      "png_sha256": "7923630e255ec2cf7bfaf2f1ef959b945584ec12409c6e2288569b09932f7819"
+    },
+    {
+      "action": "walk",
+      "direction": "back_left",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "ba351b5a43d0a87ac226557b02f5324116b784e0fbced5b9e04c224f7c9d54c4",
+      "path": "res://assets/characters/rainvest-v1/walk-back_left-05.pngdata",
+      "png_sha256": "7461f1a373dcd49458cc88fdc08febc871ad251f350dfc60c5ca6ed9f497e660"
+    },
+    {
+      "action": "walk",
+      "direction": "back_left",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "f03f661b629029eeb13cccbed922615619ae919999e09e1b8233c5d8ad83a7dd",
+      "path": "res://assets/characters/rainvest-v1/walk-back_left-06.pngdata",
+      "png_sha256": "8c7f69cf1595d7de230c6b7a8d779126ee559c2957a05233dd7b1c72af55c701"
+    },
+    {
+      "action": "walk",
+      "direction": "back_left",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "e310d0636d0f1f0f284384f5272cf79a32d1f36209ca0565f4d391b8bf495754",
+      "path": "res://assets/characters/rainvest-v1/walk-back_left-07.pngdata",
+      "png_sha256": "db6a5fade7d21539a1f302e505324e9614a1172a37dbc6ae8a2b4309224c8f60"
+    },
+    {
+      "action": "walk",
+      "direction": "left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "ef5f7b53a9aef683545e7402af4898cfa0b503629b467612e55f94c60f150db8",
+      "path": "res://assets/characters/rainvest-v1/walk-left-00.pngdata",
+      "png_sha256": "410a53208459bc74de8224b4b06f5adb8e083af01beb46eeb3734fc7980b2bc2"
+    },
+    {
+      "action": "walk",
+      "direction": "left",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5d299799b9ac60a25f4cce6614050ee6eb07e32088d45928ecf4f6d97d53b8f3",
+      "path": "res://assets/characters/rainvest-v1/walk-left-01.pngdata",
+      "png_sha256": "fa365f88069e23baafc9a9a301506eddcc3bd3eac0e8ed3bd237300cfa307357"
+    },
+    {
+      "action": "walk",
+      "direction": "left",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "27cb07246e9d218a12c61db87c01b53571abd50db9c57d60320c57ce5a406954",
+      "path": "res://assets/characters/rainvest-v1/walk-left-02.pngdata",
+      "png_sha256": "50eb276d6cd003381c6647f4eb9002daba700d953a047ccaa82188edecd81c3c"
+    },
+    {
+      "action": "walk",
+      "direction": "left",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "db1f4bc7278f6da452b2d6555b427fb6e0148aa0bdeeefd18829b7031d0d1988",
+      "path": "res://assets/characters/rainvest-v1/walk-left-03.pngdata",
+      "png_sha256": "448e2d9c0f764aefbc02c5aba7db6c43b4bd81e20eb0f6c4a79593f13e7b9787"
+    },
+    {
+      "action": "walk",
+      "direction": "left",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "d007430a241e12ca5ee979ddb48e204810a24743077af4014c76f808f1075121",
+      "path": "res://assets/characters/rainvest-v1/walk-left-04.pngdata",
+      "png_sha256": "4a0db57b394915f61b28fdd28cfa3ddd018021463c6fd32aeb1ca52348dbd528"
+    },
+    {
+      "action": "walk",
+      "direction": "left",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "4bec45a69587a1f0b0db289e397b07a41c1bace9416655ba7779f450131ac217",
+      "path": "res://assets/characters/rainvest-v1/walk-left-05.pngdata",
+      "png_sha256": "6359acb0493c057fa9820b812c8fb569c4d50237c5c942c18110fdfef16e8215"
+    },
+    {
+      "action": "walk",
+      "direction": "left",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "3b35abd5f3bac8ea078b4aa25c2b161175c92a2fd689f88ebd4c68cc356dfa82",
+      "path": "res://assets/characters/rainvest-v1/walk-left-06.pngdata",
+      "png_sha256": "1b966cbe40e8c5c008029d5b1d1fbec99ecc65571a96327ca091ee920a6f55a7"
+    },
+    {
+      "action": "walk",
+      "direction": "left",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "396415b6a0a34bb89a4b9f46ae92d7d4d6401d8c49f451c6977322cec7ad59ca",
+      "path": "res://assets/characters/rainvest-v1/walk-left-07.pngdata",
+      "png_sha256": "657e1a9522bc1f9f65aad951c225ad06ae66db7571c87fbf233f671203f71cc8"
+    },
+    {
+      "action": "walk",
+      "direction": "front_left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "873506cdc5a0c88830c35e6839210c463feadb45cd57296c36d23e6792fff97b",
+      "path": "res://assets/characters/rainvest-v1/walk-front_left-00.pngdata",
+      "png_sha256": "c7b4e2bad0eac527a04aee8ac9057a39f65d28ff127ec8d8232857219e287255"
+    },
+    {
+      "action": "walk",
+      "direction": "front_left",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "91d371c8ede0c89c57238dc415ae28d1df1cb44a9a84a3355a2c3d3016273db2",
+      "path": "res://assets/characters/rainvest-v1/walk-front_left-01.pngdata",
+      "png_sha256": "b07fd9449a803a309e610e7144d30283f38c558d9768b861a2fc39a229a4aff3"
+    },
+    {
+      "action": "walk",
+      "direction": "front_left",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "d47a8e0c5b772d965fa178faa8ea9fc28ba236c9613c2e52db6ab66fa9c5bf8b",
+      "path": "res://assets/characters/rainvest-v1/walk-front_left-02.pngdata",
+      "png_sha256": "885bd21cfae2e079b2ca92d6eb96d74417aa484d33466aca2c05606a579762f3"
+    },
+    {
+      "action": "walk",
+      "direction": "front_left",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a0c9d79ac85c42d0a575a29da49e9fd354d6fd3b039861192091a54da8a9d119",
+      "path": "res://assets/characters/rainvest-v1/walk-front_left-03.pngdata",
+      "png_sha256": "e96ea9319926e21af27d16d3e608ff1985843bb26bb133bbeb1e7bbdac9ffa9d"
+    },
+    {
+      "action": "walk",
+      "direction": "front_left",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "06c45b0c5f755e6201b71267c377237b499515247bf9066bd3360f71de5b0b1c",
+      "path": "res://assets/characters/rainvest-v1/walk-front_left-04.pngdata",
+      "png_sha256": "fe8480240e23d13dd6f8cf4cdf0e2a70e678c9eaecc9021a9ae06615138f4c38"
+    },
+    {
+      "action": "walk",
+      "direction": "front_left",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "4f45a17ed841b3113b425bd192be5bf46188365c5fe761fc5288139465eb1faa",
+      "path": "res://assets/characters/rainvest-v1/walk-front_left-05.pngdata",
+      "png_sha256": "2897fa944490939b04aa02c389e0222716ca4c49eaeaa933bc003f9f9b2f7946"
+    },
+    {
+      "action": "walk",
+      "direction": "front_left",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "ae7289bc9b8157cbee8309dcbfd5a7cf0c17b58f61710bf3abbac4dbc4d96a50",
+      "path": "res://assets/characters/rainvest-v1/walk-front_left-06.pngdata",
+      "png_sha256": "94c6f69661bf6e48dedcecf7e62985b07ca9643dffe7db473181e2f05c8cf4ee"
+    },
+    {
+      "action": "walk",
+      "direction": "front_left",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "9970ade7c632241b8d7824b52cc092d79a5d244c61ce80379cb9497766926030",
+      "path": "res://assets/characters/rainvest-v1/walk-front_left-07.pngdata",
+      "png_sha256": "ee1970c096fdf3329d1a5bdb66ae12bb1ca46d53aae17e2309403ad123a77feb"
+    },
+    {
+      "action": "idle",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7176274f2e157bf7e11c377f3e4dad02e726cf596f1ff36f2e8c769c99151398",
+      "path": "res://assets/characters/rainvest-v1/idle-front-00.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "idle",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7176274f2e157bf7e11c377f3e4dad02e726cf596f1ff36f2e8c769c99151398",
+      "path": "res://assets/characters/rainvest-v1/idle-front-01.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "idle",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "8c5418b3b92560ba2103803402a7f8c65b0065f88ba810acd5561952d393323d",
+      "path": "res://assets/characters/rainvest-v1/idle-front-02.pngdata",
+      "png_sha256": "3699659d5fb4619b09b823988a7d4458ae8674676e00b8925895bf37553a04c0"
+    },
+    {
+      "action": "idle",
+      "direction": "front",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "8c5418b3b92560ba2103803402a7f8c65b0065f88ba810acd5561952d393323d",
+      "path": "res://assets/characters/rainvest-v1/idle-front-03.pngdata",
+      "png_sha256": "3699659d5fb4619b09b823988a7d4458ae8674676e00b8925895bf37553a04c0"
+    },
+    {
+      "action": "idle",
+      "direction": "front",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "c4e0a47f8750aabe2493f85c0ded39ecafeca05d600d4a4a12403b9dee662874",
+      "path": "res://assets/characters/rainvest-v1/idle-front-04.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "idle",
+      "direction": "front",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7176274f2e157bf7e11c377f3e4dad02e726cf596f1ff36f2e8c769c99151398",
+      "path": "res://assets/characters/rainvest-v1/idle-front-05.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "idle",
+      "direction": "front",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7176274f2e157bf7e11c377f3e4dad02e726cf596f1ff36f2e8c769c99151398",
+      "path": "res://assets/characters/rainvest-v1/idle-front-06.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "idle",
+      "direction": "front",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7176274f2e157bf7e11c377f3e4dad02e726cf596f1ff36f2e8c769c99151398",
+      "path": "res://assets/characters/rainvest-v1/idle-front-07.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "idle",
+      "direction": "front_right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5b46d93b8be37fa97e7422bb098219698e58e3d31e8091b23ccc552067f93b7e",
+      "path": "res://assets/characters/rainvest-v1/idle-front_right-00.pngdata",
+      "png_sha256": "cba7becaf7838da4f42aee58f102878ccf8c472619eb9733a1c3ad3a3865ddf6"
+    },
+    {
+      "action": "idle",
+      "direction": "front_right",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "feb11499b637ea29286060968d4b647ff05698c9bc2bda3b451973152110d8bb",
+      "path": "res://assets/characters/rainvest-v1/idle-front_right-01.pngdata",
+      "png_sha256": "d354436ed9eb215dd256f71cc74f50a687acaa1eea28443b30183ca5a6faf9e9"
+    },
+    {
+      "action": "idle",
+      "direction": "front_right",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "cdfaf9ddb504e7ee257b71230761a8c36b3b93df8615af52451b22d96e4de35e",
+      "path": "res://assets/characters/rainvest-v1/idle-front_right-02.pngdata",
+      "png_sha256": "cba7becaf7838da4f42aee58f102878ccf8c472619eb9733a1c3ad3a3865ddf6"
+    },
+    {
+      "action": "idle",
+      "direction": "front_right",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5b46d93b8be37fa97e7422bb098219698e58e3d31e8091b23ccc552067f93b7e",
+      "path": "res://assets/characters/rainvest-v1/idle-front_right-03.pngdata",
+      "png_sha256": "cba7becaf7838da4f42aee58f102878ccf8c472619eb9733a1c3ad3a3865ddf6"
+    },
+    {
+      "action": "idle",
+      "direction": "right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "0efd8a59694f2689d3599bed511acce5ee7acfc1da3d7d98ddb4cdf810133ba5",
+      "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "idle",
+      "direction": "right",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "6bcd6006af5c101ed909bc09b47a25d44f12e817ac34c18134d83a1edc5eef67",
+      "path": "res://assets/characters/rainvest-v1/idle-right-01.pngdata",
+      "png_sha256": "0058dd13fa20050974a93aa9be8746257acd7e7e4c1f359e80d7307cae2b8990"
+    },
+    {
+      "action": "idle",
+      "direction": "right",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "ed7ac0a8fcfe876c588cfe011ea2f2b5c29aff693f90801f94ef79f758af0688",
+      "path": "res://assets/characters/rainvest-v1/idle-right-02.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "idle",
+      "direction": "right",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "0efd8a59694f2689d3599bed511acce5ee7acfc1da3d7d98ddb4cdf810133ba5",
+      "path": "res://assets/characters/rainvest-v1/idle-right-03.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "idle",
+      "direction": "back_right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5a94be28166fef9382734029dd47c3062cca58aa9305d4129862e82a26ec622b",
+      "path": "res://assets/characters/rainvest-v1/idle-back_right-00.pngdata",
+      "png_sha256": "df484c6db2613da78c05668306ab53743ac5a06faf08108ffb4a64c059d35cca"
+    },
+    {
+      "action": "idle",
+      "direction": "back_right",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "bc99a2e845b5309685be40948a998be7840bc242ca218ab12b91d43431c481fd",
+      "path": "res://assets/characters/rainvest-v1/idle-back_right-01.pngdata",
+      "png_sha256": "5869fd0a4c40929034115b6c2f2d9260e158af75bd1b8f738d3d96b619edd46d"
+    },
+    {
+      "action": "idle",
+      "direction": "back_right",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5a94be28166fef9382734029dd47c3062cca58aa9305d4129862e82a26ec622b",
+      "path": "res://assets/characters/rainvest-v1/idle-back_right-02.pngdata",
+      "png_sha256": "df484c6db2613da78c05668306ab53743ac5a06faf08108ffb4a64c059d35cca"
+    },
+    {
+      "action": "idle",
+      "direction": "back_right",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5a94be28166fef9382734029dd47c3062cca58aa9305d4129862e82a26ec622b",
+      "path": "res://assets/characters/rainvest-v1/idle-back_right-03.pngdata",
+      "png_sha256": "df484c6db2613da78c05668306ab53743ac5a06faf08108ffb4a64c059d35cca"
+    },
+    {
+      "action": "idle",
+      "direction": "back",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "c7a3d0055fbcbd5fa14be3dcd80428c145376da7421488af48205cc150628d1f",
+      "path": "res://assets/characters/rainvest-v1/idle-back-00.pngdata",
+      "png_sha256": "45b217300869d6afe264185d830d5e94ea30c88d63808748890f3d78b77bcd39"
+    },
+    {
+      "action": "idle",
+      "direction": "back",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "ae49e64f74555a96482c61a2ef86b259d2267f95bd2820084b11c9e56ddf794e",
+      "path": "res://assets/characters/rainvest-v1/idle-back-01.pngdata",
+      "png_sha256": "5bf71354c55f501ea7f66dfba31c4fedea71e37d8448fa6553a9cc8c2cdf7a07"
+    },
+    {
+      "action": "idle",
+      "direction": "back",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "c7a3d0055fbcbd5fa14be3dcd80428c145376da7421488af48205cc150628d1f",
+      "path": "res://assets/characters/rainvest-v1/idle-back-02.pngdata",
+      "png_sha256": "45b217300869d6afe264185d830d5e94ea30c88d63808748890f3d78b77bcd39"
+    },
+    {
+      "action": "idle",
+      "direction": "back",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "c7a3d0055fbcbd5fa14be3dcd80428c145376da7421488af48205cc150628d1f",
+      "path": "res://assets/characters/rainvest-v1/idle-back-03.pngdata",
+      "png_sha256": "45b217300869d6afe264185d830d5e94ea30c88d63808748890f3d78b77bcd39"
+    },
+    {
+      "action": "idle",
+      "direction": "back_left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a9312d3a2bf8f47ec6d19f0f2a2b4cfef72ac84121087ddfe8a44aee3e9ebbf5",
+      "path": "res://assets/characters/rainvest-v1/idle-back_left-00.pngdata",
+      "png_sha256": "32e9a3470d8ea99f99389b1b39393eb50c3d6bf641ce4b2c7be0b3ee3eb7b766"
+    },
+    {
+      "action": "idle",
+      "direction": "back_left",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7956f5e78d74cac4668abe803f96777c4944d4cb234087b43032b7fd1e265932",
+      "path": "res://assets/characters/rainvest-v1/idle-back_left-01.pngdata",
+      "png_sha256": "4d9a754fa65df0d5e2de04852a1a0e3de672d3c2ff107128e86f5852916c7bb8"
+    },
+    {
+      "action": "idle",
+      "direction": "back_left",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a9312d3a2bf8f47ec6d19f0f2a2b4cfef72ac84121087ddfe8a44aee3e9ebbf5",
+      "path": "res://assets/characters/rainvest-v1/idle-back_left-02.pngdata",
+      "png_sha256": "32e9a3470d8ea99f99389b1b39393eb50c3d6bf641ce4b2c7be0b3ee3eb7b766"
+    },
+    {
+      "action": "idle",
+      "direction": "back_left",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a9312d3a2bf8f47ec6d19f0f2a2b4cfef72ac84121087ddfe8a44aee3e9ebbf5",
+      "path": "res://assets/characters/rainvest-v1/idle-back_left-03.pngdata",
+      "png_sha256": "32e9a3470d8ea99f99389b1b39393eb50c3d6bf641ce4b2c7be0b3ee3eb7b766"
+    },
+    {
+      "action": "idle",
+      "direction": "left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "40b2ebabee8dd46486ce121766731c3da42c39be8615aac18fd690bbd426cf80",
+      "path": "res://assets/characters/rainvest-v1/idle-left-00.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "idle",
+      "direction": "left",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a7c05d4897571ba4a4dbafc6dab20576c029566844c39aa4d48ef5a8a781971d",
+      "path": "res://assets/characters/rainvest-v1/idle-left-01.pngdata",
+      "png_sha256": "96088206e6f70b8cecf16565e4cf069592e879bfa82df9c2733eb6309e86ef99"
+    },
+    {
+      "action": "idle",
+      "direction": "left",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "9f92ac8e989e549fd36ab3362b1d1718ec41122e40a3058f277a615407169370",
+      "path": "res://assets/characters/rainvest-v1/idle-left-02.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "idle",
+      "direction": "left",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "40b2ebabee8dd46486ce121766731c3da42c39be8615aac18fd690bbd426cf80",
+      "path": "res://assets/characters/rainvest-v1/idle-left-03.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "idle",
+      "direction": "front_left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "f3307aaca2136b98bf386d1c30c0a6a80aaa572c11c403d01db5a3a1787c67d5",
+      "path": "res://assets/characters/rainvest-v1/idle-front_left-00.pngdata",
+      "png_sha256": "83bb0312e5b4579914cdeee6badff180a78f3affc0d38c3b4b9a1c5402a9d4e7"
+    },
+    {
+      "action": "idle",
+      "direction": "front_left",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "12a3e83a35c541ff9b99d0f85df5d03197fbc4e1fecb29f68df252effb8560fa",
+      "path": "res://assets/characters/rainvest-v1/idle-front_left-01.pngdata",
+      "png_sha256": "b6eaf169d90e9520d23b2917bd46e74716b9dc1b572b15ead17eaed61ddc3a2d"
+    },
+    {
+      "action": "idle",
+      "direction": "front_left",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "95171d1a573696b5ed5ef49d60bb27df91f39fb1339ea8a006f1442bc3c235c2",
+      "path": "res://assets/characters/rainvest-v1/idle-front_left-02.pngdata",
+      "png_sha256": "83bb0312e5b4579914cdeee6badff180a78f3affc0d38c3b4b9a1c5402a9d4e7"
+    },
+    {
+      "action": "idle",
+      "direction": "front_left",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "f3307aaca2136b98bf386d1c30c0a6a80aaa572c11c403d01db5a3a1787c67d5",
+      "path": "res://assets/characters/rainvest-v1/idle-front_left-03.pngdata",
+      "png_sha256": "83bb0312e5b4579914cdeee6badff180a78f3affc0d38c3b4b9a1c5402a9d4e7"
+    },
+    {
+      "action": "walk",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "4cc7a7ec39ec5bae8c001253e6fafa466c649032fdb7b61dd75c56ab6039f91d",
+      "path": "res://assets/characters/rainvest-v1/walk-front-00.pngdata",
+      "png_sha256": "a6b3bec65436c7905327f01b02b0d8ed335dfebfd4b8d9673e5cc0b74edddb70"
+    },
+    {
+      "action": "walk",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a5e6f6074052c20fde1a73535055f83256e55778df46727f10abef712020d540",
+      "path": "res://assets/characters/rainvest-v1/walk-front-01.pngdata",
+      "png_sha256": "0293bc8df23e2d14a696b3a982e7bb34a324d9c2f5586fdb42c288d079cde899"
+    },
+    {
+      "action": "walk",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "c6be5561134b56e7ca4cfe6c0ed1cc6d221034556cee00aa778bbe9abfe88ce8",
+      "path": "res://assets/characters/rainvest-v1/walk-front-02.pngdata",
+      "png_sha256": "805801af2c3979994e46e43f2632dac09813dcc4feea961b1313a87dc22a6e4e"
+    },
+    {
+      "action": "walk",
+      "direction": "front",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "8d053ee811d7644c7cde8e29f0d35dc8769ce2e6336b60236ce35206e4020ffd",
+      "path": "res://assets/characters/rainvest-v1/walk-front-03.pngdata",
+      "png_sha256": "d8fa99096666dc6056692b722037a68fe4551c3e1a59afa6e25b0407d5135b3c"
+    },
+    {
+      "action": "walk",
+      "direction": "front",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "e8a1c4079c1d48fc279fc1254c0436db848de473d1a1b04cb300b39314dd8638",
+      "path": "res://assets/characters/rainvest-v1/walk-front-04.pngdata",
+      "png_sha256": "f79a134f14725f14df51566a3a6e3cacce9b4acc9f59a50c184453ba2dd2b473"
+    },
+    {
+      "action": "walk",
+      "direction": "front",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "912e16a928fd881f63521407d71aa1dadb3a714ceab61554af66bfc1a325ce57",
+      "path": "res://assets/characters/rainvest-v1/walk-front-05.pngdata",
+      "png_sha256": "06f3bcab75e1fbb03bd54405a67aefba9270721bddcebfc84d3f6d60692e96a8"
+    },
+    {
+      "action": "walk",
+      "direction": "front",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "74570df34b693214208575ffdbe725fbe1695f1f61ece0395ff771dc33479574",
+      "path": "res://assets/characters/rainvest-v1/walk-front-06.pngdata",
+      "png_sha256": "dbfbecbc83d303dc04540cedc8dfee40df3e4d18d6a9e5f717850f3902b63d39"
+    },
+    {
+      "action": "walk",
+      "direction": "front",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "01d3c757a0ca1c7a9ca5f60dde27d23ad2b36d8290c76a9afa3e9b6e4cfd4d95",
+      "path": "res://assets/characters/rainvest-v1/walk-front-07.pngdata",
+      "png_sha256": "43a6ee37b0e0fbc802c1b52554dab3e2bb077de17c38748d7a99b9a1a8189f8e"
+    },
+    {
+      "action": "wave",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "6d28f04c4f68301015c92784c70a0786fa427e5777e12f42ad105decbf577b8a",
+      "path": "res://assets/characters/rainvest-v1/wave-front-00.pngdata",
+      "png_sha256": "78cb9759c6bb693d0b8bbae0c92b0c54efa363c74197392d81825db1243f76d9"
+    },
+    {
+      "action": "wave",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "eca20385ea297641cd334e7665851c7a6ba8381fffd5e4275eaf3274d3950402",
+      "path": "res://assets/characters/rainvest-v1/wave-front-01.pngdata",
+      "png_sha256": "fa9dd5b405698b24d66f637251d7474779b947282757f98823a7d3b58a9655d2"
+    },
+    {
+      "action": "wave",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "78ae5af54141263d9c0fdde16b61a426f93ce75cdb17726d7f50e8e5d2092825",
+      "path": "res://assets/characters/rainvest-v1/wave-front-02.pngdata",
+      "png_sha256": "7b2d78f658c06a00b2fcefa81e6a448963938f0fbb1b910d66cea81c54ee93e1"
+    },
+    {
+      "action": "wave",
+      "direction": "front",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "ff5ab80a1fa6683844b4c7d1eaadd1bef0c548040fae5813158da90b7d6941cf",
+      "path": "res://assets/characters/rainvest-v1/wave-front-03.pngdata",
+      "png_sha256": "e37a6f7c5317b5f6f2fca4c46b4b16da3305fe3d02b123f114979791903a9865"
+    },
+    {
+      "action": "wave",
+      "direction": "front",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a4b5aeb635950e01c43cfd5cf34c6876167f73ffacbcd000ba863ee46a909196",
+      "path": "res://assets/characters/rainvest-v1/wave-front-04.pngdata",
+      "png_sha256": "8ad7ba3e067723eb1bdb96d7136f98a67c07006b897e75d2511e1285d48d69ef"
+    },
+    {
+      "action": "wave",
+      "direction": "front",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "8555681df8028ba13312e191e1ebd771a54f93f1b79879dfe724ef30176aadfd",
+      "path": "res://assets/characters/rainvest-v1/wave-front-05.pngdata",
+      "png_sha256": "972553254517d7bf59b9a27169f45a7c853a09b16d6e4a37e6a204f3e84b2928"
+    },
+    {
+      "action": "wave",
+      "direction": "front",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "ee5dd53990269bc939ccf3d48fe0a2cd4613af2e9f2933742f90dd1de572d6cd",
+      "path": "res://assets/characters/rainvest-v1/wave-front-06.pngdata",
+      "png_sha256": "3efd974ebdcefbc8644790b4e6e19a26a9d1d03e6bcfeae509731429ccede713"
+    },
+    {
+      "action": "wave",
+      "direction": "front",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "6ce6833c8d6eb1d2b6d68ec01db115eec5eaf2df9c6907f9153f99dc3ad49687",
+      "path": "res://assets/characters/rainvest-v1/wave-front-07.pngdata",
+      "png_sha256": "a915383059aa3c2dacd4abb9f1cca9bbdd1a61b5d2f1e62f1bda6cdddb42e905"
+    },
+    {
+      "action": "photograph",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "73e4e2869ef4fc81d9ed19e965238f4257bb6dd2f119385c5358897a9c2c2470",
+      "path": "res://assets/characters/rainvest-v1/photograph-front-00.pngdata",
+      "png_sha256": "45ff4a908a0de2ad252d1a57e184296144090f9758198014f8dde08223f75ca0"
+    },
+    {
+      "action": "photograph",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "58baefc8e6b26a77f4e8fee3ecc3f0ba0a699d3f8ee0af57eb8978cc9f1cbf5a",
+      "path": "res://assets/characters/rainvest-v1/photograph-front-01.pngdata",
+      "png_sha256": "a59f622a7c378a9c2fcd0a4668a3050a57872ef4cf76f59e2636d0ed9dc4d170"
+    },
+    {
+      "action": "photograph",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "80e93122e9527bb196c50b73ec91a6c92fbd9766426d556631e38a2b461bafe3",
+      "path": "res://assets/characters/rainvest-v1/photograph-front-02.pngdata",
+      "png_sha256": "5af4fc2353622bcf8c9c64071df9c6a82276d1425d20be3cef24260c48381d14"
+    },
+    {
+      "action": "photograph",
+      "direction": "front",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "3e6726f6bd5f4fae317f2f715f64ddbd850df1a049b335287fa7af1328cd6b84",
+      "path": "res://assets/characters/rainvest-v1/photograph-front-03.pngdata",
+      "png_sha256": "2452815743510142f3f9d665d7e773fbe1d80b8464352106090f6d6adafd4ea4"
+    },
+    {
+      "action": "photograph",
+      "direction": "front",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "fe63cb7157f3fd4e88be8c3ad7d72de2e8824d380e49002f6d103ac3d03dadcc",
+      "path": "res://assets/characters/rainvest-v1/photograph-front-04.pngdata",
+      "png_sha256": "c1f562de46ead779bfb77463b9c555cac1698e5a58f21d035972afb809712d19"
+    },
+    {
+      "action": "photograph",
+      "direction": "front",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "b25c8af82e3d26fcb2dab73824b2a367a9af8797a3acc4f16308fe28cc6f3c9a",
+      "path": "res://assets/characters/rainvest-v1/photograph-front-05.pngdata",
+      "png_sha256": "aaa147928aef2f30ef52d7d90061f968fa2366590093124010a72504aa7e8be6"
+    },
+    {
+      "action": "photograph",
+      "direction": "front",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "b6af1a456230020221d0f7dcd36050c0fa98538be751a18b9934ae74b3764bfe",
+      "path": "res://assets/characters/rainvest-v1/photograph-front-06.pngdata",
+      "png_sha256": "5cf1d524e7710530af0eb41e2fd1c27cfdcb699e863b2856d8d0e2fb0c8caaae"
+    },
+    {
+      "action": "photograph",
+      "direction": "front",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "80176764e8c943f8e72e6542e2a9836d0f28e5554056270be857254b36e88393",
+      "path": "res://assets/characters/rainvest-v1/photograph-front-07.pngdata",
+      "png_sha256": "4582588b7714cbfd56929fd6c27ea78674fe165b016e1973e630a094340b6249"
+    },
+    {
+      "action": "interact",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a68c59e7e65641b8db3b2cbc4f45ef8dc0e076db5056590e68be8ecee693b5e7",
+      "path": "res://assets/characters/rainvest-v1/interact-front-00.pngdata",
+      "png_sha256": "d9f51fbc57d7d33e8f6b8198d890ebb60b7f04da3abb3ecc17d39ba56a062432"
+    },
+    {
+      "action": "interact",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5e6160179a1d082f59870a2ab221dcaf9a9679379fcd55897614859f6dd432e2",
+      "path": "res://assets/characters/rainvest-v1/interact-front-01.pngdata",
+      "png_sha256": "9a4d02d79788dbfd4a5873a7760d709e36c0bce2736cdf5aebe47f9b840395fd"
+    },
+    {
+      "action": "interact",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "bc9ddbe25e340a60efe743a2df0177447feeb751c8fa66f482605c9e306f57f0",
+      "path": "res://assets/characters/rainvest-v1/interact-front-02.pngdata",
+      "png_sha256": "adc173881289f2d2650dfc52b995c2350cdcde44191782457abd71e7ca6424b9"
+    },
+    {
+      "action": "interact",
+      "direction": "front",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "d7a03801e87a57374a1fb96b8dc1a17ef4d7744c7e2effda7a43b809b6299ef9",
+      "path": "res://assets/characters/rainvest-v1/interact-front-03.pngdata",
+      "png_sha256": "93399c7b2b778d020af333974a181d8d6eebc356f472ed54e23bac9d7f645e43"
+    },
+    {
+      "action": "interact",
+      "direction": "front",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "bd0803176d73e559a4490dad36fcbdcf1e8be9f64233112819aba4867a88d152",
+      "path": "res://assets/characters/rainvest-v1/interact-front-04.pngdata",
+      "png_sha256": "48984f660185b768947fea4bc0ea11e094a76e0e1e5c5449d216af69b52a4959"
+    },
+    {
+      "action": "interact",
+      "direction": "front",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "b3619a2720f433f421514a9a59a65cdaec7a1de19c9523834a6a4232b8e87633",
+      "path": "res://assets/characters/rainvest-v1/interact-front-05.pngdata",
+      "png_sha256": "1a07a81e5a5c7846f19b3dc4abcd4bbe47798f71b6ab090b1374ddc7c8543485"
+    },
+    {
+      "action": "interact",
+      "direction": "front",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "66ac32b79a3b8f055b5863df280686b6bdca4e62fd4e9d55268d523de2c7cdcd",
+      "path": "res://assets/characters/rainvest-v1/interact-front-06.pngdata",
+      "png_sha256": "b6b74686b74ed3f70cecfdf6db15e4fe00e0e0fa0fba897165dc8399525042a5"
+    },
+    {
+      "action": "interact",
+      "direction": "front",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "d94203732b6584f33b92b79d3feb5c266b3c408adc9e24ba8c9b02faecf256a7",
+      "path": "res://assets/characters/rainvest-v1/interact-front-07.pngdata",
+      "png_sha256": "b821cbcaf1d0294d0e84a994a171d7803c5a434b7ee1511d633a410fc9c24533"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "620b434e0842235ec5836ebce7890336a868bb60078bc085313bd87e46d943d8",
+      "path": "res://assets/characters/rainvest-v1/catch-front-00.pngdata",
+      "png_sha256": "aae1e4414b3125288707b062c72340458d9115e43cdda89fd23f2af1de2cc471"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "876d3266844cc6dd2555569d9c97e27dde7904433c9a6152adc6ee5e316bf952",
+      "path": "res://assets/characters/rainvest-v1/catch-front-01.pngdata",
+      "png_sha256": "18af482af0eb6c7569297a78e43b0451dbd3c40f604896c2756ce1881704774a"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "34a962ad15ec762c916344825903817d47537fef97f2a47635e60c2487e0ba34",
+      "path": "res://assets/characters/rainvest-v1/catch-front-02.pngdata",
+      "png_sha256": "3520a86fe08b68b91e76afe0349e969c29d9bc8d375cf4130d244509070e6509"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "2ceb2f16053f8fe0cf9a55cf8260e890413ed3131c45bd5e7e45a909f710b8f8",
+      "path": "res://assets/characters/rainvest-v1/catch-front-03.pngdata",
+      "png_sha256": "bcebce301ba3c84cc3effd1b1b5f05e299fea7b4f8ff71bb52e318b55af4f50e"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "12442806513995a5b02111c23ab9cc28ff8a6cf4f59cb0addd3bcd4b9136dae0",
+      "path": "res://assets/characters/rainvest-v1/catch-front-04.pngdata",
+      "png_sha256": "2ecb4ae418d64aaf7d2472c9b65b45e32645eb6a1b469605008cc902be922b19"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "6e3c216c5240b89c11db4dfc98b5851990de5453a774e4e18cffb418640bfebe",
+      "path": "res://assets/characters/rainvest-v1/catch-front-05.pngdata",
+      "png_sha256": "9d0a36220f24c94c761e1bdb05ee0b68bd60571ee31f9cc3becdf2ede987a3a9"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "8bab1cf553d1b5952a8e1a5f75dd5bf4f09cbc7b6ff7c31ef360dea850ada1f0",
+      "path": "res://assets/characters/rainvest-v1/catch-front-06.pngdata",
+      "png_sha256": "3332bb8de279f20296a6d4ce60fa5fcd60451fec352ceece272babe0775ae349"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "b8378916cc80113f832ce5715de8a9e488d34d947efb851c3b55d31408504432",
+      "path": "res://assets/characters/rainvest-v1/catch-front-07.pngdata",
+      "png_sha256": "b65c3aadc3cc9c8a0d45d2de6f0cb069dd03cf2f8933caeff74982f87db81310"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 8,
+      "source_kind": "authored",
+      "source_pixel_sha256": "137d307591bd75057accc8ebadb037e6f85a58b01e20a57ceb72d217c19e40c9",
+      "path": "res://assets/characters/rainvest-v1/catch-front-08.pngdata",
+      "png_sha256": "be7dfeaa0137c1eb94a6d397989b8f44dfe2ecb95f0ef371c536d55dc52ffe7b"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 9,
+      "source_kind": "authored",
+      "source_pixel_sha256": "54b9451e484f117af9c23bb68a1196cdaad038d4c457c75b31cbab336146ab3d",
+      "path": "res://assets/characters/rainvest-v1/catch-front-09.pngdata",
+      "png_sha256": "b2b30b24f95d1ca18da34e39be53d6b101c1ebe37e8826ba9ffca4a13610c9d4"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 10,
+      "source_kind": "authored",
+      "source_pixel_sha256": "e579944bcdfe27e925c5a6412818834ec1378056e257da4169f5208d3d14b93e",
+      "path": "res://assets/characters/rainvest-v1/catch-front-10.pngdata",
+      "png_sha256": "69b3e7ee2c247c04a6bd79e3ba15f10fff3132f1ac7e7f88d0ac58fe1389d808"
+    },
+    {
+      "action": "catch",
+      "direction": "front",
+      "frame": 11,
+      "source_kind": "authored",
+      "source_pixel_sha256": "87df784bfcb5f88323e1a2e2a1ffa14554e257a92c8ffbc2c76b803d778d3b1f",
+      "path": "res://assets/characters/rainvest-v1/catch-front-11.pngdata",
+      "png_sha256": "acf805e174447770026707ac9549a53cf209bdd652e5d54ab57fe302efdd7f53"
+    },
+    {
+      "action": "jump",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "fdffb573a7698fa5c6addca937ee9caedf88b81783b22b73deff2eb0fe30c65e",
+      "path": "res://assets/characters/rainvest-v1/jump-front-00.pngdata",
+      "png_sha256": "065f9ffeb9e95dd39b0cebd437a2abe1e0d1e8368a9dee45056e85a74b980dde"
+    },
+    {
+      "action": "jump",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "eb0ff11458bc6700c016367e8bc10c4a25f281f780b5ecae117d9fc60683235a",
+      "path": "res://assets/characters/rainvest-v1/jump-front-01.pngdata",
+      "png_sha256": "62408660b9d367c909524080fb624427fbffc031ad73b2c4a7fe86027f4fad65"
+    },
+    {
+      "action": "jump",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "3bb76c050e9a3f9cd45ff1d6406128f4ae89226d9553a7762b0d6217f3480900",
+      "path": "res://assets/characters/rainvest-v1/jump-front-02.pngdata",
+      "png_sha256": "a8f15b3064900b57157a88a3f92f03ddafd29a446edb127aef4cb8bc88eb7f9d"
+    },
+    {
+      "action": "jump",
+      "direction": "front",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "2a4135b2e3b493d98094229b0ea607cd7f2824ec221ed525a29a7d9e0a1a77e6",
+      "path": "res://assets/characters/rainvest-v1/jump-front-03.pngdata",
+      "png_sha256": "94c8c64a8cd837d1ca62d376fa8332db2560dc28b35b20b7dc23d8cfd2d0d721"
+    },
+    {
+      "action": "jump",
+      "direction": "front",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "60756bbb67404d3024c6994a2f97e010718499f64311c52ba317602e838a5f99",
+      "path": "res://assets/characters/rainvest-v1/jump-front-04.pngdata",
+      "png_sha256": "7cc83f53b310f3c592d86fb7f32a1658fd558c0b8a3b3554329614505e87bf47"
+    },
+    {
+      "action": "jump",
+      "direction": "front",
+      "frame": 5,
+      "source_kind": "authored",
+      "source_pixel_sha256": "0bcbb9047121c905057a25a49411715a90c0a2cc70741febe30b491f81912ef8",
+      "path": "res://assets/characters/rainvest-v1/jump-front-05.pngdata",
+      "png_sha256": "dda31e8391284fca9237abf4c2c2bb24d9ea654ac82df277cd06b49f56898bac"
+    },
+    {
+      "action": "jump",
+      "direction": "front",
+      "frame": 6,
+      "source_kind": "authored",
+      "source_pixel_sha256": "86eb4135df824a38356ea5d7bc577695858e5ffa9ecfff793539d374a3dbb103",
+      "path": "res://assets/characters/rainvest-v1/jump-front-06.pngdata",
+      "png_sha256": "415d34304816f49a325732cce23506b86b9cbdac4493b39baf17517e2a9644a3"
+    },
+    {
+      "action": "jump",
+      "direction": "front",
+      "frame": 7,
+      "source_kind": "authored",
+      "source_pixel_sha256": "9dfc788e50be9afbb174bda043bd96c2e9eb4fef07638013a2a8eefcc01f0c88",
+      "path": "res://assets/characters/rainvest-v1/jump-front-07.pngdata",
+      "png_sha256": "198553e6613a1b308aa696316daadd23a0d6be9d43cba1985c8d06bdfe2c7e11"
+    },
+    {
+      "action": "sit",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "0ee75a06c9aecaef3c9e84e109c51479888dbb831b5a158add3aee2029bae36d",
+      "path": "res://assets/characters/rainvest-v1/sit-front-00.pngdata",
+      "png_sha256": "2fa3c793105cbdc0b074f0a6eaa4dc0d7e51769b707d93ac95e8048e93bbc901"
+    },
+    {
+      "action": "sit",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7c792d5468080c0983408bfe16bbb84f742cce6c637bdc573cbc8bb9bec74c13",
+      "path": "res://assets/characters/rainvest-v1/sit-front-01.pngdata",
+      "png_sha256": "7b948313936a9d5aecba1e0283a532db83a7fb69e21535c87aea59d5b434ecf5"
+    },
+    {
+      "action": "sit",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5a81fb09727e5db84951c81634f34264b65dbe36204b00af8dbda6b722c23de7",
+      "path": "res://assets/characters/rainvest-v1/sit-front-02.pngdata",
+      "png_sha256": "4ee419499fda51bc64232282cd70acc9a3102ccba038619430b0e3267e233eda"
+    },
+    {
+      "action": "sit",
+      "direction": "front",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "109b798aea915ef266640185417d1f85986f937df1471da4ad42728b8c05e136",
+      "path": "res://assets/characters/rainvest-v1/sit-front-03.pngdata",
+      "png_sha256": "27c0f46981748029eb855ad3ee5a4ef631a45de9bb1acda6e97ce48b447528f2"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front-00.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front-01.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front-02.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_right",
+      "frame": 0,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front_right-00.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_right",
+      "frame": 1,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front_right-01.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_right",
+      "frame": 2,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front_right-02.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "right",
+      "frame": 0,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-right-00.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "right",
+      "frame": 1,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-right-01.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "right",
+      "frame": 2,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-right-02.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_right",
+      "frame": 0,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back_right-00.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_right",
+      "frame": 1,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back_right-01.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_right",
+      "frame": 2,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back_right-02.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back",
+      "frame": 0,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back-00.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back",
+      "frame": 1,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back-01.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back",
+      "frame": 2,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back-02.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_left",
+      "frame": 0,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back_left-00.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_left",
+      "frame": 1,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back_left-01.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "back_left",
+      "frame": 2,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-back_left-02.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "left",
+      "frame": 0,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-left-00.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "left",
+      "frame": 1,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-left-01.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "left",
+      "frame": 2,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-left-02.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_left",
+      "frame": 0,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front_left-00.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_left",
+      "frame": 1,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front_left-01.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "celebrate",
+      "direction": "front_left",
+      "frame": 2,
+      "source_kind": "runtime_fallback",
+      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
+      "path": "res://assets/characters/rainvest-v1/celebrate-front_left-02.pngdata",
+      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    }
+  ],
+  "encoding": "png_bytes_without_import_conversion"
+}

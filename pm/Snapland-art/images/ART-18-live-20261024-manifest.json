@@ -1,0 +1,230 @@
+{
+  "ART-18-live-20261024-source-result.json": {
+    "bytes": 50,
+    "sha256": "78283b48c5c12ff8b8c2aac1631c53be1a4d603bcca8a1f5918547ddcf5829b2"
+  },
+  "ART-18-live-20261024-source-result.log": {
+    "bytes": 557,
+    "sha256": "eac731533b7174aba1629e25744d906baeec123eb7a427a5f13cce9bc14cf0a7"
+  },
+  "ART-18-live-20261024-pack-result.json": {
+    "bytes": 221,
+    "sha256": "4b6679a62e05593c07cf16630cd2306597e3c1488e472e24699645279609ef0c"
+  },
+  "ART-18-live-20261024-pack-result.log": {
+    "bytes": 617,
+    "sha256": "951eaa71970a57d24e1d4b6199d03f8080c1b13e2c9bad24c6114480ee72b92d"
+  },
+  "ART-18-live-20261024-normal-result.json": {
+    "bytes": 50,
+    "sha256": "e288868ef0a1a9db43976a0227ef2603a0d00f7b441824cf91ac9f32cd090cdb"
+  },
+  "ART-18-live-20261024-normal-result.log": {
+    "bytes": 929,
+    "sha256": "eb4aa9200fe060a33951f5a6913603050f5be9d5da59f6dc49efe53acb734e56"
+  },
+  "ART-18-live-20261024-quarter-result.json": {
+    "bytes": 50,
+    "sha256": "202764eff07d4d57040af9250da70e531a0efea9b84b7276d046969cfa71e0c7"
+  },
+  "ART-18-live-20261024-quarter-result.log": {
+    "bytes": 929,
+    "sha256": "eb4aa9200fe060a33951f5a6913603050f5be9d5da59f6dc49efe53acb734e56"
+  },
+  "ART-18-live-20261024-world-result.json": {
+    "bytes": 50,
+    "sha256": "eeef5f29024a67c57e0b8ae243bdb0d5ef8953ff3bedefef1d453d026ef1bb03"
+  },
+  "ART-18-live-20261024-world-result.log": {
+    "bytes": 13280,
+    "sha256": "73cdc621341527b2d86eed1d864cb9c3aa71d5af0bacc709aa6cab7f5ce430a2"
+  },
+  "ART-18-live-20261024-release-result.json": {
+    "bytes": 73,
+    "sha256": "a57b1570494561eea898f46aec882d4862dcf138437ad033938302da8cb67c11"
+  },
+  "ART-18-live-20261024-release-result.log": {
+    "bytes": 6876,
+    "sha256": "dff73cbc09878b368f709d8f5c9892496d282c00b2df0702596e26b8e14a07cc"
+  },
+  "ART-18-live-20261024-linux-build.json": {
+    "bytes": 137011,
+    "sha256": "6bd49a05fadf876c37fce3084fac7b09c9d8cf5da310896038f6985655acbac7"
+  },
+  "ART-18-live-20261024-linux-import.log": {
+    "bytes": 110596,
+    "sha256": "8db7be461dda380024dac3905b365711098e69b7c3634d8cfc0bb42afc446e24"
+  },
+  "ART-18-live-20261024-linux-export.log": {
+    "bytes": 178702,
+    "sha256": "b00d42608e60f1eb930741807f9505db39519737ad264ba95514568575c42488"
+  },
+  "ART-18-live-20261024-regressions.json": {
+    "bytes": 757,
+    "sha256": "8a043b5ef3f722af61c8da8cd999695e379a272ed5d352888e2a2c678fd5d91e"
+  },
+  "ART-18-live-20261024-wardrobe.json": {
+    "bytes": 199,
+    "sha256": "b2a0f25040ebf2e392a90d3e9783f62e8c264ac02e1acb20e1c952df7fa347ee"
+  },
+  "ART-18-live-20261024-main-checks.json": {
+    "bytes": 214,
+    "sha256": "f7c7b259bcf197e965df9c7471fd0cd047ff37af7e404753568cc7cbb1338d76"
+  },
+  "ART-18-live-20261024-payload-parity.json": {
+    "bytes": 137,
+    "sha256": "c41b0e10c31ac15d81701a8a70e7723f63fc3879baba729048f2ecd3cb2d852a"
+  },
+  "ART-18-live-20261024-python-159.log": {
+    "bytes": 25295,
+    "sha256": "6633010d0480af648a00b05fe06a13257ab987d07d77c24404ae4ad621b249eb"
+  },
+  "ART-18-live-20261024-design-all.log": {
+    "bytes": 112,
+    "sha256": "86ff4586fb870397fe32c5e2385514cad71ec4890ac583f8de57e29b92a9102d"
+  },
+  "ART-18-live-20261024-quarter.mp4": {
+    "bytes": 17642736,
+    "sha256": "2ecb2833331ed2350678aa8136fc941978caeb5de6bf41fcb1d9fd0770640089"
+  },
+  "ART-18-live-20261024-quarter-video.json": {
+    "bytes": 264,
+    "sha256": "54850bd97e8727e6014c2e7c9461e3d88e72ed3bc5cc31791f05e0cd60871a5f"
+  },
+  "ART-18-live-20261024-normal-172.json": {
+    "bytes": 58208,
+    "sha256": "812061329a1889a2836dc3eb59947b5b6858b462bd4df0e04c82d9b221c5a638"
+  },
+  "ART-18-live-20261024-quarter-172.json": {
+    "bytes": 58380,
+    "sha256": "71099cdfc93cee45ef6c92e1d165c9149b54c5080733fa844a15eb4ade8817b6"
+  },
+  "ART-18-live-20261024-world-inputs.json": {
+    "bytes": 3442,
+    "sha256": "b0b8da06decd46ced835d56591be677a3958bdb70c942bf0aedfcdf6c0ebf2f3"
+  },
+  "ART-18-live-20261024-final-pck-parity.json": {
+    "bytes": 211,
+    "sha256": "ab84c494bbf648e7a22317aecf213e5d3524f5a21884ef17dd32e303395c8912"
+  },
+  "ART-18-live-20261024-release-video.json": {
+    "bytes": 262,
+    "sha256": "460a8e2465faa135fe5a1f1b0285848b210d4b32ce8270caa62fe84833e17680"
+  },
+  "ART-18-live-20261024-release-video-samples.jpg": {
+    "bytes": 1586610,
+    "sha256": "5b0b86219dd0b07895dd195a9bb038be998ae36806a68a1404b5a14c8164becd"
+  },
+  "ART-18-live-20261024-release.mp4": {
+    "bytes": 5925812,
+    "sha256": "3ac7e36e0344785c2dddafea0288bded14c9283b29a0c28ee11a442a15ad91ff"
+  },
+  "ART-18-live-20261024-release-rainvest.png": {
+    "bytes": 34529,
+    "sha256": "1bbc7cd6ef567d8317c9276d245a32bf7256f5b3e061abe647aa9f699418b282"
+  },
+  "ART-18-live-20261024-release-review-0.jpg": {
+    "bytes": 482554,
+    "sha256": "392108046b68c49f238757b496f52c8137d31df64ce7ae5c878a4c65739d4ee8"
+  },
+  "ART-18-live-20261024-release-review-1.jpg": {
+    "bytes": 533264,
+    "sha256": "bc0499419c2a123414ca6f0e2e1126eb035f6ed68f26e7930bc4f29cdfc27971"
+  },
+  "ART-18-live-20261024-release-review-2.jpg": {
+    "bytes": 568682,
+    "sha256": "315eeb0300449ff65a5c95268dd5cc698c471b43fa7151fa073d2cb5b3e63c54"
+  },
+  "ART-18-live-20261024-review-00.jpg": {
+    "bytes": 498257,
+    "sha256": "a8f9d972278da802170df2658430ece0c888e96869d3878edc0c5dceeee7f87b"
+  },
+  "ART-18-live-20261024-review-01.jpg": {
+    "bytes": 506932,
+    "sha256": "a0c49904ef606619a3143f4bf6d8d5cb4c09ed7f33aef2fd4e1873a3cc0052d6"
+  },
+  "ART-18-live-20261024-review-02.jpg": {
+    "bytes": 488297,
+    "sha256": "47009e56bbc5f2b27005cce713f2b26d92c5ffe77158081c22b1b3e05cbaa269"
+  },
+  "ART-18-live-20261024-review-03.jpg": {
+    "bytes": 496114,
+    "sha256": "f9b3023cfe9d330d528a9913fe98ff9ab99c7a96e309c8beba4399e6e0981d1b"
+  },
+  "ART-18-live-20261024-review-04.jpg": {
+    "bytes": 601814,
+    "sha256": "d19433f978a1a2bc55bc0ef4b1f08825118fc23d9ebf6b32eb6f70bb00906840"
+  },
+  "ART-18-live-20261024-review-05.jpg": {
+    "bytes": 612943,
+    "sha256": "720a55148ab39843b574e91cc88f83df25bbfab22a41391542e39ccabe16fb00"
+  },
+  "ART-18-live-20261024-review-06.jpg": {
+    "bytes": 656542,
+    "sha256": "fbe62249825adb694302223f34f1025017340840290fb1240de8ea3e46920a0b"
+  },
+  "ART-18-live-20261024-review-07.jpg": {
+    "bytes": 355841,
+    "sha256": "1af503c32587f48e9140c99ba78e6de681aab01e4bc092218b5bc1bc464c300f"
+  },
+  "ART-18-live-20261024-world-01-fitting.png": {
+    "bytes": 242120,
+    "sha256": "a40be9b67f3acda9c40a35f305df669374624469eb1c243d3bf6ce01823be95a"
+  },
+  "ART-18-live-20261024-world-02-walking-01.png": {
+    "bytes": 1174871,
+    "sha256": "b88df661f646b7428534e8e50b36def2db597b0759c6d15b8b90a3839fa3165e"
+  },
+  "ART-18-live-20261024-world-02-walking-02.png": {
+    "bytes": 1172643,
+    "sha256": "653e1b72047af6e25b851be1367881125c08c24f50ca71c213568583ef033906"
+  },
+  "ART-18-live-20261024-world-02-walking-03.png": {
+    "bytes": 1174752,
+    "sha256": "9e3fa3dc65be8764904195e3440e43f29eaa1b3aea3bd32bf629830c5da6c88c"
+  },
+  "ART-18-live-20261024-world-02-walking-04.png": {
+    "bytes": 1178299,
+    "sha256": "efb086f5c5c864c742b34e3d85149a42668b5f584666708aaa87abc1884ce153"
+  },
+  "ART-18-live-20261024-world-02-walking-05.png": {
+    "bytes": 1162135,
+    "sha256": "bdc96e9c3fefb0247060952427af76a59eb926abe5f96a46b9131a91baec30d9"
+  },
+  "ART-18-live-20261024-world-02-walking-06.png": {
+    "bytes": 1153013,
+    "sha256": "0a62f27b7f7f784409e7593e703620377dd25593f77ede039ae13e5668cf012c"
+  },
+  "ART-18-live-20261024-world-02-walking-07.png": {
+    "bytes": 1152771,
+    "sha256": "c3f3e7e93259e6bc6774b2f34739d2662b90dcfd5e84f2407d128e8d42cd7142"
+  },
+  "ART-18-live-20261024-world-02-walking-08.png": {
+    "bytes": 1163371,
+    "sha256": "b9e5d5aa6f41e6184be2a3b9fe70974a953cd31ec4f9a49267b1b5f6e20d787a"
+  },
+  "ART-18-live-20261024-world-03-reduced-settings.png": {
+    "bytes": 242898,
+    "sha256": "f6ee382a9b6c6137382e369cbe5e53fcd2a211f683580430151cfd6122876674"
+  },
+  "ART-18-live-20261024-world-04-reduced-wave.png": {
+    "bytes": 1165259,
+    "sha256": "2f53d447e72c50695013761971d9760a095926baa5460e83f1a454f47c4faba3"
+  },
+  "ART-18-live-20261024-world-05-reentry.png": {
+    "bytes": 1160882,
+    "sha256": "e889c8098bee2f8509a1303c0f0a29adee5e19fbff332ca4c64a1bb81a150004"
+  },
+  "ART-18-live-20261024-normal-final-raw-captures.zip": {
+    "bytes": 25180925,
+    "sha256": "39387664315fb4590e09b87b130ef331fb3bbda8dc5f73d03fe35ec12f732815"
+  },
+  "ART-18-live-20261024-quarter-raw-captures.zip": {
+    "bytes": 25280981,
+    "sha256": "7f57e42ba390a6683b228475e4fbfa81eb124d70e93f606c9d66b3fe3812d93e"
+  },
+  "ART-18-live-20261024-replays-and-rejections.zip": {
+    "bytes": 8184570,
+    "sha256": "13ef68e4b3355acd99846cadf8788b36a2480b57db2d7d4e5ea6154bc13eacca"
+  }
+}

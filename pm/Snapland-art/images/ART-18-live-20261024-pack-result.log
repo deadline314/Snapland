@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: garment overlay preserves 172 original compositions; missing last cel falls back across all eight directions
+WARNING: Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] texture (res://game/world/avatar_renderer.gd:302)
+         [1] _initialize (/workspace/work/Snapland-character/work/remaining-20261024/art18-packed-overlay-final/audit/check.gd:16)

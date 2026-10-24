@@ -1,0 +1,7 @@
+{
+  "changed_sources": [
+    "game/main.gd"
+  ],
+  "garment_sources_all_identical": true,
+  "scope": "Final release differs only in saved-motion smoke expectation; full 172 PCK material check used prior build"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "wardrobe runtime tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.26
+  },
+  {
+    "name": "wardrobe UI tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 10.9
+  }
+]

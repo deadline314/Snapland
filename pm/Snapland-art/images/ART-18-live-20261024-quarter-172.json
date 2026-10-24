@@ -1,0 +1,2754 @@
+[
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front_right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front_right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front_right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front_right",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "right",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back_right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back_right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back_right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back_right",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back_left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back_left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back_left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "back_left",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "left",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front_left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front_left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front_left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "idle",
+    "direction": "front_left",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "photograph",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "photograph",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "photograph",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "photograph",
+    "direction": "front",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "photograph",
+    "direction": "front",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "photograph",
+    "direction": "front",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "photograph",
+    "direction": "front",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "photograph",
+    "direction": "front",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "interact",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "interact",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "interact",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "interact",
+    "direction": "front",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "interact",
+    "direction": "front",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "interact",
+    "direction": "front",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "interact",
+    "direction": "front",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "interact",
+    "direction": "front",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 8.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 9.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 10.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "catch",
+    "direction": "front",
+    "frame": 11.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "jump",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "jump",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "jump",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "jump",
+    "direction": "front",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "jump",
+    "direction": "front",
+    "frame": 4.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "jump",
+    "direction": "front",
+    "frame": 5.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "jump",
+    "direction": "front",
+    "frame": 6.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "jump",
+    "direction": "front",
+    "frame": 7.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "sit",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "sit",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "sit",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "sit",
+    "direction": "front",
+    "frame": 3.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "authored",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front_right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front_right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front_right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back_right",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back_right",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back_right",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back_left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back_left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "back_left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front_left",
+    "frame": 0.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front_left",
+    "frame": 1.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "bob",
+      "hair_color": "silver",
+      "skin": "deep",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  },
+  {
+    "action": "celebrate",
+    "direction": "front_left",
+    "frame": 2.0,
+    "outside_cloth_changes": 0,
+    "source_kind": "runtime_fallback",
+    "style": {
+      "face": "curious",
+      "gender": "neutral",
+      "hair": "curly",
+      "hair_color": "chestnut",
+      "skin": "olive",
+      "species": "human"
+    },
+    "time_scale": 0.25
+  }
+]

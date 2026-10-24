@@ -5,6 +5,7 @@ const ITEMS := [
 	{"id": "outfit-coral", "name": "海港外套・珊瑚紅", "slot": "outfit", "price": 80, "color": "#E87968", "itemdefid": 51002, "tradable": false, "marketable": false},
 	{"id": "outfit-gold", "name": "海港外套・暖金黃", "slot": "outfit", "price": 100, "color": "#D8AB47", "itemdefid": 51003, "tradable": false, "marketable": false},
 	{"id": "outfit-navy", "name": "海港外套・深海藍", "slot": "outfit", "price": 90, "color": "#364D78", "itemdefid": 51004, "tradable": false, "marketable": false},
+	{"id": "outfit-rainvest", "name": "海風長背心・雨金", "slot": "outfit", "price": 0, "color": "#E5B53D", "itemdefid": 51009, "tradable": false, "marketable": false},
 	{"id": "hat-none", "name": "不戴帽子", "slot": "hat", "price": 0, "color": "#FFFFFF", "itemdefid": 51005, "tradable": false, "marketable": false},
 	{"id": "hat-straw", "name": "草編遮陽帽", "slot": "hat", "price": 60, "color": "#D8BB77", "itemdefid": 51006, "tradable": false, "marketable": false},
 	{"id": "hat-sailor", "name": "水手帽", "slot": "hat", "price": 70, "color": "#F2F1E8", "itemdefid": 51007, "tradable": false, "marketable": false},

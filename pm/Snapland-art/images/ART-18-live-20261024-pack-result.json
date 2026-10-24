@@ -1,0 +1,6 @@
+{
+  "exit": 0,
+  "seconds": 27.66,
+  "errors": 0,
+  "scope": "Pinned editor engine loading actual embedded PCK; audit has only project.godot and external test, no loose player scripts or art. Not a native release boot."
+}

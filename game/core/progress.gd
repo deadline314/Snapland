@@ -46,7 +46,7 @@ var intro_seen := false
 var platform_pending_achievements: Array[String] = []
 var appearance: Dictionary = DEFAULT_APPEARANCE.duplicate(true)
 var equipped: Dictionary = DEFAULT_EQUIPPED.duplicate(true)
-var owned_clothes: Array[String] = ["outfit-tide"]
+var owned_clothes: Array[String] = ["outfit-tide", "outfit-rainvest"]
 var coins := 120
 var wardrobe_rewarded_games: Array[String] = []
 var tutorial_seen_games: Array[String] = []
@@ -925,8 +925,8 @@ func _apply_save(payload: Dictionary) -> void:
 				push_warning("Invalid wardrobe item '%s' in field 'owned_clothes' in progress file '%s'; skipping." % [id, _save_path()])
 				continue
 			owned_clothes.append(id)
-	if not owned_clothes.has("outfit-tide"):
-		owned_clothes.append("outfit-tide")
+	for free_outfit in ["outfit-tide", "outfit-rainvest"]:
+		if not owned_clothes.has(free_outfit): owned_clothes.append(free_outfit)
 	var loaded_equipped: Variant = payload.get("equipped", {})
 	if typeof(loaded_equipped) == TYPE_DICTIONARY:
 		for slot: Variant in DEFAULT_EQUIPPED:
@@ -998,7 +998,7 @@ func _reset_memory() -> void:
 	platform_pending_achievements = []
 	appearance = DEFAULT_APPEARANCE.duplicate(true)
 	equipped = DEFAULT_EQUIPPED.duplicate(true)
-	owned_clothes = ["outfit-tide"]
+	owned_clothes = ["outfit-tide", "outfit-rainvest"]
 	coins = 120
 	wardrobe_rewarded_games = []
 	tutorial_seen_games = []

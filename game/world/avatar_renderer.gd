@@ -64,6 +64,8 @@ const OUTFIT_COLORS := {
 	"outfit-gold": Color("#d8ab47"), "outfit-navy": Color("#364d78"),
 }
 
+var garment_overlays = preload("res://game/world/garment_overlay_library.gd").new()
+
 var _atlas: Texture2D
 var _atlas_image: Image
 var _hat_atlas_image: Image
@@ -194,6 +196,15 @@ func authored_action_fps(action: String, direction: String = "front") -> float:
 	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
 	return animation_library.frame_fps("traveller", action, safe_direction) if animation_library != null else 0.0
 
+func original_garment_pose(action: String, direction: String, frame: int) -> Image:
+	if action=="walk": return _walk_pose_image(direction,frame)
+	if action=="idle": return _stable_idle_pixels.frame("hero-idle",direction,frame)
+	if animation_library.has_frame("traveller",action,direction):
+		var source: Texture2D = animation_library.texture("traveller",action,direction,frame)
+		return source.get_image().duplicate() if source!=null else null
+	var cardinal := direction if DIRECTIONS.has(direction) else _closest_cardinal(direction)
+	return _atlas_pose_image(_pose_index(cardinal,frame,action)) if _atlas_valid else null
+
 func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "front", frame: int = 0, action: String = "idle") -> Texture2D:
 	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
 	var authored_action: bool = animation_library != null and animation_library.has_action("traveller", action, safe_direction)
@@ -215,6 +226,9 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	for key in DEFAULT_APPEARANCE:
 		if appearance.has(key): normalized_appearance[key] = str(appearance[key])
 	var outfit := str(equipped.get("outfit", "outfit-tide"))
+	var garment_selected: bool = outfit==garment_overlays.OUTFIT
+	# Fabric is applied after the original body palette, before hair and hats.
+	var body_outfit := "outfit-tide" if garment_selected else outfit
 	var hat := str(equipped.get("hat", "hat-none"))
 	var pose := _pose_index(pose_direction, safe_frame, safe_action)
 	var render_appearance := normalized_appearance.duplicate()
@@ -230,7 +244,8 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var manifest_has_head_anchor := false
 	if has_manifest_frame:
 		# Clothing completeness and palette-only profiles are resolved by the library.
-		var pose_equipped := equipped
+		var pose_equipped := equipped.duplicate()
+		if garment_selected: pose_equipped["outfit"] = "outfit-tide"
 		var authored: Texture2D = animation_library.texture("traveller", safe_action, safe_direction, safe_frame, pose_equipped)
 		if authored != null:
 			# ImageTexture.get_image() may expose a cached image. Renderer passes
@@ -304,7 +319,9 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
 	# Recolor the body before compositing a prepared haircut. Applying the coat
 	# palette afterwards mistakes dark-blue curls over the jacket for cloth.
-	_apply_palette(image, normalized_appearance, outfit, pose_direction, has_hair_overlay, source_metrics.get("source_hair_indices",palette_hair_indices),source_metrics.get("palette_hair_indices",PackedInt32Array()),source_metrics.get("foreground_indices",PackedInt32Array()))
+	_apply_palette(image, normalized_appearance, body_outfit, pose_direction, has_hair_overlay, source_metrics.get("source_hair_indices",palette_hair_indices),source_metrics.get("palette_hair_indices",PackedInt32Array()),source_metrics.get("foreground_indices",PackedInt32Array()))
+	if garment_selected and not inspect_authored_idle_sources:
+		garment_overlays.apply(self,image,safe_action,safe_direction,idle_frame if registered_idle else walk_frame if safe_action=="walk" else safe_frame)
 	if has_hair_overlay:
 		face_backdrop = image.duplicate()
 		source_hair_mask = source_metrics.source_hair_mask

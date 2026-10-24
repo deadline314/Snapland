@@ -25,6 +25,9 @@ func _run() -> void:
 	progress.reset_progress()
 	_check(progress.coins == 120, "new profile starts with 120 coins")
 	_check(progress.owned_clothes.has("outfit-tide") and progress.equipped.outfit == "outfit-tide", "free harbor jacket is owned and equipped")
+	_check(progress.owned_clothes.has("outfit-rainvest"), "new silhouette is free and owned")
+	_check(progress.equip_clothing("outfit-rainvest") and progress.coins==120, "new silhouette can be worn without currency")
+	_check(progress.equip_clothing("outfit-tide"), "original jacket remains freely available")
 	var starting_coins: int = progress.coins
 	var options: Dictionary = progress.appearance_options()
 	for index in range(100):
@@ -75,6 +78,7 @@ func _run() -> void:
 			saved_skin_is_valid = true
 	_check(saved_skin_is_valid, "appearance option survives reload")
 	_check(progress.coins == 60 and progress.owned_clothes.has("outfit-coral") and progress.owned_clothes.has("hat-straw"), "currency and all owned items survive reload")
+	_check(progress.owned_clothes.has("outfit-rainvest"), "free silhouette survives existing wardrobe reload")
 	_check(progress.equipped.outfit == "outfit-coral" and progress.equipped.hat == "hat-none", "equipped items survive reload")
 	progress.complete_game("game-002", false)
 	_check(progress.coins == 60, "reward receipt survives reload and prevents repeat payout")
@@ -82,7 +86,7 @@ func _run() -> void:
 	progress.complete_game("game-003", false)
 	_check(progress.coins == progress.MAX_COINS, "game rewards clamp currency at the safe limit")
 	_check(progress.wardrobe_item("outfit-tide").itemdefid == 51001 and not progress.wardrobe_item("outfit-tide").tradable and not progress.wardrobe_item("outfit-tide").marketable, "catalog has unique offline item definition")
-	_check(progress.wardrobe_items().size() == 8, "wardrobe catalog exposes all clothing and hat choices")
+	_check(progress.wardrobe_items().size() == 9, "wardrobe catalog exposes all clothing and hat choices")
 
 	var save_path: String = progress._save_path()
 	var fixture := FileAccess.open(save_path, FileAccess.WRITE)

@@ -1,0 +1,182 @@
+[
+  {
+    "action": "idle",
+    "direction": "front",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-tide"
+    },
+    "frame": 0,
+    "label": "01-fitting",
+    "position": [
+      0.0,
+      23.2000007629395
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "walk",
+    "direction": "back",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 4,
+    "label": "02-walking-01",
+    "position": [
+      0.0,
+      22.7078189849854
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "walk",
+    "direction": "back_right",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 1,
+    "label": "02-walking-02",
+    "position": [
+      0.35732838511467,
+      22.2284660339355
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "walk",
+    "direction": "right",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 6,
+    "label": "02-walking-03",
+    "position": [
+      0.948952734470367,
+      22.1421794891357
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "walk",
+    "direction": "front_right",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 2,
+    "label": "02-walking-04",
+    "position": [
+      1.42830789089203,
+      22.4995021820068
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "walk",
+    "direction": "front",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 0,
+    "label": "02-walking-05",
+    "position": [
+      1.5145937204361,
+      23.091121673584
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "walk",
+    "direction": "front_left",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 4,
+    "label": "02-walking-06",
+    "position": [
+      1.15726542472839,
+      23.5704746246338
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "walk",
+    "direction": "left",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 1,
+    "label": "02-walking-07",
+    "position": [
+      0.565641164779663,
+      23.6567611694336
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "walk",
+    "direction": "back_left",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 6,
+    "label": "02-walking-08",
+    "position": [
+      0.0862858667969704,
+      23.2994384765625
+    ],
+    "reduced_motion": false
+  },
+  {
+    "action": "idle",
+    "direction": "back_left",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 0,
+    "label": "03-reduced-settings",
+    "position": [
+      0.0111557738855481,
+      23.224308013916
+    ],
+    "reduced_motion": true
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 0,
+    "label": "04-reduced-wave",
+    "position": [
+      0.0111557738855481,
+      23.224308013916
+    ],
+    "reduced_motion": true
+  },
+  {
+    "action": "wave",
+    "direction": "front",
+    "equipped": {
+      "hat": "hat-none",
+      "outfit": "outfit-rainvest"
+    },
+    "frame": 0,
+    "label": "05-reentry",
+    "position": [
+      0.0111557738855481,
+      23.224308013916
+    ],
+    "reduced_motion": true
+  }
+]

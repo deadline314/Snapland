@@ -1,0 +1,44 @@
+[
+  {
+    "name": "island hair lifecycle tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 3.71
+  },
+  {
+    "name": "source registration coordinate tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.34
+  },
+  {
+    "name": "authored avatar side idle tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 4.43
+  },
+  {
+    "name": "character animation library tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 0.43
+  },
+  {
+    "name": "atomic outfit coverage tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 2.48
+  },
+  {
+    "name": "garment overlay tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 26.96
+  },
+  {
+    "name": "side outfit palette tests",
+    "exit": 0,
+    "error": null,
+    "seconds": 5.18
+  }
+]

@@ -193,8 +193,11 @@ func _smoke_art_test() -> void:
 			await _smoke_art_abort("Authored NPC activity assets failed to load: " + actor_role)
 			return
 	var motion_status:Dictionary=world.component_motion.statistics()
-	if not bool(motion_status.get("playing",false)) or int(motion_status.get("registration_count",0))<100:
-		await _smoke_art_abort("Scene component animation did not start")
+	# A saved reduced-motion preference intentionally stops decorative tracks.
+	# Acceptance must check that preference rather than require motion anyway.
+	var motion_expected := not bool(world.reduced_motion)
+	if bool(motion_status.get("playing",false))!=motion_expected or bool(motion_status.get("reduced_motion",false))!=bool(world.reduced_motion) or int(motion_status.get("registration_count",0))<100:
+		await _smoke_art_abort("Scene component animation disagrees with saved motion preference")
 		return
 	if int(world.occlusion_controller.statistics().get("registered_buildings",0))<15:
 		await _smoke_art_abort("Eligible building cutaways were not registered")
