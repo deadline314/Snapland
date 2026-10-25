@@ -227,6 +227,11 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		if appearance.has(key): normalized_appearance[key] = str(appearance[key])
 	var outfit := str(equipped.get("outfit", "outfit-tide"))
 	var garment_selected: bool = outfit==garment_overlays.OUTFIT
+	# A rejected family must bypass previously composed dressed textures too.
+	# Validation stays lazy for all other outfits and authoring-only views.
+	var garment_cache_tag := ""
+	if garment_selected and not inspect_authored_idle_sources:
+		garment_cache_tag = ":fabric:%d:%s" % [garment_overlays.get_instance_id(),garment_overlays.ready(self)]
 	# Fabric is applied after the original body palette, before hair and hats.
 	var body_outfit := "outfit-tide" if garment_selected else outfit
 	var hat := str(equipped.get("hat", "hat-none"))
@@ -234,7 +239,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var render_appearance := normalized_appearance.duplicate()
 	render_appearance.erase("gender")
 	var pose_key := "stable-idle:%s:%d" % [safe_direction,idle_frame] if registered_idle else ("walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else ("manifest:%s:%s:%d" % [safe_action, safe_direction, safe_frame] if has_manifest_frame else "action:%s:%d" % [safe_direction, pose]))
-	var key := "%s|%s|%s" % [JSON.stringify(render_appearance), outfit + ":" + hat, pose_key]
+	var key := "%s|%s|%s" % [JSON.stringify(render_appearance), outfit + ":" + hat + garment_cache_tag, pose_key]
 	if _cache.has(key):
 		_cache_order.erase(key)
 		_cache_order.append(key)
