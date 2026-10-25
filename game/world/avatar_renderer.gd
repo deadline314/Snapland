@@ -65,6 +65,7 @@ const OUTFIT_COLORS := {
 }
 
 var garment_overlays = preload("res://game/world/garment_overlay_library.gd").new()
+var legacy_heads = preload("res://game/world/legacy_head_source.gd").new()
 
 var _atlas: Texture2D
 var _atlas_image: Image
@@ -206,11 +207,16 @@ func original_garment_pose(action: String, direction: String, frame: int) -> Ima
 	return _atlas_pose_image(_pose_index(cardinal,frame,action)) if _atlas_valid else null
 
 func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "front", frame: int = 0, action: String = "idle") -> Texture2D:
-	var safe_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
+	var requested_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
+	var safe_direction := requested_direction
 	var authored_action: bool = animation_library != null and animation_library.has_action("traveller", action, safe_direction)
 	var safe_action := action if ACTIONS.has(action) or action == "walk" or authored_action else "idle"
+	var legacy_source: Dictionary = {}
+	if _atlas_valid and ACTIONS.has(safe_action) and not authored_action:
+		legacy_source = legacy_heads.resolve(safe_action,str(appearance.get("species",DEFAULT_APPEARANCE.species)),self)
+		if not legacy_source.is_empty(): safe_direction = str(legacy_source.direction)
 	# Dedicated standing cels share the registered walking head and fixed ground.
-	# Legacy cropped portraits remain available only for source diagnostics.
+	# Existing complete portraits remain explicit static fallbacks, not new directional art.
 	var has_manifest_frame: bool = safe_action != "walk" and (safe_action != "idle" or inspect_authored_idle_sources) and animation_library.has_frame("traveller", safe_action, safe_direction)
 	var authored_frame_count: int = animation_library.frame_count("traveller", safe_action, safe_direction) if has_manifest_frame else 0
 	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, authored_frame_count - 1) if has_manifest_frame else clampi(frame, 0, 2)
@@ -239,6 +245,9 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var render_appearance := normalized_appearance.duplicate()
 	render_appearance.erase("gender")
 	var pose_key := "stable-idle:%s:%d" % [safe_direction,idle_frame] if registered_idle else ("walk:%s:%d" % [safe_direction, walk_frame] if use_walk_source else ("manifest:%s:%s:%d" % [safe_action, safe_direction, safe_frame] if has_manifest_frame else "action:%s:%d" % [safe_direction, pose]))
+	# The complete legacy portrait is front-facing. Preserve request identity
+	# for cold/warm caches without applying back-facing hair to that portrait.
+	if not legacy_source.is_empty(): pose_key += ":legacy:%d:%s" % [legacy_heads.get_instance_id(),requested_direction]
 	var key := "%s|%s|%s" % [JSON.stringify(render_appearance), outfit + ":" + hat + garment_cache_tag, pose_key]
 	if _cache.has(key):
 		_cache_order.erase(key)
@@ -285,16 +294,19 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	# replacement cuts belong only to alternate styles or un-authored fallbacks.
 	var has_authored_source_hair := use_walk_source or has_manifest_frame
 	var use_replacement_hair := str(normalized_appearance.get("hair", "windswept")) != "windswept" or not has_authored_source_hair
+	# Default ink hair remains the untouched complete source. Reviewed ownership
+	# enables alternate cuts and precise tinting, not a redraw of the default.
+	if not legacy_source.is_empty() and str(normalized_appearance.hair)=="windswept": use_replacement_hair = false
 	var has_hair_overlay := use_replacement_hair and ((_hair_atlas_valid and DIRECTIONS.has(safe_direction)) or (_diagonal_hair_valid and not DIRECTIONS.has(safe_direction)))
 	var has_hat_overlay := _hat_atlas_valid and DIRECTIONS.has(safe_direction) or _diagonal_hat_valid and not DIRECTIONS.has(safe_direction)
 	var face_backdrop: Image
 	var face_mask := PackedByteArray()
 	var source_hair_mask := PackedByteArray()
-	var source_metrics: Dictionary = {}
+	var source_metrics: Dictionary = legacy_heads.metrics_for(safe_action,image) if not legacy_source.is_empty() else {}
 	if has_hair_overlay:
 		if use_walk_source:
 			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, image)
-		else:
+		elif legacy_source.is_empty():
 			source_metrics = _authored_source_hair_metrics(image, safe_direction, safe_action, safe_frame)
 	if has_hair_overlay and not bool(source_metrics.get("hair_owner_valid",false)):
 		# A changed cel needs its own reviewed ownership data. Preserve the
@@ -305,7 +317,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		if not _missing_head_owner_warnings.has(missing_signature):
 			_missing_head_owner_warnings[missing_signature]=true
 			push_warning("Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.")
-	if has_hair_overlay and has_manifest_frame and ((safe_action == "idle" and safe_direction in ["front_left", "front_right"]) or (safe_action == "celebrate" and safe_direction == "front")):
+	if has_hair_overlay and (not legacy_source.is_empty() or (has_manifest_frame and ((safe_action == "idle" and safe_direction in ["front_left", "front_right"]) or (safe_action == "celebrate" and safe_direction == "front")))):
 		var replacement_cut := _cached_hair_cut(str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.ink)
 		if not bool(source_metrics.get("replacement_geometry_valid", false)) or not bool(replacement_cut.get("face_opening_valid", false)):
 			# Keep a complete authored source if either side of registration is
@@ -316,15 +328,20 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if not has_hair_overlay and str(normalized_appearance.get("hair", "windswept")) == "windswept" and str(normalized_appearance.get("hair_color", "ink")) != "ink":
 		if source_metrics.is_empty():
 			var palette_hair_source := _walk_pose_image(safe_direction, walk_frame) if use_walk_source else image.duplicate()
-			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_source else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action, safe_frame)
-		palette_hair_indices = source_metrics.source_hair_indices
+			if not legacy_source.is_empty(): source_metrics = legacy_heads.metrics_for(safe_action,palette_hair_source)
+			else: source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_source else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action, safe_frame)
+		palette_hair_indices = source_metrics.get("source_hair_indices",PackedInt32Array())
 	if species=="elf" and source_metrics.is_empty():
 		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
 	if has_authored_source_hair and source_metrics.is_empty():
 		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
 	# Recolor the body before compositing a prepared haircut. Applying the coat
 	# palette afterwards mistakes dark-blue curls over the jacket for cloth.
-	_apply_palette(image, normalized_appearance, body_outfit, pose_direction, has_hair_overlay, source_metrics.get("source_hair_indices",palette_hair_indices),source_metrics.get("palette_hair_indices",PackedInt32Array()),source_metrics.get("foreground_indices",PackedInt32Array()))
+	# Human cuts without material ownership cannot safely tint guessed collar
+	# pixels. Other species keep their existing path pending ownership review.
+	var can_recolor_source_hair: bool = species!="human" or bool(source_metrics.get("hair_owner_valid",false))
+	var hair_recolor_indices: PackedInt32Array = source_metrics.get("source_hair_indices",palette_hair_indices) if can_recolor_source_hair else PackedInt32Array()
+	_apply_palette(image, normalized_appearance, body_outfit, pose_direction, has_hair_overlay, hair_recolor_indices,source_metrics.get("palette_hair_indices",PackedInt32Array()),source_metrics.get("foreground_indices",PackedInt32Array()))
 	if garment_selected and not inspect_authored_idle_sources:
 		garment_overlays.apply(self,image,safe_action,safe_direction,idle_frame if registered_idle else walk_frame if safe_action=="walk" else safe_frame)
 	if has_hair_overlay:

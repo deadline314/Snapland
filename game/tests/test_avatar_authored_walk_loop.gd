@@ -1,5 +1,10 @@
 extends SceneTree
 
+class UnreviewedLegacyHeads:
+	extends RefCounted
+	func resolve(_action: String, _species: String, _avatar: RefCounted) -> Dictionary:
+		return {}
+
 const ParkWorld = preload("res://game/world/park_world.gd")
 const DIRECTIONS := ["back", "back_right", "right", "front_right", "front", "front_left", "left", "back_left"]
 const INPUTS := [
@@ -189,12 +194,16 @@ func _check(condition: bool, label: String) -> void:
 func _check_fallback_cache_direction() -> void:
 	# A fresh renderer is the oracle: cache warming must never choose a different
 	# hat view. Missing authored celebration remains an explicit fallback.
+	# Keep the original unreviewed route as the direction-diverse cache oracle.
+	# Reviewed front portraits now have their own canonical-hat contract.
 	var renderer = preload("res://game/world/avatar_renderer.gd").new()
+	renderer.legacy_heads=UnreviewedLegacyHeads.new()
 	var equipment := {"outfit": "outfit-tide", "hat": "hat-straw"}
 	var first: Texture2D = renderer.texture({}, equipment, "front", 0, "celebrate")
 	var saw_direction_difference := false
 	for direction in DIRECTIONS:
 		var reference = preload("res://game/world/avatar_renderer.gd").new()
+		reference.legacy_heads=UnreviewedLegacyHeads.new()
 		for frame in range(3):
 			var warmed: Texture2D = renderer.texture({}, equipment, direction, frame, "celebrate")
 			var cold: Texture2D = reference.texture({}, equipment, direction, frame, "celebrate")
