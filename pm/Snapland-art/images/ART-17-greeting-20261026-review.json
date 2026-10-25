@@ -1,0 +1,224 @@
+{
+  "1": {
+    "tool": "image_gen.imagegen",
+    "source_original": "/workspace/generated_images/exec-723b49c8-8aed-45a6-b5f3-06deac77e481.png",
+    "sha256": "0d6bec66bc951eeed5c56206329963079b0203c9a7e24efdbf24b024ef0f9717",
+    "transparent_background_requested": true,
+    "reference": "work/legacy-other-20261026/result/profile/wave.png",
+    "prompt_file": "prompt.txt",
+    "frames": [
+      {
+        "frame": 0,
+        "cell_origin": [
+          0,
+          0
+        ],
+        "opaque_bounds": [
+          168,
+          20,
+          417,
+          492
+        ],
+        "camera_lens_template_center_x": 302,
+        "camera_lens_template_center_y": 292,
+        "template_rgb_mean_square_error": 0.0
+      },
+      {
+        "frame": 1,
+        "cell_origin": [
+          512,
+          0
+        ],
+        "opaque_bounds": [
+          111,
+          19,
+          383,
+          492
+        ],
+        "camera_lens_template_center_x": 269,
+        "camera_lens_template_center_y": 292,
+        "template_rgb_mean_square_error": 442.13
+      },
+      {
+        "frame": 2,
+        "cell_origin": [
+          1024,
+          0
+        ],
+        "opaque_bounds": [
+          98,
+          20,
+          375,
+          492
+        ],
+        "camera_lens_template_center_x": 260,
+        "camera_lens_template_center_y": 292,
+        "template_rgb_mean_square_error": 864.16
+      },
+      {
+        "frame": 3,
+        "cell_origin": [
+          0,
+          512
+        ],
+        "opaque_bounds": [
+          124,
+          9,
+          417,
+          485
+        ],
+        "camera_lens_template_center_x": 303,
+        "camera_lens_template_center_y": 285,
+        "template_rgb_mean_square_error": 1027.153
+      },
+      {
+        "frame": 4,
+        "cell_origin": [
+          512,
+          512
+        ],
+        "opaque_bounds": [
+          115,
+          9,
+          384,
+          485
+        ],
+        "camera_lens_template_center_x": 271,
+        "camera_lens_template_center_y": 285,
+        "template_rgb_mean_square_error": 1028.058
+      },
+      {
+        "frame": 5,
+        "cell_origin": [
+          1024,
+          512
+        ],
+        "opaque_bounds": [
+          107,
+          9,
+          376,
+          485
+        ],
+        "camera_lens_template_center_x": 263,
+        "camera_lens_template_center_y": 285,
+        "template_rgb_mean_square_error": 1038.142
+      }
+    ],
+    "camera_x_spread_px": 43,
+    "accepted": false,
+    "decision": "Rejected: unchanged torso camera material varies horizontally within the promised equal cells, and bottom row ground differs. Do not silently recenter each frame by its alpha bounds or soles; no production assets changed.",
+    "visual_review": "Both entire six-pose sheets and v1 white-background alpha diagnostic actually viewed. Initial dark viewer showed glow-colored transparent RGB; alpha audit/white composition supersede that initial background concern. Rejection is based on registration and changing figure, not RGB of alpha-zero background.",
+    "scope": "Still source diagnostics, not native animation playback or gameplay acceptance."
+  },
+  "2": {
+    "tool": "image_gen.imagegen",
+    "source_original": "/workspace/generated_images/exec-52267035-debb-4866-92d8-23e024977187.png",
+    "sha256": "98d82800340942818a8c0e6f9bb8dd51624b8cd91ee264f8a01980365283c325",
+    "transparent_background_requested": true,
+    "reference": "work/legacy-other-20261026/candidate-wave-v1/source.png",
+    "prompt_file": "prompt.txt",
+    "frames": [
+      {
+        "frame": 0,
+        "cell_origin": [
+          0,
+          0
+        ],
+        "opaque_bounds": [
+          170,
+          18,
+          419,
+          491
+        ],
+        "camera_lens_template_center_x": 302,
+        "camera_lens_template_center_y": 292,
+        "template_rgb_mean_square_error": 0.0
+      },
+      {
+        "frame": 1,
+        "cell_origin": [
+          512,
+          0
+        ],
+        "opaque_bounds": [
+          110,
+          18,
+          387,
+          491
+        ],
+        "camera_lens_template_center_x": 271,
+        "camera_lens_template_center_y": 292,
+        "template_rgb_mean_square_error": 450.144
+      },
+      {
+        "frame": 2,
+        "cell_origin": [
+          1024,
+          0
+        ],
+        "opaque_bounds": [
+          97,
+          18,
+          376,
+          491
+        ],
+        "camera_lens_template_center_x": 261,
+        "camera_lens_template_center_y": 292,
+        "template_rgb_mean_square_error": 365.772
+      },
+      {
+        "frame": 3,
+        "cell_origin": [
+          0,
+          512
+        ],
+        "opaque_bounds": [
+          126,
+          11,
+          419,
+          485
+        ],
+        "camera_lens_template_center_x": 303,
+        "camera_lens_template_center_y": 286,
+        "template_rgb_mean_square_error": 1186.182
+      },
+      {
+        "frame": 4,
+        "cell_origin": [
+          512,
+          512
+        ],
+        "opaque_bounds": [
+          117,
+          11,
+          387,
+          485
+        ],
+        "camera_lens_template_center_x": 272,
+        "camera_lens_template_center_y": 285,
+        "template_rgb_mean_square_error": 1237.803
+      },
+      {
+        "frame": 5,
+        "cell_origin": [
+          1024,
+          512
+        ],
+        "opaque_bounds": [
+          107,
+          11,
+          377,
+          485
+        ],
+        "camera_lens_template_center_x": 263,
+        "camera_lens_template_center_y": 286,
+        "template_rgb_mean_square_error": 970.959
+      }
+    ],
+    "camera_x_spread_px": 42,
+    "accepted": false,
+    "decision": "Rejected: unchanged torso camera material varies horizontally within the promised equal cells, and bottom row ground differs. Do not silently recenter each frame by its alpha bounds or soles; no production assets changed.",
+    "visual_review": "Both entire six-pose sheets and v1 white-background alpha diagnostic actually viewed. Initial dark viewer showed glow-colored transparent RGB; alpha audit/white composition supersede that initial background concern. Rejection is based on registration and changing figure, not RGB of alpha-zero background.",
+    "scope": "Still source diagnostics, not native animation playback or gameplay acceptance."
+  }
+}
