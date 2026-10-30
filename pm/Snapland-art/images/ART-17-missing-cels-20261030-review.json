@@ -1,0 +1,77 @@
+{
+  "scope": "Malformed action timing without frame table; no new art or animation acceptance",
+  "base_sha": "1fa10d5c321797cd2ce682852af79514d5d8a600",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "renderer": "Compatibility/Mesa llvmpipe; software rendering",
+  "native_size": [
+    960,
+    540
+  ],
+  "native_result": {
+    "exit": 0,
+    "engine_errors": 0,
+    "pass": "native missing-cel complete-source comparison"
+  },
+  "regressions": [
+    {
+      "script": "work/entry-recovery/probe.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 0.36,
+      "pass_lines": [
+        "PROBE completed, available=false"
+      ]
+    },
+    {
+      "script": "game/tests/test_character_animation_library.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 3.98,
+      "pass_lines": [
+        "PASS: character animation library checks"
+      ]
+    },
+    {
+      "script": "game/tests/test_outfit_atomic_coverage.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 2.58,
+      "pass_lines": [
+        "PASS: atomic outfit coverage (394 checks)"
+      ]
+    },
+    {
+      "script": "game/tests/test_garment_overlay.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 27.15,
+      "pass_lines": [
+        "PASS: garment overlay preserves 172 original compositions; missing last cel falls back across all eight directions"
+      ]
+    },
+    {
+      "script": "game/tests/test_avatar_authored_walk_loop.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 36.17,
+      "pass_lines": [
+        "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig"
+      ]
+    }
+  ],
+  "evidence": {
+    "before.log": "49e7d0ebc4498839bcad9296d86c65e34d617722ed6cbae0db14caf503b95ad0",
+    "probe.log": "81a6a43df1419a591c5929eb7767b71f325915f2b7fb05452d15c2b6b0e76587",
+    "test_character_animation_library.log": "86fb2a0326aeda2f69b0acdcd3c88155ccc8318050bad7841be72f25cdc78f35",
+    "test_outfit_atomic_coverage.log": "0faf2103a5c3a97676a42d67284dfa3bd700da1248bf3d16341ba773afa3d891",
+    "test_garment_overlay.log": "4adb46485ee332660db0f563fe80bf3224411003faa0420af884e0fd83cf28f0",
+    "test_avatar_authored_walk_loop.log": "d44664e9a5f72f6f46c8090be89ccf735c10294fc23bf070f7be501b25eeb7a2",
+    "results.json": "df52a5c5057e3646185462b9b1c6d6c29a8a7ab5bd9a4f3b21fa798c3f10f4bf",
+    "probe.gd": "cbd094b8c07a14a9fd1e2726177fe9e0de0cf37328765f5a7d2f3dd7fde067a1",
+    "native.gd": "2c894d4af6506bb44e371ec54de7c99e9ceb12d37269d495ce66beebd22b0798",
+    "native.tscn": "ef8e4ab61f309d9730d16de2f8c0ab905b43e305a3cd86d893e14f1906c0a5c5",
+    "native-final/native.log": "bf9103295f771a9df8e3ee7965dab8d0b2c6df428f9eb78b46d2548d8ee655a0"
+  },
+  "screenshot_sha256": "53423ed70a95342a8f920a3c832736b5e0d9341cc7c9a147e5ccd1569e86eb00",
+  "rejected_capture": "First technical capture had overlapping portraits and wrong content scaling; retained in the owned work directory and not used as accepted evidence."
+}

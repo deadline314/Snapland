@@ -124,5 +124,26 @@ func _initialize() -> void:
 	assert(jump_feet_rows.size() > 1, "authored airborne feet offsets vary while canonical feet placement stays aligned")
 	var jump_coverage: Array = production_library.coverage_report().traveller.jump
 	assert(jump_coverage == ["front"] and not production_library.has_action("traveller", "jump", "back"), "coverage reports only authored front jump poses")
+	# A partially written action can retain timing after losing its cels. Every
+	# public reader must reject it without a GDScript error or leaking a pose.
+	var damaged = Library.new()
+	damaged.manifest.actors.traveller.wave.front.erase("frames")
+	damaged.manifest.actors.traveller.wave.front.frame_durations = [0.25]
+	assert(not damaged.has_action("traveller", "wave", "front"), "timing without frames is unavailable")
+	assert(damaged.frame_count("traveller", "wave", "front") == 0 and damaged.frame_for_time("traveller", "wave", "front", 0.3) == 0, "missing frames cannot advance playback")
+	assert(not damaged.get_sequence("traveller", "wave", "front").available and damaged.texture("traveller", "wave", "front", 0) == null, "damaged action cannot expose partial source or attachment data")
+	assert(damaged.diagnostics.size() == 1 and damaged.diagnostics[0].begins_with("traveller/wave/front:"), "repeated readers retain one actionable diagnostic")
+	assert(damaged.has_action("traveller", "idle", "front"), "another valid action remains usable")
+	var Avatar = load("res://game/world/avatar_renderer.gd")
+	var fallback = Avatar.new()
+	fallback.animation_library.manifest.actors.traveller.erase("wave")
+	var wearer = Avatar.new()
+	wearer.animation_library = damaged
+	for haircut in ["windswept", "bob", "curly"]:
+		var appearance: Dictionary = Avatar.DEFAULT_APPEARANCE.duplicate()
+		appearance.hair = haircut
+		var expected: Image = fallback.texture(appearance, {"outfit":"outfit-tide"}, "front", 0, "wave").get_image()
+		var recovered: Image = wearer.texture(appearance, {"outfit":"outfit-tide"}, "front", 0, "wave").get_image()
+		assert(recovered.get_data() == expected.get_data(), "damaged timing retains the complete legacy wearer for " + haircut)
 	print("PASS: character animation library checks")
 	quit(0)

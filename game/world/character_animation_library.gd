@@ -457,7 +457,8 @@ func _entry(actor: String, action: String, direction: String) -> Dictionary:
 	var actions: Variant = actors.get(actor, {})
 	var dirs: Variant = actions.get(action, {}) if actions is Dictionary else {}
 	var entry: Variant = dirs.get(direction, {}) if dirs is Dictionary else {}
-	var valid_entry: bool = entry is Dictionary and entry.get("frames", []) is Array and entry.get("frames", []).size() <= 256
+	var frames: Variant = entry.get("frames", []) if entry is Dictionary else null
+	var valid_entry: bool = entry is Dictionary and frames is Array and frames.size() <= 256
 	if valid_entry:
 		var fps: Variant = entry.get("fps", 1.0)
 		valid_entry = (fps is int or fps is float) and is_finite(float(fps)) and float(fps) > 0.0 and float(fps) <= 60.0
@@ -465,7 +466,7 @@ func _entry(actor: String, action: String, direction: String) -> Dictionary:
 		valid_entry = valid_entry and loop_value is bool
 		if entry.has("frame_durations"):
 			var durations: Variant = entry.frame_durations
-			valid_entry = valid_entry and durations is Array and durations.size() == entry.frames.size() and not durations.is_empty()
+			valid_entry = valid_entry and durations is Array and durations.size() == frames.size() and not durations.is_empty()
 			if valid_entry:
 				for duration in durations:
 					if not (duration is int or duration is float) or not is_finite(float(duration)) or float(duration) <= 0.0 or float(duration) > 30.0:
