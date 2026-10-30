@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-30",
+  "base_sha": "9acf5c8baf8781da0c4a5db427436c04c7580e97",
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "method": "8-cel source, targeted bottom-row correction, then isolated opposite-contact pose with study diagram",
+  "candidates": [
+    {
+      "index": 1,
+      "file": "candidate-1.png",
+      "sha256": "3cd61dd5cd20b21bede3458b96f74d281ff477b1ac649fa3bc83e6d402290f1c",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "prompt": "Produce a production sprite-animation source sheet of the EXACT brown-haired glasses ticket-attendant character in the references, with unchanged 2D pixel-art rendering, blue M hoodie, cream shorts, brown ankle boots, brown shoulder satchel, round black glasses, tousled hair and cute large-head proportions. Task: EIGHT distinct full-body drawings for ONE complete two-step WALK CYCLE all facing screen RIGHT in strict side profile, arranged in an exact 4-column by 2-row grid. Transparent background, no labels, no ground shadows, no extra figures. Each cell equal 384x512 pixels on total 1536x1024 sheet, fixed body root center x=192 in its cell, fixed ground line y=460. Character body full height about 380px, do not fill to borders. Keep head size, hair and face identity, boot shape, bag and torso consistent at every cell. These must be a true alternating-leg cycle, NOT a repeated one-leg shuffle. Reading left-to-right top-row then bottom-row: 1 NEAR left leg forward heel contact, FAR right leg behind toe contact. 2 near leg accepts weight, knees bend slightly. 3 near leg under hip bearing weight, FAR right knee crosses forward lifted. 4 near leg behind pushing with toe, FAR right knee in front. 5 FAR right leg is now extended forward landing heel, NEAR left leg clearly behind toe contact (the opposite of pose 1). 6 far leg accepts weight. 7 far leg under hip bearing weight, NEAR left knee crosses forward lifted. 8 far leg behind pushing off, NEAR left knee advances preparing pose1. Explicitly trace each thigh down to its own knee/boot; the near leg is visible in front of the far leg at crossings. TWO different legs take turns carrying weight, do not merely recolor the same forward boot. Gentle coherent body rise and fall, no jumping. One hand naturally holds the bag strap; other arm small opposite swing. Match source high quality crisp shaded pixel-art outlines, no smoothing or new art style. Exactly eight chronological cels; no duplicate neutral cels and no duplicate loop endpoint.",
+      "references": [
+        "assets/characters/ticket-turnaround-candidate-v2.png",
+        "assets/characters/ticket-front-actions-v2.png"
+      ],
+      "accepted": false,
+      "reason": "Visible near shorts cuff remains attached to the forward leg; no reliable opposite contact. No production integration or native playback."
+    },
+    {
+      "index": 2,
+      "file": "candidate-2.png",
+      "sha256": "a3d41293267607e7e8c52702556ec5ba4e7e8784981026f0d3284e4e3f3bcc3d",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "prompt": "Edit the attached sprite sheet to CORRECT the leg alternation. Preserve the exact first four cels, every character's head, glasses, torso, bag, arms, style, fixed cell placement and scale. ONLY redraw the legs and shorts in the bottom four cels (5,6,7,8). The bottom row must depict the OPPOSITE LEG PHASE from the top row. On the top row currently the NEAR leg (the clearly visible shorts cuff on the viewer's right) stays forward. In bottom cel5 the NEAR leg and its visible shorts cuff MUST extend backwards to the LEFT, connected continuously from the NEAR hip down to the boot on the far LEFT; the FAR leg extends forward to the RIGHT. Show the upper near thigh exiting diagonally down-left from the hip in front of and occluding the other thigh, with its boot behind the body. Cel6 carries this near thigh back while the far/front leg supports. Cel7 the far leg stays down vertically supporting, near thigh sweeps forward, knee bends and boot lifts in front. Cel8 near leg extends forward, far leg pushes behind. Keep shorts cuffs separate and follow the physical thighs, do not merely change boot colors. Preserve chronological contact, down, pass, up then OPPOSITE contact, down, pass, up. It must be visibly impossible to confuse pose1 and pose5. Same exact transparent 4x2 grid, no text, no added shadows, no rescaling or camera movement, all cels facing right. This is a targeted animation correction, not a new character illustration.",
+      "references": [
+        "candidate-1.png"
+      ],
+      "accepted": false,
+      "reason": "Visible near shorts cuff remains attached to the forward leg; no reliable opposite contact. No production integration or native playback."
+    },
+    {
+      "index": 3,
+      "file": "candidate-3.png",
+      "sha256": "af17242d6d6ece5a27171a539f7e0cd59c82233485d169cf1fb9c87ccc9537d1",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "prompt": "Create ONE full-body sprite of the brown-haired round-glasses boy from reference1. Same blue hoodie, cream shorts, brown boots, cross-body satchel, tousled hair, exact same cute pixel-art proportions and identity. He faces SCREEN RIGHT in strict side profile. Use ONLY the MIDDLE stick-figure pose numbered 13 in reference2 for the walking anatomy; do NOT copy any text, colors, lines, grid or art style from the diagram. The anatomical point: the NEAR leg, whose outer shorts cuff is fully visible, extends BACKWARDS toward the LEFT, from hip to a bent-back knee to boot touching ground at the very BACK. Its fully visible shorts cuff points DOWN-LEFT behind him. The far leg extends FORWARDS toward the RIGHT with heel touching ground. Crucially, overlap the near/back thigh IN FRONT OF the far/front thigh at the hip, like the RED leg in middle diagram. The pose must visibly differ from the first diagram, which has the near leg in front. Natural full body, complete hands and feet, one hand can hold satchel strap. Transparent 512x768 canvas, no cast shadow, no labels. The body is centered, ground line at y=700, head top y=100. Match the source's crisp shaded pixel-art language, no smooth new rendering, no colored limb markers. Only one character, one pose.",
+      "references": [
+        "assets/characters/ticket-turnaround-candidate-v2.png",
+        "pm/Snapland-art/images/ART-17-front-walk-20261024-reference-1.png"
+      ],
+      "accepted": false,
+      "reason": "Visible near shorts cuff remains attached to the forward leg; no reliable opposite contact. No production integration or native playback."
+    }
+  ],
+  "reference_hashes": {
+    "assets/characters/ticket-turnaround-candidate-v2.png": "28dc7ba7d57ba447bc72a0ef5fbd44beb6077a43c79f41974635bf7cdcce1798",
+    "assets/characters/ticket-front-actions-v2.png": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1",
+    "pm/Snapland-art/images/ART-17-front-walk-20261024-reference-1.png": "a188bf07781e052c79abf861955ad885f0ad31df03bded4bd5e9cc7892f2b3e6"
+  },
+  "research": {
+    "reading": "Six source teams; web text retrieved and read. Existing Monmouth contact diagram viewed. No external video playback.",
+    "sources": [
+      {
+        "name": "aseprite",
+        "url": "https://www.aseprite.org/docs/animation/",
+        "chars": 1853,
+        "excerpts": [
+          "rate different animations of the same sprite There are some extra tools like the Preview Window and Onion Skinning that will make your life a lot easier to animate. Common Operations Add a new frame copying the current one Add a new empty frame Copy frames or cels Move frames or cels Remove frames Reuse frames Tag several frames Change the duration of a specific frame Copy layers/frames/cels between files Loop a section Reverse frames Onion Skinning See the Onion Skinning section. SEE ALSO Timeline | Onion Skinning | Continuous Layers | Tags Links Home Known Issues Bug Report Contributors Donations Community Aseprite Community Discord Server Steam Community /r/aseprite Documentation Quick reference Docs - FAQ Tutorial Blog Development GitHu",
+          "he duration of a specific frame Copy layers/frames/cels between files Loop a section Reverse frames Onion Skinning See the Onion Skinning section. SEE ALSO Timeline | Onion Skinning | Continuous Layers | Tags Links Home Known Issues Bug Report Contributors Donations Community Aseprite Community Discord Server Steam Community /r/aseprite Documentation Quick reference Docs - FAQ Tutorial Blog Development GitHub Devblog Roadmap Contribute Social Twitter Mastodon Facebook YouTube Instagram © 2001‐2026 Igara Studio S.A. | Terms of Service | Privacy | Support ",
+          "ic frame Copy layers/frames/cels between files Loop a section Reverse frames Onion Skinning See the Onion Skinning section. SEE ALSO Timeline | Onion Skinning | Continuous Layers | Tags Links Home Known Issues Bug Report Contributors Donations Community Aseprite Community Discord Server Steam Community /r/aseprite Documentation Quick reference Docs - FAQ Tutorial Blog Development GitHub Devblog Roadmap Contribute Social Twitter Mastodon Facebook YouTube Instagram © 2001‐2026 Igara Studio S.A. | Terms of Service | Privacy | Support ",
+          "es Loop a section Reverse frames Onion Skinning See the Onion Skinning section. SEE ALSO Timeline | Onion Skinning | Continuous Layers | Tags Links Home Known Issues Bug Report Contributors Donations Community Aseprite Community Discord Server Steam Community /r/aseprite Documentation Quick reference Docs - FAQ Tutorial Blog Development GitHub Devblog Roadmap Contribute Social Twitter Mastodon Facebook YouTube Instagram © 2001‐2026 Igara Studio S.A. | Terms of Service | Privacy | Support "
+        ]
+      },
+      {
+        "name": "spine",
+        "url": "https://esotericsoftware.com/spine-keys",
+        "chars": 18456,
+        "excerpts": [
+          " moves between frames (unless interpolation is disabled). Playback can be done at a higher or lower frame rate than the timeline shows. Frame snapping Hold shift when clicking or scrubbing the timeline to disable frame snapping and set the timeline position between frames. This allows you to see the animation interpolate smoothly, as it does when played, and to set keys between frames, if needed. Fractional frames can also be used for a very short transition. For example, a bone could have a translate key on frame 15, then another key on frame 15.01. Repeat When disabled, playback continues past the end of the animation. When enabled, playback starts over at frame 0 when it reaches the the highest frame that has a key. When multiple skeleto"
+        ]
+      },
+      {
+        "name": "godot",
+        "url": "https://docs.godotengine.org/en/stable/tutorials/2d/2d_sprite_animation.html",
+        "chars": 168215,
+        "excerpts": [
+          "ins Baumgarte stabilization Ghost collisions Memory usage Ray-cast face index Kinematic RigidBody3D contacts Contact impulses Area3D and SoftBody3D WorldBoundaryShape3D Notable differences to the Godot Jolt extension Project settings Joint nodes Thread safety Using RigidBody What is a rigid body? How to control a rigid body The \"look at\" method Using Area2D Introduction What is an area? Area properties Overlap detection Area influence Point gravity Examples Using CharacterBody2D/3D Introduction What is a character body? Movement and collision move_and_collide move_and_slide Detecting collisions Which movement method to use? Examples Movement and walls Bouncing/reflecting Platformer movement Ray-casting Introduction Space Accessing space Ray",
+          "arte stabilization Ghost collisions Memory usage Ray-cast face index Kinematic RigidBody3D contacts Contact impulses Area3D and SoftBody3D WorldBoundaryShape3D Notable differences to the Godot Jolt extension Project settings Joint nodes Thread safety Using RigidBody What is a rigid body? How to control a rigid body The \"look at\" method Using Area2D Introduction What is an area? Area properties Overlap detection Area influence Point gravity Examples Using CharacterBody2D/3D Introduction What is a character body? Movement and collision move_and_collide move_and_slide Detecting collisions Which movement method to use? Examples Movement and walls Bouncing/reflecting Platformer movement Ray-casting Introduction Space Accessing space Raycast quer",
+          "ation 2D and 3D physics interpolation 2D Particles Other Troubleshooting physics issues Objects are passing through each other at high speeds Stacked objects are unstable and wobbly Scaled physics bodies or collision shapes do not collide correctly Thin objects are wobbly when resting on the floor Cylinder collision shapes are unstable VehicleBody simulation is unstable, especially at high speeds Collision results in bumps when an object moves across tiles Framerate drops when an object touches another object Framerate suddenly drops to a very low value beyond a certain amount of physics simulation Physics simulation is unreliable when far away from the world origin Platform-specific Linux Wayland/X11 Overview When to use Wayland Changing t",
+          "and overriding it Default template List of template placeholders Evaluating expressions Basic usage Passing variables to an expression Setting a base instance for the expression Example script Built-in functions Change scenes manually Instancing with signals Shooting example Pausing games and process mode Introduction How pausing works Process Modes Pause menu example File system Introduction Implementation project.godot Path delimiter Resource path User path Host file system Drawbacks Resources Nodes and resources External vs built-in Loading resources from code Loading scenes Freeing resources Creating your own resources Singletons (Autoload) Introduction Autoload Custom scene switcher Using SceneTree Introduction MainLoop SceneTree Root "
+        ]
+      },
+      {
+        "name": "monmouth",
+        "url": "https://animation.monmouth.edu/instruct/animation/walk-cycle/",
+        "chars": 6325,
+        "excerpts": [
+          "r will give the walk cycle a little hickup when it loops. Timing Here’s an indication of how long a walk cycle should be, based on a frame rate of 24 frames per second: 8 frames – A very fast run (4 frames per step, 6 steps per second) 12 frames – A run or very fast walk (4 frames per step, 6 steps per second) 16 frames – Slow run or ‘cartoon’ walk (6 frames per step, 4 steps per second) 24 frames – Brisk, business-like walk – ‘natural walk’ (12 frames per step, 3 steps per second) 32 frames – Strolling walk, more leisurely (16 frames per step, 2/3rd steps per second) 40 frames – Elderly or tired person (20 frames per step, almost a second per step) 48 frames – Slow step (24 frames per step, 1 step per second) 64 frames – …’show me the way ",
+          "le hickup when it loops. Timing Here’s an indication of how long a walk cycle should be, based on a frame rate of 24 frames per second: 8 frames – A very fast run (4 frames per step, 6 steps per second) 12 frames – A run or very fast walk (4 frames per step, 6 steps per second) 16 frames – Slow run or ‘cartoon’ walk (6 frames per step, 4 steps per second) 24 frames – Brisk, business-like walk – ‘natural walk’ (12 frames per step, 3 steps per second) 32 frames – Strolling walk, more leisurely (16 frames per step, 2/3rd steps per second) 40 frames – Elderly or tired person (20 frames per step, almost a second per step) 48 frames – Slow step (24 frames per step, 1 step per second) 64 frames – …’show me the way … to go home’… (32 frames per ste",
+          "etweens → the character is stretching a sore muscle Category: Animation , General | Tag: Movement , Walk Cycle Leave a Reply Cancel reply You must be logged in to post a comment. Search for: Categories Animation (16) 2D (3) 3D Computer (11) General (1) Rigging (8) Autodesk Maya (36) 2016 (2) 2019 (1) 2020 (9) 2022 (2) 2023 (4) 2024 (2) Blender (7) 4.2LTS (4) 4.3 (2) Krita (4) Modeling (19) procedural (1) Post Production (3) Rendering (12) Texturing (5) Resources (18) 3D Models (2) Music (4) Open Source (7) Sound FX (2) Textures (2) Traditional (1) Tutorials (9) Tags 2D Animation 2D Paint 2D Painting Arnold Audio Bend Deformer Bevel Blender Blendshapes Box Modeling Bridge Cloth Controllers Creative Commons Deformer Demo Reel Dynamics Simulat",
+          "Draw revolve Sculpting Set Driven Keys Simulation Skinbind Smooth Preview Tips & Tricks Tool UVs VR Walk Cycle Recent Posts Mobygratis Mantissa: Free VJ Loops Tenacity: Audio Editing and Recording Poly Modeling on Sculpt Modeling a Chair Search Search Meta Log in Entries feed Comments feed WordPress.org Copyright 2026 Monmouth Animation Instruction Pages "
+        ]
+      },
+      {
+        "name": "animationmentor",
+        "url": "https://www.animationmentor.com/blog/tutorial-animating-human-walk-cycle/",
+        "chars": 11455,
+        "excerpts": [
+          "verting your walk to move forward and come to a stop. With these steps, you’ll be able to animate a walk cycle that feels natural, appealing, and ready for your demo reel. Keep an eye on our social media platforms for more tutorials, live workshops, and new courses. Follow us: LinkedIn | Instagram | YouTube Want to be mentored by professional animators like Jason? At the core of Animation Mentor are our 3D Character Animation and Game Animation programs. Follow your animation dreams by learning from animators at studios like Disney, DreamWorks, Pixar, ILM, Riot Games, Netflix, and Blizzard! LEARN MORE Share On Linkedin Share On Facebook Share On X Share On Reddit Share On Pinterest Share Via Email Animation | Animation Tips & Tricks | Anima",
+          " Developing Your Character Animation Reel The field of animation is becoming more popular with each passing year. As the demand for unique and entertaining content grows, the demand for skilled animators is also on the rise. But there’s a catch: this sector is also remarkably competitive! That’s especially... Top 3 Reasons You Need Creature Animation on Your Demo Reel Just a few of the films on Shawn Kelly's IMDb page Shawn Kelly, Lead Animator at Industrial Light & Magic (ILM) and Animation Mentor Co-Founder educates us on why you need more creature animation in your demo reel and reminds us that we are all animators. Sit back,... CATEGORIES 12 Principles of Animation 6 Basic Emotions Animation Animation Events Animation Mentor Animation M",
+          " a Student Apply Now Get More Info Newsletter Sign Up Sign Up About About Animation Mentor Partners Contact Us The School Why Animation Mentor Do I Qualify Online Campus Tour FAQ Advanced Placement Discounts and Promos Rigs Free Maya Rigs Animation Character Rigs Resources Blog Webinars Ebooks Podcasts 11 Second Club Merchandise Follow Us Follow Follow Follow Follow Follow Terms of Use Privacy Contact Us © 2024 Yellowbrick Animation Mentor LLC. All rights reserved. ANIMATIONMENTOR, ECRITIQUE, the AnimationMentor logo and other AnimationMentor marks,logo and trade dress are trademarks or registered trademarks of Yellowbrick Animation Mentor LLC. All other trademarks are the property of their respective owners. ",
+          "dcasts 11 Second Club Merchandise Follow Us Follow Follow Follow Follow Follow Terms of Use Privacy Contact Us © 2024 Yellowbrick Animation Mentor LLC. All rights reserved. ANIMATIONMENTOR, ECRITIQUE, the AnimationMentor logo and other AnimationMentor marks,logo and trade dress are trademarks or registered trademarks of Yellowbrick Animation Mentor LLC. All other trademarks are the property of their respective owners. "
+        ]
+      },
+      {
+        "name": "slynyrd",
+        "url": "https://www.slynyrd.com/blog/2020/1/23/pixelblog-25-motion-cycles",
+        "chars": 6581,
+        "excerpts": [
+          " a bit harder to animate than a run cycle. I cover run cycles in Pixelblog 8 . I present a standard walk cycle here with some exaggeration to help illustrate the subtle mechanics of the motion. Start by making a figure with the body parts clearly defined by color. It’s much easier if you animate one section at a time for all frames. Animate the legs first, then the arms, head, and overall body movement. Take careful note of the position of all the body parts in every frame. Once the animation is satisfactory you can color and add details. The more detailed the design, the more difficult it will be to keep the movement clean. I recommend keeping your characters simple, especially if you are new to frame animation. This is a standard walk cyc",
+          "nd keeping your characters simple, especially if you are new to frame animation. This is a standard walk cycle, but the motion can vary greatly depending on body type, age, and circumstances. To introduce more personality, observe real people and try incorporating their unique movements into the animation. For example, a carefree child marches with pride, the elderly shuffle slowly with hunched backs, the drunk sway and stumble, and so on. Dog Walk Quadrupeds are animals that walk on 4 legs. While they exhibit some of the same mechanics seen in bipedal locomotion, the additional set of legs further complicates things. You should have a firm grasp of 2 legged walk cycles before attempting to animate a 4 legged walk. I chose Shiba Inu, to ill",
+          "on, the additional set of legs further complicates things. You should have a firm grasp of 2 legged walk cycles before attempting to animate a 4 legged walk. I chose Shiba Inu, to illustrate quadrupedal locomotion. I’ve never owned one, but surely they’re the cutest! Same as the human, break the anatomy down into separate body parts defined by flat colors. Think of the legs as 2 sets of biped legs. The bone structure is different than a human but the principle stepping motion is very similar. Animate one set of legs at a time, then do the body, head, and tail. Observe how the back leg follows one step behind the front leg of the opposite side. Make sure the distance traveled is the same for both the front and back legs, or the body will app",
+          "er, I think a convincing wing motion can be done with a few less frames. The extremes of motion are keyframes. so you should start with these. then do the smear and take it from there. Start with the front view before attempting the side view. Animate only the wings first, then add the overall bobbing motion last. Once the motion is satisfactory, you can color and add details. Notice how I thickened up parts of the wings and added visible tail feathers in my finished version of the front view. FINAL THOUGHTS I use a fairly realistic style with some degree of exaggeration for these studies in order to best illustrate the basics of the motion. If I were making sprites for a game I would go for more stylized designs with personality, and possi"
+        ]
+      }
+    ],
+    "godot_excerpt": "godot-main.txt",
+    "decisions": [
+      "Aseprite: retain original cels and discrete frame order.",
+      "Spine: attachment sequencing is separate from transform interpolation; do not use full-body warping.",
+      "Godot: use authored sprite frames; playback capability does not validate source motion.",
+      "Monmouth: opposite contact must exchange limbs before adding breakdowns. The saved frame-13 diagram was used as a pose guide, not copied into game art.",
+      "Animation Mentor: trace hip-knee-ankle and support, not color alone.",
+      "SLYNYRD: block leg mechanics before detailed costume; rejected detailed candidates do not establish a full cycle."
+    ]
+  },
+  "scope": "Static source review only. No new production animation, GPU playback, performance, export or human listening acceptance."
+}
