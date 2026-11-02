@@ -1,0 +1,279 @@
+{
+  "date": "2026-11-02 Asia/Taipei",
+  "base_commit": "1a76480420df88e2192eabf5b04abb4a6a7ab1df",
+  "source_sha256": {
+    "game/world/park_world.gd": "4065519b4e19a51d626b8db36c67f423332caab5aa14ffff0c33443eee90694a",
+    "game/world/character_animation_library.gd": "3718a59d43b980987a3ca588e4d035accced511996f126f446e0875fb8f7b5ee",
+    "game/tests/test_avatar_authored_walk_loop.gd": "51bd01039ab090aeec230a66653b2b9785efdcc7e2768e6cc6eafcc74bd074ac",
+    "game/tests/test_character_animation_library.gd": "32f69d636b9c5e37aa84cd26b4be1ebb1b4aada2833edf02d3cd894f2b0b371f",
+    "game/tests/native_avatar_action_events_review.gd": "3950afd9a8db3855989b27b238bbb2e90bd5f43b9810cb238d1258e629aa8dec",
+    "game/tests/native_avatar_action_events_review.tscn": "1877d62ccb3e0e3bd41c59832cbe97f99931809f841b5d1e4fd0094dcc9ee9ef"
+  },
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "renderer": "Compatibility / llvmpipe software display",
+  "local_tests": [
+    {
+      "script": "game/tests/test_character_animation_library.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 3.6,
+      "passes": [
+        "PASS: character animation library checks"
+      ]
+    },
+    {
+      "script": "game/tests/test_avatar_authored_walk_loop.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 38.38,
+      "passes": [
+        "PASS: real world avatar presents authored eight-direction walk cels, natural stance holds, and allocates no unused hero rig"
+      ]
+    },
+    {
+      "script": "game/tests/test_garment_overlay.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 25.73,
+      "passes": [
+        "PASS: garment overlay preserves 172 original compositions; missing last cel falls back across all eight directions"
+      ]
+    },
+    {
+      "script": "game/tests/test_island_hair_lifecycle.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 3.32,
+      "passes": [
+        "PASS: island hair lifecycle retains live walk phase through appearance, motion and reduced-motion changes"
+      ]
+    },
+    {
+      "script": "work/celebration/probe.gd",
+      "exit": 0,
+      "errors": 0,
+      "seconds": 4.91,
+      "passes": [
+        "CELEBRATION_PROBE: {\"duration\":0.666666666666667,\"frames\":[{\"facing\":\"front\",\"index\":0,\"sha256\":\"b66a50222c98fa4aa7ffbc9e334d06b48c5e7971788dd8832abb976991501b63\"},{\"facing\":\"front\",\"index\":1,\"sha256\":\"e72686bd0aa61a5e2ae7e4537ccc5a28a299539021963f4a88d75e1c2fdf99e2\"},{\"facing\":\"front\",\"index\":2,\"sha256\":\"c1ccef32c671b1b0dccb88da72e2835feaaebf4f7321e02a60abed8f998ff086\"},{\"facing\":\"front\",\"index\":3,\"sha256\":\"e74ee563f9a706e7ce9c482f7d1dd546ac4819d47f197fd0595a7f61efaacb69\"},{\"facing\":\"front\",\"index\":4,\"sha256\":\"c63c2cbdca4dc943d986aa4dc193de3292168a4d94b9c3a58db19e96f4b2c0eb\"},{\"facing\":\"front\",\"index\":5,\"sha256\":\"ab2a3762d9e7ab7e9c7799905353ddf69294032deb26f0a13989296102bda09e\"},{\"facing\":\"front\",\"index\":6,\"sha256\":\"37403b1848729c56cb81faa831fac7bf5e1efda3bb45f7630965c42243fa8dcf\"},{\"facing\":\"front\",\"index\":7,\"sha256\":\"2513b82d3b285644b2e23dc9b5a59c4a3201abf98ea40d922955a6455ebbaf12\"}],\"scope\":\"Controlled renderer snapshots; no gameplay or timing acceptance\",\"unique_images\":8}"
+      ]
+    }
+  ],
+  "final_world_regression": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 46.16,
+    "dedicated_source_priority": true
+  },
+  "native": {
+    "normal-v3": {
+      "engine": "4.7.2-stable (official)",
+      "fountain_round": "scripted real inputs and native result return",
+      "rendered_size": "(1280.0, 720.0)",
+      "result": "PASS_NATIVE_ACTION_EVENTS",
+      "scope": "Main-backed input/source/wardrobe evidence; camera and initial placement are fixtures. No new source art, human play or listening acceptance.",
+      "seen": {
+        "celebrate-bob": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "celebrate-curly": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "celebrate-default": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "celebrate-reduced": {
+          "0": true
+        },
+        "interact": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "photograph": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "wave": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        }
+      },
+      "time_scale": 1.0,
+      "wall_ms": 117179,
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "avg_frame_rate": "30/1",
+            "nb_frames": "551"
+          }
+        ],
+        "format": {
+          "duration": "18.366667",
+          "size": "3484833"
+        }
+      },
+      "video_sha256": "503f9773e35f6971f11c49cd7f684dea07497b4d5c149e730f5bf0854f787b8d"
+    },
+    "quarter": {
+      "engine": "4.7.2-stable (official)",
+      "fountain_round": "synthetic result return for slow source inspection",
+      "rendered_size": "(1280.0, 720.0)",
+      "result": "PASS_NATIVE_ACTION_EVENTS",
+      "scope": "Main-backed input/source/wardrobe evidence; camera and initial placement are fixtures. No new source art, human play or listening acceptance.",
+      "seen": {
+        "celebrate-bob": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "celebrate-curly": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "celebrate-default": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "celebrate-reduced": {
+          "0": true
+        },
+        "interact": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "photograph": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        },
+        "wave": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true
+        }
+      },
+      "time_scale": 0.25,
+      "wall_ms": 170640,
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "avg_frame_rate": "30/1",
+            "nb_frames": "932"
+          }
+        ],
+        "format": {
+          "duration": "31.066667",
+          "size": "2983468"
+        }
+      },
+      "video_sha256": "5f2e179b7c4806c12d2a88324aa2188058aabf7cc55ced2700da714cafdd9de2"
+    }
+  },
+  "scope": "Scripted real native inputs, actual post-draw source checks, selected viewport and decoded video frame inspection. No human play/listening, new art, full NPC or hardware FPS claim. Quarter result is synthetic only.",
+  "failed_fixture_attempts": {
+    "normal": "Movement naturally canceled wave before deceleration completed; standing snapshot also overlapped nearby NPC. Failed, not accepted.",
+    "normal-v2": "Input flush alone did not resolve motion cancellation. Failed, not accepted.",
+    "normal-v3": "Wait for actual natural stillness; open patch position. Product physics/duration unchanged. Passed."
+  },
+  "inspected_frames": {
+    "normal-v3": [
+      "celebrate-default-00 through 07-sprite.png",
+      "celebrate-default-03.png",
+      "celebrate-bob-03.png",
+      "celebrate-curly-07.png",
+      "fountain-result.png",
+      "decoded-6.png",
+      "decoded-25.png",
+      "decoded-44.png",
+      "decoded-63.png",
+      "decoded-53.png",
+      "decoded-473.png",
+      "decoded-477.png"
+    ],
+    "quarter": [
+      "celebrate-bob-03.png",
+      "celebrate-curly-03.png",
+      "decoded-780.png",
+      "decoded-785.png"
+    ]
+  }
+}

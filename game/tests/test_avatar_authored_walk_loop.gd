@@ -138,6 +138,67 @@ func _run() -> void:
 		_check(world.avatar_action.is_empty(), "%s clears only after its authored sequence duration" % action)
 		_check(world.facing == "front", "%s completion keeps the newly selected front heading" % action)
 	_check(not world.avatar_renderer.has_authored_action("celebrate", "back"), "celebrate has no falsely claimed authored back-direction coverage")
+	# The event reuses the complete, already dressed jump clip. The manifest's
+	# art inventory does not claim new celebration drawings or new directions.
+	var original_jump: Dictionary = world.avatar_renderer.animation_library.manifest.actors.traveller.jump
+	var traveller: Dictionary = world.avatar_renderer.animation_library.manifest.actors.traveller
+	var had_celebration := traveller.has("celebrate")
+	var original_celebration: Variant = traveller.get("celebrate")
+	traveller.celebrate = original_jump.duplicate(true)
+	_check(world._avatar_source_action("celebrate", "front") == "celebrate", "dedicated celebration source takes priority over shared jump")
+	if had_celebration: traveller.celebrate = original_celebration
+	else: traveller.erase("celebrate")
+	world.avatar_renderer.garment_overlays.ready(world.avatar_renderer)
+	var celebration_look: Dictionary = world.avatar_appearance.duplicate()
+	celebration_look.hair = "bob"
+	var celebration_outfit := {"outfit":"outfit-rainvest", "hat":"hat-straw"}
+	for index in 8:
+		world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, "front", index, "jump")
+		world.avatar_renderer.texture(celebration_look, celebration_outfit, "front", index, "jump")
+	world.facing = "back"
+	world.play_action("celebrate")
+	_check(world.avatar_action == "celebrate" and world.last_avatar_source_action == "jump" and world.facing == "front", "celebration retains event identity and selects the real front jump")
+	_check(is_equal_approx(world.avatar_action_remaining, 8.0 / 12.0), "celebration ends with the complete jump clip")
+	var celebration_frames := {}
+	var celebration_pixels := {}
+	for tick in range(48):
+		if world.last_avatar_action == "celebrate":
+			var index: int = world.last_avatar_frame
+			if not celebration_frames.has(index):
+				celebration_frames[index] = true
+				var actual: Image = world.avatar.texture.get_image()
+				var expected: Image = world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, "front", index, "jump").get_image()
+				_check(actual.get_data() == expected.get_data(), "celebration body, fabric, hair and hat use the same source cel")
+				celebration_pixels[Marshalls.raw_to_base64(actual.get_data())] = true
+		if tick == 5:
+			world.blocked = true
+			var held_time: float = world.avatar_action_elapsed
+			var held_pose: Texture2D = world.avatar.texture
+			for _pause_tick in 8: await physics_frame
+			_check(world.avatar_action_elapsed == held_time and world.avatar.texture == held_pose, "pause holds the exact celebration source and clock")
+			world.blocked = false
+		if tick == 15:
+			var held_time: float = world.avatar_action_elapsed
+			world.set_avatar_look(celebration_look, celebration_outfit)
+			_check(world.avatar_action_elapsed == held_time and world.last_avatar_source_action == "jump", "changing outfit does not restart or detach the shared clip")
+		await physics_frame
+		if world.avatar_action.is_empty(): break
+	_check(celebration_frames.size() == 8 and celebration_pixels.size() == 8, "celebration displays all eight genuine source poses")
+	_check(world.avatar_action.is_empty() and world.last_avatar_action == "idle", "completed celebration returns to dedicated idle")
+	world.reduced_motion = true
+	world.play_action("celebrate")
+	for _tick in 6: await physics_frame
+	_check(world.last_avatar_frame == 0 and world.last_avatar_source_action == "jump", "reduced motion retains the complete standing cel")
+	world.reduced_motion = false
+	world.play_action("celebrate")
+	Input.action_press("move_left")
+	for _tick in 10: await physics_frame
+	_check(world.avatar_action.is_empty() and world.last_avatar_action == "walk", "movement cancels the celebration instead of sliding a planted source")
+	Input.action_release("move_left")
+	world.player.velocity = Vector3.ZERO
+	for _tick in 3: await physics_frame
+	# Preserve the old whole-action-absence regression as an actual source fault.
+	world.avatar_renderer.animation_library.manifest.actors.traveller.erase("jump")
 	world.facing = "back"
 	world.play_action("celebrate")
 	var fallback_frames := {}
@@ -146,6 +207,7 @@ func _run() -> void:
 		if world.last_avatar_action == "celebrate": fallback_frames[world.last_avatar_frame] = true
 		if world.avatar_action.is_empty(): break
 	_check(world.facing == "back" and fallback_frames.size() > 1 and fallback_frames.size() <= 3, "whole-action absence uses a safely advancing maximum-three-frame fallback without changing facing")
+	world.avatar_renderer.animation_library.manifest.actors.traveller.jump = original_jump
 	Input.action_press("move_left")
 	for _tick in range(24): await physics_frame
 	_check(world.avatar_is_walking and world.last_avatar_action == "walk" and world.avatar_motion_rig == null, "real travel cleanly returns from gesture to the authored walk loop")

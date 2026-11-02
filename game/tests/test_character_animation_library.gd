@@ -124,12 +124,20 @@ func _initialize() -> void:
 	assert(jump_feet_rows.size() > 1, "authored airborne feet offsets vary while canonical feet placement stays aligned")
 	var jump_coverage: Array = production_library.coverage_report().traveller.jump
 	assert(jump_coverage == ["front"] and not production_library.has_action("traveller", "jump", "back"), "coverage reports only authored front jump poses")
+	assert(is_equal_approx(production_library.sequence_duration("traveller", "jump", "front"), 8.0 / 12.0), "clip duration follows its authored frame rate")
+	var timed = Library.new()
+	timed.manifest.actors.traveller.jump.front.frame_durations = [0.1, 0.2, 0.1, 0.3, 0.4, 0.1, 0.2, 0.1]
+	assert(is_equal_approx(timed.sequence_duration("traveller", "jump", "front"), 1.5), "explicit cel holds define the full action duration")
+	assert(timed.frame_for_time("traveller", "jump", "front", 1.49) == 7 and timed.frame_for_time("traveller", "jump", "front", 1.5) == 7, "non-looping timing reaches and retains the authored last cel")
+	timed.manifest.actors.traveller.jump.front.frame_durations = [0.1]
+	assert(timed.sequence_duration("traveller", "jump", "front") == 0.0, "corrupt timing has no usable duration")
 	# A partially written action can retain timing after losing its cels. Every
 	# public reader must reject it without a GDScript error or leaking a pose.
 	var damaged = Library.new()
 	damaged.manifest.actors.traveller.wave.front.erase("frames")
 	damaged.manifest.actors.traveller.wave.front.frame_durations = [0.25]
 	assert(not damaged.has_action("traveller", "wave", "front"), "timing without frames is unavailable")
+	assert(damaged.sequence_duration("traveller", "wave", "front") == 0.0, "missing cels cannot extend an action")
 	assert(damaged.frame_count("traveller", "wave", "front") == 0 and damaged.frame_for_time("traveller", "wave", "front", 0.3) == 0, "missing frames cannot advance playback")
 	assert(not damaged.get_sequence("traveller", "wave", "front").available and damaged.texture("traveller", "wave", "front", 0) == null, "damaged action cannot expose partial source or attachment data")
 	assert(damaged.diagnostics.size() == 1 and damaged.diagnostics[0].begins_with("traveller/wave/front:"), "repeated readers retain one actionable diagnostic")

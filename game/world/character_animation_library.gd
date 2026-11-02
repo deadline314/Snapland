@@ -148,6 +148,15 @@ func has_anchor(actor: String, action: String, direction: String, frame_index: i
 	var anchors: Variant = frame.get("anchors", {})
 	return anchors is Dictionary and anchors.has(name)
 
+func sequence_duration(actor: String, action: String, direction: String) -> float:
+	var frames := _frames(actor, action, direction)
+	if frames.is_empty(): return 0.0
+	var durations: Array = _entry(actor, action, direction).get("frame_durations", [])
+	if durations.is_empty(): return float(frames.size()) / frame_fps(actor, action, direction)
+	var total := 0.0
+	for duration in durations: total += float(duration)
+	return total
+
 func frame_for_time(actor: String, action: String, direction: String, elapsed: float, reduced_motion: bool = false) -> int:
 	var frames := _frames(actor, action, direction)
 	if frames.is_empty() or reduced_motion: return 0

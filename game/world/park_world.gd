@@ -31,6 +31,9 @@ const CREAM = Color("#edddb8")
 const TEAL = Color("#246c6c")
 const CORAL = Color("#da705c")
 const GOLD = Color("#edbb65")
+# Semantic events may share an already authored clip. Dedicated event art
+# takes priority; missing shared art retains the original complete fallback.
+const AVATAR_SHARED_ACTIONS := {"celebrate": "jump"}
 var player: CharacterBody3D
 var avatar: Sprite3D
 var avatar_renderer: RefCounted
@@ -48,6 +51,7 @@ var _warned_missing_avatar_actions: Dictionary = {}
 var last_avatar_direction := ""
 var last_avatar_frame := -1
 var last_avatar_action := ""
+var last_avatar_source_action := ""
 var camera: Camera3D
 var sun: DirectionalLight3D
 var environment: Environment
@@ -2492,19 +2496,13 @@ func _authored_action_direction(action: String, preferred_direction: String) -> 
 func _has_authored_avatar_action(action: String, direction: String) -> bool:
 	if avatar_renderer == null:
 		return false
-	var library = avatar_renderer.animation_library
-	if library == null:
-		return false
-	var actors: Variant = library.manifest.get("actors", {})
-	var traveller: Variant = actors.get("traveller", {}) if actors is Dictionary else {}
-	var action_entries: Variant = traveller.get(action, {}) if traveller is Dictionary else {}
-	var entry: Variant = action_entries.get(direction, {}) if action_entries is Dictionary else {}
-	if not entry is Dictionary:
-		return false
-	var frames: Variant = entry.get("frames", [])
-	if not frames is Array or frames.is_empty():
-		return false
-	return avatar_renderer.has_authored_action(action, direction)
+	return avatar_renderer.has_authored_action(_avatar_source_action(action, direction), direction)
+
+func _avatar_source_action(action: String, direction: String) -> String:
+	if avatar_renderer == null or not AVATAR_SHARED_ACTIONS.has(action): return action
+	if avatar_renderer.has_authored_action(action, direction): return action
+	var shared := str(AVATAR_SHARED_ACTIONS[action])
+	return shared if avatar_renderer.has_authored_action(shared, direction) else action
 
 func _warn_missing_avatar_action_once(action: String) -> void:
 	if _warned_missing_avatar_actions.has(action):
@@ -2518,11 +2516,8 @@ func _warn_missing_avatar_action_once(action: String) -> void:
 func _avatar_action_duration(action: String, direction: String = "front") -> float:
 	if not _has_authored_avatar_action(action, direction):
 		return 0.8
-	var frame_count: int = avatar_renderer.authored_frame_count(action, direction)
-	var fps: float = avatar_renderer.authored_action_fps(action, direction)
-	if frame_count <= 0 or not is_finite(fps) or fps <= 0.0:
-		return 0.8
-	var duration: float = float(frame_count) / fps
+	var source_action := _avatar_source_action(action, direction)
+	var duration: float = avatar_renderer.animation_library.sequence_duration("traveller", source_action, direction)
 	if not is_finite(duration) or duration <= 0.0:
 		return 0.8
 	return clampf(duration, 0.1, 8.0)
@@ -2558,12 +2553,13 @@ func _refresh_avatar_texture(frame: int) -> void:
 	if action != "walk" and action != "idle" and not riding:
 		var animation_library = avatar_renderer.animation_library
 		if _has_authored_avatar_action(action, direction):
-			display_frame=animation_library.frame_for_time("traveller", action, direction, avatar_action_elapsed if action == avatar_action else time, reduced_motion)
+			texture_action = _avatar_source_action(action, direction)
+			display_frame=animation_library.frame_for_time("traveller", texture_action, direction, avatar_action_elapsed if action == avatar_action else time, reduced_motion)
 		else:
 			# The built-in fallback has only three authored-looking poses. Advance
 			# those safely instead of leaving it on the unrelated walk phase.
 			display_frame=0 if reduced_motion else mini(floori(maxf(0.0,avatar_action_elapsed)*3.0),2)
-	if last_avatar_direction == direction and last_avatar_frame == display_frame and last_avatar_action == action: return
+	if last_avatar_direction == direction and last_avatar_frame == display_frame and last_avatar_action == action and last_avatar_source_action == texture_action: return
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,direction,display_frame,texture_action)
 	if is_instance_valid(avatar_hair_rig):
 		avatar.texture=avatar_hair_rig.sync_pose(avatar.texture,avatar_renderer,avatar_appearance,avatar_equipped,direction,display_frame,texture_action)
@@ -2573,6 +2569,7 @@ func _refresh_avatar_texture(frame: int) -> void:
 	last_avatar_direction=direction
 	last_avatar_frame=display_frame
 	last_avatar_action=action
+	last_avatar_source_action=texture_action
 
 func _ride_pose_frame() -> int:
 	if reduced_motion: return 0
