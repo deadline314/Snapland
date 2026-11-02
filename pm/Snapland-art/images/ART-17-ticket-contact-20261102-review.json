@@ -1,0 +1,135 @@
+{
+  "date": "2026-11-02 Asia/Taipei",
+  "tool": "image_gen.imagegen",
+  "accepted": false,
+  "runtime_adopted": false,
+  "semantic_scope": "Whole-character source art review only. No new native animation or gameplay acceptance. Original runtime assets unchanged.",
+  "attempts": [
+    {
+      "label": "single-v1",
+      "prompt": "Create ONE single full-body walking key pose of the EXACT same ticket-clerk boy in the first reference, in strict side view facing SCREEN RIGHT. Preserve his fine hand-drawn HD2D pixel look, rounded head/body proportions, tousled chestnut hair, round brown glasses, royal blue hoodie with cream small mountain emblem, cream shorts, chunky brown boots, brown crossbody satchel, near hand holding its strap. Transparent background, whole person fully visible with ample margins. This is an anatomy correction draft for the OPPOSITE CONTACT to the second reference; the second reference wrongly repeats near-thigh-forward. Draw the near LEFT leg visibly reaching BACK to screen LEFT: its cream shorts hem, bare thigh, bent knee and shin form a continuous connected silhouette entirely BEHIND the pelvis, down to a back boot on its toe. The near knee must be clearly to the LEFT of the pelvis center. The FAR RIGHT leg is straight and reaches FORWARD to screen RIGHT with heel touching ground, its bare thigh emerges from the far inner shorts opening, partly occluded by the nearer rear thigh. Far leg slightly darker consistently. The only forward-pointing thigh and shin is the FAR leg. Show both hip-to-knee chains unambiguously; do not merely recolor the same near-forward outline. Both legs connected, relaxed modest walking stride, stable hip and head, no jump or run, no duplicated legs, no ghosting, no detached pieces, no text or layout labels, no floor/shadow. Keep head and torso close to the reference identity. The new image is just ONE opposite-contact pose, not a sheet and not a mirrored whole character.",
+      "references": [
+        "assets/characters/ticket-front-actions-v2.png",
+        "pm/Snapland-art/images/ART-17-ticket-walk-20261024-rejected-contacts.png"
+      ],
+      "review": "Rejected: foreground cream shorts panel still connects to the forward thigh; color difference alone does not establish the opposite contact.",
+      "accepted": false,
+      "transparent_background": true,
+      "output": "ART-17-ticket-contact-20261102-single-v1.png",
+      "sha256": "62e1c67cb277d1a13a5974403c3cf48e79cda33ef9447f9f65c582d321cb09ef",
+      "dimensions": [
+        1265,
+        1243
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "corner_rgba": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "reference_sha256": {
+        "assets/characters/ticket-front-actions-v2.png": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1",
+        "pm/Snapland-art/images/ART-17-ticket-walk-20261024-rejected-contacts.png": "54e40e91afc500e7ae08b26e8b7cfd0120d3f963f95398707452bbfde12333d6"
+      }
+    },
+    {
+      "label": "single-v2",
+      "prompt": "Edit ONLY the pelvis, shorts and legs of this one full-body character to correct the anatomical overlap. Preserve the head, face, glasses, hoodie, hand, strap and satchel exactly. Transparent background. The current picture is wrong: the large cream SHORTS LEG on screen RIGHT is drawn in FRONT of the other shorts leg even though that forward leg must be FARTHER from camera. Reverse that actual pants/thigh overlap, not just leg colors. The NEAR cream shorts cuff must point diagonally BACKWARD toward lower LEFT, and that broad near cream cuff must visibly connect to the light bare thigh on screen LEFT behind the pelvis. Place this near cuff directly below the satchel, with its outer side seam visibly wrapping toward the REAR knee at screen LEFT. It overlaps in front of the other shorts piece at the crotch. The FAR forward shorts leg on screen RIGHT must be a smaller, partially hidden darker cream shape BEHIND the near rear cuff, continuous into the forward darker bare thigh, knee and boot on screen RIGHT. The foreground shorts overlap line must slope down-left from pelvis to near rear knee; remove the big foreground shorts panel sloping down-right from the original. Whole boy facing right, both feet still contact ground, complete connected hip/knee/ankle chains, no extra limbs. Same dimensions, original whole character visible. This is ONE complete corrected contact pose, no sheet, no text, no diagram, no other changes.",
+      "references": [
+        "single-v1"
+      ],
+      "review": "Anatomy study improved: the foreground shorts cuff now follows the rear light thigh and overlaps the forward far cuff. Not runtime accepted: only one key pose, rendering and outline differ from canonical front sheet; does not establish an animation cycle.",
+      "accepted": false,
+      "transparent_background": true,
+      "output": "ART-17-ticket-contact-20261102-single-v2.png",
+      "sha256": "81d0782d548b0411a633af1a8d15635d3877efa90ed565ed8dff7238a520bbfd",
+      "dimensions": [
+        1265,
+        1243
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "corner_rgba": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "reference_sha256": {
+        "single-v1": "62e1c67cb277d1a13a5974403c3cf48e79cda33ef9447f9f65c582d321cb09ef"
+      }
+    },
+    {
+      "label": "cycle-v1",
+      "prompt": "Produce a production candidate sprite sheet: EXACTLY EIGHT full-body cels in a 4-column by 2-row grid, generous transparent gutters. Same ticket-clerk boy, always facing SCREEN RIGHT, side walking IN PLACE. First reference is canonical character design and crisp HD2D fine pixel rendering: chestnut wavy hair, round glasses, royal blue hoodie, cream shorts, chunky brown boots, brown satchel. Second reference is the CORRECT FAR-LEG-FORWARD contact anatomy, especially the near shorts cuff visibly overlapping backward toward the left. Use that exact leg-overlap structure for cel FIVE, not the same foreground shorts panel pointed forward again. Third reference shows the opposite near-leg-forward contact. Make the whole sheet ONE consistent artist/rendering: crisp controlled pixel clusters and thin dark outlines, no soft painterly haze or smooth vector line replacement, match canonical first reference.\nFixed layout with four equal columns and two equal rows; each whole character at same scale and same pelvis/torso local X, head size, root and shared ground baseline. Only tiny natural vertical hip bob; do not translate cels across their logical cell or shift row two. No background, floor, cast shadows, labels, frame numbers or grid lines; transparent alpha. Stable glasses, hair silhouette, hands, satchel strap and logo. Preserve both complete arms and legs attached to the body; the bag hand holds its strap.\nEight sequential real WALK poses in row-major order: 1 near leg forward heel contact and far leg back toe; 2 near knee bends receiving weight while far foot lifts; 3 near foot planted BELOW pelvis while FAR knee swings forward past the supporting leg, bent elevated far boot; 4 near leg BEHIND pelvis pushing off and far leg reaching forward; 5 opposite contact: FAR leg forward heel and NEAR leg back toe, with the foreground near cream shorts cuff clearly sweeping BACK-LEFT OVER the far shorts leg, as second reference; 6 far knee receives weight while near foot lifts behind; 7 far foot planted BELOW pelvis while NEAR knee swings forward past support, bent elevated near boot; 8 near leg reaches forward as far leg pushes behind, closing into pose1. Phases 3 and 7 must clearly differ in which thigh is supporting, and five must be the true opposite shorts/thigh overlap from one. Far leg keeps slightly darker shading throughout. Keep feet near the ground: grounded ordinary walking, not running, hopping, skates, duplicated stance, detached leg cutouts or recolor-only gait. DO NOT duplicate cel1 as cel8. All eight must be different genuine sequential whole-character poses.",
+      "references": [
+        "assets/characters/ticket-front-actions-v2.png",
+        "single-v2",
+        "pm/Snapland-art/images/ART-17-ticket-walk-20261024-rejected-contacts.png"
+      ],
+      "review": "Rejected: bottom row repeats near-forward shorts/thigh pattern. First and fifth do not establish opposite contacts. Lifted-knee variants repeat too. No complete two-step gait.",
+      "accepted": false,
+      "transparent_background": true,
+      "output": "ART-17-ticket-contact-20261102-cycle-v1.png",
+      "sha256": "9f7a019721277492bafcbc4be65ba432a24dd40036727db2d280aaa8fbb89770",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "corner_rgba": [
+        19,
+        4,
+        1,
+        0
+      ],
+      "reference_sha256": {
+        "assets/characters/ticket-front-actions-v2.png": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1",
+        "single-v2": "81d0782d548b0411a633af1a8d15635d3877efa90ed565ed8dff7238a520bbfd",
+        "pm/Snapland-art/images/ART-17-ticket-walk-20261024-rejected-contacts.png": "54e40e91afc500e7ae08b26e8b7cfd0120d3f963f95398707452bbfde12333d6"
+      }
+    },
+    {
+      "label": "cycle-v2",
+      "prompt": "Correct this eight-cel ticket-clerk sprite sheet. Keep the TOP ROW OF FOUR complete characters as it is. The bottom row is wrong because it repeats the top row's foreground thigh forward. Redraw ONLY THE LOWER FOUR COMPLETE CHARACTERS to show the OPPOSITE LEG HALF-CYCLE. Use the SECOND image as the precise anatomical template for BOTTOM LEFT: the broad foreground cream shorts cuff leans BACK-LEFT beneath the satchel and overlaps in front of a narrower far shorts cuff that leans FORWARD-RIGHT. Its near light thigh extends backward left; far darker thigh goes forward right. This actual crossing shorts overlap from the second image must be visible at bottom left. In the next bottom cel, the far forward darker leg bends receiving weight and the light near rear boot starts lifting. In bottom cel three the darker far leg supports below pelvis and the LIGHT NEAR knee/boot is raised and passing forward, with the near thigh visibly IN FRONT of the dark support thigh. Bottom cel four the near light leg extends forward to prepare the top-left contact, far dark leg retreats. These four lower cels must NOT repeat the four upper cels' same thigh/shorts silhouettes. Preserve exact character identity, connected full limbs, dimensions, torso/head size, grid alignment and camera, constant local root and ground row. No copying/recolor-only fix, no moving head or body across cells, no duplicated ending pose, no changed glasses or satchel. All eight complete cels still fully inside generous 4x2 cells, same final image dimensions, transparent background. The final should remain the same fine pixel-art source style, no floor or shadows or text.",
+      "references": [
+        "cycle-v1",
+        "single-v2"
+      ],
+      "review": "Rejected: local revision still leaves the same forward foreground shorts/thigh in the lower contact and repeats the same half-cycle. No valid alternating gait.",
+      "accepted": false,
+      "transparent_background": true,
+      "output": "ART-17-ticket-contact-20261102-cycle-v2.png",
+      "sha256": "56e6cae0698c734bf2bb83b6482e39435219d3127954f9e5ceede6a999ee704e",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "corner_rgba": [
+        19,
+        5,
+        1,
+        0
+      ],
+      "reference_sha256": {
+        "cycle-v1": "9f7a019721277492bafcbc4be65ba432a24dd40036727db2d280aaa8fbb89770",
+        "single-v2": "81d0782d548b0411a633af1a8d15635d3877efa90ed565ed8dff7238a520bbfd"
+      }
+    }
+  ],
+  "alpha_review": "All outputs have transparent corner alpha=0. Dark transparent RGB in preview is not used as a rejection reason. Actual pose overlap and source identity are reviewed directly.",
+  "research": "Revisited the actual existing source and earlier rejected contact image; current six-team text study is preserved in ART-17 celebration replay. No new tutorial video was watched."
+}
