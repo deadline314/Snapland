@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-02 Asia/Taipei",
+  "runtime_commit": "bb6d3118f7676617d8f124e98ee7a6bc4a2797d5",
+  "build": {
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "source_commit": "bb6d3118f7676617d8f124e98ee7a6bc4a2797d5",
+    "template_sha256": "d9f79ab89b5ae369aeed11c6052d402e8218cd503bf85b4a235f9c30c46a7c63",
+    "steps": [
+      {
+        "step": "import",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 21.75
+      },
+      {
+        "step": "export",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 4.73
+      }
+    ],
+    "binary": {
+      "file": "Snapland.x86_64",
+      "bytes": 241399984,
+      "sha256": "d3584656d3d2cf4793cdec3df200bf18d4499cabeb999e497ebb01cc0eed1091"
+    },
+    "scope": "Linux x86_64 release executable with embedded PCK; runtime acceptance is a separate step"
+  },
+  "runtime_working_bytes_match_build": true,
+  "native_release": {
+    "exit": 0,
+    "errors": 0,
+    "seconds": 26.34,
+    "cwd": "/workspace/work/snapland-20261102/work/celebration/linux-release/release",
+    "loose_project": false,
+    "editor_cache": false,
+    "binary_sha256": "d3584656d3d2cf4793cdec3df200bf18d4499cabeb999e497ebb01cc0eed1091",
+    "captures": 12,
+    "scope": "Actual exported ELF, embedded main scene, no source/scene/pack override. Scripted art resource smoke; Dummy audio is not listening."
+  },
+  "pack_parity": {
+    "result": "PASS",
+    "poses": 88,
+    "exact_rgba_parity": true,
+    "pack_development_test_absent": true,
+    "scope": "External QA script mounts embedded pack; separate exported-binary native boot is recorded independently"
+  },
+  "missing_source": {
+    "removed": "assets/characters/traveller-actions-v1.png and its import sidecar in a fresh private runtime copy",
+    "source_hashes_match_runtime": true,
+    "exit": 0,
+    "errors": 0,
+    "directions": [
+      "front",
+      "back",
+      "left",
+      "right"
+    ],
+    "fallback_canvas": [
+      64,
+      96
+    ],
+    "review": "All four actual fallback images inspected; recognizable complete figure. Warning names missing atlas. No production resource or player save removed."
+  },
+  "inspected_release_frames": [
+    "art-smoke-game-003.png",
+    "art-smoke-game-012.png"
+  ],
+  "acceptance_scope": "Basic player four-direction walk and four visible action events, missing primary atlas fallback, Linux exported assets. Full character animation/wardrobe remains ART-17/18. No new human play, listening, Windows run, or all-day/night wardrobe acceptance."
+}
