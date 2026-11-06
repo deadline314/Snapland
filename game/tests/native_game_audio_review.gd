@@ -9,6 +9,12 @@ const TestSaveGuard := preload("res://game/core/test_save_guard.gd")
 const AudioDirector := preload("res://game/audio/audio_director.gd")
 const MUSIC_SETTLE_SECONDS := 2.4
 const FEEDBACK_GAP_SECONDS := 0.5
+## Dense feedback burst: alternating hits and misses just above the repeat gate, then the
+## full result jingle, to check the mix stays controlled under rapid play.
+const BURST_EVENTS := 12
+const BURST_GAP_SECONDS := 0.045
+## Games whose own beat-locked or instrument music replaces the shared game track.
+const SELF_SCORED_GAMES := ["game-006", "game-012"]
 
 var main: Node
 var output_dir := ""
@@ -18,6 +24,7 @@ var recorder_index := -1
 var started_msec := 0
 var timeline: Array[Dictionary] = []
 var failures: Array[String] = []
+var volume_settings := {}
 
 func _ready() -> void:
 	call_deferred("_run")
@@ -27,9 +34,12 @@ func _run() -> void:
 	if not save_error.is_empty():
 		await _fail(save_error)
 		return
+	var full_volume := false
 	for argument in OS.get_cmdline_user_args():
 		if argument.begins_with("--audio-review-output="):
 			output_dir = argument.trim_prefix("--audio-review-output=").strip_edges()
+		elif argument == "--full-volume":
+			full_volume = true
 	if output_dir.is_empty() or not output_dir.is_absolute_path():
 		await _fail("Pass --audio-review-output=<absolute directory>")
 		return
@@ -40,6 +50,11 @@ func _run() -> void:
 		return
 	progress.reset_progress()
 	progress.intro_seen = true
+	if full_volume:
+		# Worst case for loudness: every slider at full.
+		for key in ["master_volume", "music_volume", "sfx_volume"]:
+			progress.settings[key] = 1.0
+	volume_settings = {"master": float(progress.settings.master_volume), "music": float(progress.settings.music_volume), "sfx": float(progress.settings.sfx_volume)}
 	main = (load(MAIN_SCENE_PATH) as PackedScene).instantiate()
 	get_tree().root.add_child(main)
 	await _wait_frames(8)
@@ -69,6 +84,11 @@ func _run() -> void:
 		_mark("music", id)
 		if playing != expected_music:
 			failures.append("%s plays %s instead of %s" % [id, playing, expected_music])
+		var owns_music: bool = main.session.has_method("owns_music") and main.session.owns_music()
+		if bool(main.audio.is_music_suppressed()) != owns_music:
+			failures.append("%s shared-track suppression %s does not match the game's own music %s" % [id, main.audio.is_music_suppressed(), owns_music])
+		if (id in SELF_SCORED_GAMES) != owns_music:
+			failures.append("%s expected own music=%s but reports %s" % [id, id in SELF_SCORED_GAMES, owns_music])
 		await _screenshot(id)
 		for kind: String in AudioDirector.GAME_AUDIO_FEEDBACK_KINDS:
 			main.session.feedback.emit(kind)
@@ -78,6 +98,13 @@ func _run() -> void:
 			if not expected_sfx.is_empty() and sfx_path != expected_sfx:
 				failures.append("%s %s played %s instead of %s" % [id, kind, sfx_path, expected_sfx])
 			await _duration(FEEDBACK_GAP_SECONDS)
+		_mark("burst_start", id)
+		for burst in BURST_EVENTS:
+			main.session.feedback.emit("success" if burst % 2 == 0 else "miss")
+			await _duration(BURST_GAP_SECONDS)
+		main.audio.play_sfx("quest_complete")
+		await _duration(2.2)
+		_mark("burst_end", id)
 		main._cancel_game()
 		await _duration(0.9)
 		_mark("left", id)
@@ -94,6 +121,7 @@ func _run() -> void:
 		"method": "Main._launch_game for all twelve welcome games; session.feedback signal emitted by the review script for interact/success/miss; Master bus AudioEffectRecord; no gameplay input, no audition",
 		"audio_driver": AudioServer.get_driver_name() if AudioServer.has_method("get_driver_name") else "",
 		"mix_rate": AudioServer.get_mix_rate(),
+		"volume_settings": volume_settings,
 		"duration_seconds": float(Time.get_ticks_msec() - started_msec) / 1000.0,
 		"events": timeline,
 		"failures": failures,
@@ -146,6 +174,7 @@ func _mark(event: String, game_id: String) -> void:
 		"context": main.audio._active_context if main != null and main.audio != null else "",
 		"music": _active_music_path() if main != null and main.audio != null else "",
 		"sfx": main.audio._sfx.stream.resource_path if main != null and main.audio != null and main.audio._sfx.stream != null else "",
+		"shared_track_suppressed": bool(main.audio.is_music_suppressed()) if main != null and main.audio != null else false,
 	})
 
 func _duration(seconds: float) -> void:

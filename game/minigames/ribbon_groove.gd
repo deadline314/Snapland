@@ -16,7 +16,9 @@ const TAIL_SECONDS := 1.6
 const ACTION_NOTES := {"left": 64, "right": 67, "jump": 72}
 const BASS_ROOTS: Array[int] = [36, 33, 29, 31]
 const FINALE_NOTES: Array[int] = [72, 76, 79, 84]
-const PEAK := 0.82
+## About -6 dBFS: the same peak headroom every shipped music track keeps, so the groove is
+## not louder than the other games and the hits on top of it never reach full scale.
+const PEAK := 0.5
 
 static var _cached_stream: AudioStreamWAV
 

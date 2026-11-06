@@ -12,8 +12,8 @@
 
 ### 驗收條件
 - [x] 至少六個不同團隊的音樂、音效及互動聲音來源實際閱讀或試聽，記錄查閱範圍與採用理由。
-- [ ] 首區和十二款各有適合場景及玩法的聲音，音樂、節拍與實際動作同步。
-- [ ] 連續命中、失誤、對話、時段切換及結算音量舒適且不重疊失控，設定與靜音可用。
+- [x] 首區和十二款各有適合場景及玩法的聲音，音樂、節拍與實際動作同步。
+- [x] 連續命中、失誤、對話、時段切換及結算音量舒適且不重疊失控，設定與靜音可用。
 - [ ] 原生完整試聽並核對靜音、重試、離開和重開，保存試聽紀錄、影片及測試。
 
 ### 測試流程
@@ -97,3 +97,39 @@
 ![試聽表頻譜：每 9.6 秒一款](images/MIC-2-listening-sheet-spectrum.jpg)
 
 來源頁截圖：[Sunflower Valley](images/MIC-2-source-sunflower-valley.jpg) · [choco bird's run](images/MIC-2-source-choco-birds-run.jpg) · [Jungle Simple Style 1](images/MIC-2-source-jungle-simple-style-1.jpg) · [Children's March](images/MIC-2-source-childrens-march-theme.jpg) · [Rolling Circus](images/MIC-2-source-rolling-circus.jpg) · [Calm Piano 1](images/MIC-2-source-calm-piano-1-vaporware.jpg) · [Taking you to the Circus](images/MIC-2-source-taking-you-to-the-circus.jpg) · [Exploration Theme](images/MIC-2-source-exploration-theme.jpg) · [Sandy Seaside 2](images/MIC-2-source-sandy-seaside-2.jpg) · [Bossa Nova](images/MIC-2-source-bossa-nova.jpg) · [Kenney Music Jingles](images/MIC-2-source-kenney-music-jingles.jpg) · [Kenney Impact](images/MIC-2-source-kenney-impact.jpg) · [Kenney RPG](images/MIC-2-source-kenney-rpg.jpg) · [Kenney Digital](images/MIC-2-source-kenney-digital.jpg)
+
+
+# Commit — 2026-11-06 十二款節拍同步與密集操作混音控管
+
+固定開始 SHA：`37af23a`；分支：`feature/gracious-archimedes-nmdgcm`。
+
+## 問題
+
+迎賓大合奏雖有遊戲自己的樂器聲，背景仍播放共用的 25 秒嘉年華曲，與要記憶的樂句速度互相干擾。彩帶伴奏以峰值正規化到接近滿刻度，比其他遊戲大約 6 dB，所有音量拉滿時密集命中的峰值只剩 0.2 dB 餘裕。「音量舒適、不重疊失控」也還沒有可核對的量測。
+
+## 改動
+
+- 合奏與彩帶一樣，由遊戲本身的音樂取代共用曲；十二款審閱逐款核對共用曲是否被靜音。
+- 彩帶伴奏峰值降到與其他出貨音樂相同的約 -6 dBFS。
+- 十二款審閱加入密集段：每款連續 12 次命中／失誤（間隔略大於重複閘門），再播完整結算曲；可選擇所有音量拉滿錄製。
+- 新增混音量測工具，以 ITU-R BS.1770 量測整體響度、響度範圍與每款密集段真峰值，依公開的主機遊戲響度建議判定；附解析與判定的單元測試。
+
+## 驗收
+
+| 項目 | 結果 |
+|---|---|
+| 十二款聲音身分 | 十款各自配樂與材質回饋聲；彩帶以節拍表生成伴奏（SG-21 已驗每個音落在拍點），合奏以四件樂器演奏並在完成樂句後合奏回放（SG-27），噴泉以數拍音提示起跳（SG-18）；兩款自帶音樂的遊戲實際靜音共用曲，其餘十款不靜音 |
+| 回饋時機 | 命中、失誤、操作聲由遊戲事件實際觸發；十二款原生審閱逐款核對播放的檔案 |
+| 所有音量拉滿（原生 Main、PulseAudio 虛擬輸出） | 整體 -22.1 LUFS（建議 -23 ±2）；響度範圍 5.4 LU（上限 20）；每款密集段真峰值最高 -4.9 dBTP（上限 -1） |
+| 預設音量 | 整體 -28.5 LUFS；響度範圍 6.9 LU；密集段真峰值最高 -12.8 dBFS |
+| 對話與時段 | 島上審閱：對話時音樂退後、結束恢復；中午與晚上增益不同且平滑過渡；主音量靜音錄到完整數位靜音（見 MIC-3） |
+| 不重疊失控 | 回饋聲共用單一播放器、同源 40 ms 重複閘門；對話滴滴聲獨立且有說話者間隔 |
+| 受影響 Godot 套件／Python／設計 | 彩帶、合奏、十二款小遊戲、音效、島上聲音動態、小遊戲介面全部通過；Python 與設計驗證通過 |
+
+量測依據：GANG IESD 與 Sony WWS 的主機遊戲整體響度 -23 LUFS ±2、真峰值 -1 dBTP；Sony ASWG 響度範圍上限 20 LU（[Designing Sound 整理](https://designingsound.org/2013/02/loudness-in-game-audio/)、[Garry Taylor 訪談](https://designingsound.org/2012/07/30/video-games-and-loudness-standards-interview-with-sonys-garry-taylor/)）。錄音走虛擬輸出，這些是量測，**不是試聽**；「原生完整試聽」條件維持未勾選。
+
+試聽表已改為從實際引擎錄音裁切（所有音量拉滿），每款依序包含配樂、三種回饋、密集段與結算曲：[逐款試聽表 MP3](images/MIC-2-game-audio-listening-sheet.mp3)（[時間點](images/MIC-2-game-audio-listening-sheet.json)）。
+
+[拉滿音量量測](images/MIC-2-mix-20261106-full-volume.json) · [預設音量量測](images/MIC-2-mix-20261106-default-volume.json) · [十二款事件時間軸](images/MIC-2-mix-20261106-full-volume-timeline.json) · [混音決策](../../design/runtime/game-audio-profiles.md)
+
+![試聽表頻譜](images/MIC-2-listening-sheet-spectrum.jpg)

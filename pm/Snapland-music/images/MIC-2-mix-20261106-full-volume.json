@@ -1,0 +1,111 @@
+{
+  "games": {
+    "game-001": {
+      "music_momentary_max": -21.9,
+      "burst_momentary_max": -18.8,
+      "burst_true_peak_captured": -9.3,
+      "burst_true_peak_full_sliders": -9.3,
+      "spike_lu": 3.1,
+      "ok": true
+    },
+    "game-002": {
+      "music_momentary_max": -23.0,
+      "burst_momentary_max": -19.0,
+      "burst_true_peak_captured": -9.6,
+      "burst_true_peak_full_sliders": -9.6,
+      "spike_lu": 4.0,
+      "ok": true
+    },
+    "game-003": {
+      "music_momentary_max": -17.9,
+      "burst_momentary_max": -14.4,
+      "burst_true_peak_captured": -4.9,
+      "burst_true_peak_full_sliders": -4.9,
+      "spike_lu": 3.5,
+      "ok": true
+    },
+    "game-004": {
+      "music_momentary_max": -23.3,
+      "burst_momentary_max": -20.1,
+      "burst_true_peak_captured": -8.0,
+      "burst_true_peak_full_sliders": -8.0,
+      "spike_lu": 3.2,
+      "ok": true
+    },
+    "game-005": {
+      "music_momentary_max": -22.8,
+      "burst_momentary_max": -20.3,
+      "burst_true_peak_captured": -11.3,
+      "burst_true_peak_full_sliders": -11.3,
+      "spike_lu": 2.5,
+      "ok": true
+    },
+    "game-006": {
+      "music_momentary_max": -20.6,
+      "burst_momentary_max": -17.7,
+      "burst_true_peak_captured": -5.2,
+      "burst_true_peak_full_sliders": -5.2,
+      "spike_lu": 2.9,
+      "ok": true
+    },
+    "game-007": {
+      "music_momentary_max": -28.8,
+      "burst_momentary_max": -18.5,
+      "burst_true_peak_captured": -10.2,
+      "burst_true_peak_full_sliders": -10.2,
+      "spike_lu": 10.3,
+      "ok": true
+    },
+    "game-008": {
+      "music_momentary_max": -19.6,
+      "burst_momentary_max": -19.5,
+      "burst_true_peak_captured": -9.8,
+      "burst_true_peak_full_sliders": -9.8,
+      "spike_lu": 0.1,
+      "ok": true
+    },
+    "game-009": {
+      "music_momentary_max": -26.9,
+      "burst_momentary_max": -19.7,
+      "burst_true_peak_captured": -9.9,
+      "burst_true_peak_full_sliders": -9.9,
+      "spike_lu": 7.2,
+      "ok": true
+    },
+    "game-010": {
+      "music_momentary_max": -22.1,
+      "burst_momentary_max": -19.1,
+      "burst_true_peak_captured": -10.1,
+      "burst_true_peak_full_sliders": -10.1,
+      "spike_lu": 3.0,
+      "ok": true
+    },
+    "game-011": {
+      "music_momentary_max": -22.5,
+      "burst_momentary_max": -19.1,
+      "burst_true_peak_captured": -6.6,
+      "burst_true_peak_full_sliders": -6.6,
+      "spike_lu": 3.4,
+      "ok": true
+    },
+    "game-012": {
+      "music_momentary_max": -13.8,
+      "burst_momentary_max": -21.5,
+      "burst_true_peak_captured": -12.0,
+      "burst_true_peak_full_sliders": -12.0,
+      "spike_lu": -7.7,
+      "ok": true
+    }
+  },
+  "volume_settings": {
+    "master": 1.0,
+    "music": 1.0,
+    "sfx": 1.0
+  },
+  "integrated_captured": -22.1,
+  "reference_ok": true,
+  "loudness_range": 5.4,
+  "loudness_range_ok": true,
+  "full_slider_peak_offset_db": -0.0,
+  "pcm_to_wall_scale": 0.99603
+}

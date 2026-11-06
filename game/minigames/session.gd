@@ -1700,8 +1700,13 @@ func _on_ribbon_action_released(action: String) -> void:
 	_sync_ribbon_model("input")
 
 ## True when this round plays its own beat-locked music (Main then mutes shared music).
+## True when this game plays its own beat-locked or instrument music, so the shared game
+## track must stay silent instead of clashing in tempo with what the player follows.
 func owns_music() -> bool:
-	return mode == "ribbon_rhythm" and is_instance_valid(_ribbon_groove)
+	match mode:
+		"ribbon_rhythm": return is_instance_valid(_ribbon_groove)
+		"melody_memory": return is_instance_valid(_melody_voices)
+	return false
 
 func _restart_ribbon_groove() -> void:
 	if DisplayServer.get_name() == "headless" or not is_inside_tree():

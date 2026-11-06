@@ -1,0 +1,780 @@
+{
+	"audio_driver": "PulseAudio",
+	"audition": "pending",
+	"duration_seconds": 121.458,
+	"events": [
+		{
+			"context": "harbor",
+			"event": "start",
+			"game": "",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 0.0,
+			"sfx": "",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-001",
+			"event": "music",
+			"game": "game-001",
+			"music": "res://assets/audio/cc0/games/game-001-music.ogg",
+			"seconds": 2.871,
+			"sfx": "",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-001",
+			"event": "feedback_interact",
+			"game": "game-001",
+			"music": "res://assets/audio/cc0/games/game-001-music.ogg",
+			"seconds": 3.063,
+			"sfx": "res://assets/audio/cc0/games/game-001-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-001",
+			"event": "feedback_success",
+			"game": "game-001",
+			"music": "res://assets/audio/cc0/games/game-001-music.ogg",
+			"seconds": 3.449,
+			"sfx": "res://assets/audio/cc0/games/game-001-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-001",
+			"event": "feedback_miss",
+			"game": "game-001",
+			"music": "res://assets/audio/cc0/games/game-001-music.ogg",
+			"seconds": 4.016,
+			"sfx": "res://assets/audio/cc0/games/game-001-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-001",
+			"event": "burst_start",
+			"game": "game-001",
+			"music": "res://assets/audio/cc0/games/game-001-music.ogg",
+			"seconds": 4.6,
+			"sfx": "res://assets/audio/cc0/games/game-001-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-001",
+			"event": "burst_end",
+			"game": "game-001",
+			"music": "res://assets/audio/cc0/games/game-001-music.ogg",
+			"seconds": 8.421,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-001",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 9.692,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-002",
+			"event": "music",
+			"game": "game-002",
+			"music": "res://assets/audio/cc0/games/game-002-music.ogg",
+			"seconds": 12.217,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-002",
+			"event": "feedback_interact",
+			"game": "game-002",
+			"music": "res://assets/audio/cc0/games/game-002-music.ogg",
+			"seconds": 12.307,
+			"sfx": "res://assets/audio/cc0/games/game-002-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-002",
+			"event": "feedback_success",
+			"game": "game-002",
+			"music": "res://assets/audio/cc0/games/game-002-music.ogg",
+			"seconds": 12.764,
+			"sfx": "res://assets/audio/cc0/games/game-002-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-002",
+			"event": "feedback_miss",
+			"game": "game-002",
+			"music": "res://assets/audio/cc0/games/game-002-music.ogg",
+			"seconds": 13.28,
+			"sfx": "res://assets/audio/cc0/games/game-002-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-002",
+			"event": "burst_start",
+			"game": "game-002",
+			"music": "res://assets/audio/cc0/games/game-002-music.ogg",
+			"seconds": 13.809,
+			"sfx": "res://assets/audio/cc0/games/game-002-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-002",
+			"event": "burst_end",
+			"game": "game-002",
+			"music": "res://assets/audio/cc0/games/game-002-music.ogg",
+			"seconds": 16.72,
+			"sfx": "res://assets/audio/cc0/games/game-002-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-002",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 18.081,
+			"sfx": "res://assets/audio/cc0/games/game-002-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-003",
+			"event": "music",
+			"game": "game-003",
+			"music": "res://assets/audio/cc0/games/game-003-music.ogg",
+			"seconds": 24.739,
+			"sfx": "res://assets/audio/cc0/games/game-002-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-003",
+			"event": "feedback_interact",
+			"game": "game-003",
+			"music": "res://assets/audio/cc0/games/game-003-music.ogg",
+			"seconds": 25.031,
+			"sfx": "res://assets/audio/cc0/games/game-003-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-003",
+			"event": "feedback_success",
+			"game": "game-003",
+			"music": "res://assets/audio/cc0/games/game-003-music.ogg",
+			"seconds": 25.515,
+			"sfx": "res://assets/audio/cc0/games/game-003-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-003",
+			"event": "feedback_miss",
+			"game": "game-003",
+			"music": "res://assets/audio/cc0/games/game-003-music.ogg",
+			"seconds": 26.087,
+			"sfx": "res://assets/audio/cc0/games/game-003-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-003",
+			"event": "burst_start",
+			"game": "game-003",
+			"music": "res://assets/audio/cc0/games/game-003-music.ogg",
+			"seconds": 26.708,
+			"sfx": "res://assets/audio/cc0/games/game-003-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "burst_end",
+			"game": "game-003",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 31.103,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-003",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 32.473,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-004",
+			"event": "music",
+			"game": "game-004",
+			"music": "res://assets/audio/cc0/games/game-004-music.ogg",
+			"seconds": 35.021,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-004",
+			"event": "feedback_interact",
+			"game": "game-004",
+			"music": "res://assets/audio/cc0/games/game-004-music.ogg",
+			"seconds": 35.153,
+			"sfx": "res://assets/audio/cc0/games/game-004-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-004",
+			"event": "feedback_success",
+			"game": "game-004",
+			"music": "res://assets/audio/cc0/games/game-004-music.ogg",
+			"seconds": 35.596,
+			"sfx": "res://assets/audio/cc0/games/game-004-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-004",
+			"event": "feedback_miss",
+			"game": "game-004",
+			"music": "res://assets/audio/cc0/games/game-004-music.ogg",
+			"seconds": 36.156,
+			"sfx": "res://assets/audio/cc0/games/game-004-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-004",
+			"event": "burst_start",
+			"game": "game-004",
+			"music": "res://assets/audio/cc0/games/game-004-music.ogg",
+			"seconds": 36.659,
+			"sfx": "res://assets/audio/cc0/games/game-004-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-004",
+			"event": "burst_end",
+			"game": "game-004",
+			"music": "res://assets/audio/cc0/games/game-004-music.ogg",
+			"seconds": 39.876,
+			"sfx": "res://assets/audio/cc0/games/game-004-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-004",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 41.144,
+			"sfx": "res://assets/audio/cc0/games/game-004-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-005",
+			"event": "music",
+			"game": "game-005",
+			"music": "res://assets/audio/cc0/games/game-005-music.ogg",
+			"seconds": 48.236,
+			"sfx": "res://assets/audio/cc0/games/game-004-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-005",
+			"event": "feedback_interact",
+			"game": "game-005",
+			"music": "res://assets/audio/cc0/games/game-005-music.ogg",
+			"seconds": 48.327,
+			"sfx": "res://assets/audio/cc0/games/game-005-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-005",
+			"event": "feedback_success",
+			"game": "game-005",
+			"music": "res://assets/audio/cc0/games/game-005-music.ogg",
+			"seconds": 48.784,
+			"sfx": "res://assets/audio/cc0/games/game-005-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-005",
+			"event": "feedback_miss",
+			"game": "game-005",
+			"music": "res://assets/audio/cc0/games/game-005-music.ogg",
+			"seconds": 49.293,
+			"sfx": "res://assets/audio/cc0/games/game-005-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-005",
+			"event": "burst_start",
+			"game": "game-005",
+			"music": "res://assets/audio/cc0/games/game-005-music.ogg",
+			"seconds": 49.846,
+			"sfx": "res://assets/audio/cc0/games/game-005-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-005",
+			"event": "burst_end",
+			"game": "game-005",
+			"music": "res://assets/audio/cc0/games/game-005-music.ogg",
+			"seconds": 52.718,
+			"sfx": "res://assets/audio/cc0/games/game-005-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-005",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 54.034,
+			"sfx": "res://assets/audio/cc0/games/game-005-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game",
+			"event": "music",
+			"game": "game-006",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 58.348,
+			"sfx": "res://assets/audio/cc0/games/game-005-miss.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "feedback_interact",
+			"game": "game-006",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 58.449,
+			"sfx": "res://assets/audio/ui_click.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "feedback_success",
+			"game": "game-006",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 58.953,
+			"sfx": "res://assets/audio/cc0/game_hit.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "feedback_miss",
+			"game": "game-006",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 59.421,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "burst_start",
+			"game": "game-006",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 59.935,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "burst_end",
+			"game": "game-006",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 65.13,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-006",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 66.485,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-007",
+			"event": "music",
+			"game": "game-007",
+			"music": "res://assets/audio/cc0/games/game-007-music.ogg",
+			"seconds": 68.989,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-007",
+			"event": "feedback_interact",
+			"game": "game-007",
+			"music": "res://assets/audio/cc0/games/game-007-music.ogg",
+			"seconds": 69.078,
+			"sfx": "res://assets/audio/cc0/games/game-007-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-007",
+			"event": "feedback_success",
+			"game": "game-007",
+			"music": "res://assets/audio/cc0/games/game-007-music.ogg",
+			"seconds": 69.566,
+			"sfx": "res://assets/audio/cc0/games/game-007-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-007",
+			"event": "feedback_miss",
+			"game": "game-007",
+			"music": "res://assets/audio/cc0/games/game-007-music.ogg",
+			"seconds": 70.059,
+			"sfx": "res://assets/audio/cc0/games/game-007-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-007",
+			"event": "burst_start",
+			"game": "game-007",
+			"music": "res://assets/audio/cc0/games/game-007-music.ogg",
+			"seconds": 70.62,
+			"sfx": "res://assets/audio/cc0/games/game-007-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-007",
+			"event": "burst_end",
+			"game": "game-007",
+			"music": "res://assets/audio/cc0/games/game-007-music.ogg",
+			"seconds": 73.621,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-007",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 74.874,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-008",
+			"event": "music",
+			"game": "game-008",
+			"music": "res://assets/audio/cc0/games/game-008-music.ogg",
+			"seconds": 77.455,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-008",
+			"event": "feedback_interact",
+			"game": "game-008",
+			"music": "res://assets/audio/cc0/games/game-008-music.ogg",
+			"seconds": 77.56,
+			"sfx": "res://assets/audio/cc0/games/game-008-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-008",
+			"event": "feedback_success",
+			"game": "game-008",
+			"music": "res://assets/audio/cc0/games/game-008-music.ogg",
+			"seconds": 78.046,
+			"sfx": "res://assets/audio/cc0/games/game-008-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-008",
+			"event": "feedback_miss",
+			"game": "game-008",
+			"music": "res://assets/audio/cc0/games/game-008-music.ogg",
+			"seconds": 78.561,
+			"sfx": "res://assets/audio/cc0/games/game-008-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-008",
+			"event": "burst_start",
+			"game": "game-008",
+			"music": "res://assets/audio/cc0/games/game-008-music.ogg",
+			"seconds": 79.114,
+			"sfx": "res://assets/audio/cc0/games/game-008-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-008",
+			"event": "burst_end",
+			"game": "game-008",
+			"music": "res://assets/audio/cc0/games/game-008-music.ogg",
+			"seconds": 82.295,
+			"sfx": "res://assets/audio/cc0/games/game-008-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-008",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 83.555,
+			"sfx": "res://assets/audio/cc0/games/game-008-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-009",
+			"event": "music",
+			"game": "game-009",
+			"music": "res://assets/audio/cc0/games/game-009-music.ogg",
+			"seconds": 86.195,
+			"sfx": "res://assets/audio/cc0/games/game-008-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-009",
+			"event": "feedback_interact",
+			"game": "game-009",
+			"music": "res://assets/audio/cc0/games/game-009-music.ogg",
+			"seconds": 86.319,
+			"sfx": "res://assets/audio/cc0/games/game-009-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-009",
+			"event": "feedback_success",
+			"game": "game-009",
+			"music": "res://assets/audio/cc0/games/game-009-music.ogg",
+			"seconds": 86.736,
+			"sfx": "res://assets/audio/cc0/games/game-009-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-009",
+			"event": "feedback_miss",
+			"game": "game-009",
+			"music": "res://assets/audio/cc0/games/game-009-music.ogg",
+			"seconds": 87.247,
+			"sfx": "res://assets/audio/cc0/games/game-009-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-009",
+			"event": "burst_start",
+			"game": "game-009",
+			"music": "res://assets/audio/cc0/games/game-009-music.ogg",
+			"seconds": 87.784,
+			"sfx": "res://assets/audio/cc0/games/game-009-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-009",
+			"event": "burst_end",
+			"game": "game-009",
+			"music": "res://assets/audio/cc0/games/game-009-music.ogg",
+			"seconds": 90.823,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-009",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 92.077,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-010",
+			"event": "music",
+			"game": "game-010",
+			"music": "res://assets/audio/cc0/games/game-010-music.ogg",
+			"seconds": 96.223,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-010",
+			"event": "feedback_interact",
+			"game": "game-010",
+			"music": "res://assets/audio/cc0/games/game-010-music.ogg",
+			"seconds": 96.323,
+			"sfx": "res://assets/audio/cc0/games/game-010-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-010",
+			"event": "feedback_success",
+			"game": "game-010",
+			"music": "res://assets/audio/cc0/games/game-010-music.ogg",
+			"seconds": 96.766,
+			"sfx": "res://assets/audio/cc0/games/game-010-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-010",
+			"event": "feedback_miss",
+			"game": "game-010",
+			"music": "res://assets/audio/cc0/games/game-010-music.ogg",
+			"seconds": 97.286,
+			"sfx": "res://assets/audio/cc0/games/game-010-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-010",
+			"event": "burst_start",
+			"game": "game-010",
+			"music": "res://assets/audio/cc0/games/game-010-music.ogg",
+			"seconds": 97.814,
+			"sfx": "res://assets/audio/cc0/games/game-010-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-010",
+			"event": "burst_end",
+			"game": "game-010",
+			"music": "res://assets/audio/cc0/games/game-010-music.ogg",
+			"seconds": 100.715,
+			"sfx": "res://assets/audio/cc0/games/game-010-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-010",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 101.991,
+			"sfx": "res://assets/audio/cc0/games/game-010-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-011",
+			"event": "music",
+			"game": "game-011",
+			"music": "res://assets/audio/cc0/games/game-011-music.ogg",
+			"seconds": 106.557,
+			"sfx": "res://assets/audio/cc0/games/game-010-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-011",
+			"event": "feedback_interact",
+			"game": "game-011",
+			"music": "res://assets/audio/cc0/games/game-011-music.ogg",
+			"seconds": 106.651,
+			"sfx": "res://assets/audio/cc0/games/game-011-interact.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-011",
+			"event": "feedback_success",
+			"game": "game-011",
+			"music": "res://assets/audio/cc0/games/game-011-music.ogg",
+			"seconds": 107.124,
+			"sfx": "res://assets/audio/cc0/games/game-011-success.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-011",
+			"event": "feedback_miss",
+			"game": "game-011",
+			"music": "res://assets/audio/cc0/games/game-011-music.ogg",
+			"seconds": 107.635,
+			"sfx": "res://assets/audio/cc0/games/game-011-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-011",
+			"event": "burst_start",
+			"game": "game-011",
+			"music": "res://assets/audio/cc0/games/game-011-music.ogg",
+			"seconds": 108.156,
+			"sfx": "res://assets/audio/cc0/games/game-011-miss.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game:game-011",
+			"event": "burst_end",
+			"game": "game-011",
+			"music": "res://assets/audio/cc0/games/game-011-music.ogg",
+			"seconds": 111.086,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-011",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 112.38,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		},
+		{
+			"context": "game",
+			"event": "music",
+			"game": "game-012",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 114.994,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "feedback_interact",
+			"game": "game-012",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 115.095,
+			"sfx": "res://assets/audio/ui_click.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "feedback_success",
+			"game": "game-012",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 115.549,
+			"sfx": "res://assets/audio/cc0/game_hit.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "feedback_miss",
+			"game": "game-012",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 116.044,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "burst_start",
+			"game": "game-012",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 116.63,
+			"sfx": "res://assets/audio/soft_error.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "game",
+			"event": "burst_end",
+			"game": "game-012",
+			"music": "res://assets/audio/cc0/game.ogg",
+			"seconds": 119.712,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": true
+		},
+		{
+			"context": "harbor",
+			"event": "left",
+			"game": "game-012",
+			"music": "res://assets/audio/cc0/harbor.ogg",
+			"seconds": 120.959,
+			"sfx": "res://assets/audio/quest_complete.wav",
+			"shared_track_suppressed": false
+		}
+	],
+	"failures": [],
+	"method": "Main._launch_game for all twelve welcome games; session.feedback signal emitted by the review script for interact/success/miss; Master bus AudioEffectRecord; no gameplay input, no audition",
+	"mix_rate": 44100.0,
+	"volume_settings": {
+		"master": 1.0,
+		"music": 1.0,
+		"sfx": 1.0
+	}
+}
