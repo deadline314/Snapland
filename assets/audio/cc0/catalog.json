@@ -313,24 +313,32 @@
       "source_sha256": "371bfc606045dbaadc234696049d474f1b3473dc336fda8d0e183c17d9f1533f",
       "channels": 2,
       "peak_limit_db": -6,
-      "filter": "",
+      "filter": "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse",
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：烏克麗麗、夏日與島嶼標籤；用於初上碼頭，保留整首及原速，聽感與兩次循環待驗。",
       "audition": "pending_local_listening",
       "gain_db": -5.51,
-      "sha256": "a12861cf2d6bb3f1550a69b4d332c4ab485ec456dde54a8c4e169b795424bbd4",
-      "bytes": 3039203,
+      "sha256": "c54fdc0adb018e270f7e33a0aa3f4ecd513b295e82551a951f104a0b46c5a13c",
+      "bytes": 3013544,
       "measurement": {
-        "input_i": "-24.10",
-        "input_tp": "-5.76",
-        "input_lra": "6.80",
-        "input_thresh": "-34.17",
-        "output_i": "-23.56",
+        "input_i": "-24.08",
+        "input_tp": "-5.87",
+        "input_lra": "6.90",
+        "input_thresh": "-34.16",
+        "output_i": "-23.58",
         "output_tp": "-6.00",
-        "output_lra": "6.90",
-        "output_thresh": "-33.62",
+        "output_lra": "6.80",
+        "output_thresh": "-33.65",
         "normalization_type": "dynamic",
-        "target_offset": "0.56"
+        "target_offset": "0.58"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00156,
+        "seam_level_step_db": -2.82,
+        "source_level_step_db": -2.85,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -342,24 +350,32 @@
       "source_sha256": "29dfe7f2491fa2cabd159db70db868445be253e395db5f75b30b3113f798f4ca",
       "channels": 2,
       "peak_limit_db": -6,
-      "filter": "",
+      "filter": "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse",
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：作者選擇cozy方向，木管、吉他與節慶標籤適合悠閒遊園；原曲有收尾，循環接續的音樂性仍待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": -8.21,
-      "sha256": "d880037416584673ecffb6e7861a74a6cd8a03d4523f6e2533320d8d4a5aed56",
-      "bytes": 3810572,
+      "gain_db": -8.2,
+      "sha256": "7db7a3aa162ebc3b3fd27c9b64dd86a3dec7a18e86ce7e3c36411f552789ae5e",
+      "bytes": 4478023,
       "measurement": {
-        "input_i": "-23.04",
-        "input_tp": "-7.96",
-        "input_lra": "6.50",
-        "input_thresh": "-33.27",
-        "output_i": "-21.87",
+        "input_i": "-23.02",
+        "input_tp": "-7.99",
+        "input_lra": "7.00",
+        "input_thresh": "-33.25",
+        "output_i": "-21.91",
         "output_tp": "-6.00",
-        "output_lra": "6.00",
+        "output_lra": "5.80",
         "output_thresh": "-31.95",
         "normalization_type": "dynamic",
-        "target_offset": "-1.13"
+        "target_offset": "-1.09"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00075,
+        "seam_level_step_db": 9.67,
+        "source_level_step_db": 9.13,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -371,24 +387,32 @@
       "source_sha256": "ddc00cd59af7c9d0d7e34fecdcfc47cd70dcafd0199d0eac4fb63e124a464b1e",
       "channels": 2,
       "peak_limit_db": -6,
-      "filter": "",
+      "filter": "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse",
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：作者為Carnival挑戰製作的短循環，25.5秒；僅共用初始曲，十二款獨立配樂仍屬MIC-2。",
       "audition": "pending_local_listening",
-      "gain_db": -9.09,
-      "sha256": "19570bffa9772375f575d27854c3a73fcfb612d500e8fa86e7c63b459cbb0f40",
-      "bytes": 449889,
+      "gain_db": -9.18,
+      "sha256": "748b2933dfee35b6f540ec03d54857e4b6db86dbd366eef892719dac663f017f",
+      "bytes": 493308,
       "measurement": {
-        "input_i": "-23.01",
-        "input_tp": "-9.55",
-        "input_lra": "3.10",
-        "input_thresh": "-33.01",
-        "output_i": "-23.31",
-        "output_tp": "-10.66",
-        "output_lra": "2.80",
-        "output_thresh": "-33.31",
+        "input_i": "-22.99",
+        "input_tp": "-9.82",
+        "input_lra": "2.90",
+        "input_thresh": "-32.99",
+        "output_i": "-23.51",
+        "output_tp": "-11.37",
+        "output_lra": "2.70",
+        "output_thresh": "-33.51",
         "normalization_type": "dynamic",
-        "target_offset": "0.31"
+        "target_offset": "0.51"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00827,
+        "seam_level_step_db": 5.43,
+        "source_level_step_db": 5.46,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -623,19 +647,27 @@
       "selection_reason": "候選：作者以Spyro式明亮鈴聲與鼓點製作的上揚曲；對應乘風投遞的輕快飛行。循環接續與聽感待實聽。頻譜顯示6.5–9kHz與14kHz鈴聲帶偏強，先以6kHz高頻架降5dB減少疲勞；是否足夠待實聽。",
       "audition": "pending_local_listening",
       "gain_db": -3.1,
-      "sha256": "52d9f70edc7f89f6e34e12b0df3e18e9b837a85775ae61e4b8d520ab15fbc9c4",
-      "bytes": 2931638,
+      "sha256": "24dc00e00bf6230b8004f586b2526b0f47c7be6adf879d6dc69dbb15e02af232",
+      "bytes": 2920312,
       "measurement": {
-        "input_i": "-23.38",
-        "input_tp": "-5.96",
-        "input_lra": "5.70",
-        "input_thresh": "-33.41",
-        "output_i": "-22.50",
+        "input_i": "-23.37",
+        "input_tp": "-6.11",
+        "input_lra": "5.80",
+        "input_thresh": "-33.37",
+        "output_i": "-22.47",
         "output_tp": "-6.00",
-        "output_lra": "5.70",
-        "output_thresh": "-32.52",
+        "output_lra": "5.60",
+        "output_thresh": "-32.47",
         "normalization_type": "dynamic",
-        "target_offset": "-0.50"
+        "target_offset": "-0.53"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00105,
+        "seam_level_step_db": 1.17,
+        "source_level_step_db": 1.04,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -741,20 +773,28 @@
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：作者描述為騎鳥奔跑的輕快奇想曲；對應風箏追風穿環。循環接續與聽感待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": -11.66,
-      "sha256": "a044b0df384dc326adc77e8aa86238baae518ea8bef46d22d4eb07f364f270e6",
-      "bytes": 1496529,
+      "gain_db": -11.69,
+      "sha256": "7ab6195597d44b3a65a2432b75fa9277391c7ba7f461b5ca73b2fc3400a6e995",
+      "bytes": 1476804,
       "measurement": {
         "input_i": "-22.98",
-        "input_tp": "-11.15",
+        "input_tp": "-11.03",
         "input_lra": "5.50",
-        "input_thresh": "-33.03",
-        "output_i": "-23.19",
-        "output_tp": "-11.05",
-        "output_lra": "4.60",
-        "output_thresh": "-33.22",
+        "input_thresh": "-33.01",
+        "output_i": "-23.30",
+        "output_tp": "-11.37",
+        "output_lra": "4.70",
+        "output_thresh": "-33.32",
         "normalization_type": "dynamic",
-        "target_offset": "0.19"
+        "target_offset": "0.30"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00071,
+        "seam_level_step_db": 1.96,
+        "source_level_step_db": 1.81,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -860,20 +900,28 @@
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：作者標示木琴與馬林巴雙旋律；槌擊類音色接近水花與拍點。循環接續與聽感待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": 11.41,
-      "sha256": "6088b52ac248d425d3a9e7dca67903cd3e453b5ba8c8a7399795c21a66c5cc88",
-      "bytes": 1707086,
+      "gain_db": 11.38,
+      "sha256": "fd2c5b9e4b317f4fb2eb93f6acf9597cbd1dafd9ac82c12344b156e01b2825a2",
+      "bytes": 1698640,
       "measurement": {
         "input_i": "-22.96",
-        "input_tp": "-8.03",
+        "input_tp": "-7.89",
         "input_lra": "6.00",
-        "input_thresh": "-33.37",
-        "output_i": "-23.04",
-        "output_tp": "-7.98",
-        "output_lra": "5.80",
-        "output_thresh": "-33.40",
+        "input_thresh": "-33.38",
+        "output_i": "-22.96",
+        "output_tp": "-7.52",
+        "output_lra": "5.90",
+        "output_thresh": "-33.33",
         "normalization_type": "dynamic",
-        "target_offset": "0.04"
+        "target_offset": "-0.04"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00666,
+        "seam_level_step_db": -1.11,
+        "source_level_step_db": -1.19,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -980,19 +1028,27 @@
       "selection_reason": "候選：作者標示可無縫循環的童趣進行曲；對應指揮人潮列隊通行。循環接續與聽感待實聽。",
       "audition": "pending_local_listening",
       "gain_db": -5.18,
-      "sha256": "8598101086bf5c7854469eed10ad184da7c2ae2f0c8c2af2ac0d0aa31a567466",
-      "bytes": 1374274,
+      "sha256": "8f7fe14effeadb0ed87253c058e0233442c53cf7185a540b468594eb6a2ab3e8",
+      "bytes": 1345715,
       "measurement": {
         "input_i": "-22.99",
-        "input_tp": "-7.12",
+        "input_tp": "-7.04",
         "input_lra": "2.30",
         "input_thresh": "-32.99",
-        "output_i": "-22.56",
-        "output_tp": "-6.89",
-        "output_lra": "2.10",
-        "output_thresh": "-32.56",
+        "output_i": "-22.60",
+        "output_tp": "-6.83",
+        "output_lra": "2.00",
+        "output_thresh": "-32.60",
         "normalization_type": "dynamic",
-        "target_offset": "-0.44"
+        "target_offset": "-0.40"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00237,
+        "seam_level_step_db": 6.28,
+        "source_level_step_db": 6.31,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -1098,20 +1154,28 @@
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：32秒分層短循環；輕快馬戲感對應草坪追帽。循環接續與聽感待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": 5.64,
-      "sha256": "3594bd6a850dbfb506669fb2e07038227f0fe8a5ce1d568e5329dfd1f3143a12",
-      "bytes": 669666,
+      "gain_db": 5.63,
+      "sha256": "0192f6b2d1ab83ed57539a77aedfe50c16a94b7e8e2586cd8ae355ac786b25e5",
+      "bytes": 648048,
       "measurement": {
-        "input_i": "-23.02",
-        "input_tp": "-10.71",
+        "input_i": "-23.01",
+        "input_tp": "-10.65",
         "input_lra": "0.70",
-        "input_thresh": "-33.02",
-        "output_i": "-22.83",
-        "output_tp": "-10.62",
+        "input_thresh": "-33.01",
+        "output_i": "-22.94",
+        "output_tp": "-10.61",
         "output_lra": "0.70",
-        "output_thresh": "-32.83",
+        "output_thresh": "-32.94",
         "normalization_type": "dynamic",
-        "target_offset": "-0.17"
+        "target_offset": "-0.06"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00177,
+        "seam_level_step_db": 1.92,
+        "source_level_step_db": 1.75,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -1217,20 +1281,28 @@
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：作者描述為放鬆的鋪底與上揚鋼琴；規劃水路時不催促思考。循環接續與聽感待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": -4.52,
-      "sha256": "03520b078035649e5f23308ad8b8c6ad43232146c850243d94a2dd288af9c605",
-      "bytes": 3017869,
+      "gain_db": -4.5,
+      "sha256": "1350ae835cea41d410522c53eb3a6763bd18d5ece71f63cb148cd001f94e26b6",
+      "bytes": 3003662,
       "measurement": {
         "input_i": "-22.98",
-        "input_tp": "-7.03",
+        "input_tp": "-7.06",
         "input_lra": "6.60",
-        "input_thresh": "-33.20",
-        "output_i": "-22.40",
-        "output_tp": "-6.86",
+        "input_thresh": "-33.15",
+        "output_i": "-22.35",
+        "output_tp": "-6.98",
         "output_lra": "6.50",
-        "output_thresh": "-32.51",
+        "output_thresh": "-32.45",
         "normalization_type": "dynamic",
-        "target_offset": "-0.60"
+        "target_offset": "-0.65"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00123,
+        "seam_level_step_db": 0.46,
+        "source_level_step_db": 0.39,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -1336,20 +1408,28 @@
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：馬戲團方向的完整曲；對應招牌平衡的雜技感。循環接續與聽感待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": -11.57,
-      "sha256": "d98d4395ca684b3621226fb61d8f6b15020a39f0c1a1d0ed771c342c9f5d5695",
-      "bytes": 2509659,
+      "gain_db": -11.54,
+      "sha256": "4f1036d2603e97e43f496f8539df9cf88155975986b311dbb43eb3278a0f6f32",
+      "bytes": 2501380,
       "measurement": {
         "input_i": "-22.97",
-        "input_tp": "-12.14",
+        "input_tp": "-12.25",
         "input_lra": "3.00",
-        "input_thresh": "-33.07",
-        "output_i": "-23.25",
-        "output_tp": "-12.20",
+        "input_thresh": "-33.01",
+        "output_i": "-23.26",
+        "output_tp": "-12.36",
         "output_lra": "2.80",
-        "output_thresh": "-33.30",
+        "output_thresh": "-33.29",
         "normalization_type": "dynamic",
-        "target_offset": "0.25"
+        "target_offset": "0.26"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00584,
+        "seam_level_step_db": 1.02,
+        "source_level_step_db": 0.97,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -1455,20 +1535,28 @@
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：作者描述為帶水感的合成器／鋼琴氛圍並可無縫循環；對應月影劇台的安靜觀察。循環接續與聽感待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": 2.05,
-      "sha256": "63e7ef026fad9bc4cd1415b63fd2411542cf100e4359a6b8c126600f61682b91",
-      "bytes": 2561287,
+      "gain_db": 2.04,
+      "sha256": "47712944b70505526d2c9348aff65cdd266651665daa2e3187d4f368a1fde136",
+      "bytes": 2546811,
       "measurement": {
         "input_i": "-22.99",
-        "input_tp": "-6.09",
+        "input_tp": "-6.06",
         "input_lra": "7.60",
         "input_thresh": "-33.01",
-        "output_i": "-22.16",
+        "output_i": "-22.21",
         "output_tp": "-6.00",
-        "output_lra": "7.50",
-        "output_thresh": "-32.17",
+        "output_lra": "7.60",
+        "output_thresh": "-32.22",
         "normalization_type": "dynamic",
-        "target_offset": "-0.84"
+        "target_offset": "-0.79"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00273,
+        "seam_level_step_db": -2.5,
+        "source_level_step_db": -2.24,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -1574,20 +1662,28 @@
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：作者描述為很短的熱帶晶片曲；明亮音色對應泡泡與海風觀景台。循環接續與聽感待實聽。頻譜顯示方波寬頻密集，先以7kHz低通柔化；是否足夠待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": -8.92,
-      "sha256": "5ad52fa84ccf4623b103dd0736bf80b7d1f9ce42f9ca22ff969465bcdbd14299",
-      "bytes": 666136,
+      "gain_db": -8.96,
+      "sha256": "7812512264c81c4531acb2ebdf5ff519716722e7d9911eee3a03be289ca7876d",
+      "bytes": 645581,
       "measurement": {
         "input_i": "-23.00",
-        "input_tp": "-9.55",
+        "input_tp": "-9.66",
         "input_lra": "2.90",
         "input_thresh": "-33.00",
-        "output_i": "-23.39",
-        "output_tp": "-10.38",
-        "output_lra": "2.70",
-        "output_thresh": "-33.39",
+        "output_i": "-23.25",
+        "output_tp": "-10.42",
+        "output_lra": "2.80",
+        "output_thresh": "-33.25",
         "normalization_type": "dynamic",
-        "target_offset": "0.39"
+        "target_offset": "0.25"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00219,
+        "seam_level_step_db": -0.04,
+        "source_level_step_db": 0.07,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {
@@ -1693,20 +1789,28 @@
       "preparation": "static-gain-and-format",
       "selection_reason": "候選：8-bit巴薩諾瓦；悠閒節奏對應觀海長椅的換位思考。循環接續與聽感待實聽。",
       "audition": "pending_local_listening",
-      "gain_db": -5.36,
-      "sha256": "822fff809d7897515bf6baa4029bce81c88c218b8db71b7c85063472660a046b",
-      "bytes": 1057391,
+      "gain_db": -5.37,
+      "sha256": "15d1f4a2d886615f3e5fc6d9503eadfe4ec85249e92a021861cfcc1ff451950f",
+      "bytes": 1041293,
       "measurement": {
-        "input_i": "-22.97",
-        "input_tp": "-6.41",
+        "input_i": "-22.98",
+        "input_tp": "-6.43",
         "input_lra": "1.90",
-        "input_thresh": "-32.97",
+        "input_thresh": "-32.98",
         "output_i": "-22.66",
         "output_tp": "-6.00",
-        "output_lra": "1.60",
+        "output_lra": "1.50",
         "output_thresh": "-32.66",
         "normalization_type": "dynamic",
         "target_offset": "-0.34"
+      },
+      "loop_crossfade_seconds": 1.0,
+      "loop_seam": {
+        "sample_jump": 0.00309,
+        "seam_level_step_db": -3.63,
+        "source_level_step_db": -3.67,
+        "offset_seconds": 1.0,
+        "window_seconds": 0.1
       }
     },
     {

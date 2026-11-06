@@ -6,6 +6,7 @@ This never runs the legacy composer or changes musical timing/pitch.
 """
 from pathlib import Path
 import argparse
+import array
 import hashlib
 import json
 import math
@@ -30,6 +31,54 @@ def measure(path):
     if not match:
         raise ValueError(f'No loudness measurement: {path}')
     return json.loads(match[-1])
+
+
+def bake_loop_crossfade(source, output, seconds):
+    """Make the file loop sample-continuously: its last `seconds` blend into its first.
+
+    The result starts `seconds` into the track and ends on the original opening, so a
+    plain Ogg loop wraps from the blended tail straight into the next note without a
+    click, a gap or a faded ending followed by a sudden restart.
+    """
+    # Two reads of the same file, not asplit: asplit stalls when one branch ends early.
+    graph = (f'[0:a]atrim=start={seconds},asetpts=PTS-STARTPTS[a];'
+             f'[1:a]atrim=end={seconds},asetpts=PTS-STARTPTS[b];[a][b]acrossfade=d={seconds}:c1=qsin:c2=qsin[o]')
+    run('ffmpeg', '-v', 'error', '-y', '-i', str(source), '-i', str(source), '-filter_complex', graph,
+        '-map', '[o]', '-c:a', 'pcm_f32le', str(output))
+    if subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', str(output)],
+                      capture_output=True, text=True, timeout=60).stdout.strip() in ('', 'N/A'):
+        raise ValueError(f'Loop crossfade produced no audio: {output}')
+
+
+def _decode_mono(path, rate=44100):
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', str(path), '-ac', '1', '-ar', str(rate), '-f', 'f32le', '-'],
+                         check=True, capture_output=True, timeout=120).stdout
+    samples = array.array('f')
+    samples.frombytes(raw)
+    return samples
+
+
+def _level_db(values):
+    mean_square = sum(value * value for value in values) / max(1, len(values))
+    return 10 * math.log10(mean_square) if mean_square > 0 else -120.0
+
+
+def measure_loop_seam(path, reference, offset_seconds, rate=44100, window_seconds=0.1):
+    """Click size and level change across the shipped loop point.
+
+    `reference` is the unlooped preparation; the loop wraps from its `offset_seconds`
+    point back onto itself, so the same level change there is the music, not the seam.
+    """
+    samples, original = _decode_mono(path, rate), _decode_mono(reference, rate)
+    count = int(rate * window_seconds)
+    cut = int(rate * offset_seconds)
+    if len(samples) < count * 2 or cut < count or len(original) < cut + count:
+        raise ValueError(f'Too short to measure a loop seam: {path}')
+    seam_step = _level_db(samples[:count]) - _level_db(samples[-count:])
+    source_step = _level_db(original[cut:cut + count]) - _level_db(original[cut - count:cut])
+    return {'sample_jump': round(abs(samples[-1] - samples[0]), 5), 'seam_level_step_db': round(seam_step, 2),
+            'source_level_step_db': round(source_step, 2), 'offset_seconds': offset_seconds,
+            'window_seconds': window_seconds}
 
 
 def main():
@@ -72,6 +121,14 @@ def main():
         # Float intermediate retains peaks above 0 dB from lossy source decoding.
         command[command.index('pcm_s16le')] = 'pcm_f32le'
         run(*command)
+        crossfade = float(item.get('loop_crossfade_seconds', 0) or 0)
+        unlooped = intermediate
+        if crossfade > 0:
+            if item['kind'] != 'music':
+                raise ValueError(f'Only music loops take a baked crossfade: {item["id"]}')
+            looped = args.source_dir / ('looped-' + item['id'] + '.wav')
+            bake_loop_crossfade(intermediate, looped, crossfade)
+            intermediate = looped
         loud = measure(intermediate)
         peak = float(loud['input_tp'])
         integrated = float(loud['input_i'])
@@ -88,6 +145,8 @@ def main():
         item['sha256'] = sha(output)
         item['bytes'] = output.stat().st_size
         item['measurement'] = measure(output)
+        if item['kind'] == 'music' and crossfade > 0:
+            item['loop_seam'] = measure_loop_seam(output, unlooped, crossfade)
         print(item['id'], item['bytes'], item['measurement']['input_i'], item['measurement']['input_tp'], flush=True)
     catalog['preparation_tool'] = run('ffmpeg', '-version').stdout.splitlines()[0]
     (folder / 'catalog.json').write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

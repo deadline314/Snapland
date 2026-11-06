@@ -1,0 +1,12 @@
+{
+  "longest_silence_seconds": 0.0,
+  "wrap_peak_step": 0.01572,
+  "music_reference_step": 0.02684,
+  "level_before_db": -31.9,
+  "level_after_db": -49.54,
+  "crossfade_min_level_db": -40.15,
+  "gap_ok": true,
+  "click_ok": true,
+  "crossfade_ok": true,
+  "pcm_to_wall_scale": 0.99535
+}

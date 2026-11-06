@@ -1,0 +1,13 @@
+{
+	"audio_driver": "PulseAudio",
+	"context_started_seconds": 0.002487,
+	"crossfade_seconds": 0.85,
+	"expected_loop_seconds": 24.4871137700195,
+	"method": "Main AudioDirector context 'game' left playing past one full loop, then switched to 'plaza'; Master bus AudioEffectRecord; no gameplay, no audition",
+	"observed_wrap_seconds": 24.639422,
+	"playback_wrapped": true,
+	"switch_seconds": 28.594992,
+	"track": "res://assets/audio/cc0/game.ogg",
+	"track_seconds": 24.4846267700195,
+	"wall_seconds": 32.986517
+}

@@ -1,0 +1,158 @@
+[
+ {
+  "id": "harbor",
+  "path": "assets/audio/cc0/harbor.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00156,
+   "seam_level_step_db": -2.82,
+   "source_level_step_db": -2.85,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "plaza",
+  "path": "assets/audio/cc0/plaza.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00075,
+   "seam_level_step_db": 9.67,
+   "source_level_step_db": 9.13,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game",
+  "path": "assets/audio/cc0/game.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00827,
+   "seam_level_step_db": 5.43,
+   "source_level_step_db": 5.46,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game001_music",
+  "path": "assets/audio/cc0/games/game-001-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00105,
+   "seam_level_step_db": 1.17,
+   "source_level_step_db": 1.04,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game002_music",
+  "path": "assets/audio/cc0/games/game-002-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00071,
+   "seam_level_step_db": 1.96,
+   "source_level_step_db": 1.81,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game003_music",
+  "path": "assets/audio/cc0/games/game-003-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00666,
+   "seam_level_step_db": -1.11,
+   "source_level_step_db": -1.19,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game004_music",
+  "path": "assets/audio/cc0/games/game-004-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00237,
+   "seam_level_step_db": 6.28,
+   "source_level_step_db": 6.31,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game005_music",
+  "path": "assets/audio/cc0/games/game-005-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00177,
+   "seam_level_step_db": 1.92,
+   "source_level_step_db": 1.75,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game007_music",
+  "path": "assets/audio/cc0/games/game-007-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00123,
+   "seam_level_step_db": 0.46,
+   "source_level_step_db": 0.39,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game008_music",
+  "path": "assets/audio/cc0/games/game-008-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00584,
+   "seam_level_step_db": 1.02,
+   "source_level_step_db": 0.97,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game009_music",
+  "path": "assets/audio/cc0/games/game-009-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00273,
+   "seam_level_step_db": -2.5,
+   "source_level_step_db": -2.24,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game010_music",
+  "path": "assets/audio/cc0/games/game-010-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00219,
+   "seam_level_step_db": -0.04,
+   "source_level_step_db": 0.07,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ },
+ {
+  "id": "game011_music",
+  "path": "assets/audio/cc0/games/game-011-music.ogg",
+  "loop_crossfade_seconds": 1.0,
+  "loop_seam": {
+   "sample_jump": 0.00309,
+   "seam_level_step_db": -3.63,
+   "source_level_step_db": -3.67,
+   "offset_seconds": 1.0,
+   "window_seconds": 0.1
+  }
+ }
+]
