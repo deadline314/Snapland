@@ -658,7 +658,11 @@ func _update_district_label_visibility() -> void:
 		var dz := label.global_position.z-player_z
 		label.visible=dx*dx+dz*dz<=100.0
 
-func _point(id: String, title: String, pos: Vector3, marker_height := 2.1) -> void:
+## Interaction markers float above the 2.4-unit character sprites so they never cover a
+## face; low attraction props pass their own smaller height.
+const DEFAULT_MARKER_HEIGHT := 2.85
+
+func _point(id: String, title: String, pos: Vector3, marker_height := DEFAULT_MARKER_HEIGHT) -> void:
 	points.append({"id":id,"label":title,"position":pos})
 	var marker := _label("◇", pos + Vector3(0,marker_height,0), 38, GOLD)
 	points[-1]["marker"]=marker

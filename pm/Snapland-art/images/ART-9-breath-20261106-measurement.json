@@ -1,0 +1,126 @@
+{
+ "declared_breath_cycle_seconds": {
+  "announcer": 2.56410256410256,
+  "imp": 1.91256830601093,
+  "ticket": 3.03030303030303
+ },
+ "before_change": "all three NPCs looped their authored idle at 3 fps; 票票 and 阿浪 both 8 frames = identical 2.67 s cycle, starting together",
+ "subjects": {
+  "traveller": {
+   "idle_poses_seen": 8,
+   "actions_seen": [
+    "idle"
+   ],
+   "median_pose_hold_frames_at_30fps": 6.5,
+   "holds": [
+    34,
+    7,
+    6,
+    3,
+    3,
+    3,
+    7,
+    12,
+    63,
+    8,
+    6,
+    2,
+    4,
+    2,
+    8,
+    12
+   ]
+  },
+  "traveller_vest_hat": {
+   "idle_poses_seen": 8,
+   "actions_seen": [
+    "idle"
+   ],
+   "median_pose_hold_frames_at_30fps": 6.5,
+   "holds": [
+    27,
+    7,
+    6,
+    3,
+    3,
+    3,
+    7,
+    12,
+    63,
+    8,
+    6,
+    2,
+    4,
+    2,
+    8,
+    12
+   ]
+  },
+  "ticket": {
+   "idle_poses_seen": 8,
+   "actions_seen": [
+    "idle_gesture",
+    "stand"
+   ],
+   "median_pose_hold_frames_at_30fps": 11,
+   "holds": [
+    6,
+    11,
+    12,
+    12,
+    11,
+    12,
+    11,
+    11,
+    12,
+    11,
+    11,
+    12,
+    11,
+    12,
+    11,
+    11
+   ]
+  },
+  "imp": {
+   "idle_poses_seen": 7,
+   "actions_seen": [
+    "idle_gesture",
+    "stand"
+   ],
+   "median_pose_hold_frames_at_30fps": 8.0,
+   "holds": [
+    1,
+    9,
+    8,
+    8,
+    8,
+    8,
+    9,
+    8,
+    8,
+    8,
+    8,
+    9,
+    8,
+    8,
+    8,
+    8
+   ]
+  },
+  "announcer": {
+   "idle_poses_seen": 2,
+   "actions_seen": [
+    "emotion_curious",
+    "idle",
+    "special",
+    "stand",
+    "walk"
+   ],
+   "median_pose_hold_frames_at_30fps": 10,
+   "holds": [
+    10
+   ]
+  }
+ }
+}

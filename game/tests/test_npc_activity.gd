@@ -87,6 +87,19 @@ func _run() -> void:
 	assert(_controller.statistics().registration_count == 0 and not _controller.statistics().playing, "release stops playback and clears registrations")
 	_scene.queue_free()
 	await process_frame
+	# Breathing: each named NPC loops its authored idle at its own tempo, so none breathe in unison.
+	var breathing: Node = NpcActivityScript.new()
+	root.add_child(breathing)
+	var cycles := {}
+	for role in ["ticket", "imp", "announcer"]:
+		cycles[role] = breathing.breath_cycle_seconds(role)
+		assert(cycles[role] > 1.0 and cycles[role] < 5.0, "%s has a plausible full breathing cycle: %.2fs" % [role, cycles[role]])
+	assert(absf(cycles.ticket - cycles.announcer) > 0.25 and absf(cycles.ticket - cycles.imp) > 0.25 and absf(cycles.imp - cycles.announcer) > 0.25, "the three NPC breathing cycles differ: %s" % str(cycles))
+	assert(NpcActivityScript.breath_tempo("ticket") < NpcActivityScript.breath_tempo("announcer") and NpcActivityScript.breath_tempo("announcer") < NpcActivityScript.breath_tempo("imp"), "calm guide slowest, excitable imp fastest")
+	assert(is_equal_approx(NpcActivityScript.breath_tempo("unknown"), 1.0), "unknown roles keep the authored rate")
+	assert(not is_equal_approx(breathing._phase_seed(0.0, 1), breathing._phase_seed(0.0, 2)), "different instances start their breath at different points")
+	breathing.queue_free()
+	await process_frame
 	print("PASS: NPC activity runtime checks (role registration, safe fallback, route gating, pause, and cleanup)")
 	quit(0)
 

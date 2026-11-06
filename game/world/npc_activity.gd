@@ -15,6 +15,9 @@ const ANNOUNCER_RETURN_SECONDS := 5.3
 const ANNOUNCER_SECOND_REST_END := 7.6
 const ANNOUNCER_STOP_SETTLE_SECONDS := 0.16
 const ANNOUNCER_PERSONALITY_DELAY := 0.12
+## Breathing tempo per role, applied only to looping stand/idle frames: the calm guide breathes
+## slowest, the excitable imp fastest. Authored frames and their declared fps stay unchanged.
+const BREATH_TEMPO := {"ticket": 0.88, "imp": 1.22, "announcer": 1.04}
 const ROLE_NAMES := ["ticket", "imp", "announcer"]
 const ACTION_REGIONS_PATH := "res://assets/characters/npc-action-regions.json"
 const ANIMATION_LIBRARY_PATH := "res://game/world/character_animation_library.gd"
@@ -219,6 +222,7 @@ func register_actor(
 		"action_elapsed": 0.0,
 		"action_sequence": {},
 		"idle_due": 5.0 + fposmod(_phase_seed(seed, instance_id) * 7.31, 7.0),
+		"breath_phase_pending": true,
 		"last_idle_action": "",
 		"idle_event_count": 0,
 		"route_rest_started": -1.0,
@@ -708,6 +712,11 @@ func _play_actor_action(record_index: int, action: String, direction: String, re
 		record.missing_actions = missing
 	if reset or String(record.action) != action or String(record.direction) != direction:
 		record.action_elapsed = 0.0
+		if _is_breathing_loop(action, sequence) and bool(record.get("breath_phase_pending", false)):
+			# Only the first idle after appearing starts mid-breath, so characters never inhale in
+			# unison; later idles begin on the neutral first frame for a clean settle after actions.
+			record.action_elapsed = _phase_seed(float(record.get("seed", 0.0)), int(record.get("instance_id", 0))) * _sequence_seconds(sequence)
+			record.breath_phase_pending = false
 	record.action = action
 	record.direction = direction
 	record.action_sequence = sequence
@@ -742,7 +751,10 @@ func _advance_actor(record: Dictionary, target: Sprite3D, delta: float, allow_id
 	var frames: Array = sequence.get("frames", [])
 	if frames.is_empty():
 		return
-	var frame_index := floori(float(record.action_elapsed) * maxf(0.01, float(sequence.get("fps", 1.0))))
+	var fps := maxf(0.01, float(sequence.get("fps", 1.0)))
+	if _is_breathing_loop(action, sequence):
+		fps *= breath_tempo(String(record.role))
+	var frame_index := floori(float(record.action_elapsed) * fps)
 	if bool(sequence.get("loop", false)):
 		frame_index = posmod(frame_index, frames.size())
 	elif frame_index >= frames.size():
@@ -859,6 +871,28 @@ func _idle_action_for_role(role: String, direction: String, previous_action: Str
 		return ""
 	var phase := fposmod(_phase_seed(seed, instance_id) + float(event_index) * 0.61803398875, 1.0)
 	return available[mini(floori(phase * float(available.size())), available.size() - 1)]
+
+
+static func breath_tempo(role: String) -> float:
+	return float(BREATH_TEMPO.get(role, 1.0))
+
+
+## Seconds one breathing loop takes for this role, from the authored frames and fps.
+func breath_cycle_seconds(role: String, direction: String = "front") -> float:
+	_ensure_animation_library()
+	if _animation_library == null:
+		return 0.0
+	var sequence := _normalize_sequence(_animation_library.get_sequence(role, "idle", direction))
+	return _sequence_seconds(sequence) / breath_tempo(role) if bool(sequence.get("available", false)) else 0.0
+
+
+static func _is_breathing_loop(action: String, sequence: Dictionary) -> bool:
+	return action in ["stand", "idle"] and bool(sequence.get("loop", false))
+
+
+static func _sequence_seconds(sequence: Dictionary) -> float:
+	var frames: Array = sequence.get("frames", [])
+	return float(frames.size()) / maxf(0.01, float(sequence.get("fps", 1.0)))
 
 
 func _phase_seed(seed: float, instance_id: int) -> float:

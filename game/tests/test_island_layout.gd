@@ -150,6 +150,14 @@ func _run() -> void:
 	Input.parse_input_event(right); Input.flush_buffered_events()
 	await physics_frame
 	_check(world.player.position.x>10.2 and world.player.position.y>0.43,"real physics walking climbs continuously from lawn onto lookout deck without a vertical ledge (reached x=%.2f y=%.2f after %d jog ticks)" % [world.player.position.x,world.player.position.y,climb_ticks])
+	# Character and arrival markers float above head height so they never cover a face.
+	var character_sprite_height := 2.4
+	for point_id in ["arrival", "guide", "quest-001", "quest-002"]:
+		var marker_point: Dictionary = {}
+		for point in world.points:
+			if str(point.get("id", "")) == point_id: marker_point = point
+		var marker := marker_point.get("marker") as Label3D
+		_check(marker != null and marker.global_position.y - Vector3(marker_point.position).y > character_sprite_height + 0.3, "%s marker clears the character's head" % point_id)
 	await _check_coastal_extension(world)
 	world.queue_free()
 	await process_frame
