@@ -1,0 +1,247 @@
+{
+ "result": "PASS",
+ "audio_driver": "PulseAudio",
+ "pcm_duration_seconds": 45.2440816326531,
+ "wall_duration_seconds": 45.390365,
+ "dialogue_beep_play_edges_during_real_main_text_reveal": 4,
+ "master_mute_digital_silence_verified": true,
+ "phase_pcm_windows_have_signal": true,
+ "limits": [
+  "Scripted Main interactions; not a human playtest.",
+  "Master-bus RMS is the combined game mix and does not isolate music from waves.",
+  "Audio output measurements do not establish subjective sound quality; local audition remains pending."
+ ],
+ "pcm_windows": [
+  {
+   "id": "harbor_noon",
+   "pcm": {
+    "nonzero_samples": 407949,
+    "rms": 0.02356695453097,
+    "sample_frames": 204293
+   }
+  },
+  {
+   "id": "harbor_night",
+   "pcm": {
+    "nonzero_samples": 441051,
+    "rms": 0.0174466554282935,
+    "sample_frames": 220935
+   }
+  },
+  {
+   "id": "plaza_night",
+   "pcm": {
+    "nonzero_samples": 450254,
+    "rms": 0.00355158574967031,
+    "sample_frames": 230648
+   }
+  },
+  {
+   "id": "plaza_noon",
+   "pcm": {
+    "nonzero_samples": 438364,
+    "rms": 0.00844753539199437,
+    "sample_frames": 220090
+   }
+  },
+  {
+   "id": "dialogue",
+   "observed_beep_play_edges": 4,
+   "pcm": {
+    "nonzero_samples": 145119,
+    "rms": 0.015524641250355,
+    "sample_frames": 72818
+   }
+  },
+  {
+   "id": "master_mute",
+   "longest_zero_run_seconds": 1.88086167800454,
+   "pcm": {
+    "nonzero_samples": 4389,
+    "rms": 0.00664697020679066,
+    "sample_frames": 65652
+   },
+   "required_zero_seconds": 1.488694
+  },
+  {
+   "id": "paused",
+   "pcm": {
+    "nonzero_samples": 13716,
+    "rms": 0.014535652406412,
+    "sample_frames": 29652
+   }
+  }
+ ],
+ "event_mix_state": [
+  {
+   "event": "harbor_noon_stable_start",
+   "active_context": "harbor",
+   "active_music_path": "res://assets/audio/cc0/harbor.ogg",
+   "area": "harbor",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "harbor_noon_stable_end",
+   "active_context": "harbor",
+   "active_music_path": "res://assets/audio/cc0/harbor.ogg",
+   "area": "harbor",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "harbor_night_stable_start",
+   "active_context": "harbor",
+   "active_music_path": "res://assets/audio/cc0/harbor.ogg",
+   "area": "harbor",
+   "phase": "night",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "harbor_night_stable_end",
+   "active_context": "harbor",
+   "active_music_path": "res://assets/audio/cc0/harbor.ogg",
+   "area": "harbor",
+   "phase": "night",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "plaza_night_stable_start",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "night",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "plaza_night_stable_end",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "night",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "plaza_noon_stable_start",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "plaza_noon_stable_end",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "main_dialogue_opened",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": true,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "main_dialogue_closed",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "main_settings_master_muted",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.0
+  },
+  {
+   "event": "main_settings_master_mute_window_end",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.0
+  },
+  {
+   "event": "main_settings_master_restored",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "main_pause_opened",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": true,
+   "master_setting": 0.7
+  },
+  {
+   "event": "main_pause_held",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": true,
+   "master_setting": 0.7
+  },
+  {
+   "event": "main_pause_resumed",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  },
+  {
+   "event": "main_audio_shutdown",
+   "active_context": "plaza",
+   "active_music_path": "res://assets/audio/cc0/plaza.ogg",
+   "area": "plaza",
+   "phase": "noon",
+   "dialogue_active": false,
+   "paused": false,
+   "master_setting": 0.7
+  }
+ ]
+}

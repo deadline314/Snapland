@@ -8,7 +8,7 @@ var _crowd_finished := false
 var _crowd_model_evidence: Dictionary = {}
 ## Wall-clock budgets stretch on a loaded machine (SNAPLAND_REVIEW_WALL_SCALE >= 1).
 ## Game time, inputs and scoring are unchanged; only the review's patience grows.
-var _wall_scale := maxf(1.0, float(OS.get_environment("SNAPLAND_REVIEW_WALL_SCALE"))) if OS.get_environment("SNAPLAND_REVIEW_WALL_SCALE").is_valid_float() else 1.0
+var _wall_scale := preload("res://game/tests/review_wall_scale.gd").factor()
 
 func _ready() -> void:
 	_started_at_ms = Time.get_ticks_msec()

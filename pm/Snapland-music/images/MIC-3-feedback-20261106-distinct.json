@@ -1,0 +1,429 @@
+{
+  "shared": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.015,
+        "centroid_hz": 2330.1,
+        "direction_octaves": -0.184
+      },
+      "success": {
+        "duration_s": 0.284,
+        "centroid_hz": 717.7,
+        "direction_octaves": 1.02
+      },
+      "miss": {
+        "duration_s": 0.321,
+        "centroid_hz": 739.1,
+        "direction_octaves": -0.113
+      },
+      "shutter": {
+        "duration_s": 0.058,
+        "centroid_hz": 2507.5,
+        "direction_octaves": -0.038
+      },
+      "result": {
+        "duration_s": 2.125,
+        "centroid_hz": 505.3,
+        "direction_octaves": 0.494
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length"
+      ],
+      "interact/result": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "interact/shutter": [
+        "length"
+      ],
+      "interact/success": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "miss/result": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "miss/shutter": [
+        "brightness",
+        "length"
+      ],
+      "miss/success": [
+        "contour"
+      ],
+      "result/shutter": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "result/success": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "shutter/success": [
+        "brightness",
+        "length",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-001": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.516,
+        "centroid_hz": 2085.0,
+        "direction_octaves": 0.071
+      },
+      "success": {
+        "duration_s": 0.173,
+        "centroid_hz": 3556.2,
+        "direction_octaves": -0.505
+      },
+      "miss": {
+        "duration_s": 0.402,
+        "centroid_hz": 537.5,
+        "direction_octaves": 2.623
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "contour"
+      ],
+      "interact/success": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "miss/success": [
+        "brightness",
+        "length",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-002": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.386,
+        "centroid_hz": 882.1,
+        "direction_octaves": -0.064
+      },
+      "success": {
+        "duration_s": 0.489,
+        "centroid_hz": 1364.4,
+        "direction_octaves": -0.284
+      },
+      "miss": {
+        "duration_s": 0.115,
+        "centroid_hz": 303.7,
+        "direction_octaves": 1.58
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "interact/success": [
+        "brightness"
+      ],
+      "miss/success": [
+        "brightness",
+        "length",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-003": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.106,
+        "centroid_hz": 1699.3,
+        "direction_octaves": 0.22
+      },
+      "success": {
+        "duration_s": 0.298,
+        "centroid_hz": 459.4,
+        "direction_octaves": -0.656
+      },
+      "miss": {
+        "duration_s": 0.18,
+        "centroid_hz": 403.6,
+        "direction_octaves": 1.896
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "interact/success": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "miss/success": [
+        "length",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-004": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.343,
+        "centroid_hz": 6406.9,
+        "direction_octaves": 0.005
+      },
+      "success": {
+        "duration_s": 0.364,
+        "centroid_hz": 973.3,
+        "direction_octaves": 0.813
+      },
+      "miss": {
+        "duration_s": 0.226,
+        "centroid_hz": 664.1,
+        "direction_octaves": 0.807
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "interact/success": [
+        "brightness",
+        "contour"
+      ],
+      "miss/success": [
+        "brightness",
+        "length"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-005": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.094,
+        "centroid_hz": 3456.3,
+        "direction_octaves": 0.116
+      },
+      "success": {
+        "duration_s": 0.46,
+        "centroid_hz": 1722.4,
+        "direction_octaves": -2.184
+      },
+      "miss": {
+        "duration_s": 0.447,
+        "centroid_hz": 589.6,
+        "direction_octaves": 2.53
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "interact/success": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "miss/success": [
+        "brightness",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-007": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.081,
+        "centroid_hz": 567.0,
+        "direction_octaves": 0.571
+      },
+      "success": {
+        "duration_s": 0.117,
+        "centroid_hz": 1984.4,
+        "direction_octaves": -0.122
+      },
+      "miss": {
+        "duration_s": 0.562,
+        "centroid_hz": 204.5,
+        "direction_octaves": 0.082
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length"
+      ],
+      "interact/success": [
+        "brightness",
+        "contour"
+      ],
+      "miss/success": [
+        "brightness",
+        "length"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-008": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.561,
+        "centroid_hz": 3232.9,
+        "direction_octaves": -0.371
+      },
+      "success": {
+        "duration_s": 0.17,
+        "centroid_hz": 1335.5,
+        "direction_octaves": -0.299
+      },
+      "miss": {
+        "duration_s": 0.158,
+        "centroid_hz": 416.1,
+        "direction_octaves": 1.726
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "interact/success": [
+        "brightness",
+        "length"
+      ],
+      "miss/success": [
+        "brightness",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-009": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.375,
+        "centroid_hz": 7071.5,
+        "direction_octaves": -0.131
+      },
+      "success": {
+        "duration_s": 0.15,
+        "centroid_hz": 7956.1,
+        "direction_octaves": -0.245
+      },
+      "miss": {
+        "duration_s": 0.132,
+        "centroid_hz": 304.7,
+        "direction_octaves": 1.842
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "interact/success": [
+        "length"
+      ],
+      "miss/success": [
+        "brightness",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-010": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.352,
+        "centroid_hz": 390.7,
+        "direction_octaves": -0.341
+      },
+      "success": {
+        "duration_s": 0.36,
+        "centroid_hz": 1263.9,
+        "direction_octaves": 0.391
+      },
+      "miss": {
+        "duration_s": 0.137,
+        "centroid_hz": 333.1,
+        "direction_octaves": 1.797
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "length",
+        "contour"
+      ],
+      "interact/success": [
+        "brightness",
+        "contour"
+      ],
+      "miss/success": [
+        "brightness",
+        "length",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  },
+  "game-011": {
+    "sounds": {
+      "interact": {
+        "duration_s": 0.074,
+        "centroid_hz": 397.7,
+        "direction_octaves": 2.055
+      },
+      "success": {
+        "duration_s": 0.162,
+        "centroid_hz": 372.6,
+        "direction_octaves": 1.642
+      },
+      "miss": {
+        "duration_s": 0.382,
+        "centroid_hz": 889.0,
+        "direction_octaves": 2.811
+      }
+    },
+    "pairs": {
+      "interact/miss": [
+        "brightness",
+        "length",
+        "contour"
+      ],
+      "interact/success": [
+        "length"
+      ],
+      "miss/success": [
+        "brightness",
+        "length",
+        "contour"
+      ]
+    },
+    "indistinct": []
+  }
+}

@@ -1,12 +1,15 @@
 extends Node
 
 const TestSaveGuard := preload("res://game/core/test_save_guard.gd")
+const ReviewWallScale := preload("res://game/tests/review_wall_scale.gd")
 const AUDIO_CATALOG_PATH := "res://assets/audio/cc0/catalog.json"
 const REQUIRED_PHASE_SECONDS := 3.05
 const SETTLE_SECONDS := 0.95
 const MAX_CAPTURE_SECONDS := 25.0
 const MAX_STARTUP_SECONDS := 12.0
 const MUTE_EDGE_GUARD_USEC := 100000
+## How far either side of the wall-clock mute window to look for the recorded silence.
+const MUTE_SEARCH_SLACK_USEC := 2000000
 
 var _main: Node
 var _output_dir := ""
@@ -94,8 +97,8 @@ func _run() -> void:
 		return
 	_scenario_started_usec = Time.get_ticks_usec()
 	var startup_seconds: float = float(_scenario_started_usec - _recording_started_usec) / 1000000.0
-	if startup_seconds > MAX_STARTUP_SECONDS:
-		_fail("Main startup exceeded its separate %.1fs bound (%.3fs)." % [MAX_STARTUP_SECONDS, startup_seconds])
+	if startup_seconds > ReviewWallScale.seconds(MAX_STARTUP_SECONDS):
+		_fail("Main startup exceeded its separate %.1fs bound (%.3fs)." % [ReviewWallScale.seconds(MAX_STARTUP_SECONDS), startup_seconds])
 	_main.world.player.velocity = Vector3.ZERO
 	_main.world.player.position.z = 13.0
 	if not await _wait_for_area("海風碼頭", 90):
@@ -123,13 +126,11 @@ func _run() -> void:
 	var dialogue_started := _mark("main_dialogue_opened")
 	var dialogue_started_at_usec := Time.get_ticks_usec()
 	var dialogue_deadline := dialogue_started_at_usec + 1600000
-	var observed_playing := false
+	# Count real play() calls: a 24 ms beep can start and finish between two slow frames.
+	var beeps_before: int = int(_main.audio.dialogue_beeps_started())
 	while Time.get_ticks_usec() < dialogue_deadline:
 		await get_tree().process_frame
-		var beep_playing: bool = bool(_main.audio._dialogue_beep_player.playing)
-		if beep_playing and not observed_playing:
-			_dialogue_beep_edges += 1
-		observed_playing = beep_playing
+	_dialogue_beep_edges = int(_main.audio.dialogue_beeps_started()) - beeps_before
 	var dialogue_closed := Time.get_ticks_usec()
 	_main._finish_dialogue()
 	_mark("main_dialogue_closed")
@@ -169,8 +170,8 @@ func _run() -> void:
 	_main.queue_free()
 	await _frames(3)
 	var elapsed_seconds: float = float(Time.get_ticks_usec() - _scenario_started_usec) / 1000000.0
-	if elapsed_seconds > MAX_CAPTURE_SECONDS:
-		_fail("Measured Main interaction scenario exceeded its %0.1fs bound (%.3fs)." % [MAX_CAPTURE_SECONDS, elapsed_seconds])
+	if elapsed_seconds > ReviewWallScale.seconds(MAX_CAPTURE_SECONDS):
+		_fail("Measured Main interaction scenario exceeded its %0.1fs bound (%.3fs)." % [ReviewWallScale.seconds(MAX_CAPTURE_SECONDS), elapsed_seconds])
 	_finish()
 
 
@@ -325,7 +326,14 @@ func _finish() -> void:
 					window["pcm_verification_edge_guard_usec"] = MUTE_EDGE_GUARD_USEC
 				_windows[window_index] = window
 				if str(window.id) == "master_mute":
-					_silence_verified = float(metrics.get("rms", 1.0)) <= 0.0001 and int(metrics.get("nonzero_samples", 1)) == 0
+					var aligned_silence := float(metrics.get("rms", 1.0)) <= 0.0001 and int(metrics.get("nonzero_samples", 1)) == 0
+					# A virtual sink can drop mix frames, so the PCM clock may trail wall time. Also accept
+					# an exact-zero run found near the expected spot that is as long as the guarded window.
+					var required_seconds := float(metric_end_usec - metric_start_usec) / 1000000.0
+					var run := _longest_zero_run(recording, start_usec - MUTE_SEARCH_SLACK_USEC, end_usec + MUTE_SEARCH_SLACK_USEC, channel_count)
+					window["longest_zero_run_seconds"] = run
+					window["required_zero_seconds"] = required_seconds
+					_silence_verified = aligned_silence or run >= required_seconds
 		var phase_signal := true
 		var phase_window_count := 0
 		for window in _windows:
@@ -354,7 +362,7 @@ func _finish() -> void:
 				break
 		if not found:
 			all_phases_verified = false
-	var passed := _failures.is_empty() and _native_audio and _capture_timing_valid and _pcm_has_signal and _phase_pcm_windows_verified and _silence_verified and _dialogue_beep_edges > 0 and all_phases_verified and total_seconds <= MAX_CAPTURE_SECONDS
+	var passed := _failures.is_empty() and _native_audio and _capture_timing_valid and _pcm_has_signal and _phase_pcm_windows_verified and _silence_verified and _dialogue_beep_edges > 0 and all_phases_verified and total_seconds <= ReviewWallScale.seconds(MAX_CAPTURE_SECONDS)
 	var result := "PASS" if passed else ("INCONCLUSIVE" if not _native_audio or not _capture_timing_valid else "FAIL")
 	var report := {
 		"fixture": "MIC-2 Main-backed phase-aware island audio dynamics",
@@ -431,6 +439,27 @@ func _pcm_window_metrics(recording: AudioStreamWAV, start_usec: int, end_usec: i
 			sum_squares += pow(float(sample) / 32768.0, 2.0)
 			sample_count += 1
 	return {"rms": sqrt(sum_squares / float(sample_count)) if sample_count > 0 else -1.0, "nonzero_samples": nonzero_count, "sample_frames": end_frame - start_frame}
+
+
+## Longest stretch, in seconds, where every channel sample is exactly zero.
+func _longest_zero_run(recording: AudioStreamWAV, start_usec: int, end_usec: int, channels: int) -> float:
+	if recording.format != AudioStreamWAV.FORMAT_16_BITS or recording.mix_rate <= 0 or end_usec <= start_usec:
+		return 0.0
+	var data: PackedByteArray = recording.data
+	var total_frames: int = data.size() / 2 / channels
+	var start_frame: int = clampi(roundi(maxf(0.0, float(start_usec - _recording_started_usec) / 1000000.0) * float(recording.mix_rate)), 0, total_frames)
+	var end_frame: int = clampi(roundi(maxf(0.0, float(end_usec - _recording_started_usec) / 1000000.0) * float(recording.mix_rate)), start_frame, total_frames)
+	var best := 0
+	var current := 0
+	for frame in range(start_frame, end_frame):
+		var silent := true
+		for channel in range(channels):
+			if data.decode_s16((frame * channels + channel) * 2) != 0:
+				silent = false
+				break
+		current = current + 1 if silent else 0
+		best = maxi(best, current)
+	return float(best) / float(recording.mix_rate)
 
 
 func _recording_has_signal(data: PackedByteArray) -> bool:

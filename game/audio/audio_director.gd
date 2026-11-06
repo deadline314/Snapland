@@ -56,6 +56,7 @@ var _note_streams: Array[AudioStreamWAV] = []
 var _dialogue_beep_player: AudioStreamPlayer
 var _dialogue_beep_streams: Dictionary = {}
 var _last_dialogue_beep_msec := -100000
+var _dialogue_beeps_started := 0
 var _active_music := -1
 var _active_context := ""
 var _settings := DEFAULT_SETTINGS.duplicate(true)
@@ -198,6 +199,7 @@ func shutdown() -> void:
 	_last_sfx_msec.clear()
 	_active_game_profile = {}
 	_last_dialogue_beep_msec = -100000
+	_dialogue_beeps_started = 0
 	_paused = false
 
 ## `game_id` picks that game's own track and feedback set for the "game" context.
@@ -384,7 +386,13 @@ func play_dialogue_beep(speaker: String, character: String, clock_msec: int = -1
 	_dialogue_beep_player.stream = _dialogue_beep_streams[speaker]
 	_dialogue_beep_player.volume_db = _sfx_volume_db() - 8.0
 	_dialogue_beep_player.play()
+	_dialogue_beeps_started += 1
 	return true
+
+## Total beeps actually started since the last shutdown; reviews read this instead of
+## sampling the player, which a 24 ms beep can slip between.
+func dialogue_beeps_started() -> int:
+	return _dialogue_beeps_started
 
 static func _is_dialogue_beep_glyph(character: String) -> bool:
 	return not character.strip_edges().is_empty() and not DIALOGUE_PUNCTUATION.contains(character)

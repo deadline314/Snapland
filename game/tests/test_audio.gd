@@ -119,6 +119,8 @@ func _initialize() -> void:
 	audio.play_sfx("shutter")
 	assert(audio._sfx.stream.resource_path == "res://assets/audio/photo_shutter.wav")
 	assert(is_equal_approx(audio._sfx.volume_db, linear_to_db(0.8 * 0.5)))
+	# Mark the click as just played so the repeat-gate check never depends on machine speed.
+	audio._last_sfx_msec["ui_click"] = Time.get_ticks_msec()
 	var ui_click_time := int(audio._last_sfx_msec["ui_click"])
 	var current_sfx_stream: AudioStream = audio._sfx.stream
 	audio.play_sfx("ui_click")
@@ -195,7 +197,15 @@ func _initialize() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(bad_path))
 	print("PASS: per-game audio profiles route %d games" % profiles.size())
 
+	# Dialogue beeps: letters start one beep each (after the speaker interval), punctuation and spaces never do.
+	var beeps_before := audio.dialogue_beeps_started()
+	assert(audio.play_dialogue_beep("票票", "歡", 0))
+	assert(not audio.play_dialogue_beep("票票", "。", 1000))
+	assert(not audio.play_dialogue_beep("票票", " ", 2000))
+	assert(audio.play_dialogue_beep("票票", "迎", 3000))
+	assert(audio.dialogue_beeps_started() == beeps_before + 2, "only real letters count as started beeps")
 	audio.shutdown()
+	assert(audio.dialogue_beeps_started() == 0, "shutdown resets the beep counter")
 	for player: AudioStreamPlayer in audio._music_players:
 		assert(player.stream == null)
 	assert(audio._ambience.stream == null)
