@@ -30,6 +30,7 @@ const ACTION_VISIBLE_HEIGHT := 420
 const ACTION_SIDE_PADDING := 2
 const NpcWalkMotionScript = preload("res://game/world/npc_walk_motion.gd")
 const NpcCostumeScript = preload("res://game/world/npc_costume.gd")
+const AuthoredPatrolScript = preload("res://game/world/authored_npc_patrol.gd")
 
 static var _action_frame_cache: Dictionary = {}
 static var _action_atlas: Texture2D
@@ -389,7 +390,36 @@ func configure_motion(view_camera: Camera3D, ground_height: Callable, enabled: b
 		_records[index]["motion"] = null
 		_records[index]["route_base"] = null
 		if _motion_enabled: _setup_motion(index)
+		_setup_authored_patrol(index)
 	_update_motion_pause(_reduced_motion or (_activity_paused and not _dialogue_hold))
+
+func _setup_authored_patrol(index: int) -> void:
+	var previous: RefCounted = _records[index].get("authored_patrol")
+	_records[index]["authored_patrol"] = null
+	_records[index]["distance_driven_walk"] = false
+	if _motion_enabled or String(_records[index].role) != "imp" or not _motion_ground.is_valid(): return
+	if not _has_sequence("imp", "walk", "right") or not _has_sequence("imp", "walk", "left"): return
+	var anchor := _records[index].anchor.get_ref() as Node3D
+	var patrol = previous if previous != null else AuthoredPatrolScript.new()
+	if patrol.configure(anchor, _motion_ground): _records[index]["authored_patrol"] = patrol
+
+func _update_authored_patrol(index: int, delta: float) -> void:
+	if index < 0 or index >= _records.size(): return
+	var record: Dictionary = _records[index]
+	var patrol: RefCounted = record.get("authored_patrol")
+	if patrol == null or String(record.action) not in ["stand", "idle", "walk"]: return
+	var movement: Dictionary = patrol.advance(delta)
+	if bool(movement.moving):
+		if String(record.action) != "walk" or String(record.direction) != String(movement.direction):
+			if not _play_actor_action(index, "walk", String(movement.direction), true): return
+			record = _records[index]
+		record.action_elapsed = float(movement.phase) * AnimationTiming.duration(record.action_sequence)
+		record["distance_driven_walk"] = true
+		_records[index] = record
+	elif String(record.action) == "walk":
+		_play_actor_action(index, "idle", "front", true)
+		_records[index]["distance_driven_walk"] = false
+		_records[index]["idle_due"] = _action_clock + 0.25
 
 func motion_report() -> Dictionary:
 	var supported := {}
@@ -541,6 +571,7 @@ func _process(delta: float) -> void:
 		if is_instance_valid(target):
 			if not _dialogue_hold:
 				_update_short_route(record,delta)
+				_update_authored_patrol(_record_index(record), delta)
 			if not _dialogue_hold and String(record.role) == "announcer":
 				_update_announcer_action(record)
 			var record_index := _record_index(record)
@@ -648,6 +679,8 @@ func _restore_record(record: Dictionary) -> void:
 	var anchor: Node3D = record.anchor.get_ref()
 	if is_instance_valid(anchor):
 		anchor.position = record.baseline_anchor_position
+	var patrol: RefCounted = record.get("authored_patrol")
+	if patrol != null: patrol.reset()
 	var material_ref: WeakRef = record.material
 	if material_ref != null:
 		var material: ShaderMaterial = material_ref.get_ref()
@@ -721,6 +754,7 @@ func _play_actor_action(record_index: int, action: String, direction: String, re
 	record.action = action
 	record.direction = direction
 	record.action_sequence = sequence
+	record["distance_driven_walk"] = false
 	_records[record_index] = record
 	_apply_actor_frame(record_index, 0)
 	return true
@@ -748,7 +782,8 @@ func _advance_actor(record: Dictionary, target: Sprite3D, delta: float, allow_id
 		if empty_index >= 0:
 			_records[empty_index].idle_due = record.idle_due
 		return
-	record.action_elapsed = float(record.action_elapsed) + delta
+	if action != "walk" or not bool(record.get("distance_driven_walk", false)):
+		record.action_elapsed = float(record.action_elapsed) + delta
 	var frames: Array = sequence.get("frames", [])
 	if frames.is_empty():
 		return

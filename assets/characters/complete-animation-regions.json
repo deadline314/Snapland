@@ -19,7 +19,7 @@
     "traveller": "Front actions with dedicated authored idle in all eight directions. Existing eight-direction walk remains in the legacy atlas. Jump is an eight-pose front action at 12 FPS; other jump directions are not authored here. Seated and catch actions retain separately authored metadata.",
     "traveller_outfit_coral": "Historical incomplete vest candidate only: retained for provenance, never selected. The shipping coral jacket is a palette of the complete base body in every action and direction.",
     "ticket": "Walk row is only a walk_candidate pending authored validation.",
-    "imp": "42 authored cells (7x6); no frames synthesized.",
+    "imp": "42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.",
     "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."
   },
   "outfit_required_poses": {
@@ -12212,6 +12212,220 @@
                 "feet_method": "bottom_8px_two_contact_midpoint",
                 "head_method": "central_upper_alpha_hat_hair_top"
               },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "walk": {
+        "right": {
+          "fps": 7,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-walk-sides-v1.png",
+              "region": [
+                106,
+                42,
+                268,
+                337
+              ],
+              "anchors": {
+                "feet": [
+                  116,
+                  335
+                ],
+                "head": [
+                  186,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-walk-sides-v1.png",
+              "region": [
+                549,
+                42,
+                268,
+                337
+              ],
+              "anchors": {
+                "feet": [
+                  117,
+                  335
+                ],
+                "head": [
+                  186,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-walk-sides-v1.png",
+              "region": [
+                993,
+                42,
+                268,
+                337
+              ],
+              "anchors": {
+                "feet": [
+                  116,
+                  335
+                ],
+                "head": [
+                  186,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-walk-sides-v1.png",
+              "region": [
+                1436,
+                42,
+                268,
+                337
+              ],
+              "anchors": {
+                "feet": [
+                  116,
+                  335
+                ],
+                "head": [
+                  186,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            }
+          ]
+        },
+        "left": {
+          "fps": 7,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-walk-sides-v1.png",
+              "region": [
+                75,
+                483,
+                273,
+                340
+              ],
+              "anchors": {
+                "feet": [
+                  147,
+                  338
+                ],
+                "head": [
+                  151,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-walk-sides-v1.png",
+              "region": [
+                518,
+                483,
+                272,
+                340
+              ],
+              "anchors": {
+                "feet": [
+                  148,
+                  338
+                ],
+                "head": [
+                  151,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-walk-sides-v1.png",
+              "region": [
+                962,
+                483,
+                273,
+                340
+              ],
+              "anchors": {
+                "feet": [
+                  147,
+                  338
+                ],
+                "head": [
+                  151,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-walk-sides-v1.png",
+              "region": [
+                1406,
+                483,
+                272,
+                340
+              ],
+              "anchors": {
+                "feet": [
+                  146,
+                  338
+                ],
+                "head": [
+                  151,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
               "layers": []
             }
           ]

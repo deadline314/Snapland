@@ -140,6 +140,34 @@ func _run() -> void:
 			_assert_projected_contact_feet(role, source_sprite)
 			assert(source_sprite.visible and _activity_record_for_role(role).motion == null, "%s camera change cannot silently enable a gait rig" % role)
 	assert(announcer_sprite.texture == _world.npc_activity._records[2].frames[0], "resumed announcer displays its authored idle frame")
+	var imp := _actor_record_for_role("imp")
+	var imp_root := imp.activity_root as Node3D
+	var imp_sprite := imp.sprite as Sprite3D
+	var seen_walk_feet := {}
+	for _tick in range(650):
+		activity._process(1.0 / 30.0)
+		var imp_record := _activity_record_for_role("imp")
+		assert(points.imp.position == imp_root.global_position, "imp interaction point follows actual patrol displacement")
+		if String(imp_record.action) != "walk": continue
+		var index: int = floori(float(imp_record.action_elapsed) * float(imp_record.action_sequence.fps)) % 4
+		var key := "%s/%d" % [imp_record.direction,index]
+		if not seen_walk_feet.has(key):
+			_world._update_sprite_grounding()
+			_assert_projected_contact_feet("imp walk " + key, imp_sprite)
+			seen_walk_feet[key] = true
+		if seen_walk_feet.size() == 8: break
+	assert(seen_walk_feet.size() == 8, "all eight real patrol poses keep visible feet above terrain")
+	var imp_hold_position := imp_root.position
+	var imp_hold_phase: float = _activity_record_for_role("imp").authored_patrol.phase
+	activity.set_activity_paused(true)
+	activity._process(2.0)
+	assert(imp_root.position == imp_hold_position and _activity_record_for_role("imp").authored_patrol.phase == imp_hold_phase, "modal pause freezes grounded route and gait phase")
+	activity.set_dialogue_hold(true)
+	activity._process(0.4)
+	assert(imp_root.position == imp_hold_position and _activity_record_for_role("imp").authored_patrol.phase == imp_hold_phase, "dialogue animation never advances patrol or catches up feet")
+	activity.set_dialogue_hold(false)
+	activity.set_reduced_motion(true)
+	assert(imp_root.position == points.imp.position and imp_root.position == _activity_record_for_role("imp").baseline_anchor_position, "reduced motion restores imp route and interaction point together")
 	_world.queue_free()
 	await process_frame
 	print("PASS: NPC world activity integration")

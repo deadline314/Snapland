@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-11",
+  "timezone": "Asia/Taipei",
+  "base_commit": "e60a9ae",
+  "method": "Reference-based image generation and scoped corrections; generated PNGs retained verbatim.",
+  "steps": [
+    {
+      "id": "initial",
+      "prompt": "Create a production PIXEL ART sprite sheet for the EXACT small red imp character in the reference: squat little red devil, angular wide ears with navy inner ears, one tall curved ivory horn and one smaller ivory horn, mischievous half-lidded eyes, tiny fangs, cream oval belly, short dark teal neckerchief, slim red curved arrow-tail, bare red clawed feet, no clothes or boots. Preserve the exact chubby proportions and angular crisp pixel clusters of this character, no painterly smoothing. Exactly TWO rows by FOUR columns on a transparent background, equal fixed-size cells, generous transparent gutters and at least 12% empty margins around each COMPLETE full body. No labels, no text, no ground shadows. Row 1 is a strict RIGHT-facing SIDE VIEW, row 2 is the same imp walking LEFT, actually redraw the far side preserving the asymmetrical horn identity rather than an obvious mirror. Each row contains ONE complete FOUR-POSE TWO-STEP walk cycle, reading left to right: pose 1 NEAR foot reaches forwards (heel contact) and FAR foot trails backwards on its toe; pose 2 NEAR foot supports body directly beneath the hip while FAR leg passes forwards with knee bent and foot lifted; pose 3 FAR foot reaches forwards and supports weight (heel contact), while the NEAR leg extends BACKWARDS on its toe; pose 4 FAR foot supports directly under hip while NEAR leg passes forwards bent and lifted. Far leg is consistently darker red and partially hidden BEHIND the near thigh at the pelvis. The near leg's visible continuous hip-thigh-knee-ankle contour must exchange front and back at poses 1 versus 3. Show both connected legs and both feet in all poses; no duplicated same-leg contacts. These are short gentle WALK steps with grounded weight, not a dance, jump, run or march. Head, horn, torso proportions and neckerchief remain stable, very subtle torso down-up motion. Arms swing slightly opposite the legs, hands stay complete. Tail follows a small restrained arc with its tip clear of the feet. All feet share the same ground level except the deliberately raised passing foot, with head height changing only a few pixels. Do not auto-center on each foot: preserve a fixed body root center and canvas scale per cell. Crisp readable low-resolution production pixel art matching the reference.",
+      "status": "rejected",
+      "review": "第三、四格重複第一半循環，近側腿沒有交換到後方。",
+      "archive_member": "initial.png",
+      "sha256": "cce3b79d38868edd6c25de679bd3392a437b5feb6dd46ac47a9cb7ace69a219a",
+      "actual_dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "id": "legs",
+      "prompt": "EDIT this sprite sheet, preserving its 2 rows x 4 columns layout and transparent background. Preserve all heads, faces, horns, ears, neckerchief, torsos, tails, arms and the entire FIRST TWO COLUMNS exactly as they are. Correct ONLY the LEGS and FEET in column THREE and FOUR of EACH ROW. The first two columns show the NEAR brighter red leg forward or planted, and FAR dark burgundy leg swinging forward. To complete the second step, column THREE must have the NEAR BRIGHT RED LEG extended BACKWARDS (towards SCREEN LEFT in top row, towards SCREEN RIGHT in bottom row) while the FAR DARK BURGUNDY leg extends FORWARD (towards SCREEN RIGHT in top row, towards SCREEN LEFT in bottom row) and supports weight. At the pelvis, the BRIGHT near thigh and continuous hip contour must visibly overlap ON TOP of the darker far thigh and run BACKWARDS to its rear foot; do NOT leave the near hip connected to the forward leg. Column FOUR must have the FAR DARK BURGUNDY leg planted vertically directly UNDER the body, and the NEAR BRIGHT RED leg lifted and swinging FORWARD with its knee bent. Both bright foreground thighs must emerge from the actual near hip, with correct overlap and complete connected feet. It is essential to REVERSE which leg is BRIGHT and IN FRONT in columns 3 and 4 relative to columns 1 and 2: bright leg behind in column 3, bright leg raised forward in column 4. All feet stay the same size and baseline; small restrained walking, no extra limbs, no floating or amputated feet. Crisp pixel rendering consistent with the untouched sheet.",
+      "status": "partial",
+      "review": "兩次接觸與近遠腿連接成立，手臂仍需反向擺動。",
+      "archive_member": "legs.png",
+      "sha256": "2b1fe294be0a9ab3dde0ed348da9241cfca79c93338f063680164c26540282f7",
+      "actual_dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "id": "arms",
+      "prompt": "Edit ONLY the ARMS and HANDS in the THIRD and FOURTH columns of this two-row pixel-art imp sprite sheet. Keep the first two columns and ALL heads, faces, bodies, horns, tails, legs and feet unchanged. The walk is now anatomically correct; preserve every leg exactly. Arms should softly counter-swing with the legs instead of repeating the first half. In column THREE of top row (walking right), the NEAR arm that currently rests against the left/back hip should move forward to the RIGHT with a small bent-elbow swing, its red fist near the front/right lower chest, clearly in front of the torso. FAR arm moves behind to the LEFT, darker red and partly occluded by body. In column THREE bottom row (walking left), the NEAR arm currently at the right/back hip moves forward to the LEFT, red fist near the front/left lower chest, FAR arm back RIGHT and partly occluded. In column FOUR of each row, near arm relaxes toward vertical at its own hip as the raised near leg comes forward, far arm begins the forward swing. Keep the arm lengths and tiny fist sizes consistent with untouched columns 1 and 2, no extra hands or fingers, no crossing the face or scarf, no weapon. Gentle small-amplitude walk, confident mischievous imp personality. Do not change any leg pose, feet, tail or facial expression. Transparent background, same exact canvas size and grid, crisp pixel art.",
+      "status": "partial",
+      "review": "腿與反向擺臂成立；追加左右身份核對後發現左向長角被鏡像，未採用這版。",
+      "archive_member": "arms.png",
+      "sha256": "90a132d8294b3af33a7999fe05bc01e2aa8388711feadacfd28e5617af964d3d",
+      "actual_dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "id": "final",
+      "prompt": "Make ONE tightly scoped correction to the FIRST reference sprite sheet. Keep its exact 2-row, 4-column canvas, all poses, feet, arms, body, face, ears, scarf, tail, scale, pixel rendering and transparency unchanged. The TOP ROW is already correct and must remain unchanged. In ALL FOUR BOTTOM-ROW LEFT-FACING HEADS ONLY, correct the asymmetrical HORNS to maintain the same character anatomy. The tall curved ivory horn belongs on the REAR/SCREEN-RIGHT part of the skull in a left-facing view; the SHORT ivory horn belongs on the FRONT/SCREEN-LEFT part of the skull. Match the left-facing character on the LEFT SIDE of the SECOND reference: small horn upper left/front, large curved horn upper right/back, both anchored naturally to the skull. Do not mirror the tall horn into the front of the forehead. Draw the large curved horn at screen-right behind the smaller screen-left horn, keeping its existing height and thick pixel outline; curve consistent with the second reference. Preserve the exact forehead, eyes, ears and all body pixels. No motion or limb changes; this fixes horn identity across the two walking directions. Maintain transparent background and exact original canvas dimensions.",
+      "status": "native-verified-source",
+      "review": "修正左向長角歸屬，保留完整四肢與兩步循環；正常及 PCK 原生八姿勢核對，慢速與重入另記錄。",
+      "archive_member": "final.png",
+      "sha256": "9ccd67d38b27cddd6848cb12de196f7fee8eadf3dfe30ee6d52122e4adbb1126",
+      "actual_dimensions": [
+        1774,
+        887
+      ]
+    }
+  ],
+  "references": [
+    {
+      "path": "assets/characters/imp-front-actions-v2.png",
+      "sha256": "03a7f332575cb919c4ecd2df567d091192632512d9d94569615799286ee2a4cf"
+    },
+    {
+      "path": "assets/characters/imp-turnaround-candidate-v1.png",
+      "sha256": "135842ab8564fc68f0c29ea8224658ca21c7df4eb6320efd1f9b427a017663c0"
+    }
+  ],
+  "reference_limits": "Front action atlas supplies character identity. The old turnaround candidate is only an anatomical horn-side guide, not newly accepted motion.",
+  "production": {
+    "path": "assets/characters/imp-walk-sides-v1.png",
+    "sha256": "9ccd67d38b27cddd6848cb12de196f7fee8eadf3dfe30ee6d52122e4adbb1126",
+    "directions": {
+      "right": 4,
+      "left": 4
+    },
+    "source_scale": 0.395,
+    "phase_order": [
+      "near_contact",
+      "near_support_far_pass",
+      "far_contact",
+      "far_support_near_pass"
+    ],
+    "anchor_policy": "fixed authored cell center; shared row ground; no per-pose feet recentering or auto-fit",
+    "review_scope": "Eight full-body walking keys, two alternating contacts, bounded ground patrol and source identity; not complete ART-16/17/18 acceptance."
+  },
+  "source_archive": "pm/Snapland-art/images/ART-17-imp-walk-20261111-sources.zip",
+  "source_archive_sha256": "eb9c2b13712f7d33094f95642c71212c66d8fa832bfd180f54d69cedc5c641a8"
+}
