@@ -683,3 +683,21 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![回到既有待機](images/ART-17-announcer-settle-20261111-settled.png)
 
 [正常影片](images/ART-17-announcer-settle-20261111-normal.mp4) · [四分之一速度／重入](images/ART-17-announcer-settle-20261111-quarter.mp4) · [降低動態](images/ART-17-announcer-settle-20261111-reduced.mp4) · [PCK 播放](images/ART-17-announcer-settle-20261111-pack.mp4) · [完整報告與指紋](images/ART-17-announcer-settle-20261111-review.json) · [逐姿勢、反例與測試及封裝紀錄](images/ART-17-announcer-settle-20261111-evidence.zip) · [原畫與完整提示](images/ART-17-announcer-settle-20261111-sources.zip)。角色來源起始 SHA：`5f2af71`；分支：`codex/ticket-delivery-20261111`。
+
+# Commit — 2026-11-11 完整回歸與 Windows 預覽輸出
+
+## 內文
+
+本輪票票與阿浪收勢、缺件對話回歸與跨平台驗證修正整合後，重新輸出可直接啟動的 Windows 預覽。執行檔不納入 repo；程式與來源指紋、輸出日誌及十二入口原生畫面保存在驗證附件。
+
+| 項目 | 結果 |
+|---|---|
+| 完整 Python | 177 項通過，32.521 秒 |
+| 完整 Godot | 99 項通過，累計 918.57 秒；使用原有本機 timeout-scale 2，完成標記與錯誤判定保留 |
+| 設計資料 | 5 個範圍通過 |
+| Windows 執行檔 | 來源提交 3cb35e9，281,737,200 bytes；匯入、輸出及隔離無視窗啟動 exit 0、0 ERROR |
+| 預設圖形原生執行 | Vulkan／Forward+／AMD Radeon RX 9070 XT，十二款入口各保存實際繪製畫面；人物、三位 NPC、場景動畫、遮擋與圖集載入檢查通過，exit 0、0 ERROR |
+
+十二入口檢查確認啟動與資源載入，不當作完整通關、每件服裝／每張動作播放、真人遊玩、連續觀看或試聽。視覺動作證據仍以本票及 ART-16 的原生正常／慢速與 PCK 檢視為準。整套角色驗收狀態保持進行中。
+
+[完整回歸、Windows 輸出與原生入口證據](images/ART-17-delivery-20261111-verification.zip)。本機預覽位於 `build/Snapland-preview-20261111/Snapland.exe`；驗證使用獨立測試存檔。
