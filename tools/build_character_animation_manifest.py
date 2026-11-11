@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Build/check alpha-derived character animation regions. Never modifies source PNGs."""
+"""Build/check character regions and source-bound annotations without editing PNGs."""
 from __future__ import annotations
-import argparse, json, sys
+import argparse, copy, hashlib, json, sys
 from pathlib import Path
 from PIL import Image
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets/characters/complete-animation-regions.json"
+AUTHORING = ROOT / "assets/characters/animation-authoring.json"
 TRAVELLER_VARIANT = ROOT / "assets/characters/traveller-vest-actions-v1.png"
 ANNOUNCER_SIDE_WALK = ROOT / "assets/characters/announcer-walk-sides-v2.png"
 ANNOUNCER_SIDE_SCALE = 0.54
@@ -288,6 +289,129 @@ def add_traveller_directional_idle(actor_data: dict) -> dict:
     return {"frame_count": sum(r["frame_count"] for r in reports), "atlases": reports}
 
 
+def validate_pose_metadata(metadata: dict, canvas: list[int], context: str) -> None:
+    def point(value: object) -> bool:
+        return (
+            isinstance(value, list) and len(value) == 2
+            and all(type(p) is int and 0 <= p < size for p, size in zip(value, canvas))
+        )
+
+    def polygon(value: object) -> bool:
+        return isinstance(value, list) and 3 <= len(value) <= 256 and all(point(p) for p in value)
+
+    def eye_rect(value: object) -> bool:
+        return (
+            isinstance(value, list) and len(value) == 4
+            and all(type(v) is int for v in value) and point(value[:2])
+            and value[2] > 0 and value[3] > 0
+            and value[0] + value[2] <= canvas[0]
+            and value[1] + value[3] <= canvas[1]
+        )
+
+    for field, values in metadata.items():
+        valid = isinstance(values, list) and bool(values) and len(values) <= 256
+        if valid and field == "normalized_face_eyes":
+            valid = all(eye_rect(rect) for rect in values)
+        elif valid and field == "normalized_head_contour":
+            valid = polygon(values)
+        elif valid and field == "foreground_polygons":
+            valid = all(polygon(poly) for poly in values)
+        if not valid:
+            raise ValueError(f"{context}: invalid {field} coordinates")
+
+
+def apply_authoring_metadata(manifest: dict) -> None:
+    """Restore reviewed metadata only onto the exact source pose it belongs to.
+
+    This sidecar is an authoring input, not runtime data. Missing or stale input
+    fails the build before main() can overwrite the live manifest.
+    """
+    authored = json.loads(AUTHORING.read_text(encoding="utf-8"))
+    if not isinstance(authored, dict) or authored.get("schema_version") != 1:
+        raise ValueError("animation authoring: expected schema_version 1 object")
+    for key in ("outfit_modes", "outfit_required_poses", "coverage_notes"):
+        if not isinstance(authored.get(key), dict):
+            raise ValueError(f"animation authoring: missing or invalid {key}")
+    if any(
+        not isinstance(item, str) or mode not in ("palette", "variant")
+        for item, mode in authored["outfit_modes"].items()
+    ):
+        raise ValueError("animation authoring: unknown outfit mode")
+    for actor, actions in authored["outfit_required_poses"].items():
+        if actor not in ACTORS or not isinstance(actions, dict):
+            raise ValueError(f"animation authoring: invalid outfit actor {actor}")
+        for action, directions in actions.items():
+            if not isinstance(action, str) or not isinstance(directions, dict):
+                raise ValueError(f"animation authoring: invalid outfit coverage {actor}/{action}")
+            if any(
+                not isinstance(direction, str) or type(count) is not int or not 1 <= count <= 256
+                for direction, count in directions.items()
+            ):
+                raise ValueError(f"animation authoring: invalid outfit coverage {actor}/{action}")
+    if any(not isinstance(key, str) or not isinstance(value, str) for key, value in authored["coverage_notes"].items()):
+        raise ValueError("animation authoring: coverage notes must be strings")
+    annotations = authored.get("frame_annotations")
+    if not isinstance(annotations, list):
+        raise ValueError("animation authoring: frame_annotations must be an array")
+    hashes: dict[str, str] = {}
+    seen: set[tuple[str, str, str, int]] = set()
+    allowed_fields = {"normalized_face_eyes", "normalized_head_contour", "foreground_polygons"}
+    for annotation in annotations:
+        if not isinstance(annotation, dict):
+            raise ValueError("animation authoring: pose annotation must be an object")
+        actor, action, direction = (annotation.get(key) for key in ("actor", "action", "direction"))
+        context = f"animation authoring {actor}/{action}/{direction}"
+        if not all(isinstance(key, str) for key in (actor, action, direction)):
+            raise ValueError(f"{context}: expected string pose identity")
+        actor_data = manifest["actors"].get(actor, {})
+        sequence = actor_data.get(action, {}).get(direction, {})
+        if not sequence.get("frames"):
+            raise ValueError(f"{context}: missing generated pose sequence")
+        for key in ("canvas_size", "reference_size", "feet_baseline"):
+            if annotation.get(key) != actor_data.get(key):
+                raise ValueError(f"{context}: changed {key}; review annotations")
+        source = annotation.get("source", "")
+        if not isinstance(source, str) or not source.startswith("res://assets/characters/"):
+            raise ValueError(f"{context}: expected character source path")
+        path = (ROOT / source.removeprefix("res://")).resolve()
+        if not path.is_relative_to((ROOT / "assets/characters").resolve()):
+            raise ValueError(f"{context}: source escapes character assets")
+        if source not in hashes:
+            with path.open("rb") as stream:
+                hashes[source] = hashlib.file_digest(stream, "sha256").hexdigest()
+        if annotation.get("source_sha256") != hashes[source]:
+            raise ValueError(f"{context}: source fingerprint changed; review annotations")
+        frames = annotation.get("frames")
+        if not isinstance(frames, list) or not frames:
+            raise ValueError(f"{context}: expected annotated frames")
+        for item in frames:
+            index = item.get("index") if isinstance(item, dict) else None
+            if type(index) is not int or not 0 <= index < len(sequence["frames"]):
+                raise ValueError(f"{context}: invalid frame index {index}")
+            identity = (actor, action, direction, index)
+            if identity in seen:
+                raise ValueError(f"{context}/frame {index}: duplicate annotation")
+            seen.add(identity)
+            frame = sequence["frames"][index]
+            geometry_matches = (
+                frame["source"] == source
+                and all(item.get(key) == frame.get(key) for key in ("region", "anchors"))
+                and item.get("source_scale", 1.0) == frame.get("source_scale", 1.0)
+            )
+            if not geometry_matches:
+                raise ValueError(f"{context}/frame {index}: changed pose geometry; review annotations")
+            metadata = item.get("metadata")
+            if not isinstance(metadata, dict) or not metadata or metadata.keys() - allowed_fields:
+                raise ValueError(f"{context}/frame {index}: unsupported annotation fields")
+            validate_pose_metadata(metadata, actor_data["canvas_size"], f"{context}/frame {index}")
+            frame.update(copy.deepcopy(metadata))
+    # The atlas builder owns bounds, not wardrobe policy or reviewed source
+    # coverage. Keep those explicit inputs independent of its generated output.
+    manifest["outfit_modes"] = copy.deepcopy(authored["outfit_modes"])
+    manifest["outfit_required_poses"] = copy.deepcopy(authored["outfit_required_poses"])
+    manifest["coverage_notes"].update(copy.deepcopy(authored["coverage_notes"]))
+
+
 def build() -> tuple[dict,dict]:
     actors={}; reports={}
     for actor in ACTORS:
@@ -314,10 +438,11 @@ def build() -> tuple[dict,dict]:
                     for direction, entry in directions.items():
                         actors[actor][action].setdefault(direction, entry)
     manifest={"schema_version":1,"description":"Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.","runtime_aliases":{"traveller":{"station_stand":"idle/front/frame_0 (same authored frame; not a separate animation)"},"ticket":{"special":"idle_gesture/front (runtime alias; no duplicate frames)"}},"coverage_notes":{"traveller":TRAVELLER_COVERAGE_NOTE,"traveller_outfit_coral":"Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.","ticket":"Walk row is only a walk_candidate pending authored validation.","imp":"42 authored cells (7x6); no frames synthesized.","announcer":"Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."},"actors":actors}
+    apply_authoring_metadata(manifest)
     return manifest,reports
 
 def main() -> int:
-    parser=argparse.ArgumentParser(); parser.add_argument("--check",action="store_true",help="validate alpha-derived regions and compare the committed manifest"); parser.add_argument("--write",action="store_true",help="write JSON manifest (source PNGs are read-only)")
+    parser=argparse.ArgumentParser(description=__doc__, epilog="Reviewed wardrobe and pose metadata: assets/characters/animation-authoring.json. Source or pose mismatches stop before writing output."); parser.add_argument("--check",action="store_true",help="validate alpha-derived regions and compare the committed manifest"); parser.add_argument("--write",action="store_true",help="write JSON manifest (source PNGs are read-only)")
     parser.add_argument("--side-idle-only", action="store_true", help="update/check only profile idle; preserve separately authored seated/catch actions")
     parser.add_argument("--directional-idle-only", action="store_true", help="update/check all dedicated non-front idle sources while preserving unrelated actions")
     args=parser.parse_args()

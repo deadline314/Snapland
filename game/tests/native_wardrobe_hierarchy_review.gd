@@ -119,11 +119,13 @@ func _run() -> void:
 	await _finish_review()
 
 func _resize_review_window(target: Vector2i) -> bool:
-	DisplayServer.window_set_size(target)
+	# Set the owning Window so its responsive-layout size updates even on an X11
+	# display without a window manager; a raw DisplayServer request can lag it.
+	get_window().size = target
 	var deadline := Time.get_ticks_msec() + 2500
-	while DisplayServer.window_get_size() != target and Time.get_ticks_msec() < deadline:
+	while (DisplayServer.window_get_size() != target or get_window().size != target) and Time.get_ticks_msec() < deadline:
 		if not await _wait_frames(1): return false
-	if DisplayServer.window_get_size() != target:
+	if DisplayServer.window_get_size() != target or get_window().size != target:
 		await _review_fail("Window did not reach requested physical size " + str(target))
 		return false
 	return await _wait_frames(4)
@@ -214,20 +216,24 @@ func _check_selected_shop_state() -> bool:
 	var selected_visible: bool = selected != null and scroll_rect.intersection(main.get_viewport().get_visible_rect()).encloses(selected.get_global_rect())
 	var catalog_price := int(Progress.wardrobe_item("outfit-gold").get("price", -1))
 	var price_text := ""
+	var price_label: Label
 	if selected != null:
 		for sibling in selected.get_parent().get_children():
 			if sibling is Label and str(sibling.text).contains("幣"):
 				price_text = str(sibling.text)
+				price_label = sibling
 	var diagnostic := "disabled=%s status=%s row_price=%s catalog_price=%d focus=%s selected_rect=%s scroll_rect=%s selected_visible=%s" % [str(purchase.disabled if purchase != null else "missing"), str(panel.status_label.text), price_text, catalog_price, str(focused), str(selected.get_global_rect()) if selected != null else "missing", str(scroll_rect), str(selected_visible)]
 	print("SHOP_STATE[", _variant, "] ", diagnostic)
-	var price_ink: Color = selected.get_parent().get_child(selected.get_index()+1).get_theme_color("font_color") if selected != null else Color.WHITE
+	var price_ink := price_label.get_theme_color("font_color") if price_label != null else Color.WHITE
 	var status_ink: Color = panel.status_label.get_theme_color("font_color")
 	var paper_panel := main.overlay.find_child("AdaptiveMenuPanel", true, false) as PanelContainer
 	var paper_style := paper_panel.get_theme_stylebox("panel") as StyleBoxFlat if paper_panel != null else null
 	var paper_bg := paper_style.bg_color if paper_style != null else Color.WHITE
-	var price_contrast := _contrast_ratio(price_ink, paper_bg)
-	var status_contrast := _contrast_ratio(status_ink, paper_bg)
-	print("SHOP_CONTRAST[", _variant, "] price=", price_ink, " ratio=", price_contrast, " status=", status_ink, " ratio=", status_contrast, " paper=", paper_bg)
+	var price_bg := _label_background(price_label, paper_bg)
+	var status_bg := _label_background(panel.status_label, paper_bg)
+	var price_contrast := _contrast_ratio(price_ink, price_bg)
+	var status_contrast := _contrast_ratio(status_ink, status_bg)
+	print("SHOP_CONTRAST[", _variant, "] price=", price_ink, " ratio=", price_contrast, " status=", status_ink, " ratio=", status_contrast, " price_background=", price_bg, " status_background=", status_bg)
 	if panel.selected_item_id != "outfit-gold" or catalog_price != 100 or not focused or selected == null:
 		await _review_fail("Actual pointer selection must select the exact catalog item and leave it keyboard-focused: " + diagnostic)
 		return false
@@ -235,6 +241,16 @@ func _check_selected_shop_state() -> bool:
 		await _review_fail("Candidate must visibly focus the selected row, state exact price and disable unaffordable purchase: " + diagnostic)
 		return false
 	return true
+
+func _label_background(label: Label, fallback: Color) -> Color:
+	if not is_instance_valid(label): return fallback
+	var plate := label.get_node_or_null("PriceContrastPlate") as PanelContainer
+	# The current pixel theme draws a light plate behind price ink. Measure that
+	# surface only when it is visible and actually covers the label being read.
+	if plate == null or not plate.is_visible_in_tree() or not plate.get_global_rect().encloses(label.get_global_rect()):
+		return fallback
+	var style := plate.get_theme_stylebox("panel") as StyleBoxFlat
+	return fallback.blend(style.bg_color) if style != null else fallback
 
 func _contrast_ratio(first: Color, second: Color) -> float:
 	var first_luminance := _luminance(first)

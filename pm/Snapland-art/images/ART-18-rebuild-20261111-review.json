@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-11",
+  "timezone": "Asia/Taipei",
+  "starting_commit": "66eeb72",
+  "branch": "codex/wardrobe-rebuild-20261111",
+  "rebuild": {
+    "project": "/tmp/snapland-art18-20261111/project",
+    "rebuilt_manifest_equals_accepted_data": true,
+    "source_project_manifest_modified": false,
+    "runtime_source_and_assets": "symlinked read-only inputs; generated manifest and captures are isolated",
+    "hash_validation": "all annotated source fingerprints and canonical pose geometry checked"
+  },
+  "authoring_input_sha256": "9424c898370e1d912e76d83eec17d7b60a5ce10a372cbbbbad58a0e3b0c5a698",
+  "live_manifest_sha256": "3efb90b9298d0bf0c306f4c89a92ece83e0b8b217b23cd05f5afb018271b9109",
+  "python_tests": 4,
+  "rejection_scenarios": 7,
+  "runtime_checks": 6,
+  "native": {
+    "godot": "4.7.2.stable.official.ed1daf0bf",
+    "renderer": "Compatibility / llvmpipe",
+    "human_played": false,
+    "audio_driver": "Dummy",
+    "pass_marker": "PASS: native wardrobe candidate hierarchy, exact-price disabled state, keyboard focus, reduced motion and compact bounds",
+    "final_errors": 0,
+    "price_and_status_contrast": 6.47519793552595,
+    "threshold_unchanged": 4.5,
+    "physical_window_sizes": [
+      [
+        1280,
+        720
+      ],
+      [
+        800,
+        600
+      ]
+    ],
+    "reviewed_images": [
+      "03-shop-unaffordable-100-focus.png",
+      "05-shop-compact-800x600.png",
+      "06-appearance-compact-800x600.png"
+    ],
+    "capture_dimensions": {
+      "01-appearance-standard.png": [
+        1280,
+        720
+      ],
+      "02-closet-standard.png": [
+        1280,
+        720
+      ],
+      "03-shop-unaffordable-100-focus.png": [
+        1280,
+        720
+      ],
+      "04-shop-reduced-motion.png": [
+        1280,
+        720
+      ],
+      "05-shop-compact-800x600.png": [
+        800,
+        450
+      ],
+      "06-appearance-compact-800x600.png": [
+        800,
+        450
+      ]
+    }
+  },
+  "evidence_archive": "ART-18-rebuild-20261111-evidence.zip",
+  "evidence_archive_sha256": "57670270de6d11997e9c929a74f2a87d9f5b2f3b7ea598c596fb282713336fe6",
+  "ticket_complete": false
+}
