@@ -1,6 +1,7 @@
 extends Node
 
 const MainScene := preload("res://game/main.tscn")
+const CharacterLibrary := preload("res://game/world/character_animation_library.gd")
 
 var _failures: Array[String] = []
 
@@ -20,6 +21,14 @@ func _run() -> void:
 	await _frames(3)
 	var world: Node = main.world
 	var activity: Variant = world.npc_activity
+	# Missing coverage is a fixture condition, independent of production assets.
+	# A fresh library avoids stale sequence caches from the normal Main startup.
+	var missing_library := CharacterLibrary.new()
+	missing_library.manifest.actors.ticket.erase("walk")
+	activity._animation_library = missing_library
+	activity._sequence_availability.clear()
+	_check(not activity._has_sequence("ticket", "walk", "right") and not activity._has_sequence("ticket", "walk", "left"), "fixture explicitly removes both side walks")
+	_check(activity._has_sequence("ticket", "idle", "front") and activity._has_sequence("ticket", "greet", "front"), "missing-walk fixture preserves real authored idle and greeting")
 	# This fixture deliberately exercises the retained opt-in review adapter.
 	# Production-world source-cel tests independently require it to stay absent.
 	_check(not bool(activity.motion_report().enabled), "Main production startup leaves the review-only measured adapter disabled")
