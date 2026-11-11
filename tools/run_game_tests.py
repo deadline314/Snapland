@@ -54,7 +54,7 @@ PASS_MARKERS = {
     "garment part ownership tests": "PASS: garment sleeves retain 121 owned source pixels, reject adjacent raster tiles and preserve unassigned torso pixels",
     "side outfit palette tests": "PASS: side jacket palette, 72 source-bound cases, exposed cloth witnesses and curly hair occlusion",
     "authored idle hair attachment tests": "PASS: source-atlas closed-eye attachment availability (not production idle playback)",
-    "authored NPC source walking tests": "PASS: authored announcer and grounded imp routes display complete source poses; unsupported ticket remains stationary",
+    "authored NPC source walking tests": "PASS: all three authored NPC routes display complete side poses and preserve independent personality actions",
     "authored NPC patrol tests": "PASS: authored NPC patrol bounds, distance phase, obstacle/ground rejection, teleport, long-frame and release",
     "character animation library tests": "PASS: character animation library checks",
     "NPC animation state tests": "PASS: NPC animation state progression, interruption, pause, fallback, and cleanup",

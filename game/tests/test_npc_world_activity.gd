@@ -51,6 +51,7 @@ func _run() -> void:
 		assert(sprite.texture.get_size() == Vector2(NpcActivityScript.ACTION_CANVAS_SIZE), "%s preserves its complete registered source canvas" % role)
 		assert(sprite.scale == Vector3.ONE and is_equal_approx(sprite.pixel_size, 2.4 / float(NpcActivityScript.ACTION_VISIBLE_HEIGHT)), "%s uses the authored fixed pixel scale without procedural body stretch" % role)
 		var actor_root: Node3D = actor_record.activity_root
+		assert(points[role].marker.get_parent() == actor_root, "%s interaction marker belongs to its moving actor before bob animation is registered" % role)
 		assert(actor_root.global_position.is_finite(), "%s activity root has a valid world position" % role)
 		assert(sprite.has_meta("npc_world_ground_anchor_managed"), "%s front Sprite is registered with the world's Y-only billboard ground-anchor owner" % role)
 		_world._update_sprite_grounding()
@@ -71,6 +72,7 @@ func _run() -> void:
 	_world.npc_activity._process(0.0)
 	assert(is_equal_approx(announcer_root.position.x, baseline_root_position.x + 0.6), "announcer side-step stays on its open route bound (actual %.12f, expected %.12f)" % [announcer_root.position.x, baseline_root_position.x + 0.6])
 	assert(is_equal_approx(float(points["announcer"].position.x), start_point.x + 0.6), "the world interaction point follows the announcer root")
+	assert(is_equal_approx(points.announcer.marker.global_position.x,announcer_root.global_position.x), "announcer marker follows the route with its interaction point")
 	var announcer_sprite := announcer.sprite as Sprite3D
 	var baseline_texture: Texture2D = _activity_record_for_role("announcer").baseline_texture
 	var activity: Variant = _world.npc_activity
@@ -148,6 +150,7 @@ func _run() -> void:
 		activity._process(1.0 / 30.0)
 		var imp_record := _activity_record_for_role("imp")
 		assert(points.imp.position == imp_root.global_position, "imp interaction point follows actual patrol displacement")
+		assert(is_equal_approx(points.imp.marker.global_position.x,imp_root.global_position.x), "imp marker follows the actor without a stale world-space bob baseline")
 		if String(imp_record.action) != "walk": continue
 		var index: int = floori(float(imp_record.action_elapsed) * float(imp_record.action_sequence.fps)) % 4
 		var key := "%s/%d" % [imp_record.direction,index]
@@ -168,6 +171,25 @@ func _run() -> void:
 	activity.set_dialogue_hold(false)
 	activity.set_reduced_motion(true)
 	assert(imp_root.position == points.imp.position and imp_root.position == _activity_record_for_role("imp").baseline_anchor_position, "reduced motion restores imp route and interaction point together")
+	activity.set_reduced_motion(false)
+	activity.set_activity_paused(false)
+	var ticket := _actor_record_for_role("ticket")
+	var ticket_root := ticket.activity_root as Node3D
+	var ticket_sprite := ticket.sprite as Sprite3D
+	var seen_ticket_feet := {}
+	for _tick in range(650):
+		activity._process(1.0/30.0)
+		var record := _activity_record_for_role("ticket")
+		assert(points.ticket.position == ticket_root.global_position and is_equal_approx(points.ticket.marker.global_position.x,ticket_root.global_position.x), "ticket interaction target and marker both follow actual plaza movement")
+		if String(record.action) != "walk": continue
+		var index: int = floori(float(record.action_elapsed) * float(record.action_sequence.fps)) % 4
+		var key := "%s/%d" % [record.direction,index]
+		if not seen_ticket_feet.has(key):
+			_world._update_sprite_grounding()
+			_assert_projected_contact_feet("ticket walk " + key, ticket_sprite)
+			seen_ticket_feet[key] = true
+		if seen_ticket_feet.size() == 8: break
+	assert(seen_ticket_feet.size() == 8, "all eight ticket side poses retain actual visible ground contact")
 	_world.queue_free()
 	await process_frame
 	print("PASS: NPC world activity integration")

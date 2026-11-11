@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-11",
+  "tool": "image_gen.imagegen",
+  "production_source": "assets/characters/ticket-walk-sides-v1.png",
+  "source_sha256": "4446b03de300e5cec962e6c908eecf75159d5ed2f5dd504b0894d6e7b844c9b3",
+  "reference_sha256": {
+    "assets/characters/ticket-front-actions-v2.png": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1"
+  },
+  "stages": [
+    {
+      "file": "01-ticketCompactWalk.png",
+      "bytes": 1677782,
+      "sha256": "70262c3d3b207e3c5508d9670f7594b0abc550ea640894341136eb5105d3bda6",
+      "prompt": "Create a crisp fine PIXEL ART sprite sheet of the EXACT friendly ticket-clerk boy in the reference: tousled angular chestnut hair, round thin BLACK glasses, small friendly smile, blue hoodie with cream mountain emblem, cream shorts, bare calves, BROWN ankle boots touching bare calves (NO white socks), small brown leather shoulder satchel on his anatomical RIGHT side. Keep approved chibi proportions, same face, hair clusters, cuffs, bag and boots, no smooth vector art. Exactly TWO ROWS by FOUR COLUMNS, equal cells, generous 12 percent transparent margins around each complete body, transparent background, no text, labels or ground shadows. Row 1 walks RIGHT, row 2 walks LEFT. Redraw the two sides with correct anatomy and bag ownership: RIGHT-facing view shows the near/right-side satchel and the near RIGHT hand holding its strap; LEFT-facing view sees the boy's left side, so the bag remains on his FAR/right side, mostly occluded behind torso and far hip with only its back edge visible, not swapped to the near hip. Near left arm can swing freely in left-facing row. Each row is one complete FOUR-POSE TWO-STEP WALK cycle, NOT two repeats of one step. Pose 1: NEAR leg and its near shorts opening extend FORWARD heel-first, FAR leg trails behind on toe. Pose 2: NEAR foot supports under hip, FAR knee gently passes forward with its boot lifted a little. Pose 3: OPPOSITE CONTACT, the NEAR thigh and its MAIN VISIBLE SHORTS PANEL extend BACKWARDS to rear toe, and overlap IN FRONT OF the far thigh at the crotch; FAR leg reaches FORWARD to heel contact. Pose 4: FAR foot supports under hip, NEAR knee gently passes forward with its boot lifted a little. Keep the near shorts panel continuously joined to its OWN thigh: near shorts tilt forward at pose1 and BACKWARD at pose3; actual pelvis overlap must reverse, not just boot colors. Subtle weight shifts, short relaxed walking steps, not running, jumping or high-knee marching. Arms gently counter-swing except hand holding bag strap. Same head size, stable body root per cell and shared ground line, complete arms, both connected legs and boots in every pose.",
+      "decision": "Rejected gray smoke alpha matte and repeated near-leg contacts."
+    },
+    {
+      "file": "02-ticketCompactWalkEdit.png",
+      "bytes": 1118895,
+      "sha256": "fa762e69743b8257b55350227c6d51a95fba2ea02976384ae7c0793866d9f794",
+      "prompt": "Edit this pixel-art ticket-clerk walking sheet. TWO essential corrections, preserving character identity and the 2x4 layout. 1) Make a CLEAN TRUE TRANSPARENT background: remove ALL grey haze, smoke-like matte, colored speckles and disconnected background pixels around the eight bodies. Keep clean crisp black character outlines, do not soften or erode character pixels. Fit all eight complete figures with consistent fixed scale and at least 12 percent transparent margin in each equal cell; the hair tips must not touch the canvas edge. No shadows or added background. 2) Correct the anatomical second half in columns THREE and FOUR of BOTH rows. Preserve the first two poses' anatomy. In column THREE TOP row (walking RIGHT), the MAIN VISIBLE near-side CREAM SHORTS PANEL must slope DOWN and BACK to the LEFT from waist, and its near thigh must continue diagonally BACK LEFT to the rear boot. This large bright near panel overlaps IN FRONT of the smaller far panel at the crotch. The FAR leg is the FORWARD RIGHT leg, shaded behind the near thigh. Reverse the current crotch overlap: do not leave the large near shorts opening attached to the forward leg. In column THREE BOTTOM row (walking LEFT), do the reciprocal: large near shorts panel slopes DOWN BACK to the RIGHT, its continuous near thigh extends BACK RIGHT, over the FAR thigh extending FORWARD LEFT. In column FOUR in both rows, FAR foot is planted under hip and NEAR knee/near shorts opening passes gently forward, boot only slightly lifted, not a high-knee march. This completes two actual alternating steps: contact near, passing far, contact far, passing near. Keep boots directly against bare calves, NO white socks, keep both connected thighs/knees/boots present. Preserve bag anatomy: top row bag is near and visible, bottom row bag stays far and partly hidden, never put the far bag on the near hip. Keep head, hair, glasses, face, clothes, proportions and hands consistent; keep crisp fine pixel art.",
+      "decision": "Clean alpha accepted; opposite shorts ownership still unresolved."
+    },
+    {
+      "file": "03-ticketCompactContact.png",
+      "bytes": 959163,
+      "sha256": "a07c2a1d5e2113a632785055aa192390cdd485e5b26480fc34993f8eca6274b9",
+      "prompt": "Edit ONLY the SHORTS AND UPPER THIGHS of the THIRD BOY IN THE TOP ROW (the right-facing boy centered around x=1090) in this sprite sheet. Leave the other SEVEN boys absolutely unchanged. Leave this boy's head, hair, glasses, hoodie, hands, satchel, knees, boots and all screen positions unchanged. Reverse the crotch overlap for an opposite walking contact. In the area approximately x=1035..1135, y=270..345, redraw the LARGE BRIGHT CREAM NEAR-SIDE SHORTS PANEL so it extends diagonally DOWN LEFT/BACKWARDS, wrapping around and continuing into the LEFT/back thigh. Its front edge must overlap in FRONT of the smaller FAR-side shorts panel. The FAR-side smaller cream panel ends around the RIGHT/front thigh and stays BEHIND the near panel at the crotch. The bright NEAR hip and near shorts opening now connect continuously to the BACK/LEFT leg, not the front/right leg. Visually the main shorts panel must slope from the waist at upper right to its hem at lower LEFT, with the smaller far/front panel tucked BEHIND it to the RIGHT. Match the existing pixel clusters and colors. This is an anatomical overlap change at the pelvis, not a change of boot color. Preserve the eight-figure layout and transparent background, no other edits.",
+      "decision": "Top third opposite contact corrected; partial production source only."
+    },
+    {
+      "file": "04-ticketCompactPass.png",
+      "bytes": 977325,
+      "sha256": "e41a37af5f14f81322c858f42b5d6569cd0da4a65e62718cdbd3532653944f68",
+      "prompt": "Edit ONLY the SHORTS and UPPER THIGH overlap of the FOURTH / RIGHTMOST boy in the TOP ROW (right-facing, centered near x=1510) of this sprite sheet. Leave the other SEVEN figures and all heads, torsos, hands, bags, knees and boots unchanged. This pose must be the NEAR leg passing forward while the FAR leg is the vertical weight-bearing leg. At approximately x=1460..1555,y=268..337, make the LARGE VISIBLE BRIGHT CREAM NEAR-SIDE SHORTS PANEL wrap the RAISED FORWARD/RIGHT thigh and knee. That near panel must slope forward/down RIGHT and overlap ON TOP of the smaller far-side panel at the crotch. The FAR shorts panel is the small panel behind to the LEFT, around the VERTICAL planted leg. Currently the large visible near panel ends on the vertical left leg; reverse that pelvis overlap so the large near hip and thigh connect continuously into the LIFTED RIGHT leg. Keep both calf/boot positions unchanged and both legs fully attached. Match existing cream fabric shadows and crisp pixel contours. This changes leg ownership through real hip/shorts overlap, not boot colors. Keep the clean transparent background, original dimensions and layout.",
+      "decision": "Top fourth near passing corrected; left row still pending."
+    },
+    {
+      "file": "05-ticketCompactLeftContact.png",
+      "bytes": 978849,
+      "sha256": "32a2db819aedd897810afa7070aa9be3d86a637b9e09614bf89153ac816ea9b4",
+      "prompt": "Edit ONLY the SHORTS and UPPER THIGHS of the THIRD BOY IN THE BOTTOM ROW (the left-facing boy centered around x=1090) of this pixel-art sprite sheet. Keep the other SEVEN complete figures unchanged, especially the corrected third and fourth figures of the top row. Keep this target boy's head, hair, glasses, face, hoodie, hands, far-side satchel, knees, calves and boots at their existing positions. Reverse the current crotch overlap for the opposite contact. In the area approximately x=1020..1145,y=716..795, draw the LARGE BRIGHT CREAM NEAR-SIDE SHORTS PANEL so it slopes DOWN BACK to SCREEN RIGHT from the waist, wrapping around the BACK/RIGHT thigh. The near thigh must connect continuously from that near hip through its rear shorts opening to the back/right knee. This large near panel overlaps IN FRONT OF the smaller FAR-side shorts panel at the crotch. The FAR-side small shorts panel is to the FRONT/SCREEN LEFT and continues into the FORWARD/LEFT thigh. Do not leave the main visible near shorts opening attached to the left/front leg. This is the mirror anatomical logic of the already corrected top-row third pose, but the left-facing figure has the bag on the FAR side behind its torso; preserve that bag ownership. Match existing pixel fabric shading and hard outline, no boot recoloring, no other figure edits. Clean transparent background, same exact dimensions.",
+      "decision": "Bottom third opposite contact corrected; left passing still pending."
+    },
+    {
+      "file": "06-ticketCompactLeftPass.png",
+      "bytes": 998627,
+      "sha256": "4446b03de300e5cec962e6c908eecf75159d5ed2f5dd504b0894d6e7b844c9b3",
+      "prompt": "Edit ONLY the SHORTS and UPPER THIGH overlap of the FOURTH / RIGHTMOST boy in the BOTTOM ROW (left-facing, around x=1510). Preserve the other SEVEN figures exactly, including the now-correct opposite-contact third figures. Preserve this boy's head, hair, face, hoodie, hands, far-side bag, knee and boot positions. This passing pose must have the NEAR leg lifted FORWARD to SCREEN LEFT, while the FAR leg is VERTICAL and planted at SCREEN RIGHT. Around x=1450..1550,y=716..792, redraw the LARGE VISIBLE BRIGHT CREAM NEAR-SIDE SHORTS PANEL wrapping the raised FRONT/LEFT thigh. It must tilt DOWN LEFT and overlap IN FRONT of the smaller FAR-side shorts panel around the VERTICAL RIGHT leg. Right now the main near panel ends on the vertical right leg; change that actual crotch overlap so the near hip and near shorts opening continue into the LIFTED LEFT leg. The small far panel is tucked behind to the RIGHT. This is the reciprocal of the corrected fourth figure in the top row. Keep all body parts fully connected, same leg lengths, cream fabric shading, crisp black pixel contours and clean true transparency. No changes to any other pose or body area.",
+      "decision": "Final: both directions near/far contact and passing poses, bare calves, right-side satchel. Accepted for side walking only."
+    }
+  ],
+  "registration": {
+    "source_size": [
+      1774,
+      887
+    ],
+    "column_bounds": [
+      48,
+      464,
+      880,
+      1296,
+      1712
+    ],
+    "root_x": [
+      256,
+      672,
+      1088,
+      1504
+    ],
+    "source_scale": 0.432,
+    "ground": "shared per row",
+    "per_frame_foot_recenter": false,
+    "directions": [
+      "right",
+      "left"
+    ],
+    "poses": [
+      "near contact",
+      "far passing",
+      "far contact",
+      "near passing"
+    ]
+  },
+  "scope": "Complete side walking sources; not full start/stop/turn transitions or complete character animation acceptance."
+}

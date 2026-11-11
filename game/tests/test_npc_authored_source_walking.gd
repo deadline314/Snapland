@@ -48,7 +48,7 @@ func _run() -> void:
 	var library := Library.new()
 	var ticket_candidate: Dictionary = library.get_sequence("ticket", "walk_candidate", "front")
 	_check(bool(ticket_candidate.get("available", false)) and ticket_candidate.get("frames", []).size() == 8, "ticket exploratory row exists but remains separately named and is not accepted as walk")
-	_check(not controller._has_sequence("ticket", "walk", "right") and not controller._has_sequence("ticket", "walk", "left"), "ticket candidate does not satisfy a directional walk route")
+	_check(controller._has_sequence("ticket", "walk", "right") and controller._has_sequence("ticket", "walk", "left"), "ticket uses the new complete side sources rather than its old front candidate")
 	_check(controller._has_sequence("imp", "walk", "right") and controller._has_sequence("imp", "walk", "left"), "imp has independently drawn two-contact walking sources in both directions")
 	_check(controller._records[_record_index(controller, "imp")].get("authored_patrol") != null, "validated imp sources enable grounded distance-driven patrol")
 	_check(controller._has_sequence("announcer", "walk", "right") and controller._has_sequence("announcer", "walk", "left"), "announcer's validated directional source cels select its route")
@@ -105,12 +105,21 @@ func _run() -> void:
 	var moved_left := false
 	var imp_directions := {}
 	var imp_seen := {"right": {}, "left": {}}
+	var ticket_seen := {"right": {}, "left": {}}
 	var tick_count := ceili(CYCLE_SECONDS * 2.0 / TICK_SECONDS)
 	for _tick in range(tick_count):
 		# Advance the authored route track and the controller explicitly. No scene
 		# playback or waiting is needed; this is the same data-time progression.
 		controller._player.advance(TICK_SECONDS)
 		controller._process(TICK_SECONDS)
+		var ticket_record: Dictionary = controller._records[int(role_indices.ticket)]
+		_check(anchors.ticket.position.x >= ticket_start.x - 0.00001 and anchors.ticket.position.x <= ticket_start.x + 1.20001 and is_equal_approx(anchors.ticket.position.z, ticket_start.z), "ticket patrol stays on the plaza side of its starting point")
+		if String(ticket_record.action) == "walk":
+			var heading := String(ticket_record.direction)
+			var sequence: Dictionary = ticket_record.action_sequence
+			var index: int = Library.AnimationTiming.frame_at_time(sequence, float(ticket_record.action_elapsed))
+			_check(actors.ticket.texture == sequence.frames[index].texture, "ticket uses its actual distance-selected complete side pose")
+			ticket_seen[heading][index] = true
 		var imp_record: Dictionary = controller._records[int(role_indices.imp)]
 		_check(absf(anchors.imp.position.x - imp_start.x) <= 0.30001 and is_equal_approx(anchors.imp.position.z, imp_start.z), "imp remains inside its grounded route pocket")
 		if String(imp_record.action) == "walk":
@@ -142,12 +151,12 @@ func _run() -> void:
 				moved_right = true
 			if direction == "left" and current_position.distance_to(announcer_start) > 0.01:
 				moved_left = true
-		if String(controller._records[int(role_indices.ticket)].action) not in ["stand", "idle"]:
+		if String(controller._records[int(role_indices.ticket)].action) not in ["stand", "idle", "walk"]:
 			ticket_persona = true
-		if String(controller._records[int(role_indices.imp)].action) not in ["stand", "idle"]:
+		if String(controller._records[int(role_indices.imp)].action) not in ["stand", "idle", "walk"]:
 			imp_persona = true
 
-	_check(anchors.ticket.position.is_equal_approx(ticket_start), "ticket remains in place without validated walk frames")
+	_check(ticket_seen.right.size() == 4 and ticket_seen.left.size() == 4, "ticket naturally shows all eight side poses on a complete outbound and return path")
 	_check(imp_directions.size() == 2 and imp_seen.right.size() == 4 and imp_seen.left.size() == 4, "imp patrol reaches both directions and all eight source poses")
 	_check(ticket_persona and imp_persona, "ticket and imp naturally play persona actions during the two route cycles")
 	_check(moved_right and moved_left, "announcer naturally moves in both directions while its route plays authored frames")
@@ -156,30 +165,31 @@ func _run() -> void:
 		var seen: Dictionary = announcer_sequences[direction].seen
 		_check(seen.size() == 4, "announcer %s route naturally displays all four complete source cels" % direction)
 	_check(actors.announcer.visible and controller._records[int(role_indices.announcer)].get("motion") == null, "announcer retains the full authored Sprite with no gait rig")
-	var damaged_library := Library.new()
-	damaged_library.manifest.actors.imp.walk.left.frames[3].region = [99999,0,10,10]
-	var guard := NpcActivity.new()
-	guard._animation_library = damaged_library
-	scene.add_child(guard)
-	var guarded_root := Node3D.new()
-	scene.add_child(guarded_root)
-	var guarded_sprite := Sprite3D.new()
-	var fallback := NpcActivity.load_action_frames("imp")
-	guarded_sprite.texture = fallback[0]
-	guarded_root.add_child(guarded_sprite)
-	_check(guard.register_actor(guarded_sprite,"imp",fallback,guarded_root), "damaged-source imp retains complete fallback registration")
-	guard.finish_registration()
-	guard.configure_motion(camera, Callable(self,"_ground_height"), false)
-	_check(guard._records[0].get("authored_patrol") == null, "one damaged later source cel prevents the entire two-direction patrol")
-	for _tick in range(120): guard._process(TICK_SECONDS)
-	_check(guarded_root.position == Vector3.ZERO and guarded_sprite.texture != null, "unusable walk sources leave a stationary complete actor instead of one-way or partial motion")
-	guard.release()
+	for damaged_role in ["imp", "ticket"]:
+		var damaged_library := Library.new()
+		damaged_library.manifest.actors[damaged_role].walk.left.frames[3].region = [99999,0,10,10]
+		var guard := NpcActivity.new()
+		guard._animation_library = damaged_library
+		scene.add_child(guard)
+		var guarded_root := Node3D.new()
+		scene.add_child(guarded_root)
+		var guarded_sprite := Sprite3D.new()
+		var fallback := NpcActivity.load_action_frames(damaged_role)
+		guarded_sprite.texture = fallback[0]
+		guarded_root.add_child(guarded_sprite)
+		_check(guard.register_actor(guarded_sprite,damaged_role,fallback,guarded_root), "%s retains complete fallback registration" % damaged_role)
+		guard.finish_registration()
+		guard.configure_motion(camera, Callable(self,"_ground_height"), false)
+		_check(guard._records[0].get("authored_patrol") == null, "%s damaged later source cel prevents the entire two-direction patrol" % damaged_role)
+		for _tick in range(120): guard._process(TICK_SECONDS)
+		_check(guarded_root.position == Vector3.ZERO and guarded_sprite.texture != null, "%s unusable walk sources retain a stationary complete actor" % damaged_role)
+		guard.release()
 	controller.release()
 	scene.queue_free()
 	if not _failures.is_empty():
 		_finish_failed()
 		return
-	print("PASS: authored announcer and grounded imp routes display complete source poses; unsupported ticket remains stationary")
+	print("PASS: all three authored NPC routes display complete side poses and preserve independent personality actions")
 	quit(0)
 
 func _check(condition: bool, message: String) -> void:

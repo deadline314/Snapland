@@ -75,6 +75,21 @@ func _run() -> void:
 		saw_wall = saw_wall or physical_patrol.blocked_reason == "obstacle"
 		assert(physical_actor.position.x < 1.04, "actual physics rays stop the actor before a static wall")
 	assert(saw_wall, "real PhysicsDirectSpaceState detects the blocking wall")
+	physical_actor.position = Vector3(4,0,0)
+	var plaza_patrol = Patrol.new()
+	assert(plaza_patrol.configure(physical_actor, _height, _path_clear, {"minimum_offset":0.0,"maximum_offset":1.2,"speed":0.9,"stride":1.2,"initial_rest":2.0,"rest_seconds":4.0}))
+	var plaza_headings := {}
+	for _index in range(700):
+		var before := physical_actor.position
+		var before_phase: float = plaza_patrol.phase
+		var sample: Dictionary = plaza_patrol.advance(1.0/30.0)
+		assert(physical_actor.position.x >= 4.0 and physical_actor.position.x <= 5.20001, "one-sided route never steps onto the elevated side")
+		assert(is_equal_approx(plaza_patrol.phase, fposmod(before_phase+before.distance_to(physical_actor.position)/1.2,1.0)), "role-specific stride uses the same actual-distance clock")
+		if sample.moving: plaza_headings[sample.direction] = true
+	assert(plaza_headings.size() == 2, "one-sided route returns to its starting side")
+	var preserved_phase: float = plaza_patrol.phase
+	for invalid in [{"speed":0.0},{"stride":NAN},{"initial_rest":-1},{"minimum_offset":0,"maximum_offset":0},{"unknown":1}]:
+		assert(not plaza_patrol.configure(physical_actor,_height,_path_clear,invalid) and plaza_patrol.phase == preserved_phase, "invalid profiles cannot partly replace a live route")
 	physical_actor.queue_free()
 	wall.queue_free()
 	await process_frame

@@ -1,0 +1,406 @@
+{
+  "date": "2026-11-11",
+  "base_commit": "9d7063b1d19e6cd9d0819f605424b969511aadb4",
+  "branch": "codex/ticket-authored-walk-20261111",
+  "scope": "Ticket NPC full side walking and grounded plaza route plus moving NPC interaction markers. Full character acceptance remains open.",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "rendering": "Compatibility / llvmpipe / Xvfb; offline fixed FPS movie capture, not hardware performance",
+  "audio": "Dummy; no auditory acceptance",
+  "human_played": false,
+  "human_continuous_movie_review": false,
+  "manually_inspected": [
+    "normal all eight complete side walking PNGs",
+    "quarter-v2 right-3, left-2, settled",
+    "PCK left-2"
+  ],
+  "development_failure": "First quarter recording hit timeout 240 while offline rendering overlapped other checks. No complete report produced; final sole-GPU recording uses fresh output and timeout 600. Private package parity first rejected deliberately modified export preset; corrected to report its review-only override separately.",
+  "checks": {
+    "runtime_affected": "Import, authored walking/patrol, NPC state/world/dialogue, component animation: 7/7 pass",
+    "regression": "Import, final damaged-ticket/imp source guard, actor alpha, main story: 4/4 pass",
+    "builder": "4/4 Python tests; manifest --check verifies 194 regions",
+    "data_preservation": "All preexisting actors/actions and wardrobe metadata unchanged apart from ticket.walk and ticket coverage note"
+  },
+  "movies": {
+    "normal": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "11.266667",
+      "nb_read_frames": "338"
+    },
+    "quarter": {
+      "width": 1280,
+      "height": 720,
+      "r_frame_rate": "30/1",
+      "duration": "47.700000",
+      "nb_read_frames": "1431"
+    }
+  },
+  "native": {
+    "normal": {
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "patrol": {
+        "distinct_positions": 82,
+        "npc_root_repositioned": false,
+        "samples": [
+          {
+            "anchor": {
+              "x": -3.76999998092651,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 0,
+            "phase": 0.0249999761581421,
+            "simulation_seconds": 2.05833333333334
+          },
+          {
+            "anchor": {
+              "x": -3.47000026702881,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 1,
+            "phase": 0.274999737739563,
+            "simulation_seconds": 2.39166666666667
+          },
+          {
+            "anchor": {
+              "x": -3.1700005531311,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 2,
+            "phase": 0.524999499320984,
+            "simulation_seconds": 2.725
+          },
+          {
+            "anchor": {
+              "x": -2.8700008392334,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 3,
+            "phase": 0.774999260902405,
+            "simulation_seconds": 3.05833333333333
+          },
+          {
+            "anchor": {
+              "x": -2.62999987602234,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 0,
+            "phase": 0.025000015894572,
+            "simulation_seconds": 9.42499999999998
+          },
+          {
+            "anchor": {
+              "x": -2.92999958992004,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 1,
+            "phase": 0.274999777475993,
+            "simulation_seconds": 9.75833333333331
+          },
+          {
+            "anchor": {
+              "x": -3.22999930381775,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 2,
+            "phase": 0.524999539057414,
+            "simulation_seconds": 10.0916666666666
+          },
+          {
+            "anchor": {
+              "x": -3.52999901771545,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 3,
+            "phase": 0.774999300638835,
+            "simulation_seconds": 10.425
+          }
+        ],
+        "seen": {
+          "left": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true
+          },
+          "right": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true
+          }
+        },
+        "settled": true,
+        "simulation_seconds": 10.3,
+        "source_consistent": true
+      },
+      "scene_rebuild": false,
+      "playback_mode": "normal simulation time_scale=1.0"
+    },
+    "quarter": {
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "patrol": {
+        "distinct_positions": 322,
+        "npc_root_repositioned": false,
+        "samples": [
+          {
+            "anchor": {
+              "x": -3.79250001907349,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 0,
+            "phase": 0.00624994436899821,
+            "simulation_seconds": 2.34999999999999
+          },
+          {
+            "anchor": {
+              "x": -3.49250268936157,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 1,
+            "phase": 0.256247719128926,
+            "simulation_seconds": 2.68333333333333
+          },
+          {
+            "anchor": {
+              "x": -3.19250535964966,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 2,
+            "phase": 0.506245493888856,
+            "simulation_seconds": 3.01666666666666
+          },
+          {
+            "anchor": {
+              "x": -2.89250802993774,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 3,
+            "phase": 0.756243268648782,
+            "simulation_seconds": 3.34999999999999
+          },
+          {
+            "anchor": {
+              "x": -2.60749983787537,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 0,
+            "phase": 0.00624998410542569,
+            "simulation_seconds": 10.3666666666667
+          },
+          {
+            "anchor": {
+              "x": -2.90749716758728,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 1,
+            "phase": 0.256247758865354,
+            "simulation_seconds": 10.7
+          },
+          {
+            "anchor": {
+              "x": -3.20749449729919,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 2,
+            "phase": 0.506245533625283,
+            "simulation_seconds": 11.0333333333333
+          },
+          {
+            "anchor": {
+              "x": -3.50749182701111,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 3,
+            "phase": 0.75624330838521,
+            "simulation_seconds": 11.3666666666667
+          }
+        ],
+        "seen": {
+          "left": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true
+          },
+          "right": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true
+          }
+        },
+        "settled": true,
+        "simulation_seconds": 11.2416666666666,
+        "source_consistent": true
+      },
+      "scene_rebuild": true,
+      "playback_mode": "quarter simulation time_scale=0.25"
+    },
+    "package": {
+      "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "patrol": {
+        "distinct_positions": 82,
+        "npc_root_repositioned": false,
+        "samples": [
+          {
+            "anchor": {
+              "x": -3.76999998092651,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 0,
+            "phase": 0.0249999761581421,
+            "simulation_seconds": 2.05833333333334
+          },
+          {
+            "anchor": {
+              "x": -3.47000026702881,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 1,
+            "phase": 0.274999737739563,
+            "simulation_seconds": 2.39166666666667
+          },
+          {
+            "anchor": {
+              "x": -3.1700005531311,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 2,
+            "phase": 0.524999499320984,
+            "simulation_seconds": 2.725
+          },
+          {
+            "anchor": {
+              "x": -2.8700008392334,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "right",
+            "frame": 3,
+            "phase": 0.774999260902405,
+            "simulation_seconds": 3.05833333333333
+          },
+          {
+            "anchor": {
+              "x": -2.62999987602234,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 0,
+            "phase": 0.025000015894572,
+            "simulation_seconds": 10.0916666666666
+          },
+          {
+            "anchor": {
+              "x": -2.92999958992004,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 1,
+            "phase": 0.274999777475993,
+            "simulation_seconds": 10.425
+          },
+          {
+            "anchor": {
+              "x": -3.22999930381775,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 2,
+            "phase": 0.524999539057414,
+            "simulation_seconds": 10.7583333333333
+          },
+          {
+            "anchor": {
+              "x": -3.52999901771545,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "direction": "left",
+            "frame": 3,
+            "phase": 0.774999300638835,
+            "simulation_seconds": 11.0916666666666
+          }
+        ],
+        "seen": {
+          "left": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true
+          },
+          "right": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true
+          }
+        },
+        "settled": true,
+        "simulation_seconds": 10.9666666666666,
+        "source_consistent": true
+      }
+    }
+  },
+  "media_sha256": {
+    "ART-17-ticket-walk-20261111-sources.zip": "94e37e94e7e8c10ba844666254b04028d238b0b503e88b273e771ba4313d620e",
+    "ART-17-ticket-walk-20261111-evidence.zip": "866b1da1ba4094a4131afa09ea3feee40788e2dd9120a72373122c16a908ac50",
+    "ART-17-ticket-walk-20261111-quarter.mp4": "97366b27dd175dc3cdf2c40487ad52bc7b4fa82c7d15d8312c116dc173fc0303",
+    "ART-17-ticket-walk-20261111-settled.png": "7f1c2c1df1cce617281a117efbfee85484f6c7d89f7c61e818c2dd39d4097287",
+    "ART-17-ticket-walk-20261111-normal.mp4": "9ce738ee10986f6559a659f930de268dabcd68f0691dc56e34dec2ee5377680e",
+    "ART-17-ticket-walk-20261111-left.png": "83a807fd17e5387096fb5bab873f56066b89fab68c7e3382a574c59a04457ebd",
+    "ART-17-ticket-walk-20261111-right.png": "d5b85bc94e91ec7ba23e2e514e81fc480765146e151ede2480917471d5fe9ffa"
+  },
+  "package": {
+    "file": "ticket-final-qa.pck",
+    "bytes": 169999108,
+    "sha256": "65b97d2931819eafa0415a76b6501daaa512b0245215877355473d6e5bd4e977",
+    "runtime": "Pinned Godot 4.7.2 editor --main-pack from a directory outside the source project",
+    "scope": "Packed native fixture, not a standalone desktop executable",
+    "parity_file": "source-parity.json"
+  }
+}

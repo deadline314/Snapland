@@ -18,7 +18,7 @@
   "coverage_notes": {
     "traveller": "Front actions with dedicated authored idle in all eight directions. Existing eight-direction walk remains in the legacy atlas. Jump is an eight-pose front action at 12 FPS; other jump directions are not authored here. Seated and catch actions retain separately authored metadata.",
     "traveller_outfit_coral": "Historical incomplete vest candidate only: retained for provenance, never selected. The shipping coral jacket is a palette of the complete base body in every action and direction.",
-    "ticket": "Walk row is only a walk_candidate pending authored validation.",
+    "ticket": "Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.",
     "imp": "42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.",
     "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."
   },
@@ -11145,6 +11145,220 @@
                 "feet_method": "bottom_8px_joined_contact_centroid",
                 "head_method": "central_upper_alpha_hat_hair_top"
               },
+              "layers": []
+            }
+          ]
+        }
+      },
+      "walk": {
+        "right": {
+          "fps": 7,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-walk-sides-v1.png",
+              "region": [
+                150,
+                12,
+                214,
+                393
+              ],
+              "anchors": {
+                "feet": [
+                  106,
+                  391
+                ],
+                "head": [
+                  107,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-walk-sides-v1.png",
+              "region": [
+                562,
+                12,
+                213,
+                393
+              ],
+              "anchors": {
+                "feet": [
+                  110,
+                  391
+                ],
+                "head": [
+                  106,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-walk-sides-v1.png",
+              "region": [
+                976,
+                12,
+                218,
+                393
+              ],
+              "anchors": {
+                "feet": [
+                  112,
+                  391
+                ],
+                "head": [
+                  109,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-walk-sides-v1.png",
+              "region": [
+                1391,
+                12,
+                213,
+                393
+              ],
+              "anchors": {
+                "feet": [
+                  113,
+                  391
+                ],
+                "head": [
+                  105,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            }
+          ]
+        },
+        "left": {
+          "fps": 7,
+          "loop": true,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-walk-sides-v1.png",
+              "region": [
+                138,
+                461,
+                224,
+                393
+              ],
+              "anchors": {
+                "feet": [
+                  118,
+                  391
+                ],
+                "head": [
+                  114,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-walk-sides-v1.png",
+              "region": [
+                563,
+                461,
+                213,
+                393
+              ],
+              "anchors": {
+                "feet": [
+                  109,
+                  391
+                ],
+                "head": [
+                  105,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-walk-sides-v1.png",
+              "region": [
+                970,
+                461,
+                220,
+                393
+              ],
+              "anchors": {
+                "feet": [
+                  118,
+                  391
+                ],
+                "head": [
+                  110,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-walk-sides-v1.png",
+              "region": [
+                1390,
+                461,
+                215,
+                393
+              ],
+              "anchors": {
+                "feet": [
+                  114,
+                  391
+                ],
+                "head": [
+                  106,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
               "layers": []
             }
           ]

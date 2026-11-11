@@ -31,6 +31,7 @@ const ACTION_SIDE_PADDING := 2
 const NpcWalkMotionScript = preload("res://game/world/npc_walk_motion.gd")
 const NpcCostumeScript = preload("res://game/world/npc_costume.gd")
 const AuthoredPatrolScript = preload("res://game/world/authored_npc_patrol.gd")
+const AUTHORED_PATROL_PROFILES := {"imp":{}, "ticket":{"minimum_offset":0.0, "maximum_offset":1.2, "speed":0.9, "stride":1.2, "rest_seconds":4.0, "initial_rest":2.0}}
 
 static var _action_frame_cache: Dictionary = {}
 static var _action_atlas: Texture2D
@@ -397,11 +398,12 @@ func _setup_authored_patrol(index: int) -> void:
 	var previous: RefCounted = _records[index].get("authored_patrol")
 	_records[index]["authored_patrol"] = null
 	_records[index]["distance_driven_walk"] = false
-	if _motion_enabled or String(_records[index].role) != "imp" or not _motion_ground.is_valid(): return
-	if not _has_sequence("imp", "walk", "right") or not _has_sequence("imp", "walk", "left"): return
+	var role := String(_records[index].role)
+	if _motion_enabled or not AUTHORED_PATROL_PROFILES.has(role) or not _motion_ground.is_valid(): return
+	if not _has_sequence(role, "walk", "right") or not _has_sequence(role, "walk", "left"): return
 	var anchor := _records[index].anchor.get_ref() as Node3D
 	var patrol = previous if previous != null else AuthoredPatrolScript.new()
-	if patrol.configure(anchor, _motion_ground): _records[index]["authored_patrol"] = patrol
+	if patrol.configure(anchor, _motion_ground, Callable(), AUTHORED_PATROL_PROFILES[role]): _records[index]["authored_patrol"] = patrol
 
 func _update_authored_patrol(index: int, delta: float) -> void:
 	if index < 0 or index >= _records.size(): return

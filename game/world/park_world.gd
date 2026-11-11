@@ -661,11 +661,18 @@ func _update_district_label_visibility() -> void:
 ## Interaction markers float above the 2.4-unit character sprites so they never cover a
 ## face; low attraction props pass their own smaller height.
 const DEFAULT_MARKER_HEIGHT := 2.85
+const NPC_ROLE_BY_POINT := {"guide":"ticket", "quest-001":"imp", "quest-002":"announcer"}
 
 func _point(id: String, title: String, pos: Vector3, marker_height := DEFAULT_MARKER_HEIGHT) -> void:
 	points.append({"id":id,"label":title,"position":pos})
 	var marker := _label("◇", pos + Vector3(0,marker_height,0), 38, GOLD)
 	points[-1]["marker"]=marker
+	# Capture the marker's animation baseline after attaching it to the actor.
+	# Its local bob stays independent while the actor owns all route movement.
+	if NPC_ROLE_BY_POINT.has(id):
+		var actor := _npc_record_for_role(String(NPC_ROLE_BY_POINT[id]))
+		var anchor := actor.get("activity_root") as Node3D
+		if is_instance_valid(anchor): marker.reparent(anchor, true)
 	component_motion.register_component(marker,"marker",float(points.size())*0.7)
 
 func _register_npc_activity() -> void:

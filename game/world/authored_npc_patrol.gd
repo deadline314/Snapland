@@ -8,6 +8,8 @@ const STRIDE := 0.36
 const REST_SECONDS := 2.6
 const MAX_STEP_SECONDS := 0.1
 const MAX_GROUND_CHANGE := 0.12
+const DEFAULT_PROFILE := {"minimum_offset":-HALF_WIDTH, "maximum_offset":HALF_WIDTH, "speed":SPEED, "stride":STRIDE, "rest_seconds":REST_SECONDS, "initial_rest":1.2}
+const PROFILE_LIMITS := {"minimum_offset":Vector2(-2,0), "maximum_offset":Vector2(0,2), "speed":Vector2(0.01,3), "stride":Vector2(0.05,4), "rest_seconds":Vector2(0.1,30), "initial_rest":Vector2(0,30)}
 
 var _anchor: WeakRef
 var _ground: Callable
@@ -18,10 +20,14 @@ var _sign := 1.0
 var _rest := 1.2
 var phase := 0.0
 var blocked_reason := ""
+var _profile: Dictionary = DEFAULT_PROFILE.duplicate()
 
-func configure(anchor: Node3D, ground: Callable, obstacle_test: Callable = Callable()) -> bool:
+func configure(anchor: Node3D, ground: Callable, obstacle_test: Callable = Callable(), profile: Dictionary = {}) -> bool:
 	if not is_instance_valid(anchor) or not anchor.is_inside_tree() or not ground.is_valid(): return false
+	var validated := _validated_profile(profile)
+	if validated.is_empty(): return false
 	var changed_actor: bool = _anchor == null or _anchor.get_ref() != anchor
+	_profile = validated
 	_anchor = weakref(anchor)
 	_ground = ground
 	_obstacle_test = obstacle_test
@@ -34,7 +40,7 @@ func reset() -> void:
 	_origin = anchor.global_position
 	_last_position = _origin
 	_sign = 1.0
-	_rest = 1.2
+	_rest = float(_profile.initial_rest)
 	phase = 0.0
 	blocked_reason = ""
 
@@ -52,8 +58,8 @@ func advance(delta: float) -> Dictionary:
 	if _rest > 0.0:
 		_rest = maxf(0.0, _rest - step)
 		return result
-	var destination := _origin + Vector3(_sign * HALF_WIDTH, 0.0, 0.0)
-	var candidate := current.move_toward(destination, SPEED * step)
+	var destination := _origin + Vector3(float(_profile.maximum_offset if _sign > 0.0 else _profile.minimum_offset), 0.0, 0.0)
+	var candidate := current.move_toward(destination, float(_profile.speed) * step)
 	var current_ground := _height(current)
 	var next_ground := _height(candidate)
 	if not is_finite(current_ground) or not is_finite(next_ground) or absf(current_ground - next_ground) > MAX_GROUND_CHANGE:
@@ -69,13 +75,24 @@ func advance(delta: float) -> Dictionary:
 	anchor.global_position = candidate
 	var distance := Vector2(candidate.x-current.x, candidate.z-current.z).length()
 	_last_position = anchor.global_position
-	phase = fposmod(phase + distance / STRIDE, 1.0)
+	phase = fposmod(phase + distance / float(_profile.stride), 1.0)
 	result.moving = distance > 0.000001
 	result.distance = distance
 	result.phase = phase
 	if candidate.distance_to(destination) < 0.000001:
 		_sign *= -1.0
-		_rest = REST_SECONDS
+		_rest = float(_profile.rest_seconds)
+	return result
+
+static func _validated_profile(profile: Dictionary) -> Dictionary:
+	var result := DEFAULT_PROFILE.duplicate()
+	for key in profile:
+		if not PROFILE_LIMITS.has(key): return {}
+		var value: Variant = profile[key]
+		var limits: Vector2 = PROFILE_LIMITS[key]
+		if not (value is int or value is float) or not is_finite(float(value)) or float(value) < limits.x or float(value) > limits.y: return {}
+		result[key] = float(value)
+	if float(result.minimum_offset) >= float(result.maximum_offset): return {}
 	return result
 
 func _height(position: Vector3) -> float:

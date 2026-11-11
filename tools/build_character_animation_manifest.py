@@ -14,6 +14,8 @@ ANNOUNCER_SIDE_WALK = ROOT / "assets/characters/announcer-walk-sides-v2.png"
 ANNOUNCER_SIDE_SCALE = 0.54
 IMP_SIDE_WALK = ROOT / "assets/characters/imp-walk-sides-v1.png"
 IMP_SIDE_SCALE = 0.395
+TICKET_SIDE_WALK = ROOT / "assets/characters/ticket-walk-sides-v1.png"
+TICKET_SIDE_SCALE = 0.432
 TRAVELLER_JUMP = ROOT / "assets/characters/traveller-jump-front-v1.png"
 # One sequence-wide scale derived from the largest row-baseline-preserving crop:
 # 360 canonical px / (1.6 actor scale * 343 source px) ~= 0.656.
@@ -206,14 +208,18 @@ def add_traveller_jump(actor_data: dict) -> dict:
     variant_heights=[item["strong_alpha_height_px"] for item in variant_summaries]
     return {"actor":"traveller","action":"jump","direction":"front","source":TRAVELLER_JUMP.relative_to(ROOT).as_posix(),"source_size":[w,h],"atlas_rows":{"base":[yb[0],yb[1]],"outfit-coral":[yb[1],yb[2]]},"frame_count":len(frames),"variant_frame_count":len(variant_rows),"fps":12,"loop":False,"source_scale":round(TRAVELLER_JUMP_SCALE,6),"reference_size":spec["ref"],"actor_scale":round(actor_scale,4),"effective_scale":round(effective_scale,4),"max_region_size_px":[max_region_width,max_region_height],"strong_alpha_height_px":{"base":[min(heights),max(heights)],"outfit-coral":[min(variant_heights),max(variant_heights)]},"anchor_policy":"feet x comes from lower strong-alpha shoe contacts; feet y uses the shared atlas-row lower edge so authored airborne height remains visible","frames":summaries,"variant_frames":variant_summaries}
 
-def add_npc_side_walk(actor_data: dict, actor: str, source: Path, columns: int, source_scale: float, fixed_cell_root: bool = False) -> dict:
+def add_npc_side_walk(actor_data: dict, actor: str, source: Path, columns: int, source_scale: float, fixed_cell_root: bool = False, column_bounds: tuple[int, ...] | None = None) -> dict:
     """Register the four authored profile keys per side; repeated atlas cells stay unregistered."""
     if not source.exists():
         raise ValueError(f"missing side-walk atlas: {source.relative_to(ROOT)}")
     rgba=np.asarray(Image.open(source).convert("RGBA")); alpha=rgba[:,:,3]; h,w=alpha.shape
     xs=runs((alpha>128).any(axis=0)); ys=runs((alpha>128).any(axis=1))
     xb=boundaries(xs,w,columns,f"{actor} side-walk columns")
-    if fixed_cell_root:
+    if column_bounds is not None:
+        if len(column_bounds) != columns + 1 or any(type(value) is not int or not 0 <= value <= w for value in column_bounds) or any(a >= b for a, b in zip(column_bounds, column_bounds[1:])):
+            raise ValueError(f"{actor}: invalid authored column bounds")
+        xb=list(column_bounds)
+    elif fixed_cell_root:
         xb=[round(i*w/columns) for i in range(columns+1)]
     yb=boundaries(ys,h,2,f"{actor} side-walk rows")
     spec=ACTORS[actor]
@@ -435,6 +441,8 @@ def build() -> tuple[dict,dict]:
     reports["announcer"]["walk_side_atlas"]={k:v for k,v in announcer_walk_report.items() if k!="frames"}
     imp_walk_report=add_npc_side_walk(actors["imp"], "imp", IMP_SIDE_WALK, 4, IMP_SIDE_SCALE, fixed_cell_root=True)
     reports["imp"]["walk_side_atlas"]={k:v for k,v in imp_walk_report.items() if k!="frames"}
+    ticket_walk_report=add_npc_side_walk(actors["ticket"], "ticket", TICKET_SIDE_WALK, 4, TICKET_SIDE_SCALE, fixed_cell_root=True, column_bounds=(48,464,880,1296,1712))
+    reports["ticket"]["walk_side_atlas"]={k:v for k,v in ticket_walk_report.items() if k!="frames"}
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
@@ -450,7 +458,7 @@ def build() -> tuple[dict,dict]:
                 elif isinstance(directions, dict) and isinstance(actors[actor][action], dict):
                     for direction, entry in directions.items():
                         actors[actor][action].setdefault(direction, entry)
-    manifest={"schema_version":1,"description":"Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.","runtime_aliases":{"traveller":{"station_stand":"idle/front/frame_0 (same authored frame; not a separate animation)"},"ticket":{"special":"idle_gesture/front (runtime alias; no duplicate frames)"}},"coverage_notes":{"traveller":TRAVELLER_COVERAGE_NOTE,"traveller_outfit_coral":"Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.","ticket":"Walk row is only a walk_candidate pending authored validation.","imp":"42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.","announcer":"Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."},"actors":actors}
+    manifest={"schema_version":1,"description":"Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.","runtime_aliases":{"traveller":{"station_stand":"idle/front/frame_0 (same authored frame; not a separate animation)"},"ticket":{"special":"idle_gesture/front (runtime alias; no duplicate frames)"}},"coverage_notes":{"traveller":TRAVELLER_COVERAGE_NOTE,"traveller_outfit_coral":"Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.","ticket":"Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.","imp":"42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.","announcer":"Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."},"actors":actors}
     apply_authoring_metadata(manifest)
     return manifest,reports
 
@@ -502,10 +510,10 @@ def main() -> int:
                 if jump["source_size"] != [2172,724]: failures.append("traveller/jump/front: source atlas dimensions changed")
             side_walk=report.get("walk_side_atlas")
             if side_walk:
-                if side_walk["frame_count"] != 8 or side_walk["registered_frames_per_direction"] != 4 or (actor=="announcer" and not side_walk["repeated_cells_excluded"]): failures.append("announcer: expected only four unique authored side-walk frames per direction")
-                if side_walk["primary_alpha_boundary_hits"]: failures.append(f"announcer side-walk: {side_walk['primary_alpha_boundary_hits']} strong silhouettes touch split")
-                if min(side_walk["canonical_margins_min_px"].values()) <= 2: failures.append("announcer side-walk: strong-alpha margin is 2px or less")
-                if min(side_walk["canonical_aa_margins_min_px"].values()) < 0: failures.append("announcer side-walk: padded weak-alpha bounds exceed canonical canvas")
+                if side_walk["frame_count"] != 8 or side_walk["registered_frames_per_direction"] != 4 or (actor=="announcer" and not side_walk["repeated_cells_excluded"]): failures.append(f"{actor}: expected four unique authored side-walk frames per direction")
+                if side_walk["primary_alpha_boundary_hits"]: failures.append(f"{actor} side-walk: {side_walk['primary_alpha_boundary_hits']} strong silhouettes touch split")
+                if min(side_walk["canonical_margins_min_px"].values()) <= 2: failures.append(f"{actor} side-walk: strong-alpha margin is 2px or less")
+                if min(side_walk["canonical_aa_margins_min_px"].values()) < 0: failures.append(f"{actor} side-walk: padded weak-alpha bounds exceed canonical canvas")
             print(json.dumps({k:v for k,v in report.items() if k!="frames"},ensure_ascii=False))
         if failures:
             print("FAIL: "+"; ".join(failures),file=sys.stderr); return 1
