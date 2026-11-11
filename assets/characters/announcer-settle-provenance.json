@@ -1,0 +1,27 @@
+{
+  "ticket": "ART-17",
+  "date": "2026-11-11",
+  "generator": "image_gen.imagegen",
+  "source": "announcer-settle-sides-v1.png",
+  "references": [
+    "announcer-walk-sides-v2.png",
+    "announcer-front-actions-v2.png"
+  ],
+  "registration": {
+    "columns": 4,
+    "rows": 2,
+    "column_bounds": [
+      48,
+      464,
+      880,
+      1296,
+      1712
+    ],
+    "uniform_source_scale": 0.4,
+    "shared_row_ground": true,
+    "per_frame_recenter": false,
+    "mirrored": false
+  },
+  "prompt": "Use case: identity-preserve. Asset type: transparent sprite atlas for a production game. Reference image 1 is EXACT Announcer sailor NPC side walk. Reference image 2 is exact FRONT resting identity; use its first neutral figure. Create TWO ROWS by FOUR COLUMNS full-body in-place side-to-front stop TURN animation. Row 1 orientations: 1 RIGHT profile both feet planted below hips, hands relaxed; 2 quarter RIGHT-to-front rotation about 30 degrees; 3 almost FRONT about15 degrees; 4 FRONT original neutral stance feet spaced apart, arms relaxed. Row 2 counterparts start LEFT profile and smoothly turn through two opposite-side intermediate angles to same FRONT neutral. Keep actual identity: chibi chestnut brown swept hair, cream WHITE sailor beret with small dark navy anchor and dark blue band, mustard YELLOW open raincoat to upper thigh, navy/white horizontal striped shirt visible only in chest opening, dark teal shorts and mustard yellow rubber boots with dark teal soles. No bag, scarf, glasses or telescope. Preserve outfit layers, hat angle and anchor placement, complete fingers/arms and two complete connected legs, both ears as appropriate to real view. Consistent compact chibi proportions and precisely same volume at all angles; no very long neck/legs. Match source crisp chunky pixel clusters, no smooth painterly details. Match exact proportions of the FRONT reference for FINAL stance, shoulder/coat and head width and toe-out boot stance; not a narrow-kneed silhouette. Every frame has fixed pelvis root, same head/ground height, shared row baseline and same scale, generous clear margins within identical cells. Whole body remains within its cell, equal transparent gutters. This is calm planted pivot, no walking, lifted knees, detached limbs, mirroring/reused parts, shadows, labels or background. Genuinely transparent background. Four DISTINCT turning orientations per row, no duplicates.",
+  "scope": "Eight independent complete side-to-front stop poses, using the existing finite action pipeline; not all-direction actor completion."
+}

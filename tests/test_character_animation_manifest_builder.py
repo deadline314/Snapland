@@ -15,6 +15,16 @@ SPEC.loader.exec_module(BUILDER)
 
 
 class CharacterAnimationManifestBuilderTests(unittest.TestCase):
+    def test_announcer_turn_has_complete_finite_sources(self):
+        after, reports = BUILDER.build()
+        for direction in ("right", "left"):
+            sequence = after["actors"]["announcer"].get("settle", {}).get(direction, {})
+            self.assertEqual(4, len(sequence.get("frames", [])))
+            self.assertFalse(sequence["loop"])
+            self.assertEqual("front", sequence["return_direction"])
+            self.assertEqual(10, sequence["fps"])
+        self.assertEqual(8, reports["announcer"]["settle_side_atlas"]["frame_count"])
+
     def test_ticket_turn_is_finite_and_keeps_existing_sources_and_wardrobe(self):
         before = json.loads(BUILDER.OUT.read_text(encoding="utf-8"))
         after, reports = BUILDER.build()

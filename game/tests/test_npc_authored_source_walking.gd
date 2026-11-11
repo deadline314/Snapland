@@ -99,6 +99,8 @@ func _run() -> void:
 	var ticket_start: Vector3 = anchors.ticket.position
 	var imp_start: Vector3 = anchors.imp.position
 	var announcer_start: Vector3 = anchors.announcer.position
+	var announcer_previous_position: Vector3 = announcer_start
+	var announcer_settle_seen := {"right": {}, "left": {}}
 	var ticket_persona := false
 	var imp_persona := false
 	var moved_right := false
@@ -148,6 +150,13 @@ func _run() -> void:
 			imp_directions[heading] = true
 			imp_seen[heading][index] = true
 		var right_record: Dictionary = controller._records[int(role_indices.announcer)]
+		if String(right_record.action) == "settle":
+			_check(anchors.announcer.position.is_equal_approx(announcer_previous_position), "announcer root stays planted throughout the authored stop turn")
+			var turn_sequence: Dictionary = right_record.action_sequence
+			var turn_index: int = Library.AnimationTiming.frame_at_time(turn_sequence, float(right_record.action_elapsed))
+			announcer_settle_seen[String(right_record.direction)][turn_index] = true
+			_check(actors.announcer.texture == controller._costume_texture("announcer", turn_sequence.frames[turn_index].texture), "announcer stop turn retains its complete source and costume")
+		announcer_previous_position = anchors.announcer.position
 		if String(right_record.action) == "walk":
 			var direction := String(right_record.direction)
 			if not announcer_sequences.has(direction):
@@ -180,6 +189,7 @@ func _run() -> void:
 	_check(imp_settle_seen.right.size() == 4 and imp_settle_seen.left.size() == 4, "imp naturally settles through all four full turn poses from both sides")
 	_check(ticket_persona and imp_persona, "ticket and imp naturally play persona actions during the two route cycles")
 	_check(moved_right and moved_left, "announcer naturally moves in both directions while its route plays authored frames")
+	_check(announcer_settle_seen.right.size() == 4 and announcer_settle_seen.left.size() == 4, "announcer naturally shows all eight side-to-front stop poses")
 	_check(anchors.announcer.position.distance_to(announcer_start) < 0.001, "announcer returns to its route origin after complete cycles")
 	for direction in ["right", "left"]:
 		var seen: Dictionary = announcer_sequences[direction].seen

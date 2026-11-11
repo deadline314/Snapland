@@ -974,6 +974,9 @@ func _update_announcer_action(record: Dictionary) -> void:
 	var index := _record_index(record)
 	if direction.is_empty():
 		if current_action == "walk":
+			if _has_sequence("announcer", "settle", current_direction):
+				_play_actor_action(index, "settle", current_direction, true)
+				return
 			var rest_started := float(record.get("route_rest_started", -1.0))
 			if rest_started < 0.0:
 				record.route_rest_started = _action_clock

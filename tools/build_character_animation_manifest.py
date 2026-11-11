@@ -12,6 +12,8 @@ AUTHORING = ROOT / "assets/characters/animation-authoring.json"
 TRAVELLER_VARIANT = ROOT / "assets/characters/traveller-vest-actions-v1.png"
 ANNOUNCER_SIDE_WALK = ROOT / "assets/characters/announcer-walk-sides-v2.png"
 ANNOUNCER_SIDE_SCALE = 0.54
+ANNOUNCER_SIDE_SETTLE = ROOT / "assets/characters/announcer-settle-sides-v1.png"
+ANNOUNCER_SETTLE_SCALE = 0.40
 IMP_SIDE_WALK = ROOT / "assets/characters/imp-walk-sides-v1.png"
 IMP_SIDE_SCALE = 0.395
 IMP_SIDE_SETTLE = ROOT / "assets/characters/imp-settle-sides-v1.png"
@@ -442,6 +444,8 @@ def build() -> tuple[dict,dict]:
     reports["traveller"]["jump_front"]={k:v for k,v in jump_report.items() if k not in ("frames","variant_frames")}
     announcer_walk_report=add_npc_side_action(actors["announcer"], "announcer", ANNOUNCER_SIDE_WALK, 8, ANNOUNCER_SIDE_SCALE)
     reports["announcer"]["walk_side_atlas"]={k:v for k,v in announcer_walk_report.items() if k!="frames"}
+    announcer_settle_report=add_npc_side_action(actors["announcer"], "announcer", ANNOUNCER_SIDE_SETTLE, 4, ANNOUNCER_SETTLE_SCALE, fixed_cell_root=True, column_bounds=(48,464,880,1296,1712), action="settle", fps=10, loop=False, return_direction="front")
+    reports["announcer"]["settle_side_atlas"]={k:v for k,v in announcer_settle_report.items() if k!="frames"}
     imp_walk_report=add_npc_side_action(actors["imp"], "imp", IMP_SIDE_WALK, 4, IMP_SIDE_SCALE, fixed_cell_root=True)
     reports["imp"]["walk_side_atlas"]={k:v for k,v in imp_walk_report.items() if k!="frames"}
     imp_settle_report=add_npc_side_action(actors["imp"], "imp", IMP_SIDE_SETTLE, 4, IMP_SIDE_SCALE, fixed_cell_root=True, action="settle", fps=10, loop=False, return_direction="front")
@@ -518,7 +522,7 @@ def main() -> int:
             for side_action in ("walk_side_atlas", "settle_side_atlas"):
                 side_walk=report.get(side_action)
                 if not side_walk: continue
-                if side_walk["frame_count"] != 8 or side_walk["registered_frames_per_direction"] != 4 or (actor=="announcer" and not side_walk["repeated_cells_excluded"]): failures.append(f"{actor}: expected four unique authored side-walk frames per direction")
+                if side_walk["frame_count"] != 8 or side_walk["registered_frames_per_direction"] != 4 or (actor=="announcer" and side_action=="walk_side_atlas" and not side_walk["repeated_cells_excluded"]): failures.append(f"{actor}: expected four unique authored side-action frames per direction")
                 if side_walk["primary_alpha_boundary_hits"]: failures.append(f"{actor} side-walk: {side_walk['primary_alpha_boundary_hits']} strong silhouettes touch split")
                 if min(side_walk["canonical_margins_min_px"].values()) <= 2: failures.append(f"{actor} side-walk: strong-alpha margin is 2px or less")
                 if min(side_walk["canonical_aa_margins_min_px"].values()) < 0: failures.append(f"{actor} side-walk: padded weak-alpha bounds exceed canonical canvas")

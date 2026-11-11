@@ -14453,6 +14453,222 @@
             }
           ]
         }
+      },
+      "settle": {
+        "right": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                159,
+                17,
+                202,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  97,
+                  393
+                ],
+                "head": [
+                  115,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                567,
+                17,
+                207,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  105,
+                  393
+                ],
+                "head": [
+                  113,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                996,
+                18,
+                210,
+                394
+              ],
+              "anchors": {
+                "feet": [
+                  92,
+                  392
+                ],
+                "head": [
+                  111,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                1418,
+                17,
+                202,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  86,
+                  393
+                ],
+                "head": [
+                  104,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            }
+          ],
+          "return_direction": "front"
+        },
+        "left": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                129,
+                460,
+                208,
+                396
+              ],
+              "anchors": {
+                "feet": [
+                  127,
+                  394
+                ],
+                "head": [
+                  95,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                559,
+                460,
+                206,
+                396
+              ],
+              "anchors": {
+                "feet": [
+                  113,
+                  394
+                ],
+                "head": [
+                  96,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                983,
+                461,
+                209,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  105,
+                  393
+                ],
+                "head": [
+                  101,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                1418,
+                461,
+                202,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  86,
+                  393
+                ],
+                "head": [
+                  104,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            }
+          ],
+          "return_direction": "front"
+        }
       }
     }
   },

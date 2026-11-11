@@ -23,7 +23,8 @@ func _observe_authored_patrol(role: String, observe_settle := false) -> void:
 			positions[JSON.stringify(_actor_anchor())] = true
 			if direction in seen and consistent and not seen[direction].has(index):
 				seen[direction][index] = true
-				samples.append({"direction":direction, "frame":index, "anchor":_actor_anchor(), "phase":record.authored_patrol.phase, "simulation_seconds":_simulated_seconds})
+				var patrol: RefCounted = record.get("authored_patrol")
+				samples.append({"direction":direction, "frame":index, "anchor":_actor_anchor(), "phase":patrol.phase if patrol != null else null, "motion_driver":"distance-patrol" if patrol != null else "authored-route-track", "simulation_seconds":_simulated_seconds})
 				var capture := get_viewport().get_texture().get_image()
 				_store_capture("walk-%s-%d" % [direction,index], capture)
 		elif observe_settle and String(record.get("action", "")) == "settle":
