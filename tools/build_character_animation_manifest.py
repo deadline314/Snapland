@@ -17,6 +17,7 @@ IMP_SIDE_SCALE = 0.395
 IMP_SIDE_SETTLE = ROOT / "assets/characters/imp-settle-sides-v1.png"
 TICKET_SIDE_WALK = ROOT / "assets/characters/ticket-walk-sides-v1.png"
 TICKET_SIDE_SCALE = 0.432
+TICKET_SIDE_SETTLE = ROOT / "assets/characters/ticket-settle-sides-v1.png"
 TRAVELLER_JUMP = ROOT / "assets/characters/traveller-jump-front-v1.png"
 # One sequence-wide scale derived from the largest row-baseline-preserving crop:
 # 360 canonical px / (1.6 actor scale * 343 source px) ~= 0.656.
@@ -447,6 +448,8 @@ def build() -> tuple[dict,dict]:
     reports["imp"]["settle_side_atlas"]={k:v for k,v in imp_settle_report.items() if k!="frames"}
     ticket_walk_report=add_npc_side_action(actors["ticket"], "ticket", TICKET_SIDE_WALK, 4, TICKET_SIDE_SCALE, fixed_cell_root=True, column_bounds=(48,464,880,1296,1712))
     reports["ticket"]["walk_side_atlas"]={k:v for k,v in ticket_walk_report.items() if k!="frames"}
+    ticket_settle_report=add_npc_side_action(actors["ticket"], "ticket", TICKET_SIDE_SETTLE, 4, TICKET_SIDE_SCALE, fixed_cell_root=True, column_bounds=(48,464,880,1296,1712), action="settle", fps=10, loop=False, return_direction="front")
+    reports["ticket"]["settle_side_atlas"]={k:v for k,v in ticket_settle_report.items() if k!="frames"}
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.

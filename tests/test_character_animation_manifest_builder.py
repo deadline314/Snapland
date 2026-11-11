@@ -15,6 +15,24 @@ SPEC.loader.exec_module(BUILDER)
 
 
 class CharacterAnimationManifestBuilderTests(unittest.TestCase):
+    def test_ticket_turn_is_finite_and_keeps_existing_sources_and_wardrobe(self):
+        before = json.loads(BUILDER.OUT.read_text(encoding="utf-8"))
+        after, reports = BUILDER.build()
+        for direction in ("right", "left"):
+            sequence = after["actors"]["ticket"].get("settle", {}).get(direction, {})
+            self.assertEqual(4, len(sequence.get("frames", [])))
+            self.assertFalse(sequence["loop"])
+            self.assertEqual("front", sequence["return_direction"])
+            self.assertEqual(10, sequence["fps"])
+        self.assertEqual(8, reports["ticket"]["settle_side_atlas"]["frame_count"])
+        for actor, actions in before["actors"].items():
+            for action, value in actions.items():
+                if actor == "ticket" and action == "settle":
+                    continue
+                self.assertEqual(value, after["actors"][actor][action], (actor, action))
+        for key in ("outfit_modes", "outfit_required_poses"):
+            self.assertEqual(before[key], after[key])
+
     def test_stale_or_invalid_authoring_input_cannot_overwrite_manifest(self):
         approved = json.loads(BUILDER.AUTHORING.read_text(encoding="utf-8"))
         damaged_inputs = []

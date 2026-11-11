@@ -108,6 +108,8 @@ func _run() -> void:
 	var imp_settle_seen := {"right": {}, "left": {}}
 	var imp_previous_position: Vector3 = anchors.imp.position
 	var ticket_seen := {"right": {}, "left": {}}
+	var ticket_settle_seen := {"right": {}, "left": {}}
+	var ticket_previous_position: Vector3 = anchors.ticket.position
 	var tick_count := ceili(CYCLE_SECONDS * 2.0 / TICK_SECONDS)
 	for _tick in range(tick_count):
 		# Advance the authored route track and the controller explicitly. No scene
@@ -115,6 +117,13 @@ func _run() -> void:
 		controller._player.advance(TICK_SECONDS)
 		controller._process(TICK_SECONDS)
 		var ticket_record: Dictionary = controller._records[int(role_indices.ticket)]
+		if String(ticket_record.action) == "settle":
+			_check(anchors.ticket.position == ticket_previous_position, "ticket root remains planted throughout the authored turn")
+			var turn_sequence: Dictionary = ticket_record.action_sequence
+			var turn_index: int = Library.AnimationTiming.frame_at_time(turn_sequence, float(ticket_record.action_elapsed))
+			ticket_settle_seen[String(ticket_record.direction)][turn_index] = true
+			_check(actors.ticket.texture == turn_sequence.frames[turn_index].texture, "ticket turn uses the complete source at its authored time")
+		ticket_previous_position = anchors.ticket.position
 		_check(anchors.ticket.position.x >= ticket_start.x - 0.00001 and anchors.ticket.position.x <= ticket_start.x + 1.20001 and is_equal_approx(anchors.ticket.position.z, ticket_start.z), "ticket patrol stays on the plaza side of its starting point")
 		if String(ticket_record.action) == "walk":
 			var heading := String(ticket_record.direction)
@@ -160,12 +169,13 @@ func _run() -> void:
 				moved_right = true
 			if direction == "left" and current_position.distance_to(announcer_start) > 0.01:
 				moved_left = true
-		if String(controller._records[int(role_indices.ticket)].action) not in ["stand", "idle", "walk"]:
+		if String(controller._records[int(role_indices.ticket)].action) not in ["stand", "idle", "walk", "settle"]:
 			ticket_persona = true
 		if String(controller._records[int(role_indices.imp)].action) not in ["stand", "idle", "walk", "settle"]:
 			imp_persona = true
 
 	_check(ticket_seen.right.size() == 4 and ticket_seen.left.size() == 4, "ticket naturally shows all eight side poses on a complete outbound and return path")
+	_check(ticket_settle_seen.right.size() == 4 and ticket_settle_seen.left.size() == 4, "ticket naturally settles through all four complete turn poses from both sides")
 	_check(imp_directions.size() == 2 and imp_seen.right.size() == 4 and imp_seen.left.size() == 4, "imp patrol reaches both directions and all eight source poses")
 	_check(imp_settle_seen.right.size() == 4 and imp_settle_seen.left.size() == 4, "imp naturally settles through all four full turn poses from both sides")
 	_check(ticket_persona and imp_persona, "ticket and imp naturally play persona actions during the two route cycles")

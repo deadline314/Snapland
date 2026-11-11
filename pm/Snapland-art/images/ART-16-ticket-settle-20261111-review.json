@@ -1,0 +1,2532 @@
+{
+  "date": "2026-11-11",
+  "ticket": "ART-16",
+  "base_commit": "28fb8f77b33cf56a500904a9bb0cd8de645f1916",
+  "human_played": false,
+  "human_audio_review": false,
+  "visual_review": "Viewed eight normal settle keys, selected quarter and PCK keys; not continuous human video playback.",
+  "audio_driver": "Dummy",
+  "renderer": "gl_compatibility",
+  "source_sha256": {
+    "assets/characters/ticket-settle-sides-v1.png": "004e7b26e97bca98c8b3a378bc5aeb5103e632f36793729e4f5221665173be75",
+    "assets/characters/ticket-walk-sides-v1.png": "4446b03de300e5cec962e6c908eecf75159d5ed2f5dd504b0894d6e7b844c9b3",
+    "assets/characters/ticket-front-actions-v2.png": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1",
+    "assets/characters/complete-animation-regions.json": "71def04a96413be13d151e482fc81fbcc72627e9e5a3e3b2951b2cb6c596a2bb",
+    "tools/build_character_animation_manifest.py": "d093cfbd06d2eeeb3e97481189c36e46c954e7304e6f51e78939b2a0ce62fd15"
+  },
+  "runs": {
+    "normal": {
+      "native_report": {
+        "actions": [
+          {
+            "action": "walk",
+            "anchor": {
+              "x": -3.79999995231628,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "authored_frames": 4,
+            "authored_or_rig_source": "authored",
+            "detail": {
+              "distinct_positions": 82,
+              "npc_root_repositioned": false,
+              "samples": [
+                {
+                  "anchor": {
+                    "x": -3.76999998092651,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 0,
+                  "phase": 0.0249999761581421,
+                  "simulation_seconds": 2.05833333333334
+                },
+                {
+                  "anchor": {
+                    "x": -3.47000026702881,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 1,
+                  "phase": 0.274999737739563,
+                  "simulation_seconds": 2.39166666666667
+                },
+                {
+                  "anchor": {
+                    "x": -3.1700005531311,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 2,
+                  "phase": 0.524999499320984,
+                  "simulation_seconds": 2.725
+                },
+                {
+                  "anchor": {
+                    "x": -2.8700008392334,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 3,
+                  "phase": 0.774999260902405,
+                  "simulation_seconds": 3.05833333333333
+                },
+                {
+                  "anchor": {
+                    "x": -2.62999987602234,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 0,
+                  "phase": 0.025000015894572,
+                  "simulation_seconds": 10.4916666666666
+                },
+                {
+                  "anchor": {
+                    "x": -2.92999958992004,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 1,
+                  "phase": 0.274999777475993,
+                  "simulation_seconds": 10.825
+                },
+                {
+                  "anchor": {
+                    "x": -3.22999930381775,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 2,
+                  "phase": 0.524999539057414,
+                  "simulation_seconds": 11.1583333333333
+                },
+                {
+                  "anchor": {
+                    "x": -3.52999901771545,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 3,
+                  "phase": 0.774999300638835,
+                  "simulation_seconds": 11.4916666666666
+                }
+              ],
+              "seen": {
+                "left": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                },
+                "right": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                }
+              },
+              "settle_seen": {
+                "left": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                },
+                "right": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                }
+              },
+              "settled": true,
+              "simulation_seconds": 11.7666666666666,
+              "source_consistent": true
+            },
+            "direction": "right",
+            "gait_position": {},
+            "label": "grounded-ticket-patrol",
+            "predicate": true,
+            "source": "authored",
+            "status": "observed"
+          }
+        ],
+        "actor": "ticket",
+        "camera_framing": {
+          "actor_scale_or_npc_route_changed": false,
+          "camera_up_shift": 0.18215454949273,
+          "correction_pinned": true,
+          "fixture_adjusted_camera": true,
+          "foot_padding_pixels": 97.074462890625,
+          "full_silhouette_inside_hud_safe_viewport": true,
+          "head_padding_pixels": 97.0740661621094,
+          "hud_safe_bottom": 636.0,
+          "hud_safe_top": 116.0,
+          "orthographic_size": 5.0,
+          "pin_simulation_seconds": 0.458333333333333,
+          "sprite_alpha_screen_rect": [
+            541.257202148438,
+            213.074066162109,
+            193.371520996094,
+            325.851470947266
+          ]
+        },
+        "camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+        "camera_size": 5.0,
+        "capture_png": [
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-start.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-walk-right-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-walk-right-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-walk-right-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-walk-right-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settle-right-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settle-right-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settle-right-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settle-right-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-walk-left-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-walk-left-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-walk-left-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-walk-left-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settle-left-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settle-left-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settle-left-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settle-left-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\normal/ticket-settled.png"
+        ],
+        "captured_frame_framing": [
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 97.074462890625,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0740661621094,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                541.257202148438,
+                213.074066162109,
+                189.257202148438,
+                325.851470947266
+              ]
+            },
+            "label": "start"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5426940917969,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                553.60009765625,
+                215.542694091797,
+                175.268615722656,
+                320.914215087891
+              ]
+            },
+            "label": "walk-right-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5426940917969,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                550.308715820313,
+                215.542694091797,
+                174.445739746094,
+                320.914215087891
+              ]
+            },
+            "label": "walk-right-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.543212890625,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5425567626953,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                548.663024902344,
+                215.542556762695,
+                178.559936523438,
+                320.914245605469
+              ]
+            },
+            "label": "walk-right-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5426940917969,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.840148925781,
+                215.542694091797,
+                174.445678710938,
+                320.914215087891
+              ]
+            },
+            "label": "walk-right-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.8968048095703,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                552.777221679688,
+                213.89680480957,
+                162.92578125,
+                322.560119628906
+              ]
+            },
+            "label": "settle-right-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0740661621094,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.840148925781,
+                213.074066162109,
+                171.977111816406,
+                323.382843017578
+              ]
+            },
+            "label": "settle-right-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.543212890625,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0740661621094,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                555.245788574219,
+                213.074066162109,
+                179.382934570313,
+                323.382720947266
+              ]
+            },
+            "label": "settle-right-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.54296875,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0740661621094,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                550.308715820313,
+                213.074066162109,
+                183.497131347656,
+                323.382965087891
+              ]
+            },
+            "label": "settle-right-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5426940917969,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                543.725830078125,
+                215.542694091797,
+                183.497192382813,
+                320.914215087891
+              ]
+            },
+            "label": "walk-left-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5425567626953,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                551.131469726563,
+                215.542556762695,
+                174.44580078125,
+                320.914367675781
+              ]
+            },
+            "label": "walk-left-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5425567626953,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                543.725830078125,
+                215.542556762695,
+                180.205749511719,
+                320.914367675781
+              ]
+            },
+            "label": "walk-left-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.54296875,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5426940917969,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.017211914063,
+                215.542694091797,
+                176.091491699219,
+                320.914337158203
+              ]
+            },
+            "label": "walk-left-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.8968048095703,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                561.005798339844,
+                213.89680480957,
+                168.685729980469,
+                322.560119628906
+              ]
+            },
+            "label": "settle-left-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.8969421386719,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.017211914063,
+                213.896942138672,
+                174.445739746094,
+                322.559967041016
+              ]
+            },
+            "label": "settle-left-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.543212890625,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0739288330078,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                549.485778808594,
+                213.073928833008,
+                185.142944335938,
+                323.382873535156
+              ]
+            },
+            "label": "settle-left-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5430908203125,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0740661621094,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.840026855469,
+                213.074066162109,
+                187.611511230469,
+                323.382843017578
+              ]
+            },
+            "label": "settle-left-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.18215454949273,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 97.074462890625,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0740661621094,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                541.257202148438,
+                213.074066162109,
+                193.371520996094,
+                325.851470947266
+              ]
+            },
+            "label": "settled"
+          }
+        ],
+        "complete_acceptance": false,
+        "encoded_movie_metadata": "pending ffprobe verification by root",
+        "ending_anchor": {
+          "x": -3.79999995231628,
+          "y": 0.0,
+          "z": 5.0
+        },
+        "expected_movie_fps": 0.0,
+        "expected_movie_slowdown_factor": 1.0,
+        "failures": [],
+        "fixed_fps": 30.0,
+        "fixture": "Main-backed native island animation acceptance",
+        "grounded_ticket_patrol": {
+          "distinct_positions": 82,
+          "npc_root_repositioned": false,
+          "samples": [
+            {
+              "anchor": {
+                "x": -3.76999998092651,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 0,
+              "phase": 0.0249999761581421,
+              "simulation_seconds": 2.05833333333334
+            },
+            {
+              "anchor": {
+                "x": -3.47000026702881,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 1,
+              "phase": 0.274999737739563,
+              "simulation_seconds": 2.39166666666667
+            },
+            {
+              "anchor": {
+                "x": -3.1700005531311,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 2,
+              "phase": 0.524999499320984,
+              "simulation_seconds": 2.725
+            },
+            {
+              "anchor": {
+                "x": -2.8700008392334,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 3,
+              "phase": 0.774999260902405,
+              "simulation_seconds": 3.05833333333333
+            },
+            {
+              "anchor": {
+                "x": -2.62999987602234,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 0,
+              "phase": 0.025000015894572,
+              "simulation_seconds": 10.4916666666666
+            },
+            {
+              "anchor": {
+                "x": -2.92999958992004,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 1,
+              "phase": 0.274999777475993,
+              "simulation_seconds": 10.825
+            },
+            {
+              "anchor": {
+                "x": -3.22999930381775,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 2,
+              "phase": 0.524999539057414,
+              "simulation_seconds": 11.1583333333333
+            },
+            {
+              "anchor": {
+                "x": -3.52999901771545,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 3,
+              "phase": 0.774999300638835,
+              "simulation_seconds": 11.4916666666666
+            }
+          ],
+          "seen": {
+            "left": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            },
+            "right": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            }
+          },
+          "settle_seen": {
+            "left": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            },
+            "right": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            }
+          },
+          "settled": true,
+          "simulation_seconds": 11.7666666666666,
+          "source_consistent": true
+        },
+        "hero_scripted_placement": true,
+        "human_played": false,
+        "human_visual_review": "pending",
+        "initial_actor_placement_changed": false,
+        "initial_actor_placement_note": "Selected NPC root and route are unchanged. The hero is repositioned near the NPC every fixture frame as a scripted camera helper; this is not natural hero movement evidence.",
+        "initial_grounding": {
+          "complete": true,
+          "grounded": true,
+          "grounding_method": "runtime Sprite ground-anchor with stationary NPC root",
+          "horizontal_speed": 0.0,
+          "simulation_seconds": 0.1,
+          "stable_process_frames": 3
+        },
+        "initial_hero_position": null,
+        "movie_duration_estimate_seconds": 12.2666666666667,
+        "movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+        "movie_fps_source": "Godot fixed movie process delta",
+        "movie_writer_active": true,
+        "movie_writer_frame_count": null,
+        "natural_action_windows": [],
+        "npc_activity_clock": 12.2916666666666,
+        "npc_roots_repositioned": false,
+        "placed_camera": true,
+        "playback_mode": "normal simulation time_scale=1.0",
+        "process_frames_in_run": 368,
+        "reduced_motion": false,
+        "scene_rebuild": false,
+        "scripted_input": true,
+        "segment_mode": "actions-only",
+        "simulation_seconds": 12.2916666666666,
+        "simulation_seconds_including_capture_and_startup": 12.2916666666666,
+        "starting_anchor": {
+          "x": -3.79999995231628,
+          "y": 0.0,
+          "z": 5.0
+        },
+        "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+        "technical_status": "PASS",
+        "wardrobe_profile": "default"
+      },
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "30/1",
+            "duration": "12.733333",
+            "nb_frames": "382"
+          }
+        ]
+      }
+    },
+    "quarter": {
+      "native_report": {
+        "actions": [
+          {
+            "action": "scene",
+            "anchor": {},
+            "authored_frames": 0,
+            "authored_or_rig_source": "pending",
+            "detail": {},
+            "direction": "rebuild",
+            "gait_position": {},
+            "label": "scene-before-rebuild",
+            "predicate": true,
+            "source": "pending",
+            "status": "observed"
+          },
+          {
+            "action": "walk",
+            "anchor": {
+              "x": -3.79999995231628,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "authored_frames": 4,
+            "authored_or_rig_source": "authored",
+            "detail": {
+              "distinct_positions": 322,
+              "npc_root_repositioned": false,
+              "samples": [
+                {
+                  "anchor": {
+                    "x": -3.79250001907349,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 0,
+                  "phase": 0.00624994436899821,
+                  "simulation_seconds": 2.34999999999999
+                },
+                {
+                  "anchor": {
+                    "x": -3.49250268936157,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 1,
+                  "phase": 0.256247719128926,
+                  "simulation_seconds": 2.68333333333333
+                },
+                {
+                  "anchor": {
+                    "x": -3.19250535964966,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 2,
+                  "phase": 0.506245493888856,
+                  "simulation_seconds": 3.01666666666666
+                },
+                {
+                  "anchor": {
+                    "x": -2.89250802993774,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 3,
+                  "phase": 0.756243268648782,
+                  "simulation_seconds": 3.34999999999999
+                },
+                {
+                  "anchor": {
+                    "x": -2.60749983787537,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 0,
+                  "phase": 0.00624998410542569,
+                  "simulation_seconds": 10.7583333333334
+                },
+                {
+                  "anchor": {
+                    "x": -2.90749716758728,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 1,
+                  "phase": 0.256247758865354,
+                  "simulation_seconds": 11.0916666666667
+                },
+                {
+                  "anchor": {
+                    "x": -3.20749449729919,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 2,
+                  "phase": 0.506245533625283,
+                  "simulation_seconds": 11.425
+                },
+                {
+                  "anchor": {
+                    "x": -3.50749182701111,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 3,
+                  "phase": 0.75624330838521,
+                  "simulation_seconds": 11.7583333333333
+                }
+              ],
+              "seen": {
+                "left": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                },
+                "right": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                }
+              },
+              "settle_seen": {
+                "left": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                },
+                "right": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                }
+              },
+              "settled": true,
+              "simulation_seconds": 12.0249999999999,
+              "source_consistent": true
+            },
+            "direction": "right",
+            "gait_position": {},
+            "label": "grounded-ticket-patrol",
+            "predicate": true,
+            "source": "authored",
+            "status": "observed"
+          }
+        ],
+        "actor": "ticket",
+        "camera_framing": {
+          "actor_scale_or_npc_route_changed": false,
+          "camera_up_shift": 0.180374569363064,
+          "correction_pinned": true,
+          "fixture_adjusted_camera": true,
+          "foot_padding_pixels": 97.0741577148438,
+          "full_silhouette_inside_hud_safe_viewport": true,
+          "head_padding_pixels": 97.0743408203125,
+          "hud_safe_bottom": 636.0,
+          "hud_safe_top": 116.0,
+          "orthographic_size": 5.0,
+          "pin_simulation_seconds": 0.458333333333334,
+          "sprite_alpha_screen_rect": [
+            541.257202148438,
+            213.074340820313,
+            193.371459960938,
+            325.851501464844
+          ]
+        },
+        "camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+        "camera_size": 5.0,
+        "capture_png": [
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-start.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-walk-right-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-walk-right-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-walk-right-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-walk-right-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settle-right-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settle-right-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settle-right-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settle-right-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-walk-left-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-walk-left-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-walk-left-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-walk-left-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settle-left-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settle-left-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settle-left-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settle-left-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\quarter/ticket-settled.png"
+        ],
+        "captured_frame_framing": [
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 97.0741577148438,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0743408203125,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                541.257202148438,
+                213.074340820313,
+                193.371459960938,
+                325.851501464844
+              ]
+            },
+            "label": "start"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5431060791016,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                553.600036621094,
+                215.543106079102,
+                175.268615722656,
+                320.914123535156
+              ]
+            },
+            "label": "walk-right-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                550.30859375,
+                215.54296875,
+                174.44580078125,
+                320.914245605469
+              ]
+            },
+            "label": "walk-right-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5426635742188,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                548.662902832031,
+                215.54296875,
+                178.559997558594,
+                320.914367675781
+              ]
+            },
+            "label": "walk-right-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                547.840026855469,
+                215.54296875,
+                174.44580078125,
+                320.914245605469
+              ]
+            },
+            "label": "walk-right-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.897216796875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                552.777221679688,
+                213.897216796875,
+                162.925720214844,
+                322.559997558594
+              ]
+            },
+            "label": "settle-right-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0744781494141,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                547.840026855469,
+                213.074478149414,
+                171.977233886719,
+                323.382751464844
+              ]
+            },
+            "label": "settle-right-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0743408203125,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                555.245727539063,
+                213.074340820313,
+                179.382934570313,
+                323.382873535156
+              ]
+            },
+            "label": "settle-right-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.54296875,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0743408203125,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                550.30859375,
+                213.074340820313,
+                183.497192382813,
+                323.382690429688
+              ]
+            },
+            "label": "settle-right-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5426635742188,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                543.725769042969,
+                215.54296875,
+                183.497192382813,
+                320.914367675781
+              ]
+            },
+            "label": "walk-left-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                551.131469726563,
+                215.54296875,
+                174.44580078125,
+                320.914245605469
+              ]
+            },
+            "label": "walk-left-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                543.725769042969,
+                215.54296875,
+                180.205749511719,
+                320.914245605469
+              ]
+            },
+            "label": "walk-left-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                547.017211914063,
+                215.54296875,
+                176.091430664063,
+                320.914245605469
+              ]
+            },
+            "label": "walk-left-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.897216796875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                561.005737304688,
+                213.897216796875,
+                168.685791015625,
+                322.559997558594
+              ]
+            },
+            "label": "settle-left-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.897216796875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                547.017211914063,
+                213.897216796875,
+                174.445739746094,
+                322.559997558594
+              ]
+            },
+            "label": "settle-left-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5426635742188,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0743408203125,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                549.485778808594,
+                213.074340820313,
+                185.142883300781,
+                323.382995605469
+              ]
+            },
+            "label": "settle-left-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0744781494141,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                547.840026855469,
+                213.074478149414,
+                187.611511230469,
+                323.382751464844
+              ]
+            },
+            "label": "settle-left-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.180374569363064,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 97.0741577148438,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0743408203125,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333334,
+              "sprite_alpha_screen_rect": [
+                541.257202148438,
+                213.074340820313,
+                193.371459960938,
+                325.851501464844
+              ]
+            },
+            "label": "settled"
+          }
+        ],
+        "complete_acceptance": false,
+        "encoded_movie_metadata": "pending ffprobe verification by root",
+        "ending_anchor": {
+          "x": -3.79999995231628,
+          "y": 0.0,
+          "z": 5.0
+        },
+        "expected_movie_fps": 0.0,
+        "expected_movie_slowdown_factor": 4.0,
+        "failures": [],
+        "fixed_fps": 30.0,
+        "fixture": "Main-backed native island animation acceptance",
+        "grounded_ticket_patrol": {
+          "distinct_positions": 322,
+          "npc_root_repositioned": false,
+          "samples": [
+            {
+              "anchor": {
+                "x": -3.79250001907349,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 0,
+              "phase": 0.00624994436899821,
+              "simulation_seconds": 2.34999999999999
+            },
+            {
+              "anchor": {
+                "x": -3.49250268936157,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 1,
+              "phase": 0.256247719128926,
+              "simulation_seconds": 2.68333333333333
+            },
+            {
+              "anchor": {
+                "x": -3.19250535964966,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 2,
+              "phase": 0.506245493888856,
+              "simulation_seconds": 3.01666666666666
+            },
+            {
+              "anchor": {
+                "x": -2.89250802993774,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 3,
+              "phase": 0.756243268648782,
+              "simulation_seconds": 3.34999999999999
+            },
+            {
+              "anchor": {
+                "x": -2.60749983787537,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 0,
+              "phase": 0.00624998410542569,
+              "simulation_seconds": 10.7583333333334
+            },
+            {
+              "anchor": {
+                "x": -2.90749716758728,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 1,
+              "phase": 0.256247758865354,
+              "simulation_seconds": 11.0916666666667
+            },
+            {
+              "anchor": {
+                "x": -3.20749449729919,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 2,
+              "phase": 0.506245533625283,
+              "simulation_seconds": 11.425
+            },
+            {
+              "anchor": {
+                "x": -3.50749182701111,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 3,
+              "phase": 0.75624330838521,
+              "simulation_seconds": 11.7583333333333
+            }
+          ],
+          "seen": {
+            "left": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            },
+            "right": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            }
+          },
+          "settle_seen": {
+            "left": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            },
+            "right": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            }
+          },
+          "settled": true,
+          "simulation_seconds": 12.0249999999999,
+          "source_consistent": true
+        },
+        "hero_scripted_placement": true,
+        "human_played": false,
+        "human_visual_review": "pending",
+        "initial_actor_placement_changed": false,
+        "initial_actor_placement_note": "Selected NPC root and route are unchanged. The hero is repositioned near the NPC every fixture frame as a scripted camera helper; this is not natural hero movement evidence.",
+        "initial_grounding": {
+          "complete": true,
+          "grounded": true,
+          "grounding_method": "runtime Sprite ground-anchor with stationary NPC root",
+          "horizontal_speed": 0.0,
+          "simulation_seconds": 0.0250000000000001,
+          "stable_process_frames": 3
+        },
+        "initial_hero_position": null,
+        "movie_duration_estimate_seconds": 49.9,
+        "movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+        "movie_fps_source": "Godot fixed movie process delta",
+        "movie_writer_active": true,
+        "movie_writer_frame_count": null,
+        "natural_action_windows": [],
+        "npc_activity_clock": 12.1666666666666,
+        "npc_roots_repositioned": false,
+        "placed_camera": true,
+        "playback_mode": "quarter simulation time_scale=0.25",
+        "process_frames_in_run": 1497,
+        "reduced_motion": false,
+        "scene_rebuild": true,
+        "scripted_input": true,
+        "segment_mode": "actions-only",
+        "simulation_seconds": 12.4999999999999,
+        "simulation_seconds_including_capture_and_startup": 12.4999999999999,
+        "starting_anchor": {
+          "x": -3.79999995231628,
+          "y": 0.0,
+          "z": 5.0
+        },
+        "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+        "technical_status": "PASS",
+        "wardrobe_profile": "default"
+      },
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "30/1",
+            "duration": "50.833333",
+            "nb_frames": "1525"
+          }
+        ]
+      }
+    },
+    "reduced": {
+      "native_report": {
+        "actions": [
+          {
+            "action": "scene",
+            "anchor": {},
+            "authored_frames": 0,
+            "authored_or_rig_source": "pending",
+            "detail": {},
+            "direction": "rebuild",
+            "gait_position": {},
+            "label": "scene-before-rebuild",
+            "predicate": true,
+            "source": "pending",
+            "status": "observed"
+          },
+          {
+            "action": "idle",
+            "anchor": {
+              "x": -3.79999995231628,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "authored_frames": 8,
+            "authored_or_rig_source": "authored",
+            "detail": {},
+            "direction": "front",
+            "gait_position": {},
+            "label": "reduced-motion",
+            "predicate": true,
+            "source": "authored",
+            "status": "observed"
+          }
+        ],
+        "actor": "ticket",
+        "camera_framing": {
+          "actor_scale_or_npc_route_changed": false,
+          "camera_up_shift": 0.273640758633727,
+          "correction_pinned": true,
+          "fixture_adjusted_camera": true,
+          "foot_padding_pixels": 87.1998291015625,
+          "full_silhouette_inside_hud_safe_viewport": true,
+          "head_padding_pixels": 87.1998291015625,
+          "hud_safe_bottom": 636.0,
+          "hud_safe_top": 116.0,
+          "orthographic_size": 5.0,
+          "pin_simulation_seconds": 1.29166666666667,
+          "sprite_alpha_screen_rect": [
+            551.954345703125,
+            203.199829101563,
+            176.091430664063,
+            345.600341796875
+          ]
+        },
+        "camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+        "camera_size": 5.0,
+        "capture_png": [
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\reduced/ticket-start.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\reduced/ticket-reduced-motion.png"
+        ],
+        "captured_frame_framing": [
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.273640758633727,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 87.1998291015625,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 87.1998291015625,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 1.29166666666667,
+              "sprite_alpha_screen_rect": [
+                551.954345703125,
+                203.199829101563,
+                176.091430664063,
+                345.600341796875
+              ]
+            },
+            "label": "start"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.273640758633727,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 87.1998291015625,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 87.1998291015625,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 1.29166666666667,
+              "sprite_alpha_screen_rect": [
+                551.954345703125,
+                203.199829101563,
+                176.091430664063,
+                345.600341796875
+              ]
+            },
+            "label": "reduced-motion"
+          }
+        ],
+        "complete_acceptance": false,
+        "encoded_movie_metadata": "pending ffprobe verification by root",
+        "ending_anchor": {
+          "x": -3.79999995231628,
+          "y": 0.0,
+          "z": 5.0
+        },
+        "expected_movie_fps": 0.0,
+        "expected_movie_slowdown_factor": 1.0,
+        "failures": [],
+        "fixed_fps": 30.0,
+        "fixture": "Main-backed native island animation acceptance",
+        "hero_scripted_placement": true,
+        "human_played": false,
+        "human_visual_review": "pending",
+        "initial_actor_placement_changed": false,
+        "initial_actor_placement_note": "Selected NPC root and route are unchanged. The hero is repositioned near the NPC every fixture frame as a scripted camera helper; this is not natural hero movement evidence.",
+        "initial_grounding": {
+          "complete": true,
+          "grounded": true,
+          "grounding_method": "runtime Sprite ground-anchor with stationary NPC root",
+          "horizontal_speed": 0.0,
+          "simulation_seconds": 0.1,
+          "stable_process_frames": 3
+        },
+        "initial_hero_position": null,
+        "movie_duration_estimate_seconds": 1.33333333333333,
+        "movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+        "movie_fps_source": "Godot fixed movie process delta",
+        "movie_writer_active": true,
+        "movie_writer_frame_count": null,
+        "natural_action_windows": [],
+        "npc_activity_clock": 0.0,
+        "npc_roots_repositioned": false,
+        "placed_camera": true,
+        "playback_mode": "normal simulation time_scale=1.0",
+        "process_frames_in_run": 40,
+        "reduced_motion": true,
+        "scene_rebuild": true,
+        "scripted_input": true,
+        "segment_mode": "actions-only",
+        "simulation_seconds": 1.35833333333333,
+        "simulation_seconds_including_capture_and_startup": 1.35833333333333,
+        "starting_anchor": {
+          "x": -3.79999995231628,
+          "y": 0.0,
+          "z": 5.0
+        },
+        "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+        "technical_status": "PASS",
+        "wardrobe_profile": "default"
+      },
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "30/1",
+            "duration": "1.800000",
+            "nb_frames": "54"
+          }
+        ]
+      }
+    },
+    "pack": {
+      "native_report": {
+        "actions": [
+          {
+            "action": "walk",
+            "anchor": {
+              "x": -3.79999995231628,
+              "y": 0.0,
+              "z": 5.0
+            },
+            "authored_frames": 4,
+            "authored_or_rig_source": "authored",
+            "detail": {
+              "distinct_positions": 82,
+              "npc_root_repositioned": false,
+              "samples": [
+                {
+                  "anchor": {
+                    "x": -3.76999998092651,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 0,
+                  "phase": 0.0249999761581421,
+                  "simulation_seconds": 2.05833333333334
+                },
+                {
+                  "anchor": {
+                    "x": -3.47000026702881,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 1,
+                  "phase": 0.274999737739563,
+                  "simulation_seconds": 2.39166666666667
+                },
+                {
+                  "anchor": {
+                    "x": -3.1700005531311,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 2,
+                  "phase": 0.524999499320984,
+                  "simulation_seconds": 2.725
+                },
+                {
+                  "anchor": {
+                    "x": -2.8700008392334,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "right",
+                  "frame": 3,
+                  "phase": 0.774999260902405,
+                  "simulation_seconds": 3.05833333333333
+                },
+                {
+                  "anchor": {
+                    "x": -2.62999987602234,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 0,
+                  "phase": 0.025000015894572,
+                  "simulation_seconds": 9.82499999999998
+                },
+                {
+                  "anchor": {
+                    "x": -2.92999958992004,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 1,
+                  "phase": 0.274999777475993,
+                  "simulation_seconds": 10.1583333333333
+                },
+                {
+                  "anchor": {
+                    "x": -3.22999930381775,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 2,
+                  "phase": 0.524999539057414,
+                  "simulation_seconds": 10.4916666666666
+                },
+                {
+                  "anchor": {
+                    "x": -3.52999901771545,
+                    "y": 0.0,
+                    "z": 5.0
+                  },
+                  "direction": "left",
+                  "frame": 3,
+                  "phase": 0.774999300638835,
+                  "simulation_seconds": 10.825
+                }
+              ],
+              "seen": {
+                "left": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                },
+                "right": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                }
+              },
+              "settle_seen": {
+                "left": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                },
+                "right": {
+                  "0": true,
+                  "1": true,
+                  "2": true,
+                  "3": true
+                }
+              },
+              "settled": true,
+              "simulation_seconds": 11.1,
+              "source_consistent": true
+            },
+            "direction": "right",
+            "gait_position": {},
+            "label": "grounded-ticket-patrol",
+            "predicate": true,
+            "source": "authored",
+            "status": "observed"
+          }
+        ],
+        "actor": "ticket",
+        "camera_framing": {
+          "actor_scale_or_npc_route_changed": false,
+          "camera_up_shift": 0.182155185275608,
+          "correction_pinned": true,
+          "fixture_adjusted_camera": true,
+          "foot_padding_pixels": 97.0741577148438,
+          "full_silhouette_inside_hud_safe_viewport": true,
+          "head_padding_pixels": 97.0742034912109,
+          "hud_safe_bottom": 636.0,
+          "hud_safe_top": 116.0,
+          "orthographic_size": 5.0,
+          "pin_simulation_seconds": 0.458333333333333,
+          "sprite_alpha_screen_rect": [
+            541.257202148438,
+            213.074203491211,
+            193.371520996094,
+            325.851623535156
+          ]
+        },
+        "camera_placement_note": "Review camera is framed on the live actor and foot baseline, framed once from the first complete, grounded and stationary live Sprite, then translated with the actor root using a fixed camera correction and 5-unit orthographic size. NPC roots, routes, and role scale remain unchanged.",
+        "camera_size": 5.0,
+        "capture_png": [
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-start.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-walk-right-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-walk-right-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-walk-right-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-walk-right-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settle-right-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settle-right-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settle-right-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settle-right-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-walk-left-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-walk-left-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-walk-left-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-walk-left-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settle-left-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settle-left-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settle-left-2.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settle-left-3.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\.review\\ticket-settle-20261111-v2\\pack/ticket-settled.png"
+        ],
+        "captured_frame_framing": [
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 97.0741577148438,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0742034912109,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                539.611450195313,
+                213.074203491211,
+                195.017272949219,
+                325.851623535156
+              ]
+            },
+            "label": "start"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                553.60009765625,
+                215.54296875,
+                175.268615722656,
+                320.914245605469
+              ]
+            },
+            "label": "walk-right-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                550.308715820313,
+                215.54296875,
+                174.445739746094,
+                320.914245605469
+              ]
+            },
+            "label": "walk-right-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.54296875,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5428314208984,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                548.663024902344,
+                215.542831420898,
+                178.559936523438,
+                320.914184570313
+              ]
+            },
+            "label": "walk-right-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.840148925781,
+                215.54296875,
+                174.445678710938,
+                320.914245605469
+              ]
+            },
+            "label": "walk-right-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.8970794677734,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                552.777282714844,
+                213.897079467773,
+                162.925720214844,
+                322.560119628906
+              ]
+            },
+            "label": "settle-right-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0742034912109,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.840148925781,
+                213.074203491211,
+                171.977111816406,
+                323.382995605469
+              ]
+            },
+            "label": "settle-right-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.54296875,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0742034912109,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                555.245788574219,
+                213.074203491211,
+                179.382934570313,
+                323.3828125
+              ]
+            },
+            "label": "settle-right-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5426635742188,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0742034912109,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                550.308715820313,
+                213.074203491211,
+                183.497131347656,
+                323.383117675781
+              ]
+            },
+            "label": "settle-right-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                543.725830078125,
+                215.54296875,
+                183.497192382813,
+                320.914245605469
+              ]
+            },
+            "label": "walk-left-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5428314208984,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                551.131469726563,
+                215.542831420898,
+                174.44580078125,
+                320.914367675781
+              ]
+            },
+            "label": "walk-left-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.5428314208984,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                543.725830078125,
+                215.542831420898,
+                180.205749511719,
+                320.914367675781
+              ]
+            },
+            "label": "walk-left-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5426635742188,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 99.54296875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.017211914063,
+                215.54296875,
+                176.091491699219,
+                320.914367675781
+              ]
+            },
+            "label": "walk-left-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.8970794677734,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                561.005798339844,
+                213.897079467773,
+                168.685729980469,
+                322.560119628906
+              ]
+            },
+            "label": "settle-left-0"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.897216796875,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.017211914063,
+                213.897216796875,
+                174.445739746094,
+                322.559997558594
+              ]
+            },
+            "label": "settle-left-1"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.54296875,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0740661621094,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                549.485778808594,
+                213.074066162109,
+                185.142944335938,
+                323.382965087891
+              ]
+            },
+            "label": "settle-left-2"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 99.5427856445313,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0742034912109,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                547.840026855469,
+                213.074203491211,
+                187.611511230469,
+                323.382995605469
+              ]
+            },
+            "label": "settle-left-3"
+          },
+          {
+            "framing": {
+              "actor_scale_or_npc_route_changed": false,
+              "camera_up_shift": 0.182155185275608,
+              "correction_pinned": true,
+              "fixture_adjusted_camera": true,
+              "foot_padding_pixels": 97.0741577148438,
+              "full_silhouette_inside_hud_safe_viewport": true,
+              "head_padding_pixels": 97.0742034912109,
+              "hud_safe_bottom": 636.0,
+              "hud_safe_top": 116.0,
+              "orthographic_size": 5.0,
+              "pin_simulation_seconds": 0.458333333333333,
+              "sprite_alpha_screen_rect": [
+                541.257202148438,
+                213.074203491211,
+                193.371520996094,
+                325.851623535156
+              ]
+            },
+            "label": "settled"
+          }
+        ],
+        "complete_acceptance": false,
+        "encoded_movie_metadata": "pending ffprobe verification by root",
+        "ending_anchor": {
+          "x": -3.79999995231628,
+          "y": 0.0,
+          "z": 5.0
+        },
+        "expected_movie_fps": 0.0,
+        "expected_movie_slowdown_factor": 1.0,
+        "failures": [],
+        "fixed_fps": 30.0,
+        "fixture": "Main-backed native island animation acceptance",
+        "grounded_ticket_patrol": {
+          "distinct_positions": 82,
+          "npc_root_repositioned": false,
+          "samples": [
+            {
+              "anchor": {
+                "x": -3.76999998092651,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 0,
+              "phase": 0.0249999761581421,
+              "simulation_seconds": 2.05833333333334
+            },
+            {
+              "anchor": {
+                "x": -3.47000026702881,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 1,
+              "phase": 0.274999737739563,
+              "simulation_seconds": 2.39166666666667
+            },
+            {
+              "anchor": {
+                "x": -3.1700005531311,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 2,
+              "phase": 0.524999499320984,
+              "simulation_seconds": 2.725
+            },
+            {
+              "anchor": {
+                "x": -2.8700008392334,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "right",
+              "frame": 3,
+              "phase": 0.774999260902405,
+              "simulation_seconds": 3.05833333333333
+            },
+            {
+              "anchor": {
+                "x": -2.62999987602234,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 0,
+              "phase": 0.025000015894572,
+              "simulation_seconds": 9.82499999999998
+            },
+            {
+              "anchor": {
+                "x": -2.92999958992004,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 1,
+              "phase": 0.274999777475993,
+              "simulation_seconds": 10.1583333333333
+            },
+            {
+              "anchor": {
+                "x": -3.22999930381775,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 2,
+              "phase": 0.524999539057414,
+              "simulation_seconds": 10.4916666666666
+            },
+            {
+              "anchor": {
+                "x": -3.52999901771545,
+                "y": 0.0,
+                "z": 5.0
+              },
+              "direction": "left",
+              "frame": 3,
+              "phase": 0.774999300638835,
+              "simulation_seconds": 10.825
+            }
+          ],
+          "seen": {
+            "left": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            },
+            "right": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            }
+          },
+          "settle_seen": {
+            "left": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            },
+            "right": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            }
+          },
+          "settled": true,
+          "simulation_seconds": 11.1,
+          "source_consistent": true
+        },
+        "hero_scripted_placement": true,
+        "human_played": false,
+        "human_visual_review": "pending",
+        "initial_actor_placement_changed": false,
+        "initial_actor_placement_note": "Selected NPC root and route are unchanged. The hero is repositioned near the NPC every fixture frame as a scripted camera helper; this is not natural hero movement evidence.",
+        "initial_grounding": {
+          "complete": true,
+          "grounded": true,
+          "grounding_method": "runtime Sprite ground-anchor with stationary NPC root",
+          "horizontal_speed": 0.0,
+          "simulation_seconds": 0.1,
+          "stable_process_frames": 3
+        },
+        "initial_hero_position": null,
+        "movie_duration_estimate_seconds": 11.6,
+        "movie_duration_source": "estimate before final cleanup from Godot process frames / reported fixed FPS; verify encoded file metadata and playback",
+        "movie_fps_source": "Godot fixed movie process delta",
+        "movie_writer_active": true,
+        "movie_writer_frame_count": null,
+        "natural_action_windows": [],
+        "npc_activity_clock": 11.625,
+        "npc_roots_repositioned": false,
+        "placed_camera": true,
+        "playback_mode": "normal simulation time_scale=1.0",
+        "process_frames_in_run": 348,
+        "reduced_motion": false,
+        "scene_rebuild": false,
+        "scripted_input": true,
+        "segment_mode": "actions-only",
+        "simulation_seconds": 11.625,
+        "simulation_seconds_including_capture_and_startup": 11.625,
+        "starting_anchor": {
+          "x": -3.79999995231628,
+          "y": 0.0,
+          "z": 5.0
+        },
+        "status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+        "technical_status": "PASS",
+        "wardrobe_profile": "default"
+      },
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "30/1",
+            "duration": "12.066667",
+            "nb_frames": "362"
+          }
+        ]
+      }
+    }
+  }
+}

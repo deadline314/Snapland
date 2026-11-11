@@ -95,3 +95,30 @@ Godot 4.7.2、Compatibility／llvmpipe、Dummy 音訊，固定離線錄影節拍
 ![回到原有完整待機](images/ART-16-imp-settle-20261111-settled.png)
 
 [正常速度影片](images/ART-16-imp-settle-20261111-normal.mp4) · [真實四分之一速度／重入](images/ART-16-imp-settle-20261111-quarter.mp4) · [結果、版本與指紋](images/ART-16-imp-settle-20261111-review.json) · [原生姿勢、測試、失敗與打包紀錄](images/ART-16-imp-settle-20261111-evidence.zip) · [四份原畫與完整提示](images/ART-16-imp-settle-20261111-sources.zip)。起始 SHA：`5a28e44`；分支：`codex/imp-authored-settle-20261111`。角色行為覆蓋與換裝依 ART-17、ART-18 原條件分別驗收。
+
+# Commit — 2026-11-11 補上票票停步回正面收勢
+
+## 內文
+
+票票走到路線端點時原本直接切回正面待機。現在從左右兩側各經過四張完整站定與轉身姿勢，再回到原有站姿；人物根位置在收勢期間保持不動，原有招呼、遞票與個性待機繼續可用。
+
+第一版末段雙腳過窄，原生檢視後重畫近正面與正面站距。第二版逐張核對完整四肢、眼鏡、髮型、短褲及右側斜背包，保留固定根點與共同行地面；沒有拆腿、鏡像或逐姿勢縮放。既有角色動作及換裝資料逐項相同，僅新增票票左右收勢。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 來源及重建 | 210 個來源區域檢查通過；5 項建置測試通過，含先失敗的缺少收勢反例與既有動作、衣物資料保留 |
+| 受影響回歸 | 匯入、NPC 完整來源步行、巡路、素材庫、狀態及腳底接地共 6 項通過 |
+| 原生正常 | 382 格／30 FPS／12.733 秒，左右各四張行走及收勢、82 個實際根位置與最後待機；exit 0、0 ERROR |
+| 真實四分之一速度及重入 | 1525 格／30 FPS／50.833 秒；重建後再次觀察完整往返、八張收勢與待機；exit 0、0 ERROR |
+| 降低動態及重入 | 54 格／30 FPS／1.800 秒，靜止完整人物及既有安全檢查通過；exit 0、0 ERROR |
+| 隔離 PCK | 來源指紋一致，包內再觀察完整往返、左右八張收勢與待機；362 格／30 FPS／12.067 秒，匯入、輸出及原生程序均 exit 0、0 ERROR |
+
+Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收勢、四分之一速度左右近正面與包內左向近正面；影片完成完整解碼檢查，不宣稱真人連續觀看、遊玩、試聽或即時性能。PCK 以相同引擎執行，不是獨立桌面執行檔。整票維持進行中。
+
+![右向收勢接近正面](images/ART-16-ticket-settle-20261111-right.png)
+![左向保留斜背包身份](images/ART-16-ticket-settle-20261111-left.png)
+![回到原有完整待機](images/ART-16-ticket-settle-20261111-settled.png)
+
+[正常影片](images/ART-16-ticket-settle-20261111-normal.mp4) · [四分之一速度／重入](images/ART-16-ticket-settle-20261111-quarter.mp4) · [降低動態](images/ART-16-ticket-settle-20261111-reduced.mp4) · [PCK 播放](images/ART-16-ticket-settle-20261111-pack.mp4) · [完整結果與來源指紋](images/ART-16-ticket-settle-20261111-review.json) · [原生姿勢、測試、初版與封裝紀錄](images/ART-16-ticket-settle-20261111-evidence.zip) · [兩版原畫與完整提示](images/ART-16-ticket-settle-20261111-sources.zip)。起始 SHA：`28fb8f7`；分支：`codex/ticket-delivery-20261111`。

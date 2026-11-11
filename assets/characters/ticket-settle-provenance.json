@@ -1,0 +1,37 @@
+{
+  "ticket": "ART-16",
+  "date": "2026-11-11",
+  "generator": "image_gen.imagegen",
+  "source": "ticket-settle-sides-v1.png",
+  "references": [
+    "ticket-walk-sides-v1.png",
+    "ticket-front-actions-v2.png"
+  ],
+  "registration": {
+    "columns": 4,
+    "rows": 2,
+    "column_bounds": [
+      48,
+      464,
+      880,
+      1296,
+      1712
+    ],
+    "uniform_source_scale": 0.432,
+    "shared_row_ground": true,
+    "per_frame_recenter": false,
+    "mirrored": false
+  },
+  "stages": [
+    {
+      "file": "01-ticket-turn.png",
+      "prompt": "Use case: identity-preserve. Asset type: transparent production game pixel-art sprite atlas. Input image 1 is the exact Ticket NPC side walking identity reference; input image 2 is the front resting identity reference, use FIRST neutral character only. Create exactly TWO ROWS and FOUR COLUMNS of complete whole-body Ticket NPC in-place stop-to-front turn poses. Row 1: right facing planted feet close under hips; quarter-right toward front; nearly front; exact FRONT resting stance. Row 2: left facing planted stance; quarter-left toward front; nearly front; exact same FRONT resting stance. Four clearly distinct orientations per row. Preserve this exact chibi brown swept hair, round black glasses, friendly closed mouth smile, blue hoodie with small cream zigzag chest motif, cream shorts exposing calves, brown ankle boots, brown crossbody satchel on character's ANATOMICAL RIGHT hip (viewer LEFT in front view); right hand grips satchel strap while left hand settles relaxed by side. Keep satchel identity correct through both sides, do not mirror accessories. Both feet remain planted at a shared floor with gentle pivot, never walking or raised knee. Same body volume, stable hair top, exact same scale, fixed root centered in every equal cell and shared row baseline. Pixel art with crisp pixel clusters matching reference; full body and both connected arms/legs visible; generous transparent margins/gutters. This is a natural four-key rotation from either side to front, not duplicate forward poses or a walk cycle. No ground shadows, text, extra characters, objects, matte or background. Genuinely transparent background. No squash/stretch, detached limbs or variable scale. Make front final pose match neutral reference so return to idle has no costume or pose pop.",
+      "decision": "Superseded: native final stance too narrow relative to the original idle."
+    },
+    {
+      "file": "02-ticket-turn-stance.png",
+      "prompt": "Edit the FIRST transparent 2x4 Ticket turning sprite sheet. Second image is the original FRONT IDENTITY. Keep FIRST TWO columns of both rows completely unchanged. Fix only third and fourth columns, preserving sheet dimensions, shared floor, root, top-of-hair height and character's height. In both FOURTH cells the legs/boots are too narrow together and the torso/head too slender, causing a visible pop when switching to original idle. Match exact original neutral proportions from second reference's FIRST character: broaden the head/hair silhouette 8%, torso and shoulder width 10%, cream shorts slightly wider, feet apart with two boot centers approximately a head-half-width apart, toes angle slightly outward. Both boots must be fully planted with air between the boots, not knees touching. The front stance's outer boot width should be about 70% of the widest hair width. Maintain total height and exact root. Right hand grips satchel strap on viewer LEFT, left hand down, satchel same anatomical right hip; do not mirror. Third cells interpolate smoothly toward this broader FRONT stance: slightly turn out the planted trailing boot and open the leg spacing, retain each actual opposite almost-front angle and correctly foreshorten the far shoulder. Do not make knees longer or increase height. Preserve face, round glasses, hoodie, original cream tiny zigzag, bag, whole limbs, low resolution pixel cluster style. Genuinely transparent, no shadow or extra texture. Exact TWO rows FOUR columns; all figures full body inside original cells. This fixes the end of a short side-to-front turn so its final key has the original front idle silhouette.",
+      "decision": "Accepted for the limited side-to-front stop transition after viewing all eight native normal keys, quarter-rate representatives and PCK playback samples. Does not complete all-direction animation acceptance."
+    }
+  ]
+}
