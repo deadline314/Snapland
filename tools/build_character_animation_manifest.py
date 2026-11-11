@@ -14,6 +14,7 @@ ANNOUNCER_SIDE_WALK = ROOT / "assets/characters/announcer-walk-sides-v2.png"
 ANNOUNCER_SIDE_SCALE = 0.54
 IMP_SIDE_WALK = ROOT / "assets/characters/imp-walk-sides-v1.png"
 IMP_SIDE_SCALE = 0.395
+IMP_SIDE_SETTLE = ROOT / "assets/characters/imp-settle-sides-v1.png"
 TICKET_SIDE_WALK = ROOT / "assets/characters/ticket-walk-sides-v1.png"
 TICKET_SIDE_SCALE = 0.432
 TRAVELLER_JUMP = ROOT / "assets/characters/traveller-jump-front-v1.png"
@@ -208,20 +209,20 @@ def add_traveller_jump(actor_data: dict) -> dict:
     variant_heights=[item["strong_alpha_height_px"] for item in variant_summaries]
     return {"actor":"traveller","action":"jump","direction":"front","source":TRAVELLER_JUMP.relative_to(ROOT).as_posix(),"source_size":[w,h],"atlas_rows":{"base":[yb[0],yb[1]],"outfit-coral":[yb[1],yb[2]]},"frame_count":len(frames),"variant_frame_count":len(variant_rows),"fps":12,"loop":False,"source_scale":round(TRAVELLER_JUMP_SCALE,6),"reference_size":spec["ref"],"actor_scale":round(actor_scale,4),"effective_scale":round(effective_scale,4),"max_region_size_px":[max_region_width,max_region_height],"strong_alpha_height_px":{"base":[min(heights),max(heights)],"outfit-coral":[min(variant_heights),max(variant_heights)]},"anchor_policy":"feet x comes from lower strong-alpha shoe contacts; feet y uses the shared atlas-row lower edge so authored airborne height remains visible","frames":summaries,"variant_frames":variant_summaries}
 
-def add_npc_side_walk(actor_data: dict, actor: str, source: Path, columns: int, source_scale: float, fixed_cell_root: bool = False, column_bounds: tuple[int, ...] | None = None) -> dict:
-    """Register the four authored profile keys per side; repeated atlas cells stay unregistered."""
+def add_npc_side_action(actor_data: dict, actor: str, source: Path, columns: int, source_scale: float, fixed_cell_root: bool = False, column_bounds: tuple[int, ...] | None = None, *, action: str = "walk", fps: int = 7, loop: bool = True, return_direction: str | None = None) -> dict:
+    """Register four complete side-action keys; preserve their authored roots and row ground."""
     if not source.exists():
-        raise ValueError(f"missing side-walk atlas: {source.relative_to(ROOT)}")
+        raise ValueError(f"missing side-action atlas: {source.relative_to(ROOT)}")
     rgba=np.asarray(Image.open(source).convert("RGBA")); alpha=rgba[:,:,3]; h,w=alpha.shape
     xs=runs((alpha>128).any(axis=0)); ys=runs((alpha>128).any(axis=1))
-    xb=boundaries(xs,w,columns,f"{actor} side-walk columns")
+    xb=boundaries(xs,w,columns,f"{actor}/{action} columns")
     if column_bounds is not None:
         if len(column_bounds) != columns + 1 or any(type(value) is not int or not 0 <= value <= w for value in column_bounds) or any(a >= b for a, b in zip(column_bounds, column_bounds[1:])):
             raise ValueError(f"{actor}: invalid authored column bounds")
         xb=list(column_bounds)
     elif fixed_cell_root:
         xb=[round(i*w/columns) for i in range(columns+1)]
-    yb=boundaries(ys,h,2,f"{actor} side-walk rows")
+    yb=boundaries(ys,h,2,f"{actor}/{action} rows")
     spec=ACTORS[actor]
     actor_scale=min(spec["canvas"][0]/spec["ref"][0],spec["canvas"][1]/spec["ref"][1])
     effective_scale=actor_scale*source_scale
@@ -233,7 +234,7 @@ def add_npc_side_walk(actor_data: dict, actor: str, source: Path, columns: int, 
             x0,x1=xb[col],xb[col+1]; y0,y1=yb[row],yb[row+1]
             tile=alpha[y0:y1,x0:x1]; body=tile>128
             yy,xx=np.where(body)
-            if not len(xx): raise ValueError(f"{actor}/walk/{direction}/frame {col}: no primary alpha body")
+            if not len(xx): raise ValueError(f"{actor}/{action}/{direction}/frame {col}: no primary alpha body")
             bx0,bx1=int(xx.min()),int(xx.max()+1); by0,by1=int(yy.min()),int(yy.max()+1)
             edge_hits+=int(bool(body[0].any() or body[-1].any() or body[:,0].any() or body[:,-1].any()))
             pad=2; rx0=max(0,bx0-pad); ry0=max(0,by0-pad); rx1=min(tile.shape[1],bx1+pad); ry1=min(tile.shape[0],by1+pad)
@@ -257,8 +258,9 @@ def add_npc_side_walk(actor_data: dict, actor: str, source: Path, columns: int, 
             min_margins=[min(min_margins[i],value) for i,value in enumerate(margins)]
             min_aa_margins=[min(min_aa_margins[i],value-pad*effective_scale) for i,value in enumerate(margins)]
             summaries.append({"direction":direction,"frame":col,"region":region,"anchors":{"feet":feet,"head":head},"anchor_method":methods,"strong_alpha_pixels":int(np.count_nonzero(body))})
-        side_actions[direction]={"fps":7,"loop":True,"frames":frames}
-    actor_data["walk"]=side_actions
+        side_actions[direction]={"fps":fps,"loop":loop,"frames":frames}
+        if return_direction is not None: side_actions[direction]["return_direction"]=return_direction
+    actor_data[action]=side_actions
     return {"actor":actor,"source":source.relative_to(ROOT).as_posix(),"source_size":[w,h],"atlas_rows":{"right":0,"left":1},"registered_frames_per_direction":4,"repeated_cells_excluded":columns>4,"frame_count":sum(len(entry["frames"]) for entry in side_actions.values()),"grid_from_global_alpha_gutters":True,"source_scale":source_scale,"actor_scale":round(actor_scale,4),"effective_scale":round(effective_scale,4),"primary_alpha_boundary_hits":edge_hits,"canonical_margins_min_px":{"left":round(min_margins[0],1),"top":round(min_margins[1],1),"right":round(min_margins[2],1),"bottom":round(min_margins[3],1)},"canonical_aa_margins_min_px":{"left":round(min_aa_margins[0],1),"top":round(min_aa_margins[1],1),"right":round(min_aa_margins[2],1),"bottom":round(min_aa_margins[3],1)},"frames":summaries}
 
 def add_traveller_idle_atlas(actor_data: dict, filename: str, directions: tuple[str, ...], source_scale: float) -> dict:
@@ -437,11 +439,13 @@ def build() -> tuple[dict,dict]:
     reports["traveller"]["variants"]={"outfit-coral":{k:v for k,v in variant_report.items() if k!="frames"}}
     jump_report=add_traveller_jump(actors["traveller"])
     reports["traveller"]["jump_front"]={k:v for k,v in jump_report.items() if k not in ("frames","variant_frames")}
-    announcer_walk_report=add_npc_side_walk(actors["announcer"], "announcer", ANNOUNCER_SIDE_WALK, 8, ANNOUNCER_SIDE_SCALE)
+    announcer_walk_report=add_npc_side_action(actors["announcer"], "announcer", ANNOUNCER_SIDE_WALK, 8, ANNOUNCER_SIDE_SCALE)
     reports["announcer"]["walk_side_atlas"]={k:v for k,v in announcer_walk_report.items() if k!="frames"}
-    imp_walk_report=add_npc_side_walk(actors["imp"], "imp", IMP_SIDE_WALK, 4, IMP_SIDE_SCALE, fixed_cell_root=True)
+    imp_walk_report=add_npc_side_action(actors["imp"], "imp", IMP_SIDE_WALK, 4, IMP_SIDE_SCALE, fixed_cell_root=True)
     reports["imp"]["walk_side_atlas"]={k:v for k,v in imp_walk_report.items() if k!="frames"}
-    ticket_walk_report=add_npc_side_walk(actors["ticket"], "ticket", TICKET_SIDE_WALK, 4, TICKET_SIDE_SCALE, fixed_cell_root=True, column_bounds=(48,464,880,1296,1712))
+    imp_settle_report=add_npc_side_action(actors["imp"], "imp", IMP_SIDE_SETTLE, 4, IMP_SIDE_SCALE, fixed_cell_root=True, action="settle", fps=10, loop=False, return_direction="front")
+    reports["imp"]["settle_side_atlas"]={k:v for k,v in imp_settle_report.items() if k!="frames"}
+    ticket_walk_report=add_npc_side_action(actors["ticket"], "ticket", TICKET_SIDE_WALK, 4, TICKET_SIDE_SCALE, fixed_cell_root=True, column_bounds=(48,464,880,1296,1712))
     reports["ticket"]["walk_side_atlas"]={k:v for k,v in ticket_walk_report.items() if k!="frames"}
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
@@ -508,8 +512,9 @@ def main() -> int:
             if jump:
                 if jump["frame_count"] != 8 or jump["variant_frame_count"] != 8 or jump["fps"] != 12 or jump["loop"]: failures.append("traveller/jump/front: expected eight base and coral frames at 12 FPS, non-looping")
                 if jump["source_size"] != [2172,724]: failures.append("traveller/jump/front: source atlas dimensions changed")
-            side_walk=report.get("walk_side_atlas")
-            if side_walk:
+            for side_action in ("walk_side_atlas", "settle_side_atlas"):
+                side_walk=report.get(side_action)
+                if not side_walk: continue
                 if side_walk["frame_count"] != 8 or side_walk["registered_frames_per_direction"] != 4 or (actor=="announcer" and not side_walk["repeated_cells_excluded"]): failures.append(f"{actor}: expected four unique authored side-walk frames per direction")
                 if side_walk["primary_alpha_boundary_hits"]: failures.append(f"{actor} side-walk: {side_walk['primary_alpha_boundary_hits']} strong silhouettes touch split")
                 if min(side_walk["canonical_margins_min_px"].values()) <= 2: failures.append(f"{actor} side-walk: strong-alpha margin is 2px or less")
@@ -517,7 +522,7 @@ def main() -> int:
             print(json.dumps({k:v for k,v in report.items() if k!="frames"},ensure_ascii=False))
         if failures:
             print("FAIL: "+"; ".join(failures),file=sys.stderr); return 1
-        verified_regions=sum(x["frame_count"]+x.get("walk_side_atlas",{}).get("frame_count",0) for x in reports.values())
+        verified_regions=sum(x["frame_count"]+x.get("walk_side_atlas",{}).get("frame_count",0)+x.get("settle_side_atlas",{}).get("frame_count",0) for x in reports.values())
         print(f"PASS: {verified_regions} authored regions verified; no synthetic frames")
     if not args.check and not args.write: parser.print_help()
     return 0

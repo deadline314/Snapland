@@ -419,7 +419,12 @@ func _update_authored_patrol(index: int, delta: float) -> void:
 		record["distance_driven_walk"] = true
 		_records[index] = record
 	elif String(record.action) == "walk":
-		_play_actor_action(index, "idle", "front", true)
+		var role := String(record.role)
+		var direction := String(record.direction)
+		if _has_sequence(role, "settle", direction):
+			_play_actor_action(index, "settle", direction, true)
+		else:
+			_play_actor_action(index, "idle", "front", true)
 		_records[index]["distance_driven_walk"] = false
 		_records[index]["idle_due"] = _action_clock + 0.25
 
@@ -793,8 +798,10 @@ func _advance_actor(record: Dictionary, target: Sprite3D, delta: float, allow_id
 	if _is_breathing_loop(action, sequence):
 		playback_elapsed *= breath_tempo(String(record.role))
 	if not bool(sequence.get("loop", false)) and playback_elapsed >= _sequence_seconds(sequence):
-		var direction := String(record.direction)
+		var direction := String(sequence.get("return_direction", record.direction))
 		if _play_actor_action(_record_index(record), "stand", direction, true):
+			if sequence.has("return_direction"):
+				_records[_record_index(record)]["idle_due"] = _action_clock + 0.6
 			return
 		var index := _record_index(record)
 		if index >= 0:

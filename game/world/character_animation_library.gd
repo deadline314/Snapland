@@ -7,6 +7,7 @@ const TEXTURE_CACHE_LIMIT := 96
 const IMAGE_CACHE_LIMIT := 8
 const OUTFIT_CACHE_LIMIT := 64
 const ACTORS := ["traveller", "ticket", "imp", "announcer"]
+const DIRECTIONS := ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]
 
 var _stable_walk_pixels = preload("res://game/world/walk_pixel_sources.gd").new()
 var manifest: Dictionary = {}
@@ -117,6 +118,8 @@ func get_sequence(actor: String, action: String, direction: String, equipped: Di
 	var result := {"fps": frame_fps(actor, action, direction), "loop": bool(entry.get("loop", true)), "frames": frames, "available": not frames.is_empty() and frames.all(func(item: Dictionary) -> bool: return item.get("texture") != null)}
 	if entry.has("frame_durations"):
 		result["frame_durations"] = entry.frame_durations.duplicate()
+	if entry.has("return_direction"):
+		result["return_direction"] = entry.return_direction
 	_sequences[key] = result
 	_sequence_order.append(key)
 	while _sequence_order.size() > 64: _sequences.erase(_sequence_order.pop_front())
@@ -451,6 +454,11 @@ func _entry(actor: String, action: String, direction: String) -> Dictionary:
 	var dirs: Variant = actions.get(action, {}) if actions is Dictionary else {}
 	var entry: Variant = dirs.get(direction, {}) if dirs is Dictionary else {}
 	var valid_entry: bool = entry is Dictionary and AnimationTiming.is_valid(entry)
+	if valid_entry and entry.has("return_direction"):
+		var return_direction: Variant = entry.return_direction
+		if not return_direction is String or return_direction not in DIRECTIONS or bool(entry.get("loop", true)):
+			_diagnostic("%s/%s/%s" % [actor, action, direction], "return_direction requires a valid direction on a finite action")
+			return {}
 	if not valid_entry:
 		var key := "%s/%s/%s" % [actor, action, direction]
 		if not _warned.has(key) and _warned.size() < 128:

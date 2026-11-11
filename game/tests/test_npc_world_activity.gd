@@ -146,20 +146,23 @@ func _run() -> void:
 	var imp_root := imp.activity_root as Node3D
 	var imp_sprite := imp.sprite as Sprite3D
 	var seen_walk_feet := {}
+	var seen_settle_feet := {}
 	for _tick in range(650):
 		activity._process(1.0 / 30.0)
 		var imp_record := _activity_record_for_role("imp")
 		assert(points.imp.position == imp_root.global_position, "imp interaction point follows actual patrol displacement")
 		assert(is_equal_approx(points.imp.marker.global_position.x,imp_root.global_position.x), "imp marker follows the actor without a stale world-space bob baseline")
-		if String(imp_record.action) != "walk": continue
+		if String(imp_record.action) not in ["walk", "settle"]: continue
 		var index: int = floori(float(imp_record.action_elapsed) * float(imp_record.action_sequence.fps)) % 4
 		var key := "%s/%d" % [imp_record.direction,index]
-		if not seen_walk_feet.has(key):
+		var seen: Dictionary = seen_walk_feet if String(imp_record.action) == "walk" else seen_settle_feet
+		if not seen.has(key):
 			_world._update_sprite_grounding()
-			_assert_projected_contact_feet("imp walk " + key, imp_sprite)
-			seen_walk_feet[key] = true
-		if seen_walk_feet.size() == 8: break
+			_assert_projected_contact_feet("imp " + String(imp_record.action) + " " + key, imp_sprite)
+			seen[key] = true
+		if seen_walk_feet.size() == 8 and seen_settle_feet.size() == 8: break
 	assert(seen_walk_feet.size() == 8, "all eight real patrol poses keep visible feet above terrain")
+	assert(seen_settle_feet.size() == 8, "all eight real turn poses keep visible feet grounded during the pivot")
 	var imp_hold_position := imp_root.position
 	var imp_hold_phase: float = _activity_record_for_role("imp").authored_patrol.phase
 	activity.set_activity_paused(true)

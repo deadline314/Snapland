@@ -12644,6 +12644,222 @@
             }
           ]
         }
+      },
+      "settle": {
+        "right": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                132,
+                55,
+                235,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  90,
+                  332
+                ],
+                "head": [
+                  156,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                566,
+                55,
+                245,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  100,
+                  332
+                ],
+                "head": [
+                  164,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                996,
+                55,
+                254,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  113,
+                  332
+                ],
+                "head": [
+                  163,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                1415,
+                55,
+                261,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  137,
+                  332
+                ],
+                "head": [
+                  164,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            }
+          ],
+          "return_direction": "front"
+        },
+        "left": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                100,
+                495,
+                238,
+                338
+              ],
+              "anchors": {
+                "feet": [
+                  122,
+                  336
+                ],
+                "head": [
+                  130,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                538,
+                496,
+                241,
+                337
+              ],
+              "anchors": {
+                "feet": [
+                  128,
+                  335
+                ],
+                "head": [
+                  138,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                976,
+                499,
+                244,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  133,
+                  332
+                ],
+                "head": [
+                  148,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                1415,
+                499,
+                260,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  137,
+                  332
+                ],
+                "head": [
+                  164,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            }
+          ],
+          "return_direction": "front"
+        }
       }
     },
     "announcer": {

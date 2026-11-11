@@ -105,6 +105,8 @@ func _run() -> void:
 	var moved_left := false
 	var imp_directions := {}
 	var imp_seen := {"right": {}, "left": {}}
+	var imp_settle_seen := {"right": {}, "left": {}}
+	var imp_previous_position: Vector3 = anchors.imp.position
 	var ticket_seen := {"right": {}, "left": {}}
 	var tick_count := ceili(CYCLE_SECONDS * 2.0 / TICK_SECONDS)
 	for _tick in range(tick_count):
@@ -121,6 +123,13 @@ func _run() -> void:
 			_check(actors.ticket.texture == sequence.frames[index].texture, "ticket uses its actual distance-selected complete side pose")
 			ticket_seen[heading][index] = true
 		var imp_record: Dictionary = controller._records[int(role_indices.imp)]
+		if String(imp_record.action) == "settle":
+			_check(anchors.imp.position == imp_previous_position, "imp root remains planted throughout the authored turn")
+			var turn_sequence: Dictionary = imp_record.action_sequence
+			var turn_index: int = Library.AnimationTiming.frame_at_time(turn_sequence, float(imp_record.action_elapsed))
+			imp_settle_seen[String(imp_record.direction)][turn_index] = true
+			_check(actors.imp.texture == turn_sequence.frames[turn_index].texture, "turn uses the complete source at its authored time")
+		imp_previous_position = anchors.imp.position
 		_check(absf(anchors.imp.position.x - imp_start.x) <= 0.30001 and is_equal_approx(anchors.imp.position.z, imp_start.z), "imp remains inside its grounded route pocket")
 		if String(imp_record.action) == "walk":
 			var heading := String(imp_record.direction)
@@ -153,11 +162,12 @@ func _run() -> void:
 				moved_left = true
 		if String(controller._records[int(role_indices.ticket)].action) not in ["stand", "idle", "walk"]:
 			ticket_persona = true
-		if String(controller._records[int(role_indices.imp)].action) not in ["stand", "idle", "walk"]:
+		if String(controller._records[int(role_indices.imp)].action) not in ["stand", "idle", "walk", "settle"]:
 			imp_persona = true
 
 	_check(ticket_seen.right.size() == 4 and ticket_seen.left.size() == 4, "ticket naturally shows all eight side poses on a complete outbound and return path")
 	_check(imp_directions.size() == 2 and imp_seen.right.size() == 4 and imp_seen.left.size() == 4, "imp patrol reaches both directions and all eight source poses")
+	_check(imp_settle_seen.right.size() == 4 and imp_settle_seen.left.size() == 4, "imp naturally settles through all four full turn poses from both sides")
 	_check(ticket_persona and imp_persona, "ticket and imp naturally play persona actions during the two route cycles")
 	_check(moved_right and moved_left, "announcer naturally moves in both directions while its route plays authored frames")
 	_check(anchors.announcer.position.distance_to(announcer_start) < 0.001, "announcer returns to its route origin after complete cycles")

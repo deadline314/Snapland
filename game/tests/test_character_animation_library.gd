@@ -76,6 +76,17 @@ func _initialize() -> void:
 	assert(library.get_sequence("imp", "dance", "front").frames.is_empty(), "missing direction/action coverage stays explicitly unavailable")
 	assert(library.cached_texture_count() <= Library.TEXTURE_CACHE_LIMIT, "composed texture cache has a fixed bound")
 	var production_library = Library.new()
+	for side in ["right", "left"]:
+		var settle: Dictionary = production_library.get_sequence("imp", "settle", side)
+		assert(settle.available and settle.frames.size() == 4 and not settle.loop and settle.return_direction == "front", "complete finite turn retains its explicit front return direction")
+	for invalid in ["unsupported", 4, true]:
+		var bad_return = Library.new()
+		bad_return.manifest.actors.imp.settle.right.return_direction = invalid
+		assert(not bad_return.get_sequence("imp", "settle", "right").available and bad_return.get_sequence("imp", "idle", "front").available, "invalid return direction rejects only the affected action")
+		assert(not bad_return.has_action("imp", "settle", "right") and bad_return.frame_count("imp", "settle", "right") == 0 and bad_return.sequence_duration("imp", "settle", "right") == 0.0, "all public readers reject invalid return metadata consistently")
+	var looping_return = Library.new()
+	looping_return.manifest.actors.imp.settle.left.loop = true
+	assert(not looping_return.get_sequence("imp", "settle", "left").available, "a looping clip cannot promise a finite return direction")
 	var announcer_right: Dictionary = production_library.get_sequence("announcer", "walk", "right")
 	var announcer_left: Dictionary = production_library.get_sequence("announcer", "walk", "left")
 	assert(announcer_right.available and announcer_right.frames.size() == 4 and announcer_left.available and announcer_left.frames.size() == 4, "real manifest loads four authored side poses for each profile direction")

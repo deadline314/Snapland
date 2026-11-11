@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-11",
+  "base_commit": "5a28e44",
+  "method": "Reference-based image generation and scoped edits; original PNGs preserved verbatim.",
+  "production_source": "assets/characters/imp-settle-sides-v1.png",
+  "source_sha256": "fba892de8aad2490237f9900dec7c4743882eb33c15b064707b60dfa5c849af4",
+  "references": {
+    "assets/characters/imp-walk-sides-v1.png": "9ccd67d38b27cddd6848cb12de196f7fee8eadf3dfe30ee6d52122e4adbb1126",
+    "assets/characters/imp-front-actions-v2.png": "03a7f332575cb919c4ecd2df567d091192632512d9d94569615799286ee2a4cf"
+  },
+  "registration": {
+    "source_size": [
+      1774,
+      887
+    ],
+    "fixed_columns": 4,
+    "shared_row_floor": true,
+    "uniform_source_scale": 0.395,
+    "unique_source_cells": 8,
+    "directions": [
+      "right-to-front",
+      "left-to-front"
+    ],
+    "poses": [
+      "planted side stance",
+      "quarter pivot",
+      "near-front pivot",
+      "front hands-on-hips stance"
+    ],
+    "per_frame_foot_recenter": false,
+    "limb_reconstruction": false,
+    "mirror": false
+  },
+  "stages": [
+    {
+      "file": "01-impTurn.png",
+      "sha256": "602889bfabc2f821faa60ceac091a89fe528c874189792635fd273dc17cfda43",
+      "prompt": "Create a production PIXEL ART sprite sheet of the EXACT small red imp in the two references, for a calm IN-PLACE TURN from walking side orientation to resting front orientation. Exactly TWO rows by FOUR columns, transparent background with zero matte/smoke/ground shadow, equal cells and generous transparent gutters and 12% margins. Every cell shows the COMPLETE figure head, both horns, both ears, both arms/hands, torso, both connected legs and bare clawed feet, whole tail. Preserve reference proportions, chubby body, large angular ears/navy inner ears, mischievous half-lidded eyes, tiny fangs, cream oval belly, dark teal neckerchief, and an asymmetrical ivory horn pair: the tall horn is the imp's anatomical LEFT horn (front view on viewer RIGHT) and the other horn is short. Preserve this actual identity through every angle; DO NOT mirror the tall horn between views. Crisp low-resolution pixel clusters exactly matching source, no soft smooth painterly edges. Row 1 from left to right: (1) settled RIGHT-facing side/three-quarter profile matching the top reference walking view but with BOTH feet now planted close under hips, arms relaxed; (2) pelvis, chest and face rotate about 25 degrees toward the viewer with a modest planted-foot pivot and relaxed opposite hand follow; (3) nearly FRONT-facing with the trailing foot pivoting into the resting stance and tiny restrained scarf/tail follow; (4) exact FRONT resting stance matching the first neutral pose of the second reference, both feet naturally apart and hands on hips. Row 2 is the LEFT-facing version turning through actual opposite-side intermediate orientations into the same FRONT resting stance: (1) settled LEFT-facing profile with planted feet, (2) quarter-turn toward viewer, (3) nearly FRONT, (4) FRONT neutral. These are FOUR clearly distinct orientation keys per row, not four identical forward-facing drawings. All heads and feet retain stable height and body volume, no squash/stretch, knee lifts, walking contacts, giant steps or floating feet. Use an identical fixed body-root and shared floor level in all cells, keep the modest torso pivot around the hips. Tail and scarf remain complete and recognizable; do not slide the whole body between cells. No labels/text, no extra character parts, no reused cutout limbs. This is a small readable TURN/settle sequence, not a dance or more walk poses.",
+      "decision": "Rejected front-tail ownership and final hands; side pivot poses retained for correction."
+    },
+    {
+      "file": "02-impTurnRest.png",
+      "sha256": "c17f5014463a7275bc493f2e03e9f5b4875675a9512bca099bb49e55a145c33e",
+      "prompt": "Edit ONLY the fourth (rightmost) character in EACH of the two rows of the first image. Preserve every pixel of the first three columns and preserve the 2x4 transparent sheet layout, stable size and floor. The fourth character of both rows is the final FRONT RESTING pose and must match the exact first neutral character of the second reference: BOTH hands placed on hips with elbows slightly out, the thin arrow-tipped red TAIL emerges behind the imp and curls up on the viewer's RIGHT side (not left), cream belly centered, broad resting clawed feet, tall ivory horn on viewer RIGHT and short horn on viewer LEFT. Remove the incorrect tail on viewer LEFT in these two cells only. Keep same chubby proportions, navy scarf, mischievous face, crisp pixel art, full body and generous transparent margins. No matte, no shadow, no new poses. Correct the final resting tail/hand ownership to make a seamless return to the original front resting identity; do not change any other column.",
+      "decision": "Hands and final tail corrected; top third tail would teleport between sides, rejected."
+    },
+    {
+      "file": "03-impTurnPivot.png",
+      "sha256": "da644b758a8de3d1abf2c363d9d7b6e6e33e4974a858fb3d5828cb74babc27ac",
+      "prompt": "Edit ONLY the THIRD character of the TOP ROW in this transparent 2x4 pixel sprite sheet. All seven other characters must remain untouched. The top row depicts an imp rotating from RIGHT toward FRONT. The third character must be about 15 degrees away from full FRONT: reveal the left ear almost as much as right ear, face/nose and cream belly almost centered, hips midway into front resting foot stance, both arms just beginning to bend toward hands-on-hips final pose. Preserve the tall horn on viewer RIGHT, short horn on viewer LEFT. Its tail passes BEHIND the torso during this pivot: remove the current large curled tail and arrow on viewer LEFT; show only a very short red tail edge just starting to emerge behind the body's viewer RIGHT hip, with the rest hidden by the body. This gives a continuous tail rotation toward the fourth pose's right-side curl instead of a left-to-right teleport. Full head/feet, exact same scale, root and ground, chubby shape and crisp pixel clusters. No shadows/matte, keep transparent background and all other seven cells unchanged.",
+      "decision": "Tail passes behind body; native inspection caught missing front scarf flap, superseded."
+    },
+    {
+      "file": "04-impTurnScarf.png",
+      "sha256": "fba892de8aad2490237f9900dec7c4743882eb33c15b064707b60dfa5c849af4",
+      "prompt": "Correct the neckerchief identity in this imp turn sheet, using the second reference's exact FRONT NEUTRAL stance as the clothing reference. Edit ONLY the third and fourth characters in each row; keep all other cells, scale, fixed floor, complete limbs, horns, tail and transparent layout unchanged. This imp wears a dark teal NECKERCHIEF with a visible short triangular hanging end, not just a collar. In the FOURTH character of both rows add the same dark teal scarf end as the second reference: a small vertical folded triangular cloth flap draping down on the viewer RIGHT side of the upper cream belly, attached naturally to the knot by the neck and touching the chest, never floating. Preserve the cream belly's other side. In the THIRD character of each row, reveal a slightly smaller/foreshortened version of this same short scarf end on the corresponding anatomical side as the torso turns toward FRONT. It should become fully visible in the last pose, not pop into existence after returning to idle. Match the original compact proportions and crisp pixel clusters. No extra accessories, no changes to hands, horns, feet, facial expression, body scale or other cells. No matte, shadows or text.",
+      "decision": "Final scarf flap restored in both third/fourth keys; accepted as limited stop-to-front transition source, subject to native review."
+    }
+  ]
+}
