@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-11",
+  "timezone": "Asia/Taipei",
+  "starting_commit": "69b367c",
+  "branch": "codex/remaining-animation-20261111",
+  "references": [
+    "assets/characters/ticket-front-actions-v2.png",
+    "pm/Snapland-art/images/ART-17-ticket-contact-20261102-single-v2.png"
+  ],
+  "runtime_integration": false,
+  "steps": [
+    {
+      "id": "cycle",
+      "prompt": "Create a production pixel-art WALK CYCLE sprite sheet for the SAME ticket clerk character in the first reference: tousled angular chestnut hair, round BLACK glasses, blue hoodie with cream mountain emblem, cream shorts, small brown leather shoulder satchel on his NEAR side, brown ankle boots, relaxed friendly boy proportions. Match his identity and fine pixel-art rendering closely, without smooth vector outlines or painterly gradients. The second reference illustrates ONLY the opposite-leg contact: do NOT copy its smooth rendering or sock changes. Output exactly EIGHT complete full-body poses, arranged in a strict 4 columns by 2 rows grid on a transparent background. Every cell the same size with generous transparent gutters and at least 12 percent margin around every whole body, no text, no numbers, no ground shadows. ALL poses face SCREEN RIGHT in a strict side view, NOT turning towards the camera. Fixed camera scale and root center, same hair/head/torso size, no per-pose zoom. This is ONE complete TWO-STEP bipedal cycle, NOT two copies of the same step. Reading order: (1) NEAR LEG forward heel contact, far leg behind toe off. (2) down: near leg bearing weight forward, far knee bends behind. (3) passing: near leg planted beneath hip, far knee swings forward. (4) up: near planted leg behind, far knee reaches front. (5) OPPOSITE CONTACT: NEAR LEG AND ITS VISIBLE SHORTS HEM EXTEND BACKWARDS to the left, near boot touching behind by toe; FAR LEG extends forwards to screen right to heel contact. The backwards NEAR THIGH at frame 5 must visibly originate at the near shorts hem, overlap the far thigh, and run backwards from hip to knee; the NEAR hand still holds the bag strap. (6) down: FAR leg bears weight forward, NEAR knee bends behind. (7) passing: FAR leg planted beneath hip, NEAR knee swings forward. (8) up: FAR planted leg behind, NEAR knee reaches front. Keep each anatomical leg connected continuously from its own shorts opening through knee to boot across all eight drawings. The visible near shorts opening and near thigh MUST exchange front/back roles at frames 1 versus 5. Arms swing gently in opposition; satchel hand remains attached, bag sway small. Center of gravity has a subtle down/up change, not head scaling. Both arms, both connected legs and both boots present in every cell. Eight DIFFERENT meaningful full-body poses, clear rightward walking, disciplined readable pixel clusters.",
+      "status": "rejected",
+      "review": "兩列均重複近側腿前伸的半循環，未交換承重腿。",
+      "archive_member": "cycle.png",
+      "sha256": "92a0bc4ec2a73a39258e7444508fc4612dd4220be21bb44bfd792bc3970c8b73",
+      "actual_dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_corners": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "contact-first",
+      "prompt": "Draw ONLY ONE complete full-body right-facing SIDE VIEW walking pose of the SAME pixel-art boy in the reference: chestnut messy hair, round black glasses, blue hoodie, cream shorts, brown satchel on the visible near shoulder/hip, brown boots. Preserve his fine pixel rendering and proportions. Transparent background, generous margins, no text. This is the OPPOSITE walk contact to the reference sheet. The NEAR LEG, the one on the same side as the visible brown satchel and near hand holding the strap, is BEHIND the hips, extended diagonally down LEFT, touching ground with the TOE at screen LEFT. Its cream shorts opening is behind the crotch, and the visible NEAR thigh clearly runs backwards left from that rear shorts opening. The FAR LEG passes BEHIND this near thigh and extends FORWARD to screen RIGHT, with the far boot reaching heel-first to the RIGHT. Draw the near shorts hem BEHIND and LEFT of the far shorts hem. The near thigh crosses OVER the far thigh at the hip with an unmistakable continuous contour down to the rear boot. It is essential to exchange which thigh is in front: the reference sheet has near leg always forward, and this new pose has NEAR LEG BACK with NEAR SHORTS OPENING BACK. Small natural walking stance, full attached arms and legs, no labels, no schematic colors. Pose the entire boy from scratch with this anatomy, not just swapping boot colors. Fine crisp pixel clusters consistent with the reference.",
+      "status": "rejected",
+      "review": "主要近側褲管仍連向右前腿，未成立相反接觸。",
+      "archive_member": "contact-first.png",
+      "sha256": "348098b5b684eb34b798338988f0b994bf54c88e0f1ca3d93fb3f9723d7ab4e7",
+      "actual_dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_corners": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "contact-edited",
+      "prompt": "Edit this pixel-art character image. KEEP the head, hair, eyeglasses, face, blue hoodie, both hands, shoulder bag, both boots and their screen positions unchanged. Edit the cream SHORTS and the upper THIGHS ONLY. Change the shorts overlap so that the main large visible near-side shorts panel runs diagonally BACKWARDS to the LEFT and ends around the upper LEFT thigh, NOT the front right thigh. This large near-side shorts panel should slope from the waist at upper right DOWN to the LEFT; its bottom hem wraps the LEFT/back thigh. At the crotch, this near-side shorts panel must overlap in FRONT OF the right/front leg's smaller, darker far-side shorts panel. The right/front thigh is the FAR leg, and must appear BEHIND the left/back thigh at the crotch. The LEFT/back thigh should have the continuous bright near-side contour from the near hip through its short hem down toward its left/back knee. You must visually reverse the existing overlap at the crotch. Every other aspect remains the same, all body parts connected. Transparent background. Fine crisp pixel art.",
+      "status": "contact-study-only",
+      "review": "近側褲管可連到左後腿並遮住遠側褲管；僅單張接觸研究，不是正式步行。",
+      "archive_member": "contact-edited.png",
+      "sha256": "36e386b618311bb23c62d93b62ff62038b54ce3aaca03cd2c5fb25e67d5a709c",
+      "actual_dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_corners": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "half-b",
+      "prompt": "Create a pixel-art sprite strip, exactly FOUR complete full-body poses in one horizontal row, transparent background, even 4-cell grid, no text or labels, generous transparent margin. It is the SECOND HALF (the opposite leg half) of a right-facing SIDE VIEW walk cycle for this EXACT reference character. Match reference face, tousled chestnut hair, round black glasses, blue hoodie, cream shorts, brown near-side satchel, short white socks, brown boots, fine crisp pixel clusters and scale. FIRST pose is EXACTLY the reference contact: the near-side main shorts panel extends BACK/LEFT from hip over the smaller far-side panel; near thigh and boot extend BACK/LEFT, far leg extends FORWARD/RIGHT. Keep this overlap continuous into next poses. Pose 2 DOWN: FAR leg planted forward at right and bearing weight with knee slightly bent, NEAR leg/toe lifting behind on left; near shorts panel still tilted backwards. Pose 3 PASS: FAR leg is straight planted under hip, NEAR knee swings forward across it, near boot lifted slightly behind, near shorts panel begins moving toward front, showing actual exchange of the two legs. Pose 4 UP: FAR planted leg trails behind LEFT on toe, NEAR knee and its near shorts opening lift forward RIGHT, near boot below knee reaching out for next heel contact. Maintain fixed identical HEAD size and chest height with only subtle vertical rise, keep arms attached, near hand holds satchel strap in all frames, far hand swings in opposition. Anatomical near/far identity must stay continuous: near leg starts behind in frame1 and ends in front in frame4. Make a WALK, not running or hopping. No per-frame zoom, no duplicate contacts. Each pose full body fully inside its cell, both legs and both boots present.",
+      "status": "rejected",
+      "review": "首格改善相反接觸，但 passing 與 up 的近遠腿連接未連續成立，未批准半循環。",
+      "archive_member": "half-b.png",
+      "sha256": "731304be1580a1f95cc5aa660145a532d386baf7fe342d977b6c5d4931ea0bf5",
+      "actual_dimensions": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_corners": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "half-a",
+      "prompt": "Create exactly FOUR full-body pixel-art walking poses in ONE horizontal row, transparent background. Match the reference strip's character identity, pixel clusters, head shape/size, hairstyle, eyes, black glasses, blue hoodie, cream shorts, satchel and brown boots EXACTLY. This new strip is the FIRST HALF of the right-facing side-view cycle; reference is the second half. Camera side RIGHT, full bodies, generous same-sized cells. Near hand grips strap, far arm naturally opposite legs. Four poses reading order: 1 CONTACT: the NEAR leg (same side as visible satchel) is FORWARD to the RIGHT, heel touching the baseline, far leg BACK LEFT on toe. The main bright near shorts panel and near thigh slope down RIGHT, in FRONT of the far shorts and far thigh. 2 DOWN: near front RIGHT knee bends under weight, far leg lifts behind LEFT with bent knee. 3 PASS: NEAR foot planted under hip, FAR knee swings forward to RIGHT with far boot lifted off ground; near shorts and near thigh must visibly OCCLUDE the swinging FAR thigh. 4 UP: NEAR leg planted trailing BACK LEFT on toe, FAR knee raised forward RIGHT; main near-side shorts panel slopes down LEFT, covering the far thigh at the crotch. Do NOT repeat reference's leg phases; this new half is the anatomical OPPOSITE phase. Maintain both legs continuously connected to correct shorts openings, readable near versus far thigh overlap, fixed head dimensions, small subtle vertical bob only, complete both arms and both boots every cell. Walking with relaxed small stride, NOT running or high knee marching. No text, no ground shadows, no labels.",
+      "status": "rejected",
+      "review": "末格主要褲管仍連向前抬腿，不能連續接到另一半循環；高抬膝及幀間比例也需重畫。",
+      "archive_member": "half-a.png",
+      "sha256": "b14ac995e2a08a5862816173cfc0d325fe9b873b2de5c45db81b403908a77b54",
+      "actual_dimensions": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_corners": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "reference_fingerprints": [
+    {
+      "path": "assets/characters/ticket-front-actions-v2.png",
+      "sha256": "1e50731be7ce3eec5276042059f98cc21c1ea55acba67996862f7959300c7af1"
+    },
+    {
+      "path": "pm/Snapland-art/images/ART-17-ticket-contact-20261102-single-v2.png",
+      "sha256": "81d0782d548b0411a633af1a8d15635d3877efa90ed565ed8dff7238a520bbfd"
+    }
+  ],
+  "archive": "ART-17-walk-20261111-sources.zip",
+  "archive_sha256": "d84ab32c2fcf93b9a25b96c23d47af885f548b322c211ac7fbcd6286fcad285c"
+}

@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-11",
+  "timezone": "Asia/Taipei",
+  "starting_commit": "69b367c",
+  "branch": "codex/remaining-animation-20261111",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "renderer": "Compatibility / Mesa llvmpipe",
+  "test_summary": {
+    "affected_checks_passed": 14,
+    "final_timing_checks_passed": 3,
+    "before_fix": "Assertion failed: NPC passes a short anticipation cel at its authored time; bounded process timeout 124",
+    "after_fix": "No script or engine errors; intentional wrong-canvas warning exercises whole-sequence rejection"
+  },
+  "visual_review": "Viewed normal greet/interact/emotion_happy/idle_gesture frame 3 and quarter greet frame 3/interact frame 5. Automatic native observations covered all eight source cels in all four actions. No claim of continuous human playback, gameplay, listening, or complete art acceptance.",
+  "native": {
+    "normal": {
+      "metadata": {
+        "width": 1280,
+        "height": 720,
+        "r_frame_rate": "30/1",
+        "duration": "8.666667",
+        "nb_read_frames": "260"
+      },
+      "sha256": "875586b40ac3be2bdaa2c649817be5e3ae7d3c45a372c1268686551123f71f34",
+      "fixture_status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "all_action_predicates": true,
+      "human_played": false,
+      "audio_driver": "Dummy"
+    },
+    "quarter": {
+      "metadata": {
+        "width": 1280,
+        "height": 720,
+        "r_frame_rate": "30/1",
+        "duration": "32.066667",
+        "nb_read_frames": "962"
+      },
+      "sha256": "4f48c64bf1fa3890a27b7d9ca625f3d3358b2e7e95f4f1182181f639ed3bb275",
+      "fixture_status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "failures": [],
+      "all_action_predicates": true,
+      "human_played": false,
+      "audio_driver": "Dummy"
+    }
+  },
+  "evidence_archive": "ART-17-timing-20261111-evidence.zip",
+  "evidence_sha256": "2f9d57fa4acf3ee3e7e29386fdc27d3051ff768f2965c043b0c3521943cb0f24",
+  "new_walk_sources_accepted": false
+}

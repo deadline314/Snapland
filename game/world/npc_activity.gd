@@ -21,6 +21,7 @@ const BREATH_TEMPO := {"ticket": 0.88, "imp": 1.22, "announcer": 1.04}
 const ROLE_NAMES := ["ticket", "imp", "announcer"]
 const ACTION_REGIONS_PATH := "res://assets/characters/npc-action-regions.json"
 const ANIMATION_LIBRARY_PATH := "res://game/world/character_animation_library.gd"
+const AnimationTiming = preload("res://game/world/character_animation_timing.gd")
 const DIRECTIONS := ["front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left"]
 const ACTION_CANVAS_SIZE := Vector2i(320, 460)
 const ACTION_FEET_ROW := 448
@@ -751,13 +752,10 @@ func _advance_actor(record: Dictionary, target: Sprite3D, delta: float, allow_id
 	var frames: Array = sequence.get("frames", [])
 	if frames.is_empty():
 		return
-	var fps := maxf(0.01, float(sequence.get("fps", 1.0)))
+	var playback_elapsed := float(record.action_elapsed)
 	if _is_breathing_loop(action, sequence):
-		fps *= breath_tempo(String(record.role))
-	var frame_index := floori(float(record.action_elapsed) * fps)
-	if bool(sequence.get("loop", false)):
-		frame_index = posmod(frame_index, frames.size())
-	elif frame_index >= frames.size():
+		playback_elapsed *= breath_tempo(String(record.role))
+	if not bool(sequence.get("loop", false)) and playback_elapsed >= _sequence_seconds(sequence):
 		var direction := String(record.direction)
 		if _play_actor_action(_record_index(record), "stand", direction, true):
 			return
@@ -770,7 +768,7 @@ func _advance_actor(record: Dictionary, target: Sprite3D, delta: float, allow_id
 			idle_record.action_elapsed = 0.0
 			_records[index] = idle_record
 		return
-	_apply_actor_frame(_record_index(record), frame_index)
+	_apply_actor_frame(_record_index(record), AnimationTiming.frame_at_time(sequence, playback_elapsed))
 	_records[_record_index(record)] = record
 
 
@@ -814,6 +812,8 @@ func _restore_actor_visual(record: Dictionary) -> void:
 
 
 func _normalize_sequence(sequence: Dictionary) -> Dictionary:
+	if not AnimationTiming.is_valid(sequence):
+		return {"available": false, "frames": []}
 	var copy := sequence.duplicate()
 	var frames: Array = sequence.get("frames", [])
 	var normalized: Array[Dictionary] = []
@@ -826,7 +826,7 @@ func _normalize_sequence(sequence: Dictionary) -> Dictionary:
 			frame["texture"] = _normalize_frame(texture)
 		normalized.append(frame)
 	copy["frames"] = normalized
-	copy["available"] = bool(sequence.get("available", false)) and normalized.size() == frames.size() and not normalized.is_empty()
+	copy["available"] = bool(sequence.get("available", false)) and normalized.size() == frames.size() and not normalized.is_empty() and normalized.all(func(frame: Dictionary) -> bool: return frame.get("texture") != null)
 	return copy
 
 
@@ -891,8 +891,7 @@ static func _is_breathing_loop(action: String, sequence: Dictionary) -> bool:
 
 
 static func _sequence_seconds(sequence: Dictionary) -> float:
-	var frames: Array = sequence.get("frames", [])
-	return float(frames.size()) / maxf(0.01, float(sequence.get("fps", 1.0)))
+	return AnimationTiming.duration(sequence)
 
 
 func _phase_seed(seed: float, instance_id: int) -> float:

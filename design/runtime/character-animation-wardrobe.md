@@ -1,5 +1,15 @@
 # 角色整套動畫與服裝分層研究
 
+## 2026-11-11 共用逐格停留時間與完整回退
+
+主角與 NPC 共用 `character_animation_timing.gd` 驗證及取樣時間；素材庫傳出 `frame_durations`，NPC 不再把全部姿勢當作等長影格。呼吸節奏只縮放同一播放時間，暫停不累積補播，有限動作播足末格後才回站姿。時間規格仍容許既有固定 FPS，沒有更改已驗收的姿勢或快取上限。
+
+NPC 在接到動作前驗證整段 canonical canvas；即使壞掉的是後段影格，也拒絕整段並回到完整站姿，避免停在上一張手勢。反例先重現固定 FPS 的錯誤，再以不等長停留、暫停、循環、角色呼吸倍率、末格及損壞後段影格驗證。
+
+實際讀取 [Aseprite 動畫文件](https://www.aseprite.org/docs/animation/) 的逐格時間入口，以及 Godot 4.7.2 的 [SpriteFrames 原始 API 文件](https://raw.githubusercontent.com/godotengine/godot/4.7.2-stable/doc/classes/SpriteFrames.xml)（逐格長度）與 [AnimatedSprite2D 原始 API 文件](https://raw.githubusercontent.com/godotengine/godot/4.7.2-stable/doc/classes/AnimatedSprite2D.xml)（更換動畫保留播放進度）。一般 Godot 文件及 Animation Mentor 頁面本輪回應 403，Aseprite Frame Properties 回應 404，均未列為成功閱讀；沒有觀看外部影片。
+
+原生正常／四分之一速度只重驗票票既有四種正面動作；來源格自動觀察與抽樣 PNG 檢視不代表全角色動畫自然度通過。五份新步行原畫仍未形成可採用的完整循環，只有局部修正的單張相反接觸可作研究。來源、完整提示、尺寸及拒收理由見 ART-17 本次交付紀錄。
+
 ## 2026-10-15 角色管線重設優先
 
 使用者指出部件的生成與綁定方式存在根本問題，要求暫停原有修補與素材生成，先查業界流程再重新設計。新研究、現況核對與完整提案見[角色製作、換裝與行為管線重設](character-production-pipeline-v2.md)（ART-28）。先前未提交的頭部修補與候選保留，但不代表使用者接受；以下已提交歷史證據維持其原本範圍，不能當成新管線驗收。

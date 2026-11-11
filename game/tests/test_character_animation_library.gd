@@ -127,6 +127,8 @@ func _initialize() -> void:
 	assert(is_equal_approx(production_library.sequence_duration("traveller", "jump", "front"), 8.0 / 12.0), "clip duration follows its authored frame rate")
 	var timed = Library.new()
 	timed.manifest.actors.traveller.jump.front.frame_durations = [0.1, 0.2, 0.1, 0.3, 0.4, 0.1, 0.2, 0.1]
+	var timed_sequence: Dictionary = timed.get_sequence("traveller", "jump", "front")
+	assert(timed_sequence.get("frame_durations", []) == [0.1, 0.2, 0.1, 0.3, 0.4, 0.1, 0.2, 0.1], "sequence consumers receive authored cel holds, not only FPS")
 	assert(is_equal_approx(timed.sequence_duration("traveller", "jump", "front"), 1.5), "explicit cel holds define the full action duration")
 	assert(timed.frame_for_time("traveller", "jump", "front", 1.49) == 7 and timed.frame_for_time("traveller", "jump", "front", 1.5) == 7, "non-looping timing reaches and retains the authored last cel")
 	timed.manifest.actors.traveller.jump.front.frame_durations = [0.1]

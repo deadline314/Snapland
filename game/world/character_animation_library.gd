@@ -2,6 +2,7 @@ extends RefCounted
 ## Tolerant loader for authored, frame-aligned character atlases.
 
 const MANIFEST_PATH := "res://assets/characters/complete-animation-regions.json"
+const AnimationTiming = preload("res://game/world/character_animation_timing.gd")
 const TEXTURE_CACHE_LIMIT := 96
 const IMAGE_CACHE_LIMIT := 8
 const OUTFIT_CACHE_LIMIT := 64
@@ -114,6 +115,8 @@ func get_sequence(actor: String, action: String, direction: String, equipped: Di
 			frame["anchors"] = normalized_anchors
 		frames.append(frame)
 	var result := {"fps": frame_fps(actor, action, direction), "loop": bool(entry.get("loop", true)), "frames": frames, "available": not frames.is_empty() and frames.all(func(item: Dictionary) -> bool: return item.get("texture") != null)}
+	if entry.has("frame_durations"):
+		result["frame_durations"] = entry.frame_durations.duplicate()
 	_sequences[key] = result
 	_sequence_order.append(key)
 	while _sequence_order.size() > 64: _sequences.erase(_sequence_order.pop_front())
@@ -149,29 +152,10 @@ func has_anchor(actor: String, action: String, direction: String, frame_index: i
 	return anchors is Dictionary and anchors.has(name)
 
 func sequence_duration(actor: String, action: String, direction: String) -> float:
-	var frames := _frames(actor, action, direction)
-	if frames.is_empty(): return 0.0
-	var durations: Array = _entry(actor, action, direction).get("frame_durations", [])
-	if durations.is_empty(): return float(frames.size()) / frame_fps(actor, action, direction)
-	var total := 0.0
-	for duration in durations: total += float(duration)
-	return total
+	return AnimationTiming.duration(_entry(actor, action, direction))
 
 func frame_for_time(actor: String, action: String, direction: String, elapsed: float, reduced_motion: bool = false) -> int:
-	var frames := _frames(actor, action, direction)
-	if frames.is_empty() or reduced_motion: return 0
-	var entry := _entry(actor, action, direction)
-	var durations: Array = entry.get("frame_durations", [])
-	if not durations.is_empty():
-		var total := 0.0
-		for duration in durations: total += float(duration)
-		var remaining := fposmod(maxf(0.0, elapsed), total) if bool(entry.get("loop", true)) else minf(maxf(0.0, elapsed), total)
-		for index in range(durations.size()):
-			if remaining < float(durations[index]): return index
-			remaining -= float(durations[index])
-		return durations.size() - 1
-	var index := floori(maxf(0.0, elapsed) * frame_fps(actor, action, direction))
-	return posmod(index, frames.size()) if bool(entry.get("loop", true)) else mini(index, frames.size() - 1)
+	return AnimationTiming.frame_at_time(_entry(actor, action, direction), elapsed, reduced_motion)
 
 func texture(actor: String, action: String, direction: String, frame_index: int, equipped: Dictionary = {}) -> Texture2D:
 	var frames := _frames(actor, action, direction)
@@ -466,21 +450,7 @@ func _entry(actor: String, action: String, direction: String) -> Dictionary:
 	var actions: Variant = actors.get(actor, {})
 	var dirs: Variant = actions.get(action, {}) if actions is Dictionary else {}
 	var entry: Variant = dirs.get(direction, {}) if dirs is Dictionary else {}
-	var frames: Variant = entry.get("frames", []) if entry is Dictionary else null
-	var valid_entry: bool = entry is Dictionary and frames is Array and frames.size() <= 256
-	if valid_entry:
-		var fps: Variant = entry.get("fps", 1.0)
-		valid_entry = (fps is int or fps is float) and is_finite(float(fps)) and float(fps) > 0.0 and float(fps) <= 60.0
-		var loop_value: Variant = entry.get("loop", true)
-		valid_entry = valid_entry and loop_value is bool
-		if entry.has("frame_durations"):
-			var durations: Variant = entry.frame_durations
-			valid_entry = valid_entry and durations is Array and durations.size() == frames.size() and not durations.is_empty()
-			if valid_entry:
-				for duration in durations:
-					if not (duration is int or duration is float) or not is_finite(float(duration)) or float(duration) <= 0.0 or float(duration) > 30.0:
-						valid_entry = false
-						break
+	var valid_entry: bool = entry is Dictionary and AnimationTiming.is_valid(entry)
 	if not valid_entry:
 		var key := "%s/%s/%s" % [actor, action, direction]
 		if not _warned.has(key) and _warned.size() < 128:
