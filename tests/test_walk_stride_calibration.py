@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import unittest
+import tempfile
 from pathlib import Path
 
 from tools import walk_stride_calibration as calibration
@@ -18,7 +19,7 @@ class WalkStrideCalibrationTests(unittest.TestCase):
         cls.metadata = json.loads(calibration.REGIONS.read_text(encoding="utf-8"))
 
     def test_calibration_tracks_current_artwork(self) -> None:
-        self.assertEqual(self.stored["regions_sha256"], hashlib.sha256(calibration.REGIONS.read_bytes()).hexdigest(),
+        self.assertEqual(self.stored["regions_sha256"], calibration.source_text_signature(calibration.REGIONS),
                          "walk regions changed: rerun tools/walk_stride_calibration.py --write")
         for path, digest in self.stored["atlas_sha256"].items():
             self.assertEqual(digest, hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), f"{path} changed: recalibrate")
@@ -27,6 +28,18 @@ class WalkStrideCalibrationTests(unittest.TestCase):
         fresh = calibration.measure(self.metadata)
         self.assertEqual(fresh["directions"], self.stored["directions"])
         self.assertEqual(set(self.stored["directions"]), set(self.metadata["directions"]))
+
+    def test_source_signature_ignores_checkout_newlines_but_detects_content(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "regions.json"
+            lf = '{"description":"角色","stride":1}\n'.encode('utf-8')
+            source.write_bytes(lf)
+            expected = hashlib.sha256(lf).hexdigest()
+            self.assertEqual(expected, calibration.source_text_signature(source))
+            source.write_bytes(lf.replace(b'\n', b'\r\n'))
+            self.assertEqual(expected, calibration.source_text_signature(source))
+            source.write_bytes(lf.replace(b'1', b'2'))
+            self.assertNotEqual(expected, calibration.source_text_signature(source))
 
     def test_measured_strides_are_consistent_and_far_below_the_old_constant(self) -> None:
         strides = [entry["stride_world"] for entry in self.stored["directions"].values()]

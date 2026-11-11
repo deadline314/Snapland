@@ -25,7 +25,7 @@ class AuditResourceStagingTests(unittest.TestCase):
     def assert_graph(self, stage, files, extra=()):
         expected = set(files) - {'assets/characters/hero-2d-v1/manifest.json'}
         expected.update(extra)
-        actual = {str(p.relative_to(stage)) for p in stage.rglob('*') if p.is_file()}
+        actual = {p.relative_to(stage).as_posix() for p in stage.rglob('*') if p.is_file()}
         self.assertEqual(actual, expected | {'project.godot'})
         for name in expected:
             self.assertEqual((stage / name).read_bytes(), files[name])

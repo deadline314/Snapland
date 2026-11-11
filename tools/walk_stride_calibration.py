@@ -39,6 +39,11 @@ SCREEN_ANGLE_DEGREES = {"right": 0.0, "left": 0.0, "front_right": 45.0, "front_l
 DEPTH_DIRECTIONS = ("front", "back")
 
 
+def source_text_signature(path: Path) -> str:
+    """Hash UTF-8 source text independently of Git checkout newline settings."""
+    return hashlib.sha256(path.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
+
+
 def _components(mask: np.ndarray) -> list[np.ndarray]:
     """4-connected components as arrays of (row, column) pixels."""
     seen = np.zeros_like(mask, dtype=bool)
@@ -121,7 +126,7 @@ def main() -> int:
         path = entry["atlas"].removeprefix("res://")
         atlas_hashes[path] = hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
     document = {"schema_version": 1, "tool": "tools/walk_stride_calibration.py",
-                "regions_sha256": hashlib.sha256(REGIONS.read_bytes()).hexdigest(),
+                "regions_sha256": source_text_signature(REGIONS),
                 "atlas_sha256": dict(sorted(atlas_hashes.items())), **result}
     text = json.dumps(document, ensure_ascii=False, indent=2) + "\n"
     if args.write:

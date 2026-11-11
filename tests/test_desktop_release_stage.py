@@ -44,7 +44,7 @@ class DesktopReleaseStageTests(unittest.TestCase):
             self.assertFalse((stage / "tools").exists())
             self.assertFalse((stage / "game/untracked.gd").exists())
             self.assertEqual(
-                {str(path.relative_to(stage)) for path in stage.rglob("*") if path.is_file()},
+                {path.relative_to(stage).as_posix() for path in stage.rglob("*") if path.is_file()},
                 set(runtime),
             )
             for name, body in runtime.items():

@@ -6,8 +6,8 @@ from tools.island_avatar.garment_manifest import DEFAULT_GUIDE, IDLE_GUIDE, ROOT
 class GarmentManifestTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.guide = json.loads(DEFAULT_GUIDE.read_text())
-        cls.required = json.loads((ROOT / 'assets/characters/complete-animation-regions.json').read_text())['outfit_required_poses']['traveller']
+        cls.guide = json.loads(DEFAULT_GUIDE.read_text(encoding='utf-8'))
+        cls.required = json.loads((ROOT / 'assets/characters/complete-animation-regions.json').read_text(encoding='utf-8'))['outfit_required_poses']['traveller']
 
     def check_invalid(self, mutate, text):
         guide = copy.deepcopy(self.guide)
@@ -30,7 +30,7 @@ class GarmentManifestTests(unittest.TestCase):
         self.assertNotIn({'action': 'walk', 'direction': 'front', 'frame': 7}, report['missing'])
 
     def test_two_validated_atlases_report_exact_union_without_enabling_the_outfit(self):
-        idle = json.loads(IDLE_GUIDE.read_text())
+        idle = json.loads(IDLE_GUIDE.read_text(encoding='utf-8'))
         report = validate_collection([self.guide, idle], self.required)
         self.assertEqual((report['required'], report['provided'], report['missing_count']), (148, 44, 104))
         self.assertEqual(report['source_guides'], 2)
