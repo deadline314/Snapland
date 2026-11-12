@@ -27,7 +27,7 @@ func _run() -> void:
 		return
 	var catalog: RefCounted = CatalogScript.new()
 	var catalog_report: Dictionary = catalog.validation_report()
-	if not bool(catalog_report.get("ok", false)) or int(catalog_report.get("lesson_count", 0)) != 13:
+	if not bool(catalog_report.get("ok", false)) or int(catalog_report.get("lesson_count", 0)) != 14:
 		await _review_fail("Tutorial catalog is not complete: %s" % str(catalog_report))
 		return
 	_short_review = OS.get_cmdline_user_args().has("--tutorial-review-short")
@@ -76,7 +76,7 @@ func _run() -> void:
 func _run_controls_only() -> void:
 	var catalog: RefCounted = CatalogScript.new()
 	var catalog_report: Dictionary = catalog.validation_report()
-	if not bool(catalog_report.get("ok", false)) or int(catalog_report.get("lesson_count", 0)) != 13:
+	if not bool(catalog_report.get("ok", false)) or int(catalog_report.get("lesson_count", 0)) != 14:
 		await _review_fail("Tutorial catalog preflight failed: %s" % str(catalog_report))
 		return
 	var panel: Control = TutorialPanelScript.new()
@@ -105,7 +105,7 @@ func _run_controls_only() -> void:
 		panel.replay()
 		if panel.current_step != 0:
 			await _review_fail("Replay did not return to step 1 for %s" % lesson_id)
-	print("PASS: tutorial controls/assets preflight; lessons=%d steps=%d imported_screenshots=39; GPU navigation/capture not run" % [lesson_ids.size(), verified_steps])
+	print("PASS: tutorial controls/assets preflight; lessons=%d steps=%d imported_screenshots=42; GPU navigation/capture not run" % [lesson_ids.size(), verified_steps])
 	panel.queue_free()
 	await get_tree().process_frame
 	get_tree().quit(0)

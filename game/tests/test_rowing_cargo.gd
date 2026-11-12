@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Route = preload("res://game/tests/rowing_input_route.gd")
+
 const Model = preload("res://game/minigames/rowing_cargo_model.gd")
 var checks := 0
 var failures := 0
@@ -119,7 +121,7 @@ func _test_clock_and_input_bounds() -> void:
 	_expect(model.snapshot().delivery_ledger.size() <= 3, "storage remains bounded after unattended round")
 
 func _test_docking_fixtures() -> void:
-	# Explicit internal fixtures exercise rejection edges; only solve() earns route proof.
+	# Explicit internal fixtures exercise rejection edges; only Route.solve() earns route proof.
 	var model = Model.new()
 	model.reset()
 	model.interact()
@@ -235,7 +237,7 @@ func _test_crate_impact_route() -> void:
 	model.step(0.25)
 	_expect(model.snapshot().crate_impacts == 1 and model.snapshot().wall_collisions == 0, "fast hull contact records a real crate impact")
 	_expect(model.snapshot().cargo[0].status == "waiting" and model.snapshot().cargo[0].position == Model.CARGO_STARTS[0], "impacted cargo remains recoverable at its anchored pickup")
-	solve(model)
+	Route.solve(model)
 	_expect(model.snapshot().success and model.snapshot().ordinary_eligible and not model.snapshot().devil, "real impact denies devil while recovered three-crate finish still succeeds")
 
 func _test_wall_recovery_route() -> void:
@@ -246,8 +248,8 @@ func _test_wall_recovery_route() -> void:
 	model._velocity = Vector2(-3.0, 0.0)
 	model.step(0.25)
 	_expect(model.snapshot().wall_collisions == 1 and model.snapshot().crate_impacts == 0, "wall fixture records only hull collision")
-	navigate(model, Model.CARGO_STARTS[0])
-	solve(model)
+	Route.navigate(model, Model.CARGO_STARTS[0])
+	Route.solve(model)
 	_expect(model.snapshot().success and model.snapshot().devil, "recovering from an actual wall bump preserves earned devil")
 
 func _test_public_routes() -> void:
@@ -255,7 +257,7 @@ func _test_public_routes() -> void:
 	for assisted in [false, true]:
 		var model = Model.new()
 		model.reset(assisted)
-		solve(model)
+		Route.solve(model)
 		var state: Dictionary = model.snapshot()
 		_expect(state.success and state.devil and state.ordinary_eligible, "public route delivers three and earns actual crest dock: assisted=%s" % assisted)
 		_expect(state.delivery_ledger.size() == 3 and state.crate_impacts == 0, "three distinct clean deliveries: assisted=%s" % assisted)
@@ -266,72 +268,10 @@ func _test_public_routes() -> void:
 		print("PUBLIC ROUTE assisted=%s elapsed=%.3f crate_impacts=%d walls=%d ledger=%s" % [assisted, state.elapsed, state.crate_impacts, state.wall_collisions, state.delivery_ledger])
 	var shifted = Model.new()
 	shifted.reset()
-	solve(shifted, 0.2)
+	Route.solve(shifted, 0.2)
 	_expect(shifted.snapshot().success, "same waypoints remain deliverable with shifted stroke timing")
 	var angle_changed := false
 	for i in shifted.snapshot().delivery_ledger.size():
 		angle_changed = angle_changed or absf(shifted.snapshot().delivery_ledger[i].angle - normal_angles[i]) > 0.001
 	_expect(angle_changed, "shifted stroke timing changes recorded physical docking angles on the same route")
 	print("SHIFTED STROKES elapsed=%.3f ledger=%s" % [shifted.snapshot().elapsed, shifted.snapshot().delivery_ledger])
-
-static func solve(model, stroke_shift: float = 0.0) -> void:
-	for i in 3:
-		var state: Dictionary = model.snapshot()
-		if i > 0:
-			navigate(model, Vector2(5.0, Model.LONG_ROUTE_Y), false, stroke_shift)
-			navigate(model, Vector2(-4.0, Model.LONG_ROUTE_Y), false, stroke_shift)
-			navigate(model, Model.CARGO_STARTS[i], false, stroke_shift)
-		model.interact()
-		navigate(model, Vector2(-4.0, Model.LONG_ROUTE_Y), false, stroke_shift)
-		navigate(model, Vector2(4.0, Model.LONG_ROUTE_Y), false, stroke_shift)
-		var dock: Vector2 = Model.DOCKS[Model.DESTINATIONS[i] - 1].position
-		navigate(model, dock - Vector2(2.0, 0.0), false, stroke_shift)
-		navigate(model, dock, true, stroke_shift)
-		state = model.snapshot()
-		var guard := 0
-		while not state.ended and not state.crest and guard < 260:
-			steer(model, 0.0)
-			model.step(0.025)
-			state = model.snapshot()
-			guard += 1
-		model.sideslip(-1.0 if state.position.y > dock.y else 1.0)
-		for frame in 16:
-			steer(model, 0.0)
-			model.step(0.025)
-		model.interact()
-		if model.snapshot().delivery_ledger.size() != i + 1:
-			print("SOLVER delivery failure i=%d state=%s" % [i, model.snapshot()])
-			return
-
-static func steer(model, heading: float) -> void:
-	var state: Dictionary = model.snapshot()
-	var correction: float = angle_difference(state.heading, heading) * 4.0 - state.angular_velocity * 2.0
-	model.set_rudder(signf(correction) if absf(correction) > 0.1 else 0.0)
-
-static func navigate(model, target: Vector2, dock_align: bool = false, stroke_shift: float = 0.0) -> void:
-	for frame in 2000:
-		var state: Dictionary = model.snapshot()
-		if state.ended:
-			return
-		var offset: Vector2 = target - state.position
-		var distance := offset.length()
-		var heading: float = offset.angle()
-		if dock_align:
-			heading = 0.0
-		if distance < 0.45 and state.speed < 0.6 and (not dock_align or absf(angle_difference(state.heading, 0.0)) < 0.15):
-			model.clear_input()
-			return
-		steer(model, heading)
-		var error := absf(angle_difference(state.heading, heading))
-		var desired_speed := minf(2.5, distance * 0.9) if error < 0.5 else 0.0
-		if dock_align:
-			desired_speed = clampf(offset.x, -1.0, 1.0) if error < 0.2 else 0.0
-			if error < 0.2 and state.sideslip_ready and absf(offset.y) > 0.2:
-				model.sideslip(signf(offset.y * 0.8 - state.velocity.y))
-		if state.paddle_ready and fposmod(state.elapsed, 0.5) >= stroke_shift:
-			if state.forward_speed < desired_speed - 0.35:
-				model.paddle(1.0)
-			elif state.forward_speed > desired_speed + 0.35:
-				model.paddle(-1.0)
-		model.step(0.025)
-	print("SOLVER waypoint timeout target=%s state=%s" % [target, model.snapshot()])

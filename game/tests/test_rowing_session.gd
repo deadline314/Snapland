@@ -3,30 +3,9 @@ extends SceneTree
 const Session = preload("res://game/minigames/session.gd")
 const View = preload("res://game/minigames/rowing_cargo_view.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
-const Solver = preload("res://game/tests/test_rowing_cargo.gd")
+const Solver = preload("res://game/tests/rowing_input_route.gd")
 var checks := 0
 var failures := 0
-
-class SessionCommands extends RefCounted:
-	var session: Control
-	func _init(value: Control) -> void: session = value
-	func snapshot() -> Dictionary: return session.active_driver.snapshot()
-	func key(code: Key, pressed: bool) -> void:
-		var event := InputEventKey.new()
-		event.keycode = code
-		event.pressed = pressed
-		session._unhandled_input(event)
-	func tap(code: Key) -> void:
-		key(code, true)
-		key(code, false)
-	func paddle(direction: float) -> void: tap(KEY_W if direction > 0.0 else KEY_S)
-	func sideslip(direction: float) -> void: tap(KEY_E if direction > 0.0 else KEY_Q)
-	func interact() -> void: tap(KEY_SPACE)
-	func set_rudder(direction: float) -> void:
-		key(KEY_A, direction < 0.0)
-		key(KEY_D, direction > 0.0)
-	func clear_input() -> void: set_rudder(0.0)
-	func step(delta: float) -> void: session._process(delta)
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -168,7 +147,7 @@ func _run() -> void:
 	s._process(999.0)
 	expect(results.size() == result_count and cancellations.size() == 1, "unknown cannot finish under wrong ID")
 	s.start("game-013")
-	Solver.solve(SessionCommands.new(s))
+	Solver.solve(Solver.SessionCommands.new(s))
 	s._process(0.0)
 	expect(s.ended and results.size() == result_count + 1 and results.back().success and results.back().ordinary_eligible and results.back().devil, "real three-cargo Session input route finishes with actual devil qualification")
 	expect(results.back().score == 300 and results.back().score_summary.rows[0].count == 3, "success result contains three real deliveries")

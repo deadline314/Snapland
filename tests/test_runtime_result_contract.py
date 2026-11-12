@@ -60,6 +60,15 @@ class RuntimeResultContractTests(unittest.TestCase):
         self.assertEqual(len(labels), len(set(labels)), "runtime suite names must be unique")
         self.assertEqual(set(labels) - {"clean project import"}, set(PASS_MARKERS), "new suites require a completion contract; retired suites cannot leave stale contracts")
 
+    def test_rowing_markers_require_exact_zero_failure_completion(self) -> None:
+        for label in ('rowing cargo model tests', 'rowing cargo driver tests', 'rowing cargo view tests',
+                      'rowing Session tests', 'harbor collection tests', 'rowing Main tests', 'rowing native fixture tests',
+                      'delivered game catalog tests', 'harbor game progress tests'):
+            marker = PASS_MARKERS[label]
+            with self.subTest(label=label):
+                self.assertIsNone(result_error(label, self.result(marker + '\n')))
+                self.assertIsNotNone(result_error(label, self.result(marker + ' trailing unverified output\n')))
+
     def test_suite_sidecar_directories_do_not_share_prior_suite_files(self) -> None:
         # Exercise the actual runner loop with a fake engine that owns the same
         # relative photo/cache names in every invocation. Distinct JSON names

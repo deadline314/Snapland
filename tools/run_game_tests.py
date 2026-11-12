@@ -21,6 +21,15 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "rowing native fixture tests": "PASS: rowing native fixture adjacent helper and three real tutorial PNGs",
+    "rowing Main tests": "PASS: rowing Main entry, regional map, tutorial, truthful timeout, practice, assisted reward and reload",
+    "harbor collection tests": "Harbor collection: 22 checks, 0 failures",
+    "rowing Session tests": "Rowing Session: 34 checks, 0 failures",
+    "rowing cargo view tests": "Rowing view: 32 checks, 0 failures",
+    "rowing cargo driver tests": "Rowing driver: 39 checks, 0 failures",
+    "rowing cargo model tests": "Rowing cargo: 58 checks, 0 failures",
+    "harbor game progress tests": "PASS: harbor rewards, replay, legacy, captures, reload and atomic failure",
+    "delivered game catalog tests": "PASS: delivered game catalog, copies, regional identity and malformed data",
     "boat prologue state tests": "PASS: boat prologue state, save boundaries, and optional story validation",
     "boat prologue stage tests": "PASS: boat prologue reversible ferry stage, timing, and bounded preview",
     "boat prologue integration tests": "PASS: boat prologue first-run, replay, interruption, and unchanged rewards",
@@ -32,7 +41,7 @@ PASS_MARKERS = {
     "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",
     "pixel UI button depth tests": "PASS: Paper pixel-button depth, state, focus and contrast checks",
     "pixel UI collection tests": "PASS: pixel UI collection, map, achievement, and tutorial checks",
-    "pixel tutorial page tests": "PASS: native-matching tutorial39steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
+    "pixel tutorial page tests": "PASS: native-matching tutorial42steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
     "pixel UI customization tests": "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls",
     "pixel UI minigame tests": "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes",
     "region progress tests": "PASS: region progress defaults, migration, transactions, and rollback",
@@ -157,7 +166,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith("boat prologue ") or label in {"region progress tests", "harbor world tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "harbor ", "delivered game ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -173,6 +182,15 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("region progress tests", common + ["--script", "res://game/tests/test_region_progress.gd"]),
         ("harbor world tests", common + ["--script", "res://game/tests/test_harbor_world.gd"]),
         ("region travel tests", common + ["res://game/tests/test_region_travel.tscn"]),
+        ("delivered game catalog tests", common + ["--script", "res://game/tests/test_game_catalog.gd"]),
+        ("harbor game progress tests", common + ["--script", "res://game/tests/test_harbor_game_progress.gd"]),
+        ("rowing cargo model tests", common + ["--script", "res://game/tests/test_rowing_cargo.gd"]),
+        ("rowing cargo driver tests", common + ["--script", "res://game/tests/test_rowing_cargo_driver.gd"]),
+        ("rowing cargo view tests", common + ["--script", "res://game/tests/test_rowing_cargo_view.gd"]),
+        ("rowing Session tests", common + ["--script", "res://game/tests/test_rowing_session.gd"]),
+        ("harbor collection tests", common + ["--script", "res://game/tests/test_harbor_collection.gd"]),
+        ("rowing Main tests", common + ["res://game/tests/test_rowing_main.tscn"]),
+        ("rowing native fixture tests", common + ["res://game/tests/native_rowing_main.tscn", "--", "--rowing-preflight"]),
         ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
         ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
         ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),

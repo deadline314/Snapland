@@ -83,7 +83,7 @@ class GameTests(unittest.TestCase):
                     v.validate_games(broken, self.refs)
 
     def test_unbuilt_games_cannot_claim_runtime(self):
-        self.data['games'][12]['implementation'] = 'single_player_runtime_needs_full_acceptance'
+        self.data['games'][13]['implementation'] = 'single_player_runtime_needs_full_acceptance'
         with self.assertRaisesRegex(ValueError, 'scope'):
             v.validate_games(self.data, self.refs)
 
@@ -96,10 +96,21 @@ class GameTests(unittest.TestCase):
 
     def test_first_park_matches_current_single_player_rules(self):
         runtime = v.load(ROOT, 'game/data/welcome_games.json')
-        v.validate_runtime_game_alignment(self.data, runtime)
+        v.validate_runtime_game_alignment(self.data, runtime, v.load(ROOT, 'game/data/harbor_games.json'))
         self.data['games'][0]['demon'] = 'a different qualification rule'
         with self.assertRaisesRegex(ValueError, 'runtime demon drift'):
-            v.validate_runtime_game_alignment(self.data, runtime)
+            v.validate_runtime_game_alignment(self.data, runtime, v.load(ROOT, 'game/data/harbor_games.json'))
+
+    def test_harbor_matches_only_actual_delivered_row(self):
+        runtime = v.load(ROOT, 'game/data/welcome_games.json')
+        harbor = v.load(ROOT, 'game/data/harbor_games.json')
+        v.validate_runtime_game_alignment(self.data, runtime, harbor)
+        self.data['games'][12]['runtime_mode'] = 'invented'
+        with self.assertRaisesRegex(ValueError, 'game-013.*runtime runtime_mode drift'):
+            v.validate_runtime_game_alignment(self.data, runtime, harbor)
+        harbor.append(dict(harbor[0], id='game-014', local_index=2))
+        with self.assertRaisesRegex(ValueError, 'delivered harbor runtime coverage'):
+            v.validate_runtime_game_alignment(self.data, runtime, harbor)
 
 
 class StoryTests(unittest.TestCase):

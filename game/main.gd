@@ -4,6 +4,7 @@ const HarborWorld = preload("res://game/world/harbor_world.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
+const Catalog = preload("res://game/core/game_catalog.gd")
 const Session = preload("res://game/minigames/session.gd")
 const PhotoStage = preload("res://game/ui/photo_stage.gd")
 const WardrobePanel = preload("res://game/ui/wardrobe_panel.gd")
@@ -1251,13 +1252,15 @@ func _interact(id: String, title: String) -> void:
 		_travel_to_region("welcome")
 		return
 	if world_region=="harbor":
-		if id=="harbor:tide":
+		if id.begins_with("game-"):
+			_show_game_info(id)
+		elif id=="harbor:tide":
 			world.set_tide(not world.is_high_tide())
 			_notice("漲潮：沙洲暫停通行，免費渡船照常。" if world.is_high_tide() else "退潮：沙洲開放，免費渡船照常。")
 		elif id.begins_with("harbor:ferry:"):
 			world.take_ferry(id)
 		elif id.begins_with("harbor:info:"):
-			_start_dialogue([{ "speaker":title, "text":"沿環岸步道或搭免費渡船前往燈塔。潮汐鐘可預覽漲退潮；遊戲與當地收藏仍在準備中。" }],Callable())
+			_start_dialogue([{ "speaker":title, "text":"沿環岸步道或搭免費渡船前往燈塔。潮汐鐘可預覽漲退潮；浪間小艇已開放，其他十一款遊戲準備中。" }],Callable())
 		return
 	if is_instance_valid(world.coastal_play) and world.coastal_play.activate(id):
 		return
@@ -1339,9 +1342,7 @@ func _story_snapshot() -> Dictionary:
 	}
 
 func _definition(id: String) -> Dictionary:
-	for definition in definitions:
-		if definition.get("id","")==id: return definition
-	return {}
+	return Catalog.find(id)
 
 func _show_game_info(id: String) -> void:
 	var definition := _definition(id)
@@ -1367,7 +1368,7 @@ func _show_game_info(id: String) -> void:
 
 func _show_game_rules(id: String) -> void:
 	var definition := _definition(id)
-	var body := _open(str(definition.get("name",id)),"迎賓大道  /  玩法與選項","game_rules")
+	var body := _open(str(definition.get("name",id)),("潮汐碼頭" if str(Catalog.identity(id).get("zone","welcome"))=="harbor" else "迎賓大道")+"  /  玩法與選項","game_rules")
 	var entry_stamp := HBoxContainer.new()
 	entry_stamp.add_theme_constant_override("separation",8)
 	body.add_child(entry_stamp)
@@ -1382,7 +1383,7 @@ func _show_game_rules(id: String) -> void:
 	objective_card.add_child(Paper.label(str(definition.get("instructions","依畫面提示操作。")),20))
 	var notes := [
 		{"text":"小惡魔："+str(definition.get("devil_hint","完成特殊互動。")),"color":Paper.TEAL},
-		{"text":"完成一般目標可收藏普通拍貼；達成特別條件也會收進小惡魔拍貼。","color":Paper.INK},
+		{"text":"自然結束本局（送完三箱或時間到）可收藏普通拍貼；送完三箱才算成功。中途取消不收藏。" if definition.get("mode","")=="rowing_cargo" else "完成一般目標可收藏普通拍貼；達成特別條件也會收進小惡魔拍貼。","color":Paper.INK},
 		{"text":"輔助遊玩會放寬時間或判定，仍可收藏普通拍貼；小惡魔是否要求未開輔助，以上方條件為準。練習不記錄分數與收藏。","color":Paper.TEAL},
 	]
 	_content_pager(body,"GameRulesExtraDetails",notes,_render_rules_note,1,entry_stamp)
@@ -1443,23 +1444,30 @@ func _cancel_game() -> void:
 	world.show()
 	world.set_process(true)
 
-func _game_finished(result: Dictionary) -> void:
+func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_original_frames: Array[String] = []) -> void:
 	var id := str(result.get("game_id",""))
 	var practice := bool(result.get("practice",false))
-	var saved_frames: Array[String] = []
-	var saved_original_frames: Array[String] = []
-	if bool(result.get("success",false)) and not practice and DisplayServer.get_name()!="headless":
+	var success := bool(result.get("success",false))
+	var ordinary_eligible := bool(result.get("ordinary_eligible",success)) and not practice
+	var reward_saved := false
+	var photos_saved := true
+	if ordinary_eligible and DisplayServer.get_name()!="headless" and (saved_frames.is_empty() or saved_frames.size()<photo_frames.size() or saved_original_frames.size()<photo_original_frames.size()):
 		# The completed session will draw its end overlay on the next frame. Keep
 		# the most recent rendered gameplay image instead of photographing that UI.
 		_append_photo_snapshot()
 		saved_frames=_save_photo_frames(id)
 		saved_original_frames=_save_photo_original_frames(id)
-	if bool(result.get("success",false)) and not practice:
-		celebrate_on_close=true
-		Progress.complete_game(id,bool(result.get("devil",false)),bool(result.get("assisted",false)))
+	if ordinary_eligible:
+		reward_saved=Progress.complete_game(id,success and bool(result.get("devil",false)),bool(result.get("assisted",false)))
+		if reward_saved and not saved_frames.is_empty():
+			photos_saved=_sync_finished_photo_thumbnails(result,saved_frames,saved_original_frames)
+			if DisplayServer.get_name()!="headless":
+				photos_saved=photos_saved and saved_frames.size()==photo_frames.size() and saved_original_frames.size()==photo_original_frames.size()
+		elif DisplayServer.get_name()!="headless":
+			photos_saved=false
+	celebrate_on_close=success and not practice and reward_saved
+	if success and not practice and reward_saved:
 		_record_story_mission_event({"type":"minigame_result","id":id,"success":true,"practice":false})
-		if not saved_frames.is_empty():
-			_sync_finished_photo_thumbnails(result,saved_frames,saved_original_frames)
 	_cancel_game()
 	audio.play_sfx("success" if result.get("success",false) else "miss")
 	var definition := _definition(id)
@@ -1471,19 +1479,26 @@ func _game_finished(result: Dictionary) -> void:
 	result_summary.add_child(Paper.icon("album",23,Paper.CORAL if practice else Paper.TEAL))
 	var score_line := "練習分數 %d（不保存）"%int(result.get("score",0)) if practice else "本次成績 %d   ·   %s"%[int(result.get("score",0)),"輔助遊玩" if result.get("assisted",false) else "標準遊玩"]
 	result_summary.add_child(Paper.label(score_line,20))
-	if result.get("success",false) and not practice:
+	if ordinary_eligible and reward_saved:
 		var award := HBoxContainer.new()
 		award.add_theme_constant_override("separation",8)
 		body.add_child(award)
 		award.add_child(Paper.icon("album",24,Paper.TEAL))
 		award.add_child(Paper.label("普通拍貼已收藏",20,Paper.TEAL))
-		if result.get("devil",false):
+		if success and result.get("devil",false):
 			award.add_child(Paper.icon("devil",24,Paper.CORAL))
 			award.add_child(Paper.label("小惡魔也入鏡了",20,Paper.CORAL))
+	elif ordinary_eligible:
+		body.add_child(Paper.label("收藏尚未保存；請重試保存本局紀錄。",20,Paper.CORAL))
 	elif practice:
 		body.add_child(Paper.label("這是私人練習回合；分數、拍貼、任務與成就都沒有寫入紀錄。",20,Paper.DEEP_TEAL))
 	else:
 		body.add_child(Paper.label("沒有扣除任何收藏。也可以開啟輔助，試試別的節奏。",22))
+	if ordinary_eligible and reward_saved and not photos_saved:
+		body.add_child(Paper.label("拍貼已收藏，但本局照片尚未保存；請重試保存照片。",18,Paper.CORAL))
+	if ordinary_eligible and (not reward_saved or not photos_saved):
+		var retry := Paper.button("重試保存",_game_finished.bind(result,saved_frames,saved_original_frames),modal_footer)
+		retry.name="RetryGameSave"
 	var qualification_text:=str(result.get("score_summary",{}).get("qualification_text",""))
 	if not qualification_text.is_empty():
 		var qualification:=Paper.label(qualification_text,17,Paper.TEAL)
@@ -1538,9 +1553,9 @@ func _game_finished(result: Dictionary) -> void:
 	_back(body)
 
 func _sync_finished_photo_thumbnails(result: Dictionary, saved_frames: Array[String], saved_original_frames: Array[String] = []) -> bool:
-	if not bool(result.get("success",false)) or bool(result.get("practice",false)):
+	if not bool(result.get("ordinary_eligible",result.get("success",false))) or bool(result.get("practice",false)):
 		return false
-	return Progress.attach_welcome_game_photo_frames(str(result.get("game_id","")),saved_frames,bool(result.get("devil",false)),saved_original_frames)
+	return Progress.attach_game_photo_frames(str(result.get("game_id","")),saved_frames,bool(result.get("success",false)) and bool(result.get("devil",false)),saved_original_frames)
 
 func _show_album() -> void:
 	var body := _open("一張照片，一點小事。","PHOTO COLLECTION","album")
@@ -1754,10 +1769,10 @@ func _show_exploration(id: String) -> void:
 	_back(body)
 
 func _show_achievements() -> void:
-	var body := _open("那些「我做到了」的小瞬間。","WELCOME  /  迎賓成就","achievements")
+	var body := _open("那些「我做到了」的小瞬間。","HARBOR  /  碼頭成就" if world_region=="harbor" else "WELCOME  /  迎賓成就","achievements")
 	var stamp_script = load("res://game/ui/achievement_stamp_book.gd")
 	var stamp_book = stamp_script.new()
-	stamp_book.setup(Progress,definitions)
+	stamp_book.setup(Progress,Catalog.definitions(world_region),world_region)
 	stamp_book.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	stamp_book.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(stamp_book)
@@ -1769,6 +1784,9 @@ func _show_map() -> void:
 		var harbor_map = load("res://game/ui/harbor_map_panel.gd").new()
 		harbor_map.setup(world.map_snapshot())
 		harbor_body.add_child(harbor_map)
+		for definition in Catalog.definitions(world_region):
+			var action := Paper.button(str(definition.name)+" · 查看玩法",_show_game_info.bind(str(definition.id)),modal_footer)
+			action.name="HarborGame"+str(definition.id)
 		_back(harbor_body)
 		return
 	var body := _open("今天想去哪一邊？","ISLAND MAP","map")
@@ -2113,7 +2131,7 @@ func _layout_open_panel(panel: Control) -> void:
 	panel.custom_minimum_size=Vector2(width,height)
 
 func _show_ticket() -> void:
-	var body := _open("航海旅券","WELCOME  /  迎賓遊戲指南","ticket")
+	var body := _open("航海旅券","HARBOR  /  碼頭遊戲指南" if world_region=="harbor" else "WELCOME  /  迎賓遊戲指南","ticket")
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2

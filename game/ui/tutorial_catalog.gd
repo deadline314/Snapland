@@ -1,10 +1,10 @@
 extends RefCounted
 class_name TutorialCatalog
-## Loads and validates the MAIN10 park and welcome-game tutorial catalog.
+## Loads and validates the MAIN10 park and delivered-game tutorial catalog.
 
 const DATA_PATH := "res://game/data/tutorials.json"
 const SCREENSHOT_ROOT := "res://assets/ui/tutorials/"
-const EXPECTED_LESSONS := ["park", "game-001", "game-002", "game-003", "game-004", "game-005", "game-006", "game-007", "game-008", "game-009", "game-010", "game-011", "game-012"]
+const EXPECTED_LESSONS := ["park", "game-001", "game-002", "game-003", "game-004", "game-005", "game-006", "game-007", "game-008", "game-009", "game-010", "game-011", "game-012", "game-013"]
 const REQUIRED_STEP_FIELDS := ["id", "title", "image", "alt", "goal", "input", "success"]
 
 var _lessons: Dictionary = {}

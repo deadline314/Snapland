@@ -50,7 +50,9 @@ func _build_region_geometry() -> void:
 	_sign("免費渡船 ↔ 燈塔", Vector3(-12, 0.2, 10.8))
 	_sign("免費渡船 ↔ 岸邊", Vector3(-2, 0.2, 3.8))
 	_sign("環岸步道 → 燈塔", Vector3(-11.8, 0.2, -8.5))
-	_sign("遊戲準備中", Vector3(12, 0.2, -2.3))
+	_sign("浪間小艇 · 空白鍵拿取／交貨", Vector3(12, 0.2, -2.3))
+	_box(Vector3(13.4, 0.8, -0.4), Vector3(1.0, 1.2, 1.0), TEAL)
+	_box(Vector3(13.4, 1.5, -0.4), Vector3(1.5, 0.2, 1.5), CORAL)
 	_tide_label = _sign("退潮 · 沙洲可通行", Vector3(-12, 0.2, -3.0))
 	_cylinder(Vector3(-13.8, 1.35, -3), 0.48, 0.16, GOLD).rotation_degrees.x = 90
 	_box(Vector3(-13.8, 0.75, -3), Vector3(0.14, 1.5, 0.14), TEAL)
@@ -59,7 +61,8 @@ func _build_region_geometry() -> void:
 	_point("harbor:ferry:shore", "免費渡船 · 前往燈塔", SHORE_DOCK)
 	_point("harbor:ferry:lighthouse", "免費渡船 · 返回岸邊", LIGHTHOUSE_DOCK)
 	_point("harbor:info:lighthouse", "燈塔與環形水路", Vector3(0, GROUND_Y, -2))
-	_point("harbor:info:games", "潮汐碼頭遊戲準備中", Vector3(12, GROUND_Y, 0))
+	_point("game-013", "浪間小艇 · 免費遊玩", Vector3(12, GROUND_Y, 0))
+	_sign("其餘十一款遊戲準備中", Vector3(12, 0.2, 3))
 	current_area = "潮汐碼頭"
 
 func _terrain(rect: Rect2, material: Material) -> MeshInstance3D:

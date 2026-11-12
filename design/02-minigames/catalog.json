@@ -333,8 +333,9 @@
       "reference": "catalog-b360",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「划槳、轉舵並側滑靠岸」；「逆浪抄近或繞防波堤」形成取捨，以「同路線不同槳時機改變靠岸角」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "rowing_cargo"
     },
     {
       "name": "潮汐沙路",

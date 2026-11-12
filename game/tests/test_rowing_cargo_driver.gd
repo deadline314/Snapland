@@ -1,7 +1,7 @@
 extends SceneTree
 const Driver = preload("res://game/minigames/rowing_cargo_driver.gd")
 const View = preload("res://game/minigames/rowing_cargo_view.gd")
-const Solver = preload("res://game/tests/test_rowing_cargo.gd")
+const Solver = preload("res://game/tests/rowing_input_route.gd")
 var checks := 0
 var failures := 0
 func _initialize() -> void:
