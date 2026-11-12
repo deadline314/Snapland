@@ -1,0 +1,60 @@
+{
+  "source_commit": "00b29d7794772812adf32fcb4dfb98ecae11868b",
+  "source_inputs_git_clean": true,
+  "runtime_files": 1089,
+  "exe_sha256": "d7d83e1c46fc79847a65b7ff9e2ed0c40dfc9836470a558a00c34f28191aee53",
+  "exe_bytes": 282206472,
+  "pck_sha256": "d95f86d31be73843ca550e1ee741d10e5d7f38d14374582c774c580de6d0f9e1",
+  "pck_bytes": 172937976,
+  "native": {
+    "800x600/writer": {
+      "captures": 11,
+      "scripted_profile_setup": true,
+      "failures": []
+    },
+    "800x600/restart": {
+      "captures": 10,
+      "scripted_profile_setup": false,
+      "failures": []
+    },
+    "1280x720/writer": {
+      "captures": 11,
+      "scripted_profile_setup": true,
+      "failures": []
+    },
+    "1280x720/restart": {
+      "captures": 10,
+      "scripted_profile_setup": false,
+      "failures": []
+    },
+    "1920x1080/writer": {
+      "captures": 11,
+      "scripted_profile_setup": true,
+      "failures": []
+    },
+    "1920x1080/restart": {
+      "captures": 10,
+      "scripted_profile_setup": false,
+      "failures": []
+    }
+  },
+  "pck_default_forward_plus": "writer11+restart10 PASS; no ERROR",
+  "windows_checks": [
+    "fresh welcome startup PASS",
+    "saved harbor startup40meshes90nodes PASS",
+    "saved-harbor art review welcome12captures PASS; saved harbor preserved"
+  ],
+  "scripted_fixture": true,
+  "fixture_welcome_cards": 6,
+  "earned_in_human_play": false,
+  "human_played": false,
+  "human_listened": false,
+  "ci": {
+    "run": 43255587138,
+    "status": "success",
+    "python_tests": 183,
+    "runtime_checks": 107,
+    "url": "https://github.com/deadline314/Snapland/actions/runs/43255587138"
+  },
+  "existing_warnings": "15 unsupported-material warnings per welcome construction; no new suppression"
+}

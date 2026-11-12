@@ -32,10 +32,10 @@
 
 **Interfaces:** `Progress.current_region: String = "welcome"`; supported persisted values welcome/harbor. `set_current_region(region: String) -> bool` idempotently saves once, rolls back failure and does not emit changed. Missing/invalid/unimplemented destination loads welcome without rejecting other data.
 
-- [ ] Write/run red tests for fresh/reset/missing/malformed/unknown/unimplemented destinations, both supported round trips, same-value no write, rejected value no write, exactly-one-write success, real failure rollback, unknown fields/prologue/rewards preserved.
-- [ ] Reach declaration, payload, known-field exclusion, validation/load/reset paths, keeping version1. Optional malformed field warns and defaults welcome. Add current_region to explicit restart snapshot.
-- [ ] Cover failure with real isolated IO in a captured child, assert exact expected diagnostic+PASS+exit and no hidden errors; parent suite has clean output (reuse existing child-test convention).
-- [ ] Run new state test plus existing core/save/prologue-state regressions; self-review, commit only owned paths, detailed task-1-report.md. Do not edit runner/Main/world/UI.
+- [x] Write/run red tests for fresh/reset/missing/malformed/unknown/unimplemented destinations, both supported round trips, same-value no write, rejected value no write, exactly-one-write success, real failure rollback, unknown fields/prologue/rewards preserved.
+- [x] Reach declaration, payload, known-field exclusion, validation/load/reset paths, keeping version1. Optional malformed field warns and defaults welcome. Add current_region to explicit restart snapshot.
+- [x] Cover failure with real isolated IO in a captured child, assert exact expected diagnostic+PASS+exit and no hidden errors; parent suite has clean output (reuse existing child-test convention).
+- [x] Run new state test plus existing core/save/prologue-state regressions; self-review, commit only owned paths, detailed task-1-report.md. Do not edit runner/Main/world/UI.
 
 ### Task 2: Reusable world seams and real harbor terrain
 
@@ -43,12 +43,12 @@
 
 **Interfaces:** HarborWorld extends ParkWorld; shared world contract unchanged. Expose `set_tide(high: bool)`, `is_high_tide() -> bool`, `take_ferry(point_id: String) -> bool`, `map_snapshot() -> Dictionary` as specified. Points harbor:tide, harbor:ferry:*, harbor:info:*, region:welcome only.
 
-- [ ] Write/run red focused world tests for real independent scene, collision/terrain agreement, safe spawns, return/clock/docks reachability, both tide states, player-on-sandbar rising tide, free ferry and bounded scene reentry.
-- [ ] Extract only existing region geometry/activities, player spawn/floor, instance ground wrapper, movement constraints and area name hooks. Preserve the static welcome ground API and original default behavior/order, including recovery stride reset. Route all internal grounding through wrapper; null-guard optional water materials.
-- [ ] Build distinct lighthouse shore, sandbar shortcut, ring waterway and permanent reachable docks/path with existing helpers/materials. No welcome geometry built then deleted, hidden welcome slabs, NPC/toy controllers or reward points. Use real collision surfaces matching map terrain.
-- [ ] Local tide preview uses no global clock/save; high tide makes sandbar unavailable and safely relocates a player standing there; ferry always free to fixed safe docks, zero velocity. Recovery cannot trap player in water.
-- [ ] Reuse approved avatar/appearance/settings/time/lighting and shared movement; override no-op NPC/activity/collection behavior. Return snapshots only primitive geometry/point data, no retained world nodes.
-- [ ] Run new world test plus affected welcome layout/grounding/avatar-motion/boat-stage tests. Self-review and commit owned files; detailed task-2-report.md. No Main/Progress/UI/runner/docs edits.
+- [x] Write/run red focused world tests for real independent scene, collision/terrain agreement, safe spawns, return/clock/docks reachability, both tide states, player-on-sandbar rising tide, free ferry and bounded scene reentry.
+- [x] Extract only existing region geometry/activities, player spawn/floor, instance ground wrapper, movement constraints and area name hooks. Preserve the static welcome ground API and original default behavior/order, including recovery stride reset. Route all internal grounding through wrapper; null-guard optional water materials.
+- [x] Build distinct lighthouse shore, sandbar shortcut, ring waterway and permanent reachable docks/path with existing helpers/materials. No welcome geometry built then deleted, hidden welcome slabs, NPC/toy controllers or reward points. Use real collision surfaces matching map terrain.
+- [x] Local tide preview uses no global clock/save; high tide makes sandbar unavailable and safely relocates a player standing there; ferry always free to fixed safe docks, zero velocity. Recovery cannot trap player in water.
+- [x] Reuse approved avatar/appearance/settings/time/lighting and shared movement; override no-op NPC/activity/collection behavior. Return snapshots only primitive geometry/point data, no retained world nodes.
+- [x] Run new world test plus affected welcome layout/grounding/avatar-motion/boat-stage tests. Self-review and commit owned files; detailed task-2-report.md. No Main/Progress/UI/runner/docs edits.
 
 ### Task 3: Travel lifecycle and truthful regional UI
 
@@ -56,10 +56,10 @@
 
 **Interfaces:** Consume Tasks1/2. Startup chooses saved world; explicit guarded travel saves before replacing world, applies current settings/look/phase/story and reconnects signals once. Harbor map consumes map_snapshot; collection setup gains optional region default welcome and preserves existing callers.
 
-- [ ] Write/run failing integration tests for below/equal threshold, no consumption/rewards, qualified entry/return, both tides, repeated travel/old-world release, save failure preserving original world, saved-harbor startup, legacy/malformed fallback, profile reset, session/dialogue/capture travel rejection and unchanged welcome flow.
-- [ ] Implement one small explicit welcome/harbor selector and guarded replacement: block reentry/input/old area events, validate known destination and threshold, save first, only then release old world/build destination at safe spawn. Rebind/apply once; initial area/HUD/audio must match region. No transition during game/dialogue/capture; no boat replay on harbor startup/harbor pause. Welcome return retains its replay feature.
-- [ ] Guard exact optional CoastalPlay/discoveries call sites. Preserve current shutdown guards. Keep current-region state and visible world consistent on reset; minigame cancel/settings while in harbor recover the same world/audio without rewards.
-- [ ] Region-scope HUD/pause /18,/12; add harbor-only real map with tide, dock/lighthouse/return markers; welcome map retains routes and shows harbor available with six-card admission. Other gates remain future. Collection defaults current region, can switch to welcome to inspect saved originals; harbor is an honest empty state. Harbor task shortcut directs to welcome, existing game/achievement views explicitly label their welcome scope. Do not add future game definitions.
-- [ ] Register all3 new suites/exact PASS markers in official runner without broad error exceptions. Update intentional welcome-only fixtures narrowly. Run affected travel/UI/story/dialogue/settings/save/boat tests and focused Python runner contracts.
-- [ ] Add native fixture real admission/travel/tide/ferry/free return, restart-from-harbor mode, settings/currentlook, map/collection, no reward changes; exact actual dimensions800x600/1280x720/1920x1080,1.25text/reduced. Controller executes native/isolated PCK/Windows and publishes evidence.
-- [ ] Self-review, commit only owned files and detailed task-3-report.md. Do not push/mark ticket complete.
+- [x] Write/run failing integration tests for below/equal threshold, no consumption/rewards, qualified entry/return, both tides, repeated travel/old-world release, save failure preserving original world, saved-harbor startup, legacy/malformed fallback, profile reset, session/dialogue/capture travel rejection and unchanged welcome flow.
+- [x] Implement one small explicit welcome/harbor selector and guarded replacement: block reentry/input/old area events, validate known destination and threshold, save first, only then release old world/build destination at safe spawn. Rebind/apply once; initial area/HUD/audio must match region. No transition during game/dialogue/capture; no boat replay on harbor startup/harbor pause. Welcome return retains its replay feature.
+- [x] Guard exact optional CoastalPlay/discoveries call sites. Preserve current shutdown guards. Keep current-region state and visible world consistent on reset; minigame cancel/settings while in harbor recover the same world/audio without rewards.
+- [x] Region-scope HUD/pause /18,/12; add harbor-only real map with tide, dock/lighthouse/return markers; welcome map retains routes and shows harbor available with six-card admission. Other gates remain future. Collection defaults current region, can switch to welcome to inspect saved originals; harbor is an honest empty state. Harbor task shortcut directs to welcome, existing game/achievement views explicitly label their welcome scope. Do not add future game definitions.
+- [x] Register all3 new suites/exact PASS markers in official runner without broad error exceptions. Update intentional welcome-only fixtures narrowly. Run affected travel/UI/story/dialogue/settings/save/boat tests and focused Python runner contracts.
+- [x] Add native fixture real admission/travel/tide/ferry/free return, restart-from-harbor mode, settings/currentlook, map/collection, no reward changes; exact actual dimensions800x600/1280x720/1920x1080,1.25text/reduced. Controller executes native/isolated PCK/Windows and publishes evidence.
+- [x] Self-review, commit only owned files and detailed task-3-report.md. Do not push/mark ticket complete.
