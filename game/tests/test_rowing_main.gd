@@ -5,6 +5,13 @@ const Solver = preload("res://game/tests/rowing_input_route.gd")
 var failures: Array[String] = []
 var main: Node
 
+class ObservedMain extends "res://game/main.gd":
+	var dispatched_results: Array[Dictionary] = []
+	func _record_story_mission_event(evidence: Dictionary) -> void:
+		if evidence.get("type", "") == "minigame_result":
+			dispatched_results.append(evidence.duplicate(true))
+		super._record_story_mission_event(evidence)
+
 func _ready() -> void:
 	call_deferred("_run")
 
@@ -118,16 +125,16 @@ func _failure_contract() -> void:
 	check(code == 0 and log.contains("PASS: rowing Main save failure and retry"), "real failed-save child completes")
 	var writes := errors.filter(func(line): return line.contains("Cannot write progress temporary file") and line.contains(child+".tmp"))
 	var attachment := errors.filter(func(line): return line.contains("Could not save gameplay thumbnail paths for 'photo-harbor-game-1'."))
-	if errors.size() != 3 or writes.size() != 2 or attachment.size() != 1:
+	if errors.size() != 8 or writes.size() != 5 or attachment.size() != 3:
 		print("CHILD_DIAGNOSTICS=",JSON.stringify(errors)," EXPECTED_PATH=",child)
-	check(errors.size() == 3 and writes.size() == 2 and attachment.size() == 1, "child captures only exact isolated completion/attachment failures")
+	check(errors.size() == 8 and writes.size() == 5 and attachment.size() == 3, "child captures only exact isolated completion/attachment failures")
 
 func _failure_child() -> void:
 	Progress.reset_progress()
 	Progress.intro_seen = true
 	for i in range(1, 7): Progress.grant_photo("photo-welcome-game-%d" % i)
 	Progress.set_current_region("harbor")
-	main = load("res://game/main.tscn").instantiate()
+	main = ObservedMain.new()
 	get_tree().root.add_child(main)
 	await get_tree().process_frame
 	main._launch_game("game-013", false)
@@ -162,6 +169,42 @@ func _failure_child() -> void:
 	DirAccess.remove_absolute(blocker)
 	if retry != null: retry.pressed.emit()
 	check(Progress.photos["photo-harbor-game-1"].get("frames", []) == [path] and Progress.coins == before_coins+40, "attachment retry saves same actual result with no duplicate coins")
+	check(main.dispatched_results.is_empty(), "timeout and its persistence retries never dispatch story success")
+	# Genuine successful result, retained unchanged while exercising only its saves.
+	main._launch_game("game-013", true)
+	var successful: Control = main.session
+	successful.set_process(false)
+	successful.finished.disconnect(main._game_finished)
+	var completed: Array[Dictionary] = []
+	successful.finished.connect(func(result: Dictionary): completed.append(result))
+	Solver.solve(Commands.new(successful))
+	successful._process(0.0)
+	check(completed.size() == 1 and completed[0].success and completed[0].devil, "story retry fixture earns real assisted success")
+	var unchanged := completed[0].duplicate(true)
+	DirAccess.make_dir_recursive_absolute(blocker)
+	main._game_finished(completed[0], paths, paths)
+	check(main.dispatched_results.is_empty(), "failed successful-result reward save dispatches zero story events")
+	DirAccess.remove_absolute(blocker)
+	# The reward saves first; block only its following attachment write.
+	Progress.changed.connect(func(): DirAccess.make_dir_recursive_absolute(blocker), CONNECT_ONE_SHOT)
+	retry = main.overlay.find_child("RetryGameSave", true, false) as Button
+	if retry != null: retry.pressed.emit()
+	check(main.dispatched_results.size() == 1 and _text(main.overlay).contains("照片尚未保存"), "successful reward dispatches once despite photo failure")
+	retry = main.overlay.find_child("RetryGameSave", true, false) as Button
+	if retry != null: retry.pressed.emit()
+	check(main.dispatched_results.size() == 1, "repeated failed photo repair cannot replay story success")
+	DirAccess.remove_absolute(blocker)
+	retry = main.overlay.find_child("RetryGameSave", true, false) as Button
+	if retry != null: retry.pressed.emit()
+	check(main.dispatched_results.size() == 1 and not _text(main.overlay).contains("照片尚未保存"), "successful photo repair cannot replay story success")
+	check(completed[0] == unchanged, "retry keeps caller-owned actual result immutable")
+	main._launch_game("game-013", true)
+	var replay: Control = main.session
+	replay.set_process(false)
+	Solver.solve(Commands.new(replay))
+	replay._process(0.0)
+	check(main.dispatched_results.size() == 2, "genuinely separate successful replay dispatches its own single event")
+	check(Progress.coins == before_coins+40, "successful reward and photo retries keep atomic one-time coins")
 	main.audio.shutdown()
 	await get_tree().create_timer(0.15).timeout
 	main.queue_free()

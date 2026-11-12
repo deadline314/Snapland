@@ -1444,7 +1444,7 @@ func _cancel_game() -> void:
 	world.show()
 	world.set_process(true)
 
-func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_original_frames: Array[String] = []) -> void:
+func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_original_frames: Array[String] = [], story_notified: bool = false) -> void:
 	var id := str(result.get("game_id",""))
 	var practice := bool(result.get("practice",false))
 	var success := bool(result.get("success",false))
@@ -1466,7 +1466,8 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 		elif DisplayServer.get_name()!="headless":
 			photos_saved=false
 	celebrate_on_close=success and not practice and reward_saved
-	if success and not practice and reward_saved:
+	if success and not practice and reward_saved and not story_notified:
+		story_notified=true
 		_record_story_mission_event({"type":"minigame_result","id":id,"success":true,"practice":false})
 	_cancel_game()
 	audio.play_sfx("success" if result.get("success",false) else "miss")
@@ -1497,7 +1498,7 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 	if ordinary_eligible and reward_saved and not photos_saved:
 		body.add_child(Paper.label("拍貼已收藏，但本局照片尚未保存；請重試保存照片。",18,Paper.CORAL))
 	if ordinary_eligible and (not reward_saved or not photos_saved):
-		var retry := Paper.button("重試保存",_game_finished.bind(result,saved_frames,saved_original_frames),modal_footer)
+		var retry := Paper.button("重試保存",_game_finished.bind(result,saved_frames,saved_original_frames,story_notified),modal_footer)
 		retry.name="RetryGameSave"
 	var qualification_text:=str(result.get("score_summary",{}).get("qualification_text",""))
 	if not qualification_text.is_empty():
