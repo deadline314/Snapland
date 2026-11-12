@@ -157,6 +157,21 @@ func _ready() -> void:
 	_load_foliage_atlas()
 	_load_identity_atlas()
 	_build_lighting()
+	_build_region_geometry()
+	_build_player()
+	_build_region_activities()
+	_build_camera()
+	_update_sprite_grounding()
+	occlusion_controller.configure(player,camera)
+	occlusion_controller.set_reveal_visual(avatar)
+	_register_npc_activity()
+	interaction_requested.connect(_on_interaction_requested)
+	component_motion.finish_registration()
+	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
+	set_time_of_day(TimeOfDayScript.DEFAULT_PHASE)
+
+
+func _build_region_geometry() -> void:
 	_build_land()
 	_build_shoreline()
 	_build_dock()
@@ -167,7 +182,8 @@ func _ready() -> void:
 	story_landmarks = StoryLandmarksScript.new()
 	add_child(story_landmarks)
 	story_landmarks.configure(self)
-	_build_player()
+
+func _build_region_activities() -> void:
 	coastal_play=CoastalPlay.new()
 	coastal_play.name="CoastalFreePlay"
 	add_child(coastal_play)
@@ -176,15 +192,6 @@ func _ready() -> void:
 	island_attractions.name = "IslandAttractions"
 	add_child(island_attractions)
 	island_attractions.configure(self, player, Vector3(-6.7, 0.26, 11.2))
-	_build_camera()
-	_update_sprite_grounding()
-	occlusion_controller.configure(player,camera)
-	occlusion_controller.set_reveal_visual(avatar)
-	_register_npc_activity()
-	interaction_requested.connect(_on_interaction_requested)
-	component_motion.finish_registration()
-	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
-	set_time_of_day(TimeOfDayScript.DEFAULT_PHASE)
 
 
 func _exit_tree() -> void:
@@ -370,6 +377,9 @@ static func sprite_ground_anchor_y(
 	var feet_from_center := (feet_row - canvas_height * 0.5) * pixel_size
 	return ground_y - parent_world_y - sprite_local_y + feet_from_center * camera_up_y
 
+func ground_surface_y(world_position: Vector3) -> float:
+	return _ground_surface_y(world_position)
+
 static func _ground_surface_y(world_position: Vector3) -> float:
 	# Match the tops of the raised boardwalk and authored district floors as well
 	# as the plaza/avenue path; the lawn is the fallback.
@@ -432,7 +442,7 @@ func _update_sprite_grounding() -> void:
 			continue
 		var ground_y := float(record.ground_y)
 		if parent == player:
-			ground_y = _ground_surface_y(player.global_position)
+			ground_y = ground_surface_y(player.global_position)
 		var desired_y := sprite_ground_anchor_y(
 			ground_y,
 			parent.global_position.y,
@@ -450,7 +460,7 @@ func _update_sprite_grounding() -> void:
 		var shadow := record.get("node") as Node3D
 		var anchor := record.get("anchor") as Node3D
 		if not is_instance_valid(shadow) or not is_instance_valid(anchor): continue
-		var shadow_y := _ground_surface_y(anchor.global_position) - anchor.global_position.y + 0.005
+		var shadow_y := ground_surface_y(anchor.global_position) - anchor.global_position.y + 0.005
 		if absf(shadow.position.y - shadow_y) > 0.0005:
 			shadow.position.y = shadow_y
 		var ground_offset: Vector3 = record.get("ground_offset", Vector3.ZERO)
@@ -461,7 +471,7 @@ func _update_sprite_grounding() -> void:
 		var proxy := proxy_record.get("node") as Node3D
 		var actor := proxy_record.get("actor") as Node3D
 		if not is_instance_valid(proxy) or not is_instance_valid(actor): continue
-		proxy.position.y = 0.0 if actor == player and is_riding() else _ground_surface_y(actor.global_position) - actor.global_position.y
+		proxy.position.y = 0.0 if actor == player and is_riding() else ground_surface_y(actor.global_position) - actor.global_position.y
 		var silhouette = proxy_record.get("silhouette")
 		if is_instance_valid(silhouette):
 			silhouette.scene_camera = camera
@@ -1865,7 +1875,7 @@ func _npc(pos: Vector3, color: Color, title: String) -> void:
 	# Sprite lighting, but do not displace those pixels a second time in shader.
 	_set_living_sprite_material(sprite,1,phase,breath_rate,idle_role,false)
 	ground_anchor.add_child(sprite)
-	var ground_y := _ground_surface_y(pos)
+	var ground_y := ground_surface_y(pos)
 	_register_sprite_ground_anchor(sprite,ground_anchor,activity_root,ground_y,float(NpcActivityScript.ACTION_FEET_ROW),float(NpcActivityScript.ACTION_CANVAS_SIZE.y))
 	_add_contact_shadow(activity_root,Vector3(0,ground_y-activity_root.global_position.y+0.005,0),Vector2(0.78,0.46))
 	_add_actor_shadow_proxy(activity_root,role,ground_y-activity_root.global_position.y,sprite)
@@ -2137,7 +2147,7 @@ func _build_player() -> void:
 	# Ramps keep the requested ground speed; otherwise gravity bleeds uphill travel and the
 	# distance-driven walk cycle visibly slows mid-climb.
 	player.floor_constant_speed=true
-	player.position=Vector3(0,0.3,23.2)
+	player.position=_player_spawn_position()
 	var collision := CollisionShape3D.new()
 	var capsule := CapsuleShape3D.new()
 	capsule.radius=0.3
@@ -2164,13 +2174,19 @@ func _build_player() -> void:
 	avatar_ground_anchor.add_child(avatar)
 	avatar.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	avatar_contact_shadow=_add_contact_shadow(player,Vector3(0,0,0),Vector2(0.92,0.58))
-	_add_actor_shadow_proxy(player,"hero",_ground_surface_y(player.position)-player.position.y,avatar)
-	_register_sprite_ground_anchor(avatar,avatar_ground_anchor,player,_ground_surface_y(player.position),float(AvatarRenderer.FEET_BASELINE),float(AvatarRenderer.CANVAS_SIZE.y))
+	_add_actor_shadow_proxy(player,"hero",ground_surface_y(player.position)-player.position.y,avatar)
+	_register_sprite_ground_anchor(avatar,avatar_ground_anchor,player,ground_surface_y(player.position),float(AvatarRenderer.FEET_BASELINE),float(AvatarRenderer.CANVAS_SIZE.y))
 	add_child(player)
 	# Production presentation uses the complete authored Sprite atlases directly.
 	# The optional AvatarMotionRig remains available to isolated review scenes.
 	avatar_motion_rig=null
 	avatar_motion_available=false
+	_build_player_floor()
+
+func _player_spawn_position() -> Vector3:
+	return Vector3(0,0.3,23.2)
+
+func _build_player_floor() -> void:
 	# Ground collision covers walkable land and dock. Sea never traps the player.
 	for geometry in [Vector3(72,0.2,96),Vector3(5,0.2,13)]:
 		var floor_body := StaticBody3D.new()
@@ -2218,12 +2234,12 @@ func _sync_external_avatar_reposition() -> void:
 		avatar_is_walking=false
 		walk_distance_phase=0.0
 		if avatar_motion_available and is_instance_valid(avatar_motion_rig):
-			avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+			avatar_motion_rig.position.y=ground_surface_y(player.global_position)-player.global_position.y
 			_sync_avatar_motion_camera(true)
 	avatar_last_physics_position=current_position
 
 func _avatar_ground_height(point: Vector2) -> float:
-	return _ground_surface_y(Vector3(point.x,0.0,point.y))
+	return ground_surface_y(Vector3(point.x,0.0,point.y))
 
 static func motion_sources_ready(records: Dictionary) -> bool:
 	const REQUIRED_DIRECTIONS := ["front","front_right","right","back_right","back","back_left","left","front_left"]
@@ -2232,6 +2248,25 @@ static func motion_sources_ready(records: Dictionary) -> bool:
 		var record: Variant=records.get(direction,{})
 		if not record is Dictionary or not bool(record.get("valid",false)): return false
 	return true
+
+func _constrain_player(previous_position: Vector3) -> bool:
+	player.position.z=clampf(player.position.z,CoastalCircuit.WALK_BOUNDS.position.y,26.5)
+	player.position.x=clampf(player.position.x,CoastalCircuit.WALK_BOUNDS.position.x,CoastalCircuit.WALK_BOUNDS.end.x)
+	# Terrain edge: prevent stepping from the land directly into water.
+	if player.position.z>18.0 and absf(player.position.x)>2.05:
+		if previous_position.z>18.0:
+			player.position.x=clampf(player.position.x,-2.05,2.05)
+		else:
+			player.position.z=18.0
+	if player.position.z>18.6:
+		player.position.x=clampf(player.position.x,-2.05,2.05)
+	if player.position.y < -1.0:
+		player.position=Vector3(0,0.3,10)
+		return true
+	return false
+
+func _area_at_position(position: Vector3) -> String:
+	return "海岸環線" if absf(position.x)>20.0 or position.z < -48.0 else ("海風碼頭" if position.z>12 else ("迎賓大道" if position.z < -11 else "中央廣場"))
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(player): return
@@ -2272,18 +2307,7 @@ func _physics_process(delta: float) -> void:
 	var previous_position: Vector3=player.position
 	var previous_world_position: Vector3=player.global_position
 	player.move_and_slide()
-	player.position.z=clampf(player.position.z,CoastalCircuit.WALK_BOUNDS.position.y,26.5)
-	player.position.x=clampf(player.position.x,CoastalCircuit.WALK_BOUNDS.position.x,CoastalCircuit.WALK_BOUNDS.end.x)
-	# Terrain edge: prevent stepping from the land directly into water.
-	if player.position.z>18.0 and absf(player.position.x)>2.05:
-		if previous_position.z>18.0:
-			player.position.x=clampf(player.position.x,-2.05,2.05)
-		else:
-			player.position.z=18.0
-	if player.position.z>18.6:
-		player.position.x=clampf(player.position.x,-2.05,2.05)
-	if player.position.y < -1.0:
-		player.position=Vector3(0,0.3,10)
+	if _constrain_player(previous_position):
 		previous_position=player.position
 		previous_world_position=player.global_position
 	var actual_world_delta := player.global_position-previous_world_position
@@ -2294,7 +2318,7 @@ func _physics_process(delta: float) -> void:
 		facing = quantize_walk_direction(horizontal_delta, facing)
 		walk_distance_phase = advance_walk_phase(walk_distance_phase, travelled, walk_stride_for(facing))
 	if avatar_motion_available:
-		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+		avatar_motion_rig.position.y=ground_surface_y(player.global_position)-player.global_position.y
 		camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
 		camera.look_at(player.position+Vector3(0,1,0))
 		_sync_avatar_motion_camera()
@@ -2323,7 +2347,7 @@ func _physics_process(delta: float) -> void:
 	if avatar_motion_available: _sync_avatar_motion_camera()
 	_update_sprite_grounding()
 	_update_npc_name_labels()
-	var area := "海岸環線" if absf(player.position.x)>20.0 or player.position.z < -48.0 else ("海風碼頭" if player.position.z>12 else ("迎賓大道" if player.position.z < -11 else "中央廣場"))
+	var area := _area_at_position(player.position)
 	if area!=current_area:
 		current_area=area
 		area_changed.emit(area)
@@ -2489,7 +2513,7 @@ func play_action(name: String) -> void:
 	else:
 		_warn_missing_avatar_action_once(action)
 	if avatar_motion_available and not is_riding():
-		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+		avatar_motion_rig.position.y=ground_surface_y(player.global_position)-player.global_position.y
 		avatar_motion_rig.cancel_motion()
 	avatar_action=action
 	avatar_action_remaining=_avatar_action_duration(action, action_direction if not action_direction.is_empty() else facing)
@@ -2671,8 +2695,8 @@ func _update_lamp_selection(force := false) -> void:
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
 	set_avatar_hair_motion_enabled(avatar_hair_motion_enabled)
-	sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
-	fountain_water.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
+	if sea_material != null: sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
+	if fountain_water != null: fountain_water.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	if is_instance_valid(component_motion): component_motion.set_reduced_motion(reduced_motion)
 	if is_instance_valid(npc_activity): npc_activity.set_reduced_motion(reduced_motion)
 	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
@@ -2697,7 +2721,7 @@ func end_ride() -> void:
 	if is_instance_valid(island_attractions):
 		island_attractions.end_ride()
 	if avatar_motion_available:
-		avatar_motion_rig.position.y=_ground_surface_y(player.global_position)-player.global_position.y
+		avatar_motion_rig.position.y=ground_surface_y(player.global_position)-player.global_position.y
 		avatar_motion_rig.cancel_motion()
 	avatar_is_walking=false
 	avatar_action=""
