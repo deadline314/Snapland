@@ -12,6 +12,8 @@
 
 `python tools/run_game_tests.py` 執行真實 Godot 的乾淨匯入、啟動及受影響 runtime 測試，缺少引擎或腳本錯誤會失敗。測試使用獨立暫存 profile，不覆寫玩家進度。
 
+完整 CI 使用四個必要遊戲批次，共用素材來源只檢查一次；本機預設仍跑全部。可用 `--shard-index 0 --shard-count 4` 執行其中一批（索引 0–3）；與 `--only` 不可混用，單批結果只代表該批。分批覆蓋與實測耗時見 [驗證分批](design/runtime/runtime-ci-shards.md)。
+
 原生 GPU 截圖：`godot --path . -- --capture`。驗收時另設 `SNAPLAND_SAVE_PATH` 到測試檔案；截圖模式自動退出。設計研究、來源與驗收限制見 [本輪設計](design/runtime/DESIGN.md) 及 [票券入口](pm/README.md)。
 
 十二款原生自動操作驗收：指定獨立 `SNAPLAND_SAVE_PATH` 後執行 `godot --path . res://game/tests/native_review.tscn`，需要 GPU。它輸入鍵鼠事件並保存結算畫面，屬程式化驗收，不能代表真人的樂趣或音樂聽感評價。

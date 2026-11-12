@@ -1,0 +1,253 @@
+{
+  "source_commit": "6956f93e2e1b5e1898fb5aae48998d2228ad9dd1",
+  "run_url": "https://github.com/deadline314/Snapland/actions/runs/43263971097",
+  "conclusion": "success",
+  "attempt": 2,
+  "python_tests": 196,
+  "local_contract_tests": 46,
+  "local_native_shard": {
+    "index": 1,
+    "runtime_checks": 22,
+    "clean_import": 1,
+    "suite_seconds_sum": 255.61
+  },
+  "coverage": {
+    "run": 43263971097,
+    "attempt": 2,
+    "conclusion": "success",
+    "shards": [
+      {
+        "index": 0,
+        "job": 131353895092,
+        "startedAt": "2026-11-12T16:59:59Z",
+        "completedAt": "2026-11-12T17:10:28Z",
+        "runtime_step": {
+          "completedAt": "2026-11-12T17:10:24Z",
+          "conclusion": "success",
+          "name": "Run native Godot startup and runtime tests",
+          "number": 6,
+          "startedAt": "2026-11-12T17:05:38Z",
+          "status": "completed"
+        },
+        "runtime_count": 26,
+        "checks": [
+          "clean project import",
+          "game startup",
+          "island alternate hair source tests",
+          "avatar role rig tests",
+          "authored avatar walk loop tests",
+          "authored NPC patrol tests",
+          "atomic outfit coverage tests",
+          "side outfit palette tests",
+          "avatar prop foreground tests",
+          "sprite clearance tests",
+          "component animation tests",
+          "kite flight view tests",
+          "hat rescue view tests",
+          "melody memory view tests",
+          "shadow theatre view tests",
+          "pipe plan presentation tests",
+          "balloon harbor presentation tests",
+          "fountain timing tests",
+          "boat prologue stage tests",
+          "promenade free play tests",
+          "coastal free play tests",
+          "saved photo viewer tests",
+          "photo original preservation tests",
+          "island dialogue tests",
+          "pixel UI button depth tests",
+          "pixel UI customization tests",
+          "pixel typography tests"
+        ]
+      },
+      {
+        "index": 1,
+        "job": 131353985094,
+        "startedAt": "2026-11-12T16:59:59Z",
+        "completedAt": "2026-11-12T17:07:49Z",
+        "runtime_step": {
+          "completedAt": "2026-11-12T17:07:46Z",
+          "conclusion": "success",
+          "name": "Run native Godot startup and runtime tests",
+          "number": 6,
+          "startedAt": "2026-11-12T17:03:06Z",
+          "status": "completed"
+        },
+        "runtime_count": 22,
+        "checks": [
+          "clean project import",
+          "avatar runtime tests",
+          "avatar attachment tests",
+          "seated avatar tests",
+          "source registration coordinate tests",
+          "NPC world activity tests",
+          "NPC direction lifecycle tests",
+          "NPC missing walk idle tests",
+          "NPC dialogue hold tests",
+          "kite flight model tests",
+          "bench swap model tests",
+          "sign balance view tests",
+          "hat rescue model tests",
+          "ribbon rhythm view tests",
+          "shadow theatre model tests",
+          "boat prologue state tests",
+          "boat prologue integration tests",
+          "island game entry tests",
+          "island audio dynamics tests",
+          "main scene integration tests",
+          "pixel UI shell tests",
+          "pixel tutorial page tests",
+          "localization framework tests"
+        ]
+      },
+      {
+        "index": 2,
+        "job": 131353964270,
+        "startedAt": "2026-11-12T16:59:59Z",
+        "completedAt": "2026-11-12T17:11:22Z",
+        "runtime_step": {
+          "completedAt": "2026-11-12T17:11:19Z",
+          "conclusion": "success",
+          "name": "Run native Godot startup and runtime tests",
+          "number": 6,
+          "startedAt": "2026-11-12T17:02:37Z",
+          "status": "completed"
+        },
+        "runtime_count": 30,
+        "checks": [
+          "clean project import",
+          "region progress tests",
+          "core runtime tests",
+          "avatar renderer tests",
+          "avatar motion rig runtime tests",
+          "avatar motion world integration tests",
+          "authored avatar side idle tests",
+          "authored idle hair attachment tests",
+          "character animation library tests",
+          "garment cache tests",
+          "legacy head source tests",
+          "NPC animation state tests",
+          "tutorial panel/catalog tests",
+          "tutorial seen progress tests",
+          "travel collection UI tests",
+          "tutorial image/control tests",
+          "daylight lighting tests",
+          "NPC activity tests",
+          "NPC motion source tests",
+          "NPC walk motion tests",
+          "building occlusion tests",
+          "bubble photo model tests",
+          "bubble photo view tests",
+          "crowd semaphore view tests",
+          "pipe round model tests",
+          "crowd crossing view tests",
+          "main story integration tests",
+          "island layout tests",
+          "shared photo thumbnail tests",
+          "pixel UI popup tests",
+          "pixel UI minigame tests"
+        ]
+      },
+      {
+        "index": 3,
+        "job": 131353895101,
+        "startedAt": "2026-11-12T16:59:58Z",
+        "completedAt": "2026-11-12T17:08:46Z",
+        "runtime_step": {
+          "completedAt": "2026-11-12T17:08:44Z",
+          "conclusion": "success",
+          "name": "Run native Godot startup and runtime tests",
+          "number": 6,
+          "startedAt": "2026-11-12T17:02:55Z",
+          "status": "completed"
+        },
+        "runtime_count": 28,
+        "checks": [
+          "clean project import",
+          "harbor world tests",
+          "region travel tests",
+          "test/review save isolation tests",
+          "wardrobe runtime tests",
+          "island hair lifecycle tests",
+          "minigame HUD hierarchy tests",
+          "eight-direction walk tests",
+          "authored NPC source walking tests",
+          "NPC departure lifecycle tests",
+          "garment overlay tests",
+          "garment part ownership tests",
+          "time-of-day tests",
+          "actor alpha silhouette tests",
+          "wardrobe UI tests",
+          "bench swap view tests",
+          "sign balance model tests",
+          "melody memory model tests",
+          "ribbon rhythm model tests",
+          "ribbon Session startup tests",
+          "ribbon Session lifecycle tests",
+          "welcome minigame tests",
+          "crowd traffic model tests",
+          "fountain jump view tests",
+          "balloon delivery tests",
+          "story runtime tests",
+          "island ride tests",
+          "audio runtime tests",
+          "pixel UI collection tests"
+        ]
+      }
+    ],
+    "unique_runtime_checks": 106,
+    "clean_imports": 4
+  },
+  "jobs": [
+    {
+      "id": 131353890017,
+      "name": "full-suite",
+      "conclusion": "success",
+      "startedAt": "2026-11-12T17:14:02Z",
+      "completedAt": "2026-11-12T17:17:41Z"
+    },
+    {
+      "id": 131353893301,
+      "name": "runtime-source",
+      "conclusion": "success",
+      "startedAt": "2026-11-12T16:55:51Z",
+      "completedAt": "2026-11-12T16:59:55Z"
+    },
+    {
+      "id": 131353895092,
+      "name": "game-runtime (0)",
+      "conclusion": "success",
+      "startedAt": "2026-11-12T16:59:59Z",
+      "completedAt": "2026-11-12T17:10:28Z"
+    },
+    {
+      "id": 131353895101,
+      "name": "game-runtime (3)",
+      "conclusion": "success",
+      "startedAt": "2026-11-12T16:59:58Z",
+      "completedAt": "2026-11-12T17:08:46Z"
+    },
+    {
+      "id": 131353964270,
+      "name": "game-runtime (2)",
+      "conclusion": "success",
+      "startedAt": "2026-11-12T16:59:59Z",
+      "completedAt": "2026-11-12T17:11:22Z"
+    },
+    {
+      "id": 131353985094,
+      "name": "game-runtime (1)",
+      "conclusion": "success",
+      "startedAt": "2026-11-12T16:59:59Z",
+      "completedAt": "2026-11-12T17:07:49Z"
+    }
+  ],
+  "retry_note": "Initial full-suite checkout took9m18s and job hit existing10m timeout. Only full-suite retried; source and four successful runtime jobs retained. No timeout or strict error-policy changes.",
+  "reviews": {
+    "task1": "approved",
+    "task2": "approved",
+    "whole_branch": "approved"
+  },
+  "product_ui_changed": false,
+  "human_play_claim": false
+}

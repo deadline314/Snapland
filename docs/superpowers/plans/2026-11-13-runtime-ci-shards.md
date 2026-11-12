@@ -30,12 +30,12 @@
 
 **Interfaces:** `--shard-index I --shard-count N` 0-based, both-or-neither; invalid/negative/outside/empty and --only combination fail. Default invocation unchanged. Extract one reusable suite-construction function and one selection/partition helper if required; choose clear names and record for Task2. Use stable hashlib label hash, preserve registry order and commands.
 
-- [ ] Run existing result/entrypoint contract baseline before changes; write/run red shard tests using actual registry plus small edge fixtures, then implement.
-- [ ] Move existing registry without altering commands/order. Validate unique labels, complete marker correspondence and nonempty runtime catalog. Keep every existing missing-engine/test/version/marker/error guard; missing markers cannot hide in unselected shards.
-- [ ] Add validated CLI pair; stable per-label assignment independent of process hash seed/input membership/order, clean import always first, exactly-once union across4 and representative other counts. Reject empty shard and --only mixing. Default and old flags keep current semantics.
-- [ ] Meaningful tests cover real registry completeness/partition union/disjointness, ordering/no mutation, stable membership, invalid values, actual main selection invocation, nonzero/errors/missing marker behavior and per-suite profile isolation. Do not mirror the chosen hash's numeric answers.
-- [ ] Run focused new+existing Python contracts and one actual Godot shard (not only mocked commands). Record exact labels/count, pinned engine, isolated profiles and output. No repeat full suite required locally; four real cloud shards are Task2/controller gate.
-- [ ] Self-review, commit owned paths, detailed task-1-report.md with status/commit/interfaces/exact commands/logs/concerns. Do not change workflow or tickets.
+- [x] Run existing result/entrypoint contract baseline before changes; write/run red shard tests using actual registry plus small edge fixtures, then implement.
+- [x] Move existing registry without altering commands/order. Validate unique labels, complete marker correspondence and nonempty runtime catalog. Keep every existing missing-engine/test/version/marker/error guard; missing markers cannot hide in unselected shards.
+- [x] Add validated CLI pair; stable per-label assignment independent of process hash seed/input membership/order, clean import always first, exactly-once union across4 and representative other counts. Reject empty shard and --only mixing. Default and old flags keep current semantics.
+- [x] Meaningful tests cover real registry completeness/partition union/disjointness, ordering/no mutation, stable membership, invalid values, actual main selection invocation, nonzero/errors/missing marker behavior and per-suite profile isolation. Do not mirror the chosen hash's numeric answers.
+- [x] Run focused new+existing Python contracts and one actual Godot shard (not only mocked commands). Record exact labels/count, pinned engine, isolated profiles and output. No repeat full suite required locally; four real cloud shards are Task2/controller gate.
+- [x] Self-review, commit owned paths, detailed task-1-report.md with status/commit/interfaces/exact commands/logs/concerns. Do not change workflow or tickets.
 
 ### Task 2: Complete required CI matrix and timing evidence
 
@@ -43,7 +43,7 @@
 
 **Interfaces:** Consume Task1 flags, four indices0/1/2/3 with count4. Preserve full-suite job and all triggers, shared source gates once as a required prerequisite, game-runtime becomes fail-fast:false matrix.
 
-- [ ] Read actual workflow and source preflight requirements. Preserve pinned Python/Godot/action versions, rights, timeouts, concurrency and all existing source/runtime/coverage/entrypoint checks.
-- [ ] Move authoring/source preflight from repeated runtime job to a required once-only job; install its existing pinned engine there. Each runtime matrix job installs its own original pinned engine, keeps parser/entrypoint/partition coverage validation and runs its exact shard. No missing fourth job or partial --only filter.
-- [ ] Validate existing/new contracts and exact matrix/flag coverage without a new YAML dependency. Parent pushes and runs actual full cloud workflow; any syntax/coverage failure must be fixed, no bypass.
-- [ ] Self-review, commit owned paths, detailed task-2-report.md. Controller records per-job actual results/times, confirms full actual universe covered, reviews branch, updates ticket and merges/pushes/cleans. No visual screenshot is needed because product UI is unchanged.
+- [x] Read actual workflow and source preflight requirements. Preserve pinned Python/Godot/action versions, rights, timeouts, concurrency and all existing source/runtime/coverage/entrypoint checks.
+- [x] Move authoring/source preflight from repeated runtime job to a required once-only job; install its existing pinned engine there. Each runtime matrix job installs its own original pinned engine, keeps parser/entrypoint/partition coverage validation and runs its exact shard. No missing fourth job or partial --only filter.
+- [x] Validate existing/new contracts and exact matrix/flag coverage without a new YAML dependency. Parent pushes and runs actual full cloud workflow; any syntax/coverage failure must be fixed, no bypass.
+- [x] Self-review, commit owned paths, detailed task-2-report.md. Controller records per-job actual results/times, confirms full actual universe covered, reviews branch, updates ticket and merges/pushes/cleans. No visual screenshot is needed because product UI is unchanged.
