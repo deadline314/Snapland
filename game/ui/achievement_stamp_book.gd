@@ -104,8 +104,8 @@ func _ready() -> void:
 	_game_summary=BoxContainer.new()
 	_game_summary.vertical=true
 	_game_summary.add_theme_constant_override("separation",6)
-	_summary_title=Paper.section_title("%s設施｜初次完成 · %d 枚" % ["碼頭" if _zone=="harbor" else "迎賓",_games.size()])
-	_summary_copy=Paper.label("每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。",16,Paper.INK)
+	_summary_title=Paper.section_title("%s設施｜初次收藏 · %d 枚" % ["碼頭" if _zone=="harbor" else "迎賓",_games.size()])
+	_summary_copy=Paper.label("每款遊戲收藏首張拍貼即可蓋章，普通或小惡魔皆可。",16,Paper.INK)
 	_game_summary.add_child(_summary_title)
 	_game_summary.add_child(_summary_copy)
 	_game_body.add_child(_game_summary)
@@ -143,7 +143,7 @@ func _ready() -> void:
 		title.custom_minimum_size.x=140.0/Paper.physical_scale(self)
 		copy.add_child(title)
 		copy.add_child(Paper.label("已蓋章" if unlocked else "待完成",15,Paper.TEAL if unlocked else Paper.INK))
-		var condition := Paper.label("條件：收藏這款遊戲的普通拍貼",16,Paper.INK)
+		var condition := Paper.label("條件：收藏這款遊戲首張拍貼",16,Paper.INK)
 		condition.name="StampCondition"
 		copy.add_child(condition)
 		row.add_child(copy)
@@ -238,9 +238,9 @@ func _fit_stamp_columns(grid: GridContainer) -> void:
 	_game_body.vertical=true
 	_game_summary.vertical=not compact
 	_game_summary.custom_minimum_size.x=0.0
-	_summary_title.text=("%s印章 · %d 枚" if compact else "%s設施｜初次完成 · %d 枚") % ["碼頭" if _zone=="harbor" else "迎賓",_games.size()]
-	_summary_copy.text="灰色：收藏普通拍貼後蓋章" if compact else "每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。"
-	_summary_copy.tooltip_text="每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。"
+	_summary_title.text=("%s印章 · %d 枚" if compact else "%s設施｜初次收藏 · %d 枚") % ["碼頭" if _zone=="harbor" else "迎賓",_games.size()]
+	_summary_copy.text="灰色：收藏首張拍貼後蓋章" if compact else "每款遊戲收藏首張拍貼即可蓋章，普通或小惡魔皆可。"
+	_summary_copy.tooltip_text="每款遊戲收藏首張拍貼即可蓋章，普通或小惡魔皆可。"
 	_summary_title.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN if compact else Control.SIZE_EXPAND_FILL
 	_summary_title.autowrap_mode=TextServer.AUTOWRAP_OFF if compact else TextServer.AUTOWRAP_WORD_SMART
 	_summary_copy.autowrap_mode=TextServer.AUTOWRAP_OFF if compact else TextServer.AUTOWRAP_WORD_SMART

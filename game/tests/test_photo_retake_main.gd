@@ -104,6 +104,8 @@ func _run() -> void:
 			main._retake_capture(image,panel,generation,id,not devil)
 			check(Progress.photos == snapshot, "closed stale capture cannot grant")
 			await _frames()
+			if id == "game-001" and devil:
+				await _check_devil_first_stamp(identity)
 	check(main.events.is_empty(), "retake and practice never dispatch story success")
 	main._practice_for_retake("game-009",true)
 	main.session._leave_from_hud()
@@ -126,6 +128,24 @@ func _run() -> void:
 	await _frames()
 	await _writer_checks(image)
 	_finish()
+
+func _check_devil_first_stamp(identity: Dictionary) -> void:
+	check(Progress.achievements.has(identity.achievement_id) and Progress.photos.has(identity.devil_photo_id) and not Progress.photos.has(identity.photo_id),"first devil-only retake unlocks real stamp without ordinary card")
+	main._show_achievements()
+	await _frames()
+	var tile: Control=main.overlay.find_child("AchievementStamp_"+str(identity.achievement_id),true,false)
+	var condition: Label=tile.find_child("StampCondition",true,false) if tile!=null else null
+	check(condition!=null and condition.text.contains("首張拍貼") and not condition.text.contains("普通拍貼"),"unlocked devil-first stamp condition permits first card of either kind")
+	var book: Control
+	for child in main.overlay.find_children("*","Control",true,false):
+		if child.get_script()!=null and child.get_script().resource_path=="res://game/ui/achievement_stamp_book.gd": book=child
+	check(book!=null and book._summary_title.text.contains("初次收藏") and book._summary_copy.text.contains("普通或小惡魔"),"wide stamp summary describes first collection of either card")
+	get_window().size=Vector2i(800,450)
+	await _frames()
+	check(book!=null and book._summary_copy.text.contains("首張拍貼"),"compact stamp summary permits devil-first collection")
+	get_window().size=Vector2i(1280,720)
+	main._close()
+	await _frames()
 
 func _writer_checks(image: Image) -> void:
 	var directory: String = main._photo_directory()

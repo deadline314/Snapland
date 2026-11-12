@@ -40,6 +40,9 @@ func _run() -> void:
 		prepared_main.free()
 	native_helper.free()
 	_check_save_failure_child_contract()
+	_check(_write_failure_diagnostic("fixture.json.tmp","Windows")=="ERROR: Cannot write progress temporary file 'fixture.json.tmp': File not found", "measured Windows obstructed-parent diagnostic mapping")
+	_check(_write_failure_diagnostic("fixture.json.tmp","Linux")=="ERROR: Cannot write progress temporary file 'fixture.json.tmp': Can't open file", "measured Linux obstructed-parent diagnostic mapping")
+	_check(_write_failure_diagnostic("fixture.json.tmp","Unknown").is_empty(), "unmeasured platforms do not gain a catchall diagnostic")
 	_finish()
 
 func _check_save_failure_child_contract() -> void:
@@ -58,9 +61,14 @@ func _check_save_failure_child_contract() -> void:
 	_check(exit_code == 0, "failed-save Main child exits successfully")
 	_check(child_log.contains("PASS: tutorial and attempt failed-save cleanup"), "failed-save Main child emits its result marker")
 	var blocked := (OS.get_environment("SNAPLAND_SAVE_PATH")+".blocked-directory").path_join("progress.json.tmp")
-	var expected := "ERROR: Cannot write progress temporary file '%s': File not found" % blocked
+	var expected := _write_failure_diagnostic(blocked,OS.get_name())
 	_check(error_lines == [expected,expected], "child captures exactly tutorial and attempt unwritable-profile diagnostics")
 	_check(not child_log.contains("SCRIPT ERROR:"), "failed-save child has no script or parse errors")
+
+func _write_failure_diagnostic(path: String, platform: String) -> String:
+	var native_errors := {"Windows":ERR_FILE_NOT_FOUND,"Linux":ERR_FILE_CANT_OPEN}
+	if not native_errors.has(platform): return ""
+	return "ERROR: Cannot write progress temporary file '%s': %s" % [path,error_string(native_errors[platform])]
 
 func _check(condition: bool, message: String) -> void:
 	if not condition:
