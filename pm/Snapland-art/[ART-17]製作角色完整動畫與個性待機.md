@@ -729,3 +729,12 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![左向轉身中段](images/ART-17-grounded-20261112-left-2.png)
 
 [正常影片](images/ART-17-grounded-20261112-normal.mp4) · [四分之一速度／重入](images/ART-17-grounded-20261112-quarter.mp4) · [降低動態／重入](images/ART-17-grounded-20261112-reduced.mp4) · [空目錄 PCK](images/ART-17-grounded-20261112-pack-isolated.mp4) · [結果與指紋](images/ART-17-grounded-20261112-review.json) · [原生姿勢、測試、反例及重現紀錄](images/ART-17-grounded-20261112-evidence.zip)。固定基準 `10dced9`；分支 `codex/announcer-grounded-pivots-20261112`。
+
+
+# Commit — 2026-11-12 輸出最新 Windows 成品
+
+## 內文
+
+最新 Windows 成品整合本輪三位 NPC 起步／接地／資料恢復，以及換裝時的手掌、相機前景修正。原始內容逐檔指紋與輸出來源相同；內嵌遊戲資源匯出、隔離啟動與預設 Forward+／Vulkan 十二入口初始繪製通過，exit 0、0 ERROR。程式與完整來源指紋依據 `7a9e2d3`，完整執行檔留在本機輸出目錄，沒有放進版本庫。
+
+[成品來源指紋、匯出、啟動與十二入口畫面](images/ART-17-windows-20261112-final.zip)。此為成品初始繪製驗證，不代表完整玩法、真人試聽、硬體 FPS 或整套動畫自然度驗收；整票維持進行中。
