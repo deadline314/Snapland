@@ -1,0 +1,101 @@
+# Rowing Cargo Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to implement this plan task-by-task.
+
+**Goal:** Deliver SG-28 game013 in harbor with real inertial rowing, accessible controls, tutorial, truthful results and persistent regional collectibles.
+
+**Architecture:** A lightweight delivered-data catalog, pure deterministic model and read-only native view, one new-mode driver path in Session. Keep twelve welcome modes intact. Use existing Main/reward/photo/pause/tutorial UI.
+
+**Tech Stack:** Existing Godot4.7.2, GDScript, JSON and Python standard library; no new dependencies.
+
+**Spec:** `design/runtime/rowing-cargo.md`.
+
+## Global Constraints
+
+- Assigned worktree C:/Users/stanl/Github/Snapland/.review/rowing-game-worktree, codex/rowing-game-20261113. Not alone; do not revert others. No worker push/branch switching/subagents. Controller owns tickets/docs/publication/evidence.
+- Author and committer stanley890314@gmail.com; no assistant/model names or Co-Authored-By trailers. Stage owned source/tests only, never generated import/uid metadata.
+- Every direct Godot run sets isolated absolute SNAPLAND_SAVE_PATH. Windows engine C:/Tools/Godot/Godot_v4.7.2-stable_win64_console.exe; Linux WSL pinned engine /home/stanley/.cache/snapland-boat-debug/Godot_v4.7.2-stable_linux.x86_64 and Linux-native private save paths.
+- Preserve welcome12 order/default APIs, old saves/rewards/photo validation, pause/focus/help/retry/practice, Steam boundary and both export presets. Delivered013 only;014 remains unsupported. No speculative framework or migration of twelve modes.
+- Ordinary participation qualification never falsifies success. Devil requires real crest sideslip docking without crate impacts, assistance remains eligible; practice/cancel no rewards. No direct completion/score/boat-position shortcuts in native verification.
+- Controller handles full CI/source/native/PCK/Windows release. Workers run affected local baselines/red/focused checks, self-review and commit, report exact commands/results and bounded risks in report file. No duplicate full suite for each edit.
+
+## Review Focus
+
+- Corrupt or unknown catalog/save identities cannot grant unbuilt content or erase existing metadata.
+- Failed reward save cannot partly spend/grant/update receipts or emit a success achievement; restart/replay must be idempotent.
+- Long/invalid delta, tide closing gap, collision and simultaneous/released controls cannot strand cargo, advance during pause or complete twice.
+- Correct global013/local1 identity must reach tutorials, images, stamps, regional switching and legacy unsupported fixtures.
+- A rendered boat moving by real paddle/wave forces must remain controllable and readable in small enlarged-text/reduced-motion windows; model-only success is insufficient.
+
+### Task 1: Delivered catalog and safe regional progress
+
+**Files:** Create `game/core/game_catalog.gd`, `game/data/harbor_games.json`, `game/tests/test_game_catalog.gd`, `game/tests/test_harbor_game_progress.gd`; modify `game/core/progress.gd` and concretely affected unsupported-ID fixtures `game/tests/test_tutorial_seen_progress.gd`, `game/tests/test_wardrobe.gd`. No Session/Main/UI/model edits yet. No runner registration until Task5.
+
+**Interfaces:** Catalog RefCounted static `definitions(zone: String = "welcome") -> Array`, `all_definitions() -> Array`, `find(id_or_mode: String) -> Dictionary`, `identity(id_or_mode: String) -> Dictionary`. Return deep copies. Identity `{id,mode,zone,local_index,photo_id,devil_photo_id,achievement_id}`. Explicit known data paths welcome/harbor only, validates actual delivered rows before global/local numbering. Existing welcome bare-array shape unchanged. Harbor one row game-013, mode `rowing_cargo`, name 浪間小艇, instructions `划槳、轉舵並側滑靠岸`, ordinary `載三箱到兩座浮碼頭`, devil `用浪峰側滑靠岸不撞箱`; use spec for other concise text. Validate required nonempty text, ID/mode uniqueness and exact zone numbering; no arbitrary script paths.
+
+Progress `complete_game(game_id:String,devil:bool,assisted:bool=false)->bool` retains calling compatibility and gives Main reliable saved status. Resolve catalog identity; one atomic save for photos/40coins/global receipt/achievements, restore all touched state on failure and emit changed/new achievement signals only after success. Existing grant_photo/_unlock outside this method unchanged. Preserve existing photo metadata on replay and legacy no-retroactive coins; welcome milestones remain scoped to welcome12. `attach_game_photo_frames(...) -> bool` generalizes same current validation/rollback body; `attach_welcome_game_photo_frames(...)` stays compatible wrapper (welcome restriction preserved). Tutorial and receipt validators accept delivered13, reject14, unknown/malformed. Do not preload UI/Session/tutorials into Progress.
+
+- [ ] Inspect all touched callers and run existing core/tutorial-seen/wardrobe/photo baseline with isolated profiles; record original results.
+- [ ] Write red catalog/harbor progress tests: default12 ordered, harbor1/all13/copies, global/local identity, malformed/duplicate/zone mismatch via small explicit parser helper or fixture boundary; unknown14 no mutation; no heavy UI dependency.
+- [ ] Implement lightweight catalog and one actual harbor runtime row; do not add other planned IDs.
+- [ ] Generalize reward/tutorial/receipt/photo identities; implement atomic complete_game with one save and rollback on forced write failure. Test first ordinary/devil, assisted, repeat/no duplicate money or signals, legacy photo without receipt, unknowns, untouched unknown metadata and full welcome milestone thresholds.
+- [ ] Test thumbnails/original validation and real two-process reload for harbor card/receipt/tutorial/achievement; verify failed save leaves persisted and memory state unchanged. Change unsupported sentinel013 to014 only in fixtures that now genuinely need an unsupported ID.
+- [ ] Run affected tests and self-review; commit owned files. Write task-1-report.md with status/commit/signatures/source mapping/tests and any concerns. Report only concise status back.
+
+### Task 2: Deterministic rowing and cargo rules
+
+**Files:** Create `game/minigames/rowing_cargo_model.gd`, `game/tests/test_rowing_cargo.gd` only.
+
+**Interfaces:** RefCounted model `reset(assisted:bool=false)`, `set_rudder(value:float)`, `paddle(direction:float=1.0)`, `sideslip(direction:float)`, `interact()`, `clear_input()`, `step(delta:float)->Dictionary`, `snapshot()->Dictionary`. Read-only deep-copy snapshots include elapsed/remaining/ended/success/devil/ordinary_eligible/score/mistakes, boat position/heading/velocity/angular_velocity, cargo identities/positions/destinations/status, docks geometry, water/tide/gap/shelter/crest forecast, feedback and bounded delivery ledger. Expose constants/geometry for view and input-based verifier; no test-only completion/move APIs. Model owns sole simulation clock.
+
+Rules from spec: real heading-dependent forward/reverse paddle impulses, held rudder torque, lateral crest sideslip; inertia and damping with finite bounded time/substeps. Three crates actually collected and delivered to two marked docks with speed/angle tolerance; no repeat delivery. Sheltered longer passage always available, shorter exposed tide gap changes; visible modeled waves affect control. Centralize physical/layout/timing constants, record chosen values in report. Naturally ended round gets ordinary_eligible even timeout; success only all3, devil successful run plus actual crest sideslip dock and no crate impacts. Assisted lowers wave force, widens safe docking and modest attraction, never disables devil. Crate impacts distinct from wall collisions. Ignore nonfinite input/time safely; bounded arrays/no event-per-frame history. Boat/cargo recover within playable bounds, tide cannot trap them.
+
+- [ ] Read closest existing sign_balance model/test patterns and current canonical game013 row; write red deterministic/physics/cargo tests before implementing.
+- [ ] Implement controls/force/inertia/clock and snapshot; same route with shifted stroke timing must produce different docking angle, not merely different score. Test repeatability and independent copies.
+- [ ] Implement real pickup/drop/speed/angle/two-dock ledger, waves/crest/shelter/tide/side-slip and actual normal/assisted devil, failure/cancel eligibility. Unit fixtures may arrange physics edge states but document them as fixtures, not native earned proof.
+- [ ] Test invalid/huge delta, input clamps, boundary/wall/crate collision, tide under boat, no duplicate deliveries, clear_input, terminal freeze and bounded storage.
+- [ ] Implement an input-driven solver test that uses public commands and snapshot feedback only to deliver all three in normal AND assisted modes; no position/score/terminal mutation. Preserve this route for native verifier. Record tuning/route limitations instead of faking success.
+- [ ] Run focused suite, self-review, commit and task-2-report.md with constants/contract/results/solver evidence.
+
+### Task 3: Native rowing view and small driver
+
+**Files:** Create `game/minigames/rowing_cargo_view.gd`, `game/minigames/rowing_cargo_driver.gd`, `game/tests/test_rowing_cargo_driver.gd`, `game/tests/test_rowing_cargo_view.gd`. Model changes only if a concrete Task2 contract defect is reported to controller first. No Session/Main changes.
+
+**Interfaces:** Driver RefCounted `reset(assisted:bool,time_phase:String)->void`, `create_view()->Control` (headless null permitted), `handle_input(event:InputEvent,design_point:Vector2)->bool`, `clear_input()->void`, `step(delta:float)->Dictionary`, `snapshot()->Dictionary`, `present(time_phase:String,reduced_motion:bool)->void`, `score_summary(practice:bool)->Dictionary`. Driver owns model and at most one optional view; normalized state elapsed/score/mistakes/ended/success/devil/ordinary_eligible/progress_text/time_text/feedback_text. Summary existing `{total,label,rule,rows,qualification_text}` shape, truthful actual deliveries/impacts. Driver does not run independent process simulation.
+
+Control view owns one small SubViewport 3D world/camera, receives read-only snapshot through `present(snapshot,time_phase,reduced_motion)`. Keyboard W/Up stroke, S/Down reverse, A/D/Left/Right held rudder, Q/E sideslip,Space interact; consume relevant press and releases, reject echo. Onscreen buttons send identical command ownership, no double application; clear_input on release lifecycle. If view needs named command signal, choose one bounded explicit signal and document it. Complete geometry boat/oars/crates/numbered docks/waves/breakwater/route cues; never duplicate full park or animate dismembered art. Fits Session design-space layout, scene draws below shared HUD. Nonessential animation reduced, essential heading/wave/tide/force cues preserved, muted-readable text/icons.
+
+- [ ] Baseline nearest existing native view pattern, write red driver input/release/echo/normalization/summary/headless/view-reuse tests.
+- [ ] Implement driver and view using model only as source; no second timer, no repeated resources/mesh/material allocation per frame.
+- [ ] Test keyboard and pointer same commands, clear held rudder, paused repeated present no simulation, reduced motion cues, time phase refresh and finite invalid inputs.
+- [ ] Run native view smoke and capture real image at1280x720 with isolated save; inspect it, verify no engine ERROR and bounded nodes/resources through repeated create/free. A render-only fixture is not a full game-completion claim.
+- [ ] Self-review, commit owned files, task-3-report.md including view command contract, images, tests and layout concerns.
+
+### Task 4: Session lifecycle and regional collection UI
+
+**Files:** Modify `game/minigames/session.gd`, `game/ui/collection_book_panel.gd`, `game/ui/achievement_stamp_book.gd`; create focused `game/tests/test_rowing_session.gd`, `game/tests/test_harbor_collection.gd`; adjust concretely affected UI test fixtures only. No Main/world/tutorial/data/design validator edits.
+
+**Interfaces:** Use Catalog and Task3 driver. Session.definitions(zone:String="welcome") stays default12; start/_definition accept all delivered IDs/modes. One new-mode-only constant driver map (`rowing_cargo`) and active_driver, no universal base or migration of legacy12. Driver branch in reset before old resets/prompts; _process before legacy elapsed/timeout, sole model clock; _sync_presentation allocate once/headless-safe; HUD uses normalized driver values; score_summary delegate; _draw returns before old game backdrop; _finish includes ordinary_eligible only for driver results (legacy missing field preserves old meaning). Pause/leave clears driver input, preserves existing freeze/focus/discard-delta/help/music flows. Avoid adding rowing case to each legacy text/helper switch.
+
+Collection switches definitions by actual selected zone, resolves both saved harbor IDs/images, keep welcome extra6 and quotas18/12, remove blanket harbor-empty only for actual delivered013. Keep trusted bounded original/thumbnail validation. Achievement stamps use Catalog identity instead of list position, optional explicit zone argument preserving old setup callers; one harbor row checks ACH_GAME_013 and harbor title, not welcome001. Welcome milestone page remains welcome-scoped.
+
+- [ ] Run affected Session/minigame/UI baselines; write red lifecycle tests for start by global ID/mode, retry/practice/finish-once, failure ordinary eligibility, legacy default12, unknown14 rejection.
+- [ ] Integrate one optional driver path, normalized HUD/finish; test pause/blur/help/leave clears input, frozen model/presentation, resume ignores stale long delta, no generic-timeout race/double clock.
+- [ ] Implement/test real regional album switching welcome→harbor→welcome, harbor1 photo/devil/original, missing images safe, source-region quotas; no leakage of welcome non-game entries.
+- [ ] Implement/test stamp global013 mapping and scoped milestones, enlarged text/small layout using existing components. Inspect native session+UI frames for no old background overlay.
+- [ ] Run affected regressions (old12/pause/practice/score/photos/UI), self-review, commit and task-4-report.md with signatures/tests/evidence.
+
+### Task 5: Main entry, truthful rewards, tutorials and complete verification registration
+
+**Files:** Modify `game/main.gd`, `game/world/harbor_world.gd`, `game/data/tutorials.json`, `game/ui/tutorial_catalog.gd`, `design/02-minigames/catalog.json`, `tools/verify_design.py`, `tools/run_game_tests.py`; create real tutorial PNGs `assets/ui/tutorials/game-013-*.png`, focused Main integration tests and reusable input-driven native capture fixture under `game/tests/`; update concretely affected Python/Godot fixtures/contracts. First confirm HarborWorld exact path via rg; if different use actual existing path and record before edit. No export config changes unless a proven packaging failure.
+
+**Interfaces:** Main lookup all delivered via Catalog while welcome definitions stay12; current region controls game list/map/album/stamp scope. Actual harbor game013 kiosk and map entry; remaining11 honest準備中. `_game_finished` ordinary_eligible fallbacksuccess for old12 controls capture/grant, separate realsuccess for story event/audio/results. Check Progress.complete_game bool, only show saved reward after success, clear failure message/retry on write failure. Photo attachment generalized, no fake success or scripted reward completion. Preserve practice/cancel and welcome tutorial flow.
+
+Tutorial013 existing schema2–3steps uses real native PNGs; required lessons list append013. Data design row013 marked single_player_runtime_needs_full_acceptance with runtime_mode rowing_cargo; all014+staydesignonly. Python validation reads actual harbor data, checks alignment only delivered rows, welcome12 and unknown14 sentinel preserved. Register every new test with exact PASS_MARKERS and entrypoint/deadline/isolation contracts in sole runner; four-shard coverage must continue automatically.
+
+- [ ] Run affected Main/tutorial/design/runner baselines then red tests for actual harbor launch,map,first-entry lesson/practice/help, truthful success vs timeout ordinary result, assisted devil, retry/cancel, save-failure behavior and global013 capture/achievement.
+- [ ] Integrate actual world/kiosk/map/Main/rewards/region scope; no new fake harbor story/quests/exploration card. Native driver follows public input route from Task2, never sets boat position, score, completion flags or result dictionaries to claim earned success.
+- [ ] Capture actual tutorial steps and add valid lesson; test actual PNG existence/load, first-seen save/restart and existing tutorial behavior. Update design/runtimealignment checks and unsupported fixtures only for now-delivered013.
+- [ ] Register suites/markers; run focused new suites plus concretely affected old12/Main/photos/story/region/UI/tutorial/runner/design checks. Verify bounded native repeated create/free, no ERROR and exact completion markers. Controller later runs full cloud matrix and final3size/PCK/Windows proof, do not mark ticket complete prematurely.
+- [ ] Native fixture uses explicit synthetic six-card eligibility setup, real UI entry/control commands for normal+assisted3delivery/devil and timeout ordinary/practice/cancel/pause, real saved writer/restart-reader; every capture checks actualdimensions/write result and no invalid reward count. Keep reusable commands/solver narrow, no new production automation switches.
+- [ ] Self-review, commit owned files, task-5-report.md with exact interfaces, native routes, tests, tutorial assets and any residual risks. Controller final-review/fix wave, fullCI/native/export/evidence/ticket/main publication/cleanup follows.
