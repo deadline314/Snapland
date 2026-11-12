@@ -125,6 +125,7 @@ func _progress_payload_snapshot() -> Dictionary:
 		"coins": Progress.coins,
 		"wardrobe_rewarded_games": Progress.wardrobe_rewarded_games,
 		"tutorial_seen_games": Progress.tutorial_seen_games,
+		"attempted_games": Progress.attempted_games,
 	}, true)
 	return payload
 

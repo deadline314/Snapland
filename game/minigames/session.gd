@@ -569,9 +569,9 @@ func _retry_from_hud() -> void:
 	set_paused(false)
 
 func _leave_from_hud() -> void:
+	ended = true
 	if active_driver != null:
 		active_driver.clear_input()
-		ended = true
 		if is_instance_valid(presentation): presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	paused = false
 	_cancel_ribbon_finish_gate()
@@ -2231,7 +2231,7 @@ func _sync_driver_state(state: Dictionary) -> void:
 func _finish(success: bool, devil: bool = false) -> void:
 	if ended: return
 	ended = true; won = success; devil_won = success and devil
-	var result := {"game_id": game_id, "success": success, "devil": devil_won, "score": score, "assisted": assisted, "practice": practice_mode, "mistakes": mistakes, "score_summary": score_summary()}
+	var result := {"game_id": game_id, "success": success, "devil": devil_won, "score": score, "assisted": assisted, "practice": practice_mode, "mistakes": mistakes, "score_summary": score_summary(), "ordinary_eligible": not practice_mode}
 	if active_driver != null:
 		active_driver.clear_input()
 		result["ordinary_eligible"] = bool(_driver_state.get("ordinary_eligible", false)) and not practice_mode

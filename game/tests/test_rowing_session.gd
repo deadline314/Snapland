@@ -133,7 +133,7 @@ func _run() -> void:
 	s._process(0.1)
 	expect(driver.snapshot().elapsed == old_elapsed and s.game_id == "game-002", "old driver stops advancing under legacy ID")
 	s._finish(true)
-	expect(not results.back().has("ordinary_eligible") and results.back().game_id == "game-002", "legacy finished contract stays unchanged")
+	expect(results.back().ordinary_eligible and results.back().game_id == "game-002", "legacy natural result declares ordinary eligibility")
 	s.start("rowing_cargo", true)
 	expect(s.game_id == "game-013" and s.assisted and s.active_driver != driver, "mode start creates fresh driver after legacy")
 	driver = s.active_driver

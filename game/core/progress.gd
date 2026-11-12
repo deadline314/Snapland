@@ -54,6 +54,7 @@ var owned_clothes: Array[String] = ["outfit-tide", "outfit-rainvest"]
 var coins := 120
 var wardrobe_rewarded_games: Array[String] = []
 var tutorial_seen_games: Array[String] = []
+var attempted_games: Array[String] = []
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
@@ -108,6 +109,20 @@ func mark_game_tutorial_seen(game_id: String) -> bool:
 	tutorial_seen_games.append(game_id)
 	if not save_progress():
 		tutorial_seen_games.erase(game_id)
+		return false
+	return true
+
+func has_attempted_game(game_id: String) -> bool:
+	return _is_rewardable_game_id(game_id) and attempted_games.has(game_id)
+
+func mark_game_attempted(game_id: String) -> bool:
+	if not _is_rewardable_game_id(game_id):
+		return false
+	if attempted_games.has(game_id):
+		return true
+	attempted_games.append(game_id)
+	if not save_progress():
+		attempted_games.erase(game_id)
 		return false
 	return true
 
@@ -168,20 +183,41 @@ func complete_game(game_id: String, devil: bool, assisted: bool = false) -> bool
 	var identity := GameCatalog.identity(game_id)
 	if identity.is_empty() or identity.id != game_id:
 		return false
+	var cards := {identity.photo_id: {"game_id": game_id, "assisted": assisted, "devil": false}}
+	if devil:
+		cards[identity.devil_photo_id] = {"game_id": game_id, "assisted": assisted, "devil": true, "challenge_earned": true}
+	return _award_game_cards(identity, cards, devil)
+
+func complete_retake(game_id: String, devil: bool, saved_frames: Array, saved_original_frames: Array) -> bool:
+	var identity := GameCatalog.identity(game_id)
+	if identity.is_empty() or identity.id != game_id or not has_attempted_game(game_id):
+		return false
+	var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
+	if photos.has(photo_id) or saved_frames.is_empty() or saved_frames.size() > MAX_GAME_PHOTO_FRAMES or saved_original_frames.size() != saved_frames.size():
+		return false
+	var frames := _validated_game_photo_frames(photo_id, saved_frames)
+	var originals := _validated_game_photo_original_frames(photo_id, saved_original_frames)
+	if frames.size() != saved_frames.size() or originals.size() != saved_original_frames.size():
+		return false
+	return _award_game_cards(identity, {photo_id: {"game_id": game_id, "devil": devil, "acquisition_method": "retake", "challenge_earned": false, "frames": frames, "original_frames": originals}}, false)
+
+# Both acquisition paths commit rewards before exposing any success signal.
+func _award_game_cards(identity: Dictionary, cards: Dictionary, challenge_earned: bool) -> bool:
 	var previous_photos := photos.duplicate(true)
 	var previous_achievements := achievements.duplicate(true)
 	var previous_coins := coins
 	var previous_receipts := wardrobe_rewarded_games.duplicate()
 	var previous_pending := platform_pending_achievements.duplicate()
-	var completed_photo_id: String = identity.photo_id
+	var game_id: String = identity.id
 	if not wardrobe_rewarded_games.has(game_id):
-		if not photos.has(completed_photo_id):
+		if not photos.has(identity.photo_id) and not photos.has(identity.devil_photo_id):
 			coins = mini(clampi(coins, 0, MAX_COINS) + 40, MAX_COINS)
 		wardrobe_rewarded_games.append(game_id)
-	if not photos.has(completed_photo_id):
-		photos[completed_photo_id] = {"game_id": game_id, "assisted": assisted, "devil": false}
-	if devil and not photos.has(identity.devil_photo_id):
-		photos[identity.devil_photo_id] = {"game_id": game_id, "assisted": assisted, "devil": true}
+	for photo_id: String in cards:
+		if not photos.has(photo_id):
+			photos[photo_id] = cards[photo_id]
+	if challenge_earned and photos.get(identity.devil_photo_id) is Dictionary:
+		photos[identity.devil_photo_id]["challenge_earned"] = true
 	var candidates: Array[String] = [identity.achievement_id]
 	if _has_complete_game_set("welcome", false):
 		candidates.append("ACH_WELCOME_CLEAR")
@@ -236,51 +272,30 @@ func attach_game_photo_frames(game_id: String, saved_frames: Array, include_devi
 	if not photos.has(ordinary_id) or not photos[ordinary_id] is Dictionary:
 		push_warning("Cannot attach gameplay thumbnails: collected ordinary photo '%s' is missing." % ordinary_id)
 		return false
+	var devil_id: String = identity.devil_photo_id
+	var targets: Array[String] = []
+	for photo_id: String in [ordinary_id, devil_id] if include_devil else [ordinary_id]:
+		if photos.get(photo_id) is Dictionary and photos[photo_id].get("acquisition_method", "") != "retake":
+			targets.append(photo_id)
+	if targets.is_empty():
+		return true
 	var image_cache: Dictionary = {}
 	var valid_frames := _validated_game_photo_frames(ordinary_id, saved_frames, image_cache)
 	if valid_frames.is_empty():
-		var ordinary_photo: Dictionary = photos[ordinary_id]
-		valid_frames = _validated_game_photo_frames(ordinary_id, ordinary_photo.get("frames", []), image_cache)
+		valid_frames = _validated_game_photo_frames(ordinary_id, photos[ordinary_id].get("frames", []), image_cache)
 	if valid_frames.is_empty():
 		push_warning("No readable 320x180 gameplay thumbnails are available for collected photo '%s'." % ordinary_id)
 		return false
 	var valid_originals := _validated_game_photo_original_frames(ordinary_id, saved_original_frames)
-	var previous_ordinary: Variant = photos[ordinary_id].get("frames", null)
-	var had_previous_ordinary: bool = photos[ordinary_id].has("frames")
-	var devil_id: String = identity.devil_photo_id
-	var update_devil := include_devil and photos.has(devil_id) and photos[devil_id] is Dictionary
-	var previous_devil: Variant = photos[devil_id].get("frames", null) if update_devil else null
-	var had_previous_devil: bool = update_devil and photos[devil_id].has("frames")
-	var previous_ordinary_original: Variant = photos[ordinary_id].get("original_frames", null)
-	var had_previous_ordinary_original: bool = photos[ordinary_id].has("original_frames")
-	var previous_devil_original: Variant = photos[devil_id].get("original_frames", null) if update_devil else null
-	var had_previous_devil_original: bool = update_devil and photos[devil_id].has("original_frames")
-	photos[ordinary_id]["frames"] = valid_frames.duplicate()
-	if update_devil:
-		photos[devil_id]["frames"] = valid_frames.duplicate()
-	if not valid_originals.is_empty():
-		photos[ordinary_id]["original_frames"] = valid_originals.duplicate()
-		if update_devil:
-			photos[devil_id]["original_frames"] = valid_originals.duplicate()
+	var previous: Dictionary = {}
+	for photo_id in targets:
+		previous[photo_id] = photos[photo_id].duplicate(true)
+		photos[photo_id]["frames"] = valid_frames.duplicate()
+		if not valid_originals.is_empty():
+			photos[photo_id]["original_frames"] = valid_originals.duplicate()
 	if not save_progress():
-		if had_previous_ordinary:
-			photos[ordinary_id]["frames"] = previous_ordinary
-		else:
-			photos[ordinary_id].erase("frames")
-		if update_devil:
-			if had_previous_devil:
-				photos[devil_id]["frames"] = previous_devil
-			else:
-				photos[devil_id].erase("frames")
-		if had_previous_ordinary_original:
-			photos[ordinary_id]["original_frames"] = previous_ordinary_original
-		else:
-			photos[ordinary_id].erase("original_frames")
-		if update_devil:
-			if had_previous_devil_original:
-				photos[devil_id]["original_frames"] = previous_devil_original
-			else:
-				photos[devil_id].erase("original_frames")
+		for photo_id in previous:
+			photos[photo_id] = previous[photo_id]
 		push_error("Could not save gameplay thumbnail paths for '%s'." % ordinary_id)
 		return false
 	return true
@@ -295,6 +310,9 @@ func _backfill_legacy_devil_photo_frames() -> bool:
 		if not photos.has(devil_id) or not photos[devil_id] is Dictionary:
 			continue
 		var devil_photo: Dictionary = photos[devil_id]
+		var ordinary_record: Variant = photos.get("photo-welcome-game-%d" % game_number)
+		if devil_photo.get("acquisition_method", "") == "retake" or (ordinary_record is Dictionary and ordinary_record.get("acquisition_method", "") == "retake"):
+			continue
 		var current_frames := _validated_game_photo_frames(devil_id, devil_photo.get("frames", []), image_cache)
 		if not current_frames.is_empty():
 			if devil_photo.get("frames", []) != current_frames:
@@ -628,6 +646,7 @@ func save_progress() -> bool:
 		"coins": coins,
 		"wardrobe_rewarded_games": wardrobe_rewarded_games,
 		"tutorial_seen_games": tutorial_seen_games,
+		"attempted_games": _validated_attempted_games(attempted_games),
 	}, true)
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
@@ -925,13 +944,23 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 			if typeof(game_id) != TYPE_STRING or not _is_rewardable_game_id(str(game_id)):
 				push_warning("Invalid completed game reward '%s' in progress file '%s'; skipping." % [str(game_id), path])
 				safe_rewarded_games.erase(game_id)
+	if result.has("attempted_games"):
+		result["attempted_games"] = _validated_attempted_games(result["attempted_games"])
 	return result
+
+func _validated_attempted_games(value: Variant) -> Array[String]:
+	var valid: Array[String] = []
+	if value is Array:
+		for definition: Dictionary in GameCatalog.all_definitions():
+			if value.has(definition.id):
+				valid.append(definition.id)
+	return valid
 
 func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -1014,6 +1043,12 @@ func _apply_save(payload: Dictionary) -> void:
 		for game_id: Variant in loaded_tutorial_seen:
 			if typeof(game_id) == TYPE_STRING and _is_rewardable_game_id(game_id) and not tutorial_seen_games.has(game_id):
 				tutorial_seen_games.append(game_id)
+	attempted_games = _validated_attempted_games(payload.get("attempted_games", []))
+	if not payload.has("attempted_games"):
+		for definition: Dictionary in GameCatalog.all_definitions():
+			var identity := GameCatalog.identity(definition.id)
+			if not attempted_games.has(definition.id) and (photos.has(identity.photo_id) or photos.has(identity.devil_photo_id)):
+				attempted_games.append(definition.id)
 	_loading = false
 
 func _apply_loaded_setting(key: String, value: Variant) -> void:
@@ -1069,6 +1104,7 @@ func _reset_memory() -> void:
 	coins = 120
 	wardrobe_rewarded_games = []
 	tutorial_seen_games = []
+	attempted_games = []
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
 
