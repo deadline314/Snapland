@@ -1,0 +1,945 @@
+{
+  "source_commit": "f6f9a8bf788e17ab02ab7c3e35b116019fb5aefb",
+  "exported_source_commit": "123e769251903fa086f742f2a475668f6ab62422",
+  "runtime_input_count": 1097,
+  "runtime_inputs_unchanged_after_export": true,
+  "changed_paths_after_export": [
+    "game/tests/test_melody_memory_view.gd",
+    "game/tests/test_test_save_guard.gd"
+  ],
+  "preview_path": "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing",
+  "release_build": {
+    "source_commit": "123e769251903fa086f742f2a475668f6ab62422",
+    "stage": "C:\\Users\\stanl\\Github\\Snapland\\.review\\rowing-game-worktree\\.review\\release-stage",
+    "output": "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing",
+    "runtime_files": 1097,
+    "inputs_git_clean": true,
+    "stage_excludes_all_tests": true,
+    "steps": [
+      {
+        "step": "import",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 23.36
+      },
+      {
+        "step": "pack",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 7.44
+      },
+      {
+        "step": "exe",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 5.14
+      }
+    ],
+    "artifacts": {
+      "Snapland.exe": {
+        "bytes": 282439824,
+        "sha256": "9d274a624955d3cb7d758ce55f4a5e8a6532686243b3b53d7b7ce97288f362c2",
+        "relative_path": "Snapland.exe"
+      },
+      "Snapland.pck": {
+        "bytes": 173171332,
+        "sha256": "7d189204a0f5f943f97bafbcc1c8a77287125e174af3f6ff95db82e4df6ae644",
+        "relative_path": "qa/Snapland.pck"
+      }
+    },
+    "template_sha256": "d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562",
+    "native_helpers": {
+      "native_rowing_main.gd": "2432daaa1013f640b1ef4ef61bc835a5eb2fe08b3e4073e327b54698d17bd58b",
+      "rowing_input_route.gd": "c223f16e916e2765b53a36cc998315133aa74351c6b8dadebdbb1d004e4f913d"
+    }
+  },
+  "release_checks": {
+    "pck-assisted-final": {
+      "pass": true,
+      "profile": "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final\\profile.json",
+      "dummy_audio": true,
+      "default_forward_plus": true,
+      "width": 1280,
+      "exit": 0,
+      "source": "123e769251903fa086f742f2a475668f6ab62422",
+      "target": "pck",
+      "large_text": false,
+      "warnings": 0,
+      "errors": 0,
+      "step": 0.016666666666666666,
+      "mode": "assisted",
+      "height": 720
+    },
+    "pck-restart-final": {
+      "pass": true,
+      "step": 0.025,
+      "source": "123e769251903fa086f742f2a475668f6ab62422",
+      "profile": "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final\\profile.json",
+      "mode": "read",
+      "dummy_audio": true,
+      "exit": 0,
+      "errors": 0,
+      "height": 720,
+      "default_forward_plus": true,
+      "large_text": false,
+      "target": "pck",
+      "warnings": 0,
+      "width": 1280
+    },
+    "exe-ui": {
+      "source": "123e769251903fa086f742f2a475668f6ab62422",
+      "target": "standalone Windows EXE",
+      "actual_saved_profile": "qa/pck-assisted-final/profile.json copied to qa/exe-ui/profile.json",
+      "default_forward_plus": true,
+      "sidecar_pack": false,
+      "dummy_audio": true,
+      "observations": [
+        "saved harbor loaded",
+        "map > game-013 invitation > real Session",
+        "restart confirmation resets round",
+        "pointer pickup carries first crate to dock-1",
+        "keyboard paddle accepted",
+        "pause and tutorial retain frozen round",
+        "cancel returns to harbor",
+        "Alt+F4 closes window and process"
+      ],
+      "errors": 0,
+      "warnings": 0,
+      "full_round": false,
+      "human_playtest": false,
+      "limitation": "release EXE external --script bootstrap did not execute; timed out case retained, not counted as passed"
+    },
+    "exe-smoke-fresh": {
+      "warnings": 15,
+      "errors": 0,
+      "dummy_audio": true,
+      "pass": true,
+      "standalone_without_sidecar": true,
+      "default_forward_plus": true,
+      "kind": "fresh",
+      "exit": 0
+    },
+    "exe-smoke-harbor": {
+      "pass": true,
+      "standalone_without_sidecar": true,
+      "kind": "harbor",
+      "exit": 0,
+      "warnings": 0,
+      "default_forward_plus": true,
+      "errors": 0,
+      "dummy_audio": true
+    },
+    "exe-smoke-art": {
+      "errors": 0,
+      "kind": "art",
+      "pass": true,
+      "exit": 0,
+      "dummy_audio": true,
+      "warnings": 15,
+      "standalone_without_sidecar": true,
+      "default_forward_plus": true
+    }
+  },
+  "real_packed_profile": {
+    "current_region": "harbor",
+    "coins": 160,
+    "cards": {
+      "photo-harbor-devil-1": {
+        "assisted": true,
+        "devil": true,
+        "frames": [
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-2.png"
+        ],
+        "game_id": "game-013",
+        "original_frames": [
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-original-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-original-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-original-2.png"
+        ]
+      },
+      "photo-harbor-game-1": {
+        "assisted": true,
+        "devil": false,
+        "frames": [
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-2.png"
+        ],
+        "game_id": "game-013",
+        "original_frames": [
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-original-0.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-original-1.png",
+          "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-rowing\\qa\\pck-assisted-final/photos/game-013-original-2.png"
+        ]
+      }
+    }
+  },
+  "actual_control_provenance": "All new game-013 captures/ledger derive from real public inputs; six old welcome cards are labelled synthetic entry prerequisites.",
+  "native_sizes": [
+    {
+      "width": 800,
+      "height": 600,
+      "text_scale": 1.25,
+      "reduced_motion": true,
+      "mode": "normal"
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "mode": "normal and assisted"
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "text_scale": 1.25,
+      "reduced_motion": true,
+      "mode": "timeout"
+    }
+  ],
+  "limitations": [
+    "Programmatic input, not human enjoyment/listening approval",
+    "Full round on isolated pack; EXE uses actual UI plus startup and legacy art smoke",
+    "Inherited welcome OcclusionController warnings preserved; no errors",
+    "Four audio tickets still require human listening; ART16/17 remain incomplete",
+    "13 delivered games; 115 further games plus world/story/endings remain"
+  ],
+  "packed_real_png_dimensions": [
+    {
+      "path": "qa/pck-assisted-final/photos/game-013-0.png",
+      "width": 320,
+      "height": 180,
+      "bytes": 29640
+    },
+    {
+      "path": "qa/pck-assisted-final/photos/game-013-1.png",
+      "width": 320,
+      "height": 180,
+      "bytes": 30353
+    },
+    {
+      "path": "qa/pck-assisted-final/photos/game-013-2.png",
+      "width": 320,
+      "height": 180,
+      "bytes": 30353
+    },
+    {
+      "path": "qa/pck-assisted-final/photos/game-013-original-0.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 50446
+    },
+    {
+      "path": "qa/pck-assisted-final/photos/game-013-original-1.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 50968
+    },
+    {
+      "path": "qa/pck-assisted-final/photos/game-013-original-2.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 50968
+    }
+  ],
+  "cloud": {
+    "conclusion": "success",
+    "headSha": "f6f9a8bf788e17ab02ab7c3e35b116019fb5aefb",
+    "jobs": [
+      {
+        "completedAt": "2026-11-12T19:57:43Z",
+        "conclusion": "success",
+        "databaseId": 131449683616,
+        "name": "runtime-source",
+        "startedAt": "2026-11-12T19:53:00Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-12T19:53:01Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-12T19:53:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:55:54Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-12T19:53:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:55:54Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-12T19:55:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:55:56Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 4,
+            "startedAt": "2026-11-12T19:55:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:55:57Z",
+            "conclusion": "success",
+            "name": "Verify runtime test coverage is configured",
+            "number": 5,
+            "startedAt": "2026-11-12T19:55:56Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:56:17Z",
+            "conclusion": "success",
+            "name": "Verify isolated original-style 2D hero sample",
+            "number": 6,
+            "startedAt": "2026-11-12T19:55:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:56:31Z",
+            "conclusion": "success",
+            "name": "Verify isolated 2D hair bones and attachment contracts",
+            "number": 7,
+            "startedAt": "2026-11-12T19:56:17Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:56:59Z",
+            "conclusion": "success",
+            "name": "Verify fixed-root 2D walk pixels and original limb registration",
+            "number": 8,
+            "startedAt": "2026-11-12T19:56:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:57:41Z",
+            "conclusion": "success",
+            "name": "Verify fixed-head island idle and blinking across appearances",
+            "number": 9,
+            "startedAt": "2026-11-12T19:56:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:57:41Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 17,
+            "startedAt": "2026-11-12T19:57:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:57:41Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 18,
+            "startedAt": "2026-11-12T19:57:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:57:42Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-11-12T19:57:41Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/43294673452/job/131449683616"
+      },
+      {
+        "completedAt": "2026-11-12T19:58:15Z",
+        "conclusion": "success",
+        "databaseId": 131449684077,
+        "name": "full-suite",
+        "startedAt": "2026-11-12T19:53:00Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-12T19:53:02Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-12T19:53:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:57:01Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-12T19:53:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:57:02Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-12T19:57:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:57:06Z",
+            "conclusion": "success",
+            "name": "Install 2D asset authoring test dependency",
+            "number": 4,
+            "startedAt": "2026-11-12T19:57:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:57:06Z",
+            "conclusion": "success",
+            "name": "Validate all design data and links",
+            "number": 5,
+            "startedAt": "2026-11-12T19:57:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:58:12Z",
+            "conclusion": "success",
+            "name": "Test validators against invalid designs",
+            "number": 6,
+            "startedAt": "2026-11-12T19:57:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:58:12Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-12T19:58:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:58:13Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-12T19:58:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T19:58:13Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-12T19:58:13Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/43294673452/job/131449684077"
+      },
+      {
+        "completedAt": "2026-11-12T20:09:09Z",
+        "conclusion": "success",
+        "databaseId": 131452497043,
+        "name": "game-runtime (2)",
+        "startedAt": "2026-11-12T19:57:47Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-12T19:57:48Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-12T19:57:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:41Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-12T19:57:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:42Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-12T20:00:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:43Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-12T20:00:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:45Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-12T20:00:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:09:06Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-12T20:00:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:09:06Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-12T20:09:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:09:07Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-12T20:09:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:09:07Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-12T20:09:07Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/43294673452/job/131452497043"
+      },
+      {
+        "completedAt": "2026-11-12T20:06:30Z",
+        "conclusion": "success",
+        "databaseId": 131452497082,
+        "name": "game-runtime (3)",
+        "startedAt": "2026-11-12T19:57:46Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-12T19:57:48Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-12T19:57:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:37Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-12T19:57:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:37Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-12T20:00:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:38Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-12T20:00:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:40Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-12T20:00:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:06:28Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-12T20:00:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:06:28Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-12T20:06:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:06:28Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-12T20:06:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:06:28Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-12T20:06:28Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/43294673452/job/131452497082"
+      },
+      {
+        "completedAt": "2026-11-12T20:04:15Z",
+        "conclusion": "success",
+        "databaseId": 131452497129,
+        "name": "game-runtime (0)",
+        "startedAt": "2026-11-12T19:57:46Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-12T19:57:48Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-12T19:57:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:25Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-12T19:57:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:25Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-12T20:00:25Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:27Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-12T20:00:25Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:28Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-12T20:00:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:04:12Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-12T20:00:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:04:12Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-12T20:04:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:04:12Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-12T20:04:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:04:12Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-12T20:04:12Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/43294673452/job/131452497129"
+      },
+      {
+        "completedAt": "2026-11-12T20:05:24Z",
+        "conclusion": "success",
+        "databaseId": 131452497139,
+        "name": "game-runtime (1)",
+        "startedAt": "2026-11-12T19:57:46Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-12T19:57:48Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-12T19:57:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:36Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-12T19:57:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:36Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-12T20:00:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:39Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-12T20:00:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:00:41Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-12T20:00:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:05:22Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-12T20:00:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:05:22Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-12T20:05:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:05:22Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-12T20:05:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-12T20:05:22Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-12T20:05:22Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/43294673452/job/131452497139"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/deadline314/Snapland/actions/runs/43294673452",
+    "python_tests": 198,
+    "runtime_coverage": {
+      "unique_suites": 115,
+      "clean_imports": 4,
+      "exact_once": true,
+      "shards": [
+        {
+          "job": "game-runtime (0)",
+          "shard": 0,
+          "runtime_suites": 30,
+          "clean_imports": 1,
+          "runtime_seconds": 223.31,
+          "labels": [
+            "clean project import",
+            "game startup",
+            "harbor game progress tests",
+            "rowing cargo model tests",
+            "rowing cargo view tests",
+            "rowing Session tests",
+            "island alternate hair source tests",
+            "avatar role rig tests",
+            "authored avatar walk loop tests",
+            "authored NPC patrol tests",
+            "atomic outfit coverage tests",
+            "side outfit palette tests",
+            "avatar prop foreground tests",
+            "sprite clearance tests",
+            "component animation tests",
+            "kite flight view tests",
+            "hat rescue view tests",
+            "melody memory view tests",
+            "shadow theatre view tests",
+            "pipe plan presentation tests",
+            "balloon harbor presentation tests",
+            "fountain timing tests",
+            "boat prologue stage tests",
+            "promenade free play tests",
+            "coastal free play tests",
+            "saved photo viewer tests",
+            "photo original preservation tests",
+            "island dialogue tests",
+            "pixel UI button depth tests",
+            "pixel UI customization tests",
+            "pixel typography tests"
+          ]
+        },
+        {
+          "job": "game-runtime (1)",
+          "shard": 1,
+          "runtime_suites": 24,
+          "clean_imports": 1,
+          "runtime_seconds": 281.14,
+          "labels": [
+            "clean project import",
+            "rowing cargo driver tests",
+            "harbor collection tests",
+            "avatar runtime tests",
+            "avatar attachment tests",
+            "seated avatar tests",
+            "source registration coordinate tests",
+            "NPC world activity tests",
+            "NPC direction lifecycle tests",
+            "NPC missing walk idle tests",
+            "NPC dialogue hold tests",
+            "kite flight model tests",
+            "bench swap model tests",
+            "sign balance view tests",
+            "hat rescue model tests",
+            "ribbon rhythm view tests",
+            "shadow theatre model tests",
+            "boat prologue state tests",
+            "boat prologue integration tests",
+            "island game entry tests",
+            "island audio dynamics tests",
+            "main scene integration tests",
+            "pixel UI shell tests",
+            "pixel tutorial page tests",
+            "localization framework tests"
+          ]
+        },
+        {
+          "job": "game-runtime (2)",
+          "shard": 2,
+          "runtime_suites": 31,
+          "clean_imports": 1,
+          "runtime_seconds": 501.3,
+          "labels": [
+            "clean project import",
+            "region progress tests",
+            "rowing Main tests",
+            "core runtime tests",
+            "avatar renderer tests",
+            "avatar motion rig runtime tests",
+            "avatar motion world integration tests",
+            "authored avatar side idle tests",
+            "authored idle hair attachment tests",
+            "character animation library tests",
+            "garment cache tests",
+            "legacy head source tests",
+            "NPC animation state tests",
+            "tutorial panel/catalog tests",
+            "tutorial seen progress tests",
+            "travel collection UI tests",
+            "tutorial image/control tests",
+            "daylight lighting tests",
+            "NPC activity tests",
+            "NPC motion source tests",
+            "NPC walk motion tests",
+            "building occlusion tests",
+            "bubble photo model tests",
+            "bubble photo view tests",
+            "crowd semaphore view tests",
+            "pipe round model tests",
+            "crowd crossing view tests",
+            "main story integration tests",
+            "island layout tests",
+            "shared photo thumbnail tests",
+            "pixel UI popup tests",
+            "pixel UI minigame tests"
+          ]
+        },
+        {
+          "job": "game-runtime (3)",
+          "shard": 3,
+          "runtime_suites": 30,
+          "clean_imports": 1,
+          "runtime_seconds": 347.41,
+          "labels": [
+            "clean project import",
+            "harbor world tests",
+            "region travel tests",
+            "delivered game catalog tests",
+            "rowing native fixture tests",
+            "test/review save isolation tests",
+            "wardrobe runtime tests",
+            "island hair lifecycle tests",
+            "minigame HUD hierarchy tests",
+            "eight-direction walk tests",
+            "authored NPC source walking tests",
+            "NPC departure lifecycle tests",
+            "garment overlay tests",
+            "garment part ownership tests",
+            "time-of-day tests",
+            "actor alpha silhouette tests",
+            "wardrobe UI tests",
+            "bench swap view tests",
+            "sign balance model tests",
+            "melody memory model tests",
+            "ribbon rhythm model tests",
+            "ribbon Session startup tests",
+            "ribbon Session lifecycle tests",
+            "welcome minigame tests",
+            "crowd traffic model tests",
+            "fountain jump view tests",
+            "balloon delivery tests",
+            "story runtime tests",
+            "island ride tests",
+            "audio runtime tests",
+            "pixel UI collection tests"
+          ]
+        }
+      ]
+    }
+  },
+  "evidence_archive": {
+    "path": "SG-28-evidence-20261113.zip",
+    "bytes": 9495444,
+    "sha256": "f9dc12c8a851d783c13c59170f268ba7b392e6dd570eff6034e47b1215e1c724",
+    "entries": 302
+  }
+}
