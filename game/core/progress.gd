@@ -282,7 +282,8 @@ func attach_game_photo_frames(game_id: String, saved_frames: Array, include_devi
 	var image_cache: Dictionary = {}
 	var valid_frames := _validated_game_photo_frames(ordinary_id, saved_frames, image_cache)
 	if valid_frames.is_empty():
-		valid_frames = _validated_game_photo_frames(ordinary_id, photos[ordinary_id].get("frames", []), image_cache)
+		var fallback_id: String = targets[0]
+		valid_frames = _validated_game_photo_frames(fallback_id, photos[fallback_id].get("frames", []), image_cache)
 	if valid_frames.is_empty():
 		push_warning("No readable 320x180 gameplay thumbnails are available for collected photo '%s'." % ordinary_id)
 		return false
