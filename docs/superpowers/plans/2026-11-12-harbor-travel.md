@@ -52,7 +52,7 @@
 
 ### Task 3: Travel lifecycle and truthful regional UI
 
-**Files:** Modify `game/main.gd`, `game/ui/collection_book_panel.gd`, `game/ui/island_map_panel.gd`, `tools/run_game_tests.py`; create `game/ui/harbor_map_panel.gd`, `game/tests/test_region_travel.gd` and `.tscn`, `game/tests/native_region_travel_review.gd` and `.tscn`; update only affected UI/entry test fixtures and PASS-contract unit checks as needed.
+**Files:** Modify `game/main.gd`, `game/ui/collection_book_panel.gd`, `game/ui/island_map_panel.gd`, `tools/run_game_tests.py`; narrowly update only the harbor physical-gate availability label in `game/world/park_world.gd`; create `game/ui/harbor_map_panel.gd`, `game/tests/test_region_travel.gd` and `.tscn`, `game/tests/native_region_travel_review.gd` and `.tscn`; update only affected UI/entry test fixtures and PASS-contract unit checks as needed.
 
 **Interfaces:** Consume Tasks1/2. Startup chooses saved world; explicit guarded travel saves before replacing world, applies current settings/look/phase/story and reconnects signals once. Harbor map consumes map_snapshot; collection setup gains optional region default welcome and preserves existing callers.
 
