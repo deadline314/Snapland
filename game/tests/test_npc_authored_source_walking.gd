@@ -112,12 +112,23 @@ func _run() -> void:
 	var ticket_seen := {"right": {}, "left": {}}
 	var ticket_settle_seen := {"right": {}, "left": {}}
 	var ticket_previous_position: Vector3 = anchors.ticket.position
+	var departures := {"ticket":{"right":{},"left":{}}, "imp":{"right":{},"left":{}}}
+	var previous_positions := {"ticket":ticket_start,"imp":imp_start}
 	var tick_count := ceili(CYCLE_SECONDS * 2.0 / TICK_SECONDS)
 	for _tick in range(tick_count):
 		# Advance the authored route track and the controller explicitly. No scene
 		# playback or waiting is needed; this is the same data-time progression.
 		controller._player.advance(TICK_SECONDS)
 		controller._process(TICK_SECONDS)
+		for role in departures:
+			var departing_record: Dictionary = controller._records[int(role_indices[role])]
+			if String(departing_record.action) == "depart":
+				_check(anchors[role].position == previous_positions[role], "%s turns in place before travelling" % role)
+				var departure: Dictionary = departing_record.action_sequence
+				var departure_index := Library.AnimationTiming.frame_at_time(departure, float(departing_record.action_elapsed))
+				departures[role][String(departing_record.direction)][departure_index] = true
+				_check(actors[role].texture == departure.frames[departure_index].texture, "%s departure displays its complete shared source pose" % role)
+			previous_positions[role] = anchors[role].position
 		var ticket_record: Dictionary = controller._records[int(role_indices.ticket)]
 		if String(ticket_record.action) == "settle":
 			_check(anchors.ticket.position == ticket_previous_position, "ticket root remains planted throughout the authored turn")
@@ -178,9 +189,9 @@ func _run() -> void:
 				moved_right = true
 			if direction == "left" and current_position.distance_to(announcer_start) > 0.01:
 				moved_left = true
-		if String(controller._records[int(role_indices.ticket)].action) not in ["stand", "idle", "walk", "settle"]:
+		if String(controller._records[int(role_indices.ticket)].action) not in ["stand", "idle", "walk", "settle", "depart"]:
 			ticket_persona = true
-		if String(controller._records[int(role_indices.imp)].action) not in ["stand", "idle", "walk", "settle"]:
+		if String(controller._records[int(role_indices.imp)].action) not in ["stand", "idle", "walk", "settle", "depart"]:
 			imp_persona = true
 
 	_check(ticket_seen.right.size() == 4 and ticket_seen.left.size() == 4, "ticket naturally shows all eight side poses on a complete outbound and return path")
@@ -188,6 +199,8 @@ func _run() -> void:
 	_check(imp_directions.size() == 2 and imp_seen.right.size() == 4 and imp_seen.left.size() == 4, "imp patrol reaches both directions and all eight source poses")
 	_check(imp_settle_seen.right.size() == 4 and imp_settle_seen.left.size() == 4, "imp naturally settles through all four full turn poses from both sides")
 	_check(ticket_persona and imp_persona, "ticket and imp naturally play persona actions during the two route cycles")
+	for role in departures:
+		_check(departures[role].right.size() == 4 and departures[role].left.size() == 4, "%s naturally presents both complete front-to-side departures" % role)
 	_check(moved_right and moved_left, "announcer naturally moves in both directions while its route plays authored frames")
 	_check(announcer_settle_seen.right.size() == 4 and announcer_settle_seen.left.size() == 4, "announcer naturally shows all eight side-to-front stop poses")
 	_check(anchors.announcer.position.distance_to(announcer_start) < 0.001, "announcer returns to its route origin after complete cycles")

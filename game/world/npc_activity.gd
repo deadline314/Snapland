@@ -15,6 +15,7 @@ const ANNOUNCER_RETURN_SECONDS := 5.3
 const ANNOUNCER_SECOND_REST_END := 7.6
 const ANNOUNCER_STOP_SETTLE_SECONDS := 0.16
 const ANNOUNCER_PERSONALITY_DELAY := 0.12
+const MAX_ROUTE_DEPARTURE_SECONDS := 1.0
 ## Breathing tempo per role, applied only to looping stand/idle frames: the calm guide breathes
 ## slowest, the excitable imp fastest. Authored frames and their declared fps stay unchanged.
 const BREATH_TEMPO := {"ticket": 0.88, "imp": 1.22, "announcer": 1.04}
@@ -410,7 +411,14 @@ func _update_authored_patrol(index: int, delta: float) -> void:
 	var record: Dictionary = _records[index]
 	var patrol: RefCounted = record.get("authored_patrol")
 	if patrol == null or String(record.action) not in ["stand", "idle", "walk"]: return
-	var movement: Dictionary = patrol.advance(delta)
+	var movement: Dictionary = patrol.advance(delta, String(record.action) == "walk")
+	if String(record.action) in ["stand", "idle"] and bool(movement.get("ready", false)):
+		var role := String(record.role)
+		var direction := String(movement.direction)
+		if _has_route_departure(role, direction):
+			_play_actor_action(index, "depart", direction, true)
+			return
+		movement = patrol.advance(delta)
 	if bool(movement.moving):
 		if String(record.action) != "walk" or String(record.direction) != String(movement.direction):
 			if not _play_actor_action(index, "walk", String(movement.direction), true): return
@@ -427,6 +435,11 @@ func _update_authored_patrol(index: int, delta: float) -> void:
 			_play_actor_action(index, "idle", "front", true)
 		_records[index]["distance_driven_walk"] = false
 		_records[index]["idle_due"] = _action_clock + 0.25
+
+func _has_route_departure(role: String, direction: String) -> bool:
+	if not _has_sequence(role, "depart", direction): return false
+	var sequence: Dictionary = _animation_library.get_sequence(role, "depart", direction)
+	return not bool(sequence.get("loop", true)) and not sequence.has("return_direction") and AnimationTiming.duration(sequence) <= MAX_ROUTE_DEPARTURE_SECONDS
 
 func motion_report() -> Dictionary:
 	var supported := {}
@@ -798,7 +811,13 @@ func _advance_actor(record: Dictionary, target: Sprite3D, delta: float, allow_id
 	if _is_breathing_loop(action, sequence):
 		playback_elapsed *= breath_tempo(String(record.role))
 	if not bool(sequence.get("loop", false)) and playback_elapsed >= _sequence_seconds(sequence):
+		if action == "depart":
+			var patrol: RefCounted = record.get("authored_patrol")
+			if patrol != null and not _dialogue_hold and not _activity_paused and not _reduced_motion:
+				patrol.begin_stride()
+				if _play_actor_action(_record_index(record), "walk", String(record.direction), true): return
 		var direction := String(sequence.get("return_direction", record.direction))
+		if action == "depart": direction = "front"
 		if _play_actor_action(_record_index(record), "stand", direction, true):
 			if sequence.has("return_direction"):
 				_records[_record_index(record)]["idle_due"] = _action_clock + 0.6

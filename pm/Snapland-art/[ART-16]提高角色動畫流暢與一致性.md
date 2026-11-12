@@ -122,3 +122,32 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 ![回到原有完整待機](images/ART-16-ticket-settle-20261111-settled.png)
 
 [正常影片](images/ART-16-ticket-settle-20261111-normal.mp4) · [四分之一速度／重入](images/ART-16-ticket-settle-20261111-quarter.mp4) · [降低動態](images/ART-16-ticket-settle-20261111-reduced.mp4) · [PCK 播放](images/ART-16-ticket-settle-20261111-pack.mp4) · [完整結果與來源指紋](images/ART-16-ticket-settle-20261111-review.json) · [原生姿勢、測試、初版與封裝紀錄](images/ART-16-ticket-settle-20261111-evidence.zip) · [兩版原畫與完整提示](images/ART-16-ticket-settle-20261111-sources.zip)。起始 SHA：`28fb8f7`；分支：`codex/ticket-delivery-20261111`。
+
+
+# Commit — 2026-11-12 銜接原地轉向與實際起步
+
+## 內文
+
+票票與小角原本從正面待機直接切成側向行走。現在左右各經過四張既有完整轉身姿勢，轉好才起步；轉身期間人物與互動位置不移動。三位 NPC 的收勢末端統一回到原有中立站姿，票票與小角起步首格亦保持相同外觀，避免頭部、衣著與站距在交接處跳變。沿用既有原畫，新增原畫數為零。
+
+對話或暫停期間結束的起步回到站姿；恢復活動再重新轉身，不會站在原地踏步。招呼中斷、降低動態與破損動作來源均保留完整人物及安全回退。相同姿勢共用貼圖，沒有額外產生重複畫布。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 來源與重建 | 218 個區域通過，八方向主角與換裝資料保留；Python 局部 38 項通過 |
+| 受影響引擎 | 匯入、NPC 行走、巡路、起步生命週期、素材庫、狀態、輪廓、世界活動、缺圖對話、對話暫停及腳底接地共 11 項通過 |
+| 起步生命週期 | 暫停、對話、招呼中斷、重新設定、重新接步、降低動態及五類來源錯誤通過；貼圖身份、錨點及快取無重複增長 |
+| 正常原生 | 票票 408 格／13.600 秒、小角 289 格／9.633 秒；各觀察左右八張起步、行走與收勢，起步最大根位置偏移 0 |
+| 四分之一速度／重入 | 票票 1621 格／54.033 秒、小角 1227 格／40.900 秒，完整往返及最後待機通過 |
+| 降低動態／重入 | 兩位維持完整靜止人物，原生檢查通過 |
+| 隔離 PCK | 來源指紋一致；票票 388 格／12.933 秒、小角 289 格／9.633 秒，阿浪中立收勢另通過；匯入、輸出及十次原生執行均 exit 0、0 ERROR |
+
+實際逐張檢視票票與小角正常左右八張起步，另檢視慢速、包內代表姿勢及阿浪中立末格。初版獨立正面圖的輪廓跳變已改正，前後對照與先失敗後通過的診斷均保存。六部影片完成完整解碼檢查。Godot 4.7.2、Windows Compatibility、Dummy 音訊、固定 30 FPS 錄影；不宣稱真人連續觀看、遊玩、試聽或即時性能。PCK 使用相同引擎執行。整票依原條件維持進行中。
+
+![票票沿用原待機開始轉身](images/ART-16-pivots-20261112-ticket-depart-right-0.png)
+![票票左向轉身中段](images/ART-16-pivots-20261112-ticket-depart-left-2.png)
+![小角右向轉身中段](images/ART-16-pivots-20261112-imp-depart-right-2.png)
+
+[票票正常](images/ART-16-pivots-20261112-ticket-normal.mp4) · [票票慢速](images/ART-16-pivots-20261112-ticket-quarter.mp4) · [票票包內](images/ART-16-pivots-20261112-ticket-pack.mp4) · [小角正常](images/ART-16-pivots-20261112-imp-normal.mp4) · [小角慢速](images/ART-16-pivots-20261112-imp-quarter.mp4) · [小角包內](images/ART-16-pivots-20261112-imp-pack.mp4) · [結果及來源指紋](images/ART-16-pivots-20261112-review.json) · [姿勢、診斷與重現紀錄](images/ART-16-pivots-20261112-evidence.zip)。起始 SHA：`702825b`；分支：`codex/npc-departures-20261112`。

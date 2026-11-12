@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "NPC departure lifecycle tests": "PASS: planted NPC departure, pause, dialogue, interruption, stride restart, reduced motion and damaged-source fallback",
     "pixel typography tests": "PASS: 40 pixel font checks, 0 failures",
     "localization framework tests": "PASS: locale packs, fallback, preferences and live UI state",
     "pixel UI shell tests": "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920",
@@ -202,6 +203,7 @@ def main(argv: list[str] | None = None) -> int:
             ("authored idle hair attachment tests", common + ["--script", "res://game/tests/test_avatar_idle_attachment.gd"]),
             ("authored NPC source walking tests", common + ["--script", "res://game/tests/test_npc_authored_source_walking.gd"]),
             ("authored NPC patrol tests", common + ["--script", "res://game/tests/test_authored_npc_patrol.gd"]),
+            ("NPC departure lifecycle tests", common + ["--script", "res://game/tests/test_npc_departure_lifecycle.gd"]),
             ("character animation library tests", common + ["--script", "res://game/tests/test_character_animation_library.gd"]),
             ("atomic outfit coverage tests", common + ["--script", "res://game/tests/test_outfit_atomic_coverage.gd"]),
             ("garment overlay tests", common + ["--script", "res://game/tests/test_garment_overlay.gd"]),

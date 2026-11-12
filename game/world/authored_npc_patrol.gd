@@ -44,8 +44,12 @@ func reset() -> void:
 	phase = 0.0
 	blocked_reason = ""
 
-func advance(delta: float) -> Dictionary:
-	var result := {"moving": false, "distance": 0.0, "phase": phase, "direction": "right" if _sign > 0.0 else "left"}
+func begin_stride() -> void:
+	# A planted orientation change starts a new contact cycle, not a step.
+	phase = 0.0
+
+func advance(delta: float, allow_translation := true) -> Dictionary:
+	var result := {"moving": false, "ready": false, "distance": 0.0, "phase": phase, "direction": "right" if _sign > 0.0 else "left"}
 	var anchor := _anchor.get_ref() as Node3D if _anchor != null else null
 	if not is_instance_valid(anchor) or not anchor.is_inside_tree() or not is_finite(delta) or delta <= 0.0: return result
 	var current := anchor.global_position
@@ -72,6 +76,8 @@ func advance(delta: float) -> Dictionary:
 		_sign *= -1.0
 		_rest = 0.6
 		return result
+	result.ready = true
+	if not allow_translation: return result
 	anchor.global_position = candidate
 	var distance := Vector2(candidate.x-current.x, candidate.z-current.z).length()
 	_last_position = anchor.global_position

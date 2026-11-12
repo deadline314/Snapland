@@ -15,6 +15,25 @@ SPEC.loader.exec_module(BUILDER)
 
 
 class CharacterAnimationManifestBuilderTests(unittest.TestCase):
+    def test_turn_endpoints_share_the_exact_existing_neutral_pose(self):
+        before = json.loads(BUILDER.OUT.read_text(encoding="utf-8"))
+        after, _ = BUILDER.build()
+        for role in ("ticket", "imp", "announcer"):
+            for direction in ("right", "left"):
+                frames = after["actors"][role]["settle"][direction]["frames"]
+                self.assertEqual(after["actors"][role]["idle"]["front"]["frames"][0], frames[-1])
+                self.assertEqual(before["actors"][role]["settle"][direction]["frames"][:3], frames[:3])
+
+    def test_departures_reuse_complete_turn_sources_without_changing_other_actions(self):
+        after, _ = BUILDER.build()
+        for role in ("ticket", "imp"):
+            for direction in ("right", "left"):
+                departure = after["actors"][role].get("depart", {}).get(direction, {})
+                self.assertEqual(4, len(departure.get("frames", [])))
+                self.assertFalse(departure["loop"])
+                self.assertNotIn("return_direction", departure)
+                self.assertEqual(list(reversed(after["actors"][role]["settle"][direction]["frames"])), departure["frames"])
+
     def test_announcer_turn_has_complete_finite_sources(self):
         after, reports = BUILDER.build()
         for direction in ("right", "left"):
@@ -37,7 +56,9 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
         self.assertEqual(8, reports["ticket"]["settle_side_atlas"]["frame_count"])
         for actor, actions in before["actors"].items():
             for action, value in actions.items():
-                if actor == "ticket" and action == "settle":
+                if actor in ("ticket", "imp", "announcer") and action == "settle":
+                    continue
+                if actor in ("ticket", "imp") and action == "depart":
                     continue
                 self.assertEqual(value, after["actors"][actor][action], (actor, action))
         for key in ("outfit_modes", "outfit_required_poses"):

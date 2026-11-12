@@ -434,6 +434,17 @@ def apply_authoring_metadata(manifest: dict) -> None:
     manifest["coverage_notes"].update(copy.deepcopy(authored["coverage_notes"]))
 
 
+def add_route_departures(actor_data: dict) -> None:
+    """Replay approved whole-body pivots toward the walking side; no new art."""
+    actor_data["depart"] = {}
+    for direction, settle in actor_data["settle"].items():
+        entry = {"fps": settle["fps"], "loop": False,
+                 "frames": copy.deepcopy(list(reversed(settle["frames"])))}
+        if "frame_durations" in settle:
+            entry["frame_durations"] = list(reversed(settle["frame_durations"]))
+        actor_data["depart"][direction] = entry
+
+
 def build() -> tuple[dict,dict]:
     actors={}; reports={}
     for actor in ACTORS:
@@ -454,6 +465,14 @@ def build() -> tuple[dict,dict]:
     reports["ticket"]["walk_side_atlas"]={k:v for k,v in ticket_walk_report.items() if k!="frames"}
     ticket_settle_report=add_npc_side_action(actors["ticket"], "ticket", TICKET_SIDE_SETTLE, 4, TICKET_SIDE_SCALE, fixed_cell_root=True, column_bounds=(48,464,880,1296,1712), action="settle", fps=10, loop=False, return_direction="front")
     reports["ticket"]["settle_side_atlas"]={k:v for k,v in ticket_settle_report.items() if k!="frames"}
+    # A second independently drawn front view can change head/clothing volume
+    # at the idle boundary. End all pivots on the existing exact neutral cel.
+    for role in ("ticket", "imp", "announcer"):
+        neutral = actors[role]["idle"]["front"]["frames"][0]
+        for sequence in actors[role]["settle"].values():
+            sequence["frames"][-1] = copy.deepcopy(neutral)
+    for role in ("ticket", "imp"):
+        add_route_departures(actors[role])
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
@@ -470,6 +489,7 @@ def build() -> tuple[dict,dict]:
                     for direction, entry in directions.items():
                         actors[actor][action].setdefault(direction, entry)
     manifest={"schema_version":1,"description":"Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.","runtime_aliases":{"traveller":{"station_stand":"idle/front/frame_0 (same authored frame; not a separate animation)"},"ticket":{"special":"idle_gesture/front (runtime alias; no duplicate frames)"}},"coverage_notes":{"traveller":TRAVELLER_COVERAGE_NOTE,"traveller_outfit_coral":"Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.","ticket":"Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.","imp":"42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.","announcer":"Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."},"actors":actors}
+    manifest["coverage_notes"]["route_pivots"] = "NPC settle endpoints share idle/front/frame_0 exactly. Ticket and imp departures replay approved settle poses in reverse, reusing existing source regions; no additional drawings."
     apply_authoring_metadata(manifest)
     return manifest,reports
 

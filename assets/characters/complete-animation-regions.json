@@ -14,7 +14,8 @@
     "traveller_outfit_coral": "Historical incomplete vest candidate only: retained for provenance, never selected. The shipping coral jacket is a palette of the complete base body in every action and direction.",
     "ticket": "Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.",
     "imp": "42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.",
-    "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."
+    "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered.",
+    "route_pivots": "NPC settle endpoints share idle/front/frame_0 exactly. Ticket and imp departures replay approved settle poses in reverse, reusing existing source regions; no additional drawings."
   },
   "actors": {
     "traveller": {
@@ -11397,28 +11398,27 @@
               "layers": []
             },
             {
-              "source": "res://assets/characters/ticket-settle-sides-v1.png",
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
               "region": [
-                1394,
+                64,
                 10,
-                224,
-                396
+                102,
+                172
               ],
               "anchors": {
                 "feet": [
-                  110,
-                  394
+                  52,
+                  170
                 ],
                 "head": [
-                  110,
+                  50,
                   2
                 ]
               },
               "anchor_method": {
-                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "feet_method": "bottom_8px_two_contact_midpoint",
                 "head_method": "central_upper_alpha_hat_hair_top"
               },
-              "source_scale": 0.432,
               "layers": []
             }
           ],
@@ -11504,16 +11504,178 @@
               "layers": []
             },
             {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                64,
+                10,
+                102,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  170
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ],
+          "return_direction": "front"
+        }
+      },
+      "depart": {
+        "right": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                64,
+                10,
+                102,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  170
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
               "source": "res://assets/characters/ticket-settle-sides-v1.png",
               "region": [
-                1391,
-                455,
-                229,
+                984,
+                10,
+                219,
+                396
+              ],
+              "anchors": {
+                "feet": [
+                  104,
+                  394
+                ],
+                "head": [
+                  110,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-settle-sides-v1.png",
+              "region": [
+                559,
+                10,
+                210,
                 396
               ],
               "anchors": {
                 "feet": [
                   113,
+                  394
+                ],
+                "head": [
+                  105,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-settle-sides-v1.png",
+              "region": [
+                149,
+                11,
+                199,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  107,
+                  393
+                ],
+                "head": [
+                  103,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            }
+          ]
+        },
+        "left": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/ticket-front-actions-v2.png",
+              "region": [
+                64,
+                10,
+                102,
+                172
+              ],
+              "anchors": {
+                "feet": [
+                  52,
+                  170
+                ],
+                "head": [
+                  50,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-settle-sides-v1.png",
+              "region": [
+                977,
+                455,
+                226,
+                396
+              ],
+              "anchors": {
+                "feet": [
+                  111,
                   394
                 ],
                 "head": [
@@ -11527,9 +11689,58 @@
               },
               "source_scale": 0.432,
               "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-settle-sides-v1.png",
+              "region": [
+                558,
+                456,
+                213,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  114,
+                  393
+                ],
+                "head": [
+                  108,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/ticket-settle-sides-v1.png",
+              "region": [
+                159,
+                456,
+                206,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  97,
+                  393
+                ],
+                "head": [
+                  106,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.432,
+              "layers": []
             }
-          ],
-          "return_direction": "front"
+          ]
         }
       }
     },
@@ -12894,28 +13105,27 @@
               "layers": []
             },
             {
-              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "source": "res://assets/characters/imp-front-actions-v2.png",
               "region": [
-                1415,
-                55,
-                261,
-                334
+                49,
+                69,
+                121,
+                135
               ],
               "anchors": {
                 "feet": [
-                  137,
-                  332
+                  55,
+                  133
                 ],
                 "head": [
-                  164,
+                  63,
                   2
                 ]
               },
               "anchor_method": {
-                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "feet_method": "bottom_8px_two_contact_midpoint",
                 "head_method": "central_upper_alpha_hat_hair_top"
               },
-              "source_scale": 0.395,
               "layers": []
             }
           ],
@@ -13001,16 +13211,98 @@
               "layers": []
             },
             {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                49,
+                69,
+                121,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  133
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            }
+          ],
+          "return_direction": "front"
+        }
+      },
+      "depart": {
+        "right": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                49,
+                69,
+                121,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  133
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
               "source": "res://assets/characters/imp-settle-sides-v1.png",
               "region": [
-                1415,
-                499,
-                260,
+                996,
+                55,
+                254,
                 334
               ],
               "anchors": {
                 "feet": [
-                  137,
+                  113,
+                  332
+                ],
+                "head": [
+                  163,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                566,
+                55,
+                245,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  100,
                   332
                 ],
                 "head": [
@@ -13024,9 +13316,138 @@
               },
               "source_scale": 0.395,
               "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                132,
+                55,
+                235,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  90,
+                  332
+                ],
+                "head": [
+                  156,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
             }
-          ],
-          "return_direction": "front"
+          ]
+        },
+        "left": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/imp-front-actions-v2.png",
+              "region": [
+                49,
+                69,
+                121,
+                135
+              ],
+              "anchors": {
+                "feet": [
+                  55,
+                  133
+                ],
+                "head": [
+                  63,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                976,
+                499,
+                244,
+                334
+              ],
+              "anchors": {
+                "feet": [
+                  133,
+                  332
+                ],
+                "head": [
+                  148,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                538,
+                496,
+                241,
+                337
+              ],
+              "anchors": {
+                "feet": [
+                  128,
+                  335
+                ],
+                "head": [
+                  138,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/imp-settle-sides-v1.png",
+              "region": [
+                100,
+                495,
+                238,
+                338
+              ],
+              "anchors": {
+                "feet": [
+                  122,
+                  336
+                ],
+                "head": [
+                  130,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.395,
+              "layers": []
+            }
+          ]
         }
       }
     },
@@ -14535,28 +14956,27 @@
               "layers": []
             },
             {
-              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
               "region": [
-                1418,
-                17,
-                202,
-                395
+                86,
+                44,
+                88,
+                151
               ],
               "anchors": {
                 "feet": [
-                  86,
-                  393
+                  43,
+                  149
                 ],
                 "head": [
-                  104,
+                  44,
                   2
                 ]
               },
               "anchor_method": {
-                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "feet_method": "bottom_8px_two_contact_midpoint",
                 "head_method": "central_upper_alpha_hat_hair_top"
               },
-              "source_scale": 0.4,
               "layers": []
             }
           ],
@@ -14642,28 +15062,27 @@
               "layers": []
             },
             {
-              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
               "region": [
-                1418,
-                461,
-                202,
-                395
+                86,
+                44,
+                88,
+                151
               ],
               "anchors": {
                 "feet": [
-                  86,
-                  393
+                  43,
+                  149
                 ],
                 "head": [
-                  104,
+                  44,
                   2
                 ]
               },
               "anchor_method": {
-                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "feet_method": "bottom_8px_two_contact_midpoint",
                 "head_method": "central_upper_alpha_hat_hair_top"
               },
-              "source_scale": 0.4,
               "layers": []
             }
           ],

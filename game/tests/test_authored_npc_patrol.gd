@@ -13,6 +13,12 @@ func _run() -> void:
 	root.add_child(actor)
 	var patrol = Patrol.new()
 	assert(patrol.configure(actor, _height, _path_clear))
+	var prepare_sample := {}
+	for _index in range(20): prepare_sample = patrol.advance(0.1, false)
+	assert(bool(prepare_sample.get("ready", false)) and not prepare_sample.moving and actor.position == Vector3.ZERO and patrol.phase == 0.0, "waiting for an in-place turn never moves the body or feet phase")
+	assert(patrol.advance(1.0/60.0).moving, "walking resumes only after the turn owner allows translation")
+	actor.position = Vector3.ZERO
+	patrol.reset()
 	var directions := {}
 	var moved := 0.0
 	for _index in range(1500):

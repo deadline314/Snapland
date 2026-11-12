@@ -168,6 +168,30 @@ func texture(actor: String, action: String, direction: String, frame_index: int,
 		_diagnostic(_context(actor, action, direction, index), "frame entry must be an object")
 		return null
 	var frame: Dictionary = _frame_for_equipment(frames[index], equipped, actor, action, direction, index)
+	if actor != "traveller":
+		# Route pivots share approved canvases only after every source, anchor,
+		# layer and equipment field matches. Timing remains owned by each clip.
+		var source_frames: Array = []
+		var source_action := ""
+		var source_direction := direction
+		var source_index := 0
+		if action == "depart":
+			source_frames = _frames(actor, "settle", direction)
+			if source_frames.size() == frames.size():
+				source_action = "settle"
+				source_index = source_frames.size() - 1 - index
+		elif action == "settle" and index == frames.size() - 1:
+			source_action = "idle"
+			source_direction = "front"
+			source_frames = _frames(actor, "idle", "front")
+		if not source_action.is_empty() and source_index >= 0 and source_index < source_frames.size() and source_frames[source_index] is Dictionary:
+			var source_frame := _frame_for_equipment(source_frames[source_index], equipped, actor, source_action, source_direction, source_index)
+			if frame == source_frame:
+				var shared := texture(actor, source_action, source_direction, source_index, equipped)
+				var source_key := "%s|%s|%s|%d|%s" % [actor, source_action, source_direction, source_index, JSON.stringify(equipped)]
+				if shared != null and _layouts.has(source_key):
+					_layouts["%s|%s|%s|%d|%s" % [actor, action, direction, index, JSON.stringify(equipped)]] = _layouts[source_key]
+				return shared
 	return _render_frame(actor, action, direction, index, frame, equipped)
 
 func inspect_variant_texture(actor: String, action: String, direction: String, frame_index: int, outfit: String) -> Texture2D:
