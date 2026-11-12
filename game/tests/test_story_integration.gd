@@ -21,6 +21,7 @@ func _run() -> void:
 		_finish()
 		return
 	progress.reset_progress()
+	progress.prologue_seen = true # This fixture exercises the original arrival.
 	progress.intro_seen = false
 	progress.save_progress()
 	get_window().size = Vector2i(1280, 720)

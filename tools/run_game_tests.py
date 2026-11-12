@@ -20,6 +20,9 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "boat prologue state tests": "PASS: boat prologue state, save boundaries, and optional story validation",
+    "boat prologue stage tests": "PASS: boat prologue reversible ferry stage, timing, and bounded preview",
+    "boat prologue integration tests": "PASS: boat prologue first-run, replay, interruption, and unchanged rewards",
     "avatar prop foreground tests": "PASS: prop foreground 128 complete-pose blends, independent hand/camera witnesses, rigid guards, exact-source rejection, bounded cache and 10 malformed inputs",
     "NPC departure lifecycle tests": "PASS: planted NPC departure, pause, dialogue, interruption, stride restart, reduced motion and damaged-source fallback",
     "pixel typography tests": "PASS: 40 pixel font checks, 0 failures",
@@ -129,12 +132,19 @@ def fail(message: str) -> int:
     return 1
 
 
-def result_error(label: str, result: subprocess.CompletedProcess[str]) -> str | None:
+def result_error(label: str, result: subprocess.CompletedProcess[str], expected_save_path: str | None = None) -> str | None:
     """A completed engine process still needs its own error-free completion line."""
     output = (result.stdout or "") + "\n" + (result.stderr or "")
     if result.returncode:
         return f"{label} exited {result.returncode}:\n{output.strip()[-6000:]}"
     engine_errors = [line for line in output.splitlines() if "ERROR:" in line]
+    if label == "boat prologue state tests":
+        # This suite deliberately blocks exactly its own profile's .tmp write.
+        expected = rf"ERROR: Cannot write progress temporary file '{re.escape(expected_save_path or '')}\.tmp': Can't open file"
+        matches = [line for line in engine_errors if re.fullmatch(expected, line)] if expected_save_path else []
+        if len(matches) != 1:
+            return f"{label} expected exactly one isolated temporary-write diagnostic; observed {len(matches)}."
+        engine_errors.remove(matches[0])
     if engine_errors:
         return f"{label} logged engine errors:\n" + "\n".join(engine_errors[-40:])
     marker = PASS_MARKERS.get(label)
@@ -143,7 +153,8 @@ def result_error(label: str, result: subprocess.CompletedProcess[str]) -> str | 
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    if not any(line.startswith(marker) for line in stdout_lines):
+    completed = any(line == marker for line in stdout_lines) if label.startswith("boat prologue ") else any(line.startswith(marker) for line in stdout_lines)
+    if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
     return None
@@ -260,6 +271,9 @@ def main(argv: list[str] | None = None) -> int:
             ("fountain jump view tests", common + ["--script", "res://game/tests/test_fountain_jump_view.gd"]),
             ("fountain timing tests", common + ["--script", "res://game/tests/test_fountain.gd"]),
             ("balloon delivery tests", common + ["--script", "res://game/tests/test_balloon.gd"]),
+            ("boat prologue state tests", common + ["--script", "res://game/tests/test_boat_prologue_state.gd"]),
+            ("boat prologue stage tests", common + ["--script", "res://game/tests/test_boat_prologue_stage.gd"]),
+            ("boat prologue integration tests", common + ["res://game/tests/test_boat_prologue_integration.tscn"]),
             ("story runtime tests", common + ["--script", "res://game/tests/test_story.gd"]),
             ("main story integration tests", common + ["res://game/tests/test_story_integration.tscn"]),
             ("island ride tests", common + ["--script", "res://game/tests/test_island_ride.gd"]),
@@ -313,7 +327,7 @@ def main(argv: list[str] | None = None) -> int:
             except (ValueError, OSError, subprocess.SubprocessError) as error:
                 message = f"{label} could not run: {error}"
             else:
-                message = result_error(label, result)
+                message = result_error(label, result, env["SNAPLAND_SAVE_PATH"])
             if message:
                 if label == "clean project import" or not options.keep_going:
                     return fail(message)

@@ -52,6 +52,7 @@ func _run() -> void:
 	get_window().size = Vector2i(1280, 720)
 	_progress = get_tree().root.get_node_or_null("Progress")
 	_progress.reset_progress()
+	_progress.prologue_seen = true # Preserve this original-arrival review.
 	_progress.intro_seen = false
 	_progress.settings["reduced_motion"] = false
 	_progress.save_progress()

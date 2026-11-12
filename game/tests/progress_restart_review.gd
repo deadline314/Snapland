@@ -1,7 +1,7 @@
 extends Node
 ## Optional two-process persistence evidence; never uses a player's profile.
 var failures: Array[String] = []
-const FIELDS := ["photos","achievements","quests","visited","settings","appearance","equipped","owned_clothes","coins","wardrobe_rewarded_games","platform_pending_achievements","intro_seen","tutorial_seen_games","_extra_fields"]
+const FIELDS := ["photos","achievements","quests","visited","settings","appearance","equipped","owned_clothes","coins","wardrobe_rewarded_games","platform_pending_achievements","intro_seen","prologue_seen","tutorial_seen_games","_extra_fields"]
 func _ready() -> void:
 	call_deferred("_run")
 func _check(condition: bool, reason: String) -> void:

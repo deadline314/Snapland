@@ -17,6 +17,7 @@ func _run() -> void:
  progress=root.get_node("Progress")
  if not returning:
   progress.reset_progress()
+  progress.prologue_seen=true # This review targets the original arrival and twelve stations.
   progress.intro_seen=false
  else:
   _check(progress.tutorial_seen_games.size()==12,"new process loaded all twelve learned tutorials")

@@ -21,6 +21,7 @@ func _run() -> void:
 		return
 	get_window().size = Vector2i(1280, 720)
 	Progress.reset_progress()
+	Progress.prologue_seen = true # Preserve this original-arrival review.
 	Progress.intro_seen = false
 	Progress.save_progress()
 	_main = MainScene.instantiate()

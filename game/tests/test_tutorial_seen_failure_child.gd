@@ -18,6 +18,7 @@ func _run() -> void:
 		_finish()
 		return
 	progress.reset_progress()
+	progress.prologue_seen = true # Preserve the original-arrival setup before tutorial failure.
 	var original_path := OS.get_environment("SNAPLAND_SAVE_PATH")
 	var obstruction_path := original_path + ".blocked-directory"
 	var obstruction := FileAccess.open(obstruction_path, FileAccess.WRITE)

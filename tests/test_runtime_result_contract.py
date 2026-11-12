@@ -91,7 +91,8 @@ class RuntimeResultContractTests(unittest.TestCase):
                 self.assertEqual(path.read_bytes(), payload, "a later suite overwrote another suite's sidecar")
             self.assertEqual(timeout, 240 if label == "avatar renderer tests" else 90)
             observed.append(save)
-            return subprocess.CompletedProcess(command, 0, PASS_MARKERS.get(label, "import complete") + "\n", "")
+            stderr = f"ERROR: Cannot write progress temporary file '{save}.tmp': Can't open file" if label == "boat prologue state tests" else ""
+            return subprocess.CompletedProcess(command, 0, PASS_MARKERS.get(label, "import complete") + "\n", stderr)
 
         with mock.patch.dict(os.environ, {"GODOT_BIN": "fixture-godot"}), \
              mock.patch("tools.run_game_tests.subprocess.run", return_value=self.result("4.7.2.stable.official.fixture")), \
@@ -117,7 +118,8 @@ class RuntimeResultContractTests(unittest.TestCase):
             label = next(keys[part] for part in command if part in keys)
             dispatched.append((label, timeout))
             stdout = "" if label in failing else (PASS_MARKERS.get(label, "import complete") + "\n")
-            return subprocess.CompletedProcess(command, 0, stdout, "")
+            stderr = f"ERROR: Cannot write progress temporary file '{env['SNAPLAND_SAVE_PATH']}.tmp': Can't open file" if label == "boat prologue state tests" else ""
+            return subprocess.CompletedProcess(command, 0, stdout, stderr)
 
         errors = io.StringIO()
         with mock.patch.dict(os.environ, {"GODOT_BIN": "fixture-godot"}), \
@@ -159,6 +161,30 @@ class RuntimeResultContractTests(unittest.TestCase):
         code, dispatched, _ = self.run_with_fake_engine(["--timeout-scale", "0.5"], set())
         self.assertEqual(code, 2, "argparse rejects a shorter limit")
         self.assertEqual(dispatched, [])
+
+    def test_boat_state_requires_one_exact_error_for_its_own_profile(self) -> None:
+        label = "boat prologue state tests"
+        save = "C:/isolated/regex [profile]+/progress.json"
+        expected = f"ERROR: Cannot write progress temporary file '{save}.tmp': Can't open file"
+        marker = PASS_MARKERS[label]
+        self.assertIsNone(result_error(label, self.result(marker, expected), save))
+        for stderr in ["", expected + "\n" + expected, expected.replace(save, "C:/other/progress.json"),
+                       expected.replace("Can't open file", "Permission denied"), expected + " extra"]:
+            with self.subTest(stderr=stderr):
+                self.assertIn("exactly one", result_error(label, self.result(marker, stderr), save) or "")
+        for extra in ["ERROR: another IO failure", "SCRIPT ERROR: Parse Error", "SCRIPT ERROR: Assertion failed"]:
+            self.assertIn("logged engine errors", result_error(label, self.result(marker, expected + "\n" + extra), save) or "")
+        self.assertIsNotNone(result_error(label, self.result(marker, expected)))
+        self.assertIn("logged engine errors", result_error("boat prologue stage tests", self.result(PASS_MARKERS["boat prologue stage tests"], expected), save) or "")
+        self.assertIn("exited 1", result_error(label, self.result(marker, expected, 1), save) or "")
+
+    def test_boat_suites_require_exact_completion_lines(self) -> None:
+        save = "C:/isolated/profile.json"
+        for label in ["boat prologue state tests", "boat prologue stage tests", "boat prologue integration tests"]:
+            expected = f"ERROR: Cannot write progress temporary file '{save}.tmp': Can't open file" if label == "boat prologue state tests" else ""
+            self.assertIsNone(result_error(label, self.result(PASS_MARKERS[label], expected), save))
+            for marker in ["", PASS_MARKERS[label] + " suffix", "quoted " + PASS_MARKERS[label]]:
+                self.assertIn("without its PASS marker", result_error(label, self.result(marker, expected), save) or "")
 
     def test_newly_registered_contracts_require_real_completion(self) -> None:
         cases = {

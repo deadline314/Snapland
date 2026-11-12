@@ -31,6 +31,7 @@ func _run() -> void:
 		return
 	get_window().size = Vector2i(1280, 720)
 	Progress.reset_progress()
+	Progress.prologue_seen = true # Preserve this original-arrival review.
 	Progress.intro_seen = false
 	if not Progress.save_progress():
 		await _fail_and_quit("Could not initialize the isolated review save profile.")

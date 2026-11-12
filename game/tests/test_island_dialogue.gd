@@ -71,6 +71,7 @@ func _run() -> void:
 	_audio.queue_free()
 	await get_tree().process_frame
 	Progress.reset_progress()
+	Progress.prologue_seen = true # This fixture exercises the original arrival.
 	Progress.intro_seen = false
 	Progress.save_progress()
 	_main = MainScene.instantiate()

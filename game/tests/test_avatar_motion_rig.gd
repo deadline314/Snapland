@@ -529,6 +529,7 @@ func _world_reach_audit() -> void:
 	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty(): OS.set_environment("SNAPLAND_SAVE_PATH",ProjectSettings.globalize_path("res://.review/sol-world-reach-save.json"))
 	var progress = root.get_node("Progress")
 	progress.reset_progress()
+	progress.prologue_seen = true # Preserve this original-arrival review.
 	progress.intro_seen = false
 	var main = load("res://game/main.tscn").instantiate()
 	root.add_child(main)

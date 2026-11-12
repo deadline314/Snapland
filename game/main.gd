@@ -11,6 +11,7 @@ const TimePanel = preload("res://game/ui/time_panel.gd")
 const SettingsPanel = preload("res://game/ui/settings_panel.gd")
 const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
 const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
+const BoatPrologueStage = preload("res://game/story/boat_prologue_stage.gd")
 var world: Node3D
 var audio: Node
 var story: RefCounted
@@ -39,6 +40,8 @@ var dialogue: Array=[]
 var dialogue_index := 0
 var dialogue_label: Label
 var dialogue_panel: Control
+var boat_stage: Node3D
+var boat_first_run := false
 var dialogue_done := Callable()
 var dialogue_cancelled := Callable()
 var reveal := 0.0
@@ -75,6 +78,7 @@ func _ready() -> void:
 	_build_ui()
 	world.interaction_requested.connect(_interact)
 	world.area_changed.connect(func(name: String):
+		if quitting: return
 		area_label.text=name
 		_update_breadcrumb(name)
 		_sync_audio_environment()
@@ -89,7 +93,8 @@ func _ready() -> void:
 		world.player.position=Vector3(0,0.4,9)
 		_capture_sequence.call_deferred()
 	elif not Progress.intro_seen:
-		_show_arrival()
+		if not Progress.prologue_seen: _show_boat_prologue(true)
+		else: _show_arrival()
 	var user_args := OS.get_cmdline_user_args()
 	if user_args.has("--smoke-test"):
 		if user_args.has("--smoke-art"):
@@ -223,9 +228,13 @@ func _smoke_art_abort(reason: String) -> void:
 func _notification(what: int) -> void:
 	if what==NOTIFICATION_WM_CLOSE_REQUEST: _quit_game()
 
+func _exit_tree() -> void:
+	_clear_boat_prologue()
+
 func _quit_game() -> void:
 	if quitting: return
 	quitting=true
+	_clear_boat_prologue()
 	world.blocked=true
 	Progress.save_progress()
 	audio.shutdown()
@@ -614,6 +623,7 @@ func _refresh() -> void:
 		DisplayServer.window_set_mode(mode)
 
 func _process(delta: float) -> void:
+	if quitting: return
 	if session!=null and DisplayServer.get_name()!="headless" and session.elapsed>=next_snapshot and not session.ended:
 		next_snapshot=session.elapsed+0.9
 		_sample_photo.call_deferred()
@@ -658,6 +668,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if quitting: return
 	if event.is_action_pressed("pause"):
 		if modal_kind=="" and session==null and world.coastal_play.discoveries.end_control(): pass
 		elif modal_kind=="dialogue": _cancel_dialogue()
@@ -955,6 +966,9 @@ func _show_pause() -> void:
 		var button := _pause_action(column,str(entry[0]),entry[1],str(entry[2]),str(entry[3]))
 		button.name=str(entry[2])
 		button.tooltip_text=str(entry[0])
+	if session==null:
+		var replay := _pause_action(island_actions,"重看船上序章",_show_boat_prologue,"PauseBoatPrologueButton","shell")
+		replay.tooltip_text="重看晚風號船上片刻，結束後回到原地。"
 	if session!=null:
 		var tutorial := _pause_action(island_actions,"本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),"PauseTutorialButton","map")
 		tutorial.tooltip_text="本局圖解教學"
@@ -1010,10 +1024,45 @@ func _pause_action(parent: VBoxContainer,label: String,callback: Callable,node_n
 	button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	return button
 
+func _show_boat_prologue(first_run: bool = false) -> void:
+	if session!=null or is_instance_valid(boat_stage) or quitting: return
+	if modal_kind=="pause": _close()
+	var lines: Array = story.prologue_lines()
+	if lines.is_empty():
+		if first_run: _show_arrival()
+		else: _close()
+		return
+	var stage := BoatPrologueStage.new()
+	world.add_child(stage)
+	if not stage.configure(world,Progress.appearance,Progress.equipped,bool(Progress.settings.get("reduced_motion",false))):
+		stage.queue_free()
+		if first_run: _show_arrival()
+		else: _close()
+		return
+	_start_dialogue(lines,_complete_boat_prologue,_complete_boat_prologue)
+	boat_stage=stage
+	boat_first_run=first_run
+	_render_dialogue()
+
+func _clear_boat_prologue() -> void:
+	if is_instance_valid(boat_stage):
+		boat_stage.finish()
+		boat_stage.queue_free()
+	boat_stage=null
+	boat_first_run=false
+
+func _complete_boat_prologue() -> void:
+	if not is_instance_valid(boat_stage): return
+	var continue_arrival := boat_first_run
+	_clear_boat_prologue()
+	Progress.mark_prologue_seen()
+	if continue_arrival: _show_arrival()
+
 func _show_arrival() -> void:
 	_start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress(),func(): Progress.intro_seen=true; Progress.save_progress())
 
 func _start_dialogue(lines: Array, done: Callable, cancelled: Callable = Callable()) -> void:
+	_clear_boat_prologue()
 	if lines.is_empty():
 		if done.is_valid(): done.call()
 		return
@@ -1047,6 +1096,13 @@ func _render_dialogue() -> void:
 		_finish_dialogue()
 		return
 	var line: Dictionary=dialogue[dialogue_index]
+	if is_instance_valid(boat_stage):
+		boat_stage.show_beat(dialogue_index,str(line.get("pose","idle")))
+		dialogue_panel.cancel_button.text="直接下船"
+		dialogue_panel.cancel_button.tooltip_text="略過船上序章，接續碼頭導覽。" if boat_first_run else "略過這次重播，回到原地繼續探索。"
+	else:
+		dialogue_panel.cancel_button.text="結束對話"
+		dialogue_panel.cancel_button.tooltip_text=""
 	var speaker := str(line.get("speaker", "旁白"))
 	var dialogue_text := str(line.get("text", ""))
 	if line.has("text_key"):
@@ -1100,6 +1156,7 @@ func _cancel_dialogue() -> void:
 
 func _dialogue_panel_exiting(panel: Control) -> void:
 	if dialogue_panel!=panel: return
+	_clear_boat_prologue()
 	if is_instance_valid(audio):
 		audio.set_dialogue_active(false)
 	dialogue_panel=null
@@ -1112,6 +1169,7 @@ func _dialogue_panel_exiting(panel: Control) -> void:
 		if is_instance_valid(world):
 			world.set_dialogue_hold(false)
 			world.blocked=session!=null
+		if is_instance_valid(hud): hud.show()
 
 func _dialogue_panel_resized() -> void:
 	if not is_instance_valid(dialogue_panel): return

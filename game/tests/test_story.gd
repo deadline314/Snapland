@@ -57,7 +57,7 @@ func _run() -> void:
 	_check(explorations.size() == 3, "all legacy exploration entries remain")
 	_check(explorations.map(func(item: Dictionary) -> String: return item.id) == ["explore-001", "explore-002", "explore-003"], "exploration ids are stable")
 	_check(explorations.map(func(item: Dictionary) -> String: return item.photo_id) == ["photo-welcome-explore-1", "photo-welcome-explore-2", "photo-welcome-explore-3"], "exploration photo ids are stable")
-	_check(story.prologue_entry().get("status") == "future", "unimplemented boat prologue stays marked future")
+	_check(story.prologue_entry().get("status") == "available", "integrated boat prologue is available for replay")
 	if _failures.is_empty():
 		print("PASS: story data, compatibility, mission evidence, and idempotency")
 		quit(0)

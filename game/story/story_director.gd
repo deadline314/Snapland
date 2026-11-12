@@ -36,8 +36,8 @@ const EXPLORATIONS: Array[Dictionary] = [
 ]
 
 const PROLOGUE_ENTRY: Dictionary = {
-	"id": "prologue-boat", "title": "開船前的小插曲", "status": "future", "replayable": true,
-	"description": "預留船上序章入口；目前尚未演出，玩家從下船抵達迎賓大道開始。"
+	"id": "prologue-boat", "title": "開船前的小插曲", "status": "available", "replayable": true,
+	"description": "在晚風號甲板整理相機、試看取景並向島上招手；可直接下船，或從遊園選單重看。"
 }
 
 var _story_data: Dictionary = {}
