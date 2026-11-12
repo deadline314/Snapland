@@ -145,7 +145,7 @@ func _harbor_ui(before: Dictionary) -> void:
 	await _frames(3)
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
-	_check(book._region=="harbor" and book._entries().is_empty(), "harbor collection defaults to honest empty state")
+	_check(book._region=="harbor" and book._entries().size()==1 and book._entries()[0].id=="photo-harbor-game-1", "harbor collection shows delivered local first game")
 	selector.select(0)
 	selector.item_selected.emit(0)
 	_check(book._region=="welcome" and book._entries().size()==18, "switching back retains welcome's original eighteen sources")

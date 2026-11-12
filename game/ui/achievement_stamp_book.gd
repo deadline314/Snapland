@@ -3,6 +3,7 @@ extends VBoxContainer
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
+const GameCatalog = preload("res://game/core/game_catalog.gd")
 
 class StampMark extends Control:
 	var number := "01"
@@ -27,6 +28,7 @@ class StampMark extends Control:
 
 var _progress: Node
 var _games: Array = []
+var _zone := "welcome"
 var _game_section: VBoxContainer
 var _milestone_section: HFlowContainer
 var _milestone_heading: Label
@@ -43,9 +45,12 @@ var _summary_copy: Label
 var _pagination_queued := false
 var _game_grid: GridContainer
 
-func setup(progress: Node, games: Array) -> void:
+func setup(progress: Node, games: Array, zone: String = "") -> void:
 	_progress=progress
-	_games=games.duplicate(true)
+	_games=GameCatalog.definitions(zone) if not zone.is_empty() else games.duplicate(true)
+	_zone="welcome"
+	if not zone.is_empty(): _zone=zone
+	elif not _games.is_empty(): _zone=str(GameCatalog.identity(str(_games[0].get("id",""))).get("zone","welcome"))
 
 func _ready() -> void:
 	if not get_viewport().size_changed.is_connected(_on_viewport_size_changed):
@@ -99,7 +104,7 @@ func _ready() -> void:
 	_game_summary=BoxContainer.new()
 	_game_summary.vertical=true
 	_game_summary.add_theme_constant_override("separation",6)
-	_summary_title=Paper.section_title("迎賓設施｜初次完成 · 12 枚")
+	_summary_title=Paper.section_title("%s設施｜初次完成 · %d 枚" % ["碼頭" if _zone=="harbor" else "迎賓",_games.size()])
 	_summary_copy=Paper.label("每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。",16,Paper.INK)
 	_game_summary.add_child(_summary_title)
 	_game_summary.add_child(_summary_copy)
@@ -118,7 +123,9 @@ func _ready() -> void:
 	_game_body.add_child(columns)
 	for index in range(mini(12,_games.size())):
 		var game: Dictionary=_games[index]
-		var id := "ACH_GAME_%03d" % (index+1)
+		var identity := GameCatalog.identity(str(game.get("id","")))
+		if identity.is_empty(): continue
+		var id := str(identity.achievement_id)
 		var unlocked: bool=_progress.achievements.has(id)
 		var tile := PanelContainer.new()
 		tile.name="AchievementStamp_"+id
@@ -128,7 +135,7 @@ func _ready() -> void:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation",7)
 		tile.add_child(row)
-		row.add_child(_stamp("%02d" % (index+1),unlocked))
+		row.add_child(_stamp("%02d" % int(id.trim_prefix("ACH_GAME_")),unlocked))
 		var copy := VBoxContainer.new()
 		copy.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		var title := Paper.label(str(game.get("name","設施 %02d" % (index+1))),17)
@@ -231,7 +238,7 @@ func _fit_stamp_columns(grid: GridContainer) -> void:
 	_game_body.vertical=true
 	_game_summary.vertical=not compact
 	_game_summary.custom_minimum_size.x=0.0
-	_summary_title.text="迎賓印章 · 12 枚" if compact else "迎賓設施｜初次完成 · 12 枚"
+	_summary_title.text=("%s印章 · %d 枚" if compact else "%s設施｜初次完成 · %d 枚") % ["碼頭" if _zone=="harbor" else "迎賓",_games.size()]
 	_summary_copy.text="灰色：完成正式回合後蓋章" if compact else "每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。"
 	_summary_copy.tooltip_text="每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。"
 	_summary_title.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN if compact else Control.SIZE_EXPAND_FILL

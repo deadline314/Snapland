@@ -27,6 +27,8 @@ const GOLD := Color("#b77c45")
 const PAPER := Color("#fff2d4")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const MinigameHUDScript = preload("res://game/ui/minigame_hud.gd")
+const GameCatalog = preload("res://game/core/game_catalog.gd")
+const DRIVERS := {"rowing_cargo": preload("res://game/minigames/rowing_cargo_driver.gd")}
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
 const FountainJumpViewScript = preload("res://game/minigames/fountain_jump_view.gd")
 const FountainJumpModelScript = preload("res://game/minigames/fountain_jump_model.gd")
@@ -77,8 +79,6 @@ const FOUNTAIN_JUMP_DURATION := 8.0 / 12.0
 const FOUNTAIN_LANDING_SETTLE_SECONDS := 0.07
 const REQUIRED_PROP_KEYS: Array[String] = ["balloon", "mailbox", "kite", "urchin", "hat", "visitor", "mascot", "lantern", "tourist_coral", "tourist_blue", "tourist_gold", "tourist_green", "flower_horn", "camera", "sign", "bench"]
 const BACKDROP_SCENES: Array[String] = ["harbor", "garden", "stage", "night"]
-static var _catalog_cache: Array = []
-static var _catalog_loaded := false
 static var _backdrop_texture: Texture2D
 static var _backdrop_checked := false
 static var _backdrop_warning_emitted := false
@@ -108,6 +108,8 @@ var practice_mode := false
 var minigame_hud: Control
 var presentation: Control
 var presentation_mode := ""
+var active_driver: RefCounted
+var _driver_state: Dictionary = {}
 var _fountain_output: TextureRect
 var pipe_connected := false
 var pipe_finish_at := -1.0
@@ -236,25 +238,34 @@ var shadow_broken := false
 var seats: Array[int] = []
 var flower_cells: Array[int] = []
 
-static func definitions() -> Array:
-	if not _catalog_loaded:
-		_catalog_loaded = true
-		var file := FileAccess.open("res://game/data/welcome_games.json", FileAccess.READ)
-		if file:
-			var parser := JSON.new()
-			if parser.parse(file.get_as_text()) == OK and parser.data is Array:
-				_catalog_cache = parser.data
-	return _catalog_cache
+static func definitions(zone: String = "welcome") -> Array:
+	return GameCatalog.definitions(zone)
 
 func start(id: String, assisted_mode: bool = false) -> void:
+	if active_driver != null: active_driver.clear_input()
+	active_driver = null
+	_driver_state.clear()
+	paused = false
+	_discard_next_delta = false
+	if minigame_hud != null: minigame_hud.set_paused(false)
+	_resume_presentation_rendering()
+	if is_instance_valid(presentation):
+		presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		presentation.hide()
+		presentation.queue_free()
+	presentation = null
+	presentation_mode = ""
+	_fountain_output = null
+	_cancel_ribbon_finish_gate()
+	_cancel_melody_finale()
+	if is_instance_valid(_ribbon_groove): _ribbon_groove.stop()
+	if is_instance_valid(_melody_voices): _melody_voices.stop_all()
 	game_id = ""
 	mode = ""
-	if _catalog_cache.is_empty(): definitions()
-	for item in _catalog_cache:
-		if item is Dictionary and (item.get("id", "") == id or item.get("mode", "") == id):
-			game_id = str(item.id)
-			mode = str(item.mode)
-			break
+	var item := GameCatalog.find(id)
+	if not item.is_empty():
+		game_id = str(item.id)
+		mode = str(item.mode)
 	if game_id.is_empty():
 		ended = true
 		prompt = "這款小遊戲暫時無法開啟"
@@ -262,6 +273,7 @@ func start(id: String, assisted_mode: bool = false) -> void:
 		cancelled.emit()
 		return
 	assisted = assisted_mode
+	if DRIVERS.has(mode): active_driver = DRIVERS[mode].new()
 	balloon_tutorial_seen = false
 	var progress := get_node_or_null("/root/Progress")
 	reduced_motion = progress != null and bool(progress.settings.get("reduced_motion", false))
@@ -298,6 +310,8 @@ func _sync_presentation() -> void:
 		presentation = null
 		_fountain_output = null
 		presentation_mode = mode
+		if active_driver != null:
+			presentation = active_driver.create_view()
 		match mode:
 			"balloon_delivery":
 				# Headless rules tests do not allocate a renderer or GPU world.
@@ -324,6 +338,7 @@ func _sync_presentation() -> void:
 		if presentation != null:
 			presentation.name = "GamePresentation"
 			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			if active_driver != null: presentation.mouse_filter = Control.MOUSE_FILTER_PASS
 			add_child(presentation)
 			move_child(presentation, 0)
 			if mode == "kite_rings":
@@ -387,6 +402,12 @@ func _sync_presentation() -> void:
 				presentation.configure_avatar(ribbon_appearance, ribbon_equipped)
 				presentation.grab_focus()
 			_layout_presentation()
+	if active_driver != null:
+		_layout_presentation()
+		active_driver.present(time_phase, reduced_motion)
+		if is_instance_valid(presentation): presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE if paused or ended else Control.MOUSE_FILTER_PASS
+		if paused: _refresh_paused_render_targets()
+		return
 	if not is_instance_valid(presentation): return
 	match mode:
 		"balloon_delivery":
@@ -416,6 +437,13 @@ func _layout_presentation() -> void:
 	presentation.size = DESIGN_SIZE
 	presentation.scale = Vector2.ONE * factor
 	presentation.position = (size - DESIGN_SIZE * factor) * 0.5
+	if active_driver != null and minigame_hud != null:
+		var gameplay_top: float = minigame_hud.position.y + minigame_hud.gameplay_top() * minigame_hud.scale.y
+		if presentation.position.y + 140.0 * factor < gameplay_top:
+			# Keep the driver's status band below the measured accessible HUD.
+			factor = minf(factor, maxf(0.01, (size.y - gameplay_top) / (DESIGN_SIZE.y - 140.0)))
+			presentation.scale = Vector2.ONE * factor
+			presentation.position = Vector2((size.x - DESIGN_SIZE.x * factor) * 0.5, gameplay_top - 140.0 * factor)
 	if paused: _refresh_paused_render_targets()
 
 func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
@@ -458,6 +486,9 @@ func _resume_presentation_rendering() -> void:
 func set_paused(value: bool) -> void:
 	if ended and value:
 		return
+	if active_driver != null:
+		if value: active_driver.clear_input()
+		if is_instance_valid(presentation): presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE if value or ended else Control.MOUSE_FILTER_PASS
 	if value and mode == "bubble_photo" and bubble_model != null:
 		# A held control can lose its release while focus is in the pause menu.
 		# Cancel only an unlaunched charge; an already launched bubble remains live.
@@ -538,6 +569,10 @@ func _retry_from_hud() -> void:
 	set_paused(false)
 
 func _leave_from_hud() -> void:
+	if active_driver != null:
+		active_driver.clear_input()
+		ended = true
+		if is_instance_valid(presentation): presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	paused = false
 	_cancel_ribbon_finish_gate()
 	if is_instance_valid(_ribbon_groove):
@@ -578,6 +613,10 @@ func _refresh_hud(force: bool = false) -> void:
 		feedback_text = prompt
 	elif feedback_age <= 1.2:
 		feedback_text = prompt
+	if active_driver != null:
+		time_text = str(_driver_state.get("time_text", ""))
+		# The driver view owns its feedback line below the controls.
+		feedback_text = ""
 	minigame_hud.set_state({
 		"title": str(info.get("name", "小遊戲")),
 		"objective": str(info.get("goal", "完成挑戰")),
@@ -597,6 +636,7 @@ func _refresh_hud(force: bool = false) -> void:
 	})
 
 func _progress_text() -> String:
+	if active_driver != null: return str(_driver_state.get("progress_text", ""))
 	match mode:
 		"balloon_delivery": return "郵袋 %d / 3" % balloon_delivery_index
 		"kite_rings": return "風環 %d / 5　中心 %d　救援 %d" % [count, devil_progress, int(kite_model.snapshot().rescues_used)]
@@ -632,6 +672,7 @@ func _progress_text() -> String:
 	return ""
 
 func score_summary() -> Dictionary:
+	if active_driver != null: return active_driver.score_summary(practice_mode)
 	var totals: Dictionary = {}
 	var labels: Dictionary = {}
 	var counts: Dictionary = {}
@@ -756,6 +797,7 @@ func _score_rule_text() -> String:
 
 func set_time_of_day(phase_id: Variant) -> void:
 	time_phase = TimeOfDayScript.normalize(phase_id)
+	if active_driver != null: _sync_presentation()
 	if mode == "bubble_photo" and bubble_model != null:
 		bubble_model.time_of_day = time_phase
 		bubble_model.snapshot()
@@ -795,6 +837,21 @@ func _rng_reset() -> void:
 
 func reset_round() -> void:
 	_resume_presentation_rendering()
+	if active_driver != null:
+		active_driver.reset(assisted, time_phase)
+		ended = false
+		paused = false
+		won = false
+		devil_won = false
+		_discard_next_delta = false
+		score_events.clear()
+		particles.clear()
+		_sync_driver_state(active_driver.snapshot())
+		_sync_presentation()
+		if minigame_hud != null: minigame_hud.set_paused(false)
+		_refresh_hud(true)
+		queue_redraw()
+		return
 	pipe_connected = false
 	pipe_finish_at = -1.0
 	elapsed = 0.0
@@ -944,13 +1001,20 @@ func _process(delta: float) -> void:
 		shadow_delta = minf(shadow_delta, 0.5)
 		_shadow_frame_delta = minf(shadow_delta, ShadowTheatreModelScript.MAX_STEP)
 	if not paused: _sync_presentation()
-	_hud_refresh_clock += maxf(delta, 0.0)
+	_hud_refresh_clock += maxf(delta, 0.0) if is_finite(delta) else 0.0
 	if _hud_dirty and _hud_refresh_clock >= HUD_REFRESH_INTERVAL:
 		_refresh_hud(true)
 	if ended or paused:
 		return
 	if _discard_next_delta:
 		_discard_next_delta = false
+		_refresh_hud()
+		queue_redraw()
+		return
+	if active_driver != null:
+		_sync_driver_state(active_driver.step(delta))
+		_sync_presentation()
+		if bool(_driver_state.ended): _finish(bool(_driver_state.success), bool(_driver_state.devil))
 		_refresh_hud()
 		queue_redraw()
 		return
@@ -1433,6 +1497,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if paused:
 		return
+	if active_driver != null:
+		var point := Vector2.ZERO
+		if event is InputEventMouse or event is InputEventScreenTouch or event is InputEventScreenDrag:
+			point = presentation.get_global_transform_with_canvas().affine_inverse() * event.position if is_instance_valid(presentation) else _to_design(event.position)
+		if active_driver.handle_input(event, point) and viewport: viewport.set_input_as_handled()
+		_sync_driver_state(active_driver.snapshot())
+		_sync_presentation()
+		_refresh_hud()
+		return
 	if (event is InputEventKey or event is InputEventMouse) and viewport:
 		viewport.set_input_as_handled()
 	if mode == "shadow_alignment" and not is_instance_valid(presentation) and event is InputEventKey:
@@ -1837,6 +1910,9 @@ func _bubble_shutter() -> void:
 	queue_redraw()
 
 func _notification(what: int) -> void:
+	if active_driver != null:
+		if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT]: set_paused(true)
+		elif what == NOTIFICATION_EXIT_TREE: active_driver.clear_input()
 	if mode == "bubble_photo" and bubble_model != null and what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT]:
 		bubble_model.cancel_bubble_charge()
 		_sync_presentation()
@@ -2145,11 +2221,22 @@ func _shadow_pointer_target(point: Vector2) -> Vector2:
 	var depth := lerpf(ShadowTheatreModelScript.LAMP_Z_MAX, ShadowTheatreModelScript.LAMP_Z_MIN, clampf((point.y - 176.0) / 440.0, 0.0, 1.0))
 	return Vector2(x, depth)
 
+func _sync_driver_state(state: Dictionary) -> void:
+	_driver_state = state
+	elapsed = float(state.elapsed)
+	game_time = elapsed
+	score = int(state.score)
+	mistakes = int(state.mistakes)
+
 func _finish(success: bool, devil: bool = false) -> void:
 	if ended: return
 	ended = true; won = success; devil_won = success and devil
 	var result := {"game_id": game_id, "success": success, "devil": devil_won, "score": score, "assisted": assisted, "practice": practice_mode, "mistakes": mistakes, "score_summary": score_summary()}
-	minigame_hud.set_score_details(result.score_summary)
+	if active_driver != null:
+		active_driver.clear_input()
+		result["ordinary_eligible"] = bool(_driver_state.get("ordinary_eligible", false)) and not practice_mode
+		if is_instance_valid(presentation): presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if minigame_hud != null: minigame_hud.set_score_details(result.score_summary)
 	finished.emit(result)
 	_refresh_hud(true)
 	queue_redraw()
@@ -2157,6 +2244,7 @@ func _finish(success: bool, devil: bool = false) -> void:
 func _draw() -> void:
 	var viewport_size := size
 	draw_rect(Rect2(Vector2.ZERO, viewport_size), BG)
+	if active_driver != null: return
 	_design_transform()
 	if mode in ["balloon_delivery", "flower_pipes", "crowd_traffic", "kite_rings", "bubble_photo", "sign_balance", "bench_swap", "hat_catching"]:
 		if mode == "balloon_delivery" and is_instance_valid(presentation):
@@ -2489,9 +2577,8 @@ func _warn_prop_asset(message: String) -> void:
 	push_warning(message)
 
 func _definition() -> Dictionary:
-	if _catalog_cache.is_empty(): definitions()
-	for item in _catalog_cache:
-		if item.id == game_id: return item
+	var item := GameCatalog.find(game_id)
+	if not item.is_empty(): return item
 	return {"name":"小遊戲", "goal":"完成挑戰", "instructions":"依畫面提示操作", "devil_hint":"完成額外條件", "devil":"完成額外條件", "ordinary":"完成挑戰"}
 
 func _draw_game() -> void:

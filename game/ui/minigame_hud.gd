@@ -265,7 +265,7 @@ func _build_feedback() -> void:
 func set_feedback_at(message: String, anchor: Vector2) -> void:
 	_feedback_label.text = message
 	_feedback.visible = not message.is_empty()
-	_feedback.position = Vector2(clampf(anchor.x - _feedback.size.x * 0.5, 30, DESIGN_SIZE.x - _feedback.size.x - 30), clampf(anchor.y - 78, _feedback_top(), DESIGN_SIZE.y - _feedback.size.y - 82))
+	_feedback.position = Vector2(clampf(anchor.x - _feedback.size.x * 0.5, 30, DESIGN_SIZE.x - _feedback.size.x - 30), clampf(anchor.y - 78, gameplay_top(), DESIGN_SIZE.y - _feedback.size.y - 82))
 
 func _build_pause_layer() -> void:
 	_pause_layer = _overlay("PauseOverlay")
@@ -517,11 +517,11 @@ func _layout() -> void:
 	_header.size=Vector2(maxf(392.0,ceilf(header_minimum.x)),panel_height)
 	_status_rail.size=Vector2(maxf(616.0,ceilf(rail_minimum.x)),panel_height)
 	_status_rail.position.x=DESIGN_SIZE.x-24.0-_status_rail.size.x
-	_feedback.position.y=_feedback_top()
+	_feedback.position.y=gameplay_top()
 	if _feedback_anchor_override is Vector2:
 		set_feedback_at(_feedback_label.text, _feedback_anchor_override)
 
-func _feedback_top() -> float:
+func gameplay_top() -> float:
 	return maxf(130.0, _header.position.y + _header.size.y + 18.0)
 
 func _queue_layout_refresh() -> void:

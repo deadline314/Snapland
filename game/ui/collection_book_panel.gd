@@ -4,6 +4,7 @@ extends Control
 const Paper = preload("res://game/ui/paper_ui.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const PhotoViewer = preload("res://game/ui/photo_viewer.gd")
+const GameCatalog = preload("res://game/core/game_catalog.gd")
 const PAGE_SIZE := 4
 const MAX_PHOTO_FRAME_CANDIDATES := 12
 const MAX_LEGACY_UI_PHOTO_BYTES := 16 * 1024 * 1024
@@ -48,10 +49,10 @@ func _notification(what: int) -> void:
 		_layout_book_controls()
 		_apply_responsive_spread_columns()
 
-func setup(progress: Node, definitions: Array, phases: Array, photo_loader: Callable, region: String = "welcome") -> void:
+func setup(progress: Node, _definitions_source: Array, phases: Array, photo_loader: Callable, region: String = "welcome") -> void:
 	_region="harbor" if region=="harbor" else "welcome"
 	_progress=progress
-	_definitions=definitions.duplicate(true)
+	_definitions=GameCatalog.definitions(_region)
 	_time_phases=phases.duplicate(true)
 	_photo_loader=photo_loader
 	_game_photo_texture_cache.clear()
@@ -133,6 +134,8 @@ func _ready() -> void:
 	regions.tooltip_text="切換園區收藏；已保存的迎賓原圖仍可查看。"
 	regions.item_selected.connect(func(index: int):
 		_region="harbor" if index==1 else "welcome"
+		_definitions=GameCatalog.definitions(_region)
+		if _region=="harbor" and _category=="time": _category="normal"
 		_page=0
 		_refresh_book()
 	)
@@ -210,19 +213,14 @@ func _refresh_book() -> void:
 		if phase is Dictionary and _progress.photos.has(TimeOfDay.postcard_id(str(phase.get("id","")))):
 			time_count+=1
 	_time_button.text="四時明信片  %d / 4" % time_count
-	_collection_state.visible=int(_progress.normal_count_for_zone(_region))+int(_progress.devil_count(_region))+time_count==0
+	_collection_state.visible=int(_progress.normal_count_for_zone(_region))+int(_progress.devil_count(_region))+(time_count if _region=="welcome" else 0)==0
 	_collection_state.text="收藏簿還是空白的。拍照留下第一筆記錄。"
 	if Paper.physical_scale(self)<0.9:
 		_normal_button.text="普通 %d / 18" % int(_progress.normal_count_for_zone(_region))
 		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count(_region))
 		_time_button.text="四時 %d / 4" % time_count
 	_time_button.visible=_region=="welcome"
-	_empty_message.text="潮汐碼頭的遊戲與當地收藏仍在準備中。可切換迎賓大道，查看已保存的照片與原圖。" if _region=="harbor" else "這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
-	_collection_state.visible=_region=="welcome" and _collection_state.visible
-	if _region=="harbor":
-		_normal_button.text="普通拍貼 · 準備中"
-		_devil_button.text="小惡魔 · 準備中"
-		_photo_details.text="潮汐碼頭｜目前沒有可取得的當地收藏。"
+	_empty_message.text="這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
 	var entries := _entries()
 	var capacity := _page_capacity()
 	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
@@ -267,7 +265,6 @@ func _on_viewport_size_changed() -> void:
 func _set_tab_labels(scale_factor: float) -> void:
 	if not is_instance_valid(_normal_button):
 		return
-	if _region=="harbor": return
 	var normal_count := int(_progress.normal_count_for_zone(_region)) if _progress != null else 0
 	var devil_count := int(_progress.devil_count(_region)) if _progress != null else 0
 	var time_count := 0
@@ -349,20 +346,23 @@ func _page_capacity() -> int:
 	return PAGE_SIZE if physical_width >= 1200.0 or get_viewport_rect().size.y*Paper.physical_scale(self)>=550.0 else 2
 
 func _entries() -> Array[Dictionary]:
-	if _region=="harbor": return []
 	var entries: Array[Dictionary]=[]
 	match _category:
 		"normal":
 			for game in _definitions:
-				var number := int(str(game.get("id","game-000")).trim_prefix("game-"))
-				entries.append(_entry("photo-welcome-game-%d" % number,str(game.get("name","遊戲 %02d" % number)),"完成迎賓大道這款小遊戲，拍照收藏普通拍貼。"))
-			for exploration in [{"id":"photo-welcome-explore-1","name":"花壇會眨眼","how":"選表情並拍照。"},{"id":"photo-welcome-explore-2","name":"歡迎字樣的影子","how":"把字樣投影對準牆上空框後拍照。"},{"id":"photo-welcome-explore-3","name":"長椅雙人份","how":"借立牌、坐上長椅後按快門。"},{"id":"photo-welcome-story-1","name":"照片多了一條尾巴","how":"完成迎賓主線對話。"},{"id":"photo-welcome-quest-1","name":"吉祥物的尾巴危機","how":"完成小角的三步委託。"},{"id":"photo-welcome-quest-2","name":"廣播即興救場","how":"完成阿浪的三步委託。"}]:
+				var identity := GameCatalog.identity(str(game.get("id","")))
+				if identity.get("zone", "") != _region: continue
+				entries.append(_entry(str(identity.photo_id),str(game.get("name","遊戲")),"完成這款小遊戲的正式回合，拍照收藏普通拍貼。"))
+			var explorations := [{"id":"photo-welcome-explore-1","name":"花壇會眨眼","how":"選表情並拍照。"},{"id":"photo-welcome-explore-2","name":"歡迎字樣的影子","how":"把字樣投影對準牆上空框後拍照。"},{"id":"photo-welcome-explore-3","name":"長椅雙人份","how":"借立牌、坐上長椅後按快門。"},{"id":"photo-welcome-story-1","name":"照片多了一條尾巴","how":"完成迎賓主線對話。"},{"id":"photo-welcome-quest-1","name":"吉祥物的尾巴危機","how":"完成小角的三步委託。"},{"id":"photo-welcome-quest-2","name":"廣播即興救場","how":"完成阿浪的三步委託。"}] if _region=="welcome" else []
+			for exploration in explorations:
 				entries.append(_entry(str(exploration.id),str(exploration.name),str(exploration.how)))
 		"devil":
 			for game in _definitions:
-				var number := int(str(game.get("id","game-000")).trim_prefix("game-"))
-				entries.append(_entry("photo-welcome-devil-%d" % number,str(game.get("name","遊戲 %02d" % number))+" · 小惡魔",str(game.get("devil_hint","完成設施的特別條件。"))))
+				var identity := GameCatalog.identity(str(game.get("id","")))
+				if identity.get("zone", "") != _region: continue
+				entries.append(_entry(str(identity.devil_photo_id),str(game.get("name","遊戲"))+" · 小惡魔",str(game.get("devil_hint","完成設施的特別條件。"))))
 		"time":
+			if _region!="welcome": return entries
 			for phase in _time_phases:
 				var id := str(phase.get("id",""))
 				entries.append(_entry(TimeOfDay.postcard_id(id),str(phase.get("label","時段"))+" · "+str(phase.get("clock","")),"切換到這個時段，為園區拍攝紀念明信片。"))
@@ -562,7 +562,7 @@ func _saved_texture(photo_id: String) -> Texture2D:
 	var frames: Variant=photo.get("frames",[])
 	if not frames is Array:
 		return null
-	var is_game_photo := photo_id.begins_with("photo-welcome-game-") or photo_id.begins_with("photo-welcome-devil-")
+	var is_game_photo := photo_id.begins_with("photo-welcome-game-") or photo_id.begins_with("photo-welcome-devil-") or photo_id.begins_with("photo-harbor-game-") or photo_id.begins_with("photo-harbor-devil-")
 	for frame_index in range(mini(frames.size(),MAX_PHOTO_FRAME_CANDIDATES)):
 		var path_value: Variant=frames[frame_index]
 		if typeof(path_value)!=TYPE_STRING or str(path_value).strip_edges().is_empty():
