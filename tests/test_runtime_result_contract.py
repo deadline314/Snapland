@@ -1,18 +1,15 @@
 """Runtime completion cannot hide engine errors, early exits or another suite's output."""
 from __future__ import annotations
 
-import ast
 from contextlib import redirect_stderr, redirect_stdout
 import io
 import os
 from pathlib import Path
-import inspect
-import re
 import subprocess
 import unittest
 from unittest import mock
 
-from tools.run_game_tests import PASS_MARKERS, main, result_error
+from tools.run_game_tests import PASS_MARKERS, build_checks, main, result_error
 
 LABEL = "authored idle hair attachment tests"
 ACTUAL_IDLE_COMPLETION = "PASS: source-atlas closed-eye attachment availability (not production idle playback)"
@@ -59,9 +56,7 @@ class RuntimeResultContractTests(unittest.TestCase):
         self.assertIn("logged engine errors", result_error("clean project import", self.result(stderr="ERROR: import failed")) or "")
 
     def test_every_selected_runtime_suite_has_one_completion_contract(self) -> None:
-        tree = ast.parse(inspect.getsource(main))
-        checks = next(node.value for node in ast.walk(tree) if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "checks" for target in node.targets))
-        labels = [ast.literal_eval(row.elts[0]) for row in checks.elts]
+        labels = [label for label, _ in build_checks("fixture-godot")]
         self.assertEqual(len(labels), len(set(labels)), "runtime suite names must be unique")
         self.assertEqual(set(labels) - {"clean project import"}, set(PASS_MARKERS), "new suites require a completion contract; retired suites cannot leave stale contracts")
 
@@ -69,9 +64,7 @@ class RuntimeResultContractTests(unittest.TestCase):
         # Exercise the actual runner loop with a fake engine that owns the same
         # relative photo/cache names in every invocation. Distinct JSON names
         # alone must not permit any later suite to see those earlier sidecars.
-        tree = ast.parse(inspect.getsource(main))
-        checks = next(node.value for node in ast.walk(tree) if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "checks" for target in node.targets))
-        labels = [ast.literal_eval(row.elts[0]) for row in checks.elts]
+        labels = [label for label, _ in build_checks("fixture-godot")]
         observed: list[Path] = []
         protected: dict[Path, bytes] = {}
 
@@ -105,17 +98,10 @@ class RuntimeResultContractTests(unittest.TestCase):
     def run_with_fake_engine(self, argv: list[str], failing: set[str]) -> tuple[int, list[tuple[str, float]], str]:
         """Drive the real runner loop; returns exit code, dispatched (label, timeout) and stderr."""
         dispatched: list[tuple[str, float]] = []
-        tree = ast.parse(inspect.getsource(main))
-        checks = next(node.value for node in ast.walk(tree) if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "checks" for target in node.targets))
-        # Each suite command carries one unique key: its res:// entry, the smoke flag or the import flag.
-        keys = {}
-        for row in checks.elts:
-            label = ast.literal_eval(row.elts[0])
-            found = re.findall(r"res://[^'\"]+|--smoke-test|--import", ast.unparse(row.elts[1]))
-            keys[found[0]] = label
+        keys = {tuple(command): label for label, command in build_checks("fixture-godot")}
 
         def fake_engine(_root, command, *, env, timeout):
-            label = next(keys[part] for part in command if part in keys)
+            label = keys[tuple(command)]
             dispatched.append((label, timeout))
             stdout = "" if label in failing else (PASS_MARKERS.get(label, "import complete") + "\n")
             stderr = f"ERROR: Cannot write progress temporary file '{env['SNAPLAND_SAVE_PATH']}.tmp': Can't open file" if label == "boat prologue state tests" else ""

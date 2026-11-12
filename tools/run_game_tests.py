@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 from pathlib import Path
 import re
@@ -163,8 +164,161 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
     return None
 
 
+def build_checks(executable: str) -> list[tuple[str, list[str]]]:
+    """Construct the single ordered catalog without starting the engine."""
+    common = [executable, "--headless", "--path", str(ROOT), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
+    return [
+        ("clean project import", [executable, "--headless", "--editor", "--path", str(ROOT), "--rendering-method", "gl_compatibility", "--import", "--quit"]),
+        ("game startup", common + ["--", "--smoke-test"]),
+        ("region progress tests", common + ["--script", "res://game/tests/test_region_progress.gd"]),
+        ("harbor world tests", common + ["--script", "res://game/tests/test_harbor_world.gd"]),
+        ("region travel tests", common + ["res://game/tests/test_region_travel.tscn"]),
+        ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
+        ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
+        ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),
+        ("avatar runtime tests", common + ["--script", "res://game/tests/test_avatar.gd"]),
+        ("avatar renderer tests", common + ["--script", "res://game/tests/test_avatar_renderer.gd"]),
+        ("avatar attachment tests", common + ["--script", "res://game/tests/test_avatar_attachment.gd"]),
+        ("island hair lifecycle tests", common + ["--script", "res://game/tests/test_island_hair_lifecycle.gd"]),
+        ("island alternate hair source tests", common + ["--script", "res://game/tests/test_island_hair_sources.gd"]),
+        ("seated avatar tests", common + ["--script", "res://game/tests/test_avatar_seated.gd"]),
+        ("source registration coordinate tests", common + ["--script", "res://game/tests/test_source_registration.gd"]),
+        ("avatar motion rig runtime tests", common + ["--script", "res://game/tests/test_avatar_motion_rig.gd"]),
+        ("avatar role rig tests", common + ["res://game/tests/test_avatar_role_rig.tscn"]),
+        ("avatar motion world integration tests", common + ["--script", "res://game/tests/test_avatar_motion_world.gd"]),
+        ("minigame HUD hierarchy tests", common + ["--script", "res://game/tests/test_minigame_hud.gd"]),
+        ("eight-direction walk tests", common + ["--script", "res://game/tests/test_avatar_walk.gd"]),
+        ("authored avatar walk loop tests", common + ["--script", "res://game/tests/test_avatar_authored_walk_loop.gd"]),
+        ("authored avatar side idle tests", common + ["--script", "res://game/tests/test_avatar_side_idle.gd"]),
+        ("authored idle hair attachment tests", common + ["--script", "res://game/tests/test_avatar_idle_attachment.gd"]),
+        ("authored NPC source walking tests", common + ["--script", "res://game/tests/test_npc_authored_source_walking.gd"]),
+        ("authored NPC patrol tests", common + ["--script", "res://game/tests/test_authored_npc_patrol.gd"]),
+        ("NPC departure lifecycle tests", common + ["--script", "res://game/tests/test_npc_departure_lifecycle.gd"]),
+        ("character animation library tests", common + ["--script", "res://game/tests/test_character_animation_library.gd"]),
+        ("atomic outfit coverage tests", common + ["--script", "res://game/tests/test_outfit_atomic_coverage.gd"]),
+        ("garment overlay tests", common + ["--script", "res://game/tests/test_garment_overlay.gd"]),
+        ("garment cache tests", common + ["--script", "res://game/tests/test_garment_cache.gd"]),
+        ("legacy head source tests", common + ["--script", "res://game/tests/test_legacy_head_source.gd"]),
+        ("garment part ownership tests", common + ["--script", "res://game/tests/test_garment_part_ownership.gd"]),
+        ("side outfit palette tests", common + ["--script", "res://game/tests/test_outfit_side_palette.gd"]),
+        ("avatar prop foreground tests", common + ["--script", "res://game/tests/test_avatar_prop_foreground.gd"]),
+        ("NPC animation state tests", common + ["--script", "res://game/tests/test_npc_animation_states.gd"]),
+        ("tutorial panel/catalog tests", common + ["--script", "res://game/tests/test_tutorial_panel.gd"]),
+        ("tutorial seen progress tests", common + ["res://game/tests/test_tutorial_seen_progress.tscn"]),
+        ("travel collection UI tests", common + ["res://game/tests/test_travel_book_ui.tscn"]),
+        ("tutorial image/control tests", common + ["res://game/tests/native_tutorial_depth_review.tscn", "--", "--tutorial-review-controls-only"]),
+        ("time-of-day tests", common + ["--script", "res://game/tests/test_time_of_day.gd"]),
+        ("daylight lighting tests", common + ["--script", "res://game/tests/test_daylight_lighting.gd"]),
+        ("actor alpha silhouette tests", common + ["--script", "res://game/tests/test_actor_shadow_silhouette.gd"]),
+        ("NPC activity tests", common + ["--script", "res://game/tests/test_npc_activity.gd"]),
+        ("NPC world activity tests", common + ["--script", "res://game/tests/test_npc_world_activity.gd"]),
+        ("NPC motion source tests", common + ["res://game/tests/test_npc_motion_sources.tscn"]),
+        ("NPC walk motion tests", common + ["--script", "res://game/tests/test_npc_walk_motion.gd"]),
+        ("NPC direction lifecycle tests", common + ["--script", "res://game/tests/test_npc_walk_direction_lifecycle.gd"]),
+        ("NPC missing walk idle tests", common + ["res://game/tests/test_missing_walk_idle_lifecycle.tscn"]),
+        ("NPC dialogue hold tests", common + ["res://game/tests/test_npc_dialogue_hold.tscn"]),
+        ("sprite clearance tests", common + ["--script", "res://game/tests/test_sprite_clearance.gd"]),
+        ("wardrobe UI tests", common + ["res://game/tests/test_wardrobe_ui.tscn"]),
+        ("component animation tests", common + ["--script", "res://game/tests/test_component_animation.gd"]),
+        ("building occlusion tests", common + ["--script", "res://game/tests/test_occlusion.gd"]),
+        ("kite flight model tests", common + ["--script", "res://game/tests/test_kite_flight_model.gd"]),
+        ("kite flight view tests", common + ["--script", "res://game/tests/test_kite_flight_view.gd"]),
+        ("bubble photo model tests", common + ["--script", "res://game/tests/test_bubble_photo_model.gd"]),
+        ("bubble photo view tests", common + ["--script", "res://game/tests/test_bubble_photo_view.gd"]),
+        ("bench swap model tests", common + ["--script", "res://game/tests/test_bench_swap_model.gd"]),
+        ("bench swap view tests", common + ["--script", "res://game/tests/test_bench_swap_view.gd"]),
+        ("sign balance model tests", common + ["--script", "res://game/tests/test_sign_balance_model.gd"]),
+        ("sign balance view tests", common + ["--script", "res://game/tests/test_sign_balance_view.gd"]),
+        ("hat rescue model tests", common + ["--script", "res://game/tests/test_hat_rescue_model.gd"]),
+        ("hat rescue view tests", common + ["--script", "res://game/tests/test_hat_rescue_view.gd"]),
+        ("melody memory model tests", common + ["--script", "res://game/tests/test_melody_memory_model.gd"]),
+        ("melody memory view tests", common + ["--script", "res://game/tests/test_melody_memory_view.gd"]),
+        ("ribbon rhythm model tests", common + ["--script", "res://game/tests/test_ribbon_rhythm_model.gd"]),
+        ("ribbon rhythm view tests", common + ["--script", "res://game/tests/test_ribbon_rhythm_view.gd"]),
+        ("ribbon Session startup tests", common + ["--script", "res://game/tests/test_ribbon_session_startup.gd"]),
+        ("ribbon Session lifecycle tests", common + ["--script", "res://game/tests/test_ribbon_finish_session.gd"]),
+        ("shadow theatre model tests", common + ["--script", "res://game/tests/test_shadow_theatre_model.gd"]),
+        ("shadow theatre view tests", common + ["--script", "res://game/tests/test_shadow_theatre_view.gd"]),
+        ("crowd semaphore view tests", common + ["--script", "res://game/tests/test_crowd_semaphore_view.gd"]),
+        ("welcome minigame tests", common + ["--script", "res://game/tests/test_minigames.gd"]),
+        ("pipe round model tests", common + ["--script", "res://game/tests/test_pipe_round_model.gd"]),
+        ("pipe plan presentation tests", common + ["--script", "res://game/tests/test_pipe_plan_view.gd"]),
+        ("balloon harbor presentation tests", common + ["--script", "res://game/tests/test_balloon_harbor_view.gd"]),
+        ("crowd traffic model tests", common + ["--script", "res://game/tests/test_crowd_traffic_model.gd"]),
+        ("crowd crossing view tests", common + ["--script", "res://game/tests/test_crowd_crossing_view.gd"]),
+        ("fountain jump view tests", common + ["--script", "res://game/tests/test_fountain_jump_view.gd"]),
+        ("fountain timing tests", common + ["--script", "res://game/tests/test_fountain.gd"]),
+        ("balloon delivery tests", common + ["--script", "res://game/tests/test_balloon.gd"]),
+        ("boat prologue state tests", common + ["--script", "res://game/tests/test_boat_prologue_state.gd"]),
+        ("boat prologue stage tests", common + ["--script", "res://game/tests/test_boat_prologue_stage.gd"]),
+        ("boat prologue integration tests", common + ["res://game/tests/test_boat_prologue_integration.tscn"]),
+        ("story runtime tests", common + ["--script", "res://game/tests/test_story.gd"]),
+        ("main story integration tests", common + ["res://game/tests/test_story_integration.tscn"]),
+        ("island ride tests", common + ["--script", "res://game/tests/test_island_ride.gd"]),
+        ("island layout tests", common + ["--script", "res://game/tests/test_island_layout.gd"]),
+        ("promenade free play tests", common + ["--script", "res://game/tests/test_promenade_play.gd"]),
+        ("coastal free play tests", common + ["--script", "res://game/tests/test_coastal_play.gd"]),
+        ("shared photo thumbnail tests", common + ["res://game/tests/test_main_photo_thumbnails.tscn"]),
+        ("saved photo viewer tests", common + ["res://game/tests/test_album_photo_viewer.tscn"]),
+        ("photo original preservation tests", common + ["res://game/tests/test_photo_originals.tscn"]),
+        ("island dialogue tests", common + ["res://game/tests/test_island_dialogue.tscn"]),
+        ("island game entry tests", common + ["res://game/tests/test_island_game_entry.tscn"]),
+        ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
+        ("island audio dynamics tests", common + ["--script", "res://game/tests/test_audio_dynamics.gd"]),
+        ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
+        ("pixel UI shell tests", common + ["res://game/tests/test_pixel_ui_shell.tscn"]),
+        ("pixel UI popup tests", common + ["--script", "res://game/tests/test_pixel_ui_popup_bounds.gd"]),
+        ("pixel UI button depth tests", common + ["--script", "res://game/tests/test_pixel_button_depth.gd"]),
+        ("pixel UI collection tests", common + ["res://game/tests/test_pixel_ui_collections.tscn"]),
+        ("pixel tutorial page tests", common + ["--script", "res://game/tests/test_tutorial_paged_viewport.gd"]),
+        ("pixel UI customization tests", common + ["res://game/tests/test_pixel_ui_customization.tscn"]),
+        ("pixel UI minigame tests", common + ["res://game/tests/test_pixel_ui_minigames.tscn"]),
+        ("pixel typography tests", common + ["res://game/tests/test_pixel_fonts.tscn"]),
+        ("localization framework tests", common + ["res://game/tests/test_localization.tscn"]),
+    ]
+
+
+def validate_selection(only: list[str] | tuple[str, ...], shard_index: int | None, shard_count: int | None) -> None:
+    if (shard_index is None) != (shard_count is None):
+        raise ValueError("--shard-index and --shard-count must be supplied together")
+    if shard_count is not None:
+        if shard_count <= 0 or not 0 <= shard_index < shard_count:
+            raise ValueError("--shard-count must be positive and --shard-index must be in [0, count)")
+        if only:
+            raise ValueError("--only cannot be combined with --shard-index/--shard-count")
+
+
+def select_checks(checks: list[tuple[str, list[str]]], *, only: list[str] | tuple[str, ...] = (),
+                  shard_index: int | None = None, shard_count: int | None = None) -> list[tuple[str, list[str]]]:
+    """Validate the whole catalog before narrowing it; always import first."""
+    validate_selection(only, shard_index, shard_count)
+    labels = [label for label, _ in checks]
+    if not labels or labels[0] != "clean project import" or len(labels) < 2:
+        raise ValueError("Runtime catalog must start with clean project import and contain runtime suites.")
+    if len(labels) != len(set(labels)):
+        raise ValueError("Runtime catalog contains duplicate suite labels.")
+    missing = set(labels[1:]) - PASS_MARKERS.keys()
+    stale = PASS_MARKERS.keys() - set(labels[1:])
+    if missing or stale:
+        raise ValueError(f"Runtime completion marker mismatch: missing {sorted(missing)!r}, stale {sorted(stale)!r}.")
+    if shard_count is not None:
+        if shard_count > len(checks) - 1:
+            raise ValueError(f"--shard-count {shard_count} exceeds {len(checks) - 1} runtime suites.")
+        selected = [row for row in checks[1:]
+                    if int.from_bytes(hashlib.sha256(row[0].encode("utf-8")).digest(), "big") % shard_count == shard_index]
+        if not selected:
+            raise ValueError(f"Runtime shard {shard_index}/{shard_count} is empty.")
+        return checks[:1] + selected
+    if only:
+        selected = [row for row in checks[1:] if any(text in row[0] for text in only)]
+        if not selected:
+            raise ValueError(f"--only {only!r} matched no runtime suite.")
+        return checks[:1] + selected
+    return checks[:]
+
+
 def parse_options(argv: list[str]) -> argparse.Namespace:
-    """CI runs with no options; flags only narrow or slow down local diagnosis."""
+    """Default execution stays complete; shards partition that same catalog."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--only", action="append", default=[], metavar="TEXT",
                         help="run only suites whose label contains TEXT (repeatable); the clean import still runs first")
@@ -172,9 +326,15 @@ def parse_options(argv: list[str]) -> argparse.Namespace:
                         help="run every selected suite and report all failures instead of stopping at the first")
     parser.add_argument("--timeout-scale", type=float, default=1.0, metavar="FACTOR",
                         help="multiply per-suite limits on slower local machines (>= 1; CI keeps 1)")
+    parser.add_argument("--shard-index", type=int, metavar="INDEX", help="0-based runtime shard index (requires --shard-count)")
+    parser.add_argument("--shard-count", type=int, metavar="COUNT", help="number of runtime shards (requires --shard-index)")
     options = parser.parse_args(argv)
     if not options.timeout_scale >= 1.0:
         parser.error("--timeout-scale cannot shorten the configured limits")
+    try:
+        validate_selection(options.only, options.shard_index, options.shard_count)
+    except ValueError as error:
+        parser.error(str(error))
     return options
 
 
@@ -194,125 +354,11 @@ def main(argv: list[str] | None = None) -> int:
     with tempfile.TemporaryDirectory(prefix="snapland-godot-test-") as temporary:
         env = os.environ.copy()
         env["SNAPLAND_SAVE_PATH"] = str(Path(temporary) / "profile" / "progress.json")
-        common = [executable, "--headless", "--path", str(ROOT), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
-        checks = [
-            ("clean project import", [executable, "--headless", "--editor", "--path", str(ROOT), "--rendering-method", "gl_compatibility", "--import", "--quit"]),
-            ("game startup", common + ["--", "--smoke-test"]),
-            ("region progress tests", common + ["--script", "res://game/tests/test_region_progress.gd"]),
-            ("harbor world tests", common + ["--script", "res://game/tests/test_harbor_world.gd"]),
-            ("region travel tests", common + ["res://game/tests/test_region_travel.tscn"]),
-            ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
-            ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
-            ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),
-            ("avatar runtime tests", common + ["--script", "res://game/tests/test_avatar.gd"]),
-            ("avatar renderer tests", common + ["--script", "res://game/tests/test_avatar_renderer.gd"]),
-            ("avatar attachment tests", common + ["--script", "res://game/tests/test_avatar_attachment.gd"]),
-            ("island hair lifecycle tests", common + ["--script", "res://game/tests/test_island_hair_lifecycle.gd"]),
-            ("island alternate hair source tests", common + ["--script", "res://game/tests/test_island_hair_sources.gd"]),
-            ("seated avatar tests", common + ["--script", "res://game/tests/test_avatar_seated.gd"]),
-            ("source registration coordinate tests", common + ["--script", "res://game/tests/test_source_registration.gd"]),
-            ("avatar motion rig runtime tests", common + ["--script", "res://game/tests/test_avatar_motion_rig.gd"]),
-            ("avatar role rig tests", common + ["res://game/tests/test_avatar_role_rig.tscn"]),
-            ("avatar motion world integration tests", common + ["--script", "res://game/tests/test_avatar_motion_world.gd"]),
-            ("minigame HUD hierarchy tests", common + ["--script", "res://game/tests/test_minigame_hud.gd"]),
-            ("eight-direction walk tests", common + ["--script", "res://game/tests/test_avatar_walk.gd"]),
-            ("authored avatar walk loop tests", common + ["--script", "res://game/tests/test_avatar_authored_walk_loop.gd"]),
-            ("authored avatar side idle tests", common + ["--script", "res://game/tests/test_avatar_side_idle.gd"]),
-            ("authored idle hair attachment tests", common + ["--script", "res://game/tests/test_avatar_idle_attachment.gd"]),
-            ("authored NPC source walking tests", common + ["--script", "res://game/tests/test_npc_authored_source_walking.gd"]),
-            ("authored NPC patrol tests", common + ["--script", "res://game/tests/test_authored_npc_patrol.gd"]),
-            ("NPC departure lifecycle tests", common + ["--script", "res://game/tests/test_npc_departure_lifecycle.gd"]),
-            ("character animation library tests", common + ["--script", "res://game/tests/test_character_animation_library.gd"]),
-            ("atomic outfit coverage tests", common + ["--script", "res://game/tests/test_outfit_atomic_coverage.gd"]),
-            ("garment overlay tests", common + ["--script", "res://game/tests/test_garment_overlay.gd"]),
-            ("garment cache tests", common + ["--script", "res://game/tests/test_garment_cache.gd"]),
-            ("legacy head source tests", common + ["--script", "res://game/tests/test_legacy_head_source.gd"]),
-            ("garment part ownership tests", common + ["--script", "res://game/tests/test_garment_part_ownership.gd"]),
-            ("side outfit palette tests", common + ["--script", "res://game/tests/test_outfit_side_palette.gd"]),
-            ("avatar prop foreground tests", common + ["--script", "res://game/tests/test_avatar_prop_foreground.gd"]),
-            ("NPC animation state tests", common + ["--script", "res://game/tests/test_npc_animation_states.gd"]),
-            ("tutorial panel/catalog tests", common + ["--script", "res://game/tests/test_tutorial_panel.gd"]),
-            ("tutorial seen progress tests", common + ["res://game/tests/test_tutorial_seen_progress.tscn"]),
-            ("travel collection UI tests", common + ["res://game/tests/test_travel_book_ui.tscn"]),
-            ("tutorial image/control tests", common + ["res://game/tests/native_tutorial_depth_review.tscn", "--", "--tutorial-review-controls-only"]),
-            ("time-of-day tests", common + ["--script", "res://game/tests/test_time_of_day.gd"]),
-            ("daylight lighting tests", common + ["--script", "res://game/tests/test_daylight_lighting.gd"]),
-            ("actor alpha silhouette tests", common + ["--script", "res://game/tests/test_actor_shadow_silhouette.gd"]),
-            ("NPC activity tests", common + ["--script", "res://game/tests/test_npc_activity.gd"]),
-            ("NPC world activity tests", common + ["--script", "res://game/tests/test_npc_world_activity.gd"]),
-            ("NPC motion source tests", common + ["res://game/tests/test_npc_motion_sources.tscn"]),
-            ("NPC walk motion tests", common + ["--script", "res://game/tests/test_npc_walk_motion.gd"]),
-            ("NPC direction lifecycle tests", common + ["--script", "res://game/tests/test_npc_walk_direction_lifecycle.gd"]),
-            ("NPC missing walk idle tests", common + ["res://game/tests/test_missing_walk_idle_lifecycle.tscn"]),
-            ("NPC dialogue hold tests", common + ["res://game/tests/test_npc_dialogue_hold.tscn"]),
-            ("sprite clearance tests", common + ["--script", "res://game/tests/test_sprite_clearance.gd"]),
-            ("wardrobe UI tests", common + ["res://game/tests/test_wardrobe_ui.tscn"]),
-            ("component animation tests", common + ["--script", "res://game/tests/test_component_animation.gd"]),
-            ("building occlusion tests", common + ["--script", "res://game/tests/test_occlusion.gd"]),
-            ("kite flight model tests", common + ["--script", "res://game/tests/test_kite_flight_model.gd"]),
-            ("kite flight view tests", common + ["--script", "res://game/tests/test_kite_flight_view.gd"]),
-            ("bubble photo model tests", common + ["--script", "res://game/tests/test_bubble_photo_model.gd"]),
-            ("bubble photo view tests", common + ["--script", "res://game/tests/test_bubble_photo_view.gd"]),
-            ("bench swap model tests", common + ["--script", "res://game/tests/test_bench_swap_model.gd"]),
-            ("bench swap view tests", common + ["--script", "res://game/tests/test_bench_swap_view.gd"]),
-            ("sign balance model tests", common + ["--script", "res://game/tests/test_sign_balance_model.gd"]),
-            ("sign balance view tests", common + ["--script", "res://game/tests/test_sign_balance_view.gd"]),
-            ("hat rescue model tests", common + ["--script", "res://game/tests/test_hat_rescue_model.gd"]),
-            ("hat rescue view tests", common + ["--script", "res://game/tests/test_hat_rescue_view.gd"]),
-            ("melody memory model tests", common + ["--script", "res://game/tests/test_melody_memory_model.gd"]),
-            ("melody memory view tests", common + ["--script", "res://game/tests/test_melody_memory_view.gd"]),
-            ("ribbon rhythm model tests", common + ["--script", "res://game/tests/test_ribbon_rhythm_model.gd"]),
-            ("ribbon rhythm view tests", common + ["--script", "res://game/tests/test_ribbon_rhythm_view.gd"]),
-            ("ribbon Session startup tests", common + ["--script", "res://game/tests/test_ribbon_session_startup.gd"]),
-            ("ribbon Session lifecycle tests", common + ["--script", "res://game/tests/test_ribbon_finish_session.gd"]),
-            ("shadow theatre model tests", common + ["--script", "res://game/tests/test_shadow_theatre_model.gd"]),
-            ("shadow theatre view tests", common + ["--script", "res://game/tests/test_shadow_theatre_view.gd"]),
-            ("crowd semaphore view tests", common + ["--script", "res://game/tests/test_crowd_semaphore_view.gd"]),
-            ("welcome minigame tests", common + ["--script", "res://game/tests/test_minigames.gd"]),
-            ("pipe round model tests", common + ["--script", "res://game/tests/test_pipe_round_model.gd"]),
-            ("pipe plan presentation tests", common + ["--script", "res://game/tests/test_pipe_plan_view.gd"]),
-            ("balloon harbor presentation tests", common + ["--script", "res://game/tests/test_balloon_harbor_view.gd"]),
-            ("crowd traffic model tests", common + ["--script", "res://game/tests/test_crowd_traffic_model.gd"]),
-            ("crowd crossing view tests", common + ["--script", "res://game/tests/test_crowd_crossing_view.gd"]),
-            ("fountain jump view tests", common + ["--script", "res://game/tests/test_fountain_jump_view.gd"]),
-            ("fountain timing tests", common + ["--script", "res://game/tests/test_fountain.gd"]),
-            ("balloon delivery tests", common + ["--script", "res://game/tests/test_balloon.gd"]),
-            ("boat prologue state tests", common + ["--script", "res://game/tests/test_boat_prologue_state.gd"]),
-            ("boat prologue stage tests", common + ["--script", "res://game/tests/test_boat_prologue_stage.gd"]),
-            ("boat prologue integration tests", common + ["res://game/tests/test_boat_prologue_integration.tscn"]),
-            ("story runtime tests", common + ["--script", "res://game/tests/test_story.gd"]),
-            ("main story integration tests", common + ["res://game/tests/test_story_integration.tscn"]),
-            ("island ride tests", common + ["--script", "res://game/tests/test_island_ride.gd"]),
-            ("island layout tests", common + ["--script", "res://game/tests/test_island_layout.gd"]),
-            ("promenade free play tests", common + ["--script", "res://game/tests/test_promenade_play.gd"]),
-            ("coastal free play tests", common + ["--script", "res://game/tests/test_coastal_play.gd"]),
-            ("shared photo thumbnail tests", common + ["res://game/tests/test_main_photo_thumbnails.tscn"]),
-            ("saved photo viewer tests", common + ["res://game/tests/test_album_photo_viewer.tscn"]),
-            ("photo original preservation tests", common + ["res://game/tests/test_photo_originals.tscn"]),
-            ("island dialogue tests", common + ["res://game/tests/test_island_dialogue.tscn"]),
-            ("island game entry tests", common + ["res://game/tests/test_island_game_entry.tscn"]),
-            ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
-            ("island audio dynamics tests", common + ["--script", "res://game/tests/test_audio_dynamics.gd"]),
-            ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
-            ("pixel UI shell tests", common + ["res://game/tests/test_pixel_ui_shell.tscn"]),
-            ("pixel UI popup tests", common + ["--script", "res://game/tests/test_pixel_ui_popup_bounds.gd"]),
-            ("pixel UI button depth tests", common + ["--script", "res://game/tests/test_pixel_button_depth.gd"]),
-            ("pixel UI collection tests", common + ["res://game/tests/test_pixel_ui_collections.tscn"]),
-            ("pixel tutorial page tests", common + ["--script", "res://game/tests/test_tutorial_paged_viewport.gd"]),
-            ("pixel UI customization tests", common + ["res://game/tests/test_pixel_ui_customization.tscn"]),
-            ("pixel UI minigame tests", common + ["res://game/tests/test_pixel_ui_minigames.tscn"]),
-            ("pixel typography tests", common + ["res://game/tests/test_pixel_fonts.tscn"]),
-            ("localization framework tests", common + ["res://game/tests/test_localization.tscn"]),
-        ]
-        missing_markers = [label for label, _ in checks if label != "clean project import" and label not in PASS_MARKERS]
-        if missing_markers:
-            return fail(f"Runtime checks have no configured completion marker: {missing_markers!r}.")
-        if options.only:
-            selected = [(label, command) for label, command in checks
-                        if label == "clean project import" or any(text in label for text in options.only)]
-            if len(selected) == 1:
-                return fail(f"--only {options.only!r} matched no runtime suite.")
-            checks = selected
+        try:
+            checks = select_checks(build_checks(executable), only=options.only,
+                                   shard_index=options.shard_index, shard_count=options.shard_count)
+        except ValueError as error:
+            return fail(str(error))
         failures: list[str] = []
         for suite_index, (label, command) in enumerate(checks):
             # Photos, decoder proofs and caches live beside the JSON profile.
