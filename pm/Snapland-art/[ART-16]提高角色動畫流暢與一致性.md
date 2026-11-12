@@ -182,3 +182,19 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 ![包內維持原有完整站姿](images/ART-16-source-bound-20261112-settled.png)
 
 [包內正常](images/ART-16-source-bound-20261112-normal-pack.mp4) · [四分之一速度](images/ART-16-source-bound-20261112-quarter.mp4) · [降低動態](images/ART-16-source-bound-20261112-reduced.mp4) · [候選固定根比較](images/ART-16-source-bound-20261112-study.mp4) · [來源、格數與指紋](images/ART-16-source-bound-20261112-review.json) · [最終正常完整姿勢、慢速代表圖、失敗與重現紀錄](images/ART-16-source-bound-20261112-evidence.zip) · [兩側候選、指南與完整提示](images/ART-16-source-bound-20261112-studies.zip)。固定基準 `f9a05ae`；分支 `codex/source-bound-walks-20261112`。
+
+# Commit — 2026-11-12 核對原畫尺寸與格式
+
+## 內文
+
+邊界複核另外重現：圖片按相同像素資料改變長寬排列後，仍可能套用舊圖。現在把圖片尺寸與格式一併核對；損壞的巢狀資料也會保留完整來源。原有角色圖、快取上限與播放時序相同。
+
+### 測試結果
+
+相同像素、不同圖像排列先重現錯套，再由原生隔離包確認不再錯用舊圖。世界移動、三位 NPC 來源行走、素材庫及輪廓共 5 組局部檢查通過；最後追加資料型別案例後，匯入與素材庫再跑 2 組通過。Python 像素與重建檢查 7 項通過；原生 672 張匯出再次核對 24 張來源尺寸、格式及指紋。
+
+空目錄包內確認主角八方向／NPC 像素、素材替換及相同資料改變排列三項檢查；正常巡路錄影 460 格／15.333 秒、30 FPS，exit 0、0 ERROR。這是原生自動檢查與截圖，沒有真人遊玩或試聽；整票維持進行中。
+
+![包內沿用原有完整走姿](images/ART-16-source-layout-20261112-native.png)
+
+[來源、失敗重現、局部檢查與包內結果](images/ART-16-source-layout-20261112-evidence.zip)。固定基準 `d396e86`；分支 `codex/walk-source-layout-20261112`。

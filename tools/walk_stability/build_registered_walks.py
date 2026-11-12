@@ -21,7 +21,7 @@ def compile_frames(baseline,output):
     for (family,view),items in groups.items():
         if family=="island-raw":continue
         bindings=[item.get("source_binding") for item in items]
-        if any(not isinstance(binding,dict) or not isinstance(binding.get("frame"),dict) or not isinstance(binding.get("image_sha256"),str) or len(binding["image_sha256"])!=64 for binding in bindings):
+        if any(not isinstance(binding,dict) or not isinstance(binding.get("frame"),dict) or not isinstance(binding.get("image_sha256"),str) or len(binding["image_sha256"])!=64 or not isinstance(binding.get("image_layout"),str) or not binding["image_layout"] for binding in bindings):
             raise ValueError(f"Recapture source-bound native baseline before compiling: {family}/{view}")
     import cv2,numpy as np
     old=json.loads((ROOT/"assets/characters/walk-regions.json").read_text(encoding="utf-8"))

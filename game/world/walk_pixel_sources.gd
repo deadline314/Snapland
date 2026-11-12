@@ -21,7 +21,9 @@ func frame(actor: String, view: String, index: int, source_binding: Dictionary =
         var bindings: Variant = spec.get("source_bindings", [])
         if not bindings is Array or bindings.size()!=count or not bindings[index] is Dictionary or source_image==null:return null
         var binding: Dictionary = bindings[index]
+        if not binding.get("frame") is Dictionary or not binding.get("image_layout") is String or not binding.get("image_sha256") is String:return null
         if binding.get("frame",{}) != source_binding:return null
+        if binding.get("image_layout","") != "%dx%d:%d" % [source_image.get_width(),source_image.get_height(),source_image.get_format()]:return null
         var image_id := source_image.get_instance_id()
         if not _source_hashes.has(image_id):
             if _source_hashes.size()>=8:_source_hashes.erase(_source_hashes.keys()[0])

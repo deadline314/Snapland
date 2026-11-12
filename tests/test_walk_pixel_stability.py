@@ -26,7 +26,7 @@ class WalkPixelStabilityTest(unittest.TestCase):
             output.mkdir()
             previous=output/"announcer-walk-left.png"
             previous.write_bytes(b"approved previous atlas")
-            for invalid in [None,{}, {"frame":{},"image_sha256":"bad"}]:
+            for invalid in [None,{}, {"frame":{},"image_sha256":"bad"}, {"frame":{},"image_sha256":"0"*64}]:
                 frames=[{"family":family,"view":view,"frame":0,"file":"uncaptured.png","source_binding":invalid} for family,view in groups]
                 (baseline/"frames.json").write_text(json.dumps({"frames":frames}),encoding="utf-8")
                 with self.assertRaisesRegex(ValueError,"Recapture source-bound native baseline"):

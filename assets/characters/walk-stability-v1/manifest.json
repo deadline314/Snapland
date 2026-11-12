@@ -82,7 +82,8 @@
               180.0
             ]
           },
-          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6"
+          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6",
+          "image_layout": "1774x887:5"
         },
         {
           "frame": {
@@ -121,7 +122,8 @@
               180.0
             ]
           },
-          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6"
+          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6",
+          "image_layout": "1774x887:5"
         },
         {
           "frame": {
@@ -160,7 +162,8 @@
               180.0
             ]
           },
-          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6"
+          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6",
+          "image_layout": "1774x887:5"
         },
         {
           "frame": {
@@ -199,7 +202,8 @@
               180.0
             ]
           },
-          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6"
+          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6",
+          "image_layout": "1774x887:5"
         }
       ]
     },
@@ -283,7 +287,8 @@
               180.0
             ]
           },
-          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6"
+          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6",
+          "image_layout": "1774x887:5"
         },
         {
           "frame": {
@@ -322,7 +327,8 @@
               180.0
             ]
           },
-          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6"
+          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6",
+          "image_layout": "1774x887:5"
         },
         {
           "frame": {
@@ -361,7 +367,8 @@
               180.0
             ]
           },
-          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6"
+          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6",
+          "image_layout": "1774x887:5"
         },
         {
           "frame": {
@@ -400,7 +407,8 @@
               180.0
             ]
           },
-          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6"
+          "image_sha256": "c962fb5a6f5fa99c8688306201ee5a9ee72c814b39426f1176f7540112ee8bf6",
+          "image_layout": "1774x887:5"
         }
       ]
     },
@@ -507,7 +515,8 @@
               180.0
             ]
           },
-          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc"
+          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -545,7 +554,8 @@
               180.0
             ]
           },
-          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc"
+          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -583,7 +593,8 @@
               180.0
             ]
           },
-          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc"
+          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -621,7 +632,8 @@
               180.0
             ]
           },
-          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc"
+          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -659,7 +671,8 @@
               180.0
             ]
           },
-          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc"
+          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -697,7 +710,8 @@
               180.0
             ]
           },
-          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc"
+          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -735,7 +749,8 @@
               180.0
             ]
           },
-          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc"
+          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -773,7 +788,8 @@
               180.0
             ]
           },
-          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc"
+          "image_sha256": "9cb1ec0c7042f69d562c080e6a04880b0ecf719450fd9056b53d9a95eb84fefc",
+          "image_layout": "1448x1086:5"
         }
       ]
     },
@@ -1384,7 +1400,8 @@
               200.0
             ]
           },
-          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678"
+          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -1422,7 +1439,8 @@
               200.0
             ]
           },
-          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678"
+          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -1460,7 +1478,8 @@
               200.0
             ]
           },
-          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678"
+          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -1498,7 +1517,8 @@
               200.0
             ]
           },
-          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678"
+          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -1536,7 +1556,8 @@
               200.0
             ]
           },
-          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678"
+          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -1574,7 +1595,8 @@
               200.0
             ]
           },
-          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678"
+          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -1612,7 +1634,8 @@
               200.0
             ]
           },
-          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678"
+          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678",
+          "image_layout": "1448x1086:5"
         },
         {
           "frame": {
@@ -1650,7 +1673,8 @@
               200.0
             ]
           },
-          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678"
+          "image_sha256": "49a9d44d24fd3f69a2e3a4e2cfbfeffa9ea6b6c3375fa9607bfa29165fe38678",
+          "image_layout": "1448x1086:5"
         }
       ]
     }

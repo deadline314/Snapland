@@ -107,21 +107,37 @@ func _initialize() -> void:
 	changed_pixels._images[str(current_frame.source)] = changed_source
 	var expected_replacement := changed_pixels._render_frame("announcer","walk","right",0,current_frame,{},true)
 	assert(changed_pixels.texture("announcer","walk","right",0).get_image().get_data() == expected_replacement.get_image().get_data(), "even the same source path cannot reuse registered pixels after its image changes")
+	var changed_layout = Library.new()
+	var layout_pose: Dictionary = changed_layout.manifest.actors.announcer.walk.right.frames[0]
+	var layout_source: Image = changed_layout._image(str(layout_pose.source),"announcer","walk","right",0)
+	var reshaped_source := Image.create_from_data(layout_source.get_width()/2,layout_source.get_height()*2,false,layout_source.get_format(),layout_source.get_data())
+	assert(reshaped_source.get_data() == layout_source.get_data(), "layout regression uses identical pixel bytes in a different atlas shape")
+	changed_layout._images[str(layout_pose.source)] = reshaped_source
+	var expected_layout := changed_layout._render_frame("announcer","walk","right",0,layout_pose,{},true)
+	assert(changed_layout.texture("announcer","walk","right",0).get_image().get_data() == expected_layout.get_image().get_data(), "identical pixel bytes cannot hide a changed atlas layout")
 	for invalid_binding in [null, {}, [], ["invalid"], [null,null,null,null]]:
 		var fallback = Library.new()
 		fallback._stable_walk_pixels.manifest["announcer-walk/right"].source_bindings = invalid_binding
 		var raw_pose: Dictionary = fallback.manifest.actors.announcer.walk.right.frames[0]
 		var expected_fallback := fallback._render_frame("announcer","walk","right",0,raw_pose,{},true)
 		assert(fallback.texture("announcer","walk","right",0).get_image().get_data() == expected_fallback.get_image().get_data(), "missing or malformed source binding preserves the complete source pose")
+	for field in ["frame","image_layout","image_sha256"]:
+		var malformed = Library.new()
+		malformed._stable_walk_pixels.manifest["announcer-walk/right"].source_bindings[0][field] = []
+		var raw_pose: Dictionary = malformed.manifest.actors.announcer.walk.right.frames[0]
+		var expected_fallback := malformed._render_frame("announcer","walk","right",0,raw_pose,{},true)
+		assert(malformed.texture("announcer","walk","right",0).get_image().get_data() == expected_fallback.get_image().get_data(), "invalid nested source-binding fields preserve the complete source pose")
 	var changed_canvas = Library.new()
 	changed_canvas.manifest.actors.announcer.canvas_size = [321,460]
 	assert(changed_canvas.texture("announcer","walk","right",0).get_width() == 321, "registered pixels cannot bypass a replacement canvas")
-	var binding: Dictionary = production_library._stable_walk_pixels.manifest["announcer-walk/right"].source_bindings[0].frame
+	var cache_fixture = preload("res://game/world/walk_pixel_sources.gd").new()
+	cache_fixture.manifest["announcer-walk/right"].source_bindings[0].image_layout = "4x4:%d" % Image.FORMAT_RGBA8
+	var binding: Dictionary = cache_fixture.manifest["announcer-walk/right"].source_bindings[0].frame
 	for _image_index in range(10):
 		var other_image := Image.create(4,4,false,Image.FORMAT_RGBA8)
 		other_image.fill(Color.RED)
-		assert(production_library._stable_walk_pixels.frame("announcer-walk","right",0,binding,other_image) == null, "mismatched source pixels reject the registered cache")
-	assert(production_library._stable_walk_pixels._source_hashes.size() == 8, "source fingerprint cache evicts old entries after eight source images")
+		assert(cache_fixture.frame("announcer-walk","right",0,binding,other_image) == null, "mismatched source pixels reject the registered cache")
+	assert(cache_fixture._source_hashes.size() == 8, "source fingerprint cache evicts old entries after eight source images")
 	var announcer_left: Dictionary = production_library.get_sequence("announcer", "walk", "left")
 	assert(announcer_right.available and announcer_right.frames.size() == 4 and announcer_left.available and announcer_left.frames.size() == 4, "real manifest loads four authored side poses for each profile direction")
 	var distinct_right: Dictionary = {}

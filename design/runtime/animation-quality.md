@@ -73,3 +73,5 @@ The runtime rig, parts atlas, manifest and trial tests were withdrawn and archiv
 指紋使用 Godot 原生 [HashingContext](https://docs.godotengine.org/en/latest/classes/class_hashingcontext.html)，每個不可變來源圖片只計算一次，最多保留八筆小型指紋。圖片與貼圖快取上限沿用既有設定。共用的主角行走／待機仍走原有選圖契約，沒有改動其原畫或錨點。既有四組 NPC 穩定化序列共 24 張姿勢補上來源綁定，PNG 位元組未改。固定畫布匯出保留來源綁定；重建工具會在寫入任何新圖之前拒絕沒有綁定的舊基準，要求重新擷取。
 
 新增兩側各八張的完整步態候選，以近／遠肢體示意引導，並以原生固定根、固定列地板、統一比例比較正常與四分之一速度。擺臂交替較清楚，但共享列地板下的鞋底仍差 0–5 原畫像素（統一縮放後最多約 4 像素）；候選不取代正式四格來源，亦未改寫固定頭部與接地驗收。候選、原提示、指南、來源量測及實際比較錄影封存於 ART-16 證據。
+
+來源識別另包含解碼圖片的寬、高與 `Image.Format`，保存為 `image_layout`。僅比對像素位元組不足：實際將 `1774×887` RGBA 圖按相同資料重排成 `887×1774`，原檢查會錯用舊圖。素材庫現在先核對格式與尺寸，再核對像素指紋；同一案例在隔離 PCK 內應回報 `SAME_PIXEL_BYTES=true`、`STALE_OVERRIDE=false`。巢狀綁定欄位型別錯誤也保留完整來源，沒有新增圖片快取或改動現有 PNG。
