@@ -291,6 +291,9 @@ func _apply_responsive_spread_columns() -> void:
 	_spread.add_theme_constant_override("h_separation",8.0/Paper.physical_scale(self))
 	_spread.add_theme_constant_override("v_separation",8.0/Paper.physical_scale(self))
 	if _progress != null and is_instance_valid(_page_label):
+		var focused := get_viewport().gui_get_focus_owner()
+		if focused!=null and focused.get_parent()==_spread:
+			_page=floori(float(focused.get_index())/_page_capacity())
 		var page_count := maxi(1, ceili(float(_entries().size()) / float(_page_capacity())))
 		_page=clampi(_page,0,page_count-1)
 		_page_label.text="第 %d / %d 頁" % [_page+1,page_count]
@@ -314,7 +317,14 @@ func _rebuild_profile() -> void:
 	if profile==_built_profile:
 		return
 	_built_profile=profile
+	var details := _photo_details.text
+	var focused := get_viewport().gui_get_focus_owner()
+	var focused_name := str(focused.name) if focused!=null and focused.get_parent()==_spread else ""
 	_refresh_book()
+	_photo_details.text=details
+	if not focused_name.is_empty():
+		var replacement := _spread.get_node_or_null(NodePath(focused_name)) as Control
+		if replacement!=null and replacement.is_visible_in_tree(): replacement.grab_focus()
 
 func _fit_album_cards_to_available_height() -> void:
 	if not is_inside_tree(): return
@@ -346,7 +356,15 @@ func _gui_input(event: InputEvent) -> void:
 
 func _page_capacity() -> int:
 	var physical_width := get_viewport_rect().size.x * Paper.physical_scale(self)
-	return PAGE_SIZE if physical_width >= 1200.0 or get_viewport_rect().size.y*Paper.physical_scale(self)>=550.0 else 2
+	if physical_width >= 1200.0: return PAGE_SIZE
+	if _compact_cards() or not is_instance_valid(_spread) or not is_instance_valid(_nav): return 2
+	# Use every current entry's natural minimum so changing pages cannot change capacity.
+	var row_height := 0.0
+	for tile in _spread.get_children():
+		if tile.get_child_count()>0:
+			row_height=maxf(row_height,(tile.get_child(0) as Control).get_combined_minimum_size().y)
+	var available := _nav.get_global_rect().position.y-_spread.get_global_rect().position.y-2.0
+	return PAGE_SIZE if row_height>0.0 and available>=2.0*row_height+_spread.get_theme_constant("v_separation") else 2
 
 func _entries() -> Array[Dictionary]:
 	var entries: Array[Dictionary]=[]
@@ -417,6 +435,8 @@ func _photo_tile(entry: Dictionary) -> Control:
 	tile.mouse_filter=Control.MOUSE_FILTER_STOP
 	tile.text=""
 	tile.tooltip_text=str(entry.instructions)
+	if entry.has("game_id"):
+		tile.tooltip_text="查看原圖" if collected else ("免費補拍" if _progress.has_attempted_game(str(entry.game_id)) else "先練習再免費補拍")
 	var tile_style := Paper.button_box(Paper.FRAME, Paper.TEAL if collected else Paper.GOLD, 0, Vector2.ZERO)
 	tile.add_theme_stylebox_override("normal",tile_style)
 	tile.add_theme_stylebox_override("hover",Paper.button_box(Color("#1e5360"),Paper.GOLD,0,Vector2.ZERO))

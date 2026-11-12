@@ -203,5 +203,30 @@ class RuntimeResultContractTests(unittest.TestCase):
                 self.assertIsNone(result_error(label, self.result(completion)))
 
 
+
+RETAKE_SUITES = {
+    "photo retake progress tests": ("test_photo_retake_progress.gd", "PASS: attempt history, selected retake awards, provenance and atomic rollback"),
+    "participation result tests": ("test_participation_results.gd", "PASS: thirteen participation results, practice, cancellation and driver eligibility"),
+    "retake panel tests": ("test_retake_panel.gd", "PASS: retake panel canonical targets, reversible state, keyboard and capture guards"),
+    "photo retake Main tests": ("test_photo_retake_main.tscn", "PASS: Main selected retakes, actual attempts, truthful awards and safe PNG replacement"),
+    "retake native fixture tests": ("test_retake_native_fixture.gd", "PASS: retake native fixture adjacent helper, isolated packaging and real resources"),
+}
+
+
+class RetakeRunnerTests(unittest.TestCase):
+    def test_all_five_entries_and_strict_completion(self):
+        checks = dict(build_checks("fixture-godot"))
+        for label, (entry, marker) in RETAKE_SUITES.items():
+            with self.subTest(label=label):
+                self.assertIn(label, checks)
+                self.assertIn("res://game/tests/" + entry, checks[label])
+                self.assertEqual(PASS_MARKERS[label], marker)
+                for output in ("", marker + " suffix", "quoted " + marker):
+                    self.assertIsNotNone(result_error(label, subprocess.CompletedProcess([], 0, output, "")))
+                self.assertIsNone(result_error(label, subprocess.CompletedProcess([], 0, marker, "")))
+                for diagnostic in ("ERROR: failed", "SCRIPT ERROR: Parse Error"):
+                    self.assertIsNotNone(result_error(label, subprocess.CompletedProcess([], 0, marker, diagnostic)))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -21,6 +21,11 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "photo retake progress tests": "PASS: attempt history, selected retake awards, provenance and atomic rollback",
+    "participation result tests": "PASS: thirteen participation results, practice, cancellation and driver eligibility",
+    "retake panel tests": "PASS: retake panel canonical targets, reversible state, keyboard and capture guards",
+    "photo retake Main tests": "PASS: Main selected retakes, actual attempts, truthful awards and safe PNG replacement",
+    "retake native fixture tests": "PASS: retake native fixture adjacent helper, isolated packaging and real resources",
     "rowing native fixture tests": "PASS: rowing native fixture adjacent helper and three real tutorial PNGs",
     "rowing Main tests": "PASS: rowing Main entry, regional map, tutorial, truthful timeout, practice, assisted reward and reload",
     "harbor collection tests": "Harbor collection: 22 checks, 0 failures",
@@ -166,7 +171,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "harbor ", "delivered game ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -179,6 +184,11 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
     return [
         ("clean project import", [executable, "--headless", "--editor", "--path", str(ROOT), "--rendering-method", "gl_compatibility", "--import", "--quit"]),
         ("game startup", common + ["--", "--smoke-test"]),
+        ("photo retake progress tests", common + ["--script", "res://game/tests/test_photo_retake_progress.gd"]),
+        ("participation result tests", common + ["--script", "res://game/tests/test_participation_results.gd"]),
+        ("retake panel tests", common + ["--script", "res://game/tests/test_retake_panel.gd"]),
+        ("photo retake Main tests", common + ["res://game/tests/test_photo_retake_main.tscn"]),
+        ("retake native fixture tests", common + ["--script", "res://game/tests/test_retake_native_fixture.gd"]),
         ("region progress tests", common + ["--script", "res://game/tests/test_region_progress.gd"]),
         ("harbor world tests", common + ["--script", "res://game/tests/test_harbor_world.gd"]),
         ("region travel tests", common + ["res://game/tests/test_region_travel.tscn"]),

@@ -125,7 +125,7 @@ func _check_album() -> void:
 	var grid := _overlay.find_child("AlbumPhotoGrid", true, false) as GridContainer
 	_check(grid != null and grid.get_child_count() == 18, "album keeps all stable ordinary photo entries in its paged collection")
 	_check((_overlay.find_child("AlbumCollectionState", true, false) as Label).visible, "a new collection has a clear empty-collection state")
-	for physical_size in [Vector2i(800,450),Vector2i(1280,720),Vector2i(1920,1080)]:
+	for physical_size in [Vector2i(800,450),Vector2i(800,600),Vector2i(1280,720),Vector2i(1920,1080)]:
 		get_window().size=physical_size
 		await _frames(4)
 		_check_album_card_geometry(album,"empty",physical_size)
@@ -136,7 +136,7 @@ func _check_album() -> void:
 	_original_record = _progress.photos.duplicate(true)
 	album.call("_refresh_book")
 	await _frames(2)
-	for physical_size in [Vector2i(800,450),Vector2i(1280,720),Vector2i(1920,1080)]:
+	for physical_size in [Vector2i(800,450),Vector2i(800,600),Vector2i(1280,720),Vector2i(1920,1080)]:
 		get_window().size=physical_size
 		await _frames(4)
 		_check_album_card_geometry(album,"filled",physical_size)
@@ -491,19 +491,38 @@ func _check_main_album_host() -> void:
 			album=ancestor as Control
 			break
 		ancestor=ancestor.get_parent()
-	for physical_size in [Vector2i(800,450),Vector2i(1280,720),Vector2i(1920,1080)]:
+	for physical_size in [Vector2i(800,450),Vector2i(800,600),Vector2i(1280,720),Vector2i(1920,1080)]:
 		get_window().size=physical_size
 		await _frames(8)
 		if album!=null:
 			_check_album_card_geometry(album,"empty",physical_size)
-	Progress.photos["photo-welcome-game-1"]={"frames":["res://assets/ui/tutorials/park-step-01.png"]}
+	Progress.photos["photo-welcome-game-1"]={"frames":["res://assets/ui/tutorials/park-step-01.png"],"acquisition_method":"retake"}
 	if album!=null:
 		album.call("_refresh_book")
-	for physical_size in [Vector2i(800,450),Vector2i(1280,720),Vector2i(1920,1080)]:
+	for physical_size in [Vector2i(800,450),Vector2i(800,600),Vector2i(1280,720),Vector2i(1920,1080)]:
 		get_window().size=physical_size
 		await _frames(8)
 		if album!=null:
+			var selected: Control = album.find_child("AlbumPhoto_photo-welcome-game-1",true,false)
+			selected.grab_focus()
+			await _frames(8)
+			var settled_capacity: int = album.call("_page_capacity")
+			await _frames(8)
+			_check(album.call("_page_capacity")==settled_capacity and album._photo_details.text.contains("photo-welcome-game-1") and album._photo_details.text.contains("免費補拍布景"), "selected retake detail survives stable responsive capacity at "+str(physical_size))
 			_check_album_card_geometry(album,"filled",physical_size)
+	get_window().size=Vector2i(800,600)
+	await _frames(8)
+	if album!=null:
+		await _check_album_catalog_pagination(album)
+		var regions: OptionButton = album.find_child("AlbumRegionSelector",true,false)
+		regions.select(1)
+		regions.item_selected.emit(1)
+		await _frames(8)
+		_check_album_card_geometry(album,"empty",Vector2i(800,600))
+		regions.select(0)
+		regions.item_selected.emit(0)
+		await _frames(8)
+		_check_album_card_geometry(album,"filled",Vector2i(800,600))
 	get_window().size=Vector2i(800,450)
 	await _frames(8)
 	if album!=null:
@@ -530,6 +549,25 @@ func _check_main_album_host() -> void:
 			for rect in fixed_rects:
 				if rect.intersects(tile.get_global_rect()): controls_disjoint=false
 	_check(controls_disjoint,"Main 1280 logical canvas at 800×450 with 1.25 text keeps photos, fixed controls, and return action disjoint")
+	get_window().size=Vector2i(1280,720)
+	album.call("_set_category","normal")
+	await _frames(8)
+	(album.find_child("AlbumPhoto_photo-welcome-game-4",true,false) as Control).grab_focus()
+	await _frames(8)
+	get_window().size=Vector2i(800,600)
+	await _frames(12)
+	var focused := get_viewport().gui_get_focus_owner()
+	_check(focused!=null and focused.name=="AlbumPhoto_photo-welcome-game-4" and focused.is_visible_in_tree() and album._page==1,"responsive four-to-two card reflow keeps latter-half selected target on its visible page and retains keyboard focus")
+	for down in [true,false]:
+		var event := InputEventKey.new()
+		event.keycode=KEY_ENTER
+		event.physical_keycode=KEY_ENTER
+		event.pressed=down
+		get_viewport().push_input(event)
+		await _frames(1)
+	await _frames(4)
+	_check(main.session!=null and main.session.game_id=="game-004" and main.session.practice_mode,"Enter after responsive reflow activates the same real Main practice target")
+	if main.session!=null: main._cancel_game(false)
 	if main.has_method("_close"): main._close()
 	main.queue_free()
 	Progress.photos=saved_photos
@@ -558,7 +596,7 @@ func _check_album_catalog_pagination(album: Control) -> void:
 				complete=complete and not seen.has(tile.name)
 				seen[tile.name]=true
 			complete=complete and on_page==mini(capacity,expected-page*capacity)
-			_check_album_card_geometry(album,"filled",Vector2i(800,450))
+			_check_album_card_geometry(album,"filled",get_window().size)
 			album.call("_change_page",1)
 			await _frames(4)
 		_check(complete and seen.size()==expected,"real Main %s pagination reaches every stable catalog ID exactly once" % category)

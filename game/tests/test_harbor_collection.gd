@@ -53,7 +53,8 @@ func _run() -> void:
 	album.setup(progress, Catalog.definitions("harbor"), [], Callable())
 	panel.add_child(album)
 	await frames()
-	expect(album._entries().size() == 18, "welcome retains twelve games and six other sources")
+	var missing_tile: Button = album.find_child("AlbumPhoto_photo-welcome-game-1",true,false)
+	expect(album._entries().size() == 18 and missing_tile.tooltip_text == "先練習再免費補拍", "welcome retains twelve games and six other sources with concise missing-card action")
 	var selector := album.find_child("AlbumRegionSelector", true, false) as OptionButton
 	selector.select(1)
 	selector.item_selected.emit(1)
@@ -67,7 +68,7 @@ func _run() -> void:
 	expect(album._normal_button.text.contains("1 / 18") and album._devil_button.text.contains("1 / 12"), "source region quotas remain eighteen and twelve")
 	expect(not album._time_button.visible and not album._empty_message.visible, "harbor has real game entries without welcome postcards")
 	var tile := album.find_child("AlbumPhoto_photo-harbor-game-1", true, false) as Button
-	expect(tile != null and tile.find_child("SavedPhotoFrame", true, false) != null and album._thumbnail_decode_count == 1, "harbor thumbnail uses bounded reader and cache")
+	expect(tile != null and tile.find_child("SavedPhotoFrame", true, false) != null and album._thumbnail_decode_count == 1 and tile.tooltip_text == "查看原圖", "harbor thumbnail uses bounded reader/cache and concise original action")
 	expect(album._saved_original_texture("photo-harbor-game-1").get_width() == 960, "harbor original retains saved size")
 	tile.pressed.emit()
 	await frames()
