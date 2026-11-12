@@ -1146,6 +1146,10 @@ func _build_dock() -> void:
 		_box(Vector3(x,3.75,13.65),Vector3(0.035,0.3,0.035),Color("#6e563c"))
 		_lantern(Vector3(x,3.55,13.65))
 	# Original ferry silhouette, with portholes, lifebuoy, chimney and pennants.
+	var ferry_stage_anchor := Marker3D.new()
+	ferry_stage_anchor.name = "FerryDeckStageAnchor"
+	ferry_stage_anchor.position = Vector3(5.5,1.04,22.65)
+	add_child(ferry_stage_anchor)
 	var hull := _box(Vector3(5.5,0,25),Vector3(5,0.8,8),Color("#77513a"),true)
 	hull.material_override = _coastal_surface(1,1.8,Color("#cfb38a"))
 	var bow := _mesh(CylinderMesh.new(),Vector3(5.5,0,20.8),_coastal_surface(1,1.8,Color("#cfb38a")))
