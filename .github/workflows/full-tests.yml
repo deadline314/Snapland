@@ -49,7 +49,7 @@ jobs:
         if: ${{ !cancelled() && steps.authoring-dependency.outcome == 'success' }}
         run: python -m unittest discover -s tests -v
 
-  game-runtime:
+  runtime-source:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -57,8 +57,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify runtime completion and entrypoint contracts
-        run: python -m unittest tests.test_runtime_result_contract tests.test_godot_entrypoints -v
       - name: Install pinned Godot 4.7.2
         shell: bash
         run: |
@@ -76,5 +74,28 @@ jobs:
         run: python tools/walk_stability/run_audit.py --tag ci --test
       - name: Verify fixed-head island idle and blinking across appearances
         run: python tools/island_avatar/run_contracts.py
+
+  game-runtime:
+    needs: runtime-source
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard-index: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify runtime completion, entrypoint and shard coverage contracts
+        run: python -m unittest tests.test_runtime_result_contract tests.test_godot_entrypoints tests.test_runtime_shards -v
+      - name: Install pinned Godot 4.7.2
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 --output godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip godot.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
       - name: Run native Godot startup and runtime tests
-        run: python tools/run_game_tests.py
+        run: python tools/run_game_tests.py --shard-index ${{ matrix.shard-index }} --shard-count 4

@@ -3,10 +3,12 @@ from __future__ import annotations
 
 from collections import Counter
 from contextlib import redirect_stderr, redirect_stdout
+import ast
 import copy
 import io
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import unittest
@@ -42,6 +44,45 @@ class RuntimeShardTests(unittest.TestCase):
                 seen.update(label for label, _ in selected[1:])
             self.assertEqual(seen, Counter(runner.PASS_MARKERS.keys()))
         self.assertEqual(self.checks, original)
+
+    def test_ci_matrix_runs_the_complete_real_partition_after_source_checks(self) -> None:
+        workflow = (runner.ROOT / ".github/workflows/full-tests.yml").read_text(encoding="utf-8")
+        jobs = dict(re.findall(r"^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)",
+                               workflow.split("\njobs:\n", 1)[1], re.M | re.S))
+        runtime = jobs["game-runtime"]
+        self.assertIn("    needs: runtime-source\n", runtime)
+        strategy = runtime.split("    strategy:\n", 1)[1].split("    steps:\n", 1)[0]
+        matrix = re.fullmatch(r"      fail-fast: false\n      matrix:\n        shard-index: (\[[^\n]+\])\n", strategy)
+        self.assertIsNotNone(matrix, "all four shards must run without matrix exclusions or early cancellation")
+        indices = ast.literal_eval(matrix.group(1))
+        command = re.findall(r"^        run: python tools/run_game_tests.py (.+)$", runtime, re.M)
+        self.assertEqual(len(command), 1)
+        flags = re.fullmatch(r"--shard-index \$\{\{ matrix.shard-index \}\} --shard-count (\d+)", command[0])
+        self.assertIsNotNone(flags, "CI must run its complete shard without local filters")
+        count = int(flags.group(1))
+        self.assertEqual(count, 4)
+        self.assertEqual(indices, list(range(count)))
+        seen = Counter()
+        for index in indices:
+            selected = runner.select_checks(self.checks, shard_index=index, shard_count=count)
+            self.assertEqual(selected[0], self.checks[0])
+            seen.update(label for label, _ in selected[1:])
+        self.assertEqual(seen, Counter(runner.PASS_MARKERS.keys()))
+        source = jobs["runtime-source"]
+        self.assertNotIn("    strategy:", source, "shared source checks run once")
+        for script in ("tools/check_runtime_tests.py", "tools/hero_2d/run_contract_tests.py",
+                       "tools/hero_2d/run_hair_review.py --contracts",
+                       "tools/walk_stability/run_audit.py --tag ci --test",
+                       "tools/island_avatar/run_contracts.py"):
+            line = f"        run: python {script}\n"
+            self.assertEqual(workflow.count(line), 1)
+            self.assertIn(line, source)
+        self.assertIn("tests.test_runtime_shards", runtime)
+        self.assertIn("tests.test_runtime_result_contract", runtime)
+        self.assertIn("tests.test_godot_entrypoints", runtime)
+        for job in (source, runtime):
+            self.assertNotRegex(job, r"(?m)^\s+(?:if|continue-on-error):")
+            self.assertIn("Godot_v4.7.2-stable_linux.x86_64.zip", job)
 
     def test_membership_does_not_depend_on_other_labels_or_input_order(self) -> None:
         count = 4
