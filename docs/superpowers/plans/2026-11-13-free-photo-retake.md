@@ -18,7 +18,7 @@
 - Original card IDs/quotas, acquisition_method=retake, one global game receipt and 40 coins at most; old ordinary OR devil without receipt gets no retroactive money. Selected devil retake never grants missing ordinary.
 - A retake only grants the missing selected card with validated actual images. Existing other card metadata/PNG bytes remain unchanged, and later genuine devil success can record technique without rewriting retake provenance.
 - Three no-timer reversible steps: clearly labelled demonstration, visibly adjustable themed set, actual set photograph. No equipment, fee, skill or AI gate; keyboard sequential choices suffice.
-- Reuse Paper/accessibility/PNG size limits. Absolute isolated SNAPLAND_SAVE_PATH for every test; no real user profiles. Full 90-second runtime limits/error scanning/all old tests retained.
+- Reuse Paper/accessibility/PNG size limits. Absolute isolated SNAPLAND_SAVE_PATH for every test; no real user profiles. New suites keep the standard 90-second limit; existing exceptions (avatar renderer 240 seconds), error scanning and all old tests are retained.
 - One implementation worker at a time; reviewers read-only. Author and committer stanley890314@gmail.com, no assistant/model/coauthor text; no worker push, branch switches, unrelated changes or subagents.
 
 ## Review Focus
@@ -42,10 +42,10 @@
 - Session natural _finish results always contain ordinary_eligible; legacy = not practice, driver retains its own natural eligibility AND not practice. Cancel remains separate.
 - Existing complete_game signature/boolean and attach APIs stay compatible. Share the existing atomic reward transaction by a narrow private extraction, rather than a parallel copy. Retake metadata contains acquisition_method="retake" and challenge_earned=false. Genuine devil completion records challenge_earned=true; retain first acquisition provenance and retake photo paths (attachment must not replace an existing retake card's photos). Existing gameplay cards preserve replay behavior.
 
-- [ ] Write focused failing tests: all thirteen natural false results remain success=false but ordinary eligible, practice/cancel excluded; bad/alias/unbuilt attempt IDs rejected; one attempt save/reload/reset; failed attempt save rolls back; canonical old-card inference.
-- [ ] Add award tests: missing ordinary/devil selected independently, no other-card mutation, valid decoded 320x180 thumbnails and bounded originals required, no blank grants; one40coin receipt across both paths/replays; old ordinary OR devil without receipt no money; invalid target and no attempt fail; actual blocked save restores all photos/coins/receipts/achievements/platform queue/signals; real later devil proof updates without falsely winning from retake.
-- [ ] Run red with pinned engine and private profiles, implement minimal shared changes, run green plus core/wardrobe/photos/original/harbor reward/save guard and Session affected regressions. No weakening assertions or limits.
-- [ ] Self-review callers, apply-save known-fields/validation/payload/reset, exact image ownership and emitted signals. Commit only owned scope; report exact APIs/results.
+- [x] Write focused failing tests: all thirteen natural false results remain success=false but ordinary eligible, practice/cancel excluded; bad/alias/unbuilt attempt IDs rejected; one attempt save/reload/reset; failed attempt save rolls back; canonical old-card inference.
+- [x] Add award tests: missing ordinary/devil selected independently, no other-card mutation, valid decoded 320x180 thumbnails and bounded originals required, no blank grants; one40coin receipt across both paths/replays; old ordinary OR devil without receipt no money; invalid target and no attempt fail; actual blocked save restores all photos/coins/receipts/achievements/platform queue/signals; real later devil proof updates without falsely winning from retake.
+- [x] Run red with pinned engine and private profiles, implement minimal shared changes, run green plus core/wardrobe/photos/original/harbor reward/save guard and Session affected regressions. No weakening assertions or limits.
+- [x] Self-review callers, apply-save known-fields/validation/payload/reset, exact image ownership and emitted signals. Commit only owned scope; report exact APIs/results.
 
 ### Task 2: Reversible themed photo set
 
@@ -64,7 +64,7 @@
 
 ### Task 3: Album/kiosk entry, real launch attempts and safe photo persistence
 
-**Files:** Modify game/main.gd, game/ui/collection_book_panel.gd, game/ui/stamp_book_panel.gd (collection achievement copy only), game/data/tutorials.json and concise rules/help copy where existing wording contradicts participation. Create game/tests/test_photo_retake_main.gd; extend existing shared photo writer tests where appropriate. No unrelated UI redesign.
+**Files:** Modify game/main.gd, game/ui/collection_book_panel.gd, game/ui/achievement_stamp_book.gd (collection achievement copy only), game/data/tutorials.json and concise rules/help copy where existing wording contradicts participation. Create game/tests/test_photo_retake_main.gd; extend existing shared photo writer tests where appropriate. No unrelated UI redesign.
 
 **Interfaces:**
 - Consume Task1 Progress APIs/natural eligibility and Task2 RetakePanel signals/setup/set_capture_result.
