@@ -47,7 +47,7 @@ func _run() -> void:
 	_check(thumbs.size() == 1 and originals.size() == 1 and FileAccess.file_exists(thumbs[0]) and FileAccess.file_exists(originals[0]), "thumbnail and original are written as separate files")
 	_check(not _main.call("_sync_finished_photo_thumbnails", {"game_id": "game-001", "success": false, "practice": false}, thumbs, originals), "failed games cannot attach either photo resolution")
 	_check(not _main.call("_sync_finished_photo_thumbnails", {"game_id": "game-001", "success": true, "practice": true}, thumbs, originals), "practice games cannot attach either photo resolution")
-	_check(progress.call("complete_game", "game-001", true) == null, "fixture awards through the existing game completion path")
+	_check(progress.call("complete_game", "game-001", true) == true, "fixture awards through the saved game completion path")
 	var attach_ok := bool(progress.call("attach_welcome_game_photo_frames", "game-001", thumbs, true, originals)) if progress.has_method("attach_welcome_game_photo_frames") else false
 	_check(attach_ok, "game attachment stores optional shared originals without granting another card")
 	var ordinary: Dictionary = progress.photos.get("photo-welcome-game-1", {})

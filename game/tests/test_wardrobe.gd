@@ -60,7 +60,7 @@ func _run() -> void:
 	_check(progress.coins == 120, "first completion of a second supported game awards 40 coins")
 	progress.complete_game("game-002", false)
 	_check(progress.coins == 120, "second game's reward is also one-time")
-	for invalid_game_id in ["game-013", "game-1", "id"]:
+	for invalid_game_id in ["game-014", "game-1", "id"]:
 		progress.complete_game(invalid_game_id, false)
 		progress.complete_game(invalid_game_id, false)
 	_check(progress.coins == 120, "unsupported and malformed game IDs never award currency")

@@ -13,6 +13,7 @@ const MAX_GAME_PHOTO_ORIGINAL_PIXELS := 4 * 1024 * 1024
 const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TestSaveGuard = preload("res://game/core/test_save_guard.gd")
+const GameCatalog = preload("res://game/core/game_catalog.gd")
 const DEFAULT_APPEARANCE := {
 	"skin": "warm", "species": "human", "gender": "neutral",
 	"hair": "windswept", "hair_color": "ink", "face": "curious",
@@ -97,10 +98,10 @@ func set_current_region(region: String) -> bool:
 	return true
 
 func has_seen_tutorial(game_id: String) -> bool:
-	return WELCOME_GAME_IDS.has(game_id) and tutorial_seen_games.has(game_id)
+	return _is_rewardable_game_id(game_id) and tutorial_seen_games.has(game_id)
 
 func mark_game_tutorial_seen(game_id: String) -> bool:
-	if not WELCOME_GAME_IDS.has(game_id):
+	if not _is_rewardable_game_id(game_id):
 		return false
 	if tutorial_seen_games.has(game_id):
 		return true
@@ -163,40 +164,75 @@ func collect_time_postcard(value: String, frame_path: String, original_path: Str
 	changed.emit()
 	return true
 
-func complete_game(game_id: String, devil: bool, assisted: bool = false) -> void:
-	var game_number := _welcome_game_number(game_id)
-	if game_number == 0:
-		return
-	var completed_photo_id := "photo-welcome-game-%d" % game_number
+func complete_game(game_id: String, devil: bool, assisted: bool = false) -> bool:
+	var identity := GameCatalog.identity(game_id)
+	if identity.is_empty() or identity.id != game_id:
+		return false
+	var previous_photos := photos.duplicate(true)
+	var previous_achievements := achievements.duplicate(true)
+	var previous_coins := coins
+	var previous_receipts := wardrobe_rewarded_games.duplicate()
+	var previous_pending := platform_pending_achievements.duplicate()
+	var completed_photo_id: String = identity.photo_id
 	if not wardrobe_rewarded_games.has(game_id):
 		if not photos.has(completed_photo_id):
 			coins = mini(clampi(coins, 0, MAX_COINS) + 40, MAX_COINS)
 		wardrobe_rewarded_games.append(game_id)
-	grant_photo("photo-welcome-game-%d" % game_number, {"game_id": game_id, "assisted": assisted, "devil": false})
-	if devil:
-		grant_photo("photo-welcome-devil-%d" % game_number, {"game_id": game_id, "assisted": assisted, "devil": true})
-	_unlock("ACH_GAME_%03d" % game_number)
+	if not photos.has(completed_photo_id):
+		photos[completed_photo_id] = {"game_id": game_id, "assisted": assisted, "devil": false}
+	if devil and not photos.has(identity.devil_photo_id):
+		photos[identity.devil_photo_id] = {"game_id": game_id, "assisted": assisted, "devil": true}
+	var candidates: Array[String] = [identity.achievement_id]
 	if _has_complete_game_set("welcome", false):
-		_unlock("ACH_WELCOME_CLEAR")
+		candidates.append("ACH_WELCOME_CLEAR")
 	if _has_complete_game_set("welcome", true):
-		_unlock("ACH_WELCOME_DEVILS")
+		candidates.append("ACH_WELCOME_DEVILS")
 	var all_devils := true
 	for zone in ZONES:
 		if devil_count(zone) < 12:
 			all_devils = false
 			break
 	if all_devils:
-		_unlock("ACH_ALL_DEVILS")
+		candidates.append("ACH_ALL_DEVILS")
+	var newly_unlocked: Array[String] = []
+	for id in candidates:
+		if achievements.has(id):
+			continue
+		achievements[id] = true
+		newly_unlocked.append(id)
+		# Persist the platform queue with the reward before SteamBridge observes its signal.
+		if not platform_pending_achievements.has(id):
+			platform_pending_achievements.append(id)
+	if photos == previous_photos and wardrobe_rewarded_games == previous_receipts and newly_unlocked.is_empty():
+		return true
+	if not save_progress():
+		photos = previous_photos
+		achievements = previous_achievements
+		coins = previous_coins
+		wardrobe_rewarded_games = previous_receipts
+		platform_pending_achievements = previous_pending
+		return false
+	var previous_suppression := _suppress_changed_save
+	_suppress_changed_save = true
+	for id in newly_unlocked:
+		achievement_unlocked.emit(id)
 	changed.emit()
+	_suppress_changed_save = previous_suppression
+	return true
 
 ## Attach saved gameplay captures to cards already granted by complete_game.
 ## Ordinary and devil records share paths; this method never grants a card.
 func attach_welcome_game_photo_frames(game_id: String, saved_frames: Array, include_devil: bool, saved_original_frames: Array = []) -> bool:
-	var game_number := _welcome_game_number(game_id)
-	if game_number == 0:
+	if _welcome_game_number(game_id) == 0:
+		return false
+	return attach_game_photo_frames(game_id, saved_frames, include_devil, saved_original_frames)
+
+func attach_game_photo_frames(game_id: String, saved_frames: Array, include_devil: bool, saved_original_frames: Array = []) -> bool:
+	var identity := GameCatalog.identity(game_id)
+	if identity.is_empty() or identity.id != game_id:
 		push_warning("Cannot attach gameplay thumbnails for unknown game '%s'." % game_id)
 		return false
-	var ordinary_id := "photo-welcome-game-%d" % game_number
+	var ordinary_id: String = identity.photo_id
 	if not photos.has(ordinary_id) or not photos[ordinary_id] is Dictionary:
 		push_warning("Cannot attach gameplay thumbnails: collected ordinary photo '%s' is missing." % ordinary_id)
 		return false
@@ -211,7 +247,7 @@ func attach_welcome_game_photo_frames(game_id: String, saved_frames: Array, incl
 	var valid_originals := _validated_game_photo_original_frames(ordinary_id, saved_original_frames)
 	var previous_ordinary: Variant = photos[ordinary_id].get("frames", null)
 	var had_previous_ordinary: bool = photos[ordinary_id].has("frames")
-	var devil_id := "photo-welcome-devil-%d" % game_number
+	var devil_id: String = identity.devil_photo_id
 	var update_devil := include_devil and photos.has(devil_id) and photos[devil_id] is Dictionary
 	var previous_devil: Variant = photos[devil_id].get("frames", null) if update_devil else null
 	var had_previous_devil: bool = update_devil and photos[devil_id].has("frames")
@@ -724,13 +760,7 @@ func _welcome_game_number(game_id: String) -> int:
 	return index + 1 if index >= 0 else 0
 
 func _is_rewardable_game_id(game_id: String) -> bool:
-	if not game_id.begins_with("game-"):
-		return false
-	var number_text := game_id.trim_prefix("game-")
-	if not number_text.is_valid_int():
-		return false
-	var number := int(number_text)
-	return WELCOME_GAME_IDS.has(game_id) and game_id == "game-%03d" % number
+	return GameCatalog.identity(game_id).get("id", "") == game_id and not game_id.is_empty()
 
 func _has_complete_game_set(zone: String, devil: bool) -> bool:
 	for index in range(1, 13):
@@ -851,7 +881,7 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 	elif result.has("tutorial_seen_games"):
 		var safe_tutorial_seen: Array = result["tutorial_seen_games"]
 		for game_id: Variant in safe_tutorial_seen.duplicate():
-			if typeof(game_id) != TYPE_STRING or not WELCOME_GAME_IDS.has(str(game_id)):
+			if typeof(game_id) != TYPE_STRING or not _is_rewardable_game_id(str(game_id)):
 				push_warning("Invalid seen tutorial ID '%s' in progress file '%s'; skipping." % [str(game_id), path])
 				safe_tutorial_seen.erase(game_id)
 	if result.has("appearance"):
@@ -982,7 +1012,7 @@ func _apply_save(payload: Dictionary) -> void:
 	var loaded_tutorial_seen: Variant = payload.get("tutorial_seen_games", [])
 	if typeof(loaded_tutorial_seen) == TYPE_ARRAY:
 		for game_id: Variant in loaded_tutorial_seen:
-			if typeof(game_id) == TYPE_STRING and WELCOME_GAME_IDS.has(game_id) and not tutorial_seen_games.has(game_id):
+			if typeof(game_id) == TYPE_STRING and _is_rewardable_game_id(game_id) and not tutorial_seen_games.has(game_id):
 				tutorial_seen_games.append(game_id)
 	_loading = false
 
