@@ -39,7 +39,7 @@
 
 ### Task 2: Complete required CI matrix and timing evidence
 
-**Files:** Modify `.github/workflows/full-tests.yml`; only affected existing workflow contract tests if concretely necessary. No runner/game/assets edits.
+**Files:** Modify `.github/workflows/full-tests.yml`; add the focused workflow matrix/actual-catalog coverage contract to existing `tests/test_runtime_shards.py` if necessary. No partition implementation, runner/game/assets edits.
 
 **Interfaces:** Consume Task1 flags, four indices0/1/2/3 with count4. Preserve full-suite job and all triggers, shared source gates once as a required prerequisite, game-runtime becomes fail-fast:false matrix.
 
