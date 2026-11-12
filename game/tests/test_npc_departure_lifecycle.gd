@@ -8,11 +8,16 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
-	for role in ["ticket", "imp"]:
+	for role in ["ticket", "imp", "announcer"]:
 		var fixture := _fixture(role)
 		var controller: Node = fixture.controller
 		var actor: Node3D = fixture.actor
 		var sprite: Sprite3D = fixture.sprite
+		if not controller._has_sequence(role,"depart","right"):
+			_check(false,"Missing complete departure for "+role)
+			controller.release()
+			fixture.scene.free()
+			continue
 		for direction in ["right", "left"]:
 			var original: Dictionary = controller._animation_library.get_sequence(role, "settle", direction)
 			var before: int = controller._animation_library.cached_texture_count()
@@ -49,6 +54,15 @@ func _run() -> void:
 		_check(actor.position == Vector3.ZERO and controller._records[0].authored_patrol.phase == 0.0, "first walking contact begins at the planted root with a fresh stride")
 		controller._process(1.0/60.0)
 		_check(actor.position.x > 0.0 and controller._records[0].authored_patrol.phase > 0.0, "body and foot phase advance only when actual travel begins")
+		var held_root := actor.position
+		var held_patrol: RefCounted=controller._records[0].authored_patrol
+		controller.configure_motion(fixture.camera,Callable(),false)
+		controller._player.advance(2.0)
+		controller._process(0.3)
+		_check(actor.position==held_root and String(controller._records[0].action) in ["stand","idle"] and controller._records[0].authored_patrol==null,"lost ground provider freezes the complete actor without a legacy-track jump or in-place walk")
+		controller.configure_motion(fixture.camera,_ground,false)
+		_check(controller._records[0].authored_patrol==held_patrol,"provider recovery retains the registered route origin and bounded patrol object")
+		_check(_until(controller,"depart") and _until(controller,"walk") and actor.position==held_root,"provider recovery starts a fresh planted pivot before resuming travel")
 		controller.set_reduced_motion(true)
 		controller._process(2.0)
 		_check(actor.position == Vector3.ZERO and sprite.texture != null, "reduced motion restores a complete stationary actor")

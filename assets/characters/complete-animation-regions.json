@@ -15,7 +15,7 @@
     "ticket": "Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.",
     "imp": "42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.",
     "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered.",
-    "route_pivots": "NPC settle endpoints share idle/front/frame_0 exactly. Ticket and imp departures replay approved settle poses in reverse, reusing existing source regions; no additional drawings."
+    "route_pivots": "All three NPCs share exact idle neutral endpoints and replay approved settle poses in reverse for grounded departures; no additional drawings."
   },
   "actors": {
     "traveller": {
@@ -15087,6 +15087,218 @@
             }
           ],
           "return_direction": "front"
+        }
+      },
+      "depart": {
+        "right": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                86,
+                44,
+                88,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  149
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                996,
+                18,
+                210,
+                394
+              ],
+              "anchors": {
+                "feet": [
+                  92,
+                  392
+                ],
+                "head": [
+                  111,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                567,
+                17,
+                207,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  105,
+                  393
+                ],
+                "head": [
+                  113,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                159,
+                17,
+                202,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  97,
+                  393
+                ],
+                "head": [
+                  115,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            }
+          ]
+        },
+        "left": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/announcer-front-actions-v2.png",
+              "region": [
+                86,
+                44,
+                88,
+                151
+              ],
+              "anchors": {
+                "feet": [
+                  43,
+                  149
+                ],
+                "head": [
+                  44,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "bottom_8px_two_contact_midpoint",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                983,
+                461,
+                209,
+                395
+              ],
+              "anchors": {
+                "feet": [
+                  105,
+                  393
+                ],
+                "head": [
+                  101,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                559,
+                460,
+                206,
+                396
+              ],
+              "anchors": {
+                "feet": [
+                  113,
+                  394
+                ],
+                "head": [
+                  96,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-settle-sides-v1.png",
+              "region": [
+                129,
+                460,
+                208,
+                396
+              ],
+              "anchors": {
+                "feet": [
+                  127,
+                  394
+                ],
+                "head": [
+                  95,
+                  2
+                ]
+              },
+              "anchor_method": {
+                "feet_method": "fixed_authored_cell_root_and_shared_row_ground",
+                "head_method": "central_upper_alpha_hat_hair_top"
+              },
+              "source_scale": 0.4,
+              "layers": []
+            }
+          ]
         }
       }
     }

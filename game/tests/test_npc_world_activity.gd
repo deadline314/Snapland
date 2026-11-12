@@ -68,8 +68,9 @@ func _run() -> void:
 	var baseline_root_position: Vector3 = announcer_root.position
 	var start_point: Vector3 = points["announcer"].position
 	_world.npc_activity._player.seek(0.0, true)
-	_world.npc_activity._player.advance(1.2)
-	_world.npc_activity._process(0.0)
+	for _step in 90:
+		_world.npc_activity._player.advance(1.0/60.0)
+		_world.npc_activity._process(1.0/60.0)
 	assert(is_equal_approx(announcer_root.position.x, baseline_root_position.x + 0.6), "announcer side-step stays on its open route bound (actual %.12f, expected %.12f)" % [announcer_root.position.x, baseline_root_position.x + 0.6])
 	assert(is_equal_approx(float(points["announcer"].position.x), start_point.x + 0.6), "the world interaction point follows the announcer root")
 	assert(is_equal_approx(points.announcer.marker.global_position.x,announcer_root.global_position.x), "announcer marker follows the route with its interaction point")

@@ -471,7 +471,7 @@ def build() -> tuple[dict,dict]:
         neutral = actors[role]["idle"]["front"]["frames"][0]
         for sequence in actors[role]["settle"].values():
             sequence["frames"][-1] = copy.deepcopy(neutral)
-    for role in ("ticket", "imp"):
+    for role in ("ticket", "imp", "announcer"):
         add_route_departures(actors[role])
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
@@ -489,7 +489,7 @@ def build() -> tuple[dict,dict]:
                     for direction, entry in directions.items():
                         actors[actor][action].setdefault(direction, entry)
     manifest={"schema_version":1,"description":"Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.","runtime_aliases":{"traveller":{"station_stand":"idle/front/frame_0 (same authored frame; not a separate animation)"},"ticket":{"special":"idle_gesture/front (runtime alias; no duplicate frames)"}},"coverage_notes":{"traveller":TRAVELLER_COVERAGE_NOTE,"traveller_outfit_coral":"Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.","ticket":"Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.","imp":"42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.","announcer":"Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."},"actors":actors}
-    manifest["coverage_notes"]["route_pivots"] = "NPC settle endpoints share idle/front/frame_0 exactly. Ticket and imp departures replay approved settle poses in reverse, reusing existing source regions; no additional drawings."
+    manifest["coverage_notes"]["route_pivots"] = "All three NPCs share exact idle neutral endpoints and replay approved settle poses in reverse for grounded departures; no additional drawings."
     apply_authoring_metadata(manifest)
     return manifest,reports
 

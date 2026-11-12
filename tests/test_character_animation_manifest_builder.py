@@ -26,7 +26,7 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
 
     def test_departures_reuse_complete_turn_sources_without_changing_other_actions(self):
         after, _ = BUILDER.build()
-        for role in ("ticket", "imp"):
+        for role in ("ticket", "imp", "announcer"):
             for direction in ("right", "left"):
                 departure = after["actors"][role].get("depart", {}).get(direction, {})
                 self.assertEqual(4, len(departure.get("frames", [])))
@@ -58,7 +58,7 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
             for action, value in actions.items():
                 if actor in ("ticket", "imp", "announcer") and action == "settle":
                     continue
-                if actor in ("ticket", "imp") and action == "depart":
+                if actor in ("ticket", "imp", "announcer") and action == "depart":
                     continue
                 self.assertEqual(value, after["actors"][actor][action], (actor, action))
         for key in ("outfit_modes", "outfit_required_poses"):

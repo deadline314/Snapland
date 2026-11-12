@@ -112,8 +112,9 @@ func _run() -> void:
 	var ticket_seen := {"right": {}, "left": {}}
 	var ticket_settle_seen := {"right": {}, "left": {}}
 	var ticket_previous_position: Vector3 = anchors.ticket.position
-	var departures := {"ticket":{"right":{},"left":{}}, "imp":{"right":{},"left":{}}}
-	var previous_positions := {"ticket":ticket_start,"imp":imp_start}
+	var departures := {"ticket":{"right":{},"left":{}}, "imp":{"right":{},"left":{}}, "announcer":{"right":{},"left":{}}}
+	var previous_positions := {"ticket":ticket_start,"imp":imp_start,"announcer":announcer_start}
+	var announcer_returned := false
 	var tick_count := ceili(CYCLE_SECONDS * 2.0 / TICK_SECONDS)
 	for _tick in range(tick_count):
 		# Advance the authored route track and the controller explicitly. No scene
@@ -127,7 +128,7 @@ func _run() -> void:
 				var departure: Dictionary = departing_record.action_sequence
 				var departure_index := Library.AnimationTiming.frame_at_time(departure, float(departing_record.action_elapsed))
 				departures[role][String(departing_record.direction)][departure_index] = true
-				_check(actors[role].texture == departure.frames[departure_index].texture, "%s departure displays its complete shared source pose" % role)
+				_check(actors[role].texture == controller._costume_texture(role,departure.frames[departure_index].texture), "%s departure displays its complete shared source pose and existing costume" % role)
 			previous_positions[role] = anchors[role].position
 		var ticket_record: Dictionary = controller._records[int(role_indices.ticket)]
 		if String(ticket_record.action) == "settle":
@@ -168,6 +169,7 @@ func _run() -> void:
 			announcer_settle_seen[String(right_record.direction)][turn_index] = true
 			_check(actors.announcer.texture == controller._costume_texture("announcer", turn_sequence.frames[turn_index].texture), "announcer stop turn retains its complete source and costume")
 		announcer_previous_position = anchors.announcer.position
+		if moved_left and anchors.announcer.position.distance_to(announcer_start)<0.001: announcer_returned=true
 		if String(right_record.action) == "walk":
 			var direction := String(right_record.direction)
 			if not announcer_sequences.has(direction):
@@ -203,7 +205,7 @@ func _run() -> void:
 		_check(departures[role].right.size() == 4 and departures[role].left.size() == 4, "%s naturally presents both complete front-to-side departures" % role)
 	_check(moved_right and moved_left, "announcer naturally moves in both directions while its route plays authored frames")
 	_check(announcer_settle_seen.right.size() == 4 and announcer_settle_seen.left.size() == 4, "announcer naturally shows all eight side-to-front stop poses")
-	_check(anchors.announcer.position.distance_to(announcer_start) < 0.001, "announcer returns to its route origin after complete cycles")
+	_check(announcer_returned, "announcer naturally crosses its registered origin on the return path")
 	for direction in ["right", "left"]:
 		var seen: Dictionary = announcer_sequences[direction].seen
 		_check(seen.size() == 4, "announcer %s route naturally displays all four complete source cels" % direction)

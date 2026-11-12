@@ -32,7 +32,7 @@ const ACTION_SIDE_PADDING := 2
 const NpcWalkMotionScript = preload("res://game/world/npc_walk_motion.gd")
 const NpcCostumeScript = preload("res://game/world/npc_costume.gd")
 const AuthoredPatrolScript = preload("res://game/world/authored_npc_patrol.gd")
-const AUTHORED_PATROL_PROFILES := {"imp":{}, "ticket":{"minimum_offset":0.0, "maximum_offset":1.2, "speed":0.9, "stride":1.2, "rest_seconds":4.0, "initial_rest":2.0}}
+const AUTHORED_PATROL_PROFILES := {"imp":{}, "ticket":{"minimum_offset":0.0, "maximum_offset":1.2, "speed":0.9, "stride":1.2, "rest_seconds":4.0, "initial_rest":2.0}, "announcer":{"minimum_offset":-0.6,"maximum_offset":0.6,"speed":0.6,"stride":0.36,"rest_seconds":1.9,"initial_rest":0.0}}
 
 static var _action_frame_cache: Dictionary = {}
 static var _action_atlas: Texture2D
@@ -397,14 +397,28 @@ func configure_motion(view_camera: Camera3D, ground_height: Callable, enabled: b
 
 func _setup_authored_patrol(index: int) -> void:
 	var previous: RefCounted = _records[index].get("authored_patrol")
+	if previous==null: previous=_records[index].get("suspended_authored_patrol")
+	_records[index]["suspended_authored_patrol"]=previous
 	_records[index]["authored_patrol"] = null
 	_records[index]["distance_driven_walk"] = false
 	var role := String(_records[index].role)
-	if _motion_enabled or not AUTHORED_PATROL_PROFILES.has(role) or not _motion_ground.is_valid(): return
-	if not _has_sequence(role, "walk", "right") or not _has_sequence(role, "walk", "left"): return
-	var anchor := _records[index].anchor.get_ref() as Node3D
-	var patrol = previous if previous != null else AuthoredPatrolScript.new()
-	if patrol.configure(anchor, _motion_ground, Callable(), AUTHORED_PATROL_PROFILES[role]): _records[index]["authored_patrol"] = patrol
+	if _motion_enabled:
+		_records[index]["suspended_authored_patrol"]=null
+		_records[index]["authored_route_selected"]=false
+		for track in _records[index].tracks: _animation.track_set_enabled(track,true)
+		return
+	if AUTHORED_PATROL_PROFILES.has(role) and _motion_ground.is_valid() and _has_sequence(role,"walk","right") and _has_sequence(role,"walk","left"):
+		var anchor := _records[index].anchor.get_ref() as Node3D
+		var patrol = previous if previous != null else AuthoredPatrolScript.new()
+		if patrol.configure(anchor,_motion_ground,Callable(),AUTHORED_PATROL_PROFILES[role]):
+			_records[index]["authored_patrol"]=patrol
+			_records[index]["suspended_authored_patrol"]=null
+			_records[index]["authored_route_selected"]=true
+			# One owner moves the root. The legacy track remains available only
+			# for registrations without a ground provider or the optional rig.
+			for track in _records[index].tracks: _animation.track_set_enabled(track,false)
+	if previous!=null and _records[index].authored_patrol==null:
+		_play_actor_action(index,"stand","front",true)
 
 func _update_authored_patrol(index: int, delta: float) -> void:
 	if index < 0 or index >= _records.size(): return
@@ -592,7 +606,7 @@ func _process(delta: float) -> void:
 			if not _dialogue_hold:
 				_update_short_route(record,delta)
 				_update_authored_patrol(_record_index(record), delta)
-			if not _dialogue_hold and String(record.role) == "announcer":
+			if not _dialogue_hold and String(record.role) == "announcer" and not bool(record.get("authored_route_selected",false)):
 				_update_announcer_action(record)
 			var record_index := _record_index(record)
 			if record_index >= 0:
