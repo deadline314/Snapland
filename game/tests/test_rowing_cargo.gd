@@ -26,6 +26,9 @@ func _test_physics_and_copies() -> void:
 	var b = Model.new()
 	a.reset()
 	b.reset()
+	var initial: Dictionary = a.snapshot()
+	var pickup_distance: float = initial.position.distance_to(initial.cargo[0].position)
+	_expect(initial.carrying.is_empty() and initial.cargo[0].status == "waiting" and pickup_distance > Model.BOAT_RADIUS + Model.CRATE_RADIUS and pickup_distance <= Model.PICKUP_RADIUS, "empty initial hull is separate from waiting cargo but within pickup reach")
 	for i in 180:
 		for model in [a, b]:
 			model.set_rudder(0.3)
@@ -243,7 +246,7 @@ func _test_wall_recovery_route() -> void:
 	model._velocity = Vector2(-3.0, 0.0)
 	model.step(0.25)
 	_expect(model.snapshot().wall_collisions == 1 and model.snapshot().crate_impacts == 0, "wall fixture records only hull collision")
-	navigate(model, Model.START)
+	navigate(model, Model.CARGO_STARTS[0])
 	solve(model)
 	_expect(model.snapshot().success and model.snapshot().devil, "recovering from an actual wall bump preserves earned devil")
 
