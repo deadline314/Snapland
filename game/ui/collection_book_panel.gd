@@ -20,6 +20,7 @@ var _definitions: Array = []
 var _time_phases: Array = []
 var _photo_loader: Callable
 var _category := "normal"
+var _region := "welcome"
 var _page := 0
 var _spread: GridContainer
 var _spread_surface: Control
@@ -47,7 +48,8 @@ func _notification(what: int) -> void:
 		_layout_book_controls()
 		_apply_responsive_spread_columns()
 
-func setup(progress: Node, definitions: Array, phases: Array, photo_loader: Callable) -> void:
+func setup(progress: Node, definitions: Array, phases: Array, photo_loader: Callable, region: String = "welcome") -> void:
+	_region="harbor" if region=="harbor" else "welcome"
 	_progress=progress
 	_definitions=definitions.duplicate(true)
 	_time_phases=phases.duplicate(true)
@@ -123,6 +125,18 @@ func _ready() -> void:
 	_nav=HBoxContainer.new()
 	_nav.name="AlbumPageControls"
 	add_child(_nav)
+	var regions := OptionButton.new()
+	regions.name="AlbumRegionSelector"
+	regions.add_item("迎賓大道")
+	regions.add_item("潮汐碼頭")
+	regions.select(1 if _region=="harbor" else 0)
+	regions.tooltip_text="切換園區收藏；已保存的迎賓原圖仍可查看。"
+	regions.item_selected.connect(func(index: int):
+		_region="harbor" if index==1 else "welcome"
+		_page=0
+		_refresh_book()
+	)
+	_nav.add_child(regions)
 	var previous := Paper.button("← 上一頁",func(): _change_page(-1),_nav)
 	previous.name="AlbumPreviousPage"
 	previous.custom_minimum_size=Vector2(130,44)
@@ -134,7 +148,7 @@ func _ready() -> void:
 	_page_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	_page_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	_nav.add_child(_page_label)
-	_nav.move_child(_page_label,1)
+	_nav.move_child(_page_label,2)
 	_collection_state=Paper.label("",16,Paper.GOLD)
 	_collection_state.name="AlbumCollectionState"
 	add_child(_collection_state)
@@ -146,6 +160,7 @@ func _ready() -> void:
 	_refresh_book()
 
 func _layout_book_controls() -> void:
+	if not is_inside_tree(): return
 	if not is_instance_valid(_scroll):
 		return
 	var scale_factor := Paper.physical_scale(self)
@@ -188,19 +203,26 @@ func _refresh_book() -> void:
 	if _progress==null or not is_instance_valid(_spread):
 		return
 	_photo_details.text = _category_prompt()
-	_normal_button.text="普通拍貼  %d / 18" % int(_progress.normal_count())
-	_devil_button.text="小惡魔  %d / 12" % int(_progress.devil_count())
+	_normal_button.text="普通拍貼  %d / 18" % int(_progress.normal_count_for_zone(_region))
+	_devil_button.text="小惡魔  %d / 12" % int(_progress.devil_count(_region))
 	var time_count := 0
 	for phase in _time_phases:
 		if phase is Dictionary and _progress.photos.has(TimeOfDay.postcard_id(str(phase.get("id","")))):
 			time_count+=1
 	_time_button.text="四時明信片  %d / 4" % time_count
-	_collection_state.visible=int(_progress.normal_count())+int(_progress.devil_count())+time_count==0
+	_collection_state.visible=int(_progress.normal_count_for_zone(_region))+int(_progress.devil_count(_region))+time_count==0
 	_collection_state.text="收藏簿還是空白的。拍照留下第一筆記錄。"
 	if Paper.physical_scale(self)<0.9:
-		_normal_button.text="普通 %d / 18" % int(_progress.normal_count())
-		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count())
+		_normal_button.text="普通 %d / 18" % int(_progress.normal_count_for_zone(_region))
+		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count(_region))
 		_time_button.text="四時 %d / 4" % time_count
+	_time_button.visible=_region=="welcome"
+	_empty_message.text="潮汐碼頭的遊戲與當地收藏仍在準備中。可切換迎賓大道，查看已保存的照片與原圖。" if _region=="harbor" else "這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
+	_collection_state.visible=_region=="welcome" and _collection_state.visible
+	if _region=="harbor":
+		_normal_button.text="普通拍貼 · 準備中"
+		_devil_button.text="小惡魔 · 準備中"
+		_photo_details.text="潮汐碼頭｜目前沒有可取得的當地收藏。"
 	var entries := _entries()
 	var capacity := _page_capacity()
 	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
@@ -232,6 +254,7 @@ func _refresh_book() -> void:
 	call_deferred("_fit_album_cards_to_available_height")
 
 func _on_viewport_size_changed() -> void:
+	if not is_inside_tree(): return
 	var scale_factor := Paper.physical_scale(self)
 	Paper.adapt_menu(self,scale_factor)
 	_set_tab_labels(scale_factor)
@@ -244,8 +267,9 @@ func _on_viewport_size_changed() -> void:
 func _set_tab_labels(scale_factor: float) -> void:
 	if not is_instance_valid(_normal_button):
 		return
-	var normal_count := int(_progress.normal_count()) if _progress != null else 0
-	var devil_count := int(_progress.devil_count()) if _progress != null else 0
+	if _region=="harbor": return
+	var normal_count := int(_progress.normal_count_for_zone(_region)) if _progress != null else 0
+	var devil_count := int(_progress.devil_count(_region)) if _progress != null else 0
 	var time_count := 0
 	if _progress != null:
 		for phase in _time_phases:
@@ -284,6 +308,7 @@ func _queue_profile_rebuild() -> void:
 	call_deferred("_rebuild_profile")
 
 func _rebuild_profile() -> void:
+	if not is_inside_tree(): return
 	_rebuild_queued=false
 	var profile := "%s:%s:%s" % [Paper.physical_scale(self),_compact_cards(),_page_capacity()]
 	if profile==_built_profile:
@@ -292,6 +317,7 @@ func _rebuild_profile() -> void:
 	_refresh_book()
 
 func _fit_album_cards_to_available_height() -> void:
+	if not is_inside_tree(): return
 	_layout_book_controls()
 	_queue_profile_rebuild()
 	if not is_instance_valid(_spread) or not is_instance_valid(_nav):
@@ -323,6 +349,7 @@ func _page_capacity() -> int:
 	return PAGE_SIZE if physical_width >= 1200.0 or get_viewport_rect().size.y*Paper.physical_scale(self)>=550.0 else 2
 
 func _entries() -> Array[Dictionary]:
+	if _region=="harbor": return []
 	var entries: Array[Dictionary]=[]
 	match _category:
 		"normal":

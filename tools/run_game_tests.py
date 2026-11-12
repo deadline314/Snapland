@@ -34,6 +34,9 @@ PASS_MARKERS = {
     "pixel tutorial page tests": "PASS: native-matching tutorial39steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
     "pixel UI customization tests": "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls",
     "pixel UI minigame tests": "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes",
+    "region progress tests": "PASS: region progress defaults, migration, transactions, and rollback",
+    "harbor world tests": "PASS: harbor world terrain, tide safety, free ferry, map alignment and bounded reentry (7017 checks)",
+    "region travel tests": "PASS: region travel admission, lifecycle, scoped UI, restart, and unchanged rewards",
     "game startup": "PASS: game startup and clean shutdown",
     "core runtime tests": "PASS: core runtime checks",
     "test/review save isolation tests": "PASS: save guard child processes use a unique verified fake Godot profile; every rejected-path case preserves seeded sidecars",
@@ -153,7 +156,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith("boat prologue ") else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith("boat prologue ") or label in {"region progress tests", "harbor world tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -195,6 +198,9 @@ def main(argv: list[str] | None = None) -> int:
         checks = [
             ("clean project import", [executable, "--headless", "--editor", "--path", str(ROOT), "--rendering-method", "gl_compatibility", "--import", "--quit"]),
             ("game startup", common + ["--", "--smoke-test"]),
+            ("region progress tests", common + ["--script", "res://game/tests/test_region_progress.gd"]),
+            ("harbor world tests", common + ["--script", "res://game/tests/test_harbor_world.gd"]),
+            ("region travel tests", common + ["res://game/tests/test_region_travel.tscn"]),
             ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
             ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
             ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),

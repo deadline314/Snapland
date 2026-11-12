@@ -67,7 +67,7 @@ func _test_map() -> void:
 	var harbor := _main.overlay.find_child("MapGate_harbor",true,false) as Button
 	if harbor!=null:
 		await _activate(harbor)
-		_check(_has_label(map_detail,"6 張") and _has_label(map_detail,"準備中"),"harbor detail explains its actual threshold and unavailable state")
+		_check(_has_label(map_detail,"6 張") and _has_label(map_detail,"尚未達資格"),"harbor detail explains its actual threshold and admission state")
 		_check(_main.world.avatar.global_position==original_position,"selecting a map destination does not teleport the avatar")
 	var station := _main.overlay.find_child("MapStop_game-010",true,false) as Button
 	if station!=null:

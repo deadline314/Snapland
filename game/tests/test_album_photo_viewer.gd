@@ -8,6 +8,9 @@ class FakeProgress extends Node:
 	var quests: Dictionary = {}
 	var coins := 120
 
+	func normal_count_for_zone(zone: String) -> int:
+		return normal_count() if zone=="welcome" else 0
+
 	func normal_count() -> int:
 		var count := 0
 		for photo_id in photos:

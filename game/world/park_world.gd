@@ -1762,7 +1762,7 @@ func _build_gates() -> void:
 		_local_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
 		_local_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
 		_point("gate:"+zone["id"],zone["name"],pos+Vector3(0,0,2))
-		_local_label("%d 張 · 準備中"%zone["threshold"],pos+Vector3(0,1.1,0.48),19)
+		_local_label("6 張 · 不消耗" if zone["id"]=="harbor" else "%d 張 · 準備中"%zone["threshold"],pos+Vector3(0,1.1,0.48),19)
 
 func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 	match index:

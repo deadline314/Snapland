@@ -186,6 +186,15 @@ class RuntimeResultContractTests(unittest.TestCase):
             for marker in ["", PASS_MARKERS[label] + " suffix", "quoted " + PASS_MARKERS[label]]:
                 self.assertIn("without its PASS marker", result_error(label, self.result(marker, expected), save) or "")
 
+    def test_region_suites_require_exact_clean_completion(self) -> None:
+        for label in ["region progress tests", "harbor world tests", "region travel tests"]:
+            marker = PASS_MARKERS[label]
+            self.assertIsNone(result_error(label, self.result(marker)))
+            for output in ["", marker + " suffix", "quoted " + marker]:
+                self.assertIn("without its PASS marker", result_error(label, self.result(output)) or "")
+            self.assertIn("logged engine errors", result_error(label, self.result(marker, "ERROR: resource failed")) or "")
+            self.assertIn("exited 1", result_error(label, self.result(marker, code=1)) or "")
+
     def test_newly_registered_contracts_require_real_completion(self) -> None:
         cases = {
             "source registration coordinate tests": "PASS: body registration, independent palette/boot coordinates and immutable rebuild",

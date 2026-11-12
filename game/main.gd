@@ -1,5 +1,6 @@
 extends Node
 const WorldScene = preload("res://game/world/park_world.gd")
+const HarborWorld = preload("res://game/world/harbor_world.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
@@ -13,6 +14,8 @@ const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
 const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 const BoatPrologueStage = preload("res://game/story/boat_prologue_stage.gd")
 var world: Node3D
+var world_region := "welcome"
+var changing_region := false
 var audio: Node
 var story: RefCounted
 var ui: Control
@@ -68,31 +71,25 @@ const STORY_CELEBRATION := {"quest-001": ["imp", "dance"], "quest-002": ["announ
 func _ready() -> void:
 	get_tree().auto_accept_quit=false
 	capture_mode=OS.get_cmdline_user_args().has("--capture")
-	world=WorldScene.new()
+	var welcome_review := capture_mode or OS.get_cmdline_user_args().has("--smoke-art")
+	world_region="welcome" if welcome_review else Progress.current_region
+	world=HarborWorld.new() if world_region=="harbor" else WorldScene.new()
 	add_child(world)
 	audio=Audio.new()
 	add_child(audio)
-	world.coastal_play.note_requested.connect(audio.play_note)
 	story=Story.new()
 	definitions=Session.definitions()
 	_build_ui()
-	world.interaction_requested.connect(_interact)
-	world.area_changed.connect(func(name: String):
-		if quitting: return
-		area_label.text=name
-		_update_breadcrumb(name)
-		_sync_audio_environment()
-		if session==null: audio.play_context("harbor" if name=="海風碼頭" else "plaza")
-	)
+	_bind_world()
 	Progress.changed.connect(_refresh)
 	Localization.locale_changed.connect(_on_locale_changed)
 	Progress.achievement_unlocked.connect(_achievement_toast)
 	_refresh()
-	audio.play_context("harbor")
+	audio.play_context(_island_audio_context())
 	if capture_mode:
 		world.player.position=Vector3(0,0.4,9)
 		_capture_sequence.call_deferred()
-	elif not Progress.intro_seen:
+	elif world_region=="welcome" and not Progress.intro_seen:
 		if not Progress.prologue_seen: _show_boat_prologue(true)
 		else: _show_arrival()
 	var user_args := OS.get_cmdline_user_args()
@@ -101,6 +98,57 @@ func _ready() -> void:
 			_smoke_art_test.call_deferred()
 		else:
 			_smoke_test.call_deferred()
+
+func _bind_world() -> void:
+	if is_instance_valid(world.coastal_play):
+		world.coastal_play.note_requested.connect(audio.play_note)
+	world.interaction_requested.connect(_interact)
+	world.area_changed.connect(_on_world_area_changed.bind(world))
+	_on_world_area_changed(world.current_area,world)
+
+func _on_world_area_changed(area: String, source: Node3D) -> void:
+	if quitting or changing_region or source!=world: return
+	area_label.text=area
+	_update_breadcrumb(area)
+	_sync_audio_environment()
+	if session==null: audio.play_context(_island_audio_context())
+
+func _island_audio_context() -> String:
+	return "harbor" if world_region=="harbor" or (is_instance_valid(world) and world.current_area=="海風碼頭") else "plaza"
+
+func _travel_to_region(destination: String) -> bool:
+	if quitting or changing_region or session!=null or capture_mode or is_instance_valid(boat_stage) or modal_kind not in ["","gate","map","tasks"]:
+		return false
+	if destination not in ["welcome","harbor"] or destination==world_region: return false
+	if destination=="harbor" and Progress.normal_count()<6:
+		_notice("還差 %d 張不同普通拍貼；收藏不消耗。" % (6-Progress.normal_count()))
+		return false
+	if not Progress.set_current_region(destination):
+		_notice("旅程尚未保存，請再試一次。")
+		return false
+	changing_region=true
+	world.blocked=true
+	# Interaction signals can still be on the old world's stack.
+	_replace_region.call_deferred(destination,true)
+	return true
+
+func _replace_region(destination: String, returning: bool = false) -> void:
+	if quitting: return
+	_close()
+	world.free()
+	world_region=destination
+	world=HarborWorld.new() if destination=="harbor" else WorldScene.new()
+	add_child(world)
+	if returning and destination=="welcome":
+		for point in world.points:
+			if point.id=="gate:harbor":
+				world.player.position=point.position+Vector3(0,0.3,1.8)
+				world.player.velocity=Vector3.ZERO
+	world.current_area=world._area_at_position(world.player.position)
+	_bind_world()
+	changing_region=false
+	_on_world_area_changed(world.current_area,world)
+	_refresh()
 
 func _smoke_test() -> void:
 	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty():
@@ -589,6 +637,11 @@ func _back(parent: Node) -> void:
 
 func _refresh() -> void:
 	if not is_instance_valid(ui): return
+	if not changing_region and world_region!=Progress.current_region and not capture_mode and not OS.get_cmdline_user_args().has("--smoke-art"):
+		changing_region=true
+		world.blocked=true
+		_replace_region.call_deferred(Progress.current_region)
+		return
 	Paper.set_font_style(str(Progress.settings.get("font_style", "pixel")))
 	Paper.set_reduced_motion(bool(Progress.settings.get("reduced_motion",false)))
 	Paper.set_text_scale(float(Progress.settings.get("ui_scale",1.0)))
@@ -598,8 +651,8 @@ func _refresh() -> void:
 	if is_instance_valid(ui): ui.layout_direction=Control.LAYOUT_DIRECTION_RTL if Localization.is_rtl() else Control.LAYOUT_DIRECTION_LTR
 	_adapt_hud()
 	_adapt_open_menu()
-	normal_count_label.text=Localization.text("hud.normal_count", {"count": Progress.normal_count()})
-	devil_count_label.text=Localization.text("hud.devil_count", {"count": Progress.devil_count()})
+	normal_count_label.text=Localization.text("hud.normal_count", {"count": Progress.normal_count_for_zone(world_region)})
+	devil_count_label.text=Localization.text("hud.devil_count", {"count": Progress.devil_count(world_region)})
 	coin_count_label.text=Localization.text("hud.coins", {"count": Progress.coins})
 	var phase := TimeOfDay.phase_for_id(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE))
 	phase_label.text="%s %s"%[str(phase.get("label","中午")),str(phase.get("clock","12:00"))]
@@ -609,7 +662,7 @@ func _refresh() -> void:
 		if step>0 and step<3:
 			var quest: Dictionary=story.quest_data(id)
 			quest_label.text=quest.get("title",id)+"  %d / 3"%step
-	quest_label.visible=not quest_label.text.is_empty()
+	quest_label.visible=world_region=="welcome" and not quest_label.text.is_empty()
 	audio.apply_settings(Progress.settings)
 	world.apply_settings(Progress.settings)
 	_apply_time_phase()
@@ -623,7 +676,7 @@ func _refresh() -> void:
 		DisplayServer.window_set_mode(mode)
 
 func _process(delta: float) -> void:
-	if quitting: return
+	if quitting or changing_region: return
 	if session!=null and DisplayServer.get_name()!="headless" and session.elapsed>=next_snapshot and not session.ended:
 		next_snapshot=session.elapsed+0.9
 		_sample_photo.call_deferred()
@@ -649,14 +702,15 @@ func _process(delta: float) -> void:
 func _context_prompt() -> String:
 	if world.is_riding(): return "E   下來走走"
 	var id := str(world.nearest.get("id",""))
-	var play_prompt: String=world.coastal_play.prompt(id)
-	if world.coastal_play.discoveries.controlling: return play_prompt
+	var play_prompt: String=world.coastal_play.prompt(id) if is_instance_valid(world.coastal_play) else ""
+	if is_instance_valid(world.coastal_play) and is_instance_valid(world.coastal_play.discoveries) and world.coastal_play.discoveries.controlling: return play_prompt
 	if not play_prompt.is_empty(): return "E   "+play_prompt
 	if id.begins_with("game-"): return "E   玩"+str(_definition(id).get("name","這個遊戲"))
 	var actor_prompts := {"guide":"和票票說話","quest-001":"和小角說話","quest-002":"和阿浪說話","arrival":"重看上島導覽","ride-tide":"搭乘貝殼輪"}
 	return "E   "+str(actor_prompts.get(id,world.nearest.get("label","附近設施")))
 
 func _input(event: InputEvent) -> void:
+	if quitting or changing_region: return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_T:
 		if modal_kind == "time":
 			_close()
@@ -668,9 +722,9 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if quitting: return
+	if quitting or changing_region: return
 	if event.is_action_pressed("pause"):
-		if modal_kind=="" and session==null and world.coastal_play.discoveries.end_control(): pass
+		if modal_kind=="" and session==null and is_instance_valid(world.coastal_play) and is_instance_valid(world.coastal_play.discoveries) and world.coastal_play.discoveries.end_control(): pass
 		elif modal_kind=="dialogue": _cancel_dialogue()
 		elif modal_kind!="": _close()
 		elif session==null: _show_pause()
@@ -704,7 +758,7 @@ func _apply_time_phase() -> void:
 func _sync_audio_environment() -> void:
 	if not is_instance_valid(audio):
 		return
-	var area := "harbor" if is_instance_valid(world) and world.current_area == "海風碼頭" else "plaza"
+	var area := _island_audio_context()
 	var phase := TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE))
 	audio.set_island_state(area, phase)
 
@@ -923,7 +977,7 @@ func _show_pause() -> void:
 	collection.name="PauseCollectionStatus"
 	collection.add_theme_constant_override("separation",2)
 	island.add_child(collection)
-	for stat in [["拍貼","%d / 18"%Progress.normal_count(),Paper.GOLD],["小惡魔","%d / 12"%Progress.devil_count(),Paper.CORAL],["遊園幣","%d"%Progress.coins,Paper.GOLD]]:
+	for stat in [["拍貼","%d / 18"%Progress.normal_count_for_zone(world_region),Paper.GOLD],["小惡魔","%d / 12"%Progress.devil_count(world_region),Paper.CORAL],["遊園幣","%d"%Progress.coins,Paper.GOLD]]:
 		var stat_row := HBoxContainer.new()
 		stat_row.add_theme_constant_override("separation",8)
 		collection.add_child(stat_row)
@@ -966,7 +1020,7 @@ func _show_pause() -> void:
 		var button := _pause_action(column,str(entry[0]),entry[1],str(entry[2]),str(entry[3]))
 		button.name=str(entry[2])
 		button.tooltip_text=str(entry[0])
-	if session==null:
+	if session==null and world_region=="welcome":
 		var replay := _pause_action(island_actions,"重看船上序章",_show_boat_prologue,"PauseBoatPrologueButton","shell")
 		replay.tooltip_text="重看晚風號船上片刻，結束後回到原地。"
 	if session!=null:
@@ -1025,7 +1079,7 @@ func _pause_action(parent: VBoxContainer,label: String,callback: Callable,node_n
 	return button
 
 func _show_boat_prologue(first_run: bool = false) -> void:
-	if session!=null or is_instance_valid(boat_stage) or quitting: return
+	if session!=null or is_instance_valid(boat_stage) or quitting or changing_region or world_region!="welcome": return
 	if modal_kind=="pause": _close()
 	var lines: Array = story.prologue_lines()
 	if lines.is_empty():
@@ -1191,8 +1245,21 @@ func _dialogue_panel_resized() -> void:
 	center.offset_bottom=-20.0/scale_factor
 
 func _interact(id: String, title: String) -> void:
+	if quitting or changing_region or session!=null or modal_kind!="": return
 	audio.play_sfx("interact")
-	if world.coastal_play.activate(id):
+	if id=="region:welcome":
+		_travel_to_region("welcome")
+		return
+	if world_region=="harbor":
+		if id=="harbor:tide":
+			world.set_tide(not world.is_high_tide())
+			_notice("漲潮：沙洲暫停通行，免費渡船照常。" if world.is_high_tide() else "退潮：沙洲開放，免費渡船照常。")
+		elif id.begins_with("harbor:ferry:"):
+			world.take_ferry(id)
+		elif id.begins_with("harbor:info:"):
+			_start_dialogue([{ "speaker":title, "text":"沿環岸步道或搭免費渡船前往燈塔。潮汐鐘可預覽漲退潮；遊戲與當地收藏仍在準備中。" }],Callable())
+		return
+	if is_instance_valid(world.coastal_play) and world.coastal_play.activate(id):
 		return
 	if id.begins_with("game-"):
 		_show_game_info(id)
@@ -1242,7 +1309,15 @@ func _interact(id: String, title: String) -> void:
 			if zone.id==id.trim_prefix("gate:"):
 				var body := _open(zone.name,"NEXT ADVENTURE","gate")
 				body.add_child(Paper.label(zone.theme,25))
-				body.add_child(Paper.label("入園資格：%d 張不同普通拍貼（不消耗）\n目前：%d 張\n\n這座園區正在準備中。先去迎賓大道留下今天的回憶吧。"%[zone.threshold,Progress.normal_count()],22))
+				if zone.id=="harbor":
+					var remaining := maxi(6-Progress.normal_count(),0)
+					body.add_child(Paper.label("入園資格：6 張不同普通拍貼（不消耗）\n目前：%d 張\n%s" % [Progress.normal_count(),"已達資格，可前往潮汐碼頭。" if remaining==0 else "還差 %d 張。"%remaining],22))
+					if remaining==0:
+						var travel := Paper.button("前往潮汐碼頭",func(): _travel_to_region("harbor"),body)
+						travel.name="TravelHarborButton"
+						travel.tooltip_text="前往潮汐碼頭；拍貼與遊園幣都不消耗。"
+				else:
+					body.add_child(Paper.label("入園資格：%d 張不同普通拍貼（不消耗）\n目前：%d 張\n\n這座園區正在準備中。"%[zone.threshold,Progress.normal_count()],22))
 				_back(body)
 				break
 
@@ -1362,7 +1437,7 @@ func _cancel_game() -> void:
 		session=null
 	_sync_audio_environment()
 	audio.set_music_suppressed(false)
-	audio.play_context("harbor" if world.current_area=="海風碼頭" else "plaza")
+	audio.play_context(_island_audio_context())
 	hud.show()
 	world.blocked=false
 	world.show()
@@ -1471,13 +1546,19 @@ func _show_album() -> void:
 	var body := _open("一張照片，一點小事。","PHOTO COLLECTION","album")
 	var book_script = load("res://game/ui/collection_book_panel.gd")
 	var book = book_script.new()
-	book.setup(Progress,definitions,TimeOfDay.PHASES,Callable(self,"_photo_texture"))
+	book.setup(Progress,definitions,TimeOfDay.PHASES,Callable(self,"_photo_texture"),world_region)
 	book.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	book.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(book)
 	_back(body)
 
 func _show_tasks() -> void:
+	if world_region=="harbor":
+		var harbor_body := _open("迎賓大道的委託","WELCOME QUESTS","tasks")
+		harbor_body.add_child(Paper.label("潮汐碼頭目前沒有當地任務。小角和阿浪的既有委託仍在迎賓大道，進度會保留。",22))
+		Paper.button("免費返回迎賓大道",func(): _travel_to_region("welcome"),harbor_body)
+		_back(harbor_body)
+		return
 	var body := _open("今天，幫誰一個小忙？","ISLAND QUESTS","tasks")
 	body.add_child(Paper.label("委託會自動保存；選一張旅券即可接續目前進度。",18,Paper.DEEP_TEAL))
 	_content_pager(body,"TaskPages",["quest-001","quest-002"],_render_task_card,1)
@@ -1673,7 +1754,7 @@ func _show_exploration(id: String) -> void:
 	_back(body)
 
 func _show_achievements() -> void:
-	var body := _open("那些「我做到了」的小瞬間。","ACHIEVEMENTS","achievements")
+	var body := _open("那些「我做到了」的小瞬間。","WELCOME  /  迎賓成就","achievements")
 	var stamp_script = load("res://game/ui/achievement_stamp_book.gd")
 	var stamp_book = stamp_script.new()
 	stamp_book.setup(Progress,definitions)
@@ -1683,6 +1764,13 @@ func _show_achievements() -> void:
 	_back(body)
 
 func _show_map() -> void:
+	if world_region=="harbor":
+		var harbor_body := _open("潮汐碼頭 · 燈塔與環岸步道","HARBOR MAP","map")
+		var harbor_map = load("res://game/ui/harbor_map_panel.gd").new()
+		harbor_map.setup(world.map_snapshot())
+		harbor_body.add_child(harbor_map)
+		_back(harbor_body)
+		return
 	var body := _open("今天想去哪一邊？","ISLAND MAP","map")
 	var map_script = load("res://game/ui/island_map_panel.gd")
 	var map_panel = map_script.new()
@@ -2025,7 +2113,7 @@ func _layout_open_panel(panel: Control) -> void:
 	panel.custom_minimum_size=Vector2(width,height)
 
 func _show_ticket() -> void:
-	var body := _open("航海旅券","ISLAND GUIDE","ticket")
+	var body := _open("航海旅券","WELCOME  /  迎賓遊戲指南","ticket")
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2

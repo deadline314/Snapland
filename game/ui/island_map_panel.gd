@@ -283,7 +283,7 @@ func _add_destination_buttons() -> void:
 		gate.add_theme_font_size_override("font_size",10 if short_name.length()>2 else 11)
 		gate.set_meta("menu_base_font",16)
 		gate.custom_minimum_size=Vector2(44,44)
-		gate.tooltip_text="%s｜%d 張不同普通拍貼即可取得資格；園區仍在準備中。" % [zone_name,int(zone_value.get("threshold",0))]
+		gate.tooltip_text="潮汐碼頭｜6 張不同普通拍貼，不消耗；從潮汐路口前往。" if zone_id=="harbor" else "%s｜%d 張不同普通拍貼即可取得資格；園區仍在準備中。" % [zone_name,int(zone_value.get("threshold",0))]
 		for state in ["normal","hover","pressed","hover_pressed","disabled","focus"]:
 			var gate_style := gate.get_theme_stylebox(state).duplicate() as StyleBoxFlat
 			if gate_style != null:
@@ -420,9 +420,12 @@ func _select_zone(zone: Dictionary) -> void:
 	_set_map_selection("MapGate_"+str(zone.get("id","")))
 	var threshold := int(zone.get("threshold",0))
 	var remaining := maxi(threshold-_normal_count,0)
-	_detail_title.text="%s｜準備中" % str(zone.get("name","未命名園區"))
+	_detail_title.text="%s｜%s" % [str(zone.get("name","未命名園區")),("可前往" if remaining==0 else "尚未達資格") if str(zone.get("id",""))=="harbor" else "準備中"]
 	var qualification := "已達入園資格" if remaining==0 else "還差 %d 張不同普通拍貼" % remaining
 	_detail_text.text="主題：%s\n普通拍貼：%d / %d 張\n%s；收藏不消耗。" % [str(zone.get("theme","主題資料準備中。")),_normal_count,threshold,qualification]
+
+	if str(zone.get("id",""))=="harbor":
+		_detail_text.text="普通拍貼：%d / 6 張\n%s；收藏不消耗。\n從潮汐路口前往，返回免費。" % [_normal_count,qualification]
 
 func _set_map_selection(node_name: String) -> void:
 	_selected_map_button=node_name
