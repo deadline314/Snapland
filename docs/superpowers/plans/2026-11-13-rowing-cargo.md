@@ -35,12 +35,12 @@
 
 Progress `complete_game(game_id:String,devil:bool,assisted:bool=false)->bool` retains calling compatibility and gives Main reliable saved status. Resolve catalog identity; one atomic save for photos/40coins/global receipt/achievements, restore all touched state on failure and emit changed/new achievement signals only after success. Existing grant_photo/_unlock outside this method unchanged. Preserve existing photo metadata on replay and legacy no-retroactive coins; welcome milestones remain scoped to welcome12. `attach_game_photo_frames(...) -> bool` generalizes same current validation/rollback body; `attach_welcome_game_photo_frames(...)` stays compatible wrapper (welcome restriction preserved). Tutorial and receipt validators accept delivered13, reject14, unknown/malformed. Do not preload UI/Session/tutorials into Progress.
 
-- [ ] Inspect all touched callers and run existing core/tutorial-seen/wardrobe/photo baseline with isolated profiles; record original results.
-- [ ] Write red catalog/harbor progress tests: default12 ordered, harbor1/all13/copies, global/local identity, malformed/duplicate/zone mismatch via small explicit parser helper or fixture boundary; unknown14 no mutation; no heavy UI dependency.
-- [ ] Implement lightweight catalog and one actual harbor runtime row; do not add other planned IDs.
-- [ ] Generalize reward/tutorial/receipt/photo identities; implement atomic complete_game with one save and rollback on forced write failure. Test first ordinary/devil, assisted, repeat/no duplicate money or signals, legacy photo without receipt, unknowns, untouched unknown metadata and full welcome milestone thresholds.
-- [ ] Test thumbnails/original validation and real two-process reload for harbor card/receipt/tutorial/achievement; verify failed save leaves persisted and memory state unchanged. Change unsupported sentinel013 to014 only in fixtures that now genuinely need an unsupported ID.
-- [ ] Run affected tests and self-review; commit owned files. Write task-1-report.md with status/commit/signatures/source mapping/tests and any concerns. Report only concise status back.
+- [x] Inspect all touched callers and run existing core/tutorial-seen/wardrobe/photo baseline with isolated profiles; record original results.
+- [x] Write red catalog/harbor progress tests: default12 ordered, harbor1/all13/copies, global/local identity, malformed/duplicate/zone mismatch via small explicit parser helper or fixture boundary; unknown14 no mutation; no heavy UI dependency.
+- [x] Implement lightweight catalog and one actual harbor runtime row; do not add other planned IDs.
+- [x] Generalize reward/tutorial/receipt/photo identities; implement atomic complete_game with one save and rollback on forced write failure. Test first ordinary/devil, assisted, repeat/no duplicate money or signals, legacy photo without receipt, unknowns, untouched unknown metadata and full welcome milestone thresholds.
+- [x] Test thumbnails/original validation and real two-process reload for harbor card/receipt/tutorial/achievement; verify failed save leaves persisted and memory state unchanged. Change unsupported sentinel013 to014 only in fixtures that now genuinely need an unsupported ID.
+- [x] Run affected tests and self-review; commit owned files. Write task-1-report.md with status/commit/signatures/source mapping/tests and any concerns. Report only concise status back.
 
 ### Task 2: Deterministic rowing and cargo rules
 
@@ -50,12 +50,12 @@ Progress `complete_game(game_id:String,devil:bool,assisted:bool=false)->bool` re
 
 Rules from spec: real heading-dependent forward/reverse paddle impulses, held rudder torque, lateral crest sideslip; inertia and damping with finite bounded time/substeps. Three crates actually collected and delivered to two marked docks with speed/angle tolerance; no repeat delivery. Sheltered longer passage always available, shorter exposed tide gap changes; visible modeled waves affect control. Centralize physical/layout/timing constants, record chosen values in report. Repeated commands cannot stack unbounded impulses within one simulation instant; if a stroke/slip cooldown is used, expose readiness for clear player feedback and the input solver. Naturally ended round gets ordinary_eligible even timeout; success only all3, devil successful run plus actual crest sideslip dock and no crate impacts. Assisted lowers wave force, widens safe docking and modest attraction, never disables devil. Crate impacts distinct from wall collisions. Ignore nonfinite input/time safely; bounded arrays/no event-per-frame history. Boat/cargo recover within playable bounds, tide cannot trap them.
 
-- [ ] Read closest existing sign_balance model/test patterns and current canonical game013 row; write red deterministic/physics/cargo tests before implementing.
-- [ ] Implement controls/force/inertia/clock and snapshot; same route with shifted stroke timing must produce different docking angle, not merely different score. Test repeatability and independent copies.
-- [ ] Implement real pickup/drop/speed/angle/two-dock ledger, waves/crest/shelter/tide/side-slip and actual normal/assisted devil, failure/cancel eligibility. Unit fixtures may arrange physics edge states but document them as fixtures, not native earned proof.
-- [ ] Test invalid/huge delta, input clamps, boundary/wall/crate collision, tide under boat, no duplicate deliveries, clear_input, terminal freeze and bounded storage.
-- [ ] Implement an input-driven solver test that uses public commands and snapshot feedback only to deliver all three in normal AND assisted modes; no position/score/terminal mutation. Preserve this route for native verifier. Record tuning/route limitations instead of faking success.
-- [ ] Run focused suite, self-review, commit and task-2-report.md with constants/contract/results/solver evidence.
+- [x] Read closest existing sign_balance model/test patterns and current canonical game013 row; write red deterministic/physics/cargo tests before implementing.
+- [x] Implement controls/force/inertia/clock and snapshot; same route with shifted stroke timing must produce different docking angle, not merely different score. Test repeatability and independent copies.
+- [x] Implement real pickup/drop/speed/angle/two-dock ledger, waves/crest/shelter/tide/side-slip and actual normal/assisted devil, failure/cancel eligibility. Unit fixtures may arrange physics edge states but document them as fixtures, not native earned proof.
+- [x] Test invalid/huge delta, input clamps, boundary/wall/crate collision, tide under boat, no duplicate deliveries, clear_input, terminal freeze and bounded storage.
+- [x] Implement an input-driven solver test that uses public commands and snapshot feedback only to deliver all three in normal AND assisted modes; no position/score/terminal mutation. The required route must use actual player-accessible digital controls: paddle/slip -1 or +1, rudder -1/0/+1, with timing/readiness; fractional analog inputs may be unit-tested but cannot be its only successful route. Preserve this route for native verifier. Record tuning/route limitations instead of faking success.
+- [x] Run focused suite, self-review, commit and task-2-report.md with constants/contract/results/solver evidence.
 
 ### Task 3: Native rowing view and small driver
 
@@ -67,7 +67,7 @@ Control view owns one small SubViewport 3D world/camera, receives read-only snap
 
 - [ ] Baseline nearest existing native view pattern, write red driver input/release/echo/normalization/summary/headless/view-reuse tests.
 - [ ] Implement driver and view using model only as source; no second timer, no repeated resources/mesh/material allocation per frame.
-- [ ] Test keyboard and pointer same commands, clear held rudder, paused repeated present no simulation, reduced motion cues, time phase refresh and finite invalid inputs.
+- [ ] Test keyboard and pointer same commands, opposing rudder press/release and keyboard/pointer ownership without stuck input, clear held rudder, paused repeated present no simulation, reduced motion cues, time phase refresh and finite invalid inputs.
 - [ ] Run native view smoke and capture real image at1280x720 with isolated save; inspect it, verify no engine ERROR and bounded nodes/resources through repeated create/free. A render-only fixture is not a full game-completion claim.
 - [ ] Self-review, commit owned files, task-3-report.md including view command contract, images, tests and layout concerns.
 
