@@ -151,3 +151,14 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 ![小角右向轉身中段](images/ART-16-pivots-20261112-imp-depart-right-2.png)
 
 [票票正常](images/ART-16-pivots-20261112-ticket-normal.mp4) · [票票慢速](images/ART-16-pivots-20261112-ticket-quarter.mp4) · [票票包內](images/ART-16-pivots-20261112-ticket-pack.mp4) · [小角正常](images/ART-16-pivots-20261112-imp-normal.mp4) · [小角慢速](images/ART-16-pivots-20261112-imp-quarter.mp4) · [小角包內](images/ART-16-pivots-20261112-imp-pack.mp4) · [結果及來源指紋](images/ART-16-pivots-20261112-review.json) · [姿勢、診斷與重現紀錄](images/ART-16-pivots-20261112-evidence.zip)。起始 SHA：`702825b`；分支：`codex/npc-departures-20261112`。
+
+
+# Commit — 2026-11-12 複核並拒收步態候選
+
+## 內文
+
+阿浪八相位步態先後嘗試整張圖集參考、單張正式側面／正面參考，以及單張相反接觸姿勢，共三份候選。前兩份仍無法可靠交換接觸腳與近遠側擺臂；第三份亦沒有足夠的相反接觸與連續循環證據。三份均未採用，正式原畫、播放資料與已交付的起停功能保持相同。較多欄位、新檔名或單張姿勢不當作完整新步態。
+
+三份圖實際檢視，透明通道、尺寸、來源及 SHA-256 已核對，封存內容可完整解壓。這是原畫研究結果，不是新增原生動畫或遊玩驗收；整票依原條件維持進行中。
+
+[三份候選、完整提示、參考與指紋](images/ART-16-walk-study-20261112-candidates.zip)。來源使用內建圖像工具；詳見[動畫品質研究](../../design/runtime/animation-quality.md)。固定基準 `4cb87f5`；分支 `codex/announcer-walk-study-20261112`。

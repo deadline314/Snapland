@@ -58,3 +58,10 @@ This is a research recommendation only. No generated images, GPU visual review, 
 The root session subsequently generated one LEFT-profile parts atlas and rendered a five-piece torso/thigh/shin rig in the real park. The headless math checks and native capture fixture completed, but actual inspection exposed unnatural leg proportions, visible circular knee joints and shoes rotating with the shins. The first fixture also put the subject behind the fountain; it was relocated to open ground before judging the full body. The user explicitly rejected the resulting appearance as grotesque on 2026-10-12. These failures override any successful numerical test.
 
 The runtime rig, parts atlas, manifest and trial tests were withdrawn and archived locally. The accepted full-body avatar remains in use. [Rejected native appearance](../../pm/Snapland-art/images/ART-16-rejected-rig.png) is retained only as failure evidence. The trial does not establish fluid walking, planted feet in world coordinates, eight-view support, or production-ready character animation. Future animation must preserve the approved full-body proportions and be reviewed as a complete cycle before adoption.
+
+
+## 2026-11-12 阿浪八相位步態研究
+
+三份內建圖像工具候選均未進入正式素材。第一份依整張舊圖集嘗試八相位，仍重複相同半循環；第二份改用正式渲染器匯出的單張側面與正面身份作參考，仍未可靠交換近／遠腿與反向擺臂；第三份縮小為一張相反接觸姿勢，近臂仍向後，沒有足夠證據判作完整相反步。不能把八欄或新檔名算成八個有效步態姿勢。
+
+三份透明 PNG、正式來源匯出參考、完整提示、尺寸、透明度與 SHA-256 均封存於 ART-16 的 `ART-16-walk-study-20261112-candidates.zip`。這是原畫研究與拒收，沒有新動作、原生動畫播放或遊玩驗收；正式來源圖與動作資料保持原值。後續來源需先通過兩個接觸腳交替及完整循環，再進入錨點、正常／慢放和服裝驗證。
