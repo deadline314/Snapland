@@ -39,18 +39,23 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var session: Node = main.get("session")
-	_check(session != null and session.get("game_id") == "game-002", "failed seen save starts the selected game")
-	_check(main.get("toast").get("text").contains("無法保存"), "failed seen save shows a brief notice")
+	_check(session != null and session.get("game_id") == "game-002", "failed seen save still starts the selected ordinary game")
+	_check(main.get("toast").get("text").contains("嘗試資格尚未保存"), "failed actual-attempt save shows a retry notice")
+	_check(session != null and not session.ended and not session.paused and session.is_processing(), "generic failed-save launch retains a fully initialized playable session")
+	await get_tree().create_timer(0.5).timeout
+	_check(session != null and session.minigame_hud._feedback.visible and session.minigame_hud._feedback_label.text.contains("本局可繼續"), "legacy session HUD retains unsaved retake notice after half a second")
 	var session_count := 0
 	for child in main.get("ui").get_children():
 		if child.get_script() == SESSION_SCRIPT:
 			session_count += 1
-	_check(session_count == 1, "failed seen save launches exactly one session")
+	_check(session_count == 1, "generic failed-save launch retains exactly one playable session")
 	_check(not progress.has_seen_tutorial("game-002"), "failed save rolls back seen state")
+	_check(not progress.has_attempted_game("game-002"), "failed save rolls back actual-attempt state")
 	OS.set_environment("SNAPLAND_SAVE_PATH", original_path)
 	progress._reset_memory()
 	progress.load_progress()
 	_check(not progress.has_seen_tutorial("game-002"), "failed seen state remains absent after profile reload")
+	_check(not progress.has_attempted_game("game-002"), "failed attempt remains absent after profile reload")
 	if is_instance_valid(main.get("audio")):
 		main.get("audio").call("shutdown")
 		await get_tree().create_timer(0.15).timeout
@@ -67,7 +72,7 @@ func _finish() -> void:
 	for failure in failures:
 		push_error("FAIL: " + failure)
 	if failures.is_empty():
-		print("PASS: tutorial seen failed-save Main start")
+		print("PASS: tutorial and attempt failed-save cleanup")
 		get_tree().quit(0)
 	else:
 		get_tree().quit(1)

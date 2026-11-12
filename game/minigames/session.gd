@@ -221,6 +221,8 @@ var phase_wash := Color(0.93,0.72,0.55,0.055)
 var phase_shadow_color := Color(0.12,0.22,0.24,0.24)
 var phase_shadow_x := 4.0
 var feedback_age := 99.0
+var _launch_notice := ""
+var _launch_notice_until_msec := 0
 var feedback_origin := Vector2(640, 400)
 var particles: Array[Dictionary] = []
 var prompt := ""
@@ -242,6 +244,8 @@ static func definitions(zone: String = "welcome") -> Array:
 	return GameCatalog.definitions(zone)
 
 func start(id: String, assisted_mode: bool = false) -> void:
+	_launch_notice=""
+	_launch_notice_until_msec=0
 	if active_driver != null: active_driver.clear_input()
 	active_driver = null
 	_driver_state.clear()
@@ -617,6 +621,8 @@ func _refresh_hud(force: bool = false) -> void:
 		time_text = str(_driver_state.get("time_text", ""))
 		# The driver view owns its feedback line below the controls.
 		feedback_text = ""
+	var launch_notice := Time.get_ticks_msec() < _launch_notice_until_msec
+	if launch_notice: feedback_text=_launch_notice
 	minigame_hud.set_state({
 		"title": str(info.get("name", "小遊戲")),
 		"objective": str(info.get("goal", "完成挑戰")),
@@ -624,9 +630,9 @@ func _refresh_hud(force: bool = false) -> void:
 		"score": score,
 		"time_text": time_text,
 		"feedback_text": feedback_text,
-		"feedback_width": 240.0 if mode in ["flower_pipes", "sign_balance"] else (420.0 if mode == "kite_rings" else 540.0),
-		"feedback_anchor": SignBalanceViewScript.FEEDBACK_ANCHOR if mode == "sign_balance" else null,
-		"feedback_color": feedback_color,
+		"feedback_width": 540.0 if launch_notice else (240.0 if mode in ["flower_pipes", "sign_balance"] else (420.0 if mode == "kite_rings" else 540.0)),
+		"feedback_anchor": Vector2(640,200) if launch_notice else (SignBalanceViewScript.FEEDBACK_ANCHOR if mode == "sign_balance" else null),
+		"feedback_color": YELLOW if launch_notice else feedback_color,
 		"assisted": assisted,
 		"practice": practice_mode,
 		"reduced_motion": reduced_motion,
@@ -717,13 +723,13 @@ func score_summary() -> Dictionary:
 	var summary := {"total": score, "label": _score_label(), "rule": _score_rule_text(), "rows": rows}
 	if mode=="kite_rings" and ended and not practice_mode:
 		if not kite_model.won:
-			summary["qualification_text"]="普通拍貼需五環全過（本次 %d / 5）；小惡魔需未輔助、五次中心且零救援。"%kite_model.ring_index
+			summary["qualification_text"]="本局成功需五環全過（本次 %d / 5）；小惡魔需未輔助、五次中心且零救援。"%kite_model.ring_index
 		elif assisted:
-			summary["qualification_text"]="五環全過，取得普通拍貼；輔助回合不取得小惡魔拍貼。"
+			summary["qualification_text"]="五環全過，達成本局目標；輔助回合不取得小惡魔拍貼。"
 		elif kite_model.devil_won:
 			summary["qualification_text"]="五環全中心、零救援，已達成小惡魔條件。"
 		else:
-			summary["qualification_text"]="普通拍貼：五環全過。小惡魔需五次中心、零救援（本次中心 %d / 5、救援 %d）。"%[kite_model.center_hits,kite_model.rescues_used]
+			summary["qualification_text"]="本局成功：五環全過。小惡魔需五次中心、零救援（本次中心 %d / 5、救援 %d）。"%[kite_model.center_hits,kite_model.rescues_used]
 	if mode == "melody_memory" and ended and not practice_mode:
 		summary["qualification_text"] = MelodyMemoryModelScript.qualification_text(melody_model.snapshot())
 	if mode == "ribbon_rhythm" and ended and not practice_mode:
@@ -735,32 +741,32 @@ func score_summary() -> Dictionary:
 		var safe_groups := int(crowd_state.safe_count)
 		var missed_groups := int(crowd_state.missed_count)
 		if not won:
-			summary["qualification_text"] = "普通拍貼需六隊全部安全通過（本次 %d / 6，改道 %d）；小惡魔另需未輔助、總分至少 %d。" % [safe_groups, missed_groups, CrowdTrafficScript.DEVIL_SCORE]
+			summary["qualification_text"] = "本局成功需六隊全部安全通過（本次 %d / 6，改道 %d）；小惡魔另需未輔助、總分至少 %d。" % [safe_groups, missed_groups, CrowdTrafficScript.DEVIL_SCORE]
 		elif assisted:
-			summary["qualification_text"] = "六隊全部安全通過，取得普通拍貼；輔助回合不取得小惡魔拍貼（本次 %d 分）。" % score
+			summary["qualification_text"] = "六隊全部安全通過，達成本局目標；輔助回合不取得小惡魔拍貼（本次 %d 分）。" % score
 		elif devil_won:
 			summary["qualification_text"] = "六隊全部安全、沒有隊伍改道，總分 %d 達 %d，已達成小惡魔條件。" % [score, CrowdTrafficScript.DEVIL_SCORE]
 		else:
-			summary["qualification_text"] = "普通拍貼：六隊全部安全。小惡魔需總分至少 %d，本次 %d（差 %d，縮短等候可多拿效率分）。" % [CrowdTrafficScript.DEVIL_SCORE, score, CrowdTrafficScript.DEVIL_SCORE - score]
+			summary["qualification_text"] = "本局成功：六隊全部安全。小惡魔需總分至少 %d，本次 %d（差 %d，縮短等候可多拿效率分）。" % [CrowdTrafficScript.DEVIL_SCORE, score, CrowdTrafficScript.DEVIL_SCORE - score]
 	if mode == "fountain_timing" and ended and not practice_mode:
 		var perfect_count := fountain_grades.count("完美")
 		if not won:
-			summary["qualification_text"] = "普通拍貼需三跳全部踩中（本次 %d / 3，錯過 %d）；小惡魔需未輔助且三跳完美。" % [count, mistakes]
+			summary["qualification_text"] = "本局成功需三跳全部踩中（本次 %d / 3，錯過 %d）；小惡魔需未輔助且三跳完美。" % [count, mistakes]
 		elif assisted:
-			summary["qualification_text"] = "三跳全中，取得普通拍貼；輔助回合不取得小惡魔拍貼（本次完美 %d / 3）。" % perfect_count
+			summary["qualification_text"] = "三跳全中，達成本局目標；輔助回合不取得小惡魔拍貼（本次完美 %d / 3）。" % perfect_count
 		elif devil_won:
 			summary["qualification_text"] = "三跳都在 ±70ms 內完美起跳，已達成小惡魔條件。"
 		else:
-			summary["qualification_text"] = "普通拍貼：三跳全中。小惡魔需未輔助且三跳完美（±70ms），本次完美 %d / 3。" % perfect_count
+			summary["qualification_text"] = "本局成功：三跳全中。小惡魔需未輔助且三跳完美（±70ms），本次完美 %d / 3。" % perfect_count
 	if mode == "balloon_delivery" and ended and not practice_mode:
 		if not won:
-			summary["qualification_text"] = "普通拍貼需限時送達三站（本次 %d / 3）；小惡魔需未輔助且零失誤。" % balloon_delivery_index
+			summary["qualification_text"] = "本局成功需限時送達三站（本次 %d / 3）；小惡魔需未輔助且零失誤。" % balloon_delivery_index
 		elif assisted:
-			summary["qualification_text"] = "三站全送達，取得普通拍貼；輔助回合不取得小惡魔拍貼。"
+			summary["qualification_text"] = "三站全送達，達成本局目標；輔助回合不取得小惡魔拍貼。"
 		elif devil_won:
 			summary["qualification_text"] = "三站全送達、零失誤，已達成小惡魔條件。"
 		else:
-			summary["qualification_text"] = "普通拍貼：三站全送達。小惡魔需未輔助且零失誤（本次失誤 %d）。" % mistakes
+			summary["qualification_text"] = "本局成功：三站全送達。小惡魔需未輔助且零失誤（本次失誤 %d）。" % mistakes
 	return summary
 
 func _score_label() -> String:
@@ -781,17 +787,17 @@ func _score_label() -> String:
 
 func _score_rule_text() -> String:
 	match mode:
-		"balloon_delivery": return "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站得普通拍貼；未輔助且零失誤才得小惡魔拍貼。"
-		"kite_rings": return "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過得普通拍貼；未輔助、五環全中心且零救援才得小惡魔拍貼。"
-		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100，超出或沒跳為錯過 0 分。輔助放寬為 ±110／240／340ms。三跳全中得普通拍貼；未輔助且三跳完美才得小惡魔拍貼。"
-		"crowd_traffic": return "每隊安全通過 +50；開始過路前等不到 2.2 秒 +20、不到 4.4 秒 +10；救援隊及時通行另 +50。六隊全部安全得普通拍貼；未輔助、無隊伍改道且總分至少 430 才得小惡魔拍貼。"
+		"balloon_delivery": return "每站送達 +150；撞海膽或過快進站不扣分、記一次失誤。限時送達三站才算本局成功；未輔助且零失誤才得小惡魔拍貼。"
+		"kite_rings": return "中心穿環 +100、擦邊 +60，漏環或斷線不加分。五環全過才算本局成功；未輔助、五環全中心且零救援才得小惡魔拍貼。"
+		"fountain_timing": return "三跳總分 0–900；每跳完美 ±70ms +300、準確 ±160ms +200、踩中 ±220ms +100，超出或沒跳為錯過 0 分。輔助放寬為 ±110／240／340ms。三跳全中才算本局成功；未輔助且三跳完美才得小惡魔拍貼。"
+		"crowd_traffic": return "每隊安全通過 +50；開始過路前等不到 2.2 秒 +20、不到 4.4 秒 +10；救援隊及時通行另 +50。六隊全部安全才算本局成功；未輔助、無隊伍改道且總分至少 430 才得小惡魔拍貼。"
 		"hat_catching": return HatRescueModelScript.score_rule_text()
 		"ribbon_rhythm": return RibbonRhythmModelScript.score_rule_text()
 		"flower_pipes": return "每張完成工單 +1000，每次旋轉 −20，最低 0 分；三張全部供水才完成。"
 		"sign_balance": return "每段調整配重並連續穩定至少 0.52 秒得 70 分；中心精準落點得 100 分。五段安全可普通通關，七段全精準且零撞線可得小惡魔拍貼。"
-		"shadow_alignment": return "每輪合格最高 500 分，輪廓越吻合分數越高；三輪至少兩輪合格得普通拍貼，三輪精準且零失誤、未輔助才得小惡魔拍貼。"
+		"shadow_alignment": return "每輪合格最高 500 分，輪廓越吻合分數越高；三輪至少兩輪合格才算本局成功，三輪精準且零失誤、未輔助才得小惡魔拍貼。"
 		"bubble_photo": return "三張各 0–100 分：全身涵蓋 60、置中 30、合焦時機 10；合格還需泡泡完整包住全身。至少兩張合格成功，三張完美可得小惡魔拍貼。"
-		"bench_swap": return "每桌 300 分 − 交換次數 × 25；三桌完成得普通拍貼。三桌皆最少交換、未輔助且未重排才得小惡魔拍貼。"
+		"bench_swap": return "每桌 300 分 − 交換次數 × 25；三桌完成才算本局成功。三桌皆最少交換、未輔助且未重排才得小惡魔拍貼。"
 		"melody_memory": return MelodyMemoryModelScript.score_rule_text()
 	return "得分由已記錄的遊戲事件累加。"
 
@@ -2129,6 +2135,11 @@ func _on_melody_replay_requested() -> void:
 	if int(melody_snapshot.get("replay_count", 0)) > before_replays:
 		_feedback(str(melody_snapshot.get("last_event", "重聽樂句")), BLUE)
 	queue_redraw()
+
+func show_launch_notice(message: String) -> void:
+	_launch_notice=message
+	_launch_notice_until_msec=Time.get_ticks_msec()+6000
+	_refresh_hud(true)
 
 func _feedback(message: String, color: Color) -> void:
 	prompt = message; feedback_color = color; feedback_age = 0.0

@@ -143,7 +143,7 @@ func _ready() -> void:
 		title.custom_minimum_size.x=140.0/Paper.physical_scale(self)
 		copy.add_child(title)
 		copy.add_child(Paper.label("已蓋章" if unlocked else "待完成",15,Paper.TEAL if unlocked else Paper.INK))
-		var condition := Paper.label("條件：完成正式回合",16,Paper.INK)
+		var condition := Paper.label("條件：收藏這款遊戲的普通拍貼",16,Paper.INK)
 		condition.name="StampCondition"
 		copy.add_child(condition)
 		row.add_child(copy)
@@ -172,7 +172,7 @@ func _ready() -> void:
 		if _progress.photos.has(photo_id):
 			time_count+=1
 	var milestones := [
-		{"id":"ACH_WELCOME_CLEAR","number":"N","title":"迎賓全通關","condition":"集齊迎賓大道 12 張普通遊戲拍貼","current":normal_games,"target":12},
+		{"id":"ACH_WELCOME_CLEAR","number":"N","title":"迎賓普通卡全收藏","condition":"集齊迎賓大道 12 張普通遊戲拍貼","current":normal_games,"target":12},
 		{"id":"ACH_WELCOME_DEVILS","number":"D","title":"尾巴藏不住","condition":"集齊迎賓大道 12 張小惡魔拍貼","current":welcome_devils,"target":12},
 		{"id":"ACH_ALL_DEVILS","number":"120","title":"每個小惡魔都入鏡","condition":"集齊十區共 120 張小惡魔拍貼","current":total_devils,"target":120},
 		{"id":TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS,"number":"4","title":"四時留影","condition":"收藏凌晨、中午、傍晚與晚上明信片","current":time_count,"target":4},
@@ -239,7 +239,7 @@ func _fit_stamp_columns(grid: GridContainer) -> void:
 	_game_summary.vertical=not compact
 	_game_summary.custom_minimum_size.x=0.0
 	_summary_title.text=("%s印章 · %d 枚" if compact else "%s設施｜初次完成 · %d 枚") % ["碼頭" if _zone=="harbor" else "迎賓",_games.size()]
-	_summary_copy.text="灰色：完成正式回合後蓋章" if compact else "每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。"
+	_summary_copy.text="灰色：收藏普通拍貼後蓋章" if compact else "每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。"
 	_summary_copy.tooltip_text="每段遊園回憶都能留下一枚印章。灰色印章會列出下一個可完成的挑戰。"
 	_summary_title.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN if compact else Control.SIZE_EXPAND_FILL
 	_summary_title.autowrap_mode=TextServer.AUTOWRAP_OFF if compact else TextServer.AUTOWRAP_WORD_SMART

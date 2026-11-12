@@ -88,7 +88,7 @@ func _test_definition_catalog() -> void:
 	var lessons: Array = tutorial_data.get("lessons", [])
 	var bench_tutorial: Dictionary = lessons.filter(func(item: Dictionary) -> bool: return str(item.get("id", "")) == "game-011")[0]
 	_expect(str(bench_definition.instructions).contains("1–6") and str(bench_definition.ordinary).contains("三桌"), "game-011 catalog teaches six numbered seats and all three rule-based orders")
-	_expect(str(bench_tutorial.ordinary).contains("三桌") and str(bench_tutorial.bonus).contains("最少") and str(bench_tutorial.steps[0].input).contains("1–6"), "game-011 tutorial matches its six-seat interaction and exact-minimum devil target")
+	_expect(str(bench_tutorial.ordinary).contains("自然結束") and str(bench_tutorial.ordinary).contains("免費補拍") and str(bench_tutorial.bonus).contains("最少") and str(bench_tutorial.steps[0].input).contains("1–6"), "game-011 tutorial separates participation from its six-seat interaction and exact-minimum devil target")
 	var missing := _new_session("unknown-game-id")
 	assert(missing.ended and missing.game_id.is_empty())
 	missing.queue_free()

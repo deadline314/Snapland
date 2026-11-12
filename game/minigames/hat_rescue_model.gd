@@ -254,7 +254,7 @@ func _finish() -> void:
 
 ## Player-facing rule text, built from the same constants the round scores with.
 static func score_rule_text() -> String:
-	return "中心接住 +%d，從第二頂連續中心起每頂再加 %d（最多 +%d）；擦帽接住 +%d、漏接 0 分並中斷連續。接住至少 %d 頂得普通拍貼；未開輔助、六頂全部中心且零漏接才得小惡魔拍貼。" % [CENTER_POINTS, STREAK_STEP, STREAK_CAP, EDGE_POINTS, ORDINARY_CATCHES]
+	return "中心接住 +%d，從第二頂連續中心起每頂再加 %d（最多 +%d）；擦帽接住 +%d、漏接 0 分並中斷連續。接住至少 %d 頂才算本局成功；未開輔助、六頂全部中心且零漏接才得小惡魔拍貼。" % [CENTER_POINTS, STREAK_STEP, STREAK_CAP, EDGE_POINTS, ORDINARY_CATCHES]
 
 ## Explains this finished formal round's ordinary/devil eligibility with its real counts.
 static func qualification_text(state: Dictionary) -> String:
@@ -263,12 +263,12 @@ static func qualification_text(state: Dictionary) -> String:
 	var missed := int(state.get("misses", 0))
 	if not bool(state.get("success", false)):
 		var reason := "時間到" if bool(state.get("timed_out", false)) else "救回 %d / 6" % caught_count
-		return "普通拍貼需接住至少 %d 頂（本次%s）；小惡魔需未輔助、六頂全中心且零漏接。" % [ORDINARY_CATCHES, reason]
+		return "本局成功需接住至少 %d 頂（本次%s）；小惡魔需未輔助、六頂全中心且零漏接。" % [ORDINARY_CATCHES, reason]
 	if bool(state.get("assisted", false)):
-		return "救回 %d 頂，取得普通拍貼；輔助回合不取得小惡魔拍貼。" % caught_count
+		return "救回 %d 頂，達成本局目標；輔助回合不取得小惡魔拍貼。" % caught_count
 	if bool(state.get("devil", false)):
 		return "六頂全部中心接住、零漏接，已達成小惡魔條件。"
-	return "救回 %d 頂，取得普通拍貼。小惡魔需六頂全中心、零漏接（本次中心 %d / 6、漏接 %d）。" % [caught_count, centers, missed]
+	return "救回 %d 頂，達成本局目標。小惡魔需六頂全中心、零漏接（本次中心 %d / 6、漏接 %d）。" % [caught_count, centers, missed]
 
 func _resolved_count() -> int:
 	var count := 0

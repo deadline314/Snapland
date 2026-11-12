@@ -165,7 +165,7 @@ func release_action(action: String) -> Dictionary:
 
 ## Player-facing rule text built from the scoring constants above.
 static func score_rule_text() -> String:
-	return "精準（拍心 ±%d 毫秒）+%d、合拍（±%d 毫秒）+%d；四個重拍另 +%d。漏拍與錯按不扣分但會記錄。八拍中命中 %d 拍得普通拍貼；未開輔助、八拍全精準且零漏拍、零錯按才得小惡魔拍貼。輔助放寬為 ±%d 毫秒。" % [roundi(PRECISE_WINDOW * 1000.0), PERFECT_POINTS, roundi(ACCEPT_WINDOW * 1000.0), GOOD_POINTS, STRONG_BONUS, ORDINARY_SUCCESS_HITS, roundi(ASSISTED_WINDOW * 1000.0)]
+	return "精準（拍心 ±%d 毫秒）+%d、合拍（±%d 毫秒）+%d；四個重拍另 +%d。漏拍與錯按不扣分但會記錄。八拍中命中 %d 拍才算本局成功；未開輔助、八拍全精準且零漏拍、零錯按才得小惡魔拍貼。輔助放寬為 ±%d 毫秒。" % [roundi(PRECISE_WINDOW * 1000.0), PERFECT_POINTS, roundi(ACCEPT_WINDOW * 1000.0), GOOD_POINTS, STRONG_BONUS, ORDINARY_SUCCESS_HITS, roundi(ASSISTED_WINDOW * 1000.0)]
 
 ## Explains a finished formal round's ordinary/devil eligibility with its real counts.
 static func qualification_text(state: Dictionary) -> String:
@@ -174,12 +174,12 @@ static func qualification_text(state: Dictionary) -> String:
 	var missed := int(state.get("missed_count", 0))
 	var wrong := int(state.get("error_count", 0)) - missed
 	if not bool(state.get("success", false)):
-		return "普通拍貼需命中 %d / 8 拍（本次 %d 拍）；小惡魔需未輔助、八拍全精準且零失誤。" % [ORDINARY_SUCCESS_HITS, hits]
+		return "本局成功需命中 %d / 8 拍（本次 %d 拍）；小惡魔需未輔助、八拍全精準且零失誤。" % [ORDINARY_SUCCESS_HITS, hits]
 	if bool(state.get("assisted", false)):
-		return "命中 %d 拍，取得普通拍貼；輔助回合不取得小惡魔拍貼。" % hits
+		return "命中 %d 拍，達成本局目標；輔助回合不取得小惡魔拍貼。" % hits
 	if bool(state.get("devil_success", false)):
 		return "八拍全精準、零漏拍與錯按，已達成小惡魔條件。"
-	return "命中 %d 拍，取得普通拍貼。小惡魔需八拍全精準且零失誤（本次精準 %d / 8、漏拍 %d、錯按 %d）。" % [hits, precise, missed, wrong]
+	return "命中 %d 拍，達成本局目標。小惡魔需八拍全精準且零失誤（本次精準 %d / 8、漏拍 %d、錯按 %d）。" % [hits, precise, missed, wrong]
 
 func snapshot() -> Dictionary:
 	return _snapshot_cache

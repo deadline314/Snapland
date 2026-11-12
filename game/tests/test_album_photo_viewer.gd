@@ -6,6 +6,8 @@ class FakeProgress extends Node:
 	var photos: Dictionary = {}
 	var achievements: Dictionary = {}
 	var quests: Dictionary = {}
+	func has_attempted_game(_id: String) -> bool:
+		return false
 	var coins := 120
 
 	func normal_count_for_zone(zone: String) -> int:

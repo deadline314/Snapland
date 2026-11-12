@@ -50,14 +50,16 @@ func _check_save_failure_child_contract() -> void:
 		"res://game/tests/test_tutorial_seen_failure_child.tscn",
 	])
 	var exit_code := OS.execute(OS.get_executable_path(), arguments, output, true, false)
-	var child_log := str(output)
+	var child_log := str(output[0]) if not output.is_empty() else ""
 	var error_lines: Array[String] = []
 	for line in child_log.split("\n"):
-		if line.contains("ERROR:"):
-			error_lines.append(line)
+		if line.begins_with("ERROR:") or line.begins_with("SCRIPT ERROR:"):
+			error_lines.append(line.strip_edges())
 	_check(exit_code == 0, "failed-save Main child exits successfully")
-	_check(child_log.contains("PASS: tutorial seen failed-save Main start"), "failed-save Main child emits its result marker")
-	_check(error_lines.size() == 1 and error_lines[0].contains("Cannot write progress temporary file"), "child captures only the deliberate unwritable-profile error")
+	_check(child_log.contains("PASS: tutorial and attempt failed-save cleanup"), "failed-save Main child emits its result marker")
+	var blocked := (OS.get_environment("SNAPLAND_SAVE_PATH")+".blocked-directory").path_join("progress.json.tmp")
+	var expected := "ERROR: Cannot write progress temporary file '%s': File not found" % blocked
+	_check(error_lines == [expected,expected], "child captures exactly tutorial and attempt unwritable-profile diagnostics")
 	_check(not child_log.contains("SCRIPT ERROR:"), "failed-save child has no script or parse errors")
 
 func _check(condition: bool, message: String) -> void:

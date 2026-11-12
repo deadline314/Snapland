@@ -113,7 +113,7 @@ func set_state(state: Dictionary) -> void:
 		if bool(state.get("practice", false)):
 			_result_status.text = "練習結果・不會收藏拍貼\n" + str(_details.get("label", "得分")) + "　" + str(state.get("score", 0))
 		else:
-			_result_status.text = ("惡魔拍貼達成" if devil else "普通拍貼達成" if won else "未達普通拍貼") + "\n" + str(_details.get("label", "得分")) + "　" + str(state.get("score", 0))
+			_result_status.text = ("普通與小惡魔拍貼資格已達成" if devil else "普通拍貼資格已達成") + "\n" + str(_details.get("label", "得分")) + "　" + str(state.get("score", 0))
 		_result_status.add_theme_color_override("font_color", MINT if won else PAPER)
 	if bool(state.get("reduced_motion", false)):
 		_feedback.modulate.a = 1.0

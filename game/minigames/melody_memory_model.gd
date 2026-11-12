@@ -172,12 +172,12 @@ static func qualification_text(state: Dictionary) -> String:
 	var precise := int(state.get("precise_notes", 0))
 	var errors := int(state.get("error_count", 0))
 	if not bool(state.get("success", false)):
-		return "普通拍貼需完成三句（本次 %d / 3）。" % int(state.get("completed_phrases", 0))
+		return "本局成功需完成三句（本次 %d / 3）。" % int(state.get("completed_phrases", 0))
 	if bool(state.get("assisted", false)):
-		return "三句合奏完成，取得普通拍貼；輔助回合不取得小惡魔拍貼。"
+		return "三句合奏完成，達成本局目標；輔助回合不取得小惡魔拍貼。"
 	if bool(state.get("devil_success", false)):
 		return "三句全對、零失誤且每音都踩準拍點，已達成小惡魔條件。"
-	return "三句合奏完成，取得普通拍貼。小惡魔需零失誤且每音踩準（本次精準 %d / %d、失誤 %d）。" % [precise, total, errors]
+	return "三句合奏完成，達成本局目標。小惡魔需零失誤且每音踩準（本次精準 %d / %d、失誤 %d）。" % [precise, total, errors]
 
 func replay_phrase() -> Dictionary:
 	if ended or phase != "active" or replay_count >= REPLAY_LIMIT:

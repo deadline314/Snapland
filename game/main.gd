@@ -12,6 +12,8 @@ const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TimePanel = preload("res://game/ui/time_panel.gd")
 const SettingsPanel = preload("res://game/ui/settings_panel.gd")
 const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
+const RetakePanelScript = preload("res://game/ui/retake_panel.gd")
+const RetakeLessons = preload("res://game/ui/tutorial_catalog.gd")
 const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 const BoatPrologueStage = preload("res://game/story/boat_prologue_stage.gd")
 var world: Node3D
@@ -62,6 +64,11 @@ var tutorial_panel: Control
 var tutorial_target := ""
 var tutorial_origin := ""
 var tutorial_assist := false
+var retake_panel: Control
+var retake_target: Dictionary = {}
+var retake_practice_target: Dictionary = {}
+var retake_generation := 0
+var retake_saving := false
 ## Last contextual conversation id chosen for an island character (review/tests).
 var last_conversation_id := ""
 ## A quest result finished during a game is announced after returning to the park.
@@ -283,6 +290,7 @@ func _exit_tree() -> void:
 func _quit_game() -> void:
 	if quitting: return
 	quitting=true
+	_dispose_retake()
 	_clear_boat_prologue()
 	world.blocked=true
 	Progress.save_progress()
@@ -429,6 +437,7 @@ func _update_breadcrumb(current: String) -> void:
 		breadcrumbs[i].add_theme_font_size_override("font_size",14 if i==active else 12)
 
 func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
+	_dispose_retake()
 	for child in overlay.get_children():
 		overlay.remove_child(child)
 		child.queue_free()
@@ -606,6 +615,9 @@ func _adapt_content_pagers(compact: bool) -> void:
 			_render_content_page(node,floori(float(first)/desired),true)
 
 func _close() -> void:
+	var practice_return := retake_practice_target.duplicate() if modal_kind == "result" and session == null else {}
+	if not practice_return.is_empty(): retake_practice_target.clear()
+	_dispose_retake()
 	if modal_kind=="dialogue":
 		_finish_dialogue()
 		return
@@ -629,6 +641,8 @@ func _close() -> void:
 		pending_story_notice=""
 	if celebrate and session==null and world.has_method("play_action"):
 		world.play_action("celebrate")
+	if not practice_return.is_empty():
+		_request_retake(str(practice_return.id),bool(practice_return.devil))
 
 func _back(parent: Node) -> void:
 	var button := Paper.button(Localization.text("button.back"),_close,modal_footer)
@@ -814,10 +828,10 @@ func _capture_time_postcard_frame(phase_id: String, token: int) -> Dictionary:
 	if error != OK and error != ERR_ALREADY_EXISTS:
 		push_warning("Cannot create time postcard directory: " + directory)
 		return {}
-	var base_path := directory + "/" + TimeOfDay.postcard_id(phase_id)
+	var base_path := directory + "/" + TimeOfDay.postcard_id(phase_id)+"-"+Crypto.new().generate_random_bytes(16).hex_encode()
 	var path := base_path + ".png"
 	var original_path := base_path + "-original.png"
-	if thumbnail.save_png(path) != OK or not _save_bounded_photo_image(original, original_path):
+	if not _save_bounded_photo_image(thumbnail,path) or not _save_bounded_photo_image(original, original_path):
 		_remove_photo_paths([path, original_path])
 		push_warning("Cannot save time postcard image: " + path)
 		return {}
@@ -1345,10 +1359,12 @@ func _definition(id: String) -> Dictionary:
 	return Catalog.find(id)
 
 func _show_game_info(id: String) -> void:
+	_dispose_retake()
 	var definition := _definition(id)
 	if definition.is_empty():
 		_notice("這個設施暫時休息中，先逛逛其他地方吧。")
 		return
+	id=str(definition.id)
 	for child in overlay.get_children():
 		overlay.remove_child(child)
 		child.queue_free()
@@ -1368,6 +1384,10 @@ func _show_game_info(id: String) -> void:
 
 func _show_game_rules(id: String) -> void:
 	var definition := _definition(id)
+	if definition.is_empty():
+		_notice("這個設施暫時休息中，先逛逛其他地方吧。")
+		return
+	id=str(definition.id)
 	var body := _open(str(definition.get("name",id)),("潮汐碼頭" if str(Catalog.identity(id).get("zone","welcome"))=="harbor" else "迎賓大道")+"  /  玩法與選項","game_rules")
 	var entry_stamp := HBoxContainer.new()
 	entry_stamp.add_theme_constant_override("separation",8)
@@ -1376,17 +1396,31 @@ func _show_game_rules(id: String) -> void:
 	entry_stamp.add_child(Paper.label("免費重玩   ·   收藏不消耗",18,Paper.TEAL))
 	var objective_card := Paper.card(body,Color("#fffaf0"),8)
 	objective_card.name="GameRulesDetails"
-	objective_card.add_child(Paper.section_title("本局目標"))
+	var objective_heading := HBoxContainer.new()
+	objective_card.add_child(objective_heading)
+	objective_heading.add_child(Paper.section_title("本局目標"))
 	objective_card.add_child(Paper.label(str(definition.get("goal","完成挑戰")),22))
 	Paper.divider(objective_card)
 	objective_card.add_child(Paper.section_title("操作方式",Paper.DEEP_TEAL))
 	objective_card.add_child(Paper.label(str(definition.get("instructions","依畫面提示操作。")),20))
 	var notes := [
 		{"text":"小惡魔："+str(definition.get("devil_hint","完成特殊互動。")),"color":Paper.TEAL},
-		{"text":"自然結束本局（送完三箱或時間到）可收藏普通拍貼；送完三箱才算成功。中途取消不收藏。" if definition.get("mode","")=="rowing_cargo" else "完成一般目標可收藏普通拍貼；達成特別條件也會收進小惡魔拍貼。","color":Paper.INK},
+		{"text":"正式遊玩自然結束即可收藏普通拍貼，不限勝負；中途取消不收藏。小惡魔實際技巧以上方條件為準，也可免費補拍收藏。","color":Paper.INK},
 		{"text":"輔助遊玩會放寬時間或判定，仍可收藏普通拍貼；小惡魔是否要求未開輔助，以上方條件為準。練習不記錄分數與收藏。","color":Paper.TEAL},
 	]
 	_content_pager(body,"GameRulesExtraDetails",notes,_render_rules_note,1,entry_stamp)
+	var retakes := HBoxContainer.new()
+	retakes.name="GameRulesRetakes"
+	objective_heading.add_child(retakes)
+	var canonical: String = definition.get("id","")
+	var identity := Catalog.identity(canonical)
+	for devil in [false,true]:
+		var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
+		if Progress.photos.has(photo_id): continue
+		var attempted := Progress.has_attempted_game(canonical)
+		var action := _request_retake if attempted else _practice_for_retake
+		var button := Paper.button(("免費補拍" if attempted else "先練習再補拍")+("小惡魔" if devil else "普通卡"),action.bind(canonical,devil),retakes)
+		button.name="KioskRetakeDevil" if devil else "KioskRetakeOrdinary"
 	var row := modal_footer
 	row.add_theme_constant_override("separation",8)
 	Paper.button("圖解教學",func(): _open_tutorial(id,"game_info",bool(Progress.settings.get("assist",false))),row)
@@ -1402,9 +1436,17 @@ func _request_game_start(id: String, assist: bool) -> void:
 	_launch_game(id,assist)
 
 func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
-	if _definition(id).is_empty():
+	if quitting or changing_region: return
+	var definition := _definition(id)
+	if definition.is_empty():
 		_notice("這個設施暫時無法開啟，請先逛逛其他地方。")
 		return
+	id=str(definition.id)
+	if not _can_access_game(id): return
+	if session != null: return
+	if not practice or retake_practice_target.get("id","") != id:
+		retake_practice_target.clear()
+	_dispose_retake()
 	photo_frames.clear()
 	photo_original_frames.clear()
 	next_snapshot=1.0
@@ -1426,12 +1468,25 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	if session.has_method("set_time_of_day"):
 		session.set_time_of_day(TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE)))
 	session.start(id,assist)
+	if session == null or session.game_id != id or session.ended:
+		_cancel_game(false)
+		_notice("遊戲尚未開啟，請重新進入設施。")
+		return
 	if practice and session.has_method("set_practice_mode"):
 		session.set_practice_mode(true)
+	if not Progress.mark_game_attempted(id):
+		if practice and retake_practice_target.get("id","") == id:
+			_cancel_game(false)
+			retake_practice_target.clear()
+			_notice("嘗試紀錄尚未保存；免費補拍尚未開啟，請重新進入練習後重試。")
+			return
+		var message := "嘗試資格尚未保存；本局可繼續。補拍未開啟，下次進入可重試。"
+		_notice(message)
+		session.show_launch_notice(message)
 	audio.play_context("game", id)
 	audio.set_music_suppressed(session.has_method("owns_music") and session.owns_music())
 
-func _cancel_game() -> void:
+func _cancel_game(return_to_retake: bool = true) -> void:
 	if session!=null:
 		ui.remove_child(session)
 		session.queue_free()
@@ -1443,6 +1498,10 @@ func _cancel_game() -> void:
 	world.blocked=false
 	world.show()
 	world.set_process(true)
+	if return_to_retake and not retake_practice_target.is_empty():
+		var target := retake_practice_target.duplicate()
+		retake_practice_target.clear()
+		_request_retake(str(target.id),bool(target.devil))
 
 func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_original_frames: Array[String] = [], story_notified: bool = false) -> void:
 	var id := str(result.get("game_id",""))
@@ -1469,7 +1528,7 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 	if success and not practice and reward_saved and not story_notified:
 		story_notified=true
 		_record_story_mission_event({"type":"minigame_result","id":id,"success":true,"practice":false})
-	_cancel_game()
+	_cancel_game(false)
 	audio.play_sfx("success" if result.get("success",false) else "miss")
 	var definition := _definition(id)
 	var result_title := "練習完成" if practice else ("今天的這一格，值得留下。" if result.get("success",false) else "差一點！再玩一次就好。")
@@ -1548,6 +1607,8 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 			content.add_child(thumbnail)
 			content.add_child(Paper.label("第 %d 格%s"%[i+1," · 未拍攝" if saved_frames.is_empty() else ""],16,Paper.TEAL))
 	Paper.button("再練一次" if practice else "再玩一次",func(): _launch_game(id,bool(result.get("assisted",false)),practice),modal_footer).grab_focus()
+	if practice and retake_practice_target.get("id","") == id:
+		Paper.button("返回所選補拍",_request_retake.bind(id,bool(retake_practice_target.devil)),modal_footer).name="PracticeReturnRetake"
 	if not practice:
 		Paper.button("練習操作",func(): _launch_game(id,bool(result.get("assisted",false)),true),modal_footer)
 		Paper.button("輔助重試",func(): _launch_game(id,true),modal_footer)
@@ -1563,10 +1624,96 @@ func _show_album() -> void:
 	var book_script = load("res://game/ui/collection_book_panel.gd")
 	var book = book_script.new()
 	book.setup(Progress,definitions,TimeOfDay.PHASES,Callable(self,"_photo_texture"),world_region)
+	book.retake_requested.connect(_request_retake)
+	book.practice_requested.connect(_practice_for_retake)
 	book.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	book.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(book)
 	_back(body)
+
+func _can_access_game(id: String) -> bool:
+	var identity := Catalog.identity(id)
+	if identity.is_empty(): return false
+	if identity.zone == "harbor" and Progress.normal_count() < 6 and Progress.current_region != "harbor":
+		_notice("潮汐碼頭還差 %d 張不同普通拍貼；先收藏迎賓大道，收藏不消耗。" % (6-Progress.normal_count()))
+		return false
+	return true
+
+func _practice_for_retake(id: String, devil: bool) -> void:
+	if session != null: return
+	var definition := Catalog.find(id)
+	if definition.is_empty() or definition.id != id or not _can_access_game(id): return
+	retake_practice_target={"id":id,"devil":devil}
+	_launch_game(id,bool(Progress.settings.get("assist",false)),true)
+
+func _request_retake(id: String, devil: bool) -> void:
+	if quitting or changing_region: return
+	var definition := Catalog.find(id)
+	if definition.is_empty() or definition.id != id or session != null or not _can_access_game(id): return
+	var identity := Catalog.identity(id)
+	var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
+	if Progress.photos.has(photo_id):
+		_notice("這張卡已收藏，可到相簿查看原圖。")
+		return
+	if not Progress.has_attempted_game(id):
+		var body := _open("先試一次，再留下這張照片。",photo_id,"retake_practice")
+		body.add_child(Paper.label("先進入練習，隨時退出也能回來免費補拍。練習不自動發卡。",20))
+		Paper.button("進入練習",_practice_for_retake.bind(id,devil),modal_footer).name="RetakePracticeStart"
+		_back(body)
+		return
+	retake_practice_target.clear()
+	_close()
+	retake_target={"id":id,"devil":devil}
+	retake_panel=RetakePanelScript.new()
+	retake_panel.name="RetakePanel"
+	retake_panel.setup(definition,devil,RetakeLessons.new().get_lesson(id))
+	retake_panel.capture_requested.connect(_retake_capture.bind(retake_panel,retake_generation,id,devil))
+	retake_panel.close_requested.connect(_close)
+	modal_kind="retake"
+	world.blocked=true
+	hud.hide()
+	ui.add_child(retake_panel)
+
+func _dispose_retake() -> void:
+	retake_generation+=1
+	if is_instance_valid(retake_panel):
+		retake_panel.hide()
+		retake_panel.queue_free()
+	retake_panel=null
+	retake_target.clear()
+
+func _retake_capture(image: Image, owner: Control, generation: int, id: String, devil: bool) -> void:
+	if quitting or retake_saving or is_queued_for_deletion(): return
+	if not is_instance_valid(owner) or owner != retake_panel or owner.is_queued_for_deletion() or not owner.is_inside_tree(): return
+	if generation != retake_generation or modal_kind != "retake" or retake_target != {"id":id,"devil":devil}: return
+	if image == null or image.is_empty() or image.get_size() != Vector2i(1280,720):
+		owner.set_capture_result(false,"照片不完整，請重新按下快門。")
+		return
+	retake_saving=true
+	var identity := Catalog.identity(id)
+	var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
+	var directory := _photo_directory()
+	var error := DirAccess.make_dir_recursive_absolute(directory)
+	var saved := false
+	var owned: Array[String] = []
+	if error == OK or error == ERR_ALREADY_EXISTS:
+		var base := directory.path_join(photo_id+"-retake-"+Crypto.new().generate_random_bytes(16).hex_encode())
+		var thumbnail := base+".png"
+		var original := base+"-original.png"
+		owned.assign([thumbnail,original])
+		if _save_bounded_photo_image(_prepare_photo_thumbnail(image),thumbnail) and _save_bounded_photo_image(_prepare_photo_original(image),original):
+			if owner == retake_panel and generation == retake_generation and modal_kind == "retake":
+				saved=Progress.complete_retake(id,devil,[thumbnail],[original])
+	if not saved:
+		# Only paths generated by this capture are eligible for removal.
+		for path in owned:
+			var referenced := false
+			for record in Progress.photos.values():
+				if record is Dictionary and (path in record.get("frames",[]) or path in record.get("original_frames",[])): referenced=true
+			if not referenced: _remove_photo_paths([path])
+	retake_saving=false
+	if is_instance_valid(owner) and owner == retake_panel and generation == retake_generation:
+		owner.set_capture_result(saved,"所選卡已收藏：補拍布景，未記為實際挑戰成績。" if saved else "照片或收藏尚未保存，請重試快門；不會重複發獎。")
 
 func _show_tasks() -> void:
 	if world_region=="harbor":
@@ -1834,7 +1981,7 @@ func _achievement_toast(id: String) -> void:
 	if id.begins_with("ACH_GAME_"):
 		label=str(_definition("game-%03d"%int(id.trim_prefix("ACH_GAME_"))).get("name","小遊戲"))+"的第一張照片"
 	else:
-		label={"ACH_WELCOME_CLEAR":"迎賓大道通關","ACH_WELCOME_DEVILS":"迎賓小惡魔全收藏","ACH_ALL_DEVILS":"全島小惡魔全收藏",TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS:"四時留影"}.get(id,"新的旅途紀念")
+		label={"ACH_WELCOME_CLEAR":"迎賓普通遊戲拍貼全收藏","ACH_WELCOME_DEVILS":"迎賓小惡魔全收藏","ACH_ALL_DEVILS":"全島小惡魔全收藏",TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS:"四時留影"}.get(id,"新的旅途紀念")
 	_notice("成就解鎖  ✦  "+label)
 
 func _capture_sequence() -> void:
@@ -1952,7 +2099,7 @@ func _save_photo_frames(id: String) -> Array[String]:
 		return paths
 	for i in range(photo_frames.size()):
 		var path := directory+"/"+id+"-%d.png"%i
-		if photo_frames[i].save_png(path)==OK: paths.append(path)
+		if _save_bounded_photo_image(photo_frames[i],path): paths.append(path)
 		else: push_warning("Cannot save photo frame: "+path)
 	return paths
 
@@ -1970,19 +2117,33 @@ func _save_photo_original_frames(id: String) -> Array[String]:
 	return paths
 
 func _save_bounded_photo_image(image: Image, path: String) -> bool:
-	if image == null or image.is_empty() or image.get_width() * image.get_height() > 4 * 1024 * 1024:
+	if image == null or image.is_empty() or image.get_width() > 4096 or image.get_height() > 4096 or image.get_width() * image.get_height() > 4 * 1024 * 1024:
 		push_warning("Skipping original photo outside the 4-megapixel limit: " + path)
 		return false
-	var error := image.save_png(path)
+	var temporary := path+".staging-"+Crypto.new().generate_random_bytes(16).hex_encode()+".png"
+	var encoded := image.save_png_to_buffer()
+	if encoded.size() < 45 or encoded.size() > 16 * 1024 * 1024:
+		push_warning("Cannot encode bounded original photo: " + path)
+		return false
+	var staged := FileAccess.open(temporary,FileAccess.WRITE)
+	if staged == null:
+		push_warning("Cannot write staged original photo: " + path)
+		return false
+	staged.store_buffer(encoded)
+	staged.flush()
+	var error := staged.get_error()
+	staged.close()
 	var file_size := -1
-	if FileAccess.file_exists(path):
-		var saved_file := FileAccess.open(path, FileAccess.READ)
+	if FileAccess.file_exists(temporary):
+		var saved_file := FileAccess.open(temporary, FileAccess.READ)
 		if saved_file != null:
 			file_size = saved_file.get_length()
 			saved_file.close()
+	if error == OK and file_size >= 45 and file_size <= 16 * 1024 * 1024:
+		error=DirAccess.rename_absolute(temporary,path)
 	if error != OK or file_size < 45 or file_size > 16 * 1024 * 1024:
-		if FileAccess.file_exists(path):
-			DirAccess.remove_absolute(path)
+		if FileAccess.file_exists(temporary):
+			DirAccess.remove_absolute(temporary)
 		push_warning("Cannot save bounded original photo: " + path)
 		return false
 	return true

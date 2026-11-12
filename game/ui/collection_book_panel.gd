@@ -1,4 +1,6 @@
 extends Control
+signal retake_requested(game_id: String, devil: bool)
+signal practice_requested(game_id: String, devil: bool)
 ## A paged paper book over the existing photo and achievement records.
 
 const Paper = preload("res://game/ui/paper_ui.gd")
@@ -122,6 +124,7 @@ func _ready() -> void:
 	_photo_details.name="AlbumPhotoDetails"
 	_photo_details.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	_photo_details.custom_minimum_size.y=32.0/Paper.physical_scale(self)
+	_photo_details.minimum_size_changed.connect(func(): call_deferred("_fit_album_cards_to_available_height"))
 	add_child(_photo_details)
 	_nav=HBoxContainer.new()
 	_nav.name="AlbumPageControls"
@@ -352,7 +355,7 @@ func _entries() -> Array[Dictionary]:
 			for game in _definitions:
 				var identity := GameCatalog.identity(str(game.get("id","")))
 				if identity.get("zone", "") != _region: continue
-				entries.append(_entry(str(identity.photo_id),str(game.get("name","遊戲")),"完成這款小遊戲的正式回合，拍照收藏普通拍貼。"))
+				entries.append(_game_entry(game,identity,false))
 			var explorations := [{"id":"photo-welcome-explore-1","name":"花壇會眨眼","how":"選表情並拍照。"},{"id":"photo-welcome-explore-2","name":"歡迎字樣的影子","how":"把字樣投影對準牆上空框後拍照。"},{"id":"photo-welcome-explore-3","name":"長椅雙人份","how":"借立牌、坐上長椅後按快門。"},{"id":"photo-welcome-story-1","name":"照片多了一條尾巴","how":"完成迎賓主線對話。"},{"id":"photo-welcome-quest-1","name":"吉祥物的尾巴危機","how":"完成小角的三步委託。"},{"id":"photo-welcome-quest-2","name":"廣播即興救場","how":"完成阿浪的三步委託。"}] if _region=="welcome" else []
 			for exploration in explorations:
 				entries.append(_entry(str(exploration.id),str(exploration.name),str(exploration.how)))
@@ -360,7 +363,7 @@ func _entries() -> Array[Dictionary]:
 			for game in _definitions:
 				var identity := GameCatalog.identity(str(game.get("id","")))
 				if identity.get("zone", "") != _region: continue
-				entries.append(_entry(str(identity.devil_photo_id),str(game.get("name","遊戲"))+" · 小惡魔",str(game.get("devil_hint","完成設施的特別條件。"))))
+				entries.append(_game_entry(game,identity,true))
 		"time":
 			if _region!="welcome": return entries
 			for phase in _time_phases:
@@ -379,9 +382,24 @@ func _entries() -> Array[Dictionary]:
 
 func _category_prompt() -> String:
 	match _category:
-		"devil": return "小惡魔拍貼｜完成設施的特別條件，收藏的畫格會先出現。"
+		"devil": return "小惡魔拍貼｜實際技巧與免費補拍分開記錄；選取缺卡進入補拍。"
 		"time": return "四時明信片｜切換園區時段，留下那一刻的實際照片。"
-		_: return "普通拍貼｜完成遊戲、探索或委託，照片就會收進本子。"
+		_: return "普通拍貼｜正式遊玩自然結束不限勝負；選取缺卡可先練習或免費補拍。"
+
+func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Dictionary:
+	var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
+	var instructions := ("實際技巧："+str(game.devil_hint)) if devil else "正式遊玩自然結束即可收藏，不限勝負。"
+	instructions += "｜%s · 固定遊戲亭：%s · %s" % ["潮汐碼頭" if identity.zone=="harbor" else "迎賓大道",game.name,photo_id]
+	if _progress.photos.has(photo_id):
+		var record: Dictionary = _progress.photos[photo_id]
+		instructions += "｜取得："+("免費補拍布景" if record.get("acquisition_method","")=="retake" else "遊戲拍攝")
+		if devil: instructions += "｜"+("實際技巧已達成" if record.get("challenge_earned",record.get("acquisition_method","")!="retake") else "實際技巧尚未達成")
+	else:
+		instructions += "｜"+("免費補拍" if _progress.has_attempted_game(str(game.id)) else "先練習再免費補拍（可隨時退出）")
+	var entry := _entry(photo_id,str(game.name)+(" · 小惡魔" if devil else ""),instructions)
+	entry.game_id=str(game.id)
+	entry.devil=devil
+	return entry
 
 func _entry(photo_id: String, title: String, instructions: String) -> Dictionary:
 	return {"id":photo_id,"title":title,"instructions":instructions}
@@ -467,6 +485,10 @@ func _photo_tile(entry: Dictionary) -> Control:
 	else:
 		content_row.add_child(title)
 	var status := Paper.label("已收藏" if collected else "尚未收藏",16,Paper.TEAL if collected else Paper.INK)
+	if collected and entry.has("game_id"):
+		status.text="已收藏 · "+("補拍" if _progress.photos[entry.id].get("acquisition_method","")=="retake" else "遊戲")
+	if not collected and entry.has("game_id"):
+		status.text="免費補拍" if _progress.has_attempted_game(str(entry.game_id)) else "先練習再補拍"
 	status.name="AlbumPhotoStatus"
 	(copy_column if compact_layout else content_row).add_child(status)
 	var method := Paper.label(str(entry.instructions),16,Paper.INK)
@@ -487,6 +509,12 @@ func _set_children_mouse_ignored(node: Node) -> void:
 
 func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 	if not _progress.photos.has(entry.id):
+		if entry.has("game_id"):
+			if _progress.has_attempted_game(str(entry.game_id)):
+				retake_requested.emit(str(entry.game_id),bool(entry.devil))
+			else:
+				practice_requested.emit(str(entry.game_id),bool(entry.devil))
+			return
 		_photo_details.text="這張照片還在等你，完成遊園後再回來翻看。"
 		return
 	var photo_id := str(entry.id)
