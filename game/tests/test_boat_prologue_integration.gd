@@ -150,11 +150,13 @@ func _test_save_failure_process() -> void:
 	var expected := "ERROR: Cannot write progress temporary file '%s.tmp': Can't open file" % child_path
 	var errors: Array[String] = []
 	var passed := false
-	for line in str(output[0] if not output.is_empty() else "").split("\n"):
+	var child_output := str(output[0] if not output.is_empty() else "")
+	for line in child_output.split("\n"):
 		var clean := line.strip_edges()
 		if clean.contains("ERROR:"): errors.append(clean)
 		if clean == "PASS: boat save-failure continues arrival without rewards": passed = true
-	_check(code == 0 and passed and errors == [expected], "isolated real IO failure continues arrival; exactly one expected diagnostic and no hidden runtime errors")
+	var details := "exit=%d passed=%s expected=%s errors=%s output_tail=%s" % [code,passed,expected.left(500),JSON.stringify(errors).left(1000),child_output.right(3000)]
+	_check(code == 0 and passed and errors == [expected], "isolated real IO failure continues arrival; exactly one expected diagnostic and no hidden runtime errors; " + details)
 
 func _save_failure_child() -> void:
 	Progress.reset_progress()
@@ -185,8 +187,12 @@ func _spawn() -> void:
 
 func _dispose() -> void:
 	if not is_instance_valid(main): return
+	# Match real quit so restored world physics cannot restart audio during the wait.
+	main.quitting = true
 	main.audio.shutdown()
+	main.world.area_changed.emit("海風碼頭")
 	await get_tree().create_timer(0.2).timeout
+	_check(main.audio._active_context.is_empty(), "pending area event cannot restart audio during fixture teardown")
 	main.free()
 	main = null
 	await _frames(3)
