@@ -88,6 +88,40 @@ func _initialize() -> void:
 	looping_return.manifest.actors.imp.settle.left.loop = true
 	assert(not looping_return.get_sequence("imp", "settle", "left").available, "a looping clip cannot promise a finite return direction")
 	var announcer_right: Dictionary = production_library.get_sequence("announcer", "walk", "right")
+	var replacement = Library.new()
+	var replacement_frame: Dictionary = replacement.manifest.actors.announcer.walk.right.frames[0]
+	replacement_frame.source = source
+	replacement_frame.region = [0,0,4,4]
+	replacement_frame.anchors = {"feet":[2,4],"head":[2,0]}
+	replacement_frame.source_scale = 1.0
+	replacement_frame.layers = []
+	var replacement_pixels: Image = replacement.texture("announcer","walk","right",0).get_image()
+	assert(replacement_pixels.get_pixel(160,444) == Color.RED, "a replacement full-pose source cannot be covered by an old registered walk")
+	assert(replacement.normalized_anchor("announcer","walk","right",0,"head") == Vector2i(160,440), "replacement pose retains its own head attachment")
+	for _extra_frame in range(4):replacement.manifest.actors.announcer.walk.right.frames.append(replacement_frame.duplicate(true))
+	assert(replacement.texture("announcer","walk","right",7).get_image().get_pixel(160,444) == Color.RED, "a longer replacement walk safely uses every new source cel")
+	var changed_pixels = Library.new()
+	var current_frame: Dictionary = changed_pixels.manifest.actors.announcer.walk.right.frames[0]
+	var changed_source: Image = changed_pixels._image(str(current_frame.source),"announcer","walk","right",0).duplicate()
+	changed_source.fill(Color.RED)
+	changed_pixels._images[str(current_frame.source)] = changed_source
+	var expected_replacement := changed_pixels._render_frame("announcer","walk","right",0,current_frame,{},true)
+	assert(changed_pixels.texture("announcer","walk","right",0).get_image().get_data() == expected_replacement.get_image().get_data(), "even the same source path cannot reuse registered pixels after its image changes")
+	for invalid_binding in [null, {}, [], ["invalid"], [null,null,null,null]]:
+		var fallback = Library.new()
+		fallback._stable_walk_pixels.manifest["announcer-walk/right"].source_bindings = invalid_binding
+		var raw_pose: Dictionary = fallback.manifest.actors.announcer.walk.right.frames[0]
+		var expected_fallback := fallback._render_frame("announcer","walk","right",0,raw_pose,{},true)
+		assert(fallback.texture("announcer","walk","right",0).get_image().get_data() == expected_fallback.get_image().get_data(), "missing or malformed source binding preserves the complete source pose")
+	var changed_canvas = Library.new()
+	changed_canvas.manifest.actors.announcer.canvas_size = [321,460]
+	assert(changed_canvas.texture("announcer","walk","right",0).get_width() == 321, "registered pixels cannot bypass a replacement canvas")
+	var binding: Dictionary = production_library._stable_walk_pixels.manifest["announcer-walk/right"].source_bindings[0].frame
+	for _image_index in range(10):
+		var other_image := Image.create(4,4,false,Image.FORMAT_RGBA8)
+		other_image.fill(Color.RED)
+		assert(production_library._stable_walk_pixels.frame("announcer-walk","right",0,binding,other_image) == null, "mismatched source pixels reject the registered cache")
+	assert(production_library._stable_walk_pixels._source_hashes.size() == 8, "source fingerprint cache evicts old entries after eight source images")
 	var announcer_left: Dictionary = production_library.get_sequence("announcer", "walk", "left")
 	assert(announcer_right.available and announcer_right.frames.size() == 4 and announcer_left.available and announcer_left.frames.size() == 4, "real manifest loads four authored side poses for each profile direction")
 	var distinct_right: Dictionary = {}

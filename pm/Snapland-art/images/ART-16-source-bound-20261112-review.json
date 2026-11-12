@@ -1,0 +1,55 @@
+{
+  "ticket": "ART-16",
+  "date": "2026-11-12",
+  "base_commit": "f9a05ae7286006a8f986daa05570c62cf5c24930",
+  "source_bindings": 24,
+  "source_pngs_modified": false,
+  "runtime_local_checks": 16,
+  "final_guard_checks": 4,
+  "native_export_frames": 672,
+  "movies": [
+    {
+      "label": "normal-pack",
+      "file": "ART-16-source-bound-20261112-normal-pack.mp4",
+      "r_frame_rate": "30/1",
+      "duration": "15.333333",
+      "nb_frames": "460"
+    },
+    {
+      "label": "quarter",
+      "file": "ART-16-source-bound-20261112-quarter.mp4",
+      "r_frame_rate": "30/1",
+      "duration": "61.400000",
+      "nb_frames": "1842"
+    },
+    {
+      "label": "reduced",
+      "file": "ART-16-source-bound-20261112-reduced.mp4",
+      "r_frame_rate": "30/1",
+      "duration": "1.800000",
+      "nb_frames": "54"
+    }
+  ],
+  "isolated_pack_regressions": [
+    "test_walk_pixel_stability",
+    "test_character_animation_library"
+  ],
+  "candidate_poses": 16,
+  "candidate_accepted": false,
+  "candidate_ground_gap_source_pixels": [
+    0,
+    5
+  ],
+  "human_played": false,
+  "human_listened": false,
+  "sources": {
+    "game/world/walk_pixel_sources.gd": "9a5a0439c9b8cf9d19a90427f5c87509a9d64ba512887e9f6b7e8490422d0705",
+    "game/world/character_animation_library.gd": "b6bfece790842a616aef066395272cf63e31e6e3e8661dfd0dadaa305ff52478",
+    "game/tests/test_character_animation_library.gd": "b27472f1dd36dca9f6fb764ba50179e0c9edbb432687320873c8c7a1788a568d",
+    "game/tests/export_walk_stability.gd": "65b3877e9658ce6105ce685884fe5dc34ed8d78ef40629263669f6248e7191dc",
+    "assets/characters/walk-stability-v1/manifest.json": "2fcfd3b222b98ae5d893dbfe758d1d8af28b66bb7832865569e60d76e63e362b",
+    "tools/walk_stability/build_registered_walks.py": "26034009f36f3bee2d8d4a29ed1f11d2a0d328c498e6a60ef63cc5753c5be82b",
+    "tests/test_walk_pixel_stability.py": "318124cd5b0e2df110a385fb957ca67524f4fe356f87dfd27a79cde8d64ce1c4"
+  },
+  "note": "Native fixture captures and source comparisons; no human continuous-play or listening acceptance. Candidate study uses fixed cell roots, one scale and shared row ground."
+}

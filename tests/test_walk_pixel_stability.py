@@ -1,6 +1,7 @@
 """Use image content, not self-reported pivots, to reject walking head jitter."""
 import json
 import unittest
+import tempfile
 from pathlib import Path
 from PIL import Image,ImageChops
 ROOT=Path(__file__).resolve().parents[1]
@@ -13,6 +14,26 @@ def region(pack,frame):
 
 
 class WalkPixelStabilityTest(unittest.TestCase):
+    def test_walk_rebuild_rejects_unbound_baseline_before_replacing_pixels(self):
+        from tools.walk_stability import build_registered_walks
+        views=["front","front_right","right","back_right","back","back_left","left","front_left"]
+        groups=[("island-raw",view) for view in views]+[("announcer-walk","left"),("announcer-walk","right"),("announcer-walk_candidate","front"),("ticket-walk_candidate","front")]
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            baseline=root/"baseline"
+            baseline.mkdir()
+            output=root/"output"
+            output.mkdir()
+            previous=output/"announcer-walk-left.png"
+            previous.write_bytes(b"approved previous atlas")
+            for invalid in [None,{}, {"frame":{},"image_sha256":"bad"}]:
+                frames=[{"family":family,"view":view,"frame":0,"file":"uncaptured.png","source_binding":invalid} for family,view in groups]
+                (baseline/"frames.json").write_text(json.dumps({"frames":frames}),encoding="utf-8")
+                with self.assertRaisesRegex(ValueError,"Recapture source-bound native baseline"):
+                    build_registered_walks.compile_frames(baseline,output)
+                self.assertEqual(b"approved previous atlas",previous.read_bytes())
+                self.assertEqual([previous],list(output.iterdir()))
+
     def test_walk_head_pixels_stay_rigid_while_limbs_animate(self):
         manifest=json.loads((PACK/"manifest.json").read_text(encoding="utf-8"))
         for view in manifest["directions"]:

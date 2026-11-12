@@ -349,7 +349,8 @@ func _render_frame(actor: String, action: String, direction: String, index: int,
 	fixed_canvas.blend_rect(output, Rect2i(Vector2i.ZERO, scaled_size), destination)
 	output = fixed_canvas
 	if not inspection and action in ["walk","walk_candidate"]:
-		var registered: Image = _stable_walk_pixels.frame(actor+"-"+action,direction,index)
+		var binding := {"pose":frame,"canvas_size":canvas_value,"reference_size":reference_value,"feet_baseline":baseline_value}
+		var registered: Image = _stable_walk_pixels.frame(actor+"-"+action,direction,index,binding,source_image)
 		if registered!=null:
 			output=registered
 			var registered_layout: Dictionary=_layouts[key]

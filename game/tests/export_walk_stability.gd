@@ -36,7 +36,15 @@ func _run() -> void:
             for view in Parts.DIRECTIONS:
                 for frame in range(library.frame_count(actor,action,view)):
                     var texture: Texture2D = library.texture(actor,action,view,frame)
-                    if texture!=null:_save(texture.get_image(),"%s-%s" % [actor,action],view,frame)
+                    if texture!=null:
+                        _save(texture.get_image(),"%s-%s" % [actor,action],view,frame)
+                        var geometry: Dictionary=library.manifest.actors[actor]
+                        var pose: Dictionary=geometry[action][view].frames[frame]
+                        var image: Image=library._image(str(pose.source),actor,action,view,frame)
+                        var context:=HashingContext.new()
+                        if context.start(HashingContext.HASH_SHA256)!=OK or context.update(image.get_data())!=OK:
+                            push_error("Could not fingerprint walk source");quit(1);return
+                        records[-1]["source_binding"]={"frame":{"pose":pose,"canvas_size":geometry.canvas_size,"reference_size":geometry.reference_size,"feet_baseline":geometry.feet_baseline},"image_sha256":context.finish().hex_encode()}
     var file := FileAccess.open(output.path_join("frames.json"),FileAccess.WRITE)
     file.store_string(JSON.stringify({"scope":"Actual runtime CPU compositor output at a fixed actor root; no camera tracking or positional motion","frames":records},"  "));file.close()
     parts.free()

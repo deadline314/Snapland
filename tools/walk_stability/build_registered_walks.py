@@ -11,7 +11,6 @@ sys.path.insert(0,str(ROOT))
 from tools.walk_stability.source_repairs import apply_repairs,load_recipe,RECIPE
 def rounded(x):return math.floor(x+.5) if x>=0 else math.ceil(x-.5)
 def compile_frames(baseline,output):
-    import cv2,numpy as np
     baseline=Path(baseline);output=Path(output);output.mkdir(parents=True,exist_ok=True)
     index=json.loads((baseline/"frames.json").read_text(encoding="utf-8"))["frames"]
     groups={}
@@ -19,6 +18,12 @@ def compile_frames(baseline,output):
         if item["family"] not in ["island-raw","announcer-walk","announcer-walk_candidate","ticket-walk_candidate"]:continue
         groups.setdefault((item["family"],item["view"]),[]).append(item)
     if len(groups)!=12:raise ValueError("Expected eight hero and four NPC walk sequences")
+    for (family,view),items in groups.items():
+        if family=="island-raw":continue
+        bindings=[item.get("source_binding") for item in items]
+        if any(not isinstance(binding,dict) or not isinstance(binding.get("frame"),dict) or not isinstance(binding.get("image_sha256"),str) or len(binding["image_sha256"])!=64 for binding in bindings):
+            raise ValueError(f"Recapture source-bound native baseline before compiling: {family}/{view}")
+    import cv2,numpy as np
     old=json.loads((ROOT/"assets/characters/walk-regions.json").read_text(encoding="utf-8"))
     manifest={"schema_version":1,"method":"Fixed root registration followed by a rigid per-heading head/neck reference part. No runtime anatomy inference.","sequences":{}}
     recipe=load_recipe()
@@ -27,6 +32,7 @@ def compile_frames(baseline,output):
     review=[]
     for (family,view),items in sorted(groups.items()):
         items.sort(key=lambda v:v["frame"])
+        bindings=[item.get("source_binding") for item in items] if family!="island-raw" else []
         images=[Image.open(baseline/r["file"]).convert("RGBA") for r in items];w,h=images[0].size
         if family=="island-raw":
             data=old["directions"][view];scale=360/444
@@ -62,6 +68,7 @@ def compile_frames(baseline,output):
         key=("hero" if family=="island-raw" else family)+"/"+view
         spec={"source":"res://"+str((output/name).resolve().relative_to(ROOT.resolve())).replace("\\","/"),"canvas":[w,h],"frames":len(items),"head_neck_seam_y":seam,"registration_offsets":offsets,"placement_scores":scores,"source_frame_sha256":[hashlib.sha256((baseline/r["file"]).read_bytes()).hexdigest() for r in items]}
         if family!="island-raw":
+            spec["source_bindings"]=bindings
             actor,action=family.split("-",1)
             full=json.loads((ROOT/"assets/characters/complete-animation-regions.json").read_text(encoding="utf-8"))["actors"][actor]
             frame0=full[action][view]["frames"][0]
