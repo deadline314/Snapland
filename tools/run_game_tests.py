@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "avatar prop foreground tests": "PASS: prop foreground 128 complete-pose blends, independent hand/camera witnesses, rigid guards, exact-source rejection, bounded cache and 10 malformed inputs",
     "NPC departure lifecycle tests": "PASS: planted NPC departure, pause, dialogue, interruption, stride restart, reduced motion and damaged-source fallback",
     "pixel typography tests": "PASS: 40 pixel font checks, 0 failures",
     "localization framework tests": "PASS: locale packs, fallback, preferences and live UI state",
@@ -211,6 +212,7 @@ def main(argv: list[str] | None = None) -> int:
             ("legacy head source tests", common + ["--script", "res://game/tests/test_legacy_head_source.gd"]),
             ("garment part ownership tests", common + ["--script", "res://game/tests/test_garment_part_ownership.gd"]),
             ("side outfit palette tests", common + ["--script", "res://game/tests/test_outfit_side_palette.gd"]),
+            ("avatar prop foreground tests", common + ["--script", "res://game/tests/test_avatar_prop_foreground.gd"]),
             ("NPC animation state tests", common + ["--script", "res://game/tests/test_npc_animation_states.gd"]),
             ("tutorial panel/catalog tests", common + ["--script", "res://game/tests/test_tutorial_panel.gd"]),
             ("tutorial seen progress tests", common + ["res://game/tests/test_tutorial_seen_progress.tscn"]),

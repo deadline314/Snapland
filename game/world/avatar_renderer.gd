@@ -66,6 +66,7 @@ const OUTFIT_COLORS := {
 
 var garment_overlays = preload("res://game/world/garment_overlay_library.gd").new()
 var legacy_heads = preload("res://game/world/legacy_head_source.gd").new()
+var prop_foreground = preload("res://game/world/avatar_prop_foreground.gd").new()
 
 var _atlas: Texture2D
 var _atlas_image: Image
@@ -183,6 +184,8 @@ func hair_motion_attachment_guard(direction: String, frame: int, action: String,
 	var hat := str(equipped.get("hat", "hat-none"))
 	if DIRECTIONS.has(direction): _apply_hat(guard, hat, direction, head.y, shift)
 	else: _apply_diagonal_hat(guard, hat, direction, head.y, shift)
+	var original := original_garment_pose(action,direction,frame)
+	for pixel in prop_foreground.indices(original): guard.set_pixel(pixel%280,pixel/280,Color.WHITE)
 	return guard
 
 func has_authored_action(action: String, direction: String = "front") -> bool:
@@ -303,6 +306,12 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var face_mask := PackedByteArray()
 	var source_hair_mask := PackedByteArray()
 	var source_metrics: Dictionary = legacy_heads.metrics_for(safe_action,image) if not legacy_source.is_empty() else {}
+	var prop_indices := PackedInt32Array()
+	if safe_action in ["walk","idle"] and safe_direction in ["front","front_left","front_right","left","right"]:
+		prop_indices = prop_foreground.indices(image)
+		if has_hair_overlay and prop_indices.is_empty():
+			has_hair_overlay=false
+			use_replacement_hair=false
 	if has_hair_overlay:
 		if use_walk_source:
 			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, image)
@@ -360,6 +369,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		_apply_diagonal_hair(image, str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.get(str(normalized_appearance.get("hair_color", "ink")), HAIR_COLORS.ink), hair_hat_offset, head_shift_x, hair_target_width, face_backdrop, source_metrics, SKIN_COLORS.get(str(normalized_appearance.get("skin", "warm")), SKIN_COLORS.warm))
 	if face_backdrop != null:
 		_restore_face_features(image, face_backdrop, face_mask, source_metrics.face_indices)
+		prop_foreground.restore(image,face_backdrop,prop_indices)
 	if DIRECTIONS.has(safe_direction):
 		_apply_appearance_details(image, normalized_appearance, safe_direction, safe_action)
 	var selected_hair_color: Color = HAIR_COLORS.get(str(normalized_appearance.get("hair_color","ink")),HAIR_COLORS.ink)

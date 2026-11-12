@@ -48,6 +48,11 @@ func _run() -> void:
 				await _draw()
 				var moving := rig.get_texture().get_image()
 				var protected_error := _difference(moving, expected, _allowed(view))
+				var prop_error := 0
+				for index in renderer.prop_foreground.indices(renderer.original_garment_pose("walk",view,0)):
+					var point := Vector2i(index%280,index/280)
+					if moving.get_pixelv(point)!=expected.get_pixelv(point): prop_error+=1
+				_check(prop_error==0,"moving hair changed rigid camera/hand foreground: %s/%s/%s/%d" % [style,view,hat,prop_error])
 				var moved := _difference(moving, before)
 				_check(protected_error == 0, "face/body/hat drift outside authored tuft envelope: %s/%s/%d" % [style + "/" + view, hat, protected_error])
 				if hat == "hat-none": _check(moved > 0, "bones must actually change visible hair pixels: " + view)
@@ -59,7 +64,7 @@ func _run() -> void:
 				await _draw()
 				var settled := _difference(rig.get_texture().get_image(), expected)
 				_check(settled == 0, "stopped hair must settle to exact original: %s/%s/%d" % [style + "/" + view, hat, settled])
-				cases.append({"style": style, "direction": view, "hat": hat, "rest_error": rest_error, "protected_error": protected_error, "moving_pixels": moved, "settled_error": settled})
+				cases.append({"style": style, "direction": view, "hat": hat, "rest_error": rest_error, "protected_error": protected_error, "prop_error":prop_error,"moving_pixels": moved, "settled_error": settled})
 				before.save_png(output.path_join(style + "-" + view + "-" + hat + "-rest.png"))
 				moving.save_png(output.path_join(style + "-" + view + "-" + hat + "-moving.png"))
 				if style != "windswept" and hat == "hat-none":

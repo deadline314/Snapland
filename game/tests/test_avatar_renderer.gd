@@ -113,11 +113,15 @@ func _paint_layers(renderer,source: Image,record: Dictionary,result: Image,look:
 	else: renderer._apply_diagonal_hair(overlay,look.hair,view,Avatar.HAIR_COLORS[look.hair_color],anchor.y,anchor.x-140,renderer.walk_head_width(view,frame)*1.05,source,overlay_record)
 	var body := source.duplicate()
 	renderer._apply_palette(body,look,equipped.outfit,renderer._closest_cardinal(view),true,record.source_hair_indices,record.palette_hair_indices)
+	var foreground := PackedByteArray()
+	foreground.resize(280*360)
+	for index in renderer.prop_foreground.indices(source): foreground[index]=1
 	for y in range(360):
 		for x in range(280):
 			var index := y*280+x
 			var hair_color := overlay.get_pixel(x,y)
-			if hair_color.a==1.0 and record.face_mask[index]==0: assert(result.get_pixel(x,y)==hair_color,"opaque haircut RGB cannot receive jacket/skin palette")
+			if foreground[index]!=0: assert(result.get_pixel(x,y)==body.get_pixel(x,y),"held camera/hand foreground retains selected body RGBA over hair")
+			elif hair_color.a==1.0 and record.face_mask[index]==0: assert(result.get_pixel(x,y)==hair_color,"opaque haircut RGB cannot receive jacket/skin palette")
 			if hair_color.a==0.0 and record.replacement_source_mask[index]==0: assert(result.get_pixel(x,y)==body.get_pixel(x,y),"outside head/cut original body RGBA remains exact")
 	return true
 

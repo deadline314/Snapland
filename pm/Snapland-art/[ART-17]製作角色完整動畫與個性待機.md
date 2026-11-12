@@ -38,8 +38,8 @@
 # 跟其他票的關係
 
 - Blocks：無
-- Blocked by：ART-18
-- Related：ART-9、ART-12、ART-14、ART-15、ART-16
+- Blocked by：無
+- Related：ART-9、ART-12、ART-14、ART-15、ART-16、ART-18
 
 ---
 
