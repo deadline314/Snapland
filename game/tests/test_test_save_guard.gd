@@ -76,7 +76,7 @@ func _build_fixture_project(project_dir: String) -> void:
 	var game_dir := project_dir.path_join("game")
 	var core_dir := game_dir.path_join("core")
 	assert(DirAccess.make_dir_recursive_absolute(core_dir) == OK)
-	for source: String in ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd"]:
+	for source: String in ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd", "game_catalog.gd"]:
 		var source_path := "res://game/core/" + source
 		var target_path := core_dir.path_join(source)
 		var input := FileAccess.open(source_path, FileAccess.READ)
@@ -86,6 +86,10 @@ func _build_fixture_project(project_dir: String) -> void:
 		output.store_buffer(input.get_buffer(input.get_length()))
 		input.close()
 		output.close()
+	var data_dir := game_dir.path_join("data")
+	assert(DirAccess.make_dir_recursive_absolute(data_dir) == OK)
+	for source: String in ["welcome_games.json", "harbor_games.json"]:
+		_copy_script("res://game/data/" + source, data_dir.path_join(source))
 	var tests_dir := game_dir.path_join("tests")
 	assert(DirAccess.make_dir_recursive_absolute(tests_dir) == OK)
 	_copy_script("res://game/tests/test_save_guard_child.gd", tests_dir.path_join("test_save_guard_child.gd"))
@@ -266,8 +270,11 @@ func _cleanup_temp_fixture() -> void:
 	# The fixture root is generated uniquely above and contains only test-owned files.
 	DirAccess.remove_absolute(_fixture_root.path_join("project/normal_save_roundtrip.gd"))
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game/tests/test_save_guard_child.gd"))
-	for name: String in ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd"]:
+	for name: String in ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd", "game_catalog.gd"]:
 		DirAccess.remove_absolute(_fixture_root.path_join("project/game/core").path_join(name))
+	for name: String in ["welcome_games.json", "harbor_games.json"]:
+		DirAccess.remove_absolute(_fixture_root.path_join("project/game/data").path_join(name))
+	DirAccess.remove_absolute(_fixture_root.path_join("project/game/data"))
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game/tests"))
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game/core"))
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game"))

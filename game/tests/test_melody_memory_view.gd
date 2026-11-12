@@ -127,14 +127,15 @@ func _test_game_session_view_lifecycle(view: View) -> void:
 	var native_display := DisplayServer.get_name() != "headless"
 	if native_display:
 		DisplayServer.window_set_size(Vector2i(1280, 720))
-	else:
-		# Headless rule tests do not allocate the renderer; retain a direct ready view
-		# to verify that its resource setup and update path still work in that mode.
+	session.start("game-012")
+	if not native_display:
+		# Borrow the root-owned ready view only after start clears prior presentations.
 		session.presentation = view
 		session.presentation_mode = "melody_memory"
 		view.note_requested.connect(session._on_melody_note_requested)
 		view.replay_requested.connect(session._on_melody_replay_requested)
-	session.start("game-012")
+		session._sync_presentation()
+		_expect(view._snapshot == session.melody_model.snapshot(), "borrowed headless view receives the launched model's initial state")
 	var model: Variant = session.melody_model
 	var launched_view: View = view if not native_display else session.presentation as View
 	_expect(session.game_id == "game-012" and session.mode == "melody_memory", "game-012 launches its actual melody session and finite model")
@@ -166,5 +167,11 @@ func _test_game_session_view_lifecycle(view: View) -> void:
 	_expect(int(model.snapshot().input_index) == 0 and model.snapshot().phase == "listen" and session.score == 0, "retry resets both the launched game model and visible phrase")
 	session.set_practice_mode(true)
 	_expect(session.practice_mode and model.snapshot().phase == "listen" and model.snapshot().input_index == 0, "practice restarts the same view-model lifecycle without carrying the answer forward")
+	if not native_display:
+		view.note_requested.disconnect(session._on_melody_note_requested)
+		view.replay_requested.disconnect(session._on_melody_replay_requested)
+		session.presentation = null
+		session.presentation_mode = ""
 	session.queue_free()
 	await process_frame
+	_expect(is_instance_valid(view) and view.is_inside_tree(), "root-owned fixture view survives Session cleanup for its owner to free once")
