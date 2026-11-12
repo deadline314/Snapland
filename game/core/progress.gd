@@ -43,6 +43,7 @@ var quests: Dictionary = {}
 var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
 var visited: Dictionary = {}
 var intro_seen := false
+var prologue_seen := false
 var platform_pending_achievements: Array[String] = []
 var appearance: Dictionary = DEFAULT_APPEARANCE.duplicate(true)
 var equipped: Dictionary = DEFAULT_EQUIPPED.duplicate(true)
@@ -69,6 +70,15 @@ func grant_photo(source_id: String, metadata: Dictionary = {}) -> bool:
 		return false
 	photos[source_id] = metadata.duplicate(true)
 	changed.emit()
+	return true
+
+func mark_prologue_seen() -> bool:
+	if prologue_seen:
+		return true
+	prologue_seen = true
+	if not save_progress():
+		prologue_seen = false
+		return false
 	return true
 
 func has_seen_tutorial(game_id: String) -> bool:
@@ -558,6 +568,7 @@ func save_progress() -> bool:
 		"settings": safe_settings,
 		"visited": visited,
 		"intro_seen": intro_seen,
+		"prologue_seen": prologue_seen,
 		"platform_pending_achievements": platform_pending_achievements,
 		"appearance": appearance,
 		"equipped": equipped,
@@ -812,6 +823,9 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 		if result.has(key) and typeof(result[key]) != TYPE_BOOL:
 			push_error("Invalid '%s' field in progress file '%s'; using default." % [key, path])
 			result.erase(key)
+	if result.has("prologue_seen") and typeof(result["prologue_seen"]) != TYPE_BOOL:
+		push_warning("Invalid 'prologue_seen' field in progress file '%s'; treating as already seen." % path)
+		result.erase("prologue_seen")
 	if result.has("tutorial_seen_games") and typeof(result["tutorial_seen_games"]) != TYPE_ARRAY:
 		push_warning("Invalid 'tutorial_seen_games' field in progress file '%s'; using defaults." % path)
 		result.erase("tutorial_seen_games")
@@ -868,7 +882,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -905,6 +919,7 @@ func _apply_save(payload: Dictionary) -> void:
 			if loaded_visited[key] == true:
 				visited[str(key)] = true
 	intro_seen = payload.get("intro_seen", false) == true
+	prologue_seen = payload.get("prologue_seen", true) == true
 	var loaded_pending: Variant = payload.get("platform_pending_achievements", [])
 	if typeof(loaded_pending) == TYPE_ARRAY:
 		for achievement_id in loaded_pending:
@@ -995,6 +1010,7 @@ func _reset_memory() -> void:
 	settings = DEFAULT_SETTINGS.duplicate(true)
 	visited = {}
 	intro_seen = false
+	prologue_seen = false
 	platform_pending_achievements = []
 	appearance = DEFAULT_APPEARANCE.duplicate(true)
 	equipped = DEFAULT_EQUIPPED.duplicate(true)

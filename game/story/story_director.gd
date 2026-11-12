@@ -101,6 +101,7 @@ func _validate_story_data() -> Array[String]:
 				errors.append("%s[%d] has unknown speaker or empty text" % [field, index])
 			elif str(line.get("speaker", "")) == "露露":
 				errors.append("%s[%d] uses unavailable character 露露" % [field, index])
+	errors.append_array(_validate_prologue_lines())
 	errors.append_array(_validate_conversations())
 	var missions: Variant = _story_data.get("quest_missions", {})
 	if not missions is Dictionary:
@@ -246,6 +247,25 @@ func _conversation_matches(when: Dictionary, state: Dictionary) -> bool:
 	if when.has("time_phase") and str(when.time_phase) != str(state.get("time_phase", "")):
 		return false
 	return true
+
+func _validate_prologue_lines() -> Array[String]:
+	var errors: Array[String] = []
+	if not _story_data.has("prologue_lines"):
+		return errors
+	var lines: Variant = _story_data["prologue_lines"]
+	if not lines is Array or lines.is_empty():
+		errors.append("prologue_lines must be a non-empty array")
+		return errors
+	for index in range(lines.size()):
+		var line: Variant = lines[index]
+		if not line is Dictionary or not ALLOWED_SPEAKERS.has(line.get("speaker", null)) or not line.get("text", null) is String or str(line.get("text", "")).strip_edges().is_empty() or not ["idle", "interact", "photograph", "wave"].has(line.get("pose", null)):
+			errors.append("prologue_lines[%d] requires an existing speaker, non-empty text and supported pose" % index)
+	return errors
+
+func prologue_lines() -> Array:
+	if not _validate_prologue_lines().is_empty():
+		return []
+	return (_story_data.get("prologue_lines", []) as Array).duplicate(true)
 
 func intro_lines() -> Array:
 	return (_story_data.get("intro_lines", []) as Array).duplicate(true)
