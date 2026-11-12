@@ -127,9 +127,9 @@ func _test_signals_and_overlays(hud: Control) -> void:
 	hud.set_state({"title":"帽子救援", "objective":"完整目標文字", "progress_text":"6/6 接住", "score":816, "time_text":"00:00", "ended":true, "won":true, "devil":true})
 	var result_layer: Control = hud.get("_result_layer")
 	var result_status: Label = hud.get("_result_status")
-	_check(result_layer.visible and result_status.text.contains("惡魔拍貼達成") and result_status.text.contains("816"), "formal result shows earned outcome and actual total")
+	_check(result_layer.visible and result_status.text.contains("普通與小惡魔拍貼資格已達成") and result_status.text.ends_with("　816"), "formal result shows qualification before persistence and actual total")
 	hud.set_state({"title":"練習", "objective":"完整目標文字", "progress_text":"6/6 接住", "score":816, "time_text":"00:00", "ended":true, "won":true, "devil":false, "practice":true})
-	_check(result_status.text.contains("練習結果・不會收藏拍貼") and not result_status.text.contains("惡魔拍貼達成"), "practice result states that it does not award a collectible")
+	_check(result_status.text.contains("練習結果・不會收藏拍貼") and result_status.text.ends_with("　816") and not result_status.text.contains("拍貼資格已達成"), "practice result keeps its actual total without claiming collection qualification")
 
 func _click_button(button: Button) -> void:
 	var click := InputEventMouseButton.new()
