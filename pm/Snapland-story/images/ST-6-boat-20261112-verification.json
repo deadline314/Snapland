@@ -1,0 +1,37 @@
+{
+  "source_commit": "8512937d37e522a52d47484431f6be6921e589a2",
+  "runtime_files": 1087,
+  "exe_sha256": "808b79ae0128dedc6d9143337c8408566d52e34eb2dfe2b06f05158f9ecfc960",
+  "exe_bytes": 282192376,
+  "pck_sha256": "778d5d4b491c003eb4494260962d2fa789a2740a71c01fadc9e8cbb68ef6cf94",
+  "pck_bytes": 172923884,
+  "scripted_native": true,
+  "human_played": false,
+  "human_listened": false,
+  "native_sizes": [
+    "800x600",
+    "1280x720",
+    "1920x1080"
+  ],
+  "native_captures_each": 10,
+  "pck_forward_plus_captures": 10,
+  "windows_startup": "PASS; no ERROR",
+  "windows_twelve_game_assets": "PASS;12captures; no ERROR",
+  "existing_warnings": "15 unsupported building-material warnings; unchanged",
+  "ci": {
+    "run": 43247479202,
+    "status": "success",
+    "prior_failed_run": 43242323231,
+    "prior_failure_fixed": "test cleanup audio race; no runtime change",
+    "python_tests": 182,
+    "runtime_checks": 104,
+    "url": "https://github.com/deadline314/Snapland/actions/runs/43247479202"
+  },
+  "source_inputs_git_clean": true,
+  "rebuilt_artifacts_byte_identical": true,
+  "cross_platform_fix_checks": {
+    "linux_official": "2/2",
+    "windows_official": "2/2",
+    "deterministic_child": "both pass strict exact error predicate"
+  }
+}
