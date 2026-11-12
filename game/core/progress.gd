@@ -36,6 +36,7 @@ const WELCOME_GAME_IDS := [
 	"game-007", "game-008", "game-009", "game-010", "game-011", "game-012",
 ]
 const ZONES := ["welcome", "harbor", "candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky", "cinema"]
+const SUPPORTED_REGIONS := ["welcome", "harbor"]
 
 var photos: Dictionary = {}
 var achievements: Dictionary = {}
@@ -44,6 +45,7 @@ var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
 var visited: Dictionary = {}
 var intro_seen := false
 var prologue_seen := false
+var current_region: String = "welcome"
 var platform_pending_achievements: Array[String] = []
 var appearance: Dictionary = DEFAULT_APPEARANCE.duplicate(true)
 var equipped: Dictionary = DEFAULT_EQUIPPED.duplicate(true)
@@ -79,6 +81,19 @@ func mark_prologue_seen() -> bool:
 	if not save_progress():
 		prologue_seen = false
 		return false
+	return true
+
+func set_current_region(region: String) -> bool:
+	if not SUPPORTED_REGIONS.has(region):
+		return false
+	if current_region == region:
+		return true
+	var previous := current_region
+	current_region = region
+	if not save_progress():
+		current_region = previous
+		return false
+	# Main refreshes after replacing the world; changed would save a second time.
 	return true
 
 func has_seen_tutorial(game_id: String) -> bool:
@@ -569,6 +584,7 @@ func save_progress() -> bool:
 		"visited": visited,
 		"intro_seen": intro_seen,
 		"prologue_seen": prologue_seen,
+		"current_region": current_region,
 		"platform_pending_achievements": platform_pending_achievements,
 		"appearance": appearance,
 		"equipped": equipped,
@@ -826,6 +842,9 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 	if result.has("prologue_seen") and typeof(result["prologue_seen"]) != TYPE_BOOL:
 		push_warning("Invalid 'prologue_seen' field in progress file '%s'; treating as already seen." % path)
 		result.erase("prologue_seen")
+	if result.has("current_region") and (typeof(result["current_region"]) != TYPE_STRING or not SUPPORTED_REGIONS.has(result["current_region"])):
+		push_warning("Invalid 'current_region' field in progress file '%s'; using welcome." % path)
+		result.erase("current_region")
 	if result.has("tutorial_seen_games") and typeof(result["tutorial_seen_games"]) != TYPE_ARRAY:
 		push_warning("Invalid 'tutorial_seen_games' field in progress file '%s'; using defaults." % path)
 		result.erase("tutorial_seen_games")
@@ -882,7 +901,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -920,6 +939,7 @@ func _apply_save(payload: Dictionary) -> void:
 				visited[str(key)] = true
 	intro_seen = payload.get("intro_seen", false) == true
 	prologue_seen = payload.get("prologue_seen", true) == true
+	current_region = payload.get("current_region", "welcome")
 	var loaded_pending: Variant = payload.get("platform_pending_achievements", [])
 	if typeof(loaded_pending) == TYPE_ARRAY:
 		for achievement_id in loaded_pending:
@@ -1011,6 +1031,7 @@ func _reset_memory() -> void:
 	visited = {}
 	intro_seen = false
 	prologue_seen = false
+	current_region = "welcome"
 	platform_pending_achievements = []
 	appearance = DEFAULT_APPEARANCE.duplicate(true)
 	equipped = DEFAULT_EQUIPPED.duplicate(true)

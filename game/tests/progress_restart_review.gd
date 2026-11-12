@@ -1,7 +1,7 @@
 extends Node
 ## Optional two-process persistence evidence; never uses a player's profile.
 var failures: Array[String] = []
-const FIELDS := ["photos","achievements","quests","visited","settings","appearance","equipped","owned_clothes","coins","wardrobe_rewarded_games","platform_pending_achievements","intro_seen","prologue_seen","tutorial_seen_games","_extra_fields"]
+const FIELDS := ["photos","achievements","quests","visited","settings","appearance","equipped","owned_clothes","coins","wardrobe_rewarded_games","platform_pending_achievements","intro_seen","prologue_seen","current_region","tutorial_seen_games","_extra_fields"]
 func _ready() -> void:
 	call_deferred("_run")
 func _check(condition: bool, reason: String) -> void:
@@ -40,6 +40,7 @@ func _run() -> void:
 		_check(Progress.buy_clothing("outfit-coral"),"writer purchases one outfit")
 		_check(Progress.equip_clothing("outfit-coral"),"writer equips owned outfit")
 		Progress._extra_fields["restart_review_future"] = {"preserved":true}
+		_check(Progress.set_current_region("harbor"),"writer saves current region")
 		_check(Progress.save_progress(),"writer saves complete progress")
 		var file := FileAccess.open(expected_path,FileAccess.WRITE)
 		_check(file!=null,"writer creates independent expected snapshot")
@@ -56,6 +57,7 @@ func _run() -> void:
 		_check(Progress.photos.has("photo-welcome-game-1") and Progress.photos.has("photo-welcome-devil-1"),"ordinary and devil photos remain distinct")
 		_check(Progress.achievements.has("ACH_GAME_001") and not Progress.platform_pending_achievements.is_empty(),"offline achievement and pending platform receipt survive")
 		_check(Progress.quests.get("quest-001",0)==2,"unfinished quest resumes at the same step")
+		_check(Progress.current_region=="harbor","current region survives restart")
 		_check(Progress.equipped.outfit=="outfit-coral" and Progress.owned_clothes.has("outfit-coral"),"ownership and selected outfit survive")
 	for failure in failures: push_error("Persistence review: "+failure)
 	if failures.is_empty(): print("PASS: two-process persistence ","writer" if OS.get_cmdline_user_args().has("--write-review") else "reader"," pid=",OS.get_process_id())
