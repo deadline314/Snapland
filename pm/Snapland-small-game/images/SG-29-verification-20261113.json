@@ -1,0 +1,598 @@
+{
+  "ticket": "SG-29",
+  "status": "complete feature acceptance; publication recorded in handoff",
+  "runtime_source_commit": "90ee94c08ceddf5d0ca038e7269be335261cedf5",
+  "validated_commit": "baccba860abf7aeb650bbae785a4c01d3d066fca",
+  "ci": {
+    "run_id": 43320756889,
+    "url": "https://github.com/deadline314/Snapland/actions/runs/43320756889",
+    "headSha": "baccba860abf7aeb650bbae785a4c01d3d066fca",
+    "conclusion": "success",
+    "attempt": 2,
+    "python_tests": 199,
+    "source_checks": "success",
+    "runtime_suites": 120,
+    "unique_runtime_suites": 120,
+    "clean_imports": 4,
+    "old_suites_preserved": 115,
+    "new_suites": 5,
+    "exact_once_union": true,
+    "shards": [
+      {
+        "index": 0,
+        "executed_job_id": 131543003850,
+        "runtime_count": 33,
+        "imports": 1,
+        "run_order_matches": true,
+        "pass_order_matches": true,
+        "seconds_including_import": 270.04
+      },
+      {
+        "index": 1,
+        "executed_job_id": 131552251924,
+        "runtime_count": 24,
+        "imports": 1,
+        "run_order_matches": true,
+        "pass_order_matches": true,
+        "seconds_including_import": 221.74
+      },
+      {
+        "index": 2,
+        "executed_job_id": 131543003975,
+        "runtime_count": 33,
+        "imports": 1,
+        "run_order_matches": true,
+        "pass_order_matches": true,
+        "seconds_including_import": 564.22
+      },
+      {
+        "index": 3,
+        "executed_job_id": 131543004099,
+        "runtime_count": 30,
+        "imports": 1,
+        "run_order_matches": true,
+        "pass_order_matches": true,
+        "seconds_including_import": 271.62
+      }
+    ],
+    "executed_full_suite_job": 131540467686,
+    "executed_source_job": 131540468264,
+    "latest_attempt_jobs": [
+      {
+        "id": 131552251924,
+        "name": "game-runtime (1)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 43320756889,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Install pinned Godot 4.7.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run native Godot startup and runtime tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          }
+        ]
+      },
+      {
+        "id": 131552252180,
+        "name": "full-suite",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 43320756889,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Install 2D asset authoring test dependency",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Validate all design data and links",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Test validators against invalid designs",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          }
+        ]
+      },
+      {
+        "id": 131552253316,
+        "name": "runtime-source",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 43320756889,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Install pinned Godot 4.7.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Verify runtime test coverage is configured",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Verify isolated original-style 2D hero sample",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Verify isolated 2D hair bones and attachment contracts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Verify fixed-root 2D walk pixels and original limb registration",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Verify fixed-head island idle and blinking across appearances",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          }
+        ]
+      },
+      {
+        "id": 131552253770,
+        "name": "game-runtime (3)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 43320756889,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Install pinned Godot 4.7.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run native Godot startup and runtime tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          }
+        ]
+      },
+      {
+        "id": 131552254764,
+        "name": "game-runtime (0)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 43320756889,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Install pinned Godot 4.7.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run native Godot startup and runtime tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          }
+        ]
+      },
+      {
+        "id": 131552319944,
+        "name": "game-runtime (2)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 43320756889,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Install pinned Godot 4.7.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run native Godot startup and runtime tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          }
+        ]
+      }
+    ],
+    "infrastructure_retry": {
+      "cancelled_checkout_job": 131543003961,
+      "actual_retry_job": 131552251924,
+      "reason": "Checkout stalled over17minutes before any test; same commit, only this job rerun",
+      "completed_five_results_reused": true,
+      "cancelled_runtime_dispatches": 0
+    },
+    "log_transport": "ANSI color escapes removed only; all diagnostic text retained"
+  },
+  "build": {
+    "source_commit": "90ee94c08ceddf5d0ca038e7269be335261cedf5",
+    "stage": "C:\\Users\\stanl\\Github\\Snapland\\.review\\photo-retake-worktree\\.review\\release-stage-Snapland-preview-20261113-retake-r2",
+    "output": "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-retake-r2",
+    "runtime_files": 1098,
+    "inputs_git_clean": true,
+    "stage_excludes_all_tests": true,
+    "steps": [
+      {
+        "step": "import",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 22.92
+      },
+      {
+        "step": "pack",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 7.56
+      },
+      {
+        "step": "exe",
+        "exit": 0,
+        "errors": 0,
+        "seconds": 5.37
+      }
+    ],
+    "artifacts": {
+      "Snapland.exe": {
+        "bytes": 282475224,
+        "sha256": "0f4438b95349558328573c4886a61bc94c4f150c9be3a4e6a72eafd528ce5e45",
+        "relative_path": "Snapland.exe"
+      },
+      "Snapland.pck": {
+        "bytes": 173206732,
+        "sha256": "64f61430999d6d22196be90bad8ed961a20f178a312c7b5782f480ebe9326845",
+        "relative_path": "qa/Snapland.pck"
+      }
+    },
+    "template_sha256": "d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562"
+  },
+  "standalone": {
+    "status": "PASS",
+    "source_commit": "90ee94c08ceddf5d0ca038e7269be335261cedf5",
+    "docs_head": "dc693bf4c201201ebf21bd2aafc155a8379b3fed",
+    "runtime_equivalent": true,
+    "standalone_embedded_pack": true,
+    "adjacent_pck_absent": true,
+    "actual_input": "Sky targeted Windows UI pointer clicks, Tab and Enter; no external automation script or production bypass",
+    "sequence": [
+      "M travel menu",
+      "album concise action hover",
+      "selected devil-only game001",
+      "observe via Enter",
+      "framing right via Enter",
+      "mailbox via mouse",
+      "Tab autoscroll to distance",
+      "wide via Enter",
+      "Next and actual shutter mouse",
+      "normal Alt+F4",
+      "new standalone process same profile",
+      "ordinary0/devil1 album",
+      "actual original viewer",
+      "normal Alt+F4"
+    ],
+    "settings": {
+      "ui_scale": 1.25,
+      "reduced_motion": true
+    },
+    "coins_before": 120,
+    "coins_after": 160,
+    "one_receipt": true,
+    "ordinary_absent": true,
+    "challenge_earned": false,
+    "reader_bytes_unchanged": true,
+    "images": [
+      {
+        "kind": "frames",
+        "path": "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-retake-r2\\qa\\exe-ui/photos/photo-welcome-devil-1-retake-ffcb782e79afeed4698150b2496991d1.png",
+        "dimensions": [
+          320,
+          180
+        ],
+        "sha256": "0f0c3512af2427699b37c37df6f79ad94f7707aa28b3d52d2a8c2d1098b99b97"
+      },
+      {
+        "kind": "original_frames",
+        "path": "C:\\Users\\stanl\\Github\\Snapland\\build\\Snapland-preview-20261113-retake-r2\\qa\\exe-ui/photos/photo-welcome-devil-1-retake-ffcb782e79afeed4698150b2496991d1-original.png",
+        "dimensions": [
+          1280,
+          720
+        ],
+        "sha256": "68da71e2cef6cc885b1d7f107a32875b6952521ae28b1754cadccc46bd4c7df3"
+      }
+    ],
+    "logs": [
+      {
+        "launch": "writer",
+        "errors": 0,
+        "warnings": 15,
+        "inherited": "welcome OcclusionController material warnings"
+      },
+      {
+        "launch": "restart",
+        "errors": 0,
+        "warnings": 15,
+        "inherited": "welcome OcclusionController material warnings"
+      }
+    ],
+    "scope": "Automated UI/native visual proof, not human fun/audio acceptance"
+  },
+  "remaining_game_scope": "13 of 128 games delivered; no human audio or new animation acceptance",
+  "known_warnings": "Inherited welcome material warnings:15 per construction; preserved unsupported materials, separate followup",
+  "limits": [
+    "Earlier wide source routes predate album-only fix; final small/focused geometry and final packed/EXE cover final code",
+    "Historical initial Task1 missing-API red log unavailable; not fabricated",
+    "Single-file image replacement, not cross-file power-loss transaction",
+    "Source contract data may be synthetic or deliberately malformed; genuine native target acquisition is separately labelled"
+  ],
+  "bundle": {
+    "path": "SG-29-evidence-20261113.zip",
+    "bytes": 10633722,
+    "sha256": "006d45055717662e315c0e5fbf2a984b53e5d667f303092498641ce6fd75d73c",
+    "entries": 379
+  }
+}
