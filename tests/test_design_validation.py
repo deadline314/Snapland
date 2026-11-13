@@ -83,7 +83,7 @@ class GameTests(unittest.TestCase):
                     v.validate_games(broken, self.refs)
 
     def test_unbuilt_games_cannot_claim_runtime(self):
-        self.data['games'][17]['implementation'] = 'single_player_runtime_needs_full_acceptance'
+        self.data['games'][18]['implementation'] = 'single_player_runtime_needs_full_acceptance'
         with self.assertRaisesRegex(ValueError, 'scope'):
             v.validate_games(self.data, self.refs)
 
@@ -112,7 +112,7 @@ class GameTests(unittest.TestCase):
         self.data['games'][13]['demon'] = 'a different qualification rule'
         with self.assertRaisesRegex(ValueError, 'game-014.*runtime demon drift'):
             v.validate_runtime_game_alignment(self.data, runtime, harbor)
-        harbor.append(dict(harbor[4], id='game-018', local_index=6))
+        harbor.append(dict(harbor[5], id='game-019', local_index=7))
         with self.assertRaisesRegex(ValueError, 'delivered harbor runtime coverage'):
             v.validate_runtime_game_alignment(self.data, runtime, harbor)
 

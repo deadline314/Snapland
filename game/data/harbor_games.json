@@ -68,5 +68,19 @@
     "ordinary": "三球擊開沙灘蟹門",
     "attraction_tag": "蟹洞沙盤",
     "island_invitation": "直擊小門，還是借濕沙堤反彈？力道決定彈珠滾多遠。"
+  },
+  {
+    "id": "game-018",
+    "mode": "cargo_balance",
+    "zone": "harbor",
+    "local_index": 6,
+    "name": "船艙配重",
+    "goal": "搬箱進船艙並指定繫帶，航行中左右吃水保持平衡，依序在兩港卸貨",
+    "instructions": "搬箱並固定甲板繫帶",
+    "devil_hint": "四道側浪都保持在安全傾斜內，且至少一次在航行中移重抗浪；輔助仍可挑戰",
+    "devil": "不卸箱用移重抗過側浪",
+    "ordinary": "航行中保持吃水平衡",
+    "attraction_tag": "貨船剖面艙",
+    "island_invitation": "重箱放低放中間，看側浪預告移一箱抵住傾斜。"
   }
 ]

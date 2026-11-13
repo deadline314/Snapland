@@ -21,6 +21,12 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "cargo native fixture tests": "PASS: cargo native fixture adjacent helper and three real tutorial PNGs",
+    "cargo Main tests": "PASS: cargo Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
+    "cargo Session tests": "Cargo balance Session: 24 checks, 0 failures",
+    "cargo view tests": "Cargo balance view: 26 checks, 0 failures",
+    "cargo driver tests": "Cargo balance driver: 30 checks, 0 failures",
+    "cargo model tests": "Cargo balance: 38 checks, 0 failures",
     "crab native fixture tests": "PASS: crab native fixture adjacent helper and three real tutorial PNGs",
     "crab Main tests": "PASS: crab Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
     "crab Session tests": "Crab marbles Session: 22 checks, 0 failures",
@@ -195,7 +201,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -249,6 +255,12 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("crab Session tests", common + ["--script", "res://game/tests/test_crab_marbles_session.gd"]),
         ("crab Main tests", common + ["res://game/tests/test_crab_marbles_main.tscn"]),
         ("crab native fixture tests", common + ["res://game/tests/native_crab_marbles_main.tscn", "--", "--crab-preflight"]),
+        ("cargo model tests", common + ["--script", "res://game/tests/test_cargo_balance.gd"]),
+        ("cargo driver tests", common + ["--script", "res://game/tests/test_cargo_balance_driver.gd"]),
+        ("cargo view tests", common + ["--script", "res://game/tests/test_cargo_balance_view.gd"]),
+        ("cargo Session tests", common + ["--script", "res://game/tests/test_cargo_balance_session.gd"]),
+        ("cargo Main tests", common + ["res://game/tests/test_cargo_balance_main.tscn"]),
+        ("cargo native fixture tests", common + ["res://game/tests/native_cargo_balance_main.tscn", "--", "--cargo-preflight"]),
         ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
         ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
         ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),
