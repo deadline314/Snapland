@@ -1274,7 +1274,7 @@ func _interact(id: String, title: String) -> void:
 		elif id.begins_with("harbor:ferry:"):
 			world.take_ferry(id)
 		elif id.begins_with("harbor:info:"):
-			_start_dialogue([{ "speaker":title, "text":"沿環岸步道或搭免費渡船前往燈塔。潮汐鐘可預覽漲退潮；浪間小艇已開放，其他十一款遊戲準備中。" }],Callable())
+			_start_dialogue([{ "speaker":title, "text":_harbor_info_text() }],Callable())
 		return
 	if is_instance_valid(world.coastal_play) and world.coastal_play.activate(id):
 		return
@@ -1358,6 +1358,13 @@ func _story_snapshot() -> Dictionary:
 func _definition(id: String) -> Dictionary:
 	return Catalog.find(id)
 
+
+## Lighthouse sign: counts what the catalog actually delivers in the harbor.
+func _harbor_info_text() -> String:
+	var open := Catalog.definitions("harbor").size()
+	var total := 12 # game-013..024 in the design catalogue
+	var games := "碼頭%d款遊戲都已開放。" % open if open >= total else "已開放%d款遊戲，其餘%d款準備中。" % [open, total - open]
+	return "沿環岸步道或搭免費渡船前往燈塔。潮汐鐘可預覽漲退潮；" + games
 func _show_game_info(id: String) -> void:
 	_dispose_retake()
 	var definition := _definition(id)

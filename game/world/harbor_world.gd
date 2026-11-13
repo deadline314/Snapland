@@ -101,7 +101,10 @@ func _build_region_geometry() -> void:
 	_box(Vector3(13.6, 0.8, -10.4), Vector3(1.0, 1.2, 1.0), CORAL)
 	_box(Vector3(13.6, 1.5, -10.4), Vector3(1.5, 0.2, 1.5), GOLD)
 	_point("game-023", "海鳥借風 · 免費遊玩", Vector3(12, GROUND_Y, -10.2))
-	_sign("其餘一款遊戲準備中", Vector3(12, 0.2, 9.4))
+	_sign("潮鐘合閘 · 對齊水位放船", Vector3(12, 0.2, 8.4))
+	_box(Vector3(13.6, 0.8, 10.4), Vector3(1.0, 1.2, 1.0), CORAL)
+	_box(Vector3(13.6, 1.5, 10.4), Vector3(1.5, 0.2, 1.5), GOLD)
+	_point("game-024", "潮鐘合閘 · 免費遊玩", Vector3(12, GROUND_Y, 10.2))
 	current_area = "潮汐碼頭"
 
 func _terrain(rect: Rect2, material: Material) -> MeshInstance3D:

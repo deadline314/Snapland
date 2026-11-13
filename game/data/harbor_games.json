@@ -152,5 +152,19 @@
     "ordinary": "帶三根羽毛回巢",
     "attraction_tag": "海崖滑翔",
     "island_invitation": "高處風大、海面風小；收一下翼，放開就能換回高度。"
+  },
+  {
+    "id": "game-024",
+    "mode": "tide_lock",
+    "zone": "harbor",
+    "local_index": 12,
+    "name": "潮鐘合閘",
+    "goal": "聽潮鐘預告對齊水位、輪流開下閘與上閘，讓三艘船過閘上港，最後關閘關閥",
+    "instructions": "按潮鐘預告拉閘放船",
+    "devil_hint": "一次蓄水同時送兩艘船上港，全程沒有船擱淺；輔助仍可挑戰",
+    "devil": "一次蓄水送雙船而不擱淺",
+    "ordinary": "三船過閘後安全關水",
+    "attraction_tag": "潮鐘船閘",
+    "island_invitation": "兩道閘不能同開；聽鐘、看水位，再決定併船還是分批。"
   }
 ]

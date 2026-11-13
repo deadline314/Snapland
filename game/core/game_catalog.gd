@@ -2,7 +2,7 @@ extends RefCounted
 
 const DATA_PATHS := {"welcome": "res://game/data/welcome_games.json", "harbor": "res://game/data/harbor_games.json"}
 const ZONE_STARTS := {"welcome": 1, "harbor": 13}
-const ZONE_COUNTS := {"welcome": 12, "harbor": 11}
+const ZONE_COUNTS := {"welcome": 12, "harbor": 12}
 const TEXT_FIELDS := ["id", "mode", "name", "goal", "instructions", "devil_hint", "devil", "ordinary", "attraction_tag", "island_invitation"]
 static var _cache: Dictionary = {}
 
