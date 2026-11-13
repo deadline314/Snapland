@@ -15,16 +15,18 @@ func _run() -> void:
 	var harbor: Array = catalog.definitions("harbor")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 1 and all_games.size() == 13, "only the thirteen delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 2 and all_games.size() == 14, "only the fourteen delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor and catalog.definitions("candy").is_empty(), "global order is welcome then harbor; planned regions remain unavailable")
 	_check(harbor[0].name == "浪間小艇" and harbor[0].instructions == "划槳、轉舵並側滑靠岸" and harbor[0].ordinary == "載三箱到兩座浮碼頭" and harbor[0].devil == "用浪峰側滑靠岸不撞箱", "harbor row uses the approved concise copy")
 	var expected := {"id": "game-013", "mode": "rowing_cargo", "zone": "harbor", "local_index": 1, "photo_id": "photo-harbor-game-1", "devil_photo_id": "photo-harbor-devil-1", "achievement_id": "ACH_GAME_013"}
 	_check(catalog.identity("game-013") == expected and catalog.identity("rowing_cargo") == expected, "global and mode lookup produce the same regional identity")
+	var sandbar := {"id": "game-014", "mode": "tide_sandbar", "zone": "harbor", "local_index": 2, "photo_id": "photo-harbor-game-2", "devil_photo_id": "photo-harbor-devil-2", "achievement_id": "ACH_GAME_014"}
+	_check(catalog.identity("game-014") == sandbar and catalog.identity("tide_sandbar") == sandbar and harbor[1].name == "潮汐沙路", "second harbor game keeps local two and global fourteen")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
-	for invalid in ["game-014", "game-13", "game-001 ", "", "res://game/minigames/session.gd"]:
+	for invalid in ["game-015", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:
 		_check(catalog.find(invalid).is_empty() and catalog.identity(invalid).is_empty(), "unknown or malformed catalog key is rejected: " + invalid)
 	welcome[0].name = "mutated"
 	harbor[0].name = "mutated"
@@ -47,7 +49,7 @@ func _run() -> void:
 		bad = sources.duplicate(true)
 		bad.harbor[0][field] = "  "
 		invalid_sources.append(bad)
-	for field_value in [["id", "game-014"], ["id", "game-001"], ["mode", "balloon_delivery"], ["mode", "res://evil.gd"], ["zone", "welcome"], ["local_index", 13], ["local_index", true]]:
+	for field_value in [["id", "game-015"], ["id", "game-014"], ["id", "game-001"], ["mode", "balloon_delivery"], ["mode", "res://evil.gd"], ["zone", "welcome"], ["local_index", 13], ["local_index", true]]:
 		bad = sources.duplicate(true)
 		bad.harbor[0][field_value[0]] = field_value[1]
 		invalid_sources.append(bad)

@@ -62,7 +62,11 @@ func _build_region_geometry() -> void:
 	_point("harbor:ferry:lighthouse", "免費渡船 · 返回岸邊", LIGHTHOUSE_DOCK)
 	_point("harbor:info:lighthouse", "燈塔與環形水路", Vector3(0, GROUND_Y, -2))
 	_point("game-013", "浪間小艇 · 免費遊玩", Vector3(12, GROUND_Y, 0))
-	_sign("其餘十一款遊戲準備中", Vector3(12, 0.2, 3))
+	_sign("潮汐沙路 · 空白鍵插路標", Vector3(12, 0.2, 3.4))
+	_box(Vector3(13.4, 0.8, 5.4), Vector3(1.0, 1.2, 1.0), CORAL)
+	_box(Vector3(13.4, 1.5, 5.4), Vector3(1.5, 0.2, 1.5), GOLD)
+	_point("game-014", "潮汐沙路 · 免費遊玩", Vector3(12, GROUND_Y, 5.6))
+	_sign("其餘十款遊戲準備中", Vector3(12, 0.2, 9.4))
 	current_area = "潮汐碼頭"
 
 func _terrain(rect: Rect2, material: Material) -> MeshInstance3D:

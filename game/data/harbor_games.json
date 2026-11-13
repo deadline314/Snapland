@@ -12,5 +12,19 @@
     "ordinary": "載三箱到兩座浮碼頭",
     "attraction_tag": "潮汐貨運碼頭",
     "island_invitation": "抓準浪峰划一槳，把貨物平安送進港灣。"
+  },
+  {
+    "id": "game-014",
+    "mode": "tide_sandbar",
+    "zone": "harbor",
+    "local_index": 2,
+    "name": "潮汐沙路",
+    "goal": "退潮時沿沙路插路標連接三座礁，在潮水淹沒前平安回到營地",
+    "instructions": "在沙洲走跑並放路標",
+    "devil_hint": "第一輪潮內先標高地與中繼沙丘留好回路，再連三礁並回營；輔助仍可挑戰",
+    "devil": "一輪潮內先留回路再探三礁",
+    "ordinary": "退潮窗口內連接三礁",
+    "attraction_tag": "退潮沙洲",
+    "island_invitation": "看準水位刻度，趁退潮把路標一路插到三座礁。"
   }
 ]

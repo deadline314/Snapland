@@ -39,7 +39,7 @@ func _run() -> void:
 	image.resize(960, 540)
 	_check(image.save_png(original) == OK, "write real original")
 	var bytes := FileAccess.get_file_as_bytes(thumb)
-	for invalid in ["", "game-000", "game-014", "game-13", "rowing_cargo", "game-013 "]:
+	for invalid in ["", "game-000", "game-015", "game-13", "rowing_cargo", "game-013 "]:
 		var before := _snapshot()
 		_check(not progress.mark_game_attempted(invalid) and not progress.has_attempted_game(invalid) and not progress.complete_retake(invalid, true, [thumb], [original]) and _snapshot() == before, "invalid target rejected: " + invalid)
 	_check(not progress.complete_retake("game-013", false, [thumb], [original]), "unattempted game cannot retake")
@@ -50,7 +50,7 @@ func _run() -> void:
 	progress.reset_progress()
 	progress.load_progress()
 	_check(progress.attempted_games.is_empty(), "reset clears persisted history")
-	var mixed: Array = ["game-013", "game-013", "rowing_cargo", "game-014", "game-13", null, 13]
+	var mixed: Array = ["game-013", "game-013", "rowing_cargo", "game-015", "game-13", null, 13]
 	for i in 100: mixed.append("game-001")
 	var safe: Dictionary = progress._validated_payload({"attempted_games": mixed, "future": {"kept": true}}, "fixture")
 	_check(safe.attempted_games == ["game-001", "game-013"], "canonical deduplicated bounded attempt history")
@@ -62,7 +62,7 @@ func _run() -> void:
 	for definition: Dictionary in Catalog.all_definitions():
 		var identity := Catalog.identity(definition.id)
 		for card: String in [identity.photo_id, identity.devil_photo_id]:
-			progress._apply_save({"photos": {card: {"legacy": true}, "photo-future-game-1": {"game_id": "game-014"}}, "future": 7})
+			progress._apply_save({"photos": {card: {"legacy": true}, "photo-future-game-1": {"game_id": "game-015"}}, "future": 7})
 			_check(progress.attempted_games == [definition.id], "canonical old card infers " + card)
 	progress._apply_save({"photos": {"photo-welcome-game-01": {}, "photo-welcome-game-99": {}, "photo-future": {"game_id": "game-001"}}})
 	_check(progress.attempted_games.is_empty(), "malformed and unrelated metadata cannot infer attempts")

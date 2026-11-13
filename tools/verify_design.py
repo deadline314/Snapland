@@ -8,6 +8,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
+HARBOR_DELIVERED = 2  # game-013 onward, in local order
 ZONES = ('welcome', 'harbor', 'candy', 'nightmarket', 'circus', 'toy', 'garden', 'hotel', 'sky', 'cinema')
 CORES = {'掌握', '取捨', '預測', '創意', '協調', '節奏'}
 GAME_FIELDS = ('id', 'name', 'zone', 'core', 'action', 'goal', 'choice', 'feedback', 'variation', 'solo', 'multi', 'ai', 'demon', 'demon_assist_policy', 'variant', 'assist', 'test', 'reference', 'revision', 'revision_reason', 'presentation', 'implementation')
@@ -81,7 +82,7 @@ def validate_games(data, refs):
         check(row['core'] in CORES, f'games {row["id"]}: unknown core')
         check(row['reference'] in refs, f'games {row["id"]}: missing source')
         check(row['revision'] in {'保留', '重設', '替換'}, f'games {row["id"]}: revision status')
-        expected_state = 'single_player_runtime_needs_full_acceptance' if i <= 13 else 'design_only_not_playtested'
+        expected_state = 'single_player_runtime_needs_full_acceptance' if i <= 12 + HARBOR_DELIVERED else 'design_only_not_playtested'
         check(row['implementation'] == expected_state, f'games {row["id"]}: implementation scope mismatch')
     check(CORES.issubset({r['core'] for r in rows}), 'games: missing fun families')
     prototypes = data.get('prototype_order')
@@ -93,7 +94,8 @@ def validate_games(data, refs):
 def validate_runtime_game_alignment(data, runtime, harbor):
     """The catalogue may plan modes, but cannot silently redefine live solo rules."""
     check(len(runtime) == 12 and [r['id'] for r in runtime] == [f'game-{i:03d}' for i in range(1, 13)], 'games: first-park runtime coverage')
-    check(len(harbor) == 1 and harbor[0]['id'] == 'game-013' and harbor[0]['zone'] == 'harbor' and harbor[0]['local_index'] == 1, 'games: delivered harbor runtime coverage')
+    check(len(harbor) == HARBOR_DELIVERED and all(row['id'] == f'game-{13 + i:03d}' and row['zone'] == 'harbor' and row['local_index'] == i + 1
+                                                for i, row in enumerate(harbor)), 'games: delivered harbor runtime coverage')
     delivered = {row['id']: row for row in runtime + harbor}
     for row in data['games']:
         if row['id'] not in delivered:

@@ -19,7 +19,7 @@ func _run() -> void:
 	progress.reset_progress()
 	_check(not progress.has_seen_tutorial("game-001"), "new profile sees the first game tutorial")
 	_check(not progress.mark_game_tutorial_seen("game-000"), "unknown game IDs cannot be marked learned")
-	_check(not progress.mark_game_tutorial_seen("game-014"), "out-of-range game IDs cannot be marked learned")
+	_check(not progress.mark_game_tutorial_seen("game-015"), "out-of-range game IDs cannot be marked learned")
 	_check(progress.mark_game_tutorial_seen("game-001"), "valid game can be marked learned")
 	_check(progress.mark_game_tutorial_seen("game-001"), "marking the same game learned is idempotent")
 	_check(progress.tutorial_seen_games == ["game-001"], "seen state contains one canonical ID")

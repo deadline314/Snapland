@@ -63,7 +63,9 @@ class RuntimeResultContractTests(unittest.TestCase):
     def test_rowing_markers_require_exact_zero_failure_completion(self) -> None:
         for label in ('rowing cargo model tests', 'rowing cargo driver tests', 'rowing cargo view tests',
                       'rowing Session tests', 'harbor collection tests', 'rowing Main tests', 'rowing native fixture tests',
-                      'delivered game catalog tests', 'harbor game progress tests'):
+                      'delivered game catalog tests', 'harbor game progress tests', 'sandbar model tests',
+                      'sandbar driver tests', 'sandbar view tests', 'sandbar Session tests', 'sandbar Main tests',
+                      'sandbar native fixture tests'):
             marker = PASS_MARKERS[label]
             with self.subTest(label=label):
                 self.assertIsNone(result_error(label, self.result(marker + '\n')))
@@ -206,7 +208,7 @@ class RuntimeResultContractTests(unittest.TestCase):
 
 RETAKE_SUITES = {
     "photo retake progress tests": ("test_photo_retake_progress.gd", "PASS: attempt history, selected retake awards, provenance and atomic rollback"),
-    "participation result tests": ("test_participation_results.gd", "PASS: thirteen participation results, practice, cancellation and driver eligibility"),
+    "participation result tests": ("test_participation_results.gd", "PASS: fourteen participation results, practice, cancellation and driver eligibility"),
     "retake panel tests": ("test_retake_panel.gd", "PASS: retake panel canonical targets, reversible state, keyboard and capture guards"),
     "photo retake Main tests": ("test_photo_retake_main.tscn", "PASS: Main selected retakes, actual attempts, truthful awards and safe PNG replacement"),
     "retake native fixture tests": ("test_retake_native_fixture.gd", "PASS: retake native fixture adjacent helper, isolated packaging and real resources"),

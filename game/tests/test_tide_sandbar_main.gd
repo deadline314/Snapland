@@ -1,0 +1,86 @@
+extends Node
+
+const Route = preload("res://game/tests/tide_sandbar_route.gd")
+var failures: Array[String] = []
+var main: Node
+
+func _ready() -> void:
+	call_deferred("_run")
+
+func check(ok: bool, message: String) -> void:
+	if not ok: failures.append(message)
+
+func solve(session: Control, route: Array) -> bool:
+	session.set_process(false)
+	var solved := Route.solve(Route.SessionCommands.new(session), route, true, 1.0 / 60.0, true)
+	if main.session == session: session._process(0.0)
+	return solved
+
+func _run() -> void:
+	if not OS.get_environment("SNAPLAND_SAVE_PATH").is_absolute_path(): get_tree().quit(1); return
+	Progress.reset_progress()
+	Progress.intro_seen = true
+	main = load("res://game/main.tscn").instantiate()
+	get_tree().root.add_child(main)
+	await get_tree().process_frame
+	check(main.definitions.size() == 12, "welcome definitions stay twelve")
+	check(main._definition("game-014").get("mode", "") == "tide_sandbar", "Main resolves global14")
+	check(main._definition("game-015").is_empty(), "Main refuses undelivered15")
+	# Synthetic harbor admission only; the game014 cards are earned through Session inputs.
+	for i in range(1, 7): Progress.grant_photo("photo-welcome-game-%d" % i)
+	check(main._travel_to_region("harbor"), "six welcome cards admit harbor")
+	for i in 4: await get_tree().process_frame
+	check(main.world._point_by_id("game-014").get("id", "") == "game-014", "real harbor kiosk for game014")
+	main._show_map()
+	await get_tree().process_frame
+	var map_action = main.overlay.find_child("HarborGamegame-014", true, false)
+	check(map_action is Button, "regional map offers game014 invitation")
+	if map_action != null: map_action.pressed.emit()
+	check(main.modal_kind == "game_info", "map opens normal invite")
+	main._request_game_start("game-014", false)
+	await get_tree().process_frame
+	check(is_instance_valid(main.tutorial_panel) and main.tutorial_target == "game-014", "014 first-entry lesson")
+	main._tutorial_start("game-014")
+	for i in 3: await get_tree().process_frame
+	check(Progress.has_seen_tutorial("game-014") and main.session != null, "first entry saves lesson and starts014")
+	if main.session != null:
+		var s: Control = main.session
+		s.set_process(false)
+		for i in 2000:
+			if main.session == null: break
+			s._process(0.1)
+	check(Progress.photos.has("photo-harbor-game-2") and Progress.normal_count_for_zone("harbor") == 1 and Progress.devil_count("harbor") == 0, "natural timeout earns the second harbor ordinary card only")
+	check(_text(main.overlay).contains("普通拍貼已收藏"), "timeout result states the saved ordinary card")
+	check(Progress.wardrobe_rewarded_games.has("game-014") and Progress.achievements.has("ACH_GAME_014"), "global receipt and achievement014")
+	var coins: int = Progress.coins
+	main._launch_game("game-014", false, true)
+	check(solve(main.session, Route.SECURE_FIRST), "practice secure route completes")
+	check(main.session == null and Progress.coins == coins and Progress.devil_count("harbor") == 0, "practice success awards nothing")
+	main._launch_game("game-014", false)
+	check(solve(main.session, Route.FAR_FIRST), "far-first route completes")
+	check(Progress.devil_count("harbor") == 0 and Progress.coins == coins, "far-first success stays ordinary without new coins")
+	main._launch_game("game-014", true)
+	check(solve(main.session, Route.SECURE_FIRST), "assisted secure route completes")
+	check(main.session == null and Progress.photos.has("photo-harbor-devil-2") and Progress.devil_count("harbor") == 1 and Progress.coins == coins, "assisted secure route awards devil once")
+	main._launch_game("game-014", false)
+	main.session._leave_from_hud()
+	check(main.session == null and Progress.coins == coins, "cancel awards nothing")
+	main._show_achievements()
+	check(_text(main.overlay).contains("碼頭"), "Main selects regional stamps")
+	main._close()
+	check(not Progress.photos.has("photo-harbor-game-1"), "game013 card is not unlocked by game014")
+	Progress._reset_memory()
+	Progress.load_progress()
+	check(Progress.has_seen_tutorial("game-014") and Progress.normal_count_for_zone("harbor") == 1 and Progress.devil_count("harbor") == 1 and Progress.achievements.has("ACH_GAME_014"), "profile reload preserves game014")
+	main.audio.shutdown()
+	await get_tree().create_timer(0.15).timeout
+	main.queue_free()
+	for i in 12: await get_tree().process_frame
+	for problem in failures: push_error(problem)
+	print("PASS: sandbar Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload" if failures.is_empty() else "FAIL: sandbar Main")
+	get_tree().quit(0 if failures.is_empty() else 1)
+
+func _text(node: Node) -> String:
+	var result := str(node.text) if node is Label else ""
+	for child in node.get_children(): result += "\n" + _text(child)
+	return result

@@ -46,7 +46,7 @@ func _run() -> void:
 	_check(not results.back().ordinary_eligible, "driver natural ineligibility is retained")
 	session.free()
 	for failure in failures: push_error("FAIL: " + failure)
-	if failures.is_empty(): print("PASS: thirteen participation results, practice, cancellation and driver eligibility")
+	if failures.is_empty(): print("PASS: fourteen participation results, practice, cancellation and driver eligibility")
 	quit(0 if failures.is_empty() else 1)
 
 func _check(ok: bool, message: String) -> void:

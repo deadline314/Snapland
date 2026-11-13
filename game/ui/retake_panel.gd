@@ -16,7 +16,7 @@ const PROPS := [
 	["camera","lantern","sign"], ["flower_horn","lantern","mascot"],
 	["bench","visitor","tourist_gold"], ["lantern","sign","camera"],
 	["sign","mailbox","lantern"], ["flower_horn","lantern","camera"],
-	["lantern","sign","bench"]]
+	["lantern","sign","bench"], ["sign","lantern","visitor"]]
 const PROP_LABELS := {"balloon":"氣球", "mailbox":"郵箱", "kite":"風箏", "lantern":"燈籠", "flower_horn":"花喇叭", "camera":"相機", "sign":"指示牌", "visitor":"旅人", "tourist_blue":"藍衣旅人", "tourist_coral":"珊瑚旅人", "hat":"帽子", "mascot":"吉祥物", "bench":"長椅", "tourist_gold":"金衣旅人"}
 
 class CopyScroll extends ScrollContainer:
@@ -131,7 +131,10 @@ func _load_set() -> bool:
 	var atlas := load("res://assets/minigames/props/tidal-props-v2.png") as Texture2D
 	var regions: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/minigames/props/regions.json"))
 	if atlas == null or not regions is Dictionary: return _source_error()
-	for key in PROPS[int(_definition.id.trim_prefix("game-"))-1]:
+	var prop_index := int(_definition.id.trim_prefix("game-"))-1
+	# A delivered game without a themed prop row fails closed instead of indexing past the table.
+	if prop_index < 0 or prop_index >= PROPS.size(): return _source_error()
+	for key in PROPS[prop_index]:
 		var region: Variant = regions.get(key)
 		if not region is Array or region.size() != 4: return _source_error()
 		var rect := Rect2(float(region[0]),float(region[1]),float(region[2]),float(region[3]))

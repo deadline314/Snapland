@@ -69,10 +69,10 @@ func _run() -> void:
 	writes = progress.save_calls
 	signals = changes
 	_check(progress.complete_game("game-013", true) and _snapshot() == before_replay and progress.save_calls == writes and changes == signals, "devil replay is idempotent")
-	for invalid in ["game-014", "game-000", "game-13", "rowing_cargo", "game-013 ", ""]:
+	for invalid in ["game-015", "game-000", "game-13", "rowing_cargo", "game-013 ", ""]:
 		_check(not progress.complete_game(invalid, true) and not progress.mark_game_tutorial_seen(invalid) and not progress.has_seen_tutorial(invalid) and _snapshot() == before_replay, "unsupported and malformed persistent IDs never mutate state: " + invalid)
 	_check(progress.mark_game_tutorial_seen("game-013") and progress.has_seen_tutorial("game-013"), "delivered harbor tutorial is supported")
-	var safe: Dictionary = progress._validated_payload({"tutorial_seen_games": ["game-013", "game-014", "game-13", 13], "wardrobe_rewarded_games": ["game-013", "game-014", "rowing_cargo", null]}, "harbor-fixture")
+	var safe: Dictionary = progress._validated_payload({"tutorial_seen_games": ["game-013", "game-015", "game-13", 13], "wardrobe_rewarded_games": ["game-013", "game-015", "rowing_cargo", null]}, "harbor-fixture")
 	_check(safe.tutorial_seen_games == ["game-013"] and safe.wardrobe_rewarded_games == ["game-013"], "tutorial and reward validators accept only delivered canonical IDs")
 	var thumb := save_path.get_base_dir().path_join("thumb.png")
 	var original := save_path.get_base_dir().path_join("original.png")
@@ -82,7 +82,7 @@ func _run() -> void:
 	image.resize(960, 540)
 	_check(image.save_png(original) == OK, "actual full resolution PNG is written")
 	_check(not progress.attach_welcome_game_photo_frames("game-013", [thumb], true, [original]), "welcome wrapper preserves its region restriction")
-	_check(not progress.attach_game_photo_frames("game-014", [thumb], true), "unsupported attachment cannot grant a card")
+	_check(not progress.attach_game_photo_frames("game-015", [thumb], true), "unsupported attachment cannot grant a card")
 	_check(not progress.attach_game_photo_frames("game-013", [original], true), "original dimensions cannot pass thumbnail validation")
 	_check(progress.attach_game_photo_frames("game-013", [thumb], true, [original]), "harbor shares validated thumbnails and originals")
 	_check(progress.photos["photo-harbor-game-1"].frames == [thumb] and progress.photos["photo-harbor-devil-1"].frames == [thumb] and progress.photos["photo-harbor-devil-1"].original_frames == [original], "both harbor records reference the same captures")
