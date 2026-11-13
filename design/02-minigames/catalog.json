@@ -2,7 +2,7 @@
   "version": 1,
   "date": "2026-10-20",
   "status": "design_spec_not_playtested",
-  "scope": "128基本候選；僅001–019有現行單人程式，未宣稱全款或多人已可玩。",
+  "scope": "128基本候選；僅001–020有現行單人程式，未宣稱全款或多人已可玩。",
   "prototype_order": [
     "game-001",
     "game-004",
@@ -508,8 +508,9 @@
       "reference": "catalog-jamboree",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「調帆角並選內外航線」；「搶風快線或低張力內線」形成取捨，以「玩家能用旗預判一次超越」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "sail_chase"
     },
     {
       "name": "貝殼聽潮",

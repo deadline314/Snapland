@@ -15,7 +15,7 @@ func _run() -> void:
 	var harbor: Array = catalog.definitions("harbor")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 7 and all_games.size() == 19, "only the nineteen delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 8 and all_games.size() == 20, "only the twenty delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor and catalog.definitions("candy").is_empty(), "global order is welcome then harbor; planned regions remain unavailable")
@@ -31,6 +31,7 @@ func _run() -> void:
 	_check(catalog.identity("game-017") == {"id": "game-017", "mode": "crab_marbles", "zone": "harbor", "local_index": 5, "photo_id": "photo-harbor-game-5", "devil_photo_id": "photo-harbor-devil-5", "achievement_id": "ACH_GAME_017"} and harbor[4].name == "蟹洞彈珠", "harbor game 5 keeps its regional identity")
 	_check(catalog.identity("game-018") == {"id": "game-018", "mode": "cargo_balance", "zone": "harbor", "local_index": 6, "photo_id": "photo-harbor-game-6", "devil_photo_id": "photo-harbor-devil-6", "achievement_id": "ACH_GAME_018"} and harbor[5].name == "船艙配重", "harbor game 6 keeps its regional identity")
 	_check(catalog.identity("game-019") == {"id": "game-019", "mode": "buoy_relay", "zone": "harbor", "local_index": 7, "photo_id": "photo-harbor-game-7", "devil_photo_id": "photo-harbor-devil-7", "achievement_id": "ACH_GAME_019"} and harbor[6].name == "浮標接力", "harbor game 7 keeps its regional identity")
+	_check(catalog.identity("game-020") == {"id": "game-020", "mode": "sail_chase", "zone": "harbor", "local_index": 8, "photo_id": "photo-harbor-game-8", "devil_photo_id": "photo-harbor-devil-8", "achievement_id": "ACH_GAME_020"} and harbor[7].name == "帆影追逐", "harbor game 8 keeps its regional identity")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
 	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:
@@ -56,7 +57,7 @@ func _run() -> void:
 		bad = sources.duplicate(true)
 		bad.harbor[0][field] = "  "
 		invalid_sources.append(bad)
-	for field_value in [["id", "game-020"], ["id", "game-014"], ["id", "game-001"], ["mode", "balloon_delivery"], ["mode", "res://evil.gd"], ["zone", "welcome"], ["local_index", 13], ["local_index", true]]:
+	for field_value in [["id", "game-021"], ["id", "game-014"], ["id", "game-001"], ["mode", "balloon_delivery"], ["mode", "res://evil.gd"], ["zone", "welcome"], ["local_index", 13], ["local_index", true]]:
 		bad = sources.duplicate(true)
 		bad.harbor[0][field_value[0]] = field_value[1]
 		invalid_sources.append(bad)

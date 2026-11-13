@@ -70,7 +70,8 @@ class RuntimeResultContractTests(unittest.TestCase):
                       'tug driver tests', 'tug view tests', 'tug Session tests', 'tug Main tests', 'tug native fixture tests',
                       'crab native fixture tests', 'crab Main tests', 'crab Session tests', 'crab view tests', 'crab driver tests', 'crab model tests',
                       'cargo native fixture tests', 'cargo Main tests', 'cargo Session tests', 'cargo view tests', 'cargo driver tests', 'cargo model tests',
-                      'relay native fixture tests', 'relay Main tests', 'relay Session tests', 'relay view tests', 'relay driver tests', 'relay model tests'):
+                      'relay native fixture tests', 'relay Main tests', 'relay Session tests', 'relay view tests', 'relay driver tests', 'relay model tests',
+                      'sail native fixture tests', 'sail Main tests', 'sail Session tests', 'sail view tests', 'sail driver tests', 'sail model tests'):
             marker = PASS_MARKERS[label]
             with self.subTest(label=label):
                 self.assertIsNone(result_error(label, self.result(marker + '\n')))

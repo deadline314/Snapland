@@ -96,5 +96,19 @@
     "ordinary": "把漂流郵筒傳到岸邊",
     "attraction_tag": "浮標接力站",
     "island_invitation": "近站穩穩交接，還是遠投直接上岸？蓄力決定郵筒飛多遠。"
+  },
+  {
+    "id": "game-020",
+    "mode": "sail_chase",
+    "zone": "harbor",
+    "local_index": 8,
+    "name": "帆影追逐",
+    "goal": "轉舵、收放帆角追上繞圈的移動燈船三次，依浮標旗預告搶風轉向",
+    "instructions": "調帆角並選內外航線",
+    "devil_hint": "在順風換舷後六秒內追上燈船一次，並追上三次；輔助仍可挑戰",
+    "devil": "用一次順風換舷完成超越",
+    "ordinary": "追上移動燈船三次",
+    "attraction_tag": "帆影追逐海域",
+    "island_invitation": "外線風強、內線路短；看浮標旗預告風向，收放帆角追上燈船。"
   }
 ]
