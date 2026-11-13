@@ -21,6 +21,12 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "gull native fixture tests": "PASS: gull native fixture adjacent helper and three real tutorial PNGs",
+    "gull Main tests": "PASS: gull Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
+    "gull Session tests": "Gull glide Session: 23 checks, 0 failures",
+    "gull view tests": "Gull glide view: 16 checks, 0 failures",
+    "gull driver tests": "Gull glide driver: 27 checks, 0 failures",
+    "gull model tests": "Gull glide: 31 checks, 0 failures",
     "anchor native fixture tests": "PASS: anchor native fixture adjacent helper and three real tutorial PNGs",
     "anchor Main tests": "PASS: anchor Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
     "anchor Session tests": "Anchor chain Session: 23 checks, 0 failures",
@@ -225,7 +231,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -309,6 +315,12 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("anchor Session tests", common + ["--script", "res://game/tests/test_anchor_chain_session.gd"]),
         ("anchor Main tests", common + ["res://game/tests/test_anchor_chain_main.tscn"]),
         ("anchor native fixture tests", common + ["res://game/tests/native_anchor_chain_main.tscn", "--", "--anchor-preflight"]),
+        ("gull model tests", common + ["--script", "res://game/tests/test_gull_glide.gd"]),
+        ("gull driver tests", common + ["--script", "res://game/tests/test_gull_glide_driver.gd"]),
+        ("gull view tests", common + ["--script", "res://game/tests/test_gull_glide_view.gd"]),
+        ("gull Session tests", common + ["--script", "res://game/tests/test_gull_glide_session.gd"]),
+        ("gull Main tests", common + ["res://game/tests/test_gull_glide_main.tscn"]),
+        ("gull native fixture tests", common + ["res://game/tests/native_gull_glide_main.tscn", "--", "--gull-preflight"]),
         ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
         ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
         ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),

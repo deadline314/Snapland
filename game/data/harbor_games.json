@@ -138,5 +138,19 @@
     "ordinary": "把擱淺貨船轉進航道",
     "attraction_tag": "礁區救援",
     "island_invitation": "直拉不會轉，借一顆礁石改個方向，船頭就動了。"
+  },
+  {
+    "id": "game-023",
+    "mode": "gull_glide",
+    "zone": "harbor",
+    "local_index": 11,
+    "name": "海鳥借風",
+    "goal": "展翼滑翔、短促收翼俯衝再拉高，借上升氣流帶三根羽毛回到崖上的巢",
+    "instructions": "展翼滑翔並短促收翼",
+    "devil_hint": "收翼穿過岩縫，再展翼帶三根羽毛回巢；輔助仍可挑戰",
+    "devil": "收翼穿岩縫後再展翼回巢",
+    "ordinary": "帶三根羽毛回巢",
+    "attraction_tag": "海崖滑翔",
+    "island_invitation": "高處風大、海面風小；收一下翼，放開就能換回高度。"
   }
 ]
