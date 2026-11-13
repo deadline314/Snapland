@@ -124,5 +124,19 @@
     "ordinary": "回應潮聲的三段呼吸",
     "attraction_tag": "潮池貝殼",
     "island_invitation": "粗波紋按住、細波紋輕敲，靜默那拍請留給海。"
+  },
+  {
+    "id": "game-022",
+    "mode": "anchor_chain",
+    "zone": "harbor",
+    "local_index": 10,
+    "name": "錨鏈穿礁",
+    "goal": "放錨、繞礁並收鏈，借礁石改變拉力方向，把擱淺貨船轉進航道",
+    "instructions": "放錨、繞礁並收鏈",
+    "devil_hint": "同一顆礁石連繞兩圈，讓鏈條在同點兩次變向，全程不斷鏈脫困；輔助仍可挑戰",
+    "devil": "用同一礁點兩次變向脫困",
+    "ordinary": "把擱淺貨船轉進航道",
+    "attraction_tag": "礁區救援",
+    "island_invitation": "直拉不會轉，借一顆礁石改個方向，船頭就動了。"
   }
 ]
