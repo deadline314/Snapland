@@ -67,7 +67,8 @@ class RuntimeResultContractTests(unittest.TestCase):
                       'sandbar driver tests', 'sandbar view tests', 'sandbar Session tests', 'sandbar Main tests',
                       'sandbar native fixture tests', 'prism model tests', 'prism driver tests', 'prism view tests',
                       'prism Session tests', 'prism Main tests', 'prism native fixture tests', 'tug model tests',
-                      'tug driver tests', 'tug view tests', 'tug Session tests', 'tug Main tests', 'tug native fixture tests'):
+                      'tug driver tests', 'tug view tests', 'tug Session tests', 'tug Main tests', 'tug native fixture tests',
+                      'crab native fixture tests', 'crab Main tests', 'crab Session tests', 'crab view tests', 'crab driver tests', 'crab model tests'):
             marker = PASS_MARKERS[label]
             with self.subTest(label=label):
                 self.assertIsNone(result_error(label, self.result(marker + '\n')))

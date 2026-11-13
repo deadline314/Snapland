@@ -15,7 +15,7 @@ func _run() -> void:
 	var harbor: Array = catalog.definitions("harbor")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 4 and all_games.size() == 16, "only the sixteen delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 5 and all_games.size() == 17, "only the seventeen delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor and catalog.definitions("candy").is_empty(), "global order is welcome then harbor; planned regions remain unavailable")
@@ -28,6 +28,7 @@ func _run() -> void:
 	_check(catalog.identity("game-015") == prism and catalog.identity("lighthouse_prism") == prism and harbor[2].name == "燈塔折光", "third harbor game keeps local three and global fifteen")
 	var tug := {"id": "game-016", "mode": "rope_tug", "zone": "harbor", "local_index": 4, "photo_id": "photo-harbor-game-4", "devil_photo_id": "photo-harbor-devil-4", "achievement_id": "ACH_GAME_016"}
 	_check(catalog.identity("game-016") == tug and catalog.identity("rope_tug") == tug and harbor[3].name == "繩結拖船", "fourth harbor game keeps local four and global sixteen")
+	_check(catalog.identity("game-017") == {"id": "game-017", "mode": "crab_marbles", "zone": "harbor", "local_index": 5, "photo_id": "photo-harbor-game-5", "devil_photo_id": "photo-harbor-devil-5", "achievement_id": "ACH_GAME_017"} and harbor[4].name == "蟹洞彈珠", "harbor game 5 keeps its regional identity")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
 	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:
@@ -53,7 +54,7 @@ func _run() -> void:
 		bad = sources.duplicate(true)
 		bad.harbor[0][field] = "  "
 		invalid_sources.append(bad)
-	for field_value in [["id", "game-017"], ["id", "game-014"], ["id", "game-001"], ["mode", "balloon_delivery"], ["mode", "res://evil.gd"], ["zone", "welcome"], ["local_index", 13], ["local_index", true]]:
+	for field_value in [["id", "game-018"], ["id", "game-014"], ["id", "game-001"], ["mode", "balloon_delivery"], ["mode", "res://evil.gd"], ["zone", "welcome"], ["local_index", 13], ["local_index", true]]:
 		bad = sources.duplicate(true)
 		bad.harbor[0][field_value[0]] = field_value[1]
 		invalid_sources.append(bad)

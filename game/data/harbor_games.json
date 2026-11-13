@@ -54,5 +54,19 @@
     "ordinary": "拖浮台通過三道狹灣",
     "attraction_tag": "拖船水灣",
     "island_invitation": "收短拖繩穩穩過灣，或放長繩讓浮台繞過灣角。"
+  },
+  {
+    "id": "game-017",
+    "mode": "crab_marbles",
+    "zone": "harbor",
+    "local_index": 5,
+    "name": "蟹洞彈珠",
+    "goal": "瞄準角度、蓄力放出彈珠，用三顆彈珠撞開三扇沙灘蟹門",
+    "instructions": "瞄角、蓄力並放彈珠",
+    "devil_hint": "讓一顆彈珠反彈後同一次撞開兩扇蟹門，並開完三扇；輔助仍可挑戰",
+    "devil": "一次反彈開雙門",
+    "ordinary": "三球擊開沙灘蟹門",
+    "attraction_tag": "蟹洞沙盤",
+    "island_invitation": "直擊小門，還是借濕沙堤反彈？力道決定彈珠滾多遠。"
   }
 ]

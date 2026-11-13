@@ -2,7 +2,7 @@
   "version": 1,
   "date": "2026-10-20",
   "status": "design_spec_not_playtested",
-  "scope": "128基本候選；僅001–016有現行單人程式，未宣稱全款或多人已可玩。",
+  "scope": "128基本候選；僅001–017有現行單人程式，未宣稱全款或多人已可玩。",
   "prototype_order": [
     "game-001",
     "game-004",
@@ -433,8 +433,9 @@
       "reference": "catalog-b360",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「瞄角、蓄力並放彈珠」；「直擊小門或借濕沙反彈」形成取捨，以「力道改變距離而非只換動畫」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "crab_marbles"
     },
     {
       "name": "船艙配重",
