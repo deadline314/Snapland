@@ -16,7 +16,7 @@ const PROPS := [
 	["camera","lantern","sign"], ["flower_horn","lantern","mascot"],
 	["bench","visitor","tourist_gold"], ["lantern","sign","camera"],
 	["sign","mailbox","lantern"], ["flower_horn","lantern","camera"],
-	["lantern","sign","bench"], ["sign","lantern","visitor"], ["lantern","camera","sign"], ["sign","mailbox","visitor"], ["mascot","flower_horn","visitor"], ["bench","sign","tourist_blue"], ["mailbox","lantern","tourist_coral"], ["kite","lantern","tourist_gold"]]
+	["lantern","sign","bench"], ["sign","lantern","visitor"], ["lantern","camera","sign"], ["sign","mailbox","visitor"], ["mascot","flower_horn","visitor"], ["bench","sign","tourist_blue"], ["mailbox","lantern","tourist_coral"], ["kite","lantern","tourist_gold"], ["flower_horn","camera","tourist_coral"]]
 const PROP_LABELS := {"balloon":"氣球", "mailbox":"郵箱", "kite":"風箏", "lantern":"燈籠", "flower_horn":"花喇叭", "camera":"相機", "sign":"指示牌", "visitor":"旅人", "tourist_blue":"藍衣旅人", "tourist_coral":"珊瑚旅人", "hat":"帽子", "mascot":"吉祥物", "bench":"長椅", "tourist_gold":"金衣旅人"}
 
 class CopyScroll extends ScrollContainer:

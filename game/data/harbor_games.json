@@ -110,5 +110,19 @@
     "ordinary": "追上移動燈船三次",
     "attraction_tag": "帆影追逐海域",
     "island_invitation": "外線風強、內線路短；看浮標旗預告風向，收放帆角追上燈船。"
+  },
+  {
+    "id": "game-021",
+    "mode": "shell_tide",
+    "zone": "harbor",
+    "local_index": 9,
+    "name": "貝殼聽潮",
+    "goal": "聽潮聲示範後照波紋先後敲四個貝殼，回應三段潮的呼吸，靜默拍不能敲",
+    "instructions": "依波紋先後按四個貝殼",
+    "devil_hint": "三段都完成，而且所有靜默拍都沒有誤觸；輔助仍可挑戰",
+    "devil": "完整留下兩次靜默不誤觸",
+    "ordinary": "回應潮聲的三段呼吸",
+    "attraction_tag": "潮池貝殼",
+    "island_invitation": "粗波紋按住、細波紋輕敲，靜默那拍請留給海。"
   }
 ]

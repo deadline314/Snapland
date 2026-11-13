@@ -28,7 +28,7 @@ const PAPER := Color("#fff2d4")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const MinigameHUDScript = preload("res://game/ui/minigame_hud.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
-const DRIVERS := {"rowing_cargo": preload("res://game/minigames/rowing_cargo_driver.gd"), "tide_sandbar": preload("res://game/minigames/tide_sandbar_driver.gd"), "lighthouse_prism": preload("res://game/minigames/lighthouse_prism_driver.gd"), "rope_tug": preload("res://game/minigames/rope_tug_driver.gd"), "crab_marbles": preload("res://game/minigames/crab_marbles_driver.gd"), "cargo_balance": preload("res://game/minigames/cargo_balance_driver.gd"), "buoy_relay": preload("res://game/minigames/buoy_relay_driver.gd"), "sail_chase": preload("res://game/minigames/sail_chase_driver.gd")}
+const DRIVERS := {"rowing_cargo": preload("res://game/minigames/rowing_cargo_driver.gd"), "tide_sandbar": preload("res://game/minigames/tide_sandbar_driver.gd"), "lighthouse_prism": preload("res://game/minigames/lighthouse_prism_driver.gd"), "rope_tug": preload("res://game/minigames/rope_tug_driver.gd"), "crab_marbles": preload("res://game/minigames/crab_marbles_driver.gd"), "cargo_balance": preload("res://game/minigames/cargo_balance_driver.gd"), "buoy_relay": preload("res://game/minigames/buoy_relay_driver.gd"), "sail_chase": preload("res://game/minigames/sail_chase_driver.gd"), "shell_tide": preload("res://game/minigames/shell_tide_driver.gd")}
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
 const FountainJumpViewScript = preload("res://game/minigames/fountain_jump_view.gd")
 const FountainJumpModelScript = preload("res://game/minigames/fountain_jump_model.gd")
@@ -2234,6 +2234,10 @@ func _shadow_pointer_target(point: Vector2) -> Vector2:
 
 func _sync_driver_state(state: Dictionary) -> void:
 	_driver_state = state
+	# Drivers that sound notes hand them over once; Main routes them to the shared audio.
+	if active_driver != null and active_driver.has_method("consume_notes"):
+		for note: int in active_driver.consume_notes():
+			note_played.emit(note)
 	elapsed = float(state.elapsed)
 	game_time = elapsed
 	score = int(state.score)
