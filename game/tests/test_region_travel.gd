@@ -145,7 +145,7 @@ func _harbor_ui(before: Dictionary) -> void:
 	await _frames(3)
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
-	_check(book._region=="harbor" and book._entries().size()==2 and book._entries()[0].id=="photo-harbor-game-1" and book._entries()[1].id=="photo-harbor-game-2", "harbor collection shows both delivered local games in order")
+	_check(book._region=="harbor" and book._entries().size()==preload("res://game/core/game_catalog.gd").definitions("harbor").size() and book._entries()[0].id=="photo-harbor-game-1" and book._entries()[1].id=="photo-harbor-game-2", "harbor collection shows every delivered local game in order")
 	selector.select(0)
 	selector.item_selected.emit(0)
 	_check(book._region=="welcome" and book._entries().size()==18, "switching back retains welcome's original eighteen sources")

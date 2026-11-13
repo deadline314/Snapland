@@ -26,5 +26,19 @@
     "ordinary": "退潮窗口內連接三礁",
     "attraction_tag": "退潮沙洲",
     "island_invitation": "看準水位刻度，趁退潮把路標一路插到三座礁。"
+  },
+  {
+    "id": "game-015",
+    "mode": "lighthouse_prism",
+    "zone": "harbor",
+    "local_index": 3,
+    "name": "燈塔折光",
+    "goal": "轉動鏡面與分光稜鏡、開合遮光板，讓燈塔光束同時點亮三座航標",
+    "instructions": "旋轉稜鏡並開合遮光板",
+    "devil_hint": "只用一次分束，同時照亮三座航標與隱藏側標；輔助仍可挑戰",
+    "devil": "用一次分束照到隱藏側標",
+    "ordinary": "同時照亮三座航標",
+    "attraction_tag": "燈塔光路縮景",
+    "island_invitation": "轉一轉鏡面，讓燈塔的光一路點亮海上的航標。"
   }
 ]

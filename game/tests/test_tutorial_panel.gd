@@ -41,8 +41,8 @@ func _on_watchdog_timeout() -> void:
 func _run() -> void:
 	var catalog := Catalog.new()
 	var report: Dictionary = catalog.validation_report()
-	_check(report.ok and report.lesson_count == 15, "catalog includes park and all fourteen delivered games")
-	_check(catalog.lesson_ids()[0] == "park" and catalog.lesson_ids()[-1] == "game-014", "catalog keeps stable lesson order")
+	_check(report.ok and report.lesson_count == Catalog.EXPECTED_LESSONS.size() and Catalog.EXPECTED_LESSONS.size() == 1 + preload("res://game/core/game_catalog.gd").all_definitions().size(), "catalog includes park and every delivered game")
+	_check(catalog.lesson_ids()[0] == "park" and catalog.lesson_ids() == Catalog.EXPECTED_LESSONS, "catalog keeps stable lesson order")
 	for lesson_id in catalog.lesson_ids():
 		var lesson: Dictionary = catalog.get_lesson(lesson_id)
 		_check(lesson.steps.size() >= 2 and lesson.steps.size() <= 3, "%s uses two or three steps" % lesson_id)

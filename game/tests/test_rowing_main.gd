@@ -30,7 +30,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	check(main.definitions.size() == 12, "welcome definitions stay twelve")
 	check(main._definition("game-013").get("mode", "") == "rowing_cargo", "Main resolves global13")
-	check(main._definition("game-015").is_empty(), "Main refuses undelivered15")
+	check(main._definition("game-120").is_empty(), "Main refuses an undelivered game")
 	if not failures.is_empty():
 		main.audio.shutdown()
 		main.queue_free()

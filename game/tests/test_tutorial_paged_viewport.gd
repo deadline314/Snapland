@@ -63,7 +63,7 @@ func _run() -> void:
 	panel.queue_free()
 	await _frames(2)
 	if failures.is_empty():
-		print("PASS: native-matching tutorial45steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel")
+		print("PASS: native-matching tutorial steps for every lesson, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel")
 		quit(0)
 	else:
 		for failure in failures: push_error(failure)

@@ -60,8 +60,9 @@ func _run() -> void:
 	selector.item_selected.emit(1)
 	await frames()
 	var entries: Array = album._entries()
-	expect(entries.size() == 2 and entries[0].id == "photo-harbor-game-1" and entries[0].title == "浪間小艇" and entries[1].title == "潮汐沙路", "region switch resolves harbor locals one and two from globals thirteen and fourteen")
-	if entries.size() != 2:
+	var harbor_count: int = Catalog.definitions("harbor").size()
+	expect(entries.size() == harbor_count and entries[0].id == "photo-harbor-game-1" and entries[0].title == "浪間小艇" and entries[1].title == "潮汐沙路", "region switch resolves harbor locals in global order")
+	if entries.size() != harbor_count:
 		overlay.free()
 		quit(1)
 		return
@@ -79,7 +80,7 @@ func _run() -> void:
 		await frames()
 	album._set_category("devil")
 	await frames()
-	expect(album._entries().size() == 2 and album._entries()[0].id == "photo-harbor-devil-1" and album._entries()[1].id == "photo-harbor-devil-2", "harbor devil identities are locals one and two")
+	expect(album._entries().size() == harbor_count and album._entries()[0].id == "photo-harbor-devil-1" and album._entries()[1].id == "photo-harbor-devil-2", "harbor devil identities follow local order")
 	tile = album.find_child("AlbumPhoto_photo-harbor-devil-1", true, false) as Button
 	tile.pressed.emit()
 	await frames()
@@ -95,7 +96,7 @@ func _run() -> void:
 	album._set_category("time")
 	selector.select(1)
 	selector.item_selected.emit(1)
-	expect(album._category == "normal" and album._entries().size() == 2, "switching from welcome time cannot leak postcards into harbor")
+	expect(album._category == "normal" and album._entries().size() == harbor_count, "switching from welcome time cannot leak postcards into harbor")
 	expect(progress.photos == before, "album browsing changes no collection records")
 	var capture := OS.get_environment("HARBOR_COLLECTION_CAPTURE")
 	if not capture.is_empty() and DisplayServer.get_name() != "headless":
@@ -119,7 +120,7 @@ func _run() -> void:
 	var stamp := stamps.find_child("AchievementStamp_ACH_GAME_013", true, false)
 	expect(stamp != null and stamps.find_child("AchievementStamp_ACH_GAME_001", true, false) == null, "harbor row never guesses achievement one from local position")
 	expect(stamp != null and not stamp.find_child("StampMark_*", true, false).unlocked, "welcome achievement cannot unlock harbor stamp")
-	expect(stamps._summary_title.text.contains("碼頭") and stamps._summary_title.text.contains("2 枚") and stamps.find_child("AchievementStamp_ACH_GAME_014", true, false) != null, "inferred harbor stamp title matches catalog")
+	expect(stamps._summary_title.text.contains("碼頭") and stamps._summary_title.text.contains("%d 枚" % Catalog.definitions("harbor").size()) and stamps.find_child("AchievementStamp_ACH_GAME_014", true, false) != null, "inferred harbor stamp title matches catalog")
 	stamps.queue_free()
 	await frames()
 	progress.achievements["ACH_GAME_013"] = true

@@ -31,7 +31,7 @@ func _run() -> void:
 		check(panel._viewport.size == Vector2i(1280,720), "one fixed photograph viewport")
 		panel.queue_free()
 		await process_frame
-	for invalid in ["game-015", "balloon_delivery", "park", ""]:
+	for invalid in ["game-120", "balloon_delivery", "park", ""]:
 		var panel = script.new()
 		panel.setup({"id":invalid}, false, lessons.get_lesson("game-001"))
 		root.add_child(panel)
@@ -50,7 +50,7 @@ func _run() -> void:
 	var definition := Catalog.find("game-013")
 	var lesson := lessons.get_lesson("game-013")
 	panel.setup(definition, true, lesson)
-	definition.id = "game-015"
+	definition.id = "game-120"
 	lesson.steps[0].image = "res://outside.png"
 	panel.setup(Catalog.find("game-001"), false, lessons.get_lesson("game-001"))
 	root.add_child(panel)

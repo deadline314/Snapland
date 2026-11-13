@@ -34,7 +34,7 @@ func _run() -> void:
 	var cancellations: Array[int] = []
 	s.finished.connect(func(result: Dictionary): results.append(result))
 	s.cancelled.connect(func(): cancellations.append(1))
-	expect(Session.definitions().size() == 12 and Session.definitions("harbor").size() == 2, "welcome stays twelve; harbor lists two delivered games")
+	expect(Session.definitions().size() == 12 and Session.definitions("harbor")[1].mode == "tide_sandbar", "welcome stays twelve; sandbar is the second harbor game")
 	s.start("game-014")
 	expect(s.game_id == "game-014" and s.mode == "tide_sandbar" and not s.ended, "start accepts delivered global ID")
 	if s.game_id != "game-014":
@@ -115,8 +115,8 @@ func _run() -> void:
 	expect(s.ended and not driver.snapshot().moving and driver.snapshot().elapsed == old_elapsed and results.size() == count, "leave cancels without completion")
 	s.start("game-013")
 	expect(s.mode == "rowing_cargo" and s.active_driver != driver, "switching to rowing releases the sandbar driver")
-	s.start("game-015")
-	expect(s.ended and s.game_id.is_empty() and s.active_driver == null, "undelivered fifteenth game is refused")
+	s.start("game-120")
+	expect(s.ended and s.game_id.is_empty() and s.active_driver == null, "undelivered game is refused")
 	s.start("game-014")
 	s._process(0.1)
 	s._refresh_hud(true)

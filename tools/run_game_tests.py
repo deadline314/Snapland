@@ -22,7 +22,7 @@ EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
     "photo retake progress tests": "PASS: attempt history, selected retake awards, provenance and atomic rollback",
-    "participation result tests": "PASS: fourteen participation results, practice, cancellation and driver eligibility",
+    "participation result tests": "PASS: every delivered participation result, practice, cancellation and driver eligibility",
     "retake panel tests": "PASS: retake panel canonical targets, reversible state, keyboard and capture guards",
     "photo retake Main tests": "PASS: Main selected retakes, actual attempts, truthful awards and safe PNG replacement",
     "retake native fixture tests": "PASS: retake native fixture adjacent helper, isolated packaging and real resources",
@@ -33,6 +33,12 @@ PASS_MARKERS = {
     "rowing cargo view tests": "Rowing view: 32 checks, 0 failures",
     "rowing cargo driver tests": "Rowing driver: 39 checks, 0 failures",
     "rowing cargo model tests": "Rowing cargo: 58 checks, 0 failures",
+    "prism native fixture tests": "PASS: prism native fixture adjacent helper and three real tutorial PNGs",
+    "prism Main tests": "PASS: prism Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
+    "prism Session tests": "Lighthouse prism Session: 20 checks, 0 failures",
+    "prism view tests": "Lighthouse prism view: 34 checks, 0 failures",
+    "prism driver tests": "Lighthouse prism driver: 37 checks, 0 failures",
+    "prism model tests": "Lighthouse prism: 46 checks, 0 failures",
     "sandbar native fixture tests": "PASS: sandbar native fixture adjacent helper and three real tutorial PNGs",
     "sandbar Main tests": "PASS: sandbar Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
     "sandbar Session tests": "Tide sandbar Session: 31 checks, 0 failures",
@@ -52,11 +58,11 @@ PASS_MARKERS = {
     "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",
     "pixel UI button depth tests": "PASS: Paper pixel-button depth, state, focus and contrast checks",
     "pixel UI collection tests": "PASS: pixel UI collection, map, achievement, and tutorial checks",
-    "pixel tutorial page tests": "PASS: native-matching tutorial45steps, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
+    "pixel tutorial page tests": "PASS: native-matching tutorial steps for every lesson, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
     "pixel UI customization tests": "PASS: pixel UI settings, text-scale persistence, immediate time selection, and fixed category controls",
     "pixel UI minigame tests": "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes",
     "region progress tests": "PASS: region progress defaults, migration, transactions, and rollback",
-    "harbor world tests": "PASS: harbor world terrain, tide safety, free ferry, map alignment and bounded reentry (7041 checks)",
+    "harbor world tests": "PASS: harbor world terrain, tide safety, free ferry, map alignment and bounded reentry",
     "region travel tests": "PASS: region travel admission, lifecycle, scoped UI, restart, and unchanged rewards",
     "game startup": "PASS: game startup and clean shutdown",
     "core runtime tests": "PASS: core runtime checks",
@@ -177,7 +183,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -213,6 +219,12 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("sandbar Session tests", common + ["--script", "res://game/tests/test_tide_sandbar_session.gd"]),
         ("sandbar Main tests", common + ["res://game/tests/test_tide_sandbar_main.tscn"]),
         ("sandbar native fixture tests", common + ["res://game/tests/native_tide_sandbar_main.tscn", "--", "--sandbar-preflight"]),
+        ("prism model tests", common + ["--script", "res://game/tests/test_lighthouse_prism.gd"]),
+        ("prism driver tests", common + ["--script", "res://game/tests/test_lighthouse_prism_driver.gd"]),
+        ("prism view tests", common + ["--script", "res://game/tests/test_lighthouse_prism_view.gd"]),
+        ("prism Session tests", common + ["--script", "res://game/tests/test_lighthouse_prism_session.gd"]),
+        ("prism Main tests", common + ["res://game/tests/test_lighthouse_prism_main.tscn"]),
+        ("prism native fixture tests", common + ["res://game/tests/native_lighthouse_prism_main.tscn", "--", "--prism-preflight"]),
         ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
         ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
         ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),

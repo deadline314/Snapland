@@ -25,7 +25,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	check(main.definitions.size() == 12, "welcome definitions stay twelve")
 	check(main._definition("game-014").get("mode", "") == "tide_sandbar", "Main resolves global14")
-	check(main._definition("game-015").is_empty(), "Main refuses undelivered15")
+	check(main._definition("game-120").is_empty(), "Main refuses an undelivered game")
 	# Synthetic harbor admission only; the game014 cards are earned through Session inputs.
 	for i in range(1, 7): Progress.grant_photo("photo-welcome-game-%d" % i)
 	check(main._travel_to_region("harbor"), "six welcome cards admit harbor")

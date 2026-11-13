@@ -27,7 +27,7 @@ func _run() -> void:
 		return
 	var catalog: RefCounted = CatalogScript.new()
 	var catalog_report: Dictionary = catalog.validation_report()
-	if not bool(catalog_report.get("ok", false)) or int(catalog_report.get("lesson_count", 0)) != 15:
+	if not bool(catalog_report.get("ok", false)) or int(catalog_report.get("lesson_count", 0)) != CatalogScript.EXPECTED_LESSONS.size():
 		await _review_fail("Tutorial catalog is not complete: %s" % str(catalog_report))
 		return
 	_short_review = OS.get_cmdline_user_args().has("--tutorial-review-short")
@@ -76,7 +76,7 @@ func _run() -> void:
 func _run_controls_only() -> void:
 	var catalog: RefCounted = CatalogScript.new()
 	var catalog_report: Dictionary = catalog.validation_report()
-	if not bool(catalog_report.get("ok", false)) or int(catalog_report.get("lesson_count", 0)) != 15:
+	if not bool(catalog_report.get("ok", false)) or int(catalog_report.get("lesson_count", 0)) != CatalogScript.EXPECTED_LESSONS.size():
 		await _review_fail("Tutorial catalog preflight failed: %s" % str(catalog_report))
 		return
 	var panel: Control = TutorialPanelScript.new()

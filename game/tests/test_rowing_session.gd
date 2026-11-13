@@ -57,7 +57,7 @@ func _run() -> void:
 		s.free()
 		quit(1)
 		return
-	expect(Session.definitions("harbor").size() == 2 and s._definition().name == "浪間小艇", "regional catalog and definition resolve delivered row")
+	expect(Session.definitions("harbor")[0].mode == "rowing_cargo" and s._definition().name == "浪間小艇", "regional catalog and definition resolve delivered row")
 	var driver = s.active_driver
 	expect(driver != null and s.presentation == null if DisplayServer.get_name() == "headless" else s.presentation != null, "headless skips optional renderer; native owns view")
 	await process_frame
@@ -140,7 +140,7 @@ func _run() -> void:
 	key(s, KEY_D)
 	old_view = s.presentation
 	s.set_paused(true)
-	s.start("game-015")
+	s.start("game-120")
 	expect(s.ended and s.game_id.is_empty() and s.active_driver == null and s.presentation == null, "unknown active start tears down previous game")
 	expect(driver.snapshot().rudder == 0 and (old_view == null or old_view.is_queued_for_deletion()), "unknown start releases old input and view")
 	var result_count := results.size()
