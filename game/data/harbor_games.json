@@ -40,5 +40,19 @@
     "ordinary": "同時照亮三座航標",
     "attraction_tag": "燈塔光路縮景",
     "island_invitation": "轉一轉鏡面，讓燈塔的光一路點亮海上的航標。"
+  },
+  {
+    "id": "game-016",
+    "mode": "rope_tug",
+    "zone": "harbor",
+    "local_index": 4,
+    "name": "繩結拖船",
+    "goal": "掛上拖繩、收放繩長並轉向，把浮台拖過三道狹灣送進碼頭",
+    "instructions": "掛鉤、收放拖繩並轉向",
+    "devil_hint": "從第三道的側灣拖過浮台，全程不斷繩並送進碼頭；輔助仍可挑戰",
+    "devil": "借浮台擺盪越側灣不斷繩",
+    "ordinary": "拖浮台通過三道狹灣",
+    "attraction_tag": "拖船水灣",
+    "island_invitation": "收短拖繩穩穩過灣，或放長繩讓浮台繞過灣角。"
   }
 ]

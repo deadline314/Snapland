@@ -69,7 +69,11 @@ func _build_region_geometry() -> void:
 	# The prism miniature sits beside the lighthouse it borrows its beam from.
 	_sign("燈塔折光 · 轉鏡點亮航標", Vector3(2.4, 0.2, 1.4))
 	_point("game-015", "燈塔折光 · 免費遊玩", Vector3(1.2, GROUND_Y, -0.6))
-	_sign("其餘九款遊戲準備中", Vector3(12, 0.2, 9.4))
+	_sign("繩結拖船 · 掛鉤拖浮台", Vector3(12, 0.2, -6.4))
+	_box(Vector3(13.4, 0.8, -4.6), Vector3(1.0, 1.2, 1.0), TEAL)
+	_box(Vector3(13.4, 1.5, -4.6), Vector3(1.5, 0.2, 1.5), CREAM)
+	_point("game-016", "繩結拖船 · 免費遊玩", Vector3(12, GROUND_Y, -4.6))
+	_sign("其餘八款遊戲準備中", Vector3(12, 0.2, 9.4))
 	current_area = "潮汐碼頭"
 
 func _terrain(rect: Rect2, material: Material) -> MeshInstance3D:

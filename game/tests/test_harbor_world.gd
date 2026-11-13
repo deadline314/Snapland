@@ -43,7 +43,7 @@ func _run() -> void:
 		_check(snapshot.points.size() == world.points.size(), "map includes every actual interaction")
 		for point in snapshot.points:
 			_check(point.keys().size() == 3 and point.has("id") and point.has("label") and point.position is Vector3, "point snapshot only id/label/position")
-			_check(point.id in ["game-013", "game-014", "game-015"] or point.id == "region:welcome" or point.id == "harbor:tide" or point.id.begins_with("harbor:ferry:") or point.id.begins_with("harbor:info:"), "only delivered harbor games and existing regional interactions")
+			_check(point.id in ["game-013", "game-014", "game-015", "game-016"] or point.id == "region:welcome" or point.id == "harbor:tide" or point.id.begins_with("harbor:ferry:") or point.id.begins_with("harbor:info:"), "only delivered harbor games and existing regional interactions")
 		var spawn: Vector3 = world.player.position
 		var shore_landing: Vector3 = world._point_by_id("harbor:ferry:shore").position
 		_check(_map_land(snapshot, Vector2(spawn.x, spawn.z)), "safe mapped spawn")

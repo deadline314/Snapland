@@ -33,6 +33,12 @@ PASS_MARKERS = {
     "rowing cargo view tests": "Rowing view: 32 checks, 0 failures",
     "rowing cargo driver tests": "Rowing driver: 39 checks, 0 failures",
     "rowing cargo model tests": "Rowing cargo: 58 checks, 0 failures",
+    "tug native fixture tests": "PASS: tug native fixture adjacent helper and three real tutorial PNGs",
+    "tug Main tests": "PASS: tug Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
+    "tug Session tests": "Rope tug Session: 20 checks, 0 failures",
+    "tug view tests": "Rope tug view: 24 checks, 0 failures",
+    "tug driver tests": "Rope tug driver: 31 checks, 0 failures",
+    "tug model tests": "Rope tug: 38 checks, 0 failures",
     "prism native fixture tests": "PASS: prism native fixture adjacent helper and three real tutorial PNGs",
     "prism Main tests": "PASS: prism Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
     "prism Session tests": "Lighthouse prism Session: 20 checks, 0 failures",
@@ -183,7 +189,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -225,6 +231,12 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("prism Session tests", common + ["--script", "res://game/tests/test_lighthouse_prism_session.gd"]),
         ("prism Main tests", common + ["res://game/tests/test_lighthouse_prism_main.tscn"]),
         ("prism native fixture tests", common + ["res://game/tests/native_lighthouse_prism_main.tscn", "--", "--prism-preflight"]),
+        ("tug model tests", common + ["--script", "res://game/tests/test_rope_tug.gd"]),
+        ("tug driver tests", common + ["--script", "res://game/tests/test_rope_tug_driver.gd"]),
+        ("tug view tests", common + ["--script", "res://game/tests/test_rope_tug_view.gd"]),
+        ("tug Session tests", common + ["--script", "res://game/tests/test_rope_tug_session.gd"]),
+        ("tug Main tests", common + ["res://game/tests/test_rope_tug_main.tscn"]),
+        ("tug native fixture tests", common + ["res://game/tests/native_rope_tug_main.tscn", "--", "--tug-preflight"]),
         ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
         ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
         ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),
