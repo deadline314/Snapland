@@ -216,5 +216,44 @@ func _initialize() -> void:
 		var expected: Image = fallback.texture(appearance, {"outfit":"outfit-tide"}, "front", 0, "wave").get_image()
 		var recovered: Image = wearer.texture(appearance, {"outfit":"outfit-tide"}, "front", 0, "wave").get_image()
 		assert(recovered.get_data() == expected.get_data(), "damaged timing retains the complete legacy wearer for " + haircut)
+	for anchor in [[0,3], [4,3], [1,0], [1,4]]:
+		var clipped = Library.new(manifest_path)
+		clipped.manifest.actors.traveller.wave.front.frames[0].anchors.feet = anchor
+		assert(clipped.texture("traveller", "wave", "front", 0) == null, "valid source bounds cannot hide visible pixels beyond a canvas edge: %s" % str(anchor))
+		assert(clipped.normalized_anchor("traveller", "wave", "front", 0, "feet") == Vector2i.ZERO and clipped._textures.is_empty(), "rejected clipping leaves no usable layout or texture")
+		clipped.texture("traveller", "wave", "front", 0)
+		assert(clipped.diagnostics.size() == 1 and clipped.diagnostics[0].contains("traveller/wave/front/frame 0") and clipped.diagnostics[0].contains("canvas"), "clipping produces one contextual diagnostic")
+		assert(clipped.texture("traveller", "scaled", "front", 0) != null, "another complete action remains usable")
+	var padded_image := Image.create(4,4,false,Image.FORMAT_RGBA8)
+	padded_image.fill(Color.TRANSPARENT)
+	padded_image.fill_rect(Rect2i(1,1,2,2), Color.RED)
+	var padded_source := "user://animation-test-padding.png"
+	assert(padded_image.save_png(padded_source) == OK)
+	var padded = Library.new(manifest_path)
+	padded.manifest.actors.traveller.wave.front.frames[0].source = padded_source
+	padded.manifest.actors.traveller.wave.front.frames[0].anchors.feet = [4,4]
+	padded.manifest.actors.traveller.wave.front.frames[0].layers = []
+	var padded_texture: Texture2D = padded.texture("traveller", "wave", "front", 0)
+	assert(padded_texture != null and padded_texture.get_image().get_used_rect() == Rect2i(0,0,4,4), "transparent padding outside the canvas does not reject complete visible pixels")
+	padded_image.fill(Color.TRANSPARENT)
+	var blank_source := "user://animation-test-blank.png"
+	assert(padded_image.save_png(blank_source) == OK)
+	var blank = Library.new(manifest_path)
+	blank.manifest = padded.manifest.duplicate(true)
+	blank.manifest.actors.traveller.wave.front.frames[0].source = blank_source
+	var blank_texture: Texture2D = blank.texture("traveller", "wave", "front", 0)
+	assert(blank_texture != null and not blank_texture.get_image().get_used_rect().has_area(), "an empty cel has no visible pixels to clip")
+	var displaced = Library.new()
+	displaced.manifest.actors.traveller.wave.front.frames[0].anchors.feet = [0,0]
+	var recovered_wearer = Avatar.new()
+	recovered_wearer.animation_library = displaced
+	for haircut in ["windswept", "bob", "curly"]:
+		var appearance: Dictionary = Avatar.DEFAULT_APPEARANCE.duplicate()
+		appearance.hair = haircut
+		assert(recovered_wearer.texture(appearance, {"outfit":"outfit-tide"}, "front", 0, "wave").get_image().get_data() == fallback.texture(appearance, {"outfit":"outfit-tide"}, "front", 0, "wave").get_image().get_data(), "clipped pose preserves the complete legacy wearer for " + haircut)
+	for actor in production_library.coverage_report():
+		for action in production_library.coverage_report()[actor]:
+			for direction in production_library.coverage_report()[actor][action]:
+				assert(production_library.get_sequence(actor, action, direction).available, "every registered production pose remains complete: %s/%s/%s" % [actor,action,direction])
 	print("PASS: character animation library checks")
 	quit(0)

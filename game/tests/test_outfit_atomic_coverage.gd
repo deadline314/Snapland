@@ -25,7 +25,7 @@ func _run() -> void:
 	var valid := _fixture()
 	var library = Library.new(_write(valid))
 	_check_all(library, true, "complete outfit")
-	var mutations := ["missing", "outside", "anchor", "source", "container", "nonfinite", "scale", "entire_action", "entire_direction", "missing_anchor"]
+	var mutations := ["missing", "outside", "anchor", "source", "container", "nonfinite", "scale", "entire_action", "entire_direction", "missing_anchor", "canvas_clip"]
 	for mutation in mutations:
 		var broken: Dictionary = valid.duplicate(true)
 		var target: Dictionary = broken.actors.traveller.wave.left.frames[1]
@@ -33,6 +33,7 @@ func _run() -> void:
 			"missing": target.erase("variants")
 			"outside": target.variants.coat.region = [3, 3, 4, 4]
 			"anchor": target.variants.coat.anchors.head = [-1, 0]
+			"canvas_clip": target.variants.coat.anchors.feet = [0, 0]
 			"missing_anchor": target.variants.coat.anchors.erase("head")
 			"source": target.variants.coat.source = output.path_join("missing.png")
 			"container": target.variants = []
@@ -92,7 +93,8 @@ func _run() -> void:
 
 func _fixture() -> Dictionary:
 	var frame := {"source": source, "region": [0,0,4,4], "anchors": {"feet": [1,3], "head": [2,0]}, "layers": [], "variants": {"coat": {"source": replacement, "region": [0,0,4,4], "anchors": {"feet": [2,2], "head": [0,1]}}}}
-	return {"schema_version": 1, "outfit_modes": {"base": "palette"}, "outfit_required_poses": {"traveller": {"idle": {"front": 2}, "wave": {"left": 2}}}, "actors": {"traveller": {"canvas_size": [12,8], "reference_size": [4,4], "feet_baseline": 6, "idle": {"front": {"fps": 2, "loop": true, "frames": [frame.duplicate(true), frame.duplicate(true)]}}, "wave": {"left": {"fps": 2, "loop": false, "frames": [frame.duplicate(true), frame.duplicate(true)]}}}}}
+	# Keep the original 2x scale and anchor expectations, with room for both complete bodies.
+	return {"schema_version": 1, "outfit_modes": {"base": "palette"}, "outfit_required_poses": {"traveller": {"idle": {"front": 2}, "wave": {"left": 2}}}, "actors": {"traveller": {"canvas_size": [12,10], "reference_size": [6,4], "feet_baseline": 6, "idle": {"front": {"fps": 2, "loop": true, "frames": [frame.duplicate(true), frame.duplicate(true)]}}, "wave": {"left": {"fps": 2, "loop": false, "frames": [frame.duplicate(true), frame.duplicate(true)]}}}}}
 
 func _write(value: Dictionary) -> String:
 	FileAccess.open(manifest_path, FileAccess.WRITE).store_string(JSON.stringify(value))

@@ -1,0 +1,103 @@
+{
+  "base_commit": "d7f385575722de7c760590e42145a75c3865a0a2",
+  "branch": "codex/character-continuation-20261117",
+  "date": "2026-11-17 Asia/Taipei",
+  "scope": "ART-16 shared-canvas clipping and whole-outfit fallback; static native rendering, not gameplay or animation acceptance",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "renderer": "Windows Compatibility / AMD Radeon RX 9070 XT",
+  "audio": "Dummy; no listening acceptance",
+  "local_checks": [
+    {
+      "group": "library-final",
+      "entry": "test_character_animation_library.gd",
+      "exit": 0,
+      "error_lines": [],
+      "completion": [
+        "PASS: character animation library checks"
+      ],
+      "pass": true
+    },
+    {
+      "group": "avatar-final",
+      "entry": "test_avatar.gd",
+      "exit": 0,
+      "error_lines": [],
+      "completion": [
+        "PASS: avatar runtime checks"
+      ],
+      "pass": true
+    },
+    {
+      "group": "outfit-final",
+      "entry": "test_outfit_atomic_coverage.gd",
+      "exit": 0,
+      "error_lines": [],
+      "completion": [
+        "PASS: atomic outfit coverage (407 checks)"
+      ],
+      "pass": true
+    },
+    {
+      "group": "npc-source-final",
+      "entry": "test_npc_authored_source_walking.gd",
+      "exit": 0,
+      "error_lines": [],
+      "completion": [
+        "PASS: all three authored NPC routes display complete side poses and preserve independent personality actions"
+      ],
+      "pass": true
+    },
+    {
+      "group": "departure-final",
+      "entry": "test_npc_departure_lifecycle.gd",
+      "exit": 0,
+      "error_lines": [],
+      "completion": [
+        "PASS: planted NPC departure, pause, dialogue, interruption, stride restart, reduced motion and damaged-source fallback"
+      ],
+      "pass": true
+    },
+    {
+      "group": "pixels-final",
+      "entry": "test_walk_pixel_stability.gd",
+      "exit": 0,
+      "error_lines": [],
+      "completion": [
+        "PASS actual runtime walk pixels: eight hero headings, both NPC sides and nonfrozen limbs"
+      ],
+      "pass": true
+    },
+    {
+      "group": "shadow-final",
+      "entry": "test_actor_shadow_silhouette.gd",
+      "exit": 0,
+      "error_lines": [],
+      "completion": [
+        "PASS: actor alpha caster preserves pose, frame, atlas, flips and live texture identity without source mutation"
+      ],
+      "pass": true
+    }
+  ],
+  "python": "11 tests passed (character animation manifest builder + animation QA export)",
+  "production_coverage": {
+    "sequences": 50,
+    "poses": 294
+  },
+  "review": "Independent read-only review approved; empty-cel observation covered by has_area guard and runtime regression",
+  "native_pack_pixels_equal": true,
+  "accepted_new_artwork": 0,
+  "art_candidates": 4,
+  "remaining_open_tickets": [
+    "ART-16",
+    "ART-17",
+    "MIC-1",
+    "MIC-2",
+    "MIC-3",
+    "ST-5"
+  ],
+  "files_sha256": {
+    "game/world/character_animation_library.gd": "59247f8c85f29b7d5058384557c685b6f23833485aca559c690abcfdf879afbe",
+    "game/tests/test_character_animation_library.gd": "670e0872d5365e1974cb2c6ca69041c36dd3fcf09e29f81a4aa7a14e6e761103",
+    "game/tests/test_outfit_atomic_coverage.gd": "47208f118766c1c6bff2ca2252dd273f850610957f53e8e1f85b7ae46be5d9ac"
+  }
+}

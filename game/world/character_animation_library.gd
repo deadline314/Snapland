@@ -343,6 +343,11 @@ func _render_frame(actor: String, action: String, direction: String, index: int,
 	if baseline < 0 or baseline > canvas_size.y:
 		_diagnostic(_context(actor, action, direction, index), "feet_baseline is outside canvas")
 		return null
+	var visible_bounds := output.get_used_rect()
+	visible_bounds.position += destination
+	if visible_bounds.has_area() and not Rect2i(Vector2i.ZERO, canvas_size).encloses(visible_bounds):
+		_diagnostic(_context(actor, action, direction, index), "feet anchor places visible pixels outside the shared canvas")
+		return null
 	_layouts[key] = {"scale": scale_factor, "destination": destination}
 	var fixed_canvas := Image.create(canvas_size.x, canvas_size.y, false, Image.FORMAT_RGBA8)
 	fixed_canvas.fill(Color.TRANSPARENT)
@@ -408,6 +413,9 @@ func outfit_variant_ready(actor: String, outfit: String) -> bool:
 			if frames.is_empty(): return _remember_outfit(key, false)
 			for index in range(frames.size()):
 				if not frames[index] is Dictionary or _validated_outfit_variant(frames[index], outfit, actor, str(action), str(direction), index).is_empty():
+					return _remember_outfit(key, false)
+				if inspect_variant_texture(actor, str(action), str(direction), index, outfit) == null:
+					_diagnostic(_context(actor, str(action), str(direction), index), "outfit '%s' cannot render a complete pose; preserving the whole original outfit" % outfit)
 					return _remember_outfit(key, false)
 				count += 1
 	return _remember_outfit(key, count > 0)

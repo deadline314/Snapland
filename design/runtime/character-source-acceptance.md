@@ -16,6 +16,18 @@
 2026-10-30，ART-17。來源損壞時可能留下 frame_durations，卻遺失 frames。這是缺件資料，應回到完整人物；不能在同一次驗證先用 frames 的空陣列預設值，之後又直接取不存在的欄位。驗證與時間表長度比較共用同一份已取得的影格容器。各公開讀取入口均檢查拒收、單筆具體診斷、有效鄰近動作及完整舊人物的像素回退。原始反例曾 exit 0 但有 SCRIPT ERROR，再次證明退出碼不能單獨代表通過。此修正沒有改變正式影格、播放時間、服裝覆蓋表或驗收門檻。
 
 
+## 固定畫布也要驗證實際可見像素
+
+2026-11-17，ART-16。來源矩形與腳錨各自合法，仍可能在落到共用畫布後裁掉人物。4×4 不透明圖放大兩倍、畫布 12×8、基線 6，腳錨 [0,3]、[4,3]、[1,0]、[1,4] 分別重現四邊裁切。舊程式回傳不完整貼圖；原反例 exit 0 但有 SCRIPT ERROR，不能算通過。
+
+現在使用縮放後的實際可見範圍加上落點，確認完全在畫布內，失敗時先記角色／動作／方向／格號，再沿用完整人物回退；不建立損壞的貼圖或錨點快取。透明邊距可在畫布外，空白格也保持原有行為。衣物沿用既有候選檢視入口逐格驗證後才允許整套替換，最後一格失敗同樣保留整套原衣物。96 張貼圖、8 張來源圖與 64 筆衣物判斷上限不變，沒有新增逐幀掃圖或常駐快取。
+
+原衣物測試的綠色替換圖曾超出畫布底端兩像素。測試畫布改成 12×10、參考尺寸 6×4，保持原先兩倍縮放、取樣像素、頭部座標及全部原斷言；另新增最後一格裁切反例，先失敗後通過。正式來源、姿勢、時間表及遊戲資料皆未改動。50 組／294 格登錄序列、三種髮型完整回退、透明邊距／空白格與四邊拒收均通過。
+
+本輪重新讀六方文字：[Aseprite 洋蔥皮](https://aseprite.org/docs/onion-skinning/)、[Raymond Schlitter 步態](https://www.slynyrd.com/blog/2020/1/23/pixelblog-25-motion-cycles)、[Motion Twin 原作者製作流程](https://www.gamedeveloper.com/production/art-design-deep-dive-using-a-3d-pipeline-for-2d-animation-in-i-dead-cells-i-)、[Godot 逐格播放](https://docs.godotengine.org/en/stable/tutorials/2d/2d_sprite_animation.html)、[Spine 曲線與循環](https://esotericsoftware.com/spine-graph)、[Unity 部件分類與替換](https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/SL-Asset.html)。採用接觸／passing 先成立、固定身份與逐格覆蓋的方法；不改走已被否定的 3D 角色或程序拆腿。兩份 GIF 在本次網頁工具未成功讀取，不稱已看動畫。另核對官方 [Image 可見範圍](https://docs.godotengine.org/en/stable/classes/class_image.html#class-image-method-get-used-rect)及 [Rect2i 包含判斷](https://docs.godotengine.org/en/stable/classes/class_rect2i.html#class-rect2i-method-encloses)的語意。
+
+四份新候選分別為雙側八格、單張相反接觸、右向八格及其局部修正。完整循環仍沒有清楚連上近側褲管、膝與相反接觸腳，單張也不能建立整套動作，因此全數未採用。透明 RGB／低 alpha 雜訊不作拒收理由。原圖、提示、尺寸、alpha 與指紋附 ART-16；本輪沒有新增已批准姿勢，也不替 ART-17 結案。
+
 ## 相反接觸必須連同褲管辨識
 
 2026-11-02，ART-17。側身有遮擋的短褲角色，不只比較兩隻靴子的明暗或前後位置；須從近側褲管的外側縫線、褲口一路追到同側大腿、膝、脛與腳。遠側腿向前時，近側後伸褲管應在交叉處遮住較窄的遠側褲管。單張局部修正可以建立這個關係，但生成整循環仍可能回到同一前伸輪廓，必須在兩個接觸與兩個 passing 分別重查。新八格與局部修正均未通過，沒有進入動作清單。生成提示中的尺寸、格數與背景要求不代替輸出檢查；本輪單張實際 1265×1243、整張實際 1536×1024，透明角落 alpha=0 的 RGB 不視為可見底色。
