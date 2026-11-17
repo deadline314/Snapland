@@ -1438,38 +1438,49 @@ func _show_game_rules(id: String) -> void:
 	entry_stamp.add_child(Paper.label("免費重玩   ·   收藏不消耗",18,Paper.TEAL))
 	var objective_card := Paper.card(body,Color("#fffaf0"),8)
 	objective_card.name="GameRulesDetails"
-	var objective_heading := HBoxContainer.new()
-	objective_card.add_child(objective_heading)
-	objective_heading.add_child(Paper.section_title("本局目標"))
-	objective_card.add_child(Paper.label(str(definition.get("goal","完成挑戰")),22))
-	Paper.divider(objective_card)
-	objective_card.add_child(Paper.section_title("操作方式",Paper.DEEP_TEAL))
-	objective_card.add_child(Paper.label(str(definition.get("instructions","依畫面提示操作。")),20))
 	var notes := [
+		{"kind":"goal","definition":definition},
+		{"kind":"instructions","text":str(definition.get("instructions","依畫面提示操作。"))},
 		{"text":"小惡魔："+str(definition.get("devil_hint","完成特殊互動。")),"color":Paper.TEAL},
 		{"text":("參與操作後正常結算即可收藏普通拍貼，不限勝負；未操作或中途取消不收藏。" if definition.mode in ["sugar_bridge","cookie_mold"] else "正式遊玩自然結束即可收藏普通拍貼，不限勝負；中途取消不收藏。")+"小惡魔實際技巧以上方條件為準，也可免費補拍收藏。","color":Paper.INK},
 		{"text":"輔助遊玩會放寬時間或判定，仍可收藏普通拍貼；小惡魔是否要求未開輔助，以上方條件為準。練習不記錄分數與收藏。","color":Paper.TEAL},
 	]
-	_content_pager(body,"GameRulesExtraDetails",notes,_render_rules_note,1,entry_stamp)
+	_content_pager(objective_card,"GameRulesExtraDetails",notes,_render_game_rules_page,1,entry_stamp)
+	var row := HFlowContainer.new()
+	row.name="GameRulesActions"
+	row.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	modal_footer.add_child(row)
+	row.add_theme_constant_override("h_separation",8)
+	row.add_theme_constant_override("v_separation",8)
 	var retakes := HBoxContainer.new()
 	retakes.name="GameRulesRetakes"
-	objective_heading.add_child(retakes)
-	var canonical: String = definition.get("id","")
+	row.add_child(retakes)
+	var canonical: String=definition.id
 	var identity := Catalog.identity(canonical)
 	for devil in [false,true]:
-		var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
+		var photo_id: String=identity.devil_photo_id if devil else identity.photo_id
 		if Progress.photos.has(photo_id): continue
 		var attempted := Progress.has_attempted_game(canonical)
 		var action := _request_retake if attempted else _practice_for_retake
 		var button := Paper.button(("免費補拍" if attempted else "先練習再補拍")+("小惡魔" if devil else "普通卡"),action.bind(canonical,devil),retakes)
 		button.name="KioskRetakeDevil" if devil else "KioskRetakeOrdinary"
-	var row := modal_footer
-	row.add_theme_constant_override("separation",8)
 	Paper.button("圖解教學",func(): _open_tutorial(id,"game_info",bool(Progress.settings.get("assist",false))),row)
 	Paper.button("練習操作",func(): _launch_game(id,bool(Progress.settings.get("assist",false)),true),row)
 	Paper.button("開始遊玩",func(): _request_game_start(id,bool(Progress.settings.get("assist",false))),row).grab_focus()
 	Paper.button("輔助挑戰",func(): _request_game_start(id,true),row)
 	_back(body)
+	modal_footer.get_node("MenuBackButton").reparent(row)
+
+func _render_game_rules_page(parent: VBoxContainer, entry: Dictionary, index: int) -> void:
+	if entry.get("kind","")=="instructions":
+		parent.add_child(Paper.section_title("操作方式",Paper.DEEP_TEAL))
+		parent.add_child(Paper.label(str(entry.text),20))
+	elif entry.get("kind","")=="goal":
+		var definition: Dictionary=entry.definition
+		parent.add_child(Paper.section_title("本局目標"))
+		parent.add_child(Paper.label(str(definition.get("goal","完成挑戰")),22))
+	else:
+		_render_rules_note(parent,entry,index-2)
 
 func _request_game_start(id: String, assist: bool) -> void:
 	if not Progress.has_seen_tutorial(id):

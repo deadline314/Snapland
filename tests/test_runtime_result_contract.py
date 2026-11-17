@@ -120,7 +120,7 @@ class RuntimeResultContractTests(unittest.TestCase):
                 protected[sidecar] = payload
             for path, payload in protected.items():
                 self.assertEqual(path.read_bytes(), payload, "a later suite overwrote another suite's sidecar")
-            self.assertEqual(timeout, 240 if label == "avatar renderer tests" else 90)
+            self.assertEqual(timeout, 240 if label in {"avatar renderer tests", "pixel UI shell tests"} else 90)
             observed.append(save)
             stderr = f"ERROR: Cannot write progress temporary file '{save}.tmp': Can't open file" if label == "boat prologue state tests" else ""
             return subprocess.CompletedProcess(command, 0, PASS_MARKERS.get(label, "import complete") + "\n", stderr)

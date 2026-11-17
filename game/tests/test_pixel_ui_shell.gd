@@ -2,6 +2,9 @@ extends Node
 
 const MainScene = preload("res://game/main.tscn")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const RulesReview = preload("res://game/tests/native_game_rules_layout_review.gd")
+const Catalog = preload("res://game/core/game_catalog.gd")
+const Release = preload("res://game/tests/audio_playback_release.gd")
 const PAUSE_BUTTONS := [
 	"PauseResumeButton", "PauseMapButton", "PauseTasksButton", "PauseAlbumButton",
 	"PauseAchievementsButton", "PauseWardrobeButton", "PauseTimeButton",
@@ -154,7 +157,7 @@ func _run() -> void:
 		await _check_page_sequence("GameRulesExtraDetails",["RulesNote0","RulesNote1","RulesNote2"],dimensions)
 		for button_text in ["圖解教學","練習操作","開始遊玩","輔助挑戰"]:
 			var found := false
-			for action in _main.modal_footer.get_children():
+			for action in _main.modal_footer.find_children("*","Button",true,false):
 				if action is Button and action.text==button_text:
 					found=true
 					_check(get_viewport().get_visible_rect().encloses(action.get_global_rect()),"rules fixed %s fits %s"%[button_text,str(dimensions)])
@@ -244,15 +247,18 @@ func _run() -> void:
 		_main._cancel_dialogue()
 		await _frames(2)
 		_check(_main.modal_kind=="" and not _main.world.blocked,"dialogue cancellation restores world input")
+	await _check_rules_catalog()
 	var theme := Paper.theme()
 	var disabled := theme.get_stylebox("disabled","Button") as StyleBoxFlat
 	_check(_contrast(theme.get_color("font_disabled_color","Button"),disabled.bg_color)>=4.5,"default disabled button meets 4.5 contrast")
 	_check(Paper.PRICE_INK==Color("#8d3c33"),"price ink keeps its light-plate contract")
 	_check(Paper.text_scale()>=1.0 and Paper.text_scale()<=1.25,"text scale remains within its persisted accessible range")
+	_main.quitting=true
+	var playbacks: Array[WeakRef]=Release.capture(_main.audio)
 	_main.audio.shutdown()
-	await get_tree().create_timer(0.15).timeout
 	_main.queue_free()
 	await _frames(2)
+	_check(await Release.wait_for_release(get_tree(),playbacks),"pixel UI releases stopped audio playback before exit")
 	if _failures.is_empty():
 		print("PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920")
 		get_tree().quit(0)
@@ -405,6 +411,167 @@ func _click_control(control: Control) -> void:
 		event.pressed=pressed
 		get_viewport().push_input(event,true)
 		await _frames(1)
+
+func _check_rules_catalog() -> void:
+	var window := get_window()
+	window.content_scale_mode=Window.CONTENT_SCALE_MODE_DISABLED
+	var cases := 0
+	for dimensions in [Vector2i(1280,720),Vector2i(1152,648),Vector2i(800,600)]:
+		window.content_scale_size=dimensions
+		window.size=dimensions
+		Progress.settings["ui_scale"]=1.25 if dimensions.x==800 else 1.0
+		Progress.settings["reduced_motion"]=dimensions.x==800
+		_main._refresh()
+		await _frames(4)
+		_check(get_viewport().get_visible_rect().size==Vector2(dimensions),"rules uses actual requested viewport %s"%dimensions)
+		for definition: Dictionary in Catalog.all_definitions():
+			for context in 5:
+				RulesReview.set_context(definition.id,context)
+				_main._show_game_rules(definition.id)
+				await _frames(4)
+				var pager: Control=_main.overlay.find_child("GameRulesExtraDetails",true,false)
+				for page in int(pager.get_meta("page_count")):
+					cases+=1
+					for problem in RulesReview.inspect_layout(_main): _check(false,"%s %s ownership%s page%s: %s"%[dimensions,definition.id,context,page,problem])
+					for action_name in ["KioskRetakeOrdinary","KioskRetakeDevil"]:
+						var action: Button=_main.overlay.find_child(action_name,true,false)
+						var expected := context not in [2,4] if action_name=="KioskRetakeOrdinary" else context not in [3,4]
+						_check((action!=null)==expected,"rules retains ownership-specific %s for context%s"%[action_name,context])
+						if action!=null: _check(action.text.begins_with("先練習再補拍" if context==0 else "免費補拍"),"rules retains attempt-specific retake prerequisite")
+					var page_text := ""
+					for label: Label in pager.find_children("*","Label",true,false):
+						if not label.is_visible_in_tree(): continue
+						page_text+=label.text
+						if label.text in [definition.goal,definition.instructions] or str(label.name).begins_with("RulesNote"):
+							var base_size: int=[22,20,18][mini(page,2)]
+							_check(label.get_theme_font_size("font_size")==ceili(base_size*(1.25 if dimensions.x==800 else 1.0)),"rules retains original readable text size on page%s"%page)
+					if page==0: _check(page_text.contains(definition.goal),"first rules page retains complete selected goal")
+					elif page==1: _check(page_text.contains(definition.instructions),"second rules page retains complete selected instructions")
+					else: _check(pager.find_child("RulesNote%d"%(page-2),true,false)!=null,"rules notes preserve their ordered named pages")
+					if page<int(pager.get_meta("page_count"))-1:
+						var next: Button=_main.overlay.find_child("GameRulesExtraDetailsNext",true,false)
+						_check(next!=null and not next.disabled,"catalog rules Next remains enabled before final page")
+						next.pressed.emit()
+						await _frames(3)
+						_check(int(pager.get_meta("page_index"))==page+1,"connected rules callback reaches next page")
+					else:
+						_check(_main.overlay.find_child("GameRulesExtraDetailsNext",true,false).disabled,"catalog final page disables Next")
+				_main._close()
+				_check(_main.modal_kind=="" and _main.hud.visible,"catalog rules close restores HUD")
+	print("Rules catalog geometry: %d games / 3 viewports / 4 synthetic ownership combinations plus unattempted missing pair / %d note pages"%[Catalog.all_definitions().size(),cases])
+	await _check_rules_callbacks()
+
+func _rules_action(text: String) -> Button:
+	for action: Button in _main.modal_footer.find_children("*","Button",true,false):
+		if action.text==text: return action
+	return null
+
+func _rules_key(code: Key) -> void:
+	for pressed in [true,false]:
+		var event := InputEventKey.new()
+		event.keycode=code
+		event.physical_keycode=code
+		event.pressed=pressed
+		get_viewport().push_input(event)
+		await _frames(1)
+
+func _check_rules_callbacks() -> void:
+	# Synthetic ownership isolates entry routes; only real Main callbacks start/cancel Sessions.
+	for id in ["game-001","game-025"]:
+		var zone: String=Catalog.identity(id).zone
+		if _main.world_region!=zone:
+			for index in range(1,7): Progress.grant_photo("photo-welcome-game-%d"%index)
+			_check(_main._travel_to_region(zone),"synthetic admission uses actual regional travel before selected rules callbacks")
+			await _frames(5)
+		RulesReview.set_context(id,0)
+		Progress.settings["assist"]=false
+		_main._show_game_rules(id)
+		await _frames(4)
+		var actions: Array[Button]=[]
+		for action: Button in _main.modal_footer.find_children("*","Button",true,false):
+			if not str(action.name).begins_with("KioskRetake"): actions.append(action)
+		_check(actions.size()==5,"rules retains four play choices and return")
+		var expected := ["圖解教學","練習操作","開始遊玩","輔助挑戰",Localization.text("button.back")]
+		for index in mini(actions.size(),expected.size()): _check(actions[index].text==expected[index],"rules action reading order remains %s"%expected[index])
+		var seen: Array[String]=[]
+		_main.overlay.find_child("KioskRetakeOrdinary",true,false).grab_focus()
+		for step in 13:
+			var owner := get_viewport().gui_get_focus_owner()
+			if owner is Button: seen.append(owner.text)
+			await _rules_key(KEY_TAB)
+		for text in expected: _check(seen.has(text),"rules keyboard Tab reaches "+text)
+		for retake_name in ["KioskRetakeOrdinary","KioskRetakeDevil"]:
+			_check(seen.has("先練習再補拍"+("普通卡" if retake_name=="KioskRetakeOrdinary" else "小惡魔")),"Tab reaches longest unattempted retake")
+		await _click_control(_rules_action("圖解教學"))
+		await _frames(3)
+		_check(is_instance_valid(_main.tutorial_panel) and _main.tutorial_target==id and _main.tutorial_origin=="game_info","rules tutorial opens selected actual lesson")
+		_main._tutorial_close()
+		await _frames(2)
+		var pager: Control=_main.overlay.find_child("GameRulesExtraDetails",true,false)
+		_main.overlay.find_child("GameRulesExtraDetailsNext",true,false).grab_focus()
+		await _rules_key(KEY_ENTER)
+		await _frames(3)
+		_check(int(pager.get_meta("page_index"))==1,"rules keyboard Next opens instructions")
+		_main.overlay.find_child("GameRulesExtraDetailsPrevious",true,false).grab_focus()
+		await _rules_key(KEY_ENTER)
+		await _frames(3)
+		_check(int(pager.get_meta("page_index"))==0 and get_viewport().gui_get_focus_owner() is Button,"rules keyboard Previous returns to goal and retains active focus")
+		await _click_control(_rules_action("練習操作"))
+		await _frames(3)
+		_check(_main.session!=null and _main.session.game_id==id and _main.session.practice_mode and not _main.session.assisted,"rules practice starts actual selected unassisted Session")
+		_main._cancel_game(false)
+		Progress.settings["assist"]=true
+		_main._show_game_rules(id)
+		await _frames(3)
+		await _click_control(_rules_action("練習操作"))
+		await _frames(3)
+		_check(_main.session!=null and _main.session.practice_mode and _main.session.assisted,"rules practice preserves persisted assist setting")
+		_main._cancel_game(false)
+		Progress.settings["assist"]=false
+		for assisted in [false,true]:
+			Progress.tutorial_seen_games.erase(id)
+			_main._show_game_rules(id)
+			await _frames(3)
+			_rules_action("輔助挑戰" if assisted else "開始遊玩").grab_focus()
+			await _rules_key(KEY_ENTER)
+			await _frames(3)
+			_check(is_instance_valid(_main.tutorial_panel) and _main.tutorial_target==id and _main.tutorial_origin=="first_entry" and _main.tutorial_assist==assisted,"rules formal/assist preserves first-entry tutorial prerequisite")
+			_main._tutorial_close()
+			Progress.tutorial_seen_games.append(id)
+			_main._show_game_rules(id)
+			await _frames(3)
+			await _click_control(_rules_action("輔助挑戰" if assisted else "開始遊玩"))
+			await _frames(3)
+			_check(_main.session!=null and _main.session.game_id==id and not _main.session.practice_mode and _main.session.assisted==assisted,"rules formal/assist launches actual selected Session")
+			_main._cancel_game(false)
+		for attempted in [false,true]:
+			for devil in [false,true]:
+				RulesReview.set_context(id,1 if attempted else 0)
+				_main._show_game_rules(id)
+				await _frames(3)
+				var button: Button=_main.overlay.find_child("KioskRetakeDevil" if devil else "KioskRetakeOrdinary",true,false)
+				if devil:
+					button.grab_focus()
+					await _rules_key(KEY_ENTER)
+				else: await _click_control(button)
+				await _frames(3)
+				if attempted:
+					_check(_main.modal_kind=="retake" and _main.retake_target=={"id":id,"devil":devil} and _main.retake_panel!=null,"attempted rules retake opens selected actual panel")
+					_main._close()
+				else:
+					_check(_main.session!=null and _main.session.game_id==id and _main.session.practice_mode and _main.retake_practice_target=={"id":id,"devil":devil},"unattempted rules retake starts selected practice")
+					_main._cancel_game(false)
+					_main.retake_practice_target.clear()
+				_check(Progress.photos.is_empty(),"rules callbacks and cancelled practice grant no photos")
+		_main._show_game_rules(id)
+		await _frames(3)
+		_main.overlay.find_child("MenuBackButton",true,false).grab_focus()
+		await _rules_key(KEY_ENTER)
+		_check(_main.modal_kind=="" and _main.hud.visible,"rules keyboard return restores HUD")
+		_main._show_game_rules(id)
+		await _frames(3)
+		await _click_return(get_window().size)
+	print("Rules callbacks: two selected games; real tutorial/practice/formal/assist, both retakes before/after attempt, Tab, Enter, pointer and back")
 
 # Keep callback inspection out of the coroutine frame: only the weak reference
 # may survive while queued controls and their signal connections are freed.

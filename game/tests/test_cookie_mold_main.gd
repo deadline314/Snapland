@@ -49,7 +49,11 @@ func _run() -> void:
 	check(_text(main.overlay).contains("糖果工廠"), "rules name the candy region")
 	var rules_next: Button = main.overlay.find_child("GameRulesExtraDetailsNext", true, false)
 	check(rules_next != null, "rules expose the participation page")
-	if rules_next != null: rules_next.pressed.emit()
+	if rules_next != null:
+		var rules_pager: Control=main.overlay.find_child("GameRulesExtraDetails",true,false)
+		for page in int(rules_pager.get_meta("page_count")):
+			if main.overlay.find_child("RulesNote1",true,false)!=null: break
+			rules_next.pressed.emit()
 	check(_text(main.overlay).contains("參與操作") and _text(main.overlay).contains("未操作"), "rules require actual participation and explain idle exclusion")
 	main._close()
 	main._show_map()

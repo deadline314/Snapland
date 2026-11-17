@@ -550,7 +550,7 @@ def main(argv: list[str] | None = None) -> int:
             suite_directory = Path(temporary) / f"suite-{suite_index}"
             suite_directory.mkdir()
             env["SNAPLAND_SAVE_PATH"] = str(suite_directory / "progress.json")
-            timeout = (240 if label == "avatar renderer tests" else 90) * options.timeout_scale
+            timeout = (240 if label in {"avatar renderer tests", "pixel UI shell tests"} else 90) * options.timeout_scale
             started = time.monotonic()
             print(f"RUN: {label} ({suite_index + 1}/{len(checks)}, limit {timeout}s)", flush=True)
             try:

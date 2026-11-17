@@ -23,7 +23,7 @@
 
 ## Task 1: Diagnose shared minimum-size root, implement and validate rules layout
 
-**Ownership:** game/main.gd rules-specific _show_game_rules/necessaryrulesrenderer only; game/tests/test_pixel_ui_shell.gd and minimalaffectedexistingrules/callbackfixtures if needed; new game/tests/native_game_rules_layout_review.gd/.tscn; tools/run_game_tests.py/tests/test_runtime_result_contract.py ONLYifexistingstrictmarkerchangesnecessary. Private.review/game-rules-layout-20261118+newD. Nootherproduction/PM/docs/Git; askrootconcreteoutsideownershipbeforetouching.
+**Ownership:** game/main.gd rules-specific _show_game_rules/necessaryrulesrenderer only; game/tests/test_pixel_ui_shell.gd and minimalaffectedexistingrules/callbackfixtures if needed; new game/tests/native_game_rules_layout_review.gd/.tscn; tools/run_game_tests.py/tests/test_runtime_result_contract.py for necessary strict marker updates or measured PixelShell-only 240s limit using the existing avatar pattern. Private.review/game-rules-layout-20261118+newD. Nootherproduction/PM/docs/Git; askrootconcreteoutsideownershipbeforetouching.
 **Interfaces:** PreservepublicMainrules/retake/start/tutorial/backcallbacks andnamednodes; actualCatalogall_definitions. Existing_pixel_ui_shell remainsrealNode.tscn strictmarker. NativefixturealsoNodeactualscene, sourceonlycapture/guard, normalreleaseexcluded. Exactrequest/windowprofile/constraintsinspec.
 
 - [ ] Readspec/currentrules/_open/_back/_content_pager/Paper/fixtures andcallers; baselineexistingselectedUIcheckcaptured. Fresholdgame025/026/001 RED at800large bothcardsmissing/unattempted, viewport/minsize/Controlrect/rawPNG proof; noSG43untrackedfixtureimport.
