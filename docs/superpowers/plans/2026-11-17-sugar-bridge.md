@@ -53,8 +53,8 @@
 
 - [x] Review all tasks and full branch; fix real findings through original implementer and scoped review.
 - [x] Run affected tests, native three-size actual-input routes, saved restart and private standalone output.
-- [ ] Save evidence, validate design/links, complete ticket only when acceptance met, commit/push using user email.
-- [ ] Fetch/rebase/integrate main, inspect CI and remove only delivered owned branch.
+- [x] Save evidence, validate design/links, complete ticket only when acceptance met, commit/push using user email.
+- [x] Fetch/rebase/integrate main, inspect CI and remove only delivered owned branch.
 
 ## Execution ledger
 
@@ -77,3 +77,5 @@
 - Final native routes also pass:800x600125%/reduced-motion assisted500,1280x720 sequential longbridge400, participated load/fall timeout0,1920x1080 same-band500. Three lesson PNGs are real Main sources, not stand-ins. All captures/physics progression are scripted, not human play.
 
 - Final standalone acceptance: all1178runtime/allowlistedfixture source hashes match current workspace, binarySHAverified;500writer/coldrestart andactualselecteddevilretake/coldrestart pass with noERROR/missingimagewarnings. SG-41 evidence zip22.5MB+sixPNGs prepared;20uniqueaffectedGodotsuites,65Python tests andfive designscopes passed. Git integration/CI next.
+
+- Git closure: a7491430f0b226bf0512a460e374d14d0a5321be committed/pushed, latestorigin/main fast-forwarded with zero divergence; localmain/originmain sameSHA, userauthor+committer verified. Ownedfeaturebranch removedlocal/remote. mainfullCIstarted44121228790; its duplicatedownbranchrun44121151940cancelled. CIstillrunning atSG42opening; notclaimedpassed.
