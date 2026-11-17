@@ -32,6 +32,8 @@ func _run() -> void:
 	check(main.world._point_by_id("game-019").get("id", "") == "game-019", "real relay kiosk for game019")
 	main._show_map()
 	await get_tree().process_frame
+	main.overlay.find_child("RegionGamesButton", true, false).pressed.emit()
+	await get_tree().process_frame
 	var map_action = main.overlay.find_child("HarborGamegame-019", true, false)
 	check(map_action is Button, "regional map offers game019 invitation")
 	if map_action != null: map_action.pressed.emit()

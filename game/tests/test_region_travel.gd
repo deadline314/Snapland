@@ -116,9 +116,11 @@ func _run() -> void:
 	Progress.prologue_seen=false
 	await _spawn()
 	_check(main.world_region=="harbor" and main.boat_stage==null and main.modal_kind=="", "saved harbor restart skips welcome boat/arrival")
+	main._show_map()
+	main.overlay.find_child("RegionGamesButton",true,false).pressed.emit()
 	Progress.reset_progress()
 	await _frames(4)
-	_check(main.world_region=="welcome" and Progress.current_region=="welcome" and _world_count()==1, "reset rebuilds actual welcome world")
+	_check(main.world_region=="welcome" and Progress.current_region=="welcome" and _world_count()==1 and main.modal_kind=="", "reset from game entries rebuilds actual welcome world and closes the old map")
 	for index in range(1,7): Progress.photos["photo-welcome-game-%d"%index]={}
 	_check(main._travel_to_region("candy"), "prepare live candy reset")
 	await _frames(4)
@@ -294,13 +296,54 @@ func _regional_map_location_flow(map: Node) -> void:
 	if locations!=null:
 		for entry: Label in locations.get_children():
 			if entry.get_line_count()!=1 or not locations.get_global_rect().grow(0.5).encloses(entry.get_global_rect()): readable=false
-			if main.world_region=="candy" and not window.get_visible_rect().grow(0.5).encloses(entry.get_global_rect()): readable=false
-	_check(readable,"%s map flows complete numbered locations on one line within flow bounds at 800x600 / 1.25; candy entries also fit viewport" % main.world_region)
+			if not window.get_visible_rect().grow(0.5).encloses(entry.get_global_rect()): readable=false
+	_check(readable,"%s map flows complete numbered locations on one line within flow and viewport bounds at 800x600 / 1.25" % main.world_region)
+	_check(_within_viewport(map) and _within_viewport(main.modal_footer), "%s real map and fixed footer fit 800x600 / 1.25" % main.world_region)
+	if main.world_region=="harbor":
+		_check(map.snapshot.points.size()==17, "harbor regression uses all seventeen real locations")
+		var entrance: Button=main.overlay.find_child("RegionGamesButton",true,false)
+		_check(entrance!=null and main.modal_footer.get_child_count()==2, "regional map has one game entrance and fixed back action")
+		if entrance!=null:
+			entrance.pressed.emit()
+			await _frames(6)
+			var grid: GridContainer=main.overlay.find_child("RegionalGameEntriesGrid",true,false)
+			var delivered: Array=preload("res://game/core/game_catalog.gd").definitions("harbor")
+			_check(main.modal_kind=="region_games" and grid!=null, "game entrance opens its separate page")
+			if grid!=null:
+				_check(grid.columns==2 and grid.get_child_count()==12 and delivered.size()==12, "entry grid contains all twelve delivered games in two columns")
+				_check(_within_viewport(grid) and _within_viewport(main.modal_footer) and main.overlay.find_children("*","ScrollContainer",true,false).is_empty(), "complete entry page and fixed back fit without scrolling")
+				for definition: Dictionary in delivered:
+					var action: Button=grid.get_node_or_null("HarborGame"+str(definition.id))
+					_check(action!=null, "entry page preserves stable button for "+str(definition.id))
+					if action==null: continue
+					var font := action.get_theme_font("font")
+					var font_size := action.get_theme_font_size("font_size")
+					var text_size := font.get_string_size(action.text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size)
+					text_size.y=maxf(text_size.y,font.get_height(font_size))
+					_check(_within_viewport(action) and action.size.y>=44 and action.size.x>=text_size.x+action.get_theme_stylebox("normal").get_minimum_size().x and action.size.y>=text_size.y+action.get_theme_stylebox("normal").get_minimum_size().y, "readable complete entry and 44px target for "+str(definition.id))
+					# Reopen the page between invitations so every callback is exercised.
+					main.overlay.find_child("HarborGame"+str(definition.id),true,false).pressed.emit()
+					_check(main.modal_kind=="game_info" and main.overlay.get_child(0).definition.id==definition.id, "entry opens its exact game invitation: "+str(definition.id))
+					main._show_region_games()
+					await _frames(3)
+					grid=main.overlay.find_child("RegionalGameEntriesGrid",true,false)
+			var back: Button=main.overlay.find_child("MenuBackButton",true,false)
+			_check(back!=null and back.text.contains("地圖"), "entry back explicitly names its map destination")
+			if back!=null: back.pressed.emit()
+			await _frames(3)
+			_check(main.modal_kind=="map" and main.overlay.find_child("HarborMapPanel",true,false)!=null, "entry back returns to the real regional map")
+			main.overlay.find_child("RegionGamesButton",true,false).pressed.emit()
+			main._close()
+			await _frames(3)
+			_check(main.modal_kind=="map", "entry Escape close follows the same map return")
 	window.content_scale_size=previous_scale_size
 	window.content_scale_aspect=previous_aspect
 	window.size=previous_size
 	Progress.set_setting("ui_scale",previous_text_scale)
 	await _frames(4)
+
+func _within_viewport(control: Control) -> bool:
+	return control.is_visible_in_tree() and get_viewport().get_visible_rect().grow(0.5).encloses(control.get_global_rect())
 
 func _failure_process() -> void:
 	var save_path := OS.get_environment("SNAPLAND_SAVE_PATH")

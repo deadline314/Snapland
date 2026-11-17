@@ -57,8 +57,8 @@
 - [x] Register all new runtime tests with required pass markers and check runtime coverage configuration.
 - [x] Review each worker's result against the spec and check the entire final branch; fix actionable findings.
 - [x] Run affected local tests, design/link validation, native three-size route/restart checks and isolated output validation.
-- [ ] Add only actual evidence, mark MAIN-26 acceptance when met, commit/push separately from any later SG-41 implementation.
-- [ ] Fetch/rebase latest main if needed, integrate/push main, inspect CI and remove only the delivered owned branch/worktree.
+- [x] Add only actual evidence, mark MAIN-26 acceptance when met, commit/push separately from any later SG-41 implementation.
+- [x] Fetch/rebase latest main if needed, integrate/push main, inspect CI and remove only the delivered owned branch/worktree.
 
 ## Execution ledger
 
@@ -82,3 +82,5 @@
 - Final most-capable whole-branch review: no Critical/Important finding. Minor QA provenance flag: writer inherited scripted_profile_setup=false despite synthetic setup. A dedicated one-line QA fix sets it only in writer mode; all previous raw evidence is retained and fresh root/package writer/readers will prove the corrected field. No gameplay/source asset behavior changes.
 
 - Final QA provenance correction: fresh root and re-exported private writer/readers pass with true/false setup flags respectively, 14/12 captures each. Previous raw reports retained with an explicit legacy-field correction note. Scoped most-capable re-review accepted, no new finding. Compact evidence now records 15 native cases and source/executable hashes.
+- Delivery: d0698af pushed, origin/main and local main fast-forwarded to d0698af054963e83b86ece7c7bf58d47b0644126. Owned codex/candy-world-20261117 branch removed locally/remotely only after ancestry verification. No worktree was created. Full main CI 44108912119 in progress; duplicate owned branch run cancelled. Next work continues on codex/region-map-20261117.
+- CI completion: main run https://github.com/deadline314/Snapland/actions/runs/44108912119 passed all six jobs (runtime-source, full-suite and four game-runtime shards).

@@ -15,6 +15,7 @@ func _ready() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	get_window().size=Vector2i(1280,720)
 	_progress=get_tree().root.get_node_or_null("Progress")
 	_check(_progress!=null,"Progress autoload exists")
 	if _progress==null:
@@ -52,6 +53,13 @@ func _test_empty_album() -> void:
 	_main._refresh()
 
 func _test_map() -> void:
+	var window := get_window()
+	var previous_size := window.size
+	var previous_scale_size := window.content_scale_size
+	var previous_aspect := window.content_scale_aspect
+	for frame in range(60):
+		if _main.world.player.is_on_floor(): break
+		await get_tree().physics_frame
 	_main._show_map()
 	await _frames(2)
 	_check(_main.modal_kind=="map","map opens through the existing ticket callback")
@@ -61,6 +69,8 @@ func _test_map() -> void:
 	_check(hub!=null,"map labels the sea-wind harbor hub")
 	_check(stations.size()==12,"map exposes all twelve real welcome-game stations")
 	_check(gates.size()==9,"map exposes the other nine park entrances")
+	var legend: Node=_main.overlay.find_child("IslandMapLegend",true,false)
+	_check(legend!=null and _has_label(legend,"珊瑚線：迎賓大道") and _has_label(legend,"青綠線：海岸環線") and _has_label(legend,"右側：園區路口") and not _has_label(legend,"九島準備中"),"map legend preserves route colors and truthfully labels regional gates without claiming all nine are unavailable")
 	var map_detail: Node=_main.overlay.find_child("DestinationDetails",true,false)
 	_check(map_detail!=null,"map has a readable destination details panel")
 	var original_position: Vector3=_main.world.avatar.global_position
@@ -77,7 +87,9 @@ func _test_map() -> void:
 	for review_case in [[Vector2i(800,600),1.0],[Vector2i(1280,720),1.0],[Vector2i(800,600),1.25]]:
 		var viewport_size: Vector2i=review_case[0]
 		_progress.set_setting("ui_scale",review_case[1])
-		get_tree().root.size=viewport_size
+		window.content_scale_size=viewport_size
+		window.content_scale_aspect=Window.CONTENT_SCALE_ASPECT_IGNORE
+		window.size=viewport_size
 		await _frames(2)
 		_main._show_map()
 		await _frames(2)
@@ -94,6 +106,11 @@ func _test_map() -> void:
 		for first in range(all_stops.size()):
 			for second in range(first+1,all_stops.size()):
 				if all_stops[first].get_global_rect().intersects(all_stops[second].get_global_rect()): separated=false
+		var stops_clear_of_gates := true
+		for stop in all_stops:
+			for gate in all_gates:
+				if stop.get_global_rect().intersects(gate.get_global_rect()): stops_clear_of_gates=false
+		_check(stops_clear_of_gates,"all twelve stations stay clear of all nine gates at actual %dx%d" % [viewport_size.x,viewport_size.y])
 		var map_hub := _main.overlay.find_child("MapHub",true,false) as Button
 		var harbor_clear := map_hub!=null
 		for stop in all_stops:
@@ -130,9 +147,21 @@ func _test_map() -> void:
 		_check(station_details_fit,"all twelve station descriptions preserve the map and return control at %dx%d" % [viewport_size.x,viewport_size.y])
 		_check(separated,"map station hit targets never overlap at %dx%d" % [viewport_size.x,viewport_size.y])
 		_check(contained,"map stations and entrances stay visible, keyboard focusable, at least 44px and inside the island chart at %dx%d" % [viewport_size.x,viewport_size.y])
+		var detail := _main.overlay.find_child("DestinationDetails",true,false) as Control
+		var back := _main.overlay.find_child("MenuBackButton",true,false) as Control
+		_check(detail!=null and back!=null and window.get_visible_rect().encloses(detail.get_global_rect()) and window.get_visible_rect().encloses(back.get_global_rect()),"selected destination details and fixed back fit actual %dx%d" % [viewport_size.x,viewport_size.y])
+		var workspace := _main.overlay.find_child("IslandMapWorkspace",true,false) as GridContainer
+		var map_nodes := workspace.find_children("*","",true,false).size() if workspace!=null else 0
+		for resize_to in [Vector2i(1280,720) if viewport_size.x==800 else Vector2i(800,600),viewport_size]:
+			window.content_scale_size=resize_to
+			window.size=resize_to
+			await _frames(6)
+			_check(workspace!=null and workspace.columns==(1 if resize_to.x<1100 else 2) and workspace.find_children("*","",true,false).size()==map_nodes and _all_visible_rects_fit(_main.overlay,window.get_visible_rect()),"open map adapts in place without node growth at actual %dx%d" % [resize_to.x,resize_to.y])
 		_main._close()
 	_progress.set_setting("ui_scale",1.0)
-	get_tree().root.size=Vector2i(1280,720)
+	window.content_scale_size=previous_scale_size
+	window.content_scale_aspect=previous_aspect
+	window.size=previous_size
 	_main._refresh()
 	await _frames(3)
 

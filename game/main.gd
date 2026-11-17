@@ -631,6 +631,9 @@ func _adapt_content_pagers(compact: bool) -> void:
 			_render_content_page(node,floori(float(first)/desired),true)
 
 func _close() -> void:
+	if modal_kind=="region_games" and not changing_region and not quitting:
+		_show_map()
+		return
 	var practice_return := retake_practice_target.duplicate() if modal_kind == "result" and session == null else {}
 	if not practice_return.is_empty(): retake_practice_target.clear()
 	_dispose_retake()
@@ -1965,9 +1968,9 @@ func _show_map() -> void:
 		var harbor_map = load("res://game/ui/harbor_map_panel.gd").new()
 		harbor_map.setup(world.map_snapshot())
 		harbor_body.add_child(harbor_map)
-		for definition in Catalog.definitions(world_region):
-			var action := Paper.button(str(definition.name)+" · 查看玩法",_show_game_info.bind(str(definition.id)),modal_footer)
-			action.name="HarborGame"+str(definition.id)
+		if not Catalog.definitions(world_region).is_empty():
+			var games_button := Paper.button("遊戲入口",_show_region_games,modal_footer)
+			games_button.name="RegionGamesButton"
 		if world_region=="candy":
 			var return_button := Paper.button("免費返回迎賓大道",_travel_to_region.bind("welcome"),modal_footer)
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
@@ -1982,6 +1985,24 @@ func _show_map() -> void:
 	map_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(map_panel)
 	_back(body)
+
+func _show_region_games() -> void:
+	var body := _open(_region_name()+" · 遊戲入口",world_region.to_upper()+" GAMES","region_games")
+	var entries := GridContainer.new()
+	entries.name="RegionalGameEntriesGrid"
+	entries.columns=2
+	entries.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	entries.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	body.add_child(entries)
+	for definition in Catalog.definitions(world_region):
+		var action := Paper.button(str(definition.name),_show_game_info.bind(str(definition.id)),entries)
+		action.name="HarborGame"+str(definition.id)
+		action.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		action.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	var back := Paper.button("返回地圖 · Esc",_show_map,modal_footer)
+	back.name="MenuBackButton"
+	back.custom_minimum_size=Vector2(190,44)
+	back.grab_focus()
 
 func _show_settings() -> void:
 	var body := _open("把這趟遊園，調成你的步調。","SETTINGS","settings")

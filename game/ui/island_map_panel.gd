@@ -174,6 +174,8 @@ var _games: Array = []
 var _normal_count := 0
 var _station_positions: Dictionary = {}
 var _canvas: MapSurface
+var _workspace: GridContainer
+var _detail_body: BoxContainer
 var _detail_title: Label
 var _detail_text: Label
 var _selected_map_button := "MapHub"
@@ -200,19 +202,21 @@ func _ready() -> void:
 	clip.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
 	clip.vertical_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(clip)
-	var workspace := HBoxContainer.new()
-	workspace.name="IslandMapWorkspace"
-	workspace.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	workspace.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	workspace.add_theme_constant_override("separation",10)
-	clip.add_child(workspace)
+	_workspace=GridContainer.new()
+	_workspace.name="IslandMapWorkspace"
+	_workspace.columns=2
+	_workspace.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	_workspace.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	_workspace.add_theme_constant_override("h_separation",10)
+	_workspace.add_theme_constant_override("v_separation",10)
+	clip.add_child(_workspace)
 	var frame := PanelContainer.new()
 	frame.name="IslandChartFrame"
 	frame.add_theme_stylebox_override("panel",Paper.plaque())
 	frame.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	frame.size_flags_stretch_ratio=2.4
 	frame.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	workspace.add_child(frame)
+	_workspace.add_child(frame)
 	_canvas=MapSurface.new()
 	_canvas.name="IslandChartCanvas"
 	_canvas.custom_minimum_size=Vector2(600,0)
@@ -230,24 +234,33 @@ func _ready() -> void:
 	detail.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	detail.size_flags_stretch_ratio=1.0
 	detail.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	workspace.add_child(detail)
-	var detail_body := VBoxContainer.new()
-	detail_body.add_theme_constant_override("separation",8)
-	detail.add_child(detail_body)
+	_workspace.add_child(detail)
+	_detail_body=BoxContainer.new()
+	_detail_body.vertical=true
+	_detail_body.add_theme_constant_override("separation",8)
+	detail.add_child(_detail_body)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	_detail_body.add_child(title_stack)
 	var heading := Paper.label("目的地情報",14,Paper.GOLD)
-	detail_body.add_child(heading)
+	title_stack.add_child(heading)
 	_detail_title=Paper.section_title("海風碼頭｜下船起點")
 	_detail_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	_detail_text=Paper.label("由碼頭沿著珊瑚色路線進入迎賓大道。選取地圖標記，查看站點目標與園區門檻。",17,Paper.INK)
 	_detail_text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	_detail_text.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	_detail_text.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	detail_body.add_child(_detail_title)
-	detail_body.add_child(_detail_text)
+	title_stack.add_child(_detail_title)
+	_detail_body.add_child(_detail_text)
 	var legend := HBoxContainer.new()
 	legend.name="IslandMapLegend"
 	legend.add_theme_constant_override("separation",12)
 	add_child(legend)
-	legend.add_child(Paper.label("珊瑚線：迎賓大道　·　青綠線：海岸環線　·　右側九島準備中",16,Paper.INK))
+	var legend_text := Paper.label("珊瑚線：迎賓大道　·　青綠線：海岸環線　·　右側：園區路口",16,Paper.INK)
+	legend_text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	legend_text.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	legend.add_child(legend_text)
+	_layout_map_buttons()
 	if not _zones.is_empty():
 		_canvas.queue_redraw()
 
@@ -312,6 +325,11 @@ func _layout_map_buttons() -> void:
 	if not is_instance_valid(_canvas):
 		return
 	var menu_scale := Paper.physical_scale(_canvas)
+	if is_instance_valid(_detail_body):
+		var compact := get_viewport().get_visible_rect().size.x*menu_scale<1100.0
+		_workspace.columns=1 if compact else 2
+		_detail_body.vertical=not compact
+		_canvas.custom_minimum_size=Vector2(600.0/menu_scale,220.0/menu_scale if compact else 0.0)
 	var hit_size := Vector2(44.0/menu_scale,48.0/menu_scale)
 	var sx := _canvas.size.x/720.0
 	var sy := _canvas.size.y/360.0

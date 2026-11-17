@@ -132,6 +132,8 @@ func _run() -> void:
 	main._show_map()
 	await capture("map")
 	var player_before: Vector3 = main.world.player.position
+	main.overlay.find_child("RegionGamesButton", true, false).pressed.emit()
+	await frames(3)
 	main.overlay.find_child("HarborGamegame-013", true, false).pressed.emit()
 	check(main.modal_kind == "game_info" and main.world.player.position == player_before, "read-only map opens invitation without teleport")
 	main._request_game_start("game-013", assisted)

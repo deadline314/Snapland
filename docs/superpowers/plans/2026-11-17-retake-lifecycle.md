@@ -24,8 +24,8 @@
 ## Task 2: Delivery
 
 - [x] Fresh current-workspace retake integration check passes with no error/leak lines.
-- [ ] Attach actual raw proof, complete ticket, commit/push independently of concurrent MAIN-27 UI edits.
-- [ ] Fetch/rebase as needed, integrate latest main and inspect CI.
+- [x] Attach actual raw proof, complete ticket, commit/push independently of concurrent MAIN-27 UI edits.
+- [x] Fetch/rebase as needed, integrate latest main and inspect CI.
 
 ## Execution ledger
 
@@ -35,3 +35,4 @@
 - Original nonverbose focused A/B/A/B: two no-drain runs fail with matching resource/object ownership; two bounded-drain runs pass, observed drains 65/21 ms. Detailed variants also pass 90–104 ms. No fixed wait assumed release.
 - Four full retake runs pass in 32.34/32.72/32.34/32.52 s across normal/detailed and distinct profiles; strict checker rejects original and accepts all four fixed results.
 - Fresh review: no actionable findings; weak references do not keep native playbacks alive across await, and deadline records failure/nonzero exit. Fresh current-workspace check passed in 32.35 s. Hardware audio/whole-game play are outside this pure fixture correction.
+- Delivery: 08b872a5103241e524ee60065e32c619b894f21d pushed and fast-forwarded into local/origin main. Concurrent MAIN-27 tracked edits were hash-verified unchanged across integration. The active region-map branch is retained for its unfinished ticket; no worktree was created. Main CI 44113523193 in progress, duplicate owned branch run cancelled.
