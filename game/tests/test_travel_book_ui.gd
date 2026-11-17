@@ -60,6 +60,7 @@ func _test_map() -> void:
 	for frame in range(60):
 		if _main.world.player.is_on_floor(): break
 		await get_tree().physics_frame
+	_check(_main.world.player.is_on_floor(),"map position check starts with the player grounded")
 	_main._show_map()
 	await _frames(2)
 	_check(_main.modal_kind=="map","map opens through the existing ticket callback")
@@ -73,12 +74,19 @@ func _test_map() -> void:
 	_check(legend!=null and _has_label(legend,"珊瑚線：迎賓大道") and _has_label(legend,"青綠線：海岸環線") and _has_label(legend,"右側：園區路口") and not _has_label(legend,"九島準備中"),"map legend preserves route colors and truthfully labels regional gates without claiming all nine are unavailable")
 	var map_detail: Node=_main.overlay.find_child("DestinationDetails",true,false)
 	_check(map_detail!=null,"map has a readable destination details panel")
-	var original_position: Vector3=_main.world.avatar.global_position
+	var original_position: Vector3=_main.world.player.global_position
+	var original_sprite_position: Vector3=_main.world.avatar.global_position
 	var harbor := _main.overlay.find_child("MapGate_harbor",true,false) as Button
 	if harbor!=null:
 		await _activate(harbor)
+		# A synthetic camera offset reproduces billboard settling after the player lands.
+		_main.world.camera.position.y+=1.0
+		await get_tree().physics_frame
+		await get_tree().process_frame
+		print("MAP_POSITION_CAMERA_WITNESS player_before=",original_position," player_after=",_main.world.player.global_position," sprite_before=",original_sprite_position," sprite_after=",_main.world.avatar.global_position," camera_up_y=",_main.world.camera.global_basis.y.y," anchor_y=",_main.world.avatar_ground_anchor.position.y)
+		_check(_main.world.player.global_position==original_position and _main.world.avatar.global_position!=original_sprite_position,"camera grounding moves the displayed sprite while the player body stays fixed")
 		_check(_has_label(map_detail,"6 張") and _has_label(map_detail,"尚未達資格"),"harbor detail explains its actual threshold and admission state")
-		_check(_main.world.avatar.global_position==original_position,"selecting a map destination does not teleport the avatar")
+		_check(_main.world.player.global_position==original_position,"selecting a map destination does not teleport the avatar")
 	var station := _main.overlay.find_child("MapStop_game-010",true,false) as Button
 	if station!=null:
 		await _activate(station)
