@@ -1,6 +1,7 @@
 extends Node
 
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
+const Catalog = preload("res://game/core/game_catalog.gd")
 const FIXTURE_APP_PREFIX := "SnaplandSaveGuard-"
 
 var _fixture_root := ""
@@ -88,8 +89,8 @@ func _build_fixture_project(project_dir: String) -> void:
 		output.close()
 	var data_dir := game_dir.path_join("data")
 	assert(DirAccess.make_dir_recursive_absolute(data_dir) == OK)
-	for source: String in ["welcome_games.json", "harbor_games.json"]:
-		_copy_script("res://game/data/" + source, data_dir.path_join(source))
+	for source: String in Catalog.DATA_PATHS.values():
+		_copy_script(source, data_dir.path_join(source.get_file()))
 	var tests_dir := game_dir.path_join("tests")
 	assert(DirAccess.make_dir_recursive_absolute(tests_dir) == OK)
 	_copy_script("res://game/tests/test_save_guard_child.gd", tests_dir.path_join("test_save_guard_child.gd"))
@@ -272,8 +273,8 @@ func _cleanup_temp_fixture() -> void:
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game/tests/test_save_guard_child.gd"))
 	for name: String in ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd", "game_catalog.gd"]:
 		DirAccess.remove_absolute(_fixture_root.path_join("project/game/core").path_join(name))
-	for name: String in ["welcome_games.json", "harbor_games.json"]:
-		DirAccess.remove_absolute(_fixture_root.path_join("project/game/data").path_join(name))
+	for source: String in Catalog.DATA_PATHS.values():
+		DirAccess.remove_absolute(_fixture_root.path_join("project/game/data").path_join(source.get_file()))
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game/data"))
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game/tests"))
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game/core"))
