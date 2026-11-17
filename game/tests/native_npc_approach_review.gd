@@ -246,4 +246,3 @@ func _finish() -> void:
 	if _failures.is_empty(): print("PASS: native NPC approach actions and idle recovery")
 	else: push_error("Native approach failures: " + "; ".join(_failures))
 	get_tree().quit(0 if _failures.is_empty() else 1)
-
