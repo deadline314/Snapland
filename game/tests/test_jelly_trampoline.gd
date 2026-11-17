@@ -20,6 +20,7 @@ func _run() -> void:
 		_input_and_recovery(model)
 		_geometry_and_deadline(model)
 		_prediction(model)
+		_prediction_input_state(model)
 		_threshold_and_bell_checkpoint(model)
 		for variant in 2:
 			for assisted in [false, true]:
@@ -416,3 +417,57 @@ func _threshold_and_bell_checkpoint(model) -> void:
 	expect(model.snapshot().fruit.bell_touched and model.snapshot().delivered == 0, "current-fruit reset setup uses actual airborne bell contact")
 	model.reset_fruit()
 	expect(model.snapshot().mistakes == 1 and not model.snapshot().fruit.bell_touched and model.snapshot().bell_deliveries == 0 and model.snapshot().fruit.ready, "X clears uncompleted same-fruit bell contact without delivery reward")
+
+func _prediction_input_state(model) -> void:
+	model.reset()
+	configure(model, 340, 0)
+	model.begin_charge()
+	advance(model, 0.8)
+	var charged: Dictionary = model.snapshot()
+	expect(not charged.helper and charged.fruit.ready and charged.charging and charged.trajectory.size() == 24, "charged-ready released preview must continue through the real unheld bed rebound")
+	expect(model.snapshot() == charged, "released-state prediction leaves the real held charge unchanged")
+	model.release_charge()
+	var rebounded := false
+	var previous: Dictionary = model.snapshot()
+	for i in range(1, 24):
+		advance(model, 0.1)
+		var state: Dictionary = model.snapshot()
+		if i < charged.trajectory.size():
+			var predicted: Vector2 = charged.trajectory[i]
+			expect(predicted.distance_to(Vector2(state.fruit.x, state.fruit.y)) < 0.0001, "charged-ready preview matches explicitly released flight before and after bed rebound")
+		if previous.fruit.vy > 0 and state.fruit.vy < 0:
+			rebounded = true
+			expect(not state.fruit.ready and not state.charging, "released helper-off shot really rebounds without an automatic catch")
+			print("JELLY_PREVIEW_RELEASED_REBOUND flight_time=%.1f y=%.9f vy=%.9f" % [i * 0.1, state.fruit.y, state.fruit.vy])
+		previous = state
+	expect(rebounded and not model.snapshot().fruit.ready, "released preview and actual flight continue after substantial bed rebound")
+
+	model.reset()
+	configure(model, 340, 0)
+	launch(model, 0.8)
+	advance(model, 0.2)
+	model.begin_charge()
+	var held_flight: Dictionary = model.snapshot()
+	expect(not held_flight.fruit.ready and not held_flight.charging and not held_flight.helper and held_flight.trajectory.size() > 2 and held_flight.trajectory.size() < 24, "airborne prepared-held preview retains intended catch and terminates at real bed contact")
+	expect(model.snapshot() == held_flight, "airborne held-catch prediction leaves real input and physics unchanged")
+	for i in range(1, held_flight.trajectory.size() - 1):
+		advance(model, 0.1)
+		var state: Dictionary = model.snapshot()
+		var predicted: Vector2 = held_flight.trajectory[i]
+		expect(predicted.distance_to(Vector2(state.fruit.x, state.fruit.y)) < 0.0001 and not state.fruit.ready, "airborne held-catch preview matches actual samples before contact")
+	var caught: Dictionary = wait_ready(model)
+	var endpoint: Vector2 = held_flight.trajectory.back()
+	expect(endpoint == Vector2(340, 492) and caught.fruit.ready and caught.charging and caught.fruit.vx == 0 and caught.fruit.vy == 0 and caught.mistakes == 0, "airborne held prediction endpoint is actual prepared catch, not passive rebound")
+	expect(is_equal_approx(caught.fruit.y, 492 + 40 * caught.depth) and caught.charge_seconds < 1.0 / 60.0, "held charging begins only after the predicted real contact")
+	print("JELLY_PREVIEW_HELD_CATCH points=%d endpoint=%s charging=%s" % [held_flight.trajectory.size(), endpoint, caught.charging])
+
+	model.reset()
+	configure(model, 340, 0)
+	model.toggle_helper()
+	model.begin_charge()
+	advance(model, 0.8)
+	var helper_ready: Dictionary = model.snapshot()
+	expect(helper_ready.trajectory.size() > 2 and helper_ready.trajectory.size() < 24 and helper_ready.trajectory.back() == Vector2(340, 492), "hypothetical release preserves helper's genuine contact catch")
+	model.release_charge()
+	caught = wait_ready(model)
+	expect(caught.fruit.ready and not caught.charging and caught.mistakes == 0 and caught.fruit.y == 492, "helper catches explicitly released fruit and still waits for manual charge")

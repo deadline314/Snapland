@@ -244,6 +244,7 @@ func _flight(s: Dictionary, h: float, held: bool) -> float:
 func snapshot() -> Dictionary:
 	var result := _s.duplicate(true)
 	var preview := _s.duplicate(true)
+	var preview_held := _held
 	var points: Array[Vector2] = []
 	if not preview.ended:
 		if preview.fruit.ready and preview.depth > 0:
@@ -251,12 +252,13 @@ func snapshot() -> Dictionary:
 			preview.fruit.vx = speed * sin(deg_to_rad(float(preview.tilt)))
 			preview.fruit.vy = -speed * cos(deg_to_rad(float(preview.tilt)))
 			preview.fruit.ready = false
+			preview_held = false
 		if not preview.fruit.ready:
 			points.append(Vector2(preview.fruit.x, preview.fruit.y))
 			for i in 23:
 				var predicted_fruit: Dictionary = preview.fruit
 				for j in 12:
-					_flight(preview, SUBSTEP, _held)
+					_flight(preview, SUBSTEP, preview_held)
 					if preview.fruit.ready or preview.ended:
 						break
 				points.append(Vector2(predicted_fruit.x, predicted_fruit.y))
