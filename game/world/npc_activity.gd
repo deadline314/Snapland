@@ -314,6 +314,9 @@ func set_reduced_motion(enabled: bool) -> void:
 		if is_instance_valid(_player):
 			_player.pause()
 		_restore_baselines()
+		for index in range(_records.size()):
+			if bool(_records[index].active):
+				_play_actor_action(index, "stand", "front", true)
 		_freeze_shader_motion(true)
 		_update_motion_pause(true)
 		return

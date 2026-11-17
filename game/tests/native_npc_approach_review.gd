@@ -111,6 +111,7 @@ func _review_role(role: String, pass_index: int, reduced: bool) -> void:
 	record = _record(role)
 	_check(record.action in ["stand", "idle"] and record.direction == "front" and bool(record.action_sequence.get("loop", false)) and _source_matches(role, sprite, record), role + " finite action returns to complete authored idle")
 	_world.apply_settings({"reduced_motion": reduced})
+	record = _record(role)
 	var idle_start := float(record.action_elapsed)
 	var idle_texture := sprite.texture
 	await get_tree().create_timer(0.65).timeout
@@ -124,7 +125,7 @@ func _review_role(role: String, pass_index: int, reduced: bool) -> void:
 	row["wall_ms"] = Time.get_ticks_msec() - start_ms
 	row["idle_elapsed"] = record.action_elapsed
 	row["reduced_motion"] = reduced
-	row["idle_source"] = "complete authored standing baseline restored by reduced-motion setting" if reduced else "looping authored front standing sequence"
+	row["idle_source"] = "frozen complete authored front standing sequence" if reduced else "looping authored front standing sequence"
 	_report.roles.append(row)
 	await _press_key(KEY_ESCAPE)
 	_world.apply_settings({"reduced_motion": false})
@@ -132,8 +133,6 @@ func _review_role(role: String, pass_index: int, reduced: bool) -> void:
 	_check(_main.modal_kind == "" and not _world.blocked and not _world.npc_dialogue_hold and _world.npc_activity._player.is_playing(), role + " Escape cancels and releases route")
 
 func _source_matches(role: String, sprite: Sprite3D, record: Dictionary) -> bool:
-	if _world.reduced_motion:
-		return sprite.is_visible_in_tree() and sprite.texture != null and sprite.texture == record.baseline_texture
 	var sequence: Dictionary = record.get("action_sequence", {})
 	var frames: Array = sequence.get("frames", [])
 	if frames.is_empty() or not sprite.is_visible_in_tree() or sprite.texture == null or bool(sequence.get("legacy_fallback", false)): return false

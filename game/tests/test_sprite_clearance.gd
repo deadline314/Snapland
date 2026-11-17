@@ -106,15 +106,18 @@ func _assert_npc_reduced_motion_restoration() -> void:
 		var material := sprite.material_override as ShaderMaterial if is_instance_valid(sprite) else null
 		_check(is_instance_valid(sprite) and is_instance_valid(activity_root), "%s reduced-motion actor is still present" % role)
 		if not is_instance_valid(sprite) or not is_instance_valid(activity_root): continue
-		_check(sprite.texture == record.baseline_texture, "%s reduced motion restores its registered rest texture" % role)
+		var frames: Array = record.action_sequence.get("frames", [])
+		var expected := frames[0].texture as Texture2D if not frames.is_empty() else null
+		if role == "announcer" and expected != null: expected = activity._costume_texture(role, expected)
+		_check(record.action == "stand" and record.direction == "front" and expected != null and sprite.texture == expected, "%s reduced motion selects its complete formal front standing texture" % role)
 		_check(is_equal_approx(sprite.pixel_size,float(record.baseline_pixel_size)), "%s reduced motion restores its pixel size" % role)
 		_check(sprite.flip_h == bool(record.baseline_flip_h), "%s reduced motion restores its horizontal flip" % role)
 		_check(activity_root.position.is_equal_approx(record.baseline_anchor_position), "%s reduced motion restores its activity-root position" % role)
 		if material != null:
 			if bool(record.has_shader_texture):
-				_check(material.get_shader_parameter("texture_albedo") == record.baseline_shader_texture, "%s reduced motion restores its material texture" % role)
+				_check(material.get_shader_parameter("texture_albedo") == sprite.texture, "%s reduced motion synchronizes its formal standing material texture" % role)
 			if bool(record.has_shader_uv_rect):
-				_check(material.get_shader_parameter("uv_rect") == record.baseline_shader_uv_rect, "%s reduced motion restores its material UV rectangle" % role)
+				_check(material.get_shader_parameter("uv_rect") == Vector4(0,0,1,1), "%s reduced motion preserves its complete formal canvas UV rectangle" % role)
 			if material.get_shader_parameter("gesture_pixels") != null:
 				_check(is_equal_approx(float(material.get_shader_parameter("gesture_pixels")),float(record.gesture_baseline)), "%s reduced motion restores its gesture baseline" % role)
 		_check_npc_grounded_texture(sprite,role+" reduced motion")
@@ -127,8 +130,10 @@ func _assert_npc_reduced_motion_restoration() -> void:
 		var material := sprite.material_override as ShaderMaterial if is_instance_valid(sprite) else null
 		_check(is_instance_valid(sprite), "%s restored activity actor is still present" % role)
 		if not is_instance_valid(sprite): continue
-		var frames: Array = record.frames
-		_check(not frames.is_empty() and sprite.texture == frames[0], "%s activity resumes from its first authored frame" % role)
+		var frames: Array = record.action_sequence.get("frames", [])
+		var expected := frames[0].texture as Texture2D if not frames.is_empty() else null
+		if role == "announcer" and expected != null: expected = activity._costume_texture(role, expected)
+		_check(record.action == "stand" and record.direction == "front" and expected != null and sprite.texture == expected, "%s activity resumes from its complete formal front standing frame" % role)
 		if material != null:
 			_check(material.get_shader_parameter("texture_albedo") == sprite.texture, "%s activity shader texture matches the restored Sprite3D" % role)
 			_check(material.get_shader_parameter("uv_rect") == Vector4(0.0,0.0,1.0,1.0), "%s activity restores full-canvas shader UVs" % role)

@@ -162,8 +162,23 @@ func _run() -> void:
 	_controller._process(0.01)
 	assert(String(_controller._records[0].last_idle_action) != first_ticket_idle, "ticket does not repeat the same personality action in consecutive idle events")
 	_assert_role_has_distinct_idle_cycle(_imp, "imp", ["idle_gesture", "emotion_proud", "dance"])
+	assert(_controller.interact(_actor), "reduced motion can interrupt an active interaction")
+	assert(_controller.request_action(_announcer, "walk", "right"), "reduced motion can interrupt an active walk")
 	_controller.set_reduced_motion(true)
-	assert(_actor.texture == baseline and is_equal_approx(_actor.pixel_size, baseline_size), "reduced motion restores the original texture and pixel size")
+	for index in range(3):
+		var reduced_record: Dictionary = _controller._records[index]
+		var reduced_actor := reduced_record.target.get_ref() as Sprite3D
+		assert(reduced_record.action == "stand" and reduced_record.direction == "front" and bool(reduced_record.action_sequence.get("available", false)), "%s reduced motion selects formal front standing" % reduced_record.role)
+		assert(reduced_actor.texture == _stand[0] and reduced_actor.texture.get_size() == Vector2(320, 460), "%s reduced motion uses the first complete authored standing cel" % reduced_record.role)
+	assert(is_equal_approx(_actor.pixel_size, baseline_size), "reduced motion preserves the original pixel size")
+	_controller.set_reduced_motion(true)
+	_controller.set_activity_paused(true)
+	_controller.set_dialogue_hold(true)
+	_controller._process(2.0)
+	for index in range(3):
+		assert(is_zero_approx(float(_controller._records[index].action_elapsed)) and (_controller._records[index].target.get_ref() as Sprite3D).texture == _stand[0], "repeated reduced motion freezes standing source and time even during dialogue hold")
+	_controller.set_dialogue_hold(false)
+	_controller.set_activity_paused(false)
 	_controller.set_reduced_motion(false)
 	assert(_controller.statistics().playing, "motion resumes after reduced motion")
 	assert(float(_controller._records[0].idle_due) >= 5.0 and float(_controller._records[1].idle_due) >= 5.0 and not is_equal_approx(float(_controller._records[0].idle_due), float(_controller._records[1].idle_due)), "actors receive independent delayed idle-event offsets")
@@ -238,6 +253,14 @@ func _run() -> void:
 	_controller._advance_actor(_controller._records[0], _actor, 0.65 / NpcActivityScript.breath_tempo("ticket"), false)
 	assert(_actor.texture == _greet[1], "loop wraps at the sum of authored holds and preserves phase")
 	assert(is_equal_approx(_controller.breath_cycle_seconds("ticket", "right"), 0.65 / NpcActivityScript.breath_tempo("ticket")), "reported breathing cycle agrees with the displayed timeline")
+	library.sequences["ticket/stand/front"] = library.sequences["ticket/broken_probe/front"]
+	library.sequences["ticket/idle/front"] = library.sequences["ticket/broken_probe/front"]
+	assert(_controller.greet(_actor), "a valid interaction precedes damaged reduced-motion standing")
+	_controller.set_reduced_motion(true)
+	assert(_actor.texture == baseline and _controller._records[0].action_sequence.is_empty(), "damaged formal standing restores the complete baseline rather than retaining a gesture")
+	assert(_controller.coverage_report().missing_requests.ticket.has("stand/front"), "damaged reduced-motion standing is explicitly missing")
+	_controller._process(2.0)
+	assert(_actor.texture == baseline, "damaged reduced-motion fallback stays frozen")
 	_actor.queue_free()
 	_imp.queue_free()
 	_announcer.queue_free()

@@ -2,6 +2,7 @@ extends SceneTree
 
 const ParkWorldScript := preload("res://game/world/park_world.gd")
 const NpcActivityScript := preload("res://game/world/npc_activity.gd")
+const CharacterAnimationLibraryScript := preload("res://game/world/character_animation_library.gd")
 
 var _world: Node3D
 
@@ -75,7 +76,6 @@ func _run() -> void:
 	assert(is_equal_approx(float(points["announcer"].position.x), start_point.x + 0.6), "the world interaction point follows the announcer root")
 	assert(is_equal_approx(points.announcer.marker.global_position.x,announcer_root.global_position.x), "announcer marker follows the route with its interaction point")
 	var announcer_sprite := announcer.sprite as Sprite3D
-	var baseline_texture: Texture2D = _activity_record_for_role("announcer").baseline_texture
 	var activity: Variant = _world.npc_activity
 	var event_counts_before: Array[int] = []
 	for record in activity._records:
@@ -95,8 +95,10 @@ func _run() -> void:
 	for index in range(activity._records.size()):
 		assert(int(activity._records[index].idle_event_count)==event_counts_before[index], "dialogue hold does not launch random idle actions")
 	activity.set_reduced_motion(true)
+	_assert_reduced_formal_standing()
 	var reduced_elapsed: float=float(_activity_record_for_role("announcer").action_elapsed)
 	activity._process(0.4)
+	_assert_reduced_formal_standing()
 	assert(is_equal_approx(float(_activity_record_for_role("announcer").action_elapsed),reduced_elapsed), "reduced motion stops authored dialogue-hold animation")
 	activity.set_reduced_motion(false)
 	activity.set_dialogue_hold(false)
@@ -115,7 +117,10 @@ func _run() -> void:
 		var motion: Variant = _activity_record_for_role(role).get("motion")
 		assert(actor_record.sprite.visible and motion == null, "%s reduced-motion world pose renders only the authored Sprite" % role)
 	assert(announcer_root.position == baseline_root_position and points["announcer"].position == start_point, "reduced motion restores NPC root and world point")
-	assert(announcer_sprite.texture == baseline_texture, "reduced motion restores the original visible idle frame")
+	_assert_reduced_formal_standing()
+	_world.apply_settings({"reduced_motion": true})
+	activity._process(0.4)
+	_assert_reduced_formal_standing()
 	_world.blocked = true
 	_world._process(0.0)
 	assert(_world.npc_activity.statistics().activity_paused, "blocked/modal world state pauses the NPC controller")
@@ -142,7 +147,8 @@ func _run() -> void:
 			_world._update_sprite_grounding()
 			_assert_projected_contact_feet(role, source_sprite)
 			assert(source_sprite.visible and _activity_record_for_role(role).motion == null, "%s camera change cannot silently enable a gait rig" % role)
-	assert(announcer_sprite.texture == _world.npc_activity._records[2].frames[0], "resumed announcer displays its authored idle frame")
+	var resumed_record := _activity_record_for_role("announcer")
+	assert(resumed_record.action == "stand" and resumed_record.direction == "front" and announcer_sprite.texture == activity._costume_texture("announcer", resumed_record.action_sequence.frames[0].texture), "resumed announcer retains its complete authored front standing frame")
 	var imp := _actor_record_for_role("imp")
 	var imp_root := imp.activity_root as Node3D
 	var imp_sprite := imp.sprite as Sprite3D
@@ -232,6 +238,22 @@ func _check_invalid_motion_configuration() -> void:
 
 func _test_ground_height(_point: Vector2) -> float:
 	return 0.055
+
+
+func _assert_reduced_formal_standing() -> void:
+	var library := CharacterAnimationLibraryScript.new()
+	for role in ["ticket", "imp", "announcer"]:
+		var record := _activity_record_for_role(role)
+		var sprite := _actor_record_for_role(role).sprite as Sprite3D
+		var sequence: Dictionary = library.get_sequence(role, "idle", "front")
+		assert(bool(sequence.get("available", false)) and not sequence.get("frames", []).is_empty(), "%s has a complete formal front standing source" % role)
+		var expected := sequence.frames[0].texture as Texture2D
+		if role == "announcer": expected = _world.npc_activity._costume_texture(role, expected)
+		assert(record.action == "stand" and record.direction == "front" and bool(record.action_sequence.get("available", false)) and is_zero_approx(float(record.action_elapsed)), "%s reduced motion records frozen formal front standing" % role)
+		assert(sprite.texture.get_size() == Vector2(NpcActivityScript.ACTION_CANVAS_SIZE) and sprite.texture.get_image().get_data() == expected.get_image().get_data(), "%s reduced motion preserves the exact formal canvas and role costume" % role)
+		var material := sprite.material_override as ShaderMaterial
+		assert(material.get_shader_parameter("texture_albedo") == sprite.texture and material.get_shader_parameter("uv_rect") == Vector4(0, 0, 1, 1), "%s reduced motion keeps shader source and full-canvas layout aligned" % role)
+		assert(is_zero_approx(float(material.get_shader_parameter("motion"))), "%s reduced motion freezes shader motion" % role)
 
 
 func _actor_record_for_role(role: String) -> Dictionary:

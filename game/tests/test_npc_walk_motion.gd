@@ -258,7 +258,9 @@ func _check_activity_integration() -> void:
 		var index:=_record_index_by_role(controller,role)
 		assert(actors[role].visible and not controller._records[index].motion.rig.visible,"reduced motion shows only the authored Sprite for %s" % role)
 	var announcer_record: Dictionary=controller._records[_record_index_by_role(controller,"announcer")]
-	assert(actors.announcer.texture==announcer_record.baseline_texture and materials.announcer.get_shader_parameter("texture_albedo")==announcer_record.baseline_shader_texture,"reduced motion retains the same bounded measured trouser treatment on announcer rest texture")
+	var standing: Dictionary = Library.new().get_sequence("announcer", "idle", "front")
+	var expected_standing: Texture2D = controller._costume_texture("announcer", standing.frames[0].texture)
+	assert(announcer_record.action == "stand" and announcer_record.direction == "front" and actors.announcer.texture.get_image().get_data() == expected_standing.get_image().get_data() and materials.announcer.get_shader_parameter("texture_albedo") == actors.announcer.texture,"reduced motion retains the bounded measured trouser treatment on formal announcer front standing")
 	controller.set_reduced_motion(false)
 	assert(is_equal_approx(float(materials.imp.get_shader_parameter("motion")),0.7),"disabling reduced motion restores the prior shader value")
 	controller.configure_motion(camera,Callable(self,"_ground_height"),false)

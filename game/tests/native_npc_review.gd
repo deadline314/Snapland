@@ -57,7 +57,10 @@ func _run() -> void:
 	for role in NpcRoles:
 		var record: Dictionary = records[role]
 		var material := _sprite(role).material_override as ShaderMaterial
-		if _sprite(role).texture != reduced_textures[role] or _anchor(role).position != reduced_positions[role] or _sprite(role).texture != record.baseline_texture or material == null or material.get_shader_parameter("texture_albedo") != record.baseline_shader_texture or material.get_shader_parameter("uv_rect") != record.baseline_shader_uv_rect:
+		var frames: Array = record.action_sequence.get("frames", [])
+		var expected := frames[0].texture as Texture2D if not frames.is_empty() else null
+		if role == "announcer" and expected != null: expected = controller._costume_texture(role, expected)
+		if record.action != "stand" or record.direction != "front" or expected == null or _sprite(role).texture != reduced_textures[role] or _anchor(role).position != reduced_positions[role] or _sprite(role).texture != expected or material == null or material.get_shader_parameter("texture_albedo") != _sprite(role).texture or material.get_shader_parameter("uv_rect") != Vector4(0,0,1,1):
 			await _fail("Reduced motion did not retain stable synchronized NPC pose/root: " + role)
 			return
 	main.world.apply_settings({"reduced_motion": false})
