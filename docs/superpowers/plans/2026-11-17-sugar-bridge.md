@@ -79,3 +79,5 @@
 - Final standalone acceptance: all1178runtime/allowlistedfixture source hashes match current workspace, binarySHAverified;500writer/coldrestart andactualselecteddevilretake/coldrestart pass with noERROR/missingimagewarnings. SG-41 evidence zip22.5MB+sixPNGs prepared;20uniqueaffectedGodotsuites,65Python tests andfive designscopes passed. Git integration/CI next.
 
 - Git closure: a7491430f0b226bf0512a460e374d14d0a5321be committed/pushed, latestorigin/main fast-forwarded with zero divergence; localmain/originmain sameSHA, userauthor+committer verified. Ownedfeaturebranch removedlocal/remote. mainfullCIstarted44121228790; its duplicatedownbranchrun44121151940cancelled. CIstillrunning atSG42opening; notclaimedpassed.
+
+- CI follow-up:44121228790 oldmain completed withsave-guardfixturemissingCandydata andSprite-vs-player mapassertionfailures; these were not game025 result failures. MAIN29 5594015 andMAIN30 d233d1f delivered strictfixture corrections withrawRED/GREENevidence. LatestmainCI44127544526runscombinedfixes; notclaimedpasseduntilobserved.

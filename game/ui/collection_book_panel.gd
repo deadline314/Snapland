@@ -403,12 +403,12 @@ func _category_prompt() -> String:
 	match _category:
 		"devil": return "小惡魔拍貼｜實際技巧與免費補拍分開記錄；選取缺卡進入補拍。"
 		"time": return "四時明信片｜切換園區時段，留下那一刻的實際照片。"
-		_: return "普通拍貼｜正式遊玩自然結束不限勝負；選取缺卡可先練習或免費補拍。"
+		_: return "普通拍貼｜參與操作後正常結算不限勝負；選取缺卡可先練習或免費補拍。" if _region=="candy" else "普通拍貼｜正式遊玩自然結束不限勝負；選取缺卡可先練習或免費補拍。"
 
 func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Dictionary:
 	var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
 	var instructions := ("實際技巧："+str(game.devil_hint)) if devil else "正式遊玩自然結束即可收藏，不限勝負。"
-	if not devil and game.mode=="sugar_bridge": instructions="參與操作後正常結算即可收藏，不限勝負。"
+	if not devil and game.mode in ["sugar_bridge","cookie_mold"]: instructions="參與操作後正常結算即可收藏，不限勝負。"
 	instructions += "｜%s · 固定遊戲亭：%s · %s" % [{"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(identity.zone,"迎賓大道"),game.name,photo_id]
 	if _progress.photos.has(photo_id):
 		var record: Dictionary = _progress.photos[photo_id]

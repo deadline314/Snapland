@@ -12,5 +12,19 @@
     "ordinary": "三顆運料球送到右岸",
     "attraction_tag": "材料工作台",
     "island_invitation": "長橋逐球、短橋可併送；拉得越長越薄，落球和斷帶都能免費重送。"
+  },
+  {
+    "id": "game-026",
+    "mode": "cookie_mold",
+    "zone": "candy",
+    "local_index": 2,
+    "name": "餅乾翻模",
+    "goal": "逐角輕敲鬆模、連續翻轉並移盤，完整接住六種異形餅乾",
+    "instructions": "翻模、輕敲並滑接餅乾",
+    "devil_hint": "第六塊雙層餅須借實際翻轉慣性完整脫模並接住，且六塊全數承接；輔助與AI扶盤仍須親自翻模、輕敲和滑接",
+    "devil": "借翻模慣性完整取出雙層餅",
+    "ordinary": "完整取出六塊異形餅",
+    "attraction_tag": "餅模工作台",
+    "island_invitation": "A/D翻模、Tab換角、Space按住輕敲、方向鍵移盤；裂餅或漏接可免費重做。"
   }
 ]

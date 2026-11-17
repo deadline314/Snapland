@@ -27,7 +27,7 @@ func _run() -> void:
 	main = load("res://game/main.tscn").instantiate()
 	get_tree().root.add_child(main)
 	await _frames()
-	check(main.definitions.size() == 12 and Catalog.all_definitions().size() == 25, "welcome keeps twelve and delivered island has25")
+	check(main.definitions.size() == 12 and Catalog.all_definitions().size() == 26, "welcome keeps twelve and delivered island has26")
 	check(Catalog.identity("game-025") == {"id":"game-025", "mode":"sugar_bridge", "zone":"candy", "local_index":1, "photo_id":"photo-candy-game-1", "devil_photo_id":"photo-candy-devil-1", "achievement_id":"ACH_GAME_025"}, "first candy card has fixed local1 and global025 identities")
 	main._practice_for_retake("game-025", true)
 	check(main.session == null and not Progress.has_attempted_game("game-025"), "locked candy retake cannot bypass admission")
@@ -88,7 +88,7 @@ func _run() -> void:
 	Route.tap(main.session, KEY_ENTER)
 	main.session._leave_from_hud()
 	check(main.session == null and Progress.coins == coins and Progress.normal_count_for_zone("candy") == 1, "cancel cannot duplicate awards")
-	check(not Progress.photos.has("photo-candy-game-2") and not Progress.photos.has("photo-harbor-game-12"), "025 never grants upcoming candy or existing harbor cards")
+	check(not Progress.photos.has("photo-candy-game-2") and not Progress.photos.has("photo-harbor-game-12"), "025 never grants the other candy or existing harbor cards")
 	Progress._reset_memory()
 	Progress.load_progress()
 	check(Progress.current_region == "candy" and Progress.has_seen_tutorial("game-025") and Progress.achievements.has("ACH_GAME_025") and Progress.normal_count_for_zone("candy") == 1 and Progress.devil_count("candy") == 1 and Progress.coins == coins, "saved restart retains candy identity, tutorial, cards and receipt")
@@ -128,7 +128,7 @@ func _retake_after_reset() -> void:
 	main._show_album()
 	await _frames()
 	var book = _book(main.overlay)
-	check(book != null and book._entries().size() == 1, "candy album exposes one real local entry")
+	check(book != null and book._entries().size() == 2, "candy album exposes two real local entries")
 	if book != null:
 		for devil in [false,true]:
 			var entry: Dictionary = book._game_entry(Catalog.find("game-025"),Catalog.identity("game-025"),devil)

@@ -1447,7 +1447,7 @@ func _show_game_rules(id: String) -> void:
 	objective_card.add_child(Paper.label(str(definition.get("instructions","依畫面提示操作。")),20))
 	var notes := [
 		{"text":"小惡魔："+str(definition.get("devil_hint","完成特殊互動。")),"color":Paper.TEAL},
-		{"text":"正式遊玩自然結束即可收藏普通拍貼，不限勝負；中途取消不收藏。小惡魔實際技巧以上方條件為準，也可免費補拍收藏。","color":Paper.INK},
+		{"text":("參與操作後正常結算即可收藏普通拍貼，不限勝負；未操作或中途取消不收藏。" if definition.mode in ["sugar_bridge","cookie_mold"] else "正式遊玩自然結束即可收藏普通拍貼，不限勝負；中途取消不收藏。")+"小惡魔實際技巧以上方條件為準，也可免費補拍收藏。","color":Paper.INK},
 		{"text":"輔助遊玩會放寬時間或判定，仍可收藏普通拍貼；小惡魔是否要求未開輔助，以上方條件為準。練習不記錄分數與收藏。","color":Paper.TEAL},
 	]
 	_content_pager(body,"GameRulesExtraDetails",notes,_render_rules_note,1,entry_stamp)
@@ -2371,7 +2371,7 @@ func _show_ticket() -> void:
 		["島嶼地圖",_show_map,"探索島嶼"], ["今日任務",_show_tasks,"探索島嶼"],
 		["拍貼收藏本",_show_album,"收藏記錄"], ["遊園成就",_show_achievements,"收藏記錄"],
 		["衣櫃與服飾店",_show_wardrobe,"整裝出發"], ["切換時段",_open_time_panel_from_ticket,"遊園安排"],
-		["設定與輔助",_show_settings,"遊園安排"], ["拉糖橋圖解教學" if world_region=="candy" else "園區圖解教學",_show_region_tutorial,"操作速查"],
+		["設定與輔助",_show_settings,"遊園安排"], ["工廠圖解教學" if world_region=="candy" else "園區圖解教學",_show_region_tutorial,"操作速查"],
 	]
 	for index in range(entries.size()):
 		var entry: Array=entries[index]
@@ -2386,8 +2386,20 @@ func _show_ticket() -> void:
 	_back(body)
 
 func _show_region_tutorial() -> void:
-	if world_region=="candy": _open_tutorial("game-025","ticket")
-	else: _open_tutorial("park","ticket")
+	if world_region!="candy":
+		_open_tutorial("park","ticket")
+		return
+	var body := _open("工廠圖解教學","CANDY / 已開放遊戲","region_tutorials")
+	var choices := GridContainer.new()
+	choices.name="CandyTutorialChoices"
+	choices.columns=2
+	choices.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	body.add_child(choices)
+	for definition: Dictionary in Catalog.definitions("candy"):
+		var action := Paper.button(str(definition.name),_open_tutorial.bind(str(definition.id),"ticket"),choices)
+		action.name="CandyTutorial_"+str(definition.id)
+		action.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	_back(body)
 
 func _open_time_panel_from_ticket() -> void:
 	if modal_kind != "ticket":

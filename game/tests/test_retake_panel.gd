@@ -21,6 +21,7 @@ func _run() -> void:
 	if script == null:
 		finish()
 		return
+	check(script.PROPS.size() == 26 and Catalog.all_definitions().size() == 26, "every one of26 delivered games has exactly one actual prop row")
 	var lessons := Lessons.new()
 	for definition in Catalog.all_definitions():
 		var panel = script.new()
@@ -34,7 +35,7 @@ func _run() -> void:
 		check(panel.current_step == 2 and not panel._shutter.disabled, "every delivered set reaches an enabled shutter: " + definition.id)
 		panel.queue_free()
 		await process_frame
-	for invalid in ["game-026", "game-120", "balloon_delivery", "park", ""]:
+	for invalid in ["game-027", "game-120", "balloon_delivery", "park", ""]:
 		var panel = script.new()
 		panel.setup({"id":invalid}, false, lessons.get_lesson("game-001"))
 		root.add_child(panel)

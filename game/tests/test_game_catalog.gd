@@ -16,7 +16,7 @@ func _run() -> void:
 	var candy: Array = catalog.definitions("candy")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 1 and all_games.size() == 25, "only the twenty-five delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 2 and all_games.size() == 26, "only the twenty-six delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy and catalog.definitions("nightmarket").is_empty(), "global order is welcome then harbor then delivered candy; upcoming regions remain unavailable")
@@ -38,6 +38,8 @@ func _run() -> void:
 	_check(catalog.identity("game-023") == {"id": "game-023", "mode": "gull_glide", "zone": "harbor", "local_index": 11, "photo_id": "photo-harbor-game-11", "devil_photo_id": "photo-harbor-devil-11", "achievement_id": "ACH_GAME_023"} and harbor[10].name == "海鳥借風", "harbor game 11 keeps its regional identity")
 	_check(catalog.identity("game-024") == {"id": "game-024", "mode": "tide_lock", "zone": "harbor", "local_index": 12, "photo_id": "photo-harbor-game-12", "devil_photo_id": "photo-harbor-devil-12", "achievement_id": "ACH_GAME_024"} and harbor[11].name == "潮鐘合閘", "harbor game 12 keeps its regional identity")
 	_check(catalog.identity("game-025") == {"id":"game-025", "mode":"sugar_bridge", "zone":"candy", "local_index":1, "photo_id":"photo-candy-game-1", "devil_photo_id":"photo-candy-devil-1", "achievement_id":"ACH_GAME_025"} and candy[0].name == "拉糖橋", "first candy game keeps local one and global twenty-five")
+	var cookie := {"id":"game-026", "mode":"cookie_mold", "zone":"candy", "local_index":2, "photo_id":"photo-candy-game-2", "devil_photo_id":"photo-candy-devil-2", "achievement_id":"ACH_GAME_026"}
+	_check(catalog.identity("game-026") == cookie and catalog.identity("cookie_mold") == cookie and candy[1].name == "餅乾翻模", "second candy game keeps local two and global twenty-six")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
 	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:
@@ -72,6 +74,16 @@ func _run() -> void:
 	invalid_sources.append(bad)
 	bad = sources.duplicate(true)
 	bad.candy = []
+	invalid_sources.append(bad)
+	for field_value in [["id","game-025"],["id","game-027"],["mode","sugar_bridge"],["zone","harbor"],["local_index",1],["local_index",true]]:
+		bad = sources.duplicate(true)
+		bad.candy[1][field_value[0]] = field_value[1]
+		invalid_sources.append(bad)
+	bad = sources.duplicate(true)
+	bad.candy.pop_back()
+	invalid_sources.append(bad)
+	bad = sources.duplicate(true)
+	bad.candy.append(bad.candy[1].duplicate(true))
 	invalid_sources.append(bad)
 	for invalid in invalid_sources:
 		_check(catalog._validated_catalog(invalid).is_empty(), "malformed, duplicate or mismatched catalog data fails closed")

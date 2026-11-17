@@ -233,24 +233,34 @@ SUGAR_SUITES = {
 }
 
 
-class SugarRunnerTests(unittest.TestCase):
-    def test_sugar_suites_are_registered_once_with_exact_entrypoints(self) -> None:
+COOKIE_SUITES = {
+    "cookie model tests": ("test_cookie_mold.gd", "Cookie mold tests: 1209 checks, 0 failures"),
+    "cookie driver tests": ("test_cookie_mold_driver.gd", "Cookie mold driver: 34 checks, 0 failures"),
+    "cookie view tests": ("test_cookie_mold_view.gd", "Cookie mold view: 176 checks, 0 failures"),
+    "cookie Session tests": ("test_cookie_mold_session.gd", "Cookie mold Session: 21 checks, 0 failures"),
+    "cookie Main tests": ("test_cookie_mold_main.tscn", "PASS: cookie Main factory entry, six real catches, fixed rewards, selected retake originals and reload"),
+}
+DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES
+
+
+class RegionalDriverRunnerTests(unittest.TestCase):
+    def test_driver_suites_are_registered_once_with_exact_entrypoints(self) -> None:
         checks = build_checks("fixture-godot")
-        sugar = [(label, command) for label, command in checks if label.startswith("sugar ")]
-        self.assertEqual(len(sugar), 5)
-        self.assertEqual({label for label, _ in sugar}, set(SUGAR_SUITES))
-        for label, command in sugar:
+        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie "))]
+        self.assertEqual(len(drivers), 10)
+        self.assertEqual({label for label, _ in drivers}, set(DRIVER_SUITES))
+        for label, command in drivers:
             with self.subTest(label=label):
-                entry, marker = SUGAR_SUITES[label]
+                entry, marker = DRIVER_SUITES[label]
                 self.assertEqual(PASS_MARKERS[label], marker)
                 self.assertIn("res://game/tests/" + entry, command)
                 self.assertEqual("--script" in command, entry.endswith(".gd"))
 
-    def test_sugar_completion_rejects_fabricated_or_dirty_results(self) -> None:
+    def test_driver_completion_rejects_fabricated_or_dirty_results(self) -> None:
         def result(stdout: str = "", stderr: str = "", code: int = 0) -> subprocess.CompletedProcess[str]:
             return subprocess.CompletedProcess([], code, stdout, stderr)
 
-        for label, (_, marker) in SUGAR_SUITES.items():
+        for label, (_, marker) in DRIVER_SUITES.items():
             with self.subTest(label=label):
                 self.assertIsNone(result_error(label, result("Godot 4.7.2\r\n" + marker + "\r\n")))
                 for output in ("", "quoted " + marker, marker + " suffix", marker.replace("0 failures", "1 failures").replace("PASS:", "FAIL:")):

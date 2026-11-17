@@ -26,6 +26,11 @@ PASS_MARKERS = {
     "sugar view tests": "Sugar bridge view: 55 checks, 0 failures",
     "sugar Session tests": "Sugar bridge Session: 21 checks, 0 failures",
     "sugar Main tests": "PASS: sugar Main candy entry, tutorial, real results, fixed rewards, selected retake originals and reload",
+    "cookie model tests": "Cookie mold tests: 1209 checks, 0 failures",
+    "cookie driver tests": "Cookie mold driver: 34 checks, 0 failures",
+    "cookie view tests": "Cookie mold view: 176 checks, 0 failures",
+    "cookie Session tests": "Cookie mold Session: 21 checks, 0 failures",
+    "cookie Main tests": "PASS: cookie Main factory entry, six real catches, fixed rewards, selected retake originals and reload",
     "lock native fixture tests": "PASS: lock native fixture adjacent helper and three real tutorial PNGs",
     "lock Main tests": "PASS: lock Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
     "lock Session tests": "Tide lock Session: 24 checks, 0 failures",
@@ -243,7 +248,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -345,6 +350,11 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("sugar view tests", common + ["--script", "res://game/tests/test_sugar_bridge_view.gd"]),
         ("sugar Session tests", common + ["--script", "res://game/tests/test_sugar_bridge_session.gd"]),
         ("sugar Main tests", common + ["res://game/tests/test_sugar_bridge_main.tscn"]),
+        ("cookie model tests", common + ["--script", "res://game/tests/test_cookie_mold.gd"]),
+        ("cookie driver tests", common + ["--script", "res://game/tests/test_cookie_mold_driver.gd"]),
+        ("cookie view tests", common + ["--script", "res://game/tests/test_cookie_mold_view.gd"]),
+        ("cookie Session tests", common + ["--script", "res://game/tests/test_cookie_mold_session.gd"]),
+        ("cookie Main tests", common + ["res://game/tests/test_cookie_mold_main.tscn"]),
         ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
         ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
         ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),

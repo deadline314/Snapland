@@ -25,6 +25,14 @@ func _run() -> void:
 			session._unhandled_input(load_ball)
 			load_ball.pressed = false
 			session._unhandled_input(load_ball)
+		if definition.mode == "cookie_mold":
+			var move_tray := InputEventKey.new()
+			move_tray.keycode = KEY_RIGHT
+			move_tray.pressed = true
+			session._unhandled_input(move_tray)
+			session._process(0.1)
+			move_tray.pressed = false
+			session._unhandled_input(move_tray)
 		if session.active_driver != null:
 			for tick in 4000:
 				if session.ended: break

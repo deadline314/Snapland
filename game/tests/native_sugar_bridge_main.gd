@@ -11,10 +11,11 @@ var tutorial_dir := ""
 var mode := ""
 var requested := Vector2i(1280, 720)
 var started := Time.get_ticks_msec()
+var review_game_id := "game-025"
 
 func _process(_delta: float) -> void:
 	if Time.get_ticks_msec() - started > 180000:
-		push_error("Native sugar Main exceeded 180 second wall-clock guard")
+		push_error("Native %s Main exceeded 180 second wall-clock guard" % review_game_id)
 		get_tree().quit(1)
 
 func _ready() -> void:
@@ -253,7 +254,10 @@ func capture(label: String, tutorial_step: int = 0) -> void:
 	captures.append(label + ".png")
 	if tutorial_step > 0 and not tutorial_dir.is_empty():
 		check(image.get_size() == Vector2i(1280, 720), "tutorial source is actual 1280x720")
-		check(image.save_png(tutorial_dir.path_join("game-025-step-%02d.png" % tutorial_step)) == OK, "write real tutorial PNG")
+		check(image.save_png(tutorial_dir.path_join("%s-step-%02d.png" % [review_game_id, tutorial_step])) == OK, "write real tutorial PNG")
+
+func completion_marker() -> String:
+	return "PASS: native sugar Main actual controls, material result, fixed photos and restart"
 
 func finish() -> void:
 	var report := {"scope":"automated Main actual input/GPU, synthetic admission, no human play or listening claim", "mode":mode, "viewport":requested, "captures":captures, "failures":failures, "results":results, "save_path":OS.get_environment("SNAPLAND_SAVE_PATH")}
@@ -274,5 +278,5 @@ func finish() -> void:
 	var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
 	if file != null: file.store_string(JSON.stringify(report, "\t"))
 	for problem in failures: push_error(problem)
-	print("PASS: native sugar Main actual controls, material result, fixed photos and restart" if failures.is_empty() else "FAIL: native sugar Main")
+	print(completion_marker() if failures.is_empty() else "FAIL: native " + review_game_id + " Main")
 	get_tree().quit(0 if failures.is_empty() else 1)

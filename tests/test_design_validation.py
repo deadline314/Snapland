@@ -84,7 +84,7 @@ class GameTests(unittest.TestCase):
                     v.validate_games(broken, self.refs)
 
     def test_unbuilt_games_cannot_claim_runtime(self):
-        self.data['games'][25]['implementation'] = 'single_player_runtime_needs_full_acceptance'
+        self.data['games'][26]['implementation'] = 'single_player_runtime_needs_full_acceptance'
         with self.assertRaisesRegex(ValueError, 'scope'):
             v.validate_games(self.data, self.refs)
 
@@ -125,14 +125,25 @@ class GameTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'game-025.*scope'):
             v.validate_games(self.data, self.refs)
 
-    def test_candy_matches_only_actual_delivered_row(self):
+    def test_second_candy_game_has_delivered_runtime_scope(self):
+        row = self.data['games'][25]
+        self.assertEqual(row['implementation'], 'single_player_runtime_needs_full_acceptance')
+        self.assertEqual(row['runtime_mode'], 'cookie_mold')
+        self.data['games'][25]['implementation'] = 'design_only_not_playtested'
+        with self.assertRaisesRegex(ValueError, 'game-026.*scope'):
+            v.validate_games(self.data, self.refs)
+
+    def test_candy_matches_only_actual_delivered_rows(self):
         runtime = v.load(ROOT, 'game/data/welcome_games.json')
         harbor = v.load(ROOT, 'game/data/harbor_games.json')
         v.validate_runtime_game_alignment(self.data, runtime, harbor, self.candy)
-        for candy in ([], [dict(self.candy[0], id='game-026')],
-                      [dict(self.candy[0], zone='harbor')],
-                      [dict(self.candy[0], local_index=2)],
-                      self.candy + [dict(self.candy[0], id='game-026', local_index=2)]):
+        first, second = self.candy
+        for candy in ([], [first], [second, first],
+                      [first, dict(second, id='game-027')],
+                      [first, dict(second, zone='harbor')],
+                      [first, dict(second, local_index=1)],
+                      [first, dict(second, id='game-025')],
+                      self.candy + [dict(second, id='game-027', local_index=3)]):
             with self.subTest(candy=candy):
                 with self.assertRaisesRegex(ValueError, 'delivered candy runtime coverage'):
                     v.validate_runtime_game_alignment(self.data, runtime, harbor, candy)
@@ -140,12 +151,13 @@ class GameTests(unittest.TestCase):
     def test_candy_runtime_rules_cannot_drift(self):
         runtime = v.load(ROOT, 'game/data/welcome_games.json')
         harbor = v.load(ROOT, 'game/data/harbor_games.json')
-        for field in ('name', 'action', 'goal', 'demon', 'runtime_mode'):
-            with self.subTest(field=field):
-                broken = copy.deepcopy(self.data)
-                broken['games'][24][field] = 'a different live rule'
-                with self.assertRaisesRegex(ValueError, f'game-025.*runtime {field} drift'):
-                    v.validate_runtime_game_alignment(broken, runtime, harbor, self.candy)
+        for index in (24, 25):
+            for field in ('name', 'action', 'goal', 'demon', 'runtime_mode'):
+                with self.subTest(game=index + 1, field=field):
+                    broken = copy.deepcopy(self.data)
+                    broken['games'][index][field] = 'a different live rule'
+                    with self.assertRaisesRegex(ValueError, f'game-{index + 1:03d}.*runtime {field} drift'):
+                        v.validate_runtime_game_alignment(broken, runtime, harbor, self.candy)
 
 
 class StoryTests(unittest.TestCase):
