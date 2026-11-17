@@ -615,14 +615,14 @@
     {
       "name": "拉糖橋",
       "core": "創意",
-      "action": "抓兩端拉伸並固定糖帶",
-      "goal": "搭橋承住三顆運料球",
+      "action": "抓端、拉糖搭橋，再逐球上料",
+      "goal": "三顆運料球送到右岸",
       "choice": "短厚承重或長薄跨遠",
       "feedback": "帶厚、下垂和壓痕",
       "variation": "支架距離與糖料彈性",
       "multi": "各控一端，可交換固定點",
       "ai": "簡單AI保持玩家鎖定的端點",
-      "demon": "讓糖帶先作彈弓再成橋",
+      "demon": "同一條糖帶先彈中料斗再運糖",
       "variant": "反重力糖帶須掛天花支點",
       "assist": "顯示承重預覽、斷橋退回原料",
       "test": "兩種固定法都能過球",
@@ -633,8 +633,9 @@
       "reference": "catalog-donut",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「抓兩端拉伸並固定糖帶」；「短厚承重或長薄跨遠」形成取捨，以「兩種固定法都能過球」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "sugar_bridge"
     },
     {
       "name": "餅乾翻模",

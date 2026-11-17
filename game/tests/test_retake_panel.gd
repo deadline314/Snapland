@@ -27,11 +27,14 @@ func _run() -> void:
 		panel.setup(definition, false, lessons.get_lesson(definition.id))
 		root.add_child(panel)
 		await process_frame
-		check(panel.current_step == 0 and not panel._next.disabled, "canonical delivered target opens at observation: " + definition.id)
+		check(panel._valid and panel._props.size() == 3 and panel.current_step == 0 and not panel._next.disabled, "canonical delivered target opens with three real props: " + definition.id)
 		check(panel._viewport.size == Vector2i(1280,720), "one fixed photograph viewport")
+		panel._next.pressed.emit()
+		panel._next.pressed.emit()
+		check(panel.current_step == 2 and not panel._shutter.disabled, "every delivered set reaches an enabled shutter: " + definition.id)
 		panel.queue_free()
 		await process_frame
-	for invalid in ["game-120", "balloon_delivery", "park", ""]:
+	for invalid in ["game-026", "game-120", "balloon_delivery", "park", ""]:
 		var panel = script.new()
 		panel.setup({"id":invalid}, false, lessons.get_lesson("game-001"))
 		root.add_child(panel)

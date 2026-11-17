@@ -80,13 +80,13 @@ func _build_region_geometry() -> void:
 	_sign("材料工作台", Vector3(-8, GROUND_Y, 4.3))
 	_sign("糖漿管道", Vector3(9, GROUND_Y, -5.5))
 	_sign("泡泡停靠", Vector3(9, GROUND_Y, 10.8))
-	_sign("遊戲準備中", Vector3(0, GROUND_Y, -10.8))
+	_sign("拉糖橋 1／12", Vector3(0, GROUND_Y, -10.8))
 	_point("region:welcome", "返回迎賓大道 · 免費", Vector3(0, GROUND_Y, 10))
 	_point("candy:temperature", "溫度觀察台 · 切換冷／溫／熱", Vector3(-8, GROUND_Y, 0))
 	_point("candy:reset", "免費回到工廠入口", Vector3(9, GROUND_Y, 9))
 	_point("candy:info:workbench", "材料工作台 · 不影響進度", Vector3(-8, GROUND_Y, 3))
 	_point("candy:info:pipes", "糖漿管道與輸送廊", Vector3(9, GROUND_Y, -4))
-	_point("candy:info:games", "十二款工廠遊戲 · 準備中", Vector3(0, GROUND_Y, -9))
+	_point("game-025", "拉糖橋 · 抓端搭橋與運糖", Vector3(0, GROUND_Y, -9))
 	current_area = "糖果工廠"
 
 func _sign(text: String, at: Vector3) -> Label3D:

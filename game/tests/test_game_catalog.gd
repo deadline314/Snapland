@@ -13,12 +13,13 @@ func _run() -> void:
 		return
 	var welcome: Array = catalog.definitions()
 	var harbor: Array = catalog.definitions("harbor")
+	var candy: Array = catalog.definitions("candy")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and all_games.size() == 24, "only the twenty-four delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 1 and all_games.size() == 25, "only the twenty-five delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
-	_check(all_games == welcome + harbor and catalog.definitions("candy").is_empty(), "global order is welcome then harbor; planned regions remain unavailable")
+	_check(all_games == welcome + harbor + candy and catalog.definitions("nightmarket").is_empty(), "global order is welcome then harbor then delivered candy; upcoming regions remain unavailable")
 	_check(harbor[0].name == "浪間小艇" and harbor[0].instructions == "划槳、轉舵並側滑靠岸" and harbor[0].ordinary == "載三箱到兩座浮碼頭" and harbor[0].devil == "用浪峰側滑靠岸不撞箱", "harbor row uses the approved concise copy")
 	var expected := {"id": "game-013", "mode": "rowing_cargo", "zone": "harbor", "local_index": 1, "photo_id": "photo-harbor-game-1", "devil_photo_id": "photo-harbor-devil-1", "achievement_id": "ACH_GAME_013"}
 	_check(catalog.identity("game-013") == expected and catalog.identity("rowing_cargo") == expected, "global and mode lookup produce the same regional identity")
@@ -36,6 +37,7 @@ func _run() -> void:
 	_check(catalog.identity("game-022") == {"id": "game-022", "mode": "anchor_chain", "zone": "harbor", "local_index": 10, "photo_id": "photo-harbor-game-10", "devil_photo_id": "photo-harbor-devil-10", "achievement_id": "ACH_GAME_022"} and harbor[9].name == "錨鏈穿礁", "harbor game 10 keeps its regional identity")
 	_check(catalog.identity("game-023") == {"id": "game-023", "mode": "gull_glide", "zone": "harbor", "local_index": 11, "photo_id": "photo-harbor-game-11", "devil_photo_id": "photo-harbor-devil-11", "achievement_id": "ACH_GAME_023"} and harbor[10].name == "海鳥借風", "harbor game 11 keeps its regional identity")
 	_check(catalog.identity("game-024") == {"id": "game-024", "mode": "tide_lock", "zone": "harbor", "local_index": 12, "photo_id": "photo-harbor-game-12", "devil_photo_id": "photo-harbor-devil-12", "achievement_id": "ACH_GAME_024"} and harbor[11].name == "潮鐘合閘", "harbor game 12 keeps its regional identity")
+	_check(catalog.identity("game-025") == {"id":"game-025", "mode":"sugar_bridge", "zone":"candy", "local_index":1, "photo_id":"photo-candy-game-1", "devil_photo_id":"photo-candy-devil-1", "achievement_id":"ACH_GAME_025"} and candy[0].name == "拉糖橋", "first candy game keeps local one and global twenty-five")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
 	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:
@@ -48,7 +50,7 @@ func _run() -> void:
 	var identity: Dictionary = catalog.identity("game-013")
 	identity.zone = "mutated"
 	_check(catalog.definitions()[0].name == "氣球快遞" and catalog.definitions("harbor")[0].name == "浪間小艇" and catalog.identity("game-013").zone == "harbor", "all catalog APIs return deep copies")
-	var sources := {"welcome": catalog.definitions(), "harbor": catalog.definitions("harbor")}
+	var sources := {"welcome": catalog.definitions(), "harbor": catalog.definitions("harbor"), "candy": catalog.definitions("candy")}
 	_check(catalog._validated_catalog(sources) == sources, "explicit parser boundary accepts delivered data")
 	var invalid_sources: Array = []
 	var bad: Dictionary = sources.duplicate(true)

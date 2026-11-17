@@ -55,13 +55,14 @@ func _run() -> void:
 		_check(snapshot.points.size() == world.points.size() and snapshot.points.size() == 6, "all actual factory interactions mapped")
 		for point in snapshot.points:
 			_check(point.size() == 3 and point.position is Vector3, "point contains only id/label/position")
-			_check(point.id in ["region:welcome", "candy:temperature", "candy:reset"] or point.id.begins_with("candy:info:"), "no game/reward IDs")
+			_check(point.id in ["region:welcome", "candy:temperature", "candy:reset"] or point.id.begins_with("candy:info:") or point.id == "game-025", "only the delivered sugar bridge and observation IDs")
 			_check(reached.has(Vector2i(roundi(point.position.x), roundi(point.position.z))), "connected safe walking route to %s" % point.id)
 			world.player.position = point.position
 			world.player.velocity = Vector3.ZERO
 			await physics_frame
 			await physics_frame
 			_check(world.player.position.distance_to(point.position) < 0.2 and world.nearest.get("id", "") == point.id, "actual safe footing and selection for %s" % point.id)
+		_check(snapshot.points.filter(func(point): return str(point.id).begins_with("game-")).size() == 1 and world._point_by_id("game-025").label.contains("拉糖橋"), "exactly one delivered candy game has a real entrance")
 		var count: int = world.find_children("*", "Node", true, false).size()
 		var materials: int = world.material_cache.size()
 		var display_id: int = world._temperature_display.get_instance_id()

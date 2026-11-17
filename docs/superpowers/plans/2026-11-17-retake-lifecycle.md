@@ -36,3 +36,5 @@
 - Four full retake runs pass in 32.34/32.72/32.34/32.52 s across normal/detailed and distinct profiles; strict checker rejects original and accepts all four fixed results.
 - Fresh review: no actionable findings; weak references do not keep native playbacks alive across await, and deadline records failure/nonzero exit. Fresh current-workspace check passed in 32.35 s. Hardware audio/whole-game play are outside this pure fixture correction.
 - Delivery: 08b872a5103241e524ee60065e32c619b894f21d pushed and fast-forwarded into local/origin main. Concurrent MAIN-27 tracked edits were hash-verified unchanged across integration. The active region-map branch is retained for its unfinished ticket; no worktree was created. Main CI 44113523193 in progress, duplicate owned branch run cancelled.
+
+- main CI confirmed successful after delivery: https://github.com/deadline314/Snapland/actions/runs/44113523193.

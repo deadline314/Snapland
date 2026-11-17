@@ -685,8 +685,8 @@ func _refresh() -> void:
 	if is_instance_valid(ui): ui.layout_direction=Control.LAYOUT_DIRECTION_RTL if Localization.is_rtl() else Control.LAYOUT_DIRECTION_LTR
 	_adapt_hud()
 	_adapt_open_menu()
-	normal_count_label.text="當地拍貼 0 / 0" if world_region=="candy" else Localization.text("hud.normal_count", {"count": Progress.normal_count_for_zone(world_region)})
-	devil_count_label.text="小惡魔 0 / 0" if world_region=="candy" else Localization.text("hud.devil_count", {"count": Progress.devil_count(world_region)})
+	normal_count_label.text=Localization.text("hud.normal_count", {"count": Progress.normal_count_for_zone(world_region)})
+	devil_count_label.text=Localization.text("hud.devil_count", {"count": Progress.devil_count(world_region)})
 	coin_count_label.text=Localization.text("hud.coins", {"count": Progress.coins})
 	var phase := TimeOfDay.phase_for_id(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE))
 	phase_label.text="%s %s"%[str(phase.get("label","中午")),str(phase.get("clock","12:00"))]
@@ -1011,7 +1011,7 @@ func _show_pause() -> void:
 	collection.name="PauseCollectionStatus"
 	collection.add_theme_constant_override("separation",2)
 	island.add_child(collection)
-	for stat in [["拍貼","0 / 0" if world_region=="candy" else "%d / 18"%Progress.normal_count_for_zone(world_region),Paper.GOLD],["小惡魔","0 / 0" if world_region=="candy" else "%d / 12"%Progress.devil_count(world_region),Paper.CORAL],["遊園幣","%d"%Progress.coins,Paper.GOLD]]:
+	for stat in [["拍貼","%d / 18"%Progress.normal_count_for_zone(world_region),Paper.GOLD],["小惡魔","%d / 12"%Progress.devil_count(world_region),Paper.CORAL],["遊園幣","%d"%Progress.coins,Paper.GOLD]]:
 		var stat_row := HBoxContainer.new()
 		stat_row.add_theme_constant_override("separation",8)
 		collection.add_child(stat_row)
@@ -1285,14 +1285,16 @@ func _interact(id: String, title: String) -> void:
 		_travel_to_region("welcome")
 		return
 	if world_region=="candy":
-		if id=="candy:temperature":
+		if id.begins_with("game-") and Catalog.identity(id).get("zone","")=="candy":
+			_show_game_info(id)
+		elif id=="candy:temperature":
 			world.cycle_temperature()
 			_notice(world.temperature_label()+"；材料觀察不影響進度。")
 		elif id=="candy:reset":
 			world.reset_to_entry()
 			_notice("已免費回到工廠入口。")
 		elif id.begins_with("candy:info:"):
-			_start_dialogue([{ "speaker":title, "text":"觀察冷、溫、熱三態的糖料形狀與黏度；不授予拍貼或遊園幣。糖果工廠十二款遊戲尚在準備中，可隨時免費返回迎賓大道。" }],Callable())
+			_start_dialogue([{ "speaker":title, "text":"觀察冷、溫、熱三態的糖料形狀與黏度；觀察不授予拍貼或遊園幣。"+_candy_info_text()+"可隨時免費返回迎賓大道。" }],Callable())
 		return
 	if world_region=="harbor":
 		if id.begins_with("game-"):
@@ -1394,6 +1396,10 @@ func _harbor_info_text() -> String:
 	var total := 12 # game-013..024 in the design catalogue
 	var games := "碼頭%d款遊戲都已開放。" % open if open >= total else "已開放%d款遊戲，其餘%d款準備中。" % [open, total - open]
 	return "沿環岸步道或搭免費渡船前往燈塔。潮汐鐘可預覽漲退潮；" + games
+
+func _candy_info_text() -> String:
+	var delivered := Catalog.definitions("candy").size()
+	return "工廠遊戲已開放 %d / 12 款，其餘 %d 款準備中。" % [delivered,12-delivered]
 func _show_game_info(id: String) -> void:
 	_dispose_retake()
 	var definition := _definition(id)
@@ -1424,7 +1430,7 @@ func _show_game_rules(id: String) -> void:
 		_notice("這個設施暫時休息中，先逛逛其他地方吧。")
 		return
 	id=str(definition.id)
-	var body := _open(str(definition.get("name",id)),("潮汐碼頭" if str(Catalog.identity(id).get("zone","welcome"))=="harbor" else "迎賓大道")+"  /  玩法與選項","game_rules")
+	var body := _open(str(definition.get("name",id)),str({"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(Catalog.identity(id).get("zone","welcome"),"迎賓大道"))+"  /  玩法與選項","game_rules")
 	var entry_stamp := HBoxContainer.new()
 	entry_stamp.add_theme_constant_override("separation",8)
 	body.add_child(entry_stamp)
@@ -1670,8 +1676,8 @@ func _show_album() -> void:
 func _can_access_game(id: String) -> bool:
 	var identity := Catalog.identity(id)
 	if identity.is_empty(): return false
-	if identity.zone == "harbor" and Progress.normal_count() < 6 and Progress.current_region != "harbor":
-		_notice("潮汐碼頭還差 %d 張不同普通拍貼；先收藏迎賓大道，收藏不消耗。" % (6-Progress.normal_count()))
+	if identity.zone in ["harbor","candy"] and Progress.normal_count() < 6 and Progress.current_region != identity.zone:
+		_notice("%s還差 %d 張不同普通拍貼；先收藏迎賓大道，收藏不消耗。" % [{"harbor":"潮汐碼頭","candy":"糖果工廠"}[identity.zone],6-Progress.normal_count()])
 		return false
 	return true
 
@@ -2352,7 +2358,7 @@ func _layout_open_panel(panel: Control) -> void:
 func _show_ticket() -> void:
 	var body := _open("航海旅券",world_region.to_upper()+"  /  "+_region_name()+"遊園指南","ticket")
 	if world_region=="candy":
-		body.add_child(Paper.label("當地十二款遊戲尚在準備中；溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
+		body.add_child(Paper.label(_candy_info_text()+"溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2
@@ -2365,7 +2371,7 @@ func _show_ticket() -> void:
 		["島嶼地圖",_show_map,"探索島嶼"], ["今日任務",_show_tasks,"探索島嶼"],
 		["拍貼收藏本",_show_album,"收藏記錄"], ["遊園成就",_show_achievements,"收藏記錄"],
 		["衣櫃與服飾店",_show_wardrobe,"整裝出發"], ["切換時段",_open_time_panel_from_ticket,"遊園安排"],
-		["設定與輔助",_show_settings,"遊園安排"], ["工廠地圖與觀察" if world_region=="candy" else "園區圖解教學",_show_region_tutorial,"操作速查"],
+		["設定與輔助",_show_settings,"遊園安排"], ["拉糖橋圖解教學" if world_region=="candy" else "園區圖解教學",_show_region_tutorial,"操作速查"],
 	]
 	for index in range(entries.size()):
 		var entry: Array=entries[index]
@@ -2380,7 +2386,7 @@ func _show_ticket() -> void:
 	_back(body)
 
 func _show_region_tutorial() -> void:
-	if world_region=="candy": _show_map()
+	if world_region=="candy": _open_tutorial("game-025","ticket")
 	else: _open_tutorial("park","ticket")
 
 func _open_time_panel_from_ticket() -> void:

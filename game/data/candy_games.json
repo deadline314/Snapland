@@ -1,0 +1,16 @@
+[
+  {
+    "id": "game-025",
+    "mode": "sugar_bridge",
+    "zone": "candy",
+    "local_index": 1,
+    "name": "拉糖橋",
+    "goal": "抓住糖帶兩端搭橋，安排上料間隔，把三顆運料球送到右岸",
+    "instructions": "抓端、拉糖搭橋，再逐球上料",
+    "devil_hint": "先用糖帶彈中側料斗，再用同一條糖帶實際運送並送達三球；回收會清除資格，輔助仍可挑戰",
+    "devil": "同一條糖帶先彈中料斗再運糖",
+    "ordinary": "三顆運料球送到右岸",
+    "attraction_tag": "材料工作台",
+    "island_invitation": "長橋逐球、短橋可併送；拉得越長越薄，落球和斷帶都能免費重送。"
+  }
+]

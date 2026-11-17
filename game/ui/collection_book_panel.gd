@@ -224,11 +224,7 @@ func _refresh_book() -> void:
 		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count(_region))
 		_time_button.text="四時 %d / 4" % time_count
 	_time_button.visible=_region=="welcome"
-	_empty_message.text="糖果工廠尚未開放當地拍貼；可切換園區查看迎賓與碼頭收藏及原圖。" if _region=="candy" else "這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
-	if _region=="candy":
-		_normal_button.text="普通拍貼 0 / 0"
-		_devil_button.text="小惡魔 0 / 0"
-		_collection_state.text="溫度觀察不授予拍貼或遊園幣。"
+	_empty_message.text="這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
 	var entries := _entries()
 	var capacity := _page_capacity()
 	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
@@ -283,9 +279,6 @@ func _set_tab_labels(scale_factor: float) -> void:
 	_normal_button.text=("普通 %d / 18" if scale_factor<0.9 else "普通拍貼  %d / 18") % normal_count
 	_devil_button.text=("小惡魔 %d / 12" if scale_factor<0.9 else "小惡魔  %d / 12") % devil_count
 	_time_button.text=("四時 %d / 4" if scale_factor<0.9 else "四時明信片  %d / 4") % time_count
-	if _region=="candy":
-		_normal_button.text="普通拍貼 0 / 0"
-		_devil_button.text="小惡魔 0 / 0"
 
 func _apply_responsive_spread_columns() -> void:
 	if not is_instance_valid(_spread):
@@ -415,7 +408,8 @@ func _category_prompt() -> String:
 func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Dictionary:
 	var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
 	var instructions := ("實際技巧："+str(game.devil_hint)) if devil else "正式遊玩自然結束即可收藏，不限勝負。"
-	instructions += "｜%s · 固定遊戲亭：%s · %s" % ["潮汐碼頭" if identity.zone=="harbor" else "迎賓大道",game.name,photo_id]
+	if not devil and game.mode=="sugar_bridge": instructions="參與操作後正常結算即可收藏，不限勝負。"
+	instructions += "｜%s · 固定遊戲亭：%s · %s" % [{"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(identity.zone,"迎賓大道"),game.name,photo_id]
 	if _progress.photos.has(photo_id):
 		var record: Dictionary = _progress.photos[photo_id]
 		instructions += "｜取得："+("免費補拍布景" if record.get("acquisition_method","")=="retake" else "遊戲拍攝")
@@ -618,7 +612,11 @@ func _saved_texture(photo_id: String) -> Texture2D:
 	var frames: Variant=photo.get("frames",[])
 	if not frames is Array:
 		return null
-	var is_game_photo := photo_id.begins_with("photo-welcome-game-") or photo_id.begins_with("photo-welcome-devil-") or photo_id.begins_with("photo-harbor-game-") or photo_id.begins_with("photo-harbor-devil-")
+	var is_game_photo := false
+	for zone: String in GameCatalog.DATA_PATHS:
+		if photo_id.begins_with("photo-%s-game-" % zone) or photo_id.begins_with("photo-%s-devil-" % zone):
+			is_game_photo = true
+			break
 	for frame_index in range(mini(frames.size(),MAX_PHOTO_FRAME_CANDIDATES)):
 		var path_value: Variant=frames[frame_index]
 		if typeof(path_value)!=TYPE_STRING or str(path_value).strip_edges().is_empty():

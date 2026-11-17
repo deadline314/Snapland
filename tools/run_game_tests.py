@@ -21,6 +21,11 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "sugar model tests": "Sugar bridge: 63 checks, 0 failures",
+    "sugar driver tests": "Sugar bridge driver: 51 checks, 0 failures",
+    "sugar view tests": "Sugar bridge view: 55 checks, 0 failures",
+    "sugar Session tests": "Sugar bridge Session: 21 checks, 0 failures",
+    "sugar Main tests": "PASS: sugar Main candy entry, tutorial, real results, fixed rewards, selected retake originals and reload",
     "lock native fixture tests": "PASS: lock native fixture adjacent helper and three real tutorial PNGs",
     "lock Main tests": "PASS: lock Main entry, regional map, tutorial, truthful timeout, practice, routes, assisted devil and reload",
     "lock Session tests": "Tide lock Session: 24 checks, 0 failures",
@@ -238,7 +243,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -335,6 +340,11 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("lock Session tests", common + ["--script", "res://game/tests/test_tide_lock_session.gd"]),
         ("lock Main tests", common + ["res://game/tests/test_tide_lock_main.tscn"]),
         ("lock native fixture tests", common + ["res://game/tests/native_tide_lock_main.tscn", "--", "--lock-preflight"]),
+        ("sugar model tests", common + ["--script", "res://game/tests/test_sugar_bridge.gd"]),
+        ("sugar driver tests", common + ["--script", "res://game/tests/test_sugar_bridge_driver.gd"]),
+        ("sugar view tests", common + ["--script", "res://game/tests/test_sugar_bridge_view.gd"]),
+        ("sugar Session tests", common + ["--script", "res://game/tests/test_sugar_bridge_session.gd"]),
+        ("sugar Main tests", common + ["res://game/tests/test_sugar_bridge_main.tscn"]),
         ("core runtime tests", common + ["res://game/tests/test_core.tscn"]),
         ("test/review save isolation tests", common + ["res://game/tests/test_test_save_guard.tscn"]),
         ("wardrobe runtime tests", common + ["--script", "res://game/tests/test_wardrobe.gd"]),

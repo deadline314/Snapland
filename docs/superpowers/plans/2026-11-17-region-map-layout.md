@@ -49,3 +49,5 @@ Fix-round expansion: game/ui/island_map_panel.gd and game/tests/test_travel_book
 - Native harness ownership: an otherwise successful 1280 run exposed the same asynchronous audio release at exit; new fixture observes weak playback references under a deadline, following proven MAIN-28 evidence. All old failed/raw runs remain available; no error was ignored. Clean editor import also passed.
 
 - Final native acceptance: 800×600/1.25, 1280×720 and1920×1080 each pass five actual Main captures and all twelve invitation callbacks. Fresh scoped review accepted truthful legend copy. Evidence preserves original failures, final PNGs, source snapshot/hashes and all covering logs. Design/link validation passed all five scopes.
+
+- main CI confirmed successful after delivery: https://github.com/deadline314/Snapland/actions/runs/44116097783.

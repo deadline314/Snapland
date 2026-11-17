@@ -1,8 +1,8 @@
 extends RefCounted
 
-const DATA_PATHS := {"welcome": "res://game/data/welcome_games.json", "harbor": "res://game/data/harbor_games.json"}
-const ZONE_STARTS := {"welcome": 1, "harbor": 13}
-const ZONE_COUNTS := {"welcome": 12, "harbor": 12}
+const DATA_PATHS := {"welcome": "res://game/data/welcome_games.json", "harbor": "res://game/data/harbor_games.json", "candy": "res://game/data/candy_games.json"}
+const ZONE_STARTS := {"welcome": 1, "harbor": 13, "candy": 25}
+const ZONE_COUNTS := {"welcome": 12, "harbor": 12, "candy": 1}
 const TEXT_FIELDS := ["id", "mode", "name", "goal", "instructions", "devil_hint", "devil", "ordinary", "attraction_tag", "island_invitation"]
 static var _cache: Dictionary = {}
 
@@ -11,7 +11,10 @@ static func definitions(zone: String = "welcome") -> Array:
 	return _cache.get(zone, []).duplicate(true)
 
 static func all_definitions() -> Array:
-	return definitions() + definitions("harbor")
+	var delivered: Array = []
+	for zone: String in DATA_PATHS:
+		delivered.append_array(definitions(zone))
+	return delivered
 
 static func find(id_or_mode: String) -> Dictionary:
 	for definition: Dictionary in all_definitions():

@@ -224,6 +224,43 @@ RETAKE_SUITES = {
     "retake native fixture tests": ("test_retake_native_fixture.gd", "PASS: retake native fixture adjacent helper, isolated packaging and real resources"),
 }
 
+SUGAR_SUITES = {
+    "sugar model tests": ("test_sugar_bridge.gd", "Sugar bridge: 63 checks, 0 failures"),
+    "sugar driver tests": ("test_sugar_bridge_driver.gd", "Sugar bridge driver: 51 checks, 0 failures"),
+    "sugar view tests": ("test_sugar_bridge_view.gd", "Sugar bridge view: 55 checks, 0 failures"),
+    "sugar Session tests": ("test_sugar_bridge_session.gd", "Sugar bridge Session: 21 checks, 0 failures"),
+    "sugar Main tests": ("test_sugar_bridge_main.tscn", "PASS: sugar Main candy entry, tutorial, real results, fixed rewards, selected retake originals and reload"),
+}
+
+
+class SugarRunnerTests(unittest.TestCase):
+    def test_sugar_suites_are_registered_once_with_exact_entrypoints(self) -> None:
+        checks = build_checks("fixture-godot")
+        sugar = [(label, command) for label, command in checks if label.startswith("sugar ")]
+        self.assertEqual(len(sugar), 5)
+        self.assertEqual({label for label, _ in sugar}, set(SUGAR_SUITES))
+        for label, command in sugar:
+            with self.subTest(label=label):
+                entry, marker = SUGAR_SUITES[label]
+                self.assertEqual(PASS_MARKERS[label], marker)
+                self.assertIn("res://game/tests/" + entry, command)
+                self.assertEqual("--script" in command, entry.endswith(".gd"))
+
+    def test_sugar_completion_rejects_fabricated_or_dirty_results(self) -> None:
+        def result(stdout: str = "", stderr: str = "", code: int = 0) -> subprocess.CompletedProcess[str]:
+            return subprocess.CompletedProcess([], code, stdout, stderr)
+
+        for label, (_, marker) in SUGAR_SUITES.items():
+            with self.subTest(label=label):
+                self.assertIsNone(result_error(label, result("Godot 4.7.2\r\n" + marker + "\r\n")))
+                for output in ("", "quoted " + marker, marker + " suffix", marker.replace("0 failures", "1 failures").replace("PASS:", "FAIL:")):
+                    self.assertIsNotNone(result_error(label, result(output)), output)
+                self.assertIsNotNone(result_error(label, result(stderr=marker)), "stderr cannot claim completion")
+                for diagnostic in ("ERROR: resource failed", "SCRIPT ERROR: Parse Error"):
+                    self.assertIsNotNone(result_error(label, result(marker + "\n" + diagnostic)))
+                    self.assertIsNotNone(result_error(label, result(marker, diagnostic)))
+                self.assertIsNotNone(result_error(label, result(marker, code=1)))
+
 
 class RetakeRunnerTests(unittest.TestCase):
     def test_all_five_entries_and_strict_completion(self):

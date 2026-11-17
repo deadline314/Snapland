@@ -18,6 +18,13 @@ func _run() -> void:
 	session.cancelled.connect(func(): cancelled.append(1))
 	for definition: Dictionary in Catalog.all_definitions():
 		session.start(definition.id)
+		if definition.mode == "sugar_bridge":
+			var load_ball := InputEventKey.new()
+			load_ball.keycode = KEY_ENTER
+			load_ball.pressed = true
+			session._unhandled_input(load_ball)
+			load_ball.pressed = false
+			session._unhandled_input(load_ball)
 		if session.active_driver != null:
 			for tick in 4000:
 				if session.ended: break
