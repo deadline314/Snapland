@@ -291,12 +291,22 @@ func check(ok: bool, message: String) -> void:
 
 func _finish() -> void:
 	main.quitting=true
+	var playbacks: Array[WeakRef]=[]
+	for player in main.audio.get_children():
+		if player is AudioStreamPlayer and player.has_stream_playback():
+			playbacks.append(weakref(player.get_stream_playback()))
 	main.audio.shutdown()
 	if not OS.get_cmdline_user_args().has("--retake-failure-child"):
 		main.world.area_changed.emit(main.world.current_area)
 		check(main.audio._active_context.is_empty(),"teardown ignores late current-world area callbacks")
-	await get_tree().create_timer(0.15).timeout
 	main.queue_free()
 	await _frames()
+	# stop() releases the player before the audio backend releases its playback.
+	var deadline := Time.get_ticks_msec()+2000
+	while playbacks.any(func(playback: WeakRef): return playback.get_ref()!=null):
+		if Time.get_ticks_msec()>=deadline:
+			check(false,"audio backend releases stopped playbacks before exit")
+			break
+		await get_tree().process_frame
 	if failures.is_empty(): print("PASS: Main selected retakes, actual attempts, truthful awards and safe PNG replacement")
 	get_tree().quit(0 if failures.is_empty() else 1)
