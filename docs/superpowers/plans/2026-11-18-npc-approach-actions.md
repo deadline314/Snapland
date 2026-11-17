@@ -53,3 +53,5 @@
 ## Final validation
 
 Task1 and Task3 actual RED/GREEN retained; all three task gates pass with0 findings. Eleven affected headless suites, current Main native reduced/rebuild and independent embedded3modeQA passed. All1188 runtime/fixture source hashes and binary SHA verified. Root inspected final normal3actions, quarteridle, and all3reduced frontstanding pictures. Original baseline-equality reduced acceptance was rejected visually and preserved. MAIN32 opening tracks separately reproduced obsolete legacy entry failure; ART17 stays inprogress. Wholebranch review and final Git/CI delivery recorded in root ledger.
+
+Wholebranch review found one P2 missed native clearance caller. One final fix wave updated only its formal-source reduced/resume expectations and exact source-foot calibration, preserving all contact/depth guards. Actual inherited method RED/GREEN completed; final scoped re-review marks P2 ADDRESSED with no new breakage. Full clearance entry still has an earlier unchanged geometry failure, tracked by MAIN33; neither legacy full-entry failure is represented as passing. Production and accepted package inputs unchanged by this test-only wave.
