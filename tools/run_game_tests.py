@@ -117,6 +117,7 @@ PASS_MARKERS = {
     "pixel UI minigame tests": "PASS: minigame HUD, pause/results, invite, dialogue, photo frame, and 3 viewport sizes",
     "region progress tests": "PASS: region progress defaults, migration, transactions, and rollback",
     "harbor world tests": "PASS: harbor world terrain, tide safety, free ferry, map alignment and bounded reentry",
+    "candy world tests": "PASS: candy world connected terrain, temperature, safe reset, map and bounded reentry",
     "region travel tests": "PASS: region travel admission, lifecycle, scoped UI, restart, and unchanged rewards",
     "game startup": "PASS: game startup and clean shutdown",
     "core runtime tests": "PASS: core runtime checks",
@@ -237,7 +238,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -257,6 +258,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("retake native fixture tests", common + ["--script", "res://game/tests/test_retake_native_fixture.gd"]),
         ("region progress tests", common + ["--script", "res://game/tests/test_region_progress.gd"]),
         ("harbor world tests", common + ["--script", "res://game/tests/test_harbor_world.gd"]),
+        ("candy world tests", common + ["--script", "res://game/tests/test_candy_world.gd"]),
         ("region travel tests", common + ["res://game/tests/test_region_travel.tscn"]),
         ("delivered game catalog tests", common + ["--script", "res://game/tests/test_game_catalog.gd"]),
         ("harbor game progress tests", common + ["--script", "res://game/tests/test_harbor_game_progress.gd"]),

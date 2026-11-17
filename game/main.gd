@@ -1,6 +1,7 @@
 extends Node
 const WorldScene = preload("res://game/world/park_world.gd")
 const HarborWorld = preload("res://game/world/harbor_world.gd")
+const CandyWorld = preload("res://game/world/candy_world.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
@@ -81,7 +82,7 @@ func _ready() -> void:
 	capture_mode=OS.get_cmdline_user_args().has("--capture")
 	var welcome_review := capture_mode or OS.get_cmdline_user_args().has("--smoke-art")
 	world_region="welcome" if welcome_review else Progress.current_region
-	world=HarborWorld.new() if world_region=="harbor" else WorldScene.new()
+	world=_new_region_world(world_region)
 	add_child(world)
 	audio=Audio.new()
 	add_child(audio)
@@ -110,9 +111,22 @@ func _ready() -> void:
 func _bind_world() -> void:
 	if is_instance_valid(world.coastal_play):
 		world.coastal_play.note_requested.connect(audio.play_note)
-	world.interaction_requested.connect(_interact)
+	world.interaction_requested.connect(_on_world_interaction_requested.bind(world))
 	world.area_changed.connect(_on_world_area_changed.bind(world))
 	_on_world_area_changed(world.current_area,world)
+
+func _on_world_interaction_requested(id: String, title: String, source: Node3D) -> void:
+	if source!=world: return
+	_interact(id,title)
+
+func _new_region_world(region: String) -> Node3D:
+	match region:
+		"harbor": return HarborWorld.new()
+		"candy": return CandyWorld.new()
+	return WorldScene.new()
+
+func _region_name() -> String:
+	return {"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(world_region,"迎賓大道")
 
 func _on_world_area_changed(area: String, source: Node3D) -> void:
 	if quitting or changing_region or source!=world: return
@@ -127,14 +141,15 @@ func _island_audio_context() -> String:
 func _travel_to_region(destination: String) -> bool:
 	if quitting or changing_region or session!=null or capture_mode or is_instance_valid(boat_stage) or modal_kind not in ["","gate","map","tasks"]:
 		return false
-	if destination not in ["welcome","harbor"] or destination==world_region: return false
-	if destination=="harbor" and Progress.normal_count()<6:
+	if not Progress.SUPPORTED_REGIONS.has(destination) or destination==world_region: return false
+	if destination in ["harbor","candy"] and Progress.normal_count()<6:
 		_notice("還差 %d 張不同普通拍貼；收藏不消耗。" % (6-Progress.normal_count()))
 		return false
+	changing_region=true
 	if not Progress.set_current_region(destination):
+		changing_region=false
 		_notice("旅程尚未保存，請再試一次。")
 		return false
-	changing_region=true
 	world.blocked=true
 	# Interaction signals can still be on the old world's stack.
 	_replace_region.call_deferred(destination,true)
@@ -143,13 +158,14 @@ func _travel_to_region(destination: String) -> bool:
 func _replace_region(destination: String, returning: bool = false) -> void:
 	if quitting: return
 	_close()
+	var departure := world_region
 	world.free()
 	world_region=destination
-	world=HarborWorld.new() if destination=="harbor" else WorldScene.new()
+	world=_new_region_world(destination)
 	add_child(world)
 	if returning and destination=="welcome":
 		for point in world.points:
-			if point.id=="gate:harbor":
+			if point.id=="gate:"+departure:
 				world.player.position=point.position+Vector3(0,0.3,1.8)
 				world.player.velocity=Vector3.ZERO
 	world.current_area=world._area_at_position(world.player.position)
@@ -666,8 +682,8 @@ func _refresh() -> void:
 	if is_instance_valid(ui): ui.layout_direction=Control.LAYOUT_DIRECTION_RTL if Localization.is_rtl() else Control.LAYOUT_DIRECTION_LTR
 	_adapt_hud()
 	_adapt_open_menu()
-	normal_count_label.text=Localization.text("hud.normal_count", {"count": Progress.normal_count_for_zone(world_region)})
-	devil_count_label.text=Localization.text("hud.devil_count", {"count": Progress.devil_count(world_region)})
+	normal_count_label.text="當地拍貼 0 / 0" if world_region=="candy" else Localization.text("hud.normal_count", {"count": Progress.normal_count_for_zone(world_region)})
+	devil_count_label.text="小惡魔 0 / 0" if world_region=="candy" else Localization.text("hud.devil_count", {"count": Progress.devil_count(world_region)})
 	coin_count_label.text=Localization.text("hud.coins", {"count": Progress.coins})
 	var phase := TimeOfDay.phase_for_id(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE))
 	phase_label.text="%s %s"%[str(phase.get("label","中午")),str(phase.get("clock","12:00"))]
@@ -992,7 +1008,7 @@ func _show_pause() -> void:
 	collection.name="PauseCollectionStatus"
 	collection.add_theme_constant_override("separation",2)
 	island.add_child(collection)
-	for stat in [["拍貼","%d / 18"%Progress.normal_count_for_zone(world_region),Paper.GOLD],["小惡魔","%d / 12"%Progress.devil_count(world_region),Paper.CORAL],["遊園幣","%d"%Progress.coins,Paper.GOLD]]:
+	for stat in [["拍貼","0 / 0" if world_region=="candy" else "%d / 18"%Progress.normal_count_for_zone(world_region),Paper.GOLD],["小惡魔","0 / 0" if world_region=="candy" else "%d / 12"%Progress.devil_count(world_region),Paper.CORAL],["遊園幣","%d"%Progress.coins,Paper.GOLD]]:
 		var stat_row := HBoxContainer.new()
 		stat_row.add_theme_constant_override("separation",8)
 		collection.add_child(stat_row)
@@ -1265,6 +1281,16 @@ func _interact(id: String, title: String) -> void:
 	if id=="region:welcome":
 		_travel_to_region("welcome")
 		return
+	if world_region=="candy":
+		if id=="candy:temperature":
+			world.cycle_temperature()
+			_notice(world.temperature_label()+"；材料觀察不影響進度。")
+		elif id=="candy:reset":
+			world.reset_to_entry()
+			_notice("已免費回到工廠入口。")
+		elif id.begins_with("candy:info:"):
+			_start_dialogue([{ "speaker":title, "text":"觀察冷、溫、熱三態的糖料形狀與黏度；不授予拍貼或遊園幣。糖果工廠十二款遊戲尚在準備中，可隨時免費返回迎賓大道。" }],Callable())
+		return
 	if world_region=="harbor":
 		if id.begins_with("game-"):
 			_show_game_info(id)
@@ -1326,13 +1352,13 @@ func _interact(id: String, title: String) -> void:
 			if zone.id==id.trim_prefix("gate:"):
 				var body := _open(zone.name,"NEXT ADVENTURE","gate")
 				body.add_child(Paper.label(zone.theme,25))
-				if zone.id=="harbor":
+				if zone.id in ["harbor","candy"]:
 					var remaining := maxi(6-Progress.normal_count(),0)
-					body.add_child(Paper.label("入園資格：6 張不同普通拍貼（不消耗）\n目前：%d 張\n%s" % [Progress.normal_count(),"已達資格，可前往潮汐碼頭。" if remaining==0 else "還差 %d 張。"%remaining],22))
+					body.add_child(Paper.label("入園資格：6 張不同普通拍貼（不消耗）\n目前：%d 張\n%s" % [Progress.normal_count(),"已達資格，可前往%s。"%zone.name if remaining==0 else "還差 %d 張。"%remaining],22))
 					if remaining==0:
-						var travel := Paper.button("前往潮汐碼頭",func(): _travel_to_region("harbor"),body)
-						travel.name="TravelHarborButton"
-						travel.tooltip_text="前往潮汐碼頭；拍貼與遊園幣都不消耗。"
+						var travel := Paper.button("前往"+str(zone.name),_travel_to_region.bind(str(zone.id)),body)
+						travel.name="TravelCandyButton" if zone.id=="candy" else "TravelHarborButton"
+						travel.tooltip_text="6 張不同普通拍貼即可前往；拍貼與遊園幣都不消耗，返回免費。"
 				else:
 					body.add_child(Paper.label("入園資格：%d 張不同普通拍貼（不消耗）\n目前：%d 張\n\n這座園區正在準備中。"%[zone.threshold,Progress.normal_count()],22))
 				_back(body)
@@ -1723,9 +1749,9 @@ func _retake_capture(image: Image, owner: Control, generation: int, id: String, 
 		owner.set_capture_result(saved,"所選卡已收藏：補拍布景，未記為實際挑戰成績。" if saved else "照片或收藏尚未保存，請重試快門；不會重複發獎。")
 
 func _show_tasks() -> void:
-	if world_region=="harbor":
-		var harbor_body := _open("迎賓大道的委託","WELCOME QUESTS","tasks")
-		harbor_body.add_child(Paper.label("潮汐碼頭目前沒有當地任務。小角和阿浪的既有委託仍在迎賓大道，進度會保留。",22))
+	if world_region!="welcome":
+		var harbor_body := _open(_region_name()+"的委託",world_region.to_upper()+" QUESTS","tasks")
+		harbor_body.add_child(Paper.label(_region_name()+"目前沒有當地任務。小角和阿浪的既有委託仍在迎賓大道，進度會保留。",22))
 		Paper.button("免費返回迎賓大道",func(): _travel_to_region("welcome"),harbor_body)
 		_back(harbor_body)
 		return
@@ -1924,7 +1950,7 @@ func _show_exploration(id: String) -> void:
 	_back(body)
 
 func _show_achievements() -> void:
-	var body := _open("那些「我做到了」的小瞬間。","HARBOR  /  碼頭成就" if world_region=="harbor" else "WELCOME  /  迎賓成就","achievements")
+	var body := _open("那些「我做到了」的小瞬間。",world_region.to_upper()+"  /  "+_region_name()+"成就","achievements")
 	var stamp_script = load("res://game/ui/achievement_stamp_book.gd")
 	var stamp_book = stamp_script.new()
 	stamp_book.setup(Progress,Catalog.definitions(world_region),world_region)
@@ -1934,14 +1960,17 @@ func _show_achievements() -> void:
 	_back(body)
 
 func _show_map() -> void:
-	if world_region=="harbor":
-		var harbor_body := _open("潮汐碼頭 · 燈塔與環岸步道","HARBOR MAP","map")
+	if world_region in ["harbor","candy"]:
+		var harbor_body := _open("糖果工廠 · 材料與輸送廊" if world_region=="candy" else "潮汐碼頭 · 燈塔與環岸步道",world_region.to_upper()+" MAP","map")
 		var harbor_map = load("res://game/ui/harbor_map_panel.gd").new()
 		harbor_map.setup(world.map_snapshot())
 		harbor_body.add_child(harbor_map)
 		for definition in Catalog.definitions(world_region):
 			var action := Paper.button(str(definition.name)+" · 查看玩法",_show_game_info.bind(str(definition.id)),modal_footer)
 			action.name="HarborGame"+str(definition.id)
+		if world_region=="candy":
+			var return_button := Paper.button("免費返回迎賓大道",_travel_to_region.bind("welcome"),modal_footer)
+			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
 		_back(harbor_body)
 		return
 	var body := _open("今天想去哪一邊？","ISLAND MAP","map")
@@ -2300,7 +2329,9 @@ func _layout_open_panel(panel: Control) -> void:
 	panel.custom_minimum_size=Vector2(width,height)
 
 func _show_ticket() -> void:
-	var body := _open("航海旅券","HARBOR  /  碼頭遊戲指南" if world_region=="harbor" else "WELCOME  /  迎賓遊戲指南","ticket")
+	var body := _open("航海旅券",world_region.to_upper()+"  /  "+_region_name()+"遊園指南","ticket")
+	if world_region=="candy":
+		body.add_child(Paper.label("當地十二款遊戲尚在準備中；溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2
@@ -2313,7 +2344,7 @@ func _show_ticket() -> void:
 		["島嶼地圖",_show_map,"探索島嶼"], ["今日任務",_show_tasks,"探索島嶼"],
 		["拍貼收藏本",_show_album,"收藏記錄"], ["遊園成就",_show_achievements,"收藏記錄"],
 		["衣櫃與服飾店",_show_wardrobe,"整裝出發"], ["切換時段",_open_time_panel_from_ticket,"遊園安排"],
-		["設定與輔助",_show_settings,"遊園安排"], ["園區圖解教學",func(): _open_tutorial("park","ticket"),"操作速查"],
+		["設定與輔助",_show_settings,"遊園安排"], ["工廠地圖與觀察" if world_region=="candy" else "園區圖解教學",_show_region_tutorial,"操作速查"],
 	]
 	for index in range(entries.size()):
 		var entry: Array=entries[index]
@@ -2326,6 +2357,10 @@ func _show_ticket() -> void:
 	help.name="TicketQuickHelp"
 	body.add_child(help)
 	_back(body)
+
+func _show_region_tutorial() -> void:
+	if world_region=="candy": _show_map()
+	else: _open_tutorial("park","ticket")
 
 func _open_time_panel_from_ticket() -> void:
 	if modal_kind != "ticket":

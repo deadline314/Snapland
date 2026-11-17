@@ -52,7 +52,7 @@ func _notification(what: int) -> void:
 		_apply_responsive_spread_columns()
 
 func setup(progress: Node, _definitions_source: Array, phases: Array, photo_loader: Callable, region: String = "welcome") -> void:
-	_region="harbor" if region=="harbor" else "welcome"
+	_region=region if region in ["welcome","harbor","candy"] else "welcome"
 	_progress=progress
 	_definitions=GameCatalog.definitions(_region)
 	_time_phases=phases.duplicate(true)
@@ -133,12 +133,13 @@ func _ready() -> void:
 	regions.name="AlbumRegionSelector"
 	regions.add_item("迎賓大道")
 	regions.add_item("潮汐碼頭")
-	regions.select(1 if _region=="harbor" else 0)
-	regions.tooltip_text="切換園區收藏；已保存的迎賓原圖仍可查看。"
+	regions.add_item("糖果工廠")
+	regions.select(["welcome","harbor","candy"].find(_region))
+	regions.tooltip_text="切換園區收藏；迎賓與碼頭既有照片及原圖仍可查看。"
 	regions.item_selected.connect(func(index: int):
-		_region="harbor" if index==1 else "welcome"
+		_region=["welcome","harbor","candy"][index]
 		_definitions=GameCatalog.definitions(_region)
-		if _region=="harbor" and _category=="time": _category="normal"
+		if _region!="welcome" and _category=="time": _category="normal"
 		_page=0
 		_refresh_book()
 	)
@@ -223,7 +224,11 @@ func _refresh_book() -> void:
 		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count(_region))
 		_time_button.text="四時 %d / 4" % time_count
 	_time_button.visible=_region=="welcome"
-	_empty_message.text="這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
+	_empty_message.text="糖果工廠尚未開放當地拍貼；可切換園區查看迎賓與碼頭收藏及原圖。" if _region=="candy" else "這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
+	if _region=="candy":
+		_normal_button.text="普通拍貼 0 / 0"
+		_devil_button.text="小惡魔 0 / 0"
+		_collection_state.text="溫度觀察不授予拍貼或遊園幣。"
 	var entries := _entries()
 	var capacity := _page_capacity()
 	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
@@ -278,6 +283,9 @@ func _set_tab_labels(scale_factor: float) -> void:
 	_normal_button.text=("普通 %d / 18" if scale_factor<0.9 else "普通拍貼  %d / 18") % normal_count
 	_devil_button.text=("小惡魔 %d / 12" if scale_factor<0.9 else "小惡魔  %d / 12") % devil_count
 	_time_button.text=("四時 %d / 4" if scale_factor<0.9 else "四時明信片  %d / 4") % time_count
+	if _region=="candy":
+		_normal_button.text="普通拍貼 0 / 0"
+		_devil_button.text="小惡魔 0 / 0"
 
 func _apply_responsive_spread_columns() -> void:
 	if not is_instance_valid(_spread):

@@ -194,7 +194,7 @@ class RuntimeResultContractTests(unittest.TestCase):
                 self.assertIn("without its PASS marker", result_error(label, self.result(marker, expected), save) or "")
 
     def test_region_suites_require_exact_clean_completion(self) -> None:
-        for label in ["region progress tests", "harbor world tests", "region travel tests"]:
+        for label in ["region progress tests", "harbor world tests", "candy world tests", "region travel tests"]:
             marker = PASS_MARKERS[label]
             self.assertIsNone(result_error(label, self.result(marker)))
             for output in ["", marker + " suffix", "quoted " + marker]:

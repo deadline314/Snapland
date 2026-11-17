@@ -290,7 +290,11 @@ func check(ok: bool, message: String) -> void:
 		push_error("FAIL: " + message)
 
 func _finish() -> void:
+	main.quitting=true
 	main.audio.shutdown()
+	if not OS.get_cmdline_user_args().has("--retake-failure-child"):
+		main.world.area_changed.emit(main.world.current_area)
+		check(main.audio._active_context.is_empty(),"teardown ignores late current-world area callbacks")
 	await get_tree().create_timer(0.15).timeout
 	main.queue_free()
 	await _frames()

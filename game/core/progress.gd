@@ -37,7 +37,7 @@ const WELCOME_GAME_IDS := [
 	"game-007", "game-008", "game-009", "game-010", "game-011", "game-012",
 ]
 const ZONES := ["welcome", "harbor", "candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky", "cinema"]
-const SUPPORTED_REGIONS := ["welcome", "harbor"]
+const SUPPORTED_REGIONS := ["welcome", "harbor", "candy"]
 
 var photos: Dictionary = {}
 var achievements: Dictionary = {}

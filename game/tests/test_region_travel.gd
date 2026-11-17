@@ -25,15 +25,18 @@ func _run() -> void:
 		return
 	var original: Node=main.world
 	_check(main.world_region=="welcome", "fresh profile selects welcome")
-	_check(_labels3d(main.world).contains("6 張 · 不消耗") and _labels3d(main.world).count("準備中")==8, "physical harbor gate is open while eight future gates stay truthful")
+	_check(_labels3d(main.world).contains("6 張 · 不消耗") and _labels3d(main.world).count("準備中")==7, "physical harbor gate is open while seven future gates stay truthful")
 	_check(not main._travel_to_region("moon") and not main._travel_to_region("welcome"), "unknown/same destinations do nothing")
 	for index in range(1,6): Progress.photos["photo-welcome-game-%d"%index]={}
-	_check(not main._travel_to_region("harbor") and main.world==original, "five ordinary cards cannot enter")
+	_check(not main._travel_to_region("harbor") and not main._travel_to_region("candy") and main.world==original, "five ordinary cards cannot enter either delivered gate")
+	main._interact("gate:candy","糖果工廠")
+	_check(_labels(main.overlay).contains("還差 1 張") and main.overlay.find_child("TravelCandyButton",true,false)==null, "candy gate explains the exact ordinary-card difference")
+	main._close()
 	Progress.photos["photo-welcome-devil-1"]={}
 	Progress.photos["postcard-time-dawn"]={}
-	_check(not main._travel_to_region("harbor"), "devil cards and postcards do not replace six ordinary cards")
+	_check(not main._travel_to_region("harbor") and not main._travel_to_region("candy"), "devil cards and postcards do not replace six ordinary cards")
 	# A sixth card from a different region proves admission uses the global count.
-	Progress.photos["photo-candy-game-1"]={}
+	Progress.photos["photo-harbor-game-1"]={}
 	_check(Progress.normal_count()==6 and Progress.normal_count_for_zone("welcome")==5, "global threshold fixture is distinct and regional")
 	main._refresh()
 	main._show_map()
@@ -42,6 +45,9 @@ func _run() -> void:
 	_check(welcome_map!=null, "welcome retains its station map")
 	welcome_map.pressed.emit()
 	_check(_labels(main.overlay).contains("可前往"), "welcome map truthfully shows open harbor")
+	var candy_gate: Button=main.overlay.find_child("MapGate_candy",true,false)
+	candy_gate.pressed.emit()
+	_check(_labels(main.overlay).contains("糖果工廠｜可前往") and candy_gate.tooltip_text.contains("不消耗"), "welcome map truthfully shows open candy with free-return qualification")
 	main._close()
 	main._start_dialogue([{ "speaker":"票票", "text":"測試對話" }],Callable())
 	_check(not main._travel_to_region("harbor"), "dialogue owns the world")
@@ -74,7 +80,7 @@ func _run() -> void:
 	_check(main.world.coastal_play==null and main.world.npc_activity==null, "harbor never instantiates welcome toys/NPCs")
 	_check(main.audio._active_context=="harbor" and main.world.reduced_motion and main.world.night, "harbor applies current settings/time/audio")
 	_check(main.world.avatar_appearance==Progress.appearance and main.world.avatar_equipped==Progress.equipped, "harbor reapplies complete current look")
-	_check(main.normal_count_label.text.contains("0 / 18") and main.devil_count_label.text.contains("0 / 12"), "harbor HUD uses local numerators")
+	_check(main.normal_count_label.text.contains("1 / 18") and main.devil_count_label.text.contains("0 / 12"), "harbor HUD uses local numerators")
 	main.world.nearest=main.world.points[0]
 	_check(not main._context_prompt().is_empty(), "optional coastal prompt is safe")
 	await _harbor_ui(before)
@@ -100,6 +106,7 @@ func _run() -> void:
 		main._close()
 		_check(main._travel_to_region("harbor"), "repeat qualified trip starts")
 		await _frames(4)
+	await _candy_trips(before)
 	_check(_snapshot()==before, "repeated trips preserve all rewards and appearance")
 	_check(_world_count()==1, "steady state has exactly one world")
 	_check(Progress.save_progress(), "harbor profile saves for restart")
@@ -112,6 +119,12 @@ func _run() -> void:
 	Progress.reset_progress()
 	await _frames(4)
 	_check(main.world_region=="welcome" and Progress.current_region=="welcome" and _world_count()==1, "reset rebuilds actual welcome world")
+	for index in range(1,7): Progress.photos["photo-welcome-game-%d"%index]={}
+	_check(main._travel_to_region("candy"), "prepare live candy reset")
+	await _frames(4)
+	Progress.reset_progress()
+	await _frames(4)
+	_check(main.world_region=="welcome" and Progress.current_region=="welcome" and _world_count()==1 and Progress.photos.is_empty(), "reset from candy rebuilds one welcome world without retained local state")
 	await _dispose()
 	# Missing and malformed region saves preserve legacy welcome startup.
 	for supplied in [null,"moon"]:
@@ -129,6 +142,107 @@ func _run() -> void:
 	await _failure_process()
 	await _finish()
 
+func _candy_trips(before: Dictionary) -> void:
+	for trip in range(2):
+		var old: Node=main.world
+		_check(main._travel_to_region("candy"), "six global ordinary cards admit candy from harbor")
+		_check(main.changing_region and main.world==old and Progress.current_region=="candy", "candy saves before replacing the old world")
+		old.interaction_requested.emit("region:welcome","stale return")
+		_check(not main._travel_to_region("welcome"), "candy transition rejects old interaction and reentry")
+		await _frames(4)
+		_check(not is_instance_valid(old) and main.world_region=="candy" and _world_count()==1, "candy releases previous world and has one live world")
+		_check(main.world.coastal_play==null and main.world.npc_activity==null and main.world.reduced_motion and main.world.night, "candy has no welcome activities and reapplies settings/time")
+		_check(main.world.avatar_appearance==Progress.appearance and main.world.avatar_equipped==Progress.equipped and main.audio._active_context=="plaza", "candy reapplies appearance and uses a valid existing music context")
+		_check(main.normal_count_label.text.contains("0 / 0") and main.devil_count_label.text.contains("0 / 0") and not main.quest_label.visible, "candy HUD truthfully has no local cards or tasks")
+		var stale := Node3D.new()
+		var temperature: int=main.world.map_snapshot().temperature
+		main._on_world_interaction_requested("candy:temperature","stale temperature",stale)
+		main._on_world_interaction_requested("region:welcome","stale return",stale)
+		main._on_world_area_changed("stale area",stale)
+		_check(main.world.map_snapshot().temperature==temperature and not main.changing_region and not main.area_label.text.contains("stale"), "late events from a different world cannot operate the new world")
+		stale.free()
+		main._interact("guide","stale welcome guide")
+		main._interact("game-001","stale welcome game")
+		_check(main.modal_kind=="" and main.session==null, "candy rejects welcome game and story dispatch")
+		for state in range(3):
+			main.world.interaction_requested.emit("candy:temperature","溫度觀察台")
+			_check(main.modal_kind=="" and main.world.map_snapshot().temperature==(temperature+state+1)%3 and main.toast.text.contains("不影響進度"), "candy observation cycles in place without a modal")
+		main.world.player.position=Vector3(0,1,0)
+		main.world.player.velocity=Vector3(4,3,2)
+		main._interact("candy:reset","返回入口")
+		_check(main.world.player.velocity==Vector3.ZERO, "candy reset clears velocity")
+		await _candy_ui()
+		_check(_snapshot()==before and Progress.photos.keys().all(func(id): return not str(id).begins_with("photo-candy-")), "candy observations and menus grant and consume nothing")
+		if trip==0:
+			main.world.cycle_temperature()
+			_check(main.world.map_snapshot().temperature!=0, "restart fixture has changed observation state")
+			_check(Progress.save_progress(), "candy profile saves for restart")
+			await _dispose()
+			Progress.load_progress()
+			Progress.intro_seen=false
+			Progress.prologue_seen=false
+			await _spawn()
+			_check(main.world_region=="candy" and main.boat_stage==null and main.modal_kind=="" and _world_count()==1, "saved candy restart builds candy directly and skips welcome intro")
+			_check(main.world.map_snapshot().temperature==0, "candy temperature is not persistent progress")
+			Progress.intro_seen=true
+			Progress.prologue_seen=true
+		var saved_cards: Dictionary=Progress.photos.duplicate(true)
+		Progress.photos.clear()
+		var candy: Node=main.world
+		candy.interaction_requested.emit("region:welcome","返回迎賓大道")
+		await _frames(4)
+		_check(not is_instance_valid(candy) and main.world_region=="welcome" and _world_count()==1, "candy return is permanently free with no cards")
+		_check(main.world.player.position.distance_to(_point("gate:candy").position)<2.5 and Progress.photos.is_empty(), "candy returns safely beside its own welcome gate without rewards")
+		Progress.photos=saved_cards
+		main._interact("gate:candy","糖果工廠")
+		var travel: Button=main.overlay.find_child("TravelCandyButton",true,false)
+		_check(travel!=null and travel.tooltip_text.contains("不消耗"), "qualified candy gate has a truthful explicit travel action")
+		main._close()
+		_check(main._travel_to_region("harbor"), "existing harbor remains reachable after candy return")
+		await _frames(4)
+
+func _candy_ui() -> void:
+	main._show_pause()
+	_check(main.overlay.find_child("PauseBoatPrologueButton",true,false)==null and _labels(main.overlay).contains("0 / 0"), "candy pause shows local empty collection and no boat replay")
+	main._close()
+	var expected_map: Dictionary=main.world.map_snapshot()
+	main._show_map()
+	await _frames(3)
+	var map: Node=main.overlay.find_child("CandyMapPanel",true,false)
+	_check(map!=null and main.overlay.find_child("MapStop_game-001",true,false)==null and main.overlay.find_child("HarborMapTide",true,false)==null, "candy map has factory terrain without welcome stations or harbor tide")
+	if map!=null:
+		_check(map.snapshot==expected_map and _labels(map).contains("觀察台") and _labels(map).contains("免費"), "candy map reflects real bounds terrain points position and temperature")
+		await _regional_map_location_flow(map)
+	main._close()
+	main._show_album()
+	await _frames(3)
+	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
+	var book: Node=selector.get_parent().get_parent()
+	_check(selector.item_count==3 and selector.selected==2 and book._region=="candy" and book._entries().is_empty() and _labels(book).contains("尚未開放"), "candy album shows honest empty local content")
+	for index in [0,1,2]:
+		selector.select(index)
+		selector.item_selected.emit(index)
+		_check(book._region==["welcome","harbor","candy"][index] and book._entries().size()==[18,12,0][index], "all three album regions retain their real source catalogues")
+	main._close()
+	main._show_tasks()
+	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")
+	main._close()
+	main._show_achievements()
+	await _frames(3)
+	var stamps: GridContainer=main.overlay.find_child("MinigameStampGrid",true,false)
+	_check(stamps!=null and stamps.get_child_count()==0 and _labels(main.overlay).contains("糖廠") and _labels(main.overlay).contains("尚未開放"), "candy achievement summary has zero local game stamps")
+	main._close()
+	main._show_ticket()
+	_check(_labels(main.overlay).contains("十二款遊戲尚在準備中"), "candy ticket explains its real current content")
+	var guide: Button=main.overlay.find_child("TicketAction7",true,false)
+	guide.pressed.emit()
+	await _frames(3)
+	_check(main.modal_kind=="map" and main.overlay.find_child("CandyMapPanel",true,false)!=null, "candy guide opens factory information rather than welcome lessons")
+	main._close()
+	main._show_settings()
+	main._close()
+	_check(main.world.visible and not main.world.blocked and main.audio._active_context=="plaza", "candy settings safely restore world input and valid music")
+
 func _harbor_ui(before: Dictionary) -> void:
 	main._show_pause()
 	_check(main.overlay.find_child("PauseBoatPrologueButton",true,false)==null, "harbor pause has no boat replay")
@@ -140,6 +254,7 @@ func _harbor_ui(before: Dictionary) -> void:
 	var map: Node=main.overlay.find_child("HarborMapPanel",true,false)
 	_check(map!=null and main.overlay.find_child("MapStop_game-001",true,false)==null, "harbor map uses real terrain without welcome stations")
 	_check(map.snapshot.bounds==main.world.BOUNDS and map.snapshot.player==main.world.player.position, "map snapshot reflects actual world")
+	await _regional_map_location_flow(map)
 	main._close()
 	main._show_album()
 	await _frames(3)
@@ -163,6 +278,30 @@ func _harbor_ui(before: Dictionary) -> void:
 	_check(main.session==null and main.world_region=="harbor" and main.audio._active_context=="harbor", "cancel welcome minigame restores harbor audio")
 	_check(_snapshot()==before, "menus, settings and game cancellation grant nothing")
 
+func _regional_map_location_flow(map: Node) -> void:
+	var window := get_window()
+	var previous_size := window.size
+	var previous_scale_size := window.content_scale_size
+	var previous_aspect := window.content_scale_aspect
+	var previous_text_scale: float=Progress.settings.ui_scale
+	window.content_scale_size=Vector2i(800,600)
+	window.content_scale_aspect=Window.CONTENT_SCALE_ASPECT_IGNORE
+	window.size=Vector2i(800,600)
+	Progress.set_setting("ui_scale",1.25)
+	await _frames(6)
+	var locations: HFlowContainer=map.find_child("*MapLocations",true,false)
+	var readable: bool=locations!=null and locations.get_child_count()==map.snapshot.points.size()
+	if locations!=null:
+		for entry: Label in locations.get_children():
+			if entry.get_line_count()!=1 or not locations.get_global_rect().grow(0.5).encloses(entry.get_global_rect()): readable=false
+			if main.world_region=="candy" and not window.get_visible_rect().grow(0.5).encloses(entry.get_global_rect()): readable=false
+	_check(readable,"%s map flows complete numbered locations on one line within flow bounds at 800x600 / 1.25; candy entries also fit viewport" % main.world_region)
+	window.content_scale_size=previous_scale_size
+	window.content_scale_aspect=previous_aspect
+	window.size=previous_size
+	Progress.set_setting("ui_scale",previous_text_scale)
+	await _frames(4)
+
 func _failure_process() -> void:
 	var save_path := OS.get_environment("SNAPLAND_SAVE_PATH")
 	var child_path := save_path.get_base_dir().path_join("travel-failure-child/progress.json")
@@ -178,7 +317,7 @@ func _failure_process() -> void:
 		var clean := line.strip_edges()
 		if clean.contains("ERROR:"): errors.append(clean)
 		if clean=="PASS: region travel failed save retains live world and permits retry": passed=true
-	_check(code==0 and passed and errors==[expected], "isolated travel IO failure: exit=%d passed=%s expected=%s errors=%s output_tail=%s" % [code,passed,expected.left(500),JSON.stringify(errors).left(1000),child_output.right(3000)])
+	_check(code==0 and passed and errors==[expected,expected,expected], "isolated travel IO failure: exit=%d passed=%s expected=%s errors=%s output_tail=%s" % [code,passed,expected.left(500),JSON.stringify(errors).left(1000),child_output.right(3000)])
 
 func _failure_child() -> void:
 	Progress.reset_progress()
@@ -186,23 +325,25 @@ func _failure_child() -> void:
 	for index in range(1,7): Progress.photos["photo-welcome-game-%d"%index]={}
 	_check(Progress.save_progress(), "failure fixture saves")
 	await _spawn()
-	main._interact("gate:harbor","潮汐碼頭")
-	var old: Node=main.world
-	var player: Transform3D=old.player.transform
-	var camera: Transform3D=old.camera.transform
-	var flags := [old.blocked,old.is_processing(),old.is_physics_processing(),main.modal_kind]
-	var before := _snapshot()
-	var path := Progress._save_path()
-	var saved := FileAccess.get_file_as_string(path)
-	_check(DirAccess.make_dir_absolute(path+".tmp")==OK, "block temporary write")
-	_check(not main._travel_to_region("harbor"), "failed durable write rejects travel")
-	_check(main.world==old and Progress.current_region=="welcome" and main.world_region=="welcome" and not main.changing_region, "failure retains world identity and region flags")
-	_check(old.player.transform==player and old.camera.transform==camera and flags==[old.blocked,old.is_processing(),old.is_physics_processing(),main.modal_kind], "failure retains player camera and input/modal state")
-	_check(_snapshot()==before and FileAccess.get_file_as_string(path)==saved and main.toast.text.contains("再試"), "failure leaves save/rewards intact with retry message")
-	DirAccess.remove_absolute(path+".tmp")
-	_check(main._travel_to_region("harbor"), "same gate supports retry")
-	await _frames(4)
-	_check(main.world_region=="harbor" and not is_instance_valid(old), "retry reaches harbor")
+	for destination in ["harbor","candy","welcome"]:
+		var origin: String=main.world_region
+		main._show_map()
+		var old: Node=main.world
+		var player: Transform3D=old.player.transform
+		var camera: Transform3D=old.camera.transform
+		var flags := [old.blocked,old.is_processing(),old.is_physics_processing(),main.modal_kind]
+		var before := _snapshot()
+		var path := Progress._save_path()
+		var saved := FileAccess.get_file_as_string(path)
+		_check(DirAccess.make_dir_absolute(path+".tmp")==OK, "block temporary write")
+		_check(not main._travel_to_region(destination), "failed durable write rejects travel")
+		_check(main.world==old and Progress.current_region==origin and main.world_region==origin and not main.changing_region, "failure retains world identity and region flags")
+		_check(old.player.transform==player and old.camera.transform==camera and flags==[old.blocked,old.is_processing(),old.is_physics_processing(),main.modal_kind], "failure retains player camera and input/modal state")
+		_check(_snapshot()==before and FileAccess.get_file_as_string(path)==saved and main.toast.text.contains("再試"), "failure leaves save/rewards intact with retry message")
+		DirAccess.remove_absolute(path+".tmp")
+		_check(main._travel_to_region(destination), "same gate supports retry")
+		await _frames(4)
+		_check(main.world_region==destination and not is_instance_valid(old), "retry reaches saved destination")
 	await _dispose()
 	for failure in failures: push_error("FAIL: "+failure)
 	if failures.is_empty(): print("PASS: region travel failed save retains live world and permits retry")
