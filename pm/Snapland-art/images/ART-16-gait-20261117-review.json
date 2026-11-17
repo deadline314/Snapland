@@ -1,0 +1,152 @@
+{
+  "scope": "Rejected candidate research, not installed production animation or human gameplay/audio acceptance",
+  "base_commit": "63ab519b22605d0774744d218cfc199e280bee44",
+  "branch": "codex/animation-source-20261117",
+  "generated_sources": 20,
+  "engine": "Godot4.7.2 Compatibility AMD Radeon RX9070XT Dummy audio",
+  "production_adopted": false,
+  "baseline_python_tests": {
+    "command": "python -m unittest tests.test_character_animation_manifest_builder tests.test_walk_pixel_stability -v",
+    "exit_code": 0,
+    "tests": 15,
+    "seconds": 18.852
+  },
+  "main_runs": [
+    {
+      "tag": "main-preview-normal",
+      "exit_code": 0,
+      "errors": 0,
+      "technical_status": "PASS",
+      "visual_status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "movie": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "nb_frames": "460"
+          }
+        ],
+        "format": {
+          "duration": "15.333333"
+        }
+      },
+      "seen": {
+        "right": 8,
+        "left": 8
+      },
+      "max_departure_root_drift": 0.0,
+      "movie_sha256": "17ac35dad9c56e95bb38ae2827748369e31a21c49321d4a8e2e1259efa5a124c",
+      "full_video_decode": "PASS",
+      "warnings": "Existing unsupported occlusion ShaderMaterial and low disk space warnings are retained in logs."
+    },
+    {
+      "tag": "main-preview-quarter",
+      "exit_code": 0,
+      "errors": 0,
+      "technical_status": "PASS",
+      "visual_status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "movie": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "nb_frames": "1842"
+          }
+        ],
+        "format": {
+          "duration": "61.400000"
+        }
+      },
+      "seen": {
+        "right": 8,
+        "left": 8
+      },
+      "max_departure_root_drift": 0.0,
+      "movie_sha256": "96cbf950654a34d25f60d9b07544e4960125988bbd618f5ec0e45a3188f72d7a",
+      "full_video_decode": "PASS",
+      "warnings": "Existing unsupported occlusion ShaderMaterial and low disk space warnings are retained in logs."
+    },
+    {
+      "tag": "root-main-preview-normal",
+      "exit_code": 0,
+      "errors": 0,
+      "technical_status": "PASS",
+      "visual_status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "movie": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "nb_frames": "460"
+          }
+        ],
+        "format": {
+          "duration": "15.333333"
+        }
+      },
+      "seen": {
+        "right": 8,
+        "left": 8
+      },
+      "max_departure_root_drift": 0.0,
+      "movie_sha256": "d1913cd6ca657b535315dcc119324d2c5e57bb6a1d2ab77163de9ae56ae9e110",
+      "full_video_decode": "PASS",
+      "warnings": "Existing unsupported occlusion ShaderMaterial and low disk space warnings are retained in logs."
+    },
+    {
+      "tag": "root-main-preview-quarter",
+      "exit_code": 0,
+      "errors": 0,
+      "technical_status": "PASS",
+      "visual_status": "OBSERVATIONS_COMPLETE_VISUAL_PENDING",
+      "movie": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "nb_frames": "1842"
+          }
+        ],
+        "format": {
+          "duration": "61.400000"
+        }
+      },
+      "seen": {
+        "right": 8,
+        "left": 8
+      },
+      "max_departure_root_drift": 0.0,
+      "movie_sha256": "f15f132827e405654aaad5296699902e9eb4b3d028586bb77ad95938d52f774d",
+      "full_video_decode": "PASS",
+      "warnings": "Existing unsupported occlusion ShaderMaterial and low disk space warnings are retained in logs."
+    }
+  ],
+  "production_restore": {
+    "assets/characters/complete-animation-regions.json": "4838ba7bb27f7ad1cba1110e68661dca19f3981d8e0dc4b38b9b21652e025543",
+    "game/world/npc_activity.gd": "94c65089fc0c6222bdf9b6dca2777ec4ca1da9c1892ed14661b11cda094d8afc",
+    "game/tests/native_authored_patrol_review.gd": "9a9e644b2fa418f3a49156e7cb837d05171b9dfabf86ddd9712e50ad462387f9"
+  },
+  "candidate_metrics": {
+    "body_bottom_px": 448,
+    "source_cels": 16,
+    "outside_head_changed_pixels_after_explicit_registration": 0,
+    "rigid_head_pixels": true,
+    "reviewed_right_offset": [
+      -20,
+      0
+    ],
+    "walk_speed_trial": 0.6,
+    "stride_trial": 1.2,
+    "source_cels_per_cycle": 8,
+    "theoretical_pose_changes_per_second": 4,
+    "source_acceptance": "Head and costume proportions still differ at existing departure/settle joins; four poses/sec does not establish improved fluency."
+  }
+}
