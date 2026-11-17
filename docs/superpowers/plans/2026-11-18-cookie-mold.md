@@ -68,7 +68,7 @@
 - [x] Capture three REAL Main1280 lesson sources, then import and check all lessons/fields/physical sizes. Actual native input at800125%/reduced motion,1280ordinary/challenge/timeout,1920; actual arranged-set shutter pixels and cold saved restart.
 - [x] Build exact final private QA snapshot only AFTER integration freeze; clean release-directory boot without path/scene overrides, actualresult+retake writers and cold readers. Compare all runtime resource hashes and executable SHA to final source.
 - [x] Fresh whole-branch review, fix via original implementer/scoped re-review, appropriate affected checks, all design scopes, evidence and ticket completion.
-- [ ] Fetch/rebase as needed; explicit SG42 files only, user author/committer email, commit+push feature then main, inspect CI, remove only delivered owned branch/worktree. No assistant/model attribution in commit messages.
+- [x] Fetch/rebase as needed; explicit SG42 files only, user author/committer email, commit+push feature then main, inspect CI, remove only delivered owned branch/worktree. No assistant/model attribution in commit messages.
 
 ## Execution ledger
 
@@ -88,3 +88,5 @@
 - NewprivateQA export uses task-owned D:/Snapland-QA/20261118-cookie-mold-2a75381f because C:isspace-limited; it copies only declaredtrackedruntime+newcookieassets, not the repository or blocked oldstage directories. ExistingblockedQAprojectdirectoriesremainuntouched. EmbeddedWindowsreleasewith3allowlistednativefixturefilespendingexactsource/hash/4-caseacceptance.
 
 - Final embeddedQA acceptance complete:1188source/resourcehashesmatchfrozenworkspace,binarySHAverified;actual800writer/coldreader andactualselecteddevilshutter/coldreader all4exit0/noERROR/nomissing026. PublicSG42evidence14.94MB+sixPNGs,allfive designscopespassed. Per-ticketGit/mainintegrationnext; MAIN31separatelydiagnosesexistingNPCaudioexitresource retention, noSG42productionmutation.
+
+- Git closure: feature2be4e18pushed, rebasedontoorigin/main d233d1f withfourpreviouslydeliveredpatch-equivalentMAIN29/30commits skipped; final04f3bac02dc5d9ed3e4d777d303367ed9ce548bd fast-forwarded/pushedtomain. Userauthor/committer+cleanmessageverified; ownedfeaturebranchremovedlocal/remote,noactiveownedworktree. LatestmainCI44133310374started, duplicatebranch44133215820cancelled. EOF-onlyblanklineformattingkeptbodyidentical; finalDexportrecompiledandall4casespassed,1188rawhashesmatch. MAIN31continuesonnewcodex/dialogue-release-20261118.
