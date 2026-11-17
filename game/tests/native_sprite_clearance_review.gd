@@ -241,7 +241,7 @@ func _review_avatar_poses() -> bool:
 	world.avatar_is_walking = false
 	world.camera.size = CLEARANCE_CAMERA_SIZE
 	var hero_target: Vector3 = world.player.global_position + Vector3(0, 1.25, 0)
-	_position_camera(hero_target, deg_to_rad(24.0))
+	_position_camera(hero_target, deg_to_rad(24.0), deg_to_rad(20.0))
 	world._update_sprite_grounding()
 	for direction in HERO_DIRECTIONS:
 		world.facing = direction
@@ -376,9 +376,10 @@ func _visible_alpha_bounds(image: Image) -> Rect2i:
 		return Rect2i()
 	return Rect2i(left, top, right - left + 1, bottom - top + 1)
 
-func _position_camera(target: Vector3, pitch: float) -> void:
+func _position_camera(target: Vector3, pitch: float, azimuth: float = deg_to_rad(5.0)) -> void:
 	main.world.camera.size = CLEARANCE_CAMERA_SIZE
-	main.world.camera.position = target + Vector3(0, tan(pitch) * CLEARANCE_CAMERA_DISTANCE, CLEARANCE_CAMERA_DISTANCE)
+	# NPCs clear the fountain rim; the hero needs a wider view around the avenue signpost.
+	main.world.camera.position = target + Vector3(0, tan(pitch) * CLEARANCE_CAMERA_DISTANCE, CLEARANCE_CAMERA_DISTANCE).rotated(Vector3.UP, azimuth)
 	main.world.camera.look_at(target, Vector3.UP)
 	main.world.camera.current = true
 
