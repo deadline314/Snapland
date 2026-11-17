@@ -31,6 +31,13 @@ func _run() -> void:
 		_check(backdrop != null and backdrop.position.y < -0.4 and backdrop.find_children("*", "CollisionObject3D", true, false).is_empty(), "bounded chocolate scenery stays below land without fake walkable collision")
 		_check(backdrop.mesh is PlaneMesh and (backdrop.mesh as PlaneMesh).size == Vector2(110, 110), "chocolate backdrop has fixed dimensions")
 		_check(world._temperature_label.font_size == 32 and is_equal_approx(world._temperature_label.pixel_size, 0.02), "physical sign uses larger glyphs")
+		var game_signs: Array = world.local_sign_labels.filter(func(label: Label3D): return label.text.begins_with("工廠遊戲 "))
+		world.player.position = Vector3(0, script.GROUND_Y, -10.8)
+		world.player.velocity = Vector3.ZERO
+		await physics_frame
+		await physics_frame
+		_check(game_signs.size() == 1 and game_signs[0].is_visible_in_tree() and game_signs[0].text == "工廠遊戲 4／12", "constructed visible factory game sign advertises the four delivered games")
+		world.reset_to_entry()
 		for sign_label in world.local_sign_labels:
 			_check(sign_label.billboard == BaseMaterial3D.BILLBOARD_DISABLED and sign_label.basis.is_equal_approx(Basis.IDENTITY) and not sign_label.no_depth_test, "physical sign stays parallel to its fixed board with depth enabled")
 		var snapshot: Dictionary = world.map_snapshot()

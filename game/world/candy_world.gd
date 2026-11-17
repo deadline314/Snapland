@@ -80,7 +80,7 @@ func _build_region_geometry() -> void:
 	_sign("材料工作台", Vector3(-8, GROUND_Y, 4.3))
 	_sign("糖漿管道", Vector3(9, GROUND_Y, -5.5))
 	_sign("泡泡停靠", Vector3(9, GROUND_Y, 10.8))
-	_sign("工廠遊戲 3／12", Vector3(0, GROUND_Y, -10.8))
+	_sign("工廠遊戲 %d／12" % preload("res://game/core/game_catalog.gd").definitions("candy").size(), Vector3(0, GROUND_Y, -10.8))
 	_sign("餅乾翻模", Vector3(-5.2, GROUND_Y, 0.5))
 	_point("region:welcome", "返回迎賓大道 · 免費", Vector3(0, GROUND_Y, 10))
 	_point("candy:temperature", "溫度觀察台 · 切換冷／溫／熱", Vector3(-8, GROUND_Y, 0))
