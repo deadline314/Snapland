@@ -257,14 +257,21 @@ COOKIE_SUITES = {
     "cookie Session tests": ("test_cookie_mold_session.gd", "Cookie mold Session: 21 checks, 0 failures"),
     "cookie Main tests": ("test_cookie_mold_main.tscn", "PASS: cookie Main factory entry, six real catches, fixed rewards, selected retake originals and reload"),
 }
-DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES
+SYRUP_SUITES = {
+    "syrup model tests": ("test_syrup_flood.gd", "Syrup flood tests: 308 checks, 0 failures"),
+    "syrup driver tests": ("test_syrup_flood_driver.gd", "Syrup flood driver: 96 checks, 0 failures"),
+    "syrup view tests": ("test_syrup_flood_view.gd", "Syrup flood view: 104 checks, 0 failures"),
+    "syrup Session tests": ("test_syrup_flood_session.gd", "Syrup flood Session: 46 checks, 0 failures"),
+    "syrup Main tests": ("test_syrup_flood_main.tscn", "PASS: syrup Main factory entry, three real filled closed tanks, fixed rewards, selected retake originals and reload"),
+}
+DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES
 
 
 class RegionalDriverRunnerTests(unittest.TestCase):
     def test_driver_suites_are_registered_once_with_exact_entrypoints(self) -> None:
         checks = build_checks("fixture-godot")
-        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie "))]
-        self.assertEqual(len(drivers), 10)
+        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup "))]
+        self.assertEqual(len(drivers), 15)
         self.assertEqual({label for label, _ in drivers}, set(DRIVER_SUITES))
         for label, command in drivers:
             with self.subTest(label=label):

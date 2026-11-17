@@ -25,6 +25,12 @@ func _run() -> void:
 			session._unhandled_input(load_ball)
 			load_ball.pressed = false
 			session._unhandled_input(load_ball)
+		if definition.mode == "syrup_flood":
+			var valve := InputEventKey.new()
+			valve.keycode = KEY_SPACE
+			for pressed in [true,false,true,false]:
+				valve.pressed = pressed
+				session._unhandled_input(valve)
 		if definition.mode == "cookie_mold":
 			var move_tray := InputEventKey.new()
 			move_tray.keycode = KEY_RIGHT
@@ -45,7 +51,16 @@ func _run() -> void:
 		_check(results.size() == result_count, "natural finish emits once")
 		session.start(definition.id)
 		session.set_practice_mode(true)
-		if session.active_driver != null: session._driver_state["ordinary_eligible"] = true
+		if definition.mode == "syrup_flood":
+			var practice_valve := InputEventKey.new()
+			practice_valve.keycode = KEY_SPACE
+			for pressed in [true,false,true,false]:
+				practice_valve.pressed = pressed
+				session._unhandled_input(practice_valve)
+			for tick in 310:
+				if session.ended: break
+				session._process(0.25)
+		elif session.active_driver != null: session._driver_state["ordinary_eligible"] = true
 		session._finish(false)
 		_check(results.back().has("ordinary_eligible") and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
 		session.set_practice_mode(false)

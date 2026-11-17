@@ -21,6 +21,11 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "syrup model tests": "Syrup flood tests: 308 checks, 0 failures",
+    "syrup driver tests": "Syrup flood driver: 96 checks, 0 failures",
+    "syrup view tests": "Syrup flood view: 104 checks, 0 failures",
+    "syrup Session tests": "Syrup flood Session: 46 checks, 0 failures",
+    "syrup Main tests": "PASS: syrup Main factory entry, three real filled closed tanks, fixed rewards, selected retake originals and reload",
     "sugar model tests": "Sugar bridge: 63 checks, 0 failures",
     "sugar driver tests": "Sugar bridge driver: 51 checks, 0 failures",
     "sugar view tests": "Sugar bridge view: 55 checks, 0 failures",
@@ -249,7 +254,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ")) or label in {"region progress tests", "region travel tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ")) or label in {"region progress tests", "region travel tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -351,6 +356,11 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("sugar view tests", common + ["--script", "res://game/tests/test_sugar_bridge_view.gd"]),
         ("sugar Session tests", common + ["--script", "res://game/tests/test_sugar_bridge_session.gd"]),
         ("sugar Main tests", common + ["res://game/tests/test_sugar_bridge_main.tscn"]),
+        ("syrup model tests", common + ["--script", "res://game/tests/test_syrup_flood.gd"]),
+        ("syrup driver tests", common + ["--script", "res://game/tests/test_syrup_flood_driver.gd"]),
+        ("syrup view tests", common + ["--script", "res://game/tests/test_syrup_flood_view.gd"]),
+        ("syrup Session tests", common + ["--script", "res://game/tests/test_syrup_flood_session.gd"]),
+        ("syrup Main tests", common + ["res://game/tests/test_syrup_flood_main.tscn"]),
         ("cookie model tests", common + ["--script", "res://game/tests/test_cookie_mold.gd"]),
         ("cookie driver tests", common + ["--script", "res://game/tests/test_cookie_mold_driver.gd"]),
         ("cookie view tests", common + ["--script", "res://game/tests/test_cookie_mold_view.gd"]),
