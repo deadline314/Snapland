@@ -140,20 +140,31 @@ func _review_npc_frames() -> bool:
 
 func _review_reduced_motion_npcs() -> bool:
 	var expected_states: Dictionary = {}
+	var activity = main.world.npc_activity
 	for role in NpcRoles:
 		var sprite := _sprite_for_role(role)
 		if sprite == null:
 			await _fail("Reduced-motion NPC fixture lost its Sprite3D: " + role)
 			return false
-		var record: Dictionary = _npc_frame_records[role]
 		var material := sprite.material_override as ShaderMaterial
 		if material == null:
 			await _fail("Reduced-motion NPC fixture has no live ShaderMaterial: " + role)
 			return false
+		var sequence: Dictionary = activity._normalize_sequence(activity._animation_library.get_sequence(role, "idle", "front"))
+		if not bool(sequence.get("available", false)) or sequence.get("frames", []).is_empty():
+			await _fail("Reduced-motion NPC fixture has no valid formal front standing source: " + role)
+			return false
+		var standing := sequence.frames[0].texture as Texture2D
+		if role == "announcer": standing = activity._costume_texture(role, standing)
+		var feet: Array = sequence.frames[0].get("anchors", {}).get("feet", [])
+		if feet.size() != 2 or int(feet[1]) != NpcActivityScript.ACTION_FEET_ROW:
+			await _fail("Reduced-motion NPC formal standing source has an invalid feet anchor: " + role)
+			return false
 		expected_states[role] = {
-			"texture": record.baseline_texture,
-			"shader_texture": record.baseline_shader_texture,
-			"shader_uv_rect": record.baseline_shader_uv_rect,
+			"texture": standing,
+			"shader_texture": standing,
+			"shader_uv_rect": Vector4(0, 0, 1, 1),
+			"opaque_foot_row": _visible_alpha_bounds(standing.get_image()).end.y - 1,
 		}
 	main.world.apply_settings({"reduced_motion": true})
 	await RenderingServer.frame_post_draw
@@ -167,16 +178,17 @@ func _review_reduced_motion_npcs() -> bool:
 		var expected: Dictionary = expected_states[role]
 		var material := sprite.material_override as ShaderMaterial
 		var texture := sprite.texture as Texture2D
-		if texture != expected.texture or not _texture_synced(sprite):
-			await _fail("Reduced-motion NPC %s did not restore a synchronized canonical rest frame" % role)
+		if record.action != "stand" or record.direction != "front" or not is_zero_approx(float(record.action_elapsed)) or texture != expected.texture or not _texture_synced(sprite):
+			await _fail("Reduced-motion NPC %s did not select synchronized formal front standing" % role)
 			return false
 		if texture.get_width() != NpcActivityScript.ACTION_CANVAS_SIZE.x or texture.get_height() != NpcActivityScript.ACTION_CANVAS_SIZE.y:
 			await _fail("Reduced-motion NPC %s rest texture is not the full canonical %s canvas" % [role, NpcActivityScript.ACTION_CANVAS_SIZE])
 			return false
 		var image := texture.get_image()
 		var visible_rect := _visible_alpha_bounds(image)
-		if image.get_format() != Image.FORMAT_RGBA8 or visible_rect.end.y - 1 != NpcActivityScript.ACTION_FEET_ROW:
-			await _fail("Reduced-motion NPC %s rest texture is not RGBA8 with its lowest opaque foot pixel on row %d" % [role, NpcActivityScript.ACTION_FEET_ROW])
+		var opaque_foot_row := visible_rect.end.y - 1
+		if image.get_format() != Image.FORMAT_RGBA8 or opaque_foot_row != int(expected.opaque_foot_row) or opaque_foot_row > NpcActivityScript.ACTION_FEET_ROW or NpcActivityScript.ACTION_FEET_ROW - opaque_foot_row > 1:
+			await _fail("Reduced-motion NPC %s rest texture is not RGBA8 with its formal opaque foot row %d within one pixel of anchor row %d" % [role, expected.opaque_foot_row, NpcActivityScript.ACTION_FEET_ROW])
 			return false
 		if not await _check_normal_depth(sprite, material, "reduced-motion NPC %s" % role): return false
 		var anchor := sprite.get_parent() as Node3D
@@ -206,10 +218,10 @@ func _review_reduced_motion_npcs() -> bool:
 			await _fail("NPC %s shader texture/UV did not resynchronize after restoring normal motion" % role)
 			return false
 		if material == null or material.get_shader_parameter("texture_albedo") != expected.shader_texture or material.get_shader_parameter("uv_rect") != expected.shader_uv_rect:
-			await _fail("NPC %s did not restore its exact registered shader texture/UV after reduced motion" % role)
+			await _fail("NPC %s did not retain its formal standing shader texture/UV after reduced motion" % role)
 			return false
-		if sprite.texture != record.baseline_texture:
-			await _fail("NPC %s did not restore its registered canonical texture after reduced motion" % role)
+		if record.action != "stand" or record.direction != "front" or not is_zero_approx(float(record.action_elapsed)) or sprite.texture != expected.texture:
+			await _fail("NPC %s did not retain paused formal front standing after reduced motion" % role)
 			return false
 	return true
 
