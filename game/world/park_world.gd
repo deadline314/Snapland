@@ -2404,11 +2404,8 @@ func _on_interaction_requested(id: String, _label: String) -> void:
 		_: return
 	var actor_record := _npc_record_for_role(role)
 	var sprite := actor_record.get("sprite") as Sprite3D
-	var actor_root := actor_record.get("activity_root") as Node3D
-	if not is_instance_valid(sprite) or not is_instance_valid(actor_root) or not is_instance_valid(player): return
-	var target_delta := Vector2(player.global_position.x - actor_root.global_position.x, player.global_position.z - actor_root.global_position.z)
-	var direction := quantize_walk_direction(target_delta, "front")
-	pending_npc_interaction = {"sprite": sprite, "action": action, "direction": direction}
+	if not is_instance_valid(sprite): return
+	pending_npc_interaction = {"sprite": sprite, "action": action, "direction": "front"}
 
 func _play_pending_npc_interaction() -> void:
 	if pending_npc_interaction.is_empty() or not is_instance_valid(npc_activity): return

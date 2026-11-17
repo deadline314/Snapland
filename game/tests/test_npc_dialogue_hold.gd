@@ -2,6 +2,7 @@ extends Node
 
 const MainScene := preload("res://game/main.tscn")
 const Release = preload("res://game/tests/audio_playback_release.gd")
+const Library = preload("res://game/world/character_animation_library.gd")
 
 var _failures: Array[String] = []
 
@@ -100,7 +101,92 @@ func _run() -> void:
 	_check(is_equal_approx(float(_activity_record(main,"ticket").action_elapsed),reduced_elapsed), "reduced motion stops NPC frames after dialogue")
 	world.apply_settings({"reduced_motion":false})
 	print("DIALOGUE-HOLD measured: greeting %.3f→%.3f s; idle after close %.3f→%.3f s; announcer route remained at %s" % [dialogue_start_elapsed,dialogue_elapsed,post_close_elapsed,float(post_close_end.action_elapsed),str(route_origin)])
+	await _check_approaches(main)
 	await _finish(main)
+
+
+func _check_approaches(main: Node) -> void:
+	var world: Node = main.world
+	var activity: Variant = world.npc_activity
+	var approaches := {
+		"front": Vector3(0,0,1), "front_right": Vector3(1,0,1),
+		"right": Vector3(1,0,0), "back_right": Vector3(1,0,-1),
+		"back": Vector3(0,0,-1), "back_left": Vector3(-1,0,-1),
+		"left": Vector3(-1,0,0), "front_left": Vector3(-1,0,1),
+	}
+	for role in ["ticket", "imp", "announcer"]:
+		var point_id := "guide" if role == "ticket" else ("quest-001" if role == "imp" else "quest-002")
+		var action := "greet" if role == "ticket" else "interact"
+		var actor := _actor_record(main, role)
+		var actor_root := actor.get("activity_root") as Node3D
+		var sprite := actor.get("sprite") as Sprite3D
+		for approach in approaches:
+			var label := "%s/%s" % [role, approach]
+			await _approach(main, actor_root, approaches[approach])
+			_check(String(world.nearest.get("id", "")) == point_id, label + " real physics proximity selects its NPC")
+			var held_roots := {}
+			var held_points := {}
+			for other in world.character_sprites:
+				held_roots[other.role] = other.activity_root.global_position
+				held_points[other.role] = world._point_by_id("guide" if other.role == "ticket" else ("quest-001" if other.role == "imp" else "quest-002")).position
+			world.interact()
+			_check(main.modal_kind == "dialogue" and world.blocked and world.npc_dialogue_hold and activity.statistics().dialogue_hold, label + " actual interaction opens held Main dialogue")
+			var record := _activity_record(main, role)
+			var sequence: Dictionary = record.action_sequence
+			_check(String(record.action) == action and String(record.direction) == "front" and bool(sequence.get("available", false)) and not bool(sequence.get("loop", true)) and sequence.get("frames", []).size() >= 7, label + " selects the complete finite front action")
+			_check(sprite.visible and sprite.texture.get_size() == Vector2(activity.ACTION_CANVAS_SIZE), label + " displays a complete authored action canvas")
+			var start_elapsed := float(record.action_elapsed)
+			var start_texture := sprite.texture
+			# Advance the actual selected sequence; keep the original real-time checks above.
+			activity._process(0.24)
+			record = _activity_record(main, role)
+			_check(float(record.action_elapsed) > start_elapsed + 0.2 and sprite.texture != start_texture, label + " held action advances to a later authored frame")
+			activity._process(activity._sequence_seconds(sequence) + 0.05)
+			record = _activity_record(main, role)
+			_check(String(record.action) in ["stand", "idle"] and bool(record.action_sequence.get("loop", false)) and sprite.texture != null and main.modal_kind == "dialogue", label + " action ends in complete looping standing during dialogue")
+			for other in world.character_sprites:
+				var point: Dictionary = world._point_by_id("guide" if other.role == "ticket" else ("quest-001" if other.role == "imp" else "quest-002"))
+				_check(other.activity_root.global_position.distance_to(held_roots[other.role]) < 0.001 and point.position.distance_to(held_points[other.role]) < 0.001, label + " preserves " + String(other.role) + " root and interaction point")
+			main._cancel_dialogue()
+			await _frames(2)
+			_check(main.modal_kind == "" and not world.blocked and not world.npc_dialogue_hold and not activity.statistics().dialogue_hold and activity._player.is_playing(), label + " cancellation safely releases Main hold and resumes the route")
+		await _check_unavailable_action(main, role, point_id, action, actor_root, sprite)
+	print("APPROACH coverage: 3 roles × 8 distinct geometric offsets; real physics nearest/interact/Main dialogue; direct missing direction and damaged front source per role")
+
+
+func _approach(main: Node, actor_root: Node3D, offset: Vector3) -> void:
+	main.world.player.global_position = actor_root.global_position + offset.normalized() * 1.6 + Vector3(0,0.1,0)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	await get_tree().process_frame
+
+
+func _check_unavailable_action(main: Node, role: String, point_id: String, action: String, actor_root: Node3D, sprite: Sprite3D) -> void:
+	var activity: Variant = main.world.npc_activity
+	await _approach(main, actor_root, Vector3(-1,0,-1))
+	_check(activity.request_action(sprite, action, "front"), role + " valid action can precede an unsupported direct direction")
+	activity._process(0.24)
+	_check(not activity.request_action(sprite, action, "back_left"), role + " unsupported direct direction remains unavailable")
+	var record := _activity_record(main, role)
+	_check(String(record.action) == "stand" and record.action_sequence.is_empty() and sprite.texture == record.baseline_texture and sprite.visible, role + " missing direct direction restores its complete standing baseline")
+	_check(activity.coverage_report().missing_requests[role].has(action + "/back_left"), role + " missing direct direction remains explicitly reported")
+	_check(activity.request_action(sprite, action, "front"), role + " valid gesture can precede a damaged front source")
+	activity._process(0.24)
+	var previous_library: Variant = activity._animation_library
+	var damaged := Library.new()
+	# Existing damaged-source mechanism: invalidate a later source cel before caching.
+	damaged.manifest.actors[role][action].front.frames[-1].region = [99999,0,10,10]
+	activity._animation_library = damaged
+	_check(String(main.world.nearest.get("id", "")) == point_id, role + " damaged-source check retains real proximity selection")
+	main.world.interact()
+	record = _activity_record(main, role)
+	_check(main.modal_kind == "dialogue" and main.world.npc_dialogue_hold, role + " damaged front source still opens actual Main dialogue")
+	_check(String(record.action) == "stand" and record.action_sequence.is_empty() and sprite.texture == record.baseline_texture and sprite.visible, role + " damaged front source restores the complete actor instead of retaining a gesture")
+	_check(activity.coverage_report().missing_requests[role].has(action + "/front"), role + " damaged front source remains explicitly reported")
+	main._cancel_dialogue()
+	activity._animation_library = previous_library
+	await _frames(2)
+	_check(main.modal_kind == "" and not main.world.blocked and not main.world.npc_dialogue_hold and activity._player.is_playing(), role + " damaged-source dialogue cancels and releases safely")
 
 
 func _actor_record(main: Node, role: String) -> Dictionary:
