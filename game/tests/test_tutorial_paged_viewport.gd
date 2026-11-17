@@ -11,7 +11,7 @@ func _run() -> void:
 	var panel := Tutorial.new()
 	root.add_child(panel)
 	await _frames(2)
-	for dimensions in [Vector2i(800,450),Vector2i(1280,720),Vector2i(1920,1080)]:
+	for dimensions in [Vector2i(800,600),Vector2i(800,450),Vector2i(1280,720),Vector2i(1920,1080)]:
 		root.size=dimensions
 		await _frames(2)
 		for lesson_id in panel.catalog.lesson_ids():

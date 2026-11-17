@@ -40,5 +40,19 @@
     "ordinary": "三缸達90%至100%且三閥關閉",
     "attraction_tag": "糖漿管道",
     "island_invitation": "Tab換管、Space開關閥、H切熱源、F中管旁路；R指定AI關一閥，X免費排空不回時間，C停流配置。"
+  },
+  {
+    "id": "game-028",
+    "mode": "jelly_trampoline",
+    "zone": "candy",
+    "local_index": 4,
+    "name": "果凍彈床",
+    "goal": "移床斜壓並按住蓄彈，放開後把三顆果實真正送上高台",
+    "instructions": "移床斜壓、按住蓄彈再放開",
+    "devil_hint": "讓任一果實真實碰響側鈴，並把同一顆送上高台，再完成三顆；AI與回接只是可選補救，輔助仍可挑戰",
+    "devil": "碰鈴的同顆果實送達並完成三顆",
+    "ordinary": "連續送三顆果實上高台",
+    "attraction_tag": "彈性工作台",
+    "island_invitation": "A/D移床、Q/E斜壓、Space按住蓄彈再放開；普通失落重送三顆，輔助保留已送進度。R切AI接穩等你放行；X只重置當顆、不回時間。"
   }
 ]

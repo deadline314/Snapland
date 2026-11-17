@@ -690,14 +690,14 @@
     {
       "name": "果凍彈床",
       "core": "掌握",
-      "action": "移動落點並按住蓄彈",
+      "action": "移床斜壓、按住蓄彈再放開",
       "goal": "連續送三顆果實上高台",
       "choice": "深壓高跳或淺壓穩落",
       "feedback": "凹陷深度與落點弧線",
       "variation": "果重及平台高度",
       "multi": "分站彈床，傳遞果實",
       "ai": "簡單AI接穩後等玩家指令放",
-      "demon": "用斜壓反彈碰響側鈴",
+      "demon": "碰鈴的同顆果實送達並完成三顆",
       "variant": "反重力果實須吸附再釋放",
       "assist": "放大台面、落下保留檢查點",
       "test": "斜壓可改飛向而非純高度",
@@ -708,8 +708,9 @@
       "reference": "catalog-b360",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「移動落點並按住蓄彈」；「深壓高跳或淺壓穩落」形成取捨，以「斜壓可改飛向而非純高度」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "jelly_trampoline"
     },
     {
       "name": "巧克力蝕刻",

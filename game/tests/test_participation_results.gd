@@ -18,6 +18,8 @@ func _run() -> void:
 	session.cancelled.connect(func(): cancelled.append(1))
 	for definition: Dictionary in Catalog.all_definitions():
 		session.start(definition.id)
+		if definition.mode == "jelly_trampoline":
+			preload("res://game/tests/test_jelly_trampoline_session.gd").launch(session, 0.15)
 		if definition.mode == "sugar_bridge":
 			var load_ball := InputEventKey.new()
 			load_ball.keycode = KEY_ENTER
@@ -51,7 +53,10 @@ func _run() -> void:
 		_check(results.size() == result_count, "natural finish emits once")
 		session.start(definition.id)
 		session.set_practice_mode(true)
-		if definition.mode == "syrup_flood":
+		if definition.mode == "jelly_trampoline":
+			preload("res://game/tests/test_jelly_trampoline_session.gd").launch(session, 0.15)
+			preload("res://game/tests/test_jelly_trampoline_session.gd").advance(session, 61.0)
+		elif definition.mode == "syrup_flood":
 			var practice_valve := InputEventKey.new()
 			practice_valve.keycode = KEY_SPACE
 			for pressed in [true,false,true,false]:

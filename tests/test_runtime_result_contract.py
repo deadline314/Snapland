@@ -264,14 +264,21 @@ SYRUP_SUITES = {
     "syrup Session tests": ("test_syrup_flood_session.gd", "Syrup flood Session: 46 checks, 0 failures"),
     "syrup Main tests": ("test_syrup_flood_main.tscn", "PASS: syrup Main factory entry, three real filled closed tanks, fixed rewards, selected retake originals and reload"),
 }
-DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES
+JELLY_SUITES = {
+    "jelly model tests": ("test_jelly_trampoline.gd", "Jelly trampoline tests: 215 checks, 0 failures"),
+    "jelly driver tests": ("test_jelly_trampoline_driver.gd", "Jelly trampoline driver: 78 checks, 0 failures"),
+    "jelly view tests": ("test_jelly_trampoline_view.gd", "Jelly trampoline view: 83 checks, 0 failures"),
+    "jelly Session tests": ("test_jelly_trampoline_session.gd", "Jelly trampoline Session: 52 checks, 0 failures"),
+    "jelly Main tests": ("test_jelly_trampoline_main.tscn", "PASS: jelly Main factory entry, three real deliveries and same-fruit bell, fixed rewards, selected retake originals and reload"),
+}
+DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES
 
 
 class RegionalDriverRunnerTests(unittest.TestCase):
     def test_driver_suites_are_registered_once_with_exact_entrypoints(self) -> None:
         checks = build_checks("fixture-godot")
-        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup "))]
-        self.assertEqual(len(drivers), 15)
+        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup ", "jelly "))]
+        self.assertEqual(len(drivers), 20)
         self.assertEqual({label for label, _ in drivers}, set(DRIVER_SUITES))
         for label, command in drivers:
             with self.subTest(label=label):
