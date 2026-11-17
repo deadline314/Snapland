@@ -27,7 +27,7 @@
 
 # 跟其他票的關係
 
-- Blocks：無
+- Blocks：SG-41
 - Blocked by：無
 - Related：MAIN-24、SG-40
 
