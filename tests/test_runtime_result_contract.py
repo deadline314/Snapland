@@ -19,6 +19,23 @@ class RuntimeResultContractTests(unittest.TestCase):
     def result(self, stdout: str = "", stderr: str = "", code: int = 0) -> subprocess.CompletedProcess[str]:
         return subprocess.CompletedProcess(["godot"], code, stdout, stderr)
 
+    def test_audio_release_requires_its_exact_clean_completion(self) -> None:
+        label = "audio playback release tests"
+        marker = "PASS: audio playback release weak refs, owner-free wait and bounded timeout"
+        entries = [command for name, command in build_checks("fixture-godot") if name == label]
+        self.assertEqual(len(entries), 1)
+        self.assertIn("--script", entries[0])
+        self.assertIn("res://game/tests/test_audio_playback_release.gd", entries[0])
+        self.assertEqual(PASS_MARKERS[label], marker)
+        self.assertIsNone(result_error(label, self.result(marker + "\n")))
+        for output in ("", "quoted " + marker, marker + " suffix", "PASS: Main NPC dialogue hold lifecycle"):
+            self.assertIsNotNone(result_error(label, self.result(output)))
+        self.assertIsNotNone(result_error(label, self.result(stderr=marker)))
+        self.assertIsNotNone(result_error(label, self.result(marker, code=1)))
+        for diagnostic in ("ERROR: retained playback", "SCRIPT ERROR: invalid reference"):
+            self.assertIsNotNone(result_error(label, self.result(marker + "\n" + diagnostic)))
+            self.assertIsNotNone(result_error(label, self.result(marker, diagnostic)))
+
     def test_current_source_diagnostic_completion_is_accepted(self) -> None:
         self.assertIsNone(result_error(LABEL, self.result("Godot 4.7.2\r\n\r\n" + ACTUAL_IDLE_COMPLETION + "\r\n", "WARNING: fixture fallback\n")))
 

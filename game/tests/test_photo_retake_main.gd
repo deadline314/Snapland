@@ -1,6 +1,7 @@
 extends Node
 
 const Catalog = preload("res://game/core/game_catalog.gd")
+const Release = preload("res://game/tests/audio_playback_release.gd")
 var main: Node
 var failures: Array[String] = []
 
@@ -291,22 +292,13 @@ func check(ok: bool, message: String) -> void:
 
 func _finish() -> void:
 	main.quitting=true
-	var playbacks: Array[WeakRef]=[]
-	for player in main.audio.get_children():
-		if player is AudioStreamPlayer and player.has_stream_playback():
-			playbacks.append(weakref(player.get_stream_playback()))
+	var playbacks: Array[WeakRef] = Release.capture(main.audio)
 	main.audio.shutdown()
 	if not OS.get_cmdline_user_args().has("--retake-failure-child"):
 		main.world.area_changed.emit(main.world.current_area)
 		check(main.audio._active_context.is_empty(),"teardown ignores late current-world area callbacks")
 	main.queue_free()
 	await _frames()
-	# stop() releases the player before the audio backend releases its playback.
-	var deadline := Time.get_ticks_msec()+2000
-	while playbacks.any(func(playback: WeakRef): return playback.get_ref()!=null):
-		if Time.get_ticks_msec()>=deadline:
-			check(false,"audio backend releases stopped playbacks before exit")
-			break
-		await get_tree().process_frame
+	check(await Release.wait_for_release(get_tree(), playbacks), "audio backend releases stopped playbacks before exit")
 	if failures.is_empty(): print("PASS: Main selected retakes, actual attempts, truthful awards and safe PNG replacement")
 	get_tree().quit(0 if failures.is_empty() else 1)

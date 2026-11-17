@@ -1,6 +1,7 @@
 extends Node
 ## Automated Main input/GPU evidence with synthetic admission; not a human playtest.
 const View = preload("res://game/minigames/sugar_bridge_view.gd")
+const Release = preload("res://game/tests/audio_playback_release.gd")
 var main: Node
 var session: Control
 var failures: Array[String] = []
@@ -263,18 +264,11 @@ func finish() -> void:
 	var report := {"scope":"automated Main actual input/GPU, synthetic admission, no human play or listening claim", "mode":mode, "viewport":requested, "captures":captures, "failures":failures, "results":results, "save_path":OS.get_environment("SNAPLAND_SAVE_PATH")}
 	if is_instance_valid(main):
 		main.quitting = true
-		var playbacks: Array[WeakRef] = []
-		for player in main.audio.get_children():
-			if player is AudioStreamPlayer and player.has_stream_playback(): playbacks.append(weakref(player.get_stream_playback()))
+		var playbacks: Array[WeakRef] = Release.capture(main.audio)
 		main.audio.shutdown()
 		main.queue_free()
 		await frames(3)
-		var deadline := Time.get_ticks_msec() + 2000
-		while playbacks.any(func(playback: WeakRef): return playback.get_ref() != null):
-			if Time.get_ticks_msec() >= deadline:
-				check(false, "native audio releases stopped playback before exit")
-				break
-			await frames(1)
+		check(await Release.wait_for_release(get_tree(), playbacks), "native audio releases stopped playback before exit")
 	var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
 	if file != null: file.store_string(JSON.stringify(report, "\t"))
 	for problem in failures: push_error(problem)

@@ -2,6 +2,7 @@ extends Node
 
 const Route = preload("res://game/tests/test_cookie_mold_session.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
+const Release = preload("res://game/tests/audio_playback_release.gd")
 var main: Node
 var failures: Array[String] = []
 
@@ -172,20 +173,11 @@ func _book(node: Node) -> Node:
 func _finish() -> void:
 	if is_instance_valid(main):
 		main.quitting = true
-		var playbacks: Array[WeakRef] = []
-		for player in main.audio.get_children():
-			if player is AudioStreamPlayer and player.has_stream_playback():
-				playbacks.append(weakref(player.get_stream_playback()))
+		var playbacks: Array[WeakRef] = Release.capture(main.audio)
 		main.audio.shutdown()
 		main.queue_free()
 		await _frames()
-		# The backend may retain stopped playback after its player is freed.
-		var deadline := Time.get_ticks_msec() + 2000
-		while playbacks.any(func(playback: WeakRef): return playback.get_ref() != null):
-			if Time.get_ticks_msec() >= deadline:
-				check(false, "audio backend releases stopped playbacks before exit")
-				break
-			await get_tree().process_frame
+		check(await Release.wait_for_release(get_tree(), playbacks), "audio backend releases stopped playbacks before exit")
 	for message in failures: push_error(message)
 	print("PASS: cookie Main factory entry, six real catches, fixed rewards, selected retake originals and reload" if failures.is_empty() else "FAIL: cookie Main")
 	get_tree().quit(0 if failures.is_empty() else 1)

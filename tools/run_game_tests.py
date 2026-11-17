@@ -216,6 +216,7 @@ PASS_MARKERS = {
     "island dialogue tests": "PASS: island dialogue panel and bounded, speaker-pitched beep",
     "island game entry tests": "PASS: 12 compact invites and first-entry/optional-rule flow",
     "audio runtime tests": "PASS: audio runtime checks",
+    "audio playback release tests": "PASS: audio playback release weak refs, owner-free wait and bounded timeout",
     "island audio dynamics tests": "PASS: phase-aware island audio dynamics and dialogue duck",
     "main scene integration tests": "PASS: main scene integration checks",
 }
@@ -248,7 +249,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ")) or label in {"region progress tests", "region travel tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ")) or label in {"region progress tests", "region travel tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -446,6 +447,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("island dialogue tests", common + ["res://game/tests/test_island_dialogue.tscn"]),
         ("island game entry tests", common + ["res://game/tests/test_island_game_entry.tscn"]),
         ("audio runtime tests", common + ["--script", "res://game/tests/test_audio.gd"]),
+        ("audio playback release tests", common + ["--script", "res://game/tests/test_audio_playback_release.gd"]),
         ("island audio dynamics tests", common + ["--script", "res://game/tests/test_audio_dynamics.gd"]),
         ("main scene integration tests", common + ["res://game/tests/test_integration.tscn"]),
         ("pixel UI shell tests", common + ["res://game/tests/test_pixel_ui_shell.tscn"]),

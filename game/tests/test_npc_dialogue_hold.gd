@@ -1,6 +1,7 @@
 extends Node
 
 const MainScene := preload("res://game/main.tscn")
+const Release = preload("res://game/tests/audio_playback_release.gd")
 
 var _failures: Array[String] = []
 
@@ -141,12 +142,12 @@ func _check(condition: bool, message: String) -> void:
 
 
 func _finish(main: Node) -> void:
-	# Stop audio while players still exist, as in Main's normal quit path.
-	# Allow the audio thread to release stopped streams before node teardown.
+	main.quitting = true
+	var playbacks: Array[WeakRef] = Release.capture(main.audio)
 	main.audio.shutdown()
-	await get_tree().create_timer(0.15).timeout
 	main.queue_free()
 	await _frames(2)
+	_check(await Release.wait_for_release(get_tree(), playbacks), "audio backend releases stopped playbacks before exit")
 	if _failures.is_empty():
 		print("PASS: Main NPC dialogue hold lifecycle")
 		get_tree().quit(0)
