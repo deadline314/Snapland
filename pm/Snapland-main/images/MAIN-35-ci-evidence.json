@@ -1,0 +1,1672 @@
+{
+  "ticket": "MAIN-35",
+  "workflow_source": "c5871d5f614d23458cc5b9e3416a5eec1add753b",
+  "observed_at": "2026-11-19T06:27:14.3178737+08:00",
+  "before": {
+    "conclusion": "cancelled",
+    "event": "push",
+    "headBranch": "main",
+    "headSha": "9d251d8c3fef6523adf0e08487587f2de99341e5",
+    "jobs": [
+      {
+        "completedAt": "2026-11-18T21:44:57Z",
+        "conclusion": "success",
+        "databaseId": 135154546534,
+        "name": "full-suite",
+        "startedAt": "2026-11-18T21:41:41Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T21:41:43Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T21:41:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:40Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T21:41:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:41Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T21:43:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:46Z",
+            "conclusion": "success",
+            "name": "Install 2D asset authoring test dependency",
+            "number": 4,
+            "startedAt": "2026-11-18T21:43:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:46Z",
+            "conclusion": "success",
+            "name": "Validate all design data and links",
+            "number": 5,
+            "startedAt": "2026-11-18T21:43:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:44:55Z",
+            "conclusion": "success",
+            "name": "Test validators against invalid designs",
+            "number": 6,
+            "startedAt": "2026-11-18T21:43:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:44:55Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T21:44:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:44:55Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T21:44:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:44:56Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T21:44:55Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44404088517/job/135154546534"
+      },
+      {
+        "completedAt": "2026-11-18T21:45:39Z",
+        "conclusion": "success",
+        "databaseId": 135154546985,
+        "name": "runtime-source",
+        "startedAt": "2026-11-18T21:41:41Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T21:41:43Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T21:41:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:35Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T21:41:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:36Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T21:43:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:38Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 4,
+            "startedAt": "2026-11-18T21:43:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:38Z",
+            "conclusion": "success",
+            "name": "Verify runtime test coverage is configured",
+            "number": 5,
+            "startedAt": "2026-11-18T21:43:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:43:59Z",
+            "conclusion": "success",
+            "name": "Verify isolated original-style 2D hero sample",
+            "number": 6,
+            "startedAt": "2026-11-18T21:43:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:44:14Z",
+            "conclusion": "success",
+            "name": "Verify isolated 2D hair bones and attachment contracts",
+            "number": 7,
+            "startedAt": "2026-11-18T21:43:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:44:46Z",
+            "conclusion": "success",
+            "name": "Verify fixed-root 2D walk pixels and original limb registration",
+            "number": 8,
+            "startedAt": "2026-11-18T21:44:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:45:37Z",
+            "conclusion": "success",
+            "name": "Verify fixed-head island idle and blinking across appearances",
+            "number": 9,
+            "startedAt": "2026-11-18T21:44:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:45:37Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 17,
+            "startedAt": "2026-11-18T21:45:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:45:37Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 18,
+            "startedAt": "2026-11-18T21:45:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:45:37Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-11-18T21:45:37Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44404088517/job/135154546985"
+      },
+      {
+        "completedAt": "2026-11-18T21:55:11Z",
+        "conclusion": "success",
+        "databaseId": 135156937701,
+        "name": "game-runtime (0)",
+        "startedAt": "2026-11-18T21:45:42Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T21:45:44Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T21:45:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:48:32Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T21:45:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:48:33Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T21:48:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:48:37Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T21:48:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:48:38Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T21:48:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:55:08Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T21:48:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:55:08Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T21:55:08Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:55:09Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T21:55:08Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:55:09Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T21:55:09Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44404088517/job/135156937701"
+      },
+      {
+        "completedAt": "2026-11-18T21:58:44Z",
+        "conclusion": "cancelled",
+        "databaseId": 135156937884,
+        "name": "game-runtime (2)",
+        "startedAt": "2026-11-18T21:45:42Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T21:45:43Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T21:45:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:47:31Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T21:45:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:47:32Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T21:47:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:47:34Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T21:47:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:47:35Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T21:47:34Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:58:43Z",
+            "conclusion": "cancelled",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T21:47:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:58:43Z",
+            "conclusion": "skipped",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T21:58:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:58:43Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T21:58:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:58:43Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T21:58:43Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44404088517/job/135156937884"
+      },
+      {
+        "completedAt": "2026-11-18T21:54:17Z",
+        "conclusion": "success",
+        "databaseId": 135156937957,
+        "name": "game-runtime (1)",
+        "startedAt": "2026-11-18T21:45:42Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T21:45:43Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T21:45:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:47:31Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T21:45:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:47:31Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T21:47:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:47:34Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T21:47:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:47:36Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T21:47:34Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:54:15Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T21:47:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:54:15Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T21:54:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:54:15Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T21:54:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:54:15Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T21:54:15Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44404088517/job/135156937957"
+      },
+      {
+        "completedAt": "2026-11-18T21:55:14Z",
+        "conclusion": "success",
+        "databaseId": 135156937982,
+        "name": "game-runtime (3)",
+        "startedAt": "2026-11-18T21:45:43Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T21:45:46Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T21:45:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:48:41Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T21:45:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:48:41Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T21:48:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:48:44Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T21:48:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:48:46Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T21:48:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:55:11Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T21:48:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:55:11Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T21:55:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:55:11Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T21:55:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:55:11Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T21:55:11Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44404088517/job/135156937982"
+      }
+    ],
+    "startedAt": "2026-11-18T21:41:38Z",
+    "status": "completed",
+    "updatedAt": "2026-11-18T21:58:45Z",
+    "url": "https://github.com/deadline314/Snapland/actions/runs/44404088517"
+  },
+  "simultaneous_main_runs": [
+    {
+      "conclusion": "",
+      "createdAt": "2026-11-18T22:04:22Z",
+      "databaseId": 44407936253,
+      "event": "push",
+      "headSha": "c5871d5f614d23458cc5b9e3416a5eec1add753b",
+      "startedAt": "2026-11-18T22:04:22Z",
+      "status": "in_progress",
+      "updatedAt": "2026-11-18T22:04:27Z",
+      "url": "https://github.com/deadline314/Snapland/actions/runs/44407936253"
+    },
+    {
+      "conclusion": "",
+      "createdAt": "2026-11-18T21:58:29Z",
+      "databaseId": 44406936194,
+      "event": "schedule",
+      "headSha": "9d251d8c3fef6523adf0e08487587f2de99341e5",
+      "startedAt": "2026-11-18T21:58:29Z",
+      "status": "in_progress",
+      "updatedAt": "2026-11-18T22:02:03Z",
+      "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194"
+    }
+  ],
+  "newer_changes_replaced_earlier_changes": {
+    "observed_at": "2026-11-19T06:07:34.8004444+08:00",
+    "runs": [
+      {
+        "conclusion": "",
+        "createdAt": "2026-11-18T22:06:33Z",
+        "databaseId": 44408308995,
+        "event": "push",
+        "headSha": "b85bc74837caf41102812622f7ad6490b6a43e4b",
+        "startedAt": "2026-11-18T22:06:33Z",
+        "status": "in_progress",
+        "updatedAt": "2026-11-18T22:07:03Z",
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44408308995"
+      },
+      {
+        "conclusion": "cancelled",
+        "createdAt": "2026-11-18T22:04:22Z",
+        "databaseId": 44407936253,
+        "event": "push",
+        "headSha": "c5871d5f614d23458cc5b9e3416a5eec1add753b",
+        "startedAt": "2026-11-18T22:04:22Z",
+        "status": "completed",
+        "updatedAt": "2026-11-18T22:06:50Z",
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44407936253"
+      },
+      {
+        "conclusion": "",
+        "createdAt": "2026-11-18T21:58:29Z",
+        "databaseId": 44406936194,
+        "event": "schedule",
+        "headSha": "9d251d8c3fef6523adf0e08487587f2de99341e5",
+        "startedAt": "2026-11-18T21:58:29Z",
+        "status": "in_progress",
+        "updatedAt": "2026-11-18T22:02:03Z",
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194"
+      }
+    ]
+  },
+  "completed_scheduled_run": {
+    "conclusion": "success",
+    "event": "schedule",
+    "headBranch": "main",
+    "headSha": "9d251d8c3fef6523adf0e08487587f2de99341e5",
+    "jobs": [
+      {
+        "completedAt": "2026-11-18T22:02:00Z",
+        "conclusion": "success",
+        "databaseId": 135164696458,
+        "name": "runtime-source",
+        "startedAt": "2026-11-18T21:58:48Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T21:58:49Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T21:58:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T21:59:59Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T21:58:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:00:00Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T21:59:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:00:02Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 4,
+            "startedAt": "2026-11-18T22:00:00Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:00:02Z",
+            "conclusion": "success",
+            "name": "Verify runtime test coverage is configured",
+            "number": 5,
+            "startedAt": "2026-11-18T22:00:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:00:22Z",
+            "conclusion": "success",
+            "name": "Verify isolated original-style 2D hero sample",
+            "number": 6,
+            "startedAt": "2026-11-18T22:00:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:00:35Z",
+            "conclusion": "success",
+            "name": "Verify isolated 2D hair bones and attachment contracts",
+            "number": 7,
+            "startedAt": "2026-11-18T22:00:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:01:07Z",
+            "conclusion": "success",
+            "name": "Verify fixed-root 2D walk pixels and original limb registration",
+            "number": 8,
+            "startedAt": "2026-11-18T22:00:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:01:58Z",
+            "conclusion": "success",
+            "name": "Verify fixed-head island idle and blinking across appearances",
+            "number": 9,
+            "startedAt": "2026-11-18T22:01:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:01:58Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 17,
+            "startedAt": "2026-11-18T22:01:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:01:58Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 18,
+            "startedAt": "2026-11-18T22:01:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:01:58Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-11-18T22:01:58Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194/job/135164696458"
+      },
+      {
+        "completedAt": "2026-11-18T22:03:47Z",
+        "conclusion": "success",
+        "databaseId": 135164696794,
+        "name": "full-suite",
+        "startedAt": "2026-11-18T21:58:48Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T21:58:49Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T21:58:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:02:29Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T21:58:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:02:30Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:02:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:02:35Z",
+            "conclusion": "success",
+            "name": "Install 2D asset authoring test dependency",
+            "number": 4,
+            "startedAt": "2026-11-18T22:02:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:02:35Z",
+            "conclusion": "success",
+            "name": "Validate all design data and links",
+            "number": 5,
+            "startedAt": "2026-11-18T22:02:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:44Z",
+            "conclusion": "success",
+            "name": "Test validators against invalid designs",
+            "number": 6,
+            "startedAt": "2026-11-18T22:02:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:44Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:03:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:45Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:03:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:45Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:03:45Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194/job/135164696794"
+      },
+      {
+        "completedAt": "2026-11-18T22:18:47Z",
+        "conclusion": "success",
+        "databaseId": 135166642693,
+        "name": "game-runtime (2)",
+        "startedAt": "2026-11-18T22:02:03Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:02:04Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:02:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:05:48Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:02:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:05:48Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:05:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:05:52Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T22:05:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:05:53Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T22:05:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:18:43Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T22:05:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:18:43Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:18:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:18:43Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:18:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:18:43Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:18:43Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194/job/135166642693"
+      },
+      {
+        "completedAt": "2026-11-18T22:12:33Z",
+        "conclusion": "success",
+        "databaseId": 135166642701,
+        "name": "game-runtime (1)",
+        "startedAt": "2026-11-18T22:02:03Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:02:04Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:02:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:04:03Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:02:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:04:04Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:04:03Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:04:06Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T22:04:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:04:08Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T22:04:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:12:30Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T22:04:08Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:12:30Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:12:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:12:31Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:12:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:12:31Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:12:31Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194/job/135166642701"
+      },
+      {
+        "completedAt": "2026-11-18T22:11:42Z",
+        "conclusion": "success",
+        "databaseId": 135166642752,
+        "name": "game-runtime (3)",
+        "startedAt": "2026-11-18T22:02:03Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:02:04Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:02:03Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:17Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:02:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:17Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:03:17Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:19Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T22:03:17Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:21Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T22:03:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:11:39Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T22:03:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:11:39Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:11:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:11:40Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:11:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:11:40Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:11:40Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194/job/135166642752"
+      },
+      {
+        "completedAt": "2026-11-18T22:11:44Z",
+        "conclusion": "success",
+        "databaseId": 135166642756,
+        "name": "game-runtime (0)",
+        "startedAt": "2026-11-18T22:02:03Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:02:04Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:02:03Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:15Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:02:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:16Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:03:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:20Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T22:03:16Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:03:21Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T22:03:20Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:11:42Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T22:03:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:11:42Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:11:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:11:42Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:11:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:11:42Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:11:42Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194/job/135166642756"
+      }
+    ],
+    "startedAt": "2026-11-18T21:58:29Z",
+    "status": "completed",
+    "updatedAt": "2026-11-18T22:18:47Z",
+    "url": "https://github.com/deadline314/Snapland/actions/runs/44406936194"
+  },
+  "completed_updated_main_run": {
+    "conclusion": "success",
+    "event": "push",
+    "headBranch": "main",
+    "headSha": "b85bc74837caf41102812622f7ad6490b6a43e4b",
+    "jobs": [
+      {
+        "completedAt": "2026-11-18T22:09:22Z",
+        "conclusion": "success",
+        "databaseId": 135169505266,
+        "name": "full-suite",
+        "startedAt": "2026-11-18T22:06:52Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:06:54Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:06:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:03Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:06:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:04Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:08:03Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:13Z",
+            "conclusion": "success",
+            "name": "Install 2D asset authoring test dependency",
+            "number": 4,
+            "startedAt": "2026-11-18T22:08:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:13Z",
+            "conclusion": "success",
+            "name": "Validate all design data and links",
+            "number": 5,
+            "startedAt": "2026-11-18T22:08:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:09:20Z",
+            "conclusion": "success",
+            "name": "Test validators against invalid designs",
+            "number": 6,
+            "startedAt": "2026-11-18T22:08:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:09:20Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:09:20Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:09:20Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:09:20Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:09:20Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:09:20Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44408308995/job/135169505266"
+      },
+      {
+        "completedAt": "2026-11-18T22:09:35Z",
+        "conclusion": "success",
+        "databaseId": 135169505871,
+        "name": "runtime-source",
+        "startedAt": "2026-11-18T22:06:52Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:06:53Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:06:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:03Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:06:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:04Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:08:03Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:05Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 4,
+            "startedAt": "2026-11-18T22:08:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:06Z",
+            "conclusion": "success",
+            "name": "Verify runtime test coverage is configured",
+            "number": 5,
+            "startedAt": "2026-11-18T22:08:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:19Z",
+            "conclusion": "success",
+            "name": "Verify isolated original-style 2D hero sample",
+            "number": 6,
+            "startedAt": "2026-11-18T22:08:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:30Z",
+            "conclusion": "success",
+            "name": "Verify isolated 2D hair bones and attachment contracts",
+            "number": 7,
+            "startedAt": "2026-11-18T22:08:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:08:54Z",
+            "conclusion": "success",
+            "name": "Verify fixed-root 2D walk pixels and original limb registration",
+            "number": 8,
+            "startedAt": "2026-11-18T22:08:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:09:32Z",
+            "conclusion": "success",
+            "name": "Verify fixed-head island idle and blinking across appearances",
+            "number": 9,
+            "startedAt": "2026-11-18T22:08:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:09:32Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 17,
+            "startedAt": "2026-11-18T22:09:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:09:33Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 18,
+            "startedAt": "2026-11-18T22:09:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:09:33Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-11-18T22:09:33Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44408308995/job/135169505871"
+      },
+      {
+        "completedAt": "2026-11-18T22:23:48Z",
+        "conclusion": "success",
+        "databaseId": 135171149192,
+        "name": "game-runtime (0)",
+        "startedAt": "2026-11-18T22:10:17Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:10:19Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:10:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:15:18Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:10:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:15:19Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:15:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:15:21Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T22:15:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:15:23Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T22:15:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:23:45Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T22:15:23Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:23:45Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:23:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:23:45Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:23:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:23:45Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:23:45Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44408308995/job/135171149192"
+      },
+      {
+        "completedAt": "2026-11-18T22:19:48Z",
+        "conclusion": "success",
+        "databaseId": 135171149199,
+        "name": "game-runtime (1)",
+        "startedAt": "2026-11-18T22:10:46Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:10:47Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:10:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:12:02Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:10:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:12:02Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:12:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:12:05Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T22:12:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:12:07Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T22:12:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:19:46Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T22:12:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:19:46Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:19:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:19:46Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:19:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:19:46Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:19:46Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44408308995/job/135171149199"
+      },
+      {
+        "completedAt": "2026-11-18T22:22:24Z",
+        "conclusion": "success",
+        "databaseId": 135171149256,
+        "name": "game-runtime (2)",
+        "startedAt": "2026-11-18T22:11:47Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:11:48Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:11:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:14:40Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:11:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:14:40Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:14:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:14:44Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T22:14:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:14:46Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T22:14:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:22:21Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T22:14:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:22:21Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:22:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:22:21Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:22:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:22:21Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:22:21Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44408308995/job/135171149256"
+      },
+      {
+        "completedAt": "2026-11-18T22:21:17Z",
+        "conclusion": "success",
+        "databaseId": 135171149344,
+        "name": "game-runtime (3)",
+        "startedAt": "2026-11-18T22:11:44Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-11-18T22:11:45Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-11-18T22:11:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:13:06Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-11-18T22:11:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:13:06Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-11-18T22:13:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:13:09Z",
+            "conclusion": "success",
+            "name": "Verify runtime completion, entrypoint and shard coverage contracts",
+            "number": 4,
+            "startedAt": "2026-11-18T22:13:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:13:10Z",
+            "conclusion": "success",
+            "name": "Install pinned Godot 4.7.2",
+            "number": 5,
+            "startedAt": "2026-11-18T22:13:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:21:14Z",
+            "conclusion": "success",
+            "name": "Run native Godot startup and runtime tests",
+            "number": 6,
+            "startedAt": "2026-11-18T22:13:10Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:21:14Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 11,
+            "startedAt": "2026-11-18T22:21:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:21:14Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 12,
+            "startedAt": "2026-11-18T22:21:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-11-18T22:21:14Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "startedAt": "2026-11-18T22:21:14Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/deadline314/Snapland/actions/runs/44408308995/job/135171149344"
+      }
+    ],
+    "startedAt": "2026-11-18T22:06:33Z",
+    "status": "completed",
+    "updatedAt": "2026-11-18T22:23:49Z",
+    "url": "https://github.com/deadline314/Snapland/actions/runs/44408308995"
+  },
+  "local_runtime_contracts": 52,
+  "design_scopes": 5,
+  "group_rule": "The ref and trigger category both participate in the GitHub Actions concurrency key."
+}
