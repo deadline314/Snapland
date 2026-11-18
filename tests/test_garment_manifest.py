@@ -8,6 +8,7 @@ class GarmentManifestTests(unittest.TestCase):
     def setUpClass(cls):
         cls.guide = json.loads(DEFAULT_GUIDE.read_text(encoding='utf-8'))
         cls.required = json.loads((ROOT / 'assets/characters/complete-animation-regions.json').read_text(encoding='utf-8'))['outfit_required_poses']['traveller']
+        cls.required_count = sum(count for directions in cls.required.values() for count in directions.values())
 
     def check_invalid(self, mutate, text):
         guide = copy.deepcopy(self.guide)
@@ -17,7 +18,7 @@ class GarmentManifestTests(unittest.TestCase):
 
     def test_partial_front_preview_identifies_all_other_required_cels(self):
         report = validate(self.guide, self.required)
-        self.assertEqual((report['required'], report['provided'], report['missing_count']), (148, 8, 140))
+        self.assertEqual((report['required'], report['provided'], report['missing_count']), (self.required_count, 8, self.required_count - 8))
         self.assertFalse(report['authored_coverage_complete'])
         self.assertEqual(report['runtime_fallback_request_count'], 24)
         self.assertFalse(report['runtime_fallbacks_are_authored_art'])
@@ -27,12 +28,14 @@ class GarmentManifestTests(unittest.TestCase):
         self.assertFalse(report['ready_for_wardrobe'])
         self.assertIn({'action': 'catch', 'direction': 'front', 'frame': 11}, report['missing'])
         self.assertIn({'action': 'walk', 'direction': 'back', 'frame': 7}, report['missing'])
+        for direction in ('left', 'right'):
+            self.assertIn({'action': 'wave', 'direction': direction, 'frame': 4}, report['missing'])
         self.assertNotIn({'action': 'walk', 'direction': 'front', 'frame': 7}, report['missing'])
 
     def test_two_validated_atlases_report_exact_union_without_enabling_the_outfit(self):
         idle = json.loads(IDLE_GUIDE.read_text(encoding='utf-8'))
         report = validate_collection([self.guide, idle], self.required)
-        self.assertEqual((report['required'], report['provided'], report['missing_count']), (148, 44, 104))
+        self.assertEqual((report['required'], report['provided'], report['missing_count']), (self.required_count, 44, self.required_count - 44))
         self.assertEqual(report['source_guides'], 2)
         self.assertEqual(report['runtime_fallback_request_count'], 24)
         self.assertFalse(report['ready_for_wardrobe'])
@@ -84,7 +87,7 @@ class GarmentManifestTests(unittest.TestCase):
     def test_legacy_coverage_never_inflates_authored_art_or_enables_preview(self):
         guide = self.legacy_request_guide()
         report = validate(guide, self.required)
-        self.assertEqual((report['provided'], report['missing_count']), (8, 140))
+        self.assertEqual((report['provided'], report['missing_count']), (8, self.required_count - 8))
         self.assertEqual((report['runtime_fallback_provided'], report['runtime_fallback_missing_count']), (1, 23))
         self.assertFalse(report['runtime_fallbacks_are_authored_art'])
         self.assertFalse(report['ready_for_wardrobe'])
@@ -117,7 +120,7 @@ class GarmentManifestTests(unittest.TestCase):
         guide = copy.deepcopy(self.guide)
         guide['frames'][0]['torso_scale'] = [0.55, 0.22]
         report = validate(guide, self.required)
-        self.assertEqual((report['provided'], report['missing_count']), (8, 140))
+        self.assertEqual((report['provided'], report['missing_count']), (8, self.required_count - 8))
         self.assertFalse(report['ready_for_wardrobe'])
         for scale in [[float('nan'), 0.4], [0.5, float('inf')], [0.5, 0], [0.5, 4.1], [0.5], [True, 0.5]]:
             with self.subTest(scale=scale):

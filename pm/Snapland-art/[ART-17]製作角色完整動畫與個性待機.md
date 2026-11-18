@@ -819,3 +819,9 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![戴草帽的鮑伯頭向右側身招手](images/ART-17-wave-20261119-bob-hat.png)
 
 [正常影片](images/ART-17-wave-20261119-normal.mp4) · [四分之一速度與重建](images/ART-17-wave-20261119-quarter.mp4) · [原生與封裝證據](images/ART-17-wave-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/6a36c81308bb91d8384c0178b392a3706b18bb9c)。
+
+## Commit — 2026-11-19 同步換裝驗證與髮尾素材指紋
+
+側身招手增加 10 格衣裝需求後，衣裝預覽改依完整清單核對缺格，仍逐一驗證預覽只有原來提供的格數。髮尾資料重新核對新增的素材指紋，原有髮束及已登錄的遮罩內容維持相同。
+
+212 項 Python 測試全數通過。隔離 Windows 原生場景以同樣的向右移動重現鮑伯頭與捲髮原先出現來源驗證回退，更新後兩者的髮尾皆重新擺動。檔內附兩種造型的移動畫面及修正前後日誌。[髮尾回歸證據](images/ART-17-wave-hair-recheck-20261119.zip)。
