@@ -130,7 +130,7 @@ static func _segment_fraction(a: Vector2, b: Vector2, c: Vector2, d: Vector2) ->
 	if squared == 0.0:
 		return 0.0 if qx * sy - qy * sx == 0.0 else -1.0
 	var start := (qx * rx + qy * ry) / squared
-	var end := start + (sx * rx + sy * ry) / squared
+	var end := ((float(d.x) - float(a.x)) * rx + (float(d.y) - float(a.y)) * ry) / squared
 	var first := maxf(0.0, minf(start, end))
 	return first if first <= minf(1.0, maxf(start, end)) else -1.0
 

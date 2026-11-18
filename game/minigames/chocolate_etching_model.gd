@@ -17,6 +17,7 @@ var _current := PackedVector2Array()
 var _invalid_stroke := false
 var _guides: Array = []
 var _drive_attempt := false
+var _stock_revision := 0
 
 func _init() -> void:
 	reset()
@@ -29,6 +30,7 @@ func reset(assisted: bool = false, variant: int = 0) -> void:
 	_drive_attempt = false
 	_history = []
 	_strokes = [[], [], [], []]
+	_stock_revision += 1
 	var centers := [Vector2(160,190), Vector2(330,190), Vector2(500,190), Vector2(330,318 if variant == 0 else 302)]
 	_motion_cursor = centers[0]
 	var contacts: Array[Vector2i] = []
@@ -142,6 +144,7 @@ func release_tool() -> void:
 		if length > 0.0:
 			_remember()
 			_strokes[_s.selected].append({"points": _current.duplicate(), "depth": _s.depth, "width": 2.0 + 6.0 * _s.depth * _s.depth})
+			_stock_revision += 1
 			_s.participated = _s.participated or length >= 8.0
 			_structure_changed()
 			_s.feedback = "熱線已提交；切透整圈才可折料"
@@ -165,7 +168,13 @@ func fold_or_mount() -> void:
 	if _s.ended:
 		return
 	if _s.phase == "assembly":
-		place_selected(_s.cursor)
+		var mounted: Dictionary = _s.parts[_s.selected]
+		if mounted.mounted and mounted.position.distance_to(_s.cursor) <= 3.0:
+			_remember()
+			mounted.mounted = false
+			_structure_changed()
+		else:
+			place_selected(_s.cursor)
 		return
 	cancel_tool()
 	var part: Dictionary = _s.parts[_s.selected]
@@ -212,6 +221,7 @@ func fold_or_mount() -> void:
 	part.freed = true
 	part.outline = outline
 	part.removed_outline = removed
+	_stock_revision += 1
 	_structure_changed()
 	_refresh_clamp()
 	_s.feedback = "已折出實際齒輪；切換試裝後自行放置"
@@ -221,21 +231,17 @@ func place_selected(point: Vector2) -> void:
 	if _s.ended or _s.phase != "assembly" or not Geometry.finite_point(point):
 		return
 	var part: Dictionary = _s.parts[_s.selected]
-	if not part.freed:
+	if not part.freed or (part.mounted and point.is_equal_approx(part.position)):
 		return
-	if part.mounted and part.position.distance_to(point) <= 3.0:
-		_remember()
-		part.mounted = false
-	else:
-		var radius := 0.0
-		for vertex in part.outline:
-			radius = maxf(radius, vertex.distance_to(part.source_center))
-		if point.x - radius < 0 or point.x + radius > 720 or point.y - radius < 0 or point.y + radius > 440:
-			_s.feedback = "成品完整旋轉範圍須在畫布內"
-			return
-		_remember()
-		part.position = point
-		part.mounted = true
+	var radius := 0.0
+	for vertex in part.outline:
+		radius = maxf(radius, vertex.distance_to(part.source_center))
+	if point.x - radius < 0 or point.x + radius > 720 or point.y - radius < 0 or point.y + radius > 440:
+		_s.feedback = "成品完整旋轉範圍須在畫布內"
+		return
+	_remember()
+	part.position = point
+	part.mounted = true
 	_structure_changed()
 
 func toggle_phase() -> void:
@@ -255,6 +261,7 @@ func undo() -> void:
 	var previous: Dictionary = _history.pop_back()
 	_s.parts = previous.parts
 	_strokes = previous.strokes
+	_stock_revision += 1
 	if not _s.assisted:
 		_mistake()
 	_structure_changed()
@@ -305,10 +312,15 @@ func snapshot() -> Dictionary:
 	var result := _s.duplicate(true)
 	result.selected_guides = _guides.duplicate(true)
 	result.selected_strokes = _strokes[_s.selected].duplicate(true)
+	result.stock_revision = _stock_revision
+	result.output_percent = 100 if _s.success else mini(99, floori(100.0 * _s.output_travel / TAU))
 	result.current_stroke = _current.duplicate()
 	result.undo_available = _history.size()
 	result.undo_limit = UNDO_LIMIT
 	return result
+
+func stock_strokes() -> Array:
+	return _all_strokes().duplicate(true)
 
 func _material_at(point: Vector2) -> bool:
 	if not Geometry.in_board(point):

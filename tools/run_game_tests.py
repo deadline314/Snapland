@@ -21,9 +21,9 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
-    "chocolate model tests": "Chocolate etching tests: 211 checks, 0 failures",
-    "chocolate driver tests": "Chocolate etching driver: 73 checks, 0 failures",
-    "chocolate view tests": "Chocolate etching view: 30 checks, 0 failures",
+    "chocolate model tests": "Chocolate etching tests: 217 checks, 0 failures",
+    "chocolate driver tests": "Chocolate etching driver: 92 checks, 0 failures",
+    "chocolate view tests": "Chocolate etching view: 33 checks, 0 failures",
     "chocolate Session tests": "Chocolate etching Session: 55 checks, 0 failures",
     "chocolate Main tests": "PASS: chocolate Main factory entrance, three-wheel and leftover idler results, fixed rewards, selected PNG I/O and reload",
     "jelly model tests": "Jelly trampoline tests: 215 checks, 0 failures",

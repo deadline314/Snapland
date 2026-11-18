@@ -4,6 +4,7 @@ const VIEW_PATH := "res://game/minigames/chocolate_etching_view.gd"
 const Model = preload("res://game/minigames/chocolate_etching_model.gd")
 var checks := 0
 var failures := 0
+const Route = preload("res://game/tests/test_chocolate_etching_driver.gd").Route
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -54,6 +55,20 @@ func _run() -> void:
 		"reduced motion retains assembly mode and output state")
 	check(view.get_node("Instruction").text.contains("原位按 F 取下"), "assembly describes keyboard placement and take-off")
 	check(layout_errors(view, Rect2(Vector2.ZERO, script.DESIGN_SIZE)).is_empty(), "all assembly labels and controls fit")
+	var route := Route.new("pointer", false, 0)
+	check(route.craft(false), "progress fixture extracts three wheels")
+	route.arrange(false)
+	route.command("tool", true)
+	route.advance(0.995 * TAU / 2.0)
+	var almost: Dictionary = route.driver.snapshot()
+	view.present(almost, "noon", false)
+	check(not almost.success and almost.output_percent == 99 and almost.progress_text.ends_with("99%") and view.get_node("Progress").text.contains("99%"),
+		"HUD and workbench both show 99% at 99.5% of a real turn")
+	route.advance(0.1)
+	var done: Dictionary = route.driver.snapshot()
+	view.present(done, "noon", false)
+	check(done.success and done.output_percent == 100 and done.progress_text.ends_with("100%") and view.get_node("Progress").text.contains("100%"),
+		"both readouts reach 100% with real transmission completion")
 	print("RETAINED ", JSON.stringify({"node_ids": baseline.nodes, "font_ids": baseline.fonts, "style_ids": baseline.styles, "presentations": 120, "retries": 10}))
 	view.queue_free()
 	await process_frame

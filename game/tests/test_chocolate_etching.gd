@@ -13,6 +13,9 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	var geo := preload("res://game/minigames/chocolate_etching_geometry.gd")
+	expect(geo._segment_fraction(Vector2(100,100), Vector2(103,100), Vector2(107,100), Vector2(103,100)) == 1.0,
+		"Reversed collinear segment includes the exact shared endpoint")
 	expect(FileAccess.file_exists("res://game/minigames/chocolate_etching_model.gd"), "Drawn chocolate material must have its pure model")
 	expect(FileAccess.file_exists("res://game/minigames/chocolate_etching_geometry.gd"), "Actual contour and kerf geometry must exist")
 	if failures == 0:
@@ -21,6 +24,23 @@ func _run() -> void:
 			expect(false, "Model must instantiate")
 		else:
 			var model = script.new()
+			var revision: int = model.snapshot().stock_revision
+			draw(model, PackedVector2Array([Vector2(100,100), Vector2(125,100)]), false)
+			expect(model.snapshot().stock_revision > revision, "Committed stock heat invalidates the render cache")
+			revision = model.snapshot().stock_revision
+			model.cycle_piece()
+			model.step(0.1)
+			var stock: Array = model.stock_strokes()
+			stock[0].points[0] = Vector2.ZERO
+			stock[0].depth = 0
+			expect(model.stock_strokes()[0].points[0] == Vector2(100,100) and model.stock_strokes()[0].depth == 0.5
+				and model.snapshot().stock_revision == revision and not model.snapshot().has("stock_strokes"),
+				"Selection and time preserve the board revision and isolated committed heat stays outside per-frame snapshots")
+			model.undo()
+			expect(model.snapshot().stock_revision > revision and model.stock_strokes().is_empty(), "Undo invalidates visible heat")
+			revision = model.snapshot().stock_revision
+			model.reset()
+			expect(model.snapshot().stock_revision > revision, "Retry advances the stock revision past earlier rounds")
 			_review_round_one(model)
 			_review_round_two(model)
 			_assisted_geometry_precision(model)
@@ -316,6 +336,9 @@ func _network_tests(model) -> void:
 	advance(model,0.5)
 	expect(model.snapshot().output_travel == state.output_travel, "Release and idle retain progress without adding rotation")
 	model.place_selected(Vector2(600,350))
+	expect(model.snapshot().output_travel == state.output_travel and model.snapshot().parts[3].mounted, "An identical placement preserves progress")
+	model.move_cursor_to(Vector2(600,350))
+	model.fold_or_mount()
 	expect(model.snapshot().output_travel == 0.0 and not model.snapshot().parts[3].mounted, "Unmount is a structural progress reset")
 	var r := radii(model.snapshot())
 	model.place_selected(Vector2(320,220-r[1]-r[3]))

@@ -4,6 +4,7 @@ const Catalog = preload("res://game/core/game_catalog.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Bench = preload("res://game/minigames/chocolate_etching_view.gd")
 const Route = preload("res://game/tests/test_chocolate_etching_driver.gd").Route
+const DriverChecks = preload("res://game/tests/test_chocolate_etching_driver.gd")
 const ViewChecks = preload("res://game/tests/test_chocolate_etching_view.gd")
 const GAME := "game-029"
 const ORDINARY := "photo-candy-game-5"
@@ -214,6 +215,8 @@ func read_lessons() -> void:
 	var panel: Control = main.tutorial_panel
 	for slide in 3:
 		var texture: Texture2D = panel._image.texture
+		check(texture != null and texture.resource_path == "res://assets/ui/tutorials/game-029-step-%02d.png" % (slide + 1),
+			"actual ordered game-029 lesson texture %d" % (slide + 1))
 		var image := texture.get_image() if texture != null else null
 		check(image != null and image.get_size() == Vector2i(1280, 720), "actual tutorial PNG %d decodes at native resolution" % (slide + 1))
 		var covered: Array = []
@@ -228,7 +231,7 @@ func read_lessons() -> void:
 			await capture(label)
 			check_layout(label, panel, group)
 			lessons.append({"capture": label + ".png", "image": texture.resource_path if texture != null else "", "semantic_indices": semantic, "copy": visible_copy(group)})
-		check(covered == range(panel._copy_sections.size()), "every semantic section covered exactly once for slide %d" % (slide + 1))
+		check(covered == [0, 1, 2, 3, 4], "all five semantic fields in order for slide %d" % (slide + 1))
 		if slide < 2:
 			await press_button(panel._next_button)
 
@@ -365,6 +368,35 @@ func exercise_material() -> void:
 	await capture_board("undo-restored-material")
 	routes.append({"label": "material", "deep": deep.depth, "retrace_depth": folded.depth, "strokes": folded.selected_strokes.size(),
 		"strength": folded.parts[0].strength, "outline_points": folded.parts[0].outline.size(), "removed_outline_points": folded.parts[0].removed_outline.size()})
+	route.tap("undo")
+	route.tap("undo")
+	check(pointer_route.cut(1) and pointer_route.cut(2), "two main wheels fold before the undoable open margin cut")
+	pointer_route.select(0)
+	pointer_route.trace(PackedVector2Array(Route.MARGIN_CUT_A), false)
+	check(pointer_route.cut(0), "open margin cut keeps the owner extractable")
+	pointer_route.select(3)
+	var hole_point: Vector2 = points[7]
+	await capture_margin("idler", hole_point, true)
+	pointer_route.select(0)
+	await capture_margin("owner", hole_point, true)
+	check(not pointer_route.cut(3) and clock.snapshot().feedback.contains("惰輪耗料範圍碰到其他片的舊切縫"),
+		"actual native idler refuses the visible old kerf at its removal margin")
+	for _i in 6:
+		route.tap("undo")
+	pointer_route.select(0)
+	check(clock.snapshot().selected_strokes.is_empty(), "actual native undo removes the original margin cut")
+	await capture_margin("undone", hole_point, false)
+
+func capture_margin(label: String, hole_point: Vector2, marked: bool) -> void:
+	var name_ := "old-stock-cut-" + label
+	await capture_board(name_)
+	var image := Image.load_from_file(output.path_join(name_ + ".png"))
+	var transform: Transform2D = session.presentation.get_global_transform_with_canvas()
+	var middle: Vector2 = Route.MARGIN_CUT_A[0].lerp(Route.MARGIN_CUT_A[1], 0.5)
+	var heat := DriverChecks.heat_pixel_count(image, transform * Bench.board_to_design(middle))
+	var hole_heat := DriverChecks.heat_pixel_count(image, transform * Bench.board_to_design(hole_point))
+	print("STOCK_FRAME ", label, " heat=", heat, " hole_heat=", hole_heat)
+	check((heat > 0) == marked and hole_heat == 0, label + " raw Main pixels put the burn only on remaining stock")
 
 func launch_from_result(text: String) -> bool:
 	var match_button: Button

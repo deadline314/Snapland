@@ -42,6 +42,9 @@ var _held_style: StyleBoxFlat
 var _font: Font
 var _text_scale := 0.0
 var _canvas: Node2D
+var _surface: Node2D
+var _stock_strokes: Array = []
+var _stock_revision := -1
 
 static func key_code(event: InputEventKey) -> int:
 	return event.physical_keycode if event.physical_keycode else event.keycode
@@ -89,6 +92,11 @@ func _ready() -> void:
 	clip.clip_contents = true
 	clip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(clip)
+	_surface = Node2D.new()
+	_surface.name = "StockSurface"
+	_surface.scale = Vector2.ONE * BOARD_SCALE
+	_surface.draw.connect(_draw_surface)
+	clip.add_child(_surface)
 	_canvas = Node2D.new()
 	_canvas.name = "BoardCanvas"
 	_canvas.scale = Vector2.ONE * BOARD_SCALE
@@ -165,8 +173,17 @@ func _get_tooltip(at_position: Vector2) -> String:
 	return TOOLTIPS.get(command_at(at_position), "")
 
 func present(state: Dictionary, _time_phase: String, _reduced_motion: bool) -> void:
+	var refresh_surface: bool = _state.get("phase") != state.phase or state.has("stock_strokes")
+	if state.has("stock_strokes"):
+		_stock_strokes = state.stock_strokes
+		_stock_revision = state.stock_revision
+	elif _stock_revision != state.stock_revision:
+		_stock_strokes = state.selected_strokes
+		refresh_surface = true
 	_state = state
 	if is_node_ready():
+		if refresh_surface:
+			_surface.queue_redraw()
 		_apply_snapshot()
 		_canvas.queue_redraw()
 	queue_redraw()
@@ -197,7 +214,7 @@ func _apply_snapshot() -> void:
 	_labels.Time.text = "%d 秒   ·   %d 分" % [ceili(_state.remaining), _state.score]
 	_labels.Instruction.text = "拖曳或按住空白配方向鍵描線。畫布內放開提交，外側取消。淺切沿原線重描，切透一圈再折料。" if craft else "拖曳放置，或移游標後按 F。原位按 F 取下。對準兩軸及中心距，按住空白讓出口轉滿一圈。"
 	var direction := "靜止" if is_zero_approx(_state.output_omega) else ("順時針" if _state.output_omega > 0.0 else "逆時針")
-	_labels.Progress.text = ("切深 %.2f  ·  %d / 8 筆" % [_state.depth, _state.selected_strokes.size()]) if craft else ("出口 %d%%  ·  %s" % [roundi(100.0 * _state.output_travel / TAU), direction])
+	_labels.Progress.text = ("切深 %.2f  ·  %d / 8 筆" % [_state.depth, _state.selected_strokes.size()]) if craft else ("出口 %d%%  ·  %s" % [_state.output_percent, direction])
 	_labels.Guide.text = "切線引導" if craft else "接觸線"
 	_labels.Legend.text = "深度熱線" if craft else "放置預覽"
 	_labels.Margin.text = "主輪 %d / 3" % _state.get("main_freed", 0) if craft else "金圈入軸"
@@ -250,13 +267,8 @@ func _draw() -> void:
 func _draw_board() -> void:
 	if _state.is_empty():
 		return
-	_canvas.draw_rect(Rect2(Vector2.ZERO, BOARD_SIZE), BENCH)
-	for x in range(20, 720, 20):
-		_canvas.draw_line(Vector2(x, 0), Vector2(x, 440), GRID)
-	for y in range(20, 440, 20):
-		_canvas.draw_line(Vector2(0, y), Vector2(720, y), GRID)
 	if _state.phase == "craft":
-		_draw_material()
+		_draw_tools()
 	else:
 		_draw_assembly()
 	var cursor: Vector2 = _state.cursor
@@ -265,31 +277,39 @@ func _draw_board() -> void:
 	_canvas.draw_line(cursor - Vector2(0, 11), cursor + Vector2(0, 11), Paper.GOLD, 1.4, true)
 	_canvas.draw_rect(Rect2(Vector2.ZERO, BOARD_SIZE), Paper.FRAME, false, 2)
 
-func _draw_material() -> void:
+func _draw_surface() -> void:
+	_surface.draw_rect(Rect2(Vector2.ZERO, BOARD_SIZE), BENCH)
+	for x in range(20, 720, 20):
+		_surface.draw_line(Vector2(x, 0), Vector2(x, 440), GRID)
+	for y in range(20, 440, 20):
+		_surface.draw_line(Vector2(0, y), Vector2(720, y), GRID)
+	if _state.is_empty() or _state.phase != "craft":
+		return
 	var board: Rect2 = _state.source_board
-	_canvas.draw_rect(Rect2(board.position + Vector2(0, 5), board.size), EDGE)
-	_canvas.draw_rect(board, COCOA)
-	_canvas.draw_rect(board, Color("#e2a47c"), false, 1.8)
+	_surface.draw_rect(Rect2(board.position + Vector2(0, 5), board.size), EDGE)
+	_surface.draw_rect(board, COCOA)
+	_surface.draw_rect(board, Color("#e2a47c"), false, 1.8)
 	for x in range(90, 650, 40):
-		_canvas.draw_line(Vector2(x, 71), Vector2(x, 399), Color("#955b45"))
+		_surface.draw_line(Vector2(x, 71), Vector2(x, 399), Color("#955b45"))
 	for y in range(100, 400, 40):
-		_canvas.draw_line(Vector2(61, y), Vector2(649, y), Color("#955b45"))
+		_surface.draw_line(Vector2(61, y), Vector2(649, y), Color("#955b45"))
+	for stroke: Dictionary in _stock_strokes:
+		_surface.draw_polyline(stroke.points, EDGE, stroke.width + 1, true)
+		_surface.draw_polyline(stroke.points, Paper.CORAL.lerp(Paper.GOLD, stroke.depth), stroke.width, true)
 	for i in 4:
 		var part: Dictionary = _state.parts[i]
 		if part.freed:
-			_canvas.draw_colored_polygon(part.removed_outline, BENCH)
-			_contour(part.removed_outline, EDGE, 3)
-			_contour(part.outline, Color("#87918b"), 1.2, true)
+			_surface.draw_colored_polygon(part.removed_outline, BENCH)
+			_contour(part.removed_outline, EDGE, 3, false, _surface)
+			_contour(part.outline, Color("#87918b"), 1.2, true, _surface)
 		else:
-			_canvas.draw_circle(part.source_center, 12, EDGE, true, -1, true)
+			_surface.draw_circle(part.source_center, 12, EDGE, true, -1, true)
+
+func _draw_tools() -> void:
 	var selected: Dictionary = _state.parts[_state.selected]
 	if not selected.freed:
 		_contour(_state.selected_guides[0], Paper.GOLD, 1.3, true)
 		_contour(_state.selected_guides[1], Paper.TEAL, 1.1, true)
-		for stroke: Dictionary in _state.selected_strokes:
-			if stroke.points.size() >= 2:
-				_canvas.draw_polyline(stroke.points, EDGE, stroke.width + 1, true)
-				_canvas.draw_polyline(stroke.points, Paper.CORAL.lerp(Paper.GOLD, stroke.depth), stroke.width, true)
 		if _state.current_stroke.size() >= 2:
 			var width: float = 2.0 + 6.0 * _state.depth * _state.depth
 			_canvas.draw_polyline(_state.current_stroke, Paper.GOLD, width, true)
@@ -346,10 +366,10 @@ func _placed_outline(part: Dictionary, center: Vector2) -> PackedVector2Array:
 		points.append((point - source).rotated(part.angle) + center)
 	return points
 
-func _contour(points: PackedVector2Array, color: Color, width: float, dashed := false) -> void:
+func _contour(points: PackedVector2Array, color: Color, width: float, dashed := false, target: Node2D = _canvas) -> void:
 	for i in points.size():
 		var next := points[(i + 1) % points.size()]
 		if dashed:
-			_canvas.draw_dashed_line(points[i], next, color, width, 4.0, true, true)
+			target.draw_dashed_line(points[i], next, color, width, 4.0, true, true)
 		else:
-			_canvas.draw_line(points[i], next, color, width, true)
+			target.draw_line(points[i], next, color, width, true)

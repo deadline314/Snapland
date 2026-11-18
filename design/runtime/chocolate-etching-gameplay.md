@@ -28,7 +28,7 @@ SG-45／game-029。新增2D俯視工藝板：玩家親自描線、選切深、�
 
 ## 放置與實際傳動
 
-工藝／試裝共用相同720×440座標範圍。輸入軸固定(200,220)，出口軸A(440,220)、B(416,220)。主輪0、2分別放在距對應軸<=3的位置才接上（輔助<=6）；其餘輪自由放置。所有實際成品邊界需落在材料座標畫布內：放置時用實際輪廓距source_center最遠點的半徑，要求以放置中心為圓心的完整旋轉包絡落在Rect2(0,0,720,440)，確保接觸重設相位及轉完整圈都不出界；即使尚未接入傳動也先保留此空間，不靠逐幀撞邊裁切。不能一次確認自動排列。鍵盤移游標預覽，F在新位置放置；游標仍在已放位置3單位內時F取下。指標／觸控拖動只改預覽，內側放開才提交放置，取消不改原放置。位置、實際尺寸、連接與角度皆可讀取。
+工藝／試裝共用相同720×440座標範圍。輸入軸固定(200,220)，出口軸A(440,220)、B(416,220)。主輪0、2分別放在距對應軸<=3的位置才接上（輔助<=6）；其餘輪自由放置。所有實際成品邊界需落在材料座標畫布內：放置時用實際輪廓距source_center最遠點的半徑，要求以放置中心為圓心的完整旋轉包絡落在Rect2(0,0,720,440)，確保接觸重設相位及轉完整圈都不出界；即使尚未接入傳動也先保留此空間，不靠逐幀撞邊裁切。不能一次確認自動排列。鍵盤移游標預覽，F在新位置放置；游標仍在已放位置3單位內時F取下。指標／觸控拖動只改預覽，內側放開才提交放置，取消不改原放置。指標／觸控在板內可微調已放輪；原位放開保留傳動進度與撤銷歷史。位置、實際尺寸、連接與角度皆可讀取。
 
 最多4輪，對每對已放輪依實際量測建立接觸：模數相對差<=6%（輔助10%），中心距與有效節圓半徑和之差<=3（輔助6）。太近的主體干涉、齒距不合、未折出或分離都不能當成可傳動接觸。輸入所連的有限圖要能到達出口、途經三個主輪；閉環明示卡齒、停止該網路，不用無界約束求解。僅擺在旁邊或只掛枝節的第4輪不算惰輪資格。
 
@@ -42,7 +42,7 @@ SG-45／game-029。新增2D俯視工藝板：玩家親自描線、選切深、�
 
 ChocolateEtchingModel公開reset(assisted:bool=false,variant:int=0)、set_motion(direction:Vector2)、move_cursor_to(point:Vector2)、cycle_piece()、adjust_depth(direction:int)、begin_tool()、release_tool()、cancel_tool()、fold_or_mount()、place_selected(point:Vector2)、toggle_phase()、toggle_helper()、undo()、clear_input()、step(delta:float)、snapshot()->Dictionary。set_motion用每秒120座標單位推游標，斜向正規化；move_cursor_to走真實線段並限制有效畫布。begin/release在工藝為描線／提交，在試裝為轉動／停止；cancel及clear_input不提交熱線，清空移動與轉動，不還原已提交材料／進度。geometry helper的內部函式由Task1最小實作，後續只消費凍結Model／快照，不重建規則。
 
-snapshot必含elapsed,remaining,score,mistakes,ended,success,devil,ordinary_eligible,participated,assisted,variant,phase,selected,depth,cursor,cutting,driving,helper,helper_clamp,feedback,output_travel,output_omega,connections,source_board,source_centers,pins,parts。parts固定4筆，含teeth,source_center,freed,outline,removed_outline,pitch_radius,module,strength,position,mounted,angle；未取出時outline為空。另含selected_guides兩條實際引導、selected_strokes及current_stroke、undo_available／undo_limit8。只複製選中片筆劃與固定4片成品幾何，不將全歷史附進每幀快照。geometry revision可用於最小快取，不新增共享可變快照。
+snapshot必含elapsed,remaining,score,mistakes,ended,success,devil,ordinary_eligible,participated,assisted,variant,phase,selected,depth,cursor,cutting,driving,helper,helper_clamp,feedback,output_travel,output_omega,connections,source_board,source_centers,pins,parts。parts固定4筆，含teeth,source_center,freed,outline,removed_outline,pitch_radius,module,strength,position,mounted,angle；未取出時outline為空。另含selected_guides兩條實際引導、selected_strokes及current_stroke、undo_available／undo_limit8。只複製選中片筆劃與固定4片成品幾何，不將全歷史附進每幀快照。stock_revision在提交熱線、折料、撤銷及重置後遞增。Driver只在版本改變時以stock_strokes()讀取當前板面全部已提交熱線的獨立副本（最多4片×8筆×512點）。剩料保留各片切痕，已折出的孔洞遮住切痕。HUD與工藝板共用向下取整的出口百分比，成功時才顯示100%。
 
 outline、removed_outline、引導及筆劃均為原板絕對座標；position為試裝中心，angle為弧度，試裝點=(原輪廓點-source_center).rotated(angle)+position。connections為Array[Vector2i]，每對及整體按索引遞增排序，不放可變共享節點。順／逆時針描同一輪廓都可成立，不能暗藏模板頂點順序要求。
 

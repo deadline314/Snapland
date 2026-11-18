@@ -265,9 +265,9 @@ SYRUP_SUITES = {
     "syrup Main tests": ("test_syrup_flood_main.tscn", "PASS: syrup Main factory entry, three real filled closed tanks, fixed rewards, selected retake originals and reload"),
 }
 CHOCOLATE_SUITES = {
-    "chocolate model tests": ("test_chocolate_etching.gd", "Chocolate etching tests: 211 checks, 0 failures"),
-    "chocolate driver tests": ("test_chocolate_etching_driver.gd", "Chocolate etching driver: 73 checks, 0 failures"),
-    "chocolate view tests": ("test_chocolate_etching_view.gd", "Chocolate etching view: 30 checks, 0 failures"),
+    "chocolate model tests": ("test_chocolate_etching.gd", "Chocolate etching tests: 217 checks, 0 failures"),
+    "chocolate driver tests": ("test_chocolate_etching_driver.gd", "Chocolate etching driver: 92 checks, 0 failures"),
+    "chocolate view tests": ("test_chocolate_etching_view.gd", "Chocolate etching view: 33 checks, 0 failures"),
     "chocolate Session tests": ("test_chocolate_etching_session.gd", "Chocolate etching Session: 55 checks, 0 failures"),
     "chocolate Main tests": ("test_chocolate_etching_main.tscn", "PASS: chocolate Main factory entrance, three-wheel and leftover idler results, fixed rewards, selected PNG I/O and reload"),
 }

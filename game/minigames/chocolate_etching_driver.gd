@@ -13,6 +13,7 @@ var _tool_source := ""
 var _rounds := 0
 var _time_phase := "noon"
 var _reduced_motion := false
+var _presented_stock_revision := -1
 
 func reset(assisted: bool, time_phase: String) -> void:
 	clear_input()
@@ -25,6 +26,7 @@ func create_view() -> Control:
 		return null
 	if not is_instance_valid(_view):
 		_view = View.new()
+		_presented_stock_revision = -1
 		_view.input_requested.connect(handle_input)
 		_view.clear_requested.connect(clear_input)
 		_view.tree_exiting.connect(clear_input)
@@ -165,7 +167,7 @@ func snapshot() -> Dictionary:
 	for i in 3:
 		freed += int(state.parts[i].freed)
 	state["main_freed"] = freed
-	state["progress_text"] = "主輪 %d / 3 · 出口 %d%%" % [freed, floori(100.0 * state.output_travel / TAU)]
+	state["progress_text"] = "主輪 %d / 3 · 出口 %d%%" % [freed, state.output_percent]
 	state["time_text"] = "%d 秒" % ceili(state.remaining)
 	state["feedback_text"] = str(state.feedback)
 	state["held_commands"] = _keys.values()
@@ -177,7 +179,11 @@ func present(time_phase: String, reduced_motion: bool) -> void:
 	_time_phase = time_phase
 	_reduced_motion = reduced_motion
 	if is_instance_valid(_view):
-		_view.present(snapshot(), time_phase, reduced_motion)
+		var state := snapshot()
+		if _presented_stock_revision != state.stock_revision:
+			state["stock_strokes"] = _model.stock_strokes()
+			_presented_stock_revision = state.stock_revision
+		_view.present(state, time_phase, reduced_motion)
 
 func score_summary(practice: bool) -> Dictionary:
 	var state := snapshot()

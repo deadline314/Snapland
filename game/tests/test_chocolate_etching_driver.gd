@@ -36,7 +36,8 @@ func _run() -> void:
 	_check_boundaries()
 	_check_mouse_cancellation()
 	_check_shaft_isolation()
-	_check_leftover_margin()
+	_check_fine_placement()
+	await _check_leftover_margin()
 	print("Chocolate etching driver: %d checks, %d failures" % [checks, failures])
 	quit(int(failures != 0))
 
@@ -49,6 +50,7 @@ func check(ok: bool, message: String) -> void:
 # The native fixture supplies a dispatcher that parses into the focused Control.
 # The same route uses actual Godot event objects at the Driver boundary in headless tests.
 class Route:
+	const MARGIN_CUT_A := [Vector2(344.353881835938, 288.465301513672), Vector2(350.608642578125, 283.477508544922)]
 	const KEY_FOR := {
 		"left": KEY_A, "right": KEY_D, "up": KEY_W, "down": KEY_S,
 		"select": KEY_TAB, "shallow": KEY_Q, "deep": KEY_E, "tool": KEY_SPACE,
@@ -600,6 +602,51 @@ func _check_shaft_isolation() -> void:
 			if i != pivot_index:
 				route.place(i, connected.parts[i].position)
 
+func _check_fine_placement() -> void:
+	for source: String in ["pointer", "touch"]:
+		var route := Route.new(source, false, 0)
+		check(route.craft(false), source + " three genuine wheels for shaft correction")
+		route.arrange(false)
+		var pin: Vector2 = route.driver.snapshot().pins[0]
+		# Place the middle wheel at both measured pitch distances for the intended corrected input.
+		var wheels: Array = route.driver.snapshot().parts
+		var corrected_input := pin + Vector2(2, 0)
+		var span: float = corrected_input.distance_to(wheels[2].position)
+		var first: float = wheels[0].pitch_radius + wheels[1].pitch_radius
+		var second: float = wheels[1].pitch_radius + wheels[2].pitch_radius
+		var x := (span * span + first * first - second * second) / (2.0 * span)
+		route.place(1, corrected_input + Vector2(x, -sqrt(first * first - x * x)))
+		route.place(0, pin + Vector2(4, 0))
+		route.place(0, pin + Vector2(2, 0))
+		var corrected: Dictionary = route.driver.snapshot()
+		check(corrected.parts[0].mounted and corrected.parts[0].position.distance_to(pin + Vector2(2, 0)) < 0.001,
+			source + " two-unit correction mounts the input inside shaft tolerance")
+		route.command("tool", true)
+		route.advance(0.25)
+		route.command("tool", false)
+		var turning: Dictionary = route.driver.snapshot()
+		check(turning.output_travel > 0, source + " corrected input transmits to the outlet")
+		var at: Vector2 = route.view.board_to_design(turning.parts[0].position)
+		var away: Vector2 = at + Vector2(15, 7)
+		route.pointer(at, true, route.finger())
+		route.motion(away, route.finger())
+		route.pointer(away, false, route.finger(), true)
+		route.place(0, turning.parts[0].position)
+		var unchanged: Dictionary = route.driver.snapshot()
+		check(unchanged.parts == turning.parts and unchanged.output_travel == turning.output_travel and unchanged.undo_available == turning.undo_available,
+			source + " canceled drag and identical round-trip drop preserve placement, angle, history and progress")
+		route.key(KEY_F, true)
+		route.key(KEY_F, false)
+		check(not route.driver.snapshot().parts[0].mounted and route.driver.snapshot().output_travel == 0.0, source + " explicit F removes the corrected wheel")
+		route.tap("undo")
+		check(route.driver.snapshot().parts[0].mounted, source + " undo restores explicit unmount")
+		route.tap("fold")
+		check(not route.driver.snapshot().parts[0].mounted, source + " explicit on-screen fold removes mounted wheel")
+		route.tap("undo")
+		route.tap("undo")
+		check(route.driver.snapshot().parts[0].position.distance_to(pin + Vector2(4, 0)) < 0.001,
+			source + " one undo crosses the real correction after cancel and identical drop")
+
 func _check_leftover_margin() -> void:
 	var route := Route.new("pointer", false, 0)
 	var footprints: Array[PackedVector2Array] = []
@@ -631,13 +678,19 @@ func _check_leftover_margin() -> void:
 	if intrusion.is_empty():
 		check(false, "no proven fourth removal-only kerf band could be constructed")
 		return
+	var view: Control = route.driver.create_view()
+	if view != null:
+		root.add_child(view)
+	check(intrusion[0].distance_to(Route.MARGIN_CUT_A[0]) < 0.001 and intrusion[1].distance_to(Route.MARGIN_CUT_A[1]) < 0.001,
+		"actual removal-only kerf reproduces the native pixel probe")
+	check(route.cut(1) and route.cut(2), "two genuine main folds before the undoable margin cut")
 	route.select(0)
 	route.trace(intrusion, false)
 	var owner: Dictionary = route.driver.snapshot()
 	var committed: Dictionary = owner.selected_strokes[0]
 	check(Geometry.kerf_intrudes(committed.points, committed.width / 2.0, removal)
 		and not Geometry.kerf_intrudes(committed.points, committed.width / 2.0, retained), "actual other-piece kerf intersects removal margin and clears retained idler")
-	if not route.craft(false):
+	if not route.cut(0):
 		check(false, "margin case must still cut all three main wheels")
 		return
 	var main_clear := true
@@ -646,6 +699,45 @@ func _check_leftover_margin() -> void:
 		main_clear = main_clear and not Geometry.kerf_intrudes(committed.points, committed.width / 2.0, footprint)
 		main_clear = main_clear and not Geometry.overlaps(removal, footprint)
 	check(main_clear, "actual removals and actual other-piece kerf stay disjoint from each other and prospective idler removal")
+	var hole_point: Vector2 = route.driver.snapshot().selected_guides[0][7]
+	route.select(3)
+	if view != null:
+		await _check_stock_frame(route, "idler", hole_point, true)
+	route.select(0)
+	if view != null:
+		await _check_stock_frame(route, "owner", hole_point, true)
 	check(not route.cut(3) and route.driver.snapshot().feedback.contains("惰輪耗料範圍碰到其他片的舊切縫"), "actual fourth fold specifically refuses other-piece kerf in removal-only band")
 	print("LEFTOVER_MARGIN ", JSON.stringify({"owner": 0, "line": Array(committed.points).map(func(p): return [p.x, p.y]),
 		"half_width": committed.width / 2.0, "retained": retained.size(), "removal": removal.size(), "feedback": route.driver.snapshot().feedback}))
+	# Two idler contours, the owner fold and its two contours precede the original open cut.
+	for _i in 6:
+		route.tap("undo")
+	route.select(0)
+	check(route.driver.snapshot().selected_strokes.is_empty(), "undo reaches the original margin cut")
+	if view != null:
+		await _check_stock_frame(route, "undone", hole_point, false)
+		view.queue_free()
+		await process_frame
+
+func _check_stock_frame(route: Route, label: String, hole: Vector2, marked: bool) -> void:
+	route.driver.present("noon", false)
+	await process_frame
+	await RenderingServer.frame_post_draw
+	var image := root.get_texture().get_image()
+	var transform := root.get_final_transform()
+	var midpoint: Vector2 = Route.MARGIN_CUT_A[0].lerp(Route.MARGIN_CUT_A[1], 0.5)
+	var heat := heat_pixel_count(image, transform * route.view.board_to_design(midpoint))
+	var in_hole := heat_pixel_count(image, transform * route.view.board_to_design(hole))
+	print("STOCK_FRAME ", label, " heat=", heat, " hole_heat=", in_hole)
+	check((heat > 0) == marked and in_hole == 0, label + " real frame locates only the remaining stock burn")
+	check(image.save_png(OS.get_environment("CHOCOLATE_CAPTURE_DIR").path_join(label + ".png")) == OK, "write raw stock regression frame")
+
+static func heat_pixel_count(image: Image, pixel: Vector2) -> int:
+	# A half-depth burn has a distinct orange center, including at the compact viewport.
+	var count := 0
+	for y in range(-2, 3):
+		for x in range(-2, 3):
+			var color := image.get_pixelv(Vector2i(pixel) + Vector2i(x, y))
+			if absi(color.r8 - 248) <= 10 and absi(color.g8 - 171) <= 10 and absi(color.b8 - 112) <= 10:
+				count += 1
+	return count
