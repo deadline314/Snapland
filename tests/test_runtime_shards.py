@@ -84,6 +84,16 @@ class RuntimeShardTests(unittest.TestCase):
             self.assertNotRegex(job, r"(?m)^\s+(?:if|continue-on-error):")
             self.assertIn("Godot_v4.7.2-stable_linux.x86_64.zip", job)
 
+    def test_scheduled_runs_do_not_cancel_change_runs(self) -> None:
+        workflow = (runner.ROOT / ".github/workflows/full-tests.yml").read_text(encoding="utf-8")
+        concurrency = workflow.split("\nconcurrency:\n", 1)[1].split("\n\njobs:", 1)[0]
+        self.assertIn(
+            "group: full-tests-${{ github.ref }}-${{ github.event_name == 'schedule' && 'scheduled' || 'changes' }}",
+            concurrency,
+        )
+        self.assertIn("cancel-in-progress: true", concurrency)
+        self.assertIn("    - cron: '17 * * * *'", workflow)
+
     def test_membership_does_not_depend_on_other_labels_or_input_order(self) -> None:
         count = 4
         before = [runner.select_checks(self.checks, shard_index=i, shard_count=count)[1:] for i in range(count)]
