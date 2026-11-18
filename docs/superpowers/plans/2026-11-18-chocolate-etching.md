@@ -31,7 +31,7 @@
 
 ## Task 1: Bounded drawn geometry and pure transmission model
 
-**Ownership:** create game/minigames/chocolate_etching_geometry.gd, chocolate_etching_model.gd; game/tests/test_chocolate_etching.gd. Private .review/chocolate-etching-20261118/model and freshD only. No Driver/View/integration/assets/PM/docs/Git/subagents.
+**Ownership:** create game/minigames/chocolate_etching_geometry.gd, chocolate_etching_model.gd; game/tests/test_chocolate_etching.gd. The consumer-discovered precision follow-up may additionally own only game/tests/chocolate_assisted_keyboard_replay.json as actual input-replay data, if needed. Private .review/chocolate-etching-20261118/model and freshD only. No Driver/View/integration/assets/PM/docs/Git/subagents.
 **Interfaces:** exact ChocolateEtchingModel API/snapshot in authority; geometry helper domain-local, no generic framework. Later tasks consume frozen public operations and snapshots, no private state injection. Use house jelly_trampoline_model/SceneTree tests and existing launch/stage helpers as patterns, not source-copy blanket replacements.
 
 - [ ] Write missing-Model/geometry meaningful RED fixture first. Execute the exact test filename through validated4.7.2 in fresh trackedD+explicitfixture before product code, preserve actual commands/env/exit/logs. Do not count a wrong entrypoint/import/parser failure as an executed behavioral RED.
