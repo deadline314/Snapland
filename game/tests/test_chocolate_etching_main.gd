@@ -20,6 +20,11 @@ func _ready() -> void:
 func check(ok: bool, message: String) -> void:
 	if not ok: failures.append(message)
 
+func _check_chocolate_invitation(entry: String) -> void:
+	var title := main.overlay.find_child("InviteTitle", true, false) as Label
+	check(main.modal_kind == "game_info" and is_instance_valid(title) and title.is_visible_in_tree()
+		and title.text == "巧克力蝕刻", entry + " opens the visible Chocolate Etching invitation")
+
 func _run() -> void:
 	check(Catalog.find("game-029").get("mode", "") == "chocolate_etching", "game-029 must be delivered before Chocolate Main integration can run")
 	if not failures.is_empty():
@@ -51,14 +56,16 @@ func _run() -> void:
 	for i in 3: await get_tree().physics_frame
 	check(main.world.nearest.get("id", "") == "game-029", "actual factory footing selects the physical fifth entrance")
 	await Keys.key(get_viewport(), KEY_E)
-	check(main.modal_kind == "game_info", "actual E opens the physical Chocolate Etching invitation")
+	_check_chocolate_invitation("actual E at the physical station")
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	get_window().content_scale_size = Vector2i(800, 600)
 	get_window().size = Vector2i(800, 600)
 	Progress.settings["ui_scale"] = 1.25
 	Progress.settings["reduced_motion"] = true
 	Paper.set_text_scale(1.25)
-	main._show_game_rules("game-029")
+	var rules := main.overlay.find_child("InviteRules", true, false) as Button
+	check(is_instance_valid(rules) and rules.is_visible_in_tree() and not rules.disabled, "physical invitation offers its visible rules button")
+	if is_instance_valid(rules): await Keys.activate(rules)
 	await _frames()
 	check(get_viewport().get_visible_rect().size == Vector2(800, 600), "rules use the actual800x600 viewport")
 	var pager: Control = main.overlay.find_child("GameRulesExtraDetails", true, false)
@@ -95,8 +102,10 @@ func _run() -> void:
 		action.grab_focus()
 		check(action.has_focus(), "regional map action is keyboard focusable")
 		await Keys.activate(action)
-	check(main.modal_kind == "game_info", "map routes through normal invitation")
-	main._request_game_start("game-029", false)
+	_check_chocolate_invitation("focused map action")
+	var start := main.overlay.find_child("InviteStart", true, false) as Button
+	check(is_instance_valid(start) and start.is_visible_in_tree() and not start.disabled, "map invitation offers its visible start button")
+	if is_instance_valid(start): await Keys.activate(start)
 	await _frames()
 	check(is_instance_valid(main.tutorial_panel) and main.tutorial_target == "game-029", "first entry opens Chocolate Etching lesson")
 	main._tutorial_start("game-029")
@@ -166,7 +175,8 @@ func _retake_after_reset(devil: bool) -> void:
 	if main.session == null: return
 	main.session._leave_from_hud()
 	check(main.modal_kind == "retake" and main.retake_target == {"id":"game-029", "devil":devil}, "practice cancel restores selected candy retake")
-	if main.retake_panel == null: return
+	check(is_instance_valid(main.retake_panel), "selected %s retake mounts its capture panel" % photo_id)
+	if not is_instance_valid(main.retake_panel): return
 	var panel: Control = main.retake_panel
 	check(panel._valid and panel._props.size() == 3 and not panel._next.disabled, "candy retake has a valid real set before image persistence")
 	if not panel._valid: return

@@ -734,7 +734,7 @@
       "revision": "重設",
       "revision_reason": "以實際切深、剩料與量測輪廓決定傳動，深切速度與保留剩料形成取捨。現行單人程式仍需完整驗收。",
       "implementation": "single_player_runtime_needs_full_acceptance",
-      "demon_assist_policy": "普通與惡魔收藏均可使用輔助與AI夾持，仍須手動切割、折料、放置及轉滿一圈。",
+      "demon_assist_policy": "普通與小惡魔皆可使用輔助與AI夾持。正式遊玩時，實際提交至少8單位長、切入尚存板材的熱線後自然結算，包含逾時，即可收藏普通拍貼。小惡魔須從剩料切出第四輪，讓它與三個主輪同在輸入至出口的路徑上，並帶動出口轉滿一圈。",
       "runtime_mode": "chocolate_etching"
     },
     {

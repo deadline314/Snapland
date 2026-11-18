@@ -264,19 +264,21 @@ SYRUP_SUITES = {
     "syrup Session tests": ("test_syrup_flood_session.gd", "Syrup flood Session: 46 checks, 0 failures"),
     "syrup Main tests": ("test_syrup_flood_main.tscn", "PASS: syrup Main factory entry, three real filled closed tanks, fixed rewards, selected retake originals and reload"),
 }
-JELLY_SUITES = {
+CHOCOLATE_SUITES = {
     "chocolate model tests": ("test_chocolate_etching.gd", "Chocolate etching tests: 211 checks, 0 failures"),
     "chocolate driver tests": ("test_chocolate_etching_driver.gd", "Chocolate etching driver: 73 checks, 0 failures"),
     "chocolate view tests": ("test_chocolate_etching_view.gd", "Chocolate etching view: 30 checks, 0 failures"),
     "chocolate Session tests": ("test_chocolate_etching_session.gd", "Chocolate etching Session: 55 checks, 0 failures"),
     "chocolate Main tests": ("test_chocolate_etching_main.tscn", "PASS: chocolate Main factory entrance, three-wheel and leftover idler results, fixed rewards, selected PNG I/O and reload"),
+}
+JELLY_SUITES = {
     "jelly model tests": ("test_jelly_trampoline.gd", "Jelly trampoline tests: 215 checks, 0 failures"),
     "jelly driver tests": ("test_jelly_trampoline_driver.gd", "Jelly trampoline driver: 78 checks, 0 failures"),
     "jelly view tests": ("test_jelly_trampoline_view.gd", "Jelly trampoline view: 83 checks, 0 failures"),
     "jelly Session tests": ("test_jelly_trampoline_session.gd", "Jelly trampoline Session: 52 checks, 0 failures"),
     "jelly Main tests": ("test_jelly_trampoline_main.tscn", "PASS: jelly Main factory entry, three real deliveries and same-fruit bell, fixed rewards, selected retake originals and reload"),
 }
-DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES
+DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES | CHOCOLATE_SUITES
 
 
 class RegionalDriverRunnerTests(unittest.TestCase):
