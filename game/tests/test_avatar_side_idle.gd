@@ -16,6 +16,20 @@ func _run() -> void:
 	world.set_process(false)
 	world.set_physics_process(false)
 	var library = world.avatar_renderer.animation_library
+	for direction in world.avatar_renderer.WALK_DIRECTIONS:
+		world.facing = direction
+		var spec: Dictionary = world.avatar_renderer._stable_idle_pixels.manifest["hero-idle/" + direction]
+		var time_mid_pose := float(spec.frame_durations[0]) + 0.05
+		_check(world.avatar_renderer.idle_frame_for_time(direction, time_mid_pose) > 0, "fixture intersects the old mid-idle clock")
+		world.time = time_mid_pose
+		world.avatar_is_walking = true
+		world._refresh_avatar_texture(7)
+		world.avatar_is_walking = false
+		world._refresh_avatar_texture(7)
+		_check(world.last_avatar_frame == 0, direction + " enters the authored neutral pose after walking")
+		world.time += time_mid_pose
+		world._refresh_avatar_texture(7)
+		_check(world.last_avatar_frame == 1, direction + " breathes after the full neutral hold")
 	for direction in ["left", "right", "front_left", "front_right", "back_left", "back", "back_right"]:
 		_check(library.has_action("traveller", "idle", direction), direction + " has dedicated full-body idle")
 		if not library.has_action("traveller", "idle", direction): continue
@@ -45,6 +59,26 @@ func _run() -> void:
 		left_entry["frame_durations"] = invalid
 		_check(not library.has_action("traveller", "idle", "left"), "malformed explicit timing cannot select an authored action")
 	left_entry["frame_durations"] = original_durations
+	world.reduced_motion = false
+	world.facing = "left"
+	world.avatar_is_walking = true
+	world._refresh_avatar_texture(0)
+	world.avatar_is_walking = false
+	world._refresh_avatar_texture(0)
+	world.time += 2.25
+	world._refresh_avatar_texture(0)
+	_check(world.last_avatar_frame == 2, "stationary player reaches the blink")
+	var blink_time := world.time
+	world.blocked = true
+	world._process(0.5)
+	var equipped := world.avatar_equipped.duplicate(true)
+	equipped["hat"] = "hat-straw"
+	world.set_avatar_look(world.avatar_appearance, equipped)
+	_check(world.time == blink_time and world.last_avatar_frame == 2, "pause and changing hats preserve the current idle phase")
+	world.apply_settings({"reduced_motion": true})
+	_check(world.last_avatar_frame == 0, "reduced motion immediately restores the neutral pose")
+	world.apply_settings({"reduced_motion": false})
+	_check(world.last_avatar_frame == 0, "re-enabling motion starts with the neutral hold")
 	_check(world.avatar_motion_rig == null, "dedicated side idle keeps procedural gait disabled")
 	world.queue_free()
 	await process_frame

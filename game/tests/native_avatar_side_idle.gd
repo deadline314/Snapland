@@ -6,6 +6,9 @@ func _store_capture(label: String, image: Image, framing: Dictionary = {}) -> vo
 	super._store_capture(_look_capture_prefix + "-" + label, image, framing)
 
 func _hero_actions() -> void:
+	# This fixture compares original whole poses pixel for pixel.
+	_world.set_avatar_hair_motion_enabled(false)
+	_report["hair_motion_enabled_for_pose_comparison"] = false
 	var original_appearance: Dictionary = _world.avatar_appearance.duplicate(true)
 	var original_equipped: Dictionary = _world.avatar_equipped.duplicate(true)
 	var looks := [{"appearance": original_appearance, "equipped": original_equipped}]
@@ -36,6 +39,13 @@ func _hero_actions() -> void:
 			walk["main_modal"] = _main.modal_kind
 			walk["facing_after_input"] = _world.facing
 			await _record_action("side-walk-" + str(look_index), "walk", direction, "authored-walk-atlas", _actor_anchor(), bool(walk.complete) and bool(settle.complete), walk)
+			var entry_frame: int = _world.last_avatar_frame
+			var old_absolute_frame: int = _world.avatar_renderer.idle_frame_for_time(direction, _world.time)
+			await _record_action("first-neutral-" + str(look_index), "idle", direction, "authored", _actor_anchor(),
+				entry_frame == 0 and _hero_sprite_source_consistent(),
+				{"frame": entry_frame, "old_absolute_frame": old_absolute_frame, "world_time": _world.time})
+			await _capture("first-neutral-" + direction)
+			await RenderingServer.frame_post_draw
 			_begin_observation("idle", "")
 			var start := _simulated_seconds
 			var anchor := _actor_anchor()
@@ -43,8 +53,10 @@ func _hero_actions() -> void:
 			var sprite_start: Vector3 = _world.avatar.global_position
 			var root_drift := 0.0
 			var sprite_drift := 0.0
-			while _simulated_seconds - start < 3.05 and _within_budget():
-				await _frames(1)
+			var idle_spec: Dictionary = _world.avatar_renderer._stable_idle_pixels.manifest["hero-idle/" + direction]
+			var idle_duration := AnimationLibraryScript.AnimationTiming.duration(idle_spec)
+			while _simulated_seconds - start < idle_duration + 0.15 and _within_budget():
+				await RenderingServer.frame_post_draw
 				root_drift = maxf(root_drift, root_start.distance_to(_world.player.global_position))
 				sprite_drift = maxf(sprite_drift, sprite_start.distance_to(_world.avatar.global_position))
 			var rendered := _end_observation()

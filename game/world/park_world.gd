@@ -52,6 +52,7 @@ var last_avatar_direction := ""
 var last_avatar_frame := -1
 var last_avatar_action := ""
 var last_avatar_source_action := ""
+var _avatar_idle_started_at := 0.0
 var camera: Camera3D
 var sun: DirectionalLight3D
 var environment: Environment
@@ -2578,14 +2579,16 @@ func _refresh_avatar_texture(frame: int) -> void:
 	avatar.visible=true
 	var display_frame := _ride_pose_frame() if riding else frame
 	var texture_action := action
-	if action == "idle" and not avatar_renderer.has_authored_action("idle", direction) and avatar_renderer.has_walk_atlas():
-		# Directions without a dedicated idle sequence hold that direction's
-		# authored walk stance; don't leave the loop on an arbitrary phase cel.
-		display_frame=avatar_renderer.walk_idle_frame(direction)
-		texture_action="walk"
-	if action == "idle" and avatar_renderer.has_authored_action("idle", direction):
-		var animation_library = avatar_renderer.animation_library
-		display_frame=avatar_renderer.idle_frame_for_time(direction,time,reduced_motion)
+	if action == "idle":
+		if avatar_renderer.has_authored_action("idle", direction):
+			# Start settled instead of entering halfway through a breath or blink.
+			if last_avatar_source_action != "idle" or last_avatar_direction != direction or reduced_motion:
+				_avatar_idle_started_at = time
+			display_frame = avatar_renderer.idle_frame_for_time(direction, time - _avatar_idle_started_at, reduced_motion)
+		elif avatar_renderer.has_walk_atlas():
+			# Missing idle art keeps the authored walk stance for this heading.
+			display_frame = avatar_renderer.walk_idle_frame(direction)
+			texture_action = "walk"
 	if action != "walk" and action != "idle" and not riding:
 		var animation_library = avatar_renderer.animation_library
 		if _has_authored_avatar_action(action, direction):
