@@ -14,7 +14,7 @@
 - [x] 至少六個不同來源比較逐幀、骨架插值與立體烘焙，記錄實際觀察、採用理由及參考圖。
 - [ ] 主角八方向與NPC動作有足夠且有意義的過渡，連續播放沒有明顯輪播、姿態跳變或錯誤淡化重影。
 - [ ] 髮束、臉、相機、包袋、服裝、部件比例及完整身體在動作中一致，停走、轉向及換装正常。
-- [ ] 原生正常速度與慢放短片、姿勢／部件對照及局部性能、降低動態與打包驗證附票。
+- [x] 原生正常速度與慢放短片、姿勢／部件對照及局部性能、降低動態與打包驗證附票。
 
 ### Research
 已閱讀並比較 Aseprite 的[動畫時間軸](https://www.aseprite.org/docs/animation)與[洋蔥皮](https://www.aseprite.org/docs/onion-skinning/)、Pixel Joint 的[eishiya 步態回饋](https://pixeljoint.com/forum/forum_posts.asp?PID=215709&TID=25611)、Raymond Schlitter 的[步態示範](https://www.slynyrd.com/blog/2020/1/23/pixelblog-25-motion-cycles)、[UNM 四個步態姿勢課程](https://swardson.com/unm/animation1/mod13-walkcycle.php)、Godot 的[2D骨架](https://docs.godotengine.org/en/4.7/tutorials/animation/2d_skeletons.html)與[Sprite3D](https://docs.godotengine.org/en/4.7/classes/class_sprite3d.html)、Spine 的[權重](https://us.esotericsoftware.com/spine-weights)、[IK](https://esotericsoftware.com/spine-ik-constraints)與[關鍵影格插值](https://en.esotericsoftware.com/spine-graph)，以及 Motion Twin 的[Dead Cells 3D烘焙流程](https://www.gamedeveloper.com/production/art-design-deep-dive-using-a-3d-pipeline-for-2d-animation-in-i-dead-cells-i-)。共 11 個來源頁、7 個網站；逐項觀察與採用／不採用理由見[動畫品質研究](../../design/runtime/animation-quality.md)。
@@ -304,3 +304,21 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 ![後腳收近並回到側站](images/ART-16-stop-20261119-settled.png)
 
 [正常速度影片](images/ART-16-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-stop-20261119-quarter.mp4) · [原生對照與打包證據](images/ART-16-stop-20261119-evidence.zip) · [程式與素材提交](https://github.com/deadline314/Snapland/commit/36410af65a347bd707b7166cfafacf80bac94bab)。
+
+## Commit — 2026-11-19 加快首次穿雨背心
+
+首次穿上雨背心仍會核對 185 格的原畫、衣料指紋及解碼安全。原畫直接使用原有的定位與裁切流程產生可校驗像素。共用同一原畫的舊慶祝姿勢只計算一次原畫指紋，完全相同的衣料也只解碼一次。各檔案仍各自驗證，衣料快取維持 12 張。
+
+| 項目 | 結果 |
+|---|---|
+| 首次換裝同機比較 | 舊版 1,056／1,047 ms，新版 781／790 ms。中位數從 1,051 降至 786 ms，少 25.2%。前後都以隔離的新程序與存檔重跑 |
+| 角色移動與記憶體 | 固定相同八方向腳本，測原裝、雨背心搭鮑伯頭與草帽，以及降低動態。衣裝驗證後建立的原畫 GPU 貼圖數從 61 降至 0，解碼衣料上限維持 4.62 MiB |
+| 容錯與封裝 | 5 組 Godot、213 項 Python 與 5 個設計範圍通過。核對全部 185 格及共用指紋／檔案遭替換時的回退。Windows 內嵌執行檔以預設渲染器重驗八方向及三種設定 |
+
+量測使用 Godot 4.7.2、Windows Forward+、AMD Radeon RX 9070 XT、1280×720 與實際畫面呈現時鐘。四輪順序為舊、新、新、舊，全程維持視窗焦點。此數據涵蓋單機局部換裝與移動。第一次封裝退出出現資源釋放診斷，驗證場景改為先釋放音訊與場景後重跑，最終為 0 ERROR、0 釋放診斷。[Godot 計量說明](https://docs.godotengine.org/en/4.7/classes/class_performance.html)
+
+本票的正常、慢放、姿勢、降低動態與封裝證據，以及主角與 NPC 的接話和換裝影片，可從上述各段與 [ART-17 動畫接續](<[ART-17]製作角色完整動畫與個性待機.md>) 檢視。
+
+![Windows 封裝中的雨背心](images/ART-16-garment-preflight-20261119.png)
+
+[配對量測、封裝、回歸與原生截圖](images/ART-16-garment-preflight-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/cdb68782bd60be1e217437de57187c9e915191a1)。
