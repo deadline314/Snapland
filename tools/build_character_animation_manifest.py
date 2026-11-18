@@ -16,6 +16,8 @@ ANNOUNCER_SIDE_SETTLE = ROOT / "assets/characters/announcer-settle-sides-v1.png"
 ANNOUNCER_SETTLE_SCALE = 0.40
 ANNOUNCER_SIDE_DEPARTURE = ROOT / "assets/characters/announcer-departure-sides-v1.png"
 ANNOUNCER_DEPARTURE_SHA256 = "93678ba1048aabd4777652f64842ee6ced9fc1c68381c0d7314a88bead811ee5"
+ANNOUNCER_STOP_LANDING = ROOT / "assets/characters/announcer-stop-landing-v1.png"
+ANNOUNCER_STOP_SHA256 = "9fa1593f039b9a4bdc7ca967bb2ffcf7e83b919480df73349ba59ee856bd28ba"
 IMP_SIDE_WALK = ROOT / "assets/characters/imp-walk-sides-v1.png"
 IMP_SIDE_SCALE = 0.395
 IMP_SIDE_SETTLE = ROOT / "assets/characters/imp-settle-sides-v1.png"
@@ -447,11 +449,16 @@ def add_route_departures(actor_data: dict) -> None:
         actor_data["depart"][direction] = entry
 
 
+def registered_frame_source(path: Path, sha256: str) -> str:
+    with path.open("rb") as stream:
+        if hashlib.file_digest(stream, "sha256").hexdigest() != sha256:
+            raise ValueError(f"{path.name} changed; review the authored anchors before rebuilding")
+    return "res://" + path.relative_to(ROOT).as_posix()
+
+
 def add_announcer_first_step(actor_data: dict) -> dict:
     """Append the registered short step to each of the two existing pivots."""
-    with ANNOUNCER_SIDE_DEPARTURE.open("rb") as stream:
-        if hashlib.file_digest(stream, "sha256").hexdigest() != ANNOUNCER_DEPARTURE_SHA256:
-            raise ValueError("announcer departure source changed; review the authored anchors before rebuilding")
+    source = registered_frame_source(ANNOUNCER_SIDE_DEPARTURE, ANNOUNCER_DEPARTURE_SHA256)
     poses = {
         "right": ([374, 24, 351, 674], [162, 665], [211, 9], 311 / 1312),
         "left": ([1330, 27, 351, 671], [166, 662], [143, 9], 305 / 1316),
@@ -459,12 +466,24 @@ def add_announcer_first_step(actor_data: dict) -> dict:
     for direction, (region, feet, head, source_scale) in poses.items():
         entry = actor_data["depart"][direction]
         entry["frames"].append({
-            "source": "res://" + ANNOUNCER_SIDE_DEPARTURE.relative_to(ROOT).as_posix(),
+            "source": source,
             "region": region, "anchors": {"feet": feet, "head": head},
             "source_scale": source_scale, "layers": [],
         })
         entry["frame_durations"] = [0.10, 0.10, 0.10, 0.04, 0.06]
     return {"source": ANNOUNCER_SIDE_DEPARTURE.relative_to(ROOT).as_posix(), "frame_count": len(poses)}
+
+
+def add_announcer_left_landing(actor_data: dict) -> dict:
+    source = registered_frame_source(ANNOUNCER_STOP_LANDING, ANNOUNCER_STOP_SHA256)
+    entry = actor_data["settle"]["left"]
+    entry["frames"].insert(0, {
+        "source": source, "region": [1088, 123, 369, 668],
+        "anchors": {"feet": [188, 660], "head": [146, 9]},
+        "source_scale": 308 / 1302, "layers": [],
+    })
+    entry["frame_durations"] = [0.06, 0.04, 0.10, 0.10, 0.10]
+    return {"source": ANNOUNCER_STOP_LANDING.relative_to(ROOT).as_posix(), "frame_count": 1}
 
 
 def build() -> tuple[dict,dict]:
@@ -496,6 +515,7 @@ def build() -> tuple[dict,dict]:
     for role in ("ticket", "imp", "announcer"):
         add_route_departures(actors[role])
     reports["announcer"]["depart_side_atlas"] = add_announcer_first_step(actors["announcer"])
+    reports["announcer"]["stop_landing"] = add_announcer_left_landing(actors["announcer"])
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
@@ -512,7 +532,7 @@ def build() -> tuple[dict,dict]:
                     for direction, entry in directions.items():
                         actors[actor][action].setdefault(direction, entry)
     manifest={"schema_version":1,"description":"Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.","runtime_aliases":{"traveller":{"station_stand":"idle/front/frame_0 (same authored frame; not a separate animation)"},"ticket":{"special":"idle_gesture/front (runtime alias; no duplicate frames)"}},"coverage_notes":{"traveller":TRAVELLER_COVERAGE_NOTE,"traveller_outfit_coral":"Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.","ticket":"Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.","imp":"42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.","announcer":"Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."},"actors":actors}
-    manifest["coverage_notes"]["route_pivots"] = "All three NPCs share exact idle neutral endpoints and replay approved settle poses in reverse. The announcer adds one complete short step per side before walking."
+    manifest["coverage_notes"]["route_pivots"] = "All three NPCs share exact idle neutral endpoints and reverse the four pivot poses for departure. The announcer adds one short step per side before walking and one landing pose for the left stop."
     apply_authoring_metadata(manifest)
     return manifest,reports
 
@@ -574,7 +594,7 @@ def main() -> int:
             print("FAIL: "+"; ".join(failures),file=sys.stderr); return 1
         verified_regions = sum(
             report["frame_count"] + sum(report.get(action, {}).get("frame_count", 0)
-                                        for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas"))
+                                        for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas", "stop_landing"))
             for report in reports.values()
         )
         print(f"PASS: {verified_regions} authored regions verified; no synthetic frames")

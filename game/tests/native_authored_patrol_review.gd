@@ -56,7 +56,8 @@ func _observe_authored_patrol(role: String, observe_settle := false, observe_dep
 			if direction in settle_seen and consistent and not settle_seen[direction].has(index):
 				settle_seen[direction][index] = true
 				_store_capture("settle-%s-%d" % [direction,index], get_viewport().get_texture().get_image())
-		elif seen.right.size() == 4 and seen.left.size() == 4 and String(record.get("action", "")) in ["stand", "idle"] and String(record.direction) == "front" and (not observe_settle or (settle_seen.right.size() == 4 and settle_seen.left.size() == 4)):
+		elif seen.right.size() == 4 and seen.left.size() == 4 and String(record.get("action", "")) in ["stand", "idle"] and String(record.direction) == "front":
+			if observe_settle and (settle_seen.right.size() != _library.frame_count(role, "settle", "right") or settle_seen.left.size() != _library.frame_count(role, "settle", "left")): continue
 			if observe_departure and (depart_seen.right.size() != _library.frame_count(role, "depart", "right") or depart_seen.left.size() != _library.frame_count(role, "depart", "left")): continue
 			settled = true
 			break

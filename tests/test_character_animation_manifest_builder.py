@@ -22,7 +22,7 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
             for direction in ("right", "left"):
                 frames = after["actors"][role]["settle"][direction]["frames"]
                 self.assertEqual(after["actors"][role]["idle"]["front"]["frames"][0], frames[-1])
-                self.assertEqual(before["actors"][role]["settle"][direction]["frames"][:3], frames[:3])
+                self.assertEqual(before["actors"][role]["settle"][direction]["frames"][-4:-1], frames[-4:-1])
 
     def test_departures_reuse_complete_turn_sources_without_changing_other_actions(self):
         after, _ = BUILDER.build()
@@ -32,7 +32,7 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
                 self.assertEqual(5 if role == "announcer" else 4, len(departure.get("frames", [])))
                 self.assertFalse(departure["loop"])
                 self.assertNotIn("return_direction", departure)
-                self.assertEqual(list(reversed(after["actors"][role]["settle"][direction]["frames"])), departure["frames"][:4])
+                self.assertEqual(list(reversed(after["actors"][role]["settle"][direction]["frames"][-4:])), departure["frames"][:4])
                 if role == "announcer":
                     self.assertAlmostEqual(0.4, sum(departure["frame_durations"]))
                     self.assertEqual(5, len(departure["frame_durations"]))
@@ -42,10 +42,14 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
         after, reports = BUILDER.build()
         for direction in ("right", "left"):
             sequence = after["actors"]["announcer"].get("settle", {}).get(direction, {})
-            self.assertEqual(4, len(sequence.get("frames", [])))
+            self.assertEqual(5 if direction == "left" else 4, len(sequence.get("frames", [])))
             self.assertFalse(sequence["loop"])
             self.assertEqual("front", sequence["return_direction"])
             self.assertEqual(10, sequence["fps"])
+            if direction == "left":
+                self.assertAlmostEqual(0.4, sum(sequence["frame_durations"]))
+                self.assertEqual(5, len(sequence["frame_durations"]))
+                self.assertTrue(sequence["frames"][0]["source"].endswith("/announcer-stop-landing-v1.png"))
         self.assertEqual(8, reports["announcer"]["settle_side_atlas"]["frame_count"])
 
     def test_ticket_turn_is_finite_and_keeps_existing_sources_and_wardrobe(self):

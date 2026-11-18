@@ -15,7 +15,7 @@
     "ticket": "Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.",
     "imp": "42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.",
     "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered.",
-    "route_pivots": "All three NPCs share exact idle neutral endpoints and replay approved settle poses in reverse. The announcer adds one complete short step per side before walking."
+    "route_pivots": "All three NPCs share exact idle neutral endpoints and reverse the four pivot poses for departure. The announcer adds one short step per side before walking and one landing pose for the left stop."
   },
   "actors": {
     "traveller": {
@@ -14987,6 +14987,27 @@
           "loop": false,
           "frames": [
             {
+              "source": "res://assets/characters/announcer-stop-landing-v1.png",
+              "region": [
+                1088,
+                123,
+                369,
+                668
+              ],
+              "anchors": {
+                "feet": [
+                  188,
+                  660
+                ],
+                "head": [
+                  146,
+                  9
+                ]
+              },
+              "source_scale": 0.23655913978494625,
+              "layers": []
+            },
+            {
               "source": "res://assets/characters/announcer-settle-sides-v1.png",
               "region": [
                 129,
@@ -15086,7 +15107,14 @@
               "layers": []
             }
           ],
-          "return_direction": "front"
+          "return_direction": "front",
+          "frame_durations": [
+            0.06,
+            0.04,
+            0.1,
+            0.1,
+            0.1
+          ]
         }
       },
       "depart": {

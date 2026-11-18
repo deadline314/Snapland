@@ -23,9 +23,10 @@ func _run() -> void:
 			var before: int = controller._animation_library.cached_texture_count()
 			var departure: Dictionary = controller._animation_library.get_sequence(role, "depart", direction)
 			var neutral: Texture2D = controller._animation_library.texture(role, "idle", "front", 0)
-			_check(original.frames[3].texture.get_image().get_data() == neutral.get_image().get_data(), "turn endpoint and departure beginning retain the exact existing neutral pixels")
+			_check(original.frames.back().texture.get_image().get_data() == neutral.get_image().get_data(), "turn endpoint and departure beginning retain the exact existing neutral pixels")
 			for frame in range(4):
-				_check(departure.frames[frame].texture == original.frames[3-frame].texture and departure.frames[frame].anchors == original.frames[3-frame].anchors, "reverse playback shares the exact validated texture and its anchors")
+				var shared: Dictionary = original.frames[original.frames.size() - 1 - frame]
+				_check(departure.frames[frame].texture == shared.texture and departure.frames[frame].anchors == shared.anchors, "reverse playback shares the exact validated texture and its anchors")
 			var extra := 1 if role == "announcer" else 0
 			_check(controller._animation_library.cached_texture_count() == before + extra, "only the new step needs an additional GPU canvas")
 			if role == "announcer":
@@ -81,6 +82,10 @@ func _run() -> void:
 			_check(_until(controller, "walk") and fixture.actor.position.x > 0.0 and fixture.sprite.texture != null, "%s %s departure safely retains the original walking route" % [role, damage])
 			controller.release()
 			fixture.scene.free()
+	var damaged_landing := Library.new()
+	damaged_landing.manifest.actors.announcer.settle.left.frames[0].region = [99999, 0, 10, 10]
+	_check(not damaged_landing.get_sequence("announcer", "settle", "left").available, "a damaged landing suppresses the incomplete stop")
+	_check(damaged_landing.get_sequence("announcer", "depart", "left").available, "the separate left departure still resolves all shared pivots")
 	if not failures.is_empty():
 		push_error("NPC departure lifecycle failed: " + "; ".join(failures))
 		quit(1)
