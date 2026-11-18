@@ -15,7 +15,7 @@
     "ticket": "Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.",
     "imp": "42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.",
     "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered.",
-    "route_pivots": "All three NPCs share exact idle neutral endpoints and replay approved settle poses in reverse for grounded departures; no additional drawings."
+    "route_pivots": "All three NPCs share exact idle neutral endpoints and replay approved settle poses in reverse. The announcer adds one complete short step per side before walking."
   },
   "actors": {
     "traveller": {
@@ -15192,7 +15192,35 @@
               },
               "source_scale": 0.4,
               "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-departure-sides-v1.png",
+              "region": [
+                374,
+                24,
+                351,
+                674
+              ],
+              "anchors": {
+                "feet": [
+                  162,
+                  665
+                ],
+                "head": [
+                  211,
+                  9
+                ]
+              },
+              "source_scale": 0.23704268292682926,
+              "layers": []
             }
+          ],
+          "frame_durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.04,
+            0.06
           ]
         },
         "left": {
@@ -15297,7 +15325,35 @@
               },
               "source_scale": 0.4,
               "layers": []
+            },
+            {
+              "source": "res://assets/characters/announcer-departure-sides-v1.png",
+              "region": [
+                1330,
+                27,
+                351,
+                671
+              ],
+              "anchors": {
+                "feet": [
+                  166,
+                  662
+                ],
+                "head": [
+                  143,
+                  9
+                ]
+              },
+              "source_scale": 0.2317629179331307,
+              "layers": []
             }
+          ],
+          "frame_durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.04,
+            0.06
           ]
         }
       }

@@ -736,11 +736,11 @@ func _current_frame_index() -> int:
 	if _actor == "traveller": return int(_world.last_avatar_frame) if _live_texture_id() != 0 else -1
 	var record := _npc_record(_actor)
 	var sequence: Dictionary = record.get("action_sequence", {})
-	var frames: Array = sequence.get("frames", [])
-	if frames.is_empty(): return -1
-	var index := floori(float(record.get("action_elapsed", 0.0)) * maxf(0.01, float(sequence.get("fps", 1.0))))
-	if bool(sequence.get("loop", false)): return posmod(index, frames.size())
-	return mini(index, frames.size() - 1)
+	if sequence.get("frames", []).is_empty(): return -1
+	var elapsed := float(record.get("action_elapsed", 0.0))
+	if NpcActivityScript._is_breathing_loop(str(record.get("action", "")), sequence):
+		elapsed *= NpcActivityScript.breath_tempo(_actor)
+	return AnimationLibraryScript.AnimationTiming.frame_at_time(sequence, elapsed)
 
 func _sequence(action: String, direction: String) -> Dictionary:
 	return _library.get_sequence(_actor, action, direction) if _library != null else {}

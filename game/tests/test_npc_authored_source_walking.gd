@@ -202,7 +202,8 @@ func _run() -> void:
 	_check(imp_settle_seen.right.size() == 4 and imp_settle_seen.left.size() == 4, "imp naturally settles through all four full turn poses from both sides")
 	_check(ticket_persona and imp_persona, "ticket and imp naturally play persona actions during the two route cycles")
 	for role in departures:
-		_check(departures[role].right.size() == 4 and departures[role].left.size() == 4, "%s naturally presents both complete front-to-side departures" % role)
+		var frame_count := 5 if role == "announcer" else 4
+		_check(departures[role].right.size() == frame_count and departures[role].left.size() == frame_count, "%s naturally presents both complete front-to-side departures" % role)
 	_check(moved_right and moved_left, "announcer naturally moves in both directions while its route plays authored frames")
 	_check(announcer_settle_seen.right.size() == 4 and announcer_settle_seen.left.size() == 4, "announcer naturally shows all eight side-to-front stop poses")
 	_check(announcer_returned, "announcer naturally crosses its registered origin on the return path")

@@ -57,11 +57,11 @@ func _observe_authored_patrol(role: String, observe_settle := false, observe_dep
 				settle_seen[direction][index] = true
 				_store_capture("settle-%s-%d" % [direction,index], get_viewport().get_texture().get_image())
 		elif seen.right.size() == 4 and seen.left.size() == 4 and String(record.get("action", "")) in ["stand", "idle"] and String(record.direction) == "front" and (not observe_settle or (settle_seen.right.size() == 4 and settle_seen.left.size() == 4)):
-			if observe_departure and (depart_seen.right.size() != 4 or depart_seen.left.size() != 4): continue
+			if observe_departure and (depart_seen.right.size() != _library.frame_count(role, "depart", "right") or depart_seen.left.size() != _library.frame_count(role, "depart", "left")): continue
 			settled = true
 			break
 	var complete: bool = seen.right.size() == 4 and seen.left.size() == 4 and positions.size() > 8 and settled and all_consistent and maximum_departure_drift <= 0.00001
-	var observation := {"seen":seen, "settle_seen":settle_seen, "depart_seen":depart_seen, "departure_sources":"approved settle poses in reverse; no new drawings" if observe_departure else "not requested", "maximum_departure_root_drift":maximum_departure_drift, "samples":samples, "distinct_positions":positions.size(), "settled":settled, "source_consistent":all_consistent, "simulation_seconds":_simulated_seconds-start, "npc_root_repositioned":false}
+	var observation := {"seen":seen, "settle_seen":settle_seen, "depart_seen":depart_seen, "departure_sources":"validated complete depart sequence" if observe_departure else "not requested", "maximum_departure_root_drift":maximum_departure_drift, "samples":samples, "distinct_positions":positions.size(), "settled":settled, "source_consistent":all_consistent, "simulation_seconds":_simulated_seconds-start, "npc_root_repositioned":false}
 	_report["grounded_%s_patrol" % role] = observation
 	await _record_action("grounded-%s-patrol" % role, "walk", "right", "authored", _actor_anchor(), complete, observation)
 	await _capture("settled")

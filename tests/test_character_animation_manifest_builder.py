@@ -29,10 +29,14 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
         for role in ("ticket", "imp", "announcer"):
             for direction in ("right", "left"):
                 departure = after["actors"][role].get("depart", {}).get(direction, {})
-                self.assertEqual(4, len(departure.get("frames", [])))
+                self.assertEqual(5 if role == "announcer" else 4, len(departure.get("frames", [])))
                 self.assertFalse(departure["loop"])
                 self.assertNotIn("return_direction", departure)
-                self.assertEqual(list(reversed(after["actors"][role]["settle"][direction]["frames"])), departure["frames"])
+                self.assertEqual(list(reversed(after["actors"][role]["settle"][direction]["frames"])), departure["frames"][:4])
+                if role == "announcer":
+                    self.assertAlmostEqual(0.4, sum(departure["frame_durations"]))
+                    self.assertEqual(5, len(departure["frame_durations"]))
+                    self.assertTrue(departure["frames"][-1]["source"].endswith("/announcer-departure-sides-v1.png"))
 
     def test_announcer_turn_has_complete_finite_sources(self):
         after, reports = BUILDER.build()

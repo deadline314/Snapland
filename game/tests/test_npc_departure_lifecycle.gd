@@ -13,7 +13,7 @@ func _run() -> void:
 		var controller: Node = fixture.controller
 		var actor: Node3D = fixture.actor
 		var sprite: Sprite3D = fixture.sprite
-		if not controller._has_sequence(role,"depart","right"):
+		if not controller._animation_library.has_action(role, "depart", "right"):
 			_check(false,"Missing complete departure for "+role)
 			controller.release()
 			fixture.scene.free()
@@ -26,7 +26,11 @@ func _run() -> void:
 			_check(original.frames[3].texture.get_image().get_data() == neutral.get_image().get_data(), "turn endpoint and departure beginning retain the exact existing neutral pixels")
 			for frame in range(4):
 				_check(departure.frames[frame].texture == original.frames[3-frame].texture and departure.frames[frame].anchors == original.frames[3-frame].anchors, "reverse playback shares the exact validated texture and its anchors")
-			_check(controller._animation_library.cached_texture_count() == before, "departure does not allocate duplicate GPU canvases")
+			var extra := 1 if role == "announcer" else 0
+			_check(controller._animation_library.cached_texture_count() == before + extra, "only the new step needs an additional GPU canvas")
+			if role == "announcer":
+				_check(departure.frames.size() == 5 and Library.AnimationTiming.frame_at_time(departure, 0.36) == 4, "the short step is a full pose before the stride")
+				_check(is_equal_approx(Library.AnimationTiming.duration(departure), 0.4), "the short step retains the original departure duration")
 		_check(_until(controller, "depart"), "%s naturally starts an in-place departure" % role)
 		var elapsed: float = controller._records[0].action_elapsed
 		var picture := sprite.texture
@@ -92,9 +96,12 @@ func _fixture(role: String, damage := "") -> Dictionary:
 		var sequence: Dictionary = library.manifest.actors[role].depart.right
 		match damage:
 			"missing": library.manifest.actors[role].depart.erase("right")
-			"last_frame": sequence.frames[3].region = [99999,0,10,10]
+			"last_frame": sequence.frames.back().region = [99999,0,10,10]
 			"loop": sequence.loop = true
-			"duration": sequence.fps = 0.01
+			"duration":
+				sequence.frame_durations = [2.0]
+				for _frame in range(1, sequence.frames.size()):
+					sequence.frame_durations.append(0.10)
 			"return_direction": sequence.return_direction = "front"
 	var controller := Activity.new()
 	controller._animation_library = library

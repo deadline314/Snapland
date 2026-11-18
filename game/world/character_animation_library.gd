@@ -177,7 +177,7 @@ func texture(actor: String, action: String, direction: String, frame_index: int,
 		var source_index := 0
 		if action == "depart":
 			source_frames = _frames(actor, "settle", direction)
-			if source_frames.size() == frames.size():
+			if index < source_frames.size():
 				source_action = "settle"
 				source_index = source_frames.size() - 1 - index
 		elif action == "settle" and index == frames.size() - 1:
