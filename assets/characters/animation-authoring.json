@@ -20,7 +20,9 @@
         "back_right": 4
       },
       "wave": {
-        "front": 8
+        "front": 8,
+        "left": 5,
+        "right": 5
       },
       "photograph": {
         "front": 8

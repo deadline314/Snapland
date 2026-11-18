@@ -126,7 +126,7 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
 
     def test_full_build_preserves_separately_authored_actions_and_directions(self):
         before = json.loads(BUILDER.OUT.read_text(encoding="utf-8"))
-        before["actors"]["traveller"]["wave"]["left"] = {"fps": 2, "frames": [{"source": "separate-authoring-fixture"}]}
+        before["actors"]["traveller"]["wave"]["back"] = {"fps": 2, "frames": [{"source": "separate-authoring-fixture"}]}
         with tempfile.TemporaryDirectory() as temporary:
             manifest = Path(temporary) / "regions.json"
             manifest.write_text(json.dumps(before), encoding="utf-8")
@@ -134,8 +134,21 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
                 after, _ = BUILDER.build()
         for action in ("sit", "catch"):
             self.assertEqual(before["actors"]["traveller"][action], after["actors"]["traveller"].get(action))
-        self.assertEqual(before["actors"]["traveller"]["wave"]["left"], after["actors"]["traveller"]["wave"].get("left"))
+        self.assertEqual(before["actors"]["traveller"]["wave"]["back"], after["actors"]["traveller"]["wave"].get("back"))
         self.assertEqual(4, len(after["actors"]["traveller"]["idle"]["front_left"]["frames"]))
+
+    def test_profile_waves_match_wardrobe_coverage_and_neutral_endpoints(self):
+        manifest, _ = BUILDER.build()
+        waves = manifest["actors"]["traveller"]["wave"]
+        required = manifest["outfit_required_poses"]["traveller"]["wave"]
+        self.assertEqual({"front": 8, "left": 5, "right": 5}, required)
+        for direction in ("left", "right"):
+            clip = waves[direction]
+            self.assertFalse(clip["loop"])
+            self.assertAlmostEqual(0.8, sum(clip["frame_durations"]))
+            self.assertEqual(len(clip["frames"]), required[direction])
+            self.assertEqual(clip["frames"][0], clip["frames"][-1])
+            self.assertEqual(3, len({tuple(frame["region"]) for frame in clip["frames"][1:-1]}))
 
 
 if __name__ == "__main__":

@@ -104,6 +104,11 @@ func _run() -> void:
 
 	world.play_action("wave")
 	_check(world.avatar_motion_rig==null and world.avatar.visible and world.avatar_action=="wave","the source Sprite remains the gesture presenter")
+	for side in ["left", "right"]:
+		world.facing = side
+		world.play_action("wave")
+		_check(world.facing == side and world.last_avatar_direction == side and world.last_avatar_source_action == "wave", "the authored wave retains its side facing")
+		_check(is_equal_approx(world.avatar_action_remaining, 0.8), "each side plays the entire greeting")
 	world.avatar_action_remaining=0.0
 	world._refresh_avatar_texture(0)
 	_check(world.avatar_motion_rig==null and world.avatar.visible,"the source Sprite remains the walk and idle presenter after the gesture")

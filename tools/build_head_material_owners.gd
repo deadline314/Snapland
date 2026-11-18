@@ -38,7 +38,9 @@ func _initialize() -> void:
 			var count: int = renderer.walk_frame_count(direction) if action == "walk" else renderer.authored_frame_count(action,direction)
 			for frame in range(count): poses.append([action,direction,frame])
 	for action in ["wave","photograph","interact","jump","sit","catch","celebrate"]:
-		for frame in range(renderer.authored_frame_count(action,"front")): poses.append([action,"front",frame])
+		var directions := ["front", "left", "right"] if action == "wave" else ["front"]
+		for direction in directions:
+			for frame in range(renderer.authored_frame_count(action,direction)): poses.append([action,direction,frame])
 	var owners := {}
 	for pose in poses:
 		var source: Image = renderer._walk_pose_image(pose[1],pose[2]) if pose[0] == "walk" else renderer.animation_library.texture("traveller",pose[0],pose[1],pose[2]).get_image()

@@ -1553,6 +1553,96 @@
       "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
       "path": "res://assets/characters/rainvest-v1/celebrate-front_left-02.pngdata",
       "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
+    },
+    {
+      "action": "wave",
+      "direction": "left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "878ddf21aead3675f17c9b3a410b809ce32d5ec1600012d7e9f3732814ba8a4b",
+      "path": "res://assets/characters/rainvest-v1/idle-left-00.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "wave",
+      "direction": "left",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "9c1156aa1faa1a0cadb4c6ea12061224571ab1f0c39a82d0039b2f9ff3b95549",
+      "path": "res://assets/characters/rainvest-v1/idle-left-00.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "wave",
+      "direction": "left",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "39944f656717663f13a3047811e4385e0a03d8e30c533b0d05ddc46c7296c14c",
+      "path": "res://assets/characters/rainvest-v1/idle-left-00.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "wave",
+      "direction": "left",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "bb4d360e8c0f0e09935a849265b3fa09715d1961af6754a1222bf5de37b973c4",
+      "path": "res://assets/characters/rainvest-v1/idle-left-00.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "wave",
+      "direction": "left",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "878ddf21aead3675f17c9b3a410b809ce32d5ec1600012d7e9f3732814ba8a4b",
+      "path": "res://assets/characters/rainvest-v1/idle-left-00.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "wave",
+      "direction": "right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "bfcc7eeefcfed3551b3386cc9daa5be5938f9c21d7055592d3c9c76f246d8954",
+      "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "wave",
+      "direction": "right",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "b4a537be2b08147812cdf5bca6367de25fb482ad6a7c378efc52a0d1d45da45e",
+      "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "wave",
+      "direction": "right",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5c7e54f578348a82c13a7115da05434b6dd689db51c1ad90defd5cec9070d64d",
+      "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "wave",
+      "direction": "right",
+      "frame": 3,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a258bc96a478ee8a2f72a472aa070359c5b2804c9b2c710f0992da69ad42e1d7",
+      "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "wave",
+      "direction": "right",
+      "frame": 4,
+      "source_kind": "authored",
+      "source_pixel_sha256": "bfcc7eeefcfed3551b3386cc9daa5be5938f9c21d7055592d3c9c76f246d8954",
+      "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
     }
   ],
   "encoding": "png_bytes_without_import_conversion"

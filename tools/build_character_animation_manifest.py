@@ -10,6 +10,20 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets/characters/complete-animation-regions.json"
 AUTHORING = ROOT / "assets/characters/animation-authoring.json"
 TRAVELLER_VARIANT = ROOT / "assets/characters/traveller-vest-actions-v1.png"
+TRAVELLER_PROFILE_WAVES = {
+    "left": (
+        "832c0ed81f01ed9c9ebc79c933828816c0369fb118458a39a92502dd018be83c", 130,
+        (([249, 63, 314, 591], [153, 585], [150, 7]),
+         ([927, 63, 337, 591], [179, 585], [175, 7]),
+         ([1637, 63, 331, 591], [173, 585], [168, 7])),
+    ),
+    "right": (
+        "1c9d14ae8337283fb5854b3bc47bea0cbb6a10868dee09ebac794cb9ced1dc74", 150,
+        (([200, 61, 334, 589], [124, 584], [163, 8]),
+         ([923, 60, 338, 590], [125, 585], [164, 9]),
+         ([1647, 61, 326, 589], [125, 584], [164, 8])),
+    ),
+}
 ANNOUNCER_SIDE_WALK = ROOT / "assets/characters/announcer-walk-sides-v2.png"
 ANNOUNCER_SIDE_SCALE = 0.54
 ANNOUNCER_SIDE_SETTLE = ROOT / "assets/characters/announcer-settle-sides-v1.png"
@@ -456,6 +470,28 @@ def registered_frame_source(path: Path, sha256: str) -> str:
     return "res://" + path.relative_to(ROOT).as_posix()
 
 
+def add_traveller_profile_waves(actor_data: dict) -> dict:
+    """Keep the full directional idle posture at both ends of each greeting."""
+    for direction, (digest, neutral_head_x, poses) in TRAVELLER_PROFILE_WAVES.items():
+        path = ROOT / f"assets/characters/traveller-wave-{direction}-v1.png"
+        source = registered_frame_source(path, digest)
+        neutral = {
+            "source": f"res://assets/characters/idle-stability-v1/{direction}.png",
+            "region": [0, 0, 280, 360], "anchors": {"feet": [140, 346], "head": [neutral_head_x, 69]},
+            "source_scale": 0.625, "layers": [],
+        }
+        frames = [
+            {"source": source, "region": region, "anchors": {"feet": feet, "head": head},
+             "source_scale": 0.30, "layers": []}
+            for region, feet, head in poses
+        ]
+        actor_data["wave"][direction] = {
+            "fps": 10, "loop": False, "frame_durations": [0.12, 0.16, 0.24, 0.12, 0.16],
+            "frames": [neutral, *frames, copy.deepcopy(neutral)],
+        }
+    return {"frame_count": sum(len(item[2]) for item in TRAVELLER_PROFILE_WAVES.values())}
+
+
 def add_announcer_first_step(actor_data: dict) -> dict:
     """Append the registered short step to each of the two existing pivots."""
     source = registered_frame_source(ANNOUNCER_SIDE_DEPARTURE, ANNOUNCER_DEPARTURE_SHA256)
@@ -517,6 +553,7 @@ def build() -> tuple[dict,dict]:
     reports["announcer"]["depart_side_atlas"] = add_announcer_first_step(actors["announcer"])
     reports["announcer"]["stop_landing"] = add_announcer_left_landing(actors["announcer"])
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
+    reports["traveller"]["wave_side_atlas"] = add_traveller_profile_waves(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
     if OUT.exists():
@@ -594,7 +631,8 @@ def main() -> int:
             print("FAIL: "+"; ".join(failures),file=sys.stderr); return 1
         verified_regions = sum(
             report["frame_count"] + sum(report.get(action, {}).get("frame_count", 0)
-                                        for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas", "stop_landing"))
+                                        for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas",
+                                                       "stop_landing", "wave_side_atlas"))
             for report in reports.values()
         )
         print(f"PASS: {verified_regions} authored regions verified; no synthetic frames")

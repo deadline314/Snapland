@@ -1546,6 +1546,242 @@
               }
             }
           ]
+        },
+        "left": {
+          "fps": 10,
+          "loop": false,
+          "frame_durations": [
+            0.12,
+            0.16,
+            0.24,
+            0.12,
+            0.16
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/idle-stability-v1/left.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  130,
+                  69
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-wave-left-v1.png",
+              "region": [
+                249,
+                63,
+                314,
+                591
+              ],
+              "anchors": {
+                "feet": [
+                  153,
+                  585
+                ],
+                "head": [
+                  150,
+                  7
+                ]
+              },
+              "source_scale": 0.3,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-wave-left-v1.png",
+              "region": [
+                927,
+                63,
+                337,
+                591
+              ],
+              "anchors": {
+                "feet": [
+                  179,
+                  585
+                ],
+                "head": [
+                  175,
+                  7
+                ]
+              },
+              "source_scale": 0.3,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-wave-left-v1.png",
+              "region": [
+                1637,
+                63,
+                331,
+                591
+              ],
+              "anchors": {
+                "feet": [
+                  173,
+                  585
+                ],
+                "head": [
+                  168,
+                  7
+                ]
+              },
+              "source_scale": 0.3,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/idle-stability-v1/left.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  130,
+                  69
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "right": {
+          "fps": 10,
+          "loop": false,
+          "frame_durations": [
+            0.12,
+            0.16,
+            0.24,
+            0.12,
+            0.16
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/idle-stability-v1/right.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  150,
+                  69
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-wave-right-v1.png",
+              "region": [
+                200,
+                61,
+                334,
+                589
+              ],
+              "anchors": {
+                "feet": [
+                  124,
+                  584
+                ],
+                "head": [
+                  163,
+                  8
+                ]
+              },
+              "source_scale": 0.3,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-wave-right-v1.png",
+              "region": [
+                923,
+                60,
+                338,
+                590
+              ],
+              "anchors": {
+                "feet": [
+                  125,
+                  585
+                ],
+                "head": [
+                  164,
+                  9
+                ]
+              },
+              "source_scale": 0.3,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-wave-right-v1.png",
+              "region": [
+                1647,
+                61,
+                326,
+                589
+              ],
+              "anchors": {
+                "feet": [
+                  125,
+                  584
+                ],
+                "head": [
+                  164,
+                  8
+                ]
+              },
+              "source_scale": 0.3,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/idle-stability-v1/right.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  150,
+                  69
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
         }
       },
       "photograph": {
@@ -15406,7 +15642,9 @@
         "back_right": 4
       },
       "wave": {
-        "front": 8
+        "front": 8,
+        "left": 5,
+        "right": 5
       },
       "photograph": {
         "front": 8
