@@ -26,7 +26,7 @@ R 切換簡單 AI；它有實際第二支棒，在玩家之後處理未被玩家
 
 participated 要求玩家實際收到至少 1 材料，且曾真實平移至少 6、轉動至少 .5 rad；移游標、配置 AI、空轉或只等結束不算。自然正式結束且 participated 才有普通資格；普通遊戲目標仍是均勻成品，須清楚區分參與收藏與通關。練習／取消由既有 Session 排除獎勵。分數為每個達標段 100、均勻成品 100、實際接回且成品成功再 100、每次失誤扣 20，最低 0；乾淨普通 400／惡魔 500。
 
-公開 Model：reset(assisted:bool=false,variant:int=0)、set_motion(direction:Vector2)、move_stick_to(point:Vector2)、set_spin(direction:int)、finish()、toggle_helper()、clear_input()、step(delta:float)、snapshot()->Dictionary。move_stick_to 使用 (X,Z) 真實棒座標，拒絕非有限值；只更新位置、不憑瞬移掃線收絲。碰撞只在 step 中依前後有效位置檢查；每次移動需限正常速度／連續子步，不能傳送棒穿越整場掃光糖絲。Driver 的拖曳目標應逐步追隨、保留速度上限。snapshot 為獨立資料，含時間／結束／成功／參與／資格／分數／失誤／設定、棒位置／角度／角速度／三段 12 格／各段品質、風向／絲束前後點與可收量／AI 棒及材料／懸絲完整狀態／接回次數／守恆總量／feedback；不得含 Node、共享可變幾何或無界歷史。
+公開 Model：reset(assisted:bool=false,variant:int=0)、set_motion(direction:Vector2)、move_stick_to(point:Vector2)、set_spin(direction:int)、finish()、toggle_helper()、clear_input()、step(delta:float)、snapshot()->Dictionary。move_stick_to 接收 (X,Z) 真實棒座標作目標，拒絕非有限值；只設定目標，不立即改變棒位置或收絲。step 每個子步以相同 120 單位/秒上限追隨目標，並依前後有效位置檢查碰撞；不能傳送棒穿越整場掃光糖絲。set_motion 切回方向控制，clear_input 清除未到達目標；Driver 拖曳沿用這個目標追隨，不另抄運動學。snapshot 為獨立資料，含時間／結束／成功／參與／資格／分數／失誤／設定、棒位置／角度／角速度／三段 12 格／各段品質、風向／絲束前後點與可收量／AI 棒及材料／懸絲完整狀態／接回次數／守恆總量／feedback；不得含 Node、共享可變幾何或無界歷史。
 
 Driver 沿用 house reset/create_view/handle_input/clear_input/step/snapshot/present/score_summary。命令固定 left/right/near/far/spin_left/spin_right/finish/helper 共 8 個。W/↑ 靠近、S/↓ 遠離、A/D/左右鍵平移，Q 逆轉、E 或 Space 順轉，F 確認，R 切 AI；實體按鍵集合支援同義鍵及相反鍵釋放恢復，echo 不重複。鍵盤按住轉；單指／滑鼠點轉棒按鈕可鎖定轉動，放開後在 3D 工作區拖曳移棒，同鈕再點停止。移動按鈕按住有效。來源所有權清楚，第二指與合成滑鼠不得重複動作；暫停、失焦、取消、重設與離場清除移動及鎖定轉動。已收材料不因此消失。
 
