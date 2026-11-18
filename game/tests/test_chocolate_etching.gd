@@ -23,6 +23,7 @@ func _run() -> void:
 			var model = script.new()
 			_review_round_one(model)
 			_review_round_two(model)
+			_assisted_geometry_precision(model)
 			_material_tests(model)
 			_input_tests(model)
 			_network_tests(model)
@@ -651,3 +652,71 @@ func _review_round_two(model) -> void:
 			expect(stroke.size()==512 and stroke[-2]==c and stroke[-1]==a, "R4 round2 final available slot holds closure without overwriting endpoint")
 		else:
 			expect(state.selected_strokes.is_empty() and state.undo_available==0 and not state.participated and state.feedback=="封口需額外一點；請先撤銷", "R4 round2 full-cap closure fails explicitly without discarding a sample or raising cap")
+
+func _assisted_geometry_precision(model) -> void:
+	var geo = load("res://game/minigames/chocolate_etching_geometry.gd")
+	var pairs := [
+		[Vector2(203.350433349609,175.808456420898),Vector2(202.085968017578,176.940689086914),Vector2(201.142150878906,177.785827636719),Vector2(199.245437622070,179.484222412109)],
+		[Vector2(208.564117431641,208.860122680664),Vector2(209.828582763672,209.992355346680),Vector2(210.772399902344,210.837493896484),Vector2(212.669113159180,212.535888671875)]]
+	for pair in pairs:
+		var expected: float = pair[1].distance_to(pair[2])
+		for reverse_a in [false,true]:
+			for reverse_b in [false,true]:
+				var a: Vector2 = pair[1] if reverse_a else pair[0]
+				var b: Vector2 = pair[0] if reverse_a else pair[1]
+				var c: Vector2 = pair[3] if reverse_b else pair[2]
+				var d: Vector2 = pair[2] if reverse_b else pair[3]
+				expect(absf(geo.segment_distance(a,b,c,d)-expected)<0.00001 and absf(geo.segment_distance(c,d,a,b)-expected)<0.00001, "Core3 disjoint captured segments retain positive proper distance in both orders")
+	for segments in [
+		[Vector2(100,100),Vector2(110,110),Vector2(100,110),Vector2(110,100)],
+		[Vector2(100,100),Vector2(110,100),Vector2(105,100),Vector2(115,100)],
+		[Vector2(100,100),Vector2(110,100),Vector2(110,100),Vector2(110,110)]]:
+		expect(geo.segment_distance(segments[0],segments[1],segments[2],segments[3])==0.0, "Core3 genuine crossings, collinear overlap and endpoint contact remain zero")
+	expect(is_equal_approx(geo.segment_distance(Vector2(100,100),Vector2(110,100),Vector2(100,101),Vector2(110,101)),1.0), "Core3 parallel separated segments preserve their gap")
+	var hole := PackedVector2Array([Vector2(102,99),Vector2(108,99),Vector2(108,101),Vector2(102,101)])
+	expect(is_equal_approx(geo.material_length(PackedVector2Array([Vector2(100,100),Vector2(110,100)]),[hole]),4.0), "Core3 shared material intersection retains actual removed intervals")
+	expect(is_equal_approx(geo.material_length(PackedVector2Array([Vector2(100,98),Vector2(110,98)]),[hole]),10.0), "Core3 disjoint material line receives no fabricated intersections")
+	var replay = JSON.parse_string(FileAccess.get_file_as_string("res://game/tests/chocolate_assisted_keyboard_replay.json"))
+	expect(replay is Dictionary and replay.variants.size()==2, "Core3 exact captured A/B replay fixture is loaded")
+	var tiny := Vector2(110,100.000015258789)
+	var expected_contour := PackedVector2Array([Vector2(100,100),Vector2(110,100),tiny,Vector2(110,110),Vector2(100,110)])
+	var duplicate_contour := expected_contour.duplicate()
+	duplicate_contour.insert(2,Vector2(110,100))
+	duplicate_contour.append(duplicate_contour[0])
+	expect(geo._offset_contour(duplicate_contour,Vector2(105,105))==expected_contour, "Core3 generated output drops only exact consecutive/closing duplicates and retains one-ULP edges")
+	expect(not geo.simple(expected_contour), "Core3 original drawn-input EPS spacing rule remains unchanged")
+	for invalid in [
+		PackedVector2Array([Vector2(100,100),Vector2(112,110),Vector2(100,110),Vector2(110,100)]),
+		PackedVector2Array([Vector2(100,100),Vector2(110,100),Vector2(110,110),Vector2(105,105),Vector2(100,110),Vector2(105,105)]),
+		PackedVector2Array([Vector2(100,100),Vector2(110,100),Vector2(105,100),Vector2(110,110),Vector2(100,110)])]:
+		expect(geo.area(invalid)>1.0 and geo._offset_contour(invalid,Vector2(105,105)).is_empty(), "Core3 generated-output handling still rejects real crossings, nonadjacent touches and overlapping backtracks")
+	for variant in replay.variants:
+		model.reset(true,0 if variant.variant=="A" else 1)
+		model.adjust_depth(-1)
+		for stroke_index in variant.strokes.size():
+			var line := PackedVector2Array()
+			for point in variant.strokes[stroke_index]:
+				line.append(Vector2(point[0],point[1]))
+			draw(model,line,false)
+			expect(line[0]==line[-1] and line.size()<=512, "Core3 captured closure and point budget remain unchanged")
+			var candidate := line.slice(0,line.size()-1)
+			expect(geo.simple(candidate), "Core3 actual held-key contour is simple: %s stroke%d" % [variant.variant,stroke_index+1])
+			for distance in [-1.1875,1.1875]:
+				var raw := Geometry2D.offset_polygon(candidate,distance,Geometry2D.JOIN_MITER)
+				expect(raw.size()==1, "Core3 raw captured offset is genuinely a singleton")
+				if raw.size()!=1:
+					continue
+				var canonical := PackedVector2Array()
+				for point in raw[0]:
+					if canonical.is_empty() or canonical[-1]!=point:
+						canonical.append(point)
+				if canonical.size()>1 and canonical[0]==canonical[-1]:
+					canonical.remove_at(canonical.size()-1)
+				var retained: PackedVector2Array = geo.offset(candidate,distance,Vector2(160,190))
+				expect(not retained.is_empty() and Geometry2D.is_point_in_polygon(Vector2(160,190),retained), "Core3 captured singleton offset has valid true topology and contains its center")
+				expect(retained==canonical and geo.area(retained)==geo.area(raw[0]), "Core3 exact duplicate-only generated canonicalization preserves every nonzero point and area")
+				print("CAPTURED_OFFSET variant=%s stroke=%d distance=%.4f candidate=%d raw_components=%d raw_vertices=%d area=%.9f retained=%d" % [variant.variant,stroke_index+1,distance,candidate.size(),raw.size(),raw[0].size(),geo.area(raw[0]),retained.size()])
+		model.fold_or_mount()
+		var state: Dictionary = model.snapshot()
+		expect(state.parts[0].freed and state.mistakes==0 and state.selected_strokes.size()==3, "Core3 public replay of captured point inputs passes real depth, kerf and profile extraction")
+		print("CAPTURED_PUBLIC_FOLD variant=%s freed=%s outline=%d radius=%.9f mistakes=%d feedback=%s" % [variant.variant,state.parts[0].freed,state.parts[0].outline.size(),state.parts[0].pitch_radius,state.mistakes,state.feedback])

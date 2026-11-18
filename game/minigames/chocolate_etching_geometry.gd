@@ -29,9 +29,9 @@ static func material_length(line: PackedVector2Array, removed: Array) -> float:
 		var fractions: Array[float] = [0.0, 1.0]
 		for poly in removed:
 			for j in poly.size():
-				var hit = Geometry2D.segment_intersects_segment(a, b, poly[j], poly[(j + 1) % poly.size()])
-				if hit != null:
-					fractions.append(clampf((hit - a).dot(edge) / edge.length_squared(), 0.0, 1.0))
+				var fraction := _segment_fraction(a, b, poly[j], poly[(j + 1) % poly.size()])
+				if fraction >= 0.0:
+					fractions.append(fraction)
 		fractions.sort()
 		for j in range(fractions.size() - 1):
 			var midpoint := a.lerp(b, (fractions[j] + fractions[j + 1]) * 0.5)
@@ -60,9 +60,33 @@ static func simple(poly: PackedVector2Array) -> bool:
 static func offset(poly: PackedVector2Array, amount: float, center: Vector2) -> PackedVector2Array:
 	var results := Geometry2D.offset_polygon(poly, amount, Geometry2D.JOIN_MITER)
 	# A split contour or a hole is unusable; never choose an arbitrary fragment.
-	if results.size() != 1 or not simple(results[0]) or not Geometry2D.is_point_in_polygon(center, results[0]):
+	if results.size() != 1:
 		return PackedVector2Array()
-	return results[0]
+	return _offset_contour(results[0], center)
+
+static func _offset_contour(raw: PackedVector2Array, center: Vector2) -> PackedVector2Array:
+	if raw.size() > MAX_POINTS:
+		return PackedVector2Array()
+	var poly := PackedVector2Array()
+	# Generated offsets may repeat a float32 vertex; retain all nonzero edges verbatim.
+	for point in raw:
+		if poly.is_empty() or poly[-1] != point:
+			poly.append(point)
+	if poly.size() > 1 and poly[0] == poly[-1]:
+		poly.remove_at(poly.size() - 1)
+	if poly.size() < 3 or area(poly) <= 1.0 or not Geometry2D.is_point_in_polygon(center, poly):
+		return PackedVector2Array()
+	for i in poly.size():
+		var a := poly[i]
+		var b := poly[(i + 1) % poly.size()]
+		if not in_board(a) or _segment_fraction(a, b, b, poly[(i + 2) % poly.size()]) != 1.0:
+			return PackedVector2Array()
+		for j in range(i + 2, poly.size()):
+			if i == 0 and j == poly.size() - 1:
+				continue
+			if _segment_fraction(a, b, poly[j], poly[(j + 1) % poly.size()]) >= 0.0:
+				return PackedVector2Array()
+	return poly
 
 static func template(center: Vector2, teeth: int) -> PackedVector2Array:
 	var poly := PackedVector2Array()
@@ -81,9 +105,34 @@ static func point_distance(p: Vector2, line: PackedVector2Array) -> float:
 	return result
 
 static func segment_distance(a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> float:
-	if Geometry2D.segment_intersects_segment(a, b, c, d) != null:
+	if _segment_fraction(a, b, c, d) >= 0.0:
 		return 0.0
 	return minf(minf(a.distance_to(Geometry2D.get_closest_point_to_segment(a, c, d)), b.distance_to(Geometry2D.get_closest_point_to_segment(b, c, d))), minf(c.distance_to(Geometry2D.get_closest_point_to_segment(c, a, b)), d.distance_to(Geometry2D.get_closest_point_to_segment(d, a, b))))
+
+static func _segment_fraction(a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> float:
+	if maxf(a.x, b.x) < minf(c.x, d.x) or maxf(c.x, d.x) < minf(a.x, b.x) or maxf(a.y, b.y) < minf(c.y, d.y) or maxf(c.y, d.y) < minf(a.y, b.y):
+		return -1.0
+	# Scalar double products keep near-collinear captured strokes from false contacts.
+	var rx: float = float(b.x) - float(a.x)
+	var ry: float = float(b.y) - float(a.y)
+	var sx: float = float(d.x) - float(c.x)
+	var sy: float = float(d.y) - float(c.y)
+	var qx: float = float(c.x) - float(a.x)
+	var qy: float = float(c.y) - float(a.y)
+	var denominator := rx * sy - ry * sx
+	if denominator != 0.0:
+		var t := (qx * sy - qy * sx) / denominator
+		var u := (qx * ry - qy * rx) / denominator
+		return t if t >= 0.0 and t <= 1.0 and u >= 0.0 and u <= 1.0 else -1.0
+	if qx * ry - qy * rx != 0.0:
+		return -1.0
+	var squared := rx * rx + ry * ry
+	if squared == 0.0:
+		return 0.0 if qx * sy - qy * sx == 0.0 else -1.0
+	var start := (qx * rx + qy * ry) / squared
+	var end := start + (sx * rx + sy * ry) / squared
+	var first := maxf(0.0, minf(start, end))
+	return first if first <= minf(1.0, maxf(start, end)) else -1.0
 
 static func kerf_intrudes(line: PackedVector2Array, half_width: float, poly: PackedVector2Array) -> bool:
 	if line.is_empty() or poly.is_empty() or not bounds(line).grow(half_width).intersects(bounds(poly), true):
