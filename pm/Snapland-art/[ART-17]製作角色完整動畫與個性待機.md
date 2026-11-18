@@ -795,3 +795,27 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![慢放重建後的背斜向站姿](images/ART-17-idle-entry-20261119-diagonal.png)
 
 [八方向正常影片](images/ART-17-idle-entry-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-idle-entry-20261119-quarter.mp4) · [反例、原生與封裝證據](images/ART-17-idle-entry-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/02f7e021898c6fd6b1726592587c46fcf4048c2a)。
+
+# Commit — 2026-11-19 側身招呼保留原朝向
+
+## 內文
+
+主角向左或向右停步後按 F，會朝原本方向抬手、揮手並收回原站姿。每側有三張專用中段原畫，連同原站姿的首尾共五格，播放 0.8 秒。其他方向仍沿用原有的招手方向選擇規則。
+
+兩側新增原畫配有髮束遮罩與雨背心覆蓋。衣裝組合從 172 增至 182；既有覆蓋逐項保留。若一側缺少任何必要格，整段會退回可用的完整招手。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 素材和局部回歸 | 227 個原畫區域、46 項 Python 檢查、5 個設計範圍與 3 組 Godot 測試通過 |
+| 實際按鍵與換裝 | 正常速度、四分之一速度重建後及內嵌 Windows 測試檔各驗證 6 個情境。左右兩向分別核對原裝、雨背心、鮑伯頭搭草帽；皆完成五格，回原朝向站姿，人物根位移為 0 |
+| 影片 | 正常 311 格、慢放 971 格，皆為 1280×720／30 FPS，完整解碼通過 |
+
+原生呈現使用 Godot 4.7.2 與 Dummy 音訊。鏡頭及髮尾擺動在像素比對情境中固定。此處驗收範圍為側身招呼與對應換裝。
+
+![主角向右側身招手](images/ART-17-wave-20261119-right.png)
+![穿雨背心向左側身招手](images/ART-17-wave-20261119-left-rainvest.png)
+![戴草帽的鮑伯頭向右側身招手](images/ART-17-wave-20261119-bob-hat.png)
+
+[正常影片](images/ART-17-wave-20261119-normal.mp4) · [四分之一速度與重建](images/ART-17-wave-20261119-quarter.mp4) · [原生與封裝證據](images/ART-17-wave-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/6a36c81308bb91d8384c0178b392a3706b18bb9c)。
