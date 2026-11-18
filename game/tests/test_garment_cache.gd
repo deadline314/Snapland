@@ -12,10 +12,15 @@ func _initialize() -> void:
 	DirAccess.make_dir_recursive_absolute(parent)
 	var avatar = Avatar.new()
 	var family = Overlays.new()
+	var initial_textures: int = avatar.animation_library.cached_texture_count()
 	check(family.ready(avatar),"Valid family rejected")
+	check(avatar.animation_library.cached_texture_count()==initial_textures,"Validation created unused GPU textures for the base poses")
 	check(family.cache_snapshot().decoded_images==0,"Preflight retained decoded canvases")
 	var manifest: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Overlays.MANIFEST_PATH))
 	var rows: Array=manifest.frames
+	var unique_hashes := {}
+	for row in rows: unique_hashes[row.png_sha256] = true
+	check(family.cache_snapshot().verified_decodes == unique_hashes.size(), "Preflight decoded identical PNG bytes more than once")
 	var initial_source: Image=avatar.original_garment_pose(rows[0].action,rows[0].direction,int(rows[0].frame))
 	var original_hash := avatar.head_source_signature(initial_source)
 	for reverse in [false,true]:

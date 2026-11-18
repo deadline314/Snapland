@@ -204,8 +204,7 @@ func original_garment_pose(action: String, direction: String, frame: int) -> Ima
 	if action=="walk": return _walk_pose_image(direction,frame)
 	if action=="idle": return _stable_idle_pixels.frame("hero-idle",direction,frame)
 	if animation_library.has_frame("traveller",action,direction):
-		var source: Texture2D = animation_library.texture("traveller",action,direction,frame)
-		return source.get_image().duplicate() if source!=null else null
+		return animation_library.original_frame_image("traveller",action,direction,frame)
 	var cardinal := direction if DIRECTIONS.has(direction) else _closest_cardinal(direction)
 	return _atlas_pose_image(_pose_index(cardinal,frame,action)) if _atlas_valid else null
 

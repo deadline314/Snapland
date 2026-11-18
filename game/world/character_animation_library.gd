@@ -160,6 +160,15 @@ func sequence_duration(actor: String, action: String, direction: String) -> floa
 func frame_for_time(actor: String, action: String, direction: String, elapsed: float, reduced_motion: bool = false) -> int:
 	return AnimationTiming.frame_at_time(_entry(actor, action, direction), elapsed, reduced_motion)
 
+func original_frame_image(actor: String, action: String, direction: String, frame_index: int) -> Image:
+	var frames := _frames(actor, action, direction)
+	if frames.is_empty(): return null
+	var index := posmod(frame_index, frames.size())
+	if not frames[index] is Dictionary:
+		_diagnostic(_context(actor, action, direction, index), "frame entry must be an object")
+		return null
+	return _compose_frame(actor, action, direction, index, frames[index], {}, false, {})
+
 func texture(actor: String, action: String, direction: String, frame_index: int, equipped: Dictionary = {}) -> Texture2D:
 	var frames := _frames(actor, action, direction)
 	if frames.is_empty(): return null
@@ -214,6 +223,18 @@ func _render_frame(actor: String, action: String, direction: String, index: int,
 		_texture_order.erase(key)
 		_texture_order.append(key)
 		return _textures[key]
+	var layout := {}
+	var output := _compose_frame(actor, action, direction, index, frame, equipped, inspection, layout)
+	if output == null: return null
+	var result := ImageTexture.create_from_image(output)
+	_layouts[key] = layout
+	_textures[key] = result
+	_texture_order.append(key)
+	while _texture_order.size() > TEXTURE_CACHE_LIMIT:
+		_textures.erase(_texture_order.pop_front())
+	return result
+
+func _compose_frame(actor: String, action: String, direction: String, index: int, frame: Dictionary, equipped: Dictionary, inspection: bool, layout: Dictionary) -> Image:
 	var entry := _entry(actor, action, direction)
 	var fps_value: Variant = entry.get("fps", 1.0)
 	if not (fps_value is int or fps_value is float) or not is_finite(float(fps_value)):
@@ -348,7 +369,8 @@ func _render_frame(actor: String, action: String, direction: String, index: int,
 	if visible_bounds.has_area() and not Rect2i(Vector2i.ZERO, canvas_size).encloses(visible_bounds):
 		_diagnostic(_context(actor, action, direction, index), "feet anchor places visible pixels outside the shared canvas")
 		return null
-	_layouts[key] = {"scale": scale_factor, "destination": destination}
+	layout["scale"] = scale_factor
+	layout["destination"] = destination
 	var fixed_canvas := Image.create(canvas_size.x, canvas_size.y, false, Image.FORMAT_RGBA8)
 	fixed_canvas.fill(Color.TRANSPARENT)
 	fixed_canvas.blend_rect(output, Rect2i(Vector2i.ZERO, scaled_size), destination)
@@ -358,15 +380,9 @@ func _render_frame(actor: String, action: String, direction: String, index: int,
 		var registered: Image = _stable_walk_pixels.frame(actor+"-"+action,direction,index,binding,source_image)
 		if registered!=null:
 			output=registered
-			var registered_layout: Dictionary=_layouts[key]
-			registered_layout.destination += _stable_walk_pixels.root_offset(actor+"-"+action,direction,index)
-			_layouts[key]["stable_head"]=_stable_walk_pixels.head_anchor(actor+"-"+action,direction)
-	var result := ImageTexture.create_from_image(output)
-	_textures[key] = result
-	_texture_order.append(key)
-	while _texture_order.size() > TEXTURE_CACHE_LIMIT:
-		_textures.erase(_texture_order.pop_front())
-	return result
+			layout["destination"] = destination + _stable_walk_pixels.root_offset(actor+"-"+action,direction,index)
+			layout["stable_head"] = _stable_walk_pixels.head_anchor(actor+"-"+action,direction)
+	return output
 
 func _frame_for_equipment(frame: Dictionary, equipped: Dictionary, actor: String, action: String, direction: String, index: int) -> Dictionary:
 	var outfit := str(equipped.get("outfit", ""))

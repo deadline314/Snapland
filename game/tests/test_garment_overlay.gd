@@ -36,11 +36,16 @@ func _initialize() -> void:
 		check(base.get_data()==missing.get_data(),"Incomplete family partially equipped")
 	# Reject identity changes, a changed original, changed PNG and duplicate key
 	# before exposing any material. None may borrow a neighboring cel.
-	for kind in ["source", "png", "duplicate", "frame"]:
+	for kind in ["source", "legacy_source", "png", "shared_png_hash", "shared_png_path", "duplicate", "frame"]:
 		var bad: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Overlays.MANIFEST_PATH))
 		match kind:
 			"source":bad.frames[0].source_pixel_sha256="0".repeat(64)
+			"legacy_source":
+				var requests: Array = bad.frames.filter(func(row: Dictionary) -> bool: return row.action == "celebrate")
+				requests.back().source_pixel_sha256 = "0".repeat(64)
 			"png":bad.frames[0].png_sha256="0".repeat(64)
+			"shared_png_hash":bad.frames.back().png_sha256=bad.frames[0].png_sha256
+			"shared_png_path":bad.frames.back().path=bad.frames[0].path
 			"duplicate":bad.frames[1]=bad.frames[0].duplicate(true)
 			"frame":bad.frames[0].frame=true
 		var path:=parent.path_join(kind+".json")
