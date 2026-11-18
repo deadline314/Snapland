@@ -22,6 +22,7 @@ func _run() -> void:
 		else:
 			var model = script.new()
 			_review_round_one(model)
+			_review_round_two(model)
 			_material_tests(model)
 			_input_tests(model)
 			_network_tests(model)
@@ -620,3 +621,33 @@ func _review_round_one(model) -> void:
 		model.step(0.1)
 		expect(model.snapshot().cursor==stopped, "R2/R3 transition synchronizes anchor and stops movement: "+transition)
 		model.set_motion(Vector2.RIGHT)
+
+func _review_round_two(model) -> void:
+	var geo = load("res://game/minigames/chocolate_etching_geometry.gd")
+	var a := Vector2(100,100)
+	var b := Vector2(103.99999,100)
+	var c := Vector2(100,100.00005)
+	model.reset()
+	draw(model,PackedVector2Array([a,b,c]),false)
+	var stroke: PackedVector2Array=model.snapshot().selected_strokes[0].points
+	expect(stroke==PackedVector2Array([a,b,c,a]), "R4 round2 retains exact final sample before appending the real closure")
+	var expected_length := a.distance_to(b)+b.distance_to(c)+c.distance_to(a)
+	expect(absf(geo.material_length(stroke,[])-expected_length)<1.0e-12 and expected_length>8.0, "R4 round2 represented closed scratch is above eight units")
+	expect(model.snapshot().participated, "R4 round2 exact near-start closure earns genuine participation")
+	advance(model,241.0)
+	expect(model.snapshot().ordinary_eligible, "R4 round2 qualifying near-start scratch retains ordinary timeout eligibility")
+	for interior_count in [509,510]:
+		model.reset()
+		model.move_cursor_to(a)
+		model.begin_tool()
+		for i in range(1,interior_count+1):
+			model.move_cursor_to(Vector2(100+4*(i%2),100+i*0.001))
+		model.move_cursor_to(c)
+		expect(model.snapshot().current_stroke.size()==interior_count+2, "R4 round2 capacity fixture retains all real reversing samples")
+		model.release_tool()
+		var state: Dictionary=model.snapshot()
+		if interior_count==509:
+			stroke=state.selected_strokes[0].points
+			expect(stroke.size()==512 and stroke[-2]==c and stroke[-1]==a, "R4 round2 final available slot holds closure without overwriting endpoint")
+		else:
+			expect(state.selected_strokes.is_empty() and state.undo_available==0 and not state.participated and state.feedback=="封口需額外一點；請先撤銷", "R4 round2 full-cap closure fails explicitly without discarding a sample or raising cap")

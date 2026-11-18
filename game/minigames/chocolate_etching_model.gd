@@ -127,24 +127,21 @@ func release_tool() -> void:
 		return
 	_s.cutting = false
 	if not _invalid_stroke and _current.size() >= 2:
+		if _current.size() >= 3 and _current[-1] != _current[0] and _current[0].distance_to(_current[-1]) <= (7.0 if _s.assisted else 4.0):
+			if _current.size() < Geometry.MAX_POINTS:
+				_current.append(_current[0])
+			else:
+				_s.feedback = "封口需額外一點；請先撤銷"
+				_current = PackedVector2Array()
+				return
 		var removed: Array = []
 		for part in _s.parts:
 			if part.freed:
 				removed.append(part.removed_outline)
 		var length := Geometry.material_length(_current, removed)
 		if length > 0.0:
-			if _current.size() >= 3 and _current[0].distance_to(_current[-1]) <= (7.0 if _s.assisted else 4.0):
-				if _current[-1].distance_to(_current[0]) < 0.0001:
-					_current[-1] = _current[0]
-				elif _current.size() < Geometry.MAX_POINTS:
-					_current.append(_current[0])
-				else:
-					_s.feedback = "封口需額外一點；請先撤銷"
-					_current = PackedVector2Array()
-					return
 			_remember()
 			_strokes[_s.selected].append({"points": _current.duplicate(), "depth": _s.depth, "width": 2.0 + 6.0 * _s.depth * _s.depth})
-			length = Geometry.material_length(_current, removed)
 			_s.participated = _s.participated or length >= 8.0
 			_structure_changed()
 			_s.feedback = "熱線已提交；切透整圈才可折料"
