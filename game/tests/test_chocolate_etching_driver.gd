@@ -26,11 +26,15 @@ func _run() -> void:
 						and outcome.ordinary_eligible and outcome.output_travel >= TAU - 1.0e-8
 						and outcome.connections == topology and route.driver.score_summary(false).total == expected,
 						"%s %s assisted=%s idler=%s reaches %d" % [source, "AB"[variant], assisted, idler, expected])
+					if source == "keyboard" and variant == 0 and not assisted and not idler:
+						check(outcome.held_commands.is_empty() and outcome == route.driver.snapshot(),
+							"terminal step while holding Space agrees with the settled snapshot")
 					if outcome.success:
 						print("ROUTE ", JSON.stringify(route.result(outcome)))
 					else:
 						print("ROUTE REJECTED ", JSON.stringify(route.diagnostic(outcome)))
 	_check_boundaries()
+	_check_mouse_cancellation()
 	_check_shaft_isolation()
 	_check_leftover_margin()
 	print("Chocolate etching driver: %d checks, %d failures" % [checks, failures])
@@ -96,6 +100,7 @@ class Route:
 		var event := InputEventMouseButton.new()
 		event.button_index = MOUSE_BUTTON_LEFT
 		event.pressed = pressed
+		event.canceled = canceled
 		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
 		event.device = InputEvent.DEVICE_ID_EMULATION if emulated else 0
 		return dispatch.call(event, point)
@@ -374,14 +379,14 @@ class Route:
 		arrange(idler)
 		command("tool", true)
 		advance(0.75)
-		var rotating: Dictionary = driver.snapshot()
-		drive_angles = rotating.parts.map(func(p): return p.angle)
+		var state: Dictionary = driver.snapshot()
+		drive_angles = state.parts.map(func(p): return p.angle)
 		for _i in 18:
-			if driver.snapshot().ended:
+			if state.ended:
 				break
-			advance(0.25)
+			state = driver.step(0.25)
 		command("tool", false)
-		return driver.snapshot()
+		return state if state.ended else driver.snapshot()
 
 	func result(state: Dictionary) -> Dictionary:
 		var positions := placement_centers.map(func(p): return [p.x, p.y] if p != null else null)
@@ -459,6 +464,7 @@ func _check_boundaries() -> void:
 	check(pointer.pointer(first, true, 3) and driver.snapshot().cutting, "actual touch index owns an active stroke")
 	check(not pointer.pointer(second, true, 4) and not pointer.motion(second, 4) and not pointer.pointer(second, false, 4), "second touch cannot move or finalize the first")
 	check(not pointer.pointer(second, false) and driver.snapshot().cutting, "non-owner mouse release leaves first touch live")
+	check(not pointer.pointer(second, false, -1, true) and driver.snapshot().cutting, "canceled non-owner mouse release leaves first touch live")
 	pointer.key(KEY_TAB, true)
 	pointer.key(KEY_TAB, false)
 	check(driver.snapshot().selected == 0 and driver.snapshot().cutting, "competing keyboard cannot alter touch-owned preview")
@@ -514,6 +520,54 @@ func _check_boundaries() -> void:
 	check(after.selected_strokes.is_empty() and after.feedback.contains("512點"), "point capacity refuses a partial stroke")
 	check(driver.score_summary(true).qualification_text.contains("練習") and driver.score_summary(false).rows.size() == 4, "score summary exposes four rules and practice eligibility")
 	print("DRIVER_BOUNDARIES aliases/opposites, depth/selection/phase, pointer owner/cancel, retry, capacity and undo")
+
+func _check_mouse_cancellation() -> void:
+	var route := Route.new("pointer", false, 0)
+	var driver = route.driver
+	var start: Vector2 = route.view.board_to_design(Vector2(100, 100))
+	var finish: Vector2 = route.view.board_to_design(Vector2(130, 100))
+	route.pointer(start, true)
+	route.motion(finish)
+	var live: Dictionary = driver.snapshot()
+	check(live.cutting and live.current_stroke.size() >= 2 and live.current_stroke[0].distance_to(live.current_stroke[-1]) > 8.0
+		and live.undo_available == 0 and not live.participated, "mouse cancellation trial starts from traveled, uncommitted heat")
+	check(not route.pointer(finish, false, 4, true) and driver.snapshot() == live, "wrong-owner touch cancellation leaves mouse heat preview live")
+	check(route.pointer(finish, false, -1, true), "matching canceled mouse cut is consumed")
+	var canceled_cut: Dictionary = driver.snapshot()
+	check(not canceled_cut.cutting and canceled_cut.current_stroke.is_empty() and canceled_cut.held_commands.is_empty()
+		and canceled_cut.selected_strokes.is_empty() and canceled_cut.undo_available == live.undo_available
+		and canceled_cut.participated == live.participated, "canceled interior mouse cut adds no stroke, undo or participation")
+	check(not route.pointer(finish, false) and driver.snapshot() == canceled_cut, "delayed genuine mouse release leaves canceled cut discarded")
+	print("CANCELED_MOUSE_CUT ", JSON.stringify({"preview_distance": live.current_stroke[0].distance_to(live.current_stroke[-1]),
+		"strokes": canceled_cut.selected_strokes.size(), "undo": canceled_cut.undo_available, "participated": canceled_cut.participated}))
+
+	route = Route.new("pointer", false, 0)
+	driver = route.driver
+	if not route.cut(0):
+		check(false, "canceled assembly drop setup must extract a real wheel")
+		return
+	route.tap("phase")
+	route.place(0, driver.snapshot().pins[0])
+	var mounted: Dictionary = driver.snapshot()
+	var old_position: Vector2 = mounted.parts[0].position
+	var drag_target := old_position + Vector2(48, 36)
+	start = route.view.board_to_design(old_position)
+	finish = route.view.board_to_design(drag_target)
+	route.pointer(start, true)
+	route.motion(finish)
+	live = driver.snapshot()
+	check(mounted.parts[0].mounted and live.parts[0].position == old_position and live.cursor.distance_to(drag_target) < 0.001
+		and live.undo_available == mounted.undo_available, "mouse cancellation trial drags a real mounted wheel preview inside the board")
+	check(route.pointer(finish, false, -1, true), "matching canceled mouse drop is consumed")
+	var canceled_drop: Dictionary = driver.snapshot()
+	check(canceled_drop.parts[0].mounted and canceled_drop.parts[0].position == old_position
+		and canceled_drop.undo_available == mounted.undo_available and canceled_drop.participated == mounted.participated
+		and canceled_drop.selected_strokes == mounted.selected_strokes and canceled_drop.held_commands.is_empty(),
+		"canceled interior mouse drop preserves mount, history and participation")
+	check(not route.pointer(finish, false) and driver.snapshot() == canceled_drop, "delayed genuine mouse release leaves canceled drop discarded")
+	print("CANCELED_MOUSE_DROP ", JSON.stringify({"original": [old_position.x, old_position.y],
+		"target": [drag_target.x, drag_target.y], "after": [canceled_drop.parts[0].position.x, canceled_drop.parts[0].position.y],
+		"mounted": canceled_drop.parts[0].mounted, "undo_before": mounted.undo_available, "undo_after": canceled_drop.undo_available}))
 
 func _check_shaft_isolation() -> void:
 	var route := Route.new("pointer", false, 0)

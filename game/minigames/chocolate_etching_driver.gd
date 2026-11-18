@@ -37,7 +37,7 @@ func handle_input(event: InputEvent, design_point: Vector2) -> bool:
 	var source := View.pointer_source(event)
 	if source.is_empty():
 		return false
-	if event is InputEventScreenTouch and event.canceled:
+	if event.is_canceled():
 		if source != _pointer_source:
 			return false
 		clear_input()
@@ -156,6 +156,7 @@ func step(delta: float) -> Dictionary:
 	var state := snapshot()
 	if state.ended:
 		clear_input()
+		state.held_commands.clear()
 	return state
 
 func snapshot() -> Dictionary:
