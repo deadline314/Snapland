@@ -48,6 +48,8 @@ Driver沿用house reset(assisted,time_phase)、create_view、handle_input(event,
 
 連續移動以實體按鍵集合計算：W與上鍵同時按住不加倍速度，放開其中一個仍保留另一個；相反方向抵消，釋放後恢復仍按住方向。活動工藝板需真正取得焦點並接收Tab等鍵，不把GUI預設焦點跳轉誤當換片成功。Main的M地圖快捷鍵已有session==null條件，保持此界線；遊戲內M由本款切換工作面。
 
+View公開COMMANDS／KEYS及靜態command_at(design_point:Vector2)->String、command_center(command:String)->Vector2、board_to_design(board_point:Vector2)->Vector2、design_to_board(design_point:Vector2)->Vector2。輸入、繪圖與驗證共用同一等比畫布轉換及按鈕幾何，不在各層另抄比例常數；有效畫布外放開不夾回邊緣提交。
+
 View為2D俯視工藝板，固定1280×720設計座標；保留Main首140高度，狀態自140以下；畫布Rect2(24,242,880,390)內等比映射720×440，12按鈕置右側Rect2(916,242,340,390)的3欄4列，底部保留精簡模型回饋。兩模式清楚標題、實際殘料／孔洞／切深／輪廓／夾持／已放輪／預覽虛線／軸／接觸線／轉向及出口進度。少量常駐CanvasItem與固定按鈕，無逐幀Node／材質建立；必要幾何與轉動／接觸狀態不能被降低動態刪除。核心規則寫在畫面／教學；hover只提示「放開提交／外側取消」「淺切可重描保料」「先做惰輪再試轉」「撤銷不回時間」「AI只夾持」。三尺寸1280×720、1152×648、800×600（大字1.25、降低動態）所有活動文字及12控制、5規則頁與全部教學文字頁都需完整可用。
 
 ## 接入、範圍與證據
