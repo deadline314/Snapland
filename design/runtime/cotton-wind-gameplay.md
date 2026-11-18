@@ -24,7 +24,7 @@ R 切換簡單 AI；它有實際第二支棒，在玩家之後處理未被玩家
 
 ## 參與、介面與呈現
 
-participated 要求玩家實際收到至少 1 材料，且曾真實平移至少 6、轉動至少 .5 rad；移游標、配置 AI、空轉或只等結束不算。自然正式結束且 participated 才有普通資格；普通遊戲目標仍是均勻成品，須清楚區分參與收藏與通關。練習／取消由既有 Session 排除獎勵。分數為每個達標段 100、均勻成品 100、實際接回且成品成功再 100、每次失誤扣 20，最低 0；乾淨普通 400／惡魔 500。
+participated 要求玩家實際收到至少 1 材料，且曾真實平移至少 6、轉動至少 .5 rad；移游標、配置 AI、空轉或只等結束不算。自然正式結束且 participated 才有普通資格；普通遊戲目標仍是均勻成品，須清楚區分參與收藏與通關。練習／取消由既有 Session 排除獎勵。分數為每個達標段 100、F 確認均勻成品成功 100、實際接回且成品成功再 100、每次失誤扣 20，最低 0；乾淨普通 400／惡魔 500。物理上已均勻但未確認即到時，仍只按三段計 300，success／devil 為 false；符合參與條件仍可收藏普通拍貼。
 
 公開 Model：reset(assisted:bool=false,variant:int=0)、set_motion(direction:Vector2)、move_stick_to(point:Vector2)、set_spin(direction:int)、finish()、toggle_helper()、clear_input()、step(delta:float)、snapshot()->Dictionary。move_stick_to 接收 (X,Z) 真實棒座標作目標，拒絕非有限值；只設定目標，不立即改變棒位置或收絲。step 每個子步以相同 120 單位/秒上限追隨目標，並依前後有效位置檢查碰撞；不能傳送棒穿越整場掃光糖絲。set_motion 切回方向控制，clear_input 清除未到達目標；Driver 拖曳沿用這個目標追隨，不另抄運動學。snapshot 為獨立資料，含時間／結束／成功／參與／資格／分數／失誤／設定、棒位置／角度／角速度／三段 12 格／各段品質、風向／絲束前後點與可收量／AI 棒及材料／懸絲完整狀態／接回次數／守恆總量／feedback；不得含 Node、共享可變幾何或無界歷史。
 
