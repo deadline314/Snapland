@@ -220,7 +220,7 @@ func _candy_ui() -> void:
 	await _frames(3)
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
-	_check(selector.item_count==3 and selector.selected==2 and book._region=="candy" and book._entries().size()==5 and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all five delivered local games")
+	_check(selector.item_count==3 and selector.selected==2 and book._region=="candy" and book._entries().size()==6 and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all six delivered local games")
 	for index in [0,1,2]:
 		selector.select(index)
 		selector.item_selected.emit(index)
@@ -232,17 +232,17 @@ func _candy_ui() -> void:
 	main._show_achievements()
 	await _frames(3)
 	var stamps: GridContainer=main.overlay.find_child("MinigameStampGrid",true,false)
-	_check(stamps!=null and stamps.get_child_count()==5 and _labels(main.overlay).contains("糖廠") and _labels(main.overlay).contains("拉糖橋") and _labels(main.overlay).contains("餅乾翻模") and _labels(main.overlay).contains("糖漿分洪") and _labels(main.overlay).contains("果凍彈床") and _labels(main.overlay).contains("巧克力蝕刻"), "candy achievement summary has all five real local game stamps")
+	_check(stamps!=null and stamps.get_child_count()==6 and _labels(main.overlay).contains("糖廠") and _labels(main.overlay).contains("拉糖橋") and _labels(main.overlay).contains("餅乾翻模") and _labels(main.overlay).contains("糖漿分洪") and _labels(main.overlay).contains("果凍彈床") and _labels(main.overlay).contains("巧克力蝕刻"), "candy achievement summary has all six real local game stamps")
 	main._close()
 	main._show_ticket()
-	_check(_labels(main.overlay).contains("5 / 12") and _labels(main.overlay).contains("其餘 7 款準備中"), "candy ticket explains its real current content")
+	_check(_labels(main.overlay).contains("6 / 12") and _labels(main.overlay).contains("其餘 6 款準備中"), "candy ticket explains its real current content")
 	var guide: Button=main.overlay.find_child("TicketAction7",true,false)
 	_check(guide.text=="工廠圖解教學", "ticket names the available factory lessons")
 	guide.pressed.emit()
 	await _frames(3)
 	var choices: GridContainer=main.overlay.find_child("CandyTutorialChoices",true,false)
-	_check(choices!=null and choices.columns==2 and choices.get_child_count()==5, "candy guide offers exactly five delivered lessons")
-	for game_id in ["game-025","game-026","game-027","game-028","game-029"]:
+	_check(choices!=null and choices.columns==2 and choices.get_child_count()==6, "candy guide offers exactly six delivered lessons")
+	for game_id in ["game-025","game-026","game-027","game-028","game-029","game-030"]:
 		var action: Button=main.overlay.find_child("CandyTutorial_"+game_id,true,false)
 		_check(action!=null, "guide exposes "+game_id)
 		if action==null: continue

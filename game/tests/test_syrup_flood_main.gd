@@ -28,7 +28,7 @@ func _run() -> void:
 	main = load("res://game/main.tscn").instantiate()
 	get_tree().root.add_child(main)
 	await _frames()
-	check(main.definitions.size() == 12 and Catalog.all_definitions().size() == 29, "welcome keeps twelve and delivered island has29")
+	check(main.definitions.size() == 12 and Catalog.all_definitions().size() == 30, "welcome keeps twelve and delivered island has 30")
 	check(Catalog.identity("game-027") == {"id":"game-027", "mode":"syrup_flood", "zone":"candy", "local_index":3, "photo_id":"photo-candy-game-3", "devil_photo_id":"photo-candy-devil-3", "achievement_id":"ACH_GAME_027"}, "third candy card has fixed local3 and global027 identities")
 	main._practice_for_retake("game-027", true)
 	check(main.session == null and not Progress.has_attempted_game("game-027"), "locked candy retake cannot bypass admission")
@@ -155,7 +155,7 @@ func _retake_after_reset(devil: bool) -> void:
 	main._show_album()
 	await _frames()
 	var book = _book(main.overlay)
-	check(book != null and book._entries().size() == 5, "candy album exposes five real local entries")
+	check(book != null and book._entries().size() == 6, "candy album exposes six real local entries")
 	if book != null:
 		for detail_devil in [false,true]:
 			var entry: Dictionary = book._game_entry(Catalog.find("game-027"),Catalog.identity("game-027"),detail_devil)

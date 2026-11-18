@@ -1445,6 +1445,11 @@ func _show_game_rules(id: String) -> void:
 		{"text":("參與操作後正常結算即可收藏普通拍貼，不限勝負；未操作或中途取消不收藏。" if definition.mode in ["sugar_bridge","cookie_mold","syrup_flood","jelly_trampoline","chocolate_etching"] else "正式遊玩自然結束即可收藏普通拍貼，不限勝負；中途取消不收藏。")+"小惡魔實際技巧以上方條件為準，也可免費補拍收藏。","color":Paper.INK},
 		{"text":"輔助遊玩會放寬時間或判定，仍可收藏普通拍貼；小惡魔是否要求未開輔助，以上方條件為準。練習不記錄分數與收藏。","color":Paper.TEAL},
 	]
+	if definition.mode == "cotton_wind":
+		notes[3].text = "親自收絲至少 1 單位、移棒至少 6 單位、轉棒至少 0.5 弧度後，正式回合自然結算可收藏普通拍貼，包含逾時。練習或中途取消不發卡。也可免費補拍。"
+		notes[4].text = "輔助降低熱風，放寬均勻與接絲判定。R 切換的 AI 只用另一支棒收自己的絲。仍要親手移棒、轉棒，挑戰小惡魔也要親自接回。"
+		notes.append({"text":"轉棒補薄角，CV 越低表示繞棒越勻。左右移棒補薄段，讓三段重量接近。一般各段至少 12、8 格，CV ≤ 0.65、段重比 ≤ 1.35。輔助則為 12、7 格、0.8、1.5。","color":Paper.INK})
+		notes.append({"text":"暫停、失焦或手指取消會停下移動及鎖定轉動，已收的絲保留。每個達標段 100 分，確認均勻加 100 分。有接回且通關再加 100 分，失誤扣 20 分。","color":Paper.TEAL})
 	_content_pager(objective_card,"GameRulesExtraDetails",notes,_render_game_rules_page,1,entry_stamp)
 	var row := HFlowContainer.new()
 	row.name="GameRulesActions"

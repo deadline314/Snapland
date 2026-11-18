@@ -68,5 +68,19 @@
     "ordinary": "三個主輪帶動出口轉滿一圈",
     "attraction_tag": "熱線工藝板",
     "island_invitation": "方向鍵移游標，Tab換片、Q/E選深度、Space按住描線或轉動，F折料或放置、M換工藝與試裝、X撤銷、R切換AI夾持。"
+  },
+  {
+    "id": "game-030",
+    "mode": "cotton_wind",
+    "zone": "candy",
+    "local_index": 6,
+    "name": "棉糖捲風",
+    "goal": "120 秒內邊轉邊移棒，捲出三段均勻棉糖後按 F 確認。靠近收得快且厚，拉遠能取細絲。時間到保留作品。",
+    "instructions": "WASD 或方向鍵移棒。按住 Q 逆轉，E 或空白鍵順轉。滑鼠或單指點轉棒鈕鎖定，再拖曳工作區移棒，同鈕再點停止。F 確認，R 切換 AI。",
+    "devil_hint": "在遠處用棒的外段接出細絲，將斷時邊轉棒邊用另一外段接住自由端，再做勻三段並按 F 確認。",
+    "devil": "用另一外段接回將斷的絲，完成均勻成品",
+    "ordinary": "捲出三段均勻棉糖並確認",
+    "attraction_tag": "旋糖工作台",
+    "island_invitation": "WASD 或方向鍵移棒，Q/E 轉棒，F 確認。也可點轉棒鈕後拖曳移棒。"
   }
 ]

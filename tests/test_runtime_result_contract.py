@@ -278,14 +278,21 @@ JELLY_SUITES = {
     "jelly Session tests": ("test_jelly_trampoline_session.gd", "Jelly trampoline Session: 52 checks, 0 failures"),
     "jelly Main tests": ("test_jelly_trampoline_main.tscn", "PASS: jelly Main factory entry, three real deliveries and same-fruit bell, fixed rewards, selected retake originals and reload"),
 }
-DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES | CHOCOLATE_SUITES
+COTTON_SUITES = {
+    "cotton model tests": ("test_cotton_wind.gd", "Cotton wind model: 99 checks, 0 failures"),
+    "cotton driver tests": ("test_cotton_wind_driver.gd", "Cotton wind driver: 62 checks, 0 failures"),
+    "cotton view tests": ("test_cotton_wind_view.gd", "Cotton wind view: 7 checks, 0 failures"),
+    "cotton Session tests": ("test_cotton_wind_session.gd", "Cotton wind Session: 98 checks, 0 failures"),
+    "cotton Main tests": ("test_cotton_wind_main.tscn", "Cotton wind Main: 70 checks, 0 failures"),
+}
+DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES | CHOCOLATE_SUITES | COTTON_SUITES
 
 
 class RegionalDriverRunnerTests(unittest.TestCase):
     def test_driver_suites_are_registered_once_with_exact_entrypoints(self) -> None:
         checks = build_checks("fixture-godot")
-        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup ", "jelly ", "chocolate "))]
-        self.assertEqual(len(drivers), 25)
+        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup ", "jelly ", "chocolate ", "cotton "))]
+        self.assertEqual(len(drivers), 30)
         self.assertEqual({label for label, _ in drivers}, set(DRIVER_SUITES))
         for label, command in drivers:
             with self.subTest(label=label):
@@ -308,6 +315,10 @@ class RegionalDriverRunnerTests(unittest.TestCase):
                     self.assertIsNotNone(result_error(label, result(marker + "\n" + diagnostic)))
                     self.assertIsNotNone(result_error(label, result(marker, diagnostic)))
                 self.assertIsNotNone(result_error(label, result(marker, code=1)))
+                if label in COTTON_SUITES:
+                    self.assertIsNotNone(result_error(label, result(marker + "\n" + marker)), "duplicate completion is invalid")
+                    self.assertIsNotNone(result_error(label, result(marker, "WARNING: ObjectDB instances leaked at exit")))
+                    self.assertIsNotNone(result_error(label, result(marker, "WARNING: objects still in use")))
 
 
 class RetakeRunnerTests(unittest.TestCase):

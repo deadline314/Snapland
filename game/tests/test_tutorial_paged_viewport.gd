@@ -16,7 +16,7 @@ func _run() -> void:
 		await _frames(2)
 		var lesson_ids: Array[String] = panel.catalog.lesson_ids()
 		var page_count := 0
-		_check(lesson_ids.size() == 30, "one park lesson and 29 game lessons")
+		_check(lesson_ids.size() == 31, "one park lesson and 30 game lessons")
 		for lesson_id in lesson_ids:
 			await panel.open_tutorial(lesson_id)
 			for step in range(panel.catalog.get_lesson(lesson_id).steps.size()):
@@ -38,6 +38,8 @@ func _run() -> void:
 				page_count += panel._copy_pages.size()
 				if lesson_id == "game-029":
 					print("CHOCOLATE tutorial viewport=%s scale=1.25 step=%d pages=%d" % [dimensions, step + 1, panel._copy_pages.size()])
+				elif lesson_id == "game-030":
+					print("COTTON tutorial viewport=%s scale=1.25 step=%d pages=%d" % [dimensions, step + 1, panel._copy_pages.size()])
 				for page in range(panel._copy_pages.size()):
 					panel._set_copy_page(page)
 					await _frames(4)

@@ -3,6 +3,7 @@ extends SceneTree
 const Session = preload("res://game/minigames/session.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
 const Chocolate = preload("res://game/tests/test_chocolate_etching_session.gd")
+const Cotton = preload("res://game/tests/test_cotton_wind_session.gd")
 var failures: Array[String] = []
 
 func _initialize() -> void:
@@ -22,6 +23,7 @@ func _run() -> void:
 		if definition.mode == "jelly_trampoline":
 			preload("res://game/tests/test_jelly_trampoline_session.gd").launch(session, 0.15)
 		if definition.mode == "chocolate_etching": Chocolate.cut_line(session)
+		if definition.mode == "cotton_wind": Cotton.participate(session)
 		if definition.mode == "sugar_bridge":
 			var load_ball := InputEventKey.new()
 			load_ball.keycode = KEY_ENTER
@@ -51,7 +53,8 @@ func _run() -> void:
 			session._finish(false, true)
 		_check(results.back().get("ordinary_eligible", false) and not results.back().success and not results.back().devil, definition.id + " natural false stays honest and ordinary eligible")
 		var result_count := results.size()
-		session._finish(true, true)
+		if definition.mode == "cotton_wind": session._process(0.25)
+		else: session._finish(true, true)
 		_check(results.size() == result_count, "natural finish emits once")
 		session.start(definition.id)
 		session.set_practice_mode(true)
@@ -61,6 +64,9 @@ func _run() -> void:
 		elif definition.mode == "chocolate_etching":
 			Chocolate.cut_line(session)
 			Chocolate.advance(session, 241.0)
+		elif definition.mode == "cotton_wind":
+			Cotton.participate(session)
+			Cotton.advance(session, 121.0)
 		elif definition.mode == "syrup_flood":
 			var practice_valve := InputEventKey.new()
 			practice_valve.keycode = KEY_SPACE
@@ -71,14 +77,15 @@ func _run() -> void:
 				if session.ended: break
 				session._process(0.25)
 		elif session.active_driver != null: session._driver_state["ordinary_eligible"] = true
-		session._finish(false)
+		if definition.mode != "cotton_wind": session._finish(false)
 		_check(results.back().has("ordinary_eligible") and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
 		session.set_practice_mode(false)
 		session.start(definition.id)
 		result_count = results.size()
 		var cancel_count := cancelled.size()
 		session._leave_from_hud()
-		session._finish(false)
+		if definition.mode == "cotton_wind": Cotton.advance(session, 121.0)
+		else: session._finish(false)
 		_check(results.size() == result_count and cancelled.size() == cancel_count + 1, definition.id + " cancellation is separate")
 	session.start("game-013")
 	session._driver_state["ordinary_eligible"] = false

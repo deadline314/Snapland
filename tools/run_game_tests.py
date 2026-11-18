@@ -21,6 +21,11 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "cotton model tests": "Cotton wind model: 99 checks, 0 failures",
+    "cotton driver tests": "Cotton wind driver: 62 checks, 0 failures",
+    "cotton view tests": "Cotton wind view: 7 checks, 0 failures",
+    "cotton Session tests": "Cotton wind Session: 98 checks, 0 failures",
+    "cotton Main tests": "Cotton wind Main: 70 checks, 0 failures",
     "chocolate model tests": "Chocolate etching tests: 217 checks, 0 failures",
     "chocolate driver tests": "Chocolate etching driver: 92 checks, 0 failures",
     "chocolate view tests": "Chocolate etching view: 33 checks, 0 failures",
@@ -264,7 +269,12 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ", "jelly ", "chocolate ")) or label in {"region progress tests", "region travel tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
+    if label.startswith("cotton "):
+        if re.search(r"ObjectDB instances leaked|still in use|resources? in use at exit", output, re.I):
+            return f"{label} leaked engine objects or resources.\n{output.strip()[-6000:]}"
+        completed = stdout_lines.count(marker) == 1 and output.splitlines().count(marker) == 1
+    else:
+        completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ", "jelly ", "chocolate ")) or label in {"region progress tests", "region travel tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -371,6 +381,11 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate view tests", common + ["--script", "res://game/tests/test_chocolate_etching_view.gd"]),
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
+        ("cotton model tests", common + ["--script", "res://game/tests/test_cotton_wind.gd"]),
+        ("cotton driver tests", common + ["--script", "res://game/tests/test_cotton_wind_driver.gd"]),
+        ("cotton view tests", common + ["--script", "res://game/tests/test_cotton_wind_view.gd"]),
+        ("cotton Session tests", common + ["--script", "res://game/tests/test_cotton_wind_session.gd"]),
+        ("cotton Main tests", common + ["res://game/tests/test_cotton_wind_main.tscn"]),
         ("jelly model tests", common + ["--script", "res://game/tests/test_jelly_trampoline.gd"]),
         ("jelly driver tests", common + ["--script", "res://game/tests/test_jelly_trampoline_driver.gd"]),
         ("jelly view tests", common + ["--script", "res://game/tests/test_jelly_trampoline_view.gd"]),
