@@ -58,20 +58,22 @@ func _run() -> void:
 	var dimensions := OS.get_environment("COTTON_REVIEW_SIZE").split("x")
 	if dimensions.size() == 2:
 		requested = Vector2i(int(dimensions[0]), int(dimensions[1]))
-	var save_error := SaveGuard.validate_save_path(OS.get_environment("SNAPLAND_SAVE_PATH"), OS.get_user_data_dir())
-	if (DisplayServer.get_name() == "headless" or not save_error.is_empty()
-		or not output.is_absolute_path() or output.contains("://") or requested not in [Vector2i(1280, 720), Vector2i(1152, 648), Vector2i(800, 600)]
+	if (DisplayServer.get_name() == "headless" or requested not in [Vector2i(1280, 720), Vector2i(1152, 648), Vector2i(800, 600)]
 		or mode not in ["suite", "retake-ordinary", "retake-devil", "read"]):
 		push_error("Native cotton requires GPU, isolated paths, and an explicit supported mode and size")
 		get_tree().quit(1)
 		return
-	DirAccess.make_dir_recursive_absolute(output)
+	var save := OS.get_environment("SNAPLAND_SAVE_PATH")
+	var refusal := destination_error(save)
+	if not refusal.is_empty():
+		push_error("Native cotton preflight: " + refusal)
+		get_tree().quit(1)
+		return
 	Input.use_accumulated_input = false
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	get_window().content_scale_size = requested
 	get_window().size = requested
 	if mode != "read":
-		check(not FileAccess.file_exists(OS.get_environment("SNAPLAND_SAVE_PATH")), "writer has a fresh isolated save")
 		Progress.reset_progress()
 		Progress.intro_seen = true
 		Progress.prologue_seen = true
@@ -110,8 +112,44 @@ func _run() -> void:
 			check(not Progress.photos.has("photo-candy-game-%d" % card) and not Progress.photos.has("photo-candy-devil-%d" % card), "cotton never grants older factory cards")
 		check(Progress.coins == admission_coins + 40 and Progress.wardrobe_rewarded_games.count(GAME) == 1 and Progress.achievements.has(ACHIEVEMENT), "exact one 40-coin fixed achievement receipt")
 		check(Progress.save_progress(), "writer saves actual progress")
-		write_json(provenance_path(), {"mode": mode, "profile": profile_receipt()})
+		write_json(provenance_path(), {"mode": mode, "save_path": save, "save_sha256": FileAccess.get_sha256(save), "profile": profile_receipt()})
 	await finish()
+
+func destination_error(save: String) -> String:
+	for path: String in [save, output]:
+		var error := SaveGuard.validate_save_path(path, OS.get_user_data_dir())
+		if not error.is_empty():
+			return error
+	var save_dir := save.get_base_dir()
+	if not save.get_file().is_valid_filename() or save.get_file().to_lower() in ["native-originals.json", "photos"] or DirAccess.dir_exists_absolute(save):
+		return "expected a usable save file path: " + save
+	if save_dir.simplify_path().to_lower() == output.simplify_path().trim_suffix("/").to_lower():
+		return "save and capture require separate directories"
+	var fresh_paths: Array[String] = [output]
+	if mode == "read":
+		if not FileAccess.file_exists(save) or not FileAccess.file_exists(provenance_path()):
+			return "reader requires its writer's save and provenance"
+		var writer = JSON.parse_string(FileAccess.get_file_as_string(provenance_path()))
+		if not writer is Dictionary or writer.get("save_path") != save or writer.get("save_sha256") != FileAccess.get_sha256(save):
+			return "reader save does not match its writer's provenance"
+	else:
+		fresh_paths.push_front(save_dir)
+	for path: String in fresh_paths:
+		var dir := DirAccess.open(path)
+		if dir == null:
+			return "missing or inaccessible directory: " + path
+		dir.include_hidden = true
+		if dir.list_dir_begin() != OK or not dir.get_next().is_empty():
+			return "expected a fresh empty directory: " + path
+	for path: String in fresh_paths:
+		var probe := save + ".tmp" if path == save_dir else path.path_join(".cotton-write-test")
+		var file := FileAccess.open(probe, FileAccess.WRITE)
+		if file == null:
+			return "cannot write in directory: " + path
+		file.close()
+		if DirAccess.remove_absolute(probe) != OK:
+			return "cannot remove write probe: " + probe
+	return ""
 
 func parse(event: InputEvent, point := Vector2.ZERO) -> void:
 	if not event is InputEventKey:
@@ -270,8 +308,41 @@ func read_lessons() -> void:
 			lessons.append({"capture": label + ".png", "image": texture.resource_path if texture != null else "",
 				"image_rect": rect_data(image_rect), "image_clip": rect_data(image_clip), "semantic_indices": semantic, "copy": visible_copy(group)})
 		check(covered == [0, 1, 2, 3, 4], "all five semantic fields in order for slide %d" % (slide + 1))
+		if requested == Vector2i(800, 600):
+			await check_caption_zoom(panel, slide)
 		if slide < 2:
 			await press_button(panel._next_button)
+
+func check_caption_zoom(panel: Control, slide: int) -> void:
+	var preview: Button = panel._screenshot_zoom_button
+	for i in 24:
+		if preview.has_focus():
+			break
+		await key(KEY_TAB)
+	check(preview.has_focus(), "Tab reaches the screenshot preview on slide %d" % (slide + 1))
+	await key(KEY_ENTER)
+	await frames(3)
+	var caption: Label = panel._zoom_caption
+	var image: TextureRect = panel._zoom_image
+	var back: Button = panel._zoom_back
+	var expected: String = panel.current_step_data().alt
+	var label := "tutorial-%d-zoom" % (slide + 1)
+	check(panel._screenshot_zoom.is_visible_in_tree() and back.has_focus() and caption.text == expected and not expected.is_empty()
+		and caption.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING, label + " opens the full caption and focuses Back")
+	var text_size := caption.get_theme_font("font").get_multiline_string_size(caption.text, caption.horizontal_alignment, caption.size.x, caption.get_theme_font_size("font_size"))
+	check(text_size.x <= caption.size.x + 1.0 and text_size.y <= caption.size.y + 1.0 and caption.get_visible_line_count() == caption.get_line_count(),
+		label + " entire shaped caption fits")
+	check(image.texture != null and image.texture == panel._image.texture and image.is_visible_in_tree() and clip_for(image).encloses(screen_rect(image))
+		and not screen_rect(image).intersects(screen_rect(caption)) and not screen_rect(caption).intersects(screen_rect(back)), label + " image, text and Back are visible and separate")
+	await capture(label)
+	check_layout(label, panel._screenshot_zoom)
+	await key(KEY_ENTER)
+	await frames(2)
+	var restored: bool = preview.has_focus() and not panel._screenshot_zoom.is_visible_in_tree()
+	check(restored, label + " Back returns focus to the slide screenshot")
+	lessons.append({"capture": label + ".png", "caption": expected, "caption_shaped_size": [text_size.x, text_size.y],
+		"caption_rect": rect_data(screen_rect(caption)), "image_rect": rect_data(screen_rect(image)), "back_rect": rect_data(screen_rect(back)),
+		"caption_lines": caption.get_line_count(), "focus_restored": restored})
 
 func bind_session() -> bool:
 	session = main.session
@@ -738,6 +809,7 @@ func collect_layout(label: String, root: Node, active_group: Control, entries: A
 			var clip := clip_for(child)
 			var fits := clip.grow(0.5).encloses(rect)
 			var text_fits := true
+			var abbreviated := false
 			if child is Button:
 				var room: Vector2 = child.size - child.get_theme_stylebox("normal").get_minimum_size()
 				var font: Font = child.get_theme_font("font")
@@ -752,11 +824,13 @@ func collect_layout(label: String, root: Node, active_group: Control, entries: A
 				if child.autowrap_mode == TextServer.AUTOWRAP_OFF and child.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING:
 					for line in child.text.split("\n"):
 						text_fits = text_fits and child.get_theme_font("font").get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, child.get_theme_font_size("font_size")).x <= child.size.x + 0.5
+				elif child.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS and is_instance_valid(main.tutorial_panel) and child == main.tutorial_panel._image_alt:
+					abbreviated = child.get_theme_font("font").get_string_size(child.text, HORIZONTAL_ALIGNMENT_LEFT, -1, child.get_theme_font_size("font_size")).x > child.size.x + 0.5
 			else:
 				text_fits = child.get_content_height() <= child.size.y + 1.0
 			check(fits and text_fits, "%s %s bounds=%s text_fits=%s clip=%s rect=%s text=%s" % [label, child.name, fits, text_fits, clip, rect, child.text])
 			entries.append({"name": str(child.name), "text": child.text, "rect": rect_data(rect), "clip": rect_data(clip),
-				"bounds_fit": fits, "text_fits": text_fits})
+				"bounds_fit": fits, "text_fits": text_fits and not abbreviated, "abbreviated_inline": abbreviated})
 		collect_layout(label, child, active_group, entries)
 
 func write_json(path: String, data: Dictionary) -> void:

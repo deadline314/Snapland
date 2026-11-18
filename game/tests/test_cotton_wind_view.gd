@@ -106,9 +106,11 @@ func _run() -> void:
 			await _capture("game-030-step-02", state)
 			_button(_last_point, false)
 			_tap("finish")
-			check(_driver.snapshot().score == 400 and _driver.snapshot().ordinary_eligible, "parsed ordinary mouse route confirms 400")
 			break
 		_move_to(Route.target(state, false), true)
+	var ordinary := _driver.snapshot()
+	check(ordinary.ended and ordinary.success and ordinary.score == 400 and ordinary.ordinary_eligible, "parsed ordinary mouse route ends successfully with 400 and ordinary eligibility")
+	print("COTTON_ORDINARY_RESULT ", JSON.stringify({"ended": ordinary.ended, "success": ordinary.success, "score": ordinary.score, "ordinary_eligible": ordinary.ordinary_eligible}))
 	_reset_a()
 	_tap("spin_right", 0)
 	check(_driver.snapshot().omega > 0, "parsed finger tap latches spin")
@@ -285,6 +287,11 @@ func _geometry(state: Dictionary) -> void:
 func _capture(label: String, state: Dictionary) -> void:
 	_driver.present("noon", true)
 	await process_frame
+	var status := (_view.get_node("Tail") as Label).text
+	if label == "game-030-step-01":
+		check(state.quality[0].mass == 0 and status.contains("先補滿空段") and not status.contains("厚薄比"), "partial collection identifies the empty band")
+	elif label == "game-030-step-02":
+		check(state.uniform and state.ratio >= 1.0 and status.contains("厚薄比 %.2f" % state.ratio), "uniform collection displays the measured ratio")
 	_layout(label)
 	_geometry(state)
 	await RenderingServer.frame_post_draw
@@ -311,7 +318,7 @@ func _capture(label: String, state: Dictionary) -> void:
 		var path := _output.path_join(label + ".png")
 		check(not FileAccess.file_exists(path) and image.save_png(path) == OK, "immutable raw native capture " + label)
 	print("COTTON_NATIVE_FRAME ", JSON.stringify({"label": label, "size": [_width.x, _width.y], "time": state.elapsed,
-		"material": state.material.player, "quality": state.quality, "uniform": state.uniform,
+		"material": state.material.player, "quality": state.quality, "uniform": state.uniform, "ratio": state.ratio, "status": status,
 		"strands": state.strands.size(), "tail_tension": state.tail.get("tension", 0), "tail": str(state.tail),
 		"warm_pixels": warm, "mint_pixels": mint, "changed_pixels": changed}))
 

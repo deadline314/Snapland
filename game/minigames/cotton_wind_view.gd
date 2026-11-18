@@ -485,7 +485,8 @@ func _apply_interface() -> void:
 	_labels.Anchor.visible = not tail.is_empty() and tail.near_break
 	_labels.FreeEnd.visible = _labels.Anchor.visible
 	if tail.is_empty():
-		_labels.Tail.text = "三段%s · 厚薄比 %.2f    ｜    等待外段遠處收出懸絲" % ["均勻" if _state.uniform else "調整中", _state.ratio]
+		var ratio_hint := "厚薄比 %.2f" % _state.ratio if _state.ratio > 0.0 else "先補滿空段"
+		_labels.Tail.text = "三段%s · %s    ｜    等待外段遠處收出懸絲" % ["均勻" if _state.uniform else "調整中", ratio_hint]
 	else:
 		var action := "將自由端移入亮框的%s" % BAND_NAMES[tail.receiver_band] if tail.near_break else "移棒拉出張力，將斷時才可接回"
 		_labels.Tail.text = "%s · 張力 %.0f    ｜    %s" % ["將斷" if tail.near_break else "懸絲", tail.tension, action]
