@@ -125,6 +125,15 @@ func _boundaries(model) -> void:
 	expect(fixed_lane.quality[1].ready and not fixed_lane.uniform and not fixed_lane.success, "Spinning in a productive fixed lane cannot balance the outer bands even with assist")
 
 func _material(model) -> void:
+	model.reset()
+	model.move_stick_to(Vector2(0, 65))
+	for i in 240:
+		model.step(1.0 / 120.0)
+		if model.snapshot().material.player > 0:
+			break
+	var first: Dictionary = model.snapshot()
+	expect(first.bands[1][9] > 0 and first.bands[1][8] == 0, "First offset contact must deposit on middle radial cell 9; cell 8 remains empty")
+	print("COTTON_FIRST elapsed=%.6f middle8=%.9f middle9=%.9f" % [first.elapsed, first.bands[1][8], first.bands[1][9]])
 	var per_strand: Array[float] = []
 	for depth in [56.0, 146.0]:
 		model.reset()

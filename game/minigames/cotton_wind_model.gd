@@ -200,8 +200,12 @@ func _collect(strand: Dictionary, previous: Vector3, helper: bool, h: float) -> 
 	var time_after_contact := (1.0 - fraction) * h
 	var angle: float = _s.helper_angle - 2.0 * time_after_contact if helper else _s.angle - _s.omega * time_after_contact
 	var velocity: Vector3 = strand.velocity + Vector3.UP * 80.0 * time_after_contact
-	# Incoming tangent gives the feed side; rotation selects the material cell underneath.
-	var local_angle := atan2(-velocity.z, -velocity.y) - angle
+	var radial := pair[0] - pair[1]
+	# An on-axis crossing uses its approach side; a purely axial contact uses +Y.
+	if radial.y == 0.0 and radial.z == 0.0:
+		radial = a
+	var world_angle := 0.0 if radial.y == 0.0 and radial.z == 0.0 else atan2(radial.z, radial.y)
+	var local_angle := world_angle - angle
 	var cell := _cell(local_angle)
 	var bands: Array = _s.helper_bands if helper else _s.bands
 	var contact_radius := radius(bands[band][cell]) + (4.0 if _s.assisted else 0.0)
