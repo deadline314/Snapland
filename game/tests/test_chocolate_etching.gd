@@ -21,6 +21,7 @@ func _run() -> void:
 			expect(false, "Model must instantiate")
 		else:
 			var model = script.new()
+			_review_round_one(model)
 			_material_tests(model)
 			_input_tests(model)
 			_network_tests(model)
@@ -499,3 +500,123 @@ func _boundary_tests(model) -> void:
 		var phase_b: float = PI/2.0-PI/b.teeth
 		var residual: float = wrapf(a.teeth*(a.angle+phase_a-theta)+b.teeth*(b.angle+phase_b-theta-PI)-PI,-PI,PI)
 		expect(absf(residual)<0.00001, "Contact line tooth phase constraint survives actual angular integration")
+
+func _review_round_one(model) -> void:
+	var geo = load("res://game/minigames/chocolate_etching_geometry.gd")
+	model.reset(true)
+	var guide: PackedVector2Array = model.snapshot().selected_guides[0]
+	var blank := PackedVector2Array()
+	var center := Vector2(160,190)
+	for i in guide.size():
+		var a := guide[i]-center
+		var b := guide[(i+1)%guide.size()]-center
+		if a.length() < 47.6 and b.length() > 47.6:
+			var edge := b-a
+			var t := (-a.dot(edge)+sqrt(pow(a.dot(edge),2)-edge.length_squared()*(a.length_squared()-47.6*47.6)))/edge.length_squared()
+			blank.append(center+a+edge*t)
+	expect(blank.size()==12, "Review counterexample is twelve actual guide-flank intersections")
+	draw(model,blank)
+	draw(model,blank)
+	model.fold_or_mount()
+	expect(not model.snapshot().parts[0].freed, "R1 assisted convex twelve-gon cannot masquerade as teeth")
+	var missing_tooth: PackedVector2Array = geo.template(center,12)
+	for i in [0,3]:
+		missing_tooth[i]=center+(missing_tooth[i]-center).normalized()*44.5
+	for i in [1,2]:
+		missing_tooth[i]=center+(missing_tooth[i]-center).normalized()*46.8
+	expect(geo.measure(missing_tooth,center,12,true).is_empty(), "R1 one low-prominence tooth fails even within assisted radial bands")
+	for direction in [-1.0,1.0]:
+		model.reset(true)
+		guide=model.snapshot().selected_guides[0]
+		var start := (guide[1]+guide[2])*0.5
+		var tangent := (guide[2]-guide[1]).normalized()
+		var normal: Vector2 = Vector2(-tangent.y,tangent.x)*direction
+		model.move_cursor_to(start)
+		model.set_motion(normal)
+		advance(model,0.5)
+		expect((model.snapshot().cursor-start).dot(normal)>45.0, "R2 assisted relative motion escapes the snap band in both directions")
+	model.reset()
+	model.set_motion(Vector2.RIGHT)
+	model.cancel_tool()
+	var stopped: Vector2=model.snapshot().cursor
+	model.step(0.25)
+	expect(model.snapshot().cursor==stopped, "R3 public cancellation clears held motion")
+	model.reset()
+	draw(model,PackedVector2Array([Vector2(158,190),Vector2(163,190)]),false)
+	expect(model.snapshot().selected_strokes.size()==1 and model.snapshot().undo_available==1 and not model.snapshot().participated, "R4 short physical scratch commits without participation")
+	cut_piece(model,0)
+	expect(not model.snapshot().parts[0].freed, "R4 five-unit interior kerf prevents intact extraction")
+	model.reset()
+	draw(model,PackedVector2Array([Vector2(158,190),Vector2(163,190)]),false)
+	model.undo()
+	expect(model.snapshot().selected_strokes.is_empty() and model.snapshot().mistakes==1, "R4 short scratch is a real undoable edit")
+	cut_piece(model,0)
+	expect(model.snapshot().parts[0].freed, "R4 undo actually restores scratched material")
+	model.reset()
+	draw(model,PackedVector2Array([Vector2(158,190),Vector2(163,190)]),false)
+	advance(model,241.0)
+	expect(model.snapshot().ended and not model.snapshot().ordinary_eligible, "R4 short-only timeout is not participated")
+	model.reset()
+	for i in 3:
+		cut_piece(model,i)
+	assemble(model,false)
+	model.begin_tool()
+	model.step(0.25)
+	model.toggle_phase()
+	select(model,3)
+	draw(model,PackedVector2Array([Vector2(80,100),Vector2(85,100)]),false)
+	expect(model.snapshot().output_travel==0.0 and model.snapshot().selected_strokes.size()==1, "R4 short committed scratch resets structural travel")
+	for size in [0.008,0.012,0.02]:
+		var square := PackedVector2Array([Vector2(330,318),Vector2(330+size,318),Vector2(330+size,318+size),Vector2(330,318+size)])
+		var represented: float = (float(square[1].x)-float(square[0].x))*(float(square[2].y)-float(square[1].y))
+		for reverse in [false,true]:
+			if reverse:
+				square.reverse()
+			expect(absf(geo.area(square)-represented)<1.0e-12, "R5 board-coordinate represented area is stable in both windings")
+			expect(geo.overlaps(square,square)==(represented>0.0001), "R5 overlap respects the stated area threshold")
+	model.reset()
+	expect(model.snapshot().connections.is_typed() and model.snapshot().connections.get_typed_builtin()==TYPE_VECTOR2I, "R6 empty contact array has the public Vector2i element type")
+	for i in 3:
+		cut_piece(model,i)
+	assemble(model,false)
+	var contacts: Array=model.snapshot().connections
+	expect(contacts.is_typed() and contacts.get_typed_builtin()==TYPE_VECTOR2I and contacts==[Vector2i(0,1),Vector2i(1,2)], "R6 rebuilt contact array retains its type and deterministic order")
+	model.reset()
+	var asymmetric: PackedVector2Array=geo.template(center,12)
+	asymmetric.insert(28,center+Vector2.from_angle(PI/2.0-PI/12.0+TAU*9.15/12.0)*90.0)
+	asymmetric=geo.offset(asymmetric,1.75,center)
+	draw(model,asymmetric)
+	draw(model,asymmetric)
+	model.fold_or_mount()
+	expect(model.snapshot().parts[0].freed, "R7 asymmetric regression uses an actually extracted valid gear")
+	model.toggle_phase()
+	model.place_selected(Vector2(200,65))
+	expect(not model.snapshot().parts[0].mounted, "R7 full-turn envelope rejects horizontal protrusion near top canvas edge")
+	model.place_selected(Vector2(200,100))
+	expect(model.snapshot().parts[0].mounted, "R7 the same actual asymmetric gear fits at a safe center")
+	model.reset()
+	draw(model,PackedVector2Array([Vector2(100,100),Vector2(100.00005,100)]),false)
+	expect(model.snapshot().selected_strokes.size()==1 and not model.snapshot().participated, "R4 every represented nonzero scratch survives, even below sampling epsilon")
+	model.reset()
+	draw(model,PackedVector2Array([Vector2(100,100),Vector2(103,100),Vector2(101.5,102.598)]),false)
+	expect(model.snapshot().participated and model.snapshot().selected_strokes[0].points.size()==4, "R4 actual added closing segment contributes to committed material length")
+	var hole := PackedVector2Array([Vector2(102,99),Vector2(108,99),Vector2(108,101),Vector2(102,101)])
+	expect(is_equal_approx(geo.material_length(PackedVector2Array([Vector2(100,100),Vector2(110,100)]),[hole]),4.0), "R4 length through removed material is excluded from participation length")
+	model.reset(true)
+	guide=model.snapshot().selected_guides[0]
+	model.move_cursor_to((guide[1]+guide[2])*0.5)
+	model.set_motion(Vector2.RIGHT)
+	model.step(0.05)
+	model.move_cursor_to(Vector2(80,100))
+	model.begin_tool()
+	model.step(0.1)
+	model.release_tool()
+	var released: Vector2=model.snapshot().cursor
+	model.step(0.1)
+	expect(model.snapshot().participated and model.snapshot().cursor.distance_to(released)>10.0, "R2/R3 absolute move rebases anchor and valid begin/release preserves held movement")
+	for transition in ["cycle_piece","toggle_phase","undo"]:
+		model.call(transition)
+		stopped=model.snapshot().cursor
+		model.step(0.1)
+		expect(model.snapshot().cursor==stopped, "R2/R3 transition synchronizes anchor and stops movement: "+transition)
+		model.set_motion(Vector2.RIGHT)

@@ -12,9 +12,37 @@ static func in_board(p: Vector2) -> bool:
 
 static func area(poly: PackedVector2Array) -> float:
 	var total := 0.0
-	for i in poly.size():
-		total += poly[i].cross(poly[(i + 1) % poly.size()])
+	for i in range(1, poly.size() - 1):
+		var ax: float = float(poly[i].x) - float(poly[0].x)
+		var ay: float = float(poly[i].y) - float(poly[0].y)
+		var bx: float = float(poly[i + 1].x) - float(poly[0].x)
+		var by: float = float(poly[i + 1].y) - float(poly[0].y)
+		total += ax * by - ay * bx
 	return absf(total) * 0.5
+
+static func material_length(line: PackedVector2Array, removed: Array) -> float:
+	var total := 0.0
+	for i in range(line.size() - 1):
+		var a := line[i]
+		var b := line[i + 1]
+		var edge := b - a
+		var fractions: Array[float] = [0.0, 1.0]
+		for poly in removed:
+			for j in poly.size():
+				var hit = Geometry2D.segment_intersects_segment(a, b, poly[j], poly[(j + 1) % poly.size()])
+				if hit != null:
+					fractions.append(clampf((hit - a).dot(edge) / edge.length_squared(), 0.0, 1.0))
+		fractions.sort()
+		for j in range(fractions.size() - 1):
+			var midpoint := a.lerp(b, (fractions[j] + fractions[j + 1]) * 0.5)
+			var remains := true
+			for poly in removed:
+				if Geometry2D.is_point_in_polygon(midpoint, poly):
+					remains = false
+					break
+			if remains:
+				total += edge.length() * (fractions[j + 1] - fractions[j])
+	return total
 
 static func simple(poly: PackedVector2Array) -> bool:
 	if poly.size() < 3 or poly.size() > MAX_POINTS:
@@ -137,9 +165,10 @@ static func measure(poly: PackedVector2Array, center: Vector2, teeth: int, assis
 			return {}
 		root_sum += root
 		smallest = minf(smallest, root)
+		var next_root := ray_radius(poly, center, angle + TAU / teeth)
 		for fraction in [0.35, 0.5, 0.65]:
 			var top := ray_radius(poly, center, angle + TAU * fraction / teeth)
-			if top < radius - 2.0 - tolerance or top > radius + 14.0 + tolerance:
+			if top < radius - 2.0 - tolerance or top > radius + 14.0 + tolerance or top - maxf(root, next_root) < 4.0:
 				return {}
 			if fraction == 0.5:
 				top_sum += top

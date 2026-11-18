@@ -12,6 +12,7 @@ var _s: Dictionary
 var _strokes: Array = []
 var _history: Array = []
 var _motion := Vector2.ZERO
+var _motion_cursor := Vector2.ZERO
 var _current := PackedVector2Array()
 var _invalid_stroke := false
 var _guides: Array = []
@@ -29,12 +30,14 @@ func reset(assisted: bool = false, variant: int = 0) -> void:
 	_history = []
 	_strokes = [[], [], [], []]
 	var centers := [Vector2(160,190), Vector2(330,190), Vector2(500,190), Vector2(330,318 if variant == 0 else 302)]
+	_motion_cursor = centers[0]
+	var contacts: Array[Vector2i] = []
 	_s = {"elapsed": 0.0, "remaining": ROUND_SECONDS, "score": 0, "mistakes": 0,
 		"ended": false, "success": false, "devil": false, "ordinary_eligible": false,
 		"participated": false, "assisted": assisted, "variant": variant, "phase": "craft",
 		"selected": 0, "depth": 0.5, "cursor": centers[0], "cutting": false, "driving": false,
 		"helper": false, "helper_clamp": null, "feedback": "描線切透後折料；淺切可重描保料",
-		"output_travel": 0.0, "output_omega": 0.0, "connections": [], "source_board": Geometry.BOARD,
+		"output_travel": 0.0, "output_omega": 0.0, "connections": contacts, "source_board": Geometry.BOARD,
 		"source_centers": centers, "pins": [Vector2(200,220), Vector2(440 if variant == 0 else 416,220)], "parts": []}
 	for i in 4:
 		_s.parts.append({"teeth": TEETH[variant][i], "source_center": centers[i], "freed": false,
@@ -57,6 +60,7 @@ func move_cursor_to(point: Vector2) -> void:
 		return
 	var valid := point.x >= 0 and point.x <= 720 and point.y >= 0 and point.y <= 440
 	point = point.clamp(Vector2.ZERO, Vector2(720,440))
+	_motion_cursor = point
 	if _s.phase == "craft" and _s.assisted:
 		var closest := point
 		var distance := 10.0
@@ -71,7 +75,7 @@ func move_cursor_to(point: Vector2) -> void:
 	if _s.cutting:
 		if not valid or not _material_at(point):
 			_invalid_stroke = true
-		if _current.is_empty() or _current[-1].distance_to(point) > 0.0001:
+		if _current.is_empty() or _current[-1] != point:
 			if _current.size() >= 2:
 				var previous := _current[-1] - _current[-2]
 				var next := point - _current[-1]
@@ -123,10 +127,12 @@ func release_tool() -> void:
 		return
 	_s.cutting = false
 	if not _invalid_stroke and _current.size() >= 2:
-		var length := 0.0
-		for i in range(_current.size() - 1):
-			length += _current[i].distance_to(_current[i + 1])
-		if length >= 8.0:
+		var removed: Array = []
+		for part in _s.parts:
+			if part.freed:
+				removed.append(part.removed_outline)
+		var length := Geometry.material_length(_current, removed)
+		if length > 0.0:
 			if _current.size() >= 3 and _current[0].distance_to(_current[-1]) <= (7.0 if _s.assisted else 4.0):
 				if _current[-1].distance_to(_current[0]) < 0.0001:
 					_current[-1] = _current[0]
@@ -138,13 +144,16 @@ func release_tool() -> void:
 					return
 			_remember()
 			_strokes[_s.selected].append({"points": _current.duplicate(), "depth": _s.depth, "width": 2.0 + 6.0 * _s.depth * _s.depth})
-			_s.participated = true
+			length = Geometry.material_length(_current, removed)
+			_s.participated = _s.participated or length >= 8.0
 			_structure_changed()
 			_s.feedback = "熱線已提交；切透整圈才可折料"
 	_current = PackedVector2Array()
 	_refresh_clamp()
 
 func cancel_tool() -> void:
+	_motion = Vector2.ZERO
+	_motion_cursor = _s.cursor
 	_current = PackedVector2Array()
 	_invalid_stroke = false
 	_s.cutting = false
@@ -154,7 +163,6 @@ func cancel_tool() -> void:
 
 func clear_input() -> void:
 	cancel_tool()
-	_motion = Vector2.ZERO
 
 func fold_or_mount() -> void:
 	if _s.ended:
@@ -222,11 +230,12 @@ func place_selected(point: Vector2) -> void:
 		_remember()
 		part.mounted = false
 	else:
+		var radius := 0.0
 		for vertex in part.outline:
-			var placed: Vector2 = vertex - part.source_center + point
-			if placed.x < 0 or placed.x > 720 or placed.y < 0 or placed.y > 440:
-				_s.feedback = "成品邊界須在畫布內"
-				return
+			radius = maxf(radius, vertex.distance_to(part.source_center))
+		if point.x - radius < 0 or point.x + radius > 720 or point.y - radius < 0 or point.y + radius > 440:
+			_s.feedback = "成品完整旋轉範圍須在畫布內"
+			return
 		_remember()
 		part.position = point
 		part.mounted = true
@@ -272,7 +281,7 @@ func step(delta: float) -> void:
 			break
 		var h := minf(bounded / count, _s.remaining)
 		if _motion != Vector2.ZERO:
-			move_cursor_to(_s.cursor + _motion * 120.0 * h)
+			move_cursor_to(_motion_cursor + _motion * 120.0 * h)
 		if _s.driving and network.valid:
 			_s.output_omega = network.omega[2]
 			var needed: float = (TAU - _s.output_travel) / absf(_s.output_omega)
@@ -380,7 +389,8 @@ func _structure_changed() -> void:
 
 func _network() -> Dictionary:
 	var adjacency := [[], [], [], []]
-	_s.connections = []
+	var contacts: Array[Vector2i] = []
+	_s.connections = contacts
 	var interference := false
 	for i in 4:
 		if not _s.parts[i].mounted:
