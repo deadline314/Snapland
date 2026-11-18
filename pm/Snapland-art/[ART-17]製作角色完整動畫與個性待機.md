@@ -844,3 +844,22 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![鮑伯頭搭草帽檢查相機](images/ART-17-camera-idle-20261119-bob-and-straw.png)
 
 [正常影片](images/ART-17-camera-idle-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-camera-idle-20261119-quarter.mp4) · [原生、封裝與素材證據](images/ART-17-camera-idle-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/7b4362c5352f82cb7bf4f14c1e2f586cb4185c88)。
+
+## Commit — 2026-11-19 巡路中接話先落腳轉身
+
+票票、小角、阿浪巡路時按 E，對話立即開啟，角色在原地完成左右各自的落腳轉身，再播原有招呼或互動畫面。其他正在走路的 NPC 也停在原地。提前關閉對話或切換降低動態會清除等待中的手勢。
+
+| 項目 | 結果 |
+|---|---|
+| 反例與局部回歸 | 舊版重現 3 位 × 2 向直接跳到正面。新版 5 組 Godot 測試、213 項 Python 與 5 區設計檢查通過，含取消、降低動態與來源損壞回退 |
+| 原生按鍵與腳底 | 正常速度及四分之一速度各驗證 6 種角色與方向組合。E 開啟當下已進入側身收勢，逐格核對完整轉身、正面手勢及返回站姿。人物根與互動點維持固定，三位角色的全身均可在對話面板上方看見 |
+| 重入與封裝 | 降低動態及重入驗證通過。內嵌 Windows 測試檔重跑三位角色右向接話 |
+| 影片 | 正常 370 格、慢放 1,368 格，均為 1280×720／30 FPS，完整解碼通過 |
+
+拍攝腳本先透過正式巡路控制器推進至指定方向，放置玩家於實際互動範圍，再以原生按鍵開始對話。截圖採固定取景及 Dummy 音訊。
+
+![票票右向收勢接話](images/ART-17-dialogue-settle-20261119-ticket.png)
+![小角左向收勢接話](images/ART-17-dialogue-settle-20261119-imp.png)
+![阿浪左向收勢接話](images/ART-17-dialogue-settle-20261119-announcer.png)
+
+[正常影片](images/ART-17-dialogue-settle-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-dialogue-settle-20261119-quarter.mp4) · [反例、原生與封裝證據](images/ART-17-dialogue-settle-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/934df5f44931ed2baaf2140f6dc2e5b4205d8b5d)。
