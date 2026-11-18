@@ -730,7 +730,10 @@ func _check_stock_frame(route: Route, label: String, hole: Vector2, marked: bool
 	var in_hole := heat_pixel_count(image, transform * route.view.board_to_design(hole))
 	print("STOCK_FRAME ", label, " heat=", heat, " hole_heat=", in_hole)
 	check((heat > 0) == marked and in_hole == 0, label + " real frame locates only the remaining stock burn")
-	check(image.save_png(OS.get_environment("CHOCOLATE_CAPTURE_DIR").path_join(label + ".png")) == OK, "write raw stock regression frame")
+	# Diagnostic export is optional; never write relative to the test process.
+	var capture_dir := OS.get_environment("CHOCOLATE_CAPTURE_DIR").strip_edges()
+	if not capture_dir.contains("://") and capture_dir.is_absolute_path():
+		check(image.save_png(capture_dir.path_join(label + ".png")) == OK, "write raw stock regression frame")
 
 static func heat_pixel_count(image: Image, pixel: Vector2) -> int:
 	# A half-depth burn has a distinct orange center, including at the compact viewport.
