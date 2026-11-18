@@ -250,3 +250,31 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 ![既有收勢顯示比例銜接差異](images/ART-16-gait-20261117-stop.png)
 
 [正常影片](images/ART-16-gait-20261117-normal.mp4) · [四分之一速度／重建](images/ART-16-gait-20261117-quarter.mp4) · [結果與指紋](images/ART-16-gait-20261117-review.json) · [原生姿勢、端點、慢速代表圖、失敗與重現紀錄](images/ART-16-gait-20261117-evidence.zip) · [二十份原件與完整提示](images/ART-16-gait-20261117-sources.zip)。研究及界線見[阿浪八相位原畫複核](../../design/runtime/announcer-walk-study-20261117.md)。固定基準 `63ab519`；分支 `codex/animation-source-20261117`。
+
+# Commit — 2026-11-19 補上阿浪左右起步短步
+
+## 內文
+
+阿浪轉至側面後原本會直接切到跨步。現在先顯示一張完整的單腳承重姿勢，再接上行走，左右起步各新增一張。起步仍為 0.4 秒，左右原生巡路在起步期間均沒有根位移。
+
+逐張比對四組候選與正式畫面後採用第四組。右向改善較明顯，左向肩部與腳步的位移仍可見。本次交付範圍為阿浪左右起步。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 素材與清單 | 220 個來源區域驗證通過，8 項 Python 回歸通過 |
+| 行為回歸 | Godot 素材庫、三位 NPC 巡路與起步生命週期共 3 組通過。原有轉身共用畫布，每方向增加一張起步畫布。暫停、對話打斷、降低動態與損壞素材回退通過 |
+| 原生正常與慢放 | 正常 460 格／30 FPS，四分之一速度重建場景 1,842 格／30 FPS。兩側各觀察 5 格起步、4 格行走、4 格收勢。影片全段解碼通過 |
+| 降低動態與打包 | 重建 Main 後維持完整站姿。內嵌 Windows 測試執行檔觀察左右完整起步與停步，相關最終匯入、執行與輸出皆 exit 0、0 ERROR |
+| 失敗重現 | 舊驗證器以固定 FPS 取格而漏判第五格，退出 1。改用實際逐格停留時間後重跑通過 |
+
+Godot 4.7.2、Windows Compatibility、硬體繪製、Dummy 音訊。核對實際原生截圖、播放紀錄和影片可解碼性。真人連續觀看、試玩、試聽及即時效能驗收仍未納入本次範圍。
+
+### 截圖
+
+![右向短步，前腳微抬](images/ART-16-depart-20261119-right-step.png)
+![左向四分之一速度的承重姿勢](images/ART-16-depart-20261119-left-step.png)
+![降低動態並重建場景後的站姿](images/ART-16-depart-20261119-reduced.png)
+
+[正常速度影片](images/ART-16-depart-20261119-normal.mp4) · [四分之一速度／重建](images/ART-16-depart-20261119-quarter.mp4) · [原生截圖、候選、測試與打包證據](images/ART-16-depart-20261119-evidence.zip) · [程式與素材提交](https://github.com/deadline314/Snapland/commit/a6858e844e36289e2b281f60ac01584874313834)。
