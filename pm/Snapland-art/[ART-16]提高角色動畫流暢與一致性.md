@@ -278,3 +278,29 @@ Godot 4.7.2、Windows Compatibility、硬體繪製、Dummy 音訊。核對實際
 ![降低動態並重建場景後的站姿](images/ART-16-depart-20261119-reduced.png)
 
 [正常速度影片](images/ART-16-depart-20261119-normal.mp4) · [四分之一速度／重建](images/ART-16-depart-20261119-quarter.mp4) · [原生截圖、候選、測試與打包證據](images/ART-16-depart-20261119-evidence.zip) · [程式與素材提交](https://github.com/deadline314/Snapland/commit/a6858e844e36289e2b281f60ac01584874313834)。
+
+# Commit — 2026-11-19 補上阿浪左向停步落腳
+
+## 內文
+
+阿浪左向走到端點時，懸空的後腳原本直接切進雙腳併攏。新增一張前腳承重、後腳收近的完整姿勢，再接側站和原有轉身。左向收勢共五格，右向共四格。收勢總時長為 0.4 秒。
+
+以同一鏡頭拍攝緊鄰的最後走姿、落腳和側站。三張畫面的巡路根位置相同。離線另核對四張可能接入的左向走姿，加入過渡後，兩次切換中最大的全身、頭部、軀幹與下肢像素差都較小。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 素材及局部回歸 | 221 個來源區域、8 項 Python、3 組 Godot 測試通過。落腳來源損壞時會拒絕不完整收勢，左向起步仍可用 |
+| 原生正常與慢放 | 正常 460 格、四分之一速度重建 1,842 格，皆為 30 FPS 且全段可解碼；兩側各五格起步，完整播放左五格及右四格收勢 |
+| Windows 封裝 | 內嵌測試執行檔完成同一段巡路、左右起步、停步和回正面，匯入、輸出及執行 exit 0、0 ERROR |
+
+Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放紀錄及封裝，驗證範圍為阿浪停步銜接。
+
+### 截圖
+
+![舊版最後一張左向走姿](images/ART-16-stop-20261119-before.png)
+![新增的承重落腳姿勢](images/ART-16-stop-20261119-landing.png)
+![後腳收近並回到側站](images/ART-16-stop-20261119-settled.png)
+
+[正常速度影片](images/ART-16-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-stop-20261119-quarter.mp4) · [原生對照與打包證據](images/ART-16-stop-20261119-evidence.zip) · [程式與素材提交](https://github.com/deadline314/Snapland/commit/36410af65a347bd707b7166cfafacf80bac94bab)。
