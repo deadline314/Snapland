@@ -1,0 +1,73 @@
+# Cotton Wind Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development task-by-task. Root owns PM/design/plan/Git/delivery. Producers never spawn agents or mutate Git.
+
+**Goal:** Deliver game-030 棉糖捲風 with actual 3D strand collection, rotation-dependent three-band distribution and a real near-breaking strand rejoin.
+
+**Architecture:** Reuse house pure Model / Driver / retained 3D View / Session and existing catalog/tutorial/photo/retake infrastructure. One bounded model owns kinematics and material conservation; platform meshes render that state. No new dependency, shared input framework, CFD or speculative multiplayer layer.
+
+**Tech Stack:** Godot4.7.2 GDScript, built-in SubViewport/ArrayMesh/MultiMesh; Python standard-library validation and isolated runtime staging.
+
+**Spec:** design/runtime/cotton-wind-gameplay.md is binding, including exact initial calibration, interfaces, boundaries and evidence policy.
+
+## Global Constraints
+
+- game-030／cotton_wind／candy local_index6／photo-candy-game-6／photo-candy-devil-6／ACH_GAME_030；實際 29→30、工廠 5→6/12，128 候選不變，031 為下一未實作。
+- Actual 3D collection locations, stick angle, bounded 3×12 deposited masses and real free-end contact determine quality/rejoin. No button/template/timer-seeded success, replacement finished shape or injected material/tail/result/photo/reward. Initial coefficients must be proven by eight public-operation routes before freeze; report calibration conflicts for controller ruling.
+- No Progress schema, Steam/trading/economy/audio-framework, normal-player entry or export-exclusion change. Preserve existing29games, lessons, IDs, saves, participation40/dedup and latest-gameplay-photo behavior.
+- Every engine/import/export/exe uses validatedlauncher/exact4.7.2 with complete prelaunch fixture/helper/staged-script OS-child audit. SceneTree --script; Node real .tscn. Fresh absolute D stage/save/APPDATA/LOCALAPPDATA/TEMP/TMP/capture/export per process, only pairedreader shareswriter save. prepare_runtime_stage trackedruntime plus exactfixtures; no whole test tree/UID/C cache/oldpackage mutation. Asset-only addressed imports require source/engine hashes.
+- Exclude local test_photo_retake_main, test_region_travel, test_photo_retake_progress, test_region_progress fault-child parents before all launches; preserve CIregistration. Unexpected process launch stops that run for controller review. Strict exit0/markeronce/zeroERROR/genuineleaks, UTF8 engine log and unsuppressed stdio, exact byte/source/engine/template/exe evidence.
+- Native1280×720,1152×648,800×600 UI1.25/reduced:8controls, all rules/lesson pages and3rawtutorialframes fit. Native actual Input.parse_input_event + normal Session progression; no private input rescue. Only labelled sixwelcome admission/openingseen and controlledplacement+actualE allowed. No human/physicaltouch/listening/art/walking acceptance claims.
+- One implementer at a time; each frozen task fresh spec+quality review; final wholebranch review on most-capable model. Root commits with stanley890314@gmail.com, no assistant signatures. User authorizes autonomy/commit/push/rebase/mainmerge/ownbranchcleanup; no approval or continuation questions.
+
+## Review Focus
+
+1. Pointer target jumps or substep batching must not sweep infinite material or refund time: Task1 bounded pursuit/continuous contacts and Task2 drag lifecycle.
+2. Simultaneous aliases/opposite keys, latched touch spin and pause/focus cancellation must not leave ghost rotation/motion: Task2 ownership/release tests and Task3 Session lifecycle.
+3. The same strand cannot be counted twice, duplicated between helper/player/tail or recollected after breaking: Task1 conservation and mutually exclusive consumption, Task4 actual material/tension captures.
+4. Rejoin must use the opposite end while genuinely near breaking; same-end/middle/idle/helper/confirmation cannot substitute: Task1 negative routes plus Task3/4 corresponding real events.
+5. Real 3D preview, eight controls, actual quality feedback and long lessons must fit smallwindow and release GPU resources: Task2 retained-resource/geometry and Task4 fullbounds/lifetime checks.
+
+### Task 1: Bounded collection model and public routes
+
+**Files:** Create game/minigames/cotton_wind_model.gd, game/tests/test_cotton_wind.gd, game/tests/cotton_wind_route.gd. Private QA orchestration/reports under this plan workspace or .review/cotton-wind-20261118/, D runtime only. Root alone changes binding spec after a concrete calibration report.
+
+- [ ] Read authority plus house chocolate_etching_model.gd and tests only as needed. Implement exact public Model API with coherent dictionary snapshot keys, finite trust-boundary validation, bounded particles/material/meshes-independent state. No general physics/geometry framework.
+- [ ] Add focused RED tests before implementation: rotation and translation independently required, actual finite substep collection and near/far effects, A/B differences, material conservation through player/helper/tail/loss, bounded capacity and independent snapshots. Run against missing/old implementation in isolated exact4.7.2 stage; capture expected fail and exact command.
+- [ ] Implement minimal kinematic strands/three-band angular deposits, bounded target pursuit, true near-breaking free-end/opposite-end rejoin, yielding lowdensity helper, assist tolerances, quality/participation/score/deadline. No state injection or private-member mutation in success recipes.
+- [ ] Prove eight public routes A/B×assist×ordinary/rejoin using deterministic dt and Model API; helper toggle on/off usable, helper cannot collect player goal or grant rejoin. Negative stationary/no-spin, fakefinish, sameend/middle/outside nearbreak, expiredtail, nonfiniteinput, highdelta, afterended and conservation assertions. Freeze actual named snapshot contract and public route recipe, including tolerances/time/material/motion/spin needed.
+- [ ] If initial math is infeasible or creates instant teleport collection, report exact trajectory/measurement plus smallest coefficient fix before changing authority. Preserve all gameplay requirements and default120sec limit unless independently justified.
+- [ ] Run only affected local tests via validated launcher with full closure audit, D save/profiles and exact success marker; self-review and report full RED/GREEN evidence, hash manifests, files, source bytes, route observations and concerns. Do not stage/commit/push. Root freezes commit and fresh reviewer gates Task1.
+
+### Task 2: Three-dimensional view and input driver
+
+**Files:** Create game/minigames/cotton_wind_driver.gd, game/minigames/cotton_wind_view.gd, game/tests/test_cotton_wind_driver.gd, game/tests/test_cotton_wind_view.gd. A tiny domain-only view helper is allowed only after controller ruling. Consume Task1 frozen API/route helper; do not edit Model/rules to ease input or layout.
+
+- [ ] Read authority plus house cargo_balance_view.gd and chocolate_etching_driver.gd conventions. Reuse house Paper/font profiles, view focus/GUI input, design transforms and SubViewport lifetime. No sharedmodal/input-framework refactor.
+- [ ] Add RED focused Driver tests for actual key aliases/opposites, spin-source handling, pointer/touch ownership and latched spin+drag. Then implement8commands, native keyboard holds and singlepointer spin latch+bounded target pursuit, consistent hit/projection helpers, complete cancellation/focus/treeexit/reset behavior.
+- [ ] Render actual model 3×12 mass via retained ArrayMesh, real stick angle/position, fixed-capacity strand instances, world-space actual tail endpoints and visible tension/other-end catch zone, helper's real separate stick/deposits. Cache resources; update cotton surfaces only on changed deposits. Fixed nodes/instances/vertices, no decorative substitutes. Headless create_view followshouse null behavior.
+- [ ] Implement status/quality/nearfar/wind/tension/readable feedback, exact8controls, concise hovers and full rule text. Maintop140 reserved. Reducedmotion preserves essential mechanics. Use shared projection for geometry and pointer transforms; direct move cannot teleport/sweep collect.
+- [ ] Driver routes three input modalities for eight public variants, all24 ordinary/rejoin outcomes without Model state seeding. Negative source steals/canceledtouch/emulatedmouse/NaN/outside release/opposite aliases and clear input. View finite geometry/transforms,3bands measured from actual mass, retain resources on repeated present, matching hit bounds and successful teardown.
+- [ ] Native graphical Driver/View checks at1280/1152/800 UI1.25reduced on fresh D stages if needed to verify actual projection/render/lifetime; optional PNG exports only explicit absolute filesystem capture paths. Controller inspects raw frames. Do not claim headless rendering evidence.
+- [ ] Self-review, focused tests with rawreceipts and exactsource manifest; report to pairedtaskreport. Do not mutate Model/spec/Git/PM or spawn agents. Root freeze and fresh scoped review.
+
+### Task 3: Factory, Session, lessons, collection and contracts
+
+**Files:** Modify game/main.gd, game/world/candy_world.gd, game/minigames/session.gd, game/data/candy_games.json, game/data/tutorials.json, game/ui/tutorial_catalog.gd, game/ui/collection_book_panel.gd, design/02-minigames/catalog.json + catalog.md, design/runtime/full-game-delivery.md, tools/run_game_tests.py, tests/test_design_validation.py, tests/test_runtime_result_contract.py and only affected existing catalog/candy/tutorial/participation tests. Create game/tests/test_cotton_wind_session.gd, game/tests/test_cotton_wind_main.gd + .tscn. Rawtutorial PNGs may be final suppliedTask4; no fabricated interim images. Changes to legacy fault-child parents limited data/count maintenance, never local execute.
+
+- [ ] Register fixedIDs/mode/6thfactory/30thactual/31stunbuilt, Driver, entry/reset/lesson/albums/achievements/retake names following029housepattern; no schema/economy changes. Inspect all029callers and every old29/5 literal relevant to newcount; do not globally replace unrelatedIDs.
+- [ ] Verify actual entry at(6.5,GROUND_Y,10) onwalkable floor, nearest E without prop/return/info interference; use exact physics Main test. Anyposition conflict report to root, no private teleport or walkingclaim. Existingfivegameentries remain available.
+- [ ] Add full concise rules/three lessons using exactrealworldoperation semantics incl ordinaryparticipationvsuniformgoal, latches/cancel, assist/helper, nearbreaking otherend and120sec. Capture real lesson frames in Task4; do not generateart. Ensure data/validator consistency and allpages fit.
+- [ ] TDD Session/mainnatural results and all24 eventroutes plus participatedtimeout, idlehelper/zero-motionnoaward, practice/cancel/retry/pause/blur/deadline. Real completion only; no Model/results/rewards/photos flags injection. DsyntheticPNG persistence tests are labelled as I/O, never actualGPUproof.
+- [ ] Verify exactcards/achievement/method/ordinary40dedup/saveReload/bookrow30/currentmode and unaffected representative factory/oldcatalog/tutorial. Register fivefocused runtime tests and Pythoncontracts. Run local selectedsafe suites only, games+links design checks and affectedPython; fullsuite remainsCI. Do not run excludedfourparents.
+- [ ] Rootinspectdiff/testmanifest and suppliedrawframes; selfreview/report, no Git/PM changes/spawn. Fresh Task3review before Task4.
+
+### Task 4: Native input, persistence, retake and embedded package evidence
+
+**Files:** Create game/tests/native_cotton_wind_main.gd + .tscn, private .review/cotton-wind-20261118/ QA fixtures/orchestration/manifests; final actualraw assets/ui/tutorials/game-030-step-01.png ..03.png and any scopedlessondata wording corrections. Root owns PMrawPNG/archive/closure updates. Product/previousTaskcode changes require findings to originalproducer before proceeding; no silent rewrites.
+
+- [ ] Audit exactfullfixtures/helper/stageclosure and localfourparentexclusions beforeeverylaunch. Use pinnedvalidatedlauncher freshDstage/profiles/save/exports, sourcebytes/Gitblobs distinct, allowedasset-onlycache policy. No oldacceptedpackage mutations. Native eventloops normal Session deltas, report simulation vs walltime, no privategeometry/result seeding or handler rescue.
+- [ ] At1280/1152/800 UI1.25reduced, real E from controlled labelledposition, actual key/mouse/touch represented across routes; show collect/quality/nearfar and actual nearbreak/oppositecatch. Obtain3actualtutorialframes and all8controls/rules/eachlessonpagefullbounds+ancestorclip proof. Sourcehardcoded expectedbounds alone insufficient. Capture via actual viewport; no image editing.
+- [ ] Three size writer/reader pairs persist ordinary/devil/method/achievement/one40receipt as applicable. Four dedicatedGPUretakepairs ordinary+devil1280/ordinary800/devil1152 compare arranged realshutteroriginalpixels/320x180decode/selectedonly/one40receipt. Subsequentgenuinechallenge preservesretakeoriginal/path/method; newprocesschecks exactIDs. Disclose normal latestgameplayphoto refresh.
+- [ ] One NEW exactQAclosure embeddedWindowsEXE with pinned4.7.2templates andactualwriter/reader no--path/sceneoverride. Keepnormalplayerentry/exportexclusions unchanged. Capture exe/template/source/runtimefile hashes, all unsuppressed UTF8logs/stdio, strictmarker/exit/errors/leaks. No unrelated broad reruns after adequate pass.
+- [ ] Freeze fullreport + explicit promotedexisting-path/rawSHA/bytes archiveallowlist and local evidence manifest; root independently hashes/inspects rawframes and exactcommit. Fresh Task4spec+quality review, finalmostcapablewholebranchreview, oneunifiedfixwave/scopedrereview perSDD. RootmarksPMcomplete/Commit/archive,push/fetch/rebase/FFmain/push/exactCI/ownedbranchcleanup. Do not close human-only ART/MIC/ST tickets from automation.
