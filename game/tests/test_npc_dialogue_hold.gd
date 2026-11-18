@@ -102,6 +102,7 @@ func _run() -> void:
 	world.apply_settings({"reduced_motion":false})
 	print("DIALOGUE-HOLD measured: greeting %.3f→%.3f s; idle after close %.3f→%.3f s; announcer route remained at %s" % [dialogue_start_elapsed,dialogue_elapsed,post_close_elapsed,float(post_close_end.action_elapsed),str(route_origin)])
 	await _check_approaches(main)
+	await _check_walking_dialogue(main)
 	await _finish(main)
 
 
@@ -132,6 +133,9 @@ func _check_approaches(main: Node) -> void:
 			world.interact()
 			_check(main.modal_kind == "dialogue" and world.blocked and world.npc_dialogue_hold and activity.statistics().dialogue_hold, label + " actual interaction opens held Main dialogue")
 			var record := _activity_record(main, role)
+			if record.action == "settle":
+				activity._process(activity._sequence_seconds(record.action_sequence) - float(record.action_elapsed) + 0.01)
+				record = _activity_record(main, role)
 			var sequence: Dictionary = record.action_sequence
 			_check(String(record.action) == action and String(record.direction) == "front" and bool(sequence.get("available", false)) and not bool(sequence.get("loop", true)) and sequence.get("frames", []).size() >= 7, label + " selects the complete finite front action")
 			_check(sprite.visible and sprite.texture.get_size() == Vector2(activity.ACTION_CANVAS_SIZE), label + " displays a complete authored action canvas")
@@ -152,6 +156,77 @@ func _check_approaches(main: Node) -> void:
 			_check(main.modal_kind == "" and not world.blocked and not world.npc_dialogue_hold and not activity.statistics().dialogue_hold and activity._player.is_playing(), label + " cancellation safely releases Main hold and resumes the route")
 		await _check_unavailable_action(main, role, point_id, action, actor_root, sprite)
 	print("APPROACH coverage: 3 roles × 8 distinct geometric offsets; real physics nearest/interact/Main dialogue; direct missing direction and damaged front source per role")
+
+
+func _check_walking_dialogue(main: Node) -> void:
+	var world: Node = main.world
+	var activity: Variant = world.npc_activity
+	activity.set_process(false)
+	for role in ["ticket", "imp", "announcer"]:
+		var actor := _actor_record(main, role)
+		var anchor: Node3D = actor.activity_root
+		var sprite: Sprite3D = actor.sprite
+		var action := "greet" if role == "ticket" else "interact"
+		var point_id := "guide" if role == "ticket" else ("quest-001" if role == "imp" else "quest-002")
+		var cases := [["left", "complete"], ["right", "complete"]]
+		if role == "ticket": cases.append_array([["left", "cancel"], ["right", "reduce"]])
+		for test_case in cases:
+			var direction: String = test_case[0]
+			var mode: String = test_case[1]
+			var label: String = role + "/" + direction + "/" + mode
+			var moving := false
+			for _tick in range(1200):
+				var before := anchor.global_position
+				activity._process(1.0 / 60.0)
+				var record := _activity_record(main, role)
+				if record.action == "walk" and record.direction == direction and not anchor.global_position.is_equal_approx(before):
+					moving = true
+					break
+			_check(moving, label + " reaches genuine directional patrol movement")
+			if not moving: continue
+			await _approach(main, anchor, Vector3(0.0, 0.0, 1.0))
+			_check(world.nearest.get("id", "") == point_id, label + " is selected by real proximity")
+			if world.nearest.get("id", "") != point_id: continue
+			var root_before := anchor.global_position
+			var point_before: Vector3 = world._point_by_id(point_id).position
+			world.interact()
+			_check(main.modal_kind == "dialogue" and world.blocked, label + " shows dialogue immediately")
+			var begun := _activity_record(main, role)
+			_check(begun.action == "settle" and begun.direction == direction, label + " uses the authored side settle before its front gesture")
+			if mode != "complete":
+				if mode == "reduce":
+					world.apply_settings({"reduced_motion": true})
+					_check(_activity_record(main, role).action == "stand", label + " reduced motion returns to authored standing")
+					world.apply_settings({"reduced_motion": false})
+				else:
+					main._cancel_dialogue()
+				var leaked_greeting := false
+				for _tick in range(40):
+					activity._process(1.0 / 60.0)
+					leaked_greeting = leaked_greeting or _activity_record(main, role).action == action
+				_check(not leaked_greeting, label + " discards the pending dialogue gesture")
+				if main.modal_kind == "dialogue": main._cancel_dialogue()
+				await _frames(2)
+				continue
+			if begun.action == "settle":
+				var clip: Dictionary = begun.action_sequence
+				var cels := {}
+				var sources_match := true
+				for _tick in range(40):
+					var record := _activity_record(main, role)
+					if record.action != "settle": break
+					var index := Library.AnimationTiming.frame_at_time(clip, float(record.action_elapsed))
+					cels[index] = true
+					sources_match = sources_match and sprite.texture == activity._costume_texture(role, clip.frames[index].texture)
+					activity._process(1.0 / 60.0)
+				_check(sources_match and cels.size() == clip.frames.size(), label + " uses every complete authored settling cel")
+			var greeting := _activity_record(main, role)
+			_check(greeting.action == action and greeting.direction == "front", label + " enters its existing front dialogue gesture")
+			var point_after: Vector3 = world._point_by_id(point_id).position
+			_check(anchor.global_position.is_equal_approx(root_before) and point_after.is_equal_approx(point_before), label + " keeps both actor and dialogue point planted")
+			main._cancel_dialogue()
+			await _frames(2)
+	activity.set_process(true)
 
 
 func _approach(main: Node, actor_root: Node3D, offset: Vector3) -> void:

@@ -249,10 +249,19 @@ func register_actor(
 	return true
 
 
-func request_action(target: Sprite3D, action: String, direction: String = "front") -> bool:
+func request_action(target: Sprite3D, action: String, direction: String = "front", after_settle: bool = false) -> bool:
 	var instance_id := target.get_instance_id() if is_instance_valid(target) else 0
 	for index in range(_records.size()):
-		if int(_records[index].instance_id) == instance_id and bool(_records[index].active):
+		var record := _records[index]
+		if int(record.instance_id) == instance_id and bool(record.active):
+			if (
+				after_settle and _dialogue_hold and not _reduced_motion and record.action == "settle"
+				and record.action_sequence.get("return_direction", "") == direction
+				and _has_sequence(String(record.role), action, direction)
+			):
+				record["dialogue_action"] = action
+				return true
+			record.erase("dialogue_action")
 			return _play_actor_action(index, action, direction, false)
 	return false
 
@@ -315,6 +324,7 @@ func set_reduced_motion(enabled: bool) -> void:
 			_player.pause()
 		_restore_baselines()
 		for index in range(_records.size()):
+			_records[index].erase("dialogue_action")
 			if bool(_records[index].active):
 				_play_actor_action(index, "stand", "front", true)
 		_freeze_shader_motion(true)
@@ -345,18 +355,22 @@ func set_dialogue_hold(held: bool) -> void:
 	if _dialogue_hold == held:
 		return
 	_dialogue_hold = held
+	if not held:
+		for record in _records:
+			record.erase("dialogue_action")
 	_freeze_shader_motion(_activity_paused and not held or _reduced_motion)
 	_update_motion_pause(_activity_paused and not held or _reduced_motion)
 	if not is_instance_valid(_player):
 		return
 	if held:
 		_player.pause()
-		# A route may have stopped on a walk cel. Put that actor into its authored
-		# idle loop once; do not advance the route or start another idle gesture.
+		# Finish the planted turn while dialogue holds the patrol root.
 		for index in range(_records.size()):
 			if not bool(_records[index].active) or String(_records[index].action) != "walk":
 				continue
 			var direction := String(_records[index].direction)
+			if not _reduced_motion and _has_sequence(String(_records[index].role), "settle", direction):
+				if _play_actor_action(index, "settle", direction, true): continue
 			if not _play_actor_action(index,"idle",direction,true):
 				_play_actor_action(index,"stand",direction,true)
 	elif not _activity_paused and not _reduced_motion and _animation != null and _animation.get_track_count() > 0:
@@ -835,6 +849,10 @@ func _advance_actor(record: Dictionary, target: Sprite3D, delta: float, allow_id
 				if _play_actor_action(_record_index(record), "walk", String(record.direction), true): return
 		var direction := String(sequence.get("return_direction", record.direction))
 		if action == "depart": direction = "front"
+		if action == "settle" and record.has("dialogue_action"):
+			var dialogue_action := String(record.dialogue_action)
+			record.erase("dialogue_action")
+			if _dialogue_hold and _play_actor_action(_record_index(record), dialogue_action, direction, true): return
 		if _play_actor_action(_record_index(record), "stand", direction, true):
 			if sequence.has("return_direction"):
 				_records[_record_index(record)]["idle_due"] = _action_clock + 0.6

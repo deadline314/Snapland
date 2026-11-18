@@ -2428,9 +2428,7 @@ func _play_pending_npc_interaction() -> void:
 	pending_npc_interaction = {}
 	var sprite := request.get("sprite") as Sprite3D
 	if not is_instance_valid(sprite): return
-	match String(request.action):
-		"greet": npc_activity.greet(sprite, String(request.direction))
-		"interact": npc_activity.interact(sprite, String(request.direction))
+	npc_activity.request_action(sprite, String(request.action), String(request.direction), npc_dialogue_hold)
 
 ## Updates signposts and quest results from saved progress (see StoryLandmarks).
 func set_story_progress(snapshot: Dictionary) -> void:

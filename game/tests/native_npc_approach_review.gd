@@ -77,6 +77,11 @@ func _review_role(role: String, pass_index: int, reduced: bool) -> void:
 	await _press_key(KEY_E)
 	if not _check(_main.modal_kind == "dialogue" and _world.npc_dialogue_hold and _world.blocked, role + " E opens held Main dialogue"): return
 	var record := _record(role)
+	var turn_wait := 0.0
+	while record.action == "settle" and turn_wait < 0.6:
+		await get_tree().process_frame
+		turn_wait += get_process_delta_time()
+		record = _record(role)
 	var action := "greet" if role == "ticket" else "interact"
 	var sequence: Dictionary = record.action_sequence
 	if not _check(record.action == action and record.direction == "front" and bool(sequence.get("available", false)) and not bool(sequence.get("loop", true)) and sequence.get("frames", []).size() >= 7 and not bool(sequence.get("legacy_fallback", false)), role + " actual event selects finite complete front source"): return
