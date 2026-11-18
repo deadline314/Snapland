@@ -19,6 +19,9 @@
         "back": 4,
         "back_right": 4
       },
+      "idle_gesture": {
+        "front": 3
+      },
       "wave": {
         "front": 8,
         "left": 5,

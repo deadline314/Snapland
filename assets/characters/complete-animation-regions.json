@@ -3686,6 +3686,82 @@
           ]
         }
       },
+      "idle_gesture": {
+        "front": {
+          "fps": 8,
+          "loop": false,
+          "frame_durations": [
+            0.2,
+            0.4,
+            0.28
+          ],
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-camera-check-front-v1.png",
+              "region": [
+                315,
+                89,
+                274,
+                526
+              ],
+              "anchors": {
+                "feet": [
+                  137,
+                  518
+                ],
+                "head": [
+                  146,
+                  8
+                ]
+              },
+              "source_scale": 0.33578431372549017,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-camera-check-front-v1.png",
+              "region": [
+                941,
+                89,
+                275,
+                526
+              ],
+              "anchors": {
+                "feet": [
+                  137,
+                  518
+                ],
+                "head": [
+                  147,
+                  8
+                ]
+              },
+              "source_scale": 0.33578431372549017,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-camera-check-front-v1.png",
+              "region": [
+                1567,
+                89,
+                275,
+                526
+              ],
+              "anchors": {
+                "feet": [
+                  137,
+                  518
+                ],
+                "head": [
+                  146,
+                  8
+                ]
+              },
+              "source_scale": 0.33578431372549017,
+              "layers": []
+            }
+          ]
+        }
+      },
       "sit": {
         "front": {
           "fps": 2,
@@ -15640,6 +15716,9 @@
         "back_left": 4,
         "back": 4,
         "back_right": 4
+      },
+      "idle_gesture": {
+        "front": 3
       },
       "wave": {
         "front": 8,

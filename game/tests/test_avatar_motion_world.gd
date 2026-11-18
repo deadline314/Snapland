@@ -112,6 +112,7 @@ func _run() -> void:
 	world.avatar_action_remaining=0.0
 	world._refresh_avatar_texture(0)
 	_check(world.avatar_motion_rig==null and world.avatar.visible,"the source Sprite remains the walk and idle presenter after the gesture")
+	await _check_camera_idle(world)
 	var changed_appearance := {"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}
 	var changed_equipment := {"outfit":"outfit-tide","hat":"hat-none"}
 	world.set_avatar_look(changed_appearance,changed_equipment)
@@ -161,6 +162,55 @@ func _run() -> void:
 		return
 	print("PASS: integrated avatar motion world checks")
 	quit(0)
+
+func _check_camera_idle(world: ParkWorld) -> void:
+	world.facing = "front"
+	world._refresh_avatar_texture(0)
+	world.time = world._avatar_idle_started_at + ParkWorld.AVATAR_CAMERA_IDLE_DELAY - 0.2
+	for _tick in range(3): await physics_frame
+	_check(world.last_avatar_action == "idle", "the camera check does not interrupt the ordinary early idle")
+	world.blocked = true
+	world.time = world._avatar_idle_started_at + ParkWorld.AVATAR_CAMERA_IDLE_DELAY
+	for _tick in range(3): await physics_frame
+	_check(world.last_avatar_action == "idle", "blocking the world prevents the idle camera check from starting")
+	world.blocked = false
+	for _tick in range(3): await physics_frame
+	_check(world.last_avatar_source_action == ParkWorld.AVATAR_CAMERA_IDLE_ACTION and world.facing == "front", "a long front idle starts the authored camera check")
+	var held_elapsed := world.avatar_action_elapsed
+	world.blocked = true
+	for _tick in range(3): await physics_frame
+	_check(world.avatar_action_elapsed == held_elapsed, "the camera check holds its pose while blocked")
+	world.blocked = false
+	world.apply_settings({"reduced_motion": true})
+	_check(world.last_avatar_action == "idle" and world.last_avatar_frame == 0 and world.avatar_action_remaining == 0.0, "reduced motion cancels the cosmetic cue at neutral")
+	world.apply_settings({"reduced_motion": false})
+	_check(world.last_avatar_action == "idle", "reenabling motion does not resume a discarded camera pose")
+
+	world.time = world._avatar_idle_started_at + ParkWorld.AVATAR_CAMERA_IDLE_DELAY
+	for _tick in range(3): await physics_frame
+	world.play_action("wave")
+	_check(world.last_avatar_source_action == "wave", "a manual gesture overrides the camera check")
+	world.avatar_action_remaining = 0.0
+	world._refresh_avatar_texture(0)
+	world.time = world._avatar_idle_started_at + ParkWorld.AVATAR_CAMERA_IDLE_DELAY
+	for _tick in range(3): await physics_frame
+	var position := world.player.global_position
+	var seen := {}
+	for _tick in range(60):
+		if world.last_avatar_source_action == ParkWorld.AVATAR_CAMERA_IDLE_ACTION:
+			seen[world.last_avatar_frame] = true
+		await physics_frame
+	_check(seen.size() == 3 and world.last_avatar_action == "idle", "camera check displays its three cels once before returning to idle")
+	_check(world.player.global_position.is_equal_approx(position), "automatic idle animation does not move the player")
+	var original_library: RefCounted = world.avatar_renderer.animation_library
+	var incomplete: RefCounted = original_library.get_script().new()
+	var frames: Array = incomplete.manifest.actors.traveller.idle_gesture.front.frames
+	frames.back().source = "res://assets/characters/missing-camera-check.png"
+	world.avatar_renderer.animation_library = incomplete
+	world.time = world._avatar_idle_started_at + ParkWorld.AVATAR_CAMERA_IDLE_DELAY
+	for _tick in range(3): await physics_frame
+	_check(not world._avatar_camera_idle_available and world.last_avatar_action == "idle", "a missing last cel disables the whole optional gesture")
+	world.avatar_renderer.animation_library = original_library
 
 func _record_interaction(id: String, _label: String) -> void:
 	interaction_ids.append(id)

@@ -34,6 +34,8 @@ const GOLD = Color("#edbb65")
 # Semantic events may share an already authored clip. Dedicated event art
 # takes priority; missing shared art retains the original complete fallback.
 const AVATAR_SHARED_ACTIONS := {"celebrate": "jump"}
+const AVATAR_CAMERA_IDLE_DELAY := 18.0
+const AVATAR_CAMERA_IDLE_ACTION := "idle_gesture"
 var player: CharacterBody3D
 var avatar: Sprite3D
 var avatar_renderer: RefCounted
@@ -53,6 +55,7 @@ var last_avatar_frame := -1
 var last_avatar_action := ""
 var last_avatar_source_action := ""
 var _avatar_idle_started_at := 0.0
+var _avatar_camera_idle_available := true
 var camera: Camera3D
 var sun: DirectionalLight3D
 var environment: Environment
@@ -2339,6 +2342,17 @@ func _physics_process(delta: float) -> void:
 				avatar_action_elapsed += delta
 				avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
 				if avatar_action_remaining == 0.0: avatar_action=""
+	elif (
+		_avatar_camera_idle_available and not reduced_motion and not blocked and not operating_lens
+		and movement == Vector2.ZERO and not avatar_is_walking and player.is_on_floor()
+		and facing == "front" and last_avatar_direction == facing
+		and last_avatar_action == "idle" and last_avatar_frame == 0
+		and time - _avatar_idle_started_at >= AVATAR_CAMERA_IDLE_DELAY
+	):
+		var sequence: Dictionary = avatar_renderer.animation_library.get_sequence("traveller", AVATAR_CAMERA_IDLE_ACTION, "front")
+		_avatar_camera_idle_available = bool(sequence.available) and not bool(sequence.loop)
+		if _avatar_camera_idle_available:
+			play_action(AVATAR_CAMERA_IDLE_ACTION)
 	_refresh_avatar_texture(frame)
 	if is_instance_valid(avatar_hair_rig):
 		var pixel_velocity := horizontal_delta / maxf(delta, 0.000001) / avatar.pixel_size
@@ -2502,7 +2516,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func play_action(name: String) -> void:
 	var action := "photograph" if name == "photo" else name
-	if action not in ["wave", "photograph", "interact", "celebrate"]: return
+	if action not in ["wave", "photograph", "interact", "celebrate", AVATAR_CAMERA_IDLE_ACTION]: return
 	var action_direction := _authored_action_direction(action, facing)
 	if not action_direction.is_empty():
 		# Face the authored pose before starting it, and keep that heading after
@@ -2694,6 +2708,10 @@ func _update_lamp_selection(force := false) -> void:
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
+	if reduced_motion and avatar_action == AVATAR_CAMERA_IDLE_ACTION:
+		avatar_action = ""
+		avatar_action_remaining = 0.0
+		avatar_action_elapsed = 0.0
 	set_avatar_hair_motion_enabled(avatar_hair_motion_enabled)
 	if sea_material != null: sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
 	if fountain_water != null: fountain_water.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)

@@ -1643,6 +1643,33 @@
       "source_pixel_sha256": "bfcc7eeefcfed3551b3386cc9daa5be5938f9c21d7055592d3c9c76f246d8954",
       "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
       "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "idle_gesture",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "e341df98a4513ee80c3a2ba06177421c581d62de4dfb0066bd4ec186046112d7",
+      "path": "res://assets/characters/rainvest-v1/idle-front-00.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "idle_gesture",
+      "direction": "front",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "7bba3625b9d701a72ff057cbd3e8d52a76988b17b30d8c5fa0e23b36502e766d",
+      "path": "res://assets/characters/rainvest-v1/idle-front-00.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "idle_gesture",
+      "direction": "front",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "d27e303632ddca8c58668b3034121c4838d23ca0583a70c9d904f3a95b5d845c",
+      "path": "res://assets/characters/rainvest-v1/idle-front-00.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
     }
   ],
   "encoding": "png_bytes_without_import_conversion"

@@ -150,6 +150,15 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
             self.assertEqual(clip["frames"][0], clip["frames"][-1])
             self.assertEqual(3, len({tuple(frame["region"]) for frame in clip["frames"][1:-1]}))
 
+    def test_camera_check_has_three_distinct_finite_cels_with_wardrobe_coverage(self):
+        manifest, reports = BUILDER.build()
+        clip = manifest["actors"]["traveller"]["idle_gesture"]["front"]
+        self.assertFalse(clip["loop"])
+        self.assertAlmostEqual(0.88, sum(clip["frame_durations"]))
+        self.assertEqual(3, reports["traveller"]["camera_check"]["frame_count"])
+        self.assertEqual(3, len({tuple(frame["region"]) for frame in clip["frames"]}))
+        self.assertEqual({"front": 3}, manifest["outfit_required_poses"]["traveller"]["idle_gesture"])
+
 
 if __name__ == "__main__":
     unittest.main()

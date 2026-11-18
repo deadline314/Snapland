@@ -37,7 +37,7 @@ func _initialize() -> void:
 		for action in ["idle","walk"]:
 			var count: int = renderer.walk_frame_count(direction) if action == "walk" else renderer.authored_frame_count(action,direction)
 			for frame in range(count): poses.append([action,direction,frame])
-	for action in ["wave","photograph","interact","jump","sit","catch","celebrate"]:
+	for action in ["wave","photograph","interact","jump","sit","catch","celebrate","idle_gesture"]:
 		var directions := ["front", "left", "right"] if action == "wave" else ["front"]
 		for direction in directions:
 			for frame in range(renderer.authored_frame_count(action,direction)): poses.append([action,direction,frame])

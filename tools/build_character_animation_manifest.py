@@ -24,6 +24,8 @@ TRAVELLER_PROFILE_WAVES = {
          ([1647, 61, 326, 589], [125, 584], [164, 8])),
     ),
 }
+TRAVELLER_CAMERA_CHECK = ROOT / "assets/characters/traveller-camera-check-front-v1.png"
+TRAVELLER_CAMERA_CHECK_SHA256 = "cd4ec54e2826adc23832e48f12328de201bb447f41363ce85867676e536f9d43"
 ANNOUNCER_SIDE_WALK = ROOT / "assets/characters/announcer-walk-sides-v2.png"
 ANNOUNCER_SIDE_SCALE = 0.54
 ANNOUNCER_SIDE_SETTLE = ROOT / "assets/characters/announcer-settle-sides-v1.png"
@@ -492,6 +494,25 @@ def add_traveller_profile_waves(actor_data: dict) -> dict:
     return {"frame_count": sum(len(item[2]) for item in TRAVELLER_PROFILE_WAVES.values())}
 
 
+def add_traveller_camera_check(actor_data: dict) -> dict:
+    source = registered_frame_source(TRAVELLER_CAMERA_CHECK, TRAVELLER_CAMERA_CHECK_SHA256)
+    poses = (
+        ([315, 89, 274, 526], [137, 518], [146, 8]),
+        ([941, 89, 275, 526], [137, 518], [147, 8]),
+        ([1567, 89, 275, 526], [137, 518], [146, 8]),
+    )
+    # Keep the standing figure's 274px height with the same scale for all cels.
+    frames = [
+        {"source": source, "region": region, "anchors": {"feet": feet, "head": head},
+         "source_scale": 274 / (1.6 * 510), "layers": []}
+        for region, feet, head in poses
+    ]
+    actor_data["idle_gesture"] = {"front": {
+        "fps": 8, "loop": False, "frame_durations": [0.20, 0.40, 0.28], "frames": frames,
+    }}
+    return {"source": TRAVELLER_CAMERA_CHECK.relative_to(ROOT).as_posix(), "frame_count": len(frames)}
+
+
 def add_announcer_first_step(actor_data: dict) -> dict:
     """Append the registered short step to each of the two existing pivots."""
     source = registered_frame_source(ANNOUNCER_SIDE_DEPARTURE, ANNOUNCER_DEPARTURE_SHA256)
@@ -554,6 +575,7 @@ def build() -> tuple[dict,dict]:
     reports["announcer"]["stop_landing"] = add_announcer_left_landing(actors["announcer"])
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     reports["traveller"]["wave_side_atlas"] = add_traveller_profile_waves(actors["traveller"])
+    reports["traveller"]["camera_check"] = add_traveller_camera_check(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
     if OUT.exists():
@@ -632,7 +654,7 @@ def main() -> int:
         verified_regions = sum(
             report["frame_count"] + sum(report.get(action, {}).get("frame_count", 0)
                                         for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas",
-                                                       "stop_landing", "wave_side_atlas"))
+                                                       "stop_landing", "wave_side_atlas", "camera_check"))
             for report in reports.values()
         )
         print(f"PASS: {verified_regions} authored regions verified; no synthetic frames")
