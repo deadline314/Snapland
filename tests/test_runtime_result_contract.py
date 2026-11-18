@@ -265,6 +265,11 @@ SYRUP_SUITES = {
     "syrup Main tests": ("test_syrup_flood_main.tscn", "PASS: syrup Main factory entry, three real filled closed tanks, fixed rewards, selected retake originals and reload"),
 }
 JELLY_SUITES = {
+    "chocolate model tests": ("test_chocolate_etching.gd", "Chocolate etching tests: 211 checks, 0 failures"),
+    "chocolate driver tests": ("test_chocolate_etching_driver.gd", "Chocolate etching driver: 73 checks, 0 failures"),
+    "chocolate view tests": ("test_chocolate_etching_view.gd", "Chocolate etching view: 30 checks, 0 failures"),
+    "chocolate Session tests": ("test_chocolate_etching_session.gd", "Chocolate etching Session: 55 checks, 0 failures"),
+    "chocolate Main tests": ("test_chocolate_etching_main.tscn", "PASS: chocolate Main factory entrance, three-wheel and leftover idler results, fixed rewards, selected PNG I/O and reload"),
     "jelly model tests": ("test_jelly_trampoline.gd", "Jelly trampoline tests: 215 checks, 0 failures"),
     "jelly driver tests": ("test_jelly_trampoline_driver.gd", "Jelly trampoline driver: 78 checks, 0 failures"),
     "jelly view tests": ("test_jelly_trampoline_view.gd", "Jelly trampoline view: 83 checks, 0 failures"),
@@ -277,8 +282,8 @@ DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES
 class RegionalDriverRunnerTests(unittest.TestCase):
     def test_driver_suites_are_registered_once_with_exact_entrypoints(self) -> None:
         checks = build_checks("fixture-godot")
-        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup ", "jelly "))]
-        self.assertEqual(len(drivers), 20)
+        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup ", "jelly ", "chocolate "))]
+        self.assertEqual(len(drivers), 25)
         self.assertEqual({label for label, _ in drivers}, set(DRIVER_SUITES))
         for label, command in drivers:
             with self.subTest(label=label):

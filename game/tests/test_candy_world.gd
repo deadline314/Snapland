@@ -36,7 +36,7 @@ func _run() -> void:
 		world.player.velocity = Vector3.ZERO
 		await physics_frame
 		await physics_frame
-		_check(game_signs.size() == 1 and game_signs[0].is_visible_in_tree() and game_signs[0].text == "工廠遊戲 4／12", "constructed visible factory game sign advertises the four delivered games")
+		_check(game_signs.size() == 1 and game_signs[0].is_visible_in_tree() and game_signs[0].text == "工廠遊戲 5／12", "constructed visible factory game sign advertises the five delivered games")
 		world.reset_to_entry()
 		for sign_label in world.local_sign_labels:
 			_check(sign_label.billboard == BaseMaterial3D.BILLBOARD_DISABLED and sign_label.basis.is_equal_approx(Basis.IDENTITY) and not sign_label.no_depth_test, "physical sign stays parallel to its fixed board with depth enabled")
@@ -59,19 +59,20 @@ func _run() -> void:
 				if mapped and not hit.is_empty():
 					_check(absf(hit.position.y - world.ground_surface_y(sample)) < 0.001, "floor height agreement")
 		var reached := _reachable_cells(snapshot, Vector2i(0, 9))
-		_check(snapshot.points.size() == world.points.size() and snapshot.points.size() == 9, "all actual factory interactions mapped")
+		_check(snapshot.points.size() == world.points.size() and snapshot.points.size() == 10, "all actual factory interactions mapped")
 		for point in snapshot.points:
 			_check(point.size() == 3 and point.position is Vector3, "point contains only id/label/position")
-			_check(point.id in ["region:welcome", "candy:temperature", "candy:reset"] or point.id.begins_with("candy:info:") or point.id in ["game-025","game-026","game-027","game-028"], "only four delivered games and observation IDs")
+			_check(point.id in ["region:welcome", "candy:temperature", "candy:reset"] or point.id.begins_with("candy:info:") or point.id in ["game-025","game-026","game-027","game-028","game-029"], "only five delivered games and observation IDs")
 			_check(reached.has(Vector2i(roundi(point.position.x), roundi(point.position.z))), "connected safe walking route to %s" % point.id)
 			world.player.position = point.position
 			world.player.velocity = Vector3.ZERO
 			await physics_frame
 			await physics_frame
 			_check(world.player.position.distance_to(point.position) < 0.2 and world.nearest.get("id", "") == point.id, "actual safe footing and selection for %s" % point.id)
-		_check(snapshot.points.filter(func(point): return str(point.id).begins_with("game-")).size() == 4 and world._point_by_id("game-025").label.contains("拉糖橋") and world._point_by_id("game-026").label.contains("餅乾翻模"), "exactly four delivered candy games have real entrances")
+		_check(snapshot.points.filter(func(point): return str(point.id).begins_with("game-")).size() == 5 and world._point_by_id("game-025").label.contains("拉糖橋") and world._point_by_id("game-026").label.contains("餅乾翻模"), "exactly five delivered candy games have real entrances")
 		_check(world._point_by_id("game-027").position == Vector3(7, script.GROUND_Y, -6), "third game has the actual upper-right pipe entrance")
 		_check(world._point_by_id("game-028").position == Vector3(7, script.GROUND_Y, -1), "fourth game uses the next safe upper-right floor with margin")
+		_check(world._point_by_id("game-029").position == Vector3(10.5, script.GROUND_Y, -0.8), "fifth game uses the calibrated entrance")
 		var count: int = world.find_children("*", "Node", true, false).size()
 		var materials: int = world.material_cache.size()
 		var display_id: int = world._temperature_display.get_instance_id()

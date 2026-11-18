@@ -2,6 +2,7 @@ extends SceneTree
 
 const Session = preload("res://game/minigames/session.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
+const Chocolate = preload("res://game/tests/test_chocolate_etching_session.gd")
 var failures: Array[String] = []
 
 func _initialize() -> void:
@@ -20,6 +21,7 @@ func _run() -> void:
 		session.start(definition.id)
 		if definition.mode == "jelly_trampoline":
 			preload("res://game/tests/test_jelly_trampoline_session.gd").launch(session, 0.15)
+		if definition.mode == "chocolate_etching": Chocolate.cut_line(session)
 		if definition.mode == "sugar_bridge":
 			var load_ball := InputEventKey.new()
 			load_ball.keycode = KEY_ENTER
@@ -56,6 +58,9 @@ func _run() -> void:
 		if definition.mode == "jelly_trampoline":
 			preload("res://game/tests/test_jelly_trampoline_session.gd").launch(session, 0.15)
 			preload("res://game/tests/test_jelly_trampoline_session.gd").advance(session, 61.0)
+		elif definition.mode == "chocolate_etching":
+			Chocolate.cut_line(session)
+			Chocolate.advance(session, 241.0)
 		elif definition.mode == "syrup_flood":
 			var practice_valve := InputEventKey.new()
 			practice_valve.keycode = KEY_SPACE

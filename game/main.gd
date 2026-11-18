@@ -1442,7 +1442,7 @@ func _show_game_rules(id: String) -> void:
 		{"kind":"goal","definition":definition},
 		{"kind":"instructions","text":str(definition.get("instructions","依畫面提示操作。"))},
 		{"text":"小惡魔："+str(definition.get("devil_hint","完成特殊互動。")),"color":Paper.TEAL},
-		{"text":("參與操作後正常結算即可收藏普通拍貼，不限勝負；未操作或中途取消不收藏。" if definition.mode in ["sugar_bridge","cookie_mold","syrup_flood","jelly_trampoline"] else "正式遊玩自然結束即可收藏普通拍貼，不限勝負；中途取消不收藏。")+"小惡魔實際技巧以上方條件為準，也可免費補拍收藏。","color":Paper.INK},
+		{"text":("參與操作後正常結算即可收藏普通拍貼，不限勝負；未操作或中途取消不收藏。" if definition.mode in ["sugar_bridge","cookie_mold","syrup_flood","jelly_trampoline","chocolate_etching"] else "正式遊玩自然結束即可收藏普通拍貼，不限勝負；中途取消不收藏。")+"小惡魔實際技巧以上方條件為準，也可免費補拍收藏。","color":Paper.INK},
 		{"text":"輔助遊玩會放寬時間或判定，仍可收藏普通拍貼；小惡魔是否要求未開輔助，以上方條件為準。練習不記錄分數與收藏。","color":Paper.TEAL},
 	]
 	_content_pager(objective_card,"GameRulesExtraDetails",notes,_render_game_rules_page,1,entry_stamp)

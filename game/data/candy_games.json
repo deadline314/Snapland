@@ -54,5 +54,19 @@
     "ordinary": "連續送三顆果實上高台",
     "attraction_tag": "彈性工作台",
     "island_invitation": "A/D移床、Q/E斜壓、Space按住蓄彈再放開；普通失落重送三顆，輔助保留已送進度。R切AI接穩等你放行；X只重置當顆、不回時間。"
+  },
+  {
+    "id": "game-029",
+    "mode": "chocolate_etching",
+    "zone": "candy",
+    "local_index": 5,
+    "name": "巧克力蝕刻",
+    "goal": "描線折出三片齒輪並裝上試裝板，讓出口實際轉滿一圈",
+    "instructions": "描熱線、折料與放置齒輪",
+    "devil_hint": "首次轉滿一圈前，從真實剩料折出第4輪，讓它與三個主輪都位於輸入到出口的傳動路徑。輔助與AI夾持仍須親手完成。",
+    "devil": "從剩料切出惰輪並串入輸出路徑",
+    "ordinary": "三個主輪帶動出口轉滿一圈",
+    "attraction_tag": "熱線工藝板",
+    "island_invitation": "方向鍵移游標，Tab換片、Q/E選深度、Space按住描線或轉動，F折料或放置、M換工藝與試裝、X撤銷、R切換AI夾持。"
   }
 ]

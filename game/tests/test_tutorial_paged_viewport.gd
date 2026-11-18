@@ -14,7 +14,10 @@ func _run() -> void:
 	for dimensions in [Vector2i(800,600),Vector2i(800,450),Vector2i(1280,720),Vector2i(1920,1080)]:
 		root.size=dimensions
 		await _frames(2)
-		for lesson_id in panel.catalog.lesson_ids():
+		var lesson_ids: Array[String] = panel.catalog.lesson_ids()
+		var page_count := 0
+		_check(lesson_ids.size() == 30, "one park lesson and 29 game lessons")
+		for lesson_id in lesson_ids:
 			await panel.open_tutorial(lesson_id)
 			for step in range(panel.catalog.get_lesson(lesson_id).steps.size()):
 				panel._apply_responsive_layout(float(dimensions.x)/1280.0)
@@ -32,6 +35,9 @@ func _run() -> void:
 					used+=float(group.get_child_count()-1)*6.0
 					var next_section := panel._copy_pages[group_index+1].get_child(0) as Control
 					_check(used+6.0+next_section.get_combined_minimum_size().y>panel._text_scroll.size.y,"pagination only adds a page when the next full field cannot fit available height")
+				page_count += panel._copy_pages.size()
+				if lesson_id == "game-029":
+					print("CHOCOLATE tutorial viewport=%s scale=1.25 step=%d pages=%d" % [dimensions, step + 1, panel._copy_pages.size()])
 				for page in range(panel._copy_pages.size()):
 					panel._set_copy_page(page)
 					await _frames(4)
@@ -60,6 +66,7 @@ func _run() -> void:
 					_check(panel._text_scroll.scroll_vertical==before,"wheel cannot move programmatic lesson pages")
 				for semantic_index in range(5): _check(seen[semantic_index],"all original five fields fully appear at least once: %s/%s/%s/field%s"%[dimensions,lesson_id,step,semantic_index])
 				panel.next_step()
+		print("CHOCOLATE tutorial viewport=%s scale=1.25 lessons=%d semantic_groups=%d" % [dimensions, lesson_ids.size(), page_count])
 	panel.queue_free()
 	await _frames(2)
 	if failures.is_empty():

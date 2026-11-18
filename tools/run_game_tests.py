@@ -21,6 +21,11 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "chocolate model tests": "Chocolate etching tests: 211 checks, 0 failures",
+    "chocolate driver tests": "Chocolate etching driver: 73 checks, 0 failures",
+    "chocolate view tests": "Chocolate etching view: 30 checks, 0 failures",
+    "chocolate Session tests": "Chocolate etching Session: 55 checks, 0 failures",
+    "chocolate Main tests": "PASS: chocolate Main factory entrance, three-wheel and leftover idler results, fixed rewards, selected PNG I/O and reload",
     "jelly model tests": "Jelly trampoline tests: 215 checks, 0 failures",
     "jelly driver tests": "Jelly trampoline driver: 78 checks, 0 failures",
     "jelly view tests": "Jelly trampoline view: 83 checks, 0 failures",
@@ -259,7 +264,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ", "jelly ")) or label in {"region progress tests", "region travel tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
+    completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ", "jelly ", "chocolate ")) or label in {"region progress tests", "region travel tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -361,6 +366,11 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("sugar view tests", common + ["--script", "res://game/tests/test_sugar_bridge_view.gd"]),
         ("sugar Session tests", common + ["--script", "res://game/tests/test_sugar_bridge_session.gd"]),
         ("sugar Main tests", common + ["res://game/tests/test_sugar_bridge_main.tscn"]),
+        ("chocolate model tests", common + ["--script", "res://game/tests/test_chocolate_etching.gd"]),
+        ("chocolate driver tests", common + ["--script", "res://game/tests/test_chocolate_etching_driver.gd"]),
+        ("chocolate view tests", common + ["--script", "res://game/tests/test_chocolate_etching_view.gd"]),
+        ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
+        ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("jelly model tests", common + ["--script", "res://game/tests/test_jelly_trampoline.gd"]),
         ("jelly driver tests", common + ["--script", "res://game/tests/test_jelly_trampoline_driver.gd"]),
         ("jelly view tests", common + ["--script", "res://game/tests/test_jelly_trampoline_view.gd"]),
