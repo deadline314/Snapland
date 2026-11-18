@@ -770,3 +770,28 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![阿浪實際指路中間姿勢](images/ART-17-approach-20261118-announcer.png)
 
 [正常影片](images/ART-17-approach-20261118-normal.mp4) · [四分之一速度及重入](images/ART-17-approach-20261118-quarter.mp4) · [反例、回歸、原生畫面、封裝指紋與審查](images/ART-17-approach-20261118-evidence.zip)。固定基準 `3ca0b9c`；分支 `codex/npc-approach-actions-20261118`。
+
+# Commit — 2026-11-19 主角停步先回到穩定站姿
+
+## 內文
+
+主角原本依整座場景的時鐘選擇站姿，停步時可能直接進入呼吸中段或眨眼。現在八個方向都先回到原有站姿，停穩後才照各方向原有節奏呼吸與眨眼。暫停或換帽會保留當前待機進度，降低動態顯示站姿，恢復動態時從站姿開始。
+
+### 測試結果
+
+| 項目 | 結果 |
+|---|---|
+| 反例與局部回歸 | 舊版八方向均重現直接切中途格。新版八方向均從第 0 格開始，正常進入後續動作。專用待機、完整步態、世界移動與糖霜工廠共 4 組通過 |
+| 實際輸入及原生呈現 | 正常速度以鍵盤行走並停止，八方向先顯示原有站姿，再各自播放完整待機；四次停止如沿用舊時鐘會落在後段姿勢。停止後實際量測的人物根與貼圖落點位移為 0 |
+| 慢放與封裝 | 四分之一速度重建後驗證左右與兩個斜向。內嵌 Windows 測試執行檔重跑左右兩向。匯出與兩種原生速度的最終檢查均 exit 0、0 ERROR |
+| 影片 | 正常 1,090 格、慢放 2,048 格，皆為 1280×720／30 FPS，完整解碼通過 |
+
+原生畫面為 Godot 4.7.2、Windows Compatibility、Dummy 音訊。為逐像素核對原畫，拍攝情境關閉額外髮尾擺動。核對全身截圖與動畫狀態；本輪驗證範圍為待機銜接。
+
+### 截圖
+
+![右向行走後回到站姿](images/ART-17-idle-entry-20261119-side.png)
+![正向停步後的站姿](images/ART-17-idle-entry-20261119-front.png)
+![慢放重建後的背斜向站姿](images/ART-17-idle-entry-20261119-diagonal.png)
+
+[八方向正常影片](images/ART-17-idle-entry-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-idle-entry-20261119-quarter.mp4) · [反例、原生與封裝證據](images/ART-17-idle-entry-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/02f7e021898c6fd6b1726592587c46fcf4048c2a)。
