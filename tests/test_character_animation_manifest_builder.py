@@ -159,6 +159,18 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
         self.assertEqual(3, len({tuple(frame["region"]) for frame in clip["frames"]}))
         self.assertEqual({"front": 3}, manifest["outfit_required_poses"]["traveller"]["idle_gesture"])
 
+    def test_directional_photographs_preserve_registered_camera_and_hand_foregrounds(self):
+        manifest, reports = BUILDER.build()
+        photos = manifest["actors"]["traveller"]["photograph"]
+        self.assertEqual(6, reports["traveller"]["photograph_side_atlas"]["frame_count"])
+        self.assertEqual({"front": 8, "left": 3, "right": 3}, manifest["outfit_required_poses"]["traveller"]["photograph"])
+        for side in ("left", "right"):
+            clip = photos[side]
+            self.assertFalse(clip["loop"])
+            self.assertAlmostEqual(1.06, sum(clip["frame_durations"]))
+            self.assertEqual(3, len({tuple(frame["region"]) for frame in clip["frames"]}))
+            self.assertTrue(all(frame["source"].endswith(f"-{side}-v1.png") and frame["foreground_polygons"] for frame in clip["frames"]))
+
 
 if __name__ == "__main__":
     unittest.main()

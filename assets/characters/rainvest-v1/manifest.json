@@ -1670,6 +1670,60 @@
       "source_pixel_sha256": "d27e303632ddca8c58668b3034121c4838d23ca0583a70c9d904f3a95b5d845c",
       "path": "res://assets/characters/rainvest-v1/idle-front-00.pngdata",
       "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "photograph",
+      "direction": "left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "e8289fb02e9b9628f1abeeb8c85e98a13936b768eccef3407706a093ceaa8b7e",
+      "path": "res://assets/characters/rainvest-v1/photograph-left-00.pngdata",
+      "png_sha256": "fdba29fba5d451400981e9fd8a6f9efc5925523d7dc9676e8eb010152a18a260"
+    },
+    {
+      "action": "photograph",
+      "direction": "left",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "29b4b960c7d67fc3ceed13273f4f6896f07412388e2a783e000f4f74690874de",
+      "path": "res://assets/characters/rainvest-v1/photograph-left-01.pngdata",
+      "png_sha256": "cdf55b62c700054d7b66e77e805bf6022be5e27f688c2ad579b09ec881d6b7b3"
+    },
+    {
+      "action": "photograph",
+      "direction": "left",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5703828d045ed13b37f29451030f76456e7d565565359029522941239b94186a",
+      "path": "res://assets/characters/rainvest-v1/photograph-left-02.pngdata",
+      "png_sha256": "71c253de39ad550a0c6b237d666723469ef058ca241cc2e81622dbe0241cf65f"
+    },
+    {
+      "action": "photograph",
+      "direction": "right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "917ba461ca8628cca5dfab8cac1ec640865a35ccc29206b6ae3d8b0c54a5ad1e",
+      "path": "res://assets/characters/rainvest-v1/photograph-right-00.pngdata",
+      "png_sha256": "f3089407a13db793ac269abe066c0160be5eb931e87e153f8b675bd39ad962aa"
+    },
+    {
+      "action": "photograph",
+      "direction": "right",
+      "frame": 1,
+      "source_kind": "authored",
+      "source_pixel_sha256": "f337b66bf661b86cc98230b87917044140bcd45c7858db7fea935ddc071ce629",
+      "path": "res://assets/characters/rainvest-v1/photograph-right-01.pngdata",
+      "png_sha256": "72bd1b8d4849d48b223d5c83ee2cc8b8a8289f04b9889ff33d4eea3db2c670d3"
+    },
+    {
+      "action": "photograph",
+      "direction": "right",
+      "frame": 2,
+      "source_kind": "authored",
+      "source_pixel_sha256": "af9b7a3bdb2ac3bc8f9db36118badf2f6fd5bdb174d13e9ed844b690ade50df3",
+      "path": "res://assets/characters/rainvest-v1/photograph-right-02.pngdata",
+      "png_sha256": "74945fb33bd653f540307029d781c7d0f420ea79215e67402adfd465661f9935"
     }
   ],
   "encoding": "png_bytes_without_import_conversion"

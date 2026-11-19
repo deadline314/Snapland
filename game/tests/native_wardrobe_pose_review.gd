@@ -39,7 +39,7 @@ func _run() -> void:
 		for direction in required[action]:
 			for frame in int(required[action][direction]):
 				poses.append({"action":action,"direction":direction,"frame":frame})
-	if poses.size() != 185:
+	if poses.size() != 191:
 		_fail("Unexpected coverage; review the pose matrix")
 		return
 	sheet = SubViewport.new()

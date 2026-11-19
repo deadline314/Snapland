@@ -5,6 +5,18 @@ const CAMERA_CENTERS := {"front":Vector2i(145,235),"front_left":Vector2i(127,225
 ## The source hand brings the side camera inward during the stride. These
 ## lens witnesses are inspected on the eight original cels, not mask output.
 const RIGHT_WALK_CAMERA_X := [198,189,182,174,179,174,170,170]
+const PHOTO_WITNESSES := {
+	"left": [
+		[Vector2i(83,201),Vector2i(112,201),Vector2i(100,185)],
+		[Vector2i(81,173),Vector2i(104,174),Vector2i(90,159)],
+		[Vector2i(86,215),Vector2i(116,220),Vector2i(102,203)],
+	],
+	"right": [
+		[Vector2i(212,198),Vector2i(192,196),Vector2i(201,182)],
+		[Vector2i(216,164),Vector2i(193,166),Vector2i(206,149)],
+		[Vector2i(204,223),Vector2i(181,223),Vector2i(197,208)],
+	],
+}
 var failures: Array[String] = []
 func _initialize() -> void:
 	var save := OS.get_environment("SNAPLAND_SAVE_PATH")
@@ -61,6 +73,7 @@ func _initialize() -> void:
 			var dressed: Image=avatar.texture(look,equipment,"front_left",0,"walk").get_image()
 			for point in [Vector2i(100,225),Vector2i(115,225),Vector2i(120,225)]:
 				_check(dressed.get_pixelv(point)==expected.get_pixelv(point),"Prop restoration lost selected skin or outfit")
+	_check_profile_photographs(avatar)
 	var signature: String=manifest.owners.keys()[0]
 	for fault in ["canvas","schema","coordinate","fraction","boolean","bounds","overlap","order","empty","hash"]:
 		var broken: Dictionary=manifest.duplicate(true)
@@ -91,5 +104,34 @@ func _initialize() -> void:
 	if failures.is_empty(): print("PASS: prop foreground 128 complete-pose blends, independent hand/camera witnesses, rigid guards, exact-source rejection, bounded cache and 10 malformed inputs")
 	else: printerr("FAIL: "+"; ".join(failures))
 	quit(0 if failures.is_empty() else 1)
+
+func _check_profile_photographs(avatar: Avatar) -> void:
+	var equipment := {"outfit":"outfit-rainvest","hat":"hat-straw"}
+	for side in PHOTO_WITNESSES:
+		for frame in range(PHOTO_WITNESSES[side].size()):
+			var source := avatar.original_garment_pose("photograph", side, frame)
+			if source == null:
+				_check(false, "Missing side photo: %s/%d" % [side, frame])
+				continue
+			var stats := avatar._authored_source_hair_metrics(source, side, "photograph", frame)
+			_check(stats.hair_owner_valid and stats.replacement_geometry_valid, "Incomplete side photo hair ownership: %s/%d" % [side, frame])
+			for point: Vector2i in PHOTO_WITNESSES[side][frame]:
+				_check(source.get_pixelv(point).a > 0.9 and stats.foreground_indices.has(point.y * 280 + point.x),
+					"Missing independent lens or hand witness: %s/%d/%s" % [side, frame, point])
+			for skin in ["warm", "deep"]:
+				var look := Avatar.DEFAULT_APPEARANCE.duplicate()
+				look.skin = skin
+				var plain := avatar.texture(look, {"outfit":"outfit-tide","hat":"hat-straw"}, side, frame, "photograph").get_image()
+				var expected := avatar.texture(look, equipment, side, frame, "photograph").get_image()
+				for point: Vector2i in PHOTO_WITNESSES[side][frame]:
+					_check(expected.get_pixelv(point) == plain.get_pixelv(point),
+						"Side photo rainvest covered the lens or hand: %s/%d/%s" % [side, frame, point])
+				for style in ["bob", "curly"]:
+					look.hair = style
+					var actual := avatar.texture(look, equipment, side, frame, "photograph").get_image()
+					for point: Vector2i in PHOTO_WITNESSES[side][frame]:
+						_check(actual.get_pixelv(point) == expected.get_pixelv(point),
+							"Side photo lens or hand changed: %s/%d/%s/%s/%s" % [side, frame, skin, style, point])
+
 func _check(ok: bool,message: String) -> void:
 	if not ok: failures.append(message)

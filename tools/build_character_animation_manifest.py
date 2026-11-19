@@ -26,6 +26,20 @@ TRAVELLER_PROFILE_WAVES = {
 }
 TRAVELLER_CAMERA_CHECK = ROOT / "assets/characters/traveller-camera-check-front-v1.png"
 TRAVELLER_CAMERA_CHECK_SHA256 = "cd4ec54e2826adc23832e48f12328de201bb447f41363ce85867676e536f9d43"
+TRAVELLER_PROFILE_PHOTOS = {
+    "left": (
+        "770eee3f4d94ac01c3d4ab534bdfa9dd563706e1d967a1ef3be5fcb724c39294", 583,
+        (([214, 67, 318, 596], [148, 590], [168, 7]),
+         ([930, 67, 325, 598], [156, 590], [176, 7]),
+         ([1666, 67, 313, 597], [143, 590], [164, 7])),
+    ),
+    "right": (
+        "8914e81634da95d8ad7c2c7955bc9f4d2f92d329b7e39277f81e259bf5913b5e", 594,
+        (([205, 56, 318, 607], [133, 601], [151, 7]),
+         ([924, 57, 323, 606], [138, 600], [150, 6]),
+         ([1647, 57, 312, 608], [138, 600], [145, 6])),
+    ),
+}
 ANNOUNCER_SIDE_WALK = ROOT / "assets/characters/announcer-walk-sides-v2.png"
 ANNOUNCER_SIDE_SCALE = 0.54
 ANNOUNCER_SIDE_SETTLE = ROOT / "assets/characters/announcer-settle-sides-v1.png"
@@ -513,6 +527,21 @@ def add_traveller_camera_check(actor_data: dict) -> dict:
     return {"source": TRAVELLER_CAMERA_CHECK.relative_to(ROOT).as_posix(), "frame_count": len(frames)}
 
 
+def add_traveller_profile_photos(actor_data: dict) -> dict:
+    for direction, (digest, height, poses) in TRAVELLER_PROFILE_PHOTOS.items():
+        path = ROOT / f"assets/characters/traveller-photograph-{direction}-v1.png"
+        source = registered_frame_source(path, digest)
+        frames = [
+            {"source": source, "region": region, "anchors": {"feet": feet, "head": head},
+             "source_scale": 274 / (1.6 * height), "layers": []}
+            for region, feet, head in poses
+        ]
+        actor_data["photograph"][direction] = {
+            "fps": 8, "loop": False, "frames": frames, "frame_durations": [0.23, 0.55, 0.28],
+        }
+    return {"frame_count": sum(len(spec[2]) for spec in TRAVELLER_PROFILE_PHOTOS.values())}
+
+
 def add_announcer_first_step(actor_data: dict) -> dict:
     """Append the registered short step to each of the two existing pivots."""
     source = registered_frame_source(ANNOUNCER_SIDE_DEPARTURE, ANNOUNCER_DEPARTURE_SHA256)
@@ -576,6 +605,7 @@ def build() -> tuple[dict,dict]:
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     reports["traveller"]["wave_side_atlas"] = add_traveller_profile_waves(actors["traveller"])
     reports["traveller"]["camera_check"] = add_traveller_camera_check(actors["traveller"])
+    reports["traveller"]["photograph_side_atlas"] = add_traveller_profile_photos(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
     if OUT.exists():
@@ -654,7 +684,7 @@ def main() -> int:
         verified_regions = sum(
             report["frame_count"] + sum(report.get(action, {}).get("frame_count", 0)
                                         for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas",
-                                                       "stop_landing", "wave_side_atlas", "camera_check"))
+                                                       "stop_landing", "wave_side_atlas", "camera_check", "photograph_side_atlas"))
             for report in reports.values()
         )
         print(f"PASS: {verified_regions} authored regions verified; no synthetic frames")
