@@ -382,3 +382,22 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 ![穿雨背心左前斜向起步](images/ART-16-compass-departure-20261119-front-left-rainvest.png)
 
 [正常影片](images/ART-16-compass-departure-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-compass-departure-20261119-quarter.mp4) · [原畫、測試及封裝證據](images/ART-16-compass-departure-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/23306713ddf48586fefd3f8e263652e85f18877b)。
+
+## Commit — 2026-11-19 折返時保留步態
+
+玩家持續按相反方向時，人物會先減速再折返。四分之一速度曾在四個正向折返各插入六個物理更新的待機姿勢。現在保留已呈現的走姿及步距，直到移動足以切到新方向。停住、阻擋及離地仍依原有流程處理。
+
+| 項目 | 結果 |
+|---|---|
+| 對照重播 | 七條路線以正常與四分之一速度各重播，798 筆位置間距、水平速度、接地和步距完全相同。四個慢速折返的待機更新各自從 6 降到 0，其餘測試路線的畫面序列相同 |
+| 原生與封裝 | 正常、四分之一速度重入與 Windows 內嵌版各通過 8 案，涵蓋左右、前後兩種折返與原裝、雨背心加草帽及動態鮑伯頭。連續按鍵後順利切到新方向，無待機畫格 |
+| 局部回歸 | 降低動態重入、4 組 Godot 測試、214 項 Python 及 5 區設計檢查通過 |
+| 影片 | 正常 294 格、四分之一速度 1,079 格，均為 1280×720／30 FPS，完整解碼通過 |
+
+本次修正低速折返的待機跳格。折返角度之間的專用轉身姿勢仍待驗收。
+
+![慢速左向折返期間保留原走姿](images/ART-16-traveller-reversal-20261119-side-crossing.png)
+![折返後接右向走姿](images/ART-16-traveller-reversal-20261119-side-turned.png)
+![換裝後由背面折返的慢速畫面](images/ART-16-traveller-reversal-20261119-rainvest-crossing.png)
+
+[正常影片](images/ART-16-traveller-reversal-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-traveller-reversal-20261119-quarter.mp4) · [前後重播、原生和封裝證據](images/ART-16-traveller-reversal-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/7b8527fe76ac2b5d54d25b4bc4e4ea649215045a)。
