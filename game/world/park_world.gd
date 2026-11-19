@@ -2330,8 +2330,15 @@ func _physics_process(delta: float) -> void:
 	var actual_world_delta := player.global_position-previous_world_position
 	var horizontal_delta := Vector2(actual_world_delta.x, actual_world_delta.z)
 	var travelled := horizontal_delta.length()
-	avatar_is_walking = travelled > WALK_DISTANCE_EPSILON
-	if avatar_is_walking:
+	var reviewed_stop: bool = (
+		was_coasting and player.is_on_floor() and not reduced_motion and not blocked and not operating_lens
+		and last_avatar_action == "walk" and last_avatar_direction == facing
+		and last_avatar_frame in AVATAR_STOP_FROM_WALK_CELS.get(facing, [])
+	)
+	var advances_stride := travelled > WALK_DISTANCE_EPSILON
+	# Tiny coasting steps can outlast the stride threshold at a low time scale.
+	avatar_is_walking = advances_stride or (reviewed_stop and travelled > 0.0)
+	if advances_stride:
 		facing = quantize_walk_direction(horizontal_delta, facing)
 		walk_distance_phase = advance_walk_phase(walk_distance_phase, travelled, walk_stride_for(facing))
 	if avatar_motion_available:
@@ -2361,9 +2368,7 @@ func _physics_process(delta: float) -> void:
 				avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
 				if avatar_action_remaining == 0.0: avatar_action=""
 	elif (
-		was_coasting and current_horizontal == Vector2.ZERO and not avatar_is_walking and player.is_on_floor()
-		and not reduced_motion and not blocked and not operating_lens and last_avatar_action == "walk"
-		and last_avatar_direction == facing and last_avatar_frame in AVATAR_STOP_FROM_WALK_CELS.get(facing, [])
+		reviewed_stop and current_horizontal == Vector2.ZERO and not avatar_is_walking
 		and _has_authored_avatar_action(AVATAR_STOP_ACTION, facing)
 		and avatar_renderer.animation_library.original_frame_image("traveller", AVATAR_STOP_ACTION, facing, 0) != null
 	):

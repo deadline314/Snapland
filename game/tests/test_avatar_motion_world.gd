@@ -118,6 +118,7 @@ func _run() -> void:
 	_check(world.avatar_motion_rig==null and world.avatar.visible,"the source Sprite remains the walk and idle presenter after the gesture")
 	await _check_walking_gesture_requests(world)
 	await _check_profile_settles(world)
+	await _check_slow_profile_stop(world)
 	await _check_camera_idle(world)
 	var changed_appearance := {"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}
 	var changed_equipment := {"outfit":"outfit-tide","hat":"hat-none"}
@@ -228,6 +229,26 @@ func _check_profile_settles(world: ParkWorld) -> void:
 				break
 			if observed: break
 		_check(observed, "real %s movement reaches the reviewed side stop" % side)
+
+func _check_slow_profile_stop(world: ParkWorld) -> void:
+	var point := Vector3(-2.6, 0.0, -5.5)
+	point.y = world.ground_surface_y(point)
+	world.player.position = point
+	var time_scale := Engine.time_scale
+	Engine.time_scale = 0.25
+	for _tick in range(8): await physics_frame
+	Input.action_press("move_left")
+	for _tick in range(84): await physics_frame
+	Input.action_release("move_left")
+	var observed := false
+	var trace: Array = []
+	for _tick in range(76):
+		await physics_frame
+		observed = observed or world.last_avatar_action == ParkWorld.AVATAR_STOP_ACTION
+		trace.append([world.last_avatar_action, world.last_avatar_frame, world.player.velocity.x])
+	Engine.time_scale = time_scale
+	_check(observed and world.last_avatar_action == "idle" and world.facing == "left",
+		"quarter-speed deceleration plays the reviewed stop and returns to left idle: %s" % [trace.slice(30, 55)])
 
 func _check_camera_idle(world: ParkWorld) -> void:
 	world.facing = "front"
