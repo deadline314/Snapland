@@ -401,3 +401,23 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 ![換裝後由背面折返的慢速畫面](images/ART-16-traveller-reversal-20261119-rainvest-crossing.png)
 
 [正常影片](images/ART-16-traveller-reversal-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-traveller-reversal-20261119-quarter.mp4) · [前後重播、原生和封裝證據](images/ART-16-traveller-reversal-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/7b8527fe76ac2b5d54d25b4bc4e4ea649215045a)。
+
+## Commit — 2026-11-19 主角左右折返轉身
+
+主角貼地減速並持續按相反的橫向鍵時，已核對的起始步態會經過三個背側輪廓後接上新方向的步伐。轉身長 0.12 秒。左後姿勢沿用已驗證的起步圖格，背面與右後新增承重姿勢。方向中斷、離地、降低動態或缺圖時回到原流程。
+
+| 項目 | 結果 |
+|---|---|
+| 相鄰姿勢 | 實際第 5 格折返樣本的最大整身像素差異比例由 0.7157 降為 0.6392，腿部與靴子由 0.7860 降為 0.7455 |
+| 實際位移 | 14 次對照重播共 798 筆位移、水平速度、步距與接地資料逐筆一致。原生影片拍到人物在轉身期間繼續沿原物理路徑移動 |
+| 原生與封裝 | 正常、四分之一速度重入與 Windows 內嵌版各通過 6 案。左右各覆蓋原裝、雨背心加草帽及動態鮑伯頭，依序看到三個轉身方向 |
+| 回歸 | 255 個原畫區域、209 個雨背心姿勢、7 組 Godot、214 項 Python、5 區設計檢查及降低動態重入通過 |
+| 影片 | 正常 224 格、四分之一速度 828 格，均為 1280×720／30 FPS，完整解碼通過 |
+
+原生驗證使用實際 A、D 輸入、隔離存檔及固定取景。前後折返候選仍待改進，已保存比較結果。
+
+![左後轉身姿勢](images/ART-16-side-pivot-20261119-rear-left.png)
+![背面承重姿勢](images/ART-16-side-pivot-20261119-back.png)
+![穿雨背心的右後姿勢](images/ART-16-side-pivot-20261119-rainvest-rear-right.png)
+
+[正常影片](images/ART-16-side-pivot-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-side-pivot-20261119-quarter.mp4) · [原畫、原生與前後重播證據](images/ART-16-side-pivot-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/0474b2472571a12644dafaa5ead1f82906f607be)。
