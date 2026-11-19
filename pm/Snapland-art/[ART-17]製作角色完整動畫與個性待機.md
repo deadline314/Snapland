@@ -863,3 +863,22 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![阿浪左向收勢接話](images/ART-17-dialogue-settle-20261119-announcer.png)
 
 [正常影片](images/ART-17-dialogue-settle-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-dialogue-settle-20261119-quarter.mp4) · [反例、原生與封裝證據](images/ART-17-dialogue-settle-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/934df5f44931ed2baaf2140f6dc2e5b4205d8b5d)。
+
+## Commit — 2026-11-19 左右側身拍照
+
+主角朝左或右時按 P，依序抬相機、對準、放下。1.06 秒後回到原朝向站姿，人物根全程固定。左右各新增三張完整原畫與相機、手掌前景。原生截圖發現直接沿用待機雨背心會蓋到短褲，改為逐姿勢調整的六張衣料層，保留袖口、相機與背包。雨背心共覆蓋 191 格。
+
+| 項目 | 結果 |
+|---|---|
+| 素材與回歸 | 236 個原畫區域、214 項 Python、5 區設計檢查、5 組 Godot 測試通過。兩種膚色與鮑伯頭、捲髮搭草帽核對鏡頭與手掌像素 |
+| 正常、慢放、封裝 | 透過 A、D 和 P 驗證左右各三種造型，逐格觀察三個來源、零根位移、回到同向待機。正常、四分之一速度重入及 Windows 內嵌執行檔各通過六案 |
+| 降低動態 | 場景重入後驗證保留中立姿勢 |
+| 影片 | 正常 336 格、四分之一速度 1,089 格，均為 1280×720／30 FPS，完整解碼通過 |
+
+驗證分別使用獨立存檔。拍攝採固定取景及 Dummy 音訊，關閉額外髮尾擺動以便逐格核對。整票維持進行中。
+
+![右向對準相機](images/ART-17-photo-20261119-right.png)
+![左向穿雨背心拍照](images/ART-17-photo-20261119-left-rainvest.png)
+![鮑伯頭搭草帽於右向拍照](images/ART-17-photo-20261119-bob-hat.png)
+
+[正常影片](images/ART-17-photo-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-photo-20261119-quarter.mp4) · [原生、封裝與衣料檢查證據](images/ART-17-photo-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/b8d688e0ee80d09526a38abf52d15cff6f842583)。
