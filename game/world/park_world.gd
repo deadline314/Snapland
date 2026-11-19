@@ -39,8 +39,14 @@ const AVATAR_CAMERA_IDLE_ACTION := "idle_gesture"
 const AVATAR_STOP_ACTION := "settle"
 # Each listed approach cel was reviewed against its planted stop pose.
 const AVATAR_STOP_FROM_WALK_CELS := {
-	"left": [0, 1, 3, 4, 5, 7],
+	"front": [0, 2, 3, 4, 5, 6, 7],
+	"front_right": [1, 2, 5, 6, 7],
 	"right": [0, 1, 2, 3, 4, 6],
+	"back_right": [1, 2, 3, 5, 6, 7],
+	"back": [0, 1, 2, 3, 4, 5, 6, 7],
+	"back_left": [1, 2, 3, 5, 6, 7],
+	"left": [0, 1, 3, 4, 5, 7],
+	"front_left": [2, 6],
 }
 var player: CharacterBody3D
 var avatar: Sprite3D

@@ -45,7 +45,7 @@ func ready(avatar: RefCounted) -> bool:
 	for action in required:
 		for direction in required[action]:
 			for frame in int(required[action][direction]): expected[_key(action,direction,frame)] = true
-	if expected.size()!=193 or rows.size()!=expected.size(): return _reject("Incomplete garment family")
+	if expected.size()!=199 or rows.size()!=expected.size(): return _reject("Incomplete garment family")
 	var pending: Dictionary = {}
 	var verified_files := {}
 	var decoded_hashes := {}

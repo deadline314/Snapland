@@ -170,7 +170,7 @@ PASS_MARKERS = {
     "atomic outfit coverage tests": "PASS: atomic outfit coverage (",
     "legacy head source tests": "PASS: reviewed legacy human cuts preserve original face body and 24 default requests with bounded masks and fail-closed data",
     "garment cache tests": "PASS: garment cache bounds 344 exact blends, 512 warm hits and atomic missing or changed reload recovery",
-    "garment overlay tests": "PASS: garment overlay preserves 193 original compositions; missing last cel falls back across all eight directions",
+    "garment overlay tests": "PASS: garment overlay preserves 199 original compositions; missing last cel falls back across all eight directions",
     "garment part ownership tests": "PASS: garment sleeves retain 121 owned source pixels, reject adjacent raster tiles and preserve unassigned torso pixels",
     "side outfit palette tests": "PASS: side jacket palette, 72 source-bound cases, exposed cloth witnesses and curly hair occlusion",
     "authored idle hair attachment tests": "PASS: source-atlas closed-eye attachment availability (not production idle playback)",

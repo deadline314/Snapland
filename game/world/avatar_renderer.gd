@@ -1911,9 +1911,8 @@ func _apply_appearance_details(image: Image, appearance: Dictionary, direction: 
 	var sx := float(w) / 64.0
 	var sy := float(h) / 96.0
 	var face := str(appearance.get("face", "curious"))
-	# Expressions are drawn only on the authored front idle face, whose landmarks
-	# are stable. Other directions and gestures retain their original facial pixels.
-	if direction == "front" and action == "idle" and face != "curious":
+	# Front idle and settling share the same face landmarks.
+	if direction == "front" and action in ["idle", "settle"] and face != "curious":
 		_apply_face_shape(image, face, sx, sy)
 
 func _apply_face_shape(image: Image, expression: String, sx: float, sy: float) -> void:

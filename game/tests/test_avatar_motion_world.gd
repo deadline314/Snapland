@@ -117,7 +117,7 @@ func _run() -> void:
 	world._refresh_avatar_texture(0)
 	_check(world.avatar_motion_rig==null and world.avatar.visible,"the source Sprite remains the walk and idle presenter after the gesture")
 	await _check_walking_gesture_requests(world)
-	await _check_profile_settles(world)
+	await _check_settles(world)
 	await _check_slow_profile_stop(world)
 	await _check_camera_idle(world)
 	var changed_appearance := {"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}
@@ -200,25 +200,26 @@ func _check_walking_gesture_requests(world: ParkWorld) -> void:
 	world.avatar_action = ""
 	world.avatar_action_remaining = 0.0
 
-func _check_profile_settles(world: ParkWorld) -> void:
-	for side: String in ["left", "right"]:
-		var movement := "move_" + side
+func _check_settles(world: ParkWorld) -> void:
+	for index in range(DIRECTIONS.size()):
+		var direction: String = DIRECTIONS[index]
+		var movement: Array = INPUTS[index]
 		var observed := false
-		for travel_ticks in [21, 29, 39]:
+		for travel_ticks in [21, 29, 39, 18, 24, 31, 47, 54]:
 			world.player.position = Vector3(0, ParkWorld._ground_surface_y(Vector3(0, 0, -15)), -15)
 			for _tick in range(2): await physics_frame
-			Input.action_press(movement)
+			for action in movement: Input.action_press(action)
 			for _tick in range(travel_ticks): await physics_frame
-			Input.action_release(movement)
+			for action in movement: Input.action_release(action)
 			for _tick in range(18):
 				await physics_frame
 				if world.last_avatar_action != ParkWorld.AVATAR_STOP_ACTION: continue
 				observed = true
 				var at_rest := world.player.global_position
 				var phase := world.walk_distance_phase
-				var expected: Texture2D = world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, side, 0, ParkWorld.AVATAR_STOP_ACTION)
-				_check(world.avatar.texture == expected and world.facing == side and not world.avatar_is_walking, "the side stop displays its planted art after physical deceleration")
-				if side == "left":
+				var expected: Texture2D = world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, direction, 0, ParkWorld.AVATAR_STOP_ACTION)
+				_check(world.avatar.texture == expected and world.facing == direction and not world.avatar_is_walking, "the %s stop displays its planted art after physical deceleration" % direction)
+				if direction != "right":
 					for _hold in range(8): await physics_frame
 					_check(world.last_avatar_action == "idle" and world.last_avatar_frame == 0 and world.player.global_position.is_equal_approx(at_rest) and world.walk_distance_phase == phase,
 						"the planted stop returns to the same-direction neutral pose without advancing the stride")
@@ -228,7 +229,7 @@ func _check_profile_settles(world: ParkWorld) -> void:
 					world.apply_settings({"reduced_motion":false})
 				break
 			if observed: break
-		_check(observed, "real %s movement reaches the reviewed side stop" % side)
+		_check(observed, "real %s movement reaches the reviewed stop" % direction)
 
 func _check_slow_profile_stop(world: ParkWorld) -> void:
 	var point := Vector3(-2.6, 0.0, -5.5)
