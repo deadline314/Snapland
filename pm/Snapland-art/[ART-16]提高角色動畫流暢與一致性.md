@@ -421,3 +421,21 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 ![穿雨背心的右後姿勢](images/ART-16-side-pivot-20261119-rainvest-rear-right.png)
 
 [正常影片](images/ART-16-side-pivot-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-side-pivot-20261119-quarter.mp4) · [原畫、原生與前後重播證據](images/ART-16-side-pivot-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/0474b2472571a12644dafaa5ead1f82906f607be)。
+
+## Commit — 2026-11-19 主角前後折返轉身
+
+主角接地走動並反按 W 或 S 時，經驗證的承重步態會在 0.15 秒內依序顯示正面、前斜面、側面、後斜面和背面，再接上新方向的步伐。相機轉至側面後逐步遮住，背包隨朝向露出。手掌、頭髮與雨背心各有來源綁定。步態、方向與來源可用性共同決定播放，其他情況沿用原方向變更。
+
+| 項目 | 結果 |
+|---|---|
+| 姿勢 | 比對兩個方向各 2,420 個既有姿勢組合，另核對新原畫接上各步態格的邊界。採用的五個起訖格組合均降低最壞相鄰整身與腿部像素差異 |
+| 實際位移 | 72 次鍵盤對照重播共 6,480 筆位置、速度、步距相位、方向及接地資料逐筆一致。兩方向於原生遊戲實際走完五格，橫向偏移為零 |
+| 原生與封裝 | 正常、四分之一速度重入及獨立 Windows 封裝各通過 6 案。原裝、雨背心草帽配鮑伯頭及雨背心草帽配捲髮分別核對兩方向。另驗證降低動態與重入 |
+| 局部回歸 | 265 個原畫區域、216 個雨背心合成、Godot 匯入和 7 組局部測試、215 項 Python 及 5 區設計檢查通過 |
+| 影片 | 正常 420 格，四分之一速度 1,418 格。兩部皆為 1280×720／60 FPS，完整解碼通過 |
+
+影片使用實際 W、S 按鍵、隔離存檔與固定取景。逐格查看持握的相機、雙腳、臉、背包及三款髮型。不同路線的連續自然度仍依本票檢查。
+
+![三組換裝和前後折返的原生姿勢](images/ART-16-depth-pivot-20261119-three-looks.png)
+
+[前斜面](images/ART-16-depth-pivot-20261119-front-left.png) · [雨背心側面](images/ART-16-depth-pivot-20261119-rainvest-profile.png) · [捲髮後斜面](images/ART-16-depth-pivot-20261119-curly-rear.png) · [正常影片](images/ART-16-depth-pivot-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-depth-pivot-20261119-quarter.mp4) · [原畫、比較、原生和封裝證據](images/ART-16-depth-pivot-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/6e1fb2326a3bcf8d2dfe828de6c6aefb5cc45660)。
