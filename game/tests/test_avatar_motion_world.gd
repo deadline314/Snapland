@@ -119,6 +119,7 @@ func _run() -> void:
 	await _check_walking_gesture_requests(world)
 	await _check_settles(world)
 	await _check_slow_profile_stop(world)
+	await _check_departures(world)
 	await _check_camera_idle(world)
 	var changed_appearance := {"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}
 	var changed_equipment := {"outfit":"outfit-tide","hat":"hat-none"}
@@ -250,6 +251,64 @@ func _check_slow_profile_stop(world: ParkWorld) -> void:
 	Engine.time_scale = time_scale
 	_check(observed and world.last_avatar_action == "idle" and world.facing == "left",
 		"quarter-speed deceleration plays the reviewed stop and returns to left idle: %s" % [trace.slice(30, 55)])
+
+func _check_departures(world: ParkWorld) -> void:
+	var original_scale := Engine.time_scale
+	for speed: float in [1.0, 0.25]:
+		Engine.time_scale = speed
+		for direction: String in ["left", "right"]:
+			var point := Vector3(-2.6 if direction == "left" else -0.6, 0.0, -5.5)
+			point.y = world.ground_surface_y(point)
+			world.player.position = point
+			world.facing = direction
+			for _tick in range(4): await physics_frame
+			var before := world.player.global_position
+			var movement := "move_" + direction
+			Input.action_press(movement)
+			var takeoff_ticks := 0
+			var continued := false
+			var expected: Texture2D = world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, direction, 0, "depart")
+			for _tick in range(40 if speed < 1.0 else 12):
+				await physics_frame
+				if world.last_avatar_source_action == "depart":
+					takeoff_ticks += 1
+					_check(world.avatar.texture == expected and world.last_avatar_action == "walk" and world.player.global_position != before,
+						"takeoff uses its own artwork while the normal physics body moves")
+				elif takeoff_ticks > 0:
+					continued = world.last_avatar_source_action == "walk" and world.last_avatar_frame == 0
+					break
+			_check(takeoff_ticks >= (19 if speed < 1.0 else 5) and continued and world.facing == direction,
+				"%s scale %s takeoff enters the reviewed walk cel without stalling motion or changing heading (%d ticks)" % [direction, speed, takeoff_ticks])
+			Input.action_release(movement)
+	Engine.time_scale = original_scale
+	world.player.position = Vector3(-2.6, world.ground_surface_y(Vector3(-2.6,0,-5.5)), -5.5)
+	world.facing = "left"
+	for _tick in range(4): await physics_frame
+	Input.action_press("move_left")
+	for _tick in range(2): await physics_frame
+	_check(world.last_avatar_source_action == "depart", "starts a left takeoff before a settings interruption")
+	world.apply_settings({"reduced_motion":true})
+	_check(world.last_avatar_source_action == "walk" and world._avatar_departure_remaining == 0.0,
+		"reduced motion drops the takeoff and keeps walking")
+	world.apply_settings({"reduced_motion":false})
+	await physics_frame
+	_check(world.last_avatar_source_action == "walk", "reenabling motion during travel does not replay takeoff")
+	Input.action_release("move_left")
+	for _tick in range(23): await physics_frame
+	var library: RefCounted = world.avatar_renderer.animation_library
+	var incomplete: RefCounted = library.get_script().new()
+	incomplete.manifest.actors.traveller.depart.right.frames[0].source = "res://assets/characters/missing-departure.png"
+	world.avatar_renderer.animation_library = incomplete
+	world.player.position = Vector3(-0.6, world.ground_surface_y(Vector3(-0.6, 0, -5.5)), -5.5)
+	world.facing = "right"
+	for _tick in range(4): await physics_frame
+	Input.action_press("move_right")
+	for _tick in range(3): await physics_frame
+	_check(world.last_avatar_source_action == "walk" and world._avatar_departure_remaining == 0.0 and world.avatar_is_walking,
+		"missing takeoff art falls back to the existing movement and walk source")
+	Input.action_release("move_right")
+	world.avatar_renderer.animation_library = library
+	for _tick in range(23): await physics_frame
 
 func _check_camera_idle(world: ParkWorld) -> void:
 	world.facing = "front"

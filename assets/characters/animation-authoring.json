@@ -32,6 +32,10 @@
         "back_left": 1,
         "front_left": 1
       },
+      "depart": {
+        "left": 1,
+        "right": 1
+      },
       "wave": {
         "front": 8,
         "left": 5,

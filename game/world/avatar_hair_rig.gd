@@ -87,7 +87,7 @@ func sync_pose(source: Texture2D, renderer: RefCounted, appearance: Dictionary, 
 	_profile = _profiles.get(_style, {})
 	if _profile.is_empty(): return _fallback(source, "unverified hairstyle")
 	if str(appearance.get("species", "human")) != "human": return _fallback(source, "species attachment coverage remains original")
-	if action not in ["walk", "idle", "settle"]: return _fallback(source, "one-shot/ride retains its complete authored pose")
+	if action not in ["walk", "idle", "settle", "depart"]: return _fallback(source, "one-shot/ride retains its complete authored pose")
 	if not _valid_view(view) or _body == null: return _fallback(source, "unverified or changed source art")
 	var key := "%s|%s|%d|%s|%s" % [view, action, frame, JSON.stringify(appearance), JSON.stringify(equipped)]
 	var context := "%s|%s|%s" % [view, JSON.stringify(appearance), JSON.stringify(equipped)]

@@ -4428,6 +4428,62 @@
           ]
         }
       },
+      "depart": {
+        "left": {
+          "fps": 12.5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-departure-sides-v1.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  121,
+                  69
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "right": {
+          "fps": 12.5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-departure-sides-v1.png",
+              "region": [
+                280,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  180,
+                  69
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        }
+      },
       "sit": {
         "front": {
           "fps": 2,
@@ -16423,6 +16479,10 @@
         "back": 1,
         "back_left": 1,
         "front_left": 1
+      },
+      "depart": {
+        "left": 1,
+        "right": 1
       },
       "wave": {
         "front": 8,

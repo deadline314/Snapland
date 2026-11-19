@@ -37,6 +37,8 @@ const AVATAR_SHARED_ACTIONS := {"celebrate": "jump"}
 const AVATAR_CAMERA_IDLE_DELAY := 18.0
 const AVATAR_CAMERA_IDLE_ACTION := "idle_gesture"
 const AVATAR_STOP_ACTION := "settle"
+const AVATAR_DEPARTURE_ACTION := "depart"
+const AVATAR_DEPARTURE_TO_WALK_CELS := {"left": [0, 3, 4, 5, 7], "right": [0, 2, 6]}
 # Each listed approach cel was reviewed against its planted stop pose.
 const AVATAR_STOP_FROM_WALK_CELS := {
 	"front": [0, 2, 3, 4, 5, 6, 7],
@@ -62,6 +64,7 @@ var avatar_action := ""
 var avatar_action_remaining := 0.0
 var avatar_action_elapsed := 0.0
 var _avatar_action_on_stop := ""
+var _avatar_departure_remaining := 0.0
 var _warned_missing_avatar_actions: Dictionary = {}
 var last_avatar_direction := ""
 var last_avatar_frame := -1
@@ -2250,6 +2253,7 @@ func _sync_external_avatar_reposition() -> void:
 		player.velocity=Vector3.ZERO
 		avatar_is_walking=false
 		_avatar_action_on_stop = ""
+		_avatar_departure_remaining = 0.0
 		if avatar_action == AVATAR_STOP_ACTION:
 			avatar_action = ""
 			avatar_action_remaining = 0.0
@@ -2338,10 +2342,11 @@ func _physics_process(delta: float) -> void:
 	var travelled := horizontal_delta.length()
 	var reviewed_stop: bool = (
 		was_coasting and player.is_on_floor() and not reduced_motion and not blocked and not operating_lens
-		and last_avatar_action == "walk" and last_avatar_direction == facing
+		and last_avatar_action == "walk" and last_avatar_source_action == "walk" and last_avatar_direction == facing
 		and last_avatar_frame in AVATAR_STOP_FROM_WALK_CELS.get(facing, [])
 	)
 	var advances_stride := travelled > WALK_DISTANCE_EPSILON
+	var was_walking := avatar_is_walking
 	# Tiny coasting steps can outlast the stride threshold at a low time scale.
 	avatar_is_walking = advances_stride or (reviewed_stop and travelled > 0.0)
 	if advances_stride:
@@ -2357,6 +2362,19 @@ func _physics_process(delta: float) -> void:
 		avatar_motion_rig.cancel_motion()
 	var walk_frame_count := int(avatar_renderer.walk_frame_count(facing)) if avatar_renderer != null else 8
 	var frame := walk_frame_for_phase(walk_distance_phase, walk_frame_count)
+	if _avatar_departure_remaining > 0.0 or (advances_stride and not was_walking):
+		var can_depart := advances_stride and movement != Vector2.ZERO and player.is_on_floor() and not reduced_motion and last_avatar_direction == facing
+		if not can_depart or frame not in AVATAR_DEPARTURE_TO_WALK_CELS.get(facing, []):
+			_avatar_departure_remaining = 0.0
+		elif _avatar_departure_remaining > 0.0:
+			_avatar_departure_remaining = maxf(0.0, _avatar_departure_remaining - delta)
+		elif last_avatar_source_action == "idle" and _has_authored_avatar_action(AVATAR_DEPARTURE_ACTION, facing):
+			# Leave room in the reviewed stride cel for the motion during takeoff.
+			var duration: float = avatar_renderer.animation_library.sequence_duration("traveller", AVATAR_DEPARTURE_ACTION, facing)
+			var projected_speed := current_horizontal.length() + desired_speed * (duration + delta) / (2.0 * AVATAR_ACCELERATION_SECONDS)
+			var exit_phase := advance_walk_phase(walk_distance_phase, projected_speed * duration, walk_stride_for(facing))
+			if walk_frame_for_phase(exit_phase, walk_frame_count) == frame and avatar_renderer.animation_library.original_frame_image("traveller", AVATAR_DEPARTURE_ACTION, facing, 0) != null:
+				_avatar_departure_remaining = duration
 	if not _avatar_action_on_stop.is_empty():
 		var requested_action := _avatar_action_on_stop
 		_avatar_action_on_stop = ""
@@ -2634,6 +2652,8 @@ func _refresh_avatar_texture(frame: int) -> void:
 	avatar.visible=true
 	var display_frame := _ride_pose_frame() if riding else frame
 	var texture_action := action
+	if action == "walk" and _avatar_departure_remaining > 0.0:
+		texture_action = AVATAR_DEPARTURE_ACTION
 	if action == "idle":
 		if avatar_renderer.has_authored_action("idle", direction):
 			# Start settled instead of entering halfway through a breath or blink.
@@ -2654,9 +2674,10 @@ func _refresh_avatar_texture(frame: int) -> void:
 			# those safely instead of leaving it on the unrelated walk phase.
 			display_frame=0 if reduced_motion else mini(floori(maxf(0.0,avatar_action_elapsed)*3.0),2)
 	if last_avatar_direction == direction and last_avatar_frame == display_frame and last_avatar_action == action and last_avatar_source_action == texture_action: return
-	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,direction,display_frame,texture_action)
+	var source_frame := 0 if texture_action == AVATAR_DEPARTURE_ACTION else display_frame
+	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,direction,source_frame,texture_action)
 	if is_instance_valid(avatar_hair_rig):
-		avatar.texture=avatar_hair_rig.sync_pose(avatar.texture,avatar_renderer,avatar_appearance,avatar_equipped,direction,display_frame,texture_action)
+		avatar.texture=avatar_hair_rig.sync_pose(avatar.texture,avatar_renderer,avatar_appearance,avatar_equipped,direction,source_frame,texture_action)
 	var avatar_material := avatar.material_override as ShaderMaterial
 	if avatar_material != null:
 		avatar_material.set_shader_parameter("texture_albedo",avatar.texture)
@@ -2749,6 +2770,7 @@ func _update_lamp_selection(force := false) -> void:
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
+	if reduced_motion: _avatar_departure_remaining = 0.0
 	if reduced_motion and avatar_action in [AVATAR_CAMERA_IDLE_ACTION, AVATAR_STOP_ACTION]:
 		avatar_action = ""
 		avatar_action_remaining = 0.0
@@ -2769,6 +2791,7 @@ func start_ride() -> bool:
 		avatar_is_walking=false
 		avatar_action=""
 		_avatar_action_on_stop = ""
+		_avatar_departure_remaining = 0.0
 		avatar_action_remaining=0.0
 		avatar_action_elapsed=0.0
 		# The seat raises the player well above the ground; never solve ground

@@ -529,7 +529,7 @@ def add_traveller_camera_check(actor_data: dict) -> dict:
     return {"source": TRAVELLER_CAMERA_CHECK.relative_to(ROOT).as_posix(), "frame_count": len(frames)}
 
 
-def add_traveller_settles(actor_data: dict) -> dict:
+def add_traveller_footwork(actor_data: dict) -> dict:
     sides = ROOT / "assets/characters/traveller-settle-sides-v1.png"
     compass = ROOT / "assets/characters/traveller-settle-compass-v1.png"
     side_source = registered_frame_source(sides, "79f3f7ea1e9d995a4863aa529237a4ec31f4f41ad9cc950d5bf4f09af9fb7ba8")
@@ -541,16 +541,21 @@ def add_traveller_settles(actor_data: dict) -> dict:
     ]
     for index, (direction, head) in enumerate(compass_heads):
         poses.append((direction, compass_source, index % 3 * 280, index // 3 * 360, head))
-    actor_data["settle"] = {}
-    for direction, source, x, y, head in poses:
-        actor_data["settle"][direction] = {
-            "fps": 10, "loop": False, "frames": [{
-                "source": source, "region": [x, y, 280, 360],
-                "anchors": {"feet": [140, 346], "head": head},
-                "source_scale": 0.625, "layers": [],
-            }],
-        }
-    return {"sources": [file.relative_to(ROOT).as_posix() for file in (sides, compass)], "frame_count": len(poses)}
+    departure = ROOT / "assets/characters/traveller-departure-sides-v1.png"
+    departure_source = registered_frame_source(departure, "37f2821eb2e3b0dd96f93f3e67b625f49b4b75cc41fb5d7314888594e39833f5")
+    departures = [("left", departure_source, 0, 0, [121, 69]), ("right", departure_source, 280, 0, [180, 69])]
+    for action, entries, fps in (("settle", poses, 10), ("depart", departures, 12.5)):
+        actor_data[action] = {}
+        for direction, source, x, y, head in entries:
+            actor_data[action][direction] = {
+                "fps": fps, "loop": False, "frames": [{
+                    "source": source, "region": [x, y, 280, 360],
+                    "anchors": {"feet": [140, 346], "head": head},
+                    "source_scale": 0.625, "layers": [],
+                }],
+            }
+    return {"sources": [file.relative_to(ROOT).as_posix() for file in (sides, compass, departure)],
+            "frame_count": len(poses) + len(departures)}
 
 
 def add_traveller_profile_photos(actor_data: dict) -> dict:
@@ -638,7 +643,7 @@ def build() -> tuple[dict,dict]:
     reports["traveller"]["wave_side_atlas"] = add_traveller_profile_waves(actors["traveller"])
     reports["traveller"]["camera_check"] = add_traveller_camera_check(actors["traveller"])
     reports["traveller"]["photograph_side_atlas"] = add_traveller_profile_photos(actors["traveller"])
-    reports["traveller"]["settle_atlases"] = add_traveller_settles(actors["traveller"])
+    reports["traveller"]["footwork_atlases"] = add_traveller_footwork(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
     if OUT.exists():
@@ -717,7 +722,7 @@ def main() -> int:
         verified_regions = sum(
             report["frame_count"] + sum(report.get(action, {}).get("frame_count", 0)
                                         for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas",
-                                                       "stop_landing", "wave_side_atlas", "camera_check", "photograph_side_atlas", "settle_atlases"))
+                                                       "stop_landing", "wave_side_atlas", "camera_check", "photograph_side_atlas", "footwork_atlases"))
             for report in reports.values()
         )
         print(f"PASS: {verified_regions} authored regions verified; no synthetic frames")

@@ -74,7 +74,7 @@ func _initialize() -> void:
 			for point in [Vector2i(100,225),Vector2i(115,225),Vector2i(120,225)]:
 				_check(dressed.get_pixelv(point)==expected.get_pixelv(point),"Prop restoration lost selected skin or outfit")
 	_check_profile_photographs(avatar)
-	_check_settles(avatar)
+	_check_footwork(avatar)
 	var signature: String=manifest.owners.keys()[0]
 	for fault in ["canvas","schema","coordinate","fraction","boolean","bounds","overlap","order","empty","hash"]:
 		var broken: Dictionary=manifest.duplicate(true)
@@ -134,7 +134,7 @@ func _check_profile_photographs(avatar: Avatar) -> void:
 						_check(actual.get_pixelv(point) == expected.get_pixelv(point),
 							"Side photo lens or hand changed: %s/%d/%s/%s/%s" % [side, frame, skin, style, point])
 
-func _check_settles(avatar: Avatar) -> void:
+func _check_footwork(avatar: Avatar) -> void:
 	var cases := [
 		[{"face":"smiling"}, {"outfit":"outfit-tide","hat":"hat-none"}],
 		[{"hair":"bob","skin":"deep","face":"confident"}, {"outfit":"outfit-rainvest","hat":"hat-straw"}],
@@ -144,20 +144,22 @@ func _check_settles(avatar: Avatar) -> void:
 		for config in cases:
 			var look := Avatar.DEFAULT_APPEARANCE.merged(config[0], true)
 			var idle := avatar.texture(look, config[1], direction, 0, "idle").get_image()
-			var settled := avatar.texture(look, config[1], direction, 0, "settle").get_image()
 			var idle_pixels := idle.get_data()
-			var stop_pixels := settled.get_data()
 			var upper_size := 280 * 270 * 4
-			var upper_consistent := true
-			for index in range(0, upper_size, 4):
-				if maxi(idle_pixels[index + 3], stop_pixels[index + 3]) < 128: continue
-				for channel in range(4):
-					if absi(idle_pixels[index + channel] - stop_pixels[index + channel]) > 2:
-						upper_consistent = false
-						break
-				if not upper_consistent: break
-			_check(upper_consistent and idle_pixels.slice(upper_size) != stop_pixels.slice(upper_size),
-				"the %s stop preserves dressed upper-body pixels and presents different feet: %s" % [direction, config])
+			for action: String in ["settle", "depart"]:
+				if not avatar.has_authored_action(action, direction): continue
+				var pose := avatar.texture(look, config[1], direction, 0, action).get_image()
+				var pixels := pose.get_data()
+				var upper_consistent := true
+				for index in range(0, upper_size, 4):
+					if maxi(idle_pixels[index + 3], pixels[index + 3]) < 128: continue
+					for channel in range(4):
+						if absi(idle_pixels[index + channel] - pixels[index + channel]) > 2:
+							upper_consistent = false
+							break
+					if not upper_consistent: break
+				_check(upper_consistent and idle_pixels.slice(upper_size) != pixels.slice(upper_size),
+					"the %s %s preserves dressed upper-body pixels and presents different feet: %s" % [direction, action, config])
 
 func _check(ok: bool,message: String) -> void:
 	if not ok: failures.append(message)

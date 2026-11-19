@@ -223,8 +223,8 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var authored_frame_count: int = animation_library.frame_count("traveller", safe_action, safe_direction) if has_manifest_frame else 0
 	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, authored_frame_count - 1) if has_manifest_frame else clampi(frame, 0, 2)
 	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction))) and not has_manifest_frame
-	# Stop cels retain the neutral upper body, with new artwork below the hips.
-	var use_walk_layout := use_walk_source or (safe_action == "settle" and has_manifest_frame)
+	# The short footwork cels share the neutral upper body.
+	var use_walk_layout := use_walk_source or (safe_action in ["settle", "depart"] and has_manifest_frame)
 	var registered_idle: bool = safe_action == "idle" and not inspect_authored_idle_sources and _stable_idle_pixels.manifest.has("hero-idle/"+safe_direction)
 	var idle_frame := clampi(frame,0,int(_stable_idle_pixels.manifest.get("hero-idle/"+safe_direction,{}).get("frames",1))-1)
 	var walk_frame := IDLE_WALK_FRAME
@@ -308,7 +308,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var source_hair_mask := PackedByteArray()
 	var source_metrics: Dictionary = legacy_heads.metrics_for(safe_action,image) if not legacy_source.is_empty() else {}
 	var prop_indices := PackedInt32Array()
-	if safe_action in ["walk","idle","settle"] and safe_direction in ["front","front_left","front_right","left","right"]:
+	if safe_action in ["walk","idle","settle","depart"] and safe_direction in ["front","front_left","front_right","left","right"]:
 		prop_indices = prop_foreground.indices(image)
 		if has_hair_overlay and prop_indices.is_empty():
 			has_hair_overlay=false
