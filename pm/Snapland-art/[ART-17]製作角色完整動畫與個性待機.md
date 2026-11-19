@@ -895,3 +895,22 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 [正常影片](images/ART-17-walking-gesture-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-walking-gesture-20261119-quarter.mp4) · [反例與原生證據](images/ART-17-walking-gesture-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/2b6cc5baa145d2d5f91318b931406ca84473ee1a)。
 
 Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動態、重入、原生影片、逐格截圖與實際封裝已分別覆蓋主角及三位 NPC。本票仍需完成全套動作與自然度驗收。[主角行走輸入封裝證據](images/ART-17-walking-gesture-20261119-embedded.zip) · [主角側身拍照與降低動態](images/ART-17-photo-20261119-evidence.zip) · [三位 NPC 巡路接話及降低動態](images/ART-17-dialogue-settle-20261119-evidence.zip)。
+
+## Commit — 2026-11-19 主角側向減速落腳
+
+主角朝左或右自然減速停下時，已核對的入步姿勢先接到 0.1 秒的承重落腳，再回同向中立站姿。新畫的腿與靴子沿用原中立上半身，保留臉、帽髮、衣料、相機和背包。再次移動可立即打斷。四分之一速度的早期驗證抓到微小滑行會先誤切待機，現行版本在位移結束前會保留當前步態，微小最後幾步維持原有步距進度。
+
+| 項目 | 結果 |
+|---|---|
+| 素材與換裝 | 239 個原畫區域，雨背心 193 格。回歸測試包含三種膚色、三款髮型、草帽、精靈及原裝／珊瑚／雨背心，逐像素核對上半身與新增靴子 |
+| 原生、重入、封裝 | 正常、四分之一速度重入及實際 Windows 內嵌版各通過 8 案。左右各覆蓋原裝、雨背心、鮑伯頭搭草帽及動態鮑伯頭。人物根及步距在落腳時固定，接著回到同向待機第 0 格 |
+| 降低動態與回歸 | 靜止站姿及場景重入通過。214 項 Python、6 組相關 Godot 測試及 5 區設計檢查通過 |
+| 短片 | 正常 200 格、四分之一速度 706 格，均為 1280×720／30 FPS，完整解碼通過 |
+
+影片以實際 A、D 按鍵、固定取景、Dummy 音訊及隔離存檔拍攝。錄製時保留一組實際髮尾動態供比對。其他方向與整套自然度仍依原票驗收。
+
+![主角左向落腳](images/ART-17-hero-stop-20261119-left.png)
+![主角穿雨背心右向落腳](images/ART-17-hero-stop-20261119-right-rainvest.png)
+![鮑伯頭搭草帽時左向落腳](images/ART-17-hero-stop-20261119-left-bob-hat.png)
+
+[正常影片](images/ART-17-hero-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-hero-stop-20261119-quarter.mp4) · [反例、原畫、原生與封裝證據](images/ART-17-hero-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/51732d970eba32c4dd1a9248c343e04b98db0c1b) · [慢速銜接修正](https://github.com/deadline314/Snapland/commit/54df987424f124165ff17de853c6de825ac1517c)。
