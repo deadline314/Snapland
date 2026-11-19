@@ -1904,6 +1904,51 @@
       "source_pixel_sha256": "5fab4c8e2c259e5aea5b96fc07e5d188ebb75c97fd2607e9a5a5b76084e5e72b",
       "path": "res://assets/characters/rainvest-v1/idle-front-00.pngdata",
       "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "front",
+      "action": "pivot_depth",
+      "frame": 0,
+      "source_pixel_sha256": "cb41dbada4b5ac8fe651245817121be2e8d8c2130b576a2fbc7c9cc92e616567",
+      "path": "res://assets/characters/rainvest-v1/pivot-depth-front.pngdata",
+      "png_sha256": "3e502ef1e03ff8dc8c2f946b7e311d2b5f516c8d6840e2307037566905660997"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "front_left",
+      "action": "pivot_depth",
+      "frame": 0,
+      "source_pixel_sha256": "a402827f769bb5f0af63a47563cbeffcb5e01fbeaf3b56b3d24713f8a3caa07f",
+      "path": "res://assets/characters/rainvest-v1/pivot-depth-front_left.pngdata",
+      "png_sha256": "78aab88824315c66183c0d59068d79e4c5fa9e06120496b12555749140200419"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "left",
+      "action": "pivot_depth",
+      "frame": 0,
+      "source_pixel_sha256": "920e71262ca8bea61073e48407e69da45f0c174a743eb5d8364042aae0760886",
+      "path": "res://assets/characters/rainvest-v1/pivot-depth-left.pngdata",
+      "png_sha256": "05f62258cd9807c8189fcb858716cc19a70b48bd673cec3182326b66e267072c"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "back_left",
+      "action": "pivot_depth",
+      "frame": 0,
+      "source_pixel_sha256": "5edf76797fec0d8808f4bb142e07ca554fad05a667785686d425ed7002980d8a",
+      "path": "res://assets/characters/rainvest-v1/pivot-depth-back_left.pngdata",
+      "png_sha256": "227268b9aba30d63a3a1bcc928718191175674bdb09f5a12fa1c1ddad81d0d8f"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "back",
+      "action": "pivot_depth",
+      "frame": 0,
+      "source_pixel_sha256": "170329ab3fc395875e0dbf60dedcb12d6d5788a3beed16a4ee2e6763994a617d",
+      "path": "res://assets/characters/rainvest-v1/pivot-depth-back.pngdata",
+      "png_sha256": "529f4da23a30fea75ff74d7710561266202aaa5e084df74d870934d6cb07045f"
     }
   ],
   "encoding": "png_bytes_without_import_conversion"

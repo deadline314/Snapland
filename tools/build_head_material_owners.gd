@@ -41,6 +41,8 @@ func _initialize() -> void:
 		var directions := ["front", "left", "right"] if action in ["wave", "photograph"] else ["front"]
 		for direction in directions:
 			for frame in range(renderer.authored_frame_count(action,direction)): poses.append([action,direction,frame])
+	for direction in ["front", "front_left", "left", "back_left", "back"]:
+		if renderer.has_authored_action("pivot_depth", direction): poses.append(["pivot_depth", direction, 0])
 	var owners := {}
 	for pose in poses:
 		var source: Image = renderer._walk_pose_image(pose[1],pose[2]) if pose[0] == "walk" else renderer.animation_library.texture("traveller",pose[0],pose[1],pose[2]).get_image()

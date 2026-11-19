@@ -313,7 +313,9 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var source_hair_mask := PackedByteArray()
 	var source_metrics: Dictionary = legacy_heads.metrics_for(safe_action,image) if not legacy_source.is_empty() else {}
 	var prop_indices := PackedInt32Array()
-	if (safe_action in ["walk","idle","settle","depart"] or (safe_action == "celebrate" and has_manifest_frame)) and safe_direction in ["front","front_left","front_right","left","right"]:
+	var camera_heading := safe_direction in ["front", "front_left", "front_right", "left", "right"]
+	var camera_action := safe_action in ["walk", "idle", "settle", "depart"] or (safe_action == "celebrate" and has_manifest_frame)
+	if safe_action == "pivot_depth" or (camera_heading and camera_action):
 		prop_indices = prop_foreground.indices(image)
 		if has_hair_overlay and prop_indices.is_empty():
 			has_hair_overlay=false
@@ -332,7 +334,12 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		if not _missing_head_owner_warnings.has(missing_signature):
 			_missing_head_owner_warnings[missing_signature]=true
 			push_warning("Avatar: replacement hair unavailable for source without reviewed ownership; preserving the complete authored cel.")
-	if has_hair_overlay and (not legacy_source.is_empty() or (has_manifest_frame and ((safe_action == "idle" and safe_direction in ["front_left", "front_right"]) or (safe_action == "celebrate" and safe_direction == "front")))):
+	var authored_face_cut := (
+		(safe_action == "idle" and safe_direction in ["front_left", "front_right"])
+		or (safe_action == "celebrate" and safe_direction == "front")
+		or (safe_action == "pivot_depth" and safe_direction in ["front", "front_left", "left"])
+	)
+	if has_hair_overlay and (not legacy_source.is_empty() or (has_manifest_frame and authored_face_cut)):
 		var replacement_cut := _cached_hair_cut(str(normalized_appearance.get("hair", "windswept")), safe_direction, HAIR_COLORS.ink)
 		if not bool(source_metrics.get("replacement_geometry_valid", false)) or not bool(replacement_cut.get("face_opening_valid", false)):
 			# Keep a complete authored source if either side of registration is

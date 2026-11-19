@@ -39,12 +39,16 @@ const AVATAR_CAMERA_IDLE_ACTION := "idle_gesture"
 const AVATAR_STOP_ACTION := "settle"
 const AVATAR_DEPARTURE_ACTION := "depart"
 const AVATAR_PIVOT_ACTION := "pivot"
+const AVATAR_DEPTH_PIVOT_ACTION := "pivot_depth"
 const AVATAR_PIVOT_SECONDS := 0.12
+const AVATAR_DEPTH_PIVOT_SECONDS := 0.15
 const AVATAR_PIVOT_HEADINGS := ["back_left", "back", "back_right"]
+const AVATAR_DEPTH_PIVOT_HEADINGS := ["front", "front_left", "left", "back_left", "back"]
 const AVATAR_PIVOT_WALK_CELS := {
 	"right": {3: [3, 4], 4: [4], 5: [5, 6], 7: [7]},
 	"left": {3: [3], 4: [4, 5], 5: [5], 7: [7]},
 }
+const AVATAR_DEPTH_PIVOT_WALK_CELS := {"back": {5: [5, 6], 6: [6]}, "front": {5: [5], 6: [6]}}
 const AVATAR_DEPARTURE_TO_WALK_CELS := {
 	"front": [0, 1, 2, 3, 6, 7],
 	"front_right": [0, 1, 3, 4, 5, 7],
@@ -2463,31 +2467,48 @@ func _physics_process(delta: float) -> void:
 		if is_instance_valid(marker): marker.visible=point.get("id","")==nearest.get("id","")
 
 func _update_avatar_pivot(movement: Vector2, velocity: Vector2, delta: float, frame: int, frame_count: int) -> void:
-	if movement.x == 0.0 or movement.y != 0.0 or reduced_motion or not avatar_is_walking or not player.is_on_floor():
+	var lateral := movement.x != 0.0 and movement.y == 0.0
+	var depth := movement.x == 0.0 and movement.y != 0.0
+	if not (lateral or depth) or reduced_motion or not avatar_is_walking or not player.is_on_floor():
 		_avatar_pivot_remaining = 0.0
 		return
-	var target := "right" if movement.x > 0.0 else "left"
+	var target := ("right" if movement.x > 0.0 else "left") if lateral else ("front" if movement.y > 0.0 else "back")
 	if _avatar_pivot_remaining > 0.0:
 		_avatar_pivot_remaining = maxf(0.0, _avatar_pivot_remaining - delta) if target == _avatar_pivot_target else 0.0
 		return
-	if last_avatar_source_action != "walk" or facing not in ["left", "right"] or target == facing:
+	var eligible_headings := ["left", "right"] if lateral else ["front", "back"]
+	if last_avatar_source_action != "walk" or facing not in eligible_headings or target == facing:
 		return
-	if velocity.x * movement.x >= 0.0 or velocity.length_squared() > 0.34 * 0.34:
+	if velocity.dot(movement) >= 0.0 or velocity.length_squared() > 0.34 * 0.34:
 		return
-	var approved_exits: Array = AVATAR_PIVOT_WALK_CELS[target].get(frame, [])
+	var exits := AVATAR_PIVOT_WALK_CELS if lateral else AVATAR_DEPTH_PIVOT_WALK_CELS
+	var approved_exits: Array = exits[target].get(frame, [])
 	if approved_exits.is_empty(): return
 	# Keep the pivot inside the reviewed adjacent stride poses while movement continues.
-	var travel_ceiling := avatar_motion_speed_limit * AVATAR_PIVOT_SECONDS * (AVATAR_PIVOT_SECONDS + delta) / (2.0 * AVATAR_ACCELERATION_SECONDS)
+	var duration := AVATAR_PIVOT_SECONDS if lateral else AVATAR_DEPTH_PIVOT_SECONDS
+	var travel_ceiling := avatar_motion_speed_limit * duration * (duration + delta) / (2.0 * AVATAR_ACCELERATION_SECONDS)
+	if depth:
+		# The approach first slows to zero. Bound both sides of the crossing,
+		# allowing a switch from slow walk to the maximum acceleration.
+		var acceleration := AVATAR_RUN_SPEED / AVATAR_ACCELERATION_SECONDS
+		var braking_seconds := velocity.length() / acceleration
+		var departure_seconds := maxf(0.0, duration + delta - braking_seconds)
+		travel_ceiling = 0.5 * acceleration * (braking_seconds * braking_seconds + departure_seconds * departure_seconds)
 	var stride := minf(walk_stride_for(facing), walk_stride_for(target))
 	var exit_phase := advance_walk_phase(walk_distance_phase, travel_ceiling, stride)
-	if walk_frame_for_phase(exit_phase, frame_count) not in approved_exits:
-		return
-	for direction: String in AVATAR_PIVOT_HEADINGS:
-		var action := AVATAR_DEPARTURE_ACTION if direction == "back_left" else AVATAR_PIVOT_ACTION
+	var latest_exit := walk_frame_for_phase(exit_phase, frame_count)
+	if latest_exit not in approved_exits: return
+	if depth:
+		# Check each reachable exit because the actual remaining reversal distance varies.
+		if latest_exit < frame: return
+		for next_frame in range(frame, latest_exit):
+			if next_frame not in approved_exits: return
+	for direction: String in AVATAR_PIVOT_HEADINGS if lateral else AVATAR_DEPTH_PIVOT_HEADINGS:
+		var action := (AVATAR_DEPARTURE_ACTION if direction == "back_left" else AVATAR_PIVOT_ACTION) if lateral else AVATAR_DEPTH_PIVOT_ACTION
 		if avatar_renderer.animation_library.original_frame_image("traveller", action, direction, 0) == null:
 			return
 	_avatar_pivot_target = target
-	_avatar_pivot_remaining = AVATAR_PIVOT_SECONDS
+	_avatar_pivot_remaining = duration
 
 func _process(delta: float) -> void:
 	if not blocked:
@@ -2710,10 +2731,13 @@ func _refresh_avatar_texture(frame: int) -> void:
 	var texture_action := action
 	if action == "walk":
 		if _avatar_pivot_remaining > 0.0:
-			var count := AVATAR_PIVOT_HEADINGS.size()
-			var index := mini(floori((1.0 - _avatar_pivot_remaining / AVATAR_PIVOT_SECONDS) * count), count - 1)
-			direction = AVATAR_PIVOT_HEADINGS[index if _avatar_pivot_target == "right" else count - 1 - index]
-			texture_action = AVATAR_DEPARTURE_ACTION if direction == "back_left" else AVATAR_PIVOT_ACTION
+			var depth := _avatar_pivot_target in ["front", "back"]
+			var headings := AVATAR_DEPTH_PIVOT_HEADINGS if depth else AVATAR_PIVOT_HEADINGS
+			var duration := AVATAR_DEPTH_PIVOT_SECONDS if depth else AVATAR_PIVOT_SECONDS
+			var count := headings.size()
+			var index := clampi(floori((1.0 - _avatar_pivot_remaining / duration) * count), 0, count - 1)
+			direction = headings[index if _avatar_pivot_target in ["right","back"] else count - 1 - index]
+			texture_action = AVATAR_DEPTH_PIVOT_ACTION if depth else (AVATAR_DEPARTURE_ACTION if direction == "back_left" else AVATAR_PIVOT_ACTION)
 		elif _avatar_departure_remaining > 0.0:
 			texture_action = AVATAR_DEPARTURE_ACTION
 	if action == "idle":
@@ -2736,7 +2760,7 @@ func _refresh_avatar_texture(frame: int) -> void:
 			# those safely instead of leaving it on the unrelated walk phase.
 			display_frame=0 if reduced_motion else mini(floori(maxf(0.0,avatar_action_elapsed)*3.0),2)
 	if last_avatar_direction == direction and last_avatar_frame == display_frame and last_avatar_action == action and last_avatar_source_action == texture_action: return
-	var source_frame := 0 if texture_action in [AVATAR_DEPARTURE_ACTION, AVATAR_PIVOT_ACTION] else display_frame
+	var source_frame := 0 if texture_action in [AVATAR_DEPARTURE_ACTION, AVATAR_PIVOT_ACTION, AVATAR_DEPTH_PIVOT_ACTION] else display_frame
 	avatar.texture=avatar_renderer.texture(avatar_appearance,avatar_equipped,direction,source_frame,texture_action)
 	if is_instance_valid(avatar_hair_rig):
 		avatar.texture=avatar_hair_rig.sync_pose(avatar.texture,avatar_renderer,avatar_appearance,avatar_equipped,direction,source_frame,texture_action)

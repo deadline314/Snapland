@@ -4702,6 +4702,157 @@
           ]
         }
       },
+      "pivot_depth": {
+        "front": {
+          "fps": 33.333333333333336,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-pivot-depth-v1.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  157,
+                  68
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "front_left": {
+          "fps": 33.333333333333336,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-pivot-depth-v1.png",
+              "region": [
+                280,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  144,
+                  67
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": [],
+              "normalized_face_eyes": [
+                [
+                  101,
+                  153,
+                  10,
+                  17
+                ],
+                [
+                  126,
+                  151,
+                  17,
+                  20
+                ]
+              ]
+            }
+          ]
+        },
+        "left": {
+          "fps": 33.333333333333336,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-pivot-depth-v1.png",
+              "region": [
+                560,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  122,
+                  70
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "back_left": {
+          "fps": 33.333333333333336,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-pivot-depth-v1.png",
+              "region": [
+                840,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  104,
+                  71
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "back": {
+          "fps": 33.333333333333336,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-pivot-depth-v1.png",
+              "region": [
+                1120,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  144,
+                  68
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        }
+      },
       "celebrate": {
         "front": {
           "fps": 10,
@@ -16831,6 +16982,13 @@
       "pivot": {
         "back": 1,
         "back_right": 1
+      },
+      "pivot_depth": {
+        "front": 1,
+        "front_left": 1,
+        "left": 1,
+        "back_left": 1,
+        "back": 1
       },
       "celebrate": {
         "front": 5

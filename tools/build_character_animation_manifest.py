@@ -551,7 +551,13 @@ def add_traveller_footwork(actor_data: dict) -> dict:
     pivot = ROOT / "assets/characters/traveller-pivot-sides-v1.png"
     pivot_source = registered_frame_source(pivot, "6d097d4effb872644ba6ce586e9294c81f6d572c196a0dd96f96e6b628538703")
     pivot_frames = [("back", pivot_source, 0, 0, [145, 63]), ("back_right", pivot_source, 280, 0, [187, 68])]
-    for action, entries, fps in (("settle", poses, 10), ("depart", departures, 12.5), ("pivot", pivot_frames, 25)):
+    depth_pivot = ROOT / "assets/characters/traveller-pivot-depth-v1.png"
+    depth_source = registered_frame_source(depth_pivot, "8c4ce01658d23d99a8d5b8d4dda35b09a09f74f33a8e154218cedb0b0ed35391")
+    depth_views = [("front", [157, 68]), ("front_left", [144, 67]), ("left", [122, 70]),
+                   ("back_left", [104, 71]), ("back", [144, 68])]
+    depth_frames = [(direction, depth_source, index * 280, 0, head) for index, (direction, head) in enumerate(depth_views)]
+    for action, entries, fps in (("settle", poses, 10), ("depart", departures, 12.5),
+                                 ("pivot", pivot_frames, 25), ("pivot_depth", depth_frames, 100 / 3)):
         actor_data[action] = {}
         for direction, source, x, y, head in entries:
             actor_data[action][direction] = {
@@ -561,8 +567,8 @@ def add_traveller_footwork(actor_data: dict) -> dict:
                     "source_scale": 0.625, "layers": [],
                 }],
             }
-    return {"sources": [file.relative_to(ROOT).as_posix() for file in (sides, compass, departure, compass_departure, pivot)],
-            "frame_count": len(poses) + len(departures) + len(pivot_frames)}
+    return {"sources": [file.relative_to(ROOT).as_posix() for file in (sides, compass, departure, compass_departure, pivot, depth_pivot)],
+            "frame_count": len(poses) + len(departures) + len(pivot_frames) + len(depth_frames)}
 
 
 def add_traveller_celebration(actor_data: dict) -> dict:

@@ -46,6 +46,13 @@
         "back": 1,
         "back_right": 1
       },
+      "pivot_depth": {
+        "front": 1,
+        "front_left": 1,
+        "left": 1,
+        "back_left": 1,
+        "back": 1
+      },
       "celebrate": {
         "front": 5
       },
@@ -87,6 +94,25 @@
     "traveller_outfit_coral": "Historical incomplete vest candidate only: retained for provenance, never selected. The shipping coral jacket is a palette of the complete base body in every action and direction."
   },
   "frame_annotations": [
+    {
+      "actor": "traveller",
+      "action": "pivot_depth",
+      "direction": "front_left",
+      "source": "res://assets/characters/traveller-pivot-depth-v1.png",
+      "source_sha256": "8c4ce01658d23d99a8d5b8d4dda35b09a09f74f33a8e154218cedb0b0ed35391",
+      "canvas_size": [280, 360],
+      "reference_size": [175, 220],
+      "feet_baseline": 346,
+      "frames": [
+        {
+          "index": 0,
+          "region": [280, 0, 280, 360],
+          "anchors": { "feet": [140, 346], "head": [144, 67] },
+          "source_scale": 0.625,
+          "metadata": { "normalized_face_eyes": [[101, 153, 10, 17], [126, 151, 17, 20]] }
+        }
+      ]
+    },
     {
       "actor": "traveller",
       "action": "photograph",

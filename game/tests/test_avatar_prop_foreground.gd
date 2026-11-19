@@ -75,6 +75,7 @@ func _initialize() -> void:
 				_check(dressed.get_pixelv(point)==expected.get_pixelv(point),"Prop restoration lost selected skin or outfit")
 	_check_profile_photographs(avatar)
 	_check_footwork(avatar)
+	_check_depth_turn(avatar)
 	_check_celebration(avatar)
 	var signature: String=manifest.owners.keys()[0]
 	for fault in ["canvas","schema","coordinate","fraction","boolean","bounds","overlap","order","empty","hash"]:
@@ -161,6 +162,30 @@ func _check_footwork(avatar: Avatar) -> void:
 					if not upper_consistent: break
 				_check(upper_consistent and idle_pixels.slice(upper_size) != pixels.slice(upper_size),
 					"the %s %s preserves dressed upper-body pixels and presents different feet: %s" % [direction, action, config])
+
+func _check_depth_turn(avatar: Avatar) -> void:
+	var equipment := {"outfit":"outfit-rainvest", "hat":"hat-none"}
+	for view in ["front", "front_left", "left", "back_left", "back"]:
+		var source := avatar.original_garment_pose("pivot_depth", view, 0)
+		_check(source != null, "depth pivot source is loadable for " + view)
+		if source == null: continue
+		var protected := avatar.prop_foreground.indices(source)
+		_check(protected.size() > 3000 and avatar.has_head_material_owner(source), "depth pivot has the exact foreground and head owners for " + view)
+		var base := avatar.texture(Avatar.DEFAULT_APPEARANCE, equipment, view, 0, "pivot_depth").get_image()
+		var hair := {}
+		hair[base.get_region(Rect2i(40, 65, 200, 100)).get_data()] = true
+		for style in ["bob", "curly"]:
+			var look := Avatar.DEFAULT_APPEARANCE.merged({"hair":style}, true)
+			var posed := avatar.texture(look, equipment, view, 0, "pivot_depth").get_image()
+			hair[posed.get_region(Rect2i(40, 65, 200, 100)).get_data()] = true
+			var differs := false
+			for index in protected:
+				var point := Vector2i(index % 280, index / 280)
+				if posed.get_pixelv(point) == base.get_pixelv(point): continue
+				differs = true
+				break
+			_check(not differs, "depth pivot preserves the selected hands, camera and backpack for %s/%s" % [view, style])
+		_check(hair.size() == 3, "depth pivot preserves the selected hairstyle in " + view)
 
 func _check_celebration(avatar: Avatar) -> void:
 	var base := Avatar.DEFAULT_APPEARANCE.duplicate()
