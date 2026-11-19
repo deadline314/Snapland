@@ -228,6 +228,8 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction))) and not has_manifest_frame
 	# These grounded poses share the neutral head landmarks.
 	var use_walk_layout := use_walk_source or (safe_action in ["settle", "depart", "pivot", "celebrate"] and has_manifest_frame)
+	# Celebration shares the anchor, but its face and raised hand have their own ownership.
+	var use_walk_head := use_walk_layout and safe_action != "celebrate"
 	var registered_idle: bool = safe_action == "idle" and not inspect_authored_idle_sources and _stable_idle_pixels.manifest.has("hero-idle/"+safe_direction)
 	var idle_frame := clampi(frame,0,int(_stable_idle_pixels.manifest.get("hero-idle/"+safe_direction,{}).get("frames",1))-1)
 	var walk_frame := IDLE_WALK_FRAME
@@ -317,7 +319,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 			has_hair_overlay=false
 			use_replacement_hair=false
 	if has_hair_overlay:
-		if use_walk_layout:
+		if use_walk_head:
 			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, image)
 		elif legacy_source.is_empty():
 			source_metrics = _authored_source_hair_metrics(image, safe_direction, safe_action, safe_frame)
@@ -342,12 +344,12 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		if source_metrics.is_empty():
 			var palette_hair_source := _walk_pose_image(safe_direction, walk_frame) if use_walk_source else image.duplicate()
 			if not legacy_source.is_empty(): source_metrics = legacy_heads.metrics_for(safe_action,palette_hair_source)
-			else: source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_layout else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action, safe_frame)
+			else: source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_head else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action, safe_frame)
 		palette_hair_indices = source_metrics.get("source_hair_indices",PackedInt32Array())
 	if species=="elf" and source_metrics.is_empty():
-		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_layout else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
+		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_head else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
 	if has_authored_source_hair and source_metrics.is_empty():
-		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_layout else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
+		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_head else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
 	# Recolor the body before compositing a prepared haircut. Applying the coat
 	# palette afterwards mistakes dark-blue curls over the jacket for cloth.
 	# Human cuts without material ownership cannot safely tint guessed collar
@@ -381,7 +383,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if species == "elf" and _species_atlas_valid:
 		if source_metrics.is_empty():
 			var raw_pose := _walk_pose_image(safe_direction,walk_frame) if use_walk_source else image
-			source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,raw_pose) if use_walk_layout else _authored_source_hair_metrics(raw_pose,safe_direction,safe_action,safe_frame)
+			source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,raw_pose) if use_walk_head else _authored_source_hair_metrics(raw_pose,safe_direction,safe_action,safe_frame)
 		var ear_layer := Image.create(image.get_width(),image.get_height(),false,Image.FORMAT_RGBA8)
 		ear_layer.fill(Color.TRANSPARENT)
 		_apply_species_ears(ear_layer,species,pose_direction,vertical_offset,SKIN_COLORS.get(str(normalized_appearance.get("skin","warm")),SKIN_COLORS.warm),species_head_shift_x,image,source_metrics)

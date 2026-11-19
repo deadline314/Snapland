@@ -169,6 +169,13 @@ func _check_celebration(avatar: Avatar) -> void:
 		var witnesses := camera_points.duplicate()
 		if frame == 2: witnesses.append(Vector2i(91, 172))
 		var original := avatar.texture(base, {"outfit":"outfit-tide","hat":"hat-none"}, "front", frame, "celebrate").get_image()
+		var distinct_hair := {}
+		var gear := {"outfit":"outfit-rainvest","hat":"hat-none"}
+		for style in ["windswept", "bob", "curly"]:
+			var look := base.merged({"hair":style}, true)
+			var posed := avatar.texture(look, gear, "front", frame, "celebrate").get_image()
+			distinct_hair[posed.get_region(Rect2i(40, 75, 200, 78)).get_data()] = true
+		_check(distinct_hair.size() == 3, "each selected haircut remains distinct throughout celebration cel %d" % frame)
 		for style in ["bob", "curly"]:
 			var look := base.merged({"hair":style, "face":"smiling"}, true)
 			var equipment := {"outfit":"outfit-rainvest","hat":"hat-straw"}
