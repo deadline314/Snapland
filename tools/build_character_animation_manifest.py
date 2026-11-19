@@ -48,6 +48,8 @@ ANNOUNCER_SIDE_DEPARTURE = ROOT / "assets/characters/announcer-departure-sides-v
 ANNOUNCER_DEPARTURE_SHA256 = "93678ba1048aabd4777652f64842ee6ced9fc1c68381c0d7314a88bead811ee5"
 ANNOUNCER_STOP_LANDING = ROOT / "assets/characters/announcer-stop-landing-v1.png"
 ANNOUNCER_STOP_SHA256 = "9fa1593f039b9a4bdc7ca967bb2ffcf7e83b919480df73349ba59ee856bd28ba"
+ANNOUNCER_RIGHT_STOP_LANDING = ROOT / "assets/characters/announcer-stop-landing-right-v1.png"
+ANNOUNCER_RIGHT_STOP_SHA256 = "d582f8a342b0426c6f43d8de4d96b460cce49c8df5e25ed3c497bb19003b937b"
 IMP_SIDE_WALK = ROOT / "assets/characters/imp-walk-sides-v1.png"
 IMP_SIDE_SCALE = 0.395
 IMP_SIDE_SETTLE = ROOT / "assets/characters/imp-settle-sides-v1.png"
@@ -560,16 +562,22 @@ def add_announcer_first_step(actor_data: dict) -> dict:
     return {"source": ANNOUNCER_SIDE_DEPARTURE.relative_to(ROOT).as_posix(), "frame_count": len(poses)}
 
 
-def add_announcer_left_landing(actor_data: dict) -> dict:
-    source = registered_frame_source(ANNOUNCER_STOP_LANDING, ANNOUNCER_STOP_SHA256)
-    entry = actor_data["settle"]["left"]
-    entry["frames"].insert(0, {
-        "source": source, "region": [1088, 123, 369, 668],
-        "anchors": {"feet": [188, 660], "head": [146, 9]},
-        "source_scale": 308 / 1302, "layers": [],
-    })
-    entry["frame_durations"] = [0.06, 0.04, 0.10, 0.10, 0.10]
-    return {"source": ANNOUNCER_STOP_LANDING.relative_to(ROOT).as_posix(), "frame_count": 1}
+def add_announcer_stop_landings(actor_data: dict) -> dict:
+    landings = {
+        "left": (ANNOUNCER_STOP_LANDING, ANNOUNCER_STOP_SHA256,
+                 [1088, 123, 369, 668], [188, 660], [146, 9], 308 / 1302),
+        "right": (ANNOUNCER_RIGHT_STOP_LANDING, ANNOUNCER_RIGHT_STOP_SHA256,
+                  [934, 37, 317, 619], [153, 613], [191, 6], 306 / 1214),
+    }
+    for direction, (path, digest, region, feet, head, scale) in landings.items():
+        entry = actor_data["settle"][direction]
+        entry["frames"].insert(0, {
+            "source": registered_frame_source(path, digest), "region": region,
+            "anchors": {"feet": feet, "head": head}, "source_scale": scale, "layers": [],
+        })
+        entry["frame_durations"] = [0.06, 0.04, 0.10, 0.10, 0.10]
+    return {"sources": [row[0].relative_to(ROOT).as_posix() for row in landings.values()],
+            "frame_count": len(landings)}
 
 
 def build() -> tuple[dict,dict]:
@@ -601,7 +609,7 @@ def build() -> tuple[dict,dict]:
     for role in ("ticket", "imp", "announcer"):
         add_route_departures(actors[role])
     reports["announcer"]["depart_side_atlas"] = add_announcer_first_step(actors["announcer"])
-    reports["announcer"]["stop_landing"] = add_announcer_left_landing(actors["announcer"])
+    reports["announcer"]["stop_landing"] = add_announcer_stop_landings(actors["announcer"])
     reports["traveller"]["idle_directional_atlases"] = add_traveller_directional_idle(actors["traveller"])
     reports["traveller"]["wave_side_atlas"] = add_traveller_profile_waves(actors["traveller"])
     reports["traveller"]["camera_check"] = add_traveller_camera_check(actors["traveller"])
@@ -621,7 +629,7 @@ def build() -> tuple[dict,dict]:
                     for direction, entry in directions.items():
                         actors[actor][action].setdefault(direction, entry)
     manifest={"schema_version":1,"description":"Regions are alpha-trimmed per frame after row/column gutters are detected from the source-wide alpha>128 projection. Feet use shoe contacts in the bottom eight primary-alpha rows; head uses the central upper silhouette. Weak-alpha anti-alias fringes receive a 2px pad. Optional source_scale is a finite 0.01–4 per-frame multiplier on the shared actor/reference scale, never a per-frame bounds fit. The traveller jump action retains a shared atlas-row baseline so its authored airborne height is preserved. No frame is mirrored, copied, or synthetically padded.","runtime_aliases":{"traveller":{"station_stand":"idle/front/frame_0 (same authored frame; not a separate animation)"},"ticket":{"special":"idle_gesture/front (runtime alias; no duplicate frames)"}},"coverage_notes":{"traveller":TRAVELLER_COVERAGE_NOTE,"traveller_outfit_coral":"Full-pose clothing variant aligned to the 32 traveller front-action frames plus eight jump/front frames; not an independent clothing layer and does not establish all-direction coverage. Footwear/hands remain subject to visual review.","ticket":"Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.","imp":"42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.","announcer":"Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered."},"actors":actors}
-    manifest["coverage_notes"]["route_pivots"] = "All three NPCs share exact idle neutral endpoints and reverse the four pivot poses for departure. The announcer adds one short step per side before walking and one landing pose for the left stop."
+    manifest["coverage_notes"]["route_pivots"] = "All three NPCs share exact idle neutral endpoints and reverse the four pivot poses for departure. The announcer adds one short step per side before walking and one landing pose per side before turning."
     apply_authoring_metadata(manifest)
     return manifest,reports
 

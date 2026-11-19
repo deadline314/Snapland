@@ -82,10 +82,11 @@ func _run() -> void:
 			_check(_until(controller, "walk") and fixture.actor.position.x > 0.0 and fixture.sprite.texture != null, "%s %s departure safely retains the original walking route" % [role, damage])
 			controller.release()
 			fixture.scene.free()
-	var damaged_landing := Library.new()
-	damaged_landing.manifest.actors.announcer.settle.left.frames[0].region = [99999, 0, 10, 10]
-	_check(not damaged_landing.get_sequence("announcer", "settle", "left").available, "a damaged landing suppresses the incomplete stop")
-	_check(damaged_landing.get_sequence("announcer", "depart", "left").available, "the separate left departure still resolves all shared pivots")
+	for side in ["left", "right"]:
+		var damaged_landing := Library.new()
+		damaged_landing.manifest.actors.announcer.settle[side].frames[0].region = [99999, 0, 10, 10]
+		_check(not damaged_landing.get_sequence("announcer", "settle", side).available, "a damaged %s landing suppresses the incomplete stop" % side)
+		_check(damaged_landing.get_sequence("announcer", "depart", side).available, "the separate %s departure still resolves all shared pivots" % side)
 	if not failures.is_empty():
 		push_error("NPC departure lifecycle failed: " + "; ".join(failures))
 		quit(1)

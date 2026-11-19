@@ -15,7 +15,7 @@
     "ticket": "Four complete walking poses per side, preserving near/far shorts and anatomical right-side satchel. The older front walk_candidate remains a rejected exploratory row.",
     "imp": "42 authored front cells plus four complete walking poses per side. Side walks retain fixed authored cell roots and shared row ground; no mirroring, limb reconstruction or per-frame autozoom.",
     "announcer": "Side-walk adds four authored profile poses each for right and left from the first four cells per atlas row. Four repeated cells per row are excluded; diagonal and front/back walk directions remain uncovered.",
-    "route_pivots": "All three NPCs share exact idle neutral endpoints and reverse the four pivot poses for departure. The announcer adds one short step per side before walking and one landing pose for the left stop."
+    "route_pivots": "All three NPCs share exact idle neutral endpoints and reverse the four pivot poses for departure. The announcer adds one short step per side before walking and one landing pose per side before turning."
   },
   "actors": {
     "traveller": {
@@ -15641,6 +15641,27 @@
           "loop": false,
           "frames": [
             {
+              "source": "res://assets/characters/announcer-stop-landing-right-v1.png",
+              "region": [
+                934,
+                37,
+                317,
+                619
+              ],
+              "anchors": {
+                "feet": [
+                  153,
+                  613
+                ],
+                "head": [
+                  191,
+                  6
+                ]
+              },
+              "source_scale": 0.25205930807248766,
+              "layers": []
+            },
+            {
               "source": "res://assets/characters/announcer-settle-sides-v1.png",
               "region": [
                 159,
@@ -15740,7 +15761,14 @@
               "layers": []
             }
           ],
-          "return_direction": "front"
+          "return_direction": "front",
+          "frame_durations": [
+            0.06,
+            0.04,
+            0.1,
+            0.1,
+            0.1
+          ]
         },
         "left": {
           "fps": 10,

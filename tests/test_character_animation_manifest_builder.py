@@ -42,15 +42,16 @@ class CharacterAnimationManifestBuilderTests(unittest.TestCase):
         after, reports = BUILDER.build()
         for direction in ("right", "left"):
             sequence = after["actors"]["announcer"].get("settle", {}).get(direction, {})
-            self.assertEqual(5 if direction == "left" else 4, len(sequence.get("frames", [])))
+            self.assertEqual(5, len(sequence.get("frames", [])))
             self.assertFalse(sequence["loop"])
             self.assertEqual("front", sequence["return_direction"])
             self.assertEqual(10, sequence["fps"])
-            if direction == "left":
-                self.assertAlmostEqual(0.4, sum(sequence["frame_durations"]))
-                self.assertEqual(5, len(sequence["frame_durations"]))
-                self.assertTrue(sequence["frames"][0]["source"].endswith("/announcer-stop-landing-v1.png"))
+            self.assertEqual([0.06, 0.04, 0.10, 0.10, 0.10], sequence["frame_durations"])
+            self.assertAlmostEqual(0.4, sum(sequence["frame_durations"]))
+            expected = "announcer-stop-landing-v1.png" if direction == "left" else "announcer-stop-landing-right-v1.png"
+            self.assertTrue(sequence["frames"][0]["source"].endswith("/" + expected))
         self.assertEqual(8, reports["announcer"]["settle_side_atlas"]["frame_count"])
+        self.assertEqual(2, reports["announcer"]["stop_landing"]["frame_count"])
 
     def test_ticket_turn_is_finite_and_keeps_existing_sources_and_wardrobe(self):
         before = json.loads(BUILDER.OUT.read_text(encoding="utf-8"))

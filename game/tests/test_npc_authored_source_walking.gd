@@ -205,7 +205,7 @@ func _run() -> void:
 		var frame_count := 5 if role == "announcer" else 4
 		_check(departures[role].right.size() == frame_count and departures[role].left.size() == frame_count, "%s naturally presents both complete front-to-side departures" % role)
 	_check(moved_right and moved_left, "announcer naturally moves in both directions while its route plays authored frames")
-	_check(announcer_settle_seen.right.size() == 4 and announcer_settle_seen.left.size() == 5, "announcer naturally shows the left landing and both complete stops")
+	_check(announcer_settle_seen.right.size() == 5 and announcer_settle_seen.left.size() == 5, "announcer naturally shows both landings and both complete stops")
 	_check(announcer_returned, "announcer naturally crosses its registered origin on the return path")
 	for direction in ["right", "left"]:
 		var seen: Dictionary = announcer_sequences[direction].seen
