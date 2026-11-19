@@ -914,3 +914,22 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 ![鮑伯頭搭草帽時左向落腳](images/ART-17-hero-stop-20261119-left-bob-hat.png)
 
 [正常影片](images/ART-17-hero-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-hero-stop-20261119-quarter.mp4) · [反例、原畫、原生與封裝證據](images/ART-17-hero-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/51732d970eba32c4dd1a9248c343e04b98db0c1b) · [慢速銜接修正](https://github.com/deadline314/Snapland/commit/54df987424f124165ff17de853c6de825ac1517c)。
+
+## Commit — 2026-11-19 補齊主角八方向停步
+
+主角正面、背面與四個斜向各加入一張全身落腳圖格。在對應的行走姿勢減速站定後播放 0.1 秒，再回到相同方向的中立站姿。尚未核對的入步姿勢以原有流程回到中立。新增圖格保留原中立上半身和頭部位置，雨背心沿用同方向衣料，正面保留玩家選用的表情。
+
+| 項目 | 結果 |
+|---|---|
+| 素材與合成 | 245 個區域、雨背心 199 格。逐像素比對八方向各三種換裝組合的上半身，包含表情、相機、精靈、不同膚色與帽髮 |
+| 原生與封裝 | 正常、四分之一速度重建場景及 Windows 內嵌版各測 24 案。原裝、雨背心加草帽及動態鮑伯頭皆覆蓋八方向。落腳期間根位移為零，原動畫步距維持固定，接著回到同向待機第 0 格 |
+| 局部回歸 | 降低動態與重入、6 組 Godot 程式測試、214 項 Python 及 5 區設計檢查通過 |
+| 影片 | 正常 794 格，四分之一速度 3,014 格。兩部皆為 1280×720／30 FPS，完整解碼通過 |
+
+影片使用實際方向鍵輸入、隔離存檔及固定取景。整票尚需驗收完整起步、轉向及四位角色的連續動作品質。
+
+![正面停步](images/ART-17-compass-stop-20261119-front.png)
+![左前斜向停步](images/ART-17-compass-stop-20261119-front-left.png)
+![背面穿雨背心停步](images/ART-17-compass-stop-20261119-back-rainvest.png)
+
+[正常影片](images/ART-17-compass-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-compass-stop-20261119-quarter.mp4) · [原畫、測試及封裝證據](images/ART-17-compass-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/5315fc3770b9f18013576f0037e03dc603f08686)。
