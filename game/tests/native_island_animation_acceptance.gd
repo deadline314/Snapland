@@ -16,6 +16,7 @@ const CAMERA_UP_SHIFT := 0.0
 const FRAME_PADDING := 12.0
 const HUD_TOP_SAFE := 116.0
 const HUD_BOTTOM_SAFE := 84.0
+const HERO_RIGID_LOWER_BODY := Rect2i(0, 276, 280, 84)
 
 var _main: Node
 var _world: Node
@@ -37,6 +38,7 @@ var _held_keys: Array[int] = []
 var _observation: Dictionary = {}
 var _buffered_captures: Array[Dictionary] = []
 var _alpha_rect_cache: Dictionary = {}
+var _hero_rigid_checks: Dictionary = {}
 
 func _ready() -> void:
 	process_priority = 100
@@ -140,6 +142,7 @@ func _run() -> void:
 	await _finish(_failures.is_empty())
 
 func _build_main(progress: Node) -> bool:
+	_hero_rigid_checks.clear()
 	_camera_up_correction = 0.0
 	_framing_can_pin = false
 	_framing_locked = false
@@ -347,7 +350,7 @@ func _wait_announcer_action_window(requested: String) -> Dictionary:
 	return {"complete": ready, "reason": reason, "requested_action": requested, "authored_source_available": available, "source_frame_count": frames.size(), "source_fps": fps, "sequence_duration_seconds": duration, "frame_guard_seconds": frame_guard, "required_rest_remaining_seconds": required_remaining, "rest_remaining_seconds": remaining, "controller_phase": phase, "natural_action_before_request": natural_action, "source_sprite_visible_and_consistent": source_visible, "root_horizontal_speed": horizontal_speed, "controller_clock_start": start_clock, "controller_clock_end": float(controller._action_clock), "controller_wait_seconds": float(controller._action_clock) - start_clock, "simulation_wait_seconds": _simulated_seconds - start_simulation, "simulation_budget_remaining_seconds": MAX_SIMULATION_SECONDS - _simulated_seconds, "observed_intervals": samples, "watchdog_expired": Time.get_ticks_msec() >= wall_deadline, "clock_or_root_injected": false}
 
 func _observe_npc_route_start_settle() -> void:
-	if _actor in ["ticket", "imp"]:
+	if not (bool(_sequence("walk", "left").get("available", false)) and bool(_sequence("walk", "right").get("available", false))):
 		await _record_action("natural-route-start-settle", "walk", _current_direction(), "pending-authored-walk-source", _actor_anchor(), false, {"note": "No approved walking source; stationary authored idle does not pass walking."})
 		return
 	var start := _actor_anchor()
@@ -383,7 +386,7 @@ func _observe_npc_sequence(requested: String, accepted: bool) -> Dictionary:
 	var frames: Array = sequence.get("frames", [])
 	var authored := String(record.get("action", "")) == requested and bool(sequence.get("available", false)) and not bool(sequence.get("legacy_fallback", false)) and not frames.is_empty()
 	if not accepted or not authored: return {"complete": false, "accepted": accepted, "authored": false, "source_frame_count": frames.size()}
-	var duration := float(frames.size()) / maxf(0.01, float(sequence.get("fps", 1.0)))
+	var duration: float = AnimationLibraryScript.AnimationTiming.duration(sequence)
 	_begin_observation("npc_sequence", requested)
 	var start := _simulated_seconds
 	while _simulated_seconds - start < duration + 0.25 and _within_budget():
@@ -473,7 +476,8 @@ func _observe_hero_walk(seconds: float, expected: String) -> Dictionary:
 		await RenderingServer.frame_post_draw
 		elapsed += maxf(0.0, get_process_delta_time())
 		if not _world.avatar_is_walking: continue
-		cels[str(_world.last_avatar_frame)] = true
+		if _world.last_avatar_source_action == "walk":
+			cels[str(_world.last_avatar_frame)] = true
 		textures[str(_live_texture_id())] = true
 		var pixels_match := _hero_sprite_source_consistent()
 		var sample_consistent: bool = pixels_match and String(_world.facing) == expected and String(_world.last_avatar_action) == "walk"
@@ -481,7 +485,7 @@ func _observe_hero_walk(seconds: float, expected: String) -> Dictionary:
 			inconsistent_samples.append({"pixels_match": pixels_match, "facing": _world.facing, "presented_direction": _world.last_avatar_direction, "action": _world.last_avatar_action, "frame": _world.last_avatar_frame, "velocity": str(_world.player.velocity)})
 		consistent = consistent and sample_consistent
 	var moved := start != _actor_anchor()
-	return {"complete": moved and consistent and cels.size() > 1 and textures.size() > 1 and _world.avatar_is_walking, "actual_movement": moved, "source_consistent": consistent, "sprite_visible": _world.avatar.is_visible_in_tree(), "rig_hidden": _hero_rig_hidden(), "rig_instantiated": is_instance_valid(_world.avatar_motion_rig), "observed_cels": cels.keys(), "observed_texture_instances": textures.keys(), "simulation_seconds": elapsed, "expected_direction": expected, "inconsistent_samples": inconsistent_samples}
+	return {"complete": moved and consistent and cels.size() > 1 and _world.avatar_is_walking, "actual_movement": moved, "source_consistent": consistent, "sprite_visible": _world.avatar.is_visible_in_tree(), "rig_hidden": _hero_rig_hidden(), "rig_instantiated": is_instance_valid(_world.avatar_motion_rig), "observed_cels": cels.keys(), "observed_texture_instances": textures.keys(), "simulation_seconds": elapsed, "expected_direction": expected, "inconsistent_samples": inconsistent_samples}
 
 func _record_authored_playback(action: String, playback: Dictionary) -> void:
 	var available := bool(playback.get("authored", false))
@@ -489,11 +493,17 @@ func _record_authored_playback(action: String, playback: Dictionary) -> void:
 	await _capture(action + "-after-playback")
 
 func _face_back_with_keyboard() -> void:
+	var started := _simulated_seconds
+	var origin: Vector3 = _world.player.global_position
 	_press(KEY_W, true)
-	await _physics_frames(3)
+	while _simulated_seconds - started < 0.5 and _within_budget():
+		await _physics_frames(1)
+		if String(_world.facing) == "back" and _world.player.global_position.distance_to(origin) > 0.005:
+			break
 	_press(KEY_W, false)
 	var settle := await _wait_hero_settle()
-	if not bool(settle.complete) or String(_world.facing) != "back": _fail("real keyboard input did not settle facing back before action request")
+	if not bool(settle.complete) or String(_world.facing) != "back" or _world.player.global_position.distance_to(origin) <= 0.005:
+		_fail("real keyboard input did not settle facing back before action request")
 
 func _wait_hero_settle() -> Dictionary:
 	var start := _simulated_seconds
@@ -513,7 +523,7 @@ func _observe_hero_sequence(action: String) -> Dictionary:
 	if not available: return {"complete": false, "authored": false, "source_frame_count": frames.size()}
 	_begin_observation("hero_sequence", action)
 	var start := _simulated_seconds
-	var duration := float(frames.size()) / maxf(0.01, float(sequence.get("fps", 1.0)))
+	var duration: float = AnimationLibraryScript.AnimationTiming.duration(sequence)
 	while _simulated_seconds - start < duration + 0.25 and _within_budget():
 		await _frames(1)
 		if _simulated_seconds - start > 0.05 and _world.avatar_action_remaining <= 0.0: break
@@ -526,12 +536,35 @@ func _hero_rig_hidden() -> bool:
 
 func _hero_sprite_source_consistent() -> bool:
 	if not _world.avatar.is_visible_in_tree() or is_instance_valid(_world.avatar_motion_rig) or _world.avatar.texture == null: return false
-	var action: String = _world.last_avatar_action
+	var action: String = _world.last_avatar_source_action
 	var direction: String = _world.last_avatar_direction
 	if action not in ["walk", "idle"] and not _library.has_frame("traveller", action, direction): return false
-	var texture_action := "walk" if action == "idle" and not _library.has_frame("traveller", "idle", direction) else action
-	var expected: Texture2D = _world.avatar_renderer.texture(_world.avatar_appearance, _world.avatar_equipped, direction, int(_world.last_avatar_frame), texture_action)
-	return expected != null and _same_texture_pixels(_world.avatar.texture, expected)
+	var source_frame := 0 if action in ["depart", "pivot", "pivot_depth"] else int(_world.last_avatar_frame)
+	var expected: Texture2D = _world.avatar_renderer.texture(_world.avatar_appearance, _world.avatar_equipped, direction, source_frame, action)
+	var rig: SubViewport = _world.avatar_hair_rig
+	if not is_instance_valid(rig) or not bool(rig.active):
+		return expected != null and _same_texture_pixels(_world.avatar.texture, expected)
+	if _world.avatar.texture != rig.get_texture() or not String(rig.pose_key).begins_with("%s|%s|%d|" % [direction, action, source_frame]):
+		return false
+	var key := String(rig.pose_key)
+	if not _hero_rigid_checks.has(key):
+		_hero_rigid_checks[key] = _same_hero_rigid_pixels(rig.get_texture(), expected)
+	return bool(_hero_rigid_checks[key])
+
+func _same_hero_rigid_pixels(actual: Texture2D, expected: Texture2D) -> bool:
+	if expected == null or actual.get_size() != expected.get_size(): return false
+	var visible := actual.get_image()
+	var source := expected.get_image()
+	if visible == null or source == null or visible.get_format() != source.get_format(): return false
+	var a := visible.get_region(HERO_RIGID_LOWER_BODY).get_data()
+	var b := source.get_region(HERO_RIGID_LOWER_BODY).get_data()
+	var checked := 0
+	for i in range(0, a.size(), 4):
+		if maxi(a[i + 3], b[i + 3]) < 128: continue
+		checked += 1
+		for channel in range(4):
+			if absi(a[i + channel] - b[i + channel]) > 2: return false
+	return checked > 1000
 
 func _live_texture_id() -> int:
 	var sprite := _world.avatar as Sprite3D if _actor == "traveller" else _actor_record(_actor).get("sprite") as Sprite3D
