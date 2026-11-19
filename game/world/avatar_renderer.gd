@@ -1911,8 +1911,8 @@ func _apply_appearance_details(image: Image, appearance: Dictionary, direction: 
 	var sx := float(w) / 64.0
 	var sy := float(h) / 96.0
 	var face := str(appearance.get("face", "curious"))
-	# Front idle and settling share the same face landmarks.
-	if direction == "front" and action in ["idle", "settle"] and face != "curious":
+	# Front idle and footwork share the same face landmarks.
+	if direction == "front" and action in ["idle", "settle", "depart"] and face != "curious":
 		_apply_face_shape(image, face, sx, sy)
 
 func _apply_face_shape(image: Image, expression: String, sx: float, sy: float) -> void:

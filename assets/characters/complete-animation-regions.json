@@ -4482,6 +4482,168 @@
               "layers": []
             }
           ]
+        },
+        "front": {
+          "fps": 12.5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-departure-compass-v1.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  157,
+                  72
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "front_right": {
+          "fps": 12.5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-departure-compass-v1.png",
+              "region": [
+                280,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  162,
+                  58
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "back_right": {
+          "fps": 12.5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-departure-compass-v1.png",
+              "region": [
+                560,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  187,
+                  68
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "back": {
+          "fps": 12.5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-departure-compass-v1.png",
+              "region": [
+                0,
+                360,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  145,
+                  63
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "back_left": {
+          "fps": 12.5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-departure-compass-v1.png",
+              "region": [
+                280,
+                360,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  96,
+                  70
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "front_left": {
+          "fps": 12.5,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-departure-compass-v1.png",
+              "region": [
+                560,
+                360,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  149,
+                  58
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
         }
       },
       "sit": {
@@ -16482,7 +16644,13 @@
       },
       "depart": {
         "left": 1,
-        "right": 1
+        "right": 1,
+        "front": 1,
+        "front_right": 1,
+        "back_right": 1,
+        "back": 1,
+        "back_left": 1,
+        "front_left": 1
       },
       "wave": {
         "front": 8,

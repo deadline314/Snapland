@@ -34,7 +34,13 @@
       },
       "depart": {
         "left": 1,
-        "right": 1
+        "right": 1,
+        "front": 1,
+        "front_right": 1,
+        "back_right": 1,
+        "back": 1,
+        "back_left": 1,
+        "front_left": 1
       },
       "wave": {
         "front": 8,

@@ -52,5 +52,5 @@ func _initialize() -> void:
 		var file:=FileAccess.open(path,FileAccess.WRITE);file.store_string(JSON.stringify(bad));file.close()
 		var rejected=Overlays.new(path)
 		check(not rejected.ready(avatar),"Unsafe family accepted: "+kind)
-	if failures==0: print("PASS: garment overlay preserves 201 original compositions; missing last cel falls back across all eight directions")
+	if failures==0: print("PASS: garment overlay preserves 207 original compositions; missing last cel falls back across all eight directions")
 	quit(1 if failures else 0)

@@ -542,8 +542,12 @@ def add_traveller_footwork(actor_data: dict) -> dict:
     for index, (direction, head) in enumerate(compass_heads):
         poses.append((direction, compass_source, index % 3 * 280, index // 3 * 360, head))
     departure = ROOT / "assets/characters/traveller-departure-sides-v1.png"
+    compass_departure = ROOT / "assets/characters/traveller-departure-compass-v1.png"
     departure_source = registered_frame_source(departure, "37f2821eb2e3b0dd96f93f3e67b625f49b4b75cc41fb5d7314888594e39833f5")
+    compass_departure_source = registered_frame_source(compass_departure, "cae71b0312726b93273a264e1a1ae0b937d7e0bb0e3e8177ad4522b005cf5dbf")
     departures = [("left", departure_source, 0, 0, [121, 69]), ("right", departure_source, 280, 0, [180, 69])]
+    for index, (direction, head) in enumerate(compass_heads):
+        departures.append((direction, compass_departure_source, index % 3 * 280, index // 3 * 360, head))
     for action, entries, fps in (("settle", poses, 10), ("depart", departures, 12.5)):
         actor_data[action] = {}
         for direction, source, x, y, head in entries:
@@ -554,7 +558,7 @@ def add_traveller_footwork(actor_data: dict) -> dict:
                     "source_scale": 0.625, "layers": [],
                 }],
             }
-    return {"sources": [file.relative_to(ROOT).as_posix() for file in (sides, compass, departure)],
+    return {"sources": [file.relative_to(ROOT).as_posix() for file in (sides, compass, departure, compass_departure)],
             "frame_count": len(poses) + len(departures)}
 
 

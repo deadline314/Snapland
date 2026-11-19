@@ -38,7 +38,16 @@ const AVATAR_CAMERA_IDLE_DELAY := 18.0
 const AVATAR_CAMERA_IDLE_ACTION := "idle_gesture"
 const AVATAR_STOP_ACTION := "settle"
 const AVATAR_DEPARTURE_ACTION := "depart"
-const AVATAR_DEPARTURE_TO_WALK_CELS := {"left": [0, 3, 4, 5, 7], "right": [0, 2, 6]}
+const AVATAR_DEPARTURE_TO_WALK_CELS := {
+	"front": [0, 1, 2, 3, 6, 7],
+	"front_right": [0, 1, 3, 4, 5, 7],
+	"right": [0, 2, 6],
+	"back_right": [0, 4],
+	"back": [0, 1, 2, 3, 4, 5, 6, 7],
+	"back_left": [0, 4],
+	"left": [0, 3, 4, 5, 7],
+	"front_left": [0, 1, 2, 3, 4, 5, 6],
+}
 # Each listed approach cel was reviewed against its planted stop pose.
 const AVATAR_STOP_FROM_WALK_CELS := {
 	"front": [0, 2, 3, 4, 5, 6, 7],

@@ -256,15 +256,16 @@ func _check_departures(world: ParkWorld) -> void:
 	var original_scale := Engine.time_scale
 	for speed: float in [1.0, 0.25]:
 		Engine.time_scale = speed
-		for direction: String in ["left", "right"]:
-			var point := Vector3(-2.6 if direction == "left" else -0.6, 0.0, -5.5)
+		for index in range(DIRECTIONS.size()):
+			var direction: String = DIRECTIONS[index]
+			var movement: Array = INPUTS[index]
+			var point := Vector3(-2.6 if index % 2 == 0 else -0.6, 0.0, -5.5)
 			point.y = world.ground_surface_y(point)
 			world.player.position = point
 			world.facing = direction
 			for _tick in range(4): await physics_frame
 			var before := world.player.global_position
-			var movement := "move_" + direction
-			Input.action_press(movement)
+			for action in movement: Input.action_press(action)
 			var takeoff_ticks := 0
 			var continued := false
 			var expected: Texture2D = world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, direction, 0, "depart")
@@ -279,7 +280,7 @@ func _check_departures(world: ParkWorld) -> void:
 					break
 			_check(takeoff_ticks >= (19 if speed < 1.0 else 5) and continued and world.facing == direction,
 				"%s scale %s takeoff enters the reviewed walk cel without stalling motion or changing heading (%d ticks)" % [direction, speed, takeoff_ticks])
-			Input.action_release(movement)
+			for action in movement: Input.action_release(action)
 	Engine.time_scale = original_scale
 	world.player.position = Vector3(-2.6, world.ground_surface_y(Vector3(-2.6,0,-5.5)), -5.5)
 	world.facing = "left"

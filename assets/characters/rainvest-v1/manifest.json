@@ -1814,6 +1814,60 @@
       "source_pixel_sha256": "3af1fa562424ee474997ecd6db1e0f88a681beb4bc317aaa0e14a754e7cf163b",
       "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
       "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
+    },
+    {
+      "action": "depart",
+      "direction": "back",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "6e3ff61fba3e3e5135e89524d878769a534739d249451d02a4044da2e46daf7b",
+      "path": "res://assets/characters/rainvest-v1/idle-back-00.pngdata",
+      "png_sha256": "45b217300869d6afe264185d830d5e94ea30c88d63808748890f3d78b77bcd39"
+    },
+    {
+      "action": "depart",
+      "direction": "back_left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "d5826d0347463a8e8158b542b37c298b411455d64dd019cd4699c231921957be",
+      "path": "res://assets/characters/rainvest-v1/idle-back_left-00.pngdata",
+      "png_sha256": "32e9a3470d8ea99f99389b1b39393eb50c3d6bf641ce4b2c7be0b3ee3eb7b766"
+    },
+    {
+      "action": "depart",
+      "direction": "back_right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a22ed7c322ed5e3aca24b1565bae17f53ac5e1d405ee80bffb0f6bc2752c34ac",
+      "path": "res://assets/characters/rainvest-v1/idle-back_right-00.pngdata",
+      "png_sha256": "df484c6db2613da78c05668306ab53743ac5a06faf08108ffb4a64c059d35cca"
+    },
+    {
+      "action": "depart",
+      "direction": "front",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "16f9d534649b931fc2f8232a5879a836af62c3a4dd62fa575e0510a65db48c1d",
+      "path": "res://assets/characters/rainvest-v1/idle-front-00.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
+    },
+    {
+      "action": "depart",
+      "direction": "front_left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "2bf4e367446b8066585814f7271c0ffc92f5dc856191ac11f77c12628f107623",
+      "path": "res://assets/characters/rainvest-v1/idle-front_left-00.pngdata",
+      "png_sha256": "83bb0312e5b4579914cdeee6badff180a78f3affc0d38c3b4b9a1c5402a9d4e7"
+    },
+    {
+      "action": "depart",
+      "direction": "front_right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "a1f93a9101361515f60bb2fd29eb2799d746b6fb6403f4f1635fe8b87e23b2d6",
+      "path": "res://assets/characters/rainvest-v1/idle-front_right-00.pngdata",
+      "png_sha256": "cba7becaf7838da4f42aee58f102878ccf8c472619eb9733a1c3ad3a3865ddf6"
     }
   ],
   "encoding": "png_bytes_without_import_conversion"
