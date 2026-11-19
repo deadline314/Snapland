@@ -6,7 +6,7 @@ const Model = preload("res://game/minigames/bean_seesaw_model.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const STAGE := Rect2(24, 231, 1232, 328)
 enum { HOPPER_LEFT = 5, HOPPER_RIGHT, HELPER, FINISH }
-const BUTTONS := ["最左", "左", "中央", "右", "最右", "開左料斗 · Q", "開右料斗 · E", "AI 扶板 · R", "結算 · F"]
+const BUTTONS := ["最左", "左", "中央", "右", "最右", "左料斗 · Q", "右料斗 · E", "AI 扶板 · R", "結算 · F"]
 const TOOLTIPS := [
 	"大幅抬高右端", "稍微抬高右端", "讓兩端回到接近平衡", "稍微抬高左端", "大幅抬高左端",
 	"放出左料斗的下一顆豆", "放出右料斗的下一顆豆", "減少板端晃動，放豆仍由你控制", "雙盤同步後可提早結算",
@@ -83,6 +83,7 @@ func _make_widgets() -> void:
 		button.tooltip_text = TOOLTIPS[index]
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.focus_mode = Control.FOCUS_NONE
+		button.clip_text = true
 		button.toggle_mode = true
 		button.add_theme_stylebox_override("normal", normal)
 		button.add_theme_stylebox_override("pressed", selected)
