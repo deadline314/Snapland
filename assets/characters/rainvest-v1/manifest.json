@@ -1724,6 +1724,24 @@
       "source_pixel_sha256": "af9b7a3bdb2ac3bc8f9db36118badf2f6fd5bdb174d13e9ed844b690ade50df3",
       "path": "res://assets/characters/rainvest-v1/photograph-right-02.pngdata",
       "png_sha256": "74945fb33bd653f540307029d781c7d0f420ea79215e67402adfd465661f9935"
+    },
+    {
+      "action": "settle",
+      "direction": "left",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "c5a838a01c4dae3f81148779ab391f2a10f035dd82de2146577ad849df21f3f4",
+      "path": "res://assets/characters/rainvest-v1/idle-left-00.pngdata",
+      "png_sha256": "1eda7c592f3f36153219d47b2c7476814592b28f6086dc16c5911d4be5cb3735"
+    },
+    {
+      "action": "settle",
+      "direction": "right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "963bbcd25712979f5d73768157c72d6091850386d9712cbff8187ccdf43c56f8",
+      "path": "res://assets/characters/rainvest-v1/idle-right-00.pngdata",
+      "png_sha256": "2d1d7a7c9d4a38a9c37f9e73ff3fd61f6c2b048f2baf5f212d044df68aa6cdcc"
     }
   ],
   "encoding": "png_bytes_without_import_conversion"

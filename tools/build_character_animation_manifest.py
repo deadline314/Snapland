@@ -529,6 +529,21 @@ def add_traveller_camera_check(actor_data: dict) -> dict:
     return {"source": TRAVELLER_CAMERA_CHECK.relative_to(ROOT).as_posix(), "frame_count": len(frames)}
 
 
+def add_traveller_profile_settles(actor_data: dict) -> dict:
+    path = ROOT / "assets/characters/traveller-settle-sides-v1.png"
+    source = registered_frame_source(path, "79f3f7ea1e9d995a4863aa529237a4ec31f4f41ad9cc950d5bf4f09af9fb7ba8")
+    actor_data["settle"] = {}
+    for direction, x, head in (("left", 0, [121, 69]), ("right", 280, [180, 69])):
+        actor_data["settle"][direction] = {
+            "fps": 10, "loop": False, "frames": [{
+                "source": source, "region": [x, 0, 280, 360],
+                "anchors": {"feet": [140, 346], "head": head},
+                "source_scale": 0.625, "layers": [],
+            }],
+        }
+    return {"source": path.relative_to(ROOT).as_posix(), "frame_count": 2}
+
+
 def add_traveller_profile_photos(actor_data: dict) -> dict:
     for direction, (digest, height, poses) in TRAVELLER_PROFILE_PHOTOS.items():
         path = ROOT / f"assets/characters/traveller-photograph-{direction}-v1.png"
@@ -614,6 +629,7 @@ def build() -> tuple[dict,dict]:
     reports["traveller"]["wave_side_atlas"] = add_traveller_profile_waves(actors["traveller"])
     reports["traveller"]["camera_check"] = add_traveller_camera_check(actors["traveller"])
     reports["traveller"]["photograph_side_atlas"] = add_traveller_profile_photos(actors["traveller"])
+    reports["traveller"]["settle_profile_atlas"] = add_traveller_profile_settles(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
     if OUT.exists():
@@ -692,7 +708,7 @@ def main() -> int:
         verified_regions = sum(
             report["frame_count"] + sum(report.get(action, {}).get("frame_count", 0)
                                         for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas",
-                                                       "stop_landing", "wave_side_atlas", "camera_check", "photograph_side_atlas"))
+                                                       "stop_landing", "wave_side_atlas", "camera_check", "photograph_side_atlas", "settle_profile_atlas"))
             for report in reports.values()
         )
         print(f"PASS: {verified_regions} authored regions verified; no synthetic frames")

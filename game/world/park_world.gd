@@ -36,6 +36,12 @@ const GOLD = Color("#edbb65")
 const AVATAR_SHARED_ACTIONS := {"celebrate": "jump"}
 const AVATAR_CAMERA_IDLE_DELAY := 18.0
 const AVATAR_CAMERA_IDLE_ACTION := "idle_gesture"
+const AVATAR_STOP_ACTION := "settle"
+# Each listed approach cel was reviewed against its planted stop pose.
+const AVATAR_STOP_FROM_WALK_CELS := {
+	"left": [0, 1, 3, 4, 5, 7],
+	"right": [0, 1, 2, 3, 4, 6],
+}
 var player: CharacterBody3D
 var avatar: Sprite3D
 var avatar_renderer: RefCounted
@@ -2238,6 +2244,10 @@ func _sync_external_avatar_reposition() -> void:
 		player.velocity=Vector3.ZERO
 		avatar_is_walking=false
 		_avatar_action_on_stop = ""
+		if avatar_action == AVATAR_STOP_ACTION:
+			avatar_action = ""
+			avatar_action_remaining = 0.0
+			avatar_action_elapsed = 0.0
 		walk_distance_phase=0.0
 		if avatar_motion_available and is_instance_valid(avatar_motion_rig):
 			avatar_motion_rig.position.y=ground_surface_y(player.global_position)-player.global_position.y
@@ -2301,6 +2311,7 @@ func _physics_process(delta: float) -> void:
 	var desired_speed := AVATAR_RUN_SPEED if avatar_run_requested else AVATAR_WALK_SPEED
 	var desired_horizontal := movement*desired_speed
 	var current_horizontal := Vector2(player.velocity.x,player.velocity.z)
+	var was_coasting := movement == Vector2.ZERO and current_horizontal != Vector2.ZERO
 	if blocked or operating_lens:
 		current_horizontal=Vector2.ZERO
 	else:
@@ -2349,6 +2360,16 @@ func _physics_process(delta: float) -> void:
 				avatar_action_elapsed += delta
 				avatar_action_remaining=maxf(0.0,avatar_action_remaining-delta)
 				if avatar_action_remaining == 0.0: avatar_action=""
+	elif (
+		was_coasting and current_horizontal == Vector2.ZERO and not avatar_is_walking and player.is_on_floor()
+		and not reduced_motion and not blocked and not operating_lens and last_avatar_action == "walk"
+		and last_avatar_direction == facing and last_avatar_frame in AVATAR_STOP_FROM_WALK_CELS.get(facing, [])
+		and _has_authored_avatar_action(AVATAR_STOP_ACTION, facing)
+		and avatar_renderer.animation_library.original_frame_image("traveller", AVATAR_STOP_ACTION, facing, 0) != null
+	):
+		avatar_action = AVATAR_STOP_ACTION
+		avatar_action_remaining = _avatar_action_duration(AVATAR_STOP_ACTION, facing)
+		avatar_action_elapsed = 0.0
 	elif (
 		_avatar_camera_idle_available and not reduced_motion and not blocked and not operating_lens
 		and movement == Vector2.ZERO and not avatar_is_walking and player.is_on_floor()
@@ -2717,7 +2738,7 @@ func _update_lamp_selection(force := false) -> void:
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
-	if reduced_motion and avatar_action == AVATAR_CAMERA_IDLE_ACTION:
+	if reduced_motion and avatar_action in [AVATAR_CAMERA_IDLE_ACTION, AVATAR_STOP_ACTION]:
 		avatar_action = ""
 		avatar_action_remaining = 0.0
 		avatar_action_elapsed = 0.0

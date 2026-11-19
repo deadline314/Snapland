@@ -223,10 +223,12 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var authored_frame_count: int = animation_library.frame_count("traveller", safe_action, safe_direction) if has_manifest_frame else 0
 	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, authored_frame_count - 1) if has_manifest_frame else clampi(frame, 0, 2)
 	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction))) and not has_manifest_frame
+	# Stop cels retain the neutral upper body, with new artwork below the hips.
+	var use_walk_layout := use_walk_source or (safe_action == "settle" and has_manifest_frame)
 	var registered_idle: bool = safe_action == "idle" and not inspect_authored_idle_sources and _stable_idle_pixels.manifest.has("hero-idle/"+safe_direction)
 	var idle_frame := clampi(frame,0,int(_stable_idle_pixels.manifest.get("hero-idle/"+safe_direction,{}).get("frames",1))-1)
 	var walk_frame := IDLE_WALK_FRAME
-	if use_walk_source:
+	if use_walk_layout:
 		var frame_count := walk_frame_count(safe_direction)
 		walk_frame = clampi(frame, 0, frame_count - 1) if safe_action == "walk" else walk_idle_frame(safe_direction)
 	var pose_direction := safe_direction if DIRECTIONS.has(safe_direction) else _closest_cardinal(safe_direction)
@@ -267,14 +269,14 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 			# ImageTexture.get_image() may expose a cached image. Renderer passes
 			# mutate their working canvas, so detach before stripping or compositing.
 			image = authored.get_image().duplicate()
-			if animation_library.has_anchor("traveller", safe_action, safe_direction, safe_frame, "head", pose_equipped):
+			if not use_walk_layout and animation_library.has_anchor("traveller", safe_action, safe_direction, safe_frame, "head", pose_equipped):
 				manifest_head_anchor = animation_library.normalized_anchor("traveller", safe_action, safe_direction, safe_frame, "head", pose_equipped)
 				manifest_has_head_anchor = true
-	var vertical_offset := 0 if use_walk_source else (_pose_vertical_offsets[pose] if _atlas_valid else 0)
-	var hair_hat_offset := 45 if use_walk_source else vertical_offset
+	var vertical_offset := 0 if use_walk_layout else (_pose_vertical_offsets[pose] if _atlas_valid else 0)
+	var hair_hat_offset := 45 if use_walk_layout else vertical_offset
 	var head_shift_x := 0
 	var hair_target_width := HAIR_TARGET_WIDTH
-	if use_walk_source:
+	if use_walk_layout:
 		var head_anchor := walk_head_anchor(safe_direction, walk_frame)
 		var rest_anchor := walk_head_anchor(safe_direction, walk_idle_frame(safe_direction))
 		head_shift_x = head_anchor.x - image.get_width() / 2
@@ -288,7 +290,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		hair_hat_offset = manifest_head_anchor.y
 	var species := str(normalized_appearance.get("species", "human"))
 	var species_head_shift_x := 0
-	if use_walk_source:
+	if use_walk_layout:
 		var rest_head_anchor := walk_head_anchor(safe_direction, walk_idle_frame(safe_direction))
 		species_head_shift_x = walk_head_anchor(safe_direction, walk_frame).x - rest_head_anchor.x
 	# Authored source frames carry the approved windswept hair outside the walk
@@ -306,13 +308,13 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var source_hair_mask := PackedByteArray()
 	var source_metrics: Dictionary = legacy_heads.metrics_for(safe_action,image) if not legacy_source.is_empty() else {}
 	var prop_indices := PackedInt32Array()
-	if safe_action in ["walk","idle"] and safe_direction in ["front","front_left","front_right","left","right"]:
+	if safe_action in ["walk","idle","settle"] and safe_direction in ["front","front_left","front_right","left","right"]:
 		prop_indices = prop_foreground.indices(image)
 		if has_hair_overlay and prop_indices.is_empty():
 			has_hair_overlay=false
 			use_replacement_hair=false
 	if has_hair_overlay:
-		if use_walk_source:
+		if use_walk_layout:
 			source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, image)
 		elif legacy_source.is_empty():
 			source_metrics = _authored_source_hair_metrics(image, safe_direction, safe_action, safe_frame)
@@ -337,12 +339,12 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		if source_metrics.is_empty():
 			var palette_hair_source := _walk_pose_image(safe_direction, walk_frame) if use_walk_source else image.duplicate()
 			if not legacy_source.is_empty(): source_metrics = legacy_heads.metrics_for(safe_action,palette_hair_source)
-			else: source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_source else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action, safe_frame)
+			else: source_metrics = _walk_source_hair_metrics(safe_direction, walk_frame, palette_hair_source) if use_walk_layout else _authored_source_hair_metrics(palette_hair_source, safe_direction, safe_action, safe_frame)
 		palette_hair_indices = source_metrics.get("source_hair_indices",PackedInt32Array())
 	if species=="elf" and source_metrics.is_empty():
-		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
+		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_layout else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
 	if has_authored_source_hair and source_metrics.is_empty():
-		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_source else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
+		source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,image) if use_walk_layout else _authored_source_hair_metrics(image,safe_direction,safe_action,safe_frame)
 	# Recolor the body before compositing a prepared haircut. Applying the coat
 	# palette afterwards mistakes dark-blue curls over the jacket for cloth.
 	# Human cuts without material ownership cannot safely tint guessed collar
@@ -375,7 +377,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if species == "elf" and _species_atlas_valid:
 		if source_metrics.is_empty():
 			var raw_pose := _walk_pose_image(safe_direction,walk_frame) if use_walk_source else image
-			source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,raw_pose) if use_walk_source else _authored_source_hair_metrics(raw_pose,safe_direction,safe_action,safe_frame)
+			source_metrics = _walk_source_hair_metrics(safe_direction,walk_frame,raw_pose) if use_walk_layout else _authored_source_hair_metrics(raw_pose,safe_direction,safe_action,safe_frame)
 		var ear_layer := Image.create(image.get_width(),image.get_height(),false,Image.FORMAT_RGBA8)
 		ear_layer.fill(Color.TRANSPARENT)
 		_apply_species_ears(ear_layer,species,pose_direction,vertical_offset,SKIN_COLORS.get(str(normalized_appearance.get("skin","warm")),SKIN_COLORS.warm),species_head_shift_x,image,source_metrics)

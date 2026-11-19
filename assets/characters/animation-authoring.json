@@ -22,6 +22,10 @@
       "idle_gesture": {
         "front": 3
       },
+      "settle": {
+        "left": 1,
+        "right": 1
+      },
       "wave": {
         "front": 8,
         "left": 5,
