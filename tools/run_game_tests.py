@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
+    "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
     "cotton model tests": "Cotton wind model: 99 checks, 0 failures",
     "cotton driver tests": "Cotton wind driver: 62 checks, 0 failures",
     "cotton view tests": "Cotton wind view: 7 checks, 0 failures",
@@ -269,7 +270,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    if label.startswith("cotton "):
+    if label.startswith(("cotton ", "bean seesaw ")):
         if re.search(r"ObjectDB instances leaked|still in use|resources? in use at exit", output, re.I):
             return f"{label} leaked engine objects or resources.\n{output.strip()[-6000:]}"
         completed = stdout_lines.count(marker) == 1 and output.splitlines().count(marker) == 1
@@ -381,6 +382,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate view tests", common + ["--script", "res://game/tests/test_chocolate_etching_view.gd"]),
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
+        ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
         ("cotton model tests", common + ["--script", "res://game/tests/test_cotton_wind.gd"]),
         ("cotton driver tests", common + ["--script", "res://game/tests/test_cotton_wind_driver.gd"]),
         ("cotton view tests", common + ["--script", "res://game/tests/test_cotton_wind_view.gd"]),

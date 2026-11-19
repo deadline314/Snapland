@@ -85,7 +85,7 @@ func _run() -> void:
 	check(get_viewport().get_visible_rect().size == Vector2(requested), "actual window viewport")
 	check(Paper.text_scale() == (1.25 if requested.x == 800 else 1.0) and Paper.reduced_motion() == (requested.x == 800), "actual accessibility settings")
 	check(Catalog.identity(GAME) == {"id": GAME, "mode": "chocolate_etching", "zone": "candy", "local_index": 5,
-		"photo_id": ORDINARY, "devil_photo_id": DEVIL, "achievement_id": ACHIEVEMENT} and Catalog.all_definitions().size() == 30, "fixed chocolate identity and actual delivered count")
+		"photo_id": ORDINARY, "devil_photo_id": DEVIL, "achievement_id": ACHIEVEMENT}, "fixed chocolate identity")
 	if mode == "read":
 		await read_profile()
 		await finish()
@@ -146,7 +146,7 @@ func enter_station() -> bool:
 		print("CONTROLLED ACTOR PLACEMENT: (0,GROUND_Y,-10.8) sign")
 		await place_actor(Vector2(0, -10.8))
 		var signs: Array = main.world.local_sign_labels.filter(func(label: Label3D): return label.text.begins_with("工廠遊戲 "))
-		check(signs.size() == 1 and signs[0].is_visible_in_tree() and signs[0].text == "工廠遊戲 6／12", "real current physical factory sign")
+		check(signs.size() == 1 and signs[0].is_visible_in_tree() and signs[0].text == "工廠遊戲 %d／12" % Catalog.definitions("candy").size(), "real current physical factory sign")
 		await capture("factory-visible-sign")
 	print("CONTROLLED ACTOR PLACEMENT: (10.5,GROUND_Y,-0.8) station")
 	await place_actor(Vector2(10.5, -0.8))
@@ -167,7 +167,7 @@ func enter_station() -> bool:
 	await capture("map")
 	await activate(main.overlay, "RegionGamesButton")
 	var grid: Control = main.overlay.find_child("RegionalGameEntriesGrid", true, false)
-	check(grid != null and grid.get_child_count() == 6, "actual regional map lists six factory games")
+	check(grid != null and grid.get_child_count() == Catalog.definitions("candy").size(), "actual regional map lists all factory games")
 	await capture("map-entries")
 	await activate(main.overlay, "HarborGame" + GAME)
 	if not invitation("focused map action"):
@@ -603,7 +603,7 @@ func open_book(action: String, label: String) -> void:
 	check(main.modal_kind == ("achievements" if action == "TicketAction3" else "album"), "actual opened " + label)
 	if action == "TicketAction3":
 		var stamps: Control = main.overlay.find_child("MinigameStampGrid", true, false)
-		check(stamps != null and stamps.get_child_count() == 6, "actual stamp book lists six factory games")
+		check(stamps != null and stamps.get_child_count() == Catalog.definitions("candy").size(), "actual stamp book lists all factory games")
 		var stamp := await find_book_tile("AchievementStamp_" + ACHIEVEMENT, "AchievementNextPage")
 		check(stamp != null and visible_copy(stamp).contains("巧克力蝕刻") and visible_copy(stamp).contains("已蓋章"), "actual page displays the earned chocolate stamp")
 		await capture(label)

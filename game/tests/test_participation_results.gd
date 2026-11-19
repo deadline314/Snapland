@@ -4,6 +4,7 @@ const Session = preload("res://game/minigames/session.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
 const Chocolate = preload("res://game/tests/test_chocolate_etching_session.gd")
 const Cotton = preload("res://game/tests/test_cotton_wind_session.gd")
+const Seesaw = preload("res://game/tests/test_bean_seesaw.gd")
 var failures: Array[String] = []
 
 func _initialize() -> void:
@@ -24,6 +25,7 @@ func _run() -> void:
 			preload("res://game/tests/test_jelly_trampoline_session.gd").launch(session, 0.15)
 		if definition.mode == "chocolate_etching": Chocolate.cut_line(session)
 		if definition.mode == "cotton_wind": Cotton.participate(session)
+		if definition.mode == "bean_seesaw": Seesaw.participate_without_pair(session)
 		if definition.mode == "sugar_bridge":
 			var load_ball := InputEventKey.new()
 			load_ball.keycode = KEY_ENTER
@@ -53,7 +55,7 @@ func _run() -> void:
 			session._finish(false, true)
 		_check(results.back().get("ordinary_eligible", false) and not results.back().success and not results.back().devil, definition.id + " natural false stays honest and ordinary eligible")
 		var result_count := results.size()
-		if definition.mode == "cotton_wind": session._process(0.25)
+		if definition.mode in ["cotton_wind", "bean_seesaw"]: session._process(0.25)
 		else: session._finish(true, true)
 		_check(results.size() == result_count, "natural finish emits once")
 		session.start(definition.id)
@@ -67,6 +69,9 @@ func _run() -> void:
 		elif definition.mode == "cotton_wind":
 			Cotton.participate(session)
 			Cotton.advance(session, 121.0)
+		elif definition.mode == "bean_seesaw":
+			Seesaw.participate_without_pair(session)
+			Seesaw.advance(session, 76.0)
 		elif definition.mode == "syrup_flood":
 			var practice_valve := InputEventKey.new()
 			practice_valve.keycode = KEY_SPACE
@@ -77,7 +82,7 @@ func _run() -> void:
 				if session.ended: break
 				session._process(0.25)
 		elif session.active_driver != null: session._driver_state["ordinary_eligible"] = true
-		if definition.mode != "cotton_wind": session._finish(false)
+		if definition.mode not in ["cotton_wind", "bean_seesaw"]: session._finish(false)
 		_check(results.back().has("ordinary_eligible") and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
 		session.set_practice_mode(false)
 		session.start(definition.id)
@@ -85,6 +90,7 @@ func _run() -> void:
 		var cancel_count := cancelled.size()
 		session._leave_from_hud()
 		if definition.mode == "cotton_wind": Cotton.advance(session, 121.0)
+		elif definition.mode == "bean_seesaw": Seesaw.advance(session, 76.0)
 		else: session._finish(false)
 		_check(results.size() == result_count and cancelled.size() == cancel_count + 1, definition.id + " cancellation is separate")
 	session.start("game-013")

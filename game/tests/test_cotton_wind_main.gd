@@ -29,8 +29,8 @@ func _run() -> void:
 	if failures:
 		await _finish()
 		return
-	check(Catalog.find(MODE) == Catalog.find(GAME) and Catalog.all_definitions().size() == 30 and Catalog.find("game-031").is_empty(),
-		"mode lookup resolves delivered game 30 while game 31 remains unavailable")
+	check(Catalog.find(MODE) == Catalog.find(GAME) and Catalog.find("game-032").is_empty(),
+		"mode lookup resolves delivered game 30 while game 32 remains unavailable")
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	get_window().size = Vector2i(1280, 720)
 	Progress.reset_progress()
@@ -125,7 +125,7 @@ func _open_lesson() -> bool:
 	await _frames()
 	var grid := main.overlay.find_child("RegionalGameEntriesGrid", true, false) as GridContainer
 	var action := main.overlay.find_child("HarborGame" + GAME, true, false) as Button
-	check(grid != null and grid.get_child_count() == 6 and action != null, "factory map exposes exactly six delivered games")
+	check(grid != null and grid.get_child_count() == Catalog.definitions("candy").size() and action != null, "factory map exposes all delivered games")
 	if action == null:
 		return false
 	await Keys.activate(action)
@@ -136,8 +136,8 @@ func _open_lesson() -> bool:
 	await Keys.activate(start)
 	await _frames()
 	var panel: Control = main.tutorial_panel
-	check(is_instance_valid(panel) and main.tutorial_target == GAME and Lessons.new().lesson_ids().size() == 31,
-		"first entry opens cotton among the 31 park/game lessons")
+	check(is_instance_valid(panel) and main.tutorial_target == GAME and Lessons.new().lesson_ids().size() == Catalog.all_definitions().size() + 1,
+		"first entry opens cotton among the delivered park/game lessons")
 	if not is_instance_valid(panel):
 		return false
 	for step in 3:
@@ -203,21 +203,22 @@ func _check_book() -> void:
 	main._show_achievements()
 	await _frames()
 	var stamps := main.overlay.find_child("MinigameStampGrid", true, false) as GridContainer
-	check(stamps != null and stamps.get_child_count() == 6 and _visible_text(main.overlay).contains("棉糖捲風"), "factory stamp book shows sixth regional entry")
+	check(stamps != null and stamps.get_child_count() == Catalog.definitions("candy").size() and _visible_text(main.overlay).contains("棉糖捲風"), "factory stamp book shows sixth regional entry")
 	main._close()
 	main._show_ticket()
-	check(_visible_text(main.overlay).contains("6 / 12") and _visible_text(main.overlay).contains("其餘 6 款準備中"), "ticket states actual availability")
+	var available := Catalog.definitions("candy").size()
+	check(_visible_text(main.overlay).contains("%d / 12" % available) and _visible_text(main.overlay).contains("其餘 %d 款準備中" % (12 - available)), "ticket states actual availability")
 	main.overlay.find_child("TicketAction7", true, false).pressed.emit()
 	await _frames()
 	var lessons := main.overlay.find_child("CandyTutorialChoices", true, false) as GridContainer
-	check(lessons != null and lessons.get_child_count() == 6 and lessons.find_child("CandyTutorial_" + GAME, true, false) != null,
-		"factory ticket guide lists all six available lessons")
+	check(lessons != null and lessons.get_child_count() == Catalog.definitions("candy").size() and lessons.find_child("CandyTutorial_" + GAME, true, false) != null,
+		"factory ticket guide lists all available lessons")
 	main._close()
 	main._show_album()
 	await _frames()
 	var book := _find_book(main.overlay)
-	check(book != null and book._definitions.size() == 6 and book._definitions[5] == Catalog.all_definitions()[29]
-		and book._definitions[5].id == GAME and book._entries().size() == 6,
+	check(book != null and book._definitions.size() == Catalog.definitions("candy").size() and book._definitions[5] == Catalog.all_definitions()[29]
+		and book._definitions[5].id == GAME and book._entries().size() == Catalog.definitions("candy").size(),
 		"existing collection book maps global row 30 to the sixth factory card")
 	if book != null:
 		var ordinary: Dictionary = book._game_entry(Catalog.find(GAME), Catalog.identity(GAME), false)

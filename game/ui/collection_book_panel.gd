@@ -409,6 +409,7 @@ func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Diction
 	var photo_id: String = identity.devil_photo_id if devil else identity.photo_id
 	var instructions := ("實際技巧："+str(game.devil_hint)) if devil else "正式遊玩自然結束即可收藏，不限勝負。"
 	if not devil and game.mode in ["sugar_bridge","cookie_mold","syrup_flood","jelly_trampoline","chocolate_etching","cotton_wind"]: instructions="參與操作後正常結算即可收藏，不限勝負。"
+	if not devil and game.mode == "bean_seesaw": instructions="移踏板並開過雙料斗後自然結算即可收藏。"
 	instructions += "｜%s · 固定遊戲亭：%s · %s" % [{"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(identity.zone,"迎賓大道"),game.name,photo_id]
 	if _progress.photos.has(photo_id):
 		var record: Dictionary = _progress.photos[photo_id]

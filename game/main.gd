@@ -1456,6 +1456,9 @@ func _show_game_rules(id: String) -> void:
 		notes[4].text = "輔助降低熱風，放寬均勻與接絲判定。R 切換的 AI 只用另一支棒收自己的絲。仍要親手移棒、轉棒，挑戰小惡魔也要親自接回。"
 		notes.append({"text":"轉棒補薄角，CV 越低表示繞棒越勻。左右移棒補薄段，讓三段重量接近。一般各段至少 12、8 格，CV ≤ 0.65、段重比 ≤ 1.35。輔助則為 12、7 格、0.8、1.5。","color":Paper.INK})
 		notes.append({"text":"暫停、失焦或手指取消會停下移動及鎖定轉動，已收的絲保留。每個達標段 100 分，確認均勻加 100 分。有接回且通關再加 100 分，失誤扣 20 分。","color":Paper.TEAL})
+	elif definition.mode == "bean_seesaw":
+		notes[3].text = "移過踏板並開過兩邊料斗，正式回合自然結算即可取普通卡，包含逾時。練習與取消不發卡。完成雙盤同步才可按 F 提早結算。"
+		notes[4].text = "同步窗為 0.43 秒。輔助加寬秤盤與側槽，並放寬至 0.64 秒。R 切換的 AI 只扶穩板端，放豆與回彈仍由玩家控制。"
 	_content_pager(objective_card,"GameRulesExtraDetails",notes,_render_game_rules_page,1,entry_stamp)
 	var row := HFlowContainer.new()
 	row.name="GameRulesActions"

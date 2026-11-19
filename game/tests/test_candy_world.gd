@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CANDY_PATH := "res://game/world/candy_world.gd"
+const Catalog = preload("res://game/core/game_catalog.gd")
 var failures: Array[String] = []
 var checks := 0
 
@@ -17,6 +18,7 @@ func _run() -> void:
 	var before := _progress_snapshot(progress)
 	var node_count := 0
 	var cache_count := 0
+	var expected_games: Array = Catalog.definitions("candy").map(func(row: Dictionary) -> String: return row.id)
 	for visit in range(3):
 		var world = script.new()
 		root.add_child(world)
@@ -36,7 +38,7 @@ func _run() -> void:
 		world.player.velocity = Vector3.ZERO
 		await physics_frame
 		await physics_frame
-		_check(game_signs.size() == 1 and game_signs[0].is_visible_in_tree() and game_signs[0].text == "工廠遊戲 6／12", "constructed visible factory game sign advertises the six delivered games")
+		_check(game_signs.size() == 1 and game_signs[0].is_visible_in_tree() and game_signs[0].text == "工廠遊戲 %d／12" % expected_games.size(), "factory sign advertises all delivered games")
 		world.reset_to_entry()
 		for sign_label in world.local_sign_labels:
 			_check(sign_label.billboard == BaseMaterial3D.BILLBOARD_DISABLED and sign_label.basis.is_equal_approx(Basis.IDENTITY) and not sign_label.no_depth_test, "physical sign stays parallel to its fixed board with depth enabled")
@@ -59,21 +61,23 @@ func _run() -> void:
 				if mapped and not hit.is_empty():
 					_check(absf(hit.position.y - world.ground_surface_y(sample)) < 0.001, "floor height agreement")
 		var reached := _reachable_cells(snapshot, Vector2i(0, 9))
-		_check(snapshot.points.size() == world.points.size() and snapshot.points.size() == 11, "all actual factory interactions mapped")
+		_check(snapshot.points.size() == world.points.size() and snapshot.points.size() == expected_games.size() + 5, "all actual factory interactions mapped")
 		for point in snapshot.points:
 			_check(point.size() == 3 and point.position is Vector3, "point contains only id/label/position")
-			_check(point.id in ["region:welcome", "candy:temperature", "candy:reset"] or point.id.begins_with("candy:info:") or point.id in ["game-025","game-026","game-027","game-028","game-029","game-030"], "only six delivered games and observation IDs")
+			_check(point.id in ["region:welcome", "candy:temperature", "candy:reset"] or point.id.begins_with("candy:info:") or point.id in expected_games, "only delivered games and observation IDs")
 			_check(reached.has(Vector2i(roundi(point.position.x), roundi(point.position.z))), "connected safe walking route to %s" % point.id)
 			world.player.position = point.position
 			world.player.velocity = Vector3.ZERO
 			await physics_frame
 			await physics_frame
 			_check(world.player.position.distance_to(point.position) < 0.2 and world.nearest.get("id", "") == point.id, "actual safe footing and selection for %s" % point.id)
-		_check(snapshot.points.filter(func(point): return str(point.id).begins_with("game-")).size() == 6 and world._point_by_id("game-025").label.contains("拉糖橋") and world._point_by_id("game-026").label.contains("餅乾翻模"), "exactly six delivered candy games have real entrances")
+		var actual_games: Array = snapshot.points.filter(func(point): return str(point.id).begins_with("game-")).map(func(point: Dictionary) -> String: return point.id)
+		_check(actual_games == expected_games and world._point_by_id("game-025").label.contains("拉糖橋") and world._point_by_id("game-026").label.contains("餅乾翻模"), "each delivered candy game has a real entrance")
 		_check(world._point_by_id("game-027").position == Vector3(7, script.GROUND_Y, -6), "third game has the actual upper-right pipe entrance")
 		_check(world._point_by_id("game-028").position == Vector3(7, script.GROUND_Y, -1), "fourth game uses the next safe upper-right floor with margin")
 		_check(world._point_by_id("game-029").position == Vector3(10.5, script.GROUND_Y, -0.8), "fifth game uses the calibrated entrance")
 		_check(world._point_by_id("game-030").position == Vector3(6.5, script.GROUND_Y, 10), "sixth game uses the lower-right floor")
+		_check(world._point_by_id("game-031").position == Vector3(-2.2, script.GROUND_Y, -4.5), "seventh game uses the left side of the conveyor aisle")
 		var count: int = world.find_children("*", "Node", true, false).size()
 		var materials: int = world.material_cache.size()
 		var display_id: int = world._temperature_display.get_instance_id()

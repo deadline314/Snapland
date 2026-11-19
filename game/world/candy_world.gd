@@ -93,6 +93,7 @@ func _build_region_geometry() -> void:
 	_point("game-028", "果凍彈床 · 蓄彈斜壓送高台", Vector3(7, GROUND_Y, -1))
 	_point("game-029", "巧克力蝕刻 · 描線折料試轉", Vector3(10.5, GROUND_Y, -0.8))
 	_point("game-030", "棉糖捲風 · 移棒轉收糖絲", Vector3(6.5, GROUND_Y, 10))
+	_point("game-031", "糖豆蹺蹺板 · 移踏板讓雙豆落盤", Vector3(-2.2, GROUND_Y, -4.5))
 	current_area = "糖果工廠"
 
 func _sign(text: String, at: Vector3) -> Label3D:

@@ -53,7 +53,7 @@ func _run() -> void:
 	main.world.player.velocity = Vector3.ZERO
 	for i in 4: await get_tree().physics_frame
 	var signs: Array = main.world.local_sign_labels.filter(func(label: Label3D): return label.text.begins_with("工廠遊戲 "))
-	check(signs.size() == 1 and signs[0].is_visible_in_tree() and signs[0].text == "工廠遊戲 6／12","current catalog-derived visible world sign")
+	check(signs.size() == 1 and signs[0].is_visible_in_tree() and signs[0].text == "工廠遊戲 %d／12" % Catalog.definitions("candy").size(),"current catalog-derived visible world sign")
 	await capture("factory-visible-sign")
 	# Controlled actor placement to test the real nearest/E route, never claimed as walking.
 	print("CONTROLLED FIXTURE ACTOR PLACEMENT: (7,GROUND_Y,-1), not walked")
@@ -79,7 +79,7 @@ func _run() -> void:
 	await frames(3)
 	await capture("map")
 	await activate(main.overlay,"RegionGamesButton")
-	check(main.overlay.find_child("RegionalGameEntriesGrid",true,false).get_child_count() == 6,"real map lists six factory games")
+	check(main.overlay.find_child("RegionalGameEntriesGrid",true,false).get_child_count() == Catalog.definitions("candy").size(),"real map lists all factory games")
 	await capture("map-entries")
 	await activate(main.overlay,"HarborGamegame-028")
 	check(main.modal_kind == "game_info", "real regional map callback opens028")
@@ -151,7 +151,7 @@ func _run() -> void:
 	main._close()
 	main._show_achievements()
 	await frames(4)
-	check(main.overlay.find_child("MinigameStampGrid",true,false).get_child_count() == 6,"actual six-entry factory stamp book")
+	check(main.overlay.find_child("MinigameStampGrid",true,false).get_child_count() == Catalog.definitions("candy").size(),"actual factory stamp book matches the catalog")
 	await capture("achievement-book")
 	check(not Progress.photos.has("photo-candy-game-1") and not Progress.photos.has("photo-candy-game-2") and not Progress.photos.has("photo-candy-game-3"),"028 does not grant older factory cards")
 	check(Progress.wardrobe_rewarded_games.count("game-028") == 1,"exactly one fixed028 money receipt")

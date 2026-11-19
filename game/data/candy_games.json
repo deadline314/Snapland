@@ -82,5 +82,19 @@
     "ordinary": "捲出三段均勻棉糖並確認",
     "attraction_tag": "旋糖工作台",
     "island_invitation": "WASD 或方向鍵移棒，Q/E 轉棒，F 確認。也可點轉棒鈕後拖曳移棒。"
+  },
+  {
+    "id": "game-031",
+    "mode": "bean_seesaw",
+    "zone": "candy",
+    "local_index": 7,
+    "name": "糖豆蹺蹺板",
+    "goal": "75 秒內移動踏板、控制放豆時機，讓兩端糖豆同步落入各自秤盤。",
+    "instructions": "A/D 或方向鍵移踏板，Home/End 到兩端，Q/E 開左右料斗，R 切換 AI 扶板，F 在同步後結算。也可點踏板格和料斗按鈕。",
+    "devil_hint": "先壓低右端，放一顆右側輕豆。它剛上板時把踏板移到最左端，讓右端回彈把它擲進側槽。",
+    "devil": "完成雙盤同步，並用右板端回彈把輕豆送進側槽",
+    "ordinary": "兩端糖豆同步落入各自秤盤",
+    "attraction_tag": "雙料斗稱量台",
+    "island_invitation": "A/D 移踏板，Q/E 開左右料斗。調整時機讓兩顆糖豆一起落盤。也可點畫面按鈕。"
   }
 ]

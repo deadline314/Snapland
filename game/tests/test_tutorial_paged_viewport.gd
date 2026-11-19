@@ -1,6 +1,7 @@
 extends SceneTree
 const Tutorial = preload("res://game/ui/tutorial_panel.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Games = preload("res://game/core/game_catalog.gd")
 var failures: Array[String]=[]
 func _initialize() -> void:
 	call_deferred("_run")
@@ -16,7 +17,7 @@ func _run() -> void:
 		await _frames(2)
 		var lesson_ids: Array[String] = panel.catalog.lesson_ids()
 		var page_count := 0
-		_check(lesson_ids.size() == 31, "one park lesson and 30 game lessons")
+		_check(lesson_ids.size() == Games.all_definitions().size() + 1, "one park lesson and a lesson for every delivered game")
 		for lesson_id in lesson_ids:
 			await panel.open_tutorial(lesson_id)
 			for step in range(panel.catalog.get_lesson(lesson_id).steps.size()):
