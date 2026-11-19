@@ -120,6 +120,7 @@ func _run() -> void:
 	await _check_settles(world)
 	await _check_slow_profile_stop(world)
 	await _check_departures(world)
+	await _check_reversals(world)
 	await _check_camera_idle(world)
 	var changed_appearance := {"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}
 	var changed_equipment := {"outfit":"outfit-tide","hat":"hat-none"}
@@ -309,6 +310,45 @@ func _check_departures(world: ParkWorld) -> void:
 		"missing takeoff art falls back to the existing movement and walk source")
 	Input.action_release("move_right")
 	world.avatar_renderer.animation_library = library
+	for _tick in range(23): await physics_frame
+
+func _check_reversals(world: ParkWorld) -> void:
+	var original_scale := Engine.time_scale
+	for speed: float in [1.0, 0.25]:
+		Engine.time_scale = speed
+		for index in range(4):
+			var from: int = index * 2
+			var to := (from + 4) % DIRECTIONS.size()
+			var point := Vector3(-2.5 if index % 2 == 0 else -0.5, 0.0, -14.5)
+			point.y = world.ground_surface_y(point)
+			world.player.global_position = point
+			for _tick in range(5): await physics_frame
+			Input.action_press(INPUTS[from][0])
+			for _tick in range(108 if speed < 1.0 else 27): await physics_frame
+			_check(world.facing == DIRECTIONS[from] and world.last_avatar_source_action == "walk",
+				"reversal begins from real travel in %s" % DIRECTIONS[from])
+			var previous := world.player.global_position
+			var phase := world.walk_distance_phase
+			Input.action_release(INPUTS[from][0])
+			Input.action_press(INPUTS[to][0])
+			var idle_ticks := 0
+			var tiny_ticks := 0
+			var phase_held := true
+			for _tick in range(52 if speed < 1.0 else 14):
+				await physics_frame
+				var position := world.player.global_position
+				var travelled := Vector2(position.x - previous.x, position.z - previous.z).length()
+				if travelled > 0.0 and travelled <= ParkWorld.WALK_DISTANCE_EPSILON:
+					tiny_ticks += 1
+					phase_held = phase_held and world.walk_distance_phase == phase
+				if world.last_avatar_action == "idle": idle_ticks += 1
+				previous = position
+				phase = world.walk_distance_phase
+			_check(idle_ticks == 0 and world.facing == DIRECTIONS[to] and world.last_avatar_source_action == "walk",
+				"%s to %s at scale %.2f stays in the walk loop (%d idle ticks)" % [DIRECTIONS[from], DIRECTIONS[to], speed, idle_ticks])
+			_check(phase_held and (speed == 1.0 or tiny_ticks > 0), "the real reversal preserves stride phase during tiny displacement")
+			Input.action_release(INPUTS[to][0])
+	Engine.time_scale = original_scale
 	for _tick in range(23): await physics_frame
 
 func _check_camera_idle(world: ParkWorld) -> void:

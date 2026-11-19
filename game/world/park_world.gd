@@ -2329,7 +2329,8 @@ func _physics_process(delta: float) -> void:
 	avatar_run_requested = not blocked and not Input.is_key_pressed(KEY_SHIFT)
 	var desired_speed := AVATAR_RUN_SPEED if avatar_run_requested else AVATAR_WALK_SPEED
 	var desired_horizontal := movement*desired_speed
-	var current_horizontal := Vector2(player.velocity.x,player.velocity.z)
+	var previous_horizontal := Vector2(player.velocity.x,player.velocity.z)
+	var current_horizontal := previous_horizontal
 	var was_coasting := movement == Vector2.ZERO and current_horizontal != Vector2.ZERO
 	if blocked or operating_lens:
 		current_horizontal=Vector2.ZERO
@@ -2356,8 +2357,14 @@ func _physics_process(delta: float) -> void:
 	)
 	var advances_stride := travelled > WALK_DISTANCE_EPSILON
 	var was_walking := avatar_is_walking
-	# Tiny coasting steps can outlast the stride threshold at a low time scale.
-	avatar_is_walking = advances_stride or (reviewed_stop and travelled > 0.0)
+	# A slow reversal can pass through several updates below the stride threshold.
+	var turning_in_stride := (
+		not advances_stride and was_walking and movement != Vector2.ZERO and player.is_on_floor()
+		and current_horizontal.length() * delta <= WALK_DISTANCE_EPSILON
+		and (travelled > 0.0 or (current_horizontal == Vector2.ZERO and previous_horizontal.dot(movement) < 0.0))
+		and quantize_walk_direction(movement, facing) != facing
+	)
+	avatar_is_walking = advances_stride or turning_in_stride or (reviewed_stop and travelled > 0.0)
 	if advances_stride:
 		facing = quantize_walk_direction(horizontal_delta, facing)
 		walk_distance_phase = advance_walk_phase(walk_distance_phase, travelled, walk_stride_for(facing))
