@@ -933,3 +933,22 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 ![背面穿雨背心停步](images/ART-17-compass-stop-20261119-back-rainvest.png)
 
 [正常影片](images/ART-17-compass-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-compass-stop-20261119-quarter.mp4) · [原畫、測試及封裝證據](images/ART-17-compass-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/5315fc3770b9f18013576f0037e03dc603f08686)。
+
+## Commit — 2026-11-19 挑戰成功後原地舉拳
+
+主角在正式挑戰成功領獎並關閉結算後，一手持相機、另一手舉拳，雙腳維持接地，0.67 秒後回到玩家目前換裝與表情的站姿。四張動作原畫和一張中立收勢共五格。雨背心、草帽、鮑伯頭及捲髮全程保留，相機及舉起的手掌各有遮擋資料。降低動態保留起勢，重新走動可中斷，來源缺失時回退至完整跳躍。
+
+| 項目 | 結果 |
+|---|---|
+| 正式事件 | 正常、四分之一速度重入及獨立 Windows 封裝均由實際按鍵完成噴泉挑戰，從真實獎勵結算關閉後觀察慶祝。原裝、雨背心草帽配鮑伯頭、同一組合配捲髮各觀察五格，降低動態只顯示第一格。每案根位置位移為零，保存的獎勵檔案內容一致 |
+| 逐格檢查 | 核對相機、舉拳、鞋底、帽子和兩款髮型。初版四格退回預設髮型，修正後三款髮型在每格可區分，末格與所選中立站姿一致 |
+| 局部回歸 | 260 個角色素材區域、211 張雨背心合成、215 項 Python、Godot 匯入與 10 組受影響測試、5 區設計檢查均通過 |
+| 影片 | 正常 368 格，四分之一速度 1,430 格，兩部均為 1280×720／30 FPS，完整解碼通過 |
+
+影片使用腳本發送遊戲按鍵、隔離存檔及固定取景。四位角色的完整動作覆蓋與連續自然度仍依本票逐項驗收。
+
+![領獎後舉拳與相機](images/ART-17-traveller-celebration-20261119-raised-fist.png)
+![鮑伯頭、草帽與雨背心](images/ART-17-traveller-celebration-20261119-bob-rainvest.png)
+![捲髮、草帽與雨背心](images/ART-17-traveller-celebration-20261119-curly-rainvest.png)
+
+[正常影片](images/ART-17-traveller-celebration-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-traveller-celebration-20261119-quarter.mp4) · [噴泉挑戰成功](images/ART-17-traveller-celebration-20261119-reward.png) · [降低動態](images/ART-17-traveller-celebration-20261119-reduced.png) · [原畫、測試及封裝證據](images/ART-17-traveller-celebration-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/4de58f46cae8d2d911d85e91952267ac78dae929) · [髮型修正](https://github.com/deadline314/Snapland/commit/00f9fb3db18120e3cacea121b8a48547bc682061)。
