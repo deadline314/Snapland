@@ -16,7 +16,7 @@
 - [ ] 主角八方向動作合理；NPC 依自身外觀與性格演出，停留節奏有差異，沒有全場同步或不斷重播招呼。
 - [ ] 停走、轉向、移動中互動、對話與恢復待機銜接自然；不凍結走路姿勢冒充完整動作。
 - [ ] 正常速度與慢放能看見自然重心、完整四肢和接地，不因增加幀數、整身伸縮或淡化重影而假稱流暢。
-- [ ] 降低動態、場景重入及實際打包播放正常，附原生短片與逐姿勢截圖。
+- [x] 降低動態、場景重入及實際打包播放正常，附原生短片與逐姿勢截圖。
 
 ### Research
 已實際閱讀八方一手來源：Aseprite、Spine、Unity、Godot、Motion Twin、Universal LPC、Kenney、BrashMonkey。不同方法、閱讀段落、目前素材缺口、逐角色覆蓋與採用理由見[角色動畫與換裝研究](../../design/runtime/character-animation-wardrobe.md)。
@@ -893,3 +893,5 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![行走中按 E 仍可立即開啟對話](images/ART-17-walking-gesture-20261119-talk.png)
 
 [正常影片](images/ART-17-walking-gesture-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-walking-gesture-20261119-quarter.mp4) · [反例與原生證據](images/ART-17-walking-gesture-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/2b6cc5baa145d2d5f91318b931406ca84473ee1a)。
+
+Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動態、重入、原生影片、逐格截圖與實際封裝已分別覆蓋主角及三位 NPC。本票仍需完成全套動作與自然度驗收。[主角行走輸入封裝證據](images/ART-17-walking-gesture-20261119-embedded.zip) · [主角側身拍照與降低動態](images/ART-17-photo-20261119-evidence.zip) · [三位 NPC 巡路接話及降低動態](images/ART-17-dialogue-settle-20261119-evidence.zip)。
