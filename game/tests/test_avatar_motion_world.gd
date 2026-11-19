@@ -112,9 +112,11 @@ func _run() -> void:
 		world.play_action("photo")
 		_check(world.facing == side and world.last_avatar_direction == side and world.last_avatar_source_action == "photograph", "photography retains its authored side facing")
 		_check(is_equal_approx(world.avatar_action_remaining, 1.06), "each side plays the entire photographic action")
+	world.avatar_action=""
 	world.avatar_action_remaining=0.0
 	world._refresh_avatar_texture(0)
 	_check(world.avatar_motion_rig==null and world.avatar.visible,"the source Sprite remains the walk and idle presenter after the gesture")
+	await _check_walking_gesture_requests(world)
 	await _check_camera_idle(world)
 	var changed_appearance := {"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}
 	var changed_equipment := {"outfit":"outfit-tide","hat":"hat-none"}
@@ -165,6 +167,36 @@ func _run() -> void:
 		return
 	print("PASS: integrated avatar motion world checks")
 	quit(0)
+
+func _check_walking_gesture_requests(world: ParkWorld) -> void:
+	world.player.position = Vector3(0, ParkWorld._ground_surface_y(Vector3(0, 0, -15)), -15)
+	Input.action_press("move_up")
+	for _tick in range(35): await physics_frame
+	_check(world.avatar_is_walking and world.facing == "back", "gesture regression starts on the real back walk cycle")
+	for key in [KEY_F, KEY_P]:
+		var old_frame := world.last_avatar_frame
+		var old_texture := world.avatar.texture
+		var event := InputEventKey.new()
+		event.keycode = key
+		event.pressed = true
+		world._unhandled_key_input(event)
+		_check(world.facing == "back" and world.last_avatar_direction == "back" and world.last_avatar_frame == old_frame and world.avatar.texture == old_texture,
+			"walking key %d preserves direction, stride cel and texture before physics" % key)
+		for _tick in range(3): await physics_frame
+		_check(world.last_avatar_action == "walk" and world.avatar_action.is_empty(), "continued travel discards the planted gesture")
+
+	world.nearest = {"id":"test-gesture-stop", "label":"Gesture stop regression"}
+	world.interaction_requested.connect(func(_id: String, _label: String): world.blocked = true, CONNECT_ONE_SHOT)
+	var approach_texture := world.avatar.texture
+	world.interact()
+	_check(world.blocked and world.avatar.texture == approach_texture and world.facing == "back", "a reachable interaction opens immediately without replacing its moving pose")
+	Input.action_release("move_up")
+	for _tick in range(3): await physics_frame
+	_check(not world.avatar_is_walking and world.last_avatar_action == "interact" and world.facing == "front" and world.avatar_action_elapsed == 0.0,
+		"the first stationary tick prepares the whole interaction and preserves the modal pause")
+	world.blocked = false
+	world.avatar_action = ""
+	world.avatar_action_remaining = 0.0
 
 func _check_camera_idle(world: ParkWorld) -> void:
 	world.facing = "front"

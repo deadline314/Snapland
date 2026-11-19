@@ -49,6 +49,7 @@ var avatar_equipped: Dictionary = {"outfit":"outfit-tide","hat":"hat-none"}
 var avatar_action := ""
 var avatar_action_remaining := 0.0
 var avatar_action_elapsed := 0.0
+var _avatar_action_on_stop := ""
 var _warned_missing_avatar_actions: Dictionary = {}
 var last_avatar_direction := ""
 var last_avatar_frame := -1
@@ -2236,6 +2237,7 @@ func _sync_external_avatar_reposition() -> void:
 			camera.look_at(player.position+Vector3(0,1,0))
 		player.velocity=Vector3.ZERO
 		avatar_is_walking=false
+		_avatar_action_on_stop = ""
 		walk_distance_phase=0.0
 		if avatar_motion_available and is_instance_valid(avatar_motion_rig):
 			avatar_motion_rig.position.y=ground_surface_y(player.global_position)-player.global_position.y
@@ -2331,6 +2333,11 @@ func _physics_process(delta: float) -> void:
 		avatar_motion_rig.cancel_motion()
 	var walk_frame_count := int(avatar_renderer.walk_frame_count(facing)) if avatar_renderer != null else 8
 	var frame := walk_frame_for_phase(walk_distance_phase, walk_frame_count)
+	if not _avatar_action_on_stop.is_empty():
+		var requested_action := _avatar_action_on_stop
+		_avatar_action_on_stop = ""
+		if not avatar_is_walking:
+			play_action(requested_action)
 	if avatar_action_remaining > 0.0:
 		if avatar_is_walking:
 			# Gestures never hold a planted pose while the player translates.
@@ -2515,6 +2522,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func play_action(name: String) -> void:
 	var action := "photograph" if name == "photo" else name
 	if action not in ["wave", "photograph", "interact", "celebrate", AVATAR_CAMERA_IDLE_ACTION]: return
+	if avatar_is_walking:
+		# The next physics tick can stop the player when an interaction opens a modal.
+		_avatar_action_on_stop = action
+		return
 	var action_direction := _authored_action_direction(action, facing)
 	if not action_direction.is_empty():
 		# Face the authored pose before starting it, and keep that heading after
@@ -2725,6 +2736,7 @@ func start_ride() -> bool:
 	if started:
 		avatar_is_walking=false
 		avatar_action=""
+		_avatar_action_on_stop = ""
 		avatar_action_remaining=0.0
 		avatar_action_elapsed=0.0
 		# The seat raises the player well above the ground; never solve ground
