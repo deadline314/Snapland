@@ -1,6 +1,6 @@
 # [ART-16] 提高角色動畫流暢與一致性
 
-> 狀態：進行中
+> 狀態：完成
 
 ## 內文
 
@@ -12,8 +12,8 @@
 
 ### 驗收條件
 - [x] 至少六個不同來源比較逐幀、骨架插值與立體烘焙，記錄實際觀察、採用理由及參考圖。
-- [ ] 主角八方向與NPC動作有足夠且有意義的過渡，連續播放沒有明顯輪播、姿態跳變或錯誤淡化重影。
-- [ ] 髮束、臉、相機、包袋、服裝、部件比例及完整身體在動作中一致，停走、轉向及換装正常。
+- [x] 主角八方向與NPC動作有足夠且有意義的過渡，連續播放沒有明顯輪播、姿態跳變或錯誤淡化重影。
+- [x] 髮束、臉、相機、包袋、服裝、部件比例及完整身體在動作中一致，停走、轉向及換装正常。
 - [x] 原生正常速度與慢放短片、姿勢／部件對照及局部性能、降低動態與打包驗證附票。
 
 ### Research
@@ -439,3 +439,16 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 ![三組換裝和前後折返的原生姿勢](images/ART-16-depth-pivot-20261119-three-looks.png)
 
 [前斜面](images/ART-16-depth-pivot-20261119-front-left.png) · [雨背心側面](images/ART-16-depth-pivot-20261119-rainvest-profile.png) · [捲髮後斜面](images/ART-16-depth-pivot-20261119-curly-rear.png) · [正常影片](images/ART-16-depth-pivot-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-depth-pivot-20261119-quarter.mp4) · [原畫、比較、原生和封裝證據](images/ART-16-depth-pivot-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/6e1fb2326a3bcf8d2dfe828de6c6aefb5cc45660)。
+
+## Commit — 2026-11-19 八方向與全角色動作驗收
+
+主角以實際方向鍵連續繞行兩輪，八個方向各看見至少兩格正式步態，途中持續行走並接地。風拂髮旅行裝與捲髮、雨背心、草帽各跑一輪。正常速度和四分之一速度重入均通過。停步、轉向、揮手、拍照、互動及移動中兩次換裝另逐項核對。對照畫面確認髮束、臉、相機、包袋、服裝與全身裁切。行走以正式格序逐格呈現，主角下半身另比對實際合成畫面。
+
+三位 NPC 的左右步態與自然起停均在場景巡路中實際播放，另對照各自的招呼、互動與收勢。主角正常速度、四分之一速度、重入、降低動態及空目錄 Windows 內嵌成品通過。最初慢放的真實方向鍵按得太短，修正後重新錄製並保留前次失敗報告。215 項 Python 與五組設計資料檢查通過。
+
+![正常速度走完八方向的兩套外觀](images/ART-16-island-eight-directions-normal-20261119.png)
+![四分之一速度重入後完整八方向](images/ART-16-island-eight-directions-quarter-20261119.png)
+
+[原生短片、逐動作報告、降動態與封裝證據](images/ART-16-17-island-animation-20261119-evidence.zip) · [驗收工具更新](https://github.com/deadline314/Snapland/commit/7c40485a77d228e04f06777ea1829d6872a87904)。
+
+證據包含 154 項、67,285,237 bytes，SHA-256 `a65c94eaf9168eca1dda27b7dc81e38fb4501180384c0909f931e0264d791771`。內含清單逐項校驗。
