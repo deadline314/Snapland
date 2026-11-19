@@ -342,3 +342,24 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 ![阿浪右向雙腳站定](images/ART-16-right-stop-20261119-settled.png)
 
 [正常影片](images/ART-16-right-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-right-stop-20261119-quarter.mp4) · [來源、原生及封裝證據](images/ART-16-right-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/529601b9d6fa27f69cd8f6e8f615688be6a75660)。
+
+## Commit — 2026-11-19 主角左右起步
+
+主角站定後沿目前方向開始走動時，若下一格步態已核對且有足夠銜接空間，先以一張低抬腳的全身姿勢過渡。起步素材長 0.08 秒，人物持續由原有物理邏輯移動，步距照實際位移累計。降低動態、缺圖、離地及方向中斷均回到原流程。
+
+早期 0.1 秒原生驗證曾在左向起步後直接看到行走第 1 格。縮短後，正常、四分之一速度重入和 Windows 內嵌版各 6 案均接到第 0 格。補齊兩側衣料遮罩後，逐像素比對也確認雨背心、珊瑚外套、攝影機、臉和帽髮在可見上半身的合成一致。
+
+| 項目 | 結果 |
+|---|---|
+| 相鄰姿勢 | 第 0 格路線的最大整身像素差異比例，左 0.3776 → 0.3440，右 0.4249 → 0.4152。確認雙側支撐腳和抬腳輪廓 |
+| 原生與封裝 | 左右各涵蓋原裝、雨背心加草帽及動態鮑伯頭，起步時保留同一航向並持續移動。降低動態及重入通過 |
+| 回歸 | 247 個原畫區域、201 個雨背心姿勢、7 組 Godot 測試、214 項 Python 及 5 區設計檢查通過 |
+| 影片 | 正常 298 格，四分之一速度 1,077 格，均為 1280×720／30 FPS，完整解碼通過 |
+
+錄影使用實際 A、D 輸入、固定取景及隔離存檔。後續仍需核對其餘方向的起步和連續轉向。
+
+![主角左向起步](images/ART-16-traveller-departure-20261119-left.png)
+![主角穿雨背心右向起步](images/ART-16-traveller-departure-20261119-right-rainvest.png)
+![動態鮑伯頭左向起步](images/ART-16-traveller-departure-20261119-left-bob.png)
+
+[正常影片](images/ART-16-traveller-departure-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-traveller-departure-20261119-quarter.mp4) · [候選原畫、反例與封裝證據](images/ART-16-traveller-departure-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/1c025098c091bc5423923d32a0754da5200ba97f)。
