@@ -2519,15 +2519,9 @@ func set_dialogue_hold(held: bool) -> void:
 		_play_pending_npc_interaction()
 
 func _on_interaction_requested(id: String, _label: String) -> void:
-	var role := ""
-	var action := "interact"
-	match id:
-		"guide":
-			role = "ticket"
-			action = "greet"
-		"quest-001": role = "imp"
-		"quest-002": role = "announcer"
-		_: return
+	var role := String(NPC_ROLE_BY_POINT.get(id, ""))
+	if role.is_empty(): return
+	var action := "greet" if role == "ticket" else "interact"
 	var actor_record := _npc_record_for_role(role)
 	var sprite := actor_record.get("sprite") as Sprite3D
 	if not is_instance_valid(sprite): return
@@ -2631,6 +2625,7 @@ func play_action(name: String) -> void:
 		_avatar_action_on_stop = action
 		return
 	var action_direction := _authored_action_direction(action, facing)
+	var new_wave := action == "wave" and (avatar_action != "wave" or avatar_action_remaining <= 0.0)
 	if not action_direction.is_empty():
 		# Face the authored pose before starting it, and keep that heading after
 		# the sequence so the sprite does not snap back to an unsupported view.
@@ -2644,6 +2639,11 @@ func play_action(name: String) -> void:
 	avatar_action_remaining=_avatar_action_duration(action, action_direction if not action_direction.is_empty() else facing)
 	avatar_action_elapsed=0.0
 	_refresh_avatar_texture(0)
+	if new_wave and not blocked and not is_riding() and not action_direction.is_empty():
+		var role := String(NPC_ROLE_BY_POINT.get(String(nearest.get("id", "")), ""))
+		if not role.is_empty() and is_instance_valid(npc_activity):
+			var sprite := _npc_record_for_role(role).get("sprite") as Sprite3D
+			npc_activity.greet_stationary(sprite)
 
 func _authored_action_direction(action: String, preferred_direction: String) -> String:
 	if avatar_renderer == null:

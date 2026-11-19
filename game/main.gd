@@ -722,6 +722,7 @@ func _process(delta: float) -> void:
 			var prompt := _context_prompt()
 			if context_action.text!=prompt:
 				context_action.text=prompt
+				context_action.tooltip_text = "F 可向站定的角色揮手。" if not world.is_riding() and STORY_CHARACTER_BY_POINT.has(str(world.nearest.get("id", ""))) else ""
 				_adapt_hud()
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0:
 		var previous_count := dialogue_label.visible_characters

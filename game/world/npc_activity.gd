@@ -270,6 +270,17 @@ func greet(target: Sprite3D, direction: String = "front") -> bool:
 	return request_action(target, "greet", direction)
 
 
+func greet_stationary(target: Sprite3D) -> bool:
+	if _activity_paused or _dialogue_hold or _reduced_motion or not is_instance_valid(target): return false
+	var instance_id := target.get_instance_id()
+	for index in range(_records.size()):
+		var record := _records[index]
+		if int(record.instance_id) != instance_id or not bool(record.active): continue
+		if record.action not in ["stand", "idle"] or not _has_sequence(String(record.role), "greet", "front"): return false
+		return _play_actor_action(index, "greet", "front", false)
+	return false
+
+
 func interact(target: Sprite3D, direction: String = "front") -> bool:
 	return request_action(target, "interact", direction)
 

@@ -200,10 +200,42 @@ func _run() -> void:
 			seen_ticket_feet[key] = true
 		if seen_ticket_feet.size() == 8: break
 	assert(seen_ticket_feet.size() == 8, "all eight ticket side poses retain actual visible ground contact")
+	var replies_work := _check_wave_replies(points)
 	_world.queue_free()
 	await process_frame
+	if not replies_work:
+		push_error("A stationary nearby NPC did not greet once in response to the traveller's wave")
+		quit(1)
+		return
 	print("PASS: NPC world activity integration")
 	quit(0)
+
+
+func _check_wave_replies(points: Dictionary) -> bool:
+	var activity: Node = _world.npc_activity
+	_world.blocked = false
+	_world.avatar_is_walking = false
+	for role: String in points:
+		activity.set_reduced_motion(true)
+		activity.set_reduced_motion(false)
+		_world.avatar_action_remaining = 0.0
+		_world.nearest = points[role]
+		var actor := _actor_record_for_role(role)
+		var actor_root := actor.activity_root as Node3D
+		var start := actor_root.global_position
+		_world.play_action("wave")
+		var reply := _activity_record_for_role(role)
+		if reply.action != "greet" or not bool(reply.action_sequence.get("available", false)): return false
+		activity._process(0.1)
+		var elapsed: float = _activity_record_for_role(role).action_elapsed
+		_world.play_action("wave")
+		if actor_root.global_position != start or _activity_record_for_role(role).action_elapsed != elapsed: return false
+		for other: String in points:
+			if other != role and _activity_record_for_role(other).action == "greet": return false
+	activity.set_reduced_motion(true)
+	_world.avatar_action_remaining = 0.0
+	_world.play_action("wave")
+	return _activity_record_for_role("announcer").action == "stand"
 
 
 func _check_invalid_motion_configuration() -> void:
