@@ -363,3 +363,22 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 ![動態鮑伯頭左向起步](images/ART-16-traveller-departure-20261119-left-bob.png)
 
 [正常影片](images/ART-16-traveller-departure-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-traveller-departure-20261119-quarter.mp4) · [候選原畫、反例與封裝證據](images/ART-16-traveller-departure-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/1c025098c091bc5423923d32a0754da5200ba97f)。
+
+## Commit — 2026-11-19 主角八方向起步
+
+正面、背面及四個斜向各加一張全身起步姿勢，沿用左右起步的同向條件、步距和缺圖回退。每個方向只在已比對的下一張走姿及剩餘步距允許時播放。移動速度、角色位置和相機跟隨沿用原有物理邏輯。新圖保留同向中立的上半身，正面也保留玩家選用的表情。
+
+| 項目 | 結果 |
+|---|---|
+| 素材與換裝 | 253 個區域、207 個雨背心姿勢。逐像素核對八方向不同表情、帽髮、相機及衣料的上半身合成 |
+| 原生與封裝 | 正常、四分之一速度重入及 Windows 內嵌版各通過 24 案。八方向各有原裝、雨背心加草帽及動態鮑伯頭。起步時位置與步距持續更新，隨後畫面接到同向行走第 0 格 |
+| 回歸 | 降低動態與重入、7 組 Godot 測試、214 項 Python、5 區設計檢查通過 |
+| 影片 | 正常 1,085 格，四分之一速度 4,029 格，均為 1280×720／30 FPS，完整解碼通過 |
+
+影片使用實際方向鍵輸入、固定取景及隔離存檔。跨方向轉向與整套角色自然度仍待驗收。
+
+![正面起步](images/ART-16-compass-departure-20261119-front.png)
+![左後斜向起步](images/ART-16-compass-departure-20261119-back-left.png)
+![穿雨背心左前斜向起步](images/ART-16-compass-departure-20261119-front-left-rainvest.png)
+
+[正常影片](images/ART-16-compass-departure-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-compass-departure-20261119-quarter.mp4) · [原畫、測試及封裝證據](images/ART-16-compass-departure-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/23306713ddf48586fefd3f8e263652e85f18877b)。
