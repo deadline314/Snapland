@@ -110,11 +110,16 @@ func _check_completed_announcer() -> void:
 	_check(_label_text_contains(labels, "入口牌轉正了"), "completed ticket states the visible result")
 	_press_button(main.modal_body, "返回遊園")
 	await _frames(2)
+	await _interact_at("guide", false, true)
+	_check(not progress.photos.has("photo-welcome-story-1") and _guide_action() != "interact", "leaving the first guide conversation early never awards or stamps a photo")
 	await _interact_at("guide", false)
 	_check(main.modal_kind == "", "guide first story conversation completes in the park")
 	_check(progress.photos.has("photo-welcome-story-1"), "first guide conversation grants the story photo once")
+	_check(_guide_action() == "interact", "the first guide photo starts the authored ticket-stamp action")
+	var guide_photo_count: int = progress.photos.size()
 	await _interact_at("guide", false)
 	_check(main.last_conversation_id == "ticket-announcer-done", "票票 notices which request the player finished")
+	_check(progress.photos.size() == guide_photo_count and _guide_action() != "interact", "revisiting the guide neither stamps nor grants a second photo")
 	# Reload a fresh Main from the saved profile: the result stays visible and nothing repeats.
 	progress.save_progress()
 	main.queue_free()
@@ -209,7 +214,12 @@ func _latch_natural_crowd_finish(result: Dictionary, session_id: int) -> void:
 	crowd_finish_evidence["model_score"] = int(completed.crowd_model.score)
 	_check(not is_instance_valid(main.session) and completed.is_queued_for_deletion(), "Main's earlier finished listener clears and queues Session before our latch")
 
-func _interact_at(id: String, expect_quest := true) -> void:
+func _guide_action() -> String:
+	for actor in main.world.npc_activity._records:
+		if actor.role == "ticket": return str(actor.action)
+	return ""
+
+func _interact_at(id: String, expect_quest := true, cancel_dialogue := false) -> void:
 	for point in main.world.points:
 		if str(point.id) != id:
 			continue
@@ -228,9 +238,15 @@ func _interact_at(id: String, expect_quest := true) -> void:
 		_key(KEY_E, false)
 		_check(main.modal_kind == expected, "E opens actual " + expected + " UI at " + id)
 		if expected == "dialogue" and main.modal_kind == "dialogue":
-			await _complete_dialogue()
-			if expect_quest:
-				_check(main.modal_kind == "quest", "natural actor dialogue completion opens the existing quest at " + id)
+			if cancel_dialogue:
+				_key(KEY_ESCAPE, true)
+				_key(KEY_ESCAPE, false)
+				await _frames(1)
+				_check(main.modal_kind == "", "Escape closes the actual dialogue at " + id)
+			else:
+				await _complete_dialogue()
+				if expect_quest:
+					_check(main.modal_kind == "quest", "natural actor dialogue completion opens the existing quest at " + id)
 		return
 	_check(false, "world has interaction point " + id)
 

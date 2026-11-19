@@ -1317,7 +1317,7 @@ func _interact(id: String, title: String) -> void:
 		if Progress.photos.has("photo-welcome-story-1"):
 			_start_dialogue(_character_conversation("ticket"),Callable())
 		else:
-			_start_dialogue(story.main_lines(),func(): Progress.grant_photo("photo-welcome-story-1"); _notice("第一張主線拍貼，收進本子裡了。"))
+			_start_dialogue(story.main_lines(), _complete_first_guide_conversation)
 	elif id=="quest-001" or id=="quest-002":
 		# What the character says follows the saved quest step; finished requests
 		# only chat and celebrate, so revisiting never reopens or re-awards them.
@@ -1368,6 +1368,11 @@ func _interact(id: String, title: String) -> void:
 					body.add_child(Paper.label("入園資格：%d 張不同普通拍貼（不消耗）\n目前：%d 張\n\n這座園區正在準備中。"%[zone.threshold,Progress.normal_count()],22))
 				_back(body)
 				break
+
+func _complete_first_guide_conversation() -> void:
+	if not Progress.grant_photo("photo-welcome-story-1"): return
+	if is_instance_valid(world): world.react_story_npc("ticket", "interact")
+	_notice("第一張主線拍貼，收進本子裡了。")
 
 func _character_conversation(character_id: String) -> Array:
 	var conversation: Dictionary=story.conversation_for(character_id,_story_snapshot())
