@@ -1868,6 +1868,24 @@
       "source_pixel_sha256": "a1f93a9101361515f60bb2fd29eb2799d746b6fb6403f4f1635fe8b87e23b2d6",
       "path": "res://assets/characters/rainvest-v1/idle-front_right-00.pngdata",
       "png_sha256": "cba7becaf7838da4f42aee58f102878ccf8c472619eb9733a1c3ad3a3865ddf6"
+    },
+    {
+      "action": "pivot",
+      "direction": "back",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "aa9d0c85f0ea821e3e5ba558bd67394a6b4ce56bcdbe9f61c253cd0ef76b6d33",
+      "path": "res://assets/characters/rainvest-v1/idle-back-00.pngdata",
+      "png_sha256": "45b217300869d6afe264185d830d5e94ea30c88d63808748890f3d78b77bcd39"
+    },
+    {
+      "action": "pivot",
+      "direction": "back_right",
+      "frame": 0,
+      "source_kind": "authored",
+      "source_pixel_sha256": "5c95e85f34988b218a5cc68b20010a49cc065e3d2d53c1510c1ed9f895317473",
+      "path": "res://assets/characters/rainvest-v1/idle-back_right-00.pngdata",
+      "png_sha256": "df484c6db2613da78c05668306ab53743ac5a06faf08108ffb4a64c059d35cca"
     }
   ],
   "encoding": "png_bytes_without_import_conversion"

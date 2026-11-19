@@ -42,6 +42,10 @@
         "back_left": 1,
         "front_left": 1
       },
+      "pivot": {
+        "back": 1,
+        "back_right": 1
+      },
       "wave": {
         "front": 8,
         "left": 5,

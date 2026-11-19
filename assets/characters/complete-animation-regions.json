@@ -4646,6 +4646,62 @@
           ]
         }
       },
+      "pivot": {
+        "back": {
+          "fps": 25,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-pivot-sides-v1.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  145,
+                  63
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        },
+        "back_right": {
+          "fps": 25,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-pivot-sides-v1.png",
+              "region": [
+                280,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  187,
+                  68
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ]
+        }
+      },
       "sit": {
         "front": {
           "fps": 2,
@@ -16651,6 +16707,10 @@
         "back": 1,
         "back_left": 1,
         "front_left": 1
+      },
+      "pivot": {
+        "back": 1,
+        "back_right": 1
       },
       "wave": {
         "front": 8,

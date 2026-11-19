@@ -121,6 +121,7 @@ func _run() -> void:
 	await _check_slow_profile_stop(world)
 	await _check_departures(world)
 	await _check_reversals(world)
+	await _check_side_pivot(world)
 	await _check_camera_idle(world)
 	var changed_appearance := {"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}
 	var changed_equipment := {"outfit":"outfit-tide","hat":"hat-none"}
@@ -334,7 +335,7 @@ func _check_reversals(world: ParkWorld) -> void:
 			var idle_ticks := 0
 			var tiny_ticks := 0
 			var phase_held := true
-			for _tick in range(52 if speed < 1.0 else 14):
+			for _tick in range(76 if speed < 1.0 else 20):
 				await physics_frame
 				var position := world.player.global_position
 				var travelled := Vector2(position.x - previous.x, position.z - previous.z).length()
@@ -348,6 +349,39 @@ func _check_reversals(world: ParkWorld) -> void:
 				"%s to %s at scale %.2f stays in the walk loop (%d idle ticks)" % [DIRECTIONS[from], DIRECTIONS[to], speed, idle_ticks])
 			_check(phase_held and (speed == 1.0 or tiny_ticks > 0), "the real reversal preserves stride phase during tiny displacement")
 			Input.action_release(INPUTS[to][0])
+	Engine.time_scale = original_scale
+	for _tick in range(23): await physics_frame
+
+func _check_side_pivot(world: ParkWorld) -> void:
+	var original_scale := Engine.time_scale
+	for speed: float in [1.0, 0.25]:
+		Engine.time_scale = speed
+		for left_to_right: bool in [true, false]:
+			var point := Vector3(-2.5 if left_to_right else -0.5, 0.0, -14.5)
+			point.y = world.ground_surface_y(point)
+			world.player.global_position = point
+			for _tick in range(5): await physics_frame
+			var start := "left" if left_to_right else "right"
+			var goal := "right" if left_to_right else "left"
+			Input.action_press("move_" + start)
+			var approach_ticks := 27 if left_to_right else 24
+			for _tick in range(approach_ticks * (4 if speed < 1.0 else 1)): await physics_frame
+			Input.action_release("move_" + start)
+			Input.action_press("move_" + goal)
+			var headings: Array[String] = []
+			for _tick in range(88 if speed < 1.0 else 23):
+				await physics_frame
+				if world._avatar_pivot_remaining <= 0.0: continue
+				var direction := world.last_avatar_direction
+				if headings.is_empty() or headings[-1] != direction: headings.append(direction)
+				var expected_action := "depart" if direction == "back_left" else "pivot"
+				var expected: Texture2D = world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, direction, 0, expected_action)
+				_check(world.last_avatar_action == "walk" and world.avatar.texture == expected,
+					"side pivot uses the full source cel while physics continues")
+			var expected_headings := ["back_left", "back", "back_right"] if left_to_right else ["back_right", "back", "back_left"]
+			_check(headings == expected_headings and world.facing == goal and world.last_avatar_source_action == "walk",
+				"%s to %s at scale %.2f plays the three pivot poses then resumes travel, observed %s" % [start, goal, speed, headings])
+			Input.action_release("move_" + goal)
 	Engine.time_scale = original_scale
 	for _tick in range(23): await physics_frame
 

@@ -146,7 +146,7 @@ func _check_footwork(avatar: Avatar) -> void:
 			var idle := avatar.texture(look, config[1], direction, 0, "idle").get_image()
 			var idle_pixels := idle.get_data()
 			var upper_size := 280 * 270 * 4
-			for action: String in ["settle", "depart"]:
+			for action: String in ["settle", "depart", "pivot"]:
 				if not avatar.has_authored_action(action, direction): continue
 				var pose := avatar.texture(look, config[1], direction, 0, action).get_image()
 				var pixels := pose.get_data()

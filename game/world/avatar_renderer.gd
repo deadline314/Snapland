@@ -224,7 +224,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, authored_frame_count - 1) if has_manifest_frame else clampi(frame, 0, 2)
 	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction))) and not has_manifest_frame
 	# The short footwork cels share the neutral upper body.
-	var use_walk_layout := use_walk_source or (safe_action in ["settle", "depart"] and has_manifest_frame)
+	var use_walk_layout := use_walk_source or (safe_action in ["settle", "depart", "pivot"] and has_manifest_frame)
 	var registered_idle: bool = safe_action == "idle" and not inspect_authored_idle_sources and _stable_idle_pixels.manifest.has("hero-idle/"+safe_direction)
 	var idle_frame := clampi(frame,0,int(_stable_idle_pixels.manifest.get("hero-idle/"+safe_direction,{}).get("frames",1))-1)
 	var walk_frame := IDLE_WALK_FRAME

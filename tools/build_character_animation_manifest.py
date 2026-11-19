@@ -548,7 +548,10 @@ def add_traveller_footwork(actor_data: dict) -> dict:
     departures = [("left", departure_source, 0, 0, [121, 69]), ("right", departure_source, 280, 0, [180, 69])]
     for index, (direction, head) in enumerate(compass_heads):
         departures.append((direction, compass_departure_source, index % 3 * 280, index // 3 * 360, head))
-    for action, entries, fps in (("settle", poses, 10), ("depart", departures, 12.5)):
+    pivot = ROOT / "assets/characters/traveller-pivot-sides-v1.png"
+    pivot_source = registered_frame_source(pivot, "6d097d4effb872644ba6ce586e9294c81f6d572c196a0dd96f96e6b628538703")
+    pivot_frames = [("back", pivot_source, 0, 0, [145, 63]), ("back_right", pivot_source, 280, 0, [187, 68])]
+    for action, entries, fps in (("settle", poses, 10), ("depart", departures, 12.5), ("pivot", pivot_frames, 25)):
         actor_data[action] = {}
         for direction, source, x, y, head in entries:
             actor_data[action][direction] = {
@@ -558,8 +561,8 @@ def add_traveller_footwork(actor_data: dict) -> dict:
                     "source_scale": 0.625, "layers": [],
                 }],
             }
-    return {"sources": [file.relative_to(ROOT).as_posix() for file in (sides, compass, departure, compass_departure)],
-            "frame_count": len(poses) + len(departures)}
+    return {"sources": [file.relative_to(ROOT).as_posix() for file in (sides, compass, departure, compass_departure, pivot)],
+            "frame_count": len(poses) + len(departures) + len(pivot_frames)}
 
 
 def add_traveller_profile_photos(actor_data: dict) -> dict:
