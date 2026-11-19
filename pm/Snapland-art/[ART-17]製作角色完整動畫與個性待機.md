@@ -952,3 +952,14 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 ![捲髮、草帽與雨背心](images/ART-17-traveller-celebration-20261119-curly-rainvest.png)
 
 [正常影片](images/ART-17-traveller-celebration-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-traveller-celebration-20261119-quarter.mp4) · [噴泉挑戰成功](images/ART-17-traveller-celebration-20261119-reward.png) · [降低動態](images/ART-17-traveller-celebration-20261119-reduced.png) · [原畫、測試及封裝證據](images/ART-17-traveller-celebration-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/4de58f46cae8d2d911d85e91952267ac78dae929) · [髮型修正](https://github.com/deadline314/Snapland/commit/00f9fb3db18120e3cacea121b8a48547bc682061)。
+
+## Commit — 2026-11-19 票票首次交票先蓋章
+
+完成首次主線導覽並收到拍貼後，票票在原地播完既有八格蓋章與出示票卡，再恢復待機。提早離開只會關閉對話。再次交談仍有原本的招呼及進度不同的台詞。
+
+正常、四分之一速度重入及獨立 Windows 封裝均以 E、Esc 走完取消、首次領取、重複交談三案。八格來源依序可見，票票的根位置固定，收藏只新增一張。另驗證降低動態下場景重入及正面站姿。正常影片 131 格，四分之一速度 450 格，兩部均為 1280×720／30 FPS 並完整解碼。215 項 Python、Godot 匯入與 6 組故事及 NPC 回歸測試通過。
+
+![票票在首次領取後蓋章](images/ART-17-first-guide-stamp-20261119-stamp.png)
+![票票向玩家展示票卡](images/ART-17-first-guide-stamp-20261119-presented.png)
+
+[首次主線對話](images/ART-17-first-guide-stamp-20261119-dialogue.png) · [正常影片](images/ART-17-first-guide-stamp-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-first-guide-stamp-20261119-quarter.mp4) · [測試與封裝證據](images/ART-17-first-guide-stamp-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/293d46606fbbb39d4a702516fe16af20ce2ad198)。
