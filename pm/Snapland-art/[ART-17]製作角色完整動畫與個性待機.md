@@ -882,3 +882,14 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 ![鮑伯頭搭草帽於右向拍照](images/ART-17-photo-20261119-bob-hat.png)
 
 [正常影片](images/ART-17-photo-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-photo-20261119-quarter.mp4) · [原生、封裝與衣料檢查證據](images/ART-17-photo-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/b8d688e0ee80d09526a38abf52d15cff6f842583)。
+
+## Commit — 2026-11-19 主角走動時按手勢保留步態
+
+朝後走時按 F、P 或 E，原本會在同一幀把人物切到正面行走的首格。現在保留當前方向、步伐與貼圖，到下一個物理更新才判斷能否播放手勢。持續移動就維持步態；若 E 開啟對話使人物停下，對話立即顯示，互動姿勢在第一個站定更新開始並遵守原有暫停規則。
+
+舊版重現三個瞬間換格。新版通過匯入、五組 Godot 回歸與五區設計檢查。原生正常速度及四分之一速度重入分別以 W、F、P、E 操作，核對兩個手勢鍵前後的同一張貼圖，以及走近票票時對話立即顯示、站定後出現互動姿勢。兩次使用獨立存檔及固定取景。正常 63 格、慢放 143 格，均為 1280×720／30 FPS，已完整解碼。
+
+![行走中按 P 保留朝後步態](images/ART-17-walking-gesture-20261119-walk.png)
+![行走中按 E 仍可立即開啟對話](images/ART-17-walking-gesture-20261119-talk.png)
+
+[正常影片](images/ART-17-walking-gesture-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-walking-gesture-20261119-quarter.mp4) · [反例與原生證據](images/ART-17-walking-gesture-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/2b6cc5baa145d2d5f91318b931406ca84473ee1a)。
