@@ -322,3 +322,23 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 ![Windows 封裝中的雨背心](images/ART-16-garment-preflight-20261119.png)
 
 [配對量測、封裝、回歸與原生截圖](images/ART-16-garment-preflight-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/cdb68782bd60be1e217437de57187c9e915191a1)。
+
+
+## Commit — 2026-11-19 阿浪右向停步落腳
+
+阿浪向右走到巡路端點時，先以近側靴承重，後腳再落到站定位，接著播完原有轉身。新增落腳姿勢 0.06 秒，整段仍為 0.4 秒。實際抓到巡路第 2 格、落腳、雙腳站定三張相鄰原生畫面，根位置全程相同。
+
+| 項目 | 結果 |
+|---|---|
+| 原畫對照 | 核對帽徽、臉、雨衣、兩隻靴與腳底。實際進入姿勢的最大相鄰整體像素差異比例由 0.5321 降為 0.4532。四種可能走姿的最差差異亦下降，頭部、衣身及腿部各自核對 |
+| 原生與封裝 | 正常、四分之一速度重入及 Windows 內嵌執行檔均看到左右各五張收勢，來源逐格相符。降低動態重入保持站姿。原生程序無引擎錯誤或退出資源殘留 |
+| 回歸 | 237 個原畫區域、214 項 Python、五組相關 Godot 測試及五區設計檢查通過。雙向損壞落腳時取消不完整收勢，起步仍有完整來源 |
+| 影片 | 正常 460 格、慢放 1,842 格，均為 1280×720／30 FPS，已完整解碼 |
+
+兩次對照使用固定取景、獨立存檔及 Dummy 音訊。比例反映相鄰原畫的像素差異。整票的全角色連續動作與換裝一致性仍在驗收。
+
+![阿浪停前的右向步態](images/ART-16-right-stop-20261119-before.png)
+![阿浪右向承重落腳](images/ART-16-right-stop-20261119-landing.png)
+![阿浪右向雙腳站定](images/ART-16-right-stop-20261119-settled.png)
+
+[正常影片](images/ART-16-right-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-right-stop-20261119-quarter.mp4) · [來源、原生及封裝證據](images/ART-16-right-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/529601b9d6fa27f69cd8f6e8f615688be6a75660)。
