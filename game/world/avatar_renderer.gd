@@ -219,12 +219,15 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		if not legacy_source.is_empty(): safe_direction = str(legacy_source.direction)
 	# Dedicated standing cels share the registered walking head and fixed ground.
 	# Existing complete portraits remain explicit static fallbacks, not new directional art.
-	var has_manifest_frame: bool = safe_action != "walk" and (safe_action != "idle" or inspect_authored_idle_sources) and animation_library.has_frame("traveller", safe_action, safe_direction)
+	var has_manifest_frame: bool = legacy_source.is_empty() and safe_action != "walk" and (safe_action != "idle" or inspect_authored_idle_sources) and animation_library.has_frame("traveller", safe_action, safe_direction)
 	var authored_frame_count: int = animation_library.frame_count("traveller", safe_action, safe_direction) if has_manifest_frame else 0
 	var safe_frame := clampi(frame, 0, 7) if safe_action == "walk" else clampi(frame, 0, authored_frame_count - 1) if has_manifest_frame else clampi(frame, 0, 2)
+	# The celebration ends with the same dressed neutral pose as the following idle.
+	if safe_action == "celebrate" and has_manifest_frame and safe_frame == authored_frame_count - 1:
+		return texture(appearance, equipped, safe_direction, 0, "idle")
 	var use_walk_source := _walk_atlas_valid and (safe_action == "walk" or (safe_action == "idle" and WALK_DIRECTIONS.has(direction))) and not has_manifest_frame
-	# The short footwork cels share the neutral upper body.
-	var use_walk_layout := use_walk_source or (safe_action in ["settle", "depart", "pivot"] and has_manifest_frame)
+	# These grounded poses share the neutral head landmarks.
+	var use_walk_layout := use_walk_source or (safe_action in ["settle", "depart", "pivot", "celebrate"] and has_manifest_frame)
 	var registered_idle: bool = safe_action == "idle" and not inspect_authored_idle_sources and _stable_idle_pixels.manifest.has("hero-idle/"+safe_direction)
 	var idle_frame := clampi(frame,0,int(_stable_idle_pixels.manifest.get("hero-idle/"+safe_direction,{}).get("frames",1))-1)
 	var walk_frame := IDLE_WALK_FRAME
@@ -308,7 +311,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var source_hair_mask := PackedByteArray()
 	var source_metrics: Dictionary = legacy_heads.metrics_for(safe_action,image) if not legacy_source.is_empty() else {}
 	var prop_indices := PackedInt32Array()
-	if safe_action in ["walk","idle","settle","depart"] and safe_direction in ["front","front_left","front_right","left","right"]:
+	if (safe_action in ["walk","idle","settle","depart"] or (safe_action == "celebrate" and has_manifest_frame)) and safe_direction in ["front","front_left","front_right","left","right"]:
 		prop_indices = prop_foreground.indices(image)
 		if has_hair_overlay and prop_indices.is_empty():
 			has_hair_overlay=false
@@ -353,7 +356,8 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var hair_recolor_indices: PackedInt32Array = source_metrics.get("source_hair_indices",palette_hair_indices) if can_recolor_source_hair else PackedInt32Array()
 	_apply_palette(image, normalized_appearance, body_outfit, pose_direction, has_hair_overlay, hair_recolor_indices,source_metrics.get("palette_hair_indices",PackedInt32Array()),source_metrics.get("foreground_indices",PackedInt32Array()))
 	if garment_selected and not inspect_authored_idle_sources:
-		garment_overlays.apply(self,image,safe_action,safe_direction,idle_frame if registered_idle else walk_frame if safe_action=="walk" else safe_frame)
+		var garment_direction := safe_direction if legacy_source.is_empty() else requested_direction
+		garment_overlays.apply(self,image,safe_action,garment_direction,idle_frame if registered_idle else walk_frame if safe_action=="walk" else safe_frame)
 	if has_hair_overlay:
 		face_backdrop = image.duplicate()
 		source_hair_mask = source_metrics.source_hair_mask

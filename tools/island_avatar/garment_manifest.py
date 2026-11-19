@@ -171,9 +171,8 @@ def validate(guide: dict, required: dict, root: Path = ROOT) -> dict:
 def _coverage(required: dict, seen: set, root: Path, fallback_seen: set | None = None) -> dict:
     expected = {(a, d, f) for a, dirs in required.items() for d, count in dirs.items() for f in range(count)}
     missing = sorted(expected - seen)
-    # Read the real renderer inventory rather than treating the authored table
-    # as the entire runtime. ParkWorld keeps a three-frame legacy path when an
-    # action has no authored direction at all; these are requests, not new art.
+    # The authored table omits direct legacy renderer requests. Celebration
+    # keeps its legacy portrait in each direction without a dedicated clip.
     renderer = (root / 'game/world/avatar_renderer.gd').read_text()
     def inventory(name: str) -> list[str]:
         match = re.search(r'^const ' + name + r' := (\[[^\n]+\])$', renderer, re.MULTILINE)
@@ -181,8 +180,9 @@ def _coverage(required: dict, seen: set, root: Path, fallback_seen: set | None =
             raise ValueError('runtime action inventory changed; review fallback coverage')
         return json.loads(match[1])
     fallback_requests = [{'action': a, 'direction': d, 'frame': f}
-                         for a in inventory('ACTIONS') if not required.get(a)
-                         for d in inventory('WALK_DIRECTIONS') for f in range(3)]
+                         for a in inventory('ACTIONS') for d in inventory('WALK_DIRECTIONS')
+                         if not required.get(a) or (a == 'celebrate' and d not in required[a])
+                         for f in range(3)]
     fallback_seen = fallback_seen or set()
     fallback_missing = [row for row in fallback_requests
                         if (row['action'], row['direction'], row['frame']) not in fallback_seen]

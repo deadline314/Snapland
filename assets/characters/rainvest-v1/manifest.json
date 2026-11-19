@@ -1340,33 +1340,6 @@
     },
     {
       "action": "celebrate",
-      "direction": "front",
-      "frame": 0,
-      "source_kind": "runtime_fallback",
-      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
-      "path": "res://assets/characters/rainvest-v1/celebrate-front-00.pngdata",
-      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
-    },
-    {
-      "action": "celebrate",
-      "direction": "front",
-      "frame": 1,
-      "source_kind": "runtime_fallback",
-      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
-      "path": "res://assets/characters/rainvest-v1/celebrate-front-01.pngdata",
-      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
-    },
-    {
-      "action": "celebrate",
-      "direction": "front",
-      "frame": 2,
-      "source_kind": "runtime_fallback",
-      "source_pixel_sha256": "496bd30287ce3aed70b62522256b9f5be8b7b0fb7e91c56b36dc8a45ed892a24",
-      "path": "res://assets/characters/rainvest-v1/celebrate-front-02.pngdata",
-      "png_sha256": "4074ad3f72891c518fe416981e67268b364fd5c3741048002de4dc2b8b1c5768"
-    },
-    {
-      "action": "celebrate",
       "direction": "front_right",
       "frame": 0,
       "source_kind": "runtime_fallback",
@@ -1886,6 +1859,51 @@
       "source_pixel_sha256": "5c95e85f34988b218a5cc68b20010a49cc065e3d2d53c1510c1ed9f895317473",
       "path": "res://assets/characters/rainvest-v1/idle-back_right-00.pngdata",
       "png_sha256": "df484c6db2613da78c05668306ab53743ac5a06faf08108ffb4a64c059d35cca"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "front",
+      "action": "celebrate",
+      "frame": 0,
+      "source_pixel_sha256": "a579fd47786a6385d044a62891555979a725b72c3131aaa46e70d20a73cd3554",
+      "path": "res://assets/characters/rainvest-v1/celebration-front-00.pngdata",
+      "png_sha256": "4fd8c2af9c10447b58be46068ecefbc7ffb9bcb38bdb6487792515f97984d570"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "front",
+      "action": "celebrate",
+      "frame": 1,
+      "source_pixel_sha256": "35e0e798cca71b8611f11d76a0932186f789ff261048d23805226a0f5f47b195",
+      "path": "res://assets/characters/rainvest-v1/celebration-front-01.pngdata",
+      "png_sha256": "6ca3256dc9495548702dc28991896e73247075a42b38b9441ce48b9543a5df02"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "front",
+      "action": "celebrate",
+      "frame": 2,
+      "source_pixel_sha256": "62af6642e6f4ab7ca729184c765dcfaa8a111847ad15401bf81c93f4fb19213b",
+      "path": "res://assets/characters/rainvest-v1/celebration-front-02.pngdata",
+      "png_sha256": "d016493d613aa8c1bbcacd7d7f9308b40607ce8cef073c86f672e172e93fd6b4"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "front",
+      "action": "celebrate",
+      "frame": 3,
+      "source_pixel_sha256": "0162bd7b90058f264c5a56fbc304f1d4085f3bdec6b6ecb7ed03d51c6b1d4bbc",
+      "path": "res://assets/characters/rainvest-v1/celebration-front-03.pngdata",
+      "png_sha256": "bc53fe25bd148e04ba774ac92dd286ede9d29c16a4798849c515cd6a46dd5a55"
+    },
+    {
+      "source_kind": "authored",
+      "direction": "front",
+      "action": "celebrate",
+      "frame": 4,
+      "source_pixel_sha256": "5fab4c8e2c259e5aea5b96fc07e5d188ebb75c97fd2607e9a5a5b76084e5e72b",
+      "path": "res://assets/characters/rainvest-v1/idle-front-00.pngdata",
+      "png_sha256": "83ee0e56165f315c7454c93d540be53066e61b769b445a5f6c8616e5ab7ae6a0"
     }
   ],
   "encoding": "png_bytes_without_import_conversion"

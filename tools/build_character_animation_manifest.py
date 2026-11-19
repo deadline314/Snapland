@@ -565,6 +565,22 @@ def add_traveller_footwork(actor_data: dict) -> dict:
             "frame_count": len(poses) + len(departures) + len(pivot_frames)}
 
 
+def add_traveller_celebration(actor_data: dict) -> dict:
+    atlas = ROOT / "assets/characters/traveller-celebration-v1.png"
+    source = registered_frame_source(atlas, "960b8825309e58347f9bfe808cd869f92be0904bdbaf7f7021ea4083bd945198")
+    frames = [
+        {"source": source, "region": [index * 280, 0, 280, 360],
+         "anchors": {"feet": [140, 346], "head": [157, 72]},
+         "source_scale": 0.625, "layers": []}
+        for index in range(5)
+    ]
+    actor_data["celebrate"] = {"front": {
+        "fps": 10, "loop": False, "frames": frames,
+        "frame_durations": [0.09, 0.13, 0.22, 0.12, 0.11],
+    }}
+    return {"frame_count": len(frames)}
+
+
 def add_traveller_profile_photos(actor_data: dict) -> dict:
     for direction, (digest, height, poses) in TRAVELLER_PROFILE_PHOTOS.items():
         path = ROOT / f"assets/characters/traveller-photograph-{direction}-v1.png"
@@ -651,6 +667,7 @@ def build() -> tuple[dict,dict]:
     reports["traveller"]["camera_check"] = add_traveller_camera_check(actors["traveller"])
     reports["traveller"]["photograph_side_atlas"] = add_traveller_profile_photos(actors["traveller"])
     reports["traveller"]["footwork_atlases"] = add_traveller_footwork(actors["traveller"])
+    reports["traveller"]["celebration"] = add_traveller_celebration(actors["traveller"])
     # This builder owns the atlas rows above. Independent seated/catch sources
     # and additional authored directions must survive a complete regeneration.
     if OUT.exists():
@@ -729,7 +746,8 @@ def main() -> int:
         verified_regions = sum(
             report["frame_count"] + sum(report.get(action, {}).get("frame_count", 0)
                                         for action in ("walk_side_atlas", "settle_side_atlas", "depart_side_atlas",
-                                                       "stop_landing", "wave_side_atlas", "camera_check", "photograph_side_atlas", "footwork_atlases"))
+                                                       "stop_landing", "wave_side_atlas", "camera_check", "photograph_side_atlas",
+                                                       "footwork_atlases", "celebration"))
             for report in reports.values()
         )
         print(f"PASS: {verified_regions} authored regions verified; no synthetic frames")

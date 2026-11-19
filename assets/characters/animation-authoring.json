@@ -46,6 +46,9 @@
         "back": 1,
         "back_right": 1
       },
+      "celebrate": {
+        "front": 5
+      },
       "wave": {
         "front": 8,
         "left": 5,

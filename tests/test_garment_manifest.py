@@ -20,10 +20,11 @@ class GarmentManifestTests(unittest.TestCase):
         report = validate(self.guide, self.required)
         self.assertEqual((report['required'], report['provided'], report['missing_count']), (self.required_count, 8, self.required_count - 8))
         self.assertFalse(report['authored_coverage_complete'])
-        self.assertEqual(report['runtime_fallback_request_count'], 24)
+        self.assertEqual(report['runtime_fallback_request_count'], 21)
         self.assertFalse(report['runtime_fallbacks_are_authored_art'])
         self.assertEqual({row['action'] for row in report['runtime_fallback_requests']}, {'celebrate'})
-        self.assertEqual(len({row['direction'] for row in report['runtime_fallback_requests']}), 8)
+        self.assertEqual(len({row['direction'] for row in report['runtime_fallback_requests']}), 7)
+        self.assertNotIn('front', {row['direction'] for row in report['runtime_fallback_requests']})
         self.assertFalse(report['coverage_complete'])
         self.assertFalse(report['ready_for_wardrobe'])
         self.assertIn({'action': 'catch', 'direction': 'front', 'frame': 11}, report['missing'])
@@ -37,7 +38,7 @@ class GarmentManifestTests(unittest.TestCase):
         report = validate_collection([self.guide, idle], self.required)
         self.assertEqual((report['required'], report['provided'], report['missing_count']), (self.required_count, 44, self.required_count - 44))
         self.assertEqual(report['source_guides'], 2)
-        self.assertEqual(report['runtime_fallback_request_count'], 24)
+        self.assertEqual(report['runtime_fallback_request_count'], 21)
         self.assertFalse(report['ready_for_wardrobe'])
         self.assertIn({'action': 'walk', 'direction': 'back', 'frame': 7}, report['missing'])
         self.assertNotIn({'action': 'idle', 'direction': 'back', 'frame': 3}, report['missing'])
@@ -80,7 +81,7 @@ class GarmentManifestTests(unittest.TestCase):
     def legacy_request_guide(self):
         guide = copy.deepcopy(self.guide)
         row = copy.deepcopy(guide['frames'][0])
-        row.update(action='celebrate', direction='front', frame=0, source_kind='runtime_fallback')
+        row.update(action='celebrate', direction='back', frame=0, source_kind='runtime_fallback')
         guide['runtime_fallback_frames'] = [row]
         return guide
 
@@ -88,7 +89,7 @@ class GarmentManifestTests(unittest.TestCase):
         guide = self.legacy_request_guide()
         report = validate(guide, self.required)
         self.assertEqual((report['provided'], report['missing_count']), (8, self.required_count - 8))
-        self.assertEqual((report['runtime_fallback_provided'], report['runtime_fallback_missing_count']), (1, 23))
+        self.assertEqual((report['runtime_fallback_provided'], report['runtime_fallback_missing_count']), (1, 20))
         self.assertFalse(report['runtime_fallbacks_are_authored_art'])
         self.assertFalse(report['ready_for_wardrobe'])
         guide['frames'].append(guide['runtime_fallback_frames'].pop())
@@ -98,6 +99,7 @@ class GarmentManifestTests(unittest.TestCase):
     def test_legacy_requests_require_real_inventory_identity_and_unique_keys(self):
         for change, error in [({'frame': 3}, 'unknown required pose'),
                               ({'action': 'wave'}, 'unknown required pose'),
+                              ({'direction': 'front'}, 'unknown required pose'),
                               ({'source_kind': 'authored'}, 'not new art')]:
             guide = self.legacy_request_guide()
             guide['runtime_fallback_frames'][0].update(change)
@@ -108,6 +110,13 @@ class GarmentManifestTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'duplicate cel'):
             validate(guide, self.required)
         self.check_invalid(lambda g: g.update(runtime_fallback_frames={}), 'explicit list')
+
+    def test_older_coverage_keeps_the_front_legacy_request(self):
+        required = {action: directions for action, directions in self.required.items() if action != 'celebrate'}
+        guide = self.legacy_request_guide()
+        guide['runtime_fallback_frames'][0]['direction'] = 'front'
+        report = validate(guide, required)
+        self.assertEqual((report['runtime_fallback_request_count'], report['runtime_fallback_provided']), (24, 1))
 
     def test_combined_guides_cannot_double_count_a_legacy_request(self):
         guide = self.legacy_request_guide()

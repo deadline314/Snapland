@@ -41,7 +41,7 @@ func _initialize() -> void:
 		match kind:
 			"source":bad.frames[0].source_pixel_sha256="0".repeat(64)
 			"legacy_source":
-				var requests: Array = bad.frames.filter(func(row: Dictionary) -> bool: return row.action == "celebrate")
+				var requests: Array = bad.frames.filter(func(row: Dictionary) -> bool: return row.action == "celebrate" and row.source_kind == "runtime_fallback")
 				requests.back().source_pixel_sha256 = "0".repeat(64)
 			"png":bad.frames[0].png_sha256="0".repeat(64)
 			"shared_png_hash":bad.frames.back().png_sha256=bad.frames[0].png_sha256
@@ -52,5 +52,5 @@ func _initialize() -> void:
 		var file:=FileAccess.open(path,FileAccess.WRITE);file.store_string(JSON.stringify(bad));file.close()
 		var rejected=Overlays.new(path)
 		check(not rejected.ready(avatar),"Unsafe family accepted: "+kind)
-	if failures==0: print("PASS: garment overlay preserves 209 original compositions; missing last cel falls back across all eight directions")
+	if failures==0: print("PASS: garment overlay preserves 211 original compositions; missing last cel falls back across all eight directions")
 	quit(1 if failures else 0)

@@ -2664,9 +2664,11 @@ func _has_authored_avatar_action(action: String, direction: String) -> bool:
 
 func _avatar_source_action(action: String, direction: String) -> String:
 	if avatar_renderer == null or not AVATAR_SHARED_ACTIONS.has(action): return action
-	if avatar_renderer.has_authored_action(action, direction): return action
+	if avatar_renderer.has_authored_action(action, direction):
+		var sequence: Dictionary = avatar_renderer.animation_library.get_sequence("traveller", action, direction)
+		if bool(sequence.available): return action
 	var shared := str(AVATAR_SHARED_ACTIONS[action])
-	return shared if avatar_renderer.has_authored_action(shared, direction) else action
+	return shared if avatar_renderer.has_authored_action(shared, direction) else ""
 
 func _warn_missing_avatar_action_once(action: String) -> void:
 	if _warned_missing_avatar_actions.has(action):

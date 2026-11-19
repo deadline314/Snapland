@@ -34,18 +34,17 @@ func ready(avatar: RefCounted) -> bool:
 	var rows: Variant = parsed.get("frames",null)
 	if not rows is Array: return _reject("Missing garment cels")
 	var required: Dictionary = avatar.animation_library.manifest.get("outfit_required_poses",{}).get("traveller",{}).duplicate(true)
-	if required.has("celebrate"): return _reject("Celebration source changed; review garment coverage")
 	for action in avatar.ACTIONS:
 		if not required.has(action) and action!="celebrate": return _reject("New action needs garment coverage")
-	# Existing celebration is one original aliased by these real requests.
+	# Directions without a dedicated celebration still share the legacy wearer.
 	var legacy: Dictionary = {}
 	for direction in avatar.WALK_DIRECTIONS: legacy[direction] = 3
-	required["celebrate"] = legacy
+	required["celebrate"] = legacy.merged(required.get("celebrate", {}), true)
 	var expected: Dictionary = {}
 	for action in required:
 		for direction in required[action]:
 			for frame in int(required[action][direction]): expected[_key(action,direction,frame)] = true
-	if expected.size()!=209 or rows.size()!=expected.size(): return _reject("Incomplete garment family")
+	if expected.size()!=211 or rows.size()!=expected.size(): return _reject("Incomplete garment family")
 	var pending: Dictionary = {}
 	var verified_files := {}
 	var decoded_hashes := {}
@@ -58,8 +57,8 @@ func ready(avatar: RefCounted) -> bool:
 		if not (index is float or index is int) or not is_finite(float(index)) or float(index)!=floor(float(index)): return _reject("Invalid garment frame")
 		var key := _key(action,direction,int(index))
 		if not expected.has(key) or pending.has(key): return _reject("Unknown or duplicate garment cel")
-		if row.get("source_kind","")!=("runtime_fallback" if action=="celebrate" else "authored"): return _reject("Mixed original and legacy coverage")
 		var legacy_celebration: bool = action == "celebrate" and not avatar.has_authored_action(action, direction)
+		if row.get("source_kind","")!=("runtime_fallback" if legacy_celebration else "authored"): return _reject("Mixed original and legacy coverage")
 		var signature := legacy_celebration_signature if legacy_celebration else ""
 		if signature.is_empty():
 			var source: Image = avatar.original_garment_pose(action, direction, int(index))

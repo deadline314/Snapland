@@ -4702,6 +4702,126 @@
           ]
         }
       },
+      "celebrate": {
+        "front": {
+          "fps": 10,
+          "loop": false,
+          "frames": [
+            {
+              "source": "res://assets/characters/traveller-celebration-v1.png",
+              "region": [
+                0,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  157,
+                  72
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-celebration-v1.png",
+              "region": [
+                280,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  157,
+                  72
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-celebration-v1.png",
+              "region": [
+                560,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  157,
+                  72
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-celebration-v1.png",
+              "region": [
+                840,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  157,
+                  72
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            },
+            {
+              "source": "res://assets/characters/traveller-celebration-v1.png",
+              "region": [
+                1120,
+                0,
+                280,
+                360
+              ],
+              "anchors": {
+                "feet": [
+                  140,
+                  346
+                ],
+                "head": [
+                  157,
+                  72
+                ]
+              },
+              "source_scale": 0.625,
+              "layers": []
+            }
+          ],
+          "frame_durations": [
+            0.09,
+            0.13,
+            0.22,
+            0.12,
+            0.11
+          ]
+        }
+      },
       "sit": {
         "front": {
           "fps": 2,
@@ -16711,6 +16831,9 @@
       "pivot": {
         "back": 1,
         "back_right": 1
+      },
+      "celebrate": {
+        "front": 5
       },
       "wave": {
         "front": 8,

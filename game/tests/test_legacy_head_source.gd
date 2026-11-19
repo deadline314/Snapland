@@ -3,6 +3,7 @@ const Avatar = preload("res://game/world/avatar_renderer.gd")
 const Heads = preload("res://game/world/legacy_head_source.gd")
 # Independently captured from a26a65d before reviewed legacy ownership existed.
 const ORIGINAL_RENDER_SHA := "ac5ae00803018d473727c82512bc3bd61c6c353787e7a73484b4e0c391315c2f"
+const FALLBACK_DIRECTION := "back"
 const FACE_HAND := [Vector2i(111,114),Vector2i(162,114),Vector2i(115,99),Vector2i(158,99),Vector2i(140,135),Vector2i(170,139),Vector2i(43,86),Vector2i(233,83)]
 class MissingOpening:
 	extends "res://game/world/avatar_renderer.gd"
@@ -31,6 +32,7 @@ func _initialize() -> void:
 	var equipment: Dictionary={"outfit":"outfit-tide","hat":"hat-none"}
 	var requests:=0
 	for direction in Avatar.WALK_DIRECTIONS:
+		if direction=="front": continue
 		check(not avatar.has_authored_action("celebrate",direction),"Static fallback falsely became authored directional animation")
 		for frame in range(3):
 			var image: Image=avatar.texture(Avatar.DEFAULT_APPEARANCE,equipment,direction,frame,"celebrate").get_image()
@@ -40,8 +42,9 @@ func _initialize() -> void:
 	# requested navigation heading and of prior cache warming.
 	for hat in ["hat-straw","hat-sailor","hat-flower"]:
 		var equipped: Dictionary={"outfit":"outfit-tide","hat":hat}
-		var front: Image=avatar.texture(Avatar.DEFAULT_APPEARANCE,equipped,"front",0,"celebrate").get_image()
+		var front: Image=avatar.texture(Avatar.DEFAULT_APPEARANCE,equipped,FALLBACK_DIRECTION,0,"celebrate").get_image()
 		for direction in Avatar.WALK_DIRECTIONS:
+			if direction=="front": continue
 			for frame in range(3):
 				var image: Image=avatar.texture(Avatar.DEFAULT_APPEARANCE,equipped,direction,frame,"celebrate").get_image()
 				check(image.get_data()==front.get_data(),"Hat used requested heading instead of actual portrait direction")
@@ -53,11 +56,11 @@ func _initialize() -> void:
 			for hat in ["hat-none","hat-straw"]:
 				var base_look: Dictionary=Avatar.DEFAULT_APPEARANCE.duplicate();base_look.skin=skin
 				var equipped: Dictionary={"outfit":outfit,"hat":hat}
-				var baseline: Image=avatar.texture(base_look,equipped,"front",0,"celebrate").get_image()
+				var baseline: Image=avatar.texture(base_look,equipped,FALLBACK_DIRECTION,0,"celebrate").get_image()
 				for style in ["bob","curly"]:
 					for color in Avatar.HAIR_COLORS:
 						var look:=base_look.duplicate();look.hair=style;look.hair_color=color
-						var texture: Texture2D=avatar.texture(look,equipped,"front",0,"celebrate")
+						var texture: Texture2D=avatar.texture(look,equipped,FALLBACK_DIRECTION,0,"celebrate")
 						var image: Image=texture.get_image()
 						check(image.get_data()!=baseline.get_data(),"Alternate haircut was silently replaced by the default")
 						for index in body:
@@ -65,7 +68,7 @@ func _initialize() -> void:
 						for point: Vector2i in FACE_HAND:
 							if image.get_pixelv(point)!=baseline.get_pixelv(point):feature_changes+=1
 						check(image.get_pixel(170,139).a>0.95,"Old jaw alpha hole returned")
-						check(avatar.texture(look,equipped,"front",0,"celebrate")==texture,"Warm portrait cache did not reuse its own request")
+						check(avatar.texture(look,equipped,FALLBACK_DIRECTION,0,"celebrate")==texture,"Warm portrait cache did not reuse its own request")
 						profiles+=1
 	check(material_changes==0,"Hair style/dye changed visible original body or coat pixels: "+str(material_changes))
 	check(feature_changes==0,"Independent original eyes/brows/mouth/hands changed: "+str(feature_changes))
@@ -74,13 +77,13 @@ func _initialize() -> void:
 	# A damaged opening is rejected before source hair is removed.
 	var missing:=MissingOpening.new()
 	var bob: Dictionary=Avatar.DEFAULT_APPEARANCE.duplicate();bob.hair="bob"
-	var intact: Image=missing.texture(bob,equipment,"front",0,"celebrate").get_image()
+	var intact: Image=missing.texture(bob,equipment,FALLBACK_DIRECTION,0,"celebrate").get_image()
 	check(missing.head_source_signature(intact)==ORIGINAL_RENDER_SHA,"Missing face opening erased the complete source")
 	# A changed source cannot borrow ownership or resurrect a cached haircut.
-	var warm: Texture2D=avatar.texture(bob,equipment,"front",0,"celebrate")
+	var warm: Texture2D=avatar.texture(bob,equipment,FALLBACK_DIRECTION,0,"celebrate")
 	var altered:=source.duplicate();altered.set_pixel(140,100,Color.MAGENTA)
 	check(avatar.legacy_heads.metrics_for("celebrate",altered).is_empty(),"One-pixel changed source borrowed ownership")
-	var recovered: Image=avatar.texture(bob,equipment,"front",0,"celebrate").get_image()
+	var recovered: Image=avatar.texture(bob,equipment,FALLBACK_DIRECTION,0,"celebrate").get_image()
 	check(avatar.head_source_signature(recovered)==ORIGINAL_RENDER_SHA and recovered.get_data()!=warm.get_image().get_data(),"Rejected head source retained stale final haircut texture")
 	check(avatar.legacy_heads.cache_snapshot().compiled_portraits==0,"Rejected source kept compiled masks")
 	var parsed: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Heads.MANIFEST_PATH))
@@ -116,10 +119,10 @@ func _initialize() -> void:
 	for color in ["chestnut","silver"]:
 		for style in ["windswept","bob"]:
 			var look: Dictionary=Avatar.DEFAULT_APPEARANCE.duplicate();look.hair=style;look.hair_color=color
-			var image: Image=unavailable.texture(look,equipment,"front",0,"celebrate").get_image()
+			var image: Image=unavailable.texture(look,equipment,FALLBACK_DIRECTION,0,"celebrate").get_image()
 			check(unavailable.head_source_signature(image)==ORIGINAL_RENDER_SHA,"Unowned hair dye leaked into the original coat")
 	var fresh=Heads.new()
 	check(fresh.resolve("celebrate","elf",Avatar.new()).is_empty() and fresh.cache_snapshot().compiled_portraits==0,"Unreviewed species was promoted to a human cut")
 	print("LEGACY_HEAD_METRICS: ",JSON.stringify({"default_requests":requests,"appearance_profiles":profiles,"body_material_changes":material_changes,"feature_changes":feature_changes,"rejected_data_cases":faults+1}))
-	if failures==0:print("PASS: reviewed legacy human cuts preserve original face body and 24 default requests with bounded masks and fail-closed data")
+	if failures==0:print("PASS: reviewed legacy human cuts preserve original face body and 21 default requests with bounded masks and fail-closed data")
 	quit(1 if failures else 0)

@@ -75,6 +75,7 @@ func _initialize() -> void:
 				_check(dressed.get_pixelv(point)==expected.get_pixelv(point),"Prop restoration lost selected skin or outfit")
 	_check_profile_photographs(avatar)
 	_check_footwork(avatar)
+	_check_celebration(avatar)
 	var signature: String=manifest.owners.keys()[0]
 	for fault in ["canvas","schema","coordinate","fraction","boolean","bounds","overlap","order","empty","hash"]:
 		var broken: Dictionary=manifest.duplicate(true)
@@ -160,6 +161,34 @@ func _check_footwork(avatar: Avatar) -> void:
 					if not upper_consistent: break
 				_check(upper_consistent and idle_pixels.slice(upper_size) != pixels.slice(upper_size),
 					"the %s %s preserves dressed upper-body pixels and presents different feet: %s" % [direction, action, config])
+
+func _check_celebration(avatar: Avatar) -> void:
+	var base := Avatar.DEFAULT_APPEARANCE.duplicate()
+	var camera_points := [Vector2i(145, 233), Vector2i(143, 242), Vector2i(151, 231), Vector2i(167, 239)]
+	for frame in range(5):
+		var witnesses := camera_points.duplicate()
+		if frame == 2: witnesses.append(Vector2i(91, 172))
+		var original := avatar.texture(base, {"outfit":"outfit-tide","hat":"hat-none"}, "front", frame, "celebrate").get_image()
+		for style in ["bob", "curly"]:
+			var look := base.merged({"hair":style, "face":"smiling"}, true)
+			var equipment := {"outfit":"outfit-rainvest","hat":"hat-straw"}
+			var dressed := avatar.texture(look, equipment, "front", frame, "celebrate").get_image()
+			for point: Vector2i in witnesses:
+				_check(dressed.get_pixelv(point) == original.get_pixelv(point),
+					"celebration preserves the camera and raised hand under the %s outfit at %d/%s" % [style, frame, point])
+			if frame != 4: continue
+			var neutral := avatar.texture(look, equipment, "front", 0, "idle").get_image()
+			var actual := dressed.get_data()
+			var expected := neutral.get_data()
+			var consistent := true
+			for index in range(0, actual.size(), 4):
+				if maxi(actual[index + 3], expected[index + 3]) < 128: continue
+				for channel in range(4):
+					if absi(actual[index + channel] - expected[index + channel]) <= 2: continue
+					consistent = false
+					break
+				if not consistent: break
+			_check(consistent, "the last celebration cel restores the exact %s dressed idle and expression" % style)
 
 func _check(ok: bool,message: String) -> void:
 	if not ok: failures.append(message)
