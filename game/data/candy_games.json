@@ -110,5 +110,19 @@
     "ordinary": "依順序接觸並冷卻四個模座",
     "attraction_tag": "冷台模座",
     "island_invitation": "方向鍵推冰，Q 換冰。暖格會停冰，擋片讓冰停在前一格。"
+  },
+  {
+    "id": "game-033",
+    "mode": "filling_press",
+    "zone": "candy",
+    "local_index": 9,
+    "name": "夾心壓奏",
+    "goal": "依節拍合模、按住、放開，讓三層夾心餅乾封口。空拍讓模具回彈。",
+    "instructions": "A/D 或左右方向鍵壓兩側，空白鍵壓雙模，R 切換 AI。也可點按畫面上的模具按鈕。",
+    "devil_hint": "封口後看餡偏向哪邊，在回彈線輕壓同一側，讓餡回中央。三層都要封口。",
+    "devil": "完成三層同步封口，並在回彈拍把至少一層偏餡壓回中央",
+    "ordinary": "依配方同步封口三層",
+    "attraction_tag": "節拍烘焙台",
+    "island_invitation": "A/D 壓左右模，空白鍵壓雙模。看合模線按住，再看放開線鬆手。"
   }
 ]

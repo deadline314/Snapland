@@ -1462,6 +1462,9 @@ func _show_game_rules(id: String) -> void:
 	elif definition.mode == "ice_slide":
 		notes[3].text = "冰糖確實滑過一格後，正式回合自然結算即可取普通卡，包含逾時。練習與取消不發卡。"
 		notes[4].text = "輔助取消融化、延長回合並可撤銷上一步。R 切換 AI 停點預覽。兩種拍貼都能使用輔助取得。"
+	elif definition.mode == "filling_press":
+		notes[3].text = "確實壓住雙側模具後，正式回合自然結算可取普通拍貼。完成三層便通關，練習與取消不發卡。"
+		notes[4].text = "輔助放寬合模與放開時間，點一下壓住，再點一次放開。AI 在封口拍隨左模補壓右模，回彈時仍由你點單側。"
 	_content_pager(objective_card,"GameRulesExtraDetails",notes,_render_game_rules_page,1,entry_stamp)
 	var row := HFlowContainer.new()
 	row.name="GameRulesActions"
