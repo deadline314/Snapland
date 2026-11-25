@@ -1,9 +1,14 @@
 extends Node
 
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
-const Catalog = preload("res://game/core/game_catalog.gd")
 const FIXTURE_APP_PREFIX := "SnaplandSaveGuard-"
-const FIXTURE_CORE_SCRIPTS := ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd", "game_catalog.gd", "region_routes.gd"]
+# Stage only the project's source dependency directories. Keep the same res:// paths.
+const FIXTURE_RESOURCE_DIRS := {
+	"game/core": "gd",
+	"game/story": "gd",
+	"game/data": "json",
+	"game/data/locales": "json",
+}
 
 var _fixture_root := ""
 var _fixture_userdata := ""
@@ -11,22 +16,36 @@ var _fixture_name := ""
 var _failed := false
 var _owns_fake_userdata := false
 var _fake_profile_hashes: Array[String] = []
+var _fixture_dirs: Array[String] = []
+var _fixture_files: Array[String] = []
 
 func _ready() -> void:
 	var temp_root := OS.get_environment("SNAPLAND_SAVE_PATH").replace("\\", "/").get_base_dir()
-	assert(temp_root.is_absolute_path(), "test project fixture uses the externally isolated absolute save directory")
+	if not _check(temp_root.is_absolute_path(), "test fixture requires an isolated absolute save directory"):
+		get_tree().quit(1)
+		return
 	var unique := "%d-%d" % [Time.get_ticks_usec(), randi()]
 	_fixture_root = temp_root.path_join("snapland-save-guard-" + unique)
 	_fixture_name = FIXTURE_APP_PREFIX + unique
 	var userdata_parent := OS.get_user_data_dir().replace("\\", "/").get_base_dir()
-	assert(userdata_parent.is_absolute_path(), "Godot provides the platform-specific userdata parent")
+	if not _check(userdata_parent.is_absolute_path(), "test fixture requires an absolute Godot userdata parent"):
+		get_tree().quit(1)
+		return
 	_fixture_userdata = userdata_parent.path_join(_fixture_name)
-	var make_error := DirAccess.make_dir_recursive_absolute(_fixture_root)
-	assert(make_error == OK, "create only a fresh temporary fixture root")
+	if not DirAccess.dir_exists_absolute(temp_root):
+		var error := DirAccess.make_dir_recursive_absolute(temp_root)
+		if not _check(error == OK, "Cannot create isolated save directory '%s' (%s)" % [temp_root, error_string(error)]):
+			get_tree().quit(1)
+			return
+	if not _make_fixture_dir(_fixture_root):
+		get_tree().quit(1)
+		return
 	var project_dir := _fixture_root.path_join("project")
-	assert(DirAccess.make_dir_recursive_absolute(project_dir) == OK)
 	_assertions()
-	_build_fixture_project(project_dir)
+	if _failed or not _build_fixture_project(project_dir):
+		_cleanup_temp_fixture()
+		get_tree().quit(1)
+		return
 	if DirAccess.dir_exists_absolute(_fixture_userdata):
 		_check(false, "unique default userdata fixture does not pre-exist")
 		_cleanup_temp_fixture()
@@ -75,35 +94,66 @@ func _assertions() -> void:
 	_check(SaveGuard.validate_save_path(_fixture_root.path_join("isolated/profile.json"), _fixture_userdata).is_empty(), "an absolute isolated temporary path is accepted")
 	print("MEASURED: user://progress.json String.is_absolute_path() = ", "user://progress.json".is_absolute_path(), "; validator rejects virtual URIs explicitly")
 
-func _build_fixture_project(project_dir: String) -> void:
-	var game_dir := project_dir.path_join("game")
-	var core_dir := game_dir.path_join("core")
-	assert(DirAccess.make_dir_recursive_absolute(core_dir) == OK)
-	for source: String in FIXTURE_CORE_SCRIPTS:
-		var source_path := "res://game/core/" + source
-		var target_path := core_dir.path_join(source)
-		var input := FileAccess.open(source_path, FileAccess.READ)
-		assert(input != null, "fixture dependency exists: " + source)
-		var output := FileAccess.open(target_path, FileAccess.WRITE)
-		assert(output != null, "fixture dependency destination opens: " + source)
-		output.store_buffer(input.get_buffer(input.get_length()))
-		input.close()
-		output.close()
-	var data_dir := game_dir.path_join("data")
-	assert(DirAccess.make_dir_recursive_absolute(data_dir) == OK)
-	for source: String in Catalog.DATA_PATHS.values():
-		_copy_script(source, data_dir.path_join(source.get_file()))
-	var tests_dir := game_dir.path_join("tests")
-	assert(DirAccess.make_dir_recursive_absolute(tests_dir) == OK)
-	_copy_script("res://game/tests/test_save_guard_child.gd", tests_dir.path_join("test_save_guard_child.gd"))
-	var project := FileAccess.open(project_dir.path_join("project.godot"), FileAccess.WRITE)
-	assert(project != null)
-	project.store_string("[application]\nconfig/name=\"%s\"\n\n[autoload]\nProgress=\"*res://game/core/progress.gd\"\n" % _fixture_name)
-	project.close()
-	var normal_entry := FileAccess.open(project_dir.path_join("normal_save_roundtrip.gd"), FileAccess.WRITE)
-	assert(normal_entry != null)
-	normal_entry.store_string(_normal_entrypoint_source())
-	normal_entry.close()
+func _build_fixture_project(project_dir: String) -> bool:
+	if not _make_fixture_dir(project_dir) or not _make_fixture_dir(project_dir.path_join("game")):
+		return false
+	for directory: String in FIXTURE_RESOURCE_DIRS:
+		if not _stage_fixture_resources(project_dir, directory, FIXTURE_RESOURCE_DIRS[directory]):
+			return false
+	if not _make_fixture_dir(project_dir.path_join("game/tests")):
+		return false
+	var child := "game/tests/test_save_guard_child.gd"
+	if not _copy_fixture_file("res://" + child, project_dir.path_join(child)):
+		return false
+	var project_config := "[application]\nconfig/name=\"%s\"\n\n[autoload]\nProgress=\"*res://game/core/progress.gd\"\n" % _fixture_name
+	return (_write_fixture_file(project_dir.path_join("project.godot"), project_config)
+		and _write_fixture_file(project_dir.path_join("normal_save_roundtrip.gd"), _normal_entrypoint_source()))
+
+
+func _stage_fixture_resources(project_dir: String, relative_dir: String, extension: String) -> bool:
+	var source_dir := "res://" + relative_dir
+	var parent := DirAccess.open(source_dir.get_base_dir())
+	if not _check(parent != null and not parent.is_link(source_dir.get_file()),
+		"Cannot open fixture resource directory '%s' through its source parent" % source_dir):
+		return false
+	var source := DirAccess.open(source_dir)
+	if not _check(source != null, "Cannot open fixture resource directory '%s' (%s)" % [source_dir, error_string(DirAccess.get_open_error())]):
+		return false
+	var target := project_dir.path_join(relative_dir)
+	if not _make_fixture_dir(target):
+		return false
+	for name: String in source.get_files():
+		if name.get_extension() != extension:
+			continue
+		var source_path := source_dir.path_join(name)
+		if not _check(not source.is_link(name), "Fixture resource is a link: " + source_path):
+			return false
+		if not _copy_fixture_file(source_path, target.path_join(name)):
+			return false
+	return true
+
+func _make_fixture_dir(path: String) -> bool:
+	var error := DirAccess.make_dir_absolute(path)
+	if not _check(error == OK, "Cannot create fixture directory '%s' (%s)" % [path, error_string(error)]):
+		return false
+	_fixture_dirs.append(path)
+	return true
+
+func _copy_fixture_file(source: String, target: String) -> bool:
+	_fixture_files.append(target)
+	var error := DirAccess.copy_absolute(source, target)
+	return _check(error == OK, "Cannot copy fixture resource '%s' (%s)" % [source, error_string(error)])
+
+func _write_fixture_file(path: String, content: String) -> bool:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if not _check(file != null, "Cannot open fixture file '%s' (%s)" % [path, error_string(FileAccess.get_open_error())]):
+		return false
+	_fixture_files.append(path)
+	file.store_string(content)
+	file.flush()
+	var error := file.get_error()
+	file.close()
+	return _check(error == OK, "Cannot write fixture file '%s' (%s)" % [path, error_string(error)])
 
 func _normal_entrypoint_source() -> String:
 	return """extends SceneTree
@@ -149,15 +199,6 @@ func _run_mode(mode: String) -> void:
 	push_error("unknown normal fixture mode: " + mode)
 	quit(7)
 """
-
-func _copy_script(source_path: String, target_path: String) -> void:
-	var input := FileAccess.open(source_path, FileAccess.READ)
-	assert(input != null)
-	var output := FileAccess.open(target_path, FileAccess.WRITE)
-	assert(output != null)
-	output.store_buffer(input.get_buffer(input.get_length()))
-	input.close()
-	output.close()
 
 func _seed_fake_default_userdata() -> void:
 	var paths := _protected_paths()
@@ -270,27 +311,20 @@ func _cleanup_fake_userdata() -> void:
 	_check(DirAccess.remove_absolute(_fixture_userdata) == OK, "remove only the verified empty unique fake profile")
 
 func _cleanup_temp_fixture() -> void:
-	# The fixture root is generated uniquely above and contains only test-owned files.
-	DirAccess.remove_absolute(_fixture_root.path_join("project/normal_save_roundtrip.gd"))
-	DirAccess.remove_absolute(_fixture_root.path_join("project/game/tests/test_save_guard_child.gd"))
-	for name: String in FIXTURE_CORE_SCRIPTS:
-		DirAccess.remove_absolute(_fixture_root.path_join("project/game/core").path_join(name))
-	for source: String in Catalog.DATA_PATHS.values():
-		DirAccess.remove_absolute(_fixture_root.path_join("project/game/data").path_join(source.get_file()))
-	DirAccess.remove_absolute(_fixture_root.path_join("project/game/data"))
-	DirAccess.remove_absolute(_fixture_root.path_join("project/game/tests"))
-	DirAccess.remove_absolute(_fixture_root.path_join("project/game/core"))
-	DirAccess.remove_absolute(_fixture_root.path_join("project/game"))
-	DirAccess.remove_absolute(_fixture_root.path_join("project/project.godot"))
-	DirAccess.remove_absolute(_fixture_root.path_join("project"))
+	# Remove only paths created in this test's unique root, including partial stages.
 	var positive_save := _fixture_root.path_join("positive-save/progress.json")
 	for suffix: String in ["", ".bak", ".tmp"]:
 		DirAccess.remove_absolute(positive_save + suffix)
 	DirAccess.remove_absolute(positive_save.get_base_dir())
-	_check(DirAccess.remove_absolute(_fixture_root) == OK, "remove only the empty unique temporary fixture root")
+	for path: String in _fixture_files:
+		if FileAccess.file_exists(path):
+			_check(DirAccess.remove_absolute(path) == OK, "remove owned fixture file " + path)
+	for index in range(_fixture_dirs.size() - 1, -1, -1):
+		var directory := _fixture_dirs[index]
+		_check(DirAccess.remove_absolute(directory) == OK, "remove empty owned fixture directory " + directory)
 
-func _check(condition: bool, description: String) -> void:
-	if condition:
-		return
-	_failed = true
-	push_error("FAIL: " + description)
+func _check(condition: bool, description: String) -> bool:
+	if not condition:
+		_failed = true
+		push_error("FAIL: " + description)
+	return condition
