@@ -3,6 +3,7 @@ extends Node
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
 const FIXTURE_APP_PREFIX := "SnaplandSaveGuard-"
+const FIXTURE_CORE_SCRIPTS := ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd", "game_catalog.gd", "region_routes.gd"]
 
 var _fixture_root := ""
 var _fixture_userdata := ""
@@ -32,12 +33,13 @@ func _ready() -> void:
 		get_tree().quit(1)
 		return
 	var probe := _run_child(project_dir, "", "probe")
-	if probe.exit_code != 0 or not probe.output.contains("FIXTURE_USERDATA=" + _fixture_userdata) or not DirAccess.dir_exists_absolute(_fixture_userdata):
-		_check(false, "Godot probe creates and reports the exact unique fake default-userdata directory")
+	_owns_fake_userdata = probe.output.contains("FIXTURE_USERDATA=" + _fixture_userdata) and DirAccess.dir_exists_absolute(_fixture_userdata)
+	if probe.exit_code != 0 or not _owns_fake_userdata:
+		_check(false, "Godot probe loads Progress and reports the exact fake userdata (exit %d):\n%s" % [probe.exit_code, probe.output])
+		_cleanup_fake_userdata()
 		_cleanup_temp_fixture()
 		get_tree().quit(1)
 		return
-	_owns_fake_userdata = true
 	_seed_fake_default_userdata()
 	_run_guard_children(project_dir)
 	_verify_fake_userdata_unchanged()
@@ -77,7 +79,7 @@ func _build_fixture_project(project_dir: String) -> void:
 	var game_dir := project_dir.path_join("game")
 	var core_dir := game_dir.path_join("core")
 	assert(DirAccess.make_dir_recursive_absolute(core_dir) == OK)
-	for source: String in ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd", "game_catalog.gd"]:
+	for source: String in FIXTURE_CORE_SCRIPTS:
 		var source_path := "res://game/core/" + source
 		var target_path := core_dir.path_join(source)
 		var input := FileAccess.open(source_path, FileAccess.READ)
@@ -271,7 +273,7 @@ func _cleanup_temp_fixture() -> void:
 	# The fixture root is generated uniquely above and contains only test-owned files.
 	DirAccess.remove_absolute(_fixture_root.path_join("project/normal_save_roundtrip.gd"))
 	DirAccess.remove_absolute(_fixture_root.path_join("project/game/tests/test_save_guard_child.gd"))
-	for name: String in ["progress.gd", "wardrobe_catalog.gd", "time_of_day.gd", "test_save_guard.gd", "game_catalog.gd"]:
+	for name: String in FIXTURE_CORE_SCRIPTS:
 		DirAccess.remove_absolute(_fixture_root.path_join("project/game/core").path_join(name))
 	for source: String in Catalog.DATA_PATHS.values():
 		DirAccess.remove_absolute(_fixture_root.path_join("project/game/data").path_join(source.get_file()))

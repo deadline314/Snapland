@@ -25,6 +25,7 @@ func _run() -> void:
 	session.finished.connect(func(result: Dictionary): results.append(result))
 	session.cancelled.connect(func(): cancelled.append(1))
 	for definition: Dictionary in Catalog.all_definitions():
+		var before_formal := results.size()
 		session.start(definition.id)
 		if definition.mode == "jelly_trampoline":
 			preload("res://game/tests/test_jelly_trampoline_session.gd").launch(session, 0.15)
@@ -57,17 +58,18 @@ func _run() -> void:
 			session._process(0.1)
 			move_tray.pressed = false
 			session._unhandled_input(move_tray)
+		if definition.mode == "rain_courier": _walk_with_courier(session)
 		if session.active_driver != null:
-			for tick in 4000:
-				if session.ended: break
-				session._process(0.1)
+			_advance_driver_to_result(session)
 		else:
 			session._finish(false, true)
-		_check(results.back().get("ordinary_eligible", false) and not results.back().success and not results.back().devil, definition.id + " natural false stays honest and ordinary eligible")
+		_check(results.size() == before_formal + 1 and results.back().get("ordinary_eligible", false)
+			and not results.back().success and not results.back().devil, definition.id + " natural false stays honest and ordinary eligible")
 		var result_count := results.size()
 		if definition.mode in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw"]: session._process(0.25)
 		else: session._finish(true, true)
 		_check(results.size() == result_count, "natural finish emits once")
+		var before_practice := results.size()
 		session.start(definition.id)
 		session.set_practice_mode(true)
 		if definition.mode == "jelly_trampoline":
@@ -111,9 +113,13 @@ func _run() -> void:
 			for tick in 310:
 				if session.ended: break
 				session._process(0.25)
+		elif definition.mode == "rain_courier":
+			_walk_with_courier(session)
+			_advance_driver_to_result(session)
 		elif session.active_driver != null: session._driver_state["ordinary_eligible"] = true
-		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw"]: session._finish(false)
-		_check(results.back().has("ordinary_eligible") and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
+		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw", "rain_courier"]: session._finish(false)
+		_check(results.size() == before_practice + 1 and results.back().has("ordinary_eligible")
+			and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
 		session.set_practice_mode(false)
 		session.start(definition.id)
 		result_count = results.size()
@@ -127,10 +133,39 @@ func _run() -> void:
 	session._driver_state["ordinary_eligible"] = false
 	session._finish(false)
 	_check(not results.back().ordinary_eligible, "driver natural ineligibility is retained")
+	var before_idle := results.size()
+	session.start("game-037")
+	_advance_driver_to_result(session)
+	_check(results.size() == before_idle + 1 and results.back().has("ordinary_eligible")
+		and not results.back().ordinary_eligible and not results.back().success and not results.back().practice,
+		"inactive formal courier expires without ordinary eligibility")
 	session.free()
 	for failure in failures: push_error("FAIL: " + failure)
 	if failures.is_empty(): print("PASS: every delivered participation result, practice, cancellation and driver eligibility")
 	quit(0 if failures.is_empty() else 1)
+
+func _advance_driver_to_result(session: Session) -> void:
+	for tick in 4000:
+		if session.ended:
+			break
+		session._process(0.1)
+
+func _walk_with_courier(session: Session) -> void:
+	# Real route selection, pickup, and movement establish participation without delivering a box.
+	var key := InputEventKey.new()
+	for code in [KEY_RIGHT, KEY_E]:
+		key.keycode = code
+		key.pressed = true
+		session._unhandled_input(key)
+		key.pressed = false
+		session._unhandled_input(key)
+	key.keycode = KEY_UP
+	key.pressed = true
+	session._unhandled_input(key)
+	for tick in 22:
+		session._process(0.1)
+	key.pressed = false
+	session._unhandled_input(key)
 
 func _check(ok: bool, message: String) -> void:
 	if not ok: failures.append(message)

@@ -3,18 +3,24 @@ extends SceneTree
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
 	var mode := str(args[args.size() - 1]) if not args.is_empty() else "probe"
-	if mode == "probe":
-		print("FIXTURE_USERDATA=" + OS.get_user_data_dir().replace("\\", "/"))
-		quit(0)
-		return
 	call_deferred("_run_mode", mode)
 
 func _run_mode(mode: String) -> void:
 	if mode == "guard":
-		print("ERROR: save guard child reached its test body")
+		push_error("save guard child reached its test body without startup rejection")
+		quit(5)
+		return
+	if mode == "probe":
+		print("FIXTURE_USERDATA=" + OS.get_user_data_dir().replace("\\", "/"))
+	var progress := root.get_node_or_null("Progress")
+	if not is_instance_valid(progress) or not progress.has_method("save_progress") or not progress.has_method("load_progress"):
+		push_error("save guard child could not load the required Progress autoload")
+		quit(6)
+		return
+	if mode == "probe":
+		quit(0)
 		return
 	if mode == "positive":
-		var progress := root.get_node("Progress")
 		if not progress.call("save_progress"):
 			push_error("positive isolated save failed")
 			quit(2)
