@@ -965,14 +965,14 @@
     {
       "name": "燈籠繩渡",
       "core": "協調",
-      "action": "升降繩索並滑送燈籠",
-      "goal": "把四盞燈掛到巷上鉤",
+      "action": "A/D 選左或右繩端，W/S 升降，空白鍵開關煞車，E 取燈或掛燈，R 重送，輔助可按 H 固定對端。也可點按畫面或使用手把方向鍵。",
+      "goal": "用繩車運送四盞燈籠並掛上指定掛鉤",
       "choice": "快滑越坡或停住避招牌",
       "feedback": "繩斜率、燈擺與掛鉤對齊",
       "variation": "鉤位及攤車阻擋",
       "multi": "各控一端，可鎖端再交棒",
       "ai": "簡單AI固定目標高度不主動改向",
-      "demon": "用燈擺繞過一塊凸招牌",
+      "demon": "讓一盞燈藉擺盪避開直掛會撞到的招牌，掛好同一盞並完成四盞",
       "variant": "移動市鉤位行走須先預留繩長",
       "assist": "減少擺幅、掛鉤磁吸",
       "test": "單人鎖端後仍可完成全路徑",
@@ -983,8 +983,9 @@
       "reference": "catalog-overcooked",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「升降繩索並滑送燈籠」；「快滑越坡或停住避招牌」形成取捨，以「單人鎖端後仍可完成全路徑」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "lantern_crossing"
     },
     {
       "name": "銅板借彈",

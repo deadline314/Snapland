@@ -5,6 +5,7 @@ const Atmosphere = preload("res://game/world/nightmarket_atmosphere.gd")
 const BOUNDS := Rect2(-12, -14.1, 24, 23.6)
 const GROUND_Y := 0.20
 const ROOF_Y := 0.92
+const LANTERN_ENTRY := Vector3(4.12, ROOF_Y, -10.58)
 const ENTRY := Vector3(0, GROUND_Y, 7.55)
 const STORY_POINT := Vector3(4.35, GROUND_Y, 7.55)
 const STORY_HOST := Vector3(6.0, GROUND_Y, 7.23)
@@ -67,6 +68,8 @@ func _build_region_geometry() -> void:
 	_point("game-038", "炭火串燒 · 翻面收火", Vector3(9.15, GROUND_Y, 3.27))
 	_build_courier_stand()
 	_build_skewer_stand()
+	_point("game-039", "燈籠繩渡 · 屋頂掛燈", LANTERN_ENTRY)
+	_build_lantern_stand()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
 	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
@@ -309,6 +312,20 @@ func _build_skewer_stand() -> void:
 		_box(at + Vector3(x, 1.33, 0), Vector3(0.045, 0.065, 0.86), Color("#9b8990"))
 	_market_lantern(at + Vector3(0.71, 1.40, 0.49), PAPER_LIGHT, 0.12)
 	_sign("炭火串燒", at + Vector3(0, 0.18, -0.52), Color("#ffd28e"))
+
+
+func _build_lantern_stand() -> void:
+	var at := Vector3(5.13, ROOF_Y, -10.41)
+	var wood := Color("#805a63")
+	_box(at + Vector3(0.02, 0.11, 0), Vector3(0.48, 0.20, 2.07), STALL)
+	for z in [-0.86, 0.69]:
+		_box(at + Vector3(0, 0.79, z), Vector3(0.14, 1.51, 0.13), wood)
+		_box(at + Vector3(0, 1.29, z), Vector3(0.28, 0.28, 0.22), CORAL_NEON)
+	var rail := _box(at + Vector3(0, 1.49, -0.08), Vector3(0.16, 0.12, 1.83), wood)
+	rail.rotation.x = -0.09
+	for z in [-0.58, -0.11, 0.36]:
+		_market_lantern(at + Vector3(0, 1.22, z), PAPER_LIGHT, 0.12)
+	_sign("燈籠繩渡", at + Vector3(-0.76, 0.04, -0.45), Color("#f7bd8a"))
 
 
 func _build_route_markers() -> void:

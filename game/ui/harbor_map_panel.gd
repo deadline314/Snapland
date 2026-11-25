@@ -137,6 +137,10 @@ class TerrainChart extends Control:
 				draw_line(center+Vector2(u*0.65,-u*0.55),center+Vector2(u*0.65,u),ink,width)
 			"nightmarket:signs":
 				draw_polyline(PackedVector2Array([center+Vector2(u*0.25,-u),center+Vector2(-u*0.55,0),center+Vector2(u*0.55,0),center+Vector2(-u*0.25,u)]),ink,width)
+			"game-039":
+				draw_line(center + Vector2(-u, -u), center + Vector2(u, -u * 0.58), ink, width, true)
+				draw_line(center + Vector2(0, -u * 0.81), center, ink, width, true)
+				draw_circle(center + Vector2(0, u * 0.37), u * 0.58, ink, false, width, true)
 			"game-038":
 				for offset in [-0.66, 0.0, 0.66]:
 					var start := center + Vector2(u * offset - u * 0.27, u)

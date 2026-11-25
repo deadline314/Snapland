@@ -1635,6 +1635,9 @@ func _show_game_rules(id: String) -> void:
 	elif definition.mode == "bubble_lift":
 		notes[3].text = "讓泡籃離台運行後，正式回合自然結算可取普通拍貼。完成三桶才通關。"
 		notes[4].text = "輔助讓失效的泡籃緩降回收並放寬接收高度。R 在確認載重後，跟隨你的踩泵補力。"
+	elif definition.mode == "lantern_crossing":
+		notes[3].text = "實際運燈後自然結算可收藏普通卡，指定四盞全掛上才通關。練習或中途離場不計。"
+		notes[4].text = "輔助降低多餘擺幅並放寬低速對鉤。H 固定對端，仍可用燈擺避開牌角。"
 	elif definition.mode == "skewer_grill":
 		notes[3].text = "實際受熱後，正式回合自然結算可收藏普通卡。三串四面熟透上桌才通關。"
 		notes[4].text = "輔助放寬焦前時間並暫停提示一次。R 的幫手只翻指定串，仍可用餘溫收火取小惡魔。"
@@ -2574,7 +2577,7 @@ func _show_ticket() -> void:
 	if world_region=="candy":
 		body.add_child(Paper.label(_candy_info_text()+"溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
 	elif world_region=="nightmarket":
-		var note := Paper.label("入口找阿浪合照，雨棚巷送餐，東側攤街烤串。遊戲 %d / 12 款。" % Catalog.definitions("nightmarket").size(),18,Paper.TEAL)
+		var note := Paper.label("入口合照，雨棚巷送餐，東街烤串，屋頂掛燈。遊戲 %d / 12 款。" % Catalog.definitions("nightmarket").size(),18,Paper.TEAL)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	var groups := GridContainer.new()
