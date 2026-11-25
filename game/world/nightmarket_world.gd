@@ -10,6 +10,7 @@ const SCENT_ENTRY := Vector3(-5.65, GROUND_Y, -4.35)
 const COIN_ENTRY := Vector3(-9.15, GROUND_Y, -2.18)
 const ROOF_Y := 0.92
 const LANTERN_ENTRY := Vector3(4.12, ROOF_Y, -10.58)
+const UMBRELLA_ENTRY := Vector3(-3.95, ROOF_Y, -12.44)
 const ENTRY := Vector3(0, GROUND_Y, 7.55)
 const STORY_POINT := Vector3(4.35, GROUND_Y, 7.55)
 const STORY_HOST := Vector3(6.0, GROUND_Y, 7.23)
@@ -74,6 +75,8 @@ func _build_region_geometry() -> void:
 	_build_skewer_stand()
 	_point("game-039", "燈籠繩渡 · 屋頂掛燈", LANTERN_ENTRY)
 	_build_lantern_stand()
+	_point("game-044", "紙傘轉燈 · 西側屋頂", UMBRELLA_ENTRY)
+	_build_umbrella_stand()
 	_point("game-040", "銅板借彈 · 西街桌檯", COIN_ENTRY)
 	_build_coin_stand()
 	_point("game-041", "香氣尋攤 · 北街聞香亭", SCENT_ENTRY)
@@ -402,6 +405,23 @@ func _build_pancake_stand() -> void:
 	var ladle := _box(at + Vector3(0.08, 1.08, 0.12), Vector3(0.45, 0.05, 0.05), brass)
 	ladle.rotation.y = -0.43
 	_sign("西北煎台", at + Vector3(0.06, 0.60, 0.42), PAPER_LIGHT)
+
+
+func _build_umbrella_stand() -> void:
+	var at := Vector3(-4.16, ROOF_Y, -13.50)
+	var paper := Color("#b48777")
+	var brass := Color("#a5795b")
+	_cylinder(at + Vector3(0, 0.18, 0), 0.44, 0.35, STALL)
+	_cylinder(at + Vector3(0, 0.42, 0), 0.10, 0.68, brass)
+	_cylinder(at + Vector3(0, 0.78, 0), 0.58, 0.075, paper)
+	_cylinder(at + Vector3(0, 0.83, 0), 0.13, 0.09, PAPER_LIGHT)
+	for sector in 8:
+		var angle := TAU * float(sector) / 8.0
+		var radial := Vector3(cos(angle), 0.0, sin(angle))
+		var rib := _box(at + radial * 0.31 + Vector3(0, 0.84, 0), Vector3(0.49, 0.023, 0.034), brass)
+		rib.rotation.y = -angle
+	_market_lantern(at + Vector3(0.72, 0.78, 0.0), PAPER_LIGHT, 0.16)
+	_sign("紙傘轉燈", at + Vector3(0.12, 0.32, 0.47), PAPER_LIGHT)
 
 
 func _build_route_markers() -> void:

@@ -1090,14 +1090,14 @@
     {
       "name": "紙傘轉燈",
       "core": "節奏",
-      "action": "依燈掃角轉傘並短停",
-      "goal": "接住四段光紋接成花",
+      "action": "按住 A/D 或左右鍵轉傘，空白鍵煞停。輔助可按 F 切換逐格轉傘。也可點按畫面或用手把。",
+      "goal": "迎著掃燈接亮四段光紋，拼成四片花瓣",
       "choice": "連轉順拍或停傘留白",
       "feedback": "傘骨光紋與掃角拍點",
       "variation": "掃燈順序和留白段",
       "multi": "各持傘，拼接共用投影",
       "ai": "簡單AI依玩家停傘補外圈",
-      "demon": "保留兩段空白形成隱藏花芯",
+      "demon": "先轉動再主動煞停，使指定傘骨在兩個留白段實際遮光，再接亮四片花瓣",
       "variant": "攤車帶燈移動須改轉向",
       "assist": "放寬角窗、可按格轉傘",
       "test": "留白不是漏按且能預先識別",
@@ -1108,8 +1108,9 @@
       "reference": "catalog-thumper",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「依燈掃角轉傘並短停」；「連轉順拍或停傘留白」形成取捨，以「留白不是漏按且能預先識別」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "umbrella_lights"
     },
     {
       "name": "湯碗擺渡",

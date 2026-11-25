@@ -48,6 +48,8 @@ func _run() -> void:
 		"real collision supports the elevated roof deck")
 	var lantern_stop := Vector2(World.LANTERN_ENTRY.x, World.LANTERN_ENTRY.z)
 	check(await walk_to(lantern_stop) and _world.nearest.get("id") == "game-039", "accessible rooftop lantern stand is the real interaction target")
+	var umbrella_stop := Vector2(World.UMBRELLA_ENTRY.x, World.UMBRELLA_ENTRY.z)
+	check(await walk_to(umbrella_stop) and _world.nearest.get("id") == "game-044", "west rooftop umbrella is reachable on foot")
 	check(await walk_to(Vector2(0, lantern_stop.y)) and await walk_to(Vector2(0, -4.3)), "physical ramp also supports the descent")
 	var node_count: int = _world.find_children("*", "", true, false).size()
 	var lit: Material = _world._stall_lights[0].material_override

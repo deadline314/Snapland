@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Session = preload("res://game/minigames/session.gd")
+const Umbrella = preload("res://game/minigames/umbrella_lights_model.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
 const Chocolate = preload("res://game/tests/test_chocolate_etching_session.gd")
 const Cotton = preload("res://game/tests/test_cotton_wind_session.gd")
@@ -58,6 +59,7 @@ func _run() -> void:
 			session._process(0.1)
 			move_tray.pressed = false
 			session._unhandled_input(move_tray)
+		if definition.mode == "umbrella_lights": _expose_first_umbrella_petal(session)
 		if definition.mode == "pancake_fold": _place_pancake_batter(session)
 		if definition.mode == "banner_cart": _push_banner_cart(session)
 		if definition.mode == "scent_trail": _sample_initial_wake(session)
@@ -119,6 +121,9 @@ func _run() -> void:
 			for tick in 310:
 				if session.ended: break
 				session._process(0.25)
+		elif definition.mode == "umbrella_lights":
+			_expose_first_umbrella_petal(session)
+			_advance_driver_to_result(session)
 		elif definition.mode == "pancake_fold":
 			_place_pancake_batter(session)
 			_advance_driver_to_result(session)
@@ -141,7 +146,7 @@ func _run() -> void:
 			_walk_with_courier(session)
 			_advance_driver_to_result(session)
 		elif session.active_driver != null: session._driver_state["ordinary_eligible"] = true
-		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw", "rain_courier", "skewer_grill", "lantern_crossing", "coin_bank_shot", "scent_trail", "banner_cart", "pancake_fold"]: session._finish(false)
+		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw", "rain_courier", "skewer_grill", "lantern_crossing", "coin_bank_shot", "scent_trail", "banner_cart", "pancake_fold", "umbrella_lights"]: session._finish(false)
 		_check(results.size() == before_practice + 1 and results.back().has("ordinary_eligible")
 			and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
 		session.set_practice_mode(false)
@@ -193,6 +198,11 @@ func _run() -> void:
 	_advance_driver_to_result(session)
 	_check(results.size() == before_idle + 1 and not results.back().ordinary_eligible and not results.back().success,
 		"waiting by the griddle does not count as pouring batter")
+	before_idle = results.size()
+	session.start("game-044")
+	_advance_driver_to_result(session)
+	_check(results.size() == before_idle + 1 and not results.back().ordinary_eligible and not results.back().success,
+		"waiting under the moving lamp does not count as deliberate exposure")
 	session.free()
 	for failure in failures: push_error("FAIL: " + failure)
 	if failures.is_empty(): print("PASS: every delivered participation result, practice, cancellation and driver eligibility")
@@ -242,6 +252,40 @@ func _start_lantern_move(session: Session) -> void:
 		session._unhandled_input(key)
 		key.pressed = false
 		session._unhandled_input(key)
+
+
+func _expose_first_umbrella_petal(session: Session) -> void:
+	# Follow the real moving guide with held inputs for exactly the first phase.
+	var held := 0.0
+	for tick in 250:
+		var state: Dictionary = session.active_driver.snapshot()
+		if state.phase_index != 0 or state.ended:
+			break
+		var feed := 0.0
+		if state.live or state.seconds_to_sweep <= 4.0 * Umbrella.TICK + 0.00001:
+			feed = rad_to_deg(float(state.beam_end - state.beam_start)) / float(state.sweep_seconds)
+		var error := rad_to_deg(angle_difference(state.angle, state.guide_heading))
+		var velocity := rad_to_deg(state.velocity)
+		var desired := clampf(feed + 8.0 * error, -96.0, 96.0)
+		var steering := signf(desired - velocity) if absf(desired - velocity) > 3.8 else 0.0
+		if absf(feed) < 4.0 and absf(error) <= 1.3 and absf(velocity) <= 8.0:
+			steering = 0.0
+		if held != steering:
+			if held != 0.0:
+				_umbrella_turn_key(session, held, false)
+			if steering != 0.0:
+				_umbrella_turn_key(session, steering, true)
+			held = steering
+		session._process(Umbrella.TICK)
+	if held != 0.0:
+		_umbrella_turn_key(session, held, false)
+
+
+func _umbrella_turn_key(session: Session, direction: float, pressed: bool) -> void:
+	var event := InputEventKey.new()
+	event.physical_keycode = KEY_A if direction < 0.0 else KEY_D
+	event.pressed = pressed
+	session._unhandled_input(event)
 
 
 func _place_pancake_batter(session: Session) -> void:

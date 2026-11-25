@@ -198,6 +198,10 @@ class TerrainChart extends Control:
 				draw_line(center+Vector2(u*0.65,-u*0.55),center+Vector2(u*0.65,u),ink,width)
 			"nightmarket:signs":
 				draw_polyline(PackedVector2Array([center+Vector2(u*0.25,-u),center+Vector2(-u*0.55,0),center+Vector2(u*0.55,0),center+Vector2(-u*0.25,u)]),ink,width)
+			"game-044":
+				draw_arc(center, u * 0.91, PI, TAU, 16, ink, width, true)
+				draw_line(center + Vector2(-u * 0.91, 0), center + Vector2(u * 0.91, 0), ink, width, true)
+				draw_line(center, center + Vector2(0, u * 0.71), ink, width, true)
 			"game-043":
 				draw_circle(center, u * 0.84, ink, false, width, true)
 				draw_line(center + Vector2(0, -u * 0.72), center + Vector2(0, u * 0.72), ink, width, true)

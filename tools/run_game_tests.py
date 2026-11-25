@@ -22,6 +22,8 @@ EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
     "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
+    "umbrella lights driver tests": "PASS: umbrella lights driver brake and detent controls",
+    "umbrella lights model tests": "PASS: umbrella lights angular exposure and deliberate darkness",
     "pancake fold driver tests": "PASS: pancake fold driver tool handoff and metered inputs",
     "pancake fold model tests": "PASS: pancake fold batter conservation and reclaimed fold ear",
     "banner cart driver tests": "PASS: banner cart driver held controls and safe release",
@@ -411,6 +413,8 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
+        ("umbrella lights driver tests", common + ["--script", "res://game/tests/test_umbrella_lights_driver.gd"]),
+        ("umbrella lights model tests", common + ["--script", "res://game/tests/test_umbrella_lights.gd"]),
         ("pancake fold driver tests", common + ["--script", "res://game/tests/test_pancake_fold_driver.gd"]),
         ("pancake fold model tests", common + ["--script", "res://game/tests/test_pancake_fold.gd"]),
         ("banner cart driver tests", common + ["--script", "res://game/tests/test_banner_cart_driver.gd"]),
