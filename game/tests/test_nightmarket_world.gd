@@ -24,8 +24,11 @@ func _run() -> void:
 		and baseline.land.size() == 7 and not baseline.covered, "world declares its real terrain and uses a stable set of points")
 	check(baseline.points.any(func(point: Dictionary) -> bool: return point.id == "game-038"), "real skewer stand appears on east street chart")
 	var grill_stop := Vector2(9.15, 3.27)
-	for position in [Vector2(-9.6, 7.2), Vector2(-9.6, -4.3), Vector2(9.6, -4.3), grill_stop, Vector2(9.6, 7.2), Vector2(0, 7.2), Vector2(0, 0.7)]:
+	var coin_stop := Vector2(World.COIN_ENTRY.x, World.COIN_ENTRY.z)
+	for position in [Vector2(-9.6, 7.2), coin_stop, Vector2(-9.6, -4.3), Vector2(9.6, -4.3), grill_stop, Vector2(9.6, 7.2), Vector2(0, 7.2), Vector2(0, 0.7)]:
 		check(await walk_to(position), "real walker reaches %s without falling" % position)
+		if position == coin_stop:
+			check(_world.nearest.get("id") == "game-040", "coin stand is reachable and selected on the west walkway")
 		if position == grill_stop:
 			check(_world.nearest.get("id") == "game-038", "skewer stall is the interactable destination on foot")
 	check(_world.covered_at(_world.player.position) and _world.current_area == "雨棚巷", "central awning covers the actual walking area")

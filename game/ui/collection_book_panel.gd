@@ -421,6 +421,7 @@ func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Diction
 	if not devil and game.mode == "filling_press": instructions="實際雙側按壓後自然結算即可收藏。"
 	if not devil and game.mode == "paper_glide": instructions="投出紙機並飛離試飛台後，自然結算即可收藏。"
 	if not devil and game.mode == "bubble_lift": instructions="讓泡籃離台運行後，自然結算即可收藏。"
+	if not devil and game.mode == "coin_bank_shot": instructions="實際投幣滑行後，正式回合自然結算可收藏。"
 	if not devil and game.mode == "lantern_crossing": instructions="實際運送燈籠後，正式回合自然結算可收藏。"
 	if not devil and game.mode == "skewer_grill": instructions="實際烘烤後，正式回合自然結算可收藏。"
 	if not devil and game.mode == "rain_courier": instructions="實際走過送餐路線後，自然結算即可收藏。"

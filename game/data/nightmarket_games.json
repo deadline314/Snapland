@@ -40,5 +40,19 @@
     "devil_hint": "調整速度與煞車時機，用燈擺繞過凸出的招牌。掛好這盞才計入。",
     "attraction_tag": "屋頂繩渡站",
     "island_invitation": "扣著煞車可先調兩端，放開後滑車往較低端滑。抵達掛鉤，再煞停掛燈。"
+  },
+  {
+    "id": "game-040",
+    "mode": "coin_bank_shot",
+    "zone": "nightmarket",
+    "local_index": 4,
+    "name": "銅板借彈",
+    "goal": "瞄準、配置斜板，把三枚銅板穩穩送進指定孔。",
+    "instructions": "A/D 調角，W/S 調力道，F 或 Tab 選瞄投處或斜板，E 收放斜板，空白鍵投幣，輔助可按 R 調指定板。也可點按畫面或用手把。",
+    "ordinary": "把三枚銅板減速送入指定孔",
+    "devil": "同一枚銅板實際反彈兩片不同斜板後穩落指定孔，並完成三孔",
+    "devil_hint": "讓同一枚依序撞過兩片斜板，用反彈或布面減速，再進指定孔。",
+    "attraction_tag": "西街銅板桌",
+    "island_invitation": "收起斜板可直投，放下可借彈。布面會減速，擦到孔緣或太快會彈開。"
   }
 ]

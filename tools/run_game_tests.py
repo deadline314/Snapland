@@ -22,6 +22,8 @@ EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
     "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
+    "coin bank shot driver tests": "PASS: coin bank shot driver input cadence and release",
+    "coin bank shot model tests": "PASS: coin bank shot physical boards, material and called pockets",
     "lantern crossing driver tests": "PASS: lantern crossing driver inputs, detents and release",
     "lantern crossing model tests": "PASS: lantern crossing controls, pendulum clearance and four hooks",
     "skewer grill model tests": "PASS: skewer grill independent faces, charcoal zones and residual heat",
@@ -399,6 +401,8 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
+        ("coin bank shot driver tests", common + ["--script", "res://game/tests/test_coin_bank_shot_driver.gd"]),
+        ("coin bank shot model tests", common + ["--script", "res://game/tests/test_coin_bank_shot.gd"]),
         ("lantern crossing driver tests", common + ["--script", "res://game/tests/test_lantern_crossing_driver.gd"]),
         ("lantern crossing model tests", common + ["--script", "res://game/tests/test_lantern_crossing.gd"]),
         ("skewer grill model tests", common + ["--script", "res://game/tests/test_skewer_grill.gd"]),

@@ -4,6 +4,7 @@ const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const Atmosphere = preload("res://game/world/nightmarket_atmosphere.gd")
 const BOUNDS := Rect2(-12, -14.1, 24, 23.6)
 const GROUND_Y := 0.20
+const COIN_ENTRY := Vector3(-9.15, GROUND_Y, -2.18)
 const ROOF_Y := 0.92
 const LANTERN_ENTRY := Vector3(4.12, ROOF_Y, -10.58)
 const ENTRY := Vector3(0, GROUND_Y, 7.55)
@@ -70,6 +71,8 @@ func _build_region_geometry() -> void:
 	_build_skewer_stand()
 	_point("game-039", "燈籠繩渡 · 屋頂掛燈", LANTERN_ENTRY)
 	_build_lantern_stand()
+	_point("game-040", "銅板借彈 · 西街桌檯", COIN_ENTRY)
+	_build_coin_stand()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
 	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
@@ -326,6 +329,25 @@ func _build_lantern_stand() -> void:
 	for z in [-0.58, -0.11, 0.36]:
 		_market_lantern(at + Vector3(0, 1.22, z), PAPER_LIGHT, 0.12)
 	_sign("燈籠繩渡", at + Vector3(-0.76, 0.04, -0.45), Color("#f7bd8a"))
+
+
+func _build_coin_stand() -> void:
+	var at := Vector3(-10.66, GROUND_Y, -2.30)
+	var lacquer := Color("#89545a")
+	var felt := Color("#425e67")
+	_box(at + Vector3(0, 0.44, 0), Vector3(1.66, 0.87, 1.38), STALL)
+	_box(at + Vector3(0, 0.91, 0), Vector3(1.82, 0.15, 1.56), lacquer)
+	_box(at + Vector3(0, 1.00, -0.05), Vector3(1.57, 0.06, 1.33), felt)
+	for index in 3:
+		var x := -0.49 + float(index) * 0.47
+		_cylinder(at + Vector3(x, 1.05, -0.33), 0.145, 0.043, Color("#a97759"))
+		_cylinder(at + Vector3(x, 1.075, -0.33), 0.101, 0.017, INK)
+	var left := _box(at + Vector3(-0.43, 1.10, 0.28), Vector3(0.52, 0.11, 0.055), MINT_NEON)
+	left.rotation.y = 0.54
+	var right := _box(at + Vector3(0.27, 1.10, 0.18), Vector3(0.56, 0.11, 0.055), CORAL_NEON)
+	right.rotation.y = -0.46
+	_market_lantern(at + Vector3(-0.72, 1.38, 0.5), PAPER_LIGHT, 0.13)
+	_sign("銅板借彈", at + Vector3(0.11, 0.14, -0.53), Color("#f4c38b"))
 
 
 func _build_route_markers() -> void:
