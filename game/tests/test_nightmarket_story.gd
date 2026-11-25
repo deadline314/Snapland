@@ -55,6 +55,11 @@ func _run() -> void:
 	_check(origin.distance_to(main.world.player.position) > 1.0 and main.world.nearest.get("id") == Visit.NIGHTMARKET_POINT,
 		"real walking reaches the story point from spawn")
 	var walk_position: Vector3 = main.world.player.position
+	var story_marker := point.get("marker") as Label3D
+	_check(is_instance_valid(story_marker) and story_marker.visible, "the reachable story glyph is visible before dialogue")
+	var marker_states: Array[bool] = []
+	if is_instance_valid(story_marker):
+		story_marker.visibility_changed.connect(func() -> void: marker_states.append(story_marker.visible))
 	main.world.interact()
 	_check(main.modal_kind == "dialogue" and main.dialogue[0].speaker == "阿浪" and str(main.dialogue[2].text).contains("幕幕"),
 		"real world interaction opens the on-duty story")
@@ -79,6 +84,8 @@ func _run() -> void:
 				var button := main.visit_photo_panel.find_child(button_name, true, false) as Control
 				_check(button != null and root.get_visible_rect().grow(1.0).encloses(button.get_global_rect()) and button.get_global_rect().position.y > finder.end.y,
 					"viewfinder control %s fits %s: button %s viewport %s" % [button_name, viewport_size, str(button.get_global_rect()) if button != null else "missing", root.get_visible_rect()])
+		_check(main.world.nearest.get("id") == Visit.NIGHTMARKET_POINT and marker_states == [false],
+			"photo staging keeps the story target and hides its glyph once across portrait frames")
 		var camera: Camera3D = main.world._story_photo_camera
 		var frame := Viewfinder.viewfinder_rect(root.get_visible_rect().size)
 		for actor_position: Vector3 in [main.world.STORY_HOST, main.world.STORY_POINT]:
@@ -90,6 +97,7 @@ func _run() -> void:
 		and main.world.player.position.distance_to(walk_position) < 0.15 and not main.world.blocked,
 		"cancelling restores normal zoom, character position and movement")
 	_check(actor.sprite.texture == main.world._story_rest_pose, "close restores the host’s standing pose")
+	_check(marker_states == [false, true], "cancelling restores the nearby story glyph once")
 	_check(not progress.photos.has(PHOTO) and not progress.visited.has(REGION), "cancelling never creates collection or visit credit")
 	_check(await _save_then_replay(), "the photo and visit carry through the archive")
 	await _finish()

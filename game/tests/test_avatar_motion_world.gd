@@ -13,6 +13,7 @@ func _initialize() -> void:
 func _run() -> void:
 	var world := ParkWorld.new()
 	root.add_child(world)
+	_check(_visible_markers(world).is_empty(), "new regions start with no leftover active glyphs")
 	await physics_frame
 	await physics_frame
 	_check(not world.avatar_motion_available and world.avatar_motion_rig==null,"the production world avoids allocating an unused hero gait rig")
@@ -20,11 +21,8 @@ func _run() -> void:
 	var avatar_material := world.avatar.material_override as ShaderMaterial
 	_check(avatar_material!=null and float(avatar_material.get_shader_parameter("motion"))==0.0,"authored full-body cels are not displaced by the actor shader")
 	_check(int(world.component_motion.statistics().get("by_profile",{}).get("character_hero",0))==0,"authored hero idle has no procedural phase registration")
-	var visible_markers := 0
-	for point in world.points:
-		var marker := point.get("marker") as Label3D
-		if is_instance_valid(marker) and marker.visible: visible_markers+=1
-	_check(visible_markers<=1,"world interaction glyphs are limited to the one currently reachable point")
+	_check(_visible_markers(world).size() <= 1, "world interaction glyphs are limited to the one currently reachable point")
+	await _check_interaction_marker_selection(world)
 	_check(world.district_labels.size()==4,"the four local district titles are cached for bounded visibility updates")
 	for label in world.district_labels:
 		var label_position: Vector3=label.global_position
@@ -152,6 +150,8 @@ func _run() -> void:
 	world.interact()
 	_check(not interaction_ids.is_empty() and interaction_ids.back()=="ride-tide","nearby ride interaction remains reachable at the existing distance threshold")
 	_check(world.start_ride(),"the existing ride entry remains available")
+	_check(not ride_point.marker.visible and world.nearest.get("marker") == null,
+		"boarding immediately replaces the station glyph with the exit interaction")
 	_check(world.is_riding() and world.avatar_motion_rig==null and world.avatar.visible,"riding retains the seated Sprite presentation")
 	await physics_frame
 	for point in world.points:
@@ -172,6 +172,57 @@ func _run() -> void:
 		return
 	print("PASS: integrated avatar motion world checks")
 	quit(0)
+
+func _visible_markers(world: ParkWorld) -> Array[Label3D]:
+	var visible: Array[Label3D] = []
+	for point in world.points:
+		var marker: Label3D = point.get("marker")
+		if is_instance_valid(marker) and marker.visible:
+			visible.append(marker)
+	return visible
+
+func _check_interaction_marker_selection(world: ParkWorld) -> void:
+	# Keep the cutoff assertions independent of new scenery interactions.
+	var original_points := world.points.duplicate()
+	world.points.clear()
+	var anchor := Vector3(0.0, 0.0, -22.0)
+	anchor.y = ParkWorld._ground_surface_y(anchor)
+	world.player.position = anchor
+	var first := world._label("◇", anchor, 14)
+	var second := world._label("◇", anchor, 14)
+	var first_point := world._register_interaction_point("test:first", "First", anchor + Vector3.RIGHT, first)
+	var second_point := world._register_interaction_point("test:second", "Second", anchor + Vector3.RIGHT, second)
+	_check(not first.visible and not second.visible, "newly registered points stay hidden before selection")
+	await physics_frame
+	await physics_frame
+	_check(world.nearest.get("id") == "test:first" and _visible_markers(world) == [first],
+		"equal-distance points keep the first registration order")
+	second_point.position = anchor + Vector3.RIGHT * 0.25
+	await physics_frame
+	await physics_frame
+	_check(world.nearest.get("id") == "test:second" and _visible_markers(world) == [second],
+		"moving points are selected while the traveller stays still")
+	world.points.erase(second_point)
+	second.free()
+	await physics_frame
+	await physics_frame
+	_check(world.nearest.get("id") == "test:first" and _visible_markers(world) == [first],
+		"removing the active point and freeing its marker leaves the next available glyph")
+	first_point.position = world.player.position + Vector3.RIGHT * 2.41
+	await physics_frame
+	await physics_frame
+	_check(world.nearest.is_empty() and _visible_markers(world).is_empty(), "points beyond the 2.4 m reach stay hidden")
+	first_point.position = world.player.position + Vector3.RIGHT * 2.39
+	await physics_frame
+	await physics_frame
+	_check(world.nearest.get("id") == "test:first" and _visible_markers(world) == [first],
+		"points just within the 2.4 m reach become interactive")
+	first_point.position = world.player.position + Vector3.UP * 2.41
+	await physics_frame
+	await physics_frame
+	_check(world.nearest.is_empty() and _visible_markers(world).is_empty(), "vertical distance counts towards interaction reach")
+	world.points.assign(original_points)
+	first.queue_free()
 
 func _check_walking_gesture_requests(world: ParkWorld) -> void:
 	world.player.position = Vector3(0, ParkWorld._ground_surface_y(Vector3(0, 0, -15)), -15)

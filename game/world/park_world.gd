@@ -168,6 +168,7 @@ var night := false
 var time := 0.0
 var current_area := ""
 var nearest: Dictionary = {}
+var _visible_interaction_marker: Label3D
 var fountain_water: ShaderMaterial
 var sea_material: ShaderMaterial
 var active_time_phase := TimeOfDayScript.DEFAULT_PHASE
@@ -719,9 +720,8 @@ const DEFAULT_MARKER_HEIGHT := 2.85
 const NPC_ROLE_BY_POINT := {"guide":"ticket", "quest-001":"imp", "quest-002":"announcer"}
 
 func _point(id: String, title: String, pos: Vector3, marker_height := DEFAULT_MARKER_HEIGHT) -> void:
-	points.append({"id":id,"label":title,"position":pos})
 	var marker := _label("◇", pos + Vector3(0,marker_height,0), 38, GOLD)
-	points[-1]["marker"]=marker
+	_register_interaction_point(id, title, pos, marker)
 	# Capture the marker's animation baseline after attaching it to the actor.
 	# Its local bob stays independent while the actor owns all route movement.
 	if NPC_ROLE_BY_POINT.has(id):
@@ -729,6 +729,12 @@ func _point(id: String, title: String, pos: Vector3, marker_height := DEFAULT_MA
 		var anchor := actor.get("activity_root") as Node3D
 		if is_instance_valid(anchor): marker.reparent(anchor, true)
 	component_motion.register_component(marker,"marker",float(points.size())*0.7)
+
+func _register_interaction_point(id: String, title: String, pos: Vector3, marker: Label3D) -> Dictionary:
+	marker.hide()
+	var point := {"id": id, "label": title, "position": pos, "marker": marker}
+	points.append(point)
+	return point
 
 func _register_npc_activity() -> void:
 	npc_activity=NpcActivityScript.new()
@@ -2376,10 +2382,7 @@ func _physics_process(delta: float) -> void:
 			_update_sprite_grounding()
 			_update_npc_name_labels()
 			_refresh_avatar_texture(_ride_pose_frame())
-			nearest={"id":"ride-tide","label":"離開潮汐貝殼輪","position":player.global_position,"marker":null}
-			for point in points:
-				var marker := point.get("marker") as Label3D
-				if is_instance_valid(marker): marker.visible=false
+			_set_ride_exit_interaction()
 			avatar_last_physics_position=player.global_position
 			return
 	var operating_lens: bool = is_instance_valid(coastal_play) and is_instance_valid(coastal_play.discoveries) and coastal_play.discoveries.controlling
@@ -2507,9 +2510,22 @@ func _physics_process(delta: float) -> void:
 		if dist<best:
 			best=dist
 			nearest=point
-	for point in points:
-		var marker: Label3D=point.get("marker") as Label3D
-		if is_instance_valid(marker): marker.visible=point.get("id","")==nearest.get("id","")
+	_set_interaction_marker(nearest.get("marker") if _interaction_markers_allowed() else null)
+
+func _interaction_markers_allowed() -> bool:
+	return true
+
+func _set_interaction_marker(candidate: Variant) -> void:
+	var marker: Label3D = candidate as Label3D if is_instance_valid(candidate) else null
+	if is_instance_valid(_visible_interaction_marker) and _visible_interaction_marker != marker and _visible_interaction_marker.visible:
+		_visible_interaction_marker.hide()
+	_visible_interaction_marker = marker
+	if marker != null and not marker.visible:
+		marker.show()
+
+func _set_ride_exit_interaction() -> void:
+	nearest={"id":"ride-tide","label":"離開潮汐貝殼輪","position":player.global_position,"marker":null}
+	_set_interaction_marker(null)
 
 func _update_avatar_pivot(movement: Vector2, velocity: Vector2, delta: float, frame: int, frame_count: int) -> void:
 	var lateral := movement.x != 0.0 and movement.y == 0.0
@@ -2935,7 +2951,7 @@ func start_ride() -> bool:
 		# The seat raises the player well above the ground; never solve ground
 		# contacts while the 3D walk rig is hidden inside the ride pose.
 		_refresh_avatar_texture(0)
-		nearest={"id":"ride-tide","label":"離開潮汐貝殼輪","position":player.global_position,"marker":null}
+		_set_ride_exit_interaction()
 	return started
 
 func end_ride() -> void:

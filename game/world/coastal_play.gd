@@ -85,8 +85,7 @@ func _build_ball() -> void:
   stripe.rotation.z=PI*0.5 if axis==1 else 0.0
   ball.add_child(stripe)
  var marker: Label3D=world._label("◇",Ball.HOME+Vector3(0,1.1,0),38,Color("#edbb65"))
- ball_point={"id":"play:ball","label":"踢海漂球","position":Ball.HOME,"marker":marker}
- world.points.append(ball_point)
+ ball_point=world._register_interaction_point("play:ball","踢海漂球",Ball.HOME,marker)
  world._point("play:recall","拿回海漂球",Vector3(-21.4,0.18,8.0))
  # A low cradle makes the recall position legible without another floating sign.
  for side in [-1,1]:

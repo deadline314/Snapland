@@ -137,12 +137,8 @@ func end_story_photo() -> void:
 	_sync_external_avatar_reposition()
 	_refresh_avatar_texture(0)
 
-func _physics_process(delta: float) -> void:
-	super._physics_process(delta)
-	if is_instance_valid(_story_photo_camera):
-		var marker := nearest.get("marker") as Label3D
-		if is_instance_valid(marker):
-			marker.hide()
+func _interaction_markers_allowed() -> bool:
+	return not is_instance_valid(_story_photo_camera)
 
 func _build_street_foundations() -> void:
 	# Join the stalls and walkways on one city block, with curbs marking the safe routes.
