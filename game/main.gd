@@ -2199,11 +2199,11 @@ func _show_map() -> void:
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
 		_back(harbor_body)
 		return
-	var body := _open("今天想去哪一邊？","ISLAND MAP","map")
+	var body := _open("迎賓大道地圖","ISLAND MAP","map")
 	var map_script = load("res://game/ui/island_map_panel.gd")
 	var map_panel = map_script.new()
 	var park_data: Dictionary=world.park_data()
-	map_panel.setup(park_data.get("zones",[]),definitions,Progress.normal_count(),world.points)
+	map_panel.setup(park_data.get("zones",[]),definitions,Progress.normal_count(),world.points,world.player.global_position)
 	map_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	map_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(map_panel)

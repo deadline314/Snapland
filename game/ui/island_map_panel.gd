@@ -3,6 +3,7 @@ extends VBoxContainer
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
+const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 
 class StationIcon extends Control:
 	var station := 0
@@ -60,411 +61,406 @@ class StationIcon extends Control:
 				draw_line(center+Vector2(4,-5),center+Vector2(4,3),ink,1.5)
 
 class MapSurface extends Control:
-	var leaders: Array = []
-	var satellite_centers: Array[Vector2] = []
+	const WATER := Color("#347078")
+	const SHORE := Color("#e7d6ae")
+	const COAST := Color("#438878")
+	const AVENUE := Color("#cf7965")
+	const PLAZA := Color("#946745")
+	const YOU := Color("#63dbed")
+	const TARGET := Color("#ffcb65")
+
+	var player := Vector3.INF
+	var dock := Vector3.INF
+	var destination := Vector3.INF
+	var walk_chart := Rect2()
+	var station_index := Rect2()
+	var region_overview := Rect2()
+	var _origin := Vector2.ZERO
+	var _scale := 0.0
+	var _unit := 1.0
+
+	func arrange(menu_scale: float, minimum_station_width: float, minimum_overview_width: float) -> void:
+		_unit = 1.0 / menu_scale
+		var inset := 8.0 * _unit
+		var gap := 8.0 * _unit
+		var area := Rect2(Vector2.ONE * inset, size - Vector2.ONE * inset * 2.0)
+		var station_width := maxf(minimum_station_width, area.size.x * 0.30)
+		var overview_width := maxf(minimum_overview_width, area.size.x * 0.25)
+		var chart_width := maxf(0.0, area.size.x - station_width - overview_width - gap * 2.0)
+		walk_chart = Rect2(area.position, Vector2(chart_width, area.size.y))
+		station_index = Rect2(Vector2(walk_chart.end.x + gap, area.position.y), Vector2(station_width, area.size.y))
+		region_overview = Rect2(Vector2(station_index.end.x + gap, area.position.y), Vector2(overview_width, area.size.y))
+
+		var land_center := Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z)
+		var land_size := Vector2(CoastalCircuit.LAND_SIZE.x, CoastalCircuit.LAND_SIZE.z)
+		var bounds := Rect2(land_center - land_size * 0.5, land_size)
+		if dock.is_finite():
+			bounds = bounds.expand(Vector2(dock.x, dock.z + 3.5))
+		var plot := walk_chart.grow(-10.0 * _unit)
+		plot.position.y += 24.0 * _unit
+		plot.size.y -= 24.0 * _unit
+		_scale = maxf(0.0, minf(plot.size.x / bounds.size.x, plot.size.y / bounds.size.y))
+		_origin = plot.get_center() - bounds.get_center() * _scale
+		queue_redraw()
+
+	func project(point: Vector3) -> Vector2:
+		return _project_xz(Vector2(point.x, point.z))
+
+	func select(point: Vector3) -> void:
+		destination = point
+		queue_redraw()
+
+	func _project_xz(point: Vector2) -> Vector2:
+		return _origin + point * _scale
+
 	func _draw() -> void:
-		var sx := size.x / 720.0
-		var sy := size.y / 360.0
-		draw_rect(Rect2(Vector2.ZERO,size),Color("#80b8bd"))
-		# Short two-pixel marks suggest shallow-water bands without competing with the route.
-		for row in range(12):
-			var y := (18.0+row*29.0)*sy
-			var offset := 12.0 if row%2==0 else 30.0
-			for column in range(14):
-				var x := (offset+column*51.0)*sx
-				var length := 12.0 if column%3==0 else 7.0
-				draw_rect(Rect2(Vector2(x,y),Vector2(length*sx,2.0*sy)),Color("#a4ced0"))
-		# Low waterline shadow separates the cut-paper islands from the sea.
-		var coast := _pixel_steps([
-			Vector2(12,96),Vector2(40,42),Vector2(119,17),Vector2(206,29),Vector2(284,11),
-			Vector2(374,34),Vector2(447,23),Vector2(481,67),Vector2(463,137),Vector2(485,201),
-			Vector2(439,276),Vector2(350,331),Vector2(239,343),Vector2(132,326),Vector2(48,287),Vector2(14,221)
-		],8.0)
-		var main := _scaled_points(coast,sx,sy)
-		var offset := Vector2(0,12*sy)
-		draw_colored_polygon(_translate(main,offset),Color("#547b78"))
-		draw_colored_polygon(main,Color("#f0dfb7"))
-		draw_polyline(_closed_points(main),Color("#9e805a"),3.0,false)
-		# A pale green rise and a coral route make the main island read as a map, not a list.
-		var hill := _scaled_points(_pixel_steps([Vector2(36,87),Vector2(82,48),Vector2(151,42),Vector2(194,64),Vector2(178,93),Vector2(101,107),Vector2(49,119)],6.0),sx,sy)
-		draw_colored_polygon(hill,Color("#9eb58a"))
-		var route := _scaled_points([Vector2(86,282),Vector2(125,243),Vector2(197,229),Vector2(262,248),Vector2(322,220),Vector2(388,231),Vector2(414,184),Vector2(379,141),Vector2(328,105),Vector2(244,112),Vector2(170,120),Vector2(105,144)],sx,sy)
-		var path := _scaled_points(_pixel_steps([Vector2(86,282),Vector2(125,243),Vector2(197,229),Vector2(262,248),Vector2(322,220),Vector2(388,231),Vector2(414,184),Vector2(379,141),Vector2(328,105),Vector2(244,112),Vector2(170,120),Vector2(105,144)],4.0),sx,sy)
-		draw_polyline(path,Color("#fff5d8"),8.0,false)
-		draw_polyline(path,Color("#d97966"),2.0,false)
-		_draw_trees(sx,sy)
-		# Satellite islands share the same lower-right light direction as the main landmass.
-		for row in range(3):
-			for column in range(3):
-				var center := Vector2((535.0+column*83.0)*sx,(68.0+row*112.0)*sy)
-				var satellite_index := row*3+column
-				if satellite_index<satellite_centers.size():
-					center=satellite_centers[satellite_index]
-				var island_radius := 25*minf(sx,sy)
-				draw_rect(Rect2(center-Vector2(island_radius,island_radius)+Vector2(0,5*sy),Vector2(island_radius*2,island_radius*2)),Color("#688985"))
-				draw_rect(Rect2(center-Vector2(island_radius,island_radius),Vector2(island_radius*2,island_radius*2)),Color("#e5d2a7"))
-				for pixel in range(4):
-					draw_rect(Rect2(center+Vector2(-14+pixel*8,-17)*minf(sx,sy),Vector2(4*minf(sx,sy),4*minf(sx,sy))),Color("#6f966f"))
-				draw_rect(Rect2(center+Vector2(-2,-9)*minf(sx,sy),Vector2(4*minf(sx,sy),10*minf(sx,sy))),Color("#9b7148"))
-				draw_rect(Rect2(center+Vector2(-island_radius,-island_radius),Vector2(island_radius*2,island_radius*2)),Color("#a68d64"),false,2.0)
-		# Optional coastal loop: scenic stops, not additional minigame rewards.
-		var coastal := _scaled_points([Vector2(82,274),Vector2(33,232),Vector2(31,143),Vector2(68,65),Vector2(214,47),Vector2(373,58),Vector2(449,112),Vector2(442,229),Vector2(351,295),Vector2(159,308),Vector2(82,274)],sx,sy)
-		draw_polyline(coastal,Color("#4c8b81"),2.5,false)
-		# Piers and a north mark anchor the island's orientation.
-		draw_colored_polygon(_scaled_points(_pixel_steps([Vector2(56,279),Vector2(84,282),Vector2(67,322),Vector2(41,315)],4.0),sx,sy),Color("#8c694a"))
-		for plank in range(4):
-			var plank_y := (285.0+plank*7.0)*sy
-			draw_rect(Rect2(Vector2((51.0-plank*1.5)*sx,plank_y),Vector2((24.0-plank*1.2)*sx,2.0*sy)),Color("#d3ad75"))
-		draw_rect(Rect2(Vector2(456*sx,37*sy),Vector2(14*sx,3*sy)),Color("#24585d"))
-		draw_rect(Rect2(Vector2(461*sx,25*sy),Vector2(4*sx,16*sy)),Color("#d97966"))
-		draw_colored_polygon(_scaled_points([Vector2(463,17),Vector2(457,29),Vector2(463,26),Vector2(469,29)],sx,sy),Color("#dfa458"))
-		draw_colored_polygon(_scaled_points([Vector2(463,17),Vector2(457,29),Vector2(463,26)],sx,sy),Color("#d97966"))
-		for leader in leaders:
-			draw_line(leader[0],leader[1],Color("#8c694a"),1.0,false)
-		draw_string(ThemeDB.fallback_font,Vector2(459*sx,13*sy),"N",HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("#203e47"))
+		if _scale <= 0.0:
+			return
+		draw_rect(Rect2(Vector2.ZERO, size), Color("#214655"))
+		draw_rect(walk_chart, WATER)
+		draw_rect(station_index, Color("#47675e"))
+		draw_rect(region_overview, Color("#4f5f68"))
+		for panel in [walk_chart, station_index, region_overview]:
+			draw_rect(panel, Color("#91a990"), false, _unit)
+		_draw_terrain()
+		_draw_markers()
+		_draw_headings()
 
-	func _pixel_steps(points: Array, step: float) -> Array[Vector2]:
-		var result: Array[Vector2]=[]
-		if points.is_empty():
-			return result
-		for index in range(points.size()):
-			var start: Vector2=points[index]
-			var finish: Vector2=points[(index+1)%points.size()]
-			var count := maxi(1,ceili(maxf(absf(finish.x-start.x),absf(finish.y-start.y))/step))
-			var previous := start
-			if index==0:
-				result.append(start)
-			for segment in range(1,count+1):
-				var target := start.lerp(finish,float(segment)/float(count))
-				result.append(Vector2(target.x,previous.y))
-				result.append(target)
-				previous=target
-		return result
+	func _draw_terrain() -> void:
+		var center := Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z)
+		var extent := Vector2(CoastalCircuit.LAND_SIZE.x, CoastalCircuit.LAND_SIZE.z) * 0.5
+		var corners := PackedVector2Array()
+		for point: Vector2 in [Vector2(-1, -0.96), Vector2(-0.94, -1), Vector2(0.94, -1), Vector2(1, -0.96), Vector2(1, 0.96), Vector2(0.94, 1), Vector2(-0.94, 1), Vector2(-1, 0.96)]:
+			corners.append(_project_xz(center + point * extent))
+		draw_set_transform(Vector2(0.0, 3.0 * _unit))
+		draw_colored_polygon(corners, Color("#254e52"))
+		draw_set_transform(Vector2.ZERO)
+		draw_colored_polygon(corners, SHORE)
+		corners.append(corners[0])
+		draw_polyline(corners, Color("#b49b75"), _unit, true)
+		var path := PackedVector2Array()
+		for point: Vector2 in CoastalCircuit.ROUTE:
+			path.append(_project_xz(point))
+		draw_polyline(path, COAST, 2.4 * _unit, true)
+		for connector in CoastalCircuit.CONNECTORS:
+			draw_line(_project_xz(connector[0]), _project_xz(connector[1]), COAST, 1.5 * _unit, true)
+		var plaza := _project_xz(Vector2.ZERO)
+		draw_line(_project_xz(Vector2(0, -43)), _project_xz(Vector2(0, -5)), AVENUE, 3.5 * _unit, true)
+		draw_circle(plaza, 5.0 * _scale, PLAZA, false, 1.4 * _unit, true)
+		draw_circle(plaza, 2.4 * _scale, WATER, true, -1.0, true)
+		if dock.is_finite():
+			draw_line(_project_xz(Vector2(0, 5)), _project_xz(Vector2(0, 15)), PLAZA, 3.5 * _unit, true)
+			var pier_top := _project_xz(Vector2(dock.x - 2.5, dock.z - 9.5))
+			draw_rect(Rect2(pier_top, Vector2(5, 13) * _scale), PLAZA)
+		var font := Paper.font()
+		draw_string(font, plaza + Vector2(8, 4) * _unit, "廣場", HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12.0 * _unit), Color("#27474b"))
 
-	func _draw_trees(sx: float, sy: float) -> void:
-		for tree in [Vector2(72,79),Vector2(169,56),Vector2(359,61),Vector2(449,93),Vector2(443,259),Vector2(111,211),Vector2(263,307),Vector2(177,286),Vector2(302,73)]:
-			var center := Vector2(tree.x*sx,tree.y*sy)
-			var unit := minf(sx,sy)
-			draw_rect(Rect2(center+Vector2(-2,0)*unit,Vector2(4,8)*unit),Color("#8a6949"))
-			draw_rect(Rect2(center+Vector2(-7,-8)*unit,Vector2(14,6)*unit),Color("#547e68"))
-			draw_rect(Rect2(center+Vector2(-10,-4)*unit,Vector2(20,6)*unit),Color("#739873"))
-			draw_rect(Rect2(center+Vector2(-6,2)*unit,Vector2(12,3)*unit),Color("#9ab485"))
-			draw_rect(Rect2(center+Vector2(-10,-8)*unit,Vector2(20,12)*unit),Color("#3f6a61"),false,1.0)
+	func _draw_markers() -> void:
+		if destination.is_finite():
+			var point := project(destination)
+			var radius := 9.0 * _unit
+			var diamond := PackedVector2Array([point - Vector2(0, radius), point + Vector2(radius, 0), point + Vector2(0, radius), point - Vector2(radius, 0)])
+			draw_colored_polygon(diamond, TARGET)
+			diamond.append(diamond[0])
+			draw_polyline(diamond, Color("#453c30"), 1.8 * _unit, true)
+		if player.is_finite():
+			var point := project(player)
+			draw_circle(point, 5.5 * _unit, Color("#18475b"), true, -1.0, true)
+			draw_circle(point, 3.7 * _unit, YOU, true, -1.0, true)
 
-	func _scaled_points(points: Array, sx: float, sy: float) -> PackedVector2Array:
-		var result := PackedVector2Array()
-		for point: Vector2 in points:
-			result.append(Vector2(point.x*sx,point.y*sy))
-		return result
+	func _draw_headings() -> void:
+		var font := Paper.font()
+		var ink := Color("#fff0d5")
+		var font_size := ceili(16.0 * Paper.text_scale() * _unit)
+		var baseline := Vector2(10.0, 27.0) * _unit
+		draw_string(font, walk_chart.position + baseline, "迎賓步行圖", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ink)
+		draw_string(font, station_index.position + baseline, "迎賓站點", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ink)
+		draw_string(font, region_overview.position + baseline, "園區總覽", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ink)
+		var north := Vector2(walk_chart.end.x - 23.0 * _unit, walk_chart.position.y + 12.0 * _unit)
+		draw_colored_polygon(PackedVector2Array([north, north + Vector2(-4, 8) * _unit, north + Vector2(4, 8) * _unit]), TARGET)
+		draw_string(font, north + Vector2(-6, 23) * _unit, "北", HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(13.0 * _unit), ink)
 
-	func _translate(points: PackedVector2Array, offset: Vector2) -> PackedVector2Array:
-		var result := PackedVector2Array()
-		for point in points:
-			result.append(point+offset)
-		return result
-
-	func _closed_points(points: PackedVector2Array) -> PackedVector2Array:
-		var result := points.duplicate()
-		if not result.is_empty():
-			result.append(result[0])
-		return result
 
 var _zones: Array = []
 var _games: Array = []
 var _normal_count := 0
-var _station_positions: Dictionary = {}
+var _positions: Dictionary = {}
+var _player_position := Vector3.INF
 var _canvas: MapSurface
 var _workspace: GridContainer
 var _detail_body: BoxContainer
 var _detail_title: Label
 var _detail_text: Label
-var _selected_map_button := "MapHub"
+var _selected: Button
+var _stations: Array[Button] = []
+var _gates: Array[Button] = []
+var _hub: Button
+var _normal_style: StyleBoxFlat
+var _selected_style: StyleBoxFlat
+var _station_style: StyleBoxFlat
+var _selected_station_style: StyleBoxFlat
 
-func setup(zones: Array, games: Array, normal_count: int, park_points: Array = []) -> void:
-	_zones=zones.duplicate(true)
-	_games=games.duplicate(true)
-	_normal_count=normal_count
-	_station_positions.clear()
-	for point_value in park_points:
-		if point_value is Dictionary and str(point_value.get("id","")).begins_with("game-") and point_value.get("position") is Vector3:
-			_station_positions[str(point_value.id)]=point_value.position
+func setup(zones: Array, games: Array, normal_count: int, park_points: Array = [], player_position := Vector3.INF) -> void:
+	_zones = zones.duplicate(true)
+	_games = games.duplicate(true)
+	_normal_count = normal_count
+	_player_position = player_position
+	_positions.clear()
+	for point in park_points:
+		if point is Dictionary and point.get("position") is Vector3:
+			var position: Vector3 = point.position
+			if position.is_finite():
+				_positions[str(point.get("id", ""))] = position
 
 func _ready() -> void:
-	if not get_viewport().size_changed.is_connected(_layout_map_buttons):
-		get_viewport().size_changed.connect(_layout_map_buttons)
-	add_theme_constant_override("separation",10)
-	size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	size_flags_vertical=Control.SIZE_EXPAND_FILL
+	get_viewport().size_changed.connect(_layout_map_buttons)
+	add_theme_constant_override("separation", 10)
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var clip := ScrollContainer.new()
-	clip.name="AdaptiveMenuScroll"
-	clip.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	clip.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	clip.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
-	clip.vertical_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	clip.name = "AdaptiveMenuScroll"
+	clip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	clip.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	clip.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	clip.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(clip)
-	_workspace=GridContainer.new()
-	_workspace.name="IslandMapWorkspace"
-	_workspace.columns=2
-	_workspace.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	_workspace.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	_workspace.add_theme_constant_override("h_separation",10)
-	_workspace.add_theme_constant_override("v_separation",10)
+	_workspace = GridContainer.new()
+	_workspace.name = "IslandMapWorkspace"
+	_workspace.columns = 2
+	_workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_workspace.add_theme_constant_override("h_separation", 10)
+	_workspace.add_theme_constant_override("v_separation", 10)
 	clip.add_child(_workspace)
 	var frame := PanelContainer.new()
-	frame.name="IslandChartFrame"
-	frame.add_theme_stylebox_override("panel",Paper.plaque())
-	frame.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	frame.size_flags_stretch_ratio=2.4
-	frame.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	frame.name = "IslandChartFrame"
+	frame.add_theme_stylebox_override("panel", Paper.plaque())
+	frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	frame.size_flags_stretch_ratio = 2.4
+	frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_workspace.add_child(frame)
-	_canvas=MapSurface.new()
-	_canvas.name="IslandChartCanvas"
-	_canvas.custom_minimum_size=Vector2(600,0)
-	_canvas.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	_canvas.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	_canvas.clip_contents=true
+	_canvas = MapSurface.new()
+	_canvas.name = "IslandChartCanvas"
+	_canvas.custom_minimum_size = Vector2(600, 0)
+	_canvas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_canvas.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_canvas.clip_contents = true
+	_canvas.player = _player_position
+	_canvas.dock = _position("arrival")
 	_canvas.resized.connect(_layout_map_buttons)
 	frame.add_child(_canvas)
+	_normal_style = _map_button_style(false, false)
+	_selected_style = _map_button_style(true, false)
+	_station_style = _map_button_style(false, true)
+	_selected_station_style = _map_button_style(true, true)
 	_add_destination_buttons()
-	_set_map_selection(_selected_map_button)
+
 	var detail := PanelContainer.new()
-	detail.name="DestinationDetails"
-	detail.add_theme_stylebox_override("panel",Paper.plaque(Paper.FRAME))
-	detail.custom_minimum_size.x=280
-	detail.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	detail.size_flags_stretch_ratio=1.0
-	detail.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	detail.name = "DestinationDetails"
+	detail.add_theme_stylebox_override("panel", Paper.plaque(Paper.FRAME))
+	detail.custom_minimum_size.x = 280
+	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail.size_flags_stretch_ratio = 1.0
+	detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_workspace.add_child(detail)
-	_detail_body=BoxContainer.new()
-	_detail_body.vertical=true
-	_detail_body.add_theme_constant_override("separation",8)
+	_detail_body = BoxContainer.new()
+	_detail_body.vertical = true
+	_detail_body.add_theme_constant_override("separation", 8)
 	detail.add_child(_detail_body)
 	var title_stack := VBoxContainer.new()
-	title_stack.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_detail_body.add_child(title_stack)
-	var heading := Paper.label("目的地情報",14,Paper.GOLD)
-	title_stack.add_child(heading)
-	_detail_title=Paper.section_title("海風碼頭｜下船起點")
-	_detail_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-	_detail_text=Paper.label("由碼頭沿著珊瑚色路線進入迎賓大道。選取地圖標記，查看站點目標與園區門檻。",17,Paper.INK)
-	_detail_text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-	_detail_text.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	_detail_text.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	title_stack.add_child(Paper.label("目的地情報", 14, Paper.GOLD))
+	_detail_title = Paper.section_title("")
+	_detail_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_detail_text = Paper.label("", 17, Paper.INK)
+	_detail_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_detail_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_detail_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	title_stack.add_child(_detail_title)
 	_detail_body.add_child(_detail_text)
-	var legend := HBoxContainer.new()
-	legend.name="IslandMapLegend"
-	legend.add_theme_constant_override("separation",12)
+
+	var legend := Paper.label("藍點：你的位置　金菱：目的地　珊瑚線：迎賓大道　青綠線：海岸環線", 15, Paper.INK)
+	legend.name = "IslandMapLegend"
+	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(legend)
-	var legend_text := Paper.label("珊瑚線：迎賓大道　·　青綠線：海岸環線　·　右側：園區路口",16,Paper.INK)
-	legend_text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-	legend_text.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	legend.add_child(legend_text)
+	_select_hub()
 	_layout_map_buttons()
-	if not _zones.is_empty():
-		_canvas.queue_redraw()
 
 func _add_destination_buttons() -> void:
-	var hub := _make_button("海風碼頭", "MapHub")
-	hub.pressed.connect(func(): _select_hub())
-	var games := _games
-	for index in range(mini(12,games.size())):
-		var game: Dictionary=games[index]
-		var game_id := str(game.get("id","game-%03d"%(index+1)))
-		var label := "%02d" % [index+1]
-		var button := _make_button(label,"MapStop_"+game_id)
-		button.add_theme_font_size_override("font_size",13)
-		button.tooltip_text="迎賓大道第 %d 站｜%s" % [index+1,str(game.get("goal","設施介紹尚未提供。"))]
+	_hub = _make_button("海風碼頭", "MapHub")
+	_hub.tooltip_text = "查看下船起點"
+	_connect_selection(_hub, _select_hub)
+	for index in range(mini(12, _games.size())):
+		var game: Dictionary = _games[index]
+		var game_id := str(game.get("id", "game-%03d" % (index + 1)))
+		var button := _make_button("%02d" % (index + 1), "MapStop_" + game_id, true)
+		button.tooltip_text = str(game.get("name", "迎賓站點"))
 		var icon := StationIcon.new()
-		icon.station=index
-		icon.position=Vector2(14,2)
-		icon.size=Vector2(16,16)
-		icon.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		icon.name = "StationIcon"
+		icon.station = index
+		icon.size = Vector2(16, 16)
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.add_child(icon)
-		var select := _select_game.bind(game_id,index+1,game)
-		button.pressed.connect(select)
-		button.mouse_entered.connect(select)
-		button.focus_entered.connect(select)
-	var zone_index := 0
-	for zone_value in _zones:
-		if not zone_value is Dictionary or str(zone_value.get("id",""))=="welcome":
+		_stations.append(button)
+		_connect_selection(button, _select_game.bind(button, game_id, index + 1, game))
+	for zone in _zones:
+		if not zone is Dictionary or str(zone.get("id", "")) == "welcome":
 			continue
-		var zone_id := str(zone_value.id)
-		var zone_name := str(zone_value.get("name",zone_id))
-		var short_name := _gate_short_name(zone_id,zone_index+1)
-		var gate := _make_button(short_name,"MapGate_"+zone_id)
-		gate.add_theme_font_size_override("font_size",10 if short_name.length()>2 else 11)
-		gate.set_meta("menu_base_font",16)
-		gate.custom_minimum_size=Vector2(44,44)
-		gate.tooltip_text="%s｜%d 張不同普通拍貼，不消耗；從當區路口前往，返回免費。" % [zone_name,RegionRoutes.threshold(zone_id)] if RegionRoutes.supports(zone_id) else "%s｜%d 張不同普通拍貼即可取得資格；園區仍在準備中。" % [zone_name,int(zone_value.get("threshold",0))]
-		for state in ["normal","hover","pressed","hover_pressed","disabled","focus"]:
-			var gate_style := gate.get_theme_stylebox(state).duplicate() as StyleBoxFlat
-			if gate_style != null:
-				gate_style.content_margin_left=2
-				gate_style.content_margin_right=2
-				gate.add_theme_stylebox_override(state,gate_style)
-		var select_gate := _select_zone.bind(zone_value)
-		gate.pressed.connect(select_gate)
-		gate.mouse_entered.connect(select_gate)
-		gate.focus_entered.connect(select_gate)
-		zone_index+=1
+		var zone_id := str(zone.id)
+		var gate := _make_button(_gate_short_name(zone_id, _gates.size() + 1), "MapGate_" + zone_id)
+		var zone_name := str(zone.get("name", zone_id))
+		var playable := RegionRoutes.supports(zone_id)
+		var threshold := RegionRoutes.threshold(zone_id) if playable else int(zone.get("threshold", 0))
+		gate.tooltip_text = "%s｜%d 張普通拍貼 · %s" % [zone_name, threshold, "不消耗" if playable else "準備中"]
+		_gates.append(gate)
+		_connect_selection(gate, _select_zone.bind(gate, zone))
+
+func _connect_selection(button: Button, select: Callable) -> void:
+	button.pressed.connect(select)
+	button.mouse_entered.connect(select)
+	button.focus_entered.connect(select)
 
 func _gate_short_name(zone_id: String, ordinal: int) -> String:
 	var names := {"harbor":"潮汐","forest":"森林","desert":"沙丘","mountain":"山脈","snow":"雪原","volcano":"火山","sky":"天空","ruins":"遺跡","moon":"月灣","candy":"糖廠","nightmarket":"夜市","circus":"馬戲","toy":"玩具","garden":"花園","hotel":"旅店","cinema":"影城"}
-	return str(names.get(zone_id,"島%02d" % ordinal))
+	return str(names.get(zone_id, "島%02d" % ordinal))
 
-func _make_button(text: String, node_name: String) -> Button:
-	var button := Paper.button(text,func(): pass,_canvas)
-	button.name=node_name
-	button.custom_minimum_size=Vector2(44,48)
-	button.add_theme_font_size_override("font_size",13)
-	button.focus_mode=Control.FOCUS_ALL
+func _make_button(text: String, node_name: String, station := false) -> Button:
+	var button := Paper.button(text, func(): pass, _canvas)
+	button.name = node_name
+	button.set_meta("map_station", station)
+	button.set_meta("menu_base_font", 16)
+	button.focus_mode = Control.FOCUS_ALL
+	_style_button(button, false)
 	return button
 
+func _map_button_style(selected: bool, station: bool) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#276c70") if selected else Color("#f0dfb7")
+	style.border_color = Color("#f2bd68") if selected else Color("#8e7954")
+	style.set_border_width_all(3 if selected else 1)
+	style.content_margin_left = 2
+	style.content_margin_right = 2
+	style.content_margin_top = 14 if station else 2
+	style.content_margin_bottom = 2
+	return style
+
+func _style_button(button: Button, selected: bool) -> void:
+	var station: bool = button.get_meta("map_station")
+	var normal := _selected_style if selected else _normal_style
+	if station:
+		normal = _selected_station_style if selected else _station_style
+	for state in ["normal", "hover", "pressed", "hover_pressed"]:
+		button.add_theme_stylebox_override(state, normal)
+	var ink := Color("#fff4d7") if selected else Color("#24474c")
+	for state in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:
+		button.add_theme_color_override(state, ink)
+
 func _layout_map_buttons() -> void:
-	if not is_instance_valid(_canvas):
+	if not is_instance_valid(_canvas) or not is_instance_valid(_detail_body) or not is_instance_valid(_hub):
 		return
 	var menu_scale := Paper.physical_scale(_canvas)
-	if is_instance_valid(_detail_body):
-		var compact := get_viewport().get_visible_rect().size.x*menu_scale<1100.0
-		_workspace.columns=1 if compact else 2
-		_detail_body.vertical=not compact
-		_canvas.custom_minimum_size=Vector2(600.0/menu_scale,220.0/menu_scale if compact else 0.0)
-	var hit_size := Vector2(44.0/menu_scale,48.0/menu_scale)
-	var sx := _canvas.size.x/720.0
-	var sy := _canvas.size.y/360.0
-	var hub := _canvas.get_node_or_null("MapHub") as Button
-	if hub != null:
-		hub.position=Vector2(14*sx,310*sy)
-		hub.size=Vector2(82*sx,40*sy)
-	var station_buttons: Array[Button]=[]
-	var anchors: Array[Vector2]=[]
-	var index := 0
-	var route := [Vector2(86,282),Vector2(197,229),Vector2(322,220),Vector2(414,184),Vector2(328,105),Vector2(105,144)]
-	for game in _games:
-		if index>=12:
-			break
-		var button := _canvas.get_node_or_null("MapStop_"+str(game.get("id",""))) as Button
-		if button != null:
-			var world_pos: Vector3 = _station_positions.get(str(game.get("id","")),Vector3(-1 if index%2==0 else 1,0,-17-float(index/2)*4.8))
-			var progress := clampf((-world_pos.z-17.0)/24.0,0.0,1.0)
-			var route_position := progress*float(route.size()-1)
-			var route_index := clampi(floori(route_position),0,route.size()-1)
-			var next_index := mini(route_index+1,route.size()-1)
-			var route_point: Vector2 = route[route_index].lerp(route[next_index],route_position-float(route_index))
-			var previous: Vector2 = route[maxi(route_index-1,0)]
-			var following: Vector2 = route[next_index]
-			var normal := (following-previous).normalized().orthogonal()
-			var side := -1.0 if world_pos.x < 0.0 else 1.0
-			var center := route_point+normal*side*18.0
-			button.position=Vector2((center.x-22)*sx,(center.y-24)*sy)
-			button.custom_minimum_size=hit_size
-			button.size=hit_size
-			station_buttons.append(button)
-			button.add_theme_font_size_override("font_size",ceili(16.0/menu_scale))
-			for icon in button.get_children():
-				if icon is StationIcon:
-					icon.scale=Vector2.ONE/menu_scale
-					icon.position=Vector2((button.size.x-16.0/menu_scale)*0.5,2.0/menu_scale)
-			anchors.append(Vector2(route_point.x*sx,route_point.y*sy))
-		index+=1
-	var zone_index := 0
-	for zone in _zones:
-		if not zone is Dictionary or str(zone.get("id",""))=="welcome":
-			continue
-		var button := _canvas.get_node_or_null("MapGate_"+str(zone.get("id",""))) as Button
-		if button != null:
-			var column := zone_index%3
-			var row := floori(float(zone_index)/3.0)
-			button.custom_minimum_size=hit_size
-			button.size=hit_size
-			# Fixed physical hit targets need room after scaling. Clamping the
-			# final column alone pushed it over the middle column on small windows.
-			var gap := 6.0/menu_scale
-			var first_x := minf(_canvas.size.x*0.70,_canvas.size.x-8.0-3.0*hit_size.x-2.0*gap)
-			var column_step := (_canvas.size.x-8.0-hit_size.x-first_x)*0.5
-			button.position=Vector2(first_x+column*column_step,(44+row*112)*sy)
-		zone_index+=1
-	for child in _canvas.get_children():
-		if child is Button:
-			child.position=Vector2(clampf(child.position.x,8.0,maxf(8.0,_canvas.size.x-child.size.x-8)),clampf(child.position.y,8.0,maxf(8.0,_canvas.size.y-child.size.y-8)))
-	_canvas.satellite_centers.clear()
-	for zone in _zones:
-		if zone is Dictionary and str(zone.get("id",""))!="welcome":
-			var gate := _canvas.get_node_or_null("MapGate_"+str(zone.get("id",""))) as Button
-			if gate!=null:
-				_canvas.satellite_centers.append(gate.position+gate.size*0.5)
-	# Resolve collision in screen pixels, keeping leader lines to the world-derived route anchors.
-	for iteration in range(48):
-		var moved := false
-		for first in range(station_buttons.size()):
-			for second in range(first+1,station_buttons.size()):
-				var a := station_buttons[first]
-				var b := station_buttons[second]
-				var delta := b.position+b.size*0.5-a.position-a.size*0.5
-				var overlap := (a.size+b.size)*0.5+Vector2(6,6)-delta.abs()
-				if overlap.x>0 and overlap.y>0:
-					var shift := Vector2.ZERO
-					if overlap.x<overlap.y:
-						shift.x=(overlap.x*0.5+0.1)*(1.0 if delta.x>=0 else -1.0)
-					else:
-						shift.y=(overlap.y*0.5+0.1)*(1.0 if delta.y>=0 else -1.0)
-					a.position-=shift
-					b.position+=shift
-					moved=true
-		for button in station_buttons:
-			if hub!=null and button.get_rect().intersects(hub.get_rect().grow(8.0)):
-				button.position.y=hub.position.y-button.size.y-8.0
-				moved=true
-			button.position=Vector2(clampf(button.position.x,4.0,maxf(4.0,_canvas.size.x*0.67-button.size.x)),clampf(button.position.y,8.0,maxf(8.0,_canvas.size.y-button.size.y-8)))
-		if not moved: break
-	_canvas.leaders.clear()
-	for station_index in range(station_buttons.size()):
-		var button := station_buttons[station_index]
-		_canvas.leaders.append([anchors[station_index],button.position+button.size*0.5])
-	_canvas.queue_redraw()
+	var compact := get_viewport().get_visible_rect().size.x * menu_scale < 1100.0
+	_workspace.columns = 1 if compact else 2
+	_detail_body.vertical = not compact
+	var unit := 1.0 / menu_scale
+	var hub_size := Vector2(99.0, 44.0) * unit
+	var minimum_hit := ceili(44.0 * unit) * Vector2.ONE
+	var font_size := ceili(16.0 * Paper.text_scale() * unit)
+	_hub.add_theme_font_size_override("font_size", font_size)
+	hub_size = hub_size.max(_hub.get_minimum_size())
+	var station_hit := _measure_buttons(_stations, minimum_hit, font_size)
+	var overview_hit := _measure_buttons(_gates, minimum_hit, font_size)
+	var station_header := hub_size.y + 11.0 * unit
+	var overview_header := 34.0 * unit
+	var station_width := maxf(218.0 * unit, maxf(hub_size.x + 107.0 * unit, 4.0 * station_hit.x + 30.0 * unit))
+	var overview_width := maxf(164.0 * unit, 3.0 * overview_hit.x + 26.0 * unit)
+	var content_height := maxf(station_header + 3.0 * station_hit.y, overview_header + 3.0 * overview_hit.y)
+	_canvas.custom_minimum_size = Vector2(maxf(600.0 * unit, station_width + overview_width + 165.0 * unit),
+		maxf(220.0 * unit if compact else 0.0, content_height + 24.0 * unit))
+	_canvas.arrange(menu_scale, station_width, overview_width)
+	var stations := _canvas.station_index
+	_hub.position = Vector2(stations.end.x - hub_size.x - 8.0 * unit, stations.position.y + 5.0 * unit)
+	_hub.custom_minimum_size = hub_size
+	_hub.size = hub_size
+	_place_buttons(_stations, stations, 4, station_hit, station_header, 8.0 * unit)
+	_place_buttons(_gates, _canvas.region_overview, 3, overview_hit, overview_header, 8.0 * unit)
+	for button in _stations:
+		var icon := button.get_node("StationIcon") as StationIcon
+		icon.scale = Vector2.ONE * unit
+		icon.position = Vector2((button.size.x - 16.0 * unit) * 0.5, 2.0 * unit)
+
+func _measure_buttons(buttons: Array[Button], hit: Vector2, font_size: int) -> Vector2:
+	for button in buttons:
+		button.add_theme_font_size_override("font_size", font_size)
+		hit = hit.max(button.get_minimum_size())
+	return hit
+
+func _place_buttons(buttons: Array[Button], area: Rect2, columns: int, hit: Vector2, header: float, inset: float) -> void:
+	var rows := ceili(float(buttons.size()) / float(columns))
+	if rows == 0:
+		return
+	var outer := area.grow(-inset)
+	outer.position.y = area.position.y + header
+	outer.size.y = maxf(hit.y * rows, area.end.y - outer.position.y - inset)
+	var step_x := (outer.size.x - hit.x) / float(columns - 1)
+	var step_y := (outer.size.y - hit.y) / float(maxi(1, rows - 1))
+	for index in buttons.size():
+		var button := buttons[index]
+		button.custom_minimum_size = hit
+		button.size = hit
+		button.position = outer.position + Vector2((index % columns) * step_x, floorf(float(index) / columns) * step_y)
+
+func _position(point_id: String) -> Vector3:
+	return _positions.get(point_id, Vector3.INF)
+
+func _side(place: String, point: Vector3) -> String:
+	if not point.is_finite():
+		return ""
+	if absf(point.x) < 1.0:
+		return place + "中央"
+	return place + ("西側" if point.x < 0.0 else "東側")
 
 func _select_hub() -> void:
-	_set_map_selection("MapHub")
-	_detail_title.text="海風碼頭｜下船起點"
-	_detail_text.text="沿木棧橋前往中央廣場，再進入迎賓大道。沿珊瑚色路線尋找迎賓設施。"
-
-func _select_game(game_id: String, number: int, game: Dictionary) -> void:
-	_set_map_selection("MapStop_"+game_id)
-	_detail_title.text="第 %02d 站｜%s" % [number,str(game.get("name",game_id))]
-	_detail_text.text="目標：%s" % str(game.get("goal","完成設施挑戰。"))
-
-func _select_zone(zone: Dictionary) -> void:
-	var region := str(zone.get("id",""))
-	_set_map_selection("MapGate_"+region)
-	var playable := RegionRoutes.supports(region)
-	var threshold := RegionRoutes.threshold(region) if playable else int(zone.get("threshold",0))
-	var remaining := maxi(threshold-_normal_count,0)
-	_detail_title.text="%s｜%s" % [str(zone.get("name","未命名園區")),("可前往" if remaining==0 else "尚未達資格") if playable else "準備中"]
-	var qualification := "已達入園資格" if remaining==0 else "還差 %d 張不同普通拍貼" % remaining
-	_detail_text.text="主題：%s\n普通拍貼：%d / %d 張\n%s；收藏不消耗。" % [str(zone.get("theme","主題資料準備中。")),_normal_count,threshold,qualification]
-
-	if playable:
-		_detail_text.text="普通拍貼：%d / %d 張\n%s；收藏不消耗。\n從%s路口前往，返回免費。" % [_normal_count,threshold,qualification,str(zone.get("name","園區"))]
-
-func _set_map_selection(node_name: String) -> void:
-	_selected_map_button=node_name
-	if not is_instance_valid(_canvas):
+	if not _set_map_selection(_hub, _position("arrival")):
 		return
-	for child in _canvas.get_children():
-		if not child is Button:
-			continue
-		var button := child as Button
-		var selected := button.name==node_name
-		var style := StyleBoxFlat.new()
-		style.bg_color=Color("#276c70") if selected else Color("#f0dfb7")
-		style.border_color=Color("#f2bd68") if selected else Color("#8e7954")
-		style.set_border_width_all(3 if selected else 1)
-		style.set_corner_radius_all(0)
-		style.content_margin_left=2
-		style.content_margin_right=2
-		button.add_theme_stylebox_override("normal",style)
-		button.add_theme_color_override("font_color",Color("#fff4d7") if selected else Color("#24474c"))
-		button.add_theme_color_override("font_hover_color",Color("#fff4d7") if selected else Color("#24474c"))
-		button.add_theme_color_override("font_focus_color",Color("#fff4d7") if selected else Color("#24474c"))
-	_canvas.queue_redraw()
+	_detail_title.text = "海風碼頭｜下船起點"
+	_detail_text.text = "在步行圖南端。沿木棧橋向北到中央廣場。"
+
+func _select_game(button: Button, game_id: String, number: int, game: Dictionary) -> void:
+	var point := _position(game_id)
+	if not _set_map_selection(button, point):
+		return
+	_detail_title.text = "第 %02d 站｜%s" % [number, str(game.get("name", game_id))]
+	var goal := str(game.get("goal", "完成設施挑戰。"))
+	var side := _side("迎賓大道", point)
+	_detail_text.text = goal if side.is_empty() else "%s\n%s" % [side, goal]
+
+func _select_zone(button: Button, zone: Dictionary) -> void:
+	var region := str(zone.get("id", ""))
+	var playable := RegionRoutes.supports(region)
+	var point := _position("gate:" + region) if playable else Vector3.INF
+	if not _set_map_selection(button, point):
+		return
+	var threshold := RegionRoutes.threshold(region) if playable else int(zone.get("threshold", 0))
+	var remaining := maxi(threshold - _normal_count, 0)
+	var arrival := ("可前往" if remaining == 0 else "尚未達資格") if playable else "準備中"
+	_detail_title.text = "%s｜%s" % [str(zone.get("name", "未命名園區")), arrival]
+	var qualification := "已達入園資格" if remaining == 0 else "還差 %d 張不同普通拍貼" % remaining
+	var progress := "普通拍貼：%d / %d 張\n%s；收藏不消耗。" % [_normal_count, threshold, qualification]
+	if playable:
+		var side := _side("中央廣場", point)
+		var location := side + "路口，返回免費。" if not side.is_empty() else "返回免費。"
+		_detail_text.text = progress + "\n" + location
+	else:
+		_detail_text.text = "主題：%s\n%s" % [str(zone.get("theme", "主題資料準備中。")), progress]
+
+func _set_map_selection(button: Button, point: Vector3) -> bool:
+	if button == _selected:
+		return false
+	if is_instance_valid(_selected):
+		_style_button(_selected, false)
+	_selected = button
+	_style_button(button, true)
+	_canvas.select(point)
+	return true

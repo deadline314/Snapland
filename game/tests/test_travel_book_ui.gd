@@ -61,8 +61,7 @@ func _test_map() -> void:
 		if _main.world.player.is_on_floor(): break
 		await get_tree().physics_frame
 	_check(_main.world.player.is_on_floor(),"map position check starts with the player grounded")
-	_main._show_map()
-	await _frames(2)
+	await _open_map_from_ticket()
 	_check(_main.modal_kind=="map","map opens through the existing ticket callback")
 	var hub := _main.overlay.find_child("MapHub",true,false) as Button
 	var stations := _find_named_buttons(_main.overlay,"MapStop_game-")
@@ -71,11 +70,16 @@ func _test_map() -> void:
 	_check(stations.size()==12,"map exposes all twelve real welcome-game stations")
 	_check(gates.size()==9,"map exposes the other nine park entrances")
 	var legend: Node=_main.overlay.find_child("IslandMapLegend",true,false)
-	_check(legend!=null and _has_label(legend,"珊瑚線：迎賓大道") and _has_label(legend,"青綠線：海岸環線") and _has_label(legend,"右側：園區路口") and not _has_label(legend,"九島準備中"),"map legend preserves route colors and truthfully labels regional gates without claiming all nine are unavailable")
+	_check(legend!=null and _has_label(legend,"珊瑚線：迎賓大道") and _has_label(legend,"青綠線：海岸環線") and _has_label(legend,"藍點：你的位置") and _has_label(legend,"金菱：目的地") and not _has_label(legend,"九島準備中"),"map legend preserves route colors and truthfully labels regional gates without claiming all nine are unavailable")
 	var map_detail: Node=_main.overlay.find_child("DestinationDetails",true,false)
 	_check(map_detail!=null,"map has a readable destination details panel")
 	var original_position: Vector3=_main.world.player.global_position
 	var original_sprite_position: Vector3=_main.world.avatar.global_position
+	var chart := _main.overlay.find_child("IslandChartCanvas",true,false) as Control
+	var initial_map_position: Vector2 = chart.call("project", original_position)
+	_check(chart.get("player") == original_position, "map reads the grounded player body when opened from the ticket")
+	var original_photo_count: int = _progress.normal_count()
+	var original_coins: int = _progress.coins
 	var harbor := _main.overlay.find_child("MapGate_harbor",true,false) as Button
 	if harbor!=null:
 		await _activate(harbor)
@@ -87,10 +91,31 @@ func _test_map() -> void:
 		_check(_main.world.player.global_position==original_position and _main.world.avatar.global_position!=original_sprite_position,"camera grounding moves the displayed sprite while the player body stays fixed")
 		_check(_has_label(map_detail,"6 張") and _has_label(map_detail,"尚未達資格"),"harbor detail explains its actual threshold and admission state")
 		_check(_main.world.player.global_position==original_position,"selecting a map destination does not teleport the avatar")
+		_check(chart.get("player") == original_position and chart.call("project", original_position) == initial_map_position,
+			"billboard and camera changes do not move the recorded chart position")
+	await _check_map_direction(chart, map_detail)
 	var station := _main.overlay.find_child("MapStop_game-010",true,false) as Button
 	if station!=null:
 		await _activate(station)
 		_check(_has_label(map_detail,"泡泡"),"station detail shows the real game goal and instructions")
+		_check(chart.get("destination") == _world_point("game-010") and _has_label(map_detail,"迎賓大道東側"),
+			"station preview matches its actual interaction point and side")
+	_check(_progress.normal_count() == original_photo_count and _progress.coins == original_coins,
+		"previewing stations and gates preserves photos and coins")
+	_main._close()
+	await _frames(2)
+	Input.action_press("move_up")
+	for _step in range(35):
+		await get_tree().physics_frame
+	Input.action_release("move_up")
+	await get_tree().physics_frame
+	var stepped: Vector3 = _main.world.player.global_position
+	_check(stepped.z < original_position.z - 0.75, "real world movement changes the player position before reopening")
+	await _open_map_from_ticket()
+	var reopened := _main.overlay.find_child("IslandChartCanvas",true,false) as Control
+	var reopened_pin: Vector2 = reopened.call("project", stepped)
+	_check(reopened.get("player") == stepped and reopened_pin.y < initial_map_position.y,
+		"reopening the same chart puts the player marker farther north")
 	_main._close()
 	for review_case in [[Vector2i(800,600),1.0],[Vector2i(1280,720),1.0],[Vector2i(800,600),1.25]]:
 		var viewport_size: Vector2i=review_case[0]
@@ -172,6 +197,42 @@ func _test_map() -> void:
 	window.size=previous_size
 	_main._refresh()
 	await _frames(3)
+
+func _open_map_from_ticket() -> void:
+	_main._show_ticket()
+	await _frames(2)
+	var button := _main.overlay.find_child("TicketAction0",true,false) as Button
+	if button != null:
+		await _activate(button)
+
+func _world_point(point_id: String) -> Vector3:
+	for point in _main.world.points:
+		if point.id == point_id:
+			return point.position
+	return Vector3.INF
+
+func _check_map_direction(chart: Control, details: Node) -> void:
+	var west := _main.overlay.find_child("MapGate_nightmarket",true,false) as Button
+	var east := _main.overlay.find_child("MapGate_candy",true,false) as Button
+	await _activate(west)
+	var west_point := _world_point("gate:nightmarket")
+	var west_marker: Vector2 = chart.call("project", west_point)
+	_check(chart.get("destination") == west_point and _has_label(details,"中央廣場西側"),
+		"Nightmarket preview is the physical western gate")
+	var chosen_style := west.get_theme_stylebox("normal")
+	west.mouse_entered.emit()
+	west.focus_entered.emit()
+	_check(is_same(chosen_style, west.get_theme_stylebox("normal")), "repeat selection preserves the cached button style")
+	await _activate(east)
+	var east_point := _world_point("gate:candy")
+	var east_marker: Vector2 = chart.call("project", east_point)
+	var plaza: Vector2 = chart.call("project", Vector3.ZERO)
+	_check(chart.get("destination") == east_point and _has_label(details,"中央廣場東側")
+		and west_marker.x < plaza.x and plaza.x < east_marker.x, "candy preview is the physical eastern gate in the north-up chart")
+	_check(is_same(chosen_style, east.get_theme_stylebox("normal")), "different gate selections reuse the cached style")
+	await _activate(_main.overlay.find_child("MapGate_circus",true,false) as Button)
+	var unavailable: Vector3 = chart.get("destination")
+	_check(not unavailable.is_finite() and _has_label(details,"準備中"), "the regional overview preserves future eligibility without marking a playable destination")
 
 func _test_album() -> void:
 	_main._show_album()
