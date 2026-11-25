@@ -19,7 +19,7 @@ func _run() -> void:
 	var baseline: Dictionary = _world.map_snapshot()
 	check(Routes.supports("nightmarket") and Routes.threshold("nightmarket") == 6 and not Routes.supports("circus"),
 		"same-batch access uses six cards and preserves later gates")
-	check(baseline.region == "nightmarket" and baseline.operating and baseline.points.size() == 6
+	check(baseline.region == "nightmarket" and baseline.operating and baseline.points.size() == 7
 		and baseline.land.size() == 7 and not baseline.covered, "world declares its real terrain and uses a stable set of points")
 	for position in [Vector2(-9.6, 7.2), Vector2(-9.6, -4.3), Vector2(9.6, -4.3), Vector2(9.6, 7.2), Vector2(0, 7.2), Vector2(0, 0.7)]:
 		check(await walk_to(position), "real walker reaches %s without falling" % position)

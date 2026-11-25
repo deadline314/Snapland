@@ -1504,6 +1504,9 @@ func _show_game_rules(id: String) -> void:
 	elif definition.mode == "bubble_lift":
 		notes[3].text = "讓泡籃離台運行後，正式回合自然結算可取普通拍貼。完成三桶才通關。"
 		notes[4].text = "輔助讓失效的泡籃緩降回收並放寬接收高度。R 在確認載重後，跟隨你的踩泵補力。"
+	elif definition.mode == "rain_courier":
+		notes[3].text = "實際送餐行走後，正式回合自然結算可收藏普通卡。送達三份才通關，練習或中途取消不計。"
+		notes[4].text = "輔助延時、保溫並放寬滑遞時機。經過雨棚缺口時自動遮雨；挑戰小惡魔需親手撐傘護住滑過積水的餐盒。"
 	elif definition.mode == "sugar_draw":
 		notes[3].text = "實際拉出糖絲後，正式回合自然結算可取普通拍貼。完成三段才通關。"
 		notes[4].text = "輔助放寬絲徑容差，斷絲時保留已完成段落。R 切換安全溫區加熱。"
@@ -2078,7 +2081,7 @@ func _show_region_games() -> void:
 	body.add_child(entries)
 	for definition in Catalog.definitions(world_region):
 		var action := Paper.button(str(definition.name),_show_game_info.bind(str(definition.id)),entries)
-		action.name="HarborGame"+str(definition.id)
+		action.name=("NightmarketGame" if world_region=="nightmarket" else "HarborGame")+str(definition.id)
 		action.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		action.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	var back := Paper.button("返回地圖 · Esc",_show_map,modal_footer)
@@ -2436,7 +2439,7 @@ func _show_ticket() -> void:
 	if world_region=="candy":
 		body.add_child(Paper.label(_candy_info_text()+"溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
 	elif world_region=="nightmarket":
-		body.add_child(Paper.label("沿攤街走一圈，或穿雨棚巷上屋頂。入口旁可切換營業。",18,Paper.TEAL))
+		body.add_child(Paper.label("穿過雨棚巷可送熱餐或上屋頂。夜市遊戲 %d / 12 款開放。" % Catalog.definitions("nightmarket").size(),18,Paper.TEAL))
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2
@@ -2445,11 +2448,12 @@ func _show_ticket() -> void:
 	groups.add_theme_constant_override("h_separation",16)
 	groups.add_theme_constant_override("v_separation",8)
 	body.add_child(groups)
+	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學"}.get(world_region,"園區圖解教學")
 	var entries := [
 		["島嶼地圖",_show_map,"探索島嶼"], ["今日任務",_show_tasks,"探索島嶼"],
 		["拍貼收藏本",_show_album,"收藏記錄"], ["遊園成就",_show_achievements,"收藏記錄"],
 		["衣櫃與服飾店",_show_wardrobe,"整裝出發"], ["切換時段",_open_time_panel_from_ticket,"遊園安排"],
-		["設定與輔助",_show_settings,"遊園安排"], ["工廠圖解教學" if world_region=="candy" else "園區圖解教學",_show_region_tutorial,"操作速查"],
+		["設定與輔助",_show_settings,"遊園安排"], [lesson_label,_show_region_tutorial,"操作速查"],
 	]
 	for index in range(entries.size()):
 		var entry: Array=entries[index]
@@ -2464,18 +2468,20 @@ func _show_ticket() -> void:
 	_back(body)
 
 func _show_region_tutorial() -> void:
-	if world_region!="candy":
+	if world_region not in ["candy","nightmarket"]:
 		_open_tutorial("park","ticket")
 		return
-	var body := _open("工廠圖解教學","CANDY / 已開放遊戲","region_tutorials")
+	var candy := world_region=="candy"
+	var prefix := "CandyTutorial" if candy else "NightmarketTutorial"
+	var body := _open("工廠圖解教學" if candy else "夜市圖解教學",world_region.to_upper()+" / 已開放遊戲","region_tutorials")
 	var choices := GridContainer.new()
-	choices.name="CandyTutorialChoices"
+	choices.name=prefix+"Choices"
 	choices.columns=2
 	choices.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	body.add_child(choices)
-	for definition: Dictionary in Catalog.definitions("candy"):
+	for definition: Dictionary in Catalog.definitions(world_region):
 		var action := Paper.button(str(definition.name),_open_tutorial.bind(str(definition.id),"ticket"),choices)
-		action.name="CandyTutorial_"+str(definition.id)
+		action.name=prefix+"_"+str(definition.id)
 		action.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	_back(body)
 

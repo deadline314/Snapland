@@ -53,6 +53,8 @@ func _build_region_geometry() -> void:
 	_point("nightmarket:rooftop", "屋頂餐桌 · 看夜市", Vector3(0, ROOF_Y, -11.65))
 	_point("nightmarket:signs", "招牌維修台 · 看營業燈", Vector3(9.6, GROUND_Y, -0.2))
 	_point("nightmarket:reset", "安全返回夜市入口", Vector3(-9.6, GROUND_Y, 1.0))
+	_point("game-037", "雨棚快遞 · 撐傘送熱餐", Vector3(0, GROUND_Y, 2.85))
+	_build_courier_stand()
 	_sync_operating()
 	current_area = _area_at_position(ENTRY)
 
@@ -206,6 +208,15 @@ func _build_awning() -> void:
 		var edge := _box(Vector3(0, 3.50, z), Vector3(4.20, 0.13, 0.08), MINT_NEON)
 		edge.material_override = _unshaded(MINT_NEON)
 	_sign("雨棚巷", Vector3(0, GROUND_Y, 4.78), MINT_NEON)
+
+func _build_courier_stand() -> void:
+	var at := Vector3(2.77, GROUND_Y, 2.87)
+	_box(at + Vector3(0, 0.43, 0), Vector3(1.42, 0.86, 1.17), STALL)
+	_box(at + Vector3(0, 0.92, 0), Vector3(1.55, 0.13, 1.27), Color("#b78579"))
+	for x in [-0.44, 0.0, 0.44]:
+		_box(at + Vector3(x, 1.11, 0.09), Vector3(0.36, 0.24, 0.54), Color("#cb976b"))
+	_market_lantern(at + Vector3(0, 1.39, 0), PAPER_LIGHT, 0.11)
+	_sign("雨棚快遞", at + Vector3(0, 0.13, -0.44), CORAL_NEON)
 
 func _build_route_markers() -> void:
 	_sign("霓虹夜市", Vector3(-0.25, GROUND_Y, 6.25), CORAL_NEON)

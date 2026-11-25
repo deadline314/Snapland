@@ -158,7 +158,7 @@ func _run() -> void:
 	s._leave_from_hud()
 	s._process(99.0)
 	expect(s.ended and results.size() == count and not s.active_driver.snapshot().charging, "cancel clears held charge and emits no completion")
-	s.start("game-037")
+	s.start("game-038")
 	expect(s.ended and s.game_id.is_empty() and s.active_driver == null, "upcoming game 033 remains refused")
 	s.start("game-026")
 	s._process(0.1)

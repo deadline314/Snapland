@@ -14,12 +14,13 @@ func _run() -> void:
 	var welcome: Array = catalog.definitions()
 	var harbor: Array = catalog.definitions("harbor")
 	var candy: Array = catalog.definitions("candy")
+	var nightmarket: Array = catalog.definitions("nightmarket")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and all_games.size() == 36, "only the 36 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 1 and all_games.size() == 37, "only the 37 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
-	_check(all_games == welcome + harbor + candy and catalog.definitions("nightmarket").is_empty(), "global order is welcome then harbor then delivered candy; upcoming regions remain unavailable")
+	_check(all_games == welcome + harbor + candy + nightmarket and catalog.definitions("circus").is_empty(), "games retain global order and future regions remain unavailable")
 	_check(harbor[0].name == "浪間小艇" and harbor[0].instructions == "划槳、轉舵並側滑靠岸" and harbor[0].ordinary == "載三箱到兩座浮碼頭" and harbor[0].devil == "用浪峰側滑靠岸不撞箱", "harbor row uses the approved concise copy")
 	var expected := {"id": "game-013", "mode": "rowing_cargo", "zone": "harbor", "local_index": 1, "photo_id": "photo-harbor-game-1", "devil_photo_id": "photo-harbor-devil-1", "achievement_id": "ACH_GAME_013"}
 	_check(catalog.identity("game-013") == expected and catalog.identity("rowing_cargo") == expected, "global and mode lookup produce the same regional identity")
@@ -60,6 +61,8 @@ func _run() -> void:
 	_check(catalog.identity("game-035") == lift and catalog.identity("bubble_lift") == lift and candy[10].name == "汽泡升降梯", "eleventh candy game keeps local11/global035")
 	var draw := {"id":"game-036", "mode":"sugar_draw", "zone":"candy", "local_index":12, "photo_id":"photo-candy-game-12", "devil_photo_id":"photo-candy-devil-12", "achievement_id":"ACH_GAME_036"}
 	_check(catalog.identity("game-036") == draw and catalog.identity("sugar_draw") == draw and candy[11].name == "熔糖抽絲", "twelfth candy game keeps local12/global036")
+	var courier := {"id":"game-037", "mode":"rain_courier", "zone":"nightmarket", "local_index":1, "photo_id":"photo-nightmarket-game-1", "devil_photo_id":"photo-nightmarket-devil-1", "achievement_id":"ACH_GAME_037"}
+	_check(catalog.identity("game-037") == courier and catalog.identity("rain_courier") == courier and nightmarket[0].name == "雨棚快遞", "night market game has stable local and global identity")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
 	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:
@@ -72,7 +75,7 @@ func _run() -> void:
 	var identity: Dictionary = catalog.identity("game-013")
 	identity.zone = "mutated"
 	_check(catalog.definitions()[0].name == "氣球快遞" and catalog.definitions("harbor")[0].name == "浪間小艇" and catalog.identity("game-013").zone == "harbor", "all catalog APIs return deep copies")
-	var sources := {"welcome": catalog.definitions(), "harbor": catalog.definitions("harbor"), "candy": catalog.definitions("candy")}
+	var sources := {"welcome": catalog.definitions(), "harbor": catalog.definitions("harbor"), "candy": catalog.definitions("candy"), "nightmarket": catalog.definitions("nightmarket")}
 	_check(catalog._validated_catalog(sources) == sources, "explicit parser boundary accepts delivered data")
 	var invalid_sources: Array = []
 	var bad: Dictionary = sources.duplicate(true)

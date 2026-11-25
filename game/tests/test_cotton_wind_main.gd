@@ -29,7 +29,7 @@ func _run() -> void:
 	if failures:
 		await _finish()
 		return
-	check(Catalog.find(MODE) == Catalog.find(GAME) and Catalog.find("game-037").is_empty(),
+	check(Catalog.find(MODE) == Catalog.find(GAME) and Catalog.find("game-038").is_empty(),
 		"mode lookup resolves delivered game 30 while game 33 remains unavailable")
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	get_window().size = Vector2i(1280, 720)

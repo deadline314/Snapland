@@ -915,14 +915,14 @@
     {
       "name": "雨棚快遞",
       "core": "取捨",
-      "action": "穿巷、撐傘並滑遞餐盒",
-      "goal": "送三份乾爽熱餐",
+      "action": "A/D 或左右鍵選近路／雨棚路，E 取餐，按住 W 或上鍵走路，空白鍵開關傘。到收件台，光標進入亮區時按 E 滑遞。R 重取當份。也可用畫面按鈕。",
+      "goal": "把三份仍熱且乾爽的餐盒滑遞給收件人",
       "choice": "短路冒雨或長路保溫",
       "feedback": "傘下遮雨與餐盒濕熱狀態",
       "variation": "雨向、棚缺口和收件順序",
       "multi": "各搬餐盒，可互借傘遮雨",
       "ai": "簡單AI跟隨棚下路線不搶單",
-      "demon": "以傘接滑餐跨過積水",
+      "demon": "撐傘遮住滑過積水的一份餐盒，並送完三份熱餐",
       "variant": "移動棚車須先交接再換巷",
       "assist": "餐盒不冷、雨濕懲罰降低",
       "test": "安全繞路可完成不逼精準衝刺",
@@ -933,8 +933,9 @@
       "reference": "catalog-lumines",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「穿巷、撐傘並滑遞餐盒」；「短路冒雨或長路保溫」形成取捨，以「安全繞路可完成不逼精準衝刺」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "rain_courier"
     },
     {
       "name": "烤串翻面",
