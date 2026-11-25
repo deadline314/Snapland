@@ -221,11 +221,11 @@ func _candy_ui() -> void:
 	await _frames(3)
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
-	_check(selector.item_count==3 and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
-	for index in [0,1,2]:
+	_check(selector.item_count==4 and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
+	for index in [0,1,2,3]:
 		selector.select(index)
 		selector.item_selected.emit(index)
-		_check(book._region==["welcome","harbor","candy"][index] and book._entries().size()==[18,12,Catalog.definitions("candy").size()][index], "all three album regions retain their real source catalogues")
+		_check(book._region==["welcome","harbor","candy","nightmarket"][index] and book._entries().size()==[18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()][index], "all four album regions retain their real source catalogues")
 	main._close()
 	main._show_tasks()
 	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")

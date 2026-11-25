@@ -14,6 +14,7 @@ const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TestSaveGuard = preload("res://game/core/test_save_guard.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
+const RegionRoutes = preload("res://game/core/region_routes.gd")
 const DEFAULT_APPEARANCE := {
 	"skin": "warm", "species": "human", "gender": "neutral",
 	"hair": "windswept", "hair_color": "ink", "face": "curious",
@@ -37,7 +38,7 @@ const WELCOME_GAME_IDS := [
 	"game-007", "game-008", "game-009", "game-010", "game-011", "game-012",
 ]
 const ZONES := ["welcome", "harbor", "candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky", "cinema"]
-const SUPPORTED_REGIONS := ["welcome", "harbor", "candy"]
+const SUPPORTED_REGIONS := RegionRoutes.ORDER
 
 var photos: Dictionary = {}
 var achievements: Dictionary = {}

@@ -2,7 +2,8 @@ extends SceneTree
 
 const ProgressScript = preload("res://game/core/progress.gd")
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
-const INVALID_REGIONS := [null, true, 12, 1.5, [], {}, "", "moon", "nightmarket", "WELCOME", " harbor "]
+const INVALID_REGIONS := [null, true, 12, 1.5, [], {}, "", "moon", "circus", "WELCOME", " harbor "]
+const ROLLBACK_DESTINATIONS := {"welcome": "nightmarket", "harbor": "welcome", "candy": "harbor", "nightmarket": "candy"}
 var failures: Array[String] = []
 var save_path := ""
 var changes := 0
@@ -58,7 +59,7 @@ func _test_round_trips(progress: Node) -> void:
 	var original := _fixture(progress)
 	_check(original.get("version") == 1, "save version stays one")
 	progress.changed.connect(_on_changed)
-	for region in ["harbor", "candy", "welcome", "candy", "harbor", "welcome"]:
+	for region in ["harbor", "candy", "nightmarket", "welcome", "nightmarket", "candy", "harbor", "welcome"]:
 		var before := FileAccess.get_file_as_string(save_path)
 		changes = 0
 		_check(progress.call("set_current_region", region) == true, "supported destination succeeds: " + region)
@@ -79,7 +80,7 @@ func _test_round_trips(progress: Node) -> void:
 		var backup := FileAccess.get_file_as_string(save_path + ".bak")
 		_check(DirAccess.make_dir_absolute(save_path + ".tmp") == OK, "block writes during no-op checks")
 		_check(progress.call("set_current_region", region) == true, "same destination succeeds without writing")
-		for rejected in ["", "moon", "nightmarket", "WELCOME", " harbor "]:
+		for rejected in ["", "moon", "circus", "WELCOME", " harbor "]:
 			_check(progress.call("set_current_region", rejected) == false, "unsupported input rejected: " + rejected)
 		_check(progress.get("current_region") == region and changes == 0, "rejected and no-op calls preserve memory and signals")
 		_check(FileAccess.get_file_as_string(save_path) == saved and FileAccess.get_file_as_string(save_path + ".bak") == backup, "rejected and no-op calls preserve both files")
@@ -110,14 +111,14 @@ func _test_diagnostics(progress: Node) -> void:
 		_check(progress.get("current_region") == "welcome", "malformed or unimplemented region falls back: " + str(value))
 		_check(progress.save_progress(), "fallback normalizes save")
 		_check(_read_json(save_path) == original, "fallback preserves every other normalized field")
-	for previous in ["welcome", "harbor", "candy"]:
+	for previous: String in ROLLBACK_DESTINATIONS:
 		_check(progress.call("set_current_region", previous) == true, "prepare rollback origin: " + previous)
 		var saved := FileAccess.get_file_as_string(save_path)
 		var backup := FileAccess.get_file_as_string(save_path + ".bak")
 		progress.changed.connect(_on_changed)
 		changes = 0
 		_check(DirAccess.make_dir_absolute(save_path + ".tmp") == OK, "block the real temporary write")
-		var destination: String = {"welcome":"candy", "harbor":"welcome", "candy":"harbor"}[previous]
+		var destination: String = ROLLBACK_DESTINATIONS[previous]
 		_check(progress.call("set_current_region", destination) == false, "real IO failure returns false")
 		_check(progress.get("current_region") == previous and changes == 0, "failure rolls memory back without changed signal")
 		_check(FileAccess.get_file_as_string(save_path) == saved and FileAccess.get_file_as_string(save_path + ".bak") == backup, "failed transaction preserves primary and backup bytes")
@@ -138,7 +139,7 @@ func _test_diagnostic_process() -> void:
 	var expected: Array[String] = []
 	for value: Variant in INVALID_REGIONS:
 		expected.append("WARNING: Invalid 'current_region' field in progress file '%s'; using welcome." % child_path)
-	for previous in ["welcome", "harbor", "candy"]:
+	for previous in ROLLBACK_DESTINATIONS:
 		expected.append("ERROR: Cannot write progress temporary file '%s.tmp': Can't open file" % child_path)
 	var diagnostics: Array[String] = []
 	var passed := false
@@ -148,7 +149,7 @@ func _test_diagnostic_process() -> void:
 		if clean.contains("ERROR:") or clean.contains("WARNING:"): diagnostics.append(clean)
 		if clean == "PASS: region malformed fallback and real IO rollback": passed = true
 	var details := "exit=%d passed=%s diagnostics=%s output_tail=%s" % [code, passed, JSON.stringify(diagnostics).left(1500), child_output.right(3000)]
-	_check(code == 0 and passed and diagnostics == expected, "child has exactly expected fallback warnings and IO error, no hidden errors; " + details)
+	_check(code == 0 and passed and diagnostics == expected, "child has exactly the expected fallback warnings and IO errors; " + details)
 
 func _read_json(path: String) -> Dictionary:
 	return JSON.parse_string(FileAccess.get_file_as_string(path))

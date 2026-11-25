@@ -2,6 +2,8 @@ extends Node
 const WorldScene = preload("res://game/world/park_world.gd")
 const HarborWorld = preload("res://game/world/harbor_world.gd")
 const CandyWorld = preload("res://game/world/candy_world.gd")
+const NightmarketWorld = preload("res://game/world/nightmarket_world.gd")
+const RegionRoutes = preload("res://game/core/region_routes.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
@@ -123,10 +125,11 @@ func _new_region_world(region: String) -> Node3D:
 	match region:
 		"harbor": return HarborWorld.new()
 		"candy": return CandyWorld.new()
+		"nightmarket": return NightmarketWorld.new()
 	return WorldScene.new()
 
 func _region_name() -> String:
-	return {"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(world_region,"迎賓大道")
+	return RegionRoutes.title(world_region)
 
 func _on_world_area_changed(area: String, source: Node3D) -> void:
 	if quitting or changing_region or source!=world: return
@@ -142,8 +145,9 @@ func _travel_to_region(destination: String) -> bool:
 	if quitting or changing_region or session!=null or capture_mode or is_instance_valid(boat_stage) or modal_kind not in ["","gate","map","tasks"]:
 		return false
 	if not Progress.SUPPORTED_REGIONS.has(destination) or destination==world_region: return false
-	if destination in ["harbor","candy"] and Progress.normal_count()<6:
-		_notice("還差 %d 張不同普通拍貼；收藏不消耗。" % (6-Progress.normal_count()))
+	var threshold := RegionRoutes.threshold(destination)
+	if Progress.normal_count() < threshold:
+		_notice("還差 %d 張不同普通拍貼；收藏不消耗。" % (threshold-Progress.normal_count()))
 		return false
 	changing_region=true
 	if not Progress.set_current_region(destination):
@@ -469,8 +473,9 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	world.sync_activity_pause()
 	world.set_process(kind!="pause")
 	audio.set_paused(kind=="pause" or (kind=="time" and session!=null))
+	var market_menu := world_region=="nightmarket"
 	var dim := ColorRect.new()
-	dim.color=Color(0.06,0.14,0.19,0.74)
+	dim.color=Color(0.12,0.09,0.19,0.77) if market_menu else Color(0.06,0.14,0.19,0.74)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.add_child(dim)
 	hud.hide()
@@ -481,7 +486,12 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	var panel := PanelContainer.new()
 	panel.name="AdaptiveMenuPanel"
 	panel.custom_minimum_size=Vector2.ZERO
-	panel.add_theme_stylebox_override("panel",Paper.plaque())
+	var menu_face := Paper.plaque()
+	if market_menu:
+		menu_face.bg_color=Color("#201b36")
+		menu_face.border_color=Color("#725a88")
+		menu_face.shadow_color=Color("#100e20d9")
+	panel.add_theme_stylebox_override("panel",menu_face)
 	center.add_child(panel)
 	_layout_open_panel(panel)
 	var margin := MarginContainer.new()
@@ -498,6 +508,9 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	margin.add_child(shell)
 	var frame := Paper.PixelFrame.new()
 	frame.name="PixelOrnamentFrame"
+	if market_menu:
+		frame.frame_color=Color("#6a4a75")
+		frame.accent_color=Color("#eca58a")
 	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	panel.add_child(frame)
@@ -506,12 +519,13 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	ticket_heading.add_theme_constant_override("separation",12)
 	ticket_heading.custom_minimum_size.y=56
 	shell.add_child(ticket_heading)
-	ticket_heading.add_child(Paper.icon("shell",24,Paper.TEAL))
+	var header_accent := Color("#f7bd9d") if market_menu else Paper.TEAL
+	ticket_heading.add_child(Paper.icon("shell",24,header_accent))
 	var heading_stack := VBoxContainer.new()
 	heading_stack.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	heading_stack.add_theme_constant_override("separation",1)
 	ticket_heading.add_child(heading_stack)
-	var eyebrow := Paper.label("SNAPLAND   /   "+subtitle,14,Paper.TEAL)
+	var eyebrow := Paper.label("SNAPLAND   /   "+subtitle,14,header_accent)
 	eyebrow.name="AdaptiveMenuEyebrow"
 	heading_stack.add_child(eyebrow)
 	var title_label := Paper.label(title,25)
@@ -1285,6 +1299,24 @@ func _interact(id: String, title: String) -> void:
 	if id=="region:welcome":
 		_travel_to_region("welcome")
 		return
+	if world_region=="nightmarket":
+		if id.begins_with("game-") and Catalog.identity(id).get("zone", "") == world_region:
+			_show_game_info(id)
+		else:
+			match id:
+				"nightmarket:trade":
+					world.cycle_market()
+					_notice("攤街" + world.market_status() + "。通路照常開放。")
+				"nightmarket:shelter":
+					_notice("在雨棚下可以遮雨。從巷北的斜坡可到屋頂餐桌。")
+				"nightmarket:rooftop":
+					_notice("屋頂餐桌。順斜坡回去即可接回攤街環路。")
+				"nightmarket:signs":
+					_notice("招牌顯示" + world.market_status() + "。可在入口旁反覆切換。")
+				"nightmarket:reset":
+					world.reset_to_entry()
+					_notice("已免費回到夜市入口。")
+		return
 	if world_region=="candy":
 		if id.begins_with("game-") and Catalog.identity(id).get("zone","")=="candy":
 			_show_game_info(id)
@@ -1358,13 +1390,14 @@ func _interact(id: String, title: String) -> void:
 			if zone.id==id.trim_prefix("gate:"):
 				var body := _open(zone.name,"NEXT ADVENTURE","gate")
 				body.add_child(Paper.label(zone.theme,25))
-				if zone.id in ["harbor","candy"]:
-					var remaining := maxi(6-Progress.normal_count(),0)
-					body.add_child(Paper.label("入園資格：6 張不同普通拍貼（不消耗）\n目前：%d 張\n%s" % [Progress.normal_count(),"已達資格，可前往%s。"%zone.name if remaining==0 else "還差 %d 張。"%remaining],22))
+				if RegionRoutes.supports(zone.id):
+					var threshold := RegionRoutes.threshold(zone.id)
+					var remaining := maxi(threshold-Progress.normal_count(),0)
+					body.add_child(Paper.label("入園資格：%d 張不同普通拍貼（不消耗）\n目前：%d 張\n%s" % [threshold,Progress.normal_count(),"已達資格，可前往%s。"%zone.name if remaining==0 else "還差 %d 張。"%remaining],22))
 					if remaining==0:
 						var travel := Paper.button("前往"+str(zone.name),_travel_to_region.bind(str(zone.id)),body)
-						travel.name="TravelCandyButton" if zone.id=="candy" else "TravelHarborButton"
-						travel.tooltip_text="6 張不同普通拍貼即可前往；拍貼與遊園幣都不消耗，返回免費。"
+						travel.name=RegionRoutes.travel_button(zone.id)
+						travel.tooltip_text="%d 張不同普通拍貼即可前往；拍貼與遊園幣都不消耗，返回免費。" % threshold
 				else:
 					body.add_child(Paper.label("入園資格：%d 張不同普通拍貼（不消耗）\n目前：%d 張\n\n這座園區正在準備中。"%[zone.threshold,Progress.normal_count()],22))
 				_back(body)
@@ -1436,7 +1469,7 @@ func _show_game_rules(id: String) -> void:
 		_notice("這個設施暫時休息中，先逛逛其他地方吧。")
 		return
 	id=str(definition.id)
-	var body := _open(str(definition.get("name",id)),str({"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(Catalog.identity(id).get("zone","welcome"),"迎賓大道"))+"  /  玩法與選項","game_rules")
+	var body := _open(str(definition.get("name",id)),RegionRoutes.title(Catalog.identity(id).get("zone","welcome"))+"  /  玩法與選項","game_rules")
 	var entry_stamp := HBoxContainer.new()
 	entry_stamp.add_theme_constant_override("separation",8)
 	body.add_child(entry_stamp)
@@ -1716,8 +1749,9 @@ func _show_album() -> void:
 func _can_access_game(id: String) -> bool:
 	var identity := Catalog.identity(id)
 	if identity.is_empty(): return false
-	if identity.zone in ["harbor","candy"] and Progress.normal_count() < 6 and Progress.current_region != identity.zone:
-		_notice("%s還差 %d 張不同普通拍貼；先收藏迎賓大道，收藏不消耗。" % [{"harbor":"潮汐碼頭","candy":"糖果工廠"}[identity.zone],6-Progress.normal_count()])
+	var threshold := RegionRoutes.threshold(identity.zone)
+	if Progress.normal_count() < threshold and Progress.current_region != identity.zone:
+		_notice("%s還差 %d 張不同普通拍貼；先收藏迎賓大道，收藏不消耗。" % [RegionRoutes.title(identity.zone),threshold-Progress.normal_count()])
 		return false
 	return true
 
@@ -2009,16 +2043,18 @@ func _show_achievements() -> void:
 	_back(body)
 
 func _show_map() -> void:
-	if world_region in ["harbor","candy"]:
-		var harbor_body := _open("糖果工廠 · 材料與輸送廊" if world_region=="candy" else "潮汐碼頭 · 燈塔與環岸步道",world_region.to_upper()+" MAP","map")
+	if world_region!="welcome":
+		var harbor_body := _open(RegionRoutes.map_title(world_region),world_region.to_upper()+" MAP","map")
 		var harbor_map = load("res://game/ui/harbor_map_panel.gd").new()
 		harbor_map.setup(world.map_snapshot())
 		harbor_body.add_child(harbor_map)
 		if not Catalog.definitions(world_region).is_empty():
 			var games_button := Paper.button("遊戲入口",_show_region_games,modal_footer)
 			games_button.name="RegionGamesButton"
-		if world_region=="candy":
+		if world_region in ["candy", "nightmarket"]:
 			var return_button := Paper.button("免費返回迎賓大道",_travel_to_region.bind("welcome"),modal_footer)
+			if world_region=="nightmarket":
+				return_button.name="NightmarketReturnButton"
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
 		_back(harbor_body)
 		return
@@ -2399,6 +2435,8 @@ func _show_ticket() -> void:
 	var body := _open("航海旅券",world_region.to_upper()+"  /  "+_region_name()+"遊園指南","ticket")
 	if world_region=="candy":
 		body.add_child(Paper.label(_candy_info_text()+"溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
+	elif world_region=="nightmarket":
+		body.add_child(Paper.label("沿攤街走一圈，或穿雨棚巷上屋頂。入口旁可切換營業。",18,Paper.TEAL))
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2

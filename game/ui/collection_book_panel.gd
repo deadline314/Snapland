@@ -7,6 +7,7 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const PhotoViewer = preload("res://game/ui/photo_viewer.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
+const RegionRoutes = preload("res://game/core/region_routes.gd")
 const PAGE_SIZE := 4
 const MAX_PHOTO_FRAME_CANDIDATES := 12
 const MAX_LEGACY_UI_PHOTO_BYTES := 16 * 1024 * 1024
@@ -52,7 +53,7 @@ func _notification(what: int) -> void:
 		_apply_responsive_spread_columns()
 
 func setup(progress: Node, _definitions_source: Array, phases: Array, photo_loader: Callable, region: String = "welcome") -> void:
-	_region=region if region in ["welcome","harbor","candy"] else "welcome"
+	_region=region if RegionRoutes.supports(region) else "welcome"
 	_progress=progress
 	_definitions=GameCatalog.definitions(_region)
 	_time_phases=phases.duplicate(true)
@@ -131,13 +132,12 @@ func _ready() -> void:
 	add_child(_nav)
 	var regions := OptionButton.new()
 	regions.name="AlbumRegionSelector"
-	regions.add_item("迎賓大道")
-	regions.add_item("潮汐碼頭")
-	regions.add_item("糖果工廠")
-	regions.select(["welcome","harbor","candy"].find(_region))
-	regions.tooltip_text="切換園區收藏；迎賓與碼頭既有照片及原圖仍可查看。"
+	for region in RegionRoutes.ORDER:
+		regions.add_item(RegionRoutes.title(region))
+	regions.select(RegionRoutes.ORDER.find(_region))
+	regions.tooltip_text="切換園區收藏與已取得的照片。"
 	regions.item_selected.connect(func(index: int):
-		_region=["welcome","harbor","candy"][index]
+		_region=RegionRoutes.ORDER[index]
 		_definitions=GameCatalog.definitions(_region)
 		if _region!="welcome" and _category=="time": _category="normal"
 		_page=0
@@ -226,6 +226,8 @@ func _refresh_book() -> void:
 	_time_button.visible=_region=="welcome"
 	_empty_message.text="這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
 	var entries := _entries()
+	if _region=="nightmarket" and entries.is_empty():
+		_empty_message.text="霓虹夜市目前可自由探索，拍貼活動準備中。"
 	var capacity := _page_capacity()
 	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
 	_page=clampi(_page,0,page_count-1)
@@ -415,7 +417,7 @@ func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Diction
 	if not devil and game.mode == "paper_glide": instructions="投出紙機並飛離試飛台後，自然結算即可收藏。"
 	if not devil and game.mode == "bubble_lift": instructions="讓泡籃離台運行後，自然結算即可收藏。"
 	if not devil and game.mode == "sugar_draw": instructions="實際拉出糖絲後，自然結算即可收藏。"
-	instructions += "｜%s · 固定遊戲亭：%s · %s" % [{"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(identity.zone,"迎賓大道"),game.name,photo_id]
+	instructions += "｜%s · 固定遊戲亭：%s · %s" % [RegionRoutes.title(identity.zone),game.name,photo_id]
 	if _progress.photos.has(photo_id):
 		var record: Dictionary = _progress.photos[photo_id]
 		instructions += "｜取得："+("免費補拍布景" if record.get("acquisition_method","")=="retake" else "遊戲拍攝")
