@@ -5,6 +5,7 @@ var root: Window:
 
 const Scene = preload("res://game/main.tscn")
 const Guard = preload("res://game/core/test_save_guard.gd")
+const PlaybackRelease = preload("res://game/tests/audio_playback_release.gd")
 const Visit = preload("res://game/story/regional_visit.gd")
 const Viewfinder = preload("res://game/ui/regional_visit_photo_panel.gd")
 const REGION := Visit.NIGHTMARKET
@@ -151,11 +152,14 @@ func _check(condition: bool, reason: String) -> void:
 		failures.append(reason)
 
 func _finish() -> void:
+	var playbacks := PlaybackRelease.capture(main.audio)
 	main.quitting = true
 	main.audio.shutdown()
-	await get_tree().create_timer(0.25).timeout
 	main.free()
 	await _frames(3)
+	# Fixed simulation time does not drain the audio backend's real-time queue.
+	_check(await PlaybackRelease.wait_for_release(get_tree(), playbacks),
+		"night market teardown releases stopped audio playbacks")
 	for reason in failures:
 		push_error(reason)
 	if failures.is_empty():
