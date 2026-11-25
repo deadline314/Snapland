@@ -96,5 +96,19 @@
     "ordinary": "兩端糖豆同步落入各自秤盤",
     "attraction_tag": "雙料斗稱量台",
     "island_invitation": "A/D 移踏板，Q/E 開左右料斗。調整時機讓兩顆糖豆一起落盤。也可點畫面按鈕。"
+  },
+  {
+    "id": "game-032",
+    "mode": "ice_slide",
+    "zone": "candy",
+    "local_index": 8,
+    "name": "冰糖滑塊",
+    "goal": "依亮起順序讓冰糖接觸四個模座。利用冰面長滑、暖格停冰和可回收擋片預判停點。",
+    "instructions": "方向鍵或 WASD 推冰。Q 換冰，F 選擋片格，Enter 放置，X 收回，R 看停點。也可點冰糖、推冰鈕和擋片格。",
+    "devil_hint": "留一塊冰糖當擋板，讓另一塊先滑過至少一格再被它擋停，並完成四個模座。",
+    "devil": "用一塊冰糖實際擋停另一塊，再完成四個模座",
+    "ordinary": "依順序接觸並冷卻四個模座",
+    "attraction_tag": "冷台模座",
+    "island_invitation": "方向鍵推冰，Q 換冰。暖格會停冰，擋片讓冰停在前一格。"
   }
 ]

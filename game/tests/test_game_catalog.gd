@@ -16,7 +16,7 @@ func _run() -> void:
 	var candy: Array = catalog.definitions("candy")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 7 and all_games.size() == 31, "only the 31 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 8 and all_games.size() == 32, "only the 32 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy and catalog.definitions("nightmarket").is_empty(), "global order is welcome then harbor then delivered candy; upcoming regions remain unavailable")
@@ -50,6 +50,8 @@ func _run() -> void:
 	_check(catalog.identity("game-030") == cotton and catalog.identity("cotton_wind") == cotton and candy[5].name == "棉糖捲風", "sixth candy game keeps local6/global030")
 	var seesaw := {"id":"game-031", "mode":"bean_seesaw", "zone":"candy", "local_index":7, "photo_id":"photo-candy-game-7", "devil_photo_id":"photo-candy-devil-7", "achievement_id":"ACH_GAME_031"}
 	_check(catalog.identity("game-031") == seesaw and catalog.identity("bean_seesaw") == seesaw and candy[6].name == "糖豆蹺蹺板", "seventh candy game keeps local7/global031")
+	var ice := {"id":"game-032", "mode":"ice_slide", "zone":"candy", "local_index":8, "photo_id":"photo-candy-game-8", "devil_photo_id":"photo-candy-devil-8", "achievement_id":"ACH_GAME_032"}
+	_check(catalog.identity("game-032") == ice and catalog.identity("ice_slide") == ice and candy[7].name == "冰糖滑塊", "eighth candy game keeps local8/global032")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
 	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:

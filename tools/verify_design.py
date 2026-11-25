@@ -9,7 +9,7 @@ from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 HARBOR_DELIVERED = 12  # game-013 onward, in local order
-CANDY_DELIVERED = 7  # game-025 onward, in local order
+CANDY_DELIVERED = 8  # game-025 onward, in local order
 ZONES = ('welcome', 'harbor', 'candy', 'nightmarket', 'circus', 'toy', 'garden', 'hotel', 'sky', 'cinema')
 CORES = {'掌握', '取捨', '預測', '創意', '協調', '節奏'}
 GAME_FIELDS = ('id', 'name', 'zone', 'core', 'action', 'goal', 'choice', 'feedback', 'variation', 'solo', 'multi', 'ai', 'demon', 'demon_assist_policy', 'variant', 'assist', 'test', 'reference', 'revision', 'revision_reason', 'presentation', 'implementation')

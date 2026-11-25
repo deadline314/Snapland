@@ -5,6 +5,7 @@ const Catalog = preload("res://game/core/game_catalog.gd")
 const Chocolate = preload("res://game/tests/test_chocolate_etching_session.gd")
 const Cotton = preload("res://game/tests/test_cotton_wind_session.gd")
 const Seesaw = preload("res://game/tests/test_bean_seesaw.gd")
+const Ice = preload("res://game/tests/test_ice_slide.gd")
 var failures: Array[String] = []
 
 func _initialize() -> void:
@@ -26,6 +27,7 @@ func _run() -> void:
 		if definition.mode == "chocolate_etching": Chocolate.cut_line(session)
 		if definition.mode == "cotton_wind": Cotton.participate(session)
 		if definition.mode == "bean_seesaw": Seesaw.participate_without_pair(session)
+		if definition.mode == "ice_slide": Ice.participate(session)
 		if definition.mode == "sugar_bridge":
 			var load_ball := InputEventKey.new()
 			load_ball.keycode = KEY_ENTER
@@ -55,7 +57,7 @@ func _run() -> void:
 			session._finish(false, true)
 		_check(results.back().get("ordinary_eligible", false) and not results.back().success and not results.back().devil, definition.id + " natural false stays honest and ordinary eligible")
 		var result_count := results.size()
-		if definition.mode in ["cotton_wind", "bean_seesaw"]: session._process(0.25)
+		if definition.mode in ["cotton_wind", "bean_seesaw", "ice_slide"]: session._process(0.25)
 		else: session._finish(true, true)
 		_check(results.size() == result_count, "natural finish emits once")
 		session.start(definition.id)
@@ -72,6 +74,10 @@ func _run() -> void:
 		elif definition.mode == "bean_seesaw":
 			Seesaw.participate_without_pair(session)
 			Seesaw.advance(session, 76.0)
+		elif definition.mode == "ice_slide":
+			Ice.participate(session)
+			for tick in 362:
+				session._process(0.25)
 		elif definition.mode == "syrup_flood":
 			var practice_valve := InputEventKey.new()
 			practice_valve.keycode = KEY_SPACE
@@ -82,7 +88,7 @@ func _run() -> void:
 				if session.ended: break
 				session._process(0.25)
 		elif session.active_driver != null: session._driver_state["ordinary_eligible"] = true
-		if definition.mode not in ["cotton_wind", "bean_seesaw"]: session._finish(false)
+		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide"]: session._finish(false)
 		_check(results.back().has("ordinary_eligible") and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
 		session.set_practice_mode(false)
 		session.start(definition.id)

@@ -1459,6 +1459,9 @@ func _show_game_rules(id: String) -> void:
 	elif definition.mode == "bean_seesaw":
 		notes[3].text = "移過踏板並開過兩邊料斗，正式回合自然結算即可取普通卡，包含逾時。練習與取消不發卡。完成雙盤同步才可按 F 提早結算。"
 		notes[4].text = "同步窗為 0.43 秒。輔助加寬秤盤與側槽，並放寬至 0.64 秒。R 切換的 AI 只扶穩板端，放豆與回彈仍由玩家控制。"
+	elif definition.mode == "ice_slide":
+		notes[3].text = "冰糖確實滑過一格後，正式回合自然結算即可取普通卡，包含逾時。練習與取消不發卡。"
+		notes[4].text = "輔助取消融化、延長回合並可撤銷上一步。R 切換 AI 停點預覽。兩種拍貼都能使用輔助取得。"
 	_content_pager(objective_card,"GameRulesExtraDetails",notes,_render_game_rules_page,1,entry_stamp)
 	var row := HFlowContainer.new()
 	row.name="GameRulesActions"
