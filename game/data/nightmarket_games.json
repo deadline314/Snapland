@@ -54,5 +54,19 @@
     "devil_hint": "讓同一枚依序撞過兩片斜板，用反彈或布面減速，再進指定孔。",
     "attraction_tag": "西街銅板桌",
     "island_invitation": "收起斜板可直投，放下可借彈。布面會減速，擦到孔緣或太快會彈開。"
+  },
+  {
+    "id": "game-041",
+    "mode": "scent_trail",
+    "zone": "nightmarket",
+    "local_index": 5,
+    "name": "香氣尋攤",
+    "goal": "沿風路逐攤確認，找出三個還在開火的小攤。",
+    "instructions": "WASD 或方向鍵行走，Q/E 轉聞香筒，F 換香紋，空白鍵取樣或核對。也可點按畫面或使用手把。",
+    "ordinary": "找到三個真正正在烹煮的攤",
+    "devil": "在同一段分別取到兩股香紋，逆風標記最先匯合的路口，再找齊三個開火攤",
+    "devil_hint": "用 F 分開取樣同段的兩股香，沿風箭反向走，到兩股香最先匯合的路口按標記。",
+    "attraction_tag": "北街聞香亭",
+    "island_invitation": "依風箭找來風，按需切換三種香紋。支巷一換，香也會改道。"
   }
 ]

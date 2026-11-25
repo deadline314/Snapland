@@ -1635,6 +1635,9 @@ func _show_game_rules(id: String) -> void:
 	elif definition.mode == "bubble_lift":
 		notes[3].text = "讓泡籃離台運行後，正式回合自然結算可取普通拍貼。完成三桶才通關。"
 		notes[4].text = "輔助讓失效的泡籃緩降回收並放寬接收高度。R 在確認載重後，跟隨你的踩泵補力。"
+	elif definition.mode == "scent_trail":
+		notes[3].text = "取到香樣後，正式回合自然結算可收藏普通卡。找齊三攤才通關。"
+		notes[4].text = "輔助擴大採樣角度。取到弱香後，R 可標出下一個上游路口。"
 	elif definition.mode == "coin_bank_shot":
 		notes[3].text = "實際投幣滑行後，自然結算可收藏普通卡。三孔都投進才通關。"
 		notes[4].text = "輔助顯示首段走向，失手可補幣。R 只在你選中的斜板放下時調角。"
@@ -2580,7 +2583,7 @@ func _show_ticket() -> void:
 	if world_region=="candy":
 		body.add_child(Paper.label(_candy_info_text()+"溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
 	elif world_region=="nightmarket":
-		var note := Paper.label("入口合照，巷中送餐，東街烤串，屋頂掛燈，西街投幣。遊戲 %d / 12 款。" % Catalog.definitions("nightmarket").size(),18,Paper.TEAL)
+		var note := Paper.label("入口合照，巷中送餐，東街烤串，屋頂掛燈，西街投幣，北街尋香。遊戲 %d / 12 款。" % Catalog.definitions("nightmarket").size(),18,Paper.TEAL)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	var groups := GridContainer.new()

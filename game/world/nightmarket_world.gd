@@ -4,6 +4,7 @@ const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const Atmosphere = preload("res://game/world/nightmarket_atmosphere.gd")
 const BOUNDS := Rect2(-12, -14.1, 24, 23.6)
 const GROUND_Y := 0.20
+const SCENT_ENTRY := Vector3(-5.65, GROUND_Y, -4.35)
 const COIN_ENTRY := Vector3(-9.15, GROUND_Y, -2.18)
 const ROOF_Y := 0.92
 const LANTERN_ENTRY := Vector3(4.12, ROOF_Y, -10.58)
@@ -73,6 +74,8 @@ func _build_region_geometry() -> void:
 	_build_lantern_stand()
 	_point("game-040", "銅板借彈 · 西街桌檯", COIN_ENTRY)
 	_build_coin_stand()
+	_point("game-041", "香氣尋攤 · 北街聞香亭", SCENT_ENTRY)
+	_build_scent_stand()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
 	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
@@ -348,6 +351,21 @@ func _build_coin_stand() -> void:
 	right.rotation.y = -0.46
 	_market_lantern(at + Vector3(-0.72, 1.38, 0.5), PAPER_LIGHT, 0.13)
 	_sign("銅板借彈", at + Vector3(0.11, 0.14, -0.53), Color("#f4c38b"))
+
+
+func _build_scent_stand() -> void:
+	var at := Vector3(-5.65, GROUND_Y, -5.45)
+	var jade := Color("#3b695e")
+	_box(at + Vector3(0, 0.39, 0), Vector3(1.62, 0.78, 0.78), STALL)
+	_box(at + Vector3(0, 0.81, 0), Vector3(1.75, 0.10, 0.90), jade)
+	for index in 3:
+		var x := -0.51 + float(index) * 0.46
+		var glaze: Color = [MINT_NEON, PAPER_LIGHT, CORAL_NEON][index]
+		_cylinder(at + Vector3(x, 0.94, 0.10), 0.15, 0.17, jade)
+		_cylinder(at + Vector3(x, 1.05, 0.10), 0.11, 0.06, glaze)
+	var cloth := _box(at + Vector3(0, 1.46, -0.30), Vector3(1.64, 0.32, 0.10), Color("#734b65"))
+	cloth.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_sign("北街聞香", at + Vector3(0, 1.40, -0.21), PAPER_LIGHT)
 
 
 func _build_route_markers() -> void:

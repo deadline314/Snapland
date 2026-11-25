@@ -17,7 +17,7 @@ func _run() -> void:
 	var nightmarket: Array = catalog.definitions("nightmarket")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 4 and all_games.size() == 40, "only the 40 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 5 and all_games.size() == 41, "only the 41 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket and catalog.definitions("circus").is_empty(), "games retain global order and future regions remain unavailable")
@@ -69,6 +69,8 @@ func _run() -> void:
 	_check(catalog.identity("game-039") == lantern and catalog.identity("lantern_crossing") == lantern and nightmarket[2].name == "燈籠繩渡", "lantern route has stable night market identities")
 	var coin := {"id":"game-040", "mode":"coin_bank_shot", "zone":"nightmarket", "local_index":4, "photo_id":"photo-nightmarket-game-4", "devil_photo_id":"photo-nightmarket-devil-4", "achievement_id":"ACH_GAME_040"}
 	_check(catalog.identity("game-040") == coin and catalog.identity("coin_bank_shot") == coin and nightmarket[3].name == "銅板借彈", "coin game has stable night market identities")
+	var scent := {"id":"game-041", "mode":"scent_trail", "zone":"nightmarket", "local_index":5, "photo_id":"photo-nightmarket-game-5", "devil_photo_id":"photo-nightmarket-devil-5", "achievement_id":"ACH_GAME_041"}
+	_check(catalog.identity("game-041") == scent and catalog.identity("scent_trail") == scent and nightmarket[4].name == "香氣尋攤", "scent game has stable night market identities")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
 	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:

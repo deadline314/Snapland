@@ -1015,14 +1015,14 @@
     {
       "name": "香氣尋攤",
       "core": "預測",
-      "action": "轉聞香筒並逆風追氣流",
-      "goal": "找到三次真正在烹煮的攤",
+      "action": "WASD 或方向鍵行走，Q/E 轉聞香筒，F 換香紋，空白鍵取樣或核對。也可點按畫面或使用手把。",
+      "goal": "找到三個真正正在烹煮的攤",
       "choice": "近查濃香或遠讀風路",
       "feedback": "形狀氣流、風箭和源頭沸騰",
       "variation": "支巷開閉與香流混合",
       "multi": "各查支巷，可放公共氣味標",
       "ai": "簡單AI追單股弱香回報交點",
-      "demon": "分開兩股混香找共同上游",
+      "demon": "在同一段分別取到兩股香紋，逆風標記最先匯合的路口，再找齊三個開火攤",
       "variant": "移動攤讓香尾滯後須追新源",
       "assist": "持續顯示源頭方向扇形",
       "test": "無色無聲仍可用形狀辨兩股香",
@@ -1033,8 +1033,9 @@
       "reference": "catalog-jamboree",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「轉聞香筒並逆風追氣流」；「近查濃香或遠讀風路」形成取捨，以「無色無聲仍可用形狀辨兩股香」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "scent_trail"
     },
     {
       "name": "招幌避碰",
