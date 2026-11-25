@@ -17,6 +17,9 @@ func _run() -> void:
 	main.session.notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
 	_held_key(KEY_E,false);Input.flush_buffered_events();await get_tree().physics_frame
 	if str(main.session.bubble_model.snapshot().bubble.phase)!="idle":await _fail("Focus loss restored a stale unlaunched bubble");return
+	if not main.session.paused:await _fail("Focus loss did not pause the bubble round");return
+	if not main._capture("bubble-focus-lost-paused.png"):await _fail("Capture the focus pause");return
+	if not await _click_session_hud(main.session,"ResumeButton","resume after the focus interruption"):return
 	_key(KEY_SPACE);Input.flush_buffered_events();await get_tree().physics_frame
 	if not main.session.bubble_model.snapshot().photos.is_empty() or main.session.mistakes!=0:await _fail("Early shutter consumed a photo or miss");return
 	_held_key(KEY_E,true);Input.flush_buffered_events();await get_tree().physics_frame

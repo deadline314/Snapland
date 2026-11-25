@@ -104,6 +104,7 @@ var devil_won := false
 var paused := false
 var _paused_render_targets: Array[Dictionary] = []
 var _discard_next_delta := false
+var _focus_axis_guards: Dictionary[StringName, bool] = {}
 var practice_mode := false
 var minigame_hud: Control
 var presentation: Control
@@ -246,6 +247,7 @@ static func definitions(zone: String = "welcome") -> Array:
 func start(id: String, assisted_mode: bool = false) -> void:
 	_launch_notice=""
 	_launch_notice_until_msec=0
+	_focus_axis_guards.clear()
 	if active_driver != null: active_driver.clear_input()
 	active_driver = null
 	_driver_state.clear()
@@ -487,17 +489,14 @@ func _resume_presentation_rendering() -> void:
 			viewport.render_target_update_mode = int(record.mode)
 	_paused_render_targets.clear()
 
-func set_paused(value: bool) -> void:
+func set_paused(value: bool, focus_lost: bool = false) -> void:
 	if ended and value:
 		return
 	if active_driver != null:
 		if value: active_driver.clear_input()
 		if is_instance_valid(presentation): presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE if value or ended else Control.MOUSE_FILTER_PASS
-	if value and mode == "bubble_photo" and bubble_model != null:
-		# A held control can lose its release while focus is in the pause menu.
-		# Cancel only an unlaunched charge; an already launched bubble remains live.
-		bubble_model.cancel_bubble_charge()
-		_sync_presentation()
+	elif value and (focus_lost or mode in ["bubble_photo", "hat_catching", "shadow_alignment", "sign_balance"]):
+		_clear_legacy_holds()
 	if mode == "ribbon_rhythm" and is_instance_valid(presentation):
 		presentation.set_process(not value)
 	if mode == "melody_memory" and is_instance_valid(_melody_voices):
@@ -508,39 +507,66 @@ func set_paused(value: bool) -> void:
 		_ribbon_groove.set_paused(value)
 		if not value:
 			_ribbon_groove.set_volume_linear(_music_volume_linear())
-	if value and mode == "hat_catching":
-		_hat_left_held = false
-		_hat_right_held = false
-		hat_model.set_axis(0.0)
-		if is_instance_valid(presentation) and presentation.has_method("clear_held_directions"):
-			presentation.clear_held_directions()
-	if mode == "shadow_alignment":
-		_shadow_left_held = false
-		_shadow_right_held = false
-		_shadow_near_held = false
-		_shadow_far_held = false
-		if is_instance_valid(presentation):
-			if value:
-				for field in ["_left_down", "_right_down", "_up_down", "_down_down"]:
-					presentation.set(field, false)
-			presentation.set_process(not value)
-			presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE if value else Control.MOUSE_FILTER_STOP
+	if mode == "shadow_alignment" and is_instance_valid(presentation):
+		presentation.set_process(not value)
+		presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE if value else Control.MOUSE_FILTER_STOP
+	if mode == "sign_balance" and is_instance_valid(presentation):
+		presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE if value else Control.MOUSE_FILTER_STOP
 	var entering_pause := value and not paused
 	if entering_pause:
 		_pause_presentation_rendering()
 	if paused and not value:
 		_discard_next_delta = true
+		for action: StringName in _focus_axis_guards.keys():
+			if not Input.is_action_pressed(action):
+				_focus_axis_guards.erase(action)
 	var leaving_pause := paused and not value
 	if not value:
 		_resume_presentation_rendering()
 	paused = value
 	if leaving_pause:
 		_restore_play_focus.call_deferred()
-	if entering_pause:
+	if entering_pause or (value and focus_lost):
 		_sync_presentation()
 	if minigame_hud != null:
 		minigame_hud.set_paused(value)
 	_refresh_hud(true)
+
+func _clear_legacy_holds() -> void:
+	match mode:
+		"balloon_delivery":
+			balloon_braking = false
+			mouse_steering = false
+		"kite_rings":
+			_kite_up_held = false
+			_kite_down_held = false
+			_kite_boost_held = false
+			_kite_reel_held = false
+			kite_model.set_aim(0.0)
+			kite_model.set_boost(false)
+			kite_model.set_reel(false)
+		"bubble_photo":
+			# Discard the unlaunched charge. Existing bubbles stay in the same round.
+			bubble_model.cancel_bubble_charge()
+		"sign_balance":
+			if is_instance_valid(presentation):
+				presentation.clear_pointer_drag()
+		"hat_catching":
+			_hat_left_held = false
+			_hat_right_held = false
+			hat_model.set_axis(0.0)
+			if is_instance_valid(presentation):
+				presentation.clear_held_directions()
+		"shadow_alignment":
+			_shadow_left_held = false
+			_shadow_right_held = false
+			_shadow_near_held = false
+			_shadow_far_held = false
+			if is_instance_valid(presentation):
+				presentation.clear_held_controls()
+		"ribbon_rhythm":
+			ribbon_model.cancel_held_action()
+			_sync_ribbon_model("pause")
 
 ## After a pause/lesson the mouse-clicked HUD button may still own focus and would
 ## swallow arrows or Space; hand keyboard focus back to the play surface.
@@ -973,8 +999,7 @@ func reset_round() -> void:
 			shadow_model.reset(assisted, time_phase)
 			_shadow_frame_delta = 1.0 / 60.0
 			if is_instance_valid(presentation):
-				for field in ["_left_down", "_right_down", "_up_down", "_down_down"]:
-					presentation.set(field, false)
+				presentation.clear_held_controls()
 				presentation.set_process(true)
 				presentation.mouse_filter = Control.MOUSE_FILTER_STOP
 			prompt = "移動點光源的左右與深度，讓完整影形貼合牆上印記；按 Space 定影三輪"
@@ -1432,10 +1457,20 @@ func _tick_melody(delta: float) -> void:
 		_settle_melody()
 
 func _axis_x() -> float:
-	return clampf(Input.get_axis("ui_left", "ui_right") + Input.get_axis("move_left", "move_right"), -1.0, 1.0)
+	return clampf((_axis_control_strength(&"ui_right") - _axis_control_strength(&"ui_left"))
+		+ (_axis_control_strength(&"move_right") - _axis_control_strength(&"move_left")), -1.0, 1.0)
 
 func _axis_y() -> float:
-	return clampf(Input.get_axis("ui_up", "ui_down") + Input.get_axis("move_up", "move_down"), -1.0, 1.0)
+	return clampf((_axis_control_strength(&"ui_down") - _axis_control_strength(&"ui_up"))
+		+ (_axis_control_strength(&"move_down") - _axis_control_strength(&"move_up")), -1.0, 1.0)
+
+func _axis_control_strength(action: StringName) -> float:
+	var strength := Input.get_action_strength(action)
+	if not _focus_axis_guards.has(action):
+		return strength
+	if is_zero_approx(strength):
+		_focus_axis_guards.erase(action)
+	return 0.0
 
 func _on_kite_presentation_input(event: InputEvent) -> void:
 	if mode != "kite_rings" or ended or paused:
@@ -1455,6 +1490,8 @@ func _on_hat_presentation_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey:
 		var key := event as InputEventKey
+		if key.echo:
+			return
 		if key.keycode in [KEY_LEFT, KEY_A]:
 			_hat_left_held = key.pressed
 			_update_hat_axis()
@@ -1497,7 +1534,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if ended:
 		return
 	var viewport := get_viewport()
-	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
+	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE):
 		if viewport: viewport.set_input_as_handled()
 		set_paused(not paused)
 		return
@@ -1514,6 +1551,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if (event is InputEventKey or event is InputEventMouse) and viewport:
 		viewport.set_input_as_handled()
+	if event is InputEventKey and event.echo:
+		return
+	# A newly pressed key can re-arm even before the next neutral physics sample.
+	if not _focus_axis_guards.is_empty() and (event is InputEventKey or event is InputEventJoypadButton):
+		for action: StringName in _focus_axis_guards.keys():
+			if event.is_action_pressed(action):
+				_focus_axis_guards.erase(action)
 	if mode == "shadow_alignment" and not is_instance_valid(presentation) and event is InputEventKey:
 		var shadow_key := event as InputEventKey
 		match shadow_key.keycode:
@@ -1916,12 +1960,21 @@ func _bubble_shutter() -> void:
 	queue_redraw()
 
 func _notification(what: int) -> void:
-	if active_driver != null:
-		if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT]: set_paused(true)
-		elif what == NOTIFICATION_EXIT_TREE: active_driver.clear_input()
-	if mode == "bubble_photo" and bubble_model != null and what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT]:
-		bubble_model.cancel_bubble_charge()
-		_sync_presentation()
+	if what == NOTIFICATION_EXIT_TREE:
+		if active_driver != null: active_driver.clear_input()
+		return
+	if what not in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT] or game_id.is_empty() or ended:
+		return
+	# These legacy rounds poll global analog/keyboard values instead of owning held events.
+	# Wait for each action to return to neutral before it can carry into the resumed round.
+	if mode in ["balloon_delivery", "sign_balance"]:
+		for action: StringName in [&"ui_left", &"ui_right", &"move_left", &"move_right"]:
+			_focus_axis_guards[action] = true
+	if mode == "balloon_delivery":
+		for action: StringName in [&"ui_up", &"ui_down", &"move_up", &"move_down"]:
+			_focus_axis_guards[action] = true
+	if not paused or active_driver == null:
+		set_paused(true, true)
 
 func _tick_bubble_photo(delta: float) -> void:
 	bubble_model.step(delta)

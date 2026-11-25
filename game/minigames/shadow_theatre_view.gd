@@ -55,6 +55,7 @@ var _up_down := false
 var _down_down := false
 var _resume_focus_pending := false
 var _fine_down := false
+var _pointer_down := false
 var geometry_build_count := 0
 
 func _ready() -> void:
@@ -189,6 +190,14 @@ func _process(_delta: float) -> void:
 		var axis := Vector2(horizontal, depth).limit_length(1.0)
 		axis_requested.emit(axis.x * (0.25 if _fine_down else 1.0), axis.y * (0.25 if _fine_down else 1.0))
 
+func clear_held_controls() -> void:
+	_left_down = false
+	_right_down = false
+	_up_down = false
+	_down_down = false
+	_fine_down = false
+	_pointer_down = false
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		var key := event as InputEventKey
@@ -208,12 +217,13 @@ func _gui_input(event: InputEvent) -> void:
 			_: return
 		accept_event()
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
+		_pointer_down = event.pressed and not event.is_canceled()
+		if _pointer_down:
 			grab_focus()
 			lamp_target_requested.emit(_lamp_target_from_design(screen_to_design(event.position)))
-		elif event.is_released():
+		else:
 			accept_event()
-	elif event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
+	elif event is InputEventMouseMotion and _pointer_down and (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
 		lamp_target_requested.emit(_lamp_target_from_design(screen_to_design(event.position)))
 		accept_event()
 

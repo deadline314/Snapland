@@ -163,6 +163,17 @@ func release_action(action: String) -> Dictionary:
 	_refresh_snapshot()
 	return snapshot()
 
+## Focus and pause interrupt the input without judging a release or adding a miss.
+func cancel_held_action() -> void:
+	if _held_action.is_empty():
+		return
+	_held_action = ""
+	_held_started_at = 0.0
+	_held_index = -1
+	_last_pressed_action = ""
+	last_event = "跟著舞台領拍"
+	_refresh_snapshot()
+
 ## Player-facing rule text built from the scoring constants above.
 static func score_rule_text() -> String:
 	return "精準（拍心 ±%d 毫秒）+%d、合拍（±%d 毫秒）+%d；四個重拍另 +%d。漏拍與錯按不扣分但會記錄。八拍中命中 %d 拍才算本局成功；未開輔助、八拍全精準且零漏拍、零錯按才得小惡魔拍貼。輔助放寬為 ±%d 毫秒。" % [roundi(PRECISE_WINDOW * 1000.0), PERFECT_POINTS, roundi(ACCEPT_WINDOW * 1000.0), GOOD_POINTS, STRONG_BONUS, ORDINARY_SUCCESS_HITS, roundi(ASSISTED_WINDOW * 1000.0)]

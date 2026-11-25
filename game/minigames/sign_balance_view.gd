@@ -408,6 +408,9 @@ func wind_glyph(snapshot: Dictionary = {}) -> String:
 	var state := snapshot if not snapshot.is_empty() else _snapshot
 	return "←" if int(state.get("wind_direction", 1)) < 0 else "→"
 
+func clear_pointer_drag() -> void:
+	_dragging = false
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed and WEIGHT_RAIL.has_point(event.position):
