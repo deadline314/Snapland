@@ -1320,6 +1320,9 @@ func _interact(id: String, title: String) -> void:
 	if id=="region:welcome":
 		_travel_to_region("welcome")
 		return
+	if not id.is_empty() and id == RegionalVisit.point_id(world_region):
+		_start_region_story_visit(world_region)
+		return
 	if world_region=="circus":
 		match id:
 			"circus:mirrors": _notice("玻璃角標標示鏡像示意。兩端步道都可通行。")
@@ -1332,8 +1335,6 @@ func _interact(id: String, title: String) -> void:
 			_show_game_info(id)
 		else:
 			match id:
-				RegionalVisit.NIGHTMARKET_POINT:
-					_start_region_story_visit(world_region)
 				"nightmarket:trade":
 					world.cycle_market()
 					_notice("攤街" + world.market_status() + "。通路照常開放。")
@@ -1456,7 +1457,7 @@ func _open_region_story_photo(region: String, from_album: bool) -> void:
 	if quitting or changing_region or session != null or modal_kind != "" or world_region != region:
 		return
 	if not world.has_method("begin_story_photo") or not world.begin_story_photo():
-		_notice("相機尚未就緒，請再和阿浪交談。")
+		_notice("相機尚未就緒，請再和%s交談。" % RegionalVisit.host_name(region))
 		return
 	visit_photo_from_album = from_album
 	world.blocked = true
@@ -1521,7 +1522,7 @@ func _take_region_story_photo() -> void:
 			owner.show_retry()
 			return
 	_exit_region_story_photo()
-	_notice("已重演合照，原照留在本子裡。" if replay else "夜市造訪已登記，合照收進本子裡。")
+	_notice("已重演合照，原照留在本子裡。" if replay else RegionalVisit.saved_notice(region))
 
 func _owns_story_photo(owner: Control) -> bool:
 	return not quitting and not changing_region and modal_kind == "visit_photo" and is_instance_valid(owner) and owner == visit_photo_panel

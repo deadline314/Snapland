@@ -3,9 +3,13 @@ extends "res://game/world/park_world.gd"
 const ProjectionScript = preload("res://game/world/circus_projection.gd")
 const Backdrop = preload("res://game/world/nightmarket_skyline.gdshader")
 const VelvetShader = preload("res://game/world/circus_velvet.gdshader")
+const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const CURTAIN_ART := "res://assets/world/circus-tent.webp"
 const GROUND_Y := 0.20
 const ENTRY := Vector3(0, GROUND_Y, 7.8)
+const STORY_POINT := Vector3(-0.95, GROUND_Y, 5.15)
+const STORY_HOST := Vector3(-1.82, GROUND_Y, 5.32)
+const STORY_GUEST := Vector3(0.10, GROUND_Y, 5.32)
 const MIRRORS := Vector3(-8.1, GROUND_Y, 0.85)
 const AUDITORIUM := Vector3(0, GROUND_Y, 0.20)
 const SHADOW_STAGE := Vector3(8.1, GROUND_Y, 0.75)
@@ -34,6 +38,14 @@ var _pools: Array[OmniLight3D] = []
 var _trim_meshes: Dictionary = {}
 var _accent_materials: Dictionary = {}
 var _lamp_plaque: Label3D
+var _story_photo_camera: Camera3D
+var _story_photo_origin: Vector3
+var _story_photo_facing := "front"
+var _story_host_sprite: Sprite3D
+var _story_photo_signs: Array[Node3D] = []
+var _story_photo_sign_visibility: Dictionary[Node3D, bool] = {}
+var _story_rest_pose: Texture2D
+var _story_photo_pose: Texture2D
 
 
 func _build_region_geometry() -> void:
@@ -57,6 +69,8 @@ func _build_region_geometry() -> void:
 	_point("circus:auditorium", "觀眾席 · 走中央通道", AUDITORIUM)
 	_point("circus:shadow", "影子台 · 切換左／右燈", SHADOW_STAGE)
 	_point("circus:mats", "砲彈安全墊 · 看練習區", MATS)
+	_npc(STORY_HOST, VELVET, "小角")
+	_point(RegionalVisit.CIRCUS_POINT, "馬戲團迎賓 · 和小角合照", STORY_POINT)
 	current_area = _area_at_position(ENTRY)
 
 
@@ -241,9 +255,10 @@ func _lamp_cap(at: Vector3, tint: Color) -> void:
 
 
 func _plaque(title: String, at: Vector3, width: float, accent: Color) -> Label3D:
-	_box(at, Vector3(width, 0.46, 0.13), INK)
-	_emblem_strip(at + Vector3(0, -0.225, 0.085), Vector3(width, 0.045, 0.05), accent)
+	var board := _box(at, Vector3(width, 0.46, 0.13), INK)
+	var trim := _emblem_strip(at + Vector3(0, -0.225, 0.085), Vector3(width, 0.045, 0.05), accent)
 	var label := _local_label(title, at + Vector3(0, 0.014, 0.12), 29, PARCHMENT)
+	_story_photo_signs.append_array([board, trim, label])
 	label.pixel_size = 0.0134
 	return label
 
@@ -260,7 +275,100 @@ func _build_region_activities() -> void:
 
 
 func _register_npc_activity() -> void:
-	pass
+	# The host stays at the welcome station. Use the same authored cels as the island imp.
+	var actor := _npc_record_for_role("imp")
+	_story_host_sprite = actor.get("sprite") as Sprite3D
+	var name_label := actor.get("name_label") as Label3D
+	if is_instance_valid(name_label):
+		_story_photo_signs.append(name_label)
+	if not is_instance_valid(_story_host_sprite) or avatar_renderer == null:
+		return
+	_story_rest_pose = _story_host_sprite.texture
+	var library: RefCounted = avatar_renderer.animation_library
+	var idle := library.texture("imp", "idle", "front", 0) as Texture2D
+	var greeting := library.texture("imp", "greet", "front", 4) as Texture2D
+	if idle != null:
+		_story_rest_pose = _fit_npc_rest_texture(idle)
+	_story_photo_pose = _fit_npc_rest_texture(greeting) if greeting != null else _story_rest_pose
+	_set_story_host_pose(_story_rest_pose)
+	actor["name_body_height"] = _visible_body_height(_story_host_sprite)
+
+
+func begin_story_photo() -> bool:
+	if is_instance_valid(_story_photo_camera) or not is_instance_valid(player) or not is_instance_valid(_story_host_sprite):
+		return false
+	_story_photo_origin = player.position
+	_story_photo_facing = facing
+	_set_story_host_pose(_story_photo_pose)
+	for sign in _story_photo_signs:
+		if is_instance_valid(sign):
+			_story_photo_sign_visibility[sign] = sign.visible
+			sign.hide()
+	_position_story_guest(STORY_GUEST, "front")
+	_set_interaction_marker(null)
+	# Eye-level framing lets the rear tent fabric replace most of the rehearsal floor.
+	var center := STORY_HOST.lerp(STORY_GUEST, 0.5) + Vector3(0, 1.13, 0)
+	_story_photo_camera = Camera3D.new()
+	_story_photo_camera.name = "CircusGroupPhotoCamera"
+	_story_photo_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	_story_photo_camera.size = 5.35
+	_story_photo_camera.far = camera.far
+	_story_photo_camera.position = center + Vector3(-0.38, 0.92, 8.9)
+	add_child(_story_photo_camera)
+	_story_photo_camera.look_at(center)
+	_story_photo_camera.make_current()
+	var fill := OmniLight3D.new()
+	fill.position = Vector3(0.32, -0.52, -5.35)
+	fill.light_color = Color("#ffe4cf")
+	fill.light_energy = 0.87
+	fill.omni_range = 6.4
+	fill.shadow_enabled = false
+	_story_photo_camera.add_child(fill)
+	return true
+
+
+func end_story_photo() -> void:
+	if not is_instance_valid(_story_photo_camera):
+		return
+	camera.make_current()
+	_story_photo_camera.queue_free()
+	_story_photo_camera = null
+	for sign in _story_photo_sign_visibility:
+		if is_instance_valid(sign):
+			sign.visible = _story_photo_sign_visibility[sign]
+	_story_photo_sign_visibility.clear()
+	_set_story_host_pose(_story_rest_pose)
+	_position_story_guest(_story_photo_origin, _story_photo_facing)
+
+
+func _position_story_guest(at: Vector3, direction: String) -> void:
+	player.position = at
+	player.velocity = Vector3.ZERO
+	_sync_external_avatar_reposition()
+	facing = direction
+	avatar_action = ""
+	avatar_action_remaining = 0.0
+	avatar_action_elapsed = 0.0
+	_refresh_avatar_texture(0)
+
+
+func _set_story_host_pose(texture: Texture2D) -> void:
+	if not is_instance_valid(_story_host_sprite) or texture == null:
+		return
+	_story_host_sprite.texture = texture
+	var material := _story_host_sprite.material_override as ShaderMaterial
+	if material != null:
+		material.set_shader_parameter("texture_albedo", texture)
+		material.set_shader_parameter("uv_rect", Vector4(0, 0, 1, 1))
+
+
+func _interaction_markers_allowed() -> bool:
+	return not is_instance_valid(_story_photo_camera)
+
+
+func _update_district_label_visibility() -> void:
+	if not is_instance_valid(_story_photo_camera):
+		super._update_district_label_visibility()
 
 
 func _build_player_floor() -> void:

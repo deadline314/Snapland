@@ -24,8 +24,10 @@ func _run() -> void:
 	_check(_world.get_node_or_null("CircusTentBackdrop") != null and _world.coastal_play == null
 		and _world.npc_activity == null, "original tent art loads without inheriting Welcome activities")
 	_check(_world.current_area == "馬戲團入口" and _world.player.is_on_floor(), "spawn lands on the physical entry")
-	_check(_world.map_snapshot().areas.size() == 5 and _world.points.size() == 5,
-		"five real places describe the room floor plan")
+	var initial_map: Dictionary = _world.map_snapshot()
+	_check(initial_map.areas.size() == 5 and initial_map.points.size() == 6
+		and _world._point_by_id("circus:story").get("position") == World.STORY_POINT,
+		"five physical areas and the on-duty welcome station appear in the floor plan")
 	for room: Dictionary in _world.map_snapshot().areas:
 		var floor_mesh := _world.get_node_or_null("CircusFloor_" + String(room.id)) as MeshInstance3D
 		var footprint: Rect2 = room.rect
