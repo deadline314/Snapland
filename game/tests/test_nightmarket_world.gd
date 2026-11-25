@@ -23,6 +23,7 @@ func _run() -> void:
 	check(baseline.region == "nightmarket" and baseline.operating and baseline.points.size() == 7 + Catalog.definitions("nightmarket").size()
 		and baseline.land.size() == 7 and not baseline.covered, "world declares its real terrain and uses a stable set of points")
 	check(baseline.points.any(func(point: Dictionary) -> bool: return point.id == "game-038"), "real skewer stand appears on east street chart")
+	_check_paving()
 	var grill_stop := Vector2(9.15, 3.27)
 	var coin_stop := Vector2(World.COIN_ENTRY.x, World.COIN_ENTRY.z)
 	var scent_stop := Vector2(World.SCENT_ENTRY.x, World.SCENT_ENTRY.z)
@@ -44,12 +45,18 @@ func _run() -> void:
 	check(await walk_to(Vector2(0, lantern_stop.y)) and await walk_to(Vector2(0, -4.3)), "physical ramp also supports the descent")
 	var node_count: int = _world.find_children("*", "", true, false).size()
 	var lit: Material = _world._stall_lights[0].material_override
+	var paving: ShaderMaterial = _world._atmosphere.paving_material()
+	var open_reflection: float = paving.get_shader_parameter("reflection_energy")
 	for cycle in 20:
 		_world.cycle_market()
 		var snapshot: Dictionary = _world.map_snapshot()
 		check(snapshot.operating == (cycle % 2 == 1), "operating state is reversible")
 		check(_world._stall_lights[0].material_override != lit if cycle % 2 == 0 else _world._stall_lights[0].material_override == lit,
 			"each operation changes existing lamp material")
+		var actual: float = paving.get_shader_parameter("reflection_energy")
+		var expected := open_reflection * 0.24 if cycle % 2 == 0 else open_reflection
+		check(is_equal_approx(actual, expected) and _world._atmosphere.paving_material() == paving,
+			"market reflections follow existing lamps without allocating a surface")
 	check(_world.find_children("*", "", true, false).size() == node_count, "running the shop does not allocate terrain or lights")
 	var map := MapPanel.new()
 	map.setup(_world.map_snapshot())
@@ -72,6 +79,32 @@ func _run() -> void:
 	if _errors.is_empty():
 		print("PASS: night market terrain, rain cover, rooftop, maps and safe routing")
 	quit(int(not _errors.is_empty()))
+
+func _check_paving() -> void:
+	var paving: ShaderMaterial = _world._atmosphere.paving_material()
+	var roof: ShaderMaterial = _world._atmosphere.paving_material(true)
+	for index in range(5):
+		var floor: MeshInstance3D = _world.get_node("MarketWalk%d" % index)
+		check(floor.material_override == paving, "walkways reuse region-owned paving")
+	var deck: MeshInstance3D = _world.get_node("RoofDiningDeck")
+	var ramp: MeshInstance3D = _world.get_node("RoofRamp")
+	check(deck.material_override == roof and ramp.material_override == roof and roof != paving and roof.get_shader_parameter("rooftop"),
+		"the ramp and raised path share a dedicated drier finish")
+	var awning: Rect2 = World.AWNING
+	check(paving.get_shader_parameter("shelter_rect") == Vector4(awning.position.x, awning.position.y, awning.end.x, awning.end.y),
+		"ground shelter follows actual canopy coverage")
+	_world.set_time_of_day("noon")
+	var noon_color: Color = paving.get_shader_parameter("reflected_sky")
+	var noon_energy: float = paving.get_shader_parameter("reflection_energy")
+	_world.set_time_of_day("night")
+	check(paving.get_shader_parameter("reflected_sky") != noon_color and paving.get_shader_parameter("reflection_energy") > noon_energy,
+		"night cools the reflected sky and strengthens lamp reflections")
+	_world.apply_settings({"reduced_motion": true})
+	check(not paving.get_shader_parameter("reflections_move") and not roof.get_shader_parameter("reflections_move")
+		and not _world._atmosphere.is_processing(), "reduced motion freezes the ground and lamps")
+	_world.apply_settings({"reduced_motion": false})
+	check(paving.get_shader_parameter("reflections_move") and roof.get_shader_parameter("reflections_move"),
+		"continuous glints resume with motion restored")
 
 func walk_to(position: Vector2) -> bool:
 	var start: Vector3 = _world.player.position

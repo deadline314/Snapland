@@ -54,7 +54,7 @@ func _build_region_geometry() -> void:
 		var center := area.get_center()
 		var floor_mesh := _box(Vector3(center.x, GROUND_Y - 0.24, center.y), Vector3(area.size.x, 0.48, area.size.y), FLOOR_COLORS[index], true)
 		floor_mesh.name = "MarketWalk%d" % index
-		_set_registered_surface(floor_mesh, _coastal_surface(0, 2.6, FLOOR_COLORS[index]))
+		_set_registered_surface(floor_mesh, _atmosphere.paving_material())
 	_build_roof()
 	_build_stalls()
 	_build_awning()
@@ -194,12 +194,12 @@ func _build_atmosphere() -> void:
 	base.size = Vector2(112, 112)
 	var paving := _mesh(base, Vector3(0, -0.18, 0), _mat(INK))
 	paving.name = "RainyHorizonBase"
-	_set_registered_surface(paving, _coastal_surface(0, 24.0, Color("#57556b")))
+	_set_registered_surface(paving, _coastal_surface(0, 6.1, Color("#404859")))
 	_atmosphere = Atmosphere.new()
 	_atmosphere.name = "NightmarketAtmosphere"
 	add_child(_atmosphere)
 	var image := load(SKYLINE) as Texture2D if ResourceLoader.exists(SKYLINE) else null
-	_atmosphere.setup(environment, sun, image)
+	_atmosphere.setup(environment, sun, image, coastal_atlas, AWNING)
 
 func _build_roof() -> void:
 	var rise := ROOF_Y - GROUND_Y
@@ -212,10 +212,11 @@ func _build_roof() -> void:
 		Vector3(RAMP.size.x, thickness, Vector2(rise, RAMP.size.y).length()), Color("#75729b"), true)
 	slope.name = "RoofRamp"
 	slope.basis = rotation
+	_set_registered_surface(slope, _atmosphere.paving_material(true))
 	var center := ROOF.get_center()
 	var roof := _box(Vector3(center.x, ROOF_Y - 0.54, center.y), Vector3(ROOF.size.x, 1.08, ROOF.size.y), Color("#6a688d"), true)
 	roof.name = "RoofDiningDeck"
-	_set_registered_surface(roof, _coastal_surface(0, 2.15, Color("#aa9abd")))
+	_set_registered_surface(roof, _atmosphere.paving_material(true))
 	var railing := Color("#a195b4")
 	_box(Vector3(0, ROOF_Y + 0.56, -13.96), Vector3(11.16, 0.18, 0.18), railing)
 	for side in [-1.0, 1.0]:
@@ -279,8 +280,8 @@ func _build_awning() -> void:
 			_box(Vector3(x, 0.44, end), Vector3(0.33, 0.46, 0.33), Color("#527176"))
 	var glass := StandardMaterial3D.new()
 	glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	glass.albedo_color = Color(0.26, 0.62, 0.61, 0.43)
-	glass.roughness = 0.40
+	glass.albedo_color = Color(0.29, 0.49, 0.52, 0.32)
+	glass.roughness = 0.50
 	var canopy := _box(Vector3(0, 3.59, 0.97), Vector3(3.38, 0.08, 7.31), MINT_NEON)
 	canopy.name = "CoveredAlleyAwning"
 	canopy.material_override = glass
@@ -289,10 +290,11 @@ func _build_awning() -> void:
 		var frame := _box(Vector3(side * 1.88, 3.52, 0.97), Vector3(0.42, 0.17, 7.4), Color("#518582"))
 		frame.rotation.z = -side * 0.15
 	for z in [-2.70, -0.78, 1.10, 2.99, 4.62]:
-		_box(Vector3(0, 3.66, z), Vector3(4.18, 0.09, 0.07), Color("#7abbb0"))
+		_box(Vector3(0, 3.66, z), Vector3(4.18, 0.09, 0.07), Color("#6d9590"))
+	var edge_color := Color("#70b6b4")
 	for z in [-2.55, 4.51]:
-		var edge := _box(Vector3(0, 3.50, z), Vector3(4.20, 0.13, 0.08), MINT_NEON)
-		edge.material_override = _unshaded(MINT_NEON)
+		var edge := _box(Vector3(0, 3.50, z), Vector3(4.20, 0.13, 0.08), edge_color)
+		edge.material_override = _unshaded(edge_color)
 	_sign("雨棚巷", Vector3(0, GROUND_Y, 4.78), MINT_NEON)
 
 func _build_courier_stand() -> void:
