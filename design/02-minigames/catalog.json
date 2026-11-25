@@ -1040,14 +1040,14 @@
     {
       "name": "招幌避碰",
       "core": "預測",
-      "action": "抬降推車並選過巷時機",
-      "goal": "完整運三幅招幌到攤尾",
+      "action": "按住 W 推車，空白鍵煞車，R/F 升降架，Q/E 抬左／右側，A/D 選近巷／寬路。可點按畫面或用手把。",
+      "goal": "把三幅招幌完整送到巷尾",
       "choice": "直立窄路或放平繞長路",
       "feedback": "招幌實際碰撞輪廓和檐高",
       "variation": "棚高、車寬與行人間隙",
       "multi": "各搬一端可口令停車",
       "ai": "簡單AI保持已鎖高度跟車",
-      "demon": "用側傾穿過交錯低檐",
+      "demon": "讓同一幅招幌實際以相反側傾通過兩道交錯低檐，再送達三幅",
       "variant": "攤棚預告換位須先找緩衝區",
       "assist": "碰撞只停車、顯示高度尺",
       "test": "姿態影響可過空間不只是按時機",
@@ -1058,8 +1058,9 @@
       "reference": "catalog-jamboree",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「抬降推車並選過巷時機」；「直立窄路或放平繞長路」形成取捨，以「姿態影響可過空間不只是按時機」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "banner_cart"
     },
     {
       "name": "煎餅畫圓",

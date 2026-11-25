@@ -58,6 +58,7 @@ func _run() -> void:
 			session._process(0.1)
 			move_tray.pressed = false
 			session._unhandled_input(move_tray)
+		if definition.mode == "banner_cart": _push_banner_cart(session)
 		if definition.mode == "scent_trail": _sample_initial_wake(session)
 		if definition.mode == "coin_bank_shot": _launch_coin(session)
 		if definition.mode == "lantern_crossing": _start_lantern_move(session)
@@ -117,6 +118,9 @@ func _run() -> void:
 			for tick in 310:
 				if session.ended: break
 				session._process(0.25)
+		elif definition.mode == "banner_cart":
+			_push_banner_cart(session)
+			_advance_driver_to_result(session)
 		elif definition.mode == "scent_trail":
 			_sample_initial_wake(session)
 			_advance_driver_to_result(session)
@@ -133,7 +137,7 @@ func _run() -> void:
 			_walk_with_courier(session)
 			_advance_driver_to_result(session)
 		elif session.active_driver != null: session._driver_state["ordinary_eligible"] = true
-		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw", "rain_courier", "skewer_grill", "lantern_crossing", "coin_bank_shot", "scent_trail"]: session._finish(false)
+		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw", "rain_courier", "skewer_grill", "lantern_crossing", "coin_bank_shot", "scent_trail", "banner_cart"]: session._finish(false)
 		_check(results.size() == before_practice + 1 and results.back().has("ordinary_eligible")
 			and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
 		session.set_practice_mode(false)
@@ -175,6 +179,11 @@ func _run() -> void:
 	_advance_driver_to_result(session)
 	_check(results.size() == before_idle + 1 and not results.back().ordinary_eligible and not results.back().success,
 		"waiting in the scent court does not count as taking a sample")
+	before_idle = results.size()
+	session.start("game-042")
+	_advance_driver_to_result(session)
+	_check(results.size() == before_idle + 1 and not results.back().ordinary_eligible and not results.back().success,
+		"waiting by the banner cart does not count as movement")
 	session.free()
 	for failure in failures: push_error("FAIL: " + failure)
 	if failures.is_empty(): print("PASS: every delivered participation result, practice, cancellation and driver eligibility")
@@ -224,6 +233,17 @@ func _start_lantern_move(session: Session) -> void:
 		session._unhandled_input(key)
 		key.pressed = false
 		session._unhandled_input(key)
+
+
+func _push_banner_cart(session: Session) -> void:
+	var key := InputEventKey.new()
+	key.keycode = KEY_W
+	key.pressed = true
+	session._unhandled_input(key)
+	for tick in 10:
+		session._process(0.1)
+	key.pressed = false
+	session._unhandled_input(key)
 
 
 func _sample_initial_wake(session: Session) -> void:

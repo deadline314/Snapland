@@ -4,6 +4,7 @@ const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const Atmosphere = preload("res://game/world/nightmarket_atmosphere.gd")
 const BOUNDS := Rect2(-12, -14.1, 24, 23.6)
 const GROUND_Y := 0.20
+const BANNER_ENTRY := Vector3(6.05, GROUND_Y, -4.38)
 const SCENT_ENTRY := Vector3(-5.65, GROUND_Y, -4.35)
 const COIN_ENTRY := Vector3(-9.15, GROUND_Y, -2.18)
 const ROOF_Y := 0.92
@@ -76,6 +77,8 @@ func _build_region_geometry() -> void:
 	_build_coin_stand()
 	_point("game-041", "香氣尋攤 · 北街聞香亭", SCENT_ENTRY)
 	_build_scent_stand()
+	_point("game-042", "招幌避碰 · 北街推車", BANNER_ENTRY)
+	_build_banner_stand()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
 	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
@@ -364,6 +367,23 @@ func _build_scent_stand() -> void:
 	var cloth := _box(at + Vector3(0, 1.46, -0.30), Vector3(1.64, 0.32, 0.10), Color("#734b65"))
 	cloth.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_sign("北街聞香", at + Vector3(0, 1.40, -0.21), PAPER_LIGHT)
+
+
+func _build_banner_stand() -> void:
+	var at := Vector3(6.06, GROUND_Y, -5.40)
+	var lacquer := Color("#845048")
+	var fabric := Color("#765477")
+	_box(at + Vector3(0, 0.32, 0), Vector3(1.28, 0.30, 0.87), lacquer)
+	_box(at + Vector3(0, 0.52, 0), Vector3(1.37, 0.10, 0.93), Color("#a36454"))
+	for side in [-1.0, 1.0]:
+		var at_wheel := at + Vector3(side * 0.63, 0.17, 0.19)
+		_cylinder(at_wheel, 0.17, 0.08, INK).rotation.z = PI * 0.5
+	_box(at + Vector3(0, 0.84, -0.05), Vector3(0.13, 0.75, 0.13), STALL)
+	var banner := _box(at + Vector3(0.12, 1.45, -0.09), Vector3(1.10, 0.72, 0.075), fabric)
+	banner.rotation.z = -0.28
+	var hem := _box(at + Vector3(0.22, 1.11, -0.09), Vector3(1.06, 0.06, 0.083), PAPER_LIGHT)
+	hem.rotation.z = banner.rotation.z
+	_sign("招幌推車", at + Vector3(0.0, 0.62, 0.44), PAPER_LIGHT)
 
 
 func _build_route_markers() -> void:
