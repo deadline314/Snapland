@@ -172,6 +172,16 @@ func _run() -> void:
 	controller.release()
 	assert(survivor.mesh.material_override == coastal_replacement and survivor.mesh.material_override.get_shader_parameter("atlas_texture") == atlas, "release restores the final intended coastal surface with its texture intact")
 	assert(int(survivor.body.collision_layer) == 0 and int(survivor_ray_body.collision_layer) == 0, "controller release removes its ray-only collision layer")
+	assert(survivor_ray_body.is_queued_for_deletion() and survivor.body.tree_exiting.get_connections().is_empty(), "release retires the private ray and the old group callback")
+	controller.begin_building()
+	controller.register_geometry(survivor.mesh, coastal_replacement)
+	assert(controller.finish_building(survivor.body), "the same authored building can register again after release")
+	controller._fade_weight = 0.43
+	controller._update_shader_uniforms(1.25)
+	assert(is_equal_approx(float(survivor.mesh.material_override.get_shader_parameter("occlusion_cutaway_weight")), 0.43), "a rebuilt material receives the reveal even at the previous mask state")
+	await process_frame
+	assert(not is_instance_valid(survivor_ray_body) and survivor.body.tree_exiting.get_connections().size() == 1, "only the current group keeps a ray helper and callback")
+	controller.release()
 	var direct_body := StaticBody3D.new()
 	direct_body.collision_layer = 0
 	direct_body.collision_mask = 0

@@ -49,6 +49,9 @@ var _last_center_px := Vector2.ZERO
 var _last_radius_px := 0.0
 var _last_viewport_size := Vector2.ONE
 var _last_player_depth := 0.0
+var _published_viewport := Vector2.ONE
+var _published_projection := Vector4.ZERO
+var _published_weight := 0.0
 
 
 func _ready() -> void:
@@ -279,7 +282,7 @@ func refresh_visibility() -> void:
 	_ray_samples += 1
 	_active_group_id = 0
 	_active_group_ids.clear()
-	if not is_instance_valid(player) or not is_instance_valid(camera) or _ray_query == null:
+	if _building_groups.is_empty() or not is_instance_valid(player) or not is_instance_valid(camera) or _ray_query == null:
 		return
 	var frame := _reveal_frame()
 	var samples: Array[Vector3] = [player.global_position + Vector3.UP * 1.0]
@@ -322,18 +325,19 @@ func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
 	if reduced_motion:
 		_fade_weight = 1.0 if not _active_group_ids.is_empty() else 0.0
-		var player_depth := 0.0
-		if is_instance_valid(player) and is_instance_valid(camera):
-			var frame := _reveal_frame()
-			var depth_point: Vector3 = frame.centre if not frame.is_empty() else player.global_position + Vector3.UP
-			player_depth = maxf(0.0, -camera.to_local(depth_point).z)
-		_update_shader_uniforms(player_depth)
+		if _fade_weight > 0.0:
+			_refresh_projection()
+		_update_shader_uniforms(_last_player_depth)
 		_refresh_registered_labels()
 		return
 	_sample_elapsed = SAMPLE_INTERVAL
 
 
 func statistics() -> Dictionary:
+	# The idle renderer needs no fresh mask, but the diagnostic still reports
+	# the current camera and figure when nobody is blocking them.
+	if _active_group_ids.is_empty() and _fade_weight == 0.0:
+		_refresh_projection()
 	return {
 		"registered_buildings": _building_groups.size(),
 		"registered_geometry": _count_geometry(),
@@ -365,6 +369,7 @@ func release() -> void:
 	_active_group_ids.clear()
 	_active_group_id = 0
 	_fade_weight = 0.0
+	_update_shader_uniforms(_last_player_depth)
 	player = null
 	camera = null
 	reveal_visual = null
@@ -382,14 +387,30 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	if not is_instance_valid(player) or not is_instance_valid(camera):
 		return
+	var target_weight := 1.0 if not _active_group_ids.is_empty() else 0.0
+	if target_weight == 0.0 and _fade_weight == 0.0 and _published_weight == 0.0:
+		_refresh_registered_labels()
+		return
+	if not _refresh_projection():
+		return
+	if reduced_motion:
+		_fade_weight = target_weight
+	else:
+		_fade_weight = move_toward(_fade_weight, target_weight, delta / FADE_SECONDS)
+	_update_shader_uniforms(_last_player_depth)
+	_refresh_registered_labels()
+
+
+func _refresh_projection() -> bool:
+	if not is_instance_valid(player) or not is_instance_valid(camera):
+		return false
 	var viewport := get_viewport()
 	if viewport == null:
-		return
+		return false
 	var viewport_size := Vector2(viewport.get_visible_rect().size)
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
-		return
+		return false
 	var body_point := player.global_position + Vector3.UP * 1.0
-	var center := camera.unproject_position(body_point)
 	var radius := 0.0
 	var frame := _reveal_frame()
 	if frame.is_empty():
@@ -400,22 +421,14 @@ func _process(delta: float) -> void:
 		radius = reveal_radius_px(feet.distance_to(head),viewport_size)
 	else:
 		body_point = frame.centre
-		center = camera.unproject_position(body_point)
 		var screen_height := camera.unproject_position(body_point + frame.half_up).distance_to(camera.unproject_position(body_point - frame.half_up))
 		var screen_width := camera.unproject_position(body_point + frame.half_right).distance_to(camera.unproject_position(body_point - frame.half_right))
 		radius = visual_reveal_radius_px(Vector2(screen_width, screen_height), viewport_size)
-	var camera_space_body := camera.to_local(body_point)
-	var player_depth := maxf(0.0, -camera_space_body.z)
-	var target_weight := 1.0 if not _active_group_ids.is_empty() else 0.0
-	if reduced_motion:
-		_fade_weight = target_weight
-	else:
-		_fade_weight = move_toward(_fade_weight, target_weight, delta / FADE_SECONDS)
-	_last_center_px = center
+	_last_center_px = camera.unproject_position(body_point)
 	_last_radius_px = radius
 	_last_viewport_size = viewport_size
-	_update_shader_uniforms(player_depth)
-	_refresh_registered_labels()
+	_last_player_depth = maxf(0.0, -camera.to_local(body_point).z)
+	return true
 
 
 static func reveal_radius_px(projected_height: float, viewport_size: Vector2) -> float:
@@ -439,26 +452,25 @@ static func visual_reveal_radius_px(screen_size: Vector2, viewport_size: Vector2
 
 
 func _update_shader_uniforms(player_depth: float) -> void:
+	_last_player_depth = player_depth
 	if _shader_material == null:
 		return
-	_last_player_depth = player_depth
+	# Only the transition back to zero has a visible effect while exposed.
+	if _fade_weight == 0.0 and _published_weight == 0.0:
+		return
+	var projection := Vector4(_last_center_px.x, _last_center_px.y, _last_radius_px, player_depth)
+	if _published_viewport == _last_viewport_size and _published_projection == projection and _published_weight == _fade_weight:
+		return
+	_published_viewport = _last_viewport_size
+	_published_projection = projection
+	_published_weight = _fade_weight
 	_update_standard_uniforms(_shader_material, player_depth)
-	for material in _standard_materials.values():
-		_update_standard_uniforms(material, player_depth)
-	var updated: Dictionary = {}
-	for group in _building_groups:
-		var geometry: Array = group.geometry
-		var managed: Dictionary = group.managed_materials
-		for target in geometry:
-			if not is_instance_valid(target) or not _is_coastal_surface(target.material_override):
-				continue
-			if managed.get(target.get_instance_id()) != target.material_override:
-				continue
-			var material: Material = target.material_override
-			if updated.has(material):
-				continue
-			updated[material] = true
-			_set_coastal_cutaway(target, true)
+	for source: StandardMaterial3D in _standard_materials:
+		_update_standard_uniforms(_standard_materials[source], player_depth)
+	# These are controller-owned copies. External overrides remain untouched,
+	# and each authored coastal material receives the mask once per change.
+	for source: ShaderMaterial in _coastal_materials:
+		_update_coastal_uniforms(_coastal_materials[source], true)
 
 
 func _update_standard_uniforms(material: ShaderMaterial, player_depth: float) -> void:
@@ -472,8 +484,11 @@ func _update_standard_uniforms(material: ShaderMaterial, player_depth: float) ->
 
 func _set_coastal_cutaway(target: GeometryInstance3D, enabled: bool) -> void:
 	var material := target.material_override as ShaderMaterial
-	if material == null:
-		return
+	if material != null:
+		_update_coastal_uniforms(material, enabled)
+
+
+func _update_coastal_uniforms(material: ShaderMaterial, enabled: bool) -> void:
 	material.set_shader_parameter("occlusion_cutaway_enabled", 1.0 if enabled else 0.0)
 	material.set_shader_parameter("occlusion_viewport_size_px", _last_viewport_size)
 	material.set_shader_parameter("occlusion_body_center_px", _last_center_px)
@@ -527,8 +542,12 @@ func _refresh_registered_labels() -> void:
 			var original: Dictionary = originals.get(label.get_instance_id(), {})
 			if original.is_empty():
 				continue
-			label.visible = bool(original.get("visible", true)) and not (has_cutaway and _label_overlaps_mask(label))
-			label.modulate = original.get("modulate", Color.WHITE)
+			var visible := bool(original.get("visible", true)) and not (has_cutaway and _label_overlaps_mask(label))
+			var modulate: Color = original.get("modulate", Color.WHITE)
+			if label.visible != visible:
+				label.visible = visible
+			if label.modulate != modulate:
+				label.modulate = modulate
 
 
 func _label_overlaps_mask(label: Label3D) -> bool:
@@ -603,6 +622,8 @@ func _on_geometry_tree_exiting(group_id: int, geometry_id: int) -> void:
 			if item == null or item.get_instance_id() == geometry_id:
 				geometry.remove_at(index)
 		group.geometry = geometry
+		group.originals.erase(geometry_id)
+		group.managed_materials.erase(geometry_id)
 		if geometry.is_empty():
 			_remove_group_at(group_index)
 		return
@@ -631,10 +652,6 @@ func _on_group_tree_exiting(group_id: int) -> void:
 
 func _remove_group_at(group_index: int) -> void:
 	var group: Dictionary = _building_groups[group_index]
-	var blocker: CollisionObject3D = group.blocker
-	if is_instance_valid(blocker):
-		_collider_to_group.erase(blocker.get_instance_id())
-		blocker.collision_layer = int(group.original_layer)
 	var group_id := int(group.id)
 	_active_group_ids.erase(group_id)
 	if group_id == _active_group_id:
@@ -644,22 +661,36 @@ func _remove_group_at(group_index: int) -> void:
 
 
 func _restore_group(group: Dictionary) -> void:
+	var group_id := int(group.id)
 	var blocker: CollisionObject3D = group.blocker
 	if is_instance_valid(blocker):
+		_collider_to_group.erase(blocker.get_instance_id())
 		blocker.collision_layer = int(group.original_layer)
+		var cleanup := _on_group_tree_exiting.bind(group_id)
+		if blocker.tree_exiting.is_connected(cleanup):
+			blocker.tree_exiting.disconnect(cleanup)
 	var ray_body: CollisionObject3D = group.ray_body
 	if is_instance_valid(ray_body):
+		_collider_to_group.erase(ray_body.get_instance_id())
 		ray_body.collision_layer = 0
+		ray_body.queue_free()
 	for geometry in group.geometry:
 		if not is_instance_valid(geometry):
 			continue
 		var geometry_id: int = geometry.get_instance_id()
+		var cleanup := _on_geometry_tree_exiting.bind(group_id, geometry_id)
+		if geometry.tree_exiting.is_connected(cleanup):
+			geometry.tree_exiting.disconnect(cleanup)
 		var managed: Dictionary = group.managed_materials
 		if geometry.material_override == managed.get(geometry_id):
 			geometry.material_override = group.originals.get(geometry_id)
 	for label in group.labels:
 		if is_instance_valid(label):
-			var original: Dictionary = group.label_originals.get(label.get_instance_id(), {})
+			var label_id: int = label.get_instance_id()
+			var cleanup := _on_label_tree_exiting.bind(group_id, label_id)
+			if label.tree_exiting.is_connected(cleanup):
+				label.tree_exiting.disconnect(cleanup)
+			var original: Dictionary = group.label_originals.get(label_id, {})
 			if not original.is_empty():
 				label.visible = bool(original.get("visible", true))
 				label.modulate = original.get("modulate", Color.WHITE)
