@@ -1655,6 +1655,9 @@ func _show_game_rules(id: String) -> void:
 	elif definition.mode == "bubble_lift":
 		notes[3].text = "讓泡籃離台運行後，正式回合自然結算可取普通拍貼。完成三桶才通關。"
 		notes[4].text = "輔助讓失效的泡籃緩降回收並放寬接收高度。R 在確認載重後，跟隨你的踩泵補力。"
+	elif definition.mode == "soup_tray":
+		notes[3].text = "實際運送後自然結算可收藏普通卡。三碗都安全交到才通關。"
+		notes[4].text = "輔助讓湯面更快安定。灑壞可按 R 重試這一碗，先前已交成果保留。"
 	elif definition.mode == "umbrella_lights":
 		notes[3].text = "實際轉傘接過光後，正式回合自然結算可收藏普通卡。四片亮起才通關。"
 		notes[4].text = "輔助允許較寬角度。F 可選逐格轉傘，留白仍要轉動後煞停。"

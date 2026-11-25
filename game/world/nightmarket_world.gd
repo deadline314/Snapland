@@ -11,6 +11,7 @@ const COIN_ENTRY := Vector3(-9.15, GROUND_Y, -2.18)
 const ROOF_Y := 0.92
 const LANTERN_ENTRY := Vector3(4.12, ROOF_Y, -10.58)
 const UMBRELLA_ENTRY := Vector3(-3.95, ROOF_Y, -12.44)
+const SOUP_ENTRY := Vector3(-7.18, GROUND_Y, 6.52)
 const ENTRY := Vector3(0, GROUND_Y, 7.55)
 const STORY_POINT := Vector3(4.35, GROUND_Y, 7.55)
 const STORY_HOST := Vector3(6.0, GROUND_Y, 7.23)
@@ -85,6 +86,8 @@ func _build_region_geometry() -> void:
 	_build_banner_stand()
 	_point("game-043", "煎餅畫圓 · 西北煎台", PANCAKE_ENTRY)
 	_build_pancake_stand()
+	_point("game-045", "湯碗擺渡 · 西南湯攤", SOUP_ENTRY)
+	_build_soup_stand()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
 	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
@@ -422,6 +425,23 @@ func _build_umbrella_stand() -> void:
 		rib.rotation.y = -angle
 	_market_lantern(at + Vector3(0.72, 0.78, 0.0), PAPER_LIGHT, 0.16)
 	_sign("紙傘轉燈", at + Vector3(0.12, 0.32, 0.47), PAPER_LIGHT)
+
+
+func _build_soup_stand() -> void:
+	var at := SOUP_ENTRY + Vector3(-0.15, 0, -1.14)
+	var wood := Color("#614253")
+	var copper := Color("#c78e64")
+	_box(at + Vector3(0, 0.46, 0), Vector3(1.82, 0.90, 0.91), wood)
+	_box(at + Vector3(0, 0.92, 0), Vector3(1.88, 0.12, 1.01), copper)
+	for index in 3:
+		var bowl := at + Vector3((index - 1) * 0.51, 1.07, 0.12)
+		var glaze: Color = [Color("#d4c4a8"), Color("#7cb49b"), Color("#c97057")][index]
+		var foot := _cylinder(bowl, 0.14, 0.14, glaze)
+		var rim := _cylinder(bowl + Vector3(0, 0.07, 0), 0.20, 0.07, glaze.lightened(0.14))
+		foot.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		rim.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_market_lantern(at + Vector3(-0.75, 1.38, 0.06), PAPER_LIGHT, 0.13)
+	_sign("西南湯攤", at + Vector3(0.02, 0.15, 0.49), PAPER_LIGHT)
 
 
 func _build_route_markers() -> void:
