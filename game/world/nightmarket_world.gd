@@ -1,10 +1,13 @@
 extends "res://game/world/park_world.gd"
 
+const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const Atmosphere = preload("res://game/world/nightmarket_atmosphere.gd")
 const BOUNDS := Rect2(-12, -14.1, 24, 23.6)
 const GROUND_Y := 0.20
 const ROOF_Y := 0.92
 const ENTRY := Vector3(0, GROUND_Y, 7.55)
+const STORY_POINT := Vector3(4.35, GROUND_Y, 7.55)
+const STORY_HOST := Vector3(6.0, GROUND_Y, 7.23)
 const RAMP := Rect2(-2.2, -9.4, 4.4, 4.0)
 const ROOF := Rect2(-5.6, -14.1, 11.2, 4.7)
 const AWNING := Rect2(-1.95, -2.55, 3.9, 7.15)
@@ -31,6 +34,13 @@ var _dim_material: StandardMaterial3D
 var _sign_materials: Dictionary = {}
 var _trim_meshes: Dictionary = {}
 var _atmosphere: Node3D
+var _story_photo_camera: Camera3D
+var _story_photo_origin: Vector3
+var _story_photo_facing := "front"
+var _story_name_label: Label3D
+var _story_host_sprite: Sprite3D
+var _story_rest_pose: Texture2D
+var _story_photo_pose: Texture2D
 
 func _build_region_geometry() -> void:
 	_build_atmosphere()
@@ -55,8 +65,73 @@ func _build_region_geometry() -> void:
 	_point("nightmarket:reset", "安全返回夜市入口", Vector3(-9.6, GROUND_Y, 1.0))
 	_point("game-037", "雨棚快遞 · 撐傘送熱餐", Vector3(0, GROUND_Y, 2.85))
 	_build_courier_stand()
+	_npc(STORY_HOST, CORAL_NEON, "阿浪")
+	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
+	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
 	_sync_operating()
 	current_area = _area_at_position(ENTRY)
+
+func begin_story_photo() -> bool:
+	if is_instance_valid(_story_photo_camera) or not is_instance_valid(player):
+		return false
+	var actor := _npc_record_for_role("announcer")
+	if actor.is_empty():
+		return false
+	_story_photo_origin = player.position
+	_story_photo_facing = facing
+	_set_story_host_pose(_story_photo_pose)
+	_story_name_label = actor.get("name_label") as Label3D
+	if is_instance_valid(_story_name_label):
+		_story_name_label.hide()
+	player.position = STORY_POINT
+	player.velocity = Vector3.ZERO
+	_sync_external_avatar_reposition()
+	facing = "front"
+	avatar_action = ""
+	avatar_action_remaining = 0.0
+	avatar_action_elapsed = 0.0
+	_refresh_avatar_texture(0)
+	var center := STORY_POINT.lerp(STORY_HOST, 0.5) + Vector3(0, 1.45, 0)
+	_story_photo_camera = Camera3D.new()
+	_story_photo_camera.name = "NightmarketGroupPhotoCamera"
+	_story_photo_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	_story_photo_camera.size = 6.4
+	_story_photo_camera.far = camera.far
+	_story_photo_camera.position = center + Vector3(-1.70, 3.05, 9.0)
+	add_child(_story_photo_camera)
+	_story_photo_camera.look_at(center)
+	_story_photo_camera.make_current()
+	var fill := OmniLight3D.new()
+	fill.position = Vector3(0, -0.85, -6.0)
+	fill.light_color = Color("#ffdfb1")
+	fill.light_energy = 0.69
+	fill.omni_range = 5.9
+	fill.shadow_enabled = false
+	_story_photo_camera.add_child(fill)
+	return true
+
+func end_story_photo() -> void:
+	if not is_instance_valid(_story_photo_camera):
+		return
+	camera.make_current()
+	_story_photo_camera.queue_free()
+	_story_photo_camera = null
+	if is_instance_valid(_story_name_label):
+		_story_name_label.show()
+	_story_name_label = null
+	_set_story_host_pose(_story_rest_pose)
+	player.position = _story_photo_origin
+	player.velocity = Vector3.ZERO
+	facing = _story_photo_facing
+	_sync_external_avatar_reposition()
+	_refresh_avatar_texture(0)
+
+func _physics_process(delta: float) -> void:
+	super._physics_process(delta)
+	if is_instance_valid(_story_photo_camera):
+		var marker := nearest.get("marker") as Label3D
+		if is_instance_valid(marker):
+			marker.hide()
 
 func _build_street_foundations() -> void:
 	# Join the stalls and walkways on one city block, with curbs marking the safe routes.
@@ -300,7 +375,29 @@ func _build_region_activities() -> void:
 	pass
 
 func _register_npc_activity() -> void:
-	pass
+	# The host keeps a fixed welcome point and uses the authored front poses.
+	var actor := _npc_record_for_role("announcer")
+	_story_host_sprite = actor.get("sprite") as Sprite3D
+	if not is_instance_valid(_story_host_sprite) or avatar_renderer == null:
+		return
+	_story_rest_pose = _story_host_sprite.texture
+	var library: RefCounted = avatar_renderer.animation_library
+	var idle := library.texture("announcer", "idle", "front", 0) as Texture2D
+	var greeting := library.texture("announcer", "greet", "front", 4) as Texture2D
+	if idle != null:
+		_story_rest_pose = _fit_npc_rest_texture(idle)
+	_story_photo_pose = _fit_npc_rest_texture(greeting) if greeting != null else _story_rest_pose
+	_set_story_host_pose(_story_rest_pose)
+	actor["name_body_height"] = _visible_body_height(_story_host_sprite)
+
+func _set_story_host_pose(texture: Texture2D) -> void:
+	if not is_instance_valid(_story_host_sprite) or texture == null:
+		return
+	_story_host_sprite.texture = texture
+	var material := _story_host_sprite.material_override as ShaderMaterial
+	if material != null:
+		material.set_shader_parameter("texture_albedo", texture)
+		material.set_shader_parameter("uv_rect", Vector4(0, 0, 1, 1))
 
 func _build_player_floor() -> void:
 	pass

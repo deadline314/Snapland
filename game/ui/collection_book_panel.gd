@@ -1,12 +1,14 @@
 extends Control
 signal retake_requested(game_id: String, devil: bool)
 signal practice_requested(game_id: String, devil: bool)
+signal story_replay_requested(region: String)
 ## A paged paper book over the existing photo and achievement records.
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const PhotoViewer = preload("res://game/ui/photo_viewer.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
+const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const PAGE_SIZE := 4
 const MAX_PHOTO_FRAME_CANDIDATES := 12
@@ -380,6 +382,9 @@ func _entries() -> Array[Dictionary]:
 			var explorations := [{"id":"photo-welcome-explore-1","name":"花壇會眨眼","how":"選表情並拍照。"},{"id":"photo-welcome-explore-2","name":"歡迎字樣的影子","how":"把字樣投影對準牆上空框後拍照。"},{"id":"photo-welcome-explore-3","name":"長椅雙人份","how":"借立牌、坐上長椅後按快門。"},{"id":"photo-welcome-story-1","name":"照片多了一條尾巴","how":"完成迎賓主線對話。"},{"id":"photo-welcome-quest-1","name":"吉祥物的尾巴危機","how":"完成小角的三步委託。"},{"id":"photo-welcome-quest-2","name":"廣播即興救場","how":"完成阿浪的三步委託。"}] if _region=="welcome" else []
 			for exploration in explorations:
 				entries.append(_entry(str(exploration.id),str(exploration.name),str(exploration.how)))
+			var regional_story := RegionalVisit.entry(_region)
+			if not regional_story.is_empty():
+				entries.append(regional_story)
 		"devil":
 			for game in _definitions:
 				var identity := GameCatalog.identity(str(game.get("id","")))
@@ -516,6 +521,8 @@ func _photo_tile(entry: Dictionary) -> Control:
 	else:
 		content_row.add_child(title)
 	var status := Paper.label("已收藏" if collected else "尚未收藏",16,Paper.TEAL if collected else Paper.INK)
+	if collected and entry.has("story_region"):
+		status.text="已收藏 · 主線"
 	if collected and entry.has("game_id"):
 		status.text="已收藏 · "+("補拍" if _progress.photos[entry.id].get("acquisition_method","")=="retake" else "遊戲")
 	if not collected and entry.has("game_id"):
@@ -546,7 +553,7 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 			else:
 				practice_requested.emit(str(entry.game_id),bool(entry.devil))
 			return
-		_photo_details.text="這張照片還在等你，完成遊園後再回來翻看。"
+		_photo_details.text=str(entry.instructions) if entry.has("story_region") else "這張照片還在等你，完成遊園後再回來翻看。"
 		return
 	var photo_id := str(entry.id)
 	var has_original := _has_original_photo_path(photo_id)
@@ -558,14 +565,20 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 		elif texture != null:
 			_photo_details.text = str(entry.title) + "｜原尺寸照片暫時無法打開，先看看相簿畫格。"
 	if texture == null:
-		_photo_details.text="這張照片暫時看不清楚，先留在本子裡。"
+		if entry.has("story_region"):
+			story_replay_requested.emit(str(entry.story_region))
+		else:
+			_photo_details.text="這張照片暫時看不清楚，先留在本子裡。"
 		return
 	var modal_overlay := _find_modal_overlay()
 	if modal_overlay == null:
 		_photo_details.text="這張照片現在不方便翻開，先留在本子裡。"
 		return
 	var viewer := PhotoViewer.new()
-	viewer.setup(texture,str(entry.title),tile)
+	var replay := Callable()
+	if entry.has("story_region"):
+		replay = func(): story_replay_requested.emit(str(entry.story_region))
+	viewer.setup(texture,str(entry.title),tile,replay)
 	modal_overlay.add_child(viewer)
 
 func _has_original_photo_path(photo_id: String) -> bool:

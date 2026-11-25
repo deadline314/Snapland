@@ -14,6 +14,7 @@ const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TestSaveGuard = preload("res://game/core/test_save_guard.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
+const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const DEFAULT_APPEARANCE := {
 	"skin": "warm", "species": "human", "gender": "neutral",
@@ -75,6 +76,37 @@ func grant_photo(source_id: String, metadata: Dictionary = {}) -> bool:
 		return false
 	photos[source_id] = metadata.duplicate(true)
 	changed.emit()
+	return true
+
+## The regional card and its visit flag become visible only after one durable write.
+func record_region_story_visit(region: String, thumbnail: String, original: String) -> bool:
+	var photo_id := RegionalVisit.photo_id(region)
+	if photo_id.is_empty() or current_region != region:
+		return false
+	var had_photo := photos.has(photo_id)
+	var prior_visit: Variant = visited.get(region)
+	var had_visit: bool = prior_visit == true
+	if had_photo and had_visit:
+		return true
+	if not had_photo:
+		if thumbnail.is_empty() or original.is_empty():
+			return false
+		if _read_game_photo_image(photo_id, thumbnail, {}) == null or _read_game_photo_original_image(photo_id, original) == null:
+			return false
+		photos[photo_id] = {"story_region": region, "frames": [thumbnail], "original_frames": [original]}
+	visited[region] = true
+	if not save_progress():
+		if not had_photo:
+			photos.erase(photo_id)
+		if prior_visit == null:
+			visited.erase(region)
+		else:
+			visited[region] = prior_visit
+		return false
+	var previous_suppression := _suppress_changed_save
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = previous_suppression
 	return true
 
 func mark_prologue_seen() -> bool:
@@ -799,6 +831,8 @@ func _is_canonical_normal_photo(source_id: String, only_zone := "") -> bool:
 		for index in range(1, 13):
 			if source_id == "photo-%s-game-%d" % [zone, index]:
 				return true
+		if not source_id.is_empty() and source_id == RegionalVisit.photo_id(zone):
+			return true
 		if zone == "welcome":
 			for index in range(1, 4):
 				if source_id == "photo-welcome-explore-%d" % index:

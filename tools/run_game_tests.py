@@ -156,6 +156,7 @@ PASS_MARKERS = {
     "region progress tests": "PASS: region progress defaults, migration, transactions, and rollback",
     "harbor world tests": "PASS: harbor world terrain, tide safety, free ferry, map alignment and bounded reentry",
     "candy world tests": "PASS: candy world connected terrain, temperature, safe reset, map and bounded reentry",
+    "night market story tests": "PASS: night market story approach, skip, live framing, save and album replay",
     "night market world tests": "PASS: night market terrain, rain cover, rooftop, maps and safe routing",
     "region travel tests": "PASS: region travel admission, lifecycle, scoped UI, restart, and unchanged rewards",
     "game startup": "PASS: game startup and clean shutdown",
@@ -284,7 +285,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return f"{label} leaked engine objects or resources.\n{output.strip()[-6000:]}"
         completed = stdout_lines.count(marker) == 1 and output.splitlines().count(marker) == 1
     else:
-        completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ", "jelly ", "chocolate ")) or label in {"region progress tests", "region travel tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
+        completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ", "jelly ", "chocolate ")) or label in {"region progress tests", "region travel tests", "night market story tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -305,6 +306,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("region progress tests", common + ["--script", "res://game/tests/test_region_progress.gd"]),
         ("harbor world tests", common + ["--script", "res://game/tests/test_harbor_world.gd"]),
         ("candy world tests", common + ["--script", "res://game/tests/test_candy_world.gd"]),
+        ("night market story tests", common + ["--fixed-fps", "60", "res://game/tests/test_nightmarket_story.tscn"]),
         ("night market world tests", common + ["--fixed-fps", "60", "--script", "res://game/tests/test_nightmarket_world.gd"]),
         ("region travel tests", common + ["res://game/tests/test_region_travel.tscn"]),
         ("delivered game catalog tests", common + ["--script", "res://game/tests/test_game_catalog.gd"]),

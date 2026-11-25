@@ -17,6 +17,8 @@ const SettingsPanel = preload("res://game/ui/settings_panel.gd")
 const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
 const RetakePanelScript = preload("res://game/ui/retake_panel.gd")
 const RetakeLessons = preload("res://game/ui/tutorial_catalog.gd")
+const RegionalVisit = preload("res://game/story/regional_visit.gd")
+const RegionalVisitPhotoPanel = preload("res://game/ui/regional_visit_photo_panel.gd")
 const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 const BoatPrologueStage = preload("res://game/story/boat_prologue_stage.gd")
 var world: Node3D
@@ -57,6 +59,9 @@ var reveal := 0.0
 ## Game-time clock that paces dialogue beeps; only advances while text reveals.
 var dialogue_clock_msec := 100000
 var definitions: Array=[]
+var dialogue_skip_label := ""
+var visit_photo_panel: RegionalVisitPhotoPanel
+var visit_photo_from_album := false
 var capture_mode := false
 var photo_frames: Array[Image] = []
 var photo_original_frames: Array[Image] = []
@@ -654,6 +659,7 @@ func _close() -> void:
 	if modal_kind=="dialogue":
 		_finish_dialogue()
 		return
+	_dispose_region_story_photo()
 	if modal_kind == "time":
 		time_capture_token += 1
 	var celebrate := celebrate_on_close and modal_kind=="result"
@@ -766,6 +772,9 @@ func _input(event: InputEvent) -> void:
 		elif modal_kind == "":
 			_show_time_panel()
 		get_viewport().set_input_as_handled()
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_P and modal_kind == "visit_photo":
+		_take_region_story_photo()
+		get_viewport().set_input_as_handled()
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_M and modal_kind=="" and session==null:
 		_show_ticket()
 		get_viewport().set_input_as_handled()
@@ -775,6 +784,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
 		if modal_kind=="" and session==null and is_instance_valid(world.coastal_play) and is_instance_valid(world.coastal_play.discoveries) and world.coastal_play.discoveries.end_control(): pass
 		elif modal_kind=="dialogue": _cancel_dialogue()
+		elif modal_kind=="visit_photo": _exit_region_story_photo()
 		elif modal_kind!="": _close()
 		elif session==null: _show_pause()
 		get_viewport().set_input_as_handled()
@@ -1164,7 +1174,7 @@ func _complete_boat_prologue() -> void:
 func _show_arrival() -> void:
 	_start_dialogue(story.intro_lines(),func(): Progress.intro_seen=true; Progress.save_progress(),func(): Progress.intro_seen=true; Progress.save_progress())
 
-func _start_dialogue(lines: Array, done: Callable, cancelled: Callable = Callable()) -> void:
+func _start_dialogue(lines: Array, done: Callable, cancelled: Callable = Callable(), skip_label := "") -> void:
 	_clear_boat_prologue()
 	if lines.is_empty():
 		if done.is_valid(): done.call()
@@ -1175,10 +1185,11 @@ func _start_dialogue(lines: Array, done: Callable, cancelled: Callable = Callabl
 	dialogue_index=0
 	dialogue_done=done
 	dialogue_cancelled=cancelled
+	dialogue_skip_label=skip_label
 	if not is_instance_valid(dialogue_panel):
 		dialogue_panel=DialoguePanelScript.new()
 		dialogue_panel.advance_requested.connect(_next_dialogue)
-		dialogue_panel.finished.connect(_cancel_dialogue)
+		dialogue_panel.finished.connect(_dismiss_dialogue_button)
 		dialogue_panel.tree_exiting.connect(_dialogue_panel_exiting.bind(dialogue_panel))
 		ui.add_child(dialogue_panel)
 		dialogue_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -1203,6 +1214,9 @@ func _render_dialogue() -> void:
 		boat_stage.show_beat(dialogue_index,str(line.get("pose","idle")))
 		dialogue_panel.cancel_button.text="直接下船"
 		dialogue_panel.cancel_button.tooltip_text="略過船上序章，接續碼頭導覽。" if boat_first_run else "略過這次重播，回到原地繼續探索。"
+	elif not dialogue_skip_label.is_empty():
+		dialogue_panel.cancel_button.text=dialogue_skip_label
+		dialogue_panel.cancel_button.tooltip_text="跳過剩下的對話"
 	else:
 		dialogue_panel.cancel_button.text="結束對話"
 		dialogue_panel.cancel_button.tooltip_text=""
@@ -1240,6 +1254,7 @@ func _finish_dialogue(cancelled: bool = false) -> void:
 		dialogue_panel.queue_free()
 	dialogue_panel=null
 	dialogue_label=null
+	dialogue_skip_label=""
 	dialogue.clear()
 	if is_instance_valid(audio):
 		audio.set_dialogue_active(false)
@@ -1254,6 +1269,9 @@ func _finish_dialogue(cancelled: bool = false) -> void:
 	elif callback.is_valid():
 		callback.call()
 
+func _dismiss_dialogue_button() -> void:
+	_finish_dialogue(dialogue_skip_label.is_empty())
+
 func _cancel_dialogue() -> void:
 	_finish_dialogue(true)
 
@@ -1266,6 +1284,7 @@ func _dialogue_panel_exiting(panel: Control) -> void:
 	dialogue_label=null
 	dialogue_done=Callable()
 	dialogue_cancelled=Callable()
+	dialogue_skip_label=""
 	dialogue.clear()
 	if modal_kind=="dialogue":
 		modal_kind=""
@@ -1304,6 +1323,8 @@ func _interact(id: String, title: String) -> void:
 			_show_game_info(id)
 		else:
 			match id:
+				RegionalVisit.NIGHTMARKET_POINT:
+					_start_region_story_visit(world_region)
 				"nightmarket:trade":
 					world.cycle_market()
 					_notice("攤街" + world.market_status() + "。通路照常開放。")
@@ -1402,6 +1423,116 @@ func _interact(id: String, title: String) -> void:
 					body.add_child(Paper.label("入園資格：%d 張不同普通拍貼（不消耗）\n目前：%d 張\n\n這座園區正在準備中。"%[zone.threshold,Progress.normal_count()],22))
 				_back(body)
 				break
+
+func _start_region_story_visit(region: String, from_album := false) -> void:
+	var photo_id := RegionalVisit.photo_id(region)
+	if photo_id.is_empty() or (from_album and not Progress.photos.has(photo_id)):
+		return
+	if modal_kind not in ["", "album"]:
+		return
+	if modal_kind == "album":
+		_close()
+	var back_to_album := _show_album.bind(region) if from_album else Callable()
+	if world_region != region:
+		# An archived story may be reviewed elsewhere while the live set stays in its region.
+		if from_album:
+			_start_dialogue(RegionalVisit.lines(region), back_to_album, back_to_album, "略過")
+		return
+	if not from_album and Progress.normal_count() < RegionRoutes.threshold(region):
+		_notice("集滿 %d 張不同普通拍貼，就能在這裡合照。" % RegionRoutes.threshold(region))
+		return
+	_start_dialogue(RegionalVisit.lines(region), _open_region_story_photo.bind(region, from_album), back_to_album, "略過到合照")
+
+func _open_region_story_photo(region: String, from_album: bool) -> void:
+	if quitting or changing_region or session != null or modal_kind != "" or world_region != region:
+		return
+	if not world.has_method("begin_story_photo") or not world.begin_story_photo():
+		_notice("相機尚未就緒，請再和阿浪交談。")
+		return
+	visit_photo_from_album = from_album
+	world.blocked = true
+	world.sync_activity_pause()
+	hud.hide()
+	modal_kind = "visit_photo"
+	visit_photo_panel = RegionalVisitPhotoPanel.new()
+	visit_photo_panel.photo_title = RegionalVisit.title(region)
+	visit_photo_panel.shutter_requested.connect(_take_region_story_photo)
+	visit_photo_panel.cancel_requested.connect(_exit_region_story_photo)
+	ui.add_child(visit_photo_panel)
+
+func _exit_region_story_photo() -> void:
+	var return_to_album := visit_photo_from_album
+	var region := world_region
+	_close()
+	if return_to_album and not quitting and not changing_region:
+		_show_album(region)
+
+func _dispose_region_story_photo() -> void:
+	if not is_instance_valid(visit_photo_panel):
+		return
+	visit_photo_panel.hide()
+	visit_photo_panel.queue_free()
+	visit_photo_panel = null
+	visit_photo_from_album = false
+	if is_instance_valid(world):
+		world.end_story_photo()
+
+func _take_region_story_photo() -> void:
+	if quitting or modal_kind != "visit_photo" or not is_instance_valid(visit_photo_panel) or not visit_photo_panel.visible:
+		return
+	var owner := visit_photo_panel
+	if DisplayServer.get_name() == "headless":
+		owner.show_retry()
+		return
+	var region := world_region
+	var source_id := RegionalVisit.photo_id(region)
+	owner.set_busy(true)
+	owner.hide()
+	audio.play_sfx("shutter")
+	await get_tree().process_frame
+	if not _owns_story_photo(owner):
+		return
+	await RenderingServer.frame_post_draw
+	if not _owns_story_photo(owner):
+		return
+	var image := get_viewport().get_texture().get_image()
+	owner.show()
+	if image == null or image.is_empty():
+		owner.show_retry()
+		return
+	var replay := Progress.photos.has(source_id)
+	if replay:
+		if not Progress.record_region_story_visit(region, "", ""):
+			owner.show_retry()
+			return
+	else:
+		var bounds := RegionalVisitPhotoPanel.viewfinder_rect(Vector2(image.get_size()))
+		var framed := image.get_region(Rect2i(bounds))
+		if not _save_region_story_photo(region, source_id, framed):
+			owner.show_retry()
+			return
+	_exit_region_story_photo()
+	_notice("已重演合照，原照留在本子裡。" if replay else "夜市造訪已登記，合照收進本子裡。")
+
+func _owns_story_photo(owner: Control) -> bool:
+	return not quitting and not changing_region and modal_kind == "visit_photo" and is_instance_valid(owner) and owner == visit_photo_panel
+
+func _save_region_story_photo(region: String, source_id: String, image: Image) -> bool:
+	var directory := _photo_directory()
+	var error := DirAccess.make_dir_recursive_absolute(directory)
+	if error != OK and error != ERR_ALREADY_EXISTS:
+		push_warning("Cannot create regional visit photo directory: " + directory)
+		return false
+	var prefix := directory.path_join(source_id + "-" + Crypto.new().generate_random_bytes(16).hex_encode())
+	var thumbnail := prefix + ".png"
+	var original := prefix + "-original.png"
+	var prepared := _prepare_photo_original(image)
+	if (_save_bounded_photo_image(prepared, original)
+		and _save_bounded_photo_image(_prepare_photo_thumbnail(prepared), thumbnail)
+		and Progress.record_region_story_visit(region, thumbnail, original)):
+		return true
+	_remove_photo_paths([thumbnail, original])
+	return false
 
 func _complete_first_guide_conversation() -> void:
 	if not Progress.grant_photo("photo-welcome-story-1"): return
@@ -1737,11 +1868,12 @@ func _sync_finished_photo_thumbnails(result: Dictionary, saved_frames: Array[Str
 		return false
 	return Progress.attach_game_photo_frames(str(result.get("game_id","")),saved_frames,bool(result.get("success",false)) and bool(result.get("devil",false)),saved_original_frames)
 
-func _show_album() -> void:
+func _show_album(album_region := "") -> void:
 	var body := _open("一張照片，一點小事。","PHOTO COLLECTION","album")
 	var book_script = load("res://game/ui/collection_book_panel.gd")
 	var book = book_script.new()
-	book.setup(Progress,definitions,TimeOfDay.PHASES,Callable(self,"_photo_texture"),world_region)
+	book.setup(Progress,definitions,TimeOfDay.PHASES,Callable(self,"_photo_texture"),world_region if album_region.is_empty() else album_region)
+	book.story_replay_requested.connect(_start_region_story_visit.bind(true))
 	book.retake_requested.connect(_request_retake)
 	book.practice_requested.connect(_practice_for_retake)
 	book.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -2439,7 +2571,9 @@ func _show_ticket() -> void:
 	if world_region=="candy":
 		body.add_child(Paper.label(_candy_info_text()+"溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
 	elif world_region=="nightmarket":
-		body.add_child(Paper.label("穿過雨棚巷可送熱餐或上屋頂。夜市遊戲 %d / 12 款開放。" % Catalog.definitions("nightmarket").size(),18,Paper.TEAL))
+		var note := Paper.label("入口找阿浪合照，雨棚巷通往快遞與屋頂。遊戲 %d / 12 款。" % Catalog.definitions("nightmarket").size(),18,Paper.TEAL)
+		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		body.add_child(note)
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2

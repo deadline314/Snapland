@@ -5,11 +5,13 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 var _texture: Texture2D
 var _photo_title := ""
 var _focus_origin: Control
+var _replay_action := Callable()
 
-func setup(texture: Texture2D, photo_title: String, focus_origin: Control) -> void:
+func setup(texture: Texture2D, photo_title: String, focus_origin: Control, replay_action := Callable()) -> void:
 	_texture=texture
 	_photo_title=photo_title
 	_focus_origin=focus_origin
+	_replay_action=replay_action
 
 func _ready() -> void:
 	name="PhotoViewer"
@@ -66,6 +68,10 @@ func _ready() -> void:
 	var controls := HBoxContainer.new()
 	controls.alignment=BoxContainer.ALIGNMENT_END
 	body.add_child(controls)
+	if _replay_action.is_valid():
+		var replay := Paper.button("重看故事", _replay, controls)
+		replay.name = "PhotoViewerReplayStory"
+		replay.tooltip_text = "重看對話，在夜市可再演一次合照"
 	var close_button := Paper.button("返回相簿",_close,controls)
 	close_button.name="PhotoViewerClose"
 	close_button.custom_minimum_size=Vector2(156,48)
@@ -87,6 +93,13 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and (event.keycode==KEY_ESCAPE or event.is_action_pressed("ui_cancel")):
 		_close()
 		get_viewport().set_input_as_handled()
+
+func _replay() -> void:
+	if not _replay_action.is_valid():
+		return
+	hide()
+	queue_free()
+	_replay_action.call()
 
 func _close() -> void:
 	if is_instance_valid(_focus_origin) and _focus_origin.is_visible_in_tree() and _focus_origin.focus_mode!=Control.FOCUS_NONE:

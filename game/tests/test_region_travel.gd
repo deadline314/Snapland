@@ -225,7 +225,7 @@ func _candy_ui() -> void:
 	for index in [0,1,2,3]:
 		selector.select(index)
 		selector.item_selected.emit(index)
-		_check(book._region==["welcome","harbor","candy","nightmarket"][index] and book._entries().size()==[18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()][index], "all four album regions retain their real source catalogues")
+		_check(book._region==["welcome","harbor","candy","nightmarket"][index] and book._entries().size()==[18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1][index], "all four album regions retain their real source catalogues")
 	main._close()
 	main._show_tasks()
 	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")
