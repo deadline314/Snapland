@@ -4,8 +4,7 @@ const Catalog = preload("res://game/core/game_catalog.gd")
 const Routes = preload("res://game/core/region_routes.gd")
 const GATE_STATUSES := {
 	"6 張 · 不消耗": ["harbor", "candy", "nightmarket"],
-	"30 張 · 不消耗": ["circus", "toy"],
-	"30 張 · 準備中": ["garden"],
+	"30 張 · 不消耗": ["circus", "toy", "garden"],
 	"60 張 · 準備中": ["hotel", "sky", "cinema"],
 }
 var main: Node
@@ -157,7 +156,7 @@ func _run() -> void:
 		await _spawn()
 		_check(main.world_region=="welcome" and main.boat_stage==null, "legacy/invalid saved region starts welcome")
 		await _dispose()
-	for region in ["circus", "toy"]:
+	for region in ["circus", "toy", "garden"]:
 		await _same_batch_trip(region)
 	await _failure_process()
 	await _finish()
@@ -247,6 +246,16 @@ func _same_batch_trip(region: String) -> void:
 		_check(main.world_region == "welcome" and Progress.current_region == "welcome" and _snapshot() == before,
 			title + " map return persists and retains the entire collection")
 		_check(main.world.player.position.distance_to(_point(gate).position) < 2.5, title + " returns to its original Welcome gate")
+		if region == "garden":
+			var reopened: bool = main._travel_to_region(region)
+			_check(reopened, "Garden can be reopened from the same Welcome gate")
+			if reopened:
+				await _frames(5)
+				_check(main.world.nearest.get("id") == "region:welcome", "Garden safe entry faces the physical free return")
+				main.world.interact()
+				await _frames(5)
+				_check(main.world_region == "welcome" and Progress.current_region == "welcome" and _snapshot() == before,
+					"Garden physical return resumes and writes only the destination")
 	await _dispose()
 
 func _candy_trips(before: Dictionary) -> void:
@@ -326,7 +335,7 @@ func _candy_ui() -> void:
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
 	_check(selector.item_count==Routes.ORDER.size() and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
-	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,1,1]
+	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,1,1,0]
 	for index in Routes.ORDER.size():
 		selector.select(index)
 		selector.item_selected.emit(index)
@@ -334,9 +343,13 @@ func _candy_ui() -> void:
 		if book._region == "circus":
 			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-circus-story-1"
 				and book._entries()[0].story_region == "circus", "Circus lists only its delivered regional story source")
-	_check(book._entries().size() == 1 and book._entries()[0].id == "photo-toy-story-1"
-		and book._entries()[0].story_region == "toy" and _labels(book).contains("阿浪"),
-		"Toy Town album lists its physical story and gives directions without fake collectible entries")
+		elif book._region == "toy":
+			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-toy-story-1"
+				and book._entries()[0].story_region == "toy" and _labels(book).contains("阿浪"),
+				"Toy Town album lists its physical story and gives directions without fake collectible entries")
+		elif book._region == "garden":
+			_check(_labels(book).contains("苔光溫室已開放探索") and book._entries().is_empty(),
+				"Garden album offers guidance without speculative entries")
 	main._close()
 	main._show_tasks()
 	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")

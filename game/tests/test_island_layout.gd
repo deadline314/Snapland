@@ -331,9 +331,11 @@ func _check_illuminated_guides(world: Node) -> void:
 		"guide plaques add no collision or dynamic light")
 	var night_gate := world.get_node_or_null("GateStatus_nightmarket") as Label3D
 	var toy_gate := world.get_node_or_null("GateStatus_toy") as Label3D
-	var future_gate := world.get_node_or_null("GateStatus_garden") as Label3D
+	var garden_gate := world.get_node_or_null("GateStatus_garden") as Label3D
+	var future_gate := world.get_node_or_null("GateStatus_hotel") as Label3D
 	_check(night_gate != null and night_gate.text == "6 張 · 不消耗", "open Nightmarket no longer reads as pending")
 	_check(toy_gate != null and toy_gate.text == "30 張 · 不消耗", "Toy Town keeps its real 30-card gate")
+	_check(garden_gate != null and garden_gate.text == "30 張 · 不消耗", "Garden uses the same real 30-card threshold")
 	_check(future_gate != null and future_gate.text.contains("準備中"), "an unavailable gate still shows the future status")
 	if material == null: return
 	var previous_phase: String = world.active_time_phase

@@ -21,6 +21,10 @@ class TerrainChart extends Control:
 		"entry": Color("#776a54"), "blocks": Color("#87705c"),
 		"tower": Color("#675b51"), "station": Color("#54766e"), "repair": Color("#8a6855"),
 	}
+	const GARDEN_FLOORS := {
+		"sun": Color("#879376"), "wetland": Color("#747862"),
+		"vine": Color("#587568"), "buds": Color("#446965"),
+	}
 	var data: Dictionary
 
 	func _draw() -> void:
@@ -30,8 +34,8 @@ class TerrainChart extends Control:
 		if region=="nightmarket":
 			_draw_market(bounds)
 			return
-		if region in ["circus", "toy"]:
-			_draw_room_plan(bounds, region == "toy")
+		if region in ["circus", "toy", "garden"]:
+			_draw_room_plan(bounds, region)
 			return
 		var scale_factor := minf(size.x/bounds.size.x,size.y/bounds.size.y)
 		var origin := (size-bounds.size*scale_factor)*0.5
@@ -51,7 +55,7 @@ class TerrainChart extends Control:
 		var player: Vector3=data.player
 		draw_circle(origin+(Vector2(player.x,player.z)-bounds.position)*scale_factor,6.0,Paper.GOLD)
 
-	func _draw_room_plan(bounds: Rect2, toy: bool) -> void:
+	func _draw_room_plan(bounds: Rect2, region: String) -> void:
 		var unit := minf((size.x - 42.0) / bounds.size.x, (size.y - 18.0) / bounds.size.y)
 		if unit <= 0.0:
 			return
@@ -59,21 +63,24 @@ class TerrainChart extends Control:
 		var plan := Rect2((size - plan_size) * 0.5, plan_size)
 		var origin := plan.position - bounds.position * unit
 		var panel := plan.grow(7.0)
-		var backing := Color("#302b31") if toy else Color("#291f36")
+		var backing: Color = {"garden": Color("#253d37"), "toy": Color("#302b31")}.get(region, Color("#291f36"))
 		draw_rect(panel, backing)
-		draw_rect(panel, Color("#7e6a5c") if toy else Color("#72556b"), false, 1.0)
-		var swatches := TOY_FLOORS if toy else CIRCUS_FLOORS
+		var border: Color = {"garden": Color("#77958c"), "toy": Color("#7e6a5c")}.get(region, Color("#72556b"))
+		draw_rect(panel, border, false, 1.0)
+		var swatches: Dictionary = {"garden": GARDEN_FLOORS, "toy": TOY_FLOORS}.get(region, CIRCUS_FLOORS)
 		for room: Dictionary in data.areas:
 			var rect: Rect2 = room.rect
 			var floor := Rect2(origin + rect.position * unit, rect.size * unit)
 			draw_rect(floor, swatches.get(room.id, MARKET_PAVING))
 			draw_rect(floor, Color("#bc9c95"), false, 1.0)
-			if toy:
+			if region == "toy":
 				_draw_toy_detail(floor, room.id)
-			else:
+			elif region == "circus":
 				_draw_circus_detail(floor, room.id)
-		if toy:
+		if region == "toy":
 			_draw_toy_rails(origin, unit)
+		elif region == "garden":
+			_draw_garden_terrain(origin, unit)
 		var radius := clampf(unit * 1.07, 4.4, 8.0)
 		var font_size := mini(roundi(radius * 2.0), roundi(14.0 * Paper.text_scale() / Paper.physical_scale(self)))
 		for index in data.points.size():
@@ -89,6 +96,42 @@ class TerrainChart extends Control:
 		draw_circle(traveler, radius * 0.63, backing, true, -1.0, true)
 		draw_arc(traveler, radius * 0.74, 0.0, TAU, 14, Paper.GOLD, 1.8, true)
 		_draw_market_north(panel.position - Vector2(13.0, -8.0))
+
+	func _draw_garden_terrain(origin: Vector2, unit: float) -> void:
+		var water: Rect2 = data.water
+		var boardwalk: Rect2 = data.boardwalk
+		var ramp: Rect2 = data.ramp
+		var landing: Rect2 = data.upper_link
+		draw_rect(Rect2(origin + water.position * unit, water.size * unit), Color("#2c5d5c"))
+		draw_rect(Rect2(origin + boardwalk.position * unit, boardwalk.size * unit), Color("#bdad83"))
+		draw_rect(Rect2(origin + ramp.position * unit, ramp.size * unit), Color("#779487"))
+		draw_rect(Rect2(origin + landing.position * unit, landing.size * unit), Color("#86a18a"))
+		for index in data.terraces.size():
+			var terrace: Rect2 = data.terraces[index]
+			var floor := Rect2(origin + terrace.position * unit, terrace.size * unit)
+			draw_rect(floor, Color("#a9b79a") if index == 1 else Color("#91a98c"))
+			draw_rect(floor, Color("#d9d2a1"), false, 1.0)
+		for fraction in [0.26, 0.52, 0.76]:
+			var mark := origin + Vector2(ramp.get_center().x, ramp.position.y + ramp.size.y * fraction) * unit
+			var step := maxf(unit * 0.34, 1.7)
+			draw_polyline(PackedVector2Array([mark + Vector2(-step, step), mark, mark + Vector2(step, step)]), Color("#ecdbaf"), 1.0, true)
+		var leaf_size := clampf(unit * 0.55, 2.7, 6.1)
+		for index in data.beds.size():
+			var bed: Vector3 = data.beds[index]
+			var center := origin + Vector2(bed.x, bed.z) * unit
+			var fill := Color("#ffe7a0") if index == data.lit_bed else Color("#d0dcad")
+			match index:
+				0:
+					draw_colored_polygon(PackedVector2Array([center + Vector2(-leaf_size, 0), center + Vector2(0, -leaf_size),
+						center + Vector2(leaf_size, 0), center + Vector2(0, leaf_size)]), fill)
+				1:
+					draw_circle(center, leaf_size, fill, true, -1.0, true)
+				_:
+					draw_colored_polygon(PackedVector2Array([center + Vector2(0, leaf_size), center + Vector2(-leaf_size, -leaf_size * 0.5),
+						center + Vector2(0, -leaf_size), center + Vector2(leaf_size, -leaf_size * 0.5)]), fill)
+		var beam: Vector3 = data.light_center
+		var current := origin + Vector2(beam.x, beam.z) * unit
+		draw_arc(current, leaf_size * 1.5, 0.0, TAU, 20, Paper.GOLD, 1.25, true)
 
 	func _draw_toy_detail(floor: Rect2, room: String) -> void:
 		var ink := Color(ROOM_PLAN_INK, 0.50)
@@ -296,14 +339,14 @@ func setup(value: Dictionary) -> void:
 
 func _ready() -> void:
 	var region: String = snapshot.get("region","harbor")
-	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap","toy":"ToyMap"}.get(region,"HarborMap")
+	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap","toy":"ToyMap","garden":"GardenMap"}.get(region,"HarborMap")
 	name=prefix+"Panel"
 	size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	size_flags_vertical=Control.SIZE_EXPAND_FILL
 	add_theme_constant_override("separation",6)
 	var status := _status_text(region)
 	var tide := Paper.label(status,18,Paper.DEEP_TEAL)
-	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status"}.get(region,"Tide"))
+	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status","garden":"Status"}.get(region,"Tide"))
 	add_child(tide)
 	var chart := TerrainChart.new()
 	chart.name=prefix+"Terrain"
@@ -333,6 +376,7 @@ func _status_text(region: String) -> String:
 		"nightmarket":
 			return "%s · %s" % ["營業中" if snapshot.operating else "已收攤","你在雨棚下" if snapshot.covered else "你在露天區"]
 		"circus": return "你在" + String(snapshot.area)
+		"garden": return "你在%s · %s" % [snapshot.area, snapshot.light_label]
 		"toy":
 			var train: Dictionary = snapshot.train
 			var side := "左線" if train.branch == 0 else "右線"
@@ -350,4 +394,5 @@ func _legend_text(region: String) -> String:
 		"nightmarket": return "金點是你。綠色為雨棚巷，淡紫為屋頂。\n攤街可繞行，北邊斜坡通往屋頂。返回迎賓大道免費。"
 		"circus": return "金環是你。中央通道通往北側安全墊。\n兩側步道可繞回入口，返回迎賓大道免費。"
 		"toy": return "金環是你；實線為選中岔道，方點是列車。\n積木街連到維修台，返回迎賓大道免費。"
+		"garden": return "金環是你，植床上的光圈是日照位置。\n西側走木棧道，東側可上葉臺或沿寬路繞行。"
 	return "金點：你的位置　珊瑚編號：互動地點\n環岸步道全年可通；兩端免費渡船在漲退潮都可使用。返回迎賓大道永久免費。"
