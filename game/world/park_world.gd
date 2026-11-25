@@ -154,6 +154,7 @@ const AVATAR_RUN_SPEED := 1.5
 const AVATAR_ACCELERATION_SECONDS := 0.16
 const AVATAR_EXTERNAL_REPOSITION_THRESHOLD := 0.20
 var avatar_motion_speed_limit := AVATAR_WALK_SPEED
+var _avatar_careful_braking := false
 var avatar_last_physics_position := Vector3.ZERO
 var avatar_last_physics_position_valid := false
 var walk_distance_phase := 0.0
@@ -2325,6 +2326,7 @@ func _sync_external_avatar_reposition() -> void:
 			camera.look_at(player.position+Vector3(0,1,0))
 		player.velocity=Vector3.ZERO
 		avatar_is_walking=false
+		_avatar_careful_braking = false
 		_avatar_action_on_stop = ""
 		_avatar_departure_remaining = 0.0
 		_avatar_pivot_remaining = 0.0
@@ -2390,15 +2392,13 @@ func _physics_process(delta: float) -> void:
 	# Default travel is a brisk walk; Shift keeps a slower, careful pace.
 	avatar_run_requested = not blocked and not Input.is_key_pressed(KEY_SHIFT)
 	var desired_speed := AVATAR_RUN_SPEED if avatar_run_requested else AVATAR_WALK_SPEED
-	var desired_horizontal := movement*desired_speed
 	var previous_horizontal := Vector2(player.velocity.x,player.velocity.z)
-	var current_horizontal := previous_horizontal
-	var was_coasting := movement == Vector2.ZERO and current_horizontal != Vector2.ZERO
+	var was_coasting := movement == Vector2.ZERO and previous_horizontal != Vector2.ZERO
+	var current_horizontal := Vector2.ZERO
 	if blocked or operating_lens:
-		current_horizontal=Vector2.ZERO
+		_avatar_careful_braking = false
 	else:
-		if movement.length_squared()>0.0001: avatar_motion_speed_limit=desired_speed
-		current_horizontal=current_horizontal.move_toward(desired_horizontal,avatar_motion_speed_limit*delta/AVATAR_ACCELERATION_SECONDS)
+		current_horizontal = _steer_avatar_horizontal(previous_horizontal, movement, desired_speed, delta)
 	# Gravity only while airborne; floor snapping keeps the feet down on ramps. A constant
 	# downward pull while grounded made Godot's stop-on-slope rule read slow starts (for
 	# example at a quarter time scale) as standing still and zero them every tick.
@@ -2512,6 +2512,29 @@ func _physics_process(delta: float) -> void:
 			nearest=point
 	_set_interaction_marker(nearest.get("marker") if _interaction_markers_allowed() else null)
 
+func _steer_avatar_horizontal(velocity: Vector2, movement: Vector2, speed: float, delta: float) -> Vector2:
+	var desired := movement * speed
+	if movement == Vector2.ZERO or speed == AVATAR_RUN_SPEED:
+		_avatar_careful_braking = false
+	elif avatar_motion_speed_limit == AVATAR_RUN_SPEED and velocity.length_squared() > AVATAR_WALK_SPEED * AVATAR_WALK_SPEED:
+		_avatar_careful_braking = true
+	if movement.length_squared() > 0.0001:
+		avatar_motion_speed_limit = speed
+	var acceleration := avatar_motion_speed_limit / AVATAR_ACCELERATION_SECONDS
+	if not _avatar_careful_braking:
+		return velocity.move_toward(desired, acceleration * delta)
+	var brisk_brake := AVATAR_RUN_SPEED / AVATAR_ACCELERATION_SECONDS
+	if velocity.dot(movement) < 0.0:
+		# Finish braking the old heading before accelerating at the new pace.
+		var stop_time := velocity.length() / brisk_brake
+		if stop_time > delta:
+			return velocity.move_toward(Vector2.ZERO, brisk_brake * delta)
+		_avatar_careful_braking = false
+		return Vector2.ZERO.move_toward(desired, acceleration * (delta - stop_time))
+	var next := velocity.move_toward(desired, brisk_brake * delta)
+	_avatar_careful_braking = next.length_squared() > AVATAR_WALK_SPEED * AVATAR_WALK_SPEED
+	return next
+
 func _interaction_markers_allowed() -> bool:
 	return true
 
@@ -2528,19 +2551,24 @@ func _set_ride_exit_interaction() -> void:
 	_set_interaction_marker(null)
 
 func _update_avatar_pivot(movement: Vector2, velocity: Vector2, delta: float, frame: int, frame_count: int) -> void:
-	var lateral := movement.x != 0.0 and movement.y == 0.0
-	var depth := movement.x == 0.0 and movement.y != 0.0
-	if not (lateral or depth) or reduced_motion or not avatar_is_walking or not player.is_on_floor():
+	if movement == Vector2.ZERO or reduced_motion or not avatar_is_walking or not player.is_on_floor():
 		_avatar_pivot_remaining = 0.0
 		return
-	var target := ("right" if movement.x > 0.0 else "left") if lateral else ("front" if movement.y > 0.0 else "back")
+	if _avatar_pivot_remaining <= 0.0 and (
+		last_avatar_source_action != "walk" or velocity.dot(movement) >= 0.0 or velocity.length_squared() > 0.34 * 0.34
+	):
+		return
+	var target := quantize_walk_direction(movement, facing)
+	var lateral := target == "left" or target == "right"
+	var depth := target == "front" or target == "back"
+	if not (lateral or depth):
+		_avatar_pivot_remaining = 0.0
+		return
 	if _avatar_pivot_remaining > 0.0:
 		_avatar_pivot_remaining = maxf(0.0, _avatar_pivot_remaining - delta) if target == _avatar_pivot_target else 0.0
 		return
 	var eligible_headings := ["left", "right"] if lateral else ["front", "back"]
-	if last_avatar_source_action != "walk" or facing not in eligible_headings or target == facing:
-		return
-	if velocity.dot(movement) >= 0.0 or velocity.length_squared() > 0.34 * 0.34:
+	if facing not in eligible_headings or target == facing:
 		return
 	var exits := AVATAR_PIVOT_WALK_CELS if lateral else AVATAR_DEPTH_PIVOT_WALK_CELS
 	var approved_exits: Array = exits[target].get(frame, [])
@@ -2942,6 +2970,7 @@ func start_ride() -> bool:
 	var started: bool = island_attractions.start_ride()
 	if started:
 		avatar_is_walking=false
+		_avatar_careful_braking = false
 		avatar_action=""
 		_avatar_action_on_stop = ""
 		_avatar_departure_remaining = 0.0

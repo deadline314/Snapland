@@ -119,7 +119,9 @@ func _run() -> void:
 	await _check_slow_profile_stop(world)
 	await _check_departures(world)
 	await _check_reversals(world)
+	await _check_careful_pace(world)
 	await _check_side_pivot(world)
+	await _check_stick_pivot(world)
 	await _check_camera_idle(world)
 	var changed_appearance := {"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}
 	var changed_equipment := {"outfit":"outfit-tide","hat":"hat-none"}
@@ -435,6 +437,127 @@ func _check_side_pivot(world: ParkWorld) -> void:
 			Input.action_release("move_" + goal)
 	Engine.time_scale = original_scale
 	for _tick in range(23): await physics_frame
+
+func _check_careful_pace(world: ParkWorld) -> void:
+	for attempt in range(3):
+		var reverse := attempt != 0
+		var reduced := attempt == 2
+		world.apply_settings({"reduced_motion": reduced})
+		var point := Vector3(-0.5, 0.0, -14.5)
+		point.y = world.ground_surface_y(point)
+		world.player.global_position = point
+		for _tick in range(5): await physics_frame
+		_pace_key(KEY_D, true)
+		for _tick in range(30): await physics_frame
+		var initial_speed := world.player.velocity.x
+		var previous_x := world.player.position.x
+		var previous_speed := initial_speed
+		var old_axis_travel := 0.0
+		var largest_step := 0.0
+		var first_reverse := 0
+		var settle_tick := 0
+		var idle_ticks := 0
+		var optional_pose := false
+		var target_speed := ParkWorld.AVATAR_WALK_SPEED * (-1.0 if reverse else 1.0)
+		if reverse:
+			_pace_key(KEY_D, false)
+			_pace_key(KEY_A, true)
+		_pace_key(KEY_SHIFT, true)
+		for tick in range(1, 41):
+			await physics_frame
+			var current_speed := world.player.velocity.x
+			var displacement := world.player.position.x - previous_x
+			if first_reverse == 0:
+				old_axis_travel += maxf(displacement, 0.0)
+				if displacement < -0.000001: first_reverse = tick
+			largest_step = maxf(largest_step, absf(current_speed - previous_speed))
+			if settle_tick == 0 and absf(current_speed - target_speed) < 0.01: settle_tick = tick
+			if world.last_avatar_action == "idle": idle_ticks += 1
+			optional_pose = optional_pose or world.last_avatar_source_action in ["pivot", "depart"]
+			previous_x = world.player.position.x
+			previous_speed = current_speed
+		if reverse:
+			_check(first_reverse in range(2, 12) and old_axis_travel < 0.13 and idle_ticks == 0,
+				"Shift and opposite travel brake brisk momentum without inserting an idle pose")
+		else:
+			_check(settle_tick in range(2, 9),
+				"Shift alone brakes smoothly to the lower speed within eight physics ticks")
+		_check(is_equal_approx(initial_speed, ParkWorld.AVATAR_RUN_SPEED) and absf(previous_speed - target_speed) < 0.01
+			and largest_step <= 0.165 and world.player.is_on_floor(),
+			"brisk-to-careful travel stays grounded and preserves both speed caps and the bounded velocity step")
+		_check(world.facing == ("left" if reverse else "right") and not (reduced and optional_pose),
+			"direction stays readable through the reversal and reduced motion omits optional turn poses")
+		if not reverse:
+			_pace_key(KEY_SHIFT, false)
+			for _tick in range(7): await physics_frame
+			_check(is_equal_approx(world.player.velocity.x, ParkWorld.AVATAR_RUN_SPEED), "releasing Shift while holding direction restores brisk acceleration")
+			_pace_key(KEY_SHIFT, true)
+			for _tick in range(24): await physics_frame
+		_pace_key(KEY_A if reverse else KEY_D, false)
+		var release_tick := 0
+		var start_x := world.player.position.x
+		for tick in range(1, 16):
+			await physics_frame
+			if release_tick == 0 and is_zero_approx(world.player.velocity.x): release_tick = tick
+		var release_distance := absf(world.player.position.x - start_x)
+		_check(release_tick in range(9, 12) and release_distance > 0.036 and release_distance < 0.044,
+			"releasing a settled careful walk retains its gradual stop and distance")
+		_pace_key(KEY_SHIFT, false)
+		print("Welcome pace keyboard: ", JSON.stringify({
+			"reverse": reverse, "reduced_motion": reduced, "first_reverse_tick": first_reverse,
+			"old_axis_distance": old_axis_travel if reverse else null, "settle_tick": settle_tick,
+			"max_velocity_step": largest_step, "idle_ticks": idle_ticks,
+			"release_tick": release_tick, "release_distance": release_distance,
+		}))
+	world.apply_settings({"reduced_motion": false})
+
+func _check_stick_pivot(world: ParkWorld) -> void:
+	for off_axis: float in [0.18, 0.92]:
+		var point := Vector3(-0.5, 0.0, -14.5)
+		point.y = world.ground_surface_y(point)
+		world.player.global_position = point
+		for _tick in range(5): await physics_frame
+		_pace_stick(JOY_AXIS_LEFT_X, 1.0)
+		for _tick in range(24): await physics_frame
+		_check(world.facing == "right" and world.last_avatar_source_action == "walk",
+			"left stick establishes actual brisk eastward travel")
+		_pace_stick(JOY_AXIS_LEFT_X, -1.0)
+		_pace_stick(JOY_AXIS_LEFT_Y, off_axis)
+		var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		_check(input_vector.x < -0.5 and input_vector.y > 0.0 and input_vector.length() <= 1.001,
+			"the native stick bindings deliver a bounded two-component movement vector")
+		var played_pivot := false
+		var idle_ticks := 0
+		for _tick in range(33):
+			await physics_frame
+			played_pivot = played_pivot or world.last_avatar_source_action == "pivot"
+			if world.last_avatar_action == "idle": idle_ticks += 1
+		var near_cardinal := off_axis < 0.5
+		_check(played_pivot == near_cardinal and world.facing == ("left" if near_cardinal else "front_left")
+			and idle_ticks == 0 and world.player.is_on_floor(),
+			"stick variation still permits a cardinal pivot while a deliberate diagonal keeps its diagonal stride")
+		print("Welcome pace stick: ", JSON.stringify({
+			"horizontal": input_vector.x, "vertical": input_vector.y, "pivot": played_pivot,
+			"facing": world.facing, "idle_ticks": idle_ticks,
+		}))
+		_pace_stick(JOY_AXIS_LEFT_X, 0.0)
+		_pace_stick(JOY_AXIS_LEFT_Y, 0.0)
+		for _tick in range(16): await physics_frame
+
+func _pace_key(key: Key, pressed: bool) -> void:
+	var event := InputEventKey.new()
+	event.keycode = key
+	event.physical_keycode = key
+	event.pressed = pressed
+	Input.parse_input_event(event)
+	Input.flush_buffered_events()
+
+func _pace_stick(axis: JoyAxis, strength: float) -> void:
+	var event := InputEventJoypadMotion.new()
+	event.axis = axis
+	event.axis_value = strength
+	Input.parse_input_event(event)
+	Input.flush_buffered_events()
 
 func _check_camera_idle(world: ParkWorld) -> void:
 	world.facing = "front"
