@@ -111,6 +111,7 @@ func _run() -> void:
 		_check(quest_position.is_finite() and quest_position.z > -11.0, "%s character stands in front of the avenue arch beam" % quest_id)
 		_check(not world.player.test_move(quest_transform, Vector3(0.0, 0.0, 0.7)), "%s character talking space remains open" % quest_id)
 	_check_wayfinding(world)
+	_check_illuminated_guides(world)
 	var landmark_count := 0
 	for node in world.find_children("*", "Node3D", true, false):
 		if String(node.name).begins_with("GameFeature"):
@@ -258,6 +259,58 @@ func _check_wayfinding(world: Node) -> void:
 		var quest_transform := Transform3D(world.player.global_basis, quest_position + Vector3(0.0,0.3,0.0))
 		_check(not world.player.test_move(quest_transform, Vector3(0.0, 0.0, 0.7)), "%s talking space stays open beside the story props" % quest_id)
 	world.set_story_progress({"story_photo": false, "steps": {"quest-001": 0, "quest-002": 0}, "next_steps": {}, "photos": {}})
+
+func _check_illuminated_guides(world: Node) -> void:
+	var signs := world.get_node_or_null("WelcomeWayfinding") as Node3D
+	_check(signs != null and signs.get_child_count() == 3 and signs.process_mode == Node.PROCESS_MODE_DISABLED,
+		"three Welcome direction plaques have no processing")
+	if signs == null: return
+	var titles := {"Dock": "海風碼頭  ↓", "Avenue": "迎賓大道  ↑", "Nightmarket": "夜市入口  ↖"}
+	var material: StandardMaterial3D
+	for anchor: String in titles:
+		var plaque := signs.get_node_or_null(anchor) as Node3D
+		_check(plaque != null, "authored navigation plaque exists at " + anchor)
+		if plaque == null: continue
+		var label := plaque.get_node_or_null("Title") as Label3D
+		var trim := plaque.get_node_or_null("Trim") as MeshInstance3D
+		_check(label != null and label.text == titles[anchor], "visible route direction is correct at " + anchor)
+		_check(trim != null and trim.material_override is StandardMaterial3D,
+			"one lit strip identifies the board at " + anchor)
+		if trim == null: continue
+		if material == null:
+			material = trim.material_override as StandardMaterial3D
+		_check(trim.material_override == material, "the three boards share one time-phase material")
+	_check(signs.find_children("*", "CollisionObject3D", true, false).is_empty()
+		and signs.find_children("*", "Light3D", true, false).is_empty(),
+		"guide plaques add no collision or dynamic light")
+	var night_gate := world.get_node_or_null("GateStatus_nightmarket") as Label3D
+	var future_gate := world.get_node_or_null("GateStatus_toy") as Label3D
+	_check(night_gate != null and night_gate.text == "6 張 · 不消耗", "open Nightmarket no longer reads as pending")
+	_check(future_gate != null and future_gate.text.contains("準備中"), "an unavailable gate still shows the future status")
+	if material == null: return
+	var previous_phase: String = world.active_time_phase
+	var previous_reduction: bool = world.reduced_motion
+	world.set_time_of_day("noon")
+	_check(material.emission_energy_multiplier == 0.0 and world.lamp_energy_for_phase == 0.0,
+		"noon uses no artificial guide trim or lamp output")
+	world.set_time_of_day("dusk")
+	var dusk_trim := material.emission_energy_multiplier
+	var dusk_lamp: float = world.lamp_energy_for_phase
+	_check(dusk_trim > 0.0 and dusk_lamp > 0.48, "dusk improves actual light energy and charges the shared guide trim")
+	world.apply_settings({"reduced_motion": true})
+	world.set_time_of_day("dusk")
+	_check(is_equal_approx(material.emission_energy_multiplier, dusk_trim) and is_equal_approx(world.lamp_energy_for_phase, dusk_lamp),
+		"reduced motion retains the same steady directions and light intensity")
+	var active := 0
+	var shadows := 0
+	for lamp: Light3D in world.lamps:
+		active += int(lamp.light_energy > 0.0)
+		shadows += int(lamp.shadow_enabled)
+	_check(active > 0 and active <= world.ACTIVE_LAMP_LIMIT and shadows <= world.SHADOW_LAMP_LIMIT,
+		"dusk guidance preserves the existing active/shadow lamp budget")
+	world.apply_settings({"reduced_motion": previous_reduction})
+	world.set_time_of_day(previous_phase)
+
 
 func _check_coastal_extension(world: Node) -> void:
 	_check_coastal_clearance(world)

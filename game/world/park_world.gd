@@ -17,6 +17,7 @@ const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const ActorShadowSilhouette = preload("res://game/world/actor_shadow_silhouette.gd")
 const AvatarHairRig = preload("res://game/world/avatar_hair_rig.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
+const RegionRoutes = preload("res://game/core/region_routes.gd")
 const IslandAttractionsScript = preload("res://game/world/island_attractions.gd")
 const CoastalMaterialShader = preload("res://game/world/coastal_material.gdshader")
 const COASTAL_MATERIAL_ATLAS := "res://assets/world/coastal-materials-v1.png"
@@ -116,6 +117,7 @@ var lamp_candidate_distances: Array[float] = []
 var lamp_selection_elapsed := 0.0
 var lamp_selection_player_position := Vector3(INF, INF, INF)
 var lamp_energy_for_phase := 0.0
+var _wayfinding_trim: StandardMaterial3D
 var sprite_frames: Array[Texture2D] = []
 var material_cache: Dictionary = {}
 var coastal_atlas: Texture2D
@@ -220,6 +222,7 @@ func _build_region_geometry() -> void:
 	_build_plaza()
 	_build_avenue()
 	_build_gates()
+	_build_wayfinding()
 	CoastalCircuit.build(self)
 	story_landmarks = StoryLandmarksScript.new()
 	add_child(story_landmarks)
@@ -1779,6 +1782,44 @@ func park_data() -> Dictionary:
 		else: push_warning("Invalid park zone at "+path+"; entry ignored")
 	return {"zones":zones}
 
+func _build_wayfinding() -> void:
+	var signs := Node3D.new()
+	signs.name = "WelcomeWayfinding"
+	signs.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(signs)
+	_wayfinding_trim = StandardMaterial3D.new()
+	_wayfinding_trim.albedo_color = Color("#a26d43")
+	_wayfinding_trim.emission_enabled = true
+	_wayfinding_trim.emission = Color("#ffd088")
+	for entry in [
+		["Dock", Vector2(3.6, 9.3), "海風碼頭  ↓"],
+		["Avenue", Vector2(3.6, -7.2), "迎賓大道  ↑"],
+		["Nightmarket", Vector2(-5.6, 7.35), "夜市入口  ↖"],
+	]:
+		var anchor: Vector2 = entry[1]
+		var base := Vector3(anchor.x, 0.0, anchor.y)
+		base.y = ground_surface_y(base)
+		var plaque := Node3D.new()
+		plaque.name = entry[0]
+		signs.add_child(plaque)
+		_wayfinding_mesh(plaque, base + Vector3(0, 0.39, 0), Vector3(0.16, 0.78, 0.16), Color("#76553d"))
+		_wayfinding_mesh(plaque, base + Vector3(0, 0.99, 0), Vector3(3.70, 0.76, 0.13), Color("#18383d"))
+		var trim := _wayfinding_mesh(plaque, base + Vector3(0, 0.66, 0.075), Vector3(3.52, 0.07, 0.04), GOLD)
+		trim.name = "Trim"
+		trim.material_override = _wayfinding_trim
+		var label := _label(entry[2], base + Vector3(0, 1.04, 0.09), 38)
+		label.name = "Title"
+		label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+		label.reparent(plaque)
+
+func _wayfinding_mesh(plaque: Node3D, position: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
+	var mesh := _box(position, size, color)
+	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mesh.visibility_range_end = 34.0
+	mesh.reparent(plaque)
+	return mesh
+
+
 func _build_gates() -> void:
 	var data := park_data()
 	var zones: Array = data.get("zones",[])
@@ -1804,7 +1845,11 @@ func _build_gates() -> void:
 		_local_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
 		_local_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
 		_point("gate:"+zone["id"],zone["name"],pos+Vector3(0,0,2))
-		_local_label("6 張 · 不消耗" if zone["id"] in ["harbor","candy"] else "%d 張 · 準備中"%zone["threshold"],pos+Vector3(0,1.1,0.48),19)
+		var region: String = zone["id"]
+		var open := RegionRoutes.supports(region)
+		var required: int = RegionRoutes.threshold(region) if open else int(zone["threshold"])
+		var status := "%d 張 · %s" % [required, "不消耗" if open else "準備中"]
+		_local_label(status, pos + Vector3(0,1.1,0.48), 19).name = "GateStatus_" + region
 
 func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 	match index:
@@ -2809,6 +2854,10 @@ func set_time_of_day(phase_id: Variant) -> void:
 	# Dawn lamps are still on at 05:30 but subdued; 0.18 left their pools almost
 	# invisible on the newly sunlit paving, so they read as switched off.
 	lamp_energy_for_phase = float({"dawn": 0.32, "noon": 0.0, "dusk": 0.48, "night": 0.82}[active_time_phase])
+	if _wayfinding_trim != null:
+		if active_time_phase == "dusk":
+			lamp_energy_for_phase = 0.54
+		_wayfinding_trim.emission_energy_multiplier = float({"dawn": 0.18, "noon": 0.0, "dusk": 0.52, "night": 0.72}[active_time_phase])
 	_update_lamp_selection(true)
 	for record in contact_shadows:
 		var shadow := record.get("node") as Node3D
