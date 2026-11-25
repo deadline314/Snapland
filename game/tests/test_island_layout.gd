@@ -28,6 +28,7 @@ func _run() -> void:
 	var player_screen_y: float = projected_player.y / world.get_viewport().get_visible_rect().size.y
 	_check(player_screen_y > 0.47 and player_screen_y < 0.61, "camera places the avatar's ground point near the lower center instead of under the prompt")
 	_check(world.shoreline_rock_count <= 30, "shoreline rocks use separated clusters rather than a continuous perimeter row")
+	_check_welcome_water(world)
 	var game_points: Dictionary = {}
 	for point in world.points:
 		var point_id := String(point.get("id", ""))
@@ -230,6 +231,51 @@ func _finish() -> void:
 
 ## Signposts are solid landmarks at each fork, leave walking room on both sides,
 ## and every direction shows a status line once progress is applied.
+func _check_welcome_water(world: Node) -> void:
+	var bay := world.get_node_or_null("WelcomeBayWater") as MeshInstance3D
+	_check(bay != null and bay.mesh is PlaneMesh, "the Welcome bay remains a single sea plane")
+	if bay == null or not bay.mesh is PlaneMesh:
+		return
+	var material := bay.material_override as ShaderMaterial
+	_check(material != null and material.shader != null and material == world.welcome_sea_material and material != world.sea_material
+		and material.shader.resource_path.ends_with("/welcome_bay_water.gdshader"),
+		"shore effects use a shader specific to the outdoor Welcome bay")
+	if material == null or material.shader == null:
+		return
+	_check(bay.mesh.size == Vector2(240.0, 240.0) and bay.mesh.get_surface_count() == 1
+		and is_equal_approx(bay.position.y, -0.42), "sea draw and water level match the existing geometry")
+	_check(material.get_shader_parameter("land_center") == Vector2(0, -29)
+		and material.get_shader_parameter("land_half_size") == Vector2(36, 48)
+		and material.get_shader_parameter("dock_center") == Vector2(0, 21)
+		and material.get_shader_parameter("dock_half_size") == Vector2(2.5, 6.5),
+		"procedural surf measures the actual island rim and dock footprints")
+	var pools := 0
+	var sea_draws := 0
+	for mesh: MeshInstance3D in world.find_children("*", "MeshInstance3D", true, false):
+		if mesh.material_override == world.sea_material and mesh.mesh is CylinderMesh: pools += 1
+		if mesh.material_override == material: sea_draws += 1
+	_check(sea_draws == 1 and pools == 5 and world.sea_material.shader == world.fountain_water.shader,
+		"four pools, the bubbler, and the fountain keep the original shared water shader")
+	var initial_phase: String = world.active_time_phase
+	var initial_motion: bool = world.reduced_motion
+	world.set_time_of_day("noon")
+	_check(is_zero_approx(float(material.get_shader_parameter("dock_glow"))),
+		"noon contributes no artificial dock glints")
+	world.set_time_of_day("dusk")
+	var dusk_glow: float = material.get_shader_parameter("dock_glow")
+	world.set_time_of_day("night")
+	_check(dusk_glow > 0.0 and float(material.get_shader_parameter("dock_glow")) > dusk_glow,
+		"local reflected illumination follows the existing night and dusk lamp budget")
+	for reduced: bool in [true, false]:
+		world.apply_settings({"reduced_motion":reduced})
+		var expected := 0.0 if reduced else 1.0
+		_check(float(material.get_shader_parameter("motion")) == expected
+			and float(world.sea_material.get_shader_parameter("motion")) == expected
+			and float(world.fountain_water.get_shader_parameter("motion")) == expected,
+			"changing motion settings reaches the bay, pool, and fountain material")
+	world.set_time_of_day(initial_phase)
+	world.apply_settings({"reduced_motion":initial_motion})
+
 func _check_wayfinding(world: Node) -> void:
 	var landmarks: Node = world.story_landmarks
 	_check(landmarks != null, "story landmarks are built into the island")

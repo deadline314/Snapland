@@ -5,6 +5,9 @@ signal area_changed(label: String)
 const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const CoastalPlay = preload("res://game/world/coastal_play.gd")
 const WATER = preload("res://game/world/water.gdshader")
+const WELCOME_BAY_WATER = preload("res://game/world/welcome_bay_water.gdshader")
+const WELCOME_DOCK_CENTER := Vector3(0, 0, 21)
+const WELCOME_DOCK_SIZE := Vector3(5, 0.3, 13)
 const STONE = preload("res://game/world/stone.gdshader")
 const WOOD = preload("res://game/world/wood.gdshader")
 const GRASS = preload("res://game/world/grass.gdshader")
@@ -172,6 +175,7 @@ var nearest: Dictionary = {}
 var _visible_interaction_marker: Label3D
 var fountain_water: ShaderMaterial
 var sea_material: ShaderMaterial
+var welcome_sea_material: ShaderMaterial
 var active_time_phase := TimeOfDayScript.DEFAULT_PHASE
 var contact_shadow_material: StandardMaterial3D
 var contact_shadows: Array[Dictionary] = []
@@ -818,11 +822,18 @@ func _point_by_id(point_id: String) -> Dictionary:
 	return {}
 
 func _build_land() -> void:
+	# The pools retain the shared material. Only the open Welcome bay knows the shore.
 	sea_material = ShaderMaterial.new()
 	sea_material.shader = WATER
+	welcome_sea_material = ShaderMaterial.new()
+	welcome_sea_material.shader = WELCOME_BAY_WATER
+	welcome_sea_material.set_shader_parameter("land_center", Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z))
+	welcome_sea_material.set_shader_parameter("land_half_size", Vector2(CoastalCircuit.LAND_SIZE.x, CoastalCircuit.LAND_SIZE.z) * 0.5)
+	welcome_sea_material.set_shader_parameter("dock_center", Vector2(WELCOME_DOCK_CENTER.x, WELCOME_DOCK_CENTER.z))
+	welcome_sea_material.set_shader_parameter("dock_half_size", Vector2(WELCOME_DOCK_SIZE.x, WELCOME_DOCK_SIZE.z) * 0.5)
 	var sea_mesh := PlaneMesh.new()
 	sea_mesh.size = Vector2(240,240)
-	_mesh(sea_mesh,Vector3(0,-0.42,0),sea_material)
+	_mesh(sea_mesh,Vector3(0,-0.42,0),welcome_sea_material).name = "WelcomeBayWater"
 	_box(CoastalCircuit.LAND_CENTER+Vector3(0,-0.75,0),CoastalCircuit.LAND_SIZE,Color("#b89b70"))
 	var grass_material := ShaderMaterial.new()
 	grass_material.shader=GRASS
@@ -924,7 +935,7 @@ func _island_lawn_mesh() -> ArrayMesh:
 	return mesh
 
 func _build_shoreline() -> void:
-	# Layered cut-paper shore ledges and foam stay outside the playable lawn.
+	# Layered cut-paper rocks stay outside the playable lawn. The bay draws foam at the actual waterline.
 	var shore_clusters := [-69.0,-43.0,-17.0,7.0]
 	for side: float in [-1.0, 1.0]:
 		for cluster_index in range(shore_clusters.size()):
@@ -935,9 +946,6 @@ func _build_shoreline() -> void:
 				var z := center_z + stagger*1.08 + sin(float(cluster_index*7+rock_index)*1.73)*0.24
 				var x := side*(35.5 + cos(float(cluster_index*3+rock_index)*1.31)*0.52 + stagger*0.22)
 				_add_shore_rock(Vector3(x,-0.12,z),cluster_index*5+rock_index)
-			if cluster_index % 2 == 0:
-				var foam := _box(Vector3(side*35.78,-0.20,center_z+0.24),Vector3(0.12,0.035,0.86),Color("#d2e5d8"))
-				foam.rotation.y = side * 0.12
 			if cluster_index == 1 or cluster_index == 3:
 				_sea_grass(Vector3(side*34.5,0,center_z+0.45),cluster_index)
 	for cluster_index in range(4):
@@ -947,8 +955,6 @@ func _build_shoreline() -> void:
 			var x := center_x + stagger + sin(float(cluster_index*5+rock_index))*0.28
 			var z := 19.0 + cos(float(cluster_index+rock_index)*1.7)*0.58
 			_add_shore_rock(Vector3(x,-0.12,z),20+cluster_index*2+rock_index)
-		if cluster_index % 2 == 0:
-			_box(Vector3(center_x+0.45,-0.2,19.3),Vector3(0.65,0.035,0.11),Color("#d5e5d8"))
 
 func _add_shore_rock(pos: Vector3, seed_value: int) -> void:
 	var scale_value := 0.72 + fposmod(float(seed_value)*0.17,0.32)
@@ -1184,7 +1190,7 @@ func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 		_lantern(pos+Vector3(side*(wide*0.5-0.4),2.3,0))
 
 func _build_dock() -> void:
-	var dock_base := _box(Vector3(0,0.0,21),Vector3(5,0.3,13),Color("#8d6d4c"))
+	var dock_base := _box(WELCOME_DOCK_CENTER,WELCOME_DOCK_SIZE,Color("#8d6d4c"))
 	dock_base.material_override = _coastal_surface(1,1.7)
 	for i in range(27):
 		var plank := _box(Vector3(0,0.18,15+i*0.45),Vector3(4.92,0.08,0.35),Color("#9a7149"))
@@ -2905,6 +2911,8 @@ func set_time_of_day(phase_id: Variant) -> void:
 		if active_time_phase == "dusk":
 			lamp_energy_for_phase = 0.54
 		_wayfinding_trim.emission_energy_multiplier = float({"dawn": 0.18, "noon": 0.0, "dusk": 0.52, "night": 0.72}[active_time_phase])
+	if welcome_sea_material != null:
+		welcome_sea_material.set_shader_parameter("dock_glow", lamp_energy_for_phase)
 	_update_lamp_selection(true)
 	for record in contact_shadows:
 		var shadow := record.get("node") as Node3D
@@ -2960,8 +2968,10 @@ func apply_settings(settings: Dictionary) -> void:
 		avatar_action_remaining = 0.0
 		avatar_action_elapsed = 0.0
 	set_avatar_hair_motion_enabled(avatar_hair_motion_enabled)
-	if sea_material != null: sea_material.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
-	if fountain_water != null: fountain_water.set_shader_parameter("motion",0.0 if reduced_motion else 1.0)
+	var water_motion := 0.0 if reduced_motion else 1.0
+	if sea_material != null: sea_material.set_shader_parameter("motion", water_motion)
+	if welcome_sea_material != null: welcome_sea_material.set_shader_parameter("motion", water_motion)
+	if fountain_water != null: fountain_water.set_shader_parameter("motion", water_motion)
 	if is_instance_valid(component_motion): component_motion.set_reduced_motion(reduced_motion)
 	if is_instance_valid(npc_activity): npc_activity.set_reduced_motion(reduced_motion)
 	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
