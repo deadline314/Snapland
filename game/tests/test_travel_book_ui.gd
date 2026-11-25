@@ -235,6 +235,9 @@ func _check_map_direction(chart: Control, details: Node) -> void:
 	_check(chart.get("destination") == circus_point and _has_label(details,"30 張") and _has_label(details,"尚未達資格"),
 		"Circus is a physical destination with its distinct ordinary-card threshold")
 	await _activate(_main.overlay.find_child("MapGate_toy",true,false) as Button)
+	_check(chart.get("destination") == _world_point("gate:toy") and _has_label(details,"30 張") and _has_label(details,"尚未達資格"),
+		"Toy Town uses its own real entrance and the same 30-card threshold")
+	await _activate(_main.overlay.find_child("MapGate_garden",true,false) as Button)
 	var unavailable: Vector3 = chart.get("destination")
 	_check(not unavailable.is_finite() and _has_label(details,"準備中"), "the regional overview preserves future eligibility without marking a playable destination")
 

@@ -4,6 +4,7 @@ const HarborWorld = preload("res://game/world/harbor_world.gd")
 const CandyWorld = preload("res://game/world/candy_world.gd")
 const NightmarketWorld = preload("res://game/world/nightmarket_world.gd")
 const CircusWorld = preload("res://game/world/circus_world.gd")
+const ToyWorld = preload("res://game/world/toy_world.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Story = preload("res://game/story/story_director.gd")
@@ -133,6 +134,7 @@ func _new_region_world(region: String) -> Node3D:
 		"candy": return CandyWorld.new()
 		"nightmarket": return NightmarketWorld.new()
 		"circus": return CircusWorld.new()
+		"toy": return ToyWorld.new()
 	return WorldScene.new()
 
 func _region_name() -> String:
@@ -1323,6 +1325,14 @@ func _interact(id: String, title: String) -> void:
 	if not id.is_empty() and id == RegionalVisit.point_id(world_region):
 		_start_region_story_visit(world_region)
 		return
+	if world_region=="toy":
+		match id:
+			"toy:blocks": _notice("積木街北側通往維修台，往東可到車站岔道。")
+			"toy:switch": _notice(world.switch_tracks())
+			"toy:train": _notice(world.operate_train())
+			"toy:repair": _notice(world.reset_train())
+			"toy:tower": _notice("發條鐘樓 · 現在是 " + world.tower_clock())
+		return
 	if world_region=="circus":
 		match id:
 			"circus:mirrors": _notice("玻璃角標標示鏡像示意。兩端步道都可通行。")
@@ -2217,12 +2227,14 @@ func _show_map() -> void:
 		if not Catalog.definitions(world_region).is_empty():
 			var games_button := Paper.button("遊戲入口",_show_region_games,modal_footer)
 			games_button.name="RegionGamesButton"
-		if world_region in ["candy", "nightmarket", "circus"]:
+		if world_region in ["candy", "nightmarket", "circus", "toy"]:
 			var return_button := Paper.button("免費返回迎賓大道",_travel_to_region.bind("welcome"),modal_footer)
 			if world_region=="nightmarket":
 				return_button.name="NightmarketReturnButton"
 			elif world_region=="circus":
 				return_button.name="CircusReturnButton"
+			elif world_region=="toy":
+				return_button.name="ToyReturnButton"
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
 		_back(harbor_body)
 		return
@@ -2609,6 +2621,10 @@ func _show_ticket() -> void:
 		body.add_child(note)
 	elif world_region=="circus":
 		var note := Paper.label("西側是鏡廊，東側是影子台。沿觀眾席中央通道可到安全墊。",18,Paper.TEAL)
+		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		body.add_child(note)
+	elif world_region=="toy":
+		var note := Paper.label("東側可切換示範列車岔道。由西側積木街往北走，可在維修台重置。",18,Paper.TEAL)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	var groups := GridContainer.new()

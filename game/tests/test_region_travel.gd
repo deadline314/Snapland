@@ -4,8 +4,8 @@ const Catalog = preload("res://game/core/game_catalog.gd")
 const Routes = preload("res://game/core/region_routes.gd")
 const GATE_STATUSES := {
 	"6 張 · 不消耗": ["harbor", "candy", "nightmarket"],
-	"30 張 · 不消耗": ["circus"],
-	"30 張 · 準備中": ["toy", "garden"],
+	"30 張 · 不消耗": ["circus", "toy"],
+	"30 張 · 準備中": ["garden"],
 	"60 張 · 準備中": ["hotel", "sky", "cinema"],
 }
 var main: Node
@@ -157,7 +157,8 @@ func _run() -> void:
 		await _spawn()
 		_check(main.world_region=="welcome" and main.boat_stage==null, "legacy/invalid saved region starts welcome")
 		await _dispose()
-	await _circus_trip()
+	for region in ["circus", "toy"]:
+		await _same_batch_trip(region)
 	await _failure_process()
 	await _finish()
 
@@ -188,61 +189,64 @@ func _nightmarket_trip(before: Dictionary) -> void:
 	_check(main.world_region == "welcome" and Progress.current_region == "welcome" and not is_instance_valid(market)
 		and _world_count() == 1 and _snapshot() == before, "Nightmarket returns freely and preserves the collection")
 
-func _circus_trip() -> void:
+func _same_batch_trip(region: String) -> void:
 	Progress.reset_progress()
 	Progress.intro_seen = true
 	Progress.prologue_seen = true
+	var title := Routes.title(region)
+	var prefix := region.capitalize()
+	var gate := "gate:" + region
 	var ordinary := {"welcome": 12, "harbor": 12, "candy": 5}
-	for region in ordinary:
-		var count: int = ordinary[region]
+	for source_region in ordinary:
+		var count: int = ordinary[source_region]
 		for index in range(1, count + 1):
-			Progress.photos["photo-%s-game-%d" % [region, index]] = {}
+			Progress.photos["photo-%s-game-%d" % [source_region, index]] = {}
 	Progress.photos["photo-welcome-devil-1"] = {}
 	Progress.photos["postcard-time-dawn"] = {}
 	Progress.coins = 147
-	_check(Progress.normal_count() == 29 and Progress.save_progress(), "Circus fixture saves 29 ordinary cards plus collectibles")
+	_check(Progress.normal_count() == 29 and Progress.save_progress(), title + " fixture saves 29 ordinary cards plus collectibles")
 	await _spawn()
 	var welcome: Node = main.world
-	welcome.interaction_requested.emit("gate:circus", "鏡之馬戲團")
-	_check(_labels(main.overlay).contains("還差 1 張") and main.overlay.find_child("TravelCircusButton", true, false) == null
-		and not main._travel_to_region("circus"), "29 ordinary cards show the exact Circus shortage")
+	welcome.interaction_requested.emit(gate, title)
+	_check(_labels(main.overlay).contains("還差 1 張") and main.overlay.find_child(Routes.travel_button(region), true, false) == null
+		and not main._travel_to_region(region), "29 ordinary cards show the exact shortage for " + title)
 	main._close()
 	Progress.photos["photo-candy-game-6"] = {}
 	var before := _snapshot()
-	welcome.interaction_requested.emit("gate:circus", "鏡之馬戲團")
-	var travel := main.overlay.find_child("TravelCircusButton", true, false) as Button
+	welcome.interaction_requested.emit(gate, title)
+	var travel := main.overlay.find_child(Routes.travel_button(region), true, false) as Button
 	_check(Progress.normal_count() == 30 and travel != null and travel.tooltip_text.contains("30 張") and travel.tooltip_text.contains("不消耗"),
-		"30 different ordinary cards enable the actual Circus entrance")
+		"30 different ordinary cards enable the actual entrance for " + title)
 	if travel == null:
 		await _dispose()
 		return
 	travel.pressed.emit()
 	await _frames(4)
-	var reached: bool = main.world_region == "circus" and Progress.current_region == "circus"
-	_check(reached and not is_instance_valid(welcome) and _snapshot() == before and _world_count() == 1, "Circus entrance is saved without spending or retaining the prior world")
+	var reached: bool = main.world_region == region and Progress.current_region == region
+	_check(reached and not is_instance_valid(welcome) and _snapshot() == before and _world_count() == 1, title + " entrance is saved without spending or retaining the prior world")
 	if not reached:
 		await _dispose()
 		return
 	await _dispose()
 	Progress.load_progress()
 	await _spawn()
-	_check(main.world_region == "circus" and main.world._point_by_id("region:welcome").position == main.world.ENTRY
-		and _snapshot() == before and main.boat_stage == null, "fresh process setup restores Circus and preserves the existing profile")
+	_check(main.world_region == region and main.world._point_by_id("region:welcome").position == main.world.ENTRY
+		and _snapshot() == before and main.boat_stage == null, "new Main restores " + title + " and preserves the existing profile")
 	main._show_map()
 	await _frames(3)
-	var map: Node = main.overlay.find_child("CircusMapPanel", true, false)
+	var map: Node = main.overlay.find_child(prefix + "MapPanel", true, false)
 	_check(map != null and map.snapshot == main.world.map_snapshot() and main.overlay.find_child("RegionGamesButton", true, false) == null,
-		"Circus map reports actual terrain without speculative game entries")
+		title + " map reports actual terrain without speculative game entries")
 	if map != null:
 		await _regional_map_location_flow(map)
-	var leave := main.overlay.find_child("CircusReturnButton", true, false) as Button
-	_check(leave != null and _within_viewport(leave) and leave.tooltip_text.contains("免費"), "Circus map includes a reachable free return")
+	var leave := main.overlay.find_child(prefix + "ReturnButton", true, false) as Button
+	_check(leave != null and _within_viewport(leave) and leave.tooltip_text.contains("免費"), title + " map includes a reachable free return")
 	if leave != null:
 		leave.pressed.emit()
 		await _frames(4)
 		_check(main.world_region == "welcome" and Progress.current_region == "welcome" and _snapshot() == before,
-			"Circus map return persists and retains the entire collection")
-		_check(main.world.player.position.distance_to(_point("gate:circus").position) < 2.5, "Circus returns to its original Welcome gate")
+			title + " map return persists and retains the entire collection")
+		_check(main.world.player.position.distance_to(_point(gate).position) < 2.5, title + " returns to its original Welcome gate")
 	await _dispose()
 
 func _candy_trips(before: Dictionary) -> void:
@@ -322,13 +326,15 @@ func _candy_ui() -> void:
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
 	_check(selector.item_count==Routes.ORDER.size() and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
-	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,1]
+	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,1,0]
 	for index in Routes.ORDER.size():
 		selector.select(index)
 		selector.item_selected.emit(index)
 		_check(book._region==Routes.ORDER[index] and book._entries().size()==ordinary_slots[index], "regional album retains its delivered sources")
-	_check(book._entries().size() == 1 and book._entries()[0].id == "photo-circus-story-1"
-		and book._entries()[0].story_region == "circus", "Circus lists only its delivered regional story source")
+		if book._region == "circus":
+			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-circus-story-1"
+				and book._entries()[0].story_region == "circus", "Circus lists only its delivered regional story source")
+	_check(_labels(book).contains("發條玩具城已開放探索") and book._entries().is_empty(), "Toy Town album has guidance without fake collectible entries")
 	main._close()
 	main._show_tasks()
 	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")
