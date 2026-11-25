@@ -1465,6 +1465,9 @@ func _show_game_rules(id: String) -> void:
 	elif definition.mode == "filling_press":
 		notes[3].text = "確實壓住雙側模具後，正式回合自然結算可取普通拍貼。完成三層便通關，練習與取消不發卡。"
 		notes[4].text = "輔助放寬合模與放開時間，點一下壓住，再點一次放開。AI 在封口拍隨左模補壓右模，回彈時仍由你點單側。"
+	elif definition.mode == "paper_glide":
+		notes[3].text = "投出紙機並飛離試飛台後，正式回合自然結算可取普通拍貼。通關需穿過兩窗及落籃。"
+		notes[4].text = "輔助顯示首段軌跡、放寬窗籃判定並可飛行中收回。R 讓 AI 沿選定折線摺另一翼。"
 	_content_pager(objective_card,"GameRulesExtraDetails",notes,_render_game_rules_page,1,entry_stamp)
 	var row := HFlowContainer.new()
 	row.name="GameRulesActions"

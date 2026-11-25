@@ -124,5 +124,19 @@
     "ordinary": "依配方同步封口三層",
     "attraction_tag": "節拍烘焙台",
     "island_invitation": "A/D 壓左右模，空白鍵壓雙模。看合模線按住，再看放開線鬆手。"
+  },
+  {
+    "id": "game-034",
+    "mode": "paper_glide",
+    "zone": "candy",
+    "local_index": 10,
+    "name": "糖紙滑翔",
+    "goal": "選寬翼或窄翼。摺好雙翼並調整投力，穿過兩道風窗後落入包裝籃。",
+    "instructions": "1/2 選摺型，W/S 調投力，A/D 摺左右翼與轉舵，空白鍵投出。也可點畫面按鈕。",
+    "devil_hint": "過第二窗後看俯視圖，讓其中一個翼尖碰到粉色鈴。擦鈴後仍要對準籃口。",
+    "devil": "穿過兩道風窗，用翼尖擦鈴減速後落入包裝籃",
+    "ordinary": "穿過兩道風窗後落入包裝籃",
+    "attraction_tag": "試飛台",
+    "island_invitation": "摺翼後投出紙機。A/D 或畫面左右舵帶你穿過兩窗，再落入包裝籃。"
   }
 ]
