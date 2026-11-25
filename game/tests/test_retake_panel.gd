@@ -35,7 +35,7 @@ func _run() -> void:
 		check(panel.current_step == 2 and not panel._shutter.disabled, "every delivered set reaches an enabled shutter: " + definition.id)
 		panel.queue_free()
 		await process_frame
-	for invalid in ["game-035", "game-120", "balloon_delivery", "park", ""]:
+	for invalid in ["game-036", "game-120", "balloon_delivery", "park", ""]:
 		var panel = script.new()
 		panel.setup({"id":invalid}, false, lessons.get_lesson("game-001"))
 		root.add_child(panel)

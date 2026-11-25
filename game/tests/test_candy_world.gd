@@ -81,6 +81,7 @@ func _run() -> void:
 		_check(world._point_by_id("game-032").position == Vector3(-9, script.GROUND_Y, -2.6), "eighth game uses the floor by the materials lab")
 		_check(world._point_by_id("game-033").position == Vector3(4.9, script.GROUND_Y, -3.8), "ninth game uses the floor by the baking aisle")
 		_check(world._point_by_id("game-034").position == Vector3(-2.6, script.GROUND_Y, 6.55), "tenth game uses the clear floor off the main conveyor")
+		_check(world._point_by_id("game-035").position == Vector3(2.6, script.GROUND_Y, -7.0), "eleventh game sits on the north service aisle")
 		var count: int = world.find_children("*", "Node", true, false).size()
 		var materials: int = world.material_cache.size()
 		var display_id: int = world._temperature_display.get_instance_id()

@@ -16,7 +16,7 @@ func _run() -> void:
 	var candy: Array = catalog.definitions("candy")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 10 and all_games.size() == 34, "only the 34 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 11 and all_games.size() == 35, "only the 35 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy and catalog.definitions("nightmarket").is_empty(), "global order is welcome then harbor then delivered candy; upcoming regions remain unavailable")
@@ -56,6 +56,8 @@ func _run() -> void:
 	_check(catalog.identity("game-033") == filling and catalog.identity("filling_press") == filling and candy[8].name == "夾心壓奏", "ninth candy game keeps local9/global033")
 	var glider := {"id":"game-034", "mode":"paper_glide", "zone":"candy", "local_index":10, "photo_id":"photo-candy-game-10", "devil_photo_id":"photo-candy-devil-10", "achievement_id":"ACH_GAME_034"}
 	_check(catalog.identity("game-034") == glider and catalog.identity("paper_glide") == glider and candy[9].name == "糖紙滑翔", "tenth candy game keeps local10/global034")
+	var lift := {"id":"game-035", "mode":"bubble_lift", "zone":"candy", "local_index":11, "photo_id":"photo-candy-game-11", "devil_photo_id":"photo-candy-devil-11", "achievement_id":"ACH_GAME_035"}
+	_check(catalog.identity("game-035") == lift and catalog.identity("bubble_lift") == lift and candy[10].name == "汽泡升降梯", "eleventh candy game keeps local11/global035")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
 	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:

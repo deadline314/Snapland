@@ -4,7 +4,7 @@ class_name TutorialCatalog
 
 const DATA_PATH := "res://game/data/tutorials.json"
 const SCREENSHOT_ROOT := "res://assets/ui/tutorials/"
-const EXPECTED_LESSONS := ["park", "game-001", "game-002", "game-003", "game-004", "game-005", "game-006", "game-007", "game-008", "game-009", "game-010", "game-011", "game-012", "game-013", "game-014", "game-015", "game-016", "game-017", "game-018", "game-019", "game-020", "game-021", "game-022", "game-023", "game-024", "game-025", "game-026", "game-027", "game-028", "game-029", "game-030", "game-031", "game-032", "game-033", "game-034"]
+const EXPECTED_LESSONS := ["park", "game-001", "game-002", "game-003", "game-004", "game-005", "game-006", "game-007", "game-008", "game-009", "game-010", "game-011", "game-012", "game-013", "game-014", "game-015", "game-016", "game-017", "game-018", "game-019", "game-020", "game-021", "game-022", "game-023", "game-024", "game-025", "game-026", "game-027", "game-028", "game-029", "game-030", "game-031", "game-032", "game-033", "game-034", "game-035"]
 const REQUIRED_STEP_FIELDS := ["id", "title", "image", "alt", "goal", "input", "success"]
 
 var _lessons: Dictionary = {}
