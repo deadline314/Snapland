@@ -28,8 +28,10 @@ func run() -> void:
 	source.centered=false
 	source.offset=Vector2(2,3)
 	scene.add_child(source)
+	var shadow_parent := Node3D.new()
+	scene.add_child(shadow_parent)
 	var shadow := Silhouette.new()
-	scene.add_child(shadow)
+	shadow_parent.add_child(shadow)
 	var fallback := MeshInstance3D.new()
 	fallback.mesh=BoxMesh.new()
 	fallback.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
@@ -45,6 +47,9 @@ func run() -> void:
 	var expected_center := Vector3(2,3,4) + expected_basis * Vector3(1,-1.25,0)
 	check(shadow.global_position.is_equal_approx(expected_center),"Camera basis, source scale, offset or uncentered frame moved the caster")
 	check(shadow.global_basis.is_equal_approx(expected_basis),"Shadow must face the scene camera, not a light camera")
+	shadow_parent.position.x += 0.35
+	check(not shadow.global_position.is_equal_approx(expected_center),"Moving the caster's parent must displace the caster before reconciliation")
+	check(shadow.refresh() and shadow.global_position.is_equal_approx(expected_center),"An independently moving parent must not offset an unchanged sprite shadow")
 	source.flip_h=true;source.flip_v=true;shadow.sync_pose()
 	check(shadow.silhouette_material.uv1_scale.is_equal_approx(Vector3(-0.5,-1,1)) and shadow.silhouette_material.uv1_offset.is_equal_approx(Vector3(1,1,0)),"Flipping must stay inside the selected frame")
 	shadow.upright=true
@@ -71,6 +76,9 @@ func run() -> void:
 	var live_texture := viewport.get_texture()
 	source.texture=live_texture
 	check(shadow.refresh() and not fallback.visible and shadow.silhouette_material.albedo_texture==live_texture,"Live hair texture must retain its identity without pixel readback or a stale snapshot")
+	viewport.size = Vector2i(52, 40)
+	await process_frame
+	check(shadow.refresh() and shadow.silhouette_material.albedo_texture == live_texture and shadow.silhouette_quad.size == Vector2(13, 10), "Resizing the same live texture must resize its shadow quad")
 	source.hide();shadow.refresh()
 	check(not shadow.visible and not fallback.visible,"Hidden source must not leave a cast silhouette")
 	source.show();shadow.refresh()

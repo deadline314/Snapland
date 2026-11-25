@@ -518,10 +518,13 @@ func _update_sprite_grounding() -> void:
 		var proxy := proxy_record.get("node") as Node3D
 		var actor := proxy_record.get("actor") as Node3D
 		if not is_instance_valid(proxy) or not is_instance_valid(actor): continue
-		proxy.position.y = 0.0 if actor == player and is_riding() else ground_surface_y(actor.global_position) - actor.global_position.y
+		var proxy_y := 0.0 if actor == player and is_riding() else ground_surface_y(actor.global_position) - actor.global_position.y
+		if not is_equal_approx(proxy.position.y, proxy_y):
+			proxy.position.y = proxy_y
 		var silhouette = proxy_record.get("silhouette")
 		if is_instance_valid(silhouette):
-			silhouette.scene_camera = camera
+			if silhouette.scene_camera != camera:
+				silhouette.scene_camera = camera
 			silhouette.refresh()
 
 func _mat(color: Color, emissive := false) -> StandardMaterial3D:

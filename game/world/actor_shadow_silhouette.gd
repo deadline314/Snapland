@@ -33,25 +33,30 @@ func _process(_delta: float) -> void:
 
 func refresh() -> bool:
 	var supported := sync_pose()
+	var show_fallback := not supported and is_instance_valid(source) and source.is_inside_tree() and source.is_visible_in_tree()
 	for volume in fallback_volumes:
-		if is_instance_valid(volume):
-			volume.visible = not supported and is_instance_valid(source) and source.is_inside_tree() and source.is_visible_in_tree()
+		if is_instance_valid(volume) and volume.visible != show_fallback:
+			volume.visible = show_fallback
 	return supported
+
+func _set_caster_visible(value: bool) -> void:
+	if visible != value:
+		visible = value
 
 func sync_pose() -> bool:
 	if not is_instance_valid(source) or not is_instance_valid(scene_camera) or not is_inside_tree() or not source.is_inside_tree() or not scene_camera.is_inside_tree():
-		hide()
+		_set_caster_visible(false)
 		return false
 	var texture := source.texture
 	if texture == null or source.axis != Vector3.AXIS_Z or source.fixed_size or source.pixel_size <= 0.0:
-		hide()
+		_set_caster_visible(false)
 		return false
 	var region := Rect2(Vector2.ZERO, texture.get_size())
 	if texture is AtlasTexture:
 		var atlas := texture as AtlasTexture
 		# A margin adds transparent padding; do not guess its texture coordinates.
 		if atlas.atlas == null or atlas.atlas is AtlasTexture or atlas.margin != Rect2():
-			hide()
+			_set_caster_visible(false)
 			return false
 		region = atlas.region
 		if region.size == Vector2.ZERO: region.size = atlas.atlas.get_size()
@@ -63,7 +68,7 @@ func sync_pose() -> bool:
 	region.size = cell
 	var dimensions := texture.get_size()
 	if dimensions.x <= 0.0 or dimensions.y <= 0.0 or cell.x <= 0.0 or cell.y <= 0.0 or not Rect2(Vector2.ZERO, dimensions).encloses(region):
-		hide()
+		_set_caster_visible(false)
 		return false
 	var uv_scale := cell / dimensions
 	var uv_offset := region.position / dimensions
@@ -73,10 +78,17 @@ func sync_pose() -> bool:
 	if source.flip_v:
 		uv_offset.y += uv_scale.y
 		uv_scale.y = -uv_scale.y
-	silhouette_material.albedo_texture = texture
-	silhouette_material.uv1_scale = Vector3(uv_scale.x, uv_scale.y, 1.0)
-	silhouette_material.uv1_offset = Vector3(uv_offset.x, uv_offset.y, 0.0)
-	silhouette_quad.size = cell * source.pixel_size
+	if silhouette_material.albedo_texture != texture:
+		silhouette_material.albedo_texture = texture
+	var material_scale := Vector3(uv_scale.x, uv_scale.y, 1.0)
+	if silhouette_material.uv1_scale != material_scale:
+		silhouette_material.uv1_scale = material_scale
+	var material_offset := Vector3(uv_offset.x, uv_offset.y, 0.0)
+	if silhouette_material.uv1_offset != material_offset:
+		silhouette_material.uv1_offset = material_offset
+	var quad_size := cell * source.pixel_size
+	if silhouette_quad.size != quad_size:
+		silhouette_quad.size = quad_size
 	var center := source.offset
 	if not source.centered: center += cell * 0.5
 	var camera_basis := scene_camera.global_basis.orthonormalized().scaled(source.global_basis.get_scale())
@@ -88,9 +100,12 @@ func sync_pose() -> bool:
 		var right := Vector3(camera_right.x, 0.0, camera_right.z).normalized()
 		var vertical_scale := scene_camera.global_basis.y.normalized().y
 		if right.length_squared() < 0.5 or vertical_scale < 0.05:
-			hide()
+			_set_caster_visible(false)
 			return false
 		camera_basis = Basis(right, Vector3.UP * vertical_scale, right.cross(Vector3.UP)).scaled(source.global_basis.get_scale())
-	global_transform = Transform3D(camera_basis, source.global_position + camera_basis * Vector3(center.x, -center.y, 0.0) * source.pixel_size)
-	visible = source.is_visible_in_tree()
+	var target_transform := Transform3D(camera_basis, source.global_position + camera_basis * Vector3(center.x, -center.y, 0.0) * source.pixel_size)
+	# Resolve the current global pose because the caster's parent can move independently.
+	if not global_transform.is_equal_approx(target_transform):
+		global_transform = target_transform
+	_set_caster_visible(source.is_visible_in_tree())
 	return true
