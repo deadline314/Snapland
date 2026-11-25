@@ -18,7 +18,7 @@ func _run() -> void:
 	await frames(7)
 	var entry_body_y: float = _world.player.position.y
 	var baseline: Dictionary = _world.map_snapshot()
-	check(Routes.supports("nightmarket") and Routes.threshold("nightmarket") == 6 and not Routes.supports("circus"),
+	check(Routes.supports("nightmarket") and Routes.threshold("nightmarket") == 6 and not Routes.supports("toy"),
 		"same-batch access uses six cards and preserves later gates")
 	check(baseline.region == "nightmarket" and baseline.operating and baseline.points.size() == 7 + Catalog.definitions("nightmarket").size()
 		and baseline.land.size() == 7 and not baseline.covered, "world declares its real terrain and uses a stable set of points")

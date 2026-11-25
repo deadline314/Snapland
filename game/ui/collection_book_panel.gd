@@ -230,6 +230,8 @@ func _refresh_book() -> void:
 	var entries := _entries()
 	if _region=="nightmarket" and entries.is_empty():
 		_empty_message.text="霓虹夜市目前可自由探索，拍貼活動準備中。"
+	elif _region=="circus" and entries.is_empty():
+		_empty_message.text="鏡之馬戲團已開放探索，拍貼活動準備中。"
 	var capacity := _page_capacity()
 	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
 	_page=clampi(_page,0,page_count-1)

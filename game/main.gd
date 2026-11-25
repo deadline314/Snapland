@@ -3,6 +3,7 @@ const WorldScene = preload("res://game/world/park_world.gd")
 const HarborWorld = preload("res://game/world/harbor_world.gd")
 const CandyWorld = preload("res://game/world/candy_world.gd")
 const NightmarketWorld = preload("res://game/world/nightmarket_world.gd")
+const CircusWorld = preload("res://game/world/circus_world.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Story = preload("res://game/story/story_director.gd")
@@ -131,6 +132,7 @@ func _new_region_world(region: String) -> Node3D:
 		"harbor": return HarborWorld.new()
 		"candy": return CandyWorld.new()
 		"nightmarket": return NightmarketWorld.new()
+		"circus": return CircusWorld.new()
 	return WorldScene.new()
 
 func _region_name() -> String:
@@ -1318,6 +1320,13 @@ func _interact(id: String, title: String) -> void:
 	if id=="region:welcome":
 		_travel_to_region("welcome")
 		return
+	if world_region=="circus":
+		match id:
+			"circus:mirrors": _notice("玻璃角標標示鏡像示意。兩端步道都可通行。")
+			"circus:auditorium": _notice("沿中央通道向北可到砲彈安全墊。")
+			"circus:shadow": _notice(world.switch_projection())
+			"circus:mats": _notice("安全墊向南接觀眾席，兩側可繞回帳篷入口。")
+		return
 	if world_region=="nightmarket":
 		if id.begins_with("game-") and Catalog.identity(id).get("zone", "") == world_region:
 			_show_game_info(id)
@@ -2201,10 +2210,12 @@ func _show_map() -> void:
 		if not Catalog.definitions(world_region).is_empty():
 			var games_button := Paper.button("遊戲入口",_show_region_games,modal_footer)
 			games_button.name="RegionGamesButton"
-		if world_region in ["candy", "nightmarket"]:
+		if world_region in ["candy", "nightmarket", "circus"]:
 			var return_button := Paper.button("免費返回迎賓大道",_travel_to_region.bind("welcome"),modal_footer)
 			if world_region=="nightmarket":
 				return_button.name="NightmarketReturnButton"
+			elif world_region=="circus":
+				return_button.name="CircusReturnButton"
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
 		_back(harbor_body)
 		return
@@ -2587,6 +2598,10 @@ func _show_ticket() -> void:
 		body.add_child(Paper.label(_candy_info_text()+"溫度台可觀察材料三態，不影響進度。",18,Paper.TEAL))
 	elif world_region=="nightmarket":
 		var note := Paper.label("入口合照，巷中送餐，東街烤串，屋頂掛燈，西街投幣，北街尋香及運招幌。遊戲 %d / 12 款。" % Catalog.definitions("nightmarket").size(),18,Paper.TEAL)
+		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		body.add_child(note)
+	elif world_region=="circus":
+		var note := Paper.label("西側是鏡廊，東側是影子台。沿觀眾席中央通道可到安全墊。",18,Paper.TEAL)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	var groups := GridContainer.new()

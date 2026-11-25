@@ -12,6 +12,11 @@ class TerrainChart extends Control:
 	const MARKET_MINT := Color("#abe6cd")
 	const MARKET_LANTERN := Color("#ffd1a0")
 	const MARKET_LETTERS := Color("#f0e5fc")
+	const CIRCUS_FLOORS := {
+		"entry": Color("#705872"), "mirrors": Color("#546d87"),
+		"auditorium": Color("#804f65"), "shadow": Color("#645878"), "mats": Color("#4e7976"),
+	}
+	const CIRCUS_MAP_INK := Color("#ffe2ac")
 	var data: Dictionary
 
 	func _draw() -> void:
@@ -20,6 +25,9 @@ class TerrainChart extends Control:
 		var region: String = data.get("region","harbor")
 		if region=="nightmarket":
 			_draw_market(bounds)
+			return
+		if region=="circus":
+			_draw_circus(bounds)
 			return
 		var scale_factor := minf(size.x/bounds.size.x,size.y/bounds.size.y)
 		var origin := (size-bounds.size*scale_factor)*0.5
@@ -38,6 +46,59 @@ class TerrainChart extends Control:
 			draw_string(Paper.font(),marker+Vector2(7,5),str(index+1),HORIZONTAL_ALIGNMENT_LEFT,-1,roundi(14.0*Paper.text_scale()/Paper.physical_scale(self)),Paper.INK)
 		var player: Vector3=data.player
 		draw_circle(origin+(Vector2(player.x,player.z)-bounds.position)*scale_factor,6.0,Paper.GOLD)
+
+	func _draw_circus(bounds: Rect2) -> void:
+		var unit := minf((size.x - 42.0) / bounds.size.x, (size.y - 18.0) / bounds.size.y)
+		if unit <= 0.0:
+			return
+		var plan_size := bounds.size * unit
+		var plan := Rect2((size - plan_size) * 0.5, plan_size)
+		var origin := plan.position - bounds.position * unit
+		var panel := plan.grow(7.0)
+		draw_rect(panel, Color("#291f36"))
+		draw_rect(panel, Color("#72556b"), false, 1.0)
+		for room: Dictionary in data.areas:
+			var rect: Rect2 = room.rect
+			var floor := Rect2(origin + rect.position * unit, rect.size * unit)
+			draw_rect(floor, CIRCUS_FLOORS.get(room.id, MARKET_PAVING))
+			draw_rect(floor, Color("#bc9c95"), false, 1.0)
+			_draw_circus_detail(floor, room.id)
+		var radius := clampf(unit * 1.07, 4.4, 8.0)
+		var font_size := mini(roundi(radius * 2.0), roundi(14.0 * Paper.text_scale() / Paper.physical_scale(self)))
+		for index in data.points.size():
+			var point: Dictionary = data.points[index]
+			var location: Vector3 = point.position
+			var pin := origin + Vector2(location.x, location.z) * unit
+			draw_circle(pin, radius, Color("#2e243a"), true, -1.0, true)
+			draw_circle(pin, radius * 0.38, CIRCUS_MAP_INK, true, -1.0, true)
+			draw_string(Paper.font(), pin + Vector2(radius + 2.0, font_size * 0.34), str(index + 1),
+				HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, CIRCUS_MAP_INK)
+		var player: Vector3 = data.player
+		var traveler := origin + Vector2(player.x, player.z) * unit
+		draw_circle(traveler, radius * 0.63, Color("#291f36"), true, -1.0, true)
+		draw_arc(traveler, radius * 0.74, 0.0, TAU, 14, Paper.GOLD, 1.8, true)
+		_draw_market_north(panel.position - Vector2(13.0, -8.0))
+
+	func _draw_circus_detail(floor: Rect2, room: String) -> void:
+		var detail := Color(CIRCUS_MAP_INK, 0.35)
+		var center := floor.get_center()
+		match room:
+			"mirrors", "shadow":
+				var band := Rect2(floor.position + floor.size * Vector2(0.20, 0.19), floor.size * Vector2(0.60, 0.12))
+				draw_rect(band, detail, false, 1.0)
+				if room == "mirrors":
+					for portion in [0.33, 0.66]:
+						var x := band.position.x + band.size.x * float(portion)
+						draw_line(Vector2(x, band.position.y), Vector2(x, band.end.y), detail, 1.0)
+			"auditorium":
+				var y := floor.position.y + floor.size.y * 0.20
+				for rank in 4:
+					draw_line(Vector2(floor.position.x + 2.0, y), Vector2(center.x - 4.0, y), detail, 1.0)
+					draw_line(Vector2(center.x + 4.0, y), Vector2(floor.end.x - 2.0, y), detail, 1.0)
+					y += floor.size.y * 0.18
+			"mats":
+				draw_arc(center, floor.size.y * 0.41, 0.0, TAU, 24, detail, 1.0, true)
+				draw_arc(center, floor.size.y * 0.29, 0.0, TAU, 20, detail, 1.0, true)
 
 	func _draw_market(bounds: Rect2) -> void:
 		# Keep north up while shortening depth, like a small raised street model.
@@ -175,14 +236,14 @@ func setup(value: Dictionary) -> void:
 
 func _ready() -> void:
 	var region: String = snapshot.get("region","harbor")
-	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap"}.get(region,"HarborMap")
+	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap"}.get(region,"HarborMap")
 	name=prefix+"Panel"
 	size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	size_flags_vertical=Control.SIZE_EXPAND_FILL
 	add_theme_constant_override("separation",6)
 	var status := _status_text(region)
 	var tide := Paper.label(status,18,Paper.DEEP_TEAL)
-	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status"}.get(region,"Tide"))
+	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status"}.get(region,"Tide"))
 	add_child(tide)
 	var chart := TerrainChart.new()
 	chart.name=prefix+"Terrain"
@@ -211,10 +272,12 @@ func _status_text(region: String) -> String:
 		"candy": return "材料觀察："+str(["冷 · 糖塊挺立","溫 · 糖團柔軟","熱 · 糖漿流動"][int(snapshot.temperature)])
 		"nightmarket":
 			return "%s · %s" % ["營業中" if snapshot.operating else "已收攤","你在雨棚下" if snapshot.covered else "你在露天區"]
+		"circus": return "你在" + String(snapshot.area)
 	return "漲潮 · 沙洲暫停通行" if snapshot.high_tide else "退潮 · 沙洲可以步行"
 
 func _legend_text(region: String) -> String:
 	match region:
 		"candy": return "金點：你的位置　珊瑚編號：入口、觀察台與工作台\n主輸送廊連接各工作台；溫度觀察不影響進度。返回迎賓大道永久免費。"
 		"nightmarket": return "金點是你。綠色為雨棚巷，淡紫為屋頂。\n攤街可繞行，北邊斜坡通往屋頂。返回迎賓大道免費。"
+		"circus": return "金環是你。中央通道通往北側安全墊。\n兩側步道可繞回入口，返回迎賓大道免費。"
 	return "金點：你的位置　珊瑚編號：互動地點\n環岸步道全年可通；兩端免費渡船在漲退潮都可使用。返回迎賓大道永久免費。"

@@ -231,6 +231,10 @@ func _check_map_direction(chart: Control, details: Node) -> void:
 		and west_marker.x < plaza.x and plaza.x < east_marker.x, "candy preview is the physical eastern gate in the north-up chart")
 	_check(is_same(chosen_style, east.get_theme_stylebox("normal")), "different gate selections reuse the cached style")
 	await _activate(_main.overlay.find_child("MapGate_circus",true,false) as Button)
+	var circus_point := _world_point("gate:circus")
+	_check(chart.get("destination") == circus_point and _has_label(details,"30 張") and _has_label(details,"尚未達資格"),
+		"Circus is a physical destination with its distinct ordinary-card threshold")
+	await _activate(_main.overlay.find_child("MapGate_toy",true,false) as Button)
 	var unavailable: Vector3 = chart.get("destination")
 	_check(not unavailable.is_finite() and _has_label(details,"準備中"), "the regional overview preserves future eligibility without marking a playable destination")
 
