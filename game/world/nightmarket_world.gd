@@ -64,7 +64,9 @@ func _build_region_geometry() -> void:
 	_point("nightmarket:signs", "招牌維修台 · 看營業燈", Vector3(9.6, GROUND_Y, -0.2))
 	_point("nightmarket:reset", "安全返回夜市入口", Vector3(-9.6, GROUND_Y, 1.0))
 	_point("game-037", "雨棚快遞 · 撐傘送熱餐", Vector3(0, GROUND_Y, 2.85))
+	_point("game-038", "炭火串燒 · 翻面收火", Vector3(9.15, GROUND_Y, 3.27))
 	_build_courier_stand()
+	_build_skewer_stand()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
 	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
@@ -292,6 +294,22 @@ func _build_courier_stand() -> void:
 		_box(at + Vector3(x, 1.11, 0.09), Vector3(0.36, 0.24, 0.54), Color("#cb976b"))
 	_market_lantern(at + Vector3(0, 1.39, 0), PAPER_LIGHT, 0.11)
 	_sign("雨棚快遞", at + Vector3(0, 0.13, -0.44), CORAL_NEON)
+
+func _build_skewer_stand() -> void:
+	var at := Vector3(10.58, GROUND_Y, 3.28)
+	var copper := Color("#c48056")
+	_box(at + Vector3(0, 0.48, 0), Vector3(1.79, 0.94, 1.31), Color("#453039"))
+	_box(at + Vector3(0, 1.00, 0), Vector3(1.86, 0.17, 1.39), copper)
+	_box(at + Vector3(-0.12, 1.16, 0), Vector3(1.42, 0.17, 1.05), INK)
+	var embers := _unshaded(Color("#da643f"))
+	for index in 5:
+		var x := -0.66 + index * 0.27
+		var ember := _box(at + Vector3(x, 1.24, -0.08), Vector3(0.14, 0.08, 0.34), copper)
+		ember.material_override = embers
+		_box(at + Vector3(x, 1.33, 0), Vector3(0.045, 0.065, 0.86), Color("#9b8990"))
+	_market_lantern(at + Vector3(0.71, 1.40, 0.49), PAPER_LIGHT, 0.12)
+	_sign("炭火串燒", at + Vector3(0, 0.18, -0.52), Color("#ffd28e"))
+
 
 func _build_route_markers() -> void:
 	_sign("霓虹夜市", Vector3(-0.25, GROUND_Y, 6.25), CORAL_NEON)

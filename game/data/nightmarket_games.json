@@ -12,5 +12,19 @@
     "ordinary": "把三份仍熱且乾爽的餐盒滑遞給收件人",
     "attraction_tag": "雨棚快遞站",
     "island_invitation": "露天短路雨勢大；雨棚路較長，過缺口記得開傘。到站看亮區滑遞。"
+  },
+  {
+    "id": "game-038",
+    "mode": "skewer_grill",
+    "zone": "nightmarket",
+    "local_index": 2,
+    "name": "烤串翻面",
+    "goal": "選熱區、轉烤四面，把三串都烤熟後上桌。",
+    "instructions": "A/D 選串，W 移近炭，S 移餘溫，空白鍵翻面，E 上桌或換焦串，Q 添炭，R 指定翻面幫手。也可點按畫面，手把方向鍵移位。",
+    "ordinary": "把三串食材各面烤熟且不焦後上桌",
+    "devil": "全程未添炭，讓第三串最後一面在餘溫區熟成後上桌",
+    "devil_hint": "留最後一串的一面在餘溫區收火。這局先別添炭。",
+    "attraction_tag": "炭火串燒攤",
+    "island_invitation": "四面各自受熱。近炭快，焦前可移到遠炭，用餘溫烤最後一面。"
   }
 ]

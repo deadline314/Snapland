@@ -22,6 +22,8 @@ EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
     "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
+    "skewer grill model tests": "PASS: skewer grill independent faces, charcoal zones and residual heat",
+    "skewer grill driver tests": "PASS: skewer grill keyboard, mouse, touch, controller and actual scoring",
     "rain courier model tests": "PASS: rain courier routes, dry meals, timed handoff and umbrella catch",
     "rain courier driver tests": "PASS: rain courier keyboard, mouse, touch, gamepad and score breakdown",
     "sugar draw gameplay tests": "PASS: sugar draw heat, measured strands, fold and collection",
@@ -395,6 +397,8 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
+        ("skewer grill model tests", common + ["--script", "res://game/tests/test_skewer_grill.gd"]),
+        ("skewer grill driver tests", common + ["--script", "res://game/tests/test_skewer_grill_driver.gd"]),
         ("rain courier model tests", common + ["--script", "res://game/tests/test_rain_courier.gd"]),
         ("rain courier driver tests", common + ["--script", "res://game/tests/test_rain_courier_driver.gd"]),
         ("sugar draw gameplay tests", common + ["--script", "res://game/tests/test_sugar_draw.gd"]),

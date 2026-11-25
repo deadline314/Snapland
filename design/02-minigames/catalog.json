@@ -940,14 +940,14 @@
     {
       "name": "烤串翻面",
       "core": "掌握",
-      "action": "旋轉烤串並移近遠炭區",
-      "goal": "三串各面熟透不焦",
+      "action": "A/D 選串，W 移近炭，S 移餘溫，空白鍵翻面，E 上桌或換焦串，Q 添炭，R 指定翻面幫手。也可點按畫面，手把方向鍵移位。",
+      "goal": "把三串食材各面烤熟且不焦後上桌",
       "choice": "熱區快烤或餘溫慢養",
       "feedback": "表面熟度和翻面汁光",
       "variation": "食材大小與炭區分布",
       "multi": "分管串位、可交換熟串",
       "ai": "簡單AI在寬熟窗翻指定串",
-      "demon": "用餘溫完成最後一面不添炭",
+      "demon": "全程未添炭，讓第三串最後一面在餘溫區熟成後上桌",
       "variant": "攤車轉向改火風須換熱區",
       "assist": "熟度窗口加寬、焦前暫停提示",
       "test": "所有面獨立受熱不是單條計時器",
@@ -958,8 +958,9 @@
       "reference": "catalog-b360",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「旋轉烤串並移近遠炭區」；「熱區快烤或餘溫慢養」形成取捨，以「所有面獨立受熱不是單條計時器」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "skewer_grill"
     },
     {
       "name": "燈籠繩渡",

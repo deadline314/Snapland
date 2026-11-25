@@ -35,12 +35,12 @@ func _run() -> void:
 		check(panel.current_step == 2 and not panel._shutter.disabled, "every delivered set reaches an enabled shutter: " + definition.id)
 		panel.queue_free()
 		await process_frame
-	for invalid in ["game-038", "game-120", "balloon_delivery", "park", ""]:
+	for invalid in ["game-%03d" % (Catalog.all_definitions().size() + 1), "game-999", "balloon_delivery", "park", ""]:
 		var panel = script.new()
 		panel.setup({"id":invalid}, false, lessons.get_lesson("game-001"))
 		root.add_child(panel)
 		await process_frame
-		check(panel._next.disabled and panel._shutter.disabled and not panel._status.text.is_empty(), "noncanonical target refuses capture: " + invalid)
+		check(panel._next.disabled and panel._shutter.disabled and not panel._status.text.is_empty(), "unavailable or noncanonical target refuses capture: " + invalid)
 		panel.queue_free()
 		await process_frame
 	var mismatch = script.new()

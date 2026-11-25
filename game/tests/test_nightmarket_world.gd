@@ -22,8 +22,12 @@ func _run() -> void:
 		"same-batch access uses six cards and preserves later gates")
 	check(baseline.region == "nightmarket" and baseline.operating and baseline.points.size() == 7 + Catalog.definitions("nightmarket").size()
 		and baseline.land.size() == 7 and not baseline.covered, "world declares its real terrain and uses a stable set of points")
-	for position in [Vector2(-9.6, 7.2), Vector2(-9.6, -4.3), Vector2(9.6, -4.3), Vector2(9.6, 7.2), Vector2(0, 7.2), Vector2(0, 0.7)]:
+	check(baseline.points.any(func(point: Dictionary) -> bool: return point.id == "game-038"), "real skewer stand appears on east street chart")
+	var grill_stop := Vector2(9.15, 3.27)
+	for position in [Vector2(-9.6, 7.2), Vector2(-9.6, -4.3), Vector2(9.6, -4.3), grill_stop, Vector2(9.6, 7.2), Vector2(0, 7.2), Vector2(0, 0.7)]:
 		check(await walk_to(position), "real walker reaches %s without falling" % position)
+		if position == grill_stop:
+			check(_world.nearest.get("id") == "game-038", "skewer stall is the interactable destination on foot")
 	check(_world.covered_at(_world.player.position) and _world.current_area == "雨棚巷", "central awning covers the actual walking area")
 	check(await walk_to(Vector2(0, -5.3)) and await walk_to(Vector2(0, -11.62)), "raised roof is reachable on foot over the ramp")
 	var climb: float = _world.player.position.y - entry_body_y

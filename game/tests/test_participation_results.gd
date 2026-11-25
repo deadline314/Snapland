@@ -58,6 +58,7 @@ func _run() -> void:
 			session._process(0.1)
 			move_tray.pressed = false
 			session._unhandled_input(move_tray)
+		if definition.mode == "skewer_grill": _start_skewer_heat(session)
 		if definition.mode == "rain_courier": _walk_with_courier(session)
 		if session.active_driver != null:
 			_advance_driver_to_result(session)
@@ -113,11 +114,14 @@ func _run() -> void:
 			for tick in 310:
 				if session.ended: break
 				session._process(0.25)
+		elif definition.mode == "skewer_grill":
+			_start_skewer_heat(session)
+			_advance_driver_to_result(session)
 		elif definition.mode == "rain_courier":
 			_walk_with_courier(session)
 			_advance_driver_to_result(session)
 		elif session.active_driver != null: session._driver_state["ordinary_eligible"] = true
-		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw", "rain_courier"]: session._finish(false)
+		if definition.mode not in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw", "rain_courier", "skewer_grill"]: session._finish(false)
 		_check(results.size() == before_practice + 1 and results.back().has("ordinary_eligible")
 			and not results.back().ordinary_eligible and results.back().practice, definition.id + " practice excluded explicitly")
 		session.set_practice_mode(false)
@@ -139,6 +143,11 @@ func _run() -> void:
 	_check(results.size() == before_idle + 1 and results.back().has("ordinary_eligible")
 		and not results.back().ordinary_eligible and not results.back().success and not results.back().practice,
 		"inactive formal courier expires without ordinary eligibility")
+	before_idle = results.size()
+	session.start("game-038")
+	_advance_driver_to_result(session)
+	_check(results.size() == before_idle + 1 and not results.back().ordinary_eligible and not results.back().success,
+		"inactive grill does not count as actual cooking")
 	session.free()
 	for failure in failures: push_error("FAIL: " + failure)
 	if failures.is_empty(): print("PASS: every delivered participation result, practice, cancellation and driver eligibility")
@@ -166,6 +175,15 @@ func _walk_with_courier(session: Session) -> void:
 		session._process(0.1)
 	key.pressed = false
 	session._unhandled_input(key)
+
+func _start_skewer_heat(session: Session) -> void:
+	var key := InputEventKey.new()
+	key.keycode = KEY_W
+	key.pressed = true
+	session._unhandled_input(key)
+	key.pressed = false
+	session._unhandled_input(key)
+
 
 func _check(ok: bool, message: String) -> void:
 	if not ok: failures.append(message)
