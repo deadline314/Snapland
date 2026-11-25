@@ -1,6 +1,11 @@
 extends Node
 const MainScene = preload("res://game/main.tscn")
 const Catalog = preload("res://game/core/game_catalog.gd")
+const GATE_STATUSES := {
+	"6 張 · 不消耗": ["harbor", "candy", "nightmarket"],
+	"30 張 · 準備中": ["circus", "toy", "garden"],
+	"60 張 · 準備中": ["hotel", "sky", "cinema"],
+}
 var main: Node
 var failures: Array[String] = []
 
@@ -26,16 +31,22 @@ func _run() -> void:
 		return
 	var original: Node=main.world
 	_check(main.world_region=="welcome", "fresh profile selects welcome")
-	_check(_labels3d(main.world).contains("6 張 · 不消耗") and _labels3d(main.world).count("準備中")==7, "physical harbor gate is open while seven future gates stay truthful")
+	_check_gate_statuses()
 	_check(not main._travel_to_region("moon") and not main._travel_to_region("welcome"), "unknown/same destinations do nothing")
 	for index in range(1,6): Progress.photos["photo-welcome-game-%d"%index]={}
 	_check(not main._travel_to_region("harbor") and not main._travel_to_region("candy") and main.world==original, "five ordinary cards cannot enter either delivered gate")
 	main._interact("gate:candy","糖果工廠")
 	_check(_labels(main.overlay).contains("還差 1 張") and main.overlay.find_child("TravelCandyButton",true,false)==null, "candy gate explains the exact ordinary-card difference")
 	main._close()
+	original.interaction_requested.emit("gate:nightmarket", "霓虹夜市")
+	_check(_labels(main.overlay).contains("還差 1 張") and main.overlay.find_child("TravelNightmarketButton", true, false) == null,
+		"Nightmarket gate shows the missing card and offers no travel")
+	main._close()
 	Progress.photos["photo-welcome-devil-1"]={}
 	Progress.photos["postcard-time-dawn"]={}
 	_check(not main._travel_to_region("harbor") and not main._travel_to_region("candy"), "devil cards and postcards do not replace six ordinary cards")
+	_check(not main._travel_to_region("nightmarket") and main.world == original and Progress.current_region == "welcome",
+		"five ordinary cards plus devil and postcard collections cannot enter Nightmarket")
 	# A sixth card from a different region proves admission uses the global count.
 	Progress.photos["photo-harbor-game-1"]={}
 	_check(Progress.normal_count()==6 and Progress.normal_count_for_zone("welcome")==5, "global threshold fixture is distinct and regional")
@@ -65,6 +76,8 @@ func _run() -> void:
 	_check(Progress.set_appearance_batch({"skin":"olive","species":"elf","gender":"female","hair":"bob","hair_color":"silver","face":"smiling"}), "nondefault current look saves")
 	_check(Progress.equip_clothing("outfit-rainvest"), "current owned outfit saves")
 	var before := _snapshot()
+	await _nightmarket_trip(before)
+	original = main.world
 	main._interact("gate:harbor","潮汐碼頭")
 	var travel: Button=main.overlay.find_child("TravelHarborButton",true,false)
 	_check(travel!=null, "qualified gate has an explicit travel button")
@@ -144,6 +157,33 @@ func _run() -> void:
 		await _dispose()
 	await _failure_process()
 	await _finish()
+
+func _check_gate_statuses() -> void:
+	for expected: String in GATE_STATUSES:
+		for region: String in GATE_STATUSES[expected]:
+			var label := main.world.get_node_or_null("GateStatus_" + region) as Label3D
+			_check(label != null and label.text == expected, "physical %s gate shows %s" % [region, expected])
+
+func _nightmarket_trip(before: Dictionary) -> void:
+	var welcome: Node = main.world
+	welcome.interaction_requested.emit("gate:nightmarket", "霓虹夜市")
+	var travel := main.overlay.find_child("TravelNightmarketButton", true, false) as Button
+	_check(travel != null and travel.tooltip_text.contains("不消耗"), "six-card Nightmarket gate offers free travel")
+	if travel == null:
+		main._close()
+		return
+	travel.pressed.emit()
+	await _frames(4)
+	var reached: bool = main.world_region == "nightmarket" and Progress.current_region == "nightmarket"
+	_check(reached and not is_instance_valid(welcome) and _world_count() == 1 and _snapshot() == before,
+		"Nightmarket gate enters the saved market without changing collections or rewards")
+	if not reached:
+		return
+	var market: Node = main.world
+	market.interaction_requested.emit("region:welcome", "返回迎賓大道")
+	await _frames(4)
+	_check(main.world_region == "welcome" and Progress.current_region == "welcome" and not is_instance_valid(market)
+		and _world_count() == 1 and _snapshot() == before, "Nightmarket returns freely and preserves the collection")
 
 func _candy_trips(before: Dictionary) -> void:
 	for trip in range(2):
@@ -420,11 +460,6 @@ func _world_count() -> int:
 	for child in main.get_children():
 		if child is Node3D: count+=1
 	return count
-
-func _labels3d(node: Node) -> String:
-	var text := str(node.text) if node is Label3D else ""
-	for child in node.get_children(): text+=_labels3d(child)
-	return text
 
 func _labels(node: Node) -> String:
 	var text := str(node.text) if node is Label else ""
