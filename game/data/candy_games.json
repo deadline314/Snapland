@@ -152,5 +152,19 @@
     "ordinary": "讓三桶原料跨越熱槽並送達接收台",
     "attraction_tag": "汽泡廠井",
     "island_invitation": "裝桶後踩泵至綠帶，看熱槽預告再放籃。雙桶可在紫色分流段分泡。"
+  },
+  {
+    "id": "game-036",
+    "mode": "sugar_draw",
+    "zone": "candy",
+    "local_index": 12,
+    "name": "熔糖抽絲",
+    "goal": "控溫並調整拉速，讓每段糖絲的粗細和長度符合配方。",
+    "instructions": "按住 A/S/D 選慢、穩或快拉，W 加熱，空白鍵收段，F 回折，X 退料，R 控溫輔助。也可用畫面按鈕。",
+    "devil_hint": "在粗絲段快拉，累積兩倍原長。回折後的絲徑符合目標時按 F。",
+    "devil": "把兩倍長的過細絲回折成合格雙股，再完成三段糖絲",
+    "ordinary": "連續完成三段指定粗細與長度的糖絲",
+    "attraction_tag": "熔糖抽絲台",
+    "island_invitation": "看配方選拉速，滿長收段。過細絲滿兩倍長時可回折。"
   }
 ]

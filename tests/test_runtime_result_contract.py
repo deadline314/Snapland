@@ -280,6 +280,7 @@ JELLY_SUITES = {
 }
 COTTON_SUITES = {
     "bean seesaw gameplay tests": ("test_bean_seesaw.gd", "Bean seesaw gameplay: 38 checks, 0 failures"),
+    "sugar draw gameplay tests": ("test_sugar_draw.gd", "PASS: sugar draw heat, measured strands, fold and collection"),
     "bubble lift gameplay tests": ("test_bubble_lift.gd", "PASS: bubble lift cargo, heat windows, split delivery and collection"),
     "paper glide gameplay tests": ("test_paper_glide.gd", "PASS: paper glide folding, moving windows, wingtip braking and collection"),
     "filling press gameplay tests": ("test_filling_press.gd", "PASS: filling press timing, rebound, controls and results"),
@@ -296,7 +297,7 @@ DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES | CHO
 class RegionalDriverRunnerTests(unittest.TestCase):
     def test_driver_suites_are_registered_once_with_exact_entrypoints(self) -> None:
         checks = build_checks("fixture-godot")
-        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup ", "jelly ", "chocolate ", "cotton ", "bean seesaw ", "ice slide ", "filling press ", "paper glide ", "bubble lift "))]
+        drivers = [(label, command) for label, command in checks if label.startswith(("sugar ", "cookie ", "syrup ", "jelly ", "chocolate ", "cotton ", "bean seesaw ", "ice slide ", "filling press ", "paper glide ", "bubble lift ", "sugar draw "))]
         self.assertEqual(len(drivers), len(DRIVER_SUITES))
         self.assertEqual({label for label, _ in drivers}, set(DRIVER_SUITES))
         for label, command in drivers:

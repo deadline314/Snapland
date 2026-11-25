@@ -414,6 +414,7 @@ func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Diction
 	if not devil and game.mode == "filling_press": instructions="實際雙側按壓後自然結算即可收藏。"
 	if not devil and game.mode == "paper_glide": instructions="投出紙機並飛離試飛台後，自然結算即可收藏。"
 	if not devil and game.mode == "bubble_lift": instructions="讓泡籃離台運行後，自然結算即可收藏。"
+	if not devil and game.mode == "sugar_draw": instructions="實際拉出糖絲後，自然結算即可收藏。"
 	instructions += "｜%s · 固定遊戲亭：%s · %s" % [{"welcome":"迎賓大道","harbor":"潮汐碼頭","candy":"糖果工廠"}.get(identity.zone,"迎賓大道"),game.name,photo_id]
 	if _progress.photos.has(photo_id):
 		var record: Dictionary = _progress.photos[photo_id]

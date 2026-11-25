@@ -84,8 +84,8 @@ class GameTests(unittest.TestCase):
                     v.validate_games(broken, self.refs)
 
     def test_unbuilt_games_cannot_claim_runtime(self):
-        self.data['games'][35]['implementation'] = 'single_player_runtime_needs_full_acceptance'
-        with self.assertRaisesRegex(ValueError, 'game-036.*scope'):
+        self.data['games'][36]['implementation'] = 'single_player_runtime_needs_full_acceptance'
+        with self.assertRaisesRegex(ValueError, 'game-037.*scope'):
             v.validate_games(self.data, self.refs)
 
     def test_prototypes_must_be_six_distinct_existing_games(self):
@@ -146,13 +146,13 @@ class GameTests(unittest.TestCase):
         harbor = v.load(ROOT, 'game/data/harbor_games.json')
         v.validate_runtime_game_alignment(self.data, runtime, harbor, self.candy)
         prefix = self.candy[:-1]
-        eleventh = self.candy[-1]
+        twelfth = self.candy[-1]
         for candy in ([], prefix, [self.candy[1], self.candy[0], *self.candy[2:]],
-                      prefix + [dict(eleventh, id='game-036')],
-                      prefix + [dict(eleventh, zone='harbor')],
-                      prefix + [dict(eleventh, local_index=10)],
-                      prefix + [dict(eleventh, id='game-029')],
-                      self.candy + [dict(eleventh, id='game-036', local_index=12)]):
+                      prefix + [dict(twelfth, id='game-037')],
+                      prefix + [dict(twelfth, zone='harbor')],
+                      prefix + [dict(twelfth, local_index=11)],
+                      prefix + [dict(twelfth, id='game-029')],
+                      self.candy + [dict(twelfth, id='game-037', local_index=13)]):
             with self.subTest(candy=candy):
                 with self.assertRaisesRegex(ValueError, 'delivered candy runtime coverage'):
                     v.validate_runtime_game_alignment(self.data, runtime, harbor, candy)
@@ -184,7 +184,7 @@ class GameTests(unittest.TestCase):
     def test_candy_runtime_rules_cannot_drift(self):
         runtime = v.load(ROOT, 'game/data/welcome_games.json')
         harbor = v.load(ROOT, 'game/data/harbor_games.json')
-        for index in range(24, 35):
+        for index in range(24, 36):
             for field in ('name', 'action', 'goal', 'demon', 'runtime_mode'):
                 with self.subTest(game=index + 1, field=field):
                     broken = copy.deepcopy(self.data)

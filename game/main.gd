@@ -1471,6 +1471,9 @@ func _show_game_rules(id: String) -> void:
 	elif definition.mode == "bubble_lift":
 		notes[3].text = "讓泡籃離台運行後，正式回合自然結算可取普通拍貼。完成三桶才通關。"
 		notes[4].text = "輔助讓失效的泡籃緩降回收並放寬接收高度。R 在確認載重後，跟隨你的踩泵補力。"
+	elif definition.mode == "sugar_draw":
+		notes[3].text = "實際拉出糖絲後，正式回合自然結算可取普通拍貼。完成三段才通關。"
+		notes[4].text = "輔助放寬絲徑容差，斷絲時保留已完成段落。R 切換安全溫區加熱。"
 	_content_pager(objective_card,"GameRulesExtraDetails",notes,_render_game_rules_page,1,entry_stamp)
 	var row := HFlowContainer.new()
 	row.name="GameRulesActions"

@@ -22,6 +22,7 @@ EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
     "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
+    "sugar draw gameplay tests": "PASS: sugar draw heat, measured strands, fold and collection",
     "bubble lift gameplay tests": "PASS: bubble lift cargo, heat windows, split delivery and collection",
     "paper glide gameplay tests": "PASS: paper glide folding, moving windows, wingtip braking and collection",
     "filling press gameplay tests": "PASS: filling press timing, rebound, controls and results",
@@ -274,7 +275,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return None
         return f"{label} has no configured completion marker."
     stdout_lines = (result.stdout or "").splitlines()
-    if label.startswith(("cotton ", "bean seesaw ", "ice slide ", "filling press ", "paper glide ", "bubble lift ")):
+    if label.startswith(("cotton ", "bean seesaw ", "ice slide ", "filling press ", "paper glide ", "bubble lift ", "sugar draw ")):
         if re.search(r"ObjectDB instances leaked|still in use|resources? in use at exit", output, re.I):
             return f"{label} leaked engine objects or resources.\n{output.strip()[-6000:]}"
         completed = stdout_lines.count(marker) == 1 and output.splitlines().count(marker) == 1
@@ -387,6 +388,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
+        ("sugar draw gameplay tests", common + ["--script", "res://game/tests/test_sugar_draw.gd"]),
         ("bubble lift gameplay tests", common + ["--script", "res://game/tests/test_bubble_lift.gd"]),
         ("paper glide gameplay tests", common + ["--script", "res://game/tests/test_paper_glide.gd"]),
         ("filling press gameplay tests", common + ["--script", "res://game/tests/test_filling_press.gd"]),
