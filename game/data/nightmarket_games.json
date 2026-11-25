@@ -82,5 +82,19 @@
     "devil_hint": "最高一幅走近巷。過窄口後先煞車降架，避開低檐再推，到了中段停下換另一側。",
     "attraction_tag": "北街招幌車",
     "island_invitation": "外側寬路可降架繞行。近巷短，兩道低檐要向不同側抬。過巷行人得等間隙。"
+  },
+  {
+    "id": "game-043",
+    "mode": "pancake_fold",
+    "zone": "nightmarket",
+    "local_index": 7,
+    "name": "煎餅畫圓",
+    "goal": "把麵糊鋪成能沿折線包住配料的完整餅皮。",
+    "instructions": "WASD 調方向，Q 切傾鍋／移勺，空白鍵倒糊，R 舀放鍋邊餘糊，E 折合。也可用畫面按鈕或手把。",
+    "ordinary": "把凝固且覆蓋折線與配料的餅皮折合",
+    "devil": "用確實流至鍋邊再舀回的餘糊補出能折的耳片，並包住配料",
+    "devil_hint": "傾鍋把濕糊帶到邊緣，移勺用 R 舀起，再把餘糊放到折耳框中。等餅皮及折耳成形，按 E 折合。",
+    "attraction_tag": "西北煎台",
+    "island_invitation": "看熱點和薄孔再補糊。濕糊能流動，等餅面凝固再包餡。"
   }
 ]

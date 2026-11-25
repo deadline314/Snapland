@@ -4,6 +4,7 @@ const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const Atmosphere = preload("res://game/world/nightmarket_atmosphere.gd")
 const BOUNDS := Rect2(-12, -14.1, 24, 23.6)
 const GROUND_Y := 0.20
+const PANCAKE_ENTRY := Vector3(-8.82, GROUND_Y, -4.38)
 const BANNER_ENTRY := Vector3(6.05, GROUND_Y, -4.38)
 const SCENT_ENTRY := Vector3(-5.65, GROUND_Y, -4.35)
 const COIN_ENTRY := Vector3(-9.15, GROUND_Y, -2.18)
@@ -79,6 +80,8 @@ func _build_region_geometry() -> void:
 	_build_scent_stand()
 	_point("game-042", "招幌避碰 · 北街推車", BANNER_ENTRY)
 	_build_banner_stand()
+	_point("game-043", "煎餅畫圓 · 西北煎台", PANCAKE_ENTRY)
+	_build_pancake_stand()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
 	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
@@ -384,6 +387,21 @@ func _build_banner_stand() -> void:
 	var hem := _box(at + Vector3(0.22, 1.11, -0.09), Vector3(1.06, 0.06, 0.083), PAPER_LIGHT)
 	hem.rotation.z = banner.rotation.z
 	_sign("招幌推車", at + Vector3(0.0, 0.62, 0.44), PAPER_LIGHT)
+
+
+func _build_pancake_stand() -> void:
+	var at := Vector3(-8.82, GROUND_Y, -5.44)
+	var brass := Color("#ae7958")
+	var wood := Color("#645150")
+	_box(at + Vector3(0, 0.40, 0), Vector3(1.61, 0.80, 0.82), wood)
+	_box(at + Vector3(0, 0.83, 0), Vector3(1.74, 0.12, 0.90), STALL)
+	_cylinder(at + Vector3(-0.22, 0.96, 0.05), 0.39, 0.16, brass)
+	_cylinder(at + Vector3(-0.22, 1.06, 0.05), 0.34, 0.06, INK)
+	_cylinder(at + Vector3(0.47, 0.93, -0.22), 0.13, 0.13, MINT_NEON)
+	_cylinder(at + Vector3(0.53, 0.94, 0.17), 0.11, 0.15, PAPER_LIGHT)
+	var ladle := _box(at + Vector3(0.08, 1.08, 0.12), Vector3(0.45, 0.05, 0.05), brass)
+	ladle.rotation.y = -0.43
+	_sign("西北煎台", at + Vector3(0.06, 0.60, 0.42), PAPER_LIGHT)
 
 
 func _build_route_markers() -> void:

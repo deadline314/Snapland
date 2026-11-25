@@ -22,6 +22,8 @@ EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
     "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
+    "pancake fold driver tests": "PASS: pancake fold driver tool handoff and metered inputs",
+    "pancake fold model tests": "PASS: pancake fold batter conservation and reclaimed fold ear",
     "banner cart driver tests": "PASS: banner cart driver held controls and safe release",
     "banner cart model tests": "PASS: banner cart physical clearance, timing and delivery",
     "scent trail driver tests": "PASS: scent trail driver movement ownership and input release",
@@ -407,6 +409,8 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
+        ("pancake fold driver tests", common + ["--script", "res://game/tests/test_pancake_fold_driver.gd"]),
+        ("pancake fold model tests", common + ["--script", "res://game/tests/test_pancake_fold.gd"]),
         ("banner cart driver tests", common + ["--script", "res://game/tests/test_banner_cart_driver.gd"]),
         ("banner cart model tests", common + ["--script", "res://game/tests/test_banner_cart.gd"]),
         ("scent trail driver tests", common + ["--script", "res://game/tests/test_scent_trail_driver.gd"]),

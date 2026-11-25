@@ -1065,14 +1065,14 @@
     {
       "name": "煎餅畫圓",
       "core": "創意",
-      "action": "倒麵糊、傾鍋並補薄處",
-      "goal": "做出能包住配料的完整餅",
+      "action": "WASD 調方向，Q 切傾鍋／移勺，空白鍵倒糊，R 舀放鍋邊餘糊，E 折合。也可用畫面按鈕或手把。",
+      "goal": "把凝固且覆蓋折線與配料的餅皮折合",
       "choice": "薄脆易折或厚餅耗熱",
       "feedback": "麵糊流動與透光薄孔",
       "variation": "鍋面熱點與配料形狀",
       "multi": "一人倒糊一人傾鍋可交棒",
       "ai": "簡單AI維持中火不代修補",
-      "demon": "用鍋邊餘糊補出可折耳",
+      "demon": "用確實流至鍋邊再舀回的餘糊補出能折的耳片，並包住配料",
       "variant": "移動爐台改重力須預先留糊",
       "assist": "無焦化時限、薄區高亮紋理",
       "test": "多種餅輪廓都依覆蓋判定成功",
@@ -1083,8 +1083,9 @@
       "reference": "catalog-donut",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「倒麵糊、傾鍋並補薄處」；「薄脆易折或厚餅耗熱」形成取捨，以「多種餅輪廓都依覆蓋判定成功」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "pancake_fold"
     },
     {
       "name": "紙傘轉燈",
