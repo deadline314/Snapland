@@ -22,6 +22,7 @@ EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
     "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
+    "cart passing model tests": "PASS: cart passing full footprints and one-pocket reciprocal clearance (",
     "soup tray driver tests": "PASS: soup tray driver controls and gap approach",
     "soup tray model tests": "PASS: soup tray slosh, safe handoff and return crossing",
     "umbrella lights driver tests": "PASS: umbrella lights driver brake and detent controls",
@@ -419,6 +420,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
+        ("cart passing model tests", common + ["--script", "res://game/tests/test_cart_passing.gd"]),
         ("soup tray driver tests", common + ["--script", "res://game/tests/test_soup_tray_driver.gd"]),
         ("soup tray model tests", common + ["--script", "res://game/tests/test_soup_tray.gd"]),
         ("umbrella lights driver tests", common + ["--script", "res://game/tests/test_umbrella_lights_driver.gd"]),

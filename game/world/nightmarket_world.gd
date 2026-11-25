@@ -12,6 +12,7 @@ const ROOF_Y := 0.92
 const LANTERN_ENTRY := Vector3(4.12, ROOF_Y, -10.58)
 const UMBRELLA_ENTRY := Vector3(-3.95, ROOF_Y, -12.44)
 const SOUP_ENTRY := Vector3(-7.18, GROUND_Y, 6.52)
+const CART_PASS_ENTRY := Vector3(8.65, GROUND_Y, 6.46)
 const ENTRY := Vector3(0, GROUND_Y, 7.55)
 const STORY_POINT := Vector3(4.35, GROUND_Y, 7.55)
 const STORY_HOST := Vector3(6.0, GROUND_Y, 7.23)
@@ -88,6 +89,8 @@ func _build_region_geometry() -> void:
 	_build_pancake_stand()
 	_point("game-045", "湯碗擺渡 · 西南湯攤", SOUP_ENTRY)
 	_build_soup_stand()
+	_point("game-046", "攤車會車 · 東南卸貨巷", CART_PASS_ENTRY)
+	_build_cart_passing_stand()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
 	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
@@ -442,6 +445,21 @@ func _build_soup_stand() -> void:
 		rim.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_market_lantern(at + Vector3(-0.75, 1.38, 0.06), PAPER_LIGHT, 0.13)
 	_sign("西南湯攤", at + Vector3(0.02, 0.15, 0.49), PAPER_LIGHT)
+
+
+func _build_cart_passing_stand() -> void:
+	var dock := Vector3(9.96, GROUND_Y, 5.46)
+	var wood := Color("#77575a")
+	var brass := Color("#bf976c")
+	_box(dock + Vector3(0, 0.07, 0), Vector3(2.12, 0.14, 0.96), wood)
+	_box(dock + Vector3(0.05, 0.40, 0.12), Vector3(1.64, 0.18, 0.73), brass)
+	for side in [-1.0, 1.0]:
+		var wheel := _cylinder(dock + Vector3(side * 0.54, 0.29, 0.48), 0.19, 0.12, wood.darkened(0.35))
+		wheel.rotation.x = PI * 0.5
+		_box(dock + Vector3(side * 0.62, 0.54, 0.10), Vector3(0.40, 0.20, 0.48), brass.darkened(0.18))
+	_box(dock + Vector3(0.84, 0.54, 0.30), Vector3(0.54, 0.07, 0.11), wood)
+	_market_lantern(dock + Vector3(0.90, 1.08, 0.11), PAPER_LIGHT, 0.12)
+	_sign("東南卸貨巷", dock + Vector3(-0.12, 0.21, 0.40), PAPER_LIGHT)
 
 
 func _build_route_markers() -> void:

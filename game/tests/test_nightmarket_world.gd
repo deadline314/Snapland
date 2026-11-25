@@ -28,10 +28,13 @@ func _run() -> void:
 	var coin_stop := Vector2(World.COIN_ENTRY.x, World.COIN_ENTRY.z)
 	var scent_stop := Vector2(World.SCENT_ENTRY.x, World.SCENT_ENTRY.z)
 	var banner_stop := Vector2(World.BANNER_ENTRY.x, World.BANNER_ENTRY.z)
+	var cart_stop := Vector2(World.CART_PASS_ENTRY.x, World.CART_PASS_ENTRY.z)
 	var soup_stop := Vector2(World.SOUP_ENTRY.x, World.SOUP_ENTRY.z)
 	var pancake_stop := Vector2(World.PANCAKE_ENTRY.x, World.PANCAKE_ENTRY.z)
-	for position in [soup_stop, Vector2(-9.6, 7.2), coin_stop, Vector2(-9.6, -4.3), pancake_stop, scent_stop, banner_stop, Vector2(9.6, -4.3), grill_stop, Vector2(9.6, 7.2), Vector2(0, 7.2), Vector2(0, 0.7)]:
+	for position in [soup_stop, Vector2(-9.6, 7.2), coin_stop, Vector2(-9.6, -4.3), pancake_stop, scent_stop, banner_stop, Vector2(9.6, -4.3), grill_stop, Vector2(9.6, 7.2), cart_stop, Vector2(0, 7.2), Vector2(0, 0.7)]:
 		check(await walk_to(position), "real walker reaches %s without falling" % position)
+		if position == cart_stop:
+			check(_world.nearest.get("id") == "game-046", "southeast cart loading lane is reachable and selected on foot")
 		if position == soup_stop:
 			check(_world.nearest.get("id") == "game-045", "southwest soup stand is reachable and selected on foot")
 		if position == pancake_stop:

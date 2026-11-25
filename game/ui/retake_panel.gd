@@ -19,7 +19,7 @@ const PROPS := [
 	["lantern","sign","bench"], ["sign","lantern","visitor"], ["lantern","camera","sign"], ["sign","mailbox","visitor"], ["mascot","flower_horn","visitor"], ["bench","sign","tourist_blue"], ["mailbox","lantern","tourist_coral"], ["kite","lantern","tourist_gold"], ["flower_horn","camera","tourist_coral"], ["sign","camera","tourist_blue"], ["kite","camera","tourist_gold"], ["mailbox","camera","bench"],
 	["bench","sign","camera"], ["flower_horn","bench","camera"], ["lantern","sign","camera"], ["bench","lantern","camera"], ["sign","camera","lantern"],
 	["flower_horn","lantern","camera"], ["bench","sign","camera"], ["lantern","camera","bench"], ["camera","bench","sign"], ["kite","sign","bench"], ["lantern","mailbox","bench"], ["camera","flower_horn","bench"], ["lantern","visitor","flower_horn"],
-	["lantern","bench","sign"], ["lantern","kite","sign"], ["camera","lantern","sign"], ["lantern","bench","camera"], ["sign","bench","lantern"], ["bench","lantern","camera"], ["lantern","kite","bench"], ["bench","lantern","sign"],
+	["lantern","bench","sign"], ["lantern","kite","sign"], ["camera","lantern","sign"], ["lantern","bench","camera"], ["sign","bench","lantern"], ["bench","lantern","camera"], ["lantern","kite","bench"], ["bench","lantern","sign"], ["bench","kite","camera"],
 ]
 const PROP_LABELS := {"balloon":"氣球", "mailbox":"郵箱", "kite":"風箏", "lantern":"燈籠", "flower_horn":"花喇叭", "camera":"相機", "sign":"指示牌", "visitor":"旅人", "tourist_blue":"藍衣旅人", "tourist_coral":"珊瑚旅人", "hat":"帽子", "mascot":"吉祥物", "bench":"長椅", "tourist_gold":"金衣旅人"}
 
