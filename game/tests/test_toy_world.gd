@@ -1,6 +1,7 @@
 extends SceneTree
 
 const World = preload("res://game/world/toy_world.gd")
+const Visit = preload("res://game/story/regional_visit.gd")
 const MapPanel = preload("res://game/ui/harbor_map_panel.gd")
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
 const MOVES := ["move_left", "move_right", "move_up", "move_down"]
@@ -110,10 +111,12 @@ func _check_map() -> void:
 	root.add_child(map)
 	var locations := map.find_child("ToyMapLocations", true, false)
 	var status := map.find_child("ToyMapStatus", true, false) as Label
-	_check(snapshot.region == "toy" and snapshot.player == _world.player.position and snapshot.points.size() == 6
-		and snapshot.areas.size() == 5 and locations != null and locations.get_child_count() == 6 and status != null
+	_check(snapshot.region == "toy" and snapshot.player == _world.player.position and snapshot.points.size() == 7
+		and snapshot.areas.size() == 5 and locations != null and locations.get_child_count() == 7 and status != null
 		and status.text.contains("逐站") and map.find_child("ToyMapTerrain", true, false) != null,
 		"shared map records real player, switches and stops")
+	_check(snapshot.points.any(func(point: Dictionary) -> bool:
+		return point.id == Visit.TOY_POINT and point.position == World.STORY_POINT), "map directs to the physical story host")
 	var tracks: Array = snapshot.tracks
 	_check(tracks.size() == 2 and tracks[0][0] == tracks[1][0] and tracks[0][-1].x < tracks[1][-1].x,
 		"route map has the shared physical fork and two distinct endpoints")

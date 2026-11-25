@@ -233,7 +233,7 @@ func _refresh_book() -> void:
 	elif _region=="circus" and entries.is_empty():
 		_empty_message.text="鏡之馬戲團的小惡魔拍貼活動準備中。"
 	elif _region=="toy" and entries.is_empty():
-		_empty_message.text="發條玩具城已開放探索，拍貼活動準備中。"
+		_empty_message.text="發條玩具城的小惡魔拍貼活動準備中。"
 	var capacity := _page_capacity()
 	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
 	_page=clampi(_page,0,page_count-1)
@@ -414,7 +414,9 @@ func _category_prompt() -> String:
 	match _category:
 		"devil": return "小惡魔拍貼｜實際技巧與免費補拍分開記錄；選取缺卡進入補拍。"
 		"time": return "四時明信片｜切換園區時段，留下那一刻的實際照片。"
-		_: return "普通拍貼｜參與操作後正常結算不限勝負；選取缺卡可先練習或免費補拍。" if _region=="candy" else "普通拍貼｜正式遊玩自然結束不限勝負；選取缺卡可先練習或免費補拍。"
+		_:
+			if _region=="toy": return "普通拍貼｜往入口東側找阿浪，拍下車站合照。"
+			return "普通拍貼｜參與操作後正常結算不限勝負；選取缺卡可先練習或免費補拍。" if _region=="candy" else "普通拍貼｜正式遊玩自然結束不限勝負；選取缺卡可先練習或免費補拍。"
 
 func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Dictionary:
 	var photo_id: String = identity.devil_photo_id if devil else identity.photo_id

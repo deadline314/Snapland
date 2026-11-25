@@ -3,6 +3,7 @@ extends "res://game/world/park_world.gd"
 const TrainScript := preload("res://game/world/toy_train.gd")
 const Backdrop := preload("res://game/world/nightmarket_skyline.gdshader")
 const WorkshopApron := preload("res://game/world/toy_workshop_apron.gdshader")
+const RegionalVisit := preload("res://game/story/regional_visit.gd")
 const WORKSHOP_ART := "res://assets/world/toy-clockwork-yard.webp"
 const GROUND_Y := 0.20
 const BOUNDS := Rect2(-12.1, -10.8, 24.2, 20.3)
@@ -12,7 +13,12 @@ const SWITCH := Vector3(6.3, GROUND_Y, 2.25)
 const TRAIN := Vector3(9.5, GROUND_Y, 2.25)
 const REPAIR := Vector3(-7.6, GROUND_Y, -6.95)
 const TOWER := Vector3(0, GROUND_Y, -7.6)
+const STORY_POINT := Vector3(5.55, GROUND_Y, 5.22)
+const STORY_HOST := Vector3(5.19, GROUND_Y, 4.15)
+const STORY_GUEST := Vector3(10.73, GROUND_Y, 4.15)
 const STATION_ORIGIN := Vector3(8.1, GROUND_Y, -0.85)
+const STATION_STATUS_AT := STATION_ORIGIN + Vector3(0, 1.43, -2.50)
+const STATION_STATUS_WIDTH := 2.64
 const RAIL_TABLE := Rect2(5.42, -3.11, 5.36, 4.52)
 const AREAS: Array[Dictionary] = [
 	{"id": "entry", "label": "玩具城入口", "rect": Rect2(-4.35, 4.7, 8.7, 4.8), "tile": 4, "tint": Color("#aea18c")},
@@ -47,6 +53,15 @@ var _station_label: Label3D
 var _control_lever: MeshInstance3D
 var _clock_hour: Node3D
 var _clock_minute: Node3D
+var _story_photo_camera: Camera3D
+var _story_host_sprite: Sprite3D
+var _story_host_name: Label3D
+var _story_host_rest: Texture2D
+var _story_host_greeting: Texture2D
+var _story_host_anchor_y := 0.0
+var _story_player_visible := true
+var _story_station_status_visible := false
+var _story_hidden_labels: Array[Label3D] = []
 
 
 func _build_region_geometry() -> void:
@@ -70,6 +85,8 @@ func _build_region_geometry() -> void:
 	_point("toy:train", "列車控制 · 走停／逐站", TRAIN)
 	_point("toy:repair", "維修台 · 重置列車", REPAIR)
 	_point("toy:tower", "發條鐘樓 · 查看時鐘", TOWER)
+	_npc(STORY_HOST, STATION_TEAL, RegionalVisit.host_name(RegionalVisit.TOY))
+	_point(RegionalVisit.TOY_POINT, "玩具城迎賓 · 和阿浪合照", STORY_POINT)
 	_sync_station_controls()
 	current_area = _area_at_position(ENTRY)
 
@@ -194,7 +211,7 @@ func _build_station() -> void:
 	_tracks = _train.map_tracks()
 	for x in [-0.94, 0.94]:
 		_box(at + Vector3(x, 0.65, -2.54), Vector3(0.11, 1.27, 0.13), TIMBER)
-	_station_label = _plaque("", at + Vector3(0, 1.43, -2.50), 2.64, BRASS)
+	_station_label = _plaque("", STATION_STATUS_AT, STATION_STATUS_WIDTH, BRASS)
 	_station_label.position.z += 0.13
 	_desk_control(Vector3(SWITCH.x, GROUND_Y, 1.50), RED)
 	_desk_control(Vector3(TRAIN.x, GROUND_Y, 1.50), STATION_TEAL)
@@ -328,7 +345,111 @@ func _build_region_activities() -> void:
 
 
 func _register_npc_activity() -> void:
-	pass
+	var actor := _npc_record_for_role("announcer")
+	_story_host_sprite = actor.get("sprite") as Sprite3D
+	_story_host_name = actor.get("name_label") as Label3D
+	if _story_host_sprite == null or avatar_renderer == null:
+		return
+	_story_host_rest = _story_host_sprite.texture
+	var library: RefCounted = avatar_renderer.animation_library
+	var greeting := library.texture("announcer", "greet", "front", 4) as Texture2D
+	_story_host_greeting = _fit_npc_rest_texture(greeting) if greeting != null else _story_host_rest
+
+
+func begin_story_photo() -> bool:
+	if is_instance_valid(_story_photo_camera) or not is_instance_valid(player) or not is_instance_valid(_story_host_sprite) or avatar_renderer == null:
+		return false
+	var pose := avatar_renderer.texture(avatar_appearance, avatar_equipped, "front", 0, "photograph") as Texture2D
+	if pose == null:
+		return false
+	var center := Vector3(8.0, 1.035, 1.92)
+	_story_photo_camera = Camera3D.new()
+	_story_photo_camera.name = "ToyStationPhotoCamera"
+	_story_photo_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	_story_photo_camera.size = 7.40
+	_story_photo_camera.far = camera.far
+	_story_photo_camera.position = center + Vector3(0.36, 4.40, 9.90)
+	add_child(_story_photo_camera)
+	_story_photo_camera.look_at(center)
+	_stage_story_people(pose)
+	_set_interaction_marker(null)
+	_story_photo_camera.make_current()
+	return true
+
+
+func _stage_story_people(pose: Texture2D) -> void:
+	var camera_up := _story_photo_camera.global_basis.y.y
+	var guest := Sprite3D.new()
+	guest.name = "ToyStoryGuest"
+	guest.texture = pose
+	guest.pixel_size = avatar.pixel_size
+	guest.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	guest.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	guest.shaded = true
+	guest.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	guest.top_level = true
+	_story_photo_camera.add_child(guest)
+	guest.global_position = STORY_GUEST + Vector3.UP * sprite_ground_anchor_y(STORY_GUEST.y, STORY_GUEST.y,
+		0.0, AvatarRenderer.FEET_BASELINE, AvatarRenderer.CANVAS_SIZE.y, guest.pixel_size, camera_up)
+	_set_living_sprite_material(guest, 1, 0.0, 0.0, 0, false)
+	if is_instance_valid(avatar_contact_shadow):
+		var contact := avatar_contact_shadow.duplicate(0) as MeshInstance3D
+		contact.top_level = true
+		_story_photo_camera.add_child(contact)
+		contact.global_transform = Transform3D(avatar_contact_shadow.global_basis, STORY_GUEST + Vector3.UP * 0.008)
+
+	var host_anchor := _story_host_sprite.get_parent() as Node3D
+	_story_host_anchor_y = host_anchor.position.y
+	host_anchor.position.y = sprite_ground_anchor_y(STORY_HOST.y, STORY_HOST.y, _story_host_sprite.position.y,
+		NpcActivityScript.ACTION_FEET_ROW, NpcActivityScript.ACTION_CANVAS_SIZE.y, _story_host_sprite.pixel_size, camera_up)
+	_set_story_host_pose(_story_host_greeting)
+	_story_player_visible = player.visible
+	player.hide()
+	for label in local_sign_labels:
+		if label != _station_label:
+			_hide_story_label(label)
+	_story_station_status_visible = _station_label.visible
+	_station_label.show()
+	_hide_story_label(_story_host_name)
+
+
+func _hide_story_label(label: Label3D) -> void:
+	if is_instance_valid(label) and label.visible:
+		_story_hidden_labels.append(label)
+		label.hide()
+
+
+func end_story_photo() -> void:
+	if not is_instance_valid(_story_photo_camera):
+		return
+	camera.make_current()
+	_story_photo_camera.hide()
+	_story_photo_camera.queue_free()
+	_story_photo_camera = null
+	player.visible = _story_player_visible
+	_station_label.visible = _story_station_status_visible
+	_set_story_host_pose(_story_host_rest)
+	(_story_host_sprite.get_parent() as Node3D).position.y = _story_host_anchor_y
+	for label in _story_hidden_labels:
+		if is_instance_valid(label):
+			label.show()
+	_story_hidden_labels.clear()
+
+
+func _set_story_host_pose(texture: Texture2D) -> void:
+	if texture == null or not is_instance_valid(_story_host_sprite):
+		return
+	_story_host_sprite.texture = texture
+	var material := _story_host_sprite.material_override as ShaderMaterial
+	if material != null:
+		material.set_shader_parameter("texture_albedo", texture)
+		material.set_shader_parameter("uv_rect", Vector4(0, 0, 1, 1))
+
+
+func _physics_process(delta: float) -> void:
+	# Keep the live player's position, pose, follow camera and nearby target intact.
+	if not is_instance_valid(_story_photo_camera):
+		super._physics_process(delta)
 
 
 func _build_player_floor() -> void:
@@ -439,7 +560,7 @@ func _sync_station_controls() -> void:
 
 func _process(delta: float) -> void:
 	super._process(delta)
-	if not blocked and _train.advance(delta):
+	if not blocked and not is_instance_valid(_story_photo_camera) and _train.advance(delta):
 		_sync_station_controls()
 
 

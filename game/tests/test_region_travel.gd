@@ -326,7 +326,7 @@ func _candy_ui() -> void:
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
 	_check(selector.item_count==Routes.ORDER.size() and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
-	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,1,0]
+	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,1,1]
 	for index in Routes.ORDER.size():
 		selector.select(index)
 		selector.item_selected.emit(index)
@@ -334,7 +334,9 @@ func _candy_ui() -> void:
 		if book._region == "circus":
 			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-circus-story-1"
 				and book._entries()[0].story_region == "circus", "Circus lists only its delivered regional story source")
-	_check(_labels(book).contains("發條玩具城已開放探索") and book._entries().is_empty(), "Toy Town album has guidance without fake collectible entries")
+	_check(book._entries().size() == 1 and book._entries()[0].id == "photo-toy-story-1"
+		and book._entries()[0].story_region == "toy" and _labels(book).contains("阿浪"),
+		"Toy Town album lists its physical story and gives directions without fake collectible entries")
 	main._close()
 	main._show_tasks()
 	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")

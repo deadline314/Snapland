@@ -7,6 +7,9 @@ const NIGHTMARKET_PHOTO := "photo-nightmarket-story-1"
 const CIRCUS := "circus"
 const CIRCUS_POINT := "circus:story"
 const CIRCUS_PHOTO := "photo-circus-story-1"
+const TOY := "toy"
+const TOY_POINT := "toy:story"
+const TOY_PHOTO := "photo-toy-story-1"
 const VISITS := {
 	NIGHTMARKET: {
 		"id": NIGHTMARKET_PHOTO,
@@ -33,6 +36,19 @@ const VISITS := {
 			{"speaker": "小角", "text": "我剛練習報幕，鏡子裡的小角比我先鞠躬。"},
 			{"speaker": "主角", "text": "你們分工真好。誰負責藏尾巴？"},
 			{"speaker": "小角", "text": "尾巴才不肯排練。幕幕還在改首演的開場白，先合張照幫他試試燈吧。"},
+		],
+	},
+	TOY: {
+		"id": TOY_PHOTO,
+		"point": TOY_POINT,
+		"host": "阿浪",
+		"saved_notice": "玩具城造訪已登記，合照收進本子裡。",
+		"title": "列車倒著報到",
+		"instructions": "往玩具城入口東側找阿浪，在車站前合照。",
+		"lines": [
+			{"speaker": "阿浪", "text": "我在車頭貼了『請向前看』。列車倒回來時，只有我在倒著看。"},
+			{"speaker": "主角", "text": "難怪車長的帽子要兩面都能戴。"},
+			{"speaker": "阿浪", "text": "幕幕想借車站的鈴當首演提示。來合張照，幫他認認是哪一站！"},
 		],
 	},
 }
