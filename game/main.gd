@@ -137,7 +137,9 @@ func _new_region_world(region: String) -> Node3D:
 		"circus": return CircusWorld.new()
 		"toy": return ToyWorld.new()
 		"garden": return GardenWorld.new()
-	return WorldScene.new()
+	var welcome := WorldScene.new()
+	welcome.allow_follow_interpolation = region == "welcome"
+	return welcome
 
 func _region_name() -> String:
 	return RegionRoutes.title(world_region)

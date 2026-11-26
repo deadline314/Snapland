@@ -150,6 +150,9 @@ const WALK_STRIDE_LIMITS := Vector2(0.3, 3.0)
 const WALK_DIRECTION_HYSTERESIS := deg_to_rad(5.0)
 const WALK_DISTANCE_EPSILON := 0.0005
 const CAMERA_OFFSET := Vector3(3.5,16.5,25.0)
+const FOLLOW_CADENCE_TICKS := 30
+const FOLLOW_INTERPOLATION_START_RATIO := 1.50
+const FOLLOW_INTERPOLATION_STOP_RATIO := 1.23
 const AVATAR_WALK_SPEED := 0.55
 ## Default brisk pace. The authored art is a walk (about 1 world unit per two steps), so
 ## 1.5 keeps it near three steps a second; faster would read as a frantic walk, not a run.
@@ -160,6 +163,11 @@ var avatar_motion_speed_limit := AVATAR_WALK_SPEED
 var _avatar_careful_braking := false
 var avatar_last_physics_position := Vector3.ZERO
 var avatar_last_physics_position_valid := false
+var allow_follow_interpolation := false
+var _follow_interpolation_active := false
+var _follow_previous_root_mode := Node.PHYSICS_INTERPOLATION_MODE_INHERIT
+var _follow_sample_tick := -1
+var _follow_sample_frame := 0
 var walk_distance_phase := 0.0
 var walk_strides: Dictionary = {}
 var avatar_is_walking := false
@@ -246,6 +254,7 @@ func _build_region_activities() -> void:
 
 
 func _exit_tree() -> void:
+	_stop_follow_interpolation()
 	if is_instance_valid(island_attractions):
 		island_attractions.end_ride()
 	if is_instance_valid(npc_activity):
@@ -2320,6 +2329,61 @@ func _sync_avatar_motion_camera(discontinuous: bool = false) -> void:
 	if not avatar_motion_available or not is_instance_valid(avatar_motion_rig) or not is_instance_valid(camera): return
 	avatar_motion_rig.set_view_projection(camera.global_basis,atan2(camera.global_basis.z.x,camera.global_basis.z.z),discontinuous)
 
+func _update_follow_interpolation(riding: bool) -> void:
+	if not allow_follow_interpolation:
+		return
+	if reduced_motion or riding or avatar_motion_available:
+		_stop_follow_interpolation()
+		return
+	if blocked:
+		_follow_sample_tick = -1
+		return
+	var tick := Engine.get_physics_frames()
+	if _follow_sample_tick < 0:
+		_follow_sample_tick = tick
+		_follow_sample_frame = Engine.get_process_frames()
+		return
+	var ticks := tick - _follow_sample_tick
+	if ticks < FOLLOW_CADENCE_TICKS:
+		return
+	var frame := Engine.get_process_frames()
+	var ratio := float(frame - _follow_sample_frame) / ticks
+	_follow_sample_tick = tick
+	_follow_sample_frame = frame
+	if _follow_interpolation_active:
+		if ratio <= FOLLOW_INTERPOLATION_STOP_RATIO: _stop_follow_interpolation()
+	elif ratio >= FOLLOW_INTERPOLATION_START_RATIO:
+		_start_follow_interpolation()
+
+func _start_follow_interpolation() -> void:
+	var tree := get_tree()
+	# Respect configurations that already own physics interpolation.
+	if tree.physics_interpolation:
+		return
+	_follow_previous_root_mode = tree.root.physics_interpolation_mode
+	tree.root.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	player.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
+	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
+	tree.physics_interpolation = true
+	_follow_interpolation_active = true
+	_reset_follow_interpolation()
+
+func _stop_follow_interpolation() -> void:
+	_follow_sample_tick = -1
+	if not _follow_interpolation_active:
+		return
+	_follow_interpolation_active = false
+	var tree := get_tree()
+	tree.physics_interpolation = false
+	if is_instance_valid(player): player.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_INHERIT
+	if is_instance_valid(camera): camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_INHERIT
+	tree.root.physics_interpolation_mode = _follow_previous_root_mode
+
+func _reset_follow_interpolation() -> void:
+	if _follow_interpolation_active:
+		player.reset_physics_interpolation()
+		camera.reset_physics_interpolation()
+
 func _sync_external_avatar_reposition() -> void:
 	if not is_instance_valid(player): return
 	var current_position := player.global_position
@@ -2335,6 +2399,7 @@ func _sync_external_avatar_reposition() -> void:
 		if is_instance_valid(camera):
 			camera.position=player.position+CAMERA_OFFSET
 			camera.look_at(player.position+Vector3(0,1,0))
+			_reset_follow_interpolation()
 		player.velocity=Vector3.ZERO
 		avatar_is_walking=false
 		_avatar_careful_braking = false
@@ -2385,7 +2450,9 @@ func _physics_process(delta: float) -> void:
 	if not is_instance_valid(player): return
 	_sync_external_avatar_reposition()
 	_update_district_label_visibility()
-	if is_riding():
+	var riding := is_riding()
+	_update_follow_interpolation(riding)
+	if riding:
 		if blocked:
 			end_ride()
 		else:
@@ -2417,7 +2484,8 @@ func _physics_process(delta: float) -> void:
 	var previous_position: Vector3=player.position
 	var previous_world_position: Vector3=player.global_position
 	player.move_and_slide()
-	if _constrain_player(previous_position):
+	var recovered := _constrain_player(previous_position)
+	if recovered:
 		previous_position=player.position
 		previous_world_position=player.global_position
 	var actual_world_delta := player.global_position-previous_world_position
@@ -2504,8 +2572,12 @@ func _physics_process(delta: float) -> void:
 	if is_instance_valid(avatar_hair_rig):
 		var pixel_velocity := horizontal_delta / maxf(delta, 0.000001) / avatar.pixel_size
 		avatar_hair_rig.advance(delta, pixel_velocity, blocked)
-	camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
+	if recovered and _follow_interpolation_active:
+		camera.position = player.position + CAMERA_OFFSET
+	else:
+		camera.position=camera.position.lerp(player.position+CAMERA_OFFSET,minf(1,delta*7))
 	camera.look_at(player.position+Vector3(0,1,0))
+	if recovered: _reset_follow_interpolation()
 	if avatar_motion_available: _sync_avatar_motion_camera()
 	_update_sprite_grounding()
 	_update_npc_name_labels()
@@ -2963,6 +3035,7 @@ func _update_lamp_selection(force := false) -> void:
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
 	if reduced_motion:
+		_stop_follow_interpolation()
 		_avatar_departure_remaining = 0.0
 		_avatar_pivot_remaining = 0.0
 	if reduced_motion and avatar_action in [AVATAR_CAMERA_IDLE_ACTION, AVATAR_STOP_ACTION]:
@@ -2984,6 +3057,7 @@ func start_ride() -> bool:
 		return false
 	var started: bool = island_attractions.start_ride()
 	if started:
+		_stop_follow_interpolation()
 		avatar_is_walking=false
 		_avatar_careful_braking = false
 		avatar_action=""
