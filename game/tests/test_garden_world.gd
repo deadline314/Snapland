@@ -154,10 +154,10 @@ func _check_map() -> void:
 	root.add_child(map)
 	var locations := map.find_child("GardenMapLocations", true, false)
 	var status := map.find_child("GardenMapStatus", true, false) as Label
-	_check(snapshot.region == "garden" and snapshot.areas.size() == 4 and snapshot.points.size() == 5
+	_check(snapshot.region == "garden" and snapshot.areas.size() == 4 and snapshot.points.size() == 6
 		and snapshot.player == _world.player.position and snapshot.area == "夜芽庭" and locations != null
-		and locations.get_child_count() == 5 and status != null and status.text.contains("西植床")
-		and map.find_child("GardenMapTerrain", true, false) != null, "map reports its four physical rooms, local light, real traveler, and five pins")
+		and locations.get_child_count() == 6 and status != null and status.text.contains("西植床")
+		and map.find_child("GardenMapTerrain", true, false) != null, "map reports its four physical rooms, local light, traveler, and six real pins")
 	var water_only := Vector2(-10, 0)
 	_check(snapshot.water.has_point(water_only) and not snapshot.land.any(func(rect: Rect2) -> bool: return rect.has_point(water_only))
 		and snapshot.boardwalk.has_point(Vector2(-7.2, 0.05)) and snapshot.terraces[1].has_point(Vector2(7.13, -6.15))

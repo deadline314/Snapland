@@ -2648,7 +2648,7 @@ func _show_ticket() -> void:
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	elif world_region=="garden":
-		var note := Paper.label("在日照窗轉百葉，讓菱葉、圓葉和扇葉輪流照光。東側坡道上葉臺，外側寬路可繞行。",18,Paper.TEAL)
+		var note := Paper.label("日照窗旁可和票票合照，也能先轉百葉選光。東側坡道上葉臺，外側寬路可繞行。",18,Paper.TEAL)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	var groups := GridContainer.new()

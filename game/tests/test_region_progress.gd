@@ -129,10 +129,11 @@ func _test_diagnostics(progress: Node) -> void:
 		_check(_read_json(save_path) == original, "rollback preserves full normalized memory payload")
 		progress.load_progress()
 		_check(progress.get("current_region") == previous, "failed destination never survives reload")
-	_test_region_story_photo_rollback(progress)
+	for region in ["nightmarket", "garden"]:
+		_test_region_story_photo_rollback(progress, region)
 
-func _test_region_story_photo_rollback(progress: Node) -> void:
-	_check(progress.set_current_region("nightmarket"), "prepare the actual region for the story write")
+func _test_region_story_photo_rollback(progress: Node, region: String) -> void:
+	_check(progress.set_current_region(region), "prepare the actual region for the story write")
 	var before := FileAccess.get_file_as_string(save_path)
 	var backup := FileAccess.get_file_as_string(save_path + ".bak")
 	var previous_photos: Dictionary = progress.photos.duplicate(true)
@@ -145,7 +146,7 @@ func _test_region_story_photo_rollback(progress: Node) -> void:
 	_check(DirAccess.make_dir_absolute(save_path + ".tmp") == OK, "block the story save write")
 	changes = 0
 	progress.changed.connect(_on_changed)
-	_check(not progress.record_region_story_visit("nightmarket", thumbnail, original), "story save reports real IO failure")
+	_check(not progress.record_region_story_visit(region, thumbnail, original), "story save reports real IO failure")
 	_check(progress.photos == previous_photos and progress.visited == previous_visited and changes == 0,
 		"failed story save restores both fields without signaling")
 	_check(FileAccess.get_file_as_string(save_path) == before and FileAccess.get_file_as_string(save_path + ".bak") == backup,
@@ -162,7 +163,7 @@ func _test_diagnostic_process() -> void:
 	var expected: Array[String] = []
 	for value: Variant in INVALID_REGIONS:
 		expected.append("WARNING: Invalid 'current_region' field in progress file '%s'; using welcome." % child_path)
-	for _attempt in ROLLBACK_DESTINATIONS.size() + 1:
+	for _attempt in ROLLBACK_DESTINATIONS.size() + 2:
 		expected.append("ERROR: Cannot write progress temporary file '%s.tmp': Can't open file" % child_path)
 	var diagnostics: Array[String] = []
 	var passed := false

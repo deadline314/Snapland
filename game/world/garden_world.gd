@@ -4,12 +4,17 @@ const Louvers = preload("res://game/world/garden_louvers.gd")
 const Glass = preload("res://game/world/garden_glass.gdshader")
 const Water = preload("res://game/world/garden_water.gdshader")
 const Paving = preload("res://game/world/garden_paving.gdshader")
+const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const CANOPY_ART := "res://assets/world/garden-canopy-foliage.webp"
 const GROUND_Y := 0.20
 const LOWER_Y := 0.86
 const UPPER_Y := 1.12
 const ENTRY := Vector3(0, GROUND_Y, 7.8)
 const SWITCH := Vector3(0, GROUND_Y, 3.45)
+const STORY_POINT := Vector3(2.80, GROUND_Y, 5.56)
+const STORY_HOST := Vector3(2.82, GROUND_Y, 4.78)
+const STORY_PORTRAIT_HOST := STORY_HOST + Vector3(0.40, 0, 0)
+const STORY_GUEST := Vector3(-2.05, GROUND_Y, 4.78)
 const WETLAND := Vector3(-7.2, GROUND_Y, 0.05)
 const VINE := Vector3(7.13, UPPER_Y, -6.15)
 const BUDS := Vector3(0, GROUND_Y, -9.55)
@@ -50,6 +55,17 @@ var _buds: StandardMaterial3D
 var _bud_pool: OmniLight3D
 var _last_safe := ENTRY
 var _recoveries := 0
+var _foyer_sign: Array[MeshInstance3D] = []
+var _story_camera: Camera3D
+var _story_host_root: Node3D
+var _story_host_sprite: Sprite3D
+var _story_host_label: Label3D
+var _story_host_still: Texture2D
+var _story_host_greeting: Texture2D
+var _story_host_anchor_y := 0.0
+var _story_host_rest_at := Vector3.ZERO
+var _story_player_was_visible := true
+var _story_hidden_features: Array[Node3D] = []
 
 
 func _build_region_geometry() -> void:
@@ -68,6 +84,8 @@ func _build_region_geometry() -> void:
 	_point("garden:wetland", "濕地床 · 靠木棧道走", WETLAND)
 	_point("garden:vine", "藤蔓層 · 看葉臺", VINE)
 	_point("garden:buds", "夜芽庭 · 看夜芽", BUDS)
+	_npc(STORY_HOST, IRON, RegionalVisit.host_name(RegionalVisit.GARDEN))
+	_point(RegionalVisit.GARDEN_POINT, "溫室迎賓 · 和票票合照", STORY_POINT)
 	current_area = _area_at_position(ENTRY)
 
 
@@ -86,7 +104,7 @@ func _build_foundation() -> void:
 		var x: float = side * 2.73
 		_box(Vector3(x, GROUND_Y + 0.44, 8.78), Vector3(0.34, 0.87, 0.34), IRON)
 		_box(Vector3(x, GROUND_Y + 0.91, 8.78), Vector3(0.46, 0.10, 0.43), BRASS)
-	_sign("苔光溫室", Vector3(-2.04, 1.48, 8.74), 1.83)
+	_foyer_sign = _sign("苔光溫室", Vector3(-2.04, 1.48, 8.74), 1.83)
 	_brackets(ENTRY, BRASS)
 	_brackets(SWITCH, Color("#8b9864"))
 
@@ -319,11 +337,12 @@ func _box(at: Vector3, size: Vector3, tint: Color, solid := false) -> MeshInstan
 	return instance
 
 
-func _sign(title: String, at: Vector3, width: float) -> void:
-	_box(at, Vector3(width, 0.32, 0.075), DEEP_IRON)
-	_box(at + Vector3(0, -0.145, 0.047), Vector3(width - 0.09, 0.028, 0.027), BRASS)
+func _sign(title: String, at: Vector3, width: float) -> Array[MeshInstance3D]:
+	var plaque := _box(at, Vector3(width, 0.32, 0.075), DEEP_IRON)
+	var trim := _box(at + Vector3(0, -0.145, 0.047), Vector3(width - 0.09, 0.028, 0.027), BRASS)
 	var label := _local_label(title, at + Vector3(0, 0.015, 0.048), 22, Color("#f5e9b8"))
 	label.outline_size = 1
+	return [plaque, trim]
 
 
 func _brackets(at: Vector3, tint: Color) -> void:
@@ -340,7 +359,114 @@ func _build_region_activities() -> void:
 
 
 func _register_npc_activity() -> void:
-	pass
+	var actor := _npc_record_for_role("ticket")
+	_story_host_root = actor.get("activity_root") as Node3D
+	_story_host_sprite = actor.get("sprite") as Sprite3D
+	_story_host_label = actor.get("name_label") as Label3D
+	if not is_instance_valid(_story_host_sprite) or avatar_renderer == null:
+		return
+	_story_host_still = _story_host_sprite.texture
+	var library: RefCounted = avatar_renderer.animation_library
+	var greeting := library.texture("ticket", "greet", "front", 4) as Texture2D
+	_story_host_greeting = _fit_npc_rest_texture(greeting) if greeting != null else _story_host_still
+
+
+func begin_story_photo() -> bool:
+	if is_instance_valid(_story_camera) or not is_instance_valid(player) or not is_instance_valid(_story_host_root) \
+		or not is_instance_valid(_story_host_sprite) or avatar_renderer == null:
+		return false
+	var pose := avatar_renderer.texture(avatar_appearance, avatar_equipped, "front", 0, "photograph") as Texture2D
+	if pose == null:
+		return false
+	var center := Vector3(0.18, 1.38, 3.40)
+	_story_camera = Camera3D.new()
+	_story_camera.name = "GardenVisitPhotoCamera"
+	_story_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	_story_camera.size = 8.12
+	_story_camera.far = camera.far
+	_story_camera.position = center + Vector3(-0.70, 3.70, 9.40)
+	add_child(_story_camera)
+	_story_camera.look_at(center)
+	_mount_story_guest(pose)
+	_story_host_rest_at = _story_host_root.position
+	_story_host_root.position = STORY_PORTRAIT_HOST
+	var anchor := _story_host_sprite.get_parent() as Node3D
+	_story_host_anchor_y = anchor.position.y
+	anchor.position.y = sprite_ground_anchor_y(STORY_HOST.y, STORY_HOST.y, _story_host_sprite.position.y,
+		NpcActivityScript.ACTION_FEET_ROW, NpcActivityScript.ACTION_CANVAS_SIZE.y, _story_host_sprite.pixel_size, _story_camera.global_basis.y.y)
+	_set_story_host_texture(_story_host_greeting)
+	_story_player_was_visible = player.visible
+	player.hide()
+	for label in local_sign_labels:
+		_hide_story_feature(label)
+	for piece in _foyer_sign:
+		_hide_story_feature(piece)
+	_hide_story_feature(_story_host_label)
+	_set_interaction_marker(null)
+	_story_camera.make_current()
+	return true
+
+
+func _mount_story_guest(pose: Texture2D) -> void:
+	# The portrait renders its own still actor, leaving the live pose and ground contact intact.
+	var guest := Sprite3D.new()
+	guest.name = "GardenStoryGuest"
+	guest.texture = pose
+	guest.pixel_size = avatar.pixel_size
+	guest.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	guest.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	guest.shaded = true
+	guest.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	guest.top_level = true
+	_story_camera.add_child(guest)
+	guest.global_position = STORY_GUEST + Vector3.UP * sprite_ground_anchor_y(STORY_GUEST.y, STORY_GUEST.y,
+		0.0, AvatarRenderer.FEET_BASELINE, AvatarRenderer.CANVAS_SIZE.y, guest.pixel_size, _story_camera.global_basis.y.y)
+	_set_living_sprite_material(guest, 1, 0.0, 0.0, 0, false)
+	if is_instance_valid(avatar_contact_shadow):
+		var contact := avatar_contact_shadow.duplicate(0) as MeshInstance3D
+		contact.top_level = true
+		_story_camera.add_child(contact)
+		contact.global_transform = Transform3D(avatar_contact_shadow.global_basis, STORY_GUEST + Vector3.UP * 0.008)
+
+
+func _hide_story_feature(feature: Node3D) -> void:
+	if is_instance_valid(feature) and feature.visible:
+		_story_hidden_features.append(feature)
+		feature.hide()
+
+
+func _set_story_host_texture(texture: Texture2D) -> void:
+	if texture == null or not is_instance_valid(_story_host_sprite):
+		return
+	_story_host_sprite.texture = texture
+	var material := _story_host_sprite.material_override as ShaderMaterial
+	if material != null:
+		material.set_shader_parameter("texture_albedo", texture)
+		material.set_shader_parameter("uv_rect", Vector4(0, 0, 1, 1))
+
+
+func end_story_photo() -> void:
+	if not is_instance_valid(_story_camera):
+		return
+	camera.make_current()
+	_story_camera.hide()
+	_story_camera.queue_free()
+	_story_camera = null
+	player.visible = _story_player_was_visible
+	_set_story_host_texture(_story_host_still)
+	if is_instance_valid(_story_host_root):
+		_story_host_root.position = _story_host_rest_at
+	if is_instance_valid(_story_host_sprite):
+		(_story_host_sprite.get_parent() as Node3D).position.y = _story_host_anchor_y
+	for feature in _story_hidden_features:
+		if is_instance_valid(feature):
+			feature.show()
+	_story_hidden_features.clear()
+
+
+func _physics_process(delta: float) -> void:
+	if not is_instance_valid(_story_camera):
+		super._physics_process(delta)
 
 
 func update_collection(_photos: Dictionary) -> void:
@@ -455,7 +581,7 @@ func illuminated_bed() -> int:
 
 func _process(delta: float) -> void:
 	super._process(delta)
-	if not blocked and _louvers.moving():
+	if not blocked and not is_instance_valid(_story_camera) and _louvers.moving():
 		_louvers.advance(delta)
 
 

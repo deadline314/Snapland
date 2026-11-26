@@ -10,6 +10,9 @@ const CIRCUS_PHOTO := "photo-circus-story-1"
 const TOY := "toy"
 const TOY_POINT := "toy:story"
 const TOY_PHOTO := "photo-toy-story-1"
+const GARDEN := "garden"
+const GARDEN_POINT := "garden:story"
+const GARDEN_PHOTO := "photo-garden-story-1"
 const VISITS := {
 	NIGHTMARKET: {
 		"id": NIGHTMARKET_PHOTO,
@@ -49,6 +52,19 @@ const VISITS := {
 			{"speaker": "阿浪", "text": "我在車頭貼了『請向前看』。列車倒回來時，只有我在倒著看。"},
 			{"speaker": "主角", "text": "難怪車長的帽子要兩面都能戴。"},
 			{"speaker": "阿浪", "text": "幕幕想借車站的鈴當首演提示。來合張照，幫他認認是哪一站！"},
+		],
+	},
+	GARDEN: {
+		"id": GARDEN_PHOTO,
+		"point": GARDEN_POINT,
+		"host": "票票",
+		"saved_notice": "溫室造訪已登記，合照收進本子裡。",
+		"title": "盆栽先坐頭排",
+		"instructions": "到日照窗東南側找票票，和亮著的植床合照。",
+		"lines": [
+			{"speaker": "票票", "text": "幕幕借了三張葉形座位牌。我照順序排好，光一轉，盆栽先坐到頭排。"},
+			{"speaker": "主角", "text": "那三盆要各買一張票嗎？"},
+			{"speaker": "票票", "text": "它們算布景。幕幕說，首演要留一個亮著的座位給晚到的人。來，把今天亮著的那一床拍進去。"},
 		],
 	},
 }
