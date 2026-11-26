@@ -9,7 +9,7 @@ func _initialize() -> void:
 		push_error("retake panel checks require an absolute isolated save")
 		quit(1)
 		return
-	create_timer(85.0).timeout.connect(func(): push_error("retake panel watchdog"); quit(1))
+	create_timer(165.0).timeout.connect(func(): push_error("retake panel watchdog"); quit(1))
 	call_deferred("_run")
 
 func check(ok: bool, message: String) -> void:

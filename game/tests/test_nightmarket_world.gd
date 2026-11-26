@@ -59,6 +59,9 @@ func _run() -> void:
 	var sugar_stop := Vector2(World.SUGAR_LANTERN_ENTRY.x, World.SUGAR_LANTERN_ENTRY.z)
 	check(await walk_to(sugar_stop) and _world.nearest.get("id") == "game-047", "east rooftop sugar craft is a distinct real destination")
 	check(await walk_to(Vector2(0, lantern_stop.y)) and await walk_to(Vector2(0, -4.3)), "physical ramp also supports the descent")
+	var loadout_stop := Vector2(World.STALL_LOADOUT_ENTRY.x, World.STALL_LOADOUT_ENTRY.z)
+	check(await walk_to(Vector2(0, 7.91)) and await walk_to(loadout_stop) and _world.nearest.get("id") == "game-048",
+		"closing-time cart is reachable from the actual south walkway")
 	var node_count: int = _world.find_children("*", "", true, false).size()
 	var lit: Material = _world._stall_lights[0].material_override
 	var paving: ShaderMaterial = _world._atmosphere.paving_material()

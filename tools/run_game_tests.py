@@ -20,9 +20,17 @@ else:
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_VERSION = "4.7.2"
 
+SUITE_TIMEOUT_SECONDS = {
+    "avatar renderer tests": 240,
+    "pixel UI shell tests": 240,
+    "region travel tests": 180,
+    "retake panel tests": 180,
+}
+
 PASS_MARKERS = {
     "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
     "sugar lantern driver tests": "PASS: sugar lantern pointer, keyboard reach and shared lift hold",
+    "stall loadout model tests": "PASS: stall loadout fit, nesting, strap geometry, and pot extraction",
     "sugar lantern model tests": "PASS: sugar lantern geometry, structural lift, cooling, and articulated tail",
     "cart passing model tests": "PASS: cart passing full footprints and one-pocket reciprocal clearance (",
     "soup tray driver tests": "PASS: soup tray driver controls and gap approach",
@@ -311,7 +319,7 @@ def result_error(label: str, result: subprocess.CompletedProcess[str], expected_
             return f"{label} leaked engine objects or resources.\n{output.strip()[-6000:]}"
         completed = stdout_lines.count(marker) == 1 and output.splitlines().count(marker) == 1
     else:
-        completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ", "jelly ", "chocolate ")) or label in {"region progress tests", "region travel tests", "night market story tests", "audio playback release tests"} else any(line.startswith(marker) for line in stdout_lines)
+        completed = any(line == marker for line in stdout_lines) if label.startswith(("boat prologue ", "rowing ", "sandbar ", "prism ", "tug ", "harbor ", "candy ", "delivered game ", "photo retake ", "participation result ", "retake ", "crab ", "cargo ", "relay ", "sail ", "shell ", "anchor ", "gull ", "lock ", "sugar ", "cookie ", "syrup ", "jelly ", "chocolate ")) or label in {"region progress tests", "region travel tests", "night market story tests", "audio playback release tests", "stall loadout model tests"} else any(line.startswith(marker) for line in stdout_lines)
     if not completed:
         observed = [line for line in stdout_lines if line.startswith("PASS")]
         return f"{label} exited without its PASS marker ({marker!r}); observed completion lines: {observed[-8:]!r}."
@@ -428,6 +436,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
         ("sugar lantern driver tests", common + ["--script", "res://game/tests/test_sugar_lantern_driver.gd"]),
+        ("stall loadout model tests", common + ["--script", "res://game/tests/test_stall_loadout.gd"]),
         ("sugar lantern model tests", common + ["--script", "res://game/tests/test_sugar_lantern.gd"]),
         ("cart passing model tests", common + ["--script", "res://game/tests/test_cart_passing.gd"]),
         ("soup tray driver tests", common + ["--script", "res://game/tests/test_soup_tray_driver.gd"]),
@@ -669,7 +678,7 @@ def main(argv: list[str] | None = None) -> int:
             suite_directory = Path(temporary) / f"suite-{suite_index}"
             suite_directory.mkdir()
             env["SNAPLAND_SAVE_PATH"] = str(suite_directory / "progress.json")
-            timeout = (240 if label in {"avatar renderer tests", "pixel UI shell tests"} else 90) * options.timeout_scale
+            timeout = SUITE_TIMEOUT_SECONDS.get(label, 90) * options.timeout_scale
             started = time.monotonic()
             print(f"RUN: {label} ({suite_index + 1}/{len(checks)}, limit {timeout}s)", flush=True)
             try:

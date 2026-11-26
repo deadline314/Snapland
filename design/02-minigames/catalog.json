@@ -1190,16 +1190,16 @@
     {
       "name": "收攤套疊",
       "core": "取捨",
-      "action": "旋物、套疊並綁車架",
-      "goal": "把五件攤具裝車不超寬",
+      "action": "C 換攤具，方向鍵移到預覽格，Q 旋轉，R 換層，E 放下。F 扣帶或抽鍋，U 撤銷或解帶。可點器具再點車架。",
+      "goal": "裝好並固定五件攤具，兩條綁帶都有實際接觸",
       "choice": "留取物口或更緊密套裝",
       "feedback": "實際凸出輪廓和綁帶受力",
       "variation": "器具凹凸和先卸需求",
       "multi": "各拿一件，可固定後交棒",
       "ai": "簡單AI扶穩已套件不自動解答",
-      "demon": "先留通道再抽出底部湯鍋",
+      "demon": "保留出車口，扣帶後從底層抽出湯鍋，其餘攤具仍有承托",
       "variant": "車架翻向須借掛鉤懸置一件",
-      "assist": "無時限、旋轉吸附並可撤銷",
+      "assist": "不計時並可撤銷，仍由玩家套疊、綁帶與保留底層完整卸鍋路徑",
       "test": "裝得下但堵住先卸件不能完成",
       "presentation": "3D裝載桌面",
       "id": "game-048",
@@ -1208,8 +1208,9 @@
       "reference": "catalog-lumines",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「旋物、套疊並綁車架」；「留取物口或更緊密套裝」形成取捨，以「裝得下但堵住先卸件不能完成」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "stall_loadout"
     },
     {
       "name": "鏡面借道",
