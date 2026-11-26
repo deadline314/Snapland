@@ -25,3 +25,5 @@ python tools/verify_design.py --scope all
 python -m unittest discover -s tests -v
 
 Godot 執行專案使用 `python tools/run_game_tests.py` 驗證匯入、啟動、核心、小遊戲、劇情、音訊與整合；設定 `GODOT_BIN` 指向 Godot 4.7.2。CI 不允許缺少引擎或測試時安靜略過。直接執行會寫存檔的測試或截圖時，必須提供獨立 `SNAPLAND_SAVE_PATH`，不得使用玩家存檔。
+
+本機原生截圖用 `python tools/run_native_capture.py <場景> --out <資料夾>`：視窗在螢幕外、靜音、低優先權並使用獨立存檔；場景從 `SNAPLAND_CAPTURE_DIR` 取得輸出資料夾。引擎測試預設低優先權，量測時間時設 `SNAPLAND_TEST_PRIORITY=normal`。同時最多執行一個原生截圖。

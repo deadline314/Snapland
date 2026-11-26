@@ -149,6 +149,7 @@ def run_validated_godot(
         text=True,
         encoding="utf-8",
         errors="replace",
+        creationflags=_background_creationflags(env),
     )
     try:
         stdout, stderr = process.communicate(timeout=timeout)
@@ -161,6 +162,17 @@ def run_validated_godot(
             stderr=_prefer_output(stderr, timeout_error.stderr),
         ) from None
     return subprocess.CompletedProcess(args, process.returncode, stdout, stderr)
+
+
+def _background_creationflags(env: Mapping[str, str] | None = None) -> int:
+    """Run local engine checks below normal priority so the desktop stays responsive.
+
+    Set SNAPLAND_TEST_PRIORITY=normal to opt out (for example when timing a run).
+    """
+    source = env if env is not None else os.environ
+    if not _WINDOWS or source.get("SNAPLAND_TEST_PRIORITY", "").lower() == "normal":
+        return 0
+    return subprocess.BELOW_NORMAL_PRIORITY_CLASS
 
 
 def _stop_owned_process(process: subprocess.Popen[str]) -> tuple[str, str]:
