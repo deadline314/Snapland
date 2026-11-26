@@ -11,6 +11,7 @@ const COIN_ENTRY := Vector3(-9.15, GROUND_Y, -2.18)
 const ROOF_Y := 0.92
 const LANTERN_ENTRY := Vector3(4.12, ROOF_Y, -10.58)
 const UMBRELLA_ENTRY := Vector3(-3.95, ROOF_Y, -12.44)
+const SUGAR_LANTERN_ENTRY := Vector3(4.35, ROOF_Y, -12.95)
 const SOUP_ENTRY := Vector3(-7.18, GROUND_Y, 6.52)
 const CART_PASS_ENTRY := Vector3(8.65, GROUND_Y, 6.46)
 const ENTRY := Vector3(0, GROUND_Y, 7.55)
@@ -79,6 +80,8 @@ func _build_region_geometry() -> void:
 	_build_lantern_stand()
 	_point("game-044", "紙傘轉燈 · 西側屋頂", UMBRELLA_ENTRY)
 	_build_umbrella_stand()
+	_point("game-047", "糖畫牽線 · 東側屋頂糖燈", SUGAR_LANTERN_ENTRY)
+	_build_sugar_lantern_stand()
 	_point("game-040", "銅板借彈 · 西街桌檯", COIN_ENTRY)
 	_build_coin_stand()
 	_point("game-041", "香氣尋攤 · 北街聞香亭", SCENT_ENTRY)
@@ -460,6 +463,21 @@ func _build_cart_passing_stand() -> void:
 	_box(dock + Vector3(0.84, 0.54, 0.30), Vector3(0.54, 0.07, 0.11), wood)
 	_market_lantern(dock + Vector3(0.90, 1.08, 0.11), PAPER_LIGHT, 0.12)
 	_sign("東南卸貨巷", dock + Vector3(-0.12, 0.21, 0.40), PAPER_LIGHT)
+
+
+func _build_sugar_lantern_stand() -> void:
+	var work := Vector3(4.26, ROOF_Y, -13.74)
+	var copper := Color("#b87854")
+	var syrup := Color("#f3c56f")
+	_box(work + Vector3(0, 0.34, 0), Vector3(1.72, 0.67, 0.81), STALL)
+	_box(work + Vector3(0, 0.70, 0.11), Vector3(1.86, 0.13, 0.87), copper)
+	for side in [-1.0, 1.0]:
+		var rim := _box(work + Vector3(0, 0.785, side * 0.25 + 0.06), Vector3(1.65, 0.045, 0.06), syrup)
+		rim.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var support := _cylinder(work + Vector3(side * 0.61, 0.84, -0.12), 0.057, 0.26, copper)
+		support.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_market_lantern(work + Vector3(0.72, 1.12, 0.10), syrup, 0.14)
+	_sign("糖畫牽線", work + Vector3(-0.08, 0.17, 0.49), PAPER_LIGHT)
 
 
 func _build_route_markers() -> void:

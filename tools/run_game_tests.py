@@ -22,6 +22,8 @@ EXPECTED_VERSION = "4.7.2"
 
 PASS_MARKERS = {
     "bean seesaw gameplay tests": "Bean seesaw gameplay: 38 checks, 0 failures",
+    "sugar lantern driver tests": "PASS: sugar lantern pointer, keyboard reach and shared lift hold",
+    "sugar lantern model tests": "PASS: sugar lantern geometry, structural lift, cooling, and articulated tail",
     "cart passing model tests": "PASS: cart passing full footprints and one-pocket reciprocal clearance (",
     "soup tray driver tests": "PASS: soup tray driver controls and gap approach",
     "soup tray model tests": "PASS: soup tray slosh, safe handoff and return crossing",
@@ -422,6 +424,8 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("chocolate Session tests", common + ["--script", "res://game/tests/test_chocolate_etching_session.gd"]),
         ("chocolate Main tests", common + ["res://game/tests/test_chocolate_etching_main.tscn"]),
         ("bean seesaw gameplay tests", common + ["--script", "res://game/tests/test_bean_seesaw.gd"]),
+        ("sugar lantern driver tests", common + ["--script", "res://game/tests/test_sugar_lantern_driver.gd"]),
+        ("sugar lantern model tests", common + ["--script", "res://game/tests/test_sugar_lantern.gd"]),
         ("cart passing model tests", common + ["--script", "res://game/tests/test_cart_passing.gd"]),
         ("soup tray driver tests", common + ["--script", "res://game/tests/test_soup_tray_driver.gd"]),
         ("soup tray model tests", common + ["--script", "res://game/tests/test_soup_tray.gd"]),

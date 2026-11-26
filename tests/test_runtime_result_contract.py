@@ -291,7 +291,11 @@ COTTON_SUITES = {
     "cotton Session tests": ("test_cotton_wind_session.gd", "Cotton wind Session: 98 checks, 0 failures"),
     "cotton Main tests": ("test_cotton_wind_main.tscn", "Cotton wind Main: 70 checks, 0 failures"),
 }
-DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES | CHOCOLATE_SUITES | COTTON_SUITES
+SUGAR_LANTERN_SUITES = {
+    "sugar lantern driver tests": ("test_sugar_lantern_driver.gd", "PASS: sugar lantern pointer, keyboard reach and shared lift hold"),
+    "sugar lantern model tests": ("test_sugar_lantern.gd", "PASS: sugar lantern geometry, structural lift, cooling, and articulated tail"),
+}
+DRIVER_SUITES = SUGAR_SUITES | COOKIE_SUITES | SYRUP_SUITES | JELLY_SUITES | CHOCOLATE_SUITES | COTTON_SUITES | SUGAR_LANTERN_SUITES
 
 
 class RegionalDriverRunnerTests(unittest.TestCase):

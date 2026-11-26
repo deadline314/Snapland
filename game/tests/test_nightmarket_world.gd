@@ -56,6 +56,8 @@ func _run() -> void:
 	check(await walk_to(lantern_stop) and _world.nearest.get("id") == "game-039", "accessible rooftop lantern stand is the real interaction target")
 	var umbrella_stop := Vector2(World.UMBRELLA_ENTRY.x, World.UMBRELLA_ENTRY.z)
 	check(await walk_to(umbrella_stop) and _world.nearest.get("id") == "game-044", "west rooftop umbrella is reachable on foot")
+	var sugar_stop := Vector2(World.SUGAR_LANTERN_ENTRY.x, World.SUGAR_LANTERN_ENTRY.z)
+	check(await walk_to(sugar_stop) and _world.nearest.get("id") == "game-047", "east rooftop sugar craft is a distinct real destination")
 	check(await walk_to(Vector2(0, lantern_stop.y)) and await walk_to(Vector2(0, -4.3)), "physical ramp also supports the descent")
 	var node_count: int = _world.find_children("*", "", true, false).size()
 	var lit: Material = _world._stall_lights[0].material_override

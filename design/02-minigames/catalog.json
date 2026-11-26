@@ -1165,16 +1165,16 @@
     {
       "name": "糖畫牽線",
       "core": "創意",
-      "action": "牽糖線、挑起並合接節點",
-      "goal": "做出可整體抬起的燈獸",
+      "action": "方向鍵或 WASD 選點，E 選起點或接線。也可直接點兩個支點。Q 切換單／雙線，按住空白提起，F 回熱修接。",
+      "goal": "接齊獸身，在糖線凝固後維持一段穩定提燈",
       "choice": "細線省糖或雙線加固",
       "feedback": "凝固色紋和抬起時受力",
       "variation": "支架點與獸形空洞",
       "multi": "分畫兩半，可交接接點",
       "ai": "簡單AI夾住已凝端供牽線",
-      "demon": "用剩糖線加活動尾巴仍能抬起",
+      "demon": "用餘糖接上活動尾巴，提起同一隻燈獸時實際擺動且糖線未裂",
       "variant": "移動冷風使凝固方向交換",
-      "assist": "糖線不耗盡、可回熱重接",
+      "assist": "回熱補糖和放寬承重，仍需要真實接合、凝固與穩定提起",
       "test": "不同走線都可承住整體而非描唯一線",
       "presentation": "2D工藝俯視",
       "id": "game-047",
@@ -1183,8 +1183,9 @@
       "reference": "catalog-donut",
       "revision": "重設",
       "revision_reason": "原版缺逐款規格，重設為「牽糖線、挑起並合接節點」；「細線省糖或雙線加固」形成取捨，以「不同走線都可承住整體而非描唯一線」淘汰只換題材的方案。",
-      "implementation": "design_only_not_playtested",
-      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。"
+      "implementation": "single_player_runtime_needs_full_acceptance",
+      "demon_assist_policy": "普通與惡魔收藏均可用輔助／簡單AI取得；輔助只放寬容差和懲罰，不刪核心操作第二用途。",
+      "runtime_mode": "sugar_lantern"
     },
     {
       "name": "收攤套疊",
