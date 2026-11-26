@@ -12,6 +12,8 @@ const RIBBON_COLORS: Array[Color] = [Color("#e2795e"), Color("#e2ae4f"), Color("
 const ARCH_CENTER := Vector3(0, 0, -11)
 const ARCH_HALF_WIDTH := 4.0
 const BROADCAST_STAND := Vector3(1.9, 0, -5.7)
+const SIGN_READ_DISTANCE := 10.0
+const SIGN_SWITCH_MARGIN := 0.5
 
 var wayfinding := Wayfinding.new()
 var _status_labels: Dictionary = {}
@@ -21,6 +23,8 @@ var _entry_sign_before: Node3D
 var _entry_sign_after: Node3D
 var _outcomes := {"quest-001": false, "quest-002": false}
 var _last_signature := ""
+var _focused_sign := -1
+var _last_sign_position := Vector2.INF
 
 func configure(world: Node3D) -> void:
 	name = "StoryLandmarks"
@@ -63,6 +67,35 @@ func signpost_report() -> Array[Dictionary]:
 		report.append({"id": record.id, "position": record.position, "lines": (record.lines as Array).duplicate(), "label_text": label.text if is_instance_valid(label) else ""})
 	return report
 
+## Physical posts stay visible and solid. Only the nearby sign's status text follows the walker.
+func update_signpost_visibility(player_position: Vector3) -> void:
+	var at := Vector2(player_position.x, player_position.z)
+	if at == _last_sign_position:
+		return
+	_last_sign_position = at
+	var closest := -1
+	var closest_distance := SIGN_READ_DISTANCE
+	var focused_distance := INF
+	for index in _signpost_records.size():
+		var distance := at.distance_to(_signpost_records[index].read_position)
+		if index == _focused_sign:
+			focused_distance = distance
+		if distance <= closest_distance:
+			closest = index
+			closest_distance = distance
+	if closest == _focused_sign:
+		return
+	if focused_distance <= SIGN_READ_DISTANCE and closest_distance + SIGN_SWITCH_MARGIN >= focused_distance:
+		return
+	if _focused_sign >= 0:
+		var former: Label3D = _status_labels[_signpost_records[_focused_sign].id]
+		former.hide()
+	_focused_sign = closest
+	if closest >= 0:
+		var focused: Label3D = _status_labels[_signpost_records[closest].id]
+		focused.show()
+
+
 func _apply_outcomes() -> void:
 	if is_instance_valid(_ribbon):
 		_ribbon.visible = bool(_outcomes["quest-001"])
@@ -93,8 +126,7 @@ func _build_signpost(world: Node3D, signpost: Dictionary) -> void:
 	var base := Vector3(float(signpost.position[0]), 0, float(signpost.position[1]))
 	var root := _group("Signpost_%s" % id)
 	var entries: Array = signpost.entries
-	# A post with one pointing plank per direction; the readable text is a
-	# single billboard above it, shown only when the player is nearby.
+	# Each physical plank remains in place when the readable status moves to the next post.
 	var top := 1.1 + 0.26 * entries.size()
 	var post: MeshInstance3D = _adopt(world._cylinder(base + Vector3(0, top * 0.5, 0), 0.09, top, SIGN_WOOD, -1.0, true), root)
 	post.material_override = world._coastal_surface(1, 1.2, SIGN_WOOD.lightened(0.1))
@@ -105,12 +137,15 @@ func _build_signpost(world: Node3D, signpost: Dictionary) -> void:
 		var plank: MeshInstance3D = _adopt(world._box(base + Vector3(direction.x * 0.38, top - 0.16 - 0.26 * index, direction.y * 0.38), Vector3(0.9, 0.18, 0.06), SIGN_PLANK if index % 2 == 0 else SIGN_PLANK.darkened(0.12)), root)
 		plank.material_override = world._coastal_surface(6, 0.9, SIGN_PLANK if index % 2 == 0 else SIGN_PLANK.darkened(0.12))
 		plank.rotation.y = -atan2(direction.y, direction.x)
-	var board: Label3D = _adopt(world._local_label("", base + Vector3(0, top + 1.25, 0.1), 32, Color("#fff4d6")), root)
+	var board: Label3D = _adopt(world._label("", base + Vector3(0, top + 1.25, 0.1), 32, Color("#fff4d6")), root)
 	board.name = "SignText"
 	board.outline_size = 10
 	board.line_spacing = 3.0
+	board.visibility_range_end = 0.0
+	board.hide()
 	_status_labels[id] = board
-	_signpost_records.append({"id": id, "title": str(signpost.get("title", "")), "position": base, "entries": entries, "lines": []})
+	_signpost_records.append({"id": id, "title": str(signpost.get("title", "")), "position": base,
+		"read_position": Vector2(base.x, base.z), "entries": entries, "lines": []})
 
 ## Screen arrows map to island directions: up-screen is -Z (into the park).
 static func _arrow_vector(arrow: String) -> Vector2:

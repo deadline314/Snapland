@@ -721,6 +721,8 @@ func _update_district_label_visibility() -> void:
 		var dx := label.global_position.x-player_x
 		var dz := label.global_position.z-player_z
 		label.visible=dx*dx+dz*dz<=100.0
+	if is_instance_valid(story_landmarks):
+		story_landmarks.update_signpost_visibility(player.position)
 
 ## Interaction markers float above the 2.4-unit character sprites so they never cover a
 ## face; low attraction props pass their own smaller height.

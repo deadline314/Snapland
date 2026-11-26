@@ -295,6 +295,7 @@ func _check_wayfinding(world: Node) -> void:
 		for side in [-1.15, 1.15]:
 			var beside := Transform3D(world.player.global_basis, base + Vector3(side, 0.35, 1.2))
 			_check(not world.player.test_move(beside, Vector3(0.0, 0.0, -2.0)), "%s signpost leaves walking room on side %.2f" % [record.id, side])
+	_check_wayfinding_focus(world, landmarks)
 	var outcomes: Dictionary = landmarks.outcome_state()
 	_check(not outcomes.ribbon_visible and not outcomes.entry_sign_corrected, "unfinished requests leave the arch and entry sign unchanged")
 	world.set_story_progress({"story_photo": true, "steps": {"quest-001": 3, "quest-002": 3}, "next_steps": {}, "photos": {}})
@@ -305,6 +306,34 @@ func _check_wayfinding(world: Node) -> void:
 		var quest_transform := Transform3D(world.player.global_basis, quest_position + Vector3(0.0,0.3,0.0))
 		_check(not world.player.test_move(quest_transform, Vector3(0.0, 0.0, 0.7)), "%s talking space stays open beside the story props" % quest_id)
 	world.set_story_progress({"story_photo": false, "steps": {"quest-001": 0, "quest-002": 0}, "next_steps": {}, "photos": {}})
+
+func _check_wayfinding_focus(world: Node, landmarks: Node) -> void:
+	var paths := ["dock", "plaza", "avenue"]
+	var labels: Array[Label3D] = []
+	for id in paths:
+		labels.append(landmarks.get_node_or_null("Signpost_%s/SignText" % id) as Label3D)
+	if not labels.all(func(label: Label3D) -> bool: return is_instance_valid(label)):
+		_check(false, "all three existing signposts retain a separate status label")
+		return
+	var visible_ids := func() -> Array[int]:
+		var indices: Array[int] = []
+		for index in labels.size():
+			if labels[index].visible:
+				indices.append(index)
+		return indices
+	var arrivals := [23.2, 10.55, 9.10, 10.82, 11.15, -22.0, -38.0]
+	var expected := [[0], [0], [1], [1], [0], [2], []]
+	for index in arrivals.size():
+		landmarks.update_signpost_visibility(Vector3(0.0, 0.2, arrivals[index]))
+		_check(visible_ids.call() == expected[index], "one local story sign and stable handoff at z%.2f" % arrivals[index])
+	var changes: Array[bool] = []
+	labels[1].visibility_changed.connect(func() -> void: changes.append(labels[1].visible))
+	landmarks.update_signpost_visibility(Vector3(0.0, 0.2, 9.10))
+	landmarks.update_signpost_visibility(Vector3(0.0, 0.2, 9.10))
+	landmarks.update_signpost_visibility(Vector3(0.15, 0.2, 9.20))
+	_check(changes == [true] and visible_ids.call() == [1] and labels[0].text.contains("海岸環線")
+		and labels[1].text.contains("票票"), "standing and small local movement leave reading stable without losing hidden directions")
+	landmarks.update_signpost_visibility(world.player.position)
 
 func _check_illuminated_guides(world: Node) -> void:
 	var signs := world.get_node_or_null("WelcomeWayfinding") as Node3D
