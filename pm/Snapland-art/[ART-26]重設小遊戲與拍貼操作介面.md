@@ -56,7 +56,7 @@
 
 [原生驗收說明](../../design/runtime/pixel-ui-native-review.md) · [測試與全部截圖索引](images/ART-23-pixel-native-review.json) · [研究與實際來源](../../design/runtime/pixel-ui-redesign.md)。
 
-[本票畫面](images/ART-26-pixel-final-minigame-hud-1280x720-scale1.00.png) · [小尺寸畫面](images/ART-26-pixel-final-dialogue-800x450-scale1.25.png)。
+本票畫面 · 小尺寸畫面。
 
 分支：`feature/island-experience`；[本票程式與證據提交](https://github.com/deadline314/Snapland/commit/aef79b7c0a46429b80a0f2334de65e109124fcb3)。當時本機條件通過但共用分支尚未推main，故保留進行中；後續整合與本輪重驗以文末為準。
 
@@ -69,13 +69,13 @@
 
 驗收另發現舊工具只改顯示後端，雲端的Godot視窗仍停1280；第一次800／1920畫面不算尺寸通過。現在同時核對視窗、後端、固定邏輯1280×720、真實縮放0.625／1.0／1.5及輸出PNG尺寸。故意只改後端的反例會exit1明確拒絕。時段也從實際遊戲狀態核對，不以工具要求值當完成。舊Windows800／1920圖尺寸另已確認正確，不由此次雲端問題推論舊圖全失效。
 
-十四項相關UI／進度／劇情局部回歸通過，原時限及斷言保留；三程序皆exit0、0ERROR並收到真正完成行。全部99張目前畫面依本票分組，已看四票聯絡表及代表頁原尺寸。本票39張接受畫面與雜湊見[報告](images/ART-26-verify-20261020.json)。
+十四項相關UI／進度／劇情局部回歸通過，原時限及斷言保留；三程序皆exit0、0ERROR並收到真正完成行。全部99張目前畫面依本票分組，已看四票聯絡表及代表頁原尺寸。本票39張接受畫面與雜湊見報告。
 
 照片與結算在這個UI工具中是隔離的合成示例，頁面直接開啟；鍵盤、滑鼠、Esc／Tab與按下／放開經實際事件路由。這不是小遊戲通關、真人偏好、音樂試聽或效能驗收，亦不替代ART-17／18完整角色與MAIN-10當前教學資產的驗收。
 
 研究沿用[七方向實際紀錄](../../design/runtime/pixel-ui-redesign.md)，本輪重看幻想水滸傳與歧路旅人原始靜格，補讀Godot視窗、顯示後端及多解析度文件；不把參考圖當本作素材。可重用的視窗／輸出／輸入座標核對流程已補入User-guide。
 
-![三個真實尺寸的本票介面](images/ART-26-verify-20261020-overview.png)
+三個真實尺寸的本票介面（畫面已精簡）
 
 ### 遠端交付
 

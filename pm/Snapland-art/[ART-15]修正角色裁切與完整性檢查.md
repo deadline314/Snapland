@@ -50,10 +50,10 @@
 - 分支：feature/island-first-park。固定基準：[2678e7d](https://github.com/deadline314/Snapland/commit/2678e7d1640fbf62e08f032019263ec39891ee74)。
 
 ### 截圖
-![原回報腳底裁切](images/ART-15-clipped-before.png)
-![小角完整腳掌](images/ART-15-sprite-clearance-npc-imp-third.png)
-![售票員完整鞋尖與降低動態](images/ART-15-sprite-clearance-npc-ticket-reduced.png)
-![阿浪完整腳掌與降低動態](images/ART-15-sprite-clearance-npc-announcer-reduced.png)
+原回報腳底裁切（畫面已精簡）
+小角完整腳掌（畫面已精簡）
+售票員完整鞋尖與降低動態（畫面已精簡）
+阿浪完整腳掌與降低動態（畫面已精簡）
 
 Windows 輸出以 Intel Arc B580 原生 GPU 檢查角色、NPC、場景動畫與遮擋素材載入通過；這是打包冒煙檢查，不是輸出版本完整逐姿勢畫面驗收。
 
@@ -67,10 +67,10 @@ Windows 輸出以 Intel Arc B580 原生 GPU 檢查角色、NPC、場景動畫與
 
 800×450、1280×720、1920×1080各27個原生案例及獨立PCK27個案例，人物可見範圍均沒有被覆蓋；保留完整來源、足底、材質、鏡頭、降低動態及恢復檢查。四個受影響局部套件通過。正常20FPS影片9.6秒、四分之一速度37秒，模型／影片時間比例實測1.0／0.25；實際看過每四分之一模型秒的70張全身抽格及16張實際呈現的不同姿勢，沒有把抽格寫成完整連續播放或真人操作。本票按完整性範圍結案。
 
-[六方文字比較及方法](../../design/runtime/sprite-rendered-clearance.md) · [完整驗收範圍／雜湊](images/ART-15-clearance-20261020-verification.json) · [正常速度短片](images/ART-15-clearance-20261020-motion-normal-play.mp4) · [真正四分之一速度](images/ART-15-clearance-20261020-motion-quarter-play.mp4)。PCK為Windows Desktop預設匯出的資源包，在Linux Compatibility實際播放，沒有宣稱Windows EXE或聽感驗收。
+[六方文字比較及方法](../../design/runtime/sprite-rendered-clearance.md) · [完整驗收範圍／雜湊](images/ART-15-clearance-20261020-verification.json) · 正常速度短片 · 真正四分之一速度。PCK為Windows Desktop預設匯出的資源包，在Linux Compatibility實際播放，沒有宣稱Windows EXE或聽感驗收。
 
-![本輪修正前：花台擋住小角左腳與左側](images/ART-15-clearance-20261020-before-npc-imp-third.png)
-![本輪修正後：完整手腳與輪廓](images/ART-15-clearance-20261020-1280x720-npc-imp-third.png)
-![三位NPC、主角八向與動作完整性](images/ART-15-clearance-20261020-pack-overview.png)
+本輪修正前：花台擋住小角左腳與左側（畫面已精簡）
+本輪修正後：完整手腳與輪廓（畫面已精簡）
+三位NPC、主角八向與動作完整性（畫面已精簡）
 
 本輪交付：[573f95f](https://github.com/deadline314/Snapland/commit/573f95f60e340697a7c761aa1c185fb14427a526)，已快轉整合main並確認本機與origin/main一致。

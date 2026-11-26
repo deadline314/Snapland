@@ -75,8 +75,8 @@
 - 分支：`feature/island-first-park`；[遠端提交 9645e6b](https://github.com/deadline314/Snapland/commit/9645e6b)。
 
 ### 截圖
-![暫停與分數操作](images/ART-21-pause.png)
-![分數明細](images/ART-21-score-details.png)
+暫停與分數操作（畫面已精簡）
+分數明細（畫面已精簡）
 
 # Commit-2
 
@@ -157,13 +157,13 @@ HUD 專項檢查 69 項通過，Main 整合檢查通過。隔離存檔的原生�
 
 ### 畫面
 
-[原生操作影片](images/ART-21-final-native.mp4)
+原生操作影片
 
-![十二款標準尺寸遊玩畫面](images/ART-21-final-playing-12.png)
-![三款縮小視窗操作畫面](images/ART-21-final-compact-3games.png)
-![縮小後恢復標準尺寸的暫停畫面](images/ART-21-final-restored-pause.png)
+十二款標準尺寸遊玩畫面（畫面已精簡）
+三款縮小視窗操作畫面（畫面已精簡）
+縮小後恢復標準尺寸的暫停畫面（畫面已精簡）
 
-[原生操作影片](images/ART-21-final-native.mp4)已完整播放檢視，時長 10.7167 秒。完整 57 張截圖及三張比較圖位於本票 images 目錄，檔名以 `ART-21-final-` 開頭。
+原生操作影片已完整播放檢視，時長 10.7167 秒。完整 57 張截圖及三張比較圖位於本票 images 目錄，檔名以 `ART-21-final-` 開頭。
 
 ### 提交
 
@@ -222,30 +222,30 @@ HUD 專項檢查 69 項通過，Main 整合檢查通過。隔離存檔的原生�
 
 ### 畫面與影片
 
-![第 1 款四時段及降低動態](images/ART-21-matrix-20261024-game-01.jpg)
+第 1 款四時段及降低動態（畫面已精簡）
 
-![第 2 款四時段及降低動態](images/ART-21-matrix-20261024-game-02.jpg)
+第 2 款四時段及降低動態（畫面已精簡）
 
-![第 3 款四時段及降低動態](images/ART-21-matrix-20261024-game-03.jpg)
+第 3 款四時段及降低動態（畫面已精簡）
 
-![第 4 款四時段及降低動態](images/ART-21-matrix-20261024-game-04.jpg)
+第 4 款四時段及降低動態（畫面已精簡）
 
-![第 5 款四時段及降低動態](images/ART-21-matrix-20261024-game-05.jpg)
+第 5 款四時段及降低動態（畫面已精簡）
 
-![第 6 款四時段及降低動態](images/ART-21-matrix-20261024-game-06.jpg)
+第 6 款四時段及降低動態（畫面已精簡）
 
-![第 7 款四時段及降低動態](images/ART-21-matrix-20261024-game-07.jpg)
+第 7 款四時段及降低動態（畫面已精簡）
 
-![第 8 款四時段及降低動態](images/ART-21-matrix-20261024-game-08.jpg)
+第 8 款四時段及降低動態（畫面已精簡）
 
-![第 9 款四時段及降低動態](images/ART-21-matrix-20261024-game-09.jpg)
+第 9 款四時段及降低動態（畫面已精簡）
 
-![第 10 款四時段及降低動態](images/ART-21-matrix-20261024-game-10.jpg)
+第 10 款四時段及降低動態（畫面已精簡）
 
-![第 11 款四時段及降低動態](images/ART-21-matrix-20261024-game-11.jpg)
+第 11 款四時段及降低動態（畫面已精簡）
 
-![第 12 款四時段及降低動態](images/ART-21-matrix-20261024-game-12.jpg)
+第 12 款四時段及降低動態（畫面已精簡）
 
 前後畫面保留於本票 Commit-3／4、ART-5 最終比較，以及 SG-16～27 各款交付；原生操作影片沿用本票 Commit-4 與逐款專項影片，最新候客室與路口影片見 ART-5。影片與靜格的播放速度、實際檢視範圍依各證據紀錄，不聲稱本輪連續觀看全部舊影片。
 
-[本輪結果與雜湊](images/ART-21-matrix-20261024-verification.json) · [60 張完整原圖與可重播流程](images/ART-21-matrix-20261024-raw-and-fixture.zip) · [完整原生日誌](images/ART-21-matrix-20261024-result.log)。
+本輪結果與雜湊 · [60 張完整原圖與可重播流程](images/ART-21-matrix-20261024-raw-and-fixture.zip) · 完整原生日誌。

@@ -90,11 +90,11 @@
 
 Godot 4.7.2、Compatibility／llvmpipe、Dummy 音訊，固定離線錄影節拍不作即時性能結果。NPC 根沒有被檢視程式挪動；自動報告保留 `OBSERVATIONS_COMPLETE_VISUAL_PENDING`，逐張檢查不當作真人連續觀看、遊玩或試聽。整票維持進行中。
 
-![右向停步後接近正面的收勢](images/ART-16-imp-settle-20261111-right.png)
-![左向收勢保留領巾與尾巴](images/ART-16-imp-settle-20261111-left.png)
-![回到原有完整待機](images/ART-16-imp-settle-20261111-settled.png)
+右向停步後接近正面的收勢（畫面已精簡）
+左向收勢保留領巾與尾巴（畫面已精簡）
+回到原有完整待機（畫面已精簡）
 
-[正常速度影片](images/ART-16-imp-settle-20261111-normal.mp4) · [真實四分之一速度／重入](images/ART-16-imp-settle-20261111-quarter.mp4) · [結果、版本與指紋](images/ART-16-imp-settle-20261111-review.json) · [原生姿勢、測試、失敗與打包紀錄](images/ART-16-imp-settle-20261111-evidence.zip) · [四份原畫與完整提示](images/ART-16-imp-settle-20261111-sources.zip)。起始 SHA：`5a28e44`；分支：`codex/imp-authored-settle-20261111`。角色行為覆蓋與換裝依 ART-17、ART-18 原條件分別驗收。
+正常速度影片 · 真實四分之一速度／重入 · 結果、版本與指紋 · 原生姿勢、測試、失敗與打包紀錄 · 四份原畫與完整提示。起始 SHA：`5a28e44`；分支：`codex/imp-authored-settle-20261111`。角色行為覆蓋與換裝依 ART-17、ART-18 原條件分別驗收。
 
 # Commit — 2026-11-11 補上票票停步回正面收勢
 
@@ -117,11 +117,11 @@ Godot 4.7.2、Compatibility／llvmpipe、Dummy 音訊，固定離線錄影節拍
 
 Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收勢、四分之一速度左右近正面與包內左向近正面；影片完成完整解碼檢查，不宣稱真人連續觀看、遊玩、試聽或即時性能。PCK 以相同引擎執行，不是獨立桌面執行檔。整票維持進行中。
 
-![右向收勢接近正面](images/ART-16-ticket-settle-20261111-right.png)
-![左向保留斜背包身份](images/ART-16-ticket-settle-20261111-left.png)
-![回到原有完整待機](images/ART-16-ticket-settle-20261111-settled.png)
+右向收勢接近正面（畫面已精簡）
+左向保留斜背包身份（畫面已精簡）
+回到原有完整待機（畫面已精簡）
 
-[正常影片](images/ART-16-ticket-settle-20261111-normal.mp4) · [四分之一速度／重入](images/ART-16-ticket-settle-20261111-quarter.mp4) · [降低動態](images/ART-16-ticket-settle-20261111-reduced.mp4) · [PCK 播放](images/ART-16-ticket-settle-20261111-pack.mp4) · [完整結果與來源指紋](images/ART-16-ticket-settle-20261111-review.json) · [原生姿勢、測試、初版與封裝紀錄](images/ART-16-ticket-settle-20261111-evidence.zip) · [兩版原畫與完整提示](images/ART-16-ticket-settle-20261111-sources.zip)。起始 SHA：`28fb8f7`；分支：`codex/ticket-delivery-20261111`。
+正常影片 · 四分之一速度／重入 · 降低動態 · PCK 播放 · 完整結果與來源指紋 · 原生姿勢、測試、初版與封裝紀錄 · 兩版原畫與完整提示。起始 SHA：`28fb8f7`；分支：`codex/ticket-delivery-20261111`。
 
 
 # Commit — 2026-11-12 銜接原地轉向與實際起步
@@ -146,11 +146,11 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 
 實際逐張檢視票票與小角正常左右八張起步，另檢視慢速、包內代表姿勢及阿浪中立末格。初版獨立正面圖的輪廓跳變已改正，前後對照與先失敗後通過的診斷均保存。六部影片完成完整解碼檢查。Godot 4.7.2、Windows Compatibility、Dummy 音訊、固定 30 FPS 錄影；不宣稱真人連續觀看、遊玩、試聽或即時性能。PCK 使用相同引擎執行。整票依原條件維持進行中。
 
-![票票沿用原待機開始轉身](images/ART-16-pivots-20261112-ticket-depart-right-0.png)
-![票票左向轉身中段](images/ART-16-pivots-20261112-ticket-depart-left-2.png)
-![小角右向轉身中段](images/ART-16-pivots-20261112-imp-depart-right-2.png)
+票票沿用原待機開始轉身（畫面已精簡）
+票票左向轉身中段（畫面已精簡）
+小角右向轉身中段（畫面已精簡）
 
-[票票正常](images/ART-16-pivots-20261112-ticket-normal.mp4) · [票票慢速](images/ART-16-pivots-20261112-ticket-quarter.mp4) · [票票包內](images/ART-16-pivots-20261112-ticket-pack.mp4) · [小角正常](images/ART-16-pivots-20261112-imp-normal.mp4) · [小角慢速](images/ART-16-pivots-20261112-imp-quarter.mp4) · [小角包內](images/ART-16-pivots-20261112-imp-pack.mp4) · [結果及來源指紋](images/ART-16-pivots-20261112-review.json) · [姿勢、診斷與重現紀錄](images/ART-16-pivots-20261112-evidence.zip)。起始 SHA：`702825b`；分支：`codex/npc-departures-20261112`。
+票票正常 · 票票慢速 · 票票包內 · 小角正常 · 小角慢速 · 小角包內 · 結果及來源指紋 · 姿勢、診斷與重現紀錄。起始 SHA：`702825b`；分支：`codex/npc-departures-20261112`。
 
 
 # Commit — 2026-11-12 複核並拒收步態候選
@@ -161,7 +161,7 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 
 三份圖實際檢視，透明通道、尺寸、來源及 SHA-256 已核對，封存內容可完整解壓。這是原畫研究結果，不是新增原生動畫或遊玩驗收；整票依原條件維持進行中。
 
-[三份候選、完整提示、參考與指紋](images/ART-16-walk-study-20261112-candidates.zip)。來源使用內建圖像工具；詳見[動畫品質研究](../../design/runtime/animation-quality.md)。固定基準 `4cb87f5`；分支 `codex/announcer-walk-study-20261112`。
+三份候選、完整提示、參考與指紋。來源使用內建圖像工具；詳見[動畫品質研究](../../design/runtime/animation-quality.md)。固定基準 `4cb87f5`；分支 `codex/announcer-walk-study-20261112`。
 
 # Commit — 2026-11-12 防止新原畫被舊圖覆蓋
 
@@ -179,9 +179,9 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 - 空目錄 PCK 內的素材替換與像素穩定兩組檢查通過。原生包內正常 460 格／15.333 秒、四分之一速度 1,842 格／61.400 秒、降低動態 54 格／1.800 秒；均 30 FPS、exit 0、0 ERROR。
 - 實際檢視包內右向跨步、停止站姿與慢速左向完整身形。Godot 4.7.2、AMD RX 9070 XT、Compatibility、Dummy 音訊；固定離線錄影不作即時性能、真人連續觀看、遊玩或試聽結果。
 
-![包內維持原有完整站姿](images/ART-16-source-bound-20261112-settled.png)
+包內維持原有完整站姿（畫面已精簡）
 
-[包內正常](images/ART-16-source-bound-20261112-normal-pack.mp4) · [四分之一速度](images/ART-16-source-bound-20261112-quarter.mp4) · [降低動態](images/ART-16-source-bound-20261112-reduced.mp4) · [候選固定根比較](images/ART-16-source-bound-20261112-study.mp4) · [來源、格數與指紋](images/ART-16-source-bound-20261112-review.json) · [最終正常完整姿勢、慢速代表圖、失敗與重現紀錄](images/ART-16-source-bound-20261112-evidence.zip) · [兩側候選、指南與完整提示](images/ART-16-source-bound-20261112-studies.zip)。固定基準 `f9a05ae`；分支 `codex/source-bound-walks-20261112`。
+包內正常 · 四分之一速度 · 降低動態 · 候選固定根比較 · 來源、格數與指紋 · 最終正常完整姿勢、慢速代表圖、失敗與重現紀錄 · 兩側候選、指南與完整提示。固定基準 `f9a05ae`；分支 `codex/source-bound-walks-20261112`。
 
 # Commit — 2026-11-12 核對原畫尺寸與格式
 
@@ -195,9 +195,9 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 
 空目錄包內確認主角八方向／NPC 像素、素材替換及相同資料改變排列三項檢查；正常巡路錄影 460 格／15.333 秒、30 FPS，exit 0、0 ERROR。這是原生自動檢查與截圖，沒有真人遊玩或試聽；整票維持進行中。
 
-![包內沿用原有完整走姿](images/ART-16-source-layout-20261112-native.png)
+包內沿用原有完整走姿（畫面已精簡）
 
-[來源、失敗重現、局部檢查與包內結果](images/ART-16-source-layout-20261112-evidence.zip)。固定基準 `d396e86`；分支 `codex/walk-source-layout-20261112`。
+來源、失敗重現、局部檢查與包內結果。固定基準 `d396e86`；分支 `codex/walk-source-layout-20261112`。
 
 
 # Commit — 2026-11-17 防止錯誤錨點裁掉人物
@@ -221,9 +221,9 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 
 本輪另閱讀六方文字，並以內建圖像工具製作四份阿浪步態候選。相反接觸與近側褲管／腿的連續關係仍不明確，單張亦無完整循環，四份皆未採用。尺寸、alpha、原圖、完整提示與指紋均保存；正式原畫與已批准格數保持原值。研究與共用接入流程見[原畫接入驗收](../../design/runtime/character-source-acceptance.md)。本票原有驗收條件維持未勾選，狀態仍為進行中。
 
-![原生對照：合法圖片與錯誤腳錨的裁切及完整人物回退](images/ART-16-canvas-20261117-native.png)
+原生對照：合法圖片與錯誤腳錨的裁切及完整人物回退（畫面已精簡）
 
-[結果與來源指紋](images/ART-16-canvas-20261117-review.json) · [失敗、通過、原生與包內重現證據](images/ART-16-canvas-20261117-evidence.zip) · [四份未採用候選、原提示與參考](images/ART-16-canvas-20261117-candidates.zip)。固定基準 `d7f3855`；分支 `codex/character-continuation-20261117`。
+結果與來源指紋 · 失敗、通過、原生與包內重現證據 · 四份未採用候選、原提示與參考。固定基準 `d7f3855`；分支 `codex/character-continuation-20261117`。
 
 
 # Commit — 2026-11-17 複核八相位換腳與原生銜接
@@ -246,8 +246,8 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。實際查看正常八張收
 
 逐張查看正常全片的取樣對照、慢速代表姿勢及起停圖；不是真人連續觀看、遊玩、試聽或即時性能驗收。Godot 4.7.2、Windows Compatibility、AMD Radeon RX 9070 XT、Dummy 音訊；既有材質警告與低磁碟空間警告保留。所有研究使用獨立存檔，失敗程序另保存，沒有把退出碼 0 的 SCRIPT ERROR 算成通過。
 
-![未採用候選的原生右向換腳](images/ART-16-gait-20261117-walk.png)
-![既有收勢顯示比例銜接差異](images/ART-16-gait-20261117-stop.png)
+未採用候選的原生右向換腳（畫面已精簡）
+既有收勢顯示比例銜接差異（畫面已精簡）
 
 [正常影片](images/ART-16-gait-20261117-normal.mp4) · [四分之一速度／重建](images/ART-16-gait-20261117-quarter.mp4) · [結果與指紋](images/ART-16-gait-20261117-review.json) · [原生姿勢、端點、慢速代表圖、失敗與重現紀錄](images/ART-16-gait-20261117-evidence.zip) · [二十份原件與完整提示](images/ART-16-gait-20261117-sources.zip)。研究及界線見[阿浪八相位原畫複核](../../design/runtime/announcer-walk-study-20261117.md)。固定基準 `63ab519`；分支 `codex/animation-source-20261117`。
 
@@ -273,11 +273,11 @@ Godot 4.7.2、Windows Compatibility、硬體繪製、Dummy 音訊。核對實際
 
 ### 截圖
 
-![右向短步，前腳微抬](images/ART-16-depart-20261119-right-step.png)
-![左向四分之一速度的承重姿勢](images/ART-16-depart-20261119-left-step.png)
-![降低動態並重建場景後的站姿](images/ART-16-depart-20261119-reduced.png)
+右向短步，前腳微抬（畫面已精簡）
+左向四分之一速度的承重姿勢（畫面已精簡）
+降低動態並重建場景後的站姿（畫面已精簡）
 
-[正常速度影片](images/ART-16-depart-20261119-normal.mp4) · [四分之一速度／重建](images/ART-16-depart-20261119-quarter.mp4) · [原生截圖、候選、測試與打包證據](images/ART-16-depart-20261119-evidence.zip) · [程式與素材提交](https://github.com/deadline314/Snapland/commit/a6858e844e36289e2b281f60ac01584874313834)。
+正常速度影片 · 四分之一速度／重建 · 原生截圖、候選、測試與打包證據 · [程式與素材提交](https://github.com/deadline314/Snapland/commit/a6858e844e36289e2b281f60ac01584874313834)。
 
 # Commit — 2026-11-19 補上阿浪左向停步落腳
 
@@ -299,11 +299,11 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 ### 截圖
 
-![舊版最後一張左向走姿](images/ART-16-stop-20261119-before.png)
-![新增的承重落腳姿勢](images/ART-16-stop-20261119-landing.png)
-![後腳收近並回到側站](images/ART-16-stop-20261119-settled.png)
+舊版最後一張左向走姿（畫面已精簡）
+新增的承重落腳姿勢（畫面已精簡）
+後腳收近並回到側站（畫面已精簡）
 
-[正常速度影片](images/ART-16-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-stop-20261119-quarter.mp4) · [原生對照與打包證據](images/ART-16-stop-20261119-evidence.zip) · [程式與素材提交](https://github.com/deadline314/Snapland/commit/36410af65a347bd707b7166cfafacf80bac94bab)。
+正常速度影片 · 四分之一速度與重入 · 原生對照與打包證據 · [程式與素材提交](https://github.com/deadline314/Snapland/commit/36410af65a347bd707b7166cfafacf80bac94bab)。
 
 ## Commit — 2026-11-19 加快首次穿雨背心
 
@@ -319,9 +319,9 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 本票的正常、慢放、姿勢、降低動態與封裝證據，以及主角與 NPC 的接話和換裝影片，可從上述各段與 [ART-17 動畫接續](<[ART-17]製作角色完整動畫與個性待機.md>) 檢視。
 
-![Windows 封裝中的雨背心](images/ART-16-garment-preflight-20261119.png)
+Windows 封裝中的雨背心（畫面已精簡）
 
-[配對量測、封裝、回歸與原生截圖](images/ART-16-garment-preflight-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/cdb68782bd60be1e217437de57187c9e915191a1)。
+配對量測、封裝、回歸與原生截圖 · [程式提交](https://github.com/deadline314/Snapland/commit/cdb68782bd60be1e217437de57187c9e915191a1)。
 
 
 ## Commit — 2026-11-19 阿浪右向停步落腳
@@ -337,11 +337,11 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 兩次對照使用固定取景、獨立存檔及 Dummy 音訊。比例反映相鄰原畫的像素差異。整票的全角色連續動作與換裝一致性仍在驗收。
 
-![阿浪停前的右向步態](images/ART-16-right-stop-20261119-before.png)
-![阿浪右向承重落腳](images/ART-16-right-stop-20261119-landing.png)
-![阿浪右向雙腳站定](images/ART-16-right-stop-20261119-settled.png)
+阿浪停前的右向步態（畫面已精簡）
+阿浪右向承重落腳（畫面已精簡）
+阿浪右向雙腳站定（畫面已精簡）
 
-[正常影片](images/ART-16-right-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-right-stop-20261119-quarter.mp4) · [來源、原生及封裝證據](images/ART-16-right-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/529601b9d6fa27f69cd8f6e8f615688be6a75660)。
+正常影片 · 四分之一速度與重入 · 來源、原生及封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/529601b9d6fa27f69cd8f6e8f615688be6a75660)。
 
 ## Commit — 2026-11-19 主角左右起步
 
@@ -358,11 +358,11 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 錄影使用實際 A、D 輸入、固定取景及隔離存檔。後續仍需核對其餘方向的起步和連續轉向。
 
-![主角左向起步](images/ART-16-traveller-departure-20261119-left.png)
-![主角穿雨背心右向起步](images/ART-16-traveller-departure-20261119-right-rainvest.png)
-![動態鮑伯頭左向起步](images/ART-16-traveller-departure-20261119-left-bob.png)
+主角左向起步（畫面已精簡）
+主角穿雨背心右向起步（畫面已精簡）
+動態鮑伯頭左向起步（畫面已精簡）
 
-[正常影片](images/ART-16-traveller-departure-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-traveller-departure-20261119-quarter.mp4) · [候選原畫、反例與封裝證據](images/ART-16-traveller-departure-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/1c025098c091bc5423923d32a0754da5200ba97f)。
+正常影片 · 四分之一速度與重入 · 候選原畫、反例與封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/1c025098c091bc5423923d32a0754da5200ba97f)。
 
 ## Commit — 2026-11-19 主角八方向起步
 
@@ -377,11 +377,11 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 影片使用實際方向鍵輸入、固定取景及隔離存檔。跨方向轉向與整套角色自然度仍待驗收。
 
-![正面起步](images/ART-16-compass-departure-20261119-front.png)
-![左後斜向起步](images/ART-16-compass-departure-20261119-back-left.png)
-![穿雨背心左前斜向起步](images/ART-16-compass-departure-20261119-front-left-rainvest.png)
+正面起步（畫面已精簡）
+左後斜向起步（畫面已精簡）
+穿雨背心左前斜向起步（畫面已精簡）
 
-[正常影片](images/ART-16-compass-departure-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-compass-departure-20261119-quarter.mp4) · [原畫、測試及封裝證據](images/ART-16-compass-departure-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/23306713ddf48586fefd3f8e263652e85f18877b)。
+正常影片 · 四分之一速度與重入 · 原畫、測試及封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/23306713ddf48586fefd3f8e263652e85f18877b)。
 
 ## Commit — 2026-11-19 折返時保留步態
 
@@ -396,11 +396,11 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 本次修正低速折返的待機跳格。折返角度之間的專用轉身姿勢仍待驗收。
 
-![慢速左向折返期間保留原走姿](images/ART-16-traveller-reversal-20261119-side-crossing.png)
-![折返後接右向走姿](images/ART-16-traveller-reversal-20261119-side-turned.png)
-![換裝後由背面折返的慢速畫面](images/ART-16-traveller-reversal-20261119-rainvest-crossing.png)
+慢速左向折返期間保留原走姿（畫面已精簡）
+折返後接右向走姿（畫面已精簡）
+換裝後由背面折返的慢速畫面（畫面已精簡）
 
-[正常影片](images/ART-16-traveller-reversal-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-traveller-reversal-20261119-quarter.mp4) · [前後重播、原生和封裝證據](images/ART-16-traveller-reversal-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/7b8527fe76ac2b5d54d25b4bc4e4ea649215045a)。
+正常影片 · 四分之一速度與重入 · 前後重播、原生和封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/7b8527fe76ac2b5d54d25b4bc4e4ea649215045a)。
 
 ## Commit — 2026-11-19 主角左右折返轉身
 
@@ -416,11 +416,11 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 原生驗證使用實際 A、D 輸入、隔離存檔及固定取景。前後折返候選仍待改進，已保存比較結果。
 
-![左後轉身姿勢](images/ART-16-side-pivot-20261119-rear-left.png)
-![背面承重姿勢](images/ART-16-side-pivot-20261119-back.png)
-![穿雨背心的右後姿勢](images/ART-16-side-pivot-20261119-rainvest-rear-right.png)
+左後轉身姿勢（畫面已精簡）
+背面承重姿勢（畫面已精簡）
+穿雨背心的右後姿勢（畫面已精簡）
 
-[正常影片](images/ART-16-side-pivot-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-side-pivot-20261119-quarter.mp4) · [原畫、原生與前後重播證據](images/ART-16-side-pivot-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/0474b2472571a12644dafaa5ead1f82906f607be)。
+正常影片 · 四分之一速度與重入 · 原畫、原生與前後重播證據 · [程式提交](https://github.com/deadline314/Snapland/commit/0474b2472571a12644dafaa5ead1f82906f607be)。
 
 ## Commit — 2026-11-19 主角前後折返轉身
 
@@ -436,9 +436,9 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 影片使用實際 W、S 按鍵、隔離存檔與固定取景。逐格查看持握的相機、雙腳、臉、背包及三款髮型。不同路線的連續自然度仍依本票檢查。
 
-![三組換裝和前後折返的原生姿勢](images/ART-16-depth-pivot-20261119-three-looks.png)
+三組換裝和前後折返的原生姿勢（畫面已精簡）
 
-[前斜面](images/ART-16-depth-pivot-20261119-front-left.png) · [雨背心側面](images/ART-16-depth-pivot-20261119-rainvest-profile.png) · [捲髮後斜面](images/ART-16-depth-pivot-20261119-curly-rear.png) · [正常影片](images/ART-16-depth-pivot-20261119-normal.mp4) · [四分之一速度與重入](images/ART-16-depth-pivot-20261119-quarter.mp4) · [原畫、比較、原生和封裝證據](images/ART-16-depth-pivot-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/6e1fb2326a3bcf8d2dfe828de6c6aefb5cc45660)。
+前斜面 · 雨背心側面 · 捲髮後斜面 · 正常影片 · 四分之一速度與重入 · 原畫、比較、原生和封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/6e1fb2326a3bcf8d2dfe828de6c6aefb5cc45660)。
 
 ## Commit — 2026-11-19 八方向與全角色動作驗收
 
@@ -446,9 +446,9 @@ Godot 4.7.2、Windows 硬體繪製、Dummy 音訊。確認原生逐格、回放�
 
 三位 NPC 的左右步態與自然起停均在場景巡路中實際播放，另對照各自的招呼、互動與收勢。主角正常速度、四分之一速度、重入、降低動態及空目錄 Windows 內嵌成品通過。最初慢放的真實方向鍵按得太短，修正後重新錄製並保留前次失敗報告。215 項 Python 與五組設計資料檢查通過。
 
-![正常速度走完八方向的兩套外觀](images/ART-16-island-eight-directions-normal-20261119.png)
-![四分之一速度重入後完整八方向](images/ART-16-island-eight-directions-quarter-20261119.png)
+正常速度走完八方向的兩套外觀（畫面已精簡）
+四分之一速度重入後完整八方向（畫面已精簡）
 
-[原生短片、逐動作報告、降動態與封裝證據](images/ART-16-17-island-animation-20261119-evidence.zip) · [驗收工具更新](https://github.com/deadline314/Snapland/commit/7c40485a77d228e04f06777ea1829d6872a87904)。
+原生短片、逐動作報告、降動態與封裝證據 · [驗收工具更新](https://github.com/deadline314/Snapland/commit/7c40485a77d228e04f06777ea1829d6872a87904)。
 
 證據包含 154 項、67,285,237 bytes，SHA-256 `a65c94eaf9168eca1dda27b7dc81e38fb4501180384c0909f931e0264d791771`。內含清單逐項校驗。

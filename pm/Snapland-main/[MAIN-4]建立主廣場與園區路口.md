@@ -65,13 +65,13 @@ c1b7b19；feature/island-first-park。
 
 [園區與介面研究](../../design/runtime/world-research.md)。圖例為審閱參考，不是本作遊戲素材或試玩證據。
 
-![業界參考](../Snapland-art/images/ART-1-reference-octopath.jpg)
+業界參考（畫面已精簡）
 
 ### 截圖
 
-![本票原生畫面](images/MAIN-4-plaza.png)
+本票原生畫面（畫面已精簡）
 
-![本票原生畫面](images/MAIN-4-welcome.png)
+本票原生畫面（畫面已精簡）
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
 
@@ -80,6 +80,6 @@ c1b7b19；feature/island-first-park。
 
 重新核對目前碼頭、廣場、迎賓大道與九區路口；主場景整合與園區布局通過，其他九區維持園區名稱／門檻／準備中，沒有假稱已開放九張可玩地圖。本輪海岸原生實際行走255.59m、六處E觀察與回碼頭，以及含兩支線315.50m的物理往返另有MAIN-11證據；保留碰撞、實際上坡與回程，不靠關閉碰撞通過。
 
-[現行布局／原生路線範圍](images/MAIN-11-coast-20261020-verification.json) · [完整物理路線](images/MAIN-11-coast-20261020-physics-route.json)。既有實作與原程式f2d6b84已在main，本輪核對當前規則及證據，不把早期feature狀態當目前阻塞。舊Windows圖仍屬歷史；本輪無頭功能檢查、原生自動輸入與合成UI各按實際範圍記錄，沒有新Windows EXE、真人試玩或聽感認證。
+現行布局／原生路線範圍 · 完整物理路線。既有實作與原程式f2d6b84已在main，本輪核對當前規則及證據，不把早期feature狀態當目前阻塞。舊Windows圖仍屬歷史；本輪無頭功能檢查、原生自動輸入與合成UI各按實際範圍記錄，沒有新Windows EXE、真人試玩或聽感認證。
 
 本票按第一版路口／收藏流程範圍結案；MAIN-11完整探索、ART-1光影／ART-17動畫、各玩法精修及更豐富的世界互動仍照各票驗收。

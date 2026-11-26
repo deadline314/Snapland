@@ -61,11 +61,11 @@ c1b7b19；feature/island-first-park。
 
 [核心與成就研究](../../design/runtime/core-research.md)。圖例為審閱參考，不是本作遊戲素材或試玩證據。
 
-![業界參考](images/MAIN-5-reference-spacewar.png)
+業界參考（畫面已精簡）
 
 ### 截圖
 
-![本票原生畫面](images/MAIN-5-achievements-unlocked.png)
+本票原生畫面（畫面已精簡）
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
 
@@ -76,4 +76,4 @@ c1b7b19；feature/island-first-park。
 
 目前正式進度、交易與重整後介面已核對在main；不將無法解析的早期feature提交連結當合入證明。舊Windows圖與本輪Linux／llvmpipe證據分開；沒有新Windows EXE、真人試玩或聽感認證。
 
-[六份比較、驗證流程與限制](../../design/runtime/progress-restart-verification.md) · [兩程序實際結果](images/MAIN-6-restart-20261020-verification.json) · [核心回歸](../Snapland-art/images/ART-23-verify-20261020-core-runtime-tests.log) · [衣櫃回歸](../Snapland-art/images/ART-23-verify-20261020-wardrobe-runtime-tests.log) · [設定／換裝三尺寸](../Snapland-art/images/ART-25-verify-20261020.json)。全域CI後段仍有其他票的角色素材缺口，本結案不等於全案綠燈。
+[六份比較、驗證流程與限制](../../design/runtime/progress-restart-verification.md) · 兩程序實際結果 · 核心回歸 · 衣櫃回歸 · 設定／換裝三尺寸。全域CI後段仍有其他票的角色素材缺口，本結案不等於全案綠燈。

@@ -51,9 +51,9 @@
 
 | 畫面證據 | 說明 |
 | --- | --- |
-| [海港白天](images/ART-3-dock.png) · [迎賓大道](images/ART-3-avenue.png) · [主廣場日景](images/ART-3-day.png) | 原生畫面截圖 |
-| [夜景](images/ART-3-night.png) · [降低動態夜景](images/ART-3-reduced-night.png) | 原生畫面截圖 |
-| [九區入口一覽](images/ART-3-gate-harbor.png) · [糖果區](images/ART-3-gate-candy.png) · [天空區](images/ART-3-gate-sky.png) | 靜態畫面；全部九區另有截圖 |
+| [海港白天](images/ART-3-dock.png) · 迎賓大道 · [主廣場日景](images/ART-3-day.png) | 原生畫面截圖 |
+| [夜景](images/ART-3-night.png) · 降低動態夜景 | 原生畫面截圖 |
+| [九區入口一覽](images/ART-3-gate-harbor.png) · 糖果區 · 天空區 | 靜態畫面；全部九區另有截圖 |
 
 程式交付：[Commit 6e94a6b](https://github.com/deadline314/Snapland/commit/6e94a6bff33644232ca5d121da19d6fb6ddee97b)（分支 `feature/island-first-park`；固定基準 `92e885390967bff3abbde3cf52716076124b1383`）。
 
@@ -71,11 +71,11 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 原生 Compatibility／llvmpipe 最終靜格 exit 0、0 ERROR；原生環線六處觀察與回碼頭成功，141.7 秒／10 FPS 影片完整解碼並看過七個抽樣，沒有宣稱人工完整播放、音樂試聽或角色動畫整票完成。地圖、遮擋、日夜與含兩條回程的真實物理往返四項局部驗證通過。既有海港、九區入口及日夜／降低動態證據仍保留；本輪結案範圍為場景布景，角色與完整光影品質依 ART-17／18、ART-1 接續。
 
-[本輪七方研究與設計](../../design/runtime/coastal-exploration-expansion.md) · [原生環線影片與量測](../Snapland-main/[MAIN-11]完善迎賓大道探索動線.md) · [最終原生執行紀錄](images/ART-3-coast-20261020-engine.log)。場景程式已整合主線 [0ec93bd](https://github.com/deadline314/Snapland/commit/0ec93bd92ae0611c236c4aeaa1b0a04bedb341a7)。
+[本輪七方研究與設計](../../design/runtime/coastal-exploration-expansion.md) · [原生環線影片與量測](../Snapland-main/[MAIN-11]完善迎賓大道探索動線.md) · 最終原生執行紀錄。場景程式已整合主線 [0ec93bd](https://github.com/deadline314/Snapland/commit/0ec93bd92ae0611c236c4aeaa1b0a04bedb341a7)。
 
 | 原生畫面 | 證據 |
 |---|---|
-| 前後海岸 | [原版](images/ART-3-coast-20261020-before-west.png) · [最終版](images/ART-3-coast-20261020-west.png) |
-| 拒收中間畫面 | [錯誤岩壁](images/ART-3-coast-20261020-rejected-west.png) · [錯誤溫室](images/ART-3-coast-20261020-rejected-garden.png) |
-| 六處地標 | [修帆所](images/ART-3-coast-20261020-loft.png) · [鐘亭](images/ART-3-coast-20261020-bell.png) · [燈塔](images/ART-3-coast-20261020-lighthouse.png) · [觀星庭](images/ART-3-coast-20261020-north.png) · [溫室](images/ART-3-coast-20261020-garden.png) · [水車](images/ART-3-coast-20261020-wheel.png) |
-| 日夜與降低動態 | [既有廣場](images/ART-3-coast-20261020-plaza.png) · [燈塔夜景](images/ART-3-coast-20261020-lighthouse-night.png) · [水車降低動態夜景](images/ART-3-coast-20261020-wheel-reduced-night.png) |
+| 前後海岸 | 原版 · 最終版 |
+| 拒收中間畫面 | 錯誤岩壁 · 錯誤溫室 |
+| 六處地標 | 修帆所 · 鐘亭 · 燈塔 · 觀星庭 · 溫室 · 水車 |
+| 日夜與降低動態 | 既有廣場 · 燈塔夜景 · 水車降低動態夜景 |

@@ -96,9 +96,9 @@
 
 ### 截圖與影片
 
-![珊瑚外套跨姿勢實際畫面](images/ART-18-coral-jacket-consistency-v1-contact.jpg)
+珊瑚外套跨姿勢實際畫面（畫面已精簡）
 
-[正常速度](images/ART-18-coral-jacket-consistency-v1-normal.mp4) · [四分之一速度](images/ART-18-coral-jacket-consistency-v1-quarter.mp4) · [完整全身圖](images/ART-18-coral-jacket-consistency-v1-start.png) · [原生報告](images/ART-18-coral-jacket-consistency-v1-report.json) · [來源與編碼紀錄](images/ART-18-coral-jacket-consistency-v1-verification.json)
+正常速度 · 四分之一速度 · 完整全身圖 · 原生報告 · 來源與編碼紀錄
 
 本輪開始基準：`4d0a2a814860e54243dd116bed54c564233c0aa0`；分支：`feature/island-experience`；票況：進行中。不同服裝完整輪廓、全部動作與輸出版本換裝仍需完成，相關驗收未勾選。
 
@@ -129,10 +129,10 @@
 
 ### 截圖與影片
 
-![前斜閉眼與短髮換裝](images/ART-17-directional-idle-20261015-diagonal-normal-cels-2.jpg)
-![真正慢速模擬的閉眼姿勢](images/ART-17-directional-idle-20261015-diagonal-quarter-video-frames.jpg)
+前斜閉眼與短髮換裝（畫面已精簡）
+真正慢速模擬的閉眼姿勢（畫面已精簡）
 
-[正常影片](images/ART-17-directional-idle-20261015-diagonal-normal.mp4) · [四分之一模擬速度](images/ART-17-directional-idle-20261015-diagonal-quarter.mp4) · [完整局部驗收與隔離存檔證據](images/ART-17-directional-idle-20261015-verification.json)。
+正常影片 · 四分之一模擬速度 · 完整局部驗收與隔離存檔證據。
 
 分支：`feature/island-experience`；固定開始 SHA：`ce86d3b`。本批與 ART-17 共用必要的閉眼姿勢修正，程式與證據提交：[3c6ae27](https://github.com/deadline314/Snapland/commit/3c6ae27c071290d12fc2f952ef036319f19257ce)。票況：進行中；沒有將外套換色當作不同衣物輪廓完成。
 
@@ -177,9 +177,9 @@
 
 洋紅色為衣料標記，下一列為珊瑚配色預覽，皆為製作端診斷圖，不是原生遊戲截圖。24 格均已實際檢視。
 
-![右側完整行走衣料與配色](images/ART-18-side-materials-20261017-01.png)
-![右側待機及左側行走衣料](images/ART-18-side-materials-20261017-02.png)
-![左側其餘行走及待機衣料](images/ART-18-side-materials-20261017-03.png)
+右側完整行走衣料與配色（畫面已精簡）
+右側待機及左側行走衣料（畫面已精簡）
+左側其餘行走及待機衣料（畫面已精簡）
 
 票況：進行中。本輪不把外套換色或安全性修正當成不同服裝輪廓完成。
 
@@ -199,17 +199,17 @@
 
 原生仍是 Godot 4.7／llvmpipe，環境解析度與特效有明示降成本 fixture，人物合成維持 280×360。4.7.2 補驗是 Linux 來源與 PCK，沒有聲稱 Windows EXE、完整光影、原機器即時效能或真人試玩。暫停選單短暫遮住一個影片樣本，另保留原始角色像素 PNG。
 
-![修正前：珊瑚款側身仍大片藍色](images/ART-18-side-20261017-before-blue-pixels.png)
-![修正後：原生珊瑚側身與原姿勢](images/ART-18-side-20261017-normal-coat-pixels.png)
-![正常速度實際島上取景，右側為人物合成預覽；另附 280×360 原始像素圖](images/ART-18-side-20261017-normal-world.png)
+修正前：珊瑚款側身仍大片藍色（畫面已精簡）
+修正後：原生珊瑚側身與原姿勢（畫面已精簡）
+正常速度實際島上取景，右側為人物合成預覽；另附 280×360 原始像素圖（畫面已精簡）
 
-[正常速度影片](images/ART-18-side-20261017-normal.mp4) · [真正慢速影片](images/ART-18-side-20261017-quarter.mp4) · [正常原生報告](images/ART-18-side-20261017-normal-audit.json) · [慢速原生報告](images/ART-18-side-20261017-quarter-audit.json) · [完整驗收範圍與 SHA](images/ART-18-side-20261017-verification.json)。
+正常速度影片 · 真正慢速影片 · 正常原生報告 · 慢速原生報告 · [完整驗收範圍與 SHA](images/ART-18-side-20261017-verification.json)。
 
-[正常全身抽樣](images/ART-18-side-20261017-normal-frames-03.png) · [慢速全身抽樣](images/ART-18-side-20261017-quarter-frames-03.png) · [固定 4.7.2 輸出探測](images/ART-18-side-20261017-pack-4.7.2-material-report.json)。兩份 PCK 本身未提交或發布，票內保存來源與雜湊。
+正常全身抽樣 · 慢速全身抽樣 · 固定 4.7.2 輸出探測。兩份 PCK 本身未提交或發布，票內保存來源與雜湊。
 
 ### 拒收例與品質防線
 
-[鏡片／跨胸衣袖誤標草稿](images/ART-18-side-20261017-rejected-full-camera.png)、[抬手漏標草稿](images/ART-18-side-20261017-rejected-full-raised-arms.png) 與[第二輪修訂仍有誤標](images/ART-18-side-20261017-rejected-full-v3.png) 均為製作端拒收圖，未作為遊戲素材。乾淨匯入曾抓到型別推斷錯誤，獨立像素檢查另抓到 JSON 數字型別使有效標記未載入；修正後重新執行全部側身矩陣與兩版隔離 PCK。
+鏡片／跨胸衣袖誤標草稿、抬手漏標草稿 與第二輪修訂仍有誤標 均為製作端拒收圖，未作為遊戲素材。乾淨匯入曾抓到型別推斷錯誤，獨立像素檢查另抓到 JSON 數字型別使有效標記未載入；修正後重新執行全部側身矩陣與兩版隔離 PCK。
 
 本輪保存實際流程與結果，整票仍為進行中；不同服飾輪廓及完整動作品質繼續按原驗收判定。
 
@@ -261,11 +261,11 @@
 
 ### 截圖與影片
 
-![正常製作預覽的完整八姿勢](images/ART-18-authoring-20261021-normal-reviewed-all-poses.png)
-![真正四分之一時間的八姿勢](images/ART-18-authoring-20261021-quarter-reviewed-all-poses.png)
-![純衣料與原人物的明確關節對照](images/ART-18-authoring-20261021-joint-guide-diagram.png)
+正常製作預覽的完整八姿勢（畫面已精簡）
+真正四分之一時間的八姿勢（畫面已精簡）
+純衣料與原人物的明確關節對照（畫面已精簡）
 
-[正常短片](images/ART-18-authoring-20261021-normal-reviewed.mp4) · [四分之一時間](images/ART-18-authoring-20261021-quarter-reviewed.mp4) · [完整缺件與回退清單](images/ART-18-authoring-20261021-fallback-runtime-reviewed-coverage.json) · [正式172個請求的逐項結果](images/ART-18-authoring-20261021-fallback-runtime-reviewed-fallback-report.json) · [重建結果](images/ART-18-authoring-20261021-bake-delivery-bake-report.json) · [來源與範圍](images/ART-18-authoring-20261021-provenance.json) · [拒收歷史](images/ART-18-authoring-20261021-attempt-history.json) · [原檔、完整提示及診斷快照](images/ART-18-authoring-20261021-source-and-diagnostics.zip) · [附件雜湊清單](images/ART-18-authoring-20261021-manifest.json)。
+正常短片 · 四分之一時間 · [完整缺件與回退清單](images/ART-18-authoring-20261021-fallback-runtime-reviewed-coverage.json) · 正式172個請求的逐項結果 · 重建結果 · 來源與範圍 · 拒收歷史 · [原檔、完整提示及診斷快照](images/ART-18-authoring-20261021-source-and-diagnostics.zip) · 附件雜湊清單。
 
 
 # Commit — 2026-10-21 補齊八向專用待機衣料預覽
@@ -289,12 +289,12 @@
 
 這是2D製作視窗，採原待機每格時長；不是正式衣櫃輸入、髮尾動態、降低動態或輸出包驗收。影片完整解碼，不聲稱連續觀看或真人試玩。
 
-![實際製作視窗八方向，原人物部件保留](images/ART-18-idle-cloth-20261021-native-eight-overview.png)
-![實際來源與目標關節對照](images/ART-18-idle-cloth-20261021-final-joints-diagram.png)
+實際製作視窗八方向，原人物部件保留（畫面已精簡）
+實際來源與目標關節對照（畫面已精簡）
 
-[正常短片](images/ART-18-idle-cloth-20261021-normal-v2.mp4) · [真正四分之一時間](images/ART-18-idle-cloth-20261021-quarter-v2.mp4) · [正常逐姿勢1](images/ART-18-idle-cloth-20261021-normal-v2-poses-1.png)／[2](images/ART-18-idle-cloth-20261021-normal-v2-poses-2.png)／[3](images/ART-18-idle-cloth-20261021-normal-v2-poses-3.png) · [慢放逐姿勢1](images/ART-18-idle-cloth-20261021-quarter-v2-poses-1.png)／[2](images/ART-18-idle-cloth-20261021-quarter-v2-poses-2.png)／[3](images/ART-18-idle-cloth-20261021-quarter-v2-poses-3.png)。
+正常短片 · 真正四分之一時間 · 正常逐姿勢1／2／3 · 慢放逐姿勢1／2／3。
 
-[缺件與回退清單](images/ART-18-idle-cloth-20261021-combined-coverage.json) · [全部範圍與來源](images/ART-18-idle-cloth-20261021-verification.json) · [拒收歷史](images/ART-18-idle-cloth-20261021-attempt-history.json) · [前批實際完整CI](images/ART-18-idle-cloth-20261021-ci-460db-verification.json) · [完整提示、原檔與診斷](images/ART-18-idle-cloth-20261021-source-and-diagnostics.zip) · [附件雜湊](images/ART-18-idle-cloth-20261021-manifest.json)。
+[缺件與回退清單](images/ART-18-idle-cloth-20261021-combined-coverage.json) · [全部範圍與來源](images/ART-18-idle-cloth-20261021-verification.json) · 拒收歷史 · 前批實際完整CI · [完整提示、原檔與診斷](images/ART-18-idle-cloth-20261021-source-and-diagnostics.zip) · 附件雜湊。
 
 
 # Commit — 2026-10-22 衣身底料保護與拒收流程
@@ -316,10 +316,10 @@
 
 審圖拒絕原因包括舊短褲邊線、背包被切去下半部、手掌被衣料覆蓋及原臂範圍不準。這些草稿未上架，也不計為新增已批准覆蓋；原長外套維持44/148，缺104格與24個非新原畫的慶祝回退請求。整票仍進行中，未勾條件保持原狀。本輪沒有新的正常／慢放正式換裝、降低動態或輸出包驗收。
 
-![拒收：原臂邊界不準，衣料侵入袖子](images/ART-18-underlay-20261022-vest-bake-v8-walk-left.png)
-![拒收：依色塊推測背包會切去下半部](images/ART-18-underlay-20261022-vest-bake-v3-back_left.png)
+拒收：原臂邊界不準，衣料侵入袖子（畫面已精簡）
+拒收：依色塊推測背包會切去下半部（畫面已精簡）
 
-[局部驗證與完整範圍](images/ART-18-underlay-20261022-verification.json) · [反例與修正](images/ART-18-underlay-20261022-part-delivery.json) · [拒收影片](images/ART-18-underlay-20261022-rejected-native.mp4) · [來源／完整提示與診斷](images/ART-18-underlay-20261022-rejected-sources-and-diagnostics.zip) · [附件指紋](images/ART-18-underlay-20261022-manifest.json)。
+[局部驗證與完整範圍](images/ART-18-underlay-20261022-verification.json) · 反例與修正 · [拒收影片](images/ART-18-underlay-20261022-rejected-native.mp4) · [來源／完整提示與診斷](images/ART-18-underlay-20261022-rejected-sources-and-diagnostics.zip) · 附件指紋。
 
 # Commit — 2026-10-24 補齊長背心來源與舊動作覆蓋
 
@@ -334,11 +334,11 @@
 | 固定引擎局部 | 原袖片121像素、鄰片0；同色衣料侵入頭部、一像素原圖／頭部改變及錯動作均拒絕；1.75秒、exit0、0ERROR |
 | 審圖範圍 | 八向走路／待機與正面六種動作共22張全身聯絡圖，加既有慶祝原圖／合成；這批為靜態製作檢查 |
 
-![走路斜前方，原袖口與相機帶保留](images/ART-18-full-source-20261024-v20-walk-front_left.jpg)
-![拍照全動作，手掌與相機前景保留](images/ART-18-full-source-20261024-v20-photograph-front.jpg)
-![蹲下僅調整衣料，原人物不縮放](images/ART-18-full-source-20261024-v20-jump-front.jpg)
+走路斜前方，原袖口與相機帶保留（畫面已精簡）
+拍照全動作，手掌與相機前景保留（畫面已精簡）
+蹲下僅調整衣料，原人物不縮放（畫面已精簡）
 
-[逐格保護結果](images/ART-18-full-source-20261024-bake-report.json) · [真實覆蓋範圍](images/ART-18-full-source-20261024-coverage.json) · [相容逐位元比較](images/ART-18-full-source-20261024-legacy-parity.json) · [局部引擎檢查](images/ART-18-full-source-20261024-ownership.log) · [23項資料測試](images/ART-18-full-source-20261024-python-23.log) · [原件、完整提示、拒收與診斷](images/ART-18-full-source-20261024-source-and-diagnostics.zip) · [附件雜湊](images/ART-18-full-source-20261024-manifest.json)。
+逐格保護結果 · 真實覆蓋範圍 · 相容逐位元比較 · 局部引擎檢查 · 23項資料測試 · 原件、完整提示、拒收與診斷 · 附件雜湊。
 
 # Commit — 2026-10-24 正式提供免費長背心與整套回退
 
@@ -364,11 +364,11 @@
 
 這是單人來源／換裝與Linux首幀驗收；不是十二款打包通關、所有髮帽組合、Windows或真人聽感驗收。輸出短片抽樣主要是冷啟動與世界畫面，十二款以各自實際viewport首幀圖核對，不宣稱短片完整呈現十二款流程。詳細設計與共通方法已同步[製作與正式整合紀錄](../../design/runtime/outfit-completeness.md)及User-guide。
 
-![免費衣櫃先試穿，再明確穿戴](images/ART-18-live-20261024-world-01-fitting.png)
-![原生八方向與替代髮色整合](images/ART-18-live-20261024-review-00.jpg)
-![真正輸出包的接帽首幀，保留新長背心](images/ART-18-live-20261024-release-rainvest.png)
+免費衣櫃先試穿，再明確穿戴（畫面已精簡）
+原生八方向與替代髮色整合（畫面已精簡）
+真正輸出包的接帽首幀，保留新長背心（畫面已精簡）
 
-[原生操作結果](images/ART-18-live-20261024-world-inputs.json) · [正常172次](images/ART-18-live-20261024-normal-172.json)／[慢放172次](images/ART-18-live-20261024-quarter-172.json) · [慢放影片](images/ART-18-live-20261024-quarter.mp4) · [純包內檢查](images/ART-18-live-20261024-pack-result.log) · [Linux匯出來源與指紋](images/ART-18-live-20261024-linux-build.json) · [實際冷啟動](images/ART-18-live-20261024-release-result.log) · [最後衣料來源一致性](images/ART-18-live-20261024-final-pck-parity.json) · [正常原始截圖](images/ART-18-live-20261024-normal-final-raw-captures.zip)／[慢放原始截圖](images/ART-18-live-20261024-quarter-raw-captures.zip) · [驅動器、診斷與拒收歷史](images/ART-18-live-20261024-replays-and-rejections.zip) · [附件指紋](images/ART-18-live-20261024-manifest.json)。
+原生操作結果 · 正常172次／慢放172次 · 慢放影片 · 純包內檢查 · Linux匯出來源與指紋 · 實際冷啟動 · 最後衣料來源一致性 · 正常原始截圖／慢放原始截圖 · 驅動器、診斷與拒收歷史 · 附件指紋。
 
 # Commit — 2026-10-24 修正兩個隔離審查入口
 
@@ -386,7 +386,7 @@
 
 這是審查目錄的資源路徑修正；整票狀態與其餘未勾條件維持。完整場景套件依各次CI實際結果記錄，不由兩項局部入口通過推論。
 
-[原始遠端失敗](images/ART-18-ci-paths-20261024-remote-failure.log) · [修正前反例](images/ART-18-ci-paths-20261024-negative.log)／[修正後](images/ART-18-ci-paths-20261024-regression.log) · [固定原點命令](images/ART-18-ci-paths-20261024-walk-audit.log) · [待機命令](images/ART-18-ci-paths-20261024-idle-contracts.log) · [161項Python](images/ART-18-ci-paths-20261024-python-full.log) · [隔離來源指紋](images/ART-18-ci-paths-20261024-source-hashes.json) · [範圍](images/ART-18-ci-paths-20261024-verification.json)。
+原始遠端失敗 · 修正前反例／修正後 · 固定原點命令 · 待機命令 · 161項Python · 隔離來源指紋 · 範圍。
 
 
 # Commit — 2026-10-24 核對衣櫃完整目錄與實際分頁
@@ -406,11 +406,11 @@
 | 修正後完整UI自訂路線 | 7.55秒，exit 0，0ERROR；800×450、1.25字級及原設定／衣櫃／時間流程全通過 |
 | 本機Python全套 | 161／161通過 |
 
-[原始遠端失敗](images/ART-18-catalog-ci-20261024-remote-failure.log) ·
-[本機反例](images/ART-18-catalog-ci-20261024-negative.log) ·
-[修正後完整路線](images/ART-18-catalog-ci-20261024-fixed.log) ·
-[161項Python](images/ART-18-catalog-ci-20261024-python-full.log) ·
-[證據指紋](images/ART-18-catalog-ci-20261024-hashes.json)。
+原始遠端失敗 ·
+本機反例 ·
+修正後完整路線 ·
+161項Python ·
+證據指紋。
 
 本段是驗證條件隨實際商品增長的修正，不等於新增原生圖片審閱或完整動畫驗收。
 
@@ -430,10 +430,10 @@
 以上驗證正式產品基準；後續獨立角色投影候選不由此回歸替代其整合驗收。
 整票仍依其餘美術／動態條件維持進行中。
 
-[逐項結果與實際時限](images/ART-18-full-runtime-20261024-report.json) ·
-[遠端成功日誌](images/ART-18-full-runtime-20261024-ci-success.log) ·
-[本機原始逾時及全部成功日誌](images/ART-18-full-runtime-20261024-local-logs.zip) ·
-[證據指紋](images/ART-18-full-runtime-20261024-hashes.json)。
+逐項結果與實際時限 ·
+遠端成功日誌 ·
+本機原始逾時及全部成功日誌 ·
+證據指紋。
 
 
 # Commit — 2026-10-24 查明舊慶祝姿勢的頭髮邊界
@@ -453,9 +453,9 @@
 | 未知圖的頭部歸屬 | 原圖及一像素變更圖均無有效歸屬，不冒用其他圖 |
 | 審閱範圍 | headless 影像組合；沒有新增原生動畫、完整換髮或打包通過聲稱 |
 
-[原圖、拒收遮罩、回退畫面、原始紀錄與重播程序](images/ART-18-legacy-head-20261024-evidence.zip)；[來源與範圍](images/ART-18-legacy-head-20261024-review.json)。
+原圖、拒收遮罩、回退畫面、原始紀錄與重播程序；來源與範圍。
 
-![舊原圖、錯誤候選與八個請求方向的完整回退；仍是同一張正面原圖](images/ART-18-legacy-head-20261024-contact.png)
+舊原圖、錯誤候選與八個請求方向的完整回退；仍是同一張正面原圖（畫面已精簡）
 
 
 # Commit — 2026-10-26 降低衣料常駐記憶體並修正回退
@@ -481,15 +481,15 @@
 
 外觀回歸的診斷驅動器首輪誤設 90 秒而逾時，未記作成功；使用既有官方 240 秒上限重跑，160.88 秒通過，沒有放寬正式測試。首份缺少最終貼圖回退修正的輸出也已拒收，附原來源與原因。快取數字只計衣料解碼畫布，不代表程序總記憶體、VRAM 或硬體 FPS；成品檢查不等於完整玩法／全套動畫或真人試聽。
 
-[官方資料、責任與可重播流程](../../design/runtime/outfit-resource-cache.md)；[數值、來源與雜湊](images/ART-18-cache-20261026-review.json)；[正反例、原始 log 與程序](images/ART-18-cache-20261026-replay.zip)；[12 張正式衣櫃流程原圖](images/ART-18-cache-20261026-native.zip)；[12 張最終成品入口原圖與執行紀錄](images/ART-18-cache-20261026-release.zip)。
+[官方資料、責任與可重播流程](../../design/runtime/outfit-resource-cache.md)；數值、來源與雜湊；正反例、原始 log 與程序；12 張正式衣櫃流程原圖；12 張最終成品入口原圖與執行紀錄。
 
-![正式試衣與完整人物](images/ART-18-cache-20261026-fitting.png)
-![正式穿戴及移動一](images/ART-18-cache-20261026-native-1.png)
-![正式穿戴及移動二](images/ART-18-cache-20261026-native-2.png)
-![降低動態與保存重載](images/ART-18-cache-20261026-native-3.png)
-![最終成品入口一](images/ART-18-cache-20261026-release-1.png)
-![最終成品入口二](images/ART-18-cache-20261026-release-2.png)
-![最終成品入口三](images/ART-18-cache-20261026-release-3.png)
+正式試衣與完整人物（畫面已精簡）
+正式穿戴及移動一（畫面已精簡）
+正式穿戴及移動二（畫面已精簡）
+降低動態與保存重載（畫面已精簡）
+最終成品入口一（畫面已精簡）
+最終成品入口二（畫面已精簡）
+最終成品入口三（畫面已精簡）
 
 
 # Commit — 2026-10-26 修正舊慶祝原圖的換髮與帽子
@@ -506,10 +506,10 @@
 
 實際閱讀 Spine 官方 [Slots 繪製順序](https://esotericsoftware.com/spine-slots) 與 [Skins 附件組合](https://esotericsoftware.com/spine-skins)，核對並下載以下四張官方參考圖。採用來源綁定的附件／前後關係審閱，不借用同色衣服充作髮區；圖片僅供研究，未作遊戲素材或生成輸入，沒有聲稱觀看教學影片。
 
-![官方附件繪製順序](images/ART-18-legacy-20261026-reference-draworder.png)
-![調整前的前後關係](images/ART-18-legacy-20261026-reference-draworder-before.png)
-![調整後的前後關係](images/ART-18-legacy-20261026-reference-draworder-after.png)
-![官方外觀組合面板](images/ART-18-legacy-20261026-reference-skins.png)
+官方附件繪製順序（畫面已精簡）
+調整前的前後關係（畫面已精簡）
+調整後的前後關係（畫面已精簡）
+官方外觀組合面板（畫面已精簡）
 
 ### 測試結果
 
@@ -526,20 +526,20 @@
 | 最終嵌入 PCK | 隔離無散落素材目錄重跑 120 組、24 舊請求及 13 故障；37.77 秒、0 ERROR |
 | 真正 Linux 成品 | 新來源逐檔指紋一致；冷啟動／十二入口初始繪製／退出 28.25 秒、0 ERROR，保留捲髮、免費背心、降低動態及金幣；12 張入口畫面實際查看 |
 
-[來源、逐項結果及成品指紋](images/ART-18-legacy-20261026-review.json) · [候選、拒收、原圖、原始 log 及重播程序](images/ART-18-legacy-20261026-replay.zip) · [正常速度 30 張原生原圖](images/ART-18-legacy-20261026-normal-native.zip) · [真實四分之一速度 30 張原生原圖](images/ART-18-legacy-20261026-quarter-native.zip) · [實際成品入口與原始紀錄](images/ART-18-legacy-20261026-release.zip) · [可共用的來源歸屬流程](../../design/runtime/legacy-portrait-head-ownership.md)。
+來源、逐項結果及成品指紋 · 候選、拒收、原圖、原始 log 及重播程序 · 正常速度 30 張原生原圖 · 真實四分之一速度 30 張原生原圖 · 實際成品入口與原始紀錄 · [可共用的來源歸屬流程](../../design/runtime/legacy-portrait-head-ownership.md)。
 
 畫面右側為當時正式角色最終貼圖的原尺寸 inset，非另一個合成器；外觀矩陣直接指定場景髮帽，不冒充取得／購買。保留原速度與真實四分之一速度的獨立存檔及完整截圖；這是靜態原圖的場景／UI／回退驗證，沒有新增動畫短片、完整玩法、真人試聽或硬體效能聲稱。首輪 Linux 選單測試輸入不生效、次輪額外截圖已超過原動作時長，均保留失敗；改用真實 X11 輸入，去除超時的額外靜態請求，未改正式動作時長。
 
-![正常：背心、短髮與捲髮](images/ART-18-legacy-20261026-normal-1.png)
-![正常：帽子及原髮](images/ART-18-legacy-20261026-normal-2.png)
-![正常：原衣物與換髮](images/ART-18-legacy-20261026-normal-3.png)
-![正常：三款髮型帽子](images/ART-18-legacy-20261026-normal-4.png)
-![正常：操作、暫停、降低動態與重入](images/ART-18-legacy-20261026-normal-5.png)
-![真實四分之一速度一](images/ART-18-legacy-20261026-quarter-1.png)
-![真實四分之一速度二](images/ART-18-legacy-20261026-quarter-2.png)
-![真實四分之一速度三](images/ART-18-legacy-20261026-quarter-3.png)
-![真實四分之一速度四](images/ART-18-legacy-20261026-quarter-4.png)
-![真實四分之一速度操作與重入](images/ART-18-legacy-20261026-quarter-5.png)
+正常：背心、短髮與捲髮（畫面已精簡）
+正常：帽子及原髮（畫面已精簡）
+正常：原衣物與換髮（畫面已精簡）
+正常：三款髮型帽子（畫面已精簡）
+正常：操作、暫停、降低動態與重入（畫面已精簡）
+真實四分之一速度一（畫面已精簡）
+真實四分之一速度二（畫面已精簡）
+真實四分之一速度三（畫面已精簡）
+真實四分之一速度四（畫面已精簡）
+真實四分之一速度操作與重入（畫面已精簡）
 
 # Commit — 2026-11-11 防止重建洗掉換裝與拍照遮擋
 
@@ -561,10 +561,10 @@
 
 原生使用 Godot 4.7.2／Compatibility／llvmpipe、Dummy 音訊；標準截圖 1280×720，800×600 實體視窗的內容截圖為 800×450。實際查看標準商店、縮小後商店與外觀圖；不是真人遊玩或試聽，沒有新增原畫、服飾方向或動畫自然度驗收。整票維持進行中。
 
-![隔離重建檔的標準商店與完整人物](images/ART-18-rebuild-20261111-shop.png)
-![縮小視窗後的商店與完整預覽](images/ART-18-rebuild-20261111-compact.png)
+隔離重建檔的標準商店與完整人物（畫面已精簡）
+縮小視窗後的商店與完整預覽（畫面已精簡）
 
-[來源、雜湊與結果](images/ART-18-rebuild-20261111-review.json) · [反例、建置、回歸、原生紀錄及截圖](images/ART-18-rebuild-20261111-evidence.zip)。固定起始 SHA：`66eeb72`；分支：`codex/wardrobe-rebuild-20261111`。
+來源、雜湊與結果 · 反例、建置、回歸、原生紀錄及截圖。固定起始 SHA：`66eeb72`；分支：`codex/wardrobe-rebuild-20261111`。
 
 
 # Commit — 2026-11-12 完成換裝分層同步驗收
@@ -597,9 +597,9 @@
 
 ### 截圖與證據
 
-![捲髮保持手掌與相機前景](images/ART-18-sync-20261112-walking.png)
-![拍照保留所選髮帽與雙手相機](images/ART-18-sync-20261112-photograph.png)
-![正式慶祝跳躍中的換裝](images/ART-18-sync-20261112-jump.png)
-![原生逐姿勢對照](images/ART-18-sync-20261112-poses.png)
+捲髮保持手掌與相機前景（畫面已精簡）
+拍照保留所選髮帽與雙手相機（畫面已精簡）
+正式慶祝跳躍中的換裝（畫面已精簡）
+原生逐姿勢對照（畫面已精簡）
 
-[正常速度](images/ART-18-sync-20261112-normal.mp4) · [四分之一速度](images/ART-18-sync-20261112-quarter.mp4) · [降低動態及恢復](images/ART-18-sync-20261112-reduced.mp4) · [空目錄 PCK 播放](images/ART-18-sync-20261112-pack.mp4) · [完整 33 頁原生姿勢](images/ART-18-sync-20261112-poses.zip) · [結果、逐項觀察與來源指紋](images/ART-18-sync-20261112-review.json) · [原生日誌、反例、代表畫面及重現紀錄](images/ART-18-sync-20261112-evidence.zip)。製作責任與重建方式見[前景來源與驗證](../../design/runtime/avatar-prop-foreground.md)。固定基準 `f3acd8f`；分支 `codex/wardrobe-review-20261112`。
+正常速度 · 四分之一速度 · 降低動態及恢復 · 空目錄 PCK 播放 · 完整 33 頁原生姿勢 · 結果、逐項觀察與來源指紋 · 原生日誌、反例、代表畫面及重現紀錄。製作責任與重建方式見[前景來源與驗證](../../design/runtime/avatar-prop-foreground.md)。固定基準 `f3acd8f`；分支 `codex/wardrobe-review-20261112`。

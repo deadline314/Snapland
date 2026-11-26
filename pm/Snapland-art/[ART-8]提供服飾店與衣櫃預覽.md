@@ -49,7 +49,7 @@
 
 | 畫面證據 | 說明 |
 | --- | --- |
-| [衣櫃外觀](images/ART-8-appearance.png) · [草帽試穿](images/ART-8-preview-hat-straw.png) · [珊瑚服飾試穿](images/ART-8-preview-outfit-coral.png) | 原生靜態畫面 |
+| 衣櫃外觀 · 草帽試穿 · 珊瑚服飾試穿 | 原生靜態畫面 |
 | [800 視窗](images/ART-8-layout-800.png) · [1280 視窗](images/ART-8-layout-1280.png) | 根任務檢視 800 視窗；原生控制範圍與輸入檢查通過 |
 
 程式交付：[Commit 0114a92](https://github.com/deadline314/Snapland/commit/0114a92341725aefcf7eff3fc477dfe66adad482)（分支 `feature/island-first-park`；固定基準 `4c320b9d6eef219d5ea90a9b96cb09ad7a68b3a5`）。
@@ -67,7 +67,7 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 本輪三尺寸為800×450、1280×720及1920×1080，文字1.25倍；最大尺寸核對實際夜間與降低動態。要求值、Window、後端、viewport縮放與PNG尺寸一致；只改後端而Window未變的反例已拒絕。舊Windows圖保留為歷史；本輪另補800×600完整實體視窗，內容800×450及上下各75px留白分別核對。現行paper與wardrobe來源最新提交82a6f38已在main；不將無法解析的舊feature連結當合入證明。
 
-[尺寸方法與官方比較](../../design/runtime/native-window-verification.md) · [導覽／焦點與14項回歸](images/ART-23-verify-20261020.json) · [分類收藏](images/ART-24-verify-20261020.json) · [換裝／設定](images/ART-25-verify-20261020.json) · [小遊戲／照片UI](images/ART-26-verify-20261020.json)。此結案限本票列明的基礎介面；ART-20實際遊園拍貼流程、ART-21各玩法畫面品質、Windows EXE與真人體驗沒有自動結案。
+[尺寸方法與官方比較](../../design/runtime/native-window-verification.md) · 導覽／焦點與14項回歸 · 分類收藏 · 換裝／設定 · 小遊戲／照片UI。此結案限本票列明的基礎介面；ART-20實際遊園拍貼流程、ART-21各玩法畫面品質、Windows EXE與真人體驗沒有自動結案。
 
 
-本輪另實際查看800×600的八張衣櫃／設定頁，33頁原生流程exit0、0ERROR；只將這八張列為本次人工圖像檢視。[八頁總覽](images/ART-8-verify-20261020-800x600-overview.png) · [尺寸、來源及範圍](images/ART-8-verify-20261020-800x600.json)。非16:9視窗的viewport圖會排除留白，現直接擷取原生client window，PNG實際800×600；未放大內容圖冒充視窗大小。
+本輪另實際查看800×600的八張衣櫃／設定頁，33頁原生流程exit0、0ERROR；只將這八張列為本次人工圖像檢視。八頁總覽 · 尺寸、來源及範圍。非16:9視窗的viewport圖會排除留白，現直接擷取原生client window，PNG實際800×600；未放大內容圖冒充視窗大小。

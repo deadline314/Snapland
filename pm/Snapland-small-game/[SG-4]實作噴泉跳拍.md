@@ -64,13 +64,13 @@ c1b7b19；feature/island-first-park。
 
 [小遊戲研究](../../design/runtime/minigame-research.md)。圖例為審閱參考，不是本作遊戲素材或試玩證據。
 
-![業界參考](images/SG-2-reference-jamboree.jpg)
+業界參考（畫面已精簡）
 
 ### 截圖
 
-![本票原生畫面](images/SG-4-game.png)
+本票原生畫面（畫面已精簡）
 
-![本票原生畫面](images/SG-4-result.png)
+本票原生畫面（畫面已精簡）
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
 
@@ -81,6 +81,6 @@ c1b7b19；feature/island-first-park。
 
 本輪真Godot4.7.2核心、小遊戲（81案例）及主場景三項回歸均exit0、0ERROR且有完成行；小遊戲涵蓋十二款正常／輔助成功與失敗、計分及輸入邊界。依現行規則，部分輔助模式只有普通收藏，不把輔助完成冒稱惡魔；惡魔條件仍由正式判定取得。MAIN-14本輪另有十二款實際入口／教學／取消／重進，MAIN-13／16有正式普通／惡魔照片及新程序重開。
 
-[共用現行數據與證據範圍](images/SG-2-baseline-20261020-verification.json) · [核心](images/SG-2-baseline-20261020-core-runtime-tests.log) · [十二款](images/SG-2-baseline-20261020-welcome-minigame-tests.log) · [主場景](images/SG-2-baseline-20261020-main-scene-integration-tests.log)。實作前研究及舊原生圖保留於Commit-1；補充採用[本輪七團隊比較](../../design/02-minigames/revision-notes.md)的動詞差異、輔助容差、失敗可理解及資訊可回看方法，Panic圖是外部靜態研究，未當本作素材。
+共用現行數據與證據範圍 · 核心 · 十二款 · 主場景。實作前研究及舊原生圖保留於Commit-1；補充採用[本輪七團隊比較](../../design/02-minigames/revision-notes.md)的動詞差異、輔助容差、失敗可理解及資訊可回看方法，Panic圖是外部靜態研究，未當本作素材。
 
 本票按已列三項第一版驗收結案；各款SG-16～27、共通SG-14與ART-21仍按各自精修範圍驗收。舊原生圖片已重新查看但仍標為歷史，本輪模型／輸入回歸不冒稱十二款新GPU通關、Windows EXE、真人試玩或實際聽感。

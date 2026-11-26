@@ -63,12 +63,12 @@
 
 ### 截圖
 
-![碼頭入場與免費渡船](images/MAIN-24-harbor-20261113-800-arrival.png)
+碼頭入場與免費渡船（畫面已精簡）
 
-![漲潮時的實際區域地圖](images/MAIN-24-harbor-20261113-800-map-high.png)
+漲潮時的實際區域地圖（畫面已精簡）
 
-![原有迎賓收藏仍可查看](images/MAIN-24-harbor-20261113-welcome-collection.png)
+原有迎賓收藏仍可查看（畫面已精簡）
 
-![獨立輸出包](images/MAIN-24-harbor-20261113-pck.png)
+獨立輸出包（畫面已精簡）
 
-[證據索引](images/MAIN-24-harbor-20261113-evidence-index.md)；[完整原生畫面、測試與審查](images/MAIN-24-harbor-20261113-evidence.zip)；[成品來源與指紋](images/MAIN-24-harbor-20261113-verification.json)。
+證據索引；完整原生畫面、測試與審查；成品來源與指紋。

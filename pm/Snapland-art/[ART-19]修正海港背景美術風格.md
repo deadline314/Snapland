@@ -53,13 +53,13 @@
 
 [七方閱讀與採用理由](../../design/runtime/background-art-revision.md)。生成提示詞、來源和雜湊保存在背景資產紀錄，工具為內建 image generation。
 
-![原圖](images/ART-19-original.png)
-![修正版](images/ART-19-revised.png)
-![實際閱讀的像素群例圖](images/ART-19-ref-clusters.png)
-![碼頭原生畫面](images/ART-19-game-01-noon.png)
-![溫室原生畫面](images/ART-19-game-07-noon.png)
-![舞台原生畫面](images/ART-19-game-06-dusk.png)
-![夜間原生畫面](images/ART-19-game-10-night.png)
+原圖（畫面已精簡）
+修正版（畫面已精簡）
+實際閱讀的像素群例圖（畫面已精簡）
+碼頭原生畫面（畫面已精簡）
+溫室原生畫面（畫面已精簡）
+舞台原生畫面（畫面已精簡）
+夜間原生畫面（畫面已精簡）
 
 48 張完整畫面依 images/ART-19-game-01–12-dawn/noon/dusk/night.png 命名；降低動態畫面為 images/ART-19-reduced-motion-on.png。
 
@@ -85,9 +85,9 @@
 | 實際查看 | 三頁共 36 張正向畫面及一頁 8 張反向畫面 |
 | 現行時段／降低動態 | 沿用 ART-21 的已交付 60 格驗收，不冒稱本輪重跑 |
 
-[完整畫面、原始紀錄及重播程序](images/ART-19-retired-20261024-evidence.zip)；[來源版本、範圍及雜湊](images/ART-19-retired-20261024-review.json)。
+完整畫面、原始紀錄及重播程序；來源版本、範圍及雜湊。
 
-![十二款比較一](images/ART-19-retired-20261024-contact-1.png)
-![十二款比較二](images/ART-19-retired-20261024-contact-2.png)
-![十二款比較三](images/ART-19-retired-20261024-contact-3.png)
-![裸露舊背景的反向對照](images/ART-19-retired-20261024-contact-negative.png)
+十二款比較一（畫面已精簡）
+十二款比較二（畫面已精簡）
+十二款比較三（畫面已精簡）
+裸露舊背景的反向對照（畫面已精簡）

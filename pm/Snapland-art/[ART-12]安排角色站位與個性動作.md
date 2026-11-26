@@ -66,11 +66,11 @@ NPC位置容易遮擋，角色缺少各自活動節奏。
 ### 截圖
 
 [原生或研究證據：ART-12-announcer-01.png](images/ART-12-announcer-01.png)
-[原生或研究證據：ART-12-announcer-02.png](images/ART-12-announcer-02.png)
+原生或研究證據：ART-12-announcer-02.png
 [原生或研究證據：ART-12-imp-01.png](images/ART-12-imp-01.png)
-[原生或研究證據：ART-12-imp-02.png](images/ART-12-imp-02.png)
+原生或研究證據：ART-12-imp-02.png
 [原生或研究證據：ART-12-ticket-01.png](images/ART-12-ticket-01.png)
-[原生或研究證據：ART-12-ticket-02.png](images/ART-12-ticket-02.png)
+原生或研究證據：ART-12-ticket-02.png
 
 ### 程式與證據提交
 分支：feature/island-first-park。更新至最新main後的本票提交：[449c328](https://github.com/deadline314/Snapland/commit/449c328b6bd41116b15e190b96ea90a0935d4539)。
@@ -90,7 +90,7 @@ NPC位置容易遮擋，角色缺少各自活動節奏。
 
 這次完成的是本票站位、短活動、接地及通行範圍；票票／小角仍缺正式完整方向行走，主角與所有NPC整套動畫繼續由ART-16／17／18驗收，不能由本票結案推論全套動作完成。原畫及正式角色程式未因本次驗收變更。
 
-![三位角色現行自然活動1](images/ART-12-live-20261024-npc-live-v2-contact-1.jpg)
-![三位角色現行自然活動2](images/ART-12-live-20261024-npc-live-v2-contact-2.jpg)
+三位角色現行自然活動1（畫面已精簡）
+三位角色現行自然活動2（畫面已精簡）
 
-[原生活動短片](images/ART-12-live-20261024-npc-live-v2-live.mp4) · [腳底逐次量測](images/ART-12-live-20261024-npc-live-v2-feet.json) · [範圍與來源](images/ART-12-live-20261024-verification.json) · [局部結果](images/ART-12-live-20261024-npc-checks-results.json) · [取景／量測來源](images/ART-12-live-20261024-sources.zip)。
+原生活動短片 · 腳底逐次量測 · 範圍與來源 · 局部結果 · 取景／量測來源。

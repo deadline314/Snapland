@@ -61,11 +61,11 @@ c1b7b19；feature/island-first-park。
 
 [核心與成就研究](../../design/runtime/core-research.md)。圖例為審閱參考，不是本作遊戲素材或試玩證據。
 
-![業界參考](../Snapland-art/images/ART-1-reference-octopath.jpg)
+業界參考（畫面已精簡）
 
 ### 截圖
 
-![本票原生畫面](images/MAIN-3-startup.png)
+本票原生畫面（畫面已精簡）
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
 
@@ -80,4 +80,4 @@ Related：MAIN-18（驗收入口辨識與失敗收束）。
 
 用未改動的正式腳本做兩個獨立反例：不存在的GODOT_BIN返回1；包含project.godot但缺正式測試的隔離小專案也返回1，沒有NOT APPLICABLE或成功略過。23項入口／完成契約另已通過，正式92項及原90／240秒上限不變。
 
-[缺引擎反例](images/MAIN-3-runtime-guard-20261020-missing-engine.log) · [缺測試反例](images/MAIN-3-runtime-guard-20261020-missing-suite.log) · [實際結果](images/MAIN-3-runtime-guard-20261020-verification.json) · [當前原生尺寸／導覽證據](../Snapland-art/images/ART-23-verify-20261020.json)。本票按「能啟動且CI真的執行、不能略過」結案；其他美術、內容及全域失敗不隨之結案。
+缺引擎反例 · 缺測試反例 · 實際結果 · 當前原生尺寸／導覽證據。本票按「能啟動且CI真的執行、不能略過」結案；其他美術、內容及全域失敗不隨之結案。

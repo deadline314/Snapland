@@ -66,11 +66,11 @@ c1b7b19；feature/island-first-park。
 
 [園區與介面研究](../../design/runtime/world-research.md)。圖例為審閱參考，不是本作遊戲素材或試玩證據。
 
-![業界參考](images/ART-2-reference-accessibility.jpg)
+業界參考（畫面已精簡）
 
 ### 截圖
 
-![本票原生畫面](images/ART-2-album-ui.png)
+本票原生畫面（畫面已精簡）
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
 
@@ -81,4 +81,4 @@ c1b7b19；feature/island-first-park。
 
 本輪三尺寸為800×450、1280×720及1920×1080，文字1.25倍；最大尺寸核對實際夜間與降低動態。要求值、Window、後端、viewport縮放與PNG尺寸一致；只改後端而Window未變的反例已拒絕。舊Windows／800×600圖保留為歷史，不能冒稱本輪驗過。現行paper與wardrobe來源最新提交82a6f38已在main；不將無法解析的舊feature連結當合入證明。
 
-[尺寸方法與官方比較](../../design/runtime/native-window-verification.md) · [導覽／焦點與14項回歸](images/ART-23-verify-20261020.json) · [分類收藏](images/ART-24-verify-20261020.json) · [換裝／設定](images/ART-25-verify-20261020.json) · [小遊戲／照片UI](images/ART-26-verify-20261020.json)。此結案限本票列明的基礎介面；ART-20實際遊園拍貼流程、ART-21各玩法畫面品質、Windows EXE與真人體驗沒有自動結案。
+[尺寸方法與官方比較](../../design/runtime/native-window-verification.md) · 導覽／焦點與14項回歸 · 分類收藏 · 換裝／設定 · 小遊戲／照片UI。此結案限本票列明的基礎介面；ART-20實際遊園拍貼流程、ART-21各玩法畫面品質、Windows EXE與真人體驗沒有自動結案。

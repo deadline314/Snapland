@@ -54,11 +54,11 @@
 
 原生測試在站點間有定位，時段／降低動態由隔離 fixture 切換；沒有冒充全程步行或時段面板操作。已實看踢球、鐘與水閘前後原尺寸圖，以及影片的均勻抽樣；影片為 1280×720、20 FPS、150 幀／7.5 秒，完整解碼 0 錯誤。不宣稱人類完整連續觀看、即時效能或音效主觀試聽。
 
-![可控制方向的海漂球](images/MAIN-21-play-20261020-ball-side-kick.png)
-![可自行敲節奏的潮鐘](images/MAIN-21-play-20261020-bell-played.png)
-![打開的水閘及落水](images/MAIN-21-play-20261020-wheel-night-open.png)
+可控制方向的海漂球（畫面已精簡）
+可自行敲節奏的潮鐘（畫面已精簡）
+打開的水閘及落水（畫面已精簡）
 
-[實際操作短片](images/MAIN-21-play-20261020-play.mp4) · [原生報告](images/MAIN-21-play-20261020-report.json) · [原生日誌](images/MAIN-21-play-20261020-native.log) · [物理與生命週期測試](images/MAIN-21-play-20261020-freeplay.log) · [布局測試](images/MAIN-21-play-20261020-layout.log) · [原先球架搶互動的拒收紀錄](images/MAIN-21-play-20261020-rejected-recall.log) · [啟動檢視工具的拒收紀錄](images/MAIN-21-play-20261020-rejected-capture.log) · [證據雜湊](images/MAIN-21-play-20261020-manifest.json)。
+實際操作短片 · 原生報告 · 原生日誌 · 物理與生命週期測試 · 布局測試 · 原先球架搶互動的拒收紀錄 · 啟動檢視工具的拒收紀錄 · 證據雜湊。
 
 本票結案限已開放海岸三種自由互動；所有園區的內容豐富度及整體美術仍依其他票接續。
 

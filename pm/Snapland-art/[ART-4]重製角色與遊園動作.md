@@ -51,7 +51,7 @@
 | 畫面證據 | 說明 |
 | --- | --- |
 | [小角身份近景](images/ART-4-kaku-portrait.png) · [票票近景](images/ART-4-ticket-portrait.png) | 角色靜態近景 |
-| [主角朝前](images/ART-4-step-front.png) · [朝後](images/ART-4-step-back.png) · [朝左](images/ART-4-step-left.png) · [朝右](images/ART-4-step-right.png) | 方向動作靜態畫格 |
+| 主角朝前 · 朝後 · 朝左 · 朝右 | 方向動作靜態畫格 |
 | [行走預覽影片](images/ART-7-walk-preview.mp4) | 使用者已看過並提出步態意見；影片仍非行走品質驗收 |
 | [主角全身待機](images/ART-15-sprite-clearance-avatar-idle-front.png) · [NPC 售票員](images/ART-15-sprite-clearance-npc-ticket-first.png) · [小角降低動態](images/ART-15-sprite-clearance-npc-imp-reduced.png) | 原生全身 fixture 靜態圖，不宣稱動畫完成 |
 

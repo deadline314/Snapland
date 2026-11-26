@@ -28,8 +28,8 @@
 - [Dave the Diver 官方畫面](https://store.steampowered.com/app/1868140/DAVE_THE_DIVER/)：任務、時間與工具分組，需求靠近對象；不照搬經營畫面的資訊密度。
 - [Hades 官方更新說明](https://www.supergiantgames.com/blog/hades-superstar-update-patch-notes/)：閱讀了暫停變暗、減少重複數值和讓返回更清楚的說明；本項沒有觀看遊戲畫面。
 
-![Sea of Stars 狀態與操作分區](images/ART-20-ref-sea-of-stars.png)
-![Dave the Diver 餐廳操作分區](images/ART-20-ref-dave-menu.png)
+Sea of Stars 狀態與操作分區（畫面已精簡）
+Dave the Diver 餐廳操作分區（畫面已精簡）
 
 ### 測試流程
 1. 查看本票研究紀錄與圖例，核對採用的原則和原生前後比較。
@@ -60,15 +60,15 @@
 
 ### 測試結果
 - 可提交版本：地圖／收藏／成就 59 項通過；衣櫃檢查通過；原生遊園介面輸入流程通過，0 腳本或引擎錯誤。
-- 證據：[驗收摘要](images/ART-20-review.json)、[原生操作影片](images/ART-20-native-ui.mp4)。
+- 證據：驗收摘要、原生操作影片。
 - 分支：`feature/island-first-park`；[遠端交付提交](https://github.com/deadline314/Snapland/commit/da19582)。
 
 ### 截圖
-![小視窗島嶼地圖](images/ART-20-map-800.png)
-![小視窗收藏本](images/ART-20-album-800.png)
-![小視窗成就印章](images/ART-20-achievements-800.png)
-![小視窗衣櫃](images/ART-20-wardrobe-800.png)
-![夜晚遊園介面](images/ART-20-main-night-800.png)
+小視窗島嶼地圖（畫面已精簡）
+小視窗收藏本（畫面已精簡）
+小視窗成就印章（畫面已精簡）
+小視窗衣櫃（畫面已精簡）
+夜晚遊園介面（畫面已精簡）
 
 
 # Commit-2
@@ -99,16 +99,16 @@
 
 | 畫面 | 基準版 | 候選版 |
 |---|---|---|
-| 標準外觀 | ![基準版標準外觀](images/ART-20-wardrobe-before-01-appearance-standard.png) | ![候選版標準外觀](images/ART-20-wardrobe-after-01-appearance-standard.png) |
-| 標準衣櫃 | ![基準版標準衣櫃](images/ART-20-wardrobe-before-02-closet-standard.png) | ![候選版標準衣櫃](images/ART-20-wardrobe-after-02-closet-standard.png) |
-| 未負擔商店選取 | ![基準版未負擔商店](images/ART-20-wardrobe-before-03-shop-unaffordable-100-focus.png) | ![候選版未負擔商店](images/ART-20-wardrobe-after-03-shop-unaffordable-100-focus.png) |
-| 降低動態商店 | ![基準版降低動態商店](images/ART-20-wardrobe-before-04-shop-reduced-motion.png) | ![候選版降低動態商店](images/ART-20-wardrobe-after-04-shop-reduced-motion.png) |
-| 800×600 商店 | ![基準版小視窗商店](images/ART-20-wardrobe-before-05-shop-compact-800x600.png) | ![候選版小視窗商店](images/ART-20-wardrobe-after-05-shop-compact-800x600.png) |
-| 800×600 外觀 | ![基準版小視窗外觀](images/ART-20-wardrobe-before-06-appearance-compact-800x600.png) | ![候選版小視窗外觀](images/ART-20-wardrobe-after-06-appearance-compact-800x600.png) |
+| 標準外觀 | 基準版標準外觀（畫面已精簡） | 候選版標準外觀（畫面已精簡） |
+| 標準衣櫃 | 基準版標準衣櫃（畫面已精簡） | 候選版標準衣櫃（畫面已精簡） |
+| 未負擔商店選取 | 基準版未負擔商店（畫面已精簡） | 候選版未負擔商店（畫面已精簡） |
+| 降低動態商店 | 基準版降低動態商店（畫面已精簡） | 候選版降低動態商店（畫面已精簡） |
+| 800×600 商店 | 基準版小視窗商店（畫面已精簡） | 候選版小視窗商店（畫面已精簡） |
+| 800×600 外觀 | 基準版小視窗外觀（畫面已精簡） | 候選版小視窗外觀（畫面已精簡） |
 
 ### 原生操作錄影
 
-[衣櫃標準尺寸四頁操作錄影](images/ART-20-wardrobe-hierarchy-native.mp4)
+衣櫃標準尺寸四頁操作錄影
 
 ### 提交
 
@@ -135,14 +135,14 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 主 Session 重建本票提交內容，版面、照片檢視器與共用縮圖三项局部驗證全過。實際原生操作遊園選單、四個時段及降低動態，錄影 891 格／14.85 秒、0 ERROR；已查看大／小相簿、地圖、衣櫃、設定、成就和對話截圖。實體視窗為 1280×720 與 800×600，後者截取的有效畫布是 800×450。保留第一輪裁字失敗圖，新增測試逐一核對卡片、文字與導覽位於紙頁和捲動區的可見範圍。正式遊戲取得照片及重開後檢視高清原圖仍與 MAIN-16 一起驗收；本票維持進行中，未把局部改善稱作所有介面精品完成。
 
 ### 測試與證據
-[版面決策與邊界](../../design/runtime/album-layout-refinement.md) · [照片放大與返回](../../design/runtime/album-photo-interaction.md) · [局部版面驗證](images/ART-20-island-final-layout-local.log) · [照片檢視驗證](images/ART-20-island-final-viewer-local.log) · [原生操作紀錄](images/ART-20-island-final-native.log) · [選單操作影片](images/ART-20-island-final-normal.mp4)。
+[版面決策與邊界](../../design/runtime/album-layout-refinement.md) · [照片放大與返回](../../design/runtime/album-photo-interaction.md) · 局部版面驗證 · 照片檢視驗證 · 原生操作紀錄 · 選單操作影片。
 
-![退回修正的下排裁字](images/ART-20-island-rejected-album-clipping.png)
-![四張照片、完整文字與導覽](images/ART-20-island-final-album-1280.png)
-![小視窗雙欄與固定返回](images/ART-20-island-final-album-800.png)
-![衣櫃完整人物預覽](images/ART-20-island-final-wardrobe-1280.png)
-![時段選擇](images/ART-20-island-final-time-800.png)
-![島嶼地圖](images/ART-20-island-final-map-1280.png)
+退回修正的下排裁字（畫面已精簡）
+四張照片、完整文字與導覽（畫面已精簡）
+小視窗雙欄與固定返回（畫面已精簡）
+衣櫃完整人物預覽（畫面已精簡）
+時段選擇（畫面已精簡）
+島嶼地圖（畫面已精簡）
 
 本輪提交基準：`e0a332b`；分支：`feature/island-experience`。共用改動涉及 MAIN-13 的收藏卡片顯示，沒有更改收藏資格或重新發獎勵。本段是程式化操作及原生畫面檢查，沒有人工試玩或試聽宣稱。
 
@@ -154,10 +154,10 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 
 同一八拍失敗輸入流程，原生引擎無視窗量測由 32.65 秒降至 2.86 秒；不當作渲染 FPS。完整原有首區整合 81 組於 79.37 秒完成、exit 0、0 ERROR，90 秒上限不變。節奏規則／畫面 42／138 項通過；HUD 保留原 69 項並加兩項真實通知與最新文字驗證，共 71 項，完成契約同步計數。
 
-[六方方法比較與範圍](../../design/runtime/hud-update-cost.md) · [完整整合紀錄](images/ART-20-live-theme-20261020-integration.log)。以下為原生 Compatibility／llvmpipe 的靜態 HUD 版面 fixture，人工設定顯示文字，並非正式回合或真人試玩。標準 1280×720 與小視窗 800×600（有效畫布 800×450）已實際查看，0 ERROR。初次小視窗 fixture 把實體尺寸再縮放一次，畫面拒收；修正 fixture 以 viewport 邏輯尺寸配置後重拍，保留原錯誤截圖；本票整套介面驗收仍維持進行中。
+[六方方法比較與範圍](../../design/runtime/hud-update-cost.md) · 完整整合紀錄。以下為原生 Compatibility／llvmpipe 的靜態 HUD 版面 fixture，人工設定顯示文字，並非正式回合或真人試玩。標準 1280×720 與小視窗 800×600（有效畫布 800×450）已實際查看，0 ERROR。初次小視窗 fixture 把實體尺寸再縮放一次，畫面拒收；修正 fixture 以 viewport 邏輯尺寸配置後重拍，保留原錯誤截圖；本票整套介面驗收仍維持進行中。
 
-![標準視窗 HUD](images/ART-20-live-theme-20261020-corrected-hud-1280x720.png)
-![小視窗 HUD](images/ART-20-live-theme-20261020-corrected-hud-800x600.png)
+標準視窗 HUD（畫面已精簡）
+小視窗 HUD（畫面已精簡）
 
 
 # Commit-10：讓探索畫面先留給世界
@@ -175,9 +175,9 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 - 本輪十二張介面總覽，以及 800 探索／旅券、1280 對話、1920 探索原尺寸圖已實際看過。海岸三種自由互動在最終 UI 下也重新通過，32.69 秒、0 ERROR。
 - 原生短片保留真實輸入；全檔解碼通過、均勻抽樣已看過，未宣稱人工連續播放、主觀試聽或全島美術驗收。站點間有測試定位，尺寸／時段由隔離 fixture 切換。
 
-![三尺寸探索、旅券、對話與入口](images/ART-20-light-20261020-overview.png)
+三尺寸探索、旅券、對話與入口（畫面已精簡）
 
-[減負前的相同潮鐘位置](../Snapland-main/images/MAIN-21-play-20261020-bell-before.png) · [800 像素探索](images/ART-20-light-20261020-800-exploration.png) · [最終互動短片](images/ART-20-light-20261020-play.mp4) · [原生報告](images/ART-20-light-20261020-report.json) · [三尺寸 shell](images/ART-20-light-20261020-shell.log) · [對話](images/ART-20-light-20261020-dialogue.log) · [小遊戲 UI](images/ART-20-light-20261020-ui-minigames.log) · [來源雜湊](images/ART-20-light-20261020-manifest.json)。
+減負前的相同潮鐘位置 · 800 像素探索 · 最終互動短片 · 原生報告 · 三尺寸 shell · 對話 · 小遊戲 UI · 來源雜湊。
 
 本輪交付以 `c4eaae5` 接續，限遊園常駐資訊、附近操作與場景文字層級；全套介面和拍貼流程仍依未勾選條件驗收，狀態保持進行中。
 
@@ -192,12 +192,12 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 
 七張流程圖以兩頁聯絡圖實際查看；這是程式派送真實輸入與原生畫面驗收，不是玩家試玩或聲音試聽。初輪93.94秒因驗收工具過早要求結算而失敗，原始紀錄保留。本段支持照片取得、收藏閱讀與持久化範圍，整套視覺與其他未勾選條件維持原狀，票仍進行中。
 
-![實際普通／小惡魔結果及收藏](images/ART-20-photo-20261024-contact-1.jpg)
-![原圖放大與重載](images/ART-20-photo-20261024-contact-2.jpg)
+實際普通／小惡魔結果及收藏（畫面已精簡）
+原圖放大與重載（畫面已精簡）
 
-[流程紀錄](images/ART-20-photo-20261024-flow-report.json) · [真正重開與檔案雜湊](images/ART-20-photo-20261024-reopen-result.json) · [首輪拒收](images/ART-20-photo-20261024-rejected.log) · [證據指紋](images/ART-20-photo-20261024-manifest.json) · [修正後清單與本輪實讀來源](../../design/runtime/ui-manual-review-checklist.md)。
+流程紀錄 · 真正重開與檔案雜湊 · 首輪拒收 · 證據指紋 · [修正後清單與本輪實讀來源](../../design/runtime/ui-manual-review-checklist.md)。
 
-Main完整局部整合另以官方入口重跑22.39秒通過，原90秒上限保留；[結果](images/ART-20-photo-20261024-integration-result.json)。
+Main完整局部整合另以官方入口重跑22.39秒通過，原90秒上限保留；結果。
 
 
 # Commit — 2026-10-24 完成整套介面檢視與地圖選取減負
@@ -231,10 +231,10 @@ Main完整局部整合另以官方入口重跑22.39秒通過，原90秒上限保
 
 ### 畫面與流程
 
-![小視窗三種最終選取，返回均可見](images/ART-20-current-20261024-map-review-800.jpg)
-![標準尺寸最終選取](images/ART-20-current-20261024-map-review-1280.jpg)
-![大視窗最終選取](images/ART-20-current-20261024-map-review-1920.jpg)
+小視窗三種最終選取，返回均可見（畫面已精簡）
+標準尺寸最終選取（畫面已精簡）
+大視窗最終選取（畫面已精簡）
 
-[整套標準畫面第一頁](images/ART-20-current-20261024-standard-contact-1.jpg) · [小視窗第一頁](images/ART-20-current-20261024-compact-contact-1.jpg) · [大視窗第一頁](images/ART-20-current-20261024-large-contact-1.jpg)；每種各六頁，完整99張、原始報告及前後來源均在附件。
+整套標準畫面第一頁 · 小視窗第一頁 · 大視窗第一頁；每種各六頁，完整99張、原始報告及前後來源均在附件。
 
-[最終地圖鍵鼠影片](images/ART-20-current-20261024-map-native.mp4) · [影片實看抽樣](images/ART-20-current-20261024-map-video-samples.jpg) · [證據與指紋](images/ART-20-current-20261024-verification.json) · [完整圖、原版與拒收候選、可重播流程](images/ART-20-current-20261024-full-captures-and-replay.zip) · [原因、實讀研究與共通流程](../../design/runtime/island-map-target-layout.md)。
+最終地圖鍵鼠影片 · 影片實看抽樣 · 證據與指紋 · 完整圖、原版與拒收候選、可重播流程 · [原因、實讀研究與共通流程](../../design/runtime/island-map-target-layout.md)。

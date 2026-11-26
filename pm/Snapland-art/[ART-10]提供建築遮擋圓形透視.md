@@ -38,7 +38,7 @@
 
 ## 研究圖例
 
-![ShaderCrew 官網提供的建築局部揭露示意](images/ART-10-reference-reveal.png)
+ShaderCrew 官網提供的建築局部揭露示意（畫面已精簡）
 
 官網靜態圖可看見建築內部與角色位置，並非圓形遮罩動態證據。只借鑑遮擋處仍能辨識角色的目的；Snapland 保留自己的建築配色與圓形局部透視。來源：https://shadercrew.com/assets/reveal.png。六種來源及取捨见研究文件。
 
@@ -55,8 +55,8 @@
 | 畫面證據 | 說明 |
 | --- | --- |
 | [遮擋日景](images/ART-10-cutaway-day.png) · [遮擋夜景](images/ART-10-cutaway-night.png) · [降低動態](images/ART-10-cutaway-reduced-motion.png) | 原生靜態畫面 |
-| [右側小亭遮擋](images/ART-10-cutaway-right-kiosk.png) · [拱門遮擋](images/ART-10-arch-cutaway-day.png) | 固定審查視角畫面 |
-| [1600×900 視窗](images/ART-10-arch-cutaway-resized-equipped.png) · [遮擋退出後](images/ART-10-arch-cutaway-clear.png) | 原生靜態畫面 |
+| 右側小亭遮擋 · 拱門遮擋 | 固定審查視角畫面 |
+| [1600×900 視窗](images/ART-10-arch-cutaway-resized-equipped.png) · 遮擋退出後 | 原生靜態畫面 |
 
 程式交付：[Commit 886816a](https://github.com/deadline314/Snapland/commit/886816ad9a7d35b7702cce48a93e4fd052517bb8)（分支 `feature/island-first-park`；固定基準 `a1fc7abaa91a5d9fdf6e2c7ca084f0dba0205985`）。
 
@@ -90,11 +90,11 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 ### 截圖與錄影
 
-![完整牆面](images/ART-10-native-v2-opaque.png)
-![完整主角的柔邊圓形透視](images/ART-10-native-v2-reveal.png)
-![離開後牆面恢復](images/ART-10-native-v2-restored.png)
+完整牆面（畫面已精簡）
+完整主角的柔邊圓形透視（畫面已精簡）
+離開後牆面恢復（畫面已精簡）
 
-[原生測試場景錄影](images/ART-10-native-v2-reveal.mp4)。分支：`feature/island-experience`；本輪固定基準：`86bd44cd7017fb2d4bc05685271f6cdfa618c9da`。遠端連結於推送後補入。
+原生測試場景錄影。分支：`feature/island-experience`；本輪固定基準：`86bd44cd7017fb2d4bc05685271f6cdfa618c9da`。遠端連結於推送後補入。
 
 
 # Commit — 2026-10-20 修復大量建築的透視參數容量
@@ -105,11 +105,11 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 原有遮擋與日光兩項回歸通過；新增來源不可變、相同來源重用、跨控制器隔離與清理檢查。完整園區仍有 865 個布景網格，1280×720 的實際時段拍照／原圖檢視已重跑為 0 ERROR。使用 Godot 4.7.2、Compatibility、llvmpipe；不是 Windows 硬體、Forward+ 完整光影或真人試玩驗收。原有不支援特殊材質警告保留，票維持進行中。
 
-[六方資料與選擇](../../design/runtime/occlusion.md) · [遮擋實測](images/ART-10-capacity-20261020-occlusion.log) · [日光實測](images/ART-10-capacity-20261020-daylight.log)。修正前後的引擎記錄、照片與雜湊見本批驗證索引。
+[六方資料與選擇](../../design/runtime/occlusion.md) · 遮擋實測 · 日光實測。修正前後的引擎記錄、照片與雜湊見本批驗證索引。
 
-[本輪來源、範圍、修正前後與圖片雜湊](images/ART-10-capacity-20261020-verification.json)。
+本輪來源、範圍、修正前後與圖片雜湊。
 
-![本輪實際原圖檢視；作為渲染容量回歸背景，不是透視動畫驗收](images/ART-10-capacity-20261020-viewer.png)
+本輪實際原圖檢視；作為渲染容量回歸背景，不是透視動畫驗收（畫面已精簡）
 
 # Commit — 2026-10-23 依實際立牌開圈並完成原生前後驗收
 
@@ -139,7 +139,7 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 量測過程發現的假差異都保留原因：鄰近燈柱、植栽等立牌的透明邊緣會在隱藏主角時改變幾個像素，最後改為量測時隱藏其他立牌與標籤，只比較主角與建築；門檻沒有放寬。Godot 4.7.2 Compatibility、Xvfb 上的 llvmpipe 軟體繪製，腳本送出實際方向鍵；不是 GPU 硬體、Windows 或真人試玩。
 
-![修正前後：同一路線、同一亭子](images/ART-10-occlusion-20261023-before-after.png)
-![拱門透視、關閉與離開後恢復（量測畫面隱藏其他立牌）](images/ART-10-occlusion-20261023-arch.png)
+修正前後：同一路線、同一亭子（畫面已精簡）
+拱門透視、關閉與離開後恢復（量測畫面隱藏其他立牌）（畫面已精簡）
 
-[正常速度短片](images/ART-10-occlusion-20261023-normal.mp4)（26.2 秒，30 FPS 固定時鐘，中午與夜晚各走兩種建築） · [真正四分之一速度](images/ART-10-occlusion-20261023-quarter.mp4)（98.5 秒） · [逐案量測](images/ART-10-occlusion-20261023-verification.json) · [研究與決策](../../design/runtime/occlusion.md)
+正常速度短片（26.2 秒，30 FPS 固定時鐘，中午與夜晚各走兩種建築） · 真正四分之一速度（98.5 秒） · 逐案量測 · [研究與決策](../../design/runtime/occlusion.md)

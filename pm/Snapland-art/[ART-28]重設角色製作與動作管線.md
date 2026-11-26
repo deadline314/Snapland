@@ -53,7 +53,7 @@
 | 全域設計檢查 | 園區通過後因既有小遊戲目錄缺檔中止 |
 | 設計一致性審閱 | 已收窄可選 NPC 巡路敘述，並釐清程式與研究提交基準 |
 
-[完整設計](../../design/runtime/character-production-pipeline-v2.md)；[核對紀錄](images/ART-28-document-review.json)。
+[完整設計](../../design/runtime/character-production-pipeline-v2.md)；核對紀錄。
 
 ### 截圖
 

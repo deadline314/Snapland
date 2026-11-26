@@ -61,12 +61,12 @@
 
 ### 截圖
 
-![2D 主角獨立樣本啟動畫面](images/ART-29-2d-export-startup.png)
-![兩髮型、髮帽與兩件外套的八方向組合](images/ART-29-2d-looks.png)
-![舉機途中切換外觀](images/ART-29-2d-photo.png)
+2D 主角獨立樣本啟動畫面（畫面已精簡）
+兩髮型、髮帽與兩件外套的八方向組合（畫面已精簡）
+舉機途中切換外觀（畫面已精簡）
 
-[正常錄影](images/ART-29-2d-normal.mp4)（39.133 秒／1174 格）、[四分之一模擬速度錄影](images/ART-29-2d-quarter.mp4)（141.733 秒／4252 格），均為 1280×800、30 FPS。
-[全身步行](images/ART-29-2d-windswept-hat0-tide_jacket-walk.png)、[長外套起步](images/ART-29-2d-windswept-hat0-long_coat-start.png)、[停步](images/ART-29-2d-windswept-hat0-long_coat-stop.png)、[轉身](images/ART-29-2d-windswept-hat0-long_coat-turn.png)、[相機全身圖格](images/ART-29-2d-bob-hat1-long_coat-photo.png)。
+正常錄影（39.133 秒／1174 格）、四分之一模擬速度錄影（141.733 秒／4252 格），均為 1280×800、30 FPS。
+全身步行、長外套起步、停步、轉身、相機全身圖格。
 [驗收範圍與版本證據](images/ART-29-2d-verification.json)、[樣本操作與重製](../../design/runtime/hero-2d-sample-delivery.md)。
 
 本次交付位於 `feature/island-experience`，限獨立主角樣本；遠端交付提交 [ddba856](https://github.com/deadline314/Snapland/commit/ddba8565590f148b060a868df6b2efb4042dcb06)。
@@ -91,8 +91,8 @@
 
 ### 截圖
 
-![兩件外套的逐格頭部標記之一](images/ART-29-head-follow-markers-3.png)
-[全部標記與驗收範圍](images/ART-29-head-follow-verification.json)、[來源重建結果](images/ART-29-head-follow-reproducibility.json)。Commit-1 的八組外觀媒體保留為前版紀錄；最新單髮型正常／慢放及髮根跟隨證據見 [ART-30]([ART-30]製作主角髮尾骨架動態樣本.md)。
+兩件外套的逐格頭部標記之一（畫面已精簡）
+全部標記與驗收範圍、來源重建結果。Commit-1 的八組外觀媒體保留為前版紀錄；最新單髮型正常／慢放及髮根跟隨證據見 [ART-30]([ART-30]製作主角髮尾骨架動態樣本.md)。
 
 # Commit-3
 
@@ -113,10 +113,10 @@
 
 ### 截圖
 
-![兩款髮型與帽子的八方向](images/ART-31-looks-tide_jacket.png)
+兩款髮型與帽子的八方向（畫面已精簡）
 
-![另一件衣物與相機保持接合](images/ART-31-looks-long_coat.png)
+另一件衣物與相機保持接合（畫面已精簡）
 
-![拍照中換裝](images/ART-31-sample-photo-mid-appearance.png)
+拍照中換裝（畫面已精簡）
 
-[最新正常錄影](images/ART-31-sample-normal.mp4)、[最新慢速錄影](images/ART-31-sample-quarter.mp4)、[本輪驗收紀錄](images/ART-31-verification.json)。本段取代前兩段對行走偏移的通過結論。
+最新正常錄影、最新慢速錄影、本輪驗收紀錄。本段取代前兩段對行走偏移的通過結論。

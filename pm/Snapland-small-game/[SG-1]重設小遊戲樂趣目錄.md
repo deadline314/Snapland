@@ -54,9 +54,9 @@
 | 文件畫面 | 實際PDF頁面點陣擷取並檢視；初版錯字型候選拒收 |
 | 遊戲／真人試玩 | 本票未執行，不由文件或資料測試推論 |
 
-[完整可讀目錄](../../design/02-minigames/catalog.md) · [六款原型順序](../../design/02-minigames/prototype-order.md) · [驗證範圍與雜湊](images/SG-1-verification.json) · [Python記錄](images/SG-1-python-full.log)。本票結案只代表設計需求交付，沒有把其他實作票結案。
+[完整可讀目錄](../../design/02-minigames/catalog.md) · [六款原型順序](../../design/02-minigames/prototype-order.md) · 驗證範圍與雜湊 · Python記錄。本票結案只代表設計需求交付，沒有把其他實作票結案。
 
-![實際設計文件頁面，不是遊戲畫面](images/SG-1-catalog-review.png)
+實際設計文件頁面，不是遊戲畫面（畫面已精簡）
 
 ![Panic官方靜態研究圖，非本作素材](images/SG-1-reference-b360.png)
 

@@ -66,13 +66,13 @@ c1b7b19；feature/island-first-park。
 
 [園區與介面研究](../../design/runtime/world-research.md)。圖例為審閱參考，不是本作遊戲素材或試玩證據。
 
-![業界參考](images/ART-1-reference-octopath.jpg)
+業界參考（畫面已精簡）
 
 ### 截圖
 
-![本票原生畫面](images/ART-1-plaza-day.png)
+本票原生畫面（畫面已精簡）
 
-![本票原生畫面](images/ART-1-plaza-night.png)
+本票原生畫面（畫面已精簡）
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
 
@@ -97,12 +97,12 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 主 Session 以本票提交內容重建並執行光影、地圖和設施局部驗證，三項全過，載入及執行沒有 ERROR。原生 GPU 擷取四時段共 361 格／6.017 秒，四張最終圖片均已實際查看：地面長影會隨日照改變，夜間燈光照亮附近人物，票票的完整全身可見。角色方向影是近似體積，未精確描出頭髮、衣服與坐姿；本段不宣稱完整角色動畫或整島精品品質通過，新增品質条件維持未勾。
 
 ### 測試與證據
-[多方向研究與圖例](../../design/runtime/island-experience-references.md) · [光影取捨与驗證界限](../../design/runtime/character-lighting-shadows.md) · [局部驗證](images/ART-1-island-final-lighting-local.log) · [原生紀錄](images/ART-1-island-final-native.log) · [四時段報告](images/ART-1-island-final-report.json) · [原生四時段影片](images/ART-1-island-final-normal.mp4)。
+[多方向研究與圖例](../../design/runtime/island-experience-references.md) · [光影取捨与驗證界限](../../design/runtime/character-lighting-shadows.md) · 局部驗證 · 原生紀錄 · 四時段報告 · 原生四時段影片。
 
-![凌晨廣場](images/ART-1-island-final-dawn.png)
-![中午廣場與完整票票](images/ART-1-island-final-noon.png)
-![傍晚方向陰影](images/ART-1-island-final-dusk.png)
-![夜晚附近燈光](images/ART-1-island-final-night.png)
+凌晨廣場（畫面已精簡）
+中午廣場與完整票票（畫面已精簡）
+傍晚方向陰影（畫面已精簡）
+夜晚附近燈光（畫面已精簡）
 
 本輪固定基準：`939130f`；分支：`feature/island-experience`；票況：進行中。共用變動包括 MAIN-11 的票票站位與 MAIN-15 的入口距離驗證，保留原有通路、互動及設施測試斷言；本段為受控場景檢查，沒有人工試玩或試聽宣稱。
 
@@ -131,16 +131,16 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 
 ### 截圖與紀錄
 
-![正面方向光透明缺口](images/ART-1-alpha-shadow-20261024-alpha-L.png)
-![背面低角度方向光](images/ART-1-alpha-shadow-20261024-back-alpha.png)
-![夜燈透明缺口](images/ART-1-alpha-shadow-20261024-point-alpha.png)
-![被拒絕的不透明方卡](images/ART-1-alpha-shadow-20261024-opaque-card-negative.png)
+正面方向光透明缺口（畫面已精簡）
+背面低角度方向光（畫面已精簡）
+夜燈透明缺口（畫面已精簡）
+被拒絕的不透明方卡（畫面已精簡）
 
-[正常採樣](images/ART-1-alpha-shadow-20261024-accepted-samples.json) ·
-[原生執行紀錄](images/ART-1-alpha-shadow-20261024-accepted-execution.log) ·
-[低解析度反例](images/ART-1-alpha-shadow-20261024-low-resolution-negative-samples.json) ·
-[先前失敗採樣](images/ART-1-alpha-shadow-20261024-rejected-wide-samples.json) ·
-[證據雜湊](images/ART-1-alpha-shadow-20261024-hashes.json) ·
+正常採樣 ·
+原生執行紀錄 ·
+低解析度反例 ·
+先前失敗採樣 ·
+證據雜湊 ·
 [研究與重跑流程](../../design/runtime/character-lighting-shadows.md#alpha-silhouette-feasibility-review-2026-10-24)。
 
 
@@ -163,16 +163,16 @@ Related：ART-22、MAIN-11、MAIN-14、MAIN-15、ST-5。
 以上只驗靜態合成的內部輪廓，不是全部頭髮邊緣、完整招手、動態髮尾、坐姿、
 八方向、正式島嶼、影片或輸出包驗收。原判定維持，整票及品質條件不勾選。
 
-![原外套投影對照，從原生畫面裁切供檢視](images/ART-1-character-alpha-20261024-base-contact.png)
-![長背心與草帽投影對照，從原生畫面裁切供檢視](images/ART-1-character-alpha-20261024-vest-hat-wave-contact.png)
+原外套投影對照，從原生畫面裁切供檢視（畫面已精簡）
+長背心與草帽投影對照，從原生畫面裁切供檢視（畫面已精簡）
 
-[原外套逐樣本](images/ART-1-character-alpha-20261024-base-samples.json) ·
-[長背心逐樣本](images/ART-1-character-alpha-20261024-vest-hat-wave-samples.json) ·
-[原外套來源](images/ART-1-character-alpha-20261024-base-source.png) ·
-[長背心來源](images/ART-1-character-alpha-20261024-vest-hat-wave-source.png) ·
-[原外套原生紀錄](images/ART-1-character-alpha-20261024-base-execution.log) ·
-[長背心原生紀錄](images/ART-1-character-alpha-20261024-vest-hat-wave-execution.log) ·
-[證據指紋](images/ART-1-character-alpha-20261024-hashes.json)。
+原外套逐樣本 ·
+長背心逐樣本 ·
+原外套來源 ·
+長背心來源 ·
+原外套原生紀錄 ·
+長背心原生紀錄 ·
+證據指紋。
 
 
 # Commit-5
@@ -214,24 +214,24 @@ ART-7／9／16／17／18分別驗收。
 
 ### 圖片、影片與重跑證據
 
-![凌晨前後，左為舊近似體積、右為當格輪廓](images/ART-1-upright-20261024-before-after-dawn.png)
-![中午前後，腳邊投影取自人物輪廓](images/ART-1-upright-20261024-before-after-noon.png)
-![傍晚前後](images/ART-1-upright-20261024-before-after-dusk.png)
-![夜間前後](images/ART-1-upright-20261024-before-after-night.png)
-![正式Main夜間降低動態，擷取設定另有紀錄](images/ART-1-upright-20261024-main-reduced.png)
+凌晨前後，左為舊近似體積、右為當格輪廓（畫面已精簡）
+中午前後，腳邊投影取自人物輪廓（畫面已精簡）
+傍晚前後（畫面已精簡）
+夜間前後（畫面已精簡）
+正式Main夜間降低動態，擷取設定另有紀錄（畫面已精簡）
 
-[正常原生錄影](images/ART-1-upright-20261024-normal.mp4) ·
-[真正四分之一速度](images/ART-1-upright-20261024-quarter.mp4) ·
-[逐項結果與限制](images/ART-1-upright-20261024-verification.json) ·
-[Main完整光影與夜間重驗](images/ART-1-upright-20261024-main-lighting.zip) ·
-[正常狀態原尺寸像素](images/ART-1-upright-20261024-world-normal.zip)／[慢放](images/ART-1-upright-20261024-world-quarter.zip) ·
-[舊版取景](images/ART-1-upright-20261024-world-before.zip) ·
-[原始失敗](images/ART-1-upright-20261024-negative.zip) ·
-[契約與輪廓反例](images/ART-1-upright-20261024-contracts.zip) ·
+正常原生錄影 ·
+真正四分之一速度 ·
+逐項結果與限制 ·
+Main完整光影與夜間重驗 ·
+正常狀態原尺寸像素／慢放 ·
+舊版取景 ·
+原始失敗 ·
+契約與輪廓反例 ·
 [重跑與圖片還原工具](images/ART-1-upright-20261024-replay.zip) ·
-[成品初次繪製及原始輸出紀錄](images/ART-1-upright-20261024-elf-captures.zip) ·
-[來源指紋與輸出](images/ART-1-upright-20261024-build.json) ·
-[證據指紋](images/ART-1-upright-20261024-hashes.json)。
+成品初次繪製及原始輸出紀錄 ·
+來源指紋與輸出 ·
+證據指紋。
 
 截圖矩陣採無損保存，逐張核對193張解碼RGBA；並實際還原正常組16張核對。
 重建PNG壓縮位元組可不同，像素不變；矩陣不是動畫影片。原片兩組保留全部
@@ -239,5 +239,5 @@ ART-7／9／16／17／18分別驗收。
 
 [本輪研究、舊版拒收與共同流程](../../design/runtime/character-lighting-shadows.md)
 重新檢視Godot的透明裁切、光源視角與陰影設定，以及已保存的
-[Octopath開發訪談圖例](images/ART-1-reference-octopath.jpg)，採分清人物與場景
+Octopath開發訪談圖例，採分清人物與場景
 層次、讓實際光源產生一致投影的方法。

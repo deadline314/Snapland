@@ -53,11 +53,11 @@
 精確提交內容的原圖、縮圖、收藏冊、照片檢視與核心局部檢查 6/6 通過；三次正向原生執行 0 個 ERROR。主 Session 完整播放正式流程 71.4 秒及時段流程 7.483 秒，實際查看相簿、原圖與重開畫面。兩次驗收腳本自身的翻頁／按鈕狀態錯誤保留失敗紀錄，修正後重新執行；沒有刪除收藏或畫面檢查。音訊使用 Dummy，本票沒有試聽宣稱。完整套件交 CI。
 
 ### 截圖與影片
-![正式收藏冊](images/MAIN-16-final-ordinary-album-tiles.png)
-![正式照片原圖](images/MAIN-16-final-ordinary-original-viewer.png)
-![重開後原圖](images/MAIN-16-final-reopened-original.png)
-![時段照片原圖](images/MAIN-16-final-time-original-viewer.png)
-[正式拍貼流程影片](images/MAIN-16-final-gameplay-normal.mp4) · [時段拍貼流程影片](images/MAIN-16-final-time-normal.mp4) · [證據與雜湊](images/MAIN-16-final-evidence.json)
+正式收藏冊（畫面已精簡）
+正式照片原圖（畫面已精簡）
+重開後原圖（畫面已精簡）
+時段照片原圖（畫面已精簡）
+正式拍貼流程影片 · 時段拍貼流程影片 · 證據與雜湊
 
 分支：`feature/island-experience`。本輪開始基準維持票內固定 SHA；原生證據採本票提交索引。票況維持進行中，與島上整組交付一起核對。程式與證據提交：[55466d2](https://github.com/deadline314/Snapland/commit/55466d2)。
 
@@ -70,7 +70,7 @@
 
 主 Session 已實際查看兩分類、兩原圖、真正重開兩分類及時段原圖。另保存 1280×720、15 FPS、11.133 秒的本輪重開短片，完整解碼通過並檢視六個等距抽樣；包含啟動圖與結束桌面，不宣稱完整逐格觀看或真人試玩。先前完整正式／時段影片保留為舊版本證據。本輪使用 Godot 4.7.2／llvmpipe／Compatibility，Dummy 音訊不代表試聽或 Windows 硬體驗收。
 
-全部四項驗收已有對應證據，票況完成。[正式兩局、照片共用及局部檢查索引](images/MAIN-13-shared-20261020-verification.json) · [本輪真正重開短片](images/MAIN-16-originals-20261020-reopen.mp4) · [範圍、解碼與雜湊](images/MAIN-16-originals-20261020-verification.json) · [時段明信片與原圖](../Snapland-art/images/ART-10-capacity-20261020-native-report.json)。
+全部四項驗收已有對應證據，票況完成。正式兩局、照片共用及局部檢查索引 · 本輪真正重開短片 · 範圍、解碼與雜湊 · 時段明信片與原圖。
 
-![目前版本普通原圖](images/MAIN-13-shared-20261020-ordinary-original-viewer.png)
-![目前版本小惡魔共用原圖](images/MAIN-13-shared-20261020-devil-original-viewer.png)
+目前版本普通原圖（畫面已精簡）
+目前版本小惡魔共用原圖（畫面已精簡）

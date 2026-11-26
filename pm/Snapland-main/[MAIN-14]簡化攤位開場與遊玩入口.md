@@ -58,11 +58,11 @@
 
 ### 截圖與影片
 
-![氣球入口](images/MAIN-14-native-game-001.png)
-![風箏入口與可讀主要操作](images/MAIN-14-native-game-002.png)
-![觀景台入口](images/MAIN-14-native-game-010.png)
+氣球入口（畫面已精簡）
+風箏入口與可讀主要操作（畫面已精簡）
+觀景台入口（畫面已精簡）
 
-[原生操作驗收影片](images/MAIN-14-native-entry-review.mp4)
+原生操作驗收影片
 
 分支：`feature/island-experience`；遠端 commit 連結於提交後補入。
 
@@ -77,13 +77,13 @@
 ### 測試結果
 
 - 入口、教學已讀／保存失敗、主流程整合三項最終局部測試通過，0 ERROR。
-- 原生新存檔十二攤位：實際 E 進入、返回、普通／輔助首次教學、取消後未讀、略過後模式保留及確認離開全部通過。這輪 151.65 秒，先於收起 HUD 的最後外觀修正；其舊畫面只保留作[重複 HUD 反例](images/MAIN-14-entry-20261020-rejected-duplicate-hud.png)。最後修正另有完整局部回歸及下列最終續玩驗收。
+- 原生新存檔十二攤位：實際 E 進入、返回、普通／輔助首次教學、取消後未讀、略過後模式保留及確認離開全部通過。這輪 151.65 秒，先於收起 HUD 的最後外觀修正；其舊畫面只保留作重複 HUD 反例。最後修正另有完整局部回歸及下列最終續玩驗收。
 - 關閉引擎後，以同一隔離檔新程序載入十二份已讀記錄：十二款直接進入、確認離開與返回通過，完整已保存 payload 前後相同。最後版為 800×450 實體視窗、邏輯 1280×720、1.25 大字、夜間與降低動態；86.55 秒、0 ERROR。十二張邀請總覽及兩張原尺寸畫面已實際查看。
-- [原生輸入影片](images/MAIN-14-entry-20261020-returning.mp4)為 MovieMaker 1280×720、10 FPS、527 幀、52.7 秒；全檔解碼 0 錯誤，六個均勻抽樣已看過，不宣稱人類連續觀看、試聽、即時效能或十二款玩法品質通過。
+- 原生輸入影片為 MovieMaker 1280×720、10 FPS、527 幀、52.7 秒；全檔解碼 0 錯誤，六個均勻抽樣已看過，不宣稱人類連續觀看、試聽、即時效能或十二款玩法品質通過。
 
-![十二攤位最終大字入口](images/MAIN-14-entry-20261020-invites.png)
+十二攤位最終大字入口（畫面已精簡）
 
-[新存檔報告](images/MAIN-14-entry-20261020-new.json) · [續玩報告](images/MAIN-14-entry-20261020-returning.json) · [原版反例](images/MAIN-14-entry-20261020-rejected-assist.log) · [最終入口測試](images/MAIN-14-entry-20261020-entry.log) · [教學存檔測試](images/MAIN-14-entry-20261020-tutorial-progress.log) · [整合測試](images/MAIN-14-entry-20261020-integration.log) · [證據雜湊](images/MAIN-14-entry-20261020-manifest.json)。
+新存檔報告 · 續玩報告 · 原版反例 · 最終入口測試 · 教學存檔測試 · 整合測試 · 證據雜湊。
 
 開始基準 `244536b`；分支 `codex/finish-runtime-batch-20261020`。本票結案限攤位入口完整流程；教學截圖的當前版本覆蓋仍由 MAIN-10 追蹤。
 

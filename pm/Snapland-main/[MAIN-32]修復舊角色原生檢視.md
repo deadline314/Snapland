@@ -56,8 +56,8 @@
 
 ### 截圖
 
-![票票完整腳部](images/MAIN-32-ticket.png)
-![小角完整行走姿勢](images/MAIN-32-imp.png)
-![阿浪完整站姿](images/MAIN-32-announcer.png)
+票票完整腳部（畫面已精簡）
+小角完整行走姿勢（畫面已精簡）
+阿浪完整站姿（畫面已精簡）
 
-[原始失敗、拒收畫面、最終回歸、來源及審查](images/MAIN-32-evidence.zip)
+原始失敗、拒收畫面、最終回歸、來源及審查

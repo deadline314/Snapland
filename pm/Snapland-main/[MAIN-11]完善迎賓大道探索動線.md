@@ -48,12 +48,12 @@
 主 Session 重建本票提交內容，載入與地圖、遮擋、遊樂設施三項局部驗證全過，沒有腳本或執行錯誤。另已實際查看整合候選的原生往返影片：91.667 秒、178.545 公尺，從碼頭走過四處目的地、搭乘／離開潮汐設施並走回碼頭，沒有傳送或卡住後重置；正常與四分之一速度均播放至結尾。影片包含仍在 ART-17 改善的角色動畫與 ART-1 光影，不能當本票單獨提交版本或完整精品品質通過；各時段、NPC 完整動畫與探索趣味的條件仍未勾選，票維持進行中。
 
 ### 測試與證據
-[多方向研究與實際圖例](../../design/runtime/island-experience-references.md) · [本輪地圖決策](../../design/runtime/island-landscape-polish.md) · [地圖驗證](images/MAIN-11-layout-local.log) · [遮擋驗證](images/MAIN-11-occlusion-local.log) · [設施驗證](images/MAIN-11-ride-local.log)。
+[多方向研究與實際圖例](../../design/runtime/island-experience-references.md) · [本輪地圖決策](../../design/runtime/island-landscape-polish.md) · 地圖驗證 · 遮擋驗證 · 設施驗證。
 
-![海岸觀景台與緩坡](images/MAIN-11-motion12-roam-lookout.png)
-![月影劇台](images/MAIN-11-motion12-roam-moonstage.png)
+海岸觀景台與緩坡（畫面已精簡）
+月影劇台（畫面已精簡）
 
-[正常影片](images/MAIN-11-motion12-roam-review-normal.mp4) · [四分之一速度影片](images/MAIN-11-motion12-roam-review-slow.mp4) · [路線報告](images/MAIN-11-motion12-roam-report.json) · [原生執行紀錄](images/MAIN-11-motion12-roam-native.log)。影片為方便票內審閱的壓縮副本；原始高品質錄影保留在本 Session 驗收目錄。拍攝為程式化鍵盤操作，沒有人工試玩或試聽的宣稱。
+正常影片 · 四分之一速度影片 · 路線報告 · 原生執行紀錄。影片為方便票內審閱的壓縮副本；原始高品質錄影保留在本 Session 驗收目錄。拍攝為程式化鍵盤操作，沒有人工試玩或試聽的宣稱。
 
 本輪提交基準：`7055915`；分支：`feature/island-experience`。角色及光影共用範圍追蹤 ART-17／ART-1。
 
@@ -71,7 +71,7 @@
 
 驗收曾抓到導覽亭／石柱附近的狹路及岩壁貼近路緣；已重排入口與回程，最終實際玩家碰撞體逐段核對中線及左右 0.8 公尺餘裕。兩條中途返回皆以真正物理往返，最終含回程支線共約 315.50 公尺、0 ERROR。入口鋪面最後再南退一公尺，錄製路線仍落在最終鋪面內；受影響路緣、完整物理環線與最終原生靜格重驗通過。保留全部原關卡、NPC 來源腳底、上坡與照明斷言。
 
-[影片](images/MAIN-11-coast-20261020-walk.mp4) · [原生路線與六處觀察](images/MAIN-11-coast-20261020-native-walk.json) · [最終含支線物理往返](images/MAIN-11-coast-20261020-physics-route.json) · [四項局部檢查](images/MAIN-11-coast-20261020-map-summary.json) · [完整量測界線](images/MAIN-11-coast-20261020-verification.json)。場景與日夜前後圖見 ART-3。本段驗收新增環線；主線、十二遊戲整體探索節奏、完整角色演出的原條件仍維持未勾，本票保持進行中。
+影片 · 原生路線與六處觀察 · 最終含支線物理往返 · 四項局部檢查 · 完整量測界線。場景與日夜前後圖見 ART-3。本段驗收新增環線；主線、十二遊戲整體探索節奏、完整角色演出的原條件仍維持未勾，本票保持進行中。
 
 
 # Commit-4：燈鏡回光與溫室灑水
@@ -96,13 +96,13 @@
 
 影片為 1280×720、60 FPS、486 格／8.1 秒的原生離線錄製，已完整解碼，未連續觀看或試聽；當前往返路線是另一個原生程序與靜格，沒有冒稱同一支影片含完整環線。已看兩張操作總覽、日夜／小視窗和花朵原尺寸圖；全部是程式派送真實輸入，非玩家試玩。
 
-第一輪在 60 FPS 過早發出第二次踢球，碰到原有冷卻而失敗；改為等實際可輸入再重跑，沒有放寬方向斷言。重跑工具誤沿用輸出目錄，故該輪失敗原始 log 被覆寫；[歷程](images/MAIN-11-discoveries-20261020-attempt-history.json)明列此限制，不冒稱保存了那份 raw log。成功操作已另存唯讀副本，時段／完整路線皆使用不可覆寫的新目錄。
+第一輪在 60 FPS 過早發出第二次踢球，碰到原有冷卻而失敗；改為等實際可輸入再重跑，沒有放寬方向斷言。重跑工具誤沿用輸出目錄，故該輪失敗原始 log 被覆寫；歷程明列此限制，不冒稱保存了那份 raw log。成功操作已另存唯讀副本，時段／完整路線皆使用不可覆寫的新目錄。
 
-[本輪驗收／來源／雜湊](images/MAIN-11-discoveries-20261020-verification.json) · [操作影片](images/MAIN-11-discoveries-20261020-native.mp4) · [完整物理環線](images/MAIN-11-discoveries-20261020-walk-walk.json)
+[本輪驗收／來源／雜湊](images/MAIN-11-discoveries-20261020-verification.json) · 操作影片 · 完整物理環線
 
-![夜間親手轉鏡與海上回光](images/MAIN-11-discoveries-20261020-accepted-native-v2-lighthouse-mouse-right.png)
-![小視窗仍可操作](images/MAIN-11-discoveries-20261020-native-phase-v1-lighthouse-small-controls.png)
-![灑水後留下的花朵](images/MAIN-11-discoveries-20261020-native-phase-v1-garden-noon-bloomed.png)
+夜間親手轉鏡與海上回光（畫面已精簡）
+小視窗仍可操作（畫面已精簡）
+灑水後留下的花朵（畫面已精簡）
 
 
 # Commit — 2026-10-23 三處岔路路標與新存檔步行驗收
@@ -127,13 +127,13 @@
 
 未勾選的「無空白路程與擁擠設施、主角與 NPC 動畫融入環境」仍待處理：大道中段仍是較長的直線步道，本輪只加了路標；角色動畫品質依 ART-17 追蹤。廣場路標第一行「票票・導覽亭　導覽亭」名稱重複，待下次調整文字。票維持進行中。
 
-![碼頭路標](images/MAIN-11-flow-20261023-dock-sign.jpg)
-![廣場路標：上島時的四個方向](images/MAIN-11-flow-20261023-plaza-sign-before.jpg)
-![大道中段路標：四個區域的拍貼進度](images/MAIN-11-flow-20261023-avenue-sign.jpg)
-![晚上的廣場路標](images/MAIN-11-flow-20261023-plaza-night.jpg)
-![傍晚](images/MAIN-11-flow-20261023-plaza-dusk.jpg)
-![凌晨](images/MAIN-11-flow-20261023-plaza-dawn.jpg)
-![續玩後的廣場路標](images/MAIN-11-flow-20261023-continue.jpg)
+碼頭路標（畫面已精簡）
+廣場路標：上島時的四個方向（畫面已精簡）
+大道中段路標：四個區域的拍貼進度（畫面已精簡）
+晚上的廣場路標（畫面已精簡）
+傍晚（畫面已精簡）
+凌晨（畫面已精簡）
+續玩後的廣場路標（畫面已精簡）
 
 [原生步行影片](images/MAIN-11-flow-20261023-walk.mp4) · [逐段步行、對話與路標紀錄](images/MAIN-11-flow-20261023-report.json) · [設計與研究](../../design/runtime/island-reactive-story.md)
 
@@ -162,9 +162,9 @@
 
 最初複製輸出暫存因磁碟容量不足，在引擎啟動前拒收；只清除本Session已合入main、已不用的匯出暫存專案，再重新輸出。局部測試也抓到結尾音訊資源尚未釋放；依共用退出流程停止場景、等待音訊伺服器消化停止命令，再驗證四台風車物件已釋放。所有失敗與最後通過紀錄均保留，沒有把exit0但含ERROR的紀錄當成功。
 
-![第一處踏板風車與廣場交談空間](images/MAIN-11-windmills-20261024-01-pad-0-stepped.png)
-![大道後段兩處玩具與不同目的地](images/MAIN-11-windmills-20261024-review-1.jpg)
-![四時段碼頭與返回路線](images/MAIN-11-windmills-20261024-review-2.jpg)
-![夜間玩具及降低動態](images/MAIN-11-windmills-20261024-review-3.jpg)
+第一處踏板風車與廣場交談空間（畫面已精簡）
+大道後段兩處玩具與不同目的地（畫面已精簡）
+四時段碼頭與返回路線（畫面已精簡）
+夜間玩具及降低動態（畫面已精簡）
 
-[完整往返影片](images/MAIN-11-windmills-20261024-walk.mp4) · [25段與互動逐項紀錄](images/MAIN-11-windmills-20261024-route.json) · [最後局部檢查](images/MAIN-11-windmills-20261024-final-result.log) · [原有回歸](images/MAIN-11-windmills-20261024-regressions-results.json) · [輸出來源與指紋](images/MAIN-11-windmills-20261024-linux-build.json) · [真正輸出啟動](images/MAIN-11-windmills-20261024-linux-smoke-result.log) · [驅動器／拒收與診斷](images/MAIN-11-windmills-20261024-replays-and-diagnostics.zip) · [範圍](images/MAIN-11-windmills-20261024-verification.json) · [附件指紋](images/MAIN-11-windmills-20261024-manifest.json)。
+完整往返影片 · 25段與互動逐項紀錄 · 最後局部檢查 · 原有回歸 · 輸出來源與指紋 · 真正輸出啟動 · 驅動器／拒收與診斷 · 範圍 · 附件指紋。

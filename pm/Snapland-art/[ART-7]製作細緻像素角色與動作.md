@@ -49,8 +49,8 @@
 
 | 畫面證據 | 說明 |
 | --- | --- |
-| [角色細節](images/ART-7-character-approved.png) · [畫廊臉部](images/ART-7-gallery-face.png) · [髮型](images/ART-7-gallery-hair.png) | 原生靜態畫面 |
-| [拍照動作](images/ART-7-action-photo.png) · [互動](images/ART-7-action-interact.png) · [招呼](images/ART-7-action-wave.png) · [慶祝](images/ART-7-action-celebrate.png) | 動作靜態畫格 |
+| [角色細節](images/ART-7-character-approved.png) · 畫廊臉部 · 髮型 | 原生靜態畫面 |
+| 拍照動作 · 互動 · 招呼 · 慶祝 | 動作靜態畫格 |
 | [角色行走預覽影片](images/ART-7-walk-preview.mp4) | 使用者已看過並提出步態意見；不作通過宣稱 |
 | [主角全身待機](images/ART-15-sprite-clearance-avatar-idle-front.png) · [行走姿勢](images/ART-15-sprite-clearance-avatar-walk-front_right-5-of-8.png) · [招手姿勢](images/ART-15-sprite-clearance-avatar-wave.png) | 原生全身靜態 fixture；不作動畫完成證據 |
 
@@ -85,16 +85,16 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 | 打包動作與衣帽 | 88 組姿勢逐像素符合原始專案，慶祝完整八格後回待機；開發測試檔沒有進入遊戲包 |
 | 版本一致 | 全部 1,059 份建置輸入與目前正式程式／資源雜湊相同 |
 
-程式版本：[bb6d311](https://github.com/deadline314/Snapland/commit/bb6d3118f7676617d8f124e98ee7a6bc4a2797d5)。[正常速度原生影片](images/ART-17-celebration-20261102-normal-v3.mp4) · [真實四分之一速度](images/ART-17-celebration-20261102-quarter.mp4) · [建置與檢查結果](images/ART-7-release-20261102-review.json) · [建置雜湊、原始日誌、12 張成品截圖與可重播資源檢查](images/ART-7-release-20261102-replay.zip)。
+程式版本：[bb6d311](https://github.com/deadline314/Snapland/commit/bb6d3118f7676617d8f124e98ee7a6bc4a2797d5)。正常速度原生影片 · 真實四分之一速度 · 建置與檢查結果 · 建置雜湊、原始日誌、12 張成品截圖與可重播資源檢查。
 
 本票完成基本人物、可觀察動作與安全打包範圍。先前已勾選的日夜、衣櫃與移動碰撞沿用原驗收紀錄；本輪沒有將十二入口資源冒煙稱為完整玩法、真人試玩或試聽。完整主角／三位 NPC 動作及完整服飾品質仍由 ART-17／ART-18 原條件驗收，沒有因本票完成而代為勾選。
 
-![原生向前步行](images/ART-7-release-20261102-walk-front.png)
-![原生向後步行](images/ART-7-release-20261102-walk-back.png)
-![原生向左步行](images/ART-7-release-20261102-walk-left.png)
-![原生向右步行](images/ART-7-release-20261102-walk-right.png)
-![Linux 成品實際載入主角與噴泉場景](images/ART-7-release-20261102-fountain.png)
-![缺圖時的正面完整安全人物](images/ART-7-release-20261102-fallback-front.png)
-![缺圖時的背面完整安全人物](images/ART-7-release-20261102-fallback-back.png)
-![缺圖時的左側完整安全人物](images/ART-7-release-20261102-fallback-left.png)
-![缺圖時的右側完整安全人物](images/ART-7-release-20261102-fallback-right.png)
+原生向前步行（畫面已精簡）
+原生向後步行（畫面已精簡）
+原生向左步行（畫面已精簡）
+原生向右步行（畫面已精簡）
+Linux 成品實際載入主角與噴泉場景（畫面已精簡）
+缺圖時的正面完整安全人物（畫面已精簡）
+缺圖時的背面完整安全人物（畫面已精簡）
+缺圖時的左側完整安全人物（畫面已精簡）
+缺圖時的右側完整安全人物（畫面已精簡）

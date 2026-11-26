@@ -53,20 +53,20 @@
 
 ### 測試結果
 
-[精簡驗收](images/ART-27-verification.json)；[99 張原生畫面索引](images/ART-27-native-index.json)；[語系與字體六組原生紀錄](../Snapland-main/images/MAIN-19-native-language-verification.json)。字型 30 項、HUD 69 項檢查均通過；字型來源 3 項及啟動隔離 13 項 Python 檢查通過。靜態盤點的 975 個字符全有隨遊戲攜帶的字型可用，這不代表支援所有 Unicode。
+精簡驗收；99 張原生畫面索引；語系與字體六組原生紀錄。字型 30 項、HUD 69 項檢查均通過；字型來源 3 項及啟動隔離 13 項 Python 檢查通過。靜態盤點的 975 個字符全有隨遊戲攜帶的字型可用，這不代表支援所有 Unicode。
 
 ### 截圖
 
-![像素字體暫停選單](images/ART-27-native-pause-1280x720-scale1.25.png)
+像素字體暫停選單（畫面已精簡）
 
-[小畫面大字換裝](images/ART-27-native-wardrobe-appearance-800x450-scale1.25.png)；[1920 大字成就與固定返回](images/ART-27-native-achievements-1920x1080-scale1.25.png)；[小遊戲介面](images/ART-27-native-minigame-hud-1280x720-scale1.25.png)。
+小畫面大字換裝；1920 大字成就與固定返回；小遊戲介面。
 
 ### 實際參考
 
 [八個方向的查閱內容、取捨與合法授權](../../design/runtime/typography-localization.md)；[字型版本、原始來源與雜湊](../../assets/fonts/font-provenance.json)。以下是研究頁截圖，沒有當成本作素材或遊戲驗收：
 
-- [Fusion](images/ART-27-reference-fusion.png)、[Cubic 11](images/ART-27-reference-cubic.png)、[Galmuri](images/ART-27-reference-galmuri.png)、[Ark Pixel](images/ART-27-reference-ark.png)
-- [Unifont](images/ART-27-reference-unifont.png)、[Godot 國際化](images/ART-27-reference-godot-i18n.png)、[SIL OFL](images/ART-27-reference-ofl.png)
+- Fusion、Cubic 11、Galmuri、Ark Pixel
+- Unifont、Godot 國際化、SIL OFL
 
 ### 歷史交付狀態
 
@@ -84,12 +84,12 @@
 
 原 30 項字型檢查加十組正式符號 profile，共 40 項通過；長椅規則／畫面 49／80 項、語系保存／損毀資料回退／即時狀態與新增雙尺寸高行距條件通過。字型來源／授權三項 Python 檢查通過，75 份正式文字來源的 1025 個非 ASCII 字符由隨附字型覆蓋，0 缺字；不代表全部 Unicode。最終原生 QA 與相關局部執行 exit 0、0 ERROR；故意缺譯文／損毀語系使用明確 WARNING。
 
-既有 99 張主要介面證據保留，本輪另有六組語系／字體 fixture、最終 RTL 雙尺寸與正式符號圖，實際檢視的具體清單見[本輪驗證](images/ART-27-text-20261020-verification.json)。本票文字與字型條件已完成並整合；角色、配樂與全遊戲品質依原票接續，未發布語系也不當成完整翻譯。
+既有 99 張主要介面證據保留，本輪另有六組語系／字體 fixture、最終 RTL 雙尺寸與正式符號圖，實際檢視的具體清單見本輪驗證。本票文字與字型條件已完成並整合；角色、配樂與全遊戲品質依原票接續，未發布語系也不當成完整翻譯。
 
-[研究與流程](../../design/runtime/typography-localization.md) · [40 項字型紀錄](images/ART-27-text-20261020-40-font-checks.log) · [受影響套件](images/ART-27-text-20261020-glyph-suites.json) · [三尺寸原介面回歸](images/ART-27-text-20261020-ui-suites.json)。
+[研究與流程](../../design/runtime/typography-localization.md) · 40 項字型紀錄 · 受影響套件 · 三尺寸原介面回歸。
 
-![十種 profile 的正式符號](images/ART-27-text-20261020-production-marks.png)
-![修正後標準 RTL 大字暫停](images/ART-27-text-20261020-rtl-pixel-pause-menu.png)
-![修正後窄視窗 RTL 大字暫停](images/ART-27-text-20261020-rtl-compact-pause-menu.png)
+十種 profile 的正式符號（畫面已精簡）
+修正後標準 RTL 大字暫停（畫面已精簡）
+修正後窄視窗 RTL 大字暫停（畫面已精簡）
 
-[保留的拒收裁切畫面](images/ART-27-text-20261020-rejected-rtl-pause.png)。
+保留的拒收裁切畫面。

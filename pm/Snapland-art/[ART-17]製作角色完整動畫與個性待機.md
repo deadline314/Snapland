@@ -81,11 +81,11 @@
 主 Session 重跑角色素材、主角、NPC 狀態、NPC 場景與安全預設相關局部測試通過；原生錄影完成，素材邊界問題 0。完整套件交由 CI，此次不聲稱完整動畫或換裝已完成。
 
 ### 截圖與影片
-![主角待機完整全身](images/ART-17-traveller-idle-normal.png)
-![票務員待機完整全身](images/ART-17-ticket-idle-normal.png)
-![小角待機完整全身](images/ART-17-imp-idle-normal.png)
-![阿浪待機完整全身](images/ART-17-announcer-idle-normal.png)
-[正常速度與慢放影片](images/ART-17-idles-normal-slow.mp4) · [本次覆蓋與錄影報告](images/ART-17-idle-capture-report.json)
+主角待機完整全身（畫面已精簡）
+票務員待機完整全身（畫面已精簡）
+小角待機完整全身（畫面已精簡）
+阿浪待機完整全身（畫面已精簡）
+正常速度與慢放影片 · 本次覆蓋與錄影報告
 
 本次新增文件與票內引用皆可開啟，證據檔雜湊逐檔核對。整體連結驗證仍遇到原有設計入口缺少目錄文件，已另開 MAIN-12，未修改驗證或忽略失敗。
 
@@ -105,10 +105,10 @@
 Root 查看 32 張逐格原生截圖並將正常速度與慢速影片播放至結尾後退件：新頭髮輪廓較平順且缺少核准參考中的碎髮；幀間身高差 13 px，舊待機差 3 px；左右看隊伍的意圖不清楚，多數姿勢近似中性；腳下 padding 為 10–12 px，未達 12% 目標。影片各為 1280×720；正常 102 格／60 FPS／1.7 秒，慢速 342 格／60 FPS／5.7 秒。候選不得進入正式 atlas／manifest；原有動畫驗收仍未完成。
 
 ### 測試結果
-區域、錨點與結構 CPU 檢查通過 90 項；這些數值檢查不代表動畫品質通過。原生正常與慢速播放各自 exit 0、記錄 0 個 ERROR，但視覺審查退件。完整逐格素材、執行 log 與雜湊見[證據索引](images/ART-17-queue-rejected-evidence.json)。
+區域、錨點與結構 CPU 檢查通過 90 項；這些數值檢查不代表動畫品質通過。原生正常與慢速播放各自 exit 0、記錄 0 個 ERROR，但視覺審查退件。完整逐格素材、執行 log 與雜湊見證據索引。
 
 ### 研究與證據
-[待機圖集閱讀與退件紀錄](../../design/runtime/character-idle-atlas-review.md)保存六個文字來源的實際閱讀界限、量測與退件原因。32 張逐格截圖、8 張聯絡表、兩段影片、量測 JSON、三份執行 log 和原始未採用素材均放在 `images/ART-17-queue-rejected-*`；[正常影片](images/ART-17-queue-rejected-normal.mp4)、[慢速影片](images/ART-17-queue-rejected-slow.mp4)、[正常聯絡表 1](images/ART-17-queue-rejected-normal-contact-1.png)、[正常聯絡表 2](images/ART-17-queue-rejected-normal-contact-2.png)、[正常聯絡表 3](images/ART-17-queue-rejected-normal-contact-3.png)、[正常聯絡表 4](images/ART-17-queue-rejected-normal-contact-4.png)、[慢速聯絡表 1](images/ART-17-queue-rejected-slow-contact-1.png)、[慢速聯絡表 2](images/ART-17-queue-rejected-slow-contact-2.png)、[慢速聯絡表 3](images/ART-17-queue-rejected-slow-contact-3.png)、[慢速聯絡表 4](images/ART-17-queue-rejected-slow-contact-4.png)。47 份媒體的逐檔 SHA-256 記錄在[證據索引](images/ART-17-queue-rejected-evidence.json)。本候選屬 `feature/island-first-park`；所有動畫覆蓋與品質驗收維持未勾選。
+[待機圖集閱讀與退件紀錄](../../design/runtime/character-idle-atlas-review.md)保存六個文字來源的實際閱讀界限、量測與退件原因。32 張逐格截圖、8 張聯絡表、兩段影片、量測 JSON、三份執行 log 和原始未採用素材均放在 `images/ART-17-queue-rejected-*`；正常影片、慢速影片、正常聯絡表 1、正常聯絡表 2、正常聯絡表 3、正常聯絡表 4、慢速聯絡表 1、慢速聯絡表 2、慢速聯絡表 3、慢速聯絡表 4。47 份媒體的逐檔 SHA-256 記錄在證據索引。本候選屬 `feature/island-first-park`；所有動畫覆蓋與品質驗收維持未勾選。
 
 本次研究與退件證據提交：[4e86c01](https://github.com/deadline314/Snapland/commit/4e86c011cf21f318c26257f862f135d9bd68025a)。票況：進行中。
 
@@ -172,15 +172,15 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 ### 截圖與影片
 
-[主角walk10正常](images/ART-17-hero-body-tenth-normal.mp4) · [主角walk10四分之一速](images/ART-17-hero-body-tenth-quarter.mp4) · [主角idle10正常](images/ART-17-hero-idle-tenth-normal.mp4) · [主角idle10四分之一速](images/ART-17-hero-idle-tenth-quarter.mp4)
+主角walk10正常 · 主角walk10四分之一速 · 主角idle10正常 · 主角idle10四分之一速
 
-[NPC第11版正常](images/ART-17-npc-island-eleventh-normal.mp4) · [NPC第11版四分之一速](images/ART-17-npc-island-eleventh-quarter.mp4) · [票票姿勢聯絡表](images/ART-17-npc11-ticket-contact.png) · [小角姿勢聯絡表](images/ART-17-npc11-imp-contact.png) · [阿浪姿勢聯絡表](images/ART-17-npc11-announcer-contact.png)
+NPC第11版正常 · NPC第11版四分之一速 · 票票姿勢聯絡表 · 小角姿勢聯絡表 · 阿浪姿勢聯絡表
 
-[對話開啟圖](images/ART-17-dialogue-accepted-open.png) · [對話後待機圖](images/ART-17-dialogue-accepted-idle.png) · [暫停凍結圖](images/ART-17-dialogue-accepted-pause.png) · [對話回歸報告](images/ART-17-dialogue-accepted-report.json) · [原生log](images/ART-17-dialogue-accepted.log) · [正常影片](images/ART-17-dialogue-accepted-normal.mp4) · [四分之一速影片](images/ART-17-dialogue-accepted-quarter.mp4)
+對話開啟圖 · 對話後待機圖 · 暫停凍結圖 · [對話回歸報告](images/ART-17-dialogue-accepted-report.json) · [原生log](images/ART-17-dialogue-accepted.log) · [正常影片](images/ART-17-dialogue-accepted-normal.mp4) · [四分之一速影片](images/ART-17-dialogue-accepted-quarter.mp4)
 
 [整圈路線報告](images/ART-17-island-motion-finalproof-report.json) · [整圈路線log](images/ART-17-island-motion-finalproof.log) · [九張截圖聯絡表](images/ART-17-island-motion-finalproof-contact.png) · [正常影片](images/ART-17-island-motion-finalproof-normal.mp4) · [四分之一速影片](images/ART-17-island-motion-finalproof-quarter.mp4)。兩段影片為離線Movie Maker輸出與壓縮交付，不作即時效能基準。
 
-本輪驗收證據基準：`b2c44bf`；分支：`feature/island-experience`。本輪程式與證據提交：[b4c3f77](https://github.com/deadline314/Snapland/commit/b4c3f77c281e293a43dc69d8b3aca933c1e48a58)。[整組逐票交付紀錄](images/ART-17-session-delivery.md)。
+本輪驗收證據基準：`b2c44bf`；分支：`feature/island-experience`。本輪程式與證據提交：[b4c3f77](https://github.com/deadline314/Snapland/commit/b4c3f77c281e293a43dc69d8b3aca933c1e48a58)。整組逐票交付紀錄。
 
 票況維持進行中；完整角色動作／外觀覆蓋、打包播放、降低動態完整驗收仍未勾選。
 
@@ -192,7 +192,7 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 **驗收：** 本機局部測試涵蓋路線轉向、長短影格、停步、對話恢復與三位NPC活動，均通過。原生路線驗證exit 0、0 ERROR；Root實際看過22張姿勢與路線截圖及三張聯絡表。這次只接受靜態完整性與回歸條件，沒有新增正常／慢放完整動畫的驗收，也沒有勾選本票尚未完成的動畫條件。
 
-[三角色原生報告](images/ART-17-ui-route-regression-report.json) · [姿勢聯絡表1](images/ART-17-ui-route-contact-1.jpg) · [姿勢聯絡表2](images/ART-17-ui-route-contact-2.jpg) · [姿勢聯絡表3](images/ART-17-ui-route-contact-3.jpg)。所有驗收使用獨立存檔；本輪開始基準`f1d2feedcf6b58418d2a6682238ce088e92cbbaf`。
+三角色原生報告 · 姿勢聯絡表1 · 姿勢聯絡表2 · 姿勢聯絡表3。所有驗收使用獨立存檔；本輪開始基準`f1d2feedcf6b58418d2a6682238ce088e92cbbaf`。
 
 分支：`feature/island-experience`；[程式與原生截圖提交](https://github.com/deadline314/Snapland/commit/3326f7a722199bb9eda9e511e32541650fc1f2d9)。票況：進行中；待處理完整角色動作／外觀覆蓋、打包播放與降低動態驗收。
 
@@ -222,23 +222,23 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 ### 截圖與影片
 
-![原圖主角完整全身](images/ART-17-authored-traveller-v1-start.png)
+原圖主角完整全身（畫面已精簡）
 
-[主角正常速度](images/ART-17-authored-traveller-v1-normal.mp4) · [主角四分之一速度](images/ART-17-authored-traveller-v1-quarter-actions.mp4) · [主角逐姿勢 1](images/ART-17-authored-traveller-v1-cels-1.jpg) · [2](images/ART-17-authored-traveller-v1-cels-2.jpg) · [3](images/ART-17-authored-traveller-v1-cels-3.jpg)
+主角正常速度 · 主角四分之一速度 · 主角逐姿勢 1 · 2 · 3
 
-[票票正常](images/ART-17-authored-ticket-v2-normal.mp4) · [慢放](images/ART-17-authored-ticket-v2-quarter-actions.mp4) · [全身圖](images/ART-17-authored-ticket-v2-start.png) · [姿勢圖](images/ART-17-authored-ticket-v2-cels-1.jpg)
+票票正常 · 慢放 · 全身圖 · 姿勢圖
 
-[小角正常](images/ART-17-authored-imp-v2-normal.mp4) · [慢放](images/ART-17-authored-imp-v2-quarter-actions.mp4) · [全身圖](images/ART-17-authored-imp-v2-start.png) · [姿勢圖](images/ART-17-authored-imp-v2-cels-1.jpg)
+小角正常 · 慢放 · 全身圖 · 姿勢圖
 
-[阿浪正常](images/ART-17-authored-announcer-v2-normal.mp4) · [慢放](images/ART-17-authored-announcer-v2-quarter-actions.mp4) · [全身圖](images/ART-17-authored-announcer-v2-start.png) · [姿勢圖](images/ART-17-authored-announcer-v2-cels-1.jpg)
+阿浪正常 · 慢放 · 全身圖 · 姿勢圖
 
-[降低動態／重入影片](images/ART-17-authored-reduced-reentry-v1-normal.mp4) · [報告](images/ART-17-authored-reduced-reentry-v1-report.json) · [打包原生影片](images/ART-17-authored-packed-v1-normal.mp4) · [報告](images/ART-17-authored-packed-v1-report.json) · [局部測試紀錄](images/ART-17-authored-local-verification.json) · [四角色錄影與編碼資訊](images/ART-17-authored-walking-v1-evidence.json)
+降低動態／重入影片 · 報告 · 打包原生影片 · 報告 · 局部測試紀錄 · 四角色錄影與編碼資訊
 
 影片都是原生場景的腳本輸入錄製，審閱相機拉近；NPC 根節點和路線未移動，主角在 NPC 審閱中只作畫外取景輔助。慢放是正常影片動作段延長四倍，並非另一輪模擬；全部交付影片 30 FPS，不作即時效能基準。舊錄影中屋頂遮住足部或主角擋住 NPC 的版本沒有採作這次全身證據。
 
 固定基準：`4d0a2a814860e54243dd116bed54c564233c0aa0`；分支：`feature/island-experience`；票況：進行中。待完整角色素材、正常／慢放品質與全換裝覆蓋通過後再轉審查。
 
-本輪程式與原生證據已推送：[e8320de](https://github.com/deadline314/Snapland/commit/e8320de7ab71ac2d716d314ba09f95834116535c)。[八方向行走與動作短片](images/ART-17-authored-traveller-v1-walk-actions.mp4)直接取完整影片第 30 秒之後的正常速度動作段。
+本輪程式與原生證據已推送：[e8320de](https://github.com/deadline314/Snapland/commit/e8320de7ab71ac2d716d314ba09f95834116535c)。八方向行走與動作短片直接取完整影片第 30 秒之後的正常速度動作段。
 
 ### 2026-10-14 獨立動作研究檢查補強
 
@@ -246,7 +246,7 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 **改動：** 以正常 30Hz 檢查自然停留時可完整播放兩種已具備動作；正式島嶼仍直接播放原圖，沒有重新啟用拆腿動作。
 
-**驗收：** 獨立局部測試 exit 0、0 ERROR；[執行紀錄](images/ART-17-optional-motion-rest-v1.log)。這是獨立研究回歸，不算正式角色動畫品質或真人試玩。
+**驗收：** 獨立局部測試 exit 0、0 ERROR；執行紀錄。這是獨立研究回歸，不算正式角色動畫品質或真人試玩。
 
 獨立檢查提交：[cf7578a](https://github.com/deadline314/Snapland/commit/cf7578a29c4d64ffdf9bd5c471091cd5bb56f247)。
 
@@ -258,9 +258,9 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 **驗收：** 實際輸出版本以既有正常保存／退出流程啟動並關閉，exit 0、0 ERROR；主 Session 檢視實際上島與對話畫面。全組改動後再次檢查 Main 整合與主角世界狀態，兩項通過。這是啟動與整合回歸，沒有當成整島試玩成功或完整內容驗收。
 
-![普通試玩包的實際上島畫面](images/ART-17-normal-player-preview-v1.png)
+普通試玩包的實際上島畫面（畫面已精簡）
 
-[試玩包來源與啟動紀錄](images/ART-17-normal-player-preview-v1-manifest.json) · [原生啟動紀錄](images/ART-17-normal-player-preview-v1.log) · [Main 整合](images/ART-17-session-main-integration-v1.log) · [世界狀態回歸](images/ART-17-session-world-integration-v1.log)。普通試玩包版本基準為 `cf7578a`，本機檔案在本分支的 `build/island-walk-preview-20261014/`；以 `Play-Island-Preview.cmd` 啟動會使用同資料夾的 `profile/progress.json`，不共用原本正式存檔。
+試玩包來源與啟動紀錄 · 原生啟動紀錄 · Main 整合 · 世界狀態回歸。普通試玩包版本基準為 `cf7578a`，本機檔案在本分支的 `build/island-walk-preview-20261014/`；以 `Play-Island-Preview.cmd` 啟動會使用同資料夾的 `profile/progress.json`，不共用原本正式存檔。
 
 ## 2026-10-15 票票正式行走接續
 
@@ -298,10 +298,10 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 ### 截圖與影片
 
-![左右待機與換裝逐姿勢1](images/ART-17-side-idle-poses-1.jpg)
-![左右待機與換裝逐姿勢2](images/ART-17-side-idle-poses-2.jpg)
+左右待機與換裝逐姿勢1（畫面已精簡）
+左右待機與換裝逐姿勢2（畫面已精簡）
 
-[正常速度](images/ART-17-side-idle-normal-v1.mp4) · [四分之一模擬速度](images/ART-17-side-idle-quarter-v1.mp4) · [實際打包正常速度](images/ART-17-side-idle-packed-normal-v1.mp4) · [驗收摘要](images/ART-17-side-idle-verification.json) · [原生正常報告](images/ART-17-side-idle-normal-report.json) · [慢速報告](images/ART-17-side-idle-quarter-report.json) · [打包報告](images/ART-17-side-idle-packed-report.json) · [普通包啟動紀錄](images/ART-17-side-idle-player-smoke.log) · [早期失敗](images/ART-17-side-idle-earlier-failures.json) · [票票候選拒收紀錄與完整提示](images/ART-17-ticket-walk-rejected-20261015.json)。
+正常速度 · 四分之一模擬速度 · 實際打包正常速度 · 驗收摘要 · 原生正常報告 · 慢速報告 · 打包報告 · 普通包啟動紀錄 · 早期失敗 · 票票候選拒收紀錄與完整提示。
 
 普通本機試走入口：`C:/Users/stanl/.codex/snapland-qa/side-idle-20261015-v1/Play-Island-Preview.cmd`。啟動檔使用同資料夾的`profile/progress.json`；直接開exe不會套用該隔離設定。來源素材由內建imagegen生成，完整提示與不可變原檔雜湊保存在素材來源紀錄；未使用API／CLI生成。
 
@@ -341,11 +341,11 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 ### 截圖與影片
 
-![五向待機與閉眼換髮](images/ART-17-directional-idle-20261015-diagonal-normal-cels-2.jpg)
-![後向專用站姿與呼吸](images/ART-17-directional-idle-20261015-rear-normal-cels-1.jpg)
-![短髮精靈外觀的實際慢速影格](images/ART-17-directional-idle-20261015-diagonal-quarter-video-frames.jpg)
+五向待機與閉眼換髮（畫面已精簡）
+後向專用站姿與呼吸（畫面已精簡）
+短髮精靈外觀的實際慢速影格（畫面已精簡）
 
-[斜向正常](images/ART-17-directional-idle-20261015-diagonal-normal.mp4) · [斜向四分之一模擬速度](images/ART-17-directional-idle-20261015-diagonal-quarter.mp4) · [後向正常](images/ART-17-directional-idle-20261015-rear-normal.mp4) · [後向四分之一模擬速度](images/ART-17-directional-idle-20261015-rear-quarter.mp4) · [實際打包影片](images/ART-17-directional-idle-20261015-packed.mp4) · [完整驗收與隔離存檔紀錄](images/ART-17-directional-idle-20261015-verification.json) · [來源、完整提示與雜湊](../../assets/characters/traveller-idle-directional-provenance.json)。
+斜向正常 · 斜向四分之一模擬速度 · 後向正常 · 後向四分之一模擬速度 · 實際打包影片 · 完整驗收與隔離存檔紀錄 · [來源、完整提示與雜湊](../../assets/characters/traveller-idle-directional-provenance.json)。
 
 本輪兩次票票行走恢復候選皆拒收，沒有登記為正式行走。[六方方法閱讀與完整姿勢導引](../../design/runtime/character-walk-keypose-recovery.md) · [提示、來源雜湊與拒收理由](images/ART-17-ticket-pose-recovery-20261015.json)。
 
@@ -364,10 +364,10 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 四種外觀48張角色圖、兩速各12張post-draw姿勢均查看；站定片段所有22／50電影格已解碼查看，並非連續看完所有影片。101項Python、接帽規則／視圖與髮型來源／生命周期通過；原生三髮型×八方向×四帽96組像素、另200格待機／行走休止、保護區、恢復與1px反例通過。獨立PCK無散落PNG，十二新來源、36款髮型姿勢、原16方向動態依賴及移動優先均通過。
 
-[七方已讀研究與製作／拒收流程](../../design/runtime/catch-character-consistency.md) · [全部實際範圍、版本與雜湊](../Snapland-art/images/ART-17-catch-v5-20261020-verification.json) · [正常短片](../Snapland-art/images/ART-17-catch-v5-20261020-normal.mp4) · [真正四分之一時間](../Snapland-art/images/ART-17-catch-v5-20261020-quarter.mp4)。雲端llvmpipe；2D完整1280×720，製作檢視暫隱3D世界，不當完整光影、Windows EXE、真人試玩或試聽。
+[七方已讀研究與製作／拒收流程](../../design/runtime/catch-character-consistency.md) · [全部實際範圍、版本與雜湊](../Snapland-art/images/ART-17-catch-v5-20261020-verification.json) · 正常短片 · 真正四分之一時間。雲端llvmpipe；2D完整1280×720，製作檢視暫隱3D世界，不當完整光影、Windows EXE、真人試玩或試聽。
 
-![原生站定十二格](../Snapland-art/images/ART-17-catch-v5-20261020-normal-poses.png)
-![正式髮型／膚色／種族／外套的四種實際外觀](../Snapland-art/images/ART-17-catch-v5-20261020-variants.png)
+原生站定十二格（畫面已精簡）
+正式髮型／膚色／種族／外套的四種實際外觀（畫面已精簡）
 
 本批是兩張相關票的同一組素材／呈現整合，整票仍進行中。ART-17尚缺票票／小角正式左右步行及四人完整演出；SG-20整體布景、更多完整操作情境與玩法品質仍依原條件。NPC整張走路候選曾連續畫成同一條腿前伸，已拒收；兩色分腿關鍵姿勢只作製作診斷，未加入正式遊戲。
 
@@ -388,9 +388,9 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 | 動畫素材庫／整套衣服／側向衣料 | 三項均通過、0 ERROR，分別 0.43／0.72／5.46 秒 |
 | 完整套件 | 此次變更留 CI；先前 5daf281 的 115 Python／92 Godot 通過不當成本次結果 |
 
-![實際回退貼圖：修正前、獨立基準與修正後](images/ART-17-fallback-cache-20261021-comparison.png)
+實際回退貼圖：修正前、獨立基準與修正後（畫面已精簡）
 
-[前反例](images/ART-17-fallback-cache-20261021-before-probe.json) · [修正後對照](images/ART-17-fallback-cache-20261021-after-probe.json) · [四項局部結果](images/ART-17-fallback-cache-20261021-local-results.json) · [正式世界回歸日誌](images/ART-17-fallback-cache-20261021-test_avatar_authored_walk_loop.log)。貼圖對照是渲染來源檢查，不是新增動畫、美術自然度或輸出包試玩。
+前反例 · 修正後對照 · 四項局部結果 · 正式世界回歸日誌。貼圖對照是渲染來源檢查，不是新增動畫、美術自然度或輸出包試玩。
 
 
 # Commit — 2026-10-21 修正斜向行走多手原畫
@@ -403,17 +403,17 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 ![三髮型原畫修正前後](images/ART-17-source-hand-20261021-three-hair-before-after.png)
 
-[原速短片](images/ART-17-source-hand-20261021-native-normal-v3-review.mp4) · [真正四分之一速度](images/ART-17-source-hand-20261021-native-quarter-v3-review.mp4) · [六方資料、製作與拒收流程](../../design/runtime/source-art-repairs.md) · [完整證據、結果與雜湊](images/ART-17-source-hand-20261021-verification.json)。
+原速短片 · 真正四分之一速度 · [六方資料、製作與拒收流程](../../design/runtime/source-art-repairs.md) · [完整證據、結果與雜湊](images/ART-17-source-hand-20261021-verification.json)。
 
 
 # Commit — 2026-10-24 正式行走候選拒收
 
 重新閱讀 Adobe 的雙腳接觸／交叉、重心與回頭重畫說明，以及 Aseprite 的逐格、時間軸與疊影流程，並核對既有八方研究。以現行票票原畫製作右向八格候選；整張查看後，後半循環仍重複同一側腿前伸。再縮小為兩張相反接觸姿勢，第二張只改變小腿與襪子明暗，近側短褲／大腿仍連向相同前伸輪廓，不能當成真正換腿。兩次均拒收，沒有接入正式角色、改動既有原畫或勾選完整行走驗收。
 
-![拒收：後半循環沒有換腿](images/ART-17-ticket-walk-20261024-rejected-cycle.png)
-![拒收：明暗不同不等於雙腿交換](images/ART-17-ticket-walk-20261024-rejected-contacts.png)
+拒收：後半循環沒有換腿（畫面已精簡）
+拒收：明暗不同不等於雙腿交換（畫面已精簡）
 
-[實際閱讀、完整提示、來源及輸出雜湊、拒收原因](images/ART-17-ticket-walk-20261024-review.json)。本輪是原畫品質檢查，沒有通過的動畫，因此不宣稱原生播放或新增動作完成。
+實際閱讀、完整提示、來源及輸出雜湊、拒收原因。本輪是原畫品質檢查，沒有通過的動畫，因此不宣稱原生播放或新增動作完成。
 
 
 # Commit — 2026-10-24 核對相反接觸姿勢與四次候選
@@ -424,14 +424,14 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 四次新候選包含正面八格、單張相反接觸、帶標記兩列八格及局部修正。單張相反接觸有改善，但渲染與步幅不符原角色；兩列候選仍有重複接觸，後續修改修好了推離格卻改壞另一跨步格。逐張實際查看，均未採用為正式動畫，原驗收保持未勾。黑底預覽疑似光暈的觀察，經白底合成覆核後撤回，拒收原因為姿勢與風格，不是預覽底色。
 
-[四次完整提示詞、來源與輸出雜湊、逐格拒收理由](images/ART-17-front-walk-20261024-review.json)。原輸出完整保存，沒有拆腿拼接、整身伸縮或用淡化冒充新姿勢。
+四次完整提示詞、來源與輸出雜湊、逐格拒收理由。原輸出完整保存，沒有拆腿拼接、整身伸縮或用淡化冒充新姿勢。
 
-![接觸交換圖解；Monmouth，僅研究參考](images/ART-17-front-walk-20261024-reference-1.png)
-![跨步圖解；Monmouth，僅研究參考](images/ART-17-front-walk-20261024-reference-2.png)
-![下沉圖解；Monmouth，僅研究參考](images/ART-17-front-walk-20261024-reference-3.png)
-![推離圖解；Monmouth，僅研究參考](images/ART-17-front-walk-20261024-reference-4.png)
-![帶標記候選的白底實際合成](images/ART-17-front-walk-20261024-labelled-white.png)
-![局部修正候選的白底實際合成](images/ART-17-front-walk-20261024-corrected-white.png)
+接觸交換圖解；Monmouth，僅研究參考（畫面已精簡）
+跨步圖解；Monmouth，僅研究參考（畫面已精簡）
+下沉圖解；Monmouth，僅研究參考（畫面已精簡）
+推離圖解；Monmouth，僅研究參考（畫面已精簡）
+帶標記候選的白底實際合成（畫面已精簡）
+局部修正候選的白底實際合成（畫面已精簡）
 
 本輪是素材與圖解審閱，沒有新增原生動畫、效能或打包通過聲稱。
 
@@ -453,10 +453,10 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 | 透明原圖 | 實際檢查 alpha 並合成淺底；透明 RGB 的深底印象不作最終拒收理由 |
 | 驗證範圍 | 原畫及靜態格位診斷，沒有新增原生動畫／玩法／完整動作完成聲稱 |
 
-[完整來源、提示詞與可重播檢查](images/ART-17-greeting-20261026-source-review.zip) · [兩版來源指紋及逐格量測](images/ART-17-greeting-20261026-review.json) · [共用原畫入庫門檻](../../design/runtime/character-source-acceptance.md)。
+完整來源、提示詞與可重播檢查 · 兩版來源指紋及逐格量測 · [共用原畫入庫門檻](../../design/runtime/character-source-acceptance.md)。
 
-![第一版固定格位與相機位置，拒收](images/ART-17-greeting-20261026-rejected-1.png)
-![第二版仍有位移，拒收](images/ART-17-greeting-20261026-rejected-2.png)
+第一版固定格位與相機位置，拒收（畫面已精簡）
+第二版仍有位移，拒收（畫面已精簡）
 
 
 # Commit — 2026-10-30 修正損壞動作資料的完整人物回退
@@ -478,9 +478,9 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 此交付為損壞來源回退修正，並非新動畫、自然度、成品試玩或試聽驗收；整票保持進行中。原生比較不把缺少髮區時保留原髮誤稱為三款換髮成功。
 
-![原生完整人物回退對照；兩欄像素相同](images/ART-17-missing-cels-20261030.png)
+原生完整人物回退對照；兩欄像素相同（畫面已精簡）
 
-[反例、原始日誌與可重播檢視](images/ART-17-missing-cels-20261030-replay.zip) · [實際結果、版本與雜湊](images/ART-17-missing-cels-20261030-review.json)。固定起始 SHA：`1fa10d5`；分支：`codex/remaining-art-20261030`。
+反例、原始日誌與可重播檢視 · 實際結果、版本與雜湊。固定起始 SHA：`1fa10d5`；分支：`codex/remaining-art-20261030`。
 
 
 # Commit — 2026-10-30 核對兩步循環與相反接觸姿勢
@@ -491,7 +491,7 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 三次票票候選依次為八格右向全循環、針對後四格的局部修正，以及用接觸圖引導的單張相反接觸。實際查看後，可見短褲近側褲管仍接向前伸腿，沒有可靠完成相反接觸；三次全部拒收，沒有替換正式人物或登記新行走。最後單圖實際為 1024×1536，未把提示中的 512×768 當成輸出尺寸。
 
-[全部原始來源與六方閱讀文字](images/ART-17-walk-20261030-sources.zip) · [完整提示、參考指紋、實際尺寸與逐次拒收理由](images/ART-17-walk-20261030-review.json)。以上是靜態原畫核對，不是新增原生動畫、效能、輸出或試聽驗收；原有正式來源與驗收勾選保持一致。
+全部原始來源與六方閱讀文字 · 完整提示、參考指紋、實際尺寸與逐次拒收理由。以上是靜態原畫核對，不是新增原生動畫、效能、輸出或試聽驗收；原有正式來源與驗收勾選保持一致。
 
 
 # Commit — 2026-11-02 讓勝利後的慶祝完整起跳與落地
@@ -513,12 +513,12 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 原生環境為 Godot 4.7.2／Compatibility／llvmpipe、1280×720，影片為固定 30fps 記錄，不作硬體效能評估。實際檢視八張完整來源格、正常及慢速原生截圖與影片解碼格；不是人類連續遊玩或試聽。互動姿勢為動作演練，沒有當作 NPC 任務通關。
 
-[正常速度原生影片](images/ART-17-celebration-20261102-normal-v3.mp4) · [真實四分之一速度](images/ART-17-celebration-20261102-quarter.mp4) · [版本、雜湊與實際結果](images/ART-17-celebration-20261102-review.json) · [來源格、原始日誌、失敗檢查記錄、六方閱讀與重播資料](images/ART-17-celebration-20261102-replay.zip) · [來源共用與研究決策](../../design/runtime/celebration-source-events.md)。整票依原驗收維持進行中。
+正常速度原生影片 · 真實四分之一速度 · 版本、雜湊與實際結果 · 來源格、原始日誌、失敗檢查記錄、六方閱讀與重播資料 · [來源共用與研究決策](../../design/runtime/celebration-source-events.md)。整票依原驗收維持進行中。
 
-![原生勝利後慶祝起跳](images/ART-17-celebration-20261102-normal.png)
-![短髮、背心與草帽隨同一格起跳](images/ART-17-celebration-20261102-bob.png)
-![捲髮與衣帽隨落地恢復](images/ART-17-celebration-20261102-curly.png)
-![真實噴泉輸入後的結算](images/ART-17-celebration-20261102-fountain.png)
+原生勝利後慶祝起跳（畫面已精簡）
+短髮、背心與草帽隨同一格起跳（畫面已精簡）
+捲髮與衣帽隨落地恢復（畫面已精簡）
+真實噴泉輸入後的結算（畫面已精簡）
 
 
 # Commit — 2026-11-02 核對短褲與大腿的相反遮擋
@@ -531,12 +531,12 @@ NPC對話後待機回歸已完成GPU重跑：exit 0、0個ERROR。對話結束�
 
 四份原始完整人物均保存；實際檢查 alpha 後確認角落透明，預覽中透明 RGB 的深色不作拒收理由。此輪為原畫審閱，沒有新增原生播放、打包、性能或試聽通過聲稱。
 
-[完整提示詞、來源指紋、實際尺寸及逐次檢查結果](images/ART-17-ticket-contact-20261102-review.json)。
+完整提示詞、來源指紋、實際尺寸及逐次檢查結果。
 
-![第一張仍未交換近側褲管與大腿](images/ART-17-ticket-contact-20261102-single-v1.png)
-![局部修正改善單張接觸遮擋，非完成動畫](images/ART-17-ticket-contact-20261102-single-v2.png)
-![八格候選仍重複同一半循環，拒收](images/ART-17-ticket-contact-20261102-cycle-v1.png)
-![後四格修正版仍未完成換腿，拒收](images/ART-17-ticket-contact-20261102-cycle-v2.png)
+第一張仍未交換近側褲管與大腿（畫面已精簡）
+局部修正改善單張接觸遮擋，非完成動畫（畫面已精簡）
+八格候選仍重複同一半循環，拒收（畫面已精簡）
+後四格修正版仍未完成換腿，拒收（畫面已精簡）
 
 # Commit — 2026-11-11 保留逐格停留與拒絕半套動作
 
@@ -558,11 +558,11 @@ NPC 原本忽略素材指定的逐格停留，把預備、長停留及收勢都�
 
 實際檢視正常招呼、遞票、情緒與待機小動作的第 3 格，以及慢速招呼第 3 格、遞票第 5 格。自動原生報告仍保留 `OBSERVATIONS_COMPLETE_VISUAL_PENDING`；沒有聲稱真人連續播放、遊玩、試聽或整套角色動畫通過。時間取樣反例使用隔離資料；原生片段驗證既有動作，沒有當作新步態播放。
 
-![四分之一速度下的既有遞票姿勢](images/ART-17-timing-20261111-ticket.png)
+四分之一速度下的既有遞票姿勢（畫面已精簡）
 
-[正常影片](images/ART-17-timing-20261111-normal.mp4) · [四分之一速度影片](images/ART-17-timing-20261111-quarter.mp4) · [版本、雜湊及結果](images/ART-17-timing-20261111-review.json) · [反例、測試、原生報告、抽樣圖與閱讀紀錄](images/ART-17-timing-20261111-evidence.zip)。
+正常影片 · 四分之一速度影片 · 版本、雜湊及結果 · 反例、測試、原生報告、抽樣圖與閱讀紀錄。
 
-[五份原畫、完整提示及參考指紋](images/ART-17-walk-20261111-sources.zip) · [逐次原畫審閱](images/ART-17-walk-20261111-review.json)。固定起始 SHA：`69b367c`；分支：`codex/remaining-animation-20261111`。整票維持進行中。
+五份原畫、完整提示及參考指紋 · 逐次原畫審閱。固定起始 SHA：`69b367c`；分支：`codex/remaining-animation-20261111`。整票維持進行中。
 
 # Commit — 2026-11-11 接入小角左右步態與地面巡路
 
@@ -593,11 +593,11 @@ NPC 原本忽略素材指定的逐格停留，把預備、長停留及收勢都�
 
 原生為 Godot 4.7.2／Compatibility／llvmpipe、Dummy 音訊，固定錄影節拍不作硬體效能評估。主角在畫外作為取景助手，NPC 根位置沒有被檢視程式挪動；對話提示可屬於畫外主角附近的其他角色。實際檢視正常八張全身姿勢、慢速左右接觸與待機，以及包內左向姿勢；自動報告保留 `OBSERVATIONS_COMPLETE_VISUAL_PENDING`，沒有當作真人連續觀看、遊玩、試聽或全角色動畫驗收。整票維持進行中。
 
-![右向相反接觸與完整四肢](images/ART-17-imp-walk-20261111-right.png)
-![左向保留同一側長角及反向擺臂](images/ART-17-imp-walk-20261111-left.png)
-![停止後回到原站姿](images/ART-17-imp-walk-20261111-settled.png)
+右向相反接觸與完整四肢（畫面已精簡）
+左向保留同一側長角及反向擺臂（畫面已精簡）
+停止後回到原站姿（畫面已精簡）
 
-[正常速度影片](images/ART-17-imp-walk-20261111-normal.mp4) · [真實四分之一速度／場景重入](images/ART-17-imp-walk-20261111-quarter.mp4) · [版本、雜湊及結果](images/ART-17-imp-walk-20261111-review.json) · [原生逐姿勢、原始測試及打包紀錄](images/ART-17-imp-walk-20261111-evidence.zip) · [完整來源、提示與逐版決定](images/ART-17-imp-walk-20261111-sources.zip)。起始 SHA：`e60a9ae`；分支：`codex/imp-authored-walk-20261111`。
+正常速度影片 · 真實四分之一速度／場景重入 · 版本、雜湊及結果 · 原生逐姿勢、原始測試及打包紀錄 · 完整來源、提示與逐版決定。起始 SHA：`e60a9ae`；分支：`codex/imp-authored-walk-20261111`。
 
 
 # Commit — 2026-11-11 接入票票左右步態與廣場往返
@@ -629,11 +629,11 @@ NPC 原本忽略素材指定的逐格停留，把預備、長停留及收勢都�
 
 實際檢視正常八張全身圖、慢速右向通過／左向接觸及待機，以及封裝左向接觸圖。第一次慢速離線錄影逾時，保留日誌後改用新輸出重錄完成。原生為 Godot 4.7.2、Compatibility／llvmpipe、Dummy 音訊；固定錄影節拍不作硬體效能評估。鏡頭由畫外主角協助取景，檢視程式沒有挪動 NPC 根位置；自動報告保留 `OBSERVATIONS_COMPLETE_VISUAL_PENDING`，逐張檢視不當作真人連續觀看、遊玩、試聽或全角色動畫驗收。整票維持進行中。
 
-![右向相反接觸與右側斜背包](images/ART-17-ticket-walk-20261111-right.png)
-![左向通過與完整四肢](images/ART-17-ticket-walk-20261111-left.png)
-![往返停止後的原站姿](images/ART-17-ticket-walk-20261111-settled.png)
+右向相反接觸與右側斜背包（畫面已精簡）
+左向通過與完整四肢（畫面已精簡）
+往返停止後的原站姿（畫面已精簡）
 
-[正常速度影片](images/ART-17-ticket-walk-20261111-normal.mp4) · [真實四分之一速度／重入](images/ART-17-ticket-walk-20261111-quarter.mp4) · [版本、結果與指紋](images/ART-17-ticket-walk-20261111-review.json) · [原生姿勢、測試、失敗日誌與封裝紀錄](images/ART-17-ticket-walk-20261111-evidence.zip) · [六份完整原畫、提示與逐版決定](images/ART-17-ticket-walk-20261111-sources.zip)。起始 SHA：`9d7063b`；分支：`codex/ticket-authored-walk-20261111`。
+正常速度影片 · 真實四分之一速度／重入 · 版本、結果與指紋 · 原生姿勢、測試、失敗日誌與封裝紀錄 · 六份完整原畫、提示與逐版決定。起始 SHA：`9d7063b`；分支：`codex/ticket-authored-walk-20261111`。
 
 # Commit — 2026-11-11 恢復缺少步態時的對話回歸
 
@@ -651,7 +651,7 @@ NPC 原本忽略素材指定的逐格停留，把預備、長停留及收勢都�
 | 缺件與對話完整流程 | 明確缺少左右來源，待機與招呼有效；呼吸、左右實際位移、對話、暫停及降低動態全部通過，exit 0、0 ERROR，出現完整完成標記 |
 | 正式對話保持 | 原正式對話保持套件通過，17.06 秒；正式人物來源未修改 |
 
-[原始失敗、修正及完整通過日誌](images/ART-17-missing-walk-20261111-evidence.zip)。這是容錯流程回歸，不是新增原畫、真人遊玩或試聽；整票維持進行中。
+原始失敗、修正及完整通過日誌。這是容錯流程回歸，不是新增原畫、真人遊玩或試聽；整票維持進行中。
 
 # Commit — 2026-11-11 接入阿浪完整停步收勢
 
@@ -678,11 +678,11 @@ NPC 原本忽略素材指定的逐格停留，把預備、長停留及收勢都�
 
 Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速左右近正面及包內左向近正面均實際查看；四段影片完整解碼檢查，不宣稱真人連續觀看、遊玩、試聽或即時性能。PCK 仍使用相同引擎執行，不是獨立桌面執行檔。整票維持進行中。
 
-![右向停步接近正面](images/ART-17-announcer-settle-20261111-right.png)
-![左向收勢保留雨衣與水手帽](images/ART-17-announcer-settle-20261111-left.png)
-![回到既有待機](images/ART-17-announcer-settle-20261111-settled.png)
+右向停步接近正面（畫面已精簡）
+左向收勢保留雨衣與水手帽（畫面已精簡）
+回到既有待機（畫面已精簡）
 
-[正常影片](images/ART-17-announcer-settle-20261111-normal.mp4) · [四分之一速度／重入](images/ART-17-announcer-settle-20261111-quarter.mp4) · [降低動態](images/ART-17-announcer-settle-20261111-reduced.mp4) · [PCK 播放](images/ART-17-announcer-settle-20261111-pack.mp4) · [完整報告與指紋](images/ART-17-announcer-settle-20261111-review.json) · [逐姿勢、反例與測試及封裝紀錄](images/ART-17-announcer-settle-20261111-evidence.zip) · [原畫與完整提示](images/ART-17-announcer-settle-20261111-sources.zip)。角色來源起始 SHA：`5f2af71`；分支：`codex/ticket-delivery-20261111`。
+正常影片 · 四分之一速度／重入 · 降低動態 · PCK 播放 · 完整報告與指紋 · 逐姿勢、反例與測試及封裝紀錄 · 原畫與完整提示。角色來源起始 SHA：`5f2af71`；分支：`codex/ticket-delivery-20261111`。
 
 # Commit — 2026-11-11 完整回歸與 Windows 預覽輸出
 
@@ -700,7 +700,7 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 十二入口檢查確認啟動與資源載入，不當作完整通關、每件服裝／每張動作播放、真人遊玩、連續觀看或試聽。視覺動作證據仍以本票及 ART-16 的原生正常／慢速與 PCK 檢視為準。整套角色驗收狀態保持進行中。
 
-[完整回歸、Windows 輸出與原生入口證據](images/ART-17-delivery-20261111-verification.zip)。本機預覽位於 `build/Snapland-preview-20261111/Snapland.exe`；驗證使用獨立測試存檔。
+完整回歸、Windows 輸出與原生入口證據。本機預覽位於 `build/Snapland-preview-20261111/Snapland.exe`；驗證使用獨立測試存檔。
 
 
 # Commit — 2026-11-12 銜接阿浪原地轉向與接地起步
@@ -724,11 +724,11 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 實際逐張檢視正常左右八張起步，以及慢速與包內代表姿勢；影片完成完整解碼檢查。第一次擴充檢查漏算阿浪原有服裝合成，已補回同一服裝的嚴格貼圖身份比較，其餘原斷言保留。Godot 4.7.2、Windows Compatibility、Dummy 音訊、固定 30 FPS 錄影，不宣稱真人連續觀看、遊玩、試聽或硬體性能。整票依原條件維持進行中。
 
-![阿浪沿用原站姿開始起步](images/ART-17-grounded-20261112-right-0.png)
-![右向轉身中段](images/ART-17-grounded-20261112-right-2.png)
-![左向轉身中段](images/ART-17-grounded-20261112-left-2.png)
+阿浪沿用原站姿開始起步（畫面已精簡）
+右向轉身中段（畫面已精簡）
+左向轉身中段（畫面已精簡）
 
-[正常影片](images/ART-17-grounded-20261112-normal.mp4) · [四分之一速度／重入](images/ART-17-grounded-20261112-quarter.mp4) · [降低動態／重入](images/ART-17-grounded-20261112-reduced.mp4) · [空目錄 PCK](images/ART-17-grounded-20261112-pack-isolated.mp4) · [結果與指紋](images/ART-17-grounded-20261112-review.json) · [原生姿勢、測試、反例及重現紀錄](images/ART-17-grounded-20261112-evidence.zip)。固定基準 `10dced9`；分支 `codex/announcer-grounded-pivots-20261112`。
+正常影片 · 四分之一速度／重入 · 降低動態／重入 · 空目錄 PCK · 結果與指紋 · 原生姿勢、測試、反例及重現紀錄。固定基準 `10dced9`；分支 `codex/announcer-grounded-pivots-20261112`。
 
 
 # Commit — 2026-11-12 輸出最新 Windows 成品
@@ -737,7 +737,7 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 最新 Windows 成品整合本輪三位 NPC 起步／接地／資料恢復，以及換裝時的手掌、相機前景修正。原始內容逐檔指紋與輸出來源相同；內嵌遊戲資源匯出、隔離啟動與預設 Forward+／Vulkan 十二入口初始繪製通過，exit 0、0 ERROR。程式與完整來源指紋依據 `7a9e2d3`，完整執行檔留在本機輸出目錄，沒有放進版本庫。
 
-[成品來源指紋、匯出、啟動與十二入口畫面](images/ART-17-windows-20261112-final.zip)。此為成品初始繪製驗證，不代表完整玩法、真人試聽、硬體 FPS 或整套動畫自然度驗收；整票維持進行中。
+成品來源指紋、匯出、啟動與十二入口畫面。此為成品初始繪製驗證，不代表完整玩法、真人試聽、硬體 FPS 或整套動畫自然度驗收；整票維持進行中。
 
 # Commit — 2026-11-18 修正非正面靠近互動
 
@@ -765,11 +765,11 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 正常與慢速影片採固定 30 FPS 錄製並完成全片解碼檢查，不作硬體性能數據。實際逐張檢視三位正常中間姿勢、待機及慢速／降低動態代表畫面。玩家擺位、隱藏主角及拉近鏡頭均為拍攝取景；不是真人自由遊玩、連續觀看、試聽或整套動畫自然度驗收。
 
-![票票實際招呼中間姿勢](images/ART-17-approach-20261118-ticket.png)
-![小角實際互動中間姿勢](images/ART-17-approach-20261118-imp.png)
-![阿浪實際指路中間姿勢](images/ART-17-approach-20261118-announcer.png)
+票票實際招呼中間姿勢（畫面已精簡）
+小角實際互動中間姿勢（畫面已精簡）
+阿浪實際指路中間姿勢（畫面已精簡）
 
-[正常影片](images/ART-17-approach-20261118-normal.mp4) · [四分之一速度及重入](images/ART-17-approach-20261118-quarter.mp4) · [反例、回歸、原生畫面、封裝指紋與審查](images/ART-17-approach-20261118-evidence.zip)。固定基準 `3ca0b9c`；分支 `codex/npc-approach-actions-20261118`。
+正常影片 · 四分之一速度及重入 · 反例、回歸、原生畫面、封裝指紋與審查。固定基準 `3ca0b9c`；分支 `codex/npc-approach-actions-20261118`。
 
 # Commit — 2026-11-19 主角停步先回到穩定站姿
 
@@ -790,11 +790,11 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 ### 截圖
 
-![右向行走後回到站姿](images/ART-17-idle-entry-20261119-side.png)
-![正向停步後的站姿](images/ART-17-idle-entry-20261119-front.png)
-![慢放重建後的背斜向站姿](images/ART-17-idle-entry-20261119-diagonal.png)
+右向行走後回到站姿（畫面已精簡）
+正向停步後的站姿（畫面已精簡）
+慢放重建後的背斜向站姿（畫面已精簡）
 
-[八方向正常影片](images/ART-17-idle-entry-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-idle-entry-20261119-quarter.mp4) · [反例、原生與封裝證據](images/ART-17-idle-entry-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/02f7e021898c6fd6b1726592587c46fcf4048c2a)。
+八方向正常影片 · 四分之一速度與重入 · 反例、原生與封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/02f7e021898c6fd6b1726592587c46fcf4048c2a)。
 
 # Commit — 2026-11-19 側身招呼保留原朝向
 
@@ -814,17 +814,17 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 原生呈現使用 Godot 4.7.2 與 Dummy 音訊。鏡頭及髮尾擺動在像素比對情境中固定。此處驗收範圍為側身招呼與對應換裝。
 
-![主角向右側身招手](images/ART-17-wave-20261119-right.png)
-![穿雨背心向左側身招手](images/ART-17-wave-20261119-left-rainvest.png)
-![戴草帽的鮑伯頭向右側身招手](images/ART-17-wave-20261119-bob-hat.png)
+主角向右側身招手（畫面已精簡）
+穿雨背心向左側身招手（畫面已精簡）
+戴草帽的鮑伯頭向右側身招手（畫面已精簡）
 
-[正常影片](images/ART-17-wave-20261119-normal.mp4) · [四分之一速度與重建](images/ART-17-wave-20261119-quarter.mp4) · [原生與封裝證據](images/ART-17-wave-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/6a36c81308bb91d8384c0178b392a3706b18bb9c)。
+正常影片 · 四分之一速度與重建 · 原生與封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/6a36c81308bb91d8384c0178b392a3706b18bb9c)。
 
 ## Commit — 2026-11-19 同步換裝驗證與髮尾素材指紋
 
 側身招手增加 10 格衣裝需求後，衣裝預覽改依完整清單核對缺格，仍逐一驗證預覽只有原來提供的格數。髮尾資料重新核對新增的素材指紋，原有髮束及已登錄的遮罩內容維持相同。
 
-212 項 Python 測試全數通過。隔離 Windows 原生場景以同樣的向右移動重現鮑伯頭與捲髮原先出現來源驗證回退，更新後兩者的髮尾皆重新擺動。檔內附兩種造型的移動畫面及修正前後日誌。[髮尾回歸證據](images/ART-17-wave-hair-recheck-20261119.zip)。
+212 項 Python 測試全數通過。隔離 Windows 原生場景以同樣的向右移動重現鮑伯頭與捲髮原先出現來源驗證回退，更新後兩者的髮尾皆重新擺動。檔內附兩種造型的移動畫面及修正前後日誌。髮尾回歸證據。
 
 ## Commit — 2026-11-19 主角停留時檢查相機
 
@@ -839,11 +839,11 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 除正常影片首次自然等待外，其餘換裝情境將驗證時鐘移至觸發前。畫面採固定驗證取景、Dummy 音訊，停用髮尾擺動以核對原畫。素材檢查拒收了第一版較寬的輪廓，採用第二版維持正面體型與靴子接地。
 
-![主角低頭檢查相機](images/ART-17-camera-idle-20261119-base.png)
-![穿雨背心檢查相機](images/ART-17-camera-idle-20261119-rainvest.png)
-![鮑伯頭搭草帽檢查相機](images/ART-17-camera-idle-20261119-bob-and-straw.png)
+主角低頭檢查相機（畫面已精簡）
+穿雨背心檢查相機（畫面已精簡）
+鮑伯頭搭草帽檢查相機（畫面已精簡）
 
-[正常影片](images/ART-17-camera-idle-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-camera-idle-20261119-quarter.mp4) · [原生、封裝與素材證據](images/ART-17-camera-idle-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/7b4362c5352f82cb7bf4f14c1e2f586cb4185c88)。
+正常影片 · 四分之一速度與重入 · 原生、封裝與素材證據 · [程式提交](https://github.com/deadline314/Snapland/commit/7b4362c5352f82cb7bf4f14c1e2f586cb4185c88)。
 
 ## Commit — 2026-11-19 巡路中接話先落腳轉身
 
@@ -858,11 +858,11 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 拍攝腳本先透過正式巡路控制器推進至指定方向，放置玩家於實際互動範圍，再以原生按鍵開始對話。截圖採固定取景及 Dummy 音訊。
 
-![票票右向收勢接話](images/ART-17-dialogue-settle-20261119-ticket.png)
-![小角左向收勢接話](images/ART-17-dialogue-settle-20261119-imp.png)
-![阿浪左向收勢接話](images/ART-17-dialogue-settle-20261119-announcer.png)
+票票右向收勢接話（畫面已精簡）
+小角左向收勢接話（畫面已精簡）
+阿浪左向收勢接話（畫面已精簡）
 
-[正常影片](images/ART-17-dialogue-settle-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-dialogue-settle-20261119-quarter.mp4) · [反例、原生與封裝證據](images/ART-17-dialogue-settle-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/934df5f44931ed2baaf2140f6dc2e5b4205d8b5d)。
+正常影片 · 四分之一速度與重入 · 反例、原生與封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/934df5f44931ed2baaf2140f6dc2e5b4205d8b5d)。
 
 ## Commit — 2026-11-19 左右側身拍照
 
@@ -877,11 +877,11 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 驗證分別使用獨立存檔。拍攝採固定取景及 Dummy 音訊，關閉額外髮尾擺動以便逐格核對。整票維持進行中。
 
-![右向對準相機](images/ART-17-photo-20261119-right.png)
-![左向穿雨背心拍照](images/ART-17-photo-20261119-left-rainvest.png)
-![鮑伯頭搭草帽於右向拍照](images/ART-17-photo-20261119-bob-hat.png)
+右向對準相機（畫面已精簡）
+左向穿雨背心拍照（畫面已精簡）
+鮑伯頭搭草帽於右向拍照（畫面已精簡）
 
-[正常影片](images/ART-17-photo-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-photo-20261119-quarter.mp4) · [原生、封裝與衣料檢查證據](images/ART-17-photo-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/b8d688e0ee80d09526a38abf52d15cff6f842583)。
+正常影片 · 四分之一速度與重入 · 原生、封裝與衣料檢查證據 · [程式提交](https://github.com/deadline314/Snapland/commit/b8d688e0ee80d09526a38abf52d15cff6f842583)。
 
 ## Commit — 2026-11-19 主角走動時按手勢保留步態
 
@@ -889,12 +889,12 @@ Godot 4.7.2、Windows Compatibility、Dummy 音訊。正常八張收勢、慢速
 
 舊版重現三個瞬間換格。新版通過匯入、五組 Godot 回歸與五區設計檢查。原生正常速度及四分之一速度重入分別以 W、F、P、E 操作，核對兩個手勢鍵前後的同一張貼圖，以及走近票票時對話立即顯示、站定後出現互動姿勢。兩次使用獨立存檔及固定取景。正常 63 格、慢放 143 格，均為 1280×720／30 FPS，已完整解碼。
 
-![行走中按 P 保留朝後步態](images/ART-17-walking-gesture-20261119-walk.png)
-![行走中按 E 仍可立即開啟對話](images/ART-17-walking-gesture-20261119-talk.png)
+行走中按 P 保留朝後步態（畫面已精簡）
+行走中按 E 仍可立即開啟對話（畫面已精簡）
 
-[正常影片](images/ART-17-walking-gesture-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-walking-gesture-20261119-quarter.mp4) · [反例與原生證據](images/ART-17-walking-gesture-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/2b6cc5baa145d2d5f91318b931406ca84473ee1a)。
+正常影片 · 四分之一速度與重入 · 反例與原生證據 · [程式提交](https://github.com/deadline314/Snapland/commit/2b6cc5baa145d2d5f91318b931406ca84473ee1a)。
 
-Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動態、重入、原生影片、逐格截圖與實際封裝已分別覆蓋主角及三位 NPC。本票仍需完成全套動作與自然度驗收。[主角行走輸入封裝證據](images/ART-17-walking-gesture-20261119-embedded.zip) · [主角側身拍照與降低動態](images/ART-17-photo-20261119-evidence.zip) · [三位 NPC 巡路接話及降低動態](images/ART-17-dialogue-settle-20261119-evidence.zip)。
+Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動態、重入、原生影片、逐格截圖與實際封裝已分別覆蓋主角及三位 NPC。本票仍需完成全套動作與自然度驗收。主角行走輸入封裝證據 · 主角側身拍照與降低動態 · 三位 NPC 巡路接話及降低動態。
 
 ## Commit — 2026-11-19 主角側向減速落腳
 
@@ -909,11 +909,11 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 
 影片以實際 A、D 按鍵、固定取景、Dummy 音訊及隔離存檔拍攝。錄製時保留一組實際髮尾動態供比對。其他方向與整套自然度仍依原票驗收。
 
-![主角左向落腳](images/ART-17-hero-stop-20261119-left.png)
-![主角穿雨背心右向落腳](images/ART-17-hero-stop-20261119-right-rainvest.png)
-![鮑伯頭搭草帽時左向落腳](images/ART-17-hero-stop-20261119-left-bob-hat.png)
+主角左向落腳（畫面已精簡）
+主角穿雨背心右向落腳（畫面已精簡）
+鮑伯頭搭草帽時左向落腳（畫面已精簡）
 
-[正常影片](images/ART-17-hero-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-hero-stop-20261119-quarter.mp4) · [反例、原畫、原生與封裝證據](images/ART-17-hero-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/51732d970eba32c4dd1a9248c343e04b98db0c1b) · [慢速銜接修正](https://github.com/deadline314/Snapland/commit/54df987424f124165ff17de853c6de825ac1517c)。
+正常影片 · 四分之一速度與重入 · 反例、原畫、原生與封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/51732d970eba32c4dd1a9248c343e04b98db0c1b) · [慢速銜接修正](https://github.com/deadline314/Snapland/commit/54df987424f124165ff17de853c6de825ac1517c)。
 
 ## Commit — 2026-11-19 補齊主角八方向停步
 
@@ -928,11 +928,11 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 
 影片使用實際方向鍵輸入、隔離存檔及固定取景。整票尚需驗收完整起步、轉向及四位角色的連續動作品質。
 
-![正面停步](images/ART-17-compass-stop-20261119-front.png)
-![左前斜向停步](images/ART-17-compass-stop-20261119-front-left.png)
-![背面穿雨背心停步](images/ART-17-compass-stop-20261119-back-rainvest.png)
+正面停步（畫面已精簡）
+左前斜向停步（畫面已精簡）
+背面穿雨背心停步（畫面已精簡）
 
-[正常影片](images/ART-17-compass-stop-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-compass-stop-20261119-quarter.mp4) · [原畫、測試及封裝證據](images/ART-17-compass-stop-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/5315fc3770b9f18013576f0037e03dc603f08686)。
+正常影片 · 四分之一速度與重入 · 原畫、測試及封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/5315fc3770b9f18013576f0037e03dc603f08686)。
 
 ## Commit — 2026-11-19 挑戰成功後原地舉拳
 
@@ -947,11 +947,11 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 
 影片使用腳本發送遊戲按鍵、隔離存檔及固定取景。四位角色的完整動作覆蓋與連續自然度仍依本票逐項驗收。
 
-![領獎後舉拳與相機](images/ART-17-traveller-celebration-20261119-raised-fist.png)
-![鮑伯頭、草帽與雨背心](images/ART-17-traveller-celebration-20261119-bob-rainvest.png)
-![捲髮、草帽與雨背心](images/ART-17-traveller-celebration-20261119-curly-rainvest.png)
+領獎後舉拳與相機（畫面已精簡）
+鮑伯頭、草帽與雨背心（畫面已精簡）
+捲髮、草帽與雨背心（畫面已精簡）
 
-[正常影片](images/ART-17-traveller-celebration-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-traveller-celebration-20261119-quarter.mp4) · [噴泉挑戰成功](images/ART-17-traveller-celebration-20261119-reward.png) · [降低動態](images/ART-17-traveller-celebration-20261119-reduced.png) · [原畫、測試及封裝證據](images/ART-17-traveller-celebration-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/4de58f46cae8d2d911d85e91952267ac78dae929) · [髮型修正](https://github.com/deadline314/Snapland/commit/00f9fb3db18120e3cacea121b8a48547bc682061)。
+正常影片 · 四分之一速度與重入 · 噴泉挑戰成功 · 降低動態 · 原畫、測試及封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/4de58f46cae8d2d911d85e91952267ac78dae929) · [髮型修正](https://github.com/deadline314/Snapland/commit/00f9fb3db18120e3cacea121b8a48547bc682061)。
 
 ## Commit — 2026-11-19 票票首次交票先蓋章
 
@@ -959,10 +959,10 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 
 正常、四分之一速度重入及獨立 Windows 封裝均以 E、Esc 走完取消、首次領取、重複交談三案。八格來源依序可見，票票的根位置固定，收藏只新增一張。另驗證降低動態下場景重入及正面站姿。正常影片 131 格，四分之一速度 450 格，兩部均為 1280×720／30 FPS 並完整解碼。215 項 Python、Godot 匯入與 6 組故事及 NPC 回歸測試通過。
 
-![票票在首次領取後蓋章](images/ART-17-first-guide-stamp-20261119-stamp.png)
-![票票向玩家展示票卡](images/ART-17-first-guide-stamp-20261119-presented.png)
+票票在首次領取後蓋章（畫面已精簡）
+票票向玩家展示票卡（畫面已精簡）
 
-[首次主線對話](images/ART-17-first-guide-stamp-20261119-dialogue.png) · [正常影片](images/ART-17-first-guide-stamp-20261119-normal.mp4) · [四分之一速度與重入](images/ART-17-first-guide-stamp-20261119-quarter.mp4) · [測試與封裝證據](images/ART-17-first-guide-stamp-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/293d46606fbbb39d4a702516fe16af20ce2ad198)。
+首次主線對話 · 正常影片 · 四分之一速度與重入 · 測試與封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/293d46606fbbb39d4a702516fe16af20ce2ad198)。
 
 ## Commit — 2026-11-19 角色回應揮手與逐角色動作覆蓋
 
@@ -979,9 +979,9 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 
 三位 NPC 各做正常速度和四分之一速度重入的真實 F 輸入測試，分別播完 8、7、8 格。每案只一位回應，連按保留同段時鐘，腳下根位置固定。另以小角驗證降低動態重入及 Windows 內嵌版。六部招呼錄影和四部自然觀察錄影均完整解碼為 1280×720／30 FPS。215 項 Python、Godot 匯入與 5 組局部回歸通過。不同方向的連續自然度仍依原票驗收。
 
-![四位角色自然待機及不同動作](images/ART-17-four-character-idle-20261119-native.png)
+四位角色自然待機及不同動作（畫面已精簡）
 
-[票票招呼](images/ART-17-wave-replies-20261119-ticket.png) · [小角招呼](images/ART-17-wave-replies-20261119-imp.png) · [阿浪招呼](images/ART-17-wave-replies-20261119-announcer.png) · [四位角色的正常原生錄影](images/ART-17-four-character-idle-20261119-evidence.zip) · [F 招呼、慢放及封裝證據](images/ART-17-wave-replies-20261119-evidence.zip) · [程式提交](https://github.com/deadline314/Snapland/commit/d4c32521c3a4f050eded5bfee7059ff4af9ac4b5)。
+票票招呼 · 小角招呼 · 阿浪招呼 · 四位角色的正常原生錄影 · F 招呼、慢放及封裝證據 · [程式提交](https://github.com/deadline314/Snapland/commit/d4c32521c3a4f050eded5bfee7059ff4af9ac4b5)。
 
 ## Commit — 2026-11-19 四位角色完整節奏與接地驗收
 
@@ -989,8 +989,8 @@ Windows 內嵌執行檔再用同一流程驗證 F、P 與 E 三案。降低動�
 
 四位角色各錄 30 秒自然活動，同場三位 NPC 的首次眨眼分別在第 477、1、301 格，呼吸週期約 3.03、1.91、2.56 秒。沒有人操作時沒有自動招呼。主角及小角的降低動態重入通過，主角的空目錄 Windows 內嵌成品通過。原生錄影為實際遊戲畫面與腳本輸入，全部以 1280×720、60 FPS 解碼核對。
 
-![正常速度的三位 NPC 個性動作](images/ART-17-island-character-personality-normal-20261119.png)
-![四分之一速度重入後的個性動作](images/ART-17-island-character-personality-quarter-20261119.png)
-![三位 NPC 自然巡路的左右步態](images/ART-17-island-natural-strides-20261119.png)
+正常速度的三位 NPC 個性動作（畫面已精簡）
+四分之一速度重入後的個性動作（畫面已精簡）
+三位 NPC 自然巡路的左右步態（畫面已精簡）
 
-[各角色整段原生錄影、同場節奏與封裝報告](images/ART-16-17-island-animation-20261119-evidence.zip) · [驗收工具更新](https://github.com/deadline314/Snapland/commit/7c40485a77d228e04f06777ea1829d6872a87904)。
+各角色整段原生錄影、同場節奏與封裝報告 · [驗收工具更新](https://github.com/deadline314/Snapland/commit/7c40485a77d228e04f06777ea1829d6872a87904)。

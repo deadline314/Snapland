@@ -51,10 +51,10 @@
 
 ### 截圖
 
-![阿浪原遮擋姿勢全身與靴子](images/MAIN-33-announcer-clear.png)
+阿浪原遮擋姿勢全身與靴子（畫面已精簡）
 
-![主角正面靴子與路牌分開](images/MAIN-33-hero-clear.png)
+主角正面靴子與路牌分開（畫面已精簡）
 
-![主角慶祝姿勢](images/MAIN-33-hero-celebrate.png)
+主角慶祝姿勢（畫面已精簡）
 
-[原圖、失敗及還原對照、完整紀錄與審查](images/MAIN-33-evidence.zip)
+原圖、失敗及還原對照、完整紀錄與審查

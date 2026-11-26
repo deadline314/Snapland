@@ -59,11 +59,11 @@ Root 使用隔離存檔完成上島對話、兩條任務、探索拍照與兩款
 
 ### 截圖與影片
 
-![抵達與教學](images/ST-4-final-contact-1.png)
-![正式成果與小角任務](images/ST-4-final-contact-2.png)
-![阿浪任務與保存重開](images/ST-4-final-contact-3.png)
+抵達與教學（畫面已精簡）
+正式成果與小角任務（畫面已精簡）
+阿浪任務與保存重開（畫面已精簡）
 
-[原生流程影片](images/ST-4-final-native-flow.mp4)。十二張原圖以 `ST-4-final-` 開頭保存在本票 images 資料夾。
+原生流程影片。十二張原圖以 `ST-4-final-` 開頭保存在本票 images 資料夾。
 
 分支：`feature/island-first-park`。本輪程式與原生證據：[61fb5de](https://github.com/deadline314/Snapland/commit/61fb5de200cbc0eb805a01ed5dd1f9378399e634)。
 
@@ -93,10 +93,10 @@ Root 使用隔離存檔完成上島對話、兩條任務、探索拍照與兩款
 
 原生操作以程式送出真實鍵盤與滑鼠事件；故事全流程在站點間只移動玩家位置，沒有直接設定分數、委託進度或獎勵。這些是腳本驗收，不是真人試玩。共用機器負載很高時，故事全流程用 `SNAPLAND_REVIEW_WALL_SCALE=15` 放寬等待時間，遊戲時間、輸入與計分不變；另修正腳本裡已過時的快門按鈕文字。
 
-![完成小角委託後，拱門掛上彩帶](images/ST-4-result-20261023-quest001-result-on-island.jpg)
-![完成阿浪委託後，入口牌轉正，路標顯示兩件完成](images/ST-4-result-20261023-quest002-result-on-island.jpg)
-![小角第一次說明請求](images/ST-4-flow-20261023-imp-request.jpg)
-![晚上回訪，阿浪在提醒後補上一句夜場旁白](images/ST-4-flow-20261023-announcer-night.jpg)
+完成小角委託後，拱門掛上彩帶（畫面已精簡）
+完成阿浪委託後，入口牌轉正，路標顯示兩件完成（畫面已精簡）
+小角第一次說明請求（畫面已精簡）
+晚上回訪，阿浪在提醒後補上一句夜場旁白（畫面已精簡）
 
 [研究、設計與驗證界線](../../design/runtime/island-reactive-story.md) · [原生流程影片](../Snapland-main/images/MAIN-11-flow-20261023-walk.mp4) · [流程紀錄](../Snapland-main/images/MAIN-11-flow-20261023-report.json)
 

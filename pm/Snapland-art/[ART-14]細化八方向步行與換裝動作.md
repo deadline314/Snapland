@@ -69,23 +69,23 @@
 [原生或研究證據：ART-14-eight-direction-walk.mp4](images/ART-14-eight-direction-walk.mp4)
 [原生或研究證據：ART-14-gallery-hair.png](images/ART-14-gallery-hair.png)
 [原生或研究證據：ART-14-gallery-hat.png](images/ART-14-gallery-hat.png)
-[原生或研究證據：ART-14-gallery-poses-back.png](images/ART-14-gallery-poses-back.png)
-[原生或研究證據：ART-14-gallery-poses-back_left.png](images/ART-14-gallery-poses-back_left.png)
-[原生或研究證據：ART-14-gallery-poses-back_right.png](images/ART-14-gallery-poses-back_right.png)
+原生或研究證據：ART-14-gallery-poses-back.png
+原生或研究證據：ART-14-gallery-poses-back_left.png
+原生或研究證據：ART-14-gallery-poses-back_right.png
 [原生或研究證據：ART-14-gallery-poses-front.png](images/ART-14-gallery-poses-front.png)
-[原生或研究證據：ART-14-gallery-poses-front_left.png](images/ART-14-gallery-poses-front_left.png)
-[原生或研究證據：ART-14-gallery-poses-front_right.png](images/ART-14-gallery-poses-front_right.png)
-[原生或研究證據：ART-14-gallery-poses-left.png](images/ART-14-gallery-poses-left.png)
-[原生或研究證據：ART-14-gallery-poses-right.png](images/ART-14-gallery-poses-right.png)
+原生或研究證據：ART-14-gallery-poses-front_left.png
+原生或研究證據：ART-14-gallery-poses-front_right.png
+原生或研究證據：ART-14-gallery-poses-left.png
+原生或研究證據：ART-14-gallery-poses-right.png
 [原生或研究證據：ART-14-gallery-species.png](images/ART-14-gallery-species.png)
-[原生或研究證據：ART-14-walk-back.png](images/ART-14-walk-back.png)
-[原生或研究證據：ART-14-walk-back_left.png](images/ART-14-walk-back_left.png)
-[原生或研究證據：ART-14-walk-back_right.png](images/ART-14-walk-back_right.png)
-[原生或研究證據：ART-14-walk-front.png](images/ART-14-walk-front.png)
-[原生或研究證據：ART-14-walk-front_left.png](images/ART-14-walk-front_left.png)
-[原生或研究證據：ART-14-walk-front_right.png](images/ART-14-walk-front_right.png)
-[原生或研究證據：ART-14-walk-left.png](images/ART-14-walk-left.png)
-[原生或研究證據：ART-14-walk-right.png](images/ART-14-walk-right.png)
+原生或研究證據：ART-14-walk-back.png
+原生或研究證據：ART-14-walk-back_left.png
+原生或研究證據：ART-14-walk-back_right.png
+原生或研究證據：ART-14-walk-front.png
+原生或研究證據：ART-14-walk-front_left.png
+原生或研究證據：ART-14-walk-front_right.png
+原生或研究證據：ART-14-walk-left.png
+原生或研究證據：ART-14-walk-right.png
 
 ### 程式與證據提交
 分支：feature/island-first-park。更新至最新main後的本票提交：[209d95f](https://github.com/deadline314/Snapland/commit/209d95fb5ad0d9c24d6f6213b726efaa9988db43)。
@@ -122,6 +122,6 @@
 
 原生錄影使用 30 FPS 固定時鐘與 llvmpipe 軟體繪製，實際按鍵事件；不是 GPU 實機、Windows 或真人試玩。已實際查看正常速度影片的逐格角色（右後方向一段），全身完整、雙靴交替。擺臂與重心自然度取決於原畫，屬 ART-16 的更高標準。
 
-[研究與量測方法](../../design/runtime/walk-stride-calibration.md) · [校準資料](../../assets/characters/walk-stride-calibration.json) · [正常速度影片](images/ART-14-stride-20261023-normal.mp4) · [真正四分之一速度影片](images/ART-14-stride-20261023-quarter.mp4) · [正常速度紀錄](images/ART-14-stride-20261023-normal-audit.json) · [四分之一速度紀錄](images/ART-14-stride-20261023-quarter-audit.json) · [完整套件結果](images/ART-14-stride-20261023-full-suite.log) · [輸出建置](images/ART-14-stride-20261023-release-build.json) · [輸出檔啟動紀錄](images/ART-14-stride-20261023-release-smoke.log)
+[研究與量測方法](../../design/runtime/walk-stride-calibration.md) · [校準資料](../../assets/characters/walk-stride-calibration.json) · 正常速度影片 · 真正四分之一速度影片 · 正常速度紀錄 · 四分之一速度紀錄 · 完整套件結果 · 輸出建置 · 輸出檔啟動紀錄
 
-![右後方向連續行走影格](images/ART-14-stride-20261023-back-right-frames.jpg)
+右後方向連續行走影格（畫面已精簡）

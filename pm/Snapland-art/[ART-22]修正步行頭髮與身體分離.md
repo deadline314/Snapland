@@ -63,11 +63,11 @@
 
 ### 截圖與影片
 
-![原生完整角色與三種髮型、八方向](images/ART-22-attachment-frame-3.png)
-![帽子與種族、膚色切換](images/ART-22-variant-3-2-skin-2.png)
-![較早候選的浮空耳朵，未當成通過](images/ART-22-candidate-floating-variant-0-1.png)
+原生完整角色與三種髮型、八方向（畫面已精簡）
+帽子與種族、膚色切換（畫面已精簡）
+較早候選的浮空耳朵，未當成通過（畫面已精簡）
 
-[正常速度](images/ART-22-attachment-palette-normal.mp4) · [四分之一慢放](images/ART-22-attachment-palette-quarter.mp4)
+正常速度 · 四分之一慢放
 
 分支：`feature/island-experience`。遠端提交連結於推送後補入。
 
@@ -78,7 +78,7 @@
 
 當前4.7.2另重新通過全部64格×3髮型耳角接合與不可變來源檢查64.17秒、換裝／動態／降低動態生命週期3.34秒。新增接帽素材後的實際GPU96組及200格休止／保護像素回歸也通過，一像素身體偏移反例仍會被拒絕。先前正常／慢放影片採完整人物抽格實看，並未改寫為連續播放；本票按頭髮、帽子與種族部件接合範圍結案。
 
-[當前驗收與原生證據版本界線](images/ART-22-current-20261020-verification.json) · [當前耳角／頭髮接合](images/ART-22-current-20261020-avatar-attachment-tests.log) · [當前行走中切換](images/ART-22-current-20261020-island-hair-lifecycle-tests.log) · [正式短髮／捲髮原生正常與慢放](<../Snapland-art/[ART-34]擴充島上其他髮型動態.md>) · [本輪實際GPU96組](images/ART-17-catch-v5-20261020-gpu-hair.json)。
+當前驗收與原生證據版本界線 · 當前耳角／頭髮接合 · 當前行走中切換 · [正式短髮／捲髮原生正常與慢放](<../Snapland-art/[ART-34]擴充島上其他髮型動態.md>) · 本輪實際GPU96組。
 
-![正式短髮反向／停步／戴帽，既有真實四分之一速度影片抽格](images/ART-34-bob-reverse-quarter-sheet-01.png)
+正式短髮反向／停步／戴帽，既有真實四分之一速度影片抽格（畫面已精簡）
 ![正式捲髮前半八方向，既有真實四分之一速度影片抽格](images/ART-34-curly-quarter-sheet-01.png)

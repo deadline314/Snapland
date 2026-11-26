@@ -52,4 +52,4 @@
 
 ### 驗證紀錄
 
-[完整雲端結果](https://github.com/deadline314/Snapland/actions/runs/43263971097) · [覆蓋與時間](images/MAIN-25-ci-20261113-verification.json) · [完整紀錄](images/MAIN-25-ci-20261113-evidence.zip)。本票只調整驗證分工，沒有遊戲畫面變更。
+[完整雲端結果](https://github.com/deadline314/Snapland/actions/runs/43263971097) · 覆蓋與時間 · 完整紀錄。本票只調整驗證分工，沒有遊戲畫面變更。

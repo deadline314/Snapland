@@ -55,7 +55,7 @@
 
 ### 文件與圖片
 
-[使用者指南](../user_guide.md) · [接續 Prompt](../next_session_prompt.md) · [圖片來源](images/MAIN-20-reference-provenance.json) · [文件核對紀錄](images/MAIN-20-document-review.json)
+[使用者指南](../user_guide.md) · [接續 Prompt](../next_session_prompt.md) · [圖片來源](images/MAIN-20-reference-provenance.json) · 文件核對紀錄
 
 ![使用者肯定的個性方向](images/MAIN-20-user-liked-personality-sheet.png)
 
@@ -76,7 +76,7 @@
 
 三張原圖均已重新檢視並核對 SHA256，保留原始「個性／美術方向肯定」與「捲動暫停介面否定」標籤。新接續 Prompt 只保留最新 main 入口、實際角色／衣物／校準範圍、隔離存檔與推送規範，單獨複製不再帶入舊 feature 工作區；Python 範例僅語法核對，不算引擎執行。
 
-依全部 89 張票檔重新盤點，文件票完成後為 10 張完成、78 張進行中、1 張審查中，共 79 張未結案。[逐票清單](../open_tickets.md)逐項連回原票並保留未勾驗收，不把局部實作或靜態圖當全遊戲通過。[原圖與盤點核對紀錄](images/MAIN-20-document-review-20261017.json)。文件連結與一段 Python 範例語法均通過；本輪沒有新增遊戲試玩、GPU 或聲音驗收。
+依全部 89 張票檔重新盤點，文件票完成後為 10 張完成、78 張進行中、1 張審查中，共 79 張未結案。[逐票清單](../open_tickets.md)逐項連回原票並保留未勾驗收，不把局部實作或靜態圖當全遊戲通過。原圖與盤點核對紀錄。文件連結與一段 Python 範例語法均通過；本輪沒有新增遊戲試玩、GPU 或聲音驗收。
 
 本票所有文件條件已核對，從審查中接續至完成；不代表角色、玩法、光影、UIUX 與聲音的其他票一併完成。主要遊戲交付來源與提交已在指南及接續文件標明。
 

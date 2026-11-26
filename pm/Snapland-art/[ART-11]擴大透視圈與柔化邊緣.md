@@ -61,14 +61,14 @@
 
 ### 截圖
 
-[原生或研究證據：ART-11-arch-cutaway-clear.png](images/ART-11-arch-cutaway-clear.png)
+原生或研究證據：ART-11-arch-cutaway-clear.png
 [原生或研究證據：ART-11-arch-cutaway-day.png](images/ART-11-arch-cutaway-day.png)
-[原生或研究證據：ART-11-arch-cutaway-resized-equipped.png](images/ART-11-arch-cutaway-resized-equipped.png)
-[原生或研究證據：ART-11-cutaway-clear.png](images/ART-11-cutaway-clear.png)
-[原生或研究證據：ART-11-cutaway-day.png](images/ART-11-cutaway-day.png)
-[原生或研究證據：ART-11-cutaway-night.png](images/ART-11-cutaway-night.png)
-[原生或研究證據：ART-11-cutaway-reduced-motion.png](images/ART-11-cutaway-reduced-motion.png)
-[原生或研究證據：ART-11-cutaway-right-kiosk.png](images/ART-11-cutaway-right-kiosk.png)
+原生或研究證據：ART-11-arch-cutaway-resized-equipped.png
+原生或研究證據：ART-11-cutaway-clear.png
+原生或研究證據：ART-11-cutaway-day.png
+原生或研究證據：ART-11-cutaway-night.png
+原生或研究證據：ART-11-cutaway-reduced-motion.png
+原生或研究證據：ART-11-cutaway-right-kiosk.png
 
 ### 程式與證據提交
 分支：feature/island-first-park。更新至最新main後的本票提交：[b90ecb2](https://github.com/deadline314/Snapland/commit/b90ecb22684d65d071edc0f31b27ddff2ca41102)。
@@ -100,9 +100,9 @@
 
 ### 截圖及影片
 
-![近景完整角色與建築陰影](images/ART-11-zoom-v3-reveal.png)
-![離開後恢復完整建築](images/ART-11-zoom-v3-restored.png)
-[正常速度](images/ART-11-zoom-v3-normal.mp4) · [四分之一速度](images/ART-11-zoom-v3-quarter.mp4) · [原生記錄](images/ART-11-zoom-v3-native.log)
+近景完整角色與建築陰影（畫面已精簡）
+離開後恢復完整建築（畫面已精簡）
+正常速度 · 四分之一速度 · 原生記錄
 
 # Commit — 2026-10-23 較大透視圈的各情境驗收
 
@@ -120,7 +120,7 @@
 
 四時段（凌晨、中午、傍晚、晚上）兩種建築、換裝後、降低動態、800×600 與 1600×900 視窗、離開後恢復與重建 Main 共 13 案全部通過：主角像素透過透視圈 100% 相同，頭頂與靴底列一致，圈外建築像素改變 0。正常與四分之一速度短片附在 ART-10。Godot 4.7.2 Compatibility、Xvfb 上的 llvmpipe 軟體繪製，腳本送出實際方向鍵；不是 GPU 硬體、Windows 或真人試玩。
 
-![四時段、換裝與降低動態](images/ART-11-occlusion-20261023-conditions.png)
-![兩種視窗與重建 Main 後](images/ART-11-occlusion-20261023-windows-reentry.png)
+四時段、換裝與降低動態（畫面已精簡）
+兩種視窗與重建 Main 後（畫面已精簡）
 
-量測截圖為比較用畫面，已隱藏其他立牌與標籤；完整畫面見短片。[逐案量測](images/ART-10-occlusion-20261023-verification.json)
+量測截圖為比較用畫面，已隱藏其他立牌與標籤；完整畫面見短片。逐案量測

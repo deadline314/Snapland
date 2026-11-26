@@ -59,9 +59,9 @@
 - 分支：`feature/island-first-park`；[遠端提交 cbbcd29](https://github.com/deadline314/Snapland/commit/cbbcd29)。
 
 ### 截圖與影片
-![800 像素教學](images/MAIN-10-game-001-800-normal.png)
-![原生截圖放大](images/MAIN-10-game-001-800-normal-screenshot-zoom.png)
-[原生教學操作影片](images/MAIN-10-native-tutorial.mp4)
+800 像素教學（畫面已精簡）
+原生截圖放大（畫面已精簡）
+原生教學操作影片
 
 
 # Commit-2
@@ -88,18 +88,18 @@
 |---|---|
 | 十二款流程 | 首次教學、略過或開始、遊玩中說明、暫停重看、離開確認、私人練習說明及重進流程通過；本次未完成十二款遊戲本身 |
 | 原生畫面 | 72 張 1280×720 畫面與六張 3×4 總覽；逐張 SHA-256 見[證據清單](../../design/runtime/MAIN-10-v3-native-evidence-manifest.md) |
-| 影片 | [原生生命週期流程影片](images/MAIN-10-lifecycle-v3-native.mp4)；4,150 幀、60 FPS、69.1667 秒，Root 已播放並檢查指定畫面 |
+| 影片 | 原生生命週期流程影片；4,150 幀、60 FPS、69.1667 秒，Root 已播放並檢查指定畫面 |
 | 回歸測試 | 教學已讀／存檔測試與主畫面整合測試通過；v2 的三次迎賓大合奏錯誤已由 SG-27 修正提交 `7719b26`，v3 未再出現 |
 | 完整遊玩與介面更新 | 未完成；教學頁截圖仍須更新為目前遊玩介面，並需後續完成完整遊戲與視覺驗收 |
 
 ### 畫廊
 
-![首次進入｜第 1 步](images/MAIN-10-v3-native-first-entry-step-01.png)
-![教學導覽｜第 2 步](images/MAIN-10-v3-native-tutorial-step-02.png)
-![教學導覽｜第 3 步](images/MAIN-10-v3-native-tutorial-step-03.png)
-![正式回合｜遊玩中說明](images/MAIN-10-v3-native-formal-session-help.png)
-![暫停選單｜手動重看](images/MAIN-10-v3-native-manual-reopen.png)
-![私人練習｜遊玩中說明](images/MAIN-10-v3-native-private-practice-help.png)
+首次進入｜第 1 步（畫面已精簡）
+教學導覽｜第 2 步（畫面已精簡）
+教學導覽｜第 3 步（畫面已精簡）
+正式回合｜遊玩中說明（畫面已精簡）
+暫停選單｜手動重看（畫面已精簡）
+私人練習｜遊玩中說明（畫面已精簡）
 
 測試方式及範圍：[原生生命週期檢視](../../design/runtime/tutorial-lifecycle-native-review.md)；逐張來源與雜湊：[證據清單](../../design/runtime/MAIN-10-v3-native-evidence-manifest.md)。
 
@@ -132,11 +132,11 @@
 
 實際 UI 操作驗收與來源圖分開。新版測試曾抓到 800×450 文字超出、過期的開始按鈕搜尋和分頁裁切判斷問題，修正後再跑；失敗執行保留原狀，不列為成功。本票完成圖文教學與重看入口；不以此作十二款最終玩法、美術、NPC 動畫或玩家試玩認可。
 
-[驗收與逐檔雜湊](images/MAIN-10-current-20261020-verification.json) · [全部程序結果](images/MAIN-10-current-20261020-native-acceptance.json) · [真實教學來源](images/MAIN-10-current-20261020-source-manifest.json)
+驗收與逐檔雜湊 · 全部程序結果 · 真實教學來源
 
 ### 畫面
 
-![本輪實際教學操作總覽](images/MAIN-10-current-20261020-ui-overview-03.png)
-![第三輪實際結果與當前說明](images/MAIN-10-current-20261020-validation-native-v6-last-six-game-009-step-03.png)
-![保留完整畫面的暫停舞台](images/MAIN-10-current-20261020-pause-after-current-game-003-paused-stage.png)
-![暫停期間明確刷新夜間光照](images/MAIN-10-current-20261020-pause-after-current-game-003-paused-night.png)
+本輪實際教學操作總覽（畫面已精簡）
+第三輪實際結果與當前說明（畫面已精簡）
+保留完整畫面的暫停舞台（畫面已精簡）
+暫停期間明確刷新夜間光照（畫面已精簡）

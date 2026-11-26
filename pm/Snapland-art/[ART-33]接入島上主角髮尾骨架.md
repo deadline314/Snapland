@@ -41,7 +41,7 @@
 既有固定根點與待機已在島上，但髮尾骨架仍只在獨立樣本；走路中換裝或切換額外動態還會短暫回到第一格。
 現在島上人類主角的微風短髮使用原人物像素與固定髮根，只讓外側髮束末端回擺。帽子、臉、相機及原步態保留，換裝和動態切換維持當格與步行進度；停止後收斂，降低動態／停用恢復原圖。其他種族、其他髮型及單次動作保留完整原人物，本票沒有把它們算成新增骨架覆蓋。
 
-先核對七方官方文字資料，另檢視 Unity 換圖錯位與修正兩張靜態原圖，採用原因與範圍見[研究與製作紀錄](../../design/runtime/island-hair-binding.md)。初版合成改動了微透明像素，已拒收並保留[失敗紀錄](images/ART-33-rejected-overlap-audit.json)；修正後以原 RGBA、實際骨架渲染與故意一像素偏移的負例確認。
+先核對七方官方文字資料，另檢視 Unity 換圖錯位與修正兩張靜態原圖，採用原因與範圍見[研究與製作紀錄](../../design/runtime/island-hair-binding.md)。初版合成改動了微透明像素，已拒收並保留失敗紀錄；修正後以原 RGBA、實際骨架渲染與故意一像素偏移的負例確認。
 
 ### 測試結果
 
@@ -60,18 +60,18 @@
 
 ### 截圖與影片
 
-![八方向與戴帽的實際人物渲染](images/ART-33-eight-view-hats.png)
+八方向與戴帽的實際人物渲染（畫面已精簡）
 
-![實際島上與完整人物像素檢視](images/ART-33-island-walk.png)
+實際島上與完整人物像素檢視（畫面已精簡）
 
-[正常錄影](images/ART-33-normal-review.mp4) · [四分之一模擬速度錄影](images/ART-33-quarter-review.mp4)
+正常錄影 · 四分之一模擬速度錄影
 
-[持續反向與換裝正常錄影](images/ART-33-live-normal-review.mp4) · [持續反向與換裝四分之一錄影](images/ART-33-live-quarter-review.mp4)
+持續反向與換裝正常錄影 · 持續反向與換裝四分之一錄影
 
-[完整量測與驗收範圍](images/ART-33-verification.json) · [32 組像素比較](images/ART-33-pixels-audit.json)
+[完整量測與驗收範圍](images/ART-33-verification.json) · 32 組像素比較
 
-[正常逐姿勢 1](images/ART-33-normal-poses-1.png) · [2](images/ART-33-normal-poses-2.png) · [3](images/ART-33-normal-poses-3.png)
+正常逐姿勢 1 · 2 · 3
 
-[四分之一逐姿勢 1](images/ART-33-quarter-poses-1.png) · [2](images/ART-33-quarter-poses-2.png) · [3](images/ART-33-quarter-poses-3.png)
+四分之一逐姿勢 1 · 2 · 3
 
 分支：`codex/character-hair-binding`，由原遊戲分支建立的獨立工作區交付；主線遊戲與其他票仍依各自驗收處理。

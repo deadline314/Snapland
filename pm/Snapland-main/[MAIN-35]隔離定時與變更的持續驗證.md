@@ -48,4 +48,4 @@
 | 實際並行 | 同一分支的定時驗證與變更驗證曾同時執行。較新的推送取代舊推送，定時驗證完成 |
 | 完整套件 | 定時及更新後主分支各 6 項通過，紀錄附事件來源、提交、工作結果及時間 |
 
-[GitHub 實際驗證紀錄](images/MAIN-35-ci-evidence.json) · [完成的定時驗證](https://github.com/deadline314/Snapland/actions/runs/44406936194) · [更新後主分支的完整驗證](https://github.com/deadline314/Snapland/actions/runs/44408308995) · [分組規則](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency) · [程式提交](https://github.com/deadline314/Snapland/commit/c5871d5f614d23458cc5b9e3416a5eec1add753b)。
+GitHub 實際驗證紀錄 · [完成的定時驗證](https://github.com/deadline314/Snapland/actions/runs/44406936194) · [更新後主分支的完整驗證](https://github.com/deadline314/Snapland/actions/runs/44408308995) · [分組規則](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency) · [程式提交](https://github.com/deadline314/Snapland/commit/c5871d5f614d23458cc5b9e3416a5eec1add753b)。

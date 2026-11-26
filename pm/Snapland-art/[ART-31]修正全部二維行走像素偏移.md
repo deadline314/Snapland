@@ -57,17 +57,17 @@
 
 ### 截圖
 
-![原島嶼慢速左向實際操作](images/ART-31-island-quarter-left.png)
+原島嶼慢速左向實際操作（畫面已精簡）
 
-![兩種髮型與戴帽在八方向保持接合](images/ART-31-looks-tide_jacket.png)
+兩種髮型與戴帽在八方向保持接合（畫面已精簡）
 
-![另一件衣物的八方向外觀](images/ART-31-looks-long_coat.png)
+另一件衣物的八方向外觀（畫面已精簡）
 
-[完整驗收紀錄與範圍](images/ART-31-verification.json)、[修正前](images/ART-31-pixel-before.json)、[修正後](images/ART-31-pixel-after.json)、[根點與原畫檢查](images/ART-31-root-after.json)。
+完整驗收紀錄與範圍、修正前、修正後、根點與原畫檢查。
 
-[固定站位正常對照](images/ART-31-fixed-normal.mp4)、[固定站位慢播對照](images/ART-31-fixed-quarter.mp4)、[原島嶼正常操作](images/ART-31-island-normal.mp4)、[原島嶼慢速操作](images/ART-31-island-quarter.mp4)。
+固定站位正常對照、固定站位慢播對照、原島嶼正常操作、原島嶼慢速操作。
 
-[換裝樣本正常](images/ART-31-sample-normal.mp4)、[換裝樣本慢速](images/ART-31-sample-quarter.mp4)、[髮尾樣本正常](images/ART-31-hair-normal.mp4)、[髮尾樣本慢速](images/ART-31-hair-quarter.mp4)。
+換裝樣本正常、換裝樣本慢速、髮尾樣本正常、髮尾樣本慢速。
 
 # Commit-2
 
@@ -75,4 +75,4 @@
 
 本機最新原島嶼與髮尾樣本現在有各自獨立進度的啟動入口。原島嶼已實際完成開啟、保存及正常退出，0 ERROR；這是啟動與存檔流程檢查。[驗收紀錄](images/ART-31-launcher-smoke.log)。
 
-完整 CI 另揭露舊檢查把眨眼來源當作正式停步，以及要求抬腳各格鞋底相同。現在保留原畫眨眼來源檢查，並同時檢查正式停步、可見頭部固定、每格鞋底保留原圖高度；完整角色外觀與世界接線入口已通過，0 ERROR。[完整角色入口紀錄](images/ART-31-test-avatar-runtime.log)。
+完整 CI 另揭露舊檢查把眨眼來源當作正式停步，以及要求抬腳各格鞋底相同。現在保留原畫眨眼來源檢查，並同時檢查正式停步、可見頭部固定、每格鞋底保留原圖高度；完整角色外觀與世界接線入口已通過，0 ERROR。完整角色入口紀錄。

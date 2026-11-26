@@ -66,7 +66,7 @@ c1b7b19；feature/island-first-park。
 
 ### 截圖
 
-![本票原生畫面](images/ST-3-quest.png)
+本票原生畫面（畫面已精簡）
 
 [整組驗收、票況與存檔事故紀錄](../first-playable-delivery.md)。
 
@@ -75,6 +75,6 @@ c1b7b19；feature/island-first-park。
 
 依目前實作核對兩條三步任務：小角互動→長椅構圖→自己的角色泡泡合照；阿浪互動→迎賓牆取景→人潮號誌。錯誤證據與練習結果不推進、未完成不授卡、完成後再觸發不重複授卡。Main故事整合實際走到探索取卡、未完成票重開、首次教學／離開重進及自然人潮完成後的任務回報；兩個新程序另保留quest-001第2步及完整進度。三探索與guide固定來源、去重由Main整合與核心回歸覆蓋。沒有把直接餵入事件的規則測試當成整條泡泡任務的真人自然通關影片。
 
-[Main實際互動／任務整合](../Snapland-art/images/ART-23-verify-20261020-main-story-integration-tests.log) · [任務事件／拒絕／冪等](../Snapland-art/images/ART-23-verify-20261020-story-runtime-tests.log) · [真正新程序保存](../Snapland-main/images/MAIN-6-restart-20261020-verification.json)。既有實作與原程式f2d6b84已在main，本輪核對當前規則及證據，不把早期feature狀態當目前阻塞。舊Windows圖仍屬歷史；本輪無頭功能檢查、原生自動輸入與合成UI各按實際範圍記錄，沒有新Windows EXE、真人試玩或聽感認證。
+Main實際互動／任務整合 · 任務事件／拒絕／冪等 · 真正新程序保存。既有實作與原程式f2d6b84已在main，本輪核對當前規則及證據，不把早期feature狀態當目前阻塞。舊Windows圖仍屬歷史；本輪無頭功能檢查、原生自動輸入與合成UI各按實際範圍記錄，沒有新Windows EXE、真人試玩或聽感認證。
 
 任務名稱對齊現在的角色動機與實際步驟，未減少三步／三探索／固定獎勵／保存條件。ST-4更深入的角色演出與ST-5語音聽感仍保持進行中；本結案不是全島劇情或全部角色動畫完成。

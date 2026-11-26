@@ -54,13 +54,13 @@
 
 ### 測試結果
 
-[六組原生文字與語系紀錄](images/MAIN-19-native-language-verification.json)；[共同局部測試摘要](../Snapland-art/images/ART-27-verification.json)。語系、核心存檔、Main 整合、設定、對話與受影響介面測試均通過，無 ERROR。完整套件交 CI。
+六組原生文字與語系紀錄；共同局部測試摘要。語系、核心存檔、Main 整合、設定、對話與受影響介面測試均通過，無 ERROR。完整套件交 CI。
 
 ### 截圖與來源
 
-![未發布英文 QA 設定；正式清單仍僅繁中](images/MAIN-19-english-qa-settings.png)
+未發布英文 QA 設定；正式清單仍僅繁中（畫面已精簡）
 
-[RTL 與多語字形 QA](images/MAIN-19-rtl-qa-gallery.png)；[八個方向的第一手來源與取捨](../../design/runtime/typography-localization.md)；[研究頁截圖與99張正式UI畫面索引](../Snapland-art/[ART-27]完善像素字體與多語可讀性.md)。
+RTL 與多語字形 QA；[八個方向的第一手來源與取捨](../../design/runtime/typography-localization.md)；[研究頁截圖與99張正式UI畫面索引](../Snapland-art/[ART-27]完善像素字體與多語可讀性.md)。
 
 ### 歷史交付狀態
 
@@ -76,4 +76,4 @@
 
 與 ART-27 一起補上高行距 RTL 的雙尺寸暫停條件：所有主要入口與繼續／離開完整可見、不重疊，文字與字型不縮小；原中文三尺寸的 Tab／滑鼠返回及設定流程保持通過。原生六組語系／字型與最終標準／窄視窗 RTL 畫面均有可查證資料，具體查看的畫面另列。框架程式及本輪修正已整合 [b441722](https://github.com/deadline314/Snapland/commit/b441722168491a213a867ddfc21701de773f2671)，原先等待工作分支整組交付的阻塞已解除，本票完成。
 
-[本輪語系與版面執行紀錄](../Snapland-art/images/ART-27-text-20261020-locale-and-tall-pause.log) · [原生驗證與具體範圍](../Snapland-art/images/ART-27-text-20261020-verification.json) · [共同第一手研究與回歸方法](../../design/runtime/typography-localization.md)。最終相關執行 exit 0、0 ERROR；故意缺譯文／無效語系的 WARNING 保留，不稱完整翻譯或真人試玩。
+本輪語系與版面執行紀錄 · 原生驗證與具體範圍 · [共同第一手研究與回歸方法](../../design/runtime/typography-localization.md)。最終相關執行 exit 0、0 ERROR；故意缺譯文／無效語系的 WARNING 保留，不稱完整翻譯或真人試玩。

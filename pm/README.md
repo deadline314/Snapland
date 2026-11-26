@@ -10,6 +10,10 @@
 
 各專案獨立編號；名稱格式與交付請讀 [.agents/skills/pm-ticket/SKILL.md](../.agents/skills/pm-ticket/SKILL.md)。截圖是交付證據，設計票的圖片為文件預覽而非遊戲截圖。
 
+## 媒體保留
+
+每張票預設只留一張必要的 PNG，不放影片、壓縮檔與原始紀錄。未結案票與各專案最近五張完成票保留媒體；更早的完成票由 `python tools/prune_pm_media.py --apply` 精簡，連結改為文字，舊媒體可從 git 歷史取回。先不加 `--apply` 可預覽會移除的數量。
+
 [最新逐票未結案清單](open_tickets.md)收錄 125 張票，其中 118 張完成、6 張未結案、1 張封存。
 
 ## 本輪需求

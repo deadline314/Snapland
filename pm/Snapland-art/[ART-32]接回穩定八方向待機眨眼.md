@@ -51,8 +51,8 @@
 
 ### 截圖
 
-![八方向張眼與閉眼／背面呼吸對照](images/ART-32-eight-view-idle.png)
+八方向張眼與閉眼／背面呼吸對照（畫面已精簡）
 
-[正常錄影](images/ART-32-normal.mp4) · [四分之一速度錄影](images/ART-32-quarter.mp4)
+正常錄影 · 四分之一速度錄影
 
-![拒收的首版頭頸切口](images/ART-32-rejected-head-seam.png)
+拒收的首版頭頸切口（畫面已精簡）

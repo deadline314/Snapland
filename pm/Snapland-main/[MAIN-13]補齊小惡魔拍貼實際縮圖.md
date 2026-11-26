@@ -57,7 +57,7 @@
 主 Session 重建本票提交內容，縮圖、核心進度與存檔隔離三項局部驗證全過，腳本載入成功。核對同檔共用、重玩不重複、練習／失敗不附圖、舊資料回填、路徑去重、缺檔及損壞替代，十二張共用照片只解碼一次。故意損壞壓縮資料的負測試在隔離子程序產生預期解碼錯誤並被拒絕，不能描述成所有負測試都沒有引擎訊息。正式遊戲與真正重開的完整原生驗收仍與 MAIN-16 合併檢查，票維持進行中。
 
 ### 測試結果
-[縮圖局部驗證](images/MAIN-13-shared-thumbnail-local.log) · [存檔隔離驗證](images/MAIN-13-save-isolation-local.log) · [來源與處理界限](../../design/runtime/main-devil-thumbnails.md)。本段只記錄 CPU 局部驗證，不聲稱畫面或人工試玩已通過。
+縮圖局部驗證 · 存檔隔離驗證 · [來源與處理界限](../../design/runtime/main-devil-thumbnails.md)。本段只記錄 CPU 局部驗證，不聲稱畫面或人工試玩已通過。
 
 本輪提交基準：`e60275f`；分支：`feature/island-experience`。相關原生畫面與高清原圖追蹤 MAIN-16／ART-20。
 
@@ -70,7 +70,7 @@
 
 Godot 4.7.2 的正式普通及小惡魔兩局均完成，兩個分類顯示同一局真實畫面；兩張卡共用三張 1280×720 原圖及三張 320×180 縮圖。新程序重開後仍可查看兩類與原圖，進度檔逐位元相同。普通／小惡魔各一張，沒有重複收藏。縮圖、原圖保護及相簿三項局部回歸通過；主 Session 實際查看兩分類、兩原圖及重開兩分類共六張畫面。全五項驗收已有對應證據，票況完成。
 
-[實際輸入、結果及範圍索引](images/MAIN-13-shared-20261020-verification.json) · [正式流程](images/MAIN-13-shared-20261020-game-report.json) · [真正重開與存檔不變](images/MAIN-13-shared-20261020-reopen-report.json)。使用 X11／llvmpipe／Compatibility，自動輸入不稱真人試玩，Dummy 音訊不稱試聽。高清原圖與本輪重開短片另見 MAIN-16。
+實際輸入、結果及範圍索引 · 正式流程 · 真正重開與存檔不變。使用 X11／llvmpipe／Compatibility，自動輸入不稱真人試玩，Dummy 音訊不稱試聽。高清原圖與本輪重開短片另見 MAIN-16。
 
-![普通收藏](images/MAIN-13-shared-20261020-ordinary-album-tiles.png)
-![小惡魔共用本局照片](images/MAIN-13-shared-20261020-devil-album-tiles.png)
+普通收藏（畫面已精簡）
+小惡魔共用本局照片（畫面已精簡）

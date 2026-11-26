@@ -53,4 +53,4 @@
 | 設計規格 | park、games、story、items、links 5 項通過 |
 | Python | 215 項通過 |
 
-![實際車站模型、選中岔道與步行區](images/MAIN-45-toy-railway.png)
+實際車站模型、選中岔道與步行區（畫面已精簡）

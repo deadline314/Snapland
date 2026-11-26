@@ -50,10 +50,10 @@
 
 | 畫面證據 | 說明 |
 | --- | --- |
-| [旗幟近景 01](images/ART-9-flag-01.png) · [旗幟近景 02](images/ART-9-flag-02.png) · [植栽近景](images/ART-9-foliage-01.png) | 原生靜態畫面 |
-| [阿浪近景](images/ART-9-npc-announcer-close.png) · [小角近景](images/ART-9-npc-imp-close.png) · [票票近景](images/ART-9-npc-ticket-close.png) | 角色身份靜態近景 |
+| [旗幟近景 01](images/ART-9-flag-01.png) · 旗幟近景 02 · [植栽近景](images/ART-9-foliage-01.png) | 原生靜態畫面 |
+| 阿浪近景 · 小角近景 · 票票近景 | 角色身份靜態近景 |
 | [NPC 售票員第一格](images/ART-15-sprite-clearance-npc-ticket-first.png) · [小角降低動態格](images/ART-15-sprite-clearance-npc-imp-reduced.png) · [主角全身待機](images/ART-15-sprite-clearance-avatar-idle-front.png) | 原生 clearance fixture 靜態畫面；未覆蓋完整待機動畫 |
-| [動態預覽影片](images/ART-9-10-motion.mp4) | 影片已保存，尚未完成影片審閱及包裝驗收 |
+| 動態預覽影片 | 影片已保存，尚未完成影片審閱及包裝驗收 |
 
 程式交付：[Commit 572fa25](https://github.com/deadline314/Snapland/commit/572fa25ee797dcfd08a52af501c9e84768e9fc96)（分支 `feature/island-first-park`；固定基準 `abcb00bf3db53ae8ace3a54dcca5368fe6d83e4e`）。
 
@@ -93,6 +93,6 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 
 原生錄影使用軟體繪製與固定時鐘、腳本放置鏡頭；不是 GPU 實機或真人試玩。已實際查看 15 張近景與影片中的四位角色。
 
-[逐幀量測](images/ART-9-breath-20261106-measurement.json) · [原生近景影片](images/ART-9-breath-20261106-native.mp4) · [輸出建置](images/ART-9-breath-20261106-release-build.json) · [輸出檔啟動紀錄](images/ART-9-breath-20261106-release-smoke.log) · [設計說明](../../design/runtime/component-animation.md)
+逐幀量測 · 原生近景影片 · 輸出建置 · 輸出檔啟動紀錄 · [設計說明](../../design/runtime/component-animation.md)
 
-![主角、主角長背心戴帽、票票、小角、阿浪的原生待機近景](images/ART-9-breath-20261106-poses.jpg)
+主角、主角長背心戴帽、票票、小角、阿浪的原生待機近景（畫面已精簡）

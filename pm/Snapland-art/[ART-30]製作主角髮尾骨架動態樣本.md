@@ -57,12 +57,12 @@
 
 ### 截圖
 
-![原畫風格的獨立輸出](images/ART-30-export-startup.png)
-![八方向戴帽與無帽近看](images/ART-30-normal-head-directions.png)
-![拍照時手部與相機遮擋](images/ART-30-normal-photo-foreground.png)
+原畫風格的獨立輸出（畫面已精簡）
+八方向戴帽與無帽近看（畫面已精簡）
+拍照時手部與相機遮擋（畫面已精簡）
 
 [正常錄影](images/ART-30-normal-normal.mp4)（56.8 秒／1704 格）、[四分之一模擬速度錄影](images/ART-30-quarter-quarter.mp4)（214.133 秒／6424 格），皆為 1280×800、30 FPS，播放速度 1×。
-[慢放全身](images/ART-30-quarter-body-directions.png)、[慢放頭部](images/ART-30-quarter-head-directions.png)、[回擺中暫停](images/ART-30-quarter-pause-during-rebound.png)、[實際渲染比較](images/ART-30-gpu-pixel-comparison.json)、[驗收範圍與雜湊](images/ART-30-verification.json)。
+慢放全身、慢放頭部、回擺中暫停、實際渲染比較、[驗收範圍與雜湊](images/ART-30-verification.json)。
 
 [操作與重建說明](../../design/runtime/hero-2d-hair-sample-delivery.md)。此為主 Session 的限定樣本檢視，非使用者親自試玩或整島驗收。
 
@@ -84,6 +84,6 @@
 
 ### 截圖
 
-![戴帽與頭頸分件保持接合](images/ART-31-looks-tide_jacket.png)
+戴帽與頭頸分件保持接合（畫面已精簡）
 
-[最新正常錄影](images/ART-31-hair-normal.mp4)、[最新慢速錄影](images/ART-31-hair-quarter.mp4)、[十六組實際顯示比較](images/ART-31-hair-gpu.json)、[輸出操作紀錄](images/ART-31-hair-export-controls.json)、[最新驗收範圍](images/ART-31-verification.json)。本段取代前段對逐格髮根穩定的通過結論。
+最新正常錄影、最新慢速錄影、十六組實際顯示比較、輸出操作紀錄、最新驗收範圍。本段取代前段對逐格髮根穩定的通過結論。

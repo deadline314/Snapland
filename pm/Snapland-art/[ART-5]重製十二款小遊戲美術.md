@@ -81,12 +81,12 @@ Windows輸出於Intel Arc B580原生GPU完成圖集、NPC、場景動畫與遮�
 | 局部檢查 | 六組既有局部通過，最終光影再驗通過；共通小遊戲 84 案例 96.10 秒通過。初次本地 90 秒超時保留，使用既有本地倍率 2（上限 180 秒），案例、判定與分數未變 |
 | 真正 Linux 成品 | 最新來源逐檔雜湊一致；輸出與原生十二入口初始繪製／資源檢查通過、0 ERROR。這是成品啟動與資源驗收，不是十二款成品完整通關或 Windows 驗收 |
 
-![遊戲 1–4](images/ART-5-final-20261024-games-1.jpg)
-![遊戲 5–8](images/ART-5-final-20261024-games-2.jpg)
-![遊戲 9–12](images/ART-5-final-20261024-games-3.jpg)
-![候客室前後](images/ART-5-final-20261024-bench-room-comparison.jpg)
-![同一人物狀態的四時段光影](images/ART-5-final-20261024-crowd-light-comparison.jpg)
+遊戲 1–4（畫面已精簡）
+遊戲 5–8（畫面已精簡）
+遊戲 9–12（畫面已精簡）
+候客室前後（畫面已精簡）
+同一人物狀態的四時段光影（畫面已精簡）
 
-[長椅 Main 原生錄影](images/ART-5-final-20261024-bench-main.mp4)（23.133 秒、347 格、15 FPS） · [人潮固定模擬擷取](images/ART-5-final-20261024-crowd-main-fixed.mp4)（80.2 秒、1,203 格、15 FPS；不是正常速度影片） · [全部成功路線與完整擷取](images/ART-5-final-20261024-game-captures.zip) · [來源前後、尺寸／光影與原始失敗](images/ART-5-final-20261024-sources-and-diagnostics.zip) · [精確範圍、版本及逐檔雜湊](images/ART-5-final-20261024-verification.json)。兩段影片已完整解碼並查看抽格，不宣稱連續觀看；Dummy 音訊不當試聽。
+長椅 Main 原生錄影（23.133 秒、347 格、15 FPS） · 人潮固定模擬擷取（80.2 秒、1,203 格、15 FPS；不是正常速度影片） · 全部成功路線與完整擷取 · 來源前後、尺寸／光影與原始失敗 · 精確範圍、版本及逐檔雜湊。兩段影片已完整解碼並查看抽格，不宣稱連續觀看；Dummy 音訊不當試聽。
 
 本票依十二款場景、具體道具、目標及原生成功畫面的原驗收範圍結案。角色整套動畫、換裝與全島品質各依原票驗收。

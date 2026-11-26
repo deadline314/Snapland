@@ -51,4 +51,4 @@
 | 設計規格 | park、games、story、items、links 5 項通過 |
 | Python 回歸 | 215 項通過 |
 
-![走到影子台切換燈位，查看實際投影與帳篷步道](images/MAIN-44-mirror-circus.png)
+走到影子台切換燈位，查看實際投影與帳篷步道（畫面已精簡）

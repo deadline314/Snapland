@@ -57,7 +57,7 @@ Root 從這次提交的暫存內容重建獨立專案，實際執行拒絕案例
 
 ### 測試結果與證據
 
-提交內容的匯入、存檔隔離與核心流程 3/3 通過，0 ERROR。保留負面案例沒有改動資料的標記、兩次普通啟動的成功標記與局部測試結果：[隔離驗收紀錄](images/MAIN-17-isolation-validation.log)、[核心流程紀錄](images/MAIN-17-core-validation.log)、[事故後檔案核對](images/MAIN-17-live-profile-preservation.json)。完整套件交由 CI。
+提交內容的匯入、存檔隔離與核心流程 3/3 通過，0 ERROR。保留負面案例沒有改動資料的標記、兩次普通啟動的成功標記與局部測試結果：隔離驗收紀錄、核心流程紀錄、事故後檔案核對。完整套件交由 CI。
 
 分支：`feature/island-experience`；遠端提交連結於提交後補記。票況：進行中。
 
@@ -77,8 +77,8 @@ Linux 的隔離驗收依賴 Windows 暫存與使用者目錄資訊，啟動時�
 
 Windows 正常環境與移除 Windows 暫存變數兩組原生檢查均通過，0 ERROR，拒絕案例三個檔案雜湊均保持不變，一般假存檔載入／保存／重開成功。Linux 結果以這次修正後的 CI 為準；本票維持進行中。
 
-- [正常環境紀錄](images/MAIN-17-portable-normal.log)
-- [無 Windows 暫存變數紀錄](images/MAIN-17-portable-no-windows-temp.log)
+- 正常環境紀錄
+- 無 Windows 暫存變數紀錄
 
 # Commit-3
 
@@ -86,4 +86,4 @@ Windows 正常環境與移除 Windows 暫存變數兩組原生檢查均通過，
 
 修正後的 Linux CI 已實際完成隔離存檔檢查，與兩組 Windows 結果一致。本票要求的拒絕案例、假存檔保護、普通保存與重開均已驗證；本票完成。
 
-[Linux 執行紀錄與來源](images/MAIN-17-linux-ci.log)。此結果僅代表存檔隔離階段，不代表完整 CI 或遊戲試玩通過。
+Linux 執行紀錄與來源。此結果僅代表存檔隔離階段，不代表完整 CI 或遊戲試玩通過。

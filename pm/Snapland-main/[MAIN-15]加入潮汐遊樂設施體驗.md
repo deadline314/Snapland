@@ -60,13 +60,13 @@ Root 實際查看三張提交內容的原生截圖，並將正常 15.7 秒與四
 
 採用海岸主題的獨立休閒設施，與計分小遊戲並置的理由、已讀多方向資料和參考圖見[島上體驗研究](../../design/runtime/island-experience-references.md)。本段原生圖沿用這張票獨立提交的場景與照明，不冒充後續 ART-1 的新照明。
 
-![開闊入口](images/MAIN-15-rideproof-v5-approach.png)
-![實際完整頭部坐姿](images/MAIN-15-rideproof-v5-seated.png)
-![返回入口](images/MAIN-15-rideproof-v5-return.png)
+開闊入口（畫面已精簡）
+實際完整頭部坐姿（畫面已精簡）
+返回入口（畫面已精簡）
 
-[正常影片](images/MAIN-15-rideproof-v5-normal.mp4) · [慢放影片](images/MAIN-15-rideproof-v5-quarter.mp4) · [原生執行紀錄](images/MAIN-15-rideproof-v5-native.log) · [操作與數值報告](images/MAIN-15-rideproof-v5-report.json) · [設施驗證](images/MAIN-15-ride-validation.log) · [完整頭部驗證](images/MAIN-15-seated-validation.log) · [換髮驗證](images/MAIN-15-attachment-validation.log)。
+正常影片 · 慢放影片 · 原生執行紀錄 · 操作與數值報告 · 設施驗證 · 完整頭部驗證 · 換髮驗證。
 
-保留退件證據：[實際貼圖缺口](images/MAIN-15-rejected-transparent-head-texture.png)、[當時的原生缺口畫面](images/MAIN-15-rejected-transparent-head-native.png)。來源貼圖在組合前快照；測試圖或舊式局部髮色範圍不能代替完整頭部檢查。
+保留退件證據：實際貼圖缺口、當時的原生缺口畫面。來源貼圖在組合前快照；測試圖或舊式局部髮色範圍不能代替完整頭部檢查。
 
 分支：`feature/island-experience`；遠端提交連結於提交後補記。票況：進行中。本票最小涉及 ART-22 共用角色組合，修正已畫好動作的頭部透明缺口；沒有改動原始圖片。
 
@@ -85,12 +85,12 @@ Root 實際查看三張提交內容的原生截圖，並將正常 15.7 秒與四
 - 原生最終 86.97 秒。已查看日夜坐姿八格總覽、入口與返回，以及代表日間／夜間原尺寸圖；角色、頭部與座位保持完整，鏡頭在設施外。日夜由隔離 fixture 切換，不宣稱時段 UI 或真人自由試玩。
 - 原設施局部測試保留全部條件，追加真正座位在四分之一、半圈、接近整圈的物理位置及自然結束，另檢查兩盞燈實際發光、白天關閉。23.43 秒通過；時段光源預算測試 4.01 秒通過，0 ERROR。原有降低動態、失焦、暫停與移除場景安全恢復仍通過。
 - 最終乾淨匯入 4.28 秒、0 ERROR；23 項引擎入口／完成契約通過。
-- [原生完整流程短片](images/MAIN-15-ride-20261020-ride.mp4) 1280×720、10 FPS、384 幀、38.4 秒，完整解碼 0 錯誤，均勻抽樣已檢視。沒有把抽樣寫成人工連續觀看、主觀試聽或即時效能通過。
+- 原生完整流程短片 1280×720、10 FPS、384 幀、38.4 秒，完整解碼 0 錯誤，均勻抽樣已檢視。沒有把抽樣寫成人工連續觀看、主觀試聽或即時效能通過。
 
-![日夜不同座位角度](images/MAIN-15-ride-20261020-seated-overview.png)
-![夜間實際照明](images/MAIN-15-ride-20261020-night-seat-2.png)
+日夜不同座位角度（畫面已精簡）
+夜間實際照明（畫面已精簡）
 
-[步行與完整乘坐報告](images/MAIN-15-ride-20261020-report.json) · [原生紀錄](images/MAIN-15-ride-20261020-native.log) · [設施局部驗證](images/MAIN-15-ride-20261020-ride.log) · [日夜光源預算](images/MAIN-15-ride-20261020-daylight.log) · [補燈前畫面](images/MAIN-15-ride-20261020-before-night-lights.png) · [匯入](images/MAIN-15-ride-20261020-import.log) · [證據雜湊](images/MAIN-15-ride-20261020-manifest.json)。
+步行與完整乘坐報告 · 原生紀錄 · 設施局部驗證 · 日夜光源預算 · 補燈前畫面 · 匯入 · 證據雜湊。
 
 接續基準 `2424410`；分支 `codex/finish-runtime-batch-20261020`。本票結案限這座休閒設施，不代表所有園區、角色動畫或整套光影品質完成。
 

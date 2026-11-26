@@ -56,11 +56,11 @@
 | 五個設計範圍 | 園區、遊戲、劇情、物品與連結通過；沒有執行遊戲試玩 |
 | 劇情資料／反例 | 16 項 Python 檢查通過；涵蓋六人四段、二十／三十覆蓋、結局、引用、區內依賴、恢復與歸屬 |
 | 文件圖 | 實際 PDF 的點陣預覽已檢視；是設計文件，非 Godot 畫面 |
-| 可重現紀錄 | [測試 log](images/ST-1-20261020-tests.log)、[完整資料驗證](images/ST-1-20261020-design-all.log)、[來源與範圍](images/ST-1-20261020-verification.json) |
+| 可重現紀錄 | 測試 log、完整資料驗證、來源與範圍 |
 
 ### 截圖
 
-![六人與四段主線設計文件，非遊戲畫面](images/ST-1-20261020-design-preview.png)
+六人與四段主線設計文件，非遊戲畫面（畫面已精簡）
 ![研究參考：官方 A Short Hike 原圖，非本作素材](images/ST-1-20261020-reference-short-hike.png)
 
 開始基準 `056b5d4cba0bf7c907ad8a207c367aed95726c98`；分支 `codex/finish-runtime-batch-20261020`。完成範圍為本票設計條件；原生迎賓內容依 ST-2／3 的各自證據。

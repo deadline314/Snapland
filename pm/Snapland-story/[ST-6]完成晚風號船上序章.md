@@ -62,12 +62,12 @@
 
 ### 截圖
 
-![船上短對話](images/ST-6-boat-20261112-1280.png)
+船上短對話（畫面已精簡）
 
-![小視窗、放大文字與降低動態](images/ST-6-boat-20261112-800-reduced.png)
+小視窗、放大文字與降低動態（畫面已精簡）
 
-![小視窗重播入口](images/ST-6-boat-20261112-pause-800.png)
+小視窗重播入口（畫面已精簡）
 
-![隔離輸出包](images/ST-6-boat-20261112-pck.png)
+隔離輸出包（畫面已精簡）
 
-[證據索引](images/ST-6-boat-20261112-evidence-index.md)；[完整原生畫面、測試與審查證據](images/ST-6-boat-20261112-evidence.zip)；[成品來源與指紋](images/ST-6-boat-20261112-verification.json)。
+證據索引；完整原生畫面、測試與審查證據；成品來源與指紋。
