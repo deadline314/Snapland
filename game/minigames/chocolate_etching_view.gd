@@ -5,6 +5,10 @@ signal input_requested(event: InputEvent, design_point: Vector2)
 signal clear_requested
 
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
+const HEADER := Rect2(24, 140, 1232, 98)
+const COCOA_BOARD := Color("#4a2e2a")
 const DESIGN_SIZE := Vector2(1280, 720)
 const BOARD_SIZE := Vector2(720, 440)
 const BOARD_PANEL := Rect2(24, 242, 880, 390)
@@ -37,8 +41,6 @@ var _state: Dictionary = {}
 var _labels: Dictionary = {}
 var _buttons: Dictionary = {}
 var _part_labels: Array[Label] = []
-var _normal_style: StyleBox
-var _held_style: StyleBox
 var _font: Font
 var _text_scale := 0.0
 var _canvas: Node2D
@@ -102,8 +104,6 @@ func _ready() -> void:
 	_canvas.scale = Vector2.ONE * BOARD_SCALE
 	_canvas.draw.connect(_draw_board)
 	clip.add_child(_canvas)
-	_normal_style = Paper.button_box(Paper.FRAME, GRID)
-	_held_style = Paper.button_box(Color("#4b4c3b"), Paper.GOLD)
 	for i in COMMANDS.size():
 		var command: String = COMMANDS[i]
 		var button := Button.new()
@@ -111,8 +111,7 @@ func _ready() -> void:
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.focus_mode = Control.FOCUS_NONE
 		button.toggle_mode = true
-		button.add_theme_stylebox_override("normal", _normal_style)
-		button.add_theme_stylebox_override("pressed", _held_style)
+		Props.skin_key(button, Color("#6a4434"))
 		button.add_theme_color_override("font_color", Paper.PAPER)
 		button.add_theme_color_override("font_pressed_color", Paper.GOLD)
 		add_child(button)
@@ -132,6 +131,9 @@ func _ready() -> void:
 	_add_label("Route", Rect2(796, 572, 100, 38), 16, Paper.PAPER)
 	_add_label("Feedback", Rect2(40, 638, 1200, 33), 22, Paper.GOLD)
 	_add_label("Scoring", Rect2(40, 672, 1200, 39), 17, Paper.PAPER)
+	# Two resident lines a side; the full rule and scoring text sit in the header tooltip.
+	_labels.Instruction.visible = false
+	_labels.Scoring.visible = false
 	for i in 4:
 		var label := _add_label("Gear%d" % (i + 1), Rect2(0, 0, 20, 22), 16, Paper.PAPER)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -170,6 +172,8 @@ func _gui_input(event: InputEvent) -> void:
 func _get_tooltip(at_position: Vector2) -> String:
 	if WORKSPACE.has_point(at_position) and _state.get("phase") == "craft":
 		return TOOLTIPS.tool
+	if (HEADER.has_point(at_position) or at_position.y > 636.0) and not _state.is_empty():
+		return _labels.Instruction.text + "\n" + _labels.Scoring.text
 	return TOOLTIPS.get(command_at(at_position), "")
 
 func present(state: Dictionary, _time_phase: String, _reduced_motion: bool) -> void:
@@ -244,12 +248,10 @@ func _apply_snapshot() -> void:
 		button.set_pressed_no_signal(command in _state.get("held_commands", []) or (command == "tool" and (_state.cutting or _state.driving)))
 
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 573), Paper.DEEP)
-	draw_rect(Rect2(24, 140, 1232, 98), Paper.DEEP_TEAL)
-	draw_rect(Rect2(24, 140, 4, 98), Paper.TEAL)
-	draw_rect(BOARD_PANEL, Color("#122d37"))
-	draw_rect(COMMAND_PANEL, Paper.DEEP_TEAL)
-	draw_rect(Rect2(24, 636, 1232, 36), Paper.DEEP_TEAL)
+	Props.wood_panel(self, HEADER, COCOA_BOARD, true)
+	Props.wood_panel(self, BOARD_PANEL, Props.SIGN_PLUM, true)
+	Props.wood_panel(self, COMMAND_PANEL, Props.SIGN_PLUM, true)
+	Props.wood_panel(self, Rect2(24, 636, 1232, 36), COCOA_BOARD, true)
 	if _state.is_empty():
 		return
 	var craft: bool = _state.phase == "craft"
@@ -260,9 +262,7 @@ func _draw() -> void:
 	else:
 		draw_line(Vector2(37, 300), Vector2(125, 300), Paper.TEAL, 2, true)
 		draw_dashed_line(Vector2(798, 300), Vector2(888, 300), Paper.TEAL, 2, 7, true)
-		var gauge := Rect2(40, 613, 90, 6)
-		draw_rect(gauge, GRID)
-		draw_rect(Rect2(gauge.position, Vector2(gauge.size.x * _state.output_travel / TAU, gauge.size.y)), Paper.TEAL)
+		Props.bar(self, Rect2(40, 612, 90, 8), _state.output_travel / TAU, Paper.TEAL)
 
 func _draw_board() -> void:
 	if _state.is_empty():
@@ -286,13 +286,20 @@ func _draw_surface() -> void:
 	if _state.is_empty() or _state.phase != "craft":
 		return
 	var board: Rect2 = _state.source_board
+	_surface.draw_rect(Rect2(board.position + Vector2(4, 8), board.size), Color(Props.CANDY_SHADOW, 0.6))
 	_surface.draw_rect(Rect2(board.position + Vector2(0, 5), board.size), EDGE)
-	_surface.draw_rect(board, COCOA)
+	# A moulded chocolate slab: one raised square per 40 px segment.
+	var segment := _segment()
+	var y := board.position.y
+	while y < board.end.y - 0.5:
+		var x := board.position.x
+		var tall := minf(40.0, board.end.y - y)
+		while x < board.end.x - 0.5:
+			var wide := minf(40.0, board.end.x - x)
+			_surface.draw_texture_rect_region(segment, Rect2(x, y, wide, tall), Rect2(0, 0, wide, tall))
+			x += 40.0
+		y += 40.0
 	_surface.draw_rect(board, Color("#e2a47c"), false, 1.8)
-	for x in range(90, 650, 40):
-		_surface.draw_line(Vector2(x, 71), Vector2(x, 399), Color("#955b45"))
-	for y in range(100, 400, 40):
-		_surface.draw_line(Vector2(61, y), Vector2(649, y), Color("#955b45"))
 	for stroke: Dictionary in _stock_strokes:
 		_surface.draw_polyline(stroke.points, EDGE, stroke.width + 1, true)
 		_surface.draw_polyline(stroke.points, Paper.CORAL.lerp(Paper.GOLD, stroke.depth), stroke.width, true)
@@ -304,6 +311,29 @@ func _draw_surface() -> void:
 			_contour(part.outline, Color("#87918b"), 1.2, true, _surface)
 		else:
 			_surface.draw_circle(part.source_center, 12, EDGE, true, -1, true)
+
+## One 40 x 40 chocolate segment: a raised square, lit top-left, with a groove.
+static func _segment() -> ImageTexture:
+	return Pixels.cached("choc-segment", func() -> Image:
+		var image := Image.create(20, 20, false, Image.FORMAT_RGBA8)
+		for y in 20:
+			for x in 20:
+				var tone := COCOA
+				if x == 0 or y == 0:
+					tone = Props.deepen(COCOA, 0.35)
+				elif x == 1 or y == 1:
+					tone = Props.lighten(COCOA, 0.3)
+				elif x == 19 or y == 19:
+					tone = Props.deepen(COCOA, 0.22)
+				elif x == 18 or y == 18:
+					tone = Props.deepen(COCOA, 0.1)
+				elif x < 6 and y < 6 and x + y < 7:
+					tone = Props.lighten(COCOA, 0.12)
+				else:
+					tone = Pixels.grainy(COCOA, x, y, 0.06)
+				image.set_pixel(x, y, tone)
+		image.resize(40, 40, Image.INTERPOLATE_NEAREST)
+		return image)
 
 func _draw_tools() -> void:
 	var selected: Dictionary = _state.parts[_state.selected]
@@ -328,7 +358,13 @@ func _draw_assembly() -> void:
 		if not part.mounted:
 			continue
 		var shape := _placed_outline(part, part.position)
+		var drop := PackedVector2Array()
+		for point in shape:
+			drop.append(point + Vector2(4, 6))
+		_canvas.draw_colored_polygon(drop, Color(Props.CANDY_SHADOW, 0.45))
 		_canvas.draw_colored_polygon(shape, PART_COLORS[i])
+		_canvas.draw_arc(part.position, part.pitch_radius * 0.72, PI * 0.9, PI * 1.6, 16, Props.lighten(PART_COLORS[i], 0.35), 4.0, true)
+		_canvas.draw_arc(part.position, part.pitch_radius * 0.72, PI * -0.1, PI * 0.6, 16, Props.deepen(PART_COLORS[i], 0.2), 4.0, true)
 		_contour(shape, EDGE, 2)
 		_canvas.draw_arc(part.position, part.pitch_radius, 0, TAU, 50, Color("#593f31"), 1.4, true)
 		var spoke: Vector2 = part.position + Vector2.from_angle(part.angle) * (part.pitch_radius - 12)

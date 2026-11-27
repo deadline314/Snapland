@@ -5,11 +5,14 @@ signal input_cancelled
 
 const Model = preload("res://game/minigames/filling_press_model.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 const BACKDROP_PATH := "res://assets/minigames/filling-press-workbench.webp"
 const PANEL := Rect2(36, 208, 792, 312)
 const TRACK := Rect2(54, 555, 756, 10)
 const COMMANDS := [Model.LEFT, Model.BOTH, Model.RIGHT, 0]
 const TITLES := ["左模 · A", "雙模 · Space", "右模 · D", "AI · R"]
+const ICONS := ["left", "grab", "right", "helper"]
 const HINTS := ["按住左模，在放開線鬆手", "一起壓左右模", "按住右模，在放開線鬆手", "跟隨左模，在合模時補壓右模"]
 const CREAM := Color("#fff0da")
 const GOLD := Color("#ffd88f")
@@ -46,6 +49,8 @@ static func pointer_source(event: InputEvent) -> String:
 func _get_tooltip(point: Vector2) -> String:
 	var index := button_at(point)
 	if index == -1:
+		if PANEL.has_point(point) and not _state.is_empty():
+			return "點一次壓住，再點放開" if _state.assisted else "按住合模，到點放開"
 		return ""
 	if _state.get("assisted", false) and index < 3:
 		return "點一次壓住，再點放開。回彈時點單側。"
@@ -56,8 +61,6 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	if ResourceLoader.exists(BACKDROP_PATH):
 		_backdrop = load(BACKDROP_PATH)
-	var normal := Paper.button_box(Color("#422d44"), Color("#ad8791"))
-	var active := Paper.button_box(Color("#664753"), GOLD)
 	for index in COMMANDS.size():
 		var button := Button.new()
 		button.text = TITLES[index]
@@ -65,9 +68,9 @@ func _ready() -> void:
 		button.toggle_mode = true
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.focus_mode = Control.FOCUS_NONE
-		button.add_theme_stylebox_override("normal", normal)
-		button.add_theme_stylebox_override("pressed", active)
+		Props.skin_key(button, Props.KEY_PLUM, ICONS[index])
 		button.add_theme_color_override("font_color", CREAM)
+		button.add_theme_color_override("font_pressed_color", GOLD)
 		add_child(button)
 		button.position = button_rect(index).position
 		button.size = button_rect(index).size
@@ -133,13 +136,43 @@ func _draw() -> void:
 	if _state.is_empty() or _font == null:
 		return
 	_text(Vector2(36, 184), _state.feedback, GOLD, 20)
-	draw_rect(PANEL.grow(3), Color("#675064"))
+	Props.metal_plate(self, PANEL.grow(6), Props.BRASS, false)
 	draw_rect(PANEL, Color("#302539"))
 	if _backdrop != null:
 		draw_texture_rect(_backdrop, PANEL, false)
 	_draw_press()
 	_draw_recipe()
 	_draw_timing()
+
+## Wafer with a pressed waffle grid, lit from the top left.
+static func _wafer(color: Color) -> ImageTexture:
+	return Pixels.bake("filling-wafer:" + color.to_html(false), Vector2i(72, 7), func(x: int, y: int) -> Color:
+		if (x == 0 or x == 71) and (y == 0 or y == 6):
+			return Pixels.CLEAR
+		var tone := color
+		if x % 6 == 0 or y == 3:
+			tone = Props.deepen(color, 0.18)
+		elif x % 6 == 1 or y == 0:
+			tone = Props.lighten(color, 0.2)
+		return Pixels.grainy(tone, x, y, 0.1))
+
+## Soft filling that bulges between the wafers, with a glossy stripe.
+static func _cream(color: Color) -> ImageTexture:
+	return Pixels.bake("filling-cream:" + color.to_html(false), Vector2i(46, 5), func(x: int, y: int) -> Color:
+		var bulge := 1 if x < 3 or x > 42 else 0
+		if y < bulge or y > 4 - bulge:
+			return Pixels.CLEAR
+		if y == bulge:
+			return Props.lighten(color, 0.35) if (x / 5) % 3 != 0 else Props.lighten(color, 0.15)
+		return Props.deepen(color, 0.12) if y == 4 - bulge else color)
+
+## A mold block: riveted iron frame round a copper die that glows when pressed.
+func _mold(plate: Rect2, pressing: bool, label: String) -> void:
+	Props.block_shadow(self, plate, Vector2(6, 8), 0.4)
+	Props.metal_plate(self, plate, Color("#a87560"))
+	var die := plate.grow(-16)
+	Props.surface(self, die, "groove", Color("#c17e6b") if pressing else Color("#9d6b60"))
+	_text(plate.position + Vector2(48, 70), label, CREAM, 23)
 
 func _draw_press() -> void:
 	var pressure: Vector2 = _state.pressure
@@ -150,46 +183,49 @@ func _draw_press() -> void:
 	var crust := Color("#e2a06b")
 	var crisp := Color("#f6c38d")
 	var fill_color := MINT if _state.phase == Model.REBOUND and absf(_state.offset) <= Model.CENTER_LIMIT else RED
-	draw_rect(Rect2(center.x - width / 2, center.y - 44 + flatten * 8, width, 28), crust)
-	draw_rect(Rect2(center.x - width / 2, center.y + 12 - flatten * 4, width, 28), crisp)
-	draw_rect(Rect2(filling_center - 94, center.y - 9, 188, 19 - flatten * 7), fill_color)
+	Props.contact_shadow(self, Vector2(center.x + 6, center.y + 56), width * 0.9, 0.45)
+	draw_texture_rect(_wafer(crisp), Rect2(center.x - width / 2, center.y + 12 - flatten * 4, width, 28), false)
+	draw_texture_rect(_cream(fill_color), Rect2(filling_center - 94, center.y - 11, 188, 22 - flatten * 7), false)
+	draw_texture_rect(_wafer(crust), Rect2(center.x - width / 2, center.y - 44 + flatten * 8, width, 28), false)
 	draw_line(Vector2(center.x, center.y - 55), Vector2(center.x, center.y - 25), CREAM, 2)
 	draw_line(Vector2(center.x, center.y + 33), Vector2(center.x, center.y + 55), CREAM, 2)
 	for index in 2:
 		var shift: float = pressure[index] * 38.0
 		var x: float = 141 + shift if index == 0 else 599 - shift
 		var plate := Rect2(x, center.y - 59, 124, 116)
-		draw_rect(plate, Color("#553c46"))
-		draw_rect(plate.grow(-7), Color("#9f635b"))
-		draw_rect(plate.grow(-13), Color("#c17e6b") if pressure[index] > 0.0 else Color("#b47d71"))
-		_text(plate.position + Vector2(42, 70), "左" if index == 0 else "右", CREAM, 23)
+		# The piston rod that drives each mold in from the frame.
+		var rod_from := PANEL.position.x + 4.0 if index == 0 else plate.end.x
+		Props.shaded_box(self, Rect2(rod_from, center.y - 12, (plate.position.x if index == 0 else PANEL.end.x - 4.0) - rod_from, 22), Props.deepen(Color("#b4704f"), 0.2), 4.0)
+		_mold(plate, pressure[index] > 0.0, "左" if index == 0 else "右")
 	for index in range(_state.layers.size()):
 		var x := 288.0 + 100.0 * index
 		var filling_height: float = 6.0 + 12.0 * _state.layers[index]
-		draw_rect(Rect2(x, 461, 88, filling_height + 14), crust)
-		draw_rect(Rect2(x, 468, 88, filling_height), RED)
+		Props.contact_shadow(self, Vector2(x + 46, 470 + filling_height + 14), 92, 0.4)
+		draw_texture_rect(_wafer(crust), Rect2(x, 461, 88, 8), false)
+		draw_texture_rect(_cream(RED), Rect2(x + 2, 467, 84, filling_height), false)
+		draw_texture_rect(_wafer(crisp), Rect2(x, 465 + filling_height, 88, 8), false)
 
 func _draw_recipe() -> void:
-	_text(Vector2(865, 244), "薄脆配方" if _state.layout == 0 else "厚餡配方", CREAM, 22)
+	Props.wood_panel(self, Rect2(852, 208, 398, 392), Props.SIGN_PLUM, true)
+	_text(Vector2(875, 248), "薄脆配方" if _state.layout == 0 else "厚餡配方", CREAM, 22)
 	for index in range(_state.recipe.size()):
 		var y := 272 + 66 * index
-		var row := Rect2(861, y, 380, 54)
+		var row := Rect2(869, y, 364, 54)
 		var done: bool = index < _state.layers.size()
 		var active: bool = index == _state.layers.size()
-		draw_rect(row, Color("#473647") if active else Color("#293449"))
-		draw_rect(row, MINT if done else (GOLD if active else Color("#607088")), false, 2)
+		Props.shaded_box(self, row, Color("#6b4558") if active else Color("#4a3448"), 6.0, done)
+		if active:
+			draw_rect(Rect2(row.position + Vector2(2, 2), Vector2(row.size.x - 4, 2)), GOLD)
 		var kind := "薄餡 · 1 拍" if _state.recipe[index] == 1 else "厚餡 · 2 拍"
-		_text(Vector2(879, y + 34), "第 %d 層  %s" % [index + 1, kind], MINT if done else CREAM, 18)
-	_text(Vector2(865, 495), "回彈置中  " + ("已達成" if _state.centered else "待完成"), MINT, 17)
-	_text(Vector2(865, 537), "點一次壓住，再點放開" if _state.assisted else "按住合模，到點放開", CREAM, 17)
+		_text(Vector2(885, y + (36 if done else 32)), "第 %d 層  %s" % [index + 1, kind], MINT if done else CREAM, 18)
+	_text(Vector2(875, 500), "回彈置中  " + ("已達成" if _state.centered else "待完成"), MINT, 17)
 
 func _draw_timing() -> void:
 	var target: float = _state.target
 	var range_end: float = target + _state.window
 	var position := clampf(_state.clock / range_end, 0.0, 1.0)
 	var label := "空拍 · 留空"
-	draw_rect(TRACK, Color("#69536a"))
-	draw_rect(Rect2(TRACK.position, Vector2(TRACK.size.x * position, TRACK.size.y)), GOLD)
+	Props.bar(self, TRACK, position, GOLD)
 	if _state.phase == Model.PRESS:
 		_marker(_state.start, range_end, "合模", MINT)
 		_marker(target, range_end, "放開", CREAM)
@@ -201,7 +237,7 @@ func _draw_timing() -> void:
 			label = "回彈 · 輕壓%s側" % ("右" if _state.offset > 0.0 else "左")
 		else:
 			label = "餡已置中"
-	_text(Vector2(865, 578), label, GOLD, 20)
+	_text(Vector2(875, 578), label, GOLD, 20)
 
 func _marker(cue: float, range_end: float, label: String, color: Color) -> void:
 	var x := TRACK.position.x + cue * TRACK.size.x / range_end

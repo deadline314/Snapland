@@ -23,6 +23,14 @@ const HEMP := Color("#d9c08a")
 const SHADOW := Color("#0b2233")
 ## Stained board that carries light text (status boards, meter boards).
 const SIGN_TEAL := Color("#1f4c5a")
+## Candy factory: plum enamel boards and keys, rose and mint enamel, biscuit,
+## cream icing and the plum dusk that shades everything under the awnings.
+const SIGN_PLUM := Color("#43283f")
+const KEY_PLUM := Color("#6b3f5c")
+const KEY_MINT := Color("#2f6a62")
+const BISCUIT := Color("#d29a5e")
+const ICING := Color("#fbead2")
+const CANDY_SHADOW := Color("#2a1430")
 
 ## 9 x 9 control icons, drawn in one colour. '#' is ink.
 const ICONS := {
@@ -49,6 +57,7 @@ const ICONS := {
 	"power": ["....##...", "...##....", "..##.....", ".######..", "...####..", "....##...", "...##....", "..##.....", ".##......"],
 	"shell": [".........", "...###...", "..#.#.#..", ".#.#.#.#.", "#.#.#.#.#", "#.#.#.#.#", ".#######.", "...###...", "....#...."],
 	"strap": [".........", "#########", "#########", "...###...", "...#.#...", "...###...", "#########", "#########", "........."],
+	"helper": ["....#....", ".#######.", ".#.....#.", ".#.#.#.#.", ".#.....#.", ".#######.", "...###...", ".#######.", "##.....##"],
 	"swap": ["..#......", ".##......", "#######..", ".##......", "..#...#..", "......##.", "..#######", "......##.", "......#.."],
 	# Night market keys.
 	"umbrella": ["...###...", ".#######.", "#########", "#.#.#.#.#", "....#....", "....#....", "....#....", "..#.#....", "...#....."],
@@ -171,6 +180,21 @@ static func gauge(canvas: CanvasItem, rect: Rect2, fraction: float, fill: Color,
 		canvas.draw_rect(Rect2(liquid.end.x - PIXEL * 2, liquid.position.y, PIXEL * 2, liquid.size.y), deepen(fill, 0.2))
 	canvas.draw_rect(Rect2(box.position.x + PIXEL, box.position.y, PIXEL * 2, box.size.y), Color(1, 1, 1, 0.16))
 
+## The same glass meter on its side, filled from the left to `fraction`.
+static func bar(canvas: CanvasItem, rect: Rect2, fraction: float, fill: Color, frame := BRASS) -> void:
+	var box := snap_rect(rect)
+	canvas.draw_rect(box.grow(PIXEL * 2), deepen(frame))
+	canvas.draw_rect(box.grow(PIXEL), frame)
+	canvas.draw_rect(Rect2(box.position - Vector2(PIXEL, PIXEL), Vector2(box.size.x + PIXEL * 2, PIXEL)), lighten(frame, 0.4))
+	canvas.draw_rect(box, Color("#2a1f30"))
+	var level := snappedf(clampf(fraction, 0.0, 1.0) * box.size.x, PIXEL)
+	if level > 0.0:
+		canvas.draw_rect(Rect2(box.position, Vector2(level, box.size.y)), fill)
+		canvas.draw_rect(Rect2(box.position, Vector2(level, PIXEL)), lighten(fill, 0.45))
+		if box.size.y > PIXEL * 3:
+			canvas.draw_rect(Rect2(box.position.x, box.end.y - PIXEL, level, PIXEL), deepen(fill, 0.2))
+	canvas.draw_rect(Rect2(box.position.x, box.position.y + PIXEL, box.size.x, PIXEL), Color(1, 1, 1, 0.12))
+
 ## Dithered oval where an object touches the ground.
 static func contact_shadow(canvas: CanvasItem, center: Vector2, width: float, strength := 0.5) -> void:
 	var size := snap(Vector2(width, maxf(PIXEL * 2, width * 0.3)))
@@ -212,8 +236,8 @@ static func key_cap(canvas: CanvasItem, rect: Rect2, held: bool, enabled := true
 
 ## A whole control key: cap, icon on the left and a short label. The label keeps
 ## the caller's font so it follows the player's text settings.
-static func control_key(canvas: CanvasItem, rect: Rect2, held: bool, icon_name: String, label: String, font: Font, font_size: int, enabled := true) -> void:
-	key_cap(canvas, rect, held, enabled)
+static func control_key(canvas: CanvasItem, rect: Rect2, held: bool, icon_name: String, label: String, font: Font, font_size: int, enabled := true, tone := Color("#2f6470")) -> void:
+	key_cap(canvas, rect, held, enabled, tone)
 	var sink := Vector2(0, 6.0 if held else 0.0)
 	var ink := Color("#ffc66d") if held else (Color("#80e6c2") if enabled else Color("#5d7f86"))
 	var text_from := 14.0
@@ -225,6 +249,64 @@ static func control_key(canvas: CanvasItem, rect: Rect2, held: bool, icon_name: 
 	while size > 12 and font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x > room:
 		size -= 1
 	canvas.draw_string(font, rect.position + Vector2(text_from, (rect.size.y - 8.0) * 0.5 + size * 0.36) + sink, label, HORIZONTAL_ALIGNMENT_LEFT, room, size, Color("#f0f0d8") if enabled else Color("#8fa6a8"))
+
+## Skins a Button node as the same physical key: the cap sinks onto its lip and
+## shows a brass edge while the button is pressed (a held or chosen toggle), the
+## label sinks with it, and an optional icon sits left of the label.
+static func skin_key(button: Button, tone := Color("#2f6470"), icon_name := "") -> void:
+	var dull := tone.lerp(Color("#2a2a36"), 0.6)
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
+		var held := state.ends_with("pressed")
+		var style := StyleBoxTexture.new()
+		style.texture = _key_skin(dull if state == "disabled" else (lighten(tone, 0.08) if state == "hover" else tone), held)
+		style.texture_margin_top = 10.0
+		style.texture_margin_bottom = 12.0
+		style.texture_margin_left = 6.0
+		style.texture_margin_right = 6.0
+		style.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_TILE_FIT
+		style.content_margin_left = 14.0
+		style.content_margin_right = 14.0
+		style.content_margin_top = 12.0 if held else 4.0
+		style.content_margin_bottom = 6.0 if held else 14.0
+		button.add_theme_stylebox_override(state, StyleBoxEmpty.new() if state == "focus" else style)
+	if ICONS.has(icon_name):
+		button.icon = _icon(icon_name)
+		button.add_theme_constant_override("h_separation", 8)
+	for state: String in ["icon_normal_color", "icon_hover_color", "icon_focus_color"]:
+		button.add_theme_color_override(state, Color("#f0f0d8"))
+	button.add_theme_color_override("icon_pressed_color", Color("#ffc66d"))
+	button.add_theme_color_override("icon_hover_pressed_color", Color("#ffc66d"))
+	button.add_theme_color_override("icon_disabled_color", Color(0.7, 0.7, 0.72, 0.5))
+
+## 16 x 16 art-pixel cap for skin_key: outline, lit bevel, face, dark lip and a
+## soft drop below; the held cap starts three rows lower and carries a brass edge.
+static func _key_skin(tone: Color, held: bool) -> ImageTexture:
+	return _cached("keyskin:%s:%s" % [tone.to_html(false), held], func() -> Image:
+		var image := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+		var top := 3 if held else 0
+		var lip := 13 if held else 11
+		for y in 16:
+			for x in 16:
+				var edge_x := x == 0 or x == 15
+				var color := Color(0, 0, 0, 0)
+				if y == 14 or y == 15:
+					color = Color(CANDY_SHADOW, 0.32 if y == 14 else 0.16) if x > 0 and x < 15 else color
+				elif y < top:
+					pass
+				elif y == top or y == 13 or edge_x:
+					color = deepen(tone) if not ((y == top or y == 13) and edge_x) else Color(0, 0, 0, 0)
+				elif y >= lip:
+					color = deepen(tone, 0.3)
+				elif held and y == top + 1:
+					color = BRASS
+				elif y == top + 1 or x == 1:
+					color = lighten(tone, 0.22)
+				elif y == lip - 1 or x == 14:
+					color = deepen(tone, 0.16)
+				else:
+					color = lighten(tone, 0.06) if y < 5 else Pixels.grainy(tone, x, y, 0.1)
+				image.set_pixel(x, y, color)
+		return image)
 
 # --- baked sprites and surfaces (arcade_pixels.gd textures) --------------------
 

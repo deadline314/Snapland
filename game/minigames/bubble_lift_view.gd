@@ -5,6 +5,9 @@ signal pointer_cancelled
 
 const Model = preload("res://game/minigames/bubble_lift_model.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
+const ICONS := ["less", "more", "confirm", "helper", "down", "down", "up", "wave"]
 const BACKDROP := "res://assets/minigames/bubble-lift-shaft.webp"
 const SHAFT := Rect2(35, 192, 871, 320)
 const CONSOLE := Rect2(927, 192, 317, 320)
@@ -80,9 +83,6 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	if ResourceLoader.exists(BACKDROP):
 		_texture = load(BACKDROP) as Texture2D
-	var normal := Paper.button_box(Color("#38304e"), Color("#9f89b8"))
-	var active := Paper.button_box(Color("#5a4467"), GOLD)
-	var disabled := Paper.button_box(Color("#28283b"), Color("#68627e"))
 	for index in LABELS.size():
 		var button := Button.new()
 		button.clip_text = true
@@ -90,10 +90,9 @@ func _ready() -> void:
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.focus_mode = Control.FOCUS_NONE
 		button.text = LABELS[index]
-		button.add_theme_stylebox_override("normal", normal)
-		button.add_theme_stylebox_override("pressed", active)
-		button.add_theme_stylebox_override("disabled", disabled)
+		Props.skin_key(button, Color("#5b3f66"), ICONS[index])
 		button.add_theme_color_override("font_color", INK)
+		button.add_theme_color_override("font_pressed_color", GOLD)
 		button.add_theme_color_override("font_disabled_color", MUTED)
 		add_child(button)
 		button.position = button_rect(index).position
@@ -174,7 +173,7 @@ func _draw() -> void:
 	if _state.is_empty() or _font == null:
 		return
 	_text(Vector2(35, 166), _state.feedback, GOLD, 18)
-	draw_rect(SHAFT.grow(2), MUTED)
+	Props.metal_plate(self, SHAFT.grow(6), Props.BRASS, false)
 	draw_rect(SHAFT, Color("#25203c"))
 	if _texture != null:
 		draw_texture_rect(_texture, SHAFT, false)
@@ -185,11 +184,12 @@ func _draw_shaft() -> void:
 	var end: float = _state.end
 	var heat: Vector2 = _state.heat
 	var roof: float = _state.heat_height
-	draw_line(_project(0, 0), _project(end, 0), Color("#78708a"), 3.0, true)
+	Props.rope(self, _project(0, 0), _project(end, 0), 6.0)
 	_draw_zone(heat.x, heat.y, roof, MINT if _state.cool else HEAT)
 	_text(_project(heat.x, roof) + Vector2(10, -9), "熱槽", MINT if _state.cool else HEAT, 17)
 	var entry := _project(0, 0)
-	draw_rect(Rect2(entry - Vector2(21, 0), Vector2(72, 13)), Color("#7e687e"))
+	Props.contact_shadow(self, entry + Vector2(18, 18), 80, 0.45)
+	Props.shaded_box(self, Rect2(entry - Vector2(21, 0), Vector2(72, 16)), Props.BISCUIT, 6.0)
 	_text(entry + Vector2(-14, 30), "裝載台", INK, 16)
 	if _state.selection == 2:
 		var start: float = _state.fork
@@ -206,21 +206,32 @@ func _draw_shaft() -> void:
 		_draw_bubble(_project(parcel.distance, parcel.height, parcel.lane), parcel.cargo, parcel.gas, parcel.shell, parcel.returning)
 
 func _draw_zone(start: float, finish: float, height: float, color: Color) -> void:
+	# A glass heat chamber in a copper frame, ribbed with heater rods.
 	var corners := PackedVector2Array([_project(start, 0), _project(start, height), _project(finish, height), _project(finish, 0)])
-	draw_colored_polygon(corners, Color(color, 0.19))
-	corners.append(corners[0])
-	draw_polyline(corners, color, 3.0, true)
+	draw_colored_polygon(corners, Color(color, 0.22))
+	var glow := PackedVector2Array([corners[0], corners[0].lerp(corners[1], 0.35), corners[3].lerp(corners[2], 0.35), corners[3]])
+	draw_colored_polygon(glow, Color(color, 0.18))
 	for fraction in [0.16, 0.4, 0.64, 0.88]:
 		var distance := lerpf(start, finish, fraction)
-		draw_dashed_line(_project(distance, 0.08), _project(distance, height - 0.1), Color(color, 0.38), 2.0, 7.0)
+		draw_line(_project(distance, 0.08), _project(distance, height - 0.1), Color(Props.deepen(color, 0.3), 0.7), 4.0)
+		draw_line(_project(distance, 0.08) + Vector2(-1, 0), _project(distance, height - 0.1) + Vector2(-1, 0), Color(Props.lighten(color, 0.3), 0.7), 1.0)
+	var ring := corners.duplicate()
+	ring.append(corners[0])
+	draw_polyline(ring, Props.deepen(Color("#b4704f"), 0.4), 9.0)
+	draw_polyline(ring, Color("#b4704f"), 5.0)
+	draw_line(corners[0], corners[1], Props.lighten(Color("#b4704f"), 0.4), 2.0)
+	draw_line(corners[1], corners[2], Props.lighten(Color("#b4704f"), 0.4), 2.0)
+	draw_line(corners[0].lerp(corners[2], 0.15), corners[0].lerp(corners[2], 0.35), Color(1, 1, 1, 0.25), 4.0)
 
 func _draw_receiver(lane: int, title: String, color: Color) -> void:
 	var bounds := Model.reception_range(lane, _state.assisted)
 	var top := _project(_state.end, bounds.y, lane)
 	var bottom := _project(_state.end, bounds.x, lane)
 	var bracket := PackedVector2Array([top - Vector2(12, 0), top, bottom, bottom - Vector2(24, 0)])
-	draw_polyline(bracket, color, 4.0, true)
-	draw_rect(Rect2(bottom - Vector2(28, 0), Vector2(44, 9)), Color("#9f7767"))
+	draw_polyline(bracket, Props.deepen(color, 0.45), 8.0)
+	draw_polyline(bracket, color, 4.0)
+	Props.contact_shadow(self, bottom + Vector2(-4, 16), 56, 0.4)
+	Props.shaded_box(self, Rect2(bottom - Vector2(28, 0), Vector2(44, 12)), Props.BISCUIT, 4.0)
 	_text(bottom + Vector2(4, 27), title, color, 16)
 
 func _draw_bubble(at: Vector2, mask: int, gas: float, shell: float, returning: bool) -> void:
@@ -229,9 +240,13 @@ func _draw_bubble(at: Vector2, mask: int, gas: float, shell: float, returning: b
 	var tint := HEAT.lerp(MINT, shell)
 	if returning:
 		tint = FORK
-	draw_circle(center, radius, Color(tint, 0.19), true, -1.0, true)
-	draw_arc(center, radius, 0, TAU, 36, tint, 2.0 + shell * 2.0, true)
-	draw_arc(center, radius - 5.0, PI * 1.15, PI * 1.65, 8, INK, 1.8, true)
+	# A blown-sugar bubble: tinted film, a deeper rim, a window glint top left.
+	draw_circle(center, radius, Color(tint, 0.22), true, -1.0, true)
+	draw_circle(center + Vector2(radius * 0.18, radius * 0.22), radius * 0.62, Color(Props.deepen(tint, 0.2), 0.12), true, -1.0, true)
+	draw_arc(center, radius, 0, TAU, 36, Props.deepen(tint, 0.35), 2.0 + shell * 2.0 + 2.0, true)
+	draw_arc(center, radius - 1.0, 0, TAU, 36, tint, 1.0 + shell * 2.0, true)
+	draw_arc(center, radius - 5.0, PI * 1.1, PI * 1.6, 8, INK, 2.5, true)
+	draw_rect(Rect2(center + Vector2(-radius * 0.42, -radius * 0.58), Vector2(4, 4)), INK)
 	var count := Model.cargo_count(mask)
 	var shown_count := 0
 	for index in 3:
@@ -243,15 +258,23 @@ func _draw_bubble(at: Vector2, mask: int, gas: float, shell: float, returning: b
 		draw_line(at + Vector2(0, 14), at + Vector2(0, 30), FORK, 2)
 		draw_polyline(PackedVector2Array([at + Vector2(-5, 24), at + Vector2(0, 30), at + Vector2(5, 24)]), FORK, 2)
 
+## Enamel syrup keg with brass hoops, rounded towards the light.
+static func _keg(index: int) -> ImageTexture:
+	var tone: Color = BARREL_COLORS[index]
+	return Pixels.bake("bubble-keg:%d" % index, Vector2i(12, 14), func(x: int, y: int) -> Color:
+		if (y == 0 or y == 13) and (x == 0 or x == 11):
+			return Pixels.CLEAR
+		if y == 2 or y == 11:
+			return Props.BRASS if x > 2 else Props.lighten(Props.BRASS, 0.3)
+		return Pixels.rounded(tone, Vector2((x - 5.5) / 6.0, -0.2 + (y - 6.5) / 20.0)))
+
 func _barrel(at: Vector2, index: int, size: float) -> void:
 	var box := Rect2(at - Vector2(13, 14) * size, Vector2(26, 28) * size)
-	draw_rect(box, BARREL_COLORS[index])
-	draw_line(box.position + Vector2(0, 6 * size), box.position + Vector2(box.size.x, 6 * size), Color("#5a4b60"), 2)
-	draw_line(box.end - Vector2(box.size.x, 6 * size), box.end - Vector2(0, 6 * size), Color("#5a4b60"), 2)
+	Props.contact_shadow(self, Vector2(at.x + 2, box.end.y + 2), box.size.x * 1.3, 0.35)
+	draw_texture_rect(_keg(index), box.grow(2.0 * size), false)
 
 func _draw_console() -> void:
-	draw_rect(CONSOLE, Color("#302942"))
-	draw_rect(CONSOLE, MUTED, false, 2.0)
+	Props.wood_panel(self, CONSOLE, Props.SIGN_PLUM, true)
 	_text(Vector2(947, 225), _state.course_name, INK, 20)
 	var cooling: bool = _state.cool
 	_text(Vector2(947, 254), "%s · %.1f 秒後%s" % ["降溫" if cooling else "高熱", _state.heat_change, "升溫" if cooling else "降溫"], MINT if cooling else HEAT, 16)
@@ -264,10 +287,8 @@ func _draw_console() -> void:
 func _draw_controls_status() -> void:
 	_text(Vector2(947, 284), "%.1f 秒後入槽 · %s" % [_state.entry_time, "降溫" if _state.entry_cool else "高熱"], MINT if _state.entry_cool else HEAT, 16)
 	_text(Vector2(947, 317), "載重 %.2f   泡量 %.2f" % [_state.load_mass, _state.gas], INK, 16)
-	var strip := Rect2(947, 334, 274, 11)
-	draw_rect(strip, Color("#6c5b7d"))
-	var fill: float = _state.gas / Model.MAX_GAS
-	draw_rect(Rect2(strip.position, Vector2(strip.size.x * fill, strip.size.y)), GOLD)
+	var strip := Rect2(947, 334, 274, 12)
+	Props.bar(self, strip, _state.gas / Model.MAX_GAS, GOLD)
 	if _state.loaded != 0:
 		var recommended: Vector2 = _state.recommend * (strip.size.x / Model.MAX_GAS)
 		draw_rect(Rect2(strip.position + Vector2(recommended.x, -4), Vector2(recommended.y - recommended.x, 19)), MINT, false, 2)

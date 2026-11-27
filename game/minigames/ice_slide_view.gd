@@ -4,6 +4,10 @@ signal input_requested(event: InputEvent, design_point: Vector2)
 
 const Model = preload("res://game/minigames/ice_slide_model.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
+const STATUS_PLATE := Rect2(666, 164, 584, 86)
+const ICONS := ["up", "left", "down", "right", "swap", "grab", "confirm", "less", "undo", "helper"]
 const CELL := 66.0
 const GRID := Rect2(38, 172, 594, 462)
 const COMMANDS := ["up", "left", "down", "right", "swap", "mark", "place", "recall", "undo", "helper"]
@@ -43,6 +47,8 @@ func _get_tooltip(point: Vector2) -> String:
 	var index := button_at(point)
 	if index >= 0:
 		return TIPS[index]
+	if STATUS_PLATE.has_point(point):
+		return "暖格停冰，亮框是下一個模座；冰塊互擋也算數。"
 	var cell := cell_at(point)
 	if _state.is_empty() or cell == Model.EMPTY:
 		return ""
@@ -69,8 +75,6 @@ func _gui_input(event: InputEvent) -> void:
 func _ready() -> void:
 	custom_minimum_size = Vector2(1280, 720)
 	mouse_filter = Control.MOUSE_FILTER_PASS
-	var normal := Paper.button_box(Color("#24455e"), Color("#6b9db3"))
-	var selected := Paper.button_box(Color("#356b7e"), MINT)
 	for index in COMMANDS.size():
 		var button := Button.new()
 		button.text = TITLES[index]
@@ -78,9 +82,9 @@ func _ready() -> void:
 		button.toggle_mode = true
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.focus_mode = Control.FOCUS_NONE
-		button.add_theme_stylebox_override("normal", normal)
-		button.add_theme_stylebox_override("pressed", selected)
+		Props.skin_key(button, Color("#2f5a6e"), ICONS[index])
 		button.add_theme_color_override("font_color", GLASS)
+		button.add_theme_color_override("font_pressed_color", MINT)
 		add_child(button)
 		button.position = button_rect(index).position
 		button.size = button_rect(index).size
@@ -111,64 +115,95 @@ func _refresh() -> void:
 	_buttons[9].set_pressed_no_signal(_state.helper)
 	queue_redraw()
 
+## Frosted sugar-glass floor tile; `odd` is the slightly deeper checker.
+static func _tile(odd: bool) -> ImageTexture:
+	var base := Color("#3d6f8c") if odd else Color("#44799a")
+	return Pixels.bake("ice-tile:%s" % odd, Vector2i(30, 30), func(x: int, y: int) -> Color:
+		if x + y < 7 and (x + y) % 3 == 0:
+			return Props.lighten(base, 0.35)
+		if Pixels.noise(x / 3, y / 3, 5) > 0.9:
+			return Props.lighten(base, 0.12)
+		return Pixels.grainy(base, x, y, 0.08))
+
+## Copper warming plate with glowing bars.
+static func _warm_plate() -> ImageTexture:
+	return Pixels.bake("ice-warm", Vector2i(30, 30), func(x: int, y: int) -> Color:
+		if x < 3 or y < 3 or x > 26 or y > 26:
+			return Pixels.metal(Color("#9a5a48"), x, y)
+		if (y - 3) % 6 < 3:
+			return Color("#ffb070") if (x + y) % 9 != 0 else Color("#ffd690")
+		return Pixels.grainy(Color("#5a3438"), x, y, 0.1))
+
+## A rock-sugar cube: lit top face, shaded right face and a crystal glint.
+static func _cube(tint: Color) -> ImageTexture:
+	return Pixels.bake("ice-cube:" + tint.to_html(false), Vector2i(22, 22), func(x: int, y: int) -> Color:
+		if y >= 1 and y <= 4 and x >= 5 - y and x <= 22 - y:
+			return Props.lighten(tint, 0.35) if (x + y) % 5 != 0 else Props.lighten(tint, 0.5)
+		if x >= 18 and y >= 22 - x and y <= 38 - x:
+			return Props.deepen(tint, 0.22)
+		if x <= 17 and y >= 5:
+			if x >= 2 and x <= 3 and y >= 7 and y <= 13:
+				return Props.lighten(tint, 0.5)
+			return Pixels.grainy(tint, x, y, 0.1)
+		return Pixels.CLEAR)
+
 func _draw() -> void:
 	if _state.is_empty() or _font == null:
 		return
-	draw_rect(GRID.grow(8), Color("#34576d"))
+	Props.block_shadow(self, GRID.grow(10), Vector2(8, 10), 0.4)
+	Props.metal_plate(self, GRID.grow(10), Color("#8fa6b0"))
 	for y in Model.BOARD.size.y:
 		for x in Model.BOARD.size.x:
 			var cell := Vector2i(x, y)
-			var tile := Rect2(_origin(Vector2(cell)), Vector2.ONE * CELL).grow(-2)
-			draw_rect(tile, Color("#294c68") if (x + y) % 2 == 0 else Color("#28445f"))
-			if cell in _state.warm:
-				draw_rect(tile, Color("#744e4a"))
-				for line in 3:
-					var point := tile.position + Vector2(8 + line * 12, 44)
-					draw_line(point, point + Vector2(10, 10), AMBER, 2, true)
+			var tile := Rect2(_origin(Vector2(cell)), Vector2.ONE * CELL).grow(-1)
+			draw_texture_rect(_warm_plate() if cell in _state.warm else _tile((x + y) % 2 == 1), tile, false)
 	for cell: Vector2i in _state.trail:
-		draw_circle(_origin(Vector2(cell) + Vector2(0.5, 0.5)), 4, Color("#a5d7ed"))
+		Props.token(self, _origin(Vector2(cell) + Vector2(0.5, 0.5)), 5.0, Color("#cfeaf2"))
 	for index in _state.molds.size():
 		var mold: Vector2i = _state.molds[index]
 		var center := _origin(Vector2(mold) + Vector2(0.5, 0.5))
 		var color := MINT if index < _state.cooled else (AMBER if index == _state.cooled else GLASS)
 		var rim := Rect2(center - Vector2(27, 27), Vector2(54, 54))
-		draw_rect(rim, color, false, 4 if index == _state.cooled else 2)
-		_label(Vector2(rim.position.x + 4, rim.position.y + 20), str(index + 1), color, 16)
+		# A pressed enamel candy mold: a dark well inside a coloured rim.
+		draw_rect(rim.grow(2), Props.deepen(color, 0.5))
+		draw_rect(rim, color)
+		Props.surface(self, rim.grow(-6 if index == _state.cooled else -4), "groove", Props.deepen(color, 0.35))
+		_label(Vector2(rim.position.x + 8, rim.position.y + 22), str(index + 1), color, 16)
 	for cell: Vector2i in _state.hints:
 		draw_arc(_origin(Vector2(cell) + Vector2(0.5, 0.5)), 17, 0, TAU, 24, MINT, 2, true)
 	if _state.stopper != Model.EMPTY:
 		var edge := Rect2(_origin(Vector2(_state.stopper)) + Vector2(8, 8), Vector2(50, 50))
-		draw_rect(edge, PINK)
-		draw_rect(edge.grow(-5), Color("#8d516a"), false, 2)
-		_label(edge.position + Vector2(11, 32), "擋", INK, 18)
+		Props.block_shadow(self, edge, Vector2(4, 6), 0.4)
+		Props.shaded_box(self, edge, PINK, 8.0)
+		_label(edge.position + Vector2(13, 30), "擋", INK, 18)
 	for index in _state.positions.size():
 		var center := _origin(_state.positions[index] + Vector2(0.5, 0.5))
 		var body := Rect2(center - Vector2(22, 22), Vector2(44, 44))
 		var color := GLASS if index == 0 else MINT
 		if index == _state.selected:
-			draw_rect(body.grow(4), Color("#fff6d9"), false, 3)
-		draw_rect(body, color)
-		draw_line(body.position + Vector2(4, 5), body.position + Vector2(39, 5), Color.WHITE, 2)
-		_label(center + Vector2(-8, 8), "A" if index == 0 else "B", INK, 21)
+			draw_rect(body.grow(6), Color("#fff6d9"), false, 3)
+		Props.contact_shadow(self, center + Vector2(4, 22), 50, 0.45)
+		Props.stamp(self, _cube(color), body.position, 2.0)
+		_label(center + Vector2(-9, 12), "A" if index == 0 else "B", INK, 21)
 	if _state.cursor != Model.EMPTY:
 		draw_rect(Rect2(_origin(Vector2(_state.cursor)) + Vector2(4, 4), Vector2(58, 58)), PINK, false, 3)
 	_draw_status()
 
 func _draw_status() -> void:
-	var left := 677.0
-	_label(Vector2(left, 192), "模座  %d / 4    ·    冰糖 %s" % [_state.cooled, "A" if _state.selected == 0 else "B"], GLASS, 23)
-	_label(Vector2(left, 230), "冰塊互擋  " + ("已達成" if _state.ice_stop else "待完成"), MINT, 19)
-	_label(Vector2(left, 266), _state.feedback, AMBER, 17)
-	_label(Vector2(left, 305), "暖格停冰   ｜   亮框是下一個模座", GLASS, 17)
-	_label(Vector2(left, 342), "輔助中 · 冰糖不融化" if _state.assisted else "冰糖熱度", PINK, 17)
-	if not _state.assisted:
-		for index in 2:
-			var x := left + index * 204
-			var heat: float = _state.heat[index] / Model.MELT_SECONDS
-			_label(Vector2(x, 374), "A" if index == 0 else "B", GLASS, 16)
-			draw_rect(Rect2(x + 28, 362, 154, 10), Color("#432b4d"))
-			draw_rect(Rect2(x + 28, 362, 154 * clampf(heat, 0.0, 1.0), 10), PINK)
-	_label(Vector2(left, 402), "選擋片格" if _state.cursor != Model.EMPTY else "推所選冰糖", GLASS, 18)
+	var left := 684.0
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
+	var mode := "選擋片格" if _state.cursor != Model.EMPTY else "推所選冰糖"
+	_label(Vector2(left, 198), "模座 %d / 4  ·  冰糖 %s  ·  互擋%s  ·  %s" % [_state.cooled, "A" if _state.selected == 0 else "B", "已達成" if _state.ice_stop else "待完成", mode], GLASS, 18)
+	_label(Vector2(left, 234), _state.feedback, AMBER, 17)
+	if _state.assisted:
+		_label(Vector2(left, 300), "輔助中 · 冰糖不融化", PINK, 17)
+		return
+	_label(Vector2(left, 300), "冰糖熱度", PINK, 17)
+	for index in 2:
+		var x := left + 100 + index * 230
+		var heat: float = _state.heat[index] / Model.MELT_SECONDS
+		_label(Vector2(x, 302), "A" if index == 0 else "B", GLASS, 16)
+		Props.bar(self, Rect2(x + 24, 288, 170, 12), heat, PINK)
 
 func _origin(cell: Vector2) -> Vector2:
 	return GRID.position + cell * CELL

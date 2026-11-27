@@ -5,6 +5,8 @@ signal pointer_cancelled
 
 const Model = preload("res://game/minigames/paper_glide_model.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 const BACKDROP := "res://assets/minigames/paper-glide-workshop.webp"
 const COURSE := Rect2(34, 191, 872, 323)
 const RADAR := Rect2(928, 191, 316, 323)
@@ -15,6 +17,7 @@ const PINK := Color("#f5a9a0")
 const MUTED := Color("#77939e")
 enum { WIDE, NARROW, LESS, MORE, LEFT, RIGHT, THROW, AI }
 const LABELS := ["寬翼 · 1", "窄翼 · 2", "減投力 · S", "加投力 · W", "摺左翼 · A", "摺右翼 · D", "投出 · Space", "摺翼 AI · R"]
+const ICONS := ["wing", "sail", "less", "more", "turn_left", "turn_right", "up", "helper"]
 const HINTS := ["較慢、下沉少，翼尖需要更多窗寬", "較快、下沉多，能穿較窄空間", "降低紙機的初速", "增加紙機的初速",
 	"沿已選折線摺左翼", "沿已選折線摺右翼", "雙翼摺好後投出", "按一側後，AI 沿同一折線摺另一翼"]
 
@@ -70,17 +73,15 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	if ResourceLoader.exists(BACKDROP):
 		_texture = load(BACKDROP)
-	var normal := Paper.button_box(Color("#24434b"), Color("#79a5a3"))
-	var selected := Paper.button_box(Color("#375762"), GOLD)
 	for index in LABELS.size():
 		var button := Button.new()
 		button.clip_text = true
 		button.toggle_mode = true
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.focus_mode = Control.FOCUS_NONE
-		button.add_theme_stylebox_override("normal", normal)
-		button.add_theme_stylebox_override("pressed", selected)
+		Props.skin_key(button, Props.KEY_MINT, ICONS[index])
 		button.add_theme_color_override("font_color", INK)
+		button.add_theme_color_override("font_pressed_color", GOLD)
 		add_child(button)
 		button.position = button_rect(index).position
 		button.size = button_rect(index).size
@@ -165,7 +166,7 @@ func _draw() -> void:
 	if _state.is_empty() or _font == null:
 		return
 	_text(Vector2(34, 166), _state.feedback, GOLD, 19)
-	draw_rect(COURSE.grow(2), MUTED)
+	Props.metal_plate(self, COURSE.grow(6), Props.BRASS, false)
 	draw_rect(COURSE, Color("#1a363c"))
 	if _texture != null:
 		draw_texture_rect(_texture, COURSE, false)
@@ -173,6 +174,42 @@ func _draw() -> void:
 	_draw_radar()
 	if _state.phase == Model.SETUP:
 		_draw_fold_preview()
+
+## Wicker packing basket with a rolled rim.
+static func _basket() -> ImageTexture:
+	return Pixels.bake("glide-basket", Vector2i(16, 9), func(x: int, y: int) -> Color:
+		if (y > 1 and (x == 0 or x == 15)) or (y == 8 and (x < 2 or x > 13)):
+			return Pixels.CLEAR
+		if y < 2:
+			return Props.lighten(Props.BISCUIT, 0.25) if (x + y) % 3 != 0 else Props.BISCUIT
+		var weave := (x / 2 + y / 2) % 2 == 0
+		return Pixels.grainy(Props.BISCUIT if weave else Props.deepen(Props.BISCUIT, 0.22), x, y, 0.12))
+
+## Small bell; `tone` shows whether the glider has brushed it.
+static func _bell(tone: Color) -> ImageTexture:
+	return Pixels.bake("glide-bell:" + tone.to_html(false), Vector2i(9, 9), func(x: int, y: int) -> Color:
+		var half: int = [0, 1, 2, 2, 3, 3, 3, 4, 4][y]
+		if absi(x - 4) > half:
+			return Pixels.CLEAR
+		if y == 8:
+			return Props.deepen(tone, 0.25)
+		return Pixels.rounded(tone, Vector2((x - 4) / 4.5, (y - 4) / 4.5)))
+
+## Sugar-glass window in a brass frame, hung from the ceiling pipe on chains.
+func _wind_window(corners: PackedVector2Array, color: Color) -> void:
+	for index in [1, 2]:
+		Props.chain(self, Vector2(corners[index].x, COURSE.position.y + 14), corners[index], 6.0, Props.BRASS)
+	draw_colored_polygon(corners, Color(color.lerp(Color("#f3c6d0"), 0.5), 0.22))
+	var ring := corners.duplicate()
+	ring.append(corners[0])
+	draw_polyline(ring, Props.deepen(Props.BRASS), 9.0)
+	draw_polyline(ring, Props.BRASS if color == GOLD else Props.deepen(TEAL, 0.1), 5.0)
+	draw_line(ring[0], ring[1], Props.lighten(Props.BRASS, 0.4), 2.0)
+	draw_line(ring[1], ring[2], Props.lighten(Props.BRASS, 0.4), 2.0)
+	# A glint across the sugar glass.
+	var glass_a := corners[0].lerp(corners[2], 0.3)
+	var glass_b := corners[1].lerp(corners[3], 0.3)
+	draw_line(glass_a.lerp(glass_b, 0.2), glass_a.lerp(glass_b, 0.7), Color(1, 1, 1, 0.3), 4.0)
 
 func _draw_course() -> void:
 	for lane in [-3.5, 0.0, 3.5]:
@@ -186,19 +223,15 @@ func _draw_course() -> void:
 		var corners := PackedVector2Array()
 		for offset in [Vector2(-width, -height), Vector2(-width, height), Vector2(width, height), Vector2(width, -height)]:
 			corners.append(_project(center + Vector3(offset.x, offset.y, 0)))
-		var fill := color
-		fill.a = 0.20
-		draw_colored_polygon(corners, fill)
-		corners.append(corners[0])
-		draw_polyline(corners, color, 4.0, true)
+		_wind_window(corners, color)
 		_text(_project(center + Vector3(0, height, 0)) + Vector2(16, 11), "風窗 %d" % (index + 1), color, 15)
 	var basket := _project(_state.basket)
-	draw_rect(Rect2(basket - Vector2(24, 2), Vector2(48, 28)), Color("#8d6940"))
-	draw_line(basket - Vector2(28, 2), basket + Vector2(28, -2), GOLD, 4)
-	_text(basket + Vector2(-27, 48), "包裝籃", INK, 16)
+	Props.contact_shadow(self, basket + Vector2(4, 30), 66, 0.5)
+	Props.stamp(self, _basket(), basket - Vector2(32, 6), 4.0)
+	_text(basket + Vector2(-27, 52), "包裝籃", INK, 16)
 	var bell := _project(_state.bell)
-	draw_line(bell, bell + Vector2(0, -25), PINK, 2)
-	draw_circle(bell, 8, TEAL if _state.braked else PINK)
+	Props.rope(self, bell + Vector2(0, -30), bell + Vector2(0, -8), 4.0)
+	Props.stamp(self, _bell(TEAL if _state.braked else Props.BRASS), bell - Vector2(18, 10), 4.0)
 	_text(bell + Vector2(-28, -31), "減速鈴", PINK, 15)
 	if _state.phase == Model.SETUP and _state.assisted:
 		for point: Vector3 in _state.preview:
@@ -210,19 +243,28 @@ func _draw_paper() -> void:
 	var base := _project(center + Vector3(0, -0.08, -0.55))
 	var nose := _project(center + Vector3(0, 0.10, 1.07))
 	var offset := Model.wing_offset(_state.fold, _state.bank)
+	# Its shadow on the workshop floor, so height reads at a glance.
+	var drop := Vector3(0, -center.y, 0)
+	var shade := PackedVector2Array([_project(center + Vector3(0, -0.08, -0.55) + drop), _project(center - offset + drop), _project(center + Vector3(0, 0.1, 1.07) + drop), _project(center + offset + drop)])
+	draw_colored_polygon(shade, Color(Props.CANDY_SHADOW, 0.35))
+	var sheet := Color("#f4ecd8")
 	for side in [-1.0, 1.0]:
 		var tip := _project(center + side * offset)
-		draw_colored_polygon(PackedVector2Array([base, nose, tip]), INK if side < 0.0 else TEAL)
-		draw_circle(tip, 3.5, GOLD)
-	draw_line(base, nose, Color("#497c7f"), 2.0)
+		var wing := PackedVector2Array([base, nose, tip])
+		draw_colored_polygon(wing, Props.lighten(sheet, 0.1) if side < 0.0 else Props.deepen(sheet, 0.14))
+		# A printed candy-wrapper stripe across each wing.
+		draw_line(base.lerp(tip, 0.55), nose.lerp(tip, 0.4), Color("#f09aa8") if side < 0.0 else Color("#c97a88"), 3.0)
+		wing.append(base)
+		draw_polyline(wing, Props.deepen(sheet, 0.5), 2.0)
+		Props.token(self, tip, 4.0, GOLD)
+	draw_line(base, nose, Props.deepen(sheet, 0.55), 3.0)
 
 func _draw_radar() -> void:
-	draw_rect(RADAR, Color("#183747"))
-	draw_rect(RADAR, MUTED, false, 2)
+	Props.wood_panel(self, RADAR, Props.SIGN_TEAL, true)
 	_text(Vector2(947, 223), "%s · %s" % [_state.course_name, "寬翼" if _state.fold == 0 else "窄翼"], INK, 19)
 	_text(Vector2(947, 255), "投力 %d/3   側風向%s" % [int(_state.power) + 1, "右" if _state.wind > 0.0 else "左"], GOLD, 17)
 	_text(Vector2(947, 284), "● 翼尖位置  ▬ 風窗", INK, 15)
-	draw_rect(Rect2(952, 309, 268, 178), Color("#142e3a"))
+	Props.surface(self, Rect2(952, 309, 268, 178), "groove", Color("#1d4450"))
 	draw_line(Vector2(1086, 311), Vector2(1086, 487), Color("#425a67"), 2.0)
 	for index in _state.windows.size():
 		var window: Dictionary = _state.windows[index]
@@ -245,9 +287,9 @@ func _draw_radar() -> void:
 
 func _draw_fold_preview() -> void:
 	var card := Rect2(53, 353, 203, 144)
-	draw_rect(card, Color("#243d49"))
-	draw_rect(card, MUTED, false, 2)
-	_text(Vector2(67, 384), "摺翼 %d / 2" % (int((_state.folded & Model.LEFT) != 0) + int((_state.folded & Model.RIGHT) != 0)), INK, 16)
+	Props.block_shadow(self, card, Vector2(5, 7), 0.4)
+	Props.surface(self, card, "paper", Color("#e9dfc6"))
+	_text(Vector2(67, 384), "摺翼 %d / 2" % (int((_state.folded & Model.LEFT) != 0) + int((_state.folded & Model.RIGHT) != 0)), Color("#5a3a4a"), 16)
 	var inset := Vector2(155, 443)
 	var span := 71.0 if _state.fold == 0 else 46.0
 	var nose := inset - Vector2(0, 40)
@@ -255,7 +297,8 @@ func _draw_fold_preview() -> void:
 		var folded: bool = (_state.folded & (Model.LEFT if side < 0 else Model.RIGHT)) != 0
 		var tip := inset + Vector2(side * (span if folded else 79.0), 22)
 		var edge := inset + Vector2(0, 34)
-		draw_colored_polygon(PackedVector2Array([nose, tip, edge]), TEAL if folded else Color("#a9b6a6"))
+		draw_colored_polygon(PackedVector2Array([nose, tip, edge]), Color("#7fcdb4") if folded else Color("#f7f0e0"))
+		draw_polyline(PackedVector2Array([nose, tip, edge, nose]), Color("#8a7a66"), 2.0)
 		draw_dashed_line(nose, edge + Vector2(side * span * 0.42, -14), Color("#305a62"), 2.0, 5)
 
 func _text(at: Vector2, value: String, color: Color, size: int) -> void:
