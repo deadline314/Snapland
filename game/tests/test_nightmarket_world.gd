@@ -4,6 +4,10 @@ const World = preload("res://game/world/nightmarket_world.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
 const Routes = preload("res://game/core/region_routes.gd")
 const MapPanel = preload("res://game/ui/harbor_map_panel.gd")
+const Scenery = preload("res://game/world/nightmarket_scenery.gd")
+const Life = preload("res://game/world/nightmarket_life.gd")
+const Atmosphere = preload("res://game/world/nightmarket_atmosphere.gd")
+const NODE_BUDGET := 900
 const MOVES := ["move_left", "move_right", "move_up", "move_down"]
 var _world: Node3D
 var _errors: Array[String] = []
@@ -24,6 +28,8 @@ func _run() -> void:
 		and baseline.land.size() == 7 and not baseline.covered, "world declares its real terrain and uses a stable set of points")
 	check(baseline.points.any(func(point: Dictionary) -> bool: return point.id == "game-038"), "real skewer stand appears on east street chart")
 	_check_paving()
+	_check_scenery()
+	await _check_life()
 	var grill_stop := Vector2(9.15, 3.27)
 	var coin_stop := Vector2(World.COIN_ENTRY.x, World.COIN_ENTRY.z)
 	var scent_stop := Vector2(World.SCENT_ENTRY.x, World.SCENT_ENTRY.z)
@@ -63,15 +69,21 @@ func _run() -> void:
 	check(await walk_to(Vector2(0, 7.91)) and await walk_to(loadout_stop) and _world.nearest.get("id") == "game-048",
 		"closing-time cart is reachable from the actual south walkway")
 	var node_count: int = _world.find_children("*", "", true, false).size()
-	var lit: Material = _world._stall_lights[0].material_override
+	var lanterns: ShaderMaterial = _world._scenery.props.lantern_material
+	var neon: ShaderMaterial = _world._scenery.props.neon_material
+	var open_lanterns: float = lanterns.get_shader_parameter("energy")
+	var open_neon: float = neon.get_shader_parameter("energy")
+	check(open_lanterns > 0.5 and open_neon > 0.5, "an open market keeps its lanterns and signs lit")
 	var paving: ShaderMaterial = _world._atmosphere.paving_material()
 	var open_reflection: float = paving.get_shader_parameter("reflection_energy")
 	for cycle in 20:
 		_world.cycle_market()
 		var snapshot: Dictionary = _world.map_snapshot()
 		check(snapshot.operating == (cycle % 2 == 1), "operating state is reversible")
-		check(_world._stall_lights[0].material_override != lit if cycle % 2 == 0 else _world._stall_lights[0].material_override == lit,
-			"each operation changes existing lamp material")
+		var share := Scenery.CLOSED_GLOW if cycle % 2 == 0 else 1.0
+		check(is_equal_approx(lanterns.get_shader_parameter("energy"), open_lanterns * share) and is_equal_approx(neon.get_shader_parameter("energy"), open_neon * share)
+			and _world._scenery.props.lantern_material == lanterns and _world._scenery.props.neon_material == neon,
+			"each operation dims or relights the existing lanterns and signs")
 		var actual: float = paving.get_shader_parameter("reflection_energy")
 		var expected := open_reflection * 0.24 if cycle % 2 == 0 else open_reflection
 		check(is_equal_approx(actual, expected) and _world._atmosphere.paving_material() == paving,
@@ -124,6 +136,80 @@ func _check_paving() -> void:
 	_world.apply_settings({"reduced_motion": false})
 	check(paving.get_shader_parameter("reflections_move") and roof.get_shader_parameter("reflections_move"),
 		"continuous glints resume with motion restored")
+
+## Landmarks, light budget and ground cover of the rebuilt quarter.
+func _check_scenery() -> void:
+	for landmark in ["MarketNeon", "Scenery_lanterns", "Scenery_parasols", "Scenery_pennants", "Scenery_banners", "CoveredAlleyAwning", "LuckyCatArm", "MarketRotisserie", "MarketParasol", "MarketFan0", "ValleyFloor", "SceneryDetail"]:
+		check(_world.has_node(landmark), "the market keeps its %s" % landmark)
+	var boards: Array[String] = []
+	for label: Label3D in _world._scenery.props.sign_labels:
+		boards.append(label.text.replace("\n", ""))
+		check(label.visible and is_zero_approx(label.visibility_range_end), "signboards read from across the market")
+	for stand: Array in World.STANDS:
+		check(boards.has(World.STAND_SIGNS[stand[0]]) and Scenery.Props.EMBLEMS.has(stand[3]) and _world._point_by_id(stand[0]).position == stand[2],
+			"%s keeps its signboard text, a pixel emblem and its entry point" % stand[0])
+	check((_world.get_node("Scenery_lanterns") as MultiMeshInstance3D).multimesh.instance_count >= 30, "paper lanterns hang all over the market as one batch")
+	check(_world.lamps.size() == Scenery.LAMPS.size() and _world.lamps.size() + Atmosphere.POOLS.size() <= World.ACTIVE_LAMP_LIMIT,
+		"every market light fits the lit budget together with the three lantern pools")
+	for phase in ["dawn", "noon", "dusk", "night"]:
+		_world.set_time_of_day(phase)
+		var lit: int = _world.lamps.filter(func(lamp: Light3D) -> bool: return lamp.light_energy > 0.0).size()
+		var shadowed: int = _world.lamps.filter(func(lamp: Light3D) -> bool: return lamp.shadow_enabled).size()
+		check(lit == _world.lamps.size() and shadowed <= World.SHADOW_LAMP_LIMIT, "lanterns stay lit at %s within the shadow budget" % phase)
+		check(float(_world._scenery.props.neon_material.get_shader_parameter("energy")) >= 1.0, "neon carries the mood at %s" % phase)
+	# The fixed camera sees about 19 m of ground beyond the player in every direction.
+	var valley: MeshInstance3D = _world.get_node("ValleyFloor")
+	var reach := (valley.mesh as PlaneMesh).size * 0.5
+	check(reach.x >= World.BOUNDS.end.x + 31.0 and reach.y >= World.BOUNDS.end.y + 31.0 and reach.y >= -World.BOUNDS.position.y + 31.0,
+		"ground continues past the camera's view on every side")
+	check(_world.ground_surface_y(Vector3(-20, 0, -20)) == Scenery.QUARTER_Y and _world.ground_surface_y(Vector3(40, 0, 0)) == Scenery.VALLEY_Y
+		and Scenery.QUARTER_Y < World.GROUND_Y and Scenery.VALLEY_Y < Scenery.QUARTER_Y, "the street sits on the paved quarter, which sits on the valley floor")
+	check(_world.find_children("*", "Node", true, false).size() + 1 <= NODE_BUDGET, "the market stays inside its node budget")
+
+## The lucky cat greets a visitor, the kitchen turns, and reduced motion stills it all.
+func _check_life() -> void:
+	var life: Life = _world._life
+	var arm: MeshInstance3D = _world.get_node("LuckyCatArm")
+	var spit: MeshInstance3D = _world.get_node("MarketRotisserie")
+	var motion_shaders: Array[ShaderMaterial] = [_world._scenery.props.neon_material, _world._scenery.props.lantern_material,
+		_world.material_cache["cloth:pennant"], _world.material_cache["cloth:banner"]]
+	await frames(3)
+	check(not life.cat_excited, "the lucky cat idles while the visitor is across the market")
+	var idle_swing := await _swing(arm)
+	var turned := spit.basis
+	await frames(4)
+	check(not spit.basis.is_equal_approx(turned), "the rotisserie turns")
+	var home: Vector3 = _world.player.position
+	_world.player.position = Vector3(-9.6, World.GROUND_Y, 7.2)
+	await frames(3)
+	check(life.cat_excited, "walking up to the shrine makes the lucky cat greet the visitor")
+	check(await _swing(arm) > idle_swing * 1.5, "the greeting is a bigger wave than the idle beckon")
+	var saved_count := FileAccess.get_file_as_bytes(OS.get_environment("SNAPLAND_SAVE_PATH")).size()
+	_world.apply_settings({"reduced_motion": true})
+	await frames(2)
+	turned = spit.basis
+	check(is_zero_approx(await _swing(arm)) and is_equal_approx(arm.rotation.z, Life.CAT_GREETING) and spit.basis.is_equal_approx(turned),
+		"reduced motion holds the kitchen still and the cat's paw raised")
+	for material in motion_shaders:
+		check(is_zero_approx(material.get_shader_parameter("motion")), "reduced motion stills neon, lanterns and cloth")
+	_world.player.position = home
+	await frames(2)
+	check(not life.cat_excited and is_equal_approx(arm.rotation.z, Life.CAT_REST), "the cat lowers its paw once the visitor leaves, without animating")
+	_world.apply_settings({"reduced_motion": false})
+	for material in motion_shaders:
+		check(is_equal_approx(material.get_shader_parameter("motion"), 1.0), "motion resumes when the setting is cleared")
+	check(FileAccess.get_file_as_bytes(OS.get_environment("SNAPLAND_SAVE_PATH")).size() == saved_count, "greeting the cat writes nothing to the save")
+	await frames(3)
+
+## How far the arm travels over a short while.
+func _swing(arm: Node3D) -> float:
+	var low := arm.rotation.z
+	var high := low
+	for tick in 40:
+		await physics_frame
+		low = minf(low, arm.rotation.z)
+		high = maxf(high, arm.rotation.z)
+	return high - low
 
 func walk_to(position: Vector2) -> bool:
 	var start: Vector3 = _world.player.position

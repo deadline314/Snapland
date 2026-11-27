@@ -5,6 +5,9 @@ render_mode cull_back;
 
 varying vec3 world_position;
 
+// A district under heavy canopy darkens the island's meadow instead of painting its own.
+uniform vec3 shade : source_color = vec3(1.0);
+
 // World detail is snapped to this grid so the lawn keeps a pixel-art grain.
 const float TEXEL = 0.2;
 
@@ -40,6 +43,6 @@ void fragment() {
 	// The lawn receives the key light, so its albedo stays about half of an
 	// ambient-only value: sunlit grass keeps the authored meadow tone and cast
 	// shadows read as shadows instead of disappearing on grass.
-	ALBEDO = meadow;
+	ALBEDO = meadow * shade;
 	ROUGHNESS = 0.97;
 }

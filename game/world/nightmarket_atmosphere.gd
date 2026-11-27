@@ -39,6 +39,9 @@ var _skyline: ShaderMaterial
 var _pools: Array[OmniLight3D] = []
 var _street_paving: ShaderMaterial
 var _roof_paving: ShaderMaterial
+## The unlit lanes around the street share the wet look in a darker stone.
+var _lane_paving: ShaderMaterial
+var _pavings: Array[ShaderMaterial] = []
 var _operating := true
 var _reduced_motion := false
 var _light_energy := 0.62
@@ -48,8 +51,9 @@ var _until_update := 0.0
 func setup(environment: Environment, sun: DirectionalLight3D, skyline: Texture2D, stone_atlas: Texture2D, shelter: Rect2) -> void:
 	_environment = environment
 	_sun = sun
-	_street_paving = _make_paving(stone_atlas, shelter, false)
-	_roof_paving = _make_paving(stone_atlas, shelter, true)
+	_street_paving = _make_paving(stone_atlas, shelter, false, Color("#8c96a2"))
+	_roof_paving = _make_paving(stone_atlas, shelter, true, Color("#978b9d"))
+	_lane_paving = _make_paving(stone_atlas, shelter, false, Color("#6a7285"))
 	if skyline != null:
 		_build_skyline(skyline)
 	if DisplayServer.get_name() != "headless":
@@ -57,7 +61,9 @@ func setup(environment: Environment, sun: DirectionalLight3D, skyline: Texture2D
 	apply_palette("noon")
 	_sync_animation()
 
-func paving_material(rooftop := false) -> ShaderMaterial:
+func paving_material(rooftop := false, lane := false) -> ShaderMaterial:
+	if lane:
+		return _lane_paving
 	return _roof_paving if rooftop else _street_paving
 
 func apply_palette(phase: String) -> void:
@@ -72,8 +78,8 @@ func apply_palette(phase: String) -> void:
 	_light_energy = palette.pool_energy
 	if _skyline != null:
 		_skyline.set_shader_parameter("haze", haze)
-	_street_paving.set_shader_parameter("reflected_sky", palette.reflected_sky)
-	_roof_paving.set_shader_parameter("reflected_sky", palette.reflected_sky)
+	for paving in _pavings:
+		paving.set_shader_parameter("reflected_sky", palette.reflected_sky)
 	_sync_reflections()
 	_sync_pools()
 
@@ -91,19 +97,20 @@ func set_reduced_motion(value: bool) -> void:
 	_sync_reflections()
 	_sync_animation()
 
-func _make_paving(stone_atlas: Texture2D, shelter: Rect2, rooftop: bool) -> ShaderMaterial:
+func _make_paving(stone_atlas: Texture2D, shelter: Rect2, rooftop: bool, tint: Color) -> ShaderMaterial:
 	var surface := ShaderMaterial.new()
 	surface.shader = WetStreetShader
 	surface.set_shader_parameter("has_stone_atlas", stone_atlas != null)
 	if stone_atlas != null:
 		surface.set_shader_parameter("stone_atlas", stone_atlas)
 	surface.set_shader_parameter("rooftop", rooftop)
-	surface.set_shader_parameter("stone_tint", Color("#978b9d") if rooftop else Color("#8c96a2"))
+	surface.set_shader_parameter("stone_tint", tint)
 	surface.set_shader_parameter("shelter_rect", Vector4(shelter.position.x, shelter.position.y, shelter.end.x, shelter.end.y))
 	for pool in POOLS:
 		var position: Vector3 = pool.position
 		surface.set_shader_parameter("%s_pool" % pool.id, Vector2(position.x, position.z))
 		surface.set_shader_parameter("%s_lantern" % pool.id, pool.color)
+	_pavings.append(surface)
 	return surface
 
 func _build_skyline(texture: Texture2D) -> void:
@@ -116,7 +123,9 @@ func _build_skyline(texture: Texture2D) -> void:
 	backdrop.name = "RainyMarketSkyline"
 	backdrop.mesh = plane
 	backdrop.material_override = _skyline
-	backdrop.position = Vector3(0.0, 5.4, -15.6)
+	# Right behind the northern row of shop fronts, so the painted town climbs the
+	# hill from their eaves.
+	backdrop.position = Vector3(0.0, 4.68, -16.7)
 	backdrop.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(backdrop)
 
@@ -154,10 +163,9 @@ func _sync_pools() -> void:
 func _sync_reflections() -> void:
 	var energy := _operating_light()
 	var moving := _operating and not _reduced_motion
-	_street_paving.set_shader_parameter("reflection_energy", energy)
-	_roof_paving.set_shader_parameter("reflection_energy", energy)
-	_street_paving.set_shader_parameter("reflections_move", moving)
-	_roof_paving.set_shader_parameter("reflections_move", moving)
+	for paving in _pavings:
+		paving.set_shader_parameter("reflection_energy", energy)
+		paving.set_shader_parameter("reflections_move", moving)
 
 func _operating_light() -> float:
 	return _light_energy if _operating else _light_energy * CLOSED_LIGHT_SCALE

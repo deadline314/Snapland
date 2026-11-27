@@ -183,13 +183,22 @@ const REGIONS := {
 	"nightmarket": {
 		"clouds": 0.0, "reserved_particles": 90,
 		"particles": [
-			{"kind": "steam", "phases": ALWAYS, "amount": 14, "at": Vector3(-7.33, 1.36, 5.5), "box": Vector3(0.6, 0.04, 0.12)},
-			{"kind": "steam", "phases": ALWAYS, "amount": 16, "at": Vector3(-6.1, 1.5, 0.0), "box": Vector3(0.4, 0.04, 3.2)},
-			{"kind": "ember", "phases": ["dusk", "night"], "amount": 18, "at": Vector3(6.1, 1.3, 0.0), "box": Vector3(0.4, 0.05, 3.2)},
+			# The soup pot, the terrace steamers and pot, then the pancake griddle.
+			{"kind": "steam", "phases": ALWAYS, "amount": 12, "at": Vector3(-7.75, 1.6, 5.38), "box": Vector3(0.25, 0.04, 0.25)},
+			{"kind": "steam", "phases": ALWAYS, "amount": 16, "at": Vector3(-6.25, 2.0, -0.7), "box": Vector3(0.3, 0.04, 1.5)},
+			{"kind": "steam", "phases": ALWAYS, "amount": 8, "at": Vector3(-9.12, 1.3, -5.42), "box": Vector3(0.25, 0.04, 0.25)},
+			# The terrace grills and the skewer stand.
+			{"kind": "ember", "phases": ALWAYS, "amount": 16, "at": Vector3(6.25, 1.5, -0.3), "box": Vector3(0.4, 0.05, 1.6)},
+			{"kind": "ember", "phases": ALWAYS, "amount": 8, "at": Vector3(10.58, 1.35, 3.4), "box": Vector3(0.3, 0.05, 0.5)},
+			# Fireflies drift over the dark meadow along the path home.
+			{"kind": "firefly", "phases": ALWAYS, "amount": 26, "at": Vector3(0.0, 0.2, 16.0), "box": Vector3(17.0, 0.9, 4.5)},
 		],
 		"critters": [
 			{"kind": "pigeon", "count": 4, "at": Vector3(0.0, 0, 1.2), "spread": 1.1, "phases": ALWAYS},
+			# Moths circle the lantern pool and two of the hanging lamps.
 			{"kind": "moth", "count": 3, "at": Vector3(-7.4, 0, 2.6), "spread": 1.2, "height": 1.7, "phases": ALWAYS},
+			{"kind": "moth", "count": 2, "at": Vector3(10.2, 0, 7.0), "spread": 0.7, "height": 2.3, "phases": ALWAYS},
+			{"kind": "moth", "count": 2, "at": Vector3(-10.2, 0, -4.4), "spread": 0.7, "height": 2.3, "phases": ALWAYS},
 		],
 	},
 	"circus": {

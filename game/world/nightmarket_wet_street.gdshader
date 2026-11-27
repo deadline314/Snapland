@@ -90,14 +90,39 @@ void fragment() {
 		ROUGHNESS = mix(0.85, 0.37, wet * facet);
 		SPECULAR = mix(0.15, 0.32, wet * facet);
 		vec3 glow = reflected_sky.rgb * (0.043 + wet * (0.045 + 0.042 * facet));
+
+		// Standing water gathers where the paving dips. A puddle drowns the joints,
+		// lies mirror-flat for the lamps and carries the lantern colours.
+		float dip = sin(at.x * 0.63 + 1.7) * sin(at.y * 0.57 - 0.4) + 0.32 * sin(at.x * 1.9 - at.y * 1.3 + 0.8);
+		float puddle = smoothstep(0.66, 0.8, dip) * (rooftop ? 0.5 : 1.0 - shelter);
+		ALBEDO *= mix(1.0, 0.42, puddle);
+		ROUGHNESS = mix(ROUGHNESS, 0.07, puddle);
+		SPECULAR = mix(SPECULAR, 0.62, puddle);
+		vec3 street_lantern = mix(west_lantern.rgb, east_lantern.rgb, smoothstep(-4.0, 4.0, at.x));
+		float shimmer = 0.5 + 0.5 * sin(dot(at, vec2(7.3, 4.1)) + (reflections_move ? TIME * 0.9 : 0.0));
+		float rim = smoothstep(0.66, 0.71, dip) * (1.0 - smoothstep(0.71, 0.8, dip)) * (rooftop ? 0.5 : 1.0 - shelter);
+		glow += puddle * (reflected_sky.rgb * 0.035 + street_lantern * reflection_energy * 0.035 * shimmer * shimmer) + reflected_sky.rgb * rim * 0.012;
+		// Raindrops ring the open ground while the air moves.
+		if (reflections_move) {
+			vec2 drop_cell = floor(at * 1.3);
+			float chance = fract(sin(dot(drop_cell, vec2(12.9898, 78.233))) * 43758.5453);
+			vec2 drop_center = 0.5 + 0.3 * vec2(fract(chance * 17.3) - 0.5, fract(chance * 41.7) - 0.5);
+			float age = fract(TIME * 0.6 + chance * 7.0);
+			float ring = abs(length(fract(at * 1.3) - drop_center) - age * 0.3);
+			float open_sky = rooftop ? 1.0 : 1.0 - shelter;
+			glow += reflected_sky.rgb * (1.0 - smoothstep(0.0, 0.05, ring)) * (1.0 - age) * step(0.6, chance) * open_sky * (0.05 + 0.22 * puddle);
+		}
+
+		float mirror = max(wet, puddle);
+		float sheen = max(facet, puddle);
 		vec2 front = normalize(INV_VIEW_MATRIX[2].xz + vec2(0.0001, 0.0001));
 		vec3 lamps = vec3(0.0);
 		if (rooftop) {
-			lamps = roof_lantern.rgb * lantern_reflection(at, roof_pool, front, wet, facet);
+			lamps = roof_lantern.rgb * lantern_reflection(at, roof_pool, front, mirror, sheen);
 		} else if (at.x < -3.0) {
-			lamps = west_lantern.rgb * lantern_reflection(at, west_pool, front, wet, facet);
+			lamps = west_lantern.rgb * lantern_reflection(at, west_pool, front, mirror, sheen);
 		} else if (at.x > 3.0) {
-			lamps = east_lantern.rgb * lantern_reflection(at, east_pool, front, wet, facet);
+			lamps = east_lantern.rgb * lantern_reflection(at, east_pool, front, mirror, sheen);
 		}
 		EMISSION = glow + lamps * reflection_energy * 0.72;
 	}

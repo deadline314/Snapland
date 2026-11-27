@@ -1,7 +1,16 @@
 extends "res://game/world/park_world.gd"
+## Neon night market: a lantern-lit street quarter under big trees, always in dusk
+## or night light with rain in the air. This script owns what the player can do here
+## (walkable land, the covered alley, the roof terrace, opening hours and every
+## interaction point); nightmarket_scenery builds the place and nightmarket_life
+## animates it.
 
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const Atmosphere = preload("res://game/world/nightmarket_atmosphere.gd")
+const Kit := preload("res://game/world/scenery_kit.gd")
+const Props := preload("res://game/world/nightmarket_props.gd")
+const Scenery := preload("res://game/world/nightmarket_scenery.gd")
+const Life := preload("res://game/world/nightmarket_life.gd")
 const BOUNDS := Rect2(-12, -14.1, 24, 23.6)
 const GROUND_Y := 0.20
 const PANCAKE_ENTRY := Vector3(-8.82, GROUND_Y, -4.38)
@@ -28,22 +37,47 @@ const LAND: Array[Rect2] = [
 ]
 const FLOOR_COLORS := [Color("#8093aa"), Color("#73819b"), Color("#73819b"), Color("#8196ab"), Color("#698f95")]
 const SKYLINE := "res://assets/world/nightmarket-skyline.webp"
-const INK := Color("#292943")
-const STALL := Color("#584160")
 const CORAL_NEON := Color("#ff937a")
 const MINT_NEON := Color("#7df0db")
 const PAPER_LIGHT := Color("#fff0cd")
-const STALL_ACCENTS := [Color("#c87372"), Color("#5aa899"), Color("#a08ec0")]
-const STALL_ROOFS := [Color("#7d465e"), Color("#395f68"), Color("#645177")]
+const TERRACE_Y := Scenery.TERRACE_Y
+const WEST := PI * 0.5
+const EAST := -PI * 0.5
+## Game stands, in map order: id, label, entry point, emblem, stand position, yaw
+## (0 faces the camera), stand kind, awning stripe, sign kind, sign position and
+## sign accent. A "tall" sign stands on a pole at its position, so it hides little of
+## the lane behind it; a "roof" board rides on struts above the stand's awning and a
+## "wall" board is fixed flat to whatever is behind it.
+const STANDS := [
+	["game-037", "雨棚快遞 · 撐傘送熱餐", Vector3(0, GROUND_Y, 2.85), "umbrella", Vector3(2.77, TERRACE_Y, 2.87), EAST, "parcels", Color(1.25, 0.5, 0.42), "tall", Vector3(3.3, TERRACE_Y, 1.8), CORAL_NEON],
+	["game-038", "炭火串燒 · 翻面收火", Vector3(9.15, GROUND_Y, 3.27), "skewer", Vector3(10.58, GROUND_Y, 3.28), EAST, "grill", Color(1.3, 0.95, 0.45), "tall", Vector3(10.9, GROUND_Y, 1.95), Color("#ffd28e")],
+	["game-039", "燈籠繩渡 · 屋頂掛燈", LANTERN_ENTRY, "lantern", Vector3(5.13, ROOF_Y, -10.41), 0.0, "rope", Color.WHITE, "tall", Vector3(5.2, ROOF_Y, -11.55), Color("#f7bd8a")],
+	["game-044", "紙傘轉燈 · 西側屋頂", UMBRELLA_ENTRY, "parasol", Vector3(-4.16, ROOF_Y, -13.50), 0.0, "parasol", Color.WHITE, "tall", Vector3(-5.15, ROOF_Y, -13.6), PAPER_LIGHT],
+	["game-047", "糖畫牽線 · 東側屋頂糖燈", SUGAR_LANTERN_ENTRY, "sugar", Vector3(4.26, ROOF_Y, -13.74), 0.0, "sugar", Color(1.3, 0.95, 0.45), "roof", Vector3(4.26, ROOF_Y + 2.85, -14.14), PAPER_LIGHT],
+	["game-040", "銅板借彈 · 西街桌檯", COIN_ENTRY, "coin", Vector3(-10.66, GROUND_Y, -2.30), WEST, "coins", Color(0.95, 0.6, 1.3), "tall", Vector3(-10.9, GROUND_Y, -3.6), Color("#f4c38b")],
+	["game-041", "香氣尋攤 · 北街聞香亭", SCENT_ENTRY, "scent", Vector3(-5.65, GROUND_Y, -5.45), 0.0, "jars", Color(0.55, 1.15, 1.0), "roof", Vector3(-5.65, 3.05, -5.85), PAPER_LIGHT],
+	["game-042", "招幌避碰 · 北街推車", BANNER_ENTRY, "banner", Vector3(6.06, GROUND_Y, -5.40), 0.0, "banner", Color.WHITE, "wall", Vector3(6.06, 3.0, -6.2), PAPER_LIGHT],
+	["game-043", "煎餅畫圓 · 西北煎台", PANCAKE_ENTRY, "pancake", Vector3(-8.82, GROUND_Y, -5.44), 0.0, "griddle", Color(1.25, 0.5, 0.42), "roof", Vector3(-8.82, 3.05, -5.84), PAPER_LIGHT],
+	["game-045", "湯碗擺渡 · 西南湯攤", SOUP_ENTRY, "soup", SOUP_ENTRY + Vector3(-0.15, 0, -1.14), 0.0, "pot", Color(1.3, 0.95, 0.45), "tall", Vector3(-5.85, GROUND_Y, 4.95), PAPER_LIGHT],
+	["game-046", "攤車會車 · 東南卸貨巷", CART_PASS_ENTRY, "cart", Vector3(9.96, GROUND_Y, 5.46), 0.0, "cargo", Color.WHITE, "tall", Vector3(11.45, GROUND_Y, 5.15), PAPER_LIGHT],
+	["game-048", "收攤套疊 · 東南收攤台", STALL_LOADOUT_ENTRY, "stack", STALL_LOADOUT_ENTRY + Vector3(0.08, 0, 0.88), 0.0, "nest", Color.WHITE, "wall", Vector3(13.5, 1.12, 10.05), PAPER_LIGHT],
+]
+## Signboard text for each stand (the labels players already know).
+const STAND_SIGNS := {
+	"game-037": "雨棚快遞", "game-038": "炭火串燒", "game-039": "燈籠繩渡", "game-044": "紙傘轉燈", "game-047": "糖畫牽線", "game-040": "銅板借彈",
+	"game-041": "北街聞香", "game-042": "招幌推車", "game-043": "西北煎台", "game-045": "西南湯攤", "game-046": "東南卸貨巷", "game-048": "收攤套疊",
+}
+## The lanterns here stay lit all day; the district is always in dusk or night light.
+const LAMP_LEVELS := {"dawn": 2.4, "noon": 2.2, "dusk": 3.2, "night": 3.8}
+## Under the canopy the trees are dark shapes whatever the hour.
+const FOLIAGE_GRADE := {"dawn": Color(0.72, 0.78, 0.95), "noon": Color(0.78, 0.84, 0.98), "dusk": Color(0.7, 0.72, 0.95), "night": Color(0.6, 0.7, 0.98)}
 var _operating := true
 var _status_label: Label3D
-var _stall_lights: Array[MeshInstance3D] = []
 var _rain: Array[CPUParticles3D] = []
-var _lit_material: StandardMaterial3D
-var _dim_material: StandardMaterial3D
-var _sign_materials: Dictionary = {}
-var _trim_meshes: Dictionary = {}
 var _atmosphere: Node3D
+var _kit: Kit
+var _scenery: Scenery
+var _life: Life
 var _story_photo_camera: Camera3D
 var _story_photo_origin: Vector3
 var _story_photo_facing := "front"
@@ -54,54 +88,140 @@ var _story_photo_pose: Texture2D
 
 func _build_region_geometry() -> void:
 	_build_atmosphere()
-	_build_street_foundations()
-	_build_neighboring_shops()
+	_build_terrain()
+	_kit = Kit.new(self)
+	_scenery = Scenery.new(self, _kit)
+	_scenery.build()
+	_build_entries()
+	_life = Life.new(self, _scenery)
+	_scenery.finish()
+	_kit.finish()
+	_add_rain()
+	_sync_operating()
+	_life.hold_still()
+	current_area = _area_at_position(ENTRY)
+
+func _build_atmosphere() -> void:
+	_atmosphere = Atmosphere.new()
+	_atmosphere.name = "NightmarketAtmosphere"
+	add_child(_atmosphere)
+	var image := load(SKYLINE) as Texture2D if ResourceLoader.exists(SKYLINE) else null
+	_atmosphere.setup(environment, sun, image, coastal_atlas, AWNING)
+
+## Walkable ground with collision: the wet streets, the ramp and the roof terrace.
+func _build_terrain() -> void:
 	for index in FLOOR_COLORS.size():
 		var area := LAND[index]
 		var center := area.get_center()
 		var floor_mesh := _box(Vector3(center.x, GROUND_Y - 0.24, center.y), Vector3(area.size.x, 0.48, area.size.y), FLOOR_COLORS[index], true)
 		floor_mesh.name = "MarketWalk%d" % index
 		_set_registered_surface(floor_mesh, _atmosphere.paving_material())
-	_build_roof()
-	_build_stalls()
-	_build_awning()
-	_build_route_markers()
-	_add_rain()
+	var rise := ROOF_Y - GROUND_Y
+	var angle := atan2(rise, RAMP.size.y)
+	var ramp_center := RAMP.get_center()
+	var rotation := Basis(Vector3.RIGHT, angle)
+	var thickness := 0.28
+	var top := Vector3(ramp_center.x, GROUND_Y + rise * 0.5, ramp_center.y)
+	var slope := _box(top - rotation.y * thickness * 0.5,
+		Vector3(RAMP.size.x, thickness, Vector2(rise, RAMP.size.y).length()), Color("#75729b"), true)
+	slope.name = "RoofRamp"
+	slope.basis = rotation
+	_set_registered_surface(slope, _atmosphere.paving_material(true))
+	var center := ROOF.get_center()
+	var roof := _box(Vector3(center.x, ROOF_Y - 0.54, center.y), Vector3(ROOF.size.x, 1.08, ROOF.size.y), Color("#6a688d"), true)
+	roof.name = "RoofDiningDeck"
+	_set_registered_surface(roof, _atmosphere.paving_material(true))
+
+func _build_entries() -> void:
+	var props := _scenery.props
 	_point("region:welcome", "返回迎賓大道 · 免費", ENTRY)
 	_point("nightmarket:trade", "攤街燈牌 · 切換營業", Vector3(-4.0, GROUND_Y, 6.65))
 	_point("nightmarket:shelter", "雨棚巷 · 看遮雨方式", Vector3(0, GROUND_Y, 0.7))
 	_point("nightmarket:rooftop", "屋頂餐桌 · 看夜市", Vector3(0, ROOF_Y, -11.65))
 	_point("nightmarket:signs", "招牌維修台 · 看營業燈", Vector3(9.6, GROUND_Y, -0.2))
 	_point("nightmarket:reset", "安全返回夜市入口", Vector3(-9.6, GROUND_Y, 1.0))
-	_point("game-037", "雨棚快遞 · 撐傘送熱餐", Vector3(0, GROUND_Y, 2.85))
-	_point("game-038", "炭火串燒 · 翻面收火", Vector3(9.15, GROUND_Y, 3.27))
-	_build_courier_stand()
-	_build_skewer_stand()
-	_point("game-039", "燈籠繩渡 · 屋頂掛燈", LANTERN_ENTRY)
-	_build_lantern_stand()
-	_point("game-044", "紙傘轉燈 · 西側屋頂", UMBRELLA_ENTRY)
-	_build_umbrella_stand()
-	_point("game-047", "糖畫牽線 · 東側屋頂糖燈", SUGAR_LANTERN_ENTRY)
-	_build_sugar_lantern_stand()
-	_point("game-040", "銅板借彈 · 西街桌檯", COIN_ENTRY)
-	_build_coin_stand()
-	_point("game-041", "香氣尋攤 · 北街聞香亭", SCENT_ENTRY)
-	_build_scent_stand()
-	_point("game-042", "招幌避碰 · 北街推車", BANNER_ENTRY)
-	_build_banner_stand()
-	_point("game-043", "煎餅畫圓 · 西北煎台", PANCAKE_ENTRY)
-	_build_pancake_stand()
-	_point("game-045", "湯碗擺渡 · 西南湯攤", SOUP_ENTRY)
-	_build_soup_stand()
-	_point("game-046", "攤車會車 · 東南卸貨巷", CART_PASS_ENTRY)
-	_build_cart_passing_stand()
-	_point("game-048", "收攤套疊 · 東南收攤台", STALL_LOADOUT_ENTRY)
-	_build_stall_loadout_stand()
+	for index in range(STANDS.size()):
+		var stand: Array = STANDS[index]
+		_point(stand[0], stand[1], stand[2])
+		_build_stand(stand, index)
+	_status_label = props.tall_sign(market_status(), Vector3(-5.2, TERRACE_Y, 4.55), MINT_NEON)
+	props.tall_sign("雨棚巷", Vector3(-2.32, GROUND_Y, 4.9), MINT_NEON, "", 1.6)
+	_build_sign_bench()
 	_npc(STORY_HOST, CORAL_NEON, "阿浪")
-	_sign("夜市迎賓", STORY_HOST + Vector3(0, 1.10, -0.75), CORAL_NEON)
+	props.sign("夜市迎賓", STORY_HOST + Vector3(0, 2.92, -0.75), CORAL_NEON)
 	_point(RegionalVisit.NIGHTMARKET_POINT, "夜市迎賓 · 和阿浪合照", STORY_POINT)
-	_sync_operating()
-	current_area = _area_at_position(ENTRY)
+	props.fit_stacked_labels()
+
+func _build_stand(stand: Array, variation: int) -> void:
+	var props := _scenery.props
+	var at: Vector3 = stand[4]
+	var frame := Transform3D(Basis(Vector3.UP, float(stand[5])), at)
+	var kind := str(stand[6])
+	var board: Vector3 = stand[9]
+	match kind:
+		"rope": _build_lantern_rope(at)
+		"parasol": _build_parasol_stand(at)
+		"banner": _build_banner_cart(frame)
+		"cargo", "nest": props.cart(frame, stand[7], kind, variation, false)
+		_: props.cart(frame, stand[7], kind, variation)
+	if stand[8] == "tall":
+		props.tall_sign(STAND_SIGNS[stand[0]], board, stand[10], str(stand[3]))
+		return
+	props.sign(STAND_SIGNS[stand[0]], board, stand[10], str(stand[3]), board.y)
+	if stand[8] == "roof":
+		var foot := at.y + 2.1
+		for side: float in [-1.0, 1.0]:
+			_kit.detail.box(Vector3(at.x + side * 0.45, (board.y - 0.36 + foot) * 0.5, board.z - 0.06), Vector3(0.05, board.y - 0.36 - foot, 0.05), Props.IRON)
+
+## Two posts and a rope of paper lanterns to ferry across the terrace.
+func _build_lantern_rope(at: Vector3) -> void:
+	var props := _scenery.props
+	_kit.detail.box(at + Vector3(0, 0.08, -0.08), Vector3(0.5, 0.16, 2.1), Props.PLUM)
+	for z: float in [-0.86, 0.69]:
+		_kit.piles().add(at + Vector3(0, 1.2, z), Vector3(0.13, 2.4, 0.13))
+		_kit.detail.box(at + Vector3(0, 2.44, z), Vector3(0.22, 0.1, 0.22), Props.BRASS)
+	props.wire(at + Vector3(0, 2.36, -0.86), at + Vector3(0, 2.36, 0.69), 0.14, Color("#c9b58a"))
+	for hung in range(3):
+		props.lantern(at + Vector3(0, 2.26, -0.5 + 0.43 * float(hung)), Props.LANTERN_COLORS[hung], 0.62)
+
+## A large oil-paper umbrella turns slowly on its stand.
+func _build_parasol_stand(at: Vector3) -> void:
+	_kit.detail.tube(at + Vector3(0, 0.18, 0), 0.44, 0.38, 0.36, Props.PLUM, 10)
+	_kit.detail.tube(at + Vector3(0, 1.1, 0), 0.05, 0.05, 1.6, Props.BRASS, 6)
+	var spinner := _mesh(Props.parasol_mesh(Color("#ffb09a"), PAPER_LIGHT), at + Vector3(0, 2.05, 0), _vertex_color_material("scenery-detail"))
+	spinner.scale = Vector3.ONE * 1.6
+	spinner.name = "MarketParasol"
+	_scenery.parasol_spinner = spinner
+	_scenery.props.neon.tube(at + Vector3(0.72, 0.92, 0.0), 0.14, 0.14, 0.28, Props.AMBER, 8)
+	_kit.detail.tube(at + Vector3(0.72, 0.4, 0.0), 0.04, 0.04, 0.8, Props.IRON, 6)
+
+## Hand cart carrying a tall cloth banner that stirs in the air.
+func _build_banner_cart(frame: Transform3D) -> void:
+	var detail := _kit.detail
+	_scenery.props.cart(frame, Color.WHITE, "", 1, false)
+	detail.frame = frame
+	detail.box(Vector3(-0.3, 2.1, 0), Vector3(0.08, 2.4, 0.08), Props.DARK_WOOD)
+	detail.box(Vector3(0.12, 3.24, 0), Vector3(1.0, 0.06, 0.06), Props.DARK_WOOD)
+	detail.frame = Transform3D.IDENTITY
+	var banners := _kit.batch("banners", Kit.cloth_mesh(Vector2(0.86, 1.7), 4, 6, true), _kit.cloth_material("banner", 0.07))
+	banners.add(frame * Vector3(-0.24, 3.2, 0.02), Vector3.ONE, frame.basis, Color("#b0607f"))
+
+## The sign repair bench: spare tubes, a ladder and one sign that will not stay lit.
+func _build_sign_bench() -> void:
+	var props := _scenery.props
+	var detail := _kit.detail
+	var at := Vector3(10.9, GROUND_Y, -1.45)
+	_kit.surface(props.wood(Color("#8d7a8a"))).add(at + Vector3(0, 0.45, 0), Vector3(1.6, 0.9, 0.7))
+	_kit.surface(props.wood(Color("#d9b9a6"))).add(at + Vector3(0, 0.93, 0), Vector3(1.72, 0.06, 0.8))
+	detail.box(at + Vector3(-0.45, 1.05, 0.05), Vector3(0.4, 0.2, 0.26), Color("#b5484a"))
+	for tube in range(3):
+		props.neon.box(at + Vector3(0.1 + 0.2 * float(tube), 1.0, 0.1 - 0.12 * float(tube)), Vector3(0.05, 0.05, 0.6), Props.buzzing(Props.NEON_COLORS[tube + 1], float(tube)), Basis(Vector3.UP, 0.3 * float(tube)))
+	for rail: float in [-0.22, 0.22]:
+		detail.box(at + Vector3(0.95 + rail, 1.1, -0.2), Vector3(0.05, 2.3, 0.05), Props.BAMBOO, Basis(Vector3.RIGHT, -0.2))
+	for rung in range(5):
+		detail.box(at + Vector3(0.95, 0.35 + 0.4 * float(rung), -0.02 - 0.08 * float(rung)), Vector3(0.44, 0.04, 0.04), Props.BAMBOO)
+	props.tall_sign("招牌維修台", Vector3(11.7, GROUND_Y, -2.0), CORAL_NEON)
+	_kit.blocker(at + Vector3(0, 0.95, 0), Vector3(1.6, 1.9, 0.7))
 
 func begin_story_photo() -> bool:
 	if is_instance_valid(_story_photo_camera) or not is_instance_valid(player):
@@ -161,379 +281,15 @@ func end_story_photo() -> void:
 func _interaction_markers_allowed() -> bool:
 	return not is_instance_valid(_story_photo_camera)
 
-func _build_street_foundations() -> void:
-	# Join the stalls and walkways on one city block, with curbs marking the safe routes.
-	var foundation := _box(Vector3(0, -0.46, -1.7), Vector3(26.4, 0.60, 25.9), Color("#446079"))
-	foundation.name = "MarketBlock"
-	_set_registered_surface(foundation, _coastal_surface(0, 6.8, Color("#536681")))
-	for side in [-1.0, 1.0]:
-		var x: float = side * 11.88
-		_box(Vector3(x, 0.30, -0.1), Vector3(0.20, 0.24, 19.1), Color("#8794a5"))
-		_box(Vector3(side * 4.82, 0.28, 0.85), Vector3(5.14, 0.47, 8.0), Color("#42374e"))
-		_box(Vector3(side * 8.66, 0.19, -8.29), Vector3(6.15, 0.60, 4.15), Color("#4e4a67"))
-		_box(Vector3(side * 8.90, 0.64, -9.95), Vector3(5.24, 1.20, 0.29), Color("#665a7f"))
-	for x in [-4.8, 4.8]:
-		_box(Vector3(x, 0.27, 9.39), Vector3(8.00, 0.19, 0.21), Color("#8794a5"))
-		_box(Vector3(x, 0.18, 9.65), Vector3(8.00, 0.12, 0.27), Color("#4a6178"))
-
-func _box(pos: Vector3, size: Vector3, color: Color, solid := false) -> MeshInstance3D:
-	if solid:
-		return super._box(pos, size, color, true)
-	var mesh := _trim_meshes.get(size) as BoxMesh
-	if mesh == null:
-		mesh = BoxMesh.new()
-		mesh.size = size
-		_trim_meshes[size] = mesh
-	return _mesh(mesh, pos, _finish(color, size))
-
-func _build_neighboring_shops() -> void:
-	# These facades extend the district beyond the playable street without adding collision.
-	var wall := Color("#4b435e")
-	var eaves := Color("#3d3857")
-	var shutter := Color("#654f64")
-	var window := _unshaded(Color("#bf8a7e"))
-	for at: Vector3 in [Vector3(-14.65, -0.14, -5.7), Vector3(14.4, -0.14, -7.8),
-			Vector3(-15.55, -0.14, 5.1), Vector3(15.2, -0.14, 4.7)]:
-		_box(at + Vector3(0, 1.42, 0), Vector3(3.68, 2.84, 4.15), wall)
-		for side in [-1.0, 1.0]:
-			var panel := _box(at + Vector3(side * 1.01, 2.97, 0), Vector3(2.16, 0.23, 4.52), eaves)
-			panel.rotation.z = -side * 0.25
-		var face := at + Vector3(0, 1.57, 2.12)
-		_box(face, Vector3(2.88, 1.26, 0.16), shutter)
-		for x in [-0.93, 0.0, 0.93]:
-			var pane := _box(face + Vector3(x, 0.17, 0.10), Vector3(0.54, 0.64, 0.08), PAPER_LIGHT)
-			pane.material_override = window
-			pane.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		_box(face + Vector3(0, -0.56, 0.43), Vector3(3.20, 0.13, 0.90), eaves)
-
-func _build_atmosphere() -> void:
-	var base := PlaneMesh.new()
-	base.size = Vector2(112, 112)
-	var paving := _mesh(base, Vector3(0, -0.18, 0), _mat(INK))
-	paving.name = "RainyHorizonBase"
-	_set_registered_surface(paving, _coastal_surface(0, 6.1, Color("#404859")))
-	_atmosphere = Atmosphere.new()
-	_atmosphere.name = "NightmarketAtmosphere"
-	add_child(_atmosphere)
-	var image := load(SKYLINE) as Texture2D if ResourceLoader.exists(SKYLINE) else null
-	_atmosphere.setup(environment, sun, image, coastal_atlas, AWNING)
-
-func _build_roof() -> void:
-	var rise := ROOF_Y - GROUND_Y
-	var angle := atan2(rise, RAMP.size.y)
-	var ramp_center := RAMP.get_center()
-	var rotation := Basis(Vector3.RIGHT, angle)
-	var thickness := 0.28
-	var top := Vector3(ramp_center.x, GROUND_Y + rise * 0.5, ramp_center.y)
-	var slope := _box(top - rotation.y * thickness * 0.5,
-		Vector3(RAMP.size.x, thickness, Vector2(rise, RAMP.size.y).length()), Color("#75729b"), true)
-	slope.name = "RoofRamp"
-	slope.basis = rotation
-	_set_registered_surface(slope, _atmosphere.paving_material(true))
-	var center := ROOF.get_center()
-	var roof := _box(Vector3(center.x, ROOF_Y - 0.54, center.y), Vector3(ROOF.size.x, 1.08, ROOF.size.y), Color("#6a688d"), true)
-	roof.name = "RoofDiningDeck"
-	_set_registered_surface(roof, _atmosphere.paving_material(true))
-	var railing := Color("#a195b4")
-	_box(Vector3(0, ROOF_Y + 0.56, -13.96), Vector3(11.16, 0.18, 0.18), railing)
-	for side in [-1.0, 1.0]:
-		_box(Vector3(side * 5.49, ROOF_Y + 0.56, center.y), Vector3(0.17, 0.18, 4.54), railing)
-		_box(Vector3(side * 3.92, ROOF_Y + 0.56, -9.53), Vector3(3.30, 0.18, 0.17), railing)
-		for z in [-13.94, -11.80, -9.53]:
-			_box(Vector3(side * 5.48, ROOF_Y + 0.24, z), Vector3(0.20, 0.64, 0.20), STALL)
-	for x in [-3.2, 3.2]:
-		var tabletop := _cylinder(Vector3(x, ROOF_Y + 0.72, -11.7), 0.83, 0.16, Color("#bd8d7e"))
-		_cylinder(tabletop.position + Vector3(0, 0.09, 0), 0.40, 0.04, Color("#7e5572"))
-		_cylinder(Vector3(x, ROOF_Y + 0.34, -11.7), 0.45, 0.68, INK, 0.29, true)
-		_market_lantern(Vector3(x, ROOF_Y + 0.97, -11.7), PAPER_LIGHT, 0.13)
-		for dz in [-1.02, 1.02]:
-			_box(Vector3(x, ROOF_Y + 0.21, -11.7 + dz), Vector3(0.94, 0.42, 0.42), STALL)
-	_sign("屋頂餐桌", Vector3(0.0, ROOF_Y, -13.3), CORAL_NEON)
-
-func _build_stalls() -> void:
-	_lit_material = _unshaded(CORAL_NEON)
-	_dim_material = _unshaded(Color("#76546b"))
-	for side in [-1, 1]:
-		for index in 3:
-			var x: float = side * 6.1
-			var z := -3.1 + index * 3.07
-			_build_stall(Vector3(x, GROUND_Y, z), side, (index + int(side > 0)) % STALL_ACCENTS.size())
-	_status_label = _sign("", Vector3(-4.2, GROUND_Y, 5.62), MINT_NEON)
-	_sign("招牌維修台", Vector3(10.0, GROUND_Y, -1.5), CORAL_NEON)
-
-func _build_stall(at: Vector3, side: int, style: int) -> void:
-	var accent: Color = STALL_ACCENTS[style]
-	_box(at + Vector3(0, 0.56, 0), Vector3(2.08, 1.12, 2.38), STALL).name = "MarketBooth"
-	_box(at + Vector3(0, 1.18, 0), Vector3(2.27, 0.15, 2.53), Color("#bd8b73"))
-	for x in [-0.95, 0.95]:
-		for z in [-1.04, 1.04]:
-			_box(at + Vector3(x, 1.65, z), Vector3(0.14, 0.99, 0.14), Color("#75485c"))
-	for tile in [-1.0, 1.0]:
-		var panel := _box(at + Vector3(tile * 0.60, 2.35, 0), Vector3(1.27, 0.14, 2.69), STALL_ROOFS[style])
-		panel.rotation.z = -tile * 0.27
-		_box(at + Vector3(tile * 1.16, 2.19, 0), Vector3(0.11, 0.12, 2.72), accent)
-	_box(at + Vector3(0, 2.55, 0), Vector3(0.17, 0.11, 2.77), accent)
-	_box(at + Vector3(0, 0.57, 1.21), Vector3(1.71, 0.66, 0.07), accent)
-	for x in [-0.53, 0.0, 0.53]:
-		_box(at + Vector3(x, 0.58, 1.25), Vector3(0.07, 0.63, 0.07), Color("#5d4156"))
-		var serving := _cylinder(at + Vector3(x, 1.31, 0.69), 0.19, 0.12, Color("#d59c69"))
-		serving.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	var strip := _box(at + Vector3(side * 1.14, 1.13, 0), Vector3(0.08, 0.13, 2.41), accent)
-	strip.material_override = _unshaded(accent)
-	var lantern := _market_lantern(at + Vector3(side * 0.85, 1.94, 1.17), CORAL_NEON, 0.16)
-	_stall_lights.append(lantern)
-
-func _market_lantern(at: Vector3, color: Color, radius: float) -> MeshInstance3D:
-	_cylinder(at + Vector3(0, radius, 0), radius * 0.83, 0.10, STALL)
-	var lantern := _cylinder(at, radius, radius * 1.85, color)
-	lantern.material_override = _unshaded(color)
-	lantern.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	return lantern
-
-func _build_awning() -> void:
-	for end in [-2.75, 0.97, 4.69]:
-		for x in [-1.98, 1.98]:
-			_box(Vector3(x, 1.88, end), Vector3(0.15, 3.35, 0.15), Color("#658e89"), true)
-			_box(Vector3(x, 0.44, end), Vector3(0.33, 0.46, 0.33), Color("#527176"))
-	var glass := StandardMaterial3D.new()
-	glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	glass.albedo_color = Color(0.29, 0.49, 0.52, 0.32)
-	glass.roughness = 0.50
-	var canopy := _box(Vector3(0, 3.59, 0.97), Vector3(3.38, 0.08, 7.31), MINT_NEON)
-	canopy.name = "CoveredAlleyAwning"
-	canopy.material_override = glass
-	canopy.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	for side in [-1.0, 1.0]:
-		var frame := _box(Vector3(side * 1.88, 3.52, 0.97), Vector3(0.42, 0.17, 7.4), Color("#518582"))
-		frame.rotation.z = -side * 0.15
-	for z in [-2.70, -0.78, 1.10, 2.99, 4.62]:
-		_box(Vector3(0, 3.66, z), Vector3(4.18, 0.09, 0.07), Color("#6d9590"))
-	var edge_color := Color("#70b6b4")
-	for z in [-2.55, 4.51]:
-		var edge := _box(Vector3(0, 3.50, z), Vector3(4.20, 0.13, 0.08), edge_color)
-		edge.material_override = _unshaded(edge_color)
-	_sign("雨棚巷", Vector3(0, GROUND_Y, 4.78), MINT_NEON)
-
-func _build_courier_stand() -> void:
-	var at := Vector3(2.77, GROUND_Y, 2.87)
-	_box(at + Vector3(0, 0.43, 0), Vector3(1.42, 0.86, 1.17), STALL)
-	_box(at + Vector3(0, 0.92, 0), Vector3(1.55, 0.13, 1.27), Color("#b78579"))
-	for x in [-0.44, 0.0, 0.44]:
-		_box(at + Vector3(x, 1.11, 0.09), Vector3(0.36, 0.24, 0.54), Color("#cb976b"))
-	_market_lantern(at + Vector3(0, 1.39, 0), PAPER_LIGHT, 0.11)
-	_sign("雨棚快遞", at + Vector3(0, 0.13, -0.44), CORAL_NEON)
-
-func _build_skewer_stand() -> void:
-	var at := Vector3(10.58, GROUND_Y, 3.28)
-	var copper := Color("#c48056")
-	_box(at + Vector3(0, 0.48, 0), Vector3(1.79, 0.94, 1.31), Color("#453039"))
-	_box(at + Vector3(0, 1.00, 0), Vector3(1.86, 0.17, 1.39), copper)
-	_box(at + Vector3(-0.12, 1.16, 0), Vector3(1.42, 0.17, 1.05), INK)
-	var embers := _unshaded(Color("#da643f"))
-	for index in 5:
-		var x := -0.66 + index * 0.27
-		var ember := _box(at + Vector3(x, 1.24, -0.08), Vector3(0.14, 0.08, 0.34), copper)
-		ember.material_override = embers
-		_box(at + Vector3(x, 1.33, 0), Vector3(0.045, 0.065, 0.86), Color("#9b8990"))
-	_market_lantern(at + Vector3(0.71, 1.40, 0.49), PAPER_LIGHT, 0.12)
-	_sign("炭火串燒", at + Vector3(0, 0.18, -0.52), Color("#ffd28e"))
-
-
-func _build_lantern_stand() -> void:
-	var at := Vector3(5.13, ROOF_Y, -10.41)
-	var wood := Color("#805a63")
-	_box(at + Vector3(0.02, 0.11, 0), Vector3(0.48, 0.20, 2.07), STALL)
-	for z in [-0.86, 0.69]:
-		_box(at + Vector3(0, 0.79, z), Vector3(0.14, 1.51, 0.13), wood)
-		_box(at + Vector3(0, 1.29, z), Vector3(0.28, 0.28, 0.22), CORAL_NEON)
-	var rail := _box(at + Vector3(0, 1.49, -0.08), Vector3(0.16, 0.12, 1.83), wood)
-	rail.rotation.x = -0.09
-	for z in [-0.58, -0.11, 0.36]:
-		_market_lantern(at + Vector3(0, 1.22, z), PAPER_LIGHT, 0.12)
-	_sign("燈籠繩渡", at + Vector3(-0.76, 0.04, -0.45), Color("#f7bd8a"))
-
-
-func _build_coin_stand() -> void:
-	var at := Vector3(-10.66, GROUND_Y, -2.30)
-	var lacquer := Color("#89545a")
-	var felt := Color("#425e67")
-	_box(at + Vector3(0, 0.44, 0), Vector3(1.66, 0.87, 1.38), STALL)
-	_box(at + Vector3(0, 0.91, 0), Vector3(1.82, 0.15, 1.56), lacquer)
-	_box(at + Vector3(0, 1.00, -0.05), Vector3(1.57, 0.06, 1.33), felt)
-	for index in 3:
-		var x := -0.49 + float(index) * 0.47
-		_cylinder(at + Vector3(x, 1.05, -0.33), 0.145, 0.043, Color("#a97759"))
-		_cylinder(at + Vector3(x, 1.075, -0.33), 0.101, 0.017, INK)
-	var left := _box(at + Vector3(-0.43, 1.10, 0.28), Vector3(0.52, 0.11, 0.055), MINT_NEON)
-	left.rotation.y = 0.54
-	var right := _box(at + Vector3(0.27, 1.10, 0.18), Vector3(0.56, 0.11, 0.055), CORAL_NEON)
-	right.rotation.y = -0.46
-	_market_lantern(at + Vector3(-0.72, 1.38, 0.5), PAPER_LIGHT, 0.13)
-	_sign("銅板借彈", at + Vector3(0.11, 0.14, -0.53), Color("#f4c38b"))
-
-
-func _build_scent_stand() -> void:
-	var at := Vector3(-5.65, GROUND_Y, -5.45)
-	var jade := Color("#3b695e")
-	_box(at + Vector3(0, 0.39, 0), Vector3(1.62, 0.78, 0.78), STALL)
-	_box(at + Vector3(0, 0.81, 0), Vector3(1.75, 0.10, 0.90), jade)
-	for index in 3:
-		var x := -0.51 + float(index) * 0.46
-		var glaze: Color = [MINT_NEON, PAPER_LIGHT, CORAL_NEON][index]
-		_cylinder(at + Vector3(x, 0.94, 0.10), 0.15, 0.17, jade)
-		_cylinder(at + Vector3(x, 1.05, 0.10), 0.11, 0.06, glaze)
-	var cloth := _box(at + Vector3(0, 1.46, -0.30), Vector3(1.64, 0.32, 0.10), Color("#734b65"))
-	cloth.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_sign("北街聞香", at + Vector3(0, 1.40, -0.21), PAPER_LIGHT)
-
-
-func _build_banner_stand() -> void:
-	var at := Vector3(6.06, GROUND_Y, -5.40)
-	var lacquer := Color("#845048")
-	var fabric := Color("#765477")
-	_box(at + Vector3(0, 0.32, 0), Vector3(1.28, 0.30, 0.87), lacquer)
-	_box(at + Vector3(0, 0.52, 0), Vector3(1.37, 0.10, 0.93), Color("#a36454"))
-	for side in [-1.0, 1.0]:
-		var at_wheel := at + Vector3(side * 0.63, 0.17, 0.19)
-		_cylinder(at_wheel, 0.17, 0.08, INK).rotation.z = PI * 0.5
-	_box(at + Vector3(0, 0.84, -0.05), Vector3(0.13, 0.75, 0.13), STALL)
-	var banner := _box(at + Vector3(0.12, 1.45, -0.09), Vector3(1.10, 0.72, 0.075), fabric)
-	banner.rotation.z = -0.28
-	var hem := _box(at + Vector3(0.22, 1.11, -0.09), Vector3(1.06, 0.06, 0.083), PAPER_LIGHT)
-	hem.rotation.z = banner.rotation.z
-	_sign("招幌推車", at + Vector3(0.0, 0.62, 0.44), PAPER_LIGHT)
-
-
-func _build_pancake_stand() -> void:
-	var at := Vector3(-8.82, GROUND_Y, -5.44)
-	var brass := Color("#ae7958")
-	var wood := Color("#645150")
-	_box(at + Vector3(0, 0.40, 0), Vector3(1.61, 0.80, 0.82), wood)
-	_box(at + Vector3(0, 0.83, 0), Vector3(1.74, 0.12, 0.90), STALL)
-	_cylinder(at + Vector3(-0.22, 0.96, 0.05), 0.39, 0.16, brass)
-	_cylinder(at + Vector3(-0.22, 1.06, 0.05), 0.34, 0.06, INK)
-	_cylinder(at + Vector3(0.47, 0.93, -0.22), 0.13, 0.13, MINT_NEON)
-	_cylinder(at + Vector3(0.53, 0.94, 0.17), 0.11, 0.15, PAPER_LIGHT)
-	var ladle := _box(at + Vector3(0.08, 1.08, 0.12), Vector3(0.45, 0.05, 0.05), brass)
-	ladle.rotation.y = -0.43
-	_sign("西北煎台", at + Vector3(0.06, 0.60, 0.42), PAPER_LIGHT)
-
-
-func _build_umbrella_stand() -> void:
-	var at := Vector3(-4.16, ROOF_Y, -13.50)
-	var paper := Color("#b48777")
-	var brass := Color("#a5795b")
-	_cylinder(at + Vector3(0, 0.18, 0), 0.44, 0.35, STALL)
-	_cylinder(at + Vector3(0, 0.42, 0), 0.10, 0.68, brass)
-	_cylinder(at + Vector3(0, 0.78, 0), 0.58, 0.075, paper)
-	_cylinder(at + Vector3(0, 0.83, 0), 0.13, 0.09, PAPER_LIGHT)
-	for sector in 8:
-		var angle := TAU * float(sector) / 8.0
-		var radial := Vector3(cos(angle), 0.0, sin(angle))
-		var rib := _box(at + radial * 0.31 + Vector3(0, 0.84, 0), Vector3(0.49, 0.023, 0.034), brass)
-		rib.rotation.y = -angle
-	_market_lantern(at + Vector3(0.72, 0.78, 0.0), PAPER_LIGHT, 0.16)
-	_sign("紙傘轉燈", at + Vector3(0.12, 0.32, 0.47), PAPER_LIGHT)
-
-
-func _build_soup_stand() -> void:
-	var at := SOUP_ENTRY + Vector3(-0.15, 0, -1.14)
-	var wood := Color("#614253")
-	var copper := Color("#c78e64")
-	_box(at + Vector3(0, 0.46, 0), Vector3(1.82, 0.90, 0.91), wood)
-	_box(at + Vector3(0, 0.92, 0), Vector3(1.88, 0.12, 1.01), copper)
-	for index in 3:
-		var bowl := at + Vector3((index - 1) * 0.51, 1.07, 0.12)
-		var glaze: Color = [Color("#d4c4a8"), Color("#7cb49b"), Color("#c97057")][index]
-		var foot := _cylinder(bowl, 0.14, 0.14, glaze)
-		var rim := _cylinder(bowl + Vector3(0, 0.07, 0), 0.20, 0.07, glaze.lightened(0.14))
-		foot.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		rim.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_market_lantern(at + Vector3(-0.75, 1.38, 0.06), PAPER_LIGHT, 0.13)
-	_sign("西南湯攤", at + Vector3(0.02, 0.15, 0.49), PAPER_LIGHT)
-
-
-func _build_cart_passing_stand() -> void:
-	var dock := Vector3(9.96, GROUND_Y, 5.46)
-	var wood := Color("#77575a")
-	var brass := Color("#bf976c")
-	_box(dock + Vector3(0, 0.07, 0), Vector3(2.12, 0.14, 0.96), wood)
-	_box(dock + Vector3(0.05, 0.40, 0.12), Vector3(1.64, 0.18, 0.73), brass)
-	for side in [-1.0, 1.0]:
-		var wheel := _cylinder(dock + Vector3(side * 0.54, 0.29, 0.48), 0.19, 0.12, wood.darkened(0.35))
-		wheel.rotation.x = PI * 0.5
-		_box(dock + Vector3(side * 0.62, 0.54, 0.10), Vector3(0.40, 0.20, 0.48), brass.darkened(0.18))
-	_box(dock + Vector3(0.84, 0.54, 0.30), Vector3(0.54, 0.07, 0.11), wood)
-	_market_lantern(dock + Vector3(0.90, 1.08, 0.11), PAPER_LIGHT, 0.12)
-	_sign("東南卸貨巷", dock + Vector3(-0.12, 0.21, 0.40), PAPER_LIGHT)
-
-
-func _build_sugar_lantern_stand() -> void:
-	var work := Vector3(4.26, ROOF_Y, -13.74)
-	var copper := Color("#b87854")
-	var syrup := Color("#f3c56f")
-	_box(work + Vector3(0, 0.34, 0), Vector3(1.72, 0.67, 0.81), STALL)
-	_box(work + Vector3(0, 0.70, 0.11), Vector3(1.86, 0.13, 0.87), copper)
-	for side in [-1.0, 1.0]:
-		var rim := _box(work + Vector3(0, 0.785, side * 0.25 + 0.06), Vector3(1.65, 0.045, 0.06), syrup)
-		rim.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		var support := _cylinder(work + Vector3(side * 0.61, 0.84, -0.12), 0.057, 0.26, copper)
-		support.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_market_lantern(work + Vector3(0.72, 1.12, 0.10), syrup, 0.14)
-	_sign("糖畫牽線", work + Vector3(-0.08, 0.17, 0.49), PAPER_LIGHT)
-
-
-func _build_stall_loadout_stand() -> void:
-	var at := STALL_LOADOUT_ENTRY + Vector3(0.08, 0, 0.88)
-	var wood := Color("#9c7258")
-	var frame := Color("#577f77")
-	_box(at + Vector3(0, 0.42, 0), Vector3(1.74, 0.26, 0.79), frame, true)
-	_box(at + Vector3(0, 0.56, 0), Vector3(1.78, 0.07, 0.85), wood)
-	for x in [-0.73, 0.73]:
-		_box(at + Vector3(x, 0.74, 0), Vector3(0.09, 0.37, 0.75), frame)
-		_box(at + Vector3(x, 0.22, 0), Vector3(0.19, 0.30, 0.29), INK)
-	_box(at + Vector3(-0.31, 0.71, 0.12), Vector3(0.58, 0.26, 0.43), wood)
-	var pot := _cylinder(at + Vector3(0.40, 0.70, 0.04), 0.25, 0.24, Color("#c39273"))
-	pot.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_sign("收攤套疊", at + Vector3(0, 0.14, -0.47), PAPER_LIGHT)
-
-
-func _build_route_markers() -> void:
-	_sign("霓虹夜市", Vector3(-0.25, GROUND_Y, 6.25), CORAL_NEON)
-	_sign("免費返回", Vector3(0.0, GROUND_Y, 8.75), PAPER_LIGHT)
-	for x in [-9.75, 0.0, 9.75]:
-		for z in [-4.7, 5.65, 7.0]:
-			_box(Vector3(x, GROUND_Y + 0.012, z), Vector3(0.8, 0.025, 0.14), MINT_NEON)
-	for x in [-11.6, 11.6]:
-		for z in [-4.8, 0.0, 4.9, 8.4]:
-			_box(Vector3(x, GROUND_Y + 0.54, z), Vector3(0.12, 1.08, 0.12), STALL)
-			var cap := _box(Vector3(x, GROUND_Y + 1.12, z), Vector3(0.23, 0.17, 0.24), PAPER_LIGHT)
-			cap.material_override = _unshaded(PAPER_LIGHT)
-
-func _sign(text: String, at: Vector3, accent: Color) -> Label3D:
-	var frame := _box(at + Vector3(0, 1.82, 0), Vector3(2.90, 0.70, 0.14), INK)
-	var edge := _box(frame.position + Vector3(0, -0.29, 0.08), Vector3(2.85, 0.075, 0.10), accent)
-	edge.material_override = _unshaded(accent)
-	var label := _local_label(text, at + Vector3(0, 1.84, 0.09), 29, PAPER_LIGHT)
-	label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
-	label.pixel_size = 0.018
-	return label
-
-func _unshaded(color: Color) -> StandardMaterial3D:
-	if _sign_materials.has(color):
-		return _sign_materials[color]
-	var material := StandardMaterial3D.new()
-	material.albedo_color = color
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	_sign_materials[color] = material
-	return material
-
 func _add_rain() -> void:
 	if DisplayServer.get_name() == "headless":
 		return
 	var streak := BoxMesh.new()
 	streak.size = Vector3(0.015, 0.31, 0.015)
-	streak.material = _unshaded(Color("#a9add1"))
+	var streak_material := StandardMaterial3D.new()
+	streak_material.albedo_color = Color("#a9add1")
+	streak_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	streak.material = streak_material
 	for side in [-1, 1]:
 		var emitter := CPUParticles3D.new()
 		emitter.position = Vector3(side * 7.2, 6.2, 0.5)
@@ -561,6 +317,27 @@ func apply_settings(settings: Dictionary) -> void:
 func set_time_of_day(phase_id: Variant) -> void:
 	super.set_time_of_day(phase_id)
 	_atmosphere.apply_palette(active_time_phase)
+	lamp_energy_for_phase = float(LAMP_LEVELS[active_time_phase])
+	# Neon and lanterns bloom here at every hour.
+	environment.glow_intensity = 0.55
+	_update_lamp_selection(true)
+	_scenery.apply_time_of_day(active_time_phase)
+
+func refresh_label_fonts(font: Font) -> void:
+	super.refresh_label_fonts(font)
+	_scenery.props.fit_stacked_labels()
+
+func _apply_foliage_phase() -> void:
+	var tint: Color = FOLIAGE_GRADE[active_time_phase]
+	for material in foliage_materials:
+		material.set_shader_parameter("tint", tint)
+
+func _process(delta: float) -> void:
+	super._process(delta)
+	if reduced_motion:
+		_life.hold_still()
+	elif not blocked:
+		_life.animate(delta)
 
 func cycle_market() -> void:
 	_operating = not _operating
@@ -571,10 +348,9 @@ func market_status() -> String:
 
 func _sync_operating() -> void:
 	_atmosphere.set_market_open(_operating)
-	for lamp in _stall_lights:
-		lamp.material_override = _lit_material if _operating else _dim_material
+	_scenery.set_open(_operating)
 	if is_instance_valid(_status_label):
-		_status_label.text = market_status()
+		_status_label.text = Props.stacked(market_status())
 
 func _build_region_activities() -> void:
 	pass
@@ -628,7 +404,10 @@ func ground_surface_y(position: Vector3) -> float:
 		return ROOF_Y
 	if RAMP.has_point(at):
 		return lerpf(ROOF_Y, GROUND_Y, inverse_lerp(RAMP.position.y, RAMP.end.y, at.y))
-	return GROUND_Y if _is_land(at) else -0.4
+	if _is_land(at):
+		return GROUND_Y
+	# Off the streets the quarter's paving, then the valley floor, is the ground.
+	return Scenery.QUARTER_Y if Scenery.QUARTER.has_point(at) or (absf(at.x) < 2.5 and at.y > 0.0) else Scenery.VALLEY_Y
 
 func _is_land(point: Vector2) -> bool:
 	for rect in LAND:
