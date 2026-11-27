@@ -124,6 +124,7 @@ class RuntimeResultContractTests(unittest.TestCase):
                 "avatar renderer tests": 240,
                 "figure scale tests": 240,
                 "pixel UI shell tests": 240,
+                "pixel tutorial page tests": 240,
                 "region travel tests": 180,
                 "retake panel tests": 180,
             }

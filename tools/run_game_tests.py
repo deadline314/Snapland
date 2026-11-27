@@ -24,6 +24,8 @@ SUITE_TIMEOUT_SECONDS = {
     "avatar renderer tests": 240,
     "figure scale tests": 240,
     "pixel UI shell tests": 240,
+    # Walks every lesson at four window sizes, so it grows with each delivered game.
+    "pixel tutorial page tests": 240,
     "region travel tests": 180,
     "retake panel tests": 180,
 }

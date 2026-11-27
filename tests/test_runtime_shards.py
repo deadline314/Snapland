@@ -191,7 +191,7 @@ class RuntimeShardTests(unittest.TestCase):
             sidecar.write_bytes(label.encode())
             self.assertNotIn(save.parent, paths)
             paths.append(save.parent)
-            self.assertEqual(timeout, (240 if label in {"avatar renderer tests", "pixel UI shell tests"} else 90) * 2)
+            self.assertEqual(timeout, (240 if label in {"avatar renderer tests", "pixel UI shell tests", "pixel tutorial page tests"} else 90) * 2)
             if label == selected[1][0] and broken is not None:
                 if isinstance(broken, Exception):
                     raise broken
