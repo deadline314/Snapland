@@ -4,3 +4,4 @@ __pycache__/
 .review/
 build/
 *.tmp
+.omc/
