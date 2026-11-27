@@ -189,7 +189,7 @@ func begin_story_photo() -> bool:
 	_story_camera.far = camera.far
 	_story_camera.position = center + Vector3(-0.70, 3.70, 9.40)
 	add_child(_story_camera)
-	_story_camera.look_at(center)
+	_story_camera.look_at(to_global(center))
 	_mount_story_guest(pose)
 	_story_host_rest_at = _story_host_root.position
 	_story_host_root.position = STORY_PORTRAIT_HOST
@@ -223,14 +223,14 @@ func _mount_story_guest(pose: Texture2D) -> void:
 	guest.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	guest.top_level = true
 	_story_camera.add_child(guest)
-	guest.global_position = STORY_GUEST + Vector3.UP * sprite_ground_anchor_y(STORY_GUEST.y, STORY_GUEST.y,
+	guest.global_position = to_global(STORY_GUEST) + Vector3.UP * sprite_ground_anchor_y(STORY_GUEST.y, STORY_GUEST.y,
 		0.0, AvatarRenderer.FEET_BASELINE, AvatarRenderer.CANVAS_SIZE.y, guest.pixel_size, _story_camera.global_basis.y.y)
 	_set_living_sprite_material(guest, 1, 0.0, 0.0, 0, false)
 	if is_instance_valid(avatar_contact_shadow):
 		var contact := avatar_contact_shadow.duplicate(0) as MeshInstance3D
 		contact.top_level = true
 		_story_camera.add_child(contact)
-		contact.global_transform = Transform3D(avatar_contact_shadow.global_basis, STORY_GUEST + Vector3.UP * 0.008)
+		contact.global_transform = Transform3D(avatar_contact_shadow.global_basis, to_global(STORY_GUEST) + Vector3.UP * 0.008)
 
 
 func _hide_story_feature(feature: Node3D) -> void:
@@ -293,7 +293,15 @@ func _on_floor_plan(point: Vector2) -> bool:
 	for rect in LAND:
 		if rect.has_point(point):
 			return true
-	return false
+	return _open_ground(point)
+
+
+func is_walkable(position: Vector3) -> bool:
+	var at := Vector2(position.x, position.z)
+	for offset in FOOTPRINT:
+		if not _on_floor_plan(at + offset):
+			return false
+	return true
 
 
 func _height_at(at: Vector2) -> float:
@@ -334,7 +342,7 @@ func _can_record_footing(position: Vector3, surface: float) -> bool:
 
 
 func _constrain_player(previous_position: Vector3) -> bool:
-	var current := player.position
+	var current := player_spot()
 	var support := ground_surface_y(current)
 	if not _safe_standing(previous_position) or not _safe_standing(current) or previous_position.y > support + 0.40:
 		return _restore_footing()
@@ -344,10 +352,8 @@ func _constrain_player(previous_position: Vector3) -> bool:
 
 
 func _restore_footing() -> bool:
-	player.position = _last_safe
-	player.velocity = Vector3.ZERO
 	_recoveries += 1
-	_sync_external_avatar_reposition()
+	place_player(_last_safe)
 	return true
 
 
@@ -424,17 +430,22 @@ func set_time_of_day(phase_id: Variant) -> void:
 	_coordinate_lighting()
 
 
+const HAZE := {"dawn": Color("#93a48c"), "noon": Color("#849e8a"), "dusk": Color("#5f6c66"), "night": Color("#22363f")}
+const AMBIENT := {"dawn": Color("#f1ddc6"), "noon": Color("#e6ead2"), "dusk": Color("#d9b8a2"), "night": Color("#8a9aa8")}
+const AMBIENT_ENERGY := {"dawn": 0.5, "noon": 0.52, "dusk": 0.48, "night": 0.38}
+
 ## The greenhouse keeps the island's sun but filters it: greener air, a softer key
 ## light, and nights bright enough to read by the glow of the plants.
+func _air(phase: String, island: Dictionary) -> Dictionary:
+	return {
+		"sky": HAZE[phase], "fog": HAZE[phase], "ambient": AMBIENT[phase], "ambient_energy": AMBIENT_ENERGY[phase],
+		"sun": (island.sun as Color).lerp(Color("#dfebce"), 0.35), "sun_energy": minf(float(island.sun_energy), 1.05),
+	}
+
+
+## Louvre light, night buds and lanterns follow the time of day.
 func _coordinate_lighting() -> void:
 	var evening := active_time_phase in ["dusk", "night"]
-	var haze: Color = {"dawn": Color("#93a48c"), "noon": Color("#849e8a"), "dusk": Color("#5f6c66"), "night": Color("#22363f")}[active_time_phase]
-	environment.background_color = haze
-	environment.fog_light_color = haze
-	environment.ambient_light_color = {"dawn": Color("#f1ddc6"), "noon": Color("#e6ead2"), "dusk": Color("#d9b8a2"), "night": Color("#8a9aa8")}[active_time_phase]
-	environment.ambient_light_energy = {"dawn": 0.5, "noon": 0.52, "dusk": 0.48, "night": 0.38}[active_time_phase]
-	sun.light_color = sun.light_color.lerp(Color("#dfebce"), 0.35)
-	sun.light_energy = minf(sun.light_energy, 1.05)
 	if not is_instance_valid(_louvers):
 		return
 	_louvers.set_light_gain(0.50 if evening else 0.68)
@@ -448,7 +459,7 @@ func map_snapshot() -> Dictionary:
 	var stops: Array[Dictionary] = []
 	for point in points:
 		stops.append({"id": point.id, "label": point.label, "position": point.position})
-	var at := player.position if is_instance_valid(player) else ENTRY
+	var at := player_spot() if is_instance_valid(player) else ENTRY
 	var lit := illuminated_bed()
 	return {"region": "garden", "bounds": BOUNDS, "land": LAND.duplicate(), "areas": AREAS.duplicate(true),
 		"points": stops, "player": at, "area": _area_at_position(at), "water": WETLAND_WATER, "boardwalk": BOARDWALK,

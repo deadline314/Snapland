@@ -6,6 +6,7 @@ const IslandLayout = preload("res://game/world/island_layout.gd")
 const IslandScenery = preload("res://game/world/island_scenery.gd")
 const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const IslandMapPanel = preload("res://game/ui/island_map_panel.gd")
+const DistrictSites = preload("res://game/world/district_sites.gd")
 
 ## Scene budget for the Welcome island (design/runtime/scene-building-standards.md).
 const NODE_BUDGET := 2600
@@ -38,14 +39,19 @@ func _run() -> void:
 	var projected_player: Vector2 = world.camera.unproject_position(world.player.global_position)
 	var player_screen_y: float = projected_player.y / world.get_viewport().get_visible_rect().size.y
 	_check(player_screen_y > 0.47 and player_screen_y < 0.61, "camera places the avatar's ground point near the lower center instead of under the prompt")
-	_check(world.shoreline_rock_count <= 30, "shoreline rocks use separated clusters rather than a continuous perimeter row")
+	var shore_length := 0.0
+	var shore := IslandShape.coast()
+	for index in shore.size():
+		shore_length += shore[index].distance_to(shore[(index + 1) % shore.size()])
+	_check(world.shoreline_rock_count <= ceili(shore_length / IslandScenery.ROCK_CLUSTER_SPACING) * 3, "shoreline rocks use separated clusters rather than a continuous perimeter row (%d along %.0f m)" % [world.shoreline_rock_count, shore_length])
 	_check_welcome_water(world)
 	_check_ground_layers(world)
 	_check_ferry(world)
 	var game_points: Dictionary = {}
 	for point in world.points:
 		var point_id := String(point.get("id", ""))
-		if point_id.begins_with("game-"):
+		# Districts list their own entries in the island too; these are the island's own.
+		if point_id.begins_with("game-") and not point.has("region"):
 			game_points[point_id] = point.get("position")
 	_check(game_points.size() == 12, "all twelve stable game point IDs remain registered")
 	var positions: Array[Vector3] = []
@@ -161,7 +167,12 @@ func _run() -> void:
 		_check(marker != null and marker.global_position.y - Vector3(marker_point.position).y > character_sprite_height + 0.3, "%s marker clears the character's head" % point_id)
 	await _check_coastal_extension(world)
 	_check_map_chart(world)
+	# The walk above woke the districts it passed; each keeps its own budget.
 	var nodes: int = world.find_children("*", "Node", true, false).size() + 1
+	for district: Node in world.district_host.districts.values():
+		var own := district.find_children("*", "Node", true, false).size() + 1
+		_check(own <= 900, "%s stays inside the district node budget (%d)" % [district.name, own])
+		nodes -= own
 	_check(nodes + GPU_ONLY_NODES <= NODE_BUDGET, "the larger island stays inside the Welcome node budget (%d headless, %d allowed with a GPU)" % [nodes, NODE_BUDGET])
 	world.queue_free()
 	await process_frame
@@ -399,7 +410,8 @@ func _check_planting(world: Node) -> void:
 	for kind in ["oak", "ginkgo", "palm", "pine", "shrub", "planter"]:
 		if not world.foliage_textures.has(kind): continue
 		for sprite: Sprite3D in world.find_children("*", "Sprite3D", true, false):
-			if sprite.texture != world.foliage_textures[kind]: continue
+			# A district plants by its own plan (its quays and yards are not the island's shore).
+			if sprite.texture != world.foliage_textures[kind] or sprite.get_parent() != world: continue
 			var height := sprite.pixel_size * sprite.texture.get_height()
 			var anchor := sprite.global_position - Vector3(0, height * 0.5, 0)
 			_check(IslandShape.distance_to_coast(Vector2(anchor.x, anchor.z)) >= 1.5, "%s at %s keeps 1.5 m back from the waterline" % [kind, anchor])
@@ -625,6 +637,8 @@ func _check_map_chart(world: Node) -> void:
 		placed += 1
 		if id == "arrival":
 			_check(chart.walk_chart.has_point(marker) and not Geometry2D.is_point_in_polygon(marker, outline) and marker.y > frame.get_center().y, "the dock marker sits on the pier, south of the shore")
+		elif point.has("region"):
+			if not chart.district_plot(str(point.region)).grow(1.0).has_point(marker): misplaced += 1
 		elif not Geometry2D.is_point_in_polygon(marker, outline):
 			misplaced += 1
 	_check(placed >= 44 and misplaced == 0, "every map marker falls inside the drawn island (%d of %d outside)" % [misplaced, placed])

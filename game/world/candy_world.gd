@@ -81,6 +81,14 @@ func set_time_of_day(phase_id: Variant) -> void:
 	if _scenery != null:
 		_scenery.apply_time_of_day(lamp_energy_for_phase)
 
+## Sugar air: rosy light, a warmer sun and colours a little sweeter than outside.
+func _air(_phase: String, island: Dictionary) -> Dictionary:
+	return {
+		"ambient": (island.ambient as Color).lerp(Color("#ffc9dd"), 0.34), "fog": (island.fog as Color).lerp(Color("#f3bfd2"), 0.4),
+		"sky": (island.sky as Color).lerp(Color("#f0c4d6"), 0.3), "sun": (island.sun as Color).lerp(Color("#ffe0ec"), 0.25),
+		"saturation": 1.17, "glow": float(island.glow) + 0.02,
+	}
+
 func _process(delta: float) -> void:
 	super._process(delta)
 	if reduced_motion:
@@ -118,7 +126,10 @@ func ground_surface_y(position: Vector3) -> float:
 func _is_land(point: Vector2) -> bool:
 	for rect in LAND:
 		if rect.has_point(point): return true
-	return false
+	return _open_ground(point)
+
+func is_walkable(position: Vector3) -> bool:
+	return _safe_footing(position)
 
 func _safe_footing(position: Vector3) -> bool:
 	for offset in [Vector2(-0.3, -0.3), Vector2(-0.3, 0.3), Vector2(0.3, -0.3), Vector2(0.3, 0.3)]:
@@ -126,11 +137,11 @@ func _safe_footing(position: Vector3) -> bool:
 	return true
 
 func _constrain_player(previous_position: Vector3) -> bool:
-	if player.position.y < -1.0 or not _safe_footing(previous_position):
+	if player_spot().y < -1.0 or not _safe_footing(previous_position):
 		reset_to_entry()
 		return true
-	if not _safe_footing(player.position):
-		player.position = previous_position
+	if not _safe_footing(player_spot()):
+		_set_player_spot(previous_position)
 		player.velocity = Vector3.ZERO
 	return false
 
@@ -151,24 +162,12 @@ func _apply_temperature() -> void:
 
 func reset_to_entry() -> bool:
 	if not is_instance_valid(player): return false
-	player.position = ENTRY
-	player.velocity = Vector3.ZERO
-	_sync_external_avatar_reposition()
-	avatar_is_walking = false
-	walk_distance_phase = 0.0
-	avatar_action = ""
-	avatar_action_remaining = 0.0
-	avatar_action_elapsed = 0.0
-	if is_instance_valid(avatar_hair_rig): avatar_hair_rig.reset_motion()
-	if is_instance_valid(camera):
-		camera.position = ENTRY + CAMERA_OFFSET
-		camera.look_at(ENTRY + Vector3(0, 1, 0))
-	_refresh_avatar_texture(0)
-	_update_sprite_grounding()
+	place_player(ENTRY)
+	_host().settle_avatar()
 	return true
 
 func map_snapshot() -> Dictionary:
 	var map_points: Array[Dictionary] = []
 	for point in points:
 		map_points.append({"id": point.id, "label": point.label, "position": point.position})
-	return {"bounds": BOUNDS, "land": LAND.duplicate(), "points": map_points, "player": player.position if is_instance_valid(player) else ENTRY, "temperature": _temperature, "region": "candy"}
+	return {"bounds": BOUNDS, "land": LAND.duplicate(), "points": map_points, "player": player_spot() if is_instance_valid(player) else ENTRY, "temperature": _temperature, "region": "candy"}

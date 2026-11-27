@@ -33,7 +33,9 @@ static func build_ground(world: Node3D) -> void:
 static func _build_sea(world: Node3D) -> void:
 	var sea_mesh := PlaneMesh.new()
 	sea_mesh.size = SEA_SIZE
-	world._mesh(sea_mesh, Vector3(IslandShape.CENTER.x, SEA_Y, IslandShape.CENTER.y), world.welcome_sea_material).name = "WelcomeBayWater"
+	# Centred on the land, so the sea stays wide on every side as the island grows.
+	var middle := IslandShape.bounds().get_center()
+	world._mesh(sea_mesh, Vector3(middle.x, SEA_Y, middle.y), world.welcome_sea_material).name = "WelcomeBayWater"
 
 static func _build_beach(world: Node3D) -> void:
 	# The beach is the land itself: a flat top just under the lawn whose rim
@@ -71,6 +73,7 @@ static func _build_lawn(world: Node3D) -> void:
 		_add_flat_polygon(outline, 0.0, vertices, normals, indices)
 	var grass := ShaderMaterial.new()
 	grass.shader = world.GRASS
+	world.material_cache["welcome-lawn"] = grass
 	world._mesh(_array_mesh(vertices, normals, indices), Vector3(0, IslandLayout.LAWN_Y, 0), grass).name = "WelcomeLawn"
 
 static func _build_paving(world: Node3D) -> void:

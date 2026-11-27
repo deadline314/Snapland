@@ -1,7 +1,35 @@
 extends Node3D
 ## Original modular island scenery. All interactions remain data driven.
+##
+## Districts. A region world (any script that extends this one) runs in one of
+## two modes:
+## - standalone: it owns the walker, the camera, the sun and the Environment.
+##   Tests build regions this way, and so does a region that is not on the
+##   island yet.
+## - embedded: `embedded_in` is the island world and `district` its region id;
+##   DistrictHost sets both and adds it as a child at its site (DistrictSites).
+##   It then builds only its own geometry, shares the host's walker, camera,
+##   sun, Environment, lamp list, ground-contact lists, occlusion controller
+##   and material cache, and leaves movement, lamp choice and the sky to the
+##   host. Its interaction points are also listed in the host, in world space.
+## For a region script to work in both modes it must:
+## 1. read and move the walker with player_spot() and place_player() (its own
+##    coordinates in either mode), never player.position;
+## 2. end its own "is this floor" test with `or _open_ground(point)`, and
+##    answer is_walkable(position) in its own coordinates;
+## 3. describe its light as data in _air(phase, island) instead of writing the
+##    Environment or the sun;
+## 4. keep dressing beyond its floors inside dress_rect(...) and filter
+##    scattered pieces with dresses(point), so the island supplies the
+##    surroundings when it is embedded.
 signal interaction_requested(id: String, label: String)
 signal area_changed(label: String)
+## The district the walker stands in changed ("welcome" for the island itself).
+signal district_changed(region: String)
+## A sticker gate opened while playing.
+signal gate_opened(region: String)
+const DistrictSites = preload("res://game/world/district_sites.gd")
+const DistrictHostScript = preload("res://game/world/district_host.gd")
 const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const CoastalPlay = preload("res://game/world/coastal_play.gd")
 const IslandShape = preload("res://game/world/island_shape.gd")
@@ -216,8 +244,23 @@ var island_attractions: Node
 var field_games: Node3D
 ## Raises only the avatar's picture (a hop); the body, shadow and footing stay put.
 var avatar_visual_lift := 0.0
+## Embedded mode (see the district notes at the top of this file).
+var embedded_in: Node3D
+var district := ""
+var district_ready := false
+## The island world's keeper of embedded districts; null in a region world.
+var district_host: Node
+## The sky, sun and air this world wants in the current phase (see environment_target).
+var air_target: Dictionary = {}
+var _air_blend: Dictionary = {}
+var _site: Dictionary = {}
+var _gate_leaves: Dictionary = {}
+var _gate_leaf_mesh: ArrayMesh
 
 func _ready() -> void:
+	if embedded_in != null:
+		_ready_embedded()
+		return
 	active_lamp_indices.resize(ACTIVE_LAMP_LIMIT)
 	lamp_candidate_distances.resize(ACTIVE_LAMP_LIMIT)
 	shadow_lamp_indices.resize(SHADOW_LAMP_LIMIT)
@@ -280,7 +323,228 @@ func _build_region_geometry() -> void:
 func _ambience_profile() -> Dictionary:
 	return AmbienceProfiles.profile(AmbienceProfiles.region_for(self))
 
+# --- Districts -------------------------------------------------------------
+
+## State an embedded district takes from its host by reference instead of
+## building its own.
+const SHARED_WITH_HOST := [
+	"player", "avatar", "avatar_renderer", "avatar_contact_shadow", "camera", "sun", "environment",
+	"occlusion_controller", "lamps", "material_cache", "coastal_atlas", "contact_shadow_material",
+	"foliage_textures", "foliage_atlas_loaded", "foliage_materials", "foliage_shadow_casters",
+	"sprite_ground_anchors", "contact_shadows", "actor_shadow_proxies",
+	"identity_atlas", "identity_textures", "character_frames", "avatar_appearance", "avatar_equipped",
+]
+
+func _ready_embedded() -> void:
+	_site = DistrictSites.SITES[district]
+	for shared: String in SHARED_WITH_HOST:
+		set(shared, embedded_in.get(shared))
+	component_motion = ComponentAnimationScript.new()
+	component_motion.name = "ComponentAnimation"
+	add_child(component_motion)
+	_build_region_geometry()
+	_build_fitting_batches()
+	_register_npc_activity()
+	component_motion.finish_registration()
+	# The island already shades the ground with clouds; a district adds only its own air.
+	var air := _ambience_profile().duplicate()
+	air["clouds"] = 0.0
+	ambience = WorldAmbienceScript.new()
+	ambience.name = "WorldAmbience"
+	add_child(ambience)
+	ambience.configure(self, air)
+	_update_npc_name_labels(true)
+	district_ready = true
+
+## The world that owns the walker and the camera: the host, or this world itself.
+func _host() -> Node3D:
+	return embedded_in if embedded_in != null else self
+
+## The walker's position in this world's own coordinates.
+func player_spot() -> Vector3:
+	return to_local(player.global_position) if embedded_in != null else player.position
+
+## Stand the walker at a spot given in this world's own coordinates and let the
+## camera and pose catch up with the move.
+func place_player(spot: Vector3) -> void:
+	_set_player_spot(spot)
+	player.velocity = Vector3.ZERO
+	_host()._sync_external_avatar_reposition()
+
+## Move the walker only; movement limits use this every tick.
+func _set_player_spot(spot: Vector3) -> void:
+	if embedded_in != null: player.global_position = to_global(spot)
+	else: player.position = spot
+
+## Drop any pose or stride in progress and frame the walker where it now stands.
+func settle_avatar() -> void:
+	avatar_is_walking = false
+	walk_distance_phase = 0.0
+	avatar_action = ""
+	avatar_action_remaining = 0.0
+	avatar_action_elapsed = 0.0
+	if is_instance_valid(avatar_hair_rig): avatar_hair_rig.reset_motion()
+	if is_instance_valid(camera):
+		camera.position = player.position + CAMERA_OFFSET
+		camera.look_at(player.position + Vector3(0, 1, 0))
+	_refresh_avatar_texture(0)
+	_update_sprite_grounding()
+
+## Embedded only. True where a spot outside this district's own floors can still
+## be stood on: its approach strip once its gate is open, and anywhere beyond
+## its claim that the island allows.
+func _open_ground(spot: Vector2) -> bool:
+	if embedded_in == null: return false
+	if (_site.approach as Rect2).has_point(spot): return embedded_in.district_host.gate_is_open(district)
+	if (_site.claim as Rect2).has_point(spot): return false
+	return embedded_in.island_walkable(spot + Vector2(position.x, position.z))
+
+## True where this world should place a scattered piece of dressing. Embedded,
+## pieces outside the claim thin out across the transition band and keep to
+## open island lawn.
+func dresses(spot: Vector2) -> bool:
+	if embedded_in == null or (_site.claim as Rect2).has_point(spot): return true
+	var at := spot + Vector2(position.x, position.z)
+	return DistrictSites.ground_weight(district, at) > DistrictSites.chance(at) and embedded_in.band_site_clear(at)
+
+## How far this world's own ground reaches: `authored` standalone, the claim embedded.
+func dress_rect(authored: Rect2) -> Rect2:
+	return authored if embedded_in == null else authored.intersection(_site.claim)
+
+## True where fixed dressing belongs: anywhere standalone, inside the claim embedded.
+func in_dress_reach(spot: Vector2) -> bool:
+	return embedded_in == null or (_site.claim as Rect2).has_point(spot)
+
+## Ground height at a spot in this district's own coordinates, for the host.
+func district_ground_y(spot: Vector3) -> float:
+	if (_site.approach as Rect2).has_point(Vector2(spot.x, spot.z)): return float(_site.approach_y)
+	return ground_surface_y(spot)
+
+## True on island ground a walker may stand on, ignoring districts.
+func island_walkable(spot: Vector2) -> bool:
+	return IslandLayout.DOCK_WALK.has_point(spot) or (IslandShape.contains(spot, IslandShape.WALK_MARGIN) and not IslandLayout.in_pond(spot))
+
+## True on open island lawn where a district may stand a transition-band prop.
+func band_site_clear(spot: Vector2) -> bool:
+	return IslandShape.on_lawn(spot, IslandLayout.TREE_SHORE_MARGIN) and not IslandLayout.on_path(spot, IslandLayout.TREE_PATH_MARGIN) \
+		and not IslandLayout.keeps_clear(spot) and not DistrictSites.claims(spot)
+
+const AIR_KEYS := ["sky", "fog", "ambient", "ambient_energy", "sun", "sun_energy", "glow", "saturation"]
+const AIR_GLOW := {"dawn": 0.025, "noon": 0.025, "dusk": 0.045, "night": 0.08}
+
+## What this world wants the shared sky, sun and air to be in `phase`: the
+## island's daylight with this region's own changes (_air) laid over it.
+func environment_target(phase: String) -> Dictionary:
+	var profile: Dictionary = TimeOfDayScript.phase_for_id(phase)
+	var sky: Color = profile.sky_color
+	var ambient: Color = profile.ambient_color
+	var target := {
+		"sky": sky, "fog": sky.lerp(ambient, 0.28), "ambient": ambient, "ambient_energy": float(profile.ambient_energy) * 0.58,
+		"sun": profile.key_color, "sun_energy": float(profile.key_energy), "glow": float(AIR_GLOW[phase]), "saturation": 1.08,
+	}
+	target.merge(_air(phase, target), true)
+	return target
+
+## A region's own light for `phase`: any of AIR_KEYS, given the island's values.
+func _air(_phase: String, _island: Dictionary) -> Dictionary:
+	return {}
+
+func _write_air(target: Dictionary) -> void:
+	environment.background_color = target.sky
+	environment.fog_light_color = target.fog
+	environment.ambient_light_color = target.ambient
+	environment.ambient_light_energy = target.ambient_energy
+	environment.glow_intensity = target.glow
+	environment.adjustment_saturation = target.saturation
+	sun.light_color = target.sun
+	sun.light_energy = target.sun_energy
+
+## Repaint the shared sky and sun from this world's target and whatever share of
+## each district's target reaches the walker.
+func blend_air() -> void:
+	if air_target.is_empty(): return
+	for key: String in AIR_KEYS:
+		_air_blend[key] = air_target[key]
+	if is_instance_valid(district_host): district_host.blend_air(_air_blend, AIR_KEYS)
+	_write_air(_air_blend)
+
+## Lawn tint toward every district, and holes in the lawn and beach where a
+## built district sinks its own water below ground.
+func bind_district_ground(built: Array) -> void:
+	var holes: Array[Vector4] = []
+	for region: String in built:
+		for hole: Rect2 in DistrictSites.SITES[region].cutouts:
+			var corner := DistrictSites.to_world(region, Vector3(hole.position.x, 0, hole.position.y))
+			holes.append(Vector4(corner.x, corner.z, corner.x + hole.size.x, corner.z + hole.size.y))
+	var count := mini(holes.size(), 8)
+	holes.resize(8)
+	for key: String in ["welcome-lawn", "welcome-beach"]:
+		var ground := material_cache.get(key) as ShaderMaterial
+		if ground == null: continue
+		ground.set_shader_parameter("cutouts", holes)
+		ground.set_shader_parameter("cutout_count", count)
+	var lawn := material_cache.get("welcome-lawn") as ShaderMaterial
+	if lawn == null: return
+	lawn.set_shader_parameter("district_tint", IslandShape.district_tint())
+	lawn.set_shader_parameter("tint_origin", IslandShape.sdf_origin())
+	lawn.set_shader_parameter("tint_inverse_size", IslandShape.sdf_inverse_size())
+	lawn.set_shader_parameter("district_blend", true)
+
+## Share of the light and air at the walker: one entry per district plus the
+## island's own under "welcome"; the shares sum to 1.
+func district_weights() -> Dictionary:
+	var shares := {"welcome": 1.0}
+	if is_instance_valid(district_host):
+		shares.merge(district_host.weights)
+		shares["welcome"] = district_host.island_share()
+	return shares
+
+## Where fast travel sets the walker down for `region`, in world space; the
+## district is built first if needed. Vector3.INF when it cannot be reached.
+func arrival_point(region: String) -> Vector3:
+	if region == "welcome": return _player_spawn_position()
+	if not is_instance_valid(district_host) or district_host.ensure(region) == null: return Vector3.INF
+	return DistrictSites.arrival(region)
+
+## The built district for `region`, or this world for "welcome" and for a
+## region world that stands alone.
+func region_world(region: String) -> Node3D:
+	var node: Node3D = district_host.built(region) if is_instance_valid(district_host) else null
+	return node if node != null else self
+
+## Stand the walker where a save left it: at `saved` while that is still ground
+## it may stand on, otherwise at `region`'s arrival point. A save from before
+## the island was continuous has no position and lands at the arrival point.
+func restore_walker(saved: Vector3, region: String) -> void:
+	if not is_instance_valid(district_host): return
+	var spot := Vector3.INF
+	if saved.is_finite() and saved.y > -1.0 and saved.y < 6.0:
+		district_host.ensure(DistrictSites.ruling(Vector2(saved.x, saved.z)))
+		if is_walkable(saved): spot = saved
+	if not spot.is_finite() and region != "welcome": spot = arrival_point(region)
+	if spot.is_finite():
+		place_player(spot + Vector3(0, 0.05, 0))
+		settle_avatar()
+	refresh_standing()
+
+## Work out again which district the walker stands in, after it was moved.
+func refresh_standing() -> void:
+	if is_instance_valid(district_host): district_host.track(player.position, 0.0)
+
+## The district the walker stands in, or "welcome".
+func standing_region() -> String:
+	return district_host.standing if is_instance_valid(district_host) else "welcome"
+
+## Hand the sticker count to the gates (see DistrictHost.set_sticker_count).
+func set_sticker_count(count: int) -> void:
+	if is_instance_valid(district_host): district_host.set_sticker_count(count)
+
 func _build_region_activities() -> void:
+	district_host = DistrictHostScript.new()
+	district_host.name = "DistrictHost"
+	add_child(district_host)
+	district_host.configure(self)
+	bind_district_ground([])
 	coastal_play=CoastalPlay.new()
 	coastal_play.name="CoastalFreePlay"
 	add_child(coastal_play)
@@ -292,6 +556,9 @@ func _build_region_activities() -> void:
 
 
 func _exit_tree() -> void:
+	if embedded_in != null:
+		if is_instance_valid(npc_activity): npc_activity.release()
+		return
 	_stop_follow_interpolation()
 	if is_instance_valid(island_attractions):
 		island_attractions.end_ride()
@@ -482,6 +749,9 @@ static func sprite_ground_anchor_y(
 	return ground_y - parent_world_y - sprite_local_y + feet_from_center * camera_up_y
 
 func ground_surface_y(world_position: Vector3) -> float:
+	if is_instance_valid(district_host):
+		var rules: Node3D = district_host.ruling(world_position)
+		if rules != null: return rules.district_ground_y(rules.to_local(world_position))
 	return _ground_surface_y(world_position)
 
 static func _ground_surface_y(world_position: Vector3) -> float:
@@ -522,6 +792,9 @@ func _register_sprite_ground_anchor(sprite: Sprite3D, anchor: Node3D, parent: No
 	})
 
 func _update_sprite_grounding() -> void:
+	if embedded_in != null:
+		embedded_in._update_sprite_grounding()
+		return
 	if not is_instance_valid(camera):
 		return
 	var camera_up_y := camera.global_basis.y.y
@@ -776,6 +1049,9 @@ func _update_district_label_visibility() -> void:
 		label.visible=dx*dx+dz*dz<=100.0
 	if is_instance_valid(story_landmarks):
 		story_landmarks.update_signpost_visibility(player.position)
+	if is_instance_valid(district_host):
+		for region: String in district_host.districts:
+			if district_host.is_awake(region): district_host.districts[region]._update_district_label_visibility()
 
 ## Interaction markers float above the 2.4-unit character sprites so they never cover a
 ## face; low attraction props pass their own smaller height.
@@ -783,6 +1059,8 @@ const DEFAULT_MARKER_HEIGHT := 2.85
 const NPC_ROLE_BY_POINT := {"guide":"ticket", "quest-001":"imp", "quest-002":"announcer"}
 
 func _point(id: String, title: String, pos: Vector3, marker_height := DEFAULT_MARKER_HEIGHT) -> void:
+	# On the island the way back is the road, so an embedded district keeps no return point.
+	if embedded_in != null and id == "region:welcome": return
 	var marker := _label("◇", pos + Vector3(0,marker_height,0), 38, GOLD)
 	_register_interaction_point(id, title, pos, marker)
 	# Capture the marker's animation baseline after attaching it to the actor.
@@ -797,6 +1075,8 @@ func _register_interaction_point(id: String, title: String, pos: Vector3, marker
 	marker.hide()
 	var point := {"id": id, "label": title, "position": pos, "marker": marker}
 	points.append(point)
+	if embedded_in != null:
+		embedded_in.points.append({"id": id, "label": title, "position": to_global(pos), "marker": marker, "region": district})
 	return point
 
 func _register_npc_activity() -> void:
@@ -2036,7 +2316,7 @@ func _build_gates() -> void:
 	for i in range(1,zones.size()):
 		var zone: Dictionary=zones[i]
 		var region: String = zone["id"]
-		if not IslandLayout.GATES.has(region):
+		if not IslandLayout.has_gate(region):
 			push_warning("No gate site for region '%s'; gate omitted." % region)
 			continue
 		var gate := Node3D.new()
@@ -2066,6 +2346,7 @@ func _build_gates() -> void:
 		_local_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
 		_adopt_district_geometry(gate,first_part)
 		_fitting_space = Transform3D.IDENTITY
+		if DistrictSites.has(region): _add_gate_leaves(gate, region)
 		_point("gate:"+region,zone["name"],IslandLayout.gate_point(region))
 		var open := RegionRoutes.supports(region)
 		var required: int = RegionRoutes.threshold(region) if open else int(zone["threshold"])
@@ -2080,6 +2361,55 @@ func _build_gates() -> void:
 		light.light_energy = 0.0
 		add_child(light)
 		lamps.append(light)
+
+const GATE_OPEN_ANGLE := 1.75
+const GATE_SWING_SECONDS := 0.9
+
+## Two barred leaves between the pillars: shut until the district's sticker
+## threshold is met, and you can see through them.
+func _add_gate_leaves(gate: Node3D, region: String) -> void:
+	if _gate_leaf_mesh == null:
+		var bars := SurfaceTool.new()
+		bars.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var bar := BoxMesh.new()
+		for index in 6:
+			bars.append_from(bar, 0, Transform3D(Basis().scaled(Vector3(0.06, 1.62, 0.06)), Vector3(0.1 + float(index) * 0.17, 1.13, 0)))
+		for rail: float in [0.36, 1.9]:
+			bars.append_from(bar, 0, Transform3D(Basis().scaled(Vector3(1.0, 0.09, 0.08)), Vector3(0.52, rail, 0)))
+		_gate_leaf_mesh = bars.commit()
+	var leaves: Array[MeshInstance3D] = []
+	for side: float in [-1.0, 1.0]:
+		var leaf := MeshInstance3D.new()
+		leaf.name = "GateLeaf"
+		leaf.mesh = _gate_leaf_mesh
+		leaf.material_override = _mat(Color("#2c4a4d"))
+		# Hinged on its pillar; the right leaf is the left one turned round.
+		leaf.position = Vector3(side * 1.04, 0, 0)
+		leaf.rotation.y = 0.0 if side < 0.0 else PI
+		leaf.set_meta("hinge", side)
+		gate.add_child(leaf)
+		leaves.append(leaf)
+		mesh_count += 1
+	_gate_leaves[region] = leaves
+
+## Swing a district's gate open or shut and reword its sign.
+func show_gate(region: String, open: bool, celebrate: bool) -> void:
+	var status := find_child("GateStatus_" + region, false, false) as Label3D
+	if status != null:
+		status.text = "已開放 · 請進" if open else "%d 張 · 不消耗" % RegionRoutes.threshold(region)
+	for leaf: MeshInstance3D in _gate_leaves.get(region, []):
+		var side: float = leaf.get_meta("hinge")
+		var closed := 0.0 if side < 0.0 else PI
+		var target := closed - (side * GATE_OPEN_ANGLE if open else 0.0)
+		if celebrate and not reduced_motion and is_inside_tree():
+			create_tween().tween_property(leaf, "rotation:y", target, GATE_SWING_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		else:
+			leaf.rotation.y = target
+	if celebrate: play_action("celebrate")
+
+func gate_leaf_angle(region: String) -> float:
+	var leaves: Array = _gate_leaves.get(region, [])
+	return absf(float(leaves[0].rotation.y)) if not leaves.is_empty() else 0.0
 
 func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 	match index:
@@ -2590,6 +2920,9 @@ func _reset_follow_interpolation() -> void:
 		camera.reset_physics_interpolation()
 
 func _sync_external_avatar_reposition() -> void:
+	if embedded_in != null:
+		embedded_in._sync_external_avatar_reposition()
+		return
 	if not is_instance_valid(player): return
 	var current_position := player.global_position
 	if not avatar_last_physics_position_valid:
@@ -2647,17 +2980,44 @@ func _constrain_player(_previous_position: Vector3) -> bool:
 		return true
 	return false
 
+## The walker stays on standable ground: inside a district its own floor plan
+## decides, elsewhere the island does, and the two only meet on an approach.
+func _constrain_walker(previous_position: Vector3) -> bool:
+	var here := DistrictSites.ruling(Vector2(player.position.x, player.position.z)) if is_instance_valid(district_host) else ""
+	if here.is_empty(): return _constrain_player(previous_position)
+	var rules: Node3D = district_host.built(here)
+	if rules != null and DistrictSites.ruling(Vector2(previous_position.x, previous_position.z)) == here:
+		return rules._constrain_player(rules.to_local(previous_position))
+	# Stepping in from the island: only onto ground the district lets a walker stand on.
+	if rules == null or not rules.is_walkable(rules.to_local(player.position)):
+		player.position.x = previous_position.x
+		player.position.z = previous_position.z
+		player.velocity = Vector3.ZERO
+	return false
+
 ## True where the avatar can stand. Placement data asks this instead of
 ## assuming the island's current outline.
 func is_walkable(position: Vector3) -> bool:
 	var spot := Vector2(position.x,position.z)
-	return IslandLayout.DOCK_WALK.has_point(spot) or (IslandShape.contains(spot,IslandShape.WALK_MARGIN) and not IslandLayout.in_pond(spot))
+	if is_instance_valid(district_host):
+		var region := DistrictSites.ruling(spot)
+		if not region.is_empty():
+			var rules: Node3D = district_host.built(region)
+			return rules != null and rules.is_walkable(rules.to_local(position))
+	return island_walkable(spot)
 
 func _area_at_position(position: Vector3) -> String:
-	return IslandShape.area_at(Vector2(position.x,position.z))
+	var spot := Vector2(position.x,position.z)
+	if is_instance_valid(district_host):
+		var region := DistrictSites.ruling(spot)
+		var rules: Node3D = district_host.built(region)
+		if rules != null and (rules._site.claim as Rect2).has_point(DistrictSites.to_local(region, spot)):
+			return rules._area_at_position(rules.to_local(position))
+		if district_host.standing != "welcome": return RegionRoutes.title(district_host.standing)
+	return IslandShape.area_at(spot)
 
 func _physics_process(delta: float) -> void:
-	if not is_instance_valid(player): return
+	if embedded_in != null or not is_instance_valid(player): return
 	_sync_external_avatar_reposition()
 	_update_district_label_visibility()
 	var riding := is_riding()
@@ -2694,7 +3054,7 @@ func _physics_process(delta: float) -> void:
 	var previous_position: Vector3=player.position
 	var previous_world_position: Vector3=player.global_position
 	player.move_and_slide()
-	var recovered := _constrain_player(previous_position)
+	var recovered := _constrain_walker(previous_position)
 	if recovered:
 		previous_position=player.position
 		previous_world_position=player.global_position
@@ -2791,6 +3151,7 @@ func _physics_process(delta: float) -> void:
 	if avatar_motion_available: _sync_avatar_motion_camera()
 	_update_sprite_grounding()
 	_update_npc_name_labels()
+	if is_instance_valid(district_host): district_host.track(player.position, delta)
 	var area := _area_at_position(player.position)
 	if area!=current_area:
 		current_area=area
@@ -2893,6 +3254,11 @@ func _update_avatar_pivot(movement: Vector2, velocity: Vector2, delta: float, fr
 	_avatar_pivot_remaining = duration
 
 func _process(delta: float) -> void:
+	if embedded_in != null:
+		# The host owns the walker, the lamps and the dialogue; a district only keeps time.
+		blocked = embedded_in.blocked
+		if not blocked: time += delta
+		return
 	if not blocked:
 		time+=delta
 		if not reduced_motion:
@@ -3014,7 +3380,7 @@ func interact() -> void:
 		interaction_requested.emit(nearest.id,nearest.label)
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if blocked or not event is InputEventKey or not event.pressed or event.echo: return
+	if embedded_in != null or blocked or not event is InputEventKey or not event.pressed or event.echo: return
 	if event.keycode == KEY_F:
 		play_action("wave")
 		get_viewport().set_input_as_handled()
@@ -3094,6 +3460,11 @@ func _avatar_action_duration(action: String, direction: String = "front") -> flo
 	return clampf(duration, 0.1, 8.0)
 
 func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
+	if embedded_in != null:
+		avatar_appearance = appearance
+		avatar_equipped = equipped
+		return
+	if is_instance_valid(district_host): district_host.set_avatar_look(appearance, equipped)
 	if avatar_appearance == appearance and avatar_equipped == equipped: return
 	var held_frame := maxi(0,last_avatar_frame)
 	avatar_appearance=appearance.duplicate(true)
@@ -3104,6 +3475,9 @@ func set_avatar_look(appearance: Dictionary, equipped: Dictionary) -> void:
 	_refresh_avatar_texture(held_frame)
 
 func _refresh_avatar_texture(frame: int) -> void:
+	if embedded_in != null:
+		embedded_in._refresh_avatar_texture(frame)
+		return
 	if not is_instance_valid(avatar) or avatar_renderer == null: return
 	var riding := is_riding()
 	var action := "sit" if riding else (avatar_action if avatar_action_remaining > 0.0 and not avatar_is_walking else ("walk" if avatar_is_walking else "idle"))
@@ -3178,18 +3552,11 @@ func set_time_of_day(phase_id: Variant) -> void:
 	active_time_phase = TimeOfDayScript.normalize(phase_id)
 	var profile: Dictionary = TimeOfDayScript.phase_for_id(active_time_phase)
 	night = active_time_phase == "night"
-	sun.rotation_degrees = profile.key_rotation_degrees
-	sun.light_color = profile.key_color
-	sun.light_energy = float(profile.key_energy)
-	environment.background_color = profile.sky_color
-	environment.ambient_light_color = profile.ambient_color
-	environment.ambient_light_energy = float(profile.ambient_energy) * 0.58
-	environment.fog_light_color = profile.sky_color.lerp(profile.ambient_color, 0.28)
-	match active_time_phase:
-		"dawn": environment.glow_intensity = 0.025
-		"noon": environment.glow_intensity = 0.025
-		"dusk": environment.glow_intensity = 0.045
-		"night": environment.glow_intensity = 0.08
+	air_target = environment_target(active_time_phase)
+	if embedded_in == null:
+		sun.rotation_degrees = profile.key_rotation_degrees
+		if is_instance_valid(district_host): district_host.set_phase(active_time_phase)
+		blend_air()
 	# Dawn lamps are still on at 05:30 but subdued; 0.18 left their pools almost
 	# invisible on the newly sunlit paving, so they read as switched off.
 	lamp_energy_for_phase = float({"dawn": 0.32, "noon": 0.0, "dusk": 0.48, "night": 0.82}[active_time_phase])
@@ -3201,8 +3568,10 @@ func set_time_of_day(phase_id: Variant) -> void:
 		welcome_sea_material.set_shader_parameter("dock_glow", lamp_energy_for_phase)
 	if ferry_window_glow != null:
 		ferry_window_glow.emission_energy_multiplier = lamp_energy_for_phase * 1.8
-	_update_lamp_selection(true)
 	if is_instance_valid(ambience): ambience.set_phase(active_time_phase)
+	# The host chooses lamps, grades painted scenery and grounds shadows for every district.
+	if embedded_in != null: return
+	_update_lamp_selection(true)
 	_apply_foliage_phase()
 	for record in contact_shadows:
 		var shadow := record.get("node") as Node3D
@@ -3220,7 +3589,8 @@ func _update_lamp_selection(force := false) -> void:
 		lamp_candidate_distances[slot] = INF
 	for lamp_index in range(lamps.size()):
 		var lamp := lamps[lamp_index]
-		if not is_instance_valid(lamp): continue
+		# A sleeping district's lamps are hidden with it and take no slot.
+		if not is_instance_valid(lamp) or not lamp.is_visible_in_tree(): continue
 		var distance := player.global_position.distance_squared_to(lamp.global_position)
 		for slot in range(ACTIVE_LAMP_LIMIT):
 			if distance >= lamp_candidate_distances[slot]: continue
@@ -3254,6 +3624,10 @@ func _update_lamp_selection(force := false) -> void:
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))
+	if embedded_in != null:
+		_apply_motion_setting()
+		return
+	if is_instance_valid(district_host): district_host.apply_settings(settings)
 	if reduced_motion:
 		_stop_follow_interpolation()
 		_avatar_departure_remaining = 0.0
@@ -3263,16 +3637,20 @@ func apply_settings(settings: Dictionary) -> void:
 		avatar_action_remaining = 0.0
 		avatar_action_elapsed = 0.0
 	set_avatar_hair_motion_enabled(avatar_hair_motion_enabled)
+	_apply_motion_setting()
+	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
+	if is_instance_valid(island_attractions): island_attractions.set_reduced_motion(reduced_motion)
+	_apply_render_quality(RenderQuality.normalize(settings.get("graphics_quality", RenderQuality.DEFAULT_LEVEL)))
+
+## Reduced motion for the moving things this world built itself.
+func _apply_motion_setting() -> void:
 	var water_motion := 0.0 if reduced_motion else 1.0
 	if sea_material != null: sea_material.set_shader_parameter("motion", water_motion)
 	if welcome_sea_material != null: welcome_sea_material.set_shader_parameter("motion", water_motion)
 	if fountain_water != null: fountain_water.set_shader_parameter("motion", water_motion)
 	if is_instance_valid(component_motion): component_motion.set_reduced_motion(reduced_motion)
 	if is_instance_valid(npc_activity): npc_activity.set_reduced_motion(reduced_motion)
-	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
-	if is_instance_valid(island_attractions): island_attractions.set_reduced_motion(reduced_motion)
 	if is_instance_valid(ambience): ambience.set_reduced_motion(reduced_motion)
-	_apply_render_quality(RenderQuality.normalize(settings.get("graphics_quality", RenderQuality.DEFAULT_LEVEL)))
 
 ## Apply a picture-quality level once; repeated settings refreshes cost nothing.
 func _apply_render_quality(level: String) -> void:
@@ -3330,6 +3708,8 @@ func _notification(what: int) -> void:
 
 func update_collection(photos: Dictionary) -> void:
 	for point in points:
+		# A district marks its own entries.
+		if point.has("region"): continue
 		var source := ""
 		if point.id.begins_with("game-"):
 			source="photo-welcome-game-%d"%int(point.id.trim_prefix("game-"))

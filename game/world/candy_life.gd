@@ -230,7 +230,8 @@ func _pose(still: bool) -> void:
 func _react(delta: float) -> void:
 	var player: Node3D = world.player
 	if not is_instance_valid(player): return
-	var here := Vector2(player.position.x, player.position.z)
+	var spot: Vector3 = world.player_spot()
+	var here := Vector2(spot.x, spot.z)
 	var watched := here.distance_to(Vector2(scenery.globe_centre.x, scenery.globe_centre.z)) < GUMBALL_NOTICE
 	_tumble_speed = move_toward(_tumble_speed, 1.5 if watched else 0.12, delta * 1.2)
 	_tumble += _tumble_speed * delta

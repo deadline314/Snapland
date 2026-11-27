@@ -165,7 +165,8 @@ func _scuttle_crabs(delta: float) -> void:
 	var player: Node3D = world.player
 	if not is_instance_valid(player): return
 	var time: float = world.time
-	var player_at := Vector2(player.position.x, player.position.z)
+	var spot: Vector3 = world.player_spot()
+	var player_at := Vector2(spot.x, spot.z)
 	for index in range(CRABS.size()):
 		var crab: Array = CRABS[index]
 		var home := Vector2(float(crab[0]), float(crab[2]))

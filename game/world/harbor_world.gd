@@ -91,7 +91,14 @@ func _build_entries() -> void:
 func set_time_of_day(phase_id: Variant) -> void:
 	super.set_time_of_day(phase_id)
 	if _scenery != null:
-		_scenery.apply_time_of_day(lamp_energy_for_phase, environment.background_color)
+		_scenery.apply_time_of_day(lamp_energy_for_phase, air_target.sky)
+
+## Sea air: a paler, cooler haze and a little more light thrown back off the water.
+func _air(_phase: String, island: Dictionary) -> Dictionary:
+	return {
+		"ambient": (island.ambient as Color).lerp(Color("#cfe9f2"), 0.26), "ambient_energy": float(island.ambient_energy) * 1.1,
+		"fog": (island.fog as Color).lerp(Color("#bfe0e8"), 0.35), "saturation": 0.98,
+	}
 
 func _process(delta: float) -> void:
 	super._process(delta)
@@ -133,7 +140,7 @@ func ground_surface_y(position: Vector3) -> float:
 func _is_land(point: Vector2) -> bool:
 	for rect in LAND:
 		if rect.has_point(point): return true
-	return not _high_tide and SANDBAR.has_point(point)
+	return (not _high_tide and SANDBAR.has_point(point)) or _open_ground(point)
 
 func _safe_footing(position: Vector3) -> bool:
 	var center := Vector2(position.x, position.z)
@@ -141,13 +148,16 @@ func _safe_footing(position: Vector3) -> bool:
 		if not _is_land(center + offset): return false
 	return true
 
+func is_walkable(position: Vector3) -> bool:
+	return _safe_footing(position)
+
 func _constrain_player(previous_position: Vector3) -> bool:
-	if player.position.y < -1.0 or not _safe_footing(previous_position):
-		player.position = SHORE_DOCK
+	if player_spot().y < -1.0 or not _safe_footing(previous_position):
+		_set_player_spot(SHORE_DOCK)
 		player.velocity = Vector3.ZERO
 		return true
-	if not _safe_footing(player.position):
-		player.position = previous_position
+	if not _safe_footing(player_spot()):
+		_set_player_spot(previous_position)
 		player.velocity = Vector3.ZERO
 	return false
 
@@ -156,7 +166,7 @@ func _area_at_position(_position: Vector3) -> String:
 
 func set_tide(high: bool) -> void:
 	if high == _high_tide: return
-	if high and is_instance_valid(player) and SANDBAR.grow(0.3).has_point(Vector2(player.position.x, player.position.z)):
+	if high and is_instance_valid(player) and SANDBAR.grow(0.3).has_point(Vector2(player_spot().x, player_spot().z)):
 		_relocate(SHORE_DOCK)
 	_high_tide = high
 	if _scenery != null and is_instance_valid(_scenery.sandbar_body):
@@ -180,13 +190,11 @@ func take_ferry(point_id: String) -> bool:
 	return true
 
 func _relocate(destination: Vector3) -> void:
-	player.position = destination
-	player.velocity = Vector3.ZERO
-	_sync_external_avatar_reposition()
+	place_player(destination)
 	_update_sprite_grounding()
 
 func map_snapshot() -> Dictionary:
 	var map_points: Array[Dictionary] = []
 	for point in points:
 		map_points.append({"id": point.id, "label": point.label, "position": point.position})
-	return {"bounds": BOUNDS, "land": LAND.duplicate(), "sandbar": SANDBAR, "points": map_points, "player": player.position, "high_tide": _high_tide}
+	return {"bounds": BOUNDS, "land": LAND.duplicate(), "sandbar": SANDBAR, "points": map_points, "player": player_spot(), "high_tide": _high_tide}

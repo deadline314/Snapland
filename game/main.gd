@@ -1,12 +1,10 @@
 extends Node
 const WorldScene = preload("res://game/world/park_world.gd")
-const HarborWorld = preload("res://game/world/harbor_world.gd")
-const CandyWorld = preload("res://game/world/candy_world.gd")
 const NightmarketWorld = preload("res://game/world/nightmarket_world.gd")
 const CircusWorld = preload("res://game/world/circus_world.gd")
 const ToyWorld = preload("res://game/world/toy_world.gd")
-const GardenWorld = preload("res://game/world/garden_world.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
+const DistrictSites = preload("res://game/world/district_sites.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const FieldGameChip = preload("res://game/ui/field_game_chip.gd")
@@ -109,6 +107,8 @@ func _ready() -> void:
 	world_region="welcome" if welcome_review else Progress.current_region
 	world=_new_region_world(world_region)
 	add_child(world)
+	if not welcome_review and _on_island(world_region):
+		world.restore_walker(Progress.player_position, world_region)
 	audio=Audio.new()
 	add_child(audio)
 	story=Story.new()
@@ -145,8 +145,35 @@ func _bind_world() -> void:
 	field_chip.bind(world.field_games)
 	world.interaction_requested.connect(_on_world_interaction_requested.bind(world))
 	world.area_changed.connect(_on_world_area_changed.bind(world))
+	world.district_changed.connect(_on_district_changed)
+	world.gate_opened.connect(_on_gate_opened)
 	_on_world_area_changed(world.current_area,world)
 	_mark_daily_picks()
+
+## Regions that stand on the continuous island share one world; the rest still
+## load a world of their own.
+func _on_island(region: String) -> bool:
+	return region=="welcome" or DistrictSites.has(region)
+
+## The world that carries the walker's region: an embedded district, or `world` itself.
+func region_world(region := "") -> Node3D:
+	return world.region_world(world_region if region.is_empty() else region)
+
+## The walker walked into another district: the HUD and the save follow.
+func _on_district_changed(region: String) -> void:
+	if quitting or changing_region or region==world_region or not _on_island(world_region): return
+	var previous := world_region
+	world_region=region
+	if not Progress.set_current_region(region):
+		world_region=previous
+		return
+	_hud_seen=_collection_totals()
+	_sync_audio_environment()
+	if session==null: audio.play_context(_island_audio_context())
+
+func _on_gate_opened(region: String) -> void:
+	audio.play_sfx("success")
+	_notice("%s的閘門打開了，直接走進去吧。" % RegionRoutes.title(region))
 
 func _on_world_interaction_requested(id: String, title: String, source: Node3D) -> void:
 	if source!=world: return
@@ -154,14 +181,11 @@ func _on_world_interaction_requested(id: String, title: String, source: Node3D) 
 
 func _new_region_world(region: String) -> Node3D:
 	match region:
-		"harbor": return HarborWorld.new()
-		"candy": return CandyWorld.new()
 		"nightmarket": return NightmarketWorld.new()
 		"circus": return CircusWorld.new()
 		"toy": return ToyWorld.new()
-		"garden": return GardenWorld.new()
 	var welcome := WorldScene.new()
-	welcome.allow_follow_interpolation = region == "welcome"
+	welcome.allow_follow_interpolation = true
 	return welcome
 
 func _region_name() -> String:
@@ -197,7 +221,8 @@ func _travel_to_region(destination: String) -> bool:
 func _transition_busy() -> bool:
 	return is_instance_valid(region_transition) and region_transition.busy()
 
-## Swap regions behind a cover so the blocking build never shows as a frozen view.
+## Move behind a cover: the camera jump inside the island, or the build of a
+## region that still has a world of its own, never shows as a frozen view.
 func _begin_region_travel(destination: String) -> void:
 	if not PaperMotion.has_display() or not is_instance_valid(region_transition):
 		# Interaction signals can still be on the old world's stack.
@@ -215,17 +240,27 @@ func _replace_region(destination: String, returning: bool = false) -> void:
 	if quitting: return
 	_close()
 	var departure := world_region
-	world.free()
 	world_region=destination
-	world=_new_region_world(destination)
-	add_child(world)
-	if returning and destination=="welcome":
-		for point in world.points:
-			if point.id=="gate:"+departure:
-				world.player.position=point.position+Vector3(0,0.3,1.8)
-				world.player.velocity=Vector3.ZERO
+	# Districts on the island are a walk apart: only the walker moves.
+	var same_world := _on_island(departure) and _on_island(destination)
+	if not same_world:
+		world.free()
+		world=_new_region_world(destination)
+		add_child(world)
+	if _on_island(destination):
+		var spot := Vector3.INF
+		if destination!="welcome":
+			spot=world.arrival_point(destination)
+		elif returning or same_world:
+			for point in world.points:
+				if point.id=="gate:"+departure: spot=point.position+Vector3(0,0.3,1.8)
+		if spot.is_finite():
+			world.place_player(spot)
+			world.settle_avatar()
+		world.refresh_standing()
 	world.current_area=world._area_at_position(world.player.position)
-	_bind_world()
+	if not same_world: _bind_world()
+	world.blocked=false
 	changing_region=false
 	_on_world_area_changed(world.current_area,world)
 	_refresh()
@@ -806,6 +841,7 @@ func _refresh() -> void:
 	audio.apply_settings(Progress.settings)
 	world.apply_settings(Progress.settings)
 	_apply_time_phase()
+	world.set_sticker_count(Progress.normal_count())
 	world.update_collection(Progress.photos)
 	_mark_daily_picks()
 	if world.has_method("set_story_progress"):
@@ -818,6 +854,7 @@ func _refresh() -> void:
 
 func _process(delta: float) -> void:
 	if quitting or changing_region: return
+	if is_instance_valid(world) and _on_island(world_region): Progress.player_position=world.player.global_position
 	if session!=null and DisplayServer.get_name()!="headless" and session.elapsed>=next_snapshot and not session.ended:
 		next_snapshot=session.elapsed+0.9
 		_sample_photo.call_deferred()
@@ -1413,20 +1450,23 @@ func _interact(id: String, title: String) -> void:
 	if id=="region:welcome":
 		_travel_to_region("welcome")
 		return
-	if not id.is_empty() and id == RegionalVisit.point_id(world_region):
-		_start_region_story_visit(world_region)
+	# A point belongs to the district that built it, wherever the walker's feet are.
+	var here := str(world._point_by_id(id).get("region","welcome")) if _on_island(world_region) else world_region
+	var place := region_world(here)
+	if not id.is_empty() and id == RegionalVisit.point_id(here):
+		_start_region_story_visit(here)
 		return
-	if id.begins_with("game-") and world_region in ["circus","toy","garden"] and Catalog.identity(id).get("zone","")==world_region:
+	if id.begins_with("game-") and here in ["circus","toy","garden"] and Catalog.identity(id).get("zone","")==here:
 		_show_game_info(id)
 		return
-	if world_region=="garden":
+	if here=="garden":
 		match id:
-			"garden:louvers": _notice(world.switch_louvers())
+			"garden:louvers": _notice(place.switch_louvers())
 			"garden:wetland": _notice("走木棧道穿過濕地床。北端接夜芽庭。")
 			"garden:vine": _notice("沿原坡下葉臺。東側寬路也通往夜芽庭。")
 			"garden:buds": _notice("夜晚能看到葉間的淡光。往南可返回日照窗。")
 		return
-	if world_region=="toy":
+	if here=="toy":
 		match id:
 			"toy:blocks": _notice("積木街北側通往維修台，往東可到車站岔道。")
 			"toy:switch": _notice(world.switch_tracks())
@@ -1434,15 +1474,15 @@ func _interact(id: String, title: String) -> void:
 			"toy:repair": _notice(world.reset_train())
 			"toy:tower": _notice(world.wind_tower())
 		return
-	if world_region=="circus":
+	if here=="circus":
 		match id:
 			"circus:mirrors": _notice("走近鏡子，會照出被拉長或壓扁的自己。兩端步道都可通行。")
 			"circus:auditorium": _notice("沿中央通道向北可到砲彈安全墊。")
 			"circus:shadow": _notice(world.switch_projection())
 			"circus:mats": _notice("站進表演圈，聚光燈和鼓聲會跟著你。向南接觀眾席。")
 		return
-	if world_region=="nightmarket":
-		if id.begins_with("game-") and Catalog.identity(id).get("zone", "") == world_region:
+	if here=="nightmarket":
+		if id.begins_with("game-") and Catalog.identity(id).get("zone", "") == here:
 			_show_game_info(id)
 		else:
 			match id:
@@ -1459,26 +1499,26 @@ func _interact(id: String, title: String) -> void:
 					world.reset_to_entry()
 					_notice("已免費回到夜市入口。")
 		return
-	if world_region=="candy":
+	if here=="candy":
 		if id.begins_with("game-") and Catalog.identity(id).get("zone","")=="candy":
 			_show_game_info(id)
 		elif id=="candy:temperature":
-			world.cycle_temperature()
-			_notice(world.temperature_label()+"；材料觀察不影響進度。")
+			place.cycle_temperature()
+			_notice(place.temperature_label()+"；材料觀察不影響進度。")
 		elif id=="candy:reset":
-			world.reset_to_entry()
+			place.reset_to_entry()
 			_notice("已免費回到工廠入口。")
 		elif id.begins_with("candy:info:"):
 			_start_dialogue([{ "speaker":title, "text":"觀察冷、溫、熱三態的糖料形狀與黏度；觀察不授予拍貼或遊園幣。"+_candy_info_text()+"可隨時免費返回迎賓大道。" }],Callable())
 		return
-	if world_region=="harbor":
+	if here=="harbor":
 		if id.begins_with("game-"):
 			_show_game_info(id)
 		elif id=="harbor:tide":
-			world.set_tide(not world.is_high_tide())
-			_notice("漲潮：沙洲暫停通行，免費渡船照常。" if world.is_high_tide() else "退潮：沙洲開放，免費渡船照常。")
+			place.set_tide(not place.is_high_tide())
+			_notice("漲潮：沙洲暫停通行，免費渡船照常。" if place.is_high_tide() else "退潮：沙洲開放，免費渡船照常。")
 		elif id.begins_with("harbor:ferry:"):
-			world.take_ferry(id)
+			place.take_ferry(id)
 		elif id.begins_with("harbor:info:"):
 			_start_dialogue([{ "speaker":title, "text":_harbor_info_text() }],Callable())
 		return
@@ -1567,7 +1607,7 @@ func _start_region_story_visit(region: String, from_album := false) -> void:
 func _open_region_story_photo(region: String, from_album: bool) -> void:
 	if quitting or changing_region or session != null or modal_kind != "" or world_region != region:
 		return
-	if not world.has_method("begin_story_photo") or not world.begin_story_photo():
+	if not region_world().has_method("begin_story_photo") or not region_world().begin_story_photo():
 		_notice("相機尚未就緒，請再和%s交談。" % RegionalVisit.host_name(region))
 		return
 	visit_photo_from_album = from_album
@@ -1595,8 +1635,8 @@ func _dispose_region_story_photo() -> void:
 	visit_photo_panel.queue_free()
 	visit_photo_panel = null
 	visit_photo_from_album = false
-	if is_instance_valid(world):
-		world.end_story_photo()
+	if is_instance_valid(world) and region_world().has_method("end_story_photo"):
+		region_world().end_story_photo()
 
 func _take_region_story_photo() -> void:
 	if quitting or modal_kind != "visit_photo" or not is_instance_valid(visit_photo_panel) or not visit_photo_panel.visible:
@@ -2538,7 +2578,7 @@ func _show_map() -> void:
 	if world_region!="welcome":
 		var harbor_body := _open(RegionRoutes.map_title(world_region),world_region.to_upper()+" MAP","map")
 		var harbor_map = load("res://game/ui/harbor_map_panel.gd").new()
-		var region_snapshot: Dictionary=world.map_snapshot()
+		var region_snapshot: Dictionary=region_world().map_snapshot()
 		region_snapshot["daily_picks"]=_daily_picks()
 		harbor_map.setup(region_snapshot)
 		harbor_body.add_child(harbor_map)

@@ -3,6 +3,17 @@ render_mode cull_back;
 
 #include "res://game/world/wind.gdshaderinc"
 
+// Toward a themed district the lawn takes on that district's ground colour:
+// rgb is the colour and alpha the amount, laid over the island's shore grid.
+uniform bool district_blend = false;
+uniform sampler2D district_tint : source_color, filter_linear, repeat_disable;
+uniform vec2 tint_origin;
+uniform vec2 tint_inverse_size;
+// World rects (min x, min z, max x, max z) where a district sinks water or a
+// channel below the lawn.
+uniform vec4 cutouts[8];
+uniform int cutout_count = 0;
+
 varying vec3 world_position;
 
 // A district under heavy canopy darkens the island's meadow instead of painting its own.
@@ -16,6 +27,12 @@ void vertex() {
 }
 
 void fragment() {
+	for (int index = 0; index < cutout_count; index++) {
+		vec4 hole = cutouts[index];
+		if (world_position.x > hole.x && world_position.z > hole.y && world_position.x < hole.z && world_position.z < hole.w) {
+			discard;
+		}
+	}
 	vec2 cell = floor(world_position.xz / TEXEL) * TEXEL;
 	// Irregular meadow patches instead of a checkerboard: two noise scales,
 	// posterised into a few flat tones.
@@ -35,6 +52,13 @@ void fragment() {
 	float speckle = wind_hash(floor(world_position.xz * 7.0) + vec2(18.1, 3.7));
 	meadow += vec3((speckle - 0.5) * 0.012 + blade * 0.02);
 	meadow += vec3(0.03, 0.042, 0.012) * gust;
+
+	if (district_blend) {
+		vec4 tint = texture(district_tint, (cell - tint_origin) * tint_inverse_size);
+		// Stepped and stippled, so the change keeps the lawn's pixel grain.
+		float amount = floor(tint.a * 5.0 + wind_hash(cell * 1.7 + vec2(9.2, 3.3))) / 5.0;
+		meadow = mix(meadow, tint.rgb * (0.40 + tone * 0.12 + blade * 0.05), clamp(amount, 0.0, 1.0));
+	}
 
 	// Grass presses down in a small ring around the walker.
 	float pressed = walker_brush(cell, 0.9);

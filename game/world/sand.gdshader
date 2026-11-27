@@ -13,6 +13,11 @@ uniform float sand_width = 2.6;
 uniform vec3 beaches[12];
 uniform int beach_count = 0;
 
+// World rects (min x, min z, max x, max z) where a district sinks water or a
+// channel below the beach.
+uniform vec4 cutouts[8];
+uniform int cutout_count = 0;
+
 varying vec3 world_position;
 
 float cell_seed(vec2 cell) {
@@ -24,6 +29,12 @@ void vertex() {
 }
 
 void fragment() {
+	for (int index = 0; index < cutout_count; index++) {
+		vec4 hole = cutouts[index];
+		if (world_position.x > hole.x && world_position.z > hole.y && world_position.x < hole.z && world_position.z < hole.w) {
+			discard;
+		}
+	}
 	// Grain is snapped to the same world pixel grid as the bay and the lawn.
 	vec2 cell = floor(world_position.xz * 6.0);
 	vec2 p = cell / 6.0;

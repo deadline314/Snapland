@@ -1,4 +1,5 @@
 extends RefCounted
+const DistrictSites = preload("res://game/world/district_sites.gd")
 ## The Welcome island's outline and everything measured from it.
 ##
 ## One authored coastline is smoothed into a closed polygon; a signed-distance
@@ -8,21 +9,23 @@ extends RefCounted
 ## Coordinates are world x/z in metres (x east, z south). Nothing is random and
 ## the bake is cached for the life of the process.
 
-## Clockwise from the dock bay: east headland, south-east cape, east bay, east
-## cape, lagoon and its sand spit, north cape, north-west cape, west inlet,
-## west cape, west bay, south-west cape, west headland.
+## Clockwise from the dock bay: east headland, the greenhouse peninsula, east
+## bay, the candy peninsula, lagoon and its sand spit, north cape, north-west
+## cape, west inlet, west cape, west bay, south-west cape, the harbor spit that
+## hooks round the south-west bay, west headland. District sites (see
+## DistrictSites) stand on the peninsulas and in the bay.
 const COAST_CONTROL := [
 	Vector2(0,19), Vector2(11,19.4), Vector2(20,22), Vector2(28,27), Vector2(38,32.5), Vector2(50,36), Vector2(59.5,32), Vector2(65,22.5), Vector2(67,11.5), Vector2(72.5,1.5),
-	Vector2(82,-4), Vector2(92,-8), Vector2(98.5,-17.5), Vector2(95,-28.5), Vector2(83.5,-33),
+	Vector2(84,6), Vector2(92,16), Vector2(100,27), Vector2(112,33.5), Vector2(125,31.5), Vector2(138,33), Vector2(151,24), Vector2(158,10), Vector2(164,-4), Vector2(160,-19), Vector2(153,-30), Vector2(141,-35.5), Vector2(128,-32), Vector2(115,-35.5), Vector2(104,-32.5), Vector2(95,-34), Vector2(83.5,-33),
 	Vector2(74.5,-36), Vector2(67,-43.5), Vector2(65,-54.5), Vector2(70.5,-64.5),
-	Vector2(82,-69.5), Vector2(93,-73), Vector2(100.5,-82.5), Vector2(96.5,-93.5), Vector2(85.5,-97),
+	Vector2(82,-67), Vector2(92,-65.5), Vector2(101,-58), Vector2(112,-55.5), Vector2(123,-48.5), Vector2(136,-52), Vector2(150,-47.5), Vector2(166,-52), Vector2(180,-61), Vector2(187,-74), Vector2(184.5,-88), Vector2(188,-101), Vector2(183,-114), Vector2(173,-123.5), Vector2(159,-125.5), Vector2(147,-131), Vector2(134,-126.5), Vector2(123,-128.5), Vector2(113,-124.5), Vector2(106,-116), Vector2(99,-105.5), Vector2(85.5,-97),
 	Vector2(76.5,-103), Vector2(67,-108.5), Vector2(63,-119.5), Vector2(70.5,-129), Vector2(82,-129), Vector2(87.5,-121.5), Vector2(92,-117.5), Vector2(96,-125), Vector2(91,-136.5), Vector2(80,-142), Vector2(67,-143.5),
 	Vector2(54,-147.5), Vector2(41,-145.5), Vector2(30,-151), Vector2(20.5,-160.5), Vector2(9.5,-166), Vector2(-2,-162.5), Vector2(-7.5,-153), Vector2(-15,-145.5),
 	Vector2(-28,-143.5), Vector2(-43,-140), Vector2(-56,-142), Vector2(-69,-136.5), Vector2(-78,-125), Vector2(-80,-112),
 	Vector2(-72.5,-103), Vector2(-59.5,-101), Vector2(-50,-93.5), Vector2(-52,-84), Vector2(-63,-80.5), Vector2(-76.5,-80.5),
 	Vector2(-89.5,-78.5), Vector2(-100.5,-71), Vector2(-104,-58), Vector2(-96.5,-47), Vector2(-83.5,-43.5),
 	Vector2(-74.5,-37.5), Vector2(-70.5,-26.5), Vector2(-76.5,-15.5),
-	Vector2(-87.5,-8), Vector2(-96.5,1.5), Vector2(-96.5,14.5), Vector2(-87.5,23.5),
+	Vector2(-87.5,-8), Vector2(-96.5,1.5), Vector2(-102,14), Vector2(-108,27), Vector2(-106,41), Vector2(-109.5,54), Vector2(-105,67), Vector2(-99,77), Vector2(-91,78), Vector2(-86.5,71), Vector2(-88,60), Vector2(-85.5,49), Vector2(-88.5,39), Vector2(-84,31),
 	Vector2(-74.5,29), Vector2(-61.5,27.5), Vector2(-52,33), Vector2(-43,40.5), Vector2(-31.5,40.5), Vector2(-23,33), Vector2(-20,26), Vector2(-11,21),
 ]
 ## Sand between the waterline and the grass, everywhere along the coast.
@@ -58,6 +61,9 @@ const GRID_PADDING := 16.0
 ## Cells nearer the coast than this hold exact distances; farther ones are interpolated.
 const EXACT_BAND := 6.0
 const COARSE_STRIDE := 4
+## The grid snaps to the lattice the first coast was baked on, so growing the
+## island adds cells without shifting the ones already there.
+const GRID_ANCHOR := Vector2(-120.1401, -182.0342)
 
 static var _coast := PackedVector2Array()
 static var _coast_curve: Curve2D
@@ -160,6 +166,11 @@ static func sdf_texture() -> ImageTexture:
 		_texture = ImageTexture.create_from_image(Image.create_from_data(_columns, _rows, false, Image.FORMAT_RF, _grid.to_byte_array()))
 	return _texture
 
+## Lawn tint toward each district, on the same grid as sdf_texture().
+static func district_tint() -> ImageTexture:
+	_ensure()
+	return DistrictSites.tint_texture(_origin, _columns, _rows, CELL)
+
 static func sdf_origin() -> Vector2:
 	_ensure()
 	return _origin - Vector2.ONE * CELL * 0.5
@@ -181,10 +192,10 @@ static func _bake() -> void:
 	var extent := Rect2(_coast[0], Vector2.ZERO)
 	for point in _coast: extent = extent.expand(point)
 	extent = extent.grow(GRID_PADDING)
-	_origin = extent.position
 	var block := float(COARSE_STRIDE) * CELL
-	_columns = ceili(extent.size.x / block) * COARSE_STRIDE + 1
-	_rows = ceili(extent.size.y / block) * COARSE_STRIDE + 1
+	_origin = GRID_ANCHOR + ((extent.position - GRID_ANCHOR) / block).floor() * block
+	_columns = ceili((extent.end.x - _origin.x) / block) * COARSE_STRIDE + 1
+	_rows = ceili((extent.end.y - _origin.y) / block) * COARSE_STRIDE + 1
 	_grid.resize(_columns * _rows)
 	var land := _land_mask()
 	# Exact distances on a coarse lattice decide which blocks need exact cells.

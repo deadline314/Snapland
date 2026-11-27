@@ -4,6 +4,7 @@ extends RefCounted
 ## Edit a table to move something; builders and checks read the same rows.
 
 const IslandShape = preload("res://game/world/island_shape.gd")
+const DistrictSites = preload("res://game/world/district_sites.gd")
 const FieldRegistry = preload("res://game/world/field/field_registry.gd")
 
 const PATH_TOP_Y := 0.18
@@ -22,10 +23,10 @@ const PATHS := [
 	{"id": "nightmarket", "width": 3.6, "surface": "paving", "points": [Vector2(2,-108), Vector2(-12,-110), Vector2(-28,-116), Vector2(-44,-122), Vector2(-58,-124), Vector2(-64,-122.2), Vector2(-67.7,-120.5)]},
 	{"id": "circus", "width": 3.6, "surface": "paving", "points": [Vector2(22,-122), Vector2(32,-127), Vector2(42,-131), Vector2(47,-134.5), Vector2(50.9,-136.9)]},
 	{"id": "west", "width": 3.6, "surface": "paving", "points": [Vector2(-4,-58), Vector2(-16,-62), Vector2(-30,-66), Vector2(-44,-64), Vector2(-58,-62), Vector2(-72,-64), Vector2(-86,-62)]},
-	{"id": "harbor", "width": 3.6, "surface": "paving", "points": [Vector2(-12.5,-1.5), Vector2(-24,-6), Vector2(-38,-10), Vector2(-52,-6), Vector2(-66,0), Vector2(-76,5), Vector2(-82,8.4), Vector2(-84.7,9.5)]},
+	{"id": "harbor", "width": 3.6, "surface": "paving", "points": [Vector2(-12.5,-1.5), Vector2(-24,-6), Vector2(-38,-10), Vector2(-52,-6), Vector2(-66,0), Vector2(-76,5), Vector2(-82,8.4), Vector2(-84.7,9.5), Vector2(-92,15), Vector2(-97.5,28), Vector2(-98.5,44), Vector2(-97,57), Vector2(-94.5,63.5), Vector2(-92.4,65)]},
 	{"id": "east", "width": 3.6, "surface": "paving", "points": [Vector2(0,-66), Vector2(12,-70), Vector2(24,-66), Vector2(31,-59), Vector2(33,-50), Vector2(44,-46), Vector2(53,-46.6), Vector2(58,-47.6)]},
-	{"id": "garden", "width": 3.6, "surface": "paving", "points": [Vector2(12.5,-1.5), Vector2(24,-6), Vector2(38,-12), Vector2(52,-14), Vector2(66,-12), Vector2(78,-14), Vector2(84,-15.4), Vector2(86.6,-15.6)]},
-	{"id": "candy", "width": 3.6, "surface": "paving", "points": [Vector2(6,-90), Vector2(20,-88), Vector2(34,-86), Vector2(48,-84), Vector2(62,-84), Vector2(76,-82), Vector2(83,-80.6), Vector2(86.6,-79.6)]},
+	{"id": "garden", "width": 3.6, "surface": "paving", "points": [Vector2(12.5,-1.5), Vector2(24,-6), Vector2(38,-12), Vector2(52,-14), Vector2(66,-12), Vector2(78,-14), Vector2(84,-15.4), Vector2(86.6,-15.6), Vector2(93,-11), Vector2(97,-3), Vector2(100,9), Vector2(106,20), Vector2(114,25), Vector2(121,25.2), Vector2(123,23.5), Vector2(123,21.4)]},
+	{"id": "candy", "width": 3.6, "surface": "paving", "points": [Vector2(6,-90), Vector2(20,-88), Vector2(34,-86), Vector2(48,-84), Vector2(62,-84), Vector2(76,-82), Vector2(83,-80.6), Vector2(86.6,-79.6), Vector2(92,-72), Vector2(99,-63), Vector2(112,-58), Vector2(130,-56.5), Vector2(144,-57), Vector2(150,-58.5), Vector2(150.9,-61.7)]},
 	{"id": "wind-terrace", "width": 4.0, "surface": "paving", "points": [Vector2(-6,-48), Vector2(-11.5,-48)]},
 	{"id": "lookout", "width": 3.0, "surface": "trail", "points": [Vector2(48,-84), Vector2(50.5,-96), Vector2(48,-106), Vector2(46.6,-112)]},
 	{"id": "lookout-deck", "width": 3.0, "surface": "trail", "points": [Vector2(46.4,-120.2), Vector2(48.8,-120.2)]},
@@ -76,11 +77,12 @@ const GAME_ENTRIES := [
 	{"position": Vector3(8,0,-118.5), "place": "月影劇台", "district": "stage"},
 ]
 const MIN_ENTRY_SPACING := 14.0
-## Region gates stand at the island's edge, at the end of the road toward where
-## the master plan puts each district: x, z, yaw in degrees (0 faces south).
+## Gates of the regions that are not on the island yet stand at its edge, at the
+## end of the road toward where the master plan puts each district: x, z, yaw in
+## degrees (0 faces south). A district that stands on the island keeps its gate
+## at its own door instead (see DistrictSites).
 const GATES := {
-	"harbor": Vector3(-86,8,40), "candy": Vector3(88,-81,-45), "nightmarket": Vector3(-69,-122,40),
-	"circus": Vector3(52,-138.5,-35), "toy": Vector3(10,-156,0), "garden": Vector3(88,-17,-45),
+	"nightmarket": Vector3(-69,-122,40), "circus": Vector3(52,-138.5,-35), "toy": Vector3(10,-156,0),
 	"hotel": Vector3(-36,34.6,180), "sky": Vector3(49.5,29,-160), "cinema": Vector3(85.5,-135.5,-60),
 }
 ## The coastal loop's six landmarks. "position" is the plaque on the trail and
@@ -206,11 +208,20 @@ static func district_surface_y(point: Vector2) -> float:
 	if absf(p.x) <= 7.0 and p.y >= -43.75 and p.y <= -37.15: return 0.18
 	return -1.0
 
+static func has_gate(region: String) -> bool:
+	return GATES.has(region) or DistrictSites.has(region)
+
+## Every region with a gate on the island, edge gates first.
+static func gate_regions() -> Array:
+	return GATES.keys() + DistrictSites.regions()
+
 static func gate_position(region: String) -> Vector3:
+	if DistrictSites.has(region): return DistrictSites.gate_position(region)
 	var gate: Vector3 = GATES[region]
 	return Vector3(gate.x, 0, gate.y)
 
 static func gate_yaw(region: String) -> float:
+	if DistrictSites.has(region): return DistrictSites.gate_yaw(region)
 	return deg_to_rad((GATES[region] as Vector3).z)
 
 ## Where a visitor stands to use a gate: two metres out from its front.
@@ -244,8 +255,10 @@ static func keeps_clear(point: Vector2, margin := 0.0) -> bool:
 		if (district.footprint as Rect2).grow(1.5 + margin).has_point(point - (district.offset as Vector2)): return true
 	for entry: Dictionary in GAME_ENTRIES:
 		if point.distance_to(Vector2(entry.position.x, entry.position.z)) < 4.2 + margin: return true
-	for gate: Vector3 in GATES.values():
-		if point.distance_to(Vector2(gate.x, gate.y)) < 5.0 + margin: return true
+	if DistrictSites.claims(point, 2.0 + margin): return true
+	for region: String in gate_regions():
+		var gate := gate_position(region)
+		if point.distance_to(Vector2(gate.x, gate.z)) < 5.0 + margin: return true
 	for site: Vector3 in STRUCTURES + JUNCTIONS:
 		if point.distance_to(Vector2(site.x, site.y)) < site.z + margin: return true
 	for ridge: Vector2 in RIDGES:

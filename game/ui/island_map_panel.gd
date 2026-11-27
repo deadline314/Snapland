@@ -6,6 +6,7 @@ const RegionRoutes = preload("res://game/core/region_routes.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
 const IslandShape = preload("res://game/world/island_shape.gd")
 const IslandLayout = preload("res://game/world/island_layout.gd")
+const DistrictSites = preload("res://game/world/district_sites.gd")
 
 class StationIcon extends Control:
 	var station := 0
@@ -148,6 +149,10 @@ class MapSurface extends Control:
 			draw_colored_polygon(_projected(lawn), LAWN)
 		coast.append(coast[0])
 		draw_polyline(coast, Color("#b49b75"), _unit, true)
+		for region: String in DistrictSites.regions():
+			var plot := district_plot(region)
+			draw_rect(plot, (DistrictSites.SITES[region].ground as Color).lerp(SHORE, 0.25))
+			draw_rect(plot, Color("#5d5140"), false, _unit)
 		for pond: Vector3 in IslandLayout.PONDS:
 			draw_circle(_project_xz(Vector2(pond.x, pond.y)), pond.z * _scale, WATER, true, -1.0, true)
 		# Lanes first, then the coastal loop, then the promenade on top.
@@ -167,6 +172,14 @@ class MapSurface extends Control:
 			draw_rect(Rect2(pier_top, Vector2(5, 13) * _scale), PLAZA)
 		var font := Paper.font()
 		draw_string(font, plaza + Vector2(8, 4) * _unit, "廣場", HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12.0 * _unit), Color("#27474b"))
+		for region: String in DistrictSites.regions():
+			var plot := district_plot(region)
+			draw_string(font, plot.position + Vector2(3, 13) * _unit, RegionRoutes.title(region), HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(11.0 * _unit), Color("#2b2620"))
+
+	## A district's own ground in chart pixels.
+	func district_plot(region: String) -> Rect2:
+		var claim := DistrictSites.world_rect(region, "claim")
+		return Rect2(_project_xz(claim.position), claim.size * _scale)
 
 	func _draw_markers() -> void:
 		if destination.is_finite():

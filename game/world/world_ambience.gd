@@ -35,11 +35,14 @@ var _cloud_drift := Vector2.ZERO
 var _emitter_specs: Array[Dictionary] = []
 var _critter_batch: MultiMesh
 var _shadow_batch: MultiMesh
+## An embedded district's air follows the island's wind instead of driving it.
+var _drives_wind := true
 
 
 func configure(world: Node3D, region_profile: Dictionary) -> void:
 	_world = world
 	_profile = region_profile
+	_drives_wind = world.get("embedded_in") == null
 	_build_cloud()
 	_build_critters()
 	# Particle systems only exist on a real renderer, like the market rain.
@@ -71,6 +74,16 @@ func set_quality(cloud_shade: bool, air_particles: bool) -> void:
 	_sync()
 
 
+## How much of this air is present, 0..1: its motes fade out as the walker
+## leaves for another district's air.
+func set_presence(amount: float) -> void:
+	var share := clampf(amount, 0.0, 1.0)
+	for spec: Dictionary in _emitter_specs:
+		var tone: Color = spec.tone
+		# Additive motes fade by brightness, the rest by opacity.
+		(spec.material as StandardMaterial3D).albedo_color = Color(tone.r * share, tone.g * share, tone.b * share, tone.a) if spec.additive else Color(tone.r, tone.g, tone.b, tone.a * share)
+
+
 func particle_total() -> int:
 	return Profiles.particle_total(_profile)
 
@@ -87,12 +100,13 @@ func _process(delta: float) -> void:
 func advance(delta: float) -> void:
 	if not is_instance_valid(_world) or not is_instance_valid(_world.player):
 		return
-	var focus: Vector3 = _world.player.global_position
+	# Emitters and animals live in this layer's own space, which an embedded district offsets.
+	var focus: Vector3 = to_local(_world.player.global_position)
 	# Wind stands still and nothing reacts to the walker under reduced motion.
-	RenderingServer.global_shader_parameter_set(WIND_WALKER, NO_WALKER if _reduced_motion else focus)
+	if _drives_wind: RenderingServer.global_shader_parameter_set(WIND_WALKER, NO_WALKER if _reduced_motion else focus)
 	if not _reduced_motion:
 		_wind_time += delta
-		RenderingServer.global_shader_parameter_set(WIND_TIME, _wind_time)
+		if _drives_wind: RenderingServer.global_shader_parameter_set(WIND_TIME, _wind_time)
 		if cloud != null and cloud.visible:
 			_cloud_drift += CLOUD_WIND * delta
 			_cloud_material.set_shader_parameter("drift", _cloud_drift)
@@ -277,4 +291,4 @@ func _build_emitter(spec: Dictionary) -> void:
 		emitter.position = spec.at
 	add_child(emitter)
 	emitters.append(emitter)
-	_emitter_specs.append({"phases": spec.get("phases", Profiles.ALWAYS), "follows": not spec.has("at"), "lift": float(look.get("lift", 0.0))})
+	_emitter_specs.append({"phases": spec.get("phases", Profiles.ALWAYS), "follows": not spec.has("at"), "lift": float(look.get("lift", 0.0)), "material": material, "tone": material.albedo_color, "additive": bool(look.get("additive", false))})

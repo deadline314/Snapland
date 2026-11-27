@@ -61,6 +61,8 @@ var visited: Dictionary = {}
 var intro_seen := false
 var prologue_seen := false
 var current_region: String = "welcome"
+## Where the walker stood on the island when the game was last saved; INF when unknown.
+var player_position := Vector3.INF
 var platform_pending_achievements: Array[String] = []
 var appearance: Dictionary = DEFAULT_APPEARANCE.duplicate(true)
 var equipped: Dictionary = DEFAULT_EQUIPPED.duplicate(true)
@@ -136,6 +138,13 @@ func mark_prologue_seen() -> bool:
 		prologue_seen = false
 		return false
 	return true
+
+## A saved position is three finite numbers within the island's reach; anything else is "unknown".
+func _loaded_position(value: Variant) -> Vector3:
+	if typeof(value) != TYPE_ARRAY or value.size() != 3: return Vector3.INF
+	for part: Variant in value:
+		if typeof(part) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(part)) or absf(float(part)) > 1000.0: return Vector3.INF
+	return Vector3(float(value[0]), float(value[1]), float(value[2]))
 
 func set_current_region(region: String) -> bool:
 	if not SUPPORTED_REGIONS.has(region):
@@ -793,6 +802,7 @@ func save_progress() -> bool:
 		"intro_seen": intro_seen,
 		"prologue_seen": prologue_seen,
 		"current_region": current_region,
+		"player_position": [player_position.x, player_position.y, player_position.z] if player_position.is_finite() else [],
 		"platform_pending_achievements": platform_pending_achievements,
 		"appearance": appearance,
 		"equipped": equipped,
@@ -1179,7 +1189,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers", "player_position"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -1218,6 +1228,7 @@ func _apply_save(payload: Dictionary) -> void:
 	intro_seen = payload.get("intro_seen", false) == true
 	prologue_seen = payload.get("prologue_seen", true) == true
 	current_region = payload.get("current_region", "welcome")
+	player_position = _loaded_position(payload.get("player_position"))
 	var loaded_pending: Variant = payload.get("platform_pending_achievements", [])
 	if typeof(loaded_pending) == TYPE_ARRAY:
 		for achievement_id in loaded_pending:
@@ -1321,6 +1332,7 @@ func _reset_memory() -> void:
 	intro_seen = false
 	prologue_seen = false
 	current_region = "welcome"
+	player_position = Vector3.INF
 	platform_pending_achievements = []
 	appearance = DEFAULT_APPEARANCE.duplicate(true)
 	equipped = DEFAULT_EQUIPPED.duplicate(true)

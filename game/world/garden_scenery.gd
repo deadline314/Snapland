@@ -169,7 +169,7 @@ func _build_terrain() -> void:
 	# One ring of ground around the house; it runs well past what the camera can see.
 	var tool := SurfaceTool.new()
 	tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var reach := Rect2(-58, -54, 116, 110)
+	var reach: Rect2 = world.dress_rect(Rect2(-58, -54, 116, 110))
 	_terrain_quad(tool, Rect2(reach.position.x, reach.position.y, reach.size.x, HOUSE.position.y - reach.position.y))
 	_terrain_quad(tool, Rect2(reach.position.x, HOUSE.end.y, reach.size.x, reach.end.y - HOUSE.end.y))
 	_terrain_quad(tool, Rect2(reach.position.x, HOUSE.position.y, HOUSE.position.x - reach.position.x, HOUSE.size.y))
@@ -591,6 +591,7 @@ func _build_forecourt() -> void:
 				var seed_value := float(segment) * 31.0 + float(step) * 2.0 + lane
 				var across := (to - from).normalized().orthogonal() * lane * (0.42 + 0.14 * Props.scatter(seed_value))
 				var at := from.lerp(to, (float(step) + 0.5 + 0.3 * lane * Props.scatter(seed_value + 5.0)) / float(steps)) + across
+				if not world.in_dress_reach(at): continue
 				var tone := 0.82 + 0.16 * Props.scatter(seed_value + 9.0)
 				stones.add(Vector3(at.x, TERRAIN_Y - 0.02, at.y), Vector3(0.9 + 0.3 * Props.scatter(seed_value + 2.0), 1.0, 0.8 + 0.25 * Props.scatter(seed_value + 3.0)), Basis(Vector3.UP, seed_value), Color(tone * 0.6, tone * 0.62, tone * 0.54))
 	# A paved apron in front of the door.
@@ -719,6 +720,7 @@ func _in_parterre(point: Vector2) -> bool:
 
 func _build_woodland() -> void:
 	for tree: Array in NEAR_TREES:
+		if not world.in_dress_reach(Vector2(float(tree[1]), float(tree[2]))): continue
 		kit.billboard(str(tree[0]), Vector3(float(tree[1]), TERRAIN_Y, float(tree[2])), float(tree[3]))
 	# The wood beyond: a jittered grid, thinned around the clearing, the forecourt
 	# and the path, so the same trees stand there on every visit.
@@ -729,7 +731,7 @@ func _build_woodland() -> void:
 		for column in range(27):
 			var seed_value := float(row) * 57.0 + float(column) * 13.0
 			var at := Vector2(-56.0 + SPACING * (float(column) + 0.8 * Props.scatter(seed_value)), -53.0 + SPACING * (float(row) + 0.8 * Props.scatter(seed_value + 1.0)))
-			if clearing.has_point(at) or forecourt.has_point(at) or _on_path(at, 3.4): continue
+			if clearing.has_point(at) or forecourt.has_point(at) or _on_path(at, 3.4) or not world.dresses(at): continue
 			var near_edge := clearing.grow(3.5).has_point(at) or forecourt.grow(3.0).has_point(at)
 			var pick := Props.scatter(seed_value + 2.0)
 			var ground := Vector3(at.x, TERRAIN_Y, at.y)

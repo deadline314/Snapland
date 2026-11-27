@@ -114,7 +114,8 @@ func animate(delta: float) -> void:
 func _update_frogs(delta: float) -> void:
 	var player: Node3D = world.player
 	if not is_instance_valid(player): return
-	var walker := Vector2(player.position.x, player.position.z)
+	var spot: Vector3 = world.player_spot()
+	var walker := Vector2(spot.x, spot.z)
 	for index in range(FROGS.size()):
 		var home := frog_home(index)
 		var distance := walker.distance_to(Vector2(home.x, home.z))

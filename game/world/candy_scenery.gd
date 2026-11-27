@@ -153,13 +153,16 @@ func _roofing() -> Material:
 
 func _build_ground() -> void:
 	# A chocolate bed lies under everything, so no gap can ever show the sky colour.
-	var bed := PlaneMesh.new()
-	bed.size = Vector2(110, 110)
-	var backdrop: MeshInstance3D = world._mesh(bed, Vector3(0, -0.65, 0), world._mat(Color("#53313e")))
-	backdrop.name = "ChocolateBackdrop"
-	backdrop.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# On the island the island's own ground lies there instead.
+	if world.embedded_in == null:
+		var bed := PlaneMesh.new()
+		bed.size = Vector2(110, 110)
+		var backdrop: MeshInstance3D = world._mesh(bed, Vector3(0, -0.65, 0), world._mat(Color("#53313e")))
+		backdrop.name = "ChocolateBackdrop"
+		backdrop.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var field: Rect2 = world.dress_rect(Rect2(-FIELD, -FIELD, FIELD * 2.0, FIELD * 2.0))
 	var rows: Array[float] = []
-	for z in range(-int(FIELD), int(FIELD) + 1, 2):
+	for z in range(int(field.position.y), int(field.end.y) + 1, 2):
 		rows.append(float(z))
 		if z == 4: rows.append(5.0)
 	# The lawn stops at the river banks and leaves the canal open.
@@ -183,8 +186,8 @@ func _build_ground() -> void:
 		if index == rows.size() - 1: continue
 		var next := rows[index + 1]
 		var canal := z >= 0.0 and next <= 5.0
-		_lawn_quad(lawn, -FIELD, 4.0 if canal else river_left(z) - 0.5, z, -FIELD, 4.0 if canal else river_left(next) - 0.5, next)
-		_lawn_quad(lawn, river_right(z) + 0.5, FIELD, z, river_right(next) + 0.5, FIELD, next)
+		_lawn_quad(lawn, field.position.x, 4.0 if canal else river_left(z) - 0.5, z, field.position.x, 4.0 if canal else river_left(next) - 0.5, next)
+		_lawn_quad(lawn, river_right(z) + 0.5, field.end.x, z, river_right(next) + 0.5, field.end.x, next)
 	var lawn_material := ShaderMaterial.new()
 	lawn_material.shader = LAWN
 	world.material_cache["candy-lawn"] = lawn_material
@@ -216,6 +219,7 @@ func _build_ground() -> void:
 	var path_right := PackedVector3Array()
 	for step in range(19):
 		var z := 12.0 + 3.0 * float(step)
+		if z > field.end.y + 1.0: break
 		var centre := 0.9 * sin((z - 12.0) * 0.11) * minf(1.0, (z - 12.0) / 5.0)
 		path_left.append(Vector3(centre - 1.9, LAWN_Y + 0.03, z))
 		path_right.append(Vector3(centre + 1.9, LAWN_Y + 0.03, z))
@@ -226,6 +230,13 @@ func _build_ground() -> void:
 	var edging: MeshInstance3D = world._mesh(banks.commit(), Vector3.ZERO, _biscuit())
 	edging.name = "CandyBanks"
 	edging.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	if world.embedded_in != null:
+		# The river enters and leaves the factory grounds through a culvert in a low biscuit wall.
+		for z: float in [field.position.y, field.end.y]:
+			var middle := (river_left(z) + river_right(z)) * 0.5
+			kit.surface(_biscuit()).add(Vector3(middle, 0.42, z), Vector3(7.4, 1.0, 0.7))
+			kit.detail.box(Vector3(middle, 0.02, z), Vector3(3.3, 0.44, 0.76), Color("#3a2430"))
+			kit.surface(_roofing()).add(Vector3(middle, 0.98, z), Vector3(7.8, 0.14, 0.95))
 
 ## One lawn quad between the row at `z` and the row at `next_z`.
 func _lawn_quad(lawn: SurfaceTool, west: float, east: float, z: float, west_next: float, east_next: float, next_z: float) -> void:
@@ -504,13 +515,14 @@ func _build_gate() -> void:
 	detail.tube(Vector3(7.2, LAWN_Y + 1.15, 20.4), 0.05, 0.04, 2.3, Props.WHITE, 6)
 	Props.cane_fence(kit, Vector2(-34.0, 27.6), Vector2(-3.4, 27.6), LAWN_Y, Props.MINT.darkened(0.3))
 	Props.cane_fence(kit, Vector2(3.4, 27.6), Vector2(12.6, 27.6), LAWN_Y, Props.MINT.darkened(0.3))
-	Props.cane_fence(kit, Vector2(19.4, 27.6), Vector2(34.0, 27.6), LAWN_Y, Props.MINT.darkened(0.3))
+	if world.in_dress_reach(Vector2(34.0, 27.6)): Props.cane_fence(kit, Vector2(19.4, 27.6), Vector2(34.0, 27.6), LAWN_Y, Props.MINT.darkened(0.3))
 
 ## Candy trees, gumdrop hedges, flowers and a cooling tower on the far bank.
 func _build_planting() -> void:
 	for index in range(TREES.size()):
 		var tree: Array = TREES[index]
 		var at := Vector3(float(tree[1]), LAWN_Y, float(tree[2]))
+		if not world.dresses(Vector2(at.x, at.z)): continue
 		if int(tree[0]) == 0:
 			Props.lollipop_tree(kit, gloss, at, float(tree[3]), Props.SWEETS[index % Props.SWEETS.size()], Props.WHITE)
 		else:
@@ -518,12 +530,14 @@ func _build_planting() -> void:
 	for hedge: Array in HEDGES:
 		var from := Vector3(float(hedge[0]), LAWN_Y, float(hedge[1]))
 		var to := Vector3(float(hedge[2]), LAWN_Y, float(hedge[3]))
+		if not world.in_dress_reach(Vector2(to.x, to.z)): continue
 		var count := int(from.distance_to(to) / 0.62)
 		for index in range(count + 1):
 			var seed_value := from.x * 3.1 + from.z * 1.7 + float(index) * 5.3
 			Props.gumdrop(gloss, from.lerp(to, float(index) / float(count)) + Vector3(0.1 * _scatter(seed_value) - 0.05, 0, 0.1 * _scatter(seed_value + 1.0) - 0.05), 0.27 + 0.1 * _scatter(seed_value + 2.0), Props.SWEETS[(index * 2 + int(from.x)) % Props.SWEETS.size()].lerp(Props.MINT, 0.35))
 	var flower_facing := kit.view_basis * Basis(Vector3.RIGHT, PI * 0.5)
 	for cluster: Array in FLOWERS:
+		if not world.dresses(Vector2(float(cluster[0]), float(cluster[1]))): continue
 		for index in range(int(cluster[2])):
 			var seed_value := float(cluster[0]) * 2.3 + float(cluster[1]) * 4.1 + float(index) * 7.7
 			var at := Vector3(float(cluster[0]) + (_scatter(seed_value) * 2.0 - 1.0) * 1.1, LAWN_Y, float(cluster[1]) + (_scatter(seed_value + 1.0) * 2.0 - 1.0) * 0.9)
@@ -532,6 +546,7 @@ func _build_planting() -> void:
 			gloss.tube(at + Vector3(0, height + 0.08, 0), 0.13, 0.13, 0.07, Props.SWEETS[index % Props.SWEETS.size()], 7, flower_facing)
 			gloss.tube(at + Vector3(0, height + 0.08, 0) + kit.view_basis.z * 0.045, 0.06, 0.05, 0.03, Props.WHITE, 5, flower_facing)
 	for plant: Array in PLANTS:
+		if not world.in_dress_reach(Vector2(float(plant[1]), float(plant[3]))): continue
 		kit.billboard(str(plant[0]), Vector3(float(plant[1]), float(plant[2]), float(plant[3])), float(plant[4]))
 	var tower_at := Vector3(23.5, LAWN_Y, -8.5)
 	Props.cooling_tower(kit, tower_at)

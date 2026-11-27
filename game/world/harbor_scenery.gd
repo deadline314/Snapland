@@ -108,8 +108,9 @@ func _build_water_and_ground() -> void:
 	shoals.append_array(FLATS)
 	shoals.append(ISLET)
 	world.sea_material = kit.shore_water(world.LAND, shoals)
+	# On the island the bay is the island's own sea; the harbor keeps only its tidal basin.
 	var plane := PlaneMesh.new()
-	plane.size = Vector2(240, 240)
+	plane.size = Vector2(240, 240) if world.embedded_in == null else (world.BOUNDS as Rect2).size - Vector2(0.3, 0.3)
 	sea = world._mesh(plane, Vector3(0, _low_water, 0), world.sea_material)
 	sea.name = "HarborSea"
 	sea.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -129,7 +130,7 @@ func _build_water_and_ground() -> void:
 	sandbar_bank.name = "LowTideSandbarBank"
 	for index in range(FLATS.size()):
 		kit.mound(FLATS[index], FLAT_TOP, 0.55, 1.25, sand, 2.1 * float(index + 1))
-	kit.mound(ISLET, _ground_y, 0.9, 1.6, sand, 4.4)
+	if world.in_dress_reach(ISLET.get_center()): kit.mound(ISLET, _ground_y, 0.9, 1.6, sand, 4.4)
 
 ## Stone edges get a pale coping and bollards; timber edges a kerb beam and piles.
 ## Every wall carries a dark band that only low water uncovers.
@@ -169,7 +170,7 @@ func _edge_size(length: float, height: float, width: float, along_x: bool) -> Ve
 
 func _build_piers_and_docks() -> void:
 	# The causeway is the way back to the welcome avenue; the jetties are roped off.
-	_pier(Rect2(-47, 3.8, 32, 2.4), false)
+	_pier(Rect2(-47, 3.8, 32, 2.4) if world.embedded_in == null else world._site.approach, false)
 	_pier(Rect2(-8.6, 12, 1.9, 5.6), true)
 	_pier(Rect2(15, 1.9, 5.2, 1.7), true)
 	for dock: Vector3 in [world.SHORE_DOCK, world.LIGHTHOUSE_DOCK]:
@@ -246,6 +247,7 @@ func _build_dressing() -> void:
 	for post in LAMP_POSTS:
 		kit.lamp_post(post)
 	for plant: Array in PLANTS:
+		if not world.in_dress_reach(Vector2(float(plant[1]), float(plant[3]))): continue
 		kit.billboard(str(plant[0]), Vector3(float(plant[1]), float(plant[2]), float(plant[3])), float(plant[4]))
 	for index in range(CARGO.size()):
 		Props.cargo(kit, CARGO[index], index)
@@ -267,6 +269,7 @@ func _build_dressing() -> void:
 		kit.bunting(gallery + (corner - gallery).normalized() * 1.05, corner + Vector3(0, 2.75, 0), PENNANT_COLORS, 0.55)
 	var boulders := kit.batch("boulders", kit.unit_boulder, kit.shore_ground("rock", Color("#a59c8a"), Color("#5d5f5a"), 0.4))
 	for cluster: Array in ROCKS:
+		if not world.in_dress_reach(Vector2(float(cluster[0]), float(cluster[1]))): continue
 		for index in range(int(cluster[2])):
 			var seed_value := float(cluster[0]) * 3.1 + float(cluster[1]) * 1.7 + float(index) * 5.3
 			var size := float(cluster[5]) * (0.55 + 0.45 * _scatter(seed_value))
