@@ -220,7 +220,13 @@ func _layout(label: String) -> void:
 			continue
 		if not bounds.encloses(child.get_rect()) or not root.get_visible_rect().encloses(canvas * child.get_rect()):
 			errors.append("bounds " + child.name + " " + str(child.get_rect()))
-	check(buttons == 8 and labels >= 18 and band_rects.size() == 3 and errors.is_empty(), "%s complete actual labels/controls: %s" % [label, errors])
+	# The three rule paragraphs moved from resident labels into the header tooltip.
+	var rules := _view._get_tooltip(View.WORKSPACE.position - Vector2(0, 20))
+	for rule in ["Instruction", "RejoinRule", "ParticipationRule"]:
+		var hidden := _view.get_node(rule) as Label
+		if hidden.is_visible_in_tree() or hidden.text.is_empty() or not rules.contains(hidden.text):
+			errors.append("rule %s should be hidden and in the header tooltip" % rule)
+	check(buttons == 8 and labels >= 15 and band_rects.size() == 3 and errors.is_empty(), "%s complete actual labels/controls: %s" % [label, errors])
 	print("COTTON_LAYOUT ", JSON.stringify({"frame": label, "labels": labels, "controls": buttons, "errors": errors}))
 
 func _measure_cotton(stick: Node3D, bands: Array, expected_position: Vector3, angle: float) -> bool:

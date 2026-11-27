@@ -4,6 +4,10 @@ class_name SyrupFloodView
 signal command_requested(command: String, pressed: bool, source: String)
 signal pointer_requested(action: String, point: Vector2, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const STATUS_PLATE := Rect2(24, 140, 1232, 152)
+const BUTTON_ICONS := ["left", "right", "gate", "flame", "swap", "helper", "down", "wait"]
 const DESIGN_SIZE := Vector2(1280, 720)
 const STAGE := Rect2(24, 300, 1232, 278)
 const HEIGHT := 5.2
@@ -102,6 +106,17 @@ static func hover_text(command: String) -> String:
 		"helper": return "AI 只監看指定一缸，到 92% 關閥；不會加熱。"
 		"configuration": return "停流時可配置；停止升溫、流糖與計時，續流後才結算。"
 	return ""
+## Exact readings stay one hover away; the board shows them as meters.
+func _get_tooltip(at_position: Vector2) -> String:
+	if not STATUS_PLATE.has_point(at_position) or _snapshot.is_empty():
+		return tooltip_text
+	var lines: PackedStringArray = []
+	for i in 3:
+		var branch: Dictionary = _snapshot.branches[i]
+		lines.append("%d管 溫%d%% 黏%.2f 流%.1f · 長 %.2f 熱容 %.2f 容 %d" % [i + 1, roundi(branch.temperature * 100), branch.viscosity, 0.0 if _snapshot.configuration_paused else branch.flow, branch.length, branch.heat_capacity, branch.capacity])
+	lines.append("熱源 %s · AI %s · 冷塞 %.1f/%d %s · 旁路用糖 %.1f · 溢出 %d" % ["關" if _snapshot.heater < 0 else "%d管" % (_snapshot.heater + 1), "關" if _snapshot.helper < 0 else "%d管" % (_snapshot.helper + 1), _snapshot.plug_amount, _snapshot.plug_required, "已堵" if _snapshot.cold_plugged else ("旁路" if _snapshot.diversion else "入缸"), _snapshot.branches[1].leaked, _snapshot.mistakes])
+	return "\n".join(lines)
+
 func clear_pointer_input(emit_cancel: bool = true) -> void:
 	_pointer_owner = ""
 	_pointer_command = ""
@@ -190,6 +205,7 @@ func _create_stage() -> void:
 	sun.rotation_degrees = Vector3(-45, -25, 0)
 	sun.shadow_enabled = true
 	_world.add_child(sun)
+	StageProps.dress_lighting(_environment, sun)
 	var camera := Camera3D.new()
 	camera.name = "SyrupCamera"
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -202,10 +218,18 @@ func _create_stage() -> void:
 	camera.current = true
 	for item in [["metal", "#87b8bf"], ["edge", "#d3eeeb"], ["back", "#274451"], ["tank", "#4b747e"], ["band", "#5bdbad"], ["heater", "#ff713f"], ["plug", "#e3ae6a"], ["selected", "#fff19a"]]:
 		_materials[item[0]] = _material(item[1])
-	_box("Workbench", Vector3(21, 0.16, 3.8), Vector3(0, -0.15, 0), _materials.back)
+	# Copper troughs, brass-framed vats with plum enamel backs, a planked bench.
+	_materials.metal = StageProps.painted(Color("#8a4f3a"))
+	_materials.edge = StageProps.painted(Color("#d9ab55"))
+	_materials.tank = StageProps.painted(Color("#5a3a52"))
+	_materials.heater = StageProps.solid(Color("#ff713f"), 1.0, 0.6)
+	_materials.plug = StageProps.candy(Color("#e3ae6a"))
+	_materials.band = StageProps.solid(Color("#5bdbad"), 1.0, 0.25)
+	_box("Workbench", Vector3(24, 0.16, 3.8), Vector3(0, -0.15, 0), StageProps.wood(Color("#7a5238")))
+	_box("FactoryWall", Vector3(26, 8, 0.2), Vector3(0, 2.0, -1.95), StageProps.tiled_wall())
 	for i in 3:
 		var x := (i - 1) * 6.3
-		var syrup := _material("#cb944a")
+		var syrup := StageProps.candy(Color("#cb944a"))
 		_materials["syrup%d" % i] = syrup
 		_pipes.append(_box("PipeFloor%d" % i, Vector3(2.1, 0.14, 0.7), Vector3(x - 0.75, 2.35, 0), _materials.metal))
 		_pipe_backs.append(_box("PipeBack%d" % i, Vector3(2.1, 0.42, 0.12), Vector3(x - 0.75, 2.56, -0.35), _materials.edge))
@@ -227,7 +251,7 @@ func _create_stage() -> void:
 	_box("BypassTray", Vector3(1.1, 0.12, 1.1), Vector3(1.85, 0.65, 0.15), _materials.tank)
 	_selection = _box("SelectedValve", Vector3(1.3, 0.06, 0.65), Vector3.ZERO, _materials.selected)
 func _apply_snapshot() -> void:
-	_environment.background_color = Color("#263a49") if _time_phase in ["night", "evening"] else Color("#526773")
+	_environment.background_color = Color("#263a49") if _time_phase in ["night", "evening"] else Color("#6a5262")
 	var paused: bool = _snapshot.configuration_paused or _snapshot.ended
 	for i in 3:
 		var branch: Dictionary = _snapshot.branches[i]
@@ -276,22 +300,26 @@ func status_text() -> String:
 func feedback_text() -> String:
 	return str(_snapshot.get("feedback", ""))
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 152), Paper.DEEP_TEAL)
-	_text(Vector2(38, 170), status_text(), 930, 20, Paper.GOLD)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_PLUM, true)
+	_text(Vector2(40, 170), status_text(), 930, 20, Paper.GOLD)
 	if _snapshot.is_empty():
 		return
 	_text(Vector2(1000, 170), "%d 秒 · %d 分" % [ceili(_snapshot.remaining), _snapshot.score], 240, 18, Paper.TEAL)
+	_text(Vector2(40, 200), feedback_text(), 1190, 17)
+	# One fill meter per pipe, with the target zone marked and a heat strip under it.
 	for i in 3:
 		var branch: Dictionary = _snapshot.branches[i]
-		var x := 38.0 + i * 410
+		var x := 40.0 + i * 410
 		var selected: bool = _snapshot.selected == i
-		_text(Vector2(x, 204), "%s%d管 %s %d%% / %d%%" % ["▶" if selected else " ", i + 1, "溢出" if branch.spoiled else ("開" if branch.valve else "關"), roundi(100.0 * branch.fill / branch.capacity), roundi(100.0 * branch.target / branch.capacity)], 390, 18, Paper.CORAL if branch.spoiled else (Paper.GOLD if selected else Paper.TEAL))
-		var thermal: String = "冷" if branch.temperature <= 0.30 else ("熱" if branch.temperature >= 0.65 else "溫")
-		_text(Vector2(x, 233), "%s%d%% 黏%.2f 流%.1f" % [thermal, roundi(branch.temperature * 100), branch.viscosity, 0.0 if _snapshot.configuration_paused else branch.flow], 390, 16)
-		_text(Vector2(x, 262), "長 %.2f 熱容 %.2f 容 %d" % [branch.length, branch.heat_capacity, branch.capacity], 390, 16)
-	_text(Vector2(38, 288), "熱源 %s · AI %s" % ["關" if _snapshot.heater < 0 else "%d管" % (_snapshot.heater + 1), "關" if _snapshot.helper < 0 else "%d管" % (_snapshot.helper + 1)], 400, 16, Paper.CORAL)
-	_text(Vector2(448, 288), "冷塞 %.1f/%d %s" % [_snapshot.plug_amount, _snapshot.plug_required, "已堵" if _snapshot.cold_plugged else ("旁路" if _snapshot.diversion else "入缸")], 390, 16, Paper.TEAL)
-	_text(Vector2(858, 288), "旁路用糖 %.1f · 溢出 %d" % [_snapshot.branches[1].leaked, _snapshot.mistakes], 390, 16)
+		var tint: Color = Paper.CORAL if branch.spoiled else (Paper.GOLD if selected else Paper.TEAL)
+		_text(Vector2(x, 238), "%s%d管 %s" % ["▶" if selected else " ", i + 1, "溢出" if branch.spoiled else ("開" if branch.valve else "關")], 110, 18, tint)
+		var meter := Rect2(x + 112, 224, 250, 14)
+		Props.bar(self, meter, float(branch.fill) / float(branch.capacity), Color("#cb944a").lerp(Color("#ff6838"), branch.temperature))
+		var target_x: float = meter.position.x + meter.size.x * float(branch.target) / float(branch.capacity)
+		draw_rect(Rect2(target_x, meter.position.y - 4, 2, meter.size.y + 8), Color("#5bdbad"))
+		Props.bar(self, Rect2(x + 112, 256, 250, 6), branch.temperature, Color("#ff8a5a"), Color("#8a6a78"))
+		_text(Vector2(x + 370, 238), "%d%%" % roundi(100.0 * branch.fill / branch.capacity), 40, 16, tint)
+		_text(Vector2(x + 370, 266), "冷" if branch.temperature <= 0.30 else ("熱" if branch.temperature >= 0.65 else "溫"), 40, 15, Color("#ffb08a"))
 	for i in 3:
 		var at := design_point(Vector3((i - 1) * 6.3 + 0.45, -0.45, 0.0))
 		var branch: Dictionary = _snapshot.branches[i]
@@ -299,8 +327,4 @@ func _draw() -> void:
 	for i in COMMANDS.size():
 		var rect := button_rect(COMMANDS[i])
 		var held: bool = _pointer_command == COMMANDS[i] and not _pointer_owner.is_empty()
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(8, 26), BUTTON_KEYS[i], 131, 15, Paper.GOLD)
-		_text(rect.position + Vector2(8, 59), "續流" if COMMANDS[i] == "configuration" and _snapshot.configuration_paused else BUTTON_ACTIONS[i], 131, 16)
-	_text(Vector2(28, 700), feedback_text(), 1220, 17, Paper.GOLD)
+		Props.labelled_key(self, rect, held, BUTTON_ICONS[i], BUTTON_KEYS[i], "續流" if COMMANDS[i] == "configuration" and _snapshot.configuration_paused else BUTTON_ACTIONS[i], Paper.font(), text_size(15), text_size(16), true, Props.KEY_PLUM)

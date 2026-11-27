@@ -313,3 +313,60 @@ static func nest_mesh(radius: float) -> ArrayMesh:
 	sculpt.ball(Vector3(-radius * 0.22, radius * 0.48, 0), radius * 0.2, Color("#eef0e4"), Color("#d8dccb"), 6, 3, 1.25)
 	sculpt.ball(Vector3(radius * 0.2, radius * 0.46, radius * 0.1), radius * 0.18, Color("#e8ecdf"), Color("#d2d8c6"), 6, 3, 1.25)
 	return sculpt.mesh()
+
+# --- candy factory (games 025–036) ---------------------------------------------
+
+## Boiled sugar and jelly: glossy, with a pale rim where the form turns away.
+static func candy(color: Color, alpha := 1.0) -> StandardMaterial3D:
+	var material := solid(color, alpha)
+	material.roughness = 0.28
+	material.rim_enabled = true
+	material.rim = 0.45
+	material.rim_tint = 0.2
+	return material
+
+## Candy-cane pillar standing on y = 0: a dark plinth, a shaft of twisted
+## stripes in `tone` and `stripe`, a moulding and a brass cap plate.
+static func candy_pillar_mesh(radius: float, height: float, tone: Color, stripe: Color) -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	sculpt.tube(Vector3(0, height * 0.05, 0), radius * 1.3, radius * 1.2, height * 0.1, tone.darkened(0.35), 8)
+	var rings := 8
+	var shaft := height * 0.78
+	for ring in rings:
+		var low := height * 0.1 + shaft * ring / rings
+		sculpt.tube(Vector3(0, low + shaft / rings * 0.5, 0), radius, radius, shaft / rings + 0.002, stripe if ring % 2 == 0 else tone, 8, Basis(Vector3.UP, ring * 0.4))
+	sculpt.tube(Vector3(0, height * 0.92, 0), radius * 1.05, radius * 1.3, height * 0.06, tone.lightened(0.12), 8)
+	sculpt.tube(Vector3(0, height * 0.97, 0), radius * 1.4, radius * 1.4, height * 0.05, Color("#d9ab55"), 8)
+	return sculpt.mesh()
+
+## Striped boiled sweet centred on its middle.
+static func sweet_mesh(radius: float, tone: Color, stripe: Color) -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	sculpt.ball(Vector3.ZERO, radius, tone, stripe, 10, 5)
+	return sculpt.mesh()
+
+## Copper pan standing on y = 0 with a flared wall, a rolled rim and a dark well.
+static func copper_pan_mesh(radius: float, depth: float, tone := Color("#c07a52")) -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	sculpt.tube(Vector3(0, depth * 0.5, 0), radius * 0.75, radius, depth, tone, 10)
+	sculpt.tube(Vector3(0, depth, 0), radius * 1.08, radius * 1.08, depth * 0.14, tone.lightened(0.2), 10)
+	sculpt.tube(Vector3(0, depth * 1.02, 0), radius * 0.9, radius * 0.9, depth * 0.06, Color("#3a2228"), 10)
+	sculpt.box(Vector3(radius * 1.2, depth * 0.8, 0), Vector3(radius * 0.5, depth * 0.14, radius * 0.18), tone.darkened(0.3))
+	return sculpt.mesh()
+
+## Jelly block centred on its middle: a glossy body, a paler top slab and a
+## darker skirt where it meets the floor.
+static func jelly_mesh(size: Vector3, tone: Color) -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	sculpt.box(Vector3(0, -size.y * 0.42, 0), Vector3(size.x * 1.02, size.y * 0.16, size.z * 1.02), tone.darkened(0.25))
+	sculpt.box(Vector3(0, -size.y * 0.04, 0), Vector3(size.x, size.y * 0.62, size.z), tone)
+	sculpt.box(Vector3(0, size.y * 0.38, 0), Vector3(size.x * 0.94, size.y * 0.22, size.z * 0.94), tone.lightened(0.22))
+	sculpt.box(Vector3(-size.x * 0.25, size.y * 0.5, size.z * 0.2), Vector3(size.x * 0.22, size.y * 0.04, size.z * 0.12), tone.lightened(0.5))
+	return sculpt.mesh()
+
+## Factory back wall: large glazed tiles in a muted tone, so the wall recedes
+## behind the brighter candy in front of it.
+static func tiled_wall(color := Color("#8f6a74")) -> ShaderMaterial:
+	var material := stone(color)
+	material.set_shader_parameter("block", Vector2(1.3, 0.65))
+	return material

@@ -5,6 +5,11 @@ signal command_requested(command: String, pressed: bool, source: String)
 signal pointer_requested(action: String, point: Vector2, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const SIDE_PANEL := Rect2(966, 210, 290, 364)
+const BUTTON_ICONS := ["swap", "grab", "anchor", "up", "undo", "helper"]
 const DESIGN_SIZE := Vector2(1280, 720)
 const STAGE := Rect2(24, 210, 928, 364)
 const WORLD := Rect2(-6.3077, -3.2, 21.4154, 8.4)
@@ -67,7 +72,13 @@ static func endpoint_at(point: Vector2, state: Dictionary) -> int:
 	return result
 
 func _get_tooltip(at_position: Vector2) -> String:
-	return "共用支點先換端，再抓端點。" if button_rect("next").has_point(at_position) else ""
+	if button_rect("next").has_point(at_position):
+		return "共用支點先換端，再抓端點。"
+	if STATUS_PLATE.has_point(at_position):
+		return "搭長橋或中央短橋，三球送到右岸。Enter 上料，也可免費重送落球。先彈中料斗，再用同帶運送三球得小惡魔；X 回收會清除命中。"
+	if SIDE_PANEL.has_point(at_position):
+		return "糖帶越長越細、越下垂。金色端點已固定，白色抓取中，藍色由 AI 保持，圓圈是選中的端點。"
+	return ""
 
 static func pointer_source(event: InputEvent) -> String:
 	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT or event is InputEventMouseMotion) and event.device != InputEvent.DEVICE_ID_EMULATION:
@@ -209,6 +220,7 @@ func _create_stage() -> void:
 	_sun.rotation_degrees = Vector3(-40, -25, 0)
 	_sun.shadow_enabled = true
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "SugarCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -218,14 +230,19 @@ func _create_stage() -> void:
 	_world.add_child(_camera)
 	_camera.current = true
 	for item in [["table", "#653d45"], ["edge", "#bd8066"], ["support", "#f1dcaa"], ["pin", "#e6ae3f"], ["pink", "#e995a9"], ["mint", "#6ecab1"], ["selected", "#ffdc64"], ["held", "#fff4df"], ["helper", "#82a7f0"], ["ball", "#ba653c"], ["bean", "#e6bf55"], ["hopper", "#c68758"], ["hit", "#8bd9a8"], ["broken", "#9b8e87"]]:
-		_materials[item[0]] = _material(item[1])
-	_box("WorkbenchBack", Vector3(19, 7.5, 0.2), Vector3(4.4, 0.1, -1.6), _world, _materials.table)
-	_box("WorkbenchEdge", Vector3(19, 0.3, 3), Vector3(4.4, -3, -0.4), _world, _materials.edge)
+		_materials[item[0]] = StageProps.candy(Color(item[1])) if item[0] in ["pink", "mint", "hit", "held", "helper", "selected", "bean"] else _material(item[1])
+	_materials["sculpt"] = StageProps.sculpt_material()
+	# Pastel tiled factory wall, a cream wainscot and a planked biscuit bench.
+	_box("WorkbenchBack", Vector3(24, 10, 0.2), Vector3(4.4, 1.0, -1.6), _world, StageProps.tiled_wall())
+	_box("Wainscot", Vector3(24, 1.6, 0.3), Vector3(4.4, -2.4, -1.45), _world, StageProps.wood(Color("#efd9b8"), 0.3, true))
+	_box("WorkbenchEdge", Vector3(24, 0.3, 3), Vector3(4.4, -3, -0.4), _world, StageProps.wood(Color("#7a5238")))
+	_box("BenchFront", Vector3(24, 1.2, 0.2), Vector3(4.4, -3.7, 1.1), _world, StageProps.wood(Color("#8f6444"), 0.3, true))
+	var pillar := StageProps.candy_pillar_mesh(0.4, 2.4, Color("#f4e2c2"), Color("#e58aa0"))
 	for i in 3:
 		var support := Node3D.new()
 		support.name = "Support%d" % i
 		_world.add_child(support)
-		_box("Pedestal", Vector3(0.8, 2.4, 1.2), Vector3(0, -1.2, -0.4), support, _materials.support)
+		StageProps.add(support, "Pedestal", pillar, _materials.sculpt, Vector3(0, -2.4, -0.4))
 		_box("Top", Vector3(1.1, 0.16, 1.5), Vector3(0, -0.08, -0.25), support, _materials.pin)
 		_sphere("Pin", 0.12, Vector3.ZERO, support, _materials.pin)
 		_label(["左岸", "中央", "右岸"][i], Vector3(0, -1.85, 0.4), support)
@@ -238,17 +255,16 @@ func _create_stage() -> void:
 	for i in 4:
 		_handles.append(_sphere("Endpoint%d" % i, 0.23, Vector3.ZERO, _world, _materials.pink if i < 2 else _materials.mint))
 		_endpoint_labels.append(_label(str(i + 1), Vector3(0, 0.43, 0.3), _handles[-1]))
+	var sweet := StageProps.sweet_mesh(0.21, Color("#d0703f"), Color("#f6dcb0"))
 	for i in 3:
-		_balls.append(_sphere("DeliveryBall%d" % i, 0.21, Vector3.ZERO, _world, _materials.ball))
+		_balls.append(StageProps.add(_world, "DeliveryBall%d" % i, sweet, _materials.sculpt))
 	_bean = _sphere("TrialBean", 0.16, Vector3.ZERO, _world, _materials.bean)
 	for i in 30:
 		_preview.append(_sphere("Preview%d" % i, 0.045, Vector3.ZERO, _world, _materials.bean))
 	_hopper = Node3D.new()
 	_hopper.name = "SideHopper"
 	_world.add_child(_hopper)
-	_box("Bowl", Vector3(1.0, 0.25, 0.8), Vector3(0, -0.25, -0.15), _hopper, _materials.hopper)
-	for side in [-1, 1]:
-		_box("Lip", Vector3(0.14, 0.65, 0.8), Vector3(side * 0.5, 0, -0.15), _hopper, _materials.hopper)
+	StageProps.add(_hopper, "Bowl", StageProps.copper_pan_mesh(0.5, 0.6), _materials.sculpt, Vector3(0, -0.375, -0.15))
 	_label("試料斗", Vector3(0, 0.65, 0.2), _hopper)
 	var ring := TorusMesh.new()
 	ring.inner_radius = 0.29
@@ -300,7 +316,7 @@ func _apply_snapshot() -> void:
 		if _preview[i].visible:
 			_preview[i].position = _at(_snapshot.preview[i], 0.25)
 	var night := _time_phase == "night"
-	_environment.background_color = Color("#302b42") if night else Color("#d8b6a5")
+	_environment.background_color = Color("#302b42") if night else Color("#c99a96")
 	_sun.light_color = Color("#b6c9ed") if night else Color("#fff0d4")
 	_sun.light_energy = 0.8 if night else 1.1
 	var physical_scale := Paper.physical_scale(self) * get_global_transform_with_canvas().x.length()
@@ -323,30 +339,21 @@ func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: 
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, text_size(font_size), color)
 
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
-	_text(Vector2(38, 165), status_text(), 1200, 17)
-	_text(Vector2(38, 191), "搭長橋或中央短橋，三球送到右岸。Enter 上料，也可免費重送落球。", 1200, 17)
-	draw_rect(Rect2(966, 210, 290, 364), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_PLUM, true)
+	_text(Vector2(40, 166), status_text(), 1190, 17)
+	_text(Vector2(40, 193), str(_snapshot.get("feedback", "")), 1190, 18, Paper.GOLD)
+	Props.wood_panel(self, SIDE_PANEL, Props.SIGN_PLUM, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(980, 237), "糖帶材料", 260, 20, Paper.GOLD)
+		_text(Vector2(982, 240), "糖帶材料", 250, 20, Paper.GOLD)
 		for i in 2:
 			var band: Dictionary = _snapshot.bands[i]
-			var y := 273 + i * 104
-			_text(Vector2(980, y), "糖帶 %d  %s" % [i + 1, "已斷 · X 回收" if band.broken else ("已命中料斗" if band.hit else "可拉伸")], 260, 17)
-			_text(Vector2(980, y + 28), "長 %.1f · 厚 %.2f" % [band.length, band.thickness], 260, 17)
-			if _snapshot.assisted:
-				_text(Vector2(980, y + 55), "載 %.1f／限 %.1f" % [band.load, band.capacity], 260, 16)
-			else:
-				_text(Vector2(980, y + 55), "越長越細、越下垂", 260, 16)
-		_text(Vector2(980, 502), "重 %.2f · 彈 %.2f" % [_snapshot.weight, _snapshot.elasticity], 260, 16)
-		_text(Vector2(980, 536), "金固定 · 白抓取", 260, 16)
-		_text(Vector2(980, 562), "藍 AI · 圈選中", 260, 16)
+			var y := 280 + i * 92
+			Props.token(self, Vector2(990, y - 6), 7.0, Color("#e995a9") if i == 0 else Color("#6ecab1"))
+			_text(Vector2(1004, y), "糖帶 %d  %s" % [i + 1, "已斷 · X 回收" if band.broken else ("已命中料斗" if band.hit else "可拉伸")], 240, 17)
+			_text(Vector2(982, y + 30), ("長 %.1f · 厚 %.2f · 載 %.1f／%.1f" % [band.length, band.thickness, band.load, band.capacity]) if _snapshot.assisted else ("長 %.1f · 厚 %.2f" % [band.length, band.thickness]), 260, 16)
+		_text(Vector2(982, 480), "重 %.2f · 彈 %.2f" % [_snapshot.weight, _snapshot.elasticity], 250, 16)
 	for i in COMMANDS.size():
 		var rect := button_rect(COMMANDS[i])
 		var held := _pointer_owners.values().has(COMMANDS[i])
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(8, 24), BUTTON_KEYS[i], rect.size.x - 12, 15)
-		_text(rect.position + Vector2(8, 52), BUTTON_ACTIONS[i], rect.size.x - 12, 15)
-	_text(Vector2(28, 674), str(_snapshot.get("feedback", "")), 1220, 19, Paper.GOLD)
-	_text(Vector2(28, 704), "先彈中料斗，再用同帶運送三球得小惡魔；X 回收會清除命中。", 1220, 17)
+		Props.control_key(self, rect, held, BUTTON_ICONS[i], BUTTON_ACTIONS[i], Paper.font(), text_size(15), true, Props.KEY_PLUM)
+		draw_string(Paper.font(), rect.position + Vector2(0, 17 + (6 if held else 0)), BUTTON_KEYS[i], HORIZONTAL_ALIGNMENT_RIGHT, rect.size.x - 10, text_size(12), Color(Paper.GOLD, 0.85))

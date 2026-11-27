@@ -267,7 +267,7 @@ COOKIE_SUITES = {
 SYRUP_SUITES = {
     "syrup model tests": ("test_syrup_flood.gd", "Syrup flood tests: 308 checks, 0 failures"),
     "syrup driver tests": ("test_syrup_flood_driver.gd", "Syrup flood driver: 96 checks, 0 failures"),
-    "syrup view tests": ("test_syrup_flood_view.gd", "Syrup flood view: 104 checks, 0 failures"),
+    "syrup view tests": ("test_syrup_flood_view.gd", "Syrup flood view: 105 checks, 0 failures"),
     "syrup Session tests": ("test_syrup_flood_session.gd", "Syrup flood Session: 46 checks, 0 failures"),
     "syrup Main tests": ("test_syrup_flood_main.tscn", "PASS: syrup Main factory entry, three real filled closed tanks, fixed rewards, selected retake originals and reload"),
 }
@@ -281,7 +281,7 @@ CHOCOLATE_SUITES = {
 JELLY_SUITES = {
     "jelly model tests": ("test_jelly_trampoline.gd", "Jelly trampoline tests: 215 checks, 0 failures"),
     "jelly driver tests": ("test_jelly_trampoline_driver.gd", "Jelly trampoline driver: 78 checks, 0 failures"),
-    "jelly view tests": ("test_jelly_trampoline_view.gd", "Jelly trampoline view: 83 checks, 0 failures"),
+    "jelly view tests": ("test_jelly_trampoline_view.gd", "Jelly trampoline view: 94 checks, 0 failures"),
     "jelly Session tests": ("test_jelly_trampoline_session.gd", "Jelly trampoline Session: 52 checks, 0 failures"),
     "jelly Main tests": ("test_jelly_trampoline_main.tscn", "PASS: jelly Main factory entry, three real deliveries and same-fruit bell, fixed rewards, selected retake originals and reload"),
 }

@@ -6,6 +6,10 @@ signal clear_requested
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Model = preload("res://game/minigames/cotton_wind_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const HEADER := Rect2(24, 140, 1232, 98)
+const FOOTER := Rect2(24, 636, 1232, 36)
 const DESIGN_SIZE := Vector2(1280, 720)
 const WORKSPACE := Rect2(24, 242, 880, 390)
 const COMMAND_PANEL := Rect2(916, 242, 340, 390)
@@ -22,7 +26,7 @@ const BAND_NAMES := ["左段", "中段", "右段"]
 const BAND_TINTS := [Color("#ffd0ac"), Color("#ffadd5"), Color("#d5bbff")]
 const WOOD := Color("#b68055")
 const HELPER_TINT := Color("#8ae0c4")
-const BOARD := Color("#153146")
+const BOARD := Color("#3a2838")
 const EDGE := Color("#4e768c")
 const CAMERA_FOCUS := Vector3(0, 94, 100)
 const CAMERA_YAW := PI / 18.0
@@ -132,6 +136,8 @@ func _gui_input(event: InputEvent) -> void:
 func _get_tooltip(at_position: Vector2) -> String:
 	if WORKSPACE.has_point(at_position):
 		return "拖曳移棒，點轉棒按鈕可邊轉邊移"
+	if HEADER.has_point(at_position) or at_position.y >= FOOTER.position.y:
+		return "%s\n%s\n%s" % [_labels.Instruction.text, _labels.RejoinRule.text, _labels.ParticipationRule.text]
 	var command := COMMANDS.find(command_at(at_position))
 	return TOOLTIPS[command] if command >= 0 else ""
 
@@ -156,8 +162,6 @@ func _add_label(label_name: String, rect: Rect2, font_size: int, color: Color) -
 	return label
 
 func _create_interface() -> void:
-	var normal := Paper.button_box(Paper.FRAME, EDGE)
-	var held := Paper.button_box(Color("#4b4541"), Paper.GOLD)
 	for i in COMMANDS.size():
 		var command: String = COMMANDS[i]
 		var button := Button.new()
@@ -166,8 +170,7 @@ func _create_interface() -> void:
 		button.focus_mode = Control.FOCUS_NONE
 		button.toggle_mode = true
 		button.text = ACTIONS[i] + "\n" + KEY_LABELS[i]
-		button.add_theme_stylebox_override("normal", normal)
-		button.add_theme_stylebox_override("pressed", held)
+		Props.skin_key(button, Props.KEY_PLUM)
 		button.add_theme_color_override("font_color", Paper.PAPER)
 		button.add_theme_color_override("font_pressed_color", Paper.GOLD)
 		add_child(button)
@@ -203,6 +206,9 @@ func _create_interface() -> void:
 	_add_label("Feedback", Rect2(40, 635, 1200, 31), 20, Paper.GOLD)
 	_add_label("RejoinRule", Rect2(40, 668, 1200, 25), 16, Paper.PAPER).text = "將斷時轉棒，用另一外段碰自由端。均勻並實際接回可得小惡魔；AI 只收自己的糖絲。"
 	_add_label("ParticipationRule", Rect2(40, 692, 1200, 25), 16, Paper.PAPER).text = "正式回合自然結束，收絲至少 1、移棒至少 6、轉棒至少 0.5 弧度可收藏普通拍貼。均勻後確認才通關。"
+	# Two resident lines in the header; the rules sit in its tooltip.
+	for rule in ["Instruction", "RejoinRule", "ParticipationRule"]:
+		_labels[rule].visible = false
 
 func _material(tint: Color, unshaded := false) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
@@ -240,7 +246,7 @@ func _rod(node_name: String, cotton: ArrayMesh, grip_color: Color, cotton_materi
 	_world.add_child(rod)
 	_mesh("DepositedCotton", cotton, rod, cotton_material)
 	var grip := _cylinder(4.1, 15.0)
-	var grip_material := _material(grip_color)
+	var grip_material := StageProps.candy(grip_color)
 	var marker_material := _material(Paper.GOLD)
 	for side in [-1, 1]:
 		var handle := _mesh("Grip%d" % side, grip, rod, grip_material)
@@ -280,7 +286,10 @@ func _create_stage() -> void:
 	var light := DirectionalLight3D.new()
 	light.rotation_degrees = Vector3(-64, -35, 0)
 	light.light_energy = 0.75
+	light.shadow_enabled = true
 	_world.add_child(light)
+	StageProps.dress_lighting(_environment, light)
+	_environment.ssao_radius = 12.0
 	_camera = Camera3D.new()
 	_camera.name = "WorkbenchCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -289,14 +298,22 @@ func _create_stage() -> void:
 	_camera.transform = Transform3D(Basis(CAMERA_RIGHT, CAMERA_UP, CAMERA_BACK), CAMERA_FOCUS + CAMERA_BACK * 500.0)
 	_world.add_child(_camera)
 	_camera.current = true
-	_box("Countertop", Vector3(490, 10, 254), Vector3(0, -4, 93), _material(Color("#345671")))
-	var lane_material := _material(Color("#57778c"))
+	# A planked biscuit counter (the stage is in centimetres, so planks are 30 wide).
+	var counter := StageProps.wood(Color("#b07a4c"), 30.0)
+	counter.set_shader_parameter("texels_per_metre", 0.16)
+	_box("Countertop", Vector3(490, 10, 254), Vector3(0, -4, 93), counter)
+	var lane_material := _material(Color("#e8c9a0"))
 	for z in [45.0, 100.0, 155.0]:
 		_box("DistanceLine", Vector3(406, 0.2, 1.2), Vector3(0, 1.15, z), lane_material)
-	var spinner := _mesh("SugarSpinner", _cylinder(27.0, 34.0), _world, _material(Color("#a85c74")))
+	# Candy-floss spinner: rose enamel drum with cream bands, a brass rim, a glowing sugar bed.
+	var spinner := _mesh("SugarSpinner", _cylinder(27.0, 34.0), _world, StageProps.candy(Color("#c06a86")))
 	spinner.position = Vector3(0, 20, 0)
-	_mesh("SpinnerRim", _cylinder(29.0, 4.0), _world, _material(Color("#d492a8"))).position.y = 37
-	_mesh("SugarSource", _cylinder(21.0, 1.0), _world, _material(Color("#ffd287"))).position.y = 39.2
+	var band_material := StageProps.candy(Color("#fbead2"))
+	for band in 2:
+		_mesh("SpinnerBand%d" % band, _cylinder(27.6, 4.0), spinner, band_material).position.y = -8.0 + band * 12.0
+	_mesh("SpinnerFoot", _cylinder(31.0, 4.0), _world, StageProps.solid(Color("#8a4f5e"))).position.y = 2
+	_mesh("SpinnerRim", _cylinder(29.0, 4.0), _world, StageProps.solid(Color("#d9ab55"))).position.y = 37
+	_mesh("SugarSource", _cylinder(21.0, 1.0), _world, StageProps.solid(Color("#ffd287"), 1.0, 0.35)).position.y = 39.2
 	var cotton_material := _material(Color.WHITE)
 	cotton_material.vertex_color_use_as_albedo = true
 	cotton_material.vertex_color_is_srgb = true
@@ -498,6 +515,7 @@ func _apply_interface() -> void:
 		_buttons[command].set_pressed_no_signal(command in _state.get("held_commands", []) or (command == "helper" and _state.helper))
 
 func _draw() -> void:
-	draw_rect(Rect2(0, 140, 1280, 580), Paper.DEEP)
-	draw_rect(WORKSPACE.grow(2), EDGE)
-	draw_rect(COMMAND_PANEL, BOARD)
+	Props.wood_panel(self, HEADER, Props.SIGN_PLUM, true)
+	Props.metal_plate(self, WORKSPACE.grow(6), Props.BRASS, false)
+	Props.wood_panel(self, COMMAND_PANEL, Props.SIGN_PLUM, true)
+	Props.wood_panel(self, FOOTER, Props.SIGN_PLUM, true)

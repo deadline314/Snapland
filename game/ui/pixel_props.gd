@@ -250,6 +250,19 @@ static func control_key(canvas: CanvasItem, rect: Rect2, held: bool, icon_name: 
 		size -= 1
 	canvas.draw_string(font, rect.position + Vector2(text_from, (rect.size.y - 8.0) * 0.5 + size * 0.36) + sink, label, HORIZONTAL_ALIGNMENT_LEFT, room, size, Color("#f0f0d8") if enabled else Color("#8fa6a8"))
 
+## A two-line control key for narrow keys: icon and key name on top, the action
+## underneath, both in the caller's font sizes so text stays legible.
+static func labelled_key(canvas: CanvasItem, rect: Rect2, held: bool, icon_name: String, key_label: String, action: String, font: Font, key_size: int, action_size: int, enabled := true, tone := Color("#2f6470")) -> void:
+	key_cap(canvas, rect, held, enabled, tone)
+	var sink := Vector2(0, 6.0 if held else 0.0)
+	var room := rect.size.x - 14.0
+	var key_from := 10.0
+	if ICONS.has(icon_name):
+		icon(canvas, icon_name, rect.position + Vector2(18, 16) + sink, Color("#ffc66d") if held else Color("#f0e0b8"))
+		key_from = 32.0
+	canvas.draw_string(font, rect.position + Vector2(key_from, 22) + sink, key_label, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - key_from - 6.0, key_size, Color("#ffc66d") if held else Color("#e8d8b0"))
+	canvas.draw_string(font, rect.position + Vector2(8, rect.size.y - 18) + sink, action, HORIZONTAL_ALIGNMENT_LEFT, room, action_size, Color("#f0f0d8") if enabled else Color("#8fa6a8"))
+
 ## Skins a Button node as the same physical key: the cap sinks onto its lip and
 ## shows a brass edge while the button is pressed (a held or chosen toggle), the
 ## label sinks with it, and an optional icon sits left of the label.

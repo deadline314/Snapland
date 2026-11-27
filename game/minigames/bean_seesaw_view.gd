@@ -4,6 +4,10 @@ signal input_requested(event: InputEvent, design_point: Vector2)
 
 const Model = preload("res://game/minigames/bean_seesaw_model.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const STATUS_PLATE := Rect2(24, 156, 1232, 72)
+const BUTTON_ICONS := ["", "", "", "", "", "down", "down", "helper", "confirm"]
 const STAGE := Rect2(24, 231, 1232, 328)
 enum { HOPPER_LEFT = 5, HOPPER_RIGHT, HELPER, FINISH }
 const BUTTONS := ["最左", "左", "中央", "右", "最右", "左料斗 · Q", "右料斗 · E", "AI 扶板 · R", "結算 · F"]
@@ -49,7 +53,12 @@ static func button_at(point: Vector2) -> int:
 
 func _get_tooltip(at_position: Vector2) -> String:
 	var index := button_at(at_position)
+	if index < 0 and (STATUS_PLATE.has_point(at_position) or STAGE.has_point(at_position)):
+		return "A / D 或方向鍵移踏板，Home / End 到兩端"
 	return TOOLTIPS[index] if index >= 0 else ""
+
+func _draw() -> void:
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_PLUM, true)
 
 func _gui_input(event: InputEvent) -> void:
 	if mouse_filter == Control.MOUSE_FILTER_IGNORE:
@@ -75,8 +84,6 @@ func _make_widgets() -> void:
 	_add_label(Rect2(32, 164, 1216, 29), 22, CREAM)
 	_add_label(Rect2(32, 198, 1216, 26), 19, MINT)
 	_add_label(Rect2(32, 560, 1216, 28), 17, GOLD)
-	var normal := Paper.button_box(Color("#37324a"), Color("#8c7c99"))
-	var selected := Paper.button_box(Color("#54384d"), GOLD)
 	for index in BUTTONS.size():
 		var button := Button.new()
 		button.text = BUTTONS[index]
@@ -85,8 +92,7 @@ func _make_widgets() -> void:
 		button.focus_mode = Control.FOCUS_NONE
 		button.clip_text = true
 		button.toggle_mode = true
-		button.add_theme_stylebox_override("normal", normal)
-		button.add_theme_stylebox_override("pressed", selected)
+		Props.skin_key(button, Props.KEY_PLUM, BUTTON_ICONS[index])
 		button.add_theme_color_override("font_color", CREAM)
 		button.add_theme_color_override("font_pressed_color", GOLD)
 		add_child(button)
@@ -121,7 +127,7 @@ func _apply() -> void:
 	_labels[0].text = "%s    ｜    側槽%s" % [sync_text, "已收" if _state.side_catch else "待回彈"]
 	_labels[1].text = _state.feedback_text
 	var rise: float = _state.angular_speed * Model.HALF_LENGTH * cos(_state.angle)
-	_labels[2].text = "A / D 或方向鍵移踏板，Home / End 到兩端    ｜    右端 %s %.1f    ｜    %s" % [
+	_labels[2].text = "右端 %s %.1f    ｜    %s" % [
 		"上升 ↑" if rise > 0.10 else ("下降 ↓" if rise < -0.10 else "平穩"), absf(rise),
 		"雙料斗高低不同" if _state.layout == 1 else "左料斗先出重豆",
 	]
@@ -173,7 +179,9 @@ func _make_stage() -> void:
 	var light := DirectionalLight3D.new()
 	light.rotation_degrees = Vector3(-35, -25, 0)
 	light.light_energy = 0.90
+	light.shadow_enabled = true
 	world.add_child(light)
+	StageProps.dress_lighting(environment, light)
 	var camera := Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.keep_aspect = Camera3D.KEEP_HEIGHT
@@ -183,24 +191,36 @@ func _make_stage() -> void:
 	camera.look_at(Vector3(0, 2.3, 0))
 	camera.current = true
 
-	var plum := _material(Color("#51425c"))
-	var copper := _material(Color("#be7a67"))
-	var cocoa := _material(Color("#774d59"))
-	var mint := _material(MINT)
-	var pink := _material(PINK)
-	var ochre := _material(GOLD)
+	var plum := StageProps.candy(Color("#6b4f6e"))
+	var copper := _material(Color("#d29a5e"))
+	var cocoa := StageProps.candy(Color("#a85c74"))
+	var mint := StageProps.candy(MINT)
+	var pink := StageProps.candy(PINK)
+	var ochre := StageProps.candy(GOLD)
+	var brass := StageProps.solid(Color("#d9ab55"))
+	var seam := _material(Color("#8a5a3a"))
 	_bean_materials.assign([mint, ochre])
 	_pan_empty = _material(Color("#284a4f"))
 	_slot_empty = plum
 	_slot_full = pink
-	_box(world, Vector3(13.8, 0.31, 2.5), Vector3(0, 0.14, 0), cocoa)
-	_box(world, Vector3(13.65, 0.09, 2.4), Vector3(0, 0.33, 0), copper)
+	# Tiled factory wall, a planked bench, a candy-striped fulcrum with a brass axle.
+	_box(world, Vector3(22, 9, 0.2), Vector3(0, 3.6, -1.6), StageProps.tiled_wall())
+	_box(world, Vector3(13.8, 0.31, 2.5), Vector3(0, 0.14, 0), StageProps.painted(Color("#6a4434")))
+	_box(world, Vector3(13.65, 0.09, 2.4), Vector3(0, 0.33, 0), StageProps.wood(Color("#c9935e")))
 	_cylinder(world, 0.26, 0.68, Model.BOARD_HEIGHT - 0.36, Vector3(0, Model.BOARD_HEIGHT * 0.5 + 0.14, -0.06), plum)
-	_cylinder(world, 0.28, 0.28, 0.28, Vector3(0, Model.BOARD_HEIGHT, 0.33), ochre).rotation_degrees.x = 90
+	for band in 3:
+		var at := 0.35 + band * 0.3
+		_cylinder(world, lerpf(0.68, 0.26, at) + 0.02, lerpf(0.68, 0.26, at - 0.08) + 0.02, (Model.BOARD_HEIGHT - 0.36) * 0.08, Vector3(0, 0.14 + (Model.BOARD_HEIGHT - 0.36) * at, -0.06), pink)
+	_cylinder(world, 0.28, 0.28, 0.28, Vector3(0, Model.BOARD_HEIGHT, 0.33), brass).rotation_degrees.x = 90
 	_board = Node3D.new()
 	_board.position = Vector3(0, Model.BOARD_HEIGHT, 0)
 	world.add_child(_board)
 	_box(_board, Vector3(2 * Model.HALF_LENGTH, 0.18, 0.66), Vector3.ZERO, copper)
+	# Plank seams and brass end caps ride with the board as it tips.
+	for joint in [-0.6, -0.2, 0.2, 0.6]:
+		_box(_board, Vector3(0.03, 0.19, 0.67), Vector3(joint * Model.HALF_LENGTH, 0, 0), seam)
+	for end in [-1.0, 1.0]:
+		_box(_board, Vector3(0.1, 0.22, 0.7), Vector3(end * Model.HALF_LENGTH, 0, 0), brass)
 	_box(_board, Vector3(2 * Model.HALF_LENGTH, 0.12, 0.09), Vector3(0, 0.06, -0.31), ochre)
 	_box(_board, Vector3(0.45, 0.06, 0.59), Vector3(2.11, 0.10, 0), pink)
 	_pedal = _box(_board, Vector3(0.38, 0.23, 0.49), Vector3(0, -0.23, 0.02), mint)
@@ -215,7 +235,7 @@ func _make_stage() -> void:
 		world.add_child(hopper)
 		_hoppers.append(hopper)
 		_cylinder(hopper, 0.43, 0.16, 0.49, Vector3.ZERO, cocoa)
-		_cylinder(hopper, 0.46, 0.46, 0.09, Vector3(0, 0.27, 0), copper)
+		_cylinder(hopper, 0.46, 0.46, 0.09, Vector3(0, 0.27, 0), brass)
 		_box(hopper, Vector3(0.23, 0.16, 0.35), Vector3(0, -0.24, 0), ochre)
 		_hopper_labels.append(_caption(hopper, Vector3(0, 0.56, 0.03), CREAM, 30))
 		var sphere := SphereMesh.new()

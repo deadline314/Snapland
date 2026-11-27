@@ -4,6 +4,10 @@ class_name JellyTrampolineView
 signal command_requested(command: String, pressed: bool, source: String)
 signal pointer_requested(action: String, point: Vector2, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const STATUS_PLATE := Rect2(24, 140, 1232, 140)
+const BUTTON_ICONS := ["left", "right", "turn_left", "turn_right", "up", "helper", "undo"]
 const DESIGN_SIZE := Vector2(1280, 720)
 const STAGE := Rect2(24, 288, 1232, 290)
 const COMMANDS := ["bed_left", "bed_right", "tilt_left", "tilt_right", "charge", "helper", "reset_fruit"]
@@ -49,6 +53,11 @@ static func hover_text(command: String) -> String:
 		"helper": return "AI只在實際接觸彈床時接穩，等你蓄彈放行。"
 		"bed_left", "bed_right": return "移床一格；空中移床只影響實際回接。"
 	return ""
+func _get_tooltip(at_position: Vector2) -> String:
+	if STATUS_PLATE.has_point(at_position):
+		return "亮帶＝果心安全支撐。AI 接穩等你放行。X 重置不回時間；斜壓改變水平速度。"
+	return hover_text(command_at(at_position))
+
 func handle_pointer(event: InputEvent, point: Vector2) -> bool:
 	var source := pointer_source(event)
 	if source.is_empty():
@@ -163,6 +172,7 @@ func _create_stage() -> void:
 	sun.rotation_degrees = Vector3(-45, -25, 0)
 	sun.shadow_enabled = true
 	_world.add_child(sun)
+	StageProps.dress_lighting(_environment, sun)
 	var camera := Camera3D.new()
 	camera.name = "JellyCamera"
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -174,11 +184,20 @@ func _create_stage() -> void:
 	camera.current = true
 	for item in [["frame", "#498a97"], ["jelly", "#64d3ad"], ["edge", "#b5ffe0"], ["target", "#ee9b66"], ["safe", "#fff1a1"], ["fruit", "#ff6f83"], ["bell", "#ffd85c"], ["arc", "#b2e8ff"]]:
 		_materials[item[0]] = _material(item[1])
-	_box("Floor", Vector3(22, 0.12, 2.4), Vector3(0, -0.1, 0), _materials.frame)
+	# Glossy jelly and fruit, a wafer-layer tower, candy-striped posts on a biscuit floor.
+	for glossy in ["jelly", "fruit", "bell", "safe"]:
+		_materials[glossy] = StageProps.candy(Color(_materials[glossy].albedo_color))
+	_materials.target = StageProps.wood(Color("#e3a86a"), 0.18)
+	_materials.frame = StageProps.painted(Color("#e58aa0"))
+	_box("BackWall", Vector3(26, 9, 0.2), Vector3(0, 3.5, -1.4), StageProps.tiled_wall())
+	_box("Floor", Vector3(22, 0.12, 2.4), Vector3(0, -0.1, 0), StageProps.wood(Color("#c9935e")))
 	for x in [32, 1088]:
-		_box("Wall%d" % x, Vector3(0.12, 5.88, 1.0), world_point(x, 326), _materials.frame)
-	_box("TopBeam", Vector3(21.12, 0.12, 0.9), world_point(560, 32), _materials.frame)
+		var wall := _box("Wall%d" % x, Vector3(0.12, 5.88, 1.0), world_point(x, 326), _materials.frame)
+		for band in 6:
+			_box("Stripe%d" % band, Vector3(0.14, 0.42, 1.02), Vector3(0, -2.5 + band * 1.0, 0), StageProps.painted(Color("#fbead2"))).reparent(wall, false)
+	_box("TopBeam", Vector3(21.12, 0.12, 0.9), world_point(560, 32), StageProps.painted(Color("#d9ab55")))
 	_bed = _box("ElasticBed", Vector3(2.8, 0.44, 1.5), Vector3.ZERO, _materials.jelly)
+	_box("BedGloss", Vector3(2.6, 0.06, 1.3), Vector3(0, 0.22, 0), StageProps.candy(Color("#b5ffe0"))).reparent(_bed, false)
 	_left = _box("CompressionLeft", Vector3(1.32, 0.8, 1.3), Vector3.ZERO, _materials.jelly)
 	_right = _box("CompressionRight", Vector3(1.32, 0.8, 1.3), Vector3.ZERO, _materials.jelly)
 	_support = _box("BedSupport", Vector3.ONE, Vector3.ZERO, _materials.edge)
@@ -189,19 +208,20 @@ func _create_stage() -> void:
 	sphere.height = 0.56
 	_fruit = _mesh("Fruit", sphere, _materials.fruit, Vector3.ZERO)
 	_fruit.scale.x = 2.0
+	_box("FruitLeaf", Vector3(0.12, 0.08, 0.22), Vector3(0.0, 0.3, 0), StageProps.painted(Color("#5aa86a"))).reparent(_fruit, false)
 	var bell_mesh := SphereMesh.new()
 	bell_mesh.radius = 0.32
 	bell_mesh.height = 0.64
 	_bell = _mesh("SideBell", bell_mesh, _materials.bell, Vector3.ZERO)
 	_bell.scale.x = 2.0
-	_box("BellHanger", Vector3(0.1, 1.6, 0.12), world_point(930, 110, -0.2), _materials.bell)
+	_box("BellHanger", Vector3(0.1, 1.6, 0.12), world_point(930, 110, -0.2), StageProps.solid(StageProps.HEMP))
 	var dot := SphereMesh.new()
 	dot.radius = 0.055
 	dot.height = 0.11
 	for i in 24:
 		_dots.append(_mesh("Trajectory%02d" % i, dot, _materials.arc, Vector3.ZERO))
 func _apply_snapshot() -> void:
-	_environment.background_color = Color("#243b50") if _time_phase in ["night", "evening"] else Color("#34566a")
+	_environment.background_color = Color("#243b50") if _time_phase in ["night", "evening"] else Color("#6a5262")
 	var bed: Dictionary = _snapshot.bed
 	var target: Dictionary = _snapshot.target
 	var fruit: Dictionary = _snapshot.fruit
@@ -249,24 +269,21 @@ func text_rows() -> Array:
 	if _snapshot.is_empty():
 		return []
 	return [
-		[Vector2(38, 168), status_text(), 900, 18],
-		[Vector2(1000, 168), "%d秒  %d分" % [ceili(_snapshot.remaining), _snapshot.score], 240, 18],
-		[Vector2(38, 202), "送達 %d/3 · 失誤 %d" % [_snapshot.delivered, _snapshot.mistakes], 360, 17],
-		[Vector2(430, 202), "重 %.2f · 斜壓 %d°" % [_snapshot.fruit.mass, _snapshot.tilt], 380, 17],
-		[Vector2(850, 202), "蓄彈 %d%% · AI%s" % [roundi(_snapshot.depth * 100), "開" if _snapshot.helper else "關"], 390, 17],
-		[Vector2(38, 239), "亮帶＝果心安全支撐", 405, 16],
-		[Vector2(460, 239), "碰鈴送達 %d · 當顆%s" % [_snapshot.bell_deliveries, "已碰鈴" if _snapshot.fruit.bell_touched else "未碰鈴"], 790, 16],
-		[Vector2(38, 274), "AI接穩等你放行", 405, 16],
-		[Vector2(460, 274), "X重置不回時間 · 斜壓改變水平速度", 790, 16],
-		[Vector2(28, 700), feedback_text(), 1220, 17]]
+		[Vector2(40, 168), status_text(), 900, 18, Paper.GOLD],
+		[Vector2(1000, 168), "%d秒  %d分" % [ceili(_snapshot.remaining), _snapshot.score], 240, 18, Paper.TEAL],
+		[Vector2(40, 200), feedback_text(), 1190, 17, Paper.PAPER],
+		[Vector2(40, 256), "送達 %d/3 · 失誤 %d" % [_snapshot.delivered, _snapshot.mistakes], 360, 16, Paper.PAPER],
+		[Vector2(500, 256), "蓄彈 %d%%" % roundi(_snapshot.depth * 100), 140, 16, Paper.GOLD],
+		[Vector2(860, 256), "重 %.2f · 斜壓 %d°" % [_snapshot.fruit.mass, _snapshot.tilt], 390, 16, Paper.PAPER]]
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 140), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_PLUM, true)
 	for row in text_rows():
-		_text(row[0], row[1], row[2], row[3], Paper.GOLD if row[0].y in [168.0, 700.0] else Paper.PAPER)
+		_text(row[0], row[1], row[2], row[3], row[4])
+	if not _snapshot.is_empty():
+		for i in 3:
+			Props.token(self, Vector2(40 + 18 + i * 30, 228), 11.0, Color("#ff6f83") if i < int(_snapshot.delivered) else Color("#6b4558"))
+		Props.bar(self, Rect2(640, 244, 190, 14), float(_snapshot.depth), Color("#64d3ad"))
 	for i in COMMANDS.size():
 		var rect := button_rect(COMMANDS[i])
 		var held: bool = _pointer_command == COMMANDS[i] and not _pointer_owner.is_empty()
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(8, 26), BUTTON_KEYS[i], 153, 15, Paper.GOLD)
-		_text(rect.position + Vector2(8, 59), BUTTON_ACTIONS[i], 153, 16)
+		Props.labelled_key(self, rect, held, BUTTON_ICONS[i], BUTTON_KEYS[i], BUTTON_ACTIONS[i], Paper.font(), text_size(15), text_size(16), true, Props.KEY_PLUM)

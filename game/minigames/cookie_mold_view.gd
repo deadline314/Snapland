@@ -4,6 +4,11 @@ class_name CookieMoldView
 signal command_requested(command: String, pressed: bool, source: String)
 signal pointer_requested(action: String, point: Vector2, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const STATUS_PLATE := Rect2(24, 140, 1232, 64)
+const SIDE_PANEL := Rect2(918, 212, 338, 370)
+const BUTTON_ICONS := ["turn_left", "turn_right", "left", "right", "grab", "left", "right", "helper", "undo"]
 const DESIGN_SIZE := Vector2(1280, 720)
 const STAGE := Rect2(24, 212, 880, 370)
 const HEIGHT := 5.3
@@ -137,6 +142,13 @@ func handle_pointer(event: InputEvent, point: Vector2) -> bool:
 	queue_redraw()
 	return true
 
+func _get_tooltip(at_position: Vector2) -> String:
+	if STATUS_PLATE.has_point(at_position):
+		return "拖把手翻模 · 點角按住再放開 · 拖盤柄滑接"
+	if SIDE_PANEL.has_point(at_position):
+		return "AI 只扶盤，翻模由你。失手按 X 免費重做，保留進度，時間不回復。"
+	return ""
+
 func clear_pointer_input(emit_cancel: bool = true) -> void:
 	_pointer_owner = ""
 	_pointer_command = ""
@@ -249,6 +261,7 @@ func _create_stage() -> void:
 	sun.rotation_degrees = Vector3(-40, -25, 0)
 	sun.shadow_enabled = true
 	_world.add_child(sun)
+	StageProps.dress_lighting(_environment, sun)
 	_camera = Camera3D.new()
 	_camera.name = "CookieCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -261,7 +274,21 @@ func _create_stage() -> void:
 	_camera.current = true
 	for item in [["table", "#5c4145"], ["mold", "#91b9be"], ["rim", "#d3eff0"], ["cookie", "#db9a4f"], ["cream", "#fff0cf"], ["tray", "#c9dbe4"], ["glove", "#fff3db"], ["finger", "#dccfb9"], ["cuff", "#af6474"], ["gap", "#352c36"], ["crack", "#74372e"], ["selected", "#ffe36b"]]:
 		_materials[item[0]] = _material(item[1])
-	_box("WorkbenchBack", Vector3(13, 6, 0.15), Vector3(0, 1.2, -1.5), _world, _materials.table)
+	# Tin mould and tray, baked biscuit, a cream glove: each with its own finish.
+	for tin in ["mold", "rim", "tray"]:
+		_materials[tin].metallic = 0.15
+		_materials[tin].roughness = 0.42
+		_materials[tin].rim_enabled = true
+		_materials[tin].rim = 0.3
+	_materials.mold.albedo_color = Color("#9fb4b2")
+	_materials.rim.albedo_color = Color("#d9c08a")
+	_materials.tray.albedo_color = Color("#e7a9b4")
+	_materials.cookie = StageProps.painted(Color("#d38d45"))
+	_materials.cream = StageProps.candy(Color("#fff0cf"))
+	_materials.glove = StageProps.painted(Color("#fff3db"))
+	_materials.cuff = StageProps.painted(Color("#af6474"))
+	_box("WorkbenchBack", Vector3(16, 8, 0.15), Vector3(0, 1.2, -1.5), _world, StageProps.tiled_wall())
+	_box("Wainscot", Vector3(16, 1.4, 0.2), Vector3(0, -1.6, -1.4), _world, StageProps.wood(Color("#efd9b8"), 0.3, true))
 	_mold = Node3D.new()
 	_mold.name = "MoldAssembly"
 	_world.add_child(_mold)
@@ -288,6 +315,7 @@ func _create_stage() -> void:
 	_tray.name = "CatchTray"
 	_world.add_child(_tray)
 	_box("TrayBody", Vector3(2.3, 0.10, 1.7), Vector3(0, -0.08, 0), _tray, _materials.tray)
+	_box("TrayDoily", Vector3(1.9, 0.01, 1.35), Vector3(0, -0.025, 0), _tray, StageProps.painted(Color("#fbead2")))
 	for side in [-1, 1]:
 		_box("TrayLipX", Vector3(0.08, 0.18, 1.7), Vector3(side * 1.15, -0.01, 0), _tray, _materials.rim)
 		_box("TrayLipZ", Vector3(2.3, 0.18, 0.08), Vector3(0, -0.01, side * 0.85), _tray, _materials.rim)
@@ -402,38 +430,31 @@ func status_text() -> String:
 	return "先鬆黏角，再翻模滑接" if _snapshot.is_empty() else "%s · %s" % [_snapshot.shape_name, "雙層：借慣性取出" if _snapshot.double_layer else "先鬆黏角，再翻模滑接"]
 
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 64), Paper.DEEP_TEAL)
-	_text(Vector2(38, 166), status_text(), 1200, 18, Paper.GOLD)
-	_text(Vector2(38, 196), "拖把手翻模 · 點角按住再放開 · 拖盤柄滑接", 1200, 17)
-	draw_rect(Rect2(918, 212, 338, 370), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_PLUM, true)
+	_text(Vector2(40, 167), status_text(), 1190, 18, Paper.GOLD)
+	_text(Vector2(40, 195), str(_snapshot.get("feedback", "")), 1190, 17)
+	Props.wood_panel(self, SIDE_PANEL, Props.SIGN_PLUM, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(932, 244), "完整接住 %d／6" % _snapshot.caught, 310, 21, Paper.GOLD)
-		_text(Vector2(932, 278), "模角 %d° · 慣性 %.1f" % [roundi(rad_to_deg(_snapshot.mold_angle)), absf(_snapshot.mold_omega)], 310, 17)
-		_text(Vector2(932, 310), "AI 只扶盤，翻模由你", 310, 17)
-		_text(Vector2(932, 342), "蓄力：放開才敲", 310, 18)
-		draw_rect(Rect2(932, 354, 306, 16), Paper.FRAME)
-		draw_rect(Rect2(932, 354, 306 * clampf(float(_snapshot.charge) / 0.9, 0, 1), 16), Paper.GOLD)
+		_text(Vector2(934, 246), "完整接住 %d／6" % _snapshot.caught, 300, 21, Paper.GOLD)
+		_text(Vector2(934, 282), "模角 %d° · 慣性 %.1f" % [roundi(rad_to_deg(_snapshot.mold_angle)), absf(_snapshot.mold_omega)], 300, 17)
+		_text(Vector2(934, 318), "蓄力：放開才敲", 300, 18)
+		Props.bar(self, Rect2(936, 332, 300, 14), float(_snapshot.charge) / 0.9, Paper.GOLD)
 		var selected: Dictionary = _snapshot.edges[int(_snapshot.selected_edge)]
-		_text(Vector2(932, 402), "角 %d · 黏附 %d%%" % [int(_snapshot.selected_edge) + 1, roundi(float(selected.adhesion) * 100)], 310, 18)
-		_text(Vector2(932, 434), "裂損 %d%% · 換角輕敲" % roundi(float(selected.stress) / float(_snapshot.crack_limit) * 100), 310, 17, Paper.CORAL)
+		_text(Vector2(934, 386), "角 %d · 黏附 %d%%" % [int(_snapshot.selected_edge) + 1, roundi(float(selected.adhesion) * 100)], 300, 18)
+		_text(Vector2(934, 418), "裂損 %d%% · 換角輕敲" % roundi(float(selected.stress) / float(_snapshot.crack_limit) * 100), 300, 17, Paper.CORAL)
 		for i in 6:
-			var at := Vector2(946 + i * 49, 472)
+			var at := Vector2(950 + i * 49, 486)
 			if _seen_polygons[i] != null:
 				var outline := PackedVector2Array()
 				for point: Vector2 in _seen_polygons[i]:
 					outline.append(at + Vector2(point.x, -point.y) * 30.0)
+				draw_colored_polygon(outline, Color("#d38d45") if _snapshot.completed[i] else Color("#6b4558"))
 				outline.append(outline[0])
 				draw_polyline(outline, Paper.TEAL if _snapshot.completed[i] else Paper.GOLD, 2.0, true)
 			else:
-				draw_circle(at, 13, Paper.FRAME)
-				_text(at + Vector2(-6, 7), str(i + 1), 28, 15)
-		_text(Vector2(932, 520), "失手：X 免費重做", 310, 17)
-		_text(Vector2(932, 553), "保留進度，時間不回復", 310, 17)
+				Props.token(self, at, 14.0, Color("#6b4558"))
+				_text(at + Vector2(-5, 7), str(i + 1), 28, 15)
 	for i in COMMANDS.size():
 		var rect := button_rect(COMMANDS[i])
 		var held: bool = _pointer_command == COMMANDS[i] and not _pointer_owner.is_empty()
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(7, 24), BUTTON_KEYS[i], 118, 14)
-		_text(rect.position + Vector2(7, 57), BUTTON_ACTIONS[i], 118, 16)
-	_text(Vector2(28, 708), str(_snapshot.get("feedback", "")), 1220, 17, Paper.GOLD)
+		Props.labelled_key(self, rect, held, BUTTON_ICONS[i], BUTTON_KEYS[i], BUTTON_ACTIONS[i], Paper.font(), text_size(14), text_size(16), true, Props.KEY_PLUM)
