@@ -130,6 +130,8 @@ func _ready() -> void:
 func _bind_world() -> void:
 	if is_instance_valid(world.coastal_play):
 		world.coastal_play.note_requested.connect(audio.play_note)
+	if world.has_signal("note_requested"):
+		world.note_requested.connect(audio.play_note)
 	if is_instance_valid(world.field_games):
 		world.field_games.note_requested.connect(audio.play_note)
 		world.field_games.feedback_requested.connect(audio.play_sfx)
@@ -1419,7 +1421,7 @@ func _interact(id: String, title: String) -> void:
 			"toy:switch": _notice(world.switch_tracks())
 			"toy:train": _notice(world.operate_train())
 			"toy:repair": _notice(world.reset_train())
-			"toy:tower": _notice("發條鐘樓 · 現在是 " + world.tower_clock())
+			"toy:tower": _notice(world.wind_tower())
 		return
 	if world_region=="circus":
 		match id:

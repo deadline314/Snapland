@@ -105,8 +105,10 @@ func _check_framing(world: Node3D) -> void:
 		for location: Vector3 in [world.STORY_HOST, world.STORY_GUEST]:
 			_check(frame.has_point(camera.unproject_position(location)) and frame.has_point(camera.unproject_position(location + Vector3.UP * 2.42)),
 				"both full-body portrait subjects fit at %s" % size)
-		for location: Vector3 in [Vector3(6.43, 0.9, -2.43), Vector3(9.94, 0.9, -2.70), Vector3(8.1, 0.9, 0.77)]:
-			_check(frame.has_point(camera.unproject_position(location)), "each possible train position fits at %s" % size)
+		var stops: PackedVector3Array = world._train.stops()
+		_check(stops.size() == 4, "the railway reports its dock, tail siding and both termini")
+		for stop in stops:
+			_check(frame.has_point(camera.unproject_position(Vector3(stop.x, 0.9, stop.z))), "each possible train position fits at %s" % size)
 		for side in [-1.0, 1.0]:
 			var corner: Vector3 = world.STATION_STATUS_AT + Vector3(side * world.STATION_STATUS_WIDTH * 0.5, 0.215, -0.07)
 			_check(frame.grow(-4.0).has_point(camera.unproject_position(corner)), "the physical sign is fully framed at %s" % size)
