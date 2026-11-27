@@ -352,26 +352,26 @@ func _candy_ui() -> void:
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
 	_check(selector.item_count==Routes.ORDER.size() and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
-	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,Catalog.definitions("circus").size()+1,Catalog.definitions("toy").size()+1,Catalog.definitions("garden").size()+1]
+	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,Catalog.definitions("circus").size()+2,Catalog.definitions("toy").size()+2,Catalog.definitions("garden").size()+2]
 	for index in Routes.ORDER.size():
 		selector.select(index)
 		selector.item_selected.emit(index)
 		_check(book._region==Routes.ORDER[index] and book._entries().size()==ordinary_slots[index], "regional album retains its delivered sources")
 		if book._region == "circus":
 			var circus_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
-			_check(circus_ids == ["photo-circus-game-1", "photo-circus-game-2", "photo-circus-game-3", "photo-circus-game-4", "photo-circus-game-5", "photo-circus-game-7", "photo-circus-game-9", "photo-circus-story-1"] and book._entries()[7].story_region == "circus"
+			_check(circus_ids == ["photo-circus-game-1", "photo-circus-game-2", "photo-circus-game-3", "photo-circus-game-4", "photo-circus-game-5", "photo-circus-game-7", "photo-circus-game-9", "photo-circus-story-1", "photo-circus-quest-1"] and book._entries()[7].story_region == "circus" and book._entries()[8].story_errand == "circus"
 				and _labels(book).contains("哈哈鏡大頭貼") and _labels(book).contains("誰是假倒影") and _labels(book).contains("接飛碟") and _labels(book).contains("人肉砲彈") and _labels(book).contains("走鋼索") and _labels(book).contains("舞台換景") and _labels(book).contains("帽中套物"),
 				"Circus lists its delivered games under their own catalogue slots and its regional story source")
 		elif book._region == "toy":
 			var toy_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
-			_check(toy_ids == ["photo-toy-game-1", "photo-toy-game-2", "photo-toy-game-3", "photo-toy-game-4", "photo-toy-game-5", "photo-toy-game-6", "photo-toy-game-8", "photo-toy-game-10", "photo-toy-story-1"] and book._entries()[8].story_region == "toy"
+			_check(toy_ids == ["photo-toy-game-1", "photo-toy-game-2", "photo-toy-game-3", "photo-toy-game-4", "photo-toy-game-5", "photo-toy-game-6", "photo-toy-game-8", "photo-toy-game-10", "photo-toy-story-1", "photo-toy-quest-1"] and book._entries()[8].story_region == "toy" and book._entries()[9].story_errand == "toy"
 				and _labels(book).contains("阿浪") and _labels(book).contains("發條衝刺") and _labels(book).contains("整點咕咕") and _labels(book).contains("磁鐵搬家") and _labels(book).contains("積木拱橋") and _labels(book).contains("軌道換軌") and _labels(book).contains("彈簧青蛙") and _labels(book).contains("陀螺相撲") and _labels(book).contains("敲敲玩具兵"),
 				"Toy Town album lists its delivered games and its physical story without fake collectible entries")
 		elif book._region == "garden":
 			var garden_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
 			var garden_games: Array = Catalog.definitions("garden")
 			var expected_ids: Array = garden_games.map(func(row: Dictionary) -> String: return Catalog.identity(row.id).photo_id)
-			_check(garden_ids == expected_ids + ["photo-garden-story-1"] and expected_ids.has("photo-garden-game-5") and book._entries().back().story_region == "garden"
+			_check(garden_ids == expected_ids + ["photo-garden-story-1", "photo-garden-quest-1"] and expected_ids.has("photo-garden-game-5") and book._entries()[-2].story_region == "garden" and book._entries().back().story_errand == "garden"
 				and _labels(book).contains("票票") and garden_games.all(func(row: Dictionary) -> bool: return _labels(book).contains(row.name)),
 				"Garden album lists each delivered game under its own slot number and its story without speculative slots")
 	main._close()

@@ -2,6 +2,7 @@ extends Control
 signal retake_requested(game_id: String, devil: bool)
 signal practice_requested(game_id: String, devil: bool)
 signal story_replay_requested(region: String)
+signal errand_replay_requested(region: String)
 ## A paged paper book over the existing photo and achievement records.
 
 const Paper = preload("res://game/ui/paper_ui.gd")
@@ -9,6 +10,7 @@ const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const PhotoViewer = preload("res://game/ui/photo_viewer.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
+const ResidentErrands = preload("res://game/story/resident_errands.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const FailReplayViewer = preload("res://game/ui/fail_replay_viewer.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
@@ -408,6 +410,9 @@ func _entries() -> Array[Dictionary]:
 			var regional_story := RegionalVisit.entry(_region)
 			if not regional_story.is_empty():
 				entries.append(regional_story)
+			var errand := ResidentErrands.entry(_region)
+			if not errand.is_empty():
+				entries.append(errand)
 		"devil":
 			for game in _definitions:
 				var identity := GameCatalog.identity(str(game.get("id","")))
@@ -584,6 +589,8 @@ func _photo_tile(entry: Dictionary) -> Control:
 	var status := Paper.label("已收藏" if collected else "尚未收藏",16,Paper.TEAL if collected else Paper.INK)
 	if collected and entry.has("story_region"):
 		status.text="已收藏 · 主線"
+	if collected and entry.has("story_errand"):
+		status.text="已收藏 · 委託"
 	if entry.has("fail_game"):
 		status.text="已收藏 · 可重播" if collected else "還沒失敗過"
 		tile.tooltip_text="重播失敗瞬間" if collected else "失敗一次就會留下"
@@ -625,7 +632,7 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 			else:
 				practice_requested.emit(str(entry.game_id),bool(entry.devil))
 			return
-		_photo_details.text=str(entry.instructions) if entry.has("story_region") else "這張照片還在等你，完成遊園後再回來翻看。"
+		_photo_details.text=str(entry.instructions) if entry.has("story_region") or entry.has("story_errand") else "這張照片還在等你，完成遊園後再回來翻看。"
 		return
 	var photo_id := str(entry.id)
 	var has_original := _has_original_photo_path(photo_id)
@@ -639,6 +646,8 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 	if texture == null:
 		if entry.has("story_region"):
 			story_replay_requested.emit(str(entry.story_region))
+		elif entry.has("story_errand"):
+			errand_replay_requested.emit(str(entry.story_errand))
 		else:
 			_photo_details.text="這張照片暫時看不清楚，先留在本子裡。"
 		return
@@ -650,6 +659,8 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 	var replay := Callable()
 	if entry.has("story_region"):
 		replay = func(): story_replay_requested.emit(str(entry.story_region))
+	elif entry.has("story_errand"):
+		replay = func(): errand_replay_requested.emit(str(entry.story_errand))
 	viewer.setup(texture,str(entry.title),tile,replay)
 	modal_overlay.add_child(viewer)
 

@@ -102,6 +102,13 @@ class TerrainChart extends Control:
 			draw_circle(pin, radius * 0.38, ROOM_PLAN_INK, true, -1.0, true)
 			draw_string(Paper.font(), pin + Vector2(radius + 2.0, font_size * 0.34), str(index + 1),
 				HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ROOM_PLAN_INK)
+		if data.has("errand"):
+			# Stops outside the floor plan (games on the meadow) sit on the plan's rim.
+			var target: Vector3 = data.errand.position
+			var flag := (origin + Vector2(target.x, target.z) * unit).clamp(panel.position, panel.end)
+			draw_circle(flag, radius * 1.7, Color(Paper.CORAL, 0.28), true, -1.0, true)
+			draw_line(flag + Vector2(-1.5, radius), flag + Vector2(-1.5, -radius * 1.6), ROOM_PLAN_INK, 1.4, true)
+			draw_colored_polygon(PackedVector2Array([flag + Vector2(-1.5, -radius * 1.6), flag + Vector2(radius * 1.3, -radius), flag + Vector2(-1.5, -radius * 0.4)]), Paper.CORAL)
 		var player: Vector3 = data.player
 		var traveler := origin + Vector2(player.x, player.z) * unit
 		draw_circle(traveler, radius * 0.63, backing, true, -1.0, true)
@@ -370,6 +377,10 @@ func _ready() -> void:
 	var tide := Paper.label(status,18,Paper.DEEP_TEAL)
 	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status","garden":"Status"}.get(region,"Tide"))
 	add_child(tide)
+	if snapshot.has("errand"):
+		var errand := Paper.label("小旗：委託目標｜" + str(snapshot.errand.goal), 17, Paper.CORAL)
+		errand.name = prefix + "Errand"
+		add_child(errand)
 	var chart := TerrainChart.new()
 	chart.name=prefix+"Terrain"
 	chart.data=snapshot

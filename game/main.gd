@@ -23,6 +23,7 @@ const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
 const RetakePanelScript = preload("res://game/ui/retake_panel.gd")
 const RetakeLessons = preload("res://game/ui/tutorial_catalog.gd")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
+const Errands = preload("res://game/story/resident_errands.gd")
 const RegionalVisitPhotoPanel = preload("res://game/ui/regional_visit_photo_panel.gd")
 const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 const BoatPrologueStage = preload("res://game/story/boat_prologue_stage.gd")
@@ -79,6 +80,8 @@ var definitions: Array=[]
 var dialogue_skip_label := ""
 var visit_photo_panel: RegionalVisitPhotoPanel
 var visit_photo_from_album := false
+## The open regional photo stage is for the host's errand, not the greeting.
+var visit_photo_errand := false
 var capture_mode := false
 var photo_frames: Array[Image] = []
 var photo_original_frames: Array[Image] = []
@@ -145,6 +148,7 @@ func _bind_world() -> void:
 	if is_instance_valid(world.field_games):
 		world.field_games.note_requested.connect(audio.play_note)
 		world.field_games.feedback_requested.connect(audio.play_sfx)
+		world.field_games.round_finished.connect(func(result: Dictionary): _errand_event("field_game","field:"+str(result.get("id",""))))
 	field_chip.bind(world.field_games)
 	if is_instance_valid(world.district_host):
 		thief=RoamingThief.attach(world)
@@ -178,6 +182,7 @@ func _on_district_changed(region: String) -> void:
 		world_region=previous
 		return
 	_hud_seen=_collection_totals()
+	_refresh_quest_line()
 	_sync_audio_environment()
 	if session==null: audio.play_context(_island_audio_context())
 
@@ -857,13 +862,7 @@ func _refresh() -> void:
 	coin_count_label.text=Localization.text("hud.coins", {"count": Progress.coins})
 	var phase := TimeOfDay.phase_for_id(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE))
 	phase_label.text="%s %s"%[str(phase.get("label","中午")),str(phase.get("clock","12:00"))]
-	quest_label.text=""
-	for id in ["quest-001","quest-002"]:
-		var step := int(Progress.quests.get(id,0))
-		if step>0 and step<3:
-			var quest: Dictionary=story.quest_data(id)
-			quest_label.text=quest.get("title",id)+"  %d / 3"%step
-	quest_label.visible=world_region=="welcome" and not quest_label.text.is_empty()
+	_refresh_quest_line()
 	audio.apply_settings(Progress.settings)
 	world.apply_settings(Progress.settings)
 	_apply_time_phase()
@@ -878,12 +877,31 @@ func _refresh() -> void:
 	if DisplayServer.get_name()!="headless" and not capture_mode:
 		DisplayServer.window_set_mode(mode)
 
+## One goal line: this district's errand, else the welcome quests on the
+## island, else an errand under way elsewhere (its game may be on the meadow).
+func _refresh_quest_line() -> void:
+	quest_label.text=""
+	if world_region=="welcome":
+		for id in ["quest-001","quest-002"]:
+			var step := int(Progress.quests.get(id,0))
+			if step>0 and step<3:
+				var quest: Dictionary=story.quest_data(id)
+				quest_label.text=quest.get("title",id)+"  %d / 3"%step
+	for region: String in [world_region]+Errands.regions():
+		var errand_line := Errands.hud_line(region,Progress.errand_step(region))
+		if not errand_line.is_empty() and (region==world_region or quest_label.text.is_empty()):
+			quest_label.text=errand_line
+			break
+	quest_label.visible=not quest_label.text.is_empty()
+
 func _process(delta: float) -> void:
 	if quitting or changing_region: return
 	if is_instance_valid(world) and _on_island(world_region): Progress.player_position=world.player.global_position
 	if session!=null and DisplayServer.get_name()!="headless" and session.elapsed>=next_snapshot and not session.ended:
 		next_snapshot=session.elapsed+0.9
 		_sample_photo.call_deferred()
+	if is_instance_valid(world) and modal_kind=="" and session==null and not world.nearest.is_empty():
+		_errand_event("reach",str(world.nearest.get("id","")))
 	if is_instance_valid(world) and modal_kind=="" and session==null:
 		var has_context: bool = not world.nearest.is_empty() or world.is_riding()
 		var context_appeared := has_context and not context_bar.visible
@@ -914,6 +932,8 @@ func _context_prompt() -> String:
 	var play_prompt: String=world.coastal_play.prompt(id) if is_instance_valid(world.coastal_play) else ""
 	if is_instance_valid(world.coastal_play) and is_instance_valid(world.coastal_play.discoveries) and world.coastal_play.discoveries.controlling: return play_prompt
 	if not play_prompt.is_empty(): return "E   "+play_prompt
+	var errand_prompt := _errand_prompt(id)
+	if not errand_prompt.is_empty(): return "E   "+errand_prompt
 	if id.begins_with("game-"): return "E   玩"+str(_definition(id).get("name","這個遊戲"))
 	var actor_prompts := {"guide":"和票票說話","quest-001":"和小角說話","quest-002":"和阿浪說話","arrival":"重看上島導覽","ride-tide":"搭乘貝殼輪"}
 	return "E   "+str(actor_prompts.get(id,world.nearest.get("label","附近設施")))
@@ -1469,6 +1489,7 @@ func _interact(id: String, title: String) -> void:
 	if quitting or changing_region or session!=null or modal_kind!="": return
 	audio.play_sfx("interact")
 	if is_instance_valid(world.field_games) and world.field_games.activate(id):
+		if id.begins_with("toy:"): _errand_event("toy",id)
 		return
 	if is_instance_valid(thief) and thief.activate(id):
 		return
@@ -1481,7 +1502,7 @@ func _interact(id: String, title: String) -> void:
 	var here := str(record.get("region","welcome")) if _on_island(world_region) else world_region
 	var place := region_world(here)
 	if not id.is_empty() and id == RegionalVisit.point_id(here):
-		_start_region_story_visit(here)
+		if not _talk_errand(here): _start_region_story_visit(here)
 		return
 	if id.begins_with("game-") and here in ["circus","toy","garden"] and Catalog.identity(id).get("zone","")==here:
 		_show_game_info(id)
@@ -1612,8 +1633,48 @@ func _interact(id: String, title: String) -> void:
 				_back(body)
 				break
 
-func _start_region_story_visit(region: String, from_album := false) -> void:
-	var photo_id := RegionalVisit.photo_id(region)
+## The errand, once the greeting photo is kept: ask, nudge, or wrap up with a
+## photo. False when the host should play the greeting instead.
+func _talk_errand(region: String) -> bool:
+	if not _errand_open(region):
+		return false
+	var step := Progress.errand_step(region)
+	if step<0:
+		_start_dialogue(Errands.intro(region),_accept_errand.bind(region),_accept_errand.bind(region),"略過")
+	elif step<Errands.PHOTO_STEP:
+		_start_dialogue(Errands.reminder(region,step),Callable())
+	else:
+		_start_dialogue(Errands.finale(region),_open_region_story_photo.bind(region,false,true),Callable(),"略過到合照")
+	return true
+
+## The host has an errand to give or finish here and now.
+func _errand_open(region: String) -> bool:
+	return Errands.has(region) and world_region==region and Progress.photos.has(RegionalVisit.photo_id(region)) and not Progress.photos.has(Errands.photo_id(region))
+
+func _accept_errand(region: String) -> void:
+	if Progress.advance_errand(region,-1):
+		_notice("接下委託：%s　%s" % [Errands.title(region),Errands.step(region,0).goal])
+		_refresh_quest_line()
+
+func _errand_prompt(id: String) -> String:
+	if id!=RegionalVisit.point_id(world_region) or not _errand_open(world_region): return ""
+	var step := Progress.errand_step(world_region)
+	var host := RegionalVisit.host_name(world_region)
+	return "聽%s的煩惱" % host if step<0 else ("和%s合照" % host if step>=Errands.PHOTO_STEP else "和%s說話" % host)
+
+## Evidence from the walk, an instant game or a toy; finishes the step it matches.
+func _errand_event(kind: String, point: String) -> void:
+	for region: String in Errands.regions():
+		var step := Progress.errand_step(region)
+		if Errands.matches(region,step,kind,point) and Progress.advance_errand(region,step):
+			audio.play_sfx("success")
+			_notice(Errands.progress_notice(region,step))
+			_refresh_quest_line()
+			return
+
+func _start_region_story_visit(region: String, from_album := false, errand := false) -> void:
+	var photo_id := Errands.photo_id(region) if errand else RegionalVisit.photo_id(region)
+	var lines := Errands.finale(region) if errand else RegionalVisit.lines(region)
 	if photo_id.is_empty() or (from_album and not Progress.photos.has(photo_id)):
 		return
 	if modal_kind not in ["", "album"]:
@@ -1624,26 +1685,27 @@ func _start_region_story_visit(region: String, from_album := false) -> void:
 	if world_region != region:
 		# An archived story may be reviewed elsewhere while the live set stays in its region.
 		if from_album:
-			_start_dialogue(RegionalVisit.lines(region), back_to_album, back_to_album, "略過")
+			_start_dialogue(lines, back_to_album, back_to_album, "略過")
 		return
 	if not from_album and Progress.normal_count() < RegionRoutes.threshold(region):
 		_notice("集滿 %d 張不同普通拍貼，就能在這裡合照。" % RegionRoutes.threshold(region))
 		return
-	_start_dialogue(RegionalVisit.lines(region), _open_region_story_photo.bind(region, from_album), back_to_album, "略過到合照")
+	_start_dialogue(lines, _open_region_story_photo.bind(region, from_album, errand), back_to_album, "略過到合照")
 
-func _open_region_story_photo(region: String, from_album: bool) -> void:
+func _open_region_story_photo(region: String, from_album: bool, errand := false) -> void:
 	if quitting or changing_region or session != null or modal_kind != "" or world_region != region:
 		return
 	if not region_world().has_method("begin_story_photo") or not region_world().begin_story_photo():
 		_notice("相機尚未就緒，請再和%s交談。" % RegionalVisit.host_name(region))
 		return
 	visit_photo_from_album = from_album
+	visit_photo_errand = errand
 	world.blocked = true
 	world.sync_activity_pause()
 	hud.hide()
 	modal_kind = "visit_photo"
 	visit_photo_panel = RegionalVisitPhotoPanel.new()
-	visit_photo_panel.photo_title = RegionalVisit.title(region)
+	visit_photo_panel.photo_title = Errands.title(region) if errand else RegionalVisit.title(region)
 	visit_photo_panel.shutter_requested.connect(_take_region_story_photo)
 	visit_photo_panel.cancel_requested.connect(_exit_region_story_photo)
 	ui.add_child(visit_photo_panel)
@@ -1662,6 +1724,7 @@ func _dispose_region_story_photo() -> void:
 	visit_photo_panel.queue_free()
 	visit_photo_panel = null
 	visit_photo_from_album = false
+	visit_photo_errand = false
 	if is_instance_valid(world) and region_world().has_method("end_story_photo"):
 		region_world().end_story_photo()
 
@@ -1673,7 +1736,8 @@ func _take_region_story_photo() -> void:
 		owner.show_retry()
 		return
 	var region := world_region
-	var source_id := RegionalVisit.photo_id(region)
+	var errand := visit_photo_errand
+	var source_id := Errands.photo_id(region) if errand else RegionalVisit.photo_id(region)
 	owner.set_busy(true)
 	owner.hide()
 	audio.play_sfx("shutter")
@@ -1690,7 +1754,7 @@ func _take_region_story_photo() -> void:
 		return
 	var replay := Progress.photos.has(source_id)
 	if replay:
-		if not Progress.record_region_story_visit(region, "", ""):
+		if not (Progress.record_errand_photo(region, "", "") if errand else Progress.record_region_story_visit(region, "", "")):
 			owner.show_retry()
 			return
 	else:
@@ -1700,7 +1764,8 @@ func _take_region_story_photo() -> void:
 			owner.show_retry()
 			return
 	_exit_region_story_photo()
-	_notice("已重演合照，原照留在本子裡。" if replay else RegionalVisit.saved_notice(region))
+	_notice("已重演合照，原照留在本子裡。" if replay else (Errands.saved_notice(region) if errand else RegionalVisit.saved_notice(region)))
+	_refresh_quest_line()
 
 func _owns_story_photo(owner: Control) -> bool:
 	return not quitting and not changing_region and modal_kind == "visit_photo" and is_instance_valid(owner) and owner == visit_photo_panel
@@ -1717,7 +1782,7 @@ func _save_region_story_photo(region: String, source_id: String, image: Image) -
 	var prepared := _prepare_photo_original(image)
 	if (_save_bounded_photo_image(prepared, original)
 		and _save_bounded_photo_image(_prepare_photo_thumbnail(prepared), thumbnail)
-		and Progress.record_region_story_visit(region, thumbnail, original)):
+		and (Progress.record_errand_photo(region, thumbnail, original) if source_id == Errands.photo_id(region) else Progress.record_region_story_visit(region, thumbnail, original))):
 		return true
 	_remove_photo_paths([thumbnail, original])
 	return false
@@ -2137,6 +2202,7 @@ func _show_album(album_region := "") -> void:
 	var book = book_script.new()
 	book.setup(Progress,definitions,TimeOfDay.PHASES,Callable(self,"_photo_texture"),world_region if album_region.is_empty() else album_region)
 	book.story_replay_requested.connect(_start_region_story_visit.bind(true))
+	book.errand_replay_requested.connect(_start_region_story_visit.bind(true,true))
 	book.retake_requested.connect(_request_retake)
 	book.practice_requested.connect(_practice_for_retake)
 	book.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -2232,7 +2298,12 @@ func _retake_capture(image: Image, owner: Control, generation: int, id: String, 
 func _show_tasks() -> void:
 	if world_region!="welcome":
 		var harbor_body := _open(_region_name()+"的委託",world_region.to_upper()+" QUESTS","tasks")
-		harbor_body.add_child(Paper.label(_region_name()+"目前沒有當地任務。小角和阿浪的既有委託仍在迎賓大道，進度會保留。",22))
+		if Errands.has(world_region):
+			var errand_card := Paper.label(_errand_status(world_region),22)
+			errand_card.name="ErrandStatus"
+			harbor_body.add_child(errand_card)
+		else:
+			harbor_body.add_child(Paper.label(_region_name()+"目前沒有當地任務。小角和阿浪的既有委託仍在迎賓大道，進度會保留。",22))
 		Paper.button("免費返回迎賓大道",func(): _travel_to_region("welcome"),harbor_body)
 		_back(harbor_body)
 		return
@@ -2241,6 +2312,23 @@ func _show_tasks() -> void:
 	_content_pager(body,"TaskPages",["quest-001","quest-002"],_render_task_card,1)
 	body.add_child(Paper.label("小角和阿浪在迎賓大道的左右步道等你。",18,Paper.TEAL))
 	_back(body)
+
+func _errand_status(region: String) -> String:
+	var host := RegionalVisit.host_name(region)
+	var step := Progress.errand_step(region)
+	if Progress.photos.has(Errands.photo_id(region)): return "%s · 已完成，合照收在相簿裡。" % Errands.title(region)
+	if not Progress.photos.has(RegionalVisit.photo_id(region)): return "先和%s拍迎賓合照，%s還有一件小事想拜託你。" % [host,host]
+	if step<0: return "%s好像有煩惱，去找%s聊聊。" % [host,host]
+	return "%s · 進度 %d / 3\n%s" % [Errands.title(region),step+1,Errands.step(region,step).goal]
+
+## Where the walker should head for a region's errand, in island coordinates;
+## INF when nothing is under way or the place is not built yet.
+func _errand_target(region: String) -> Vector3:
+	var point := str(Errands.step(region,Progress.errand_step(region)).get("point",""))
+	if point.is_empty() or Progress.photos.has(Errands.photo_id(region)) or not is_instance_valid(world): return Vector3.INF
+	for record: Dictionary in world.points:
+		if str(record.get("id",""))==point: return record.position
+	return Vector3.INF
 
 func _render_task_card(parent: VBoxContainer, id: String, _index: int) -> void:
 	var quest: Dictionary=story.quest_data(id)
@@ -2614,6 +2702,9 @@ func _show_map() -> void:
 		var harbor_map = load("res://game/ui/harbor_map_panel.gd").new()
 		var region_snapshot: Dictionary=region_world().map_snapshot()
 		region_snapshot["daily_picks"]=_daily_picks()
+		var errand_at := _errand_target(world_region)
+		if errand_at.is_finite():
+			region_snapshot["errand"]={"position":region_world().to_local(errand_at),"goal":str(Errands.step(world_region,Progress.errand_step(world_region)).goal)}
 		harbor_map.setup(region_snapshot)
 		harbor_body.add_child(harbor_map)
 		if not Catalog.definitions(world_region).is_empty():
@@ -2643,6 +2734,8 @@ func _show_island_map() -> void:
 	map_panel.setup(park_data.get("zones",[]),definitions,Progress.normal_count(),world.points,world.player.global_position)
 	map_panel.daily_picks=_daily_picks()
 	if is_instance_valid(thief): map_panel.thief_area=thief.map_area()
+	for region: String in Errands.regions():
+		if _errand_target(region).is_finite(): map_panel.errand_marks.append(_errand_target(region))
 	map_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	map_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(map_panel)

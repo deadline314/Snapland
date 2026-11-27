@@ -30,6 +30,7 @@ const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TestSaveGuard = preload("res://game/core/test_save_guard.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
+const ResidentErrands = preload("res://game/story/resident_errands.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const DEFAULT_APPEARANCE := {
 	"skin": "warm", "species": "human", "gender": "neutral",
@@ -85,6 +86,9 @@ var daily_bonus: Dictionary = {}
 var fail_stickers: Dictionary = {}
 ## Times the roaming thief was caught, 0 to THIEF_CATCH_GOAL.
 var thief_catches := 0
+## Resident errands by region: the step being worked on (ResidentErrands);
+## absent until the host first asks.
+var errands: Dictionary = {}
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
@@ -135,6 +139,50 @@ func record_region_story_visit(region: String, thumbnail: String, original: Stri
 	_suppress_changed_save = true
 	changed.emit()
 	_suppress_changed_save = previous_suppression
+	return true
+
+func errand_step(region: String) -> int:
+	return int(errands.get(region, -1))
+
+## Moves an errand from `from_step` (-1 = not asked yet) to the next step with
+## one durable write; the last step is finished only by record_errand_photo.
+func advance_errand(region: String, from_step: int) -> bool:
+	if not ResidentErrands.has(region) or from_step < -1 or from_step >= ResidentErrands.PHOTO_STEP or errand_step(region) != from_step:
+		return false
+	errands[region] = from_step + 1
+	if not save_progress():
+		if from_step < 0:
+			errands.erase(region)
+		else:
+			errands[region] = from_step
+		return false
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = false
+	return true
+
+## The errand photo and the finished errand are saved together, once; a replay
+## (photo already kept) changes nothing.
+func record_errand_photo(region: String, thumbnail: String, original: String) -> bool:
+	var photo_id := ResidentErrands.photo_id(region)
+	if photo_id.is_empty() or current_region != region:
+		return false
+	var had_photo := photos.has(photo_id)
+	if had_photo:
+		return errand_step(region) == ResidentErrands.DONE
+	if errand_step(region) != ResidentErrands.PHOTO_STEP or thumbnail.is_empty() or original.is_empty():
+		return false
+	if _read_game_photo_image(photo_id, thumbnail, {}) == null or _read_game_photo_original_image(photo_id, original) == null:
+		return false
+	photos[photo_id] = {"story_errand": region, "frames": [thumbnail], "original_frames": [original]}
+	errands[region] = ResidentErrands.DONE
+	if not save_progress():
+		photos.erase(photo_id)
+		errands[region] = ResidentErrands.PHOTO_STEP
+		return false
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = false
 	return true
 
 func mark_prologue_seen() -> bool:
@@ -847,6 +895,7 @@ func save_progress() -> bool:
 		"daily_bonus": daily_bonus,
 		"fail_stickers": fail_stickers,
 		"thief_catches": thief_catches,
+		"errands": errands,
 	}, true)
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
@@ -1002,7 +1051,7 @@ func _is_canonical_normal_photo(source_id: String, only_zone := "") -> bool:
 		for index in range(1, 13):
 			if source_id == "photo-%s-game-%d" % [zone, index]:
 				return true
-		if not source_id.is_empty() and source_id == RegionalVisit.photo_id(zone):
+		if not source_id.is_empty() and (source_id == RegionalVisit.photo_id(zone) or source_id == ResidentErrands.photo_id(zone)):
 			return true
 		if zone == "welcome":
 			for index in range(1, 4):
@@ -1213,6 +1262,19 @@ func _validated_fail_stickers(value: Variant) -> Dictionary:
 		valid[id] = {"frame": frame, "replay": replay}
 	return valid
 
+## Unknown regions are kept so a later errand loses nothing.
+func _validated_errands(value: Variant) -> Dictionary:
+	var valid := {}
+	if not value is Dictionary:
+		push_warning("Invalid 'errands' field in progress file '%s'; using defaults." % _save_path())
+		return valid
+	for region: Variant in value:
+		if typeof(region) == TYPE_STRING and not str(region).is_empty() and _valid_whole_number(value[region], ResidentErrands.DONE):
+			valid[region] = int(value[region])
+		else:
+			push_warning("Invalid errand '%s' in progress file '%s'; skipping." % [str(region), _save_path()])
+	return valid
+
 func _valid_whole_number(value: Variant, maximum: int) -> bool:
 	if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
 		return false
@@ -1222,7 +1284,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers", "player_position", "thief_catches"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers", "player_position", "thief_catches", "errands"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -1315,6 +1377,7 @@ func _apply_save(payload: Dictionary) -> void:
 		thief_catches = int(loaded_catches)
 	else:
 		push_warning("Invalid 'thief_catches' field in progress file '%s'; starting the thief over." % _save_path())
+	errands = _validated_errands(payload.get("errands", {}))
 	if not payload.has("attempted_games"):
 		for definition: Dictionary in GameCatalog.all_definitions():
 			var identity := GameCatalog.identity(definition.id)
@@ -1383,6 +1446,7 @@ func _reset_memory() -> void:
 	daily_bonus = {}
 	fail_stickers = {}
 	thief_catches = 0
+	errands = {}
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
 
