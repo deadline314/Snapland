@@ -61,7 +61,8 @@ static func _is_block_mesh(mesh: Mesh) -> bool:
 	return mesh is BoxMesh or mesh is CylinderMesh or mesh is SphereMesh or mesh is CapsuleMesh or mesh is PrismMesh
 
 
-static func _shows_flat_face(size: Vector3) -> bool:
+## True when a primitive of this size has a face big enough to read as a blank block.
+static func shows_flat_face(size: Vector3) -> bool:
 	var sides := [absf(size.x), absf(size.y), absf(size.z)]
 	sides.sort()
 	return sides[2] > FLAT_FACE_LONG and sides[1] > FLAT_FACE_SHORT
@@ -97,7 +98,7 @@ static func _check_mesh(world: Node3D, instance: MeshInstance3D, found: Dictiona
 		found["primitive_shadow"].append({"where": _where(world, instance), "detail": mesh.get_class()})
 		return
 	var size := mesh.get_aabb().size * instance.global_basis.get_scale()
-	if _shows_flat_face(size) and _is_flat_material(_surface_material(instance, mesh)):
+	if shows_flat_face(size) and _is_flat_material(_surface_material(instance, mesh)):
 		found["flat_block"].append({"where": _where(world, instance), "detail": "%s %.1f x %.1f x %.1f m" % [mesh.get_class(), size.x, size.y, size.z]})
 
 
@@ -110,7 +111,7 @@ static func _check_multimesh(world: Node3D, instance: MultiMeshInstance3D, found
 	var base := batch.mesh.get_aabb().size * instance.global_basis.get_scale()
 	var flat := 0
 	for index in batch.instance_count:
-		if _shows_flat_face(base * batch.get_instance_transform(index).basis.get_scale()):
+		if shows_flat_face(base * batch.get_instance_transform(index).basis.get_scale()):
 			flat += 1
 	if flat > 0:
 		found["flat_block"].append({"where": _where(world, instance), "detail": "%d batched %s instances" % [flat, batch.mesh.get_class()]})

@@ -12,6 +12,8 @@ const WELCOME_DOCK_SIZE := Vector3(5, 0.3, 13)
 const STONE = preload("res://game/world/stone.gdshader")
 const WOOD = preload("res://game/world/wood.gdshader")
 const GRASS = preload("res://game/world/grass.gdshader")
+const PAINTED_FINISH = preload("res://game/world/painted_finish.gdshader")
+const SceneStandards = preload("res://game/world/scene_standards.gd")
 const SAND = preload("res://game/world/sand.gdshader")
 const LIVING_SPRITE = preload("res://game/world/living_sprite.gdshader")
 const ComponentAnimationScript = preload("res://game/world/component_animation.gd")
@@ -668,10 +670,23 @@ func _vertex_color_material(cache_key: String, roughness := 0.9) -> StandardMate
 	material_cache[cache_key]=material
 	return material
 
+## Colour for a primitive of this size: faces large enough to read as a blank
+## block get the painted surface instead of one flat colour.
+func _finish(color: Color, size: Vector3) -> Material:
+	if not SceneStandards.shows_flat_face(size):
+		return _mat(color)
+	var key := "painted:" + color.to_html(true)
+	if material_cache.has(key): return material_cache[key]
+	var material := ShaderMaterial.new()
+	material.shader = PAINTED_FINISH
+	material.set_shader_parameter("tint", color)
+	material_cache[key] = material
+	return material
+
 func _box(pos: Vector3, size: Vector3, color: Color, solid := false) -> MeshInstance3D:
 	var mesh := BoxMesh.new()
 	mesh.size = size
-	var instance := _mesh(mesh, pos, _mat(color))
+	var instance := _mesh(mesh, pos, _finish(color, size))
 	if solid:
 		var body := StaticBody3D.new()
 		var shape := CollisionShape3D.new()
@@ -688,7 +703,7 @@ func _cylinder(pos: Vector3, radius: float, height: float, color: Color, top := 
 	mesh.bottom_radius = radius
 	mesh.height = height
 	mesh.radial_segments = 16
-	var instance:=_mesh(mesh,pos,_mat(color))
+	var instance:=_mesh(mesh,pos,_finish(color,Vector3(maxf(radius,mesh.top_radius)*2.0,height,maxf(radius,mesh.top_radius)*2.0)))
 	if solid:
 		var body:=StaticBody3D.new()
 		var shape:=CollisionShape3D.new()
@@ -714,7 +729,7 @@ func _sphere(pos: Vector3, radius: float, color: Color) -> MeshInstance3D:
 	mesh.height = radius * 2
 	mesh.radial_segments = 12
 	mesh.rings = 6
-	return _mesh(mesh, pos, _mat(color))
+	return _mesh(mesh, pos, _finish(color, Vector3.ONE * radius * 2.0))
 
 func _label(text: String, pos: Vector3, size := 32, color := CREAM) -> Label3D:
 	var label := Label3D.new()

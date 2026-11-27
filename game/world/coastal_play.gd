@@ -133,7 +133,9 @@ func _update_gate() -> void:
  rotor.set_meta("play_speed",0.7 if valve_open else 0.0)
  gate.position.y=1.18 if valve_open else 0.55
  spill.visible=valve_open
- water.material_override.albedo_color=Color("#428d8c") if valve_open else Color("#28505a")
+ var flow_color := Color("#428d8c") if valve_open else Color("#28505a")
+ if water.material_override is ShaderMaterial: (water.material_override as ShaderMaterial).set_shader_parameter("tint", flow_color)
+ else: water.material_override.albedo_color=flow_color
  for stream in streams:stream.visible=valve_open
 
 func _physics_process(delta: float) -> void:

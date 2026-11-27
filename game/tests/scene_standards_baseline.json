@@ -1,18 +1,18 @@
 {
 	"candy": {
-		"flat_block": 18,
+		"flat_block": 1,
 		"floating_sprite": 0,
 		"node_budget": 0,
 		"primitive_shadow": 0
 	},
 	"circus": {
-		"flat_block": 52,
+		"flat_block": 8,
 		"floating_sprite": 0,
 		"node_budget": 0,
 		"primitive_shadow": 0
 	},
 	"garden": {
-		"flat_block": 22,
+		"flat_block": 8,
 		"floating_sprite": 0,
 		"node_budget": 0,
 		"primitive_shadow": 0
@@ -24,19 +24,19 @@
 		"primitive_shadow": 0
 	},
 	"nightmarket": {
-		"flat_block": 101,
+		"flat_block": 0,
 		"floating_sprite": 0,
 		"node_budget": 0,
 		"primitive_shadow": 0
 	},
 	"toy": {
-		"flat_block": 30,
+		"flat_block": 0,
 		"floating_sprite": 0,
 		"node_budget": 0,
 		"primitive_shadow": 0
 	},
 	"welcome": {
-		"flat_block": 67,
+		"flat_block": 10,
 		"floating_sprite": 0,
 		"node_budget": 0,
 		"primitive_shadow": 0

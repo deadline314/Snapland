@@ -309,7 +309,7 @@ func _box(at: Vector3, size: Vector3, color: Color, solid := false) -> MeshInsta
 		mesh = BoxMesh.new()
 		mesh.size = size
 		_mesh_cache[size] = mesh
-	return _mesh(mesh, at, _mat(color))
+	return _mesh(mesh, at, _finish(color, size))
 
 
 func _emblem(at: Vector3, size: Vector3, tint: Color) -> MeshInstance3D:

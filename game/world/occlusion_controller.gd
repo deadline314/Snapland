@@ -3,6 +3,7 @@ extends Node
 
 const OccluderShader := preload("res://game/world/occluder.gdshader")
 const CoastalMaterialShader := preload("res://game/world/coastal_material.gdshader")
+const PaintedFinishShader := preload("res://game/world/painted_finish.gdshader")
 const RAY_COLLISION_LAYER := 1 << 5
 const SAMPLE_INTERVAL := 0.08
 const FADE_SECONDS := 0.15
@@ -150,7 +151,8 @@ func replace_registered_surface(target: GeometryInstance3D, surface_material: Ma
 
 
 func _is_coastal_surface(surface_material: Material) -> bool:
-	return surface_material is ShaderMaterial and (surface_material as ShaderMaterial).shader == CoastalMaterialShader
+	# Both surface shaders carry the same cutaway uniforms.
+	return surface_material is ShaderMaterial and (surface_material as ShaderMaterial).shader in [CoastalMaterialShader, PaintedFinishShader]
 
 
 func _is_supported_surface(surface_material: Material) -> bool:

@@ -232,7 +232,7 @@ func _box(at: Vector3, size: Vector3, color: Color, solid := false) -> MeshInsta
 		mesh = BoxMesh.new()
 		mesh.size = size
 		_trim_meshes[size] = mesh
-	return _mesh(mesh, at, _mat(color))
+	return _mesh(mesh, at, _finish(color, size))
 
 
 func _emblem_strip(at: Vector3, size: Vector3, tint: Color) -> MeshInstance3D:

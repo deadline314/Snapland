@@ -325,7 +325,7 @@ func _paving(tint: Color, finish: Finish = Finish.STONE) -> ShaderMaterial:
 func _box(at: Vector3, size: Vector3, tint: Color, solid := false) -> MeshInstance3D:
 	var geometry := BoxMesh.new()
 	geometry.size = size
-	var instance := _mesh(geometry, at, _mat(tint))
+	var instance := _mesh(geometry, at, _finish(tint, size))
 	if solid:
 		var body := StaticBody3D.new()
 		var collision := CollisionShape3D.new()

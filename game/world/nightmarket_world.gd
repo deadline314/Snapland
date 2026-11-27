@@ -184,7 +184,7 @@ func _box(pos: Vector3, size: Vector3, color: Color, solid := false) -> MeshInst
 		mesh = BoxMesh.new()
 		mesh.size = size
 		_trim_meshes[size] = mesh
-	return _mesh(mesh, pos, _mat(color))
+	return _mesh(mesh, pos, _finish(color, size))
 
 func _build_neighboring_shops() -> void:
 	# These facades extend the district beyond the playable street without adding collision.
