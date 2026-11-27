@@ -11,6 +11,9 @@ const GameCatalog = preload("res://game/core/game_catalog.gd")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const FailReplayViewer = preload("res://game/ui/fail_replay_viewer.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
+## Each album category is a postage stamp of its own colour.
+const TAB_TONES := {"normal": Color("#6fc7b7"), "devil": Color("#f08f73"), "time": Color("#dfa458"), "fail": Color("#c9a6d8")}
 const PAGE_SIZE := 4
 const MAX_PHOTO_FRAME_CANDIDATES := 12
 const MAX_LEGACY_UI_PHOTO_BYTES := 16 * 1024 * 1024
@@ -128,6 +131,8 @@ func _ready() -> void:
 	_fail_button.tooltip_text="好笑的失敗瞬間，可重播"
 	for button in [_normal_button,_devil_button,_time_button,_fail_button]:
 		button.custom_minimum_size=Vector2(0,44)
+		var category := str(button.name).trim_prefix("AlbumTab_")
+		Collage.dress(button,"stamp",TAB_TONES.keys().find(category),"",TAB_TONES[category])
 	_photo_details=Paper.label("選取照片，查看收藏方式。",16,Paper.INK)
 	_photo_details.name="AlbumPhotoDetails"
 	_photo_details.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -158,6 +163,8 @@ func _ready() -> void:
 	var next := Paper.button("下一頁 →",func(): _change_page(1),_nav)
 	next.name="AlbumNextPage"
 	next.custom_minimum_size=Vector2(130,44)
+	Collage.dress(previous,"stamp",4,"",Collage.CREAM)
+	Collage.dress(next,"stamp",5,"",Collage.CREAM)
 	_page_label=Paper.label("第 1 / 1 頁",16,Paper.INK)
 	_page_label.name="AlbumPageLabel"
 	_page_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -232,6 +239,9 @@ func _refresh_book() -> void:
 		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count(_region))
 		_time_button.text="四時 %d / 4" % time_count
 	_time_button.visible=_region=="welcome"
+	for tab in [_normal_button,_devil_button,_time_button,_fail_button]:
+		var art := tab.get_node_or_null("CollageArt") as Collage.Item
+		if art!=null: art.set_chosen(str(tab.name)=="AlbumTab_"+_category)
 	_fail_button.visible=not _arcade_games().is_empty()
 	_fail_button.text=("失敗 %d / %d" if Paper.physical_scale(self)<0.9 else "失敗拍貼  %d / %d") % [_fail_count(),_arcade_games().size()]
 	_empty_message.text="這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"

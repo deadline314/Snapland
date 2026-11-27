@@ -12,6 +12,7 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 ## The shared minigame drawing kit; the helpers below are thin wrappers over it.
 const Props = preload("res://game/ui/pixel_props.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 const DESIGN := Vector2(1280, 720)
 ## Dusky plum the circus sprites' shadows lean toward.
 const SPRITE_SHADE := Color(0.05, 0.02, 0.09)
@@ -362,26 +363,59 @@ func _draw_ready_banner() -> void:
 func _draw_closing_card() -> void:
 	var elapsed := float(state.get("stage_time", 0.0)) if str(state.get("stage", "")) == "closing" else 9.0
 	draw_rect(Rect2(Vector2.ZERO, DESIGN), Color(INK, 0.5 * (1.0 if reduced_motion else smoothstep(0.0, 0.25, elapsed))))
-	var card := Rect2(410, 250, 460, 250)
-	draw_rect(Rect2(card.position + Vector2(10, 14), card.size), Color(0.06, 0.02, 0.08, 0.45))
-	panel(card, "velvet", VELVET.darkened(0.3))
-	gilt_frame(card.grow(6.0), 24.0)
-	label(Vector2(640, card.position.y + 48.0), "時間到！", 40, CREAM, pop_in(elapsed, 0.24))
+	# A torn journal card is slapped down at a slight angle and taped in place.
+	var settle := pop_in(elapsed, 0.3)
+	var angle := deg_to_rad(-2.5 + 9.0 * (1.0 - settle))
+	var centre := Vector2(640, 375) + Vector2(0, 70.0 * (1.0 - settle))
+	var face := Rect2(Vector2(-240, -130), Vector2(480, 260))
+	var edge: PackedVector2Array = Collage.torn(face, 13, 3.0, 10.0)
+	draw_set_transform(centre + Vector2(10, 14), angle)
+	draw_colored_polygon(edge, Color(0.06, 0.02, 0.08, 0.45))
+	draw_set_transform(centre, angle)
+	draw_colored_polygon(edge, Collage.CREAM)
+	Collage.outline(self, edge, Props.deepen(Collage.CREAM, 0.55), 3.0)
+	var strip: PackedVector2Array = Collage.torn(Rect2(-70, -114, 270, 58), 7, 3.0, 8.0)
+	draw_colored_polygon(strip, Paper.CORAL)
 	var earned := int(state.get("medal", 0))
+	var seal: PackedVector2Array = Collage.stamp_shape(Rect2(26, -40, 190, 64))
+	draw_colored_polygon(seal, Medal.FACES[earned].lightened(0.45))
+	Collage.outline(self, seal, Props.deepen(Medal.FACES[earned], 0.5), 2.0)
+	draw_line(Vector2(36, 92), Vector2(206, 88), Color(Paper.CORAL, 0.8), 3.0)
+	draw_set_transform(Vector2.ZERO)
+	for side: float in [-1.0, 1.0]:
+		Collage.tape(self, centre + Vector2(side * 196.0, -128.0).rotated(angle), 92.0, angle + side * 0.55)
+	_card_text(centre, angle, Vector2(64, -84), "時間到！", 40, CREAM, pop_in(elapsed, 0.24), true)
+	_card_text(centre, angle, Vector2(121, -7), Medal.NAMES[earned], 30, INK, 1.0, false)
+	# The score counts up once the card has landed.
+	var shown := int(state.get("score", 0))
+	if not reduced_motion:
+		shown = roundi(shown * smoothstep(0.35, 0.8, elapsed))
+	_card_text(centre, angle, Vector2(121, 62), "%d 分" % shown, 34, INK, 1.0, false)
 	# The medal drops in after a beat and squashes as it lands.
 	var drop_age := elapsed - 0.3
 	var fall := 0.0 if reduced_motion else -220.0 * (1.0 - smoothstep(0.0, 0.26, drop_age))
 	if drop_age >= 0.0 or reduced_motion:
 		var landed := squash(drop_age - 0.26, 0.3)
-		var at := Vector2(540, card.position.y + 158.0 + fall)
+		var at := centre + Vector2(-130, 40).rotated(angle) + Vector2(0, fall)
 		draw_set_transform(at, 0.0, landed)
 		Medal.paint(self, Vector2(0, 0), 6.0, earned)
 		draw_set_transform(Vector2.ZERO)
-		dust_puffs(Vector2(540, card.position.y + 200.0), drop_age - 0.26, 70.0)
+		dust_puffs(centre + Vector2(-130, 84).rotated(angle), drop_age - 0.26, 70.0)
 		if earned > 0 and drop_age > 0.7:
 			glint(at, 38.0, 2.4, -0.96)
-	label(Vector2(730, card.position.y + 128.0), Medal.NAMES[earned], 34, Medal.FACES[earned].lightened(0.2))
-	label(Vector2(730, card.position.y + 178.0), "%d 分" % int(state.get("score", 0)), 30)
+
+
+## Text on the tilted closing card, centred on `offset` in card space.
+func _card_text(centre: Vector2, angle: float, offset: Vector2, content: String, font_size: int, color: Color, scale_factor: float, outlined: bool) -> void:
+	if _font == null:
+		return
+	var extent := _font.get_string_size(content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	draw_set_transform(centre + offset.rotated(angle), angle, Vector2.ONE * scale_factor)
+	var origin := Vector2(-extent.x * 0.5, extent.y * 0.32)
+	if outlined:
+		draw_string_outline(_font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, clampi(int(font_size * 0.22), 3, 12), INK)
+	draw_string(_font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, color)
+	draw_set_transform(Vector2.ZERO)
 
 
 ## A brass medallion: bevelled rim, ten rivets and a glossy enamel centre.

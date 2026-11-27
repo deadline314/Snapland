@@ -5,6 +5,7 @@ extends SceneTree
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const RegionTransition = preload("res://game/ui/region_transition.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 
 var failures := 0
 var checks := 0
@@ -54,6 +55,32 @@ func _run() -> void:
 	button.disabled = true
 	button.mouse_entered.emit()
 	_check(button.self_modulate == Color.WHITE, "disabled buttons stay untinted")
+
+	var probe := Control.new()
+	host.add_child(probe)
+	PaperMotion.ease_property(probe, &"modulate:a", 0.5, 0.3, 0.1)
+	_check(is_equal_approx(probe.modulate.a, 0.5), "eased properties land at once without motion")
+	var counter := Label.new()
+	host.add_child(counter)
+	PaperMotion.count_up(counter, 340, "%d 分")
+	_check(counter.text == "340 分", "count-up shows the final number at once without motion")
+	PaperMotion.page_turn(probe)
+	_check(probe.scale == Vector2.ONE and is_equal_approx(probe.modulate.a, 1.0), "page turn rests flat and opaque")
+	_check(PaperMotion.stagger(40) <= 0.25, "a long stagger still settles inside half a second")
+
+	# Collage keepsakes keep the real button as the hit area and never shrink it.
+	var plain := Paper.button("島嶼地圖", func() -> void: pass, host)
+	var dressed := Paper.button("島嶼地圖", func() -> void: pass, host)
+	var art := Collage.dress(dressed, "tag", 3, "map")
+	_check(dressed.get_combined_minimum_size().x >= plain.get_combined_minimum_size().x and dressed.get_combined_minimum_size().y >= plain.get_combined_minimum_size().y, "a dressed keepsake is at least as large a target as the plain button")
+	_check(art.mouse_filter == Control.MOUSE_FILTER_IGNORE and is_equal_approx(art.enter, 1.0), "keepsake art ignores the pointer and rests settled")
+	dressed.grab_focus()
+	_check(is_equal_approx(art.lift, 1.0) and art.z_index == 1, "focus lifts the keepsake above its neighbours at once")
+	dressed.release_focus()
+	_check(is_equal_approx(art.lift, 0.0) and art.z_index == 0, "losing focus sets it back down")
+	dressed.button_down.emit()
+	_check(is_equal_approx(art.squash, 0.0) and is_equal_approx(art.ink, 0.0), "a press leaves no lingering squash or ink without motion")
+	_check(dressed.text == "島嶼地圖", "the button keeps its own text")
 
 	var note := Label.new()
 	host.add_child(note)

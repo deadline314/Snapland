@@ -22,6 +22,12 @@ const _ENTER_TWEEN := &"paper_motion_enter"
 const _ENTER_REST := &"paper_motion_enter_rest"
 const _FLASH_TWEEN := &"paper_motion_flash"
 const _POP_TWEEN := &"paper_motion_pop"
+const _COUNT_TWEEN := &"paper_motion_count"
+const SWING_SECONDS := 0.26
+const TURN_SECONDS := 0.24
+const COUNT_SECONDS := 0.45
+const STAGGER_SECONDS := 0.026
+const STAGGER_CAP := 8
 
 static var _reduced := false
 
@@ -129,6 +135,76 @@ static func rise_and_free(note: Control, distance := 30.0, seconds := RISE_SECON
 		tween.tween_property(note, "modulate:a", 0.0, seconds * 0.45).set_delay(seconds * 0.55)
 		tween.chain()
 	tween.tween_callback(note.queue_free)
+
+
+## Ease one float property of `node` to `to` (optionally starting at `from`)
+## after `delay`. Each property runs its own tween, so a lift and a fly-in on the
+## same item never cancel each other. Without motion the value is set at once.
+static func ease_property(node: Node, property: StringName, to: float, seconds: float, delay := 0.0, trans := Tween.TRANS_CUBIC, from := NAN) -> void:
+	if not is_instance_valid(node):
+		return
+	var key := StringName("paper_motion_" + property)
+	_stop(node, key)
+	if not enabled() or not node.is_inside_tree():
+		node.set_indexed(NodePath(property), to)
+		return
+	if not is_nan(from):
+		node.set_indexed(NodePath(property), from)
+	var tween := _start(node, key)
+	if delay > 0.0:
+		tween.tween_interval(delay)
+	tween.tween_property(node, NodePath(property), to, seconds).set_trans(trans).set_ease(Tween.EASE_OUT)
+
+
+## Damped swing of a float property around 0 (a wiggle, a squash), ending at 0.
+static func swing(node: Node, property: StringName, amplitude: float, seconds := SWING_SECONDS) -> void:
+	if not is_instance_valid(node):
+		return
+	var key := StringName("paper_motion_" + property)
+	_stop(node, key)
+	node.set(property, 0.0)
+	if not enabled() or not node.is_inside_tree():
+		return
+	var tween := _start(node, key)
+	for peak: float in [1.0, -0.55, 0.25, 0.0]:
+		tween.tween_property(node, NodePath(property), amplitude * peak, seconds * 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+## Entrance delay for the `index`-th item of a group, capped so the whole group
+## settles inside half a second.
+static func stagger(index: int) -> float:
+	return minf(index, STAGGER_CAP) * STAGGER_SECONDS
+
+
+## Swap a whole sheet in like turning a journal page: it unfolds from its left
+## edge. Only for controls whose transform no Container manages.
+static func page_turn(control: Control, seconds := TURN_SECONDS) -> void:
+	if not is_instance_valid(control) or not control.is_inside_tree():
+		return
+	_stop(control, _ENTER_TWEEN)
+	control.scale = Vector2.ONE
+	control.modulate.a = 1.0
+	if not enabled():
+		return
+	control.pivot_offset = Vector2(0.0, control.size.y * 0.5)
+	control.scale = Vector2(0.55, 1.0)
+	control.modulate.a = 0.0
+	var tween := _start(control, _ENTER_TWEEN).set_parallel(true)
+	tween.tween_property(control, "scale", Vector2.ONE, seconds).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(control, "modulate:a", 1.0, seconds * 0.6)
+
+
+## Count a label up to `value` (formatted with `template`); the final text is set
+## first so readers of the label never see a stale number when motion is off.
+static func count_up(label: Label, value: int, template := "%d", seconds := COUNT_SECONDS) -> void:
+	if not is_instance_valid(label):
+		return
+	_stop(label, _COUNT_TWEEN)
+	label.text = template % value
+	if not enabled() or not label.is_inside_tree() or value == 0:
+		return
+	var tween := _start(label, _COUNT_TWEEN)
+	tween.tween_method(func(shown: float) -> void: label.text = template % roundi(shown), 0.0, float(value), seconds).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 
 ## Give a button hover, focus and press feedback. Safe to call once per button.

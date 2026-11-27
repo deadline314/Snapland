@@ -4,6 +4,7 @@ const RegionRoutes = preload("res://game/core/region_routes.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 const FieldGameChip = preload("res://game/ui/field_game_chip.gd")
 const RoamingThief = preload("res://game/world/roaming_thief.gd")
 const ArcadeMedal = preload("res://game/ui/arcade_medal.gd")
@@ -583,6 +584,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	world.set_process(kind!="pause")
 	audio.set_paused(kind=="pause" or (kind=="time" and session!=null))
 	var market_menu := world_region=="nightmarket"
+	var collage := Collage.KINDS.has(kind)
 	var dim := ColorRect.new()
 	dim.color=Color(0.12,0.09,0.19,0.77) if market_menu else Color(0.06,0.14,0.19,0.74)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -602,6 +604,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 		menu_face.shadow_color=Color("#100e2099")
 	panel.add_theme_stylebox_override("panel",menu_face)
 	center.add_child(panel)
+	if collage: Collage.sheet(panel,market_menu)
 	_layout_open_panel(panel)
 	var margin := MarginContainer.new()
 	margin.name="AdaptiveMenuMargin"
@@ -615,21 +618,22 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	shell.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	shell.add_theme_constant_override("separation",8)
 	margin.add_child(shell)
-	var frame := Paper.PixelFrame.new()
-	frame.name="PixelOrnamentFrame"
-	if market_menu:
-		frame.frame_color=Color("#6a4a75")
-		frame.accent_color=Color("#eca58a")
-	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	panel.add_child(frame)
+	if not collage:
+		var frame := Paper.PixelFrame.new()
+		frame.name="PixelOrnamentFrame"
+		if market_menu:
+			frame.frame_color=Color("#6a4a75")
+			frame.accent_color=Color("#eca58a")
+		frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		frame.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		panel.add_child(frame)
 	var ticket_heading := HBoxContainer.new()
 	ticket_heading.name="AdaptiveMenuHeader"
 	ticket_heading.add_theme_constant_override("separation",12)
 	ticket_heading.custom_minimum_size.y=56
 	shell.add_child(ticket_heading)
 	var header_accent := Color("#f7bd9d") if market_menu else Paper.TEAL
-	ticket_heading.add_child(Paper.icon("shell",24,header_accent))
+	if not collage: ticket_heading.add_child(Paper.icon("shell",24,header_accent))
 	var heading_stack := VBoxContainer.new()
 	heading_stack.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	heading_stack.add_theme_constant_override("separation",1)
@@ -640,6 +644,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	var title_label := Paper.label(title,25)
 	title_label.name="AdaptiveMenuTitle"
 	heading_stack.add_child(title_label)
+	if collage: Collage.headline(title_label,eyebrow,market_menu)
 	var content := VBoxContainer.new()
 	content.name="AdaptiveMenuContent"
 	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -657,7 +662,9 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	if not get_tree().root.size_changed.is_connected(_adapt_open_menu):
 		get_tree().root.size_changed.connect(_adapt_open_menu)
 	if not same_panel:
-		PaperMotion.enter(center)
+		# Moving from one collage page to another turns the journal page.
+		if collage and was_open: PaperMotion.page_turn(center)
+		else: PaperMotion.enter(center)
 		if not was_open: PaperMotion.fade_in(dim)
 	return content
 
@@ -822,6 +829,10 @@ func _back(parent: Node) -> void:
 	var button := Paper.button(Localization.text("button.back"),_close,modal_footer)
 	button.name="MenuBackButton"
 	button.custom_minimum_size=Vector2(190,44)
+	if Collage.KINDS.has(modal_kind):
+		# Roomy pages take a ticket stub; the busy result footer a slim stamp.
+		if modal_kind=="result": Collage.dress(button,"stamp",9,"",Collage.CREAM)
+		else: Collage.dress(button,"stub",9,"door",Color("#1d4f5b"))
 	button.grab_focus()
 
 func _refresh() -> void:
@@ -1141,16 +1152,20 @@ func _show_pause() -> void:
 	island_panel.name="PauseIslandStatus"
 	island_panel.custom_minimum_size.x=270
 	island_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	island_panel.add_theme_stylebox_override("panel",Paper.plaque(Paper.FRAME))
+	var note_face := StyleBoxEmpty.new()
+	note_face.set_content_margin_all(14)
+	island_panel.add_theme_stylebox_override("panel",note_face)
 	columns.add_child(island_panel)
+	Collage.backing(island_panel,"note",0,Collage.CREAM,12.0)
 	var island := VBoxContainer.new()
 	island.add_theme_constant_override("separation",9)
 	island_panel.add_child(island)
 	var island_heading := HBoxContainer.new()
 	island_heading.add_theme_constant_override("separation",8)
 	island.add_child(island_heading)
-	island_heading.add_child(Paper.icon("shell",24,Paper.GOLD))
+	island_heading.add_child(Paper.icon("shell",24,Collage.INK_CORAL))
 	var status_heading := Paper.section_title("島嶼狀態",Paper.TEAL)
+	status_heading.add_theme_color_override("font_color",Collage.INK_TEAL)
 	status_heading.name="PauseIslandHeading"
 	island_heading.add_child(status_heading)
 	var portrait := TextureRect.new()
@@ -1164,30 +1179,35 @@ func _show_pause() -> void:
 	if world.avatar_renderer!=null:
 		portrait.texture=world.avatar_renderer.texture(Progress.appearance,Progress.equipped,"front",0,"idle")
 	island.add_child(portrait)
-	Paper.divider(island,Paper.FRAME)
+	Collage.backing(portrait,"photo",1,Color("#fbf7ec"),6.0)
+	Paper.divider(island,Color("#c8b78f"))
 	var place_row := HBoxContainer.new()
 	place_row.add_theme_constant_override("separation",7)
 	island.add_child(place_row)
-	place_row.add_child(Paper.icon("pin",20,Paper.GOLD))
+	place_row.add_child(Paper.icon("pin",20,Collage.INK_CORAL))
 	var place := Paper.label(str(world.current_area if not world.current_area.is_empty() else area_label.text),20,Paper.PAPER)
+	place.add_theme_color_override("font_color",Collage.INK)
 	place.name="PauseCurrentArea"
 	place_row.add_child(place)
 	var phase_data := TimeOfDay.phase_for_id(Progress.settings.get("time_phase",TimeOfDay.DEFAULT_PHASE))
 	var phase := Paper.label("時間  "+str(phase_data.get("label","中午"))+"  "+str(phase_data.get("clock","12:00")),16,Paper.TEAL)
+	phase.add_theme_color_override("font_color",Collage.INK_TEAL)
 	phase.name="PauseCurrentPhase"
 	island.add_child(phase)
 	var collection := VBoxContainer.new()
 	collection.name="PauseCollectionStatus"
 	collection.add_theme_constant_override("separation",2)
 	island.add_child(collection)
-	for stat in [["拍貼","%d / 18"%Progress.normal_count_for_zone(world_region),Paper.GOLD],["小惡魔","%d / 12"%Progress.devil_count(world_region),Paper.CORAL],["遊園幣","%d"%Progress.coins,Paper.GOLD]]:
+	for stat in [["拍貼","%d / 18"%Progress.normal_count_for_zone(world_region),Collage.INK_BRASS],["小惡魔","%d / 12"%Progress.devil_count(world_region),Collage.INK_CORAL],["遊園幣","%d"%Progress.coins,Collage.INK_BRASS]]:
 		var stat_row := HBoxContainer.new()
 		stat_row.add_theme_constant_override("separation",8)
 		collection.add_child(stat_row)
 		var stat_label := Paper.label(str(stat[0]),14,Paper.PAPER)
+		stat_label.add_theme_color_override("font_color",Collage.INK)
 		stat_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		stat_row.add_child(stat_label)
 		var stat_value := Paper.label(str(stat[1]),14,stat[2])
+		stat_value.add_theme_color_override("font_color",stat[2])
 		stat_value.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
 		stat_value.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		stat_row.add_child(stat_value)
@@ -1195,7 +1215,7 @@ func _show_pause() -> void:
 	nav_panel.name="PauseMenuPanel"
 	nav_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	nav_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	nav_panel.add_theme_stylebox_override("panel",Paper.plaque(Paper.DEEP))
+	nav_panel.add_theme_stylebox_override("panel",StyleBoxEmpty.new())
 	columns.add_child(nav_panel)
 	var actions := GridContainer.new()
 	actions.name="PauseActions"
@@ -1209,13 +1229,13 @@ func _show_pause() -> void:
 	var keepsake_actions := _pause_action_column(actions,"紀念與整裝","album")
 	var links := [
 		["島嶼地圖",_show_map,"PauseMapButton","map","explore"],
-		["今日任務",_show_tasks,"PauseTasksButton","ticket","explore"],
+		["今日任務",_show_tasks,"PauseTasksButton","task","explore"],
 		["更多旅券",_show_ticket,"PauseTicketButton","ticket","explore"],
-		["操作速查",_show_controls,"PauseControlsButton","gear","explore"],
+		["操作速查",_show_controls,"PauseControlsButton","book","explore"],
 		["拍貼收藏",_show_album,"PauseAlbumButton","album","keepsake"],
-		["遊園成就",_show_achievements,"PauseAchievementsButton","gear","keepsake"],
+		["遊園成就",_show_achievements,"PauseAchievementsButton","star","keepsake"],
 		["衣櫃換裝",_show_wardrobe,"PauseWardrobeButton","hat","keepsake"],
-		["切換時段",_show_time_panel,"PauseTimeButton","shell","keepsake"],
+		["切換時段",_show_time_panel,"PauseTimeButton","clock","keepsake"],
 		["設定與輔助",_show_settings,"PauseSettingsButton","gear","keepsake"],
 	]
 	for entry in links:
@@ -1224,13 +1244,13 @@ func _show_pause() -> void:
 		button.name=str(entry[2])
 		button.tooltip_text=str(entry[0])
 	if session==null and world_region=="welcome":
-		var replay := _pause_action(island_actions,"重看船上序章",_show_boat_prologue,"PauseBoatPrologueButton","shell")
+		var replay := _pause_action(island_actions,"重看船上序章",_show_boat_prologue,"PauseBoatPrologueButton","play")
 		replay.tooltip_text="重看晚風號船上片刻，結束後回到原地。"
 	if session!=null:
-		var tutorial := _pause_action(island_actions,"本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),"PauseTutorialButton","map")
+		var tutorial := _pause_action(island_actions,"本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),"PauseTutorialButton","book")
 		tutorial.tooltip_text="本局圖解教學"
 	modal_footer.alignment=BoxContainer.ALIGNMENT_BEGIN
-	modal_footer.add_child(Paper.icon("gear",18,Paper.GOLD))
+	modal_footer.add_child(Paper.icon("gear",18,Collage.SEA))
 	var saved := Paper.label("進度會自動保存",16,Paper.TEAL)
 	saved.name="PauseSavedStatus"
 	modal_footer.add_child(saved)
@@ -1240,45 +1260,50 @@ func _show_pause() -> void:
 	var resume := Paper.button("繼續遊園  ·  Esc",_close,modal_footer)
 	resume.name="PauseResumeButton"
 	resume.custom_minimum_size=Vector2(210,0)
-	Paper.set_button_role(resume,"primary")
+	Collage.dress(resume,"stamp",8,"play",Paper.CORAL)
 	var leave := Paper.button("儲存並離開",_quit_game,modal_footer)
 	leave.name="PauseQuitButton"
 	leave.custom_minimum_size=Vector2(180,0)
+	Collage.dress(leave,"stamp",9,"",Collage.CREAM)
 	resume.grab_focus()
 
 func _pause_action_column(parent: GridContainer,title: String,motif: String) -> VBoxContainer:
 	var column := VBoxContainer.new()
 	column.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	column.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	column.add_theme_constant_override("separation",3)
+	column.add_theme_constant_override("separation",10)
 	parent.add_child(column)
+	if parent.get_child_count()==2:
+		# The second column hangs half a tag lower: a diagonal, not a grid.
+		var drop := Control.new()
+		drop.name="PauseColumnDrop"
+		drop.custom_minimum_size.y=26
+		drop.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		column.add_child(drop)
 	var heading := HBoxContainer.new()
 	heading.add_theme_constant_override("separation",7)
 	column.add_child(heading)
-	heading.add_child(Paper.icon(motif,20,Paper.GOLD))
-	var heading_label := Paper.section_title(title,Paper.TEAL)
+	heading.add_child(Paper.icon(motif,20,Collage.SEA))
+	var heading_label := Paper.section_title(title,Collage.RIM)
 	heading_label.custom_minimum_size.y=22
 	heading.add_child(heading_label)
-	Paper.divider(column,Paper.FRAME)
 	var grid := GridContainer.new()
 	grid.name="PauseActionGrid"
 	grid.columns=1
 	grid.add_theme_constant_override("h_separation",8)
-	grid.add_theme_constant_override("v_separation",3)
+	grid.add_theme_constant_override("v_separation",6)
 	column.add_child(grid)
 	return column
 
 func _pause_action(parent: VBoxContainer,label: String,callback: Callable,node_name: String,motif: String) -> Button:
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation",8)
-	row.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	var grid := parent.get_node("PauseActionGrid") as GridContainer
-	grid.add_child(row)
-	row.add_child(Paper.icon(motif,20,Paper.TEAL))
-	var button := Paper.button(label,callback,row)
+	var button := Paper.button(label,callback,grid)
 	button.name=node_name
 	button.custom_minimum_size=Vector2(0,0)
 	button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	# Reading order runs down the left column, then the right one.
+	var order := grid.get_child_count()-1+(5 if parent.get_index()==1 else 0)
+	Collage.dress(button,"tag",order,motif)
 	return button
 
 func _show_boat_prologue(first_run: bool = false) -> void:
@@ -2103,7 +2128,9 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 			if not saved_frames.is_empty(): thumbnail.texture=_photo_texture(saved_frames[mini(i,saved_frames.size()-1)])
 			content.add_child(thumbnail)
 			content.add_child(Paper.label("第 %d 格%s"%[i+1," · 未拍攝" if saved_frames.is_empty() else ""],16,Paper.TEAL))
-	Paper.button("再練一次" if practice else "再玩一次",func(): _launch_game(id,bool(result.get("assisted",false)),practice),modal_footer).grab_focus()
+	var again := Paper.button("再練一次" if practice else "再玩一次",func(): _launch_game(id,bool(result.get("assisted",false)),practice),modal_footer)
+	Collage.dress(again,"stamp",0,"play",Paper.CORAL)
+	again.grab_focus()
 	if practice and retake_practice_target.get("id","") == id:
 		Paper.button("返回所選補拍",_request_retake.bind(id,bool(retake_practice_target.devil)),modal_footer).name="PracticeReturnRetake"
 	if not practice:
@@ -2402,6 +2429,7 @@ func _render_arcade_result(parent: VBoxContainer, summary: Dictionary) -> void:
 	var total := Paper.label("%d 分"%int(summary.get("total",0)),40,Paper.GOLD)
 	total.name="ArcadeResultScore"
 	words.add_child(total)
+	PaperMotion.count_up(total,int(summary.get("total",0)),"%d 分")
 	var verdict := Paper.label(str(summary.get("verdict","")),20)
 	verdict.name="ArcadeResultVerdict"
 	verdict.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -2975,6 +3003,8 @@ func _adapt_open_menu() -> void:
 			grid.columns=2 if tall_text else 1
 		for button in pause_actions.find_children("*","Button",true,false):
 			button.custom_minimum_size.y=(44.0 if compact else 64.0)/scale_factor
+	var column_drop := overlay.find_child("PauseColumnDrop",true,false) as Control
+	if column_drop!=null: column_drop.custom_minimum_size.y=0.0 if compact or tall_text else 26.0
 	var pause_status := overlay.find_child("PauseIslandStatus",true,false) as Control
 	if pause_status!=null: pause_status.visible=not (compact and tall_text)
 	var portrait := overlay.find_child("PausePlayerPortrait",true,false) as TextureRect
@@ -3037,10 +3067,13 @@ func _show_ticket() -> void:
 	var picks_line := _daily_picks_line()
 	picks_line.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	variety.add_child(picks_line)
+	picks_line.add_theme_color_override("font_color",Collage.INK)
+	Collage.backing(picks_line,"note",2,Color("#ecd5a4"),6.0)
 	var best := int(Progress.field_records.get(ParkVariety.MARATHON_RECORD,{}).get("best",0))
 	var marathon_button := Paper.button("連玩挑戰"+(" · 最佳 %d"%best if best>0 else ""),_start_marathon,variety)
 	marathon_button.name="MarathonStartButton"
 	marathon_button.tooltip_text="隨機五款街機，回合減半，比總分。"
+	Collage.dress(marathon_button,"stamp",1,"star",Paper.BRASS)
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2
@@ -3051,10 +3084,10 @@ func _show_ticket() -> void:
 	body.add_child(groups)
 	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學","circus":"馬戲團圖解教學","toy":"玩具城圖解教學","garden":"溫室圖解教學"}.get(world_region,"園區圖解教學")
 	var entries := [
-		["島嶼地圖",_show_map,"探索島嶼"], ["今日任務",_show_tasks,"探索島嶼"],
-		["拍貼收藏本",_show_album,"收藏記錄"], ["遊園成就",_show_achievements,"收藏記錄"],
-		["衣櫃與服飾店",_show_wardrobe,"整裝出發"], ["切換時段",_open_time_panel_from_ticket,"遊園安排"],
-		["設定與輔助",_show_settings,"遊園安排"], [lesson_label,_show_region_tutorial,"操作速查"],
+		["島嶼地圖",_show_map,"探索島嶼","map"], ["今日任務",_show_tasks,"探索島嶼","task"],
+		["拍貼收藏本",_show_album,"收藏記錄","album"], ["遊園成就",_show_achievements,"收藏記錄","star"],
+		["衣櫃與服飾店",_show_wardrobe,"整裝出發","hat"], ["切換時段",_open_time_panel_from_ticket,"遊園安排","clock"],
+		["設定與輔助",_show_settings,"遊園安排","gear"], [lesson_label,_show_region_tutorial,"操作速查","book"],
 	]
 	for index in range(entries.size()):
 		var entry: Array=entries[index]
@@ -3063,6 +3096,7 @@ func _show_ticket() -> void:
 		button.tooltip_text=str(entry[2])
 		button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		button.size_flags_vertical=Control.SIZE_EXPAND_FILL
+		Collage.dress(button,"stub",index+2,str(entry[3]))
 	var help := Paper.label("WASD 移動　E 互動　P 拍照　Esc 暫停",16,Paper.TEAL)
 	help.name="TicketQuickHelp"
 	body.add_child(help)
