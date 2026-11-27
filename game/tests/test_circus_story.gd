@@ -38,12 +38,12 @@ func _run() -> void:
 	root.add_child(main)
 	await _frames(5)
 	var origin: Vector3 = main.world.player.position
-	var point: Dictionary = main.world._point_by_id(Visit.CIRCUS_POINT)
-	var actor: Dictionary = main.world._npc_record_for_role("imp")
-	_check(not actor.is_empty() and not point.is_empty() and actor.activity_root.position == main.world.STORY_HOST,
+	var point: Dictionary = main.region_world()._point_by_id(Visit.CIRCUS_POINT)
+	var actor: Dictionary = main.region_world()._npc_record_for_role("imp")
+	_check(not actor.is_empty() and not point.is_empty() and actor.activity_root.position == main.region_world().STORY_HOST,
 		"fixed story point has authored 小角 at the foyer")
-	_check(is_instance_valid(main.world._story_rest_pose) and is_instance_valid(main.world._story_photo_pose)
-		and main.world._story_rest_pose != main.world._story_photo_pose, "authored host has distinct front standing and greeting poses")
+	_check(is_instance_valid(main.region_world()._story_rest_pose) and is_instance_valid(main.region_world()._story_photo_pose)
+		and main.region_world()._story_rest_pose != main.region_world()._story_photo_pose, "authored host has distinct front standing and greeting poses")
 	if point.is_empty():
 		await _finish()
 		return
@@ -60,7 +60,7 @@ func _run() -> void:
 	var story_marker := point.get("marker") as Label3D
 	_check(is_instance_valid(story_marker) and story_marker.visible, "the reachable story glyph is visible before dialogue")
 	var marker_states: Array[bool] = []
-	var signs: Array[Node3D] = main.world._story_photo_signs
+	var signs: Array[Node3D] = main.region_world()._story_photo_signs
 	_check(not signs.is_empty(), "tent signs are registered for the photo")
 	if not signs.is_empty():
 		signs[0].hide()
@@ -77,20 +77,20 @@ func _run() -> void:
 	_check(skip.text == "略過到合照", "skip is available before any text has been read")
 	skip.pressed.emit()
 	await _frames(3)
-	_check(main.modal_kind == "visit_photo" and main.visit_photo_panel != null and main.world._story_photo_camera.is_current(),
+	_check(main.modal_kind == "visit_photo" and main.visit_photo_panel != null and main.region_world()._story_photo_camera.is_current(),
 		"skip opens the live stage with its dedicated camera")
 	if main.modal_kind == "visit_photo":
 		_check(signs.all(func(sign: Node3D) -> bool: return not sign.visible),
 			"the portrait hides the actual plaques without altering tent geometry")
-		_check(actor.sprite.texture == main.world._story_photo_pose, "photo stage uses the registered front greeting pose")
+		_check(actor.sprite.texture == main.region_world()._story_photo_pose, "photo stage uses the registered front greeting pose")
 		for viewport_size: Vector2i in [Vector2i(800, 600), Vector2i(1280, 720), Vector2i(1920, 1080)]:
 			root.content_scale_size = viewport_size
 			root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
 			root.size = viewport_size
 			await _frames(4)
 			var finder := Viewfinder.viewfinder_rect(root.get_visible_rect().size)
-			var camera: Camera3D = main.world._story_photo_camera
-			for at: Vector3 in [main.world.STORY_HOST, main.world.STORY_GUEST]:
+			var camera: Camera3D = main.region_world()._story_photo_camera
+			for at: Vector3 in [main.region_world().to_global(main.region_world().STORY_HOST), main.region_world().to_global(main.region_world().STORY_GUEST)]:
 				_check(finder.has_point(camera.unproject_position(at + Vector3(0, 0.12, 0)))
 					and finder.has_point(camera.unproject_position(at + Vector3(0, 2.34, 0))),
 					"both full-body subjects fit the actual crop at %s" % viewport_size)
@@ -105,7 +105,7 @@ func _run() -> void:
 	_check(main.modal_kind.is_empty() and main.world.camera.is_current()
 		and main.world.player.position.distance_to(walk_position) < 0.15 and not main.world.blocked,
 		"cancelling restores normal zoom, character position and movement")
-	_check(actor.sprite.texture == main.world._story_rest_pose, "close restores the host’s standing pose")
+	_check(actor.sprite.texture == main.region_world()._story_rest_pose, "close restores the host’s standing pose")
 	_check(marker_states == [false, true], "cancelling restores the nearby story glyph once")
 	for index in signs.size():
 		_check(signs[index].visible == sign_visibility[index],

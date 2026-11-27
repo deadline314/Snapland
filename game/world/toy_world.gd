@@ -200,10 +200,9 @@ func _set_story_host_pose(texture: Texture2D) -> void:
 		material.set_shader_parameter("uv_rect", Vector4(0, 0, 1, 1))
 
 
-func _physics_process(delta: float) -> void:
-	# Keep the live player's position, pose, follow camera and nearby target intact.
-	if not is_instance_valid(_story_photo_camera):
-		super._physics_process(delta)
+# Keep the live player's position, pose, follow camera and nearby target intact.
+func staging_photo() -> bool:
+	return is_instance_valid(_story_photo_camera)
 
 
 func _build_player_floor() -> void:

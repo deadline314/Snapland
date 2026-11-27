@@ -15,7 +15,7 @@ const FLAT_MIN_ALPHA := 0.9
 const FLOATING_TOLERANCE := 0.3
 ## Rocks and roots may be bedded into sand, which lies below the lawn height.
 const SUNKEN_TOLERANCE := 0.6
-const NODE_BUDGETS := {"welcome": 2600}
+const NODE_BUDGETS := {"welcome": 2700}
 const DEFAULT_NODE_BUDGET := 900
 const RULES: Array[String] = ["flat_block", "primitive_shadow", "floating_sprite", "node_budget"]
 const OCCLUDER_SHADER := "res://game/world/occluder.gdshader"

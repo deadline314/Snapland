@@ -25,7 +25,6 @@ SUITE_TIMEOUT_SECONDS = {
     "figure scale tests": 240,
     "pixel UI shell tests": 240,
     "region travel tests": 180,
-    "district tests": 180,
     "retake panel tests": 180,
 }
 

@@ -36,12 +36,12 @@ func _run() -> void:
 	root.add_child(main)
 	await _frames(5)
 	var origin: Vector3 = main.world.player.position
-	var point: Dictionary = main.world._point_by_id(Visit.NIGHTMARKET_POINT)
-	var actor: Dictionary = main.world._npc_record_for_role("announcer")
-	_check(not actor.is_empty() and not point.is_empty() and main.world._point_by_id("game-037").has("position"),
+	var point: Dictionary = main.region_world()._point_by_id(Visit.NIGHTMARKET_POINT)
+	var actor: Dictionary = main.region_world()._npc_record_for_role("announcer")
+	_check(not actor.is_empty() and not point.is_empty() and main.region_world()._point_by_id("game-037").has("position"),
 		"fixed story point has authored 阿浪 and preserves the courier station")
-	_check(is_instance_valid(main.world._story_rest_pose) and is_instance_valid(main.world._story_photo_pose)
-		and main.world._story_rest_pose != main.world._story_photo_pose, "authored host has distinct front standing and greeting poses")
+	_check(is_instance_valid(main.region_world()._story_rest_pose) and is_instance_valid(main.region_world()._story_photo_pose)
+		and main.region_world()._story_rest_pose != main.region_world()._story_photo_pose, "authored host has distinct front standing and greeting poses")
 	if point.is_empty():
 		await _finish()
 		return
@@ -70,10 +70,10 @@ func _run() -> void:
 	_check(skip.text == "略過到合照", "skip is available before any text has been read")
 	skip.pressed.emit()
 	await _frames(3)
-	_check(main.modal_kind == "visit_photo" and main.visit_photo_panel != null and main.world._story_photo_camera.is_current(),
+	_check(main.modal_kind == "visit_photo" and main.visit_photo_panel != null and main.region_world()._story_photo_camera.is_current(),
 		"skip opens the live stage with its dedicated camera")
 	if main.modal_kind == "visit_photo":
-		_check(actor.sprite.texture == main.world._story_photo_pose, "photo stage uses the registered front greeting pose")
+		_check(actor.sprite.texture == main.region_world()._story_photo_pose, "photo stage uses the registered front greeting pose")
 		for viewport_size: Vector2i in [Vector2i(800, 600), Vector2i(1280, 720)]:
 			root.content_scale_size = viewport_size
 			root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
@@ -86,9 +86,9 @@ func _run() -> void:
 					"viewfinder control %s fits %s: button %s viewport %s" % [button_name, viewport_size, str(button.get_global_rect()) if button != null else "missing", root.get_visible_rect()])
 		_check(main.world.nearest.get("id") == Visit.NIGHTMARKET_POINT and marker_states == [false],
 			"photo staging keeps the story target and hides its glyph once across portrait frames")
-		var camera: Camera3D = main.world._story_photo_camera
+		var camera: Camera3D = main.region_world()._story_photo_camera
 		var frame := Viewfinder.viewfinder_rect(root.get_visible_rect().size)
-		for actor_position: Vector3 in [main.world.STORY_HOST, main.world.STORY_POINT]:
+		for actor_position: Vector3 in [main.region_world().to_global(main.region_world().STORY_HOST), main.region_world().to_global(main.region_world().STORY_POINT)]:
 			_check(frame.has_point(camera.unproject_position(actor_position + Vector3(0, 1.6, 0))),
 				"both principal subjects fit inside the camera frame")
 		main.visit_photo_panel.find_child("StoryPhotoCancel", true, false).pressed.emit()
@@ -96,7 +96,7 @@ func _run() -> void:
 	_check(main.modal_kind.is_empty() and main.world.camera.is_current()
 		and main.world.player.position.distance_to(walk_position) < 0.15 and not main.world.blocked,
 		"cancelling restores normal zoom, character position and movement")
-	_check(actor.sprite.texture == main.world._story_rest_pose, "close restores the host’s standing pose")
+	_check(actor.sprite.texture == main.region_world()._story_rest_pose, "close restores the host’s standing pose")
 	_check(marker_states == [false, true], "cancelling restores the nearby story glyph once")
 	_check(not progress.photos.has(PHOTO) and not progress.visited.has(REGION), "cancelling never creates collection or visit credit")
 	_check(await _save_then_replay(), "the photo and visit carry through the archive")

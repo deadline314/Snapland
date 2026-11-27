@@ -7,6 +7,8 @@ const Visit = preload("res://game/story/regional_visit.gd")
 const PhotoPanel = preload("res://game/ui/regional_visit_photo_panel.gd")
 const ACTIONS := ["move_left", "move_right", "move_up", "move_down"]
 
+## The district the story happens in (a child of the island world).
+var place: Node3D
 var _main: Node
 var _failures: Array[String] = []
 var _checks := 0
@@ -33,10 +35,11 @@ func _run() -> void:
 	get_tree().root.add_child(_main)
 	await _frames(8)
 	var world: Node = _main.world
-	var mark: Dictionary = world._point_by_id(Visit.GARDEN_POINT)
-	var host: Dictionary = world._npc_record_for_role("ticket")
-	if _check(not mark.is_empty() and mark.position == world.STORY_POINT and host.get("activity_root") != null
-		and host.activity_root.position == world.STORY_HOST and host.name_label.text == "票票", "new point is beside the real authored greeter"):
+	place = _main.region_world()
+	var mark: Dictionary = place._point_by_id(Visit.GARDEN_POINT)
+	var host: Dictionary = place._npc_record_for_role("ticket")
+	if _check(not mark.is_empty() and mark.position == place.STORY_POINT and host.get("activity_root") != null
+		and host.activity_root.position == place.STORY_HOST and host.name_label.text == "票票", "new point is beside the real authored greeter"):
 		if await _opening_then_cancel(world, mark):
 			await _complete_and_replay(world)
 	await _finish()
@@ -51,27 +54,27 @@ func _opening_then_cancel(world: Node, mark: Dictionary) -> bool:
 		return false
 	var before_light := _light_state(world)
 	var pose := _live_pose(world)
-	var hidden := world.local_sign_labels[0] as Label3D
+	var hidden := place.local_sign_labels[0] as Label3D
 	hidden.hide()
 	var marker: Label3D = mark.marker
 	var skip: Button = _main.dialogue_panel.cancel_button
 	_check(skip.text == "略過到合照", "localized skip offers the actual picture")
 	skip.pressed.emit()
-	if not _check(_main.modal_kind == "visit_photo" and world._story_camera.is_current(), "skip enters the live Garden frame"):
+	if not _check(_main.modal_kind == "visit_photo" and place._story_camera.is_current(), "skip enters the live Garden frame"):
 		return false
-	var guest := world._story_camera.get_node_or_null("GardenStoryGuest") as Sprite3D
-	_check(not world.player.visible and not marker.visible and world._story_host_sprite.texture == world._story_host_greeting
+	var guest := place._story_camera.get_node_or_null("GardenStoryGuest") as Sprite3D
+	_check(not world.player.visible and not marker.visible and place._story_host_sprite.texture == place._story_host_greeting
 		and guest != null and guest.texture == world.avatar_renderer.texture(world.avatar_appearance, world.avatar_equipped, "front", 0, "photograph"),
 		"portrait uses real greeter and installed traveller outfit while hiding interaction UI")
-	_check(world._story_host_root.position == world.STORY_PORTRAIT_HOST and not world._foyer_sign[0].visible,
+	_check(place._story_host_root.position == place.STORY_PORTRAIT_HOST and not place._foyer_sign[0].visible,
 		"portrait briefly clears the active bed and foreground plaque")
 	await _check_framing(world)
 	_check(_light_state(world) == before_light and _live_pose(world) == pose,
 		"staying in the portrait preserves player and actual lit bed")
 	_main.visit_photo_panel.find_child("StoryPhotoCancel", true, false).pressed.emit()
 	_check(_main.modal_kind == "" and world.camera.is_current() and world.player.visible and not hidden.visible
-		and _live_pose(world) == pose and _light_state(world) == before_light and world._story_host_sprite.texture == world._story_host_still
-		and world._story_host_root.position == world.STORY_HOST and world._foyer_sign[0].visible,
+		and _live_pose(world) == pose and _light_state(world) == before_light and place._story_host_sprite.texture == place._story_host_still
+		and place._story_host_root.position == place.STORY_HOST and place._foyer_sign[0].visible,
 		"cancel restores the exact player, label visibility, walking camera and bed")
 	_check(not Progress.photos.has(Visit.GARDEN_PHOTO) and not Progress.visited.has(Visit.GARDEN), "cancel creates neither a card nor a visit")
 	return true
@@ -84,7 +87,7 @@ func _complete_and_replay(world: Node) -> void:
 	for page in Visit.lines(Visit.GARDEN).size() * 2:
 		if _main.modal_kind == "dialogue":
 			_main._next_dialogue()
-	if not _check(_main.modal_kind == "visit_photo" and world.illuminated_bed() == 2 and not world.louver_is_moving(),
+	if not _check(_main.modal_kind == "visit_photo" and place.illuminated_bed() == 2 and not place.louver_is_moving(),
 		"reading every panel reaches the same portrait with the different east bed in reduced motion"):
 		return
 	var before := _live_pose(world)
@@ -134,20 +137,20 @@ func _open_replay() -> bool:
 
 func _check_framing(world: Node) -> void:
 	var root := get_tree().root
-	var camera: Camera3D = world._story_camera
+	var camera: Camera3D = place._story_camera
 	for size in [Vector2i(800, 600), Vector2i(1280, 720), Vector2i(1920, 1080)]:
 		root.content_scale_size = size
 		root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
 		root.size = size
 		await _frames(3)
 		var frame := PhotoPanel.viewfinder_rect(root.get_visible_rect().size)
-		for at: Vector3 in [world.STORY_PORTRAIT_HOST, world.STORY_GUEST]:
+		for at: Vector3 in [place.to_global(place.STORY_PORTRAIT_HOST), place.to_global(place.STORY_GUEST)]:
 			_check(frame.grow(-4.0).has_point(camera.unproject_position(at)) and frame.grow(-4.0).has_point(camera.unproject_position(at + Vector3.UP * 2.42)),
 				"both complete actors fit in the portrait at %s" % size)
-		for position: Vector3 in world.map_snapshot().beds:
+		for position: Vector3 in place.map_snapshot().beds:
 			_check(frame.grow(-5.0).has_point(camera.unproject_position(position)), "each actual plant bed can appear in the portrait at %s" % size)
 		for blade_index in [0, 6]:
-			var blade := world.get_node("GardenSunRack/GardenSlat_%d" % blade_index) as MeshInstance3D
+			var blade := place.get_node("GardenSunRack/GardenSlat_%d" % blade_index) as MeshInstance3D
 			var visible := true
 			for corner in 8:
 				if not frame.grow(-4.0).has_point(camera.unproject_position(blade.to_global(blade.get_aabb().get_endpoint(corner)))):
@@ -165,7 +168,7 @@ func _choose_bed(world: Node, expected: int) -> bool:
 		return false
 	world.interact()
 	await _frames(30)
-	return _check(world.illuminated_bed() == expected and not world.louver_is_moving(), "the actual louver selects bed %d" % expected)
+	return _check(place.illuminated_bed() == expected and not place.louver_is_moving(), "the actual louver selects bed %d" % expected)
 
 func _reach_host(world: Node) -> bool:
 	return _check(await _walk(world, Vector2(0, 5.56)) and await _walk(world, Vector2(2.80, 5.56))
@@ -173,7 +176,7 @@ func _reach_host(world: Node) -> bool:
 
 func _walk(world: Node, target: Vector2) -> bool:
 	for tick in 240:
-		var current: Vector3 = world.player.position
+		var current: Vector3 = _main.region_world().player_spot()
 		var offset := target - Vector2(current.x, current.z)
 		if offset.length() < 0.20:
 			break
@@ -188,15 +191,15 @@ func _walk(world: Node, target: Vector2) -> bool:
 	for action in ACTIONS:
 		Input.action_release(action)
 	await _frames(9)
-	var at: Vector3 = world.player.position
+	var at: Vector3 = _main.region_world().player_spot()
 	return world.player.is_on_floor() and Vector2(at.x, at.z).distance_to(target) < 0.47
 
 func _light_state(world: Node) -> Array:
-	return [world.louver_detent(), world.louver_angle(), world.louver_is_moving(), world.sun_patch_center(), world.illuminated_bed(), world.active_time_phase]
+	return [place.louver_detent(), place.louver_angle(), place.louver_is_moving(), place.sun_patch_center(), place.illuminated_bed(), place.active_time_phase]
 
 func _live_pose(world: Node) -> Array:
 	return [world.player.transform, world.player.velocity, world.camera.transform, world.avatar.texture, world.facing,
-		world.avatar_action, world.avatar_action_elapsed, world.walk_distance_phase, world.safe_reset_count()]
+		world.avatar_action, world.avatar_action_elapsed, world.walk_distance_phase, place.safe_reset_count()]
 
 func _frames(count: int) -> void:
 	for index in count:

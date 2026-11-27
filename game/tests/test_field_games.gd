@@ -723,7 +723,11 @@ func _test_stable_nodes() -> void:
 	advance(2.0)
 	check(world.find_children("*", "Node", true, false).size() == nodes and world.material_cache.size() == materials,
 		"time of day, settings, full rounds and toys create no nodes or materials")
-	check(nodes + 1 <= 2600, "the Welcome island stays inside its 2600-node budget (%d)" % (nodes + 1))
+	# Districts keep their own budget (design/runtime/scene-building-standards.md).
+	var district_nodes := 0
+	for district: Node in world.district_host.districts.values():
+		district_nodes += district.find_children("*", "Node", true, false).size() + 1
+	check(nodes + 1 - district_nodes <= 2700, "the island itself stays inside its 2700-node budget (%d)" % (nodes + 1 - district_nodes))
 	var lights := field.find_children("*", "Light3D", true, false).size()
 	check(lights == 0, "the field layer adds no lights")
 

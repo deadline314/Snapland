@@ -270,9 +270,8 @@ func end_story_photo() -> void:
 	_story_hidden_features.clear()
 
 
-func _physics_process(delta: float) -> void:
-	if not is_instance_valid(_story_camera):
-		super._physics_process(delta)
+func staging_photo() -> bool:
+	return is_instance_valid(_story_camera)
 
 
 func update_collection(_photos: Dictionary) -> void:
@@ -455,12 +454,6 @@ func _coordinate_lighting() -> void:
 	_buds.emission_energy_multiplier = {"dawn": 0.2, "noon": 0.1, "dusk": 0.9, "night": 2.0}[active_time_phase]
 	_bud_pool.light_energy = 0.68 if evening else 0.26
 	_scenery.apply_time_of_day(active_time_phase, lamp_energy_for_phase)
-
-
-## The bud pool burns whatever the hour, so on the island it holds one of the
-## lamp budget's places while the greenhouse is awake.
-func steady_light_count() -> int:
-	return 1 if is_instance_valid(_bud_pool) and is_visible_in_tree() else 0
 
 
 func map_snapshot() -> Dictionary:

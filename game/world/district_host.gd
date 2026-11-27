@@ -129,6 +129,8 @@ func _finish_build(region: String, node: Node3D, lamps_before: int, started: int
 	# The host chooses which lamps burn; each district still sets how bright its own are.
 	for index in range(lamps_before, world.lamps.size()):
 		world.lamps[index].set_meta(&"district", node)
+	# Its other lights burn on their own and take places from the lamp budget while it is awake.
+	node.steady_lights = node.find_children("*", "Light3D", true, false).filter(func(light: Light3D) -> bool: return not world.lamps.has(light)).size()
 	node.set_time_of_day(world.active_time_phase)
 	if not _settings.is_empty(): node.apply_settings(_settings)
 	if _look.size() == 2: node.set_avatar_look(_look[0], _look[1])

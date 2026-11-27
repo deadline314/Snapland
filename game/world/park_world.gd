@@ -3043,8 +3043,16 @@ func _area_at_position(position: Vector3) -> String:
 		if district_host.standing != "welcome": return RegionRoutes.title(district_host.standing)
 	return IslandShape.area_at(spot)
 
+## True while a story photo is staged: the walker, its pose and the follow
+## camera hold still. The island asks its districts; a region answers for itself.
+func staging_photo() -> bool:
+	if is_instance_valid(district_host):
+		for region: String in district_host.districts:
+			if district_host.districts[region].staging_photo(): return true
+	return false
+
 func _physics_process(delta: float) -> void:
-	if embedded_in != null or not is_instance_valid(player): return
+	if embedded_in != null or not is_instance_valid(player) or staging_photo(): return
 	_sync_external_avatar_reposition()
 	_update_district_label_visibility()
 	var riding := is_riding()
@@ -3217,9 +3225,16 @@ func _steer_avatar_horizontal(velocity: Vector2, movement: Vector2, speed: float
 	return next
 
 func _interaction_markers_allowed() -> bool:
+	# A district staging a story photo hides every glyph, the island's included.
+	if is_instance_valid(district_host):
+		for region: String in district_host.districts:
+			if not district_host.districts[region]._interaction_markers_allowed(): return false
 	return true
 
 func _set_interaction_marker(candidate: Variant) -> void:
+	if embedded_in != null:
+		embedded_in._set_interaction_marker(candidate)
+		return
 	var marker: Label3D = candidate as Label3D if is_instance_valid(candidate) else null
 	if is_instance_valid(_visible_interaction_marker) and _visible_interaction_marker != marker and _visible_interaction_marker.visible:
 		_visible_interaction_marker.hide()
@@ -3660,9 +3675,12 @@ func _lamp_level(lamp: Light3D) -> float:
 	var keeper: Object = lamp.get_meta(&"district") if lamp.has_meta(&"district") else null
 	return keeper.lamp_level(lamp) if is_instance_valid(keeper) else lamp_energy_for_phase
 
-## Lights this world keeps burning outside the lamp list (none by default).
+## Lights an embedded district keeps burning outside the shared lamp list
+## (light pools, a glow over beds); the host counts them once it is built.
+var steady_lights := 0
+
 func steady_light_count() -> int:
-	return 0
+	return steady_lights if is_visible_in_tree() else 0
 
 ## A district's brightness for one of its lamps in the current phase.
 func lamp_level(_lamp: Light3D) -> float:

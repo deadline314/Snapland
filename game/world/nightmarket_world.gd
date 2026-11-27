@@ -325,8 +325,6 @@ func set_time_of_day(phase_id: Variant) -> void:
 func _air(phase: String, _island: Dictionary) -> Dictionary:
 	return Atmosphere.air(phase)
 
-func steady_light_count() -> int:
-	return _atmosphere.pool_count() if is_instance_valid(_atmosphere) and is_visible_in_tree() else 0
 
 func refresh_label_fonts(font: Font) -> void:
 	super.refresh_label_fonts(font)

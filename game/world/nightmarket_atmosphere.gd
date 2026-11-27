@@ -139,9 +139,6 @@ func _build_pools() -> void:
 		add_child(lamp)
 		_pools.append(lamp)
 
-func pool_count() -> int:
-	return _pools.size()
-
 func _sync_animation() -> void:
 	set_process(_operating and not _reduced_motion and not _pools.is_empty())
 	_sync_pools()

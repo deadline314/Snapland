@@ -283,11 +283,6 @@ func _reset_to_entry() -> bool:
 	return true
 
 
-## The two light pools burn whatever the hour, so on the island they hold two of
-## the lamp budget's places while the circus is awake.
-func steady_light_count() -> int:
-	return _pools.size() if is_visible_in_tree() else 0
-
 
 func switch_projection() -> String:
 	_projection.toggle(reduced_motion)
