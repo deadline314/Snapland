@@ -1,5 +1,8 @@
 extends SceneTree
 const Rig = preload("res://game/world/avatar_motion_rig.gd")
+const IslandLayout = preload("res://game/world/island_layout.gd")
+
+var _completed := false
 
 class IncompleteHero extends Rig:
 	var fail_front := true
@@ -12,7 +15,13 @@ class IncompleteHero extends Rig:
 		return super._source_for(view)
 
 func _initialize() -> void:
-	call_deferred("_run")
+	call_deferred("_guarded_run")
+
+## A failed assert aborts _run but still resumes this caller, so exit at once
+## instead of idling until the runner's time limit.
+func _guarded_run() -> void:
+	await _run()
+	if not _completed: quit(1)
 
 func _run() -> void:
 	if OS.get_cmdline_user_args().has("--world-reach-audit"):
@@ -21,6 +30,7 @@ func _run() -> void:
 	await _assert_incomplete_hero_recovery()
 	if OS.get_cmdline_user_args().has("--invalid-source-only"):
 		print("PASS: real Hero ready/source fallback and rebuild recovery")
+		_completed = true
 		quit()
 		return
 	var rig := Rig.new()
@@ -252,10 +262,12 @@ func _run() -> void:
 	external.projection_basis = Transform3D.IDENTITY.looking_at(Vector3(-3.5,-15.5,-25),Vector3.UP).basis
 	external.set_direction("right")
 	for foot in external.foot_world: assert(foot.distance_to(external.global_position)<1.0,"synchronous source application cannot reuse pre-teleport settled world feet")
-	# Follow the actual ParkWorld ground sampler across ramp/deck boundaries.
+	# Follow the actual ParkWorld ground sampler across ramp/deck boundaries: the
+	# lookout ramp, which MAIN-55 moved with its district onto the island.
+	var lookout: Vector2 = IslandLayout.DISTRICTS.lookout.offset
 	var world_script = load("res://game/world/park_world.gd")
 	external.ground_height_provider = func(point: Vector2) -> float: return world_script._ground_surface_y(Vector3(point.x,0,point.y))
-	moved_parent.global_position = Vector3(6.2,world_script._ground_surface_y(Vector3(6.2,0,-36.2)),-36.2)
+	moved_parent.global_position = Vector3(lookout.x+6.2,world_script._ground_surface_y(Vector3(lookout.x+6.2,0,lookout.y-36.2)),lookout.y-36.2)
 	external.cancel_motion()
 	external.set_direction("right")
 	var ramp_contacts := [Vector3.ZERO,Vector3.ZERO]
@@ -286,7 +298,7 @@ func _run() -> void:
 				ramp_contact_epochs[leg]=external._contact_epoch[leg]
 				ramp_pivots[leg]=external._boot_contact_offset[leg]
 			else: ramp_contact_epochs[leg]=-1
-	assert(moved_parent.position.x>9 and moved_parent.position.y>0.5)
+	assert(moved_parent.position.x>lookout.x+9 and moved_parent.position.y>0.5,"the walk climbs the lookout ramp onto its deck")
 	for tick in range(60): external.advance_from_motion(1.0/60.0,Vector3.ZERO,false)
 	external.projection_basis = Basis.IDENTITY
 	external.set_direction("front")
@@ -460,6 +472,7 @@ func _run() -> void:
 	rig.queue_free()
 	await process_frame
 	print("PASS: eight direction 3D gait model/source/sole/cancellation/bounded resource tests; native quality pending")
+	_completed = true
 	quit()
 
 
@@ -564,6 +577,7 @@ func _world_reach_audit() -> void:
 	main.queue_free()
 	await process_frame
 	print("PASS: world station reach audit")
+	_completed = true
 	quit()
 
 func _assert_rendered_sole(actor, leg: int) -> void:
