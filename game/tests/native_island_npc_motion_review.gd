@@ -16,9 +16,9 @@ const ROLE_IDLE_ACTIONS := {
 const CAMERA_UP_SHIFT := 1.25
 const CAPTURE_PADDING_PX := 12.0
 const REST_IDLE_SECONDS := 3.0
-const PROOF_DIRECTORY := "pm/Snapland-art/images"
 const FRAME_POINT_TOLERANCE := 0.03
-const AUTHORED_ROUTE_HALF_WIDTH := {"ticket": 0.25, "imp": 0.35, "announcer": 0.60}
+## Since ART-17 every role walks a short authored patrol on its own Sprite; measured gait stays off.
+const AuthoredPatrolScript := preload("res://game/world/authored_npc_patrol.gd")
 const ROUTE_AXIS_TOLERANCE := 0.02
 
 var _main: Node
@@ -53,6 +53,9 @@ func _run() -> void:
 	if save_path.is_empty() or save_path.contains("://") or not save_path.is_absolute_path():
 		await _fail_and_quit("Set SNAPLAND_SAVE_PATH to an isolated absolute OS save path before running this review.")
 		return
+	if not OS.get_environment("SNAPLAND_CAPTURE_DIR").strip_edges().is_absolute_path():
+		await _fail_and_quit("Set SNAPLAND_CAPTURE_DIR to an absolute output folder (tools/run_native_capture.py does this).")
+		return
 	_proof_prefix = _safe_prefix(OS.get_environment("SNAPLAND_NATIVE_PROOF_TAG").strip_edges())
 	_report["proof_prefix"] = _proof_prefix
 	_report["save_profile_path"] = save_path
@@ -84,7 +87,7 @@ func _run() -> void:
 	_report["player_and_child_hero_rig_hidden_for_capture"] = true
 	_report["npc_activity_opted_in_by_main"] = bool(_main.world.npc_activity.motion_report().enabled)
 	var support: Dictionary = _main.world.npc_activity.motion_report()
-	_check(bool(support.enabled) and support.supported_roles.size() == ROLES.size(), "Main opts in all three actors with measured gait sources")
+	_check(not bool(support.enabled) and support.supported_roles.is_empty() and support.sprite_fallback_roles.size() == ROLES.size(), "Main keeps measured gait off and all three actors on their authored Sprites (ART-17)")
 	if not _failures.is_empty():
 		await _finish()
 		return
@@ -179,19 +182,19 @@ func _run_route_cpu_diagnostic() -> void:
 		var sprite := actor.get("sprite") as Sprite3D
 		var activity_root := actor.get("activity_root") as Node3D
 		var point: Dictionary = _main.world._point_by_id(String(ROLE_POINT[role]))
-		var motion: Variant = _main.world.npc_activity._records[_record_index(role)].get("motion")
-		var was_active := bool(motion.active)
+		var was_walking := _current_action_for_role(role) == "walk"
 		var started := false
 		var deadline := Time.get_ticks_msec()+30000
 		while Time.get_ticks_msec()<deadline:
 			await get_tree().process_frame
-			if motion.active and not was_active:
+			var walking := _current_action_for_role(role) == "walk"
+			if walking and not was_walking:
 				started = true
 				break
-			was_active = bool(motion.active)
+			was_walking = walking
 		if not _check(started,role+" CPU diagnostic observes a natural route start"):
 			break
-		if not await _review_own_route(role,motion,sprite,activity_root,point):
+		if not await _review_own_route(role,sprite,activity_root,point):
 			break
 	await _finish()
 
@@ -208,8 +211,7 @@ func _review_role(role: String) -> void:
 		return
 	if not _check(record_index >= 0, role + " has a live NpcActivity record"):
 		return
-	var motion: Variant = controller._records[record_index].get("motion")
-	if not _check(motion != null and motion.supported and motion.rig.source_records.size() == 2, role + " uses exactly the measured left/right rig records"):
+	if not _check(controller._records[record_index].get("motion") == null and controller._records[record_index].get("authored_patrol") != null, role + " has no measured gait rig and walks its authored patrol"):
 		return
 	var role_start := Time.get_ticks_msec()
 	var root_start: Vector3 = activity_root.global_position
@@ -220,8 +222,8 @@ func _review_role(role: String) -> void:
 		"start_root_world": str(root_start),
 		"start_point_world": str(point_start),
 		"normal_rest_duration_seconds_required": REST_IDLE_SECONDS,
-		"npc_role_motion_enabled": true,
-		"motion_views": _motion_view_report(role, motion),
+		"npc_role_motion_enabled": false,
+		"authored_patrol_profile": _patrol_profile(role),
 		"authored_action_coverage": {},
 		"captures": [],
 	}
@@ -235,7 +237,7 @@ func _review_role(role: String) -> void:
 	var route_origin := _route_origin_world(activity_root, route_record)
 	var route_excursion_max := 0.0
 	var route_bounds_failure := ""
-	if not await _capture_actor(role, "idle-rest", "Natural source-Sprite rest; three seconds of controller runtime", true):
+	if not await _capture_actor(role, "idle-rest", "Natural source-Sprite rest; three seconds of controller runtime"):
 		return
 	var rest_accumulated := 0.0
 	var rest_deadline := Time.get_ticks_msec() + 22000
@@ -249,8 +251,8 @@ func _review_role(role: String) -> void:
 		var current_offset: Vector3 = activity_root.global_position - route_origin
 		route_excursion_max = maxf(route_excursion_max, absf(current_offset.x))
 		if route_bounds_failure.is_empty() and not _within_authored_route_bounds(role, current_offset):
-			route_bounds_failure = "offset=%s half_width=%.3f origin=%s" % [str(current_offset), float(AUTHORED_ROUTE_HALF_WIDTH[role]), str(route_origin)]
-		if not motion.active and sprite.visible and String(current.action) in ["idle", "stand", "idle_gesture", "emotion_happy", "emotion_proud", "dance", "special", "emotion_curious"]:
+			route_bounds_failure = "offset=%s patrol=%s origin=%s" % [str(current_offset), str(_patrol_profile(role)), str(route_origin)]
+		if sprite.visible and String(current.action) in ["idle", "stand", "idle_gesture", "emotion_happy", "emotion_proud", "dance", "special", "emotion_curious"]:
 			rest_accumulated += delta
 	_check(rest_accumulated >= REST_IDLE_SECONDS, role + " accumulates at least three seconds in its authored non-gait rest/activity states")
 	if not _failures.is_empty(): return
@@ -260,12 +262,12 @@ func _review_role(role: String) -> void:
 	summary["rest_route_origin_world"] = str(route_origin)
 	summary["rest_max_abs_route_axis_offset_m"] = route_excursion_max
 	summary["rest_route_bounds_failure"] = route_bounds_failure
-	_check(route_bounds_failure.is_empty(), role + " remains within its authored route envelope during rest observation; max_abs_x=%.3fm half_width=%.3fm failure=%s" % [route_excursion_max, float(AUTHORED_ROUTE_HALF_WIDTH[role]), route_bounds_failure])
+	_check(route_bounds_failure.is_empty(), role + " remains within its authored patrol during rest observation; max_abs_x=%.3fm failure=%s" % [route_excursion_max, route_bounds_failure])
 	if not _failures.is_empty(): return
 	if not await _review_action(role, "greet", sprite): return
 	if not await _review_action(role, "interact", sprite): return
 	if not await _review_personality_actions(role, sprite, ROLE_IDLE_ACTIONS[role]): return
-	if not await _review_own_route(role, motion, sprite, activity_root, point): return
+	if not await _review_own_route(role, sprite, activity_root, point): return
 	var elapsed := Time.get_ticks_msec() - role_start
 	_check(elapsed >= 9000, role + " receives at least nine seconds of normal live runtime")
 	_check(activity_root.global_position.distance_to(point.position) <= FRAME_POINT_TOLERANCE, role + " final interaction point follows its live actor root")
@@ -283,17 +285,16 @@ func _review_action(role: String, action: String, sprite: Sprite3D) -> bool:
 	if not await _wait_for_rest(role, 24.0, action):
 		_check(false, role + " reaches a natural rest window before " + action)
 		return false
-	var motion: Variant = _main.world.npc_activity._records[_record_index(role)].motion
 	var accepted := bool(_main.world.npc_activity.call(action, sprite, "front"))
 	if not _check(accepted, role + " controller accepts authored " + action + " action"):
 		return false
 	await _frames(2)
 	var action_record: Dictionary = _main.world.npc_activity._records[_record_index(role)]
-	if not _check(String(action_record.action) == action and not motion.active and sprite.visible, role + " presents authored " + action + " on its source Sprite, not the gait rig"):
+	if not _check(String(action_record.action) == action and sprite.visible, role + " presents authored " + action + " on its source Sprite"):
 		return false
 	if not _check(_action_source_count(role, action, "front") > 0 and not bool(action_record.action_sequence.get("legacy_fallback", false)), role + " " + action + " is backed by its named loaded source sequence"):
 		return false
-	if not await _capture_actor(role, action, "NpcActivity.%s from the actor's loaded authored action sequence" % action, true):
+	if not await _capture_actor(role, action, "NpcActivity.%s from the actor's loaded authored action sequence" % action):
 		return false
 	return true
 
@@ -306,11 +307,10 @@ func _review_personality_actions(role: String, sprite: Sprite3D, actions: Array)
 		if index < 0: break
 		var record: Dictionary = _main.world.npc_activity._records[index]
 		var action := String(record.action)
-		var motion: Variant = record.get("motion")
-		if actions.has(action) and sprite.visible and motion != null and not motion.active and not seen.has(action):
+		if actions.has(action) and sprite.visible and not seen.has(action):
 			if not _check(_action_source_count(role, action, "front") > 0 and not bool(record.action_sequence.get("legacy_fallback", false)), role + " personality action " + action + " is from its loaded authored sequence"):
 				return false
-			if not await _capture_actor(role, "personality-" + action, "Naturally scheduled individual idle action: " + action, true):
+			if not await _capture_actor(role, "personality-" + action, "Naturally scheduled individual idle action: " + action):
 				return false
 			seen[action] = {"action": action, "frame_count": int(record.action_sequence.get("frames", []).size()), "action_elapsed": float(record.action_elapsed)}
 		await get_tree().process_frame
@@ -323,6 +323,8 @@ func _review_personality_actions(role: String, sprite: Sprite3D, actions: Array)
 
 
 func _route_origin_world(activity_root: Node3D, record: Dictionary) -> Vector3:
+	var patrol: Variant = record.get("authored_patrol")
+	if patrol != null: return patrol._origin
 	var parent := activity_root.get_parent() as Node3D
 	# route_base is the controller's stable authored anchor. baseline_anchor_position
 	# can predate Main's first grounded-anchor update by a few physics frames.
@@ -334,11 +336,16 @@ func _route_origin_world(activity_root: Node3D, record: Dictionary) -> Vector3:
 
 
 func _within_authored_route_bounds(role: String, offset: Vector3) -> bool:
-	if not AUTHORED_ROUTE_HALF_WIDTH.has(role):
-		return false
-	# These routes are authored along X only. Grounding can alter Y, so Y is
-	# diagnostic context; Z must remain at the stable authored route origin.
-	return absf(offset.x) <= float(AUTHORED_ROUTE_HALF_WIDTH[role]) + ROUTE_AXIS_TOLERANCE and absf(offset.z) <= ROUTE_AXIS_TOLERANCE
+	# Patrols run along X only. Grounding can alter Y, so Y is diagnostic
+	# context; Z must remain at the patrol origin.
+	var profile := _patrol_profile(role)
+	return offset.x >= float(profile.minimum_offset) - ROUTE_AXIS_TOLERANCE and offset.x <= float(profile.maximum_offset) + ROUTE_AXIS_TOLERANCE and absf(offset.z) <= ROUTE_AXIS_TOLERANCE
+
+
+func _patrol_profile(role: String) -> Dictionary:
+	var profile: Dictionary = AuthoredPatrolScript.DEFAULT_PROFILE.duplicate()
+	profile.merge(NpcActivityScript.AUTHORED_PATROL_PROFILES.get(role, {}), true)
+	return profile
 
 
 func _diagnose_announcer_route_bounds() -> void:
@@ -364,16 +371,16 @@ func _diagnose_announcer_route_bounds() -> void:
 		max_abs_y = maxf(max_abs_y, absf(offset.y))
 		max_abs_z = maxf(max_abs_z, absf(offset.z))
 		if not _within_authored_route_bounds(role, offset):
-			_check(false, "announcer actual Main route stays within authored half-width 0.600m; observed offset=" + str(offset))
+			_check(false, "announcer actual Main route stays within its authored patrol; observed offset=" + str(offset))
 			return
 		samples += 1
 	var elapsed := float(controller._action_clock) - initial_clock
 	_check(elapsed >= 8.6 and samples > 0, "CPU diagnostic observes a complete announcer route cycle; elapsed=%.3fs samples=%d" % [elapsed, samples])
 	if _failures.is_empty():
-		print("ANNOUNCER_ROUTE_BOUNDS_CPU_DIAGNOSTIC elapsed=%.3f samples=%d origin=%s max_abs_x=%.6f max_abs_y=%.6f max_abs_z=%.6f half_width=0.600 tolerance=%.3f (Y/Z recorded, not route axes)" % [elapsed, samples, str(origin), max_abs_x, max_abs_y, max_abs_z, ROUTE_AXIS_TOLERANCE])
+		print("ANNOUNCER_ROUTE_BOUNDS_CPU_DIAGNOSTIC elapsed=%.3f samples=%d origin=%s max_abs_x=%.6f max_abs_y=%.6f max_abs_z=%.6f tolerance=%.3f (Y/Z recorded, not route axes)" % [elapsed, samples, str(origin), max_abs_x, max_abs_y, max_abs_z, ROUTE_AXIS_TOLERANCE])
 
 
-func _review_own_route(role: String, motion: Variant, sprite: Sprite3D, activity_root: Node3D, point: Dictionary) -> bool:
+func _review_own_route(role: String, sprite: Sprite3D, activity_root: Node3D, point: Dictionary) -> bool:
 	var deadline := Time.get_ticks_msec() + 24000
 	var start_position: Vector3 = activity_root.global_position
 	var previous_position := start_position
@@ -384,46 +391,41 @@ func _review_own_route(role: String, motion: Variant, sprite: Sprite3D, activity
 		var record: Dictionary = _main.world.npc_activity._records[index]
 		var delta := activity_root.global_position - start_position
 		var frame_delta := activity_root.global_position - previous_position
-		var route_record: Dictionary = _main.world.npc_activity._records[index]
-		var route_offset: Vector3 = activity_root.global_position - _route_origin_world(activity_root, route_record)
+		var route_offset: Vector3 = activity_root.global_position - _route_origin_world(activity_root, record)
 		if not _within_authored_route_bounds(role, route_offset):
-			_check(false, role + " root remains inside its authored route envelope; offset=" + str(route_offset))
+			_check(false, role + " root remains inside its authored patrol; offset=" + str(route_offset))
 			return false
 		var frame_distance := Vector2(frame_delta.x,frame_delta.z).length()
 		previous_position = activity_root.global_position
 		sample_frames += 1
 		greatest_distance = maxf(greatest_distance, Vector2(delta.x, delta.z).length())
-		# The adapter activates on the first real route delta (ticket moves only
-		# 4.17 mm/frame at 60 FPS). Wait for measurable travel and a still-moving
-		# frame; the rig's settling visibility alone does not prove movement.
-		if motion.active and motion.rig.visible and not sprite.visible and greatest_distance>0.01 and frame_distance>0.0001:
-			if not _check(String(motion.rig.direction) in ["left", "right"] and motion.rig.source_records.has(String(motion.rig.direction)), role + " live gait displays a measured source direction while its own route moves"):
+		# Wait for measurable travel on a still-moving frame of the authored walk.
+		if String(record.action) == "walk" and sprite.visible and greatest_distance>0.01 and frame_distance>0.0001:
+			var direction := String(record.direction)
+			if not _check(direction in ["left", "right"] and _action_source_count(role, "walk", direction) > 0, role + " walks its own patrol with the authored " + direction + " walk on its source Sprite"):
 				return false
-			if not _check(greatest_distance > 0.01 and frame_distance>0.0001, role + " gait is driven by actual actor-root displacement, not a fixture-only rig animation"):
-				return false
-			if not _check(activity_root.global_position.distance_to(point.position) <= FRAME_POINT_TOLERANCE, role + " interaction point tracks the moving root during measured gait"):
+			if not _check(activity_root.global_position.distance_to(point.position) <= FRAME_POINT_TOLERANCE, role + " interaction point tracks the moving root during the authored walk"):
 				return false
 			if OS.get_environment("SNAPLAND_NPC_ROUTE_CPU_DIAGNOSTIC") == "1":
-				print("ROUTE_CPU_DIAGNOSTIC role=%s root_displacement_m=%.6f frame_displacement_m=%.6f observed_frames=%d rig_speed_mps=%.6f" % [role,greatest_distance,frame_distance,sample_frames,float(motion.rig.speed)])
+				print("ROUTE_CPU_DIAGNOSTIC role=%s root_displacement_m=%.6f frame_displacement_m=%.6f observed_frames=%d direction=%s" % [role,greatest_distance,frame_distance,sample_frames,direction])
 				return true
-			if not await _capture_actor(role, "native-route-gait-" + String(motion.rig.direction), "Actual Main NPC route; measured rig direction=%s" % String(motion.rig.direction), false):
+			if not await _capture_actor(role, "native-route-walk-" + direction, "Actual Main NPC patrol; authored walk direction=%s" % direction):
 				return false
-			var settled := await _wait_for_settle(role, 4.0)
-			if not _check(settled and not motion.active and sprite.visible and not motion.rig.visible, role + " measured gait settles back to the same NPC's authored Sprite"):
+			var settled := await _wait_for_settle(role, 6.0)
+			if not _check(settled and sprite.visible, role + " authored walk settles back into a rest action"):
 				return false
-			if not await _capture_actor(role, "native-route-settle", "Same NPC after actual route deceleration and rig cleanup", true):
+			if not await _capture_actor(role, "native-route-settle", "Same NPC after its patrol stops"):
 				return false
 			if not _failures.is_empty(): return false
 			var summary: Dictionary = _report.roles[role]
 			summary["route_max_root_displacement_m"] = greatest_distance
 			summary["route_sample_frames"] = sample_frames
 			summary["route_capture_frame_displacement_m"] = frame_distance
-			summary["route_direction"] = String(motion.rig.direction)
-			summary["measured_gait_source"] = _motion_view_report(role, motion)
+			summary["route_direction"] = direction
 			_report.roles[role] = summary
 			return true
 		await get_tree().process_frame
-	_check(false, role + " reaches its own natural route while the measured walk rig is visible")
+	_check(false, role + " reaches its own natural patrol walk")
 	return false
 
 
@@ -433,17 +435,17 @@ func _wait_for_rest(role: String, timeout_seconds: float, requested_action: Stri
 		var index := _record_index(role)
 		if index >= 0:
 			var record: Dictionary = _main.world.npc_activity._records[index]
-			var motion: Variant = record.get("motion")
 			var sprite: Sprite3D = record.target.get_ref()
 			var action := String(record.action)
 			var rest_actions: Array = ["idle", "stand"] + ROLE_IDLE_ACTIONS[role]
 			var in_announcer_rest := true
-			if role == "announcer":
+			# The 8.6 s clock only times the announcer's legacy route; an authored patrol has its own rests.
+			if role == "announcer" and not bool(record.get("authored_route_selected", false)):
 				var phase := fposmod(float(_main.world.npc_activity._action_clock), 8.6)
 				if requested_action == "greet": in_announcer_rest = phase >= 1.15 and phase <= 1.30
 				elif requested_action == "interact": in_announcer_rest = phase >= 5.55 and phase <= 5.70
 				else: in_announcer_rest = (phase >= 1.0 and phase < 3.3) or (phase >= 5.4 and phase < 7.6)
-			if motion != null and not motion.active and sprite.visible and not motion.rig.visible and rest_actions.has(action) and in_announcer_rest:
+			if sprite.visible and rest_actions.has(action) and in_announcer_rest:
 				return true
 		await get_tree().process_frame
 	return false
@@ -451,10 +453,10 @@ func _wait_for_rest(role: String, timeout_seconds: float, requested_action: Stri
 
 func _wait_for_settle(role: String, timeout_seconds: float) -> bool:
 	var deadline := Time.get_ticks_msec() + int(timeout_seconds * 1000.0)
+	var rest_actions: Array = ["idle", "stand", "settle"] + ROLE_IDLE_ACTIONS[role]
 	while Time.get_ticks_msec() < deadline:
 		var record: Dictionary = _main.world.npc_activity._records[_record_index(role)]
-		var motion: Variant = record.get("motion")
-		if motion != null and not motion.active and motion.rig.blend < 0.08 and record.target.get_ref().visible:
+		if rest_actions.has(String(record.action)) and record.target.get_ref().visible:
 			return true
 		await get_tree().process_frame
 	return false
@@ -469,12 +471,11 @@ func _focus_actor(role: String, actor_root: Node3D) -> void:
 	camera.size = 5.0
 	camera.current = true
 	_main.world._update_sprite_grounding()
-	_set_caption(role, "Natural world rest | authored front Sprite")
+	_set_caption(role, "Natural world rest | authored Sprite")
 
 
-func _capture_actor(role: String, phase: String, note: String, require_source_sprite: bool) -> bool:
-	var state := "measured gait %s" % String(_main.world.npc_activity._records[_record_index(role)].motion.rig.direction) if not require_source_sprite else "authored %s" % String(_main.world.npc_activity._records[_record_index(role)].action)
-	_set_caption(role, "%s | %s" % [phase.replace("-", " "), state])
+func _capture_actor(role: String, phase: String, note: String) -> bool:
+	_set_caption(role, "%s | authored %s" % [phase.replace("-", " "), String(_main.world.npc_activity._records[_record_index(role)].action)])
 	await RenderingServer.frame_post_draw
 	var actor := _actor_record(role)
 	var sprite := actor.get("sprite") as Sprite3D
@@ -483,39 +484,15 @@ func _capture_actor(role: String, phase: String, note: String, require_source_sp
 	if not _check(is_instance_valid(sprite) and is_instance_valid(activity_root) and index >= 0, role + " capture resolves the real actor"):
 		return false
 	var record: Dictionary = _main.world.npc_activity._records[index]
-	var motion: Variant = record.get("motion")
-	if not _check(motion != null and motion.supported, role + " keeps its measured adapter for every evidence capture"):
+	if not _check(record.get("motion") == null, role + " has no measured gait rig at any evidence capture"):
 		return false
 	var camera: Camera3D = _main.world.camera
 	var viewport_rect := get_viewport().get_visible_rect()
 	var source_bounds := _project_sprite_alpha_bounds(sprite, camera) if sprite.visible else Rect2()
-	var gait_bounds: Array[Dictionary] = []
-	var gait_union := Rect2()
-	var gait_parts: Array = []
-	if motion.rig.visible:
-		gait_parts = motion.rig.find_children("*", "VisualInstance3D", true, false)
-		for child in gait_parts:
-			var visual := child as VisualInstance3D
-			if not is_instance_valid(visual) or not visual.is_visible_in_tree(): continue
-			var bounds := _project_visual_bounds(visual, camera)
-			gait_bounds.append({"name": String(visual.name), "bounds_px": str(bounds)})
-			gait_union = bounds if gait_union.size == Vector2.ZERO else gait_union.merge(bounds)
-	var use_gait: bool = motion.rig.visible
-	if not _check(use_gait != require_source_sprite, role + " capture uses the requested actual visual layer (source Sprite or measured gait rig)"):
+	if not _check(sprite.visible and source_bounds.size.y > 0.0, role + " source action Sprite is visible with its measured alpha silhouette"):
 		return false
-	var measured_bounds := gait_union if use_gait else source_bounds
-	if not _check(_bounds_with_padding(measured_bounds, viewport_rect), role + " full visible head-to-feet bounds retain 12px padding at " + phase + ": " + str(measured_bounds)):
+	if not _check(_bounds_with_padding(source_bounds, viewport_rect), role + " full visible head-to-feet bounds retain 12px padding at " + phase + ": " + str(source_bounds)):
 		return false
-	if use_gait:
-		if not _check(motion.active and gait_parts.size() > 0 and gait_bounds.size() > 0, role + " is presenting actual visible measured-rig parts, not its hidden action Sprite"):
-			return false
-		var visible_names: Array[String] = []
-		for item in gait_bounds: visible_names.append(String(item.name))
-		if not _check(motion.rig._upper != null and motion.rig._upper.is_visible_in_tree() and motion.rig._boots.size() == 2 and motion.rig._boots[0].is_visible_in_tree() and motion.rig._boots[1].is_visible_in_tree(), role + " visible gait has its actual upper and both boot instances"):
-			return false
-	else:
-		if not _check(sprite.visible and not motion.rig.visible and source_bounds.size.y > 0.0, role + " source action Sprite is visible with its measured alpha silhouette"):
-			return false
 	var point_id := String(ROLE_POINT[role])
 	var point: Dictionary = _main.world._point_by_id(point_id)
 	var point_delta := activity_root.global_position.distance_to(point.position)
@@ -524,26 +501,17 @@ func _capture_actor(role: String, phase: String, note: String, require_source_sp
 	var actual_action := String(record.action)
 	var actual_direction := String(record.direction)
 	var action_sequence := record.get("action_sequence", {}) as Dictionary
-	var source_match := _source_frame_matches(role, action_sequence, sprite) if sprite.visible else false
-	var source_counts := _action_source_counts(role)
-	if require_source_sprite:
-		var source_label := role + " visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)"
-		if not source_match:
-			source_label += " | observed=" + _source_frame_diagnostic(role, action_sequence, sprite)
-		if not _check(source_match, source_label):
-			return false
-	else:
-		var view_record: Dictionary = motion.rig.source_records.get(String(motion.rig.direction), {})
-		if not _check(view_record.get("source") is Image and bool(view_record.get("valid", false)), role + " gait uses a valid immutable measured image for " + String(motion.rig.direction)):
-			return false
-		if not _check(not sprite.visible and motion.rig.visible and motion.rig.direction in ["left", "right"], role + " rig view is distinct from the old authored six-cel idle Sprite"):
-			return false
+	var source_match := _source_frame_matches(role, action_sequence, sprite)
+	var source_label := role + " visible Sprite pixels match its loaded authored action sequence or exact NPC rest baseline (including measured costume treatment)"
+	if not source_match:
+		source_label += " | observed=" + _source_frame_diagnostic(role, action_sequence, sprite)
+	if not _check(source_match, source_label):
+		return false
 	var image := get_viewport().get_texture().get_image()
 	if not _check(image.get_size() == Vector2i(1280, 720), "native capture is 1280x720"):
 		return false
 	var filename := "%s-%s-%s.png" % [_proof_prefix, role, _safe_prefix(phase)]
-	var relative := PROOF_DIRECTORY.path_join(filename)
-	var path := ProjectSettings.globalize_path("res://" + relative)
+	var path := _output_dir().path_join(filename)
 	var error := DirAccess.make_dir_recursive_absolute(path.get_base_dir())
 	if error != OK and error != ERR_ALREADY_EXISTS:
 		_check(false, "Could not create island NPC evidence directory: " + str(error))
@@ -552,7 +520,7 @@ func _capture_actor(role: String, phase: String, note: String, require_source_sp
 		_check(false, "Could not write native NPC screenshot: " + path)
 		return false
 	var capture := {
-		"path": relative,
+		"path": filename,
 		"role": role,
 		"phase": phase,
 		"description": note,
@@ -561,13 +529,8 @@ func _capture_actor(role: String, phase: String, note: String, require_source_sp
 		"controller_action": actual_action,
 		"controller_direction": actual_direction,
 		"action_source_match": source_match,
-		"action_frame_counts": source_counts,
-		"gait_rig_visible": use_gait,
-		"gait_rig_direction": String(motion.rig.direction) if use_gait else "",
-		"gait_source_record": _motion_view_report(role, motion) if use_gait else {},
-		"source_alpha_bounds_px": str(source_bounds),
-		"rig_visible_part_bounds_px": gait_bounds,
-		"visible_full_body_bounds_px": str(measured_bounds),
+		"action_frame_counts": _action_source_counts(role),
+		"visible_full_body_bounds_px": str(source_bounds),
 		"padding_px": CAPTURE_PADDING_PX,
 		"root_world": str(activity_root.global_position),
 		"interaction_point_id": point_id,
@@ -621,40 +584,8 @@ func _strong_alpha_bounds(image: Image) -> Rect2i:
 	return Rect2i(minimum, maximum - minimum + Vector2i.ONE)
 
 
-func _project_visual_bounds(visual: VisualInstance3D, camera: Camera3D) -> Rect2:
-	var aabb: AABB = visual.get_aabb()
-	var minimum := Vector2(INF, INF)
-	var maximum := Vector2(-INF, -INF)
-	for corner in range(8):
-		var local := aabb.position + Vector3(
-			aabb.size.x if corner & 1 else 0.0,
-			aabb.size.y if corner & 2 else 0.0,
-			aabb.size.z if corner & 4 else 0.0
-		)
-		var screen := camera.unproject_position(visual.global_transform * local)
-		minimum.x = minf(minimum.x, screen.x); minimum.y = minf(minimum.y, screen.y)
-		maximum.x = maxf(maximum.x, screen.x); maximum.y = maxf(maximum.y, screen.y)
-	return Rect2(minimum, maximum-minimum)
-
-
 func _bounds_with_padding(bounds: Rect2, viewport: Rect2) -> bool:
 	return bounds.size.x > 0.0 and bounds.size.y > 0.0 and bounds.position.x >= CAPTURE_PADDING_PX and bounds.position.y >= CAPTURE_PADDING_PX and bounds.end.x <= viewport.size.x-CAPTURE_PADDING_PX and bounds.end.y <= viewport.size.y-CAPTURE_PADDING_PX
-
-
-func _motion_view_report(role: String, motion: Variant) -> Dictionary:
-	var views := {}
-	for view in ["left", "right"]:
-		var record: Dictionary = motion.rig.source_records.get(view, {})
-		var measurement: Dictionary = motion.source_provider.direction_measurement(role, view)
-		views[view] = {
-			"valid": bool(record.get("valid", false)),
-			"source_size_px": str((record.get("source") as Image).get_size()) if record.get("source") is Image else "missing",
-			"source_atlas_sha256": String(measurement.get("atlas_sha256", motion.source_provider.measurements_for(role).get("source_sha256", ""))),
-			"source_rect": measurement.get("source_rect", []),
-			"leg_measurement": measurement.get("leg_measurement", {}),
-			"measured_source_geometry": bool(record.get("measured_source_geometry", false)),
-		}
-	return {"metadata_path": motion.rig.metadata_path, "required_directions": motion.rig.required_directions, "rig_source_records": views, "old_idle_front_frame_count": _action_source_count(role, "idle", "front"), "these_are_measured_directional_source_cells_not_the_old_front_animation_sequence": true}
 
 
 func _source_frame_matches(role: String, action_sequence: Dictionary, sprite: Sprite3D) -> bool:
@@ -817,7 +748,7 @@ func _finish() -> void:
 
 
 func _write_report() -> String:
-	var path := ProjectSettings.globalize_path("res://" + PROOF_DIRECTORY.path_join(_proof_prefix + "-report.json"))
+	var path := _output_dir().path_join(_proof_prefix + "-report.json")
 	if OS.get_environment("SNAPLAND_NPC_ROUTE_CPU_DIAGNOSTIC") == "1":
 		path = OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir().path_join("npc-route-cpu-report.json")
 	DirAccess.make_dir_recursive_absolute(path.get_base_dir())
@@ -826,6 +757,13 @@ func _write_report() -> String:
 		file.store_string(JSON.stringify(_report, "\t"))
 		file.close()
 	return path
+
+
+## Captures and the report go to SNAPLAND_CAPTURE_DIR, never into the repository;
+## a run without one (the CPU diagnostics) writes beside its isolated save.
+func _output_dir() -> String:
+	var folder := OS.get_environment("SNAPLAND_CAPTURE_DIR").strip_edges()
+	return folder if folder.is_absolute_path() else OS.get_environment("SNAPLAND_SAVE_PATH").get_base_dir()
 
 
 func _fail_and_quit(message: String) -> void:
