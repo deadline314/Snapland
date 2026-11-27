@@ -42,6 +42,10 @@ var _time_readout: HBoxContainer
 var _feedback: PanelContainer
 var _feedback_label: Label
 var _feedback_anchor_override: Variant = null
+## Where the game last placed the feedback banner; layout keeps it there
+## instead of snapping it back under the header.
+var _feedback_anchor: Variant = null
+var _feedback_on_state_anchor := false
 var _pause_layer: ColorRect
 var _pause_panel: PanelContainer
 var _pause_title: Label
@@ -263,7 +267,10 @@ func _build_feedback() -> void:
 	_feedback.size = Vector2(540, 48)
 	_feedback.position = Vector2(34, 130)
 	_feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_feedback.add_theme_stylebox_override("panel", Paper.nameplate())
+	# One line of 18 px text on the nameplate keeps the banner 48 px tall.
+	var plate := Paper.nameplate()
+	plate.content_margin_top = 9
+	_feedback.add_theme_stylebox_override("panel", plate)
 	_feedback_label = _label("", 18, PAPER)
 	_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -273,8 +280,13 @@ func _build_feedback() -> void:
 	add_child(_feedback)
 
 func set_feedback_at(message: String, anchor: Vector2) -> void:
+	_feedback_anchor = anchor
+	_feedback_on_state_anchor = false
 	_feedback_label.text = message
 	_feedback.visible = not message.is_empty()
+	_place_feedback(anchor)
+
+func _place_feedback(anchor: Vector2) -> void:
 	_feedback.position = Vector2(clampf(anchor.x - _feedback.size.x * 0.5, 30, DESIGN_SIZE.x - _feedback.size.x - 30), clampf(anchor.y - 78, gameplay_top(), DESIGN_SIZE.y - _feedback.size.y - 82))
 
 func _build_pause_layer() -> void:
@@ -487,9 +499,17 @@ func _layout() -> void:
 	_header.size=Vector2(maxf(392.0,ceilf(header_minimum.x)),panel_height)
 	_status_rail.size=Vector2(maxf(616.0,ceilf(rail_minimum.x)),panel_height)
 	_status_rail.position.x=DESIGN_SIZE.x-24.0-_status_rail.size.x
-	_feedback.position.y=gameplay_top()
+	# A state anchor (launch notice, sign balance) wins while it lasts; a banner
+	# the game placed stays put; only an unplaced banner sits under the header.
 	if _feedback_anchor_override is Vector2:
-		set_feedback_at(_feedback_label.text, _feedback_anchor_override)
+		_place_feedback(_feedback_anchor_override)
+		_feedback_on_state_anchor = true
+	elif _feedback_anchor is Vector2:
+		if _feedback_on_state_anchor:
+			_place_feedback(_feedback_anchor)
+			_feedback_on_state_anchor = false
+	else:
+		_feedback.position.y=gameplay_top()
 
 func gameplay_top() -> float:
 	return maxf(130.0, _header.position.y + _header.size.y + 18.0)
