@@ -16,6 +16,8 @@ const ComponentAnimationScript = preload("res://game/world/component_animation.g
 const NpcActivityScript = preload("res://game/world/npc_activity.gd")
 const StoryLandmarksScript = preload("res://game/world/story_landmarks.gd")
 const OcclusionControllerScript = preload("res://game/world/occlusion_controller.gd")
+const WorldAmbienceScript = preload("res://game/world/world_ambience.gd")
+const AmbienceProfiles = preload("res://game/world/ambience_profiles.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const ActorShadowSilhouette = preload("res://game/world/actor_shadow_silhouette.gd")
 const AvatarHairRig = preload("res://game/world/avatar_hair_rig.gd")
@@ -108,6 +110,7 @@ var component_motion: Node
 var npc_activity: Node
 var story_landmarks: Node3D
 var occlusion_controller: Node
+var ambience: Node3D
 var pending_npc_interaction: Dictionary = {}
 var _last_label_font: Font
 var lamps: Array[Light3D] = []
@@ -225,6 +228,10 @@ func _ready() -> void:
 	_register_npc_activity()
 	interaction_requested.connect(_on_interaction_requested)
 	component_motion.finish_registration()
+	ambience = WorldAmbienceScript.new()
+	ambience.name = "WorldAmbience"
+	add_child(ambience)
+	ambience.configure(self, _ambience_profile())
 	print("[park_world] scenery meshes: %d, nodes: %d" % [mesh_count, find_children("*", "Node", true, false).size()+1])
 	set_time_of_day(TimeOfDayScript.DEFAULT_PHASE)
 
@@ -241,6 +248,11 @@ func _build_region_geometry() -> void:
 	story_landmarks = StoryLandmarksScript.new()
 	add_child(story_landmarks)
 	story_landmarks.configure(self)
+
+## Cloud shade, air motes and small animals for this region; override to
+## supply a custom table instead of the shared one keyed by region.
+func _ambience_profile() -> Dictionary:
+	return AmbienceProfiles.profile(AmbienceProfiles.region_for(self))
 
 func _build_region_activities() -> void:
 	coastal_play=CoastalPlay.new()
@@ -2988,6 +3000,7 @@ func set_time_of_day(phase_id: Variant) -> void:
 	if welcome_sea_material != null:
 		welcome_sea_material.set_shader_parameter("dock_glow", lamp_energy_for_phase)
 	_update_lamp_selection(true)
+	if is_instance_valid(ambience): ambience.set_phase(active_time_phase)
 	for record in contact_shadows:
 		var shadow := record.get("node") as Node3D
 		if not is_instance_valid(shadow): continue
@@ -3051,6 +3064,7 @@ func apply_settings(settings: Dictionary) -> void:
 	if is_instance_valid(npc_activity): npc_activity.set_reduced_motion(reduced_motion)
 	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
 	if is_instance_valid(island_attractions): island_attractions.set_reduced_motion(reduced_motion)
+	if is_instance_valid(ambience): ambience.set_reduced_motion(reduced_motion)
 
 func start_ride() -> bool:
 	if blocked or not is_instance_valid(island_attractions):
