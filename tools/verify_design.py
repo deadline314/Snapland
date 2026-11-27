@@ -11,6 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 HARBOR_DELIVERED = 12  # game-013 onward, in local order
 CANDY_DELIVERED = 12  # game-025 onward, in local order
 NIGHTMARKET_DELIVERED = 12  # game-037 onward, in local order
+# Later zones deliver in local order from their own first id, in any order between zones:
+# zone -> (first game number, delivered count); rows live in game/data/<zone>_games.json.
+LATER_ZONES = {'circus': (49, 1)}
 ZONES = ('welcome', 'harbor', 'candy', 'nightmarket', 'circus', 'toy', 'garden', 'hotel', 'sky', 'cinema')
 CORES = {'掌握', '取捨', '預測', '創意', '協調', '節奏'}
 GAME_FIELDS = ('id', 'name', 'zone', 'core', 'action', 'goal', 'choice', 'feedback', 'variation', 'solo', 'multi', 'ai', 'demon', 'demon_assist_policy', 'variant', 'assist', 'test', 'reference', 'revision', 'revision_reason', 'presentation', 'implementation')
@@ -84,7 +87,9 @@ def validate_games(data, refs):
         check(row['core'] in CORES, f'games {row["id"]}: unknown core')
         check(row['reference'] in refs, f'games {row["id"]}: missing source')
         check(row['revision'] in {'保留', '重設', '替換'}, f'games {row["id"]}: revision status')
-        expected_state = 'single_player_runtime_needs_full_acceptance' if i <= 12 + HARBOR_DELIVERED + CANDY_DELIVERED + NIGHTMARKET_DELIVERED else 'design_only_not_playtested'
+        built = i <= 12 + HARBOR_DELIVERED + CANDY_DELIVERED + NIGHTMARKET_DELIVERED or any(
+            start <= i < start + count for start, count in LATER_ZONES.values())
+        expected_state = 'single_player_runtime_needs_full_acceptance' if built else 'design_only_not_playtested'
         check(row['implementation'] == expected_state, f'games {row["id"]}: implementation scope mismatch')
     check(CORES.issubset({r['core'] for r in rows}), 'games: missing fun families')
     prototypes = data.get('prototype_order')
@@ -93,7 +98,7 @@ def validate_games(data, refs):
     check(all(key in {r['id'] for r in rows} for key in prototypes), 'games: unknown prototype')
 
 
-def validate_runtime_game_alignment(data, runtime, harbor, candy, nightmarket):
+def validate_runtime_game_alignment(data, runtime, harbor, candy, nightmarket, later=None):
     """The catalogue may plan modes, but cannot silently redefine live solo rules."""
     check(len(runtime) == 12 and [r['id'] for r in runtime] == [f'game-{i:03d}' for i in range(1, 13)], 'games: first-park runtime coverage')
     check(len(harbor) == HARBOR_DELIVERED and all(row['id'] == f'game-{13 + i:03d}' and row['zone'] == 'harbor' and row['local_index'] == i + 1
@@ -104,6 +109,12 @@ def validate_runtime_game_alignment(data, runtime, harbor, candy, nightmarket):
         row['id'] == f'game-{37 + i:03d}' and row['zone'] == 'nightmarket' and row['local_index'] == i + 1
         for i, row in enumerate(nightmarket)), 'games: delivered night market runtime coverage')
     delivered = {row['id']: row for row in runtime + harbor + candy + nightmarket}
+    for zone, rows in (later or {}).items():
+        start, count = LATER_ZONES[zone]
+        check(len(rows) == count and all(
+            row['id'] == f'game-{start + i:03d}' and row['zone'] == zone and row['local_index'] == i + 1
+            for i, row in enumerate(rows)), f'games: delivered {zone} runtime coverage')
+        delivered.update({row['id']: row for row in rows})
     for row in data['games']:
         if row['id'] not in delivered:
             continue
@@ -244,7 +255,8 @@ def run(root, scope):
             validate_games(data, refs)
             validate_runtime_game_alignment(
                 data, load(root, 'game/data/welcome_games.json'), load(root, 'game/data/harbor_games.json'),
-                load(root, 'game/data/candy_games.json'), load(root, 'game/data/nightmarket_games.json'))
+                load(root, 'game/data/candy_games.json'), load(root, 'game/data/nightmarket_games.json'),
+                {zone: load(root, f'game/data/{zone}_games.json') for zone in LATER_ZONES})
         elif part == 'story':
             validate_story(load(root, 'design/03-story/quests.json'), load(root, 'design/03-story/exploration.json'))
             validate_story_structure(load(root, 'design/03-story/story-structure.json'), load(root, 'design/01-park/park.json'), load(root, 'game/data/first_park_story.json'))

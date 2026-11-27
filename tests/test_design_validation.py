@@ -119,6 +119,19 @@ class GameTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'delivered harbor runtime coverage'):
             v.validate_runtime_game_alignment(self.data, runtime, harbor, self.candy, self.nightmarket)
 
+    def test_later_zones_match_their_delivered_rows(self):
+        runtime = v.load(ROOT, 'game/data/welcome_games.json')
+        harbor = v.load(ROOT, 'game/data/harbor_games.json')
+        later = {zone: v.load(ROOT, f'game/data/{zone}_games.json') for zone in v.LATER_ZONES}
+        v.validate_runtime_game_alignment(self.data, runtime, harbor, self.candy, self.nightmarket, later)
+        self.assertEqual(self.data['games'][48]['runtime_mode'], later['circus'][0]['mode'])
+        self.data['games'][48]['demon'] = 'a different qualification rule'
+        with self.assertRaisesRegex(ValueError, 'game-049.*runtime demon drift'):
+            v.validate_runtime_game_alignment(self.data, runtime, harbor, self.candy, self.nightmarket, later)
+        later['circus'].append(dict(later['circus'][0], id='game-061'))
+        with self.assertRaisesRegex(ValueError, 'delivered circus runtime coverage'):
+            v.validate_runtime_game_alignment(self.data, runtime, harbor, self.candy, self.nightmarket, later)
+
     def test_first_candy_game_has_delivered_runtime_scope(self):
         row = self.data['games'][24]
         self.assertEqual(row['implementation'], 'single_player_runtime_needs_full_acceptance')

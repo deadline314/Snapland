@@ -442,6 +442,7 @@ func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Diction
 	if not devil and game.mode == "skewer_grill": instructions="實際烘烤後，正式回合自然結算可收藏。"
 	if not devil and game.mode == "rain_courier": instructions="實際走過送餐路線後，自然結算即可收藏。"
 	if not devil and game.mode == "sugar_draw": instructions="實際拉出糖絲後，自然結算即可收藏。"
+	if not devil and bool(game.get("arcade",false)): instructions="拿到銅牌即可收藏。"
 	instructions += "｜%s · 固定遊戲亭：%s · %s" % [RegionRoutes.title(identity.zone),game.name,photo_id]
 	if _progress.photos.has(photo_id):
 		var record: Dictionary = _progress.photos[photo_id]

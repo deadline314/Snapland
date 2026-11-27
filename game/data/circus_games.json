@@ -1,0 +1,22 @@
+[
+  {
+    "id": "game-049",
+    "mode": "funhouse_booth",
+    "zone": "circus",
+    "local_index": 1,
+    "arcade": true,
+    "name": "哈哈鏡大頭貼",
+    "goal": "停住髮型、眼睛、嘴巴三個轉輪，拼出左邊那張臉。",
+    "instructions": "空白鍵、E 或手把 A 鈕：依序停住髮型、眼睛、嘴巴三個轉輪。點一下畫面也可以。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助拼臉拿到金牌",
+    "ordinary": "依序停住三個轉輪拼出指定的臉，拿到銅牌",
+    "attraction_tag": "哈哈鏡大頭貼機",
+    "island_invitation": "看左邊的臉，按一下停一格。拼錯的怪臉也會印出來喔。",
+    "retake_props": [
+      "camera",
+      "visitor",
+      "lantern"
+    ]
+  }
+]

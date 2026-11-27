@@ -234,10 +234,23 @@ func _same_batch_trip(region: String) -> void:
 	main._show_map()
 	await _frames(3)
 	var map: Node = main.overlay.find_child(prefix + "MapPanel", true, false)
-	_check(map != null and map.snapshot == main.world.map_snapshot() and main.overlay.find_child("RegionGamesButton", true, false) == null,
-		title + " map reports actual terrain without speculative game entries")
+	var delivered: Array = Catalog.definitions(region)
+	var games_button := main.overlay.find_child("RegionGamesButton", true, false) as Button
+	_check(map != null and map.snapshot == main.world.map_snapshot() and (games_button != null) == (not delivered.is_empty()),
+		title + " map reports actual terrain and offers game entries only for delivered games")
+	for definition: Dictionary in delivered:
+		_check(not main.world._point_by_id(definition.id).is_empty() and map != null and _labels(map).contains(str(definition.name)),
+			title + " map lists the physical stand of " + str(definition.id))
 	if map != null:
 		await _regional_map_location_flow(map)
+	if games_button != null:
+		games_button.pressed.emit()
+		await _frames(3)
+		var entries: Node = main.overlay.find_child("RegionalGameEntriesGrid", true, false)
+		_check(entries != null and entries.get_child_count() == delivered.size() and (entries.get_child(0) as Button).text == str(delivered[0].name),
+			title + " game entry list names exactly its delivered games")
+		main._show_map()
+		await _frames(3)
 	var leave := main.overlay.find_child(prefix + "ReturnButton", true, false) as Button
 	_check(leave != null and _within_viewport(leave) and leave.tooltip_text.contains("免費"), title + " map includes a reachable free return")
 	if leave != null:
@@ -335,14 +348,15 @@ func _candy_ui() -> void:
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
 	_check(selector.item_count==Routes.ORDER.size() and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
-	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,1,1,1]
+	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,Catalog.definitions("circus").size()+1,Catalog.definitions("toy").size()+1,Catalog.definitions("garden").size()+1]
 	for index in Routes.ORDER.size():
 		selector.select(index)
 		selector.item_selected.emit(index)
 		_check(book._region==Routes.ORDER[index] and book._entries().size()==ordinary_slots[index], "regional album retains its delivered sources")
 		if book._region == "circus":
-			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-circus-story-1"
-				and book._entries()[0].story_region == "circus", "Circus lists only its delivered regional story source")
+			var circus_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
+			_check(circus_ids == ["photo-circus-game-1", "photo-circus-story-1"] and book._entries()[1].story_region == "circus"
+				and _labels(book).contains("哈哈鏡大頭貼"), "Circus lists its delivered game and its regional story source")
 		elif book._region == "toy":
 			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-toy-story-1"
 				and book._entries()[0].story_region == "toy" and _labels(book).contains("阿浪"),

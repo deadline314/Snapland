@@ -72,12 +72,16 @@ func _run() -> void:
 		if definition.mode == "lantern_crossing": _start_lantern_move(session)
 		if definition.mode == "skewer_grill": _start_skewer_heat(session)
 		if definition.mode == "rain_courier": _walk_with_courier(session)
+		# Arcade games award by medal: one press takes part but stays under the bronze line.
+		var arcade := bool(definition.get("arcade", false))
+		if arcade: _press_arcade_button_once(session)
 		if session.active_driver != null:
 			_advance_driver_to_result(session)
 		else:
 			session._finish(false, true)
-		_check(results.size() == before_formal + 1 and results.back().get("ordinary_eligible", false)
-			and not results.back().success and not results.back().devil, definition.id + " natural false stays honest and ordinary eligible")
+		_check(results.size() == before_formal + 1 and results.back().get("ordinary_eligible", false) == (not arcade)
+			and not results.back().success and not results.back().devil,
+			definition.id + (" below bronze stays honest and earns no card" if arcade else " natural false stays honest and ordinary eligible"))
 		var result_count := results.size()
 		if definition.mode in ["cotton_wind", "bean_seesaw", "ice_slide", "filling_press", "paper_glide", "bubble_lift", "sugar_draw"]: session._process(0.25)
 		else: session._finish(true, true)
@@ -244,6 +248,15 @@ func _run() -> void:
 	for failure in failures: push_error("FAIL: " + failure)
 	if failures.is_empty(): print("PASS: every delivered participation result, practice, cancellation and driver eligibility")
 	quit(0 if failures.is_empty() else 1)
+
+func _press_arcade_button_once(session: Session) -> void:
+	for tick in 40:
+		session._process(0.1)
+	var key := InputEventKey.new()
+	key.physical_keycode = KEY_SPACE
+	for pressed in [true, false]:
+		key.pressed = pressed
+		session._unhandled_input(key)
 
 func _advance_driver_to_result(session: Session) -> void:
 	for tick in 4000:

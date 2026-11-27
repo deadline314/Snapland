@@ -21,7 +21,16 @@ func _run() -> void:
 	if script == null:
 		finish()
 		return
-	check(script.PROPS.size() == Catalog.all_definitions().size(), "each delivered game has exactly one actual prop row")
+	var numbered := 0
+	for definition in Catalog.all_definitions():
+		var keys: Array = script._prop_keys(definition)
+		var own: bool = definition.has("retake_props")
+		numbered += int(not own)
+		check(keys.size() == 3 and keys.all(func(key: Variant) -> bool: return script.PROP_LABELS.has(key))
+			and (not own or keys == definition.retake_props), "each delivered game has exactly three actual props: " + definition.id)
+	check(script.PROPS.size() == numbered and script._prop_keys({"id": "game-%03d" % (numbered + 1)}).is_empty()
+		and script._prop_keys({"id": "game-000"}).is_empty() and script._prop_keys({}).is_empty(),
+		"the numbered table covers exactly the games without their own props and nothing past it")
 	var lessons := Lessons.new()
 	for definition in Catalog.all_definitions():
 		var panel = script.new()

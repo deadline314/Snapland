@@ -10,6 +10,7 @@ const RegionRoutes = preload("res://game/core/region_routes.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const FieldGameChip = preload("res://game/ui/field_game_chip.gd")
+const ArcadeMedal = preload("res://game/ui/arcade_medal.gd")
 const RegionTransitionScript = preload("res://game/ui/region_transition.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
@@ -1402,6 +1403,9 @@ func _interact(id: String, title: String) -> void:
 	if not id.is_empty() and id == RegionalVisit.point_id(world_region):
 		_start_region_story_visit(world_region)
 		return
+	if id.begins_with("game-") and world_region in ["circus","toy","garden"] and Catalog.identity(id).get("zone","")==world_region:
+		_show_game_info(id)
+		return
 	if world_region=="garden":
 		match id:
 			"garden:louvers": _notice(world.switch_louvers())
@@ -1720,7 +1724,10 @@ func _show_game_rules(id: String) -> void:
 		{"text":("參與操作後正常結算即可收藏普通拍貼，不限勝負；未操作或中途取消不收藏。" if definition.mode in ["sugar_bridge","cookie_mold","syrup_flood","jelly_trampoline","chocolate_etching"] else "正式遊玩自然結束即可收藏普通拍貼，不限勝負；中途取消不收藏。")+"小惡魔實際技巧以上方條件為準，也可免費補拍收藏。","color":Paper.INK},
 		{"text":"輔助遊玩會放寬時間或判定，仍可收藏普通拍貼；小惡魔是否要求未開輔助，以上方條件為準。練習不記錄分數與收藏。","color":Paper.TEAL},
 	]
-	if definition.mode == "cotton_wind":
+	if bool(definition.get("arcade",false)):
+		notes[3].text = "拿到銅牌就能收藏普通拍貼；沒拿到牌不收藏，可以馬上再玩。練習與中途離開不計。"
+		notes[4].text = "輔助會放慢速度、放寬時機，仍可拿普通拍貼；小惡魔拍貼要未開輔助拿到金牌。"
+	elif definition.mode == "cotton_wind":
 		notes[3].text = "親自收絲至少 1 單位、移棒至少 6 單位、轉棒至少 0.5 弧度後，正式回合自然結算可收藏普通拍貼，包含逾時。練習或中途取消不發卡。也可免費補拍。"
 		notes[4].text = "輔助降低熱風，放寬均勻與接絲判定。R 切換的 AI 只用另一支棒收自己的絲。仍要親手移棒、轉棒，挑戰小惡魔也要親自接回。"
 		notes.append({"text":"轉棒補薄角，CV 越低表示繞棒越勻。左右移棒補薄段，讓三段重量接近。一般各段至少 12、8 格，CV ≤ 0.65、段重比 ≤ 1.35。輔助則為 12、7 格、0.8、1.5。","color":Paper.INK})
@@ -1817,7 +1824,8 @@ func _render_game_rules_page(parent: VBoxContainer, entry: Dictionary, index: in
 		_render_rules_note(parent,entry,index-2)
 
 func _request_game_start(id: String, assist: bool) -> void:
-	if not Progress.has_seen_tutorial(id):
+	# Arcade games teach with their opening countdown; the lesson stays optional.
+	if not bool(_definition(id).get("arcade",false)) and not Progress.has_seen_tutorial(id):
 		_open_tutorial(id,"first_entry",assist)
 		return
 	_launch_game(id,assist)
@@ -1924,7 +1932,10 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 	result_summary.add_theme_constant_override("separation",8)
 	body.add_child(result_summary)
 	result_summary.add_child(Paper.icon("album",23,Paper.CORAL if practice else Paper.TEAL))
+	var arcade_result := bool(result.get("score_summary",{}).get("arcade",false))
 	var score_line := "練習分數 %d（不保存）"%int(result.get("score",0)) if practice else "本次成績 %d   ·   %s"%[int(result.get("score",0)),"輔助遊玩" if result.get("assisted",false) else "標準遊玩"]
+	# An arcade result shows its one score on the medal card below.
+	if arcade_result: score_line="練習回合（不保存）" if practice else ("輔助遊玩" if result.get("assisted",false) else "標準遊玩")
 	result_summary.add_child(Paper.label(score_line,20))
 	if ordinary_eligible and reward_saved:
 		var award := HBoxContainer.new()
@@ -1963,14 +1974,17 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 	detail.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	detail.size_flags_stretch_ratio=0.65
 	result_columns.add_child(detail)
-	detail.add_child(Paper.section_title("得分明細"))
 	var score_summary: Dictionary=result.get("score_summary",{})
-	var score_rows: Array=score_summary.get("rows",[])
-	var rows: Array=[]
-	for score_row in score_rows:
-		if score_row is Dictionary: rows.append(score_row)
-	if rows.is_empty(): rows.append({"label":"本局分數已顯示於上方。","empty":true})
-	_content_pager(detail,"ResultScorePages",rows,_render_score_row,1)
+	if arcade_result:
+		_render_arcade_result(detail,score_summary)
+	else:
+		detail.add_child(Paper.section_title("得分明細"))
+		var score_rows: Array=score_summary.get("rows",[])
+		var rows: Array=[]
+		for score_row in score_rows:
+			if score_row is Dictionary: rows.append(score_row)
+		if rows.is_empty(): rows.append({"label":"本局分數已顯示於上方。","empty":true})
+		_content_pager(detail,"ResultScorePages",rows,_render_score_row,1)
 	if not practice:
 		var frames := GridContainer.new()
 		frames.name="ResultPhotoFrames"
@@ -2130,6 +2144,35 @@ func _render_rules_note(parent: VBoxContainer, note: Dictionary, index: int) -> 
 	var label := Paper.label(str(note.text),18,note.color)
 	label.name="RulesNote%d"%index
 	parent.add_child(label)
+
+## Arcade games end on one score, one medal and one line; no breakdown.
+func _render_arcade_result(parent: VBoxContainer, summary: Dictionary) -> void:
+	var earned := clampi(int(summary.get("medal",0)),0,3)
+	var card := HBoxContainer.new()
+	card.name="ArcadeResultCard"
+	card.add_theme_constant_override("separation",18)
+	parent.add_child(card)
+	var medal := ArcadeMedal.new()
+	medal.name="ArcadeResultMedal"
+	medal.medal=earned
+	medal.custom_minimum_size=Vector2(112,160)
+	card.add_child(medal)
+	PaperMotion.pop(medal,1.2)
+	var words := VBoxContainer.new()
+	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	words.alignment=BoxContainer.ALIGNMENT_CENTER
+	card.add_child(words)
+	var rank := Paper.label(ArcadeMedal.NAMES[earned],26,ArcadeMedal.FACES[earned].lightened(0.25))
+	rank.name="ArcadeResultRank"
+	words.add_child(rank)
+	var total := Paper.label("%d 分"%int(summary.get("total",0)),40,Paper.GOLD)
+	total.name="ArcadeResultScore"
+	words.add_child(total)
+	var verdict := Paper.label(str(summary.get("verdict","")),20)
+	verdict.name="ArcadeResultVerdict"
+	verdict.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	verdict.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	parent.add_child(verdict)
 
 func _render_score_row(parent: VBoxContainer, row: Dictionary, index: int) -> void:
 	var text := str(row.get("label","得分"))
@@ -2722,7 +2765,7 @@ func _show_ticket() -> void:
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	elif world_region=="circus":
-		var note := Paper.label("西側是鏡廊，東側是影子台。沿觀眾席中央通道可到安全墊。",18,Paper.TEAL)
+		var note := Paper.label("西側是鏡廊，東側是影子台。入口旁有大頭貼機，共開放 %d / 12 款遊戲。" % Catalog.definitions("circus").size(),18,Paper.TEAL)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	elif world_region=="toy":
@@ -2741,7 +2784,7 @@ func _show_ticket() -> void:
 	groups.add_theme_constant_override("h_separation",16)
 	groups.add_theme_constant_override("v_separation",8)
 	body.add_child(groups)
-	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學"}.get(world_region,"園區圖解教學")
+	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學","circus":"馬戲團圖解教學"}.get(world_region,"園區圖解教學")
 	var entries := [
 		["島嶼地圖",_show_map,"探索島嶼"], ["今日任務",_show_tasks,"探索島嶼"],
 		["拍貼收藏本",_show_album,"收藏記錄"], ["遊園成就",_show_achievements,"收藏記錄"],
@@ -2761,12 +2804,12 @@ func _show_ticket() -> void:
 	_back(body)
 
 func _show_region_tutorial() -> void:
-	if world_region not in ["candy","nightmarket"]:
+	var lessons: Dictionary = {"candy":["工廠圖解教學","CandyTutorial"],"nightmarket":["夜市圖解教學","NightmarketTutorial"],"circus":["馬戲團圖解教學","CircusTutorial"]}
+	if not lessons.has(world_region):
 		_open_tutorial("park","ticket")
 		return
-	var candy := world_region=="candy"
-	var prefix := "CandyTutorial" if candy else "NightmarketTutorial"
-	var body := _open("工廠圖解教學" if candy else "夜市圖解教學",world_region.to_upper()+" / 已開放遊戲","region_tutorials")
+	var prefix: String = lessons[world_region][1]
+	var body := _open(str(lessons[world_region][0]),world_region.to_upper()+" / 已開放遊戲","region_tutorials")
 	var choices := GridContainer.new()
 	choices.name=prefix+"Choices"
 	choices.columns=2

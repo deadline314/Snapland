@@ -121,6 +121,13 @@ static func _valid_texture(texture: Texture2D) -> bool:
 	var height := texture.get_height()
 	return width > 0 and height > 0 and width <= MAX_PIXELS and height <= MAX_PIXELS and width*height <= MAX_PIXELS
 
+## Three prop keys for a game: its own "retake_props" data, else the numbered table row.
+static func _prop_keys(definition: Dictionary) -> Array:
+	var own: Variant = definition.get("retake_props")
+	if own is Array: return own
+	var index := int(str(definition.get("id","")).trim_prefix("game-"))-1
+	return PROPS[index] if index >= 0 and index < PROPS.size() else []
+
 func _load_set() -> bool:
 	if _definition.is_empty():
 		_status.text = "補拍資料不符，請關閉後重新選擇。"
@@ -135,10 +142,10 @@ func _load_set() -> bool:
 	var atlas := load("res://assets/minigames/props/tidal-props-v2.png") as Texture2D
 	var regions: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/minigames/props/regions.json"))
 	if atlas == null or not regions is Dictionary: return _source_error()
-	var prop_index := int(_definition.id.trim_prefix("game-"))-1
-	# A delivered game without a themed prop row fails closed instead of indexing past the table.
-	if prop_index < 0 or prop_index >= PROPS.size(): return _source_error()
-	for key in PROPS[prop_index]:
+	# A delivered game without themed props fails closed instead of indexing past the table.
+	var prop_keys := _prop_keys(_definition)
+	if prop_keys.size() != 3: return _source_error()
+	for key in prop_keys:
 		var region: Variant = regions.get(key)
 		if not region is Array or region.size() != 4: return _source_error()
 		var rect := Rect2(float(region[0]),float(region[1]),float(region[2]),float(region[3]))
@@ -246,7 +253,7 @@ func _refresh() -> void:
 	if _valid:
 		if current_step == 0: _status.text = "示範重點："+str(_lesson.steps[0].goal)
 		_choice_buttons[0].text = "取景："+["左側","置中","右側"][_framing]
-		_choice_buttons[1].text = "道具："+PROP_LABELS[PROPS[int(_definition.id.trim_prefix("game-"))-1][_decoration]]
+		_choice_buttons[1].text = "道具："+str(PROP_LABELS.get(_prop_keys(_definition)[_decoration],"道具"))
 		_choice_buttons[2].text = "景別："+["近景","標準","廣角"][_distance]
 	var locked := _capturing or _awaiting_result or _saved or _closed
 	_back.disabled = not _valid or current_step == 0 or locked

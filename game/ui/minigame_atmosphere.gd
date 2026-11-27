@@ -15,6 +15,7 @@ const THEMES := {
 	"harbor": {"mote": Color("#dff7f2"), "shaft": Color("#d9f4ff"), "drift": Vector2(22.0, 4.0), "count": 24},
 	"candy": {"mote": Color("#ffd9e8"), "shaft": Color("#ffe3c9"), "drift": Vector2(6.0, -12.0), "count": 30},
 	"nightmarket": {"mote": Color("#ffb46a"), "shaft": Color("#ffb46a"), "drift": Vector2(4.0, -26.0), "count": 30},
+	"circus": {"mote": Color("#ffe6a8"), "shaft": Color("#ffc98a"), "drift": Vector2(-8.0, 10.0), "count": 28},
 }
 ## Light by time of day: [shaft strength, vignette strength, mote alpha].
 const PHASE_LIGHT := {

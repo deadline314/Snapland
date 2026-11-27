@@ -280,6 +280,17 @@ func start(id: String, assisted_mode: bool = false) -> void:
 	if not item.is_empty():
 		game_id = str(item.id)
 		mode = str(item.mode)
+		if DRIVERS.has(mode):
+			active_driver = DRIVERS[mode].new()
+		elif bool(item.get("arcade", false)):
+			# Arcade games need no table row: game/minigames/arcade/<mode>_driver.gd.
+			var arcade_path := "res://game/minigames/arcade/%s_driver.gd" % mode
+			var arcade_script := load(arcade_path) as Script if ResourceLoader.exists(arcade_path) else null
+			if arcade_script == null:
+				push_warning("Arcade game %s has no driver at %s." % [game_id, arcade_path])
+				game_id = ""
+			else:
+				active_driver = arcade_script.new()
 	if game_id.is_empty():
 		ended = true
 		prompt = "這款小遊戲暫時無法開啟"
@@ -287,7 +298,6 @@ func start(id: String, assisted_mode: bool = false) -> void:
 		cancelled.emit()
 		return
 	assisted = assisted_mode
-	if DRIVERS.has(mode): active_driver = DRIVERS[mode].new()
 	balloon_tutorial_seen = false
 	var progress := get_node_or_null("/root/Progress")
 	reduced_motion = progress != null and bool(progress.settings.get("reduced_motion", false))

@@ -4,7 +4,7 @@ class_name TutorialCatalog
 
 const DATA_PATH := "res://game/data/tutorials.json"
 const SCREENSHOT_ROOT := "res://assets/ui/tutorials/"
-const EXPECTED_LESSONS := ["park", "game-001", "game-002", "game-003", "game-004", "game-005", "game-006", "game-007", "game-008", "game-009", "game-010", "game-011", "game-012", "game-013", "game-014", "game-015", "game-016", "game-017", "game-018", "game-019", "game-020", "game-021", "game-022", "game-023", "game-024", "game-025", "game-026", "game-027", "game-028", "game-029", "game-030", "game-031", "game-032", "game-033", "game-034", "game-035", "game-036", "game-037", "game-038", "game-039", "game-040", "game-041", "game-042", "game-043", "game-044", "game-045", "game-046", "game-047", "game-048"]
+const GameCatalog = preload("res://game/core/game_catalog.gd")
 const REQUIRED_STEP_FIELDS := ["id", "title", "image", "alt", "goal", "input", "success"]
 
 var _lessons: Dictionary = {}
@@ -48,10 +48,17 @@ func load_catalog(path: String = DATA_PATH) -> bool:
 			else:
 				_lessons[lesson_id] = lesson.duplicate(true)
 				_lesson_order.append(lesson_id)
-	for expected_id in EXPECTED_LESSONS:
+	for expected_id in expected_lessons():
 		if not _lessons.has(expected_id):
 			_diagnostics.append("tutorials/%s: required lesson is missing or invalid" % expected_id)
 	return _diagnostics.is_empty()
+
+## The park lesson, then one lesson for every delivered game in catalog order.
+static func expected_lessons() -> Array[String]:
+	var ids: Array[String] = ["park"]
+	for definition: Dictionary in GameCatalog.all_definitions():
+		ids.append(str(definition.id))
+	return ids
 
 func lesson_ids() -> Array[String]:
 	return _lesson_order.duplicate()

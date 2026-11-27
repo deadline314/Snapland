@@ -14,6 +14,9 @@ const MIRRORS := Vector3(-8.1, GROUND_Y, 0.85)
 const AUDITORIUM := Vector3(0, GROUND_Y, 0.20)
 const SHADOW_STAGE := Vector3(8.1, GROUND_Y, 0.75)
 const MATS := Vector3(0, GROUND_Y, -8.8)
+const PHOTO_BOOTH := Vector3(-3.30, GROUND_Y, 6.25)
+## Stands 1.2 m clear of the cabinet and the foyer lamp post.
+const PHOTO_BOOTH_POINT := Vector3(-2.50, GROUND_Y, 7.85)
 const BOUNDS := Rect2(-12.25, -12.0, 24.5, 21.5)
 const AREAS: Array[Dictionary] = [
 	{"id": "entry", "label": "馬戲團入口", "rect": Rect2(-4, 4.8, 8, 4.7), "tile": 0, "tint": Color("#827686")},
@@ -71,6 +74,8 @@ func _build_region_geometry() -> void:
 	_point("circus:mats", "砲彈安全墊 · 看練習區", MATS)
 	_npc(STORY_HOST, VELVET, "小角")
 	_point(RegionalVisit.CIRCUS_POINT, "馬戲團迎賓 · 和小角合照", STORY_POINT)
+	_build_photo_booth()
+	_point("game-049", "哈哈鏡大頭貼 · 按一下停一格", PHOTO_BOOTH_POINT)
 	current_area = _area_at_position(ENTRY)
 
 
@@ -134,6 +139,29 @@ func _build_foyer() -> void:
 		_box(Vector3(x, GROUND_Y + 1.05, 8.90), Vector3(0.29, 1.55, 0.30), Color("#4f3551"))
 		_lamp_cap(Vector3(x, GROUND_Y + 1.88, 8.90), BRASS)
 	_plaque("鏡之馬戲團", Vector3(2.35, GROUND_Y + 2.63, 8.75), 3.25, BRASS)
+
+
+## Entry stand of game-049. Self-contained so the foyer can be restyled around it.
+func _build_photo_booth() -> void:
+	var at := PHOTO_BOOTH
+	var canopy := _box(at + Vector3(0, 2.02, 0.12), Vector3(1.36, 0.12, 1.12), BRASS.darkened(0.25))
+	# The canopy leans out over the mirror so the stand is not a plain box.
+	canopy.rotation.x = 0.16
+	var gleam := _emblem_strip(at + Vector3(-0.12, 1.28, 0.47), Vector3(0.07, 0.70, 0.012), Color("#e2f6f6"))
+	gleam.rotation.z = -0.2
+	var parts: Array[Node3D] = [
+		_box(at + Vector3(0, 0.09, 0), Vector3(1.30, 0.18, 0.98), Color("#4f3551")),
+		_box(at + Vector3(0, 1.03, 0), Vector3(1.10, 1.70, 0.80), Color("#8a3f58"), true),
+		canopy,
+		_box(at + Vector3(0, 1.25, 0.41), Vector3(0.80, 0.98, 0.06), BRASS),
+		_emblem_strip(at + Vector3(0, 1.25, 0.45), Vector3(0.66, 0.84, 0.03), Color("#a9dbe2")),
+		gleam,
+		_box(at + Vector3(0, 0.56, 0.42), Vector3(0.46, 0.06, 0.05), INK),
+		_emblem_strip(at + Vector3(0, 0.42, 0.44), Vector3(0.30, 0.22, 0.03), PARCHMENT),
+	]
+	# The stand steps out of the welcome group photo, like the plaques do.
+	_story_photo_signs.append_array(parts)
+	_plaque("哈哈鏡大頭貼", at + Vector3(0, 2.44, 0.30), 2.05, BRASS)
 
 
 func _build_mirrors() -> void:

@@ -25,9 +25,12 @@ func _run() -> void:
 		and _world.npc_activity == null, "original tent art loads without inheriting Welcome activities")
 	_check(_world.current_area == "馬戲團入口" and _world.player.is_on_floor(), "spawn lands on the physical entry")
 	var initial_map: Dictionary = _world.map_snapshot()
-	_check(initial_map.areas.size() == 5 and initial_map.points.size() == 6
+	_check(initial_map.areas.size() == 5 and initial_map.points.size() == 7
 		and _world._point_by_id("circus:story").get("position") == World.STORY_POINT,
 		"five physical areas and the on-duty welcome station appear in the floor plan")
+	_check(_world._point_by_id("game-049").get("position") == World.PHOTO_BOOTH_POINT
+		and _world._area_at_position(World.PHOTO_BOOTH_POINT) == "馬戲團入口" and _world._safe_footing(World.PHOTO_BOOTH_POINT),
+		"the photo booth game has a reachable stand in the entry foyer")
 	for room: Dictionary in _world.map_snapshot().areas:
 		var floor_mesh := _world.get_node_or_null("CircusFloor_" + String(room.id)) as MeshInstance3D
 		var footprint: Rect2 = room.rect
@@ -55,6 +58,7 @@ func _run() -> void:
 	_check(_world.map_snapshot().areas[0].label == "馬戲團入口", "map snapshot is detached from world data")
 	map.free()
 	await _reach([Vector2(8.1, 4.65), Vector2(0, 4.65), Vector2(0, 7.8)], "region:welcome", "馬戲團入口")
+	await _reach([Vector2(World.PHOTO_BOOTH_POINT.x, World.PHOTO_BOOTH_POINT.z)], "game-049", "馬戲團入口")
 	var safe_at: Vector3 = _world.player.position
 	_world.player.position = Vector3(0, World.GROUND_Y, 10.1)
 	_world._constrain_player(safe_at)
