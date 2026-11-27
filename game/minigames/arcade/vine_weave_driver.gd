@@ -39,6 +39,7 @@ const TANGLE_SECONDS := 1.8
 const SKYLIGHT_SECONDS := 1.2
 ## How many bars ahead are planned.
 const AHEAD := 6
+const START_X := 0.5
 ## The next gap sits at least this far to the side of the last one.
 const MIN_SHIFT := 0.2
 
@@ -65,6 +66,7 @@ var _left := 0
 var _right := 0
 var _next_bar := 1
 var _demo := false
+var _steered := false
 var _last_mark := 0.0
 
 
@@ -89,6 +91,7 @@ func _init() -> void:
 
 
 func _begin_round(_chosen: Dictionary) -> void:
+	_steered = false
 	_demo = true
 	_reset_vine()
 
@@ -104,8 +107,9 @@ func _warm_up(delta: float) -> void:
 
 
 func _go() -> void:
-	# Play starts from the bottom with the first gap right above the tip and a
-	# full bar of room, so the first move is always the player's.
+	# Play starts from the bottom in the middle with the first gap off to one
+	# side and a full bar of room: the first move is always the player's, and a
+	# vine left alone runs into the very first bar.
 	_demo = false
 	_reset_vine()
 
@@ -116,6 +120,8 @@ func _tick(delta: float) -> void:
 
 
 func _press(button: StringName) -> void:
+	if button == &"left" or button == &"right":
+		_steered = true
 	if button == &"left":
 		_left += 1
 	elif button == &"right":
@@ -127,6 +133,13 @@ func _release(button: StringName) -> void:
 		_left = maxi(0, _left - 1)
 	elif button == &"right":
 		_right = maxi(0, _right - 1)
+
+
+## No input, no points: until the player has steered this round, nothing that
+## happens on its own (a gust, a gap sliding over the tip) scores.
+func add_score(points: int, word := "") -> void:
+	if _steered:
+		super(points, word)
 
 
 func _round_over() -> void:
@@ -269,19 +282,20 @@ func _reset_vine() -> void:
 	_right = 0
 	_next_bar = 1
 	tip_y = 0.0
+	tip_x = START_X
 	drift = 0.0
 	_last_mark = 0.0
 	while _next_bar <= AHEAD:
 		_plan_bar(_next_bar)
 		_next_bar += 1
-	tip_x = float(bars[0].x)
+	tip_x = START_X
 	path.append(Vector2(tip_x, tip_y))
 
 
 ## Plan bar `height`: a gap within reach of the last one, narrower later;
 ## breathing gaps and butterflies once the round warms up.
 func _plan_bar(height: int) -> void:
-	var previous := float(bars.back().x) if not bars.is_empty() else 0.5
+	var previous := float(bars.back().x) if not bars.is_empty() else START_X
 	# The next gap is never further than the vine can steer in one bar's growth.
 	var reach := STEER * 0.7 / lerpf(GROW_FIRST, GROW_LAST, heat())
 	# ...and never straight above it, so a vine left alone runs into the bar.

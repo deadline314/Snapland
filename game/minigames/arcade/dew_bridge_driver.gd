@@ -85,6 +85,7 @@ var _left := 0
 var _right := 0
 var _next_drip := 0.0
 var _demo := false
+var _steered := false
 var _chewed := false
 var _still_for := 0.0
 
@@ -110,6 +111,7 @@ func _init() -> void:
 
 
 func _begin_round(_chosen: Dictionary) -> void:
+	_steered = false
 	tilt = 0.0
 	droplets.clear()
 	splash = {}
@@ -172,6 +174,8 @@ func _tick(delta: float) -> void:
 
 
 func _press(button: StringName) -> void:
+	if button == &"left" or button == &"right":
+		_steered = true
 	if button == &"left":
 		_left += 1
 	elif button == &"right":
@@ -183,6 +187,13 @@ func _release(button: StringName) -> void:
 		_left = maxi(0, _left - 1)
 	elif button == &"right":
 		_right = maxi(0, _right - 1)
+
+
+## No input, no points: until the player has steered this round, nothing that
+## happens on its own (a gust, a gap sliding over the tip) scores.
+func add_score(points: int, word := "") -> void:
+	if _steered:
+		super(points, word)
 
 
 func _round_over() -> void:

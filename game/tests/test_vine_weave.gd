@@ -18,6 +18,7 @@ func _initialize() -> void:
 func _run() -> void:
 	assert(OS.get_environment("SNAPLAND_SAVE_PATH").is_absolute_path())
 	_countdown_demonstrates_a_gap()
+	_untouched_rounds_never_score()
 	_steering_and_threading()
 	_hitting_a_bar_ties_a_bow()
 	_butterflies_and_skylights()
@@ -40,8 +41,8 @@ func _countdown_demonstrates_a_gap() -> void:
 	_check(game.tip_y > 1.0 and game.tangle.is_empty() and game.score == 0, "the countdown grows the vine through the first gap by itself and scores nothing")
 	_advance(game, 0.1)
 	var first: Dictionary = game.bars[0]
-	_check(game.stage == "play" and game.tip_y < 0.2 and absf(game.tip_x - float(first.x)) < 0.02 and float(first.height) == 1.0,
-		"play starts at the bottom lined up under the first gap, a full bar below it")
+	_check(game.stage == "play" and game.tip_y < 0.2 and is_equal_approx(game.tip_x, Game.START_X) and absf(float(first.x) - Game.START_X) >= Game.MIN_SHIFT - 0.001 and float(first.height) == 1.0,
+		"play starts at the bottom in the middle, with the first gap off to one side a full bar above")
 
 
 func _steering_and_threading() -> void:
@@ -58,6 +59,7 @@ func _steering_and_threading() -> void:
 	_check(game.tip_x < x - 0.08, "A steers it left")
 	var straight := _playing("standard")
 	var bar: Dictionary = straight.bars[0]
+	straight.tip_x = straight.gap_x(bar)
 	_advance(straight, 1.0 / straight.growth() + 0.05)
 	_check(straight.passed == 1 and straight.score >= Game.PASS_POINTS + Game.CENTRE_POINTS and straight.tangle.is_empty() and straight.tip_y > float(bar.height),
 		"growing straight up through the middle of a gap threads it for points and a centre bonus")
@@ -277,7 +279,23 @@ func _round(variant_id: String, assisted := false) -> Game:
 func _playing(variant_id: String, assisted := false) -> Game:
 	var game := _round(variant_id, assisted)
 	_advance(game, Base.READY_SECONDS + 0.01)
+	# These checks set the scene up directly; count the round as steered.
+	game._steered = true
 	return game
+
+func _untouched_rounds_never_score() -> void:
+	var scored: Array[String] = []
+	for assisted: bool in [false, true]:
+		for round_seed in 40:
+			var game := Game.new()
+			game.round_seed = round_seed
+			game.reset(assisted, "noon")
+			while game.stage != "done":
+				game.step(1.0 / 60.0)
+			if game.score != 0:
+				scored.append("seed %d%s: %d" % [round_seed, " assisted" if assisted else "", game.score])
+	_check(scored.is_empty(), "no input means no points across 80 seeded rounds: %s" % [scored])
+
 
 
 ## First seed whose round uses the named variant.

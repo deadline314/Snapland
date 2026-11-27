@@ -19,6 +19,7 @@ func _initialize() -> void:
 func _run() -> void:
 	assert(OS.get_environment("SNAPLAND_SAVE_PATH").is_absolute_path())
 	_countdown_demonstrates_a_sip()
+	_untouched_rounds_never_score()
 	_tilting_rolls_the_drop()
 	_drinking_and_pouring()
 	_big_drops_glide_further()
@@ -333,7 +334,23 @@ func _round(variant_id: String, assisted: bool) -> Game:
 func _playing(variant_id: String, assisted := false) -> Game:
 	var game := _round(variant_id, assisted)
 	_advance(game, Base.READY_SECONDS + 0.01)
+	# These checks set the scene up directly; count the round as steered.
+	game._steered = true
 	return game
+
+func _untouched_rounds_never_score() -> void:
+	var scored: Array[String] = []
+	for assisted: bool in [false, true]:
+		for round_seed in 40:
+			var game := Game.new()
+			game.round_seed = round_seed
+			game.reset(assisted, "noon")
+			while game.stage != "done":
+				game.step(1.0 / 60.0)
+			if game.score != 0:
+				scored.append("seed %d%s: %d" % [round_seed, " assisted" if assisted else "", game.score])
+	_check(scored.is_empty(), "no input means no points across 80 seeded rounds: %s" % [scored])
+
 
 
 ## First seed whose round uses the named variant.
