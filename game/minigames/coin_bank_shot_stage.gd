@@ -2,6 +2,7 @@ extends SubViewport
 ## The table, cushions and puck use the same planar coordinates as the model.
 
 const Model = preload("res://game/minigames/coin_bank_shot_model.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const SURFACES := "res://assets/minigames/coin-bank-surfaces.webp"
 const FRAME := Color("#775240")
 const COPPER := Color("#db9c57")
@@ -56,6 +57,7 @@ func _build_camera_and_lights() -> void:
 	key.light_color = Color("#ffe4bd")
 	key.light_energy = 1.0
 	key.rotation_degrees = Vector3(-52, -33, 0)
+	key.shadow_enabled = true
 	_table.add_child(key)
 	var pool := OmniLight3D.new()
 	pool.position = Vector3(3.3, 1.6, -2.5)
@@ -73,8 +75,9 @@ func _build_geometry(state: Dictionary) -> void:
 	_dish.rings = 1
 	var tray: Rect2 = state.tray
 	var centre := tray.get_center()
-	var lacquer := _material(Color("#542a33"), 0.58, 0.28)
-	var rim := _material(FRAME, 0.39, 0.47)
+	# Lacquered planks for the cabinet and cushions instead of flat paint.
+	var lacquer := StageProps.wood(Color("#5a2d33"), 0.16)
+	var rim := StageProps.wood(FRAME, 0.08)
 	var inset := _material(Color("#704d40"), 0.49, 0.08)
 	var cloth := _material(Color("#395e69"), 0.94)
 	if ResourceLoader.exists(SURFACES):
@@ -90,7 +93,7 @@ func _build_geometry(state: Dictionary) -> void:
 	var surface := PlaneMesh.new()
 	surface.size = Vector2.ONE
 	var gold := _material(COPPER, 0.42, 0.64)
-	var dark := _material(Color("#0d1920"), 0.88)
+	var dark := StageProps.painted(Color("#1a1418"))
 	_box(_table, _position(centre, -0.16), Vector3(tray.size.x + 0.38, 0.33, tray.size.y + 0.38), lacquer)
 	var cut := _mesh(_table, surface, _position(centre, 0.032), inset)
 	cut.scale = Vector3(tray.size.x, 1.0, tray.size.y)
@@ -110,6 +113,8 @@ func _build_geometry(state: Dictionary) -> void:
 		_table.add_child(well)
 		_wells.append(well)
 		_disc(well, Vector3(0, 0.010, 0), Model.RIM_RADIUS, 0.018, dark)
+		# A cup inside the hole catches the lamp on its far wall.
+		_disc(well, Vector3(0, 0.016, 0), Model.POT_RADIUS * 0.72, 0.014, StageProps.painted(Color("#3a2a24")))
 		_rims.append(_mesh(well, ring, Vector3(0, 0.025, 0), _rim_plain))
 	for index in 2:
 		var board_row: Dictionary = state.boards[index]
@@ -129,7 +134,7 @@ func _build_board(index: int, half_length: float, rim: Material) -> void:
 	_boards.append(body)
 	_board_half_lengths.append(half_length)
 	var length := half_length * 2.0
-	var tone := _material(BOARD_TONES[index], 0.60, 0.24)
+	var tone := StageProps.wood(BOARD_TONES[index], 0.1)
 	_box(body, Vector3(0, 0.07, 0), Vector3(length, 0.12, Model.BOARD_RADIUS * 2.0), tone)
 	_box(body, Vector3(0, 0.141, 0), Vector3(length, 0.036, Model.BOARD_RADIUS * 2.24), rim)
 	for side in [-1.0, 1.0]:

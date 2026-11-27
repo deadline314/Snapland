@@ -50,6 +50,17 @@ const ICONS := {
 	"shell": [".........", "...###...", "..#.#.#..", ".#.#.#.#.", "#.#.#.#.#", "#.#.#.#.#", ".#######.", "...###...", "....#...."],
 	"strap": [".........", "#########", "#########", "...###...", "...#.#...", "...###...", "#########", "#########", "........."],
 	"swap": ["..#......", ".##......", "#######..", ".##......", "..#...#..", "......##.", "..#######", "......##.", "......#.."],
+	# Night market keys.
+	"umbrella": ["...###...", ".#######.", "#########", "#.#.#.#.#", "....#....", "....#....", "....#....", "..#.#....", "...#....."],
+	"stop": ["..#####..", ".#######.", "#########", "#.......#", "#########", "#########", ".#######.", "..#####..", "........."],
+	"flame": ["....#....", "...##....", "...###...", "..####.#.", ".######..", ".###.###.", "###...##.", ".##...##.", "..#####.."],
+	"coin": ["..#####..", ".##...##.", "#...#...#", "#..###..#", "#...#...#", "#..###..#", "#...#...#", ".##...##.", "..#####.."],
+	"funnel": ["#########", "#########", ".#######.", "..#####..", "...###...", "...###...", "...###...", "...###...", "....#...."],
+	"ladle": ["......###", ".....##..", "....##...", "...##....", "#######..", "#######..", ".#####...", "..###....", "........."],
+	"layers": ["....#....", "..##.##..", "##.....##", "..##.##..", "#...#...#", "##.....##", "..##.##..", "....#....", "........."],
+	"awning": ["#########", "#.#.#.#.#", ".#.#.#.#.", "#.......#", "#.......#", "#.......#", "#.......#", "#.......#", "#.......#"],
+	"walk": ["......##.", "......##.", ".......#.", "..##.....", "..##.....", "...#..##.", "......##.", ".......#.", "........."],
+	"reset": ["..####...", ".#....#.#", "#......##", "#.....###", "#........", "#.......#", ".#.....#.", "..#####..", "........."],
 }
 
 # --- colour -------------------------------------------------------------------
@@ -93,6 +104,27 @@ static func wood_panel(canvas: CanvasItem, rect: Rect2, tone := OAK, calm := fal
 	var box := snap_rect(rect)
 	_tile(canvas, _wood(tone, 0.35 if calm else 1.0), box)
 	_bevel(canvas, box, Color(lighten(tone, 0.3), 0.7), Color(deepen(tone, 0.3), 0.8))
+	_outline(canvas, box, deepen(tone))
+
+## A lacquered sign board with a gilt pinstripe and brass corner studs: a calm
+## face for readouts that carry a lot of text (night market stalls).
+static func lacquer_board(canvas: CanvasItem, rect: Rect2, tone: Color) -> void:
+	var box := snap_rect(rect)
+	# Four posterised bands, lit at the top, so the face is never one flat colour
+	# yet stays calm behind text.
+	var band := snappedf(box.size.y / 4.0, PIXEL)
+	for step in 4:
+		var top := box.position.y + band * step
+		var height := box.end.y - top if step == 3 else band
+		canvas.draw_rect(Rect2(box.position.x, top, box.size.x, height), lighten(tone, 0.08) if step == 0 else (tone if step < 3 else deepen(tone, 0.12)))
+	_bevel(canvas, box, lighten(tone, 0.3), deepen(tone, 0.3))
+	var inner := box.grow(-6.0)
+	canvas.draw_rect(Rect2(inner.position, Vector2(inner.size.x, PIXEL)), Color(BRASS, 0.55))
+	canvas.draw_rect(Rect2(inner.position.x, inner.end.y - PIXEL, inner.size.x, PIXEL), Color(deepen(BRASS, 0.3), 0.55))
+	canvas.draw_rect(Rect2(inner.position, Vector2(PIXEL, inner.size.y)), Color(BRASS, 0.55))
+	canvas.draw_rect(Rect2(inner.end.x - PIXEL, inner.position.y, PIXEL, inner.size.y), Color(deepen(BRASS, 0.3), 0.55))
+	for corner: Vector2 in [inner.position, Vector2(inner.end.x, inner.position.y), Vector2(inner.position.x, inner.end.y), inner.end]:
+		rivet(canvas, corner, BRASS)
 	_outline(canvas, box, deepen(tone))
 
 ## Brushed metal plate with a raised rim and, when there is room, corner rivets.
@@ -215,6 +247,32 @@ static func surface(canvas: CanvasItem, rect: Rect2, kind: String, base: Color, 
 static func gilt_frame(canvas: CanvasItem, rect: Rect2, border: float, base: Color, texel := 4.0, tint := Color.WHITE) -> void:
 	var size := Vector2i(maxi(4, roundi(rect.size.x / texel) - 2), maxi(4, roundi(rect.size.y / texel) - 2))
 	canvas.draw_texture_rect(Pixels.frame(size, maxi(3, roundi(border / texel) - 1), base), rect, false, tint)
+
+## A tileable material swatch for `fill_polygon`: wood (planks), metal, paper
+## (oiled paper with fibres) or cobble (wet stone setts that catch lamp light).
+static func material_tile(kind: String, tone: Color) -> ImageTexture:
+	match kind:
+		"wood":
+			return _wood(tone)
+		"metal":
+			return _metal(tone)
+		"paper":
+			return _paper(tone)
+		"cobble":
+			return _cobble(tone)
+	push_warning("pixel_props: unknown material tile " + kind)
+	return _paper(tone)
+
+## Fills any polygon with a material tile mapped in design pixels, so shapes
+## that touch share one continuous grain. The canvas must have texture_repeat
+## enabled; `tint` multiplies the swatch (shade a face by darkening it).
+static func fill_polygon(canvas: CanvasItem, points: PackedVector2Array, tile: Texture2D, tint := Color.WHITE) -> void:
+	var cell := tile.get_size()
+	var uvs := PackedVector2Array()
+	uvs.resize(points.size())
+	for index in points.size():
+		uvs[index] = points[index] / cell
+	canvas.draw_colored_polygon(points, tint, uvs, tile)
 
 # --- finishing touches ----------------------------------------------------------
 # Time-based ones take a phase or elapsed time from the caller's own clock, so
@@ -416,4 +474,45 @@ static func _icon(icon_name: String) -> ImageTexture:
 			for x in 9:
 				if rows[y][x] == "#":
 					image.set_pixel(x, y, Color.WHITE)
+		return image)
+
+static func _paper(tone: Color) -> ImageTexture:
+	return _cached("paper:" + tone.to_html(false), func() -> Image:
+		var image := Image.create(48, 48, false, Image.FORMAT_RGBA8)
+		for y in 48:
+			for x in 48:
+				# Long thin fibres run across the sheet; a fine tooth fills between.
+				var color := tone.lerp(lighten(tone, 0.1), Pixels.noise(x, y, 4) * 0.4)
+				var fibre := Pixels.noise((x + y * 3) / 7, y, 9)
+				if fibre > 0.96:
+					color = deepen(tone, 0.08)
+				elif fibre < 0.03:
+					color = lighten(tone, 0.16)
+				image.set_pixel(x, y, color)
+		return image)
+
+## Staggered rounded setts with dark joints, a lit top-left rim on each stone
+## and the odd warm puddle glint.
+static func _cobble(tone: Color) -> ImageTexture:
+	return _cached("cobble:" + tone.to_html(false), func() -> Image:
+		var image := Image.create(48, 48, false, Image.FORMAT_RGBA8)
+		for y in 48:
+			var row := y / 8
+			var shift := 6 if row % 2 == 1 else 0
+			for x in 48:
+				var column := (x + shift) / 12
+				var local := Vector2i((x + shift) % 12, y % 8)
+				var stone := tone.lerp(deepen(tone, 0.25) if Pixels.noise(column, row, 5) > 0.5 else lighten(tone, 0.1), Pixels.noise(column, row, 8) * 0.55)
+				var color := stone
+				if local.y == 7 or local.x == 11:
+					color = deepen(tone, 0.5)
+				elif (local.y == 6 and local.x > 0) or local.x == 10:
+					color = deepen(stone, 0.2)
+				elif local.y == 0 or local.x == 0:
+					color = lighten(stone, 0.18)
+				elif Pixels.noise(x, y, 17) < 0.05:
+					color = deepen(stone, 0.12)
+				elif local.y == 2 and local.x > 2 and local.x < 6 and Pixels.noise(column, row, 21) > 0.62:
+					color = lighten(stone, 0.4).lerp(Color("#ffd49a"), 0.35)
+				image.set_pixel(x, y, color)
 		return image)

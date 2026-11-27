@@ -17,6 +17,8 @@ const COPPER := Color("#c99578")
 const GOLD := Color("#ffdc9d")
 const MINT := Color("#a8e5cb")
 const CORAL := Color("#ffb6a5")
+## Lacquered stall wood for boards; the side view is a dim paper screen.
+const LACQUER := Color("#3a2a30")
 const FABRICS := [Color("#ebad86"), Color("#9bd6bb"), Color("#d2b2ed")]
 
 enum { DRIVE, BRAKE, RAISE, LOWER, ROLL_LEFT, ROLL_RIGHT, DIRECT, BYPASS }
@@ -25,6 +27,9 @@ const LABELS := [
 	"推車前進 · W", "按住煞車 · 空白", "升架 · R", "降架 · F",
 	"左側上抬 · Q", "右側上抬 · E", "選近巷 · A", "選外側寬路 · D",
 ]
+const KEY_ICONS := ["walk", "stop", "more", "less", "turn_left", "turn_right", "left", "right"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := [
 	"BannerDrive", "BannerBrake", "BannerRaise", "BannerLower",
 	"BannerRollLeft", "BannerRollRight", "BannerDirect", "BannerBypass",
@@ -59,9 +64,11 @@ static func action_available(action: int, state: Dictionary) -> bool:
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	build_controls(LABELS, Color("#2e3c4a"), Color("#625143"), EDGE, GOLD)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	_stage = Stage.new()
 	add_child(_stage)
 	_refresh()
@@ -132,7 +139,7 @@ func _draw() -> void:
 	var gate := _next_gate()
 	var at_crosswalk := _crosswalk_near()
 	_text(Vector2(35, 172), _guide(gate, at_crosswalk), CORAL if _state.blocked else GOLD, 22, BOARD.size.x)
-	draw_rect(BOARD.grow(2), EDGE)
+	Props.wood_panel(self, BOARD.grow(8), LACQUER)
 	draw_rect(BOARD, DEEP)
 	draw_texture_rect(_stage.get_texture(), BOARD, false)
 	_draw_readout(gate, at_crosswalk)
@@ -190,8 +197,7 @@ func _gate_name(gate: Dictionary) -> String:
 
 
 func _draw_readout(gate: Dictionary, at_crosswalk: bool) -> void:
-	draw_rect(READOUT.grow(2), EDGE)
-	draw_rect(READOUT, DEEP)
+	Props.lacquer_board(self, READOUT, LACQUER)
 	var base := READOUT.position + Vector2(14, 0)
 	var banner: Dictionary = _state.banners[_state.banner_index]
 	_text(base + Vector2(0, 31), banner.name, INK, 24, 305)
@@ -240,8 +246,9 @@ func _pose_line() -> String:
 
 
 func _draw_profile(gate: Dictionary) -> void:
-	draw_rect(PROFILE, PANEL)
-	draw_rect(PROFILE, GRID, false, 1.0)
+	draw_rect(PROFILE.grow(3.0), Props.deepen(LACQUER, 0.45))
+	Props.surface(self, PROFILE, "photo", Color("#2c3646"))
+	draw_rect(Rect2(PROFILE.position.x - 3, PROFILE.end.y, PROFILE.size.x + 6, 3), Props.lighten(LACQUER, 0.25))
 	for step in range(1, 5):
 		var y := PROFILE_ORIGIN.y - float(step) * PROFILE_SCALE * 0.5
 		draw_line(Vector2(PROFILE.position.x + 12, y), Vector2(PROFILE.end.x - 12, y), GRID, 1.0)
@@ -259,17 +266,16 @@ func _draw_profile(gate: Dictionary) -> void:
 	var low: Vector3 = _state.carriage_min
 	var high: Vector3 = _state.carriage_max
 	var frame := Rect2(_profile_point(Vector3(low.x, high.y, 0), cart_x), Vector2(high.x - low.x, high.y - low.y) * PROFILE_SCALE)
-	draw_rect(frame, Color("#465766"))
-	draw_rect(frame, PALE, false, 1.3)
+	Props.shaded_box(self, frame, Color("#7a5a3e"), minf(4.0, frame.size.y * 0.5))
 	var anchor := _profile_point(_state.pivot, cart_x)
 	draw_line(Vector2(PROFILE_ORIGIN.x, frame.position.y), anchor, PALE, 2.0, true)
 	var outline := PackedVector2Array()
 	for corner: Vector3 in _state.canvas:
 		outline.append(_profile_point(corner, cart_x))
 	var cloth: Color = FABRICS[_state.banner_index]
-	draw_colored_polygon(outline, Color(cloth, 0.30))
+	Props.fill_polygon(self, outline, Props.material_tile("paper", cloth), Color(1, 1, 1, 0.85))
 	outline.append(outline[0])
-	draw_polyline(outline, cloth, 2.1, true)
+	draw_polyline(outline, Props.deepen(cloth, 0.35), 2.1, true)
 	draw_circle(anchor, 3.1, INK, true, -1.0, true)
 
 
@@ -288,7 +294,8 @@ func _draw_gate_profile(gate: Dictionary, lane_x: float) -> void:
 	var size_px := Vector2(high.x - low.x, high.y - low.y) * PROFILE_SCALE
 	var area := Rect2(_profile_point(Vector3(low.x, high.y, 0), lane_x), size_px)
 	var tone := CORAL if int(_state.block_id) == int(gate.id) else COPPER
-	draw_rect(area, Color(tone, 0.24))
+	Props.fill_polygon(self, PackedVector2Array([area.position, Vector2(area.end.x, area.position.y), area.end, Vector2(area.position.x, area.end.y)]),
+		Props.material_tile("wood", tone.darkened(0.35)), Color(1, 1, 1, 0.8))
 	draw_rect(area, tone, false, 1.6)
 	if gate.kind == "roof":
 		for x in range(ceili(area.position.x + 6), floori(area.end.x - 2), 12):

@@ -24,6 +24,11 @@ const MATERIALS := [Color("#507f91"), Color("#ab8258"), Color("#b77643"), Color(
 const PHASE_WASH := {"dawn": Color(0.33, 0.31, 0.26, 0.08), "noon": Color(0.51, 0.37, 0.22, 0.08),
 	"dusk": Color(0.65, 0.29, 0.14, 0.07), "night": Color(0.04, 0.09, 0.15, 0.06)}
 const PLACEMENT_SECONDS := 0.17
+## Lacquered stall wood, the cart's deck boards, and the finish of each piece
+## (pot, rack, tray, crate, plates).
+const LACQUER := Color("#3a2a26")
+const DECK_WOOD := Color("#7a5640")
+const FINISHES := ["metal", "wood", "wood", "wood", "paper"]
 const EXTRACTION_SECONDS := 0.53
 const DRAW_KEYS := [&"focus", &"layer", &"selected", &"angle", &"fit", &"ghost", &"secured", &"devil", &"feedback", &"straps", &"pot_path", &"ended"]
 const CONTROL_KEYS := [&"secured", &"devil", &"selected", &"can_undo", &"ended", &"control_mask"]
@@ -32,6 +37,9 @@ enum { NORTH, EAST, SOUTH, WEST, PLACE, ROTATE, LEVEL, PHASE, UNDO, CYCLE }
 
 const LABELS := ["往上移 · ↑", "往右移 · →", "往下移 · ↓", "往左移 · ←",
 	"放置 · E", "轉向 · Q", "換層 · R", "綁帶 · F"]
+const KEY_ICONS := ["up", "right", "down", "left", "grab", "turn_right", "layers", "strap"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := ["StallLoadoutNorth", "StallLoadoutEast", "StallLoadoutSouth", "StallLoadoutWest",
 	"StallLoadoutPlace", "StallLoadoutRotate", "StallLoadoutLevel", "StallLoadoutPhase"]
 const CARGO_HINTS := ["底層湯鍋；高難度需沿開口抽出。", "木架中央有空位，可套進器具。", "料盒有凸起，先確認上方格位。",
@@ -113,10 +121,12 @@ static func action_available(action: int, state: Dictionary) -> bool:
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_alcove = load(ART) as Texture2D
 	build_controls(LABELS, Color("#26343b"), Color("#614733"), EDGE, AMBER)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	for index in Model.PIECE_COUNT:
 		var normal: Color = MATERIALS[index].darkened(0.68)
 		var slot := _tool_button("StallLoadoutPiece%d" % index, piece_rect(index), normal, normal.lightened(0.15))
@@ -136,9 +146,12 @@ func _tool_button(id: String, rect: Rect2, normal: Color, active: Color) -> Butt
 	button.focus_mode = Control.FOCUS_NONE
 	button.clip_text = true
 	button.toggle_mode = true
-	button.add_theme_stylebox_override("normal", Paper.button_box(normal, EDGE))
-	button.add_theme_stylebox_override("pressed", Paper.button_box(active, AMBER))
-	button.add_theme_stylebox_override("disabled", Paper.button_box(normal.darkened(0.12), EDGE.darkened(0.3)))
+	# The view paints a key cap under each one; the Button keeps its text.
+	for style in ["normal", "hover", "focus", "disabled", "pressed", "hover_pressed"]:
+		var box := StyleBoxEmpty.new()
+		box.content_margin_bottom = 8.0 - (KEY_SINK if style.contains("pressed") else 0.0)
+		box.content_margin_top = KEY_SINK if style.contains("pressed") else 0.0
+		button.add_theme_stylebox_override(style, box)
 	button.add_theme_color_override("font_color", TEXT)
 	button.add_theme_color_override("font_pressed_color", TEXT)
 	button.add_theme_color_override("font_disabled_color", MUTED)
@@ -297,6 +310,7 @@ func _sync_controls() -> void:
 	_undo.disabled = not action_available(UNDO, _state)
 	_undo.text = "解帶 · U / View" if tied else "撤回 · U / View"
 	_undo.set_pressed_no_signal((mask & (1 << UNDO)) != 0)
+	queue_redraw()
 
 
 func _draw() -> void:
@@ -306,6 +320,7 @@ func _draw() -> void:
 		draw_texture_rect_region(_alcove, Rect2(0, 119, 1280, 601),
 			Rect2(0, (art_size.y - visible_height) * 0.5, art_size.x, visible_height))
 	draw_rect(Rect2(0, 119, 1280, 601), PHASE_WASH[_phase])
+	_draw_tool_caps()
 	_draw_cart()
 	if _state.is_empty():
 		return
@@ -318,29 +333,41 @@ func _draw() -> void:
 	_draw_readout()
 
 
+func _draw_tool_caps() -> void:
+	for index in _slots.size():
+		var slot := _slots[index]
+		var held := slot.button_pressed and not slot.disabled
+		var tone: Color = MATERIALS[index].darkened(0.45)
+		Props.key_cap(self, Rect2(slot.position, slot.size), held, true, tone if not slot.disabled else tone.lerp(Color("#1c1216"), 0.55))
+
+
 func _draw_cart() -> void:
 	var corners := _patch(0.0, 0.0, float(Model.DECK.x), float(Model.DECK.z), 0.0)
 	var base := Vector2(0, 15)
 	var shadow := PackedVector2Array([corners[0] + Vector2(-17, 27), corners[1] + Vector2(19, 23),
 		corners[2] + Vector2(24, 32), corners[3] + Vector2(-17, 39)])
 	draw_colored_polygon(shadow, Color(0.02, 0.06, 0.08, 0.55))
+	var boards := Props.material_tile("wood", DECK_WOOD)
 	for x in [1.1, 5.55]:
 		var wheel := _project(Vector3(x, 0, Model.DECK.z)) + Vector2(0, 25)
-		draw_circle(wheel, 16.0, Color("#151f26"), true, -1.0, true)
-		draw_circle(wheel, 13.5, Color("#77654d"), false, 2.1, true)
-		draw_circle(wheel, 4.5, Color("#a68862"), true, -1.0, true)
-	_quad(corners[3], corners[2], corners[2] + base, corners[3] + base, Color("#48312d"))
-	_quad(corners[2], corners[1], corners[1] + base, corners[2] + base, Color("#684535"))
-	for x in Model.DECK.x:
-		for z in Model.DECK.z:
-			var patch := _patch(x, z, 1.0, 1.0, 0.0)
-			var color := Color("#604839") if (x + z) % 2 == 0 else Color("#583f35")
-			draw_colored_polygon(patch, color)
-			draw_line(patch[2], patch[3], Color("#342f31"), 1.0, true)
-			draw_line(patch[2], patch[1], Color("#413735"), 1.0, true)
-			if (x * 3 + z) % 5 == 0:
-				draw_line(patch[0].lerp(patch[3], 0.63) + EAST_AXIS * 0.17,
-					patch[1].lerp(patch[2], 0.63) - EAST_AXIS * 0.20, Color(0.86, 0.64, 0.43, 0.17), 1.0, true)
+		Props.contact_shadow(self, wheel + Vector2(4, 14), 40.0, 0.7)
+		Props.token(self, wheel, 16.0, Color("#4a3628"))
+		draw_arc(wheel, 11.0, 0.0, TAU, 20, Color("#2a1d16"), 2.0, true)
+		for spoke in 4:
+			var ray := Vector2.from_angle(PI * 0.25 * spoke * 2.0 + 0.4) * 11.0
+			draw_line(wheel - ray, wheel + ray, Color("#6e5238"), 2.0, true)
+		Props.token(self, wheel, 4.0, Props.BRASS)
+	Props.fill_polygon(self, PackedVector2Array([corners[3], corners[2], corners[2] + base, corners[3] + base]), boards, Color(0.5, 0.42, 0.42))
+	Props.fill_polygon(self, PackedVector2Array([corners[2], corners[1], corners[1] + base, corners[2] + base]), boards, Color(0.72, 0.6, 0.56))
+	# Deck boards run along the cart's width, mapped on the deck's own axes.
+	var cell := boards.get_size()
+	var deck_uv := PackedVector2Array([Vector2.ZERO, Vector2(Model.DECK.x * 48.0 / cell.x, 0.0),
+		Vector2(Model.DECK.x * 48.0 / cell.x, Model.DECK.z * 32.0 / cell.y), Vector2(0.0, Model.DECK.z * 32.0 / cell.y)])
+	draw_colored_polygon(corners, Color(0.86, 0.8, 0.78), deck_uv, boards)
+	for x in range(1, Model.DECK.x):
+		draw_line(_project(Vector3(x, 0, 0)), _project(Vector3(x, 0, Model.DECK.z)), Color(0.14, 0.09, 0.08, 0.35), 1.0, true)
+	for z in range(1, Model.DECK.z):
+		draw_line(_project(Vector3(0, 0, z)), _project(Vector3(Model.DECK.x, 0, z)), Color(0.14, 0.09, 0.08, 0.35), 1.0, true)
 	for band: int in Model.STRAP_ROWS:
 		var z := float(band) + 0.5
 		draw_dashed_line(_project(Vector3(0, 0, z)), _project(Vector3(Model.DECK.x, 0, z)),
@@ -410,16 +437,19 @@ func _draw_voxel(cell: Vector3, id: int, offset: Vector2, neighbors: Dictionary 
 	var far := east + SOUTH_AXIS
 	var down := -HEIGHT
 	var color: Color = MATERIALS[id]
+	# Each piece keeps its finish (metal, wood or glaze); faces are the same
+	# swatch in light or shade, so no face is one flat colour.
+	var finish := Props.material_tile(FINISHES[id], color.lightened(0.12))
 	var side_z := not neighbors.has(at + Vector3i.BACK)
 	var side_x := not neighbors.has(at + Vector3i.RIGHT)
 	if side_z:
-		_quad(south, far, far + down, south + down, color.darkened(0.46))
-		draw_line(south + down, far + down, INK, 1.6, true)
+		Props.fill_polygon(self, PackedVector2Array([south, far, far + down, south + down]), finish, Color(0.5, 0.48, 0.5))
+		draw_line(south + down, far + down, Props.deepen(color, 0.6), 1.6, true)
 	if side_x:
-		_quad(far, east, east + down, far + down, color.darkened(0.27))
-		draw_line(far, far + down, INK, 1.3, true)
+		Props.fill_polygon(self, PackedVector2Array([far, east, east + down, far + down]), finish, Color(0.68, 0.66, 0.68))
+		draw_line(far, far + down, Props.deepen(color, 0.5), 1.3, true)
 	if not neighbors.has(at + Vector3i.UP):
-		_quad(top, east, far, south, color.lightened(0.12))
+		Props.fill_polygon(self, PackedVector2Array([top, east, far, south]), finish)
 		if neighbors.get(at - Vector3i.BACK, -1) != id:
 			draw_line(top, east, color.lightened(0.40), 1.35, true)
 		if neighbors.get(at - Vector3i.RIGHT, -1) != id:
@@ -495,8 +525,7 @@ func _draw_positioning() -> void:
 
 
 func _draw_readout() -> void:
-	draw_rect(READOUT, CARD)
-	draw_rect(READOUT, EDGE, false, 2.0)
+	Props.lacquer_board(self, READOUT, LACQUER)
 	var left := READOUT.position.x + 19.0
 	var top := READOUT.position.y
 	var count: int = _state.get("placed", 0)
@@ -505,9 +534,13 @@ func _draw_readout() -> void:
 	for index in Model.PIECE_COUNT:
 		var tile := Rect2(left + index * 59.0, top + 50, 49, 9)
 		var loaded: bool = index < _pieces.size() and _pieces[index].anchor != Model.UNPLACED
-		draw_rect(tile, MATERIALS[index].lightened(0.15) if loaded else Color("#414445"))
+		if loaded:
+			Props.shaded_box(self, tile.grow_individual(0, 0, 0, 4), MATERIALS[index].lightened(0.15), 4.0)
+		else:
+			draw_rect(tile.grow(1.0), Props.deepen(LACQUER, 0.4))
+			draw_rect(tile, Color("#24181a"))
 	_text(Vector2(left, top + 101), "雙帶已固定" if tied else "尚未綁帶", MINT if tied else MUTED, 22)
-	draw_line(Vector2(left, top + 116), Vector2(READOUT.end.x - 20.0, top + 116), EDGE, 1.0)
+	Props.wood_panel(self, Rect2(left - 4, top + 114, READOUT.size.x - 32.0, 4), Props.deepen(LACQUER, 0.2))
 	var guidance_y := top + 157.0
 	var reason: StringName = _state.get("feedback", &"ready")
 	if not tied:
@@ -521,6 +554,8 @@ func _draw_readout() -> void:
 	var guide: String = FEEDBACK.get(reason, "可在預覽位置放下。")
 	var needs_attention := reason in [&"outside", &"collision", &"unsupported", &"exit_blocked", &"strap_gap"]
 	_text(Vector2(left, guidance_y), guide, CORAL if needs_attention else TEXT, 16)
+	var held_undo := _undo.button_pressed and not _undo.disabled
+	Props.key_cap(self, UNDO_RECT, held_undo, true, KEY_TONE if not _undo.disabled else KEY_TONE.lerp(Color("#1c1216"), 0.55))
 
 
 func _text(at: Vector2, label: String, color: Color, pixels: int) -> void:

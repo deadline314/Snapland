@@ -17,6 +17,10 @@ const CORAL := Color("#ffad9f")
 const PALETTE := [Color("#8cc6ba"), Color("#e1aecd"), Color("#e6b276")]
 const CART_NAMES := ["A 茶車", "B 點心車", "C 木箱車"]
 const CART_CODES := ["A", "B", "C"]
+## Lacquered stall wood, wet alley setts and the bays' deck boards.
+const LACQUER := Color("#3f2726")
+const SETT := Color("#3d4a47")
+const DECK := Color("#7a5a3e")
 const RESTART_GUIDE := "再按一次重置才回起點。本局仍可取得普通拍貼。"
 
 enum { SELECT, WEST, NORTH, EAST, UNLOAD, UNDO, SOUTH, RESTART }
@@ -28,6 +32,9 @@ const LABELS := [
 	"換車 · Q", "向左 · ←", "往上進出側袋 · ↑", "向右 · →",
 	"卸貨 · 空白", "撤回 · Z", "往下進出側袋 · ↓", "重置 · R",
 ]
+const KEY_ICONS := ["swap", "left", "up", "right", "grab", "undo", "down", "reset"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := [
 	"CartPassingSelect", "CartPassingWest", "CartPassingNorth", "CartPassingEast",
 	"CartPassingUnload", "CartPassingUndo", "CartPassingSouth", "CartPassingRestart",
@@ -103,10 +110,12 @@ static func guide(state: Dictionary) -> String:
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_alley = load(ALLEY_PATH) as Texture2D
 	build_controls(LABELS, Color("#243a41"), Color("#626044"), EDGE, GOLD)
 	for id in NAMES.size():
 		_buttons[id].name = NAMES[id]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	_refresh()
 
 
@@ -188,6 +197,8 @@ func _get_tooltip(point: Vector2) -> String:
 	if slot >= 0:
 		return HINTS[slot]
 	var action := hit_board_command(point, _state)
+	if action < 0 and BOARD.has_point(point):
+		return "十字鍵移車 · X 換車 · A 卸貨" + (" · Y 撤回；可點側袋試移一格" if _state.get("assisted", false) else "")
 	if action >= POCKET_ACTION:
 		return "朝這個側袋試移一格"
 	if action >= CART_ACTION:
@@ -199,7 +210,7 @@ func _draw() -> void:
 	if _state.is_empty() or _font == null:
 		return
 	_draw_heading()
-	draw_rect(BOARD.grow(2), EDGE)
+	Props.wood_panel(self, BOARD.grow(8), LACQUER)
 	draw_rect(BOARD, NIGHT)
 	if _alley != null:
 		draw_texture_rect(_alley, BOARD, false, Color.WHITE if _phase == "night" else Color(1.0, 0.95, 0.87))
@@ -209,9 +220,6 @@ func _draw() -> void:
 		if not cart.delivered:
 			_draw_cart(cart)
 	_draw_move_options()
-	_text(Vector2(37, 713), "十字鍵移車 · X 換車 · A 卸貨 · Y 撤回" if _state.assisted else "十字鍵移車 · X 換車 · A 卸貨", PALE, 14, 850)
-	if _state.assisted:
-		_text(Vector2(976, 713), "可點側袋試移一格", PALE, 14, 266)
 
 
 func _draw_heading() -> void:
@@ -226,29 +234,37 @@ func _draw_heading() -> void:
 
 func _draw_lane() -> void:
 	var lane := _grid_rect(Rect2(0, Model.LANE_Y, Model.BOARD_SIZE.x, 1))
-	draw_rect(lane, Color(0.035, 0.11, 0.13, 0.83))
-	draw_rect(lane, Color("#8e8271"), false, 2)
-	for column in Model.BOARD_SIZE.x:
-		var cell := Rect2(lane.position + Vector2(column * CELL.x, 0), CELL)
-		_draw_tile(cell)
+	var setts := Props.material_tile("cobble", SETT)
+	# Bays first, so the lane's kerb stones run across their mouths.
 	for pocket: Dictionary in _state.pockets:
 		var source: Rect2i = pocket.rect
 		var bay := _grid_rect(Rect2(source))
-		draw_rect(bay, Color(0.12, 0.19, 0.18, 0.9))
-		draw_rect(bay, Color("#b89872"), false, 2)
+		Props.block_shadow(self, bay, Vector2(4, 6), 0.45)
+		Props.wood_panel(self, bay, DECK)
+		draw_rect(bay, Color(0.06, 0.08, 0.12, 0.28))
 		for column in source.size.x:
 			_draw_tile(Rect2(bay.position + Vector2(column * CELL.x, 0), CELL))
 		var label_y := bay.position.y - 9 if source.position.y < Model.LANE_Y else bay.end.y + 24
 		var badge := Rect2(bay.position.x, label_y - 21, minf(bay.size.x, 190), 26)
-		draw_rect(badge, Color(0.07, 0.15, 0.16, 0.92))
-		_text(Vector2(badge.position.x + 7, label_y), "側袋  %d 格" % source.size.x, GOLD, 17, badge.size.x - 10)
+		Props.shaded_box(self, badge.grow_individual(0, 0, 0, 4), LACQUER, 4.0)
+		_text(Vector2(badge.position.x + 8, label_y), "側袋  %d 格" % source.size.x, GOLD, 17, badge.size.x - 10)
+	Props.fill_polygon(self, _corners(lane), setts, Color(0.82, 0.84, 0.9))
+	for edge_y: float in [lane.position.y - 4.0, lane.end.y]:
+		Props.fill_polygon(self, _corners(Rect2(lane.position.x, edge_y, lane.size.x, 4.0)), Props.material_tile("cobble", Props.lighten(SETT, 0.3)))
+	Props.vignette(self, lane, 0.35, Color("#0a0d14"))
+	for column in Model.BOARD_SIZE.x:
+		_draw_tile(Rect2(lane.position + Vector2(column * CELL.x, 0), CELL))
 
 
+## Chalked stall marks keep the grid readable on stone and deck alike.
 func _draw_tile(tile: Rect2) -> void:
-	draw_rect(tile.grow(-3), Color(0.56, 0.73, 0.69, 0.21), false, 1.2)
-	for depth in [14.0, 48.0]:
-		var at := tile.position + Vector2(0, depth)
-		draw_line(at, at + Vector2(CELL.x, 0), Color(0.57, 0.66, 0.65, 0.31), 1.25)
+	var chalk := Color(0.93, 0.9, 0.8, 0.34)
+	for corner: Vector2 in [Vector2(4, 4), Vector2(CELL.x - 10, 4), Vector2(4, CELL.y - 6), Vector2(CELL.x - 10, CELL.y - 6)]:
+		draw_rect(Rect2(tile.position + corner, Vector2(6, 2)), chalk)
+
+
+static func _corners(rect: Rect2) -> PackedVector2Array:
+	return PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])
 
 
 func _draw_destinations() -> void:
@@ -307,27 +323,28 @@ func _draw_cart(cart: Dictionary) -> void:
 	var color: Color = PALETTE[cart.id]
 	var selected: bool = cart.id == _state.selected
 	var chassis := footprint.grow(-6)
-	var shadow := Rect2(chassis.position + Vector2(2, 5), chassis.size)
-	draw_rect(shadow, Color(0.01, 0.035, 0.03, 0.78))
-	draw_rect(chassis, color.darkened(0.61))
-	var roof := Rect2(chassis.position + Vector2(3, 3), chassis.size - Vector2(6, 12))
-	draw_rect(roof, color.darkened(0.34))
-	draw_rect(Rect2(roof.position, Vector2(roof.size.x, 3)), color.lightened(0.29))
-	draw_rect(Rect2(roof.position.x, roof.end.y - 4, roof.size.x, 4), color.darkened(0.53))
+	Props.block_shadow(self, chassis, Vector2(4, 7), 0.6)
+	Props.shaded_box(self, chassis, Color("#5a3a28"), 8.0)
+	# The bed is painted planking in the cart's colour.
+	var roof := Rect2(chassis.position + Vector2(4, 4), chassis.size - Vector2(8, 14))
+	Props.surface(self, roof, "planks", color.darkened(0.38))
 	for fraction in [0.13, 0.87]:
-		var axle := Vector2(lerpf(chassis.position.x, chassis.end.x, fraction), chassis.end.y - 3)
-		draw_circle(axle, 6, NIGHT, true, -1, true)
-		draw_circle(axle, 2.7, color.darkened(0.16), true, -1, true)
+		var axle := Vector2(lerpf(chassis.position.x, chassis.end.x, fraction), chassis.end.y - 2)
+		Props.contact_shadow(self, axle + Vector2(2, 6), 22.0, 0.7)
+		Props.token(self, axle, 8.0, Color("#4a3226"))
+		Props.token(self, axle, 3.0, Props.BRASS)
 	for column in range(cart.length):
 		var tile := Rect2(footprint.position + Vector2(column * CELL.x, 0), CELL).grow(-9)
 		_draw_load(tile, cart, column, color)
 	var nose_x := roof.end.x - 15 if cart.travel_sign > 0 else roof.position.x + 15
 	var nose := Vector2(nose_x, roof.get_center().y)
-	draw_rect(Rect2(nose - Vector2(10, 12), Vector2(20, 24)), NIGHT)
+	Props.shaded_box(self, Rect2(nose - Vector2(10, 12), Vector2(20, 26)), LACQUER, 4.0)
 	_arrow(nose, Vector2(float(cart.travel_sign), 0.0), INK, 6)
-	var name_rect := Rect2(footprint.get_center().x - 54, chassis.position.y + 11, 108, 25)
-	draw_rect(name_rect, Color(0.025, 0.09, 0.1, 0.93))
-	_text(Vector2(name_rect.position.x + 4, name_rect.position.y + 18), CART_NAMES[cart.id], INK, 16, 103)
+	# A small hanging tag, so the load on the bed stays in view.
+	var label_width := _font.get_string_size(CART_NAMES[cart.id], HORIZONTAL_ALIGNMENT_LEFT, -1, roundi(14 * _scale)).x + 14.0
+	var name_rect := Rect2(footprint.get_center().x - label_width * 0.5, chassis.position.y - 12, label_width, 20)
+	Props.shaded_box(self, name_rect.grow_individual(0, 0, 0, 4), LACQUER, 4.0)
+	_text(Vector2(name_rect.position.x + 7, name_rect.position.y + 15), CART_NAMES[cart.id], INK, 14, label_width)
 	if selected:
 		_brackets(footprint.grow(-1), GOLD)
 
@@ -336,20 +353,24 @@ func _draw_load(tile: Rect2, cart: Dictionary, column: int, color: Color) -> voi
 	var center := tile.get_center()
 	match int(cart.id):
 		0:
+			# Two glazed tea urns with brass lids.
 			for offset_x in [-12.0, 11.0]:
 				var at := center + Vector2(offset_x, 4)
-				draw_circle(at, 8, color.darkened(0.61), true, -1, true)
-				draw_circle(at, 5, color.lightened(0.17), false, 2, true)
+				Props.contact_shadow(self, at + Vector2(2, 7), 20.0, 0.6)
+				Props.token(self, at, 9.0, color.darkened(0.3))
+				Props.token(self, at + Vector2(-1, -2), 4.0, Props.BRASS)
 		1:
+			# A paper-lined tray of buns.
 			var tray := Rect2(tile.position + Vector2(4, 13), tile.size - Vector2(8, 23))
-			draw_rect(tray, Color("#eacac0"))
+			Props.shaded_box(self, tray, Color("#b98a5e"), 4.0)
 			for x in range(3):
-				draw_circle(tray.position + Vector2(8 + x * 10, 8), 3.3, color.darkened(0.53), true, -1, true)
+				Props.token(self, tray.position + Vector2(8 + x * 10, 7), 4.0, Color("#f1d6c6"))
 		2:
+			# A slatted crate with a cross brace.
 			var box := tile.grow(-4)
-			draw_rect(box, color.darkened(0.52))
-			draw_rect(box, color.lightened(0.12), false, 2)
-			draw_line(box.position + Vector2(4, 5), box.end - Vector2(4, 4), color.darkened(0.15), 3, true)
+			Props.block_shadow(self, box, Vector2(3, 4), 0.45)
+			Props.shaded_box(self, box, Color("#a2774a"), 6.0)
+			draw_line(box.position + Vector2(5, 5), box.end - Vector2(5, 9), Props.deepen(Color("#a2774a"), 0.3), 3, true)
 			if cart.tail_pad != Model.NO_PAD and not cart.tail_unloaded and column == cart.length - 1:
 				_brackets(box.grow(1), GOLD)
 
@@ -370,7 +391,7 @@ func _arrow(at: Vector2, direction: Vector2, color: Color, extent: float) -> voi
 
 func _badge(center: Vector2, face: String, color: Color) -> void:
 	var rect := Rect2(center - Vector2(50, 12), Vector2(100, 24))
-	draw_rect(rect, Color(0.055, 0.11, 0.12, 0.92))
+	Props.shaded_box(self, rect.grow_individual(0, 0, 0, 4), LACQUER, 4.0)
 	draw_string(_font, rect.position + Vector2(0, 18), face, HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, roundi(14 * _scale), color)
 
 

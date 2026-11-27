@@ -17,10 +17,16 @@ const SCENT_TONES := [Color("#8ee3c4"), Color("#ffcd83"), Color("#eab8e5")]
 const SCENTS := ["茶香", "炭香", "糖香"]
 const HEADINGS := ["北", "東北", "東", "東南", "南", "西南", "西", "西北"]
 const GUARDRAIL_LIGHT := Color("#ffd2a8")
+## Lacquered stall wood for boards; the lanes are laid in the plaza's own setts.
+const LACQUER := Color("#3a2630")
+const SETT := Color("#58525e")
 
 enum { MOVE_NORTH, MOVE_EAST, MOVE_SOUTH, MOVE_WEST, TURN_LEFT, TURN_RIGHT, FILTER, ACTION }
 
 const LABELS := ["往北 · W", "往東 · D", "往南 · S", "往西 · A", "左轉聞香器 · Q", "右轉聞香器 · E", "換濾網 · F", "採樣 · 空白"]
+const KEY_ICONS := ["up", "right", "down", "left", "turn_left", "turn_right", "funnel", "wave"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := ["ScentNorth", "ScentEast", "ScentSouth", "ScentWest", "ScentTurnLeft", "ScentTurnRight", "ScentFilter", "ScentAction"]
 const HINTS := [
 	"按住沿巷往北", "按住沿巷往東", "按住沿巷往南", "按住沿巷往西",
@@ -47,9 +53,11 @@ static func action_available(action: int, state: Dictionary) -> bool:
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	build_controls(LABELS, Color("#273b46"), Color("#535643"), FRAME, GOLD)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	if ResourceLoader.exists(ART):
 		_backdrop = load(ART) as Texture2D
 	if ResourceLoader.exists(COUNTER_ART):
@@ -224,7 +232,7 @@ func _draw() -> void:
 
 
 func _draw_backdrop() -> void:
-	draw_rect(BOARD.grow(2.0), FRAME)
+	Props.wood_panel(self, BOARD.grow(8.0), LACQUER)
 	draw_rect(BOARD, DEEP)
 	if is_instance_valid(_backdrop):
 		var source := _backdrop.get_size()
@@ -236,6 +244,7 @@ func _draw_backdrop() -> void:
 			crop.y = source.x / board_aspect
 		draw_texture_rect_region(_backdrop, BOARD, Rect2((source - crop) * Vector2(0.5, 0.23), crop))
 		draw_rect(BOARD, Color(0.04, 0.07, 0.10, 0.3))
+	Props.shaded_box(self, Rect2(44, 193, 172, 28), LACQUER, 4.0)
 	_text(Vector2(52, 211), "風箭指向下游", INK, 16, 200)
 	_arrow(Vector2(188, 205), Vector2.RIGHT, 23.0, MINT, 1.7)
 
@@ -252,8 +261,11 @@ func _screen_direction(world_position: Vector2, direction: Vector2) -> Vector2:
 func _draw_lanes() -> void:
 	# Keep the painted paving visible through the playable field. The closed
 	# branch keeps its striped barrier and a distinct tint at any text scale.
-	_stroke_lanes(Vector2.ZERO, 4.5, Color(0.08, 0.14, 0.17, 0.34), Color(0.14, 0.08, 0.11, 0.38))
-	_stroke_lanes(Vector2.ZERO, 1.8, Color(0.36, 0.64, 0.62, 0.23), Color(0.50, 0.29, 0.33, 0.26))
+	# Lanes are laid as a raised walk of setts with a dark kerb, so they sit in
+	# the street; a closed branch is the same stone in shadow.
+	var setts := Props.material_tile("cobble", SETT)
+	_pave_lanes(setts, 6.0, Color(0.1, 0.07, 0.1), Color(0.16, 0.06, 0.08), null)
+	_pave_lanes(setts, 0.0, Color(0.82, 0.8, 0.86), Color(0.56, 0.4, 0.44), setts)
 	for link in _screen_links:
 		var at: Vector2 = link.at
 		var direction: Vector2 = link.direction
@@ -266,9 +278,26 @@ func _draw_lanes() -> void:
 			_draw_patterns(at - downwind * 23.0, sampled_mask, 0.72, 0.78)
 
 
-func _stroke_lanes(offset: Vector2, extra_width: float, walk: Color, closed: Color) -> void:
+func _pave_lanes(setts: Texture2D, extra_width: float, walk: Color, closed: Color, fill: Texture2D) -> void:
 	for link in _screen_links:
-		draw_line(link.a + offset, link.b + offset, walk if link.open else closed, link.width + extra_width, true)
+		var a: Vector2 = link.a
+		var b: Vector2 = link.b
+		var half := (float(link.width) + extra_width) * 0.5
+		var side := (b - a).normalized().orthogonal() * half
+		var tone := walk if link.open else closed
+		# Each lane is a band with rounded ends, so crossings join cleanly.
+		for shape in [PackedVector2Array([a + side, b + side, b - side, a - side]), _disc(a, half), _disc(b, half)]:
+			if fill == null:
+				draw_colored_polygon(shape, tone)
+			else:
+				Props.fill_polygon(self, shape, setts, tone)
+
+
+static func _disc(at: Vector2, radius: float) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for step in 10:
+		points.append(at + Vector2.from_angle(TAU * step / 10.0) * radius)
+	return points
 
 
 func _draw_barrier(at: Vector2, direction: Vector2, side: Vector2) -> void:
@@ -319,9 +348,7 @@ func _draw_stall(stall: Dictionary, player: Vector2) -> void:
 	var tone := MINT if found else Color("#dcad7d")
 	var is_cooking: bool = stall.get("cooking", false)
 	var canopy := at + Vector2(0, -22)
-	draw_set_transform(at + Vector2(0, 1.5), 0.0, Vector2(1.0, 0.38))
-	draw_circle(Vector2.ZERO, 22.0, Color(0.035, 0.055, 0.082, 0.77), true, -1.0, true)
-	draw_set_transform(Vector2.ZERO)
+	Props.oval_shadow(self, at + Vector2(4, 2), Vector2(26, 9), 0.6, Color("#120a12"))
 	if _counter != null:
 		var size := _counter.get_size().normalized() * 60.0
 		draw_texture_rect(_counter, Rect2(at - Vector2(size.x * 0.5, size.y), size), false)
@@ -367,8 +394,8 @@ func _draw_player(position: Vector2) -> void:
 		draw_colored_polygon(fan, Color(MINT, 0.14))
 		fan.append(sampler_origin)
 		draw_polyline(fan, Color(MINT, 0.42), 1.4, true)
+	Props.oval_shadow(self, at + Vector2(3, 2), Vector2(14, 6), 0.6, Color("#120a12"))
 	draw_set_transform(at + Vector2(0, 2), 0.0, Vector2(1.0, 0.46))
-	draw_circle(Vector2.ZERO, 13.5, Color(0.035, 0.06, 0.077, 0.9), true, -1.0, true)
 	if _state.get("action_ready", false):
 		draw_circle(Vector2.ZERO, 15.0, GOLD, false, 2.2, true)
 	draw_set_transform(Vector2.ZERO)
@@ -378,9 +405,11 @@ func _draw_player(position: Vector2) -> void:
 	var step := _screen_direction(position, facing) * pace * 4.0
 	draw_line(at + Vector2(-4, -7), at + Vector2(-5 + turn, 0) + step, DEEP, 4.0, true)
 	draw_line(at + Vector2(4, -7), at + Vector2(5 + turn, 0) - step, DEEP, 4.0, true)
-	draw_colored_polygon(PackedVector2Array([
-		at + Vector2(-5, -17), at + Vector2(5, -17), at + Vector2(9, -3), at + Vector2(-9, -3),
-	]), Color("#c47655"))
+	var coat := PackedVector2Array([at + Vector2(-5, -17), at + Vector2(5, -17), at + Vector2(9, -3), at + Vector2(-9, -3)])
+	draw_colored_polygon(coat, Color("#c47655"))
+	draw_colored_polygon(PackedVector2Array([at + Vector2(1, -17), at + Vector2(5, -17), at + Vector2(9, -3), at + Vector2(3, -3)]), Props.deepen(Color("#c47655"), 0.25))
+	coat.append(coat[0])
+	draw_polyline(coat, Props.deepen(Color("#c47655")), 1.5, true)
 	draw_line(at + Vector2(-5, -10), at + Vector2(6, -8), GOLD, 2.0, true)
 	draw_circle(at + Vector2(turn, -21), 5.8, Color("#f8cb9c"), true, -1.0, true)
 	draw_arc(at + Vector2(turn, -21), 6.0, PI, TAU, 10, Color("#344a52"), 3.0, true)
@@ -396,9 +425,7 @@ func _draw_player(position: Vector2) -> void:
 
 
 func _draw_readout(cue: Dictionary) -> void:
-	draw_rect(READOUT.grow(2.0), FRAME)
-	draw_rect(READOUT, DEEP)
-	draw_rect(Rect2(900, 187, 345, 4), GOLD)
+	Props.lacquer_board(self, READOUT, LACQUER)
 	var heading: int = posmod(int(_state.get("sampler_turn", 0)), HEADINGS.size())
 	var filter: int = _state.get("filter", -1)
 	var found: int = _state.get("found", 0)
@@ -410,36 +437,42 @@ func _draw_readout(cue: Dictionary) -> void:
 	for scent in SCENTS.size():
 		var row := Vector2(919, 276 + float(scent) * 35.0)
 		_draw_reading(row, scent, _meter_steps(strengths[scent]), sampled, found_mask)
-	draw_line(Vector2(919, 386), Vector2(1227, 386), FRAME, 1.2, true)
+	Props.wood_panel(self, Rect2(916, 384, 313, 4), Props.deepen(LACQUER, 0.2))
 	var prompt := "靠近有風的巷道"
-	var detail := "風箭指向氣味飄散的方向"
 	var accent := MUTED
 	if _state.get("success", false):
 		prompt = "找到三個香源"
-		detail = "已標記共用上游" if _state.get("mix_proven", false) else "採樣結果已記錄"
 		accent = MINT
 	elif _state.get("ended", false):
 		prompt = "時間到"
-		detail = "已核對 %d／3 攤" % found
 	elif _state.get("action_ready", false):
 		prompt = "%s · 空白" % _action_name()
-		detail = "沿風箭反方向找香源"
 		accent = GOLD
 	elif Vector2(cue.get("wind", Vector2.ZERO)).length_squared() > 0.0:
 		prompt = "轉向有訊號的位置"
-		detail = "快到攤前時核對氣味"
-	if _state.get("helper_visible", false):
-		detail = "虛線圈標出微弱氣味"
-	elif _state.get("helper_ready", false):
-		detail = "R／Y 查看微弱氣味"
-	elif int(_state.get("mixed_mask", 0)) != 0 and not _state.get("mix_proven", false):
-		detail = "去兩種氣味共用的上游"
 	_text(Vector2(919, 423), prompt, accent, 19, 309.0)
-	_text(Vector2(919, 451), detail, MUTED, 17, 309.0)
+	_text(Vector2(919, 451), _detail(), MUTED, 17, 309.0)
 	if _state.get("mix_proven", false):
 		_text(Vector2(919, 489), "共用上游已標記", MINT, 17, 309.0)
 	elif int(_state.get("mixed_mask", 0)) != 0:
 		_text(Vector2(919, 489), "分辨出兩種混合氣味", GOLD, 17, 309.0)
+
+
+## The readout's second line; it changes with the search.
+func _detail() -> String:
+	if _state.get("helper_visible", false):
+		return "虛線圈標出微弱氣味"
+	if _state.get("helper_ready", false):
+		return "R／Y 查看微弱氣味"
+	if int(_state.get("mixed_mask", 0)) != 0 and not _state.get("mix_proven", false):
+		return "去兩種氣味共用的上游"
+	if _state.get("success", false):
+		return "已標記共用上游" if _state.get("mix_proven", false) else "採樣結果已記錄"
+	if _state.get("ended", false):
+		return "已核對 %d／3 攤" % int(_state.get("found", 0))
+	if _state.get("action_ready", false):
+		return "沿風箭反方向找香源"
+	return "風箭指向氣味飄散的方向"
 
 
 func _draw_reading(row: Vector2, scent: int, steps: int, sampled: int, found_mask: int) -> void:
@@ -449,7 +482,8 @@ func _draw_reading(row: Vector2, scent: int, steps: int, sampled: int, found_mas
 	_text(row + Vector2(34, 6), SCENTS[scent], INK, 18, 83.0)
 	for segment in 3:
 		var box := Rect2(row + Vector2(110 + segment * 24, -4), Vector2(18, 8))
-		draw_rect(box, tone if segment < steps else Color("#324754"))
+		draw_rect(box.grow(1.0), Props.deepen(LACQUER, 0.4))
+		draw_rect(box, tone if segment < steps else Color("#2a1c22"))
 		if segment < steps:
 			draw_line(box.position + Vector2(3, 2), box.position + Vector2(13, 2), Color(INK, 0.66), 1.0, true)
 	if found_mask & bit != 0:

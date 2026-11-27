@@ -13,7 +13,6 @@ const GOLD := Color("#ffcf85")
 const INK := Color("#fff0da")
 const PALE := Color("#c4c7c5")
 const DEEP := Color("#211e2c")
-const PANEL := Color("#292739")
 const FRAME := Color("#857068")
 const UMBER := Color("#5f3e3c")
 const RIB_LIGHT := Color("#d7a477")
@@ -22,11 +21,18 @@ const CORAL := Color("#ffad9b")
 const NIGHT_TINTS := {
 	"dawn": Color("#e5c7b7"), "noon": Color("#e6e0d4"), "dusk": Color("#ddc3cd"), "night": Color("#d1c5da"),
 }
+## Lacquered shop wood for the boards, oiled paper for the canopy, a red hem.
+const LACQUER := Color("#3f2726")
+const OILED_PAPER := Color("#e9c48e")
+const HEM := Color("#a8442f")
 const PETAL_TONES := [Color("#ffd695"), Color("#ffbc85"), Color("#fdddad"), Color("#f7b991")]
 
 enum { LEFT, RIGHT, BRAKE, DETENT }
 
 const LABELS := ["逆時針 · A", "順時針 · D", "按住煞車 · 空白", "逐格模式 · F"]
+const KEY_ICONS := ["turn_left", "turn_right", "stop", "swap"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := ["UmbrellaLeft", "UmbrellaRight", "UmbrellaBrake", "UmbrellaDetent"]
 const HINTS := [
 	"按住逆時針轉傘", "按住順時針轉傘", "留白拍要先轉傘，再按住煞停", "輔助可切換每次轉一格",
@@ -53,9 +59,11 @@ static func action_available(action: int, state: Dictionary) -> bool:
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	build_controls(LABELS, Color("#343544"), Color("#644d40"), FRAME, GOLD)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	if ResourceLoader.exists(ART):
 		_backdrop = load(ART) as Texture2D
 	for index in Model.PETAL_COUNT:
@@ -65,6 +73,8 @@ func _ready() -> void:
 
 
 func _get_tooltip(point: Vector2) -> String:
+	if READOUT.has_point(point) and not _state.is_empty():
+		return _status() + "\n實線是掃燈、虛線是預告；外圈雙短線是煞停位置。"
 	var slot := hit_slot(point)
 	if slot == DETENT and not _state.get("assisted", false):
 		return "開啟本回合輔助後可用逐格"
@@ -152,7 +162,7 @@ func _guide() -> String:
 
 
 func _draw_workbench() -> void:
-	draw_rect(BOARD.grow(2.0), FRAME)
+	Props.wood_panel(self, BOARD.grow(8.0), LACQUER)
 	draw_rect(BOARD, DEEP)
 	if _backdrop != null:
 		var original := _backdrop.get_size()
@@ -163,7 +173,7 @@ func _draw_workbench() -> void:
 			crop.x = original.y * BOARD.size.aspect()
 		draw_texture_rect_region(_backdrop, BOARD, Rect2((original - crop) * Vector2(0.5, 0.37), crop), NIGHT_TINTS[_phase])
 	draw_rect(BOARD, Color(0.10, 0.08, 0.14, 0.25))
-	draw_line(BOARD.position + Vector2(11, 6), Vector2(BOARD.end.x - 11, BOARD.position.y + 6), Color(GOLD, 0.44), 1.0, true)
+	Props.vignette(self, BOARD, 0.6, Color("#140c14"))
 
 
 func _draw_timing_arc() -> void:
@@ -208,29 +218,35 @@ func _draw_umbrella() -> void:
 	draw_set_transform(Vector2.ZERO)
 	var ribs: PackedFloat32Array = _state.rib_offsets
 	var angle: float = _state.angle
+	var fibre := Props.material_tile("paper", OILED_PAPER)
 	for index in ribs.size():
 		var start := angle + ribs[index]
 		var finish := start + TAU / float(ribs.size())
 		var paper := PackedVector2Array([HUB + Vector2(0, -7)])
 		var seam := PackedVector2Array()
+		var hem := PackedVector2Array()
 		for step in 9:
 			var portion := float(step) / 8.0
-			var at := _rim(lerpf(start, finish, portion), RADIUS - 3.2 * sin(portion * PI))
+			var sag := 3.2 * sin(portion * PI)
+			var at := _rim(lerpf(start, finish, portion), RADIUS - sag)
 			paper.append(at)
 			seam.append(at)
-		var warmth := 0.5 + 0.5 * cos((start + finish) * 0.5 + 2.2)
-		var parchment := Color("#b48269").lerp(Color("#e6be88"), warmth)
-		draw_colored_polygon(paper, Color(parchment, 0.91))
-		draw_polyline(seam, Color("#5d3e3c"), 5.0, true)
-		draw_polyline(seam, Color("#d8a67d"), 1.6, true)
-		for band in [0.41, 0.65, 0.86]:
-			_arc(RADIUS * float(band), start + 0.032, finish - 0.032, Color(INK, 0.16), 1.0, 8)
+			hem.append(_rim(lerpf(start, finish, portion), RADIUS - 9.0 - sag))
+		# Gores facing the top-left lamp are lit; the far ones sink into shade.
+		var facing := 0.5 + 0.5 * cos((start + finish) * 0.5 + 2.2)
+		var shade := Color(1, 1, 1).lerp(Color("#8a5a55"), 0.85 * (1.0 - facing))
+		Props.fill_polygon(self, paper, fibre, shade)
+		draw_polyline(hem, HEM * shade, 10.0, true)
+		draw_polyline(hem, Color(Props.lighten(HEM, 0.3) * shade, 0.8), 1.6, true)
+		_arc(RADIUS * 0.41, start + 0.03, finish - 0.03, Color(HEM * shade, 0.55), 3.0, 8)
+		_arc(RADIUS * 0.66, start + 0.05, finish - 0.05, Color(Props.deepen(OILED_PAPER, 0.3), 0.22), 1.0, 8)
+		draw_polyline(seam, Props.deepen(HEM, 0.5), 3.0, true)
 	for index in ribs.size():
 		var azimuth := angle + ribs[index]
 		var tip := _rim(azimuth)
-		draw_line(HUB + Vector2(0, -7), tip, UMBER, 3.8, true)
-		draw_line(HUB + Vector2(0, -7), tip - Vector2(1, 1), RIB_LIGHT, 1.2, true)
-		draw_circle(tip, 3.0, UMBER, true, -1.0, true)
+		draw_line(HUB + Vector2(0, -7), tip, Props.deepen(UMBER, 0.3), 4.4, true)
+		draw_line(HUB + Vector2(0, -7), tip - Vector2(1, 1), RIB_LIGHT, 1.4, true)
+		Props.token(self, tip, 4.0, Color("#b88a52"))
 		if not _state.ended and _state.kind == Model.BLANK and index == _state.target:
 			_draw_rib_mark(azimuth)
 	_draw_optic_petals()
@@ -240,10 +256,9 @@ func _draw_umbrella() -> void:
 	draw_colored_polygon(PackedVector2Array([needle + direction * 5.0, needle - direction * 10.0 + side, needle - direction * 10.0 - side]), DEEP)
 	draw_colored_polygon(PackedVector2Array([needle + direction * 2.0, needle - direction * 7.0 + side * 0.72, needle - direction * 7.0 - side * 0.72]), GOLD)
 	var spool := HUB + Vector2(0, -7)
-	draw_circle(spool + Vector2(1, 3), 14.2, UMBER, true, -1.0, true)
-	draw_circle(spool, 13.0, Color("#9c6b4c"), true, -1.0, true)
-	draw_arc(spool, 10.2, 0.0, TAU, 20, GOLD, 1.4, true)
-	draw_circle(spool, 4.0, INK, true, -1.0, true)
+	draw_circle(spool + Vector2(2, 4), 15.0, Color(Props.deepen(UMBER, 0.4), 0.7), true, -1.0, true)
+	Props.token(self, spool, 14.0, Color("#a4703f"))
+	Props.token(self, spool, 6.0, Color("#d8b46a"))
 
 
 func _draw_rib_mark(azimuth: float) -> void:
@@ -265,9 +280,11 @@ func _draw_optic_petals() -> void:
 			rim_segments.append(_rim(lerpf(mid - half, mid + half, float(step) / 8.0), RADIUS * 0.80))
 		for step in range(8, -1, -1):
 			rim_segments.append(_rim(lerpf(mid - half, mid + half, float(step) / 8.0), RADIUS * 0.66))
-		draw_colored_polygon(rim_segments, Color("#f9dfa0a9") if chosen else Color("#86594e73"))
+		# Cut windows: the dark shop shows through, the chosen one glows.
+		draw_colored_polygon(rim_segments, Color("#ffd88cd0") if chosen else Color("#2a1a22c8"))
 		rim_segments.append(rim_segments[0])
-		draw_polyline(rim_segments, INK if chosen else Color("#dab492"), 2.0 if chosen else 1.2, true)
+		draw_polyline(rim_segments, Props.deepen(HEM, 0.4), 3.4, true)
+		draw_polyline(rim_segments, INK if chosen else Color("#e6b98a"), 1.6 if chosen else 1.0, true)
 		var at := _rim(mid, RADIUS * 0.88)
 		_text(at + Vector2(-5, 4.5), str(index + 1), DEEP, 12, 22.0)
 
@@ -301,13 +318,12 @@ func _draw_lantern() -> void:
 
 
 func _draw_projection() -> void:
-	var contact := Rect2(SCREEN.position + Vector2(14, 15), SCREEN.size)
-	draw_rect(contact, Color(0.073, 0.057, 0.089, 0.75))
-	draw_rect(SCREEN.grow(7.0), UMBER)
-	draw_rect(SCREEN.grow(5.0), FRAME, false, 2.0)
-	draw_rect(SCREEN, Color("#342b39"))
-	draw_rect(SCREEN.grow(-8.0), Color("#473649"), false, 1.0)
-	draw_line(SCREEN.position + Vector2(0, 223), Vector2(SCREEN.end.x, SCREEN.position.y + 223), FRAME, 1.0, true)
+	Props.block_shadow(self, SCREEN.grow(8.0), Vector2(12, 14), 0.5)
+	Props.wood_panel(self, SCREEN.grow(8.0), LACQUER)
+	Props.surface(self, SCREEN, "photo", Color("#3e3040"))
+	for x in [SCREEN.position.x + SCREEN.size.x / 3.0, SCREEN.position.x + SCREEN.size.x * 2.0 / 3.0]:
+		draw_line(Vector2(x, SCREEN.position.y), Vector2(x, SCREEN.position.y + 222), Color(Props.deepen(LACQUER, 0.2), 0.45), 2.0)
+	Props.wood_panel(self, Rect2(SCREEN.position.x, SCREEN.position.y + 222, SCREEN.size.x, 4), LACQUER)
 	_text(Vector2(570, 252), "投影", INK, 18, 106.0)
 	var lit_mask: int = _state.petal_mask
 	for index in _flower_leaves.size():
@@ -332,9 +348,7 @@ func _draw_projection() -> void:
 
 
 func _draw_readout() -> void:
-	draw_rect(READOUT.grow(2.0), FRAME)
-	draw_rect(READOUT, DEEP)
-	draw_rect(Rect2(READOUT.position, Vector2(READOUT.size.x, 4.0)), GOLD)
+	Props.lacquer_board(self, READOUT, LACQUER)
 	var blank: bool = _state.kind == Model.BLANK
 	var tone := MINT if blank else GOLD
 	if blank:
@@ -351,24 +365,25 @@ func _draw_readout() -> void:
 	_bar(Rect2(920, 320, 305, 7), _state.target_overlap, tone)
 	_text(Vector2(920, 359), "留白時間" if blank else "受光時間", INK, 17, 310.0)
 	_bar(Rect2(920, 370, 305, 7), _dose_ratio(), tone)
-	draw_line(Vector2(920, 399), Vector2(1225, 399), FRAME, 1.1, true)
-	var status := "實線是掃燈，虛線是預告"
-	if blank:
-		if _state.brake_armed and not _state.brake_slowed:
-			status = "煞車已接合，等傘停穩"
-		elif _state.brake_ready:
-			status = "外圈雙短線預告煞停位置"
-		else:
-			status = "煞住傘骨才會累計留白"
-	elif _state.center_proven:
-		status = "四瓣與雙段留白已成花芯"
-	_text(Vector2(920, 430), status, PALE, 17, 309.0)
 	var next: Dictionary = _state.next
 	if not next.is_empty() and not _state.ended:
 		var following := "留白" if next.kind == Model.BLANK else "花瓣 %d" % (int(next.target) + 1)
 		_text(Vector2(920, 480), "下拍 · " + following, MINT if next.kind == Model.BLANK else GOLD, 18, 309.0)
 	elif _state.center_proven:
 		_text(Vector2(920, 480), "花芯完成", MINT, 18, 309.0)
+
+
+## The fine print for the readout's hover hint.
+func _status() -> String:
+	if _state.kind == Model.BLANK:
+		if _state.brake_armed and not _state.brake_slowed:
+			return "煞車已接合，等傘停穩"
+		if _state.brake_ready:
+			return "外圈雙短線預告煞停位置"
+		return "煞住傘骨才會累計留白"
+	if _state.center_proven:
+		return "四瓣與雙段留白已成花芯"
+	return "跟著燈掃的方向轉傘"
 
 
 func _draw_sequence() -> void:
@@ -381,8 +396,9 @@ func _draw_sequence() -> void:
 		var active: bool = not _state.ended and index == _state.phase_index
 		var tone := MINT if blank else GOLD
 		var card := Rect2(35 + float(index) * 203.0, 626, 195, 57)
-		draw_rect(card, PANEL if active else DEEP)
-		draw_rect(card, tone if active else FRAME, false, 2.0 if active else 1.0)
+		Props.shaded_box(self, card, Props.lighten(LACQUER, 0.12) if active else Props.deepen(LACQUER, 0.15), 6.0)
+		if active:
+			draw_rect(Rect2(card.position + Vector2(4, card.size.y - 10), Vector2(card.size.x - 8, 2)), tone)
 		var midpoint := card.position + Vector2(24, 29)
 		if blank:
 			_dark_mark(midpoint, 8.5, tone, state == 1)
@@ -426,10 +442,16 @@ func _leaf(at: Vector2, ray: Vector2, length_px: float, breadth: float) -> Packe
 	return outline
 
 
+## A recessed slot in the board, filled like a glass tube.
 func _bar(rect: Rect2, amount: float, tone: Color) -> void:
-	draw_rect(rect, Color("#524052"))
+	var slot := rect.grow_individual(0, 1, 0, 1)
+	draw_rect(slot.grow(2.0), Props.deepen(LACQUER, 0.4))
+	draw_rect(slot, Color("#1d1218"))
+	draw_rect(Rect2(slot.position.x, slot.end.y, slot.size.x, 2), Props.lighten(LACQUER, 0.25))
 	if amount > 0.0:
-		draw_rect(Rect2(rect.position, Vector2(rect.size.x * clampf(amount, 0.0, 1.0), rect.size.y)), tone)
+		var fill := Rect2(slot.position, Vector2(slot.size.x * clampf(amount, 0.0, 1.0), slot.size.y))
+		draw_rect(fill, tone)
+		draw_rect(Rect2(fill.position, Vector2(fill.size.x, 2)), Props.lighten(tone, 0.4))
 
 
 func _dose_ratio() -> float:

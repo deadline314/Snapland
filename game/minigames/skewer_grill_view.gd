@@ -14,12 +14,17 @@ const EDGE := Color("#785b4b")
 const MINT := Color("#a7dcc3")
 const GOLD := Color("#ffd087")
 const RED := Color("#ffb19e")
+## Lacquered counter wood for the boards and plates.
+const LACQUER := Color("#3f2726")
 const CUE_LABELS := {"raw": "生", "warming": "暖", "ready": "熟", "danger": "焦前", "charred": "焦"}
 const CUE_COLORS := {"raw": Color("#e9b4ad"), "warming": GOLD, "ready": MINT, "danger": RED, "charred": Color("#ab9a9d")}
 const ZONE_LABELS := {Model.BENCH: "備料", Model.NEAR: "近炭", Model.FAR: "餘溫", Model.SERVED: "上桌"}
 enum { PREVIOUS, NEXT, NEAR, FAR, TURN, SERVE, COAL, HELPER }
 
 const LABELS := ["上一串 · A", "下一串 · D", "移近炭 · W", "移餘溫 · S", "轉 ¼ 圈 · 空白", "上桌 · E", "添炭 · Q", "指定翻面幫手 · R"]
+const KEY_ICONS := ["left", "right", "up", "down", "turn_right", "confirm", "flame", "grab"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := ["SkewerPrevious", "SkewerNext", "SkewerNear", "SkewerFar", "SkewerTurn", "SkewerServe", "SkewerCoal", "SkewerHelper"]
 const HINTS := [
 	"切換到上一串", "切換到下一串",
@@ -60,6 +65,7 @@ func _ready() -> void:
 	build_controls(LABELS, Color("#3a3432"), Color("#65513e"), EDGE, GOLD)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	if ResourceLoader.exists(ART):
 		_texture = load(ART) as Texture2D
 	_stage = Stage.new()
@@ -68,6 +74,8 @@ func _ready() -> void:
 
 
 func _get_tooltip(point: Vector2) -> String:
+	if READOUT.has_point(point) and not _state.is_empty():
+		return "金框標示朝炭面"
 	var slot := hit_slot(point)
 	if slot == SERVE and not _state.is_empty() and _state.skewers[_state.selected].ruined:
 		return "換一串重烤，其他串保留"
@@ -117,7 +125,7 @@ func _draw() -> void:
 		return
 	var plan := "近炭旺 · 先熟再移遠" if int(_state.layout) == 0 else "餘溫厚 · 留一面慢收火"
 	_text(Vector2(35, 172), plan, GOLD, 22, BOARD.size.x)
-	draw_rect(BOARD.grow(2), EDGE)
+	Props.wood_panel(self, BOARD.grow(8), LACQUER)
 	draw_rect(BOARD, DEEP)
 	if _texture != null:
 		var art_size := _texture.get_size()
@@ -133,31 +141,32 @@ func _draw() -> void:
 
 func _draw_fire_meter(at: Vector2, title: String, value: float, tone: Color) -> void:
 	var plate := Rect2(at, Vector2(170, 44))
-	draw_rect(plate, Color(0.09, 0.10, 0.12, 0.92))
+	Props.block_shadow(self, plate, Vector2(4, 5), 0.45)
+	Props.lacquer_board(self, plate, LACQUER)
 	_text(at + Vector2(12, 30), title, tone, 17, 63)
-	var bar := Rect2(at + Vector2(69, 20), Vector2(87, 5))
-	draw_rect(bar, Color("#514846"))
+	var bar := Rect2(at + Vector2(69, 19), Vector2(87, 7))
+	draw_rect(bar.grow(2.0), Props.deepen(LACQUER, 0.4))
+	draw_rect(bar, Color("#1d1218"))
 	draw_rect(Rect2(bar.position, Vector2(bar.size.x * clampf(value, 0, 1), bar.size.y)), tone)
+	draw_rect(Rect2(bar.position, Vector2(bar.size.x * clampf(value, 0, 1), 2)), Props.lighten(tone, 0.4))
 
 
 func _draw_readout() -> void:
-	draw_rect(READOUT.grow(2), EDGE)
-	draw_rect(READOUT, DEEP)
+	Props.lacquer_board(self, READOUT, LACQUER)
 	_text(READOUT.position + Vector2(16, 30), "四面熟度", INK, 22, 168)
 	var fire := "未添炭" if int(_state.refuels) == 0 else "添炭 %d 次" % _state.refuels
 	_text(READOUT.position + Vector2(218, 30), fire, GOLD if int(_state.refuels) == 0 else PALE, 17, 150)
 	for index in Model.SKEWER_COUNT:
 		_draw_skewer_status(index, READOUT.position + Vector2(12, 50 + index * 79))
-	_text(READOUT.position + Vector2(16, 312), "金框標示朝炭面", PALE, 17, 345)
 
 
 func _draw_skewer_status(index: int, at: Vector2) -> void:
 	var entry: Dictionary = _state.skewers[index]
 	var selected := index == int(_state.selected)
 	var row := Rect2(at, Vector2(365, 73))
-	draw_rect(row, PANEL if selected else Color("#20252a"))
+	Props.shaded_box(self, row, Props.lighten(LACQUER, 0.12) if selected else Props.deepen(LACQUER, 0.12), 4.0)
 	if selected:
-		draw_rect(Rect2(at, Vector2(4, row.size.y)), GOLD)
+		draw_rect(Rect2(at + Vector2(2, 4), Vector2(4, row.size.y - 10)), GOLD)
 	var ingredient: String = entry.ingredient
 	var tag: String = ZONE_LABELS.get(entry.zone, "")
 	if index == _state.helper:
@@ -171,7 +180,9 @@ func _draw_skewer_status(index: int, at: Vector2) -> void:
 	for face in Model.FACE_COUNT:
 		var cue: String = entry.face_states[face]
 		var chip := Rect2(at + Vector2(14 + face * 85, 36), Vector2(79, 29))
-		draw_rect(chip, DEEP)
+		draw_rect(chip.grow(1.0), Props.deepen(LACQUER, 0.45))
+		draw_rect(chip, Color("#1d1218"))
+		draw_rect(Rect2(chip.position.x, chip.end.y - 2, chip.size.x, 2), Props.lighten(LACQUER, 0.2))
 		if face == int(entry.down_face) and entry.zone in [Model.NEAR, Model.FAR]:
 			draw_rect(chip, GOLD, false, 2.0)
 		var color: Color = CUE_COLORS.get(cue, PALE)

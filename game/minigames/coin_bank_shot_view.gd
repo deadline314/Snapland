@@ -12,12 +12,17 @@ const EDGE := Color("#796458")
 const GOLD := Color("#ffd98d")
 const MINT := Color("#a3e3c2")
 const CORAL := Color("#f9a392")
+## Lacquered counter wood for the boards.
+const LACQUER := Color("#3f2726")
 const BOARD_TONES := [Color("#a1e6dd"), Color("#f3a690")]
 const SELECTIONS := ["瞄投處", "斜板 A", "斜板 B"]
 
 enum { TURN_LEFT, TURN_RIGHT, POWER_DOWN, POWER_UP, SELECT, BOARD_TOGGLE, SHOOT, HELPER }
 
 const LABELS := ["向左調角 · A", "向右調角 · D", "降力道 · S", "升力道 · W", "切換調整 · F", "收放斜板 · E", "投幣 · 空白", "幫手調板 · R"]
+const KEY_ICONS := ["turn_left", "turn_right", "less", "more", "swap", "gate", "coin", "grab"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := ["CoinLeft", "CoinRight", "CoinLessPower", "CoinMorePower", "CoinSelect", "CoinBoard", "CoinShoot", "CoinHelper"]
 const HINTS := [
 	"向左轉所選的方向或斜板", "向右轉所選的方向或斜板",
@@ -56,6 +61,7 @@ func _ready() -> void:
 	build_controls(LABELS, Color("#383b40"), Color("#65523c"), EDGE, GOLD)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	if ResourceLoader.exists(ART):
 		_art = load(ART) as Texture2D
 	_stage = Stage.new()
@@ -67,6 +73,8 @@ func _get_tooltip(point: Vector2) -> String:
 	var slot := hit_slot(point)
 	if slot == BOARD_TOGGLE and not _state.is_empty() and int(_state.selected) == Model.AIM:
 		return "先切換到斜板，再收放"
+	if slot < 0 and READOUT.has_point(point) and not _state.is_empty():
+		return "深藍布面會減速；同一枚撞兩板再落孔算小惡魔。"
 	return HINTS[slot] if slot >= 0 else ""
 
 
@@ -116,7 +124,7 @@ func _draw() -> void:
 	if _state.active:
 		hint = "布面減速中" if int(_state.material) == Model.FELT else "銅板在漆面滑行"
 	_text(Vector2(35, 171), hint, GOLD, 22, BOARD.size.x)
-	draw_rect(BOARD.grow(2), EDGE)
+	Props.wood_panel(self, BOARD.grow(8), LACQUER)
 	draw_rect(BOARD, DEEP)
 	if is_instance_valid(_art):
 		var original := _art.get_size()
@@ -142,8 +150,9 @@ func _draw_routes() -> void:
 	else:
 		var launch: Vector2 = _state.launcher
 		var arrow := _world_point(launch + Vector2(_state.direction) * 0.58)
-		draw_line(_world_point(launch), arrow, GOLD, 2.2, true)
-		draw_circle(arrow, 3.4, GOLD, true, -1.0, true)
+		draw_line(_world_point(launch) + Vector2(1, 2), arrow + Vector2(1, 2), Color(Props.SHADOW, 0.6), 4.0, true)
+		draw_line(_world_point(launch), arrow, GOLD, 2.4, true)
+		Props.token(self, arrow, 4.0, GOLD)
 		var preview: PackedVector2Array = _state.preview
 		for index in range(1, preview.size(), 2):
 			draw_line(_world_point(preview[index - 1]), _world_point(preview[index]), Color("#aacce9"), 2.0, true)
@@ -174,8 +183,7 @@ func _draw_pockets_and_boards() -> void:
 
 
 func _draw_readout() -> void:
-	draw_rect(READOUT.grow(2), EDGE)
-	draw_rect(READOUT, DEEP)
+	Props.lacquer_board(self, READOUT, LACQUER)
 	var p := READOUT.position + Vector2(16, 0)
 	var target := "三孔完成" if int(_state.sunk) == Model.POCKET_COUNT else "指定孔  %d" % (int(_state.called) + 1)
 	_text(p + Vector2(0, 34), target, GOLD, 23, 199)
@@ -187,13 +195,16 @@ func _draw_readout() -> void:
 	_text(p + Vector2(0, 84), "%s  %d°" % [control, angle], INK, 20, 354)
 	_text(p + Vector2(0, 126), "投幣力道  %d" % _state.power, MUTED, 20, 195)
 	var rail := Rect2(p + Vector2(182, 112), Vector2(169, 8))
-	draw_rect(rail, Color("#41414b"))
+	draw_rect(rail.grow(2.0), Props.deepen(LACQUER, 0.4))
+	draw_rect(rail, Color("#1d1218"))
+	draw_rect(Rect2(rail.position.x, rail.end.y, rail.size.x, 2), Props.lighten(LACQUER, 0.25))
 	draw_rect(Rect2(rail.position, Vector2(rail.size.x * float(_state.power_fraction), rail.size.y)), GOLD)
+	draw_rect(Rect2(rail.position, Vector2(rail.size.x * float(_state.power_fraction), 2)), Props.lighten(GOLD, 0.4))
 	var move := "滑速  %.1f" % _state.speed if _state.active else "靠近孔時要減速"
 	_text(p + Vector2(0, 170), move, INK, 19, 346)
 	_text(p + Vector2(0, 211), "碰板 %d 次  ·  擦孔緣 %d 次" % [_state.shot_bounces, _state.rim_scrapes], MINT, 17, 352)
-	var proof := "同一枚已撞兩板 · 對準落孔" if (int(_state.contacts_mask) & 3) == 3 else "深藍布面會減速"
-	_text(p + Vector2(0, 287), proof, GOLD if (int(_state.contacts_mask) & 3) == 3 else MUTED, 17, 354)
+	if (int(_state.contacts_mask) & 3) == 3:
+		_text(p + Vector2(0, 287), "同一枚已撞兩板 · 對準落孔", GOLD, 17, 354)
 
 
 func _world_point(point: Vector2) -> Vector2:

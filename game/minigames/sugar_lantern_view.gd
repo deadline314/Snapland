@@ -14,6 +14,9 @@ const PANEL := Color("#2c2827")
 const LINE := Color("#80675a")
 const MINT := Color("#b6e5c5")
 const CORAL := Color("#ffab93")
+## Lacquered bench wood for the boards; copper pins hold the sugar.
+const LACQUER := Color("#3f2726")
+const COPPER := Color("#b8734a")
 const PHASE_TINT := {
 	"dawn": Color("#dbc0b6"), "noon": Color("#e4ddd4"),
 	"dusk": Color("#e8c9b9"), "night": Color("#d5c0c2"),
@@ -28,6 +31,9 @@ const LABELS := [
 	"往上選點 · ↑", "往右選點 · →", "往下選點 · ↓", "往左選點 · ←",
 	"接線 · E", "單線 · Q", "按住提起 · 空白", "回熱修接 · F",
 ]
+const KEY_ICONS := ["up", "right", "down", "left", "hook", "swap", "grab", "flame"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := [
 	"SugarLanternNorth", "SugarLanternEast", "SugarLanternSouth", "SugarLanternWest",
 	"SugarLanternJoin", "SugarLanternGauge", "SugarLanternLift", "SugarLanternRewarm",
@@ -80,6 +86,7 @@ func _ready() -> void:
 	build_controls(LABELS, Color("#383238"), Color("#674a42"), LINE, WARM)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	_art = load(ART) as Texture2D
 	_refresh()
 
@@ -91,7 +98,7 @@ func _get_tooltip(point: Vector2) -> String:
 	if slot >= 0 and slot < HINTS.size():
 		return HINTS[slot]
 	match hit_peg(point, _state):
-		-1: return ""
+		-1: return "十字鍵選點　A 接線　X 換粗細　右肩鍵提起　Y 回熱" if BOARD.has_point(point) else ""
 		0: return "提把。至少有一條牢靠的連線通往身體。"
 		TAIL_HINGE: return "尾巴接點。接到身體再接尾端。"
 		TAIL_END: return "尾端。提起後要能擺動。"
@@ -171,11 +178,10 @@ func _draw() -> void:
 	_draw_void()
 	_draw_work()
 	_draw_readout()
-	_text(Vector2(36, 713), "十字鍵選點　A 接線　X 換粗細　右肩鍵提起　Y 回熱", PALE, 14, 850)
 
 
 func _draw_bench() -> void:
-	draw_rect(BOARD.grow(2.0), LINE)
+	Props.wood_panel(self, BOARD.grow(8.0), LACQUER)
 	draw_rect(BOARD, INK)
 	if _art:
 		var image_size := _art.get_size()
@@ -254,15 +260,17 @@ func _draw_strand(a: Vector2, b: Vector2, strand: Dictionary) -> void:
 
 func _draw_peg(point: Vector2, index: int, focused: bool, anchored: bool) -> void:
 	var tint := MINT if index in [TAIL_HINGE, TAIL_END] else WARM
+	# Copper pins set in the bench, each with its cast shadow.
+	Props.contact_shadow(self, point + Vector2(3, 5), 18.0, 0.55)
 	if index == 0:
-		draw_rect(Rect2(point - Vector2(8, 8), Vector2(16, 16)), Color("#4d3430"))
+		Props.shaded_box(self, Rect2(point - Vector2(8, 8), Vector2(16, 18)), COPPER, 4.0)
 		draw_rect(Rect2(point - Vector2(7, 7), Vector2(14, 14)), tint, false, 2.0)
 	elif index == 10:
-		draw_circle(point, 5.0, Color("#473737"), true, -1.0, true)
+		Props.token(self, point, 5.0, COPPER.darkened(0.2))
 		draw_circle(point, 6.7, tint, false, 1.3, true)
 	else:
-		draw_circle(point, 7.0, Color("#513831"), true, -1.0, true)
-		draw_circle(point, 6.0, tint, false, 1.8, true)
+		Props.token(self, point, 7.0, COPPER)
+		draw_circle(point, 7.0, tint, false, 1.6, true)
 	if anchored:
 		draw_circle(point, 13.2, MINT, false, 2.0, true)
 	if focused:
@@ -275,10 +283,9 @@ func _draw_peg(point: Vector2, index: int, focused: bool, anchored: bool) -> voi
 
 
 func _draw_readout() -> void:
-	draw_rect(READOUT.grow(2.0), LINE)
-	draw_rect(READOUT, PANEL)
+	Props.lacquer_board(self, READOUT, LACQUER)
 	_text(Vector2(920, 223), _state.name, PALE, 25, 305)
-	draw_line(Vector2(919, 233), Vector2(1224, 233), LINE.darkened(0.2), 1.0)
+	Props.wood_panel(self, Rect2(917, 232, 309, 4), Props.deepen(LACQUER, 0.2))
 	_draw_meter(265.0, "剩糖 %d" % _state.sugar, _ratio(_state.sugar, _state.sugar_max), WARM)
 	var heat := "糖漿可牽線" if _state.heat >= Model.POUR_HEAT else "糖漿偏涼 · 先回熱"
 	if _state.rewarm_remaining > 0.0:
@@ -305,8 +312,11 @@ func _draw_readout() -> void:
 func _draw_meter(row: float, value: String, portion: float, tint: Color) -> void:
 	_text(Vector2(920, row), value, tint, 18, 306.0)
 	var channel := Rect2(920, row + 15.0, 304, 10.0)
-	draw_rect(channel, Color("#4d403d"))
+	draw_rect(channel.grow(2.0), Props.deepen(LACQUER, 0.4))
+	draw_rect(channel, Color("#1d1218"))
+	draw_rect(Rect2(channel.position.x, channel.end.y, channel.size.x, 2), Props.lighten(LACQUER, 0.25))
 	draw_rect(Rect2(channel.position, Vector2(channel.size.x * portion, channel.size.y)), tint)
+	draw_rect(Rect2(channel.position, Vector2(channel.size.x * portion, 2)), Props.lighten(tint, 0.4))
 
 
 func _guide() -> String:

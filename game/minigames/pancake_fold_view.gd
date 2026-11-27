@@ -15,6 +15,8 @@ const INK := Color("#fff0dc")
 const MUTED := Color("#bbc8c9")
 const DEEP := Color("#1d2730")
 const FRAME := Color("#72594e")
+## Lacquered counter wood for the boards.
+const LACQUER := Color("#3f2726")
 const GOLD := Color("#fbd298")
 const MINT := Color("#a8dec3")
 const CORAL := Color("#f5a991")
@@ -27,6 +29,9 @@ const REASONS := {
 
 enum { NORTH, EAST, SOUTH, WEST, POUR, TOOL, SALVAGE, FOLD }
 const LABELS := ["向北傾 · W", "向東傾 · D", "向南傾 · S", "向西傾 · A", "倒一勺 · 空白", "改用移勺 · Q", "舀鍋邊 · R", "折合 · E"]
+const KEY_ICONS := ["up", "right", "down", "left", "ladle", "swap", "grab", "confirm"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := ["PancakeNorth", "PancakeEast", "PancakeSouth", "PancakeWest", "PancakePour", "PancakeTool", "PancakeSalvage", "PancakeFold"]
 const DIRECTIONS := ["北", "東", "南", "西"]
 const DEFAULT_HINTS := [
@@ -76,6 +81,7 @@ func _ready() -> void:
 	build_controls(LABELS, Color("#3d393f"), Color("#705543"), FRAME, GOLD)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	_backdrop = load(COUNTER) as Texture2D if ResourceLoader.exists(COUNTER) else null
 	_pan = load(PAN) as Texture2D if ResourceLoader.exists(PAN) else null
 	_pixels.resize(Model.PAN_SIZE * Model.PAN_SIZE * 4)
@@ -252,7 +258,7 @@ func _set_button(index: int, value: String) -> void:
 func _draw() -> void:
 	if _state.is_empty() or _font == null:
 		return
-	draw_rect(BOARD.grow(2.0), FRAME)
+	Props.wood_panel(self, BOARD.grow(8.0), LACQUER)
 	draw_rect(BOARD, DEEP)
 	if _backdrop != null:
 		var original := _backdrop.get_size()
@@ -272,17 +278,15 @@ func _draw() -> void:
 
 
 func _draw_readout() -> void:
-	draw_rect(READOUT.grow(2.0), FRAME)
-	draw_rect(READOUT, DEEP)
-	draw_rect(Rect2(899.0, 187.0, 346.0, 4.0), GOLD)
+	Props.lacquer_board(self, READOUT, LACQUER)
 	_text(Vector2(917, 226), "熱鍋與麵糊", INK, 22, 305)
 	_text(Vector2(917, 257), "新糊 %d 勺" % floori(_state.stock / Model.POUR_MASS), MUTED, 17, 305)
 	_text(Vector2(1068, 257), "勺中餘糊" if _state.cup > 0.0 else "空勺", GOLD if _state.cup > 0.0 else MUTED, 17, 154)
-	draw_line(Vector2(917, 272), Vector2(1226, 272), FRAME, 1.0, true)
+	Props.wood_panel(self, Rect2(915, 270, 313, 4), Props.deepen(LACQUER, 0.2))
 	_meter(Vector2(917, 299), "填料覆蓋", float(_state.filled), MINT)
 	_meter(Vector2(917, 335), "折線完整", float(_state.seam), GOLD)
 	_meter(Vector2(917, 371), "餅皮凝固", float(_state.cooked), CORAL)
-	draw_line(Vector2(917, 383), Vector2(1226, 383), FRAME, 1.0, true)
+	Props.wood_panel(self, Rect2(915, 383, 313, 4), Props.deepen(LACQUER, 0.2))
 	var status := "餘糊已接成折耳" if _state.ear_proven else "可舀鍋邊餘糊" if _state.rim_available > 0.1 else "餘糊會沿傾向流往鍋邊"
 	_text(Vector2(917, 414), status, MINT if _state.ear_proven else MUTED, 17, 310)
 	for index in _feedback_lines.size():
@@ -308,8 +312,11 @@ func _fit_feedback(value: String) -> Array[String]:
 func _meter(at: Vector2, label: String, ratio: float, color: Color) -> void:
 	_text(at, label, MUTED, 17, 130.0)
 	var track := Rect2(at + Vector2(130, -12), Vector2(123, 10))
-	draw_rect(track, Color("#384b50"))
+	draw_rect(track.grow(2.0), Props.deepen(LACQUER, 0.4))
+	draw_rect(track, Color("#1d1218"))
+	draw_rect(Rect2(track.position.x, track.end.y, track.size.x, 2), Props.lighten(LACQUER, 0.25))
 	draw_rect(Rect2(track.position, Vector2(track.size.x * clampf(ratio, 0.0, 1.0), track.size.y)), color)
+	draw_rect(Rect2(track.position, Vector2(track.size.x * clampf(ratio, 0.0, 1.0), 2)), Props.lighten(color, 0.4))
 	_text(at + Vector2(261, 0), "%d%%" % roundi(100.0 * ratio), INK, 15, 56.0)
 
 

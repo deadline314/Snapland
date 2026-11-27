@@ -22,6 +22,9 @@ const PHASE_TINT := {
 	"dusk": Color("#dbbaad"), "night": Color("#bbbccc"),
 }
 const CIRCLE_SAMPLES := 48
+## Lacquered stall wood for boards; boardwalk planks and dark channel water.
+const LACQUER := Color("#3a2a26")
+const BOARDWALK := Color("#8a6a4a")
 const ROUTE_WIDTH := 0.42
 
 enum {
@@ -32,6 +35,9 @@ const LABELS := [
 	"按住走 · W", "煞停 · 空白", "近路 · D", "滑送／交碗 · E",
 	"往前傾 · ↑", "往左傾 · ←", "往後傾 · ↓", "往右傾 · →",
 ]
+const KEY_ICONS := ["walk", "stop", "swap", "confirm", "up", "left", "down", "right"]
+## Lacquered stall wood for the key caps.
+const KEY_TONE := Color("#5e3a30")
 const NAMES := [
 	"SoupWalk", "SoupBrake", "SoupRoute", "SoupAction", "SoupLeanForward",
 	"SoupLeanLeft", "SoupLeanBack", "SoupLeanRight",
@@ -81,9 +87,11 @@ static func action_available(action: int, state: Dictionary) -> bool:
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	build_controls(LABELS, Color("#303b37"), Color("#635248"), FRAME, GOLD)
 	for index in NAMES.size():
 		_buttons[index].name = NAMES[index]
+	use_key_caps(KEY_ICONS, KEY_TONE)
 	_glazes = load(GLAZES) as Texture2D
 	_alley = load(ALLEY) as Texture2D
 	_receiver = load(RECEIVER) as Texture2D
@@ -102,6 +110,8 @@ func _get_tooltip(point: Vector2) -> String:
 	var slot := hit_slot(point)
 	if slot == ROUTE and _state.get("retry_ready", false):
 		return "重試這一碗。先前交好的湯會保留。"
+	if slot < 0 and READOUT.has_point(point) and not _state.is_empty():
+		return "已保住回流交接" if _state.challenge_proven else ("已過槽，穩住這一碗" if _state.crossing_proven else "回流過槽需保有八成湯")
 	return HINTS[slot] if slot >= 0 and slot < HINTS.size() else ""
 
 
@@ -162,19 +172,18 @@ func _project(point: Vector2, height: float = 0.0) -> Vector2:
 
 func _draw_terrain() -> void:
 	var canvas := _scenery
-	canvas.draw_rect(BOARD.grow(2.0), FRAME)
+	Props.wood_panel(canvas, BOARD.grow(8.0), LACQUER)
 	canvas.draw_rect(BOARD, Color("#242c2d"))
 	if _alley != null:
 		var original := _alley.get_size()
 		var crop := Vector2(minf(original.x, original.y * BOARD.size.aspect()), minf(original.y, original.x / BOARD.size.aspect()))
 		canvas.draw_texture_rect_region(_alley, BOARD, Rect2((original - crop) * Vector2(0.5, 0.41), crop), PHASE_TINT[_phase])
 	canvas.draw_rect(BOARD, Color(0.025, 0.044, 0.047, 0.31))
-	canvas.draw_line(BOARD.position + Vector2(12, 6), Vector2(BOARD.end.x - 12, BOARD.position.y + 6), Color(GOLD, 0.45), 1.0, true)
 	var gap: Dictionary = _state.gap
 	var near: Vector2 = gap.near
 	var far: Vector2 = gap.far
 	_patch(canvas, -0.76, 0.76, near.y - 0.05, far.y + 0.05, Color("#192419"))
-	_patch(canvas, -0.68, 0.68, near.y, far.y, WATER)
+	_patch(canvas, -0.68, 0.68, near.y, far.y, WATER, Props.material_tile("metal", Color("#2c5560")))
 	for index in range(3):
 		var depth := lerpf(near.y, far.y, (index + 1.0) / 4.0)
 		canvas.draw_line(_project(Vector2(-0.54, depth)), _project(Vector2(0.53, depth)), Color("#43616b"), 1.3, true)
@@ -183,21 +192,25 @@ func _draw_terrain() -> void:
 	for route in [Model.CHANNEL if selected == Model.SAFE else Model.SAFE, selected]:
 		var channel: bool = route == Model.CHANNEL
 		_draw_route(canvas, paths[route], near.y if channel else -1.0, far.y if channel else -1.0, route == selected)
-	_patch(canvas, -gap.half_width, gap.half_width, far.y, gap.landing_end.y, Color("#611f1c").lerp(Color("#db9b63"), 0.48))
+	_patch(canvas, -gap.half_width, gap.half_width, far.y, gap.landing_end.y, Color.WHITE, Props.material_tile("wood", Color("#a3603f")))
 	_crossbar(canvas, near, ROUTE_WIDTH, Color("#f2c88a"), 3.0)
 	_crossbar(canvas, far, ROUTE_WIDTH, Color("#db995e"), 4.0)
 	_crossbar(canvas, gap.landing_end, gap.half_width, Color("#f2c88a"), 2.0)
 	var landing: Vector2 = _state.recipient
-	_patch(canvas, landing.x - 0.57, landing.x + 0.57, landing.y - 0.10, landing.y + 0.57, Color("#57443b"))
+	_patch(canvas, landing.x - 0.57, landing.x + 0.57, landing.y - 0.10, landing.y + 0.57, Color.WHITE, Props.material_tile("wood", Color("#6a5242")))
 	_crossbar(canvas, landing + Vector2(0.0, 0.53), 0.57, Color("#b98856"), 5.0)
 	_crossbar(canvas, Vector2.ZERO, 0.52, Color("#cda97c"), 4.0)
 
 
-func _patch(canvas: CanvasItem, left: float, right: float, near: float, far: float, tone: Color) -> void:
-	canvas.draw_colored_polygon(PackedVector2Array([
+func _patch(canvas: CanvasItem, left: float, right: float, near: float, far: float, tone: Color, tile: Texture2D = null) -> void:
+	var corners := PackedVector2Array([
 		_project(Vector2(left, near)), _project(Vector2(right, near)),
 		_project(Vector2(right, far)), _project(Vector2(left, far)),
-	]), tone)
+	])
+	if tile == null:
+		canvas.draw_colored_polygon(corners, tone)
+	else:
+		Props.fill_polygon(canvas, corners, tile, tone)
 
 
 func _crossbar(canvas: CanvasItem, point: Vector2, half_width: float, tone: Color, width: float) -> void:
@@ -228,8 +241,9 @@ func _draw_paving(canvas: CanvasItem, path: PackedVector2Array, chosen: bool) ->
 		var edge := across * ROUTE_WIDTH
 		left.append(_project(point + edge))
 		right.append(_project(point - edge))
-	_draw_deck(canvas, left, right, Vector2(0, 6), Color("#2e2420"))
-	_draw_deck(canvas, left, right, Vector2.ZERO, Color("#746453") if chosen else Color("#49504a"))
+	_draw_deck(canvas, left, right, Vector2(3, 7), Color(0.07, 0.05, 0.05, 0.7))
+	_draw_deck(canvas, left, right, Vector2(0, 5), Props.deepen(BOARDWALK, 0.5))
+	_draw_deck(canvas, left, right, Vector2.ZERO, Color.WHITE if chosen else Color(0.52, 0.56, 0.6), Props.material_tile("wood", BOARDWALK))
 	var rail := Color("#c0a077") if chosen else Color("#76867b")
 	canvas.draw_polyline(left, rail, 1.6, true)
 	canvas.draw_polyline(right, rail, 1.6, true)
@@ -245,7 +259,7 @@ func _draw_paving(canvas: CanvasItem, path: PackedVector2Array, chosen: bool) ->
 		advance -= segment
 
 
-func _draw_deck(canvas: CanvasItem, left: PackedVector2Array, right: PackedVector2Array, offset: Vector2, tone: Color) -> void:
+func _draw_deck(canvas: CanvasItem, left: PackedVector2Array, right: PackedVector2Array, offset: Vector2, tone: Color, tile: Texture2D = null) -> void:
 	for index in range(1, left.size()):
 		var a := left[index - 1] + offset
 		var b := right[index - 1] + offset
@@ -254,7 +268,10 @@ func _draw_deck(canvas: CanvasItem, left: PackedVector2Array, right: PackedVecto
 		for triangle in [[a, b, c], [a, c, d]]:
 			var origin: Vector2 = triangle[0]
 			if absf((Vector2(triangle[1]) - origin).cross(Vector2(triangle[2]) - origin)) > 0.01:
-				canvas.draw_colored_polygon(PackedVector2Array(triangle), tone)
+				if tile == null:
+					canvas.draw_colored_polygon(PackedVector2Array(triangle), tone)
+				else:
+					Props.fill_polygon(canvas, PackedVector2Array(triangle), tile, tone)
 
 
 func _draw() -> void:
@@ -305,7 +322,7 @@ func _draw_course() -> void:
 	draw_circle(Vector2.ZERO, 20.0, Color(0.0, 0.0, 0.0, 0.52), true, -1.0, true)
 	draw_set_transform(Vector2.ZERO)
 	if not _state.airborne:
-		draw_line(position + Vector2(-17, -4), position + Vector2(17, -4), Color("#b58b59"), 10.0, true)
+		Props.shaded_box(self, Rect2(position + Vector2(-17, -9), Vector2(34, 10)), Color("#b58b59"), 4.0)
 	var bowl := _project(_state.bowl_position, _state.bowl_height)
 	var type: int = _state.bowl.id
 	draw_line(bowl + Vector2(-11, 1), bowl + Vector2(11, 1), GLAZE_COLORS[type].darkened(0.35), 10.0, true)
@@ -327,9 +344,8 @@ func _draw_forecast() -> void:
 
 
 func _draw_readout() -> void:
-	draw_rect(READOUT.grow(2.0), FRAME)
-	draw_rect(READOUT, PANEL)
-	draw_line(Vector2(918, 232), Vector2(1228, 232), Color("#5a6054"), 1.0)
+	Props.lacquer_board(self, READOUT, LACQUER)
+	Props.wood_panel(self, Rect2(914, 232, 316, 4), Props.deepen(LACQUER, 0.2))
 	_text(Vector2(918, 222), _state.bowl.name, INK, 24, 196.0)
 	_text(Vector2(1124, 222), "第 %d 碗" % mini(Model.BOWL_COUNT, int(_state.delivered) + 1), MUTED, 17, 104.0)
 	_draw_bowl()
@@ -337,14 +353,15 @@ func _draw_readout() -> void:
 	var amount := "剩湯 %d%%" % fill
 	_text(Vector2(918, 442), amount, INK, 19, 138.0)
 	var bar := Rect2(1061, 431, 166, 10)
-	draw_rect(bar, Color("#434a43"))
+	draw_rect(bar.grow(2.0), Props.deepen(LACQUER, 0.4))
+	draw_rect(bar, Color("#1d1416"))
+	draw_rect(Rect2(bar.position.x, bar.end.y, bar.size.x, 2), Props.lighten(LACQUER, 0.25))
 	draw_rect(Rect2(bar.position, Vector2(bar.size.x * _state.fill, bar.size.y)), MINT if fill >= 80 else GOLD)
+	draw_rect(Rect2(bar.position, Vector2(bar.size.x * _state.fill, 2)), Props.lighten(MINT if fill >= 80 else GOLD, 0.4))
 	for threshold in [Model.MIN_FILL, Model.PROOF_FILL]:
 		var tick := bar.position + Vector2(bar.size.x * threshold, -4)
 		draw_line(tick, tick + Vector2(0, 18), INK, 1.0, true)
 	_text(Vector2(918, 478), _readout(), MINT if _state.return_ready or _state.handoff_ready else GOLD, 17, 311.0)
-	var proof := "已保住回流交接" if _state.challenge_proven else ("已過槽，穩住這一碗" if _state.crossing_proven else "回流過槽需保有八成湯")
-	_text(Vector2(918, 504), proof, MUTED, 16, 311.0)
 
 
 func _readout() -> String:
