@@ -40,6 +40,26 @@
     ]
   },
   {
+    "id": "game-051",
+    "mode": "scenery_drop",
+    "zone": "circus",
+    "local_index": 3,
+    "arcade": true,
+    "name": "舞台換景",
+    "goal": "旁白喊出下一場的場景，照方向把那片布景從天花板放下來；放錯會砸到演員，太慢觀眾會噓。",
+    "instructions": "↑ 月夜、← 森林、→ 城堡、↓ 海邊，或手把十字鍵：旁白喊哪一景，就按那個方向把那片布景放下來；喊兩片就兩片都放，口誤時照改口後的放。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助換景拿到金牌",
+    "ordinary": "照旁白喊的放下布景，拿到銅牌",
+    "attraction_tag": "換景小劇場",
+    "island_invitation": "旁白喊森林，就把森林放下來。放錯的布景會砸在演員頭上，他會變成紙片人走出來。",
+    "retake_props": [
+      "mascot",
+      "hat",
+      "lantern"
+    ]
+  },
+  {
     "id": "game-052",
     "mode": "plate_catch",
     "zone": "circus",

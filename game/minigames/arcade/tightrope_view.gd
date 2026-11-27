@@ -52,7 +52,7 @@ func _ready() -> void:
 		[Rect2(-2, -1, 1, 1), Color("#e07b6a")], [Rect2(1, -1, 1, 1), Color("#e07b6a")]])
 	_hat = Pixels.bake_blocks("rope-hat", Vector2i(12, 8), Vector2i(6, 8), [
 		[Rect2(-6, -2, 12, 2), Color("#3b3550")], [Rect2(-3, -8, 6, 6), Color("#3b3550")], [Rect2(-3, -4, 6, 1), Color("#c9483d")]])
-	_crowd = Pixels.bake("rope-crowd", Vector2i(320, 22), _paint_crowd)
+	_crowd = Pixels.bake("rope-crowd", Vector2i(320, 22), Pixels.crowd)
 	_weight = Pixels.bake("rope-weight", Vector2i(7, 7), func(x: int, y: int) -> Color:
 		var offset := (Vector2(x, y) + Vector2(0.5, 0.5) - Vector2(3.5, 3.5)) / 3.5
 		return Pixels.rounded(BRASS, offset) if offset.length() <= 1.0 else Pixels.CLEAR)
@@ -304,23 +304,6 @@ func _draw_level() -> void:
 	if absf(lean) > limit * 0.6:
 		var toward := "←" if lean > 0.0 else "→"
 		label(Vector2(LEVEL.end.x + 46.0, middle.y), toward, 34, ROSE, 0.9 + 0.1 * pulse(5.0))
-
-
-## The audience's heads and hats in the dark along the front of the ring.
-func _paint_crowd(x: int, y: int) -> Color:
-	var seat := x / 14
-	var middle := float(seat * 14 + 7 + int(Pixels.noise(seat, 1) * 4.0) - 2)
-	var head_y := 6.0 + Pixels.noise(seat, 2) * 4.0
-	var head := Vector2((x + 0.5 - middle) / 5.0, (y + 0.5 - head_y - 5.0) / 5.0)
-	var tones: Array[Color] = [Color("#3b3550"), Color("#5a3a4a"), Color("#3a4a5a"), Color("#4a3f30")]
-	var tone := tones[seat % tones.size()]
-	if head.length() < 1.0:
-		return Pixels.rounded(Color("#8a6a5a") if Pixels.noise(seat, 3) > 0.5 else Color("#6a5048"), head)
-	if Pixels.noise(seat, 4) > 0.55 and absf(x + 0.5 - middle) < 4.0 and y < head_y + 1.0 and y > head_y - 4.0:
-		return tone.lightened(0.1)
-	if y > head_y + 9.0 and absf(x + 0.5 - middle) < 7.0:
-		return Pixels.grainy(tone, x, y, 0.1)
-	return Pixels.CLEAR
 
 
 ## The clown in texels around his feet (x right, y up is negative), facing right.

@@ -582,6 +582,23 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			sculpt.box(top + Vector3(0.1, 1.04, 0), Vector3(0.1, 0.18, 0.08), Props.TEAL)
 			sculpt.box(top + Vector3(0.1, 1.18, 0), Vector3(0.08, 0.08, 0.08), Props.CREAM)
 			sculpt.box(top + Vector3(0.1, 1.06, 0.04), Vector3(0.7, 0.02, 0.02), Props.GOLD, Basis(Vector3.BACK, 0.12))
+		"scenery":
+			# A toy theatre: gilt posts and a valance, a painted castle cloth halfway
+			# down on its batten and the flown forest cloth above, with a pull rope.
+			for side: float in [-1.0, 1.0]:
+				sculpt.box(top + Vector3(side * 0.46, 0.4, 0), Vector3(0.08, 0.8, 0.1), Props.GOLD)
+			sculpt.box(top + Vector3(0, 0.84, 0), Vector3(1.04, 0.14, 0.12), Props.RED)
+			sculpt.box(top + Vector3(0, 0.76, 0.02), Vector3(1.0, 0.03, 0.1), Props.GOLD)
+			sculpt.box(top + Vector3(0, 0.98, -0.04), Vector3(0.84, 0.16, 0.03), Props.TEAL.darkened(0.2))
+			sculpt.box(top + Vector3(0, 0.46, -0.03), Vector3(0.84, 0.5, 0.02), Props.SKY)
+			sculpt.box(top + Vector3(0, 0.29, -0.02), Vector3(0.84, 0.16, 0.02), Color("#6fa860"))
+			sculpt.box(top + Vector3(0, 0.46, -0.01), Vector3(0.3, 0.22, 0.02), Color("#b8b4c4"))
+			for tower: float in [-0.17, 0.17]:
+				sculpt.box(top + Vector3(tower, 0.5, 0.0), Vector3(0.08, 0.3, 0.02), Color("#b8b4c4"))
+				sculpt.box(top + Vector3(tower, 0.68, 0.0), Vector3(0.1, 0.07, 0.02), Props.RED)
+			sculpt.box(top + Vector3(0, 0.2, 0.0), Vector3(0.9, 0.04, 0.05), Props.WOOD)
+			sculpt.box(top + Vector3(0.38, 0.5, 0.06), Vector3(0.02, 0.62, 0.02), Props.ROPE)
+			sculpt.box(top + Vector3(0.38, 0.18, 0.06), Vector3(0.05, 0.08, 0.05), Props.GOLD)
 
 ## Name board with its label. On the ground it stands on two legs; with `sculpt`
 ## set it rides on a cabinet and is drawn into that cabinet's mesh.

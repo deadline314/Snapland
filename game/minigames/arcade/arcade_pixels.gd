@@ -309,3 +309,21 @@ static func stage_boards(base: Color, seam: Color, x: int, y: int) -> Color:
 	elif cut == step - 1:
 		value -= 0.7
 	return lit(tone, value, x, y)
+
+
+## The audience's heads and shoulders in the dark along the front of the ring,
+## one seat every 14 texels; paint a band about 22 texels tall.
+static func crowd(x: int, y: int) -> Color:
+	var seat := x / 14
+	var middle := float(seat * 14 + 7 + int(noise(seat, 1) * 4.0) - 2)
+	var head_y := 6.0 + noise(seat, 2) * 4.0
+	var head := Vector2((x + 0.5 - middle) / 5.0, (y + 0.5 - head_y - 5.0) / 5.0)
+	var tones: Array[Color] = [Color("#3b3550"), Color("#5a3a4a"), Color("#3a4a5a"), Color("#4a3f30")]
+	var tone := tones[seat % tones.size()]
+	if head.length() < 1.0:
+		return rounded(Color("#8a6a5a") if noise(seat, 3) > 0.5 else Color("#6a5048"), head)
+	if noise(seat, 4) > 0.55 and absf(x + 0.5 - middle) < 4.0 and y < head_y + 1.0 and y > head_y - 4.0:
+		return tone.lightened(0.1)
+	if y > head_y + 9.0 and absf(x + 0.5 - middle) < 7.0:
+		return grainy(tone, x, y, 0.1)
+	return CLEAR
