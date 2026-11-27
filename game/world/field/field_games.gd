@@ -21,6 +21,7 @@ const Kit = preload("res://game/world/field/field_kit.gd")
 const Toys = preload("res://game/world/field/field_toys.gd")
 const AmbienceProfiles = preload("res://game/world/ambience_profiles.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
+const Dressing = preload("res://game/world/field/field_dressing.gd")
 
 enum Phase { IDLE, COUNTDOWN, PLAYING, RESULT }
 
@@ -30,11 +31,12 @@ const RESULT_SECONDS := 4.5
 const LEAVE_NOTE_SECONDS := 1.8
 const MEDAL_NAMES := ["再接再厲", "銅牌", "銀牌", "金牌"]
 const MEDAL_COLORS := [Color("#e8e0cc"), Color("#cf8f5a"), Color("#d5dde3"), Color("#f2c75a")]
-const PIP_OFF := Color("#56626a")
 const STAND_HEIGHT := 2.3
 ## The countdown and result float over the player's head.
 const BANNER_ABOVE := Vector3(0, 4.25, 0)
-const CAPTION_BELOW := Vector3(0, 1.15, 0)
+const CAPTION_BELOW := Vector3(0, 1.3, 0)
+## Clear space (view metres) kept between the banner and a game's own labels.
+const BANNER_MARGIN := 0.12
 
 var world: Node3D
 var region := ""
@@ -64,6 +66,9 @@ var _hop_span := 0.0
 var _hop_clock := 0.0
 var _hop_repeats := 1
 var _pennant: ArrayMesh
+## Labels the banner must not cover during the active round: the game's own
+## remarks and its sign, gathered once when the round starts.
+var _avoid: Array[Label3D] = []
 
 
 ## Adds the layer to the island world. District rows join as each district is
@@ -88,7 +93,7 @@ func configure(owner_world: Node3D, owner_region: String) -> void:
 	toys.name = "FieldToys"
 	add_child(toys)
 	toys.configure(world, self, Registry.toys(region))
-	_headline = _banner_label(84, MEDAL_COLORS[3])
+	_headline = _banner_label(72, MEDAL_COLORS[3])
 	_caption = _banner_label(40, MEDAL_COLORS[0])
 	if is_instance_valid(_progress):
 		_progress.changed.connect(_refresh_pips)
@@ -164,11 +169,16 @@ func _group_ids(group: Dictionary) -> Dictionary:
 	return ids
 
 
-## Each row's stand and game under `parent`; `owner` (the island or a
-## district) lists the interaction point and the title in its own coordinates.
+## Each row's sign and game under `parent`; `owner` (the island or a
+## district) lists the interaction point in its own coordinates. A district's
+## stations also get their themed floor and props.
 func _build_games(rows: Array, parent: Node3D, owner: Node3D) -> Array[Dictionary]:
 	var built: Array[Dictionary] = []
-	var stands: Array[Vector3] = []
+	var posts: Array[Vector3] = []
+	var bulbs: Array[Transform3D] = []
+	var owner_region := region if owner == world else String(owner.get("district"))
+	if _pennant == null:
+		_pennant = _pennant_mesh()
 	for row: Dictionary in rows:
 		var script := load(String(row.script)) as GDScript
 		if script == null or not script.can_instantiate():
@@ -177,44 +187,34 @@ func _build_games(rows: Array, parent: Node3D, owner: Node3D) -> Array[Dictionar
 		var at: Vector3 = row.at
 		var ground := Vector3(at.x, world.ground_surface_y(at), at.z)
 		var record := {"row": row, "ground": ground}
-		stands.append(ground)
-		_build_stand(record, parent)
+		posts.append_array(Dressing.build_sign(world, parent, record, owner_region, _pennant, bulbs))
 		var game: Node3D = script.new()
 		parent.add_child(game)
 		game.setup(world, self, row)
 		record["game"] = game
 		owner._point(Registry.point_id(row), String(row.prompt), owner.to_local(ground), STAND_HEIGHT + 1.0)
 		record["point"] = world.points[-1]
-		owner._local_label(String(row.title), owner.to_local(ground + Vector3(0, STAND_HEIGHT + 0.5, 0)), 32, MEDAL_COLORS[0])
 		built.append(record)
-	if not stands.is_empty():
-		Kit.posts(world, parent, stands, STAND_HEIGHT, MEDAL_COLORS[3], 0.075)
+	if not posts.is_empty():
+		Kit.posts(world, parent, posts, Dressing.POST_HEIGHT, Dressing.theme(owner_region).cap, 0.075)
+	Dressing.build_bulbs(world, parent, bulbs, owner_region)
+	if owner != world:
+		var avoid: Array[Vector3] = []
+		for point: Dictionary in world.points:
+			avoid.append(point.position)
+		for row: Dictionary in Registry.placed_toys():
+			avoid.append(row.at)
+		Dressing.build_grounds(world, parent, built, owner_region, _walkable.bind(owner), avoid)
 	return built
 
 
-## A pennant and a painted sign with three medal pips, hung on a shared post.
-func _build_stand(record: Dictionary, parent: Node3D) -> void:
-	var row: Dictionary = record.row
-	var ground: Vector3 = record.ground
-	if _pennant == null:
-		_pennant = _pennant_mesh()
-	var pennant := Kit.mesh(parent, _pennant, ground + Vector3(0, STAND_HEIGHT - 0.16, 0), world._coastal_surface(Kit.TILE_CANVAS, 0.6, row.color), false)
-	record["pennant"] = pennant
-	var board := Kit.box(parent, ground + Vector3(0, 1.2, 0.12), Vector3(0.92, 0.92, 0.07), world._coastal_surface(Kit.TILE_PLANK, 0.9, Color("#f3e3c2")))
-	board.rotation.x = -0.3
-	# Camera-facing, so the one character stays crisp on the tilted board.
-	Kit.label(board, String(row.glyph), Vector3(0, 0.12, 0.12), 46, Color("#fff6de"))
-	var pip := SphereMesh.new()
-	pip.radius = 0.075
-	pip.height = 0.15
-	pip.radial_segments = 8
-	pip.rings = 4
-	var spots: Array[Transform3D] = []
-	for index in range(Registry.MEDAL_COUNT):
-		spots.append(Transform3D(Basis.IDENTITY, Vector3(-0.27 + index * 0.27, -0.33, 0.045)))
-	var pips := Kit.batch(board, pip, spots, world._vertex_color_material("field-pips"), [PIP_OFF])
-	pips.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	record["pips"] = pips.multimesh
+## Whether a ground point (island coordinates) can be stood on, asking the
+## district being built for its own ground (the host does not list it yet).
+func _walkable(at: Vector3, owner: Node3D) -> bool:
+	var ruler := DistrictSites.ruling(Vector2(at.x, at.z))
+	if ruler == String(owner.get("district")):
+		return owner.is_walkable(owner.to_local(at))
+	return world.is_walkable(at)
 
 
 static func _pennant_mesh() -> ArrayMesh:
@@ -409,6 +409,11 @@ func _start_countdown(record: Dictionary) -> void:
 	active = record
 	var row: Dictionary = record.row
 	var game: Node3D = record.game
+	_avoid.clear()
+	for item: Node in game.find_children("*", "Label3D", true, false):
+		_avoid.append(item as Label3D)
+	for item: Label3D in record.get("sign_labels", []):
+		_avoid.append(item)
 	game.reset()
 	game.ready_up()
 	game.rng.seed = hash(String(row.id)) + _rounds
@@ -517,6 +522,51 @@ func _to_idle() -> void:
 func _place_banner(player: Vector3) -> void:
 	_headline.position = player + BANNER_ABOVE
 	_caption.position = _headline.position - CAPTION_BELOW
+	var lift := _banner_lift()
+	_headline.position.y += lift
+	_caption.position.y += lift
+
+
+## How far to raise the banner so that, as seen by the camera, it clears every
+## label of the active game (a cheer, an order bubble, the sign).
+func _banner_lift() -> float:
+	var camera: Camera3D = world.get("camera")
+	if not is_instance_valid(camera) or _avoid.is_empty():
+		return 0.0
+	var view := camera.global_basis
+	var rise := maxf(view.y.y, 0.2)
+	var head := _view_box(_headline, view)
+	var foot := _view_box(_caption, view) if _caption.visible and not _caption.text.is_empty() else head
+	var left := minf(head.x - head.z, foot.x - foot.z)
+	var right := maxf(head.x + head.z, foot.x + foot.z)
+	var bottom := foot.y - foot.w
+	var height := head.y + head.w - bottom
+	var lift := 0.0
+	# A few passes: clearing one label can push the banner into a higher one.
+	for _pass in range(3):
+		var raised := false
+		for item in _avoid:
+			if not is_instance_valid(item) or item.text.is_empty() or not item.is_visible_in_tree():
+				continue
+			var box := _view_box(item, view)
+			if box.x + box.z < left or box.x - box.z > right:
+				continue
+			var low := bottom + lift * rise
+			if box.y - box.w > low + height + BANNER_MARGIN or box.y + box.w < low - BANNER_MARGIN:
+				continue
+			lift = (box.y + box.w + BANNER_MARGIN - bottom) / rise
+			raised = true
+		if not raised:
+			break
+	return lift
+
+
+## A label's rough extent as the camera sees it: centre x, centre y, half
+## width, half height, in view metres. Wide glyphs make this a slight overestimate.
+static func _view_box(item: Label3D, view: Basis) -> Vector4:
+	var at := item.global_position
+	var em := item.font_size * item.pixel_size
+	return Vector4(view.x.dot(at), view.y.dot(at), maxi(item.text.length(), 1) * em * 0.5, em * 0.6)
 
 
 func _hide_banner() -> void:
@@ -558,7 +608,7 @@ func _refresh_pips() -> void:
 		record["medal"] = medal
 		var pips: MultiMesh = record.pips
 		for index in range(pips.instance_count):
-			pips.set_instance_color(index, MEDAL_COLORS[index + 1] if index < medal else PIP_OFF)
+			pips.set_instance_color(index, MEDAL_COLORS[index + 1] if index < medal else Dressing.PIP_OFF)
 
 
 func _notification(what: int) -> void:

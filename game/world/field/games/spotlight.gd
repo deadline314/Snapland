@@ -35,8 +35,7 @@ var _flop := false
 
 func build() -> void:
 	_middle = centre()
-	var ring := Kit.cylinder(self, _middle + Vector3(0, 0.025, 0), STAGE_RADIUS + 0.3, 0.05, Kit.sand_material(world), -1.0, 30)
-	ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# The ring carpet itself is the district's play floor (field_dressing.gd).
 	var kerb := BoxMesh.new()
 	kerb.size = Vector3(0.7, 0.22, 0.2)
 	var kerbs: Array[Transform3D] = []

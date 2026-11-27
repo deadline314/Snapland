@@ -37,9 +37,7 @@ var _show := 0.0
 
 func build() -> void:
 	var middle := centre()
-	var mat := Kit.cylinder(self, middle + Vector3(0, 0.03, 0), 2.9, 0.06, Kit.finish(world, Color("#f4c6d6"), Vector3(5.8, 0.06, 5.8)), -1.0, 28)
-	mat.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	# Candy-cane posts ring the mat, red and white by turns.
+	# Candy-cane posts ring the play floor (see field_dressing.gd), red and white by turns.
 	var cane := CylinderMesh.new()
 	cane.top_radius = 0.07
 	cane.bottom_radius = 0.07

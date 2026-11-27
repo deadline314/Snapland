@@ -48,8 +48,6 @@ func build() -> void:
 	var middle := centre()
 	var direction: Vector2 = spec.get("sea", Vector2.RIGHT)
 	_sea = Vector3(direction.x, 0, direction.y).normalized()
-	var patch := Kit.cylinder(self, middle + Vector3(0, 0.02, 0), 2.7, 0.04, Kit.sand_material(world), -1.0, 24)
-	patch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	for offset: Vector2 in spec.get("layout", []):
 		spots.append(spot(offset) + Vector3(0, 0.05, 0))
 	# One flat ring per fish in the air, drawn as a single batch.
