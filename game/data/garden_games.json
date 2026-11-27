@@ -18,5 +18,25 @@
       "lantern",
       "bench"
     ]
+  },
+  {
+    "id": "game-077",
+    "mode": "lily_hop",
+    "zone": "garden",
+    "local_index": 5,
+    "arcade": true,
+    "name": "睡蓮踏浪",
+    "goal": "葉子一被踩就開始下沉，趁它沉下去前跳到下一片，一路跳過整個池塘。",
+    "instructions": "→、空白鍵或手把 A 鈕往前跳；↑、↓ 跳到上一條或下一條水道的葉子。踩到的葉子會慢慢沉。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助踏浪拿到金牌",
+    "ordinary": "跳過池塘不被葉子拖下水，拿到銅牌",
+    "attraction_tag": "睡蓮池",
+    "island_invitation": "葉子一踩就沉，停下來就會被青蛙當成新椅子。一口氣跳過去吧！",
+    "retake_props": [
+      "flower_horn",
+      "hat",
+      "bench"
+    ]
   }
 ]

@@ -20,7 +20,7 @@ func _run() -> void:
 	var garden: Array = catalog.definitions("garden")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 2 and toy.size() == 2 and garden.size() == 1 and all_games.size() == 53, "only the 53 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 2 and toy.size() == 2 and garden.size() == 2 and all_games.size() == 54, "only the 54 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden and catalog.definitions("hotel").is_empty(), "games retain global order and future regions remain unavailable")
@@ -34,6 +34,9 @@ func _run() -> void:
 	_check(catalog.identity("game-062") == cuckoo and catalog.identity("cuckoo_cue") == cuckoo and toy[1].name == "整點咕咕" and toy[1].arcade == true, "second toy town game has stable identities and the arcade flow flag")
 	var still := {"id":"game-073", "mode":"hold_still", "zone":"garden", "local_index":1, "photo_id":"photo-garden-game-1", "devil_photo_id":"photo-garden-devil-1", "achievement_id":"ACH_GAME_073"}
 	_check(catalog.identity("game-073") == still and catalog.identity("hold_still") == still and garden[0].name == "螢火蟲長曝光" and garden[0].arcade == true, "first greenhouse game keeps its own global number and the arcade flow flag")
+	var lily := {"id":"game-077", "mode":"lily_hop", "zone":"garden", "local_index":5, "photo_id":"photo-garden-game-5", "devil_photo_id":"photo-garden-devil-5", "achievement_id":"ACH_GAME_077"}
+	_check(catalog.identity("game-077") == lily and catalog.identity("lily_hop") == lily and garden[1].name == "睡蓮踏浪" and garden[1].arcade == true,
+		"a greenhouse game keeps the number of the slot it fills, leaving slots still in design empty")
 	_check(all_games.filter(func(row: Dictionary) -> bool: return row.has("arcade") and row.zone not in ["circus", "toy", "garden"]).is_empty(), "earlier games keep their own flow")
 	_check(harbor[0].name == "浪間小艇" and harbor[0].instructions == "划槳、轉舵並側滑靠岸" and harbor[0].ordinary == "載三箱到兩座浮碼頭" and harbor[0].devil == "用浪峰側滑靠岸不撞箱", "harbor row uses the approved concise copy")
 	var expected := {"id": "game-013", "mode": "rowing_cargo", "zone": "harbor", "local_index": 1, "photo_id": "photo-harbor-game-1", "devil_photo_id": "photo-harbor-devil-1", "achievement_id": "ACH_GAME_013"}
@@ -160,6 +163,13 @@ func _run() -> void:
 		bad = sources.duplicate(true)
 		bad.garden[0][field_value[0]] = field_value[1]
 		invalid_sources.append(bad)
+	for field_value in [["id","game-085"],["id","game-073"],["id","game-77"],["local_index",2]]:
+		bad = sources.duplicate(true)
+		bad.garden[1][field_value[0]] = field_value[1]
+		invalid_sources.append(bad)
+	bad = sources.duplicate(true)
+	bad.garden.reverse()
+	invalid_sources.append(bad)
 	for zone: String in ["circus", "toy", "garden"]:
 		bad = sources.duplicate(true)
 		bad.erase(zone)

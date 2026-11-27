@@ -11,9 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 HARBOR_DELIVERED = 12  # game-013 onward, in local order
 CANDY_DELIVERED = 12  # game-025 onward, in local order
 NIGHTMARKET_DELIVERED = 12  # game-037 onward, in local order
-# Later zones deliver in local order from their own first id, in any order between zones:
-# zone -> (first game number, delivered count); rows live in game/data/<zone>_games.json.
-LATER_ZONES = {'circus': (49, 2), 'toy': (61, 2), 'garden': (73, 1)}
+# Later zones deliver any of their twelve numbered slots, in any order between zones:
+# zone -> (first game number, delivered game numbers); rows live in game/data/<zone>_games.json.
+LATER_ZONES = {'circus': (49, (49, 50)), 'toy': (61, (61, 62)), 'garden': (73, (73, 77))}
 ZONES = ('welcome', 'harbor', 'candy', 'nightmarket', 'circus', 'toy', 'garden', 'hotel', 'sky', 'cinema')
 CORES = {'掌握', '取捨', '預測', '創意', '協調', '節奏'}
 GAME_FIELDS = ('id', 'name', 'zone', 'core', 'action', 'goal', 'choice', 'feedback', 'variation', 'solo', 'multi', 'ai', 'demon', 'demon_assist_policy', 'variant', 'assist', 'test', 'reference', 'revision', 'revision_reason', 'presentation', 'implementation')
@@ -88,7 +88,7 @@ def validate_games(data, refs):
         check(row['reference'] in refs, f'games {row["id"]}: missing source')
         check(row['revision'] in {'保留', '重設', '替換'}, f'games {row["id"]}: revision status')
         built = i <= 12 + HARBOR_DELIVERED + CANDY_DELIVERED + NIGHTMARKET_DELIVERED or any(
-            start <= i < start + count for start, count in LATER_ZONES.values())
+            i in numbers for _, numbers in LATER_ZONES.values())
         expected_state = 'single_player_runtime_needs_full_acceptance' if built else 'design_only_not_playtested'
         check(row['implementation'] == expected_state, f'games {row["id"]}: implementation scope mismatch')
     check(CORES.issubset({r['core'] for r in rows}), 'games: missing fun families')
@@ -110,10 +110,10 @@ def validate_runtime_game_alignment(data, runtime, harbor, candy, nightmarket, l
         for i, row in enumerate(nightmarket)), 'games: delivered night market runtime coverage')
     delivered = {row['id']: row for row in runtime + harbor + candy + nightmarket}
     for zone, rows in (later or {}).items():
-        start, count = LATER_ZONES[zone]
-        check(len(rows) == count and all(
-            row['id'] == f'game-{start + i:03d}' and row['zone'] == zone and row['local_index'] == i + 1
-            for i, row in enumerate(rows)), f'games: delivered {zone} runtime coverage')
+        start, numbers = LATER_ZONES[zone]
+        check(len(rows) == len(numbers) and all(start <= n < start + 12 for n in numbers) and all(
+            row['id'] == f'game-{n:03d}' and row['zone'] == zone and row['local_index'] == n - start + 1
+            for n, row in zip(numbers, rows)), f'games: delivered {zone} runtime coverage')
         delivered.update({row['id']: row for row in rows})
     for row in data['games']:
         if row['id'] not in delivered:

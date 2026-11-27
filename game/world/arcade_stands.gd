@@ -19,6 +19,8 @@ const STANDS := {
 	"garden": [
 		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
 			"stand": Vector3(-9.6, 0.2, 5.6), "point": Vector3(-8.5, 0.2, 6.9), "prop": "camera", "paint": Color("#38534e")},
+		{"id": "game-077", "title": "睡蓮踏浪", "prompt": "睡蓮踏浪 · 踩葉過池",
+			"stand": Vector3(-2.6, 0.2, -7.7), "point": Vector3(-1.55, 0.2, -6.35), "prop": "lily", "paint": Color("#3f6f5a")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -42,6 +44,7 @@ static func build(world: Node3D, region: String) -> void:
 			"windup": _windup_prop(sculpt)
 			"cuckoo": _cuckoo_prop(sculpt)
 			"camera": _camera_prop(sculpt)
+			"lily": _lily_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -124,3 +127,21 @@ static func _camera_prop(sculpt: Kit.Sculpt) -> void:
 	for fly: Vector3 in [Vector3(-0.31, 1.1, 0.26), Vector3(-0.23, 1.2, 0.26), Vector3(-0.3, 1.24, 0.25)]:
 		sculpt.box(fly, Vector3(0.035, 0.035, 0.02), Color("#dcff8a"))
 	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
+
+
+## A lily pad with a frog on the roof, and a little pond basin of pads on the counter.
+static func _lily_prop(sculpt: Kit.Sculpt) -> void:
+	var leaf := Color("#5c9c62")
+	sculpt.tube(Vector3(0, 2.44, -0.3), 0.46, 0.46, 0.05, leaf, 12)
+	sculpt.box(Vector3(0.3, 2.47, -0.12), Vector3(0.22, 0.02, 0.1), Color("#3f7f52"), Basis(Vector3.UP, -0.5))
+	var frog := Color("#7cb85a")
+	sculpt.box(Vector3(-0.08, 2.6, -0.3), Vector3(0.26, 0.2, 0.22), frog)
+	for eye: float in [-0.16, 0.0]:
+		sculpt.box(Vector3(eye, 2.73, -0.2), Vector3(0.08, 0.08, 0.06), CREAM)
+		sculpt.box(Vector3(eye, 2.73, -0.16), Vector3(0.04, 0.04, 0.02), DARK)
+	sculpt.tube(Vector3(-0.15, 1.0, 0.1), 0.42, 0.4, 0.12, Color("#9aa59a"), 10)
+	sculpt.tube(Vector3(-0.15, 1.05, 0.1), 0.36, 0.36, 0.04, Color("#2c6a66"), 10)
+	for pad: Vector3 in [Vector3(-0.3, 1.08, 0.05), Vector3(-0.02, 1.08, 0.2), Vector3(-0.2, 1.08, 0.28)]:
+		sculpt.tube(pad, 0.1, 0.1, 0.02, leaf, 8)
+	sculpt.box(Vector3(-0.02, 1.11, 0.2), Vector3(0.06, 0.05, 0.06), Color("#f2a7b8"))
+	sculpt.box(Vector3(0.38, 1.0, 0.1), Vector3(0.3, 0.06, 0.26), CREAM)

@@ -87,11 +87,11 @@ Bomberman Land 3 各設施的實際玩法多半由前作同名設施推定，回
 
 SG-66 之後，共用流程（開場倒數與提示、回合計時、單一分數、獎牌線、變奏、結算卡、輔助不發小惡魔拍貼）都在共用的街機基底裡，新款只做自己的規則與畫面。登記點如下，其餘地方（遊戲清單、規則頁、收藏冊說明、教學必備檢查、補拍道具、進場略過教學）會自動跟上。
 
-1. `game/data/<區域>_games.json`：加一列，含 `"arcade": true` 與三個 `retake_props`；同步把 `game/core/game_catalog.gd` 的 `ZONE_COUNTS` 加一。
+1. `game/data/<區域>_games.json`：依編號順序加一列，含 `"arcade": true` 與三個 `retake_props`；同步把 `game/core/game_catalog.gd` 的 `ZONE_COUNTS` 加一。每區有十二個固定編號，新款沿用它取代的設計目錄編號（例如 game-077 是溫室第五格），中間未實作的編號可以空著，拍貼與成就跟著編號走。
 2. `game/minigames/arcade/<mode>_driver.gd`（繼承 `arcade_driver.gd`，宣告提示、門檻、評語、至少兩個變奏，實作幾個掛鉤）與 `<mode>_view.gd`（繼承 `arcade_view.gd`，只畫背景與場景）。檔名對上 `mode` 就會被找到，不必登記；畫面腳本在規則腳本裡以常數預載。
 3. `game/data/tutorials.json`：兩步驟教學，圖片用原生擷取的 1280×720 PNG，放 `assets/ui/tutorials/`。
 4. 該區世界檔：一個入口攤位與互動點（`_point("game-NNN", …)`）。
-5. `design/02-minigames/catalog.json` 與 `catalog.md`：該款改為實際設計，附修訂理由與稽核十問；`tools/verify_design.py` 的 `LATER_ZONES` 把該區已交付數加一。
+5. `design/02-minigames/catalog.json` 與 `catalog.md`：該款改為實際設計，附修訂理由與稽核十問；`tools/verify_design.py` 的 `LATER_ZONES` 在該區已交付編號裡加上這一款。
 6. 測試：該款自己的規則測試（含模擬輸入的銅牌與金牌回合），在 `tools/run_game_tests.py` 的 `PASS_MARKERS` 與 `build_checks` 各加一行；`game/tests/test_game_catalog.gd` 的款數與該區世界測試的互動點數。
 
 一個區域的第一款另外要做一次：`game_catalog.gd` 的 `DATA_PATHS`、`ZONE_STARTS`、`ZONE_COUNTS`，`verify_design.py` 的 `LATER_ZONES`，`game/ui/minigame_atmosphere.gd` 的 `THEMES`，`game/main.gd` 的區域圖解教學選單，以及 `game/tests/test_region_travel.gd` 對該區收藏冊內容的檢查。馬戲團、玩具城與溫室的互動點已能直接開啟該區遊戲。

@@ -60,6 +60,12 @@ func _run() -> void:
 
 
 ## Every delivered game has a stand the visitor can walk up to; coordinates live in the stand table.
+## Stands beyond the fountain are walked to along the east side of the sun floor, as visitors do.
+const STAND_ROUTES := {
+	"game-077": [Vector2(0, 4.65), Vector2(4.0, 4.65), Vector2(4.0, -6.15)],
+}
+
+
 func _check_arcade_stands() -> void:
 	var delivered: Array = Catalog.definitions("garden")
 	_check(ArcadeStands.rows("garden").size() == delivered.size(), "one entry stand per delivered Garden game")
@@ -72,9 +78,20 @@ func _check_arcade_stands() -> void:
 			continue
 		var at: Vector3 = point.position
 		_check(_world._safe_standing(at) and str(point.label).contains(str(definition.name)), str(definition.id) + " is entered from safe ground and named on its prompt")
-		_check(await _walk(Vector2(at.x, World.ENTRY.z)) and await _walk(Vector2(at.x, at.z))
+		var route: Array = STAND_ROUTES.get(definition.id, [Vector2(at.x, World.ENTRY.z)])
+		var walked := true
+		var stuck := ""
+		for waypoint: Vector2 in route + [Vector2(at.x, at.z)]:
+			if walked and not await _walk(waypoint):
+				walked = false
+				stuck = " (stopped at %s on the way to %s)" % [_world.player.position, waypoint]
+		_check(walked
 			and _world.nearest.get("id") == definition.id and Catalog.identity(str(_world.nearest.get("id"))).zone == "garden",
-			str(definition.id) + " is reachable on foot and its prompt opens that game")
+			str(definition.id) + " is reachable on foot and its prompt opens that game" + stuck)
+		var back := route.duplicate()
+		back.reverse()
+		for waypoint: Vector2 in back:
+			await _walk(waypoint)
 	_check(await _walk(Vector2(0, World.ENTRY.z)), "the way back to the entrance stays open")
 
 
