@@ -120,6 +120,26 @@
     ]
   },
   {
+    "id": "game-067",
+    "mode": "puppet_strings",
+    "zone": "toy",
+    "local_index": 7,
+    "arcade": true,
+    "name": "木偶牽線",
+    "goal": "木偶跟著八音盒跳舞，珠子順著線滑下來，滑到手腳的那一刻拉那條線；跟上拍子木偶就跳得漂亮。",
+    "instructions": "← 左手、→ 右手、↑ 頭、↓ 雙腳（WASD 或手把十字鍵也可以）：珠子滑到圈圈時拉線。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助讓木偶跳完拿到金牌",
+    "ordinary": "珠子到圈圈時拉線讓木偶跳舞，拿到銅牌",
+    "attraction_tag": "木偶小劇場",
+    "island_invitation": "珠子滑到木偶的手腳就拉線！亂拉或漏拉線會打結，結太多木偶會倒吊著跟你揮手。",
+    "retake_props": [
+      "mascot",
+      "sign",
+      "lantern"
+    ]
+  },
+  {
     "id": "game-068",
     "mode": "top_sumo",
     "zone": "toy",

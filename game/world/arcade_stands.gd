@@ -23,6 +23,8 @@ const STANDS := {
 			"stand": Vector3(-6.2, 0.2, -2.5), "point": Vector3(-7.15, 0.2, -1.05), "prop": "frog", "paint": Color("#5f7d4a")},
 		{"id": "game-066", "title": "軌道換軌", "prompt": "軌道換軌 · 扳道岔送火車回站",
 			"stand": Vector3(2.9, 0.2, -6.4), "point": Vector3(1.85, 0.2, -5.0), "prop": "rails", "paint": Color("#4f79a8")},
+		{"id": "game-067", "title": "木偶牽線", "prompt": "木偶牽線 · 跟著拍子拉線",
+			"stand": Vector3(3.3, 0.2, 2.4), "point": Vector3(2.3, 0.2, 3.8), "prop": "puppet", "paint": Color("#7a2a3c")},
 		{"id": "game-068", "title": "陀螺相撲", "prompt": "陀螺相撲 · 方向鍵撞陀螺",
 			"stand": Vector3(-7.3, 0.2, 5.7), "point": Vector3(-6.15, 0.2, 6.85), "prop": "tops", "paint": Color("#8a4a3e")},
 		{"id": "game-070", "title": "敲敲玩具兵", "prompt": "敲敲玩具兵 · 方向鍵敲回去",
@@ -67,6 +69,7 @@ static func build(world: Node3D, region: String) -> void:
 			"magnet": _magnet_prop(sculpt)
 			"bridge": _bridge_prop(sculpt)
 			"rails": _rails_prop(sculpt)
+			"puppet": _puppet_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -359,3 +362,28 @@ static func _dew_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.3, 1.32, 0.1), Vector3(0.03, 0.26, 0.03), Color("#3f6f3a"))
 	sculpt.ball(Vector3(-0.3, 1.5, 0.1), 0.07, Color("#f2a7b8"), Color("#7cae5a"), 6, 3, 1.3)
 	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
+
+
+## A marionette dangling from a wooden cross on the roof, and a tiny curtained
+## puppet stage on the counter.
+static func _puppet_prop(sculpt: Kit.Sculpt) -> void:
+	var red := Color("#c0503f")
+	var blue := Color("#4f79a8")
+	var pine := Color("#d2a46a")
+	var velvet := Color("#7a2a3c")
+	sculpt.box(Vector3(0.0, 3.3, -0.3), Vector3(0.56, 0.05, 0.06), pine)
+	sculpt.box(Vector3(0.0, 3.3, -0.3), Vector3(0.06, 0.05, 0.4), pine)
+	for x: float in [-0.25, 0.0, 0.25]:
+		sculpt.box(Vector3(x, 3.0, -0.3), Vector3(0.012, 0.56, 0.012), CREAM)
+	sculpt.box(Vector3(0.0, 2.92, -0.3), Vector3(0.12, 0.12, 0.1), pine.lightened(0.1))
+	sculpt.box(Vector3(0.0, 2.99, -0.3), Vector3(0.1, 0.04, 0.1), red)
+	sculpt.box(Vector3(0.0, 2.76, -0.3), Vector3(0.14, 0.18, 0.08), red)
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(side * 0.13, 2.84, -0.3), Vector3(0.05, 0.16, 0.05), red, Basis(Vector3.BACK, side * 0.9))
+		sculpt.box(Vector3(side * 0.04, 2.58, -0.3), Vector3(0.05, 0.18, 0.05), blue)
+	sculpt.box(Vector3(0.0, 1.14, 0.0), Vector3(0.56, 0.4, 0.06), pine.darkened(0.2))
+	sculpt.box(Vector3(0.0, 1.1, 0.04), Vector3(0.4, 0.28, 0.02), Color("#2c2440"))
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(side * 0.16, 1.1, 0.06), Vector3(0.1, 0.3, 0.03), velvet)
+	sculpt.box(Vector3(0.0, 1.29, 0.06), Vector3(0.46, 0.06, 0.03), velvet)
+	sculpt.box(Vector3(0.0, 1.03, 0.08), Vector3(0.06, 0.1, 0.03), red)
