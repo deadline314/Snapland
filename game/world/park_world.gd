@@ -4,6 +4,7 @@ signal interaction_requested(id: String, label: String)
 signal area_changed(label: String)
 const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const CoastalPlay = preload("res://game/world/coastal_play.gd")
+const WelcomeFerry = preload("res://game/world/welcome_ferry.gd")
 const WATER = preload("res://game/world/water.gdshader")
 const WELCOME_BAY_WATER = preload("res://game/world/welcome_bay_water.gdshader")
 const WELCOME_DOCK_CENTER := Vector3(0, 0, 21)
@@ -196,6 +197,7 @@ var _visible_interaction_marker: Label3D
 var fountain_water: ShaderMaterial
 var sea_material: ShaderMaterial
 var welcome_sea_material: ShaderMaterial
+var ferry_window_glow: StandardMaterial3D
 var active_time_phase := TimeOfDayScript.DEFAULT_PHASE
 var contact_shadow_material: StandardMaterial3D
 var contact_shadows: Array[Dictionary] = []
@@ -1333,32 +1335,7 @@ func _build_dock() -> void:
 		var x := -2.8 + i * 0.7
 		_box(Vector3(x,3.75,13.65),Vector3(0.035,0.3,0.035),Color("#6e563c"))
 		_lantern(Vector3(x,3.55,13.65))
-	# Original ferry silhouette, with portholes, lifebuoy, chimney and pennants.
-	var ferry_stage_anchor := Marker3D.new()
-	ferry_stage_anchor.name = "FerryDeckStageAnchor"
-	ferry_stage_anchor.position = Vector3(5.5,1.04,22.65)
-	add_child(ferry_stage_anchor)
-	var hull := _box(Vector3(5.5,0,25),Vector3(5,0.8,8),Color("#77513a"),true)
-	hull.material_override = _coastal_surface(1,1.8,Color("#cfb38a"))
-	var bow := _mesh(CylinderMesh.new(),Vector3(5.5,0,20.8),_coastal_surface(1,1.8,Color("#cfb38a")))
-	bow.scale=Vector3(2.5,0.42,1.4)
-	_box(Vector3(5.5,0.7,25),Vector3(4,0.6,6.5),TEAL)
-	var cabin := _box(Vector3(5.5,1.8,25.4),Vector3(3,1.6,4),Color("#ac9875"))
-	cabin.material_override = _coastal_surface(4,1.6)
-	var cabin_roof := _box(Vector3(5.5,2.7,25.4),Vector3(3.7,0.3,4.6),Color("#a45c48"))
-	cabin_roof.material_override = _coastal_surface(3,1.8)
-	_cylinder(Vector3(5.5,3.35,25.5),0.45,1.2,TEAL)
-	for i in range(3):
-		_sphere(Vector3(3.95,1.85,24+i*1.2),0.3,Color("#335b6e"))
-		_cylinder(Vector3(7.62,1.9,24+i*1.2),0.14,0.06,Color("#d8b277"))
-	_cylinder(Vector3(4.25,1.8,24.8),0.5,0.12,CORAL,0.5)
-	_box(Vector3(5.5,1.15,21.9),Vector3(3.5,0.12,0.1),Color("#ddc69a"))
-	for i in range(5):
-		var mast := _box(Vector3(4.1+i*0.7,2.9,22.9),Vector3(0.055,0.9,0.055),Color("#715b42"))
-		mast.rotation.z = -0.2
-		var pennant_flag := _box(Vector3(4.1+i*0.7,3.3,22.9),Vector3(0.45,0.23,0.05),[CORAL,GOLD,CREAM][i%3])
-		pennant_flag.rotation.z = -0.12
-	_local_label("晚風號",Vector3(5.5,1.2,28.5),24)
+	WelcomeFerry.build(self)
 	_point("arrival","重播上島導覽",Vector3(0,0,24))
 	_local_label("碼頭  /  海風從這裡開始",Vector3(-4,1,19),24)
 
@@ -3091,6 +3068,8 @@ func set_time_of_day(phase_id: Variant) -> void:
 		_wayfinding_trim.emission_energy_multiplier = float({"dawn": 0.18, "noon": 0.0, "dusk": 0.52, "night": 0.72}[active_time_phase])
 	if welcome_sea_material != null:
 		welcome_sea_material.set_shader_parameter("dock_glow", lamp_energy_for_phase)
+	if ferry_window_glow != null:
+		ferry_window_glow.emission_energy_multiplier = lamp_energy_for_phase * 1.8
 	_update_lamp_selection(true)
 	if is_instance_valid(ambience): ambience.set_phase(active_time_phase)
 	_apply_foliage_phase()

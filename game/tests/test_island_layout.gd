@@ -30,6 +30,7 @@ func _run() -> void:
 	_check(world.shoreline_rock_count <= 30, "shoreline rocks use separated clusters rather than a continuous perimeter row")
 	_check_welcome_water(world)
 	_check_ground_layers(world)
+	_check_ferry(world)
 	var game_points: Dictionary = {}
 	for point in world.points:
 		var point_id := String(point.get("id", ""))
@@ -348,6 +349,99 @@ func _check_ground_layers(world: Node) -> void:
 	_check(trees >= 24, "the avenue and coastal loop keep their tree cover (%d trees)" % trees)
 	_check(not world_script.tree_site_clear(Vector3(-2, 0, 20.1)) and not world_script.tree_site_clear(Vector3(17.07, 0, 5.5)) and world_script.tree_site_clear(Vector3(16.2, 0, -8)),
 		"the planting rule rejects the former palm in the bay and the one on the east path")
+
+## The moored ferry reads as a boat (tapered bow, tucked stern, detailed
+## parts), bobs only while motion is allowed, lights through the shared lamp
+## budget, and keeps the footprint, name, deck marker and replay point it had.
+func _check_ferry(world: Node) -> void:
+	var ferry := world.get_node_or_null("WelcomeFerry") as Node3D
+	var body := world.get_node_or_null("WelcomeFerry/FerryRoll") as Node3D
+	var hull := world.get_node_or_null("WelcomeFerry/FerryRoll/FerryHull") as MeshInstance3D
+	var deck := world.get_node_or_null("WelcomeFerry/FerryRoll/FerryDeck") as MeshInstance3D
+	_check(ferry != null and body != null and hull != null and deck != null, "the ferry is built as hull, deck and fittings under one moored body")
+	if ferry == null or body == null or hull == null or deck == null: return
+	var collision := world.get_node_or_null("FerryCollision") as StaticBody3D
+	var footprint: BoxShape3D = (collision.get_child(0) as CollisionShape3D).shape as BoxShape3D if collision != null and collision.get_child_count() == 1 else null
+	_check(footprint != null and collision.position == Vector3(5.5, 0, 25) and footprint.size == Vector3(5, 0.8, 8), "the ferry keeps its dockside collision footprint")
+	var arrival: Dictionary = world._point_by_id("arrival")
+	_check(arrival.get("position") == Vector3(0, 0, 24) and arrival.get("label") == "重播上島導覽", "the arrival replay point beside the ferry is unchanged")
+	var names := 0
+	for label: Label3D in ferry.find_children("*", "Label3D", true, false):
+		if label.text == "晚風號" and world.local_sign_labels.has(label): names += 1
+	_check(names == 1, "the ferry carries its name once, as a nearby-only sign")
+	# Silhouette: measure the hull's breadth near the bow, amidships and at the stern.
+	_check(not hull.mesh is PrimitiveMesh, "the hull is a modelled shape, not a stock box or cylinder")
+	var vertices: PackedVector3Array = hull.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	var colors: PackedColorArray = hull.mesh.surface_get_arrays(0)[Mesh.ARRAY_COLOR]
+	var bounds := hull.mesh.get_aabb()
+	var breadth := {"bow": 0.0, "middle": 0.0, "stern": 0.0}
+	var paints := {}
+	for index in vertices.size():
+		var along := (vertices[index].z - bounds.position.z) / bounds.size.z
+		var zone := "bow" if along < 0.06 else ("middle" if absf(along - 0.6) < 0.06 else ("stern" if along > 0.97 else ""))
+		if zone != "": breadth[zone] = maxf(float(breadth[zone]), absf(vertices[index].x))
+		paints[colors[index].to_html(false).substr(0, 4)] = true
+	_check(bounds.size.z > 8.0 and float(breadth.middle) > 2.2 and float(breadth.bow) < float(breadth.middle) * 0.35, "the hull narrows to a bow (%.2f m against %.2f m amidships)" % [breadth.bow, breadth.middle])
+	_check(float(breadth.stern) < float(breadth.middle) - 0.2 and float(breadth.stern) > float(breadth.middle) * 0.6, "the stern tucks in without coming to a point")
+	_check(paints.size() >= 6, "hull planking is painted in several strakes rather than one flat colour")
+	_check(absf(deck.global_position.y - 1.0) < 0.001 and deck.material_override is ShaderMaterial, "the deck is planked at the height the prologue stands on")
+	var marker := world.get_node_or_null("FerryDeckStageAnchor") as Marker3D
+	_check(marker != null and marker.position == Vector3(5.5, 1.04, 22.65) and marker.get_parent() == world, "the prologue deck marker stays put on the world, not on the bobbing hull")
+	var marker_local := deck.to_local(marker.global_position) if marker != null else Vector3.INF
+	var deck_bounds := deck.mesh.get_aabb()
+	_check(marker != null and Rect2(deck_bounds.position.x, deck_bounds.position.z, deck_bounds.size.x, deck_bounds.size.z).grow(-0.4).has_point(Vector2(marker_local.x, marker_local.z)), "the prologue marker stands on open deck")
+	# Standards: no large part is a single flat-coloured stock shape; small trims
+	# and thin lines are exempt.
+	var parts := 0
+	for part: GeometryInstance3D in ferry.find_children("*", "GeometryInstance3D", true, false):
+		parts += 1
+		var instance := part as MeshInstance3D
+		if instance == null or not instance.mesh is PrimitiveMesh: continue
+		var flat := instance.material_override as StandardMaterial3D
+		if instance.material_override == null: flat = (instance.mesh as PrimitiveMesh).material as StandardMaterial3D
+		if flat == null or flat.albedo_texture != null or flat.vertex_color_use_as_albedo: continue
+		var extent := instance.mesh.get_aabb().size * instance.global_transform.basis.get_scale()
+		var sides: Array[float] = [extent.x, extent.y, extent.z]
+		sides.sort()
+		_check(sides[2] <= 1.0 or sides[1] <= 0.1, "%s is not a large flat-coloured block" % instance.name)
+	_check(parts >= 20 and ferry.find_children("*", "Node", true, false).size() <= 60, "the ferry is detailed within a bounded node count (%d visual parts)" % parts)
+	for required in ["FerryRoof", "FerryFunnel", "FerryWindows", "FerryLifeRing", "FerryLantern"]:
+		_check(ferry.find_child(required, true, false) != null, "%s is part of the ferry" % required)
+	# Bobbing follows the ambient animation and rests exactly when motion is reduced.
+	var initial_motion: bool = world.reduced_motion
+	var initial_phase: String = world.active_time_phase
+	world.apply_settings({"reduced_motion": false})
+	var ambient: AnimationPlayer = world.component_motion.get_node("AmbientAnimationPlayer")
+	var heave := 0.0
+	var roll := 0.0
+	for moment: float in [1.0, 2.2, 3.7, 5.1, 7.4]:
+		ambient.seek(moment, true)
+		heave = maxf(heave, absf(ferry.position.y))
+		roll = maxf(roll, absf(body.rotation.z))
+	_check(ambient.is_playing() and heave > 0.005 and heave <= 0.05 and roll > 0.001 and roll <= 0.03, "the hull heaves and rolls gently on the water (%.3f m, %.3f rad)" % [heave, roll])
+	world.apply_settings({"reduced_motion": true})
+	_check(not ambient.is_playing() and ferry.position == Vector3(5.5, 0, 25) and body.rotation == Vector3.ZERO, "reduced motion leaves the ferry at rest")
+	world.apply_settings({"reduced_motion": initial_motion})
+	# The lantern is one of the world's budgeted lamps; windows glow only after dark.
+	var lantern := world.get_node_or_null("FerryLanternLight") as OmniLight3D
+	_check(lantern != null and world.lamps.has(lantern), "the stern lantern joins the shared lamp list")
+	var shade := ferry.find_child("FerryLantern", true, false) as MeshInstance3D
+	_check(shade != null and (shade.material_override as StandardMaterial3D).emission_enabled, "the lantern light has a glowing lamp body")
+	var previous_position: Vector3 = world.player.position
+	world.player.position = Vector3(0, 0.3, 24)
+	world.set_time_of_day("noon")
+	var glow: StandardMaterial3D = world.ferry_window_glow
+	_check(lantern != null and is_zero_approx(lantern.light_energy) and is_zero_approx(glow.emission_energy_multiplier), "by day the lantern and cabin windows are dark")
+	world.set_time_of_day("night")
+	var lit := 0
+	var shadowed := 0
+	for lamp: Light3D in world.lamps:
+		if lamp.light_energy > 0.0: lit += 1
+		if lamp.shadow_enabled: shadowed += 1
+	_check(lantern != null and lantern.light_energy > 0.0 and glow.emission_energy_multiplier > 0.5, "at night the lantern and cabin windows glow for a player on the dock")
+	_check(lit <= world.ACTIVE_LAMP_LIMIT and shadowed <= world.SHADOW_LAMP_LIMIT, "the ferry lantern stays inside the lamp budget (%d lit, %d shadowed)" % [lit, shadowed])
+	world.player.position = previous_position
+	world.set_time_of_day(initial_phase)
 
 ## Distance from `point` to the nearest land edge: positive on land.
 func _land_inset(land: Rect2, point: Vector2) -> float:
