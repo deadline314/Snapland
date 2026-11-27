@@ -1,7 +1,6 @@
 extends "res://game/ui/minigame_hold_controls.gd"
 
 const Model = preload("res://game/minigames/sugar_draw_model.gd")
-const Props = preload("res://game/ui/pixel_props.gd")
 const ART := "res://assets/minigames/sugar-draw-workbench.webp"
 const BENCH := Rect2(35, 192, 871, 320)
 const RECIPE := Rect2(927, 192, 317, 320)
