@@ -1,4 +1,5 @@
 extends RefCounted
+const RenderQuality = preload("res://game/world/render_quality.gd")
 ## Compact, single-page settings with fixed category navigation.
 
 const Paper = preload("res://game/ui/paper_ui.gd")
@@ -67,7 +68,7 @@ func _add_choice(key: String, title: String, values: Array, labels: Dictionary) 
 	var choice := OptionButton.new()
 	choice.name = "Value_" + key
 	choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var current := str(Progress.settings.get(key, "zh_TW" if key == "locale" else "pixel"))
+	var current := str(Progress.settings.get(key, Progress.DEFAULT_SETTINGS.get(key, "")))
 	for value in values:
 		choice.add_item(str(labels.get(value, value)))
 		choice.set_item_metadata(choice.item_count - 1, value)
@@ -94,6 +95,8 @@ func _fill_play() -> void:
 	_add_toggle("fullscreen",_t("settings.fullscreen"))
 	_add_slider("ui_scale",_t("settings.ui_scale"),1.0,1.25)
 	content.add_child(Paper.label(_t("settings.ui_scale.hint"),16,Paper.TEAL))
+	_add_choice("graphics_quality", _t("settings.graphics_quality"), RenderQuality.LEVELS, {"high": _t("quality.high"), "balanced": _t("quality.balanced"), "low": _t("quality.low")})
+	(content.get_node("Setting_graphics_quality/Value_graphics_quality") as Control).tooltip_text = _t("settings.graphics_quality.hint")
 
 func _fill_controls() -> void:
 	content.add_child(Paper.section_title(_t("settings.controls.title"),Paper.TEAL))

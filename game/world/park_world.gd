@@ -116,6 +116,11 @@ var _last_label_font: Font
 var lamps: Array[Light3D] = []
 const ACTIVE_LAMP_LIMIT := 8
 const SHADOW_LAMP_LIMIT := 2
+const RenderQuality = preload("res://game/world/render_quality.gd")
+## Lamp budgets for the current picture quality; never above the limits.
+var active_lamp_budget := ACTIVE_LAMP_LIMIT
+var shadow_lamp_budget := SHADOW_LAMP_LIMIT
+var render_quality := ""
 const LAMP_SELECTION_INTERVAL := 0.4
 var active_lamp_indices: Array[int] = []
 var shadow_lamp_indices: Array[int] = []
@@ -345,6 +350,11 @@ func _build_lighting() -> void:
 	environment.tonemap_exposure = 0.84
 	environment.glow_enabled = true
 	environment.glow_intensity = 0.10
+	# A light grade after tonemapping: sprites and scenery share it, so the
+	# picture gains depth without the pixel art drifting from the world palette.
+	environment.adjustment_enabled = true
+	environment.adjustment_contrast = 1.06
+	environment.adjustment_saturation = 1.08
 	environment.ssao_enabled = true
 	environment.ssao_radius = 1.1
 	environment.ssao_intensity = 0.65
@@ -3033,10 +3043,14 @@ func _update_lamp_selection(force := false) -> void:
 		var lamp_index := active_lamp_indices[slot]
 		if lamp_index < 0: continue
 		var lamp := lamps[lamp_index]
-		var enabled := lamp_energy_for_phase > 0.0
+		var enabled := lamp_energy_for_phase > 0.0 and slot < active_lamp_budget
 		lamp.light_energy = lamp_energy_for_phase if enabled else 0.0
-		lamp.shadow_enabled = enabled and active_time_phase in ["dusk", "night"] and shadow_count < SHADOW_LAMP_LIMIT
+		lamp.shadow_enabled = enabled and active_time_phase in ["dusk", "night"] and shadow_count < shadow_lamp_budget
 		if lamp.shadow_enabled:
+			# Two shadow passes per lamp instead of six; these short-range lamps look the same.
+			var omni := lamp as OmniLight3D
+			if omni != null and omni.omni_shadow_mode != OmniLight3D.SHADOW_DUAL_PARABOLOID:
+				omni.omni_shadow_mode = OmniLight3D.SHADOW_DUAL_PARABOLOID
 			shadow_lamp_indices[shadow_count] = lamp_index
 			shadow_count += 1
 	for lamp_index in range(lamps.size()):
@@ -3065,6 +3079,22 @@ func apply_settings(settings: Dictionary) -> void:
 	if is_instance_valid(occlusion_controller): occlusion_controller.set_reduced_motion(reduced_motion)
 	if is_instance_valid(island_attractions): island_attractions.set_reduced_motion(reduced_motion)
 	if is_instance_valid(ambience): ambience.set_reduced_motion(reduced_motion)
+	_apply_render_quality(RenderQuality.normalize(settings.get("graphics_quality", RenderQuality.DEFAULT_LEVEL)))
+
+## Apply a picture-quality level once; repeated settings refreshes cost nothing.
+func _apply_render_quality(level: String) -> void:
+	if level == render_quality: return
+	render_quality = level
+	var profile := RenderQuality.profile(level)
+	if environment != null:
+		environment.ssao_enabled = bool(profile.ssao)
+		environment.glow_enabled = bool(profile.glow)
+	active_lamp_budget = mini(int(profile.active_lamps), ACTIVE_LAMP_LIMIT)
+	shadow_lamp_budget = mini(int(profile.lamp_shadows), SHADOW_LAMP_LIMIT)
+	if is_instance_valid(ambience): ambience.set_quality(bool(profile.cloud_shade), bool(profile.air_particles))
+	RenderQuality.apply_renderer(profile)
+	if is_inside_tree(): RenderQuality.apply_viewport(get_viewport(), profile)
+	_update_lamp_selection(true)
 
 func start_ride() -> bool:
 	if blocked or not is_instance_valid(island_attractions):

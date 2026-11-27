@@ -68,6 +68,26 @@
       "text": "Text size",
       "source": "文字大小"
     },
+    "settings.graphics_quality": {
+      "text": "Picture quality",
+      "source": "畫質"
+    },
+    "settings.graphics_quality.hint": {
+      "text": "Lower levels save power by dropping lamp shadows, ambient shading, cloud shade and air particles.",
+      "source": "畫質越低越省電：依序關閉燈影、環境陰影、雲影與飄塵。"
+    },
+    "quality.high": {
+      "text": "High",
+      "source": "高"
+    },
+    "quality.balanced": {
+      "text": "Balanced",
+      "source": "標準"
+    },
+    "quality.low": {
+      "text": "Power saver",
+      "source": "省電"
+    },
     "settings.ui_scale.hint": {
       "text": "Text size enlarges interface text; buttons keep their full control height.",
       "source": "文字大小會放大介面文字；按鈕仍維持完整操作高度。"

@@ -1,4 +1,5 @@
 extends Node
+const RenderQuality = preload("res://game/world/render_quality.gd")
 
 signal changed
 signal achievement_unlocked(id: String)
@@ -33,6 +34,7 @@ const DEFAULT_SETTINGS := {
 	"time_phase": TimeOfDay.DEFAULT_PHASE,
 	"locale": "zh_TW",
 	"font_style": "pixel",
+	"graphics_quality": RenderQuality.DEFAULT_LEVEL,
 }
 const WELCOME_GAME_IDS := [
 	"game-001", "game-002", "game-003", "game-004", "game-005", "game-006",
@@ -648,6 +650,8 @@ func save_progress() -> bool:
 			valid = typeof(value) == TYPE_STRING and _released_locales().has(str(value))
 		elif key == "font_style":
 			valid = typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value)
+		elif key == "graphics_quality":
+			valid = typeof(value) == TYPE_STRING and RenderQuality.LEVELS.has(value)
 		elif key == "time_phase":
 			valid = typeof(value) == TYPE_STRING and TimeOfDay.phase_ids().has(value)
 		elif typeof(default_value) == TYPE_BOOL:
@@ -751,6 +755,11 @@ func set_setting(key: String, value: Variant) -> void:
 			push_warning("Invalid setting 'locale'; using zh_TW.")
 			value = "zh_TW"
 		settings[key] = value
+		_apply_setting(key)
+		changed.emit()
+		return
+	if key == "graphics_quality":
+		settings[key] = RenderQuality.normalize(value)
 		_apply_setting(key)
 		changed.emit()
 		return
@@ -905,6 +914,8 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 				valid = typeof(value) == TYPE_STRING and _released_locales().has(str(value))
 			if str(key) == "font_style":
 				valid = typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value)
+			if str(key) == "graphics_quality":
+				valid = typeof(value) == TYPE_STRING and RenderQuality.LEVELS.has(value)
 			if typeof(default_value) in [TYPE_INT, TYPE_FLOAT]:
 				valid = typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value))
 				if valid:
@@ -912,7 +923,7 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 					var high := 1.0 if str(key).ends_with("_volume") else 2.0
 					valid = float(value) >= low and float(value) <= high
 			if not valid:
-				if str(key) in ["time_phase", "locale", "font_style"]:
+				if str(key) in ["time_phase", "locale", "font_style", "graphics_quality"]:
 					push_warning("Invalid setting '%s' in progress file '%s'; using default." % [str(key), path])
 				else:
 					push_error("Invalid setting '%s' in progress file '%s'; using default." % [str(key), path])
@@ -1098,6 +1109,8 @@ func _apply_loaded_setting(key: String, value: Variant) -> void:
 		settings[key] = value if typeof(value) == TYPE_STRING and _released_locales().has(str(value)) else "zh_TW"
 	elif key == "font_style":
 		settings[key] = value if typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value) else "pixel"
+	elif key == "graphics_quality":
+		settings[key] = RenderQuality.normalize(value)
 	elif typeof(default_value) == TYPE_BOOL:
 		if typeof(value) == TYPE_BOOL:
 			settings[key] = value

@@ -22,6 +22,8 @@ var _world: Node3D
 var _profile: Dictionary = {}
 var _phase := ""
 var _reduced_motion := false
+var _cloud_shade_enabled := true
+var _air_particles_enabled := true
 var _cloud_material: ShaderMaterial
 var _cloud_drift := Vector2.ZERO
 var _emitter_specs: Array[Dictionary] = []
@@ -53,6 +55,13 @@ func set_reduced_motion(value: bool) -> void:
 	_reduced_motion = value
 	if critters != null:
 		critters.set_reduced_motion(value)
+	_sync()
+
+
+## Picture quality can drop the cloud shade pass and the air particles.
+func set_quality(cloud_shade: bool, air_particles: bool) -> void:
+	_cloud_shade_enabled = cloud_shade
+	_air_particles_enabled = air_particles
 	_sync()
 
 
@@ -88,14 +97,14 @@ func advance(delta: float) -> void:
 func _sync() -> void:
 	if cloud != null:
 		var strength := cloud_strength()
-		cloud.visible = strength > 0.0
+		cloud.visible = strength > 0.0 and _cloud_shade_enabled
 		_cloud_material.set_shader_parameter("strength", strength)
 		if is_instance_valid(_world) and is_instance_valid(_world.sun):
 			var to_sun: Vector3 = _world.sun.global_basis.z
 			var slope := Vector2(to_sun.x, to_sun.z) / maxf(to_sun.y, 0.05)
 			_cloud_material.set_shader_parameter("sun_slope", slope.limit_length(CLOUD_MAX_SLOPE))
 	for index in range(emitters.size()):
-		var active: bool = not _reduced_motion and (_emitter_specs[index].phases as Array).has(_phase)
+		var active: bool = _air_particles_enabled and not _reduced_motion and (_emitter_specs[index].phases as Array).has(_phase)
 		emitters[index].visible = active
 		emitters[index].emitting = active
 	if critters != null and critters.count > 0 and is_inside_tree():
