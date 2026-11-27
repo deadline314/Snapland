@@ -12,6 +12,9 @@ const STEP := 1.0 / 60.0
 const RUN_SPEED := 1.5
 const STROLL_SPEED := 0.8
 const WELCOME_TYPES := ["踩踏", "追逐", "時機", "收集競速", "拍照"]
+## The districts MAIN-61 gave instant games and toys. A district joins this list
+## with its own rows; the hotel (MAIN-63) has none yet.
+const FIELD_DISTRICTS := ["harbor", "candy", "nightmarket", "circus", "toy", "garden"]
 
 var failures: Array[String] = []
 var main: Node
@@ -184,6 +187,8 @@ func other_points() -> Array[Vector3]:
 func _test_table() -> void:
 	var types := {}
 	for region: String in DistrictSites.regions():
+		check(FIELD_DISTRICTS.has(region) == Registry.has_region(region), "%s has instant games exactly when it is a field district" % region)
+	for region: String in FIELD_DISTRICTS:
 		var games: Array = Registry.games(region)
 		var toys: Array = Registry.toys(region)
 		check(games.size() >= 2 and toys.size() >= 2, "%s has at least two instant games and two toys" % region)
@@ -224,7 +229,7 @@ func _has(found: Array[String], text: String) -> bool:
 
 
 func _test_placement() -> void:
-	for region: String in DistrictSites.regions():
+	for region: String in FIELD_DISTRICTS:
 		var found := Registry.district_problems(region, world.is_walkable, other_points())
 		check(found.is_empty(), "%s placement is sound: %s" % [region, str(found)])
 		var node: Node3D = world.district_host.built(region)

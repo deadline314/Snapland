@@ -94,6 +94,18 @@ const SITES := {
 		"cutouts": [],
 		"ground": Color("#b39a6a"), "ground_strength": 0.42,
 	},
+	# The south end of the west breakwater: a causeway runs down from the coastal
+	# loop to the hotel's front door; its rooms open south toward the sea.
+	"hotel": {
+		"script": "res://game/world/hotel_world.gd",
+		"at": Vector3(-16, 0, 84),
+		"claim": Rect2(-17, -15, 34, 30),
+		"approach": Rect2(-11.2, -25.0, 4.4, 11.8), "approach_y": 0.18,
+		"arrival": Vector3(-9, 0.2, -11.6),
+		"gate": Vector3(-9, -24.6, 180),
+		"cutouts": [],
+		"ground": Color("#9a8fc0"), "ground_strength": 0.55,
+	},
 }
 
 static var _tint: ImageTexture

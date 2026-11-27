@@ -1,5 +1,5 @@
 extends SceneTree
-## The six themed districts embedded in the one island world: building, gates,
+## The themed districts embedded in the one island world: building, gates,
 ## walking reach, mechanics, light blending, streaming and the saved position.
 
 const DistrictSites = preload("res://game/world/district_sites.gd")
@@ -68,11 +68,11 @@ func _check_gates(world: Node3D, host: Node) -> void:
 		var due := 6 >= RegionRoutes.threshold(region)
 		_check(host.gate_is_open(region) == due, "%s gate opens exactly at %d stickers" % [region, RegionRoutes.threshold(region)])
 		_check(opened.has(region) == due, "%s gate celebrates only when it opens during play" % region)
-	world.set_sticker_count(30)
+	world.set_sticker_count(60)
 	# The leaves swing open with a little celebration.
 	await create_timer(1.2).timeout
 	for region: String in DistrictSites.regions():
-		_check(host.gate_is_open(region) and world.gate_leaf_angle(region) > 1.0, "%s gate stands open at 30 stickers" % region)
+		_check(host.gate_is_open(region) and world.gate_leaf_angle(region) > 1.0, "%s gate stands open at 60 stickers" % region)
 
 func _gate_is_bars(leaves: Array) -> bool:
 	var leaf: MeshInstance3D = leaves[0]
@@ -145,7 +145,7 @@ func _check_closed_built(world: Node3D) -> void:
 	world.set_sticker_count(0)
 	for region: String in DistrictSites.regions():
 		_check(not world.is_walkable(_approach_middle(region)), "%s approach stays shut behind a closed gate after it is built" % region)
-	world.set_sticker_count(30)
+	world.set_sticker_count(60)
 
 ## Every interaction point of every district can be reached on foot from the
 ## plaza, over ground the walking rules allow.
@@ -227,6 +227,8 @@ func _check_mechanics(world: Node3D, host: Node) -> void:
 	var side: int = circus.projection_side()
 	circus.switch_projection()
 	_check(circus.projection_side() != side, "circus projection switches embedded")
+	var hotel: Node3D = host.built("hotel")
+	_check(hotel.ring_bell().contains("歡迎") and hotel._life._ring > 0.0, "the hotel desk bell rings embedded")
 	world.place_player(DistrictSites.arrival("candy"))
 	candy.reset_to_entry()
 	_check(world.player.global_position.distance_to(candy.to_global(candy.ENTRY)) < 0.05, "candy reset returns the island walker to the factory entry")

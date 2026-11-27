@@ -12,7 +12,7 @@ const DistrictSites = preload("res://game/world/district_sites.gd")
 ## Clockwise from the dock bay: east headland, the greenhouse peninsula, east
 ## bay, the candy peninsula, lagoon and its sand spit, the circus and toy town
 ## headland, the star-court cove, the night-market valley, west inlet, west cape, west bay, south-west cape, the harbor spit that
-## hooks round the south-west bay, west headland. District sites (see
+## hooks round the south-west bay, the hotel peninsula off the west breakwater, west headland. District sites (see
 ## DistrictSites) stand on the peninsulas and in the bay.
 const COAST_CONTROL := [
 	Vector2(0,19), Vector2(11,19.4), Vector2(20,22), Vector2(28,27), Vector2(38,32.5), Vector2(50,36), Vector2(59.5,32), Vector2(65,22.5), Vector2(67,11.5), Vector2(72.5,1.5),
@@ -28,7 +28,9 @@ const COAST_CONTROL := [
 	Vector2(-89.5,-78.5), Vector2(-100.5,-71), Vector2(-104,-58), Vector2(-96.5,-47), Vector2(-83.5,-43.5),
 	Vector2(-74.5,-37.5), Vector2(-70.5,-26.5), Vector2(-76.5,-15.5),
 	Vector2(-87.5,-8), Vector2(-96.5,1.5), Vector2(-102,14), Vector2(-108,27), Vector2(-106,41), Vector2(-109.5,54), Vector2(-105,67), Vector2(-99,77), Vector2(-91,78), Vector2(-86.5,71), Vector2(-88,60), Vector2(-85.5,49), Vector2(-88.5,39), Vector2(-84,31),
-	Vector2(-74.5,29), Vector2(-61.5,27.5), Vector2(-52,33), Vector2(-43,40.5), Vector2(-31.5,40.5), Vector2(-23,33), Vector2(-20,26), Vector2(-11,21),
+	Vector2(-74.5,29), Vector2(-61.5,27.5), Vector2(-52,33), Vector2(-43,40.5),
+	Vector2(-40.2,49), Vector2(-39.6,59), Vector2(-40.4,69), Vector2(-40,80), Vector2(-39,92), Vector2(-34.5,103), Vector2(-22,109), Vector2(-8,109.5), Vector2(4.5,105.5),
+	Vector2(11,97), Vector2(12.5,85), Vector2(11.5,74), Vector2(8,66.5), Vector2(1,62), Vector2(-7,60), Vector2(-12.5,55), Vector2(-14.5,47), Vector2(-15.5,39), Vector2(-18,32), Vector2(-20,26), Vector2(-11,21),
 ]
 ## Sand between the waterline and the grass, everywhere along the coast.
 const SAND_WIDTH := 2.6
@@ -48,7 +50,7 @@ const AREAS := [
 	["林蔭空地", 30, -112, 9], ["海風觀景台", 54, -121, 9], ["長椅池畔", -27, -95, 11], ["月影劇台", 2, -117, 12],
 	["潟湖沙洲", 80, -135, 16],
 	["西南岬", -86, 8, 11], ["東岬", 88, -81, 11], ["西北岬", -69, -122, 11], ["東北岸", 52, -139, 8], ["北岬", 10, -156, 11],
-	["東南岬", 88, -17, 11], ["西堤", -38, 33, 11], ["東堤", 50, 29, 11], ["燈塔岬", -96, -62, 12],
+	["東南岬", 88, -17, 11], ["西堤", -38, 33, 11], ["旅館堤道", -27, 50, 9], ["東堤", 50, 29, 11], ["燈塔岬", -96, -62, 12],
 ]
 const DOCK_AREA := "海風碼頭"
 const PLAZA_AREA := "中央廣場"

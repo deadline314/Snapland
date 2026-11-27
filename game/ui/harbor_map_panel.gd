@@ -25,6 +25,10 @@ class TerrainChart extends Control:
 		"sun": Color("#879376"), "wetland": Color("#747862"),
 		"vine": Color("#587568"), "buds": Color("#446965"),
 	}
+	const HOTEL_FLOORS := {
+		"lobby": Color("#8a5a5e"), "corridor": Color("#6e6690"),
+		"lost": Color("#7a6450"), "dream": Color("#5a4f8a"),
+	}
 	var data: Dictionary
 
 	## A gold ring and ribbon tails around today's recommended booths.
@@ -43,7 +47,7 @@ class TerrainChart extends Control:
 		if region=="nightmarket":
 			_draw_market(bounds)
 			return
-		if region in ["circus", "toy", "garden"]:
+		if region in ["circus", "toy", "garden", "hotel"]:
 			_draw_room_plan(bounds, region)
 			return
 		var scale_factor := minf(size.x/bounds.size.x,size.y/bounds.size.y)
@@ -73,11 +77,11 @@ class TerrainChart extends Control:
 		var plan := Rect2((size - plan_size) * 0.5, plan_size)
 		var origin := plan.position - bounds.position * unit
 		var panel := plan.grow(7.0)
-		var backing: Color = {"garden": Color("#253d37"), "toy": Color("#302b31")}.get(region, Color("#291f36"))
+		var backing: Color = {"garden": Color("#253d37"), "toy": Color("#302b31"), "hotel": Color("#2a2340")}.get(region, Color("#291f36"))
 		draw_rect(panel, backing)
-		var border: Color = {"garden": Color("#77958c"), "toy": Color("#7e6a5c")}.get(region, Color("#72556b"))
+		var border: Color = {"garden": Color("#77958c"), "toy": Color("#7e6a5c"), "hotel": Color("#9d8cc8")}.get(region, Color("#72556b"))
 		draw_rect(panel, border, false, 1.0)
-		var swatches: Dictionary = {"garden": GARDEN_FLOORS, "toy": TOY_FLOORS}.get(region, CIRCUS_FLOORS)
+		var swatches: Dictionary = {"garden": GARDEN_FLOORS, "toy": TOY_FLOORS, "hotel": HOTEL_FLOORS}.get(region, CIRCUS_FLOORS)
 		for room: Dictionary in data.areas:
 			var rect: Rect2 = room.rect
 			var floor := Rect2(origin + rect.position * unit, rect.size * unit)
@@ -91,6 +95,8 @@ class TerrainChart extends Control:
 			_draw_toy_rails(origin, unit)
 		elif region == "garden":
 			_draw_garden_terrain(origin, unit)
+		elif region == "hotel":
+			_draw_hotel_signs(origin, unit)
 		var radius := clampf(unit * 1.07, 4.4, 8.0)
 		var font_size := mini(roundi(radius * 2.0), roundi(14.0 * Paper.text_scale() / Paper.physical_scale(self)))
 		for index in data.points.size():
@@ -150,6 +156,19 @@ class TerrainChart extends Control:
 		var beam: Vector3 = data.light_center
 		var current := origin + Vector2(beam.x, beam.z) * unit
 		draw_arc(current, leaf_size * 1.5, 0.0, TAU, 20, Paper.GOLD, 1.25, true)
+
+	## Room-number plates as gold dots with their numbers, and the kept stand sites as outlines.
+	func _draw_hotel_signs(origin: Vector2, unit: float) -> void:
+		var ink := Color(ROOM_PLAN_INK, 0.45)
+		for site: Vector3 in data.get("sites", []):
+			var at := origin + Vector2(site.x, site.z) * unit
+			draw_rect(Rect2(at - Vector2(0.75, 0.5) * unit, Vector2(1.5, 1.0) * unit), ink, false, 1.0)
+		var font_size := roundi(clampf(unit * 1.1, 9.0, 13.0))
+		for sign: Dictionary in data.get("signs", []):
+			var at: Vector3 = sign.position
+			var pin := origin + Vector2(at.x, at.z) * unit
+			draw_circle(pin, clampf(unit * 0.9, 4.0, 8.0), Paper.GOLD, true, -1.0, true)
+			draw_string(Paper.font(), pin + Vector2(-font_size * 0.9, -font_size * 0.6), str(sign.number), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ROOM_PLAN_INK)
 
 	func _draw_toy_detail(floor: Rect2, room: String) -> void:
 		var ink := Color(ROOM_PLAN_INK, 0.50)
@@ -368,14 +387,14 @@ func setup(value: Dictionary) -> void:
 
 func _ready() -> void:
 	var region: String = snapshot.get("region","harbor")
-	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap","toy":"ToyMap","garden":"GardenMap"}.get(region,"HarborMap")
+	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap","toy":"ToyMap","garden":"GardenMap","hotel":"HotelMap"}.get(region,"HarborMap")
 	name=prefix+"Panel"
 	size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	size_flags_vertical=Control.SIZE_EXPAND_FILL
 	add_theme_constant_override("separation",6)
 	var status := _status_text(region)
 	var tide := Paper.label(status,18,Paper.DEEP_TEAL)
-	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status","garden":"Status"}.get(region,"Tide"))
+	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status","garden":"Status","hotel":"Status"}.get(region,"Tide"))
 	add_child(tide)
 	if snapshot.has("errand"):
 		var errand := Paper.label("小旗：委託目標｜" + str(snapshot.errand.goal), 17, Paper.CORAL)
@@ -409,7 +428,7 @@ func _status_text(region: String) -> String:
 		"candy": return "材料觀察："+str(["冷 · 糖塊挺立","溫 · 糖團柔軟","熱 · 糖漿流動"][int(snapshot.temperature)])
 		"nightmarket":
 			return "%s · %s" % ["營業中" if snapshot.operating else "已收攤","你在雨棚下" if snapshot.covered else "你在露天區"]
-		"circus": return "你在" + String(snapshot.area)
+		"circus", "hotel": return "你在" + String(snapshot.area)
 		"garden": return "你在%s · %s" % [snapshot.area, snapshot.light_label]
 		"toy":
 			var train: Dictionary = snapshot.train
@@ -429,4 +448,6 @@ func _legend_text(region: String) -> String:
 		"circus": return "金環是你。中央通道通往北側安全墊。\n兩側步道可繞回入口，返回迎賓大道免費。"
 		"toy": return "金環是你；實線為選中岔道，方點是列車。\n積木街連到維修台，返回迎賓大道免費。"
 		"garden": return "金環是你，植床上的光圈是日照位置。\n西側走木棧道，東側可上葉臺或沿寬路繞行。"
+		"hotel": return "金環是你，金色圓牌是房號路標。
+四間房都向南開到外廊，北邊大門通往海岸環線，返回迎賓大道免費。"
 	return "金點：你的位置　珊瑚編號：互動地點\n環岸步道全年可通；兩端免費渡船在漲退潮都可使用。返回迎賓大道永久免費。"

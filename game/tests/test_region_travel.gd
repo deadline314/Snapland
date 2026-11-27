@@ -5,7 +5,8 @@ const Routes = preload("res://game/core/region_routes.gd")
 const GATE_STATUSES := {
 	"6 張 · 不消耗": ["harbor", "candy", "nightmarket"],
 	"30 張 · 不消耗": ["circus", "toy", "garden"],
-	"60 張 · 準備中": ["hotel", "sky", "cinema"],
+	"60 張 · 不消耗": ["hotel"],
+	"60 張 · 準備中": ["sky", "cinema"],
 }
 var main: Node
 var failures: Array[String] = []
@@ -157,7 +158,7 @@ func _run() -> void:
 		await _spawn()
 		_check(main.world_region=="welcome" and main.boat_stage==null, "legacy/invalid saved region starts welcome")
 		await _dispose()
-	for region in ["circus", "toy", "garden"]:
+	for region in ["circus", "toy", "garden", "hotel"]:
 		await _same_batch_trip(region)
 	await _failure_process()
 	await _finish()
@@ -196,7 +197,10 @@ func _same_batch_trip(region: String) -> void:
 	var title := Routes.title(region)
 	var prefix := region.capitalize()
 	var gate := "gate:" + region
-	var ordinary := {"welcome": 12, "harbor": 12, "candy": 5}
+	# One card short of the region's threshold, from several regions.
+	var threshold := Routes.threshold(region)
+	var ordinary := {"welcome": 12, "harbor": 12, "candy": 5} if threshold == 30 else {"welcome": 12, "harbor": 12, "candy": 12, "nightmarket": 12, "circus": 11}
+	var last_card := "photo-candy-game-6" if threshold == 30 else "photo-circus-game-12"
 	for source_region in ordinary:
 		var count: int = ordinary[source_region]
 		for index in range(1, count + 1):
@@ -204,19 +208,19 @@ func _same_batch_trip(region: String) -> void:
 	Progress.photos["photo-welcome-devil-1"] = {}
 	Progress.photos["postcard-time-dawn"] = {}
 	Progress.coins = 147
-	_check(Progress.normal_count() == 29 and Progress.save_progress(), title + " fixture saves 29 ordinary cards plus collectibles")
+	_check(Progress.normal_count() == threshold - 1 and Progress.save_progress(), title + " fixture saves one card short of its threshold plus collectibles")
 	await _spawn()
 	var welcome: Node = main.world
 	welcome.interaction_requested.emit(gate, title)
 	_check(_labels(main.overlay).contains("還差 1 張") and main.overlay.find_child(Routes.travel_button(region), true, false) == null
-		and not main._travel_to_region(region), "29 ordinary cards show the exact shortage for " + title)
+		and not main._travel_to_region(region), "one card short shows the exact shortage for " + title)
 	main._close()
-	Progress.photos["photo-candy-game-6"] = {}
+	Progress.photos[last_card] = {}
 	var before := _snapshot()
 	welcome.interaction_requested.emit(gate, title)
 	var travel := main.overlay.find_child(Routes.travel_button(region), true, false) as Button
-	_check(Progress.normal_count() == 30 and travel != null and travel.tooltip_text.contains("30 張") and travel.tooltip_text.contains("不消耗"),
-		"30 different ordinary cards enable the actual entrance for " + title)
+	_check(Progress.normal_count() == threshold and travel != null and travel.tooltip_text.contains("%d 張" % threshold) and travel.tooltip_text.contains("不消耗"),
+		"%d different ordinary cards enable the actual entrance for %s" % [threshold, title])
 	if travel == null:
 		await _dispose()
 		return
@@ -352,7 +356,7 @@ func _candy_ui() -> void:
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
 	_check(selector.item_count==Routes.ORDER.size() and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
-	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,Catalog.definitions("circus").size()+2,Catalog.definitions("toy").size()+2,Catalog.definitions("garden").size()+2]
+	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,Catalog.definitions("circus").size()+2,Catalog.definitions("toy").size()+2,Catalog.definitions("garden").size()+2,Catalog.definitions("hotel").size()]
 	for index in Routes.ORDER.size():
 		selector.select(index)
 		selector.item_selected.emit(index)

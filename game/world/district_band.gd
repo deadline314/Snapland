@@ -75,6 +75,13 @@ const BANDS := {
 		"tiles": [Color("#8d8f80"), Color("#7d8572"), Color("#9a9a88"), Color("#6f7d5e")],
 		"edges": [Vector4(-9, 25, 9, 25)],
 	},
+	"hotel": {
+		# Lost luggage and umbrellas wander out of the hotel; room-number posts light the way in.
+		"density": 0.6, "props": [["luggage", 3.0, 0.0], ["umbrella_stand", 2.0, 0.0], ["paper_crane", 2.5, 0.0], ["number_post", 1.4, 0.2]],
+		"colors": [Color("#7a5a9e"), Color("#e79bb6"), Color("#4f8f99"), Color("#f4ecd8"), Color("#d9b45c")],
+		"tiles": [Color("#b9a8d2"), Color("#a796c2"), Color("#cbbfdc"), Color("#e2d6bd")],
+		"lamps": 1,
+	},
 	"harbor": {
 		# The bay keeps the harbour off the island: only the headland by its pier is band.
 		"density": 8.0, "props": [["crates", 3.0, 0.0], ["rope_coil", 3.0, 0.0], ["net_poles", 1.5, 0.15], ["dinghy", 1.2, 0.25]],
@@ -91,14 +98,15 @@ const RADIUS := {
 	"lantern_post": 0.4, "puddle": 0.85, "slate_patch": 0.8, "vending_cart": 1.05,
 	"pots": 0.55, "moss_stone": 0.6, "trellis": 0.8, "watering_can": 0.35,
 	"crates": 0.85, "rope_coil": 0.45, "net_poles": 1.2, "dinghy": 1.4,
+	"luggage": 0.6, "umbrella_stand": 0.35, "paper_crane": 0.4, "number_post": 0.4,
 }
 ## Kinds that face the camera (signs, wheels, lattices) turn only a little.
-const FACING := ["pinwheel", "windup_key", "ticket_sign", "wagon", "vending_cart", "trellis", "net_poles", "pennant_stake", "dinghy"]
+const FACING := ["pinwheel", "windup_key", "ticket_sign", "wagon", "vending_cart", "trellis", "net_poles", "pennant_stake", "dinghy", "number_post", "paper_crane"]
 ## Kinds that lie flat: no contact shadow, no grass at the foot.
 const FLAT := ["puddle", "slate_patch"]
 ## Kinds big enough to walk into: they get an invisible obstacle.
 const SOLID := ["wagon", "vending_cart", "dinghy", "trellis"]
-const LIGHT_KINDS := ["light_pole", "lantern_post", "vending_cart"]
+const LIGHT_KINDS := ["light_pole", "lantern_post", "vending_cart", "number_post"]
 
 class Placed:
 	var kind: String
@@ -881,6 +889,69 @@ func _dinghy(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
 
 static func _hash(x: int, z: int, salt: int) -> float:
 	return fposmod(sin(float(x) * 127.1 + float(z) * 311.7 + float(salt) * 74.7) * 43758.5453, 1.0)
+
+## One to three suitcases, the top one usually tipped, with straps and a handle.
+func _luggage(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	var count := 1 + int(h[0] * 2.6)
+	var y := 0.0
+	for index in count:
+		var size := Vector3(0.72 - 0.12 * float(index), 0.24 + 0.05 * fposmod(h[1] * 3.0 + float(index), 1.0), 0.46 - 0.06 * float(index))
+		var turn := Basis(Vector3.UP, (fposmod(h[2] * 5.1 + float(index) * 0.7, 1.0) - 0.5) * 0.7)
+		if index == count - 1 and count > 1: turn = turn * Basis(Vector3.BACK, (h[3] - 0.5) * 0.3)
+		var tone: Color = pal[(index + int(h[1] * 3.0)) % 3]
+		var centre := Vector3(0, y + size.y * 0.5, 0)
+		props.box(centre, size, tone, turn)
+		props.box(centre, size + Vector3(0.02, -0.1, 0.02), tone.darkened(0.18), turn)
+		for strap: float in [-0.26, 0.26]:
+			props.box(centre + turn * Vector3(strap * size.x, 0, 0), Vector3(0.05, size.y + 0.02, size.z + 0.02), Color("#5a3e2a"), turn)
+		props.box(centre + turn * Vector3(0, size.y * 0.5 + 0.04, 0), Vector3(0.2, 0.05, 0.05), pal[4], turn)
+		y += size.y
+	return []
+
+## A brass bucket of furled umbrellas with crook handles.
+func _umbrella_stand(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	var brass: Color = pal[4]
+	props.tube(Vector3(0, 0.22, 0), 0.16, 0.19, 0.44, brass.darkened(0.15), 10)
+	props.tube(Vector3(0, 0.45, 0), 0.2, 0.2, 0.04, brass, 10)
+	for index in 2 + int(h[0] * 1.9):
+		var lean := Basis(Vector3.BACK, (float(index) - 1.0) * 0.16 + (h[1] - 0.5) * 0.1) * Basis(Vector3.RIGHT, (h[2] - 0.5) * 0.2)
+		var tone: Color = pal[(index + int(h[3] * 3.0)) % 3]
+		var base := Vector3((float(index) - 1.0) * 0.07, 0.3, 0)
+		props.tube(base + lean * Vector3(0, 0.38, 0), 0.07, 0.02, 0.62, tone, 6, lean)
+		props.tube(base + lean * Vector3(0, 0.82, 0), 0.012, 0.012, 0.3, DARK, 4, lean)
+		var crook := base + lean * Vector3(0, 0.98, 0)
+		props.box(crook + lean * Vector3(0.05, 0.02, 0), Vector3(0.12, 0.03, 0.03), WOOD, lean)
+		props.box(crook + lean * Vector3(0.1, -0.04, 0), Vector3(0.03, 0.1, 0.03), WOOD, lean)
+	return []
+
+## A big folded paper crane resting on a stone.
+func _paper_crane(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	props.ball(Vector3(0, 0.05, 0), 0.24, Color("#8d8a92"), Color("#9c99a2"), 7, 2, 0.45, true)
+	var paper: Color = pal[3] if h[0] > 0.35 else pal[1].lightened(0.35)
+	var fold := paper.darkened(0.16)
+	var c := Vector3(0, 0.2, 0)
+	# Body diamond, two raised wings, a neck and a tail.
+	props.sheet(c + Vector3(-0.16, 0.0, 0), c + Vector3(0.16, 0.0, 0), c + Vector3(0, 0.12, 0.05), paper)
+	props.sheet(c + Vector3(-0.16, 0.0, 0), c + Vector3(0.16, 0.0, 0), c + Vector3(0, 0.1, -0.06), fold)
+	props.sheet(c + Vector3(-0.05, 0.08, 0), c + Vector3(0.06, 0.08, 0), c + Vector3(-0.14, 0.38, -0.2), paper)
+	props.sheet(c + Vector3(-0.05, 0.08, 0), c + Vector3(0.06, 0.08, 0), c + Vector3(0.12, 0.36, 0.2), fold)
+	props.sheet(c + Vector3(0.12, 0.0, 0), c + Vector3(0.16, 0.03, 0), c + Vector3(0.3, 0.3, 0.02), paper)
+	props.sheet(c + Vector3(0.3, 0.3, 0.02), c + Vector3(0.27, 0.29, 0), c + Vector3(0.36, 0.24, 0.02), fold)
+	props.sheet(c + Vector3(-0.12, 0.0, 0), c + Vector3(-0.16, 0.03, 0), c + Vector3(-0.32, 0.26, 0.0), fold)
+	return []
+
+## A short post with a lit oval room-number plaque on top.
+func _number_post(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	props.box(Vector3(0, 0.06, 0), Vector3(0.3, 0.12, 0.3), Color("#6e6478"))
+	props.tube(Vector3(0, 0.62, 0), 0.05, 0.045, 1.0, WOOD, 6)
+	props.box(Vector3(0, 1.16, 0), Vector3(0.5, 0.06, 0.08), pal[4])
+	var plaque := Vector3(0, 1.36, 0.02)
+	props.tube(plaque, 0.23, 0.23, 0.05, pal[0], 12, Basis(Vector3.RIGHT, PI * 0.5) * Basis.from_scale(Vector3(1.0, 1.0, 0.72)))
+	glow.tube(plaque + Vector3(0, 0, 0.03), 0.17, 0.17, 0.02, Color("#ffe7b0"), 12, Basis(Vector3.RIGHT, PI * 0.5) * Basis.from_scale(Vector3(1.0, 1.0, 0.72)))
+	# Three painted digits.
+	for digit in 3:
+		props.box(plaque + Vector3((float(digit) - 1.0) * 0.08, 0, 0.05), Vector3(0.035, 0.1 + 0.02 * float(int(h[0] * 7.0 + digit) % 2), 0.01), pal[0].darkened(0.3))
+	return [plaque + Vector3(0, 0, 0.1)]
 
 ## Smooth 1D value noise in 0..1.
 static func _smooth(t: float) -> float:

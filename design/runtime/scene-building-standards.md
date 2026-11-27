@@ -69,7 +69,7 @@
 
 ## 9. 自動檢查
 
-場景檢查會建立七個區域並逐一稽核，執行方式：
+場景檢查會建立八個區域（迎賓島與七個主題區）並逐一稽核，執行方式：
 
 ```
 python tools/run_game_tests.py --only "scene standards tests"
@@ -82,7 +82,7 @@ python tools/run_game_tests.py --only "scene standards tests"
 
 ## 10. 交付前檢查
 
-1. 執行場景檢查，七個區域全部通過。
+1. 執行場景檢查，八個區域全部通過。
 2. 用 `python tools/run_native_capture.py` 以固定視點擷取白天與夜晚各一張，對照本規範第 1 到 5 節逐條看過。
 3. 票上只附一張必要的畫面。
 4. 新增一種規則時，同時補上對應的自動檢查或寫明畫面確認方式。

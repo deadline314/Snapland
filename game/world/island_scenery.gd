@@ -6,7 +6,7 @@ extends RefCounted
 const IslandShape = preload("res://game/world/island_shape.gd")
 const IslandLayout = preload("res://game/world/island_layout.gd")
 
-const SEA_SIZE := Vector2(440, 440)
+const SEA_SIZE := Vector2(480, 480)
 const SEA_Y := -0.42
 ## The flat beach stops this far inside the waterline, then slopes under the sea.
 const BEACH_RIM := 0.7

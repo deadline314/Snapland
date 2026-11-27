@@ -36,6 +36,7 @@ const PATHS := [
 	{"id": "flower", "width": 3.0, "surface": "trail", "points": [Vector2(34,-86), Vector2(34,-93)]},
 	{"id": "grove", "width": 3.0, "surface": "trail", "points": [Vector2(22,-122), Vector2(27,-116), Vector2(30,-113)]},
 	{"id": "bench-pond", "width": 3.0, "surface": "trail", "points": [Vector2(6,-90), Vector2(-8,-90), Vector2(-20,-92), Vector2(-22,-100), Vector2(-12,-110)]},
+	{"id": "hotel", "width": 3.6, "surface": "paving", "points": [Vector2(-30,28.2), Vector2(-28.4,34), Vector2(-27.2,41), Vector2(-26.2,48), Vector2(-25.4,53.5), Vector2(-25,57.4)]},
 	{"id": "spit", "width": 2.6, "surface": "boardwalk", "points": [Vector2(47,-134.5), Vector2(56,-134.2), Vector2(65,-136.5), Vector2(74,-135.5), Vector2(83.6,-134.6)]},
 ]
 ## The coastal loop: a trail a few metres inland from the waterline. It leaves
@@ -82,7 +83,7 @@ const MIN_ENTRY_SPACING := 14.0
 ## degrees (0 faces south). A district that stands on the island keeps its gate
 ## at its own door instead (see DistrictSites).
 const GATES := {
-	"hotel": Vector3(-36,34.6,180), "sky": Vector3(49.5,29,-160), "cinema": Vector3(85.5,-135.5,-60),
+	"sky": Vector3(49.5,29,-160), "cinema": Vector3(85.5,-135.5,-60),
 }
 ## The coastal loop's six landmarks. "position" is the plaque on the trail and
 ## "outward" the step from it to the landmark itself, which stands clear of the

@@ -262,6 +262,19 @@ const REGIONS := {
 			{"kind": "sparrow", "count": 3, "at": Vector3(-3.0, 0, 5.6), "spread": 0.8},
 		],
 	},
+	"hotel": {
+		"clouds": 0.6,
+		"particles": [
+			{"kind": "dust", "phases": DAY, "amount": 30, "box": Vector3(11.0, 1.6, 9.0)},
+			# Dream dust: small stars that wink in and out over the whole hotel.
+			{"kind": "sparkle", "phases": ALWAYS, "amount": 24, "box": Vector3(11.0, 1.6, 9.0)},
+			{"kind": "firefly", "phases": ["night"], "amount": 20, "box": Vector3(11.0, 0.9, 9.0)},
+		],
+		"critters": [
+			{"kind": "moth", "count": 3, "at": Vector3(-13.2, 0, -7.4), "spread": 1.0, "height": 2.3, "phases": ALWAYS},
+			{"kind": "butterfly", "count": 2, "at": Vector3(12.8, 0, 7.2), "spread": 1.2},
+		],
+	},
 }
 
 ## Region scripts are named "<region>_world.gd"; the shared base is the Welcome island.

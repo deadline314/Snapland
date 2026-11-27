@@ -251,6 +251,8 @@ func _refresh_book() -> void:
 		_empty_message.text="發條玩具城的小惡魔拍貼活動準備中。"
 	elif _region=="garden" and entries.is_empty():
 		_empty_message.text="苔光溫室的小惡魔拍貼活動準備中。"
+	elif _region=="hotel" and entries.is_empty():
+		_empty_message.text="幽幽旅館可自由探索，小遊戲攤位準備中。"
 	var capacity := _page_capacity()
 	var page_count := maxi(1,ceili(float(entries.size())/float(capacity)))
 	_page=clampi(_page,0,page_count-1)

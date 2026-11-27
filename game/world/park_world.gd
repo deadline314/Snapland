@@ -2377,6 +2377,11 @@ func _build_gates() -> void:
 		gate.position = IslandLayout.gate_position(region)
 		gate.rotation.y = IslandLayout.gate_yaw(region)
 		_fitting_space = gate.transform
+		# A gate facing away from the camera stands between it and the visitor at the
+		# gate, so it opens like a building while someone stands behind it.
+		var faces_away := cos(gate.rotation.y) < 0.0
+		var see_through: StaticBody3D = _district_occlusion_blocker(gate, "GateOcclusionBlocker") if faces_away else null
+		if faces_away: occlusion_controller.begin_building()
 		var first_part := get_child_count()
 		var zone_color: Color = [Color("#28737a"),Color("#e2795e"),Color("#e2ae4f"),Color("#725985"),Color("#47718a"),Color("#678858"),Color("#5295a0"),Color("#42638a"),Color("#865d71")][i-1]
 		var pos := Vector3.ZERO
@@ -2394,16 +2399,19 @@ func _build_gates() -> void:
 		gate_header.material_override = _coastal_surface(3,1.4,zone_color.lightened(0.12))
 		_box(pos+Vector3(0,2.49,0),Vector3(2.65,0.12,0.8),Color("#f2d8a5"))
 		_zone_crown(i,pos,zone_color)
-		_local_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
-		_local_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
+		# A gate that faces away from the camera carries its words on the side the camera sees.
+		var face := -1.0 if faces_away else 1.0
+		_local_label(zone["name"],pos+Vector3(0,2.76,0.37*face),20)
+		_local_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43*face),28,GOLD)
 		_adopt_district_geometry(gate,first_part)
+		if faces_away: occlusion_controller.finish_building(see_through)
 		_fitting_space = Transform3D.IDENTITY
 		if DistrictSites.has(region): _add_gate_leaves(gate, region)
 		_point("gate:"+region,zone["name"],IslandLayout.gate_point(region))
 		var open := RegionRoutes.supports(region)
 		var required: int = RegionRoutes.threshold(region) if open else int(zone["threshold"])
 		var status := "%d 張 · %s" % [required, "不消耗" if open else "準備中"]
-		_local_label(status, gate.transform * Vector3(0,1.1,0.48), 19).name = "GateStatus_" + region
+		_local_label(status, gate.transform * Vector3(0,1.1,0.48*face), 19).name = "GateStatus_" + region
 		# A gate far from the plaza needs its own light after dark; it joins the shared budget.
 		var light := OmniLight3D.new()
 		light.name = "GateLamp_" + region

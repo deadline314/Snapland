@@ -16,6 +16,7 @@ const REGIONS := {
 	"circus": "res://game/world/circus_world.gd",
 	"toy": "res://game/world/toy_world.gd",
 	"garden": "res://game/world/garden_world.gd",
+	"hotel": "res://game/world/hotel_world.gd",
 }
 
 var failures := 0
@@ -68,7 +69,7 @@ func _run() -> void:
 		file.store_string(JSON.stringify(measured, "\t") + "\n")
 		print("Wrote ", BASELINE_PATH)
 	if failures == 0:
-		print("PASS: scene standards hold or improve in all seven regions (%d checks)" % checks)
+		print("PASS: scene standards hold or improve in all %d regions (%d checks)" % [REGIONS.size(), checks])
 	quit(1 if failures > 0 else 0)
 
 
