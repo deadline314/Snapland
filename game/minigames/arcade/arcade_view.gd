@@ -16,6 +16,10 @@ const CREAM := Color("#fff5dc")
 const GOLD := Color("#ffd166")
 const MINT := Color("#70e1c1")
 const ROSE := Color("#ff6f7d")
+## Dark lacquer, gilt and velvet for the shared overlays.
+const LACQUER := Color("#3a2433")
+const GILT := Color("#c9953e")
+const VELVET := Color("#5c2440")
 ## The HUD covers the canvas above this line.
 const PLAY_TOP := 122.0
 const STRIP := Rect2(410, 130, 460, 12)
@@ -103,20 +107,73 @@ func use_backdrop_art(path: String, region: Rect2, tint := Color.WHITE) -> bool:
 func stage_floor(top: float, wood: Color, seam: Color) -> void:
 	for band in 4:
 		draw_rect(Rect2(0, top - 96.0 + band * 24.0, DESIGN.x, 24), Color(0.09, 0.05, 0.14, 0.14 + band * 0.12))
-	draw_rect(Rect2(0, top, DESIGN.x, DESIGN.y - top), seam)
-	var y := top
-	for row in 4:
-		var height := 30.0 + row * 14.0
-		var tone := wood.darkened(0.42 - row * 0.07)
-		draw_rect(Rect2(0, y, DESIGN.x, height - 3.0), tone)
-		draw_rect(Rect2(0, y, DESIGN.x, 2), tone.lightened(0.14))
-		var step := 150.0 + row * 44.0
-		var x := -fmod(row * 97.0, step)
-		while x < DESIGN.x:
-			draw_rect(Rect2(x, y, 3, height - 3.0), seam)
-			x += step
-		y += height
-	draw_rect(Rect2(0, top - 4.0, DESIGN.x, 5), wood.lightened(0.32))
+	var rows := int((DESIGN.y - top) / TEXEL) + 1
+	var boards := Pixels.bake("stage|%s|%s|%d" % [wood.to_html(), seam.to_html(), rows], Vector2i(320, rows), func(x: int, y: int) -> Color:
+		return Pixels.stage_boards(wood, seam, x, y))
+	stamp(boards, Vector2(0, top))
+	# A moulded skirting board where the boards meet the wall.
+	panel(Rect2(-8, top - 14.0, DESIGN.x + 16.0, 18), "planks", wood.lightened(0.06))
+	draw_rect(Rect2(0, top + 4.0, DESIGN.x, 8), Color(0.08, 0.03, 0.1, 0.3))
+
+
+## A baked material (see Pixels.surface) stretched over `rect`, outline included.
+func panel(rect: Rect2, kind: String, base: Color, trim := Color(0, 0, 0, 0), texel := TEXEL, tint := Color.WHITE) -> void:
+	var size := Vector2i(maxi(2, roundi(rect.size.x / texel) - 2), maxi(2, roundi(rect.size.y / texel) - 2))
+	draw_texture_rect(Pixels.surface(kind, size, base, trim), rect, false, tint)
+
+
+## A chipped gilt frame `border` design pixels wide around `rect`'s edge.
+func gilt_frame(rect: Rect2, border: float, base := GILT, texel := TEXEL, tint := Color.WHITE) -> void:
+	var size := Vector2i(maxi(4, roundi(rect.size.x / texel) - 2), maxi(4, roundi(rect.size.y / texel) - 2))
+	draw_texture_rect(Pixels.frame(size, maxi(3, roundi(border / texel) - 1), base), rect, false, tint)
+
+
+## A highlight sweeping across something round and shiny every `period` seconds.
+func glint(center: Vector2, radius: float, period := 3.0, offset := 0.0) -> void:
+	if reduced_motion:
+		return
+	var phase := fposmod(now + offset, period) / 0.45
+	if phase >= 1.0:
+		return
+	var across := lerpf(-radius * 1.4, radius * 1.4, phase)
+	var step := maxf(2.0, roundf(radius / 6.0))
+	var y := -radius
+	while y < radius:
+		var point := Vector2(across + y * 0.5, y)
+		if point.length() < radius * 0.82:
+			draw_rect(Rect2(center + point - Vector2(step, step * 0.5), Vector2(step * 2.0, step)), Color(1, 0.97, 0.86, 0.7))
+		y += step
+
+
+## A slanted band of light crossing `rect` as `phase` runs from 0 to 1, drawn
+## in texel rows so it stays pixel art.
+func sheen(rect: Rect2, phase: float, width: float, alpha := 0.18, slant := 0.6) -> void:
+	if reduced_motion or phase < 0.0 or phase >= 1.0:
+		return
+	var travel := rect.size.x + rect.size.y * slant + width
+	var y := rect.position.y
+	while y < rect.end.y:
+		var left := rect.position.x - width - rect.size.y * slant + phase * travel + (rect.end.y - y) * slant
+		var from := maxf(left, rect.position.x)
+		var to := minf(left + width, rect.end.x)
+		if to > from:
+			draw_rect(Rect2(from, y, to - from, minf(TEXEL, rect.end.y - y)), Color(1, 0.98, 0.9, alpha))
+		y += TEXEL
+
+
+## Dust kicked up where something lands; `elapsed` counts from the impact.
+func dust_puffs(at: Vector2, elapsed: float, spread := 60.0) -> void:
+	if reduced_motion or elapsed < 0.0 or elapsed > 0.5:
+		return
+	var t := elapsed / 0.5
+	for side: float in [-1.0, 1.0]:
+		for puff in 3:
+			var reach := spread * (0.4 + puff * 0.3) * (1.0 - (1.0 - t) * (1.0 - t))
+			var size := roundf((10.0 - puff * 2.0) * (1.0 - t * 0.5))
+			var centre := (at + Vector2(side * reach, -puff * 4.0 - 10.0 * t)).round()
+			draw_rect(Rect2(centre - Vector2(size, size * 0.6), Vector2(size * 2.0, size * 1.2)), Color(0.9, 0.82, 0.74, 0.55 * (1.0 - t)))
+			draw_rect(Rect2(centre - Vector2(size * 0.6, size), Vector2(size * 1.2, size * 0.5)), Color(1.0, 0.94, 0.86, 0.45 * (1.0 - t)))
+
 
 ## Draw a baked sprite (arcade_pixels.gd) so texel (0, 0) of its shape lands on `at`.
 func stamp(texture: Texture2D, at: Vector2, scale_factor := TEXEL, tint := Color.WHITE) -> void:
@@ -207,12 +264,10 @@ func label_width(content: String, font_size: int) -> float:
 	return _font.get_string_size(content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x if _font != null else 0.0
 
 
-## A chunky pixel plate: outline, face and a darker lower edge.
-func plate(rect: Rect2, face: Color, edge: Color, outline := INK) -> void:
-	draw_rect(rect.grow(3.0), outline)
-	draw_rect(rect, edge)
-	draw_rect(Rect2(rect.position, rect.size - Vector2(0, 5)), face)
-	draw_rect(Rect2(rect.position, Vector2(rect.size.x, 3)), face.lightened(0.25))
+## A lacquered pixel plate with a gilt pinstripe and rivets, casting a shadow.
+func plate(rect: Rect2, face: Color, edge: Color, _outline := INK) -> void:
+	draw_rect(Rect2(rect.position + Vector2(4, 7), rect.size), Color(edge.darkened(0.4), 0.55))
+	panel(rect.grow(3.0), "lacquer", face, GILT, 3.0)
 
 
 ## A keyboard key cap centred on `center`; returns its width.
@@ -221,10 +276,9 @@ func key_cap(center: Vector2, content: String, pressed := false, font_size := 20
 	var height := font_size + 18.0
 	var drop := 4.0 if pressed else 0.0
 	var rect := Rect2(center.x - width * 0.5, center.y - height * 0.5 + drop, width, height)
-	draw_rect(rect.grow(3.0), INK)
-	draw_rect(Rect2(rect.position + Vector2(0, 6.0 - drop), rect.size), Color("#9a8f7a"))
-	draw_rect(rect, GOLD if pressed else CREAM)
-	draw_rect(Rect2(rect.position, Vector2(rect.size.x, 3)), Color.WHITE)
+	# An ivory key top on a deeper skirt that shrinks as the key goes down.
+	panel(Rect2(rect.position + Vector2(-3, 2), rect.size + Vector2(6, 9.0 - drop)), "lacquer", Color("#8a7660"), Color(0, 0, 0, 0), 3.0)
+	panel(rect.grow(3.0), "key", GOLD if pressed else CREAM, Color(0, 0, 0, 0), 3.0)
 	if _font != null:
 		var extent := _font.get_string_size(content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 		draw_string(_font, Vector2(center.x - extent.x * 0.5, center.y + drop + extent.y * 0.32), content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, INK)
@@ -240,17 +294,32 @@ func _draw_medal_strip() -> void:
 	var score := int(state.get("score", 0))
 	var full := float(lines[2]) * 1.12
 	var track := STRIP
-	draw_rect(track.grow(4.0), Color(INK, 0.9))
-	draw_rect(track, Color("#3a3447"))
+	# A lacquer rail with brass end caps around a recessed groove.
+	panel(track.grow(8.0), "lacquer", LACQUER, GILT, 2.0)
+	panel(track.grow(2.0), "groove", Color("#2a1d33"), Color(0, 0, 0, 0), 2.0)
 	var earned := int(state.get("medal", 0))
 	var fill_color: Color = Medal.FACES[earned] if earned > 0 else MINT
 	var filled := track.size.x * clampf(float(score) / full, 0.0, 1.0)
-	draw_rect(Rect2(track.position, Vector2(filled, track.size.y)), fill_color)
-	draw_rect(Rect2(track.position, Vector2(filled, 3)), fill_color.lightened(0.35))
+	if filled >= 4.0:
+		var liquid := Pixels.surface("liquid", Vector2i(int(track.size.x / 2.0) - 2, 4), fill_color.darkened(0.1))
+		var shown := filled / track.size.x
+		draw_texture_rect_region(liquid, Rect2(track.position, Vector2(filled, track.size.y)), Rect2(Vector2.ZERO, Vector2(liquid.get_width() * shown, liquid.get_height())))
+		if not reduced_motion:
+			var sweep := fposmod(now * 160.0, filled + 160.0) - 80.0
+			if sweep > 0.0 and sweep < filled - 8.0:
+				draw_rect(Rect2(track.position.x + sweep, track.position.y + 2.0, 6, track.size.y - 5.0), Color(1, 1, 1, 0.3))
+	for side: float in [0.0, 1.0]:
+		var cap := Vector2(track.position.x - 12.0 + side * (track.size.x + 24.0), track.get_center().y)
+		draw_circle(cap, 9.0, GILT.darkened(0.66))
+		draw_circle(cap, 7.0, GILT)
+		draw_circle(cap + Vector2(1, 1), 4.0, GILT.darkened(0.22))
+		draw_rect(Rect2(cap - Vector2(4, 4), Vector2(3, 3)), GILT.lightened(0.45))
 	for index in 3:
 		var at := Vector2(track.position.x + track.size.x * float(lines[index]) / full, track.get_center().y)
 		var lit := earned > index
 		Medal.paint(self, at + Vector2(0, 2), 2.0, index + 1, lit)
+		if lit:
+			glint(at + Vector2(0, 2), 12.0, 3.2, index * 0.4)
 		label(at + Vector2(36, -14), str(lines[index]), 15, Medal.FACES[index + 1] if lit else Color("#b9b2c8"))
 
 
@@ -265,7 +334,7 @@ func _draw_hint() -> void:
 	width -= 34.0
 	var x := 640.0 - width * 0.5
 	var y := 690.0
-	draw_rect(Rect2(x - 22.0, y - 26.0, width + 44.0, 52.0), Color(INK, 0.72))
+	panel(Rect2(x - 24.0, y - 28.0, width + 48.0, 58.0), "lacquer", LACQUER, GILT, 3.0, Color(1, 1, 1, 0.94))
 	var tapping := str(state.get("stage", "")) == "ready" and pulse(1.8) > 0.62
 	for pair: Array in pairs:
 		var cap := maxf(44.0, label_width(str(pair[0]), font_size) + 26.0)
@@ -278,8 +347,7 @@ func _draw_hint() -> void:
 	if not variant_label.is_empty():
 		var chip := "變奏・" + variant_label
 		var chip_width := label_width(chip, 17) + 28.0
-		draw_rect(Rect2(28.0, y - 20.0, chip_width, 40.0), Color(INK, 0.72))
-		draw_rect(Rect2(28.0, y - 20.0, 5.0, 40.0), GOLD)
+		panel(Rect2(24.0, y - 24.0, chip_width + 8.0, 48.0), "lacquer", LACQUER, GILT, 3.0, Color(1, 1, 1, 0.94))
 		label(Vector2(28.0 + chip_width * 0.5 + 2.0, y), chip, 17, GOLD)
 	if bool(state.get("assisted", false)):
 		label(Vector2(1180.0, y), "輔助中", 17, MINT)
@@ -293,7 +361,12 @@ func _draw_word() -> void:
 	var good := bool(state.get("word_good", true))
 	var fade := 1.0 - smoothstep(WORD_SECONDS - 0.25, WORD_SECONDS, elapsed)
 	var rise := 0.0 if reduced_motion else -26.0 * smoothstep(0.0, WORD_SECONDS, elapsed)
-	label(word_anchor + Vector2(0, rise), word, 58, GOLD if good else ROSE, pop_in(elapsed, 0.2), fade)
+	var face := GOLD if good else ROSE
+	var grow := pop_in(elapsed, 0.2)
+	# Darker copies underneath give the word a chunky, extruded body.
+	for depth: float in [6.0, 3.0]:
+		label(word_anchor + Vector2(0, rise + depth * grow), word, 58, face.darkened(0.5).lerp(Pixels.SHADOW_HUE, 0.3), grow, fade)
+	label(word_anchor + Vector2(0, rise), word, 58, face, grow, fade)
 
 
 func _draw_ready_banner() -> void:
@@ -302,9 +375,11 @@ func _draw_ready_banner() -> void:
 	var enter := 1.0 if reduced_motion else smoothstep(0.0, 0.18, stage_time)
 	# The banner sits low so the scene above it doubles as the opening demo.
 	var band := Rect2(0, 540.0 + 40.0 * (1.0 - enter), 1280, 112)
-	draw_rect(band, Color(INK, 0.88 * enter))
-	draw_rect(Rect2(band.position, Vector2(1280, 5)), GOLD)
-	draw_rect(Rect2(0, band.end.y - 5.0, 1280, 5), GOLD)
+	# A velvet valance in a chipped gilt frame.
+	var fade := Color(1, 1, 1, enter)
+	draw_rect(Rect2(band.position + Vector2(0, 12), band.size), Color(0.06, 0.02, 0.08, 0.4 * enter))
+	panel(band, "velvet", VELVET, Color(0, 0, 0, 0), TEXEL, fade)
+	gilt_frame(Rect2(band.position - Vector2(16, 0), band.size + Vector2(32, 0)), 16.0, GILT, TEXEL, fade)
 	label(Vector2(560, band.position.y + 42.0), str(state.get("verb", "")), 38, CREAM, pop_in(stage_time, 0.3))
 	var variant_label := str(state.get("variant_label", ""))
 	if not variant_label.is_empty():
@@ -314,9 +389,7 @@ func _draw_ready_banner() -> void:
 	var count := clampi(3 - int(stage_time / beat), 1, 3)
 	var beat_age := fmod(stage_time, beat)
 	var disc := Vector2(1090, band.get_center().y)
-	draw_circle(disc, 58.0, INK)
-	draw_circle(disc, 52.0, GOLD)
-	draw_circle(disc, 44.0, Color("#3a2433"))
+	_medallion(disc, 58.0)
 	label(disc, str(count), 64, CREAM, 0.7 + 0.3 * pop_in(beat_age, 0.22))
 
 
@@ -324,8 +397,9 @@ func _draw_closing_card() -> void:
 	var elapsed := float(state.get("stage_time", 0.0)) if str(state.get("stage", "")) == "closing" else 9.0
 	draw_rect(Rect2(Vector2.ZERO, DESIGN), Color(INK, 0.5 * (1.0 if reduced_motion else smoothstep(0.0, 0.25, elapsed))))
 	var card := Rect2(410, 250, 460, 250)
-	plate(card, Color("#3a2433"), Color("#241726"))
-	draw_rect(Rect2(card.position + Vector2(10, 10), card.size - Vector2(20, 25)), GOLD, false, 3.0)
+	draw_rect(Rect2(card.position + Vector2(10, 14), card.size), Color(0.06, 0.02, 0.08, 0.45))
+	panel(card, "velvet", VELVET.darkened(0.3))
+	gilt_frame(card.grow(6.0), 24.0)
 	label(Vector2(640, card.position.y + 48.0), "時間到！", 40, CREAM, pop_in(elapsed, 0.24))
 	var earned := int(state.get("medal", 0))
 	# The medal drops in after a beat and squashes as it lands.
@@ -337,5 +411,25 @@ func _draw_closing_card() -> void:
 		draw_set_transform(at, 0.0, landed)
 		Medal.paint(self, Vector2(0, 0), 6.0, earned)
 		draw_set_transform(Vector2.ZERO)
+		dust_puffs(Vector2(540, card.position.y + 200.0), drop_age - 0.26, 70.0)
+		if earned > 0 and drop_age > 0.7:
+			glint(at, 38.0, 2.4, -0.96)
 	label(Vector2(730, card.position.y + 128.0), Medal.NAMES[earned], 34, Medal.FACES[earned].lightened(0.2))
 	label(Vector2(730, card.position.y + 178.0), "%d 分" % int(state.get("score", 0)), 30)
+
+
+## A brass medallion: bevelled rim, ten rivets and a glossy enamel centre.
+func _medallion(center: Vector2, radius: float) -> void:
+	draw_circle(center + Vector2(5, 7), radius, Color(0.06, 0.02, 0.08, 0.45))
+	draw_circle(center, radius, GILT.darkened(0.66))
+	draw_circle(center, radius - 3.0, GILT.darkened(0.3))
+	draw_circle(center + Vector2(-2, -2), radius - 5.0, GILT.lightened(0.3))
+	draw_circle(center, radius - 8.0, GILT)
+	for rivet in 10:
+		var spot := (center + Vector2.from_angle(rivet * TAU / 10.0) * (radius - 5.0)).round()
+		draw_rect(Rect2(spot - Vector2(2, 2), Vector2(3, 3)), GILT.lightened(0.5))
+		draw_rect(Rect2(spot + Vector2(1, 1), Vector2(2, 2)), GILT.darkened(0.55))
+	draw_circle(center, radius - 13.0, LACQUER.darkened(0.6))
+	draw_circle(center + Vector2(1, 2), radius - 15.0, LACQUER.darkened(0.25))
+	draw_circle(center, radius - 17.0, LACQUER)
+	draw_arc(center, radius - 21.0, PI * 1.05, PI * 1.45, 8, Color(1, 0.92, 0.8, 0.35), 4.0)

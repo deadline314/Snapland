@@ -117,3 +117,184 @@ static func grainy(base: Color, x: int, y: int, amount := 0.08, salt := 0) -> Co
 static func rounded(base: Color, offset: Vector2) -> Color:
 	var facing := -(offset.x + offset.y) * 0.5
 	return base.lightened(0.28 * facing) if facing > 0.0 else base.darkened(-0.34 * facing)
+
+
+# --- Stage materials (circus arcade games and the shared overlays) -----------
+
+## Shadows lean toward dusky plum and highlights toward warm lamp light, the two
+## ends of the painted tents.
+const SHADOW_HUE := Color("#2a1430")
+const LIGHT_HUE := Color("#ffe2b0")
+## Red clay under gilding, showing through where a frame is chipped.
+const BOLE := Color("#8a3a2e")
+const BAYER: Array[int] = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5]
+
+
+## `base` lit (`value` > 0) or shaded (< 0) with a hue shift, posterised to half
+## steps; an ordered dither only right at each step keeps the bands crisp.
+static func lit(base: Color, value: float, x: int, y: int) -> Color:
+	var step := floorf(value * 2.0 + (BAYER[(y % 4) * 4 + x % 4] / 16.0 - 0.47) * 0.4 + 0.5) * 0.5
+	if step > 0.0:
+		return base.lightened(0.2 * step).lerp(LIGHT_HUE, 0.1 * step)
+	return base.darkened(0.26 * -step).lerp(SHADOW_HUE, 0.14 * -step)
+
+
+## A whole surface of one material, baked once per kind, size and colours.
+## Kinds: lacquer (dark plate, gilt pinstripe, corner rivets in `trim`), velvet
+## (hanging folds; a gold fringe when `trim` is opaque), enamel (glossy cabinet,
+## rivets in `trim`), glass (mirror with streaks, `trim` glowing low down),
+## paper (stock with fibres and a curled corner), key (a dished key top),
+## liquid (a striped progress fill), groove (a recessed slot), pole (round
+## brass), photo (studio backdrop), planks and planks_v (lacquered boards).
+static func surface(kind: String, size: Vector2i, base: Color, trim := CLEAR) -> ImageTexture:
+	var key := "surface|%s|%d|%d|%s|%s" % [kind, size.x, size.y, base.to_html(), trim.to_html()]
+	if _cache.has(key):
+		return _cache[key]
+	return bake(key, size, func(x: int, y: int) -> Color: return material(kind, base, trim, x, y, size.x, size.y))
+
+
+static func material(kind: String, base: Color, trim: Color, x: int, y: int, w: int, h: int) -> Color:
+	var down := float(y) / maxf(1.0, h - 1.0)
+	match kind:
+		"lacquer":
+			if w > 10 and h > 8 and trim.a > 0.0:
+				if (x < 3 or x > w - 4) and (y < 3 or y > h - 4):
+					var stud := Vector2(x if x < 3 else x - (w - 3), y if y < 3 else y - (h - 3)) - Vector2(1, 1)
+					if stud.length() < 1.3:
+						return rounded(trim, stud / 1.3)
+				var rail_x := (x == 3 or x == w - 4) and y >= 3 and y <= h - 4
+				var rail_y := (y == 3 or y == h - 4) and x >= 3 and x <= w - 4
+				if rail_x or rail_y:
+					return trim.darkened(0.2) if x == w - 4 or y == h - 4 else trim
+			return lit(base, 0.5 - 1.1 * down + 0.2 * sin((y + 1.4 * sin(x * 0.05)) * 1.3), x, y)
+		"velvet":
+			if trim.a > 0.0 and y >= h - 3:
+				if y == h - 1 and x % 3 == 0:
+					return CLEAR
+				return trim.lightened(0.15) if y == h - 3 else (trim if (x + y) % 2 == 0 else trim.darkened(0.25))
+			var fold := sin(x * TAU / 10.0 + sin(y * 0.045) * 0.9)
+			var value := 0.45 * fold + (0.25 if fold > 0.9 else 0.0) - 0.7 * maxf(0.0, 1.0 - y / 8.0)
+			return lit(base, value + 0.2 * (noise(x, y) - 0.5), x, y)
+		"enamel":
+			var stud := rivet(trim if trim.a > 0.0 else base, x, y, w, h)
+			if stud.a > 0.0:
+				return stud
+			var streak := float(x) + float(y) * 0.8 - w * 0.12 - 3.0
+			if down < 0.5 and streak > 0.0 and streak < 2.5:
+				return base.lightened(0.55).lerp(LIGHT_HUE, 0.3)
+			if down < 0.4 and streak > 4.0 and streak < 5.0:
+				return base.lightened(0.35)
+			return lit(base, 0.9 - 1.5 * down + 0.15 * (noise(x, y) - 0.5), x, y)
+		"glass":
+			var sheen := float(x) + float(y) * 0.55
+			var value := 1.2 - 1.9 * down
+			if absf(sheen - w * 0.2) < 1.6 or absf(sheen - w * 0.36) < 0.6:
+				value += 1.2
+			var tone := lit(base, value, x, y)
+			if trim.a > 0.0 and down > 0.62 and BAYER[(y % 4) * 4 + x % 4] / 16.0 < (down - 0.62) * 1.1:
+				return tone.lerp(trim, 0.35)
+			return tone
+		"paper":
+			var value := 0.35 + 0.3 * (noise(x, y) - 0.5) - maxf(0.0, float(x) / w + down - 1.5) * 3.2
+			if noise(x, y / 2, 3) > 0.975:
+				value -= 0.6
+			return lit(base, value, x, y)
+		"key":
+			var dish := Vector2(float(x) / w - 0.45, down - 0.4).length()
+			return lit(base, 0.2 - 0.6 * down + (0.4 if dish > 0.42 else 0.0), x, y)
+		"liquid":
+			return lit(base, (0.2 if posmod(x - y, 8) < 3 else 0.9) - 1.3 * down, x, y)
+		"groove":
+			return lit(base, -1.0 + 1.1 * minf(1.0, down / 0.6), x, y)
+		"pole":
+			if y % 14 == 0:
+				return base.darkened(0.45)
+			var band := 1.5 if y % 14 == 1 else 0.0
+			return lit(base, band + 1.5 - absf(float(x) / maxf(1.0, w - 1.0) - 0.3) * 4.2, x, y)
+		"photo":
+			var centre := Vector2(float(x) / w - 0.5, down - 0.42)
+			return lit(base, 0.7 - centre.length() * 2.4 + 0.4 * (noise(x / 2, y / 2) - 0.5), x, y)
+		"planks", "planks_v":
+			var tone := wood(base, x, y, 10, kind == "planks_v")
+			# A lacquer gloss line across the upper left.
+			var gloss := float(x) / w + down * 0.7
+			return tone.lightened(0.22) if absf(gloss - 0.22) < 0.05 else tone
+	return grainy(base, x, y)
+
+
+## A brass rivet head lit from the top-left on a 10-texel pitch along every
+## edge, or CLEAR between rivets.
+static func rivet(base: Color, x: int, y: int, w: int, h: int, pitch := 10, inset := 2) -> Color:
+	var across := y == inset or y == inset + 1 or y == h - inset - 2 or y == h - inset - 1
+	var down := x == inset or x == inset + 1 or x == w - inset - 2 or x == w - inset - 1
+	if not ((across and posmod(x - inset - 2, pitch) < 2) or (down and posmod(y - inset - 2, pitch) < 2)):
+		return CLEAR
+	var corner := Vector2(posmod(x - inset, 2), posmod(y - inset, 2))
+	if corner == Vector2.ZERO:
+		return base.lightened(0.4)
+	return base.darkened(0.4) if corner == Vector2.ONE else base
+
+
+## A gilded moulding `border` texels wide around a clear hole: outer bead, a
+## beaded flat, a groove and an inner lip, with mitred corners and chips down
+## to the red bole.
+static func gilt(base: Color, x: int, y: int, w: int, h: int, border: int, salt := 0) -> Color:
+	var edges := [y, x, h - 1 - y, w - 1 - x]
+	var depth: int = edges.min()
+	if depth >= border:
+		return CLEAR
+	var side := edges.find(depth)
+	var facing := side <= 1
+	var along := x if side % 2 == 0 else y
+	var q := float(depth) / float(maxi(1, border - 1))
+	var value := 0.0
+	if q < 0.25:
+		value = 1.4 if facing else -1.2
+	elif q < 0.6:
+		value = 0.3 if facing else -0.3
+		var bead_row := int(border * 0.42)
+		if border >= 6 and posmod(along, 6) in [2, 3] and (depth == bead_row or depth == bead_row + 1):
+			value = 1.8 if depth == bead_row else -1.0
+	elif q < 0.75:
+		value = -1.4
+	else:
+		value = -0.8 if facing else 1.0
+	if mini(x, w - 1 - x) == mini(y, h - 1 - y):
+		value = minf(value, -0.8)
+	if q < 0.25 and noise(x / 2, y / 2, salt + 7) < 0.05:
+		return BOLE if facing else BOLE.darkened(0.3)
+	return lit(base, value + 0.2 * (noise(x, y, salt) - 0.5), x, y)
+
+
+static func frame(size: Vector2i, border: int, base: Color, salt := 0) -> ImageTexture:
+	return bake("gilt|%d|%d|%d|%s|%d" % [size.x, size.y, border, base.to_html(), salt], size, func(x: int, y: int) -> Color:
+		return gilt(base, x, y, size.x, size.y, border, salt))
+
+
+## Stage boards seen from the front: rows grow taller toward the viewer, with
+## staggered seams, nail heads beside every seam and long grain.
+static func stage_boards(base: Color, seam: Color, x: int, y: int) -> Color:
+	var top := 0
+	var row := 0
+	while top + 6 + row * 2 <= y:
+		top += 6 + row * 2
+		row += 1
+	var height := 6 + row * 2
+	var inside := y - top
+	var step := 34 + row * 11
+	var cut := posmod(x - (row * 29) % step, step)
+	var tone := base.lerp(Color("#6e4436"), 0.3).darkened(maxf(0.2, 0.52 - row * 0.06))
+	if cut == 0 or inside == height - 1:
+		return seam
+	if inside == int(height * 0.5) and (cut == 2 or cut == step - 3):
+		return tone.lightened(0.45)
+	var value := 0.5 * sin((y + 1.8 * sin(x * 0.07 + row * 2.1)) * 1.7 + row) + 0.4 * (noise(x / 4, y, row) - 0.5)
+	if inside == 0:
+		value = 1.2
+	elif inside == height - 2:
+		value = -1.0
+	elif cut == 1:
+		value += 0.8
+	elif cut == step - 1:
+		value -= 0.7
+	return lit(tone, value, x, y)
