@@ -27,6 +27,8 @@ const GOLD := Color("#b77c45")
 const PAPER := Color("#fff2d4")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const MinigameHUDScript = preload("res://game/ui/minigame_hud.gd")
+const MinigameAtmosphereScript = preload("res://game/ui/minigame_atmosphere.gd")
+const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
 const DRIVERS := {"stall_loadout": preload("res://game/minigames/stall_loadout_driver.gd"), "sugar_lantern": preload("res://game/minigames/sugar_lantern_driver.gd"), "cart_passing": preload("res://game/minigames/cart_passing_driver.gd"), "soup_tray": preload("res://game/minigames/soup_tray_driver.gd"), "umbrella_lights": preload("res://game/minigames/umbrella_lights_driver.gd"), "pancake_fold": preload("res://game/minigames/pancake_fold_driver.gd"), "banner_cart": preload("res://game/minigames/banner_cart_driver.gd"), "scent_trail": preload("res://game/minigames/scent_trail_driver.gd"), "coin_bank_shot": preload("res://game/minigames/coin_bank_shot_driver.gd"), "lantern_crossing": preload("res://game/minigames/lantern_crossing_driver.gd"), "skewer_grill": preload("res://game/minigames/skewer_grill_driver.gd"), "rain_courier": preload("res://game/minigames/rain_courier_driver.gd"), "sugar_draw": preload("res://game/minigames/sugar_draw_driver.gd"), "bubble_lift": preload("res://game/minigames/bubble_lift_driver.gd"), "paper_glide": preload("res://game/minigames/paper_glide_driver.gd"), "filling_press": preload("res://game/minigames/filling_press_driver.gd"), "ice_slide": preload("res://game/minigames/ice_slide_driver.gd"), "bean_seesaw": preload("res://game/minigames/bean_seesaw_driver.gd"), "cotton_wind": preload("res://game/minigames/cotton_wind_driver.gd"), "chocolate_etching": preload("res://game/minigames/chocolate_etching_driver.gd"), "jelly_trampoline": preload("res://game/minigames/jelly_trampoline_driver.gd"), "syrup_flood": preload("res://game/minigames/syrup_flood_driver.gd"), "cookie_mold": preload("res://game/minigames/cookie_mold_driver.gd"), "sugar_bridge": preload("res://game/minigames/sugar_bridge_driver.gd"), "rowing_cargo": preload("res://game/minigames/rowing_cargo_driver.gd"), "tide_sandbar": preload("res://game/minigames/tide_sandbar_driver.gd"), "lighthouse_prism": preload("res://game/minigames/lighthouse_prism_driver.gd"), "rope_tug": preload("res://game/minigames/rope_tug_driver.gd"), "crab_marbles": preload("res://game/minigames/crab_marbles_driver.gd"), "cargo_balance": preload("res://game/minigames/cargo_balance_driver.gd"), "buoy_relay": preload("res://game/minigames/buoy_relay_driver.gd"), "sail_chase": preload("res://game/minigames/sail_chase_driver.gd"), "shell_tide": preload("res://game/minigames/shell_tide_driver.gd"), "anchor_chain": preload("res://game/minigames/anchor_chain_driver.gd"), "gull_glide": preload("res://game/minigames/gull_glide_driver.gd"), "tide_lock": preload("res://game/minigames/tide_lock_driver.gd")}
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
@@ -107,6 +109,12 @@ var _discard_next_delta := false
 var _focus_axis_guards: Dictionary[StringName, bool] = {}
 var practice_mode := false
 var minigame_hud: Control
+## Shared scene life and feedback layer between the game picture and the HUD.
+var atmosphere: Control
+var _seen_score := 0
+var _seen_mistakes := 0
+var _presentation_rest := Vector2.ZERO
+var _shake_applied := false
 var presentation: Control
 var presentation_mode := ""
 var active_driver: RefCounted
@@ -285,6 +293,7 @@ func start(id: String, assisted_mode: bool = false) -> void:
 	reduced_motion = progress != null and bool(progress.settings.get("reduced_motion", false))
 	_rng_reset()
 	reset_round()
+	_configure_atmosphere()
 	queue_redraw()
 
 func _ready() -> void:
@@ -303,6 +312,10 @@ func _ready() -> void:
 	minigame_hud.practice_requested.connect(func(): set_practice_mode(true))
 	minigame_hud.retry_requested.connect(_retry_from_hud)
 	minigame_hud.leave_requested.connect(_leave_from_hud)
+	atmosphere = MinigameAtmosphereScript.new()
+	add_child(atmosphere)
+	move_child(atmosphere, 0)
+	_configure_atmosphere()
 	resized.connect(_layout_presentation)
 	_sync_presentation()
 	_refresh_hud()
@@ -347,6 +360,7 @@ func _sync_presentation() -> void:
 			if active_driver != null: presentation.mouse_filter = Control.MOUSE_FILTER_PASS
 			add_child(presentation)
 			move_child(presentation, 0)
+			if is_instance_valid(atmosphere): move_child(atmosphere, 1)
 			if mode == "kite_rings":
 				# Own play-surface mouse events before a fullscreen GUI ancestor stops
 				# them. The later HUD sibling still receives its own buttons/overlays.
@@ -450,6 +464,8 @@ func _layout_presentation() -> void:
 			factor = minf(factor, maxf(0.01, (size.y - gameplay_top) / (DESIGN_SIZE.y - 140.0)))
 			presentation.scale = Vector2.ONE * factor
 			presentation.position = Vector2((size.x - DESIGN_SIZE.x * factor) * 0.5, gameplay_top - 140.0 * factor)
+	_presentation_rest = presentation.position
+	_shake_applied = false
 	if paused: _refresh_paused_render_targets()
 
 func _attach_fountain_output(view: Control, texture: Texture2D) -> TextureRect:
@@ -829,6 +845,7 @@ func _score_rule_text() -> String:
 
 func set_time_of_day(phase_id: Variant) -> void:
 	time_phase = TimeOfDayScript.normalize(phase_id)
+	_configure_atmosphere()
 	if active_driver != null: _sync_presentation()
 	if mode == "bubble_photo" and bubble_model != null:
 		bubble_model.time_of_day = time_phase
@@ -1032,6 +1049,7 @@ func _process(delta: float) -> void:
 		shadow_delta = minf(shadow_delta, 0.5)
 		_shadow_frame_delta = minf(shadow_delta, ShadowTheatreModelScript.MAX_STEP)
 	if not paused: _sync_presentation()
+	_sync_atmosphere()
 	_hud_refresh_clock += maxf(delta, 0.0) if is_finite(delta) else 0.0
 	if _hud_dirty and _hud_refresh_clock >= HUD_REFRESH_INTERVAL:
 		_refresh_hud(true)
@@ -2296,9 +2314,34 @@ func _sync_driver_state(state: Dictionary) -> void:
 	score = int(state.score)
 	mistakes = int(state.mistakes)
 
+## Theme the shared air for this game's zone and forget earlier feedback.
+func _configure_atmosphere() -> void:
+	_seen_score = score
+	_seen_mistakes = mistakes
+	if not is_instance_valid(atmosphere): return
+	var zone := str(GameCatalog.identity(game_id).get("zone", "welcome")) if not game_id.is_empty() else "welcome"
+	atmosphere.configure(zone, str(time_phase), reduced_motion)
+
+## Turn score and mistake changes into shared feedback; games need no code for it.
+func _sync_atmosphere() -> void:
+	if not is_instance_valid(atmosphere): return
+	atmosphere.set_frozen(paused or ended)
+	if score > _seen_score:
+		atmosphere.score_gained()
+		if minigame_hud != null: PaperMotion.pop(minigame_hud.find_child("ScoreReadout", true, false) as Control, 1.14)
+	if mistakes > _seen_mistakes:
+		atmosphere.mistake_made()
+	_seen_score = score
+	_seen_mistakes = mistakes
+	var offset: Vector2 = atmosphere.shake_offset()
+	if is_instance_valid(presentation) and (offset != Vector2.ZERO or _shake_applied):
+		presentation.position = _presentation_rest + offset
+		_shake_applied = offset != Vector2.ZERO
+
 func _finish(success: bool, devil: bool = false) -> void:
 	if ended: return
 	ended = true; won = success; devil_won = success and devil
+	if is_instance_valid(atmosphere): atmosphere.round_finished(success)
 	var result := {"game_id": game_id, "success": success, "devil": devil_won, "score": score, "assisted": assisted, "practice": practice_mode, "mistakes": mistakes, "score_summary": score_summary(), "ordinary_eligible": not practice_mode}
 	if active_driver != null:
 		active_driver.clear_input()
