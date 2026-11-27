@@ -24,6 +24,16 @@ const GLYPH_MAGNIFICATION := 1.3
 const CAPTION_MAGNIFICATION := 2.2
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Paper := preload("res://game/ui/paper_ui.gd")
+const PaperMotion := preload("res://game/ui/paper_motion.gd")
+const Collage := preload("res://game/ui/collage_kit.gd")
+const HudArt := preload("res://game/ui/hud_collage.gd")
+## Rail buttons as small ticket stubs: icon, swatch and resting tilt.
+const RAIL_STUBS := {"DetailsButton": ["task", Color("#2f9a8d"), -3.0], "HelpButton": ["help", Color("#dfa458"), 4.0], "PauseButton": ["pause", Color("#f08f73"), -2.5]}
+## Band width of a rail stub with its icon, and in a crowded compact rail.
+const STUB_BAND := 30.0
+const STUB_BAND_COMPACT := 4.0
+## Width of the title tag's eyelet band, normal and compact.
+const TAG_BAND_COMPACT := 14.0
 
 var _details: Dictionary = {}
 var _header: PanelContainer
@@ -37,7 +47,11 @@ var _time_label: Label
 var _time: Label
 var _badge: Label
 var _ticket: PanelContainer
-var _ticket_style: Paper.Board
+var _header_face: StyleBoxEmpty
+var _title_art: Control
+var _ticket_art: Control
+var _shown_score := 0
+var _shown_second := -1
 var _time_readout: HBoxContainer
 var _feedback: PanelContainer
 var _feedback_label: Label
@@ -89,6 +103,8 @@ func set_state(state: Dictionary) -> void:
 	_feedback_anchor_override = state.get("feedback_anchor") if state.get("feedback_anchor") is Vector2 else null
 	if _title == null:
 		return
+	var title_before := _title.text + _progress.text
+	var ticket_before := _score.text + _time.text + _badge.text
 	_title.text = str(state.get("title", "小遊戲"))
 	_objective.text = str(state.get("objective", "完成挑戰"))
 	_objective.tooltip_text = _objective.text
@@ -105,6 +121,7 @@ func set_state(state: Dictionary) -> void:
 		badge_text += "練習・不收藏"
 	_badge.text = badge_text
 	_badge.visible = not badge_text.is_empty()
+	_sync_art(state, title_before, ticket_before)
 	var message := str(state.get("feedback_text", ""))
 	_feedback.visible = not message.is_empty()
 	_feedback_label.text = message
@@ -134,6 +151,26 @@ func set_state(state: Dictionary) -> void:
 	else:
 		_feedback.modulate.a = 1.0
 	_layout()
+
+## Redraw the collage only when its print changed, and play the short beats:
+## score bump, red clock in the last five seconds, medal stamp.
+func _sync_art(state: Dictionary, title_before: String, ticket_before: String) -> void:
+	var medal := int(state.get("medal", -1))
+	if (medal >= 0) != (_title_art.medal >= 0):
+		_header_face.content_margin_right = 16.0 + (HudArt.MEDAL_ROOM if medal >= 0 else 0.0)
+	_title_art.set_medal(medal)
+	if title_before != _title.text + _progress.text:
+		_title_art.queue_redraw()
+	if ticket_before != _score.text + _time.text + _badge.text:
+		_ticket_art.queue_redraw()
+	var score := int(state.get("score", 0))
+	if score > _shown_score:
+		_ticket_art.bump_score()
+	_shown_score = score
+	var left := float(state.get("time_left", -1.0))
+	var second := ceili(left) if left > 0.0 else -1
+	_ticket_art.set_alarm(left > 0.0 and left <= 5.0, second != _shown_second)
+	_shown_second = second
 
 func set_score_details(details: Dictionary) -> void:
 	_details = details.duplicate(true)
@@ -167,7 +204,10 @@ func _build_header() -> void:
 	_header.position = Vector2(24, 18)
 	_header.size = Vector2(392, 84)
 	_header.mouse_filter = Control.MOUSE_FILTER_STOP
-	_header.add_theme_stylebox_override("panel", Paper.nameplate())
+	# The tag art draws the paper; the face only keeps the text clear of the
+	# eyelet band and the medal pin.
+	_header_face = _face(HudArt.TAG_BAND + 10.0, 16.0, 10.0, 13.0)
+	_header.add_theme_stylebox_override("panel", _header_face)
 	add_child(_header)
 	var title_col := VBoxContainer.new()
 	title_col.name = "TitleAndProgress"
@@ -191,8 +231,9 @@ func _build_header() -> void:
 	_progress = _label("準備中", 16, GOLD)
 	_progress.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	status_row.add_child(_progress)
+	_title_art = HudArt.attach(_header, "title", -3.0, {"title": _title, "progress": _progress})
 
-	# The rail itself is invisible: a voyage ticket and three enamel buttons
+	# The rail itself is invisible: score and time stubs and three button stubs
 	# sit side by side, so the play area keeps as much sky as possible.
 	_status_rail = HBoxContainer.new()
 	_status_rail.name = "MinigameStatusRail"
@@ -206,11 +247,7 @@ func _build_header() -> void:
 	_ticket.name = "ScoreAndTime"
 	_ticket.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_ticket.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_ticket_style = Paper.ticket(-96.0)
-	_ticket_style.plate = Paper.badge()
-	_ticket_style.content_margin_top = 8
-	_ticket_style.content_margin_bottom = 11
-	_ticket.add_theme_stylebox_override("panel", _ticket_style)
+	_ticket.add_theme_stylebox_override("panel", _face(12.0, 12.0, 8.0, 11.0))
 	_status_rail.add_child(_ticket)
 	var ticket_lines := VBoxContainer.new()
 	ticket_lines.add_theme_constant_override("separation", 0)
@@ -232,7 +269,7 @@ func _build_header() -> void:
 	_time_readout.name = "TimeReadout"
 	_time_readout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_time_readout.alignment = BoxContainer.ALIGNMENT_END
-	_time_readout.add_theme_constant_override("separation", 6)
+	_time_readout.add_theme_constant_override("separation", 10)
 	status_line.add_child(_time_readout)
 	_time_label = _label("時間", 14, TICKET_LABEL)
 	_time_readout.add_child(_time_label)
@@ -243,23 +280,37 @@ func _build_header() -> void:
 	_badge = _label("", 14, Paper.PRICE_INK)
 	_badge.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 	_badge.autowrap_mode = TextServer.AUTOWRAP_OFF
+	_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ticket_lines.add_child(_badge)
-	var detail_button := _button("分數明細", 16, "secondary", "score")
+	_ticket_art = HudArt.attach(_ticket, "ticket", -4.0, {"score_caption": _score_label, "score": _score, "time_caption": _time_label, "time": _time, "badge": _badge}, 0.05)
+	var detail_button := _button("分數明細", 16)
 	detail_button.name = "DetailsButton"
 	detail_button.custom_minimum_size = Vector2(132, 44)
 	detail_button.pressed.connect(func(): details_requested.emit(); open_score_details())
 	_status_rail.add_child(detail_button)
-	var help_button := _button("教學", 15, "secondary", "help")
+	var help_button := _button("教學", 15)
 	help_button.name = "HelpButton"
 	help_button.custom_minimum_size = Vector2(92, 44)
 	help_button.tooltip_text = "開啟本遊戲完整教學"
 	help_button.pressed.connect(func(): help_requested.emit())
 	_status_rail.add_child(help_button)
-	var pause_button := _button("暫停", 15, "secondary", "pause")
+	var pause_button := _button("暫停", 15)
 	pause_button.name = "PauseButton"
 	pause_button.custom_minimum_size = Vector2(92, 44)
 	pause_button.pressed.connect(func(): pause_requested.emit())
 	_status_rail.add_child(pause_button)
+	var index := 0
+	for button: Button in [detail_button, help_button, pause_button]:
+		var look: Array = RAIL_STUBS[button.name]
+		var art := Collage.dress(button, "stub", index + 4, str(look[0]), look[1], float(look[2]))
+		art.set_band(STUB_BAND)
+		# Neighbours on the rail only just overlap.
+		art.reach = Vector2(4, 4)
+		# The stubs drop onto the rail after the ticket, one after another.
+		art.fly = Vector2(0.0, -46.0)
+		art.fly_in(0.1 + PaperMotion.stagger(index + 1))
+		button.set_meta("hud_icon", str(look[0]))
+		index += 1
 
 func _build_feedback() -> void:
 	_feedback = PanelContainer.new()
@@ -267,10 +318,8 @@ func _build_feedback() -> void:
 	_feedback.size = Vector2(540, 48)
 	_feedback.position = Vector2(34, 130)
 	_feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# One line of 18 px text on the nameplate keeps the banner 48 px tall.
-	var plate := Paper.nameplate()
-	plate.content_margin_top = 9
-	_feedback.add_theme_stylebox_override("panel", plate)
+	# One line of 18 px text on the note keeps the banner 48 px tall.
+	_feedback.add_theme_stylebox_override("panel", _face(14.0, 14.0, 9.0, 13.0))
 	_feedback_label = _label("", 18, PAPER)
 	_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -278,6 +327,7 @@ func _build_feedback() -> void:
 	_feedback.add_child(_feedback_label)
 	_feedback.hide()
 	add_child(_feedback)
+	HudArt.attach(_feedback, "note", -1.2)
 
 func set_feedback_at(message: String, anchor: Vector2) -> void:
 	_feedback_anchor = anchor
@@ -396,7 +446,7 @@ func _add_action_button(parent: Control, text: String, action: Callable, role :=
 	parent.add_child(button)
 	return button
 
-func _button(text: String, font_size: int, role := "secondary", glyph := "") -> Button:
+func _button(text: String, font_size: int, role := "secondary") -> Button:
 	var button := Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
@@ -411,14 +461,17 @@ func _button(text: String, font_size: int, role := "secondary", glyph := "") -> 
 	button.add_theme_color_override("font_focus_color", Color.WHITE)
 	button.add_theme_color_override("font_disabled_color", Color("#b7c3c0"))
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
-		var style := Paper.role_style(role, state)
-		if not glyph.is_empty() and state != "focus":
-			# A face that carries an icon belongs to this one button.
-			style = style.duplicate() as Paper.Board
-			style.glyph = glyph
-		button.add_theme_stylebox_override(state, style)
-	button.set_meta("hud_glyph", not glyph.is_empty())
+		button.add_theme_stylebox_override(state, Paper.role_style(role, state))
 	return button
+
+## An invisible panel face that only keeps the content margins.
+func _face(left: float, right: float, top: float, bottom: float) -> StyleBoxEmpty:
+	var face := StyleBoxEmpty.new()
+	face.content_margin_left = left
+	face.content_margin_right = right
+	face.content_margin_top = top
+	face.content_margin_bottom = bottom
+	return face
 
 func _label(text: String, font_size: int, color: Color) -> Label:
 	var label := Label.new()
@@ -484,15 +537,6 @@ func _layout() -> void:
 	for readout in [[_score,"0000",PLATE_PADDING*2.0],[_time,"00:00",0.0]]:
 		var digits: Label = readout[0]
 		digits.custom_minimum_size.x=ceilf(digits.get_theme_font("font").get_string_size(str(readout[1]),HORIZONTAL_ALIGNMENT_LEFT,-1,digits.get_theme_font_size("font_size")).x)+float(readout[2])
-	# The ticket draws its own tear line and the brass plate under the score, so
-	# both follow the text size without extra nodes or draw calls.
-	var tear := -(_ticket_style.content_margin_right+_time_readout.get_combined_minimum_size().x+TICKET_GAP*0.5)
-	var plate_left := _ticket_style.content_margin_left+(_score_label.get_combined_minimum_size().x+SCORE_GAP if captions else 0.0)
-	var plate := Rect2(plate_left,_ticket_style.content_margin_top-2.0,_score.custom_minimum_size.x,_score.custom_minimum_size.y+5.0)
-	if not is_equal_approx(tear,_ticket_style.perforation) or not plate.is_equal_approx(_ticket_style.plate_rect):
-		_ticket_style.perforation=tear
-		_ticket_style.plate_rect=plate
-		_ticket.queue_redraw()
 	var header_minimum := _header.get_combined_minimum_size()
 	var rail_minimum := _status_rail.get_combined_minimum_size()
 	var panel_height := maxf(84.0,ceilf(maxf(header_minimum.y,rail_minimum.y)))
@@ -560,6 +604,10 @@ func _effective_layout_scale(fitted: float) -> float:
 	return maxf(layout_scale, 0.01)
 
 func _fit_semantic_text_and_targets(fitted: float) -> void:
+	var compact := Paper.text_scale() / fitted > GLYPH_MAGNIFICATION
+	var band_room := (TAG_BAND_COMPACT if compact else HudArt.TAG_BAND) + 10.0
+	if not is_equal_approx(_header_face.content_margin_left, band_room):
+		_header_face.content_margin_left = band_room
 	var stack: Array[Node] = [self]
 	while not stack.is_empty():
 		var node: Node = stack.pop_back()
@@ -574,11 +622,15 @@ func _fit_semantic_text_and_targets(fitted: float) -> void:
 				var desired_size := maxi(int(button.get_meta("hud_base_font_size", 18)), ceili(float(button.get_meta("hud_base_font_size", 18)) * Paper.text_scale() / fitted))
 				if button.get_theme_font_size("font_size") != desired_size:
 					button.add_theme_font_size_override("font_size", desired_size)
-				if bool(button.get_meta("hud_glyph", false)):
-					# Icons are decoration: drop them where the rail has no room to spare.
-					var glyph_scale := clampi(roundi(desired_size / 8.0), 2, 4) if Paper.text_scale() / fitted <= GLYPH_MAGNIFICATION else 0
-					for state in ["normal", "hover", "pressed", "disabled"]:
-						(button.get_theme_stylebox(state) as Paper.Board).set_glyph_scale(glyph_scale)
+				var art := button.get_node_or_null("CollageArt")
+				if art != null and button.has_meta("hud_icon"):
+					# Icons are decoration: drop them, and the stub's band, where the
+					# rail has no room to spare.
+					var icon_name := "" if compact else str(button.get_meta("hud_icon"))
+					if art.icon_name != icon_name:
+						art.icon_name = icon_name
+						art.far_margin = 16.0 if not compact else 4.0
+						art.set_band(STUB_BAND if not compact else STUB_BAND_COMPACT)
 			elif child is Label and child.has_meta("hud_base_font_size"):
 				var base_font_size := int(child.get_meta("hud_base_font_size"))
 				var desired_size := maxi(base_font_size, ceili(float(base_font_size) * Paper.text_scale() / fitted))

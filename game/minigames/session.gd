@@ -703,7 +703,11 @@ func _refresh_hud(force: bool = false) -> void:
 		"reduced_motion": reduced_motion,
 		"ended": ended,
 		"won": won,
-		"devil": devil_won
+		"devil": devil_won,
+		# Arcade rounds pin their medal to the title tag and redden the clock
+		# in the last seconds of play.
+		"medal": int(_driver_state.get("medal", -1)) if active_driver != null and _driver_state.has("thresholds") else -1,
+		"time_left": float(_driver_state.get("remaining", -1.0)) if active_driver != null and str(_driver_state.get("stage", "")) == "play" else -1.0,
 	})
 
 func _progress_text() -> String:

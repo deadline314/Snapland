@@ -295,6 +295,8 @@ class Item extends Control:
 	var reach := Vector2(4, 4)
 	## Width of a tag's colour band before scaling (0 = the kind's default).
 	var band := 0.0
+	## Text margin at the far end before scaling; set it before `set_band`.
+	var far_margin := 16.0
 	## Where the item flies in from.
 	var fly := Vector2(70.0, 26.0)
 	var tilt := 0.0
@@ -364,7 +366,7 @@ class Item extends Control:
 		if is_equal_approx(face.content_margin_left, left):
 			return
 		face.content_margin_left = left
-		face.content_margin_right = roundf((8.0 if Kit.Objects.has(kind) else 16.0) * k)
+		face.content_margin_right = roundf((8.0 if Kit.Objects.has(kind) else far_margin) * k)
 		face.content_margin_top = 10.0
 		face.content_margin_bottom = 12.0
 		queue_redraw()

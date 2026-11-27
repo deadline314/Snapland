@@ -13,6 +13,7 @@ const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 ## The shared minigame drawing kit; the helpers below are thin wrappers over it.
 const Props = preload("res://game/ui/pixel_props.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
+const HudArt = preload("res://game/ui/hud_collage.gd")
 const DESIGN := Vector2(1280, 720)
 ## Dusky plum the circus sprites' shadows lean toward.
 const SPRITE_SHADE := Color(0.05, 0.02, 0.09)
@@ -25,6 +26,8 @@ const ROSE := Color("#ff6f7d")
 const LACQUER := Color("#3a2433")
 const GILT := Color("#c9953e")
 const VELVET := Color("#5c2440")
+## Brown paper of the key-hint strip; cream key tops stand out on it.
+const KRAFT := Color("#e2c48e")
 ## The HUD covers the canvas above this line.
 const PLAY_TOP := 122.0
 const STRIP := Rect2(410, 130, 460, 12)
@@ -39,6 +42,7 @@ var now := 0.0
 ## Where feedback words pop; a game may move it next to the action.
 var word_anchor := Vector2(640, 236)
 var _font: Font
+var _paper_shapes: Dictionary = {}
 
 
 func _init() -> void:
@@ -301,23 +305,73 @@ func _draw_hint() -> void:
 	width -= 34.0
 	var x := 640.0 - width * 0.5
 	var y := 690.0
-	panel(Rect2(x - 24.0, y - 28.0, width + 48.0, 58.0), "lacquer", LACQUER, GILT, 3.0, Color(1, 1, 1, 0.94))
+	# A kraft strip taped across the bottom, the keys pressed into it.
+	var strip := Rect2(x - 24.0, y - 28.0, width + 48.0, 58.0)
+	paper_scrap(strip, -0.8, 19, KRAFT)
+	for side: float in [-1.0, 1.0]:
+		Collage.tape(self, strip.get_center() + Vector2(side * (strip.size.x * 0.5 - 6.0), -24.0), 46.0, deg_to_rad(side * 32.0))
 	var tapping := str(state.get("stage", "")) == "ready" and pulse(1.8) > 0.62
 	for pair: Array in pairs:
 		var cap := maxf(44.0, label_width(str(pair[0]), font_size) + 26.0)
 		key_cap(Vector2(x + cap * 0.5, y - 3.0), str(pair[0]), tapping, font_size)
 		x += cap + 12.0
 		var words := label_width(str(pair[1]), font_size)
-		label(Vector2(x + words * 0.5, y), str(pair[1]), font_size)
+		label(Vector2(x + words * 0.5, y), str(pair[1]), font_size, INK, 1.0, 1.0, false)
 		x += words + 34.0
 	var variant_label := str(state.get("variant_label", ""))
 	if not variant_label.is_empty():
-		var chip := "變奏・" + variant_label
-		var chip_width := label_width(chip, 17) + 28.0
-		panel(Rect2(24.0, y - 24.0, chip_width + 8.0, 48.0), "lacquer", LACQUER, GILT, 3.0, Color(1, 1, 1, 0.94))
-		label(Vector2(28.0 + chip_width * 0.5 + 2.0, y), chip, 17, GOLD)
+		_variant_tag("變奏・" + variant_label, Vector2(24.0, y - 28.0))
 	if bool(state.get("assisted", false)):
-		label(Vector2(1180.0, y), "輔助中", 17, MINT)
+		paper_scrap(Rect2(1132.0, y - 19.0, 96.0, 38.0), 3.0, 29, MINT)
+		label(Vector2(1180.0, y), "輔助中", 17, INK, 1.0, 1.0, false)
+
+
+## The round's variant on a luggage tag hanging at the lower left.
+func _variant_tag(content: String, at: Vector2) -> void:
+	var words := label_width(content, 17)
+	var body := Rect2(Vector2.ZERO, Vector2(words + 58.0, 44.0))
+	var angle := deg_to_rad(-2.0)
+	var key := "tag|%d" % int(body.size.x)
+	if not _paper_shapes.has(key):
+		_paper_shapes[key] = HudArt.tag_shape(body, 12.0, 23, false)
+		_paper_shapes["tag|band"] = HudArt.tag_shape(Rect2(0, 0, 30, body.size.y), 12.0, 23, false, true)
+	var shape: PackedVector2Array = _paper_shapes[key]
+	draw_set_transform(at + Vector2(5, 7), angle)
+	draw_colored_polygon(shape, Color(SPRITE_SHADE, 0.45))
+	draw_set_transform(at, angle)
+	draw_colored_polygon(shape, Collage.CREAM)
+	draw_colored_polygon(_paper_shapes["tag|band"], Paper.CORAL)
+	_outline(shape, Props.deepen(Collage.CREAM, 0.55))
+	draw_rect(Rect2(10, 17, 10, 10), Props.BRASS)
+	draw_rect(Rect2(13, 20, 4, 4), INK)
+	for knot in 4:
+		draw_rect(Rect2(8.0 - knot * 4.0, 14.0 - knot * 5.0, 4, 3), Props.HEMP)
+	draw_string(_font, Vector2(42.0, 22.0 + _font.get_ascent(17) * 0.5 - 2.0), content, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, INK)
+	draw_set_transform(Vector2.ZERO)
+
+
+## A torn scrap of paper with a shadow, tilted `angle` degrees about its centre.
+## Shapes are cached per size, so a scrap drawn every frame costs no allocation.
+func paper_scrap(rect: Rect2, angle: float, salt: int, tone := Collage.CREAM) -> void:
+	var key := "%d|%d|%d" % [int(rect.size.x), int(rect.size.y), salt]
+	if not _paper_shapes.has(key):
+		_paper_shapes[key] = Collage.torn(Rect2(-rect.size * 0.5, rect.size), salt, 2.0, 9.0)
+	var shape: PackedVector2Array = _paper_shapes[key]
+	var centre := rect.get_center()
+	draw_set_transform(centre + Vector2(5, 7), deg_to_rad(angle))
+	draw_colored_polygon(shape, Color(SPRITE_SHADE, 0.45))
+	draw_set_transform(centre, deg_to_rad(angle))
+	draw_colored_polygon(shape, tone)
+	_outline(shape, Props.deepen(tone, 0.55))
+	draw_set_transform(Vector2.ZERO)
+
+
+func _outline(shape: PackedVector2Array, color: Color) -> void:
+	if not _paper_shapes.has(shape):
+		var closed := shape.duplicate()
+		closed.append(shape[0])
+		_paper_shapes[shape] = closed
+	draw_polyline(_paper_shapes[shape], color, 2.0)
 
 
 func _draw_word() -> void:

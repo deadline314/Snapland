@@ -5,6 +5,8 @@ const InviteScript = preload("res://game/ui/island_game_invite.gd")
 const PhotoStageScript = preload("res://game/ui/photo_stage.gd")
 const DialogueScript = preload("res://game/ui/dialogue_panel.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
+const HudArt = preload("res://game/ui/hud_collage.gd")
 const MainScript = preload("res://game/main.gd")
 
 var failures: Array[String]=[]
@@ -36,12 +38,29 @@ func _run() -> void:
 	hud.set_state({"title":"沿著海港木棧道追接旅人的六頂帽子","objective":"依照風向和帽子落點移動，並在帽簷經過手線時接住；連續中心接取可獲得更高成果。","progress_text":"已接住 3/6　漏接 0","score":816,"time_text":"00:42","assisted":true})
 	_check((hud.get("_title") as Label).text.begins_with("沿著海港"),"long minigame title remains available in the HUD")
 	_check(hud.get("_score").text=="0816" and hud.get("_time").text=="00:42" and hud.get("_progress").text.contains("3/6"),"score, time, and round progress remain visible")
-	var header_style := (hud.get("_header") as Control).get_theme_stylebox("panel") as Paper.Board
-	_check(header_style!=null and header_style.kind==Paper.Board.Kind.FRAMED and header_style.bg_color==Paper.FRAME and header_style.corner>=1 and header_style.get_border_width(SIDE_BOTTOM)-header_style.get_border_width(SIDE_TOP)>=3 and header_style.shadow_size>0,"HUD title hangs on a timber-framed signboard with stepped corners, a lip and a shadow")
-	var ticket_style := (hud.find_child("ScoreAndTime",true,false) as Control).get_theme_stylebox("panel") as Paper.Board
-	var score_plate := ticket_style.plate if ticket_style!=null else null
-	_check(ticket_style!=null and ticket_style.kind==Paper.Board.Kind.PAPER and ticket_style.perforation!=0.0 and score_plate!=null and ticket_style.plate_rect.size.x>=(hud.get("_score") as Label).custom_minimum_size.x,"score and time ride on a perforated ticket with the score on its own brass plate")
-	_check(_contrast((hud.get("_time") as Label).get_theme_color("font_color"),ticket_style.bg_color)>=7.0 and _contrast((hud.get("_score") as Label).get_theme_color("font_color"),score_plate.bg_color)>=7.0 and _contrast((hud.get("_score_label") as Label).get_theme_color("font_color"),ticket_style.bg_color)>=4.5 and _contrast((hud.get("_badge") as Label).get_theme_color("font_color"),ticket_style.bg_color)>=4.5,"ticket readouts and their labels keep readable ink contrast")
+	# The HUD is collage paper, not boxes: invisible panel faces, tilted art.
+	var title_host := hud.get("_header") as Control
+	var ticket := hud.find_child("ScoreAndTime",true,false) as Control
+	var title_art := title_host.get_node_or_null("CollageArt")
+	var ticket_art := ticket.get_node_or_null("CollageArt")
+	_check(title_host.get_theme_stylebox("panel") is StyleBoxEmpty and ticket.get_theme_stylebox("panel") is StyleBoxEmpty,"HUD title and ticket draw no flat panel box")
+	_check(title_art!=null and title_art.kind=="title" and absf(title_art.tilt)>=3.0 and absf(title_art.tilt)<=6.0,"HUD title hangs as a luggage tag tilted 3-6 degrees")
+	_check(ticket_art!=null and ticket_art.kind=="ticket" and absf(ticket_art.tilt)>=3.0 and absf(ticket_art.tilt)<=6.0,"score and time ride on ticket stubs tilted 3-6 degrees")
+	for button_name in ["DetailsButton","HelpButton","PauseButton"]:
+		var stub := hud.find_child(button_name,true,false).get_node_or_null("CollageArt")
+		_check(stub!=null and stub.kind=="stub" and absf(stub.tilt)>=2.0 and absf(stub.tilt)<=6.0,"%s is a tilted paper stub"%button_name)
+	var hidden_ink := true
+	for label_name in ["_title","_progress","_score","_time","_score_label","_badge"]:
+		hidden_ink = hidden_ink and is_zero_approx((hud.get(label_name) as Label).get_theme_color("font_color").a)
+	_check(hidden_ink,"HUD labels keep their text while only the tilted paper prints it")
+	_check(_contrast(HudArt.DIGIT_INK,Collage.CREAM)>=7.0 and _contrast(HudArt.ALARM_INK,HudArt.ALARM_PAPER)>=7.0 and _contrast(HudArt.CAPTION_INK,Paper.CORAL)>=4.5 and _contrast(HudArt.CAPTION_INK,Collage.SEA)>=4.5 and _contrast(HudArt.ALARM_CAPTION,HudArt.ALARM_BAND)>=4.5 and _contrast(HudArt.STAMP_INK,Collage.CREAM)>=4.5 and _contrast(Collage.INK_TEAL,Collage.CREAM)>=4.5,"ticket and tag print keep readable ink contrast, including the red last-seconds clock")
+	hud.set_state({"title":"海風接帽","progress_text":"3/6","score":816,"time_text":"4 秒","time_left":3.6,"medal":2})
+	_check(ticket_art.alarm and title_art.medal==2,"last seconds turn the clock stub red and the earned medal is pinned to the title tag")
+	hud.set_state({"title":"海風接帽","progress_text":"3/6","score":900,"time_text":"3 秒","time_left":2.6,"medal":3})
+	# Without motion (headless, or reduced motion) every beat lands at rest at once.
+	_check(title_art.medal==3 and is_zero_approx(title_art.stamp) and is_zero_approx(ticket_art.bump) and is_zero_approx(ticket_art.shake) and is_equal_approx(title_art.enter,1.0),"medal stamp, score bump and clock shake settle instantly when motion is off")
+	hud.set_state({"title":"沿著海港木棧道追接旅人的六頂帽子","objective":"依照風向和帽子落點移動，並在帽簷經過手線時接住；連續中心接取可獲得更高成果。","progress_text":"已接住 3/6　漏接 0","score":816,"time_text":"00:42","assisted":true})
+	_check(not ticket_art.alarm and title_art.medal==-1,"games without an arcade clock or medal show neither")
 	(hud.find_child("PauseButton",true,false) as Button).pressed.emit()
 	_check(events==["pause"],"pause action preserves its signal")
 	hud.set_paused(true)
