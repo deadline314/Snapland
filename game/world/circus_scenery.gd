@@ -558,6 +558,15 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			sculpt.tube(top + Vector3(0.08, 0.5, 0), 0.15, 0.12, 0.8, Props.RED, 8, aim)
 			sculpt.tube(top + Vector3(0.16, 0.58, 0), 0.16, 0.16, 0.06, Props.GOLD, 8, aim)
 			sculpt.tube(top + Vector3(0.36, 0.82, 0), 0.13, 0.08, 0.14, Props.RED.lightened(0.2), 8, aim)
+		"wire":
+			# Two striped masts with a wire between them and a tiny walker with his pole.
+			for side: float in [-1.0, 1.0]:
+				sculpt.box(top + Vector3(side * 0.62, 0.42, 0), Vector3(0.06, 0.84, 0.06), Props.RED if side < 0.0 else Props.CREAM)
+				sculpt.box(top + Vector3(side * 0.62, 0.84, 0), Vector3(0.18, 0.04, 0.14), Props.WOOD)
+			sculpt.box(top + Vector3(0, 0.86, 0), Vector3(1.24, 0.02, 0.02), Props.IRON)
+			sculpt.box(top + Vector3(0.1, 1.04, 0), Vector3(0.1, 0.18, 0.08), Props.TEAL)
+			sculpt.box(top + Vector3(0.1, 1.18, 0), Vector3(0.08, 0.08, 0.08), Props.CREAM)
+			sculpt.box(top + Vector3(0.1, 1.06, 0.04), Vector3(0.7, 0.02, 0.02), Props.GOLD, Basis(Vector3.BACK, 0.12))
 
 ## Name board with its label. On the ground it stands on two legs; with `sculpt`
 ## set it rides on a cabinet and is drawn into that cabinet's mesh.

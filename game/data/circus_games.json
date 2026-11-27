@@ -78,5 +78,25 @@
       "hat",
       "sign"
     ]
+  },
+  {
+    "id": "game-057",
+    "mode": "tightrope",
+    "zone": "circus",
+    "local_index": 9,
+    "arcade": true,
+    "name": "走鋼索",
+    "goal": "小丑自己往前走，用左右撐住平衡桿，撐過風、鴿子和觀眾丟的帽子走到對岸。",
+    "instructions": "左右方向鍵、A／D 或手把十字鍵、左搖桿：往那邊撐平衡桿。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助走鋼索拿到金牌",
+    "ordinary": "撐住平衡讓小丑在鋼索上前進，拿到銅牌",
+    "attraction_tag": "高空鋼索",
+    "island_invitation": "小丑會自己走，你只要幫他撐住。往哪邊倒，就往反方向撐。",
+    "retake_props": [
+      "mascot",
+      "balloon",
+      "lantern"
+    ]
   }
 ]

@@ -57,6 +57,8 @@ func _run() -> void:
 	await _reach([Vector2(-6.4, -9.7)], "game-055", "砲彈安全墊")
 	await _reach([Vector2(0, -8.8), Vector2(0, 0.20)], "circus:auditorium", "觀眾席")
 	await _reach([Vector2(0, 4.06), Vector2(8.1, 4.06), Vector2(8.1, 0.75)], "circus:shadow", "影子台")
+	await _reach([Vector2(11.5, 0.75), Vector2(11.5, -2.8)], "game-057", "影子台")
+	await _reach([Vector2(11.5, 0.75), Vector2(8.1, 0.75)], "circus:shadow", "影子台")
 	await _check_projection()
 	var snapshot := _world.map_snapshot()
 	var map := MapPanel.new()

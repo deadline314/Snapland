@@ -20,7 +20,7 @@ func _run() -> void:
 	var garden: Array = catalog.definitions("garden")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 4 and toy.size() == 5 and garden.size() == 4 and all_games.size() == 61, "only the 61 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 5 and toy.size() == 5 and garden.size() == 4 and all_games.size() == 62, "only the 62 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden and catalog.definitions("hotel").is_empty(), "games retain global order and future regions remain unavailable")
@@ -45,6 +45,9 @@ func _run() -> void:
 	var cannon := {"id":"game-055", "mode":"human_cannon", "zone":"circus", "local_index":7, "photo_id":"photo-circus-game-7", "devil_photo_id":"photo-circus-devil-7", "achievement_id":"ACH_GAME_055"}
 	_check(catalog.identity("game-055") == cannon and catalog.identity("human_cannon") == cannon and circus[3].name == "人肉砲彈" and circus[3].arcade == true,
 		"the human cannon keeps catalogue slot seven")
+	var wire := {"id":"game-057", "mode":"tightrope", "zone":"circus", "local_index":9, "photo_id":"photo-circus-game-9", "devil_photo_id":"photo-circus-devil-9", "achievement_id":"ACH_GAME_057"}
+	_check(catalog.identity("game-057") == wire and catalog.identity("tightrope") == wire and circus[4].name == "走鋼索" and circus[4].arcade == true,
+		"the tightrope keeps catalogue slot nine")
 	var still := {"id":"game-073", "mode":"hold_still", "zone":"garden", "local_index":1, "photo_id":"photo-garden-game-1", "devil_photo_id":"photo-garden-devil-1", "achievement_id":"ACH_GAME_073"}
 	_check(catalog.identity("game-073") == still and catalog.identity("hold_still") == still and garden[0].name == "螢火蟲長曝光" and garden[0].arcade == true, "first greenhouse game keeps its own global number and the arcade flow flag")
 	var lily := {"id":"game-077", "mode":"lily_hop", "zone":"garden", "local_index":5, "photo_id":"photo-garden-game-5", "devil_photo_id":"photo-garden-devil-5", "achievement_id":"ACH_GAME_077"}
@@ -123,7 +126,7 @@ func _run() -> void:
 	_check(catalog.identity("game-048") == loadout and catalog.identity("stall_loadout") == loadout and nightmarket[11].name == "收攤套疊", "stall loadout has stable night market identities")
 	_check(catalog.identity("game-012").photo_id == "photo-welcome-game-12", "welcome identity retains local numbering")
 	_check(catalog.find("rowing_cargo") == harbor[0], "mode lookup returns a runtime definition")
-	for invalid in ["game-%03d" % (all_games.size() + 1), "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:
+	for invalid in ["game-127", "game-120", "game-14", "game-001 ", "", "res://game/minigames/session.gd"]:
 		_check(catalog.find(invalid).is_empty() and catalog.identity(invalid).is_empty(), "unknown or malformed catalog key is rejected: " + invalid)
 	welcome[0].name = "mutated"
 	harbor[0].name = "mutated"
