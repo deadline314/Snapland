@@ -138,7 +138,8 @@ const REGIONS := {
 		],
 	},
 	"harbor": {
-		"clouds": 1.0, "water_y": -0.25,
+		# water_y sits just above high water so gull shadows stay on the sea at any tide.
+		"clouds": 1.0, "water_y": -0.03,
 		"particles": [
 			{"kind": "spray", "phases": DAY, "amount": 36},
 			{"kind": "pollen", "phases": ["dawn", "noon"], "amount": 20},

@@ -18,7 +18,7 @@
 		"primitive_shadow": 0
 	},
 	"harbor": {
-		"flat_block": 26,
+		"flat_block": 0,
 		"floating_sprite": 0,
 		"node_budget": 0,
 		"primitive_shadow": 0

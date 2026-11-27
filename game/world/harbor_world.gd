@@ -1,6 +1,14 @@
 extends "res://game/world/park_world.gd"
-## A local tide preview: permanent shore and bridge surround the lighthouse waterway.
+## Tidal Harbor: a stone and timber quay ring around a tidal lagoon and its lighthouse
+## islet. This script owns what the player can do here (walkable land, the tide, the
+## free ferry, every interaction point); harbor_scenery builds the place and
+## harbor_life animates it.
+const Kit := preload("res://game/world/scenery_kit.gd")
+const Props := preload("res://game/world/harbor_props.gd")
+const Scenery := preload("res://game/world/harbor_scenery.gd")
+const Life := preload("res://game/world/harbor_life.gd")
 const BOUNDS := Rect2(-15, -12, 30, 24)
+## West quay, east boardwalk, north quay, south boardwalk, lighthouse islet, bridge.
 const LAND: Array[Rect2] = [
 	Rect2(-15, -12, 6, 24), Rect2(9, -12, 6, 24),
 	Rect2(-9, -12, 18, 4), Rect2(-9, 8, 18, 4),
@@ -10,114 +18,97 @@ const SANDBAR := Rect2(-9, -1.5, 5, 3)
 const SHORE_DOCK := Vector3(-12, 0.2, 9)
 const LIGHTHOUSE_DOCK := Vector3(-2, 0.2, 2)
 const GROUND_Y := 0.2
+const LOW_WATER := -0.36
+const HIGH_WATER := -0.04
+const TIDE_SECONDS := 1.6
+## Minigame entries: id, title, interaction point (x, z), stall placement, awning tint
+## and rooftop emblem. "N" stalls stand behind the point facing the camera, "D" stalls
+## stand diagonally behind it on the east boardwalk, and "" has no stall.
+const GAMES := [
+	["game-013", "浪間小艇", 12.0, 0.0, "D", "#8fd0c8", "boat"],
+	["game-014", "潮汐沙路", 12.0, 5.6, "D", "#f0907a", "flags"],
+	["game-015", "燈塔折光", 1.2, -0.6, "", "", ""],
+	["game-016", "繩結拖船", 12.0, -4.6, "D", "#f5cd7a", "rope"],
+	["game-017", "蟹洞彈珠", -4.0, 10.2, "N", "#f0907a", "crab"],
+	["game-018", "船艙配重", 0.0, 10.2, "N", "#8fd0c8", "crates"],
+	["game-019", "浮標接力", 4.0, 10.2, "N", "#f5cd7a", "buoy"],
+	["game-020", "帆影追逐", -4.0, -10.2, "N", "#8fd0c8", "sail"],
+	["game-021", "貝殼聽潮", 0.0, -10.2, "N", "#f0907a", "shell"],
+	["game-022", "錨鏈穿礁", 4.0, -10.2, "N", "#f5cd7a", "anchor"],
+	["game-023", "海鳥借風", 12.0, -10.2, "N", "#f0907a", "gull"],
+	["game-024", "潮鐘合閘", 12.0, 10.2, "D", "#8fd0c8", "bell"],
+]
+## A stall keeps this far from its interaction point, which leaves 1.25 m clear.
+const STALL_REACH := 1.85
 var _high_tide := false
-var _sandbar_mesh: MeshInstance3D
-var _sandbar_body: StaticBody3D
-var _tide_label: Label3D
+var _tide_blend := 0.0
+var _kit: Kit
+var _scenery: Scenery
+var _life: Life
 
 func _build_region_geometry() -> void:
-	sea_material = ShaderMaterial.new()
-	sea_material.shader = WATER
-	var sea := PlaneMesh.new()
-	sea.size = Vector2(180, 180)
-	_mesh(sea, Vector3(0, -0.25, 0), sea_material)
-	for index in range(LAND.size()):
-		var shore := _terrain(LAND[index], _coastal_surface(0 if index < 5 else 1, 2.0, Color("#d4c4a0")))
-		shore.name = "HarborShore%d" % index
-	_sandbar_mesh = _terrain(SANDBAR, _coastal_surface(4, 2.5, Color("#eed29a")))
-	_sandbar_mesh.name = "LowTideSandbar"
-	_sandbar_body = _sandbar_mesh.get_child(0) as StaticBody3D
-	# Deck finishes share the same collision top as the shore beneath them.
-	for dock in [SHORE_DOCK, LIGHTHOUSE_DOCK]:
-		var deck := _box(dock - Vector3(0, 0.05, 0), Vector3(3.6, 0.1, 3.6), Color("#9b784f"))
-		_set_registered_surface(deck, _coastal_surface(1, 1.4))
-		for offset in [-1.7, 1.7]:
-			_cylinder(dock + Vector3(offset, 0.32, 1.5), 0.12, 0.64, TEAL)
-	# The tower sits clear of the island's boarding and bridge approaches.
-	var lighthouse := _cylinder(Vector3(2.4, 2.9, -2.4), 0.8, 5.4, CREAM, 0.55, true)
-	lighthouse.name = "HarborLighthouse"
-	_set_registered_surface(lighthouse, _stone_finish(CREAM))
-	_cylinder(Vector3(2.4, 4.0, -2.4), 0.68, 0.5, CORAL)
-	_cylinder(Vector3(2.4, 5.85, -2.4), 0.95, 0.45, TEAL)
-	_cylinder(Vector3(2.4, 6.35, -2.4), 0.55, 0.6, GOLD)
-	_cone(Vector3(2.4, 7.1, -2.4), CORAL)
-	# A moored boat is scenery; boarding is the explicit, always-free ferry point.
-	var boat := _box(Vector3(-7, -0.02, 5.6), Vector3(2.5, 0.45, 1.3), TEAL)
-	_set_registered_surface(boat, _coastal_surface(2, 1.0))
-	_box(Vector3(-7, 0.4, 5.6), Vector3(1.0, 0.65, 1.0), CREAM)
-	_box(Vector3(-7, 0.8, 5.6), Vector3(1.5, 0.15, 1.4), CORAL)
-	_sign("返回迎賓大道", Vector3(-12, 0.2, 6.4))
-	_sign("免費渡船 ↔ 燈塔", Vector3(-12, 0.2, 10.8))
-	_sign("免費渡船 ↔ 岸邊", Vector3(-2, 0.2, 3.8))
-	_sign("環岸步道 → 燈塔", Vector3(-11.8, 0.2, -8.5))
-	_sign("浪間小艇 · 空白鍵拿取／交貨", Vector3(12, 0.2, -2.3))
-	_box(Vector3(13.4, 0.8, -0.4), Vector3(1.0, 1.2, 1.0), TEAL)
-	_box(Vector3(13.4, 1.5, -0.4), Vector3(1.5, 0.2, 1.5), CORAL)
-	_tide_label = _sign("退潮 · 沙洲可通行", Vector3(-12, 0.2, -3.0))
-	_cylinder(Vector3(-13.8, 1.35, -3), 0.48, 0.16, GOLD).rotation_degrees.x = 90
-	_box(Vector3(-13.8, 0.75, -3), Vector3(0.14, 1.5, 0.14), TEAL)
+	_kit = Kit.new(self)
+	_scenery = Scenery.new(self, _kit)
+	_scenery.build()
+	_build_entries()
+	_life = Life.new(self, _scenery)
+	_life.build()
+	_kit.finish()
+	_apply_tide()
+	_life.hold_still()
+	current_area = "潮汐碼頭"
+
+func _build_entries() -> void:
 	_point("region:welcome", "返回迎賓大道", Vector3(-12, GROUND_Y, 5))
 	_point("harbor:tide", "潮汐鐘 · 預覽漲退潮", Vector3(-12, GROUND_Y, -1))
 	_point("harbor:ferry:shore", "免費渡船 · 前往燈塔", SHORE_DOCK)
 	_point("harbor:ferry:lighthouse", "免費渡船 · 返回岸邊", LIGHTHOUSE_DOCK)
 	_point("harbor:info:lighthouse", "燈塔與環形水路", Vector3(0, GROUND_Y, -2))
-	_point("game-013", "浪間小艇 · 免費遊玩", Vector3(12, GROUND_Y, 0))
-	_sign("潮汐沙路 · 空白鍵插路標", Vector3(12, 0.2, 3.4))
-	_box(Vector3(13.4, 0.8, 5.4), Vector3(1.0, 1.2, 1.0), CORAL)
-	_box(Vector3(13.4, 1.5, 5.4), Vector3(1.5, 0.2, 1.5), GOLD)
-	_point("game-014", "潮汐沙路 · 免費遊玩", Vector3(12, GROUND_Y, 5.6))
-	# The prism miniature sits beside the lighthouse it borrows its beam from.
-	_sign("燈塔折光 · 轉鏡點亮航標", Vector3(2.4, 0.2, 1.4))
-	_point("game-015", "燈塔折光 · 免費遊玩", Vector3(1.2, GROUND_Y, -0.6))
-	_sign("繩結拖船 · 掛鉤拖浮台", Vector3(12, 0.2, -6.4))
-	_box(Vector3(13.4, 0.8, -4.6), Vector3(1.0, 1.2, 1.0), TEAL)
-	_box(Vector3(13.4, 1.5, -4.6), Vector3(1.5, 0.2, 1.5), CREAM)
-	_point("game-016", "繩結拖船 · 免費遊玩", Vector3(12, GROUND_Y, -4.6))
-	_sign("蟹洞彈珠 · 蓄力撞開蟹門", Vector3(-4, 0.2, 8.6))
-	_box(Vector3(-5.6, 0.8, 10.4), Vector3(1.0, 1.2, 1.0), CORAL)
-	_box(Vector3(-5.6, 1.5, 10.4), Vector3(1.5, 0.2, 1.5), CREAM)
-	_point("game-017", "蟹洞彈珠 · 免費遊玩", Vector3(-4, GROUND_Y, 10.2))
-	_sign("船艙配重 · 搬箱壓穩船身", Vector3(0, 0.2, 8.6))
-	_box(Vector3(1.6, 0.8, 10.4), Vector3(1.0, 1.2, 1.0), TEAL)
-	_box(Vector3(1.6, 1.5, 10.4), Vector3(1.5, 0.2, 1.5), GOLD)
-	_point("game-018", "船艙配重 · 免費遊玩", Vector3(0, GROUND_Y, 10.2))
-	_sign("浮標接力 · 投環送郵筒", Vector3(4, 0.2, 8.6))
-	_box(Vector3(5.6, 0.8, 10.4), Vector3(1.0, 1.2, 1.0), CORAL)
-	_box(Vector3(5.6, 1.5, 10.4), Vector3(1.5, 0.2, 1.5), TEAL)
-	_point("game-019", "浮標接力 · 免費遊玩", Vector3(4, GROUND_Y, 10.2))
-	_sign("帆影追逐 · 調帆追燈船", Vector3(-4, 0.2, -8.6))
-	_box(Vector3(-5.6, 0.8, -10.4), Vector3(1.0, 1.2, 1.0), TEAL)
-	_box(Vector3(-5.6, 1.5, -10.4), Vector3(1.5, 0.2, 1.5), CREAM)
-	_point("game-020", "帆影追逐 · 免費遊玩", Vector3(-4, GROUND_Y, -10.2))
-	_sign("貝殼聽潮 · 照波紋敲貝殼", Vector3(0, 0.2, -8.6))
-	_box(Vector3(1.6, 0.8, -10.4), Vector3(1.0, 1.2, 1.0), CORAL)
-	_box(Vector3(1.6, 1.5, -10.4), Vector3(1.5, 0.2, 1.5), GOLD)
-	_point("game-021", "貝殼聽潮 · 免費遊玩", Vector3(0, GROUND_Y, -10.2))
-	_sign("錨鏈穿礁 · 繞礁救貨船", Vector3(4, 0.2, -8.6))
-	_box(Vector3(5.6, 0.8, -10.4), Vector3(1.0, 1.2, 1.0), CORAL)
-	_box(Vector3(5.6, 1.5, -10.4), Vector3(1.5, 0.2, 1.5), GOLD)
-	_point("game-022", "錨鏈穿礁 · 免費遊玩", Vector3(4, GROUND_Y, -10.2))
-	_sign("海鳥借風 · 收翼借風回巢", Vector3(12, 0.2, -8.4))
-	_box(Vector3(13.6, 0.8, -10.4), Vector3(1.0, 1.2, 1.0), CORAL)
-	_box(Vector3(13.6, 1.5, -10.4), Vector3(1.5, 0.2, 1.5), GOLD)
-	_point("game-023", "海鳥借風 · 免費遊玩", Vector3(12, GROUND_Y, -10.2))
-	_sign("潮鐘合閘 · 對齊水位放船", Vector3(12, 0.2, 8.4))
-	_box(Vector3(13.6, 0.8, 10.4), Vector3(1.0, 1.2, 1.0), CORAL)
-	_box(Vector3(13.6, 1.5, 10.4), Vector3(1.5, 0.2, 1.5), GOLD)
-	_point("game-024", "潮鐘合閘 · 免費遊玩", Vector3(12, GROUND_Y, 10.2))
-	current_area = "潮汐碼頭"
+	var rows := {"north": [], "south": []}
+	for index in range(GAMES.size()):
+		var game: Array = GAMES[index]
+		var at := Vector3(float(game[2]), GROUND_Y, float(game[3]))
+		_point(game[0], "%s · 免費遊玩" % game[1], at)
+		if game[4] == "": continue
+		var diagonal: bool = game[4] == "D"
+		var yaw := -PI * 0.25 if diagonal else 0.0
+		var stall_at := at - Basis(Vector3.UP, yaw) * Vector3(0, 0, STALL_REACH)
+		if not diagonal:
+			# Row stalls stand on their own timber bays that reach out over the water.
+			stall_at.y += 0.03
+			_kit.surface(_scenery.deck()).add(stall_at + Vector3(0, -0.3, -0.15), Vector3(2.5, 0.6, 1.7))
+			for side: float in [-1.0, 1.0]:
+				_kit.piles().add(Vector3(stall_at.x + side * 1.2, -0.3, stall_at.z - 0.95), Vector3(0.26, 1.2, 0.26))
+			rows["north" if stall_at.z < 0.0 else "south"].append(stall_at + Vector3(0, 3.1, -0.5))
+		Props.stall(self, _kit, stall_at, yaw, game[1], Color(str(game[5])), game[6], index)
+	# Garlands run from sign to sign along the north and south rows.
+	for row: Array in rows.values():
+		row.sort_custom(func(a: Vector3, b: Vector3) -> bool: return a.x < b.x)
+		for index in range(row.size() - 1):
+			var inset: Vector3 = (row[index + 1] - row[index]).normalized() * 0.95
+			_kit.bunting(row[index] + inset, row[index + 1] - inset, Scenery.PENNANT_COLORS, 0.3)
 
-func _terrain(rect: Rect2, material: Material) -> MeshInstance3D:
-	var center := rect.get_center()
-	var surface := _box(Vector3(center.x, GROUND_Y - 0.3, center.y), Vector3(rect.size.x, 0.6, rect.size.y), CREAM, true)
-	_set_registered_surface(surface, material)
-	return surface
+func set_time_of_day(phase_id: Variant) -> void:
+	super.set_time_of_day(phase_id)
+	if _scenery != null:
+		_scenery.apply_time_of_day(lamp_energy_for_phase, environment.background_color)
 
-func _sign(text: String, at: Vector3) -> Label3D:
-	var board := _box(at + Vector3(0, 1.05, 0), Vector3(2.9, 0.8, 0.16), TEAL)
-	_set_registered_surface(board, _coastal_surface(2, 1.5))
-	_box(at + Vector3(0, 0.4, 0), Vector3(0.14, 0.8, 0.14), TEAL)
-	return _local_label(text, at + Vector3(0, 1.1, 0.15), 16, CREAM)
+func _process(delta: float) -> void:
+	super._process(delta)
+	var target := 1.0 if _high_tide else 0.0
+	if not is_equal_approx(_tide_blend, target):
+		_tide_blend = target if reduced_motion else move_toward(_tide_blend, target, delta / TIDE_SECONDS)
+		_apply_tide()
+	if reduced_motion:
+		_life.hold_still()
+	elif not blocked:
+		_life.animate(delta)
+
+func _apply_tide() -> void:
+	var eased := smoothstep(0.0, 1.0, _tide_blend)
+	var water_y := lerpf(LOW_WATER, HIGH_WATER, eased)
+	_scenery.apply_tide(eased, water_y)
+	_life.set_water_level(water_y)
 
 func _build_region_activities() -> void:
 	pass
@@ -135,7 +126,9 @@ func update_collection(_photos: Dictionary) -> void:
 	pass
 
 func ground_surface_y(position: Vector3) -> float:
-	return GROUND_Y if _is_land(Vector2(position.x, position.z)) else -0.4
+	# The islet out to sea is ground too, though nobody can walk to it.
+	var at := Vector2(position.x, position.z)
+	return GROUND_Y if _is_land(at) or Scenery.ISLET.has_point(at) else -0.4
 
 func _is_land(point: Vector2) -> bool:
 	for rect in LAND:
@@ -166,10 +159,10 @@ func set_tide(high: bool) -> void:
 	if high and is_instance_valid(player) and SANDBAR.grow(0.3).has_point(Vector2(player.position.x, player.position.z)):
 		_relocate(SHORE_DOCK)
 	_high_tide = high
-	if is_instance_valid(_sandbar_mesh):
-		_sandbar_mesh.visible = not high
-		_sandbar_body.collision_layer = 0 if high else 1
-		_tide_label.text = "漲潮 · 沙洲封閉" if high else "退潮 · 沙洲可通行"
+	if _scenery != null and is_instance_valid(_scenery.sandbar_body):
+		_scenery.sandbar_body.collision_layer = 0 if high else 1
+		_scenery.tide_label.text = "漲潮 · 沙洲封閉" if high else "退潮 · 沙洲可通行"
+		_life.ring_bell()
 
 func is_high_tide() -> bool:
 	return _high_tide
@@ -177,8 +170,12 @@ func is_high_tide() -> bool:
 func take_ferry(point_id: String) -> bool:
 	if not is_instance_valid(player): return false
 	match point_id:
-		"harbor:ferry:shore": _relocate(LIGHTHOUSE_DOCK)
-		"harbor:ferry:lighthouse": _relocate(SHORE_DOCK)
+		"harbor:ferry:shore":
+			_relocate(LIGHTHOUSE_DOCK)
+			_life.moor_ferry(1)
+		"harbor:ferry:lighthouse":
+			_relocate(SHORE_DOCK)
+			_life.moor_ferry(0)
 		_: return false
 	return true
 

@@ -106,6 +106,10 @@ func _run() -> void:
 		await physics_frame
 		await physics_frame
 		_check(world.player.position.distance_to(spawn) < 0.2 and not world.avatar_is_walking, "water/fall recovery uses harbor safe dock without false stride")
+		await _check_scenery(world)
+		world.player.position = spawn
+		world.player.velocity = Vector3.ZERO
+		await physics_frame
 		world.update_collection({"photo-welcome-story-1": true})
 		_check(world.map_snapshot().points == snapshot.points, "welcome collection cannot turn harbor information into rewards")
 		var count: int = world.find_children("*", "Node", true, false).size()
@@ -114,6 +118,7 @@ func _run() -> void:
 			cache_count = world.material_cache.size()
 		else:
 			_check(count == node_count and world.material_cache.size() == cache_count, "bounded scene/resources on reentry")
+		_check(count <= 900, "harbor stays inside the region node budget (%d)" % count)
 		var weak: WeakRef = weakref(world)
 		world.queue_free()
 		await process_frame
@@ -121,6 +126,55 @@ func _run() -> void:
 		_check(weak.get_ref() == null, "old world freed on reentry")
 	_check(_progress_snapshot(progress) == before, "tides/ferries/exploration never mutate global phase/progress/rewards")
 	_finish()
+
+## Landmarks, lamp budget, tide visuals, reduced motion and the crabs that react to the
+## player. Leaves the world blocked, still and at low tide, as the caller had it.
+func _check_scenery(world) -> void:
+	for landmark in ["HarborSea", "HarborShore0", "HarborShore5", "LowTideSandbar", "LowTideSandbarBank", "HarborLighthouse", "HarborLighthouseBeam", "HarborFerry", "HarborTideHand", "HarborTideBell"]:
+		_check(world.find_child(landmark, true, false) != null, "harbor landmark %s exists" % landmark)
+	_check(world.lamps.size() >= 6 and world.lamps.size() <= world.ACTIVE_LAMP_LIMIT, "every harbor lamp fits the lit budget, so none switches off as the player walks")
+	var sea: Node3D = world.find_child("HarborSea", true, false)
+	var bank: Node3D = world.find_child("LowTideSandbarBank", true, false)
+	var ferry: Node3D = world.find_child("HarborFerry", true, false)
+	var beam: Node3D = world.find_child("HarborLighthouseBeam", true, false)
+	world.set_tide(false)
+	await process_frame
+	await process_frame
+	_check(is_equal_approx(sea.position.y, world.LOW_WATER) and bank.position.y > sea.position.y + 0.4, "low water uncovers the sandbar bank")
+	world.set_tide(true)
+	await process_frame
+	await process_frame
+	_check(is_equal_approx(sea.position.y, world.HIGH_WATER) and bank.position.y < sea.position.y - 0.1, "reduced motion shows high water at once and it covers the sandbar bank")
+	_check(sea.position.y < world.GROUND_Y - 0.1, "high water stays below every quay")
+	world.set_tide(false)
+	world.blocked = false
+	await process_frame
+	await process_frame
+	var still_ferry := ferry.transform
+	var still_beam := beam.rotation
+	# Headless rendering does not keep multimesh poses, so ask where the crab is.
+	var crab_home: Vector2 = world._life.crab_position(4)
+	var visitor := Vector2(-6.2, 0.3)
+	world.player.position = Vector3(visitor.x, 0.2, visitor.y)
+	world.player.velocity = Vector3.ZERO
+	await create_timer(0.3).timeout
+	_check(ferry.transform == still_ferry and beam.rotation == still_beam and world._life.crab_position(4) == crab_home, "reduced motion holds boats, beam and crabs still")
+	world.apply_settings({"reduced_motion": false})
+	await create_timer(0.6).timeout
+	_check(ferry.transform != still_ferry and beam.rotation != still_beam, "boats bob and the beam turns with motion enabled")
+	var fled: Vector2 = world._life.crab_position(4)
+	_check(fled.distance_to(visitor) > crab_home.distance_to(visitor) + 0.3, "a crab scuttles away from the player")
+	_check(world.SANDBAR.has_point(fled), "the crab stays on its sandbar")
+	_check(world.take_ferry("harbor:ferry:shore"), "ferry to the lighthouse")
+	await process_frame
+	await process_frame
+	_check(ferry.position.distance_to(world.LIGHTHOUSE_DOCK) < ferry.position.distance_to(world.SHORE_DOCK), "the ferry boat is moored where the player lands")
+	_check(world.take_ferry("harbor:ferry:lighthouse"), "ferry back to shore")
+	await process_frame
+	await process_frame
+	_check(ferry.position.distance_to(world.SHORE_DOCK) < ferry.position.distance_to(world.LIGHTHOUSE_DOCK), "the ferry boat returns with the player")
+	world.apply_settings({"reduced_motion": true})
+	world.blocked = true
 
 func _progress_snapshot(progress) -> Dictionary:
 	var snapshot := {}
