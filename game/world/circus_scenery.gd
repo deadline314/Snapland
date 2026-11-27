@@ -582,6 +582,21 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			sculpt.box(top + Vector3(0.1, 1.04, 0), Vector3(0.1, 0.18, 0.08), Props.TEAL)
 			sculpt.box(top + Vector3(0.1, 1.18, 0), Vector3(0.08, 0.08, 0.08), Props.CREAM)
 			sculpt.box(top + Vector3(0.1, 1.06, 0.04), Vector3(0.7, 0.02, 0.02), Props.GOLD, Basis(Vector3.BACK, 0.12))
+		"spot":
+			# A can-lamp on a little gantry throwing light down onto a checkered
+			# floor where a tiny dancer stands with arms up.
+			for side: float in [-1.0, 1.0]:
+				sculpt.box(top + Vector3(side * 0.42, 0.45, 0), Vector3(0.05, 0.9, 0.05), Props.IRON)
+			sculpt.box(top + Vector3(0, 0.9, 0), Vector3(0.9, 0.05, 0.06), Props.IRON)
+			sculpt.tube(top + Vector3(0.12, 0.78, 0.05), 0.08, 0.1, 0.2, Props.GOLD, 8, Basis(Vector3.BACK, 0.35))
+			sculpt.tube(top + Vector3(0.08, 0.68, 0.06), 0.09, 0.09, 0.02, Color("#ffe2a8"), 8, Basis(Vector3.BACK, 0.35))
+			for column in 3:
+				for row in 2:
+					sculpt.box(top + Vector3(-0.2 + column * 0.2, 0.03, -0.1 + row * 0.2), Vector3(0.19, 0.03, 0.19), Props.PLUM if (column + row) % 2 == 0 else Props.NIGHT)
+			sculpt.box(top + Vector3(0, 0.2, 0), Vector3(0.1, 0.3, 0.06), Props.TEAL)
+			sculpt.box(top + Vector3(0, 0.4, 0), Vector3(0.09, 0.09, 0.08), Props.CREAM)
+			for side: float in [-1.0, 1.0]:
+				sculpt.box(top + Vector3(side * 0.08, 0.42, 0), Vector3(0.03, 0.16, 0.03), Props.TEAL, Basis(Vector3.BACK, side * -0.5))
 		"hat":
 			# An upside-down top hat with a rabbit popping out and a scarf trailing over the brim.
 			sculpt.tube(top + Vector3(0, 0.22, 0), 0.24, 0.24, 0.44, Props.NIGHT.darkened(0.3), 10)

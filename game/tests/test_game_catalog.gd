@@ -20,7 +20,7 @@ func _run() -> void:
 	var garden: Array = catalog.definitions("garden")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 7 and toy.size() == 8 and garden.size() == 5 and all_games.size() == 68, "only the 68 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 8 and toy.size() == 8 and garden.size() == 5 and all_games.size() == 69, "only the 69 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden and catalog.definitions("hotel").is_empty(), "games retain global order and future regions remain unavailable")
@@ -57,11 +57,14 @@ func _run() -> void:
 	var trick := {"id":"game-053", "mode":"hat_trick", "zone":"circus", "local_index":5, "photo_id":"photo-circus-game-5", "devil_photo_id":"photo-circus-devil-5", "achievement_id":"ACH_GAME_053"}
 	_check(catalog.identity("game-053") == trick and catalog.identity("hat_trick") == trick and circus[4].name == "帽中套物" and circus[4].arcade == true,
 		"the hat trick takes circus slot five")
+	var spot := {"id":"game-054", "mode":"spot_dance", "zone":"circus", "local_index":6, "photo_id":"photo-circus-game-6", "devil_photo_id":"photo-circus-devil-6", "achievement_id":"ACH_GAME_054"}
+	_check(catalog.identity("game-054") == spot and catalog.identity("spot_dance") == spot and circus[5].name == "追光躲步" and circus[5].arcade == true,
+		"the spot dance takes circus slot six")
 	var cannon := {"id":"game-055", "mode":"human_cannon", "zone":"circus", "local_index":7, "photo_id":"photo-circus-game-7", "devil_photo_id":"photo-circus-devil-7", "achievement_id":"ACH_GAME_055"}
-	_check(catalog.identity("game-055") == cannon and catalog.identity("human_cannon") == cannon and circus[5].name == "人肉砲彈" and circus[5].arcade == true,
+	_check(catalog.identity("game-055") == cannon and catalog.identity("human_cannon") == cannon and circus[6].name == "人肉砲彈" and circus[6].arcade == true,
 		"the human cannon keeps catalogue slot seven")
 	var wire := {"id":"game-057", "mode":"tightrope", "zone":"circus", "local_index":9, "photo_id":"photo-circus-game-9", "devil_photo_id":"photo-circus-devil-9", "achievement_id":"ACH_GAME_057"}
-	_check(catalog.identity("game-057") == wire and catalog.identity("tightrope") == wire and circus[6].name == "走鋼索" and circus[6].arcade == true,
+	_check(catalog.identity("game-057") == wire and catalog.identity("tightrope") == wire and circus[7].name == "走鋼索" and circus[7].arcade == true,
 		"the tightrope keeps catalogue slot nine")
 	var still := {"id":"game-073", "mode":"hold_still", "zone":"garden", "local_index":1, "photo_id":"photo-garden-game-1", "devil_photo_id":"photo-garden-devil-1", "achievement_id":"ACH_GAME_073"}
 	_check(catalog.identity("game-073") == still and catalog.identity("hold_still") == still and garden[0].name == "螢火蟲長曝光" and garden[0].arcade == true, "first greenhouse game keeps its own global number and the arcade flow flag")

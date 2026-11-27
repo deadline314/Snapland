@@ -100,6 +100,26 @@
     ]
   },
   {
+    "id": "game-054",
+    "mode": "spot_dance",
+    "zone": "circus",
+    "local_index": 6,
+    "arcade": true,
+    "name": "追光躲步",
+    "goal": "聚光燈在舞池上亂跑，用方向鍵一格一格跳，一直待在光裡跳舞；離開光圈太久燈就全暗。",
+    "instructions": "↑ ↓ ← → 或手把十字鍵：按一下跳一格，跟著聚光燈跳舞；跳進光裡的舞步有連擊加分，在暗處待太久燈會全暗。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助追光跳舞拿到金牌",
+    "ordinary": "跟著聚光燈跳舞，拿到銅牌",
+    "attraction_tag": "聚光舞池",
+    "island_invitation": "聚光燈跑去哪，你就跳去哪。跟丟了的話……台上只剩你的兩顆眼睛。",
+    "retake_props": [
+      "lantern",
+      "mascot",
+      "sign"
+    ]
+  },
+  {
     "id": "game-055",
     "mode": "human_cannon",
     "zone": "circus",

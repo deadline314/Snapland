@@ -51,6 +51,7 @@ func _run() -> void:
 			_check(Vector2(size.x, size.z).is_equal_approx(footprint.size), "chart and floor widths match each other")
 
 	await _reach([Vector2(0, 4.65), Vector2(-8.1, 4.65), Vector2(-8.1, 0.85)], "circus:mirrors", "鏡廊")
+	await _reach([Vector2(-8.1, 4.85), Vector2(-6.4, 4.85)], "game-054", "鏡廊")
 	await _reach([Vector2(-8.1, 4.85), Vector2(World.REFLECTION_POINT.x, World.REFLECTION_POINT.z)], "game-050", "鏡廊")
 	await _reach([Vector2(-4.25, 0.85), Vector2(-4.25, -6.40), Vector2(0, -6.40), Vector2(0, -8.80)],
 		"circus:mats", "砲彈安全墊")
