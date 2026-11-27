@@ -31,6 +31,8 @@ const STANDS := {
 	"garden": [
 		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
 			"stand": Vector3(-9.6, 0.2, 5.6), "point": Vector3(-8.5, 0.2, 6.9), "prop": "camera", "paint": Color("#38534e")},
+		{"id": "game-074", "title": "露珠牽橋", "prompt": "露珠牽橋 · 傾斜葉子滾露珠",
+			"stand": Vector3(9.0, 0.2, 6.0), "point": Vector3(10.0, 0.2, 7.4), "prop": "dew", "paint": Color("#4f7f5a")},
 		{"id": "game-077", "title": "睡蓮踏浪", "prompt": "睡蓮踏浪 · 踩葉過池",
 			"stand": Vector3(-2.6, 0.2, -7.7), "point": Vector3(-1.55, 0.2, -6.35), "prop": "lily", "paint": Color("#3f6f5a")},
 		{"id": "game-079", "title": "蘑菇撐傘", "prompt": "蘑菇撐傘 · 替幼苗接雨",
@@ -69,6 +71,7 @@ static func build(world: Node3D, region: String) -> void:
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
 			"code": _code_prop(sculpt)
+			"dew": _dew_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -337,3 +340,22 @@ static func _rails_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.32, 1.06, 0.1), Vector3(0.2, 0.12, 0.1), lamps[0])
 	sculpt.box(Vector3(-0.25, 1.15, 0.1), Vector3(0.04, 0.08, 0.04), Color("#4a4e57"))
 	sculpt.box(Vector3(-0.42, 1.09, 0.1), Vector3(0.08, 0.16, 0.1), lamps[0].darkened(0.2))
+
+
+## A broad leaf tipped over the sign with a big dewdrop rolling on it and a
+## caterpillar on its edge, and a potted flower bud on the counter.
+static func _dew_prop(sculpt: Kit.Sculpt) -> void:
+	var leaf := Color("#5f9e4f")
+	var tilt := Basis(Vector3.BACK, -0.18)
+	sculpt.box(Vector3(0.05, 2.55, -0.3), Vector3(0.05, 0.5, 0.05), Color("#3f6f3a"))
+	sculpt.box(Vector3(0, 2.84, -0.3), Vector3(1.5, 0.05, 0.5), leaf, tilt)
+	sculpt.box(Vector3(0, 2.875, -0.3), Vector3(1.4, 0.02, 0.05), Color("#b9d48a"), tilt)
+	for tip: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(tip * 0.8, 2.84 - tip * 0.15, -0.3), Vector3(0.18, 0.05, 0.26), leaf.darkened(0.1), tilt)
+	sculpt.ball(Vector3(-0.3, 3.02, -0.3), 0.15, Color("#a9e2ef"), Color("#e8fbff"), 8, 4, 0.9)
+	sculpt.box(Vector3(0.45, 2.85, -0.07), Vector3(0.22, 0.06, 0.06), Color("#9ccf52"), tilt)
+	sculpt.tube(Vector3(-0.3, 1.06, 0.1), 0.14, 0.11, 0.22, Color("#b8643f"), 8)
+	sculpt.tube(Vector3(-0.3, 1.18, 0.1), 0.12, 0.12, 0.02, Color("#4f3f2e"), 8)
+	sculpt.box(Vector3(-0.3, 1.32, 0.1), Vector3(0.03, 0.26, 0.03), Color("#3f6f3a"))
+	sculpt.ball(Vector3(-0.3, 1.5, 0.1), 0.07, Color("#f2a7b8"), Color("#7cae5a"), 6, 3, 1.3)
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)

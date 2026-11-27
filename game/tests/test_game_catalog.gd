@@ -20,7 +20,7 @@ func _run() -> void:
 	var garden: Array = catalog.definitions("garden")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 7 and toy.size() == 8 and garden.size() == 4 and all_games.size() == 67, "only the 67 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 7 and toy.size() == 8 and garden.size() == 5 and all_games.size() == 68, "only the 68 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden and catalog.definitions("hotel").is_empty(), "games retain global order and future regions remain unavailable")
@@ -65,14 +65,17 @@ func _run() -> void:
 		"the tightrope keeps catalogue slot nine")
 	var still := {"id":"game-073", "mode":"hold_still", "zone":"garden", "local_index":1, "photo_id":"photo-garden-game-1", "devil_photo_id":"photo-garden-devil-1", "achievement_id":"ACH_GAME_073"}
 	_check(catalog.identity("game-073") == still and catalog.identity("hold_still") == still and garden[0].name == "螢火蟲長曝光" and garden[0].arcade == true, "first greenhouse game keeps its own global number and the arcade flow flag")
+	var dew := {"id":"game-074", "mode":"dew_bridge", "zone":"garden", "local_index":2, "photo_id":"photo-garden-game-2", "devil_photo_id":"photo-garden-devil-2", "achievement_id":"ACH_GAME_074"}
+	_check(catalog.identity("game-074") == dew and catalog.identity("dew_bridge") == dew and garden[1].name == "露珠牽橋" and garden[1].arcade == true,
+		"the second greenhouse slot fills in between the delivered neighbours and keeps its own number")
 	var lily := {"id":"game-077", "mode":"lily_hop", "zone":"garden", "local_index":5, "photo_id":"photo-garden-game-5", "devil_photo_id":"photo-garden-devil-5", "achievement_id":"ACH_GAME_077"}
-	_check(catalog.identity("game-077") == lily and catalog.identity("lily_hop") == lily and garden[1].name == "睡蓮踏浪" and garden[1].arcade == true,
+	_check(catalog.identity("game-077") == lily and catalog.identity("lily_hop") == lily and garden[2].name == "睡蓮踏浪" and garden[2].arcade == true,
 		"a greenhouse game keeps the number of the slot it fills, leaving slots still in design empty")
 	var brolly := {"id":"game-079", "mode":"mushroom_brolly", "zone":"garden", "local_index":7, "photo_id":"photo-garden-game-7", "devil_photo_id":"photo-garden-devil-7", "achievement_id":"ACH_GAME_079"}
-	_check(catalog.identity("game-079") == brolly and catalog.identity("mushroom_brolly") == brolly and garden[2].name == "蘑菇撐傘" and garden[2].arcade == true,
+	_check(catalog.identity("game-079") == brolly and catalog.identity("mushroom_brolly") == brolly and garden[3].name == "蘑菇撐傘" and garden[3].arcade == true,
 		"the next greenhouse game keeps its own slot number too")
 	var code := {"id":"game-080", "mode":"firefly_code", "zone":"garden", "local_index":8, "photo_id":"photo-garden-game-8", "devil_photo_id":"photo-garden-devil-8", "achievement_id":"ACH_GAME_080"}
-	_check(catalog.identity("game-080") == code and catalog.identity("firefly_code") == code and garden[3].name == "螢火蟲對暗號" and garden[3].arcade == true,
+	_check(catalog.identity("game-080") == code and catalog.identity("firefly_code") == code and garden[4].name == "螢火蟲對暗號" and garden[4].arcade == true,
 		"neighbouring slots fill without a gap")
 	_check(all_games.filter(func(row: Dictionary) -> bool: return row.has("arcade") and row.zone not in ["circus", "toy", "garden"]).is_empty(), "earlier games keep their own flow")
 	_check(harbor[0].name == "浪間小艇" and harbor[0].instructions == "划槳、轉舵並側滑靠岸" and harbor[0].ordinary == "載三箱到兩座浮碼頭" and harbor[0].devil == "用浪峰側滑靠岸不撞箱", "harbor row uses the approved concise copy")
@@ -200,7 +203,7 @@ func _run() -> void:
 		bad = sources.duplicate(true)
 		bad.garden[0][field_value[0]] = field_value[1]
 		invalid_sources.append(bad)
-	for field_value in [["id","game-085"],["id","game-073"],["id","game-77"],["local_index",2]]:
+	for field_value in [["id","game-085"],["id","game-073"],["id","game-74"],["local_index",5]]:
 		bad = sources.duplicate(true)
 		bad.garden[1][field_value[0]] = field_value[1]
 		invalid_sources.append(bad)

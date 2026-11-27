@@ -28,7 +28,8 @@ static var _ramps: Array = []
 
 ## `pose` is idle, left, right, up (arms only) or nose (pinching it, front
 ## only); `front` faces the viewer. Moods change the face: plain, shocked,
-## sorry, tongue, stinky (eyes squeezed shut and watering).
+## sorry, tongue, stinky (eyes squeezed shut and watering); soaked is sorry
+## with the hair plastered flat and wet over the brow.
 static func texture(pose: StringName, front: bool, mood := "plain") -> Texture2D:
 	var key := "arcade-hero|%s|%s|%s" % [pose, front, mood]
 	var painted: Image = null
@@ -70,18 +71,27 @@ static func _paint(pose: StringName, front: bool, mood: String) -> Image:
 	_arm(ids, Vector2(28.5, 24), hands[1])
 	var hx := 20 + lean
 	_fill(ids, hx - 2, 19, hx + 2, 22, SKIN)
-	_ellipse(ids, Vector2(hx, 11), Vector2(9.6, 8.2), HAIR)
-	for spike: Vector3 in [Vector3(-6, 1, 2), Vector3(-2, 0, 2), Vector3(3, 0, 2), Vector3(7, 2, 2), Vector3(-10, 8, 1), Vector3(10, 7, 1)]:
-		_ellipse(ids, Vector2(hx + spike.x, spike.y + 2.0), Vector2(spike.z, 2.4), HAIR)
+	var soaked := mood == "soaked"
+	if soaked:
+		# No spikes: the wet hair lies flat in a low cap with strands stuck to the cheeks.
+		_ellipse(ids, Vector2(hx, 12), Vector2(10.2, 6.4), HAIR)
+		for strand: int in [-9, -8, 8, 9]:
+			_fill(ids, hx + strand, 12, hx + strand, 19 - absi(strand) % 2 * 2, HAIR)
+	else:
+		_ellipse(ids, Vector2(hx, 11), Vector2(9.6, 8.2), HAIR)
+		for spike: Vector3 in [Vector3(-6, 1, 2), Vector3(-2, 0, 2), Vector3(3, 0, 2), Vector3(7, 2, 2), Vector3(-10, 8, 1), Vector3(10, 7, 1)]:
+			_ellipse(ids, Vector2(hx + spike.x, spike.y + 2.0), Vector2(spike.z, 2.4), HAIR)
 	if front:
 		_fill(ids, hx - 7, 10, hx + 7, 19, SKIN)
 		_fill(ids, hx - 5, 20, hx + 5, 20, SKIN)
 		for x in range(hx - 7, hx + 8):
-			_fill(ids, x, 9, x, 10 + posmod(x * 7, 3), HAIR)
+			# A wet fringe hangs lower, in dripping points.
+			_fill(ids, x, 9, x, (11 + posmod(x * 5, 3) * 1) if soaked else (10 + posmod(x * 7, 3)), HAIR)
 		_fill(ids, hx - 8, 10, hx - 8, 14, HAIR)
 		_fill(ids, hx + 8, 10, hx + 8, 14, HAIR)
-		for at: Vector2i in [Vector2i(4, 3), Vector2i(5, 4), Vector2i(5, 5), Vector2i(6, 6), Vector2i(6, 7)]:
-			_put(ids, hx + at.x, at.y, STREAK)
+		if not soaked:
+			for at: Vector2i in [Vector2i(4, 3), Vector2i(5, 4), Vector2i(5, 5), Vector2i(6, 6), Vector2i(6, 7)]:
+				_put(ids, hx + at.x, at.y, STREAK)
 	else:
 		_fill(ids, hx - 5, 17, hx + 5, 21, HAIR)
 		for at: Vector2i in [Vector2i(-4, 3), Vector2i(-5, 4), Vector2i(-5, 5), Vector2i(-6, 6), Vector2i(-6, 7)]:
@@ -195,7 +205,7 @@ static func _details(image: Image, ids: PackedByteArray, front: bool, mood: Stri
 				image.set_pixel(eye, 14, INK)
 			_rect(image, hx - 1, 17, 2, 2, INK)
 			_rect(image, hx + 7, 9, 1, 2, SWEAT)
-		"sorry":
+		"sorry", "soaked":
 			for eye: int in [left, right]:
 				_rect(image, eye, 15, 2, 1, INK)
 			image.set_pixel(hx - 1, 18, INK)
@@ -203,6 +213,10 @@ static func _details(image: Image, ids: PackedByteArray, front: bool, mood: Stri
 			image.set_pixel(hx + 1, 18, INK)
 			_rect(image, hx + 7, 9, 1, 2, SWEAT)
 			_rect(image, hx + 8, 10, 1, 2, SWEAT)
+			if mood == "soaked":
+				# Water beads on the flat hair and drips off the fringe.
+				for at: Vector2i in [Vector2i(-6, 8), Vector2i(-1, 7), Vector2i(4, 8), Vector2i(-4, 12), Vector2i(2, 12)]:
+					_rect(image, hx + at.x, at.y, 1, 2, SWEAT)
 		"stinky":
 			for eye: int in [left, right]:
 				_rect(image, eye - 1, 14, 3, 1, INK)

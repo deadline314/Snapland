@@ -20,6 +20,26 @@
     ]
   },
   {
+    "id": "game-074",
+    "mode": "dew_bridge",
+    "zone": "garden",
+    "local_index": 2,
+    "arcade": true,
+    "name": "露珠牽橋",
+    "goal": "傾斜大葉子讓露珠滾動，吃掉葉尖滴下的小水珠長大，再從葉尖滾進花苞；別從葉柄那頭或蟲洞掉下去。",
+    "instructions": "← →、A D 或手把十字鍵、左搖桿：往那邊傾斜葉子。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助澆花拿到金牌",
+    "ordinary": "讓露珠長大滾進花苞，拿到銅牌",
+    "attraction_tag": "露珠葉",
+    "island_invitation": "露珠越喝越大，也越來越停不住。毛毛蟲還在葉子上啃洞，掉下去的話，正好滴在你頭上！",
+    "retake_props": [
+      "flower_horn",
+      "lantern",
+      "bench"
+    ]
+  },
+  {
     "id": "game-077",
     "mode": "lily_hop",
     "zone": "garden",
