@@ -48,6 +48,9 @@ var view_script: Script
 var rng := RandomNumberGenerator.new()
 ## Tests and capture probes pin this before reset(); negative means random.
 var round_seed := -1
+## Set before reset() to shorten the round; the medal lines shrink with it.
+## The arcade marathon plays every game at half length this way.
+var round_scale := 1.0
 var assisted := false
 var variant: Dictionary = {}
 var score := 0
@@ -60,6 +63,8 @@ var play_time := 0.0
 ## (The session's "elapsed" stops at time up, so result photos show play.)
 var clock := 0.0
 
+var _declared_seconds := -1.0
+var _declared_lines: Array[int] = []
 var _stage_time := 0.0
 var _state: Dictionary = {}
 var _held: Dictionary[String, StringName] = {}
@@ -77,7 +82,13 @@ func reset(assisted_mode: bool, _clock: String) -> void:
 		rng.seed = round_seed
 	else:
 		rng.randomize()
-	round_seconds = clampf(round_seconds, 1.0, MAX_ROUND_SECONDS)
+	if _declared_seconds < 0.0:
+		_declared_seconds = round_seconds
+		_declared_lines = thresholds.duplicate()
+	var scale := clampf(round_scale, 0.1, 1.0)
+	round_seconds = clampf(_declared_seconds * scale, 1.0, MAX_ROUND_SECONDS)
+	for tier in _declared_lines.size():
+		thresholds[tier] = maxi(1, ceili(_declared_lines[tier] * scale))
 	variant = variants[rng.randi() % variants.size()]
 	score = 0
 	mistakes = 0

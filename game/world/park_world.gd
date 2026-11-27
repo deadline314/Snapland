@@ -114,6 +114,7 @@ var environment: Environment
 var points: Array[Dictionary] = []
 var district_labels: Array[Label3D] = []
 var local_sign_labels: Array[Label3D] = []
+var daily_pick_ribbons: Array[Label3D] = []
 var component_motion: Node
 var npc_activity: Node
 var story_landmarks: Node3D
@@ -868,6 +869,38 @@ func _npc_name_projected_gap(role: String) -> float:
 	var body_height := float(record.get("name_body_height",0.0))
 	var text_height := ThemeDB.fallback_font.get_height(label.font_size) * label.pixel_size + float(label.outline_size * 2) * label.pixel_size
 	return up.dot(label.global_position - (record.activity_root as Node3D).global_position) - text_height * 0.5 - body_height
+
+## Float a "today's pick" ribbon over each recommended booth in this world.
+## Three labels are made on the first call and reused; extras stay hidden.
+func mark_daily_picks(game_ids: Array) -> void:
+	while daily_pick_ribbons.size() < 3:
+		var made := _label("★今日推薦★", Vector3.ZERO, 44, Color("#ffd36b"))
+		made.name = "DailyPickRibbon%d" % daily_pick_ribbons.size()
+		if _last_label_font != null:
+			made.font = _last_label_font
+		made.outline_size = 14
+		made.outline_modulate = Color("#7a2438")
+		# A wayfinding tag: always readable over awnings and signs, like the HUD.
+		made.no_depth_test = true
+		# Only three exist; keep them visible across the whole region.
+		made.visibility_range_end = 0.0
+		made.render_priority = 4
+		made.outline_render_priority = 3
+		made.hide()
+		daily_pick_ribbons.append(made)
+	var shown := 0
+	for id in game_ids:
+		var point := _point_by_id(str(id))
+		if point.is_empty() or shown >= daily_pick_ribbons.size():
+			continue
+		var marker := point.get("marker") as Node3D
+		var top: Vector3 = to_local(marker.global_position) if is_instance_valid(marker) and marker.is_inside_tree() else point.position + Vector3(0, DEFAULT_MARKER_HEIGHT, 0)
+		var ribbon := daily_pick_ribbons[shown]
+		ribbon.position = top + Vector3(0, 1.3, 0)
+		ribbon.show()
+		shown += 1
+	for index in range(shown, daily_pick_ribbons.size()):
+		daily_pick_ribbons[index].hide()
 
 func _point_by_id(point_id: String) -> Dictionary:
 	for point in points:

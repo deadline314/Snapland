@@ -109,6 +109,8 @@ var _paused_render_targets: Array[Dictionary] = []
 var _discard_next_delta := false
 var _focus_axis_guards: Dictionary[StringName, bool] = {}
 var practice_mode := false
+## Arcade rounds run at this share of their usual length (the marathon uses it).
+var round_scale := 1.0
 var minigame_hud: Control
 ## Shared scene life and feedback layer between the game picture and the HUD.
 var atmosphere: Control
@@ -298,6 +300,7 @@ func start(id: String, assisted_mode: bool = false) -> void:
 				game_id = ""
 			else:
 				active_driver = arcade_script.new()
+				active_driver.round_scale = round_scale
 	if game_id.is_empty():
 		ended = true
 		prompt = "這款小遊戲暫時無法開啟"

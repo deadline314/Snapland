@@ -27,6 +27,15 @@ class TerrainChart extends Control:
 	}
 	var data: Dictionary
 
+	## A gold ring and ribbon tails around today's recommended booths.
+	func _draw_pick(pin: Vector2, radius: float, id: String) -> void:
+		if not data.get("daily_picks", []).has(id):
+			return
+		draw_colored_polygon(PackedVector2Array([pin + Vector2(-radius * 0.9, radius * 0.6), pin + Vector2(-radius * 1.5, radius * 2.4), pin + Vector2(-radius * 0.6, radius * 1.9), pin + Vector2(-radius * 0.1, radius * 0.9)]), Paper.CORAL)
+		draw_colored_polygon(PackedVector2Array([pin + Vector2(radius * 0.9, radius * 0.6), pin + Vector2(radius * 1.5, radius * 2.4), pin + Vector2(radius * 0.6, radius * 1.9), pin + Vector2(radius * 0.1, radius * 0.9)]), Paper.CORAL)
+		draw_arc(pin, radius + 3.0, 0.0, TAU, 20, Paper.DEEP, 4.0, true)
+		draw_arc(pin, radius + 3.0, 0.0, TAU, 20, Paper.GOLD, 2.2, true)
+
 	func _draw() -> void:
 		if data.is_empty(): return
 		var bounds: Rect2=data.bounds
@@ -50,6 +59,7 @@ class TerrainChart extends Control:
 		for index in range(data.points.size()):
 			var position: Vector3=data.points[index].position
 			var marker := origin+(Vector2(position.x,position.z)-bounds.position)*scale_factor
+			_draw_pick(marker,5.0,str(data.points[index].get("id","")))
 			draw_circle(marker,5.0,Paper.CORAL)
 			draw_string(Paper.font(),marker+Vector2(7,5),str(index+1),HORIZONTAL_ALIGNMENT_LEFT,-1,roundi(14.0*Paper.text_scale()/Paper.physical_scale(self)),Paper.INK)
 		var player: Vector3=data.player
@@ -87,6 +97,7 @@ class TerrainChart extends Control:
 			var point: Dictionary = data.points[index]
 			var location: Vector3 = point.position
 			var pin := origin + Vector2(location.x, location.z) * unit
+			_draw_pick(pin, radius, str(point.get("id", "")))
 			draw_circle(pin, radius, Color("#2e243a"), true, -1.0, true)
 			draw_circle(pin, radius * 0.38, ROOM_PLAN_INK, true, -1.0, true)
 			draw_string(Paper.font(), pin + Vector2(radius + 2.0, font_size * 0.34), str(index + 1),
@@ -222,6 +233,7 @@ class TerrainChart extends Control:
 			var point: Dictionary = data.points[index]
 			var at: Vector3 = point.position
 			var pin := origin+Vector2(at.x,at.z)*scale
+			_draw_pick(pin,radius,str(point.id))
 			_draw_market_pin(pin,radius,str(point.id))
 			var font_size := mini(roundi(2.0*radius),roundi(14.0*Paper.text_scale()/Paper.physical_scale(self)))
 			var number := str(index+1)
@@ -375,9 +387,10 @@ func _ready() -> void:
 	add_child(locations)
 	for index in range(snapshot.points.size()):
 		var point: Dictionary=snapshot.points[index]
-		var label := Paper.label("%d %s" % [index+1,str(point.label)],14,Paper.DEEP_TEAL)
+		var picked: bool=snapshot.get("daily_picks",[]).has(str(point.get("id","")))
+		var label := Paper.label("%s%d %s" % ["★" if picked else "",index+1,str(point.label)],14,Paper.GOLD if picked else Paper.DEEP_TEAL)
 		label.autowrap_mode=TextServer.AUTOWRAP_OFF
-		label.tooltip_text=str(point.label)
+		label.tooltip_text=str(point.label)+("｜今日推薦" if picked else "")
 		locations.add_child(label)
 
 func _status_text(region: String) -> String:

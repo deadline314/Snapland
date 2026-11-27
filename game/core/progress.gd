@@ -9,6 +9,8 @@ const SAVE_VERSION := 1
 const MAX_COINS := 1000000
 ## Coins for the first bronze, silver and gold medal in each instant map game.
 const FIELD_MEDAL_COINS := [10, 20, 40]
+## Today's recommended booths pay the medal coins at this multiple.
+const DAILY_PICK_COIN_SCALE := 2
 const MAX_FIELD_SCORE := 999999
 const MAX_GAME_PHOTO_FRAMES := 3
 const MAX_GAME_PHOTO_FRAME_CANDIDATES := 12
@@ -64,6 +66,9 @@ var tutorial_seen_games: Array[String] = []
 var attempted_games: Array[String] = []
 ## Instant map games: id -> {"best": highest score, "medal": 0 to 3}.
 var field_records: Dictionary = {}
+## {"day": "YYYY-MM-DD", "paid": {game_id: medal}}: the recommended-booth
+## medals already paid today; a new day starts empty.
+var daily_bonus: Dictionary = {}
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
@@ -168,7 +173,7 @@ func mark_game_attempted(game_id: String) -> bool:
 
 ## Keeps the best score and medal of an instant map game. Each medal tier pays
 ## its coins only the first time it is reached; nothing changes if the save fails.
-func record_field_result(id: String, score: int, medal: int) -> Dictionary:
+func record_field_result(id: String, score: int, medal: int, coin_scale := 1) -> Dictionary:
 	var previous: Dictionary = field_records.get(id, {})
 	var old_best := int(previous.get("best", 0))
 	var old_medal := int(previous.get("medal", 0))
@@ -179,7 +184,7 @@ func record_field_result(id: String, score: int, medal: int) -> Dictionary:
 		return result
 	var gained := 0
 	for tier in range(old_medal, medal):
-		gained += int(FIELD_MEDAL_COINS[tier])
+		gained += int(FIELD_MEDAL_COINS[tier]) * maxi(1, coin_scale)
 	var previous_coins := coins
 	var had_record := field_records.has(id)
 	field_records[id] = {"best": maxi(old_best, score), "medal": maxi(old_medal, medal)}
@@ -199,6 +204,36 @@ func record_field_result(id: String, score: int, medal: int) -> Dictionary:
 	result.best = maxi(old_best, score)
 	result.medal = maxi(old_medal, medal)
 	result.new_best = score > old_best
+	return result
+
+## Pays a recommended booth's medal coins at the daily rate, once per medal
+## tier per booth per day; nothing changes if the save fails.
+func record_daily_pick_medal(game_id: String, medal: int, day: String) -> Dictionary:
+	medal = clampi(medal, 0, FIELD_MEDAL_COINS.size())
+	var result := {"saved": true, "coins": 0}
+	var same_day := str(daily_bonus.get("day", "")) == day
+	var paid: Dictionary = daily_bonus.get("paid", {}) if same_day else {}
+	var old_medal := int(paid.get(game_id, 0))
+	if game_id.is_empty() or day.is_empty() or medal <= old_medal:
+		return result
+	var gained := 0
+	for tier in range(old_medal, medal):
+		gained += int(FIELD_MEDAL_COINS[tier]) * DAILY_PICK_COIN_SCALE
+	var previous_bonus := daily_bonus.duplicate(true)
+	var previous_coins := coins
+	paid = paid.duplicate()
+	paid[game_id] = medal
+	daily_bonus = {"day": day, "paid": paid}
+	coins = mini(MAX_COINS, coins + gained)
+	if not save_progress():
+		coins = previous_coins
+		daily_bonus = previous_bonus
+		result.saved = false
+		return result
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = false
+	result.coins = coins - previous_coins
 	return result
 
 func set_time_phase(value: String) -> bool:
@@ -726,6 +761,7 @@ func save_progress() -> bool:
 		"tutorial_seen_games": tutorial_seen_games,
 		"attempted_games": _validated_attempted_games(attempted_games),
 		"field_records": field_records,
+		"daily_bonus": daily_bonus,
 	}, true)
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
@@ -1062,6 +1098,20 @@ func _validated_field_records(value: Variant) -> Dictionary:
 		valid[id] = {"best": int(best), "medal": int(medal)}
 	return valid
 
+func _validated_daily_bonus(value: Variant) -> Dictionary:
+	if value is Dictionary and value.is_empty():
+		return {}
+	var day: Variant = value.get("day") if value is Dictionary else null
+	var paid: Variant = value.get("paid") if value is Dictionary else null
+	if typeof(day) != TYPE_STRING or str(day).length() != 10 or not paid is Dictionary:
+		push_warning("Invalid 'daily_bonus' field in progress file '%s'; starting today fresh." % _save_path())
+		return {}
+	var valid := {}
+	for id: Variant in paid:
+		if typeof(id) == TYPE_STRING and not str(id).is_empty() and _valid_whole_number(paid[id], FIELD_MEDAL_COINS.size()):
+			valid[id] = int(paid[id])
+	return {"day": day, "paid": valid}
+
 func _valid_whole_number(value: Variant, maximum: int) -> bool:
 	if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
 		return false
@@ -1071,7 +1121,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -1156,6 +1206,7 @@ func _apply_save(payload: Dictionary) -> void:
 				tutorial_seen_games.append(game_id)
 	attempted_games = _validated_attempted_games(payload.get("attempted_games", []))
 	field_records = _validated_field_records(payload.get("field_records", {}))
+	daily_bonus = _validated_daily_bonus(payload.get("daily_bonus", {}))
 	if not payload.has("attempted_games"):
 		for definition: Dictionary in GameCatalog.all_definitions():
 			var identity := GameCatalog.identity(definition.id)
@@ -1220,6 +1271,7 @@ func _reset_memory() -> void:
 	tutorial_seen_games = []
 	attempted_games = []
 	field_records = {}
+	daily_bonus = {}
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
 

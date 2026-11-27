@@ -11,6 +11,7 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const FieldGameChip = preload("res://game/ui/field_game_chip.gd")
 const ArcadeMedal = preload("res://game/ui/arcade_medal.gd")
+const ParkVariety = preload("res://game/core/park_variety.gd")
 const RegionTransitionScript = preload("res://game/ui/region_transition.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
@@ -58,6 +59,8 @@ var modal_kind := ""
 var wardrobe_panel: RefCounted
 var time_panel: RefCounted
 var celebrate_on_close := false
+## The arcade marathon in progress: {games, index, total, scores, lines}; empty when none.
+var marathon: Dictionary = {}
 var dialogue: Array=[]
 var dialogue_index := 0
 var dialogue_label: Label
@@ -139,6 +142,7 @@ func _bind_world() -> void:
 	world.interaction_requested.connect(_on_world_interaction_requested.bind(world))
 	world.area_changed.connect(_on_world_area_changed.bind(world))
 	_on_world_area_changed(world.current_area,world)
+	_mark_daily_picks()
 
 func _on_world_interaction_requested(id: String, title: String, source: Node3D) -> void:
 	if source!=world: return
@@ -712,6 +716,8 @@ func _close() -> void:
 	_dispose_region_story_photo()
 	if modal_kind == "time":
 		time_capture_token += 1
+	# Leaving the between-games card gives the marathon up.
+	if modal_kind=="marathon" and session==null: marathon.clear()
 	var celebrate := celebrate_on_close and modal_kind=="result"
 	celebrate_on_close=false
 	overlay.hide()
@@ -797,6 +803,7 @@ func _refresh() -> void:
 	world.apply_settings(Progress.settings)
 	_apply_time_phase()
 	world.update_collection(Progress.photos)
+	_mark_daily_picks()
 	if world.has_method("set_story_progress"):
 		world.set_story_progress(_story_snapshot())
 	if world.has_method("set_avatar_look"):
@@ -1858,7 +1865,8 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	session.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	session.theme=Paper.theme()
 	session.finished.connect(_game_finished)
-	session.cancelled.connect(_cancel_game)
+	session.cancelled.connect(_session_cancelled)
+	if not marathon.is_empty(): session.round_scale=ParkVariety.MARATHON_ROUND_SCALE
 	session.help_requested.connect(func(game_id: String): _open_tutorial(game_id,"session",assist))
 	session.note_played.connect(audio.play_note)
 	session.feedback.connect(audio.play_gameplay_feedback)
@@ -1900,7 +1908,18 @@ func _cancel_game(return_to_retake: bool = true) -> void:
 		retake_practice_target.clear()
 		_request_retake(str(target.id),bool(target.devil))
 
+func _session_cancelled() -> void:
+	if marathon.is_empty():
+		_cancel_game()
+		return
+	marathon.clear()
+	_cancel_game(false)
+	_notice("連玩挑戰已放棄；隨時可以再來一趟。")
+
 func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_original_frames: Array[String] = [], story_notified: bool = false) -> void:
+	if not marathon.is_empty():
+		_marathon_round_finished(result)
+		return
 	var id := str(result.get("game_id",""))
 	var practice := bool(result.get("practice",false))
 	var success := bool(result.get("success",false))
@@ -1922,6 +1941,9 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 		elif DisplayServer.get_name()!="headless":
 			photos_saved=false
 	celebrate_on_close=success and not practice and reward_saved
+	var daily_coins := 0
+	if not practice and _daily_picks().has(id):
+		daily_coins=int(Progress.record_daily_pick_medal(id,ParkVariety.medal_of(result),ParkVariety.today()).coins)
 	if success and not practice and reward_saved and not story_notified:
 		story_notified=true
 		_record_story_mission_event({"type":"minigame_result","id":id,"success":true,"practice":false})
@@ -1950,6 +1972,10 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 			award.add_child(Paper.label("小惡魔也入鏡了",20,Paper.CORAL))
 	elif ordinary_eligible:
 		body.add_child(Paper.label("收藏尚未保存；請重試保存本局紀錄。",20,Paper.CORAL))
+	if daily_coins>0:
+		var bonus := Paper.label("★ 今日推薦攤位：獎牌遊園幣加倍 +%d"%daily_coins,20,Paper.GOLD)
+		bonus.name="DailyPickBonus"
+		body.add_child(bonus)
 	elif practice:
 		body.add_child(Paper.label("這是私人練習回合；分數、拍貼、任務與成就都沒有寫入紀錄。",20,Paper.DEEP_TEAL))
 	else:
@@ -2146,6 +2172,127 @@ func _render_rules_note(parent: VBoxContainer, note: Dictionary, index: int) -> 
 	var label := Paper.label(str(note.text),18,note.color)
 	label.name="RulesNote%d"%index
 	parent.add_child(label)
+
+func _daily_picks() -> Array[String]:
+	return ParkVariety.daily_picks(ParkVariety.today(),ParkVariety.opened_games(Progress.normal_count()))
+
+func _mark_daily_picks() -> void:
+	if is_instance_valid(world) and world.has_method("mark_daily_picks"): world.mark_daily_picks(_daily_picks())
+
+func _daily_picks_line() -> Label:
+	var names: Array[String]=[]
+	for id in _daily_picks(): names.append(str(_definition(id).get("name",id)))
+	var line := Paper.label("★ 今日推薦：%s　在這三攤拿獎牌，遊園幣加倍。"%"、".join(names),17,Paper.GOLD)
+	line.name="DailyPicksLine"
+	line.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	line.tooltip_text="每級獎牌每天加倍一次。"
+	line.mouse_filter=Control.MOUSE_FILTER_PASS
+	return line
+
+func _start_marathon() -> void:
+	if session!=null: return
+	var opened := ParkVariety.opened_games(Progress.normal_count(),true)
+	if opened.is_empty():
+		_notice("開放有街機小遊戲的園區後，就能挑戰連玩。")
+		return
+	var games := ParkVariety.marathon_games(opened,randi())
+	marathon={"games":games,"index":0,"total":0,"scores":[],"medals":[],"lines":ParkVariety.marathon_lines(games)}
+	_next_marathon_game()
+
+func _next_marathon_game() -> void:
+	if marathon.is_empty(): return
+	var id: String=marathon.games[marathon.index]
+	_launch_game(id,false)
+	if session==null or session.game_id!=id: marathon.clear()
+
+func _marathon_round_finished(result: Dictionary) -> void:
+	marathon.total+=int(result.get("score",0))
+	marathon.scores.append(int(result.get("score",0)))
+	marathon.medals.append(ParkVariety.medal_of(result))
+	marathon.index+=1
+	_cancel_game(false)
+	audio.play_sfx("success" if result.get("success",false) else "miss")
+	if marathon.index>=marathon.games.size():
+		_finish_marathon()
+		return
+	var count: int=marathon.games.size()
+	var body := _open("連玩挑戰 %d / %d"%[marathon.index,count],"MARATHON","marathon")
+	var total := Paper.label("目前總分 %d"%int(marathon.total),34,Paper.GOLD)
+	total.name="MarathonRunningTotal"
+	body.add_child(total)
+	var lane := HBoxContainer.new()
+	lane.name="MarathonLane"
+	lane.add_theme_constant_override("separation",10)
+	body.add_child(lane)
+	for index in count:
+		var stop := Paper.card(lane,Paper.FRAME,4)
+		stop.get_parent().size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		stop.get_parent().custom_minimum_size.y=132
+		stop.alignment=BoxContainer.ALIGNMENT_CENTER
+		var played: bool=index<marathon.scores.size()
+		var upcoming: bool=index==marathon.index
+		var badge := ArcadeMedal.new()
+		badge.medal=int(marathon.medals[index]) if played else 0
+		badge.custom_minimum_size=Vector2(42,52)
+		badge.modulate.a=1.0 if played else 0.35
+		stop.add_child(badge)
+		var heading := Paper.label(("%d 分"%int(marathon.scores[index])) if played else ("下一款" if upcoming else "第 %d 款"%(index+1)),20,Paper.GOLD if played else (Paper.TEAL if upcoming else Paper.INK))
+		heading.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+		stop.add_child(heading)
+		var game_name := Paper.label(str(_definition(str(marathon.games[index])).get("name","")) if played or upcoming else "？",15,Paper.INK)
+		game_name.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+		game_name.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+		stop.add_child(game_name)
+	var goals := HBoxContainer.new()
+	goals.name="MarathonGoals"
+	goals.add_theme_constant_override("separation",6)
+	body.add_child(goals)
+	var reached := ParkVariety.marathon_medal(int(marathon.total),marathon.lines)
+	for tier in 3:
+		var goal := ArcadeMedal.new()
+		goal.medal=tier+1
+		goal.custom_minimum_size=Vector2(28,38)
+		goal.modulate.a=1.0 if reached>tier else 0.45
+		goals.add_child(goal)
+		var line := Paper.label("%d"%int(marathon.lines[tier]),18,ArcadeMedal.FACES[tier+1])
+		line.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
+		line.autowrap_mode=TextServer.AUTOWRAP_OFF
+		line.custom_minimum_size.x=72
+		goals.add_child(line)
+	if reached<3:
+		var chase := Paper.label("再 %d 分拿%s"%[int(marathon.lines[reached])-int(marathon.total),ArcadeMedal.NAMES[reached+1]],18,Paper.TEAL)
+		chase.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
+		chase.autowrap_mode=TextServer.AUTOWRAP_OFF
+		goals.add_child(chase)
+	var next := Paper.button("下一款",_next_marathon_game,modal_footer)
+	next.name="MarathonNextGame"
+	var give_up := Paper.button("放棄挑戰",_close,modal_footer)
+	give_up.name="MenuBackButton"
+	give_up.custom_minimum_size=Vector2(190,44)
+	next.grab_focus()
+
+func _finish_marathon() -> void:
+	var total: int=marathon.total
+	var lines: Array=marathon.lines
+	var earned := ParkVariety.marathon_medal(total,lines)
+	marathon.clear()
+	var record := Progress.record_field_result(ParkVariety.MARATHON_RECORD,total,earned,ParkVariety.MARATHON_COIN_SCALE)
+	var body := _open("連玩挑戰完成","MARATHON","marathon_result")
+	var detail := VBoxContainer.new()
+	detail.name="MarathonResult"
+	body.add_child(detail)
+	_render_arcade_result(detail,{"medal":earned,"total":total,"verdict":["差一點就有獎牌，再跑一趟！","五款跑完，銅牌到手！","手感全開，銀牌！","街機之王，金牌！"][earned]})
+	var best := Paper.label("最佳紀錄 %d 分%s　·　銅 %d　銀 %d　金 %d"%[int(record.best)," · 新紀錄！" if bool(record.new_best) else "",int(lines[0]),int(lines[1]),int(lines[2])],18,Paper.TEAL)
+	best.name="MarathonBest"
+	body.add_child(best)
+	if int(record.coins)>0:
+		var coins := Paper.label("首次獎牌 +%d 遊園幣"%int(record.coins),20,Paper.GOLD)
+		coins.name="MarathonCoins"
+		body.add_child(coins)
+	elif not bool(record.saved):
+		body.add_child(Paper.label("紀錄尚未保存；下次挑戰會再試一次。",18,Paper.CORAL))
+	Paper.button("再挑戰一趟",_start_marathon,modal_footer).name="MarathonAgain"
+	_back(body)
 
 ## Arcade games end on one score, one medal and one line; no breakdown.
 func _render_arcade_result(parent: VBoxContainer, summary: Dictionary) -> void:
@@ -2364,7 +2511,9 @@ func _show_map() -> void:
 	if world_region!="welcome":
 		var harbor_body := _open(RegionRoutes.map_title(world_region),world_region.to_upper()+" MAP","map")
 		var harbor_map = load("res://game/ui/harbor_map_panel.gd").new()
-		harbor_map.setup(world.map_snapshot())
+		var region_snapshot: Dictionary=world.map_snapshot()
+		region_snapshot["daily_picks"]=_daily_picks()
+		harbor_map.setup(region_snapshot)
 		harbor_body.add_child(harbor_map)
 		if not Catalog.definitions(world_region).is_empty():
 			var games_button := Paper.button("遊戲入口",_show_region_games,modal_footer)
@@ -2387,6 +2536,7 @@ func _show_map() -> void:
 	var map_panel = map_script.new()
 	var park_data: Dictionary=world.park_data()
 	map_panel.setup(park_data.get("zones",[]),definitions,Progress.normal_count(),world.points,world.player.global_position)
+	map_panel.daily_picks=_daily_picks()
 	map_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	map_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(map_panel)
@@ -2781,6 +2931,17 @@ func _show_ticket() -> void:
 		var note := Paper.label("日照窗旁可和票票合照，也能先轉百葉選光。東側坡道上葉臺，外側寬路可繞行。共開放 %d / 12 款遊戲。" % Catalog.definitions("garden").size(),18,Paper.TEAL)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
+	var variety := HBoxContainer.new()
+	variety.name="ParkVarietyRow"
+	variety.add_theme_constant_override("separation",12)
+	body.add_child(variety)
+	var picks_line := _daily_picks_line()
+	picks_line.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	variety.add_child(picks_line)
+	var best := int(Progress.field_records.get(ParkVariety.MARATHON_RECORD,{}).get("best",0))
+	var marathon_button := Paper.button("連玩挑戰"+(" · 最佳 %d"%best if best>0 else ""),_start_marathon,variety)
+	marathon_button.name="MarathonStartButton"
+	marathon_button.tooltip_text="隨機五款街機，回合減半，比總分。"
 	var groups := GridContainer.new()
 	groups.name="TicketNavigation"
 	groups.columns=2

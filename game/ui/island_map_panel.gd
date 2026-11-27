@@ -3,6 +3,7 @@ extends VBoxContainer
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
+const GameCatalog = preload("res://game/core/game_catalog.gd")
 const IslandShape = preload("res://game/world/island_shape.gd")
 const IslandLayout = preload("res://game/world/island_layout.gd")
 
@@ -193,6 +194,8 @@ class MapSurface extends Control:
 		draw_string(font, north + Vector2(-6, 23) * _unit, "北", HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(13.0 * _unit), ink)
 
 
+## Today's recommended booths; their station buttons wear a star.
+var daily_picks: Array = []
 var _zones: Array = []
 var _games: Array = []
 var _normal_count := 0
@@ -308,6 +311,8 @@ func _add_destination_buttons() -> void:
 		var game_id := str(game.get("id", "game-%03d" % (index + 1)))
 		var button := _make_button("%02d" % (index + 1), "MapStop_" + game_id, true)
 		button.tooltip_text = str(game.get("name", "迎賓站點"))
+		if daily_picks.has(game_id):
+			_mark_pick(button)
 		var icon := StationIcon.new()
 		icon.name = "StationIcon"
 		icon.station = index
@@ -325,8 +330,24 @@ func _add_destination_buttons() -> void:
 		var playable := RegionRoutes.supports(zone_id)
 		var threshold := RegionRoutes.threshold(zone_id) if playable else int(zone.get("threshold", 0))
 		gate.tooltip_text = "%s｜%d 張普通拍貼 · %s" % [zone_name, threshold, "不消耗" if playable else "準備中"]
+		for pick in daily_picks:
+			if str(GameCatalog.identity(str(pick)).get("zone", "")) == zone_id:
+				_mark_pick(gate)
+				break
 		_gates.append(gate)
 		_connect_selection(gate, _select_zone.bind(gate, zone))
+
+func _mark_pick(button: Button) -> void:
+	button.tooltip_text += "｜今日推薦"
+	var star := Paper.label("★", 13, Paper.GOLD)
+	star.name = "DailyPickStar"
+	star.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	star.autowrap_mode = TextServer.AUTOWRAP_OFF
+	button.add_child(star)
+	# Pinned inside the button's top-right corner so it never widens the map.
+	star.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	star.offset_left = -16
+	star.offset_top = 1
 
 func _connect_selection(button: Button, select: Callable) -> void:
 	button.pressed.connect(select)
