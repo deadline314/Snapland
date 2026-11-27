@@ -38,5 +38,25 @@
       "lantern",
       "sign"
     ]
+  },
+  {
+    "id": "game-052",
+    "mode": "plate_catch",
+    "zone": "circus",
+    "local_index": 4,
+    "arcade": true,
+    "name": "接飛碟",
+    "goal": "飛碟飛進金圈的那一下按鍵接住，疊成高高的盤塔；奶油派要放過。",
+    "instructions": "空白鍵、E 或手把 A 鈕：飛碟到金圈時接住。點一下畫面也可以。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助接飛碟拿到金牌",
+    "ordinary": "在飛碟飛進金圈時接住，拿到銅牌",
+    "attraction_tag": "飛碟雜耍台",
+    "island_invitation": "盤子飛到手邊就按，越疊越高。接到奶油派的話……小丑會很慘。",
+    "retake_props": [
+      "mascot",
+      "lantern",
+      "sign"
+    ]
   }
 ]

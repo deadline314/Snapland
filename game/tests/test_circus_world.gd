@@ -32,7 +32,7 @@ func _run() -> void:
 	await _check_life()
 	_check(_world.current_area == "馬戲團入口" and _world.player.is_on_floor(), "spawn lands on the physical entry")
 	var initial_map: Dictionary = _world.map_snapshot()
-	_check(initial_map.areas.size() == 5 and initial_map.points.size() == 8
+	_check(initial_map.areas.size() == 5 and initial_map.points.size() == 8 + World.PITCH_GAMES.size()
 		and _world._point_by_id("circus:story").get("position") == World.STORY_POINT,
 		"five physical areas and the on-duty welcome station appear in the floor plan")
 	_check(_world._point_by_id("game-049").get("position") == World.PHOTO_BOOTH_POINT
@@ -69,6 +69,7 @@ func _run() -> void:
 	_check(_world.map_snapshot().areas[0].label == "馬戲團入口", "map snapshot is detached from world data")
 	map.free()
 	await _reach([Vector2(8.1, 4.65), Vector2(0, 4.65), Vector2(0, 7.8)], "region:welcome", "馬戲團入口")
+	await _reach([Vector2(3.3, 7.9)], "game-052", "馬戲團入口")
 	await _reach([Vector2(World.PHOTO_BOOTH_POINT.x, World.PHOTO_BOOTH_POINT.z)], "game-049", "馬戲團入口")
 	var safe_at: Vector3 = _world.player.position
 	_world.player.position = Vector3(0, World.GROUND_Y, 10.1)
@@ -108,11 +109,21 @@ func _check_landmarks() -> void:
 		_check(float(mirror[0]) > World.AREAS[1].rect.position.y and float(mirror[0]) < World.AREAS[1].rect.end.y
 			and Scenery.WALL_MIRROR_X < World.BOUNDS.position.x, "a wall mirror lines the hall without standing on its floor")
 	_check(bends.size() == Scenery.WALL_MIRRORS.size(), "every funhouse mirror bends its reflection differently")
-	_check(World.PITCHES.size() == 10, "ten empty pitches wait for the next games")
-	for pitch: Vector3 in World.PITCHES:
+	_check(World.PITCHES.size() == 10, "ten pitches are kept for the district's games")
+	var taken: Dictionary = {}
+	for stand: Dictionary in World.PITCH_GAMES:
+		var entry: Vector3 = World.PITCHES[stand.pitch] + Vector3(0, 0, World.PITCH_REACH)
+		_check(not taken.has(stand.pitch) and _world._point_by_id(stand.id).get("position") == entry and _world._safe_footing(entry)
+			and _world.get_node_or_null("CircusCabinet_" + str(stand.title)) != null,
+			"%s has its cabinet on pitch %d and a reachable point in front of it" % [stand.id, stand.pitch])
+		taken[stand.pitch] = stand.id
+	for index in range(World.PITCHES.size()):
+		var pitch: Vector3 = World.PITCHES[index]
 		var entry := pitch + Vector3(0, 0, World.PITCH_REACH)
 		var clear := _world._safe_footing(entry) and _world._on_floor_plan(Vector2(pitch.x, pitch.z))
 		for point: Dictionary in _world.points:
+			if point.id == taken.get(index, ""):
+				continue
 			clear = (clear and Vector2(point.position.x - entry.x, point.position.z - entry.z).length() >= 1.6
 				and Vector2(point.position.x - pitch.x, point.position.z - pitch.z).length() >= 1.2)
 		for other: Vector3 in World.PITCHES:

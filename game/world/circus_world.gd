@@ -42,6 +42,12 @@ const PITCHES: Array[Vector3] = [
 	Vector3(6.4, GROUND_Y, 3.6), Vector3(10.6, GROUND_Y, 3.6), Vector3(3.3, GROUND_Y, 6.25),
 ]
 const PITCH_REACH := 1.65
+## Delivered games that took a pitch: the cabinet replaces the pitch's mat and the
+## interaction point sits PITCH_REACH south of it. `topper` names the little act
+## on the canopy (circus_scenery.gd).
+const PITCH_GAMES: Array[Dictionary] = [
+	{"pitch": 9, "id": "game-052", "title": "接飛碟", "prompt": "接飛碟 · 飛碟到圈裡就按", "body": Color("#b8553f"), "shape": "oval", "topper": "plates"},
+]
 const VELVET := Color("#723e51")
 const POOL_SPECS := [
 	{"position": Vector3(-8.35, 2.75, -1.30), "color": Color("#b4d9f2"), "radius": 6.4},
@@ -90,6 +96,8 @@ func _build_region_geometry() -> void:
 	_point(RegionalVisit.CIRCUS_POINT, "馬戲團迎賓 · 和小角合照", STORY_POINT)
 	_point("game-049", "哈哈鏡大頭貼 · 按一下停一格", PHOTO_BOOTH_POINT)
 	_point("game-050", "誰是假倒影 · 擺姿勢抓假的", REFLECTION_POINT)
+	for stand: Dictionary in PITCH_GAMES:
+		_point(stand.id, stand.prompt, PITCHES[stand.pitch] + Vector3(0, 0, PITCH_REACH))
 	current_area = _area_at_position(ENTRY)
 
 

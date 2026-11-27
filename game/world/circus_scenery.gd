@@ -395,10 +395,20 @@ func _build_shadow_theatre() -> void:
 	kit.blocker(Vector3(10.7, world.GROUND_Y + 1.0, -4.6), Vector3(0.5, 2.0, 1.3))
 
 func _build_pitches() -> void:
+	var taken: Dictionary = {}
+	for stand: Dictionary in world.PITCH_GAMES:
+		taken[stand.pitch] = stand
 	for index in range(world.PITCHES.size()):
 		var at: Vector3 = world.PITCHES[index]
 		# The foyer pitch stands in the welcome photo's view.
-		Props.pitch(foreground if at.z > 5.0 else kit.detail, at, Props.PARTY[index % 4])
+		var in_photo := at.z > 5.0
+		if not taken.has(index):
+			Props.pitch(foreground if in_photo else kit.detail, at, Props.PARTY[index % 4])
+			continue
+		var stand: Dictionary = taken[index]
+		var cabinet := _cabinet(at, stand.title, stand.body, stand.shape, 0.5 + 0.36 * stand.title.length(), stand.topper)
+		if in_photo:
+			photo_clutter.append(cabinet)
 
 ## Wagons, small tents, canvas sidewalls, banner poles and crates around the yard.
 func _build_camp() -> void:
@@ -519,15 +529,26 @@ func _string_lights(from: Vector3, to: Vector3, sag: float) -> void:
 
 ## Arcade cabinet of a delivered game with its name board. It can cover whoever
 ## walks behind it, so it opens like a building. Returns the cabinet's mesh.
-func _cabinet(at: Vector3, title: String, body: Color, shape: String, board_width: float) -> MeshInstance3D:
+func _cabinet(at: Vector3, title: String, body: Color, shape: String, board_width: float, topper := "") -> MeshInstance3D:
 	world.occlusion_controller.begin_building()
 	var sculpt := Kit.Sculpt.new()
 	Props.cabinet(sculpt, Transform3D(Basis.IDENTITY, at), body, shape)
+	_topper(sculpt, at + Vector3(0, 2.22, 0.1), topper)
 	_plaque(title, at + Vector3(0, 0.9, 0), board_width, sculpt)
 	var cabinet: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("scenery-detail"))
 	cabinet.name = "CircusCabinet_" + title
 	world.occlusion_controller.finish_building(kit.blocker(at + Vector3(0, 1.0, 0), Vector3(1.1, 2.0, 0.76)))
 	return cabinet
+
+## The little act on a cabinet's canopy that says which game it is.
+func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
+	match kind:
+		"plates":
+			# A juggling stick with a leaning stack of plates, and one in mid-flight.
+			sculpt.box(top + Vector3(0.0, 0.3, 0), Vector3(0.05, 0.6, 0.05), Props.WOOD)
+			for plate in range(4):
+				sculpt.tube(top + Vector3(0.02 * plate, 0.62 + 0.07 * plate, 0), 0.2, 0.22, 0.05, Props.CREAM if plate % 2 == 0 else Props.SKY, 10)
+			sculpt.tube(top + Vector3(0.42, 0.78, 0.05), 0.16, 0.16, 0.04, Props.CREAM, 10, Basis(Vector3.BACK, 0.7))
 
 ## Name board with its label. On the ground it stands on two legs; with `sculpt`
 ## set it rides on a cabinet and is drawn into that cabinet's mesh.
