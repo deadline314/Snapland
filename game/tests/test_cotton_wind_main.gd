@@ -29,7 +29,7 @@ func _run() -> void:
 	if failures:
 		await _finish()
 		return
-	check(Catalog.find(MODE) == Catalog.find(GAME) and Catalog.find("game-%03d" % (Catalog.all_definitions().size() + 1)).is_empty(),
+	check(Catalog.find(MODE) == Catalog.find(GAME) and Catalog.find(preload("res://game/tests/undelivered_game.gd").first_id()).is_empty(),
 		"mode lookup resolves cotton wind while the next undelivered game stays unavailable")
 	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	get_window().size = Vector2i(1280, 720)

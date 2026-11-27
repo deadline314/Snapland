@@ -137,7 +137,7 @@ func _run() -> void:
 	s._leave_from_hud()
 	s._process(99.0)
 	expect(s.ended and results.size() == count and s.active_driver.snapshot().grabbed == -1, "cancel releases input and emits no completion")
-	s.start("game-%03d" % (Catalog.all_definitions().size() + 1))
+	s.start(preload("res://game/tests/undelivered_game.gd").first_id())
 	expect(s.ended and s.game_id.is_empty() and s.active_driver == null, "next undelivered game remains refused")
 	s.start("game-025")
 	s._process(0.1)
